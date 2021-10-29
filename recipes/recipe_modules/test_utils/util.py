@@ -11,7 +11,7 @@ from . import canonical
 from PB.go.chromium.org.luci.resultdb.proto.v1 import (test_result as
                                                        test_result_pb2)
 
-from RECIPE_MODULES.build.attr_utils import attrib, attrs, mapping
+from RECIPE_MODULES.build.attr_utils import attrib, attrs, mapping, sequence
 
 
 def convert_trie_to_flat_paths(trie, prefix, sep):
@@ -408,6 +408,7 @@ class RDBPerSuiteResults(object):
   unexpected_skipped_tests = attrib(set)
   invalid = attrib(bool, default=False)
   test_name_to_test_id_mapping = attrib(mapping[str, str])
+  individual_results = attrib(mapping[str, sequence[...]])
 
   @classmethod
   def create(cls,
@@ -455,7 +456,9 @@ class RDBPerSuiteResults(object):
     unexpected_failing_tests = set()
     unexpected_passing_tests = set()
     unexpected_skipped_tests = set()
+    individual_results = {}
     for test_name, test_results in results_by_test_id.items():
+      individual_results[test_name] = list(tr.status for tr in test_results)
       # This filters out any tests that were auto-retried within the
       # invocation and finished with an expected result. eg: a test that's
       # expected to CRASH and runs with results [FAIL, CRASH]. RDB returns
@@ -477,7 +480,8 @@ class RDBPerSuiteResults(object):
 
     return cls(suite_name, variant_hash, total_tests_ran,
                unexpected_passing_tests, unexpected_failing_tests,
-               unexpected_skipped_tests, invalid, test_name_to_test_id_mapping)
+               unexpected_skipped_tests, invalid, test_name_to_test_id_mapping,
+               individual_results)
 
   def with_failure_on_exit(self, failure_on_exit):
     """Returns a new instance with an updated failure_on_exit value.

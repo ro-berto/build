@@ -2777,7 +2777,26 @@
   },
   {
     "cmd": [],
-    "name": "searching_for_new_tests"
+    "name": "searching_for_new_tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@current_build_tests@ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a_dGVzdF9zdWl0ZTppb3NfY2hyb21lX2Jvb2ttYXJrc19lZzJ0ZXN0c19tb2R1bGVfaVBhZCBBaXIgMiAxNC40Cm9zOk1hYy0xMQ==@@@",
+      "@@@STEP_LOG_LINE@current_build_tests@ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a_dGVzdF9zdWl0ZTppb3NfY2hyb21lX2Jvb2ttYXJrc19lZzJ0ZXN0c19tb2R1bGVfaVBhZCBBaXIgMiAxNC40Cm9zOlVidW50dS0xNC4wNA==@@@",
+      "@@@STEP_LOG_LINE@current_build_tests@ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a_dGVzdF9zdWl0ZTppb3NfY2hyb21lX2Jvb2ttYXJrc19lZzJ0ZXN0c19tb2R1bGVfaVBob25lIDExIDE0LjQKb3M6TWFjLTEx@@@",
+      "@@@STEP_LOG_LINE@current_build_tests@ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a_dGVzdF9zdWl0ZTppb3NfY2hyb21lX2Jvb2ttYXJrc19lZzJ0ZXN0c19tb2R1bGVfaVBob25lIDExIDE0LjQKb3M6VWJ1bnR1LTE0LjA0@@@",
+      "@@@STEP_LOG_END@current_build_tests@@@",
+      "@@@STEP_LOG_LINE@historical_tests@ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a_dGVzdF9zdWl0ZTppb3NfY2hyb21lX2Jvb2ttYXJrc19lZzJ0ZXN0c19tb2R1bGVfaVBob25lIDExIDE0LjQKb3M6VWJ1bnR1LTE0LjA0@@@",
+      "@@@STEP_LOG_END@historical_tests@@@",
+      "@@@STEP_LOG_LINE@preliminary_tests@ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a_dGVzdF9zdWl0ZTppb3NfY2hyb21lX2Jvb2ttYXJrc19lZzJ0ZXN0c19tb2R1bGVfaVBhZCBBaXIgMiAxNC40Cm9zOk1hYy0xMQ==@@@",
+      "@@@STEP_LOG_LINE@preliminary_tests@ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a_dGVzdF9zdWl0ZTppb3NfY2hyb21lX2Jvb2ttYXJrc19lZzJ0ZXN0c19tb2R1bGVfaVBhZCBBaXIgMiAxNC40Cm9zOlVidW50dS0xNC4wNA==@@@",
+      "@@@STEP_LOG_LINE@preliminary_tests@ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a_dGVzdF9zdWl0ZTppb3NfY2hyb21lX2Jvb2ttYXJrc19lZzJ0ZXN0c19tb2R1bGVfaVBob25lIDExIDE0LjQKb3M6TWFjLTEx@@@",
+      "@@@STEP_LOG_END@preliminary_tests@@@",
+      "@@@STEP_LOG_LINE@new_tests@new tests: @@@",
+      "@@@STEP_LOG_LINE@new_tests@@@@",
+      "@@@STEP_LOG_LINE@new_tests@test_id: ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a, variant_hash: dGVzdF9zdWl0ZTppb3NfY2hyb21lX2Jvb2ttYXJrc19lZzJ0ZXN0c19tb2R1bGVfaVBhZCBBaXIgMiAxNC40Cm9zOlVidW50dS0xNC4wNA==@@@",
+      "@@@STEP_LOG_LINE@new_tests@test_id: ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a, variant_hash: dGVzdF9zdWl0ZTppb3NfY2hyb21lX2Jvb2ttYXJrc19lZzJ0ZXN0c19tb2R1bGVfaVBhZCBBaXIgMiAxNC40Cm9zOk1hYy0xMQ==@@@",
+      "@@@STEP_LOG_LINE@new_tests@test_id: ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a, variant_hash: dGVzdF9zdWl0ZTppb3NfY2hyb21lX2Jvb2ttYXJrc19lZzJ0ZXN0c19tb2R1bGVfaVBob25lIDExIDE0LjQKb3M6TWFjLTEx@@@",
+      "@@@STEP_LOG_END@new_tests@@@"
+    ]
   },
   {
     "cmd": [
@@ -3019,12 +3038,7 @@
       "@@@STEP_LOG_LINE@raw_io.output@{\"invocationId\": \"invocations/1\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a\", \"variant\": {\"def\": {\"os\": \"Mac-11\", \"test_suite\": \"ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4\"}}, \"variantHash\": \"dGVzdF9zdWl0ZTppb3NfY2hyb21lX2Jvb2ttYXJrc19lZzJ0ZXN0c19tb2R1bGVfaVBhZCBBaXIgMiAxNC40Cm9zOk1hYy0xMQ==\"}}@@@",
       "@@@STEP_LOG_LINE@raw_io.output@{\"invocationId\": \"invocations/2\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a\", \"variant\": {\"def\": {\"os\": \"Ubuntu-14.04\", \"test_suite\": \"ios_chrome_bookmarks_eg2tests_module_iPhone 11 14.4\"}}, \"variantHash\": \"dGVzdF9zdWl0ZTppb3NfY2hyb21lX2Jvb2ttYXJrc19lZzJ0ZXN0c19tb2R1bGVfaVBob25lIDExIDE0LjQKb3M6VWJ1bnR1LTE0LjA0\"}}@@@",
       "@@@STEP_LOG_LINE@raw_io.output@{\"invocationId\": \"invocations/3\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a\", \"variant\": {\"def\": {\"os\": \"Ubuntu-14.04\", \"test_suite\": \"ios_chrome_bookmarks_eg2tests_module_iPhone 11 14.4\"}}, \"variantHash\": \"dGVzdF9zdWl0ZTppb3NfY2hyb21lX2Jvb2ttYXJrc19lZzJ0ZXN0c19tb2R1bGVfaVBob25lIDExIDE0LjQKb3M6VWJ1bnR1LTE0LjA0\"}}@@@",
-      "@@@STEP_LOG_END@raw_io.output@@@",
-      "@@@STEP_LOG_LINE@current_build_tests@ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a_dGVzdF9zdWl0ZTppb3NfY2hyb21lX2Jvb2ttYXJrc19lZzJ0ZXN0c19tb2R1bGVfaVBhZCBBaXIgMiAxNC40Cm9zOk1hYy0xMQ==@@@",
-      "@@@STEP_LOG_LINE@current_build_tests@ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a_dGVzdF9zdWl0ZTppb3NfY2hyb21lX2Jvb2ttYXJrc19lZzJ0ZXN0c19tb2R1bGVfaVBhZCBBaXIgMiAxNC40Cm9zOlVidW50dS0xNC4wNA==@@@",
-      "@@@STEP_LOG_LINE@current_build_tests@ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a_dGVzdF9zdWl0ZTppb3NfY2hyb21lX2Jvb2ttYXJrc19lZzJ0ZXN0c19tb2R1bGVfaVBob25lIDExIDE0LjQKb3M6TWFjLTEx@@@",
-      "@@@STEP_LOG_LINE@current_build_tests@ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a_dGVzdF9zdWl0ZTppb3NfY2hyb21lX2Jvb2ttYXJrc19lZzJ0ZXN0c19tb2R1bGVfaVBob25lIDExIDE0LjQKb3M6VWJ1bnR1LTE0LjA0@@@",
-      "@@@STEP_LOG_END@current_build_tests@@@"
+      "@@@STEP_LOG_END@raw_io.output@@@"
     ]
   },
   {
@@ -3057,13 +3071,7 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@raw_io.output@{\"invocationId\": \"invocations/2\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a\", \"variant\": {\"def\": {\"os\": \"Ubuntu-14.04\", \"test_suite\": \"ios_chrome_bookmarks_eg2tests_module_iPhone 11 14.4\"}}, \"variantHash\": \"dGVzdF9zdWl0ZTppb3NfY2hyb21lX2Jvb2ttYXJrc19lZzJ0ZXN0c19tb2R1bGVfaVBob25lIDExIDE0LjQKb3M6VWJ1bnR1LTE0LjA0\"}}@@@",
-      "@@@STEP_LOG_END@raw_io.output@@@",
-      "@@@STEP_LOG_LINE@historical_tests@ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a_dGVzdF9zdWl0ZTppb3NfY2hyb21lX2Jvb2ttYXJrc19lZzJ0ZXN0c19tb2R1bGVfaVBob25lIDExIDE0LjQKb3M6VWJ1bnR1LTE0LjA0@@@",
-      "@@@STEP_LOG_END@historical_tests@@@",
-      "@@@STEP_LOG_LINE@preliminary_tests@ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a_dGVzdF9zdWl0ZTppb3NfY2hyb21lX2Jvb2ttYXJrc19lZzJ0ZXN0c19tb2R1bGVfaVBhZCBBaXIgMiAxNC40Cm9zOk1hYy0xMQ==@@@",
-      "@@@STEP_LOG_LINE@preliminary_tests@ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a_dGVzdF9zdWl0ZTppb3NfY2hyb21lX2Jvb2ttYXJrc19lZzJ0ZXN0c19tb2R1bGVfaVBhZCBBaXIgMiAxNC40Cm9zOlVidW50dS0xNC4wNA==@@@",
-      "@@@STEP_LOG_LINE@preliminary_tests@ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a_dGVzdF9zdWl0ZTppb3NfY2hyb21lX2Jvb2ttYXJrc19lZzJ0ZXN0c19tb2R1bGVfaVBob25lIDExIDE0LjQKb3M6TWFjLTEx@@@",
-      "@@@STEP_LOG_END@preliminary_tests@@@"
+      "@@@STEP_LOG_END@raw_io.output@@@"
     ]
   },
   {
@@ -3132,7 +3140,14 @@
   },
   {
     "cmd": [],
-    "name": "test_pre_run (check flakiness)"
+    "name": "test new tests for flakiness"
+  },
+  {
+    "cmd": [],
+    "name": "test new tests for flakiness.test_pre_run (check flakiness)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -3162,9 +3177,9 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "test_pre_run (check flakiness).[trigger] ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 (check flakiness) on Mac-11",
+    "name": "test new tests for flakiness.test_pre_run (check flakiness).[trigger] ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 (check flakiness) on Mac-11",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
@@ -3316,10 +3331,10 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "test_pre_run (check flakiness).include swarming task invocations",
+    "name": "test new tests for flakiness.test_pre_run (check flakiness).include swarming task invocations",
     "stdin": "{\"addInvocations\": [\"invocations/2\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@json.input@{@@@",
@@ -3333,7 +3348,10 @@
   },
   {
     "cmd": [],
-    "name": "collect tasks (check flakiness)"
+    "name": "test new tests for flakiness.collect tasks (check flakiness)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -3368,9 +3386,9 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "collect tasks (check flakiness).wait for tasks (check flakiness)",
+    "name": "test new tests for flakiness.collect tasks (check flakiness).wait for tasks (check flakiness)",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"attempts\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"sets\": [@@@",
@@ -3406,10 +3424,10 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "collect tasks (check flakiness).ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 stats",
+    "name": "test new tests for flakiness.collect tasks (check flakiness).ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 stats",
     "stdin": "{\"invocations\": [\"invocations/2\"]}",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@json.input@{@@@",
@@ -3449,9 +3467,9 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "collect tasks (check flakiness).ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 results",
+    "name": "test new tests for flakiness.collect tasks (check flakiness).ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 results",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_END@raw_io.output@@@"
     ]
   },
@@ -3514,8 +3532,9 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 (check flakiness) on Mac-11",
+    "name": "test new tests for flakiness.ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 (check flakiness) on Mac-11",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Mac-11'<br/>2 passed, 0 failed (2 total)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"failures\": [], @@@",
@@ -3554,7 +3573,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Mac-11\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"chromium.tests\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 (check flakiness) on Mac-11\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"test new tests for flakiness.ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 (check flakiness) on Mac-11\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"ios_chrome_bookmarks_eg2tests_module\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
@@ -3569,8 +3588,9 @@
   },
   {
     "cmd": [],
-    "name": "$debug - all results (check flakiness)",
+    "name": "test new tests for flakiness.$debug - all results (check flakiness)",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@serialzed results@{@@@",
       "@@@STEP_LOG_LINE@serialzed results@  \"all_suites\": [@@@",
       "@@@STEP_LOG_LINE@serialzed results@    {@@@",
@@ -3587,6 +3607,13 @@
       "@@@STEP_LOG_LINE@serialzed results@  \"unexpected_failing_suites\": []@@@",
       "@@@STEP_LOG_LINE@serialzed results@}@@@",
       "@@@STEP_LOG_END@serialzed results@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "calculate flake rates",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Tests that have exceeded the tolerated flake rate most likely indicate flakiness. See logs for details of the flaky test and the flake rate.@@@"
     ]
   },
   {

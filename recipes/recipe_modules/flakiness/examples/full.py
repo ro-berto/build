@@ -102,7 +102,8 @@ def GenTests(api):
             resultdb=build_pb2.BuildInfra.ResultDB(invocation=invocation)),
         input=build_input)
 
-  def _generate_test_result(test_id, test_variant):
+  def _generate_test_result(test_id, test_variant, status=None):
+    status = status or test_result_pb2.FAIL
     vd = getattr(test_variant, 'def')
     vh = base64.b64encode(
         ('\n'.join('{}:{}'.format(k, v)
@@ -112,7 +113,7 @@ def GenTests(api):
         variant=test_variant,
         variant_hash=vh,
         expected=False,
-        status=test_result_pb2.FAIL,
+        status=status,
     )
 
   build_database, current_patchset_invocations = [], {}
@@ -251,7 +252,8 @@ def GenTests(api):
               'searching_for_new_tests.'
               'cross reference newly identified tests against ResultDB')),
       api.override_step_data(
-          ('ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 '
+          ('test new tests for flakiness.'
+           'ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 '
            '(check flakiness) on Mac-11'),
           api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_isolated_script_output(
@@ -262,6 +264,15 @@ def GenTests(api):
               failure=False)),
       api.post_process(post_process.StatusSuccess),
   )
+
+  flaky_results = {
+      'invocations/100':
+          api.resultdb.Invocation(test_results=[
+              _generate_test_result(test_id, correct_variant),
+              _generate_test_result(
+                  test_id, correct_variant, status=test_result_pb2.PASS)
+          ])
+  }
 
   yield api.test(
       'basic_ios_test_failure',
@@ -349,7 +360,8 @@ def GenTests(api):
               'searching_for_new_tests.'
               'cross reference newly identified tests against ResultDB')),
       api.override_step_data(
-          ('ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 '
+          ('test new tests for flakiness.'
+           'ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 '
            '(check flakiness) on Mac-11'),
           api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_isolated_script_output(
@@ -359,6 +371,12 @@ def GenTests(api):
                   isolated_script_passing=False,
               ),
               failure=True)),
+      api.resultdb.query(
+          inv_bundle=flaky_results,
+          step_name=(
+              'test new tests for flakiness.'
+              'collect tasks (check flakiness).'
+              'ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 results')),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
   )

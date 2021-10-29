@@ -15,6 +15,8 @@ from recipe_engine import recipe_api
 from PB.recipe_engine import result as result_pb2
 from PB.recipe_modules.build.archive import properties as arch_prop
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
+from PB.go.chromium.org.luci.resultdb.proto.v1 import (test_result as
+                                                       test_result_pb2)
 
 from RECIPE_MODULES.build import chromium
 from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
@@ -1795,25 +1797,55 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     return '\n\n'.join(test_summary_lines)
 
   def run_tests_for_flakiness(self, builder_config, new_test_objects):
-    suffix = 'check flakiness'
+    suffix = self.m.flakiness.test_suffix
 
-    with self.wrap_chromium_tests(builder_config, new_test_objects):
-      _, invalid_test_suites, failed_test_suites = (
-          self.m.test_utils.run_tests_once(self.m, new_test_objects, suffix))
+    with self.m.step.nest('test new tests for flakiness'):
+      with self.wrap_chromium_tests(builder_config, new_test_objects):
+        # we don't need failed test_suites because they'll be analyzed for flake
+        # rates anyways through their invocation ids below.
+        _, invalid_test_suites, _ = (
+            self.m.test_utils.run_tests_once(self.m, new_test_objects, suffix))
 
-      if invalid_test_suites:
-        # TODO: Check if we need to summarize the test failures
+        if invalid_test_suites:
+          return result_pb2.RawResult(
+              summary_markdown=self._format_unrecoverable_failures(
+                  invalid_test_suites, suffix),
+              status=common_pb.FAILURE)
+
+    failure_counts = collections.defaultdict(int)
+    flaky_tests = []
+    with self.m.step.nest('calculate flake rates') as p:
+      p.step_text = (
+          'Tests that have exceeded the tolerated flake rate most likely '
+          'indicate flakiness. See logs for details of the flaky test '
+          'and the flake rate.')
+      for t in new_test_objects:
+        flaky = False
+        rdb_results = t.get_rdb_results(suffix)
+        for test_name, results in rdb_results.individual_results.items():
+          for res in results:
+            if res != test_result_pb2.PASS:
+              key = '_'.join([t.name, test_name, rdb_results.variant_hash])
+              failure_counts[key] += 1
+              flaky = True
+        if flaky:
+          flaky_tests.append(t)
+
+      if flaky_tests and failure_counts:
+        p.status = self.m.step.FAILURE
+        p.logs['flaky tests'] = ('\n'.join([
+            'test: {}, # of failures: {}, total # of runs: {}'.format(
+                k, v, self.m.flakiness._repeat_count)
+            for k, v in failure_counts.items()
+        ]))
+
+        # TODO(crbug/1204163) - Update the summary markdown to reflect flaky
+        # tests and their flake rates for easier identification.
         return result_pb2.RawResult(
             summary_markdown=self._format_unrecoverable_failures(
-                invalid_test_suites, suffix),
+                flaky_tests, suffix),
             status=common_pb.FAILURE)
 
-      if failed_test_suites:
-        # TODO: Check if we need to summarize the test failures
-        return result_pb2.RawResult(
-            summary_markdown=self._format_unrecoverable_failures(
-                failed_test_suites, suffix),
-            status=common_pb.FAILURE)
     return None
 
   def determine_compilation_targets(self, builder_id, builder_config,

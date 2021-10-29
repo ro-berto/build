@@ -55,6 +55,10 @@ class FlakinessApi(recipe_api.RecipeApi):
     self.current_query_count = properties.current_query_count or 10000
 
   @property
+  def test_suffix(self):
+    return 'check flakiness'
+
+  @property
   def check_for_flakiness(self):
     """Boolean to determine whether flakiness logic should be run for trybots.
 
@@ -294,7 +298,17 @@ class FlakinessApi(recipe_api.RecipeApi):
     if new_tests and len(new_tests) > self._max_test_targets:
       # There are more new tests detected than what we're permitting, so we're
       # taking a random subset to re-run
-      return random.sample(new_tests, self._max_test_targets)
+      res = random.sample(new_tests, self._max_test_targets)
+      s = self.m.step('subset of new tests', cmd=None)
+      s.presentation.step_text = (
+          'the total number of new tests identified exceed what we permit {}, '
+          'so a random subset of those tests have been selected.'.format(
+              self._max_test_targets))
+      s.presentation.logs['new_test_subset'] = '\n'.join([
+          'test_id: {}, variant_hash: {}'.format(t.test_id, t.variant_hash)
+          for t in res
+      ])
+      return res
 
     return new_tests
 
@@ -331,7 +345,7 @@ class FlakinessApi(recipe_api.RecipeApi):
     if not self.check_for_flakiness:
       return set([])
 
-    with self.m.step.nest('searching_for_new_tests'):
+    with self.m.step.nest('searching_for_new_tests') as p:
       current_builder = self.m.buildbucket.build.builder
       current_inv = str(self.m.buildbucket.build.infra.resultdb.invocation)
       excluded_invs = self.fetch_all_related_invocations()
@@ -343,20 +357,17 @@ class FlakinessApi(recipe_api.RecipeApi):
           inv_list=[current_inv],
           test_query_count=self.current_query_count,
           step_name='fetch test variants for current patchset')
-      self.m.step.active_result.presentation.logs[
-          'current_build_tests'] = join_tests(current_tests)
+      p.logs['current_build_tests'] = join_tests(current_tests)
 
       historical_tests = self.get_test_variants(
           inv_list=inv_list,
           step_name='fetch test variants from previous invocations')
-      self.m.step.active_result.presentation.logs[
-          'historical_tests'] = join_tests(historical_tests)
+      p.logs['historical_tests'] = join_tests(historical_tests)
 
       # Comparing the current build test list to the ResultDB query test list to
       # get a preliminary set of potential new tests.
       preliminary_new_tests = current_tests.difference(historical_tests)
-      self.m.step.active_result.presentation.logs[
-          'preliminary_tests'] = join_tests(preliminary_new_tests)
+      p.logs['preliminary_tests'] = join_tests(preliminary_new_tests)
 
       # Cross-referencing the potential new tests with ResultDB to ensure they
       # are not present in existing builds.
@@ -364,6 +375,10 @@ class FlakinessApi(recipe_api.RecipeApi):
           prelim_tests=preliminary_new_tests,
           excluded_invs=excluded_invs,
           builder=current_builder.builder)
+      p.logs['new_tests'] = ('new tests: \n\n{}'.format('\n'.join([
+          'test_id: {}, variant_hash: {}'.format(t.test_id, t.variant_hash)
+          for t in new_tests
+      ])))
 
     return new_tests
 
