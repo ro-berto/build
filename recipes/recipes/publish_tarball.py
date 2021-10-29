@@ -303,10 +303,13 @@ def publish_tarball(api):
       '--without-android', '--use-system-cmake', '--gcc-toolchain=/usr',
       '--skip-build', '--without-fuchsia'
   ]
-  api.step(
-      'download clang sources',
-      [api.path['checkout'].join('tools', 'clang', 'scripts', update_script)] +
-      update_args)
+  # Explicitly passing python3 will not be necessary once
+  # https://chromium-review.googlesource.com/c/chromium/src/+/3253157
+  # is in all release channels.
+  api.step('download clang sources', [
+      'python3', api.path['checkout'].join('tools', 'clang', 'scripts',
+                                           update_script)
+  ] + update_args)
 
   if [int(x) for x in version.split('.')] >= [87, 0, 4273, 0]:
     fetch_pgo_profiles(api)
@@ -455,7 +458,7 @@ def GenTests(api):
       api.test('basic-m76') + api.buildbucket.generic_build() +
       api.properties(version='76.0.3784.0') + api.platform('linux', 64) +
       api.post_process(post_process.StepCommandRE, 'download clang sources', [
-          '.*/build.py', '--without-android', '--use-system-cmake',
+          'python3', '.*/build.py', '--without-android', '--use-system-cmake',
           '--gcc-toolchain=/usr', '--skip-build', '--without-fuchsia'
       ]) + api.post_process(post_process.DropExpectation) + api.step_data(
           'get gn version', stdout=api.raw_io.output('1496 (0790d304)')) +

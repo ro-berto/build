@@ -336,6 +336,7 @@
   },
   {
     "cmd": [
+      "python3",
       "[START_DIR]/src/tools/clang/scripts/build.py",
       "--without-android",
       "--use-system-cmake",
