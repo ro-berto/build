@@ -552,6 +552,11 @@ def clang_tot_android_dbg(_):
 
 
 @config_ctx(includes=['ninja', 'clang', 'clang_tot'])
+def clang_tot_chromeos(_):
+  pass
+
+
+@config_ctx(includes=['ninja', 'clang', 'clang_tot'])
 def clang_tot_fuchsia(_):
   pass
 

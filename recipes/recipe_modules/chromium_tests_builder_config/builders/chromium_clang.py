@@ -208,6 +208,34 @@ SPEC = {
             test_results_config='staging_server',
             simulation_platform='win',
         ),
+    'ToTChromeOS':
+        _chromium_clang_spec(
+            chromium_config='clang_tot_chromeos',
+            chromium_apply_config=['mb'],
+            gclient_config='chromium',
+            gclient_apply_config=['clang_tot', 'chromeos'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'chromeos',
+            },
+            test_results_config='staging_server',
+            simulation_platform='linux',
+        ),
+    'ToTChromeOS (dbg)':
+        _chromium_clang_spec(
+            chromium_config='clang_tot_chromeos',
+            chromium_apply_config=['mb'],
+            gclient_config='chromium',
+            gclient_apply_config=['clang_tot', 'chromeos'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'chromeos',
+            },
+            test_results_config='staging_server',
+            simulation_platform='linux',
+        ),
     'ToTFuchsia x64':
         _chromium_clang_spec(
             chromium_config='clang_tot_fuchsia',

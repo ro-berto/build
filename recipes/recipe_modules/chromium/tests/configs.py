@@ -98,6 +98,8 @@ def GenTests(api):
 
   yield from_config('clang_tot_android_dbg')
 
+  yield from_config('clang_tot_chromeos')
+
   yield from_config('clang_tot_fuchsia')
 
   yield from_config('chromium_tsan2')
