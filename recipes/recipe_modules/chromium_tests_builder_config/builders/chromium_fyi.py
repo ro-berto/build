@@ -889,42 +889,6 @@ SPEC = {
             # From chromium_memory.py, _chromium_memory_spec
             build_gs_bucket='chromium-memory-archive',
         ),
-    'Linux MSan Tests (reclient shadow)':
-        builder_spec.BuilderSpec.create(
-            chromium_config='chromium_msan',
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'enable_reclient',
-            ],
-            chromium_apply_config=['mb'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            execution_mode=builder_spec.TEST,
-            parent_buildername='Linux MSan Builder (reclient shadow)',
-            simulation_platform='linux',
-            # From chromium_memory.py, _chromium_memory_spec
-            build_gs_bucket='chromium-memory-archive',
-        ),
-    'Linux TSan Tests (reclient shadow)':
-        builder_spec.BuilderSpec.create(
-            chromium_config='chromium_tsan2',
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'enable_reclient',
-            ],
-            chromium_apply_config=['mb'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            execution_mode=builder_spec.TEST,
-            parent_buildername='Linux TSan Builder (reclient)',
-            simulation_platform='linux',
-            # From chromium_memory.py, _chromium_memory_spec
-            build_gs_bucket='chromium-memory-archive',
-        ),
     'CFI Linux CF (reclient shadow)':
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
