@@ -1663,8 +1663,12 @@ class LocalGTestTest(LocalTest):
       args = _merge_arg(args, '--gtest_filter', ':'.join(tests_to_retry))
 
     resultdb = self.prep_local_rdb(api, include_artifacts=False)
-    gtest_results_file = api.test_utils.gtest_results(
-        add_json_log=False, leak_to=resultdb.result_file)
+    if self.spec.resultdb.use_rdb_results_for_all_decisions:
+      gtest_results_file = api.json.output(
+          add_json_log=False, leak_to=resultdb.result_file)
+    else:
+      gtest_results_file = api.test_utils.gtest_results(
+          add_json_log=False, leak_to=resultdb.result_file)
 
     step_test_data = lambda: (
         api.test_utils.test_api.canned_gtest_output(True) + api.raw_io.test_api.
@@ -2869,12 +2873,14 @@ class LocalIsolatedScriptTest(LocalTest):
     results = step_result.json.output
     presentation = step_result.presentation
 
+    validated_results = {}
     if not self.spec.resultdb.use_rdb_results_for_all_decisions:
       test_results = api.test_utils.create_results_from_json(results)
       self.spec.results_handler.render_results(api, test_results, presentation)
+      validated_results = self.spec.results_handler.validate_results(
+          api, results)
 
-    self.update_test_run(
-        api, suffix, self.spec.results_handler.validate_results(api, results))
+    self.update_test_run(api, suffix, validated_results)
     self.update_inv_name_from_stderr(step_result.stderr, suffix)
     self.update_failure_on_exit(suffix, step_result.retcode != 0)
 
