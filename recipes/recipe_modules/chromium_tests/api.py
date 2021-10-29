@@ -1338,6 +1338,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       - None if no failures
     """
     self.report_builders(builder_config, report_mirroring_builders=True)
+    self.print_link_to_results()
     self.configure_build(builder_config)
     update_step, targets_config = self.prepare_checkout(
         builder_config,
@@ -1669,6 +1670,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     self.raise_failure_if_cq_depends_footer_exists()
 
     self.report_builders(builder_config)
+    self.print_link_to_results()
     raw_result, task = self.build_affected_targets(
         builder_id,
         builder_config,
@@ -2126,6 +2128,24 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                 self.m.buildbucket.build.builder.bucket.replace('try', 'ci'),
                 builder_id.builder,
             ))
+
+  def print_link_to_results(self):
+    """Prints a step with a link to the 'test results' tab in Milo.
+
+    Useful for led builds that are stuck on the old UI but are still able to
+    render the results tab given the right URL.
+
+    TODO(crbug.com/1264479): Remove this once led builds are fully on the new UI
+    """
+    if not self.m.led.launched_by_led:
+      return
+    server = self.m.swarming.current_server
+    server = server.replace('http://', '')
+    server = server.replace('https://', '')
+    url = 'https://luci-milo.appspot.com/ui/inv/task-{}-{}/test-results'.format(
+        server, self.m.swarming.task_id)
+    result = self.m.step('test results link', cmd=None)
+    result.presentation.links['results UI'] = url
 
   def _all_compile_targets(self, tests):
     """Returns the compile_targets for all the Tests in |tests|."""

@@ -281,6 +281,7 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
     # prepare_checkout() does not attempt to run ensure_goma()
     self.m.chromium.c.compile_py.compiler = ''
     self.m.chromium_tests.report_builders(builder_config)
+    self.m.chromium_tests.print_link_to_results()
 
     self.m.chromium.apply_config('trybot_flavor')
     return builder_id, builder_config
