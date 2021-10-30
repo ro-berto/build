@@ -124,7 +124,6 @@ def export_lite_tarball(api, version):
         'native_client',
         'native_client_sdk',
         'third_party/android_platform',
-        'third_party/chromite',
         'third_party/closure_compiler',
         'third_party/freetype',
         'third_party/icu',
