@@ -5,15 +5,17 @@
 """
 
 import datetime
+import six
 
 from PB.recipe_engine import result as result_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'chromium',  # to import gclient configs
     'chromium_checkout',
+    'py3_migration',
     'depot_tools/gclient',
     'recipe_engine/buildbucket',
     'recipe_engine/cipd',
@@ -92,7 +94,8 @@ def RunSteps(api):
   # Create CIPD packages.
   futures = []
   with api.step.nest('Create CIPD packages'):
-    for platform, pkg_dir in exec_pkg_paths.iteritems():
+    for platform, pkg_dir in api.py3_migration.consistent_ordering(
+        six.iteritems(exec_pkg_paths)):
       futures.append(
           api.futures.spawn_immediate(create_cipd_package, api, platform,
                                       pkg_dir, model_dir))

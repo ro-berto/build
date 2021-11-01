@@ -495,75 +495,6 @@
   },
   {
     "cmd": [],
-    "name": "Create CIPD packages.Upload CIPD package - windows-amd64",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copytree",
-      "[CLEANUP]/rts-chromium-model",
-      "[CLEANUP]/model-pkg-dir/windows-amd64"
-    ],
-    "infra_step": true,
-    "name": "Create CIPD packages.Upload CIPD package - windows-amd64.Copy the model files",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[CLEANUP]/rts-chromium/windows-amd64/rts-chromium.exe",
-      "[CLEANUP]/model-pkg-dir/windows-amd64/rts-chromium.exe"
-    ],
-    "infra_step": true,
-    "name": "Create CIPD packages.Upload CIPD package - windows-amd64.Include the executable",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "cipd",
-      "create",
-      "-pkg-def",
-      "{\"data\": [{\"dir\": \".\", \"exclude\": []}], \"install_mode\": \"\", \"package\": \"chromium/rts/model/windows-amd64\", \"root\": \"[CLEANUP]/model-pkg-dir/windows-amd64\"}",
-      "-hash-algo",
-      "sha256",
-      "-ref",
-      "latest",
-      "-tag",
-      "build:https://ci.chromium.org/b/0",
-      "-json-output",
-      "/path/to/tmp/json"
-    ],
-    "name": "Create CIPD packages.Upload CIPD package - windows-amd64.create chromium/rts/model/windows-amd64",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"instance_id\": \"40-chars-fake-of-the-package-instance_id\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"package\": \"chromium/rts/model/windows-amd64\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@40-chars-fake-of-the-package-instance_id@https://chrome-infra-packages.appspot.com/p/chromium/rts/model/windows-amd64/+/40-chars-fake-of-the-package-instance_id@@@"
-    ]
-  },
-  {
-    "cmd": [],
     "name": "Create CIPD packages.Upload CIPD package - mac-amd64",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -629,6 +560,75 @@
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LINK@40-chars-fake-of-the-package-instance_id@https://chrome-infra-packages.appspot.com/p/chromium/rts/model/mac-amd64/+/40-chars-fake-of-the-package-instance_id@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "Create CIPD packages.Upload CIPD package - windows-amd64",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copytree",
+      "[CLEANUP]/rts-chromium-model",
+      "[CLEANUP]/model-pkg-dir/windows-amd64"
+    ],
+    "infra_step": true,
+    "name": "Create CIPD packages.Upload CIPD package - windows-amd64.Copy the model files",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CLEANUP]/rts-chromium/windows-amd64/rts-chromium.exe",
+      "[CLEANUP]/model-pkg-dir/windows-amd64/rts-chromium.exe"
+    ],
+    "infra_step": true,
+    "name": "Create CIPD packages.Upload CIPD package - windows-amd64.Include the executable",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "cipd",
+      "create",
+      "-pkg-def",
+      "{\"data\": [{\"dir\": \".\", \"exclude\": []}], \"install_mode\": \"\", \"package\": \"chromium/rts/model/windows-amd64\", \"root\": \"[CLEANUP]/model-pkg-dir/windows-amd64\"}",
+      "-hash-algo",
+      "sha256",
+      "-ref",
+      "latest",
+      "-tag",
+      "build:https://ci.chromium.org/b/0",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "name": "Create CIPD packages.Upload CIPD package - windows-amd64.create chromium/rts/model/windows-amd64",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"instance_id\": \"40-chars-fake-of-the-package-instance_id\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"package\": \"chromium/rts/model/windows-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@40-chars-fake-of-the-package-instance_id@https://chrome-infra-packages.appspot.com/p/chromium/rts/model/windows-amd64/+/40-chars-fake-of-the-package-instance_id@@@"
     ]
   },
   {
