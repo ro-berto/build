@@ -89,6 +89,8 @@ _SPEC = {
         _create_android_builder_config('Release', 64),
     'android-perf':
         _create_android_builder_config('Release', 64, perf_isolate_upload=True),
+    'linux-asan-test':
+        _create_builder_config('linux', 'Release', 64),
     'linux-dbg-compile':
         _create_builder_config('linux', 'Debug', 64),
     'linux-intel':
@@ -104,6 +106,8 @@ _SPEC = {
             'linux', 'Release', 64, perf_isolate_upload=True),
     'linux-swiftshader':
         _create_tester_config('linux', 64, 'linux-test'),
+    'linux-swiftshader-asan':
+        _create_tester_config('linux', 64, 'linux-asan-test'),
     'linux-test':
         _create_builder_config('linux', 'Release', 64),
     'linux-trace':
@@ -134,6 +138,8 @@ _SPEC = {
         _create_builder_config('win', 'Release', 64),
     'win-trace':
         _create_builder_config('win', 'Release', 64),
+    'win-x86-asan-test':
+        _create_builder_config('win', 'Release', 32),
     'win-x86-dbg-compile':
         _create_builder_config('win', 'Debug', 32),
     'win-x86-test':
@@ -154,6 +160,8 @@ _SPEC = {
         _create_tester_config('win', 64, 'win-perf'),
     'win10-x86-swiftshader':
         _create_tester_config('win', 32, 'win-x86-test'),
+    'win10-x86-swiftshader-asan':
+        _create_tester_config('win', 32, 'win-x86-asan-test'),
 }
 
 BUILDERS = builder_db.BuilderDatabase.create({

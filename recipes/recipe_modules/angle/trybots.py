@@ -48,6 +48,18 @@ _SPEC = {
             analyze_names=['angle'],
             retry_failed_shards=False,
         ),
+    'linux-asan-test':
+        try_spec.TrySpec.create(
+            mirrors=[
+                try_spec.TryMirror.create(
+                    builder_group='angle',
+                    buildername='linux-asan-test',
+                    tester='linux-swiftshader-asan',
+                ),
+            ],
+            analyze_names=['angle'],
+            retry_failed_shards=False,
+        ),
     'linux-dbg-compile':
         _create_compile_spec('linux-dbg-compile'),
     'linux-intel-hd630-perf':
@@ -144,6 +156,18 @@ _SPEC = {
                     builder_group='angle',
                     buildername='win-test',
                     tester='win10-x64-nvidia',
+                ),
+            ],
+            analyze_names=['angle'],
+            retry_failed_shards=False,
+        ),
+    'win-x86-asan-test':
+        try_spec.TrySpec.create(
+            mirrors=[
+                try_spec.TryMirror.create(
+                    builder_group='angle',
+                    buildername='win-x86-asan-test',
+                    tester='win10-x86-swiftshader-asan',
                 ),
             ],
             analyze_names=['angle'],
