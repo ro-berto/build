@@ -130,14 +130,6 @@ class _Config(object):
     # TODO(davidben): Migrate uses of this to properties.
     return '_' + token + '_' in '_' + self.buildername + '_'
 
-  def get_builder_env(self):
-    env = {}
-    # TODO(davidben): Remove this once the bots are switched to controlling
-    # this with gclient_vars and a command-line flag to vs_toolchain.py.
-    if self.has_token('vs2017'):
-      env['GYP_MSVS_VERSION'] = '2017'
-    return env
-
   def uses_clang(self):
     if self.clang is not None:
       return self.clang
@@ -311,7 +303,7 @@ def RunSteps(api, clang, cmake_args, gclient_vars, msvc_target, runner_args,
       runner_args=runner_args,
       run_ssl_tests=run_ssl_tests,
       run_unit_tests=run_unit_tests)
-  env = config.get_builder_env()
+  env = {}
   # Point Go's module and build caches to reused cache directories.
   env['GOCACHE'] = api.path['cache'].join('gocache')
   env['GOPATH'] = api.path['cache'].join('gopath')
@@ -482,13 +474,11 @@ def GenTests(api):
       ('win32', api.platform('win', 64)),
       ('win32_small', api.platform('win', 64)),
       ('win32_rel', api.platform('win', 64)),
-      ('win32_vs2017', api.platform('win', 64)),
-      ('win32_vs2017_clang', api.platform('win', 64)),
+      ('win32_clang', api.platform('win', 64)),
       ('win64', api.platform('win', 64)),
       ('win64_small', api.platform('win', 64)),
       ('win64_rel', api.platform('win', 64)),
-      ('win64_vs2017', api.platform('win', 64)),
-      ('win64_vs2017_clang', api.platform('win', 64)),
+      ('win64_clang', api.platform('win', 64)),
       ('android_arm', api.platform('linux', 64)),
       ('android_arm_rel', api.platform('linux', 64)),
       ('android_arm_armmode_rel', api.platform('linux', 64)),
