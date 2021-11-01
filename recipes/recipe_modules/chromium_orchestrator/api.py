@@ -147,6 +147,9 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
         self.m.tryserver.is_tryserver, builder_group=builder_id.group)
 
     if self.m.code_coverage.using_coverage:
+      # cas download raises "file exists" errors for android's json files
+      self.m.file.rmcontents('clear out output directory',
+                             self.m.chromium.output_dir)
       self.m.file.ensure_directory('ensure output directory',
                                    self.m.chromium.output_dir)
       self.m.cas.download(
