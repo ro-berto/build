@@ -1010,6 +1010,7 @@ SPEC = {
                 'android',
                 'angle_internal',
                 'angle_top_of_tree',
+                'enable_reclient',
             ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -1030,6 +1031,7 @@ SPEC = {
                 'android',
                 'angle_internal',
                 'angle_top_of_tree',
+                'enable_reclient',
             ],
             chromium_config_kwargs={
                 'TARGET_PLATFORM': 'android',
@@ -1045,6 +1047,7 @@ SPEC = {
                 'android',
                 'angle_internal',
                 'angle_top_of_tree',
+                'enable_reclient',
             ],
             chromium_config_kwargs={
                 'TARGET_PLATFORM': 'android',
@@ -1060,6 +1063,7 @@ SPEC = {
                 'android',
                 'angle_internal',
                 'angle_top_of_tree',
+                'enable_reclient',
             ],
             chromium_config_kwargs={
                 'TARGET_PLATFORM': 'android',
@@ -1075,6 +1079,7 @@ SPEC = {
                 'android',
                 'angle_internal',
                 'angle_top_of_tree',
+                'enable_reclient',
             ],
             chromium_config_kwargs={
                 'TARGET_PLATFORM': 'android',
@@ -1088,6 +1093,7 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'android',
+                'enable_reclient',
             ],
             chromium_config_kwargs={
                 'TARGET_PLATFORM': 'android',
@@ -1099,7 +1105,10 @@ SPEC = {
         _chromium_gpu_fyi_spec(
             chromium_config='android',
             gclient_config='chromium',
-            gclient_apply_config=['android'],
+            gclient_apply_config=[
+                'android',
+                'enable_reclient',
+            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -1112,7 +1121,10 @@ SPEC = {
         _chromium_gpu_fyi_spec(
             chromium_config='android',
             gclient_config='chromium',
-            gclient_apply_config=['android'],
+            gclient_apply_config=[
+                'android',
+                'enable_reclient',
+            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 32,
