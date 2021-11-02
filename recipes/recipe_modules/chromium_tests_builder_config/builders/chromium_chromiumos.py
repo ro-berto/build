@@ -84,6 +84,7 @@ SPEC.update([
     _config(
         'linux-chromeos-js-code-coverage',
         gclient_apply_config=['use_clang_coverage']),
+    _config('linux-chromeos-annotator-rel'),
     _config('linux-lacros-builder-rel'),
     _config('linux-lacros-dbg'),
     _config('linux-lacros-rel'),
@@ -93,8 +94,7 @@ SPEC.update([
         parent_buildername='linux-lacros-builder-rel'),
     _config('chromeos-amd64-generic-asan-rel', cros_boards='amd64-generic'),
     _config(
-        'chromeos-amd64-generic-cfi-thin-lto-rel',
-        cros_boards='amd64-generic'),
+        'chromeos-amd64-generic-cfi-thin-lto-rel', cros_boards='amd64-generic'),
     _config('chromeos-amd64-generic-dbg', cros_boards='amd64-generic'),
     _config('chromeos-amd64-generic-lacros-dbg', cros_boards='amd64-generic'),
     _config(
