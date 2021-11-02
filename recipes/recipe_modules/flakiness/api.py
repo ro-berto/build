@@ -417,8 +417,16 @@ class FlakinessApi(recipe_api.RecipeApi):
         val.lower()
         for val in self.m.tryserver.get_footer(self.COMMIT_FOOTER_KEY)
     ]
-    if not self.should_check_for_flakiness() or 'skip' in commit_footer_values:
+    if 'skip' in commit_footer_values:
       # No action for endorsing logic
+      self.m.step(
+          'skipping flaky test check since commit footer '
+          '\'Validate-Test-Flakiness: Skip\' was detected.',
+          cmd=None)
+      return []
+
+    if not self.should_check_for_flakiness():
+      self.m.step('no test files were detected with this change.', cmd=None)
       return []
 
     new_tests = self.identify_new_tests()
