@@ -21,6 +21,7 @@ import argparse
 import bisect
 import collections
 import contextlib
+import dataclasses
 import io
 import json
 import logging
@@ -173,53 +174,49 @@ def _run_ninja(out_dir: str,
   ]
 
 
-# File path is omitted, since these are intended to be associated with
-# _TidyDiagnostics with identical paths.
-_TidyReplacement = collections.namedtuple(
-    '_TidyReplacement',
-    ['new_text', 'start_line', 'end_line', 'start_char', 'end_char'])
+@dataclasses.dataclass(eq=True, order=True, frozen=True)
+class _TidyReplacement:
+  """A replacement request emitted by clang-tidy."""
+  # File path is omitted, since these are intended to be associated with
+  # _TidyDiagnostics with identical paths.
+  new_text: str
+  start_line: int
+  end_line: int
+  start_char: int
+  end_char: int
 
-# Notes which specifically reference macro expansion.
-_ExpandedFrom = collections.namedtuple('_ExpandedFrom',
-                                       ['file_path', 'line_number'])
+
+@dataclasses.dataclass(eq=True, order=True, frozen=True)
+class _ExpandedFrom:
+  """`Notes` emitted by clang-tidy which reference macro expansions."""
+  file_path: str
+  line_number: int
 
 
-class _TidyNote(
-    collections.namedtuple('_TidyNote', [
-        'file_path',
-        'line_number',
-        'message',
-        'expansion_locs',
-    ])):
+@dataclasses.dataclass(eq=True, order=True, frozen=True)
+class _TidyNote:
   """A note emitted by clang-tidy."""
+  file_path: str
+  line_number: int
+  message: str
+  expansion_locs: Tuple[_ExpandedFrom]
 
-  def to_dict(self) -> Dict[str, Any]:
-    my_dict = self._asdict()
-    my_dict['expansion_locs'] = [x._asdict() for x in my_dict['expansion_locs']]
-    return my_dict
 
+@dataclasses.dataclass(eq=True, order=True, frozen=True)
+class _TidyDiagnostic:
+  """A diagnostic emitted by clang-tidy.
 
-# Note that we shove these in a set for cheap deduplication, and we sort based
-# on the natural element order here. Sorting is mostly just for
-# deterministic/pretty output.
-class _TidyDiagnostic(
-    collections.namedtuple('_TidyDiagnostic', [
-        'file_path',
-        'line_number',
-        'diag_name',
-        'message',
-        'replacements',
-        'expansion_locs',
-        'notes',
-    ])):
-  """A diagnostic emitted by clang-tidy"""
-
-  def to_dict(self) -> Dict[str, Any]:
-    my_dict = self._asdict()
-    my_dict['replacements'] = [x._asdict() for x in my_dict['replacements']]
-    my_dict['expansion_locs'] = [x._asdict() for x in my_dict['expansion_locs']]
-    my_dict['notes'] = [x.to_dict() for x in my_dict['notes']]
-    return my_dict
+  Note that we shove these in a set for cheap deduplication, and we sort
+  based on the natural element order here. Sorting is mostly just for
+  deterministic/pretty output.
+  """
+  file_path: str
+  line_number: int
+  diag_name: str
+  message: str
+  replacements: Tuple[_TidyReplacement]
+  expansion_locs: Tuple[_ExpandedFrom]
+  notes: Tuple[_TidyNote]
 
 
 class _ParseError(Exception):
@@ -290,7 +287,8 @@ class _DiagnosticNoteBuilder:
 
   def build_notes(self) -> Iterable[_TidyNote]:
     return tuple(
-        x._replace(expansion_locs=tuple(x.expansion_locs)) for x in self._notes)
+        dataclasses.replace(x, expansion_locs=tuple(x.expansion_locs))
+        for x in self._notes)
 
 
 def _parse_tidy_fixes_file(read_line_offsets: Callable[[str], _LineOffsetMap],
@@ -1190,7 +1188,7 @@ def _convert_tidy_output_json_obj(base_path: str,
         # a specific place.
         results.append(loc)
       else:
-        results.append(loc._replace(file_path=n))
+        results.append(dataclasses.replace(loc, file_path=n))
     return tuple(results)
 
   all_diagnostics = []
@@ -1212,13 +1210,15 @@ def _convert_tidy_output_json_obj(base_path: str,
         logging.info('Dropping out-of-base note from %s', note.file_path)
         continue
       normalized_notes.append(
-          note._replace(
+          dataclasses.replace(
+              note,
               file_path=n,
               expansion_locs=normalize_expansion_locs(note.expansion_locs),
           ))
 
     all_diagnostics.append(
-        diag._replace(
+        dataclasses.replace(
+            diag,
             file_path=normalized_path,
             expansion_locs=normalize_expansion_locs(diag.expansion_locs),
             notes=tuple(normalized_notes),
@@ -1268,7 +1268,7 @@ def _convert_tidy_output_json_obj(base_path: str,
 
       # A list of all of the diagnostics we've seen in this run. They're
       # instances of `_TidyDiagnostic`.
-      'diagnostics': [x.to_dict() for x in all_diagnostics],
+      'diagnostics': [dataclasses.asdict(x) for x in all_diagnostics],
   }
 
 

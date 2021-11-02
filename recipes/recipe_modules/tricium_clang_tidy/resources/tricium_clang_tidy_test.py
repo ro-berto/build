@@ -13,6 +13,7 @@
 from __future__ import print_function
 
 import collections
+import dataclasses
 import io
 import json
 import logging
@@ -189,7 +190,7 @@ class Tests(unittest.TestCase):
     ]
 
     diag_yaml = _convert_tidy_diags_to_yaml(tidy_diags)
-    tidy_diags[-1] = tidy_diags[-1]._replace(file_path='/tidy/foo3')
+    tidy_diags[-1] = dataclasses.replace(tidy_diags[-1], file_path='/tidy/foo3')
     # YAML doesn't have a dumps() on my local machine; JSON's easiest.
     self.assertEqual(
         _parse_fixes_file_text(input_file, diag_yaml, tidy_invocation_dir),
@@ -792,16 +793,18 @@ class Tests(unittest.TestCase):
     self.assertEqual(
         result, {
             'diagnostics': [
-                _build_tidy_diagnostic(
-                    file_path='not_src.h',
-                    line_number=1,
-                    diag_name='bar',
-                    message='baz').to_dict(),
-                _build_tidy_diagnostic(
-                    file_path='src_file.cc',
-                    line_number=1,
-                    diag_name='bar',
-                    message='baz').to_dict(),
+                dataclasses.asdict(
+                    _build_tidy_diagnostic(
+                        file_path='not_src.h',
+                        line_number=1,
+                        diag_name='bar',
+                        message='baz')),
+                dataclasses.asdict(
+                    _build_tidy_diagnostic(
+                        file_path='src_file.cc',
+                        line_number=1,
+                        diag_name='bar',
+                        message='baz')),
             ],
             'failed_src_files': ['src_file.cc', 'src_file.h'],
             'failed_tidy_files': ['src_file.h', 'tertiary_file.cc'],
@@ -870,11 +873,12 @@ class Tests(unittest.TestCase):
     self.assertEqual(
         result, {
             'diagnostics': [
-                _build_tidy_diagnostic(
-                    file_path='src_file.cc',
-                    line_number=1,
-                    diag_name='bar',
-                    message='baz').to_dict(),
+                dataclasses.asdict(
+                    _build_tidy_diagnostic(
+                        file_path='src_file.cc',
+                        line_number=1,
+                        diag_name='bar',
+                        message='baz')),
             ],
             'failed_src_files': [],
             'failed_tidy_files': [],
@@ -913,11 +917,12 @@ class Tests(unittest.TestCase):
     self.assertEqual(
         result, {
             'diagnostics': [
-                _build_tidy_diagnostic(
-                    file_path='src_file.cc',
-                    line_number=1,
-                    diag_name='bar',
-                    message='baz').to_dict(),
+                dataclasses.asdict(
+                    _build_tidy_diagnostic(
+                        file_path='src_file.cc',
+                        line_number=1,
+                        diag_name='bar',
+                        message='baz')),
             ],
             'failed_src_files': [],
             'failed_tidy_files': [],
@@ -972,25 +977,26 @@ class Tests(unittest.TestCase):
     self.assertEqual(
         result, {
             'diagnostics': [
-                _build_tidy_diagnostic(
-                    file_path='src_file.h',
-                    line_number=1,
-                    diag_name='bar',
-                    message='baz',
-                    expansion_locs=(
-                        tidy._ExpandedFrom('src_file2.h', 1),
-                        tidy._ExpandedFrom('/usr/include/src_file3.h', 2),
-                    ),
-                    notes=(tidy._TidyNote(
-                        file_path='src_file_dne.h',
+                dataclasses.asdict(
+                    _build_tidy_diagnostic(
+                        file_path='src_file.h',
                         line_number=1,
-                        message='note',
+                        diag_name='bar',
+                        message='baz',
                         expansion_locs=(
-                            tidy._ExpandedFrom('src_file.h', 1),
-                            tidy._ExpandedFrom('/bar/out_of_base.h', 3),
+                            tidy._ExpandedFrom('src_file2.h', 1),
+                            tidy._ExpandedFrom('/usr/include/src_file3.h', 2),
                         ),
-                    ),),
-                ).to_dict(),
+                        notes=(tidy._TidyNote(
+                            file_path='src_file_dne.h',
+                            line_number=1,
+                            message='note',
+                            expansion_locs=(
+                                tidy._ExpandedFrom('src_file.h', 1),
+                                tidy._ExpandedFrom('/bar/out_of_base.h', 3),
+                            ),
+                        ),),
+                    )),
             ],
             'failed_src_files': [],
             'failed_tidy_files': [],
