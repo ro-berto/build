@@ -308,7 +308,7 @@ def _parse_tidy_fixes_file(read_line_offsets: Callable[[str], _LineOffsetMap],
   assert os.path.isabs(tidy_invocation_dir)
 
   try:
-    findings = yaml.load(stream)
+    findings = yaml.safe_load(stream)
   except (yaml.parser.ParserError, yaml.reader.ReaderError) as v:
     raise _ParseError('Broken yaml: %s' % v) from v
 
