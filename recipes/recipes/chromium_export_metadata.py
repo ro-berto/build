@@ -18,7 +18,7 @@ https://source.chromium.org/chromium/infra/infra/+/main:go/src/infra/tools/dirmd
 
 
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'build/chromium',
