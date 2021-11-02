@@ -275,8 +275,10 @@ class BinarySizeApi(recipe_api.RecipeApi):
 
     output_file = self.m.chromium.output_dir.join('plugin.json')
     cmd += ['--size-plugin-json-path', output_file]
-    cmd += ['--isolated-script-test-output',
-            self.m.chromium.output_dir.join('size_results.json')]
+    cmd += [
+        '--isolated-script-test-output',
+        staging_dir.join('size_results.json')
+    ]
     return cmd
 
   def get_size_analysis_command(self, staging_dir, use_m87_flow=False,

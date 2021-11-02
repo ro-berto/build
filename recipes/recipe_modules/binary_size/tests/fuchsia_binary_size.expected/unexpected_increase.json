@@ -1432,7 +1432,7 @@
       "--size-plugin-json-path",
       "[CACHE]/builder/src/out/Release/plugin.json",
       "--isolated-script-test-output",
-      "[CACHE]/builder/src/out/Release/size_results.json"
+      "[CLEANUP]/binary-size-trybot_tmp_1/with_patch/size_results.json"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -2366,7 +2366,7 @@
       "--size-plugin-json-path",
       "[CACHE]/builder/src/out/Release/plugin.json",
       "--isolated-script-test-output",
-      "[CACHE]/builder/src/out/Release/size_results.json"
+      "[CLEANUP]/binary-size-trybot_tmp_1/without_patch/size_results.json"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
