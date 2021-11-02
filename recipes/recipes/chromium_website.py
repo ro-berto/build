@@ -22,24 +22,17 @@ DEPS = [
     'recipe_engine/step',
 ]
 
-# pylint: disable=line-too-long
-PROPERTIES = {
-    'repository':
-        Property(
-            kind=str,
-            default='https://chromium.googlesource.com/experimental/website'
-        ),
-}
-# pylint: enable=line-too-long
 
-def RunSteps(api, repository):
+def RunSteps(api):
   api.gclient.set_config('chromium_website')
   api.bot_update.ensure_checkout()
   api.gclient.runhooks()
 
-  with api.context(cwd=api.m.path['checkout']):
-    npmw_path = api.m.path['checkout'].join('npmw')
-    api.step('build', [npmw_path, 'build'])
+  # TODO(dpranke): Skip this step until everything is fully set up
+  # again src-side.
+  #with api.context(cwd=api.m.path['checkout']):
+  #  npmw_path = api.m.path['checkout'].join('npmw')
+  #  api.step('build', [npmw_path, 'build'])
 
   return result_pb2.RawResult(
       status=common_pb.SUCCESS,
@@ -56,4 +49,4 @@ def GenTests(api):
 def chromium_website(c):
   s = c.solutions.add()
   s.name = 'chromium_website'
-  s.url = 'https://chromium.googlesource.com/experimental/website.git'
+  s.url = 'https://chromium.googlesource.com/website.git'
