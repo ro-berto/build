@@ -36,15 +36,20 @@ import subprocess
 import sys
 import tempfile
 import time
+from typing import (IO, Any, Callable, Dict, Generator, Iterable, List,
+                    Optional, Set, Tuple, TypeVar)
 
 import yaml
 
 _CC_FILE_EXTENSIONS = ('.cc', '.cpp', '.c', '.cxx')
 _HEADER_FILE_EXTENSIONS = ('.h', '.hpp')
 
+_T = TypeVar('_T')
+
 
 @contextlib.contextmanager
-def _temp_file():
+def _temp_file() -> Generator[str, None, None]:
+  """Creates an unconditionally deleted temp file, yielding its path."""
   fd, path = tempfile.mkstemp(prefix='tricium_tidy')
   try:
     os.close(fd)
@@ -53,7 +58,8 @@ def _temp_file():
     os.unlink(path)
 
 
-def _generate_compile_commands(out_dir):
+def _generate_compile_commands(out_dir: str) -> str:
+  """Generates a compile_commands.json file, returning the path to it."""
   compile_commands = os.path.join(out_dir, 'compile_commands.json')
   # Regenerate compile_commands every time, since the user might've patched
   # files (etc.) since our previous run.
@@ -75,12 +81,12 @@ def _generate_compile_commands(out_dir):
   return compile_commands
 
 
-def _run_ninja(out_dir,
-               phony_targets,
-               object_targets,
-               jobs=None,
-               max_targets_per_invocation=500,
-               force_clean=True):
+def _run_ninja(out_dir: str,
+               phony_targets: List[str],
+               object_targets: List[str],
+               jobs: Optional[int] = None,
+               max_targets_per_invocation: int = 500,
+               force_clean: bool = True):
   """Runs ninja, returning the object_targets that failed to build.
 
   Args:
@@ -143,7 +149,7 @@ def _run_ninja(out_dir,
 
   remaining_objects = object_targets[::-1]
   while 1:
-    to_build = []
+    to_build: List[str] = []
     while len(to_build) < max_targets_per_invocation and remaining_objects:
       obj = remaining_objects.pop()
       if os.path.exists(os.path.join(out_dir, obj)):
@@ -187,7 +193,7 @@ class _TidyNote(
     ])):
   """A note emitted by clang-tidy."""
 
-  def to_dict(self):
+  def to_dict(self) -> Dict[str, Any]:
     my_dict = self._asdict()
     my_dict['expansion_locs'] = [x._asdict() for x in my_dict['expansion_locs']]
     return my_dict
@@ -208,7 +214,7 @@ class _TidyDiagnostic(
     ])):
   """A diagnostic emitted by clang-tidy"""
 
-  def to_dict(self):
+  def to_dict(self) -> Dict[str, Any]:
     my_dict = self._asdict()
     my_dict['replacements'] = [x._asdict() for x in my_dict['replacements']]
     my_dict['expansion_locs'] = [x._asdict() for x in my_dict['expansion_locs']]
@@ -218,7 +224,7 @@ class _TidyDiagnostic(
 
 class _ParseError(Exception):
 
-  def __init__(self, err_msg):
+  def __init__(self, err_msg: str):
     Exception.__init__(self, err_msg)
     self.err_msg = err_msg
 
@@ -226,7 +232,7 @@ class _ParseError(Exception):
 class _LineOffsetMap:
   """Convenient API to turn offsets in a file into line numbers."""
 
-  def __init__(self, newline_locations):
+  def __init__(self, newline_locations: Iterable[int]):
     line_starts = sorted(x + 1 for x in newline_locations)
 
     if line_starts:
@@ -239,17 +245,17 @@ class _LineOffsetMap:
 
     self._line_starts = line_starts
 
-  def get_line_number(self, char_number):
+  def get_line_number(self, char_number: int) -> int:
     assert 0 <= char_number < sys.maxsize, char_number
     return bisect.bisect_right(self._line_starts, char_number)
 
-  def get_line_offset(self, char_number):
+  def get_line_offset(self, char_number: int) -> int:
     assert 0 <= char_number < sys.maxsize, char_number
     line_start_index = bisect.bisect_right(self._line_starts, char_number) - 1
     return char_number - self._line_starts[line_start_index]
 
   @staticmethod
-  def for_text(data):
+  def for_text(data: str) -> '_LineOffsetMap':
     return _LineOffsetMap([m.start() for m in re.finditer(r'\n', data)])
 
 
@@ -264,13 +270,13 @@ class _DiagnosticNoteBuilder:
     self._top_level_expansion_locs = []
     self._notes = []
 
-  def push_expansion_loc(self, expanded_from):
+  def push_expansion_loc(self, expanded_from: _ExpandedFrom):
     if self._notes:
       self._notes[-1].expansion_locs.append(expanded_from)
     else:
       self._top_level_expansion_locs.append(expanded_from)
 
-  def push_tidy_note(self, file_path, line_number, message):
+  def push_tidy_note(self, file_path: str, line_number: int, message: str):
     self._notes.append(
         _TidyNote(
             file_path=file_path,
@@ -279,15 +285,17 @@ class _DiagnosticNoteBuilder:
             expansion_locs=[],
         ))
 
-  def build_top_level_expansions(self):
+  def build_top_level_expansions(self) -> Iterable[_ExpandedFrom]:
     return tuple(self._top_level_expansion_locs)
 
-  def build_notes(self):
+  def build_notes(self) -> Iterable[_TidyNote]:
     return tuple(
         x._replace(expansion_locs=tuple(x.expansion_locs)) for x in self._notes)
 
 
-def _parse_tidy_fixes_file(read_line_offsets, stream, tidy_invocation_dir):
+def _parse_tidy_fixes_file(read_line_offsets: Callable[[str], _LineOffsetMap],
+                           stream: Any, tidy_invocation_dir: str
+                          ) -> Generator[_TidyDiagnostic, None, None]:
   """Parses a clang-tidy YAML file.
 
   Args:
@@ -309,7 +317,7 @@ def _parse_tidy_fixes_file(read_line_offsets, stream, tidy_invocation_dir):
   if findings is None:
     return
 
-  cached_line_offsets = {}
+  cached_line_offsets: Dict[str, _LineOffsetMap] = {}
 
   def get_line_offsets(file_path):
     assert not file_path or os.path.isabs(file_path), file_path
@@ -405,8 +413,9 @@ def _parse_tidy_fixes_file(read_line_offsets, stream, tidy_invocation_dir):
     raise _ParseError('Broken yaml: missing key %r' % key_name) from k
 
 
-def _run_clang_tidy(clang_tidy_binary, checks, in_dir, cc_file,
-                    compile_command):
+def _run_clang_tidy(clang_tidy_binary: str, checks: Optional[str], in_dir: str,
+                    cc_file: str, compile_command: str
+                   ) -> Tuple[Optional[int], str, List[_TidyDiagnostic]]:
   with _temp_file() as findings_file:
     command = [clang_tidy_binary]
 
@@ -444,7 +453,7 @@ def _run_clang_tidy(clang_tidy_binary, checks, in_dir, cc_file,
           timeout=30 * 60,
       )
 
-      return_code = tidy.returncode
+      return_code: Optional[int] = tidy.returncode
       stdout = tidy.stdout
     except FileNotFoundError:
       logging.error('Failed to spawn clang-tidy -- is it installed?')
@@ -478,7 +487,9 @@ _TidyAction = collections.namedtuple('_TidyAction',
                                      ['in_dir', 'cc_file', 'flags', 'target'])
 
 
-def _run_tidy_action(tidy_binary, checks, action):
+def _run_tidy_action(
+    tidy_binary: str, checks: Optional[str], action: _TidyAction
+) -> Optional[Tuple[Optional[int], str, List[_TidyDiagnostic]]]:
   """Runs clang-tidy, given a _TidyAction.
 
   The return value here is a bit complicated:
@@ -525,7 +536,9 @@ _CompileCommand = collections.namedtuple(
     ['target_name', 'file_abspath', 'file', 'directory', 'command'])
 
 
-def _parse_compile_commands(stream):
+def _parse_compile_commands(stream: io.TextIOWrapper
+                           ) -> Generator[_CompileCommand, None, None]:
+  """Parses compile commands from the given input stream."""
   compile_commands = json.load(stream)
 
   for action in compile_commands:
@@ -559,7 +572,8 @@ def _parse_compile_commands(stream):
     )
 
 
-def _chunk_iterable(iterable, chunk_size):
+def _chunk_iterable(iterable: Iterable[_T],
+                    chunk_size: int) -> Generator[List[_T], None, None]:
   this_chunk = []
   for i, e in enumerate(iterable, 1):
     this_chunk.append(e)
@@ -572,7 +586,8 @@ def _chunk_iterable(iterable, chunk_size):
     yield this_chunk
 
 
-def _parse_ninja_deps_output(input_stream, cwd):
+def _parse_ninja_deps_output(input_stream: IO[str], cwd: str
+                            ) -> Generator[Tuple[str, List[str]], None, None]:
   """Parses the output of `ninja -t deps`.
 
   Yields successive tuples of (object_file, [file_it_depends_on]). Ignores any
@@ -581,13 +596,11 @@ def _parse_ninja_deps_output(input_stream, cwd):
   `object_file`s are all relative to out_dir; all `file_it_depends_on`s are
   absolute.
   """
-  # If True, both `current_target` and `all_deps` are meaningless.
-  #
-  # It adds some complexity, but ninja may dump up to ~1GB of deps, most of
-  # which are stale. Lowering the constant factor there is helpful.
-  current_target_is_stale = True
-  current_target = None
-  all_deps = None
+  # If current_target is None, the target we're parsing is either nonexistent
+  # or stale. `current_target is not None` also implies that `all_deps` is a
+  # valid List object.
+  current_target: Optional[str] = None
+  all_deps: Optional[List[str]] = None
   for line in input_stream:
     line = line.rstrip()
     if not line:
@@ -602,11 +615,11 @@ def _parse_ninja_deps_output(input_stream, cwd):
     # stale, and the files that `foo.o` depends on are printed with an indent
     # under the first line.
     if not line[0].isspace():
-      if not current_target_is_stale:
+      if current_target is not None:
+        assert all_deps is not None
         yield current_target, all_deps
 
-      current_target_is_stale = line.endswith('(STALE)')
-      if current_target_is_stale:
+      if line.endswith('(STALE)'):
         current_target = None
         all_deps = None
       else:
@@ -614,14 +627,16 @@ def _parse_ninja_deps_output(input_stream, cwd):
         all_deps = []
       continue
 
-    if not current_target_is_stale:
+    if all_deps is not None:
       all_deps.append(os.path.join(cwd, line.lstrip()))
 
-  if not current_target_is_stale:
+  if current_target is not None:
+    assert all_deps is not None
     yield current_target, all_deps
 
 
-def _parse_ninja_deps(out_dir):
+def _parse_ninja_deps(out_dir: str
+                     ) -> Generator[Tuple[str, List[str]], None, None]:
   """Runs and parses the output of `ninja -t deps`.
 
   Yields successive tuples of (object_file, [file_it_depends_on]). Ignores any
@@ -634,6 +649,7 @@ def _parse_ninja_deps(out_dir):
   ninja = subprocess.Popen(
       command, cwd=out_dir, stdout=subprocess.PIPE, encoding='utf-8')
   try:
+    assert ninja.stdout is not None
     for val in _parse_ninja_deps_output(ninja.stdout, out_dir):
       yield val
   except:
@@ -659,7 +675,7 @@ def _parse_ninja_deps(out_dir):
 class _GnDesc:
   """Represents the output of `gn desc` in an efficiently-usable manner."""
 
-  def __init__(self, per_target_srcs):
+  def __init__(self, per_target_srcs: Dict[str, List[str]]):
     self._per_target_srcs = per_target_srcs
 
     targets_containing = collections.defaultdict(list)
@@ -668,14 +684,16 @@ class _GnDesc:
         targets_containing[src].append(target)
     self._targets_containing = targets_containing
 
-  def targets_containing(self, src_file):
+  def targets_containing(self, src_file: str) -> Iterable[str]:
     return self._targets_containing.get(src_file, ())
 
-  def source_files_for_target(self, target):
+  def source_files_for_target(self, target: str) -> Iterable[str]:
     return self._per_target_srcs.get(target, ())
 
 
-def _parse_gn_desc_output(full_desc, chromium_root):
+def _parse_gn_desc_output(full_desc: Dict[str, Any],
+                          chromium_root: str) -> _GnDesc:
+  """Given the full, parsed output of `gn desc`, generates a _GnDesc object."""
   per_target_srcs = {}
   for target, val in full_desc.items():
     all_srcs = val.get('sources')
@@ -691,12 +709,13 @@ def _parse_gn_desc_output(full_desc, chromium_root):
   return _GnDesc(per_target_srcs)
 
 
-def _parse_gn_desc(out_dir, chromium_root):
+def _parse_gn_desc(out_dir: str, chromium_root: str) -> _GnDesc:
   logging.info('Parsing gn desc...')
 
   command = ['gn', 'desc', '.', '//*:*', '--format=json']
   gn_desc = subprocess.Popen(
       command, stdout=subprocess.PIPE, cwd=out_dir, encoding='utf-8')
+  assert gn_desc.stdout is not None
   full_desc = json.load(gn_desc.stdout)
   return_code = gn_desc.wait()
   if return_code:
@@ -704,7 +723,9 @@ def _parse_gn_desc(out_dir, chromium_root):
   return _parse_gn_desc_output(full_desc, chromium_root)
 
 
-def _buildable_src_files_for(src_file, cc_to_target_map, gn_desc):
+def _buildable_src_files_for(src_file: str,
+                             cc_to_target_map: Dict[str, List[str]],
+                             gn_desc: _GnDesc) -> List[str]:
   """Returns cc_files that might depend on the given src_file.
 
   Args:
@@ -728,7 +749,7 @@ def _buildable_src_files_for(src_file, cc_to_target_map, gn_desc):
 
   renames = [no_suffix + x for x in _CC_FILE_EXTENSIONS]
   targets = gn_desc.targets_containing(src_file)
-  same_target_srcs = []
+  same_target_srcs: List[str] = []
   for targ in targets:
     same_target_srcs += gn_desc.source_files_for_target(targ)
 
@@ -745,8 +766,11 @@ def _buildable_src_files_for(src_file, cc_to_target_map, gn_desc):
   return result
 
 
-def _perform_build(out_dir, run_ninja, parse_ninja_deps, cc_to_target_map,
-                   gn_desc, potential_src_cc_file_deps):
+def _perform_build(out_dir: str, run_ninja: Any, parse_ninja_deps: Callable[
+    [str], Generator[Tuple[str, List[str]], None, None]],
+                   cc_to_target_map: Dict[str, List[str]], gn_desc: _GnDesc,
+                   potential_src_cc_file_deps: Dict[str, List[str]]
+                  ) -> Tuple[Dict[str, List[str]], List[str]]:
   """Performs a build, collecting info pertinent to clang-tidy's interests.
 
   Args:
@@ -822,7 +846,7 @@ def _perform_build(out_dir, run_ninja, parse_ninja_deps, cc_to_target_map,
       if src_file not in src_file_to_target_map
   }
 
-  def likely_found_by_all_build(src_file):
+  def likely_found_by_all_build(src_file: str) -> bool:
     # It's possible for .cc files to be in `still_missing` if they're only
     # built for certain OSes. It's highly unlikely that an `all` build will
     # reveal users of them, so we skip this if .cc files are all that we're
@@ -860,13 +884,15 @@ def _perform_build(out_dir, run_ninja, parse_ninja_deps, cc_to_target_map,
   return src_file_to_target_map, failed_targets
 
 
-def _generate_tidy_actions(out_dir,
-                           only_src_files,
-                           run_ninja,
-                           parse_ninja_deps,
-                           gn_desc,
-                           compile_commands,
-                           max_tidy_actions_per_file=16):
+def _generate_tidy_actions(
+    out_dir: str,
+    only_src_files: Optional[List[str]],
+    run_ninja: Any,
+    parse_ninja_deps: Callable[[str],
+                               Generator[Tuple[str, List[str]], None, None]],
+    gn_desc: _GnDesc,
+    compile_commands: List[_CompileCommand],
+    max_tidy_actions_per_file: int = 16) -> Any:
   """Figures out how to lint `only_src_files` and builds their dependencies.
 
   Args:
@@ -918,13 +944,13 @@ def _generate_tidy_actions(out_dir,
 
   actions = collections.defaultdict(list)
   for src_file in only_src_files:
-    dependent_cc_files = {
+    dependent_cc_files = list({
         target_to_cc_map[x]
         for x in src_file_to_target_map[src_file]
         # Since we filter out some build actions (e.g., pnacl), things that we
         # don't know about may get built.
         if x in target_to_cc_map
-    }
+    })
     if not dependent_cc_files:
       logging.error('No targets found for %r', src_file)
       continue
@@ -935,8 +961,7 @@ def _generate_tidy_actions(out_dir,
 
     # Sort by priority; in the case of unexpected dependencies, just use the
     # file name.
-    dependent_cc_files = sorted(
-        dependent_cc_files,
+    dependent_cc_files.sort(
         key=lambda x: (priorities.get(x, len(priorities)), x))
 
     tidy_targets = []
@@ -949,13 +974,13 @@ def _generate_tidy_actions(out_dir,
 
     for cc_file, target in tidy_targets:
       command = target_to_command_map[target]
-      action = _TidyAction(
+      tidy_action = _TidyAction(
           cc_file=cc_file,
           target=target,
           in_dir=command.directory,
           flags=command.command,
       )
-      actions[action].append(src_file)
+      actions[tidy_action].append(src_file)
 
   return actions, sorted(x for x in actions if x.target in failed_targets)
 
@@ -966,8 +991,13 @@ def _run_one_tidy_action(args):
   return action, run_tidy_action(clang_tidy_binary, clang_tidy_checks, action)
 
 
-def _run_all_tidy_actions(tidy_actions, run_tidy_action, tidy_jobs,
-                          clang_tidy_binary, clang_tidy_checks, use_threads):
+def _run_all_tidy_actions(
+    tidy_actions: List[_TidyAction],
+    run_tidy_action: Callable[[str, Optional[str], _TidyAction],
+                              Tuple[Optional[int], str, List[_TidyDiagnostic]]],
+    tidy_jobs: int, clang_tidy_binary: str, clang_tidy_checks: Optional[str],
+    use_threads: bool
+) -> Tuple[Set[_TidyAction], Set[_TidyAction], Set[_TidyDiagnostic]]:
   """Runs a series of tidy actions, returning the status of all of that.
 
   Args:
@@ -994,11 +1024,9 @@ def _run_all_tidy_actions(tidy_actions, run_tidy_action, tidy_jobs,
   # is expensive, and the GIL starts blocking us from spawning new clang-tidies
   # once parallelism is high enough (-j25-ish).
   if use_threads:
-    pool_kind = multiprocessing.pool.ThreadPool
+    pool: Any = multiprocessing.pool.ThreadPool(processes=tidy_jobs)
   else:
-    pool_kind = multiprocessing.Pool
-
-  pool = pool_kind(processes=tidy_jobs)
+    pool = multiprocessing.Pool(processes=tidy_jobs)
 
   results = pool.imap_unordered(
       _run_one_tidy_action,
@@ -1061,7 +1089,7 @@ def _filter_invalid_findings(diags):
   return good
 
 
-def _normalize_path_to_base(path, base):
+def _normalize_path_to_base(path: str, base: str) -> Optional[str]:
   assert os.path.isabs(path), '%s should be absolute' % path
 
   if base is None:
@@ -1080,9 +1108,13 @@ def _normalize_path_to_base(path, base):
   return None
 
 
-def _convert_tidy_output_json_obj(base_path, tidy_actions, failed_actions,
-                                  failed_tidy_actions, timed_out_actions,
-                                  findings, only_src_files):
+def _convert_tidy_output_json_obj(base_path: str,
+                                  tidy_actions: Dict[_TidyAction, str],
+                                  failed_actions: Iterable[_TidyAction],
+                                  failed_tidy_actions: Iterable[_TidyAction],
+                                  timed_out_actions: Iterable[_TidyAction],
+                                  findings: Iterable[_TidyDiagnostic],
+                                  only_src_files: Iterable[str]) -> Any:
   """Converts the results of this run into a JSON-serializable object.
 
   Args:
