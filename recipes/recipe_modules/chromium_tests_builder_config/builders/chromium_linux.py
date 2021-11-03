@@ -103,7 +103,10 @@ SPEC = {
                 'mb',
             ],
             gclient_config='chromium',
-            gclient_apply_config=['use_clang_coverage'],
+            gclient_apply_config=[
+                'use_clang_coverage',
+                'enable_reclient',
+            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -117,7 +120,10 @@ SPEC = {
                 'mb',
             ],
             gclient_config='chromium',
-            gclient_apply_config=['use_clang_coverage'],
+            gclient_apply_config=[
+                'use_clang_coverage',
+                'enable_reclient',
+            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -222,7 +228,9 @@ SPEC = {
                 'mb',
             ],
             gclient_config='chromium',
-            gclient_apply_config=['use_clang_coverage'],
+            gclient_apply_config=[
+                'use_clang_coverage',
+            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -292,6 +300,7 @@ SPEC = {
                 'mb',
             ],
             gclient_config='chromium',
+            gclient_apply_config=['enable_reclient'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 32,
@@ -305,6 +314,7 @@ SPEC = {
                 'mb',
             ],
             gclient_config='chromium',
+            gclient_apply_config=['enable_reclient'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
@@ -316,6 +326,7 @@ SPEC = {
             chromium_config='chromium',
             chromium_apply_config=['mb'],
             gclient_config='chromium',
+            gclient_apply_config=['enable_reclient'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
