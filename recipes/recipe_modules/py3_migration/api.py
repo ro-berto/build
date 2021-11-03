@@ -40,7 +40,7 @@ class Py3MigrationApi(recipe_api.RecipeApi):
     """
     if not self._test_data.enabled:
       return iterable  # pragma: no cover
-    return sorted(iterable, key=key)
+    return self.test_api.consistent_ordering(iterable, key=key)
 
   def consistent_dict_str(self, d):
     """Get a dict string that is the same between python versions.

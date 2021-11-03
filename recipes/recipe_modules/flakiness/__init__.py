@@ -14,6 +14,7 @@ DEPS = [
     'depot_tools/gerrit',
     'depot_tools/tryserver',
     'isolate',
+    'py3_migration',
     'recipe_engine/buildbucket',
     'recipe_engine/commit_position',
     'recipe_engine/json',

@@ -18,7 +18,7 @@ from PB.go.chromium.org.luci.resultdb.proto.v1 \
 from PB.go.chromium.org.luci.resultdb.proto.v1 \
     import resultdb as resultdb_pb2
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'chromium',
@@ -27,6 +27,8 @@ DEPS = [
     'chromium_tests_builder_config',
     'filter',
     'flakiness',
+    'py3_migration',
+    'test_utils',
     'depot_tools/gclient',
     'depot_tools/tryserver',
     'recipe_engine/assertions',
@@ -36,7 +38,6 @@ DEPS = [
     'recipe_engine/python',
     'recipe_engine/raw_io',
     'recipe_engine/resultdb',
-    'test_utils',
 ]
 
 
@@ -105,9 +106,10 @@ def GenTests(api):
   def _generate_test_result(test_id, test_variant, status=None):
     status = status or test_result_pb2.FAIL
     vd = getattr(test_variant, 'def')
-    vh = base64.b64encode(
-        ('\n'.join('{}:{}'.format(k, v)
-                   for k, v in vd.items())).encode('utf-8')).decode('utf-8')
+    vh_in = '\n'.join(
+        '{}:{}'.format(k, v)
+        for k, v in api.py3_migration.consistent_ordering(vd.items()))
+    vh = base64.b64encode(vh_in.encode('utf-8')).decode('utf-8')
     return test_result_pb2.TestResult(
         test_id=test_id,
         variant=test_variant,

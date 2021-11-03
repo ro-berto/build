@@ -377,7 +377,8 @@ class FlakinessApi(recipe_api.RecipeApi):
           builder=current_builder.builder)
       p.logs['new_tests'] = ('new tests: \n\n{}'.format('\n'.join([
           'test_id: {}, variant_hash: {}'.format(t.test_id, t.variant_hash)
-          for t in new_tests
+          for t in self.m.py3_migration.consistent_ordering(
+              new_tests, key=lambda t: (t.test_id, t.variant_hash))
       ])))
 
     return new_tests
