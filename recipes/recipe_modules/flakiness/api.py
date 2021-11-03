@@ -215,7 +215,8 @@ class FlakinessApi(recipe_api.RecipeApi):
     invs = [
         str(b.infra.resultdb.invocation)
         for b in search_results
-        if str(b.infra.resultdb.invocation) not in excluded_invs
+        if str(b.infra.resultdb.invocation) and
+        str(b.infra.resultdb.invocation) not in excluded_invs
     ]
 
     return invs

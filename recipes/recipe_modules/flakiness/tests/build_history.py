@@ -27,7 +27,7 @@ def RunSteps(api):
 
 def GenTests(api):
   build_database = []
-  for i in range(5):
+  for i in range(4):
     inv = "invocations/{}".format(i + 1)
     build = build_pb2.Build(
         id=i + 1,
@@ -36,6 +36,16 @@ def GenTests(api):
             resultdb=build_pb2.BuildInfra.ResultDB(invocation=inv)),
     )
     build_database.append(build)
+
+  # The assertion above will ensure that this empty string invocation
+  # is excluded.
+  build_database.append(
+      build_pb2.Build(
+          id=10,
+          builder=builder_pb2.BuilderID(builder='Builder'),
+          infra=build_pb2.BuildInfra(
+              resultdb=build_pb2.BuildInfra.ResultDB(invocation='')),
+      ))
 
   yield api.test(
       'basic',
