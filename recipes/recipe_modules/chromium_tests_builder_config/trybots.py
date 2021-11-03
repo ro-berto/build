@@ -1366,6 +1366,11 @@ TRYBOTS = try_spec.TryDatabase.create({
             ),
     },
     'tryserver.chromium.mac': {
+        'ios-catalyst':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.fyi',
+                buildername='ios-catalyst',
+            ),
         'ios-device':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.mac',

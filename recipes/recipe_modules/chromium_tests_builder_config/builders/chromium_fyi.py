@@ -488,6 +488,23 @@ SPEC = {
             },
             simulation_platform='linux',
         ),
+    'ios-catalyst':
+        builder_spec.BuilderSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=[
+                'mb',
+                'mac_toolchain',
+            ],
+            gclient_config='ios',
+            gclient_apply_config=[],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'ios',
+                'HOST_PLATFORM': 'mac',
+            },
+            simulation_platform='mac',
+        ),
     'ios-simulator-cronet':
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
