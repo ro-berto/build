@@ -78,7 +78,8 @@ SPEC.update([
         'lacros-arm-generic-rel',
         cros_boards='arm-generic',
     ),
-    _config('linux-ash-chromium-generator-rel'),
+    _config('linux-ash-chromium-generator-rel',
+        set_output_commit = False),
     _config('linux-chromeos-rel', gclient_apply_config=['use_clang_coverage']),
     _config('linux-chromeos-dbg',),
     _config(
