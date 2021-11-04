@@ -28,11 +28,9 @@ def RunSteps(api):
   api.bot_update.ensure_checkout()
   api.gclient.runhooks()
 
-  # TODO(dpranke): Skip this step until everything is fully set up
-  # again src-side.
-  #with api.context(cwd=api.m.path['checkout']):
-  #  npmw_path = api.m.path['checkout'].join('npmw')
-  #  api.step('build', [npmw_path, 'build'])
+  with api.context(cwd=api.m.path['checkout']):
+    npmw_path = api.m.path['checkout'].join('npmw')
+    api.step('build', [npmw_path, 'build'])
 
   return result_pb2.RawResult(
       status=common_pb.SUCCESS,
