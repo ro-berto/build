@@ -70,6 +70,18 @@ def GenTests(api):
       ),
       api.post_process(post_process.MustRun, 'test_name'),
       api.post_process(calls_runner_script, 'test_name', 'run_test_name'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'failure',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
+      api.override_step_data('test_name',
+                             api.test_utils.canned_gtest_output(False)),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
   )
@@ -85,6 +97,6 @@ def GenTests(api):
                        ['target_name']),
       api.post_process(post_process.MustRun, 'test_name'),
       api.post_process(calls_runner_script, 'test_name', 'run_target_name'),
-      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )

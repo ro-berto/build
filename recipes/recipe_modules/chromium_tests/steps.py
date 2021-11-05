@@ -1457,6 +1457,14 @@ class ScriptTest(LocalTest):  # pylint: disable=W0232
 
     resultdb = self.prep_local_rdb(api)
 
+    step_test_data = lambda: (
+        api.json.test_api.output({
+            'valid': True,
+            'failures': []
+        }) + api.raw_io.test_api.stream_output_text(
+            'rdb-stream: included "invocations/test-name" in '
+            '"invocations/build-inv"', 'stderr'))
+
     script_args = []
     if self.spec.script_args:
       script_args = ['--args', api.json.input(self.spec.script_args)]
@@ -1472,10 +1480,7 @@ class ScriptTest(LocalTest):  # pylint: disable=W0232
         resultdb=resultdb if resultdb else None,
         stderr=api.raw_io.output_text(add_output_log=True, name='stderr'),
         venv=True,  # Runs the test through vpython.
-        step_test_data=lambda: api.json.test_api.output({
-            'valid': True,
-            'failures': []
-        }))
+        step_test_data=step_test_data)
 
     status = result.presentation.status
 
@@ -2831,10 +2836,13 @@ class LocalIsolatedScriptTest(LocalTest):
     json_results_file = api.json.output(leak_to=temp)
     args.extend(['--isolated-script-test-output', json_results_file])
 
-    step_test_data = lambda: api.json.test_api.output({
-        'valid': True,
-        'failures': []
-    })
+    step_test_data = lambda: (
+        api.json.test_api.output({
+            'valid': True,
+            'failures': []
+        }) + api.raw_io.test_api.stream_output_text(
+            'rdb-stream: included "invocations/test-name" in '
+            '"invocations/build-inv"', 'stderr'))
 
     kwargs = {}
     if self.isolate_profile_data:
@@ -3050,6 +3058,11 @@ class AndroidJunitTest(LocalTest):
 
   #override
   def run_tests(self, api, suffix, json_results_file):
+    step_test_data = lambda: (
+        api.test_utils.test_api.canned_gtest_output(True) + api.raw_io.test_api.
+        stream_output_text(
+            'rdb-stream: included "invocations/test-name" in '
+            '"invocations/build-inv"', 'stderr'))
     return api.chromium_android.run_java_unit_test_suite(
         self.name,
         target_name=self.spec.target_name,
@@ -3057,8 +3070,7 @@ class AndroidJunitTest(LocalTest):
         suffix=suffix,
         additional_args=self.spec.additional_args,
         json_results_file=json_results_file,
-        step_test_data=(
-            lambda: api.test_utils.test_api.canned_gtest_output(False)),
+        step_test_data=step_test_data,
         stderr=api.raw_io.output_text(add_output_log=True, name='stderr'),
         resultdb=self.prep_local_rdb(api))
 

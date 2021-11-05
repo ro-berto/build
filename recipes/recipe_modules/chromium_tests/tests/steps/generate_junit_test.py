@@ -107,8 +107,6 @@ def GenTests(api):
           'name': 'junit_alias',
       }),
       api.post_process(post_process.MustRun, 'junit_alias'),
-      api.override_step_data('junit_alias',
-                             api.test_utils.canned_gtest_output(True)),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -120,8 +118,6 @@ def GenTests(api):
           'args': ['--foo=bar'],
       }),
       api.post_process(post_process.MustRun, 'junit_test'),
-      api.override_step_data('junit_test',
-                             api.test_utils.canned_gtest_output(True)),
       api.post_process(post_process.StepCommandContains, 'junit_test',
                        ['--foo=bar']),
       api.post_process(post_process.StatusSuccess),
@@ -136,12 +132,6 @@ def GenTests(api):
           'args': ['--foo=bar'],
       }),
       api.post_process(post_process.MustRun, 'junit_test'),
-      api.override_step_data(
-          'junit_test',
-          api.test_utils.canned_gtest_output(True),
-          stderr=api.raw_io.output_text(
-              'rdb-stream: included "invocations/test-invocation"'
-              ' in "build-invocation"')),
       api.post_process(post_process.StepCommandContains, 'junit_test', [
           'rdb', 'stream', '-var', 'builder:test-builder', '-var',
           'test_suite:junit_test', '-tag', 'step_name:junit_test',
@@ -168,8 +158,6 @@ def GenTests(api):
           },
       ),
       api.post_process(post_process.MustRun, 'junit_test'),
-      api.override_step_data('junit_test',
-                             api.test_utils.canned_gtest_output(True)),
       api.post_process(post_process.StepCommandContains, 'junit_test', [
           'rdb', 'stream', '-test-id-prefix', 'prefix', '-var',
           'builder:test-builder', '-var', 'test_suite:junit_test', '-tag',
@@ -217,8 +205,6 @@ def GenTests(api):
           'ci_only': True,
           'test': 'junit_test',
       },),
-      api.override_step_data('junit_test',
-                             api.test_utils.canned_gtest_output(True)),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.MustRun, 'junit_test'),
       api.post_process(post_process.StepTextContains, 'junit_test',

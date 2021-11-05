@@ -1291,8 +1291,8 @@
     },
     "name": "base_junit_tests",
     "~followup_annotations": [
-      "@@@STEP_LOG_END@raw_io.output_text[stderr]@@@",
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_LOG_LINE@raw_io.output_text[stderr]@rdb-stream: included \"invocations/test-name\" in \"invocations/build-inv\"@@@",
+      "@@@STEP_LOG_END@raw_io.output_text[stderr]@@@"
     ]
   },
   {
@@ -1318,20 +1318,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "Report base_junit_tests results",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>deterministic failures [caused step to fail]:<br/>Test.Two<br/>@@@",
-      "@@@STEP_LOG_LINE@Deterministic failure: Test.Two (status FAILURE)@Test 'Test.Two' completed with the following status(es): 'FAILURE'@@@",
-      "@@@STEP_LOG_LINE@Deterministic failure: Test.Two (status FAILURE)@@@@",
-      "@@@STEP_LOG_LINE@Deterministic failure: Test.Two (status FAILURE)@Test 'Test.Two' had the following logs when run:@@@",
-      "@@@STEP_LOG_LINE@Deterministic failure: Test.Two (status FAILURE)@@@@",
-      "@@@STEP_LOG_LINE@Deterministic failure: Test.Two (status FAILURE)@================================================================================@@@",
-      "@@@STEP_LOG_LINE@Deterministic failure: Test.Two (status FAILURE)@@@@",
-      "@@@STEP_LOG_LINE@Deterministic failure: Test.Two (status FAILURE)@:(@@@",
-      "@@@STEP_LOG_LINE@Deterministic failure: Test.Two (status FAILURE)@@@@",
-      "@@@STEP_LOG_LINE@Deterministic failure: Test.Two (status FAILURE)@================================================================================@@@",
-      "@@@STEP_LOG_END@Deterministic failure: Test.Two (status FAILURE)@@@"
-    ]
+    "name": "Report base_junit_tests results"
   },
   {
     "cmd": [
@@ -1339,7 +1326,7 @@
       "-u",
       "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
       "--input-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":(\", \"status\": \"FAILURE\"}]}]}",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}]}]}",
       "--builder-group",
       "chromium.android",
       "--builder-name",
@@ -1375,13 +1362,126 @@
     "name": "Upload to test-results [base_junit_tests]"
   },
   {
+    "cmd": [
+      "rdb",
+      "rpc",
+      "luci.resultdb.v1.ResultDB",
+      "QueryTestResultStatistics"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "PATH": "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "base_junit_tests stats",
+    "stdin": "{\"invocations\": [\"invocations/test-name\"]}",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@json.input@{@@@",
+      "@@@STEP_LOG_LINE@json.input@  \"invocations\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/test-name\"@@@",
+      "@@@STEP_LOG_LINE@json.input@  ]@@@",
+      "@@@STEP_LOG_LINE@json.input@}@@@",
+      "@@@STEP_LOG_END@json.input@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "rdb",
+      "query",
+      "-json",
+      "-n",
+      "1000",
+      "-u",
+      "-tr-fields",
+      "testId,variant,variantHash,status,tags,expected",
+      "test-name"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "PATH": "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "base_junit_tests results",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@raw_io.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "rdb",
+      "rpc",
+      "luci.resultdb.v1.Recorder",
+      "UpdateIncludedInvocations",
+      "-include-update-token"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "PATH": "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "include local test invocations",
+    "stdin": "{\"addInvocations\": [\"invocations/test-name\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@json.input@{@@@",
+      "@@@STEP_LOG_LINE@json.input@  \"addInvocations\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/test-name\"@@@",
+      "@@@STEP_LOG_LINE@json.input@  ], @@@",
+      "@@@STEP_LOG_LINE@json.input@  \"includingInvocation\": \"invocations/build:8945511751514863184\"@@@",
+      "@@@STEP_LOG_LINE@json.input@}@@@",
+      "@@@STEP_LOG_END@json.input@@@"
+    ]
+  },
+  {
     "cmd": [],
     "name": "$debug - all results",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@serialzed results@{@@@",
       "@@@STEP_LOG_LINE@serialzed results@  \"all_suites\": [@@@",
       "@@@STEP_LOG_LINE@serialzed results@    {@@@",
-      "@@@STEP_LOG_LINE@serialzed results@      \"invalid\": \"True\", @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"invalid\": \"False\", @@@",
       "@@@STEP_LOG_LINE@serialzed results@      \"suite_name\": \"base_junit_tests\", @@@",
       "@@@STEP_LOG_LINE@serialzed results@      \"test_name_to_test_id_mapping\": {}, @@@",
       "@@@STEP_LOG_LINE@serialzed results@      \"total_tests_ran\": 0, @@@",
@@ -1391,9 +1491,7 @@
       "@@@STEP_LOG_LINE@serialzed results@      \"variant_hash\": \"\"@@@",
       "@@@STEP_LOG_LINE@serialzed results@    }@@@",
       "@@@STEP_LOG_LINE@serialzed results@  ], @@@",
-      "@@@STEP_LOG_LINE@serialzed results@  \"unexpected_failing_suites\": [@@@",
-      "@@@STEP_LOG_LINE@serialzed results@    \"base_junit_tests\"@@@",
-      "@@@STEP_LOG_LINE@serialzed results@  ]@@@",
+      "@@@STEP_LOG_LINE@serialzed results@  \"unexpected_failing_suites\": []@@@",
       "@@@STEP_LOG_LINE@serialzed results@}@@@",
       "@@@STEP_LOG_END@serialzed results@@@"
     ]
@@ -1578,10 +1676,6 @@
     ]
   },
   {
-    "failure": {
-      "failure": {},
-      "humanReason": "1 Test Suite(s) failed.\n\n**base_junit_tests** failed because of:\n\n- Test.Two"
-    },
     "name": "$result"
   }
 ]
