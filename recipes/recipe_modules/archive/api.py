@@ -838,7 +838,7 @@ class ArchiveApi(recipe_api.RecipeApi):
         assert base_path.base == f.base
         assert base_path.is_parent_of(f)
         common_pieces = f.pieces[len(base_path.pieces):]
-        expanded_files.add('/'.join(common_pieces))
+        expanded_files.add(os.path.sep.join(common_pieces))
 
     if archive_data.verifiable_key_path:
       sig_paths = set()
