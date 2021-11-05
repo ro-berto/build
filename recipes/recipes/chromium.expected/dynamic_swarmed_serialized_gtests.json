@@ -729,7 +729,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://example.swarmingserver.appspot.com",
+      "https://chromium-swarm.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"base_unittests on NVIDIA GPU on Linux/Linux/eeeeeeeeee/Linux FYI Release (NVIDIA)/571\", \"priority\": \"25\", \"realm\": \"chromium:ci\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:chromium.gpu.fyi\", \"buildername:Linux FYI Release (NVIDIA)\", \"buildnumber:571\", \"data:eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size\", \"name:base_unittests\", \"ninja_target:\", \"project:chromium\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:chromium.ci:Linux FYI Release (NVIDIA)\", \"stepname:base_unittests on NVIDIA GPU on Linux\", \"test_id_prefix:\", \"test_suite:base_unittests\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"eeeeeeeeeeeeeeeeeeeeeeeeeeeeee\", \"size_bytes\": \"size\"}}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:Linux FYI Release (NVIDIA)\", \"-var\", \"gpu:10de:104a\", \"-var\", \"os:Linux\", \"-var\", \"test_suite:base_unittests\", \"-tag\", \"step_name:base_unittests on NVIDIA GPU on Linux\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"gtest\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"gpu\", \"value\": \"10de:104a\"}, {\"key\": \"os\", \"value\": \"Linux\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -879,7 +879,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: base_unittests on NVIDIA GPU on Linux/Linux/eeeeeeeeee/Linux FYI Release (NVIDIA)/571@https://example.swarmingserver.appspot.com/task?id=0@@@"
+      "@@@STEP_LINK@task UI: base_unittests on NVIDIA GPU on Linux/Linux/eeeeeeeeee/Linux FYI Release (NVIDIA)/571@https://chromium-swarm.appspot.com/task?id=0@@@"
     ]
   },
   {
@@ -1139,7 +1139,7 @@
       "-u",
       "RECIPE_MODULE[build::chromium_swarming]/resources/wait_for_finished_task_set.py",
       "--swarming-server",
-      "",
+      "https://chromium-swarm.appspot.com",
       "--swarming-py-path",
       "[START_DIR]/swarming.client/swarming.py",
       "--output-json",
@@ -1282,7 +1282,7 @@
       "swarming",
       "collect",
       "-server",
-      "",
+      "https://chromium-swarm.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -1373,7 +1373,7 @@
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@/task?id=0@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=0@@@"
     ]
   },
   {
@@ -1447,7 +1447,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://example.swarmingserver.appspot.com",
+      "https://chromium-swarm.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"browser_tests on NVIDIA GPU on Linux/Linux/ffffffffff/Linux FYI Release (NVIDIA)/571\", \"priority\": \"25\", \"realm\": \"chromium:ci\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:chromium.gpu.fyi\", \"buildername:Linux FYI Release (NVIDIA)\", \"buildnumber:571\", \"data:ffffffffffffffffffffffffffffff/size\", \"name:browser_tests\", \"ninja_target:\", \"project:chromium\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:chromium.ci:Linux FYI Release (NVIDIA)\", \"stepname:browser_tests on NVIDIA GPU on Linux\", \"test_id_prefix:\", \"test_suite:browser_tests\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"ffffffffffffffffffffffffffffff\", \"size_bytes\": \"size\"}}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:Linux FYI Release (NVIDIA)\", \"-var\", \"gpu:10de:104a\", \"-var\", \"os:Linux\", \"-var\", \"test_suite:browser_tests\", \"-tag\", \"step_name:browser_tests on NVIDIA GPU on Linux\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"gtest\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"gpu\", \"value\": \"10de:104a\"}, {\"key\": \"os\", \"value\": \"Linux\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -1597,7 +1597,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: browser_tests on NVIDIA GPU on Linux/Linux/ffffffffff/Linux FYI Release (NVIDIA)/571@https://example.swarmingserver.appspot.com/task?id=1@@@"
+      "@@@STEP_LINK@task UI: browser_tests on NVIDIA GPU on Linux/Linux/ffffffffff/Linux FYI Release (NVIDIA)/571@https://chromium-swarm.appspot.com/task?id=1@@@"
     ]
   },
   {
@@ -1650,7 +1650,7 @@
       "-u",
       "RECIPE_MODULE[build::chromium_swarming]/resources/wait_for_finished_task_set.py",
       "--swarming-server",
-      "",
+      "https://chromium-swarm.appspot.com",
       "--swarming-py-path",
       "[START_DIR]/swarming.client/swarming.py",
       "--output-json",
@@ -1793,7 +1793,7 @@
       "swarming",
       "collect",
       "-server",
-      "",
+      "https://chromium-swarm.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -1874,7 +1874,7 @@
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@/task?id=1@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=1@@@"
     ]
   },
   {

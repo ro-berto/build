@@ -28,7 +28,7 @@
       "swarming",
       "collect",
       "-server",
-      "",
+      "https://chromium-swarm.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -137,8 +137,8 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": \"Linux Tests\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
-      "@@@STEP_LINK@shard #0@/task?id=0@@@",
-      "@@@STEP_LINK@shard #1@/task?id=1@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/task?id=0@@@",
+      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/task?id=1@@@"
     ]
   }
 ]

@@ -163,6 +163,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     for c in builder_config.android_apply_config:
       self.m.chromium_android.apply_config(c)
 
+  def set_up_swarming(self, builder_config):
+    if builder_config.swarming_server:
+      self.m.chromium_swarming.swarming_server = builder_config.swarming_server
+
   def runhooks(self, update_step, suffix=None):
     if suffix:
       self.m.chromium.runhooks(name='runhooks ({})'.format(suffix))
@@ -258,6 +262,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # Installs toolchains configured in the current bot, if any.
     self.m.chromium.ensure_toolchains()
 
+    self.set_up_swarming(builder_config)
     self.runhooks(update_step, suffix=runhooks_suffix)
 
     targets_config = self.create_targets_config(builder_config, update_step)

@@ -4014,7 +4014,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://example.swarmingserver.appspot.com",
+      "https://chromium-swarm.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"fake test 0 (fake device 0 iOS 11.0) shard 0 (with patch)/Mac/[dummy has/ios/1\", \"priority\": \"200\", \"realm\": \"chromium:ci\", \"service_account\": \"ios-isolated-tester@chops-service-accounts.iam.gserviceaccount.com\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:chromium.fake\", \"buildername:ios\", \"buildnumber:1\", \"data:[dummy hash for 0_0/dummy size]\", \"device_type:fake device 0\", \"ios_version:11.0\", \"name:fake\", \"ninja_target:\", \"platform:simulator\", \"slavename:fake-bot-id\", \"spec_name:chromium.ci:ios\", \"stepname:fake test 0 (fake device 0 iOS 11.0) shard 0 (with patch)\", \"test:fake test 0\", \"test_id_prefix:\", \"test_suite:fake test 0 (fake device 0 iOS 11.0) shard 0\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"caches\": [{\"name\": \"runtime_ios_11_0\", \"path\": \"Runtime-ios-11.0\"}, {\"name\": \"xcode_ios_9abc\", \"path\": \"Xcode.app\"}], \"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for 0_0\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/mac_toolchain/${platform}\", \"path\": \".\", \"version\": \"git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1\"}]}, \"command\": [\"src/ios/build/bots/scripts/run.py\", \"--app\", \"src/out/Debug-iphonesimulator/fake test 0.app\", \"--host-app\", \"NO_PATH\", \"--out-dir\", \"${ISOLATED_OUTDIR}\", \"--retries\", \"3\", \"--shards\", \"1\", \"--xcode-build-version\", \"9abc\", \"--mac-toolchain-cmd\", \"./mac_toolchain\", \"--xcode-path\", \"Xcode.app\", \"--wpr-tools-path\", \"NO_PATH\", \"--replay-path\", \"NO_PATH\", \"-t\", \"CacheTestCase\", \"--iossim\", \"src/out/Debug-iphonesimulator/iossim\", \"--platform\", \"fake device 0\", \"--version\", \"11.0\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Mac\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \".\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -4178,7 +4178,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: fake test 0 (fake device 0 iOS 11.0) shard 0 (with patch)/Mac/[dummy has/ios/1@https://example.swarmingserver.appspot.com/task?id=0@@@"
+      "@@@STEP_LINK@task UI: fake test 0 (fake device 0 iOS 11.0) shard 0 (with patch)/Mac/[dummy has/ios/1@https://chromium-swarm.appspot.com/task?id=0@@@"
     ]
   },
   {
@@ -4186,7 +4186,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://example.swarmingserver.appspot.com",
+      "https://chromium-swarm.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"fake test 0 (fake device 0 iOS 11.0) shard 1 (with patch)/Mac/[dummy has/ios/1\", \"priority\": \"200\", \"realm\": \"chromium:ci\", \"service_account\": \"ios-isolated-tester@chops-service-accounts.iam.gserviceaccount.com\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:chromium.fake\", \"buildername:ios\", \"buildnumber:1\", \"data:[dummy hash for 0_1/dummy size]\", \"device_type:fake device 0\", \"ios_version:11.0\", \"name:fake\", \"ninja_target:\", \"platform:simulator\", \"slavename:fake-bot-id\", \"spec_name:chromium.ci:ios\", \"stepname:fake test 0 (fake device 0 iOS 11.0) shard 1 (with patch)\", \"test:fake test 0\", \"test_id_prefix:\", \"test_suite:fake test 0 (fake device 0 iOS 11.0) shard 1\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"caches\": [{\"name\": \"runtime_ios_11_0\", \"path\": \"Runtime-ios-11.0\"}, {\"name\": \"xcode_ios_9abc\", \"path\": \"Xcode.app\"}], \"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for 0_1\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/mac_toolchain/${platform}\", \"path\": \".\", \"version\": \"git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1\"}]}, \"command\": [\"src/ios/build/bots/scripts/run.py\", \"--app\", \"src/out/Debug-iphonesimulator/fake test 0.app\", \"--host-app\", \"NO_PATH\", \"--out-dir\", \"${ISOLATED_OUTDIR}\", \"--retries\", \"3\", \"--shards\", \"1\", \"--xcode-build-version\", \"9abc\", \"--mac-toolchain-cmd\", \"./mac_toolchain\", \"--xcode-path\", \"Xcode.app\", \"--wpr-tools-path\", \"NO_PATH\", \"--replay-path\", \"NO_PATH\", \"-t\", \"TabUITestCase\", \"-t\", \"PasswordsTestCase\", \"--iossim\", \"src/out/Debug-iphonesimulator/iossim\", \"--platform\", \"fake device 0\", \"--version\", \"11.0\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Mac\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \".\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -4352,7 +4352,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: fake test 0 (fake device 0 iOS 11.0) shard 1 (with patch)/Mac/[dummy has/ios/1@https://example.swarmingserver.appspot.com/task?id=1@@@"
+      "@@@STEP_LINK@task UI: fake test 0 (fake device 0 iOS 11.0) shard 1 (with patch)/Mac/[dummy has/ios/1@https://chromium-swarm.appspot.com/task?id=1@@@"
     ]
   },
   {
@@ -4360,7 +4360,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://example.swarmingserver.appspot.com",
+      "https://chromium-swarm.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"fake test 0 (fake device 0 iOS 11.0) shard 2 (with patch)/Mac/[dummy has/ios/1\", \"priority\": \"200\", \"realm\": \"chromium:ci\", \"service_account\": \"ios-isolated-tester@chops-service-accounts.iam.gserviceaccount.com\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:chromium.fake\", \"buildername:ios\", \"buildnumber:1\", \"data:[dummy hash for 0_2/dummy size]\", \"device_type:fake device 0\", \"ios_version:11.0\", \"name:fake\", \"ninja_target:\", \"platform:simulator\", \"slavename:fake-bot-id\", \"spec_name:chromium.ci:ios\", \"stepname:fake test 0 (fake device 0 iOS 11.0) shard 2 (with patch)\", \"test:fake test 0\", \"test_id_prefix:\", \"test_suite:fake test 0 (fake device 0 iOS 11.0) shard 2\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"caches\": [{\"name\": \"runtime_ios_11_0\", \"path\": \"Runtime-ios-11.0\"}, {\"name\": \"xcode_ios_9abc\", \"path\": \"Xcode.app\"}], \"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for 0_2\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/mac_toolchain/${platform}\", \"path\": \".\", \"version\": \"git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1\"}]}, \"command\": [\"src/ios/build/bots/scripts/run.py\", \"--app\", \"src/out/Debug-iphonesimulator/fake test 0.app\", \"--host-app\", \"NO_PATH\", \"--out-dir\", \"${ISOLATED_OUTDIR}\", \"--retries\", \"3\", \"--shards\", \"1\", \"--xcode-build-version\", \"9abc\", \"--mac-toolchain-cmd\", \"./mac_toolchain\", \"--xcode-path\", \"Xcode.app\", \"--wpr-tools-path\", \"NO_PATH\", \"--replay-path\", \"NO_PATH\", \"-t\", \"KeyboardTestCase\", \"-t\", \"ToolBarTestCase\", \"--iossim\", \"src/out/Debug-iphonesimulator/iossim\", \"--platform\", \"fake device 0\", \"--version\", \"11.0\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Mac\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \".\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -4526,7 +4526,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: fake test 0 (fake device 0 iOS 11.0) shard 2 (with patch)/Mac/[dummy has/ios/1@https://example.swarmingserver.appspot.com/task?id=2@@@"
+      "@@@STEP_LINK@task UI: fake test 0 (fake device 0 iOS 11.0) shard 2 (with patch)/Mac/[dummy has/ios/1@https://chromium-swarm.appspot.com/task?id=2@@@"
     ]
   },
   {
@@ -4534,7 +4534,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://example.swarmingserver.appspot.com",
+      "https://chromium-swarm.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"fake test 1 (fake device 1 iOS 8.1) (with patch)/Mac/[dummy has/ios/1\", \"priority\": \"200\", \"realm\": \"chromium:ci\", \"service_account\": \"ios-isolated-tester@chops-service-accounts.iam.gserviceaccount.com\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:chromium.fake\", \"buildername:ios\", \"buildnumber:1\", \"data:[dummy hash for 1/dummy size]\", \"device_type:fake device 1\", \"ios_version:8.1\", \"name:fake\", \"ninja_target:\", \"platform:simulator\", \"slavename:fake-bot-id\", \"spec_name:chromium.ci:ios\", \"stepname:fake test 1 (fake device 1 iOS 8.1) (with patch)\", \"test:fake test 1\", \"test_id_prefix:\", \"test_suite:fake test 1 (fake device 1 iOS 8.1)\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"caches\": [{\"name\": \"runtime_ios_8_1\", \"path\": \"Runtime-ios-8.1\"}, {\"name\": \"xcode_ios_9abc\", \"path\": \"Xcode.app\"}], \"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for 1\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/mac_toolchain/${platform}\", \"path\": \".\", \"version\": \"git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1\"}]}, \"command\": [\"src/ios/build/bots/scripts/run.py\", \"--app\", \"src/out/Debug-iphonesimulator/fake test 1.app\", \"--host-app\", \"NO_PATH\", \"--out-dir\", \"${ISOLATED_OUTDIR}\", \"--retries\", \"3\", \"--shards\", \"1\", \"--xcode-build-version\", \"9abc\", \"--mac-toolchain-cmd\", \"./mac_toolchain\", \"--xcode-path\", \"Xcode.app\", \"--wpr-tools-path\", \"NO_PATH\", \"--replay-path\", \"NO_PATH\", \"--args-json\", \"{\\\"test_args\\\": [\\\"--fake-arg-1\\\", \\\"--fake-arg-2\\\"]}\", \"--iossim\", \"src/out/Debug-iphonesimulator/iossim\", \"--platform\", \"fake device 1\", \"--version\", \"8.1\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Mac\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \".\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -4698,7 +4698,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: fake test 1 (fake device 1 iOS 8.1) (with patch)/Mac/[dummy has/ios/1@https://example.swarmingserver.appspot.com/task?id=3@@@"
+      "@@@STEP_LINK@task UI: fake test 1 (fake device 1 iOS 8.1) (with patch)/Mac/[dummy has/ios/1@https://chromium-swarm.appspot.com/task?id=3@@@"
     ]
   },
   {
@@ -4706,7 +4706,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://example.swarmingserver.appspot.com",
+      "https://chromium-swarm.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"fake test 2 (fake device 2 iOS 8.1) (with patch)/Mac-10.12/[dummy has/ios/1\", \"priority\": \"200\", \"realm\": \"chromium:ci\", \"service_account\": \"ios-isolated-tester@chops-service-accounts.iam.gserviceaccount.com\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:chromium.fake\", \"buildername:ios\", \"buildnumber:1\", \"data:[dummy hash for 2/dummy size]\", \"device_type:fake device 2\", \"ios_version:8.1\", \"name:fake\", \"ninja_target:\", \"platform:simulator\", \"slavename:fake-bot-id\", \"spec_name:chromium.ci:ios\", \"stepname:fake test 2 (fake device 2 iOS 8.1) (with patch) on Mac-10.12\", \"test:fake test 2\", \"test_id_prefix:\", \"test_suite:fake test 2 (fake device 2 iOS 8.1)\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"caches\": [{\"name\": \"runtime_ios_8_1\", \"path\": \"Runtime-ios-8.1\"}, {\"name\": \"xcode_ios_9abc\", \"path\": \"Xcode.app\"}], \"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for 2\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/mac_toolchain/${platform}\", \"path\": \".\", \"version\": \"git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1\"}]}, \"command\": [\"src/ios/build/bots/scripts/run.py\", \"--app\", \"src/out/Debug-iphonesimulator/fake test 2.app\", \"--host-app\", \"NO_PATH\", \"--out-dir\", \"${ISOLATED_OUTDIR}\", \"--retries\", \"3\", \"--shards\", \"4\", \"--xcode-build-version\", \"9abc\", \"--mac-toolchain-cmd\", \"./mac_toolchain\", \"--xcode-path\", \"Xcode.app\", \"--wpr-tools-path\", \"NO_PATH\", \"--replay-path\", \"NO_PATH\", \"--iossim\", \"src/out/Debug-iphonesimulator/iossim\", \"--platform\", \"fake device 2\", \"--version\", \"8.1\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Mac-10.12\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \".\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -4868,7 +4868,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: fake test 2 (fake device 2 iOS 8.1) (with patch)/Mac-10.12/[dummy has/ios/1@https://example.swarmingserver.appspot.com/task?id=4@@@"
+      "@@@STEP_LINK@task UI: fake test 2 (fake device 2 iOS 8.1) (with patch)/Mac-10.12/[dummy has/ios/1@https://chromium-swarm.appspot.com/task?id=4@@@"
     ]
   },
   {
@@ -4876,7 +4876,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://example.swarmingserver.appspot.com",
+      "https://chromium-swarm.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"fake included test 1 (fake device 1 iOS 8.1) (with patch)/Mac/[dummy has/ios/1\", \"priority\": \"200\", \"realm\": \"chromium:ci\", \"service_account\": \"ios-isolated-tester@chops-service-accounts.iam.gserviceaccount.com\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:chromium.fake\", \"buildername:ios\", \"buildnumber:1\", \"data:[dummy hash for 3/dummy size]\", \"device_type:fake device 1\", \"ios_version:8.1\", \"name:fake\", \"ninja_target:\", \"platform:simulator\", \"slavename:fake-bot-id\", \"spec_name:chromium.ci:ios\", \"stepname:fake included test 1 (fake device 1 iOS 8.1) (with patch)\", \"test:fake included test 1\", \"test_id_prefix:\", \"test_suite:fake included test 1 (fake device 1 iOS 8.1)\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"caches\": [{\"name\": \"runtime_ios_8_1\", \"path\": \"Runtime-ios-8.1\"}, {\"name\": \"xcode_ios_9abc\", \"path\": \"Xcode.app\"}], \"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for 3\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/mac_toolchain/${platform}\", \"path\": \".\", \"version\": \"git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1\"}]}, \"command\": [\"src/ios/build/bots/scripts/run.py\", \"--app\", \"src/out/Debug-iphonesimulator/fake included test 1.app\", \"--host-app\", \"NO_PATH\", \"--out-dir\", \"${ISOLATED_OUTDIR}\", \"--retries\", \"3\", \"--shards\", \"1\", \"--xcode-build-version\", \"9abc\", \"--mac-toolchain-cmd\", \"./mac_toolchain\", \"--xcode-path\", \"Xcode.app\", \"--wpr-tools-path\", \"NO_PATH\", \"--replay-path\", \"NO_PATH\", \"--iossim\", \"src/out/Debug-iphonesimulator/iossim\", \"--platform\", \"fake device 1\", \"--version\", \"8.1\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Mac\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \".\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -5038,7 +5038,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: fake included test 1 (fake device 1 iOS 8.1) (with patch)/Mac/[dummy has/ios/1@https://example.swarmingserver.appspot.com/task?id=5@@@"
+      "@@@STEP_LINK@task UI: fake included test 1 (fake device 1 iOS 8.1) (with patch)/Mac/[dummy has/ios/1@https://chromium-swarm.appspot.com/task?id=5@@@"
     ]
   },
   {
@@ -5046,7 +5046,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://example.swarmingserver.appspot.com",
+      "https://chromium-swarm.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"fake included test 2 (fake device 1 iOS 8.1) (with patch)/Mac/[dummy has/ios/1\", \"priority\": \"200\", \"realm\": \"chromium:ci\", \"service_account\": \"ios-isolated-tester@chops-service-accounts.iam.gserviceaccount.com\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:chromium.fake\", \"buildername:ios\", \"buildnumber:1\", \"data:[dummy hash for 4/dummy size]\", \"device_type:fake device 1\", \"ios_version:8.1\", \"name:fake\", \"ninja_target:\", \"platform:simulator\", \"slavename:fake-bot-id\", \"spec_name:chromium.ci:ios\", \"stepname:fake included test 2 (fake device 1 iOS 8.1) (with patch)\", \"test:fake included test 2\", \"test_id_prefix:\", \"test_suite:fake included test 2 (fake device 1 iOS 8.1)\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"caches\": [{\"name\": \"runtime_ios_8_1\", \"path\": \"Runtime-ios-8.1\"}, {\"name\": \"xcode_ios_9abc\", \"path\": \"Xcode.app\"}], \"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for 4\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/mac_toolchain/${platform}\", \"path\": \".\", \"version\": \"git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1\"}]}, \"command\": [\"src/ios/build/bots/scripts/run.py\", \"--app\", \"src/out/Debug-iphonesimulator/fake included test 2.app\", \"--host-app\", \"NO_PATH\", \"--out-dir\", \"${ISOLATED_OUTDIR}\", \"--retries\", \"3\", \"--shards\", \"1\", \"--xcode-build-version\", \"9abc\", \"--mac-toolchain-cmd\", \"./mac_toolchain\", \"--xcode-path\", \"Xcode.app\", \"--wpr-tools-path\", \"NO_PATH\", \"--replay-path\", \"NO_PATH\", \"--iossim\", \"src/out/Debug-iphonesimulator/iossim\", \"--platform\", \"fake device 1\", \"--version\", \"8.1\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Mac\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \".\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -5208,7 +5208,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: fake included test 2 (fake device 1 iOS 8.1) (with patch)/Mac/[dummy has/ios/1@https://example.swarmingserver.appspot.com/task?id=6@@@"
+      "@@@STEP_LINK@task UI: fake included test 2 (fake device 1 iOS 8.1) (with patch)/Mac/[dummy has/ios/1@https://chromium-swarm.appspot.com/task?id=6@@@"
     ]
   },
   {
@@ -5216,7 +5216,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://example.swarmingserver.appspot.com",
+      "https://chromium-swarm.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"fake test 2 (fake device 2 iOS 7.1) (with patch)/Mac/[dummy has/ios/1\", \"priority\": \"200\", \"realm\": \"chromium:ci\", \"service_account\": \"ios-isolated-tester@chops-service-accounts.iam.gserviceaccount.com\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:chromium.fake\", \"buildername:ios\", \"buildnumber:1\", \"data:[dummy hash for 5/dummy size]\", \"device_type:fake device 2\", \"ios_version:7.1\", \"name:fake\", \"ninja_target:\", \"platform:simulator\", \"slavename:fake-bot-id\", \"spec_name:chromium.ci:ios\", \"stepname:fake test 2 (fake device 2 iOS 7.1) (with patch)\", \"test:fake test 2\", \"test_id_prefix:\", \"test_suite:fake test 2 (fake device 2 iOS 7.1)\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"caches\": [{\"name\": \"runtime_ios_7_1\", \"path\": \"Runtime-ios-7.1\"}, {\"name\": \"xcode_ios_9abc\", \"path\": \"Xcode.app\"}], \"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for 5\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/mac_toolchain/${platform}\", \"path\": \".\", \"version\": \"git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1\"}]}, \"command\": [\"src/ios/build/bots/scripts/run.py\", \"--app\", \"src/out/Debug-iphonesimulator/fake test 2.app\", \"--host-app\", \"NO_PATH\", \"--out-dir\", \"${ISOLATED_OUTDIR}\", \"--retries\", \"3\", \"--shards\", \"1\", \"--xcode-build-version\", \"9abc\", \"--mac-toolchain-cmd\", \"./mac_toolchain\", \"--xcode-path\", \"Xcode.app\", \"--wpr-tools-path\", \"NO_PATH\", \"--replay-path\", \"NO_PATH\", \"--iossim\", \"src/out/Debug-iphonesimulator/iossim\", \"--platform\", \"fake device 2\", \"--version\", \"7.1\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Mac\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \".\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -5378,7 +5378,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: fake test 2 (fake device 2 iOS 7.1) (with patch)/Mac/[dummy has/ios/1@https://example.swarmingserver.appspot.com/task?id=7@@@"
+      "@@@STEP_LINK@task UI: fake test 2 (fake device 2 iOS 7.1) (with patch)/Mac/[dummy has/ios/1@https://chromium-swarm.appspot.com/task?id=7@@@"
     ]
   },
   {
@@ -5386,7 +5386,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://example.swarmingserver.appspot.com",
+      "https://chromium-swarm.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"fake included test 1 (fake device 2 iOS 7.1) (with patch)/Mac/[dummy has/ios/1\", \"priority\": \"200\", \"realm\": \"chromium:ci\", \"service_account\": \"ios-isolated-tester@chops-service-accounts.iam.gserviceaccount.com\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:chromium.fake\", \"buildername:ios\", \"buildnumber:1\", \"data:[dummy hash for 6/dummy size]\", \"device_type:fake device 2\", \"ios_version:7.1\", \"name:fake\", \"ninja_target:\", \"platform:simulator\", \"slavename:fake-bot-id\", \"spec_name:chromium.ci:ios\", \"stepname:fake included test 1 (fake device 2 iOS 7.1) (with patch)\", \"test:fake included test 1\", \"test_id_prefix:\", \"test_suite:fake included test 1 (fake device 2 iOS 7.1)\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"caches\": [{\"name\": \"runtime_ios_7_1\", \"path\": \"Runtime-ios-7.1\"}, {\"name\": \"xcode_ios_9abc\", \"path\": \"Xcode.app\"}], \"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for 6\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/mac_toolchain/${platform}\", \"path\": \".\", \"version\": \"git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1\"}]}, \"command\": [\"src/ios/build/bots/scripts/run.py\", \"--app\", \"src/out/Debug-iphonesimulator/fake included test 1.app\", \"--host-app\", \"NO_PATH\", \"--out-dir\", \"${ISOLATED_OUTDIR}\", \"--retries\", \"3\", \"--shards\", \"1\", \"--xcode-build-version\", \"9abc\", \"--mac-toolchain-cmd\", \"./mac_toolchain\", \"--xcode-path\", \"Xcode.app\", \"--wpr-tools-path\", \"NO_PATH\", \"--replay-path\", \"NO_PATH\", \"--iossim\", \"src/out/Debug-iphonesimulator/iossim\", \"--platform\", \"fake device 2\", \"--version\", \"7.1\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Mac\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \".\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -5548,7 +5548,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: fake included test 1 (fake device 2 iOS 7.1) (with patch)/Mac/[dummy has/ios/1@https://example.swarmingserver.appspot.com/task?id=8@@@"
+      "@@@STEP_LINK@task UI: fake included test 1 (fake device 2 iOS 7.1) (with patch)/Mac/[dummy has/ios/1@https://chromium-swarm.appspot.com/task?id=8@@@"
     ]
   },
   {
@@ -5556,7 +5556,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://example.swarmingserver.appspot.com",
+      "https://chromium-swarm.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"fake included test 2 (fake device 2 iOS 7.1) (with patch)/Mac/[dummy has/ios/1\", \"priority\": \"200\", \"realm\": \"chromium:ci\", \"service_account\": \"ios-isolated-tester@chops-service-accounts.iam.gserviceaccount.com\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:chromium.fake\", \"buildername:ios\", \"buildnumber:1\", \"data:[dummy hash for 7/dummy size]\", \"device_type:fake device 2\", \"ios_version:7.1\", \"name:fake\", \"ninja_target:\", \"platform:simulator\", \"slavename:fake-bot-id\", \"spec_name:chromium.ci:ios\", \"stepname:fake included test 2 (fake device 2 iOS 7.1) (with patch)\", \"test:fake included test 2\", \"test_id_prefix:\", \"test_suite:fake included test 2 (fake device 2 iOS 7.1)\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"caches\": [{\"name\": \"runtime_ios_7_1\", \"path\": \"Runtime-ios-7.1\"}, {\"name\": \"xcode_ios_9abc\", \"path\": \"Xcode.app\"}], \"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for 7\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/mac_toolchain/${platform}\", \"path\": \".\", \"version\": \"git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1\"}]}, \"command\": [\"src/ios/build/bots/scripts/run.py\", \"--app\", \"src/out/Debug-iphonesimulator/fake included test 2.app\", \"--host-app\", \"NO_PATH\", \"--out-dir\", \"${ISOLATED_OUTDIR}\", \"--retries\", \"3\", \"--shards\", \"1\", \"--xcode-build-version\", \"9abc\", \"--mac-toolchain-cmd\", \"./mac_toolchain\", \"--xcode-path\", \"Xcode.app\", \"--wpr-tools-path\", \"NO_PATH\", \"--replay-path\", \"NO_PATH\", \"--iossim\", \"src/out/Debug-iphonesimulator/iossim\", \"--platform\", \"fake device 2\", \"--version\", \"7.1\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Mac\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \".\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -5718,7 +5718,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: fake included test 2 (fake device 2 iOS 7.1) (with patch)/Mac/[dummy has/ios/1@https://example.swarmingserver.appspot.com/task?id=9@@@"
+      "@@@STEP_LINK@task UI: fake included test 2 (fake device 2 iOS 7.1) (with patch)/Mac/[dummy has/ios/1@https://chromium-swarm.appspot.com/task?id=9@@@"
     ]
   },
   {
@@ -5965,7 +5965,7 @@
       "-u",
       "RECIPE_MODULE[build::chromium_swarming]/resources/wait_for_finished_task_set.py",
       "--swarming-server",
-      "",
+      "https://chromium-swarm.appspot.com",
       "--swarming-py-path",
       "[START_DIR]/swarming.client/swarming.py",
       "--output-json",
@@ -6727,7 +6727,7 @@
       "swarming",
       "collect",
       "-server",
-      "",
+      "https://chromium-swarm.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -6799,7 +6799,7 @@
       "@@@STEP_LOG_END@test_summary.json@@@",
       "@@@STEP_LOG_LINE@passed tests@PASSED_TEST@@@",
       "@@@STEP_LOG_END@passed tests@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@/task?id=0@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=0@@@"
     ]
   },
   {
@@ -6829,7 +6829,7 @@
       "swarming",
       "collect",
       "-server",
-      "",
+      "https://chromium-swarm.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -6901,7 +6901,7 @@
       "@@@STEP_LOG_END@test_summary.json@@@",
       "@@@STEP_LOG_LINE@passed tests@PASSED_TEST@@@",
       "@@@STEP_LOG_END@passed tests@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@/task?id=1@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=1@@@"
     ]
   },
   {
@@ -6931,7 +6931,7 @@
       "swarming",
       "collect",
       "-server",
-      "",
+      "https://chromium-swarm.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -7003,7 +7003,7 @@
       "@@@STEP_LOG_END@test_summary.json@@@",
       "@@@STEP_LOG_LINE@passed tests@PASSED_TEST@@@",
       "@@@STEP_LOG_END@passed tests@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@/task?id=2@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=2@@@"
     ]
   },
   {
@@ -7033,7 +7033,7 @@
       "swarming",
       "collect",
       "-server",
-      "",
+      "https://chromium-swarm.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -7105,7 +7105,7 @@
       "@@@STEP_LOG_END@test_summary.json@@@",
       "@@@STEP_LOG_LINE@passed tests@PASSED_TEST@@@",
       "@@@STEP_LOG_END@passed tests@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@/task?id=3@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=3@@@"
     ]
   },
   {
@@ -7135,7 +7135,7 @@
       "swarming",
       "collect",
       "-server",
-      "",
+      "https://chromium-swarm.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -7207,7 +7207,7 @@
       "@@@STEP_LOG_END@test_summary.json@@@",
       "@@@STEP_LOG_LINE@passed tests@PASSED_TEST@@@",
       "@@@STEP_LOG_END@passed tests@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@/task?id=4@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=4@@@"
     ]
   },
   {
@@ -7237,7 +7237,7 @@
       "swarming",
       "collect",
       "-server",
-      "",
+      "https://chromium-swarm.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -7309,7 +7309,7 @@
       "@@@STEP_LOG_END@test_summary.json@@@",
       "@@@STEP_LOG_LINE@passed tests@PASSED_TEST@@@",
       "@@@STEP_LOG_END@passed tests@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@/task?id=5@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=5@@@"
     ]
   },
   {
@@ -7339,7 +7339,7 @@
       "swarming",
       "collect",
       "-server",
-      "",
+      "https://chromium-swarm.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -7411,7 +7411,7 @@
       "@@@STEP_LOG_END@test_summary.json@@@",
       "@@@STEP_LOG_LINE@passed tests@PASSED_TEST@@@",
       "@@@STEP_LOG_END@passed tests@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@/task?id=6@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=6@@@"
     ]
   },
   {
@@ -7441,7 +7441,7 @@
       "swarming",
       "collect",
       "-server",
-      "",
+      "https://chromium-swarm.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -7513,7 +7513,7 @@
       "@@@STEP_LOG_END@test_summary.json@@@",
       "@@@STEP_LOG_LINE@passed tests@PASSED_TEST@@@",
       "@@@STEP_LOG_END@passed tests@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@/task?id=7@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=7@@@"
     ]
   },
   {
@@ -7543,7 +7543,7 @@
       "swarming",
       "collect",
       "-server",
-      "",
+      "https://chromium-swarm.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -7615,7 +7615,7 @@
       "@@@STEP_LOG_END@test_summary.json@@@",
       "@@@STEP_LOG_LINE@passed tests@PASSED_TEST@@@",
       "@@@STEP_LOG_END@passed tests@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@/task?id=8@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=8@@@"
     ]
   },
   {
@@ -7645,7 +7645,7 @@
       "swarming",
       "collect",
       "-server",
-      "",
+      "https://chromium-swarm.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -7717,7 +7717,7 @@
       "@@@STEP_LOG_END@test_summary.json@@@",
       "@@@STEP_LOG_LINE@passed tests@PASSED_TEST@@@",
       "@@@STEP_LOG_END@passed tests@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@/task?id=9@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=9@@@"
     ]
   },
   {

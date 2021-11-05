@@ -198,6 +198,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     self._default_user = None
     self._pending_tasks = set()
     self._show_outputs_ref_in_collect_step = True
+    self._swarming_server = 'https://chromium-swarm.appspot.com'
     self._verbose = False
 
     # Record all durations of shards for aggregation.
@@ -221,6 +222,16 @@ class SwarmingApi(recipe_api.RecipeApi):
   @recipe_util.returns_placeholder
   def summary(self):
     return self.m.json.output()
+
+  @property
+  def swarming_server(self):
+    """URL of Swarming server to use, default is a production one."""
+    return self._swarming_server
+
+  @swarming_server.setter
+  def swarming_server(self, value):
+    """Changes URL of Swarming server to use."""
+    self._swarming_server = value
 
   @property
   def verbose(self):
@@ -603,7 +614,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     request = request.with_slice(0, req_slice)
 
     return SwarmingTask(
-        server=self.m.swarming.current_server,
+        server=self.swarming_server,
         request=request,
         builder_info=builder_info,
         collect_step=collect_step,
@@ -924,20 +935,13 @@ class SwarmingApi(recipe_api.RecipeApi):
     # TODO(maruel): https://crbug.com/944904
     # Some flags with "--" are read by trigger script too.
     args = [
-        '--swarming',
-        self.m.swarming.current_server,
-        '--priority',
-        str(task_request.priority),
-        '--task-name',
-        task.task_name,
-        '--dump-json',
-        self.m.json.output(),
-        '--expiration',
-        str(task_slice.expiration_secs),
-        '--io-timeout',
-        str(task_slice.io_timeout_secs),
-        '--hard-timeout',
-        str(task_slice.execution_timeout_secs),
+      '--swarming', self.swarming_server,
+      '--priority', str(task_request.priority),
+      '--task-name', task.task_name,
+      '--dump-json', self.m.json.output(),
+      '--expiration', str(task_slice.expiration_secs),
+      '--io-timeout', str(task_slice.io_timeout_secs),
+      '--hard-timeout', str(task_slice.execution_timeout_secs),
     ]
 
     for name, value in sorted(six.iteritems(task_slice.dimensions)):
@@ -1152,8 +1156,10 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     req = req.with_tags(tags_dict)
     req = self._maybe_enable_resultdb_for_task(req, resultdb)
-    return self.m.swarming.trigger(
-        self.get_step_name('trigger', task), [req], self.verbose)
+    with self.m.swarming.with_server(self.swarming_server):
+      metas = self.m.swarming.trigger(
+          self.get_step_name('trigger', task), [req], self.verbose)
+      return metas
 
   def collect_task(self, task, **kwargs):
     """Waits for a single triggered task to finish.
@@ -1542,7 +1548,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     task_sets = sorted(task_sets)
     args = [
         '--swarming-server',
-        self.m.swarming.current_server,
+        self.swarming_server,
         '--swarming-py-path',
         self.m.swarming_client.path.join('swarming.py'),
         '--output-json',
@@ -1802,19 +1808,17 @@ class SwarmingApi(recipe_api.RecipeApi):
     SwarmingTask -> argument list for go swarming command.
     """
     args = [
-        'collect',
-        '-server',
-        self.m.swarming.current_server,
+      'collect',
+      '-server', self.swarming_server,
 
-        # TODO(tikuta): Tuning this if necessary.
-        '-worker',
-        50,
-        '-task-summary-python',
-        '-task-output-stdout',
-        self.task_output_stdout,
+      # TODO(tikuta): Tuning this if necessary.
+      '-worker', 50,
 
-        # This is necessary not to cause io timeout.
-        '-verbose',
+      '-task-summary-python',
+      '-task-output-stdout', self.task_output_stdout,
+
+      # This is necessary not to cause io timeout.
+      '-verbose',
     ]
 
     args.extend(('-requests-json', self.m.json.input(requests_json)))
@@ -1836,17 +1840,13 @@ class SwarmingApi(recipe_api.RecipeApi):
     tid = lambda i: '1%02d00' % (
         i + 100*(self._task_test_data_id_offset - len(subtasks)))
     return self.m.json.test_api.output({
-        'tasks': {
-            '%s%s' % (task.task_name, suffix): {
-                'task_id':
-                    tid(i),
-                'shard_index':
-                    i,
-                'view_url':
-                    '%s/user/task/%s' %
-                    (self.m.swarming.current_server, tid(i)),
-            } for (suffix, i) in subtasks
-        },
+      'tasks': {
+        '%s%s' % (task.task_name, suffix): {
+          'task_id': tid(i),
+          'shard_index': i,
+          'view_url': '%s/user/task/%s' % (self.swarming_server, tid(i)),
+        } for (suffix, i) in subtasks
+      },
     })
 
   def configure_swarming(self,

@@ -60,6 +60,9 @@ def RunSteps(api):
 
   builder_id, builder_config = (
       api.chromium_tests_builder_config.lookup_builder())
+  api.chromium_swarming.swarming_server = (
+      builder_config.swarming_server or
+      'https://chromium-swarm-dev.appspot.com')
 
   api.chromium_tests.configure_build(builder_config)
   update_step = api.chromium_checkout.ensure_checkout(builder_config)

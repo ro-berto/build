@@ -6,7 +6,7 @@
       "[CACHE]/builder/src/path/to/script.py",
       "trigger",
       "--swarming",
-      "",
+      "https://chromium-swarm.appspot.com",
       "--priority",
       "25",
       "--task-name",
@@ -95,12 +95,12 @@
       "@@@STEP_LOG_LINE@json.output@    \"base_unittests/Ubuntu-16.04/[dummy has/test-builder/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@/task?id=10000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/task?id=10000@@@"
     ]
   },
   {
@@ -132,7 +132,7 @@
       "swarming",
       "collect",
       "-server",
-      "",
+      "https://chromium-swarm.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -230,7 +230,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": \"test-builder\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
-      "@@@STEP_LINK@shard #0@/task?id=10000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/task?id=10000@@@"
     ]
   },
   {

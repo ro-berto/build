@@ -28,7 +28,7 @@
       "swarming",
       "collect",
       "-server",
-      "",
+      "https://chromium-swarm.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -108,7 +108,7 @@
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@custom_link@http://example.com@@@",
-      "@@@STEP_LINK@shard #0@/task?id=0@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/task?id=0@@@"
     ]
   }
 ]

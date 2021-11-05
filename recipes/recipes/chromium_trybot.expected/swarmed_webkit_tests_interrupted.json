@@ -1831,7 +1831,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://example.swarmingserver.appspot.com",
+      "https://chromium-swarm.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"blink_web_tests (with patch)/Ubuntu-16.04/[dummy has/linux-rel/571\", \"priority\": \"30\", \"realm\": \"chromium:try\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.chromium.linux\", \"buildername:linux-rel\", \"buildnumber:571\", \"data:[dummy hash for blink_web_tests/size]\", \"gerrit:https://chromium-review.googlesource.com/c/456789/12\", \"name:blink_web_tests\", \"ninja_target:\", \"patch_project:chromium/src\", \"project:chromium\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:chromium.try:linux-rel\", \"stepname:blink_web_tests (with patch)\", \"test_id_prefix:\", \"test_suite:blink_web_tests\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for blink_web_tests\", \"size_bytes\": \"size]\"}}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:linux-rel\", \"-var\", \"os:Ubuntu-16.04\", \"-var\", \"test_suite:blink_web_tests\", \"-tag\", \"step_name:blink_web_tests (with patch)\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json\", \"--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-16.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -1971,7 +1971,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: blink_web_tests (with patch)/Ubuntu-16.04/[dummy has/linux-rel/571@https://example.swarmingserver.appspot.com/task?id=0@@@"
+      "@@@STEP_LINK@task UI: blink_web_tests (with patch)/Ubuntu-16.04/[dummy has/linux-rel/571@https://chromium-swarm.appspot.com/task?id=0@@@"
     ]
   },
   {
@@ -2231,7 +2231,7 @@
       "-u",
       "RECIPE_MODULE[build::chromium_swarming]/resources/wait_for_finished_task_set.py",
       "--swarming-server",
-      "",
+      "https://chromium-swarm.appspot.com",
       "--swarming-py-path",
       "[START_DIR]/swarming.client/swarming.py",
       "--output-json",
@@ -2374,7 +2374,7 @@
       "swarming",
       "collect",
       "-server",
-      "",
+      "https://chromium-swarm.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -2454,7 +2454,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": \"Linux Tests\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
-      "@@@STEP_LINK@shard #0 (failed)@/task?id=0@@@",
+      "@@@STEP_LINK@shard #0 (failed)@https://chromium-swarm.appspot.com/task?id=0@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
@@ -2694,7 +2694,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://example.swarmingserver.appspot.com",
+      "https://chromium-swarm.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"blink_web_tests (retry shards with patch)/Ubuntu-16.04/[dummy has/linux-rel/571\", \"priority\": \"29\", \"realm\": \"chromium:try\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.chromium.linux\", \"buildername:linux-rel\", \"buildnumber:571\", \"data:[dummy hash for blink_web_tests/size]\", \"gerrit:https://chromium-review.googlesource.com/c/456789/12\", \"name:blink_web_tests\", \"ninja_target:\", \"patch_project:chromium/src\", \"project:chromium\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:chromium.try:linux-rel\", \"stepname:blink_web_tests (retry shards with patch)\", \"test_id_prefix:\", \"test_suite:blink_web_tests\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for blink_web_tests\", \"size_bytes\": \"size]\"}}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:linux-rel\", \"-var\", \"os:Ubuntu-16.04\", \"-var\", \"test_suite:blink_web_tests\", \"-tag\", \"step_name:blink_web_tests (retry shards with patch)\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json\", \"--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-16.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -2834,7 +2834,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: blink_web_tests (retry shards with patch)/Ubuntu-16.04/[dummy has/linux-rel/571@https://example.swarmingserver.appspot.com/task?id=1@@@"
+      "@@@STEP_LINK@task UI: blink_web_tests (retry shards with patch)/Ubuntu-16.04/[dummy has/linux-rel/571@https://chromium-swarm.appspot.com/task?id=1@@@"
     ]
   },
   {
@@ -2887,7 +2887,7 @@
       "-u",
       "RECIPE_MODULE[build::chromium_swarming]/resources/wait_for_finished_task_set.py",
       "--swarming-server",
-      "",
+      "https://chromium-swarm.appspot.com",
       "--swarming-py-path",
       "[START_DIR]/swarming.client/swarming.py",
       "--output-json",
@@ -3030,7 +3030,7 @@
       "swarming",
       "collect",
       "-server",
-      "",
+      "https://chromium-swarm.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
