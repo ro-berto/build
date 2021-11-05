@@ -368,7 +368,7 @@
       "-out",
       "[CLEANUP]/rts-chromium-model-data/rejections",
       "-from",
-      "2012-03-04",
+      "2012-02-19",
       "-to",
       "2012-05-13"
     ],
