@@ -13,7 +13,6 @@ DEPS = [
     'chromium_tests',
     'recipe_engine/led',
     'recipe_engine/properties',
-    'recipe_engine/swarming',
 ]
 
 
@@ -34,7 +33,6 @@ def GenTests(api):
       api.properties(**{
           '$recipe_engine/led': InputProperties(led_run_id='some-led-run'),
       }),
-      api.swarming.properties(task_id='some-task-id', server='some.server.com'),
       api.post_process(post_process.MustRun, 'test results link'),
       api.post_process(post_process.DropExpectation),
   )
