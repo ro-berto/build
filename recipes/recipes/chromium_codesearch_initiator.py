@@ -15,7 +15,7 @@ linked by commit hash.
 
 from datetime import datetime
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'depot_tools/git',
@@ -114,12 +114,14 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (api.test('basic') +
-         api.step_data('fetch mirror hash',
-                       api.raw_io.stream_output('a' * 40, stream='stdout')) +
-         api.step_data('fetch mirror timestamp',
-                       api.raw_io.stream_output('100', stream='stdout')) +
-         api.step_data('fetch source hash',
-                       api.raw_io.stream_output('b' * 40, stream='stdout')) +
-         api.step_data('fetch source timestamp',
-                       api.raw_io.stream_output('50', stream='stdout')))
+  yield api.test(
+      'basic',
+      api.step_data('fetch mirror hash',
+                    api.raw_io.stream_output_text('a' * 40, stream='stdout')),
+      api.step_data('fetch mirror timestamp',
+                    api.raw_io.stream_output_text('100', stream='stdout')),
+      api.step_data('fetch source hash',
+                    api.raw_io.stream_output_text('b' * 40, stream='stdout')),
+      api.step_data('fetch source timestamp',
+                    api.raw_io.stream_output_text('50', stream='stdout')),
+  )
