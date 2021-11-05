@@ -89,10 +89,10 @@ def RunSteps(api):
            '--as=output',
            '//testing/libfuzzer:no_clusterfuzz'])
   targets = list(set(all_fuzzers).difference(set(no_clusterfuzz)))
+  targets = api.py3_migration.consistent_ordering(targets)
   api.step.active_result.presentation.logs['all_fuzzers'] = all_fuzzers
   api.step.active_result.presentation.logs['no_clusterfuzz'] = no_clusterfuzz
-  api.step.active_result.presentation.logs['targets'] = (
-      api.py3_migration.consistent_ordering(targets))
+  api.step.active_result.presentation.logs['targets'] = targets
   raw_result = api.chromium.compile(targets=targets, use_goma_module=True)
   if raw_result.status != common_pb.SUCCESS:
     return raw_result
