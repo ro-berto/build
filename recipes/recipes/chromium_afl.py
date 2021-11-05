@@ -8,18 +8,19 @@ from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 from RECIPE_MODULES.build.attr_utils import attrs, attrib
 from RECIPE_MODULES.build import chromium
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
-  'archive',
-  'chromium',
-  'depot_tools/bot_update',
-  'depot_tools/depot_tools',
-  'recipe_engine/json',
-  'recipe_engine/path',
-  'recipe_engine/python',
-  'recipe_engine/raw_io',
-  'recipe_engine/step',
+    'archive',
+    'chromium',
+    'py3_migration',
+    'depot_tools/bot_update',
+    'depot_tools/depot_tools',
+    'recipe_engine/json',
+    'recipe_engine/path',
+    'recipe_engine/python',
+    'recipe_engine/raw_io',
+    'recipe_engine/step',
 ]
 
 
@@ -90,7 +91,8 @@ def RunSteps(api):
   targets = list(set(all_fuzzers).difference(set(no_clusterfuzz)))
   api.step.active_result.presentation.logs['all_fuzzers'] = all_fuzzers
   api.step.active_result.presentation.logs['no_clusterfuzz'] = no_clusterfuzz
-  api.step.active_result.presentation.logs['targets'] = targets
+  api.step.active_result.presentation.logs['targets'] = (
+      api.py3_migration.consistent_ordering(targets))
   raw_result = api.chromium.compile(targets=targets, use_goma_module=True)
   if raw_result.status != common_pb.SUCCESS:
     return raw_result
