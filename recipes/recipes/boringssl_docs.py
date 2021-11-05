@@ -5,7 +5,7 @@
 """Generates BoringSSL documentation and uploads it to Cloud Storage."""
 
 
-PYTHON_VERSION_COMPATIBILITY = "PY2+3"
+PYTHON_VERSION_COMPATIBILITY = "PY3"
 
 DEPS = [
   'chromium',
