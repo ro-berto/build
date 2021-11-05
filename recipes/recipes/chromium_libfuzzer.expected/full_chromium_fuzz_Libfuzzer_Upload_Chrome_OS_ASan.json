@@ -590,9 +590,9 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@raw_io.output_text[refs]@target1@@@",
       "@@@STEP_LOG_END@raw_io.output_text[refs]@@@",
-      "@@@STEP_LOG_LINE@all_fuzzers@v8_target3@@@",
-      "@@@STEP_LOG_LINE@all_fuzzers@target2@@@",
       "@@@STEP_LOG_LINE@all_fuzzers@target1@@@",
+      "@@@STEP_LOG_LINE@all_fuzzers@target2@@@",
+      "@@@STEP_LOG_LINE@all_fuzzers@v8_target3@@@",
       "@@@STEP_LOG_END@all_fuzzers@@@",
       "@@@STEP_LOG_LINE@no_clusterfuzz@target1@@@",
       "@@@STEP_LOG_END@no_clusterfuzz@@@",
