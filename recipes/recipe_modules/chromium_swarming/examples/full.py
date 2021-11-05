@@ -58,8 +58,6 @@ def RunSteps(api, platforms, custom_trigger_script,
   api.chromium_checkout.ensure_checkout()
 
   # Configure swarming modules (this is optional).
-  api.chromium_swarming.swarming_server = (
-      'https://chromium-swarm-dev.appspot.com')
   api.chromium_swarming.add_default_tag('builder_group:tryserver')
   api.chromium_swarming.default_expiration = 60*60
   api.chromium_swarming.default_hard_timeout = 60*60

@@ -415,10 +415,6 @@ class WebRTCApi(recipe_api.RecipeApi):
       self.m.isolate.check_swarm_hashes(self._isolated_targets)
 
   def configure_swarming(self):
-    if self.bot.config.get('swarming_server'):
-      self.m.chromium_swarming.swarming_server = self.bot.config[
-          'swarming_server']
-
     self.m.chromium_swarming.configure_swarming(
         'webrtc',
         precommit=self.m.tryserver.is_tryserver,

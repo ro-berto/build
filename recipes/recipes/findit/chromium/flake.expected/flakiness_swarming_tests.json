@@ -1963,7 +1963,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"browser_tests (r0)/Mac-10.13/[dummy has/findit_variable/-1:0:10\", \"priority\": \"25\", \"realm\": \"project:ci\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:tryserver.chromium.mac\", \"buildername:findit_variable\", \"data:[dummy hash for browser_tests/dummy size]\", \"name:browser_tests\", \"ninja_target:\", \"project:chromium\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:project.ci:findit_variable\", \"stepname:browser_tests (r0)\", \"test_id_prefix:\", \"test_suite:browser_tests\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for browser_tests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:findit_variable\", \"-var\", \"os:Mac-10.13\", \"-var\", \"test_suite:browser_tests\", \"-tag\", \"step_name:browser_tests (r0)\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"gtest\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json\", \"--gtest_filter=Test.One\", \"--gtest_repeat=100\", \"--test-launcher-retry-limit=0\", \"--gtest_also_run_disabled_tests\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Mac-10.13\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"0\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"10\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -2118,7 +2118,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: browser_tests (r0)/Mac-10.13/[dummy has/findit_variable/-1:0:10@https://chromium-swarm.appspot.com/task?id=0@@@"
+      "@@@STEP_LINK@task UI: browser_tests (r0)/Mac-10.13/[dummy has/findit_variable/-1:0:10@https://example.swarmingserver.appspot.com/task?id=0@@@"
     ]
   },
   {
@@ -2126,7 +2126,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"browser_tests (r0)/Mac-10.13/[dummy has/findit_variable/-1:1:10\", \"priority\": \"25\", \"realm\": \"project:ci\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:tryserver.chromium.mac\", \"buildername:findit_variable\", \"data:[dummy hash for browser_tests/dummy size]\", \"name:browser_tests\", \"ninja_target:\", \"project:chromium\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:project.ci:findit_variable\", \"stepname:browser_tests (r0)\", \"test_id_prefix:\", \"test_suite:browser_tests\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for browser_tests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:findit_variable\", \"-var\", \"os:Mac-10.13\", \"-var\", \"test_suite:browser_tests\", \"-tag\", \"step_name:browser_tests (r0)\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"gtest\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json\", \"--gtest_filter=Test.One\", \"--gtest_repeat=100\", \"--test-launcher-retry-limit=0\", \"--gtest_also_run_disabled_tests\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Mac-10.13\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"1\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"10\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -2281,7 +2281,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: browser_tests (r0)/Mac-10.13/[dummy has/findit_variable/-1:1:10@https://chromium-swarm.appspot.com/task?id=1@@@"
+      "@@@STEP_LINK@task UI: browser_tests (r0)/Mac-10.13/[dummy has/findit_variable/-1:1:10@https://example.swarmingserver.appspot.com/task?id=1@@@"
     ]
   },
   {
@@ -2289,7 +2289,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"browser_tests (r0)/Mac-10.13/[dummy has/findit_variable/-1:2:10\", \"priority\": \"25\", \"realm\": \"project:ci\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:tryserver.chromium.mac\", \"buildername:findit_variable\", \"data:[dummy hash for browser_tests/dummy size]\", \"name:browser_tests\", \"ninja_target:\", \"project:chromium\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:project.ci:findit_variable\", \"stepname:browser_tests (r0)\", \"test_id_prefix:\", \"test_suite:browser_tests\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for browser_tests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:findit_variable\", \"-var\", \"os:Mac-10.13\", \"-var\", \"test_suite:browser_tests\", \"-tag\", \"step_name:browser_tests (r0)\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"gtest\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json\", \"--gtest_filter=Test.One\", \"--gtest_repeat=100\", \"--test-launcher-retry-limit=0\", \"--gtest_also_run_disabled_tests\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Mac-10.13\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"2\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"10\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -2444,7 +2444,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: browser_tests (r0)/Mac-10.13/[dummy has/findit_variable/-1:2:10@https://chromium-swarm.appspot.com/task?id=2@@@"
+      "@@@STEP_LINK@task UI: browser_tests (r0)/Mac-10.13/[dummy has/findit_variable/-1:2:10@https://example.swarmingserver.appspot.com/task?id=2@@@"
     ]
   },
   {
@@ -2452,7 +2452,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"browser_tests (r0)/Mac-10.13/[dummy has/findit_variable/-1:3:10\", \"priority\": \"25\", \"realm\": \"project:ci\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:tryserver.chromium.mac\", \"buildername:findit_variable\", \"data:[dummy hash for browser_tests/dummy size]\", \"name:browser_tests\", \"ninja_target:\", \"project:chromium\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:project.ci:findit_variable\", \"stepname:browser_tests (r0)\", \"test_id_prefix:\", \"test_suite:browser_tests\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for browser_tests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:findit_variable\", \"-var\", \"os:Mac-10.13\", \"-var\", \"test_suite:browser_tests\", \"-tag\", \"step_name:browser_tests (r0)\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"gtest\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json\", \"--gtest_filter=Test.One\", \"--gtest_repeat=100\", \"--test-launcher-retry-limit=0\", \"--gtest_also_run_disabled_tests\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Mac-10.13\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"3\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"10\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -2607,7 +2607,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: browser_tests (r0)/Mac-10.13/[dummy has/findit_variable/-1:3:10@https://chromium-swarm.appspot.com/task?id=3@@@"
+      "@@@STEP_LINK@task UI: browser_tests (r0)/Mac-10.13/[dummy has/findit_variable/-1:3:10@https://example.swarmingserver.appspot.com/task?id=3@@@"
     ]
   },
   {
@@ -2615,7 +2615,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"browser_tests (r0)/Mac-10.13/[dummy has/findit_variable/-1:4:10\", \"priority\": \"25\", \"realm\": \"project:ci\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:tryserver.chromium.mac\", \"buildername:findit_variable\", \"data:[dummy hash for browser_tests/dummy size]\", \"name:browser_tests\", \"ninja_target:\", \"project:chromium\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:project.ci:findit_variable\", \"stepname:browser_tests (r0)\", \"test_id_prefix:\", \"test_suite:browser_tests\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for browser_tests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:findit_variable\", \"-var\", \"os:Mac-10.13\", \"-var\", \"test_suite:browser_tests\", \"-tag\", \"step_name:browser_tests (r0)\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"gtest\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json\", \"--gtest_filter=Test.One\", \"--gtest_repeat=100\", \"--test-launcher-retry-limit=0\", \"--gtest_also_run_disabled_tests\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Mac-10.13\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"4\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"10\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -2770,7 +2770,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: browser_tests (r0)/Mac-10.13/[dummy has/findit_variable/-1:4:10@https://chromium-swarm.appspot.com/task?id=4@@@"
+      "@@@STEP_LINK@task UI: browser_tests (r0)/Mac-10.13/[dummy has/findit_variable/-1:4:10@https://example.swarmingserver.appspot.com/task?id=4@@@"
     ]
   },
   {
@@ -2778,7 +2778,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"browser_tests (r0)/Mac-10.13/[dummy has/findit_variable/-1:5:10\", \"priority\": \"25\", \"realm\": \"project:ci\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:tryserver.chromium.mac\", \"buildername:findit_variable\", \"data:[dummy hash for browser_tests/dummy size]\", \"name:browser_tests\", \"ninja_target:\", \"project:chromium\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:project.ci:findit_variable\", \"stepname:browser_tests (r0)\", \"test_id_prefix:\", \"test_suite:browser_tests\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for browser_tests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:findit_variable\", \"-var\", \"os:Mac-10.13\", \"-var\", \"test_suite:browser_tests\", \"-tag\", \"step_name:browser_tests (r0)\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"gtest\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json\", \"--gtest_filter=Test.One\", \"--gtest_repeat=100\", \"--test-launcher-retry-limit=0\", \"--gtest_also_run_disabled_tests\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Mac-10.13\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"5\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"10\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -2933,7 +2933,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: browser_tests (r0)/Mac-10.13/[dummy has/findit_variable/-1:5:10@https://chromium-swarm.appspot.com/task?id=5@@@"
+      "@@@STEP_LINK@task UI: browser_tests (r0)/Mac-10.13/[dummy has/findit_variable/-1:5:10@https://example.swarmingserver.appspot.com/task?id=5@@@"
     ]
   },
   {
@@ -2941,7 +2941,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"browser_tests (r0)/Mac-10.13/[dummy has/findit_variable/-1:6:10\", \"priority\": \"25\", \"realm\": \"project:ci\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:tryserver.chromium.mac\", \"buildername:findit_variable\", \"data:[dummy hash for browser_tests/dummy size]\", \"name:browser_tests\", \"ninja_target:\", \"project:chromium\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:project.ci:findit_variable\", \"stepname:browser_tests (r0)\", \"test_id_prefix:\", \"test_suite:browser_tests\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for browser_tests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:findit_variable\", \"-var\", \"os:Mac-10.13\", \"-var\", \"test_suite:browser_tests\", \"-tag\", \"step_name:browser_tests (r0)\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"gtest\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json\", \"--gtest_filter=Test.One\", \"--gtest_repeat=100\", \"--test-launcher-retry-limit=0\", \"--gtest_also_run_disabled_tests\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Mac-10.13\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"6\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"10\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -3096,7 +3096,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: browser_tests (r0)/Mac-10.13/[dummy has/findit_variable/-1:6:10@https://chromium-swarm.appspot.com/task?id=6@@@"
+      "@@@STEP_LINK@task UI: browser_tests (r0)/Mac-10.13/[dummy has/findit_variable/-1:6:10@https://example.swarmingserver.appspot.com/task?id=6@@@"
     ]
   },
   {
@@ -3104,7 +3104,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"browser_tests (r0)/Mac-10.13/[dummy has/findit_variable/-1:7:10\", \"priority\": \"25\", \"realm\": \"project:ci\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:tryserver.chromium.mac\", \"buildername:findit_variable\", \"data:[dummy hash for browser_tests/dummy size]\", \"name:browser_tests\", \"ninja_target:\", \"project:chromium\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:project.ci:findit_variable\", \"stepname:browser_tests (r0)\", \"test_id_prefix:\", \"test_suite:browser_tests\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for browser_tests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:findit_variable\", \"-var\", \"os:Mac-10.13\", \"-var\", \"test_suite:browser_tests\", \"-tag\", \"step_name:browser_tests (r0)\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"gtest\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json\", \"--gtest_filter=Test.One\", \"--gtest_repeat=100\", \"--test-launcher-retry-limit=0\", \"--gtest_also_run_disabled_tests\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Mac-10.13\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"7\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"10\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -3259,7 +3259,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: browser_tests (r0)/Mac-10.13/[dummy has/findit_variable/-1:7:10@https://chromium-swarm.appspot.com/task?id=7@@@"
+      "@@@STEP_LINK@task UI: browser_tests (r0)/Mac-10.13/[dummy has/findit_variable/-1:7:10@https://example.swarmingserver.appspot.com/task?id=7@@@"
     ]
   },
   {
@@ -3267,7 +3267,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"browser_tests (r0)/Mac-10.13/[dummy has/findit_variable/-1:8:10\", \"priority\": \"25\", \"realm\": \"project:ci\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:tryserver.chromium.mac\", \"buildername:findit_variable\", \"data:[dummy hash for browser_tests/dummy size]\", \"name:browser_tests\", \"ninja_target:\", \"project:chromium\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:project.ci:findit_variable\", \"stepname:browser_tests (r0)\", \"test_id_prefix:\", \"test_suite:browser_tests\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for browser_tests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:findit_variable\", \"-var\", \"os:Mac-10.13\", \"-var\", \"test_suite:browser_tests\", \"-tag\", \"step_name:browser_tests (r0)\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"gtest\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json\", \"--gtest_filter=Test.One\", \"--gtest_repeat=100\", \"--test-launcher-retry-limit=0\", \"--gtest_also_run_disabled_tests\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Mac-10.13\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"8\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"10\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -3422,7 +3422,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: browser_tests (r0)/Mac-10.13/[dummy has/findit_variable/-1:8:10@https://chromium-swarm.appspot.com/task?id=8@@@"
+      "@@@STEP_LINK@task UI: browser_tests (r0)/Mac-10.13/[dummy has/findit_variable/-1:8:10@https://example.swarmingserver.appspot.com/task?id=8@@@"
     ]
   },
   {
@@ -3430,7 +3430,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"browser_tests (r0)/Mac-10.13/[dummy has/findit_variable/-1:9:10\", \"priority\": \"25\", \"realm\": \"project:ci\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:tryserver.chromium.mac\", \"buildername:findit_variable\", \"data:[dummy hash for browser_tests/dummy size]\", \"name:browser_tests\", \"ninja_target:\", \"project:chromium\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:project.ci:findit_variable\", \"stepname:browser_tests (r0)\", \"test_id_prefix:\", \"test_suite:browser_tests\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for browser_tests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:findit_variable\", \"-var\", \"os:Mac-10.13\", \"-var\", \"test_suite:browser_tests\", \"-tag\", \"step_name:browser_tests (r0)\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"gtest\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json\", \"--gtest_filter=Test.One\", \"--gtest_repeat=100\", \"--test-launcher-retry-limit=0\", \"--gtest_also_run_disabled_tests\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Mac-10.13\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"9\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"10\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -3585,7 +3585,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: browser_tests (r0)/Mac-10.13/[dummy has/findit_variable/-1:9:10@https://chromium-swarm.appspot.com/task?id=9@@@"
+      "@@@STEP_LINK@task UI: browser_tests (r0)/Mac-10.13/[dummy has/findit_variable/-1:9:10@https://example.swarmingserver.appspot.com/task?id=9@@@"
     ]
   },
   {
@@ -3857,7 +3857,7 @@
       "-u",
       "RECIPE_MODULE[build::chromium_swarming]/resources/wait_for_finished_task_set.py",
       "--swarming-server",
-      "https://chromium-swarm.appspot.com",
+      "",
       "--swarming-py-path",
       "[START_DIR]/swarming.client/swarming.py",
       "--output-json",
@@ -4027,7 +4027,7 @@
       "swarming",
       "collect",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "",
       "-worker",
       "50",
       "-task-summary-python",
@@ -4117,7 +4117,7 @@
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=0@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@/task?id=0@@@"
     ]
   },
   {
