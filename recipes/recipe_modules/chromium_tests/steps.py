@@ -1727,11 +1727,15 @@ class LocalGTestTest(LocalTest):
 
     _present_info_messages(step_result.presentation, self)
 
+    results_to_upload = None
     if r:
+      results_to_upload = api.json.input(r.raw)
       self._gtest_results[suffix] = r
-
+    if self.spec.resultdb.use_rdb_results_for_all_decisions:
+      results_to_upload = gtest_results_file
+    if results_to_upload:
       api.test_results.upload(
-          api.json.input(r.raw),
+          results_to_upload,
           test_type=self.name,
           chrome_revision=api.bot_update.last_returned_properties.get(
               self.spec.commit_position_property, 'refs/x@{#0}'))
