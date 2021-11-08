@@ -1,9 +1,0 @@
-[
-  {
-    "failure": {
-      "failure": {},
-      "humanReason": "Invalid commit position: foo"
-    },
-    "name": "$result"
-  }
-]
