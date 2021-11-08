@@ -5,7 +5,6 @@
 PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
-  'chromite',
   'chromium',
   'depot_tools/git',
   'depot_tools/tryserver',

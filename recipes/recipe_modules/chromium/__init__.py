@@ -18,7 +18,6 @@ DEPS = [
     'adb',
     'build',
     'builder_group',
-    'chromite',
     'gn',
     'goma',
     'reclient',
