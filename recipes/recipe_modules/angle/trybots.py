@@ -158,6 +158,18 @@ _SPEC = {
             analyze_names=['angle'],
             retry_failed_shards=False,
         ),
+    'win-asan-test':
+        try_spec.TrySpec.create(
+            mirrors=[
+                try_spec.TryMirror.create(
+                    builder_group='angle',
+                    buildername='win-asan-test',
+                    tester='win10-x64-swiftshader-asan',
+                ),
+            ],
+            analyze_names=['angle'],
+            retry_failed_shards=False,
+        ),
     'win-dbg-compile':
         _create_compile_spec('win-dbg-compile'),
     'win-msvc-compile':
@@ -180,18 +192,6 @@ _SPEC = {
                     builder_group='angle',
                     buildername='win-test',
                     tester='win10-x64-nvidia',
-                ),
-            ],
-            analyze_names=['angle'],
-            retry_failed_shards=False,
-        ),
-    'win-x86-asan-test':
-        try_spec.TrySpec.create(
-            mirrors=[
-                try_spec.TryMirror.create(
-                    builder_group='angle',
-                    buildername='win-x86-asan-test',
-                    tester='win10-x86-swiftshader-asan',
                 ),
             ],
             analyze_names=['angle'],

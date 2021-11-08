@@ -130,6 +130,8 @@ _SPEC = {
         _create_tester_config('mac', 64, 'mac-test'),
     'mac-test':
         _create_builder_config('mac', 'Release', 64),
+    'win-asan-test':
+        _create_builder_config('win', 'Release', 64),
     'win-dbg-compile':
         _create_builder_config('win', 'Debug', 64),
     'win-msvc-compile':
@@ -146,8 +148,6 @@ _SPEC = {
         _create_builder_config('win', 'Release', 64),
     'win-trace':
         _create_builder_config('win', 'Release', 64),
-    'win-x86-asan-test':
-        _create_builder_config('win', 'Release', 32),
     'win-x86-dbg-compile':
         _create_builder_config('win', 'Debug', 32),
     'win-x86-test':
@@ -166,10 +166,10 @@ _SPEC = {
         _create_tester_config('win', 64, 'win-test'),
     'win10-x64-nvidia-perf':
         _create_tester_config('win', 64, 'win-perf'),
+    'win10-x64-swiftshader-asan':
+        _create_tester_config('win', 64, 'win-asan-test'),
     'win10-x86-swiftshader':
         _create_tester_config('win', 32, 'win-x86-test'),
-    'win10-x86-swiftshader-asan':
-        _create_tester_config('win', 32, 'win-x86-asan-test'),
 }
 
 BUILDERS = builder_db.BuilderDatabase.create({
