@@ -118,15 +118,8 @@ def GenTests(api):
     )
 
   yield api.test(
-      'rdb_success_and_json_success',
+      'rdb_success',
       common_test_data(),
-      api.override_step_data(
-          'swarming_gtest (with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.json.output({}), failure=False)),
-      api.override_step_data(
-          'collect tasks (with patch).swarming_gtest results',
-          stdout=api.raw_io.output_text(api.test_utils.rdb_results())),
       api.post_process(post_process.DoesNotRun, 'swarming_gtest failure'),
       api.post_process(post_process.DoesNotRun, 'swarming_gtest invalid'),
       api.post_process(post_process.MustRun,
@@ -136,56 +129,15 @@ def GenTests(api):
   )
 
   yield api.test(
-      'rdb_success_but_json_failure',
+      'rdb_failure',
       common_test_data(),
-      api.override_step_data(
-          'swarming_gtest (with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.json.output({}), failure=False)),
-      api.override_step_data(
-          'collect tasks (with patch).swarming_gtest results',
-          stdout=api.raw_io.output_text(api.test_utils.rdb_results())),
-      api.post_process(post_process.DoesNotRun, 'swarming_gtest failure'),
-      api.post_process(post_process.DoesNotRun, 'swarming_gtest invalid'),
-      api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'rdb_failure_but_json_success',
-      common_test_data(),
-      api.override_step_data(
-          'swarming_gtest (with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.json.output({}), failure=False)),
-      api.override_step_data(
-          'collect tasks (with patch).swarming_gtest results',
-          stdout=api.raw_io.output_text(
-              api.test_utils.rdb_results(failing_suites=['swarming_gtest']))),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'swarming_gtest', 'with patch', failures=['Test.One']),
       api.post_process(post_process.MustRun, 'swarming_gtest failure'),
       api.post_process(post_process.DoesNotRun, 'swarming_gtest invalid'),
-      api.post_process(post_process.StepTextContains,
-                       'swarming_gtest (with patch)', [
-                           'deterministic failures [caused step to fail]',
-                           'swarming_gtest_test_case1'
-                       ]),
-      api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'rdb_failure_and_json_failure',
-      common_test_data(),
-      api.override_step_data(
-          'swarming_gtest (with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.json.output({}), failure=False)),
-      api.override_step_data(
-          'collect tasks (with patch).swarming_gtest results',
-          stdout=api.raw_io.output_text(
-              api.test_utils.rdb_results(failing_suites=['swarming_gtest']))),
-      api.post_process(post_process.MustRun, 'swarming_gtest failure'),
-      api.post_process(post_process.DoesNotRun, 'swarming_gtest invalid'),
+      api.post_process(
+          post_process.StepTextContains, 'swarming_gtest (with patch)',
+          ['deterministic failures [caused step to fail]', 'Test.One']),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -193,10 +145,8 @@ def GenTests(api):
   yield api.test(
       'rdb_invalid',
       common_test_data(),
-      api.override_step_data(
-          'swarming_gtest (with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.json.output({}), failure=True)),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'swarming_gtest', 'with patch', invalid=True),
       api.post_process(post_process.DoesNotRun, 'swarming_gtest failure'),
       api.post_process(post_process.MustRun, 'swarming_gtest invalid'),
       api.post_process(post_process.StatusSuccess),
@@ -207,10 +157,6 @@ def GenTests(api):
       'rdb_invalid_after_collect',
       common_test_data(),
       api.properties(test_with_new_exit_code='swarming_gtest'),
-      api.override_step_data(
-          'swarming_gtest (with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.json.output({}), failure=False)),
       api.post_process(post_process.DoesNotRun, 'swarming_gtest failure'),
       api.post_process(post_process.MustRun, 'swarming_gtest invalid'),
       api.post_process(post_process.StatusSuccess),
@@ -220,10 +166,6 @@ def GenTests(api):
   yield api.test(
       'upload_to_legacy_test_results',
       common_test_data(),
-      api.override_step_data(
-          'swarming_gtest (with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.json.output({}), failure=False)),
       api.post_process(post_process.MustRun,
                        'Upload to test-results [swarming_gtest (with patch)]'),
       api.post_process(
@@ -247,7 +189,8 @@ def GenTests(api):
       api.override_step_data(
           'collect tasks (with patch).swarming_gtest results',
           stdout=api.raw_io.output_text(
-              api.test_utils.rdb_results(skipped_suites=['swarming_gtest']))),
+              api.test_utils.rdb_results(
+                  'swarming_gtest', skipped_tests=['Test.One']))),
       api.post_process(post_process.MustRun, 'swarming_gtest failure'),
       api.post_process(post_process.DoesNotRun, 'swarming_gtest invalid'),
       api.post_process(post_process.StatusSuccess),

@@ -347,7 +347,8 @@ def GenTests(api):
           'collect tasks.base_unittests_failed_results results',
           stdout=api.json.invalid(
               api.test_utils.rdb_results(
-                  failing_suites=['base_unittests_failed_results']))),
+                  'base_unittests_failed_results',
+                  failing_tests=['Test.One']))),
       api.post_process(post_process.MustRun, 'test3'),
       api.post_process(post_process.StatusFailure),
   )
@@ -396,7 +397,8 @@ def GenTests(api):
       api.override_step_data(
           'collect tasks.base_unittests results',
           stdout=api.raw_io.output_text(
-              api.test_utils.rdb_results(failing_suites=['base_unittests']))),
+              api.test_utils.rdb_results(
+                  'base_unittests', failing_tests=['Test.One']))),
       api.post_check(post_process.MustRun, 'abort retry'),
       api.post_process(post_process.DropExpectation),
   )
@@ -417,7 +419,7 @@ def GenTests(api):
           'enabled_experimental_test results',
           stdout=api.raw_io.output_text(
               api.test_utils.rdb_results(
-                  failing_suites=['enabled_experimental_test']))),
+                  'enabled_experimental_test', failing_tests=['Test.One']))),
       api.post_check(lambda check, steps: check(
           'enabled_experimental_test' in steps[
               'exonerate unrelated test failures'].stdin)),

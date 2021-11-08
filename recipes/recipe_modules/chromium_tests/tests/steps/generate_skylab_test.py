@@ -230,8 +230,9 @@ def GenTests(api):
           'basic_EVE_TOT results',
           stdout=api.raw_io.output_text(
               api.test_utils.rdb_results(
-                  failing_suites=['basic_EVE_TOT'],
-                  skipped_suites=['basic_EVE_TOT']))),
+                  'basic_EVE_TOT',
+                  failing_tests=['Test.One'],
+                  skipped_tests=['Test.One']))),
       api.post_process(post_process.StepFailure, 'basic_EVE_TOT.attempt: #1'),
       api.post_process(post_process.StepException, 'basic_EVE_TOT.attempt: #2'),
       api.post_process(post_process.StepSuccess, 'basic_EVE_TOT.attempt: #3'),
@@ -239,7 +240,7 @@ def GenTests(api):
       api.post_process(
           post_process.ResultReason,
           '1 Test Suite(s) failed.\n\n**basic_EVE_TOT** '
-          'failed because of:\n\n- basic_EVE_TOT_test_case1'),
+          'failed because of:\n\n- Test.One'),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -259,8 +260,9 @@ def GenTests(api):
           'basic_EVE_TOT results',
           stdout=api.raw_io.output_text(
               api.test_utils.rdb_results(
-                  failing_suites=['basic_EVE_TOT'],
-                  skipped_suites=['basic_EVE_TOT']))),
+                  'basic_EVE_TOT',
+                  failing_tests=['Test.One'],
+                  skipped_tests=['Test.One']))),
       api.post_process(
           post_process.MustRun,
           'prepare skylab tests.'
@@ -284,7 +286,7 @@ def GenTests(api):
       api.post_process(
           post_process.ResultReason,
           '1 Test Suite(s) failed.\n\n**basic_EVE_TOT** '
-          'failed because of:\n\n- basic_EVE_TOT_test_case1'),
+          'failed because of:\n\n- Test.One'),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -304,9 +306,6 @@ def GenTests(api):
       api.skylab.gen_schedule_build_resps('test_pre_run.schedule skylab tests',
                                           1),
       api.skylab.wait_on_suites('find test runner build', 1),
-      api.override_step_data(
-          'basic_EVE_TOT results',
-          stdout=api.raw_io.output_text(api.test_utils.rdb_results())),
       api.post_process(post_process.StepCommandContains, 'compile', ['chrome']),
       api.post_process(archive_gsuri_should_match_skylab_req),
       api.post_process(post_process.StepException, 'basic_EVE_TOT'),

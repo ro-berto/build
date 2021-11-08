@@ -366,33 +366,12 @@ def GenTests(api):
                   }],
               },
           }),
-      api.override_step_data(
-          'collect tasks (with patch).base_unittests results',
-          stdout=api.raw_io.output_text(
-              api.test_utils.rdb_results(failing_suites=['base_unittests']))),
-      api.override_step_data(
-          'collect tasks (retry shards with patch).base_unittests results',
-          stdout=api.raw_io.output_text(
-              api.test_utils.rdb_results(failing_suites=['base_unittests']))),
-      api.override_step_data(
-          'collect tasks (without patch).base_unittests results',
-          stdout=api.raw_io.output_text(
-              api.test_utils.rdb_results(failing_suites=['base_unittests']))),
-      api.override_step_data(
-          'base_unittests (with patch)',
-          api.chromium_swarming.summary(
-              {},
-              api.chromium_swarming.canned_summary_output_raw(failure=True))),
-      api.override_step_data(
-          'base_unittests (retry shards with patch)',
-          api.chromium_swarming.summary(
-              {},
-              api.chromium_swarming.canned_summary_output_raw(failure=True))),
-      api.override_step_data(
-          'base_unittests (without patch)',
-          api.chromium_swarming.summary(
-              {},
-              api.chromium_swarming.canned_summary_output_raw(failure=True))),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'base_unittests', 'with patch', failures=['Test.One']),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'base_unittests', 'retry shards with patch', failures=['Test.One']),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'base_unittests', 'without patch', failures=['Test.One']),
       api.filter.suppress_analyze(),
       api.post_process(post_process.MustRun,
                        'base_unittests (retry shards with patch)'),

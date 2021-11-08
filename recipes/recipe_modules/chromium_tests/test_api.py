@@ -44,3 +44,42 @@ class ChromiumTestsApi(recipe_test_api.RecipeTestApi):
                 step_prefix or '', filename, step_suffix or ''),
             self.m.json.output(contents))
     )
+
+  def gen_swarming_and_rdb_results(self,
+                                   suite_name,
+                                   suffix,
+                                   invalid=False,
+                                   failures=None):
+    """Adds overrides for the swarming-collect and rdb-query steps of a test.
+
+    To mock a swarming test's results, step data needs to be provided for the
+    `swarming collect` command, as well as the `rdb query` command. This helper
+    method can handle all that with less boilerplate.
+
+    Note: when not overridden, a swarming test's results by default will be
+    valid with zero failures. Consequently this method only needs to be invoked
+    when simulating failures.
+
+    Args:
+      suite_name: Name of the suite.
+      suffix: Phase of the build the test is in (eg "with patch").
+      invalid: If True, marks the results as invalid.
+      failures: List of names of test cases that failed.
+    """
+    failures = failures if failures else []
+    swarming_step_name = suite_name
+    if suffix:
+      swarming_step_name += ' (%s)' % suffix
+    rdb_step_name = 'collect tasks'
+    if suffix:
+      rdb_step_name += ' (%s)' % suffix
+    rdb_step_name += '.%s results' % suite_name
+    return self.override_step_data(
+        swarming_step_name,
+        self.m.chromium_swarming.canned_summary_output(
+            self.m.json.output({}), failure=invalid or
+            failures)) + self.override_step_data(
+                rdb_step_name,
+                stdout=self.m.raw_io.output_text(
+                    self.m.test_utils.rdb_results(
+                        suite_name, failing_tests=failures)))

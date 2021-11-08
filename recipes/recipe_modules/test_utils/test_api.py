@@ -490,39 +490,40 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
     return (self.m.raw_io.output_dir(files_dict) +
             self.m.json.output(canned_jsonish, retcode))
 
-  def rdb_results(self, failing_suites=None, skipped_suites=None):
+  def rdb_results(self, suite_name, failing_tests=None, skipped_tests=None):
     """Returns a JSON blob used to override data for 'query test results'.
 
     Args:
-      failing_suites: List of names of the failing suites to create results
-          for. Each suite will have a single test with a rdb_test_result.FAIL
-          result.
+      suite_name: Name of the suite.
+      failing_tests: List of test cases to create results for. Each test case
+          will have a single rdb_test_result.FAIL result.
+      skipped_tests: Same as failing_tests above, but with rdb_test_result.SKIP.
     """
 
-    def _generate_invocation(suite, status):
+    def _generate_invocation(test, status):
       test_result = rdb_test_result.TestResult(
-          test_id=suite + '_test_case1',
+          test_id=test,
           variant=rdb_common.Variant(**{
               'def': {
-                  'test_suite': suite,
+                  'test_suite': suite_name,
               },
           }),
           expected=status == rdb_test_result.PASS,
-          variant_hash=suite + '_hash',
+          variant_hash=suite_name + '_hash',
           status=status)
       return self.m.resultdb.Invocation(
           proto=rdb_invocation.Invocation(
               state=rdb_invocation.Invocation.FINALIZED,
-              name=suite + '_results'),
+              name=suite_name + '_results'),
           test_results=[test_result])
 
-    failing_suites = failing_suites or []
-    skipped_suites = skipped_suites or []
+    failing_tests = failing_tests or []
+    skipped_tests = skipped_tests or []
     invocations = []
-    for suite in failing_suites:
-      invocations.append(_generate_invocation(suite, rdb_test_result.FAIL))
-    for suite in skipped_suites:
-      invocations.append(_generate_invocation(suite, rdb_test_result.SKIP))
+    for test in failing_tests:
+      invocations.append(_generate_invocation(test, rdb_test_result.FAIL))
+    for test in skipped_tests:
+      invocations.append(_generate_invocation(test, rdb_test_result.SKIP))
 
     invocations_by_inv_id = {}
     for i, inv in enumerate(invocations):
