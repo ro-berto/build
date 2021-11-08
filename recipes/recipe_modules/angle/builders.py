@@ -108,9 +108,17 @@ _SPEC = {
         _create_tester_config('linux', 64, 'linux-test'),
     'linux-swiftshader-asan':
         _create_tester_config('linux', 64, 'linux-asan-test'),
+    'linux-swiftshader-tsan':
+        _create_tester_config('linux', 64, 'linux-asan-test'),
+    'linux-swiftshader-ubsan':
+        _create_tester_config('linux', 64, 'linux-asan-test'),
     'linux-test':
         _create_builder_config('linux', 'Release', 64),
     'linux-trace':
+        _create_builder_config('linux', 'Release', 64),
+    'linux-tsan-test':
+        _create_builder_config('linux', 'Release', 64),
+    'linux-ubsan-test':
         _create_builder_config('linux', 'Release', 64),
     'mac-amd':
         _create_tester_config('mac', 64, 'mac-test'),
