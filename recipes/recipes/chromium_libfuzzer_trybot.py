@@ -7,17 +7,18 @@ from recipe_engine.engine_types import freeze
 
 from RECIPE_MODULES.build import chromium
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
-  'chromium',
-  'chromium_checkout',
-  'depot_tools/tryserver',
-  'filter',
-  'gn',
-  'recipe_engine/context',
-  'recipe_engine/json',
-  'recipe_engine/raw_io',
+    'chromium',
+    'chromium_checkout',
+    'depot_tools/tryserver',
+    'filter',
+    'gn',
+    'py3_migration',
+    'recipe_engine/context',
+    'recipe_engine/json',
+    'recipe_engine/raw_io',
 ]
 
 BUILDERS = freeze({
@@ -75,13 +76,15 @@ def RunSteps(api):
       excluded_fuzz_labels = api.gn.refs(
           outdir, EXCLUDED_FUZZ_TARGETS, output_type='executable',
           step_name='calculate no_fuzzers', output_format='label')
-      fuzz_labels = list(all_fuzz_labels - excluded_fuzz_labels)
+      fuzz_labels = api.py3_migration.consistent_ordering(
+          list(all_fuzz_labels - excluded_fuzz_labels))
 
       # Filter out all targets that the patch doesn't affect.
       affected_files = api.chromium_checkout.get_files_affected_by_patch()
       test_targets, compile_targets = api.filter.analyze(
           affected_files, None, fuzz_labels, 'trybot_analyze_config.json')
-      affected_fuzz_labels = test_targets + compile_targets
+      affected_fuzz_labels = api.py3_migration.consistent_ordering(
+          test_targets + compile_targets)
       if not affected_fuzz_labels:
         return
 
@@ -91,8 +94,8 @@ def RunSteps(api):
           builder_id, use_goma=True, gn_args_location=api.gn.LOGS)
 
       # Convert the GN labels to ninja targets and pass them into compile.
-      affected_fuzz_targets = list(api.gn.ls(
-          outdir, affected_fuzz_labels, output_format='output'))
+      affected_fuzz_targets = api.py3_migration.consistent_ordering(
+          list(api.gn.ls(outdir, affected_fuzz_labels, output_format='output')))
       return api.chromium.compile(
           targets=affected_fuzz_targets, use_goma_module=True)
 
