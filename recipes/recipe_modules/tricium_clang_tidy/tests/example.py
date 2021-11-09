@@ -357,14 +357,6 @@ def GenTests(api):
         }]) + api.post_process(post_process.DropExpectation))
 
   yield (test_with_patch(
-      'skip_if_no_clang_tidy',
-      affected_files=['path/to/some/cc/file.cpp'],
-      clang_tidy_exists=False) +
-         api.post_process(post_process.StepWarning, 'clang-tidy') +
-         api.post_process(post_process.StatusSuccess) +
-         api.post_process(post_process.DropExpectation))
-
-  yield (test_with_patch(
       'diagnostic_use_after_move',
       affected_files=['path/to/some/cc/file.cpp']) + api.step_data(
           'clang-tidy.generate-warnings.read tidy output',

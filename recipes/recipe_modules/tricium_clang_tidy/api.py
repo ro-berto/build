@@ -185,18 +185,6 @@ class TriciumClangTidyApi(RecipeApi):
     clang_tidy_location = self.m.context.cwd.join(*_clang_tidy_path)
     per_file_comments = collections.defaultdict(_SourceFileComments)
 
-    # CLs based before Chromium's src@a55e6bed3d40262fad227ae7fb68ee1fea0e32af
-    # won't sync clang-tidy, and so will show up as red if we try to run
-    # tricium_clang_tidy on them. Avoid that.
-    #
-    # FIXME(crbug.com/1035217): Remove this once M80 is a distant memory.
-    if not self.m.path.exists(clang_tidy_location):
-      self.m.step.active_result.presentation.status = 'WARNING'
-      self.m.step.active_result.presentation.logs['skipped'] = [
-          'No clang-tidy binary found; skipping linting (crbug.com/1035217)'
-      ]
-      return per_file_comments
-
     warnings_file = self.m.path['cleanup'].join('clang_tidy_complaints.yaml')
 
     tricium_clang_tidy_command = [
