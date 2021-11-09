@@ -1572,7 +1572,7 @@
     "name": "test luci.chromium.try:chromium_presubmit",
     "~followup_annotations": [
       "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/1406154@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=fake-task-id@@@"
+      "@@@STEP_LINK@Swarming task@https://example.swarmingserver.appspot.com/task?id=fake-task-id@@@"
     ]
   },
   {
@@ -1794,12 +1794,12 @@
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"chromium-swarm.appspot.com\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"example.swarmingserver.appspot.com\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"task_id\": \"fake-task-id\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=fake-task-id@@@"
+      "@@@STEP_LINK@Swarming task@https://example.swarmingserver.appspot.com/task?id=fake-task-id@@@"
     ]
   },
   {
@@ -1862,7 +1862,7 @@
     "name": "test luci.chromium.try:linux-rel",
     "~followup_annotations": [
       "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/1406154@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=fake-task-id@@@"
+      "@@@STEP_LINK@Swarming task@https://example.swarmingserver.appspot.com/task?id=fake-task-id@@@"
     ]
   },
   {
@@ -2084,12 +2084,12 @@
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"chromium-swarm.appspot.com\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"example.swarmingserver.appspot.com\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"task_id\": \"fake-task-id\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=fake-task-id@@@"
+      "@@@STEP_LINK@Swarming task@https://example.swarmingserver.appspot.com/task?id=fake-task-id@@@"
     ]
   },
   {
@@ -2152,7 +2152,7 @@
     "name": "test luci.chromium.try:win10_chromium_x64_rel_ng",
     "~followup_annotations": [
       "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/1406154@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=fake-task-id@@@"
+      "@@@STEP_LINK@Swarming task@https://example.swarmingserver.appspot.com/task?id=fake-task-id@@@"
     ]
   },
   {
@@ -2374,12 +2374,12 @@
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"chromium-swarm.appspot.com\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"example.swarmingserver.appspot.com\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"task_id\": \"fake-task-id\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=fake-task-id@@@"
+      "@@@STEP_LINK@Swarming task@https://example.swarmingserver.appspot.com/task?id=fake-task-id@@@"
     ]
   },
   {
@@ -2442,7 +2442,7 @@
     "name": "test luci.chromium-m88.try:fuchsia_x64",
     "~followup_annotations": [
       "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/2538112@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=fake-task-id@@@"
+      "@@@STEP_LINK@Swarming task@https://example.swarmingserver.appspot.com/task?id=fake-task-id@@@"
     ]
   },
   {
@@ -2664,12 +2664,12 @@
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"chromium-swarm.appspot.com\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"example.swarmingserver.appspot.com\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"task_id\": \"fake-task-id\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=fake-task-id@@@"
+      "@@@STEP_LINK@Swarming task@https://example.swarmingserver.appspot.com/task?id=fake-task-id@@@"
     ]
   },
   {
@@ -2732,7 +2732,7 @@
     "name": "test luci.chromium-m88.try:chromium_presubmit",
     "~followup_annotations": [
       "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/2538112@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=fake-task-id@@@"
+      "@@@STEP_LINK@Swarming task@https://example.swarmingserver.appspot.com/task?id=fake-task-id@@@"
     ]
   },
   {
@@ -2954,12 +2954,12 @@
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"chromium-swarm.appspot.com\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"example.swarmingserver.appspot.com\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"task_id\": \"fake-task-id\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=fake-task-id@@@"
+      "@@@STEP_LINK@Swarming task@https://example.swarmingserver.appspot.com/task?id=fake-task-id@@@"
     ]
   },
   {
@@ -3022,7 +3022,7 @@
     "name": "test luci.chromium-m88.try:linux-rel",
     "~followup_annotations": [
       "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/2538112@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=fake-task-id@@@"
+      "@@@STEP_LINK@Swarming task@https://example.swarmingserver.appspot.com/task?id=fake-task-id@@@"
     ]
   },
   {
@@ -3244,12 +3244,12 @@
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"chromium-swarm.appspot.com\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"example.swarmingserver.appspot.com\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"task_id\": \"fake-task-id\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=fake-task-id@@@"
+      "@@@STEP_LINK@Swarming task@https://example.swarmingserver.appspot.com/task?id=fake-task-id@@@"
     ]
   },
   {
@@ -3312,7 +3312,7 @@
     "name": "test luci.chromium-m88.try:win10_chromium_x64_rel_ng",
     "~followup_annotations": [
       "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/2538112@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=fake-task-id@@@"
+      "@@@STEP_LINK@Swarming task@https://example.swarmingserver.appspot.com/task?id=fake-task-id@@@"
     ]
   },
   {
@@ -3534,12 +3534,12 @@
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"chromium-swarm.appspot.com\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"example.swarmingserver.appspot.com\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"task_id\": \"fake-task-id\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=fake-task-id@@@"
+      "@@@STEP_LINK@Swarming task@https://example.swarmingserver.appspot.com/task?id=fake-task-id@@@"
     ]
   },
   {
@@ -3602,7 +3602,7 @@
     "name": "test luci.chromium-m90.try:chromium_presubmit",
     "~followup_annotations": [
       "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/2807949@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=fake-task-id@@@"
+      "@@@STEP_LINK@Swarming task@https://example.swarmingserver.appspot.com/task?id=fake-task-id@@@"
     ]
   },
   {
@@ -3824,12 +3824,12 @@
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"chromium-swarm.appspot.com\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"example.swarmingserver.appspot.com\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"task_id\": \"fake-task-id\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=fake-task-id@@@"
+      "@@@STEP_LINK@Swarming task@https://example.swarmingserver.appspot.com/task?id=fake-task-id@@@"
     ]
   },
   {
@@ -3892,7 +3892,7 @@
     "name": "test luci.chromium-m90.try:linux-rel",
     "~followup_annotations": [
       "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/2807949@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=fake-task-id@@@"
+      "@@@STEP_LINK@Swarming task@https://example.swarmingserver.appspot.com/task?id=fake-task-id@@@"
     ]
   },
   {
@@ -4114,12 +4114,12 @@
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"chromium-swarm.appspot.com\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"example.swarmingserver.appspot.com\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"task_id\": \"fake-task-id\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=fake-task-id@@@"
+      "@@@STEP_LINK@Swarming task@https://example.swarmingserver.appspot.com/task?id=fake-task-id@@@"
     ]
   },
   {
@@ -4182,7 +4182,7 @@
     "name": "test luci.chromium-m90.try:win10_chromium_x64_rel_ng",
     "~followup_annotations": [
       "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/2807949@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=fake-task-id@@@"
+      "@@@STEP_LINK@Swarming task@https://example.swarmingserver.appspot.com/task?id=fake-task-id@@@"
     ]
   },
   {
@@ -4404,12 +4404,12 @@
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"chromium-swarm.appspot.com\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"example.swarmingserver.appspot.com\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"task_id\": \"fake-task-id\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=fake-task-id@@@"
+      "@@@STEP_LINK@Swarming task@https://example.swarmingserver.appspot.com/task?id=fake-task-id@@@"
     ]
   },
   {
@@ -4472,7 +4472,7 @@
     "name": "test luci.chromium-m94.try:chromium_presubmit",
     "~followup_annotations": [
       "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/3094448@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=fake-task-id@@@"
+      "@@@STEP_LINK@Swarming task@https://example.swarmingserver.appspot.com/task?id=fake-task-id@@@"
     ]
   },
   {
@@ -4694,12 +4694,12 @@
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"chromium-swarm.appspot.com\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"example.swarmingserver.appspot.com\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"task_id\": \"fake-task-id\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=fake-task-id@@@"
+      "@@@STEP_LINK@Swarming task@https://example.swarmingserver.appspot.com/task?id=fake-task-id@@@"
     ]
   },
   {
@@ -4762,7 +4762,7 @@
     "name": "test luci.chromium-m94.try:linux-rel",
     "~followup_annotations": [
       "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/3094448@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=fake-task-id@@@"
+      "@@@STEP_LINK@Swarming task@https://example.swarmingserver.appspot.com/task?id=fake-task-id@@@"
     ]
   },
   {
@@ -4984,12 +4984,12 @@
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"chromium-swarm.appspot.com\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"example.swarmingserver.appspot.com\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"task_id\": \"fake-task-id\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=fake-task-id@@@"
+      "@@@STEP_LINK@Swarming task@https://example.swarmingserver.appspot.com/task?id=fake-task-id@@@"
     ]
   },
   {
@@ -5052,7 +5052,7 @@
     "name": "test luci.chromium-m94.try:win10_chromium_x64_rel_ng",
     "~followup_annotations": [
       "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/3094448@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=fake-task-id@@@"
+      "@@@STEP_LINK@Swarming task@https://example.swarmingserver.appspot.com/task?id=fake-task-id@@@"
     ]
   },
   {
@@ -5274,12 +5274,12 @@
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"chromium-swarm.appspot.com\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"example.swarmingserver.appspot.com\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"task_id\": \"fake-task-id\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=fake-task-id@@@"
+      "@@@STEP_LINK@Swarming task@https://example.swarmingserver.appspot.com/task?id=fake-task-id@@@"
     ]
   },
   {
@@ -5342,7 +5342,7 @@
     "name": "test luci.chromium-m95.try:chromium_presubmit",
     "~followup_annotations": [
       "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/3219376@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=fake-task-id@@@"
+      "@@@STEP_LINK@Swarming task@https://example.swarmingserver.appspot.com/task?id=fake-task-id@@@"
     ]
   },
   {
@@ -5564,12 +5564,12 @@
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"chromium-swarm.appspot.com\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"example.swarmingserver.appspot.com\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"task_id\": \"fake-task-id\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=fake-task-id@@@"
+      "@@@STEP_LINK@Swarming task@https://example.swarmingserver.appspot.com/task?id=fake-task-id@@@"
     ]
   },
   {
@@ -5632,7 +5632,7 @@
     "name": "test luci.chromium-m95.try:linux-rel",
     "~followup_annotations": [
       "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/3219376@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=fake-task-id@@@"
+      "@@@STEP_LINK@Swarming task@https://example.swarmingserver.appspot.com/task?id=fake-task-id@@@"
     ]
   },
   {
@@ -5854,12 +5854,12 @@
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"chromium-swarm.appspot.com\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"example.swarmingserver.appspot.com\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"task_id\": \"fake-task-id\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=fake-task-id@@@"
+      "@@@STEP_LINK@Swarming task@https://example.swarmingserver.appspot.com/task?id=fake-task-id@@@"
     ]
   },
   {
@@ -5922,7 +5922,7 @@
     "name": "test luci.chromium-m95.try:win10_chromium_x64_rel_ng",
     "~followup_annotations": [
       "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/3219376@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=fake-task-id@@@"
+      "@@@STEP_LINK@Swarming task@https://example.swarmingserver.appspot.com/task?id=fake-task-id@@@"
     ]
   },
   {
@@ -6144,12 +6144,12 @@
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"chromium-swarm.appspot.com\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"example.swarmingserver.appspot.com\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"task_id\": \"fake-task-id\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=fake-task-id@@@"
+      "@@@STEP_LINK@Swarming task@https://example.swarmingserver.appspot.com/task?id=fake-task-id@@@"
     ]
   },
   {
@@ -6212,7 +6212,7 @@
     "name": "test luci.chromium-m96.try:chromium_presubmit",
     "~followup_annotations": [
       "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/3219377@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=fake-task-id@@@"
+      "@@@STEP_LINK@Swarming task@https://example.swarmingserver.appspot.com/task?id=fake-task-id@@@"
     ]
   },
   {
@@ -6434,12 +6434,12 @@
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"chromium-swarm.appspot.com\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"example.swarmingserver.appspot.com\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"task_id\": \"fake-task-id\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=fake-task-id@@@"
+      "@@@STEP_LINK@Swarming task@https://example.swarmingserver.appspot.com/task?id=fake-task-id@@@"
     ]
   },
   {
@@ -6502,7 +6502,7 @@
     "name": "test luci.chromium-m96.try:linux-rel",
     "~followup_annotations": [
       "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/3219377@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=fake-task-id@@@"
+      "@@@STEP_LINK@Swarming task@https://example.swarmingserver.appspot.com/task?id=fake-task-id@@@"
     ]
   },
   {
@@ -6724,12 +6724,12 @@
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"chromium-swarm.appspot.com\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"example.swarmingserver.appspot.com\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"task_id\": \"fake-task-id\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=fake-task-id@@@"
+      "@@@STEP_LINK@Swarming task@https://example.swarmingserver.appspot.com/task?id=fake-task-id@@@"
     ]
   },
   {
@@ -6792,7 +6792,7 @@
     "name": "test luci.chromium-m96.try:win10_chromium_x64_rel_ng",
     "~followup_annotations": [
       "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/3219377@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=fake-task-id@@@"
+      "@@@STEP_LINK@Swarming task@https://example.swarmingserver.appspot.com/task?id=fake-task-id@@@"
     ]
   },
   {
@@ -7014,12 +7014,12 @@
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"chromium-swarm.appspot.com\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"example.swarmingserver.appspot.com\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"task_id\": \"fake-task-id\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=fake-task-id@@@"
+      "@@@STEP_LINK@Swarming task@https://example.swarmingserver.appspot.com/task?id=fake-task-id@@@"
     ]
   },
   {
