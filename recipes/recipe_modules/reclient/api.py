@@ -78,6 +78,7 @@ class ReclientApi(recipe_api.RecipeApi):
     self._props = props
     self._instance = None
     self._metrics_project = None
+    self._fail_early = None
     DEFAULT_SERVICE = 'remotebuildexecution.googleapis.com:443'
     self._service = props.service or DEFAULT_SERVICE
     # Initialization is delayed until the first call for reclient exe
@@ -120,6 +121,14 @@ class ReclientApi(recipe_api.RecipeApi):
 
     self._metrics_project = self._props.metrics_project
     return self._metrics_project
+
+  @property
+  def fail_early(self):
+    if self._fail_early:
+      return self._fail_early
+
+    self._fail_early = self._props.fail_early
+    return self._fail_early
 
   @property
   def jobs(self):
@@ -295,6 +304,9 @@ class ReclientApi(recipe_api.RecipeApi):
         'RBE_use_application_default_credentials': 'false',
         'RBE_use_gce_credentials': 'true',
     }
+    if self.fail_early == True:
+      env['RBE_fail_early_min_action_count'] = 4000
+      env['RBE_fail_early_min_fallback_ratio'] = 0.5
     if self._props.profiler_service:
       env['RBE_profiler_service'] = self._props.profiler_service
       env['RBE_profiler_project_id'] = self.rbe_project

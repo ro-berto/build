@@ -5,7 +5,7 @@ syntax = "proto3";
 
 package recipe_modules.build.reclient;
 
-// NEXT ID TO USE: 10
+// NEXT ID TO USE: 11
 message InputProperties {
   // This is to specify the RBE instance
   // This needs to be a GCP project ID to use default instance, or full
@@ -48,4 +48,10 @@ message InputProperties {
   // same between remote and local.  Such builders must confirm compile
   // runs with verify mode and no mismatches.
   bool ensure_verified = 9;
+
+  // Indicates whether reproxy should fail the build if a predefined rate
+  // of local fallbacks are encountered. This prevents builds making slow
+  // progress without detecting the underlying cause of widespread local
+  // fallbacks.
+  bool fail_early = 10;
 }
