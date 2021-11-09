@@ -19,7 +19,6 @@ DEPS = [
     'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/properties',
-    'recipe_engine/python',
     'recipe_engine/step',
     'test_utils',
 ]
@@ -248,11 +247,11 @@ class _Config(object):
 
   def get_target_msvc_prefix(self, bot_utils):
     if self.msvc_target is not None:
-      return ['python', bot_utils.join('vs_env.py'), self.msvc_target]
+      return ['python3', bot_utils.join('vs_env.py'), self.msvc_target]
     if self.has_token('win32'):
-      return ['python', bot_utils.join('vs_env.py'), 'x86']
+      return ['python3', bot_utils.join('vs_env.py'), 'x86']
     if self.has_token('win64'):
-      return ['python', bot_utils.join('vs_env.py'), 'x64']
+      return ['python3', bot_utils.join('vs_env.py'), 'x64']
     return []
 
   def get_target_env(self, bot_utils):
@@ -303,37 +302,43 @@ def RunSteps(api, clang, cmake_args, gclient_vars, msvc_target, runner_args,
       runner_args=runner_args,
       run_ssl_tests=run_ssl_tests,
       run_unit_tests=run_unit_tests)
+
+  # Print the kernel version on Linux builders. BoringSSL is sensitive to
+  # whether the kernel has getrandom support.
+  if api.platform.is_linux:
+    api.step('uname', ['uname', '-a'])
+
+  # Sync and pull in everything.
+  api.gclient.set_config('boringssl')
+  if config.has_token('android'):
+    api.gclient.c.target_os.add('android')
+  api.gclient.c.solutions[0].custom_vars = config.get_gclient_vars(api.platform)
+  api.bot_update.ensure_checkout()
+  api.gclient.runhooks()
+
+  # Set up paths.
+  bot_utils = api.path['checkout'].join('util', 'bot')
+  goroot = bot_utils.join('golang')
+  adb_path = bot_utils.join('android_sdk', 'public', 'platform-tools', 'adb')
+  sde_path = bot_utils.join('sde-' + _GetHostToolSuffix(api.platform),
+                            'sde' + _GetHostExeSuffix(api.platform))
+  build_dir = api.path['checkout'].join('build')
+  runner_dir = api.path['checkout'].join('ssl', 'test', 'runner')
+
   env = {}
+  env_prefixes = {}
+  # Point to the packaged copy of Go.
+  env['GOROOT'] = goroot
+  env_prefixes['PATH'] = [goroot.join('bin')]
   # Point Go's module and build caches to reused cache directories.
   env['GOCACHE'] = api.path['cache'].join('gocache')
   env['GOPATH'] = api.path['cache'].join('gopath')
   # Disable modifications to go.mod so missing entries are treated as an error
   # instead.
   env['GOFLAGS'] = '-mod=readonly'
-  with api.context(env=env), api.osx_sdk('ios'), _CleanupMSVC(api):
-    # Print the kernel version on Linux builders. BoringSSL is sensitive to
-    # whether the kernel has getrandom support.
-    if api.platform.is_linux:
-      api.step('uname', ['uname', '-a'])
-
-    # Sync and pull in everything.
-    api.gclient.set_config('boringssl')
-    if config.has_token('android'):
-      api.gclient.c.target_os.add('android')
-    api.gclient.c.solutions[0].custom_vars = config.get_gclient_vars(
-        api.platform)
-    api.bot_update.ensure_checkout()
-    api.gclient.runhooks()
-
-    # Set up paths.
-    bot_utils = api.path['checkout'].join('util', 'bot')
-    go_env = bot_utils.join('go', 'env.py')
-    adb_path = bot_utils.join('android_sdk', 'public', 'platform-tools', 'adb')
-    sde_path = bot_utils.join('sde-' + _GetHostToolSuffix(api.platform),
-                              'sde' + _GetHostExeSuffix(api.platform))
-    build_dir = api.path['checkout'].join('build')
-    runner_dir = api.path['checkout'].join('ssl', 'test', 'runner')
-
+  with api.context(
+      env=env,
+      env_prefixes=env_prefixes), api.osx_sdk('ios'), _CleanupMSVC(api):
     # CMake is stateful, so do a clean build. BoringSSL builds quickly enough
     # that this isn't a concern.
     api.file.rmtree('clean', build_dir)
@@ -353,18 +358,18 @@ def RunSteps(api, clang, cmake_args, gclient_vars, msvc_target, runner_args,
         config.get_target_cmake_args(api.path, api.depot_tools.ninja_path,
                                      api.platform))
     with api.context(cwd=build_dir):
-      api.python(
-          'cmake', go_env, msvc_prefix + [cmake, '-GNinja'] +
+      api.step(
+          'cmake', msvc_prefix + [cmake, '-GNinja'] +
           ['-D%s=%s' % (k, v) for (k, v) in sorted(cmake_args.items())] +
           [api.path['checkout']])
-    api.python('ninja', go_env,
-               msvc_prefix + [api.depot_tools.ninja_path, '-C', build_dir])
+    api.step('ninja',
+             msvc_prefix + [api.depot_tools.ninja_path, '-C', build_dir])
 
     with api.step.defer_results():
       # The default Linux build may not depend on the C++ runtime. This is easy
       # to check when building shared libraries.
       if config.buildername == 'linux_shared':
-        api.python('check imported libraries', go_env, [
+        api.step('check imported libraries', [
             'go', 'run', api.path['checkout'].join(
                 'util', 'check_imported_libraries.go'),
             build_dir.join('crypto', 'libcrypto.so'),
@@ -372,7 +377,7 @@ def RunSteps(api, clang, cmake_args, gclient_vars, msvc_target, runner_args,
         ])
 
       with api.context(cwd=api.path['checkout']):
-        api.python('check filenames', go_env, [
+        api.step('check filenames', [
             'go', 'run', api.path['checkout'].join('util', 'check_filenames.go')
         ])
 
@@ -385,7 +390,7 @@ def RunSteps(api, clang, cmake_args, gclient_vars, msvc_target, runner_args,
           if config.has_token('sde'):
             all_tests_args += ['-sde', '-sde-path', sde_path]
           if config.has_token('android'):
-            api.python('unit tests', go_env, [
+            api.step('unit tests', [
                 'go', 'run',
                 api.path.join('util', 'run_android_tests.go'), '-build-dir',
                 build_dir, '-adb', adb_path, '-suite', 'unit',
@@ -393,8 +398,8 @@ def RunSteps(api, clang, cmake_args, gclient_vars, msvc_target, runner_args,
                 api.test_utils.test_results()
             ])
           else:
-            api.python(
-                'unit tests', go_env, msvc_prefix + [
+            api.step(
+                'unit tests', msvc_prefix + [
                     'go', 'run',
                     api.path.join('util', 'all_tests.go'), '-json-output',
                     api.test_utils.test_results()
@@ -415,7 +420,7 @@ def RunSteps(api, clang, cmake_args, gclient_vars, msvc_target, runner_args,
         runner_args += config.runner_args
         if config.has_token('android'):
           with api.context(cwd=api.path['checkout'], env=env):
-            api.python('ssl tests', go_env, [
+            api.step('ssl tests', [
                 'go', 'run',
                 api.path.join('util', 'run_android_tests.go'), '-build-dir',
                 build_dir, '-adb', adb_path, '-suite', 'ssl', '-runner-args',
@@ -424,8 +429,8 @@ def RunSteps(api, clang, cmake_args, gclient_vars, msvc_target, runner_args,
             ])
         else:
           with api.context(cwd=runner_dir, env=env):
-            api.python(
-                'ssl tests', go_env, msvc_prefix +
+            api.step(
+                'ssl tests', msvc_prefix +
                 ['go', 'test', '-json-output',
                  api.test_utils.test_results()] + runner_args)
 

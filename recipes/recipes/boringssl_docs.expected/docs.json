@@ -111,9 +111,6 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/boringssl/util/bot/go/env.py",
       "go",
       "run",
       "doc.go",
@@ -121,6 +118,14 @@
       "[CLEANUP]/boringssl-docs_tmp_1"
     ],
     "cwd": "[START_DIR]/boringssl/util",
+    "env": {
+      "GOROOT": "[START_DIR]/boringssl/util/bot/golang"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/boringssl/util/bot/golang/bin"
+      ]
+    },
     "luci_context": {
       "realm": {
         "name": "boringssl:ci"

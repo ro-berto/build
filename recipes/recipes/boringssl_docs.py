@@ -16,7 +16,6 @@ DEPS = [
   'recipe_engine/context',
   'recipe_engine/path',
   'recipe_engine/properties',
-  'recipe_engine/python',
   'recipe_engine/runtime',
   'recipe_engine/step',
 ]
@@ -30,12 +29,15 @@ def RunSteps(api):
 
   # Set up paths.
   util = api.path['checkout'].join('util')
-  go_env = util.join('bot', 'go', 'env.py')
+  goroot = util.join('bot', 'golang')
   output = api.path.mkdtemp('boringssl-docs')
 
   # Generate and upload documentation.
-  with api.context(cwd=util):
-    api.python('generate', go_env, ['go', 'run', 'doc.go', '-out', output])
+  with api.context(
+      cwd=util,
+      env={'GOROOT': goroot},
+      env_prefixes={'PATH': [goroot.join('bin')]}):
+    api.step('generate', ['go', 'run', 'doc.go', '-out', output])
   # Upload docs only if run after commit and on not experimental builds.
   if api.buildbucket.build.builder.bucket == 'ci':
     if api.runtime.is_experimental:

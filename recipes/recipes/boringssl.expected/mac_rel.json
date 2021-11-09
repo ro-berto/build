@@ -1,110 +1,6 @@
 [
   {
     "cmd": [
-      "cipd",
-      "ensure",
-      "-root",
-      "[CACHE]/osx_sdk",
-      "-ensure-file",
-      "infra/tools/mac_toolchain/${platform} git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1",
-      "-max-threads",
-      "0",
-      "-json-output",
-      "/path/to/tmp/json"
-    ],
-    "env": {
-      "GOCACHE": "[CACHE]/gocache",
-      "GOFLAGS": "-mod=readonly",
-      "GOPATH": "[CACHE]/gopath"
-    },
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "boringssl:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "ensure_installed",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:723\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/mac_toolchain/resolved-platform\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/osx_sdk/mac_toolchain",
-      "install",
-      "-kind",
-      "ios",
-      "-xcode-version",
-      "9f2000",
-      "-output-dir",
-      "[CACHE]/osx_sdk/XCode.app"
-    ],
-    "env": {
-      "GOCACHE": "[CACHE]/gocache",
-      "GOFLAGS": "-mod=readonly",
-      "GOPATH": "[CACHE]/gopath"
-    },
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "boringssl:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "install xcode"
-  },
-  {
-    "cmd": [
-      "sudo",
-      "xcode-select",
-      "--switch",
-      "[CACHE]/osx_sdk/XCode.app"
-    ],
-    "env": {
-      "GOCACHE": "[CACHE]/gocache",
-      "GOFLAGS": "-mod=readonly",
-      "GOPATH": "[CACHE]/gopath"
-    },
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "boringssl:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "select XCode"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
@@ -126,10 +22,7 @@
     "env": {
       "DEPOT_TOOLS_REPORT_BUILD": "boringssl/ci/mac_rel/8945511751514863184",
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
-      "GIT_HTTP_LOW_SPEED_TIME": "1800",
-      "GOCACHE": "[CACHE]/gocache",
-      "GOFLAGS": "-mod=readonly",
-      "GOPATH": "[CACHE]/gopath"
+      "GIT_HTTP_LOW_SPEED_TIME": "1800"
     },
     "env_suffixes": {
       "DEPOT_TOOLS_UPDATE": [
@@ -195,10 +88,7 @@
     ],
     "cwd": "[START_DIR]/boringssl",
     "env": {
-      "DEPOT_TOOLS_REPORT_BUILD": "boringssl/ci/mac_rel/8945511751514863184",
-      "GOCACHE": "[CACHE]/gocache",
-      "GOFLAGS": "-mod=readonly",
-      "GOPATH": "[CACHE]/gopath"
+      "DEPOT_TOOLS_REPORT_BUILD": "boringssl/ci/mac_rel/8945511751514863184"
     },
     "env_suffixes": {
       "PATH": [
@@ -221,6 +111,128 @@
   },
   {
     "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[CACHE]/osx_sdk",
+      "-ensure-file",
+      "infra/tools/mac_toolchain/${platform} git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1",
+      "-max-threads",
+      "0",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "GOCACHE": "[CACHE]/gocache",
+      "GOFLAGS": "-mod=readonly",
+      "GOPATH": "[CACHE]/gopath",
+      "GOROOT": "[START_DIR]/boringssl/util/bot/golang"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/boringssl/util/bot/golang/bin"
+      ]
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "boringssl:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:723\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/mac_toolchain/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/osx_sdk/mac_toolchain",
+      "install",
+      "-kind",
+      "ios",
+      "-xcode-version",
+      "9f2000",
+      "-output-dir",
+      "[CACHE]/osx_sdk/XCode.app"
+    ],
+    "env": {
+      "GOCACHE": "[CACHE]/gocache",
+      "GOFLAGS": "-mod=readonly",
+      "GOPATH": "[CACHE]/gopath",
+      "GOROOT": "[START_DIR]/boringssl/util/bot/golang"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/boringssl/util/bot/golang/bin"
+      ]
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "boringssl:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "install xcode"
+  },
+  {
+    "cmd": [
+      "sudo",
+      "xcode-select",
+      "--switch",
+      "[CACHE]/osx_sdk/XCode.app"
+    ],
+    "env": {
+      "GOCACHE": "[CACHE]/gocache",
+      "GOFLAGS": "-mod=readonly",
+      "GOPATH": "[CACHE]/gopath",
+      "GOROOT": "[START_DIR]/boringssl/util/bot/golang"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/boringssl/util/bot/golang/bin"
+      ]
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "boringssl:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "select XCode"
+  },
+  {
+    "cmd": [
       "vpython",
       "-u",
       "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
@@ -232,7 +244,13 @@
     "env": {
       "GOCACHE": "[CACHE]/gocache",
       "GOFLAGS": "-mod=readonly",
-      "GOPATH": "[CACHE]/gopath"
+      "GOPATH": "[CACHE]/gopath",
+      "GOROOT": "[START_DIR]/boringssl/util/bot/golang"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/boringssl/util/bot/golang/bin"
+      ]
     },
     "infra_step": true,
     "luci_context": {
@@ -264,7 +282,13 @@
     "env": {
       "GOCACHE": "[CACHE]/gocache",
       "GOFLAGS": "-mod=readonly",
-      "GOPATH": "[CACHE]/gopath"
+      "GOPATH": "[CACHE]/gopath",
+      "GOROOT": "[START_DIR]/boringssl/util/bot/golang"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/boringssl/util/bot/golang/bin"
+      ]
     },
     "infra_step": true,
     "luci_context": {
@@ -283,9 +307,6 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/boringssl/util/bot/go/env.py",
       "[START_DIR]/boringssl/util/bot/cmake-mac/bin/cmake",
       "-GNinja",
       "-DCMAKE_BUILD_TYPE=Release",
@@ -296,7 +317,13 @@
     "env": {
       "GOCACHE": "[CACHE]/gocache",
       "GOFLAGS": "-mod=readonly",
-      "GOPATH": "[CACHE]/gopath"
+      "GOPATH": "[CACHE]/gopath",
+      "GOROOT": "[START_DIR]/boringssl/util/bot/golang"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/boringssl/util/bot/golang/bin"
+      ]
     },
     "luci_context": {
       "realm": {
@@ -314,9 +341,6 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/boringssl/util/bot/go/env.py",
       "RECIPE_REPO[depot_tools]/ninja",
       "-C",
       "[START_DIR]/boringssl/build"
@@ -324,7 +348,13 @@
     "env": {
       "GOCACHE": "[CACHE]/gocache",
       "GOFLAGS": "-mod=readonly",
-      "GOPATH": "[CACHE]/gopath"
+      "GOPATH": "[CACHE]/gopath",
+      "GOROOT": "[START_DIR]/boringssl/util/bot/golang"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/boringssl/util/bot/golang/bin"
+      ]
     },
     "luci_context": {
       "realm": {
@@ -342,9 +372,6 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/boringssl/util/bot/go/env.py",
       "go",
       "run",
       "[START_DIR]/boringssl/util/check_filenames.go"
@@ -353,7 +380,13 @@
     "env": {
       "GOCACHE": "[CACHE]/gocache",
       "GOFLAGS": "-mod=readonly",
-      "GOPATH": "[CACHE]/gopath"
+      "GOPATH": "[CACHE]/gopath",
+      "GOROOT": "[START_DIR]/boringssl/util/bot/golang"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/boringssl/util/bot/golang/bin"
+      ]
     },
     "luci_context": {
       "realm": {
@@ -371,9 +404,6 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/boringssl/util/bot/go/env.py",
       "go",
       "run",
       "util/all_tests.go",
@@ -384,7 +414,13 @@
     "env": {
       "GOCACHE": "[CACHE]/gocache",
       "GOFLAGS": "-mod=readonly",
-      "GOPATH": "[CACHE]/gopath"
+      "GOPATH": "[CACHE]/gopath",
+      "GOROOT": "[START_DIR]/boringssl/util/bot/golang"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/boringssl/util/bot/golang/bin"
+      ]
     },
     "luci_context": {
       "realm": {
@@ -445,9 +481,6 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/boringssl/util/bot/go/env.py",
       "go",
       "test",
       "-json-output",
@@ -460,7 +493,13 @@
     "env": {
       "GOCACHE": "[CACHE]/gocache",
       "GOFLAGS": "-mod=readonly",
-      "GOPATH": "[CACHE]/gopath"
+      "GOPATH": "[CACHE]/gopath",
+      "GOROOT": "[START_DIR]/boringssl/util/bot/golang"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/boringssl/util/bot/golang/bin"
+      ]
     },
     "luci_context": {
       "realm": {
@@ -528,7 +567,13 @@
     "env": {
       "GOCACHE": "[CACHE]/gocache",
       "GOFLAGS": "-mod=readonly",
-      "GOPATH": "[CACHE]/gopath"
+      "GOPATH": "[CACHE]/gopath",
+      "GOROOT": "[START_DIR]/boringssl/util/bot/golang"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/boringssl/util/bot/golang/bin"
+      ]
     },
     "infra_step": true,
     "luci_context": {

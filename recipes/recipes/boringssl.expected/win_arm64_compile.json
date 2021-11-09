@@ -22,10 +22,7 @@
     "env": {
       "DEPOT_TOOLS_REPORT_BUILD": "boringssl/ci/buildername/8945511751514863184",
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
-      "GIT_HTTP_LOW_SPEED_TIME": "1800",
-      "GOCACHE": "[CACHE]\\gocache",
-      "GOFLAGS": "-mod=readonly",
-      "GOPATH": "[CACHE]\\gopath"
+      "GIT_HTTP_LOW_SPEED_TIME": "1800"
     },
     "env_suffixes": {
       "DEPOT_TOOLS_UPDATE": [
@@ -91,10 +88,7 @@
     ],
     "cwd": "[START_DIR]\\boringssl",
     "env": {
-      "DEPOT_TOOLS_REPORT_BUILD": "boringssl/ci/buildername/8945511751514863184",
-      "GOCACHE": "[CACHE]\\gocache",
-      "GOFLAGS": "-mod=readonly",
-      "GOPATH": "[CACHE]\\gopath"
+      "DEPOT_TOOLS_REPORT_BUILD": "boringssl/ci/buildername/8945511751514863184"
     },
     "env_suffixes": {
       "PATH": [
@@ -128,7 +122,13 @@
     "env": {
       "GOCACHE": "[CACHE]\\gocache",
       "GOFLAGS": "-mod=readonly",
-      "GOPATH": "[CACHE]\\gopath"
+      "GOPATH": "[CACHE]\\gopath",
+      "GOROOT": "[START_DIR]\\boringssl\\util\\bot\\golang"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\boringssl\\util\\bot\\golang\\bin"
+      ]
     },
     "infra_step": true,
     "luci_context": {
@@ -160,7 +160,13 @@
     "env": {
       "GOCACHE": "[CACHE]\\gocache",
       "GOFLAGS": "-mod=readonly",
-      "GOPATH": "[CACHE]\\gopath"
+      "GOPATH": "[CACHE]\\gopath",
+      "GOROOT": "[START_DIR]\\boringssl\\util\\bot\\golang"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\boringssl\\util\\bot\\golang\\bin"
+      ]
     },
     "infra_step": true,
     "luci_context": {
@@ -179,10 +185,7 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]\\boringssl\\util\\bot\\go\\env.py",
-      "python",
+      "python3",
       "[START_DIR]\\boringssl\\util\\bot\\vs_env.py",
       "arm64",
       "[START_DIR]\\boringssl\\util\\bot\\cmake-win32\\bin\\cmake.exe",
@@ -203,7 +206,13 @@
     "env": {
       "GOCACHE": "[CACHE]\\gocache",
       "GOFLAGS": "-mod=readonly",
-      "GOPATH": "[CACHE]\\gopath"
+      "GOPATH": "[CACHE]\\gopath",
+      "GOROOT": "[START_DIR]\\boringssl\\util\\bot\\golang"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\boringssl\\util\\bot\\golang\\bin"
+      ]
     },
     "luci_context": {
       "realm": {
@@ -221,10 +230,7 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]\\boringssl\\util\\bot\\go\\env.py",
-      "python",
+      "python3",
       "[START_DIR]\\boringssl\\util\\bot\\vs_env.py",
       "arm64",
       "RECIPE_REPO[depot_tools]\\ninja.exe",
@@ -234,7 +240,13 @@
     "env": {
       "GOCACHE": "[CACHE]\\gocache",
       "GOFLAGS": "-mod=readonly",
-      "GOPATH": "[CACHE]\\gopath"
+      "GOPATH": "[CACHE]\\gopath",
+      "GOROOT": "[START_DIR]\\boringssl\\util\\bot\\golang"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\boringssl\\util\\bot\\golang\\bin"
+      ]
     },
     "luci_context": {
       "realm": {
@@ -252,9 +264,6 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]\\boringssl\\util\\bot\\go\\env.py",
       "go",
       "run",
       "[START_DIR]\\boringssl\\util\\check_filenames.go"
@@ -263,7 +272,13 @@
     "env": {
       "GOCACHE": "[CACHE]\\gocache",
       "GOFLAGS": "-mod=readonly",
-      "GOPATH": "[CACHE]\\gopath"
+      "GOPATH": "[CACHE]\\gopath",
+      "GOROOT": "[START_DIR]\\boringssl\\util\\bot\\golang"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\boringssl\\util\\bot\\golang\\bin"
+      ]
     },
     "luci_context": {
       "realm": {
@@ -290,7 +305,13 @@
     "env": {
       "GOCACHE": "[CACHE]\\gocache",
       "GOFLAGS": "-mod=readonly",
-      "GOPATH": "[CACHE]\\gopath"
+      "GOPATH": "[CACHE]\\gopath",
+      "GOROOT": "[START_DIR]\\boringssl\\util\\bot\\golang"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\boringssl\\util\\bot\\golang\\bin"
+      ]
     },
     "luci_context": {
       "realm": {
