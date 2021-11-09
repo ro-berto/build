@@ -516,16 +516,15 @@ def _test_builder(api, affected_files, affected_recipes, builder, led_builder,
       job = ir.launch_result
       presentation.links['Swarming task'] = job.swarming_task_url
 
-    with api.swarming.with_server(job.swarming_hostname):
-      results = api.swarming.collect(
-          'collect',
-          [job.task_id],
-          # We're launching LUCI builders, so they can be viewed in the Milo UI,
-          # which is much better than the stdout, so don't take the time to
-          # download the stdout
-          task_output_stdout='none')
-      for result in results:
-        result.analyze()
+    results = api.swarming.collect(
+        'collect',
+        [job.task_id],
+        # We're launching LUCI builders, so they can be viewed in the Milo UI,
+        # which is much better than the stdout, so don't take the time to
+        # download the stdout
+        task_output_stdout='none')
+    for result in results:
+      result.analyze()
 
 
 def RunSteps(api):
