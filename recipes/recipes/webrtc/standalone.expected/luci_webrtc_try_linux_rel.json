@@ -1249,7 +1249,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"audio_decoder_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1\", \"priority\": \"30\", \"realm\": \"webrtc:try\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:linux_rel\", \"data:[dummy hash for audio_decoder_unittests/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:audio_decoder_unittests\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:linux_rel\", \"stepname:audio_decoder_unittests on Ubuntu-18.04\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for audio_decoder_unittests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-18.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -1360,7 +1360,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: audio_decoder_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1@https://chromium-swarm.appspot.com/task?id=0@@@"
+      "@@@STEP_LINK@task UI: audio_decoder_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1@https://example.swarmingserver.appspot.com/task?id=0@@@"
     ]
   },
   {
@@ -1368,7 +1368,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"common_audio_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1\", \"priority\": \"30\", \"realm\": \"webrtc:try\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:linux_rel\", \"data:[dummy hash for common_audio_unittests/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:common_audio_unittests\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:linux_rel\", \"stepname:common_audio_unittests on Ubuntu-18.04\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for common_audio_unittests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-18.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -1479,7 +1479,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: common_audio_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1@https://chromium-swarm.appspot.com/task?id=1@@@"
+      "@@@STEP_LINK@task UI: common_audio_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1@https://example.swarmingserver.appspot.com/task?id=1@@@"
     ]
   },
   {
@@ -1487,7 +1487,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"common_video_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1\", \"priority\": \"30\", \"realm\": \"webrtc:try\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:linux_rel\", \"data:[dummy hash for common_video_unittests/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:common_video_unittests\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:linux_rel\", \"stepname:common_video_unittests on Ubuntu-18.04\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for common_video_unittests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-18.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -1598,7 +1598,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: common_video_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1@https://chromium-swarm.appspot.com/task?id=2@@@"
+      "@@@STEP_LINK@task UI: common_video_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1@https://example.swarmingserver.appspot.com/task?id=2@@@"
     ]
   },
   {
@@ -1606,7 +1606,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"dcsctp_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1\", \"priority\": \"30\", \"realm\": \"webrtc:try\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:linux_rel\", \"data:[dummy hash for dcsctp_unittests/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:dcsctp_unittests\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:linux_rel\", \"stepname:dcsctp_unittests on Ubuntu-18.04\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for dcsctp_unittests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-18.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -1717,7 +1717,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: dcsctp_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1@https://chromium-swarm.appspot.com/task?id=3@@@"
+      "@@@STEP_LINK@task UI: dcsctp_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1@https://example.swarmingserver.appspot.com/task?id=3@@@"
     ]
   },
   {
@@ -1725,7 +1725,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"low_bandwidth_audio_test/Ubuntu-18.04/[dummy has/linux_rel/-1\", \"priority\": \"30\", \"realm\": \"webrtc:try\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:linux_rel\", \"data:[dummy hash for low_bandwidth_audio_test/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:low_bandwidth_audio_test\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:linux_rel\", \"stepname:low_bandwidth_audio_test on Ubuntu-18.04\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for low_bandwidth_audio_test\", \"size_bytes\": \"dummy size]\"}}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-18.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -1836,7 +1836,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: low_bandwidth_audio_test/Ubuntu-18.04/[dummy has/linux_rel/-1@https://chromium-swarm.appspot.com/task?id=4@@@"
+      "@@@STEP_LINK@task UI: low_bandwidth_audio_test/Ubuntu-18.04/[dummy has/linux_rel/-1@https://example.swarmingserver.appspot.com/task?id=4@@@"
     ]
   },
   {
@@ -1844,7 +1844,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"modules_tests/Ubuntu-18.04/[dummy has/linux_rel/-1:0:2\", \"priority\": \"30\", \"realm\": \"webrtc:try\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:linux_rel\", \"data:[dummy hash for modules_tests/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:modules_tests\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:linux_rel\", \"stepname:modules_tests on Ubuntu-18.04\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for modules_tests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-18.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"0\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"2\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -1963,7 +1963,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: modules_tests/Ubuntu-18.04/[dummy has/linux_rel/-1:0:2@https://chromium-swarm.appspot.com/task?id=5@@@"
+      "@@@STEP_LINK@task UI: modules_tests/Ubuntu-18.04/[dummy has/linux_rel/-1:0:2@https://example.swarmingserver.appspot.com/task?id=5@@@"
     ]
   },
   {
@@ -1971,7 +1971,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"modules_tests/Ubuntu-18.04/[dummy has/linux_rel/-1:1:2\", \"priority\": \"30\", \"realm\": \"webrtc:try\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:linux_rel\", \"data:[dummy hash for modules_tests/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:modules_tests\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:linux_rel\", \"stepname:modules_tests on Ubuntu-18.04\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for modules_tests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-18.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"1\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"2\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -2090,7 +2090,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: modules_tests/Ubuntu-18.04/[dummy has/linux_rel/-1:1:2@https://chromium-swarm.appspot.com/task?id=6@@@"
+      "@@@STEP_LINK@task UI: modules_tests/Ubuntu-18.04/[dummy has/linux_rel/-1:1:2@https://example.swarmingserver.appspot.com/task?id=6@@@"
     ]
   },
   {
@@ -2098,7 +2098,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"modules_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:0:6\", \"priority\": \"30\", \"realm\": \"webrtc:try\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:linux_rel\", \"data:[dummy hash for modules_unittests/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:modules_unittests\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:linux_rel\", \"stepname:modules_unittests on Ubuntu-18.04\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for modules_unittests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-18.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"0\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"6\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -2217,7 +2217,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: modules_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:0:6@https://chromium-swarm.appspot.com/task?id=7@@@"
+      "@@@STEP_LINK@task UI: modules_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:0:6@https://example.swarmingserver.appspot.com/task?id=7@@@"
     ]
   },
   {
@@ -2225,7 +2225,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"modules_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:1:6\", \"priority\": \"30\", \"realm\": \"webrtc:try\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:linux_rel\", \"data:[dummy hash for modules_unittests/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:modules_unittests\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:linux_rel\", \"stepname:modules_unittests on Ubuntu-18.04\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for modules_unittests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-18.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"1\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"6\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -2344,7 +2344,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: modules_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:1:6@https://chromium-swarm.appspot.com/task?id=8@@@"
+      "@@@STEP_LINK@task UI: modules_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:1:6@https://example.swarmingserver.appspot.com/task?id=8@@@"
     ]
   },
   {
@@ -2352,7 +2352,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"modules_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:2:6\", \"priority\": \"30\", \"realm\": \"webrtc:try\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:linux_rel\", \"data:[dummy hash for modules_unittests/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:modules_unittests\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:linux_rel\", \"stepname:modules_unittests on Ubuntu-18.04\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for modules_unittests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-18.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"2\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"6\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -2471,7 +2471,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: modules_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:2:6@https://chromium-swarm.appspot.com/task?id=9@@@"
+      "@@@STEP_LINK@task UI: modules_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:2:6@https://example.swarmingserver.appspot.com/task?id=9@@@"
     ]
   },
   {
@@ -2479,7 +2479,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"modules_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:3:6\", \"priority\": \"30\", \"realm\": \"webrtc:try\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:linux_rel\", \"data:[dummy hash for modules_unittests/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:modules_unittests\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:linux_rel\", \"stepname:modules_unittests on Ubuntu-18.04\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for modules_unittests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-18.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"3\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"6\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -2598,7 +2598,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: modules_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:3:6@https://chromium-swarm.appspot.com/task?id=10@@@"
+      "@@@STEP_LINK@task UI: modules_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:3:6@https://example.swarmingserver.appspot.com/task?id=10@@@"
     ]
   },
   {
@@ -2606,7 +2606,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"modules_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:4:6\", \"priority\": \"30\", \"realm\": \"webrtc:try\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:linux_rel\", \"data:[dummy hash for modules_unittests/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:modules_unittests\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:linux_rel\", \"stepname:modules_unittests on Ubuntu-18.04\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for modules_unittests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-18.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"4\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"6\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -2725,7 +2725,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: modules_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:4:6@https://chromium-swarm.appspot.com/task?id=11@@@"
+      "@@@STEP_LINK@task UI: modules_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:4:6@https://example.swarmingserver.appspot.com/task?id=11@@@"
     ]
   },
   {
@@ -2733,7 +2733,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"modules_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:5:6\", \"priority\": \"30\", \"realm\": \"webrtc:try\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:linux_rel\", \"data:[dummy hash for modules_unittests/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:modules_unittests\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:linux_rel\", \"stepname:modules_unittests on Ubuntu-18.04\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for modules_unittests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-18.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"5\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"6\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -2852,7 +2852,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: modules_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:5:6@https://chromium-swarm.appspot.com/task?id=12@@@"
+      "@@@STEP_LINK@task UI: modules_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:5:6@https://example.swarmingserver.appspot.com/task?id=12@@@"
     ]
   },
   {
@@ -2860,7 +2860,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"peerconnection_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:0:4\", \"priority\": \"30\", \"realm\": \"webrtc:try\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:linux_rel\", \"data:[dummy hash for peerconnection_unittests/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:peerconnection_unittests\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:linux_rel\", \"stepname:peerconnection_unittests on Ubuntu-18.04\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for peerconnection_unittests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-18.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"0\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"4\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -2979,7 +2979,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: peerconnection_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:0:4@https://chromium-swarm.appspot.com/task?id=13@@@"
+      "@@@STEP_LINK@task UI: peerconnection_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:0:4@https://example.swarmingserver.appspot.com/task?id=13@@@"
     ]
   },
   {
@@ -2987,7 +2987,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"peerconnection_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:1:4\", \"priority\": \"30\", \"realm\": \"webrtc:try\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:linux_rel\", \"data:[dummy hash for peerconnection_unittests/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:peerconnection_unittests\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:linux_rel\", \"stepname:peerconnection_unittests on Ubuntu-18.04\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for peerconnection_unittests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-18.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"1\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"4\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -3106,7 +3106,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: peerconnection_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:1:4@https://chromium-swarm.appspot.com/task?id=14@@@"
+      "@@@STEP_LINK@task UI: peerconnection_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:1:4@https://example.swarmingserver.appspot.com/task?id=14@@@"
     ]
   },
   {
@@ -3114,7 +3114,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"peerconnection_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:2:4\", \"priority\": \"30\", \"realm\": \"webrtc:try\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:linux_rel\", \"data:[dummy hash for peerconnection_unittests/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:peerconnection_unittests\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:linux_rel\", \"stepname:peerconnection_unittests on Ubuntu-18.04\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for peerconnection_unittests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-18.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"2\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"4\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -3233,7 +3233,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: peerconnection_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:2:4@https://chromium-swarm.appspot.com/task?id=15@@@"
+      "@@@STEP_LINK@task UI: peerconnection_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:2:4@https://example.swarmingserver.appspot.com/task?id=15@@@"
     ]
   },
   {
@@ -3241,7 +3241,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"peerconnection_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:3:4\", \"priority\": \"30\", \"realm\": \"webrtc:try\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:linux_rel\", \"data:[dummy hash for peerconnection_unittests/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:peerconnection_unittests\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:linux_rel\", \"stepname:peerconnection_unittests on Ubuntu-18.04\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for peerconnection_unittests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-18.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"3\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"4\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -3360,7 +3360,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: peerconnection_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:3:4@https://chromium-swarm.appspot.com/task?id=16@@@"
+      "@@@STEP_LINK@task UI: peerconnection_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:3:4@https://example.swarmingserver.appspot.com/task?id=16@@@"
     ]
   },
   {
@@ -3368,7 +3368,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"rtc_media_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1\", \"priority\": \"30\", \"realm\": \"webrtc:try\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:linux_rel\", \"data:[dummy hash for rtc_media_unittests/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:rtc_media_unittests\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:linux_rel\", \"stepname:rtc_media_unittests on Ubuntu-18.04\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for rtc_media_unittests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-18.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -3479,7 +3479,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: rtc_media_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1@https://chromium-swarm.appspot.com/task?id=17@@@"
+      "@@@STEP_LINK@task UI: rtc_media_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1@https://example.swarmingserver.appspot.com/task?id=17@@@"
     ]
   },
   {
@@ -3487,7 +3487,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"rtc_pc_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1\", \"priority\": \"30\", \"realm\": \"webrtc:try\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:linux_rel\", \"data:[dummy hash for rtc_pc_unittests/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:rtc_pc_unittests\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:linux_rel\", \"stepname:rtc_pc_unittests on Ubuntu-18.04\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for rtc_pc_unittests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-18.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -3598,7 +3598,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: rtc_pc_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1@https://chromium-swarm.appspot.com/task?id=18@@@"
+      "@@@STEP_LINK@task UI: rtc_pc_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1@https://example.swarmingserver.appspot.com/task?id=18@@@"
     ]
   },
   {
@@ -3606,7 +3606,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"rtc_stats_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1\", \"priority\": \"30\", \"realm\": \"webrtc:try\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:linux_rel\", \"data:[dummy hash for rtc_stats_unittests/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:rtc_stats_unittests\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:linux_rel\", \"stepname:rtc_stats_unittests on Ubuntu-18.04\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for rtc_stats_unittests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-18.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -3717,7 +3717,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: rtc_stats_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1@https://chromium-swarm.appspot.com/task?id=19@@@"
+      "@@@STEP_LINK@task UI: rtc_stats_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1@https://example.swarmingserver.appspot.com/task?id=19@@@"
     ]
   },
   {
@@ -3725,7 +3725,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"rtc_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:0:6\", \"priority\": \"30\", \"realm\": \"webrtc:try\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:linux_rel\", \"data:[dummy hash for rtc_unittests/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:rtc_unittests\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:linux_rel\", \"stepname:rtc_unittests on Ubuntu-18.04\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for rtc_unittests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-18.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"0\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"6\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -3844,7 +3844,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: rtc_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:0:6@https://chromium-swarm.appspot.com/task?id=20@@@"
+      "@@@STEP_LINK@task UI: rtc_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:0:6@https://example.swarmingserver.appspot.com/task?id=20@@@"
     ]
   },
   {
@@ -3852,7 +3852,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"rtc_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:1:6\", \"priority\": \"30\", \"realm\": \"webrtc:try\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:linux_rel\", \"data:[dummy hash for rtc_unittests/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:rtc_unittests\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:linux_rel\", \"stepname:rtc_unittests on Ubuntu-18.04\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for rtc_unittests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-18.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"1\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"6\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -3971,7 +3971,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: rtc_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:1:6@https://chromium-swarm.appspot.com/task?id=21@@@"
+      "@@@STEP_LINK@task UI: rtc_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:1:6@https://example.swarmingserver.appspot.com/task?id=21@@@"
     ]
   },
   {
@@ -3979,7 +3979,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"rtc_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:2:6\", \"priority\": \"30\", \"realm\": \"webrtc:try\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:linux_rel\", \"data:[dummy hash for rtc_unittests/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:rtc_unittests\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:linux_rel\", \"stepname:rtc_unittests on Ubuntu-18.04\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for rtc_unittests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-18.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"2\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"6\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -4098,7 +4098,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: rtc_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:2:6@https://chromium-swarm.appspot.com/task?id=22@@@"
+      "@@@STEP_LINK@task UI: rtc_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:2:6@https://example.swarmingserver.appspot.com/task?id=22@@@"
     ]
   },
   {
@@ -4106,7 +4106,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"rtc_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:3:6\", \"priority\": \"30\", \"realm\": \"webrtc:try\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:linux_rel\", \"data:[dummy hash for rtc_unittests/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:rtc_unittests\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:linux_rel\", \"stepname:rtc_unittests on Ubuntu-18.04\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for rtc_unittests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-18.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"3\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"6\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -4225,7 +4225,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: rtc_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:3:6@https://chromium-swarm.appspot.com/task?id=23@@@"
+      "@@@STEP_LINK@task UI: rtc_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:3:6@https://example.swarmingserver.appspot.com/task?id=23@@@"
     ]
   },
   {
@@ -4233,7 +4233,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"rtc_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:4:6\", \"priority\": \"30\", \"realm\": \"webrtc:try\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:linux_rel\", \"data:[dummy hash for rtc_unittests/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:rtc_unittests\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:linux_rel\", \"stepname:rtc_unittests on Ubuntu-18.04\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for rtc_unittests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-18.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"4\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"6\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -4352,7 +4352,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: rtc_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:4:6@https://chromium-swarm.appspot.com/task?id=24@@@"
+      "@@@STEP_LINK@task UI: rtc_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:4:6@https://example.swarmingserver.appspot.com/task?id=24@@@"
     ]
   },
   {
@@ -4360,7 +4360,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"rtc_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:5:6\", \"priority\": \"30\", \"realm\": \"webrtc:try\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:linux_rel\", \"data:[dummy hash for rtc_unittests/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:rtc_unittests\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:linux_rel\", \"stepname:rtc_unittests on Ubuntu-18.04\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for rtc_unittests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-18.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"5\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"6\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -4479,7 +4479,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: rtc_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:5:6@https://chromium-swarm.appspot.com/task?id=25@@@"
+      "@@@STEP_LINK@task UI: rtc_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1:5:6@https://example.swarmingserver.appspot.com/task?id=25@@@"
     ]
   },
   {
@@ -4487,7 +4487,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"slow_tests/Ubuntu-18.04/[dummy has/linux_rel/-1\", \"priority\": \"30\", \"realm\": \"webrtc:try\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:linux_rel\", \"data:[dummy hash for slow_tests/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:slow_tests\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:linux_rel\", \"stepname:slow_tests on Ubuntu-18.04\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for slow_tests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-18.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -4598,7 +4598,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: slow_tests/Ubuntu-18.04/[dummy has/linux_rel/-1@https://chromium-swarm.appspot.com/task?id=26@@@"
+      "@@@STEP_LINK@task UI: slow_tests/Ubuntu-18.04/[dummy has/linux_rel/-1@https://example.swarmingserver.appspot.com/task?id=26@@@"
     ]
   },
   {
@@ -4606,7 +4606,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"system_wrappers_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1\", \"priority\": \"30\", \"realm\": \"webrtc:try\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:linux_rel\", \"data:[dummy hash for system_wrappers_unittests/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:system_wrappers_unittests\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:linux_rel\", \"stepname:system_wrappers_unittests on Ubuntu-18.04\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for system_wrappers_unittests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-18.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -4717,7 +4717,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: system_wrappers_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1@https://chromium-swarm.appspot.com/task?id=27@@@"
+      "@@@STEP_LINK@task UI: system_wrappers_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1@https://example.swarmingserver.appspot.com/task?id=27@@@"
     ]
   },
   {
@@ -4725,7 +4725,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"test_support_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1\", \"priority\": \"30\", \"realm\": \"webrtc:try\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:linux_rel\", \"data:[dummy hash for test_support_unittests/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:test_support_unittests\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:linux_rel\", \"stepname:test_support_unittests on Ubuntu-18.04\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for test_support_unittests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-18.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -4836,7 +4836,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: test_support_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1@https://chromium-swarm.appspot.com/task?id=28@@@"
+      "@@@STEP_LINK@task UI: test_support_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1@https://example.swarmingserver.appspot.com/task?id=28@@@"
     ]
   },
   {
@@ -4844,7 +4844,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"tools_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1\", \"priority\": \"30\", \"realm\": \"webrtc:try\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:linux_rel\", \"data:[dummy hash for tools_unittests/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:tools_unittests\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:linux_rel\", \"stepname:tools_unittests on Ubuntu-18.04\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for tools_unittests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-18.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -4955,7 +4955,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: tools_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1@https://chromium-swarm.appspot.com/task?id=29@@@"
+      "@@@STEP_LINK@task UI: tools_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1@https://example.swarmingserver.appspot.com/task?id=29@@@"
     ]
   },
   {
@@ -4963,7 +4963,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"video_engine_tests/Ubuntu-18.04/[dummy has/linux_rel/-1:0:4\", \"priority\": \"30\", \"realm\": \"webrtc:try\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:linux_rel\", \"data:[dummy hash for video_engine_tests/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:video_engine_tests\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:linux_rel\", \"stepname:video_engine_tests on Ubuntu-18.04\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for video_engine_tests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-18.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"0\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"4\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -5082,7 +5082,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: video_engine_tests/Ubuntu-18.04/[dummy has/linux_rel/-1:0:4@https://chromium-swarm.appspot.com/task?id=30@@@"
+      "@@@STEP_LINK@task UI: video_engine_tests/Ubuntu-18.04/[dummy has/linux_rel/-1:0:4@https://example.swarmingserver.appspot.com/task?id=30@@@"
     ]
   },
   {
@@ -5090,7 +5090,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"video_engine_tests/Ubuntu-18.04/[dummy has/linux_rel/-1:1:4\", \"priority\": \"30\", \"realm\": \"webrtc:try\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:linux_rel\", \"data:[dummy hash for video_engine_tests/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:video_engine_tests\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:linux_rel\", \"stepname:video_engine_tests on Ubuntu-18.04\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for video_engine_tests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-18.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"1\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"4\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -5209,7 +5209,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: video_engine_tests/Ubuntu-18.04/[dummy has/linux_rel/-1:1:4@https://chromium-swarm.appspot.com/task?id=31@@@"
+      "@@@STEP_LINK@task UI: video_engine_tests/Ubuntu-18.04/[dummy has/linux_rel/-1:1:4@https://example.swarmingserver.appspot.com/task?id=31@@@"
     ]
   },
   {
@@ -5217,7 +5217,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"video_engine_tests/Ubuntu-18.04/[dummy has/linux_rel/-1:2:4\", \"priority\": \"30\", \"realm\": \"webrtc:try\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:linux_rel\", \"data:[dummy hash for video_engine_tests/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:video_engine_tests\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:linux_rel\", \"stepname:video_engine_tests on Ubuntu-18.04\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for video_engine_tests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-18.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"2\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"4\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -5336,7 +5336,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: video_engine_tests/Ubuntu-18.04/[dummy has/linux_rel/-1:2:4@https://chromium-swarm.appspot.com/task?id=32@@@"
+      "@@@STEP_LINK@task UI: video_engine_tests/Ubuntu-18.04/[dummy has/linux_rel/-1:2:4@https://example.swarmingserver.appspot.com/task?id=32@@@"
     ]
   },
   {
@@ -5344,7 +5344,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"video_engine_tests/Ubuntu-18.04/[dummy has/linux_rel/-1:3:4\", \"priority\": \"30\", \"realm\": \"webrtc:try\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:linux_rel\", \"data:[dummy hash for video_engine_tests/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:video_engine_tests\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:linux_rel\", \"stepname:video_engine_tests on Ubuntu-18.04\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for video_engine_tests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-18.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"3\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"4\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -5463,7 +5463,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: video_engine_tests/Ubuntu-18.04/[dummy has/linux_rel/-1:3:4@https://chromium-swarm.appspot.com/task?id=33@@@"
+      "@@@STEP_LINK@task UI: video_engine_tests/Ubuntu-18.04/[dummy has/linux_rel/-1:3:4@https://example.swarmingserver.appspot.com/task?id=33@@@"
     ]
   },
   {
@@ -5471,7 +5471,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"voip_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1\", \"priority\": \"30\", \"realm\": \"webrtc:try\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:linux_rel\", \"data:[dummy hash for voip_unittests/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:voip_unittests\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:linux_rel\", \"stepname:voip_unittests on Ubuntu-18.04\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for voip_unittests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-18.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -5582,7 +5582,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: voip_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1@https://chromium-swarm.appspot.com/task?id=34@@@"
+      "@@@STEP_LINK@task UI: voip_unittests/Ubuntu-18.04/[dummy has/linux_rel/-1@https://example.swarmingserver.appspot.com/task?id=34@@@"
     ]
   },
   {
@@ -5590,7 +5590,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"webrtc_nonparallel_tests/Ubuntu-18.04/[dummy has/linux_rel/-1\", \"priority\": \"30\", \"realm\": \"webrtc:try\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:linux_rel\", \"data:[dummy hash for webrtc_nonparallel_tests/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:webrtc_nonparallel_tests\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:linux_rel\", \"stepname:webrtc_nonparallel_tests on Ubuntu-18.04\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for webrtc_nonparallel_tests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-18.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -5701,7 +5701,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: webrtc_nonparallel_tests/Ubuntu-18.04/[dummy has/linux_rel/-1@https://chromium-swarm.appspot.com/task?id=35@@@"
+      "@@@STEP_LINK@task UI: webrtc_nonparallel_tests/Ubuntu-18.04/[dummy has/linux_rel/-1@https://example.swarmingserver.appspot.com/task?id=35@@@"
     ]
   },
   {
@@ -5709,7 +5709,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"video_capture_tests/Ubuntu/[dummy has/linux_rel/-1\", \"priority\": \"30\", \"realm\": \"webrtc:try\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:linux_rel\", \"data:[dummy hash for video_capture_tests/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:video_capture_tests\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:linux_rel\", \"stepname:video_capture_tests on Ubuntu\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for video_capture_tests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu\"}, {\"key\": \"pool\", \"value\": \"WebRTC-baremetal-try\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -5820,7 +5820,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: video_capture_tests/Ubuntu/[dummy has/linux_rel/-1@https://chromium-swarm.appspot.com/task?id=36@@@"
+      "@@@STEP_LINK@task UI: video_capture_tests/Ubuntu/[dummy has/linux_rel/-1@https://example.swarmingserver.appspot.com/task?id=36@@@"
     ]
   },
   {
@@ -5828,7 +5828,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"isac_fix_test/Ubuntu/[dummy has/linux_rel/-1\", \"priority\": \"30\", \"realm\": \"webrtc:try\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:linux_rel\", \"data:[dummy hash for isac_fix_test/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:isac_fix_test\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:linux_rel\", \"stepname:isac_fix_test on Ubuntu\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for isac_fix_test\", \"size_bytes\": \"dummy size]\"}}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu\"}, {\"key\": \"pool\", \"value\": \"WebRTC-baremetal-try\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -5939,7 +5939,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: isac_fix_test/Ubuntu/[dummy has/linux_rel/-1@https://chromium-swarm.appspot.com/task?id=37@@@"
+      "@@@STEP_LINK@task UI: isac_fix_test/Ubuntu/[dummy has/linux_rel/-1@https://example.swarmingserver.appspot.com/task?id=37@@@"
     ]
   },
   {
@@ -5947,7 +5947,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"webrtc_perf_tests/Ubuntu/[dummy has/linux_rel/-1\", \"priority\": \"30\", \"realm\": \"webrtc:try\", \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:linux_rel\", \"data:[dummy hash for webrtc_perf_tests/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:webrtc_perf_tests\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:linux_rel\", \"stepname:webrtc_perf_tests on Ubuntu\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for webrtc_perf_tests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [\"--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/\", \"--nologs\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu\"}, {\"key\": \"pool\", \"value\": \"WebRTC-baremetal-try\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
@@ -6061,7 +6061,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: webrtc_perf_tests/Ubuntu/[dummy has/linux_rel/-1@https://chromium-swarm.appspot.com/task?id=38@@@"
+      "@@@STEP_LINK@task UI: webrtc_perf_tests/Ubuntu/[dummy has/linux_rel/-1@https://example.swarmingserver.appspot.com/task?id=38@@@"
     ]
   },
   {
@@ -6092,7 +6092,7 @@
       "swarming",
       "collect",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -6154,7 +6154,7 @@
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=0@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=0@@@"
     ]
   },
   {
@@ -6185,7 +6185,7 @@
       "swarming",
       "collect",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -6247,7 +6247,7 @@
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=1@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=1@@@"
     ]
   },
   {
@@ -6278,7 +6278,7 @@
       "swarming",
       "collect",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -6340,7 +6340,7 @@
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=2@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=2@@@"
     ]
   },
   {
@@ -6371,7 +6371,7 @@
       "swarming",
       "collect",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -6433,7 +6433,7 @@
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=3@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=3@@@"
     ]
   },
   {
@@ -6464,7 +6464,7 @@
       "swarming",
       "collect",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -6526,7 +6526,7 @@
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=4@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=4@@@"
     ]
   },
   {
@@ -6557,7 +6557,7 @@
       "swarming",
       "collect",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -6641,9 +6641,9 @@
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=5@@@",
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=5@@@",
       "@@@STEP_LINK@shard #1 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #1 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=6@@@"
+      "@@@STEP_LINK@shard #1 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=6@@@"
     ]
   },
   {
@@ -6674,7 +6674,7 @@
       "swarming",
       "collect",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -6846,17 +6846,17 @@
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=7@@@",
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=7@@@",
       "@@@STEP_LINK@shard #1 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #1 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=8@@@",
+      "@@@STEP_LINK@shard #1 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=8@@@",
       "@@@STEP_LINK@shard #2 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #2 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=9@@@",
+      "@@@STEP_LINK@shard #2 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=9@@@",
       "@@@STEP_LINK@shard #3 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #3 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=10@@@",
+      "@@@STEP_LINK@shard #3 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=10@@@",
       "@@@STEP_LINK@shard #4 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #4 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=11@@@",
+      "@@@STEP_LINK@shard #4 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=11@@@",
       "@@@STEP_LINK@shard #5 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #5 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=12@@@"
+      "@@@STEP_LINK@shard #5 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=12@@@"
     ]
   },
   {
@@ -6887,7 +6887,7 @@
       "swarming",
       "collect",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -7015,13 +7015,13 @@
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=13@@@",
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=13@@@",
       "@@@STEP_LINK@shard #1 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #1 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=14@@@",
+      "@@@STEP_LINK@shard #1 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=14@@@",
       "@@@STEP_LINK@shard #2 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #2 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=15@@@",
+      "@@@STEP_LINK@shard #2 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=15@@@",
       "@@@STEP_LINK@shard #3 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #3 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=16@@@"
+      "@@@STEP_LINK@shard #3 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=16@@@"
     ]
   },
   {
@@ -7052,7 +7052,7 @@
       "swarming",
       "collect",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -7114,7 +7114,7 @@
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=17@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=17@@@"
     ]
   },
   {
@@ -7145,7 +7145,7 @@
       "swarming",
       "collect",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -7207,7 +7207,7 @@
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=18@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=18@@@"
     ]
   },
   {
@@ -7238,7 +7238,7 @@
       "swarming",
       "collect",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -7300,7 +7300,7 @@
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=19@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=19@@@"
     ]
   },
   {
@@ -7331,7 +7331,7 @@
       "swarming",
       "collect",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -7503,17 +7503,17 @@
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=20@@@",
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=20@@@",
       "@@@STEP_LINK@shard #1 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #1 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=21@@@",
+      "@@@STEP_LINK@shard #1 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=21@@@",
       "@@@STEP_LINK@shard #2 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #2 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=22@@@",
+      "@@@STEP_LINK@shard #2 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=22@@@",
       "@@@STEP_LINK@shard #3 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #3 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=23@@@",
+      "@@@STEP_LINK@shard #3 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=23@@@",
       "@@@STEP_LINK@shard #4 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #4 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=24@@@",
+      "@@@STEP_LINK@shard #4 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=24@@@",
       "@@@STEP_LINK@shard #5 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #5 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=25@@@"
+      "@@@STEP_LINK@shard #5 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=25@@@"
     ]
   },
   {
@@ -7544,7 +7544,7 @@
       "swarming",
       "collect",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -7606,7 +7606,7 @@
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=26@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=26@@@"
     ]
   },
   {
@@ -7637,7 +7637,7 @@
       "swarming",
       "collect",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -7699,7 +7699,7 @@
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=27@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=27@@@"
     ]
   },
   {
@@ -7730,7 +7730,7 @@
       "swarming",
       "collect",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -7792,7 +7792,7 @@
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=28@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=28@@@"
     ]
   },
   {
@@ -7823,7 +7823,7 @@
       "swarming",
       "collect",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -7885,7 +7885,7 @@
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=29@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=29@@@"
     ]
   },
   {
@@ -7916,7 +7916,7 @@
       "swarming",
       "collect",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -8044,13 +8044,13 @@
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=30@@@",
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=30@@@",
       "@@@STEP_LINK@shard #1 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #1 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=31@@@",
+      "@@@STEP_LINK@shard #1 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=31@@@",
       "@@@STEP_LINK@shard #2 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #2 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=32@@@",
+      "@@@STEP_LINK@shard #2 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=32@@@",
       "@@@STEP_LINK@shard #3 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #3 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=33@@@"
+      "@@@STEP_LINK@shard #3 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=33@@@"
     ]
   },
   {
@@ -8081,7 +8081,7 @@
       "swarming",
       "collect",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -8143,7 +8143,7 @@
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=34@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=34@@@"
     ]
   },
   {
@@ -8174,7 +8174,7 @@
       "swarming",
       "collect",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -8236,7 +8236,7 @@
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=35@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=35@@@"
     ]
   },
   {
@@ -8267,7 +8267,7 @@
       "swarming",
       "collect",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -8329,7 +8329,7 @@
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=36@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=36@@@"
     ]
   },
   {
@@ -8360,7 +8360,7 @@
       "swarming",
       "collect",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -8422,7 +8422,7 @@
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=37@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=37@@@"
     ]
   },
   {
@@ -8453,7 +8453,7 @@
       "swarming",
       "collect",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -8515,7 +8515,7 @@
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=38@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=38@@@"
     ]
   },
   {

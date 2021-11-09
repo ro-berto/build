@@ -181,7 +181,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"check mjsunit/foobar at #1 - shard 0/Ubuntu-16.04/[dummy has\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"build_is_experimental:false\", \"data:[dummy hash for foo_isolated]/123\", \"name:check\", \"purpose:v8-flake-bisect\", \"slavename:fake-bot-id\", \"stepname:check mjsunit/foobar at #1 - shard 0\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for foo_isolated]\", \"size_bytes\": \"123\"}}, \"command\": [\"tools/run-tests.py\", \"--progress=verbose\", \"--outdir=out/build\", \"--timeout=20\", \"--swarming\", \"--variants=stress_foo\", \"--foo-flag\", \"--bar-flag\", \"mjsunit/foobar\", \"--random-seed-stress-count=64\", \"--exit-after-n-failures=4\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-16.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}], \"user\": \"v8-flake-bisect\"}]}",
       "-json-output",
@@ -284,7 +284,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: check mjsunit/foobar at #1 - shard 0/Ubuntu-16.04/[dummy has@https://chromium-swarm.appspot.com/task?id=0@@@"
+      "@@@STEP_LINK@task UI: check mjsunit/foobar at #1 - shard 0/Ubuntu-16.04/[dummy has@https://example.swarmingserver.appspot.com/task?id=0@@@"
     ]
   },
   {
@@ -292,7 +292,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"check mjsunit/foobar at #1 - shard 1/Ubuntu-16.04/[dummy has\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"build_is_experimental:false\", \"data:[dummy hash for foo_isolated]/123\", \"name:check\", \"purpose:v8-flake-bisect\", \"slavename:fake-bot-id\", \"stepname:check mjsunit/foobar at #1 - shard 1\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for foo_isolated]\", \"size_bytes\": \"123\"}}, \"command\": [\"tools/run-tests.py\", \"--progress=verbose\", \"--outdir=out/build\", \"--timeout=20\", \"--swarming\", \"--variants=stress_foo\", \"--foo-flag\", \"--bar-flag\", \"mjsunit/foobar\", \"--random-seed-stress-count=64\", \"--exit-after-n-failures=4\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-16.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}], \"user\": \"v8-flake-bisect\"}]}",
       "-json-output",
@@ -395,7 +395,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: check mjsunit/foobar at #1 - shard 1/Ubuntu-16.04/[dummy has@https://chromium-swarm.appspot.com/task?id=1@@@"
+      "@@@STEP_LINK@task UI: check mjsunit/foobar at #1 - shard 1/Ubuntu-16.04/[dummy has@https://example.swarmingserver.appspot.com/task?id=1@@@"
     ]
   },
   {
@@ -426,7 +426,7 @@
       "swarming",
       "collect",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -477,7 +477,7 @@
       "@@@STEP_LOG_LINE@Merge script log@@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=0@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=0@@@"
     ]
   },
   {
@@ -508,7 +508,7 @@
       "swarming",
       "collect",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -559,7 +559,7 @@
       "@@@STEP_LOG_LINE@Merge script log@@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #0 (failed) (1m 0s)@https://chromium-swarm.appspot.com/task?id=1@@@",
+      "@@@STEP_LINK@shard #0 (failed) (1m 0s)@https://example.swarmingserver.appspot.com/task?id=1@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
@@ -585,7 +585,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"check mjsunit/foobar at #1 - shard 0/Ubuntu-16.04/[dummy has\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"build_is_experimental:false\", \"data:[dummy hash for foo_isolated]/123\", \"name:check\", \"purpose:v8-flake-bisect\", \"slavename:fake-bot-id\", \"stepname:check mjsunit/foobar at #1 - shard 0\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for foo_isolated]\", \"size_bytes\": \"123\"}}, \"command\": [\"tools/run-tests.py\", \"--progress=verbose\", \"--outdir=out/build\", \"--timeout=20\", \"--swarming\", \"--variants=stress_foo\", \"--foo-flag\", \"--bar-flag\", \"mjsunit/foobar\", \"--random-seed-stress-count=64\", \"--exit-after-n-failures=4\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-16.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}], \"user\": \"v8-flake-bisect\"}]}",
       "-json-output",
@@ -688,7 +688,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: check mjsunit/foobar at #1 - shard 0/Ubuntu-16.04/[dummy has@https://chromium-swarm.appspot.com/task?id=2@@@"
+      "@@@STEP_LINK@task UI: check mjsunit/foobar at #1 - shard 0/Ubuntu-16.04/[dummy has@https://example.swarmingserver.appspot.com/task?id=2@@@"
     ]
   },
   {
@@ -696,7 +696,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"check mjsunit/foobar at #1 - shard 1/Ubuntu-16.04/[dummy has\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"build_is_experimental:false\", \"data:[dummy hash for foo_isolated]/123\", \"name:check\", \"purpose:v8-flake-bisect\", \"slavename:fake-bot-id\", \"stepname:check mjsunit/foobar at #1 - shard 1\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for foo_isolated]\", \"size_bytes\": \"123\"}}, \"command\": [\"tools/run-tests.py\", \"--progress=verbose\", \"--outdir=out/build\", \"--timeout=20\", \"--swarming\", \"--variants=stress_foo\", \"--foo-flag\", \"--bar-flag\", \"mjsunit/foobar\", \"--random-seed-stress-count=64\", \"--exit-after-n-failures=4\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-16.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}], \"user\": \"v8-flake-bisect\"}]}",
       "-json-output",
@@ -799,7 +799,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: check mjsunit/foobar at #1 - shard 1/Ubuntu-16.04/[dummy has@https://chromium-swarm.appspot.com/task?id=3@@@"
+      "@@@STEP_LINK@task UI: check mjsunit/foobar at #1 - shard 1/Ubuntu-16.04/[dummy has@https://example.swarmingserver.appspot.com/task?id=3@@@"
     ]
   },
   {
@@ -807,7 +807,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"check mjsunit/foobar at #1 - shard 2/Ubuntu-16.04/[dummy has\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"build_is_experimental:false\", \"data:[dummy hash for foo_isolated]/123\", \"name:check\", \"purpose:v8-flake-bisect\", \"slavename:fake-bot-id\", \"stepname:check mjsunit/foobar at #1 - shard 2\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for foo_isolated]\", \"size_bytes\": \"123\"}}, \"command\": [\"tools/run-tests.py\", \"--progress=verbose\", \"--outdir=out/build\", \"--timeout=20\", \"--swarming\", \"--variants=stress_foo\", \"--foo-flag\", \"--bar-flag\", \"mjsunit/foobar\", \"--random-seed-stress-count=64\", \"--exit-after-n-failures=4\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-16.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}], \"user\": \"v8-flake-bisect\"}]}",
       "-json-output",
@@ -910,7 +910,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: check mjsunit/foobar at #1 - shard 2/Ubuntu-16.04/[dummy has@https://chromium-swarm.appspot.com/task?id=4@@@"
+      "@@@STEP_LINK@task UI: check mjsunit/foobar at #1 - shard 2/Ubuntu-16.04/[dummy has@https://example.swarmingserver.appspot.com/task?id=4@@@"
     ]
   },
   {
@@ -918,7 +918,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"check mjsunit/foobar at #1 - shard 3/Ubuntu-16.04/[dummy has\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"build_is_experimental:false\", \"data:[dummy hash for foo_isolated]/123\", \"name:check\", \"purpose:v8-flake-bisect\", \"slavename:fake-bot-id\", \"stepname:check mjsunit/foobar at #1 - shard 3\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for foo_isolated]\", \"size_bytes\": \"123\"}}, \"command\": [\"tools/run-tests.py\", \"--progress=verbose\", \"--outdir=out/build\", \"--timeout=20\", \"--swarming\", \"--variants=stress_foo\", \"--foo-flag\", \"--bar-flag\", \"mjsunit/foobar\", \"--random-seed-stress-count=64\", \"--exit-after-n-failures=4\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-16.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}], \"user\": \"v8-flake-bisect\"}]}",
       "-json-output",
@@ -1021,7 +1021,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: check mjsunit/foobar at #1 - shard 3/Ubuntu-16.04/[dummy has@https://chromium-swarm.appspot.com/task?id=5@@@"
+      "@@@STEP_LINK@task UI: check mjsunit/foobar at #1 - shard 3/Ubuntu-16.04/[dummy has@https://example.swarmingserver.appspot.com/task?id=5@@@"
     ]
   },
   {
@@ -1052,7 +1052,7 @@
       "swarming",
       "collect",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -1103,7 +1103,7 @@
       "@@@STEP_LOG_LINE@Merge script log@@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #0 (failed) (1m 0s)@https://chromium-swarm.appspot.com/task?id=2@@@",
+      "@@@STEP_LINK@shard #0 (failed) (1m 0s)@https://example.swarmingserver.appspot.com/task?id=2@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
@@ -1135,7 +1135,7 @@
       "swarming",
       "collect",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -1186,7 +1186,7 @@
       "@@@STEP_LOG_LINE@Merge script log@@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #0 (failed) (1m 0s)@https://chromium-swarm.appspot.com/task?id=3@@@",
+      "@@@STEP_LINK@shard #0 (failed) (1m 0s)@https://example.swarmingserver.appspot.com/task?id=3@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
@@ -1218,7 +1218,7 @@
       "swarming",
       "collect",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -1269,7 +1269,7 @@
       "@@@STEP_LOG_LINE@Merge script log@@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #0 (failed) (1m 0s)@https://chromium-swarm.appspot.com/task?id=4@@@",
+      "@@@STEP_LINK@shard #0 (failed) (1m 0s)@https://example.swarmingserver.appspot.com/task?id=4@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
@@ -1360,7 +1360,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"check mjsunit/foobar at #2 - shard 0/Ubuntu-16.04/[dummy has\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"build_is_experimental:false\", \"data:[dummy hash for foo_isolated/123]\", \"name:check\", \"purpose:v8-flake-bisect\", \"slavename:fake-bot-id\", \"stepname:check mjsunit/foobar at #2 - shard 0\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for foo_isolated\", \"size_bytes\": \"123]\"}}, \"command\": [\"tools/run-tests.py\", \"--progress=verbose\", \"--outdir=out/build\", \"--timeout=20\", \"--swarming\", \"--variants=stress_foo\", \"--foo-flag\", \"--bar-flag\", \"mjsunit/foobar\", \"--random-seed-stress-count=64\", \"--exit-after-n-failures=4\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-16.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}], \"user\": \"v8-flake-bisect\"}]}",
       "-json-output",
@@ -1463,7 +1463,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: check mjsunit/foobar at #2 - shard 0/Ubuntu-16.04/[dummy has@https://chromium-swarm.appspot.com/task?id=6@@@"
+      "@@@STEP_LINK@task UI: check mjsunit/foobar at #2 - shard 0/Ubuntu-16.04/[dummy has@https://example.swarmingserver.appspot.com/task?id=6@@@"
     ]
   },
   {
@@ -1471,7 +1471,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"check mjsunit/foobar at #2 - shard 1/Ubuntu-16.04/[dummy has\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"build_is_experimental:false\", \"data:[dummy hash for foo_isolated/123]\", \"name:check\", \"purpose:v8-flake-bisect\", \"slavename:fake-bot-id\", \"stepname:check mjsunit/foobar at #2 - shard 1\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for foo_isolated\", \"size_bytes\": \"123]\"}}, \"command\": [\"tools/run-tests.py\", \"--progress=verbose\", \"--outdir=out/build\", \"--timeout=20\", \"--swarming\", \"--variants=stress_foo\", \"--foo-flag\", \"--bar-flag\", \"mjsunit/foobar\", \"--random-seed-stress-count=64\", \"--exit-after-n-failures=4\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-16.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}], \"user\": \"v8-flake-bisect\"}]}",
       "-json-output",
@@ -1574,7 +1574,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: check mjsunit/foobar at #2 - shard 1/Ubuntu-16.04/[dummy has@https://chromium-swarm.appspot.com/task?id=7@@@"
+      "@@@STEP_LINK@task UI: check mjsunit/foobar at #2 - shard 1/Ubuntu-16.04/[dummy has@https://example.swarmingserver.appspot.com/task?id=7@@@"
     ]
   },
   {
@@ -1582,7 +1582,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"check mjsunit/foobar at #2 - shard 2/Ubuntu-16.04/[dummy has\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"build_is_experimental:false\", \"data:[dummy hash for foo_isolated/123]\", \"name:check\", \"purpose:v8-flake-bisect\", \"slavename:fake-bot-id\", \"stepname:check mjsunit/foobar at #2 - shard 2\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for foo_isolated\", \"size_bytes\": \"123]\"}}, \"command\": [\"tools/run-tests.py\", \"--progress=verbose\", \"--outdir=out/build\", \"--timeout=20\", \"--swarming\", \"--variants=stress_foo\", \"--foo-flag\", \"--bar-flag\", \"mjsunit/foobar\", \"--random-seed-stress-count=64\", \"--exit-after-n-failures=4\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-16.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}], \"user\": \"v8-flake-bisect\"}]}",
       "-json-output",
@@ -1685,7 +1685,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: check mjsunit/foobar at #2 - shard 2/Ubuntu-16.04/[dummy has@https://chromium-swarm.appspot.com/task?id=8@@@"
+      "@@@STEP_LINK@task UI: check mjsunit/foobar at #2 - shard 2/Ubuntu-16.04/[dummy has@https://example.swarmingserver.appspot.com/task?id=8@@@"
     ]
   },
   {
@@ -1693,7 +1693,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"check mjsunit/foobar at #2 - shard 3/Ubuntu-16.04/[dummy has\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"build_is_experimental:false\", \"data:[dummy hash for foo_isolated/123]\", \"name:check\", \"purpose:v8-flake-bisect\", \"slavename:fake-bot-id\", \"stepname:check mjsunit/foobar at #2 - shard 3\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for foo_isolated\", \"size_bytes\": \"123]\"}}, \"command\": [\"tools/run-tests.py\", \"--progress=verbose\", \"--outdir=out/build\", \"--timeout=20\", \"--swarming\", \"--variants=stress_foo\", \"--foo-flag\", \"--bar-flag\", \"mjsunit/foobar\", \"--random-seed-stress-count=64\", \"--exit-after-n-failures=4\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-16.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}], \"user\": \"v8-flake-bisect\"}]}",
       "-json-output",
@@ -1796,7 +1796,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: check mjsunit/foobar at #2 - shard 3/Ubuntu-16.04/[dummy has@https://chromium-swarm.appspot.com/task?id=9@@@"
+      "@@@STEP_LINK@task UI: check mjsunit/foobar at #2 - shard 3/Ubuntu-16.04/[dummy has@https://example.swarmingserver.appspot.com/task?id=9@@@"
     ]
   },
   {
@@ -1827,7 +1827,7 @@
       "swarming",
       "collect",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -1878,7 +1878,7 @@
       "@@@STEP_LOG_LINE@Merge script log@@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #0 (failed) (1m 0s)@https://chromium-swarm.appspot.com/task?id=6@@@",
+      "@@@STEP_LINK@shard #0 (failed) (1m 0s)@https://example.swarmingserver.appspot.com/task?id=6@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
@@ -1910,7 +1910,7 @@
       "swarming",
       "collect",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -1961,7 +1961,7 @@
       "@@@STEP_LOG_LINE@Merge script log@@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=7@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=7@@@"
     ]
   },
   {
@@ -1992,7 +1992,7 @@
       "swarming",
       "collect",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -2043,7 +2043,7 @@
       "@@@STEP_LOG_LINE@Merge script log@@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=8@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=8@@@"
     ]
   },
   {
@@ -2074,7 +2074,7 @@
       "swarming",
       "collect",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -2125,7 +2125,7 @@
       "@@@STEP_LOG_LINE@Merge script log@@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=9@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=9@@@"
     ]
   },
   {
@@ -2252,7 +2252,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"check mjsunit/foobar at #5 - shard 0/Ubuntu-16.04/[dummy has\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"build_is_experimental:false\", \"data:[dummy hash for foo_isolated/123]\", \"name:check\", \"purpose:v8-flake-bisect\", \"slavename:fake-bot-id\", \"stepname:check mjsunit/foobar at #5 - shard 0\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for foo_isolated\", \"size_bytes\": \"123]\"}}, \"command\": [\"tools/run-tests.py\", \"--progress=verbose\", \"--outdir=out/build\", \"--timeout=20\", \"--swarming\", \"--variants=stress_foo\", \"--foo-flag\", \"--bar-flag\", \"mjsunit/foobar\", \"--random-seed-stress-count=64\", \"--exit-after-n-failures=4\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-16.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}], \"user\": \"v8-flake-bisect\"}]}",
       "-json-output",
@@ -2355,7 +2355,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: check mjsunit/foobar at #5 - shard 0/Ubuntu-16.04/[dummy has@https://chromium-swarm.appspot.com/task?id=10@@@"
+      "@@@STEP_LINK@task UI: check mjsunit/foobar at #5 - shard 0/Ubuntu-16.04/[dummy has@https://example.swarmingserver.appspot.com/task?id=10@@@"
     ]
   },
   {
@@ -2363,7 +2363,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"check mjsunit/foobar at #5 - shard 1/Ubuntu-16.04/[dummy has\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"build_is_experimental:false\", \"data:[dummy hash for foo_isolated/123]\", \"name:check\", \"purpose:v8-flake-bisect\", \"slavename:fake-bot-id\", \"stepname:check mjsunit/foobar at #5 - shard 1\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for foo_isolated\", \"size_bytes\": \"123]\"}}, \"command\": [\"tools/run-tests.py\", \"--progress=verbose\", \"--outdir=out/build\", \"--timeout=20\", \"--swarming\", \"--variants=stress_foo\", \"--foo-flag\", \"--bar-flag\", \"mjsunit/foobar\", \"--random-seed-stress-count=64\", \"--exit-after-n-failures=4\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-16.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}], \"user\": \"v8-flake-bisect\"}]}",
       "-json-output",
@@ -2466,7 +2466,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: check mjsunit/foobar at #5 - shard 1/Ubuntu-16.04/[dummy has@https://chromium-swarm.appspot.com/task?id=11@@@"
+      "@@@STEP_LINK@task UI: check mjsunit/foobar at #5 - shard 1/Ubuntu-16.04/[dummy has@https://example.swarmingserver.appspot.com/task?id=11@@@"
     ]
   },
   {
@@ -2474,7 +2474,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"check mjsunit/foobar at #5 - shard 2/Ubuntu-16.04/[dummy has\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"build_is_experimental:false\", \"data:[dummy hash for foo_isolated/123]\", \"name:check\", \"purpose:v8-flake-bisect\", \"slavename:fake-bot-id\", \"stepname:check mjsunit/foobar at #5 - shard 2\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for foo_isolated\", \"size_bytes\": \"123]\"}}, \"command\": [\"tools/run-tests.py\", \"--progress=verbose\", \"--outdir=out/build\", \"--timeout=20\", \"--swarming\", \"--variants=stress_foo\", \"--foo-flag\", \"--bar-flag\", \"mjsunit/foobar\", \"--random-seed-stress-count=64\", \"--exit-after-n-failures=4\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-16.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}], \"user\": \"v8-flake-bisect\"}]}",
       "-json-output",
@@ -2577,7 +2577,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: check mjsunit/foobar at #5 - shard 2/Ubuntu-16.04/[dummy has@https://chromium-swarm.appspot.com/task?id=12@@@"
+      "@@@STEP_LINK@task UI: check mjsunit/foobar at #5 - shard 2/Ubuntu-16.04/[dummy has@https://example.swarmingserver.appspot.com/task?id=12@@@"
     ]
   },
   {
@@ -2585,7 +2585,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"check mjsunit/foobar at #5 - shard 3/Ubuntu-16.04/[dummy has\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"build_is_experimental:false\", \"data:[dummy hash for foo_isolated/123]\", \"name:check\", \"purpose:v8-flake-bisect\", \"slavename:fake-bot-id\", \"stepname:check mjsunit/foobar at #5 - shard 3\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for foo_isolated\", \"size_bytes\": \"123]\"}}, \"command\": [\"tools/run-tests.py\", \"--progress=verbose\", \"--outdir=out/build\", \"--timeout=20\", \"--swarming\", \"--variants=stress_foo\", \"--foo-flag\", \"--bar-flag\", \"mjsunit/foobar\", \"--random-seed-stress-count=64\", \"--exit-after-n-failures=4\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-16.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}], \"user\": \"v8-flake-bisect\"}]}",
       "-json-output",
@@ -2688,7 +2688,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: check mjsunit/foobar at #5 - shard 3/Ubuntu-16.04/[dummy has@https://chromium-swarm.appspot.com/task?id=13@@@"
+      "@@@STEP_LINK@task UI: check mjsunit/foobar at #5 - shard 3/Ubuntu-16.04/[dummy has@https://example.swarmingserver.appspot.com/task?id=13@@@"
     ]
   },
   {
@@ -2719,7 +2719,7 @@
       "swarming",
       "collect",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -2770,7 +2770,7 @@
       "@@@STEP_LOG_LINE@Merge script log@@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=10@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=10@@@"
     ]
   },
   {
@@ -2801,7 +2801,7 @@
       "swarming",
       "collect",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -2852,7 +2852,7 @@
       "@@@STEP_LOG_LINE@Merge script log@@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=11@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=11@@@"
     ]
   },
   {
@@ -2883,7 +2883,7 @@
       "swarming",
       "collect",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -2934,7 +2934,7 @@
       "@@@STEP_LOG_LINE@Merge script log@@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=12@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=12@@@"
     ]
   },
   {
@@ -2965,7 +2965,7 @@
       "swarming",
       "collect",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -3016,7 +3016,7 @@
       "@@@STEP_LOG_LINE@Merge script log@@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=13@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=13@@@"
     ]
   },
   {
@@ -3084,7 +3084,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"check mjsunit/foobar at #3 - shard 0/Ubuntu-16.04/[dummy has\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"build_is_experimental:false\", \"data:[dummy hash for foo_isolated/123]\", \"name:check\", \"purpose:v8-flake-bisect\", \"slavename:fake-bot-id\", \"stepname:check mjsunit/foobar at #3 - shard 0\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for foo_isolated\", \"size_bytes\": \"123]\"}}, \"command\": [\"tools/run-tests.py\", \"--progress=verbose\", \"--outdir=out/build\", \"--timeout=20\", \"--swarming\", \"--variants=stress_foo\", \"--foo-flag\", \"--bar-flag\", \"mjsunit/foobar\", \"--random-seed-stress-count=64\", \"--exit-after-n-failures=4\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-16.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}], \"user\": \"v8-flake-bisect\"}]}",
       "-json-output",
@@ -3187,7 +3187,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: check mjsunit/foobar at #3 - shard 0/Ubuntu-16.04/[dummy has@https://chromium-swarm.appspot.com/task?id=14@@@"
+      "@@@STEP_LINK@task UI: check mjsunit/foobar at #3 - shard 0/Ubuntu-16.04/[dummy has@https://example.swarmingserver.appspot.com/task?id=14@@@"
     ]
   },
   {
@@ -3195,7 +3195,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"check mjsunit/foobar at #3 - shard 1/Ubuntu-16.04/[dummy has\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"build_is_experimental:false\", \"data:[dummy hash for foo_isolated/123]\", \"name:check\", \"purpose:v8-flake-bisect\", \"slavename:fake-bot-id\", \"stepname:check mjsunit/foobar at #3 - shard 1\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for foo_isolated\", \"size_bytes\": \"123]\"}}, \"command\": [\"tools/run-tests.py\", \"--progress=verbose\", \"--outdir=out/build\", \"--timeout=20\", \"--swarming\", \"--variants=stress_foo\", \"--foo-flag\", \"--bar-flag\", \"mjsunit/foobar\", \"--random-seed-stress-count=64\", \"--exit-after-n-failures=4\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-16.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}], \"user\": \"v8-flake-bisect\"}]}",
       "-json-output",
@@ -3298,7 +3298,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: check mjsunit/foobar at #3 - shard 1/Ubuntu-16.04/[dummy has@https://chromium-swarm.appspot.com/task?id=15@@@"
+      "@@@STEP_LINK@task UI: check mjsunit/foobar at #3 - shard 1/Ubuntu-16.04/[dummy has@https://example.swarmingserver.appspot.com/task?id=15@@@"
     ]
   },
   {
@@ -3306,7 +3306,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"check mjsunit/foobar at #3 - shard 2/Ubuntu-16.04/[dummy has\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"build_is_experimental:false\", \"data:[dummy hash for foo_isolated/123]\", \"name:check\", \"purpose:v8-flake-bisect\", \"slavename:fake-bot-id\", \"stepname:check mjsunit/foobar at #3 - shard 2\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for foo_isolated\", \"size_bytes\": \"123]\"}}, \"command\": [\"tools/run-tests.py\", \"--progress=verbose\", \"--outdir=out/build\", \"--timeout=20\", \"--swarming\", \"--variants=stress_foo\", \"--foo-flag\", \"--bar-flag\", \"mjsunit/foobar\", \"--random-seed-stress-count=64\", \"--exit-after-n-failures=4\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-16.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}], \"user\": \"v8-flake-bisect\"}]}",
       "-json-output",
@@ -3409,7 +3409,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: check mjsunit/foobar at #3 - shard 2/Ubuntu-16.04/[dummy has@https://chromium-swarm.appspot.com/task?id=16@@@"
+      "@@@STEP_LINK@task UI: check mjsunit/foobar at #3 - shard 2/Ubuntu-16.04/[dummy has@https://example.swarmingserver.appspot.com/task?id=16@@@"
     ]
   },
   {
@@ -3417,7 +3417,7 @@
       "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-json-input",
       "{\"requests\": [{\"name\": \"check mjsunit/foobar at #3 - shard 3/Ubuntu-16.04/[dummy has\", \"priority\": \"25\", \"service_account\": \"\", \"tags\": [\"build_is_experimental:false\", \"data:[dummy hash for foo_isolated/123]\", \"name:check\", \"purpose:v8-flake-bisect\", \"slavename:fake-bot-id\", \"stepname:check mjsunit/foobar at #3 - shard 3\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for foo_isolated\", \"size_bytes\": \"123]\"}}, \"command\": [\"tools/run-tests.py\", \"--progress=verbose\", \"--outdir=out/build\", \"--timeout=20\", \"--swarming\", \"--variants=stress_foo\", \"--foo-flag\", \"--bar-flag\", \"mjsunit/foobar\", \"--random-seed-stress-count=64\", \"--exit-after-n-failures=4\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-16.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}], \"user\": \"v8-flake-bisect\"}]}",
       "-json-output",
@@ -3520,7 +3520,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: check mjsunit/foobar at #3 - shard 3/Ubuntu-16.04/[dummy has@https://chromium-swarm.appspot.com/task?id=17@@@"
+      "@@@STEP_LINK@task UI: check mjsunit/foobar at #3 - shard 3/Ubuntu-16.04/[dummy has@https://example.swarmingserver.appspot.com/task?id=17@@@"
     ]
   },
   {
@@ -3551,7 +3551,7 @@
       "swarming",
       "collect",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -3602,7 +3602,7 @@
       "@@@STEP_LOG_LINE@Merge script log@@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #0 (failed) (1m 0s)@https://chromium-swarm.appspot.com/task?id=14@@@",
+      "@@@STEP_LINK@shard #0 (failed) (1m 0s)@https://example.swarmingserver.appspot.com/task?id=14@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
@@ -3634,7 +3634,7 @@
       "swarming",
       "collect",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -3685,7 +3685,7 @@
       "@@@STEP_LOG_LINE@Merge script log@@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=15@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=15@@@"
     ]
   },
   {
@@ -3716,7 +3716,7 @@
       "swarming",
       "collect",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -3767,7 +3767,7 @@
       "@@@STEP_LOG_LINE@Merge script log@@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=16@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=16@@@"
     ]
   },
   {
@@ -3798,7 +3798,7 @@
       "swarming",
       "collect",
       "-server",
-      "https://chromium-swarm.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "-worker",
       "50",
       "-task-summary-python",
@@ -3849,7 +3849,7 @@
       "@@@STEP_LOG_LINE@Merge script log@@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://chromium-swarm.appspot.com/task?id=17@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=17@@@"
     ]
   },
   {

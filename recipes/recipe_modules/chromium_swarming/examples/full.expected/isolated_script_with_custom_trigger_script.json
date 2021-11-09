@@ -8,7 +8,7 @@
       "bar",
       "trigger",
       "--swarming",
-      "https://chromium-swarm-dev.appspot.com",
+      "https://example.swarmingserver.appspot.com",
       "--priority",
       "30",
       "--task-name",
@@ -100,12 +100,12 @@
       "@@@STEP_LOG_LINE@json.output@    \"hello_world/Windows-7-SP1/hash_for_w/test_buildername/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://example.swarmingserver.appspot.com/user/task/10000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm-dev.appspot.com/task?id=10000@@@"
+      "@@@STEP_LINK@shard #0@https://example.swarmingserver.appspot.com/task?id=10000@@@"
     ]
   }
 ]
