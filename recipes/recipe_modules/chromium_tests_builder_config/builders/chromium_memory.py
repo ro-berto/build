@@ -69,6 +69,7 @@ SPEC = {
         _chromium_memory_spec(
             chromium_config='chromium_msan',
             gclient_config='chromium',
+            gclient_apply_config=['enable_reclient'],
             chromium_apply_config=['mb'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -80,6 +81,7 @@ SPEC = {
         _chromium_memory_spec(
             chromium_config='chromium_msan',
             gclient_config='chromium',
+            gclient_apply_config=['enable_reclient'],
             chromium_apply_config=['mb'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -119,6 +121,7 @@ SPEC = {
         _chromium_memory_spec(
             chromium_config='chromium_tsan2',
             gclient_config='chromium',
+            gclient_apply_config=['enable_reclient'],
             chromium_apply_config=['mb'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -143,6 +146,7 @@ SPEC = {
         _chromium_memory_spec(
             chromium_config='chromium_tsan2',
             gclient_config='chromium',
+            gclient_apply_config=['enable_reclient'],
             chromium_apply_config=['mb'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -210,6 +214,7 @@ SPEC = {
         _chromium_memory_spec(
             chromium_config='chromium_clang',
             gclient_config='chromium',
+            gclient_apply_config=['enable_reclient'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -221,6 +226,7 @@ SPEC = {
         _chromium_memory_spec(
             chromium_config='chromium_clang',
             gclient_config='chromium',
+            gclient_apply_config=['enable_reclient'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -232,6 +238,7 @@ SPEC = {
         _chromium_memory_spec(
             chromium_config='chromium',
             gclient_config='chromium',
+            gclient_apply_config=['enable_reclient'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
