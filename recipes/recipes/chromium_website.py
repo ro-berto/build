@@ -25,7 +25,8 @@ DEPS = [
 
 def RunSteps(api):
   api.gclient.set_config('chromium_website')
-  api.bot_update.ensure_checkout()
+  with api.context(cwd=api.path['cache'].join('builder')):
+    api.bot_update.ensure_checkout()
   api.gclient.runhooks()
 
   with api.context(cwd=api.m.path['checkout']):
