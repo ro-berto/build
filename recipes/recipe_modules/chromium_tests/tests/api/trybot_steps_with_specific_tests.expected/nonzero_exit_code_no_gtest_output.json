@@ -1292,9 +1292,9 @@
       "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
       "--verbose",
       "-o",
-      "/path/to/tmp/json",
-      "--task-output-dir",
       "[CLEANUP]/tmp_tmp_1",
+      "--task-output-dir",
+      "[CLEANUP]/tmp_tmp_2",
       "--merge-script",
       "[START_DIR]/checkout/merge_scripts/standard_gtest_merge.py",
       "--merge-script-stdout-file",
@@ -1396,7 +1396,7 @@
       "-u",
       "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
       "--input-json",
-      "{\"per_iteration_data\": []}",
+      "[CLEANUP]/tmp_tmp_1",
       "--builder-group",
       "tryserver.chromium.linux",
       "--builder-name",
@@ -1550,6 +1550,39 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "TRYJOB FAILURE",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@INVALID_TEST_RESULTS@@@",
+      "@@@SET_BUILD_PROPERTY@failure_type@\"INVALID_TEST_RESULTS\"@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "cwd": "[CACHE]/builder",
+    "luci_context": {
+      "realm": {
+        "name": "chromium:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "base_unittests",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@"
+    ]
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -1577,6 +1610,10 @@
     ]
   },
   {
+    "failure": {
+      "failure": {},
+      "humanReason": "1 Test Suite(s) failed.\n\n**base_unittests** failed."
+    },
     "name": "$result"
   }
 ]

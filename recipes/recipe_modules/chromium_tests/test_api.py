@@ -48,6 +48,7 @@ class ChromiumTestsApi(recipe_test_api.RecipeTestApi):
   def gen_swarming_and_rdb_results(self,
                                    suite_name,
                                    suffix,
+                                   custom_os=None,
                                    invalid=False,
                                    failures=None):
     """Adds overrides for the swarming-collect and rdb-query steps of a test.
@@ -63,6 +64,8 @@ class ChromiumTestsApi(recipe_test_api.RecipeTestApi):
     Args:
       suite_name: Name of the suite.
       suffix: Phase of the build the test is in (eg "with patch").
+      custom_os: Custom swarming OS dimenion that gets embedded in the swarming
+          test's step name.
       invalid: If True, marks the results as invalid.
       failures: List of names of test cases that failed.
     """
@@ -70,6 +73,8 @@ class ChromiumTestsApi(recipe_test_api.RecipeTestApi):
     swarming_step_name = suite_name
     if suffix:
       swarming_step_name += ' (%s)' % suffix
+    if custom_os:
+      swarming_step_name += ' on ' + custom_os
     rdb_step_name = 'collect tasks'
     if suffix:
       rdb_step_name += ' (%s)' % suffix
