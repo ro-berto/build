@@ -86,10 +86,5 @@ SPEC = {
 }
 
 # Use the same config for builders using staging swarming instance.
-_CHROMIUM_SWARM_STAGING = 'https://chromium-swarm-staging.appspot.com'
-
-SPEC['linux-rel-swarming-staging'] = (
-    SPEC['linux-rel-swarming'].evolve(swarming_server=_CHROMIUM_SWARM_STAGING))
-
-SPEC['win-rel-swarming-staging'] = (
-    SPEC['win-rel-swarming'].evolve(swarming_server=_CHROMIUM_SWARM_STAGING))
+SPEC['linux-rel-swarming-staging'] = SPEC['linux-rel-swarming']
+SPEC['win-rel-swarming-staging'] = SPEC['win-rel-swarming']

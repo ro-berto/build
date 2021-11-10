@@ -260,7 +260,6 @@ BUILDERS = freeze({
                 'testing': {
                     'platform': 'mac'
                 },
-                'swarming_server': 'https://chrome-swarming.appspot.com',
                 'swarming_service_account': INTERNAL_TEST_SERVICE_ACCOUNT,
                 'ensure_sdk': 'ios',
                 'ios_config': {
@@ -284,7 +283,6 @@ BUILDERS = freeze({
                 'testing': {
                     'platform': 'mac'
                 },
-                'swarming_server': 'https://chrome-swarming.appspot.com',
                 'swarming_service_account': INTERNAL_TEST_SERVICE_ACCOUNT,
                 'ensure_sdk': 'ios',
                 'ios_config': {
@@ -309,7 +307,6 @@ BUILDERS = freeze({
                 'testing': {
                     'platform': 'mac'
                 },
-                'swarming_server': 'https://chrome-swarming.appspot.com',
                 'swarming_service_account': INTERNAL_TEST_SERVICE_ACCOUNT,
                 'ensure_sdk': 'ios',
                 'ios_config': {
@@ -342,7 +339,6 @@ BUILDERS = freeze({
                 'testing': {
                     'platform': 'mac'
                 },
-                'swarming_server': 'https://chrome-swarming.appspot.com',
                 'swarming_service_account': INTERNAL_TEST_SERVICE_ACCOUNT,
                 'ensure_sdk': 'ios',
                 'ios_config': {
@@ -366,7 +362,6 @@ BUILDERS = freeze({
                 'testing': {
                     'platform': 'mac'
                 },
-                'swarming_server': 'https://chrome-swarming.appspot.com',
                 'swarming_service_account': INTERNAL_TEST_SERVICE_ACCOUNT,
                 'ensure_sdk': 'ios',
                 'ios_config': {
@@ -390,7 +385,6 @@ BUILDERS = freeze({
                 'testing': {
                     'platform': 'mac'
                 },
-                'swarming_server': 'https://chrome-swarming.appspot.com',
                 'swarming_service_account': INTERNAL_TEST_SERVICE_ACCOUNT,
                 'ensure_sdk': 'ios',
                 'ios_config': {

@@ -156,9 +156,6 @@ class BuilderSpec(object):
   # we can always pass no_fetch_tags=True
   fetch_tags = attrib(bool, default=False)
 
-  # URL to override the swarming server to use
-  swarming_server = attrib(str, default=None)
-
   # A path relative to the checkout to a file containing the Chrome version
   # information for Android
   android_version = attrib(str, default=None)

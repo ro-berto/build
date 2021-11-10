@@ -42,7 +42,6 @@ def config(name,
   if official:
     cfg['gclient_apply_config'].append('chrome_internal')
     cfg['gclient_apply_config'].append('checkout_pgo_profiles')
-    cfg['swarming_server'] = 'https://chrome-swarming.appspot.com'
 
   return name, _chromium_clang_spec(**cfg)
 
@@ -164,7 +163,6 @@ SPEC = {
             },
             test_results_config='staging_server',
             simulation_platform='win',
-            swarming_server='https://chrome-swarming.appspot.com',
         ),
     'ToTWinOfficial64':
         _chromium_clang_spec(
@@ -180,7 +178,6 @@ SPEC = {
             },
             test_results_config='staging_server',
             simulation_platform='win',
-            swarming_server='https://chrome-swarming.appspot.com',
         ),
     'CrWinAsan':
         _chromium_clang_spec(
@@ -291,7 +288,6 @@ SPEC = {
             gclient_apply_config=[
                 'clang_tot', 'chrome_internal', 'checkout_pgo_profiles'
             ],
-            swarming_server='https://chrome-swarming.appspot.com',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,

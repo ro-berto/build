@@ -213,7 +213,6 @@ def _convert_builder_spec(obj, luci_project, builder_id_by_builder_key):
       android_config=obj.legacy_android_config.config or None,
       android_apply_config=obj.legacy_android_config.apply_configs,
       test_results_config=obj.legacy_test_results_config.config or None,
-      swarming_server=obj.swarming_server or None,
       android_version=obj.android_version_file or None,
       clobber=obj.clobber,
       build_gs_bucket=obj.build_gs_bucket or None,

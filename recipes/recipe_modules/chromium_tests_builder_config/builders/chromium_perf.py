@@ -60,7 +60,6 @@ def _common_kwargs(execution_mode, config_name, platform, target_bits):
   elif platform == 'fuchsia':
     spec['chromium_config_kwargs']['TARGET_PLATFORM'] = 'fuchsia'
 
-  spec['swarming_server'] = 'https://chrome-swarming.appspot.com'
   spec['luci_project'] = 'chrome'
   return spec
 
@@ -197,7 +196,6 @@ SPEC.update({
                 'TARGET_PLATFORM': 'chromeos',
             },
             simulation_platform='linux',
-            swarming_server='https://chrome-swarming.appspot.com',
             bisect_archive_build=True,
             bisect_gs_bucket='chrome-test-builds',
             bisect_gs_extra='official-by-commit',

@@ -118,8 +118,8 @@ message BuilderSpec {
   }
   LegacyTestResultsRecipeModuleConfig legacy_test_results_config = 7;
 
-  // URL to override the swarming server to use
-  string swarming_server = 8;
+  reserved 8;
+  reserved "swarming_server";
 
   // A path relative to the checkout to a file containing the Chrome version
   // information for Android
