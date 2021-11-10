@@ -297,6 +297,15 @@ class V8Test(BaseTest):
     )
     return result_variants == set([True])
 
+  def upload_stress_opt_data(self):
+    self.api.gsutil.upload(
+        self.api.raw_io.input_text(self.api.buildbucket.build_url()),
+        'chromium-v8',
+        'stress-opt/%s' % self.api.buildbucket.build.id,
+        name='stress-opt',
+        args=['-a', 'public-read'],
+    )
+
   def post_run(self, test):
     # The active step was either a local test run or the swarming collect step.
     step_result = self.api.step.active_result
@@ -338,7 +347,7 @@ class V8Test(BaseTest):
       self._add_bug_links(flakes, step_result.presentation)
 
     if self.has_only_stress_opt_failures(json_output):
-      self.api.step('Found isolated stress failures', cmd=None)
+      self.upload_stress_opt_data()
 
     return TestResults(failures, flakes, infra_failures)
 

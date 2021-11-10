@@ -678,8 +678,7 @@ def GenTests(api):
     ) +
     api.v8.test_spec_in_checkout('V8 Foobar', test_spec) +
     api.v8.fail('Check', variant1='stress', variant2='stress') +
-    api.post_process(MustRun, 'Found isolated stress failures') +
-    api.post_process(DropExpectation)
+    api.post_process(Filter('gsutil stress-opt'))
   )
 
   yield (
@@ -690,7 +689,7 @@ def GenTests(api):
     ) +
     api.v8.test_spec_in_checkout('V8 Foobar', test_spec) +
     api.v8.fail('Check', variant1='stress', variant2='default') +
-    api.post_process(DoesNotRun, 'Found isolated stress failures') +
+    api.post_process(DoesNotRun, 'gsutil stress-opt') +
     api.post_process(DropExpectation)
   )
 
