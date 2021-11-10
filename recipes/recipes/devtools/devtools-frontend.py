@@ -165,7 +165,7 @@ def run_unit_tests(api, builder_config):
 
 
 def run_lint_check(api):
-  run_node_script(api, 'Lint Check with ESLint', 'run_lint_check_js.js')
+  run_node_script(api, 'Lint Check with ESLint', 'run_lint_check_js.mjs')
   run_node_script(api, 'Lint check with Stylelint','run_lint_check_css.js')
 
 

@@ -866,7 +866,7 @@
       "-u",
       "third_party/node/node.py",
       "--output",
-      "scripts/test/run_lint_check_js.js"
+      "scripts/test/run_lint_check_js.mjs"
     ],
     "cwd": "[CACHE]/builder/devtools-frontend",
     "env_prefixes": {
