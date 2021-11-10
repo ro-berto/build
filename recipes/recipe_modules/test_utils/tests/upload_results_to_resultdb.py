@@ -39,16 +39,25 @@ PROPERTIES = {
 
 
 def RunSteps(api, is_swarming_test=True):
+  # TODO(crbug.com/1255217): Can remove this set_config() after android tears
+  # out result_details support.
+  api.chromium.set_config(
+      'chromium',
+      TARGET_PLATFORM=api.properties.get('target_platform', 'linux'))
+
   test_specs = []
+  resultdb = steps.ResultDB.create(use_rdb_results_for_all_decisions=True)
   if not is_swarming_test:
     test_specs.append(
-        steps.LocalIsolatedScriptTestSpec.create('base_unittests'))
+        steps.LocalIsolatedScriptTestSpec.create(
+            'base_unittests', resultdb=resultdb))
   else:
     test_specs.append(
         steps.SwarmingGTestTestSpec.create(
             'base_unittests',
             shards=2,
-            test_id_prefix='ninja://chromium/tests:base_unittests/'))
+            test_id_prefix='ninja://chromium/tests:base_unittests/',
+            resultdb=resultdb))
   tests = [test_spec.get_test() for test_spec in test_specs]
   api.chromium_swarming.path_to_merge_scripts = (
       api.path['cache'].join('merge_scripts'))
@@ -265,19 +274,6 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
 
-  inv_bundle_with_one_failure = {
-      'invid':
-          api.resultdb.Invocation(
-              proto=invocation_pb2.Invocation(
-                  state=invocation_pb2.Invocation.FINALIZED),
-              test_results=[
-                  test_result_pb2.TestResult(
-                      test_id='ninja://chromium/tests:base_unittests/Test.Two',
-                      expected=False,
-                      status=test_result_pb2.FAIL)
-              ],
-          ),
-  }
   findit_exoneration_output = {
       'flakes': [{
           'test': {
@@ -297,16 +293,8 @@ def GenTests(api):
           },
           is_swarming_test=True,
       ),
-      api.resultdb.query(
-          inv_bundle_with_one_failure,
-          step_name='collect tasks (with patch).base_unittests results',
-      ),
-      api.override_step_data(
-          'base_unittests (with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(passing=False),
-              shards=2,
-              failure=False)),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'base_unittests', 'with patch', failures=['Test.Two']),
       # The first query is used in the legacy decisions. The second is used in
       # RDB-based decisions. If both report the same failing test as flaky, then
       # the decision logic should match.
@@ -314,8 +302,6 @@ def GenTests(api):
                              api.json.output(findit_exoneration_output)),
       api.override_step_data('query known flaky failures on CQ (2)',
                              api.json.output(findit_exoneration_output)),
-      api.post_process(post_process.DoesNotRun,
-                       'Migration mismatch (informational)'),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -355,14 +341,8 @@ def GenTests(api):
               api.test_utils.canned_gtest_output(passing=False),
               shards=2,
               failure=False)),
-      # We give the failing test a different name when reported by RDB. So make
-      # sure the old test name is sent to FindIt in the legacy decision-making
-      # flow and the overridden name is sent to FindIt in the new flow.
       api.post_process(post_process.LogContains,
                        'query known flaky failures on CQ', 'input',
-                       ['Test.Two']),
-      api.post_process(post_process.LogContains,
-                       'query known flaky failures on CQ (2)', 'input',
                        ['Different.Test.Name']),
       api.post_process(post_process.DropExpectation),
   )

@@ -833,7 +833,7 @@
     },
     "name": "base_unittests_failed_results",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br/>deterministic failures [caused step to fail]:<br/>Test.One<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",
@@ -902,7 +902,8 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
-      "@@@STEP_LINK@shard #0@https://example.swarmingserver.appspot.com/task?id=0@@@"
+      "@@@STEP_LINK@shard #0@https://example.swarmingserver.appspot.com/task?id=0@@@",
+      "@@@STEP_LINK@Test.One@https://luci-milo.appspot.com/ui/inv/build:8945511751514863184/test-results?q=Test.One@@@"
     ]
   },
   {
@@ -997,7 +998,7 @@
     },
     "name": "base_unittests_failed_results_2",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",
@@ -1549,7 +1550,7 @@
     },
     "name": "base_unittests_failed_results (retry shards)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",
