@@ -693,27 +693,28 @@ def GenTests(api):
           git_repo='https://skia.googlesource.com/skia'),
   )
 
-  swarmed_webkit_tests = sum([
-      api.chromium_tests_builder_config.try_build(),
-      swarm_hashes(extra_swarmed_tests=['blink_web_tests']),
-      api.chromium_tests.read_source_side_spec(
-          'chromium.linux', {
-              'Linux Tests': {
-                  'isolated_scripts': [{
-                      'isolate_name': 'blink_web_tests',
-                      'name': 'blink_web_tests',
-                      'resultdb': {
-                          'enable': True
-                      },
-                      'swarming': {
-                          'can_use_on_swarming_builders': True
-                      },
-                      'results_handler': 'layout tests',
-                  },],
-              },
-          }),
-      api.filter.suppress_analyze(),
-  ], api.empty_test_data())
+  def swarmed_webkit_tests():
+    return sum([
+        api.chromium_tests_builder_config.try_build(),
+        swarm_hashes(extra_swarmed_tests=['blink_web_tests']),
+        api.chromium_tests.read_source_side_spec(
+            'chromium.linux', {
+                'Linux Tests': {
+                    'isolated_scripts': [{
+                        'isolate_name': 'blink_web_tests',
+                        'name': 'blink_web_tests',
+                        'resultdb': {
+                            'enable': True
+                        },
+                        'swarming': {
+                            'can_use_on_swarming_builders': True
+                        },
+                        'results_handler': 'layout tests',
+                    },],
+                },
+            }),
+        api.filter.suppress_analyze(),
+    ], api.empty_test_data())
 
   # This tests what happens if something goes horribly wrong in
   # run_web_tests.py and we return an internal error; the step should
@@ -722,7 +723,7 @@ def GenTests(api):
   # 255 == test_run_results.UNEXPECTED_ERROR_EXIT_STATUS in run_web_tests.py.
   yield api.test(
       'swarmed_webkit_tests_unexpected_error',
-      swarmed_webkit_tests,
+      swarmed_webkit_tests(),
       api.override_step_data(
           'blink_web_tests (with patch)',
           api.chromium_swarming.canned_summary_output(
@@ -741,7 +742,7 @@ def GenTests(api):
   # 130 == test_run_results.INTERRUPTED_EXIT_STATUS in run_web_tests.py.
   yield api.test(
       'swarmed_webkit_tests_interrupted',
-      swarmed_webkit_tests,
+      swarmed_webkit_tests(),
       api.override_step_data(
           'blink_web_tests (with patch)',
           api.chromium_swarming.canned_summary_output(
@@ -759,7 +760,7 @@ def GenTests(api):
   # and compare the lists of failing tests).
   yield api.test(
       'swarmed_layout_tests_too_many_failures_for_retcode',
-      swarmed_webkit_tests,
+      swarmed_webkit_tests(),
       api.override_step_data(
           'blink_web_tests (with patch)',
           api.chromium_swarming.canned_summary_output(
