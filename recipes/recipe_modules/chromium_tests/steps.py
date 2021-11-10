@@ -48,6 +48,8 @@ from recipe_engine.engine_types import freeze
 from .resultdb import ResultDB
 
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
+from PB.go.chromium.org.luci.resultdb.proto.v1 import (test_result as
+                                                       test_result_pb2)
 
 from RECIPE_MODULES.build import chromium_swarming
 from RECIPE_MODULES.build.skylab.structs import SkylabRequest
@@ -675,13 +677,12 @@ class Test(object):
     }
     """
     if self.spec.resultdb.use_rdb_results_for_all_decisions:
-      # All we're tracking via RDB is the results for tests that failed. So
-      # simply just list the failed tests in the return.
+      results = self.get_rdb_results(suffix)
       pass_fail_counts = {}
-      for t in self._rdb_results[suffix].unexpected_failing_tests:
+      for t, runs in six.iteritems(results.individual_results):
         pass_fail_counts[t] = {
-            'pass_count': 0,
-            'fail_count': 1,
+            'pass_count': len([r for r in runs if r == test_result_pb2.PASS]),
+            'fail_count': len([r for r in runs if r != test_result_pb2.PASS]),
         }
       return pass_fail_counts
     else:
