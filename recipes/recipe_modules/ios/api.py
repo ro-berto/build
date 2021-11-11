@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from __future__ import absolute_import
+
 import collections
 import copy
 import json
@@ -248,7 +250,7 @@ class iOSApi(recipe_api.RecipeApi):
         ),
       ).json.output
 
-      for key, value in parent_config.iteritems():
+      for key, value in parent_config.items():
         # Inherit the config of the parent, except for triggered bots.
         # Otherwise this builder will infinitely trigger itself.
         if key != 'triggered bots':
@@ -767,10 +769,9 @@ class iOSApi(recipe_api.RecipeApi):
     step_result = self.m.step(
         'shard EarlGrey test',
         cmd,
-        stdout=self.m.raw_io.output(),
-        step_test_data=(
-            lambda: self.m.raw_io.test_api.stream_output(debug_app_test_output)
-        ))
+        stdout=self.m.raw_io.output_text(),
+        step_test_data=(lambda: self.m.raw_io.test_api.stream_output_text(
+            debug_app_test_output)))
     test_names = TEST_NAMES_DEBUG_APP_PATTERN.findall(step_result.stdout)
     test_counts = collections.Counter(
       test_class for test_class, _ in test_names
@@ -949,18 +950,13 @@ class iOSApi(recipe_api.RecipeApi):
         '--version', '<(version)',
       ])
       files.append(iossim)
-    isolate_template_contents = {
-        'variables': {
-            'command': cmd,
-            'files': files,
-        },
-    }
+    isolate_template_contents = {'variables': {'files': files, 'command': cmd}}
 
     isolate_template = self._ensure_checkout_dir().join('template.isolate')
     self.m.file.write_text(
-      'generate template.isolate',
-      isolate_template,
-      str(isolate_template_contents),
+        'generate template.isolate',
+        isolate_template,
+        self.m.json.dumps(isolate_template_contents),
     )
     self.m.step.active_result.presentation.logs['template.isolate'] = (
       self.m.json.dumps(isolate_template_contents, indent=2).splitlines())
@@ -968,7 +964,7 @@ class iOSApi(recipe_api.RecipeApi):
     tmp_dir = self.m.path.mkdtemp('isolate')
 
     bots_and_tests = [(self.m.buildbucket.builder_name, self.__config['tests'])]
-    bots_and_tests.extend(self.__config['triggered tests'].items())
+    bots_and_tests.extend(list(self.__config['triggered tests'].items()))
     # Create swarming tasks with tests per bot.
     for bot, tests in bots_and_tests:
       for test in tests:
