@@ -297,11 +297,12 @@ class V8Test(BaseTest):
     )
     return result_variants == set([True])
 
-  def upload_stress_opt_data(self):
+  def upload_stress_opt_data(self, flake_only=False):
+    prefix = "flakes/" if flake_only else ""
     self.api.gsutil.upload(
         self.api.raw_io.input_text(self.api.buildbucket.build_url()),
         'chromium-v8',
-        'stress-opt/%s' % self.api.buildbucket.build.id,
+        'stress-opt/%s%s' % (prefix, self.api.buildbucket.build.id),
         name='stress-opt',
         args=['-a', 'public-read'],
     )
@@ -347,7 +348,7 @@ class V8Test(BaseTest):
       self._add_bug_links(flakes, step_result.presentation)
 
     if self.has_only_stress_opt_failures(json_output):
-      self.upload_stress_opt_data()
+      self.upload_stress_opt_data(flake_only=flakes and not failures)
 
     return TestResults(failures, flakes, infra_failures)
 
