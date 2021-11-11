@@ -1,6 +1,6 @@
 # Copyright 2021 The Chromium Authors. All rights reserved.
-# Use of this source code is governed under the Apache License, Version 2.0
-# that can be found in the LICENSE file.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
 """Recipe for building and deploying the www.chromium.org static website."""
 
 from recipe_engine.post_process import DropExpectation
@@ -38,12 +38,15 @@ def RunSteps(api):
     npmw_path = api.m.path['checkout'].join('npmw')
     api.step('build', [npmw_path, 'build'])
 
-    # TODO(crbug.com/1268676): Change this to `'deploy:prod'` when ready.
-    # TODO(crbug.com/1267501): Change this to `'deploy:prod <channel-id>`
-    # when running as a tryjob.
+    if api.m.tryserver.is_tryserver:
+      channel_id = 'cl%d-ps%d' % (api.m.tryserver.gerrit_change.change,
+                                  api.m.tryserver.gerrit_change.patchset)
+      cmd = [npmw_path, 'deploy:preview', channel_id]
+    else:
+      cmd = [npmw_path, 'deploy:prod']
+
     out = api.step(
-        'deploy', [npmw_path, 'deploy:staging'],
-        stdout=api.raw_io.output(add_output_log=True)).stdout
+        'deploy', cmd, stdout=api.raw_io.output(add_output_log=True)).stdout
     out = out.decode('utf-8').strip()
 
     # pylint: disable=line-too-long
@@ -52,16 +55,19 @@ def RunSteps(api):
         "Please [file a bug](https://bugs.chromium.org/p/chromium/issues/entry?template=Chromium.org+bug)\n"
     )
     # pylint: enable=line-too-long
-    url = None
-    for line in out.splitlines():
-      if 'Hosting URL' in line:
-        url = line.split()[-1]
-        msg = 'Deployed to %s' % url
 
-  if api.m.tryserver.is_tryserver:  # pragma: no cover
-    # TODO(crbug.com/1267501): Change to 'FirebaseHosting/Preview' when
-    # deploying to a preview site using the <channel-id>, above.
-    api.m.tricium.add_comment('FirebaseHosting/Deploy', msg, path='')
+    for line in out.splitlines():
+      if api.m.tryserver.is_tryserver:
+        if 'Channel URL' in line:
+          for word in line.split():
+            if word.startswith('https://chromium-website'):
+              msg = 'Preview this change at %s' % word
+      else:
+        if 'Hosting URL' in line:
+          msg = 'Deployed to %s' % line.split()[-1]
+
+  if api.m.tryserver.is_tryserver:
+    api.m.tricium.add_comment('FirebaseHosting/Preview', msg, path='')
     api.m.tricium.write_comments()
 
   return result_pb2.RawResult(
@@ -70,13 +76,34 @@ def RunSteps(api):
   )
 
 def GenTests(api):
+  # pylint: disable=line-too-long
   yield api.test(
-      'ci',
+      'presubmit',
+      api.buildbucket.try_build(
+          project='chromium-website',
+          bucket='chromium-website/try',
+          builder='chromium-website-try-builder',
+          git_repo='https://chromium.googlesource.com/website.git',
+          change_number=123456,
+          patch_set=7),
       api.step_data(
           'deploy',
-          stdout=api.raw_io.output('[1mHosting URL:[22m example.com\n')),
+          stdout=api.raw_io.output(
+              '[1mChannel URL:[22m https://chromium-website-cl123456-ps7.web.app [channel id]\n'
+          )),
       api.post_process(DropExpectation),
   )
+  # pylint: enable=line-too-long
+
+  yield api.test(
+      'postsubmit',
+      api.step_data(
+          'deploy',
+          stdout=api.raw_io.output(
+              '[1m Hosting URL:[22m https://site.web.app\n')),
+      api.post_process(DropExpectation),
+  )
+
 
 @CONFIG_CTX()
 def chromium_website(c):
