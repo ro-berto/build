@@ -78,6 +78,7 @@ def GenTests(api):
         builder_group='test-group',
         builder='test-builder',
         builder_db=builder_db,
+        experiments={'chromium.chromium_tests.use_rdb_results': True},
         **kwargs)
     t += common_test_data(test_spec)
     return t
@@ -88,6 +89,7 @@ def GenTests(api):
         builder='test-builder',
         builder_db=builder_db,
         try_db=try_db,
+        experiments={'chromium.chromium_tests.use_rdb_results': True},
         **kwargs)
     t += api.filter.suppress_analyze()
     t += common_test_data(test_spec)

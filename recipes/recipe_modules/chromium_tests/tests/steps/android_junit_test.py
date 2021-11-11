@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 from recipe_engine import post_process
+from recipe_engine.recipe_api import StepFailure
 
 from RECIPE_MODULES.build.chromium_tests import steps
 
@@ -17,6 +18,7 @@ DEPS = [
     'recipe_engine/buildbucket',
     'recipe_engine/json',
     'recipe_engine/properties',
+    'recipe_engine/raw_io',
     'recipe_engine/step',
     'test_results',
     'test_utils',
@@ -33,22 +35,27 @@ def RunSteps(api):
   test_spec = steps.AndroidJunitTestSpec.create(
       'test_name',
       target_name=api.properties.get('target_name'),
-      resultdb=steps.ResultDB(enable=True),
+      resultdb=steps.ResultDB(
+          enable=True, use_rdb_results_for_all_decisions=True),
   )
   test = test_spec.get_test()
 
   api.chromium.compile(targets=test.compile_targets(), name='compile')
 
   try:
-    test.run(api.chromium_tests.m, '')
+    _, invalid_suites, failed_suites = api.test_utils.run_tests_once(
+        api.chromium_tests.m, [test], '')
+    if not invalid_suites:
+      assert test.has_valid_results('')
   finally:
-    assert test.has_valid_results('')
     api.step('details', [])
     api.step.active_result.presentation.logs['details'] = [
         'compile_targets: {!r}'.format(test.compile_targets()),
         'failures: {!r}'.format(test.failures('')),
         'uses_local_devices: {!r}'.format(test.uses_local_devices),
     ]
+  if invalid_suites or failed_suites:
+    raise StepFailure('failure in ' + test.name)
 
 
 def GenTests(api):
@@ -80,8 +87,24 @@ def GenTests(api):
           builder_group='test_group',
           builder='test_buildername',
       ),
-      api.override_step_data('test_name',
-                             api.test_utils.canned_gtest_output(False)),
+      api.override_step_data(
+          'test_name results',
+          stdout=api.raw_io.output_text(
+              api.test_utils.rdb_results(
+                  'test_name', failing_tests=['Test.One']))),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'invalid',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
+      # No failing tests in RDB results, but a non-zero exit code will make
+      # the recipe consider the suite's results invalid.
+      api.override_step_data('test_name', retcode=1),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
   )
