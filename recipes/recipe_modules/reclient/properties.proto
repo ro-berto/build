@@ -47,6 +47,7 @@ message InputProperties {
   // This is expected to set to a builder to verify build artifacts are the
   // same between remote and local.  Such builders must confirm compile
   // runs with verify mode and no mismatches.
+  // It also sets jobs to platform's cpu count.
   bool ensure_verified = 9;
 
   // Indicates whether reproxy should fail the build if a predefined rate

@@ -136,6 +136,8 @@ class ReclientApi(recipe_api.RecipeApi):
     if self._jobs is None:
       # This heuristic is copied from Goma's recommended_jobs.
       self._jobs = min(10 * self.m.platform.cpu_count, 200)
+    if self._ensure_verified:
+      self._jobs = self.m.platform.cpu_count
     return self._jobs
 
   @property
