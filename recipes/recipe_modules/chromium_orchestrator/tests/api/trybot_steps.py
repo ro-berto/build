@@ -47,7 +47,9 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'basic',
-      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.chromium.try_build(
+          builder='linux-rel-orchestrator',
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.properties(
           **{
               '$build/chromium_orchestrator':
@@ -82,7 +84,9 @@ def GenTests(api):
 
   yield api.test(
       'basic_branch',
-      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.chromium.try_build(
+          builder='linux-rel-orchestrator',
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.properties(
           **{
               '$build/chromium_orchestrator':
@@ -112,7 +116,8 @@ def GenTests(api):
       'non_src_CL',
       api.chromium.try_build(
           builder='linux-rel-orchestrator',
-          git_repo='https://chromium.googlesource.com/v8/v8'),
+          git_repo='https://chromium.googlesource.com/v8/v8',
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.properties(
           **{
               '$build/chromium_orchestrator':
@@ -146,7 +151,9 @@ def GenTests(api):
 
   yield api.test(
       'no_builder_to_trigger_passed_in',
-      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.chromium.try_build(
+          builder='linux-rel-orchestrator',
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.post_process(post_process.DoesNotRun,
                        'trigger compilator (with patch)'),
       api.post_process(post_process.StatusException),
@@ -155,7 +162,9 @@ def GenTests(api):
 
   yield api.test(
       'depend_on_footer_failure',
-      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.chromium.try_build(
+          builder='linux-rel-orchestrator',
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.properties(
           **{
               '$build/chromium_orchestrator':
@@ -176,7 +185,9 @@ def GenTests(api):
 
   yield api.test(
       'missing_compilator_watcher_git_revision',
-      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.chromium.try_build(
+          builder='linux-rel-orchestrator',
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.properties(
           **{
               '$build/chromium_orchestrator':
@@ -240,7 +251,7 @@ def GenTests(api):
                       ),
               }
           }),
-      ),
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.chromium_orchestrator.fake_head_revision(),
       api.properties(
           **{
@@ -261,7 +272,9 @@ def GenTests(api):
 
   yield api.test(
       'no_tests_to_trigger',
-      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.chromium.try_build(
+          builder='linux-rel-orchestrator',
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.properties(
           **{
               '$build/chromium_orchestrator':
@@ -284,7 +297,9 @@ def GenTests(api):
 
   yield api.test(
       'retry_shards',
-      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.chromium.try_build(
+          builder='linux-rel-orchestrator',
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.properties(
           **{
               '$build/chromium_orchestrator':
@@ -295,14 +310,8 @@ def GenTests(api):
           }),
       api.chromium_orchestrator.fake_head_revision(),
       api.chromium_orchestrator.override_test_spec(),
-      api.override_step_data(
-          'browser_tests (with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(False), failure=True)),
-      api.override_step_data(
-          'browser_tests (retry shards with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(True), failure=False)),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'browser_tests', 'with patch', failures=['Test.One']),
       api.chromium_orchestrator.override_compilator_steps(),
       api.chromium_orchestrator.override_compilator_steps(
           is_swarming_phase=False),
@@ -319,7 +328,9 @@ def GenTests(api):
   # without patch fails so failure is not due to CL
   yield api.test(
       'retry_shards_without_patch_fails_tryjob_succeeds',
-      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.chromium.try_build(
+          builder='linux-rel-orchestrator',
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.properties(
           **{
               '$build/chromium_orchestrator':
@@ -336,26 +347,14 @@ def GenTests(api):
       api.chromium_orchestrator.override_compilator_steps(
           is_swarming_phase=False),
       api.chromium_orchestrator.override_compilator_steps(with_patch=False),
-      api.override_step_data(
-          'browser_tests (with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(False), failure=True)),
-      api.override_step_data(
-          'content_unittests (with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(False), failure=True)),
-      api.override_step_data(
-          'browser_tests (retry shards with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(False), failure=True)),
-      api.override_step_data(
-          'content_unittests (retry shards with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(True), failure=False)),
-      api.override_step_data(
-          'browser_tests (without patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(False), failure=True)),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'browser_tests', 'with patch', failures=['Test.One']),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'content_unittests', 'with patch', failures=['Test.One']),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'browser_tests', 'retry shards with patch', failures=['Test.One']),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'browser_tests', 'without patch', failures=['Test.One']),
       api.post_process(post_process.MustRun,
                        'trigger compilator (without patch)'),
       api.post_process(post_process.MustRun, 'browser_tests (without patch)'),
@@ -370,7 +369,9 @@ def GenTests(api):
   # without patch passes so failure is due to CL
   yield api.test(
       'retry_without_patch_passes_tryjob_fails',
-      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.chromium.try_build(
+          builder='linux-rel-orchestrator',
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.properties(
           **{
               '$build/chromium_orchestrator':
@@ -387,26 +388,12 @@ def GenTests(api):
       api.chromium_orchestrator.override_compilator_steps(
           with_patch=True, is_swarming_phase=False),
       api.chromium_orchestrator.override_compilator_steps(with_patch=False),
-      api.override_step_data(
-          'content_unittests (with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(False), failure=True)),
-      api.override_step_data(
-          'content_unittests (retry shards with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(True), failure=False)),
-      api.override_step_data(
-          'browser_tests (with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(False), failure=True)),
-      api.override_step_data(
-          'browser_tests (retry shards with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(False), failure=True)),
-      api.override_step_data(
-          'browser_tests (without patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(True), failure=False)),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'content_unittests', 'with patch', failures=['Test.One']),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'browser_tests', 'with patch', failures=['Test.One']),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'browser_tests', 'retry shards with patch', failures=['Test.One']),
       api.post_process(post_process.MustRun, 'browser_tests (without patch)'),
       api.post_process(post_process.MustRun, 'Tests statistics'),
       api.post_process(post_process.MustRun, 'FindIt Flakiness'),
@@ -416,7 +403,9 @@ def GenTests(api):
 
   yield api.test(
       'retry_shards_invalid',
-      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.chromium.try_build(
+          builder='linux-rel-orchestrator',
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.properties(
           **{
               '$build/chromium_orchestrator':
@@ -450,7 +439,9 @@ def GenTests(api):
 
   yield api.test(
       'retry_shards_invalid_retry',
-      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.chromium.try_build(
+          builder='linux-rel-orchestrator',
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.properties(
           **{
               '$build/chromium_orchestrator':
@@ -461,19 +452,10 @@ def GenTests(api):
           }),
       api.chromium_orchestrator.fake_head_revision(),
       api.chromium_orchestrator.override_test_spec(),
-      api.override_step_data(
-          'browser_tests (with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(passing=False), failure=True)),
-      api.override_step_data(
-          'browser_tests (retry shards with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.gtest_results(test_results_json='', retcode=1),
-              failure=True)),
-      api.override_step_data(
-          'browser_tests (without patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(passing=True), failure=False)),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'browser_tests', 'with patch', failures=['Test.One']),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'browser_tests', 'retry shards with patch', failures=['Test.One']),
       api.chromium_orchestrator.override_compilator_steps(),
       api.chromium_orchestrator.override_compilator_steps(
           is_swarming_phase=False),
@@ -489,7 +471,9 @@ def GenTests(api):
 
   yield api.test(
       'retry_shards_all_invalid_results',
-      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.chromium.try_build(
+          builder='linux-rel-orchestrator',
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.properties(
           **{
               '$build/chromium_orchestrator':
@@ -524,7 +508,9 @@ def GenTests(api):
 
   yield api.test(
       'skip_without_patch_local_tests_failed',
-      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.chromium.try_build(
+          builder='linux-rel-orchestrator',
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.properties(
           **{
               '$build/chromium_orchestrator':
@@ -545,14 +531,10 @@ def GenTests(api):
       api.override_step_data(
           'git diff to analyze patch',
           api.raw_io.stream_output('testing/buildbot/chromium.linux.json')),
-      api.override_step_data(
-          'browser_tests (with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(False), failure=True)),
-      api.override_step_data(
-          'browser_tests (retry shards with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(False), failure=True)),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'browser_tests', 'with patch', failures=['Test.One']),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'browser_tests', 'retry shards with patch', failures=['Test.One']),
       api.post_process(post_process.DoesNotRun,
                        'trigger compilator (without patch)'),
       api.post_process(post_process.MustRun,
@@ -570,7 +552,9 @@ def GenTests(api):
 
   yield api.test(
       'retry_without_patch_passes_local_tests_failed',
-      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.chromium.try_build(
+          builder='linux-rel-orchestrator',
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.properties(
           **{
               '$build/chromium_orchestrator':
@@ -591,26 +575,12 @@ def GenTests(api):
           sub_build_status=common_pb.FAILURE,
       ),
       api.chromium_orchestrator.override_compilator_steps(with_patch=False),
-      api.override_step_data(
-          'browser_tests (with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(False), failure=True)),
-      api.override_step_data(
-          'content_unittests (with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(False), failure=True)),
-      api.override_step_data(
-          'browser_tests (retry shards with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(False), failure=True)),
-      api.override_step_data(
-          'content_unittests (retry shards with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(True), failure=False)),
-      api.override_step_data(
-          'browser_tests (without patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(True), failure=False)),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'browser_tests', 'with patch', failures=['Test.One']),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'content_unittests', 'with patch', failures=['Test.One']),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'browser_tests', 'retry shards with patch', failures=['Test.One']),
       api.post_process(post_process.MustRun, 'browser_tests (without patch)'),
       api.post_process(post_process.DoesNotRun,
                        'content_unittests (without patch)'),
@@ -624,7 +594,9 @@ def GenTests(api):
 
   yield api.test(
       'code_coverage_trybot_with_patch',
-      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.chromium.try_build(
+          builder='linux-rel-orchestrator',
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.properties(
           **{
               '$build/chromium_orchestrator':
@@ -653,7 +625,9 @@ def GenTests(api):
 
   yield api.test(
       'code_coverage_trybot_retry_shards_with_patch',
-      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.chromium.try_build(
+          builder='linux-rel-orchestrator',
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.properties(
           **{
               '$build/chromium_orchestrator':
@@ -690,7 +664,9 @@ def GenTests(api):
 
   yield api.test(
       'code_coverage_trybot_without_patch',
-      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.chromium.try_build(
+          builder='linux-rel-orchestrator',
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.properties(
           **{
               '$build/chromium_orchestrator':
@@ -706,14 +682,10 @@ def GenTests(api):
       api.chromium_orchestrator.override_compilator_steps(with_patch=False),
       api.chromium_orchestrator.override_compilator_steps(
           is_swarming_phase=False),
-      api.override_step_data(
-          'browser_tests (with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(False), failure=True)),
-      api.override_step_data(
-          'browser_tests (retry shards with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(False), failure=True)),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'browser_tests', 'with patch', failures=['Test.One']),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'browser_tests', 'retry shards with patch', failures=['Test.One']),
       api.post_process(post_process.MustRun,
                        'downloading cas digest all_test_binaries'),
       api.post_process(post_process.MustRun, 'browser_tests (without patch)'),
@@ -728,7 +700,9 @@ def GenTests(api):
   )
   yield api.test(
       'retry_without_patch_fails_tests_and_local_tests',
-      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.chromium.try_build(
+          builder='linux-rel-orchestrator',
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.properties(
           **{
               '$build/chromium_orchestrator':
@@ -749,26 +723,14 @@ def GenTests(api):
           sub_build_status=common_pb.FAILURE,
       ),
       api.chromium_orchestrator.override_compilator_steps(with_patch=False),
-      api.override_step_data(
-          'browser_tests (with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(False), failure=True)),
-      api.override_step_data(
-          'browser_tests (retry shards with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(False), failure=True)),
-      api.override_step_data(
-          'browser_tests (without patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(False), failure=True)),
-      api.override_step_data(
-          'content_unittests (with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(False), failure=True)),
-      api.override_step_data(
-          'content_unittests (retry shards with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(True), failure=False)),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'browser_tests', 'with patch', failures=['Test.One']),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'browser_tests', 'retry shards with patch', failures=['Test.One']),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'browser_tests', 'without patch', failures=['Test.One']),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'content_unittests', 'with patch', failures=['Test.One']),
       api.post_process(post_process.ResultReasonRE,
                        '.*headless_python_unittests.*'),
       api.post_process(post_process.MustRun,
@@ -782,7 +744,9 @@ def GenTests(api):
 
   yield api.test(
       'without_patch_compilator_missing_swarming_props',
-      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.chromium.try_build(
+          builder='linux-rel-orchestrator',
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.properties(
           **{
               '$build/chromium_orchestrator':
@@ -798,14 +762,10 @@ def GenTests(api):
           with_patch=True, is_swarming_phase=False),
       api.chromium_orchestrator.override_compilator_steps(
           with_patch=False, empty_props=True),
-      api.override_step_data(
-          'browser_tests (with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(False), failure=True)),
-      api.override_step_data(
-          'browser_tests (retry shards with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(False), failure=True)),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'browser_tests', 'with patch', failures=['Test.One']),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'browser_tests', 'retry shards with patch', failures=['Test.One']),
       api.post_process(post_process.MustRun,
                        'trigger compilator (without patch)'),
       api.post_process(post_process.DoesNotRun,
@@ -816,7 +776,9 @@ def GenTests(api):
 
   yield api.test(
       'failed_compilator_while_waiting_for_swarming_props',
-      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.chromium.try_build(
+          builder='linux-rel-orchestrator',
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.properties(
           **{
               '$build/chromium_orchestrator':
@@ -839,7 +801,9 @@ def GenTests(api):
 
   yield api.test(
       'failed_wo_patch_compilator',
-      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.chromium.try_build(
+          builder='linux-rel-orchestrator',
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.properties(
           **{
               '$build/chromium_orchestrator':
@@ -857,14 +821,10 @@ def GenTests(api):
           with_patch=False,
           empty_props=True,
           sub_build_status=common_pb.FAILURE),
-      api.override_step_data(
-          'browser_tests (with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(False), failure=True)),
-      api.override_step_data(
-          'browser_tests (retry shards with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(False), failure=True)),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'browser_tests', 'with patch', failures=['Test.One']),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'browser_tests', 'retry shards with patch', failures=['Test.One']),
       api.post_process(post_process.MustRun,
                        'trigger compilator (without patch)'),
       api.post_process(post_process.MustRun, 'Tests statistics'),
@@ -875,7 +835,9 @@ def GenTests(api):
 
   yield api.test(
       'infra_failed_compilator_while_waiting_for_swarming_props',
-      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.chromium.try_build(
+          builder='linux-rel-orchestrator',
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.properties(
           **{
               '$build/chromium_orchestrator':
@@ -898,7 +860,9 @@ def GenTests(api):
 
   yield api.test(
       'canceled_compilator_while_waiting_for_swarming_props',
-      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.chromium.try_build(
+          builder='linux-rel-orchestrator',
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.properties(
           **{
               '$build/chromium_orchestrator':
@@ -919,7 +883,9 @@ def GenTests(api):
 
   yield api.test(
       'failed_compilator_local_test',
-      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.chromium.try_build(
+          builder='linux-rel-orchestrator',
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.properties(
           **{
               '$build/chromium_orchestrator':
@@ -936,14 +902,8 @@ def GenTests(api):
           sub_build_status=common_pb.FAILURE,
           sub_build_summary=("1 Test Suite(s) failed.\n\n"
                              "**headless_python_unittests** failed.")),
-      api.override_step_data(
-          'browser_tests (with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(False), failure=True)),
-      api.override_step_data(
-          'browser_tests (retry shards with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(True), failure=False)),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'browser_tests', 'with patch', failures=['Test.One']),
       api.post_process(post_process.MustRun, 'Tests statistics'),
       api.post_process(post_process.MustRun, 'FindIt Flakiness'),
       api.post_process(post_process.StatusFailure),
@@ -952,7 +912,9 @@ def GenTests(api):
 
   yield api.test(
       'compilator_canceled_at_local_test_phase',
-      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.chromium.try_build(
+          builder='linux-rel-orchestrator',
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.properties(
           **{
               '$build/chromium_orchestrator':
@@ -975,7 +937,9 @@ def GenTests(api):
 
   yield api.test(
       'sub_build_infra_failed',
-      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.chromium.try_build(
+          builder='linux-rel-orchestrator',
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.properties(
           **{
               '$build/chromium_orchestrator':
@@ -1006,7 +970,9 @@ def GenTests(api):
 
   yield api.test(
       'without_patch_tests_contain_command_lines_from_without_patch_compilator',
-      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.chromium.try_build(
+          builder='linux-rel-orchestrator',
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.properties(
           **{
               '$build/chromium_orchestrator':
@@ -1025,26 +991,14 @@ def GenTests(api):
       api.chromium_orchestrator.override_compilator_steps(with_patch=False),
       api.step_data('read command lines (2)',
                     api.file.read_json(fake_command_lines)),
-      api.override_step_data(
-          'content_unittests (with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(False), failure=True)),
-      api.override_step_data(
-          'content_unittests (retry shards with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(True), failure=False)),
-      api.override_step_data(
-          'browser_tests (with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(False), failure=True)),
-      api.override_step_data(
-          'browser_tests (retry shards with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(False), failure=True)),
-      api.override_step_data(
-          'browser_tests (without patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(False), failure=True)),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'content_unittests', 'with patch', failures=['Test.One']),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'browser_tests', 'with patch', failures=['Test.One']),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'browser_tests', 'retry shards with patch', failures=['Test.One']),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'browser_tests', 'without patch', failures=['Test.One']),
       api.post_process(post_process.MustRun,
                        'trigger compilator (without patch)'),
       api.post_process(post_process.MustRun, 'browser_tests (without patch)'),

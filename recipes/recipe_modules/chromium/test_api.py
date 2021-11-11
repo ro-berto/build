@@ -43,20 +43,20 @@ class ChromiumTestApi(recipe_test_api.RecipeTestApi):
       test_data += self.m.properties(parent_buildername=parent_buildername)
     return test_data
 
-  def ci_build(
-      self,
-      project='chromium',
-      bucket='ci',
-      builder_group=None,
-      builder='Linux Builder',
-      parent_builder_group=None,
-      parent_buildername=None,
-      bot_id='test_bot',
-      git_repo='https://chromium.googlesource.com/chromium/src',
-      revision='2d72510e447ab60a9728aeea2362d8be2cbd7789',
-      build_number=571,
-      tags=None,
-      **kwargs):
+  def ci_build(self,
+               project='chromium',
+               bucket='ci',
+               builder_group=None,
+               builder='Linux Builder',
+               parent_builder_group=None,
+               parent_buildername=None,
+               bot_id='test_bot',
+               git_repo='https://chromium.googlesource.com/chromium/src',
+               revision='2d72510e447ab60a9728aeea2362d8be2cbd7789',
+               build_number=571,
+               tags=None,
+               experiments=None,
+               **kwargs):
     """Create test data for a chromium CI build.
 
     Adding this to a test will set properties and inputs in a manner
@@ -65,6 +65,9 @@ class ChromiumTestApi(recipe_test_api.RecipeTestApi):
     (or triggered by another builder that was triggered by a scheduler
     poller).
     """
+    experiments = experiments if experiments else {}
+    # TODO(crbug.com/1135718): Enable the experiment by default.
+    # experiments.setdefault('chromium.chromium_tests.use_rdb_results', True)
     test_data = self._common_test_data(
         bot_id=bot_id,
         default_builder_group='chromium.linux',
@@ -80,20 +83,21 @@ class ChromiumTestApi(recipe_test_api.RecipeTestApi):
         revision=revision,
         git_repo=git_repo,
         tags=tags,
+        experiments=experiments,
         **kwargs)
 
-  def generic_build(
-      self,
-      project='chromium',
-      bucket='ci',
-      builder_group=None,
-      builder='Linux Builder',
-      parent_builder_group=None,
-      parent_buildername=None,
-      bot_id='test_bot',
-      build_number=571,
-      tags=None,
-      **kwargs):
+  def generic_build(self,
+                    project='chromium',
+                    bucket='ci',
+                    builder_group=None,
+                    builder='Linux Builder',
+                    parent_builder_group=None,
+                    parent_buildername=None,
+                    bot_id='test_bot',
+                    build_number=571,
+                    tags=None,
+                    experiments=None,
+                    **kwargs):
     """Create test data for a generic chromium build.
 
     Adding this to a test will set properties and inputs in a manner
@@ -101,6 +105,9 @@ class ChromiumTestApi(recipe_test_api.RecipeTestApi):
     neither an associated gitiles commit or gerrit change (e.g. CI
     builder triggered via the scheduler UI or a cron-like schedule).
     """
+    experiments = experiments if experiments else {}
+    # TODO(crbug.com/1135718): Enable the experiment by default.
+    # experiments.setdefault('chromium.chromium_tests.use_rdb_results', True)
     test_data = self._common_test_data(
         bot_id=bot_id,
         default_builder_group='chromium.linux',
@@ -114,27 +121,31 @@ class ChromiumTestApi(recipe_test_api.RecipeTestApi):
         builder=builder,
         build_number=build_number,
         tags=tags,
+        experiments=experiments,
         **kwargs)
 
-  def try_build(
-      self,
-      project='chromium',
-      bucket='try',
-      builder_group=None,
-      builder='linux-rel',
-      bot_id='test_bot',
-      git_repo='https://chromium.googlesource.com/chromium/src',
-      build_number=571,
-      change_number=456789,
-      patch_set=12,
-      tags=None,
-      **kwargs):
+  def try_build(self,
+                project='chromium',
+                bucket='try',
+                builder_group=None,
+                builder='linux-rel',
+                bot_id='test_bot',
+                git_repo='https://chromium.googlesource.com/chromium/src',
+                build_number=571,
+                change_number=456789,
+                patch_set=12,
+                tags=None,
+                experiments=None,
+                **kwargs):
     """Create test data for a chromium try build.
 
     Adding this to a test will set properties and inputs in a manner
     that is compatible with the chromium module for try builds with an
     associated gerrit change.
     """
+    experiments = experiments if experiments else {}
+    # TODO(crbug.com/1135718): Enable the experiment by default.
+    # experiments.setdefault('chromium.chromium_tests.use_rdb_results', True)
     test_data = self._common_test_data(
         bot_id=bot_id,
         default_builder_group='tryserver.chromium.linux',
@@ -149,6 +160,7 @@ class ChromiumTestApi(recipe_test_api.RecipeTestApi):
         change_number=change_number,
         patch_set=patch_set,
         tags=tags,
+        experiments=experiments,
         **kwargs)
 
   def override_version(self,
