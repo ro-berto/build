@@ -20,7 +20,10 @@ SPEC = {
                 'download_vr_test_apks',
             ],
             gclient_config='chromium',
-            gclient_apply_config=['android'],
+            gclient_apply_config=[
+                'android',
+                'enable_reclient',
+            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 32,
@@ -36,7 +39,10 @@ SPEC = {
                 'download_vr_test_apks',
             ],
             gclient_config='chromium',
-            gclient_apply_config=['android'],
+            gclient_apply_config=[
+                'android',
+                'enable_reclient',
+            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
@@ -52,7 +58,10 @@ SPEC = {
                 'errorprone',
             ],
             gclient_config='chromium',
-            gclient_apply_config=['android'],
+            gclient_apply_config=[
+                'android',
+                'enable_reclient',
+            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 32,
@@ -65,7 +74,10 @@ SPEC = {
         _chromium_android_spec(
             chromium_config='android',
             gclient_config='chromium',
-            gclient_apply_config=['android'],
+            gclient_apply_config=[
+                'android',
+                'enable_reclient',
+            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
@@ -78,7 +90,10 @@ SPEC = {
         _chromium_android_spec(
             chromium_config='android',
             gclient_config='chromium',
-            gclient_apply_config=['android'],
+            gclient_apply_config=[
+                'android',
+                'enable_reclient',
+            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 32,
@@ -219,7 +234,6 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'android',
-                'enable_reclient',
             ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
@@ -241,7 +255,6 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'android',
-                'enable_reclient',
             ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
@@ -263,7 +276,6 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'android',
-                'enable_reclient',
             ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
@@ -285,7 +297,6 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'android',
-                'enable_reclient',
             ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
