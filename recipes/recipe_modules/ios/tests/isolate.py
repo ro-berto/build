@@ -2,15 +2,13 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from __future__ import absolute_import
-
 import itertools
 
 from recipe_engine import config
 from recipe_engine import post_process
 from recipe_engine import recipe_api
 
-PYTHON_VERSION_COMPATIBILITY = "PY2+3"
+PYTHON_VERSION_COMPATIBILITY = "PY2"
 
 DEPS = [
     'chromium',
@@ -33,8 +31,12 @@ PROPERTIES = {
 def RunSteps(api, expected_partial_tasks):
   api.ios.read_build_config()
   tasks = api.ios.isolate()
-  for task, expected_partial_task in zip(tasks, expected_partial_tasks):
-    partial_task = {k: task.get(k) for k in expected_partial_task}
+  for task, expected_partial_task in itertools.izip(
+      tasks, expected_partial_tasks):
+    partial_task = {
+        k: task.get(k)
+        for k in expected_partial_task.iterkeys()
+    }
     api.assertions.assertEqual(partial_task, expected_partial_task)
 
 
