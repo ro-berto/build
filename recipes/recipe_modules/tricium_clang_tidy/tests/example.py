@@ -7,7 +7,7 @@ import json
 from recipe_engine import post_process
 from RECIPE_MODULES.build.tricium_clang_tidy import _clang_tidy_path
 
-PYTHON_VERSION_COMPATIBILITY = "PY2+3"
+PYTHON_VERSION_COMPATIBILITY = "PY3"
 
 DEPS = [
     'recipe_engine/context',
