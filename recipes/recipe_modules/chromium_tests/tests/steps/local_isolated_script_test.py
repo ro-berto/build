@@ -5,6 +5,7 @@
 import six
 
 from recipe_engine import post_process
+from recipe_engine.recipe_api import StepFailure
 
 from RECIPE_MODULES.build.chromium_tests import steps
 
@@ -12,6 +13,7 @@ PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'chromium',
+    'chromium_tests',
     'isolate',
     'recipe_engine/assertions',
     'recipe_engine/buildbucket',
@@ -32,9 +34,8 @@ def RunSteps(api):
 
   isolate_coverage_data = api.properties.get('isolate_coverage_data', False)
 
-  enable_resultdb = api.resultdb.enabled
   resultdb = steps.ResultDB(
-      enable=True, result_format='json') if enable_resultdb else None
+      enable=True, result_format='json', use_rdb_results_for_all_decisions=True)
   test_spec = steps.LocalIsolatedScriptTestSpec.create(
       test_name,
       override_compile_targets=api.properties.get('override_compile_targets'),
@@ -62,8 +63,8 @@ def RunSteps(api):
     test.relative_cwd = relative_cwd
 
   try:
-    test.pre_run(api, '')
-    test.run(api, '')
+    _, invalid_suites, failed_suites = api.test_utils.run_tests_once(
+        api.chromium_tests.m, [test], '')
   finally:
     api.step('details', [])
     api.step.active_result.presentation.logs['details'] = [
@@ -77,6 +78,9 @@ def RunSteps(api):
       api.assertions.assertEqual(
           test.pass_fail_counts(''),
           api.properties['expected_pass_fail_counts'])
+
+  if invalid_suites or failed_suites:
+    raise StepFailure('failure in ' + test.name)
 
 
 def GenTests(api):
@@ -96,6 +100,28 @@ def GenTests(api):
       api.properties(swarm_hashes={
           'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
       }),
+      api.post_process(post_process.StepCommandContains, 'base_unittests',
+                       ['rdb']),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'failure',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+      ),
+      api.properties(swarm_hashes={
+          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+      }),
+      api.override_step_data(
+          'base_unittests results',
+          stdout=api.raw_io.output_text(
+              api.test_utils.rdb_results(
+                  'base_unittests', failing_tests=['Test.One']))),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
@@ -114,6 +140,7 @@ def GenTests(api):
           '--relative-cwd', 'out/Release', '--', './base_unittests', '--bar',
           '--isolated-script-test-output'
       ]),
+      api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -128,6 +155,8 @@ def GenTests(api):
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           override_compile_targets=['base_unittests_run']),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
@@ -142,24 +171,7 @@ def GenTests(api):
           },
           expected_pass_fail_counts={},
       ),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'pass_fail_counts_invalid_results',
-      api.chromium.ci_build(
-          builder_group='test_group',
-          builder='test_buildername',
-      ),
-      api.properties(
-          swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
-          },
-          expected_pass_fail_counts={},
-      ),
-      api.override_step_data(
-          'base_unittests',
-          api.test_utils.m.json.output({'interrupted': True}, 255)),
+      api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -176,6 +188,8 @@ def GenTests(api):
           test_filter=['test1', 'test2'],
           repeat_count=20,
           test_name='blink_web_tests'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
   )
   yield api.test(
       'isolate_coverage_data',
@@ -189,19 +203,6 @@ def GenTests(api):
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           }),
       api.post_process(verify_isolate_flag),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'with_resultdb_enabled',
-      api.chromium.ci_build(
-          builder_group='test_group',
-          builder='test_buildername',
-      ),
-      api.properties(swarm_hashes={
-          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
-      }),
-      api.post_process(post_process.StepCommandContains, 'base_unittests',
-                       ['rdb']),
+      api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
