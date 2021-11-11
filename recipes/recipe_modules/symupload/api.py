@@ -205,7 +205,7 @@ class SymuploadApi(recipe_api.RecipeApi):
           if experimental:
             presentation.step_text = 'Experimental mode. Skipping symupload.'
             presentation.status = self.m.step.SUCCESS
-            return
+            return uploads
 
           # Use the symupload resource to mask the API key for v2 protocol.
           # Because the symupload script accepts all urls to upload for a set of
@@ -239,3 +239,4 @@ class SymuploadApi(recipe_api.RecipeApi):
                   artifact,  # artifact
                   symupload_data.url,
               )
+      return uploads
