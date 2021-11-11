@@ -8,6 +8,7 @@ DEPS = [
     'build',
     'chromium',
     'chromium_android',
+    'chromium_tests',
     'depot_tools/bot_update',
     'depot_tools/gclient',
     'recipe_engine/buildbucket',
@@ -23,6 +24,8 @@ DEPS = [
     'test_utils',
 ]
 
+from recipe_engine import post_process
+
 from RECIPE_MODULES.build.chromium_tests import steps
 
 
@@ -37,7 +40,10 @@ def RunSteps(api):
 
   test = steps.LocalGTestTestSpec.create(
       'base_unittests',
-      resultdb=steps.ResultDB(enable=True, result_format='gtest'),
+      resultdb=steps.ResultDB(
+          enable=True,
+          result_format='gtest',
+          use_rdb_results_for_all_decisions=True),
   ).get_test()
   assert not test.runs_on_swarming
 
@@ -46,7 +52,7 @@ def RunSteps(api):
   test.test_options = test_options
 
   try:
-    test.run(api, 'with patch')
+    api.test_utils.run_tests_once(api.chromium_tests.m, [test], 'with patch')
   finally:
     api.step('details', [])
     api.step.active_result.presentation.logs['details'] = [
@@ -57,11 +63,7 @@ def RunSteps(api):
         'uses_local_devices: %r' % test.uses_local_devices,
     ]
 
-    # Check the pass_fail_counts for a suffix that was not run for
-    # coverage
-    test.pass_fail_counts('')
-
-    test.run(api, 'without patch')
+    api.test_utils.run_tests_once(api.chromium_tests.m, [test], 'without patch')
 
 
 def GenTests(api):
@@ -74,6 +76,8 @@ def GenTests(api):
       api.properties(single_spec={
           'test': 'gtest_test',
       },),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
@@ -86,13 +90,12 @@ def GenTests(api):
           'test': 'gtest_test',
       },),
       api.override_step_data(
-          'base_unittests (with patch)',
-          api.test_utils.canned_gtest_output(
-              passing=False, legacy_annotation=True)),
-      api.override_step_data(
-          'base_unittests (without patch)',
-          api.test_utils.canned_gtest_output(
-              passing=True, legacy_annotation=True)),
+          'base_unittests results',
+          stdout=api.raw_io.output_text(
+              api.test_utils.rdb_results(
+                  'base_unittests', failing_tests=['Test.One']))),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
@@ -106,4 +109,6 @@ def GenTests(api):
           single_spec={'test': 'gtest_test'},
           target_platform='win',
       ),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
   )

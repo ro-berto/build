@@ -1760,14 +1760,6 @@ class LocalGTestTest(LocalTest):
 
     return api.step.raise_on_failure(step_result, status)
 
-  def pass_fail_counts(self, suffix):
-    if self.spec.resultdb.use_rdb_results_for_all_decisions:
-      return super(LocalGTestTest, self).pass_fail_counts(suffix)
-    elif self._gtest_results.get(suffix):
-      # test_result exists and is not None.
-      return self._gtest_results[suffix].pass_fail_counts
-    return {}
-
 
 class ResultsHandler(object):
 
