@@ -40,6 +40,7 @@ def GenTests(api):
             builder_group=builder_group,
             builder=builder,
             git_repo='https://chromium.googlesource.com/v8/v8.git',
+            experiments={'chromium.chromium_tests.use_rdb_results': True},
         ),
     ], api.empty_test_data())
 
@@ -69,29 +70,22 @@ def GenTests(api):
     if succeeds_without_patch is not None:
       assert succeeds_retry_with_patch is not None
 
-    def test_result(is_successful):
-      return api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_isolated_script_output(
-                  passing=is_successful, swarming=True,
-                  isolated_script_passing=is_successful,
-                  isolated_script_retcode=0 if is_successful else 125),
-              failure=not is_successful)
+    def test_result(suffix, is_successful):
+      return api.chromium_tests.gen_swarming_and_rdb_results(
+          'blink_web_tests',
+          suffix,
+          failures=[] if is_successful else ['Test.One'])
 
     result = blink_test_setup()
 
-    result += api.override_step_data(
-        'blink_web_tests (with patch)',
-        test_result(succeeds_with_patch))
+    result += test_result('with patch', succeeds_with_patch)
 
     if succeeds_retry_with_patch is not None:
-      result += api.override_step_data(
-          'blink_web_tests (retry shards with patch)',
-          test_result(succeeds_retry_with_patch))
+      result += test_result('retry shards with patch',
+                            succeeds_retry_with_patch)
 
       if succeeds_without_patch is not None:
-        result += api.override_step_data(
-            'blink_web_tests (without patch)',
-            test_result(succeeds_without_patch))
+        result += test_result('without patch', succeeds_without_patch)
 
     return result
 

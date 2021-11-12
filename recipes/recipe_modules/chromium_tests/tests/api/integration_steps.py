@@ -42,6 +42,7 @@ def GenTests(api):
             builder_group=builder_group,
             builder=builder,
             git_repo='https://chromium.googlesource.com/v8/v8.git',
+            experiments={'chromium.chromium_tests.use_rdb_results': True},
         ),
         api.properties(
             build_config=config, swarm_hashes=swarm_hashes, **kwargs),
@@ -63,29 +64,10 @@ def GenTests(api):
                   },],
               },
           }),
-      api.override_step_data(
-          'blink_web_tests (with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_isolated_script_output(
-                  passing=False,
-                  swarming=True,
-                  isolated_script_passing=False,
-                  isolated_script_retcode=125),
-              failure=True)),
-      api.override_step_data(
-          'blink_web_tests (retry shards with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_isolated_script_output(
-                  passing=False,
-                  swarming=True,
-                  isolated_script_passing=False,
-                  isolated_script_retcode=125),
-              failure=True)),
-      api.override_step_data(
-          'blink_web_tests (without patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_isolated_script_output(
-                  passing=True, swarming=True, isolated_script_passing=True))),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'blink_web_tests', 'with patch', failures=['Test.One']),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'blink_web_tests', 'retry shards with patch', failures=['Test.One']),
       api.post_process(post_process.MustRun, 'blink_web_tests (with patch)'),
       api.post_process(post_process.MustRun,
                        'blink_web_tests (retry shards with patch)'),
