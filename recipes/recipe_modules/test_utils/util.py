@@ -507,9 +507,9 @@ class RDBPerSuiteResults(object):
         'variant_hash': self.variant_hash,
         'invalid': str(self.invalid),
         'total_tests_ran': self.total_tests_ran,
-        'unexpected_passing_tests': list(self.unexpected_passing_tests),
-        'unexpected_failing_tests': list(self.unexpected_failing_tests),
-        'unexpected_skipped_tests': list(self.unexpected_skipped_tests),
+        'unexpected_passing_tests': sorted(self.unexpected_passing_tests),
+        'unexpected_failing_tests': sorted(self.unexpected_failing_tests),
+        'unexpected_skipped_tests': sorted(self.unexpected_skipped_tests),
         'test_name_to_test_id_mapping': self.test_name_to_test_id_mapping,
     }
     return jsonish_repr
