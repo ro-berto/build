@@ -109,9 +109,9 @@ _SPEC = {
     'linux-swiftshader-asan':
         _create_tester_config('linux', 64, 'linux-asan-test'),
     'linux-swiftshader-tsan':
-        _create_tester_config('linux', 64, 'linux-asan-test'),
+        _create_tester_config('linux', 64, 'linux-tsan-test'),
     'linux-swiftshader-ubsan':
-        _create_tester_config('linux', 64, 'linux-asan-test'),
+        _create_tester_config('linux', 64, 'linux-ubsan-test'),
     'linux-test':
         _create_builder_config('linux', 'Release', 64),
     'linux-trace':
