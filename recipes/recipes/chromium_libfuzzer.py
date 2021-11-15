@@ -21,6 +21,7 @@ DEPS = [
     'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/platform',
+    'recipe_engine/properties',
     'recipe_engine/raw_io',
     'recipe_engine/step',
 ]
@@ -31,6 +32,7 @@ class LibfuzzerSpec(chromium.BuilderSpec):
 
   archive_prefix = attrib(str, default='libfuzzer')
   v8_targets_only = attrib(bool, default=False)
+  ios_targets_only = attrib(bool, default=False)
   upload_bucket = attrib(str)
   upload_directory = attrib(str)
 
@@ -51,6 +53,24 @@ BUILDERS = freeze({
                     archive_prefix='libfuzzer-chromeos',
                     upload_bucket='chromium-browser-libfuzzer',
                     upload_directory='chromeos-asan',
+                ),
+            'Libfuzzer Upload iOS Catalyst Debug':
+                LibfuzzerSpec.create(
+                    chromium_config='chromium_clang',
+                    chromium_apply_config=[
+                        'mac_toolchain',
+                    ],
+                    gclient_apply_config=['ios'],
+                    chromium_config_kwargs={
+                        'BUILD_CONFIG': 'Debug',
+                        'TARGET_BITS': 64,
+                        'TARGET_PLATFORM': 'ios',
+                        'HOST_PLATFORM': 'mac',
+                    },
+                    archive_prefix='libfuzzer-ios',
+                    upload_bucket='chromium-browser-libfuzzer',
+                    upload_directory='ios-catalyst-debug',
+                    ios_targets_only=True,
                 ),
             'Libfuzzer Upload Linux32 ASan':
                 LibfuzzerSpec.create(
@@ -215,6 +235,7 @@ def RunSteps(api):
   checkout_results = api.chromium_checkout.ensure_checkout(bot_config)
 
   api.chromium.ensure_goma()
+  api.chromium.ensure_toolchains()
   api.chromium.runhooks()
   api.chromium.mb_gen(builder_id, use_goma=True)
 
@@ -237,6 +258,16 @@ def RunSteps(api):
           step_test_data=lambda: api.raw_io.test_api.stream_output_text(
               'v8_target3', stream='stdout'))
       all_fuzzers = all_fuzzers & v8_fuzzers
+    elif bot_config.ios_targets_only:
+      ios_fuzzers = api.gn.refs(
+          api.chromium.output_dir,
+          ['//testing/libfuzzer:build_for_ios_clusterfuzz_job'],
+          output_type='executable',
+          output_format='output',
+          step_name='calculate ios_fuzzers',
+          step_test_data=lambda: api.raw_io.test_api.stream_output_text(
+              'ios_target', stream='stdout'))
+      all_fuzzers = all_fuzzers & ios_fuzzers
     no_clusterfuzz = api.gn.refs(
         api.chromium.output_dir, ['//testing/libfuzzer:no_clusterfuzz'],
         output_type='executable',
@@ -244,8 +275,16 @@ def RunSteps(api):
         step_name='calculate no_clusterfuzz',
         step_test_data=lambda: api.raw_io.test_api.stream_output_text(
             'target1', stream='stdout'))
-  targets = api.py3_migration.consistent_ordering(
-      list(all_fuzzers - no_clusterfuzz))
+  targets = list(all_fuzzers - no_clusterfuzz)
+
+  # For iOS, the target list from |api.gn.refs| is a list of paths like
+  # obj/.../XXX_fuzzer. The last part of the path is the target name to be
+  # compiled.
+  if api.chromium.c.TARGET_PLATFORM == 'ios':
+    targets = [target.split('/')[-1] for target in targets]
+
+  targets = api.py3_migration.consistent_ordering(targets)
+
   api.step.active_result.presentation.logs['all_fuzzers'] = (
       api.py3_migration.consistent_ordering(all_fuzzers))
   api.step.active_result.presentation.logs['no_clusterfuzz'] = no_clusterfuzz
@@ -271,7 +310,10 @@ def RunSteps(api):
 
 def GenTests(api):
   for test in api.chromium.gen_tests_for_builders(BUILDERS):
-    yield test
+    if 'Upload_iOS' in test.name:
+      yield (test + api.properties(xcode_build_version='12345'))
+    else:
+      yield test
 
   yield api.test(
       'compile_failure',
