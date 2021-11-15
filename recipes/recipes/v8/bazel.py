@@ -33,8 +33,7 @@ def RunSteps(api):
       cwd=api.path['checkout'],
       env_prefixes={'PATH': [clang, api.v8.depot_tools_path]}):
     try:
-      api.step('Bazel build',
-               [bazel, 'build', '--verbose_failures', ':noicu/d8'])
+      api.step('Bazel build', [bazel, 'build', '--verbose_failures', ':v8ci'])
     finally:
       api.step('Bazel shutdown', [bazel, 'shutdown'])
 

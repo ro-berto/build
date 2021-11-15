@@ -4,7 +4,7 @@
       "[CACHE]/builder/v8/tools/bazel/bazel",
       "build",
       "--verbose_failures",
-      ":noicu/d8"
+      ":v8ci"
     ],
     "cwd": "[CACHE]/builder/v8",
     "env_prefixes": {
