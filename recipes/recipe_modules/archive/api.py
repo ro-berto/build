@@ -688,6 +688,8 @@ class ArchiveApi(recipe_api.RecipeApi):
   def generic_archive(self,
                       build_dir,
                       update_properties,
+                      top_level_source=None,
+                      provenance_sources=None,
                       custom_vars=None,
                       config=None):
     """Archives one or multiple packages to either google cloud storage or CIPD.
@@ -734,6 +736,7 @@ class ArchiveApi(recipe_api.RecipeApi):
         if not archive_data.only_upload_on_tests_success:
           upload_results['gcs'].extend(
               self.gcs_archive(build_dir, update_properties, archive_data,
+                               top_level_source, provenance_sources,
                                custom_vars))
       for cipd_archive_data in archive_config.cipd_archive_datas:
         upload_results['cipd'].update(
@@ -784,6 +787,8 @@ class ArchiveApi(recipe_api.RecipeApi):
                   build_dir,
                   update_properties,
                   archive_data,
+                  top_level_source=None,
+                  provenance_sources=None,
                   custom_vars=None):
     """Archives a single package to google cloud storage.
 
@@ -855,13 +860,26 @@ class ArchiveApi(recipe_api.RecipeApi):
         sig_paths.add(f + '.sig')
       expanded_files = expanded_files.union(sig_paths)
 
-      # Generates provenance to built artifacts at BCID L1. Note that this
-      # does not record the top level source for the build.
+      # Generates provenance to built artifacts.
       attestation_paths = set()
       provenance_manifest = {
           'recipe': self.m.properties.get('recipe'),
           'exp': 0,
       }
+
+      # Include more source info for artifacts chain of custody.
+      if top_level_source:
+        git_repo = {
+            'git_repo': {
+                'uri': top_level_source[0],
+                'branch': top_level_source[1],
+                'commit': top_level_source[2]
+            }
+        }
+        provenance_manifest['topLevelSource'] = git_repo
+        if provenance_sources:
+          provenance_manifest['sources'] = provenance_sources
+
       for f in files_to_verify:
         # Files are relative to the base_path, so this generates the
         # .attestation file next to the original.
