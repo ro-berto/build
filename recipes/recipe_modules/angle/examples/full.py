@@ -121,6 +121,7 @@ def GenTests(api):
         toolchain=toolchain,
         platform=platform,
         test_mode=test_mode,
+        experiments={'chromium.chromium_tests.use_rdb_results': True},
     ) + api.angle.builders(_TEST_BUILDERS) + api.angle.trybots(
         _TEST_TRYBOTS) + api.angle.override_commit_pos_data()
 
@@ -195,12 +196,7 @@ def GenTests(api):
                   },],
               },
           }),
-      api.override_step_data(
-          'basic_isolate_tests',
-          api.chromium_swarming.canned_summary_output(
-              api.json.output({'version': 2})),
-          stderr=api.raw_io.output_text(
-              'rdb-stream: included "invocations/test-inv" in "build-inv"')),
+      api.override_step_data('basic_isolate_tests', retcode=1),
   )
   yield api.test(
       'failed_json_test',
@@ -215,14 +211,8 @@ def GenTests(api):
               },
           }),
       api.override_step_data(
-          'basic_isolate_tests',
-          api.test_utils.canned_isolated_script_output(
-              passing=False,
-              is_win=False,
-              swarming=False,
-              isolated_script_passing=False,
-              use_json_test_format=True),
-          stderr=api.raw_io.output_text(
-              'rdb-stream: included "invocations/test-inv" in "build-inv"'),
-          retcode=0),
+          'basic_isolate_tests results',
+          stdout=api.raw_io.output_text(
+              api.test_utils.rdb_results(
+                  'basic_isolate_tests', failing_tests=['Test.One']))),
   )

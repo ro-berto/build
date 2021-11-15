@@ -633,7 +633,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     if retry_invalid_shards:
       for suite in test_suites:
         results = suite.get_rdb_results(suffix)
-        if results and results.invalid:
+        if results and results.invalid and suite.runs_on_swarming:
           retriable_suites.add(suite.name)
     if not retry_failed_shards:
       return retriable_suites
