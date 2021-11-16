@@ -14,7 +14,7 @@ https://luci-milo-dev.appspot.com/p/chromium/g/chromium.dev/console
 from recipe_engine import post_process
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'builder_group',
