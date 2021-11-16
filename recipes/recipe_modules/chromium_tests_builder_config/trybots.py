@@ -136,12 +136,74 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.android',
                 buildername='android-cronet-arm-dbg',
             ),
+        'android-cronet-arm64-dbg':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.android',
+                buildername='android-cronet-arm64-dbg',
+            ),
+        'android-cronet-arm64-rel':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.android',
+                buildername='android-cronet-arm64-rel',
+            ),
+        'android-cronet-asan-arm-rel':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.android',
+                buildername='android-cronet-asan-arm-rel',
+            ),
+        'android-cronet-kitkat-arm-rel':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.android',
+                buildername='android-cronet-arm-rel',
+                tester='android-cronet-arm-rel-kitkat-tests',
+            ),
+        'android-cronet-lollipop-arm-rel':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.android',
+                buildername='android-cronet-arm-rel',
+                tester='android-cronet-arm-rel-lollipop-tests',
+            ),
         'android-cronet-marshmallow-arm64-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android',
                 buildername='android-cronet-arm64-rel',
                 tester='android-cronet-arm64-rel-marshmallow-tests',
             ),
+        'android-cronet-x86-dbg':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.android',
+                buildername='android-cronet-x86-dbg',
+            ),
+        'android-cronet-x86-rel':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.android',
+                buildername='android-cronet-x86-rel',
+            ),
+        'android-cronet-x86-dbg-10-tests':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.android',
+                buildername='android-cronet-x86-dbg',
+                tester='android-cronet-x86-dbg-10-tests',
+            ),
+        'android-cronet-x86-dbg-11-tests':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.android',
+                buildername='android-cronet-x86-dbg',
+                tester='android-cronet-x86-dbg-11-tests',
+            ),
+        'android-cronet-x86-dbg-oreo-tests':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.android',
+                buildername='android-cronet-x86-dbg',
+                tester='android-cronet-x86-dbg-oreo-tests',
+            ),
+        'android-cronet-x86-dbg-pie-tests':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.android',
+                buildername='android-cronet-x86-dbg',
+                tester='android-cronet-x86-dbg-pie-tests',
+            ),
+
         # This trybot mirrors the trybot android-pie-x86-rel
         'android-inverse-fieldtrials-pie-x86-fyi-rel':
             try_spec.TrySpec.create_for_single_mirror(
@@ -320,7 +382,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.android',
                 buildername='android-cronet-arm-rel',
                 is_compile_only=True,
-                include_all_triggered_testers=True,
             ),
         'android_mojo':
             try_spec.TrySpec.create_for_single_mirror(
