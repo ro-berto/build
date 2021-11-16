@@ -58,6 +58,7 @@ BUILDERS = freeze({
                 LibfuzzerSpec.create(
                     chromium_config='chromium_clang',
                     chromium_apply_config=[
+                        'clobber',
                         'mac_toolchain',
                     ],
                     gclient_apply_config=['ios'],
