@@ -5,6 +5,8 @@
 
 import os
 import re
+import six
+
 from recipe_engine import recipe_api
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
@@ -314,8 +316,8 @@ class BinarySizeApi(recipe_api.RecipeApi):
         'gs://{bucket}/{source}'.format(
             bucket=self.results_bucket, source=gs_directory + 'LATEST'),
         stdout=self.m.raw_io.output(),
-        step_test_data=lambda: self.m.raw_io.test_api.stream_output('\n'.join(
-            generate_test_data())),
+        step_test_data=lambda: self.m.raw_io.test_api.stream_output_text(
+            '\n'.join(generate_test_data())),
         name='cat LATEST').stdout.splitlines()
 
     # If the LATEST file has blank data, it's likely to have been manually
@@ -450,7 +452,7 @@ class BinarySizeApi(recipe_api.RecipeApi):
     return True
 
   def _linkify_filenames(self, url, filename_map):
-    for filename, archived_url in filename_map.iteritems():
+    for filename, archived_url in six.iteritems(filename_map):
       url = url.replace('{{' + filename + '}}', archived_url)
     return url
 

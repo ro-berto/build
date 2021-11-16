@@ -8,7 +8,7 @@ from recipe_engine import recipe_api
 from PB.recipe_modules.build.binary_size import properties as properties_pb
 from RECIPE_MODULES.build.binary_size import constants
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'binary_size',
@@ -111,12 +111,12 @@ def GenTests(api):
     # checks that step name constant is not already nested
     check('.' not in constants.RESULTS_STEP_NAME)
     # checks that step name actually exists (i.e. not nested in another step).
-    check(steps.has_key(constants.RESULTS_STEP_NAME))
+    check(constants.RESULTS_STEP_NAME in steps)
     # checks that first character of step name is not illegal.
     check(constants.RESULTS_STEP_NAME[0].isalnum())
     # checks that this is actually the final/relevant step.
-    check(steps[constants.RESULTS_STEP_NAME].output_properties.has_key(
-        'binary_size_plugin'))
+    check('binary_size_plugin' in (
+        steps[constants.RESULTS_STEP_NAME].output_properties))
 
   yield api.test(
       'normal_build',
