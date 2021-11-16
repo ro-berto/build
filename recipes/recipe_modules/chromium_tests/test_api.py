@@ -82,9 +82,9 @@ class ChromiumTestsApi(recipe_test_api.RecipeTestApi):
     return self.override_step_data(
         swarming_step_name,
         self.m.chromium_swarming.canned_summary_output(
-            self.m.json.output({}), failure=invalid or
-            failures)) + self.override_step_data(
-                rdb_step_name,
-                stdout=self.m.raw_io.output_text(
-                    self.m.test_utils.rdb_results(
-                        suite_name, failing_tests=failures)))
+            self.m.json.output({}), failure=bool(
+                invalid or failures))) + self.override_step_data(
+                    rdb_step_name,
+                    stdout=self.m.raw_io.output_text(
+                        self.m.test_utils.rdb_results(
+                            suite_name, failing_tests=failures)))
