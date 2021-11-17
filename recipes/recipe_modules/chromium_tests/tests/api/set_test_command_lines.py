@@ -98,7 +98,8 @@ def GenTests(api):
                           gclient_config='chromium',
                       ),
               },
-          })),
+          }),
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.properties(swarm_hashes=fake_swarm_hashes),
       api.chromium_tests.read_source_side_spec(*fake_source_side_spec),
       api.step_data('find command lines', api.json.output(fake_command_lines)),
@@ -124,7 +125,8 @@ def GenTests(api):
                           gclient_config='chromium',
                       ),
               },
-          })),
+          }),
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.properties(swarm_hashes=fake_swarm_hashes),
       api.chromium_tests.read_source_side_spec(*fake_source_side_spec),
       api.step_data('find command lines', api.json.output(fake_command_lines)),
@@ -151,7 +153,8 @@ def GenTests(api):
                           gclient_config='chromium',
                       ),
               },
-          })),
+          }),
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.properties(swarm_hashes=fake_swarm_hashes),
       api.chromium_tests.read_source_side_spec(*fake_source_side_spec),
       api.step_data('find command lines', api.json.output(fake_command_lines)),
@@ -178,7 +181,8 @@ def GenTests(api):
       api.chromium_tests_builder_config.ci_build(
           builder_group=fake_group,
           builder=fake_builder,
-          builder_db=fake_builder_db),
+          builder_db=fake_builder_db,
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.properties(swarm_hashes=fake_swarm_hashes),
       api.chromium_tests.read_source_side_spec(*fake_source_side_spec),
       api.step_data('find command lines', api.json.output(fake_command_lines)),
@@ -196,7 +200,8 @@ def GenTests(api):
       api.chromium_tests_builder_config.ci_build(
           builder_group=fake_group,
           builder=fake_tester,
-          builder_db=fake_builder_db),
+          builder_db=fake_builder_db,
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.properties(
           swarm_hashes=fake_swarm_hashes,
           swarming_command_lines_digest=fake_command_lines_digest,
@@ -218,7 +223,8 @@ def GenTests(api):
           builder_group=fake_group,
           builder=fake_tester,
           parent_buildername=fake_builder,
-          builder_db=fake_builder_db),
+          builder_db=fake_builder_db,
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.chromium_tests.read_source_side_spec(
           fake_group, {
               fake_tester: {
@@ -252,7 +258,8 @@ def GenTests(api):
                           )
                       ])
               }
-          })),
+          }),
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.properties(
           config='Release',
           swarm_hashes=fake_swarm_hashes,
@@ -268,33 +275,12 @@ def GenTests(api):
                   'exclusions': [],
               }
           })),
-      api.override_step_data(
-          '%s (with patch)' % fake_test,
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_isolated_script_output(
-                  passing=False,
-                  is_win=False,
-                  swarming=True,
-                  isolated_script_passing=False,
-              ))),
-      api.override_step_data(
-          '%s (retry shards with patch)' % fake_test,
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_isolated_script_output(
-                  passing=False,
-                  is_win=False,
-                  swarming=True,
-                  isolated_script_passing=False,
-              ))),
-      api.override_step_data(
-          '%s (without patch)' % fake_test,
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_isolated_script_output(
-                  passing=True,
-                  is_win=False,
-                  swarming=True,
-                  isolated_script_passing=True,
-              ))),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          fake_test, 'with patch', failures=['Test.One']),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          fake_test, 'retry shards with patch', failures=['Test.One']),
+      api.chromium_tests.gen_swarming_and_rdb_results(fake_test,
+                                                      'without patch'),
       api.post_process(post_process.MustRun, 'find command lines (with patch)'),
       api.post_process(post_process.MustRun,
                        'find command lines (without patch)'),
@@ -314,7 +300,8 @@ def GenTests(api):
                           gclient_config='chromium',
                       ),
               },
-          })),
+          }),
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.properties(swarm_hashes=fake_swarm_hashes),
       api.chromium_tests.read_source_side_spec(
           fake_group, {
@@ -350,7 +337,8 @@ def GenTests(api):
                           gclient_config='chromium',
                       ),
               },
-          })),
+          }),
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.properties(swarm_hashes=fake_swarm_hashes),
       api.chromium_tests.read_source_side_spec(
           fake_group, {
@@ -425,7 +413,8 @@ def GenTests(api):
                           gclient_config='chromium',
                       ),
               },
-          })),
+          }),
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.properties(swarm_hashes=fake_swarm_hashes),
       api.chromium_tests.read_source_side_spec(
           fake_group, {
