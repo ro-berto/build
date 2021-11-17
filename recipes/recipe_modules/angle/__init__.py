@@ -4,7 +4,7 @@
 
 from PB.recipe_modules.build.angle import properties
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'build',
