@@ -153,10 +153,12 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CACHE]/windows_sdk/win_sdk/bin/SetEnv.x86.json",
+      "python3",
+      "RECIPE_MODULE[depot_tools::windows_sdk]/resources/find_env_json.py",
+      "--sdk_root",
+      "[CACHE]/windows_sdk",
+      "--target_arch",
+      "x86",
       "/path/to/tmp/json"
     ],
     "cwd": "[START_DIR]/crashpad",
@@ -172,7 +174,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "read SetEnv.x86.json",
+    "name": "read SetEnv json",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
@@ -294,10 +296,12 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CACHE]/windows_sdk/win_sdk/bin/SetEnv.x64.json",
+      "python3",
+      "RECIPE_MODULE[depot_tools::windows_sdk]/resources/find_env_json.py",
+      "--sdk_root",
+      "[CACHE]/windows_sdk",
+      "--target_arch",
+      "x64",
       "/path/to/tmp/json"
     ],
     "cwd": "[START_DIR]/crashpad",
@@ -313,7 +317,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "read SetEnv.x64.json",
+    "name": "read SetEnv json (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
@@ -434,10 +438,12 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CACHE]/windows_sdk/win_sdk/bin/SetEnv.x86.json",
+      "python3",
+      "RECIPE_MODULE[depot_tools::windows_sdk]/resources/find_env_json.py",
+      "--sdk_root",
+      "[CACHE]/windows_sdk",
+      "--target_arch",
+      "x86",
       "/path/to/tmp/json"
     ],
     "luci_context": {
@@ -452,7 +458,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "read SetEnv.x86.json (2)",
+    "name": "read SetEnv json (3)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
@@ -569,10 +575,12 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CACHE]/windows_sdk/win_sdk/bin/SetEnv.x64.json",
+      "python3",
+      "RECIPE_MODULE[depot_tools::windows_sdk]/resources/find_env_json.py",
+      "--sdk_root",
+      "[CACHE]/windows_sdk",
+      "--target_arch",
+      "x64",
       "/path/to/tmp/json"
     ],
     "luci_context": {
@@ -587,7 +595,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "read SetEnv.x64.json (2)",
+    "name": "read SetEnv json (4)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
