@@ -230,8 +230,8 @@ TRYBOTS = try_spec.TryDatabase.create({
         'android-marshmallow-arm64-rel-rts':
             try_spec.TrySpec.create([
                 try_spec.TryMirror.create(
-                    builder_group='chromium.android',
-                    buildername='android-marshmallow-arm64-rel',
+                    builder_group='tryserver.chromium.android',
+                    buildername='android-marshmallow-arm64-rel-rts',
                 ),
                 try_spec.TryMirror.create(
                     builder_group='chromium.gpu',
@@ -285,8 +285,8 @@ TRYBOTS = try_spec.TryDatabase.create({
             ),
         'android-pie-arm64-rel-rts':
             try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android',
-                buildername='android-pie-arm64-rel',
+                builder_group='tryserver.chromium.android',
+                buildername='android-pie-arm64-rel-rts',
                 regression_test_selection=try_spec.ALWAYS,
             ),
         'android-pie-arm64-wpt-rel-non-cq':

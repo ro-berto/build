@@ -24,7 +24,7 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>running builder 'android-marshmallow-arm64-rel' on group 'chromium.android'@@@",
       "@@@STEP_LINK@android-marshmallow-arm64-rel@https://ci.chromium.org/p/chromium/builders/ci/android-marshmallow-arm64-rel@@@",
-      "@@@SET_BUILD_PROPERTY@mirrored_builders@[\"tryserver.chromium.android:android-marshmallow-arm64-rel\", \"tryserver.chromium.android:android-marshmallow-arm64-rel-rts\"]@@@"
+      "@@@SET_BUILD_PROPERTY@mirrored_builders@[\"tryserver.chromium.android:android-marshmallow-arm64-rel\"]@@@"
     ]
   },
   {
