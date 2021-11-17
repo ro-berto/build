@@ -1438,7 +1438,7 @@ class ChromiumApi(recipe_api.RecipeApi):
         android_version_code=android_version_code,
         android_version_name=android_version_name,
         additional_args=additional_args,
-        ok_ret='any',
+        raise_on_failure=False,
         stdout=self.m.raw_io.output_text(),
         step_test_data=lambda: self.m.raw_io.test_api.stream_output_text(
             lookup_test_data))
