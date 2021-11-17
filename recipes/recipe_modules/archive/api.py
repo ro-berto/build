@@ -846,19 +846,8 @@ class ArchiveApi(recipe_api.RecipeApi):
         expanded_files.add(os.path.sep.join(common_pieces))
 
     if archive_data.verifiable_key_path:
-      sig_paths = set()
       # Immutable list of files to attach provenance.
       files_to_verify = set(expanded_files)
-      for f in files_to_verify:
-        # Files are relative to the base_path, so this generates the .sig
-        # file next to the original.
-        self.m.cloudkms.sign(archive_data.verifiable_key_path,
-                             base_path.join(f), base_path.join(f + '.sig'))
-        # This file path is appended directly to the provided gcs_path for
-        # uploads. We'll uploaded this .sig next to the original
-        # in GCS as well.
-        sig_paths.add(f + '.sig')
-      expanded_files = expanded_files.union(sig_paths)
 
       # Generates provenance to built artifacts.
       attestation_paths = set()
