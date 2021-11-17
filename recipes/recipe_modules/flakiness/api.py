@@ -144,7 +144,7 @@ class FlakinessApi(recipe_api.RecipeApi):
     the current build, or any CLs chained to the CL of the current build. Gerrit
     is used to find all chained CLs, and then each patch set of those CLs is
     used to query buildbucket for any associated builds. It then returns the
-    invocation names of all of these builds.
+    invocation names of all of these builds and tasks within the builds.
 
     An invocation represents a container of results, in this case from a
     buildbucket build. Invocation names can be used to map the buildbucket build
@@ -173,6 +173,16 @@ class FlakinessApi(recipe_api.RecipeApi):
         excluded_invs.update(
             self.get_invocations_from_change(
                 change=current_change, step_name=step))
+
+    # Find all task invocations of each build invocation and add these to
+    # excluded.
+    sub_invs = []
+    for build_inv in excluded_invs:
+      sub_invs.extend([
+          str(inv)
+          for inv in self.m.resultdb.get_included_invocations(build_inv)
+      ])
+    excluded_invs.update(sub_invs)
 
     self.m.step.active_result.presentation.logs[
         "excluded_invocation_list"] = sorted(excluded_invs)
@@ -387,7 +397,7 @@ class FlakinessApi(recipe_api.RecipeApi):
   def find_tests_for_flakiness(self, test_objects):
     """Searches for new tests in a given change
 
-    This method coordinates the workflow for searching and identifying new 
+    This method coordinates the workflow for searching and identifying new
     tests. Buildbucket is queried for a historial set of runs, cross-references
     the invocations against ResultDB, excludes certain runs and determines a
     unique set of test_id + test_variant_hash. This set is compared to the tests

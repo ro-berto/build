@@ -12,6 +12,7 @@ DEPS = [
     'flakiness',
     'recipe_engine/assertions',
     'recipe_engine/buildbucket',
+    'recipe_engine/resultdb',
     'recipe_engine/step',
 ]
 
@@ -21,7 +22,7 @@ def RunSteps(api):
   for inv in invocations:
     api.assertions.assertEqual(type(inv), str)
 
-  api.assertions.assertEqual(invocations, {'invocations/1'})
+  api.assertions.assertEqual(invocations, {'invocations/1', 'inv/3', 'inv/2'})
 
 
 def GenTests(api):
@@ -60,4 +61,5 @@ def GenTests(api):
               "\"host\": \"chromium-review.googlesource.com\", \"patchset\": "
               "\"3\", \"project\": \"chromium/src\"}]}"
           ],
-      ), api.post_process(post_process.DropExpectation))
+      ), api.resultdb.get_included_invocations(['inv/3', 'inv/2']),
+      api.post_process(post_process.DropExpectation))
