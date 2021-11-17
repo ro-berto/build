@@ -5,18 +5,21 @@
 
 """Script that deletes all files (but not directories) in a given directory."""
 
+from __future__ import absolute_import
+from __future__ import print_function
+
 import os
 import sys
 
 
 def main(args):
   if not args or len(args) != 1:
-    print >> sys.stderr, 'Please specify a single directory as an argument.'
+    print('Please specify a single directory as an argument.', file=sys.stderr)
     return 1
 
   clean_dir = args[0]
   if not os.path.isdir(clean_dir):
-    print 'Cannot find any directory at %s. Skipping cleaning.' % clean_dir
+    print('Cannot find any directory at %s. Skipping cleaning.' % clean_dir)
     return 0
 
   for filename in os.listdir(clean_dir):
@@ -24,10 +27,10 @@ def main(args):
     if os.path.isfile(file_path):
       try:
         os.remove(file_path)
-        print 'Removed %s' % file_path
+        print('Removed %s' % file_path)
       except OSError as e:
         # Don't fail if we cannot delete a file.
-        print e
+        print(e)
   return 0
 
 

@@ -5,6 +5,8 @@
 # Contains the bulk of the WebRTC builder configurations so they can be reused
 # from multiple recipes.
 
+from __future__ import absolute_import
+
 from recipe_engine.engine_types import freeze
 
 RECIPE_CONFIGS = freeze({

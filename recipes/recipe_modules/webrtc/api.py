@@ -2,11 +2,15 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from __future__ import absolute_import
+
 import contextlib
 import os
 import re
 import sys
-import urllib
+
+import six
+from six.moves import urllib
 
 from recipe_engine import recipe_api
 
@@ -236,10 +240,10 @@ class WebRTCApi(recipe_api.RecipeApi):
   @property
   def build_url(self):
     return 'https://ci.chromium.org/p/%s/builders/%s/%s/%s' % (
-        urllib.quote(self.m.buildbucket.build.builder.project),
-        urllib.quote(self.bucketname),
-        urllib.quote(self.buildername),
-        urllib.quote(str(self.m.buildbucket.build.number)))
+        urllib.parse.quote(self.m.buildbucket.build.builder.project),
+        urllib.parse.quote(self.bucketname), urllib.parse.quote(
+            self.buildername),
+        urllib.parse.quote(str(self.m.buildbucket.build.number)))
 
   def get_bot(self, bucketname, buildername):
     return Bot(self._builders, self._recipe_configs, bucketname, buildername)
@@ -331,8 +335,11 @@ class WebRTCApi(recipe_api.RecipeApi):
     # they're less time sensitive than trybots.
     if self.m.tryserver.is_tryserver and not is_deps_changed:
       analyze_input = {
-          'files': affected_files,
-          'test_targets': list(test_targets) + list(non_isolated_test_targets),
+          'files':
+              affected_files,
+          'test_targets':
+              list(sorted(test_targets)) +
+              list(sorted(non_isolated_test_targets)),
           'additional_compile_targets': ['all'],
       }
       if not is_ios:
@@ -425,8 +432,8 @@ class WebRTCApi(recipe_api.RecipeApi):
         'os',
         self.m.chromium_swarming.prefered_os_dimension(
             self.m.platform.name).split('-', 1)[0])
-    for key, value in self.bot.config.get(
-        'swarming_dimensions', {}).iteritems():
+    for key, value in six.iteritems(
+        self.bot.config.get('swarming_dimensions', {})):
       self.m.chromium_swarming.set_default_dimension(key, value)
     if self.bot.config.get('swarming_timeout'):
       self.m.chromium_swarming.default_hard_timeout = self.bot.config[

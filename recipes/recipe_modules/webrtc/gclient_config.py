@@ -3,6 +3,8 @@
 # found in the LICENSE file.
 
 
+from __future__ import absolute_import
+
 from RECIPE_MODULES.depot_tools.gclient import CONFIG_CTX
 from RECIPE_MODULES.depot_tools.gclient.config import ChromiumGitURL
 

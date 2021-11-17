@@ -4,9 +4,13 @@
 
 # Exposes the builder and recipe configurations to GenTests in recipes.
 
+from __future__ import absolute_import
+
 import os
 import base64
 import json
+
+import six
 
 from recipe_engine import recipe_test_api
 from recipe_engine import config_types
@@ -24,7 +28,9 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
 
   def example_patch(self):
     return self.m.json.output({
-        'value': base64.b64encode('diff --git a/a b/a\nnew file mode 100644\n')
+        'value':
+            six.ensure_str(
+                base64.b64encode(b'diff --git a/a b/a\nnew file mode 100644\n'))
     })
 
   def generate_builder(self,

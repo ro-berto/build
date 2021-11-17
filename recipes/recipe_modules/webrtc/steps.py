@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from __future__ import absolute_import
+
 import functools
 import json
 import os
@@ -48,26 +50,24 @@ def generate_tests(phase, bot, platform_name, build_out_dir, checkout_path,
   test_suite = bot.test_suite
 
   if test_suite in ('webrtc', 'webrtc_and_baremetal'):
-    tests += [
-        SwarmingDesktopTest('audio_decoder_unittests'),
-        SwarmingDesktopTest('common_audio_unittests'),
-        SwarmingDesktopTest('common_video_unittests'),
-        SwarmingDesktopTest('dcsctp_unittests'),
-        SwarmingDesktopTest('low_bandwidth_audio_test'),
-        SwarmingDesktopTest('modules_tests', shards=2),
-        SwarmingDesktopTest('modules_unittests', shards=6),
-        SwarmingDesktopTest('peerconnection_unittests', shards=4),
-        SwarmingDesktopTest('rtc_media_unittests'),
-        SwarmingDesktopTest('rtc_pc_unittests'),
-        SwarmingDesktopTest('rtc_stats_unittests'),
-        SwarmingDesktopTest('rtc_unittests', shards=6),
-        SwarmingDesktopTest('system_wrappers_unittests'),
-        SwarmingDesktopTest('test_support_unittests'),
-        SwarmingDesktopTest('tools_unittests'),
-        SwarmingDesktopTest('video_engine_tests', shards=4),
-        SwarmingDesktopTest('voip_unittests'),
-        SwarmingDesktopTest('webrtc_nonparallel_tests'),
-    ]
+    tests.append(SwarmingDesktopTest('audio_decoder_unittests'))
+    tests.append(SwarmingDesktopTest('common_audio_unittests'))
+    tests.append(SwarmingDesktopTest('common_video_unittests'))
+    tests.append(SwarmingDesktopTest('dcsctp_unittests'))
+    tests.append(SwarmingDesktopTest('low_bandwidth_audio_test'))
+    tests.append(SwarmingDesktopTest('modules_tests', shards=2))
+    tests.append(SwarmingDesktopTest('modules_unittests', shards=6))
+    tests.append(SwarmingDesktopTest('peerconnection_unittests', shards=4))
+    tests.append(SwarmingDesktopTest('rtc_media_unittests'))
+    tests.append(SwarmingDesktopTest('rtc_pc_unittests'))
+    tests.append(SwarmingDesktopTest('rtc_stats_unittests'))
+    tests.append(SwarmingDesktopTest('rtc_unittests', shards=6))
+    tests.append(SwarmingDesktopTest('system_wrappers_unittests'))
+    tests.append(SwarmingDesktopTest('test_support_unittests'))
+    tests.append(SwarmingDesktopTest('tools_unittests'))
+    tests.append(SwarmingDesktopTest('video_engine_tests', shards=4))
+    tests.append(SwarmingDesktopTest('voip_unittests'))
+    tests.append(SwarmingDesktopTest('webrtc_nonparallel_tests'))
 
   if test_suite == 'webrtc_and_baremetal':
     baremetal_test = functools.partial(
@@ -86,17 +86,17 @@ def generate_tests(phase, bot, platform_name, build_out_dir, checkout_path,
                 '--nologs']))
 
   if test_suite == 'desktop_perf_swarming':
-    tests += [
-        SwarmingPerfTest('isac_fix_test'),
-        SwarmingPerfTest('low_bandwidth_audio_perf_test'),
+
+    tests.append(SwarmingPerfTest('isac_fix_test'))
+    tests.append(SwarmingPerfTest('low_bandwidth_audio_perf_test'))
+    tests.append(
         SwarmingPerfTest(
             'webrtc_perf_tests',
             args=[
                 '--test_artifacts_dir=${ISOLATED_OUTDIR}',
                 '--save_worst_frame',
                 '--nologs',
-            ]),
-    ]
+            ]))
 
   if test_suite == 'android_perf_swarming':
     tests.append(
@@ -116,27 +116,25 @@ def generate_tests(phase, bot, platform_name, build_out_dir, checkout_path,
             ]))
 
   if test_suite == 'android':
-    tests += [
-        SwarmingAndroidTest('AppRTCMobile_test_apk'),
-        SwarmingAndroidTest('android_instrumentation_test_apk'),
-        SwarmingAndroidTest('audio_decoder_unittests'),
-        SwarmingAndroidTest('common_audio_unittests'),
-        SwarmingAndroidTest('common_video_unittests'),
-        SwarmingAndroidTest('dcsctp_unittests'),
-        SwarmingAndroidTest('modules_tests', shards=2),
-        SwarmingAndroidTest('modules_unittests', shards=6),
-        SwarmingAndroidTest('peerconnection_unittests', shards=4),
-        SwarmingAndroidTest('rtc_stats_unittests'),
-        SwarmingAndroidTest('rtc_unittests', shards=6),
-        SwarmingAndroidTest('system_wrappers_unittests'),
-        SwarmingAndroidTest('test_support_unittests'),
-        SwarmingAndroidTest('tools_unittests'),
-        SwarmingAndroidTest('video_engine_tests', shards=4),
-        SwarmingAndroidTest('voip_unittests'),
-        SwarmingAndroidTest('webrtc_nonparallel_tests'),
-        AndroidJunitTest('android_examples_junit_tests'),
-        AndroidJunitTest('android_sdk_junit_tests'),
-    ]
+    tests.append(SwarmingAndroidTest('AppRTCMobile_test_apk'))
+    tests.append(SwarmingAndroidTest('android_instrumentation_test_apk'))
+    tests.append(SwarmingAndroidTest('audio_decoder_unittests'))
+    tests.append(SwarmingAndroidTest('common_audio_unittests'))
+    tests.append(SwarmingAndroidTest('common_video_unittests'))
+    tests.append(SwarmingAndroidTest('dcsctp_unittests'))
+    tests.append(SwarmingAndroidTest('modules_tests', shards=2))
+    tests.append(SwarmingAndroidTest('modules_unittests', shards=6))
+    tests.append(SwarmingAndroidTest('peerconnection_unittests', shards=4))
+    tests.append(SwarmingAndroidTest('rtc_stats_unittests'))
+    tests.append(SwarmingAndroidTest('rtc_unittests', shards=6))
+    tests.append(SwarmingAndroidTest('system_wrappers_unittests'))
+    tests.append(SwarmingAndroidTest('test_support_unittests'))
+    tests.append(SwarmingAndroidTest('tools_unittests'))
+    tests.append(SwarmingAndroidTest('video_engine_tests', shards=4))
+    tests.append(SwarmingAndroidTest('voip_unittests'))
+    tests.append(SwarmingAndroidTest('webrtc_nonparallel_tests'))
+    tests.append(AndroidJunitTest('android_examples_junit_tests'))
+    tests.append(AndroidJunitTest('android_sdk_junit_tests'))
 
     if bot.should_test_android_studio_project_generation:
       tests.append(
@@ -167,58 +165,54 @@ def generate_tests(phase, bot, platform_name, build_out_dir, checkout_path,
         'iOS64 Sim Debug (iOS 12)',
         'ios_sim_x64_dbg_ios12',
     ]:
-      tests += [
+      tests.append(
           IosTest(
-              'apprtcmobile_tests', xctest=True, xcode_parallelization=True),
-          IosTest('sdk_unittests', xctest=True, xcode_parallelization=True)
-      ]
+              'apprtcmobile_tests', xctest=True, xcode_parallelization=True))
+      tests.append(
+          IosTest('sdk_unittests', xctest=True, xcode_parallelization=True))
 
-    tests += [
+    tests.append(
         IosTest(
-            'sdk_framework_unittests', xctest=True, xcode_parallelization=True),
-        IosTest('audio_decoder_unittests', xctest=True),
-        IosTest('common_audio_unittests', xctest=True),
-        IosTest('common_video_unittests', xctest=True),
-        IosTest('dcsctp_unittests', xctest=True),
-        IosTest('modules_tests', xctest=True),
-        IosTest('modules_unittests', xctest=True),
-        IosTest('rtc_media_unittests', xctest=True),
-        IosTest('rtc_pc_unittests', xctest=True),
-        IosTest('rtc_stats_unittests', xctest=True),
-        IosTest('rtc_unittests', xctest=True),
-        IosTest('system_wrappers_unittests', xctest=True),
-        IosTest('test_support_unittests', xctest=True),
-        IosTest('tools_unittests', xctest=True),
-        IosTest('video_capture_tests', xctest=True),
-        IosTest('video_engine_tests', xctest=True),
-        IosTest('voip_unittests', xctest=True),
-        IosTest('webrtc_nonparallel_tests', xctest=True),
-    ]
+            'sdk_framework_unittests', xctest=True, xcode_parallelization=True))
+    tests.append(IosTest('audio_decoder_unittests', xctest=True))
+    tests.append(IosTest('common_audio_unittests', xctest=True))
+    tests.append(IosTest('common_video_unittests', xctest=True))
+    tests.append(IosTest('dcsctp_unittests', xctest=True))
+    tests.append(IosTest('modules_tests', xctest=True))
+    tests.append(IosTest('modules_unittests', xctest=True))
+    tests.append(IosTest('rtc_media_unittests', xctest=True))
+    tests.append(IosTest('rtc_pc_unittests', xctest=True))
+    tests.append(IosTest('rtc_stats_unittests', xctest=True))
+    tests.append(IosTest('rtc_unittests', xctest=True))
+    tests.append(IosTest('system_wrappers_unittests', xctest=True))
+    tests.append(IosTest('test_support_unittests', xctest=True))
+    tests.append(IosTest('tools_unittests', xctest=True))
+    tests.append(IosTest('video_capture_tests', xctest=True))
+    tests.append(IosTest('video_engine_tests', xctest=True))
+    tests.append(IosTest('voip_unittests', xctest=True))
+    tests.append(IosTest('webrtc_nonparallel_tests', xctest=True))
 
   if test_suite == 'ios_device':
-    tests += [
-        IosTest('common_audio_unittests'),
-        IosTest('common_video_unittests'),
-        IosTest('modules_tests'),
-        IosTest('modules_unittests'),
-        IosTest('rtc_pc_unittests'),
-        IosTest('rtc_stats_unittests'),
-        IosTest('system_wrappers_unittests'),
-        IosTest('test_support_unittests'),
-        IosTest('tools_unittests'),
-        IosTest('video_capture_tests'),
-        IosTest('video_engine_tests'),
-    ]
+    tests.append(IosTest('common_audio_unittests'))
+    tests.append(IosTest('common_video_unittests'))
+    tests.append(IosTest('modules_tests'))
+    tests.append(IosTest('modules_unittests'))
+    tests.append(IosTest('rtc_pc_unittests'))
+    tests.append(IosTest('rtc_stats_unittests'))
+    tests.append(IosTest('system_wrappers_unittests'))
+    tests.append(IosTest('test_support_unittests'))
+    tests.append(IosTest('tools_unittests'))
+    tests.append(IosTest('video_capture_tests'))
+    tests.append(IosTest('video_engine_tests'))
 
   if test_suite == 'ios_perf':
-    tests += [
+    tests.append(
         IosTest(
             'webrtc_perf_tests',
             args=[
                 '--write_perf_output_on_ios',
                 '--nologs',
-            ]),
-    ]
+            ]))
 
   if test_suite == 'more_configs':
     if 'no_sctp' in phase:
@@ -354,7 +348,7 @@ class WebRtcIsolatedGtest(object):
     """Applies shared configuration for swarming tasks.
     """
     task.shards = self._shards
-    task.shard_indices = range(task.shards)
+    task.shard_indices = list(range(task.shards))
     task.build_properties = api.chromium.build_properties
 
     task_slice = task.request[0]
@@ -369,7 +363,7 @@ class WebRtcIsolatedGtest(object):
     task_slice = task_slice.with_cipd_ensure_file(ensure_file)
 
     task_dimensions = task_slice.dimensions
-    for k, v in self._dimensions.iteritems():
+    for k, v in self._dimensions.items():
       task_dimensions[k] = v
 
     # Set default value for os.
@@ -398,7 +392,7 @@ def LogcatHandler(api, step_result, has_valid_results):
   del has_valid_results
   task_output_dir = api.step.active_result.raw_io.output_dir
   result = ""
-  for file_name, contents in task_output_dir.iteritems():
+  for file_name, contents in task_output_dir.items():
     if file_name.endswith('logcats'):  # pragma: no cover
       result += contents
 
