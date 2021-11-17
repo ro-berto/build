@@ -12,6 +12,8 @@ from recipe_engine.recipe_api import Property
 
 from RECIPE_MODULES.build import chromium
 
+from PB.go.chromium.org.luci.resultdb.proto.v1 \
+    import test_result as test_result_pb2
 
 PYTHON_VERSION_COMPATIBILITY = "PY2"
 
@@ -27,6 +29,7 @@ DEPS = [
     'recipe_engine/properties',
     'recipe_engine/python',
     'recipe_engine/raw_io',
+    'recipe_engine/resultdb',
     'recipe_engine/step',
     'test_utils',
 ]
@@ -320,6 +323,7 @@ def GenTests(api):
         api.buildbucket.ci_build(
             builder='findit_variable',
             git_repo='https://chromium.googlesource.com/chromium/src',
+            experiments={'chromium.chromium_tests.use_rdb_results': True},
         ),
         api.builder_group.for_current('tryserver.chromium.%s' % platform_name),
         api.builder_group.for_target('chromium.%s' % platform_name),
@@ -341,6 +345,38 @@ def GenTests(api):
     check_fields(expected_report_fields, report_dict)
 
     return step_odict
+
+  def gen_swarming_and_rdb_results(suite_name,
+                                   suffix,
+                                   prefix=None,
+                                   failures=None):
+    """Adds overrides for the swarming-collect and rdb-query steps of a test.
+
+    See gen_swarming_and_rdb_results() in chromium_tests/test_api.py for
+    documentation. The implementation is duplicated here since findit needs
+    the 'prefix' behavior.
+    """
+    failures = failures if failures else []
+    swarming_step_name = suite_name
+    if suffix:
+      swarming_step_name += ' (%s)' % suffix
+    rdb_step_name = 'collect tasks'
+    if suffix:
+      rdb_step_name += ' (%s)' % suffix
+    rdb_step_name += '.%s results' % suite_name
+    if prefix:
+      swarming_step_name = prefix + '.' + swarming_step_name
+      rdb_step_name = prefix + '.' + rdb_step_name
+
+    return api.override_step_data(
+        swarming_step_name,
+        api.chromium_swarming.canned_summary_output(
+            api.json.output({}),
+            failure=bool(failures))) + api.override_step_data(
+                rdb_step_name,
+                stdout=api.raw_io.output_text(
+                    api.test_utils.rdb_results(
+                        suite_name, failing_tests=failures)))
 
   yield api.test(
       'nonexistent_test_step_skipped',
@@ -397,11 +433,6 @@ def GenTests(api):
               'compile_targets': ['affected_tests', 'affected_tests_run'],
               'test_targets': ['affected_tests', 'affected_tests_run'],
           })),
-      api.override_step_data(
-          'test r1.affected_tests (r1)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_gtest_output(
-                  passed_test_names=['Test.One']))),
   )
 
   yield api.test(
@@ -440,9 +471,7 @@ def GenTests(api):
 
   yield api.test(
       'all_test_failed',
-      base({
-          'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']
-      },
+      base({'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']},
            'win',
            'Win7 Tests (1)',
            test_on_good_revision=False),
@@ -458,12 +487,11 @@ def GenTests(api):
               },
           },
           step_prefix='test r1.'),
-      api.override_step_data(
-          'test r1.gl_tests (r1)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_gtest_output(
-                  failed_test_names=['Test.One', 'Test.Two', 'Test.Three']),
-              failure=True)),
+      gen_swarming_and_rdb_results(
+          'gl_tests',
+          'r1',
+          prefix='test r1',
+          failures=['Test.One', 'Test.Two', 'Test.Three']),
   )
 
   yield api.test(
@@ -483,18 +511,12 @@ def GenTests(api):
               },
           },
           step_prefix='test r1.'),
-      api.override_step_data(
-          'test r1.gl_tests (r1)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_gtest_output(
-                  passed_test_names=['Test.One', 'Test.Two', 'Test.Three']))),
   )
 
   yield api.test(
       'only_one_test_passed',
-      base({
-          'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']
-      }, 'win', 'Win7 Tests (1)'),
+      base({'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']}, 'win',
+           'Win7 Tests (1)'),
       api.chromium_tests.read_source_side_spec(
           'chromium.win', {
               'Win7 Tests (1)': {
@@ -507,12 +529,6 @@ def GenTests(api):
               },
           },
           step_prefix='test r0.'),
-      api.override_step_data(
-          'test r0.gl_tests (r0)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_gtest_output(
-                  passed_test_names=['Test.One', 'Test.Two']),
-              failure=True)),
       api.chromium_tests.read_source_side_spec(
           'chromium.win', {
               'Win7 Tests (1)': {
@@ -525,13 +541,9 @@ def GenTests(api):
               },
           },
           step_prefix='test r1.'),
-      api.override_step_data(
-          'test r1.gl_tests (r1)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_gtest_output(
-                  failed_test_names=['Test.One', 'Test.Two'],
-                  passed_test_names=['Test.Three']),
-              failure=True)),
+      gen_swarming_and_rdb_results(
+          'gl_tests', 'r1', prefix='test r1', failures=['Test.One',
+                                                        'Test.Two']),
   )
 
   yield api.test(
@@ -570,22 +582,15 @@ def GenTests(api):
           },
           step_prefix='test r1.'),
       api.override_step_data(
-          'test r1.gl_tests (r1)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_gtest_output(
-                  failed_test_names=['Test.One', 'Test.Two'],
-                  passed_test_names=['Test.Three']),
-              failure=True),
-          api.legacy_annotation.success_step,
-          stderr=api.raw_io.output_text(
-              'rdb-stream: included "invocations/test-inv" in "build-inv"')),
+          'test r1.gl_tests results',
+          stdout=api.raw_io.output_text(
+              api.test_utils.rdb_results(
+                  'gl_tests', failing_tests=['Test.One', 'Test.Two']))),
   )
 
   yield api.test(
       'swarming_tests',
-      base({
-          'gl_tests': ['Test.One']
-      }, 'mac', 'Mac10.13 Tests'),
+      base({'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests'),
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
@@ -598,18 +603,11 @@ def GenTests(api):
               },
           },
           step_prefix='test r1.'),
-      api.override_step_data(
-          'test r1.gl_tests (r1)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_gtest_output(
-                  passed_test_names=['Test.One']))),
   )
 
   yield api.test(
       'findit_culprit_in_last_sub_range',
-      base({
-          'gl_tests': ['Test.One']
-      },
+      base({'gl_tests': ['Test.One']},
            'mac',
            'Mac10.13 Tests',
            use_analyze=False,
@@ -644,24 +642,13 @@ def GenTests(api):
           'git commits in range',
           api.raw_io.stream_output('\n'.join(
               'r%d' % i for i in reversed(range(1, 7))))),
-      api.override_step_data(
-          'test r2.gl_tests (r2)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_gtest_output(
-                  passed_test_names=['Test.One']))),
-      api.override_step_data(
-          'test r3.gl_tests (r3)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_gtest_output(
-                  failed_test_names=['Test.One']),
-              failure=True)),
+      gen_swarming_and_rdb_results(
+          'gl_tests', 'r3', prefix='test r3', failures=['Test.One']),
   )
 
   yield api.test(
       'findit_culprit_in_middle_sub_range',
-      base({
-          'gl_tests': ['Test.One']
-      },
+      base({'gl_tests': ['Test.One']},
            'mac',
            'Mac10.13 Tests',
            use_analyze=False,
@@ -720,35 +707,13 @@ def GenTests(api):
           'git commits in range',
           api.raw_io.stream_output('\n'.join(
               'r%d' % i for i in reversed(range(1, 7))))),
-      api.override_step_data(
-          'test r2.gl_tests (r2)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_gtest_output(
-                  passed_test_names=['Test.One']))),
-      api.override_step_data(
-          'test r3.gl_tests (r3)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_gtest_output(
-                  failed_test_names=['Test.One']),
-              failure=True)),
-      api.override_step_data(
-          'test r5.gl_tests (r5)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_gtest_output(
-                  passed_test_names=['Test.One']),
-              failure=True)),
-      api.override_step_data(
-          'test r6.gl_tests (r6)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_gtest_output(
-                  passed_test_names=['Test.One']))),
+      gen_swarming_and_rdb_results(
+          'gl_tests', 'r3', prefix='test r3', failures=['Test.One']),
   )
 
   yield api.test(
       'findit_culprit_in_first_sub_range',
-      base({
-          'gl_tests': ['Test.One']
-      },
+      base({'gl_tests': ['Test.One']},
            'mac',
            'Mac10.13 Tests',
            use_analyze=False,
@@ -796,22 +761,8 @@ def GenTests(api):
           'git commits in range',
           api.raw_io.stream_output('\n'.join(
               'r%d' % i for i in reversed(range(1, 7))))),
-      api.override_step_data(
-          'test r1.gl_tests (r1)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_gtest_output(
-                  failed_test_names=['Test.One']),
-              failure=True)),
-      api.override_step_data(
-          'test r5.gl_tests (r5)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_gtest_output(
-                  passed_test_names=['Test.One']))),
-      api.override_step_data(
-          'test r6.gl_tests (r6)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_gtest_output(
-                  passed_test_names=['Test.One']))),
+      gen_swarming_and_rdb_results(
+          'gl_tests', 'r1', prefix='test r1', failures=['Test.One']),
   )
 
   yield api.test(
@@ -910,41 +861,20 @@ def GenTests(api):
           'git commits in range',
           api.raw_io.stream_output('\n'.join(
               'r%d' % i for i in reversed(range(1, 7))))),
-      api.override_step_data(
-          'test r5.gl_tests (r5)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_gtest_output(
-                  failed_test_names=['Test.gl_One']),
-              failure=True)),
-      api.override_step_data(
-          'test r5.browser_tests (r5)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_gtest_output(
-                  passed_test_names=['Test.browser_One']))),
-      api.override_step_data(
-          'test r6.browser_tests (r6)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_gtest_output(
-                  failed_test_names=['Test.browser_One']),
-              failure=True)),
-      api.override_step_data(
-          'test r2.gl_tests (r2)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_gtest_output(
-                  passed_test_names=['Test.gl_One']))),
-      api.override_step_data(
-          'test r3.gl_tests (r3)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_gtest_output(
-                  failed_test_names=['Test.gl_One']),
-              failure=True)),
+      gen_swarming_and_rdb_results(
+          'gl_tests', 'r5', prefix='test r5', failures=['Test.gl_One']),
+      gen_swarming_and_rdb_results(
+          'browser_tests',
+          'r6',
+          prefix='test r6',
+          failures=['Test.browser_One']),
+      gen_swarming_and_rdb_results(
+          'gl_tests', 'r3', prefix='test r3', failures=['Test.gl_One']),
   )
 
   yield api.test(
       'findit_tests_multiple_culprits',
-      base({
-          'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']
-      },
+      base({'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']},
            'mac',
            'Mac10.13 Tests',
            use_analyze=False,
@@ -1015,44 +945,19 @@ def GenTests(api):
           'git commits in range',
           api.raw_io.stream_output('\n'.join(
               'r%d' % i for i in reversed(range(1, 7))))),
-      api.override_step_data(
-          'test r4.gl_tests (r4)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_gtest_output(
-                  passed_test_names=['Test.One', 'Test.Three'],
-                  failed_test_names=['Test.Two']),
-              failure=True)),
-      api.override_step_data(
-          'test r5.gl_tests (r5)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_gtest_output(
-                  passed_test_names=['Test.One'],
-                  failed_test_names=['Test.Three']),
-              failure=True)),
-      api.override_step_data(
-          'test r6.gl_tests (r6)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_gtest_output(
-                  failed_test_names=['Test.One']),
-              failure=True)),
-      api.override_step_data(
-          'test r2.gl_tests (r2)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_gtest_output(
-                  passed_test_names=['Test.Two']))),
-      api.override_step_data(
-          'test r3.gl_tests (r3)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_gtest_output(
-                  failed_test_names=['Test.Two']),
-              failure=True)),
+      gen_swarming_and_rdb_results(
+          'gl_tests', 'r4', prefix='test r4', failures=['Test.Two']),
+      gen_swarming_and_rdb_results(
+          'gl_tests', 'r5', prefix='test r5', failures=['Test.Three']),
+      gen_swarming_and_rdb_results(
+          'gl_tests', 'r6', prefix='test r6', failures=['Test.One']),
+      gen_swarming_and_rdb_results(
+          'gl_tests', 'r3', prefix='test r3', failures=['Test.Two']),
   )
 
   yield api.test(
       'findit_consecutive_culprits',
-      base({
-          'gl_tests': ['Test.One']
-      },
+      base({'gl_tests': ['Test.One']},
            'mac',
            'Mac10.13 Tests',
            use_analyze=False,
@@ -1099,22 +1004,8 @@ def GenTests(api):
           'git commits in range',
           api.raw_io.stream_output('\n'.join(
               'r%d' % i for i in reversed(range(1, 7))))),
-      api.override_step_data(
-          'test r4.gl_tests (r4)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_gtest_output(
-                  failed_test_names=['Test.One']),
-              failure=True)),
-      api.override_step_data(
-          'test r2.gl_tests (r2)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_gtest_output(
-                  passed_test_names=['Test.One']))),
-      api.override_step_data(
-          'test r3.gl_tests (r3)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_gtest_output(
-                  passed_test_names=['Test.One']))),
+      gen_swarming_and_rdb_results(
+          'gl_tests', 'r4', prefix='test r4', failures=['Test.One']),
   )
 
   yield api.test(
@@ -1149,9 +1040,7 @@ def GenTests(api):
 
   yield api.test(
       'use_analyze_set_to_False_for_non_linear_try_job',
-      base({
-          'gl_tests': ['Test.One']
-      },
+      base({'gl_tests': ['Test.One']},
            'mac',
            'Mac10.13 Tests',
            use_analyze=True,
@@ -1186,24 +1075,14 @@ def GenTests(api):
           'git commits in range',
           api.raw_io.stream_output('\n'.join(
               'r%d' % i for i in reversed(range(1, 7))))),
-      api.override_step_data(
-          'test r2.gl_tests (r2)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_gtest_output(
-                  passed_test_names=['Test.One']))),
-      api.override_step_data(
-          'test r3.gl_tests (r3)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_gtest_output(
-                  failed_test_names=['Test.One']),
-              failure=True)),
+      gen_swarming_and_rdb_results(
+          'gl_tests', 'r3', prefix='test r3', failures=['Test.One']),
   )
 
   yield api.test(
       'flaky_tests',
-      base({
-          'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']
-      }, 'win', 'Win7 Tests (1)'),
+      base({'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']}, 'win',
+           'Win7 Tests (1)'),
       api.chromium_tests.read_source_side_spec(
           'chromium.win', {
               'Win7 Tests (1)': {
@@ -1216,13 +1095,8 @@ def GenTests(api):
               },
           },
           step_prefix='test r0.'),
-      api.override_step_data(
-          'test r0.gl_tests (r0)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_gtest_output(
-                  failed_test_names=['Test.One'],
-                  passed_test_names=['Test.Two']),
-              failure=True)),
+      gen_swarming_and_rdb_results(
+          'gl_tests', 'r0', prefix='test r0', failures=['Test.One']),
       api.chromium_tests.read_source_side_spec(
           'chromium.win', {
               'Win7 Tests (1)': {
@@ -1235,13 +1109,9 @@ def GenTests(api):
               },
           },
           step_prefix='test r1.'),
-      api.override_step_data(
-          'test r1.gl_tests (r1)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_gtest_output(
-                  failed_test_names=['Test.One', 'Test.Two'],
-                  passed_test_names=['Test.Three']),
-              failure=True)),
+      gen_swarming_and_rdb_results(
+          'gl_tests', 'r1', prefix='test r1', failures=['Test.One',
+                                                        'Test.Two']),
   )
 
   yield api.test(
@@ -1277,11 +1147,29 @@ def GenTests(api):
               failure=True)),
   )
 
+  # We manually specify the RDB invocations here rather than using
+  # gen_swarming_and_rdb_results() since we need to mock a test that has both
+  # PASS and FAIL results in a single invocation.
+  flaky_results = {
+      'invocations/100':
+          api.resultdb.Invocation(test_results=[
+              test_result_pb2.TestResult(
+                  test_id='Test.One',
+                  expected=False,
+                  status=test_result_pb2.FAIL),
+              test_result_pb2.TestResult(
+                  test_id='Test.One',
+                  expected=True,
+                  status=test_result_pb2.PASS),
+              test_result_pb2.TestResult(
+                  test_id='Test.Two',
+                  expected=False,
+                  status=test_result_pb2.FAIL),
+          ])
+  }
   yield api.test(
       'remove_culprits_for_flaky_failures',
-      base({
-          'gl_tests': ['Test.One', 'Test.Two']
-      },
+      base({'gl_tests': ['Test.One', 'Test.Two']},
            'mac',
            'Mac10.13 Tests',
            use_analyze=False,
@@ -1319,25 +1207,20 @@ def GenTests(api):
       api.override_step_data(
           'test r3.gl_tests (r3)',
           api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_gtest_output(
-                  passed_test_names=['Test.One', 'Test.Two']),
-              failure=True)),
-      api.override_step_data(
-          'test r4.gl_tests (r4)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_gtest_output(
-                  flaky_test_names=['Test.One'],
-                  failed_test_names=['Test.Two']),
-              failure=True)),
+              api.json.output({}), retcode=1)),
+      api.resultdb.query(
+          inv_bundle=flaky_results,
+          step_name='test r4.collect tasks (r4).gl_tests results'),
   )
 
   yield api.test(
       'blink_web_tests',
-      base({
-          'blink_web_tests': [
-              'fast/Test/One.html', 'fast/Test/Two.html', 'dummy/Three.js'
-          ]
-      }, 'mac', 'Mac10.13 Tests'),
+      base(
+          {
+              'blink_web_tests': [
+                  'fast/Test/One.html', 'fast/Test/Two.html', 'dummy/Three.js'
+              ]
+          }, 'mac', 'Mac10.13 Tests'),
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
@@ -1352,14 +1235,11 @@ def GenTests(api):
               },
           },
           step_prefix='test r0.'),
-      api.override_step_data(
-          'test r0.blink_web_tests (r0)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_isolated_script_output(
-                  failed_test_names=['fast/Test/One.html'],
-                  passed_test_names=['fast/Test/Two.html'],
-                  path_delimiter='/'),
-              failure=True)),
+      gen_swarming_and_rdb_results(
+          'blink_web_tests',
+          'r0',
+          prefix='test r0',
+          failures=['fast/Test/One.html']),
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
@@ -1374,16 +1254,11 @@ def GenTests(api):
               },
           },
           step_prefix='test r1.'),
-      api.override_step_data(
-          'test r1.blink_web_tests (r1)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_isolated_script_output(
-                  failed_test_names=[
-                      'fast/Test/One.html', 'fast/Test/Two.html'
-                  ],
-                  passed_test_names=['dummy/Three.js'],
-                  path_delimiter='/'),
-              failure=True)),
+      gen_swarming_and_rdb_results(
+          'blink_web_tests',
+          'r1',
+          prefix='test r1',
+          failures=['fast/Test/One.html', 'fast/Test/Two.html']),
   )
 
   yield api.test(
@@ -1403,11 +1278,6 @@ def GenTests(api):
               },
           },
           step_prefix='test r1.'),
-      api.override_step_data(
-          'test r1.services_unittests (r1)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_gtest_output(
-                  passed_test_names=['Test.One']))),
   )
 
   yield api.test(
@@ -1536,9 +1406,8 @@ def GenTests(api):
 
   yield api.test(
       'third_revision_compile_failure',
-      base({
-          'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']
-      }, 'win', 'Win7 Tests (1)'),
+      base({'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']}, 'win',
+           'Win7 Tests (1)'),
       api.chromium_tests.read_source_side_spec(
           'chromium.win', {
               'Win7 Tests (1)': {
@@ -1563,13 +1432,9 @@ def GenTests(api):
               },
           },
           step_prefix='test r1.'),
-      api.override_step_data(
-          'test r1.gl_tests (r1)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_gtest_output(
-                  failed_test_names=['Test.One', 'Test.Two'],
-                  passed_test_names=['Test.Three']),
-              failure=True)),
+      gen_swarming_and_rdb_results(
+          'gl_tests', 'r1', prefix='test r1', failures=['Test.One',
+                                                        'Test.Two']),
       api.step_data('test r0.compile', retcode=1),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),

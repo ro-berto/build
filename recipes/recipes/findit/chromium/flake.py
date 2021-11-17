@@ -108,6 +108,7 @@ def GenTests(api):
         api.buildbucket.ci_build(
             builder='findit_variable',
             git_repo='https://chromium.googlesource.com/chromium/src',
+            experiments={'chromium.chromium_tests.use_rdb_results': True},
         ),
         api.builder_group.for_current('tryserver.chromium.%s' % platform_name),
         api.builder_group.for_target('chromium.%s' % platform_name),

@@ -411,20 +411,6 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
           'status': 'SUCCESS',
       }]
 
-    for test_name in flaky_test_names:
-      cur_iteration_data[test_name] = [
-          {
-              'elapsed_time_ms': 0,
-              'output_snippet': ':)',
-              'status': 'SUCCESS',
-          },
-          {
-              'elapsed_time_ms': 0,
-              'output_snippet': ':(',
-              'status': 'FAILURE',
-          }
-      ]
-
     canned_jsonish = {
         'per_iteration_data': [cur_iteration_data]
     }
@@ -438,18 +424,6 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
       flaky_test_names=(), path_delimiter='.'):
 
     flat_tests = {}
-    for test_name in failed_test_names:
-      flat_tests[test_name] = {
-        'expected': 'PASS',
-        'actual': 'FAIL',
-        'is_unexpected': True,
-      }
-    for test_name in passed_test_names:
-      flat_tests[test_name] = {
-        'expected': 'PASS',
-        'actual': 'PASS'
-      }
-
     for test_name in flaky_test_names:
       flat_tests[test_name] = {
         'expected': 'PASS',

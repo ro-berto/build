@@ -2516,6 +2516,10 @@
     "name": "test r1.collect tasks (r1).blink_web_tests results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@raw_io.output@{\"invocation\": {\"name\": \"blink_web_tests_results\", \"state\": \"FINALIZED\"}, \"invocationId\": \"inv0\"}@@@",
+      "@@@STEP_LOG_LINE@raw_io.output@{\"invocationId\": \"inv0\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"fast/Test/One.html\", \"variant\": {\"def\": {\"test_suite\": \"blink_web_tests\"}}, \"variantHash\": \"blink_web_tests_hash\"}}@@@",
+      "@@@STEP_LOG_LINE@raw_io.output@{\"invocation\": {\"name\": \"blink_web_tests_results\", \"state\": \"FINALIZED\"}, \"invocationId\": \"inv1\"}@@@",
+      "@@@STEP_LOG_LINE@raw_io.output@{\"invocationId\": \"inv1\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"fast/Test/Two.html\", \"variant\": {\"def\": {\"test_suite\": \"blink_web_tests\"}}, \"variantHash\": \"blink_web_tests_hash\"}}@@@",
       "@@@STEP_LOG_END@raw_io.output@@@"
     ]
   },
@@ -2581,34 +2585,8 @@
     "name": "test r1.blink_web_tests (r1)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@Run on OS: 'Mac-10.13'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s<br/>Total tests: 3<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 0 (0 expected, 0 unexpected)<br/>* Failed: 2 (0 expected, >>>2 unexpected<<<)<br/>* Flaky: 0 (0 expected, 0 unexpected)<br/><br/>Unexpected Failures:<br/>* fast/Test/One.html<br/>* fast/Test/Two.html<br/>@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"path_delimiter\": \"/\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tests\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"dummy\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"Three.js\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"actual\": \"PASS\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"expected\": \"PASS\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"fast\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"Test\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"One.html\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"actual\": \"FAIL\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"expected\": \"PASS\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"is_unexpected\": true@@@",
-      "@@@STEP_LOG_LINE@json.output@        }, @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"Two.html\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"actual\": \"FAIL\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"expected\": \"PASS\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"is_unexpected\": true@@@",
-      "@@@STEP_LOG_LINE@json.output@        }@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"version\": 3@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.13'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s<br/>deterministic failures [caused step to fail]:<br/>fast/Test/One.html<br/>fast/Test/Two.html<br/>@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
@@ -2639,9 +2617,7 @@
       "@@@STEP_LOG_END@chromium_swarming.summary@@@",
       "@@@STEP_LOG_LINE@Merge script log@@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
-      "@@@STEP_LOG_LINE@outdir_json@{@@@",
-      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"exit_code\\\": 1, \\\"failure\\\": true, \\\"internal_failure\\\": false, \\\"shards\\\": [{\\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\"/\\\", \\\"tests\\\": {\\\"dummy\\\": {\\\"Three.js\\\": {\\\"actual\\\": \\\"PASS\\\", \\\"expected\\\": \\\"PASS\\\"}}, \\\"fast\\\": {\\\"Test\\\": {\\\"One.html\\\": {\\\"actual\\\": \\\"FAIL\\\", \\\"expected\\\": \\\"PASS\\\", \\\"is_unexpected\\\": true}, \\\"Two.html\\\": {\\\"actual\\\": \\\"FAIL\\\", \\\"expected\\\": \\\"PASS\\\", \\\"is_unexpected\\\": true}}}}, \\\"version\\\": 3}]}\"@@@",
-      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_LINE@outdir_json@{}@@@",
       "@@@STEP_LOG_END@outdir_json@@@",
       "@@@STEP_LOG_LINE@step_metadata@{@@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"blink_web_tests\", @@@",
@@ -2662,50 +2638,9 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
       "@@@STEP_LINK@shard #0 (failed) (1m 0s)@https://example.swarmingserver.appspot.com/task?id=0@@@",
+      "@@@STEP_LINK@fast/Test/One.html@https://luci-milo.appspot.com/ui/inv/build:8945511751514863184/test-results?q=fast%2FTest%2FOne.html@@@",
+      "@@@STEP_LINK@fast/Test/Two.html@https://luci-milo.appspot.com/ui/inv/build:8945511751514863184/test-results?q=fast%2FTest%2FTwo.html@@@",
       "@@@STEP_FAILURE@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
-      "--input-json",
-      "{\"interrupted\": false, \"path_delimiter\": \"/\", \"tests\": {\"dummy\": {\"Three.js\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}}, \"fast\": {\"Test\": {\"One.html\": {\"actual\": \"FAIL\", \"expected\": \"PASS\", \"is_unexpected\": true}, \"Two.html\": {\"actual\": \"FAIL\", \"expected\": \"PASS\", \"is_unexpected\": true}}}}, \"version\": 3}",
-      "--builder-group",
-      "tryserver.chromium.mac",
-      "--builder-name",
-      "findit_variable",
-      "--build-number",
-      "0",
-      "--test-type",
-      "test r1.blink_web_tests (r1)",
-      "--chrome-revision",
-      "170242",
-      "--build-id",
-      "8945511751514863184",
-      "--test-results-server",
-      "test-results.appspot.com"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "FORCE_MAC_TOOLCHAIN": "1"
-    },
-    "luci_context": {
-      "realm": {
-        "name": "project:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "test r1.Upload to test-results [test r1.blink_web_tests (r1)]",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -2716,14 +2651,20 @@
       "@@@STEP_LOG_LINE@serialzed results@{@@@",
       "@@@STEP_LOG_LINE@serialzed results@  \"all_suites\": [@@@",
       "@@@STEP_LOG_LINE@serialzed results@    {@@@",
-      "@@@STEP_LOG_LINE@serialzed results@      \"invalid\": \"True\", @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"invalid\": \"False\", @@@",
       "@@@STEP_LOG_LINE@serialzed results@      \"suite_name\": \"blink_web_tests\", @@@",
-      "@@@STEP_LOG_LINE@serialzed results@      \"test_name_to_test_id_mapping\": {}, @@@",
-      "@@@STEP_LOG_LINE@serialzed results@      \"total_tests_ran\": 0, @@@",
-      "@@@STEP_LOG_LINE@serialzed results@      \"unexpected_failing_tests\": [], @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"test_name_to_test_id_mapping\": {@@@",
+      "@@@STEP_LOG_LINE@serialzed results@        \"fast/Test/One.html\": \"fast/Test/One.html\", @@@",
+      "@@@STEP_LOG_LINE@serialzed results@        \"fast/Test/Two.html\": \"fast/Test/Two.html\"@@@",
+      "@@@STEP_LOG_LINE@serialzed results@      }, @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"total_tests_ran\": 2, @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"unexpected_failing_tests\": [@@@",
+      "@@@STEP_LOG_LINE@serialzed results@        \"fast/Test/One.html\", @@@",
+      "@@@STEP_LOG_LINE@serialzed results@        \"fast/Test/Two.html\"@@@",
+      "@@@STEP_LOG_LINE@serialzed results@      ], @@@",
       "@@@STEP_LOG_LINE@serialzed results@      \"unexpected_passing_tests\": [], @@@",
       "@@@STEP_LOG_LINE@serialzed results@      \"unexpected_skipped_tests\": [], @@@",
-      "@@@STEP_LOG_LINE@serialzed results@      \"variant_hash\": \"\"@@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"variant_hash\": \"blink_web_tests_hash\"@@@",
       "@@@STEP_LOG_LINE@serialzed results@    }@@@",
       "@@@STEP_LOG_LINE@serialzed results@  ], @@@",
       "@@@STEP_LOG_LINE@serialzed results@  \"unexpected_failing_suites\": [@@@",
@@ -4353,6 +4294,8 @@
     "name": "test r0.collect tasks (r0).blink_web_tests results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@raw_io.output@{\"invocation\": {\"name\": \"blink_web_tests_results\", \"state\": \"FINALIZED\"}, \"invocationId\": \"inv0\"}@@@",
+      "@@@STEP_LOG_LINE@raw_io.output@{\"invocationId\": \"inv0\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"fast/Test/One.html\", \"variant\": {\"def\": {\"test_suite\": \"blink_web_tests\"}}, \"variantHash\": \"blink_web_tests_hash\"}}@@@",
       "@@@STEP_LOG_END@raw_io.output@@@"
     ]
   },
@@ -4418,27 +4361,8 @@
     "name": "test r0.blink_web_tests (r0)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@Run on OS: 'Mac-10.13'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s<br/>Total tests: 2<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 0 (0 expected, 0 unexpected)<br/>* Failed: 1 (0 expected, >>>1 unexpected<<<)<br/>* Flaky: 0 (0 expected, 0 unexpected)<br/><br/>Unexpected Failures:<br/>* fast/Test/One.html<br/>@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"path_delimiter\": \"/\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tests\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"fast\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"Test\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"One.html\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"actual\": \"FAIL\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"expected\": \"PASS\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"is_unexpected\": true@@@",
-      "@@@STEP_LOG_LINE@json.output@        }, @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"Two.html\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"actual\": \"PASS\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"expected\": \"PASS\"@@@",
-      "@@@STEP_LOG_LINE@json.output@        }@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"version\": 3@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_TEXT@Run on OS: 'Mac-10.13'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s<br/>deterministic failures [caused step to fail]:<br/>fast/Test/One.html<br/>@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
@@ -4469,9 +4393,7 @@
       "@@@STEP_LOG_END@chromium_swarming.summary@@@",
       "@@@STEP_LOG_LINE@Merge script log@@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
-      "@@@STEP_LOG_LINE@outdir_json@{@@@",
-      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"exit_code\\\": 1, \\\"failure\\\": true, \\\"internal_failure\\\": false, \\\"shards\\\": [{\\\"interrupted\\\": false, \\\"path_delimiter\\\": \\\"/\\\", \\\"tests\\\": {\\\"fast\\\": {\\\"Test\\\": {\\\"One.html\\\": {\\\"actual\\\": \\\"FAIL\\\", \\\"expected\\\": \\\"PASS\\\", \\\"is_unexpected\\\": true}, \\\"Two.html\\\": {\\\"actual\\\": \\\"PASS\\\", \\\"expected\\\": \\\"PASS\\\"}}}}, \\\"version\\\": 3}]}\"@@@",
-      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_LINE@outdir_json@{}@@@",
       "@@@STEP_LOG_END@outdir_json@@@",
       "@@@STEP_LOG_LINE@step_metadata@{@@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"blink_web_tests\", @@@",
@@ -4492,50 +4414,8 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
       "@@@STEP_LINK@shard #0 (failed) (1m 0s)@https://example.swarmingserver.appspot.com/task?id=1@@@",
+      "@@@STEP_LINK@fast/Test/One.html@https://luci-milo.appspot.com/ui/inv/build:8945511751514863184/test-results?q=fast%2FTest%2FOne.html@@@",
       "@@@STEP_FAILURE@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
-      "--input-json",
-      "{\"interrupted\": false, \"path_delimiter\": \"/\", \"tests\": {\"fast\": {\"Test\": {\"One.html\": {\"actual\": \"FAIL\", \"expected\": \"PASS\", \"is_unexpected\": true}, \"Two.html\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}}}}, \"version\": 3}",
-      "--builder-group",
-      "tryserver.chromium.mac",
-      "--builder-name",
-      "findit_variable",
-      "--build-number",
-      "0",
-      "--test-type",
-      "test r0.blink_web_tests (r0)",
-      "--chrome-revision",
-      "170242",
-      "--build-id",
-      "8945511751514863184",
-      "--test-results-server",
-      "test-results.appspot.com"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "FORCE_MAC_TOOLCHAIN": "1"
-    },
-    "luci_context": {
-      "realm": {
-        "name": "project:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "test r0.Upload to test-results [test r0.blink_web_tests (r0)]",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -4546,14 +4426,18 @@
       "@@@STEP_LOG_LINE@serialzed results@{@@@",
       "@@@STEP_LOG_LINE@serialzed results@  \"all_suites\": [@@@",
       "@@@STEP_LOG_LINE@serialzed results@    {@@@",
-      "@@@STEP_LOG_LINE@serialzed results@      \"invalid\": \"True\", @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"invalid\": \"False\", @@@",
       "@@@STEP_LOG_LINE@serialzed results@      \"suite_name\": \"blink_web_tests\", @@@",
-      "@@@STEP_LOG_LINE@serialzed results@      \"test_name_to_test_id_mapping\": {}, @@@",
-      "@@@STEP_LOG_LINE@serialzed results@      \"total_tests_ran\": 0, @@@",
-      "@@@STEP_LOG_LINE@serialzed results@      \"unexpected_failing_tests\": [], @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"test_name_to_test_id_mapping\": {@@@",
+      "@@@STEP_LOG_LINE@serialzed results@        \"fast/Test/One.html\": \"fast/Test/One.html\"@@@",
+      "@@@STEP_LOG_LINE@serialzed results@      }, @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"total_tests_ran\": 1, @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"unexpected_failing_tests\": [@@@",
+      "@@@STEP_LOG_LINE@serialzed results@        \"fast/Test/One.html\"@@@",
+      "@@@STEP_LOG_LINE@serialzed results@      ], @@@",
       "@@@STEP_LOG_LINE@serialzed results@      \"unexpected_passing_tests\": [], @@@",
       "@@@STEP_LOG_LINE@serialzed results@      \"unexpected_skipped_tests\": [], @@@",
-      "@@@STEP_LOG_LINE@serialzed results@      \"variant_hash\": \"\"@@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"variant_hash\": \"blink_web_tests_hash\"@@@",
       "@@@STEP_LOG_LINE@serialzed results@    }@@@",
       "@@@STEP_LOG_LINE@serialzed results@  ], @@@",
       "@@@STEP_LOG_LINE@serialzed results@  \"unexpected_failing_suites\": [@@@",
@@ -4610,10 +4494,6 @@
       "@@@STEP_LOG_LINE@report@          \"fast/Test/One.html\": {@@@",
       "@@@STEP_LOG_LINE@report@            \"fail_count\": 1, @@@",
       "@@@STEP_LOG_LINE@report@            \"pass_count\": 0@@@",
-      "@@@STEP_LOG_LINE@report@          }, @@@",
-      "@@@STEP_LOG_LINE@report@          \"fast/Test/Two.html\": {@@@",
-      "@@@STEP_LOG_LINE@report@            \"fail_count\": 0, @@@",
-      "@@@STEP_LOG_LINE@report@            \"pass_count\": 1@@@",
       "@@@STEP_LOG_LINE@report@          }@@@",
       "@@@STEP_LOG_LINE@report@        }, @@@",
       "@@@STEP_LOG_LINE@report@        \"status\": \"failed\", @@@",
@@ -4643,10 +4523,6 @@
       "@@@STEP_LOG_LINE@report@          \"fast/Test/One.html\"@@@",
       "@@@STEP_LOG_LINE@report@        ], @@@",
       "@@@STEP_LOG_LINE@report@        \"pass_fail_counts\": {@@@",
-      "@@@STEP_LOG_LINE@report@          \"dummy/Three.js\": {@@@",
-      "@@@STEP_LOG_LINE@report@            \"fail_count\": 0, @@@",
-      "@@@STEP_LOG_LINE@report@            \"pass_count\": 1@@@",
-      "@@@STEP_LOG_LINE@report@          }, @@@",
       "@@@STEP_LOG_LINE@report@          \"fast/Test/One.html\": {@@@",
       "@@@STEP_LOG_LINE@report@            \"fail_count\": 1, @@@",
       "@@@STEP_LOG_LINE@report@            \"pass_count\": 0@@@",
