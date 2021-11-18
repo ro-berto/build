@@ -1402,6 +1402,12 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='linux-lacros-builder-rel',
                 tester='linux-lacros-tester-rel',
             ),
+        'linux-lacros-rel-code-coverage':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.chromiumos',
+                buildername='linux-lacros-builder-rel',
+                tester='linux-lacros-tester-rel',
+            ),
         'linux-lacros-rel-rts':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.chromiumos',
