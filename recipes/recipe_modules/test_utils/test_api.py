@@ -273,7 +273,6 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
                                     shards=1, shard_indices=None,
                                     swarming_internal_failure=False,
                                     isolated_script_passing=True,
-                                    isolated_script_retcode=None,
                                     valid=None,
                                     missing_shards=None,
                                     use_json_test_format=False,
@@ -340,10 +339,7 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
       jsonish_shards = []
       files_dict = {}
       for index, i in enumerate(shard_indices):
-        if isolated_script_retcode is None:
-          exit_code = '1' if not passing or swarming_internal_failure else '0'
-        else:
-          exit_code = str(isolated_script_retcode)
+        exit_code = '1' if not passing or swarming_internal_failure else '0'
         jsonish_shards.append({
           'failure': not passing,
           'internal_failure': swarming_internal_failure,

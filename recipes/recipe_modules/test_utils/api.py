@@ -666,7 +666,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     # Filter out suites whose failing tests are all known to be flaky, and
     # only retry what's remaining.
     for suite in test_suites:
-      if (not suite.get_rdb_results(suffix) or
+      if (not suite.runs_on_swarming or not suite.get_rdb_results(suffix) or
           not suite.get_rdb_results(suffix).unexpected_failing_tests):
         continue
       # Convert the names of all failing tests in RDB's results to FindIt's
