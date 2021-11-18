@@ -38,7 +38,12 @@ def RunSteps(api):
           'r_webrtc_git': '${webrtc_got_rev}',
       },
       perf_builder_name_alias='test-perf-alias',
-      commit_position_property='got_revision_cp')
+      commit_position_property='got_revision_cp',
+      resultdb=steps.ResultDB(
+          enable=True,
+          result_format='gtest',
+          use_rdb_results_for_all_decisions=True))
+
   test = test_spec.get_test()
 
   _, builder_config = api.chromium_tests_builder_config.lookup_builder()

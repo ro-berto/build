@@ -1726,15 +1726,9 @@ class LocalGTestTest(LocalTest):
     # these local gtests via isolate from the src-side JSON files.
     # crbug.com/584469
     self._suffix_step_name_map[suffix] = '.'.join(step_result.name_tokens)
-    if not hasattr(step_result, 'test_utils'):  # pragma: no cover
+    if not hasattr(step_result, 'test_utils'):
       self.update_test_run(api, suffix,
                            api.test_utils.canonical.result_format())
-    # For perf tests, these runs do not return json data about which tests were
-    # executed as they report to ChromePerf dashboard.
-    # Here we just need to be sure that all tests have passed.
-    elif step_result.retcode == 0 and self.spec.perf_config:
-      self.update_test_run(api, suffix,
-                           api.test_utils.canonical.result_format(valid=True))
     else:
       gtest_results = step_result.test_utils.gtest_results
       self.update_test_run(api, suffix, gtest_results.canonical_result_format())
