@@ -46,23 +46,6 @@ def RunSteps(api, properties):
         status=common_pb.INFRA_FAILURE,
         summary_markdown=summary_markdown)
 
-  # Temporary workaround for https://crbug.com/1265426, remove after de-dup.
-  cmdline_tools_2 = api.path['checkout'].join('third_party', 'android_sdk',
-                                              'public', 'cmdline-tools',
-                                              'latest-2')
-  if api.path.exists(cmdline_tools_2):
-    cmdline_tools_original = api.path['checkout'].join('third_party',
-                                                       'android_sdk', 'public',
-                                                       'cmdline-tools',
-                                                       'latest')
-    mv_cmd = [
-        'mv',
-        '-f',
-        cmdline_tools_2,
-        cmdline_tools_original,
-    ]
-    api.step('mv', mv_cmd)
-
   with api.step.nest('package versions'):
     list_cmd = [
         sdk_manager,
@@ -160,10 +143,6 @@ def GenTests(api):
       api.path.exists(
           api.path['checkout'].join('third_party', 'android_sdk', 'public',
                                     'cmdline-tools', 'latest', 'bin',
-                                    'sdkmanager'),
-          # Will be removed when dup-fix is reverted.
-          api.path['checkout'].join('third_party', 'android_sdk', 'public',
-                                    'cmdline-tools', 'latest-2', 'bin',
                                     'sdkmanager'),
           api.path['checkout'].join('third_party', 'android_sdk', 'public',
                                     'emulator.yaml')),
