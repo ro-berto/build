@@ -88,6 +88,8 @@ def GenTests(api):
   correct_variant = _generate_variant(
       os='Mac-11',
       test_suite='ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4')
+  correct_variant_another_suite = _generate_variant(
+      os='Mac-11', test_suite='ios_chrome_web_eg2tests_module_iPad Air 2 14.4')
 
   # Populate build_database with two builds and two invocations.
   # Generating 10 builds into the build_database, each with an invocation
@@ -95,6 +97,14 @@ def GenTests(api):
   test_id = (
       'ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/'
       'TestSuite.test_a')
+
+  same_suite_another_test_id = (
+      'ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/'
+      'TestSuite.test_b')
+
+  another_suite_another_test_id = (
+      'ninja://ios/chrome/test/earl_grey2:ios_chrome_web_eg2tests_module/'
+      'TestSuite.test_c')
 
   def _generate_build(builder, invocation, build_input=None):
     return build_pb2.Build(
@@ -130,6 +140,9 @@ def GenTests(api):
           _generate_test_result(test_id, mismatched_test_suite),
           _generate_test_result(test_id, mismatched_os),
           _generate_test_result(test_id, correct_variant),
+          _generate_test_result(same_suite_another_test_id, correct_variant),
+          _generate_test_result(another_suite_another_test_id,
+                                correct_variant_another_suite),
       ]
     else:
       test_results = [
@@ -186,22 +199,40 @@ def GenTests(api):
       api.chromium_tests.read_source_side_spec(
           'fake-group', {
               'fake-builder': {
-                  'isolated_scripts': [{
-                      "isolate_name":
-                          "ios_chrome_bookmarks_eg2tests_module",
-                      "name": ("ios_chrome_bookmarks_eg2tests_module_iPad "
-                               "Air 2 14.4"),
-                      "swarming": {
-                          "can_use_on_swarming_builders": True,
-                          "dimension_sets": [{
-                              "os": "Mac-11"
-                          }],
-                          "shards": 2,
+                  'isolated_scripts': [
+                      {
+                          "isolate_name":
+                              "ios_chrome_bookmarks_eg2tests_module",
+                          "name": ("ios_chrome_bookmarks_eg2tests_module_iPad "
+                                   "Air 2 14.4"),
+                          "swarming": {
+                              "can_use_on_swarming_builders": True,
+                              "dimension_sets": [{
+                                  "os": "Mac-11"
+                              }],
+                              "shards": 2,
+                          },
+                          "test_id_prefix":
+                              ("ninja://ios/chrome/test/earl_grey2:"
+                               "ios_chrome_bookmarks_eg2tests_module/")
                       },
-                      "test_id_prefix":
-                          ("ninja://ios/chrome/test/earl_grey2:"
-                           "ios_chrome_bookmarks_eg2tests_module/")
-                  },],
+                      {
+                          "isolate_name":
+                              "ios_chrome_web_eg2tests_module",
+                          "name": ("ios_chrome_web_eg2tests_module_iPad "
+                                   "Air 2 14.4"),
+                          "swarming": {
+                              "can_use_on_swarming_builders": True,
+                              "dimension_sets": [{
+                                  "os": "Mac-11"
+                              }],
+                              "shards": 1,
+                          },
+                          "test_id_prefix":
+                              ("ninja://ios/chrome/test/earl_grey2:"
+                               "ios_chrome_web_eg2tests_module/")
+                      },
+                  ],
               },
           }),
       api.filter.suppress_analyze(),
@@ -221,6 +252,15 @@ def GenTests(api):
                   swarming=True,
               ),
               failure=False)),
+      api.override_step_data(('ios_chrome_web_eg2tests_module_iPad Air 2 14.4 '
+                              '(with patch) on Mac-11'),
+                             api.chromium_swarming.canned_summary_output(
+                                 api.test_utils.canned_isolated_script_output(
+                                     passing=True,
+                                     is_win=False,
+                                     swarming=True,
+                                 ),
+                                 failure=False)),
       # This overrides the file check to ensure that we have test files
       # in the given patch.
       api.step_data(
@@ -264,6 +304,16 @@ def GenTests(api):
                   swarming=True,
               ),
               failure=False)),
+      api.override_step_data(('test new tests for flakiness.'
+                              'ios_chrome_web_eg2tests_module_iPad Air 2 14.4 '
+                              '(check flakiness) on Mac-11'),
+                             api.chromium_swarming.canned_summary_output(
+                                 api.test_utils.canned_isolated_script_output(
+                                     passing=True,
+                                     is_win=False,
+                                     swarming=True,
+                                 ),
+                                 failure=False)),
       api.post_process(post_process.StatusSuccess),
   )
 

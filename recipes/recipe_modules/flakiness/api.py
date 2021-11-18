@@ -289,7 +289,8 @@ class FlakinessApi(recipe_api.RecipeApi):
     """
     results = self.m.resultdb.get_test_result_history(
         realm=self.m.buildbucket.builder_realm,
-        test_id_regexp='|'.join(t.test_id for t in list(prelim_tests)),
+        test_id_regexp='|'.join(
+            sorted(set(t.test_id for t in list(prelim_tests)))),
         variant_predicate=predicate_pb2.VariantPredicate(
             contains={'def': {
                 'builder': builder
@@ -478,25 +479,28 @@ class FlakinessApi(recipe_api.RecipeApi):
     # if the test_id start similarly.
     new_test_objects = []
     for test in test_objects:
-      # find whether there exists a Test object that has a matching test_id.
+      test_filter = []
+      # find whether the Test object has a matching test_id.
       for new_test in new_tests:
         if (test.spec.test_id_prefix in new_test.test_id and
             _do_variants_match(test, new_test)):
-          test_copy = copy.copy(test)
           # test_id = test_id_prefix + {A full test_suite + test_name
           # representation}, so we use the test_id_prefix to split out
           # the test_suite and test_name
-          test_filter = [new_test.test_id.split(test.spec.test_id_prefix)[-1]]
-          options = steps.TestOptions(
-              test_filter=test_filter,
-              repeat_count=self._repeat_count,
-              retry_limit=0)
-          test_copy._test_options = options
+          test_filter.append(
+              new_test.test_id.split(test.spec.test_id_prefix)[-1])
+      if test_filter:
+        test_copy = copy.copy(test)
+        options = steps.TestOptions(
+            test_filter=test_filter,
+            repeat_count=self._repeat_count,
+            retry_limit=0)
+        test_copy._test_options = options
 
-          # we only need one shard of the test spec to run a test instance
-          # multiple times, we override whatever shard value was set prior to 1
-          if isinstance(test.spec, steps.SwarmingTestSpec):
-            test_copy.spec = test.spec.with_shards(1)
-          new_test_objects.append(test_copy)
+        # we only need one shard of the test spec to run a test instance
+        # multiple times, we override whatever shard value was set prior to 1
+        if isinstance(test.spec, steps.SwarmingTestSpec):
+          test_copy.spec = test.spec.with_shards(1)
+        new_test_objects.append(test_copy)
 
     return new_test_objects
