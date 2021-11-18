@@ -817,7 +817,7 @@
       "-m",
       "Rolling v8/tools/luci-go: git_revision:8b15ba47cbaf07a56f93326e39f0c8e5069c19e9..git_revision:3d8f881462b1a93c7525499381fafc8a08691be7",
       "-m",
-      "R=anybody@chromium.org,ciciobello@chromium.org"
+      "TBR=anybody@chromium.org,ciciobello@chromium.org"
     ],
     "cwd": "[CACHE]/builder/v8",
     "env_prefixes": {
@@ -874,7 +874,6 @@
       "-f",
       "--use-commit-queue",
       "--bypass-hooks",
-      "--set-bot-commit",
       "--send-mail"
     ],
     "cwd": "[CACHE]/builder/v8",

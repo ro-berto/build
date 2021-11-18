@@ -13,7 +13,7 @@
       "-m",
       "Commit 0 (Mex)\nhttps://chromium.googlesource.com/external/github.com/tc39/test262/+/beefdea",
       "-m",
-      "R=anybody@chromium.org"
+      "TBR=anybody@chromium.org"
     ],
     "cwd": "[CACHE]/builder/v8",
     "env_prefixes": {
@@ -44,7 +44,6 @@
       "-f",
       "--use-commit-queue",
       "--bypass-hooks",
-      "--set-bot-commit",
       "--send-mail"
     ],
     "cwd": "[CACHE]/builder/v8",
