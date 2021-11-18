@@ -276,7 +276,6 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
                                     isolated_script_retcode=None,
                                     valid=None,
                                     missing_shards=None,
-                                    empty_shards=None,
                                     use_json_test_format=False,
                                     output_chartjson=False,
                                     output_histograms=False,
@@ -302,8 +301,6 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
     """
     if not missing_shards:
       missing_shards = []
-    if not empty_shards:
-      empty_shards = []
     per_shard_results = []
     per_shard_chartjson_results = []
     shard_indices = range(shards) if shard_indices is None else shard_indices
@@ -363,21 +360,13 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
         # Determine what output we are writing and if it is empty or not
         output_missing = i in missing_shards and not output_chartjson
         chartjson_output_missing = i in missing_shards and output_chartjson
-        output_empty = i in empty_shards and not output_chartjson
-        chartjson_output_empty = i in empty_shards and output_chartjson
 
         if not output_missing:
-          if output_empty:
-            files_dict[swarming_path] = ''
-          else:
-            files_dict[swarming_path] = self.m.json.dumps(
-                per_shard_results[index])
+          files_dict[swarming_path] = self.m.json.dumps(
+              per_shard_results[index])
         if not chartjson_output_missing and output_chartjson:
-          if chartjson_output_empty:
-            files_dict[chartjson_swarming_path] = ''
-          else:
-            files_dict[chartjson_swarming_path] = self.m.json.dumps(
-                per_shard_chartjson_results[index])
+          files_dict[chartjson_swarming_path] = self.m.json.dumps(
+              per_shard_chartjson_results[index])
 
       jsonish_summary = {'shards': jsonish_shards}
       step_test_data = recipe_test_api.StepTestData()

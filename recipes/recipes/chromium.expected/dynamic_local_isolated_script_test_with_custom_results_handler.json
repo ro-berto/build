@@ -860,36 +860,124 @@
     "name": "telemetry_gpu_unittests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"FAIL\": 2, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"PASS\": 0@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"path_delimiter\": \".\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"seconds_since_epoch\": 14000000, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tests\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"test1\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"Test1\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"actual\": \"FAIL FAIL TIMEOUT\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"expected\": \"PASS\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"Test2\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"actual\": \"FAIL FAIL FAIL\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"expected\": \"PASS TIMEOUT\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"is_unexpected\": true@@@",
-      "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"Test2-2\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"actual\": \"FAIL FAIL FAIL\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"expected\": \"PASS TIMEOUT\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"is_unexpected\": true@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"version\": 3@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"failures\": [], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"valid\": true@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_END@raw_io.output_text[stderr]@@@",
-      "@@@STEP_LINK@uploaded@fake://@@@"
+      "@@@STEP_LOG_LINE@raw_io.output_text[stderr]@rdb-stream: included \"invocations/test-name\" in \"invocations/build-inv\"@@@",
+      "@@@STEP_LOG_END@raw_io.output_text[stderr]@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "rdb",
+      "rpc",
+      "luci.resultdb.v1.ResultDB",
+      "QueryTestResultStatistics"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "telemetry_gpu_unittests stats",
+    "stdin": "{\"invocations\": [\"invocations/test-name\"]}",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@json.input@{@@@",
+      "@@@STEP_LOG_LINE@json.input@  \"invocations\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/test-name\"@@@",
+      "@@@STEP_LOG_LINE@json.input@  ]@@@",
+      "@@@STEP_LOG_LINE@json.input@}@@@",
+      "@@@STEP_LOG_END@json.input@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "rdb",
+      "query",
+      "-json",
+      "-n",
+      "1000",
+      "-u",
+      "-tr-fields",
+      "testId,variant,variantHash,status,tags,expected",
+      "test-name"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "telemetry_gpu_unittests results",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@raw_io.output@{\"invocation\": {\"name\": \"telemetry_gpu_unittests_results\", \"state\": \"FINALIZED\"}, \"invocationId\": \"inv0\"}@@@",
+      "@@@STEP_LOG_LINE@raw_io.output@{\"invocationId\": \"inv0\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"Test.One\", \"variant\": {\"def\": {\"test_suite\": \"telemetry_gpu_unittests\"}}, \"variantHash\": \"telemetry_gpu_unittests_hash\"}}@@@",
+      "@@@STEP_LOG_END@raw_io.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "rdb",
+      "rpc",
+      "luci.resultdb.v1.Recorder",
+      "UpdateIncludedInvocations",
+      "-include-update-token"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "include local test invocations",
+    "stdin": "{\"addInvocations\": [\"invocations/test-name\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@json.input@{@@@",
+      "@@@STEP_LOG_LINE@json.input@  \"addInvocations\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/test-name\"@@@",
+      "@@@STEP_LOG_LINE@json.input@  ], @@@",
+      "@@@STEP_LOG_LINE@json.input@  \"includingInvocation\": \"invocations/build:8945511751514863184\"@@@",
+      "@@@STEP_LOG_LINE@json.input@}@@@",
+      "@@@STEP_LOG_END@json.input@@@"
     ]
   },
   {
@@ -899,14 +987,18 @@
       "@@@STEP_LOG_LINE@serialzed results@{@@@",
       "@@@STEP_LOG_LINE@serialzed results@  \"all_suites\": [@@@",
       "@@@STEP_LOG_LINE@serialzed results@    {@@@",
-      "@@@STEP_LOG_LINE@serialzed results@      \"invalid\": \"True\", @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"invalid\": \"False\", @@@",
       "@@@STEP_LOG_LINE@serialzed results@      \"suite_name\": \"telemetry_gpu_unittests\", @@@",
-      "@@@STEP_LOG_LINE@serialzed results@      \"test_name_to_test_id_mapping\": {}, @@@",
-      "@@@STEP_LOG_LINE@serialzed results@      \"total_tests_ran\": 0, @@@",
-      "@@@STEP_LOG_LINE@serialzed results@      \"unexpected_failing_tests\": [], @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"test_name_to_test_id_mapping\": {@@@",
+      "@@@STEP_LOG_LINE@serialzed results@        \"Test.One\": \"Test.One\"@@@",
+      "@@@STEP_LOG_LINE@serialzed results@      }, @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"total_tests_ran\": 1, @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"unexpected_failing_tests\": [@@@",
+      "@@@STEP_LOG_LINE@serialzed results@        \"Test.One\"@@@",
+      "@@@STEP_LOG_LINE@serialzed results@      ], @@@",
       "@@@STEP_LOG_LINE@serialzed results@      \"unexpected_passing_tests\": [], @@@",
       "@@@STEP_LOG_LINE@serialzed results@      \"unexpected_skipped_tests\": [], @@@",
-      "@@@STEP_LOG_LINE@serialzed results@      \"variant_hash\": \"\"@@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"variant_hash\": \"telemetry_gpu_unittests_hash\"@@@",
       "@@@STEP_LOG_LINE@serialzed results@    }@@@",
       "@@@STEP_LOG_LINE@serialzed results@  ], @@@",
       "@@@STEP_LOG_LINE@serialzed results@  \"unexpected_failing_suites\": [@@@",
@@ -917,6 +1009,10 @@
     ]
   },
   {
+    "failure": {
+      "failure": {},
+      "humanReason": "1 Test Suite(s) failed.\n\n**telemetry_gpu_unittests** failed because of:\n\n- Test.One"
+    },
     "name": "$result"
   }
 ]

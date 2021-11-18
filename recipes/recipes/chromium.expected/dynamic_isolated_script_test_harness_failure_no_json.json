@@ -858,11 +858,10 @@
     },
     "name": "telemetry_gpu_unittests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@",
       "@@@STEP_LOG_LINE@json.output@null@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_END@raw_io.output_text[stderr]@@@",
-      "@@@STEP_EXCEPTION@@@"
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
