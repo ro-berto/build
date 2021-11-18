@@ -1616,17 +1616,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         deapply_changes=self.deapply_patch,
         root_solution_revision=root_solution_revision)
 
-  def trybot_steps_for_tests(self, builder_id, builder_config, tests=None):
-    """Similar to trybot_steps, but only runs certain tests.
-
-    This is currently experimental code. Talk to martiniss@ if you want to
-    use this."""
-    return self.run_tests_with_and_without_changes(
-        builder_id,
-        builder_config,
-        deapply_changes=self.deapply_patch,
-        tests=tests)
-
   def raise_failure_if_cq_depends_footer_exists(self):
     # CrOS CQ supports linking & testing CLs across different repos in one
     # build via the `Cq-Depends` footer. But Chrome's CQ does not. So check
@@ -1645,7 +1634,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                                          builder_id,
                                          builder_config,
                                          deapply_changes,
-                                         tests=None,
                                          root_solution_revision=None):
     """Compile and run tests for chromium_trybot recipe.
 
@@ -1669,7 +1657,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     raw_result, task = self.build_affected_targets(
         builder_id,
         builder_config,
-        tests_to_run=tests,
         root_solution_revision=root_solution_revision)
     if raw_result and raw_result.status != common_pb.SUCCESS:
       return raw_result
@@ -1946,7 +1933,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def build_affected_targets(self,
                              builder_id,
                              builder_config,
-                             tests_to_run=None,
                              root_solution_revision=None,
                              isolate_output_files_for_coverage=False):
     """Builds targets affected by change.
@@ -1958,7 +1944,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       mirrored_bots: An optional mapping from <group, buildername> of the
                      trybot to configurations of the mirrored CI bot. Defaults
                      are in ChromiumTestsApi.
-      tests_to_run: A list of test suites to run.
       isolate_output_files_for_coverage: Whether to also upload all test
         binaries and other required code coverage output files to one hash.
 
@@ -2003,18 +1988,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     test_targets, compile_targets = self.determine_compilation_targets(
         builder_id, builder_config, affected_files, targets_config)
-
-    if tests_to_run:
-      compile_targets = [t for t in compile_targets if t in tests_to_run]
-      test_targets = [t for t in test_targets if t in tests_to_run]
-      # TODO(crbug.com/840252): Using startswith for now to allow layout tests
-      # to work, since the # ninja target which gets computed has exparchive as
-      # the suffix. Can switch to plain comparison after the bug is fixed.
-      tests = [
-          t for t in tests if any(
-              t.target_name.startswith(target_name)
-              for target_name in tests_to_run)
-      ]
 
     # Compiles and isolates test suites.
     raw_result = result_pb2.RawResult(status=common_pb.SUCCESS)
