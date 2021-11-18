@@ -55,16 +55,9 @@ def RunSteps(api, properties):
                                                        'android_sdk', 'public',
                                                        'cmdline-tools',
                                                        'latest')
-    # Remove the broken cmdline-tools dir.
-    rm_cmd = [
-        'rm',
-        '-rf',
-        cmdline_tools_original,
-    ]
-    api.step('rm', rm_cmd)
-    # Rename the fallback cmdline-tools to be used by default.
     mv_cmd = [
         'mv',
+        '-f',
         cmdline_tools_2,
         cmdline_tools_original,
     ]
