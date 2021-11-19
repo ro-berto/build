@@ -444,6 +444,7 @@ SPEC.update([
         chromium_apply_config=[
             'download_vr_test_apks',
         ],
+        gclient_apply_config=['android', 'enable_reclient'],
         chromium_config_kwargs={'TARGET_BITS': 64}),
     stock_config(
         'android-marshmallow-x86-rel',
@@ -491,9 +492,7 @@ SPEC.update([
         execution_mode=builder_spec.TEST,
         parent_buildername='android-cronet-arm64-rel'),
     stock_cronet_config(
-        'android-cronet-x86-dbg',
-        config='Debug',
-        android_config='x86_builder'),
+        'android-cronet-x86-dbg', config='Debug', android_config='x86_builder'),
     stock_cronet_config(
         'android-cronet-x86-dbg-oreo-tests',
         config='Debug',
@@ -518,7 +517,5 @@ SPEC.update([
         execution_mode=builder_spec.TEST,
         parent_buildername='android-cronet-x86-dbg',
         android_config='x86_builder'),
-    stock_cronet_config(
-        'android-cronet-x86-rel',
-        android_config='x86_builder'),
+    stock_cronet_config('android-cronet-x86-rel', android_config='x86_builder'),
 ])
