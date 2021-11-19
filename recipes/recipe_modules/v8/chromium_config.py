@@ -66,3 +66,11 @@ def node_ci(c):
     c.gn_args.append('use_sysroot=true')
     c.gn_args.append('use_custom_libcxx=true')
     c.gn_args.append('node_use_custom_libcxx=true')
+
+@CONFIG_CTX(includes=['node_ci'])
+def node_ci_debug(c):
+  c.gn_args.append('is_component_build=true')
+  c.gn_args.append('symbol_level=1')
+  c.gn_args.append('v8_enable_backtrace=true')
+  c.gn_args.append('v8_enable_fast_mksnapshot=true')
+  c.gn_args.append('v8_enable_slow_dchecks=true')

@@ -37,6 +37,8 @@ DEPS = [
 ]
 
 PROPERTIES = {
+    # Run in debug mode.
+    'is_debug': Property(default=False, kind=bool),
     # List of tester names to trigger.
     'triggers': Property(default=None, kind=list),
     # Use V8 ToT (HEAD) revision instead of pinned.
@@ -73,13 +75,20 @@ def run_with_retry(api, step_name, step_fun):
   return True
 
 
-def RunSteps(api, triggers, v8_tot, use_remoteexec, use_rbe):
+def RunSteps(api, is_debug, triggers, v8_tot, use_remoteexec, use_rbe):
   # Handle both deprecated and replacement reclient settings.
   use_remoteexec = use_remoteexec or use_rbe
   use_goma = not use_remoteexec
   with api.step.nest('initialization'):
+    if is_debug:
+      build_config = 'Debug'
+      chromium_config = 'node_ci_debug'
+    else:
+      build_config = 'Release'
+      chromium_config = 'node_ci'
+
     # Set up dependent modules.
-    api.chromium.set_config('node_ci')
+    api.chromium.set_config(chromium_config, BUILD_CONFIG=build_config)
     api.gclient.set_config('node_ci')
     if use_remoteexec:
       api.gclient.apply_config('enable_reclient')
@@ -315,6 +324,15 @@ def GenTests(api):
     api.step_data('build.compile', retcode=1) +
     api.post_process(StatusFailure) +
     api.post_process(DropExpectation)
+  )
+
+  yield (
+    test(
+      'debug_mode',
+      platform='linux',
+      is_debug=True,
+    ) +
+    api.post_process(Filter('build.gn'))
   )
 
   yield (test(

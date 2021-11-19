@@ -1,0 +1,39 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[depot_tools]/gn.py",
+      "--root=[CACHE]/builder/node-ci",
+      "gen",
+      "//out/Debug",
+      "--args=is_clang=true use_sysroot=true use_custom_libcxx=true node_use_custom_libcxx=true is_component_build=true symbol_level=1 v8_enable_backtrace=true v8_enable_fast_mksnapshot=true v8_enable_slow_dchecks=true is_debug=true target_cpu=\"x64\" use_goma=true goma_dir=\"[CACHE]/goma/client\""
+    ],
+    "cwd": "[CACHE]/builder/node-ci",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/node-ci/third_party/depot_tools"
+      ]
+    },
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "build.gn",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  }
+]
