@@ -1,7 +1,7 @@
 [
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -152,7 +152,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
+        "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "calibration attempt 1.check mjsunit/foobar at #0.check mjsunit/foobar at #0 - shard 1",

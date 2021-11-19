@@ -138,7 +138,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
     ],
     "infra_step": true,
     "name": "calibration attempt 1.check mjsunit/foobar at #1.install infra/tools/luci/swarming.ensure package directory",
@@ -151,7 +151,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin",
       "-ensure-file",
       "infra/tools/luci/swarming/${platform} swarming_module_pin",
       "-max-threads",
@@ -178,7 +178,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -289,7 +289,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -438,7 +438,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
+        "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "calibration attempt 1.check mjsunit/foobar at #1.check mjsunit/foobar at #1 - shard 0",
@@ -520,7 +520,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
+        "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "calibration attempt 1.check mjsunit/foobar at #1.check mjsunit/foobar at #1 - shard 1",
@@ -582,7 +582,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -693,7 +693,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -804,7 +804,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -915,7 +915,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -1064,7 +1064,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
+        "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "calibration attempt 2.check mjsunit/foobar at #1.check mjsunit/foobar at #1 - shard 0",
@@ -1147,7 +1147,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
+        "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "calibration attempt 2.check mjsunit/foobar at #1.check mjsunit/foobar at #1 - shard 1",
@@ -1230,7 +1230,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
+        "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "calibration attempt 2.check mjsunit/foobar at #1.check mjsunit/foobar at #1 - shard 2",
@@ -1357,7 +1357,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -1468,7 +1468,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -1579,7 +1579,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -1690,7 +1690,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -1839,7 +1839,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
+        "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "check mjsunit/foobar at #2.check mjsunit/foobar at #2 - shard 0",
@@ -1922,7 +1922,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
+        "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "check mjsunit/foobar at #2.check mjsunit/foobar at #2 - shard 1",
@@ -2004,7 +2004,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
+        "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "check mjsunit/foobar at #2.check mjsunit/foobar at #2 - shard 2",
@@ -2086,7 +2086,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
+        "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "check mjsunit/foobar at #2.check mjsunit/foobar at #2 - shard 3",
@@ -2249,7 +2249,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -2360,7 +2360,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -2471,7 +2471,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -2582,7 +2582,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -2731,7 +2731,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
+        "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "check mjsunit/foobar at #5.check mjsunit/foobar at #5 - shard 0",
@@ -2813,7 +2813,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
+        "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "check mjsunit/foobar at #5.check mjsunit/foobar at #5 - shard 1",
@@ -2895,7 +2895,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
+        "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "check mjsunit/foobar at #5.check mjsunit/foobar at #5 - shard 2",
@@ -2977,7 +2977,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
+        "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "check mjsunit/foobar at #5.check mjsunit/foobar at #5 - shard 3",
@@ -3081,7 +3081,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -3192,7 +3192,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -3303,7 +3303,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -3414,7 +3414,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -3563,7 +3563,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
+        "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "check mjsunit/foobar at #3.check mjsunit/foobar at #3 - shard 0",
@@ -3646,7 +3646,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
+        "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "check mjsunit/foobar at #3.check mjsunit/foobar at #3 - shard 1",
@@ -3728,7 +3728,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
+        "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "check mjsunit/foobar at #3.check mjsunit/foobar at #3 - shard 2",
@@ -3810,7 +3810,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
+        "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "name": "check mjsunit/foobar at #3.check mjsunit/foobar at #3 - shard 3",

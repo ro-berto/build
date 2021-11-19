@@ -309,7 +309,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/cipd/infra/tools/bqupload/latest"
+      "[START_DIR]/cipd_tool/infra/tools/bqupload/latest"
     ],
     "infra_step": true,
     "luci_context": {
@@ -334,7 +334,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/cipd/infra/tools/bqupload/latest",
+      "[START_DIR]/cipd_tool/infra/tools/bqupload/latest",
       "-ensure-file",
       "infra/tools/bqupload/${platform} latest",
       "-max-threads",
@@ -373,7 +373,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/bqupload/latest/bqupload",
+      "[START_DIR]/cipd_tool/infra/tools/bqupload/latest/bqupload",
       "goma-logs.rbe_metrics.builds"
     ],
     "infra_step": true,

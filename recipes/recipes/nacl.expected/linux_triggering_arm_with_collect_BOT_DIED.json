@@ -339,7 +339,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/cipd/infra/tools/run_annotations/latest"
+      "[START_DIR]/cipd_tool/infra/tools/run_annotations/latest"
     ],
     "cwd": "[START_DIR]/native_client",
     "env": {
@@ -387,7 +387,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/cipd/infra/tools/run_annotations/latest",
+      "[START_DIR]/cipd_tool/infra/tools/run_annotations/latest",
       "-ensure-file",
       "infra/tools/run_annotations/${platform} latest",
       "-max-threads",
@@ -449,7 +449,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/run_annotations/latest/run_annotations",
+      "[START_DIR]/cipd_tool/infra/tools/run_annotations/latest/run_annotations",
       "--output",
       "[CLEANUP]/tmp_tmp_1/sub_build.pb",
       "--",
@@ -904,7 +904,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/cipd/infra/tools/luci/cas/git_revision%3Amock_infra_git_revision"
+      "[START_DIR]/cipd_tool/infra/tools/luci/cas/git_revision%3Amock_infra_git_revision"
     ],
     "infra_step": true,
     "luci_context": {
@@ -929,7 +929,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/cipd/infra/tools/luci/cas/git_revision%3Amock_infra_git_revision",
+      "[START_DIR]/cipd_tool/infra/tools/luci/cas/git_revision%3Amock_infra_git_revision",
       "-ensure-file",
       "infra/tools/luci/cas/${platform} git_revision:mock_infra_git_revision",
       "-max-threads",
@@ -968,7 +968,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/cas/git_revision%3Amock_infra_git_revision/cas",
+      "[START_DIR]/cipd_tool/infra/tools/luci/cas/git_revision%3Amock_infra_git_revision/cas",
       "archive",
       "-cas-instance",
       "projects/example-cas-server/instances/default_instance",
@@ -1009,7 +1009,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
     ],
     "infra_step": true,
     "luci_context": {
@@ -1034,7 +1034,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin",
       "-ensure-file",
       "infra/tools/luci/swarming/${platform} swarming_module_pin",
       "-max-threads",
@@ -1073,7 +1073,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -1190,7 +1190,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "collect",
       "-server",
       "https://example.swarmingserver.appspot.com",

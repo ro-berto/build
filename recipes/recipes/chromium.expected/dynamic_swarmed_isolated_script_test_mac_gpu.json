@@ -697,7 +697,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -727,7 +727,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin",
       "-ensure-file",
       "infra/tools/luci/swarming/${platform} swarming_module_pin",
       "-max-threads",
@@ -771,7 +771,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -935,7 +935,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -1603,7 +1603,7 @@
     },
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
+        "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "luci_context": {
@@ -1780,7 +1780,7 @@
     },
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
+        "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "luci_context": {

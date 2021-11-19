@@ -1504,7 +1504,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/cipd/infra/recipe_bundles/chromium.googlesource.com/infra/luci/recipes-py/refs/heads/main"
+      "[START_DIR]/cipd_tool/infra/recipe_bundles/chromium.googlesource.com/infra/luci/recipes-py/refs/heads/main"
     ],
     "infra_step": true,
     "luci_context": {
@@ -1529,7 +1529,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/cipd/infra/recipe_bundles/chromium.googlesource.com/infra/luci/recipes-py/refs/heads/main",
+      "[START_DIR]/cipd_tool/infra/recipe_bundles/chromium.googlesource.com/infra/luci/recipes-py/refs/heads/main",
       "-ensure-file",
       "infra/recipe_bundles/chromium.googlesource.com/infra/luci/recipes-py refs/heads/main",
       "-max-threads",
@@ -1570,7 +1570,7 @@
     "cmd": [
       "vpython",
       "-u",
-      "[CACHE]/cipd/infra/recipe_bundles/chromium.googlesource.com/infra/luci/recipes-py/refs/heads/main/recipe_engine/recipes.py",
+      "[START_DIR]/cipd_tool/infra/recipe_bundles/chromium.googlesource.com/infra/luci/recipes-py/refs/heads/main/recipe_engine/recipes.py",
       "--package",
       "[CACHE]/builder/baz/infra/config/recipes.cfg",
       "analyze",
@@ -1674,7 +1674,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
     ],
     "infra_step": true,
     "luci_context": {
@@ -1699,7 +1699,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin",
       "-ensure-file",
       "infra/tools/luci/swarming/${platform} swarming_module_pin",
       "-max-threads",
@@ -1973,7 +1973,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "collect",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -2263,7 +2263,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "collect",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -2553,7 +2553,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "collect",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -2843,7 +2843,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "collect",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -3133,7 +3133,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "collect",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -3423,7 +3423,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "collect",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -3713,7 +3713,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "collect",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -4003,7 +4003,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "collect",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -4293,7 +4293,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "collect",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -4583,7 +4583,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "collect",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -4873,7 +4873,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "collect",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -5163,7 +5163,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "collect",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -5453,7 +5453,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "collect",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -5743,7 +5743,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "collect",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -6033,7 +6033,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "collect",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -6323,7 +6323,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "collect",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -6613,7 +6613,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "collect",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -6903,7 +6903,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "collect",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -7193,7 +7193,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "collect",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -7483,7 +7483,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "collect",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -7773,7 +7773,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "collect",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -8063,7 +8063,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "collect",
       "-server",
       "https://example.swarmingserver.appspot.com",

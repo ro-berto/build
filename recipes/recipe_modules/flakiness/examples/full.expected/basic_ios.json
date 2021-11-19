@@ -1470,7 +1470,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/cipd/infra/tools/luci/isolate/git_revision%3Amock_infra_git_revision"
+      "[START_DIR]/cipd_tool/infra/tools/luci/isolate/git_revision%3Amock_infra_git_revision"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -1498,7 +1498,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/cipd/infra/tools/luci/isolate/git_revision%3Amock_infra_git_revision",
+      "[START_DIR]/cipd_tool/infra/tools/luci/isolate/git_revision%3Amock_infra_git_revision",
       "-ensure-file",
       "infra/tools/luci/isolate/${platform} git_revision:mock_infra_git_revision",
       "-max-threads",
@@ -1540,7 +1540,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/isolate/git_revision%3Amock_infra_git_revision/isolate",
+      "[START_DIR]/cipd_tool/infra/tools/luci/isolate/git_revision%3Amock_infra_git_revision/isolate",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
@@ -1652,7 +1652,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -1681,7 +1681,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin",
       "-ensure-file",
       "infra/tools/luci/swarming/${platform} swarming_module_pin",
       "-max-threads",
@@ -1724,7 +1724,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -1889,7 +1889,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -2054,7 +2054,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -2705,7 +2705,7 @@
     },
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
+        "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "luci_context": {
@@ -2818,7 +2818,7 @@
     },
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
+        "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "luci_context": {
@@ -3574,7 +3574,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -3731,7 +3731,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -4174,7 +4174,7 @@
     },
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
+        "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "luci_context": {
@@ -4287,7 +4287,7 @@
     },
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
+        "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "luci_context": {

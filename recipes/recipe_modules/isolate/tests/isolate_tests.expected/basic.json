@@ -31,7 +31,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/cipd/infra/tools/luci/isolate/git_revision%3Amock_infra_git_revision"
+      "[START_DIR]/cipd_tool/infra/tools/luci/isolate/git_revision%3Amock_infra_git_revision"
     ],
     "infra_step": true,
     "name": "install infra/tools/luci/isolate.ensure package directory",
@@ -44,7 +44,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/cipd/infra/tools/luci/isolate/git_revision%3Amock_infra_git_revision",
+      "[START_DIR]/cipd_tool/infra/tools/luci/isolate/git_revision%3Amock_infra_git_revision",
       "-ensure-file",
       "infra/tools/luci/isolate/${platform} git_revision:mock_infra_git_revision",
       "-max-threads",
@@ -71,7 +71,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/isolate/git_revision%3Amock_infra_git_revision/isolate",
+      "[START_DIR]/cipd_tool/infra/tools/luci/isolate/git_revision%3Amock_infra_git_revision/isolate",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",

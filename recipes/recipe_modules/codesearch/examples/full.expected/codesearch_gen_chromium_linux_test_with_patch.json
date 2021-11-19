@@ -1108,7 +1108,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/cipd/infra/tools/package_index/latest"
+      "[START_DIR]/cipd_tool/infra/tools/package_index/latest"
     ],
     "infra_step": true,
     "luci_context": {
@@ -1133,7 +1133,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/cipd/infra/tools/package_index/latest",
+      "[START_DIR]/cipd_tool/infra/tools/package_index/latest",
       "-ensure-file",
       "infra/tools/package_index/${platform} latest",
       "-max-threads",
@@ -1172,7 +1172,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/package_index/latest/package_index",
+      "[START_DIR]/cipd_tool/infra/tools/package_index/latest/package_index",
       "--checkout_dir",
       "[START_DIR]/src",
       "--path_to_compdb",

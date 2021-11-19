@@ -63,7 +63,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/isolate/git_revision%3Amock_infra_git_revision/isolate",
+      "[START_DIR]/cipd_tool/infra/tools/luci/isolate/git_revision%3Amock_infra_git_revision/isolate",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
@@ -97,7 +97,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -110,7 +110,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -123,7 +123,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
       "https://example.swarmingserver.appspot.com",
@@ -136,7 +136,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/run_annotations/latest/run_annotations",
+      "[START_DIR]/cipd_tool/infra/tools/run_annotations/latest/run_annotations",
       "--output",
       "[CLEANUP]/tmp_tmp_1/sub_build.pb",
       "--",
@@ -174,7 +174,7 @@
     },
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
+        "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "infra_step": true,
@@ -215,7 +215,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/cipd/infra/tools/run_annotations/latest/run_annotations",
+      "[START_DIR]/cipd_tool/infra/tools/run_annotations/latest/run_annotations",
       "--output",
       "[CLEANUP]/tmp_tmp_3/sub_build.pb",
       "--",
@@ -253,7 +253,7 @@
     },
     "env_prefixes": {
       "PATH": [
-        "[CACHE]/cipd/infra/tools/luci/swarming/swarming_module_pin"
+        "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
       ]
     },
     "infra_step": true,
