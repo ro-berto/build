@@ -394,7 +394,7 @@ def LogcatHandler(api, step_result, has_valid_results):
   result = ""
   for file_name, contents in task_output_dir.items():
     if file_name.endswith('logcats'):  # pragma: no cover
-      result += contents
+      result += contents.decode()
 
   step_result.presentation.logs['logcats'] = result.splitlines()
 
