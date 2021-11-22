@@ -449,7 +449,11 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
     return (self.m.raw_io.output_dir(files_dict) +
             self.m.json.output(canned_jsonish, retcode))
 
-  def rdb_results(self, suite_name, failing_tests=None, skipped_tests=None):
+  def rdb_results(self,
+                  suite_name,
+                  failing_tests=None,
+                  skipped_tests=None,
+                  flaky_tests=None):
     """Returns a JSON blob used to override data for 'query test results'.
 
     Args:
@@ -457,6 +461,8 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
       failing_tests: List of test cases to create results for. Each test case
           will have a single rdb_test_result.FAIL result.
       skipped_tests: Same as failing_tests above, but with rdb_test_result.SKIP.
+      flaky_tests: List of test cases which has two invocations,
+          rdb_test_result.PASS and rdb_test_result.FAIL.
     """
 
     def _generate_invocation(test, status):
@@ -478,11 +484,15 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
 
     failing_tests = failing_tests or []
     skipped_tests = skipped_tests or []
+    flaky_tests = flaky_tests or []
     invocations = []
     for test in failing_tests:
       invocations.append(_generate_invocation(test, rdb_test_result.FAIL))
     for test in skipped_tests:
       invocations.append(_generate_invocation(test, rdb_test_result.SKIP))
+    for test in flaky_tests:
+      invocations.append(_generate_invocation(test, rdb_test_result.PASS))
+      invocations.append(_generate_invocation(test, rdb_test_result.FAIL))
 
     invocations_by_inv_id = {}
     for i, inv in enumerate(invocations):

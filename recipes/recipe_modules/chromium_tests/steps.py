@@ -3666,6 +3666,15 @@ class SkylabTest(Test):
               attempt_step.presentation.status = api.step.EXCEPTION
             elif b.status == common_pb2.FAILURE:
               attempt_step.presentation.status = api.step.FAILURE
+        # If the status of any test run is success, the parent step should be
+        # success too. The "Test Results" tab could expose the detailed flaky
+        # information.
+        if any(
+            [b.status == common_pb2.SUCCESS for b in self.test_runner_builds]):
+          step.presentation.status = api.step.SUCCESS
+          step.presentation.step_text = (
+              'Test had failed runs. '
+              'Check "Test Results" tab for the deterministic results.')
 
     return step
 
