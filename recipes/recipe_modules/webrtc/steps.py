@@ -4,7 +4,6 @@
 
 from __future__ import absolute_import
 
-import attr
 import functools
 import json
 import os
@@ -13,7 +12,6 @@ import sys
 
 from recipe_engine import recipe_api
 from recipe_engine.engine_types import freeze
-from RECIPE_MODULES.build.chromium_tests.resultdb import ResultDB
 
 THIS_DIR = os.path.dirname(__file__)
 sys.path.append(os.path.join(os.path.dirname(THIS_DIR)))
@@ -22,11 +20,12 @@ sys.path.append(os.path.join(os.path.dirname(THIS_DIR)))
 # adb path relative to out dir (e.g. out/Release)
 ADB_PATH = '../../third_party/android_sdk/public/platform-tools/adb'
 
-ANDROID_CIPD_PACKAGES = [(
-    "bin",
-    "infra/tools/luci/logdog/butler/${platform}",
-    "git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c",
-)]
+ANDROID_CIPD_PACKAGES = [
+    ("bin",
+     "infra/tools/luci/logdog/butler/${platform}",
+     "git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c",
+    )
+]
 
 
 def generate_tests(phase, bot, platform_name, build_out_dir, checkout_path,
@@ -82,13 +81,9 @@ def generate_tests(phase, bot, platform_name, build_out_dir, checkout_path,
       if platform_name == 'linux':
         tests.append(baremetal_test('isac_fix_test'))
 
-      tests.append(
-          baremetal_test(
-              'webrtc_perf_tests',
-              args=[
-                  '--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/',
-                  '--nologs'
-              ]))
+      tests.append(baremetal_test('webrtc_perf_tests',
+          args=['--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/',
+                '--nologs']))
 
   if test_suite == 'desktop_perf_swarming':
 
@@ -318,15 +313,7 @@ class WebRtcIsolatedGtest(object):
 
     self._task = self.create_task(api, task_input)
 
-    resultdb = None
-    for s in self._task.request[0].command:
-      if '--dump_json_test_results=' in s:
-        resultdb = attr.evolve(
-            ResultDB.create(),
-            result_format='json',
-            result_file=s[len('--dump_json_test_results='):],
-        )
-    return api.chromium_swarming.trigger_task(self._task, resultdb)
+    return api.chromium_swarming.trigger_task(self._task)
 
   @recipe_api.composite_step
   def run(self, api):
@@ -355,6 +342,7 @@ class WebRtcIsolatedGtest(object):
 
     self._apply_swarming_task_config(task, api)
     return task
+
 
   def _apply_swarming_task_config(self, task, api):
     """Applies shared configuration for swarming tasks.
@@ -387,12 +375,8 @@ class WebRtcIsolatedGtest(object):
 
     task.extra_args.extend(self._args)
 
-    # Add tags.
-    tags = {'test_suite': [self.name]}
-
     task.request = (
-        task.request.with_slice(0, task_slice).with_name(
-            self.step_name).with_tags(tags))
+        task.request.with_slice(0, task_slice).with_name(self.step_name))
     return task
 
 
