@@ -163,9 +163,15 @@ def run_unit_tests(api, builder_config):
       '--coverage',
     ])
 
+def lint_script_exists(api, name):
+  script_file = api.path['checkout'].join('scripts', 'test', name)
+  return api.path.exists(script_file)
 
 def run_lint_check(api):
-  run_node_script(api, 'Lint Check with ESLint', 'run_lint_check_js.mjs')
+  lint_script = 'run_lint_check_js.mjs'
+  if not lint_script_exists(api, lint_script):
+    lint_script = 'run_lint_check_js.js'
+  run_node_script(api, 'Lint Check with ESLint', lint_script)
   run_node_script(api, 'Lint check with Stylelint','run_lint_check_css.js')
 
 
@@ -396,4 +402,14 @@ def GenTests(api):
       api.properties(runner_args="--ITERATIONS=100 --SUITE=flaky/suite"),
       api.post_process(post_process.DoesNotRun, 'Unit Tests'),
       api.post_process(post_process.Filter('E2E tests')),
+  )
+
+  yield api.test(
+      'new lint check',
+      api.builder_group.for_current('tryserver.devtools-frontend'),
+      ci_build(builder='linux'),
+      api.properties(builder_config='Debug'),
+      api.path.exists(api.path['checkout'].join(
+          'scripts', 'test', 'run_lint_check_js.mjs'
+      )),
   )

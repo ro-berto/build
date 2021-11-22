@@ -239,13 +239,43 @@
   },
   {
     "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
+      "[CACHE]/builder/devtools-frontend/out/Debug"
+    ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/devtools-frontend/third_party"
+      ]
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "devtools:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "clean outdir"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_REPO[depot_tools]/gn.py",
       "--root=[CACHE]/builder/devtools-frontend",
       "gen",
-      "//out/Release",
-      "--args=devtools_dcheck_always_on=true is_debug=false target_cpu=\"x64\" use_goma=true goma_dir=\"[CACHE]/goma/client\""
+      "//out/Debug",
+      "--args=devtools_dcheck_always_on=true is_debug=true target_cpu=\"x64\" use_goma=true goma_dir=\"[CACHE]/goma/client\""
     ],
     "cwd": "[CACHE]/builder/devtools-frontend",
     "env": {
@@ -424,7 +454,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/devtools-frontend/out/Release",
+      "[CACHE]/builder/devtools-frontend/out/Debug",
       "-j",
       "80"
     ],
@@ -458,7 +488,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/devtools-frontend/out/Release",
+      "[CACHE]/builder/devtools-frontend/out/Debug",
       "-j",
       "80",
       "-d",
@@ -640,9 +670,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[CACHE]/builder/devtools-frontend/out/Release",
+      "[CACHE]/builder/devtools-frontend/out/Debug",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/devtools-frontend/out/Release\", \"-j\", 80]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/devtools-frontend/out/Debug\", \"-j\", 80]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -742,7 +772,7 @@
       "python",
       "-u",
       "[CACHE]/builder/devtools-frontend/scripts/test/run_unittests.py",
-      "--target=Release",
+      "--target=Debug",
       "--coverage"
     ],
     "env_prefixes": {
@@ -777,7 +807,7 @@
       "--test-suite-path=gen/test/interactions",
       "--test-suite-source-dir=test/interactions",
       "--test-server-type='component-docs'",
-      "--target=Release",
+      "--target=Debug",
       "--coverage"
     ],
     "cwd": "[CACHE]/builder/devtools-frontend",
@@ -806,7 +836,7 @@
       "-u",
       "third_party/node/node.py",
       "--output",
-      "scripts/test/run_lint_check_js.js"
+      "scripts/test/merge_coverage_reports.js"
     ],
     "cwd": "[CACHE]/builder/devtools-frontend",
     "env_prefixes": {
@@ -826,70 +856,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "Lint Check with ESLint"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "third_party/node/node.py",
-      "--output",
-      "scripts/test/run_lint_check_css.js"
-    ],
-    "cwd": "[CACHE]/builder/devtools-frontend",
-    "env_prefixes": {
-      "PATH": [
-        "[CACHE]/builder/devtools-frontend/third_party"
-      ]
-    },
-    "luci_context": {
-      "realm": {
-        "name": "devtools:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "Lint check with Stylelint"
-  },
-  {
-    "cmd": [
-      "rdb",
-      "stream",
-      "--",
-      "python",
-      "-u",
-      "third_party/node/node.py",
-      "--output",
-      "scripts/test/run_test_suite.js",
-      "--test-suite-path=gen/test/e2e",
-      "--test-suite-source-dir=test/e2e",
-      "--test-server-type='hosted-mode'",
-      "--target=Release"
-    ],
-    "cwd": "[CACHE]/builder/devtools-frontend",
-    "env_prefixes": {
-      "PATH": [
-        "[CACHE]/builder/devtools-frontend/third_party"
-      ]
-    },
-    "luci_context": {
-      "realm": {
-        "name": "devtools:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "E2E tests"
+    "name": "Combining coverage reports"
   },
   {
     "name": "$result"
