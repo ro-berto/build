@@ -14,6 +14,11 @@ PRESUBMIT_VERSION = '2.0.0'
 # only run under vpython3, and lints are performed with pylint 2.7. The
 # expectation is that these will become the defaults over time.
 PYTHON3_ONLY_FILES = (
+    'recipes/recipes/flakiness/generate_builder_test_data.resources/query.py',
+    (
+        'recipes/recipes/flakiness/generate_builder_test_data.resources/'
+        'query_test.py'
+    ),
     'recipes/recipe_modules/tricium_clang_tidy/resources/tricium_clang_tidy.py',
     'recipes/recipe_modules/tricium_clang_tidy/resources/'
     'tricium_clang_tidy_test.py',
