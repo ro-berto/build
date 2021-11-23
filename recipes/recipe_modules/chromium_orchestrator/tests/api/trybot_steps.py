@@ -267,6 +267,12 @@ def GenTests(api):
           },
       }),
       api.post_process(post_process.MustRun, 'quick run options'),
+      api.post_process(
+          post_process.LogContains,
+          'trigger compilator (with patch)',
+          'request',
+          ['$recipe_engine/cq', 'QUICK_DRY_RUN'],
+      ),
       api.post_process(post_process.DropExpectation),
   )
 

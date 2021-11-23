@@ -97,6 +97,9 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
 
     self.m.gclient.c.revisions[gclient_soln_name] = patch_repo_head_revision
 
+    # Pass in any RTS mode input props
+    compilator_properties.update(self.m.cq.props_for_child_build)
+
     request = self.m.buildbucket.schedule_request(
         builder=self.compilator,
         swarming_parent_run_id=self.m.swarming.task_id,
