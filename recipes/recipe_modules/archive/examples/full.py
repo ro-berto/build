@@ -617,14 +617,24 @@ def GenTests(api):
     )
 
   input_properties = properties.InputProperties(
-      archive_datas=[{
-          'files': ['/path/to/some/file.txt'],
-          'gcs_bucket': 'any-bucket',
-          'gcs_path': 'dest_dir/',
-          'archive_type': properties.ArchiveData.ARCHIVE_TYPE_FILES,
-          'verifiable_key_path': '/path/to/some/key',
-          'base_dir': 'src-internal',
-      }],)
+      archive_datas=[
+          {
+              'files': ['/path/to/some/file.txt'],
+              'gcs_bucket': 'any-bucket',
+              'gcs_path': 'dest_dir/',
+              'archive_type': properties.ArchiveData.ARCHIVE_TYPE_FILES,
+              'verifiable_key_path': '/path/to/some/key',
+              'base_dir': 'src-internal',
+          },
+          {
+              'files': ['/path/to/file.txt', 'path/tp/file2.txt'],
+              'gcs_bucket': 'any-bucket',
+              'gcs_path': 'dest_dir/files.zip',
+              'archive_type': properties.ArchiveData.ARCHIVE_TYPE_ZIP,
+              'verifiable_key_path': '/path/to/some/key',
+              'base_dir': 'src-internal',
+          },
+      ],)
   yield api.test(
       'verifiable_key_path',
       api.properties(
@@ -637,6 +647,13 @@ def GenTests(api):
           'dest_dir/path/to/some/file.txt.attestation', [
               '/path/to/some/file.txt.attestation',
               'gs://any-bucket/dest_dir/path/to/some/file.txt.attestation',
+          ]),
+      api.post_process(
+          post_process.StepCommandContains,
+          'Generic Archiving Steps.gsutil upload '
+          'dest_dir/files.zip.attestation', [
+              "[CLEANUP]/tmp_tmp_5/artifact.zip.attestation",
+              "gs://any-bucket/dest_dir/files.zip.attestation"
           ]),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),

@@ -169,11 +169,15 @@ message ArchiveData {
   RevisionsFile revisions_file = 14;
 
   // A string path to the key used to verify bits. Setting this parameter will
-  // generated a .sig signed version for the files listed in this ArchiveData
-  // definition and upload it to the GCS path in this config. This path is
-  // NOT relative to the out dir. Please visit
+  // generate chain-of-custody provenance for the artifacts listed in this
+  // ArchiveData definition and upload them to the GCS path in this config.
+  // This path is NOT relative to the out dir. Please visit
   // https://chromium.googlesource.com/infra/infra/+/refs/heads/master/recipes/
   // recipe_modules/cloudkms/api.py#48 for details on the underlying call.
+  // NOTE: This does not support files archived with ARCHIVE_TYPE_RECURSIVE.
+  // Please use one of the other archive types to explicitly list files that
+  // need chain-of-custody, or create a zip/tar archive of the dirs, and add the
+  // provenance to that.
   string verifiable_key_path = 8;
 
   // A string key to override the default base directory (build dir)

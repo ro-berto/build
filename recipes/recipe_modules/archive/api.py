@@ -845,49 +845,6 @@ class ArchiveApi(recipe_api.RecipeApi):
         common_pieces = f.pieces[len(base_path.pieces):]
         expanded_files.add(os.path.sep.join(common_pieces))
 
-    if archive_data.verifiable_key_path:
-      # Immutable list of files to attach provenance.
-      files_to_verify = set(expanded_files)
-
-      # Generates provenance to built artifacts.
-      attestation_paths = set()
-      provenance_manifest = {
-          'recipe': self.m.properties.get('recipe'),
-          'exp': 0,
-      }
-
-      # Include more source info for artifacts chain of custody.
-      if top_level_source:
-        git_repo = {
-            'git_repo': {
-                'uri': top_level_source[0],
-                'branch': top_level_source[1],
-                'commit': top_level_source[2]
-            }
-        }
-        provenance_manifest['topLevelSource'] = git_repo
-        if provenance_sources:
-          provenance_manifest['sources'] = provenance_sources
-
-      for f in files_to_verify:
-        # Files are relative to the base_path, so this generates the
-        # .attestation file next to the original.
-        file_hash = self.m.file.file_hash(
-            base_path.join(f), test_data='deadbeef')
-        provenance_manifest['subjectHash'] = file_hash
-        temp_dir = self.m.path.mkdtemp('tmp')
-        manifest_path = self.m.path.join(temp_dir, 'manifest.json')
-        self.m.file.write_text('Provenance manifest', manifest_path,
-                               self.m.json.dumps(provenance_manifest))
-        self.m.provenance.generate(archive_data.verifiable_key_path,
-                                   manifest_path,
-                                   base_path.join(f + '.attestation'))
-        # This file path is appended directly to the provided gcs_path for
-        # uploads. We'll uploaded this .attestation next to the original
-        # in GCS as well.
-        attestation_paths.add(f + '.attestation')
-      expanded_files = expanded_files.union(attestation_paths)
-
     # Copy all files to a temporary directory. Keeping the structure.
     # This directory will be used for archiving.
     temp_dir = self.m.path.mkdtemp()
@@ -1022,6 +979,53 @@ class ArchiveApi(recipe_api.RecipeApi):
       archive_file = self._create_zip_archive_for_upload(
           base_path, expanded_files, updated_dirs)
       uploads = {archive_file: gcs_path}
+
+    # Attach provenance files for chain-of-custody. This is done just before
+    # uploading to ensure all the artifact prep work is done (e.g. packaging
+    # files into zip archives), so provenance can be attached to any type of
+    # artifact and not just individual build files.
+    # NOTE: Provenance is not supported for recursive directory uploads because
+    # that handling doesn't currently look at individual files. It would be
+    # possible to walk the recursed dirs to add provenance to each file, but
+    # directories of files are probably better archived as a zip in that case,
+    # with a single provenance attached to the whole zip file.
+    if (archive_data.verifiable_key_path and
+        not archive_data.archive_type == ArchiveData.ARCHIVE_TYPE_RECURSIVE):
+
+      # Generates provenance to built artifacts.
+      provenance_manifest = {
+          'recipe': self.m.properties.get('recipe'),
+          'exp': 0,
+      }
+
+      # Include more source info for artifacts chain of custody.
+      if top_level_source:
+        git_repo = {
+            'git_repo': {
+                'uri': top_level_source[0],
+                'branch': top_level_source[1],
+                'commit': top_level_source[2]
+            }
+        }
+        provenance_manifest['topLevelSource'] = git_repo
+        if provenance_sources:
+          provenance_manifest['sources'] = provenance_sources
+
+      attestation_paths = {}
+      for f in uploads.keys():
+        # Generate the .attestation file next to the original.
+        attestation_path = str(f) + '.attestation'
+        file_hash = self.m.file.file_hash(f, test_data='deadbeef')
+        provenance_manifest['subjectHash'] = file_hash
+        temp_dir = self.m.path.mkdtemp('tmp')
+        manifest_path = self.m.path.join(temp_dir, 'manifest.json')
+        self.m.file.write_text('Provenance manifest', manifest_path,
+                               self.m.json.dumps(provenance_manifest))
+        self.m.provenance.generate(archive_data.verifiable_key_path,
+                                   manifest_path, attestation_path)
+        # Upload the attestation file alongside the original.
+        attestation_paths[attestation_path] = uploads[f] + '.attestation'
+      uploads.update(attestation_paths)
 
     for file_path in sorted(uploads.keys(), key=str):
       self.m.gsutil.upload(
