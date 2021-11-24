@@ -186,9 +186,9 @@ def _build_steps(api, clang, msvc, out_dir):
     api.step('compile with ninja', ninja_cmd)
 
 
-# TODO(https://crbug.com/pdfium/11): `selected_tests_only` currently only
-# enables unit tests, embedder tests and Javascript tests for the bots. Remove
-# this parameter once all the tests can pass with Skia/SkiaPaths enabled.
+# TODO(https://crbug.com/pdfium/11): `selected_tests_only` currently enables
+# all tests except for corpus tests for the bots. Remove this parameter once
+# corpus tests can pass with Skia/SkiaPaths enabled.
 # _run_tests() runs the tests and uploads the results to Gold.
 def _run_tests(api, memory_tool, v8, xfa, out_dir, build_config, revision,
                selected_tests_only):
@@ -282,11 +282,6 @@ def _run_tests(api, memory_tool, v8, xfa, out_dir, build_config, revision,
         except api.step.StepFailure as e:
           test_exception = e
 
-  if selected_tests_only:
-    if test_exception:
-      raise test_exception  # pylint: disable=E0702
-    return
-
   pixel_tests_path = str(api.path['checkout'].join('testing', 'tools',
                                                    'run_pixel_tests.py'))
   with api.context(cwd=api.path['checkout'], env=env):
@@ -324,6 +319,11 @@ def _run_tests(api, memory_tool, v8, xfa, out_dir, build_config, revision,
                      script_args + additional_args)
         except api.step.StepFailure as e:
           test_exception = e
+
+  if selected_tests_only:
+    if test_exception:
+      raise test_exception  # pylint: disable=E0702
+    return
 
   corpus_tests_path = str(api.path['checkout'].join('testing', 'tools',
                                                     'run_corpus_tests.py'))
