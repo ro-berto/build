@@ -645,6 +645,104 @@
     "name": "embeddertests"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]\\builder\\pdfium\\testing\\tools\\run_javascript_tests.py",
+      "--build-dir",
+      "out\\debug_skiapaths_xfa_v8",
+      "--gold_output_dir",
+      "[CACHE]\\builder\\pdfium\\out\\debug_skiapaths_xfa_v8\\gold_output",
+      "--run-skia-gold",
+      "--git-revision",
+      "2d72510e447ab60a9728aeea2362d8be2cbd7789",
+      "--buildbucket-id",
+      "8945511751514863184",
+      "--gold_key",
+      "clang true debug true is_standalone true javascript_runtime enabled os windows skia false skia_paths true symbol_level 1 v8 true xfa true xfa_runtime enabled"
+    ],
+    "cwd": "[CACHE]\\builder\\pdfium",
+    "luci_context": {
+      "realm": {
+        "name": "pdfium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "javascript tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]\\builder\\pdfium\\testing\\tools\\run_javascript_tests.py",
+      "--build-dir",
+      "out\\debug_skiapaths_xfa_v8",
+      "--gold_output_dir",
+      "[CACHE]\\builder\\pdfium\\out\\debug_skiapaths_xfa_v8\\gold_output",
+      "--run-skia-gold",
+      "--git-revision",
+      "2d72510e447ab60a9728aeea2362d8be2cbd7789",
+      "--buildbucket-id",
+      "8945511751514863184",
+      "--gold_key",
+      "clang true debug true is_standalone true javascript_runtime disabled os windows skia false skia_paths true symbol_level 1 v8 true xfa true xfa_runtime disabled",
+      "--disable-javascript"
+    ],
+    "cwd": "[CACHE]\\builder\\pdfium",
+    "luci_context": {
+      "realm": {
+        "name": "pdfium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "javascript tests (javascript disabled)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]\\builder\\pdfium\\testing\\tools\\run_javascript_tests.py",
+      "--build-dir",
+      "out\\debug_skiapaths_xfa_v8",
+      "--gold_output_dir",
+      "[CACHE]\\builder\\pdfium\\out\\debug_skiapaths_xfa_v8\\gold_output",
+      "--run-skia-gold",
+      "--git-revision",
+      "2d72510e447ab60a9728aeea2362d8be2cbd7789",
+      "--buildbucket-id",
+      "8945511751514863184",
+      "--gold_key",
+      "clang true debug true is_standalone true javascript_runtime enabled os windows skia false skia_paths true symbol_level 1 v8 true xfa true xfa_runtime disabled",
+      "--disable-xfa"
+    ],
+    "cwd": "[CACHE]\\builder\\pdfium",
+    "luci_context": {
+      "realm": {
+        "name": "pdfium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "javascript tests (xfa disabled)"
+  },
+  {
     "name": "$result"
   }
 ]
