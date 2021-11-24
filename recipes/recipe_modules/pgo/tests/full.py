@@ -5,6 +5,7 @@
 from recipe_engine import post_process
 
 from RECIPE_MODULES.build.chromium_tests import steps
+from RECIPE_MODULES.build.test_utils.util import RDBPerSuiteResults
 
 PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
@@ -42,8 +43,14 @@ def RunSteps(api):
         api.profiles.profile_dir().join('pgo_final_aggregate.profdata'))
 
   test_specs = [
-      steps.SwarmingIsolatedScriptTestSpec.create('performance_test_suite'),
-      steps.SwarmingIsolatedScriptTestSpec.create('different_test_suite'),
+      steps.SwarmingIsolatedScriptTestSpec.create(
+          'performance_test_suite',
+          resultdb=steps.ResultDB.create(
+              use_rdb_results_for_all_decisions=True)),
+      steps.SwarmingIsolatedScriptTestSpec.create(
+          'different_test_suite',
+          resultdb=steps.ResultDB.create(
+              use_rdb_results_for_all_decisions=True)),
   ]
 
   tests = [s.get_test() for s in test_specs]
@@ -51,12 +58,13 @@ def RunSteps(api):
   for test in tests:
     step = test.name
     # Preprocessing for test
-    test._test_runs = {
-        '': {
-            'valid': api.properties.get('benchmark_result', True),
-            'failures': api.properties.get('benchmark_failures', []),
-        }
-    }
+    test.update_rdb_results(
+        '',
+        RDBPerSuiteResults(test.name, '', 0, set([]),
+                           set(api.properties.get('benchmark_failures', [])),
+                           set([]),
+                           not api.properties.get('benchmark_result', True), {},
+                           {}))
     # shard_merge already ensures the profile_subdir is generated w/ step_name
     api.code_coverage.shard_merge(
         step, test.target_name, additional_merge=getattr(test, '_merge', None))

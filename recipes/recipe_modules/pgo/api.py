@@ -103,7 +103,7 @@ class PgoApi(recipe_api.RecipeApi):
         # crbug.com/1113316 - Ensure that the test is passed before any form
         # of handling. Failed benchmarks may produce bad profdata files, so
         # we want to fail this run if any of them fail.
-        for suffix in test._test_runs:
+        for suffix in test._rdb_results:
           # Check that each suffix for this test is valid and has no failures
           if not test.has_valid_results(suffix) or test.failures(suffix):
             failed_benchmarks.append(test.name + suffix)
