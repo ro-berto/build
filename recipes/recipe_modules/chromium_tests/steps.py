@@ -676,17 +676,14 @@ class Test(object):
       ...
     }
     """
-    if self.spec.resultdb.use_rdb_results_for_all_decisions:
-      results = self.get_rdb_results(suffix)
-      pass_fail_counts = {}
-      for t, runs in six.iteritems(results.individual_results):
-        pass_fail_counts[t] = {
-            'pass_count': len([r for r in runs if r == test_result_pb2.PASS]),
-            'fail_count': len([r for r in runs if r != test_result_pb2.PASS]),
-        }
-      return pass_fail_counts
-    else:
-      return self._test_runs[suffix]['pass_fail_counts']
+    results = self.get_rdb_results(suffix)
+    pass_fail_counts = {}
+    for t, runs in six.iteritems(results.individual_results):
+      pass_fail_counts[t] = {
+          'pass_count': len([r for r in runs if r == test_result_pb2.PASS]),
+          'fail_count': len([r for r in runs if r != test_result_pb2.PASS]),
+      }
+    return pass_fail_counts
 
   def shards_to_retry_with(self, original_num_shards, num_tests_to_retry):
     """Calculates the number of shards to run when retrying this test.
@@ -2966,10 +2963,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
       # test-results service, but don't inspect/verify them at all.
       self._isolated_script_results = step_result.json.output
       return {}
-    if getattr(step_result, 'json') and getattr(step_result.json, 'output'):
-      results_json = step_result.json.output
-    else:
-      results_json = {}
+    results_json = step_result.json.output
 
     test_run_dictionary = (
         self.spec.results_handler.validate_results(api, results_json))
@@ -2979,14 +2973,6 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     self.spec.results_handler.render_results(api, test_results, presentation)
 
     self._isolated_script_results = results_json
-
-    # Even if the output is valid, if the return code is greater than
-    # MAX_FAILURES_EXIT_STATUS then the test did not complete correctly and the
-    # results can't be trusted. It probably exited early due to a large number
-    # of failures or an environment setup issue.
-    if step_result.retcode > api.test_utils.MAX_FAILURES_EXIT_STATUS:
-      test_run_dictionary['valid'] = False
-
     return test_run_dictionary
 
   @recipe_api.composite_step

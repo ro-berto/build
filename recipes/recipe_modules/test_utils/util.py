@@ -78,18 +78,8 @@ class TestResults(object):
 
   def canonical_result_format(self):
     """Returns a dictionary with results in canonical format."""
-    unreliable = False
-    if self.raw:
-      global_tags = self.raw.get('global_tags', [])
-      unreliable = 'UNRELIABLE_RESULTS' in global_tags
-
-    # If the results are interrupted or unreliable, then they're not valid
-    valid = self.valid
-    if self.interrupted or unreliable:
-      valid = False
-
     return canonical.result_format(
-        valid=valid,
+        valid=self.valid,
         failures=list(self.unexpected_failures),
         total_tests_ran=self.total_test_runs,
         pass_fail_counts=self.pass_fail_counts,
@@ -176,12 +166,6 @@ class TestResults(object):
         expected_results: set of results listed in test_expectations.
       """
       local_expected = set(expected_results)
-      if not local_expected:
-        local_expected = {'PASS'}
-
-      if actual_result in ('TEXT', 'AUDIO', 'IMAGE', 'IMAGE+TEXT'
-                           ) and 'FAIL' in local_expected:
-        return True
       return actual_result in local_expected
 
     for (test, result) in six.iteritems(self.tests):

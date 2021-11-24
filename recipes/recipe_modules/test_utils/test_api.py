@@ -193,9 +193,6 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
     """
     per_shard_results = []
     for i in shard_indices:
-      if customized_test_results:
-        per_shard_results.append(customized_test_results)
-        continue
       jsonish_results = {
         'interrupted': False,
         'path_delimiter': '.',
@@ -232,7 +229,7 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
         }
         jsonish_results['num_failures_by_type']['PASS'] = 2
         jsonish_results['num_failures_by_type']['SKIP'] = 1
-      elif benchmark_enabled:
+      else:
         test0_2_results = {
           'expected': 'PASS TIMEOUT',
           'actual': 'FAIL FAIL FAIL',
@@ -256,8 +253,6 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
         }
 
         jsonish_results['num_failures_by_type']['FAIL'] = 2
-      else:
-        tests_run = {}
 
       for test_basename, subtests in six.iteritems(tests_run):
         for test_name, test_dict in six.iteritems(subtests):
@@ -304,20 +299,15 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
     per_shard_chartjson_results = []
     shard_indices = range(shards) if shard_indices is None else shard_indices
     for i in shard_indices:
-      if output_histograms:
-        histogramish_results = []
-        idx = 1 + (2 * i)
-        histogramish_results.append(
-            {'guid': '%s' % idx, 'name': 'foo%d' % idx, 'unit': 'count'})
-        per_shard_chartjson_results.append(histogramish_results)
-      else:
-        chartjsonish_results = {}
-        idx = 1 + (2 * i)
-        chartjsonish_results['dummy'] =  'dummy%d' % i
-        chartjsonish_results['enabled'] = benchmark_enabled
-        chartjsonish_results['charts'] = {'entry%d' % idx: 'chart%d' % idx,
-          'entry%d' % (idx + 1): 'chart%d' % (idx + 1)}
-        per_shard_chartjson_results.append(chartjsonish_results)
+      chartjsonish_results = {}
+      idx = 1 + (2 * i)
+      chartjsonish_results['dummy'] = 'dummy%d' % i
+      chartjsonish_results['enabled'] = benchmark_enabled
+      chartjsonish_results['charts'] = {
+          'entry%d' % idx: 'chart%d' % idx,
+          'entry%d' % (idx + 1): 'chart%d' % (idx + 1)
+      }
+      per_shard_chartjson_results.append(chartjsonish_results)
     if use_json_test_format:
       assert valid is None, "valid flag not used in full JSON format."
       artifacts = artifacts or {}
@@ -355,14 +345,10 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
 
         # Determine what output we are writing and if it is empty or not
         output_missing = i in missing_shards and not output_chartjson
-        chartjson_output_missing = i in missing_shards and output_chartjson
 
         if not output_missing:
           files_dict[swarming_path] = self.m.json.dumps(
               per_shard_results[index])
-        if not chartjson_output_missing and output_chartjson:
-          files_dict[chartjson_swarming_path] = self.m.json.dumps(
-              per_shard_chartjson_results[index])
 
       jsonish_summary = {'shards': jsonish_shards}
       step_test_data = recipe_test_api.StepTestData()
