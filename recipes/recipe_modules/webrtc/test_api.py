@@ -88,7 +88,10 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
       parent_rev = parent_got_revision or revision
       test += self.m.properties(parent_got_revision=parent_rev)
       test += self.m.properties(
-          swarming_command_lines={'webrtc_perf_tests': ['./dummy_cmd']})
+          swarming_command_lines={
+              'webrtc_perf_tests':
+                  ['./dummy_cmd', '--dump_json_test_results=./dummy.json']
+          })
 
     if fail_compile:
       test += self.step_data('compile', retcode=1)
