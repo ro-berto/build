@@ -572,6 +572,8 @@ def RunSteps(api):
   affected_recipes = _determine_affected_recipes(
       api, affected_files, recipes, recipes_py_path, recipes_cfg_path)
 
+  api.swarming.ensure_client()
+
   # TODO(https://crbug.com/1088020) Switch to using the led module's bundle
   # functionality when it is ready
   class Bundle(object):
@@ -594,10 +596,6 @@ def RunSteps(api):
       return led_job.then('edit', '-rbh', self._future.result())
 
   bundle = Bundle()
-
-  # Kick off a future to make the swarming client ready to use so that the
-  # install appears as a top-level step
-  api.futures.spawn_immediate(api.swarming.ensure_client)
 
   futures = []
   for builder in builders_to_trigger:
