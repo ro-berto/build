@@ -7,6 +7,7 @@
 import attr
 import collections
 import re
+import six
 
 from recipe_engine import post_process
 
@@ -15,7 +16,7 @@ from PB.go.chromium.org.luci.led.job import job as job_pb2
 from RECIPE_MODULES.build.attr_utils import (attrib, attrs, cached_property,
                                              enum, sequence)
 
-PYTHON_VERSION_COMPATIBILITY = "PY3"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'recipe_engine/buildbucket',
@@ -320,7 +321,7 @@ def _ignore_affected_files(api, repo_path, affected_files, files_to_ignore):
     if not ignored:
       new_affected_files.append(f)
 
-  for i, files in ignored_files.items():
+  for i, files in six.iteritems(ignored_files):
     if files:
       step_result = api.step(i.step_name, [])
       message = ['\n' + i.step_text]
@@ -583,7 +584,7 @@ def RunSteps(api):
       # It doesn't matter which builder the led job belongs to, the recipe
       # bundle will be the same, so just bundle it once and apply the hash to
       # each one in the trigger greenlets
-      led_job = next(iter(led_builders.values()))
+      led_job = next(six.itervalues(led_builders))
       with api.step.nest('bundle recipes'), api.context(
           cwd=repo_path, infra_steps=True):
         led_out = led_job.then('edit-recipe-bundle')
