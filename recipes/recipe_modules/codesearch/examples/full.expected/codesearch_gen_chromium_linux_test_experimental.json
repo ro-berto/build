@@ -478,10 +478,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "write gn target list",
-    "~followup_annotations": [
-      "@@@STEP_LOG_END@gn_targets.json@@@"
-    ]
+    "name": "write gn target list"
   },
   {
     "cmd": [

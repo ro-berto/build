@@ -37,9 +37,7 @@
     "infra_step": true,
     "name": "symupload.write encrypted api key",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@symupload-api-key.encrypted@encrypted_api_key@@@",
-      "@@@STEP_LOG_END@symupload-api-key.encrypted@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
