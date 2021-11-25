@@ -216,37 +216,6 @@ def _rebase_line_and_block_data(line_data, block_data, line_mapping):
   return rebased_line_data, rebased_block_data
 
 
-def _drop_data_for_unmodified_lines(line_data, block_data, unmodified_lines):
-  """Drops unmodified lines(as compared to reference commit) from coverage data.
-  
-  Args:
-    line_data (dict): A mapping from line number to corresponding
-                      execution count. 
-    block_data (dict): A mapping from line number to a list of sub-line blocks
-                      where the code is not covered. A block is represented by
-                      two integers [start_column, end_column].
-    unmodified_lines (list): A list containing line numbers which have not
-                            been modified since the reference commit.
-
-  Returns:
-    A tuple (referenced_line_data, referenced_block_data) with same structure
-    as `line_data` and `block_data` with data for `unmodified_lines` removed.
-  """
-  referenced_line_data = {}
-  for line_num, count in line_data.iteritems():
-    if line_num in unmodified_lines:
-      continue
-    referenced_line_data[line_num] = count
-
-  rebased_block_data = {}
-  for line_num, subline_blocks in block_data.iteritems():
-    if line_num in unmodified_lines:
-      continue
-    rebased_block_data[line_num] = subline_blocks
-
-  return referenced_line_data, rebased_block_data
-
-
 def _calculate_line_summary_metrics(line_data):
   """Calculates summary metrics for a file.
 
@@ -268,10 +237,7 @@ def _calculate_line_summary_metrics(line_data):
   return [{'name': 'line', 'covered': covered, 'total': len(line_data)}]
 
 
-def _to_compressed_file_record(src_path,
-                               file_coverage_data,
-                               diff_mapping=None,
-                               reference_commit=None):
+def _to_compressed_file_record(src_path, file_coverage_data, diff_mapping=None):
   """Converts the given Clang file coverage data to coverage metadata format.
 
   Coverage metadata format:
@@ -304,16 +270,9 @@ def _to_compressed_file_record(src_path,
                   root, and the corresponding value is another map that maps
                   from local diff's line number to Gerrit diff's line number as
                   well as the line itself.
-    reference_commit: Hash of a past commit. Passing this in arguments would
-                  also generate file record relative to that commit i.e.
-                  only those lines would be considered in file record which
-                  were modified/added after the said commit.
 
   Returns:
-    A tuple containing two elements, each of which is a json conforming to
-    `File` proto. The first element represents the default file coverage while 
-    the second element represents coverage relative to reference_commit. If
-    `reference_commit` is not provided, second element is None.
+    A json conforming to `File` proto representing the file coverage.
   """
   segments = file_coverage_data['segments']
   if not segments:
@@ -356,26 +315,7 @@ def _to_compressed_file_record(src_path,
   if uncovered_blocks:
     data['uncovered_blocks'] = uncovered_blocks
 
-  referenced_data = None
-  if reference_commit:
-    unmodified_lines = repository_util.GetUnmodifiedLinesSinceCommit(
-        src_path, coverage_path, reference_commit)
-    referenced_line_data, referenced_block_data = (
-        _drop_data_for_unmodified_lines(line_data, block_data,
-                                        unmodified_lines))
-    referenced_lines, referenced_uncovered_blocks = _to_compressed_format(
-        referenced_line_data, referenced_block_data)
-    referenced_data = {
-        'path':  # Convert filesystem path to a source-absolute (GN-style) path.
-            '//' + coverage_path,
-        'lines':
-            referenced_lines,
-        'summaries':
-            _calculate_line_summary_metrics(referenced_line_data),
-    }
-    if referenced_uncovered_blocks:
-      referenced_data['uncovered_blocks'] = referenced_uncovered_blocks
-  return data, referenced_data
+  return data
 
 
 def _compute_llvm_args(profdata_path,
@@ -648,7 +588,6 @@ def _generate_metadata(src_path,
                        component_mapping,
                        sources,
                        diff_mapping=None,
-                       reference_commit=None,
                        exclusions=None,
                        arch=None):
   """Generates code coverage metadata.
@@ -666,24 +605,16 @@ def _generate_metadata(src_path,
              per-cl coverage.
     diff_mapping: A json object that stores the diff mapping. Only meaningful to
                   per-cl coverage.
-    reference_commit: Hash of the commit used to generate coverage reports
-                      restricted to lines of code merged after it.
-                      Only meaningful for full-codebase coverage.
     exclusions: A regex string to exclude matches from aggregation.
     arch: A string indicating the architecture of the binaries.
 
   Returns:
-    A tuple (data, referenced_data, summaries) where:
+    A tuple (data, summaries) where:
     data: A data structure that can be serialized according to the
-                    coverage metadata format.
-    referenced_data: A data structure containing coverage info 
-                    referenced against a past commit, that can be serialized
-                    according to the coverage metadata format.                 
+                    coverage metadata format.                
     summaries: A dict that maps binary name to a summary of that binary's
                coverage data.
   """
-  assert not (bool(diff_mapping) and bool(reference_commit)
-             ), "Atmost one of diff_mapping or reference_commit can be present"
   logging.info('Generating coverage metadata ...')
   start_time = time.time()
   data = _get_coverage_data_in_json(profdata_path, llvm_cov_path, build_dir,
@@ -697,14 +628,10 @@ def _generate_metadata(src_path,
   logging.info('Processing coverage data ...')
   start_time = time.time()
   files_coverage = []
-  files_referenced_coverage = []
   for datum in data['data']:
     for file_data in datum['files']:
-      record, referenced_record = _to_compressed_file_record(
-          src_path, file_data, diff_mapping, reference_commit)
+      record = _to_compressed_file_record(src_path, file_data, diff_mapping)
       files_coverage.append(record)
-      if reference_commit:
-        files_referenced_coverage.append(referenced_record)
 
   per_directory_coverage = {}
   per_component_coverage = {}
@@ -712,10 +639,6 @@ def _generate_metadata(src_path,
     per_directory_coverage, per_component_coverage = (
         aggregation_util.get_aggregated_coverage_data_from_files(
             files_coverage, component_mapping))
-    if reference_commit:
-      per_directory_referenced_coverage, per_component_referenced_coverage = (
-          aggregation_util.get_aggregated_coverage_data_from_files(
-              files_referenced_coverage, component_mapping))
 
   summaries = _get_per_target_coverage_summary(profdata_path, llvm_cov_path,
                                                build_dir, binaries, arch)
@@ -723,9 +646,6 @@ def _generate_metadata(src_path,
   if diff_mapping is None:
     repository_util.AddGitRevisionsToCoverageFilesMetadata(
         files_coverage, src_path, 'DEPS')
-    if reference_commit:
-      repository_util.AddGitRevisionsToCoverageFilesMetadata(
-          files_referenced_coverage, src_path, 'DEPS')
 
   minutes = (time.time() - start_time) / 60
   logging.info('Processing coverage data took %.0f minutes', minutes)
@@ -736,15 +656,10 @@ def _generate_metadata(src_path,
   compressed_data = _split_metadata_in_shards_if_necessary(
       output_dir, 'files_coverage', files_coverage, per_directory_coverage,
       per_component_coverage)
-  compressed_referenced_data = None
-  if reference_commit:
-    compressed_referenced_data = _split_metadata_in_shards_if_necessary(
-        output_dir, 'files_referenced_coverage', files_referenced_coverage,
-        per_directory_referenced_coverage, per_component_referenced_coverage)
   minutes = (time.time() - start_time) / 60
   logging.info('Generating coverage metadata took %.0f minutes', minutes)
 
-  return compressed_data, compressed_referenced_data, summaries
+  return compressed_data, summaries
 
 
 def _get_clang_summary_metrics(clang_summary):
@@ -828,11 +743,6 @@ def _parse_args(args):
       help='the source files to generate the coverage for, path should be '
       'relative to the root of the code checkout')
   parser.add_argument(
-      '--reference-commit',
-      type=str,
-      help='Hash of the commit used to generate coverage reports '
-      'restricted to lines of code merged after it')
-  parser.add_argument(
       '--diff-mapping-path',
       type=str,
       help='absolute path to the file that stores the diff mapping')
@@ -895,18 +805,15 @@ def main():
       'component_mapping (for full-repo coverage) and diff_mapping '
       '(for per-cl coverage) cannot be specified at the same time.')
 
-  data, referenced_data, summaries = _generate_metadata(
-      params.src_path, params.output_dir, params.profdata_path, params.llvm_cov,
-      params.build_dir, params.binaries, component_mapping, abs_sources,
-      diff_mapping, params.reference_commit, params.exclusion_pattern,
-      params.arch)
+  data, summaries = _generate_metadata(params.src_path, params.output_dir,
+                                       params.profdata_path, params.llvm_cov,
+                                       params.build_dir, params.binaries,
+                                       component_mapping, abs_sources,
+                                       diff_mapping, params.exclusion_pattern,
+                                       params.arch)
 
   with open(os.path.join(params.output_dir, 'all.json.gz'), 'wb') as f:
     f.write(zlib.compress(json.dumps(data)))
-  if referenced_data:
-    with open(os.path.join(params.output_dir, 'all_referenced.json.gz'),
-              'wb') as f:
-      f.write(zlib.compress(json.dumps(referenced_data)))
   with open(os.path.join(params.output_dir, 'per_target_summaries.json'),
             'wb') as f:
     json.dump(summaries, f)
