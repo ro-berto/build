@@ -24,6 +24,7 @@ PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'chromium',
+    'chromium_android',
     'chromium_swarming',
     'chromium_tests',
     'chromium_tests_builder_config',
@@ -660,8 +661,16 @@ def GenTests(api):
               'pgo-group': {
                   'pgo-builder':
                       ctbc.BuilderSpec.create(
+                          android_config='main_builder',
+                          chromium_config='android',
+                          chromium_config_kwargs={
+                              'BUILD_CONFIG': 'Release',
+                              'TARGET_BITS': 32,
+                              'TARGET_PLATFORM': 'android',
+                          },
                           gclient_config='chromium',
-                          chromium_config='chromium',
+                          gclient_apply_config=['android'],
+                          simulation_platform='linux',
                       ),
               },
           }),
@@ -678,7 +687,7 @@ def GenTests(api):
                   '[dummy hash for performance_test_suite/size]'
           },),
       api.pgo(use_pgo=True, skip_profile_upload=True),
-      api.platform('mac', 64),
+      api.platform('linux', 64),
       api.chromium_tests.read_source_side_spec(
           'pgo-group', {
               'pgo-builder': {

@@ -2421,6 +2421,8 @@ class SwarmingTest(Test):
       # profiles.
       if using_pgo:
         env_vars['CHROME_SHUTDOWN_TIMEOUT'] = '300'
+        if api.chromium.c.TARGET_PLATFORM == 'android':
+          env_vars['CHROME_PGO_PROFILING'] = '1'
 
       task_slice = task_slice.with_env_vars(**env_vars)
 
