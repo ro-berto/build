@@ -1,0 +1,657 @@
+[
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]/builder"
+    ],
+    "infra_step": true,
+    "name": "ensure builder cache dir"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
+      "--spec-path",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
+      "--revision_mapping_file",
+      "{\"got_revision\": \"v8\"}",
+      "--git-cache-dir",
+      "[CACHE]/git",
+      "--cleanup-dir",
+      "[CLEANUP]/bot_update",
+      "--output_json",
+      "/path/to/tmp/json",
+      "--revision",
+      "v8@HEAD",
+      "--with_branch_heads"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "DEPOT_TOOLS_COLLECT_METRICS": "0",
+      "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
+      "GIT_HTTP_LOW_SPEED_TIME": "1800"
+    },
+    "env_suffixes": {
+      "DEPOT_TOOLS_UPDATE": [
+        "0"
+      ],
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "bot_update",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Some step text@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"v8\": \"HEAD\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"v8\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/v8.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"v8\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision_cp\": \"refs/heads/main@{#50110}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"root\": \"v8\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"source_manifest\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"directories\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"v8\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/v8.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        }@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"version\": 0@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"step_text\": \"Some step text\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@got_revision@\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_revision_cp@\"refs/heads/main@{#50110}\"@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "branch",
+      "-r",
+      "--list",
+      "branch-heads/*"
+    ],
+    "cwd": "[CACHE]/builder/v8",
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/v8/third_party/depot_tools"
+      ]
+    },
+    "infra_step": true,
+    "name": "last branches",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@stdout@branch-heads/9.1@@@",
+      "@@@STEP_LOG_LINE@stdout@branch-heads/9.2@@@",
+      "@@@STEP_LOG_END@stdout@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "Checking branch 9.2"
+  },
+  {
+    "cmd": [
+      "git",
+      "checkout",
+      "branch-heads/9.2"
+    ],
+    "cwd": "[CACHE]/builder/v8",
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/v8/third_party/depot_tools"
+      ]
+    },
+    "infra_step": true,
+    "name": "Checking branch 9.2.git checkout",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_END@stdout@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "show",
+      "HEAD:include/v8-version.h"
+    ],
+    "cwd": "[CACHE]/builder/v8",
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/v8/third_party/depot_tools"
+      ]
+    },
+    "infra_step": true,
+    "name": "Checking branch 9.2.Check branch-heads/9.2 version file",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "show",
+      "HEAD:include/v8-version.h"
+    ],
+    "cwd": "[CACHE]/builder/v8",
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/v8/third_party/depot_tools"
+      ]
+    },
+    "infra_step": true,
+    "name": "Checking branch 9.2.Proof of version change",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_END@stdout@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "Checking branch 9.2.Increment version from 3.4.3.3",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_REPO[depot_tools]/gerrit_client.py",
+      "changes",
+      "--host",
+      "chromium-review.googlesource.com",
+      "--json_file",
+      "/path/to/tmp/json",
+      "--limit",
+      "20",
+      "-p",
+      "project=v8/v8",
+      "-p",
+      "owner=v8-ci-autoroll-builder@chops-service-accounts.iam.gserviceaccount.com",
+      "-p",
+      "status=open"
+    ],
+    "cwd": "[CACHE]/builder/v8",
+    "env": {
+      "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/v8/third_party/depot_tools"
+      ]
+    },
+    "infra_step": true,
+    "name": "Checking branch 9.2.Increment version from 3.4.3.3.gerrit changes",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@json.output@[]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "branch",
+      "-D",
+      "work"
+    ],
+    "cwd": "[CACHE]/builder/v8",
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/v8/third_party/depot_tools"
+      ]
+    },
+    "infra_step": true,
+    "name": "Checking branch 9.2.Increment version from 3.4.3.3.git branch",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "clean",
+      "-ffd"
+    ],
+    "cwd": "[CACHE]/builder/v8",
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/v8/third_party/depot_tools"
+      ]
+    },
+    "infra_step": true,
+    "name": "Checking branch 9.2.Increment version from 3.4.3.3.git clean",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "new-branch",
+      "work",
+      "--upstream",
+      "branch-heads/9.2"
+    ],
+    "cwd": "[CACHE]/builder/v8",
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/v8/third_party/depot_tools"
+      ]
+    },
+    "infra_step": true,
+    "name": "Checking branch 9.2.Increment version from 3.4.3.3.git new-branch",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "config",
+      "user.name",
+      "V8 Autoroll"
+    ],
+    "cwd": "[CACHE]/builder/v8",
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/v8/third_party/depot_tools"
+      ]
+    },
+    "infra_step": true,
+    "name": "Checking branch 9.2.Increment version from 3.4.3.3.git config user.name",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "config",
+      "user.email",
+      "v8-ci-autoroll-builder@chops-service-accounts.iam.gserviceaccount.com"
+    ],
+    "cwd": "[CACHE]/builder/v8",
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/v8/third_party/depot_tools"
+      ]
+    },
+    "infra_step": true,
+    "name": "Checking branch 9.2.Increment version from 3.4.3.3.git config user.email",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "show",
+      "branch-heads/9.2:include/v8-version.h"
+    ],
+    "cwd": "[CACHE]/builder/v8",
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/v8/third_party/depot_tools"
+      ]
+    },
+    "infra_step": true,
+    "name": "Checking branch 9.2.Increment version from 3.4.3.3.Check latest version file",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "\n#define V8_MAJOR_VERSION 3\n#define V8_MINOR_VERSION 4\n#define V8_BUILD_NUMBER 3\n#define V8_PATCH_LEVEL 4\n",
+      "[CACHE]/builder/v8/include/v8-version.h"
+    ],
+    "cwd": "[CACHE]/builder/v8",
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/v8/third_party/depot_tools"
+      ]
+    },
+    "infra_step": true,
+    "name": "Checking branch 9.2.Increment version from 3.4.3.3.Increment version",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@v8-version.h@@@@",
+      "@@@STEP_LOG_LINE@v8-version.h@#define V8_MAJOR_VERSION 3@@@",
+      "@@@STEP_LOG_LINE@v8-version.h@#define V8_MINOR_VERSION 4@@@",
+      "@@@STEP_LOG_LINE@v8-version.h@#define V8_BUILD_NUMBER 3@@@",
+      "@@@STEP_LOG_LINE@v8-version.h@#define V8_PATCH_LEVEL 4@@@",
+      "@@@STEP_LOG_END@v8-version.h@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "commit",
+      "-am",
+      "Version 3.4.3.4"
+    ],
+    "cwd": "[CACHE]/builder/v8",
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/v8/third_party/depot_tools"
+      ]
+    },
+    "infra_step": true,
+    "name": "Checking branch 9.2.Increment version from 3.4.3.3.git commit",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "Checking branch 9.2.Increment version from 3.4.3.3.Dry-run commit",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "Checking branch 9.1"
+  },
+  {
+    "cmd": [
+      "git",
+      "checkout",
+      "branch-heads/9.1"
+    ],
+    "cwd": "[CACHE]/builder/v8",
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/v8/third_party/depot_tools"
+      ]
+    },
+    "infra_step": true,
+    "name": "Checking branch 9.1.git checkout",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_END@stdout@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "show",
+      "HEAD:include/v8-version.h"
+    ],
+    "cwd": "[CACHE]/builder/v8",
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/v8/third_party/depot_tools"
+      ]
+    },
+    "infra_step": true,
+    "name": "Checking branch 9.1.Check branch-heads/9.1 version file",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "show",
+      "HEAD:include/v8-version.h"
+    ],
+    "cwd": "[CACHE]/builder/v8",
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/v8/third_party/depot_tools"
+      ]
+    },
+    "infra_step": true,
+    "name": "Checking branch 9.1.Proof of version change",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_END@stdout@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "Checking branch 9.1.Increment version from 3.4.3.2",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_REPO[depot_tools]/gerrit_client.py",
+      "changes",
+      "--host",
+      "chromium-review.googlesource.com",
+      "--json_file",
+      "/path/to/tmp/json",
+      "--limit",
+      "20",
+      "-p",
+      "project=v8/v8",
+      "-p",
+      "owner=v8-ci-autoroll-builder@chops-service-accounts.iam.gserviceaccount.com",
+      "-p",
+      "status=open"
+    ],
+    "cwd": "[CACHE]/builder/v8",
+    "env": {
+      "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/v8/third_party/depot_tools"
+      ]
+    },
+    "infra_step": true,
+    "name": "Checking branch 9.1.Increment version from 3.4.3.2.gerrit changes",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@json.output@[]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "branch",
+      "-D",
+      "work"
+    ],
+    "cwd": "[CACHE]/builder/v8",
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/v8/third_party/depot_tools"
+      ]
+    },
+    "infra_step": true,
+    "name": "Checking branch 9.1.Increment version from 3.4.3.2.git branch",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "clean",
+      "-ffd"
+    ],
+    "cwd": "[CACHE]/builder/v8",
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/v8/third_party/depot_tools"
+      ]
+    },
+    "infra_step": true,
+    "name": "Checking branch 9.1.Increment version from 3.4.3.2.git clean",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "new-branch",
+      "work",
+      "--upstream",
+      "branch-heads/9.1"
+    ],
+    "cwd": "[CACHE]/builder/v8",
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/v8/third_party/depot_tools"
+      ]
+    },
+    "infra_step": true,
+    "name": "Checking branch 9.1.Increment version from 3.4.3.2.git new-branch",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "config",
+      "user.name",
+      "V8 Autoroll"
+    ],
+    "cwd": "[CACHE]/builder/v8",
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/v8/third_party/depot_tools"
+      ]
+    },
+    "infra_step": true,
+    "name": "Checking branch 9.1.Increment version from 3.4.3.2.git config user.name",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "config",
+      "user.email",
+      "v8-ci-autoroll-builder@chops-service-accounts.iam.gserviceaccount.com"
+    ],
+    "cwd": "[CACHE]/builder/v8",
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/v8/third_party/depot_tools"
+      ]
+    },
+    "infra_step": true,
+    "name": "Checking branch 9.1.Increment version from 3.4.3.2.git config user.email",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "show",
+      "branch-heads/9.1:include/v8-version.h"
+    ],
+    "cwd": "[CACHE]/builder/v8",
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/v8/third_party/depot_tools"
+      ]
+    },
+    "infra_step": true,
+    "name": "Checking branch 9.1.Increment version from 3.4.3.2.Check latest version file",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "\n#define V8_MAJOR_VERSION 3\n#define V8_MINOR_VERSION 4\n#define V8_BUILD_NUMBER 3\n#define V8_PATCH_LEVEL 3\n",
+      "[CACHE]/builder/v8/include/v8-version.h"
+    ],
+    "cwd": "[CACHE]/builder/v8",
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/v8/third_party/depot_tools"
+      ]
+    },
+    "infra_step": true,
+    "name": "Checking branch 9.1.Increment version from 3.4.3.2.Increment version",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@v8-version.h@@@@",
+      "@@@STEP_LOG_LINE@v8-version.h@#define V8_MAJOR_VERSION 3@@@",
+      "@@@STEP_LOG_LINE@v8-version.h@#define V8_MINOR_VERSION 4@@@",
+      "@@@STEP_LOG_LINE@v8-version.h@#define V8_BUILD_NUMBER 3@@@",
+      "@@@STEP_LOG_LINE@v8-version.h@#define V8_PATCH_LEVEL 3@@@",
+      "@@@STEP_LOG_END@v8-version.h@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "commit",
+      "-am",
+      "Version 3.4.3.3"
+    ],
+    "cwd": "[CACHE]/builder/v8",
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/v8/third_party/depot_tools"
+      ]
+    },
+    "infra_step": true,
+    "name": "Checking branch 9.1.Increment version from 3.4.3.2.git commit",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "Checking branch 9.1.Increment version from 3.4.3.2.Dry-run commit",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "name": "$result"
+  }
+]
