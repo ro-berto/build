@@ -326,7 +326,10 @@ class WebRtcIsolatedGtest(object):
             result_format='json',
             result_file=s[len('--dump_json_test_results='):],
         )
-    return api.chromium_swarming.trigger_task(self._task, resultdb)
+    api.chromium_swarming.trigger_task(self._task, resultdb)
+    # Remove 'invocations/' because it is added again in include_invocations.
+    api.resultdb.include_invocations(
+        [i[len('invocations/'):] for i in self._task.get_invocation_names()])
 
   @recipe_api.composite_step
   def run(self, api):
