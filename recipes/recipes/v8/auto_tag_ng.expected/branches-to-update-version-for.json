@@ -154,7 +154,7 @@
     "cmd": [
       "git",
       "show",
-      "HEAD:include/v8-version.h"
+      "include/v8-version.h"
     ],
     "cwd": "[CACHE]/builder/v8",
     "env_prefixes": {
@@ -183,7 +183,7 @@
       "RECIPE_REPO[depot_tools]/gerrit_client.py",
       "changes",
       "--host",
-      "chromium-review.googlesource.com",
+      "https://chromium-review.googlesource.com",
       "--json_file",
       "/path/to/tmp/json",
       "--limit",
@@ -461,7 +461,7 @@
     "cmd": [
       "git",
       "show",
-      "HEAD:include/v8-version.h"
+      "include/v8-version.h"
     ],
     "cwd": "[CACHE]/builder/v8",
     "env_prefixes": {
@@ -490,7 +490,7 @@
       "RECIPE_REPO[depot_tools]/gerrit_client.py",
       "changes",
       "--host",
-      "chromium-review.googlesource.com",
+      "https://chromium-review.googlesource.com",
       "--json_file",
       "/path/to/tmp/json",
       "--limit",

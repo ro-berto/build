@@ -153,7 +153,7 @@
     "cmd": [
       "git",
       "show",
-      "HEAD:include/v8-version.h"
+      "include/v8-version.h"
     ],
     "cwd": "[CACHE]/builder/v8",
     "env_prefixes": {

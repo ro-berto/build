@@ -80,7 +80,7 @@ def check_branch(api, branch_version):
         version_at_branch_head = api.v8.read_version_from_ref(
             "HEAD", branch_ref)
         proof_of_version_change = git_output(api,
-            'show', 'HEAD:%s' % api.v8.VERSION_FILE,
+            'show', api.v8.VERSION_FILE,
             ok_ret='any',
             name='Proof of version change')
         if proof_of_version_change:
@@ -182,7 +182,7 @@ def push_ref(api, repo, ref, hsh):
 def maybe_increment_version(api, ref, latest_version):
     with api.step.nest('Increment version from %s' % latest_version):
         commits = api.gerrit.get_changes(
-            'chromium-review.googlesource.com',
+            'https://chromium-review.googlesource.com',
             query_params=[
                 ('project', 'v8/v8'),
                 ('owner', PUSH_ACCOUNT),
