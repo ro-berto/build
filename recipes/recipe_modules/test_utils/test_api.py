@@ -76,11 +76,7 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
     """
     return test_results_json, retcode, name
 
-  def canned_gtest_output(self,
-                          passing,
-                          minimal=False,
-                          extra_json=None,
-                          legacy_annotation=False):
+  def canned_gtest_output(self, passing, minimal=False, extra_json=None):
     """Produces mock output for a recipe step that outputs a GTestResults
     object.
 
@@ -90,10 +86,6 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
                 effect of running fewer than the total number of tests.
       extra_json - dict with additional keys to add to gtest JSON.
       name - Optional string name of the json output.
-      legacy_annotation - Set to true if the gtest is runned with output
-                          annotated (i.e. emitting @@@annotation). This
-                          is for supporting deprecated allow_subannotation
-                          feature.
 
     Returns: A gtest_results placeholder
     """
@@ -130,9 +122,6 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
 
     retcode = None if passing else 1
     ret = self.gtest_results(self.m.json.dumps(canned_jsonish), retcode)
-    if legacy_annotation:
-      ret += self.m.legacy_annotation.success_step if passing else (
-          self.m.legacy_annotation.failure_step)
     return ret
 
   # TODO(tansell): https://crbug.com/704066 - Kill simplified JSON format.

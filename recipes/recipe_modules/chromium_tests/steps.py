@@ -700,16 +700,10 @@ class Test(object):
     tests ran in that case. It doesn't make sense to ask how this test should
     run when retried, if it hasn't run already.
     """
-    if self.spec.resultdb.use_rdb_results_for_all_decisions:
-      with_patch_total = self._rdb_results['with patch'].total_tests_ran
-      with_patch_retry_total = (
-          self._rdb_results['retry shards with patch'].total_tests_ran
-          if 'retry shards with patch' in self._rdb_results else 0)
-    else:
-      with_patch_total = self._test_runs['with patch']['total_tests_ran']
-      with_patch_retry_total = (
-          self._test_runs['retry shards with patch']['total_tests_ran']
-          if 'retry shards with patch' in self._test_runs else 0)
+    with_patch_total = self._rdb_results['with patch'].total_tests_ran
+    with_patch_retry_total = (
+        self._rdb_results['retry shards with patch'].total_tests_ran
+        if 'retry shards with patch' in self._rdb_results else 0)
     total_tests_ran = max(with_patch_total, with_patch_retry_total)
     assert total_tests_ran, (
         "We cannot compute the total number of tests to re-run if no tests "
@@ -935,9 +929,7 @@ class Test(object):
     passing_tests = set()
     failing_tests = set()
     for test_name, result in six.iteritems(self.pass_fail_counts(suffix)):
-      if result['pass_count'] > 0:
-        passing_tests.add(test_name)
-      else:
+      if result['fail_count'] > 0:
         failing_tests.add(test_name)
 
     # If a test failed in 'with patch' but didn't fail in 'retry shards with
@@ -1851,9 +1843,6 @@ class JSONResultsHandler(ResultsHandler):
 
   def upload_results(self, api, results, step_name, passed, step_suffix=None):
     # Only version 3 of results is supported by the upload server.
-    if not results or results.get('version', None) != 3:
-      return
-
     chrome_revision_cp = api.bot_update.last_returned_properties.get(
         'got_revision_cp', 'refs/x@{#0}')
 

@@ -141,7 +141,9 @@ def GenTests(api):
   yield api.test(
       'basic',
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='tryserver.chromium.linux',
+          builder='linux-rel',
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.chromium_tests.read_source_side_spec('chromium.linux', {
           'Linux Tests': {
               'gtest_tests': ['base_unittests'],
@@ -153,7 +155,9 @@ def GenTests(api):
   yield api.test(
       'basic-branch',
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='tryserver.chromium.linux',
+          builder='linux-rel',
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.chromium_tests.read_source_side_spec('chromium.linux', {
           'Linux Tests': {
               'gtest_tests': ['base_unittests'],
@@ -167,13 +171,16 @@ def GenTests(api):
       'analyze_compile_mode',
       api.chromium.try_build(
           builder_group='tryserver.chromium.linux',
-          builder='linux_chromium_clobber_rel_ng'),
+          builder='linux_chromium_clobber_rel_ng',
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
   )
 
   yield api.test(
       'analyze_names',
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='fuchsia_x64'),
+          builder_group='tryserver.chromium.linux',
+          builder='fuchsia_x64',
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.override_step_data(
           'read filter exclusion spec',
           api.json.output({
@@ -196,13 +203,17 @@ def GenTests(api):
   yield api.test(
       'no_compile',
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='tryserver.chromium.linux',
+          builder='linux-rel',
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
   )
 
   yield api.test(
       'no_compile_no_source',
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='tryserver.chromium.linux',
+          builder='linux-rel',
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.override_step_data('git diff to analyze patch',
                              api.raw_io.stream_output('OWNERS')),
   )
@@ -213,7 +224,8 @@ def GenTests(api):
           builder_group='tryserver.chromium.unmirrored',
           builder='unmirrored-chromium-rel',
           builder_db=_TEST_BUILDERS,
-          try_db=None),
+          try_db=None,
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.chromium_tests.read_source_side_spec(
           'tryserver.chromium.unmirrored', {
               'unmirrored-chromium-rel': {
@@ -252,7 +264,8 @@ def GenTests(api):
                       )
                   ]),
               },
-          })),
+          }),
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.filter.suppress_analyze(),
       api.chromium_tests.read_source_side_spec(
           'fake-group',
@@ -272,21 +285,23 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
 
-  CUSTOM_PROPS = sum([
-      api.chromium_tests_builder_config.try_build(
-          builder_group='tryserver.chromium.test',
-          builder='retry-shards',
-          builder_db=_TEST_BUILDERS,
-          try_db=_TEST_TRYBOTS),
-      api.properties(
-          swarm_hashes={
-              'base_unittests': '[dummy hash for base_unittests/size]'
-          },),
-  ], api.empty_test_data())
+  def custom_props():
+    return sum([
+        api.chromium_tests_builder_config.try_build(
+            builder_group='tryserver.chromium.test',
+            builder='retry-shards',
+            builder_db=_TEST_BUILDERS,
+            try_db=_TEST_TRYBOTS,
+            experiments={'chromium.chromium_tests.use_rdb_results': True}),
+        api.properties(
+            swarm_hashes={
+                'base_unittests': '[dummy hash for base_unittests/size]'
+            },),
+    ], api.empty_test_data())
 
   yield api.test(
       'retry_shards',
-      CUSTOM_PROPS,
+      custom_props(),
       api.chromium_tests.read_source_side_spec(
           'chromium.test', {
               'retry-shards': {
@@ -313,49 +328,7 @@ def GenTests(api):
 
   yield api.test(
       'retry_shards_without_patch',
-      CUSTOM_PROPS,
-      api.chromium_tests.read_source_side_spec(
-          'chromium.test', {
-              'retry-shards': {
-                  'gtest_tests': [{
-                      'test': 'base_unittests',
-                      'swarming': {
-                          'can_use_on_swarming_builders': True,
-                      }
-                  }],
-              },
-          }),
-      api.override_step_data(
-          'base_unittests (with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(False), failure=True)),
-      api.override_step_data(
-          'base_unittests (retry shards with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(False), failure=True)),
-      api.override_step_data(
-          'base_unittests (without patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(False), failure=True)),
-      api.filter.suppress_analyze(),
-      api.post_process(post_process.MustRun,
-                       'base_unittests (retry shards with patch)'),
-      api.post_process(post_process.MustRun, 'base_unittests (without patch)'),
-      api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'retry_shards_without_patch_rdb_experiment',
-      api.chromium_tests_builder_config.try_build(
-          builder_group='tryserver.chromium.test',
-          builder='retry-shards',
-          builder_db=_TEST_BUILDERS,
-          try_db=_TEST_TRYBOTS,
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
-      api.properties(swarm_hashes={
-          'base_unittests': '[dummy hash for base_unittests/size]'
-      }),
+      custom_props(),
       api.chromium_tests.read_source_side_spec(
           'chromium.test', {
               'retry-shards': {
@@ -387,7 +360,8 @@ def GenTests(api):
           builder_group='tryserver.chromium.test',
           builder='retry-shards',
           builder_db=_TEST_BUILDERS,
-          try_db=_TEST_TRYBOTS),
+          try_db=_TEST_TRYBOTS,
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.properties(swarm_hashes={
           'base_unittests': '[dummy hash for base_unittests/size]'
       }),
@@ -422,7 +396,8 @@ def GenTests(api):
           builder_group='tryserver.chromium.test',
           builder='retry-shards',
           builder_db=_TEST_BUILDERS,
-          try_db=_TEST_TRYBOTS),
+          try_db=_TEST_TRYBOTS,
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.properties(swarm_hashes={
           'base_unittests': '[dummy hash for base_unittests/size]'
       }),
@@ -437,15 +412,10 @@ def GenTests(api):
                   }],
               },
           }),
-      api.override_step_data(
-          'base_unittests (with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(False), failure=True)),
-      api.override_step_data(
-          'base_unittests (retry shards with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.gtest_results('invalid results', 1),
-              failure=True)),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'base_unittests', 'with patch', failures=['Test.One']),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'base_unittests', 'retry shards with patch', failures=['Test.One']),
       api.filter.suppress_analyze(),
       api.post_process(post_process.MustRun, 'base_unittests (with patch)'),
       api.post_process(post_process.MustRun,
@@ -461,7 +431,8 @@ def GenTests(api):
           builder_group='tryserver.chromium.test',
           builder='retry-shards',
           builder_db=_TEST_BUILDERS,
-          try_db=_TEST_TRYBOTS),
+          try_db=_TEST_TRYBOTS,
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.properties(swarm_hashes={
           'base_unittests': '[dummy hash for base_unittests/size]'
       }),
@@ -502,7 +473,8 @@ def GenTests(api):
           builder_group='tryserver.chromium.test',
           builder='disable-retry-wo-patch',
           builder_db=_TEST_BUILDERS,
-          try_db=_TEST_TRYBOTS),
+          try_db=_TEST_TRYBOTS,
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.properties(swarm_hashes={
           'base_unittests': '[dummy hash for base_unittests/size]'
       }),
@@ -517,14 +489,10 @@ def GenTests(api):
                   }],
               },
           }),
-      api.override_step_data(
-          'base_unittests (with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(False), failure=True)),
-      api.override_step_data(
-          'base_unittests (retry shards with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(False), failure=True)),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'base_unittests', 'with patch', failures=['Test.One']),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'base_unittests', 'retry shards with patch', failures=['Test.One']),
       api.filter.suppress_analyze(),
       api.post_process(post_process.MustRun,
                        'base_unittests (retry shards with patch)'),
@@ -538,7 +506,9 @@ def GenTests(api):
       'code_coverage_trybot_with_patch',
       api.code_coverage(use_clang_coverage=True),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='tryserver.chromium.linux',
+          builder='linux-rel',
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.properties(swarm_hashes={
           'base_unittests': '[dummy hash for base_unittests/size]'
       }),
@@ -573,7 +543,9 @@ def GenTests(api):
       'code_coverage_trybot_retry_shards_with_patch',
       api.code_coverage(use_clang_coverage=True),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='tryserver.chromium.linux',
+          builder='linux-rel',
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.properties(swarm_hashes={
           'base_unittests': '[dummy hash for base_unittests/size]'
       }),
@@ -613,7 +585,9 @@ def GenTests(api):
       'code_coverage_trybot_without_patch',
       api.code_coverage(use_clang_coverage=True),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='tryserver.chromium.linux',
+          builder='linux-rel',
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.properties(swarm_hashes={
           'base_unittests': '[dummy hash for base_unittests/size]'
       }),
@@ -630,14 +604,10 @@ def GenTests(api):
               },
           }),
       api.filter.suppress_analyze(),
-      api.override_step_data(
-          'base_unittests (with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(False), failure=True)),
-      api.override_step_data(
-          'base_unittests (retry shards with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(False), failure=True)),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'base_unittests', 'with patch', failures=['Test.One']),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'base_unittests', 'retry shards with patch', failures=['Test.One']),
       api.post_process(post_process.MustRun, 'base_unittests (with patch)'),
       api.post_process(post_process.MustRun,
                        'base_unittests (retry shards with patch)'),
@@ -680,7 +650,8 @@ def GenTests(api):
                       ctbc.TrySpec.create_for_single_mirror(
                           'pgo-group', 'pgo-builder'),
               },
-          })),
+          }),
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.properties(
           swarm_hashes={
               'performance_test_suite':
@@ -713,8 +684,6 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
 
-  canned_test = api.test_utils.canned_gtest_output
-
   def multiple_base_unittests_additional_compile_target():
     return api.chromium_tests.read_source_side_spec(
         'chromium.linux', {
@@ -728,25 +697,27 @@ def GenTests(api):
   yield api.test(
       'many_invalid_results',
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='tryserver.chromium.linux',
+          builder='linux-rel',
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       multiple_base_unittests_additional_compile_target(),
       api.filter.suppress_analyze(),
       api.chromium_tests.change_size_limit(2),
-      api.override_step_data('base_unittests1 (with patch)',
-                             canned_test(passing=False,
-                                         legacy_annotation=True)),
-      api.override_step_data('base_unittests1 (without patch)',
-                             api.legacy_annotation.failure_step),
-      api.override_step_data('base_unittests2 (with patch)',
-                             canned_test(passing=False,
-                                         legacy_annotation=True)),
-      api.override_step_data('base_unittests2 (without patch)',
-                             api.legacy_annotation.failure_step),
-      api.override_step_data('base_unittests3 (with patch)',
-                             canned_test(passing=False,
-                                         legacy_annotation=True)),
-      api.override_step_data('base_unittests3 (without patch)',
-                             api.legacy_annotation.failure_step),
+      api.override_step_data(
+          'base_unittests1 results',
+          stdout=api.raw_io.output_text(
+              api.test_utils.rdb_results(
+                  'base_unittests1', failing_tests=['Test.One']))),
+      api.override_step_data(
+          'base_unittests2 results',
+          stdout=api.raw_io.output_text(
+              api.test_utils.rdb_results(
+                  'base_unittests2', failing_tests=['Test.One']))),
+      api.override_step_data(
+          'base_unittests3 results',
+          stdout=api.raw_io.output_text(
+              api.test_utils.rdb_results(
+                  'base_unittests3', failing_tests=['Test.One']))),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.ResultReasonRE,
                        r'3 Test Suite\(s\) failed.*'),
@@ -757,7 +728,9 @@ def GenTests(api):
       'basic dryrun',
       api.properties(dry_run=True),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='tryserver.chromium.linux',
+          builder='linux-rel',
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.chromium_tests.read_source_side_spec('chromium.linux', {
           'Linux Tests': {
               'gtest_tests': ['base_unittests'],
@@ -782,7 +755,7 @@ def GenTests(api):
           builder='rts-rel',
           builder_db=_TEST_BUILDERS,
           try_db=_TEST_TRYBOTS,
-      ),
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.chromium_tests.read_source_side_spec('chromium.test', {
           'chromium-rel': {
               'gtest_tests': ['base_unittests'],
@@ -809,7 +782,7 @@ def GenTests(api):
           builder='st-rel',
           builder_db=_TEST_BUILDERS,
           try_db=_TEST_TRYBOTS,
-      ),
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.chromium_tests.read_source_side_spec('chromium.test', {
           'chromium-rel': {
               'gtest_tests': ['base_unittests'],
@@ -823,7 +796,9 @@ def GenTests(api):
   yield api.test(
       'depend_on_footer_failure',
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='tryserver.chromium.linux',
+          builder='linux-rel',
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.step_data(
           'parse description',
           api.json.output(
@@ -880,7 +855,8 @@ def GenTests(api):
                           tester='fake-tester',
                       ),
               },
-          })),
+          }),
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.post_check(post_process.MustRun,
                      'read test spec (fake-tester-group.json)'),
       api.post_check(post_process.DoesNotRun,
@@ -903,7 +879,8 @@ def GenTests(api):
                           include_all_triggered_testers=True,
                       ),
               },
-          })),
+          }),
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.post_check(post_process.MustRun,
                      'read test spec (fake-tester-group.json)'),
       api.post_check(post_process.MustRun,
@@ -969,7 +946,8 @@ def GenTests(api):
                           include_all_triggered_testers=True,
                       ),
               },
-          })),
+          }),
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.chromium_tests.read_source_side_spec(
           'fake-group', {
               'fake-builder': {
@@ -996,16 +974,6 @@ def GenTests(api):
           historical_query_count=2,
           current_query_count=2,
       ),
-      api.override_step_data(
-          ('ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 '
-           '(with patch) on Mac-11'),
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_isolated_script_output(
-                  passing=True,
-                  is_win=False,
-                  swarming=True,
-              ),
-              failure=False)),
       # This overrides the file check to ensure that we have test files
       # in the given patch.
       api.step_data(
@@ -1025,17 +993,6 @@ def GenTests(api):
           step_name=(
               'searching_for_new_tests.'
               'cross reference newly identified tests against ResultDB')),
-      api.override_step_data(
-          ('test new tests for flakiness.'
-           'ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 '
-           '(check flakiness) on Mac-11'),
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_isolated_script_output(
-                  passing=True,
-                  is_win=False,
-                  swarming=True,
-              ),
-              failure=False)),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -1063,7 +1020,8 @@ def GenTests(api):
                           buildername='fake-builder',
                       ),
               },
-          })),
+          }),
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.chromium_tests.read_source_side_spec(
           'fake-group', {
               'fake-builder': {
@@ -1090,16 +1048,6 @@ def GenTests(api):
           historical_query_count=2,
           current_query_count=2,
       ),
-      api.override_step_data(
-          ('ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 '
-           '(with patch) on Mac-11'),
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_isolated_script_output(
-                  passing=True,
-                  is_win=False,
-                  swarming=True,
-              ),
-              failure=False)),
       # This overrides the file check to ensure that we have test files
       # in the given patch.
       api.step_data(
@@ -1124,13 +1072,7 @@ def GenTests(api):
            'ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 '
            '(check flakiness) on Mac-11'),
           api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_isolated_script_output(
-                  passing=False,
-                  is_win=False,
-                  swarming=True,
-                  isolated_script_passing=False,
-              ),
-              failure=True)),
+              api.json.output({}), failure=False)),
       api.resultdb.query(
           inv_bundle=flaky_results,
           step_name=(
@@ -1155,7 +1097,8 @@ def GenTests(api):
                           buildername='fake-builder',
                       ),
               },
-          })),
+          }),
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
       api.chromium_tests.read_source_side_spec(
           'fake-group', {
               'fake-builder': {
@@ -1182,16 +1125,6 @@ def GenTests(api):
           historical_query_count=2,
           current_query_count=2,
       ),
-      api.override_step_data(
-          ('ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 '
-           '(with patch) on Mac-11'),
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_isolated_script_output(
-                  passing=True,
-                  is_win=False,
-                  swarming=True,
-              ),
-              failure=False)),
       # This overrides the file check to ensure that we have test files
       # in the given patch.
       api.step_data(
@@ -1216,13 +1149,7 @@ def GenTests(api):
            'ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 '
            '(check flakiness) on Mac-11'),
           api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_isolated_script_output(
-                  passing=False,
-                  is_win=False,
-                  swarming=True,
-                  swarming_internal_failure=True,
-              ),
-              internal_failure=True)),
+              api.json.output({}), internal_failure=True)),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
   )

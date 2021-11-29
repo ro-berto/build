@@ -2778,6 +2778,46 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
+      "--input-json",
+      "{\"failures\": [], \"successes\": [\"test1.Test1\", \"test2.Test2\"], \"times\": {\"test1.Test1\": 0.1, \"test2.Test2\": 0.1}, \"valid\": true}",
+      "--builder-group",
+      "fake-try-group",
+      "--builder-name",
+      "fake-try-builder",
+      "--build-number",
+      "571",
+      "--test-type",
+      "ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 (with patch) on Mac-11",
+      "--chrome-revision",
+      "170242",
+      "--build-id",
+      "8945511751514863184",
+      "--test-results-server",
+      "test-results.appspot.com"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "chromium:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "Upload to test-results [ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 (with patch) on Mac-11]"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
@@ -2885,6 +2925,46 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0@https://example.swarmingserver.appspot.com/task?id=2@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
+      "--input-json",
+      "{\"failures\": [], \"successes\": [\"test1.Test1\", \"test2.Test2\"], \"times\": {\"test1.Test1\": 0.1, \"test2.Test2\": 0.1}, \"valid\": true}",
+      "--builder-group",
+      "fake-try-group",
+      "--builder-name",
+      "fake-try-builder",
+      "--build-number",
+      "571",
+      "--test-type",
+      "ios_chrome_web_eg2tests_module_iPad Air 2 14.4 (with patch) on Mac-11",
+      "--chrome-revision",
+      "170242",
+      "--build-id",
+      "8945511751514863184",
+      "--test-results-server",
+      "test-results.appspot.com"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "chromium:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "Upload to test-results [ios_chrome_web_eg2tests_module_iPad Air 2 14.4 (with patch) on Mac-11]"
   },
   {
     "cmd": [],
@@ -4247,6 +4327,49 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
+      "--input-json",
+      "{\"failures\": [], \"successes\": [\"test1.Test1\", \"test2.Test2\"], \"times\": {\"test1.Test1\": 0.1, \"test2.Test2\": 0.1}, \"valid\": true}",
+      "--builder-group",
+      "fake-try-group",
+      "--builder-name",
+      "fake-try-builder",
+      "--build-number",
+      "571",
+      "--test-type",
+      "test new tests for flakiness.ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 (check flakiness) on Mac-11",
+      "--chrome-revision",
+      "170242",
+      "--build-id",
+      "8945511751514863184",
+      "--test-results-server",
+      "test-results.appspot.com"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "chromium:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "test new tests for flakiness.Upload to test-results [test new tests for flakiness.ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 (check flakiness) on Mac-11]",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
@@ -4354,6 +4477,49 @@
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0@https://example.swarmingserver.appspot.com/task?id=4@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
+      "--input-json",
+      "{\"failures\": [], \"successes\": [\"test1.Test1\", \"test2.Test2\"], \"times\": {\"test1.Test1\": 0.1, \"test2.Test2\": 0.1}, \"valid\": true}",
+      "--builder-group",
+      "fake-try-group",
+      "--builder-name",
+      "fake-try-builder",
+      "--build-number",
+      "571",
+      "--test-type",
+      "test new tests for flakiness.ios_chrome_web_eg2tests_module_iPad Air 2 14.4 (check flakiness) on Mac-11",
+      "--chrome-revision",
+      "170242",
+      "--build-id",
+      "8945511751514863184",
+      "--test-results-server",
+      "test-results.appspot.com"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "chromium:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "test new tests for flakiness.Upload to test-results [test new tests for flakiness.ios_chrome_web_eg2tests_module_iPad Air 2 14.4 (check flakiness) on Mac-11]",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
