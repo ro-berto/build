@@ -415,12 +415,3 @@ def reclient_test(c):
 def reclient_clang_scan_deps(c):
   cv = c.solutions[0].custom_vars
   cv['reclient_version'] = 're_client_version:0.41.4.3f0d8bb'
-
-
-# This configuration overrides the default reclient version
-# with experimental gomaip version.
-# TODO(b/199961426): delete this once experiments finished.
-@CONFIG_CTX()
-def reclient_gomaip_exp(c):
-  cv = c.solutions[0].custom_vars
-  cv['reclient_version'] = 're_client_version:0.46.0.cd68397.Goma-gomaip'

@@ -123,8 +123,3 @@ def GenTests(api):
       api.properties(apply_gclient_config='reclient_clang_scan_deps'),
       api.post_process(post_process.DropExpectation),
   )
-  yield api.test(
-      'reclient_gomaip_exp',
-      api.properties(apply_gclient_config='reclient_gomaip_exp'),
-      api.post_process(post_process.DropExpectation),
-  )
