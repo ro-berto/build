@@ -286,8 +286,8 @@ def _to_compressed_file_record(src_path, file_coverage_data, diff_mapping=None):
       src_path,
       r'C:\botcode\w',  # crbug.com/1010267
       '/b/f/w',  # crbug.com/1061603
-      '/b/s/w/ir/cache/builder/src',  #crbug.com/1208128
-      '/this/path/is/set'  #crbug.com/1208128
+      '/b/s/w/ir/cache/builder/src',  # crbug.com/1208128
+      '/this/path/is/set'  # crbug.com/1208128
   ]
   coverage_path = os.path.normpath(filename)
   for prefix in prefixes:
@@ -295,6 +295,11 @@ def _to_compressed_file_record(src_path, file_coverage_data, diff_mapping=None):
       coverage_path = coverage_path[len(prefix):]
       break
   coverage_path = _posix_path(coverage_path).lstrip('/')
+
+  # Do not generate coverage for out/ paths as it consists of automatically
+  # generated code.
+  if coverage_path.startswith('out/'):
+    return None
 
   line_data, block_data = _extract_coverage_info(segments)
 
@@ -631,7 +636,8 @@ def _generate_metadata(src_path,
   for datum in data['data']:
     for file_data in datum['files']:
       record = _to_compressed_file_record(src_path, file_data, diff_mapping)
-      files_coverage.append(record)
+      if record:
+        files_coverage.append(record)
 
   per_directory_coverage = {}
   per_component_coverage = {}
