@@ -27,7 +27,14 @@ RESULTDB_CONFIG = {
 }
 
 
-def gen_skylab_req(tag, tast_expr=None, test_args=None, retries=0, dut_pool=''):
+def gen_skylab_req(tag,
+                   tast_expr=None,
+                   test_args=None,
+                   retries=0,
+                   dut_pool='',
+                   secondary_board='',
+                   secondary_cros_img='',
+                   autotest_name=''):
   return SkylabRequest.create(
       request_tag=tag,
       board='eve',
@@ -38,6 +45,9 @@ def gen_skylab_req(tag, tast_expr=None, test_args=None, retries=0, dut_pool=''):
       cros_img='eve-release/R88-13545.0.0',
       dut_pool=dut_pool,
       retries=retries,
+      secondary_board=secondary_board,
+      secondary_cros_img=secondary_cros_img,
+      autotest_name=autotest_name,
       resultdb=ResultDB.create(**RESULTDB_CONFIG))
 
 
@@ -49,7 +59,13 @@ REQUESTS = [
     gen_skylab_req(
         'm88_nearby_dut_pool',
         tast_expr=LACROS_TAST_EXPR,
-        dut_pool='cross_device_multi_cb')
+        dut_pool='cross_device_multi_cb'),
+    gen_skylab_req(
+        'm88_nearby_multi_dut',
+        secondary_board='eve',
+        secondary_cros_img='eve-release/R88-13545.0.0',
+        tast_expr=LACROS_TAST_EXPR,
+        autotest_name='tast.nearby-share')
 ]
 
 
@@ -112,17 +128,33 @@ def GenTests(api):
     check(lacros_gcs_path in dep_of_lacros)
     test = ctp_reqs[tag]['testPlan']['test'][0]
     got = _args_to_dict(test['autotest']['testArgs'])
-    if got.get('tast_expr_b64'):
-      decoded_tast_expr_b64 = _decode_b64_str(got['tast_expr_b64'])
-      check(tast_expr == decoded_tast_expr_b64)
-    else:
-      decoded_test_args_b64 = _decode_b64_str(got['test_args_b64'])
-      check(test_args == decoded_test_args_b64)
+    decoded_test_args_b64 = _decode_b64_str(got['test_args_b64'])
+    check(test_args == decoded_test_args_b64)
 
     if got.get('resultdb_settings'):
       rdb_config = api.json.loads(
           base64.b64decode(got.get('resultdb_settings')))
       check(all([rdb_config[k] == v for k, v in RESULTDB_CONFIG.items()]))
+
+  def check_secondary_device(check,
+                             steps,
+                             tag,
+                             secondary_board,
+                             secondary_cros_img,
+                             lacros_gcs_path=LACROS_GCS_PATH):
+    ctp_reqs = _extract_ctp_requests(steps)
+    secondary_device = ctp_reqs[tag]['params']['secondaryDevices'][0]
+    secondary_sw_dep = secondary_device['softwareDependencies']
+    dep_of_lacros = [
+        d['lacrosGcsPath'] for d in secondary_sw_dep if d.get('lacrosGcsPath')
+    ]
+    check(lacros_gcs_path in dep_of_lacros)
+    chromeos_build = [
+        d['chromeosBuild'] for d in secondary_sw_dep if d.get('chromeosBuild')
+    ]
+    check(secondary_cros_img in chromeos_build)
+    check(secondary_device["softwareAttributes"]["buildTarget"]["name"] ==
+          secondary_board)
 
   yield api.test(
       'basic',
@@ -135,6 +167,7 @@ def GenTests(api):
       api.post_check(check_pool, 'm88_nearby_dut_pool',
                      'cross_device_multi_cb'),
       api.post_check(check_test_arg, 'm88_gtest_test_args'),
-      api.post_check(check_test_arg, 'm88_tast_with_retry'),
+      api.post_check(check_secondary_device, 'm88_nearby_multi_dut', 'eve',
+                     'eve-release/R88-13545.0.0'),
       api.post_process(post_process.DropExpectation),
   )

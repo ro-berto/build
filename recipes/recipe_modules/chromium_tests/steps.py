@@ -3497,9 +3497,12 @@ class SkylabTestSpec(TestSpec):
   """Spec for a suite that runs on CrOS Skylab."""
   cros_board = attrib(str)
   cros_img = attrib(str)
+  secondary_cros_board = attrib(str, default='')
+  secondary_cros_img = attrib(str, default='')
   dut_pool = attrib(str, default='')
   tast_expr = attrib(str, default='')
   test_args = attrib(command_args, default=())
+  autotest_name = attrib(str, default='')
   timeout_sec = attrib(int, default=3600)
   # Enable retry for all Skylab tests by default. We see around 10% of tests
   # failed due to lab issues. Set retry into test requests, so that failed
@@ -3560,8 +3563,11 @@ class SkylabTest(Test):
         request_tag=self.name,
         tast_expr=self.spec.tast_expr,
         test_args=' '.join(self.spec.test_args),
+        autotest_name=self.spec.autotest_name,
         board=self.spec.cros_board,
         cros_img=self.spec.cros_img,
+        secondary_board=self.spec.secondary_cros_board,
+        secondary_cros_img=self.spec.secondary_cros_img,
         dut_pool=self.spec.dut_pool,
         lacros_gcs_path=self.lacros_gcs_path,
         exe_rel_path=self.exe_rel_path,
@@ -3663,7 +3669,9 @@ class SkylabTest(Test):
     return step
 
   def compile_targets(self):
-    t = [self.spec.target_name, 'lacros_version_metadata']
+    # TODO(linxinan): Insert version metadata if the test artifact does not
+    # build it.
+    t = [self.spec.target_name]
     if self.is_tast_test:
       t.append('chrome')
     return t

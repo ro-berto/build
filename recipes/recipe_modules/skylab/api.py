@@ -76,9 +76,14 @@ class SkylabApi(recipe_api.RecipeApi):
           req.params.software_attributes.build_target.name = s.board
           req.params.time.maximum_duration.seconds = s.timeout_sec
           autotest_to_create = req.test_plan.test.add()
-          autotest_name = AUTOTEST_NAME_CHROMIUM
-          if s.test_type == structs.SKYLAB_TAST_TEST:
+          if s.autotest_name:
+            autotest_name = s.autotest_name
+          elif s.test_type == structs.SKYLAB_TAST_TEST:
             autotest_name = AUTOTEST_NAME_TAST
+          else:
+            autotest_name = AUTOTEST_NAME_CHROMIUM
+
+          secondary_device = None
           autotest_to_create.autotest.name = autotest_name
           tags = {
               'label-board': s.board,
@@ -111,10 +116,23 @@ class SkylabApi(recipe_api.RecipeApi):
             test_args.append('test_args_b64=%s' %
                              _base64_encode_str(s.test_args))
             tags['test_args'] = s.test_args
+
+          if s.secondary_board and s.secondary_cros_img:
+            secondary_device = req.params.secondary_devices.add()
+            secondary_sw_dep = secondary_device.software_dependencies.add()
+            secondary_sw_dep.chromeos_build = s.secondary_cros_img
+            secondary_device.software_attributes.build_target.name = \
+              s.secondary_board
+
           if s.lacros_gcs_path:
             lacros_dep = req.params.software_dependencies.add()
             lacros_dep.lacros_gcs_path = s.lacros_gcs_path
             tags['lacros_gcs_path'] = s.lacros_gcs_path
+            if secondary_device:
+              secondary_lacros_dep = secondary_device.software_dependencies.add(
+              )
+              secondary_lacros_dep.lacros_gcs_path = s.lacros_gcs_path
+
           if s.exe_rel_path:
             test_args.append('exe_rel_path=%s' % s.exe_rel_path)
             tags['exe_rel_path'] = s.exe_rel_path
