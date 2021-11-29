@@ -20,6 +20,9 @@ def _chromium_dawn_spec(os, bits, **kwargs):
 
 
 def CreateBuilderConfig(os, bits, top_of_tree):
+  gclient_apply_config = ['dawm_top_of_tree'] if top_of_tree else []
+  if os == 'linux':
+    gclient_apply_config.append('enable_reclient')
   return _chromium_dawn_spec(
       os,
       bits,
