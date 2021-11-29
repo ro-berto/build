@@ -297,6 +297,13 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "Summary",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Tagged 3.4.3.3<br/>Ref updated refs/heads/9.3-lkgr@@@"
+    ]
+  },
+  {
     "name": "$result"
   }
 ]

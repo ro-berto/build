@@ -229,6 +229,13 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "Summary",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@-none-@@@"
+    ]
+  },
+  {
     "name": "$result"
   }
 ]

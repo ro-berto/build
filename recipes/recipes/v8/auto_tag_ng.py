@@ -69,11 +69,14 @@ def RunSteps(api, tracked_branches_count):
             env_prefixes={'PATH': [api.v8.depot_tools_path]}):
         branches = last_branches(api)
         assert len(branches) >= tracked_branches_count
+        performed_actions = []
         for branch_version in branches[:tracked_branches_count]:
-            check_branch(api, branch_version)
+            check_branch(api, branch_version, performed_actions)
+        api.step('Summary', cmd=None).presentation.step_text = "\n".join(
+                performed_actions or ["-none-"])
 
 
-def check_branch(api, branch_version):
+def check_branch(api, branch_version, performed_actions):
     with api.step.nest('Checking branch %s.%s' % branch_version):
         branch_ref = 'branch-heads/%s.%s' % branch_version
         git_output(api, 'checkout', branch_ref)
@@ -84,10 +87,12 @@ def check_branch(api, branch_version):
             ok_ret='any',
             name='Proof of version change')
         if proof_of_version_change:
-            verify_tag(api, version_at_branch_head)
-            verify_lkgr(api, branch_version, version_at_branch_head)
+            verify_tag(api, version_at_branch_head, performed_actions)
+            verify_lkgr(api, branch_version,
+                    version_at_branch_head, performed_actions)
         else:
-            maybe_increment_version(api, branch_ref, version_at_branch_head)
+            maybe_increment_version(api, branch_ref,
+                    version_at_branch_head, performed_actions)
 
 
 def last_branches(api):
@@ -111,7 +116,7 @@ def last_branches(api):
     return versions
 
 
-def verify_tag(api, version_at_branch_head):
+def verify_tag(api, version_at_branch_head, performed_actions):
     with api.step.nest('Verify tag'):
         commit_at_tag = git_output(api,
                 'show', '--format=%H', '--no-patch',
@@ -129,9 +134,11 @@ def verify_tag(api, version_at_branch_head):
             else:
                 api.git('tag', str(version_at_branch_head), 'HEAD')
                 api.git('push', REMOTE_REPO_URL, str(version_at_branch_head))
+            performed_actions.append("Tagged %s" % version_at_branch_head)
 
 
-def verify_lkgr(api, branch_version, version_at_branch_head):
+def verify_lkgr(api, branch_version, version_at_branch_head,
+        performed_actions):
     with api.step.nest('Verify LKGR'):
         lkgr_ref = 'refs/heads/%s.%s-lkgr' % branch_version
         current_lkgr = get_commit_for_ref(api, lkgr_ref)
@@ -140,16 +147,17 @@ def verify_lkgr(api, branch_version, version_at_branch_head):
         api.step('LKGR commit %s' % current_lkgr, [])
         api.step('HEAD commit %s' % branch_head, [])
         if branch_head != current_lkgr:
-            set_lkgr(api, branch_head, lkgr_ref)
+            set_lkgr(api, branch_head, lkgr_ref, performed_actions)
         else:
             api.step('There is no new lkgr.', [])
 
 
-def set_lkgr(api, branch_head, lkgr_ref):
+def set_lkgr(api, branch_head, lkgr_ref, performed_actions):
     if api.properties.get('dry_run') or api.runtime.is_experimental:
         api.step('Dry-run lkgr update %s' % branch_head, cmd=None)
     else:
         push_ref(api, REMOTE_REPO_URL, lkgr_ref, branch_head)
+    performed_actions.append("Ref updated %s" % lkgr_ref)
 
 
 def git_output(api, *args, **kwargs):
@@ -179,7 +187,7 @@ def push_ref(api, repo, ref, hsh):
     api.git('push', repo, '+%s:%s' % (hsh, ref))
 
 
-def maybe_increment_version(api, ref, latest_version):
+def maybe_increment_version(api, ref, latest_version, performed_actions):
     with api.step.nest('Increment version from %s' % latest_version):
         commits = api.gerrit.get_changes(
             'https://chromium-review.googlesource.com',
@@ -195,13 +203,13 @@ def maybe_increment_version(api, ref, latest_version):
             step_result = api.step('Stale version change CL found!', cmd=None)
             step_result.presentation.status = 'FAILURE'
         else:
-            increment_version(api, ref, latest_version)
+            increment_version(api, ref, latest_version, performed_actions)
 
 
 def subject(latest_version):
     return 'Version %s' % latest_version
 
-def increment_version(api, ref, latest_version):
+def increment_version(api, ref, latest_version, performed_actions):
     """Increment the version on branch 'ref' to the next patch level.
 
     Args:
@@ -246,11 +254,11 @@ def increment_version(api, ref, latest_version):
 
     if api.properties.get('dry_run') or api.runtime.is_experimental:
         api.step('Dry-run commit', cmd=None)
-        return
-
-    api.git('cl', 'upload', '-f', '--bypass-hooks', '--send-mail',
-            '--no-autocc', '--set-bot-commit')
-    api.git('cl', 'land', '-f', '--bypass-hooks')
+    else:
+        api.git('cl', 'upload', '-f', '--bypass-hooks', '--send-mail',
+                '--no-autocc', '--set-bot-commit')
+        api.git('cl', 'land', '-f', '--bypass-hooks')
+    performed_actions.append("Version updated %s" % latest_version)
 
 def GenTests(api):
 

@@ -652,6 +652,13 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "Summary",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Version updated 3.4.3.4<br/>Version updated 3.4.3.3@@@"
+    ]
+  },
+  {
     "name": "$result"
   }
 ]
