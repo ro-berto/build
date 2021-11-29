@@ -132,8 +132,6 @@ def GetListOfGomaccInfoAfterCompilerProxyStart():
 def SetBuilderIDToCounter(builder_id, counter):
   """Set BuilderID to counter dictionary.
 
-  This function can be called only if LUCI.
-
   Args:
     builder_id: BuilderId dictionary to use.
     counter: ts_mon counter dictionary to be updated.
@@ -202,7 +200,6 @@ def UploadGomaCompilerProxyInfo(
   builderinfo = {
       'builder': builder,
       'os': chromium_utils.PlatformName(),
-      'is_luci': True,
       'is_experimental': is_experimental,
   }
   if builder_id:
@@ -381,11 +378,10 @@ def MakeGomaExitStatusCounter(
 
   try:
     counter = {
-        'name': 'goma/status',
+        'name': 'goma/status_luci',
         'value': 1,
         'os': chromium_utils.PlatformName(),
     }
-    counter['name'] = '%s_luci' % counter['name']
     SetBuilderIDToCounter(builder_id, counter)
 
     if goma_stats_file and os.path.exists(goma_stats_file):
@@ -547,11 +543,10 @@ def MakeGomaStatusCounter(
       ping_status_code = infra_status['ping_status_code']
 
     counter = {
-        'name': 'goma/failure', 'value': num_failure,
+        'name': 'goma/failure_luci', 'value': num_failure,
         'os': chromium_utils.PlatformName(),
         'ping_status_code': ping_status_code, 'result': result
     }
-    counter['name'] = '%s_luci' % counter['name']
     SetBuilderIDToCounter(builder_id, counter)
     start_time = GetCompilerProxyStartTime()
     if start_time:
@@ -623,11 +618,10 @@ def MakeGomaFailureReasonCounter(
       result = 'exception'
 
     counter = {
-        'name': 'goma/failure_reason', 'value': 1,
+        'name': 'goma/failure_reason_luci', 'value': 1,
         'os': chromium_utils.PlatformName(), 'result': result,
         'exception_reason': reason
     }
-    counter['name'] = '%s_luci' % counter['name']
     SetBuilderIDToCounter(builder_id, counter)
     start_time = GetCompilerProxyStartTime()
     if start_time:

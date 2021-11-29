@@ -127,12 +127,6 @@ def main():
 
   # From Runtime API.
   parser.add_argument(
-      '--is-luci',
-      action='store_true',
-      default=True,
-      help='Deprecated: not used. TODO(1117820): remove this flag',
-  )
-  parser.add_argument(
       '--is-experimental', action='store_true', help='True if experimental'
   )
 
