@@ -4876,7 +4876,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "1 Test Suite(s) failed.\n\n**blink_web_tests** failed:\n\n\n\n- Test.One"
+      "humanReason": "1 Test Suite(s) failed.\n\n**blink_web_tests** failed because of:\n\n- Test.One"
     },
     "name": "$result"
   }

@@ -2123,10 +2123,6 @@ class LayoutTestResultsHandler(JSONResultsHandler):
     if not 'without patch' in step_suffix:
       self._layout_test_results = archive_url
 
-  @property
-  def layout_results_url(self):
-    return self._layout_test_results
-
 
 @attrs()
 class SwarmingTestSpec(TestSpec):
