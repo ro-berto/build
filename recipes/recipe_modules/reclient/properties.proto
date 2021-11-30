@@ -50,9 +50,9 @@ message InputProperties {
   // It also sets jobs to platform's cpu count.
   bool ensure_verified = 9;
 
-  // Indicates whether reproxy should fail the build if a predefined rate
-  // of local fallbacks are encountered. This prevents builds making slow
-  // progress without detecting the underlying cause of widespread local
-  // fallbacks.
-  bool fail_early = 10;
+  // WARNING: Deprecated. Indicates whether reproxy should fail the build if a
+  // predefined rate of local fallbacks are encountered. This prevents builds
+  // making slow progress without detecting the underlying cause of widespread
+  // local fallbacks.
+  bool fail_early = 10  [deprecated=true];
 }
