@@ -1695,7 +1695,6 @@
     },
     "name": "webgl_conformance_gl_tests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>Total tests: n/a<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"failures\": [], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"valid\": true@@@",

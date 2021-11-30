@@ -218,36 +218,6 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
         }
         jsonish_results['num_failures_by_type']['PASS'] = 2
         jsonish_results['num_failures_by_type']['SKIP'] = 1
-      else:
-        test0_2_results = {
-          'expected': 'PASS TIMEOUT',
-          'actual': 'FAIL FAIL FAIL',
-          'is_unexpected': True,
-        }
-        if add_shard_index:
-          test0_2_results['shard'] = i
-        tests_run = {
-          'test%d' % idx: {
-            'Test%d' % idx: {
-              'expected': 'PASS',
-              'actual': 'FAIL FAIL TIMEOUT',
-            },
-            'Test%d' % (idx + 1): {
-              'expected': 'PASS TIMEOUT',
-              'actual': 'FAIL FAIL FAIL',
-              'is_unexpected': True,
-            },
-            'Test%d-2' % (idx + 1): test0_2_results,
-          }
-        }
-
-        jsonish_results['num_failures_by_type']['FAIL'] = 2
-
-      for test_basename, subtests in six.iteritems(tests_run):
-        for test_name, test_dict in six.iteritems(subtests):
-          test_artifacts = artifacts.get(test_basename, {}).get(test_name, {})
-          if test_artifacts:
-            test_dict['artifacts'] = test_artifacts
 
       jsonish_results['tests'] = tests_run
       per_shard_results.append(jsonish_results)
@@ -308,11 +278,6 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
         valid = True
       per_shard_results = self.generate_simplified_json_results(
           shard_indices, isolated_script_passing, valid)
-
-    if unknown:
-      per_shard_results[0]['tests']['test1']['Test1']['actual'] = 'UNKNOWN'
-    if corrupt:
-      per_shard_results[0]['tests'] = 'corrupted'
 
     if swarming:
       jsonish_shards = []
