@@ -66,7 +66,8 @@ class ChromiumTestApi(recipe_test_api.RecipeTestApi):
     poller).
     """
     experiments = experiments if experiments else {}
-    experiments.setdefault('chromium.chromium_tests.use_rdb_results', True)
+    # TODO(crbug.com/1135718): Enable the experiment by default.
+    # experiments.setdefault('chromium.chromium_tests.use_rdb_results', True)
     test_data = self._common_test_data(
         bot_id=bot_id,
         default_builder_group='chromium.linux',
@@ -105,7 +106,8 @@ class ChromiumTestApi(recipe_test_api.RecipeTestApi):
     builder triggered via the scheduler UI or a cron-like schedule).
     """
     experiments = experiments if experiments else {}
-    experiments.setdefault('chromium.chromium_tests.use_rdb_results', True)
+    # TODO(crbug.com/1135718): Enable the experiment by default.
+    # experiments.setdefault('chromium.chromium_tests.use_rdb_results', True)
     test_data = self._common_test_data(
         bot_id=bot_id,
         default_builder_group='chromium.linux',
@@ -142,7 +144,8 @@ class ChromiumTestApi(recipe_test_api.RecipeTestApi):
     associated gerrit change.
     """
     experiments = experiments if experiments else {}
-    experiments.setdefault('chromium.chromium_tests.use_rdb_results', True)
+    # TODO(crbug.com/1135718): Enable the experiment by default.
+    # experiments.setdefault('chromium.chromium_tests.use_rdb_results', True)
     test_data = self._common_test_data(
         bot_id=bot_id,
         default_builder_group='tryserver.chromium.linux',

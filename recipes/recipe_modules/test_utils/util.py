@@ -55,17 +55,61 @@ class TestResults(object):
       self.valid = False
       return
 
-    self.version = self.raw.get('version', 'simplified')
-    tests = self.raw.get('tests', {})
-    sep = self.raw.get('path_delimiter', '/')
-    self.tests = convert_trie_to_flat_paths(tests, prefix=None, sep=sep)
+    try:
+      self.version = self.raw.get('version', 'simplified')
+      tests = self.raw.get('tests', {})
+      sep = self.raw.get('path_delimiter', '/')
+      self.tests = convert_trie_to_flat_paths(tests, prefix=None, sep=sep)
 
-    # TODO(dpranke): https://crbug.com/357866 - we should simplify the
-    # handling of both the return code and parsing the actual results.
-    self._json_results()
+      # TODO(dpranke): https://crbug.com/357866 - we should simplify the
+      # handling of both the return code and parsing the actual results.
+
+      if self.version == 'simplified':
+        self._simplified_json_results()
+      else:
+        self._json_results()
+    except Exception:
+      # On parsing failure, mark the result as invalid. This will be presented
+      # to users as INVALID_TEST_RESULTS.
+      self.valid = False
 
     assert self.valid is not None, ("TestResults.valid must be set to a "
         "non-None value when the constructor returns.")
+
+  def canonical_result_format(self):
+    """Returns a dictionary with results in canonical format."""
+    return canonical.result_format(
+        valid=self.valid,
+        failures=list(self.unexpected_failures),
+        total_tests_ran=self.total_test_runs,
+        pass_fail_counts=self.pass_fail_counts,
+        findit_notrun=self.findit_notrun)
+
+  @property
+  def total_test_runs(self):
+    # Number of tests actually run, hence exclude skipped tests.
+    return sum([
+        len(self.passes), len(self.unexpected_passes),
+        len(self.failures), len(self.unexpected_failures),
+        len(self.flakes), len(self.unexpected_flakes),
+    ])
+
+  # TODO(tansell): https://crbug.com/704066 - Kill simplified JSON format.
+  def _simplified_json_results(self):
+    self.valid = self.raw.get('valid', False)
+    self.passes = {x: {} for x in self.raw.get('successes', [])}
+    self.unexpected_failures = {x: {} for x in self.raw.get('failures', [])}
+    for passing_test in self.passes:
+      self.pass_fail_counts.setdefault(
+          passing_test, {'pass_count': 0, 'fail_count': 0})
+      self.pass_fail_counts[passing_test]['pass_count'] += 1
+    for failing_test in self.unexpected_failures:
+      self.pass_fail_counts.setdefault(
+          failing_test, {'pass_count': 0, 'fail_count': 0})
+      self.pass_fail_counts[failing_test]['fail_count'] += 1
+    self.tests = {}
+    self.tests.update(self.passes)
+    self.tests.update(self.unexpected_failures)
 
   def _json_results(self):
     self.valid = self.raw.get('version', 0) == 3
@@ -142,6 +186,11 @@ class TestResults(object):
         key += 'passes'
       elif last_result in failing_statuses:
         key += 'failures'
+      elif last_result in skipping_statuses:
+        key += 'skipped'
+      else:
+        # Unknown test state was found.
+        key = 'unknown'
       getattr(self, key)[test] = result
 
       # Goes through actual_results to get pass_fail_counts for each test.
@@ -157,6 +206,8 @@ class TestResults(object):
           # runs as pass.
           # Skipped tests are not counted.
           self.pass_fail_counts[test]['pass_count'] += 1
+        else:
+          self.pass_fail_counts[test]['fail_count'] = 0
 
 
   def add_result(self, name, expected, actual=None):

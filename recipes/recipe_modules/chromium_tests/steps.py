@@ -659,6 +659,9 @@ class Test(object):
 
       return not self._rdb_results[suffix].invalid
     else:
+      if suffix not in self._test_runs:
+        return False
+
       return self._test_runs[suffix]['valid']
 
   def pass_fail_counts(self, suffix):
@@ -737,8 +740,12 @@ class Test(object):
         'There is no data for the test run suffix ({0}). This should never '
         'happen as all calls to failures() should first check that the data '
         'exists.'.format(suffix))
-    assert suffix in self._rdb_results, failure_msg
-    return self._rdb_results[suffix].unexpected_failing_tests
+    if self.spec.resultdb.use_rdb_results_for_all_decisions:
+      assert suffix in self._rdb_results, failure_msg
+      return self._rdb_results[suffix].unexpected_failing_tests
+    else:
+      assert suffix in self._test_runs, failure_msg
+      return self._test_runs[suffix]['failures']
 
   def deterministic_failures(self, suffix):
     """Return tests that failed on every test run(list of strings)."""
@@ -871,7 +878,10 @@ class Test(object):
     assert self.has_valid_results(suffix), (
         'findit_notrun must only be called when the test run is known to have '
         'valid results.')
-    return self._rdb_results[suffix].unexpected_skipped_tests
+    if self.spec.resultdb.use_rdb_results_for_all_decisions:
+      return self._rdb_results[suffix].unexpected_skipped_tests
+    else:
+      return self._test_runs[suffix]['findit_notrun']
 
   def without_patch_failures_to_ignore(self):
     """Returns test failures that should be ignored.
@@ -1734,6 +1744,286 @@ class LocalGTestTest(LocalTest):
     return api.step.raise_on_failure(step_result, status)
 
 
+class ResultsHandler(object):
+
+  def upload_results(self, api, results, step_name, passed,
+                     step_suffix=None):  # pragma: no cover
+    """Uploads test results to the Test Results Server.
+
+    Args:
+      api: Recipe API object.
+      results: Results returned by the step.
+      step_name: Name of the step that produced results.
+      passed: If the test being uploaded passed during execution.
+      step_suffix: Suffix appended to the step name.
+    """
+    raise NotImplementedError()
+
+  def render_results(self, api, results, presentation):  # pragma: no cover
+    """Renders the test result into the step's output presentation.
+
+    Args:
+      api: Recipe API object.
+      results: A TestResults object.
+      presentation: Presentation output of the step.
+    """
+    raise NotImplementedError()
+
+  def validate_results(self, api, results):  # pragma: no cover
+    """Validates test results and returns a list of failures.
+
+    Args:
+      api: Recipe API object.
+      results: Results returned by the step.
+
+    Returns:
+      (valid, failures, pass_fail_counts), where valid is True when results are
+      valid, and failures is a list of strings (typically names of failed
+      tests). pass_fail_counts is a dictionary that gives the number of passes
+      and fails for each test.
+    """
+    raise NotImplementedError()
+
+
+class JSONResultsHandler(ResultsHandler):
+  MAX_FAILS = 30
+
+  def __init__(self, ignore_task_failure=False):
+    self._ignore_task_failure = ignore_task_failure
+
+  @classmethod
+  def _format_failures(cls, state, failures):
+    """Format a human-readable explanation of what has failed.
+
+    Args:
+      state: A string describing what type of failure it was.
+      failures: a dictionary mapping test names to failure information.
+        The failure information could be empty or it could be a dictionary
+        of per-test fields per
+        https://chromium.googlesource.com/chromium/src/+/main/docs/testing/json_test_results_format.md
+
+    Returns:
+      A tuple: (failure state, list of failure strings).
+    """
+    index = 0
+    failure_strings = []
+    num_failures = len(failures)
+
+    for test_name in sorted(failures):
+      if index >= cls.MAX_FAILS:
+        failure_strings.append('* ... %d more (%d total) ...' %
+                               (num_failures - cls.MAX_FAILS, num_failures))
+        break
+      if failures[test_name] and 'shard' in failures[test_name]:
+        shard = failures[test_name]['shard']
+        failure_strings.append('* {test} (shard #{shard})'.format(
+            test=test_name, shard=shard))
+      else:
+        failure_strings.append('* {test}'.format(test=test_name))
+      index += 1
+
+    return ('{state}:'.format(state=state), failure_strings)
+
+  # TODO(tansell): Make this better formatted when milo supports html rendering.
+  @classmethod
+  def _format_counts(cls, state, expected, unexpected, highlight=False):
+    hi_left = ''
+    hi_right = ''
+    if highlight and unexpected > 0:
+      hi_left = '>>>'
+      hi_right = '<<<'
+    return ("* %(state)s: %(total)d (%(expected)d expected, "
+            "%(hi_left)s%(unexpected)d unexpected%(hi_right)s)") % dict(
+                state=state,
+                total=expected + unexpected,
+                expected=expected,
+                unexpected=unexpected,
+                hi_left=hi_left,
+                hi_right=hi_right)
+
+  def upload_results(self, api, results, step_name, passed, step_suffix=None):
+    # Only version 3 of results is supported by the upload server.
+    chrome_revision_cp = api.bot_update.last_returned_properties.get(
+        'got_revision_cp', 'refs/x@{#0}')
+
+    _, chrome_revision = api.commit_position.parse(str(chrome_revision_cp))
+    chrome_revision = str(chrome_revision)
+    api.test_results.upload(
+        api.json.input(results),
+        chrome_revision=chrome_revision,
+        test_type=step_name)
+
+  def render_results(self, api, results, presentation):
+    failure_status = (
+        api.step.WARNING if self._ignore_task_failure else api.step.FAILURE)
+
+    if not results.valid:
+      presentation.status = api.step.EXCEPTION
+      presentation.step_text = api.test_utils.INVALID_RESULTS_MAGIC
+      return
+
+    step_text = []
+
+    if results.total_test_runs == 0:
+      step_text += [
+          ('Total tests: n/a',),
+      ]
+
+    # TODO(tansell): https://crbug.com/704066 - Kill simplified JSON format.
+    elif results.version == 'simplified':
+      if results.unexpected_failures:
+        presentation.status = failure_status
+
+      step_text += [
+          ('%s passed, %s failed (%s total)' %
+           (len(results.passes), len(
+               results.unexpected_failures), len(results.tests)),),
+      ]
+
+    else:
+      if results.unexpected_flakes:
+        presentation.status = api.step.WARNING
+      if results.unexpected_failures or results.unexpected_skipped:
+        presentation.status = (
+            api.step.WARNING if self._ignore_task_failure else api.step.FAILURE)
+
+      step_text += [
+          ('Total tests: %s' % len(results.tests), [
+              self._format_counts('Passed', len(results.passes),
+                                  len(results.unexpected_passes)),
+              self._format_counts('Skipped', len(results.skipped),
+                                  len(results.unexpected_skipped)),
+              self._format_counts(
+                  'Failed',
+                  len(results.failures),
+                  len(results.unexpected_failures),
+                  highlight=True),
+              self._format_counts(
+                  'Flaky',
+                  len(results.flakes),
+                  len(results.unexpected_flakes),
+                  highlight=True),
+          ]),
+      ]
+
+    # format_step_text will automatically trim these if the list is empty.
+    step_text += [
+        self._format_failures('Unexpected Failures',
+                              results.unexpected_failures),
+    ]
+    step_text += [
+        self._format_failures('Unexpected Flakes', results.unexpected_flakes),
+    ]
+    step_text += [
+        self._format_failures('Unexpected Skips', results.unexpected_skipped),
+    ]
+
+    # Unknown test results mean something has probably gone wrong, mark as an
+    # exception.
+    if results.unknown:
+      presentation.status = api.step.EXCEPTION
+    step_text += [
+        self._format_failures('Unknown test result', results.unknown),
+    ]
+
+    presentation.step_text += api.test_utils.format_step_text(step_text)
+
+    # Handle any artifacts that the test produced if necessary.
+    self._add_links_to_artifacts(api, results, presentation)
+
+  def validate_results(self, api, results):
+    test_results = api.test_utils.create_results_from_json(results)
+    return test_results.canonical_result_format()
+
+  def _add_links_to_artifacts(self, api, results, presentation):
+    del api
+    # Add any links to artifacts that are already available.
+    # TODO(https://crbug.com/980274): Either handle the case of artifacts whose
+    # paths are filepaths, or add the ability for merge scripts to upload
+    # artifacts to a storage bucket and update the path to the URL before
+    # getting to this point.
+    if not results.valid or results.version == 'simplified':
+      return
+    artifacts = self._find_artifacts(results.raw)
+
+    # We don't want to flood Milo with links if a bunch of artifacts are
+    # generated, so put a cap on the number we're willing to show.
+    max_links = 15
+    num_links = 0
+    for artifact_map in artifacts.values():
+      for artifact_paths in artifact_map.values():
+        num_links += len(artifact_paths)
+
+    bulk_log = []
+    for test_name, test_artifacts in artifacts.items():
+      for artifact_type, artifact_paths in test_artifacts.items():
+        for path in artifact_paths:
+          link_title = '%s produced by %s' % (artifact_type, test_name)
+          if num_links < max_links:
+            presentation.links[link_title] = path
+          else:
+            bulk_log.append('%s: %s' % (link_title, path))
+    if bulk_log:
+      log_title = (
+          'Too many artifacts produced to link individually, click for links')
+      presentation.logs[log_title] = bulk_log
+
+  def _find_artifacts(self, raw_results):
+    """Finds artifacts in the given JSON results.
+
+    Currently, only finds artifacts whose paths are HTTPS URLs, see
+    https://crbug.com/980274 for more details.
+
+    Returns:
+      A dict of full test names to dicts of artifact types to paths.
+    """
+    tests = raw_results.get('tests', {})
+    path_delimiter = raw_results.get('path_delimiter', '.')
+    return self._recurse_artifacts(tests, '', path_delimiter)
+
+  def _recurse_artifacts(self, sub_results, name_so_far, path_delimiter):
+    is_leaf_node = 'actual' in sub_results and 'expected' in sub_results
+    if is_leaf_node:
+      if 'artifacts' not in sub_results:
+        return {}
+      url_artifacts = {}
+      for artifact_type, artifact_paths in sub_results['artifacts'].items():
+        for artifact_path in artifact_paths:
+          parse_result = urllib.parse.urlparse(artifact_path)
+          if parse_result.scheme == 'https' and parse_result.netloc:
+            url_artifacts.setdefault(artifact_type, []).append(artifact_path)
+      return {name_so_far: url_artifacts} if url_artifacts else {}
+
+    artifacts = {}
+    for key, val in sub_results.items():
+      if isinstance(val, (dict, collections.OrderedDict)):
+        updated_name = name_so_far + path_delimiter + str(key)
+        # Strip off the leading delimiter if this is the first iteration
+        if not name_so_far:
+          updated_name = updated_name[1:]
+        artifacts.update(
+            self._recurse_artifacts(val, updated_name, path_delimiter))
+    return artifacts
+
+
+class FakeCustomResultsHandler(ResultsHandler):
+  """Result handler just used for testing."""
+
+  def validate_results(self, api, results):
+    invalid_dictionary = api.test_utils.canonical.result_format()
+    invalid_dictionary['valid'] = True
+    return invalid_dictionary
+
+  def render_results(self, api, results, presentation):
+    presentation.step_text += api.test_utils.format_step_text([
+        ['Fake results data', []],
+    ])
+    presentation.links['uploaded'] = 'fake://'
+
+  def upload_results(self, api, results, step_name, passed, step_suffix=None):
+    api.test_utils.create_results_from_json(results)
+
+
 def _clean_step_name(step_name, suffix):
   """
   Based on
@@ -1785,6 +2075,9 @@ def _archive_layout_test_results(api, step_name, step_suffix=None):
   archive_step_name = 'archive results for ' + step_name
 
   archive_layout_test_args += api.build.slave_utils_args
+  # TODO(phajdan.jr): Pass gs_acl as a parameter, not build property.
+  if api.properties.get('gs_acl'):
+    archive_layout_test_args.extend(['--gs-acl', api.properties['gs_acl']])
   archive_result = api.build.python(archive_step_name,
                                     archive_layout_test_results,
                                     archive_layout_test_args)
@@ -1800,6 +2093,24 @@ def _archive_layout_test_results(api, step_name, step_suffix=None):
   archive_result.presentation.links['(zip)'] = (
       base + '/layout-test-results.zip')
   return base + '/layout-test-results/results.html'
+
+
+class LayoutTestResultsHandler(JSONResultsHandler):
+  """Uploads layout test results to Google storage."""
+
+  def __init__(self):
+    super(LayoutTestResultsHandler, self).__init__()
+    self._layout_test_results = ''
+
+  def upload_results(self, api, results, step_name, passed, step_suffix=None):
+    # Also upload to standard JSON results handler
+    JSONResultsHandler.upload_results(self, api, results, step_name, passed,
+                                      step_suffix)
+
+    # This keeps track of the link to build summary section for ci and cq.
+    archive_url = _archive_layout_test_results(api, step_name, step_suffix)
+    if not 'without patch' in step_suffix:
+      self._layout_test_results = archive_url
 
 
 @attrs()
@@ -2387,6 +2698,14 @@ class SwarmingGTestTest(SwarmingTest):
     return step_result
 
 
+def _get_results_handler(results_handler_name, default_handler):
+  return {
+      'default': lambda: default_handler,
+      'layout tests': LayoutTestResultsHandler,
+      'fake': FakeCustomResultsHandler,
+  }[results_handler_name]()
+
+
 @attrs()
 class LocalIsolatedScriptTestSpec(TestSpec):
   """Spec for a test that runs an isolated script locally.
@@ -2423,6 +2742,11 @@ class LocalIsolatedScriptTestSpec(TestSpec):
   def test_class(self):
     """The test class associated with the spec."""
     return LocalIsolatedScriptTest
+
+  @cached_property
+  def results_handler(self):
+    """The handler for proessing tests results."""
+    return _get_results_handler(self.results_handler_name, JSONResultsHandler())
 
 
 class LocalIsolatedScriptTest(LocalTest):
@@ -2537,8 +2861,21 @@ class LocalIsolatedScriptTest(LocalTest):
 
     status = step_result.presentation.status
 
+    # TODO(kbr, nedn): the logic of processing the output here is very similar
+    # to that of SwarmingIsolatedScriptTest. They probably should be shared
+    # between the two.
     self._suffix_step_name_map[suffix] = '.'.join(step_result.name_tokens)
-    self.update_test_run(api, suffix, {})
+    results = step_result.json.output
+    presentation = step_result.presentation
+
+    validated_results = {}
+    if not self.spec.resultdb.use_rdb_results_for_all_decisions:
+      test_results = api.test_utils.create_results_from_json(results)
+      self.spec.results_handler.render_results(api, test_results, presentation)
+      validated_results = self.spec.results_handler.validate_results(
+          api, results)
+
+    self.update_test_run(api, suffix, validated_results)
     self.update_inv_name_from_stderr(step_result.stderr, suffix)
     self.update_failure_on_exit(suffix, step_result.retcode != 0)
 
@@ -2577,6 +2914,12 @@ class SwarmingIsolatedScriptTestSpec(SwarmingTestSpec):
     """The test class associated with the spec."""
     return SwarmingIsolatedScriptTest
 
+  @cached_property
+  def results_handler(self):
+    """The handler for proessing tests results."""
+    return _get_results_handler(self.results_handler_name,
+                                JSONResultsHandler(self.ignore_task_failure))
+
 
 class SwarmingIsolatedScriptTest(SwarmingTest):
 
@@ -2602,10 +2945,22 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     return task
 
   def validate_task_results(self, api, step_result):
-    # Store the JSON results so we can later send them to the legacy
-    # test-results service, but don't inspect/verify them at all.
-    self._isolated_script_results = step_result.json.output
-    return {}
+    if self.spec.resultdb.use_rdb_results_for_all_decisions:
+      # Store the JSON results so we can later send them to the legacy
+      # test-results service, but don't inspect/verify them at all.
+      self._isolated_script_results = step_result.json.output
+      return {}
+    results_json = step_result.json.output
+
+    test_run_dictionary = (
+        self.spec.results_handler.validate_results(api, results_json))
+    presentation = step_result.presentation
+
+    test_results = api.test_utils.create_results_from_json(results_json)
+    self.spec.results_handler.render_results(api, test_results, presentation)
+
+    self._isolated_script_results = results_json
+    return test_run_dictionary
 
   @recipe_api.composite_step
   def run(self, api, suffix):
@@ -2613,18 +2968,26 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     results = self._isolated_script_results
 
     if results:
-      # Only version 3 of results is supported by the upload server.
-      upload_step_name = '.'.join(step_result.name_tokens)
-      if results and results.get('version', None) == 3:
-        chrome_rev_cp = api.bot_update.last_returned_properties.get(
-            'got_revision_cp', 'refs/x@{#0}')
-        _, chrome_rev = api.commit_position.parse(str(chrome_rev_cp))
-        api.test_results.upload(
-            api.json.input(results),
-            chrome_revision=str(chrome_rev),
-            test_type=upload_step_name)
-      if self.spec.results_handler_name == 'layout tests':
-        _archive_layout_test_results(api, upload_step_name, step_suffix=suffix)
+      if not self.spec.resultdb.use_rdb_results_for_all_decisions:
+        # Noted when uploading to test-results, the step_name is expected to be
+        # an exact match to the step name on the build.
+        self.spec.results_handler.upload_results(
+            api, results, '.'.join(step_result.name_tokens),
+            not bool(self.deterministic_failures(suffix)), suffix)
+      else:
+        # Only version 3 of results is supported by the upload server.
+        upload_step_name = '.'.join(step_result.name_tokens)
+        if results and results.get('version', None) == 3:
+          chrome_rev_cp = api.bot_update.last_returned_properties.get(
+              'got_revision_cp', 'refs/x@{#0}')
+          _, chrome_rev = api.commit_position.parse(str(chrome_rev_cp))
+          api.test_results.upload(
+              api.json.input(results),
+              chrome_revision=str(chrome_rev),
+              test_type=upload_step_name)
+        if self.spec.results_handler_name == 'layout tests':
+          _archive_layout_test_results(
+              api, upload_step_name, step_suffix=suffix)
     return step_result
 
 

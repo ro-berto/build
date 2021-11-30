@@ -136,14 +136,17 @@ class TestUtilsApi(recipe_api.RecipeApi):
     """
     step_text = []
     for section in data:
-      if len(section) == 2:
+      if len(section) == 1:
+        # Make it possible to display single-line sections.
+        step_text.append('<br/>%s<br/>' % section[0])
+      elif len(section) == 2:
         # Only displaying the section (even the header) when it's non-empty
         # simplifies caller code.
         if section[1]:
           step_text.append('<br/>%s<br/>' % section[0])
           step_text.extend(('%s<br/>' % line for line in section[1]))
       else:  # pragma: no cover
-        raise ValueError('Expected a two-element list, got %r instead.' %
+        raise ValueError('Expected a one or two-element list, got %r instead.' %
                          section)
     return ''.join(step_text)
 
