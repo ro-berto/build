@@ -318,11 +318,11 @@ class WebRtcIsolatedGtest(object):
 
     self._task = self.create_task(api, task_input)
 
-    resultdb = None
+    resultdb = ResultDB.create()
     for s in self._task.request[0].command:
       if '--dump_json_test_results=' in s:
         resultdb = attr.evolve(
-            ResultDB.create(),
+            resultdb,
             result_format='json',
             result_file=s[len('--dump_json_test_results='):],
         )
