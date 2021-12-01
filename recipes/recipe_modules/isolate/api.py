@@ -311,12 +311,6 @@ class IsolateApi(recipe_api.RecipeApi):
         self.m.path.abs_to_path(str(isolate_path) + 'd.gen.json'),
         {
             'args': [
-                '--isolated',
-                str(
-                    self.m.path.relpath(
-                        '%s/%s.isolated' % (build_dir, isolate_target_name),
-                        self.m.path['checkout'],
-                    )),
                 '--isolate',
                 str(
                     self.m.path.relpath(
