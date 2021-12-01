@@ -21,9 +21,16 @@ _FILE_PATH_ADDING_TESTS_PATTERN = ('^(.+(BUILD\.gn|DEPS|\.gni)|'
 
 
 class TestDefinition():
-  """A class to contain ResultDB TestReuslt Proto information
+  """A class to contain ResultDB TestReuslt Proto information.
+
+  Test ID, variant hash (see go/resultdb-concepts) and whether the test comes
+  from an experimental suite distinguish a |TestDefinition|. This is achieved by
+  overriding __eq__ and __hash__ methods.
 
   Attributes:
+    * is_experimental: (bool) Whether the test is from an experimental suite.
+    * tags: (list) Tags in the ResultDB test result
+    * test_id: (string) ResultDB's test_id (go/resultdb-concepts)
     * variant_hash: (stirng) ResultDB's variant_hash (go/resultdb-concepts)
   """
 
@@ -34,11 +41,18 @@ class TestDefinition():
                             'def') if test_result.variant else {}
     self.variant_hash = test_result.variant_hash
 
+    self.is_experimental = False
+    for tag in self.tags:
+      # "experimental" is the last part of step suffix (wrapped in brackets)
+      # which is part of the step name. (https://bit.ly/3I4Enc6)
+      if tag.key and tag.key == 'step_name' and 'experimental)' in tag.value:
+        self.is_experimental = True
+
   def __eq__(self, t2):
-    return (self.test_id, self.variant_hash) == t2
+    return (self.test_id, self.variant_hash, self.is_experimental) == t2
 
   def __hash__(self):
-    return hash((self.test_id, self.variant_hash))
+    return hash((self.test_id, self.variant_hash, self.is_experimental))
 
 
 class FlakinessApi(recipe_api.RecipeApi):
@@ -299,10 +313,10 @@ class FlakinessApi(recipe_api.RecipeApi):
         step_name='cross reference newly identified tests against ResultDB')
 
     for entry in results.entries:
-      test_tuple = (entry.result.test_id, entry.result.variant_hash)
+      test = TestDefinition(entry.result)
       excluded = entry.result.name.split("/tests")[0] in excluded_invs
-      if test_tuple in prelim_tests and not excluded:
-        prelim_tests.remove(test_tuple)
+      if test in prelim_tests and not excluded:
+        prelim_tests.remove(test)
 
     return prelim_tests
 
@@ -388,7 +402,8 @@ class FlakinessApi(recipe_api.RecipeApi):
           excluded_invs=excluded_invs,
           builder=current_builder.builder)
       p.logs['new_tests'] = ('new tests: \n\n{}'.format('\n'.join([
-          'test_id: {}, variant_hash: {}'.format(t.test_id, t.variant_hash)
+          'test_id: {}, variant_hash: {}, experimental: {}'.format(
+              t.test_id, t.variant_hash, t.is_experimental)
           for t in self.m.py3_migration.consistent_ordering(
               new_tests, key=lambda t: (t.test_id, t.variant_hash))
       ])))

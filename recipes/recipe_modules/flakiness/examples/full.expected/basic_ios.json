@@ -3175,11 +3175,11 @@
       "@@@STEP_LOG_END@preliminary_tests@@@",
       "@@@STEP_LOG_LINE@new_tests@new tests: @@@",
       "@@@STEP_LOG_LINE@new_tests@@@@",
-      "@@@STEP_LOG_LINE@new_tests@test_id: ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a, variant_hash: b3M6TWFjLTExCnRlc3Rfc3VpdGU6aW9zX2Nocm9tZV9ib29rbWFya3NfZWcydGVzdHNfbW9kdWxlX2lQYWQgQWlyIDIgMTQuNA==@@@",
-      "@@@STEP_LOG_LINE@new_tests@test_id: ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a, variant_hash: b3M6TWFjLTExCnRlc3Rfc3VpdGU6aW9zX2Nocm9tZV9ib29rbWFya3NfZWcydGVzdHNfbW9kdWxlX2lQaG9uZSAxMSAxNC40@@@",
-      "@@@STEP_LOG_LINE@new_tests@test_id: ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a, variant_hash: b3M6VWJ1bnR1LTE0LjA0CnRlc3Rfc3VpdGU6aW9zX2Nocm9tZV9ib29rbWFya3NfZWcydGVzdHNfbW9kdWxlX2lQYWQgQWlyIDIgMTQuNA==@@@",
-      "@@@STEP_LOG_LINE@new_tests@test_id: ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_b, variant_hash: b3M6TWFjLTExCnRlc3Rfc3VpdGU6aW9zX2Nocm9tZV9ib29rbWFya3NfZWcydGVzdHNfbW9kdWxlX2lQYWQgQWlyIDIgMTQuNA==@@@",
-      "@@@STEP_LOG_LINE@new_tests@test_id: ninja://ios/chrome/test/earl_grey2:ios_chrome_web_eg2tests_module/TestSuite.test_c, variant_hash: b3M6TWFjLTExCnRlc3Rfc3VpdGU6aW9zX2Nocm9tZV93ZWJfZWcydGVzdHNfbW9kdWxlX2lQYWQgQWlyIDIgMTQuNA==@@@",
+      "@@@STEP_LOG_LINE@new_tests@test_id: ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a, variant_hash: b3M6TWFjLTExCnRlc3Rfc3VpdGU6aW9zX2Nocm9tZV9ib29rbWFya3NfZWcydGVzdHNfbW9kdWxlX2lQYWQgQWlyIDIgMTQuNA==, experimental: False@@@",
+      "@@@STEP_LOG_LINE@new_tests@test_id: ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a, variant_hash: b3M6TWFjLTExCnRlc3Rfc3VpdGU6aW9zX2Nocm9tZV9ib29rbWFya3NfZWcydGVzdHNfbW9kdWxlX2lQaG9uZSAxMSAxNC40, experimental: False@@@",
+      "@@@STEP_LOG_LINE@new_tests@test_id: ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a, variant_hash: b3M6VWJ1bnR1LTE0LjA0CnRlc3Rfc3VpdGU6aW9zX2Nocm9tZV9ib29rbWFya3NfZWcydGVzdHNfbW9kdWxlX2lQYWQgQWlyIDIgMTQuNA==, experimental: False@@@",
+      "@@@STEP_LOG_LINE@new_tests@test_id: ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_b, variant_hash: b3M6TWFjLTExCnRlc3Rfc3VpdGU6aW9zX2Nocm9tZV9ib29rbWFya3NfZWcydGVzdHNfbW9kdWxlX2lQYWQgQWlyIDIgMTQuNA==, experimental: False@@@",
+      "@@@STEP_LOG_LINE@new_tests@test_id: ninja://ios/chrome/test/earl_grey2:ios_chrome_web_eg2tests_module/TestSuite.test_c, variant_hash: b3M6TWFjLTExCnRlc3Rfc3VpdGU6aW9zX2Nocm9tZV93ZWJfZWcydGVzdHNfbW9kdWxlX2lQYWQgQWlyIDIgMTQuNA==, experimental: False@@@",
       "@@@STEP_LOG_END@new_tests@@@"
     ]
   },

@@ -6,6 +6,7 @@ from recipe_engine import post_process
 from PB.go.chromium.org.luci.buildbucket.proto import build as build_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import builder as builder_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
+from PB.go.chromium.org.luci.resultdb.proto.v1 import common as rdb_common_pb2
 from PB.go.chromium.org.luci.resultdb.proto.v1 \
     import test_result as test_result_pb2
 from PB.go.chromium.org.luci.resultdb.proto.v1 \
@@ -26,23 +27,33 @@ DEPS = [
 
 def RunSteps(api):
   new_tests = {
-      'ninja://sample/test:some_test/TestSuite.Test2_2hash',
-      'ninja://sample/test:some_test/TestSuite.Test3_3hash',
-      'ninja://sample/test:some_test/TestSuite.Test4_4hash',
-      'presubmit:sample.com/chromium:./CheckSomething1_1hash',
-      'presubmit:sample.com/chromium:./CheckSomething2_2hash',
-      'presubmit:sample.com/chromium:./CheckSomething3_3hash',
-      'presubmit:sample.com/chromium:./CheckSomething4_4hash',
+      'ninja://sample/test:some_test/TestSuite.Test2_2hash_False',
+      'ninja://sample/test:some_test/TestSuite.Test3_3hash_False',
+      'ninja://sample/test:some_test/TestSuite.Test4_4hash_False',
+      'presubmit:sample.com/chromium:./CheckSomething1_1hash_False',
+      'presubmit:sample.com/chromium:./CheckSomething2_2hash_False',
+      'presubmit:sample.com/chromium:./CheckSomething3_3hash_False',
+      'presubmit:sample.com/chromium:./CheckSomething4_4hash_False',
   }
   found_tests = api.flakiness.identify_new_tests()
   if found_tests:
-    found_tests = set(
-        [str('_'.join([t.test_id, t.variant_hash])) for t in found_tests])
+    found_tests = set([
+        str('_'.join([t.test_id, t.variant_hash,
+                      str(t.is_experimental)])) for t in found_tests
+    ])
     api.assertions.assertEqual(new_tests, found_tests)
 
 
 def GenTests(api):
   build_database, inv_bundle = [], {}
+  non_experimental_tags = [
+      rdb_common_pb2.StringPair(
+          key='step_name', value='some test (with patch)')
+  ]
+  experimental_tags = [
+      rdb_common_pb2.StringPair(
+          key='step_name', value='some test (with patch, experimental)')
+  ]
   for i in range(5):
     inv = "invocations/{}".format(i + 1)
     build = build_pb2.Build(
@@ -57,16 +68,27 @@ def GenTests(api):
             variant_hash='{}hash'.format(i),
             expected=False,
             status=test_result_pb2.FAIL,
+            tags=non_experimental_tags,
         ),
         test_result_pb2.TestResult(
             test_id='presubmit:sample.com/chromium:./CheckSomething' + str(i),
             variant_hash='{}hash'.format(i),
             expected=False,
             status=test_result_pb2.FAIL,
+            tags=non_experimental_tags,
         ),
     ]
     inv_bundle[inv] = api.resultdb.Invocation(test_results=test_results)
 
+  experimental_inv = api.resultdb.Invocation(test_results=[
+      test_result_pb2.TestResult(
+          test_id='ninja://sample/test:some_test/TestSuite.Test2',
+          variant_hash='2hash',
+          expected=False,
+          status=test_result_pb2.FAIL,
+          tags=experimental_tags,
+      )
+  ])
   basic_build = build_pb2.Build(
       builder=builder_pb2.BuilderID(
           builder='Builder', project='chromium', bucket='try'),
@@ -113,7 +135,10 @@ def GenTests(api):
           step_name=('searching_for_new_tests.'
                      'fetch test variants for current patchset')),
       api.resultdb.query(
-          inv_bundle={'invocations/1': inv_bundle['invocations/1']},
+          inv_bundle={
+              'invocations/1': inv_bundle['invocations/1'],
+              'invocations/3': experimental_inv
+          },
           step_name=('searching_for_new_tests.'
                      'fetch test variants from previous invocations')),
       api.resultdb.get_test_result_history(
