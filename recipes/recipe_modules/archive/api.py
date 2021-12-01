@@ -1063,7 +1063,7 @@ class ArchiveApi(recipe_api.RecipeApi):
             bucket=gcs_bucket, source=latest_path, dest=dest_path)
 
         last_version = self.m.file.read_text(
-            'Read in last version', dest_path, test_data='100000.0.0.0')
+            'Read in last version', dest_path, test_data='1.2.3.4')
 
         last_versions = self._deconstruct_version(last_version)
         new_versions = self._deconstruct_version(content)
@@ -1071,6 +1071,9 @@ class ArchiveApi(recipe_api.RecipeApi):
         for last, new in zip(last_versions, new_versions):
           if last > new:
             content = last_version
+            break
+          elif new > last:
+            break
 
       content_ascii = content.encode('ascii', 'ignore')
       temp_dir = self.m.path.mkdtemp()
