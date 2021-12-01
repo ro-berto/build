@@ -648,6 +648,13 @@ class ArchiveApi(recipe_api.RecipeApi):
 
     return input_str
 
+  def _deconstruct_version(self, version):
+    """Breaks version down into list of parts."""
+    segments = []
+    for segment in version.strip().split('.'):
+      segments.append(int(segment))
+    return segments
+
   def _read_source_side_archive_spec(self, source_side_archive_spec_path):
     if not self.m.path.exists(source_side_archive_spec_path):
       return None
@@ -1042,12 +1049,30 @@ class ArchiveApi(recipe_api.RecipeApi):
             'latest_upload.gcs_path or latest_upload.gcs_file_content'
             ' not declared', 'Both latest_gcs_path and '
             'latest_gcs_file_content must be non-empty.')
+
+      latest_path = self._replace_placeholders(
+          update_properties, custom_vars, archive_data.latest_upload.gcs_path)
       content = self._replace_placeholders(
           update_properties, custom_vars,
           archive_data.latest_upload.gcs_file_content)
+      if '{%chromium_version%}' in archive_data.latest_upload.gcs_file_content:
+        file_name = self.m.path.basename(latest_path)
+        dest_path = self.m.path.mkdtemp().join(file_name)
+
+        self.m.gsutil.download(
+            bucket=gcs_bucket, source=latest_path, dest=dest_path)
+
+        last_version = self.m.file.read_text(
+            'Read in last version', dest_path, test_data='100000.0.0.0')
+
+        last_versions = self._deconstruct_version(last_version)
+        new_versions = self._deconstruct_version(content)
+
+        for last, new in zip(last_versions, new_versions):
+          if last > new:
+            content = last_version
+
       content_ascii = content.encode('ascii', 'ignore')
-      latest_path = self._replace_placeholders(
-          update_properties, custom_vars, archive_data.latest_upload.gcs_path)
       temp_dir = self.m.path.mkdtemp()
       output_file = temp_dir.join('latest.txt')
       self.m.file.write_text('Write latest file', output_file, content_ascii)

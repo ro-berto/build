@@ -12,6 +12,7 @@ PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'archive',
+    'build/chromium',
     'squashfs',
     'recipe_engine/json',
     'recipe_engine/path',
@@ -35,6 +36,7 @@ def RunSteps(api):
     return
 
   if 'gcs_archive' in api.properties:
+    api.chromium.set_config('chromium')
     api.path.mock_add_paths(api.path['start_dir'].join('squashfs',
                                                        'squashfs-tools',
                                                        'mksquashfs'))
@@ -674,6 +676,31 @@ def GenTests(api):
               ('gs://any-bucket/experimental/dest_dir/path/to/'
                'some/file.txt.attestation'),
           ]),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  input_properties = properties.InputProperties()
+  archive_data = properties.ArchiveData()
+  archive_data.dirs.extend(['anydir'])
+  archive_data.gcs_bucket = 'any-bucket'
+  archive_data.gcs_path = 'x86//chrome'
+  archive_data.archive_type = properties.ArchiveData.ARCHIVE_TYPE_ZIP
+  archive_data.latest_upload.gcs_path = "x86/latest/latest.txt"
+  archive_data.latest_upload.gcs_file_content = \
+      '{%chromium_version%}'
+  input_properties.archive_datas.extend([archive_data])
+
+  yield api.test(
+      'deconstruct_version',
+      api.chromium.ci_build(builder='test'),
+      api.properties(
+          gcs_archive=True,
+          update_properties={},
+          **{'$build/archive': input_properties}),
+      api.post_process(post_process.StepCommandContains,
+                       'Generic Archiving Steps.Write latest file',
+                       ['100000.0.0.0']),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
