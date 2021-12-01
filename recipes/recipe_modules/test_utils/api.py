@@ -1238,6 +1238,7 @@ class TestGroup(object):
       unexpected_result_invocations = self.resultdb_api.query(
           inv_ids=self.resultdb_api.invocation_ids(invocation_names),
           variants_with_unexpected_results=True,
+          limit=0,
           step_name='%s results' % test.name,
           tr_fields=RDBPerSuiteResults.NEEDED_FIELDS,
       )

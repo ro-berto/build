@@ -1215,7 +1215,7 @@
       "query",
       "-json",
       "-n",
-      "1000",
+      "0",
       "-u",
       "-tr-fields",
       "testId,variant,variantHash,status,tags,expected",
