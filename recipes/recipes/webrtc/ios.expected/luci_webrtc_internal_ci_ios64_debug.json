@@ -3436,7 +3436,7 @@
       "-server",
       "https://example.swarmingserver.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"common_audio_unittests (iPhone 11 iOS 14.7)/iOS-14.7/[dummy has/iOS64 Debug/-1\", \"priority\": \"30\", \"realm\": \"webrtc-internal:ci\", \"service_account\": \"chrome-tester@chops-service-accounts.iam.gserviceaccount.com\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:internal.client.webrtc\", \"buildername:iOS64 Debug\", \"data:[dummy hash for 0/dummy size]\", \"device_type:iPhone 11\", \"ios_version:14.7\", \"name:common_audio_unittests\", \"ninja_target:\", \"platform:device\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc-internal.ci:iOS64 Debug\", \"stepname:common_audio_unittests (iPhone 11 iOS 14.7) on iOS-14.7\", \"test:common_audio_unittests\", \"test_id_prefix:\", \"test_suite:common_audio_unittests (iPhone 11 iOS 14.7)\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"caches\": [{\"name\": \"xcode_ios_10l232m\", \"path\": \"Xcode.app\"}], \"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for 0\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/mac_toolchain/${platform}\", \"path\": \".\", \"version\": \"git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1\"}]}, \"command\": [\"src/ios/build/bots/scripts/run.py\", \"--app\", \"src/out/Debug-iphoneos/common_audio_unittests.app\", \"--host-app\", \"NO_PATH\", \"--out-dir\", \"${ISOLATED_OUTDIR}\", \"--retries\", \"3\", \"--shards\", \"1\", \"--xcode-build-version\", \"10l232m\", \"--mac-toolchain-cmd\", \"./mac_toolchain\", \"--xcode-path\", \"Xcode.app\", \"--wpr-tools-path\", \"NO_PATH\", \"--replay-path\", \"NO_PATH\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"device\", \"value\": \"iPhone12,1\"}, {\"key\": \"device_status\", \"value\": \"available\"}, {\"key\": \"os\", \"value\": \"iOS-14.7\"}, {\"key\": \"pool\", \"value\": \"chrome.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \".\"}, \"wait_for_capacity\": true}]}]}",
+      "{\"requests\": [{\"name\": \"common_audio_unittests (iPhone 11 iOS 14.7)/iOS-14.7/[dummy has/iOS64 Debug/-1\", \"priority\": \"30\", \"realm\": \"webrtc-internal:ci\", \"resultdb\": {\"enable\": true}, \"service_account\": \"chrome-tester@chops-service-accounts.iam.gserviceaccount.com\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:internal.client.webrtc\", \"buildername:iOS64 Debug\", \"data:[dummy hash for 0/dummy size]\", \"device_type:iPhone 11\", \"ios_version:14.7\", \"name:common_audio_unittests\", \"ninja_target:\", \"platform:device\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc-internal.ci:iOS64 Debug\", \"stepname:common_audio_unittests (iPhone 11 iOS 14.7) on iOS-14.7\", \"test:common_audio_unittests\", \"test_id_prefix:\", \"test_suite:common_audio_unittests (iPhone 11 iOS 14.7)\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"caches\": [{\"name\": \"xcode_ios_10l232m\", \"path\": \"Xcode.app\"}], \"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for 0\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/mac_toolchain/${platform}\", \"path\": \".\", \"version\": \"git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1\"}]}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:iOS64 Debug\", \"-var\", \"os:iOS-14.7\", \"-var\", \"test_suite:common_audio_unittests (iPhone 11 iOS 14.7)\", \"-tag\", \"step_name:common_audio_unittests (iPhone 11 iOS 14.7) on iOS-14.7\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"json\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"src/ios/build/bots/scripts/run.py\", \"--app\", \"src/out/Debug-iphoneos/common_audio_unittests.app\", \"--host-app\", \"NO_PATH\", \"--out-dir\", \"${ISOLATED_OUTDIR}\", \"--retries\", \"3\", \"--shards\", \"1\", \"--xcode-build-version\", \"10l232m\", \"--mac-toolchain-cmd\", \"./mac_toolchain\", \"--xcode-path\", \"Xcode.app\", \"--wpr-tools-path\", \"NO_PATH\", \"--replay-path\", \"NO_PATH\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"device\", \"value\": \"iPhone12,1\"}, {\"key\": \"device_status\", \"value\": \"available\"}, {\"key\": \"os\", \"value\": \"iOS-14.7\"}, {\"key\": \"pool\", \"value\": \"chrome.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \".\"}, \"wait_for_capacity\": true}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -3478,6 +3478,9 @@
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"common_audio_unittests (iPhone 11 iOS 14.7)/iOS-14.7/[dummy has/iOS64 Debug/-1\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"30\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc-internal:ci\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"resultdb\": {@@@",
+      "@@@STEP_LOG_LINE@json.input@        \"enable\": true@@@",
+      "@@@STEP_LOG_LINE@json.input@      }, @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"chrome-tester@chops-service-accounts.iam.gserviceaccount.com\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -3527,6 +3530,28 @@
       "@@@STEP_LOG_LINE@json.input@              ]@@@",
       "@@@STEP_LOG_LINE@json.input@            }, @@@",
       "@@@STEP_LOG_LINE@json.input@            \"command\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@              \"rdb\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"stream\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"builder:iOS64 Debug\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"os:iOS-14.7\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"test_suite:common_audio_unittests (iPhone 11 iOS 14.7)\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-tag\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"step_name:common_audio_unittests (iPhone 11 iOS 14.7) on iOS-14.7\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-coerce-negative-duration\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-location-tags-file\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"../../testing/location_tags.json\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-exonerate-unexpected-pass\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"--\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"result_adapter\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"json\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-result-file\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"${ISOLATED_OUTDIR}/output.json\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-artifact-directory\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"${ISOLATED_OUTDIR}\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"--\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"src/ios/build/bots/scripts/run.py\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"--app\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"src/out/Debug-iphoneos/common_audio_unittests.app\", @@@",
@@ -3600,12 +3625,48 @@
   },
   {
     "cmd": [
+      "rdb",
+      "rpc",
+      "luci.resultdb.v1.Recorder",
+      "UpdateIncludedInvocations",
+      "-include-update-token"
+    ],
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc-internal:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "trigger.resultdb.update_included_invocations",
+    "stdin": "{\"addInvocations\": [\"invocations/0\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@json.input@{@@@",
+      "@@@STEP_LOG_LINE@json.input@  \"addInvocations\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/0\"@@@",
+      "@@@STEP_LOG_LINE@json.input@  ], @@@",
+      "@@@STEP_LOG_LINE@json.input@  \"includingInvocation\": \"invocations/build:8945511751514863184\"@@@",
+      "@@@STEP_LOG_LINE@json.input@}@@@",
+      "@@@STEP_LOG_END@json.input@@@"
+    ]
+  },
+  {
+    "cmd": [
       "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
       "https://example.swarmingserver.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"common_video_unittests (iPhone 11 iOS 14.7)/iOS-14.7/[dummy has/iOS64 Debug/-1\", \"priority\": \"30\", \"realm\": \"webrtc-internal:ci\", \"service_account\": \"chrome-tester@chops-service-accounts.iam.gserviceaccount.com\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:internal.client.webrtc\", \"buildername:iOS64 Debug\", \"data:[dummy hash for 1/dummy size]\", \"device_type:iPhone 11\", \"ios_version:14.7\", \"name:common_video_unittests\", \"ninja_target:\", \"platform:device\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc-internal.ci:iOS64 Debug\", \"stepname:common_video_unittests (iPhone 11 iOS 14.7) on iOS-14.7\", \"test:common_video_unittests\", \"test_id_prefix:\", \"test_suite:common_video_unittests (iPhone 11 iOS 14.7)\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"caches\": [{\"name\": \"xcode_ios_10l232m\", \"path\": \"Xcode.app\"}], \"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for 1\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/mac_toolchain/${platform}\", \"path\": \".\", \"version\": \"git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1\"}]}, \"command\": [\"src/ios/build/bots/scripts/run.py\", \"--app\", \"src/out/Debug-iphoneos/common_video_unittests.app\", \"--host-app\", \"NO_PATH\", \"--out-dir\", \"${ISOLATED_OUTDIR}\", \"--retries\", \"3\", \"--shards\", \"1\", \"--xcode-build-version\", \"10l232m\", \"--mac-toolchain-cmd\", \"./mac_toolchain\", \"--xcode-path\", \"Xcode.app\", \"--wpr-tools-path\", \"NO_PATH\", \"--replay-path\", \"NO_PATH\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"device\", \"value\": \"iPhone12,1\"}, {\"key\": \"device_status\", \"value\": \"available\"}, {\"key\": \"os\", \"value\": \"iOS-14.7\"}, {\"key\": \"pool\", \"value\": \"chrome.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \".\"}, \"wait_for_capacity\": true}]}]}",
+      "{\"requests\": [{\"name\": \"common_video_unittests (iPhone 11 iOS 14.7)/iOS-14.7/[dummy has/iOS64 Debug/-1\", \"priority\": \"30\", \"realm\": \"webrtc-internal:ci\", \"resultdb\": {\"enable\": true}, \"service_account\": \"chrome-tester@chops-service-accounts.iam.gserviceaccount.com\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:internal.client.webrtc\", \"buildername:iOS64 Debug\", \"data:[dummy hash for 1/dummy size]\", \"device_type:iPhone 11\", \"ios_version:14.7\", \"name:common_video_unittests\", \"ninja_target:\", \"platform:device\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc-internal.ci:iOS64 Debug\", \"stepname:common_video_unittests (iPhone 11 iOS 14.7) on iOS-14.7\", \"test:common_video_unittests\", \"test_id_prefix:\", \"test_suite:common_video_unittests (iPhone 11 iOS 14.7)\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"caches\": [{\"name\": \"xcode_ios_10l232m\", \"path\": \"Xcode.app\"}], \"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for 1\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/mac_toolchain/${platform}\", \"path\": \".\", \"version\": \"git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1\"}]}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:iOS64 Debug\", \"-var\", \"os:iOS-14.7\", \"-var\", \"test_suite:common_video_unittests (iPhone 11 iOS 14.7)\", \"-tag\", \"step_name:common_video_unittests (iPhone 11 iOS 14.7) on iOS-14.7\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"json\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"src/ios/build/bots/scripts/run.py\", \"--app\", \"src/out/Debug-iphoneos/common_video_unittests.app\", \"--host-app\", \"NO_PATH\", \"--out-dir\", \"${ISOLATED_OUTDIR}\", \"--retries\", \"3\", \"--shards\", \"1\", \"--xcode-build-version\", \"10l232m\", \"--mac-toolchain-cmd\", \"./mac_toolchain\", \"--xcode-path\", \"Xcode.app\", \"--wpr-tools-path\", \"NO_PATH\", \"--replay-path\", \"NO_PATH\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"device\", \"value\": \"iPhone12,1\"}, {\"key\": \"device_status\", \"value\": \"available\"}, {\"key\": \"os\", \"value\": \"iOS-14.7\"}, {\"key\": \"pool\", \"value\": \"chrome.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \".\"}, \"wait_for_capacity\": true}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -3647,6 +3708,9 @@
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"common_video_unittests (iPhone 11 iOS 14.7)/iOS-14.7/[dummy has/iOS64 Debug/-1\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"30\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc-internal:ci\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"resultdb\": {@@@",
+      "@@@STEP_LOG_LINE@json.input@        \"enable\": true@@@",
+      "@@@STEP_LOG_LINE@json.input@      }, @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"chrome-tester@chops-service-accounts.iam.gserviceaccount.com\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -3696,6 +3760,28 @@
       "@@@STEP_LOG_LINE@json.input@              ]@@@",
       "@@@STEP_LOG_LINE@json.input@            }, @@@",
       "@@@STEP_LOG_LINE@json.input@            \"command\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@              \"rdb\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"stream\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"builder:iOS64 Debug\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"os:iOS-14.7\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"test_suite:common_video_unittests (iPhone 11 iOS 14.7)\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-tag\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"step_name:common_video_unittests (iPhone 11 iOS 14.7) on iOS-14.7\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-coerce-negative-duration\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-location-tags-file\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"../../testing/location_tags.json\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-exonerate-unexpected-pass\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"--\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"result_adapter\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"json\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-result-file\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"${ISOLATED_OUTDIR}/output.json\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-artifact-directory\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"${ISOLATED_OUTDIR}\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"--\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"src/ios/build/bots/scripts/run.py\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"--app\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"src/out/Debug-iphoneos/common_video_unittests.app\", @@@",
@@ -3769,12 +3855,48 @@
   },
   {
     "cmd": [
+      "rdb",
+      "rpc",
+      "luci.resultdb.v1.Recorder",
+      "UpdateIncludedInvocations",
+      "-include-update-token"
+    ],
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc-internal:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "trigger.resultdb.update_included_invocations (2)",
+    "stdin": "{\"addInvocations\": [\"invocations/1\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@json.input@{@@@",
+      "@@@STEP_LOG_LINE@json.input@  \"addInvocations\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/1\"@@@",
+      "@@@STEP_LOG_LINE@json.input@  ], @@@",
+      "@@@STEP_LOG_LINE@json.input@  \"includingInvocation\": \"invocations/build:8945511751514863184\"@@@",
+      "@@@STEP_LOG_LINE@json.input@}@@@",
+      "@@@STEP_LOG_END@json.input@@@"
+    ]
+  },
+  {
+    "cmd": [
       "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
       "https://example.swarmingserver.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"modules_tests (iPhone 11 iOS 14.7)/iOS-14.7/[dummy has/iOS64 Debug/-1\", \"priority\": \"30\", \"realm\": \"webrtc-internal:ci\", \"service_account\": \"chrome-tester@chops-service-accounts.iam.gserviceaccount.com\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:internal.client.webrtc\", \"buildername:iOS64 Debug\", \"data:[dummy hash for 2/dummy size]\", \"device_type:iPhone 11\", \"ios_version:14.7\", \"name:modules_tests\", \"ninja_target:\", \"platform:device\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc-internal.ci:iOS64 Debug\", \"stepname:modules_tests (iPhone 11 iOS 14.7) on iOS-14.7\", \"test:modules_tests\", \"test_id_prefix:\", \"test_suite:modules_tests (iPhone 11 iOS 14.7)\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"caches\": [{\"name\": \"xcode_ios_10l232m\", \"path\": \"Xcode.app\"}], \"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for 2\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/mac_toolchain/${platform}\", \"path\": \".\", \"version\": \"git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1\"}]}, \"command\": [\"src/ios/build/bots/scripts/run.py\", \"--app\", \"src/out/Debug-iphoneos/modules_tests.app\", \"--host-app\", \"NO_PATH\", \"--out-dir\", \"${ISOLATED_OUTDIR}\", \"--retries\", \"3\", \"--shards\", \"1\", \"--xcode-build-version\", \"10l232m\", \"--mac-toolchain-cmd\", \"./mac_toolchain\", \"--xcode-path\", \"Xcode.app\", \"--wpr-tools-path\", \"NO_PATH\", \"--replay-path\", \"NO_PATH\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"device\", \"value\": \"iPhone12,1\"}, {\"key\": \"device_status\", \"value\": \"available\"}, {\"key\": \"os\", \"value\": \"iOS-14.7\"}, {\"key\": \"pool\", \"value\": \"chrome.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \".\"}, \"wait_for_capacity\": true}]}]}",
+      "{\"requests\": [{\"name\": \"modules_tests (iPhone 11 iOS 14.7)/iOS-14.7/[dummy has/iOS64 Debug/-1\", \"priority\": \"30\", \"realm\": \"webrtc-internal:ci\", \"resultdb\": {\"enable\": true}, \"service_account\": \"chrome-tester@chops-service-accounts.iam.gserviceaccount.com\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:internal.client.webrtc\", \"buildername:iOS64 Debug\", \"data:[dummy hash for 2/dummy size]\", \"device_type:iPhone 11\", \"ios_version:14.7\", \"name:modules_tests\", \"ninja_target:\", \"platform:device\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc-internal.ci:iOS64 Debug\", \"stepname:modules_tests (iPhone 11 iOS 14.7) on iOS-14.7\", \"test:modules_tests\", \"test_id_prefix:\", \"test_suite:modules_tests (iPhone 11 iOS 14.7)\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"caches\": [{\"name\": \"xcode_ios_10l232m\", \"path\": \"Xcode.app\"}], \"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for 2\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/mac_toolchain/${platform}\", \"path\": \".\", \"version\": \"git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1\"}]}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:iOS64 Debug\", \"-var\", \"os:iOS-14.7\", \"-var\", \"test_suite:modules_tests (iPhone 11 iOS 14.7)\", \"-tag\", \"step_name:modules_tests (iPhone 11 iOS 14.7) on iOS-14.7\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"json\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"src/ios/build/bots/scripts/run.py\", \"--app\", \"src/out/Debug-iphoneos/modules_tests.app\", \"--host-app\", \"NO_PATH\", \"--out-dir\", \"${ISOLATED_OUTDIR}\", \"--retries\", \"3\", \"--shards\", \"1\", \"--xcode-build-version\", \"10l232m\", \"--mac-toolchain-cmd\", \"./mac_toolchain\", \"--xcode-path\", \"Xcode.app\", \"--wpr-tools-path\", \"NO_PATH\", \"--replay-path\", \"NO_PATH\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"device\", \"value\": \"iPhone12,1\"}, {\"key\": \"device_status\", \"value\": \"available\"}, {\"key\": \"os\", \"value\": \"iOS-14.7\"}, {\"key\": \"pool\", \"value\": \"chrome.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \".\"}, \"wait_for_capacity\": true}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -3816,6 +3938,9 @@
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"modules_tests (iPhone 11 iOS 14.7)/iOS-14.7/[dummy has/iOS64 Debug/-1\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"30\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc-internal:ci\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"resultdb\": {@@@",
+      "@@@STEP_LOG_LINE@json.input@        \"enable\": true@@@",
+      "@@@STEP_LOG_LINE@json.input@      }, @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"chrome-tester@chops-service-accounts.iam.gserviceaccount.com\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -3865,6 +3990,28 @@
       "@@@STEP_LOG_LINE@json.input@              ]@@@",
       "@@@STEP_LOG_LINE@json.input@            }, @@@",
       "@@@STEP_LOG_LINE@json.input@            \"command\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@              \"rdb\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"stream\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"builder:iOS64 Debug\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"os:iOS-14.7\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"test_suite:modules_tests (iPhone 11 iOS 14.7)\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-tag\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"step_name:modules_tests (iPhone 11 iOS 14.7) on iOS-14.7\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-coerce-negative-duration\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-location-tags-file\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"../../testing/location_tags.json\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-exonerate-unexpected-pass\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"--\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"result_adapter\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"json\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-result-file\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"${ISOLATED_OUTDIR}/output.json\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-artifact-directory\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"${ISOLATED_OUTDIR}\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"--\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"src/ios/build/bots/scripts/run.py\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"--app\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"src/out/Debug-iphoneos/modules_tests.app\", @@@",
@@ -3938,12 +4085,48 @@
   },
   {
     "cmd": [
+      "rdb",
+      "rpc",
+      "luci.resultdb.v1.Recorder",
+      "UpdateIncludedInvocations",
+      "-include-update-token"
+    ],
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc-internal:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "trigger.resultdb.update_included_invocations (3)",
+    "stdin": "{\"addInvocations\": [\"invocations/2\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@json.input@{@@@",
+      "@@@STEP_LOG_LINE@json.input@  \"addInvocations\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/2\"@@@",
+      "@@@STEP_LOG_LINE@json.input@  ], @@@",
+      "@@@STEP_LOG_LINE@json.input@  \"includingInvocation\": \"invocations/build:8945511751514863184\"@@@",
+      "@@@STEP_LOG_LINE@json.input@}@@@",
+      "@@@STEP_LOG_END@json.input@@@"
+    ]
+  },
+  {
+    "cmd": [
       "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
       "https://example.swarmingserver.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"modules_unittests (iPhone 11 iOS 14.7)/iOS-14.7/[dummy has/iOS64 Debug/-1\", \"priority\": \"30\", \"realm\": \"webrtc-internal:ci\", \"service_account\": \"chrome-tester@chops-service-accounts.iam.gserviceaccount.com\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:internal.client.webrtc\", \"buildername:iOS64 Debug\", \"data:[dummy hash for 3/dummy size]\", \"device_type:iPhone 11\", \"ios_version:14.7\", \"name:modules_unittests\", \"ninja_target:\", \"platform:device\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc-internal.ci:iOS64 Debug\", \"stepname:modules_unittests (iPhone 11 iOS 14.7) on iOS-14.7\", \"test:modules_unittests\", \"test_id_prefix:\", \"test_suite:modules_unittests (iPhone 11 iOS 14.7)\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"caches\": [{\"name\": \"xcode_ios_10l232m\", \"path\": \"Xcode.app\"}], \"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for 3\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/mac_toolchain/${platform}\", \"path\": \".\", \"version\": \"git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1\"}]}, \"command\": [\"src/ios/build/bots/scripts/run.py\", \"--app\", \"src/out/Debug-iphoneos/modules_unittests.app\", \"--host-app\", \"NO_PATH\", \"--out-dir\", \"${ISOLATED_OUTDIR}\", \"--retries\", \"3\", \"--shards\", \"1\", \"--xcode-build-version\", \"10l232m\", \"--mac-toolchain-cmd\", \"./mac_toolchain\", \"--xcode-path\", \"Xcode.app\", \"--wpr-tools-path\", \"NO_PATH\", \"--replay-path\", \"NO_PATH\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"device\", \"value\": \"iPhone12,1\"}, {\"key\": \"device_status\", \"value\": \"available\"}, {\"key\": \"os\", \"value\": \"iOS-14.7\"}, {\"key\": \"pool\", \"value\": \"chrome.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \".\"}, \"wait_for_capacity\": true}]}]}",
+      "{\"requests\": [{\"name\": \"modules_unittests (iPhone 11 iOS 14.7)/iOS-14.7/[dummy has/iOS64 Debug/-1\", \"priority\": \"30\", \"realm\": \"webrtc-internal:ci\", \"resultdb\": {\"enable\": true}, \"service_account\": \"chrome-tester@chops-service-accounts.iam.gserviceaccount.com\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:internal.client.webrtc\", \"buildername:iOS64 Debug\", \"data:[dummy hash for 3/dummy size]\", \"device_type:iPhone 11\", \"ios_version:14.7\", \"name:modules_unittests\", \"ninja_target:\", \"platform:device\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc-internal.ci:iOS64 Debug\", \"stepname:modules_unittests (iPhone 11 iOS 14.7) on iOS-14.7\", \"test:modules_unittests\", \"test_id_prefix:\", \"test_suite:modules_unittests (iPhone 11 iOS 14.7)\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"caches\": [{\"name\": \"xcode_ios_10l232m\", \"path\": \"Xcode.app\"}], \"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for 3\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/mac_toolchain/${platform}\", \"path\": \".\", \"version\": \"git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1\"}]}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:iOS64 Debug\", \"-var\", \"os:iOS-14.7\", \"-var\", \"test_suite:modules_unittests (iPhone 11 iOS 14.7)\", \"-tag\", \"step_name:modules_unittests (iPhone 11 iOS 14.7) on iOS-14.7\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"json\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"src/ios/build/bots/scripts/run.py\", \"--app\", \"src/out/Debug-iphoneos/modules_unittests.app\", \"--host-app\", \"NO_PATH\", \"--out-dir\", \"${ISOLATED_OUTDIR}\", \"--retries\", \"3\", \"--shards\", \"1\", \"--xcode-build-version\", \"10l232m\", \"--mac-toolchain-cmd\", \"./mac_toolchain\", \"--xcode-path\", \"Xcode.app\", \"--wpr-tools-path\", \"NO_PATH\", \"--replay-path\", \"NO_PATH\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"device\", \"value\": \"iPhone12,1\"}, {\"key\": \"device_status\", \"value\": \"available\"}, {\"key\": \"os\", \"value\": \"iOS-14.7\"}, {\"key\": \"pool\", \"value\": \"chrome.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \".\"}, \"wait_for_capacity\": true}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -3985,6 +4168,9 @@
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"modules_unittests (iPhone 11 iOS 14.7)/iOS-14.7/[dummy has/iOS64 Debug/-1\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"30\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc-internal:ci\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"resultdb\": {@@@",
+      "@@@STEP_LOG_LINE@json.input@        \"enable\": true@@@",
+      "@@@STEP_LOG_LINE@json.input@      }, @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"chrome-tester@chops-service-accounts.iam.gserviceaccount.com\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -4034,6 +4220,28 @@
       "@@@STEP_LOG_LINE@json.input@              ]@@@",
       "@@@STEP_LOG_LINE@json.input@            }, @@@",
       "@@@STEP_LOG_LINE@json.input@            \"command\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@              \"rdb\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"stream\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"builder:iOS64 Debug\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"os:iOS-14.7\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"test_suite:modules_unittests (iPhone 11 iOS 14.7)\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-tag\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"step_name:modules_unittests (iPhone 11 iOS 14.7) on iOS-14.7\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-coerce-negative-duration\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-location-tags-file\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"../../testing/location_tags.json\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-exonerate-unexpected-pass\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"--\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"result_adapter\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"json\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-result-file\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"${ISOLATED_OUTDIR}/output.json\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-artifact-directory\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"${ISOLATED_OUTDIR}\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"--\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"src/ios/build/bots/scripts/run.py\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"--app\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"src/out/Debug-iphoneos/modules_unittests.app\", @@@",
@@ -4107,12 +4315,48 @@
   },
   {
     "cmd": [
+      "rdb",
+      "rpc",
+      "luci.resultdb.v1.Recorder",
+      "UpdateIncludedInvocations",
+      "-include-update-token"
+    ],
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc-internal:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "trigger.resultdb.update_included_invocations (4)",
+    "stdin": "{\"addInvocations\": [\"invocations/3\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@json.input@{@@@",
+      "@@@STEP_LOG_LINE@json.input@  \"addInvocations\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/3\"@@@",
+      "@@@STEP_LOG_LINE@json.input@  ], @@@",
+      "@@@STEP_LOG_LINE@json.input@  \"includingInvocation\": \"invocations/build:8945511751514863184\"@@@",
+      "@@@STEP_LOG_LINE@json.input@}@@@",
+      "@@@STEP_LOG_END@json.input@@@"
+    ]
+  },
+  {
+    "cmd": [
       "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
       "https://example.swarmingserver.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"rtc_pc_unittests (iPhone 11 iOS 14.7)/iOS-14.7/[dummy has/iOS64 Debug/-1\", \"priority\": \"30\", \"realm\": \"webrtc-internal:ci\", \"service_account\": \"chrome-tester@chops-service-accounts.iam.gserviceaccount.com\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:internal.client.webrtc\", \"buildername:iOS64 Debug\", \"data:[dummy hash for 4/dummy size]\", \"device_type:iPhone 11\", \"ios_version:14.7\", \"name:rtc_pc_unittests\", \"ninja_target:\", \"platform:device\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc-internal.ci:iOS64 Debug\", \"stepname:rtc_pc_unittests (iPhone 11 iOS 14.7) on iOS-14.7\", \"test:rtc_pc_unittests\", \"test_id_prefix:\", \"test_suite:rtc_pc_unittests (iPhone 11 iOS 14.7)\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"caches\": [{\"name\": \"xcode_ios_10l232m\", \"path\": \"Xcode.app\"}], \"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for 4\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/mac_toolchain/${platform}\", \"path\": \".\", \"version\": \"git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1\"}]}, \"command\": [\"src/ios/build/bots/scripts/run.py\", \"--app\", \"src/out/Debug-iphoneos/rtc_pc_unittests.app\", \"--host-app\", \"NO_PATH\", \"--out-dir\", \"${ISOLATED_OUTDIR}\", \"--retries\", \"3\", \"--shards\", \"1\", \"--xcode-build-version\", \"10l232m\", \"--mac-toolchain-cmd\", \"./mac_toolchain\", \"--xcode-path\", \"Xcode.app\", \"--wpr-tools-path\", \"NO_PATH\", \"--replay-path\", \"NO_PATH\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"device\", \"value\": \"iPhone12,1\"}, {\"key\": \"device_status\", \"value\": \"available\"}, {\"key\": \"os\", \"value\": \"iOS-14.7\"}, {\"key\": \"pool\", \"value\": \"chrome.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \".\"}, \"wait_for_capacity\": true}]}]}",
+      "{\"requests\": [{\"name\": \"rtc_pc_unittests (iPhone 11 iOS 14.7)/iOS-14.7/[dummy has/iOS64 Debug/-1\", \"priority\": \"30\", \"realm\": \"webrtc-internal:ci\", \"resultdb\": {\"enable\": true}, \"service_account\": \"chrome-tester@chops-service-accounts.iam.gserviceaccount.com\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:internal.client.webrtc\", \"buildername:iOS64 Debug\", \"data:[dummy hash for 4/dummy size]\", \"device_type:iPhone 11\", \"ios_version:14.7\", \"name:rtc_pc_unittests\", \"ninja_target:\", \"platform:device\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc-internal.ci:iOS64 Debug\", \"stepname:rtc_pc_unittests (iPhone 11 iOS 14.7) on iOS-14.7\", \"test:rtc_pc_unittests\", \"test_id_prefix:\", \"test_suite:rtc_pc_unittests (iPhone 11 iOS 14.7)\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"caches\": [{\"name\": \"xcode_ios_10l232m\", \"path\": \"Xcode.app\"}], \"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for 4\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/mac_toolchain/${platform}\", \"path\": \".\", \"version\": \"git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1\"}]}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:iOS64 Debug\", \"-var\", \"os:iOS-14.7\", \"-var\", \"test_suite:rtc_pc_unittests (iPhone 11 iOS 14.7)\", \"-tag\", \"step_name:rtc_pc_unittests (iPhone 11 iOS 14.7) on iOS-14.7\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"json\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"src/ios/build/bots/scripts/run.py\", \"--app\", \"src/out/Debug-iphoneos/rtc_pc_unittests.app\", \"--host-app\", \"NO_PATH\", \"--out-dir\", \"${ISOLATED_OUTDIR}\", \"--retries\", \"3\", \"--shards\", \"1\", \"--xcode-build-version\", \"10l232m\", \"--mac-toolchain-cmd\", \"./mac_toolchain\", \"--xcode-path\", \"Xcode.app\", \"--wpr-tools-path\", \"NO_PATH\", \"--replay-path\", \"NO_PATH\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"device\", \"value\": \"iPhone12,1\"}, {\"key\": \"device_status\", \"value\": \"available\"}, {\"key\": \"os\", \"value\": \"iOS-14.7\"}, {\"key\": \"pool\", \"value\": \"chrome.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \".\"}, \"wait_for_capacity\": true}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -4154,6 +4398,9 @@
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"rtc_pc_unittests (iPhone 11 iOS 14.7)/iOS-14.7/[dummy has/iOS64 Debug/-1\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"30\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc-internal:ci\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"resultdb\": {@@@",
+      "@@@STEP_LOG_LINE@json.input@        \"enable\": true@@@",
+      "@@@STEP_LOG_LINE@json.input@      }, @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"chrome-tester@chops-service-accounts.iam.gserviceaccount.com\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -4203,6 +4450,28 @@
       "@@@STEP_LOG_LINE@json.input@              ]@@@",
       "@@@STEP_LOG_LINE@json.input@            }, @@@",
       "@@@STEP_LOG_LINE@json.input@            \"command\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@              \"rdb\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"stream\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"builder:iOS64 Debug\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"os:iOS-14.7\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"test_suite:rtc_pc_unittests (iPhone 11 iOS 14.7)\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-tag\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"step_name:rtc_pc_unittests (iPhone 11 iOS 14.7) on iOS-14.7\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-coerce-negative-duration\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-location-tags-file\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"../../testing/location_tags.json\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-exonerate-unexpected-pass\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"--\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"result_adapter\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"json\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-result-file\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"${ISOLATED_OUTDIR}/output.json\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-artifact-directory\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"${ISOLATED_OUTDIR}\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"--\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"src/ios/build/bots/scripts/run.py\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"--app\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"src/out/Debug-iphoneos/rtc_pc_unittests.app\", @@@",
@@ -4276,12 +4545,48 @@
   },
   {
     "cmd": [
+      "rdb",
+      "rpc",
+      "luci.resultdb.v1.Recorder",
+      "UpdateIncludedInvocations",
+      "-include-update-token"
+    ],
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc-internal:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "trigger.resultdb.update_included_invocations (5)",
+    "stdin": "{\"addInvocations\": [\"invocations/4\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@json.input@{@@@",
+      "@@@STEP_LOG_LINE@json.input@  \"addInvocations\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/4\"@@@",
+      "@@@STEP_LOG_LINE@json.input@  ], @@@",
+      "@@@STEP_LOG_LINE@json.input@  \"includingInvocation\": \"invocations/build:8945511751514863184\"@@@",
+      "@@@STEP_LOG_LINE@json.input@}@@@",
+      "@@@STEP_LOG_END@json.input@@@"
+    ]
+  },
+  {
+    "cmd": [
       "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
       "https://example.swarmingserver.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"rtc_stats_unittests (iPhone 11 iOS 14.7)/iOS-14.7/[dummy has/iOS64 Debug/-1\", \"priority\": \"30\", \"realm\": \"webrtc-internal:ci\", \"service_account\": \"chrome-tester@chops-service-accounts.iam.gserviceaccount.com\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:internal.client.webrtc\", \"buildername:iOS64 Debug\", \"data:[dummy hash for 5/dummy size]\", \"device_type:iPhone 11\", \"ios_version:14.7\", \"name:rtc_stats_unittests\", \"ninja_target:\", \"platform:device\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc-internal.ci:iOS64 Debug\", \"stepname:rtc_stats_unittests (iPhone 11 iOS 14.7) on iOS-14.7\", \"test:rtc_stats_unittests\", \"test_id_prefix:\", \"test_suite:rtc_stats_unittests (iPhone 11 iOS 14.7)\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"caches\": [{\"name\": \"xcode_ios_10l232m\", \"path\": \"Xcode.app\"}], \"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for 5\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/mac_toolchain/${platform}\", \"path\": \".\", \"version\": \"git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1\"}]}, \"command\": [\"src/ios/build/bots/scripts/run.py\", \"--app\", \"src/out/Debug-iphoneos/rtc_stats_unittests.app\", \"--host-app\", \"NO_PATH\", \"--out-dir\", \"${ISOLATED_OUTDIR}\", \"--retries\", \"3\", \"--shards\", \"1\", \"--xcode-build-version\", \"10l232m\", \"--mac-toolchain-cmd\", \"./mac_toolchain\", \"--xcode-path\", \"Xcode.app\", \"--wpr-tools-path\", \"NO_PATH\", \"--replay-path\", \"NO_PATH\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"device\", \"value\": \"iPhone12,1\"}, {\"key\": \"device_status\", \"value\": \"available\"}, {\"key\": \"os\", \"value\": \"iOS-14.7\"}, {\"key\": \"pool\", \"value\": \"chrome.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \".\"}, \"wait_for_capacity\": true}]}]}",
+      "{\"requests\": [{\"name\": \"rtc_stats_unittests (iPhone 11 iOS 14.7)/iOS-14.7/[dummy has/iOS64 Debug/-1\", \"priority\": \"30\", \"realm\": \"webrtc-internal:ci\", \"resultdb\": {\"enable\": true}, \"service_account\": \"chrome-tester@chops-service-accounts.iam.gserviceaccount.com\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:internal.client.webrtc\", \"buildername:iOS64 Debug\", \"data:[dummy hash for 5/dummy size]\", \"device_type:iPhone 11\", \"ios_version:14.7\", \"name:rtc_stats_unittests\", \"ninja_target:\", \"platform:device\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc-internal.ci:iOS64 Debug\", \"stepname:rtc_stats_unittests (iPhone 11 iOS 14.7) on iOS-14.7\", \"test:rtc_stats_unittests\", \"test_id_prefix:\", \"test_suite:rtc_stats_unittests (iPhone 11 iOS 14.7)\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"caches\": [{\"name\": \"xcode_ios_10l232m\", \"path\": \"Xcode.app\"}], \"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for 5\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/mac_toolchain/${platform}\", \"path\": \".\", \"version\": \"git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1\"}]}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:iOS64 Debug\", \"-var\", \"os:iOS-14.7\", \"-var\", \"test_suite:rtc_stats_unittests (iPhone 11 iOS 14.7)\", \"-tag\", \"step_name:rtc_stats_unittests (iPhone 11 iOS 14.7) on iOS-14.7\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"json\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"src/ios/build/bots/scripts/run.py\", \"--app\", \"src/out/Debug-iphoneos/rtc_stats_unittests.app\", \"--host-app\", \"NO_PATH\", \"--out-dir\", \"${ISOLATED_OUTDIR}\", \"--retries\", \"3\", \"--shards\", \"1\", \"--xcode-build-version\", \"10l232m\", \"--mac-toolchain-cmd\", \"./mac_toolchain\", \"--xcode-path\", \"Xcode.app\", \"--wpr-tools-path\", \"NO_PATH\", \"--replay-path\", \"NO_PATH\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"device\", \"value\": \"iPhone12,1\"}, {\"key\": \"device_status\", \"value\": \"available\"}, {\"key\": \"os\", \"value\": \"iOS-14.7\"}, {\"key\": \"pool\", \"value\": \"chrome.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \".\"}, \"wait_for_capacity\": true}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -4323,6 +4628,9 @@
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"rtc_stats_unittests (iPhone 11 iOS 14.7)/iOS-14.7/[dummy has/iOS64 Debug/-1\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"30\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc-internal:ci\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"resultdb\": {@@@",
+      "@@@STEP_LOG_LINE@json.input@        \"enable\": true@@@",
+      "@@@STEP_LOG_LINE@json.input@      }, @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"chrome-tester@chops-service-accounts.iam.gserviceaccount.com\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -4372,6 +4680,28 @@
       "@@@STEP_LOG_LINE@json.input@              ]@@@",
       "@@@STEP_LOG_LINE@json.input@            }, @@@",
       "@@@STEP_LOG_LINE@json.input@            \"command\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@              \"rdb\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"stream\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"builder:iOS64 Debug\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"os:iOS-14.7\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"test_suite:rtc_stats_unittests (iPhone 11 iOS 14.7)\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-tag\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"step_name:rtc_stats_unittests (iPhone 11 iOS 14.7) on iOS-14.7\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-coerce-negative-duration\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-location-tags-file\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"../../testing/location_tags.json\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-exonerate-unexpected-pass\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"--\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"result_adapter\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"json\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-result-file\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"${ISOLATED_OUTDIR}/output.json\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-artifact-directory\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"${ISOLATED_OUTDIR}\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"--\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"src/ios/build/bots/scripts/run.py\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"--app\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"src/out/Debug-iphoneos/rtc_stats_unittests.app\", @@@",
@@ -4445,12 +4775,48 @@
   },
   {
     "cmd": [
+      "rdb",
+      "rpc",
+      "luci.resultdb.v1.Recorder",
+      "UpdateIncludedInvocations",
+      "-include-update-token"
+    ],
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc-internal:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "trigger.resultdb.update_included_invocations (6)",
+    "stdin": "{\"addInvocations\": [\"invocations/5\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@json.input@{@@@",
+      "@@@STEP_LOG_LINE@json.input@  \"addInvocations\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/5\"@@@",
+      "@@@STEP_LOG_LINE@json.input@  ], @@@",
+      "@@@STEP_LOG_LINE@json.input@  \"includingInvocation\": \"invocations/build:8945511751514863184\"@@@",
+      "@@@STEP_LOG_LINE@json.input@}@@@",
+      "@@@STEP_LOG_END@json.input@@@"
+    ]
+  },
+  {
+    "cmd": [
       "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
       "https://example.swarmingserver.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"system_wrappers_unittests (iPhone 11 iOS 14.7)/iOS-14.7/[dummy has/iOS64 Debug/-1\", \"priority\": \"30\", \"realm\": \"webrtc-internal:ci\", \"service_account\": \"chrome-tester@chops-service-accounts.iam.gserviceaccount.com\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:internal.client.webrtc\", \"buildername:iOS64 Debug\", \"data:[dummy hash for 6/dummy size]\", \"device_type:iPhone 11\", \"ios_version:14.7\", \"name:system_wrappers_unittests\", \"ninja_target:\", \"platform:device\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc-internal.ci:iOS64 Debug\", \"stepname:system_wrappers_unittests (iPhone 11 iOS 14.7) on iOS-14.7\", \"test:system_wrappers_unittests\", \"test_id_prefix:\", \"test_suite:system_wrappers_unittests (iPhone 11 iOS 14.7)\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"caches\": [{\"name\": \"xcode_ios_10l232m\", \"path\": \"Xcode.app\"}], \"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for 6\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/mac_toolchain/${platform}\", \"path\": \".\", \"version\": \"git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1\"}]}, \"command\": [\"src/ios/build/bots/scripts/run.py\", \"--app\", \"src/out/Debug-iphoneos/system_wrappers_unittests.app\", \"--host-app\", \"NO_PATH\", \"--out-dir\", \"${ISOLATED_OUTDIR}\", \"--retries\", \"3\", \"--shards\", \"1\", \"--xcode-build-version\", \"10l232m\", \"--mac-toolchain-cmd\", \"./mac_toolchain\", \"--xcode-path\", \"Xcode.app\", \"--wpr-tools-path\", \"NO_PATH\", \"--replay-path\", \"NO_PATH\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"device\", \"value\": \"iPhone12,1\"}, {\"key\": \"device_status\", \"value\": \"available\"}, {\"key\": \"os\", \"value\": \"iOS-14.7\"}, {\"key\": \"pool\", \"value\": \"chrome.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \".\"}, \"wait_for_capacity\": true}]}]}",
+      "{\"requests\": [{\"name\": \"system_wrappers_unittests (iPhone 11 iOS 14.7)/iOS-14.7/[dummy has/iOS64 Debug/-1\", \"priority\": \"30\", \"realm\": \"webrtc-internal:ci\", \"resultdb\": {\"enable\": true}, \"service_account\": \"chrome-tester@chops-service-accounts.iam.gserviceaccount.com\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:internal.client.webrtc\", \"buildername:iOS64 Debug\", \"data:[dummy hash for 6/dummy size]\", \"device_type:iPhone 11\", \"ios_version:14.7\", \"name:system_wrappers_unittests\", \"ninja_target:\", \"platform:device\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc-internal.ci:iOS64 Debug\", \"stepname:system_wrappers_unittests (iPhone 11 iOS 14.7) on iOS-14.7\", \"test:system_wrappers_unittests\", \"test_id_prefix:\", \"test_suite:system_wrappers_unittests (iPhone 11 iOS 14.7)\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"caches\": [{\"name\": \"xcode_ios_10l232m\", \"path\": \"Xcode.app\"}], \"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for 6\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/mac_toolchain/${platform}\", \"path\": \".\", \"version\": \"git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1\"}]}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:iOS64 Debug\", \"-var\", \"os:iOS-14.7\", \"-var\", \"test_suite:system_wrappers_unittests (iPhone 11 iOS 14.7)\", \"-tag\", \"step_name:system_wrappers_unittests (iPhone 11 iOS 14.7) on iOS-14.7\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"json\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"src/ios/build/bots/scripts/run.py\", \"--app\", \"src/out/Debug-iphoneos/system_wrappers_unittests.app\", \"--host-app\", \"NO_PATH\", \"--out-dir\", \"${ISOLATED_OUTDIR}\", \"--retries\", \"3\", \"--shards\", \"1\", \"--xcode-build-version\", \"10l232m\", \"--mac-toolchain-cmd\", \"./mac_toolchain\", \"--xcode-path\", \"Xcode.app\", \"--wpr-tools-path\", \"NO_PATH\", \"--replay-path\", \"NO_PATH\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"device\", \"value\": \"iPhone12,1\"}, {\"key\": \"device_status\", \"value\": \"available\"}, {\"key\": \"os\", \"value\": \"iOS-14.7\"}, {\"key\": \"pool\", \"value\": \"chrome.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \".\"}, \"wait_for_capacity\": true}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -4492,6 +4858,9 @@
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"system_wrappers_unittests (iPhone 11 iOS 14.7)/iOS-14.7/[dummy has/iOS64 Debug/-1\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"30\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc-internal:ci\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"resultdb\": {@@@",
+      "@@@STEP_LOG_LINE@json.input@        \"enable\": true@@@",
+      "@@@STEP_LOG_LINE@json.input@      }, @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"chrome-tester@chops-service-accounts.iam.gserviceaccount.com\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -4541,6 +4910,28 @@
       "@@@STEP_LOG_LINE@json.input@              ]@@@",
       "@@@STEP_LOG_LINE@json.input@            }, @@@",
       "@@@STEP_LOG_LINE@json.input@            \"command\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@              \"rdb\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"stream\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"builder:iOS64 Debug\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"os:iOS-14.7\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"test_suite:system_wrappers_unittests (iPhone 11 iOS 14.7)\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-tag\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"step_name:system_wrappers_unittests (iPhone 11 iOS 14.7) on iOS-14.7\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-coerce-negative-duration\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-location-tags-file\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"../../testing/location_tags.json\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-exonerate-unexpected-pass\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"--\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"result_adapter\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"json\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-result-file\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"${ISOLATED_OUTDIR}/output.json\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-artifact-directory\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"${ISOLATED_OUTDIR}\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"--\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"src/ios/build/bots/scripts/run.py\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"--app\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"src/out/Debug-iphoneos/system_wrappers_unittests.app\", @@@",
@@ -4614,12 +5005,48 @@
   },
   {
     "cmd": [
+      "rdb",
+      "rpc",
+      "luci.resultdb.v1.Recorder",
+      "UpdateIncludedInvocations",
+      "-include-update-token"
+    ],
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc-internal:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "trigger.resultdb.update_included_invocations (7)",
+    "stdin": "{\"addInvocations\": [\"invocations/6\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@json.input@{@@@",
+      "@@@STEP_LOG_LINE@json.input@  \"addInvocations\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/6\"@@@",
+      "@@@STEP_LOG_LINE@json.input@  ], @@@",
+      "@@@STEP_LOG_LINE@json.input@  \"includingInvocation\": \"invocations/build:8945511751514863184\"@@@",
+      "@@@STEP_LOG_LINE@json.input@}@@@",
+      "@@@STEP_LOG_END@json.input@@@"
+    ]
+  },
+  {
+    "cmd": [
       "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
       "https://example.swarmingserver.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"test_support_unittests (iPhone 11 iOS 14.7)/iOS-14.7/[dummy has/iOS64 Debug/-1\", \"priority\": \"30\", \"realm\": \"webrtc-internal:ci\", \"service_account\": \"chrome-tester@chops-service-accounts.iam.gserviceaccount.com\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:internal.client.webrtc\", \"buildername:iOS64 Debug\", \"data:[dummy hash for 7/dummy size]\", \"device_type:iPhone 11\", \"ios_version:14.7\", \"name:test_support_unittests\", \"ninja_target:\", \"platform:device\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc-internal.ci:iOS64 Debug\", \"stepname:test_support_unittests (iPhone 11 iOS 14.7) on iOS-14.7\", \"test:test_support_unittests\", \"test_id_prefix:\", \"test_suite:test_support_unittests (iPhone 11 iOS 14.7)\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"caches\": [{\"name\": \"xcode_ios_10l232m\", \"path\": \"Xcode.app\"}], \"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for 7\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/mac_toolchain/${platform}\", \"path\": \".\", \"version\": \"git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1\"}]}, \"command\": [\"src/ios/build/bots/scripts/run.py\", \"--app\", \"src/out/Debug-iphoneos/test_support_unittests.app\", \"--host-app\", \"NO_PATH\", \"--out-dir\", \"${ISOLATED_OUTDIR}\", \"--retries\", \"3\", \"--shards\", \"1\", \"--xcode-build-version\", \"10l232m\", \"--mac-toolchain-cmd\", \"./mac_toolchain\", \"--xcode-path\", \"Xcode.app\", \"--wpr-tools-path\", \"NO_PATH\", \"--replay-path\", \"NO_PATH\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"device\", \"value\": \"iPhone12,1\"}, {\"key\": \"device_status\", \"value\": \"available\"}, {\"key\": \"os\", \"value\": \"iOS-14.7\"}, {\"key\": \"pool\", \"value\": \"chrome.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \".\"}, \"wait_for_capacity\": true}]}]}",
+      "{\"requests\": [{\"name\": \"test_support_unittests (iPhone 11 iOS 14.7)/iOS-14.7/[dummy has/iOS64 Debug/-1\", \"priority\": \"30\", \"realm\": \"webrtc-internal:ci\", \"resultdb\": {\"enable\": true}, \"service_account\": \"chrome-tester@chops-service-accounts.iam.gserviceaccount.com\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:internal.client.webrtc\", \"buildername:iOS64 Debug\", \"data:[dummy hash for 7/dummy size]\", \"device_type:iPhone 11\", \"ios_version:14.7\", \"name:test_support_unittests\", \"ninja_target:\", \"platform:device\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc-internal.ci:iOS64 Debug\", \"stepname:test_support_unittests (iPhone 11 iOS 14.7) on iOS-14.7\", \"test:test_support_unittests\", \"test_id_prefix:\", \"test_suite:test_support_unittests (iPhone 11 iOS 14.7)\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"caches\": [{\"name\": \"xcode_ios_10l232m\", \"path\": \"Xcode.app\"}], \"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for 7\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/mac_toolchain/${platform}\", \"path\": \".\", \"version\": \"git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1\"}]}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:iOS64 Debug\", \"-var\", \"os:iOS-14.7\", \"-var\", \"test_suite:test_support_unittests (iPhone 11 iOS 14.7)\", \"-tag\", \"step_name:test_support_unittests (iPhone 11 iOS 14.7) on iOS-14.7\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"json\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"src/ios/build/bots/scripts/run.py\", \"--app\", \"src/out/Debug-iphoneos/test_support_unittests.app\", \"--host-app\", \"NO_PATH\", \"--out-dir\", \"${ISOLATED_OUTDIR}\", \"--retries\", \"3\", \"--shards\", \"1\", \"--xcode-build-version\", \"10l232m\", \"--mac-toolchain-cmd\", \"./mac_toolchain\", \"--xcode-path\", \"Xcode.app\", \"--wpr-tools-path\", \"NO_PATH\", \"--replay-path\", \"NO_PATH\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"device\", \"value\": \"iPhone12,1\"}, {\"key\": \"device_status\", \"value\": \"available\"}, {\"key\": \"os\", \"value\": \"iOS-14.7\"}, {\"key\": \"pool\", \"value\": \"chrome.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \".\"}, \"wait_for_capacity\": true}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -4661,6 +5088,9 @@
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"test_support_unittests (iPhone 11 iOS 14.7)/iOS-14.7/[dummy has/iOS64 Debug/-1\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"30\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc-internal:ci\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"resultdb\": {@@@",
+      "@@@STEP_LOG_LINE@json.input@        \"enable\": true@@@",
+      "@@@STEP_LOG_LINE@json.input@      }, @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"chrome-tester@chops-service-accounts.iam.gserviceaccount.com\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -4710,6 +5140,28 @@
       "@@@STEP_LOG_LINE@json.input@              ]@@@",
       "@@@STEP_LOG_LINE@json.input@            }, @@@",
       "@@@STEP_LOG_LINE@json.input@            \"command\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@              \"rdb\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"stream\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"builder:iOS64 Debug\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"os:iOS-14.7\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"test_suite:test_support_unittests (iPhone 11 iOS 14.7)\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-tag\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"step_name:test_support_unittests (iPhone 11 iOS 14.7) on iOS-14.7\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-coerce-negative-duration\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-location-tags-file\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"../../testing/location_tags.json\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-exonerate-unexpected-pass\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"--\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"result_adapter\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"json\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-result-file\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"${ISOLATED_OUTDIR}/output.json\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-artifact-directory\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"${ISOLATED_OUTDIR}\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"--\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"src/ios/build/bots/scripts/run.py\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"--app\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"src/out/Debug-iphoneos/test_support_unittests.app\", @@@",
@@ -4783,12 +5235,48 @@
   },
   {
     "cmd": [
+      "rdb",
+      "rpc",
+      "luci.resultdb.v1.Recorder",
+      "UpdateIncludedInvocations",
+      "-include-update-token"
+    ],
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc-internal:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "trigger.resultdb.update_included_invocations (8)",
+    "stdin": "{\"addInvocations\": [\"invocations/7\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@json.input@{@@@",
+      "@@@STEP_LOG_LINE@json.input@  \"addInvocations\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/7\"@@@",
+      "@@@STEP_LOG_LINE@json.input@  ], @@@",
+      "@@@STEP_LOG_LINE@json.input@  \"includingInvocation\": \"invocations/build:8945511751514863184\"@@@",
+      "@@@STEP_LOG_LINE@json.input@}@@@",
+      "@@@STEP_LOG_END@json.input@@@"
+    ]
+  },
+  {
+    "cmd": [
       "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
       "https://example.swarmingserver.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"tools_unittests (iPhone 11 iOS 14.7)/iOS-14.7/[dummy has/iOS64 Debug/-1\", \"priority\": \"30\", \"realm\": \"webrtc-internal:ci\", \"service_account\": \"chrome-tester@chops-service-accounts.iam.gserviceaccount.com\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:internal.client.webrtc\", \"buildername:iOS64 Debug\", \"data:[dummy hash for 8/dummy size]\", \"device_type:iPhone 11\", \"ios_version:14.7\", \"name:tools_unittests\", \"ninja_target:\", \"platform:device\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc-internal.ci:iOS64 Debug\", \"stepname:tools_unittests (iPhone 11 iOS 14.7) on iOS-14.7\", \"test:tools_unittests\", \"test_id_prefix:\", \"test_suite:tools_unittests (iPhone 11 iOS 14.7)\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"caches\": [{\"name\": \"xcode_ios_10l232m\", \"path\": \"Xcode.app\"}], \"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for 8\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/mac_toolchain/${platform}\", \"path\": \".\", \"version\": \"git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1\"}]}, \"command\": [\"src/ios/build/bots/scripts/run.py\", \"--app\", \"src/out/Debug-iphoneos/tools_unittests.app\", \"--host-app\", \"NO_PATH\", \"--out-dir\", \"${ISOLATED_OUTDIR}\", \"--retries\", \"3\", \"--shards\", \"1\", \"--xcode-build-version\", \"10l232m\", \"--mac-toolchain-cmd\", \"./mac_toolchain\", \"--xcode-path\", \"Xcode.app\", \"--wpr-tools-path\", \"NO_PATH\", \"--replay-path\", \"NO_PATH\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"device\", \"value\": \"iPhone12,1\"}, {\"key\": \"device_status\", \"value\": \"available\"}, {\"key\": \"os\", \"value\": \"iOS-14.7\"}, {\"key\": \"pool\", \"value\": \"chrome.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \".\"}, \"wait_for_capacity\": true}]}]}",
+      "{\"requests\": [{\"name\": \"tools_unittests (iPhone 11 iOS 14.7)/iOS-14.7/[dummy has/iOS64 Debug/-1\", \"priority\": \"30\", \"realm\": \"webrtc-internal:ci\", \"resultdb\": {\"enable\": true}, \"service_account\": \"chrome-tester@chops-service-accounts.iam.gserviceaccount.com\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:internal.client.webrtc\", \"buildername:iOS64 Debug\", \"data:[dummy hash for 8/dummy size]\", \"device_type:iPhone 11\", \"ios_version:14.7\", \"name:tools_unittests\", \"ninja_target:\", \"platform:device\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc-internal.ci:iOS64 Debug\", \"stepname:tools_unittests (iPhone 11 iOS 14.7) on iOS-14.7\", \"test:tools_unittests\", \"test_id_prefix:\", \"test_suite:tools_unittests (iPhone 11 iOS 14.7)\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"caches\": [{\"name\": \"xcode_ios_10l232m\", \"path\": \"Xcode.app\"}], \"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for 8\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/mac_toolchain/${platform}\", \"path\": \".\", \"version\": \"git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1\"}]}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:iOS64 Debug\", \"-var\", \"os:iOS-14.7\", \"-var\", \"test_suite:tools_unittests (iPhone 11 iOS 14.7)\", \"-tag\", \"step_name:tools_unittests (iPhone 11 iOS 14.7) on iOS-14.7\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"json\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"src/ios/build/bots/scripts/run.py\", \"--app\", \"src/out/Debug-iphoneos/tools_unittests.app\", \"--host-app\", \"NO_PATH\", \"--out-dir\", \"${ISOLATED_OUTDIR}\", \"--retries\", \"3\", \"--shards\", \"1\", \"--xcode-build-version\", \"10l232m\", \"--mac-toolchain-cmd\", \"./mac_toolchain\", \"--xcode-path\", \"Xcode.app\", \"--wpr-tools-path\", \"NO_PATH\", \"--replay-path\", \"NO_PATH\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"device\", \"value\": \"iPhone12,1\"}, {\"key\": \"device_status\", \"value\": \"available\"}, {\"key\": \"os\", \"value\": \"iOS-14.7\"}, {\"key\": \"pool\", \"value\": \"chrome.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \".\"}, \"wait_for_capacity\": true}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -4830,6 +5318,9 @@
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"tools_unittests (iPhone 11 iOS 14.7)/iOS-14.7/[dummy has/iOS64 Debug/-1\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"30\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc-internal:ci\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"resultdb\": {@@@",
+      "@@@STEP_LOG_LINE@json.input@        \"enable\": true@@@",
+      "@@@STEP_LOG_LINE@json.input@      }, @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"chrome-tester@chops-service-accounts.iam.gserviceaccount.com\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -4879,6 +5370,28 @@
       "@@@STEP_LOG_LINE@json.input@              ]@@@",
       "@@@STEP_LOG_LINE@json.input@            }, @@@",
       "@@@STEP_LOG_LINE@json.input@            \"command\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@              \"rdb\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"stream\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"builder:iOS64 Debug\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"os:iOS-14.7\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"test_suite:tools_unittests (iPhone 11 iOS 14.7)\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-tag\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"step_name:tools_unittests (iPhone 11 iOS 14.7) on iOS-14.7\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-coerce-negative-duration\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-location-tags-file\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"../../testing/location_tags.json\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-exonerate-unexpected-pass\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"--\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"result_adapter\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"json\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-result-file\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"${ISOLATED_OUTDIR}/output.json\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-artifact-directory\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"${ISOLATED_OUTDIR}\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"--\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"src/ios/build/bots/scripts/run.py\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"--app\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"src/out/Debug-iphoneos/tools_unittests.app\", @@@",
@@ -4952,12 +5465,48 @@
   },
   {
     "cmd": [
+      "rdb",
+      "rpc",
+      "luci.resultdb.v1.Recorder",
+      "UpdateIncludedInvocations",
+      "-include-update-token"
+    ],
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc-internal:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "trigger.resultdb.update_included_invocations (9)",
+    "stdin": "{\"addInvocations\": [\"invocations/8\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@json.input@{@@@",
+      "@@@STEP_LOG_LINE@json.input@  \"addInvocations\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/8\"@@@",
+      "@@@STEP_LOG_LINE@json.input@  ], @@@",
+      "@@@STEP_LOG_LINE@json.input@  \"includingInvocation\": \"invocations/build:8945511751514863184\"@@@",
+      "@@@STEP_LOG_LINE@json.input@}@@@",
+      "@@@STEP_LOG_END@json.input@@@"
+    ]
+  },
+  {
+    "cmd": [
       "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
       "https://example.swarmingserver.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"video_capture_tests (iPhone 11 iOS 14.7)/iOS-14.7/[dummy has/iOS64 Debug/-1\", \"priority\": \"30\", \"realm\": \"webrtc-internal:ci\", \"service_account\": \"chrome-tester@chops-service-accounts.iam.gserviceaccount.com\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:internal.client.webrtc\", \"buildername:iOS64 Debug\", \"data:[dummy hash for 9/dummy size]\", \"device_type:iPhone 11\", \"ios_version:14.7\", \"name:video_capture_tests\", \"ninja_target:\", \"platform:device\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc-internal.ci:iOS64 Debug\", \"stepname:video_capture_tests (iPhone 11 iOS 14.7) on iOS-14.7\", \"test:video_capture_tests\", \"test_id_prefix:\", \"test_suite:video_capture_tests (iPhone 11 iOS 14.7)\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"caches\": [{\"name\": \"xcode_ios_10l232m\", \"path\": \"Xcode.app\"}], \"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for 9\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/mac_toolchain/${platform}\", \"path\": \".\", \"version\": \"git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1\"}]}, \"command\": [\"src/ios/build/bots/scripts/run.py\", \"--app\", \"src/out/Debug-iphoneos/video_capture_tests.app\", \"--host-app\", \"NO_PATH\", \"--out-dir\", \"${ISOLATED_OUTDIR}\", \"--retries\", \"3\", \"--shards\", \"1\", \"--xcode-build-version\", \"10l232m\", \"--mac-toolchain-cmd\", \"./mac_toolchain\", \"--xcode-path\", \"Xcode.app\", \"--wpr-tools-path\", \"NO_PATH\", \"--replay-path\", \"NO_PATH\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"device\", \"value\": \"iPhone12,1\"}, {\"key\": \"device_status\", \"value\": \"available\"}, {\"key\": \"os\", \"value\": \"iOS-14.7\"}, {\"key\": \"pool\", \"value\": \"chrome.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \".\"}, \"wait_for_capacity\": true}]}]}",
+      "{\"requests\": [{\"name\": \"video_capture_tests (iPhone 11 iOS 14.7)/iOS-14.7/[dummy has/iOS64 Debug/-1\", \"priority\": \"30\", \"realm\": \"webrtc-internal:ci\", \"resultdb\": {\"enable\": true}, \"service_account\": \"chrome-tester@chops-service-accounts.iam.gserviceaccount.com\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:internal.client.webrtc\", \"buildername:iOS64 Debug\", \"data:[dummy hash for 9/dummy size]\", \"device_type:iPhone 11\", \"ios_version:14.7\", \"name:video_capture_tests\", \"ninja_target:\", \"platform:device\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc-internal.ci:iOS64 Debug\", \"stepname:video_capture_tests (iPhone 11 iOS 14.7) on iOS-14.7\", \"test:video_capture_tests\", \"test_id_prefix:\", \"test_suite:video_capture_tests (iPhone 11 iOS 14.7)\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"caches\": [{\"name\": \"xcode_ios_10l232m\", \"path\": \"Xcode.app\"}], \"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for 9\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/mac_toolchain/${platform}\", \"path\": \".\", \"version\": \"git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1\"}]}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:iOS64 Debug\", \"-var\", \"os:iOS-14.7\", \"-var\", \"test_suite:video_capture_tests (iPhone 11 iOS 14.7)\", \"-tag\", \"step_name:video_capture_tests (iPhone 11 iOS 14.7) on iOS-14.7\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"json\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"src/ios/build/bots/scripts/run.py\", \"--app\", \"src/out/Debug-iphoneos/video_capture_tests.app\", \"--host-app\", \"NO_PATH\", \"--out-dir\", \"${ISOLATED_OUTDIR}\", \"--retries\", \"3\", \"--shards\", \"1\", \"--xcode-build-version\", \"10l232m\", \"--mac-toolchain-cmd\", \"./mac_toolchain\", \"--xcode-path\", \"Xcode.app\", \"--wpr-tools-path\", \"NO_PATH\", \"--replay-path\", \"NO_PATH\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"device\", \"value\": \"iPhone12,1\"}, {\"key\": \"device_status\", \"value\": \"available\"}, {\"key\": \"os\", \"value\": \"iOS-14.7\"}, {\"key\": \"pool\", \"value\": \"chrome.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \".\"}, \"wait_for_capacity\": true}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -4999,6 +5548,9 @@
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"video_capture_tests (iPhone 11 iOS 14.7)/iOS-14.7/[dummy has/iOS64 Debug/-1\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"30\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc-internal:ci\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"resultdb\": {@@@",
+      "@@@STEP_LOG_LINE@json.input@        \"enable\": true@@@",
+      "@@@STEP_LOG_LINE@json.input@      }, @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"chrome-tester@chops-service-accounts.iam.gserviceaccount.com\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -5048,6 +5600,28 @@
       "@@@STEP_LOG_LINE@json.input@              ]@@@",
       "@@@STEP_LOG_LINE@json.input@            }, @@@",
       "@@@STEP_LOG_LINE@json.input@            \"command\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@              \"rdb\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"stream\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"builder:iOS64 Debug\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"os:iOS-14.7\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"test_suite:video_capture_tests (iPhone 11 iOS 14.7)\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-tag\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"step_name:video_capture_tests (iPhone 11 iOS 14.7) on iOS-14.7\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-coerce-negative-duration\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-location-tags-file\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"../../testing/location_tags.json\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-exonerate-unexpected-pass\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"--\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"result_adapter\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"json\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-result-file\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"${ISOLATED_OUTDIR}/output.json\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-artifact-directory\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"${ISOLATED_OUTDIR}\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"--\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"src/ios/build/bots/scripts/run.py\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"--app\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"src/out/Debug-iphoneos/video_capture_tests.app\", @@@",
@@ -5121,12 +5695,48 @@
   },
   {
     "cmd": [
+      "rdb",
+      "rpc",
+      "luci.resultdb.v1.Recorder",
+      "UpdateIncludedInvocations",
+      "-include-update-token"
+    ],
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc-internal:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "trigger.resultdb.update_included_invocations (10)",
+    "stdin": "{\"addInvocations\": [\"invocations/9\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@json.input@{@@@",
+      "@@@STEP_LOG_LINE@json.input@  \"addInvocations\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/9\"@@@",
+      "@@@STEP_LOG_LINE@json.input@  ], @@@",
+      "@@@STEP_LOG_LINE@json.input@  \"includingInvocation\": \"invocations/build:8945511751514863184\"@@@",
+      "@@@STEP_LOG_LINE@json.input@}@@@",
+      "@@@STEP_LOG_END@json.input@@@"
+    ]
+  },
+  {
+    "cmd": [
       "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
       "-server",
       "https://example.swarmingserver.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"video_engine_tests (iPhone 11 iOS 14.7)/iOS-14.7/[dummy has/iOS64 Debug/-1\", \"priority\": \"30\", \"realm\": \"webrtc-internal:ci\", \"service_account\": \"chrome-tester@chops-service-accounts.iam.gserviceaccount.com\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:internal.client.webrtc\", \"buildername:iOS64 Debug\", \"data:[dummy hash for 10/dummy size]\", \"device_type:iPhone 11\", \"ios_version:14.7\", \"name:video_engine_tests\", \"ninja_target:\", \"platform:device\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc-internal.ci:iOS64 Debug\", \"stepname:video_engine_tests (iPhone 11 iOS 14.7) on iOS-14.7\", \"test:video_engine_tests\", \"test_id_prefix:\", \"test_suite:video_engine_tests (iPhone 11 iOS 14.7)\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"caches\": [{\"name\": \"xcode_ios_10l232m\", \"path\": \"Xcode.app\"}], \"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for 10\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/mac_toolchain/${platform}\", \"path\": \".\", \"version\": \"git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1\"}]}, \"command\": [\"src/ios/build/bots/scripts/run.py\", \"--app\", \"src/out/Debug-iphoneos/video_engine_tests.app\", \"--host-app\", \"NO_PATH\", \"--out-dir\", \"${ISOLATED_OUTDIR}\", \"--retries\", \"3\", \"--shards\", \"1\", \"--xcode-build-version\", \"10l232m\", \"--mac-toolchain-cmd\", \"./mac_toolchain\", \"--xcode-path\", \"Xcode.app\", \"--wpr-tools-path\", \"NO_PATH\", \"--replay-path\", \"NO_PATH\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"device\", \"value\": \"iPhone12,1\"}, {\"key\": \"device_status\", \"value\": \"available\"}, {\"key\": \"os\", \"value\": \"iOS-14.7\"}, {\"key\": \"pool\", \"value\": \"chrome.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \".\"}, \"wait_for_capacity\": true}]}]}",
+      "{\"requests\": [{\"name\": \"video_engine_tests (iPhone 11 iOS 14.7)/iOS-14.7/[dummy has/iOS64 Debug/-1\", \"priority\": \"30\", \"realm\": \"webrtc-internal:ci\", \"resultdb\": {\"enable\": true}, \"service_account\": \"chrome-tester@chops-service-accounts.iam.gserviceaccount.com\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:internal.client.webrtc\", \"buildername:iOS64 Debug\", \"data:[dummy hash for 10/dummy size]\", \"device_type:iPhone 11\", \"ios_version:14.7\", \"name:video_engine_tests\", \"ninja_target:\", \"platform:device\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc-internal.ci:iOS64 Debug\", \"stepname:video_engine_tests (iPhone 11 iOS 14.7) on iOS-14.7\", \"test:video_engine_tests\", \"test_id_prefix:\", \"test_suite:video_engine_tests (iPhone 11 iOS 14.7)\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"caches\": [{\"name\": \"xcode_ios_10l232m\", \"path\": \"Xcode.app\"}], \"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for 10\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/mac_toolchain/${platform}\", \"path\": \".\", \"version\": \"git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1\"}]}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:iOS64 Debug\", \"-var\", \"os:iOS-14.7\", \"-var\", \"test_suite:video_engine_tests (iPhone 11 iOS 14.7)\", \"-tag\", \"step_name:video_engine_tests (iPhone 11 iOS 14.7) on iOS-14.7\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"json\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"src/ios/build/bots/scripts/run.py\", \"--app\", \"src/out/Debug-iphoneos/video_engine_tests.app\", \"--host-app\", \"NO_PATH\", \"--out-dir\", \"${ISOLATED_OUTDIR}\", \"--retries\", \"3\", \"--shards\", \"1\", \"--xcode-build-version\", \"10l232m\", \"--mac-toolchain-cmd\", \"./mac_toolchain\", \"--xcode-path\", \"Xcode.app\", \"--wpr-tools-path\", \"NO_PATH\", \"--replay-path\", \"NO_PATH\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"device\", \"value\": \"iPhone12,1\"}, {\"key\": \"device_status\", \"value\": \"available\"}, {\"key\": \"os\", \"value\": \"iOS-14.7\"}, {\"key\": \"pool\", \"value\": \"chrome.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \".\"}, \"wait_for_capacity\": true}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -5168,6 +5778,9 @@
       "@@@STEP_LOG_LINE@json.input@      \"name\": \"video_engine_tests (iPhone 11 iOS 14.7)/iOS-14.7/[dummy has/iOS64 Debug/-1\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"30\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc-internal:ci\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"resultdb\": {@@@",
+      "@@@STEP_LOG_LINE@json.input@        \"enable\": true@@@",
+      "@@@STEP_LOG_LINE@json.input@      }, @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"chrome-tester@chops-service-accounts.iam.gserviceaccount.com\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
@@ -5217,6 +5830,28 @@
       "@@@STEP_LOG_LINE@json.input@              ]@@@",
       "@@@STEP_LOG_LINE@json.input@            }, @@@",
       "@@@STEP_LOG_LINE@json.input@            \"command\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@              \"rdb\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"stream\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"builder:iOS64 Debug\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"os:iOS-14.7\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"test_suite:video_engine_tests (iPhone 11 iOS 14.7)\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-tag\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"step_name:video_engine_tests (iPhone 11 iOS 14.7) on iOS-14.7\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-coerce-negative-duration\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-location-tags-file\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"../../testing/location_tags.json\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-exonerate-unexpected-pass\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"--\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"result_adapter\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"json\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-result-file\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"${ISOLATED_OUTDIR}/output.json\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-artifact-directory\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"${ISOLATED_OUTDIR}\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"--\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"src/ios/build/bots/scripts/run.py\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"--app\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"src/out/Debug-iphoneos/video_engine_tests.app\", @@@",
@@ -5286,6 +5921,42 @@
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
       "@@@STEP_LINK@task UI: video_engine_tests (iPhone 11 iOS 14.7)/iOS-14.7/[dummy has/iOS64 Debug/-1@https://example.swarmingserver.appspot.com/task?id=10@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "rdb",
+      "rpc",
+      "luci.resultdb.v1.Recorder",
+      "UpdateIncludedInvocations",
+      "-include-update-token"
+    ],
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc-internal:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "trigger.resultdb.update_included_invocations (11)",
+    "stdin": "{\"addInvocations\": [\"invocations/10\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@json.input@{@@@",
+      "@@@STEP_LOG_LINE@json.input@  \"addInvocations\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/10\"@@@",
+      "@@@STEP_LOG_LINE@json.input@  ], @@@",
+      "@@@STEP_LOG_LINE@json.input@  \"includingInvocation\": \"invocations/build:8945511751514863184\"@@@",
+      "@@@STEP_LOG_LINE@json.input@}@@@",
+      "@@@STEP_LOG_END@json.input@@@"
     ]
   },
   {

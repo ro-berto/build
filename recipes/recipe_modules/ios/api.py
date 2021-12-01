@@ -999,8 +999,7 @@ class iOSApi(recipe_api.RecipeApi):
 
     return tasks
 
-  def generate_test_from_task(self, task, upload_test_results=True,
-                              result_callback=None):
+  def generate_test_from_task(self, task, **kwargs):
     """Generates a Test subclass that can run tests and parse/store results.
 
     Returns:
@@ -1030,10 +1029,13 @@ class iOSApi(recipe_api.RecipeApi):
         return None
 
     self._ensure_xcode_version(task)
-    test_spec = steps.SwarmingIosTestSpec.create(self.swarming_service_account,
-                                                 self.platform, self.__config,
-                                                 task, upload_test_results,
-                                                 result_callback)
+    test_spec = steps.SwarmingIosTestSpec.create(
+        self.platform,
+        self.__config,
+        task,
+        service_account=self.swarming_service_account,
+        upload_test_results=kwargs.pop('upload_test_results', True),
+        **kwargs)
     return test_spec.get_test()
 
   def collect(self, triggered_tests):
@@ -1082,7 +1084,8 @@ class iOSApi(recipe_api.RecipeApi):
       tests = []
       with self.m.step.nest('trigger'):
         for task in tasks:
-          test = self.generate_test_from_task(task, upload_test_results)
+          test = self.generate_test_from_task(
+              task, upload_test_results=upload_test_results)
           if test:
             tests.append(test)
 

@@ -4,11 +4,13 @@
 
 from __future__ import absolute_import
 
+import attr
 import functools
 
 from recipe_engine import post_process
 from recipe_engine.engine_types import freeze
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
+from RECIPE_MODULES.build.chromium_tests.resultdb import ResultDB
 
 PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
@@ -18,6 +20,7 @@ DEPS = [
     'chromium_swarming',
     'chromium_tests',
     'ios',
+    'recipe_engine/resultdb',
     'recipe_engine/path',
     'recipe_engine/properties',
     'recipe_engine/runtime',
@@ -443,11 +446,23 @@ def RunSteps(api):
         result_callback = webrtc.upload_to_perf_dashboard
       else:
         result_callback = result_callback=lambda **kw: True
+      resultdb = attr.evolve(
+          ResultDB.create(),
+          result_format='json',
+          result_file='${ISOLATED_OUTDIR}/output.json',
+      )
       for task in tasks:
         test = api.ios.generate_test_from_task(
-            task, result_callback=result_callback)
+            task,
+            result_callback=result_callback,
+            use_rdb=True,
+            resultdb=resultdb)
         if test:
           test.pre_run(api, suffix='')
+          api.resultdb.include_invocations([
+              i[len('invocations/'):]
+              for i in test.get_task('').get_invocation_names()
+          ])
           triggered_tests.append(test)
     api.ios.collect(triggered_tests)
 

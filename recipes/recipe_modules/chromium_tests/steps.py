@@ -3204,6 +3204,7 @@ class SwarmingIosTestSpec(SwarmingTestSpec):
       * step_result: Step result object from the collect step.
       If the callback is not provided, the default is to upload
       performance results from perf_result.json
+    * use_rdb - True if the tests results are to be uploaded to ResultDB.
   """
 
   platform = attrib(enum(['device', 'simulator']), default=None)
@@ -3211,11 +3212,11 @@ class SwarmingIosTestSpec(SwarmingTestSpec):
   task = attrib(mapping[str, ...], default={})
   upload_test_results = attrib(bool, default=False)
   result_callback = attrib(callable_, default=None)
+  use_rdb = attrib(bool, default=False)
 
   @classmethod
   def create(  # pylint: disable=arguments-differ
-      cls, swarming_service_account, platform, config, task,
-      upload_test_results, result_callback):
+      cls, platform, config, task, **kwargs):
     """Create a SwarmingIosTestSpec.
 
     A number of attributes in the returned spec are either extracted
@@ -3223,23 +3224,17 @@ class SwarmingIosTestSpec(SwarmingTestSpec):
     and/or values in 'task' and/or 'config'.
 
     Arguments:
-      * swarming_service_account - The service account to run the test's
-        swarming tasks as.
       * platform - The platform of the iOS target.
       * config - A dictionary detailing the build config.
       * task - A dictionary detailing the task config.
-      * upload_test_results - Whether or not test results should be
-        uploaded.
-      * result_callback - A callback to run whenever a task finishes.
+      * kwargs - Additional keyword arguments that will be used to
+        initialize the attributes of the returned spec.
     """
     return super(SwarmingIosTestSpec, cls).create(
         name=task['step name'],
-        service_account=swarming_service_account,
         platform=platform,
         config=config,
         task=task,
-        upload_test_results=upload_test_results,
-        result_callback=result_callback,
         cipd_packages=cls._get_cipd_packages(task),
         expiration=(task['test'].get('expiration_time') or
                     config.get('expiration_time')),
@@ -3247,7 +3242,7 @@ class SwarmingIosTestSpec(SwarmingTestSpec):
                       config.get('max runtime seconds')),
         dimensions=cls._get_dimensions(platform, config, task),
         optional_dimensions=task['test'].get('optional_dimensions'),
-    )
+        **kwargs)
 
   @staticmethod
   def _get_cipd_packages(task):
@@ -3363,7 +3358,8 @@ class SwarmingIosTest(SwarmingTest):
     swarming_task.tags.add('platform:%s' % self.spec.platform)
     swarming_task.tags.add('test:%s' % str(task['test']['app']))
 
-    api.chromium_swarming.trigger_task(swarming_task)
+    resultdb = self.spec.resultdb if self.spec.use_rdb else None
+    api.chromium_swarming.trigger_task(swarming_task, resultdb)
     self._tasks[suffix] = swarming_task
 
   @recipe_api.composite_step
