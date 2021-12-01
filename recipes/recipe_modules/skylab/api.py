@@ -16,8 +16,6 @@ from PB.go.chromium.org.luci.buildbucket.proto import (builds_service as
                                                        builds_service_pb2)
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
 
-from PB.test_platform.request import Request
-
 from . import structs
 
 # Skylab prioritizes tests by the Quota Scheduler account attached in the
@@ -32,7 +30,6 @@ CTP_BUILDER_DEV = 'cros_test_platform-dev'
 AUTOTEST_NAME_TAST = 'tast.lacros'
 AUTOTEST_NAME_CHROMIUM = 'chromium'
 CROS_BUCKET = 'gs://chromeos-image-archive/'
-POOL = Request.Params.Scheduling.MANAGED_POOL_QUOTA
 
 
 def _base64_encode_str(s):
@@ -59,38 +56,34 @@ class SkylabApi(recipe_api.RecipeApi):
     Returns:
       A dict of CTP build ID keyed by request_tag(see SkylabRequest).
     """
-    build_id_by_tags = {}
-    bb_requests = []
-    with self.m.step.nest(step_name) as presentation:
-      for s in requests:
-        with self.m.step.nest(s.request_tag):
-          req = Request()
-          gs_img_uri = CROS_BUCKET + s.cros_img
-          req.params.metadata.test_metadata_url = gs_img_uri
-          req.params.metadata.debug_symbols_archive_url = gs_img_uri
-          sw_dep = req.params.software_dependencies.add()
-          sw_dep.chromeos_build = s.cros_img
-          req.params.scheduling.qs_account = (
-              QS_ACCOUNT_FYI
-              if 'fyi' in self.m.buildbucket.builder_name else QS_ACCOUNT_PROD)
-          req.params.software_attributes.build_target.name = s.board
-          req.params.time.maximum_duration.seconds = s.timeout_sec
-          autotest_to_create = req.test_plan.test.add()
-          if s.autotest_name:
-            autotest_name = s.autotest_name
-          elif s.test_type == structs.SKYLAB_TAST_TEST:
-            autotest_name = AUTOTEST_NAME_TAST
-          else:
-            autotest_name = AUTOTEST_NAME_CHROMIUM
+    # Ensure the crosfleet cipd package is installed
+    # TODO(crbug.com/1273634): We need to pin the version of crosfleet to use.
+    crosfleet_tool = self.m.cipd.ensure_tool(
+        'chromiumos/infra/crosfleet/${platform}', 'latest')
 
-          secondary_device = None
-          autotest_to_create.autotest.name = autotest_name
-          tags = {
-              'label-board': s.board,
-              'build': gs_img_uri,
-              'suite': autotest_name,
-          }
-          test_args = ['dummy=crbug.com/984103']
+    build_id_by_tags = {}
+    with self.m.step.nest(step_name) as presentation:
+      for i, s in enumerate(requests):
+        with self.m.step.nest(s.request_tag):
+          cmd = [crosfleet_tool, 'run', 'test', '-json']
+
+          cmd.extend(['-board', s.board])
+
+          if s.secondary_board and s.secondary_cros_img:
+            cmd.extend(['-secondary-boards', s.secondary_board])
+            cmd.extend(['-secondary-images', s.secondary_cros_img])
+
+          cmd.extend(['-pool', s.dut_pool if s.dut_pool else 'DUT_POOL_QUOTA'])
+
+          cmd.extend(['-image', s.cros_img])
+
+          cmd.extend(['-timeout-mins', str(int(s.timeout_sec / 60))])
+
+          cmd.extend([
+              '-qs-account', QS_ACCOUNT_FYI
+              if 'fyi' in self.m.buildbucket.builder_name else QS_ACCOUNT_PROD
+          ])
+
           assert s.resultdb and s.resultdb.enable, ('Skylab tests should '
                                                     'have resultdb enabled.')
           rdb_str = self.m.json.dumps({
@@ -98,83 +91,58 @@ class SkylabApi(recipe_api.RecipeApi):
               for k in attr.fields_dict(ResultDB)
               if not getattr(s.resultdb, k) in [None, '']
           })
-          test_args.append('resultdb_settings=%s' % _base64_encode_str(rdb_str))
-          if s.dut_pool:
-            req.params.scheduling.unmanaged_pool = s.dut_pool
-            tags['label-pool'] = s.dut_pool
-          else:
-            req.params.scheduling.managed_pool = POOL
-            tags['label-pool'] = 'DUT_POOL_QUOTA'
+
+          if s.retries:
+            cmd.extend(['-max-retries', str(int(s.retries))])
+
+          test_args = 'resultdb_settings=%s' % _base64_encode_str(rdb_str)
+
           if s.tast_expr:
             # Due to crbug/1173329, skylab does not support arbitrary tast
             # expressions. As a workaround, we encode test argument which may
             # contain complicated patterns to base64.
-            test_args.append('tast_expr_b64=%s' %
-                             _base64_encode_str(s.tast_expr))
-            tags['tast-expr'] = s.tast_expr
+            test_args = test_args + (' tast_expr_b64=%s' %
+                                     _base64_encode_str(s.tast_expr))
+
           if s.test_args:
-            test_args.append('test_args_b64=%s' %
-                             _base64_encode_str(s.test_args))
-            tags['test_args'] = s.test_args
-
-          if s.secondary_board and s.secondary_cros_img:
-            secondary_device = req.params.secondary_devices.add()
-            secondary_sw_dep = secondary_device.software_dependencies.add()
-            secondary_sw_dep.chromeos_build = s.secondary_cros_img
-            secondary_device.software_attributes.build_target.name = \
-              s.secondary_board
-
-          if s.lacros_gcs_path:
-            lacros_dep = req.params.software_dependencies.add()
-            lacros_dep.lacros_gcs_path = s.lacros_gcs_path
-            tags['lacros_gcs_path'] = s.lacros_gcs_path
-            if secondary_device:
-              secondary_lacros_dep = secondary_device.software_dependencies.add(
-              )
-              secondary_lacros_dep.lacros_gcs_path = s.lacros_gcs_path
+            test_args = test_args + (' test_args_b64=%s' %
+                                     _base64_encode_str(s.test_args))
 
           if s.exe_rel_path:
-            test_args.append('exe_rel_path=%s' % s.exe_rel_path)
-            tags['exe_rel_path'] = s.exe_rel_path
-          autotest_to_create.autotest.test_args = ' '.join(test_args)
-          swarming_tags = [
-              '{}:{}'.format(key, value) for key, value in tags.items()
-          ]
-          req.params.decorations.tags.extend(swarming_tags)
-          if s.retries:
-            self._enable_test_retries(req, s.retries)
+            test_args = test_args + (' exe_rel_path=%s' % s.exe_rel_path)
 
-          # We're sending this only to add a link back to the parent.
-          bb_tags = {'parent_buildbucket_id': str(self.m.buildbucket.build.id)}
-          bb_requests.append(
-              self.m.buildbucket.schedule_request(
-                  CTP_BUILDER_DEV
-                  if self.m.runtime.is_experimental else CTP_BUILDER,
-                  project='chromeos',
-                  bucket='testplatform',
-                  properties={
-                      'requests': {
-                          s.request_tag: json_format.MessageToDict(req)
+          cmd.extend(['-test-args', test_args])
+
+          if s.lacros_gcs_path:
+            cmd.extend(['-lacros-path', s.lacros_gcs_path])
+
+            if s.secondary_board and s.secondary_cros_img:
+              cmd.extend(['-secondary-lacros-paths', s.lacros_gcs_path])
+
+          if s.autotest_name:
+            autotest_name = s.autotest_name
+          elif s.test_type == structs.SKYLAB_TAST_TEST:
+            autotest_name = AUTOTEST_NAME_TAST
+          else:
+            autotest_name = AUTOTEST_NAME_CHROMIUM
+          cmd.append(autotest_name)
+
+          step_result = self.m.step(
+              'schedule',
+              cmd,
+              stdout=self.m.json.output(),
+              step_test_data=lambda: self.m.json.test_api.output_stream(
+                  {"Launches": [{
+                      "Build": {
+                          "id": str(800 + i),
                       },
-                  },
-                  tags=self.m.buildbucket.tags(**bb_tags),
-                  gerrit_changes=[],
-                  exe_cipd_version=''))
+                  }]}))
 
-      builds = self.m.buildbucket.schedule(bb_requests)
-      assert len(builds) == len(
-          requests), '%d test suites but only got %d builds' % (len(requests),
-                                                                len(builds))
-      # The buildbucket batch response is guaranteed to keep the same order
-      # as its request.
-      for b, r in zip(builds, requests):
-        # Build.id is int64, implemented in recipe as long.
-        # This is safe on a 64bit CPU bot for CTP build ID,
-        # e.g. 8863223149660721536.
-        build_id_by_tags[r.request_tag] = int(b.id)
-        build_url = self.m.buildbucket.build_url(build_id=b.id)
-        presentation.links[r.request_tag] = build_url
-
+          build_id_by_tags[s.request_tag] = int(
+              step_result.stdout["Launches"][0]["Build"]["id"])
+          presentation.links[(
+              s.request_tag
+          )] = 'https://ci.chromium.org/b/%s' % build_id_by_tags[s.request_tag]
     return build_id_by_tags
 
   def wait_on_suites(self, ctp_by_tag, timeout_seconds):
@@ -218,13 +186,3 @@ class SkylabApi(recipe_api.RecipeApi):
         test_runners_by_tag[t] = builds
 
     return test_runners_by_tag
-
-  def _enable_test_retries(self, req, retries):
-    """Enable test retries within a single CTP build.
-
-    Args:
-      req: A request.Request object.
-      retries: See structs.SkylabRequest.
-    """
-    req.params.retry.max = retries
-    req.params.retry.allow = True

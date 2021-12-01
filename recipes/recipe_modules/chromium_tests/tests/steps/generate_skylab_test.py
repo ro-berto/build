@@ -161,49 +161,14 @@ def GenTests(api):
           api.file.read_text(isolate_content))
     return steps
 
-  def _extract_skylab_req(steps):
-    return api.skylab.step_logs_to_ctp_by_tag(
-        steps['test_pre_run.schedule skylab tests.buildbucket.schedule'].logs)
-
-  def archive_gsuri_should_match_skylab_req(check,
-                                            steps,
-                                            build_id=8945511751514863184,
-                                            target=TAST_TARGET):
-    archive_step = ('prepare skylab tests.'
-                    'upload skylab runtime deps for {target}.'
-                    'Generic Archiving Steps.gsutil upload '
-                    'lacros/{build_id}/{target}/'
-                    'lacros_compressed.squash').format(
-                        build_id=build_id, target=target)
-    archive_link = steps[archive_step].links['gsutil.upload']
-    gs_uri = archive_link.replace('https://storage.cloud.google.com/', 'gs://')
-    for req in _extract_skylab_req(steps).values():
-      sw_deps = req['params']['softwareDependencies']
-      dep_of_lacros = [
-          d['lacrosGcsPath'] for d in sw_deps if d.get('lacrosGcsPath')
-      ]
-      check(gs_uri == '%s/lacros_compressed.squash' % dep_of_lacros[0])
-
-  def check_req_by_default_enabled_retry(check, steps):
-    for req in _extract_skylab_req(steps).values():
-      params_retry = req['params']['retry']
-      check(params_retry['allow'] == True and params_retry['max'] == 3)
-
-  def check_exe_rel_path_for_gtest(check, steps, rel_path):
-    for req in _extract_skylab_req(steps).values():
-      test = req['testPlan']['test'][0]
-      check(rel_path in test['autotest']['testArgs'])
-
-  def check_qs_account(check, steps, expected_qs):
-    for req in _extract_skylab_req(steps).values():
-      check(req['params']['scheduling']['qsAccount'] == expected_qs)
+  def _check_test_args(check, step_odict, step, argument):
+    cmd = step_odict[step].cmd
+    check(argument in cmd[cmd.index('-test-args') + 1])
 
   yield api.test(
       'basic for tast',
       boilerplate(
           'chrome-test-builds', tast_expr='("group:mainline" && "dep:lacros")'),
-      api.skylab.gen_schedule_build_resps('test_pre_run.schedule skylab tests',
-                                          1),
       api.skylab.wait_on_suites(
           'find test runner build',
           1,
@@ -211,9 +176,10 @@ def GenTests(api):
                          (902, common_pb2.INFRA_FAILURE),
                          (903, common_pb2.SUCCESS)]),
       api.post_process(post_process.StepCommandContains, 'compile', ['chrome']),
-      api.post_process(archive_gsuri_should_match_skylab_req),
-      api.post_process(check_req_by_default_enabled_retry),
-      api.post_process(check_qs_account, 'lacros'),
+      api.post_process(
+          post_process.StepCommandContains,
+          'test_pre_run.schedule skylab tests.basic_EVE_TOT.schedule',
+          ["-max-retries", "3"]),
       api.post_process(
           post_process.MustRun,
           ('prepare skylab tests.upload skylab runtime deps for %s.'
@@ -249,8 +215,6 @@ def GenTests(api):
           'chrome-test-builds',
           test_args='--test-launcher-filter-file=../../testing/buildbot/filter',
           target_name=GTEST_TARGET),
-      api.skylab.gen_schedule_build_resps('test_pre_run.schedule skylab tests',
-                                          1),
       api.skylab.wait_on_suites(
           'find test runner build',
           1,
@@ -278,9 +242,16 @@ def GenTests(api):
       api.post_process(post_process.StepCommandContains, 'compile',
                        [GTEST_TARGET]),
       api.post_process(
-          archive_gsuri_should_match_skylab_req, target=GTEST_TARGET),
-      api.post_process(check_exe_rel_path_for_gtest,
-                       'out/Release/bin/run_%s' % GTEST_TARGET),
+          post_process.StepCommandContains,
+          'test_pre_run.schedule skylab tests.basic_EVE_TOT.schedule', [
+              '-lacros-path',
+              'gs://chrome-test-builds/lacros/8945511751514863184/%s' %
+              GTEST_TARGET
+          ]),
+      api.post_process(
+          _check_test_args,
+          'test_pre_run.schedule skylab tests.basic_EVE_TOT.schedule',
+          'exe_rel_path=out/Release/bin/run_%s' % GTEST_TARGET),
       api.post_process(post_process.StepFailure, 'basic_EVE_TOT'),
       api.post_process(
           post_process.ResultReason,
@@ -292,9 +263,6 @@ def GenTests(api):
   yield api.test(
       'test from fyi builder',
       boilerplate('chrome-test-builds', builder='lacros-amd64-generic-fyi'),
-      api.skylab.gen_schedule_build_resps('test_pre_run.schedule skylab tests',
-                                          1),
-      api.post_process(check_qs_account, 'lacros_fyi'),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -302,11 +270,8 @@ def GenTests(api):
       'RDB returned empty test_results',
       boilerplate(
           'chrome-test-builds', tast_expr='("group:mainline" && "dep:lacros")'),
-      api.skylab.gen_schedule_build_resps('test_pre_run.schedule skylab tests',
-                                          1),
       api.skylab.wait_on_suites('find test runner build', 1),
       api.post_process(post_process.StepCommandContains, 'compile', ['chrome']),
-      api.post_process(archive_gsuri_should_match_skylab_req),
       api.post_process(post_process.StepException, 'basic_EVE_TOT'),
       api.post_process(post_process.StepTextContains, 'basic_EVE_TOT',
                        ['Test did not run or failed to report to ResultDB.']),
@@ -318,8 +283,6 @@ def GenTests(api):
       'Skylab outage',
       boilerplate(
           'chrome-test-builds', tast_expr='("group:mainline" && "dep:lacros")'),
-      api.skylab.gen_schedule_build_resps('test_pre_run.schedule skylab tests',
-                                          1),
       api.post_process(post_process.StepException, 'basic_EVE_TOT'),
       api.post_process(post_process.ResultReason,
                        '1 Test Suite(s) failed.\n\n**basic_EVE_TOT** failed.'),
@@ -381,8 +344,6 @@ def GenTests(api):
       'ci_only_test_on_ci_builder',
       boilerplate(
           'chrome-test-builds', tast_expr='("group:mainline" && "dep:lacros")'),
-      api.skylab.gen_schedule_build_resps('test_pre_run.schedule skylab tests',
-                                          1),
       api.skylab.wait_on_suites('find test runner build', 1),
       api.post_process(post_process.StepTextContains, 'basic_EVE_TOT', [
           'This test will not be run on try builders',

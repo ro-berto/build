@@ -229,8 +229,6 @@ def GenTests(api):
           }],
           test_skylab=True,
       ),
-      api.skylab.gen_schedule_build_resps('test_pre_run.schedule skylab tests',
-                                          1),
       api.skylab.wait_on_suites('find test runner build', 1),
   )
 

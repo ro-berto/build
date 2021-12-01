@@ -5,25 +5,22 @@
   },
   {
     "cmd": [],
-    "name": "test_pre_run.schedule skylab tests",
+    "name": "test_pre_run.install chromiumos/infra/crosfleet",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@basic_EVE_TOT@https://cr-buildbucket.appspot.com/build/800@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "test_pre_run.schedule skylab tests.basic_EVE_TOT",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
     "cmd": [
-      "bb",
-      "batch",
-      "-host",
-      "cr-buildbucket.appspot.com"
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[START_DIR]/cipd_tool/chromiumos/infra/crosfleet/latest"
     ],
     "infra_step": true,
     "luci_context": {
@@ -38,106 +35,117 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "test_pre_run.schedule skylab tests.buildbucket.schedule",
-    "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"bucket\": \"testplatform\", \"builder\": \"cros_test_platform\", \"project\": \"chromeos\"}, \"experimental\": \"NO\", \"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", \"priority\": 30, \"properties\": {\"requests\": {\"basic_EVE_TOT\": {\"params\": {\"decorations\": {\"tags\": [\"label-board:eve\", \"lacros_gcs_path:gs://dummy/lacros.zip\", \"build:gs://chromeos-image-archive/eve-release/R89-13631.0.0\", \"suite:tast.lacros\", \"exe_rel_path:out/Lacros/chrome\", \"tast-expr:lacros.Basic\", \"label-pool:DUT_POOL_QUOTA\"]}, \"metadata\": {\"debugSymbolsArchiveUrl\": \"gs://chromeos-image-archive/eve-release/R89-13631.0.0\", \"testMetadataUrl\": \"gs://chromeos-image-archive/eve-release/R89-13631.0.0\"}, \"retry\": {\"allow\": true, \"max\": 3.0}, \"scheduling\": {\"managedPool\": \"MANAGED_POOL_QUOTA\", \"qsAccount\": \"lacros\"}, \"softwareAttributes\": {\"buildTarget\": {\"name\": \"eve\"}}, \"softwareDependencies\": [{\"chromeosBuild\": \"eve-release/R89-13631.0.0\"}, {\"lacrosGcsPath\": \"gs://dummy/lacros.zip\"}], \"time\": {\"maximumDuration\": \"3600s\"}}, \"testPlan\": {\"test\": [{\"autotest\": {\"name\": \"tast.lacros\", \"testArgs\": \"dummy=crbug.com/984103 resultdb_settings=eyJiYXNlX3ZhcmlhbnQiOiB7ImNyb3NfaW1nIjogImV2ZS1yZWxlYXNlL1I4OS0xMzYzMS4wLjAiLCAiZGV2aWNlX3R5cGUiOiAiZXZlIiwgIm9zIjogIkNocm9tZU9TIiwgInRlc3Rfc3VpdGUiOiAiYmFzaWNfRVZFX1RPVCJ9LCAiY29lcmNlX25lZ2F0aXZlX2R1cmF0aW9uIjogdHJ1ZSwgImVuYWJsZSI6IHRydWUsICJleG9uZXJhdGVfdW5leHBlY3RlZF9wYXNzIjogdHJ1ZSwgImhhc19uYXRpdmVfcmVzdWx0ZGJfaW50ZWdyYXRpb24iOiBmYWxzZSwgImluY2x1ZGUiOiBmYWxzZSwgInJlc3VsdF9hZGFwdGVyX3BhdGgiOiAicmVzdWx0X2FkYXB0ZXIiLCAicmVzdWx0X2Zvcm1hdCI6ICJ0YXN0IiwgInRlc3RfaWRfYXNfdGVzdF9sb2NhdGlvbiI6IGZhbHNlLCAidXNlX3JkYl9yZXN1bHRzX2Zvcl9hbGxfZGVjaXNpb25zIjogdHJ1ZX0= tast_expr_b64=bGFjcm9zLkJhc2lj exe_rel_path=out/Lacros/chrome\"}}]}}}}, \"requestId\": \"8945511751514863184-00000000-0000-0000-0000-000000001337\", \"tags\": [{\"key\": \"parent_buildbucket_id\", \"value\": \"8945511751514863184\"}, {\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
+    "name": "test_pre_run.install chromiumos/infra/crosfleet.ensure package directory",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[START_DIR]/cipd_tool/chromiumos/infra/crosfleet/latest",
+      "-ensure-file",
+      "chromiumos/infra/crosfleet/${platform} latest",
+      "-max-threads",
+      "0",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "test_pre_run.install chromiumos/infra/crosfleet.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"responses\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-latest----------\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"chromiumos/infra/crosfleet/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "test_pre_run.schedule skylab tests",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@basic_EVE_TOT@https://ci.chromium.org/b/800@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "test_pre_run.schedule skylab tests.basic_EVE_TOT",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[START_DIR]/cipd_tool/chromiumos/infra/crosfleet/latest/crosfleet",
+      "run",
+      "test",
+      "-json",
+      "-board",
+      "eve",
+      "-pool",
+      "DUT_POOL_QUOTA",
+      "-image",
+      "eve-release/R89-13631.0.0",
+      "-timeout-mins",
+      "60",
+      "-qs-account",
+      "lacros",
+      "-max-retries",
+      "3",
+      "-test-args",
+      "resultdb_settings=eyJiYXNlX3ZhcmlhbnQiOiB7ImNyb3NfaW1nIjogImV2ZS1yZWxlYXNlL1I4OS0xMzYzMS4wLjAiLCAiZGV2aWNlX3R5cGUiOiAiZXZlIiwgIm9zIjogIkNocm9tZU9TIiwgInRlc3Rfc3VpdGUiOiAiYmFzaWNfRVZFX1RPVCJ9LCAiY29lcmNlX25lZ2F0aXZlX2R1cmF0aW9uIjogdHJ1ZSwgImVuYWJsZSI6IHRydWUsICJleG9uZXJhdGVfdW5leHBlY3RlZF9wYXNzIjogdHJ1ZSwgImhhc19uYXRpdmVfcmVzdWx0ZGJfaW50ZWdyYXRpb24iOiBmYWxzZSwgImluY2x1ZGUiOiBmYWxzZSwgInJlc3VsdF9hZGFwdGVyX3BhdGgiOiAicmVzdWx0X2FkYXB0ZXIiLCAicmVzdWx0X2Zvcm1hdCI6ICJ0YXN0IiwgInRlc3RfaWRfYXNfdGVzdF9sb2NhdGlvbiI6IGZhbHNlLCAidXNlX3JkYl9yZXN1bHRzX2Zvcl9hbGxfZGVjaXNpb25zIjogdHJ1ZX0= tast_expr_b64=bGFjcm9zLkJhc2lj exe_rel_path=out/Lacros/chrome",
+      "-lacros-path",
+      "gs://dummy/lacros.zip",
+      "tast.lacros"
+    ],
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "test_pre_run.schedule skylab tests.basic_EVE_TOT.schedule",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@3@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Launches\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"scheduleBuild\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"Build\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"id\": \"800\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@request@{@@@",
-      "@@@STEP_LOG_LINE@request@  \"requests\": [@@@",
-      "@@@STEP_LOG_LINE@request@    {@@@",
-      "@@@STEP_LOG_LINE@request@      \"scheduleBuild\": {@@@",
-      "@@@STEP_LOG_LINE@request@        \"builder\": {@@@",
-      "@@@STEP_LOG_LINE@request@          \"bucket\": \"testplatform\", @@@",
-      "@@@STEP_LOG_LINE@request@          \"builder\": \"cros_test_platform\", @@@",
-      "@@@STEP_LOG_LINE@request@          \"project\": \"chromeos\"@@@",
-      "@@@STEP_LOG_LINE@request@        }, @@@",
-      "@@@STEP_LOG_LINE@request@        \"experimental\": \"NO\", @@@",
-      "@@@STEP_LOG_LINE@request@        \"fields\": \"builder,createTime,createdBy,critical,endTime,id,input,number,output,startTime,status,updateTime\", @@@",
-      "@@@STEP_LOG_LINE@request@        \"priority\": 30, @@@",
-      "@@@STEP_LOG_LINE@request@        \"properties\": {@@@",
-      "@@@STEP_LOG_LINE@request@          \"requests\": {@@@",
-      "@@@STEP_LOG_LINE@request@            \"basic_EVE_TOT\": {@@@",
-      "@@@STEP_LOG_LINE@request@              \"params\": {@@@",
-      "@@@STEP_LOG_LINE@request@                \"decorations\": {@@@",
-      "@@@STEP_LOG_LINE@request@                  \"tags\": [@@@",
-      "@@@STEP_LOG_LINE@request@                    \"label-board:eve\", @@@",
-      "@@@STEP_LOG_LINE@request@                    \"lacros_gcs_path:gs://dummy/lacros.zip\", @@@",
-      "@@@STEP_LOG_LINE@request@                    \"build:gs://chromeos-image-archive/eve-release/R89-13631.0.0\", @@@",
-      "@@@STEP_LOG_LINE@request@                    \"suite:tast.lacros\", @@@",
-      "@@@STEP_LOG_LINE@request@                    \"exe_rel_path:out/Lacros/chrome\", @@@",
-      "@@@STEP_LOG_LINE@request@                    \"tast-expr:lacros.Basic\", @@@",
-      "@@@STEP_LOG_LINE@request@                    \"label-pool:DUT_POOL_QUOTA\"@@@",
-      "@@@STEP_LOG_LINE@request@                  ]@@@",
-      "@@@STEP_LOG_LINE@request@                }, @@@",
-      "@@@STEP_LOG_LINE@request@                \"metadata\": {@@@",
-      "@@@STEP_LOG_LINE@request@                  \"debugSymbolsArchiveUrl\": \"gs://chromeos-image-archive/eve-release/R89-13631.0.0\", @@@",
-      "@@@STEP_LOG_LINE@request@                  \"testMetadataUrl\": \"gs://chromeos-image-archive/eve-release/R89-13631.0.0\"@@@",
-      "@@@STEP_LOG_LINE@request@                }, @@@",
-      "@@@STEP_LOG_LINE@request@                \"retry\": {@@@",
-      "@@@STEP_LOG_LINE@request@                  \"allow\": true, @@@",
-      "@@@STEP_LOG_LINE@request@                  \"max\": 3.0@@@",
-      "@@@STEP_LOG_LINE@request@                }, @@@",
-      "@@@STEP_LOG_LINE@request@                \"scheduling\": {@@@",
-      "@@@STEP_LOG_LINE@request@                  \"managedPool\": \"MANAGED_POOL_QUOTA\", @@@",
-      "@@@STEP_LOG_LINE@request@                  \"qsAccount\": \"lacros\"@@@",
-      "@@@STEP_LOG_LINE@request@                }, @@@",
-      "@@@STEP_LOG_LINE@request@                \"softwareAttributes\": {@@@",
-      "@@@STEP_LOG_LINE@request@                  \"buildTarget\": {@@@",
-      "@@@STEP_LOG_LINE@request@                    \"name\": \"eve\"@@@",
-      "@@@STEP_LOG_LINE@request@                  }@@@",
-      "@@@STEP_LOG_LINE@request@                }, @@@",
-      "@@@STEP_LOG_LINE@request@                \"softwareDependencies\": [@@@",
-      "@@@STEP_LOG_LINE@request@                  {@@@",
-      "@@@STEP_LOG_LINE@request@                    \"chromeosBuild\": \"eve-release/R89-13631.0.0\"@@@",
-      "@@@STEP_LOG_LINE@request@                  }, @@@",
-      "@@@STEP_LOG_LINE@request@                  {@@@",
-      "@@@STEP_LOG_LINE@request@                    \"lacrosGcsPath\": \"gs://dummy/lacros.zip\"@@@",
-      "@@@STEP_LOG_LINE@request@                  }@@@",
-      "@@@STEP_LOG_LINE@request@                ], @@@",
-      "@@@STEP_LOG_LINE@request@                \"time\": {@@@",
-      "@@@STEP_LOG_LINE@request@                  \"maximumDuration\": \"3600s\"@@@",
-      "@@@STEP_LOG_LINE@request@                }@@@",
-      "@@@STEP_LOG_LINE@request@              }, @@@",
-      "@@@STEP_LOG_LINE@request@              \"testPlan\": {@@@",
-      "@@@STEP_LOG_LINE@request@                \"test\": [@@@",
-      "@@@STEP_LOG_LINE@request@                  {@@@",
-      "@@@STEP_LOG_LINE@request@                    \"autotest\": {@@@",
-      "@@@STEP_LOG_LINE@request@                      \"name\": \"tast.lacros\", @@@",
-      "@@@STEP_LOG_LINE@request@                      \"testArgs\": \"dummy=crbug.com/984103 resultdb_settings=eyJiYXNlX3ZhcmlhbnQiOiB7ImNyb3NfaW1nIjogImV2ZS1yZWxlYXNlL1I4OS0xMzYzMS4wLjAiLCAiZGV2aWNlX3R5cGUiOiAiZXZlIiwgIm9zIjogIkNocm9tZU9TIiwgInRlc3Rfc3VpdGUiOiAiYmFzaWNfRVZFX1RPVCJ9LCAiY29lcmNlX25lZ2F0aXZlX2R1cmF0aW9uIjogdHJ1ZSwgImVuYWJsZSI6IHRydWUsICJleG9uZXJhdGVfdW5leHBlY3RlZF9wYXNzIjogdHJ1ZSwgImhhc19uYXRpdmVfcmVzdWx0ZGJfaW50ZWdyYXRpb24iOiBmYWxzZSwgImluY2x1ZGUiOiBmYWxzZSwgInJlc3VsdF9hZGFwdGVyX3BhdGgiOiAicmVzdWx0X2FkYXB0ZXIiLCAicmVzdWx0X2Zvcm1hdCI6ICJ0YXN0IiwgInRlc3RfaWRfYXNfdGVzdF9sb2NhdGlvbiI6IGZhbHNlLCAidXNlX3JkYl9yZXN1bHRzX2Zvcl9hbGxfZGVjaXNpb25zIjogdHJ1ZX0= tast_expr_b64=bGFjcm9zLkJhc2lj exe_rel_path=out/Lacros/chrome\"@@@",
-      "@@@STEP_LOG_LINE@request@                    }@@@",
-      "@@@STEP_LOG_LINE@request@                  }@@@",
-      "@@@STEP_LOG_LINE@request@                ]@@@",
-      "@@@STEP_LOG_LINE@request@              }@@@",
-      "@@@STEP_LOG_LINE@request@            }@@@",
-      "@@@STEP_LOG_LINE@request@          }@@@",
-      "@@@STEP_LOG_LINE@request@        }, @@@",
-      "@@@STEP_LOG_LINE@request@        \"requestId\": \"8945511751514863184-00000000-0000-0000-0000-000000001337\", @@@",
-      "@@@STEP_LOG_LINE@request@        \"tags\": [@@@",
-      "@@@STEP_LOG_LINE@request@          {@@@",
-      "@@@STEP_LOG_LINE@request@            \"key\": \"parent_buildbucket_id\", @@@",
-      "@@@STEP_LOG_LINE@request@            \"value\": \"8945511751514863184\"@@@",
-      "@@@STEP_LOG_LINE@request@          }, @@@",
-      "@@@STEP_LOG_LINE@request@          {@@@",
-      "@@@STEP_LOG_LINE@request@            \"key\": \"user_agent\", @@@",
-      "@@@STEP_LOG_LINE@request@            \"value\": \"recipe\"@@@",
-      "@@@STEP_LOG_LINE@request@          }@@@",
-      "@@@STEP_LOG_LINE@request@        ]@@@",
-      "@@@STEP_LOG_LINE@request@      }@@@",
-      "@@@STEP_LOG_LINE@request@    }@@@",
-      "@@@STEP_LOG_LINE@request@  ]@@@",
-      "@@@STEP_LOG_LINE@request@}@@@",
-      "@@@STEP_LOG_END@request@@@",
-      "@@@STEP_LINK@800@https://cr-buildbucket.appspot.com/build/800@@@"
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {

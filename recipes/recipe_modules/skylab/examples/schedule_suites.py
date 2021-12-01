@@ -10,9 +10,6 @@ DEPS = [
     'skylab',
 ]
 
-import re
-import base64
-
 from RECIPE_MODULES.build.chromium_tests.resultdb import ResultDB
 from RECIPE_MODULES.build.skylab.structs import SkylabRequest
 
@@ -73,101 +70,18 @@ def RunSteps(api):
   build_ids = api.skylab.schedule_suites(REQUESTS)
   api.skylab.wait_on_suites(build_ids, timeout_seconds=3600)
 
-
 def GenTests(api):
-
-  def _extract_ctp_requests(steps):
-    return api.skylab.step_logs_to_ctp_by_tag(
-        steps['schedule skylab tests.buildbucket.schedule'].logs)
-
-  def _args_to_dict(arg_line):
-    arg_re = re.compile(r'(\w+)[:=](.*)$')
-    args_dict = {}
-    for arg in arg_line.split(' '):
-      match = arg_re.match(arg)
-      if match:
-        args_dict[match.group(1).lower()] = match.group(2)
-    return args_dict
-
-  def check_req_has_enable_retry(check, steps, tag, retries):
-    """CTP request we created should have retry enabled."""
-    ctp_reqs = _extract_ctp_requests(steps)
-    check(ctp_reqs[tag]['params']['retry']['allow'])
-    check(ctp_reqs[tag]['params']['retry']['max'] == retries)
-
-  def check_has_req_tags(check, steps, requests):
-    """Request tag should exist in the CTP requests."""
-    ctp_reqs = _extract_ctp_requests(steps)
-    for r in requests:
-      check(r.request_tag in ctp_reqs)
-
-  def check_pool(check, steps, tag, pool='', managed=False):
-    """CTP request should have the expected pool."""
-    ctp_reqs = _extract_ctp_requests(steps)
-    scheduling = ctp_reqs[tag]['params']['scheduling']
-    if managed:
-      check(scheduling['managedPool'] == 'MANAGED_POOL_QUOTA')
-    else:
-      check(scheduling['unmanagedPool'] == pool)
-
-  def _decode_b64_str(s):
-    return base64.b64decode(s).decode('utf-8')
-
-  def check_test_arg(check,
-                     steps,
-                     tag,
-                     lacros_gcs_path=LACROS_GCS_PATH,
-                     tast_expr=LACROS_TAST_EXPR,
-                     test_args=LACROS_GTEST_ARGS):
-    """CTP request should have expected parameters in the test args."""
-    ctp_reqs = _extract_ctp_requests(steps)
-    sw_deps = ctp_reqs[tag]['params']['softwareDependencies']
-    dep_of_lacros = [
-        d['lacrosGcsPath'] for d in sw_deps if d.get('lacrosGcsPath')
-    ]
-    check(lacros_gcs_path in dep_of_lacros)
-    test = ctp_reqs[tag]['testPlan']['test'][0]
-    got = _args_to_dict(test['autotest']['testArgs'])
-    decoded_test_args_b64 = _decode_b64_str(got['test_args_b64'])
-    check(test_args == decoded_test_args_b64)
-
-    if got.get('resultdb_settings'):
-      rdb_config = api.json.loads(
-          base64.b64decode(got.get('resultdb_settings')))
-      check(all([rdb_config[k] == v for k, v in RESULTDB_CONFIG.items()]))
-
-  def check_secondary_device(check,
-                             steps,
-                             tag,
-                             secondary_board,
-                             secondary_cros_img,
-                             lacros_gcs_path=LACROS_GCS_PATH):
-    ctp_reqs = _extract_ctp_requests(steps)
-    secondary_device = ctp_reqs[tag]['params']['secondaryDevices'][0]
-    secondary_sw_dep = secondary_device['softwareDependencies']
-    dep_of_lacros = [
-        d['lacrosGcsPath'] for d in secondary_sw_dep if d.get('lacrosGcsPath')
-    ]
-    check(lacros_gcs_path in dep_of_lacros)
-    chromeos_build = [
-        d['chromeosBuild'] for d in secondary_sw_dep if d.get('chromeosBuild')
-    ]
-    check(secondary_cros_img in chromeos_build)
-    check(secondary_device["softwareAttributes"]["buildTarget"]["name"] ==
-          secondary_board)
 
   yield api.test(
       'basic',
-      api.skylab.gen_schedule_build_resps('schedule skylab tests',
-                                          len(REQUESTS)),
+      api.post_process(
+          post_process.StepCommandContains,
+          'schedule skylab tests.' + REQUESTS[0].request_tag + '.schedule', [
+              'run', 'test', '-json', '-board', 'eve', '-pool',
+              'DUT_POOL_QUOTA', '-image', 'eve-release/R88-13545.0.0',
+              '-timeout-mins', '60', '-qs-account', 'lacros', '-max-retries',
+              '3'
+          ]),
       api.skylab.wait_on_suites('find test runner build', len(REQUESTS)),
-      api.post_check(check_has_req_tags, REQUESTS),
-      api.post_check(check_req_has_enable_retry, 'm88_tast_with_retry', 3),
-      api.post_check(check_pool, 'm88_gtest_test_args', managed=True),
-      api.post_check(check_pool, 'm88_nearby_dut_pool',
-                     'cross_device_multi_cb'),
-      api.post_check(check_test_arg, 'm88_gtest_test_args'),
-      api.post_check(check_secondary_device, 'm88_nearby_multi_dut', 'eve',
-                     'eve-release/R88-13545.0.0'),
       api.post_process(post_process.DropExpectation),
   )

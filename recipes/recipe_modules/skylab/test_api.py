@@ -17,23 +17,6 @@ from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
 class SkylabTestApi(recipe_test_api.RecipeTestApi):
   """Test examples for Skylab api."""
 
-  def gen_schedule_build_resps(self, step_name, req_num):
-    """Emulates the step of schedule_suites().
-
-    Args:
-    * step_name: The step name to overwrite the return.
-    * req_num: The number of buildbucket responses to mock.
-
-    Returns:
-      A step with mock response.
-    """
-    resp = []
-    for i in range(req_num):
-      resp.append(dict(schedule_build=build_pb2.Build(id=(800 + i))))
-    return self.m.buildbucket.simulated_schedule_output(
-        builds_service_pb2.BatchResponse(responses=resp),
-        step_name='%s.buildbucket.schedule' % step_name)
-
   def wait_on_suites(self,
                      step_name,
                      req_num,
@@ -64,11 +47,3 @@ class SkylabTestApi(recipe_test_api.RecipeTestApi):
               ],
               step_name='%s.buildbucket.search%s' % (step_name, retry_suffix)))
     return sum(steps, self.empty_test_data())
-
-  def step_logs_to_ctp_by_tag(self, step_log):
-    """Helper to convert the step_log into a dict of CTP request."""
-    request = self.m.json.loads(step_log['request'])
-    ctp_by_tag = {}
-    for r in request['requests']:
-      ctp_by_tag.update(r['scheduleBuild']['properties']['requests'])
-    return ctp_by_tag
