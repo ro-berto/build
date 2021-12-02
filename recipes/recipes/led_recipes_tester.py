@@ -49,11 +49,6 @@ BUILDER_FOOTER = 'Led-Recipes-Tester-Builder'
 class BuilderToTrigger(object):
   # The buildbucket v1 style name of the builder
   name = attrib(str)
-  # Whether or not to try and test versions of the builder for other branches
-  # If true, for each key in CHROMIUM_SRC_TEST_CLS, the buildbucket v1 bucket
-  # (e.g. luci.chromium.try) of this builder will be replaced with the key and
-  # that new builder will be executed if it exists
-  find_branched_versions = attrib(bool, default=True)
   # The key of the CL to use when triggering the builder
   cl_key = attrib(enum(['fast', 'slow']), default='slow')
   # An optional message to display if the call to 'led get-builder' fails
@@ -68,17 +63,6 @@ DEFAULT_BUILDERS = (
     BuilderToTrigger('luci.chromium.try:linux-rel'),
     BuilderToTrigger(
         'luci.chromium.try:win10_chromium_x64_rel_ng', cl_key='fast'),
-    # M88 is being kept alive with only fuchsia builders for an extended period
-    # of time for fuchsia's initial release. In order to provide some guard
-    # against recipe changes breaking M88 builds, try a build against one of the
-    # M88 fuchsia builders.
-    BuilderToTrigger(
-        'luci.chromium-m88.try:fuchsia_x64',
-        find_branched_versions=False,
-        cl_key='fast',
-        provisional_warning=(
-            'Builder does not exist. If M88 is still active, the configuration'
-            ' should be updated to trigger a different builder.')),
 )
 
 
@@ -163,12 +147,6 @@ CHROMIUM_SRC_TEST_CLS = collections.OrderedDict([
         'fast':
             'https://chromium-review.googlesource.com/c/chromium/src/+/3299047',
     }),
-    ('luci.chromium-m88.try', {
-        'slow':
-            'https://chromium-review.googlesource.com/c/chromium/src/+/2537783',
-        'fast':
-            'https://chromium-review.googlesource.com/c/chromium/src/+/2538112',
-    }),
     ('luci.chromium-m90.try', {
         'slow':
             'https://chromium-review.googlesource.com/c/chromium/src/+/2807827',
@@ -242,15 +220,12 @@ def _expand_builders(builders):
     yield builder
   for bucket in CHROMIUM_SRC_TEST_CLS:
     for builder in builders:
-      if not builder.find_branched_versions:
-        continue
       builder_bucket, name = builder.name.split(':', 1)
       if builder_bucket == bucket:
         continue
       yield attr.evolve(
           builder,
           name='{}:{}'.format(bucket, name),
-          find_branched_versions=False,
           provisional_warning=(
               'No equivalent to builder {} was found for bucket {}'.format(
                   builder.name, bucket)))
