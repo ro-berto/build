@@ -315,7 +315,7 @@ class BinarySizeApi(recipe_api.RecipeApi):
     lines = self.m.gsutil.cat(
         'gs://{bucket}/{source}'.format(
             bucket=self.results_bucket, source=gs_directory + 'LATEST'),
-        stdout=self.m.raw_io.output_text(),
+        stdout=self.m.raw_io.output(),
         step_test_data=lambda: self.m.raw_io.test_api.stream_output_text(
             '\n'.join(generate_test_data())),
         name='cat LATEST').stdout.splitlines()
