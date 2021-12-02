@@ -1038,6 +1038,7 @@ SPEC = {
             },
             android_config='arm64_builder_rel_mb',
             simulation_platform='linux',
+            serialize_tests=True,
         ),
     'Android FYI Release (NVIDIA Shield TV)':
         _chromium_gpu_fyi_spec(
@@ -1054,6 +1055,7 @@ SPEC = {
             },
             android_config='arm64_builder_rel_mb',
             simulation_platform='linux',
+            serialize_tests=True,
         ),
     'Android FYI Release (Pixel 2)':
         _chromium_gpu_fyi_spec(
