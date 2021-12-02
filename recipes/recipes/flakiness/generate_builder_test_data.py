@@ -19,50 +19,70 @@ DEPS = [
     'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/python',
+    'recipe_engine/raw_io',
     'recipe_engine/runtime',
     'recipe_engine/step',
+    'tar',
 ]
 
 
-def analyze_try_builder_test_history(api, builder, bucket, source,
-                                     build_number):
+def analyze_try_builder_test_history(api, builder, bucket, build_number):
   """Query test history for the given builder, and upload the results to CIPD
 
   Args:
     builder: (str) name of the try builder
     bucket: (str) name of gs bucket
-    source: (str) gs path
     build_number: (int) buildbucket build number
   """
   with api.step.nest('analyze try builder {}'.format(builder)):
-    gs_source = source.format(build_number, builder)
-    gs_path = 'gs://{}/{}'.format(bucket, gs_source)
+    source = '{}/{}'
+    if api.runtime.is_experimental:
+      source = 'experimental/' + source
+
+    # we're setting wildcard suffixes to ensure that the larger tables can
+    # partition their results before the export to GS.
+    export_source = source + '_*.json'
+    gs_source = export_source.format(build_number, builder)
+    export_gs_path = 'gs://{}/{}'.format(bucket, gs_source)
     cmd = [
         'vpython3',
         api.resource('query.py'),
         'history',
         '--builder={}'.format(builder),
-        '--export-gs-path={}'.format(gs_path),
+        '--export-gs-path={}'.format(export_gs_path),
     ]
     api.step('query test history data', cmd)
 
-    builder_file = api.path.mkstemp()
-    api.gsutil.download(bucket, gs_source, builder_file)
+    builder_folder = api.path.mkdtemp()
+    # gsutil.download doesn't support appending args before the cp command.
+    api.gsutil(['-m', 'cp', export_gs_path, builder_folder])
 
-    cmd = [
-        'vpython3',
-        api.resource('query.py'),
-        'format',
-        '--file={}'.format(builder_file),
-    ]
+    files = api.file.glob_paths(
+        'find all paritioned json files',
+        builder_folder,
+        builder + '_*.json',
+        test_data=['[CLEANUP]/builder1_000.json'])
+
+    builder_output_file = api.path['cleanup'].join('{}.json'.format(builder))
+    cmd = ['vpython3', api.resource('query.py'), 'format']
+    for f in files:
+      cmd += ['--file', str(f)]
+    cmd += ['--output-file', builder_output_file]
     api.step('format json', cmd)
 
-    dest_source = source.format('latest', builder)
+    tar_filename = '{}.json.tar.gz'.format(builder)
+    tar_gz = builder_folder.join(tar_filename)
+    pkg = api.tar.make_package(api.path['cleanup'], tar_gz, compression='gz')
+    pkg.add_file(builder_output_file)
+    pkg.tar('Create {}'.format(tar_filename))
+
+    dest_gs_source = source.format('latest', tar_filename)
     api.gsutil.upload(
-        builder_file,
+        tar_gz,
         bucket,
-        dest_source,
-        name='copy {} to latest'.format(builder))
+        dest_gs_source,
+        args=['-Z'],
+        name='copy {} to latest'.format(tar_filename))
 
 
 def RunSteps(api):
@@ -80,16 +100,13 @@ def RunSteps(api):
 
   build_number = api.buildbucket.build.number
   bucket = 'flake_endorser'
-  source = '{}/{}.json'
-  if api.runtime.is_experimental:
-    source = 'experimental/' + source
 
   futures = []
   with api.step.nest('generating historical test data'):
     for b in builders:
       futures.append(
           api.futures.spawn(analyze_try_builder_test_history, api, b, bucket,
-                            source, build_number))
+                            build_number))
 
   for f in futures:
     f.result()
@@ -99,22 +116,15 @@ def GenTests(api):
   yield api.test(
       'basic',
       api.runtime(is_experimental=True),
-      api.step_data('search for try builders',
-                    api.json.output(['builder1', 'builder2'])),
+      api.step_data('search for try builders', api.json.output(['builder1'])),
       api.post_check(
           post_process.MustRun,
           'generating historical test data.analyze try builder builder1.'
           'query test history data'),
-      api.post_check(post_process.MustRun, ('generating historical test data.'
-                                            'analyze try builder builder1.'
-                                            'gsutil copy builder1 to latest')),
-      api.post_check(
-          post_process.MustRun,
-          'generating historical test data.analyze try builder builder2.'
-          'query test history data'),
-      api.post_check(post_process.MustRun, ('generating historical test data.'
-                                            'analyze try builder builder2.'
-                                            'gsutil copy builder2 to latest')),
+      api.post_check(post_process.MustRun,
+                     ('generating historical test data.'
+                      'analyze try builder builder1.'
+                      'gsutil copy builder1.json.tar.gz to latest')),
       api.post_check(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )

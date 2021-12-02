@@ -23,6 +23,7 @@ TEST_HISTORY_QUERY = """
       test_id,
       variant_hash,
       variant,
+      tag,
       ARRAY_AGG(invocation) AS invocation,
     FROM
       `chrome-flakiness.flake_endorser.try_historical_test_data_7_days`
@@ -31,7 +32,8 @@ TEST_HISTORY_QUERY = """
     GROUP BY
       test_id,
       variant_hash,
-      variant
+      variant,
+      tag
   """
 
 
@@ -64,6 +66,7 @@ def query_test_history(bq, args):
   dataset_ref = bigquery.DatasetReference(PROJECT, dataset_id)
   table_ref = dataset_ref.table(table_id)
 
+  logging.info('Extracting temp table to GS.')
   job_config = bigquery.job.ExtractJobConfig()
   job_config.destination_format = (
       bigquery.job.DestinationFormat.NEWLINE_DELIMITED_JSON)
@@ -75,15 +78,15 @@ def query_test_history(bq, args):
 
 def format_file(bq, args):
   results = []
-  with open(args.file, 'r') as f:
-    for line in f:
-      results.append(json.loads(line))
+  for json_file in args.file:
+    with open(json_file, 'r') as f:
+      for line in f:
+        results.append(json.loads(line))
 
-  res_json = json.dumps(results)
-  with open(args.file, 'w') as f:
-    f.write(res_json)
+  with open(args.output_file, 'w') as f:
+    json.dump(results, f)
 
-  return res_json
+  return json.dumps(results)
 
 
 def parse_arguments(args):
@@ -109,7 +112,10 @@ def parse_arguments(args):
   format_parser = subparsers.add_parser(
       'format', help='format new line delimited json to json format')
   format_parser.set_defaults(func=format_file)
-  format_parser.add_argument('--file', required=True, help='path to file')
+  format_parser.add_argument(
+      '--file', required=True, action='append', help='path(s) to file')
+  format_parser.add_argument(
+      '--output-file', required=True, help='path to output file for result')
 
   return parser.parse_args(args)
 

@@ -48,17 +48,20 @@ class QueryTest(unittest.TestCase):
     self.assertEqual(res.export_gs_path, output_gs_path)
     self.assertEqual(res.builder, builder)
 
-    format_args = ['format', '--file', output_file]
+    file = '/some/file.json'
+    format_args = ['format', '--file', file, '--output-file', output_file]
     res = query.parse_arguments(format_args)
-    self.assertEqual(res.file, output_file)
+    self.assertEqual(res.file, [file])
+    self.assertEqual(res.output_file, output_file)
 
   @mock.patch(
       'builtins.open',
       new_callable=mock.mock_open,
       read_data='{\"foo\":\"bar\"}\n{\"hello\":\"world\"}')
   def test_format_file(self, mock_file):
+    file = '/some/file.json'
     output_file = '/some/path/to/file.json'
-    format_args = ['format', '--file', output_file]
+    format_args = ['format', '--file', file, '--output-file', output_file]
     args = query.parse_arguments(format_args)
     res_json = query.format_file(None, args)
     mock_file.assert_called_with(output_file, 'w')
