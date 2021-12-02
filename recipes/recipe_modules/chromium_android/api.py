@@ -189,7 +189,8 @@ class AndroidApi(recipe_api.RecipeApi):
 
   def git_number(self, commitrefs=None, step_test_data=None, **kwargs):
     if not step_test_data:
-      step_test_data = lambda: self.m.raw_io.test_api.stream_output('3000\n')
+      step_test_data = lambda: self.m.raw_io.test_api.stream_output_text(
+          '3000\n')
     with self.m.depot_tools.on_path():
       with self.m.context(env={'CHROME_HEADLESS': '1'}):
         args = ['number']

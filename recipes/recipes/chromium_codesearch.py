@@ -354,18 +354,16 @@ def GenTests(api):
     yield api.test(
         'full_%s' % (_sanitize_nonalpha(buildername)),
         api.chromium.generic_build(builder=buildername),
-        api.step_data(
-            'generate gn target list',
-            api.raw_io.stream_output(SAMPLE_GN_DESC_OUTPUT, stream='stdout')),
+        api.step_data('generate gn target list',
+                      api.raw_io.stream_output_text(SAMPLE_GN_DESC_OUTPUT)),
     )
 
   for buildername, _ in six.iteritems(SPEC['builders']):
     yield api.test(
         'full_%s_with_revision' % (_sanitize_nonalpha(buildername)),
         api.chromium.generic_build(builder=buildername),
-        api.step_data(
-            'generate gn target list',
-            api.raw_io.stream_output(SAMPLE_GN_DESC_OUTPUT, stream='stdout')),
+        api.step_data('generate gn target list',
+                      api.raw_io.stream_output_text(SAMPLE_GN_DESC_OUTPUT)),
         api.properties(
             root_solution_revision='a' * 40,
             root_solution_revision_timestamp=1531887759),
@@ -376,9 +374,8 @@ def GenTests(api):
       api.chromium.try_build(
           builder_group='tryserver.chromium.codesearch',
           builder='gen-linux-try'),
-      api.step_data(
-          'generate gn target list',
-          api.raw_io.stream_output(SAMPLE_GN_DESC_OUTPUT, stream='stdout')),
+      api.step_data('generate gn target list',
+                    api.raw_io.stream_output_text(SAMPLE_GN_DESC_OUTPUT)),
   )
 
   yield api.test(
@@ -386,9 +383,8 @@ def GenTests(api):
       _sanitize_nonalpha('codesearch-gen-chromium-win'),
       api.chromium.generic_build(builder='codesearch-gen-chromium-win'),
       api.step_data('delete old generated files', retcode=1),
-      api.step_data(
-          'generate gn target list',
-          api.raw_io.stream_output(SAMPLE_GN_DESC_OUTPUT, stream='stdout')),
+      api.step_data('generate gn target list',
+                    api.raw_io.stream_output_text(SAMPLE_GN_DESC_OUTPUT)),
   )
 
   yield api.test(
@@ -410,9 +406,8 @@ def GenTests(api):
       _sanitize_nonalpha('codesearch-gen-chromium-chromiumos'),
       api.chromium.generic_build(builder='codesearch-gen-chromium-chromiumos'),
       api.step_data('run translation_unit clang tool', retcode=2),
-      api.step_data(
-          'generate gn target list',
-          api.raw_io.stream_output(SAMPLE_GN_DESC_OUTPUT, stream='stdout')),
+      api.step_data('generate gn target list',
+                    api.raw_io.stream_output_text(SAMPLE_GN_DESC_OUTPUT)),
   )
 
   yield api.test(
@@ -427,9 +422,8 @@ def GenTests(api):
       _sanitize_nonalpha('codesearch-gen-chromium-win'),
       api.chromium.generic_build(builder='codesearch-gen-chromium-win'),
       api.step_data('set core.longpaths', retcode=1),
-      api.step_data(
-          'generate gn target list',
-          api.raw_io.stream_output(SAMPLE_GN_DESC_OUTPUT, stream='stdout')),
+      api.step_data('generate gn target list',
+                    api.raw_io.stream_output_text(SAMPLE_GN_DESC_OUTPUT)),
   )
 
   yield api.test(
@@ -437,7 +431,6 @@ def GenTests(api):
       _sanitize_nonalpha('codesearch-gen-chromium-linux'),
       api.chromium.generic_build(builder='codesearch-gen-chromium-linux'),
       api.step_data('sync generated files', retcode=1),
-      api.step_data(
-          'generate gn target list',
-          api.raw_io.stream_output(SAMPLE_GN_DESC_OUTPUT, stream='stdout')),
+      api.step_data('generate gn target list',
+                    api.raw_io.stream_output_text(SAMPLE_GN_DESC_OUTPUT)),
   )
