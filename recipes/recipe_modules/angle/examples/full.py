@@ -121,7 +121,6 @@ def GenTests(api):
         toolchain=toolchain,
         platform=platform,
         test_mode=test_mode,
-        experiments={'chromium.chromium_tests.use_rdb_results': True},
     ) + api.angle.builders(_TEST_BUILDERS) + api.angle.trybots(
         _TEST_TRYBOTS) + api.angle.override_commit_pos_data()
 

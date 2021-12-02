@@ -42,7 +42,6 @@ def GenTests(api):
             builder_group=builder_group,
             builder=builder,
             git_repo='https://chromium.googlesource.com/v8/v8.git',
-            experiments={'chromium.chromium_tests.use_rdb_results': True},
         ),
         api.properties(
             build_config=config, swarm_hashes=swarm_hashes, **kwargs),

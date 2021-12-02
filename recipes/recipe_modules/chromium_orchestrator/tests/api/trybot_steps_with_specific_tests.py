@@ -38,9 +38,7 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'test_failures_prevent_cq_retry',
-      api.chromium.try_build(
-          builder='linux-rel-orchestrator',
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      api.chromium.try_build(builder='linux-rel-orchestrator',),
       api.properties(
           **{
               '$build/chromium_orchestrator':
@@ -66,9 +64,7 @@ def GenTests(api):
 
   yield api.test(
       'invalid_tests_do_not_prevent_cq_retry',
-      api.chromium.try_build(
-          builder='linux-rel-orchestrator',
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      api.chromium.try_build(builder='linux-rel-orchestrator',),
       api.properties(
           **{
               '$build/chromium_orchestrator':
@@ -92,9 +88,7 @@ def GenTests(api):
 
   yield api.test(
       'skip_without_patch_does_not_prevent_cq_retry',
-      api.chromium.try_build(
-          builder='linux-rel-orchestrator',
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      api.chromium.try_build(builder='linux-rel-orchestrator',),
       api.properties(
           **{
               '$build/chromium_orchestrator':
@@ -122,9 +116,7 @@ def GenTests(api):
 
   yield api.test(
       'bot_update_failure_does_not_prevent_cq_retry',
-      api.chromium.try_build(
-          builder='linux-rel-orchestrator',
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      api.chromium.try_build(builder='linux-rel-orchestrator',),
       api.properties(
           **{
               '$build/chromium_orchestrator':
@@ -145,9 +137,7 @@ def GenTests(api):
   # If a test fails in 'with patch', it should be marked as a failing step.
   yield api.test(
       'recipe_step_is_failure_for_failing_test',
-      api.chromium.try_build(
-          builder='linux-rel-orchestrator',
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      api.chromium.try_build(builder='linux-rel-orchestrator',),
       api.properties(
           **{
               '$build/chromium_orchestrator':
@@ -177,10 +167,7 @@ def GenTests(api):
   # 'with patch'.
   yield api.test(
       'retry_swarming_priority',
-      api.chromium.try_build(
-          builder='linux-rel-orchestrator',
-          experiments={'chromium.chromium_tests.use_rdb_results': True},
-      ),
+      api.chromium.try_build(builder='linux-rel-orchestrator',),
       api.properties(
           **{
               '$build/chromium_orchestrator':
@@ -269,7 +256,7 @@ def GenTests(api):
         test_name,
         api.chromium.try_build(
             builder='linux-rel-orchestrator',
-            experiments={'chromium.chromium_tests.use_rdb_results': True}),
+            ),
         api.properties(
             **{
               '$build/chromium_orchestrator': InputProperties(
@@ -343,9 +330,7 @@ def GenTests(api):
   }
   yield api.test(
       'succeeded_to_exonerate_flaky_failures',
-      api.chromium.try_build(
-          builder='linux-rel-orchestrator',
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      api.chromium.try_build(builder='linux-rel-orchestrator',),
       api.properties(
           **{
               '$build/chromium_orchestrator':
@@ -407,9 +392,7 @@ def GenTests(api):
 
   yield api.test(
       'failed_to_exonerate_flaky_failures',
-      api.chromium.try_build(
-          builder='linux-rel-orchestrator',
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      api.chromium.try_build(builder='linux-rel-orchestrator',),
       api.properties(
           **{
               '$build/chromium_orchestrator':
@@ -469,9 +452,7 @@ def GenTests(api):
   # build is expected to be succeed without running "without patch" steps.
   yield api.test(
       'known_flaky_failure_failed_again_while_retrying',
-      api.chromium.try_build(
-          builder='linux-rel-orchestrator',
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      api.chromium.try_build(builder='linux-rel-orchestrator',),
       api.properties(
           **{
               '$build/chromium_orchestrator':
@@ -540,9 +521,7 @@ def GenTests(api):
   # expected to be retried during "without patch".
   yield api.test(
       'without_patch_only_retries_non_flaky_failures',
-      api.chromium.try_build(
-          builder='linux-rel-orchestrator',
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      api.chromium.try_build(builder='linux-rel-orchestrator',),
       api.properties(
           **{
               '$build/chromium_orchestrator':
@@ -616,9 +595,7 @@ def GenTests(api):
   tests = ['base_unittests', 'component_unittests', 'url_unittests']
   yield api.test(
       'summarize_both_retried_and_not_retried_test_suites',
-      api.chromium.try_build(
-          builder='linux-rel-orchestrator',
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      api.chromium.try_build(builder='linux-rel-orchestrator',),
       api.properties(
           **{
               '$build/chromium_orchestrator':

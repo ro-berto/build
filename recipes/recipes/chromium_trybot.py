@@ -83,7 +83,7 @@ def GenTests(api):
       api.chromium.generic_build(
           builder_group='fake-group',
           builder='fake-builder',
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      ),
       api.post_check(MustRun, 'not a tryjob'),
       api.post_check(StatusException),
       api.post_process(DropExpectation),
@@ -94,7 +94,7 @@ def GenTests(api):
       api.chromium.generic_build(
           builder_group='fake-group',
           builder='fake-builder',
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      ),
       api.properties(
           **{
               '$recipe_engine/led': {
@@ -115,8 +115,7 @@ def GenTests(api):
   yield api.test(
       'clobber_analyze',
       api.chromium_tests_builder_config.try_build(
-          builder='linux_chromium_clobber_rel_ng',
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+          builder='linux_chromium_clobber_rel_ng',),
       api.override_step_data(
           'analyze',
           api.json.output({
@@ -133,7 +132,7 @@ def GenTests(api):
       api.chromium_tests_builder_config.try_build(
           builder_group='tryserver.chromium.win',
           builder='win7-rel',
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      ),
       api.chromium_tests.read_source_side_spec('chromium.win', {
           'Win7 Tests (1)': {
               'gtest_tests': ['base_unittests'],
@@ -146,8 +145,7 @@ def GenTests(api):
 
   yield api.test(
       'local_gtest_with_invalid_results',
-      api.chromium_tests_builder_config.try_build(
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      api.chromium_tests_builder_config.try_build(),
       base_unittests_additional_compile_target(),
       api.filter.suppress_analyze(),
       api.override_step_data(
@@ -160,8 +158,7 @@ def GenTests(api):
 
   yield api.test(
       'script_test_with_overridden_compile_targets',
-      api.chromium_tests_builder_config.try_build(
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      api.chromium_tests_builder_config.try_build(),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
               'Linux Tests': {
@@ -176,8 +173,7 @@ def GenTests(api):
 
   yield api.test(
       'dynamic_isolated_script_test_on_trybot_passing',
-      api.chromium_tests_builder_config.try_build(
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      api.chromium_tests_builder_config.try_build(),
       swarm_hashes(extra_swarmed_tests=['telemetry_gpu_unittests']),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
@@ -199,7 +195,7 @@ def GenTests(api):
       api.chromium_tests_builder_config.try_build(
           builder_group='tryserver.chromium.mac',
           builder='mac-rel',
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      ),
       swarm_hashes(extra_swarmed_tests=['telemetry_gpu_unittests']),
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
@@ -223,8 +219,7 @@ def GenTests(api):
 
   yield api.test(
       'dynamic_isolated_script_test_on_trybot_failing',
-      api.chromium_tests_builder_config.try_build(
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      api.chromium_tests_builder_config.try_build(),
       swarm_hashes(extra_swarmed_tests=['telemetry_gpu_unittests']),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
@@ -251,8 +246,7 @@ def GenTests(api):
 
   yield api.test(
       'dynamic_isolated_script_test_with_args_on_trybot',
-      api.chromium_tests_builder_config.try_build(
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      api.chromium_tests_builder_config.try_build(),
       swarm_hashes(extra_swarmed_tests=['telemetry_gpu_unittests']),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
@@ -279,8 +273,7 @@ def GenTests(api):
 
   yield api.test(
       'dynamic_swarmed_isolated_script_test_failure_no_result_json',
-      api.chromium_tests_builder_config.try_build(
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      api.chromium_tests_builder_config.try_build(),
       swarm_hashes(extra_swarmed_tests=['telemetry_gpu_unittests']),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
@@ -303,8 +296,7 @@ def GenTests(api):
 
   yield api.test(
       'swarming_test_with_priority_expiration_and_timeout',
-      api.chromium_tests_builder_config.try_build(
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      api.chromium_tests_builder_config.try_build(),
       swarm_hashes(extra_swarmed_tests=['gl_tests']),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
@@ -324,8 +316,7 @@ def GenTests(api):
 
   yield api.test(
       'swarming_trigger_failure',
-      api.chromium_tests_builder_config.try_build(
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      api.chromium_tests_builder_config.try_build(),
       # Specifying empty swarm hashes will override the value of
       # isolate.isolated_tests so that when we attempt to run base_unittests
       # we get an error
@@ -346,8 +337,7 @@ def GenTests(api):
 
   yield api.test(
       'swarming_test_failure',
-      api.chromium_tests_builder_config.try_build(
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      api.chromium_tests_builder_config.try_build(),
       swarm_hashes(extra_swarmed_tests=['gl_tests']),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
@@ -367,8 +357,7 @@ def GenTests(api):
 
   yield api.test(
       'swarming_test_failure_no_patch_deapplication',
-      api.chromium_tests_builder_config.try_build(
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      api.chromium_tests_builder_config.try_build(),
       swarm_hashes(extra_swarmed_tests=['gl_tests']),
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
@@ -395,8 +384,7 @@ def GenTests(api):
 
   yield api.test(
       'compile_failure_without_patch_deapply_fn',
-      api.chromium_tests_builder_config.try_build(
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      api.chromium_tests_builder_config.try_build(),
       api.chromium_tests.read_source_side_spec('chromium.linux', {
           'Linux Tests': {
               'gtest_tests': ['base_unittests'],
@@ -414,8 +402,7 @@ def GenTests(api):
 
   yield api.test(
       'compile_failure_infra',
-      api.chromium_tests_builder_config.try_build(
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      api.chromium_tests_builder_config.try_build(),
       api.chromium_tests.read_source_side_spec('chromium.linux', {
           'Linux Tests': {
               'gtest_tests': ['base_unittests'],
@@ -437,8 +424,7 @@ def GenTests(api):
   for step in ('bot_update', 'gclient runhooks (with patch)'):
     yield api.test(
         _sanitize_nonalpha(step) + '_failure',
-        api.chromium_tests_builder_config.try_build(
-            experiments={'chromium.chromium_tests.use_rdb_results': True}),
+        api.chromium_tests_builder_config.try_build(),
         api.step_data(step, retcode=1),
     )
 
@@ -447,22 +433,20 @@ def GenTests(api):
       api.chromium_tests_builder_config.try_build(
           builder='win7-rel',
           builder_group='tryserver.chromium.win',
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      ),
       api.step_data('gclient runhooks (with patch)', retcode=1),
       api.step_data('gclient runhooks (without patch)', retcode=1),
   )
 
   yield api.test(
       'runhooks_failure_ng',
-      api.chromium_tests_builder_config.try_build(
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      api.chromium_tests_builder_config.try_build(),
       api.step_data('gclient runhooks (with patch)', retcode=1),
   )
 
   yield api.test(
       'compile_failure_ng',
-      api.chromium_tests_builder_config.try_build(
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      api.chromium_tests_builder_config.try_build(),
       api.filter.suppress_analyze(),
       base_unittests_additional_compile_target(),
       api.step_data('compile (with patch)', retcode=1),
@@ -477,7 +461,6 @@ def GenTests(api):
           builder_group='tryserver.v8',
           builder='v8_linux_chromium_gn_rel',
           git_repo='https://chromium.googlesource.com/v8/v8',
-          experiments={'chromium.chromium_tests.use_rdb_results': True},
       ),
       api.chromium_tests.read_source_side_spec('client.v8.fyi', {
           'V8 Linux GN': {
@@ -490,8 +473,7 @@ def GenTests(api):
 
   yield api.test(
       'compile_failure_without_patch_ng',
-      api.chromium_tests_builder_config.try_build(
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      api.chromium_tests_builder_config.try_build(),
       api.filter.suppress_analyze(),
       base_unittests_additional_compile_target(),
       api.step_data('compile (with patch)', retcode=1),
@@ -501,8 +483,7 @@ def GenTests(api):
   # commit queue job.
   yield api.test(
       'swarming_basic_cq',
-      api.chromium_tests_builder_config.try_build(
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      api.chromium_tests_builder_config.try_build(),
       swarm_hashes(extra_swarmed_tests=['base_unittests', 'browser_tests']),
       api.filter.suppress_analyze(),
   )
@@ -511,8 +492,7 @@ def GenTests(api):
   # manual try job.
   yield api.test(
       'swarming_basic_try_job',
-      api.chromium_tests_builder_config.try_build(
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      api.chromium_tests_builder_config.try_build(),
       swarm_hashes(extra_swarmed_tests=['base_unittests', 'browser_tests']),
       api.filter.suppress_analyze(),
   )
@@ -520,8 +500,7 @@ def GenTests(api):
   # One target (browser_tests) failed to produce *.isolated file.
   yield api.test(
       'swarming_missing_isolated',
-      api.chromium_tests_builder_config.try_build(
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      api.chromium_tests_builder_config.try_build(),
       swarm_hashes(extra_swarmed_tests=['base_unittests']),
       api.filter.suppress_analyze(),
   )
@@ -529,8 +508,7 @@ def GenTests(api):
   # Does not result in a compile
   yield api.test(
       'no_compile_because_of_analyze',
-      api.chromium_tests_builder_config.try_build(
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      api.chromium_tests_builder_config.try_build(),
       api.chromium_tests.read_source_side_spec('chromium.linux', {}),
       api.post_process(DoesNotRun, 'compile (with patch)'),
       api.post_process(Filter('analyze')),
@@ -539,8 +517,7 @@ def GenTests(api):
   # This should result in a compile.
   yield api.test(
       'compile_because_of_analyze_matching_exclusion',
-      api.chromium_tests_builder_config.try_build(
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      api.chromium_tests_builder_config.try_build(),
       api.chromium_tests.read_source_side_spec('chromium.linux', {}),
       api.filter.suppress_analyze(),
       base_unittests_additional_compile_target(),
@@ -552,8 +529,7 @@ def GenTests(api):
   # This should result in a compile.
   yield api.test(
       'compile_because_of_analyze',
-      api.chromium_tests_builder_config.try_build(
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      api.chromium_tests_builder_config.try_build(),
       api.chromium_tests.read_source_side_spec('chromium.linux', {}),
       api.override_step_data(
           'analyze',
@@ -568,8 +544,7 @@ def GenTests(api):
   # Tests compile_targets portion of analyze module with filtered tests
   yield api.test(
       'compile_because_of_analyze_with_filtered_tests',
-      api.chromium_tests_builder_config.try_build(
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      api.chromium_tests_builder_config.try_build(),
       api.override_step_data(
           'analyze',
           api.json.output({
@@ -583,8 +558,7 @@ def GenTests(api):
   # Tests compile_target portion of analyze module with filtered compile targets
   yield api.test(
       'compile_because_of_analyze_with_filtered_compile_targets',
-      api.chromium_tests_builder_config.try_build(
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      api.chromium_tests_builder_config.try_build(),
       api.override_step_data(
           'analyze',
           api.json.output({
@@ -599,8 +573,7 @@ def GenTests(api):
   # 'all' target.
   yield api.test(
       'compile_because_of_analyze_with_filtered_compile_targets_exclude_all',
-      api.chromium_tests_builder_config.try_build(
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      api.chromium_tests_builder_config.try_build(),
       api.chromium_tests.read_source_side_spec('chromium.linux', {
           'Linux Tests': {
               'gtest_tests': ['base_unittests'],
@@ -620,8 +593,7 @@ def GenTests(api):
   # 'all' target.
   yield api.test(
       'analyze_finds_invalid_target',
-      api.chromium_tests_builder_config.try_build(
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      api.chromium_tests_builder_config.try_build(),
       api.chromium_tests.read_source_side_spec('chromium.linux', {
           'Linux Tests': {
               'gtest_tests': ['base_unittests'],
@@ -641,14 +613,12 @@ def GenTests(api):
           builder='win7-rel',
           builder_group='tryserver.chromium.win',
           git_repo='https://chromium.googlesource.com/v8/v8',
-          experiments={'chromium.chromium_tests.use_rdb_results': True},
       ),
   )
 
   yield api.test(
       'chromium_trybot_gerrit_feature_branch',
-      api.chromium_tests_builder_config.try_build(
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      api.chromium_tests_builder_config.try_build(),
       api.filter.suppress_analyze(),
       base_unittests_additional_compile_target(),
       api.step_data('compile (with patch)', retcode=1),
@@ -659,15 +629,13 @@ def GenTests(api):
   yield api.test(
       'use_webrtc_patch_on_chromium_trybot',
       api.chromium_tests_builder_config.try_build(
-          git_repo='https://webrtc.googlesource.com/src',
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+          git_repo='https://webrtc.googlesource.com/src',),
   )
 
   yield api.test(
       'use_webrtc_patch_on_chromium_trybot_compile_failure',
       api.chromium_tests_builder_config.try_build(
-          git_repo='https://webrtc.googlesource.com/src',
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+          git_repo='https://webrtc.googlesource.com/src',),
       base_unittests_additional_compile_target(),
       api.filter.suppress_analyze(more_exclusions=['third_party/webrtc/f.*']),
       api.step_data('compile (with patch)', retcode=1),
@@ -679,13 +647,12 @@ def GenTests(api):
           builder='win7-rel',
           builder_group='tryserver.chromium.win',
           git_repo='https://skia.googlesource.com/skia',
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      ),
   )
 
   def swarmed_webkit_tests():
     return sum([
-        api.chromium_tests_builder_config.try_build(
-            experiments={'chromium.chromium_tests.use_rdb_results': True}),
+        api.chromium_tests_builder_config.try_build(),
         swarm_hashes(extra_swarmed_tests=['blink_web_tests']),
         api.chromium_tests.read_source_side_spec(
             'chromium.linux', {
@@ -737,7 +704,7 @@ def GenTests(api):
           builder_group='tryserver.blink',
           builder='mac10.12-blink-rel',
           git_repo='https://skia.googlesource.com/skia',
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      ),
   )
 
   yield api.test(
@@ -746,7 +713,7 @@ def GenTests(api):
           builder_group='tryserver.blink',
           builder='mac10.12-blink-rel',
           git_repo='https://chromium.googlesource.com/v8/v8',
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      ),
   )
 
 
@@ -774,8 +741,7 @@ def GenTests(api):
   # shards.
   yield api.test(
       'sorted',
-      api.chromium_tests_builder_config.try_build(
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      api.chromium_tests_builder_config.try_build(),
       swarm_hashes(extra_swarmed_tests=[
           '1_gtest', '2_isolated_tests', '3_isolated_tests', '5_gtest',
           '6_isolated_tests', '10_gtest'

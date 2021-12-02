@@ -99,7 +99,7 @@ def GenTests(api):
                       ),
               },
           }),
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      ),
       api.properties(swarm_hashes=fake_swarm_hashes),
       api.chromium_tests.read_source_side_spec(*fake_source_side_spec),
       api.step_data('find command lines', api.json.output(fake_command_lines)),
@@ -126,7 +126,7 @@ def GenTests(api):
                       ),
               },
           }),
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      ),
       api.properties(swarm_hashes=fake_swarm_hashes),
       api.chromium_tests.read_source_side_spec(*fake_source_side_spec),
       api.step_data('find command lines', api.json.output(fake_command_lines)),
@@ -154,7 +154,7 @@ def GenTests(api):
                       ),
               },
           }),
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      ),
       api.properties(swarm_hashes=fake_swarm_hashes),
       api.chromium_tests.read_source_side_spec(*fake_source_side_spec),
       api.step_data('find command lines', api.json.output(fake_command_lines)),
@@ -182,7 +182,7 @@ def GenTests(api):
           builder_group=fake_group,
           builder=fake_builder,
           builder_db=fake_builder_db,
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      ),
       api.properties(swarm_hashes=fake_swarm_hashes),
       api.chromium_tests.read_source_side_spec(*fake_source_side_spec),
       api.step_data('find command lines', api.json.output(fake_command_lines)),
@@ -201,7 +201,7 @@ def GenTests(api):
           builder_group=fake_group,
           builder=fake_tester,
           builder_db=fake_builder_db,
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      ),
       api.properties(
           swarm_hashes=fake_swarm_hashes,
           swarming_command_lines_digest=fake_command_lines_digest,
@@ -224,7 +224,7 @@ def GenTests(api):
           builder=fake_tester,
           parent_buildername=fake_builder,
           builder_db=fake_builder_db,
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      ),
       api.chromium_tests.read_source_side_spec(
           fake_group, {
               fake_tester: {
@@ -259,7 +259,7 @@ def GenTests(api):
                       ])
               }
           }),
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      ),
       api.properties(
           config='Release',
           swarm_hashes=fake_swarm_hashes,
@@ -301,7 +301,7 @@ def GenTests(api):
                       ),
               },
           }),
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      ),
       api.properties(swarm_hashes=fake_swarm_hashes),
       api.chromium_tests.read_source_side_spec(
           fake_group, {
@@ -338,7 +338,7 @@ def GenTests(api):
                       ),
               },
           }),
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      ),
       api.properties(swarm_hashes=fake_swarm_hashes),
       api.chromium_tests.read_source_side_spec(
           fake_group, {
@@ -414,7 +414,7 @@ def GenTests(api):
                       ),
               },
           }),
-          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      ),
       api.properties(swarm_hashes=fake_swarm_hashes),
       api.chromium_tests.read_source_side_spec(
           fake_group, {

@@ -114,7 +114,6 @@ def GenTests(api):
     return api.chromium.ci_build(
         builder_group='test_group',
         builder='test_buildername',
-        experiments={'chromium.chromium_tests.use_rdb_results': True},
     )
 
   yield api.test(
