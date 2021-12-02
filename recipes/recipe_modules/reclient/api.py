@@ -496,8 +496,7 @@ class ReclientApi(recipe_api.RecipeApi):
       gzip_data = f_out.getvalue()
       if self._test_data.enabled:
         gzip_data = 'fake gzip data'
-      self.m.file.write_raw(
-          'create ninja log gzip', gzip_path, gzip_data, include_log=False)
+      self.m.file.write_raw('create ninja log gzip', gzip_path, gzip_data)
 
     gs_filename = '%s/reclient/%s' % (time_now.date().strftime('%Y/%m/%d'),
                                       gzip_filename)
@@ -547,8 +546,7 @@ class ReclientApi(recipe_api.RecipeApi):
       tar_data = tar_out.getvalue()
       if self._test_data.enabled:
         tar_data = 'fake tar contents'
-      self.m.file.write_raw(
-          'create reclient log tar', tar_path, tar_data, include_log=False)
+      self.m.file.write_raw('create reclient log tar', tar_path, tar_data)
     gs_filename = '%s/reclient/%s' % (
         gzip_name_maker.timestamp.date().strftime('%Y/%m/%d'), tar_filename)
     self.m.gsutil.upload(tar_path, _GS_BUCKET, gs_filename,
