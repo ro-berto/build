@@ -1542,7 +1542,7 @@ TRYBOTS = try_spec.TryDatabase.create({
                 try_spec.TryMirror.create(
                     builder_group='chromium.mac',
                     buildername='Mac Builder',
-                    tester='Mac11 Tests',
+                    tester='Mac10.15 Tests',
                 ),
                 try_spec.TryMirror.create(
                     builder_group='chromium.gpu',
@@ -1561,7 +1561,7 @@ TRYBOTS = try_spec.TryDatabase.create({
                 try_spec.TryMirror.create(
                     builder_group='chromium.mac',
                     buildername='Mac Builder',
-                    tester='Mac11 Tests',
+                    tester='Mac10.15 Tests',
                 ),
                 try_spec.TryMirror.create(
                     builder_group='chromium.gpu',
@@ -1581,7 +1581,7 @@ TRYBOTS = try_spec.TryDatabase.create({
                 try_spec.TryMirror.create(
                     builder_group='chromium.mac',
                     buildername='Mac Builder',
-                    tester='Mac11 Tests',
+                    tester='Mac10.15 Tests',
                 ),
                 try_spec.TryMirror.create(
                     builder_group='chromium.gpu',
@@ -1601,7 +1601,7 @@ TRYBOTS = try_spec.TryDatabase.create({
                 try_spec.TryMirror.create(
                     builder_group='chromium.mac',
                     buildername='Mac Builder',
-                    tester='Mac11 Tests',
+                    tester='Mac10.15 Tests',
                 ),
                 try_spec.TryMirror.create(
                     builder_group='chromium.gpu',

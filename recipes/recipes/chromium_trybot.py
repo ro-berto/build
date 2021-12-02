@@ -199,7 +199,7 @@ def GenTests(api):
       swarm_hashes(extra_swarmed_tests=['telemetry_gpu_unittests']),
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
-              'Mac11 Tests': {
+              'Mac10.15 Tests': {
                   'isolated_scripts': [{
                       'isolate_name': 'telemetry_gpu_unittests',
                       'name': 'telemetry_gpu_unittests',
