@@ -1590,6 +1590,12 @@
       "none",
       "fake-task-id"
     ],
+    "cost": {
+      "cpu": 100,
+      "disk": 0,
+      "memory": 50,
+      "net": 0
+    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -1880,6 +1886,12 @@
       "none",
       "fake-task-id"
     ],
+    "cost": {
+      "cpu": 100,
+      "disk": 0,
+      "memory": 50,
+      "net": 0
+    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -2170,6 +2182,12 @@
       "none",
       "fake-task-id"
     ],
+    "cost": {
+      "cpu": 100,
+      "disk": 0,
+      "memory": 50,
+      "net": 0
+    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -2460,6 +2478,12 @@
       "none",
       "fake-task-id"
     ],
+    "cost": {
+      "cpu": 100,
+      "disk": 0,
+      "memory": 50,
+      "net": 0
+    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -2750,6 +2774,12 @@
       "none",
       "fake-task-id"
     ],
+    "cost": {
+      "cpu": 100,
+      "disk": 0,
+      "memory": 50,
+      "net": 0
+    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -3040,6 +3070,12 @@
       "none",
       "fake-task-id"
     ],
+    "cost": {
+      "cpu": 100,
+      "disk": 0,
+      "memory": 50,
+      "net": 0
+    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -3330,6 +3366,12 @@
       "none",
       "fake-task-id"
     ],
+    "cost": {
+      "cpu": 100,
+      "disk": 0,
+      "memory": 50,
+      "net": 0
+    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -3620,6 +3662,12 @@
       "none",
       "fake-task-id"
     ],
+    "cost": {
+      "cpu": 100,
+      "disk": 0,
+      "memory": 50,
+      "net": 0
+    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -3910,6 +3958,12 @@
       "none",
       "fake-task-id"
     ],
+    "cost": {
+      "cpu": 100,
+      "disk": 0,
+      "memory": 50,
+      "net": 0
+    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -4200,6 +4254,12 @@
       "none",
       "fake-task-id"
     ],
+    "cost": {
+      "cpu": 100,
+      "disk": 0,
+      "memory": 50,
+      "net": 0
+    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -4490,6 +4550,12 @@
       "none",
       "fake-task-id"
     ],
+    "cost": {
+      "cpu": 100,
+      "disk": 0,
+      "memory": 50,
+      "net": 0
+    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -4780,6 +4846,12 @@
       "none",
       "fake-task-id"
     ],
+    "cost": {
+      "cpu": 100,
+      "disk": 0,
+      "memory": 50,
+      "net": 0
+    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -5070,6 +5142,12 @@
       "none",
       "fake-task-id"
     ],
+    "cost": {
+      "cpu": 100,
+      "disk": 0,
+      "memory": 50,
+      "net": 0
+    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -5360,6 +5438,12 @@
       "none",
       "fake-task-id"
     ],
+    "cost": {
+      "cpu": 100,
+      "disk": 0,
+      "memory": 50,
+      "net": 0
+    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -5650,6 +5734,12 @@
       "none",
       "fake-task-id"
     ],
+    "cost": {
+      "cpu": 100,
+      "disk": 0,
+      "memory": 50,
+      "net": 0
+    },
     "infra_step": true,
     "luci_context": {
       "realm": {
