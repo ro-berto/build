@@ -102,7 +102,8 @@ class QueryTest(unittest.TestCase):
         bigquery.job.DestinationFormat.NEWLINE_DELIMITED_JSON)
 
     mock_client.query.assert_called_with(
-        query.TEST_HISTORY_QUERY.format(builder))
+        query.TEST_HISTORY_QUERY.format(query.EXPERIMENTAL_STEP_NAME_SUBSTRING,
+                                        builder))
     mock_client.extract_table.assert_called_with(mock.ANY, output_gs_path,
                                                  mock.ANY)
 

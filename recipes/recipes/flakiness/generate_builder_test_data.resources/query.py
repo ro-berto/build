@@ -6,7 +6,6 @@
 import argparse
 import json
 import logging
-import os
 import sys
 
 from google.cloud import bigquery
@@ -18,13 +17,17 @@ FETCH_BUILDER_QUERY = """
     FROM
       `chrome-flakiness.flake_endorser.try_historical_test_data_7_days`
   """
+# A substring that only appears in step_name tag of experimental tests' results.
+# "experimental" is the last part of step suffix (wrapped in brackets) which is
+# part of the step name. (https://bit.ly/3I4Enc6)
+EXPERIMENTAL_STEP_NAME_SUBSTRING = 'experimental)'
 TEST_HISTORY_QUERY = """
     SELECT
       test_id,
       variant_hash,
       variant,
-      tag,
-      ARRAY_AGG(invocation) AS invocation,
+      CONTAINS_SUBSTR(tag, \'{})\') AS is_experimental,
+      ARRAY_AGG(invocation) AS invocation
     FROM
       `chrome-flakiness.flake_endorser.try_historical_test_data_7_days`
     WHERE
@@ -33,7 +36,7 @@ TEST_HISTORY_QUERY = """
       test_id,
       variant_hash,
       variant,
-      tag
+      is_experimental
   """
 
 
@@ -53,7 +56,7 @@ def fetch_builders(bq, args):
 def query_test_history(bq, args):
   builder = args.builder
   logging.info('Searching test history for %s' % builder)
-  query = TEST_HISTORY_QUERY.format(builder)
+  query = TEST_HISTORY_QUERY.format(EXPERIMENTAL_STEP_NAME_SUBSTRING, builder)
   query_job = bq.query(query)
   query_job.result()
   logging.info('Query completed. Uploading results to GS bucket.')
