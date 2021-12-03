@@ -1153,3 +1153,81 @@ def GenTests(api):
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
   )
+
+  yield api.test(
+      'flakiness_in_experimental_suite_is_non_fatal',
+      api.chromium_tests_builder_config.try_build(
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
+          builder_db=builder_db,
+          try_db=ctbc.TryDatabase.create({
+              'fake-try-group': {
+                  'fake-try-builder':
+                      ctbc.TrySpec.create_for_single_mirror(
+                          builder_group='fake-group',
+                          buildername='fake-builder',
+                      ),
+              },
+          }),
+          experiments={'chromium.chromium_tests.use_rdb_results': True}),
+      api.chromium_tests.read_source_side_spec(
+          'fake-group', {
+              'fake-builder': {
+                  'isolated_scripts': [{
+                      "isolate_name":
+                          "ios_chrome_bookmarks_eg2tests_module",
+                      "name": ("ios_chrome_bookmarks_eg2tests_module_iPad "
+                               "Air 2 14.4"),
+                      "swarming": {
+                          "can_use_on_swarming_builders": True,
+                          "dimension_sets": [{
+                              "os": "Mac-11"
+                          }],
+                      },
+                      "experiment_percentage":
+                          100,
+                      "test_id_prefix":
+                          ("ninja://ios/chrome/test/earl_grey2:"
+                           "ios_chrome_bookmarks_eg2tests_module/")
+                  },],
+              },
+          }),
+      api.flakiness(
+          check_for_flakiness=True,
+          build_count=10,
+          historical_query_count=2,
+          current_query_count=2,
+      ),
+      # This overrides the file check to ensure that we have test files
+      # in the given patch.
+      api.step_data(
+          'git diff to analyze patch (2)',
+          api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
+      api.filter.suppress_analyze(),
+      # Search for all past invocations for builder
+      api.buildbucket.simulated_search_results(
+          builds=build_database,
+          step_name='searching_for_new_tests.fetch previously run invocations'),
+      api.resultdb.query(
+          inv_bundle=current_patchset_invocations,
+          step_name=('searching_for_new_tests.'
+                     'fetch test variants for current patchset')),
+      api.resultdb.get_test_result_history(
+          recent_run,
+          step_name=(
+              'searching_for_new_tests.'
+              'cross reference newly identified tests against ResultDB')),
+      api.override_step_data(
+          ('test new tests for flakiness.'
+           'ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 '
+           '(check flakiness, experimental) on Mac-11'),
+          api.chromium_swarming.canned_summary_output(
+              api.json.output({}), failure=False)),
+      api.resultdb.query(
+          inv_bundle=flaky_results,
+          step_name=(
+              'test new tests for flakiness.'
+              'ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 results')),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )

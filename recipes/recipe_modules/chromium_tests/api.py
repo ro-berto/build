@@ -23,6 +23,7 @@ from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 from RECIPE_MODULES.build.chromium_tests_builder_config import try_spec
 
 from . import generators
+from .steps import ExperimentalTest
 from .targets_config import TargetsConfig
 
 # These account ids are obtained by looking at gerrit API responses.
@@ -1787,7 +1788,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
               status=common_pb.FAILURE)
 
     failure_counts = collections.defaultdict(int)
-    flaky_tests = []
+    # In this step, flaky tests in experimental suites (test objects) are non
+    # fatal, otherwise they are fatal and will fail the build.
+    flaky_non_experimental_test_objects = []
+    flaky_experimental_test_objects = []
     with self.m.step.nest('calculate flake rates') as p:
       p.step_text = (
           'Tests that have exceeded the tolerated flake rate most likely '
@@ -1803,22 +1807,33 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
               failure_counts[key] += 1
               flaky = True
         if flaky:
-          flaky_tests.append(t)
+          if isinstance(t, ExperimentalTest):
+            flaky_experimental_test_objects.append(t)
+          else:
+            flaky_non_experimental_test_objects.append(t)
 
-      if flaky_tests and failure_counts:
-        p.status = self.m.step.FAILURE
+      # Equivalent to `if failure_counts:`.
+      if flaky_experimental_test_objects or flaky_non_experimental_test_objects:
         p.logs['flaky tests'] = ('\n'.join([
             'test: {}, # of failures: {}, total # of runs: {}'.format(
                 k, v, self.m.flakiness._repeat_count)
             for k, v in failure_counts.items()
         ]))
 
-        # TODO(crbug/1204163) - Update the summary markdown to reflect flaky
-        # tests and their flake rates for easier identification.
-        return result_pb2.RawResult(
-            summary_markdown=self._format_unrecoverable_failures(
-                flaky_tests, suffix),
-            status=common_pb.FAILURE)
+        if flaky_non_experimental_test_objects:
+          p.status = self.m.step.FAILURE
+          # TODO(crbug/1204163) - Update the summary markdown to reflect flaky
+          # tests and their flake rates for easier identification for fatal and
+          # non-fatal flakiness.
+          return result_pb2.RawResult(
+              summary_markdown=self._format_unrecoverable_failures(
+                  flaky_non_experimental_test_objects, suffix),
+              status=common_pb.FAILURE)
+
+        # When there is non fatal flakiness, let users know why the build
+        # doesn't fail.
+        p.step_text += ('\nFlaky tests in logs are non fatal because they come '
+                        'from experimental suites.')
 
     return None
 

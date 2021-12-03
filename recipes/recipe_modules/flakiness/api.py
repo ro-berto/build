@@ -472,7 +472,7 @@ class FlakinessApi(recipe_api.RecipeApi):
       # canonical name.
       variants = new_test.variants
       if ('test_suite' in variants and
-          variants['test_suite'] != test_object.spec.canonical_name):
+          variants['test_suite'] != test_object.canonical_name):
         return False
 
       if hasattr(test_object.spec, 'dimensions'):
@@ -497,13 +497,12 @@ class FlakinessApi(recipe_api.RecipeApi):
       test_filter = []
       # find whether the Test object has a matching test_id.
       for new_test in new_tests:
-        if (test.spec.test_id_prefix in new_test.test_id and
+        if (test.test_id_prefix in new_test.test_id and
             _do_variants_match(test, new_test)):
           # test_id = test_id_prefix + {A full test_suite + test_name
           # representation}, so we use the test_id_prefix to split out
           # the test_suite and test_name
-          test_filter.append(
-              new_test.test_id.split(test.spec.test_id_prefix)[-1])
+          test_filter.append(new_test.test_id.split(test.test_id_prefix)[-1])
       if test_filter:
         test_copy = copy.copy(test)
         options = steps.TestOptions(
