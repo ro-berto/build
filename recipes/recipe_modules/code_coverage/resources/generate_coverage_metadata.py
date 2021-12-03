@@ -279,7 +279,6 @@ def _to_compressed_file_record(src_path, file_coverage_data, diff_mapping=None):
     return None
 
   filename = file_coverage_data['filename']
-  rel_file_path = os.path.relpath(filename, src_path)
   # TODO(crbug.com/1010267) Remove prefixes when Clang supports relative paths
   # for coverage.
   prefixes = [
@@ -303,8 +302,8 @@ def _to_compressed_file_record(src_path, file_coverage_data, diff_mapping=None):
 
   line_data, block_data = _extract_coverage_info(segments)
 
-  if diff_mapping is not None and rel_file_path in diff_mapping:
-    line_mapping = diff_mapping[rel_file_path]
+  if diff_mapping is not None and coverage_path in diff_mapping:
+    line_mapping = diff_mapping[coverage_path]
     line_data, block_data = _rebase_line_and_block_data(line_data, block_data,
                                                         line_mapping)
 

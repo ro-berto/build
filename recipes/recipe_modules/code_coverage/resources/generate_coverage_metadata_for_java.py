@@ -165,8 +165,12 @@ def _get_file_coverage_data(file_path, source_file, diff_mapping):
   return file_coverage
 
 
-def _get_files_coverage_data(src_path, root, source_dirs, diff_mapping,
-                             source_files):
+def _get_files_coverage_data(src_path,
+                             root,
+                             source_dirs,
+                             diff_mapping,
+                             source_files,
+                             exclusion_pattern=None):
   """Gets the files coverage data based on Jacoco XML report.
 
   Args:
@@ -177,6 +181,7 @@ def _get_files_coverage_data(src_path, root, source_dirs, diff_mapping,
       per-cl coverage.
     source_files: List of source files to generate coverage data for,
       paths relative to code checkout. Only meaningful to per-cl coverage.
+    exclusion_pattern: A regex string to exclude matches from aggregation.
 
   Returns:
     A list of files coverage data.
@@ -222,6 +227,9 @@ def _get_files_coverage_data(src_path, root, source_dirs, diff_mapping,
       if diff_mapping and file_path not in files_set:
         continue
 
+      if exclusion_pattern and re.match(exclusion_pattern, file_path):
+        continue
+
       logging.info('Processing file %s', '//' + file_path)
       file_coverage = _get_file_coverage_data(file_path, source_file,
                                               diff_mapping)
@@ -238,8 +246,13 @@ def _get_files_coverage_data(src_path, root, source_dirs, diff_mapping,
   return files_coverage_data
 
 
-def generate_json_coverage_metadata(
-    src_path, root, source_dirs, component_mapping, diff_mapping, source_files):
+def generate_json_coverage_metadata(src_path,
+                                    root,
+                                    source_dirs,
+                                    component_mapping,
+                                    diff_mapping,
+                                    source_files,
+                                    exclusion_pattern=None):
   """Generates a JSON representation based on Jacoco XML report.
 
   JSON format conforms to the proto:
@@ -255,13 +268,15 @@ def generate_json_coverage_metadata(
       per-cl coverage.
     source_files: List of source files to generate coverage data for,
       paths relative to code checkout. Only meaningful to per-cl coverage.
+    exclusion_pattern: A regex string to exclude matches from aggregation.
 
   Returns:
     JSON format coverage metadata.
   """
   data = {}
   data['files'] = _get_files_coverage_data(src_path, root, source_dirs,
-                                           diff_mapping, source_files)
+                                           diff_mapping, source_files,
+                                           exclusion_pattern)
 
   # Add per directory and component coverage data.
   if data['files'] and component_mapping:
@@ -334,6 +349,10 @@ def _parse_args(args):
       type=str,
       help='Regex pattern for .exec filenames to be considered '
       'for generating metadata.')
+  parser.add_argument(
+      '--exclusion-pattern',
+      type=str,
+      help='regex pattern for sources to exclude from aggregation')
   params = parser.parse_args(args=args)
 
   if params.dir_metadata_path and not os.path.isfile(params.dir_metadata_path):
@@ -430,7 +449,8 @@ def main():
       root = ElementTree.parse(xml).getroot()
       data = generate_json_coverage_metadata(params.src_path, root, source_dirs,
                                              component_mapping, diff_mapping,
-                                             params.source_files)
+                                             params.source_files,
+                                             params.exclusion_pattern)
       logging.info('Writing fulfilled Java coverage metadata to %s',
                    params.output_dir)
       with open(os.path.join(params.output_dir, exported_filename), 'w') as f:

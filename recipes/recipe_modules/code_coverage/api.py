@@ -562,6 +562,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
             ("%s\.exec" % constants.PLATFORM_TO_TARGET_NAME_PATTERN_MAP[
                 self.platform][self._current_processing_test_type])
         ])
+        args.extend(['--exclusion-pattern', constants.TEST_FILE_REGEX])
         self.m.python(
             'Generate Java coverage metadata',
             self.resource('generate_coverage_metadata_for_java.py'),
@@ -906,12 +907,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
               constants.BOT_TO_GERRIT_LINE_NUM_MAPPING_FILE_NAME)
       ])
     else:
-      pattern = (
-          constants.EXCLUDE_SOURCES.get(self._exclude_sources_key)
-          if self._exclude_sources_key else [])
-      if pattern:
-        args.extend(['--exclusion-pattern', pattern])
-
+      args.extend(['--exclusion-pattern', constants.TEST_FILE_REGEX])
       if self._include_component_mapping:
         args.extend(['--dir-metadata-path', self._generate_dir_metadata()])
 

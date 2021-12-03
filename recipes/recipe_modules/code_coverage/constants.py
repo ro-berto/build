@@ -22,14 +22,8 @@ TOOLS_TO_EXTENSIONS_MAP = {
     'v8': ['.js']
 }
 
-# Map exclude_sources property value to files that are to be excluded from
-# coverage aggregates.
-EXCLUDE_SOURCES = {
-    'all_test_files':
-        r'.*test.*',
-    'ios_test_files_and_test_utils':
-        r'.+\/test(ing)?\/.+|.+_(unit|int|eg)tests?\.(mm|cc|m)',
-}
+# Regex to identify test code
+TEST_FILE_REGEX = r'.+\/test(s|ing)?\/.+|.+(T|t)ests?\..*'
 
 # Only generate coverage data for CLs in these gerrit projects.
 # This is a list of (host, project) pairs
@@ -80,4 +74,3 @@ PLATFORM_TO_TARGET_NAME_PATTERN_MAP = {
 }
 PLATFORM_TO_TARGET_NAME_PATTERN_MAP[
     'linux64'] = PLATFORM_TO_TARGET_NAME_PATTERN_MAP['linux']
-
