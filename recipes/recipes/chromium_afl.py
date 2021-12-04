@@ -8,12 +8,11 @@ from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 from RECIPE_MODULES.build.attr_utils import attrs, attrib
 from RECIPE_MODULES.build import chromium
 
-PYTHON_VERSION_COMPATIBILITY = "PY2+3"
+PYTHON_VERSION_COMPATIBILITY = "PY3"
 
 DEPS = [
     'archive',
     'chromium',
-    'py3_migration',
     'depot_tools/bot_update',
     'depot_tools/depot_tools',
     'recipe_engine/json',
@@ -88,8 +87,7 @@ def RunSteps(api):
            '--type=executable',
            '--as=output',
            '//testing/libfuzzer:no_clusterfuzz'])
-  targets = list(set(all_fuzzers).difference(set(no_clusterfuzz)))
-  targets = api.py3_migration.consistent_ordering(targets)
+  targets = sorted(set(all_fuzzers).difference(set(no_clusterfuzz)))
   api.step.active_result.presentation.logs['all_fuzzers'] = all_fuzzers
   api.step.active_result.presentation.logs['no_clusterfuzz'] = no_clusterfuzz
   api.step.active_result.presentation.logs['targets'] = targets
