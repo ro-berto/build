@@ -68,15 +68,18 @@ SPEC.update([
     _config(
         'lacros-amd64-generic-binary-size-rel',
         cros_boards='amd64-generic',
+        gclient_apply_config=['checkout_lacros_sdk'],
     ),
     _config(
         'lacros-amd64-generic-rel',
         cros_boards='eve',
         cros_boards_with_qemu_images='amd64-generic',
+        gclient_apply_config=['checkout_lacros_sdk'],
     ),
     _config(
         'lacros-arm-generic-rel',
         cros_boards='arm-generic',
+        gclient_apply_config=['checkout_lacros_sdk'],
     ),
     _config('linux-ash-chromium-generator-rel'),
     _config('linux-chromeos-rel', gclient_apply_config=['use_clang_coverage']),

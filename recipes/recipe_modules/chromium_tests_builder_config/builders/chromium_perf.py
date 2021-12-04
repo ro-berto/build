@@ -185,7 +185,7 @@ SPEC.update({
     'chromeos-amd64-generic-lacros-builder-perf':
         builder_spec.BuilderSpec.create(
             chromium_config='chromium_perf',
-            gclient_apply_config=['chromeos'],
+            gclient_apply_config=['chromeos', 'checkout_lacros_sdk'],
             gclient_config='chromium_perf',
             perf_isolate_upload=True,
             chromium_config_kwargs={

@@ -200,7 +200,7 @@ SPEC = {
             # TODO(crbug.com/1217155): Fix this.
             chromium_apply_config=['mb', 'mb_no_luci_auth'],
             gclient_config='chromium',
-            gclient_apply_config=['chromeos'],
+            gclient_apply_config=['chromeos', 'checkout_lacros_sdk'],
             chromium_config_kwargs={
                 'TARGET_BITS': 64,
                 'TARGET_CROS_BOARDS': 'eve',
@@ -1249,7 +1249,9 @@ SPEC = {
             chromium_config='chromium',
             chromium_apply_config=['mb'],
             gclient_config='chromium',
-            gclient_apply_config=['chromeos', 'enable_reclient'],
+            gclient_apply_config=[
+                'chromeos', 'enable_reclient', 'checkout_lacros_sdk'
+            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_ARCH': 'intel',
@@ -1264,7 +1266,7 @@ SPEC = {
             chromium_config='chromium',
             chromium_apply_config=['mb', 'goma_enable_cache_silo'],
             gclient_config='chromium',
-            gclient_apply_config=['chromeos'],
+            gclient_apply_config=['chromeos', 'checkout_lacros_sdk'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_ARCH': 'intel',
