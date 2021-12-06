@@ -9,20 +9,13 @@ from recipe_engine import recipe_api
 from recipe_engine import util as recipe_util
 
 from . import canonical
-from .util import GTestResults, RDBPerSuiteResults, RDBResults, TestResults
+from .util import GTestResults, RDBPerSuiteResults, RDBResults
 
 from PB.go.chromium.org.luci.resultdb.proto.v1 import (test_result as
                                                        test_result_pb2)
 
 from RECIPE_MODULES.build.chromium_tests import steps
 from RECIPE_MODULES.recipe_engine.json.api import JsonOutputPlaceholder
-
-
-class TestResultsOutputPlaceholder(JsonOutputPlaceholder):
-
-  def result(self, presentation, test):
-    ret = super(TestResultsOutputPlaceholder, self).result(presentation, test)
-    return TestResults(ret)
 
 
 class GTestResultsOutputPlaceholder(JsonOutputPlaceholder):
@@ -49,11 +42,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
   failing tests. This helps confirm whether the failures were flakes or
   deterministic errors.
   """
-
-  # Some test runners (such as run_web_tests.py and python tests) returns the
-  # number of failures as the return code. They need to cap the return code at
-  # 101 to avoid overflow or colliding with reserved values from the shell.
-  MAX_FAILURES_EXIT_STATUS = 101
 
   # This magic string is depended on by other infra tools.
   INVALID_RESULTS_MAGIC = 'TEST RESULTS WERE INVALID'
@@ -1129,19 +1117,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
     ]
     args += self.m.build.slave_utils_args
     self.m.build.python('archive_test_results_summary', script, args)
-
-  def create_results_from_json(self, data):
-    return TestResults(data)
-
-  @recipe_util.returns_placeholder
-  def test_results(self, add_json_log=True):
-    """A placeholder which will expand to '/tmp/file'.
-
-    The recipe must provide the expected --json-test-results flag.
-
-    The test_results will be an instance of the TestResults class.
-    """
-    return TestResultsOutputPlaceholder(self, add_json_log)
 
   @recipe_util.returns_placeholder
   def gtest_results(self, add_json_log=True, leak_to=None):
