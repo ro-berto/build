@@ -23,7 +23,7 @@ TOOLS_TO_EXTENSIONS_MAP = {
 }
 
 # Regex to identify test code
-TEST_FILE_REGEX = r'.+\/test(s|ing)?\/.+|.+(T|t)ests?\..*'
+TEST_FILE_REGEX = r'(^|.+\/)test(s|ing)?\/.+|.+(T|t)ests?\..*'
 
 # Only generate coverage data for CLs in these gerrit projects.
 # This is a list of (host, project) pairs
