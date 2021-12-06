@@ -431,19 +431,20 @@ def _get_cl_category_to_trigger(affected_files, affected_recipes, builder,
 
 
 def _test_builder(api, affected_files, affected_recipes, builder, led_builder,
-                  recipes_cfg_path, bundle):
+                  recipes_cfg_path):
   """Try running a builder with the patched recipe.
 
   Args:
     api - The recipe API object.
+    presentation - The step presentation for the top-level step for the
+      builder.
     affected_files - The set of files affected by the change.
     affected_recipes - The set of recipes affected by the change.
     builder - The name of the builder to test.
-    led_builder - The led job definition for the builder.
+    led_builder - The led job definition for the builder. It must
+      already have had its recipe bundle modified.
     recipes_cfg_path - A Path object identifying the location of the
       recipes.cfg file.
-    bundle - A Bundle object that can be applied to an led job to edit
-      the recipe bundle.
 
   Raises:
     InfraFailure if any of the led calls fail.
@@ -473,7 +474,6 @@ def _test_builder(api, affected_files, affected_recipes, builder, led_builder,
       step_result.presentation.links['Test CL ({})'.format(cl_key)] = cl
       presentation.links.update(step_result.presentation.links)
 
-      ir = bundle.apply(ir)
       # We used to set `is_experimental` to true, but the chromium recipe
       # currently uses that to deprioritize swarming tasks, which results in
       # very slow runtimes for the led task. Because this recipe blocks the
@@ -537,37 +537,25 @@ def RunSteps(api):
 
   api.swarming.ensure_client()
 
-  # TODO(https://crbug.com/1088020) Switch to using the led module's bundle
-  # functionality when it is ready
-  class Bundle(object):
-
-    def __init__(self):
-      self._future = api.futures.spawn(self._create_bundle)
-
-    @staticmethod
-    def _create_bundle():
-      # It doesn't matter which builder the led job belongs to, the recipe
-      # bundle will be the same, so just bundle it once and apply the hash to
-      # each one in the trigger greenlets
-      led_job = next(six.itervalues(led_builders))
-      with api.step.nest('bundle recipes'), api.context(
-          cwd=repo_path, infra_steps=True):
-        led_out = led_job.then('edit-recipe-bundle')
-      return led_out.edit_rbh_value
-
-    def apply(self, led_job):
-      return led_job.then('edit', '-rbh', self._future.result())
-
-  bundle = Bundle()
-
   futures = []
   for builder in builders_to_trigger:
     if builder.name not in led_builders:
       continue
-    led_builder = led_builders[builder.name]
+    # Edit the recipe bundle in the main greenlet so that it is serialized to
+    # avoid the concurrency issues of edit-recipe-bundle.
+    #
+    # TODO(crbug.com/1088020) If edit-recipe-bundle is made concurrency safe, it
+    # can be done in the _test_builder call. If a solution is added that
+    # performs the bundle once and has the same bootstrap support as
+    # edit-recipe-bundle, switch to that.
+    with api.step.nest('edit recipe bundle for {}'.format(builder.name)):
+      with api.context(cwd=repo_path):
+        led_builder = led_builders[builder.name]
+        led_builder = led_builder.then('edit-recipe-bundle')
     futures.append(
-        api.futures.spawn(_test_builder, api, affected_files, affected_recipes,
-                          builder, led_builder, recipes_cfg_path, bundle))
+        api.futures.spawn_immediate(_test_builder, api, affected_files,
+                                    affected_recipes, builder, led_builder,
+                                    recipes_cfg_path))
 
   for f in api.futures.wait(futures):
     f.result()

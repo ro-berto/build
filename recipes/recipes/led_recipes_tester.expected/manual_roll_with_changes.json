@@ -1118,7 +1118,7 @@
   },
   {
     "cmd": [],
-    "name": "bundle recipes"
+    "name": "edit recipe bundle for luci.chromium.try:chromium_presubmit"
   },
   {
     "cmd": [
@@ -1126,7 +1126,6 @@
       "edit-recipe-bundle"
     ],
     "cwd": "[CACHE]/builder/baz",
-    "infra_step": true,
     "luci_context": {
       "realm": {
         "name": "project:try"
@@ -1139,7 +1138,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "bundle recipes.led edit-recipe-bundle",
+    "name": "edit recipe bundle for luci.chromium.try:chromium_presubmit.led edit-recipe-bundle",
     "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"chromium_presubmit\",\n          \"project\": \"chromium\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  }\n}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1210,66 +1209,7 @@
       }
     },
     "name": "test luci.chromium.try:chromium_presubmit.trigger.led edit-cr-cl",
-    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"chromium_presubmit\",\n          \"project\": \"chromium\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  }\n}",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@proto.output@{@@@",
-      "@@@STEP_LOG_LINE@proto.output@  \"buildbucket\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@    \"bbagent_args\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@      \"build\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@        \"builder\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"bucket\": \"try\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"builder\": \"chromium_presubmit\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"project\": \"chromium\"@@@",
-      "@@@STEP_LOG_LINE@proto.output@        },@@@",
-      "@@@STEP_LOG_LINE@proto.output@        \"infra\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@            \"priority\": 40@@@",
-      "@@@STEP_LOG_LINE@proto.output@          }@@@",
-      "@@@STEP_LOG_LINE@proto.output@        },@@@",
-      "@@@STEP_LOG_LINE@proto.output@        \"input\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"gerrit_changes\": [@@@",
-      "@@@STEP_LOG_LINE@proto.output@            {@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"change\": \"3299047\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"host\": \"chromium-review.googlesource.com\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"patchset\": \"1337\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"project\": \"chromium/src\"@@@",
-      "@@@STEP_LOG_LINE@proto.output@            }@@@",
-      "@@@STEP_LOG_LINE@proto.output@          ],@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"properties\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@            \"recipe\": \"foo_recipe\"@@@",
-      "@@@STEP_LOG_LINE@proto.output@          }@@@",
-      "@@@STEP_LOG_LINE@proto.output@        }@@@",
-      "@@@STEP_LOG_LINE@proto.output@      }@@@",
-      "@@@STEP_LOG_LINE@proto.output@    }@@@",
-      "@@@STEP_LOG_LINE@proto.output@  }@@@",
-      "@@@STEP_LOG_LINE@proto.output@}@@@",
-      "@@@STEP_LOG_END@proto.output@@@",
-      "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/3299047@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "led",
-      "edit",
-      "-rbh",
-      "aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be/1337"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "project:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "test luci.chromium.try:chromium_presubmit.trigger.led edit",
-    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"chromium_presubmit\",\n          \"project\": \"chromium\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"gerrit_changes\": [\n            {\n              \"change\": \"3299047\",\n              \"host\": \"chromium-review.googlesource.com\",\n              \"patchset\": \"1337\",\n              \"project\": \"chromium/src\"\n            }\n          ],\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  }\n}",
+    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"chromium_presubmit\",\n          \"project\": \"chromium\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  },\n  \"cas_user_payload\": {\n    \"digest\": {\n      \"hash\": \"aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be\",\n      \"size_bytes\": \"1337\"\n    }\n  }\n}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@proto.output@{@@@",
@@ -1309,7 +1249,8 @@
       "@@@STEP_LOG_LINE@proto.output@    }@@@",
       "@@@STEP_LOG_LINE@proto.output@  }@@@",
       "@@@STEP_LOG_LINE@proto.output@}@@@",
-      "@@@STEP_LOG_END@proto.output@@@"
+      "@@@STEP_LOG_END@proto.output@@@",
+      "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/3299047@@@"
     ]
   },
   {
@@ -1332,7 +1273,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "test luci.chromium.try:chromium_presubmit.trigger.led edit (2)",
+    "name": "test luci.chromium.try:chromium_presubmit.trigger.led edit",
     "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"chromium_presubmit\",\n          \"project\": \"chromium\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"gerrit_changes\": [\n            {\n              \"change\": \"3299047\",\n              \"host\": \"chromium-review.googlesource.com\",\n              \"patchset\": \"1337\",\n              \"project\": \"chromium/src\"\n            }\n          ],\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  },\n  \"cas_user_payload\": {\n    \"digest\": {\n      \"hash\": \"aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be\",\n      \"size_bytes\": \"1337\"\n    }\n  }\n}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -1473,6 +1414,64 @@
   },
   {
     "cmd": [],
+    "name": "edit recipe bundle for luci.chromium.try:linux-rel"
+  },
+  {
+    "cmd": [
+      "led",
+      "edit-recipe-bundle"
+    ],
+    "cwd": "[CACHE]/builder/baz",
+    "luci_context": {
+      "realm": {
+        "name": "project:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "edit recipe bundle for luci.chromium.try:linux-rel.led edit-recipe-bundle",
+    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"linux-rel\",\n          \"project\": \"chromium\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  }\n}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@proto.output@{@@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"buildbucket\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"bbagent_args\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"build\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"builder\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"bucket\": \"try\",@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"builder\": \"linux-rel\",@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"project\": \"chromium\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@        },@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"infra\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"swarming\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"priority\": 40@@@",
+      "@@@STEP_LOG_LINE@proto.output@          }@@@",
+      "@@@STEP_LOG_LINE@proto.output@        },@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"input\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"recipe\": \"foo_recipe\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@          }@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }@@@",
+      "@@@STEP_LOG_LINE@proto.output@      }@@@",
+      "@@@STEP_LOG_LINE@proto.output@    }@@@",
+      "@@@STEP_LOG_LINE@proto.output@  },@@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"cas_user_payload\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"digest\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"hash\": \"aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be\",@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"size_bytes\": \"1337\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@    }@@@",
+      "@@@STEP_LOG_LINE@proto.output@  }@@@",
+      "@@@STEP_LOG_LINE@proto.output@}@@@",
+      "@@@STEP_LOG_END@proto.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
     "name": "test luci.chromium.try:linux-rel",
     "~followup_annotations": [
       "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/3299047@@@",
@@ -1506,66 +1505,7 @@
       }
     },
     "name": "test luci.chromium.try:linux-rel.trigger.led edit-cr-cl",
-    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"linux-rel\",\n          \"project\": \"chromium\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  }\n}",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@proto.output@{@@@",
-      "@@@STEP_LOG_LINE@proto.output@  \"buildbucket\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@    \"bbagent_args\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@      \"build\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@        \"builder\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"bucket\": \"try\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"builder\": \"linux-rel\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"project\": \"chromium\"@@@",
-      "@@@STEP_LOG_LINE@proto.output@        },@@@",
-      "@@@STEP_LOG_LINE@proto.output@        \"infra\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@            \"priority\": 40@@@",
-      "@@@STEP_LOG_LINE@proto.output@          }@@@",
-      "@@@STEP_LOG_LINE@proto.output@        },@@@",
-      "@@@STEP_LOG_LINE@proto.output@        \"input\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"gerrit_changes\": [@@@",
-      "@@@STEP_LOG_LINE@proto.output@            {@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"change\": \"3299047\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"host\": \"chromium-review.googlesource.com\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"patchset\": \"1337\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"project\": \"chromium/src\"@@@",
-      "@@@STEP_LOG_LINE@proto.output@            }@@@",
-      "@@@STEP_LOG_LINE@proto.output@          ],@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"properties\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@            \"recipe\": \"foo_recipe\"@@@",
-      "@@@STEP_LOG_LINE@proto.output@          }@@@",
-      "@@@STEP_LOG_LINE@proto.output@        }@@@",
-      "@@@STEP_LOG_LINE@proto.output@      }@@@",
-      "@@@STEP_LOG_LINE@proto.output@    }@@@",
-      "@@@STEP_LOG_LINE@proto.output@  }@@@",
-      "@@@STEP_LOG_LINE@proto.output@}@@@",
-      "@@@STEP_LOG_END@proto.output@@@",
-      "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/3299047@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "led",
-      "edit",
-      "-rbh",
-      "aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be/1337"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "project:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "test luci.chromium.try:linux-rel.trigger.led edit",
-    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"linux-rel\",\n          \"project\": \"chromium\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"gerrit_changes\": [\n            {\n              \"change\": \"3299047\",\n              \"host\": \"chromium-review.googlesource.com\",\n              \"patchset\": \"1337\",\n              \"project\": \"chromium/src\"\n            }\n          ],\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  }\n}",
+    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"linux-rel\",\n          \"project\": \"chromium\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  },\n  \"cas_user_payload\": {\n    \"digest\": {\n      \"hash\": \"aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be\",\n      \"size_bytes\": \"1337\"\n    }\n  }\n}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@proto.output@{@@@",
@@ -1605,7 +1545,8 @@
       "@@@STEP_LOG_LINE@proto.output@    }@@@",
       "@@@STEP_LOG_LINE@proto.output@  }@@@",
       "@@@STEP_LOG_LINE@proto.output@}@@@",
-      "@@@STEP_LOG_END@proto.output@@@"
+      "@@@STEP_LOG_END@proto.output@@@",
+      "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/3299047@@@"
     ]
   },
   {
@@ -1628,7 +1569,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "test luci.chromium.try:linux-rel.trigger.led edit (2)",
+    "name": "test luci.chromium.try:linux-rel.trigger.led edit",
     "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"linux-rel\",\n          \"project\": \"chromium\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"gerrit_changes\": [\n            {\n              \"change\": \"3299047\",\n              \"host\": \"chromium-review.googlesource.com\",\n              \"patchset\": \"1337\",\n              \"project\": \"chromium/src\"\n            }\n          ],\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  },\n  \"cas_user_payload\": {\n    \"digest\": {\n      \"hash\": \"aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be\",\n      \"size_bytes\": \"1337\"\n    }\n  }\n}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -1769,6 +1710,64 @@
   },
   {
     "cmd": [],
+    "name": "edit recipe bundle for luci.chromium.try:win10_chromium_x64_rel_ng"
+  },
+  {
+    "cmd": [
+      "led",
+      "edit-recipe-bundle"
+    ],
+    "cwd": "[CACHE]/builder/baz",
+    "luci_context": {
+      "realm": {
+        "name": "project:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "edit recipe bundle for luci.chromium.try:win10_chromium_x64_rel_ng.led edit-recipe-bundle",
+    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"win10_chromium_x64_rel_ng\",\n          \"project\": \"chromium\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  }\n}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@proto.output@{@@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"buildbucket\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"bbagent_args\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"build\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"builder\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"bucket\": \"try\",@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"builder\": \"win10_chromium_x64_rel_ng\",@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"project\": \"chromium\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@        },@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"infra\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"swarming\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"priority\": 40@@@",
+      "@@@STEP_LOG_LINE@proto.output@          }@@@",
+      "@@@STEP_LOG_LINE@proto.output@        },@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"input\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"recipe\": \"foo_recipe\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@          }@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }@@@",
+      "@@@STEP_LOG_LINE@proto.output@      }@@@",
+      "@@@STEP_LOG_LINE@proto.output@    }@@@",
+      "@@@STEP_LOG_LINE@proto.output@  },@@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"cas_user_payload\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"digest\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"hash\": \"aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be\",@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"size_bytes\": \"1337\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@    }@@@",
+      "@@@STEP_LOG_LINE@proto.output@  }@@@",
+      "@@@STEP_LOG_LINE@proto.output@}@@@",
+      "@@@STEP_LOG_END@proto.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
     "name": "test luci.chromium.try:win10_chromium_x64_rel_ng",
     "~followup_annotations": [
       "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/3299047@@@",
@@ -1802,66 +1801,7 @@
       }
     },
     "name": "test luci.chromium.try:win10_chromium_x64_rel_ng.trigger.led edit-cr-cl",
-    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"win10_chromium_x64_rel_ng\",\n          \"project\": \"chromium\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  }\n}",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@proto.output@{@@@",
-      "@@@STEP_LOG_LINE@proto.output@  \"buildbucket\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@    \"bbagent_args\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@      \"build\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@        \"builder\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"bucket\": \"try\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"builder\": \"win10_chromium_x64_rel_ng\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"project\": \"chromium\"@@@",
-      "@@@STEP_LOG_LINE@proto.output@        },@@@",
-      "@@@STEP_LOG_LINE@proto.output@        \"infra\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@            \"priority\": 40@@@",
-      "@@@STEP_LOG_LINE@proto.output@          }@@@",
-      "@@@STEP_LOG_LINE@proto.output@        },@@@",
-      "@@@STEP_LOG_LINE@proto.output@        \"input\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"gerrit_changes\": [@@@",
-      "@@@STEP_LOG_LINE@proto.output@            {@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"change\": \"3299047\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"host\": \"chromium-review.googlesource.com\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"patchset\": \"1337\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"project\": \"chromium/src\"@@@",
-      "@@@STEP_LOG_LINE@proto.output@            }@@@",
-      "@@@STEP_LOG_LINE@proto.output@          ],@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"properties\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@            \"recipe\": \"foo_recipe\"@@@",
-      "@@@STEP_LOG_LINE@proto.output@          }@@@",
-      "@@@STEP_LOG_LINE@proto.output@        }@@@",
-      "@@@STEP_LOG_LINE@proto.output@      }@@@",
-      "@@@STEP_LOG_LINE@proto.output@    }@@@",
-      "@@@STEP_LOG_LINE@proto.output@  }@@@",
-      "@@@STEP_LOG_LINE@proto.output@}@@@",
-      "@@@STEP_LOG_END@proto.output@@@",
-      "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/3299047@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "led",
-      "edit",
-      "-rbh",
-      "aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be/1337"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "project:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "test luci.chromium.try:win10_chromium_x64_rel_ng.trigger.led edit",
-    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"win10_chromium_x64_rel_ng\",\n          \"project\": \"chromium\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"gerrit_changes\": [\n            {\n              \"change\": \"3299047\",\n              \"host\": \"chromium-review.googlesource.com\",\n              \"patchset\": \"1337\",\n              \"project\": \"chromium/src\"\n            }\n          ],\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  }\n}",
+    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"win10_chromium_x64_rel_ng\",\n          \"project\": \"chromium\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  },\n  \"cas_user_payload\": {\n    \"digest\": {\n      \"hash\": \"aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be\",\n      \"size_bytes\": \"1337\"\n    }\n  }\n}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@proto.output@{@@@",
@@ -1901,7 +1841,8 @@
       "@@@STEP_LOG_LINE@proto.output@    }@@@",
       "@@@STEP_LOG_LINE@proto.output@  }@@@",
       "@@@STEP_LOG_LINE@proto.output@}@@@",
-      "@@@STEP_LOG_END@proto.output@@@"
+      "@@@STEP_LOG_END@proto.output@@@",
+      "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/3299047@@@"
     ]
   },
   {
@@ -1924,7 +1865,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "test luci.chromium.try:win10_chromium_x64_rel_ng.trigger.led edit (2)",
+    "name": "test luci.chromium.try:win10_chromium_x64_rel_ng.trigger.led edit",
     "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"win10_chromium_x64_rel_ng\",\n          \"project\": \"chromium\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"gerrit_changes\": [\n            {\n              \"change\": \"3299047\",\n              \"host\": \"chromium-review.googlesource.com\",\n              \"patchset\": \"1337\",\n              \"project\": \"chromium/src\"\n            }\n          ],\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  },\n  \"cas_user_payload\": {\n    \"digest\": {\n      \"hash\": \"aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be\",\n      \"size_bytes\": \"1337\"\n    }\n  }\n}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -2065,6 +2006,64 @@
   },
   {
     "cmd": [],
+    "name": "edit recipe bundle for luci.chromium-m90.try:chromium_presubmit"
+  },
+  {
+    "cmd": [
+      "led",
+      "edit-recipe-bundle"
+    ],
+    "cwd": "[CACHE]/builder/baz",
+    "luci_context": {
+      "realm": {
+        "name": "project:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "edit recipe bundle for luci.chromium-m90.try:chromium_presubmit.led edit-recipe-bundle",
+    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"chromium_presubmit\",\n          \"project\": \"chromium-m90\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  }\n}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@proto.output@{@@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"buildbucket\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"bbagent_args\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"build\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"builder\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"bucket\": \"try\",@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"builder\": \"chromium_presubmit\",@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"project\": \"chromium-m90\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@        },@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"infra\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"swarming\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"priority\": 40@@@",
+      "@@@STEP_LOG_LINE@proto.output@          }@@@",
+      "@@@STEP_LOG_LINE@proto.output@        },@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"input\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"recipe\": \"foo_recipe\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@          }@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }@@@",
+      "@@@STEP_LOG_LINE@proto.output@      }@@@",
+      "@@@STEP_LOG_LINE@proto.output@    }@@@",
+      "@@@STEP_LOG_LINE@proto.output@  },@@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"cas_user_payload\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"digest\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"hash\": \"aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be\",@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"size_bytes\": \"1337\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@    }@@@",
+      "@@@STEP_LOG_LINE@proto.output@  }@@@",
+      "@@@STEP_LOG_LINE@proto.output@}@@@",
+      "@@@STEP_LOG_END@proto.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
     "name": "test luci.chromium-m90.try:chromium_presubmit",
     "~followup_annotations": [
       "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/2807949@@@",
@@ -2098,66 +2097,7 @@
       }
     },
     "name": "test luci.chromium-m90.try:chromium_presubmit.trigger.led edit-cr-cl",
-    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"chromium_presubmit\",\n          \"project\": \"chromium-m90\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  }\n}",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@proto.output@{@@@",
-      "@@@STEP_LOG_LINE@proto.output@  \"buildbucket\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@    \"bbagent_args\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@      \"build\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@        \"builder\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"bucket\": \"try\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"builder\": \"chromium_presubmit\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"project\": \"chromium-m90\"@@@",
-      "@@@STEP_LOG_LINE@proto.output@        },@@@",
-      "@@@STEP_LOG_LINE@proto.output@        \"infra\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@            \"priority\": 40@@@",
-      "@@@STEP_LOG_LINE@proto.output@          }@@@",
-      "@@@STEP_LOG_LINE@proto.output@        },@@@",
-      "@@@STEP_LOG_LINE@proto.output@        \"input\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"gerrit_changes\": [@@@",
-      "@@@STEP_LOG_LINE@proto.output@            {@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"change\": \"2807949\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"host\": \"chromium-review.googlesource.com\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"patchset\": \"1337\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"project\": \"chromium/src\"@@@",
-      "@@@STEP_LOG_LINE@proto.output@            }@@@",
-      "@@@STEP_LOG_LINE@proto.output@          ],@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"properties\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@            \"recipe\": \"foo_recipe\"@@@",
-      "@@@STEP_LOG_LINE@proto.output@          }@@@",
-      "@@@STEP_LOG_LINE@proto.output@        }@@@",
-      "@@@STEP_LOG_LINE@proto.output@      }@@@",
-      "@@@STEP_LOG_LINE@proto.output@    }@@@",
-      "@@@STEP_LOG_LINE@proto.output@  }@@@",
-      "@@@STEP_LOG_LINE@proto.output@}@@@",
-      "@@@STEP_LOG_END@proto.output@@@",
-      "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/2807949@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "led",
-      "edit",
-      "-rbh",
-      "aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be/1337"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "project:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "test luci.chromium-m90.try:chromium_presubmit.trigger.led edit",
-    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"chromium_presubmit\",\n          \"project\": \"chromium-m90\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"gerrit_changes\": [\n            {\n              \"change\": \"2807949\",\n              \"host\": \"chromium-review.googlesource.com\",\n              \"patchset\": \"1337\",\n              \"project\": \"chromium/src\"\n            }\n          ],\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  }\n}",
+    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"chromium_presubmit\",\n          \"project\": \"chromium-m90\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  },\n  \"cas_user_payload\": {\n    \"digest\": {\n      \"hash\": \"aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be\",\n      \"size_bytes\": \"1337\"\n    }\n  }\n}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@proto.output@{@@@",
@@ -2197,7 +2137,8 @@
       "@@@STEP_LOG_LINE@proto.output@    }@@@",
       "@@@STEP_LOG_LINE@proto.output@  }@@@",
       "@@@STEP_LOG_LINE@proto.output@}@@@",
-      "@@@STEP_LOG_END@proto.output@@@"
+      "@@@STEP_LOG_END@proto.output@@@",
+      "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/2807949@@@"
     ]
   },
   {
@@ -2220,7 +2161,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "test luci.chromium-m90.try:chromium_presubmit.trigger.led edit (2)",
+    "name": "test luci.chromium-m90.try:chromium_presubmit.trigger.led edit",
     "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"chromium_presubmit\",\n          \"project\": \"chromium-m90\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"gerrit_changes\": [\n            {\n              \"change\": \"2807949\",\n              \"host\": \"chromium-review.googlesource.com\",\n              \"patchset\": \"1337\",\n              \"project\": \"chromium/src\"\n            }\n          ],\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  },\n  \"cas_user_payload\": {\n    \"digest\": {\n      \"hash\": \"aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be\",\n      \"size_bytes\": \"1337\"\n    }\n  }\n}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -2361,6 +2302,64 @@
   },
   {
     "cmd": [],
+    "name": "edit recipe bundle for luci.chromium-m90.try:linux-rel"
+  },
+  {
+    "cmd": [
+      "led",
+      "edit-recipe-bundle"
+    ],
+    "cwd": "[CACHE]/builder/baz",
+    "luci_context": {
+      "realm": {
+        "name": "project:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "edit recipe bundle for luci.chromium-m90.try:linux-rel.led edit-recipe-bundle",
+    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"linux-rel\",\n          \"project\": \"chromium-m90\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  }\n}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@proto.output@{@@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"buildbucket\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"bbagent_args\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"build\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"builder\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"bucket\": \"try\",@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"builder\": \"linux-rel\",@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"project\": \"chromium-m90\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@        },@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"infra\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"swarming\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"priority\": 40@@@",
+      "@@@STEP_LOG_LINE@proto.output@          }@@@",
+      "@@@STEP_LOG_LINE@proto.output@        },@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"input\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"recipe\": \"foo_recipe\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@          }@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }@@@",
+      "@@@STEP_LOG_LINE@proto.output@      }@@@",
+      "@@@STEP_LOG_LINE@proto.output@    }@@@",
+      "@@@STEP_LOG_LINE@proto.output@  },@@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"cas_user_payload\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"digest\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"hash\": \"aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be\",@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"size_bytes\": \"1337\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@    }@@@",
+      "@@@STEP_LOG_LINE@proto.output@  }@@@",
+      "@@@STEP_LOG_LINE@proto.output@}@@@",
+      "@@@STEP_LOG_END@proto.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
     "name": "test luci.chromium-m90.try:linux-rel",
     "~followup_annotations": [
       "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/2807949@@@",
@@ -2394,66 +2393,7 @@
       }
     },
     "name": "test luci.chromium-m90.try:linux-rel.trigger.led edit-cr-cl",
-    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"linux-rel\",\n          \"project\": \"chromium-m90\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  }\n}",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@proto.output@{@@@",
-      "@@@STEP_LOG_LINE@proto.output@  \"buildbucket\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@    \"bbagent_args\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@      \"build\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@        \"builder\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"bucket\": \"try\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"builder\": \"linux-rel\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"project\": \"chromium-m90\"@@@",
-      "@@@STEP_LOG_LINE@proto.output@        },@@@",
-      "@@@STEP_LOG_LINE@proto.output@        \"infra\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@            \"priority\": 40@@@",
-      "@@@STEP_LOG_LINE@proto.output@          }@@@",
-      "@@@STEP_LOG_LINE@proto.output@        },@@@",
-      "@@@STEP_LOG_LINE@proto.output@        \"input\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"gerrit_changes\": [@@@",
-      "@@@STEP_LOG_LINE@proto.output@            {@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"change\": \"2807949\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"host\": \"chromium-review.googlesource.com\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"patchset\": \"1337\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"project\": \"chromium/src\"@@@",
-      "@@@STEP_LOG_LINE@proto.output@            }@@@",
-      "@@@STEP_LOG_LINE@proto.output@          ],@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"properties\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@            \"recipe\": \"foo_recipe\"@@@",
-      "@@@STEP_LOG_LINE@proto.output@          }@@@",
-      "@@@STEP_LOG_LINE@proto.output@        }@@@",
-      "@@@STEP_LOG_LINE@proto.output@      }@@@",
-      "@@@STEP_LOG_LINE@proto.output@    }@@@",
-      "@@@STEP_LOG_LINE@proto.output@  }@@@",
-      "@@@STEP_LOG_LINE@proto.output@}@@@",
-      "@@@STEP_LOG_END@proto.output@@@",
-      "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/2807949@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "led",
-      "edit",
-      "-rbh",
-      "aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be/1337"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "project:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "test luci.chromium-m90.try:linux-rel.trigger.led edit",
-    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"linux-rel\",\n          \"project\": \"chromium-m90\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"gerrit_changes\": [\n            {\n              \"change\": \"2807949\",\n              \"host\": \"chromium-review.googlesource.com\",\n              \"patchset\": \"1337\",\n              \"project\": \"chromium/src\"\n            }\n          ],\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  }\n}",
+    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"linux-rel\",\n          \"project\": \"chromium-m90\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  },\n  \"cas_user_payload\": {\n    \"digest\": {\n      \"hash\": \"aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be\",\n      \"size_bytes\": \"1337\"\n    }\n  }\n}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@proto.output@{@@@",
@@ -2493,7 +2433,8 @@
       "@@@STEP_LOG_LINE@proto.output@    }@@@",
       "@@@STEP_LOG_LINE@proto.output@  }@@@",
       "@@@STEP_LOG_LINE@proto.output@}@@@",
-      "@@@STEP_LOG_END@proto.output@@@"
+      "@@@STEP_LOG_END@proto.output@@@",
+      "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/2807949@@@"
     ]
   },
   {
@@ -2516,7 +2457,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "test luci.chromium-m90.try:linux-rel.trigger.led edit (2)",
+    "name": "test luci.chromium-m90.try:linux-rel.trigger.led edit",
     "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"linux-rel\",\n          \"project\": \"chromium-m90\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"gerrit_changes\": [\n            {\n              \"change\": \"2807949\",\n              \"host\": \"chromium-review.googlesource.com\",\n              \"patchset\": \"1337\",\n              \"project\": \"chromium/src\"\n            }\n          ],\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  },\n  \"cas_user_payload\": {\n    \"digest\": {\n      \"hash\": \"aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be\",\n      \"size_bytes\": \"1337\"\n    }\n  }\n}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -2657,6 +2598,64 @@
   },
   {
     "cmd": [],
+    "name": "edit recipe bundle for luci.chromium-m90.try:win10_chromium_x64_rel_ng"
+  },
+  {
+    "cmd": [
+      "led",
+      "edit-recipe-bundle"
+    ],
+    "cwd": "[CACHE]/builder/baz",
+    "luci_context": {
+      "realm": {
+        "name": "project:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "edit recipe bundle for luci.chromium-m90.try:win10_chromium_x64_rel_ng.led edit-recipe-bundle",
+    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"win10_chromium_x64_rel_ng\",\n          \"project\": \"chromium-m90\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  }\n}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@proto.output@{@@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"buildbucket\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"bbagent_args\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"build\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"builder\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"bucket\": \"try\",@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"builder\": \"win10_chromium_x64_rel_ng\",@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"project\": \"chromium-m90\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@        },@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"infra\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"swarming\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"priority\": 40@@@",
+      "@@@STEP_LOG_LINE@proto.output@          }@@@",
+      "@@@STEP_LOG_LINE@proto.output@        },@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"input\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"recipe\": \"foo_recipe\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@          }@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }@@@",
+      "@@@STEP_LOG_LINE@proto.output@      }@@@",
+      "@@@STEP_LOG_LINE@proto.output@    }@@@",
+      "@@@STEP_LOG_LINE@proto.output@  },@@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"cas_user_payload\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"digest\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"hash\": \"aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be\",@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"size_bytes\": \"1337\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@    }@@@",
+      "@@@STEP_LOG_LINE@proto.output@  }@@@",
+      "@@@STEP_LOG_LINE@proto.output@}@@@",
+      "@@@STEP_LOG_END@proto.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
     "name": "test luci.chromium-m90.try:win10_chromium_x64_rel_ng",
     "~followup_annotations": [
       "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/2807949@@@",
@@ -2690,66 +2689,7 @@
       }
     },
     "name": "test luci.chromium-m90.try:win10_chromium_x64_rel_ng.trigger.led edit-cr-cl",
-    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"win10_chromium_x64_rel_ng\",\n          \"project\": \"chromium-m90\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  }\n}",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@proto.output@{@@@",
-      "@@@STEP_LOG_LINE@proto.output@  \"buildbucket\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@    \"bbagent_args\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@      \"build\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@        \"builder\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"bucket\": \"try\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"builder\": \"win10_chromium_x64_rel_ng\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"project\": \"chromium-m90\"@@@",
-      "@@@STEP_LOG_LINE@proto.output@        },@@@",
-      "@@@STEP_LOG_LINE@proto.output@        \"infra\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@            \"priority\": 40@@@",
-      "@@@STEP_LOG_LINE@proto.output@          }@@@",
-      "@@@STEP_LOG_LINE@proto.output@        },@@@",
-      "@@@STEP_LOG_LINE@proto.output@        \"input\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"gerrit_changes\": [@@@",
-      "@@@STEP_LOG_LINE@proto.output@            {@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"change\": \"2807949\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"host\": \"chromium-review.googlesource.com\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"patchset\": \"1337\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"project\": \"chromium/src\"@@@",
-      "@@@STEP_LOG_LINE@proto.output@            }@@@",
-      "@@@STEP_LOG_LINE@proto.output@          ],@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"properties\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@            \"recipe\": \"foo_recipe\"@@@",
-      "@@@STEP_LOG_LINE@proto.output@          }@@@",
-      "@@@STEP_LOG_LINE@proto.output@        }@@@",
-      "@@@STEP_LOG_LINE@proto.output@      }@@@",
-      "@@@STEP_LOG_LINE@proto.output@    }@@@",
-      "@@@STEP_LOG_LINE@proto.output@  }@@@",
-      "@@@STEP_LOG_LINE@proto.output@}@@@",
-      "@@@STEP_LOG_END@proto.output@@@",
-      "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/2807949@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "led",
-      "edit",
-      "-rbh",
-      "aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be/1337"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "project:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "test luci.chromium-m90.try:win10_chromium_x64_rel_ng.trigger.led edit",
-    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"win10_chromium_x64_rel_ng\",\n          \"project\": \"chromium-m90\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"gerrit_changes\": [\n            {\n              \"change\": \"2807949\",\n              \"host\": \"chromium-review.googlesource.com\",\n              \"patchset\": \"1337\",\n              \"project\": \"chromium/src\"\n            }\n          ],\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  }\n}",
+    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"win10_chromium_x64_rel_ng\",\n          \"project\": \"chromium-m90\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  },\n  \"cas_user_payload\": {\n    \"digest\": {\n      \"hash\": \"aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be\",\n      \"size_bytes\": \"1337\"\n    }\n  }\n}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@proto.output@{@@@",
@@ -2789,7 +2729,8 @@
       "@@@STEP_LOG_LINE@proto.output@    }@@@",
       "@@@STEP_LOG_LINE@proto.output@  }@@@",
       "@@@STEP_LOG_LINE@proto.output@}@@@",
-      "@@@STEP_LOG_END@proto.output@@@"
+      "@@@STEP_LOG_END@proto.output@@@",
+      "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/2807949@@@"
     ]
   },
   {
@@ -2812,7 +2753,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "test luci.chromium-m90.try:win10_chromium_x64_rel_ng.trigger.led edit (2)",
+    "name": "test luci.chromium-m90.try:win10_chromium_x64_rel_ng.trigger.led edit",
     "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"win10_chromium_x64_rel_ng\",\n          \"project\": \"chromium-m90\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"gerrit_changes\": [\n            {\n              \"change\": \"2807949\",\n              \"host\": \"chromium-review.googlesource.com\",\n              \"patchset\": \"1337\",\n              \"project\": \"chromium/src\"\n            }\n          ],\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  },\n  \"cas_user_payload\": {\n    \"digest\": {\n      \"hash\": \"aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be\",\n      \"size_bytes\": \"1337\"\n    }\n  }\n}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -2953,6 +2894,64 @@
   },
   {
     "cmd": [],
+    "name": "edit recipe bundle for luci.chromium-m96.try:chromium_presubmit"
+  },
+  {
+    "cmd": [
+      "led",
+      "edit-recipe-bundle"
+    ],
+    "cwd": "[CACHE]/builder/baz",
+    "luci_context": {
+      "realm": {
+        "name": "project:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "edit recipe bundle for luci.chromium-m96.try:chromium_presubmit.led edit-recipe-bundle",
+    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"chromium_presubmit\",\n          \"project\": \"chromium-m96\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  }\n}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@proto.output@{@@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"buildbucket\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"bbagent_args\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"build\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"builder\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"bucket\": \"try\",@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"builder\": \"chromium_presubmit\",@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"project\": \"chromium-m96\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@        },@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"infra\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"swarming\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"priority\": 40@@@",
+      "@@@STEP_LOG_LINE@proto.output@          }@@@",
+      "@@@STEP_LOG_LINE@proto.output@        },@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"input\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"recipe\": \"foo_recipe\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@          }@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }@@@",
+      "@@@STEP_LOG_LINE@proto.output@      }@@@",
+      "@@@STEP_LOG_LINE@proto.output@    }@@@",
+      "@@@STEP_LOG_LINE@proto.output@  },@@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"cas_user_payload\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"digest\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"hash\": \"aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be\",@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"size_bytes\": \"1337\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@    }@@@",
+      "@@@STEP_LOG_LINE@proto.output@  }@@@",
+      "@@@STEP_LOG_LINE@proto.output@}@@@",
+      "@@@STEP_LOG_END@proto.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
     "name": "test luci.chromium-m96.try:chromium_presubmit",
     "~followup_annotations": [
       "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/3219377@@@",
@@ -2986,66 +2985,7 @@
       }
     },
     "name": "test luci.chromium-m96.try:chromium_presubmit.trigger.led edit-cr-cl",
-    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"chromium_presubmit\",\n          \"project\": \"chromium-m96\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  }\n}",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@proto.output@{@@@",
-      "@@@STEP_LOG_LINE@proto.output@  \"buildbucket\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@    \"bbagent_args\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@      \"build\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@        \"builder\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"bucket\": \"try\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"builder\": \"chromium_presubmit\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"project\": \"chromium-m96\"@@@",
-      "@@@STEP_LOG_LINE@proto.output@        },@@@",
-      "@@@STEP_LOG_LINE@proto.output@        \"infra\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@            \"priority\": 40@@@",
-      "@@@STEP_LOG_LINE@proto.output@          }@@@",
-      "@@@STEP_LOG_LINE@proto.output@        },@@@",
-      "@@@STEP_LOG_LINE@proto.output@        \"input\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"gerrit_changes\": [@@@",
-      "@@@STEP_LOG_LINE@proto.output@            {@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"change\": \"3219377\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"host\": \"chromium-review.googlesource.com\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"patchset\": \"1337\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"project\": \"chromium/src\"@@@",
-      "@@@STEP_LOG_LINE@proto.output@            }@@@",
-      "@@@STEP_LOG_LINE@proto.output@          ],@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"properties\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@            \"recipe\": \"foo_recipe\"@@@",
-      "@@@STEP_LOG_LINE@proto.output@          }@@@",
-      "@@@STEP_LOG_LINE@proto.output@        }@@@",
-      "@@@STEP_LOG_LINE@proto.output@      }@@@",
-      "@@@STEP_LOG_LINE@proto.output@    }@@@",
-      "@@@STEP_LOG_LINE@proto.output@  }@@@",
-      "@@@STEP_LOG_LINE@proto.output@}@@@",
-      "@@@STEP_LOG_END@proto.output@@@",
-      "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/3219377@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "led",
-      "edit",
-      "-rbh",
-      "aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be/1337"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "project:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "test luci.chromium-m96.try:chromium_presubmit.trigger.led edit",
-    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"chromium_presubmit\",\n          \"project\": \"chromium-m96\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"gerrit_changes\": [\n            {\n              \"change\": \"3219377\",\n              \"host\": \"chromium-review.googlesource.com\",\n              \"patchset\": \"1337\",\n              \"project\": \"chromium/src\"\n            }\n          ],\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  }\n}",
+    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"chromium_presubmit\",\n          \"project\": \"chromium-m96\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  },\n  \"cas_user_payload\": {\n    \"digest\": {\n      \"hash\": \"aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be\",\n      \"size_bytes\": \"1337\"\n    }\n  }\n}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@proto.output@{@@@",
@@ -3085,7 +3025,8 @@
       "@@@STEP_LOG_LINE@proto.output@    }@@@",
       "@@@STEP_LOG_LINE@proto.output@  }@@@",
       "@@@STEP_LOG_LINE@proto.output@}@@@",
-      "@@@STEP_LOG_END@proto.output@@@"
+      "@@@STEP_LOG_END@proto.output@@@",
+      "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/3219377@@@"
     ]
   },
   {
@@ -3108,7 +3049,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "test luci.chromium-m96.try:chromium_presubmit.trigger.led edit (2)",
+    "name": "test luci.chromium-m96.try:chromium_presubmit.trigger.led edit",
     "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"chromium_presubmit\",\n          \"project\": \"chromium-m96\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"gerrit_changes\": [\n            {\n              \"change\": \"3219377\",\n              \"host\": \"chromium-review.googlesource.com\",\n              \"patchset\": \"1337\",\n              \"project\": \"chromium/src\"\n            }\n          ],\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  },\n  \"cas_user_payload\": {\n    \"digest\": {\n      \"hash\": \"aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be\",\n      \"size_bytes\": \"1337\"\n    }\n  }\n}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -3249,6 +3190,64 @@
   },
   {
     "cmd": [],
+    "name": "edit recipe bundle for luci.chromium-m96.try:linux-rel"
+  },
+  {
+    "cmd": [
+      "led",
+      "edit-recipe-bundle"
+    ],
+    "cwd": "[CACHE]/builder/baz",
+    "luci_context": {
+      "realm": {
+        "name": "project:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "edit recipe bundle for luci.chromium-m96.try:linux-rel.led edit-recipe-bundle",
+    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"linux-rel\",\n          \"project\": \"chromium-m96\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  }\n}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@proto.output@{@@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"buildbucket\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"bbagent_args\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"build\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"builder\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"bucket\": \"try\",@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"builder\": \"linux-rel\",@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"project\": \"chromium-m96\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@        },@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"infra\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"swarming\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"priority\": 40@@@",
+      "@@@STEP_LOG_LINE@proto.output@          }@@@",
+      "@@@STEP_LOG_LINE@proto.output@        },@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"input\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"recipe\": \"foo_recipe\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@          }@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }@@@",
+      "@@@STEP_LOG_LINE@proto.output@      }@@@",
+      "@@@STEP_LOG_LINE@proto.output@    }@@@",
+      "@@@STEP_LOG_LINE@proto.output@  },@@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"cas_user_payload\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"digest\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"hash\": \"aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be\",@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"size_bytes\": \"1337\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@    }@@@",
+      "@@@STEP_LOG_LINE@proto.output@  }@@@",
+      "@@@STEP_LOG_LINE@proto.output@}@@@",
+      "@@@STEP_LOG_END@proto.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
     "name": "test luci.chromium-m96.try:linux-rel",
     "~followup_annotations": [
       "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/3219377@@@",
@@ -3282,66 +3281,7 @@
       }
     },
     "name": "test luci.chromium-m96.try:linux-rel.trigger.led edit-cr-cl",
-    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"linux-rel\",\n          \"project\": \"chromium-m96\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  }\n}",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@proto.output@{@@@",
-      "@@@STEP_LOG_LINE@proto.output@  \"buildbucket\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@    \"bbagent_args\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@      \"build\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@        \"builder\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"bucket\": \"try\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"builder\": \"linux-rel\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"project\": \"chromium-m96\"@@@",
-      "@@@STEP_LOG_LINE@proto.output@        },@@@",
-      "@@@STEP_LOG_LINE@proto.output@        \"infra\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@            \"priority\": 40@@@",
-      "@@@STEP_LOG_LINE@proto.output@          }@@@",
-      "@@@STEP_LOG_LINE@proto.output@        },@@@",
-      "@@@STEP_LOG_LINE@proto.output@        \"input\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"gerrit_changes\": [@@@",
-      "@@@STEP_LOG_LINE@proto.output@            {@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"change\": \"3219377\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"host\": \"chromium-review.googlesource.com\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"patchset\": \"1337\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"project\": \"chromium/src\"@@@",
-      "@@@STEP_LOG_LINE@proto.output@            }@@@",
-      "@@@STEP_LOG_LINE@proto.output@          ],@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"properties\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@            \"recipe\": \"foo_recipe\"@@@",
-      "@@@STEP_LOG_LINE@proto.output@          }@@@",
-      "@@@STEP_LOG_LINE@proto.output@        }@@@",
-      "@@@STEP_LOG_LINE@proto.output@      }@@@",
-      "@@@STEP_LOG_LINE@proto.output@    }@@@",
-      "@@@STEP_LOG_LINE@proto.output@  }@@@",
-      "@@@STEP_LOG_LINE@proto.output@}@@@",
-      "@@@STEP_LOG_END@proto.output@@@",
-      "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/3219377@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "led",
-      "edit",
-      "-rbh",
-      "aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be/1337"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "project:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "test luci.chromium-m96.try:linux-rel.trigger.led edit",
-    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"linux-rel\",\n          \"project\": \"chromium-m96\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"gerrit_changes\": [\n            {\n              \"change\": \"3219377\",\n              \"host\": \"chromium-review.googlesource.com\",\n              \"patchset\": \"1337\",\n              \"project\": \"chromium/src\"\n            }\n          ],\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  }\n}",
+    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"linux-rel\",\n          \"project\": \"chromium-m96\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  },\n  \"cas_user_payload\": {\n    \"digest\": {\n      \"hash\": \"aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be\",\n      \"size_bytes\": \"1337\"\n    }\n  }\n}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@proto.output@{@@@",
@@ -3381,7 +3321,8 @@
       "@@@STEP_LOG_LINE@proto.output@    }@@@",
       "@@@STEP_LOG_LINE@proto.output@  }@@@",
       "@@@STEP_LOG_LINE@proto.output@}@@@",
-      "@@@STEP_LOG_END@proto.output@@@"
+      "@@@STEP_LOG_END@proto.output@@@",
+      "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/3219377@@@"
     ]
   },
   {
@@ -3404,7 +3345,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "test luci.chromium-m96.try:linux-rel.trigger.led edit (2)",
+    "name": "test luci.chromium-m96.try:linux-rel.trigger.led edit",
     "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"linux-rel\",\n          \"project\": \"chromium-m96\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"gerrit_changes\": [\n            {\n              \"change\": \"3219377\",\n              \"host\": \"chromium-review.googlesource.com\",\n              \"patchset\": \"1337\",\n              \"project\": \"chromium/src\"\n            }\n          ],\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  },\n  \"cas_user_payload\": {\n    \"digest\": {\n      \"hash\": \"aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be\",\n      \"size_bytes\": \"1337\"\n    }\n  }\n}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -3545,6 +3486,64 @@
   },
   {
     "cmd": [],
+    "name": "edit recipe bundle for luci.chromium-m96.try:win10_chromium_x64_rel_ng"
+  },
+  {
+    "cmd": [
+      "led",
+      "edit-recipe-bundle"
+    ],
+    "cwd": "[CACHE]/builder/baz",
+    "luci_context": {
+      "realm": {
+        "name": "project:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "edit recipe bundle for luci.chromium-m96.try:win10_chromium_x64_rel_ng.led edit-recipe-bundle",
+    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"win10_chromium_x64_rel_ng\",\n          \"project\": \"chromium-m96\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  }\n}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@proto.output@{@@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"buildbucket\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"bbagent_args\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"build\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"builder\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"bucket\": \"try\",@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"builder\": \"win10_chromium_x64_rel_ng\",@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"project\": \"chromium-m96\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@        },@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"infra\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"swarming\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"priority\": 40@@@",
+      "@@@STEP_LOG_LINE@proto.output@          }@@@",
+      "@@@STEP_LOG_LINE@proto.output@        },@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"input\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"recipe\": \"foo_recipe\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@          }@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }@@@",
+      "@@@STEP_LOG_LINE@proto.output@      }@@@",
+      "@@@STEP_LOG_LINE@proto.output@    }@@@",
+      "@@@STEP_LOG_LINE@proto.output@  },@@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"cas_user_payload\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"digest\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"hash\": \"aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be\",@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"size_bytes\": \"1337\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@    }@@@",
+      "@@@STEP_LOG_LINE@proto.output@  }@@@",
+      "@@@STEP_LOG_LINE@proto.output@}@@@",
+      "@@@STEP_LOG_END@proto.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
     "name": "test luci.chromium-m96.try:win10_chromium_x64_rel_ng",
     "~followup_annotations": [
       "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/3219377@@@",
@@ -3578,66 +3577,7 @@
       }
     },
     "name": "test luci.chromium-m96.try:win10_chromium_x64_rel_ng.trigger.led edit-cr-cl",
-    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"win10_chromium_x64_rel_ng\",\n          \"project\": \"chromium-m96\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  }\n}",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@proto.output@{@@@",
-      "@@@STEP_LOG_LINE@proto.output@  \"buildbucket\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@    \"bbagent_args\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@      \"build\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@        \"builder\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"bucket\": \"try\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"builder\": \"win10_chromium_x64_rel_ng\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"project\": \"chromium-m96\"@@@",
-      "@@@STEP_LOG_LINE@proto.output@        },@@@",
-      "@@@STEP_LOG_LINE@proto.output@        \"infra\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@            \"priority\": 40@@@",
-      "@@@STEP_LOG_LINE@proto.output@          }@@@",
-      "@@@STEP_LOG_LINE@proto.output@        },@@@",
-      "@@@STEP_LOG_LINE@proto.output@        \"input\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"gerrit_changes\": [@@@",
-      "@@@STEP_LOG_LINE@proto.output@            {@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"change\": \"3219377\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"host\": \"chromium-review.googlesource.com\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"patchset\": \"1337\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"project\": \"chromium/src\"@@@",
-      "@@@STEP_LOG_LINE@proto.output@            }@@@",
-      "@@@STEP_LOG_LINE@proto.output@          ],@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"properties\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@            \"recipe\": \"foo_recipe\"@@@",
-      "@@@STEP_LOG_LINE@proto.output@          }@@@",
-      "@@@STEP_LOG_LINE@proto.output@        }@@@",
-      "@@@STEP_LOG_LINE@proto.output@      }@@@",
-      "@@@STEP_LOG_LINE@proto.output@    }@@@",
-      "@@@STEP_LOG_LINE@proto.output@  }@@@",
-      "@@@STEP_LOG_LINE@proto.output@}@@@",
-      "@@@STEP_LOG_END@proto.output@@@",
-      "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/3219377@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "led",
-      "edit",
-      "-rbh",
-      "aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be/1337"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "project:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "test luci.chromium-m96.try:win10_chromium_x64_rel_ng.trigger.led edit",
-    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"win10_chromium_x64_rel_ng\",\n          \"project\": \"chromium-m96\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"gerrit_changes\": [\n            {\n              \"change\": \"3219377\",\n              \"host\": \"chromium-review.googlesource.com\",\n              \"patchset\": \"1337\",\n              \"project\": \"chromium/src\"\n            }\n          ],\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  }\n}",
+    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"win10_chromium_x64_rel_ng\",\n          \"project\": \"chromium-m96\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  },\n  \"cas_user_payload\": {\n    \"digest\": {\n      \"hash\": \"aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be\",\n      \"size_bytes\": \"1337\"\n    }\n  }\n}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@proto.output@{@@@",
@@ -3677,7 +3617,8 @@
       "@@@STEP_LOG_LINE@proto.output@    }@@@",
       "@@@STEP_LOG_LINE@proto.output@  }@@@",
       "@@@STEP_LOG_LINE@proto.output@}@@@",
-      "@@@STEP_LOG_END@proto.output@@@"
+      "@@@STEP_LOG_END@proto.output@@@",
+      "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/3219377@@@"
     ]
   },
   {
@@ -3700,7 +3641,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "test luci.chromium-m96.try:win10_chromium_x64_rel_ng.trigger.led edit (2)",
+    "name": "test luci.chromium-m96.try:win10_chromium_x64_rel_ng.trigger.led edit",
     "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"win10_chromium_x64_rel_ng\",\n          \"project\": \"chromium-m96\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"gerrit_changes\": [\n            {\n              \"change\": \"3219377\",\n              \"host\": \"chromium-review.googlesource.com\",\n              \"patchset\": \"1337\",\n              \"project\": \"chromium/src\"\n            }\n          ],\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  },\n  \"cas_user_payload\": {\n    \"digest\": {\n      \"hash\": \"aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be\",\n      \"size_bytes\": \"1337\"\n    }\n  }\n}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -3841,6 +3782,64 @@
   },
   {
     "cmd": [],
+    "name": "edit recipe bundle for luci.chromium-m97.try:chromium_presubmit"
+  },
+  {
+    "cmd": [
+      "led",
+      "edit-recipe-bundle"
+    ],
+    "cwd": "[CACHE]/builder/baz",
+    "luci_context": {
+      "realm": {
+        "name": "project:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "edit recipe bundle for luci.chromium-m97.try:chromium_presubmit.led edit-recipe-bundle",
+    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"chromium_presubmit\",\n          \"project\": \"chromium-m97\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  }\n}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@proto.output@{@@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"buildbucket\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"bbagent_args\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"build\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"builder\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"bucket\": \"try\",@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"builder\": \"chromium_presubmit\",@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"project\": \"chromium-m97\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@        },@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"infra\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"swarming\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"priority\": 40@@@",
+      "@@@STEP_LOG_LINE@proto.output@          }@@@",
+      "@@@STEP_LOG_LINE@proto.output@        },@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"input\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"recipe\": \"foo_recipe\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@          }@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }@@@",
+      "@@@STEP_LOG_LINE@proto.output@      }@@@",
+      "@@@STEP_LOG_LINE@proto.output@    }@@@",
+      "@@@STEP_LOG_LINE@proto.output@  },@@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"cas_user_payload\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"digest\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"hash\": \"aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be\",@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"size_bytes\": \"1337\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@    }@@@",
+      "@@@STEP_LOG_LINE@proto.output@  }@@@",
+      "@@@STEP_LOG_LINE@proto.output@}@@@",
+      "@@@STEP_LOG_END@proto.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
     "name": "test luci.chromium-m97.try:chromium_presubmit",
     "~followup_annotations": [
       "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/3271783@@@",
@@ -3874,66 +3873,7 @@
       }
     },
     "name": "test luci.chromium-m97.try:chromium_presubmit.trigger.led edit-cr-cl",
-    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"chromium_presubmit\",\n          \"project\": \"chromium-m97\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  }\n}",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@proto.output@{@@@",
-      "@@@STEP_LOG_LINE@proto.output@  \"buildbucket\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@    \"bbagent_args\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@      \"build\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@        \"builder\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"bucket\": \"try\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"builder\": \"chromium_presubmit\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"project\": \"chromium-m97\"@@@",
-      "@@@STEP_LOG_LINE@proto.output@        },@@@",
-      "@@@STEP_LOG_LINE@proto.output@        \"infra\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@            \"priority\": 40@@@",
-      "@@@STEP_LOG_LINE@proto.output@          }@@@",
-      "@@@STEP_LOG_LINE@proto.output@        },@@@",
-      "@@@STEP_LOG_LINE@proto.output@        \"input\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"gerrit_changes\": [@@@",
-      "@@@STEP_LOG_LINE@proto.output@            {@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"change\": \"3271783\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"host\": \"chromium-review.googlesource.com\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"patchset\": \"1337\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"project\": \"chromium/src\"@@@",
-      "@@@STEP_LOG_LINE@proto.output@            }@@@",
-      "@@@STEP_LOG_LINE@proto.output@          ],@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"properties\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@            \"recipe\": \"foo_recipe\"@@@",
-      "@@@STEP_LOG_LINE@proto.output@          }@@@",
-      "@@@STEP_LOG_LINE@proto.output@        }@@@",
-      "@@@STEP_LOG_LINE@proto.output@      }@@@",
-      "@@@STEP_LOG_LINE@proto.output@    }@@@",
-      "@@@STEP_LOG_LINE@proto.output@  }@@@",
-      "@@@STEP_LOG_LINE@proto.output@}@@@",
-      "@@@STEP_LOG_END@proto.output@@@",
-      "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/3271783@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "led",
-      "edit",
-      "-rbh",
-      "aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be/1337"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "project:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "test luci.chromium-m97.try:chromium_presubmit.trigger.led edit",
-    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"chromium_presubmit\",\n          \"project\": \"chromium-m97\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"gerrit_changes\": [\n            {\n              \"change\": \"3271783\",\n              \"host\": \"chromium-review.googlesource.com\",\n              \"patchset\": \"1337\",\n              \"project\": \"chromium/src\"\n            }\n          ],\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  }\n}",
+    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"chromium_presubmit\",\n          \"project\": \"chromium-m97\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  },\n  \"cas_user_payload\": {\n    \"digest\": {\n      \"hash\": \"aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be\",\n      \"size_bytes\": \"1337\"\n    }\n  }\n}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@proto.output@{@@@",
@@ -3973,7 +3913,8 @@
       "@@@STEP_LOG_LINE@proto.output@    }@@@",
       "@@@STEP_LOG_LINE@proto.output@  }@@@",
       "@@@STEP_LOG_LINE@proto.output@}@@@",
-      "@@@STEP_LOG_END@proto.output@@@"
+      "@@@STEP_LOG_END@proto.output@@@",
+      "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/3271783@@@"
     ]
   },
   {
@@ -3996,7 +3937,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "test luci.chromium-m97.try:chromium_presubmit.trigger.led edit (2)",
+    "name": "test luci.chromium-m97.try:chromium_presubmit.trigger.led edit",
     "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"chromium_presubmit\",\n          \"project\": \"chromium-m97\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"gerrit_changes\": [\n            {\n              \"change\": \"3271783\",\n              \"host\": \"chromium-review.googlesource.com\",\n              \"patchset\": \"1337\",\n              \"project\": \"chromium/src\"\n            }\n          ],\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  },\n  \"cas_user_payload\": {\n    \"digest\": {\n      \"hash\": \"aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be\",\n      \"size_bytes\": \"1337\"\n    }\n  }\n}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -4137,6 +4078,64 @@
   },
   {
     "cmd": [],
+    "name": "edit recipe bundle for luci.chromium-m97.try:linux-rel"
+  },
+  {
+    "cmd": [
+      "led",
+      "edit-recipe-bundle"
+    ],
+    "cwd": "[CACHE]/builder/baz",
+    "luci_context": {
+      "realm": {
+        "name": "project:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "edit recipe bundle for luci.chromium-m97.try:linux-rel.led edit-recipe-bundle",
+    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"linux-rel\",\n          \"project\": \"chromium-m97\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  }\n}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@proto.output@{@@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"buildbucket\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"bbagent_args\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"build\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"builder\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"bucket\": \"try\",@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"builder\": \"linux-rel\",@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"project\": \"chromium-m97\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@        },@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"infra\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"swarming\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"priority\": 40@@@",
+      "@@@STEP_LOG_LINE@proto.output@          }@@@",
+      "@@@STEP_LOG_LINE@proto.output@        },@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"input\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"recipe\": \"foo_recipe\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@          }@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }@@@",
+      "@@@STEP_LOG_LINE@proto.output@      }@@@",
+      "@@@STEP_LOG_LINE@proto.output@    }@@@",
+      "@@@STEP_LOG_LINE@proto.output@  },@@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"cas_user_payload\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"digest\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"hash\": \"aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be\",@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"size_bytes\": \"1337\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@    }@@@",
+      "@@@STEP_LOG_LINE@proto.output@  }@@@",
+      "@@@STEP_LOG_LINE@proto.output@}@@@",
+      "@@@STEP_LOG_END@proto.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
     "name": "test luci.chromium-m97.try:linux-rel",
     "~followup_annotations": [
       "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/3271783@@@",
@@ -4170,66 +4169,7 @@
       }
     },
     "name": "test luci.chromium-m97.try:linux-rel.trigger.led edit-cr-cl",
-    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"linux-rel\",\n          \"project\": \"chromium-m97\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  }\n}",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@proto.output@{@@@",
-      "@@@STEP_LOG_LINE@proto.output@  \"buildbucket\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@    \"bbagent_args\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@      \"build\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@        \"builder\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"bucket\": \"try\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"builder\": \"linux-rel\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"project\": \"chromium-m97\"@@@",
-      "@@@STEP_LOG_LINE@proto.output@        },@@@",
-      "@@@STEP_LOG_LINE@proto.output@        \"infra\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@            \"priority\": 40@@@",
-      "@@@STEP_LOG_LINE@proto.output@          }@@@",
-      "@@@STEP_LOG_LINE@proto.output@        },@@@",
-      "@@@STEP_LOG_LINE@proto.output@        \"input\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"gerrit_changes\": [@@@",
-      "@@@STEP_LOG_LINE@proto.output@            {@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"change\": \"3271783\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"host\": \"chromium-review.googlesource.com\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"patchset\": \"1337\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"project\": \"chromium/src\"@@@",
-      "@@@STEP_LOG_LINE@proto.output@            }@@@",
-      "@@@STEP_LOG_LINE@proto.output@          ],@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"properties\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@            \"recipe\": \"foo_recipe\"@@@",
-      "@@@STEP_LOG_LINE@proto.output@          }@@@",
-      "@@@STEP_LOG_LINE@proto.output@        }@@@",
-      "@@@STEP_LOG_LINE@proto.output@      }@@@",
-      "@@@STEP_LOG_LINE@proto.output@    }@@@",
-      "@@@STEP_LOG_LINE@proto.output@  }@@@",
-      "@@@STEP_LOG_LINE@proto.output@}@@@",
-      "@@@STEP_LOG_END@proto.output@@@",
-      "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/3271783@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "led",
-      "edit",
-      "-rbh",
-      "aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be/1337"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "project:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "test luci.chromium-m97.try:linux-rel.trigger.led edit",
-    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"linux-rel\",\n          \"project\": \"chromium-m97\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"gerrit_changes\": [\n            {\n              \"change\": \"3271783\",\n              \"host\": \"chromium-review.googlesource.com\",\n              \"patchset\": \"1337\",\n              \"project\": \"chromium/src\"\n            }\n          ],\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  }\n}",
+    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"linux-rel\",\n          \"project\": \"chromium-m97\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  },\n  \"cas_user_payload\": {\n    \"digest\": {\n      \"hash\": \"aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be\",\n      \"size_bytes\": \"1337\"\n    }\n  }\n}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@proto.output@{@@@",
@@ -4269,7 +4209,8 @@
       "@@@STEP_LOG_LINE@proto.output@    }@@@",
       "@@@STEP_LOG_LINE@proto.output@  }@@@",
       "@@@STEP_LOG_LINE@proto.output@}@@@",
-      "@@@STEP_LOG_END@proto.output@@@"
+      "@@@STEP_LOG_END@proto.output@@@",
+      "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/3271783@@@"
     ]
   },
   {
@@ -4292,7 +4233,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "test luci.chromium-m97.try:linux-rel.trigger.led edit (2)",
+    "name": "test luci.chromium-m97.try:linux-rel.trigger.led edit",
     "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"linux-rel\",\n          \"project\": \"chromium-m97\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"gerrit_changes\": [\n            {\n              \"change\": \"3271783\",\n              \"host\": \"chromium-review.googlesource.com\",\n              \"patchset\": \"1337\",\n              \"project\": \"chromium/src\"\n            }\n          ],\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  },\n  \"cas_user_payload\": {\n    \"digest\": {\n      \"hash\": \"aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be\",\n      \"size_bytes\": \"1337\"\n    }\n  }\n}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -4433,6 +4374,64 @@
   },
   {
     "cmd": [],
+    "name": "edit recipe bundle for luci.chromium-m97.try:win10_chromium_x64_rel_ng"
+  },
+  {
+    "cmd": [
+      "led",
+      "edit-recipe-bundle"
+    ],
+    "cwd": "[CACHE]/builder/baz",
+    "luci_context": {
+      "realm": {
+        "name": "project:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "edit recipe bundle for luci.chromium-m97.try:win10_chromium_x64_rel_ng.led edit-recipe-bundle",
+    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"win10_chromium_x64_rel_ng\",\n          \"project\": \"chromium-m97\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  }\n}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@proto.output@{@@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"buildbucket\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"bbagent_args\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"build\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"builder\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"bucket\": \"try\",@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"builder\": \"win10_chromium_x64_rel_ng\",@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"project\": \"chromium-m97\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@        },@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"infra\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"swarming\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"priority\": 40@@@",
+      "@@@STEP_LOG_LINE@proto.output@          }@@@",
+      "@@@STEP_LOG_LINE@proto.output@        },@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"input\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"recipe\": \"foo_recipe\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@          }@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }@@@",
+      "@@@STEP_LOG_LINE@proto.output@      }@@@",
+      "@@@STEP_LOG_LINE@proto.output@    }@@@",
+      "@@@STEP_LOG_LINE@proto.output@  },@@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"cas_user_payload\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"digest\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"hash\": \"aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be\",@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"size_bytes\": \"1337\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@    }@@@",
+      "@@@STEP_LOG_LINE@proto.output@  }@@@",
+      "@@@STEP_LOG_LINE@proto.output@}@@@",
+      "@@@STEP_LOG_END@proto.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
     "name": "test luci.chromium-m97.try:win10_chromium_x64_rel_ng",
     "~followup_annotations": [
       "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/3271783@@@",
@@ -4466,66 +4465,7 @@
       }
     },
     "name": "test luci.chromium-m97.try:win10_chromium_x64_rel_ng.trigger.led edit-cr-cl",
-    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"win10_chromium_x64_rel_ng\",\n          \"project\": \"chromium-m97\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  }\n}",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@proto.output@{@@@",
-      "@@@STEP_LOG_LINE@proto.output@  \"buildbucket\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@    \"bbagent_args\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@      \"build\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@        \"builder\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"bucket\": \"try\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"builder\": \"win10_chromium_x64_rel_ng\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"project\": \"chromium-m97\"@@@",
-      "@@@STEP_LOG_LINE@proto.output@        },@@@",
-      "@@@STEP_LOG_LINE@proto.output@        \"infra\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@            \"priority\": 40@@@",
-      "@@@STEP_LOG_LINE@proto.output@          }@@@",
-      "@@@STEP_LOG_LINE@proto.output@        },@@@",
-      "@@@STEP_LOG_LINE@proto.output@        \"input\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"gerrit_changes\": [@@@",
-      "@@@STEP_LOG_LINE@proto.output@            {@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"change\": \"3271783\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"host\": \"chromium-review.googlesource.com\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"patchset\": \"1337\",@@@",
-      "@@@STEP_LOG_LINE@proto.output@              \"project\": \"chromium/src\"@@@",
-      "@@@STEP_LOG_LINE@proto.output@            }@@@",
-      "@@@STEP_LOG_LINE@proto.output@          ],@@@",
-      "@@@STEP_LOG_LINE@proto.output@          \"properties\": {@@@",
-      "@@@STEP_LOG_LINE@proto.output@            \"recipe\": \"foo_recipe\"@@@",
-      "@@@STEP_LOG_LINE@proto.output@          }@@@",
-      "@@@STEP_LOG_LINE@proto.output@        }@@@",
-      "@@@STEP_LOG_LINE@proto.output@      }@@@",
-      "@@@STEP_LOG_LINE@proto.output@    }@@@",
-      "@@@STEP_LOG_LINE@proto.output@  }@@@",
-      "@@@STEP_LOG_LINE@proto.output@}@@@",
-      "@@@STEP_LOG_END@proto.output@@@",
-      "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/3271783@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "led",
-      "edit",
-      "-rbh",
-      "aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be/1337"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "project:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "test luci.chromium-m97.try:win10_chromium_x64_rel_ng.trigger.led edit",
-    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"win10_chromium_x64_rel_ng\",\n          \"project\": \"chromium-m97\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"gerrit_changes\": [\n            {\n              \"change\": \"3271783\",\n              \"host\": \"chromium-review.googlesource.com\",\n              \"patchset\": \"1337\",\n              \"project\": \"chromium/src\"\n            }\n          ],\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  }\n}",
+    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"win10_chromium_x64_rel_ng\",\n          \"project\": \"chromium-m97\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  },\n  \"cas_user_payload\": {\n    \"digest\": {\n      \"hash\": \"aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be\",\n      \"size_bytes\": \"1337\"\n    }\n  }\n}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@proto.output@{@@@",
@@ -4565,7 +4505,8 @@
       "@@@STEP_LOG_LINE@proto.output@    }@@@",
       "@@@STEP_LOG_LINE@proto.output@  }@@@",
       "@@@STEP_LOG_LINE@proto.output@}@@@",
-      "@@@STEP_LOG_END@proto.output@@@"
+      "@@@STEP_LOG_END@proto.output@@@",
+      "@@@STEP_LINK@Test CL (fast)@https://chromium-review.googlesource.com/c/chromium/src/+/3271783@@@"
     ]
   },
   {
@@ -4588,7 +4529,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "test luci.chromium-m97.try:win10_chromium_x64_rel_ng.trigger.led edit (2)",
+    "name": "test luci.chromium-m97.try:win10_chromium_x64_rel_ng.trigger.led edit",
     "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"try\",\n          \"builder\": \"win10_chromium_x64_rel_ng\",\n          \"project\": \"chromium-m97\"\n        },\n        \"infra\": {\n          \"swarming\": {\n            \"priority\": 40\n          }\n        },\n        \"input\": {\n          \"gerrit_changes\": [\n            {\n              \"change\": \"3271783\",\n              \"host\": \"chromium-review.googlesource.com\",\n              \"patchset\": \"1337\",\n              \"project\": \"chromium/src\"\n            }\n          ],\n          \"properties\": {\n            \"recipe\": \"foo_recipe\"\n          }\n        }\n      }\n    }\n  },\n  \"cas_user_payload\": {\n    \"digest\": {\n      \"hash\": \"aa5622eda7c9166441707e99177e584d65654c487b2aa1ba01c917ac460391be\",\n      \"size_bytes\": \"1337\"\n    }\n  }\n}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
