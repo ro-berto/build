@@ -1,0 +1,53 @@
+[
+  {
+    "cmd": [],
+    "name": "Roller: 'Update dependencies'"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_REPO[depot_tools]/gerrit_client.py",
+      "changes",
+      "--host",
+      "https://review.googlesource.com",
+      "--json_file",
+      "/path/to/tmp/json",
+      "--limit",
+      "20",
+      "-p",
+      "project=v8/v8",
+      "-p",
+      "owner=autoroll@service-accounts.com",
+      "-p",
+      "status=open",
+      "-o",
+      "LABELS",
+      "-o",
+      "CURRENT_REVISION",
+      "-o",
+      "DOWNLOAD_COMMANDS"
+    ],
+    "env": {
+      "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
+    },
+    "env_suffixes": {
+      "DEPOT_TOOLS_UPDATE": [
+        "0"
+      ],
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "Roller: 'Update dependencies'.gerrit Find open CLs",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@[]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "name": "$result"
+  }
+]
