@@ -187,20 +187,6 @@ class AndroidApi(recipe_api.RecipeApi):
         self.m.path['checkout']
     ] + repos)
 
-  def git_number(self, commitrefs=None, step_test_data=None, **kwargs):
-    if not step_test_data:
-      step_test_data = lambda: self.m.raw_io.test_api.stream_output('3000\n')
-    with self.m.depot_tools.on_path():
-      with self.m.context(env={'CHROME_HEADLESS': '1'}):
-        args = ['number']
-        args.extend(commitrefs or [])
-        return self.m.git(
-            *args,
-            stdout=self.m.raw_io.output_text(),
-            step_test_data=step_test_data,
-            infra_step=True,
-            **kwargs)
-
   def resource_sizes(self,
                      apk_path,
                      chartjson_file=False,
