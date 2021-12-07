@@ -206,6 +206,22 @@ SPEC = {
             parent_buildername='Mac Builder',
             simulation_platform='mac',
         ),
+    # TODO(crbug.com/1276595): Remove this when it's not in active branches.
+    'Mac10.15 Tests (dbg)':
+        _chromium_mac_spec(
+            chromium_config='chromium',
+            chromium_apply_config=[
+                'mb',
+            ],
+            gclient_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_BITS': 64,
+            },
+            execution_mode=builder_spec.TEST,
+            parent_buildername='Mac Builder (dbg)',
+            simulation_platform='mac',
+        ),
     'Mac11 Tests':
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
@@ -222,20 +238,7 @@ SPEC = {
             parent_buildername='Mac Builder',
             simulation_platform='mac',
         ),
-    'Mac Builder (dbg)':
-        _chromium_mac_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 64,
-            },
-            simulation_platform='mac',
-        ),
-    'Mac10.15 Tests (dbg)':
+    'Mac11 Tests (dbg)':
         _chromium_mac_spec(
             chromium_config='chromium',
             chromium_apply_config=[
@@ -248,6 +251,19 @@ SPEC = {
             },
             execution_mode=builder_spec.TEST,
             parent_buildername='Mac Builder (dbg)',
+            simulation_platform='mac',
+        ),
+    'Mac Builder (dbg)':
+        _chromium_mac_spec(
+            chromium_config='chromium',
+            chromium_apply_config=[
+                'mb',
+            ],
+            gclient_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_BITS': 64,
+            },
             simulation_platform='mac',
         ),
 }
