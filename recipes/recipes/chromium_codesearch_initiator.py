@@ -15,7 +15,7 @@ linked by commit hash.
 
 from datetime import datetime
 
-PYTHON_VERSION_COMPATIBILITY = "PY2+3"
+PYTHON_VERSION_COMPATIBILITY = "PY3"
 
 DEPS = [
     'depot_tools/git',
