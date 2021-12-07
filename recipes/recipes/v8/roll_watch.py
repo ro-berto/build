@@ -103,36 +103,27 @@ def GenTests(api):
                     'project': 'v8/v8',
                     'account': 'autoroll@service-accounts.com',
                 }]))
+    def find_open_cls(api, subject):
+        return api.override_step_data('Roller: \'%s\'.'
+                'gerrit Find open CLs' % subject,
+                api.json.output([{
+                        '_number': 123,
+                        'subject': subject,
+                        'project':'project1',
+                        'revisions': {
+                                'last': {'_number': 1}
+                        }
+                }]))
 
     yield test(api, "no-cls")
 
     yield (
         test(api, "roller-with-stale-cls") + 
-        api.override_step_data('Roller: \'Update dependencies\'.'
-                'gerrit Find open CLs',
-                api.json.output([{
-                        '_number': 123,
-                        'subject': 'Update dependencies (Frontend)',
-                        'project':'project1',
-                        'revisions': {
-                                'last': {'_number': 1}
-                        }
-                }])
-        ))
+        find_open_cls(api, 'Update dependencies'))
 
     yield (
-        test(api, "roll-failing-in-cq") + 
-        api.override_step_data('Roller: \'Update dependencies\'.'
-                'gerrit Find open CLs',
-                api.json.output([{
-                        '_number': 123,
-                        'subject': 'Update dependencies',
-                        'project':'project1',
-                        'revisions': {
-                                'last': {'_number': 1}
-                        }
-                }])
-        ) + 
+        test(api, "roll-failing-in-cq") +
+        find_open_cls(api, 'Update dependencies') +
         api.buildbucket.simulated_search_results([
                 build_pb2.Build(id=1, status=common_pb2.SUCCESS),
                 build_pb2.Build(id=2, status=common_pb2.FAILURE),
