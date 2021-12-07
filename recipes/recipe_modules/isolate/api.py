@@ -79,13 +79,10 @@ class IsolateApi(recipe_api.RecipeApi):
     if not targets:  # pragma: no cover
       return
 
-    # Rely on cas client autoroll.
-    version = self.m.file.read_text(
-          "read infra revision",
-          # This has revision of https://chromium.googlesource.com/infra/infra/.
-          self.m.cas.resource("infra.sha1"),
-          test_data='git_revision:mock_infra_git_revision').strip()
-
+    # Take revision from https://ci.chromium.org/p/infra-internal/g/infra-packagers/console
+    version = 'git_revision:8b51458b08c8df75b3ae0e1f55993ea6be39931d'
+    if self._test_data.enabled:
+      version = 'git_revision:mock_infra_git_revision'
     exe = self.m.cipd.ensure_tool('infra/tools/luci/isolate/${platform}',
                                   version)
 

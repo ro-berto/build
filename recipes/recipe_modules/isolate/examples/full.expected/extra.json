@@ -98,24 +98,6 @@
     ]
   },
   {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "RECIPE_MODULE[recipe_engine::cas]/resources/infra.sha1",
-      "/path/to/tmp/"
-    ],
-    "infra_step": true,
-    "name": "read infra revision",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@infra.sha1@git_revision:mock_infra_git_revision@@@",
-      "@@@STEP_LOG_END@infra.sha1@@@"
-    ]
-  },
-  {
     "cmd": [],
     "name": "install infra/tools/luci/isolate"
   },
@@ -188,24 +170,6 @@
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"test1\": \"[dummy hash for test1/dummy size]\", \"test2\": \"[dummy hash for test2/dummy size]\"}@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "RECIPE_MODULE[recipe_engine::cas]/resources/infra.sha1",
-      "/path/to/tmp/"
-    ],
-    "infra_step": true,
-    "name": "read infra revision (2)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@infra.sha1@git_revision:mock_infra_git_revision@@@",
-      "@@@STEP_LOG_END@infra.sha1@@@"
     ]
   },
   {
