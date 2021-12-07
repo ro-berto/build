@@ -263,6 +263,7 @@
       "RECIPE_REPO[depot_tools]/gn.py",
       "gen",
       "[START_DIR]/openscreen/out/Default",
+      "--check",
       "--args=is_debug=true target_cpu=\"arm64\""
     ],
     "cwd": "[START_DIR]/openscreen",
