@@ -100,7 +100,11 @@ SPEC.update([
     _config(
         'chromeos-amd64-generic-cfi-thin-lto-rel', cros_boards='amd64-generic'),
     _config('chromeos-amd64-generic-dbg', cros_boards='amd64-generic'),
-    _config('chromeos-amd64-generic-lacros-dbg', cros_boards='amd64-generic'),
+    _config(
+        'chromeos-amd64-generic-lacros-dbg',
+        cros_boards='amd64-generic',
+        gclient_apply_config=['checkout_lacros_sdk'],
+    ),
     _config(
         'chromeos-amd64-generic-rel',
         cros_boards_with_qemu_images='amd64-generic-vm'),
