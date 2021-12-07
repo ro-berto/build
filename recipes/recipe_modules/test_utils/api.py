@@ -282,11 +282,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
     for group in groups:
       group.run(caller_api, suffix)
 
-    bad_results_dict = {}
-    (bad_results_dict['invalid'],
-     bad_results_dict['failed']) = self._retrieve_bad_results(
-         test_suites, suffix)
-
     all_rdb_results = []
     for t in test_suites:
       if t.get_rdb_results(suffix):
@@ -301,14 +296,10 @@ class TestUtilsApi(recipe_api.RecipeApi):
     step_result.presentation.logs['serialzed results'] = (
         self.m.json.dumps(rdb_results.to_jsonish(), indent=2).splitlines())
 
-    # Re-run _retrieve_bad_results() if we're in the RDB experiment now that
-    # we've fetched the RDB results.
-    if ('chromium.chromium_tests.use_rdb_results' in
-        self.m.buildbucket.build.input.experiments):
-      bad_results_dict = {}
-      (bad_results_dict['invalid'],
-       bad_results_dict['failed']) = self._retrieve_bad_results(
-           test_suites, suffix)
+    bad_results_dict = {}
+    (bad_results_dict['invalid'],
+     bad_results_dict['failed']) = self._retrieve_bad_results(
+         test_suites, suffix)
 
     return rdb_results, bad_results_dict['invalid'], bad_results_dict['failed']
 

@@ -74,7 +74,7 @@ class ResultDB(object):
   # result_adapter deployed via the pool config. That is, result_adapter
   # w/o preceding path.
   result_adapter_path = attrib(str, default='result_adapter')
-  use_rdb_results_for_all_decisions = attrib(bool, default=False)
+  use_rdb_results_for_all_decisions = attrib(bool, default=True)
 
   @classmethod
   def create(cls, **kwargs):

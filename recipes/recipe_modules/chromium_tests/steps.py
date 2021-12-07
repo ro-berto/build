@@ -1660,12 +1660,8 @@ class LocalGTestTest(LocalTest):
       args = _merge_arg(args, '--gtest_filter', ':'.join(tests_to_retry))
 
     resultdb = self.prep_local_rdb(api, include_artifacts=False)
-    if self.spec.resultdb.use_rdb_results_for_all_decisions:
-      gtest_results_file = api.json.output(
-          add_json_log=False, leak_to=resultdb.result_file)
-    else:
-      gtest_results_file = api.test_utils.gtest_results(
-          add_json_log=False, leak_to=resultdb.result_file)
+    gtest_results_file = api.json.output(
+        add_json_log=False, leak_to=resultdb.result_file)
 
     step_test_data = lambda: (
         api.test_utils.test_api.canned_gtest_output(True) + api.raw_io.test_api.
@@ -1705,25 +1701,14 @@ class LocalGTestTest(LocalTest):
     # these local gtests via isolate from the src-side JSON files.
     # crbug.com/584469
     self._suffix_step_name_map[suffix] = '.'.join(step_result.name_tokens)
-    if not hasattr(step_result, 'test_utils'):
-      self.update_test_run(api, suffix,
-                           api.test_utils.canonical.result_format())
-    else:
-      gtest_results = step_result.test_utils.gtest_results
-      self.update_test_run(api, suffix, gtest_results.canonical_result_format())
+    self.update_test_run(api, suffix, api.test_utils.canonical.result_format())
     self.update_failure_on_exit(suffix, step_result.retcode != 0)
 
     self.update_inv_name_from_stderr(step_result.stderr, suffix)
-    r = api.test_utils.present_gtest_failures(step_result)
 
     _present_info_messages(step_result.presentation, self)
 
-    results_to_upload = None
-    if r:
-      results_to_upload = api.json.input(r.raw)
-      self._gtest_results[suffix] = r
-    if self.spec.resultdb.use_rdb_results_for_all_decisions:
-      results_to_upload = gtest_results_file
+    results_to_upload = gtest_results_file
     if results_to_upload:
       api.test_results.upload(
           results_to_upload,
@@ -2346,14 +2331,10 @@ class SwarmingGTestTest(SwarmingTest):
     return task
 
   def validate_task_results(self, api, step_result):
-    if self.spec.resultdb.use_rdb_results_for_all_decisions:
-      return {}
-    return step_result.test_utils.gtest_results.canonical_result_format()
+    return {}
 
   def pass_fail_counts(self, suffix):
-    if self.spec.resultdb.use_rdb_results_for_all_decisions:
-      return super(SwarmingGTestTest, self).pass_fail_counts(suffix)
-    return self._gtest_results[suffix].pass_fail_counts
+    return super(SwarmingGTestTest, self).pass_fail_counts(suffix)
 
   @recipe_api.composite_step
   def run(self, api, suffix):
@@ -2362,19 +2343,12 @@ class SwarmingGTestTest(SwarmingTest):
     step_name = '.'.join(step_result.name_tokens)
     self._suffix_step_name_map[suffix] = step_name
 
-    raw_json_data = None
-    if not self.spec.resultdb.use_rdb_results_for_all_decisions:
-      gtest_results = step_result.test_utils.gtest_results
-      self._gtest_results[suffix] = gtest_results
-      if gtest_results and gtest_results.raw:
-        raw_json_data = api.json.input(gtest_results.raw)
+    # TODO(crbug.com/1255217): Remove this android exception when logcats and
+    # tombstones are in resultdb.
+    if api.chromium.c.TARGET_PLATFORM == 'android':
+      raw_json_data = api.json.input(step_result.json.output)
     else:
-      # TODO(crbug.com/1255217): Remove this android exception when logcats and
-      # tombstones are in resultdb.
-      if api.chromium.c.TARGET_PLATFORM == 'android':
-        raw_json_data = api.json.input(step_result.json.output)
-      else:
-        raw_json_data = self._tasks[suffix].collect_json_output_override
+      raw_json_data = self._tasks[suffix].collect_json_output_override
 
     if raw_json_data:
       chrome_revision_cp = api.bot_update.last_returned_properties.get(
@@ -2823,6 +2797,8 @@ class MockTest(Test):
     return self.spec.abort_on_failure
 
 
+# TODO(crbug.com/webrtc/12768): Delete this class once WebRTC has migrated
+# off of it.
 @attrs()
 class SwarmingIosTestSpec(SwarmingTestSpec):
   """Spec for a test that runs against iOS via swarming.
@@ -2867,6 +2843,14 @@ class SwarmingIosTestSpec(SwarmingTestSpec):
       * kwargs - Additional keyword arguments that will be used to
         initialize the attributes of the returned spec.
     """
+    kwargs.setdefault('resultdb', ResultDB())
+
+    # SwarmingIosTest has poor integration with ResultDB fetching, so don't
+    # use RDB results for this class. This will be removed as part of the
+    # wider clean-up of this class (crbug.com/webrtc/12768).
+    kwargs['resultdb'] = attr.evolve(
+        kwargs['resultdb'], use_rdb_results_for_all_decisions=False)
+
     return super(SwarmingIosTestSpec, cls).create(
         name=task['step name'],
         platform=platform,
@@ -2945,6 +2929,8 @@ class SwarmingIosTestSpec(SwarmingTestSpec):
     return SwarmingIosTest
 
 
+# TODO(crbug.com/webrtc/12768): Delete this class once WebRTC has migrated
+# off of it.
 class SwarmingIosTest(SwarmingTest):
 
   def pre_run(self, api, suffix):

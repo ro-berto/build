@@ -73,7 +73,7 @@
       "-u",
       "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
       "--input-json",
-      "{}",
+      "[CLEANUP]/tmp_tmp_1",
       "--builder-group",
       "test_group",
       "--builder-name",

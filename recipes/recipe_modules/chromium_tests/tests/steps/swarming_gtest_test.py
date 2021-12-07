@@ -53,8 +53,7 @@ def RunSteps(api):
 
   try:
     assert len(test.get_invocation_names('')) == 0
-    test.pre_run(api, '')
-    test.run(api, '')
+    api.test_utils.run_tests_once(api.chromium_tests.m, [test], '')
     assert len(test.get_invocation_names('')) > 0
     assert test.runs_on_swarming
   finally:
@@ -178,7 +177,7 @@ def GenTests(api):
           }),
       api.post_check(
           api.swarming.check_triggered_request,
-          '[trigger] base_unittests', lambda check, req: check(
+          'test_pre_run.[trigger] base_unittests', lambda check, req: check(
               req[0].env_vars['LLVM_PROFILE_FILE'] ==
               '${ISOLATED_OUTDIR}/profraw/default-%2m.profraw')),
       api.post_process(post_process.DropExpectation),

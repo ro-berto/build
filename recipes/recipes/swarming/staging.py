@@ -143,14 +143,8 @@ def GenTests(api):
           }
         },],
       }),
-      api.override_step_data(
-          'browser_tests on Ubuntu',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(
-                  passing=False,
-                  minimal=True,
-                  extra_json={'missing_shards': [1]}),
-              failure=True)),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'browser_tests', '', custom_os='Ubuntu', failures=['Test.Two']),
   )
 
   yield api.test(

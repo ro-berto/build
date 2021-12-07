@@ -208,10 +208,6 @@ def generator_common(chromium_tests_api, raw_test_spec, swarming_delegate,
 
   rdb_kwargs = dict(raw_test_spec.get('resultdb', {}))
   rdb_kwargs.setdefault('test_id_prefix', kwargs['test_id_prefix'])
-  rdb_kwargs.setdefault(
-      'use_rdb_results_for_all_decisions',
-      ('chromium.chromium_tests.use_rdb_results' in
-       chromium_tests_api.m.buildbucket.build.input.experiments))
   kwargs['resultdb'] = steps.ResultDB.create(**rdb_kwargs)
 
   processed_set_ups = []
@@ -451,10 +447,6 @@ def generate_junit_tests(chromium_tests_api,
   for raw_spec in source_side_spec.get(buildername, {}).get('junit_tests', []):
     rdb_kwargs = dict(raw_spec.get('resultdb', {}))
     rdb_kwargs.setdefault('test_id_prefix', raw_spec.get('test_id_prefix'))
-    rdb_kwargs.setdefault(
-        'use_rdb_results_for_all_decisions',
-        ('chromium.chromium_tests.use_rdb_results' in
-         chromium_tests_api.m.buildbucket.build.input.experiments))
     resultdb = steps.ResultDB.create(**rdb_kwargs)
 
     test_spec = steps.AndroidJunitTestSpec.create(
@@ -479,10 +471,6 @@ def generate_script_tests(chromium_tests_api,
   for raw_spec in source_side_spec.get(buildername, {}).get('scripts', []):
     rdb_kwargs = dict(raw_spec.get('resultdb', {'enable': True}))
     rdb_kwargs.setdefault('test_id_prefix', raw_spec.get('test_id_prefix'))
-    rdb_kwargs.setdefault(
-        'use_rdb_results_for_all_decisions',
-        ('chromium.chromium_tests.use_rdb_results' in
-         chromium_tests_api.m.buildbucket.build.input.experiments))
     resultdb = steps.ResultDB.create(**rdb_kwargs)
 
     test_spec = steps.ScriptTestSpec.create(
