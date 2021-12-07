@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'chromium',
@@ -41,7 +41,7 @@ def RunSteps(api, properties):
     task_groups = api.json.loads(properties.tasks_groups)
     tester_properties = api.json.loads(properties.tester_properties)
 
-    for group_name, task_ids in task_groups.iteritems():
+    for group_name, task_ids in task_groups.items():
       collect_task_args = api.chromium_swarming.get_collect_task_args(
           merge_script=api.path['checkout'].join('tools', 'perf',
                                                  'process_perf_results.py'),
