@@ -427,31 +427,6 @@ class Test(object):
     # failures.
     self._known_flaky_failures_map = {}
 
-    # Contains a record of deterministic failures, one for each suffix. Maps
-    # suffix to a list of tests.
-    # Must be updated using update_test_run().
-    self._deterministic_failures = {}
-
-    # Contains a record of test runs, one for each suffix. Maps suffix to a dict
-    # with the keys 'valid', 'failures', and 'pass_fail_counts'.
-    #   'valid': A Boolean indicating whether the test run was valid.
-    #   'failures': An iterable of strings -- each the name of a test that
-    #   failed.
-    #   'total_tests_ran': How many tests this test suite executed. Ignores
-    #   retries ('pass_fail_counts' deals with that). Used to determine how many
-    #   shards to trigger when retrying tests.
-    #   'pass_fail_counts': A dictionary that provides the number of passes and
-    #   failures for each test. e.g.
-    #     {
-    #       'test3': { 'PASS_COUNT': 3, 'FAIL_COUNT': 2 }
-    #     }
-    #   'findit_notrun': A temporary field for FindIt. Lists tests for which
-    #   every test run had result NOTRUN or UNKNOWN. The CATS team expects to
-    #   move this logic back into FindIt in Q3 2019, after the test results
-    #   datastore has been cleaned up. https://crbug.com/934599.
-    # Must be updated using update_test_run()
-    self._test_runs = {}
-
     # A map from suffix [e.g. 'with patch'] to the name of the recipe engine
     # step that was invoked in run(). This makes the assumption that run() only
     # emits a single recipe engine step, and that the recipe engine step is the
@@ -653,13 +628,10 @@ class Test(object):
     and the test failing to even report its results in machine-readable
     format.
     """
-    if self.spec.resultdb.use_rdb_results_for_all_decisions:
-      if suffix not in self._rdb_results:
-        return False
+    if suffix not in self._rdb_results:
+      return False
 
-      return not self._rdb_results[suffix].invalid
-    else:
-      return self._test_runs[suffix]['valid']
+    return not self._rdb_results[suffix].invalid
 
   def pass_fail_counts(self, suffix):
     """Returns a dictionary of pass and fail counts for each test.
@@ -746,21 +718,8 @@ class Test(object):
         'There is no data for the test run suffix ({0}). This should never '
         'happen as all calls to deterministic_failures() should first check '
         'that the data exists.'.format(suffix))
-    if self.spec.resultdb.use_rdb_results_for_all_decisions:
-      assert suffix in self._rdb_results, failure_msg
-      return self._rdb_results[suffix].unexpected_failing_tests
-    else:
-      assert suffix in self._deterministic_failures, failure_msg
-      return self._deterministic_failures[suffix]
-
-  def update_test_run(self, api, suffix, test_run):
-    if self.spec.resultdb.use_rdb_results_for_all_decisions:
-      return  # If we're in the new world, leave the old results data empty.
-
-    self._test_runs[suffix] = test_run
-    self._deterministic_failures[suffix] = (
-        api.test_utils.canonical.deterministic_failures(
-            self._test_runs[suffix]))
+    assert suffix in self._rdb_results, failure_msg
+    return self._rdb_results[suffix].unexpected_failing_tests
 
   def name_of_step_for_suffix(self, suffix):
     """Returns the name of the step most relevant to the given suffix run.
@@ -1482,8 +1441,6 @@ class ScriptTest(LocalTest):  # pylint: disable=W0232
     if result.json.output:
       failures = result.json.output.get('failures')
     if failures is None:
-      self.update_test_run(api, suffix,
-                           api.test_utils.canonical.result_format())
       api.python.failing_step(
           '%s with suffix %s had an invalid result' % (self.name, suffix),
           'The recipe expected the result to contain the key \'failures\'.'
@@ -1499,17 +1456,6 @@ class ScriptTest(LocalTest):  # pylint: disable=W0232
       })
       pass_fail_counts[failing_test]['fail_count'] += 1
 
-    # It looks like the contract we have with these tests doesn't expose how
-    # many tests actually ran. Just say it's the number of failures for now,
-    # this should be fine for these tests.
-    self.update_test_run(
-        api, suffix, {
-            'failures': failures,
-            'valid': result.json.output['valid'] and result.retcode == 0,
-            'total_tests_ran': len(failures),
-            'pass_fail_counts': pass_fail_counts,
-            'findit_notrun': set(),
-        })
     self.update_failure_on_exit(suffix, result.retcode != 0)
 
     _, failures = api.test_utils.limit_failures(failures)
@@ -1701,7 +1647,6 @@ class LocalGTestTest(LocalTest):
     # these local gtests via isolate from the src-side JSON files.
     # crbug.com/584469
     self._suffix_step_name_map[suffix] = '.'.join(step_result.name_tokens)
-    self.update_test_run(api, suffix, api.test_utils.canonical.result_format())
     self.update_failure_on_exit(suffix, step_result.retcode != 0)
 
     self.update_inv_name_from_stderr(step_result.stderr, suffix)
@@ -2242,9 +2187,6 @@ class SwarmingTest(Test):
   @recipe_api.composite_step
   def run(self, api, suffix):
     """Waits for launched test to finish and collects the results."""
-    assert suffix not in self._test_runs, (
-        'Results of %s were already collected' % self.step_name(suffix))
-
     step_result, has_valid_results = api.chromium_swarming.collect_task(
         self._tasks[suffix])
     self._suffix_step_name_map[suffix] = '.'.join(step_result.name_tokens)
@@ -2259,13 +2201,11 @@ class SwarmingTest(Test):
     if not has_valid_results:
       results['valid'] = False
 
-    self.update_test_run(api, suffix, results)
     self.update_failure_on_exit(suffix, bool(self._tasks[suffix].failed_shards))
 
     _present_info_messages(step_result.presentation, self)
 
-    if self.spec.resultdb.use_rdb_results_for_all_decisions:
-      self.present_rdb_results(api, step_result, self._rdb_results.get(suffix))
+    self.present_rdb_results(api, step_result, self._rdb_results.get(suffix))
 
     return step_result
 
@@ -2313,8 +2253,7 @@ class SwarmingGTestTest(SwarmingTest):
     json_override = None
     # TODO(crbug.com/1255217): Remove this android exception when logcats and
     # tombstones are in resultdb.
-    if (self.spec.resultdb.use_rdb_results_for_all_decisions and
-        api.chromium.c.TARGET_PLATFORM != 'android'):
+    if api.chromium.c.TARGET_PLATFORM != 'android':
       json_override = api.path.mkstemp()
     task = api.chromium_swarming.gtest_task(
         raw_cmd=self._raw_cmd,
@@ -2322,9 +2261,8 @@ class SwarmingGTestTest(SwarmingTest):
         cas_input_root=cas_input_root,
         # The gtest-specific collect step changes step display based on results
         # present in the JSON. So use the default collect-step to avoid
-        # depending on JSON results in the RDB experiment.
-        use_default_collect_step=(
-            self.spec.resultdb.use_rdb_results_for_all_decisions),
+        # depending on JSON results.
+        use_default_collect_step=True,
         failure_as_exception=False,
         collect_json_output_override=json_override)
     self._apply_swarming_task_config(task, api, suffix, '--gtest_filter', ':')
@@ -2512,7 +2450,6 @@ class LocalIsolatedScriptTest(LocalTest):
     status = step_result.presentation.status
 
     self._suffix_step_name_map[suffix] = '.'.join(step_result.name_tokens)
-    self.update_test_run(api, suffix, {})
     self.update_inv_name_from_stderr(step_result.stderr, suffix)
     self.update_failure_on_exit(suffix, step_result.retcode != 0)
 
@@ -2669,8 +2606,6 @@ class AndroidJunitTest(LocalTest):
       raise
     finally:
       self._suffix_step_name_map[suffix] = '.'.join(step_result.name_tokens)
-      self.update_test_run(api, suffix,
-                           api.test_utils.canonical.result_format())
       self.update_inv_name_from_stderr(step_result.stderr, suffix)
       self.update_failure_on_exit(suffix, step_result.retcode != 0)
 
@@ -2681,9 +2616,6 @@ class AndroidJunitTest(LocalTest):
       gtest_results = api.test_utils.present_gtest_failures(
           step_result, presentation=presentation_step.presentation)
       if gtest_results:
-        self.update_test_run(api, suffix,
-                             gtest_results.canonical_result_format())
-
         api.test_results.upload(
             api.json.input(gtest_results.raw),
             test_type='.'.join(step_result.name_tokens),
@@ -2933,6 +2865,59 @@ class SwarmingIosTestSpec(SwarmingTestSpec):
 # off of it.
 class SwarmingIosTest(SwarmingTest):
 
+  def __init__(self, spec):
+    super(SwarmingIosTest, self).__init__(spec)
+
+    # Contains a record of deterministic failures, one for each suffix. Maps
+    # suffix to a list of tests.
+    # Must be updated using update_test_run().
+    self._deterministic_failures = {}
+
+    # Contains a record of test runs, one for each suffix. Maps suffix to a dict
+    # with the keys 'valid', 'failures', and 'pass_fail_counts'.
+    #   'valid': A Boolean indicating whether the test run was valid.
+    #   'failures': An iterable of strings -- each the name of a test that
+    #   failed.
+    #   'total_tests_ran': How many tests this test suite executed. Ignores
+    #   retries ('pass_fail_counts' deals with that). Used to determine how many
+    #   shards to trigger when retrying tests.
+    #   'pass_fail_counts': A dictionary that provides the number of passes and
+    #   failures for each test. e.g.
+    #     {
+    #       'test3': { 'PASS_COUNT': 3, 'FAIL_COUNT': 2 }
+    #     }
+    #   'findit_notrun': A temporary field for FindIt. Lists tests for which
+    #   every test run had result NOTRUN or UNKNOWN. The CATS team expects to
+    #   move this logic back into FindIt in Q3 2019, after the test results
+    #   datastore has been cleaned up. https://crbug.com/934599.
+    # Must be updated using update_test_run()
+    self._test_runs = {}
+
+    # A map from suffix [e.g. 'with patch'] to the name of the recipe engine
+    # step that was invoked in run(). This makes the assumption that run() only
+    # emits a single recipe engine step, and that the recipe engine step is the
+    # one that best represents the run of the tests. This is used by FindIt to
+    # look up the failing step for a test suite from buildbucket.
+    self._suffix_step_name_map = {}
+
+  def has_valid_results(self, suffix):
+    return self._test_runs[suffix]['valid']
+
+  def deterministic_failures(self, suffix):
+    """Return tests that failed on every test run(list of strings)."""
+    failure_msg = (
+        'There is no data for the test run suffix ({0}). This should never '
+        'happen as all calls to deterministic_failures() should first check '
+        'that the data exists.'.format(suffix))
+    assert suffix in self._deterministic_failures, failure_msg
+    return self._deterministic_failures[suffix]
+
+  def update_test_run(self, api, suffix, test_run):
+    self._test_runs[suffix] = test_run
+    self._deterministic_failures[suffix] = (
+        api.test_utils.canonical.deterministic_failures(
+            self._test_runs[suffix]))
+
   def pre_run(self, api, suffix):
     task = self.spec.task
 
@@ -3130,10 +3115,7 @@ class SkylabTestSpec(TestSpec):
     """
     rdb_kwargs = kwargs.pop('resultdb', {})
     return super(SkylabTestSpec, cls).create(
-        name,
-        resultdb=ResultDB.create(
-            use_rdb_results_for_all_decisions=True, **rdb_kwargs),
-        **kwargs)
+        name, resultdb=ResultDB.create(**rdb_kwargs), **kwargs)
 
   @property
   def test_class(self):
@@ -3188,7 +3170,6 @@ class SkylabTest(Test):
     step.presentation.status = status
     step.presentation.step_text += failure_msg
     self.update_failure_on_exit(suffix, True)
-    self.update_test_run(api, suffix, api.test_utils.canonical.result_format())
     raise api.step.StepFailure(status)
 
   def prep_skylab_rdb(self):
