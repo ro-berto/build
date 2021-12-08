@@ -9,8 +9,9 @@ from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 from PB.recipes.build.android import sdk_packager
 
 import math
+import six
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'chromium',
@@ -53,7 +54,10 @@ def RunSteps(api, properties):
   yaml_lines = api.file.read_text('read cipd.yaml', yaml_path).split('\n')
 
   api.step('extract version', None)
-  version = 'cr-' + str(math.floor(api.time.time() / 60 / 60 / 24))
+  version_num = math.floor(api.time.time() / 60 / 60 / 24)
+  if six.PY2:
+    version_num = int(version_num)
+  version = 'cr-' + str(version_num)
   for yaml_line in yaml_lines:
     tokens = yaml_line.split()
     if len(tokens) == 2 and tokens[0] == 'package:':
@@ -154,7 +158,7 @@ def GenTests(api):
           androidx_sample_lib.join('README.chromium')),
       api.override_step_data('read cipd.yaml',
                              api.file.read_text('package: package1')),
-      api.override_step_data('cipd search package1 cr-3.0',
+      api.override_step_data('cipd search package1 cr-3',
                              api.cipd.example_error('error')),
       api.post_process(post_process.MustRun, 'fetch_all'),
       api.post_process(post_process.MustRun, 'create cipd.yaml'),
