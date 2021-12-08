@@ -53,7 +53,7 @@ PROPERTIES = {
 ARCHIVE_LINK = 'https://storage.googleapis.com/chromium-v8/official/%s/%s'
 BRANCH_RE = re.compile(r'^refs/(branch-heads/\d+\.\d+|heads/\d+\.\d+\.\d+)$')
 RELEASE_BRANCH_RE = re.compile(r'^(?:refs/branch-heads/)?(\d+\.\d+)$')
-FIRST_BUILD_IN_MILESTONE_RE = re.compile(r'^\d+\.\d+\.\d+$')
+FIRST_BUILD_IN_MILESTONE_RE = re.compile(r'^\d+\.\d+\.\d+\.1$')
 
 
 def make_archive(api,
@@ -426,9 +426,9 @@ def GenTests(api):
           git_ref='refs/branch-heads/3.4',
           revision='a' * 40),
       api.properties(build_config='Release', target_bits=64),
-      api.v8.version_file(0, 'head', prefix='sync.'),
+      api.v8.version_file(1, 'head', prefix='sync.'),
       api.override_step_data('sync.git describe',
-                             api.raw_io.stream_output('3.4.3')),
+                             api.raw_io.stream_output('3.4.3.1')),
       api.post_process(Filter().include_re('.*ref.*')),
   )
 
@@ -537,9 +537,9 @@ def GenTests(api):
           revision='a' * 40,
       ),
       api.properties(build_config='Release', target_bits=64),
-      api.v8.version_file(0, 'head', prefix='sync.'),
+      api.v8.version_file(1, 'head', prefix='sync.'),
       api.override_step_data('sync.git describe',
-                             api.raw_io.stream_output('3.4.3')),
+                             api.raw_io.stream_output('3.4.3.1')),
       api.step_data('build (ref).compile', retcode=1),
       api.post_process(StatusFailure),
       api.post_process(DropExpectation),
@@ -560,9 +560,9 @@ def GenTests(api):
           target_bits=64,
           use_remoteexec=True,
           upload_archive=False), api.platform('linux', 64),
-      api.v8.version_file(0, 'head', prefix='sync.'),
+      api.v8.version_file(1, 'head', prefix='sync.'),
       api.override_step_data('sync.git describe',
-                             api.raw_io.stream_output('3.4.3')),
+                             api.raw_io.stream_output('3.4.3.1')),
       api.post_process(MustRun, 'sync.clobber', 'sync.gclient runhooks',
                        'build.gn', 'build.preprocess for reclient',
                        'build.compile', 'make archive.zipping'),
