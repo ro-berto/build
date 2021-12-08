@@ -723,3 +723,20 @@ def GenTests(api):
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
+
+  yield api.test(
+      'if_latest_path_does_not_exist',
+      api.chromium.ci_build(builder='test'),
+      api.properties(
+          gcs_archive=True,
+          update_properties={},
+          **{'$build/archive': input_properties}),
+      api.step_data('Generic Archiving Steps.gsutil download', retcode=1),
+      api.step_data('Generic Archiving Steps.get version',
+                    api.file.read_text('MAJOR=90\nMINOR=1\nBUILD=2\nPATCH=3')),
+      api.post_process(post_process.StepCommandContains,
+                       'Generic Archiving Steps.Write latest file',
+                       ['90.1.2.3']),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )

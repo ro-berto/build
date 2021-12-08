@@ -1059,11 +1059,13 @@ class ArchiveApi(recipe_api.RecipeApi):
         file_name = self.m.path.basename(latest_path)
         dest_path = self.m.path.mkdtemp().join(file_name)
 
-        self.m.gsutil.download(
-            bucket=gcs_bucket, source=latest_path, dest=dest_path)
-
-        last_version = self.m.file.read_text(
-            'Read in last version', dest_path, test_data='1.2.3.4')
+        try:
+          self.m.gsutil.download(
+              bucket=gcs_bucket, source=latest_path, dest=dest_path)
+          last_version = self.m.file.read_text(
+              'Read in last version', dest_path, test_data='1.2.3.4')
+        except Exception:
+          last_version = '0.0.0.0'
 
         last_versions = self._deconstruct_version(last_version)
         new_versions = self._deconstruct_version(content)
