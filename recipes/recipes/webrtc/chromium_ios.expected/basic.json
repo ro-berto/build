@@ -2424,7 +2424,7 @@
     "name": "collect tasks (with patch).fake tests 1 (fake device iOS 8.0) results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@raw_io.output@@@"
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
   },
   {
@@ -2491,7 +2491,7 @@
     "name": "collect tasks (with patch).fake tests 2 (fake device iOS 7.1) results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@raw_io.output@@@"
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
   },
   {
@@ -2558,7 +2558,7 @@
     "name": "collect tasks (with patch).fake_eg_test_host (fake device 3 iOS 9.3) results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@raw_io.output@@@"
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
   },
   {

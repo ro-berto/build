@@ -2694,7 +2694,7 @@
     "name": "collect tasks (with patch).EG2_test (Real device iOS 13.1.2) shard 0 results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@raw_io.output@@@"
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
   },
   {
@@ -2761,7 +2761,7 @@
     "name": "collect tasks (with patch).EG2_test (Real device iOS 13.1.2) shard 1 results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@raw_io.output@@@"
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
   },
   {
@@ -2828,7 +2828,7 @@
     "name": "collect tasks (with patch).EG2_test (Real device iOS 13.1.2) shard 2 results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@raw_io.output@@@"
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
   },
   {
@@ -2895,7 +2895,7 @@
     "name": "collect tasks (with patch).EG1_test2 (Real device iOS 13.1) results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@raw_io.output@@@"
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
   },
   {

@@ -1718,9 +1718,9 @@
     },
     "name": "base_unittests results",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@raw_io.output@{\"invocation\": {\"name\": \"base_unittests_results\", \"state\": \"FINALIZED\"}, \"invocationId\": \"inv0\"}@@@",
-      "@@@STEP_LOG_LINE@raw_io.output@{\"invocationId\": \"inv0\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"Test.One\", \"variant\": {\"def\": {\"test_suite\": \"base_unittests\"}}, \"variantHash\": \"base_unittests_hash\"}}@@@",
-      "@@@STEP_LOG_END@raw_io.output@@@"
+      "@@@STEP_LOG_LINE@raw_io.output_text@{\"invocation\": {\"name\": \"base_unittests_results\", \"state\": \"FINALIZED\"}, \"invocationId\": \"inv0\"}@@@",
+      "@@@STEP_LOG_LINE@raw_io.output_text@{\"invocationId\": \"inv0\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"Test.One\", \"variant\": {\"def\": {\"test_suite\": \"base_unittests\"}}, \"variantHash\": \"base_unittests_hash\"}}@@@",
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
   },
   {

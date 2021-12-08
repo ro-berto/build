@@ -1241,7 +1241,7 @@
     "name": "collect tasks.telemetry_gpu_unittests on NVIDIA GPU on Linux results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@raw_io.output@@@"
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
   },
   {

@@ -2484,7 +2484,7 @@
     "name": "test r3.collect tasks (r3).gl_tests results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_END@raw_io.output@@@"
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
   },
   {
@@ -4249,10 +4249,10 @@
     "name": "test r4.collect tasks (r4).gl_tests results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@raw_io.output@{\"invocationId\": \"invocations/100\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"Test.One\"}}@@@",
-      "@@@STEP_LOG_LINE@raw_io.output@{\"invocationId\": \"invocations/100\", \"testResult\": {\"expected\": true, \"status\": \"PASS\", \"testId\": \"Test.One\"}}@@@",
-      "@@@STEP_LOG_LINE@raw_io.output@{\"invocationId\": \"invocations/100\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"Test.Two\"}}@@@",
-      "@@@STEP_LOG_END@raw_io.output@@@"
+      "@@@STEP_LOG_LINE@raw_io.output_text@{\"invocationId\": \"invocations/100\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"Test.One\"}}@@@",
+      "@@@STEP_LOG_LINE@raw_io.output_text@{\"invocationId\": \"invocations/100\", \"testResult\": {\"expected\": true, \"status\": \"PASS\", \"testId\": \"Test.One\"}}@@@",
+      "@@@STEP_LOG_LINE@raw_io.output_text@{\"invocationId\": \"invocations/100\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"Test.Two\"}}@@@",
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
   },
   {

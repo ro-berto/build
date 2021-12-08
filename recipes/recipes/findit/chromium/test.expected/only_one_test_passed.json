@@ -2369,11 +2369,11 @@
     "name": "test r1.collect tasks (r1).gl_tests results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@raw_io.output@{\"invocation\": {\"name\": \"gl_tests_results\", \"state\": \"FINALIZED\"}, \"invocationId\": \"inv0\"}@@@",
-      "@@@STEP_LOG_LINE@raw_io.output@{\"invocationId\": \"inv0\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"Test.One\", \"variant\": {\"def\": {\"test_suite\": \"gl_tests\"}}, \"variantHash\": \"gl_tests_hash\"}}@@@",
-      "@@@STEP_LOG_LINE@raw_io.output@{\"invocation\": {\"name\": \"gl_tests_results\", \"state\": \"FINALIZED\"}, \"invocationId\": \"inv1\"}@@@",
-      "@@@STEP_LOG_LINE@raw_io.output@{\"invocationId\": \"inv1\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"Test.Two\", \"variant\": {\"def\": {\"test_suite\": \"gl_tests\"}}, \"variantHash\": \"gl_tests_hash\"}}@@@",
-      "@@@STEP_LOG_END@raw_io.output@@@"
+      "@@@STEP_LOG_LINE@raw_io.output_text@{\"invocation\": {\"name\": \"gl_tests_results\", \"state\": \"FINALIZED\"}, \"invocationId\": \"inv0\"}@@@",
+      "@@@STEP_LOG_LINE@raw_io.output_text@{\"invocationId\": \"inv0\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"Test.One\", \"variant\": {\"def\": {\"test_suite\": \"gl_tests\"}}, \"variantHash\": \"gl_tests_hash\"}}@@@",
+      "@@@STEP_LOG_LINE@raw_io.output_text@{\"invocation\": {\"name\": \"gl_tests_results\", \"state\": \"FINALIZED\"}, \"invocationId\": \"inv1\"}@@@",
+      "@@@STEP_LOG_LINE@raw_io.output_text@{\"invocationId\": \"inv1\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"Test.Two\", \"variant\": {\"def\": {\"test_suite\": \"gl_tests\"}}, \"variantHash\": \"gl_tests_hash\"}}@@@",
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
   },
   {
@@ -4108,7 +4108,7 @@
     "name": "test r0.collect tasks (r0).gl_tests results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_END@raw_io.output@@@"
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
   },
   {

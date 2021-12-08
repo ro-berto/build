@@ -175,7 +175,7 @@
     },
     "name": "junit_test results",
     "~followup_annotations": [
-      "@@@STEP_LOG_END@raw_io.output@@@"
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
   },
   {

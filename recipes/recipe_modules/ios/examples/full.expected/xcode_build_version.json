@@ -2327,7 +2327,7 @@
     "name": "collect tasks (with patch).build-global xcode build version (fake device iOS 10.0) results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@raw_io.output@@@"
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
   },
   {
@@ -2394,7 +2394,7 @@
     "name": "collect tasks (with patch).task-local xcode build version (fake device 2 iOS 11.0) results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@raw_io.output@@@"
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
   },
   {
@@ -2461,7 +2461,7 @@
     "name": "collect tasks (with patch).task-local xcode version (fake device 3 iOS 11.0) results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@raw_io.output@@@"
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
   },
   {

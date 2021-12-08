@@ -2552,7 +2552,7 @@
     "name": "collect tasks (with patch).ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@raw_io.output@@@"
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
   },
   {
@@ -2625,7 +2625,7 @@
     "name": "collect tasks (with patch).ios_chrome_web_eg2tests_module_iPad Air 2 14.4 results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@raw_io.output@@@"
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
   },
   {
@@ -3420,15 +3420,15 @@
     "name": "searching_for_new_tests.fetch test variants for current patchset",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@raw_io.output@{\"invocationId\": \"invocations/1\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a\", \"variant\": {\"def\": {\"os\": \"Ubuntu-14.04\", \"test_suite\": \"ios_chrome_bookmarks_eg2tests_module_iPhone 11 14.4\"}}, \"variantHash\": \"b3M6VWJ1bnR1LTE0LjA0CnRlc3Rfc3VpdGU6aW9zX2Nocm9tZV9ib29rbWFya3NfZWcydGVzdHNfbW9kdWxlX2lQaG9uZSAxMSAxNC40\"}}@@@",
-      "@@@STEP_LOG_LINE@raw_io.output@{\"invocationId\": \"invocations/1\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a\", \"variant\": {\"def\": {\"os\": \"Mac-11\", \"test_suite\": \"ios_chrome_bookmarks_eg2tests_module_iPhone 11 14.4\"}}, \"variantHash\": \"b3M6TWFjLTExCnRlc3Rfc3VpdGU6aW9zX2Nocm9tZV9ib29rbWFya3NfZWcydGVzdHNfbW9kdWxlX2lQaG9uZSAxMSAxNC40\"}}@@@",
-      "@@@STEP_LOG_LINE@raw_io.output@{\"invocationId\": \"invocations/1\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a\", \"variant\": {\"def\": {\"os\": \"Ubuntu-14.04\", \"test_suite\": \"ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4\"}}, \"variantHash\": \"b3M6VWJ1bnR1LTE0LjA0CnRlc3Rfc3VpdGU6aW9zX2Nocm9tZV9ib29rbWFya3NfZWcydGVzdHNfbW9kdWxlX2lQYWQgQWlyIDIgMTQuNA==\"}}@@@",
-      "@@@STEP_LOG_LINE@raw_io.output@{\"invocationId\": \"invocations/1\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a\", \"variant\": {\"def\": {\"os\": \"Mac-11\", \"test_suite\": \"ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4\"}}, \"variantHash\": \"b3M6TWFjLTExCnRlc3Rfc3VpdGU6aW9zX2Nocm9tZV9ib29rbWFya3NfZWcydGVzdHNfbW9kdWxlX2lQYWQgQWlyIDIgMTQuNA==\"}}@@@",
-      "@@@STEP_LOG_LINE@raw_io.output@{\"invocationId\": \"invocations/1\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_b\", \"variant\": {\"def\": {\"os\": \"Mac-11\", \"test_suite\": \"ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4\"}}, \"variantHash\": \"b3M6TWFjLTExCnRlc3Rfc3VpdGU6aW9zX2Nocm9tZV9ib29rbWFya3NfZWcydGVzdHNfbW9kdWxlX2lQYWQgQWlyIDIgMTQuNA==\"}}@@@",
-      "@@@STEP_LOG_LINE@raw_io.output@{\"invocationId\": \"invocations/1\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"ninja://ios/chrome/test/earl_grey2:ios_chrome_web_eg2tests_module/TestSuite.test_c\", \"variant\": {\"def\": {\"os\": \"Mac-11\", \"test_suite\": \"ios_chrome_web_eg2tests_module_iPad Air 2 14.4\"}}, \"variantHash\": \"b3M6TWFjLTExCnRlc3Rfc3VpdGU6aW9zX2Nocm9tZV93ZWJfZWcydGVzdHNfbW9kdWxlX2lQYWQgQWlyIDIgMTQuNA==\"}}@@@",
-      "@@@STEP_LOG_LINE@raw_io.output@{\"invocationId\": \"invocations/2\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a\", \"variant\": {\"def\": {\"os\": \"Ubuntu-14.04\", \"test_suite\": \"ios_chrome_bookmarks_eg2tests_module_iPhone 11 14.4\"}}, \"variantHash\": \"b3M6VWJ1bnR1LTE0LjA0CnRlc3Rfc3VpdGU6aW9zX2Nocm9tZV9ib29rbWFya3NfZWcydGVzdHNfbW9kdWxlX2lQaG9uZSAxMSAxNC40\"}}@@@",
-      "@@@STEP_LOG_LINE@raw_io.output@{\"invocationId\": \"invocations/3\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a\", \"variant\": {\"def\": {\"os\": \"Ubuntu-14.04\", \"test_suite\": \"ios_chrome_bookmarks_eg2tests_module_iPhone 11 14.4\"}}, \"variantHash\": \"b3M6VWJ1bnR1LTE0LjA0CnRlc3Rfc3VpdGU6aW9zX2Nocm9tZV9ib29rbWFya3NfZWcydGVzdHNfbW9kdWxlX2lQaG9uZSAxMSAxNC40\"}}@@@",
-      "@@@STEP_LOG_END@raw_io.output@@@"
+      "@@@STEP_LOG_LINE@raw_io.output_text@{\"invocationId\": \"invocations/1\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a\", \"variant\": {\"def\": {\"os\": \"Ubuntu-14.04\", \"test_suite\": \"ios_chrome_bookmarks_eg2tests_module_iPhone 11 14.4\"}}, \"variantHash\": \"b3M6VWJ1bnR1LTE0LjA0CnRlc3Rfc3VpdGU6aW9zX2Nocm9tZV9ib29rbWFya3NfZWcydGVzdHNfbW9kdWxlX2lQaG9uZSAxMSAxNC40\"}}@@@",
+      "@@@STEP_LOG_LINE@raw_io.output_text@{\"invocationId\": \"invocations/1\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a\", \"variant\": {\"def\": {\"os\": \"Mac-11\", \"test_suite\": \"ios_chrome_bookmarks_eg2tests_module_iPhone 11 14.4\"}}, \"variantHash\": \"b3M6TWFjLTExCnRlc3Rfc3VpdGU6aW9zX2Nocm9tZV9ib29rbWFya3NfZWcydGVzdHNfbW9kdWxlX2lQaG9uZSAxMSAxNC40\"}}@@@",
+      "@@@STEP_LOG_LINE@raw_io.output_text@{\"invocationId\": \"invocations/1\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a\", \"variant\": {\"def\": {\"os\": \"Ubuntu-14.04\", \"test_suite\": \"ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4\"}}, \"variantHash\": \"b3M6VWJ1bnR1LTE0LjA0CnRlc3Rfc3VpdGU6aW9zX2Nocm9tZV9ib29rbWFya3NfZWcydGVzdHNfbW9kdWxlX2lQYWQgQWlyIDIgMTQuNA==\"}}@@@",
+      "@@@STEP_LOG_LINE@raw_io.output_text@{\"invocationId\": \"invocations/1\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a\", \"variant\": {\"def\": {\"os\": \"Mac-11\", \"test_suite\": \"ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4\"}}, \"variantHash\": \"b3M6TWFjLTExCnRlc3Rfc3VpdGU6aW9zX2Nocm9tZV9ib29rbWFya3NfZWcydGVzdHNfbW9kdWxlX2lQYWQgQWlyIDIgMTQuNA==\"}}@@@",
+      "@@@STEP_LOG_LINE@raw_io.output_text@{\"invocationId\": \"invocations/1\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_b\", \"variant\": {\"def\": {\"os\": \"Mac-11\", \"test_suite\": \"ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4\"}}, \"variantHash\": \"b3M6TWFjLTExCnRlc3Rfc3VpdGU6aW9zX2Nocm9tZV9ib29rbWFya3NfZWcydGVzdHNfbW9kdWxlX2lQYWQgQWlyIDIgMTQuNA==\"}}@@@",
+      "@@@STEP_LOG_LINE@raw_io.output_text@{\"invocationId\": \"invocations/1\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"ninja://ios/chrome/test/earl_grey2:ios_chrome_web_eg2tests_module/TestSuite.test_c\", \"variant\": {\"def\": {\"os\": \"Mac-11\", \"test_suite\": \"ios_chrome_web_eg2tests_module_iPad Air 2 14.4\"}}, \"variantHash\": \"b3M6TWFjLTExCnRlc3Rfc3VpdGU6aW9zX2Nocm9tZV93ZWJfZWcydGVzdHNfbW9kdWxlX2lQYWQgQWlyIDIgMTQuNA==\"}}@@@",
+      "@@@STEP_LOG_LINE@raw_io.output_text@{\"invocationId\": \"invocations/2\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a\", \"variant\": {\"def\": {\"os\": \"Ubuntu-14.04\", \"test_suite\": \"ios_chrome_bookmarks_eg2tests_module_iPhone 11 14.4\"}}, \"variantHash\": \"b3M6VWJ1bnR1LTE0LjA0CnRlc3Rfc3VpdGU6aW9zX2Nocm9tZV9ib29rbWFya3NfZWcydGVzdHNfbW9kdWxlX2lQaG9uZSAxMSAxNC40\"}}@@@",
+      "@@@STEP_LOG_LINE@raw_io.output_text@{\"invocationId\": \"invocations/3\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a\", \"variant\": {\"def\": {\"os\": \"Ubuntu-14.04\", \"test_suite\": \"ios_chrome_bookmarks_eg2tests_module_iPhone 11 14.4\"}}, \"variantHash\": \"b3M6VWJ1bnR1LTE0LjA0CnRlc3Rfc3VpdGU6aW9zX2Nocm9tZV9ib29rbWFya3NfZWcydGVzdHNfbW9kdWxlX2lQaG9uZSAxMSAxNC40\"}}@@@",
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
   },
   {
@@ -3460,8 +3460,8 @@
     "name": "searching_for_new_tests.fetch test variants from previous invocations",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@raw_io.output@{\"invocationId\": \"invocations/2\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a\", \"variant\": {\"def\": {\"os\": \"Ubuntu-14.04\", \"test_suite\": \"ios_chrome_bookmarks_eg2tests_module_iPhone 11 14.4\"}}, \"variantHash\": \"b3M6VWJ1bnR1LTE0LjA0CnRlc3Rfc3VpdGU6aW9zX2Nocm9tZV9ib29rbWFya3NfZWcydGVzdHNfbW9kdWxlX2lQaG9uZSAxMSAxNC40\"}}@@@",
-      "@@@STEP_LOG_END@raw_io.output@@@"
+      "@@@STEP_LOG_LINE@raw_io.output_text@{\"invocationId\": \"invocations/2\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a\", \"variant\": {\"def\": {\"os\": \"Ubuntu-14.04\", \"test_suite\": \"ios_chrome_bookmarks_eg2tests_module_iPhone 11 14.4\"}}, \"variantHash\": \"b3M6VWJ1bnR1LTE0LjA0CnRlc3Rfc3VpdGU6aW9zX2Nocm9tZV9ib29rbWFya3NfZWcydGVzdHNfbW9kdWxlX2lQaG9uZSAxMSAxNC40\"}}@@@",
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
   },
   {
@@ -4021,7 +4021,7 @@
     "name": "test new tests for flakiness.collect tasks (check flakiness).ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_END@raw_io.output@@@"
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
   },
   {
@@ -4094,7 +4094,7 @@
     "name": "test new tests for flakiness.collect tasks (check flakiness).ios_chrome_web_eg2tests_module_iPad Air 2 14.4 results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_END@raw_io.output@@@"
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
   },
   {

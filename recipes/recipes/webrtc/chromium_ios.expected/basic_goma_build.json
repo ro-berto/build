@@ -1999,7 +1999,7 @@
     "name": "collect tasks (with patch).fake test (iPhone X iOS 8.0) results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@raw_io.output@@@"
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
   },
   {

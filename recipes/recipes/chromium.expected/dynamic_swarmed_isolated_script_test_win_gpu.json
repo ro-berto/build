@@ -1603,7 +1603,7 @@
     "name": "collect tasks.telemetry_gpu_unittests on NVIDIA GPU on Windows results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@raw_io.output@@@"
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
   },
   {
@@ -1676,7 +1676,7 @@
     "name": "collect tasks.telemetry_gpu_unittests on AMD GPU on Windows results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@raw_io.output@@@"
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
   },
   {
@@ -1749,7 +1749,7 @@
     "name": "collect tasks.telemetry_gpu_unittests on (15ad) GPU on Windows results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@raw_io.output@@@"
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
   },
   {

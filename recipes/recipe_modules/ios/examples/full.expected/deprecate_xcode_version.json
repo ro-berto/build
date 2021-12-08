@@ -1931,7 +1931,7 @@
     "name": "collect tasks (with patch).build-global xcode version (iPhone X iOS 10.0) results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@raw_io.output@@@"
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
   },
   {
@@ -1998,7 +1998,7 @@
     "name": "collect tasks (with patch).test-local xcode version (iPhone X iOS 11.0) results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@raw_io.output@@@"
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
   },
   {

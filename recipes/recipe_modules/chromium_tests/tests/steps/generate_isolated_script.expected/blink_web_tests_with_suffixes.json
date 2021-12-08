@@ -219,7 +219,7 @@
     "name": "collect tasks.blink_web_tests on Intel GPU on Mac results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@raw_io.output@@@"
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
   },
   {
