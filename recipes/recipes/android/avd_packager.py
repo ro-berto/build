@@ -7,7 +7,7 @@
 from recipe_engine import post_process
 from PB.recipes.build.android import avd_packager
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'chromium_checkout',
