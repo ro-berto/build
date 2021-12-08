@@ -509,7 +509,7 @@ class FlakinessApi(recipe_api.RecipeApi):
             test_filter=test_filter,
             repeat_count=self._repeat_count,
             retry_limit=0)
-        test_copy._test_options = options
+        test_copy.test_options = options
 
         # we only need one shard of the test spec to run a test instance
         # multiple times, we override whatever shard value was set prior to 1
