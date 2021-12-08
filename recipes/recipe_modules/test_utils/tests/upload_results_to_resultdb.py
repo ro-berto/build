@@ -46,18 +46,15 @@ def RunSteps(api, is_swarming_test=True):
       TARGET_PLATFORM=api.properties.get('target_platform', 'linux'))
 
   test_specs = []
-  resultdb = steps.ResultDB.create(use_rdb_results_for_all_decisions=True)
   if not is_swarming_test:
     test_specs.append(
-        steps.LocalIsolatedScriptTestSpec.create(
-            'base_unittests', resultdb=resultdb))
+        steps.LocalIsolatedScriptTestSpec.create('base_unittests'))
   else:
     test_specs.append(
         steps.SwarmingGTestTestSpec.create(
             'base_unittests',
             shards=2,
-            test_id_prefix='ninja://chromium/tests:base_unittests/',
-            resultdb=resultdb))
+            test_id_prefix='ninja://chromium/tests:base_unittests/'))
   tests = [test_spec.get_test() for test_spec in test_specs]
   api.chromium_swarming.path_to_merge_scripts = (
       api.path['cache'].join('merge_scripts'))

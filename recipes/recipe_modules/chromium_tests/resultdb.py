@@ -43,9 +43,6 @@ class ResultDB(object):
     * result_adapter_path - path to result_adapter binary.
     * include - If True, a new invocation will be created for the test and
       included in the parent invocation.
-    * use_rdb_results_for_all_decisions - If True, will cause the recipe to
-      discard all results fetched by parsing the legacy JSON, and instead use
-      RDB results for methods like steps.Test.pass_fail_counts().
   """
   enable = attrib(bool, default=True)
   has_native_resultdb_integration = attrib(bool, default=False)
@@ -74,7 +71,6 @@ class ResultDB(object):
   # result_adapter deployed via the pool config. That is, result_adapter
   # w/o preceding path.
   result_adapter_path = attrib(str, default='result_adapter')
-  use_rdb_results_for_all_decisions = attrib(bool, default=True)
 
   @classmethod
   def create(cls, **kwargs):

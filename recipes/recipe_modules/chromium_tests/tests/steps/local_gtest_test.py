@@ -40,10 +40,7 @@ def RunSteps(api):
 
   test = steps.LocalGTestTestSpec.create(
       'base_unittests',
-      resultdb=steps.ResultDB(
-          enable=True,
-          result_format='gtest',
-          use_rdb_results_for_all_decisions=True),
+      resultdb=steps.ResultDB(result_format='gtest'),
   ).get_test()
   assert not test.runs_on_swarming
 

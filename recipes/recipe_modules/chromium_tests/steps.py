@@ -2775,14 +2775,6 @@ class SwarmingIosTestSpec(SwarmingTestSpec):
       * kwargs - Additional keyword arguments that will be used to
         initialize the attributes of the returned spec.
     """
-    kwargs.setdefault('resultdb', ResultDB())
-
-    # SwarmingIosTest has poor integration with ResultDB fetching, so don't
-    # use RDB results for this class. This will be removed as part of the
-    # wider clean-up of this class (crbug.com/webrtc/12768).
-    kwargs['resultdb'] = attr.evolve(
-        kwargs['resultdb'], use_rdb_results_for_all_decisions=False)
-
     return super(SwarmingIosTestSpec, cls).create(
         name=task['step name'],
         platform=platform,

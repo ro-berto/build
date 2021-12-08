@@ -43,14 +43,8 @@ def RunSteps(api):
         api.profiles.profile_dir().join('pgo_final_aggregate.profdata'))
 
   test_specs = [
-      steps.SwarmingIsolatedScriptTestSpec.create(
-          'performance_test_suite',
-          resultdb=steps.ResultDB.create(
-              use_rdb_results_for_all_decisions=True)),
-      steps.SwarmingIsolatedScriptTestSpec.create(
-          'different_test_suite',
-          resultdb=steps.ResultDB.create(
-              use_rdb_results_for_all_decisions=True)),
+      steps.SwarmingIsolatedScriptTestSpec.create('performance_test_suite'),
+      steps.SwarmingIsolatedScriptTestSpec.create('different_test_suite'),
   ]
 
   tests = [s.get_test() for s in test_specs]

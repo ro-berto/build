@@ -34,8 +34,7 @@ def RunSteps(api):
 
   isolate_coverage_data = api.properties.get('isolate_coverage_data', False)
 
-  resultdb = steps.ResultDB(
-      enable=True, result_format='json', use_rdb_results_for_all_decisions=True)
+  resultdb = steps.ResultDB(result_format='json')
   test_spec = steps.LocalIsolatedScriptTestSpec.create(
       test_name,
       override_compile_targets=api.properties.get('override_compile_targets'),

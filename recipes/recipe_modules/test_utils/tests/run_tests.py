@@ -79,15 +79,13 @@ def RunSteps(api, test_swarming, test_skylab, test_name, test_experimental,
         return False
       return super(MockSwarmingTest, self).has_valid_results(suffix)
 
-  resultdb = steps.ResultDB.create(use_rdb_results_for_all_decisions=True)
   if test_swarming:
     test_specs = [
-        MockSwarmingTestSpec.create(name=test_name, resultdb=resultdb),
-        MockSwarmingTestSpec.create(name=test_name + '_2', resultdb=resultdb),
-        steps.MockTestSpec.create(name='test3', resultdb=resultdb),
+        MockSwarmingTestSpec.create(name=test_name),
+        MockSwarmingTestSpec.create(name=test_name + '_2'),
+        steps.MockTestSpec.create(name='test3'),
         steps.ExperimentalTestSpec.create(
-            MockSwarmingTestSpec.create(
-                name='disabled_experimental_test', resultdb=resultdb),
+            MockSwarmingTestSpec.create(name='disabled_experimental_test'),
             experiment_percentage=0,
             api=api),
     ]
@@ -105,23 +103,19 @@ def RunSteps(api, test_swarming, test_skylab, test_name, test_experimental,
   elif test_experimental:
     test_specs = [
         steps.ExperimentalTestSpec.create(
-            MockSwarmingTestSpec.create(
-                name='disabled_experimental_test', resultdb=resultdb),
+            MockSwarmingTestSpec.create(name='disabled_experimental_test'),
             experiment_percentage=0,
             api=api),
         steps.ExperimentalTestSpec.create(
-            MockSwarmingTestSpec.create(
-                name='enabled_experimental_test', resultdb=resultdb),
+            MockSwarmingTestSpec.create(name='enabled_experimental_test'),
             experiment_percentage=100,
             api=api)
     ]
   else:
     test_specs = [
         steps.MockTestSpec.create(
-            name=test_name,
-            abort_on_failure=abort_on_failure,
-            resultdb=resultdb),
-        steps.MockTestSpec.create(name='test2', resultdb=resultdb)
+            name=test_name, abort_on_failure=abort_on_failure),
+        steps.MockTestSpec.create(name='test2')
     ]
 
   tests = [s.get_test() for s in test_specs if not s.disabled_reason]

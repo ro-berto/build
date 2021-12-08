@@ -39,10 +39,7 @@ def RunSteps(api):
       },
       perf_builder_name_alias='test-perf-alias',
       commit_position_property='got_revision_cp',
-      resultdb=steps.ResultDB(
-          enable=True,
-          result_format='gtest',
-          use_rdb_results_for_all_decisions=True))
+      resultdb=steps.ResultDB(enable=True, result_format='gtest'))
 
   test = test_spec.get_test()
 

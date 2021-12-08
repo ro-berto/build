@@ -63,8 +63,6 @@ def RunSteps(api, fail_calculate_tests, fail_mb_and_compile,
   test_specs = [
       steps.SwarmingGTestTestSpec.create(
           'base_unittests',
-          resultdb=steps.ResultDB(
-              enable=True, use_rdb_results_for_all_decisions=True),
           **kwargs)
   ]
 
@@ -77,11 +75,7 @@ def RunSteps(api, fail_calculate_tests, fail_mb_and_compile,
 
   # Allows testing the scenario where there are multiple test suites.
   for t in api.properties.get('additional_gtest_targets', []):
-    test_specs.append(
-        steps.SwarmingGTestTestSpec.create(
-            t,
-            resultdb=steps.ResultDB(
-                enable=True, use_rdb_results_for_all_decisions=True)))
+    test_specs.append(steps.SwarmingGTestTestSpec.create(t))
 
   tests = [s.get_test() for s in test_specs]
 

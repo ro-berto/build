@@ -35,8 +35,6 @@ def RunSteps(api):
   test_spec = steps.AndroidJunitTestSpec.create(
       'test_name',
       target_name=api.properties.get('target_name'),
-      resultdb=steps.ResultDB(
-          enable=True, use_rdb_results_for_all_decisions=True),
   )
   test = test_spec.get_test()
 

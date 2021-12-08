@@ -69,9 +69,7 @@ def RunSteps(api):
         dimensions=api.properties.get('dimensions', {
             'gpu': '8086',
         }),
-        isolate_coverage_data=isolate_coverage_data,
-        resultdb=steps.ResultDB.create(
-            enable=True, use_rdb_results_for_all_decisions=True))
+        isolate_coverage_data=isolate_coverage_data)
     override_shards = api.properties.get('shards')
     if override_shards:
       test_spec = test_spec.with_shards(override_shards)
