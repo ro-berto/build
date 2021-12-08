@@ -1803,7 +1803,6 @@ class SwarmingTestSpec(TestSpec):
   ignore_task_failure = attrib(bool, False)
   named_caches = attrib(mapping[str, str], default={})
   shards = attrib(int, default=1)
-  quickrun_shards = attrib(int, default=None)
   service_account = attrib(str, default=None)
   idempotent = attrib(bool, default=None)
 
@@ -1985,10 +1984,7 @@ class SwarmingTest(Test):
                                              tests_to_retry)
     args = _merge_args_and_test_options(self, self.spec.args, test_options, api)
 
-    # If we're in quick run set the shard count to any available quickrun shards
-    use_quickrun = api.cq.active and api.cq.run_mode == api.cq.QUICK_DRY_RUN
-    shards = self.spec.quickrun_shards if (
-        use_quickrun and self.spec.quickrun_shards) else self.spec.shards
+    shards = self.spec.shards
 
     if tests_to_retry:
       # The filter list is eventually passed to the binary over the command
