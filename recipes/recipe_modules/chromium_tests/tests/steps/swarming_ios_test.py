@@ -67,7 +67,7 @@ def RunSteps(api):
   test = test_spec.get_test()
   assert test.runs_on_swarming
 
-  test.pre_run(api, '')
+  test.pre_run(api.ios.m, '')
   api.ios.collect([test])
 
 
