@@ -230,6 +230,7 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'use_clang_coverage',
+                'enable_reclient',
             ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -244,7 +245,10 @@ SPEC = {
                 'mb',
             ],
             gclient_config='chromium',
-            gclient_apply_config=['use_clang_coverage'],
+            gclient_apply_config=[
+                'use_clang_coverage',
+                'enable_reclient',
+            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,

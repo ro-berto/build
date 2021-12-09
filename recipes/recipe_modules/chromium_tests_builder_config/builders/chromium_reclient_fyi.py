@@ -33,12 +33,12 @@ SPEC = {
     # Staging reclient
     'Linux Builder reclient staging':
         chromium_apply_configs(chromium_linux.SPEC['Linux Builder'], [],
-                               ['enable_reclient', 'reclient_staging']),
+                               ['reclient_staging']),
 
     # Test reclient
     'Linux Builder reclient test':
         chromium_apply_configs(chromium_linux.SPEC['Linux Builder'], [],
-                               ['enable_reclient', 'reclient_test']),
+                               ['reclient_test']),
 }
 
 # Many of the FYI specs are made by transforming specs from other files, so
