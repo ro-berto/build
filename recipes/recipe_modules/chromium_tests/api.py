@@ -1774,7 +1774,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def run_tests_for_flakiness(self, builder_config, new_test_objects):
     suffix = self.m.flakiness.test_suffix
 
-    with self.m.step.nest('test new tests for flakiness'):
+    with self.m.step.nest('test new tests for flakiness') as p:
+      p.step_text = ('If you see failures unrelated with flaky new tests, '
+                     'please use "Validate-Test-Flakiness: skip" git footer to '
+                     'skip new test flakiness check and file a crbug to '
+                     'Infra>Test>Flakiness component.')
       with self.wrap_chromium_tests(builder_config, new_test_objects):
         # we don't need failed test_suites because they'll be analyzed for flake
         # rates anyways through their invocation ids below.

@@ -3530,7 +3530,10 @@
   },
   {
     "cmd": [],
-    "name": "test new tests for flakiness"
+    "name": "test new tests for flakiness",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@If you see failures unrelated with flaky new tests, please use \"Validate-Test-Flakiness: skip\" git footer to skip new test flakiness check and file a crbug to Infra>Test>Flakiness component.@@@"
+    ]
   },
   {
     "cmd": [],
