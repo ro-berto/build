@@ -92,8 +92,8 @@ def RunSteps(api):
     if api.properties.get('run_without_patch'):
       test._only_retry_failed_tests = True
 
-      test.pre_run(api, 'without patch')
-      test.run(api, 'without patch')
+      test.pre_run(api.chromium_tests.m, 'without patch')
+      test.run(api.chromium_tests.m, 'without patch')
 
     result = api.step('details', [])
     result.presentation.logs['details'] = [

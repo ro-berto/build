@@ -458,7 +458,7 @@ def RunSteps(api):
             use_rdb=True,
             resultdb=resultdb)
         if test:
-          test.pre_run(api, suffix='')
+          test.pre_run(api.ios.m, suffix='')
           api.resultdb.include_invocations([
               i[len('invocations/'):]
               for i in test.get_task('').get_invocation_names()
