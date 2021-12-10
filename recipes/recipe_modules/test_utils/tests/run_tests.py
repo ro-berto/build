@@ -38,9 +38,6 @@ from PB.go.chromium.org.luci.resultdb.proto.v1 import (test_result as
                                                        rdb_test_result)
 from PB.go.chromium.org.luci.resultdb.proto.v1 import common as rdb_common
 
-from PB.test_platform.taskstate import TaskState
-from PB.test_platform.steps.execution import ExecuteResponse
-
 PROPERTIES = {
     'abort_on_failure': Property(default=False),
     'test_swarming': Property(default=False),
