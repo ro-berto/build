@@ -13,7 +13,9 @@ from google.cloud import bigquery
 PROJECT = 'chrome-flakiness'
 FETCH_BUILDER_QUERY = """
     SELECT DISTINCT
-      bot
+      bot,
+      project,
+      bucket,
     FROM
       `chrome-flakiness.flake_endorser.try_historical_test_data_7_days`
   """
@@ -31,7 +33,9 @@ TEST_HISTORY_QUERY = """
     FROM
       `chrome-flakiness.flake_endorser.try_historical_test_data_7_days`
     WHERE
-      bot = \'{}\'
+      bot = \'{}\' AND
+      project = \'{}\' AND
+      bucket = \'{}\'
     GROUP BY
       test_id,
       variant_hash,
@@ -45,7 +49,11 @@ def fetch_builders(bq, args):
   query_job = bq.query(FETCH_BUILDER_QUERY)
   rows = query_job.result()
   logging.info('Query complete. Processing results.')
-  builders = [row.bot for row in rows]
+  builders = [{
+      'bot': row.bot,
+      'project': row.project,
+      'bucket': row.bucket
+  } for row in rows]
 
   with open(args.output_file, 'w') as f:
     json.dump(builders, f)
@@ -55,8 +63,12 @@ def fetch_builders(bq, args):
 
 def query_test_history(bq, args):
   builder = args.builder
-  logging.info('Searching test history for %s' % builder)
-  query = TEST_HISTORY_QUERY.format(EXPERIMENTAL_STEP_NAME_SUBSTRING, builder)
+  project = args.project
+  builder_bucket = args.builder_bucket
+  logging.info('Searching test history for %s:%s:%s' %
+               (project, builder_bucket, builder))
+  query = TEST_HISTORY_QUERY.format(EXPERIMENTAL_STEP_NAME_SUBSTRING, builder,
+                                    project, builder_bucket)
   query_job = bq.query(query)
   query_job.result()
   logging.info('Query completed. Uploading results to GS bucket.')
@@ -111,6 +123,10 @@ def parse_arguments(args):
       help=('GS bucket path to export the table data to.'))
   test_history_parser.add_argument(
       '--builder', required=True, help='try builder name')
+  test_history_parser.add_argument(
+      '--builder-bucket', required=True, help='try builder bucket in project')
+  test_history_parser.add_argument(
+      '--project', required=True, help='try builder project')
 
   format_parser = subparsers.add_parser(
       'format', help='format new line delimited json to json format')

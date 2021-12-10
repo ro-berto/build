@@ -42,6 +42,12 @@ DEPS = [
 
 
 def RunSteps(api):
+  api.assertions.assertEqual(api.flakiness.gs_bucket, 'flake_endorser')
+  api.assertions.assertEqual(
+      api.flakiness.gs_source_template(experimental=True).format(
+          'project', 'bucket', 'builder', 'latest'),
+      'experimental/project/bucket/builder/latest/')
+
   builder_id, builder_config = (
       api.chromium_tests_builder_config.lookup_builder())
   with api.chromium.chromium_layout():

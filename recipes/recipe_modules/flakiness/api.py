@@ -84,6 +84,17 @@ class FlakinessApi(recipe_api.RecipeApi):
     """
     return self._check_for_flakiness
 
+  @property
+  def gs_bucket(self):
+    return 'flake_endorser'
+
+  def gs_source_template(self, experimental=False):
+    # {project}/{bucket}/{builder}/{build_number}
+    base = '{}/{}/{}/{}/'
+    if experimental:
+      base = 'experimental/' + base
+    return base
+
   def should_check_for_flakiness(self):
     """Returns whether the module should run checks for new test flakiness.
 

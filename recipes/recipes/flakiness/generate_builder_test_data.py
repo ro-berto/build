@@ -11,6 +11,7 @@ from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 PYTHON_VERSION_COMPATIBILITY = "PY3"
 
 DEPS = [
+    'flakiness',
     'depot_tools/gsutil',
     'recipe_engine/buildbucket',
     'recipe_engine/cipd',
@@ -26,29 +27,35 @@ DEPS = [
 ]
 
 
-def analyze_try_builder_test_history(api, builder, bucket, build_number):
+def analyze_try_builder_test_history(api, builder, gs_bucket, build_number,
+                                     project, builder_bucket):
   """Query test history for the given builder, and upload the results to CIPD
 
   Args:
     builder: (str) name of the try builder
-    bucket: (str) name of gs bucket
-    build_number: (int) buildbucket build number
+    gs_bucket: (str) name of gs bucket.
+    build_number: (int) buildbucket build number of this recipe run.
+    project: (str) project associated with builder. For example, "chromium"
+    builder_bucket: (str) bucket associated with project & builder. For example,
+      "ci" or "try"
   """
-  with api.step.nest('analyze try builder {}'.format(builder)):
-    source = '{}/{}'
-    if api.runtime.is_experimental:
-      source = 'experimental/' + source
+  with api.step.nest('analyze try builder {}.{}:{}'.format(
+      project, builder_bucket, builder)):
+    experimental = api.runtime.is_experimental
+    source = api.flakiness.gs_source_template(experimental=experimental).format(
+        project, builder_bucket, builder, build_number)
 
     # we're setting wildcard suffixes to ensure that the larger tables can
     # partition their results before the export to GS.
-    export_source = source + '_*.json'
-    gs_source = export_source.format(build_number, builder)
-    export_gs_path = 'gs://{}/{}'.format(bucket, gs_source)
+    gs_source = source + '{}_*.json'.format(builder)
+    export_gs_path = 'gs://{}/{}'.format(gs_bucket, gs_source)
     cmd = [
         'vpython3',
         api.resource('query.py'),
         'history',
         '--builder={}'.format(builder),
+        '--builder-bucket={}'.format(builder_bucket),
+        '--project={}'.format(project),
         '--export-gs-path={}'.format(export_gs_path),
     ]
     api.step('query test history data', cmd)
@@ -63,7 +70,9 @@ def analyze_try_builder_test_history(api, builder, bucket, build_number):
         builder + '_*.json',
         test_data=['[CLEANUP]/builder1_000.json'])
 
-    builder_output_file = api.path['cleanup'].join('{}.json'.format(builder))
+    builder_output_folder = api.path['cleanup'].join(project, builder_bucket)
+    api.file.ensure_directory('create dir', builder_output_folder)
+    builder_output_file = builder_output_folder.join('{}.json'.format(builder))
     cmd = ['vpython3', api.resource('query.py'), 'format']
     for f in files:
       cmd += ['--file', str(f)]
@@ -71,15 +80,17 @@ def analyze_try_builder_test_history(api, builder, bucket, build_number):
     api.step('format json', cmd)
 
     tar_filename = '{}.json.tar.gz'.format(builder)
-    tar_gz = builder_folder.join(tar_filename)
+    tar_gz = builder_output_folder.join(tar_filename)
     pkg = api.tar.make_package(api.path['cleanup'], tar_gz, compression='gz')
     pkg.add_file(builder_output_file)
     pkg.tar('Create {}'.format(tar_filename))
 
-    dest_gs_source = source.format('latest', tar_filename)
+    dest_gs_source = api.flakiness.gs_source_template(
+        experimental=experimental).format(project, builder_bucket, builder,
+                                          'latest') + tar_filename
     api.gsutil.upload(
         tar_gz,
-        bucket,
+        gs_bucket,
         dest_gs_source,
         args=['-Z'],
         name='copy {} to latest'.format(tar_filename))
@@ -96,17 +107,24 @@ def RunSteps(api):
       api.json.output()
   ]
   result = api.step('search for try builders', cmd)
-  builders = result.json.output
+  builder_data = result.json.output
 
   build_number = api.buildbucket.build.number
-  bucket = 'flake_endorser'
+  gs_bucket = api.flakiness.gs_bucket
 
   futures = []
   with api.step.nest('generating historical test data'):
-    for b in builders:
+    for b in builder_data:
       futures.append(
-          api.futures.spawn(analyze_try_builder_test_history, api, b, bucket,
-                            build_number))
+          api.futures.spawn(
+              analyze_try_builder_test_history,
+              api,
+              b['bot'],
+              gs_bucket,
+              build_number,
+              b['project'],
+              b['bucket'],
+          ))
 
   for f in futures:
     f.result()
@@ -116,14 +134,20 @@ def GenTests(api):
   yield api.test(
       'basic',
       api.runtime(is_experimental=True),
-      api.step_data('search for try builders', api.json.output(['builder1'])),
+      api.step_data(
+          'search for try builders',
+          api.json.output([{
+              'bot': 'builder1',
+              'project': 'chromium',
+              'bucket': 'try',
+          }])),
       api.post_check(
           post_process.MustRun,
-          'generating historical test data.analyze try builder builder1.'
-          'query test history data'),
+          'generating historical test data.analyze try builder '
+          'chromium.try:builder1.query test history data'),
       api.post_check(post_process.MustRun,
                      ('generating historical test data.'
-                      'analyze try builder builder1.'
+                      'analyze try builder chromium.try:builder1.'
                       'gsutil copy builder1.json.tar.gz to latest')),
       api.post_check(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),

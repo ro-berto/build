@@ -37,12 +37,18 @@ class QueryTest(unittest.TestCase):
 
     output_gs_path = 'gs://some/path/test.json'
     builder = 'fake_builder'
+    project = 'chromium'
+    builder_bucket = 'try'
     history_args = [
         'history',
         '--export-gs-path',
         output_gs_path,
         '--builder',
         builder,
+        '--project',
+        project,
+        '--builder-bucket',
+        builder_bucket,
     ]
     res = query.parse_arguments(history_args)
     self.assertEqual(res.export_gs_path, output_gs_path)
@@ -87,12 +93,18 @@ class QueryTest(unittest.TestCase):
   def test_query_test_history(self, mock_client):
     output_gs_path = 'gs://some/path/test.json'
     builder = 'fake_builder'
+    project = 'chromium'
+    builder_bucket = 'try'
     history_args = [
         'history',
         '--export-gs-path',
         output_gs_path,
         '--builder',
         builder,
+        '--project',
+        project,
+        '--builder-bucket',
+        builder_bucket,
     ]
     args = query.parse_arguments(history_args)
     query.query_test_history(mock_client, args)
@@ -103,7 +115,7 @@ class QueryTest(unittest.TestCase):
 
     mock_client.query.assert_called_with(
         query.TEST_HISTORY_QUERY.format(query.EXPERIMENTAL_STEP_NAME_SUBSTRING,
-                                        builder))
+                                        builder, project, builder_bucket))
     mock_client.extract_table.assert_called_with(mock.ANY, output_gs_path,
                                                  mock.ANY)
 
