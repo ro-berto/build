@@ -1,7 +1,7 @@
 [
   {
     "cmd": [],
-    "name": "Roller: 'Update dependencies'"
+    "name": "Roller: 'roller'"
   },
   {
     "cmd": [
@@ -21,12 +21,12 @@
       "owner=autoroll@service-accounts.com",
       "-p",
       "status=open",
+      "-p",
+      "-hashtag=rw_reported",
       "-o",
       "LABELS",
       "-o",
-      "CURRENT_REVISION",
-      "-o",
-      "DOWNLOAD_COMMANDS"
+      "CURRENT_REVISION"
     ],
     "env": {
       "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
@@ -40,7 +40,7 @@
       ]
     },
     "infra_step": true,
-    "name": "Roller: 'Update dependencies'.gerrit Find open CLs",
+    "name": "Roller: 'roller'.gerrit Find open CLs",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@[]@@@",

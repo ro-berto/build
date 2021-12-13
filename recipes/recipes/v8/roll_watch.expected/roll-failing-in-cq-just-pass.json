@@ -1,10 +1,7 @@
 [
   {
     "cmd": [],
-    "name": "Roller: 'Update dependencies'",
-    "~followup_annotations": [
-      "@@@STEP_FAILURE@@@"
-    ]
+    "name": "Roller: 'roller'"
   },
   {
     "cmd": [
@@ -24,12 +21,14 @@
       "owner=autoroll@service-accounts.com",
       "-p",
       "status=open",
+      "-p",
+      "-hashtag=rw_reported",
+      "-p",
+      "hashtags=sometag",
       "-o",
       "LABELS",
       "-o",
-      "CURRENT_REVISION",
-      "-o",
-      "DOWNLOAD_COMMANDS"
+      "CURRENT_REVISION"
     ],
     "env": {
       "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
@@ -43,7 +42,7 @@
       ]
     },
     "infra_step": true,
-    "name": "Roller: 'Update dependencies'.gerrit Find open CLs",
+    "name": "Roller: 'roller'.gerrit Find open CLs",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@[@@@",
@@ -63,12 +62,10 @@
   },
   {
     "cmd": [],
-    "name": "Roller: 'Update dependencies'.Checking CL",
+    "name": "Roller: 'roller'.Checking CL",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@<br/>CL failed in CQ!@@@",
-      "@@@STEP_LINK@project1/+/123@https://review.googlesource.com/c/project1/+/123@@@",
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_LINK@project1/+/123@https://review.googlesource.com/c/project1/+/123@@@"
     ]
   },
   {
@@ -95,7 +92,7 @@
       ]
     },
     "infra_step": true,
-    "name": "Roller: 'Update dependencies'.Checking CL.buildbucket.search",
+    "name": "Roller: 'roller'.Checking CL.buildbucket.search",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@raw_io.output_text@{\"id\": \"1\", \"status\": \"SUCCESS\"}@@@",
