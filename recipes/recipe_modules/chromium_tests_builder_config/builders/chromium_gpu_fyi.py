@@ -269,22 +269,6 @@ SPEC = {
             simulation_platform='win',
             serialize_tests=True,
         ),
-    'Win10 FYI x64 Release (NVIDIA GeForce GTX 1660)':
-        _chromium_gpu_fyi_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            execution_mode=builder_spec.TEST,
-            parent_buildername='GPU FYI Win x64 Builder',
-            simulation_platform='win',
-            serialize_tests=True,
-        ),
     'Win10 FYI x86 Release (NVIDIA)':
         _chromium_gpu_fyi_spec(
             chromium_config='chromium',
