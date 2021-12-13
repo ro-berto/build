@@ -187,14 +187,9 @@ def RunSteps(api):
     api.file.rmtree('rmtree %s' % p, p)
   if check_different_build_dirs:
     # In this setup, one build dir does incremental builds. Make sure no stale
-    # .runtime_deps (explicitly also in subdirectories), .isolate or .isolated
-    # files hang around.
-    # TODO(https://crbug.com/972075): Stop caring about .isolate/.isolated when
-    # the compare_build_artifacts.py has switched to .runtime_deps.
+    # .runtime_deps (explicitly also in subdirectories) files hang around.
     api.file.rmglob('rm old .runtime_deps', api.chromium.output_dir,
                     '**/*.runtime_deps')
-    api.file.rmglob('rm old .isolate', api.chromium.output_dir, '*.isolate')
-    api.file.rmglob('rm old .isolated', api.chromium.output_dir, '*.isolated')
 
   targets = recipe_config['targets']
 
