@@ -4,6 +4,7 @@
 
 import copy
 import inspect
+import json
 import random
 import re
 
@@ -29,24 +30,65 @@ class TestDefinition():
 
   Attributes:
     * is_experimental: (bool) Whether the test is from an experimental suite.
-    * tags: (list) Tags in the ResultDB test result
-    * test_id: (string) ResultDB's test_id (go/resultdb-concepts)
-    * variant_hash: (stirng) ResultDB's variant_hash (go/resultdb-concepts)
+    * tags: (list) Tags in the ResultDB test result. If tags are provided, and
+            experimental is not True, the suffix 'experimental' is searched for
+            in the tags to determine whether it was an experimental run.
+    * test_id: (str) ResultDB's test_id (go/resultdb-concepts)
+    * variants: (dict) ResultDB's variant (go/resultdb-concepts)
+    * variant_hash: (str) ResultDB's variant_hash (go/resultdb-concepts)
   """
 
-  def __init__(self, test_result):
-    self.tags = test_result.tags if test_result.tags else []
-    self.test_id = test_result.test_id
-    self.variants = getattr(test_result.variant,
-                            'def') if test_result.variant else {}
-    self.variant_hash = test_result.variant_hash
+  def __init__(self,
+               test_id,
+               is_experimental=False,
+               tags=None,
+               variants=None,
+               variant_hash=None):
+    """
+    Args:
+      * test_id: (str) ResultDB test id
+      * is_experimental: (bool) Flag indicating whether test run was
+        experimental. If tags are defined, and this is False, step_name is
+        searched for in the tags to determine whether 'experimental)' suffix
+        is present.
+      * tags: (list) tags from ResultDB's TestResult. Used to determine whether
+        the given run was experimental.
+      * variants: either ResultDB's TestResult (dict) or a JSON string of
+        key value variant definitions. The JSON string is parsed s.t. all key,
+        value entries are flattened.
+        (eg/ [{
+          "key": "os",
+          "value": "Mac-11.0"
+        }]) is flattened to -> {"os": "Mac-11.0"}
+      * variant_hash: (str) ResultDB's variant hash
+    """
+    self.test_id = test_id
+    self.variants = variants
+    if variants and isinstance(variants, str):
+      self.variants = self._parse_string_variants(variants)
+    elif hasattr(variants, 'def'):
+      self.variants = getattr(variants, 'def', {})
 
-    self.is_experimental = False
-    for tag in self.tags:
-      # "experimental" is the last part of step suffix (wrapped in brackets)
-      # which is part of the step name. (https://bit.ly/3I4Enc6)
-      if tag.key and tag.key == 'step_name' and 'experimental)' in tag.value:
-        self.is_experimental = True
+    self.variant_hash = variant_hash
+
+    self.is_experimental = (
+        is_experimental or self._set_experimental_from_tags(tags))
+
+  def _parse_string_variants(self, variants):
+    fin = {}
+    j = json.loads(variants)
+    for kv in j:
+      fin[kv['key']] = kv['value']
+    return fin
+
+  def _set_experimental_from_tags(self, tags):
+    if tags:
+      for tag in tags:
+        # "experimental" is the last part of step suffix (wrapped in brackets)
+        # which is part of the step name. (https://bit.ly/3I4Enc6)
+        if tag.key and tag.key == 'step_name' and 'experimental)' in tag.value:
+          return True
+    return False
 
   def __eq__(self, t2):
     return (self.test_id, self.variant_hash, self.is_experimental) == t2
@@ -89,11 +131,45 @@ class FlakinessApi(recipe_api.RecipeApi):
     return 'flake_endorser'
 
   def gs_source_template(self, experimental=False):
-    # {project}/{bucket}/{builder}/{build_number}
+    """Provides template for generator recipe
+
+    Project, bucket and builder information are queried for in Buildbucket,
+    and this provides the template used.
+
+    Expected gs_source format:
+    * {project}/{bucket}/{builder}/{build_number}
+
+    Args:
+      * experimental: (bool) flag for experimental runs, appends experimental
+        to the path.
+
+    Return:
+      * (str) template
+    """
     base = '{}/{}/{}/{}/'
     if experimental:
       base = 'experimental/' + base
     return base
+
+  def builder_gs_path(self, builder, build_number=None, experimental=False):
+    """Generates the GS source
+
+    Args:
+      * builder: Buildbucket's BuilderID.
+      * builder_name: (str) optional arg for setting builder_name. this defaults
+        to 'builder' from builder_id.
+      * build_number: (int) build number to append to gs_path. defaults to
+        'latest' if not set.
+      * experimental: (bool) will append prefix path 'experimental/' if True.
+    """
+    # a list of builder names are queried for by the pre-computing builder, and
+    # requires a mechanism to set this value for the correct upload path.
+    return self.gs_source_template(experimental=experimental).format(
+        builder.project,
+        builder.bucket,
+        builder.builder,
+        str(build_number) if build_number else 'latest',
+    ) + '{}.json.tar.gz'.format(builder.builder)
 
   def should_check_for_flakiness(self):
     """Returns whether the module should run checks for new test flakiness.
@@ -214,47 +290,79 @@ class FlakinessApi(recipe_api.RecipeApi):
 
     return excluded_invs
 
-  def get_builder_invocation_history(self, builder_id, excluded_invs=None):
-    """Gets a list of Invocation names for the most recent builds on a builder.
-
-    Searches buildbucket for the ResultDB Invocation names of a specified number
-    of most recent builds on a particular builder.
-
-    Invocations represent containers of results and Invocation names can be used
-    to map buildbucket builds to results in ResultDB.
-
-    Args:
-        builder_id (buildbucket.builder.proto.BuilderID message): The builder to
-            search for build history from.
-        excluded_invs (set of str): A set of ResultDB invocation name strings
-            for invocations that we don't want to include in our invocation list
-            returned. This is usually invocations associated with the current
-            build that we don't want to consider historical invocations as they
-            contain new tests from the current CL.
+  def fetch_precomputed_test_data(self):
+    """Fetch the precomputed JSON file from GS
 
     Returns:
-        A list of ResultDB Invocation names for the builds we want to
-        query.
+      dict JSON file of precomputed data
     """
-    if excluded_invs is None:
-      excluded_invs = set()
-    step_name = 'fetch previously run invocations'
-    predicate = builds_service_pb2.BuildPredicate(builder=builder_id)
-    search_results = self.m.buildbucket.search(
-        predicate=predicate,
-        limit=self.build_count,
-        report_build=False,
-        fields=['infra.resultdb.invocation'],
-        step_name=step_name)
+    builder = self.m.buildbucket.build.builder
+    source = self.builder_gs_path(
+        builder, experimental=self.m.runtime.is_experimental)
+    local_dest = self.m.path.mkstemp()
+    self.m.gsutil.download(self.gs_bucket, source, local_dest)
 
-    invs = [
-        str(b.infra.resultdb.invocation)
-        for b in search_results
-        if str(b.infra.resultdb.invocation) and
-        str(b.infra.resultdb.invocation) not in excluded_invs
-    ]
+    # The output dir must not exist for untar.
+    output_dir = self.m.path['cleanup'].join('flake_endorser')
+    self.m.tar.untar('unpack {}'.format(source), local_dest, output_dir)
 
-    return invs
+    return self.m.file.read_json(
+        'process precomputed test history',
+        output_dir.join(builder.project, builder.bucket,
+                        '{}.json'.format(builder.builder)),
+        test_data=[{
+            'test_id':
+                ('ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_'
+                 'eg2tests_module/TestSuite.test_a'),
+            'is_experimental': False,
+            'variant':
+                ('[{"key":"builder","value":"ios-simulator-full-configs"},'
+                 '{"key":"os","value":"Ubuntu-14.04"},{"key":"test_suite",'
+                 '"value":"ios_chrome_bookmarks_eg2tests_module_iPhone 11 '
+                 '14.4"}]'),
+            'variant_hash': 'some_hash',
+            'invocation': ['invocation/2', 'invocations/3'],
+        }],
+        # We turn off logging for the JSON as some of the files are pretty
+        # large, and logging significantly affects the runtime in these cases.
+        include_log=False)
+
+  def process_precomputed_test_data(self, test_data, excluded_invs):
+    """Process the precomputed test data into TestDefinition objects.
+
+    Args:
+      * test_data: (dict) JSON of the test data. Supported keys in the test
+        data JSON include:
+        - test_id: (str, required) ResultDB's test_id.
+        - invocation: (list) a list of strings, which are invocations, which
+          must start with 'invocations/'. See "Invocation message" at
+          go/resultdb-concepts
+        - variant: (str) ResultDB's variants, in JSON string.
+        - variant_hash: (str) ResultDB's variant_hash, a hash of the variants.
+        - is_experimental: (bool) Flag determining whether the given run was
+          experimental, usually determined by the suffix `experimental` found
+          from ResultDB's tags, where the tag key is step_name.
+      * excluded_invs: (set) of str invocations. used to exclude test entries.
+
+    Returns:
+      set of TestDefinition objects
+    """
+    tests = set()
+    for test_entry in test_data:
+      test_invs = set(test_entry.get('invocation', []))
+      # A test purely from excluded_invs is not regarded as part of history
+      # tests, because it only appeared in related try job runs
+      # (excluded_invs) from the same CL or chained CL
+      if excluded_invs.issuperset(test_invs):
+        continue
+
+      tests.add(
+          TestDefinition(
+              test_entry['test_id'],
+              is_experimental=test_entry.get('is_experimental', False),
+              variants=test_entry.get('variant', None),
+              variant_hash=test_entry.get('variant_hash', None)))
+    return tests
 
   def get_test_variants(self, inv_list, test_query_count=None, step_name=None):
     """Gets a set of (test_id, variant hash) tuples found in specific builds.
@@ -282,7 +390,13 @@ class FlakinessApi(recipe_api.RecipeApi):
     test_set = set()
     for inv in inv_dict.values():
       for test_result in inv.test_results:
-        test_set.add(TestDefinition(test_result))
+        test_set.add(
+            TestDefinition(
+                test_result.test_id,
+                tags=test_result.tags,
+                variants=test_result.variant,
+                variant_hash=test_result.variant_hash,
+            ))
 
     return test_set
 
@@ -324,7 +438,12 @@ class FlakinessApi(recipe_api.RecipeApi):
         step_name='cross reference newly identified tests against ResultDB')
 
     for entry in results.entries:
-      test = TestDefinition(entry.result)
+      test = TestDefinition(
+          entry.result.test_id,
+          tags=entry.result.tags,
+          variants=entry.result.variant,
+          variant_hash=entry.result.variant_hash,
+      )
       excluded = entry.result.name.split("/tests")[0] in excluded_invs
       if test in prelim_tests and not excluded:
         prelim_tests.remove(test)
@@ -380,26 +499,28 @@ class FlakinessApi(recipe_api.RecipeApi):
       ])
 
     if not self.check_for_flakiness:
-      return set([])
+      return set()
 
     with self.m.step.nest('searching_for_new_tests') as p:
-      current_builder = self.m.buildbucket.build.builder
-      current_inv = str(self.m.buildbucket.build.infra.resultdb.invocation)
       excluded_invs = self.fetch_all_related_invocations()
+      builder_name = self.m.buildbucket.builder_name
 
-      inv_list = self.get_builder_invocation_history(
-          builder_id=current_builder, excluded_invs=excluded_invs)
+      try:
+        precomputed_json = self.fetch_precomputed_test_data()
+      except recipe_api.StepFailure:
+        p.step_text = ('The current try builder may not have test data '
+                       'precomputed.')
+        return set()
+      historical_tests = self.process_precomputed_test_data(
+          precomputed_json, set(excluded_invs))
+      p.logs['historical_tests'] = join_tests(historical_tests)
 
+      current_inv = str(self.m.buildbucket.build.infra.resultdb.invocation)
       current_tests = self.get_test_variants(
           inv_list=[current_inv],
           test_query_count=self.current_query_count,
           step_name='fetch test variants for current patchset')
       p.logs['current_build_tests'] = join_tests(current_tests)
-
-      historical_tests = self.get_test_variants(
-          inv_list=inv_list,
-          step_name='fetch test variants from previous invocations')
-      p.logs['historical_tests'] = join_tests(historical_tests)
 
       # Comparing the current build test list to the ResultDB query test list to
       # get a preliminary set of potential new tests.
@@ -411,7 +532,7 @@ class FlakinessApi(recipe_api.RecipeApi):
       new_tests = self.verify_new_tests(
           prelim_tests=preliminary_new_tests,
           excluded_invs=excluded_invs,
-          builder=current_builder.builder)
+          builder=builder_name)
       p.logs['new_tests'] = ('new tests: \n\n{}'.format('\n'.join([
           'test_id: {}, variant_hash: {}, experimental: {}'.format(
               t.test_id, t.variant_hash, t.is_experimental)

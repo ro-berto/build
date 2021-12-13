@@ -28,11 +28,12 @@ def untar_with_subprocess(tar_file, output, quiet):
   Returns:
     Exit code (0 on success).
   """
-  args = ['tar', '-xf']
+  args = ['tar']
+  options = '-x'
   if not quiet:
-    args += ['-v']
-  args += [tar_file]
-
+    options += 'v'
+  options += 'f'
+  args += [options, tar_file]
   return subprocess.call(
       args=args,
       cwd=output)

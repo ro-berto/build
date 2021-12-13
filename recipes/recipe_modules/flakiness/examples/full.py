@@ -278,20 +278,10 @@ def GenTests(api):
           step_name=(
               'searching_for_new_tests.'
               'fetching associated builds with current gerrit patchset')),
-      # Search for all past invocations for builder
-      api.buildbucket.simulated_search_results(
-          builds=build_database,
-          step_name='searching_for_new_tests.fetch previously run invocations'),
       api.resultdb.query(
           inv_bundle=current_patchset_invocations,
           step_name=('searching_for_new_tests.'
                      'fetch test variants for current patchset')),
-      api.resultdb.query(
-          inv_bundle={
-              'invocations/2': current_patchset_invocations['invocations/2']
-          },
-          step_name=('searching_for_new_tests.'
-                     'fetch test variants from previous invocations')),
       # This is what's been recently run, and that isn't in the exclusion list
       # and so should be removed (false positive).
       api.resultdb.get_test_result_history(
@@ -396,22 +386,10 @@ def GenTests(api):
           step_name=(
               'searching_for_new_tests.'
               'fetching associated builds with current gerrit patchset')),
-      # Search for all past invocations for builder
-      api.buildbucket.simulated_search_results(
-          builds=build_database,
-          step_name='searching_for_new_tests.fetch previously run invocations'),
       api.resultdb.query(
           inv_bundle=current_patchset_invocations,
           step_name=('searching_for_new_tests.'
                      'fetch test variants for current patchset')),
-      api.resultdb.query(
-          inv_bundle={
-              'invocations/2': current_patchset_invocations['invocations/2']
-          },
-          step_name=('searching_for_new_tests.'
-                     'fetch test variants from previous invocations')),
-      # This is what's been recently run, and that isn't in the exclusion list
-      # and so should be removed (false positive).
       api.resultdb.get_test_result_history(
           res,
           step_name=(

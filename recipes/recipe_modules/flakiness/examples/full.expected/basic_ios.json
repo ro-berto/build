@@ -3125,6 +3125,8 @@
     "cmd": [],
     "name": "searching_for_new_tests",
     "~followup_annotations": [
+      "@@@STEP_LOG_LINE@historical_tests@ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a_some_hash@@@",
+      "@@@STEP_LOG_END@historical_tests@@@",
       "@@@STEP_LOG_LINE@current_build_tests@ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a_b3M6TWFjLTExCnRlc3Rfc3VpdGU6aW9zX2Nocm9tZV9ib29rbWFya3NfZWcydGVzdHNfbW9kdWxlX2lQYWQgQWlyIDIgMTQuNA==@@@",
       "@@@STEP_LOG_LINE@current_build_tests@ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a_b3M6TWFjLTExCnRlc3Rfc3VpdGU6aW9zX2Nocm9tZV9ib29rbWFya3NfZWcydGVzdHNfbW9kdWxlX2lQaG9uZSAxMSAxNC40@@@",
       "@@@STEP_LOG_LINE@current_build_tests@ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a_b3M6VWJ1bnR1LTE0LjA0CnRlc3Rfc3VpdGU6aW9zX2Nocm9tZV9ib29rbWFya3NfZWcydGVzdHNfbW9kdWxlX2lQYWQgQWlyIDIgMTQuNA==@@@",
@@ -3132,11 +3134,10 @@
       "@@@STEP_LOG_LINE@current_build_tests@ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_b_b3M6TWFjLTExCnRlc3Rfc3VpdGU6aW9zX2Nocm9tZV9ib29rbWFya3NfZWcydGVzdHNfbW9kdWxlX2lQYWQgQWlyIDIgMTQuNA==@@@",
       "@@@STEP_LOG_LINE@current_build_tests@ninja://ios/chrome/test/earl_grey2:ios_chrome_web_eg2tests_module/TestSuite.test_c_b3M6TWFjLTExCnRlc3Rfc3VpdGU6aW9zX2Nocm9tZV93ZWJfZWcydGVzdHNfbW9kdWxlX2lQYWQgQWlyIDIgMTQuNA==@@@",
       "@@@STEP_LOG_END@current_build_tests@@@",
-      "@@@STEP_LOG_LINE@historical_tests@ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a_b3M6VWJ1bnR1LTE0LjA0CnRlc3Rfc3VpdGU6aW9zX2Nocm9tZV9ib29rbWFya3NfZWcydGVzdHNfbW9kdWxlX2lQaG9uZSAxMSAxNC40@@@",
-      "@@@STEP_LOG_END@historical_tests@@@",
       "@@@STEP_LOG_LINE@preliminary_tests@ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a_b3M6TWFjLTExCnRlc3Rfc3VpdGU6aW9zX2Nocm9tZV9ib29rbWFya3NfZWcydGVzdHNfbW9kdWxlX2lQYWQgQWlyIDIgMTQuNA==@@@",
       "@@@STEP_LOG_LINE@preliminary_tests@ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a_b3M6TWFjLTExCnRlc3Rfc3VpdGU6aW9zX2Nocm9tZV9ib29rbWFya3NfZWcydGVzdHNfbW9kdWxlX2lQaG9uZSAxMSAxNC40@@@",
       "@@@STEP_LOG_LINE@preliminary_tests@ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a_b3M6VWJ1bnR1LTE0LjA0CnRlc3Rfc3VpdGU6aW9zX2Nocm9tZV9ib29rbWFya3NfZWcydGVzdHNfbW9kdWxlX2lQYWQgQWlyIDIgMTQuNA==@@@",
+      "@@@STEP_LOG_LINE@preliminary_tests@ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a_b3M6VWJ1bnR1LTE0LjA0CnRlc3Rfc3VpdGU6aW9zX2Nocm9tZV9ib29rbWFya3NfZWcydGVzdHNfbW9kdWxlX2lQaG9uZSAxMSAxNC40@@@",
       "@@@STEP_LOG_LINE@preliminary_tests@ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_b_b3M6TWFjLTExCnRlc3Rfc3VpdGU6aW9zX2Nocm9tZV9ib29rbWFya3NfZWcydGVzdHNfbW9kdWxlX2lQYWQgQWlyIDIgMTQuNA==@@@",
       "@@@STEP_LOG_LINE@preliminary_tests@ninja://ios/chrome/test/earl_grey2:ios_chrome_web_eg2tests_module/TestSuite.test_c_b3M6TWFjLTExCnRlc3Rfc3VpdGU6aW9zX2Nocm9tZV93ZWJfZWcydGVzdHNfbW9kdWxlX2lQYWQgQWlyIDIgMTQuNA==@@@",
       "@@@STEP_LOG_END@preliminary_tests@@@",
@@ -3354,18 +3355,15 @@
   },
   {
     "cmd": [
-      "bb",
-      "ls",
-      "-host",
-      "cr-buildbucket.appspot.com",
-      "-json",
-      "-nopage",
-      "-n",
-      "10",
-      "-fields",
-      "infra.resultdb.invocation",
-      "-predicate",
-      "{\"builder\": {\"bucket\": \"try\", \"builder\": \"fake-try-builder\", \"project\": \"chromium\"}}"
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "gs://flake_endorser/chromium/try/fake-try-builder/latest/fake-try-builder.json.tar.gz",
+      "[CLEANUP]/tmp_tmp_3"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -3383,13 +3381,68 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "searching_for_new_tests.fetch previously run invocations",
+    "name": "searching_for_new_tests.gsutil download",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@raw_io.output_text@{\"builder\": {\"bucket\": \"try\", \"builder\": \"fake-try-builder\", \"project\": \"chromium\"}, \"infra\": {\"resultdb\": {\"invocation\": \"invocations/1\"}}}@@@",
-      "@@@STEP_LOG_LINE@raw_io.output_text@{\"builder\": {\"bucket\": \"try\", \"builder\": \"fake-try-builder\", \"project\": \"chromium\"}, \"infra\": {\"resultdb\": {\"invocation\": \"invocations/2\"}}}@@@",
-      "@@@STEP_LOG_LINE@raw_io.output_text@{\"builder\": {\"bucket\": \"try\", \"builder\": \"fake-try-builder\", \"project\": \"chromium\"}, \"infra\": {\"resultdb\": {\"invocation\": \"invocations/3\"}}}@@@",
-      "@@@STEP_LOG_END@raw_io.output_text@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::tar]/resources/untar.py"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "chromium:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "searching_for_new_tests.unpack chromium/try/fake-try-builder/latest/fake-try-builder.json.tar.gz",
+    "stdin": "{\"output\": \"[CLEANUP]/flake_endorser\", \"quiet\": false, \"tar_file\": \"[CLEANUP]/tmp_tmp_3\"}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CLEANUP]/flake_endorser/chromium/try/fake-try-builder.json",
+      "/path/to/tmp/"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "searching_for_new_tests.process precomputed test history",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -3428,39 +3481,6 @@
       "@@@STEP_LOG_LINE@raw_io.output_text@{\"invocationId\": \"invocations/1\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"ninja://ios/chrome/test/earl_grey2:ios_chrome_web_eg2tests_module/TestSuite.test_c\", \"variant\": {\"def\": {\"os\": \"Mac-11\", \"test_suite\": \"ios_chrome_web_eg2tests_module_iPad Air 2 14.4\"}}, \"variantHash\": \"b3M6TWFjLTExCnRlc3Rfc3VpdGU6aW9zX2Nocm9tZV93ZWJfZWcydGVzdHNfbW9kdWxlX2lQYWQgQWlyIDIgMTQuNA==\"}}@@@",
       "@@@STEP_LOG_LINE@raw_io.output_text@{\"invocationId\": \"invocations/2\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a\", \"variant\": {\"def\": {\"os\": \"Ubuntu-14.04\", \"test_suite\": \"ios_chrome_bookmarks_eg2tests_module_iPhone 11 14.4\"}}, \"variantHash\": \"b3M6VWJ1bnR1LTE0LjA0CnRlc3Rfc3VpdGU6aW9zX2Nocm9tZV9ib29rbWFya3NfZWcydGVzdHNfbW9kdWxlX2lQaG9uZSAxMSAxNC40\"}}@@@",
       "@@@STEP_LOG_LINE@raw_io.output_text@{\"invocationId\": \"invocations/3\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a\", \"variant\": {\"def\": {\"os\": \"Ubuntu-14.04\", \"test_suite\": \"ios_chrome_bookmarks_eg2tests_module_iPhone 11 14.4\"}}, \"variantHash\": \"b3M6VWJ1bnR1LTE0LjA0CnRlc3Rfc3VpdGU6aW9zX2Nocm9tZV9ib29rbWFya3NfZWcydGVzdHNfbW9kdWxlX2lQaG9uZSAxMSAxNC40\"}}@@@",
-      "@@@STEP_LOG_END@raw_io.output_text@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "rdb",
-      "query",
-      "-json",
-      "-n",
-      "2",
-      "1",
-      "2"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "chromium:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "searching_for_new_tests.fetch test variants from previous invocations",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@raw_io.output_text@{\"invocationId\": \"invocations/2\", \"testResult\": {\"status\": \"FAIL\", \"testId\": \"ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a\", \"variant\": {\"def\": {\"os\": \"Ubuntu-14.04\", \"test_suite\": \"ios_chrome_bookmarks_eg2tests_module_iPhone 11 14.4\"}}, \"variantHash\": \"b3M6VWJ1bnR1LTE0LjA0CnRlc3Rfc3VpdGU6aW9zX2Nocm9tZV9ib29rbWFya3NfZWcydGVzdHNfbW9kdWxlX2lQaG9uZSAxMSAxNC40\"}}@@@",
       "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
   },
@@ -4114,7 +4134,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[CLEANUP]/tmp_tmp_3",
+      "[CLEANUP]/tmp_tmp_4",
       "--merge-script",
       "[CACHE]/builder/src/testing/merge_scripts/standard_isolated_script_merge.py",
       "--merge-script-stdout-file",
@@ -4227,7 +4247,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[CLEANUP]/tmp_tmp_4",
+      "[CLEANUP]/tmp_tmp_5",
       "--merge-script",
       "[CACHE]/builder/src/testing/merge_scripts/standard_isolated_script_merge.py",
       "--merge-script-stdout-file",

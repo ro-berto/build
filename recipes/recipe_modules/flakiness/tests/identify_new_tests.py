@@ -12,6 +12,9 @@ from PB.go.chromium.org.luci.resultdb.proto.v1 \
 from PB.go.chromium.org.luci.resultdb.proto.v1 \
     import resultdb as resultdb_pb2
 
+from recipe_engine import recipe_api
+from recipe_engine import recipe_test_api
+
 PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
@@ -19,6 +22,7 @@ DEPS = [
     'depot_tools/tryserver',
     'recipe_engine/assertions',
     'recipe_engine/buildbucket',
+    'recipe_engine/file',
     'recipe_engine/json',
     'recipe_engine/properties',
     'recipe_engine/resultdb',
@@ -30,10 +34,6 @@ def RunSteps(api):
       'ninja://sample/test:some_test/TestSuite.Test2_2hash_False',
       'ninja://sample/test:some_test/TestSuite.Test3_3hash_False',
       'ninja://sample/test:some_test/TestSuite.Test4_4hash_False',
-      'presubmit:sample.com/chromium:./CheckSomething1_1hash_False',
-      'presubmit:sample.com/chromium:./CheckSomething2_2hash_False',
-      'presubmit:sample.com/chromium:./CheckSomething3_3hash_False',
-      'presubmit:sample.com/chromium:./CheckSomething4_4hash_False',
   }
   found_tests = api.flakiness.identify_new_tests()
   if found_tests:
@@ -49,10 +49,6 @@ def GenTests(api):
   non_experimental_tags = [
       rdb_common_pb2.StringPair(
           key='step_name', value='some test (with patch)')
-  ]
-  experimental_tags = [
-      rdb_common_pb2.StringPair(
-          key='step_name', value='some test (with patch, experimental)')
   ]
   for i in range(5):
     inv = "invocations/{}".format(i + 1)
@@ -70,25 +66,9 @@ def GenTests(api):
             status=test_result_pb2.FAIL,
             tags=non_experimental_tags,
         ),
-        test_result_pb2.TestResult(
-            test_id='presubmit:sample.com/chromium:./CheckSomething' + str(i),
-            variant_hash='{}hash'.format(i),
-            expected=False,
-            status=test_result_pb2.FAIL,
-            tags=non_experimental_tags,
-        ),
     ]
     inv_bundle[inv] = api.resultdb.Invocation(test_results=test_results)
 
-  experimental_inv = api.resultdb.Invocation(test_results=[
-      test_result_pb2.TestResult(
-          test_id='ninja://sample/test:some_test/TestSuite.Test2',
-          variant_hash='2hash',
-          expected=False,
-          status=test_result_pb2.FAIL,
-          tags=experimental_tags,
-      )
-  ])
   basic_build = build_pb2.Build(
       builder=builder_pb2.BuilderID(
           builder='Builder', project='chromium', bucket='try'),
@@ -127,20 +107,23 @@ def GenTests(api):
           builds=[basic_build],
           step_name=('searching_for_new_tests.fetching associated builds with '
                      'current gerrit patchset')),
-      api.buildbucket.simulated_search_results(
-          builds=build_database,
-          step_name='searching_for_new_tests.fetch previously run invocations'),
       api.resultdb.query(
           inv_bundle=inv_bundle,
           step_name=('searching_for_new_tests.'
                      'fetch test variants for current patchset')),
-      api.resultdb.query(
-          inv_bundle={
-              'invocations/1': inv_bundle['invocations/1'],
-              'invocations/3': experimental_inv
-          },
-          step_name=('searching_for_new_tests.'
-                     'fetch test variants from previous invocations')),
+      api.step_data(
+          'searching_for_new_tests.process precomputed test history',
+          api.file.read_json([{
+              'test_id': 'ninja://sample/test:some_test/TestSuite.Test2',
+              'variant_hash': '2hash',
+              'is_experimental': True,
+              'invocation': ['invocation/3']
+          }, {
+              'test_id': 'ninja://sample/test:some_test/TestSuite.Test0',
+              'variant_hash': '0hash',
+              'tags': '[{"key":"step_name","value":"some test (with patch)"}]',
+              'invocation': ['invocation/1']
+          }])),
       api.resultdb.get_test_result_history(
           res,
           step_name=(
@@ -172,5 +155,29 @@ def GenTests(api):
           historical_query_count=2,
           current_query_count=2,
       ),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'non-existent-try-builder',
+      api.buildbucket.try_build(
+          'chromium',
+          'mac',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          change_number=91827,
+          patch_set=1),
+      api.flakiness(
+          check_for_flakiness=True,
+          build_count=10,
+          historical_query_count=2,
+          current_query_count=2,
+      ),
+      api.override_step_data(
+          'searching_for_new_tests.gsutil download', retcode=1),
+      api.post_process(
+          post_process.StepTextEquals, 'searching_for_new_tests',
+          'The current try builder may not have test data precomputed.'),
+      api.post_process(post_process.DoesNotRunRE, '.*unpack.*',
+                       '.*process precomputed test history.*'),
       api.post_process(post_process.DropExpectation),
   )

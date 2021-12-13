@@ -888,13 +888,6 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
 
-  def _generate_build(builder, invocation, build_input=None):
-    return build_pb2.Build(
-        builder=builder,
-        infra=build_pb2.BuildInfra(
-            resultdb=build_pb2.BuildInfra.ResultDB(invocation=invocation)),
-        input=build_input)
-
   def _generate_test_result(test_id, test_variant, status=None):
     status = status or test_result_pb2.PASS
     vd = getattr(test_variant, 'def')
@@ -918,11 +911,7 @@ def GenTests(api):
   test_id = (
       'ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/'
       'TestSuite.test_a')
-
-  builder = builder_pb2.BuilderID(
-      builder='fake-try-builder', project='chromium', bucket='try')
   inv = 'invocations/1'
-  build_database = [_generate_build(builder, inv)]
   current_patchset_invocations = {
       inv:
           api.resultdb.Invocation(
@@ -980,10 +969,6 @@ def GenTests(api):
           'git diff to analyze patch (2)',
           api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
       api.filter.suppress_analyze(),
-      # Search for all past invocations for builder
-      api.buildbucket.simulated_search_results(
-          builds=build_database,
-          step_name='searching_for_new_tests.fetch previously run invocations'),
       api.resultdb.query(
           inv_bundle=current_patchset_invocations,
           step_name=('searching_for_new_tests.'
@@ -1054,10 +1039,6 @@ def GenTests(api):
           'git diff to analyze patch (2)',
           api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
       api.filter.suppress_analyze(),
-      # Search for all past invocations for builder
-      api.buildbucket.simulated_search_results(
-          builds=build_database,
-          step_name='searching_for_new_tests.fetch previously run invocations'),
       api.resultdb.query(
           inv_bundle=current_patchset_invocations,
           step_name=('searching_for_new_tests.'
@@ -1131,10 +1112,6 @@ def GenTests(api):
           'git diff to analyze patch (2)',
           api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
       api.filter.suppress_analyze(),
-      # Search for all past invocations for builder
-      api.buildbucket.simulated_search_results(
-          builds=build_database,
-          step_name='searching_for_new_tests.fetch previously run invocations'),
       api.resultdb.query(
           inv_bundle=current_patchset_invocations,
           step_name=('searching_for_new_tests.'
@@ -1160,6 +1137,8 @@ def GenTests(api):
           builder_group='fake-try-group',
           builder='fake-try-builder',
           builder_db=builder_db,
+          project='chromium',
+          bucket='try',
           try_db=ctbc.TryDatabase.create({
               'fake-try-group': {
                   'fake-try-builder':
@@ -1204,10 +1183,6 @@ def GenTests(api):
           'git diff to analyze patch (2)',
           api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
       api.filter.suppress_analyze(),
-      # Search for all past invocations for builder
-      api.buildbucket.simulated_search_results(
-          builds=build_database,
-          step_name='searching_for_new_tests.fetch previously run invocations'),
       api.resultdb.query(
           inv_bundle=current_patchset_invocations,
           step_name=('searching_for_new_tests.'
