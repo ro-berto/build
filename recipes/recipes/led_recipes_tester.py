@@ -7,7 +7,6 @@
 import attr
 import collections
 import re
-import six
 
 from recipe_engine import post_process
 
@@ -16,7 +15,7 @@ from PB.go.chromium.org.luci.led.job import job as job_pb2
 from RECIPE_MODULES.build.attr_utils import (attrib, attrs, cached_property,
                                              enum, sequence)
 
-PYTHON_VERSION_COMPATIBILITY = "PY2+3"
+PYTHON_VERSION_COMPATIBILITY = "PY3"
 
 DEPS = [
     'recipe_engine/buildbucket',
@@ -284,7 +283,7 @@ def _ignore_affected_files(api, repo_path, affected_files, files_to_ignore):
     if not ignored:
       new_affected_files.append(f)
 
-  for i, files in six.iteritems(ignored_files):
+  for i, files in ignored_files.items():
     if files:
       step_result = api.step(i.step_name, [])
       message = ['\n' + i.step_text]
