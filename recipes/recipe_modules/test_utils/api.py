@@ -108,33 +108,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
     limited_failures = list(itertools.islice(failures, limit))
     return limited_failures, limited_failures + [overflow_line]
 
-  @staticmethod
-  def format_step_text(data):
-    """
-    Returns string suitable for use in a followup function's step result's
-    presentation step text.
-
-    Args:
-      data - iterable of sections, where each section is one of:
-        a) tuple/list with one element for a single-line section
-           (always displayed)
-        b) tuple/list with two elements where first one is the header,
-           and the second one is an iterable of content lines; if there are
-           no contents, the whole section is not displayed
-    """
-    step_text = []
-    for section in data:
-      if len(section) == 2:
-        # Only displaying the section (even the header) when it's non-empty
-        # simplifies caller code.
-        if section[1]:
-          step_text.append('<br/>%s<br/>' % section[0])
-          step_text.extend(('%s<br/>' % line for line in section[1]))
-      else:  # pragma: no cover
-        raise ValueError('Expected a two-element list, got %r instead.' %
-                         section)
-    return ''.join(step_text)
-
   def present_gtest_failures(self, step_result, presentation=None):
     """Update a step result's presentation with details of gtest failures.
 
@@ -202,7 +175,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
       for f in flaky_failures:
         emit_log(f, 'Flaky failure')
 
-      p.step_text += self.format_step_text([
+      p.step_text += self.m.presentation_utils.format_step_text([
           [
               'deterministic failures [caused step to fail]:',
               deterministic_failures_text
@@ -884,7 +857,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     _, truncated_new_failures = self.limit_failures(new_failures)
     _, truncated_ignored_failures = self.limit_failures(ignored_failures)
     _, truncated_ignored_flakes = self.limit_failures(ignored_flakes)
-    step_text = self.format_step_text(
+    step_text = self.m.presentation_utils.format_step_text(
         [[new_failures_text, truncated_new_failures],
          [ignored_failures_text, truncated_ignored_failures],
          [ignored_flakes_text, truncated_ignored_flakes]])

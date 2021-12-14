@@ -12,6 +12,7 @@ DEPS = [
     'build',
     'chromium',
     'chromium_tests',
+    'presentation_utils',
     'recipe_engine/buildbucket',
     'recipe_engine/json',
     'recipe_engine/path',

@@ -18,6 +18,7 @@ DEPS = [
     'depot_tools/gsutil',
     'depot_tools/tryserver',
     'infra/zip',
+    'presentation_utils',
     'recipe_engine/buildbucket',
     'recipe_engine/commit_position',
     'recipe_engine/context',

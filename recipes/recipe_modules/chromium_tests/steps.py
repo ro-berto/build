@@ -932,8 +932,9 @@ class Test(object):
 
     failures, failures_text = api.test_utils.limit_failures(
         sorted(rdb_results.unexpected_failing_tests))
-    step_result.presentation.step_text += api.test_utils.format_step_text(
-        [['deterministic failures [caused step to fail]:', failures_text]])
+    step_result.presentation.step_text += (
+        api.presentation_utils.format_step_text(
+            [['deterministic failures [caused step to fail]:', failures_text]]))
     for failure in failures:
       results_url = api.chromium_tests.get_milo_test_results_url(failure)
       step_result.presentation.links[failure] = results_url
@@ -1460,7 +1461,7 @@ class ScriptTest(LocalTest):  # pylint: disable=W0232
 
     _, failures = api.test_utils.limit_failures(failures)
     result.presentation.step_text += (
-        api.test_utils.format_step_text([['failures:', failures]]))
+        api.presentation_utils.format_step_text([['failures:', failures]]))
 
     self.update_inv_name_from_stderr(result.stderr, suffix)
 

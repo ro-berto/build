@@ -14,6 +14,7 @@ DEPS = [
     'depot_tools/depot_tools',
     'depot_tools/gclient',
     'depot_tools/osx_sdk',
+    'presentation_utils',
     'recipe_engine/buildbucket',
     'recipe_engine/context',
     'recipe_engine/file',
@@ -21,7 +22,6 @@ DEPS = [
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/step',
-    'test_utils',
 ]
 
 # This recipe historically parsed the builder name for test behavior. The
@@ -272,7 +272,7 @@ def _LogFailingTests(api, step_result):
       step_result.retcode <= api.boringssl.MAX_FAILURES_EXIT_STATUS):
     failures = step_result.boringssl.test_results.unexpected_failures
     p = step_result.presentation
-    p.step_text += api.test_utils.format_step_text([
+    p.step_text += api.presentation_utils.format_step_text([
         ['unexpected_failures:', failures.keys()],
     ])
 

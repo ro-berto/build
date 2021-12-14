@@ -12,6 +12,7 @@ DEPS = [
     'py3_migration',
     'traceback',
     'depot_tools/tryserver',
+    'presentation_utils',
     'recipe_engine/buildbucket',
     'recipe_engine/json',
     'recipe_engine/legacy_annotation',

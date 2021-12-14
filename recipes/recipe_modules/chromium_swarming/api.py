@@ -1190,8 +1190,7 @@ class SwarmingApi(recipe_api.RecipeApi):
           fmt_time(max(self._shards_durations)),
       ),
     ]
-    step_text = self.m.test_utils.format_step_text([
-        ('Stats', stats)])
+    step_text = self.m.presentation_utils.format_step_text([('Stats', stats)])
     result = self.m.python.succeeding_step('Tests statistics', step_text)
     result.presentation.logs['detailed stats'] = detailed_stats
 

@@ -29,6 +29,7 @@ DEPS = [
     'isolate',
     'perf_dashboard',
     'pgo',
+    'presentation_utils',
     'puppet_service_account',
     'py3_migration',
     'recipe_engine/buildbucket',

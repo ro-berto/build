@@ -684,7 +684,8 @@ class AndroidApi(recipe_api.RecipeApi):
     finally:
       test_failures = self.m.step.active_result.json.output.get('failures', [])
       self.m.step.active_result.presentation.step_text += (
-          self.m.test_utils.format_step_text([['failures:', test_failures]]))
+          self.m.presentation_utils.format_step_text(
+              [['failures:', test_failures]]))
 
   def create_result_details(self, step_name, json_results_file):
     presentation_args = [

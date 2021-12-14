@@ -11,6 +11,7 @@ DEPS = [
     'chromium_checkout',
     'code_coverage',
     'depot_tools/tryserver',
+    'presentation_utils',
     'recipe_engine/buildbucket',
     'recipe_engine/cas',
     'recipe_engine/cipd',
