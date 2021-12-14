@@ -22,8 +22,9 @@ TOOLS_TO_EXTENSIONS_MAP = {
     'v8': ['.js']
 }
 
-# Regex to identify test code
-TEST_FILE_REGEX = r'(^|.+\/)test(s|ing)?\/.+|.+(T|t)ests?\..*'
+# Regex to identify files to be excluded from coverage
+EXCLUDED_FILE_REGEX = (r'(^|.+\/)test(s|ing)?\/.+|.+(T|t)ests?\..*|'
+                       r'.*third_party.*')
 
 # Only generate coverage data for CLs in these gerrit projects.
 # This is a list of (host, project) pairs

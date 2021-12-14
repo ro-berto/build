@@ -16,26 +16,21 @@ import constants
 
 class ConstantsTest(unittest.TestCase):
 
-  def test_excluded_sources_regex_matches_test(self):
+  def test_excluded_sources_regex_matches(self):
     """Tests test files are matched by ios exclude pattern."""
-    pattern = constants.TEST_FILE_REGEX
+    pattern = constants.EXCLUDED_FILE_REGEX
     files = [
-        'a/b/c/test.cc',
-        'a/b/c/tests.cc',
-        'a/b/c/gtest.cc',
-        'a/b/c/gtests.cc',
-        'a/b/c/gTest.java',
-        'a/b/c/gTests.java',
-        'a/test/path.cc',
-        'a/tests/path.cc',
-        'a/b/testing/path.cc',
+        'a/b/c/test.cc', 'a/b/c/tests.cc', 'a/b/c/gtest.cc', 'a/b/c/gtests.cc',
+        'a/b/c/gTest.java', 'a/b/c/gTests.java', 'a/test/path.cc',
+        'a/tests/path.cc', 'a/b/testing/path.cc', 'third_party/a.cc',
+        'a/third_party/b.cc'
     ]
     filtered_files = filter(lambda s: re.match(pattern, s), files)
     self.assertEqual(len(files), len(filtered_files))
 
-  def test_ios_excluded_sources_regex_not_match_unexluded_files(self):
+  def test_ios_excluded_sources_regex_does_not_match(self):
     """Tests non test related files are not matched by ios exclude pattern."""
-    ios_pattern = constants.TEST_FILE_REGEX
+    ios_pattern = constants.EXCLUDED_FILE_REGEX
     files = [
         '/b/s/w/ir/cache/builder/src/ios/chrome/browser/signin/'
         'signin_browser_state_info_updater.mm',
