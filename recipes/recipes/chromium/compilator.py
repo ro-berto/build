@@ -27,6 +27,7 @@ DEPS = [
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/python',
+    'recipe_engine/runtime',
     'recipe_engine/step',
     'test_utils',
 ]
@@ -34,7 +35,9 @@ DEPS = [
 PROPERTIES = InputProperties
 
 
-def RunSteps(api, properties):
+def compilator_steps(api, properties):
+  report_parent_orchestrator_build(api, properties)
+
   if not api.buildbucket.gitiles_commit.id and not (
       properties.deps_revision_overrides and properties.root_solution_revision):
     raise api.step.InfraFailure(
@@ -129,6 +132,45 @@ def RunSteps(api, properties):
           return raw_result
 
     return raw_result
+
+
+def report_parent_orchestrator_build(api, properties):
+  result = api.step(
+      'report parent orchestrator build: {}'.format(
+          properties.orchestrator.builder_name), [])
+  result.presentation.links['orchestrator build'] = (
+      create_orchestrator_milo_link(
+          api.buildbucket.build.infra.swarming.parent_run_id,
+          api.buildbucket.build.infra.swarming.hostname))
+
+
+def create_orchestrator_milo_link(swarming_task_id, host):
+  return 'https://luci-milo.appspot.com/swarming/task/{}?server={}'.format(
+      swarming_task_id, host)
+
+
+def global_shutdown_summary_markdown(parent_build_url):
+  message = ('Parent orchestrator [build]({}) ended, causing this build to be '
+             'canceled.')
+  return message.format(parent_build_url)
+
+
+def RunSteps(api, properties):
+  try:
+    return compilator_steps(api, properties)
+  finally:
+    if api.runtime.in_global_shutdown:
+      # pylint: disable=lost-exception
+      # Compilator builds can experience a variety of exceptions when its
+      # swarming tasks are killed, depending on where in the recipe it was
+      # killed.
+      # The important part is that the build status is CANCELED.
+      return result_pb2.RawResult(
+          status=common_pb.CANCELED,
+          summary_markdown=global_shutdown_summary_markdown(
+              create_orchestrator_milo_link(
+                  api.buildbucket.build.infra.swarming.parent_run_id,
+                  api.buildbucket.build.infra.swarming.hostname)))
 
 
 def GenTests(api):
@@ -331,6 +373,26 @@ def GenTests(api):
           },
       }),
       api.post_process(post_process.MustRun, 'quick run options'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'global_shutdown',
+      api.chromium.try_build(
+          builder='linux-rel-compilator', revision='deadbeef'),
+      api.platform.name('linux'),
+      api.path.exists(api.path['checkout'].join('out/Release/browser_tests')),
+      api.properties(
+          InputProperties(
+              orchestrator=InputProperties.Orchestrator(
+                  builder_name='linux-rel-orchestrator',
+                  builder_group='tryserver.chromium.linux'))),
+      override_test_spec(),
+      api.filter.suppress_analyze(),
+      api.runtime.global_shutdown_on_step('isolate tests (with patch)'),
+      api.post_process(post_process.ResultReasonRE,
+                       '.*causing this build to be canceled.*'),
+      api.post_process(post_process.StatusException),
       api.post_process(post_process.DropExpectation),
   )
 

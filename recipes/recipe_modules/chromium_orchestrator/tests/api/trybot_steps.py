@@ -61,11 +61,11 @@ def GenTests(api):
       api.chromium_orchestrator.override_compilator_steps(
           is_swarming_phase=False),
       api.chromium_orchestrator.fake_head_revision(),
+      api.chromium_orchestrator.override_test_spec(),
       api.post_process(post_process.StepCommandContains, 'bot_update',
                        ['--refs', 'refs/heads/main']),
       api.post_process(post_process.StepCommandContains, 'bot_update',
                        ['--patch_ref']),
-      api.chromium_orchestrator.override_test_spec(),
       api.post_process(
           post_process.StepCommandContains,
           'install infra/chromium/compilator_watcher.ensure_installed', [
