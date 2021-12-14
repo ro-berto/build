@@ -9,14 +9,13 @@ from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 from RECIPE_MODULES.build import chromium
 from RECIPE_MODULES.build.attr_utils import attrs, attrib
 
-PYTHON_VERSION_COMPATIBILITY = "PY2+3"
+PYTHON_VERSION_COMPATIBILITY = "PY3"
 
 DEPS = [
     'archive',
     'chromium',
     'chromium_checkout',
     'gn',
-    'py3_migration',
     'recipe_engine/context',
     'recipe_engine/json',
     'recipe_engine/path',
@@ -276,7 +275,7 @@ def RunSteps(api):
         step_name='calculate no_clusterfuzz',
         step_test_data=lambda: api.raw_io.test_api.stream_output_text(
             'target1', stream='stdout'))
-  targets = list(all_fuzzers - no_clusterfuzz)
+  targets = sorted(all_fuzzers - no_clusterfuzz)
 
   # For iOS, the target list from |api.gn.refs| is a list of paths like
   # obj/.../XXX_fuzzer. The last part of the path is the target name to be
@@ -284,11 +283,9 @@ def RunSteps(api):
   if api.chromium.c.TARGET_PLATFORM == 'ios':
     targets = [target.split('/')[-1] for target in targets]
 
-  targets = api.py3_migration.consistent_ordering(targets)
-
-  api.step.active_result.presentation.logs['all_fuzzers'] = (
-      api.py3_migration.consistent_ordering(all_fuzzers))
-  api.step.active_result.presentation.logs['no_clusterfuzz'] = no_clusterfuzz
+  api.step.active_result.presentation.logs['all_fuzzers'] = sorted(all_fuzzers)
+  api.step.active_result.presentation.logs['no_clusterfuzz'] = (
+      sorted(no_clusterfuzz))
   api.step.active_result.presentation.logs['targets'] = targets
   raw_result = api.chromium.compile(targets=targets, use_goma_module=True)
   if raw_result.status != common_pb.SUCCESS:
