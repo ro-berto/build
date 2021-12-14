@@ -5,7 +5,7 @@ from recipe_engine.engine_types import freeze
 
 from RECIPE_MODULES.build import chromium
 
-PYTHON_VERSION_COMPATIBILITY = "PY2+3"
+PYTHON_VERSION_COMPATIBILITY = "PY3"
 
 DEPS = [
     'chromium',
