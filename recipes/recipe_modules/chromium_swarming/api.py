@@ -628,7 +628,6 @@ class SwarmingApi(recipe_api.RecipeApi):
                  cipd_packages=None,
                  merge=None,
                  relative_cwd=None,
-                 use_default_collect_step=False,
                  **kwargs):
     """Returns a new SwarmingTask instance to run an isolated gtest on Swarming.
 
@@ -659,9 +658,6 @@ class SwarmingApi(recipe_api.RecipeApi):
     merge = (
         merge or chromium_swarming.MergeScript.create(
             script=self.merge_script_path('standard_gtest_merge.py')))
-
-    if not use_default_collect_step:
-      kwargs.setdefault('collect_step', self._gtest_collect_step)
 
     # Make a task, configure it to be collected through shim script.
     task = self.task(
@@ -1428,9 +1424,6 @@ class SwarmingApi(recipe_api.RecipeApi):
     if hasattr(step_result, 'json') and hasattr(
         step_result.json, 'output') and step_result.json.output:
       links = step_result.json.output.get('links', {})
-    elif (hasattr(step_result, 'test_utils') and
-          hasattr(step_result.test_utils, 'gtest_results')):
-      links = step_result.test_utils.gtest_results.raw.get('links', {})
     for k, v in six.iteritems(links):
       step_result.presentation.links[k] = v
 
@@ -1488,38 +1481,6 @@ class SwarmingApi(recipe_api.RecipeApi):
         return False
 
     return True
-
-  def _gtest_collect_step(self, task, **kwargs):
-    """Produces a step that collects and processes a result of google-test task.
-    """
-    output_placeholder = self.m.test_utils.gtest_results(add_json_log=False)
-
-    # The call to collect_task emits two JSON files and a test file:
-    #  1) a task summary JSON emitted by swarming
-    #  2) a gtest results JSON emitted by the task
-    #  3) a log file that stores stdout/stderr of task
-    # This builds an instance of StepTestData that covers all three.
-    def gen_default_step_test_data():
-      dispatched_step_test_data = (
-          self.m.test_utils.test_api.canned_gtest_output(True))
-      dispatched_step_test_data += self.test_api.merge_script_log_file(
-          'Gtest merged successfully')
-      return self.test_api.canned_summary_output(
-        dispatched_step_test_data, task.shards, task.shard_indices)
-
-    step_result, has_valid_results = self._default_collect_step(
-        task,
-        output_placeholder=output_placeholder,
-        gen_step_test_data=gen_default_step_test_data,
-        failure_as_exception=False,
-        **kwargs)
-
-    gtest_results = self.m.test_utils.present_gtest_failures(step_result)
-    if gtest_results and gtest_results.valid:
-      has_valid_results = has_valid_results and self._task_has_all_shards(
-          gtest_results.raw, step_result, task)
-
-    return step_result, has_valid_results
 
   def wait_for_finished_task_set(self, task_sets, suffix=None, attempts=0):
     """Waits for a finished set of tasks.

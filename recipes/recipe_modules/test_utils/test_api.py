@@ -277,23 +277,6 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
     else:
       return self.m.json.output(per_shard_results[0])
 
-  def simulated_gtest_output(self, failed_test_names=()):
-    cur_iteration_data = {}
-    for test_name in failed_test_names:
-      cur_iteration_data[test_name] = [{
-          'elapsed_time_ms': 0,
-          'output_snippet': ':(',
-          'status': 'FAILURE',
-      }]
-
-    canned_jsonish = {
-        'per_iteration_data': [cur_iteration_data]
-    }
-
-    return self.gtest_results(
-        self.m.json.dumps(canned_jsonish),
-        retcode=1 if failed_test_names else 0)
-
   def rdb_results(self,
                   suite_name,
                   failing_tests=None,

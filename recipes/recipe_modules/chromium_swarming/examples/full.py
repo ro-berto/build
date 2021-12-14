@@ -470,24 +470,6 @@ def GenTests(api):
               api.test_utils.canned_gtest_output(True), data)),
   )
 
-  yield api.test(
-      'gtest_with_many_failures',
-      api.chromium.ci_build(
-          builder_group='test_group',
-          builder='test_buildername',
-      ),
-      api.step_data(
-          'archive for win',
-          stdout=api.raw_io.output_text(
-              'hash_for_win/size hello_world.isolated')),
-      api.step_data(
-          'hello_world on Windows-7-SP1',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.simulated_gtest_output(
-                  failed_test_names=['test-%d' % i for i in range(100)]))),
-      api.properties(gtest_task=True),
-  )
-
   data = {
     'shards': [
       {

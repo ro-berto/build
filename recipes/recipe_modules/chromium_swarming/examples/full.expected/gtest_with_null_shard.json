@@ -960,6 +960,8 @@
     "name": "hello_world",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br>Total shard runtime (0s) + overhead(0s): 0s@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    null, @@@",
@@ -970,7 +972,7 @@
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
       "@@@STEP_LOG_END@chromium_swarming.summary@@@",
-      "@@@STEP_LOG_LINE@Merge script log@Gtest merged successfully@@@",
+      "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 failed without producing output.json@https://example.swarmingserver.appspot.com/task?id=0@@@",
       "@@@STEP_LINK@shard #1@https://example.swarmingserver.appspot.com/task?id=1@@@",

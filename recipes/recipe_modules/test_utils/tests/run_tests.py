@@ -421,3 +421,27 @@ def GenTests(api):
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
+
+  yield api.test(
+      'limit_many_failures',
+      api.chromium.try_build(builder='test_builder'),
+      api.properties(
+          test_name='base_unittests',
+          test_swarming=True,
+          swarm_hashes={
+              'base_unittests': '[dummy hash for base_unittests/size]',
+              'base_unittests_2': '[dummy hash for base_unittests_2/size]',
+          },
+          retry_failed_shards=True,
+          retry_invalid_shards=True,
+          **{
+              '$build/test_utils': {
+                  'max_reported_failures': 10,
+              },
+          }),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'base_unittests', '', failures=['test%d' % i for i in range(11)]),
+      api.post_process(post_process.StepTextContains, 'base_unittests',
+                       ['... 1 more (11 total) ...']),
+      api.post_process(post_process.DropExpectation),
+  )

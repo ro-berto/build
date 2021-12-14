@@ -2263,10 +2263,6 @@ class SwarmingGTestTest(SwarmingTest):
         raw_cmd=self._raw_cmd,
         relative_cwd=self.relative_cwd,
         cas_input_root=cas_input_root,
-        # The gtest-specific collect step changes step display based on results
-        # present in the JSON. So use the default collect-step to avoid
-        # depending on JSON results.
-        use_default_collect_step=True,
         failure_as_exception=False,
         collect_json_output_override=json_override)
     self._apply_swarming_task_config(task, api, suffix, '--gtest_filter', ':')
