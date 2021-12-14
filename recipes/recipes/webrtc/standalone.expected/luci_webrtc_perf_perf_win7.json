@@ -318,7 +318,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "--swarming-targets-file",
-      "isac_fix_test\nlow_bandwidth_audio_perf_test\nwebrtc_perf_tests\n",
+      "low_bandwidth_audio_perf_test\nwebrtc_perf_tests\n",
       "//out/Perf_Win7"
     ],
     "cwd": "[CACHE]\\builder\\src",
@@ -342,7 +342,6 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
       "@@@STEP_LOG_END@json.output[failure_summary]@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@isac_fix_test@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@low_bandwidth_audio_perf_test@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@webrtc_perf_tests@@@",
       "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
@@ -855,189 +854,6 @@
       "-server",
       "https://example.swarmingserver.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"isac_fix_test/Windows/[dummy has/Perf Win7/-1\", \"priority\": \"25\", \"realm\": \"webrtc:perf\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:perf\", \"build_is_experimental:false\", \"builder_group:client.webrtc.perf\", \"buildername:Perf Win7\", \"data:[dummy hash for isac_fix_test/1]\", \"name:isac_fix_test\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.perf:Perf Win7\", \"stepname:isac_fix_test on Windows\", \"test_suite:isac_fix_test\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for isac_fix_test\", \"size_bytes\": \"1]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:Perf Win7\", \"-var\", \"os:Windows\", \"-var\", \"test_suite:isac_fix_test\", \"-tag\", \"step_name:isac_fix_test on Windows\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.pb\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Windows\"}, {\"key\": \"pool\", \"value\": \"WebRTC-perf\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"10800\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"10800\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
-      "-json-output",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[CACHE]\\builder",
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "webrtc:perf"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "[trigger] isac_fix_test on Windows",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tasks\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"name\": \"isac_fix_test/Windows/[dummy has/Perf Win7/-1\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"0\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_result\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"resultdb_info\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"invocation\": \"invocations/0\"@@@",
-      "@@@STEP_LOG_LINE@json.output@        }@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@json.input@{@@@",
-      "@@@STEP_LOG_LINE@json.input@  \"requests\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@    {@@@",
-      "@@@STEP_LOG_LINE@json.input@      \"name\": \"isac_fix_test/Windows/[dummy has/Perf Win7/-1\", @@@",
-      "@@@STEP_LOG_LINE@json.input@      \"priority\": \"25\", @@@",
-      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc:perf\", @@@",
-      "@@@STEP_LOG_LINE@json.input@      \"resultdb\": {@@@",
-      "@@@STEP_LOG_LINE@json.input@        \"enable\": true@@@",
-      "@@@STEP_LOG_LINE@json.input@      }, @@@",
-      "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
-      "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@        \"bucket:perf\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"build_is_experimental:false\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"builder_group:client.webrtc.perf\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"buildername:Perf Win7\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"data:[dummy hash for isac_fix_test/1]\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"name:isac_fix_test\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"project:webrtc\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"purpose:CI\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"purpose:post-commit\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"slavename:fake-bot-id\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"spec_name:webrtc.perf:Perf Win7\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"stepname:isac_fix_test on Windows\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"test_suite:isac_fix_test\"@@@",
-      "@@@STEP_LOG_LINE@json.input@      ], @@@",
-      "@@@STEP_LOG_LINE@json.input@      \"task_slices\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@        {@@@",
-      "@@@STEP_LOG_LINE@json.input@          \"expiration_secs\": \"3600\", @@@",
-      "@@@STEP_LOG_LINE@json.input@          \"properties\": {@@@",
-      "@@@STEP_LOG_LINE@json.input@            \"cas_input_root\": {@@@",
-      "@@@STEP_LOG_LINE@json.input@              \"cas_instance\": \"projects/example-cas-server/instances/default_instance\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"digest\": {@@@",
-      "@@@STEP_LOG_LINE@json.input@                \"hash\": \"[dummy hash for isac_fix_test\", @@@",
-      "@@@STEP_LOG_LINE@json.input@                \"size_bytes\": \"1]\"@@@",
-      "@@@STEP_LOG_LINE@json.input@              }@@@",
-      "@@@STEP_LOG_LINE@json.input@            }, @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"cipd_input\": {@@@",
-      "@@@STEP_LOG_LINE@json.input@              \"packages\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@                {@@@",
-      "@@@STEP_LOG_LINE@json.input@                  \"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", @@@",
-      "@@@STEP_LOG_LINE@json.input@                  \"path\": \"bin\", @@@",
-      "@@@STEP_LOG_LINE@json.input@                  \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"@@@",
-      "@@@STEP_LOG_LINE@json.input@                }@@@",
-      "@@@STEP_LOG_LINE@json.input@              ]@@@",
-      "@@@STEP_LOG_LINE@json.input@            }, @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"command\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@              \"rdb\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"stream\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"builder:Perf Win7\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"os:Windows\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"test_suite:isac_fix_test\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"-tag\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"step_name:isac_fix_test on Windows\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"-coerce-negative-duration\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"-location-tags-file\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"../../testing/location_tags.json\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"-exonerate-unexpected-pass\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"--\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.pb\"@@@",
-      "@@@STEP_LOG_LINE@json.input@            ], @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"containment\": {@@@",
-      "@@@STEP_LOG_LINE@json.input@              \"containment_type\": \"NONE\"@@@",
-      "@@@STEP_LOG_LINE@json.input@            }, @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"dimensions\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@              {@@@",
-      "@@@STEP_LOG_LINE@json.input@                \"key\": \"cpu\", @@@",
-      "@@@STEP_LOG_LINE@json.input@                \"value\": \"x86-64\"@@@",
-      "@@@STEP_LOG_LINE@json.input@              }, @@@",
-      "@@@STEP_LOG_LINE@json.input@              {@@@",
-      "@@@STEP_LOG_LINE@json.input@                \"key\": \"os\", @@@",
-      "@@@STEP_LOG_LINE@json.input@                \"value\": \"Windows\"@@@",
-      "@@@STEP_LOG_LINE@json.input@              }, @@@",
-      "@@@STEP_LOG_LINE@json.input@              {@@@",
-      "@@@STEP_LOG_LINE@json.input@                \"key\": \"pool\", @@@",
-      "@@@STEP_LOG_LINE@json.input@                \"value\": \"WebRTC-perf\"@@@",
-      "@@@STEP_LOG_LINE@json.input@              }@@@",
-      "@@@STEP_LOG_LINE@json.input@            ], @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"env\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@              {@@@",
-      "@@@STEP_LOG_LINE@json.input@                \"key\": \"ISOLATED_OUTDIR\", @@@",
-      "@@@STEP_LOG_LINE@json.input@                \"value\": \"${ISOLATED_OUTDIR}\"@@@",
-      "@@@STEP_LOG_LINE@json.input@              }@@@",
-      "@@@STEP_LOG_LINE@json.input@            ], @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"env_prefixes\": [], @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"execution_timeout_secs\": \"10800\", @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"grace_period_secs\": \"30\", @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"idempotent\": false, @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"io_timeout_secs\": \"10800\", @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"outputs\": [], @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"relative_cwd\": \"\"@@@",
-      "@@@STEP_LOG_LINE@json.input@          }, @@@",
-      "@@@STEP_LOG_LINE@json.input@          \"wait_for_capacity\": false@@@",
-      "@@@STEP_LOG_LINE@json.input@        }@@@",
-      "@@@STEP_LOG_LINE@json.input@      ]@@@",
-      "@@@STEP_LOG_LINE@json.input@    }@@@",
-      "@@@STEP_LOG_LINE@json.input@  ]@@@",
-      "@@@STEP_LOG_LINE@json.input@}@@@",
-      "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: isac_fix_test/Windows/[dummy has/Perf Win7/-1@https://example.swarmingserver.appspot.com/task?id=0@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "rdb",
-      "rpc",
-      "luci.resultdb.v1.Recorder",
-      "UpdateIncludedInvocations",
-      "-include-update-token"
-    ],
-    "cwd": "[CACHE]\\builder",
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "webrtc:perf"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "resultdb.update_included_invocations",
-    "stdin": "{\"addInvocations\": [\"invocations/0\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@json.input@{@@@",
-      "@@@STEP_LOG_LINE@json.input@  \"addInvocations\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@    \"invocations/0\"@@@",
-      "@@@STEP_LOG_LINE@json.input@  ], @@@",
-      "@@@STEP_LOG_LINE@json.input@  \"includingInvocation\": \"invocations/build:8945511751514863184\"@@@",
-      "@@@STEP_LOG_LINE@json.input@}@@@",
-      "@@@STEP_LOG_END@json.input@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[START_DIR]\\cipd_tool\\infra\\tools\\luci\\swarming\\swarming_module_pin\\swarming",
-      "spawn-tasks",
-      "-server",
-      "https://example.swarmingserver.appspot.com",
-      "-json-input",
       "{\"requests\": [{\"name\": \"low_bandwidth_audio_perf_test/Windows/[dummy has/Perf Win7/-1\", \"priority\": \"25\", \"realm\": \"webrtc:perf\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:perf\", \"build_is_experimental:false\", \"builder_group:client.webrtc.perf\", \"buildername:Perf Win7\", \"data:[dummy hash for low_bandwidth_audio_perf_test/1]\", \"name:low_bandwidth_audio_perf_test\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.perf:Perf Win7\", \"stepname:low_bandwidth_audio_perf_test on Windows\", \"test_suite:low_bandwidth_audio_perf_test\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for low_bandwidth_audio_perf_test\", \"size_bytes\": \"1]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:Perf Win7\", \"-var\", \"os:Windows\", \"-var\", \"test_suite:low_bandwidth_audio_perf_test\", \"-tag\", \"step_name:low_bandwidth_audio_perf_test on Windows\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.pb\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Windows\"}, {\"key\": \"pool\", \"value\": \"WebRTC-perf\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"10800\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"10800\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
@@ -1064,10 +880,10 @@
       "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"name\": \"low_bandwidth_audio_perf_test/Windows/[dummy has/Perf Win7/-1\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"0\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"resultdb_info\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"invocation\": \"invocations/1\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"invocation\": \"invocations/0\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
@@ -1175,7 +991,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: low_bandwidth_audio_perf_test/Windows/[dummy has/Perf Win7/-1@https://example.swarmingserver.appspot.com/task?id=1@@@"
+      "@@@STEP_LINK@task UI: low_bandwidth_audio_perf_test/Windows/[dummy has/Perf Win7/-1@https://example.swarmingserver.appspot.com/task?id=0@@@"
     ]
   },
   {
@@ -1200,14 +1016,14 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "resultdb.update_included_invocations (2)",
-    "stdin": "{\"addInvocations\": [\"invocations/1\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
+    "name": "resultdb.update_included_invocations",
+    "stdin": "{\"addInvocations\": [\"invocations/0\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@json.input@{@@@",
       "@@@STEP_LOG_LINE@json.input@  \"addInvocations\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@    \"invocations/1\"@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/0\"@@@",
       "@@@STEP_LOG_LINE@json.input@  ], @@@",
       "@@@STEP_LOG_LINE@json.input@  \"includingInvocation\": \"invocations/build:8945511751514863184\"@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
@@ -1247,10 +1063,10 @@
       "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"name\": \"webrtc_perf_tests/Windows/[dummy has/Perf Win7/-1\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"2\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"resultdb_info\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"invocation\": \"invocations/2\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"invocation\": \"invocations/1\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
@@ -1370,7 +1186,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: webrtc_perf_tests/Windows/[dummy has/Perf Win7/-1@https://example.swarmingserver.appspot.com/task?id=2@@@"
+      "@@@STEP_LINK@task UI: webrtc_perf_tests/Windows/[dummy has/Perf Win7/-1@https://example.swarmingserver.appspot.com/task?id=1@@@"
     ]
   },
   {
@@ -1395,14 +1211,14 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "resultdb.update_included_invocations (3)",
-    "stdin": "{\"addInvocations\": [\"invocations/2\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
+    "name": "resultdb.update_included_invocations (2)",
+    "stdin": "{\"addInvocations\": [\"invocations/1\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@json.input@{@@@",
       "@@@STEP_LOG_LINE@json.input@  \"addInvocations\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@    \"invocations/2\"@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/1\"@@@",
       "@@@STEP_LOG_LINE@json.input@  ], @@@",
       "@@@STEP_LOG_LINE@json.input@  \"includingInvocation\": \"invocations/build:8945511751514863184\"@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
@@ -1464,146 +1280,6 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "isac_fix_test on Windows",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Windows'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"bot_id\": \"vm30\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"cas_output_root\": {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"cas_instance\": \"projects/example-project/instances/default_instance\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"digest\": {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@          \"hash\": \"24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@          \"size_bytes\": 73@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@        }@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      }, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"duration\": 31.5, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"exit_code\": 0, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"failure\": false, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"internal_failure\": false, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"modified_ts\": \"2014-09-25 01:42:00\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"name\": \"heartbeat-canary-2014-09-25_01:41:55-os=Windows\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"output\": \"Heart beat succeeded on win32.\\nFoo\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"started_ts\": \"2014-09-25T01:42:11.123\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"state\": \"COMPLETED\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"task_id\": \"148aa78d7aa0000\"@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@    }@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
-      "@@@STEP_LOG_END@chromium_swarming.summary@@@",
-      "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
-      "@@@STEP_LOG_END@Merge script log@@@",
-      "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=0@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "[CACHE]\\builder\\src\\tools_webrtc\\perf\\webrtc_dashboard_upload.py",
-      "--build-page-url",
-      "https://ci.chromium.org/p/webrtc/builders/luci.webrtc.perf/Perf%20Win7/0",
-      "--test-suite",
-      "isac_fix_test",
-      "--bot",
-      "webrtc-win-large-tests",
-      "--output-json-file",
-      "/path/to/tmp/json",
-      "--input-results-file",
-      "\nx\n\rwebrtc metric\u0012\u0002\b\r*c\n.\n\u0004bots\u0012&:$f7f17394-fa4a-481e-86bd-a82cd55935a7\n1\n\u0007pointId\u0012&:$88ea36c7-6dcb-4ba8-ba56-1979de05e16f\u0012?\n$f7f17394-fa4a-481e-86bd-a82cd55935a7\u0012\u0017\u001a\u0015\n\u0013\"webrtc_perf_tests\"\u00122\n$88ea36c7-6dcb-4ba8-ba56-1979de05e16f\u0012\n\u001a\b\n\u0006123456\u0012\u0011\n\bwhatever\u0012\u0005\u001a\u0003\n\u00012",
-      "--dashboard-url",
-      "https://chromeperf.appspot.com",
-      "--commit-position",
-      "170242",
-      "--webrtc-git-hash",
-      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-      "--perf-dashboard-machine-group",
-      "WebRTCPerf",
-      "--outdir",
-      "[CACHE]\\builder\\src\\out\\Perf_Win7",
-      "--wait-for-upload"
-    ],
-    "cwd": "[CACHE]\\builder",
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "webrtc:perf"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "isac_fix_test Dashboard Upload",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::chromium_swarming]\\resources\\collect_task.py",
-      "--verbose",
-      "-o",
-      "/path/to/tmp/json",
-      "--task-output-dir",
-      "[CLEANUP]\\tmp_tmp_2",
-      "--merge-script",
-      "RECIPE_MODULE[build::chromium_swarming]\\resources\\noop_merge.py",
-      "--merge-script-stdout-file",
-      "/path/to/tmp/merge_script_log",
-      "--merge-additional-args",
-      "[]",
-      "--summary-json-file",
-      "/path/to/tmp/json",
-      "--allow-missing-json",
-      "--",
-      "swarming",
-      "collect",
-      "-server",
-      "https://example.swarmingserver.appspot.com",
-      "-worker",
-      "50",
-      "-task-summary-python",
-      "-task-output-stdout",
-      "all",
-      "-verbose",
-      "-requests-json",
-      "{\"tasks\": [{\"task_id\": \"1\"}]}"
-    ],
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]\\cipd_tool\\infra\\tools\\luci\\swarming\\swarming_module_pin"
-      ]
-    },
-    "luci_context": {
-      "realm": {
-        "name": "webrtc:perf"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
     "name": "low_bandwidth_audio_perf_test on Windows",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
@@ -1639,7 +1315,7 @@
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=1@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=0@@@"
     ]
   },
   {
@@ -1703,7 +1379,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[CLEANUP]\\tmp_tmp_3",
+      "[CLEANUP]\\tmp_tmp_2",
       "--merge-script",
       "RECIPE_MODULE[build::chromium_swarming]\\resources\\noop_merge.py",
       "--merge-script-stdout-file",
@@ -1725,7 +1401,7 @@
       "all",
       "-verbose",
       "-requests-json",
-      "{\"tasks\": [{\"task_id\": \"2\"}]}"
+      "{\"tasks\": [{\"task_id\": \"1\"}]}"
     ],
     "env_prefixes": {
       "PATH": [
@@ -1779,7 +1455,7 @@
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=2@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=1@@@"
     ]
   },
   {

@@ -79,9 +79,6 @@ def generate_tests(phase, bot, platform_name, build_out_dir, checkout_path,
 
     # Cover tests only running on perf tests on our trybots:
     if is_tryserver:
-      if platform_name == 'linux':
-        tests.append(baremetal_test('isac_fix_test'))
-
       tests.append(
           baremetal_test(
               'webrtc_perf_tests',
@@ -91,8 +88,6 @@ def generate_tests(phase, bot, platform_name, build_out_dir, checkout_path,
               ]))
 
   if test_suite == 'desktop_perf_swarming':
-
-    tests.append(SwarmingPerfTest('isac_fix_test'))
     tests.append(SwarmingPerfTest('low_bandwidth_audio_perf_test'))
     tests.append(
         SwarmingPerfTest(

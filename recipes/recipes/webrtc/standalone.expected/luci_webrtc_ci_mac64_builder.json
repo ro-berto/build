@@ -335,7 +335,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "--swarming-targets-file",
-      "isac_fix_test\nlow_bandwidth_audio_perf_test\nwebrtc_perf_tests\n",
+      "low_bandwidth_audio_perf_test\nwebrtc_perf_tests\n",
       "//out/Mac64_Builder"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -360,7 +360,6 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
       "@@@STEP_LOG_END@json.output[failure_summary]@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@isac_fix_test@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@low_bandwidth_audio_perf_test@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@webrtc_perf_tests@@@",
       "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
@@ -543,7 +542,6 @@
       "-j",
       "80",
       "default",
-      "isac_fix_test",
       "low_bandwidth_audio_perf_test",
       "webrtc_perf_tests"
     ],
@@ -576,7 +574,6 @@
       "-j",
       "80",
       "default",
-      "isac_fix_test",
       "low_bandwidth_audio_perf_test",
       "webrtc_perf_tests",
       "-d",
@@ -740,7 +737,7 @@
       "--ninja-log-outdir",
       "[CACHE]/builder/src/out/Mac64_Builder",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Mac64_Builder\", \"-j\", 80, \"default\", \"isac_fix_test\", \"low_bandwidth_audio_perf_test\", \"webrtc_perf_tests\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Mac64_Builder\", \"-j\", 80, \"default\", \"low_bandwidth_audio_perf_test\", \"webrtc_perf_tests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -911,7 +908,6 @@
       "projects/example-cas-server/instances/default_instance",
       "-log-level",
       "debug",
-      "[CACHE]/builder/src/out/Mac64_Builder/isac_fix_test.isolated.gen.json",
       "[CACHE]/builder/src/out/Mac64_Builder/low_bandwidth_audio_perf_test.isolated.gen.json",
       "[CACHE]/builder/src/out/Mac64_Builder/webrtc_perf_tests.isolated.gen.json"
     ],
@@ -930,12 +926,11 @@
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"isac_fix_test\": \"[dummy hash for isac_fix_test/dummy size]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"low_bandwidth_audio_perf_test\": \"[dummy hash for low_bandwidth_audio_perf_test/dummy size]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"webrtc_perf_tests\": \"[dummy hash for webrtc_perf_tests/dummy size]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes_refs/heads/main(at){#170242}_without_patch@{\"isac_fix_test\": \"[dummy hash for isac_fix_test/dummy size]\", \"low_bandwidth_audio_perf_test\": \"[dummy hash for low_bandwidth_audio_perf_test/dummy size]\", \"webrtc_perf_tests\": \"[dummy hash for webrtc_perf_tests/dummy size]\"}@@@"
+      "@@@SET_BUILD_PROPERTY@swarm_hashes_refs/heads/main(at){#170242}_without_patch@{\"low_bandwidth_audio_perf_test\": \"[dummy hash for low_bandwidth_audio_perf_test/dummy size]\", \"webrtc_perf_tests\": \"[dummy hash for webrtc_perf_tests/dummy size]\"}@@@"
     ]
   },
   {
@@ -967,7 +962,7 @@
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py",
       "https://pinpoint-dot-chromeperf.appspot.com/api/isolate",
       "-i",
-      "{\"builder_name\": \"Mac64 Builder\", \"change\": \"{\\\"commits\\\": [{\\\"git_hash\\\": \\\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\\\", \\\"repository\\\": \\\"webrtc\\\"}]}\", \"isolate_map\": \"{\\\"isac_fix_test\\\": \\\"[dummy hash for isac_fix_test/dummy size]\\\", \\\"low_bandwidth_audio_perf_test\\\": \\\"[dummy hash for low_bandwidth_audio_perf_test/dummy size]\\\", \\\"webrtc_perf_tests\\\": \\\"[dummy hash for webrtc_perf_tests/dummy size]\\\"}\", \"isolate_server\": \"projects/example-cas-server/instances/default_instance\"}",
+      "{\"builder_name\": \"Mac64 Builder\", \"change\": \"{\\\"commits\\\": [{\\\"git_hash\\\": \\\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\\\", \\\"repository\\\": \\\"webrtc\\\"}]}\", \"isolate_map\": \"{\\\"low_bandwidth_audio_perf_test\\\": \\\"[dummy hash for low_bandwidth_audio_perf_test/dummy size]\\\", \\\"webrtc_perf_tests\\\": \\\"[dummy hash for webrtc_perf_tests/dummy size]\\\"}\", \"isolate_server\": \"projects/example-cas-server/instances/default_instance\"}",
       "-o",
       "/path/to/tmp/json",
       "-t",
@@ -1043,7 +1038,7 @@
       }
     },
     "name": "luci-scheduler.EmitTriggers",
-    "stdin": "{\"batches\": [{\"jobs\": [{\"job\": \"Perf Mac 10.11\", \"project\": \"webrtc\"}], \"trigger\": {\"buildbucket\": {\"properties\": {\"parent_got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"parent_got_revision_cp\": \"refs/heads/main@{#170242}\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"swarm_hashes\": {\"isac_fix_test\": \"[dummy hash for isac_fix_test/dummy size]\", \"low_bandwidth_audio_perf_test\": \"[dummy hash for low_bandwidth_audio_perf_test/dummy size]\", \"webrtc_perf_tests\": \"[dummy hash for webrtc_perf_tests/dummy size]\"}, \"swarming_command_lines\": {}}, \"tags\": [\"buildset:commit/gitiles/webrtc.googlesource.com/src/+/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"gitiles_ref:refs/heads/main\", \"parent_buildername:Mac64 Builder\", \"user_agent:recipe\"]}, \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", \"title\": \"Mac64 Builder/0\"}}], \"timestamp\": 1337000001500000}",
+    "stdin": "{\"batches\": [{\"jobs\": [{\"job\": \"Perf Mac 10.11\", \"project\": \"webrtc\"}], \"trigger\": {\"buildbucket\": {\"properties\": {\"parent_got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"parent_got_revision_cp\": \"refs/heads/main@{#170242}\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"swarm_hashes\": {\"low_bandwidth_audio_perf_test\": \"[dummy hash for low_bandwidth_audio_perf_test/dummy size]\", \"webrtc_perf_tests\": \"[dummy hash for webrtc_perf_tests/dummy size]\"}, \"swarming_command_lines\": {}}, \"tags\": [\"buildset:commit/gitiles/webrtc.googlesource.com/src/+/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"gitiles_ref:refs/heads/main\", \"parent_buildername:Mac64 Builder\", \"user_agent:recipe\"]}, \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", \"title\": \"Mac64 Builder/0\"}}], \"timestamp\": 1337000001500000}",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@input@{@@@",
       "@@@STEP_LOG_LINE@input@    \"batches\": [@@@",
@@ -1061,7 +1056,6 @@
       "@@@STEP_LOG_LINE@input@                        \"parent_got_revision_cp\": \"refs/heads/main@{#170242}\", @@@",
       "@@@STEP_LOG_LINE@input@                        \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", @@@",
       "@@@STEP_LOG_LINE@input@                        \"swarm_hashes\": {@@@",
-      "@@@STEP_LOG_LINE@input@                            \"isac_fix_test\": \"[dummy hash for isac_fix_test/dummy size]\", @@@",
       "@@@STEP_LOG_LINE@input@                            \"low_bandwidth_audio_perf_test\": \"[dummy hash for low_bandwidth_audio_perf_test/dummy size]\", @@@",
       "@@@STEP_LOG_LINE@input@                            \"webrtc_perf_tests\": \"[dummy hash for webrtc_perf_tests/dummy size]\"@@@",
       "@@@STEP_LOG_LINE@input@                        }, @@@",
