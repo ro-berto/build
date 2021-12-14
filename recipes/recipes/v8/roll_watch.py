@@ -4,18 +4,15 @@
 
 import re
 
-from recipe_engine import recipe_test_api
 from PB.recipe_engine import result
 from recipe_engine.post_process import (
-    Filter, DoesNotRun, DoesNotRunRE, DropExpectation, MustRun,
-    ResultReasonRE, StatusException, StatusFailure, StatusSuccess)
+    DropExpectation, DropExpectation, StatusFailure, StatusSuccess)
 
 from PB.go.chromium.org.luci.buildbucket.proto import (
         builds_service as builds_service_pb2,
         common as common_pb2,
         build as build_pb2)
 from recipe_engine.recipe_api import Property
-from recipe_engine.config import ConfigGroup, Dict, Single, List, ConfigList
 
 PYTHON_VERSION_COMPATIBILITY = "PY2"
 
@@ -46,15 +43,15 @@ PROPERTIES = {
 def RunSteps(api, watched_rollers):
     with api.depot_tools.on_path():
         for roller in watched_rollers:
-            with api.step.nest('Roller: \'%s\'' % roller['name']):
+            with api.step.nest("Roller: '%s'" % roller['name']):
                 process_roller(api, roller)
     if any(roller.get('has_failure', False) for roller in watched_rollers):
         return result.RawResult(status=common_pb2.FAILURE)
 
 
 def process_roller(api, roller):
-    rejects = find_open_CLs(api, roller)
-    for cl in rejects:
+    open_cls = find_open_CLs(api, roller)
+    for cl in open_cls:
         if verify_subject(roller, cl):
             process_cl(api, roller, cl)
 
@@ -71,7 +68,7 @@ def find_open_CLs(api, roller):
         o_params = ['LABELS', 'CURRENT_REVISION'],
         limit=20,
         step_test_data=api.gerrit.test_api.get_empty_changes_response_data,
-        name = 'Find open CLs',
+        name='Find open CLs',
     )
 
 
@@ -80,38 +77,33 @@ def verify_subject(roller, cl):
 
 
 def additional_criteria(roller):
-    return [
-        split_term(term)
-        for term in roller.get('criteria',[])
-    ]
-
-
-def split_term(term):
-    pattern = re.compile(r"(.+):(.+)")
-    match = pattern.match(term)
-    return match.group(1), match.group(2)
+    return [term.split(':') for term in roller.get('criteria',[])]
 
 
 def process_cl(api, roller, cl):
     with api.step.nest('Checking CL') as parent_step:
         present_cl_link(roller, cl, parent_step.presentation)
-        last_patch = cl['revisions'].values()[0]
-        builds = api.buildbucket.search(
-            builds_service_pb2.BuildPredicate(
-                gerrit_changes=[{
-                    'host' : roller['review-host'],
-                    'change' : cl['_number'],
-                    'patchset' : last_patch['_number'],
-                    'project': roller['project'],
-                }],
-            ),
-            limit=100,
-            fields=['steps.*'],
-            report_build = False,
-        )
+        builds = find_cq_blocking_builds(api, roller, cl)
         failures = [build for build in builds if failed(build)]
         if failures:
-            run_failure_fallbacks(api, roller, cl, failures)
+            run_failure_recovery(api, roller, cl, failures)
+
+
+def find_cq_blocking_builds(api, roller, cl):
+    return api.buildbucket.search(
+        builds_service_pb2.BuildPredicate(
+            gerrit_changes=[{
+                'host' : roller['review-host'],
+                'change' : cl['_number'],
+                'patchset' : last_patch_number(cl),
+                'project': roller['project'],
+            }],
+            tags=[common_pb2.StringPair(key='cq_experimental', value='false')]
+        ),
+        limit=100,
+        fields=['steps.*'],
+        report_build = False,
+    )
 
 
 def present_cl_link(roller, cl, presentation):
@@ -122,17 +114,18 @@ def present_cl_link(roller, cl, presentation):
     )
 
 
+def last_patch_number(cl):
+    return cl['revisions'].values()[0]['_number']
+
+
 def failed(build):
-    return build.status in [
-        common_pb2.FAILURE,
-        common_pb2.INFRA_FAILURE
-    ]
+    return build.status in [common_pb2.FAILURE, common_pb2.INFRA_FAILURE]
 
 
-def run_failure_fallbacks(api, roller, cl, failures):
+def run_failure_recovery(api, roller, cl, failures):
     default_recovery = ['mark_as_reported','just_fail']
-    for fallback_name in roller.get('failure_recovery', default_recovery):
-        recovery_fn = find_recovery_fn(fallback_name)
+    for recovery_fn_name in roller.get('failure_recovery', default_recovery):
+        recovery_fn = find_recovery_fn(recovery_fn_name)
         recovery_fn(api, roller, cl, failures)
 
 
@@ -145,7 +138,7 @@ def find_recovery_fn(name):
 
 
 def just_fail(api, roller, cl, failures):
-    failure_step = api.step('Roller \'%s\' failed' % roller['name'], cmd=None)
+    failure_step = api.step("Roller '%s' failed" % roller['name'], cmd=None)
     failure_step.presentation.status = api.step.FAILURE
     present_cl_link(roller, cl, failure_step.presentation)
     roller['has_failure'] = True
@@ -154,13 +147,14 @@ def just_fail(api, roller, cl, failures):
 def just_pass(api, roller, cl, failures):
     pass
 
+
 def mark_as_reported(api, roller, cl, failures):
     api.gerrit.call_raw_api('https://%s' % roller['review-host'],
                 '/changes/%s/hashtags' % cl['_number'],
                 method='POST',
                 body={"add":["rw_reported"]},
                 accept_statuses=[200, 201],
-                name='Tag CL for later golden retrieval')
+                name='Mark as reported')
 
 
 def GenTests(api):
@@ -175,8 +169,9 @@ def GenTests(api):
         config.update(**kwargs)
         return (api.test(name) +
                 api.properties(watched_rollers=[config]))
-    def find_open_cls(api):
-        return api.override_step_data('Roller: \'roller\'.'
+
+    def find_fake_cls(api):
+        return api.override_step_data("Roller: 'roller'."
                 'gerrit Find open CLs',
                 api.json.output([{
                         '_number': 123,
@@ -187,21 +182,28 @@ def GenTests(api):
                         }
                 }]))
 
+    def find_fake_builds(*builds):
+        return api.buildbucket.simulated_search_results(list(builds),
+            step_name = "Roller: 'roller'.Checking CL.buildbucket.search")
+
+    def build(build_id, status, builder_name=None, experimental=False):
+        exp_tag = common_pb2.StringPair(key='cq_experimental',
+                value='true' if experimental else 'false')
+        return build_pb2.Build(id=build_id, status=status, tags=[exp_tag])
+
     yield test(api, "no-cls")
 
     yield (
         test(api, "roller-with-stale-cls") +
-        find_open_cls(api) +
+        find_fake_cls(api) +
         api.post_process(StatusSuccess))
 
     yield (
         test(api, "roll-failing-in-cq-default") +
-        find_open_cls(api) +
-        api.buildbucket.simulated_search_results([
-                build_pb2.Build(id=1, status=common_pb2.SUCCESS),
-                build_pb2.Build(id=2, status=common_pb2.FAILURE),
-            ], step_name = 'Roller: \'roller\'.'
-            'Checking CL.buildbucket.search'
+        find_fake_cls(api) +
+        find_fake_builds(
+                build(1, common_pb2.SUCCESS),
+                build(2, common_pb2.FAILURE),
         ) +
         api.post_process(StatusFailure))
 
@@ -209,11 +211,9 @@ def GenTests(api):
         test(api, "roll-failing-in-cq-just-pass",
                 criteria=["hashtags:sometag"],
                 failure_recovery = ["just_pass"]) +
-        find_open_cls(api) +
-        api.buildbucket.simulated_search_results([
-                build_pb2.Build(id=1, status=common_pb2.SUCCESS),
-                build_pb2.Build(id=2, status=common_pb2.FAILURE),
-            ], step_name = 'Roller: \'roller\'.'
-            'Checking CL.buildbucket.search'
+        find_fake_cls(api) +
+        find_fake_builds(
+                build(1, common_pb2.SUCCESS),
+                build(2, common_pb2.FAILURE),
         ) +
         api.post_process(StatusSuccess))
