@@ -10,10 +10,39 @@ details on the presubmit API built into git cl.
 
 PRESUBMIT_VERSION = '2.0.0'
 
+_IGNORE_FREEZE_FOOTER = 'Ignore-Freeze'
+
+# The time module's handling of timezones is abysmal, so the boundaries are
+# precomputed in UNIX time
+_FREEZE_START = 1639641600  # 2021/12/16 00:00 -0800
+_FREEZE_END = 1641196800  # 2022/01/03 00:00 -0800
+
+
+def CheckFreeze(input_api, output_api):
+  if _FREEZE_START <= input_api.time.time() < _FREEZE_END:
+    footers = input_api.change.GitFootersFromDescription()
+    if _IGNORE_FREEZE_FOOTER not in footers:
+
+      def convert(t):
+        ts = input_api.time.localtime(t)
+        return input_api.time.strftime('%Y/%m/%d %H:%M %z', ts)
+
+      return [
+          output_api.PresubmitError(
+              'There is a prod freeze in effect from {} until {}'.format(
+                  convert(_FREEZE_START), convert(_FREEZE_END)
+              )
+          )
+      ]
+
+  return []
+
+
 # A list of files that are _only_ compatible with python3. Tests for these are
 # only run under vpython3, and lints are performed with pylint 2.7. The
 # expectation is that these will become the defaults over time.
 PYTHON3_ONLY_FILES = (
+    'PRESUBMIT_test.py',
     'recipes/recipes/flakiness/generate_builder_test_data.resources/query.py',
     (
         'recipes/recipes/flakiness/generate_builder_test_data.resources/'
