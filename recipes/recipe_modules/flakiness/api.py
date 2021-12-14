@@ -17,8 +17,9 @@ from PB.go.chromium.org.luci.resultdb.proto.v1 import predicate as predicate_pb2
 
 # A regular expression for file paths indicating that change in the matched file
 # might introduce new tests.
-_FILE_PATH_ADDING_TESTS_PATTERN = ('^(.+(BUILD\.gn|DEPS|\.gni)|'
-                                   'src/chromeos/CHROMEOS_LKGM|.+[T|t]est.*)$')
+# TODO(crbug.com/1204163): Extend for new tests from DEPS and build file changes
+# with '^(.+(BUILD\.gn|DEPS|\.gni)|src/chromeos/CHROMEOS_LKGM|.+[T|t]est.*)$'.
+_FILE_PATH_ADDING_TESTS_PATTERN = '^.+[T|t]est.*$'
 
 
 class TestDefinition():
