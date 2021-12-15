@@ -1293,57 +1293,41 @@
     },
     "name": "telemetry_gpu_unittests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'@@@",
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"FAIL\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"PASS\": 2, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"SKIP\": 1@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"path_delimiter\": \".\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"seconds_since_epoch\": 14000000, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tests\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"test1\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"Test1\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"actual\": \"PASS\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"expected\": \"PASS\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"Test2\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"actual\": \"TIMEOUT\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"expected\": \"PASS TIMEOUT\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"Test3\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"actual\": \"SKIP\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"expected\": \"SKIP\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"test_common\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"Test1\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"actual\": \"FAIL FAIL PASS\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"expected\": \"PASS\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"version\": 3@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"exit_code\": \"0\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"bot_id\": \"vm30\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"cas_output_root\": {@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"cas_instance\": \"projects/example-project/instances/default_instance\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"digest\": {@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@          \"hash\": \"24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@          \"size_bytes\": 73@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        }@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      }, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"duration\": 31.5, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"exit_code\": 0, @@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"failure\": false, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"internal_failure\": false@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"internal_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"modified_ts\": \"2014-09-25 01:42:00\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"name\": \"heartbeat-canary-2014-09-25_01:41:55-os=Windows\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"output\": \"Heart beat succeeded on win32.\\nFoo\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"started_ts\": \"2014-09-25T01:42:11.123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"state\": \"COMPLETED\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"task_id\": \"148aa78d7aa0000\"@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    }@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
       "@@@STEP_LOG_END@chromium_swarming.summary@@@",
       "@@@STEP_LOG_LINE@Merge script log@Merged succesfully@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
-      "@@@STEP_LOG_LINE@outdir_json@{@@@",
-      "@@@STEP_LOG_LINE@outdir_json@  \"0/output.json\": \"{\\\"interrupted\\\": false, \\\"num_failures_by_type\\\": {\\\"FAIL\\\": 0, \\\"PASS\\\": 2, \\\"SKIP\\\": 1}, \\\"path_delimiter\\\": \\\".\\\", \\\"seconds_since_epoch\\\": 14000000, \\\"tests\\\": {\\\"test1\\\": {\\\"Test1\\\": {\\\"actual\\\": \\\"PASS\\\", \\\"expected\\\": \\\"PASS\\\"}, \\\"Test2\\\": {\\\"actual\\\": \\\"TIMEOUT\\\", \\\"expected\\\": \\\"PASS TIMEOUT\\\"}, \\\"Test3\\\": {\\\"actual\\\": \\\"SKIP\\\", \\\"expected\\\": \\\"SKIP\\\"}}, \\\"test_common\\\": {\\\"Test1\\\": {\\\"actual\\\": \\\"FAIL FAIL PASS\\\", \\\"expected\\\": \\\"PASS\\\"}}}, \\\"version\\\": 3}\", @@@",
-      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"exit_code\\\": \\\"0\\\", \\\"failure\\\": false, \\\"internal_failure\\\": false}]}\"@@@",
-      "@@@STEP_LOG_LINE@outdir_json@}@@@",
+      "@@@STEP_LOG_LINE@outdir_json@{}@@@",
       "@@@STEP_LOG_END@outdir_json@@@",
       "@@@STEP_LOG_LINE@step_metadata@{@@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"telemetry_gpu_unittests\", @@@",
@@ -1362,7 +1346,8 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": \"Linux Tests\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
-      "@@@STEP_LINK@shard #0@https://example.swarmingserver.appspot.com/task?id=0@@@"
+      "@@@STEP_LINK@shard #0 cas output@https://cas-viewer.appspot.com/projects/example-cas-server/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@",
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=0@@@"
     ]
   },
   {
@@ -1371,7 +1356,7 @@
       "-u",
       "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
       "--input-json",
-      "{\"interrupted\": false, \"num_failures_by_type\": {\"FAIL\": 0, \"PASS\": 2, \"SKIP\": 1}, \"path_delimiter\": \".\", \"seconds_since_epoch\": 14000000, \"tests\": {\"test1\": {\"Test1\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"Test2\": {\"actual\": \"TIMEOUT\", \"expected\": \"PASS TIMEOUT\"}, \"Test3\": {\"actual\": \"SKIP\", \"expected\": \"SKIP\"}}, \"test_common\": {\"Test1\": {\"actual\": \"FAIL FAIL PASS\", \"expected\": \"PASS\"}}}, \"version\": 3}",
+      "{\"version\": 3}",
       "--builder-group",
       "chromium.linux",
       "--builder-name",
@@ -1425,6 +1410,37 @@
       "@@@STEP_LOG_LINE@serialzed results@  \"unexpected_failing_suites\": []@@@",
       "@@@STEP_LOG_LINE@serialzed results@}@@@",
       "@@@STEP_LOG_END@serialzed results@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "Tests statistics",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>Stats<br/>Total shards: 1<br/>Total runtime: 32s <br/>@@@",
+      "@@@STEP_LOG_LINE@detailed stats@Total shards: 1@@@",
+      "@@@STEP_LOG_LINE@detailed stats@Total runtime: 32s @@@",
+      "@@@STEP_LOG_LINE@detailed stats@Min/mean/max: 32s / 32s / 32s@@@",
+      "@@@STEP_LOG_END@detailed stats@@@"
     ]
   },
   {

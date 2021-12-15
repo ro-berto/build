@@ -103,90 +103,12 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
       per_shard_results.append(jsonish_results)
     return per_shard_results
 
-  def generate_json_test_results(self, shard_indices,
-                                 isolated_script_passing, benchmark_enabled,
-                                 customized_test_results,
-                                 add_shard_index, artifacts):
-    # pylint: disable=line-too-long
-    """Generates fake test results in the JSON test results format.
-
-    See https://chromium.googlesource.com/chromium/src/+/main/docs/testing/json_test_results_format.md
-    for documentation on the format.
-
-    Args:
-      shard_indices: A list of shard indices to use.
-      isolated_script_passing: A boolean denoting whether the generated results
-          should mark the tests as passing or not.
-      benchmark_enabled: A boolean denoting whether the tests should actually
-          be shown as run or not.
-      customized_test_results: A dict containing test results to use instead of
-          generating new results.
-      add_shard_index: A boolean denoting whether to add the shard index to
-          failing test results or not.
-      artifacts: A dict of test basenames to dicts of test names to artifacts
-          to add. For example, the following dict would add two screenshot
-          artifacts to test1.Test1:
-          {
-            'test1': {
-              'Test1': {
-                'screenshot': ['some/path.png', 'another/path.png'],
-              },
-            },
-          }
-
-    Returns:
-      A list containing JSON test results for each shard.
-    """
-    per_shard_results = []
-    for i in shard_indices:
-      jsonish_results = {
-        'interrupted': False,
-        'path_delimiter': '.',
-        'version': 3,
-        'seconds_since_epoch': 14000000 + i,
-        'num_failures_by_type': {
-           'FAIL': 0,
-           'PASS': 0
-        }
-      }
-      idx = 1 + (3 * i)
-      if isolated_script_passing and benchmark_enabled:
-        tests_run = {
-          'test_common': {
-            'Test%d' % idx: {
-              'expected': 'PASS',
-              'actual': 'FAIL FAIL PASS',
-            },
-          },
-          'test%d' % idx: {
-            'Test%d' % idx: {
-              'expected': 'PASS',
-              'actual': 'PASS',
-            },
-            'Test%d' % (idx + 1): {
-              'expected': 'PASS TIMEOUT',
-              'actual': 'TIMEOUT',
-             },
-            'Test%d' % (idx + 2): {
-              'expected': 'SKIP',
-              'actual': 'SKIP',
-             },
-          }
-        }
-        jsonish_results['num_failures_by_type']['PASS'] = 2
-        jsonish_results['num_failures_by_type']['SKIP'] = 1
-
-      jsonish_results['tests'] = tests_run
-      per_shard_results.append(jsonish_results)
-    return per_shard_results
-
   def canned_isolated_script_output(self, passing, is_win=False, swarming=False,
                                     shards=1, shard_indices=None,
                                     swarming_internal_failure=False,
                                     isolated_script_passing=True,
                                     valid=None,
                                     missing_shards=None,
-                                    use_json_test_format=False,
                                     output_chartjson=False,
                                     output_histograms=False,
                                     benchmark_enabled=True,
@@ -224,17 +146,10 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
           'entry%d' % (idx + 1): 'chart%d' % (idx + 1)
       }
       per_shard_chartjson_results.append(chartjsonish_results)
-    if use_json_test_format:
-      assert valid is None, "valid flag not used in full JSON format."
-      artifacts = artifacts or {}
-      per_shard_results = self.generate_json_test_results(
-          shard_indices, isolated_script_passing, benchmark_enabled,
-          customized_test_results, add_shard_index, artifacts)
-    else:
-      if valid is None:
-        valid = True
-      per_shard_results = self.generate_simplified_json_results(
-          shard_indices, isolated_script_passing, valid)
+    if valid is None:
+      valid = True
+    per_shard_results = self.generate_simplified_json_results(
+        shard_indices, isolated_script_passing, valid)
 
     if swarming:
       jsonish_shards = []

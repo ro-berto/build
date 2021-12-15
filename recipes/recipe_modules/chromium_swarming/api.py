@@ -1530,11 +1530,8 @@ class SwarmingApi(recipe_api.RecipeApi):
     """Collects results for a step that is *not* a googletest, like telemetry.
     """
     def gen_default_step_test_data():
-      isolated_script_results_test_data = (
-          self.m.test_utils.test_api.canned_isolated_script_output(
-              passing=True, is_win=self.m.platform.is_win, swarming=True,
-              use_json_test_format=True, shards=task.shards,
-              shard_indices=task.shard_indices))
+      isolated_script_results_test_data = self.test_api.canned_summary_output(
+          self.m.json.test_api.output({'version': 3}), failure=False)
 
       # The call to collect_isolated_script_task emits two JSON files:
       #  1) a task summary JSON emitted by swarming
