@@ -47,10 +47,10 @@
       "[TMP_BASE]/symupload.exe",
       "--timeout",
       "0",
-      "glob1.txt",
+      "[TMP_BASE]/glob1.txt",
       "https://some.url.com"
     ],
-    "name": "symupload.symupload glob1.txt",
+    "name": "symupload.symupload [TMP_BASE]/glob1.txt",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -60,10 +60,10 @@
       "[TMP_BASE]/symupload.exe",
       "--timeout",
       "0",
-      "glob2.txt",
+      "[TMP_BASE]/glob2.txt",
       "https://some.url.com"
     ],
-    "name": "symupload.symupload glob2.txt",
+    "name": "symupload.symupload [TMP_BASE]/glob2.txt",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]

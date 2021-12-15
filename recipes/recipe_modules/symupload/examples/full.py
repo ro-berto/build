@@ -156,6 +156,21 @@ def GenTests(api):
       api.post_process(post_process.StatusSuccess),
   )
 
+  yield api.test(
+      'check_file_glob_abs_path',
+      api.properties(target_platform='linux', host_platform='linux'),
+      api.path.exists(api.path['tmp_base'].join('symupload')),
+      api.symupload(input_properties_v2),
+      api.post_process(post_process.StepCommandContains,
+                       'symupload.symupload_v2', [
+                           '--artifacts',
+                           '[TMP_BASE]/glob1.txt,[TMP_BASE]/glob2.txt,'
+                           '[TMP_BASE]/some_artifact.txt',
+                       ]),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
   input_properties_v2 = properties.InputProperties()
   symupload_data = input_properties_v2.symupload_datas.add()
   symupload_data.artifacts.append('some_artifact.txt')

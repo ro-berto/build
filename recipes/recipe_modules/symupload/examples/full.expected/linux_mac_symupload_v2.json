@@ -121,7 +121,7 @@
       "python",
       "RECIPE_MODULE[build::symupload]/resources/symupload.py",
       "--artifacts",
-      "glob1.txt,glob2.txt,[TMP_BASE]/some_artifact.txt",
+      "[TMP_BASE]/glob1.txt,[TMP_BASE]/glob2.txt,[TMP_BASE]/some_artifact.txt",
       "--api-key-file",
       "[CLEANUP]/symupload-api-key.txt",
       "--binary-path",

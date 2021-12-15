@@ -189,12 +189,9 @@ class SymuploadApi(recipe_api.RecipeApi):
                 build_dir,
                 filename,
                 test_data=('glob1.txt', 'glob2.txt')):
-              # Turn the returned Path object back into a string relative to
-              # build_dir.
               assert build_dir.base == f.base
               assert build_dir.is_parent_of(f)
-              common_pieces = f.pieces[len(build_dir.pieces):]
-              uploads.append('/'.join(common_pieces))
+              uploads.append(self.m.path.abspath(f))
 
           if symupload_data.artifact:
             uploads.append(self.m.path.join(build_dir, symupload_data.artifact))
