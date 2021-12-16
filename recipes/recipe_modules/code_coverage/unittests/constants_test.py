@@ -17,7 +17,7 @@ import constants
 class ConstantsTest(unittest.TestCase):
 
   def test_excluded_sources_regex_matches(self):
-    """Tests test files are matched by ios exclude pattern."""
+    """Tests test files are matched by exclude pattern."""
     pattern = constants.EXCLUDED_FILE_REGEX
     files = [
         'a/b/c/test.cc', 'a/b/c/tests.cc', 'a/b/c/gtest.cc', 'a/b/c/gtests.cc',
@@ -28,14 +28,15 @@ class ConstantsTest(unittest.TestCase):
     filtered_files = filter(lambda s: re.match(pattern, s), files)
     self.assertEqual(len(files), len(filtered_files))
 
-  def test_ios_excluded_sources_regex_does_not_match(self):
-    """Tests non test related files are not matched by ios exclude pattern."""
+  def test_excluded_sources_regex_does_not_match(self):
+    """Tests files that are not matched by exclude pattern."""
     ios_pattern = constants.EXCLUDED_FILE_REGEX
     files = [
         '/b/s/w/ir/cache/builder/src/ios/chrome/browser/signin/'
         'signin_browser_state_info_updater.mm',
         '/b/s/w/ir/cache/builder/src/base/mac/scoped_sending_event.mm',
         '/b/s/w/ir/cache/builder/src/contest_related/file.cc',
+        '/b/s/w/ir/cache/builder/src/third_party/blink/a.cc'
     ]
     filtered_files = filter(lambda s: re.match(ios_pattern, s), files)
     self.assertEqual(0, len(filtered_files))

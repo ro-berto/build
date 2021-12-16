@@ -23,8 +23,12 @@ TOOLS_TO_EXTENSIONS_MAP = {
 }
 
 # Regex to identify files to be excluded from coverage
+# It includes all those files
+# - with 'tests/' or 'testing/' in their path
+# - with filename ending with 'Test', 'Tests', 'test' or 'tests'
+# - with 'third_party/' in their path except for 'third_party/blink'
 EXCLUDED_FILE_REGEX = (r'(^|.+\/)test(s|ing)?\/.+|.+(T|t)ests?\..*|'
-                       r'.*third_party.*')
+                       r'.*third_party\/(?!blink\/).*')
 
 # Only generate coverage data for CLs in these gerrit projects.
 # This is a list of (host, project) pairs
