@@ -285,7 +285,11 @@ def compose_build_summary(api, model_dir):
   lines = ['ChangeRecall | Savings | Max distance']
   lines += [
       '%.4f | %.2f | %.2f' %
-      (th['changeRecall'], th['savings'], th['maxDistance'])
+      (
+        th.get('changeRecall', 0), \
+        th.get('savings', 0), \
+        th.get('maxDistance', 0)
+      )
       for th in cfg['thresholds']  # note: thresholds are already sorted
       if th['changeRecall'] >= 0.9
   ]
