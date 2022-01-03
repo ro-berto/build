@@ -11,7 +11,7 @@ def BaseConfig(**_kwargs):
     # Test configuration that is equal for all tests of a builder. It
     # might be refined later in the test runner for distinct tests.
     testing = ConfigGroup(
-      test_args = List(basestring),
+      test_args = List(str),
       may_shard = Single(bool, empty_val=True, required=False),
     ),
   )

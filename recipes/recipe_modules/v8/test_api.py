@@ -616,9 +616,9 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
 
     # TODO(machenbach): Add a better field/step dropping mechanism to the
     # engine.
-    def keep_fields(_, step_odict):
+    def keep_fields(_, steps):
       to_ret = OrderedDict()
-      for name, step in step_odict.iteritems():
+      for name, step in steps.items():
         for rx, fields in keep_fields_spec:
           if re.match(rx, name):
             to_ret[name] = {
