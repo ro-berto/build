@@ -26,7 +26,9 @@
       "-o",
       "LABELS",
       "-o",
-      "CURRENT_REVISION"
+      "CURRENT_REVISION",
+      "-o",
+      "DOWNLOAD_COMMANDS"
     ],
     "env": {
       "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
@@ -46,10 +48,17 @@
       "@@@STEP_LOG_LINE@json.output@[@@@",
       "@@@STEP_LOG_LINE@json.output@  {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"_number\": 123, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"hashtags\": [], @@@",
       "@@@STEP_LOG_LINE@json.output@    \"project\": \"project1\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"revisions\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"last\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"_number\": 1@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"_number\": 1, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"fetch\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"http\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@            \"ref\": \"$ref\", @@@",
+      "@@@STEP_LOG_LINE@json.output@            \"url\": \"$git-url\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          }@@@",
+      "@@@STEP_LOG_LINE@json.output@        }@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"subject\": \"Update dependencies\"@@@",
@@ -77,9 +86,9 @@
       "-n",
       "100",
       "-fields",
-      "steps.*",
+      "tags.*,steps.*",
       "-predicate",
-      "{\"gerritChanges\": [{\"change\": \"123\", \"host\": \"review.googlesource.com\", \"patchset\": \"1\", \"project\": \"v8/v8\"}], \"tags\": [{\"key\": \"cq_experimental\", \"value\": \"false\"}]}"
+      "{\"gerritChanges\": [{\"change\": \"123\", \"host\": \"review.googlesource.com\", \"patchset\": \"1\", \"project\": \"v8/v8\"}], \"includeExperimental\": true}"
     ],
     "env_suffixes": {
       "DEPOT_TOOLS_UPDATE": [
@@ -94,6 +103,13 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_END@raw_io.output_text@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "Roller: 'roller'.Checking CL.No CQ failures on this CL yet...",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {

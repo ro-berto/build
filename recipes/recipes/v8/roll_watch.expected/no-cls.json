@@ -26,7 +26,9 @@
       "-o",
       "LABELS",
       "-o",
-      "CURRENT_REVISION"
+      "CURRENT_REVISION",
+      "-o",
+      "DOWNLOAD_COMMANDS"
     ],
     "env": {
       "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
