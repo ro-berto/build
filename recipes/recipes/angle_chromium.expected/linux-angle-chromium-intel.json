@@ -465,7 +465,7 @@
     "cmd": [],
     "name": "set blamelist pins",
     "~followup_annotations": [
-      "@@@SET_BUILD_PROPERTY@$recipe_engine/milo/blamelist_pins@[{\"host\": \"fake.org\", \"id\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"project\": \"src/third_party/angle\"}, {\"host\": \"fake.org\", \"id\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\", \"project\": \"src\"}]@@@"
+      "@@@SET_BUILD_PROPERTY@$recipe_engine/milo/blamelist_pins@[{\"host\": \"fake.org\", \"id\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\", \"project\": \"src\"}, {\"host\": \"fake.org\", \"id\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"project\": \"src/third_party/angle\"}]@@@"
     ]
   },
   {
