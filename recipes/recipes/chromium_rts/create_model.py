@@ -255,24 +255,24 @@ def compose_build_summary(api, model_dir):
       test_data={
           'thresholds': [
               {
-                  'changeRecall': 0.97,
-                  'savings': 0.5,
-                  'maxDistance': 50,
+                  'changeRecall': '0.97',
+                  'savings': '0.5',
+                  'maxDistance': '50',
               },
               {
-                  'changeRecall': 0.98,
-                  'savings': 0.4,
-                  'maxDistance': 60,
+                  'changeRecall': '0.98',
+                  'savings': '0.4',
+                  'maxDistance': '60',
               },
               {
-                  'changeRecall': 0.99,
-                  'savings': 0.3,
-                  'maxDistance': 70,
+                  'changeRecall': '0.99',
+                  'savings': '0.3',
+                  'maxDistance': '70',
               },
               {
-                  'changeRecall': 1.00,
-                  'savings': 0.2,
-                  'maxDistance': 80,
+                  'changeRecall': '1.00',
+                  'savings': '0.2',
+                  'maxDistance': '80',
               },
           ]
       },
@@ -286,12 +286,12 @@ def compose_build_summary(api, model_dir):
   lines += [
       '%.4f | %.2f | %.2f' %
       (
-        th.get('changeRecall', 0), \
-        th.get('savings', 0), \
-        th.get('maxDistance', 0)
+        float(th.get('changeRecall', '0')), \
+        float(th.get('savings', '0')), \
+        float(th.get('maxDistance', '0'))
       )
       for th in cfg['thresholds']  # note: thresholds are already sorted
-      if th['changeRecall'] >= 0.9
+      if float(th.get('changeRecall', '0')) >= 0.9
   ]
   return '<br>'.join(lines)
 
