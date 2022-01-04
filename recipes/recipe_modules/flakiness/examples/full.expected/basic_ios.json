@@ -3125,6 +3125,8 @@
     "cmd": [],
     "name": "searching_for_new_tests",
     "~followup_annotations": [
+      "@@@STEP_LOG_LINE@excluded_invocation_list@invocations/3@@@",
+      "@@@STEP_LOG_END@excluded_invocation_list@@@",
       "@@@STEP_LOG_LINE@historical_tests@ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a_some_hash@@@",
       "@@@STEP_LOG_END@historical_tests@@@",
       "@@@STEP_LOG_LINE@current_build_tests@ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a_b3M6TWFjLTExCnRlc3Rfc3VpdGU6aW9zX2Nocm9tZV9ib29rbWFya3NfZWcydGVzdHNfbW9kdWxlX2lQYWQgQWlyIDIgMTQuNA==@@@",
@@ -3348,9 +3350,7 @@
       "@@@STEP_LOG_LINE@json.input@{@@@",
       "@@@STEP_LOG_LINE@json.input@  \"name\": \"invocations/3\"@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
-      "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LOG_LINE@excluded_invocation_list@invocations/3@@@",
-      "@@@STEP_LOG_END@excluded_invocation_list@@@"
+      "@@@STEP_LOG_END@json.input@@@"
     ]
   },
   {

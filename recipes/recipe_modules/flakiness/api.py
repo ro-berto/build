@@ -262,6 +262,12 @@ class FlakinessApi(recipe_api.RecipeApi):
     change_set = {gerrit_change.change}
     excluded_invs = self.get_invocations_from_change()
 
+    def _get_excluded_changes(excluded_invs, current_change, step):
+      excluded_invs.update(
+          self.get_invocations_from_change(
+              change=current_change, step_name=step))
+
+    futures = []
     for rel_change in related["changes"]:
       change_number = int(rel_change['_change_number'])
       if change_number not in change_set:
@@ -272,23 +278,38 @@ class FlakinessApi(recipe_api.RecipeApi):
             patchset=int(rel_change['_current_revision_number']))
         step = ('fetching associated builds related with change %s' %
                 str(change_number))
-        excluded_invs.update(
-            self.get_invocations_from_change(
-                change=current_change, step_name=step))
+        futures.append(
+            self.m.futures.spawn(
+                _get_excluded_changes,
+                excluded_invs,
+                current_change,
+                step,
+            ))
+    for f in futures:
+      f.result()
+
+    def find_sub_invocations(api, build_inv, sub_invs):
+      sub_invs.extend([
+          str(inv) for inv in api.resultdb.get_included_invocations(build_inv)
+      ])
 
     # Find all task invocations of each build invocation and add these to
     # excluded.
     sub_invs = []
+    futures = []
     for build_inv in excluded_invs:
-      sub_invs.extend([
-          str(inv)
-          for inv in self.m.resultdb.get_included_invocations(build_inv)
-      ])
+      futures.append(
+          self.m.futures.spawn(
+              find_sub_invocations,
+              self.m,
+              build_inv,
+              sub_invs,
+          ))
+
+    for f in futures:
+      f.result()
+
     excluded_invs.update(sub_invs)
-
-    self.m.step.active_result.presentation.logs[
-        "excluded_invocation_list"] = sorted(excluded_invs)
-
     return excluded_invs
 
   def fetch_precomputed_test_data(self):
@@ -504,6 +525,7 @@ class FlakinessApi(recipe_api.RecipeApi):
 
     with self.m.step.nest('searching_for_new_tests') as p:
       excluded_invs = self.fetch_all_related_invocations()
+      p.logs["excluded_invocation_list"] = sorted(excluded_invs)
       builder_name = self.m.buildbucket.builder_name
 
       try:
