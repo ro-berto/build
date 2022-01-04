@@ -10,6 +10,8 @@ from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 from RECIPE_MODULES.depot_tools.tryserver import api as tryserver
 from RECIPE_MODULES.build.chromium_tests_builder_config import try_spec
+from RECIPE_MODULES.build.chromium_orchestrator.api import (
+    COMPILATOR_SWARMING_TASK_COLLECT_STEP)
 
 PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
@@ -30,6 +32,7 @@ DEPS = [
     'recipe_engine/path',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
+    'recipe_engine/runtime',
     'recipe_engine/step',
     'recipe_engine/swarming',
     'test_utils',
@@ -57,6 +60,8 @@ def GenTests(api):
                   ),
           }),
       api.code_coverage(use_clang_coverage=True),
+      api.chromium_orchestrator.override_compilator_build_proto_fetch(),
+      api.chromium_orchestrator.override_schedule_compilator_build(),
       api.chromium_orchestrator.override_compilator_steps(),
       api.chromium_orchestrator.override_compilator_steps(
           is_swarming_phase=False),
@@ -76,6 +81,8 @@ def GenTests(api):
       api.post_process(post_process.MustRun, 'browser_tests (with patch)'),
       api.post_process(post_process.MustRun,
                        'downloading cas digest all_test_binaries'),
+      api.post_process(post_process.MustRun,
+                       COMPILATOR_SWARMING_TASK_COLLECT_STEP),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -200,6 +207,28 @@ def GenTests(api):
       api.post_process(post_process.MustRun,
                        'downloading cas digest all_test_binaries'),
       api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'dont_collect_comp_task_if_not_ended',
+      api.chromium.try_build(builder='linux-rel-orchestrator',),
+      api.properties(
+          **{
+              '$build/chromium_orchestrator':
+                  InputProperties(
+                      compilator='linux-rel-compilator',
+                      compilator_watcher_git_revision='e841fc',
+                  ),
+          }),
+      api.runtime.global_shutdown_on_step('download command lines'),
+      api.chromium_orchestrator.override_schedule_compilator_build(),
+      api.chromium_orchestrator.override_compilator_steps(),
+      api.chromium_orchestrator.fake_head_revision(),
+      api.chromium_orchestrator.override_test_spec(),
+      api.post_process(post_process.DoesNotRun,
+                       COMPILATOR_SWARMING_TASK_COLLECT_STEP),
+      api.post_process(post_process.StatusException),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -753,6 +782,9 @@ def GenTests(api):
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
+      api.chromium_orchestrator.override_compilator_build_proto_fetch(
+          status=common_pb.FAILURE),
+      api.chromium_orchestrator.override_schedule_compilator_build(),
       api.chromium_orchestrator.override_test_spec(),
       api.chromium_orchestrator.fake_head_revision(),
       api.chromium_orchestrator.override_compilator_steps(
@@ -761,6 +793,8 @@ def GenTests(api):
           sub_build_summary='Step compile (with patch) failed.'),
       api.post_process(post_process.ResultReason,
                        'Step compile (with patch) failed.'),
+      api.post_process(post_process.MustRun,
+                       COMPILATOR_SWARMING_TASK_COLLECT_STEP),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
   )
@@ -776,6 +810,16 @@ def GenTests(api):
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
+      api.chromium_orchestrator.override_schedule_compilator_build(
+          step_name='trigger compilator (with patch)',
+          build_id=12345,
+      ),
+      api.chromium_orchestrator.override_schedule_compilator_build(
+          step_name='trigger compilator (without patch)',
+          build_id=54321,
+      ),
+      api.chromium_orchestrator.override_compilator_build_proto_fetch(
+          build_id=54321, status=common_pb.FAILURE),
       api.chromium_orchestrator.fake_head_revision(),
       api.chromium_orchestrator.override_test_spec(),
       api.chromium_orchestrator.override_compilator_steps(
@@ -791,6 +835,8 @@ def GenTests(api):
           'browser_tests', 'retry shards with patch', failures=['Test.One']),
       api.post_process(post_process.MustRun,
                        'trigger compilator (without patch)'),
+      api.post_process(post_process.MustRun,
+                       COMPILATOR_SWARMING_TASK_COLLECT_STEP),
       api.post_process(post_process.MustRun, 'Tests statistics'),
       api.post_process(post_process.MustRun, 'FindIt Flakiness'),
       api.post_process(post_process.StatusFailure),
@@ -808,6 +854,9 @@ def GenTests(api):
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
+      api.chromium_orchestrator.override_compilator_build_proto_fetch(
+          status=common_pb.INFRA_FAILURE),
+      api.chromium_orchestrator.override_schedule_compilator_build(),
       api.chromium_orchestrator.override_test_spec(),
       api.chromium_orchestrator.fake_head_revision(),
       api.chromium_orchestrator.override_compilator_steps(
@@ -816,6 +865,8 @@ def GenTests(api):
           sub_build_summary='Timeout waiting for compilator build'),
       api.post_process(post_process.ResultReason,
                        'Timeout waiting for compilator build'),
+      api.post_process(post_process.MustRun,
+                       COMPILATOR_SWARMING_TASK_COLLECT_STEP),
       api.post_process(post_process.StatusException),
       api.post_process(post_process.DropExpectation),
   )
@@ -854,6 +905,9 @@ def GenTests(api):
           }),
       api.chromium_orchestrator.fake_head_revision(),
       api.chromium_orchestrator.override_test_spec(),
+      api.chromium_orchestrator.override_compilator_build_proto_fetch(
+          status=common_pb.FAILURE),
+      api.chromium_orchestrator.override_schedule_compilator_build(),
       api.chromium_orchestrator.override_compilator_steps(),
       api.chromium_orchestrator.override_compilator_steps(
           is_swarming_phase=False,
@@ -864,6 +918,8 @@ def GenTests(api):
           'browser_tests', 'with patch', failures=['Test.One']),
       api.post_process(post_process.MustRun, 'Tests statistics'),
       api.post_process(post_process.MustRun, 'FindIt Flakiness'),
+      api.post_process(post_process.MustRun,
+                       COMPILATOR_SWARMING_TASK_COLLECT_STEP),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
   )
@@ -902,11 +958,14 @@ def GenTests(api):
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
+      api.chromium_orchestrator.override_schedule_compilator_build(),
       api.chromium_orchestrator.override_test_spec(),
       api.chromium_orchestrator.fake_head_revision(),
       api.chromium_orchestrator.override_compilator_steps(
           sub_build_status=common_pb.INFRA_FAILURE),
       api.post_process(post_process.MustRun, 'trigger compilator (with patch)'),
+      api.post_process(post_process.DoesNotRun,
+                       COMPILATOR_SWARMING_TASK_COLLECT_STEP),
       api.post_process(post_process.StatusException),
       api.post_process(post_process.DropExpectation),
   )

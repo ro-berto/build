@@ -12,6 +12,9 @@ from RECIPE_MODULES.build.chromium_tests.api import (
 
 PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
+COMPILATOR_SWARMING_TASK_COLLECT_STEP = (
+    'wait for compilator swarming task cleanup overhead')
+
 
 class ChromiumOrchestratorApi(recipe_api.RecipeApi):
 
@@ -23,9 +26,39 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
 
     self.compilator_watcher_pkg = None
 
-  # TODO (kimstephanie): break up trybot_steps into separate methods for each
-  # phase of the build
+    # Buildbucket ID of most recently triggered compilator build
+    # If a without patch compilator build is triggered, this will be updated
+    # to the without patch compilator build's ID
+    self.current_compilator_buildbucket_id = None
+
   def trybot_steps(self):
+    raw_result = self.test_patch()
+
+    # If the orchestrator build is canceled or infra failed, the exception
+    # should bubble up during test_patch() and the code below will not be
+    # executed
+    if self.current_compilator_buildbucket_id:
+      comp_build = self.m.buildbucket.get(
+          step_name='fetch compilator build proto',
+          build_id=self.current_compilator_buildbucket_id)
+
+      # test_patch() waits for the compilator build to finish
+      # so this assertion should always be True.
+      # If there is some regression that changes this, this prevents the
+      # orchestrator build from waiting for an unfinished compilator build
+      assert comp_build.status & common_pb.ENDED_MASK
+      # crbug.com/1271287#c22
+      # Wait for compilator task overhead to complete
+      self.m.swarming.collect(
+          name=COMPILATOR_SWARMING_TASK_COLLECT_STEP,
+          tasks=[comp_build.infra.swarming.task_id],
+          timeout="3m")
+
+    return raw_result
+
+  # TODO (kimstephanie): break up test_patch into separate methods for each
+  # phase of the build
+  def test_patch(self):
     """Runs steps to test CL changes
 
     Returns:
@@ -109,6 +142,8 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
 
     build = self.m.buildbucket.schedule(
         [request], step_name='trigger compilator (with patch)')[0]
+
+    self.current_compilator_buildbucket_id = build.id
 
     bot_update_step, targets_config = self.m.chromium_tests.prepare_checkout(
         builder_config,
@@ -222,6 +257,8 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
 
     wo_build = self.m.buildbucket.schedule(
         [request], step_name='trigger compilator (without patch)')[0]
+
+    self.current_compilator_buildbucket_id = wo_build.id
 
     self.m.chromium_tests.deapply_patch(bot_update_step)
 

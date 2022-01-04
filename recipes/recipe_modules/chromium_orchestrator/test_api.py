@@ -94,3 +94,23 @@ class ChromiumOrchestratorApi(recipe_test_api.RecipeTestApi):
     result = {'log': [{'commit': 'deadbeef'},]}
     return self.step_data('read src HEAD revision at {}'.format(ref),
                           self.m.json.output(result))
+
+  def override_schedule_compilator_build(
+      self, step_name='trigger compilator (with patch)', build_id=12345):
+    return self.m.buildbucket.simulated_schedule_output(
+        step_name=step_name,
+        batch_response=builds_service_pb2.BatchResponse(
+            responses=[dict(schedule_build=build_pb2.Build(id=build_id))]))
+
+  def override_compilator_build_proto_fetch(self,
+                                            build_id=12345,
+                                            status=common_pb.SUCCESS):
+    fake_build = build_pb2.Build(
+        id=build_id,
+        status=status,
+        infra=build_pb2.BuildInfra(
+            swarming=build_pb2.BuildInfra.Swarming(task_id='57d9108e76b91310')))
+    return self.m.buildbucket.simulated_get(
+        build=fake_build,
+        step_name='fetch compilator build proto',
+    )
