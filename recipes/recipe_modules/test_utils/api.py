@@ -432,7 +432,10 @@ class TestUtilsApi(recipe_api.RecipeApi):
         result.json.output, indent=2)
 
     if result.exc_result.retcode != 0:
-      result.presentation.step_text = 'Failed to get known flakes'
+      # FindIt can return 500 errors for large requests: crbug.com/1281674
+      result.presentation.step_text = (
+          'Failed to get known flakes. '
+          'Was there a large (1000+) amount of test failures?')
       return {}
 
     if not result.json.output:
