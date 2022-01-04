@@ -11,7 +11,6 @@ DEPS = [
     'recipe_engine/assertions',
     'recipe_engine/buildbucket',
     'recipe_engine/properties',
-    'recipe_engine/python',
     'recipe_engine/step',
 ]
 
@@ -63,8 +62,7 @@ def RunSteps(api):
 
   experimental_test = experimental_test_spec.get_test()
 
-  api.python.succeeding_step(
-      'Configured experimental test %s' % experimental_test.name, '')
+  api.step.empty('Configured experimental test %s' % experimental_test.name)
 
   suffix = api.properties.get('suffix', '')
 

@@ -11,7 +11,6 @@ DEPS = [
     'chromium_tests_builder_config',
     'recipe_engine/path',
     'recipe_engine/properties',
-    'recipe_engine/python',
     'recipe_engine/step',
     'recipe_engine/json',
 ]
@@ -29,9 +28,10 @@ def RunSteps(api, properties):
     _, builder_config = api.chromium_tests_builder_config.lookup_builder()
     execution_mode = builder_config.execution_mode
     if execution_mode != ctbc.TEST:
-      api.python.infra_failing_step(
+      api.step.empty(
           'chromium_speed_tester',
-          'Unexpected execution mode. Expect: %s, Actual: %s' %
+          status=api.step.INFRA_FAILURE,
+          step_text='Unexpected execution mode. Expect: %s, Actual: %s' %
           (ctbc.TEST, execution_mode))
     api.chromium_tests.configure_build(builder_config)
     api.chromium_tests.prepare_checkout(

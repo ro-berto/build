@@ -2984,24 +2984,7 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "cwd": "[CACHE]/builder/src",
-    "luci_context": {
-      "realm": {
-        "name": "chromium:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
+    "cmd": [],
     "name": "fake tests 1 (fake device iOS 8.0)",
     "~followup_annotations": [
       "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@"
@@ -3017,24 +3000,7 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "cwd": "[CACHE]/builder/src",
-    "luci_context": {
-      "realm": {
-        "name": "chromium:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
+    "cmd": [],
     "name": "fake tests 2 (fake device iOS 7.1)",
     "~followup_annotations": [
       "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@"
@@ -3050,24 +3016,7 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "cwd": "[CACHE]/builder/src",
-    "luci_context": {
-      "realm": {
-        "name": "chromium:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
+    "cmd": [],
     "name": "fake_eg_test_host (fake device 3 iOS 9.3)",
     "~followup_annotations": [
       "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@"

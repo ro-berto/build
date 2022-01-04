@@ -23,7 +23,6 @@ DEPS = [
     'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/properties',
-    'recipe_engine/python',
     'recipe_engine/raw_io',
     'recipe_engine/step',
     'recipe_engine/tricium',
@@ -93,9 +92,10 @@ def RunSteps(api):
       ]
 
       if not metrics_paths:
-        api.python.succeeding_step(
+        api.step.empty(
             'no_metrics_paths',
-            'No files relevant to Tricium metrics analysis were changed')
+            step_text=(
+                'No files relevant to Tricium metrics analysis were changed'))
         return
 
       # Put last version of changed files in temporary directory.

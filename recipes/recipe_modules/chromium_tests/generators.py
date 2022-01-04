@@ -109,9 +109,10 @@ def get_args_for_test(chromium_tests_api, raw_test_spec, bot_update_step):
         if variable in substitutions:
           return substitutions[variable]
         error_message = "Unknown variable '{}'".format(conditional['variable'])
-      chromium_tests_api.m.python.infra_failing_step(
+      chromium_tests_api.m.step.empty(
           'Invalid conditional',
-          'Test spec has invalid conditional: {}\n{}'.format(
+          status=chromium_tests_api.m.step.INFRA_FAILURE,
+          step_text='Test spec has invalid conditional: {}\n{}'.format(
               error_message,
               chromium_tests_api.m.json.dumps(
                   engine_types.thaw(raw_test_spec), indent=2),
@@ -220,16 +221,17 @@ def generator_common(chromium_tests_api, raw_test_spec, swarming_delegate,
             script[2:].replace('/', chromium_tests_api.m.path.sep))
         processed_set_ups.append(steps.SetUpScript.create(**set_up))
       else:
-        chromium_tests_api.m.python.failing_step(
+        chromium_tests_api.m.step.empty(
             'test spec format error',
-            textwrap.wrap(
+            status=chromium_tests_api.m.step.FAILURE,
+            log_name='details',
+            log_text=textwrap.wrap(
                 textwrap.dedent("""\
                     The test target "%s" contains a custom set up script "%s"
                     that doesn't match the expected format. Custom set up script
                     entries should be a path relative to the top-level chromium
                     src directory and should start with "//".
-                    """ % (name, script))),
-            as_log='details')
+                    """ % (name, script))))
   kwargs['set_up'] = processed_set_ups
 
   processed_tear_downs = []
@@ -242,16 +244,17 @@ def generator_common(chromium_tests_api, raw_test_spec, swarming_delegate,
             script[2:].replace('/', chromium_tests_api.m.path.sep))
         processed_tear_downs.append(steps.TearDownScript.create(**tear_down))
       else:
-        chromium_tests_api.m.python.failing_step(
+        chromium_tests_api.m.step.empty(
             'test spec format error',
-            textwrap.wrap(
+            status=chromium_tests_api.m.step.FAILURE,
+            log_name='details',
+            log_text=textwrap.wrap(
                 textwrap.dedent("""\
                     The test target "%s" contains a custom tear down script "%s"
                     that doesn't match the expected format. Custom tear down
                     script entries should be a path relative to the top-level
                     chromium src directory and should start with "//".
-                    """ % (name, script))),
-            as_log='details')
+                    """ % (name, script))))
   kwargs['tear_down'] = processed_tear_downs
 
   swarming_spec = raw_test_spec.get('swarming', {})
@@ -296,17 +299,18 @@ def generator_common(chromium_tests_api, raw_test_spec, swarming_delegate,
           merge['script'] = chromium_tests_api.m.path['checkout'].join(
               merge_script[2:].replace('/', chromium_tests_api.m.path.sep))
         else:
-          chromium_tests_api.m.python.failing_step(
+          chromium_tests_api.m.step.empty(
               'test spec format error',
-              textwrap.wrap(
+              status=chromium_tests_api.m.step.FAILURE,
+              log_name='details',
+              log_text=textwrap.wrap(
                   textwrap.dedent("""\
                       The test target "%s" contains a custom merge_script "%s"
                       that doesn't match the expected format. Custom
                       merge_script entries should be a path relative to the
                       top-level chromium src directory and should start with
                       "//".
-                      """ % (name, merge_script))),
-              as_log='details')
+                      """ % (name, merge_script))))
       kwargs['merge'] = chromium_swarming.MergeScript.create(**merge)
 
     trigger_script = dict(raw_test_spec.get('trigger_script', {}))
@@ -318,16 +322,17 @@ def generator_common(chromium_tests_api, raw_test_spec, swarming_delegate,
               trigger_script_path[2:].replace('/',
                                               chromium_tests_api.m.path.sep))
         else:
-          chromium_tests_api.m.python.failing_step(
+          chromium_tests_api.m.step.empty(
               'test spec format error',
-              textwrap.wrap(
+              status=chromium_tests_api.m.step.FAILURE,
+              log_name='details',
+              log_text=textwrap.wrap(
                   textwrap.dedent("""\
                   The test target "%s" contains a custom trigger_script "%s"
                   that doesn't match the expected format. Custom trigger_script
                   entries should be a path relative to the top-level chromium
                   src directory and should start with "//".
-                  """ % (name, trigger_script_path))),
-              as_log='details')
+                  """ % (name, trigger_script_path))))
       kwargs['trigger_script'] = chromium_swarming.TriggerScript.create(
           **trigger_script)
 
@@ -530,14 +535,15 @@ def generate_isolated_script_tests_from_one_spec(chromium_tests_api,
     # needed.
     results_handler_name = test.get('results_handler', 'default')
     if results_handler_name not in steps.ALLOWED_RESULT_HANDLER_NAMES:
-      chromium_tests_api.m.python.failing_step(
+      chromium_tests_api.m.step.empty(
           'isolated_scripts spec format error',
-          textwrap.wrap(
+          status=chromium_tests_api.m.step.FAILURE,
+          log_name='details',
+          log_text=textwrap.wrap(
               textwrap.dedent("""\
                   The isolated_scripts target "%s" contains a custom
                   results_handler "%s" but that result handler was not found.
-                  """ % (name, results_handler_name))),
-          as_log='details')
+                  """ % (name, results_handler_name))))
     common_kwargs['results_handler_name'] = results_handler_name
 
     return common_kwargs

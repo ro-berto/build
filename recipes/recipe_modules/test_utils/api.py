@@ -666,15 +666,15 @@ class TestUtilsApi(recipe_api.RecipeApi):
         six.text_type(suite.name) for suite in old_retriables)
 
     if old_retriable_names.symmetric_difference(new_retriable_names):
-      mismatch = self.m.python.succeeding_step(
-          'Migration mismatch (informational)', mismatch_string)
+      mismatch = self.m.step.empty(
+          'Migration mismatch (informational)', step_text=mismatch_string)
       mismatch.presentation.status = self.m.step.WARNING
       extra_old_retriable_names = old_retriable_names - new_retriable_names
       extra_new_retriable_names = new_retriable_names - old_retriable_names
-      discrepancy = self.m.python.succeeding_step(
+      discrepancy = self.m.step.empty(
           'Migration mismatch (retriable suites, informational)',
-          set_diff_string_unformatted.format(list(extra_old_retriable_names),
-                                             list(extra_new_retriable_names)))
+          step_text=set_diff_string_unformatted.format(
+              list(extra_old_retriable_names), list(extra_new_retriable_names)))
       discrepancy.presentation.status = self.m.step.WARNING
     return old_retriables
 
@@ -715,14 +715,17 @@ class TestUtilsApi(recipe_api.RecipeApi):
                   list of test suites which failed including invalid results)
     """
     if not hasattr(caller_api, 'chromium_swarming'):
-      self.m.python.failing_step(
+      self.m.step.empty(
           'invalid caller_api',
-          'caller_api must include the chromium_swarming recipe module')
+          status=self.m.step.FAILURE,
+          step_text=(
+              'caller_api must include the chromium_swarming recipe module'))
     if not self.m.resultdb.enabled:
-      self.m.python.failing_step(
+      self.m.step.empty(
           'resultdb not enabled',
-          'every build supported by chromium recipe code must have resultdb '
-          'enabled')
+          status=self.m.step.FAILURE,
+          step_text=('every build supported by chromium recipe code'
+                     ' must have resultdb enabled'))
     rdb_results, invalid_test_suites, failed_test_suites = (
         self.run_tests_once(
             caller_api, test_suites, suffix, sort_by_shard=sort_by_shard))
@@ -820,7 +823,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     # Record a step with INVALID_RESULTS_MAGIC, which chromium_try_flakes uses
     # for analysis.
-    self.m.python.succeeding_step(test.name, self.INVALID_RESULTS_MAGIC)
+    self.m.step.empty(test.name, step_text=self.INVALID_RESULTS_MAGIC)
 
   def _summarize_new_and_ignored_failures(self, test_suite, new_failures,
                                           ignored_failures, ignored_flakes,
@@ -869,7 +872,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
       step_text += ('<br/>If the mentioned known flaky tests are incorrect, '
                     'please file a bug at: http://bit.ly/37I61c2<br/>')
 
-    result = self.m.python.succeeding_step(step_name, step_text)
+    result = self.m.step.empty(step_name, step_text=step_text)
     if new_failures:
       result.presentation.logs[
           'failures caused build to fail'] = self.m.json.dumps(
@@ -909,10 +912,10 @@ class TestUtilsApi(recipe_api.RecipeApi):
         test_suite.without_patch_failures_to_ignore())
     if not valid_results:
       self._invalid_test_results(test_suite)
-      result = self.m.python.succeeding_step(
+      result = self.m.step.empty(
           '%s (test results summary)' % test_suite.name,
-          ('\n%s (without patch) did not produce valid results, '
-           'so no failures can safely be ignored') % test_suite.name)
+          step_text=('\n%s (without patch) did not produce valid results, '
+                     'so no failures can safely be ignored') % test_suite.name)
       result.presentation.status = self.m.step.FAILURE
       self.m.tryserver.set_test_failure_tryjob_result()
       return False
@@ -935,11 +938,13 @@ class TestUtilsApi(recipe_api.RecipeApi):
         test_suite.with_patch_failures_including_retry())
 
     if not valid_results:  # pragma: nocover
-      self.m.python.infra_failing_step(
+      self.m.step.empty(
           '{} assertion'.format(test_suite.name),
-          'This line should never be reached. If a test has invalid results '
-          'and is not going to be retried, then a failing step should have '
-          'already been emitted.')
+          status=self.m.step.INFRA_FAILURE,
+          step_text=(
+              'This line should never be reached.'
+              ' If a test has invalid results and is not going to be retried,'
+              ' then a failing step should have already been emitted.'))
 
     return self._summarize_new_and_ignored_failures(
         test_suite,
@@ -1065,10 +1070,11 @@ class TestUtilsApi(recipe_api.RecipeApi):
           'Failing With Patch Tests That Caused Build Failure':
               potential_build_flakiness,
       }
-      step = caller_api.python.succeeding_step(
-          'FindIt Flakiness', 'Metadata for FindIt post processing.')
-      step.presentation.logs['step_metadata'] = (self.m.json.dumps(
-          output, sort_keys=True, indent=2)).splitlines()
+      caller_api.step.empty(
+          'FindIt Flakiness',
+          step_text='Metadata for FindIt post processing.',
+          log_name='step_metadata',
+          log_text=self.m.json.dumps(output, sort_keys=True, indent=2))
 
   def _archive_test_results_summary(self, test_results_summary, dest_filename):
     """Archives the test results summary as JSON, storing it alongside the
@@ -1255,15 +1261,16 @@ class SwarmingGroup(TestGroup):
     if self._task_ids_to_test:  # pragma: no cover
       # Something weird is going on, just collect tasks like normal, and log a
       # warning.
-      result = caller_api.python.succeeding_step(
+      caller_api.step.empty(
           'swarming tasks.get_states issue',
-          ('swarming tasks.get_states seemed to indicate that all tasks for'
-           ' this build were finished collecting, but the recipe thinks the'
-           ' following tests still need to be collected:\n%s\nSomething is'
-           ' probably wrong with the swarming server. Falling back on the old'
-           ' collection logic.' %
-           ', '.join(test.name for test in self._task_ids_to_test.values())))
-      result.presentation.status = caller_api.step.WARNING
+          status=caller_api.step.WARNING,
+          step_text=(
+              'swarming tasks.get_states seemed to indicate that all tasks for'
+              ' this build were finished collecting, but the recipe thinks the'
+              ' following tests still need to be collected:\n%s'
+              '\nSomething is probably wrong with the swarming server.'
+              ' Falling back on the old collection logic.' %
+              ', '.join(test.name for test in self._task_ids_to_test.values())))
 
       for test in self._task_ids_to_test.values():
         # We won't collect any already collected tasks, as they're removed from

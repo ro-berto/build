@@ -1,25 +1,6 @@
 [
   {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "luci_context": {
-      "realm": {
-        "name": "chromium:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
+    "cmd": [],
     "name": "report builders",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>running tester 'Mac10.13 Tests' on group 'chromium.mac' against builder 'Mac Builder' on group 'chromium.mac'@@@",
@@ -1900,28 +1881,7 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1"
-    },
-    "luci_context": {
-      "realm": {
-        "name": "chromium:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
+    "cmd": [],
     "name": "Tests statistics",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>Stats<br/>Total shards: 2<br/>Total runtime: 1m 3s <br/>@@@",

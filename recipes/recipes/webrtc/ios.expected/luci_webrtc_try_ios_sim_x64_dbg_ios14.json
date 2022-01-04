@@ -11199,23 +11199,7 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "luci_context": {
-      "realm": {
-        "name": "webrtc:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
+    "cmd": [],
     "name": "Tests statistics",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>Stats<br/>Total shards: 18<br/>Total runtime: 9m 27s <br/>@@@",

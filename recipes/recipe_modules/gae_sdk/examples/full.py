@@ -8,7 +8,6 @@ DEPS = [
   'gae_sdk',
   'recipe_engine/path',
   'recipe_engine/platform',
-  'recipe_engine/python',
   'recipe_engine/step',
 ]
 
@@ -25,8 +24,11 @@ def RunSteps(api):
     try:
       api.gae_sdk.fetch(plat, out)
     except api.gae_sdk.PackageNotFound:
-      api.python.failing_step('Failed to fetch', 'No %s package for %s / %s' % (
-          plat, api.platform.name, api.platform.bits))
+      api.step.empty(
+          'Failed to fetch',
+          status=api.step.FAILURE,
+          step_text=('No %s package for %s / %s' %
+                     (plat, api.platform.name, api.platform.bits)))
 
 
 def GenTests(api):

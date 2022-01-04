@@ -247,10 +247,11 @@ class ReclientApi(recipe_api.RecipeApi):
         self._upload_logs(reclient_log_dir, gzip_name_maker)
         self.m.file.rmtree('cleanup reclient log dir', reclient_log_dir)
         if self._ensure_verified:
+          status = self.m.step.SUCCESS
           if self._mismatch:
-            self.m.python.infra_failing_step('verification', self._mismatch)
-          else:
-            self.m.python.succeeding_step('verification', self._mismatch)
+            status = self.m.step.INFRA_FAILURE
+          self.m.step.empty(
+              'verification', status=status, step_text=self._mismatch)
 
   def _install_reclient_cfgs(self):
     """Install reclient cfgs."""

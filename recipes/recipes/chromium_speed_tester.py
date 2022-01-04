@@ -11,7 +11,7 @@ DEPS = [
     'chromium_tests_builder_config',
     'recipe_engine/buildbucket',
     'recipe_engine/json',
-    'recipe_engine/python',
+    'recipe_engine/step',
 ]
 NO_SUFFIX = ''
 
@@ -28,10 +28,11 @@ def RunSteps(api, properties):
     api.chromium_tests.report_builders(builder_config)
     execution_mode = builder_config.execution_mode
     if execution_mode != ctbc.TEST:
-      api.python.infra_failing_step(
+      api.step.empty(
           'chromium_speed_tester',
-          'Unexpected execution mode. Expect: %s, Actual: %s' %
-          (ctbc.TEST, execution_mode))
+          status=api.step.INFRA_FAILURE,
+          step_text=('Unexpected execution mode. Expect: %s, Actual: %s' %
+                     (ctbc.TEST, execution_mode)))
     api.chromium_tests.configure_build(builder_config)
     update_step, build_config = api.chromium_tests.prepare_checkout(
         builder_config, timeout=3600, no_fetch_tags=True)

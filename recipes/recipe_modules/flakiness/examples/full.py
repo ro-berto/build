@@ -35,9 +35,9 @@ DEPS = [
     'recipe_engine/buildbucket',
     'recipe_engine/json',
     'recipe_engine/properties',
-    'recipe_engine/python',
     'recipe_engine/raw_io',
     'recipe_engine/resultdb',
+    'recipe_engine/step',
 ]
 
 
@@ -58,7 +58,7 @@ def RunSteps(api):
     if api.properties.get('assert_tests'):
       assert task.test_suites
 
-    api.python.succeeding_step('mark: before_tests', '')
+    api.step.empty('mark: before_tests')
 
     _, unrecoverable_test_suites = api.chromium_tests._run_tests_with_retries(
         builder_id, task, api.chromium_tests.deapply_patch)

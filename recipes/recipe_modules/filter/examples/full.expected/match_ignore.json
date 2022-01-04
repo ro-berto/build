@@ -86,11 +86,7 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
+    "cmd": [],
     "name": "analyze",
     "~followup_annotations": [
       "@@@STEP_TEXT@No compile necessary (all files ignored)@@@"

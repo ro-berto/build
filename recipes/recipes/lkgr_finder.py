@@ -23,7 +23,6 @@ DEPS = [
     'recipe_engine/file',
     'recipe_engine/path',
     'recipe_engine/properties',
-    'recipe_engine/python',
     'recipe_engine/raw_io',
     'recipe_engine/runtime',
     'recipe_engine/step',
@@ -100,10 +99,11 @@ def RunSteps(api, project, repo, ref, config, lkgr_status_gs_path, allowed_lag,
     allowed_lag = allowed_lag or old_botconfig.get('allowed_lag')
 
   if not project or not repo or not ref:
-    api.python.failing_step(
+    api.step.empty(
         'configuration missing',
-        'lkgr_finder requires `project`, `repo`, and `ref` ' +
-        'properties to be set.')
+        status=api.step.FAILURE,
+        step_text=('lkgr_finder requires `project`, `repo`, and `ref` '
+                   'properties to be set.'))
 
   api.gclient.set_config('infra')
   api.gclient.c.revisions['infra'] = 'HEAD'

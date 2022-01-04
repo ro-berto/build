@@ -264,28 +264,7 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(1)"
-    ],
-    "cwd": "[START_DIR]/openscreen",
-    "env": {
-      "ASAN_SYMBOLIZER_PATH": "[START_DIR]/openscreen/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
-    },
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "openscreen:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
+    "cmd": [],
     "name": "initialize code coverage.code coverage executable dependencies missing!",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",

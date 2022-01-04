@@ -7,7 +7,6 @@ PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 DEPS = [
   'chromium_tests',
   'recipe_engine/properties',
-  'recipe_engine/python',
   'recipe_engine/step',
 ]
 
@@ -27,12 +26,12 @@ def RunSteps(api):
   try:
     test.run(api.chromium_tests.m, '')
   except api.step.InfraFailure:
-    api.python.succeeding_step('infra failure in %s' % test.name, '')
+    api.step.empty('infra failure in %s' % test.name)
   except api.step.StepFailure:
     if test.abort_on_failure:
-      api.python.succeeding_step('fatal step failure in %s' % test.name, '')
+      api.step.empty('fatal step failure in %s' % test.name)
     else:
-      api.python.succeeding_step('step failure in %s' % test.name, '')
+      api.step.empty('step failure in %s' % test.name)
 
 
 def GenTests(api):

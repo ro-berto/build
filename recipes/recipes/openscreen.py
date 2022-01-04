@@ -317,8 +317,10 @@ def SetCodeCoverageConstants(api, checkout_path, host_tool_label):
   }
   if not all(exists.values()):
     result = ''.join('\nhas {}: {}'.format(p, e) for (p, e) in exists.items())
-    api.python.infra_failing_step(
-        'code coverage executable dependencies missing!', result)
+    api.step.empty(
+        'code coverage executable dependencies missing!',
+        status=api.step.INFRA_FAILURE,
+        step_text=result)
 
 
 def CalculateCodeCoverage(api, paths):
@@ -348,9 +350,9 @@ def CalculateCodeCoverage(api, paths):
   source = paths.output_path.join('default.profdata')
   dest = temp_dir.join('default.profdata')
   if api.path.exists(source) or api.path.exists(dest):
-    api.python.succeeding_step('coverage data successfully processed', '')
+    api.step.empty('coverage data successfully processed')
   else:
-    api.python.failing_step('failed to process coverage data', '')
+    api.step.empty('failed to process coverage data', status=api.step.FAILURE)
 
   # Copy the generated profdata file to a temp directory where the
   # code_coverage tool knows to look for it.
@@ -409,8 +411,9 @@ def RunTestsAndCoverageLocally(api, paths):
     # Ensure tests correctly generated coverage data.
     profraw_path = paths.checkout_path.join('default.profraw')
     if not api.path.exists(profraw_path):
-      api.python.failing_step(
-          'skip coverage calculations because no data was generated', '')
+      api.step.empty(
+          'skip coverage calculations because no data was generated',
+          status=api.step.FAILURE)
 
     # Use data generated from tests to calculate code coverage.
     else:
@@ -477,8 +480,7 @@ def RunSteps(api):
             # NOTE: By skipping the below instrument() call, the
             # code_coverage  module is set to perform full-repo coverage
             # calculations.
-            api.python.succeeding_step(
-                'instrumentation skipped for full repo coverage', '')
+            api.step.empty('instrumentation skipped for full repo coverage')
           else:
             changed_files = GetChangedFiles(api, paths.checkout_path)
 
@@ -490,10 +492,11 @@ def RunSteps(api):
             api.code_coverage.instrument(
                 changed_files, output_dir=paths.output_path)
 
-            api.python.succeeding_step(
+            api.step.empty(
                 'coverage calculations will proceed for {} files'.format(
                     len(changed_files)),
-                ''.join('\n{}'.format(str(path)) for path in changed_files))
+                step_text=''.join(
+                    '\n{}'.format(str(path)) for path in changed_files))
         except:  # pylint: disable=bare-except
           coverage_step.status = api.step.FAILURE
           use_coverage = False

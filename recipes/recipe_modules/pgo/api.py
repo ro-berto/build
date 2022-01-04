@@ -150,9 +150,12 @@ class PgoApi(recipe_api.RecipeApi):
       self.m.profiles.merge_profdata(profdata_artifact)
 
       if not self.m.path.exists(profdata_artifact):
-        self.m.python.failing_step(
-            'No profdata was generated.', 'Verify that the Swarming tasks have '
-            'completed successfully, and have output .profraw files')
+        self.m.step.empty(
+            'No profdata was generated.',
+            status=self.m.step.FAILURE,
+            step_text=(
+                'Verify that the Swarming tasks have '
+                'completed successfully, and have output .profraw files'))
 
       # Check for any merge errors
       merge_errors = self.m.profiles.find_merge_errors()
@@ -160,10 +163,10 @@ class PgoApi(recipe_api.RecipeApi):
         result = self.m.step.active_result
         result.presentation.text = 'Found invalid profraw files'
         result.presentation.properties['merge errors'] = merge_errors.stdout
-        self.m.python.failing_step(
-            'Failing due to merge errors found alongside'
-            ' invalid profile data.', 'Please see logs '
-            'of failed step for details.')
+        self.m.step.empty(
+            'Failing due to merge errors found alongside invalid profile data.',
+            status=self.m.step.FAILURE,
+            step_text='Please see logs of failed step for details.')
 
       # TODO(crbug.com/1076999) - Look into replacing this hash for the sha1
       # of the git commit of src associated w/ build.
@@ -183,11 +186,9 @@ class PgoApi(recipe_api.RecipeApi):
                        new_filepath)
 
       if self.skip_profile_upload:
-        return self.m.python.succeeding_step(
-            'Skipping upload to GS for this '
-            'generated profile as '
-            'skip_profile_upload property is '
-            'enabled.', '')
+        return self.m.step.empty(
+            'Skipping upload to GS for this generated profile as '
+            'skip_profile_upload property is enabled.')
 
       # Reset profdata_artifact to the updated naming
       self.m.profiles.upload(

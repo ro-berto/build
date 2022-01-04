@@ -1499,10 +1499,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           bot_update_step,
           targets_config.builder_config,
           read_gn_args=False)
-      self.m.python.succeeding_step(
+      self.m.step.empty(
           'explain extract build',
-          self._explain_package_transfer(builder_config, non_isolated_tests),
-          as_log='why is this running?')
+          log_name='why is this running?',
+          log_text=self._explain_package_transfer(builder_config,
+                                                  non_isolated_tests))
 
     self.download_command_lines_for_tests(tests_using_isolates, builder_config)
 
@@ -1662,7 +1663,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if raw_result and raw_result.status != common_pb.SUCCESS:
       return raw_result
 
-    self.m.python.succeeding_step('mark: before_tests', '')
+    self.m.step.empty('mark: before_tests')
     if task.test_suites:
       compile_failure, unrecoverable_test_suites = self._run_tests_with_retries(
           builder_id, task, deapply_changes)
@@ -2082,7 +2083,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     lines = [''] + [present(d) for d in sorted(builder_details)]
 
-    result = self.m.python.succeeding_step('report builders', '\n'.join(lines))
+    result = self.m.step.empty('report builders', step_text='\n'.join(lines))
 
     if report_mirroring_builders and builder_config.mirroring_try_builders:
       # TODO(gbeaty): This property is not well named, it suggests the opposite

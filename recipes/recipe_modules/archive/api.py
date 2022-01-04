@@ -571,19 +571,22 @@ class ArchiveApi(recipe_api.RecipeApi):
       # Channel name for old milestones set to legacy.
       return 'legacy%s' % milestone
     else:  # pragma: no cover
-      self.m.python.failing_step(
+      self.m.step.empty(
           'Unknown channel',
-          'Can not find channel for milestone: %s' % milestone)
+          status=self.m.step.FAILURE,
+          step_text='Can not find channel for milestone: %s' % milestone)
 
   def _replace_placeholders(self, update_properties, custom_vars, input_str):
     position_placeholder = '{%position%}'
     if position_placeholder in input_str:
       commit_position = self._get_commit_position(update_properties, None)
       if not commit_position:
-        self.m.python.failing_step(
+        self.m.step.empty(
             'Missing position placeholder',
-            'got_revision_cp or got_src_revision_cp is needed to populate '
-            'the {%position%} placeholder')
+            status=self.m.step.FAILURE,
+            step_text=(
+                'got_revision_cp or got_src_revision_cp is needed to populate '
+                'the {%position%} placeholder'))
       _, position = self.m.commit_position.parse(commit_position)
       input_str = input_str.replace(position_placeholder, str(position))
 
@@ -601,9 +604,10 @@ class ArchiveApi(recipe_api.RecipeApi):
             self.m.chromium.c.TARGET_BITS == 64):
         arch = 'amd64'
       else:  # pragma: no cover
-        self.m.python.failing_step(
+        self.m.step.empty(
             'Unresolved placeholder',
-            'Unsupported value for arch placeholder: %s-%d' %
+            status=self.m.step.FAILURE,
+            step_text='Unsupported value for arch placeholder: %s-%d' %
             (self.m.chromium.c.TARGET_ARCH, self.m.chromium.c.TARGET_BITS))
       input_str = input_str.replace(arch_placeholder, arch)
 
@@ -611,9 +615,11 @@ class ArchiveApi(recipe_api.RecipeApi):
     if commit_placeholder in input_str:
       commit = self._get_git_commit(update_properties, None)
       if not commit:
-        self.m.python.failing_step(
+        self.m.step.empty(
             'Missing commit placeholder',
-            'got_revision is needed to populate the {%commit%} placeholder')
+            status=self.m.step.FAILURE,
+            step_text=('got_revision is needed to populate '
+                       'the {%commit%} placeholder'))
       input_str = input_str.replace(commit_placeholder, commit)
 
     timestamp_placeholder = '{%timestamp%}'
@@ -643,8 +649,10 @@ class ArchiveApi(recipe_api.RecipeApi):
         if key in custom_vars:
           input_str = input_str.replace(placeholder, custom_vars[key])
         else:
-          self.m.python.failing_step('Unresolved placeholder',
-                                     placeholder + ' can not be resolved')
+          self.m.step.empty(
+              'Unresolved placeholder',
+              status=self.m.step.FAILURE,
+              step_text=placeholder + ' can not be resolved')
 
     return input_str
 
@@ -949,20 +957,22 @@ class ArchiveApi(recipe_api.RecipeApi):
     # bucket.
     if archive_data.archive_type == ArchiveData.ARCHIVE_TYPE_FILES:
       if archive_data.dirs:
-        self.m.python.failing_step(
+        self.m.step.empty(
             'ARCHIVE_TYPE_FILES does not support dirs',
-            'archive_data properties with |archive_type| '
-            'ARCHIVE_TYPE_FILES must have empty |dirs|')
+            status=self.m.step.FAILURE,
+            step_text=('archive_data properties with |archive_type| '
+                       'ARCHIVE_TYPE_FILES must have empty |dirs|'))
       uploads = {
           base_path.join(f): _sanitize_gcs_path(gcs_path, f)
           for f in expanded_files
       }
     elif (archive_data.archive_type == ArchiveData.ARCHIVE_TYPE_FLATTEN_FILES):
       if archive_data.dirs:
-        self.m.python.failing_step(
+        self.m.step.empty(
             'ARCHIVE_TYPE_FLATTEN_FILES does not support dirs',
-            'archive_data properties with |archive_type| '
-            'ARCHIVE_TYPE_FLATTEN_FILES must have empty |dirs|')
+            status=self.m.step.FAILURE,
+            step_text=('archive_data properties with |archive_type| '
+                       'ARCHIVE_TYPE_FLATTEN_FILES must have empty |dirs|'))
       uploads = {
           base_path.join(f): _sanitize_gcs_path(gcs_path,
                                                 self.m.path.basename(f))
@@ -974,11 +984,11 @@ class ArchiveApi(recipe_api.RecipeApi):
       uploads = {archive_file: gcs_path}
     elif archive_data.archive_type == ArchiveData.ARCHIVE_TYPE_RECURSIVE:
       if not archive_data.dirs:
-        self.m.python.failing_step(
-            'ARCHIVE_TYPE_RECURSIVE does not support '
-            'empty dirs', 'archive_data properties with '
-            '|archive_type| ARCHIVE_TYPE_RECURSIVE must '
-            'specify |dirs|')
+        self.m.step.empty(
+            'ARCHIVE_TYPE_RECURSIVE does not support empty dirs',
+            status=self.m.step.FAILURE,
+            step_text=('archive_data properties with |archive_type| '
+                       'ARCHIVE_TYPE_RECURSIVE must specify |dirs|'))
       uploads = {base_path.join(d): gcs_path for d in updated_dirs}
       gcs_args += ['-R']
     elif archive_data.archive_type == ArchiveData.ARCHIVE_TYPE_SQUASHFS:
@@ -1048,10 +1058,12 @@ class ArchiveApi(recipe_api.RecipeApi):
     if archive_data.HasField('latest_upload'):
       if (not archive_data.latest_upload.gcs_file_content or
           not archive_data.latest_upload.gcs_path):
-        self.m.python.failing_step(
-            'latest_upload.gcs_path or latest_upload.gcs_file_content'
-            ' not declared', 'Both latest_gcs_path and '
-            'latest_gcs_file_content must be non-empty.')
+        self.m.step.empty(
+            ('latest_upload.gcs_path or latest_upload.gcs_file_content'
+             ' not declared'),
+            status=self.m.step.FAILURE,
+            step_text=('Both latest_gcs_path and '
+                       'latest_gcs_file_content must be non-empty.'))
 
       latest_path = self._replace_placeholders(
           update_properties, custom_vars, archive_data.latest_upload.gcs_path)

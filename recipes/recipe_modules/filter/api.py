@@ -215,7 +215,7 @@ class FilterApi(recipe_api.RecipeApi):
 
     if ignored:
       analyze_result = 'No compile necessary (all files ignored)'
-      self.m.python.succeeding_step('analyze', analyze_result)
+      self.m.step.empty('analyze', step_text=analyze_result)
       return
 
     test_output = {
@@ -273,11 +273,11 @@ class FilterApi(recipe_api.RecipeApi):
 
     if matched_exclusion:
       analyze_result = 'Analyze disabled: matched exclusion'
-      # TODO(phajdan.jr): consider using plain api.step here, not python.
-      step_result = self.m.python.succeeding_step('analyze_matched_exclusion',
-                                                  analyze_result)
-      step_result.presentation.logs.setdefault('excluded_files', []).append(
-          '%s (regex = \'%s\')' % (first_found_path, first_match))
+      self.m.step.empty(
+          'analyze_matched_exclusion',
+          step_text=analyze_result,
+          log_name='excluded_files',
+          log_text='%s (regex = \'%s\')' % (first_found_path, first_match))
       self._compile_targets = sorted(all_targets)
       self._test_targets = sorted(test_targets)
     elif (step_result.json.output['status'] in ('Found dependency',

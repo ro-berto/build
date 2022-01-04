@@ -21,7 +21,6 @@ DEPS = [
     'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/properties',
-    'recipe_engine/python',
     'recipe_engine/raw_io',
     'recipe_engine/step',
     'recipe_engine/tricium',
@@ -101,8 +100,7 @@ def RunSteps(api):
 
   oilpan_email = 'oilpan-reviews@chromium.org'
   if oilpan_email in change.cc:
-    api.python.succeeding_step('already_in_cc',
-                               '{oilpan_email} is already CCed')
+    api.step.empty('already_in_cc', step_text='{oilpan_email} is already CCed')
     return
 
   with api.chromium.chromium_layout():
@@ -124,8 +122,8 @@ def RunSteps(api):
           api.path.splitext(f)[1] in src_file_suffixes
       ]
       if not affected:
-        api.python.succeeding_step('no_cc_files_changed',
-                                   'No C/C++ files changed')
+        api.step.empty(
+            'no_cc_files_changed', step_text='No C/C++ files changed')
         return
 
       with api.step.nest('oilpan_analyzer'):

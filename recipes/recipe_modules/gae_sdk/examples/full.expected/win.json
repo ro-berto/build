@@ -10,11 +10,7 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(1)"
-    ],
+    "cmd": [],
     "name": "Failed to fetch",
     "~followup_annotations": [
       "@@@STEP_TEXT@No go package for win / 64@@@",
@@ -24,7 +20,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "Step('Failed to fetch') (retcode: 1)"
+      "humanReason": "Step('Failed to fetch') (retcode: 0)"
     },
     "name": "$result"
   }

@@ -1,25 +1,6 @@
 [
   {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "luci_context": {
-      "realm": {
-        "name": "chromium:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
+    "cmd": [],
     "name": "report builders",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>running tester 'Linux Tests' on group 'chromium.linux' against builder 'Linux Builder' on group 'chromium.linux'@@@",
@@ -667,26 +648,7 @@
     "name": "extract build"
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "luci_context": {
-      "realm": {
-        "name": "chromium:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
+    "cmd": [],
     "name": "explain extract build",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@why is this running?@This builder is doing the full package transfer because:@@@",

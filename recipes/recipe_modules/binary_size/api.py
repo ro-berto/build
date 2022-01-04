@@ -217,8 +217,7 @@ class BinarySizeApi(recipe_api.RecipeApi):
               False, staging_dir, use_m87_flow, is_fuchsia)
 
           if raw_result and raw_result.status != common_pb.SUCCESS:
-            self.m.python.succeeding_step(constants.PATCH_FIXED_BUILD_STEP_NAME,
-                                          '')
+            self.m.step.empty(constants.PATCH_FIXED_BUILD_STEP_NAME)
             return None
 
         expectations_without_patch_json = (
@@ -420,8 +419,8 @@ class BinarySizeApi(recipe_api.RecipeApi):
     for filename in result_json['archive_filenames']:
       filename_map[filename] = self._archive_artifact(staging_dir, filename)
 
-    step_result = self.m.python.succeeding_step(constants.RESULTS_STEP_NAME,
-                                                result_json['summary'])
+    step_result = self.m.step.empty(
+        constants.RESULTS_STEP_NAME, step_text=result_json['summary'])
     logname_map = {}
     for link in result_json['links']:
       if 'lines' in link:

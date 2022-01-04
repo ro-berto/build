@@ -15,7 +15,7 @@ DEPS = [
     'recipe_engine/buildbucket',
     'recipe_engine/json',
     'recipe_engine/properties',
-    'recipe_engine/python',
+    'recipe_engine/step',
 ]
 
 # Name of pinpoint try builder -> (perf builder group, perf builder name)
@@ -42,10 +42,12 @@ def RunSteps(api):
   pinpoint_builder = api.buildbucket.builder_name
   perf_builder = _PINPOINT_MAPPING.get(pinpoint_builder)
   if perf_builder is None:
-    api.python.infra_failing_step(
+    api.step.empty(
         'no pinpoint mapping',
-        ('No pinpoint mapping is configured for {!r}.\n'
-         'Please update pinpoint/builder.py').format(pinpoint_builder))
+        status=api.step.INFRA_FAILURE,
+        step_text=(
+            'No pinpoint mapping is configured for {!r}.\n'
+            'Please update pinpoint/builder.py').format(pinpoint_builder))
 
   with api.chromium.chromium_layout():
     builder_id = chromium.BuilderId.create_for_group(*perf_builder)

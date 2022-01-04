@@ -29,14 +29,18 @@ class SquashfsApi(recipe_api.RecipeApi):
     https://github.com/plougher/squashfs-tools/blob/HEAD/USAGE
     """
     if not self.m.platform.is_linux:
-      self.m.python.failing_step('Mksquashfs only supports linux',
-                                 'Only use this for linux builds.')
+      self.m.step.empty(
+          'Mksquashfs only supports linux',
+          status=self.m.step.FAILURE,
+          step_text='Only use this for linux builds.')
 
     squashfs_dir = self._get_squashfs_path()
     binary_path = squashfs_dir.join('squashfs-tools', 'mksquashfs')
     if not self.m.path.exists(binary_path):
-      self.m.python.failing_step('Mksquashfs is not found',
-                                 'Binary not found at %s.' % binary_path)
+      self.m.step.empty(
+          'Mksquashfs is not found',
+          status=self.m.step.FAILURE,
+          step_text='Binary not found at %s.' % binary_path)
     self.m.build.python('mksquashfs', self.resource('squashfs_invoke.py'), [
         '--binary-path',
         self.m.path.abspath(binary_path),

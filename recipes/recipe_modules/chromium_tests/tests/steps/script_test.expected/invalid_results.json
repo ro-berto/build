@@ -55,23 +55,7 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(1)"
-    ],
-    "luci_context": {
-      "realm": {
-        "name": "chromium:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
+    "cmd": [],
     "name": "script_test with suffix  had an invalid result",
     "~followup_annotations": [
       "@@@STEP_TEXT@The recipe expected the result to contain the key 'failures'. Contents are:<br/>{}@@@",
@@ -90,7 +74,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "Step('script_test with suffix  had an invalid result') (retcode: 1)"
+      "humanReason": "Step('script_test with suffix  had an invalid result') (retcode: 0)"
     },
     "name": "$result"
   }

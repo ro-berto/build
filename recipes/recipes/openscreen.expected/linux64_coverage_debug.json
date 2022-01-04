@@ -363,27 +363,7 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "cwd": "[START_DIR]/openscreen",
-    "env": {
-      "ASAN_SYMBOLIZER_PATH": "[START_DIR]/openscreen/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
-    },
-    "luci_context": {
-      "realm": {
-        "name": "openscreen:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
+    "cmd": [],
     "name": "initialize code coverage.coverage calculations will proceed for 1 files",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -972,27 +952,7 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "cwd": "[START_DIR]/openscreen",
-    "env": {
-      "ASAN_SYMBOLIZER_PATH": "[START_DIR]/openscreen/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
-    },
-    "luci_context": {
-      "realm": {
-        "name": "openscreen:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
+    "cmd": [],
     "name": "run tests.calculate code coverage.coverage data successfully processed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
@@ -1075,27 +1035,7 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "cwd": "[START_DIR]/openscreen",
-    "env": {
-      "ASAN_SYMBOLIZER_PATH": "[START_DIR]/openscreen/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
-    },
-    "luci_context": {
-      "realm": {
-        "name": "openscreen:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
+    "cmd": [],
     "name": "run tests.calculate code coverage.process clang code coverage data for overall test coverage.skip processing because no profdata was generated",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@3@@@"
@@ -1127,27 +1067,7 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "cwd": "[START_DIR]/openscreen",
-    "env": {
-      "ASAN_SYMBOLIZER_PATH": "[START_DIR]/openscreen/third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
-    },
-    "luci_context": {
-      "realm": {
-        "name": "openscreen:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
+    "cmd": [],
     "name": "Set builder output properties",
     "~followup_annotations": [
       "@@@SET_BUILD_PROPERTY@coverage_gs_bucket@\"code-coverage-data\"@@@",

@@ -287,7 +287,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
 
   def _set_builder_output_properties_for_uploads(self):
     """Sets the output property of the builder."""
-    result = self.m.python.succeeding_step('Set builder output properties', '')
+    result = self.m.step.empty('Set builder output properties')
     result.presentation.properties['coverage_metadata_gs_paths'] = (
         self._coverage_metadata_gs_paths)
     result.presentation.properties['mimic_builder_names'] = (
@@ -315,17 +315,16 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       #    information is useless.
       # 3. Has non-trivial performance implications in terms of CQ cycle time.
       affected_files = []
-      self.m.python.succeeding_step(
-          'skip instrumenting code coverage because >200 files are modified',
-          '')
+      self.m.step.empty(
+          'skip instrumenting code coverage because >200 files are modified')
     if is_deps_only_change:
       # Skip instrumentation if current change is a DEPS only change.
       # This is because code_coverage recipe module expects affected_files to
       # belong to a chromium checkout, and in case of DEPS only change
       # affected_files belong to third party code.
       affected_files = []
-      self.m.python.succeeding_step(
-          'Skip instrumentating code coverage because DEPS only change', '')
+      self.m.step.empty(
+          'Skip instrumentating code coverage because DEPS only change')
 
     if not output_dir:
       output_dir = self.m.chromium.output_dir
@@ -370,21 +369,20 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       self._validate_test_types()
     except Exception as e:
       if self._is_per_cl_coverage:
-        self.m.python.succeeding_step(
-            'skip processing because of an exception '
-            'when validating test types to process: %s' % e, '')
+        self.m.step.empty('skip processing because of an exception '
+                          'when validating test types to process: %s' % e)
       else:
-        self.m.python.failing_step(
-            'Exception when validating test types to '
-            'process: %s' % e, '')
+        self.m.step.empty(
+            'Exception when validating test types to process: %s' % e,
+            status=self.m.step.FAILURE)
       return
 
     if self._is_per_cl_coverage:
       unsupported_projects = self._get_unsupported_projects()
       if unsupported_projects:
-        self.m.python.succeeding_step(
+        self.m.step.empty(
             'skip processing coverage data, project(s) %s is(are) unsupported' %
-            unsupported_projects, '')
+            unsupported_projects)
         return
 
     if self.use_clang_coverage:
@@ -436,13 +434,13 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     assert (tests and not binaries) or (not tests and binaries), \
         'One of tests or binaries must be provided'
     if self._is_per_cl_coverage and not self._affected_source_files:
-      self.m.python.succeeding_step(
-          'skip processing coverage data because no source file changed', '')
+      self.m.step.empty(
+          'skip processing coverage data because no source file changed')
       return
 
     if not self.m.profiles.profile_subdirs:  # pragma: no cover.
-      self.m.python.succeeding_step(
-          'skip processing coverage data because no profile data collected', '')
+      self.m.step.empty(
+          'skip processing coverage data because no profile data collected')
       return
 
     with self.m.step.nest(
@@ -451,8 +449,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       try:
         merged_profdata = self._merge_and_upload_profdata()
         if not merged_profdata:
-          self.m.python.succeeding_step(
-              'skip processing because no profdata was generated', '')
+          self.m.step.empty('skip processing because no profdata was generated')
           return
 
         merge_errors = self.m.profiles.find_merge_errors()
@@ -467,8 +464,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
               binaries, merged_profdata)
 
           if not binaries:
-            self.m.python.succeeding_step(
-                'skip processing because no data is found', '')
+            self.m.step.empty('skip processing because no data is found')
             return
         self._generate_and_upload_metadata(binaries, merged_profdata)
         self._generate_and_upload_html_report_on_trybot(binaries,
@@ -522,8 +518,8 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       **kwargs: Kwargs for python and gsutil steps.
     """
     if self._is_per_cl_coverage and not self._affected_source_files:
-      self.m.python.succeeding_step(
-          'skip processing coverage data because no source file changed', '')
+      self.m.step.empty(
+          'skip processing coverage data because no source file changed')
       return
 
     with self.m.step.nest('process java coverage (%s)' %
@@ -571,9 +567,9 @@ class CodeCoverageApi(recipe_api.RecipeApi):
 
         metadata_path = coverage_dir.join('all.json.gz')
         if not self.m.path.exists(metadata_path):
-          self.m.python.succeeding_step(
+          self.m.step.empty(
               'skip processing because %s tests metadata was missing' %
-              self._current_processing_test_type, '')
+              self._current_processing_test_type)
           return
         self._persist_coverage_data_as_json(
             source=metadata_path, data_type='java_metadata', **kwargs)
@@ -586,8 +582,8 @@ class CodeCoverageApi(recipe_api.RecipeApi):
 
   def process_javascript_coverage_data(self):
     if self._is_per_cl_coverage and not self._affected_javascript_source_files:
-      self.m.python.succeeding_step(
-          'skip processing coverage data because no source file changed', '')
+      self.m.step.empty(
+          'skip processing coverage data because no source file changed')
       return
 
     with self.m.step.nest('process javascript coverage'):

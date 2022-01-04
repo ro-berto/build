@@ -1191,7 +1191,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       ),
     ]
     step_text = self.m.presentation_utils.format_step_text([('Stats', stats)])
-    result = self.m.python.succeeding_step('Tests statistics', step_text)
+    result = self.m.step.empty('Tests statistics', step_text=step_text)
     result.presentation.logs['detailed stats'] = detailed_stats
 
   @staticmethod

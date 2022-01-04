@@ -1442,10 +1442,13 @@ class ScriptTest(LocalTest):  # pylint: disable=W0232
     if result.json.output:
       failures = result.json.output.get('failures')
     if failures is None:
-      api.python.failing_step(
+      api.step.empty(
           '%s with suffix %s had an invalid result' % (self.name, suffix),
-          'The recipe expected the result to contain the key \'failures\'.'
-          ' Contents are:\n%s' % api.json.dumps(result.json.output, indent=2))
+          status=api.step.FAILURE,
+          step_text=(
+              'The recipe expected the result to contain the key \'failures\'.'
+              ' Contents are:\n%s' %
+              api.json.dumps(result.json.output, indent=2)))
 
     # Most scripts do not emit 'successes'. If they start emitting 'successes',
     # then we can create a proper results dictionary.
@@ -2075,12 +2078,15 @@ class SwarmingTest(Test):
       # Regardless, we want to emit a failing step so that the error is not
       # overlooked.
       if len(task.shard_indices) == 0:  # pragma: no cover
-        api.python.failing_step(
+        api.step.empty(
             'missing failed shards',
-            "Retry shards with patch is being run on {}, which has no failed "
-            "shards. This usually happens because of a test runner bug. The "
-            "test runner reports test failures, but had exit_code 0.".format(
-                self.step_name(suffix='with patch')))
+            status=api.step.FAILURE,
+            step_text=(
+                "Retry shards with patch is being run on {},"
+                " which has no failed shards."
+                " This usually happens because of a test runner bug."
+                " The test runner reports test failures, but had exit_code 0."
+                .format(self.step_name(suffix='with patch'))))
     else:
       task.shard_indices = range(task.shards)
 
@@ -2156,9 +2162,11 @@ class SwarmingTest(Test):
 
     task_input = api.isolate.isolated_tests.get(self.isolate_target)
     if not task_input:
-      return api.python.infra_failing_step(
+      return api.step.empty(
           '[error] %s' % self.step_name(suffix),
-          '*.isolated file for target %s is missing' % self.isolate_target)
+          status=api.step.INFRA_FAILURE,
+          step_text=('*.isolated file for target %s is missing' %
+                     self.isolate_target))
 
     # Create task.
     self._tasks[suffix] = self.create_task(api, suffix, task_input)
@@ -2612,8 +2620,7 @@ class AndroidJunitTest(LocalTest):
 
       _present_info_messages(step_result.presentation, self)
 
-      presentation_step = api.python.succeeding_step(
-          'Report %s results' % self.name, '')
+      presentation_step = api.step.empty('Report %s results' % self.name)
       gtest_results = api.test_utils.present_gtest_failures(
           step_result, presentation=presentation_step.presentation)
       if gtest_results:

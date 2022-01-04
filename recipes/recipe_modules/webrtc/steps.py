@@ -307,9 +307,11 @@ class WebRtcIsolatedGtest(object):
     # *.isolated may be missing if *_run target is misconfigured.
     task_input = api.isolate.isolated_tests.get(self.isolate_target)
     if not task_input:  # pragma no cover
-      return api.python.failing_step(
+      return api.step.empty(
           '[error] %s' % self.step_name,
-          '*.isolated file for target %s is missing' % self.isolate_target)
+          status=api.step.FAILURE,
+          step_text=('*.isolated file for target %s is missing' %
+                     self.isolate_target))
 
     self._task = self.create_task(api, task_input)
 
