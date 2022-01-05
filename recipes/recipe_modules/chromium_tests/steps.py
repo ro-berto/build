@@ -3258,8 +3258,6 @@ class SkylabTest(Test):
     return step
 
   def compile_targets(self):
-    # TODO(linxinan): Insert version metadata if the test artifact does not
-    # build it.
     t = [self.spec.target_name]
     if self.is_tast_test:
       t.append('chrome')

@@ -2244,9 +2244,19 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     with self.m.step.nest('upload skylab runtime deps for %s' % target):
       # Lacros TLS provision requires a metadata.json containing the chrome
-      # version along with the squashfs file.
+      # version along with the squashfs file. If user does not configure it
+      # in the compile targets, we create one for the tests.
       out_dir = self.m.path.relpath(self.m.chromium.output_dir,
                                     self.m.chromium_checkout.checkout_dir)
+      #TODO(crbug/1276489): Remove below condition once we get rid of the
+      # build target lacros_version_metadata in src.
+      if not self.m.path.exists(out_dir.join('metadata.json')):
+        version = self.m.chromium.get_version()
+        version_str = '%(MAJOR)s.%(MINOR)s.%(BUILD)s.%(PATCH)s' % version
+        self.m.file.write_json(
+            'write metadata.json', out_dir.join('metadata.json'),
+            dict(content={'version': version_str}, metadata_version=1))
+
       metadata_arch = arch_prop.ArchiveData(
           gcs_bucket=gcs_bucket,
           gcs_path='%s/%s' % (gcs_path, target),

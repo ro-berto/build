@@ -192,6 +192,11 @@ def GenTests(api):
            'Generic Archiving Steps.'
            'Copy file metadata.json') % TAST_TARGET,
       ),
+      api.post_process(
+          post_process.MustRun,
+          ('prepare skylab tests.upload skylab runtime deps for %s.'
+           'write metadata.json') % TAST_TARGET,
+      ),
       api.override_step_data(
           'basic_EVE_TOT results',
           stdout=api.raw_io.output_text(
