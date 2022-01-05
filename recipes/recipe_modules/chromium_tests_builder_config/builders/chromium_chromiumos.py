@@ -91,7 +91,9 @@ SPEC.update([
     _config('linux-lacros-builder-rel'),
     _config('linux-lacros-dbg'),
     _config('linux-lacros-rel'),
-    _config('linux-lacros-rel-code-coverage'),
+    _config(
+        'linux-lacros-rel-code-coverage',
+        gclient_apply_config=['use_clang_coverage']),
     _config(
         'linux-lacros-tester-rel',
         execution_mode=builder_spec.TEST,
