@@ -1165,12 +1165,17 @@ class TestGroup(object):
             self.resultdb_api.invocation_ids(invocation_names),
             step_name=step_name)
 
-  def fetch_rdb_results(self, test, suffix):
+  def fetch_rdb_results(self,
+                        test,
+                        suffix,
+                        variants_with_unexpected_results=True):
     """Queries RDB for the given test's results.
 
     Args:
       test: steps.Test object for the given test.
       suffix: Test name suffix.
+      variants_with_unexpected_results: If True, return only test
+        results from variants that have unexpected results.
     """
     invocation_names = test.get_invocation_names(suffix)
     if not invocation_names:
@@ -1183,7 +1188,7 @@ class TestGroup(object):
           invocations=invocation_names, step_name='%s stats' % test.name)
       unexpected_result_invocations = self.resultdb_api.query(
           inv_ids=self.resultdb_api.invocation_ids(invocation_names),
-          variants_with_unexpected_results=True,
+          variants_with_unexpected_results=variants_with_unexpected_results,
           limit=0,
           step_name='%s results' % test.name,
           tr_fields=RDBPerSuiteResults.NEEDED_FIELDS,
@@ -1306,7 +1311,11 @@ class SkylabGroup(TestGroup):
     for t in self._test_suites:
       t.ctp_build_id = self.ctp_build_by_tag.get(t.name)
       t.test_runner_builds = tag_resp.get(t.name, [])
-      self.fetch_rdb_results(t, suffix)
+      # Skylab tests are executed by CrOS builders, which may retry upon
+      # failures within their builds. So the same suffix may have multiple test
+      # runs. We need to fetch all the results for a suffix, or the recipe
+      # can not separate the flaky tests and deterministic failures.
+      self.fetch_rdb_results(t, suffix, variants_with_unexpected_results=False)
       self._run_func(t, t.run, caller_api, suffix, True)
 
     self.include_rdb_invocation(

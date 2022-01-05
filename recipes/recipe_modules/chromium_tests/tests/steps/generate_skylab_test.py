@@ -196,7 +196,9 @@ def GenTests(api):
           'basic_EVE_TOT results',
           stdout=api.raw_io.output_text(
               api.test_utils.rdb_results(
-                  'basic_EVE_TOT', flaky_tests=['Test.One']))),
+                  'basic_EVE_TOT',
+                  failing_tests=['Test.Two'],
+                  flaky_tests=['Test.One']))),
       api.post_process(post_process.StepFailure, 'basic_EVE_TOT.attempt: #1'),
       api.post_process(post_process.StepException, 'basic_EVE_TOT.attempt: #2'),
       api.post_process(post_process.StepSuccess, 'basic_EVE_TOT.attempt: #3'),
@@ -205,7 +207,13 @@ def GenTests(api):
           post_process.StepTextEquals, 'basic_EVE_TOT',
           'Test had failed runs. Check "Test Results" tab for '
           'the deterministic results.'),
-      api.post_process(post_process.StatusSuccess),
+      # Only Test.Two should appear in the build summary, because Test.One
+      # has a green run.
+      api.post_process(
+          post_process.ResultReason,
+          '1 Test Suite(s) failed.\n\n**basic_EVE_TOT** '
+          'failed because of:\n\n- Test.Two'),
+      api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
   )
 
