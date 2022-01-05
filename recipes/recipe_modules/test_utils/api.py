@@ -914,8 +914,9 @@ class TestUtilsApi(recipe_api.RecipeApi):
       self._invalid_test_results(test_suite)
       result = self.m.step.empty(
           '%s (test results summary)' % test_suite.name,
-          step_text=('\n%s (without patch) did not produce valid results, '
-                     'so no failures can safely be ignored') % test_suite.name)
+          step_text=('\n%s (without patch) did not produce valid results. '
+                     'The suite likely reported no failed tests but exited '
+                     'non-zero.') % test_suite.name)
       result.presentation.status = self.m.step.FAILURE
       self.m.tryserver.set_test_failure_tryjob_result()
       return False

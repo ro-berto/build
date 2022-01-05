@@ -3025,7 +3025,7 @@
     "cmd": [],
     "name": "base_unittests (test results summary)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>base_unittests (without patch) did not produce valid results, so no failures can safely be ignored@@@",
+      "@@@STEP_TEXT@<br/>base_unittests (without patch) did not produce valid results. The suite likely reported no failed tests but exited non-zero.@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
