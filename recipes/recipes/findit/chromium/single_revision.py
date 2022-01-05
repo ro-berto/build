@@ -95,10 +95,9 @@ def RunSteps(api, properties):
 
 def _configure_builder(api, target_tester):
   # TODO(https://crbug.com/109276) Don't use master
-  bot_mirror = api.findit.get_bot_mirror_for_tester(
-      chromium.BuilderId.create_for_group(
-          target_tester.master or target_tester.group, target_tester.builder))
-  builder_config = api.findit.get_builder_config_for_mirror(bot_mirror)
+  target_builder_id = chromium.BuilderId.create_for_group(
+      target_tester.master or target_tester.group, target_tester.builder)
+  builder_config = api.findit.get_builder_config(target_builder_id)
   api.chromium_tests.configure_build(builder_config)
 
   # If there is a problem with goma, rather than default to compiling locally
@@ -112,7 +111,7 @@ def _configure_builder(api, target_tester):
   compile_kwargs = {
       'override_execution_mode': ctbc.COMPILE_AND_TEST,
   }
-  return bot_mirror.builder_id, builder_config, compile_kwargs
+  return builder_config.builder_ids[0], builder_config, compile_kwargs
 
 
 def _compute_targets_and_tests(api, builder_config, targets_config, builder_id,

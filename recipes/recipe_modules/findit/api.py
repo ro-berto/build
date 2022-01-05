@@ -3,32 +3,38 @@
 # found in the LICENSE file.
 
 from recipe_engine import recipe_api
+
+from RECIPE_MODULES.build import chromium
 from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 
 
 class FinditApi(recipe_api.RecipeApi):
 
-  def get_bot_mirror_for_tester(self, tester_id, builders=None):
-    builders = builders or self.m.chromium_tests_builder_config.builder_db
+  def get_builder_config(self, target_builder_id, builders=None):
+    _, builder_config = self.m.chromium_tests_builder_config.lookup_builder(
+        target_builder_id)
+    # The builder config doesn't match the target builder. This shouldn't
+    # happen. If this does occur, it indicates there's a problem with the
+    # properties that are being set by the findit app and/or there is a problem
+    # in the src-side properties generation.
+    if (len(builder_config.builder_ids) != 1 or
+        builder_config.builder_ids[0] != target_builder_id):
+      self.m.step.empty(
+          'invalid target builder',
+          status=self.m.step.INFRA_FAILURE,
+          step_text='Expected config for [{}], got config for {}'.format(
+              target_builder_id, list(builder_config.builder_ids)))
+    target_builder_spec = builder_config.builder_db[target_builder_id]
+    if target_builder_spec.parent_buildername is None:
+      return builder_config
 
-    tester_spec = builders[tester_id]
-
-    if tester_spec.parent_buildername is None:
-      return ctbc.TryMirror.create(
-          buildername=tester_id.builder, builder_group=tester_id.group)
-
-    return ctbc.TryMirror.create(
-        builder_group=tester_spec.parent_builder_group or tester_id.group,
-        buildername=tester_spec.parent_buildername,
-        tester=tester_id.builder,
-        tester_group=tester_id.group)
-
-  def get_builder_config_for_mirror(self, mirror, builders=None):
+    builder_id = chromium.BuilderId.create_for_group(
+        target_builder_spec.parent_builder_group or target_builder_id.group,
+        target_builder_spec.parent_buildername)
     return ctbc.BuilderConfig.create(
-        builders or self.m.chromium_tests_builder_config.builder_db,
-        builder_ids=[mirror.builder_id],
-        builder_ids_in_scope_for_testing=([mirror.tester_id]
-                                          if mirror.tester_id else []),
+        builder_config.builder_db,
+        builder_ids=[builder_id],
+        builder_ids_in_scope_for_testing=[target_builder_id],
         include_all_triggered_testers=False,
         step_api=self.m.step)
 
