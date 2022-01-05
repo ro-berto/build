@@ -646,6 +646,38 @@ SPEC = {
             simulation_platform='linux',
             serialize_tests=True,
         ),
+    'GPU FYI Android arm Builder':
+        _chromium_gpu_fyi_spec(
+            chromium_config='android',
+            gclient_config='chromium',
+            gclient_apply_config=[
+                'android',
+                'angle_internal',
+                'angle_top_of_tree',
+                'enable_reclient',
+            ],
+            chromium_config_kwargs={
+                'TARGET_PLATFORM': 'android',
+            },
+            android_config='main_builder_rel_mb',
+            simulation_platform='linux',
+        ),
+    'GPU FYI Android arm64 Builder':
+        _chromium_gpu_fyi_spec(
+            chromium_config='android',
+            gclient_config='chromium',
+            gclient_apply_config=[
+                'android',
+                'angle_internal',
+                'angle_top_of_tree',
+                'enable_reclient',
+            ],
+            chromium_config_kwargs={
+                'TARGET_PLATFORM': 'android',
+            },
+            android_config='arm64_builder_rel_mb',
+            simulation_platform='linux',
+        ),
     'GPU FYI Fuchsia Builder':
         _chromium_gpu_fyi_spec(
             chromium_config='chromium',
