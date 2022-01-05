@@ -23,6 +23,7 @@ DEPS = [
     'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/properties',
+    'recipe_engine/step',
     'recipe_engine/time',
 ]
 
@@ -33,7 +34,8 @@ warmed_file_name = 'warmed.txt'
 
 def RunSteps(api, properties):
   with api.chromium.chromium_layout():
-    api.file.rmglob('delete warmed.txt', api.path['cache'], warmed_file_name)
+    cache_dir = api.path['cache'].join('builder')
+    api.file.rmglob('delete warmed.txt', cache_dir, warmed_file_name)
 
     builder_id = chromium.BuilderId.create_for_group(
         properties.builder_to_warm.builder_group,
@@ -53,6 +55,9 @@ def RunSteps(api, properties):
         set_output_commit=builder_config.set_output_commit,
         no_fetch_tags=True)
 
+    # Get timestamp before compiling since that could take a while
+    checkout_time = int(api.time.time())
+
     if api.code_coverage.using_coverage:
       api.code_coverage.instrument([])
 
@@ -67,9 +72,13 @@ def RunSteps(api, properties):
         'got_revision',
         bot_update_step.presentation.properties.get('got_src_revision'))
 
-    api.file.write_text('write warmed.txt',
-                        api.path['cache'].join(warmed_file_name),
-                        '{},{}'.format(api.time.time(), build_revision))
+    warmed_path = cache_dir.join(warmed_file_name)
+    api.file.write_text('write warmed.txt', warmed_path,
+                        '{},{}'.format(checkout_time, build_revision))
+
+    # TODO (kimstephanie): chmod doesn't work on windows so either remove or
+    # replace this
+    api.step('Set read access on warmed file', ['chmod', '444', warmed_path])
 
     # TODO (kimstephanie): Move above logic into a loop that exits when there
     # are pending builds
