@@ -36,6 +36,8 @@ PROPERTIES = InputProperties
 
 
 def compilator_steps(api, properties):
+  api.chromium_tests.require_gerrit_cl()
+
   report_parent_orchestrator_build(api, properties)
 
   if not api.buildbucket.gitiles_commit.id and not (

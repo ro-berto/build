@@ -24,6 +24,8 @@ DEPS = [
 
 
 def RunSteps(api):
+  api.chromium_tests.require_gerrit_cl()
+
   with api.chromium.chromium_layout():
     return api.chromium_orchestrator.trybot_steps()
 

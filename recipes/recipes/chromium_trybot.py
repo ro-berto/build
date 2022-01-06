@@ -41,17 +41,8 @@ DEPS = [
 
 
 def RunSteps(api):
-  if not api.tryserver.is_tryserver:
-    result = api.step('not a tryjob', [])
-    result.presentation.step_text = (
-        'This recipe requires a gerrit CL for the source under test')
-    result.presentation.status = api.step.EXCEPTION
-    if api.led.launched_by_led:
-      result.presentation.step_text += (
-          "\n run 'led edit-cr-cl <chromium/src CL URL>' to attach a CL to test"
-      )
-      result.presentation.status = api.step.FAILURE
-    api.step.raise_on_failure(result)
+  api.chromium_tests.require_gerrit_cl()
+
   builder_id, builder_config = (
       api.chromium_tests_builder_config.lookup_builder())
   with api.chromium.chromium_layout():
