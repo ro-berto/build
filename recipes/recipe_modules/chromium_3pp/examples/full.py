@@ -32,6 +32,20 @@ def GenTests(api):
     properties.update(**kwargs)
     return api.properties(**{'$build/chromium_3pp': properties})
 
+  package_spec_other = '''
+  create {
+    source { git {} }
+    build { dep: "p_apple/some" }
+  }
+  upload {pkg_prefix: "p_apple"}
+  '''
+  package_spec_some = '''
+  create {
+    source { git {} }
+  }
+  upload {pkg_prefix: "p_apple"}
+  '''
+
   yield api.test(
       'basic',
       generate_properties(),
@@ -39,6 +53,23 @@ def GenTests(api):
           post_process.MustRun,
           'Load all packages',
       ),
+      api.override_step_data(
+          'Load all packages.find package specs',
+          api.file.glob_paths(
+              ['third_party/other/3pp/3pp.pb', 'third_party/some/3pp/3pp.pb'])),
+      api.override_step_data(
+          "Load all packages.load package specs."
+          "read 'third_party/other/3pp/3pp.pb'",
+          api.file.read_text(package_spec_other)),
+      api.override_step_data(
+          "Load all packages.load package specs."
+          "read 'third_party/some/3pp/3pp.pb'",
+          api.file.read_text(package_spec_some)),
+      api.post_process(post_process.MustRun, 'building p_apple/other',
+                       'building p_apple/some'),
+      # CI should upload the 3pp packages
+      api.post_process(post_process.MustRun, 'building p_apple/other.do upload',
+                       'building p_apple/some.do upload'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -110,18 +141,6 @@ def GenTests(api):
   )
 
   # Tests for trybot
-  trybot_basic_other = '''
-  create {
-    source { git {} }
-  }
-  upload {pkg_prefix: "p_apple"}
-  '''
-  trybot_basic_some = '''
-  create {
-    source { git {} }
-  }
-  upload {pkg_prefix: "p_apple"}
-  '''
   yield api.test(
       'trybot_basic',
       api.buildbucket.try_build(),
@@ -139,27 +158,31 @@ def GenTests(api):
       api.override_step_data(
           "Load all packages.load package specs."
           "read 'third_party/other/3pp/3pp.pb'",
-          api.file.read_text(trybot_basic_other)),
+          api.file.read_text(package_spec_other)),
       api.override_step_data(
           "Load all packages.load package specs."
           "read 'third_party/some/3pp/3pp.pb'",
-          api.file.read_text(trybot_basic_some)),
+          api.file.read_text(package_spec_some)),
       api.override_step_data(
           'Load to-build packages from third_party/other.find package specs',
           api.file.glob_paths(['third_party/other/3pp/3pp.pb'])),
       api.override_step_data(
           "Load to-build packages from third_party/other.load package specs."
           "read 'third_party/other/3pp/3pp.pb'",
-          api.file.read_text(trybot_basic_other)),
+          api.file.read_text(package_spec_other)),
       api.override_step_data(
           'Load to-build packages from third_party/some.find package specs',
           api.file.glob_paths(['third_party/some/3pp/3pp.pb'])),
       api.override_step_data(
           "Load to-build packages from third_party/some.load package specs."
           "read 'third_party/some/3pp/3pp.pb'",
-          api.file.read_text(trybot_basic_some)),
+          api.file.read_text(package_spec_some)),
       api.post_process(post_process.MustRun, 'building p_apple/other',
                        'building p_apple/some'),
+      # trybots should never upload the 3pp packages
+      api.post_process(post_process.DoesNotRun,
+                       'building p_apple/other.do upload',
+                       'building p_apple/some.do upload'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
