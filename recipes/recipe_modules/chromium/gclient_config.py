@@ -134,13 +134,13 @@ def fuchsia(c):
 
 @CONFIG_CTX(includes=['fuchsia'])
 def fuchsia_arm64(c):  # pragma: no cover
-  """Downloads boot images for running ARM64 binaries on QEMU."""
+  """Downloads terminal boot images for running ARM64 binaries on QEMU."""
 
   c.solutions[0].custom_vars['checkout_fuchsia_boot_images'] = 'qemu.arm64'
 
 @CONFIG_CTX(includes=['fuchsia'])
 def fuchsia_x64(c):  # pragma: no cover
-  """Downloads boot images for running x64 binaries on QEMU."""
+  """Downloads terminal boot images for running x64 binaries on QEMU."""
 
   c.solutions[0].custom_vars['checkout_fuchsia_boot_images'] = 'qemu.x64'
 
@@ -150,11 +150,17 @@ def fuchsia_arm64_host(c):  #pragma: no cover
 
   c.solutions[0].custom_vars['checkout_fuchsia_for_arm64_host'] = 'True'
 
-
 @CONFIG_CTX(includes=['fuchsia'])
 def fuchsia_internal(c):  #pragma: no cover
-
   c.solutions[0].custom_vars['checkout_fuchsia_internal'] = 'True'
+
+
+@CONFIG_CTX(includes=['fuchsia_x64'])
+def fuchsia_workstation(c):  #pragma: no cover
+  """Downloads workstation boot images for running x64 binaries on QEMU."""
+
+  c.solutions[0].custom_vars[
+      'checkout_fuchsia_boot_images'] = 'qemu.x64,workstation.qemu-x64-release'
 
 
 @CONFIG_CTX()
