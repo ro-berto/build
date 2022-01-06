@@ -35,7 +35,11 @@ class CronetApi(recipe_api.RecipeApi):
       self.m.chromium.apply_config(c)
     droid.init_and_sync(use_bot_update=True)
 
-  def build(self, builder_id=None, targets=None, use_goma=True):
+  def build(self,
+            builder_id=None,
+            targets=None,
+            use_goma=True,
+            use_reclient=False):
     builder_id = builder_id or self.m.chromium.get_builder_id()
     if use_goma:
       self.m.chromium.ensure_goma()
@@ -46,10 +50,13 @@ class CronetApi(recipe_api.RecipeApi):
       gn_path = self.m.path['checkout'].join('buildtools', 'linux64', 'gn')
       if not self.m.path.exists(gn_path):
         gn_path = self.m.path['checkout'].join('third_party', 'gn', 'gn')
-      self.m.chromium.run_gn(use_goma=use_goma, gn_path=gn_path)
+      self.m.chromium.run_gn(
+          use_goma=use_goma, use_reclient=use_reclient, gn_path=gn_path)
     elif self.m.chromium.c.project_generator.tool == 'mb':
-      self.m.chromium.mb_gen(builder_id, use_goma=use_goma)
-    return self.m.chromium.compile(targets=targets, use_goma_module=use_goma)
+      self.m.chromium.mb_gen(
+          builder_id, use_goma=use_goma, use_reclient=use_reclient)
+    return self.m.chromium.compile(
+        targets=targets, use_goma_module=use_goma, use_reclient=use_reclient)
 
   def get_version(self):
     version = self.m.chromium.get_version()

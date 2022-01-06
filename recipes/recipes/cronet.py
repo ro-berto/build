@@ -18,30 +18,34 @@ DEPS = [
 ]
 
 BUILDERS = freeze({
-  'local_test': {
-    'recipe_config': 'main_builder_mb',
-    'kwargs': {
-      'BUILD_CONFIG': 'Debug',
-      'REPO_URL': 'https://chromium.googlesource.com/chromium/src.git',
-      'REPO_NAME': 'src',
+    'local_test': {
+        'recipe_config': 'main_builder_mb',
+        'kwargs': {
+            'BUILD_CONFIG': 'Debug',
+            'REPO_URL': 'https://chromium.googlesource.com/chromium/src.git',
+            'REPO_NAME': 'src',
+        },
+        'cronet_kwargs': {
+            'PERF_ID': 'android_cronet_local_test_builder',
+        },
+        'use_goma': False,
     },
-    'cronet_kwargs': {
-      'PERF_ID': 'android_cronet_local_test_builder',
+    'android-cronet-marshmallow-arm64-perf-rel': {
+        'recipe_config': 'arm64_builder_mb',
+        'run_perf_tests': True,
+        'kwargs': {
+            'BUILD_CONFIG': 'Release',
+            'REPO_NAME': 'src',
+        },
+        'cronet_kwargs': {
+            'PERF_ID': 'android_cronet_m64_perf',
+        },
+        'chromium_apply_config': ['cronet_official'],
+        # Explicitly set remote execution flags to avoid incorrect settings
+        # during the goma->reclient migration.
+        'use_goma': True,
+        'use_reclient': False,
     },
-    'use_goma': False,
-  },
-  'android-cronet-marshmallow-arm64-perf-rel': {
-    'recipe_config': 'arm64_builder_mb',
-    'run_perf_tests': True,
-    'kwargs': {
-      'BUILD_CONFIG': 'Release',
-      'REPO_NAME': 'src',
-    },
-    'cronet_kwargs': {
-      'PERF_ID': 'android_cronet_m64_perf',
-    },
-    'chromium_apply_config': ['cronet_official'],
-  },
 })
 
 
@@ -56,7 +60,8 @@ def RunSteps(api):
       chromium_apply_config=builder_config.get('chromium_apply_config'))
 
   use_goma = builder_config.get('use_goma', True)
-  raw_result = api.cronet.build(use_goma=use_goma)
+  use_reclient = builder_config.get('use_reclient', False)
+  raw_result = api.cronet.build(use_goma=use_goma, use_reclient=use_reclient)
   if raw_result.status != common_pb.SUCCESS:
     return raw_result
 
