@@ -438,42 +438,50 @@ TRYBOTS = try_spec.TryDatabase.create({
         'gpu-fyi-try-android-l-nexus-5-32':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.gpu.fyi',
-                buildername='Android FYI Release (Nexus 5)',
+                buildername='GPU FYI Android arm Builder',
+                tester='Android FYI Release (Nexus 5)',
             ),
         'gpu-fyi-try-android-m-nexus-5x-64':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.gpu.fyi',
-                buildername='Android FYI Release (Nexus 5X)',
+                buildername='GPU FYI Android arm64 Builder',
+                tester='Android FYI Release (Nexus 5X)',
             ),
         'gpu-fyi-try-android-m-nexus-5x-skgl-64':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.gpu.fyi',
-                buildername='Android FYI SkiaRenderer GL (Nexus 5X)',
+                buildername='GPU FYI Android arm64 Builder',
+                tester='Android FYI SkiaRenderer GL (Nexus 5X)',
             ),
         'gpu-fyi-try-android-m-nexus-9-64':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.gpu.fyi',
-                buildername='Android FYI Release (Nexus 9)',
+                buildername='GPU FYI Android arm64 Builder',
+                tester='Android FYI Release (Nexus 9)',
             ),
         'gpu-fyi-try-android-n-nvidia-shield-tv-64':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.gpu.fyi',
-                buildername='Android FYI Release (NVIDIA Shield TV)',
+                buildername='GPU FYI Android arm64 Builder',
+                tester='Android FYI Release (NVIDIA Shield TV)',
             ),
         'gpu-fyi-try-android-p-pixel-2-32':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.gpu.fyi',
-                buildername='Android FYI Release (Pixel 2)',
+                buildername='GPU FYI Android arm Builder',
+                tester='Android FYI Release (Pixel 2)',
             ),
         'gpu-fyi-try-android-p-pixel-2-skv-32':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.gpu.fyi',
-                buildername='Android FYI SkiaRenderer Vulkan (Pixel 2)',
+                buildername='GPU FYI Android arm Builder',
+                tester='Android FYI SkiaRenderer Vulkan (Pixel 2)',
             ),
         'gpu-fyi-try-android-r-pixel-4-32':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.gpu.fyi',
-                buildername='Android FYI Release (Pixel 4)',
+                buildername='GPU FYI Android arm Builder',
+                tester='Android FYI Release (Pixel 4)',
             ),
         'gpu-try-android-m-nexus-5x-64':
             try_spec.TrySpec.create_for_single_mirror(

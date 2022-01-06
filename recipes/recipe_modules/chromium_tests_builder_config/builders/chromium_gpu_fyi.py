@@ -665,6 +665,9 @@ SPEC = {
     'GPU FYI Android arm64 Builder':
         _chromium_gpu_fyi_spec(
             chromium_config='android',
+            chromium_apply_config=[
+                'download_vr_test_apks',
+            ],
             gclient_config='chromium',
             gclient_apply_config=[
                 'android',
@@ -1006,7 +1009,6 @@ SPEC = {
     'Android FYI Release (Nexus 5)':
         _chromium_gpu_fyi_spec(
             chromium_config='android',
-            chromium_apply_config=['mb'],
             gclient_config='chromium',
             gclient_apply_config=[
                 'android',
@@ -1015,11 +1017,11 @@ SPEC = {
                 'enable_reclient',
             ],
             chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 32,
                 'TARGET_PLATFORM': 'android',
             },
-            android_config='main_builder',
+            android_config='main_builder_rel_mb',
+            execution_mode=builder_spec.TEST,
+            parent_buildername='GPU FYI Android arm Builder',
             simulation_platform='linux',
         ),
     'Android FYI Release (Nexus 5X)':
@@ -1039,11 +1041,16 @@ SPEC = {
                 'TARGET_PLATFORM': 'android',
             },
             android_config='arm64_builder_rel_mb',
+            execution_mode=builder_spec.TEST,
+            parent_buildername='GPU FYI Android arm64 Builder',
             simulation_platform='linux',
         ),
     'Android FYI Release (Nexus 9)':
         _chromium_gpu_fyi_spec(
             chromium_config='android',
+            chromium_apply_config=[
+                'download_vr_test_apks',
+            ],
             gclient_config='chromium',
             gclient_apply_config=[
                 'android',
@@ -1055,12 +1062,17 @@ SPEC = {
                 'TARGET_PLATFORM': 'android',
             },
             android_config='arm64_builder_rel_mb',
+            execution_mode=builder_spec.TEST,
+            parent_buildername='GPU FYI Android arm64 Builder',
             simulation_platform='linux',
             serialize_tests=True,
         ),
     'Android FYI Release (NVIDIA Shield TV)':
         _chromium_gpu_fyi_spec(
             chromium_config='android',
+            chromium_apply_config=[
+                'download_vr_test_apks',
+            ],
             gclient_config='chromium',
             gclient_apply_config=[
                 'android',
@@ -1072,6 +1084,8 @@ SPEC = {
                 'TARGET_PLATFORM': 'android',
             },
             android_config='arm64_builder_rel_mb',
+            execution_mode=builder_spec.TEST,
+            parent_buildername='GPU FYI Android arm64 Builder',
             simulation_platform='linux',
             serialize_tests=True,
         ),
@@ -1088,7 +1102,9 @@ SPEC = {
             chromium_config_kwargs={
                 'TARGET_PLATFORM': 'android',
             },
-            android_config='main_builder',
+            android_config='main_builder_rel_mb',
+            execution_mode=builder_spec.TEST,
+            parent_buildername='GPU FYI Android arm Builder',
             simulation_platform='linux',
         ),
     'Android FYI Release (Pixel 4)':
@@ -1097,28 +1113,37 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'android',
+                'angle_internal',
+                'angle_top_of_tree',
                 'enable_reclient',
             ],
             chromium_config_kwargs={
                 'TARGET_PLATFORM': 'android',
             },
-            android_config='main_builder',
+            android_config='main_builder_rel_mb',
+            execution_mode=builder_spec.TEST,
+            parent_buildername='GPU FYI Android arm Builder',
             simulation_platform='linux',
         ),
     'Android FYI SkiaRenderer GL (Nexus 5X)':
         _chromium_gpu_fyi_spec(
             chromium_config='android',
+            chromium_apply_config=[
+                'download_vr_test_apks',
+            ],
             gclient_config='chromium',
             gclient_apply_config=[
                 'android',
+                'angle_internal',
+                'angle_top_of_tree',
                 'enable_reclient',
             ],
             chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
                 'TARGET_PLATFORM': 'android',
             },
-            android_config='main_builder_mb',
+            android_config='arm64_builder_rel_mb',
+            execution_mode=builder_spec.TEST,
+            parent_buildername='GPU FYI Android arm64 Builder',
             simulation_platform='linux',
         ),
     'Android FYI SkiaRenderer Vulkan (Pixel 2)':
@@ -1127,14 +1152,16 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'android',
+                'angle_internal',
+                'angle_top_of_tree',
                 'enable_reclient',
             ],
             chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 32,
                 'TARGET_PLATFORM': 'android',
             },
-            android_config='main_builder_mb',
+            android_config='main_builder_rel_mb',
+            execution_mode=builder_spec.TEST,
+            parent_buildername='GPU FYI Android arm Builder',
             simulation_platform='linux',
         ),
     'ChromeOS FYI Release (amd64-generic)':
