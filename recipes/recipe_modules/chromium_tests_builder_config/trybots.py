@@ -349,13 +349,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 is_compile_only=True,
                 include_all_triggered_testers=True,
             ),
-        'android_clang_dbg_recipe':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android',
-                buildername='Android ASAN (dbg)',
-                is_compile_only=True,
-                include_all_triggered_testers=True,
-            ),
         'android_compile_dbg':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android',
