@@ -200,6 +200,14 @@ def RunSteps(api):
   # Whether do first build in local or use goma.
   compare_local = recipe_config.get('compare_local', False)
 
+  # Whether to use goma or reclient as the remote execution client.  This
+  # could be keyed off of the gclient_apply_config containing
+  # 'enable_reclient' or not, but I would prefer to keep it similar to the
+  # way other recipes work (a separate use_reclient flag).
+  use_reclient = recipe_config.get('use_reclient', False)
+  use_goma = not use_reclient
+  remote_phase = 'goma' if use_goma else 'reclient'
+
   # Do a first build and move the build artifact to the temp directory.
   builder_id = chromium.BuilderId.create_for_group(
       api.builder_group.for_current, buildername)
@@ -207,8 +215,11 @@ def RunSteps(api):
   api.chromium.mb_isolate_everything(
       builder_id, phase='local' if compare_local else None)
 
-  raw_result = api.chromium.compile(targets, name='First build',
-                       use_goma_module=not compare_local)
+  raw_result = api.chromium.compile(
+      targets,
+      name='First build',
+      use_goma_module=use_goma and not compare_local,
+      use_reclient=use_reclient and not compare_local)
   if raw_result.status != common_pb.SUCCESS:
     return raw_result
 
@@ -223,12 +234,20 @@ def RunSteps(api):
     build_dir = '//out/%s' % target
 
   api.chromium.mb_gen(
-      builder_id, build_dir=build_dir, phase='goma' if compare_local else None)
+      builder_id,
+      build_dir=build_dir,
+      phase=remote_phase if compare_local else None)
 
   api.chromium.mb_isolate_everything(
-      builder_id, build_dir=build_dir, phase='goma' if compare_local else None)
-  raw_result = api.chromium.compile(targets, name='Second build',
-      use_goma_module=True, target=target)
+      builder_id,
+      build_dir=build_dir,
+      phase=remote_phase if compare_local else None)
+  raw_result = api.chromium.compile(
+      targets,
+      name='Second build',
+      use_goma_module=use_goma,
+      use_reclient=use_reclient,
+      target=target)
   if raw_result.status != common_pb.SUCCESS:
     return raw_result
 
