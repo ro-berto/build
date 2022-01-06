@@ -1189,7 +1189,7 @@ SPEC.update([
     stock_config('VR Linux', gclient_apply_config=['enable_reclient']),
     stock_config(
         'VR Linux (reclient)', gclient_apply_config=['enable_reclient']),
-    stock_config('Linux Viz'),
+    stock_config('Linux Viz', gclient_apply_config=['enable_reclient']),
     stock_config('linux-annotator-rel'),
     stock_config(
         'linux-ash-chromium-builder-fyi-rel',

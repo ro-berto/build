@@ -610,6 +610,7 @@ SPEC = {
                 'angle_internal',
                 'angle_top_of_tree',
                 'no_kaleidoscope',
+                'enable_reclient',
             ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
