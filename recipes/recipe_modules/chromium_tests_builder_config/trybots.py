@@ -1883,6 +1883,11 @@ TRYBOTS = try_spec.TryDatabase.create({
             ],
             regression_test_selection=try_spec.ALWAYS,
             ),
+        'win11-x64-fyi-rel':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.fyi',
+                buildername='Win11 Tests x64'
+            ),
         'win_chromium_compile_dbg_ng':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.win',
