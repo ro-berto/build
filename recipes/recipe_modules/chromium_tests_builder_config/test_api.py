@@ -2,15 +2,268 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import attr
+import six
+
 from recipe_engine import recipe_test_api
 
+from RECIPE_MODULES.build.attr_utils import attrs, attrib, enum
 from RECIPE_MODULES.build.chromium import BuilderId
 
+from PB.go.chromium.org.luci.buildbucket.proto import builder as builder_pb
 from PB.recipe_modules.build.chromium_tests_builder_config import (properties as
                                                                    properties_pb
                                                                   )
 
-from . import builders, trybots, BuilderConfig, BuilderDatabase, TryDatabase
+from . import (builders, trybots, BuilderConfig, BuilderDatabase, BuilderSpec,
+               TryDatabase)
+
+_DEFAULT_SPEC = BuilderSpec.create(
+    gclient_config='chromium',
+    chromium_config='chromium',
+)
+
+_ExecutionMode = properties_pb.BuilderSpec.ExecutionMode
+
+
+@attrs()
+class BuilderDetails(object):
+  """Details for specifying builders in properties.
+
+  The following fields can be set by the caller when using the
+  properties builders:
+  * project - The LUCI project of the builder.
+  * bucket - The LUCI bucket of the builder. A default will be set by
+    the properties builders methods.
+  * builder - The name of the builder.
+  * builder_group - The builder group of the builder.
+  * builder_spec - The builder spec that should be produced for the
+    builder when converting the properties to in-memory representations.
+    The luci_project, execution_mode, parent_builder_group and
+    parent_buildername attributes will be ignored and set appropriately
+    based on the method that is adding the builder.
+  """
+
+  project = attrib(str, default='chromium')
+  bucket = attrib(str)
+  builder = attrib(str)
+  builder_group = attrib(str)
+  builder_spec = attrib(BuilderSpec, default=_DEFAULT_SPEC)
+
+  # Private fields, controlled by the properties builders and cannot be
+  # set by the caller
+  execution_mode = attrib(enum(_ExecutionMode.values()))
+  parent = attrib(builder_pb.BuilderID, default=None)
+
+
+class _PropertiesBuilder(object):
+
+  def __init__(self, ctbc_test_api):
+    self._ctbc_test_api = ctbc_test_api
+    self._builder_entries = []
+    self._builder_ids = []
+    self._builder_ids_in_scope_for_testing = []
+
+  def build(self):
+    return self._ctbc_test_api.properties(
+        properties_pb.InputProperties(
+            builder_config=properties_pb.BuilderConfig(
+                builder_db=properties_pb.BuilderDatabase(
+                    entries=self._builder_entries),
+                builder_ids=self._builder_ids,
+                builder_ids_in_scope_for_testing=(
+                    self._builder_ids_in_scope_for_testing),
+            )))
+
+  def add_builder(self, details):
+    builder_id = builder_pb.BuilderID(
+        project=details.project,
+        bucket=details.bucket,
+        builder=details.builder,
+    )
+
+    builder_spec = self._get_builder_spec(details)
+
+    self._builder_entries.append(
+        properties_pb.BuilderDatabase.Entry(
+            builder_id=builder_id,
+            builder_spec=builder_spec,
+        ))
+
+    return builder_id
+
+  def add_builder_id(self, builder_id):
+    self._builder_ids.append(builder_id)
+
+  def add_builder_id_in_scope_for_testing(self, builder_id):
+    self._builder_ids_in_scope_for_testing.append(builder_id)
+
+  def _get_builder_spec(self, details):
+    builder_spec = details.builder_spec
+
+    kwargs = {
+        'builder_group':
+            details.builder_group,
+        'execution_mode':
+            details.execution_mode,
+        'parent':
+            details.parent,
+        'legacy_gclient_config':
+            self._get_legacy_gclient_config(builder_spec),
+        'legacy_chromium_config':
+            self._get_legacy_chromium_config(builder_spec),
+        'legacy_android_config':
+            self._get_legacy_android_config(builder_spec),
+        'legacy_test_results_config':
+            self._get_legacy_test_results_config(builder_spec),
+        'android_version_file':
+            builder_spec.android_version,
+        'clobber':
+            builder_spec.clobber,
+        'build_gs_bucket':
+            builder_spec.build_gs_bucket,
+        'run_tests_serially':
+            builder_spec.serialize_tests,
+        'expose_trigger_properties':
+            builder_spec.expose_trigger_properties,
+        'skylab_upload_location':
+            self._get_skylab_upload_location(builder_spec),
+    }
+
+    return properties_pb.BuilderSpec(
+        **{k: v for k, v in six.iteritems(kwargs) if v is not None})
+
+  @staticmethod
+  def _get_legacy_gclient_config(builder_spec):
+    return properties_pb.BuilderSpec.LegacyGclientRecipeModuleConfig(
+        config=builder_spec.gclient_config,
+        apply_configs=builder_spec.gclient_apply_config,
+    )
+
+  @staticmethod
+  def _get_legacy_chromium_config(builder_spec):
+    kwargs = {
+        'config': builder_spec.chromium_config,
+        'apply_configs': builder_spec.chromium_apply_config,
+    }
+    for a in (
+        'BUILD_CONFIG',
+        'TARGET_ARCH',
+        'TARGET_BITS',
+        'TARGET_PLATFORM',
+    ):
+      if a in builder_spec.chromium_config_kwargs:
+        kwargs[a.lower()] = (builder_spec.chromium_config_kwargs[a])
+    for a in (
+        'TARGET_CROS_BOARDS',
+        'CROS_BOARDS_WITH_QEMU_IMAGES',
+    ):
+      if a in builder_spec.chromium_config_kwargs:
+        kwargs[a.lower()] = (builder_spec.chromium_config_kwargs[a].split(':'))
+    return properties_pb.BuilderSpec.LegacyChromiumRecipeModuleConfig(**kwargs)
+
+  @staticmethod
+  def _get_legacy_android_config(builder_spec):
+    kwargs = {}
+    if builder_spec.android_config is not None:
+      kwargs['config'] = builder_spec.android_config
+    if builder_spec.android_apply_config:
+      kwargs['apply_configs'] = builder_spec.android_apply_config
+    if kwargs:
+      return properties_pb.BuilderSpec.LegacyAndroidRecipeModuleConfig(**kwargs)
+    return None
+
+  @staticmethod
+  def _get_legacy_test_results_config(builder_spec):
+    kwargs = {}
+    if builder_spec.test_results_config is not None:
+      kwargs['config'] = builder_spec.test_results_config
+    if kwargs:
+      return properties_pb.BuilderSpec.LegacyTestResultsRecipeModuleConfig(
+          **kwargs)
+    return None
+
+  @staticmethod
+  def _get_skylab_upload_location(builder_spec):
+    kwargs = {}
+    for (src, dst) in (
+        ('skylab_gs_bucket', 'gs_bucket'),
+        ('skylab_gs_extra', 'gs_extra'),
+    ):
+      val = getattr(builder_spec, src)
+      if val is not None:
+        kwargs[dst] = val
+    if kwargs:
+      return properties_pb.BuilderSpec.SkylabUploadLocation(**kwargs)
+    return None
+
+
+class _CiBuilderPropertiesBuilder(object):
+
+  def __init__(self, props_builder, builder_id, builder_spec):
+    self._props_builder = props_builder
+    self._builder_id = builder_id
+    self._builder_spec = builder_spec
+
+  @classmethod
+  def create(cls, ctbc_test_api, **kwargs):
+    props_builder = _PropertiesBuilder(ctbc_test_api)
+    kwargs.setdefault('bucket', 'ci')
+    details = BuilderDetails(
+        execution_mode=_ExecutionMode.COMPILE_AND_TEST, parent=None, **kwargs)
+    builder_id = props_builder.add_builder(details)
+    props_builder.add_builder_id(builder_id)
+    return cls(props_builder, builder_id, details.builder_spec)
+
+  def with_tester(self, **kwargs):
+    kwargs.setdefault('builder_spec', self._builder_spec)
+    kwargs.setdefault('bucket', 'ci')
+    details = BuilderDetails(
+        execution_mode=_ExecutionMode.TEST, parent=self._builder_id, **kwargs)
+    tester_id = self._props_builder.add_builder(details)
+    self._props_builder.add_builder_id_in_scope_for_testing(tester_id)
+    return self
+
+  def build(self):
+    return self._props_builder.build()
+
+
+class _CiTesterPropertiesBuilder(object):
+
+  def __init__(self, props_builder, tester_details):
+    self._props_builder = props_builder
+    self._tester_details = tester_details
+    self._parent_details = None
+
+  @classmethod
+  def create(cls, ctbc_test_api, **kwargs):
+    props_builder = _PropertiesBuilder(ctbc_test_api)
+    kwargs.setdefault('bucket', 'ci')
+    details = BuilderDetails(execution_mode=_ExecutionMode.TEST, **kwargs)
+    return cls(props_builder, details)
+
+  def with_parent(self, **kwargs):
+    if self._parent_details is not None:
+      raise TypeError('`with_parent` can only be called once')
+
+    kwargs.setdefault('builder_spec', self._tester_details.builder_spec)
+    kwargs.setdefault('bucket', 'ci')
+    details = BuilderDetails(
+        execution_mode=_ExecutionMode.COMPILE_AND_TEST, **kwargs)
+    builder_id = self._props_builder.add_builder(details)
+    self._parent_details = details
+
+    tester_details = attr.evolve(self._tester_details, parent=builder_id)
+    tester_id = self._props_builder.add_builder(tester_details)
+
+    self._props_builder.add_builder_id(tester_id)
+
+    return self
+
+  def build(self):
+    if self._parent_details is None:
+      raise TypeError('`with_parent` must be called before calling `build`')
+    return self._props_builder.build()
 
 
 class ChromiumTestsBuilderConfigApi(recipe_test_api.RecipeTestApi):
@@ -19,6 +272,39 @@ class ChromiumTestsBuilderConfigApi(recipe_test_api.RecipeTestApi):
     assert isinstance(properties, properties_pb.InputProperties)
     return self.m.properties(
         **{'$build/chromium_tests_builder_config': properties})
+
+  def properties_builder_for_ci_builder(self, **kwargs):
+    """Get a properties builder for a CI builder.
+
+    See BuilderDetails for information on the allowed keyword arguments.
+    The value of bucket will default to 'ci'.
+
+    The returned object has 2 methods:
+    * with_tester - Adds a tester to the properties with the CI builder
+      as its parent. If `builder_spec` is not specified, it will use the
+      value specified for the CI builder, if any. This can be called
+      multiple times before calling `build`.
+    * build - Creates the test data object that sets the properties for
+      the module.
+    """
+    return _CiBuilderPropertiesBuilder.create(self, **kwargs)
+
+  def properties_builder_for_ci_tester(self, **kwargs):
+    """Get a properties builder for a CI tester.
+
+    See BuilderDetails for information on the allowed keyword arguments.
+    The value of bucket will default to 'ci'.
+
+    The returned object has 2 methods:
+    * with_parent - Adds the parent builder for the tester. If
+      `builder_spec` is not specified, it will use the value specified
+      for the CI tester, if any. This must be called exactly once before
+      calling `build`.
+    * build - Creates the test data object that sets the properties for
+      the module. It is an error to call this before calling
+      `with_parent`.
+    """
+    return _CiTesterPropertiesBuilder.create(self, **kwargs)
 
   @staticmethod
   def _get_builder_id(builder_group, builder, **_):
