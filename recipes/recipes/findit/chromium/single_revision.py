@@ -2,8 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import six
-
 from recipe_engine.post_process import (DoesNotRun, DropExpectation, MustRun,
                                         StepCommandContains, StatusFailure,
                                         StatusSuccess)
@@ -15,7 +13,7 @@ from RECIPE_MODULES.build import chromium
 from RECIPE_MODULES.build.chromium_tests import steps
 from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 
-PYTHON_VERSION_COMPATIBILITY = "PY2+3"
+PYTHON_VERSION_COMPATIBILITY = "PY3"
 
 DEPS = [
     'chromium',
@@ -262,7 +260,7 @@ def GenTests(api):
     props_proto.target_builder.builder = target_builder
     for t in compile_targets:
       props_proto.compile_targets.append(t)
-    for k, v in six.iteritems(tests):
+    for k, v in tests.items():
       new_message = props_proto.tests[k]
       for t in v:
         new_message.names.append(t)
