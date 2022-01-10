@@ -4,7 +4,7 @@
 
 from recipe_engine import post_process
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'chromium_3pp',
@@ -116,7 +116,7 @@ def GenTests(api):
       }]),
       api.override_step_data(
           'Confirm no-op',
-          api.raw_io.stream_output('third_party/qux/3pp/3pp.pb')),
+          api.raw_io.stream_output_text('third_party/qux/3pp/3pp.pb')),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.ResultReasonRE, 'Unexpected 3pp changes'),
       api.post_process(post_process.DropExpectation),
@@ -147,7 +147,7 @@ def GenTests(api):
       generate_properties(package_paths_to_build=['third_party/some']),
       api.override_step_data(
           'Analyze',
-          api.raw_io.stream_output('third_party/other/3pp/fetch.py')),
+          api.raw_io.stream_output_text('third_party/other/3pp/fetch.py')),
       api.post_process(post_process.LogEquals, 'Analyze',
                        'package_paths_to_build',
                        '\n'.join(['third_party/other', 'third_party/some'])),
@@ -193,7 +193,7 @@ def GenTests(api):
       generate_properties(),
       api.override_step_data(
           'Analyze',
-          api.raw_io.stream_output('\n'.join(
+          api.raw_io.stream_output_text('\n'.join(
               ['foo.cc', 'testing/buildbot/bar.json']))),
       api.post_process(post_process.MustRun, 'No 3pp related changes'),
       api.post_process(post_process.StatusSuccess),
