@@ -175,7 +175,7 @@ def ParseSwarmingResults(api, builder_name, results):
       api.step.active_result.presentation.status = 'EXCEPTION'
       success = False
       result.analyze()
-    if result.state == api.swarming.TaskState.TIMED_OUT:
+    if result.state == api.swarming.TaskState.TIMED_OUT or not result.success:
       step.presentation.status = 'EXCEPTION'
       success = False
     if result.output is not None:

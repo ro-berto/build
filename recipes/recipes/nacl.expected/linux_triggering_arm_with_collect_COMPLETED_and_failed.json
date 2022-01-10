@@ -1258,7 +1258,8 @@
     "cmd": [],
     "name": "Starting execution on odroid_32-newlib-arm_hw-pnacl-dbg",
     "~followup_annotations": [
-      "@@@STEP_LOG_END@output@@@"
+      "@@@STEP_LOG_END@output@@@",
+      "@@@STEP_EXCEPTION@@@"
     ]
   },
   {
