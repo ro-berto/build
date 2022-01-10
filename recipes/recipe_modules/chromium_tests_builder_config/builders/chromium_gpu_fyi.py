@@ -1126,6 +1126,28 @@ SPEC = {
             parent_buildername='GPU FYI Android arm Builder',
             simulation_platform='linux',
         ),
+    'Android FYI Release (Pixel 6)':
+        _chromium_gpu_fyi_spec(
+            chromium_config='android',
+            chromium_apply_config=[
+                'download_vr_test_apks',
+            ],
+            gclient_config='chromium',
+            gclient_apply_config=[
+                'android',
+                'angle_internal',
+                'angle_top_of_tree',
+                'enable_reclient',
+            ],
+            chromium_config_kwargs={
+                'TARGET_PLATFORM': 'android',
+            },
+            android_config='arm64_builder_rel_mb',
+            execution_mode=builder_spec.TEST,
+            parent_buildername='GPU FYI Android arm64 Builder',
+            simulation_platform='linux',
+            serialize_tests=True,
+        ),
     'Android FYI SkiaRenderer GL (Nexus 5X)':
         _chromium_gpu_fyi_spec(
             chromium_config='android',
