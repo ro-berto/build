@@ -291,7 +291,6 @@ def _run_tests(api, memory_tool, v8, xfa, out_dir, build_config, revision,
     except api.step.StepFailure as e:
       test_exception = e
 
-  with api.context(cwd=api.path['checkout'], env=env):
     additional_args = _get_modifiable_script_args(
         api, build_config) + ['--render-oneshot']
     try:
@@ -300,8 +299,7 @@ def _run_tests(api, memory_tool, v8, xfa, out_dir, build_config, revision,
     except api.step.StepFailure as e:
       test_exception = e
 
-  if v8:
-    with api.context(cwd=api.path['checkout'], env=env):
+    if v8:
       additional_args = _get_modifiable_script_args(
           api, build_config, javascript_disabled=True)
       try:
@@ -310,8 +308,7 @@ def _run_tests(api, memory_tool, v8, xfa, out_dir, build_config, revision,
       except api.step.StepFailure as e:
         test_exception = e
 
-    if xfa:
-      with api.context(cwd=api.path['checkout'], env=env):
+      if xfa:
         additional_args = _get_modifiable_script_args(
             api, build_config, xfa_disabled=True)
         try:
@@ -335,7 +332,6 @@ def _run_tests(api, memory_tool, v8, xfa, out_dir, build_config, revision,
     except api.step.StepFailure as e:
       test_exception = e
 
-  with api.context(cwd=api.path['checkout'], env=env):
     additional_args = _get_modifiable_script_args(
         api, build_config) + ['--render-oneshot']
     try:
@@ -344,8 +340,7 @@ def _run_tests(api, memory_tool, v8, xfa, out_dir, build_config, revision,
     except api.step.StepFailure as e:
       test_exception = e
 
-  if v8:
-    with api.context(cwd=api.path['checkout'], env=env):
+    if v8:
       additional_args = _get_modifiable_script_args(
           api, build_config, javascript_disabled=True)
       try:
@@ -354,8 +349,7 @@ def _run_tests(api, memory_tool, v8, xfa, out_dir, build_config, revision,
       except api.step.StepFailure as e:
         test_exception = e
 
-    if xfa:
-      with api.context(cwd=api.path['checkout'], env=env):
+      if xfa:
         additional_args = _get_modifiable_script_args(
             api, build_config, xfa_disabled=True)
         try:
