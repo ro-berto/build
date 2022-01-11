@@ -32,6 +32,7 @@ DEPS = [
     'recipe_engine/cipd',
     'recipe_engine/commit_position',
     'recipe_engine/context',
+    'recipe_engine/cq',
     'recipe_engine/file',
     'recipe_engine/json',
     'recipe_engine/path',

@@ -13,6 +13,8 @@ import sys
 
 from recipe_engine import recipe_api
 from recipe_engine.engine_types import freeze
+from RECIPE_MODULES.build import chromium_swarming
+from RECIPE_MODULES.build.chromium_tests import steps
 from RECIPE_MODULES.build.chromium_tests.resultdb import ResultDB
 
 THIS_DIR = os.path.dirname(__file__)
@@ -22,11 +24,13 @@ sys.path.append(os.path.join(os.path.dirname(THIS_DIR)))
 # adb path relative to out dir (e.g. out/Release)
 ADB_PATH = '../../third_party/android_sdk/public/platform-tools/adb'
 
-ANDROID_CIPD_PACKAGES = [(
-    "bin",
-    "infra/tools/luci/logdog/butler/${platform}",
-    "git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c",
-)]
+ANDROID_CIPD_PACKAGES = [
+    chromium_swarming.CipdPackage.create(
+        name='infra/tools/luci/logdog/butler/${platform}',
+        version='git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c',
+        root='bin',
+    )
+]
 
 
 def generate_tests(phase, bot, platform_name, build_out_dir, checkout_path,
@@ -221,94 +225,38 @@ def generate_tests(phase, bot, platform_name, build_out_dir, checkout_path,
   return tests
 
 
-class WebRtcIsolatedGtest(object):
+class WebRtcIsolatedGtest(steps.SwarmingIsolatedScriptTest):
   """Triggers an isolated task to run a GTest binary, and collects the results.
 
   This class is based off Chromium's SwarmingIsolatedScriptTest, but strips out
   the parts we don't need.
   """
 
-  def __init__(self,
-               name,
-               dimensions=None,
-               args=None,
-               shards=1,
-               cipd_packages=None,
-               idempotent=None,
-               result_handlers=None):
+  def __init__(self, name, result_handlers=None, **kwargs):
     """Constructs an instance of WebRtcIsolatedGtest.
 
     Args:
       name: Displayed name of the test.
-      dimensions (dict of str: str): Requested dimensions of the test.
-      args: List of arguments to pass as "Extra Args" to the swarming task.
-          These are passed to whatever runs first in the swarming job, like
-          build/android/test_runner.py on Android or gtest-parallel on Desktop.
-          (these often pass through args to the test binary).
-      shards: Number of shards to trigger.
-      cipd_packages: [(str, str, str)] list of 3-tuples containing cipd
-          package root, package name, and package version.
-      idempotent: Whether to mark the task as idempotent. A value of None will
-          cause chromium_swarming/api.py to apply its default_idempotent val.
       result_handlers: a list of callbacks that take (api, step_result,
           has_valid_results) and take some action to it (typically writing
           something into the step result).
     """
-    self._name = name
-    self._dimensions = dimensions or {}
-    self._args = args or []
-    self._shards = shards
-    self._cipd_packages = cipd_packages
-    self._idempotent = idempotent
+    super(WebRtcIsolatedGtest, self).__init__(
+        steps.SwarmingIsolatedScriptTestSpec.create(name, **kwargs))
     self._result_handlers = result_handlers or []
-    self._raw_cmd = []
-    self._relative_cwd = None
-
     self._task = None
     self._has_collected = False
 
-  @property
-  def isolate_target(self):
-    return self._name
-
-  @property
-  def name(self):
-    return self._name
-
-  @property
-  def step_name(self):
-    return self._name
-
-  @property
-  def raw_cmd(self):  # pragma: no cover
-    return self._raw_cmd
-
-  @raw_cmd.setter
-  def raw_cmd(self, value):
-    self._raw_cmd = value
-
-  @property
-  def relative_cwd(self):  # pragma: no cover
-    return self._relative_cwd
-
-  @relative_cwd.setter
-  def relative_cwd(self, value):
-    self._relative_cwd = value
-
-  @property
-  def runs_on_swarming(self):
-    return True
-
   def pre_run(self, api):
     """Launches the test on Swarming."""
-    assert self._task is None, (
-        'Test %s was already triggered' % self.step_name)  # pragma no cover
+    assert self._task is None, ('Test %s was already triggered' % self.name
+                               )  # pragma no cover
 
     # *.isolated may be missing if *_run target is misconfigured.
     task_input = api.isolate.isolated_tests.get(self.isolate_target)
     if not task_input:  # pragma no cover
       return api.step.empty(
-          '[error] %s' % self.step_name,
+          '[error] %s' % self.name,
           status=api.step.FAILURE,
           step_text=('*.isolated file for target %s is missing' %
                      self.isolate_target))
@@ -332,7 +280,7 @@ class WebRtcIsolatedGtest(object):
   def run(self, api):
     """Waits for launched test to finish and collects the results."""
     assert not self._has_collected, (  # pragma no cover
-        'Results of %s were already collected' % self.step_name)
+        'Results of %s were already collected' % self.name)
     self._has_collected = True
 
     step_result, has_valid_results = api.chromium_swarming.collect_task(
@@ -345,54 +293,13 @@ class WebRtcIsolatedGtest(object):
 
   def create_task(self, api, task_input):
     task = api.chromium_swarming.task(
-        name=self.step_name,
+        name=self.name,
         raw_cmd=self._raw_cmd,
         relative_cwd=self._relative_cwd,
         cas_input_root=task_input)
 
-    task_slice = task.request[0]
-    task.request = task.request.with_slice(0, task_slice)
-
-    self._apply_swarming_task_config(task, api)
-    return task
-
-  def _apply_swarming_task_config(self, task, api):
-    """Applies shared configuration for swarming tasks.
-    """
-    task.shards = self._shards
-    task.shard_indices = list(range(task.shards))
-    task.build_properties = api.chromium.build_properties
-
-    task_slice = task.request[0]
-
-    if self._idempotent is not None:
-      task_slice = task_slice.with_idempotent(self._idempotent)
-
-    ensure_file = task_slice.cipd_ensure_file
-    if self._cipd_packages:
-      for package in self._cipd_packages:
-        ensure_file.add_package(package[1], package[2], package[0])
-    task_slice = task_slice.with_cipd_ensure_file(ensure_file)
-
-    task_dimensions = task_slice.dimensions
-    for k, v in self._dimensions.items():
-      task_dimensions[k] = v
-
-    # Set default value for os.
-    if 'os' not in task_dimensions:
-      task_dimensions['os'] = api.chromium_swarming.prefered_os_dimension(
-          api.platform.name)  # pragma no cover
-
-    task_slice = task_slice.with_dimensions(**task_dimensions)
-
-    task.extra_args.extend(self._args)
-
-    # Add tags.
-    tags = {'test_suite': [self.name]}
-
-    task.request = (
-        task.request.with_slice(0, task_slice).with_name(
-            self.step_name).with_tags(tags))
+    self._apply_swarming_task_config(
+        task, api, suffix='', filter_flag=None, filter_delimiter=None)
     return task
 
 
@@ -444,19 +351,19 @@ def SwarmingPerfTest(name, args=None, **kwargs):
   # data to work with."""
   return WebRtcIsolatedGtest(
       name,
+      result_handlers=handlers,
       args=args,
       cipd_packages=ANDROID_CIPD_PACKAGES,
       shards=1,
       idempotent=False,
-      result_handlers=handlers,
       **kwargs)
 
 
 def SwarmingAndroidTest(name, **kwargs):
   return WebRtcIsolatedGtest(
       name,
-      cipd_packages=ANDROID_CIPD_PACKAGES,
       result_handlers=[InvalidResultsHandler, LogcatHandler],
+      cipd_packages=ANDROID_CIPD_PACKAGES,
       **kwargs)
 
 
@@ -481,10 +388,10 @@ def SwarmingAndroidPerfTest(name, args=None, **kwargs):
 
   return WebRtcIsolatedGtest(
       name,
+      result_handlers=handlers,
       args=args,
       shards=1,
       idempotent=False,
-      result_handlers=handlers,
       **kwargs)
 
 
