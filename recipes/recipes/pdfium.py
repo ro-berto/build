@@ -6,7 +6,7 @@
 PYTHON_VERSION_COMPATIBILITY = "PY3"
 
 # Separately, python command used to run the steps in the recipe.
-PYTHON_CMD = ['python3', '-u']
+PYTHON_CMD = ['vpython3', '-u']
 
 DEPS = [
     'builder_group',
