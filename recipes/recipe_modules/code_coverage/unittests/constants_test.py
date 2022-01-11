@@ -22,8 +22,7 @@ class ConstantsTest(unittest.TestCase):
     files = [
         'a/b/c/test.cc', 'a/b/c/tests.cc', 'a/b/c/gtest.cc', 'a/b/c/gtests.cc',
         'a/b/c/gTest.java', 'a/b/c/gTests.java', 'a/test/path.cc',
-        'a/tests/path.cc', 'a/b/testing/path.cc', 'third_party/a.cc',
-        'a/third_party/b.cc'
+        'a/tests/path.cc', 'a/b/testing/path.cc'
     ]
     filtered_files = filter(lambda s: re.match(pattern, s), files)
     self.assertEqual(len(files), len(filtered_files))
@@ -36,7 +35,6 @@ class ConstantsTest(unittest.TestCase):
         'signin_browser_state_info_updater.mm',
         '/b/s/w/ir/cache/builder/src/base/mac/scoped_sending_event.mm',
         '/b/s/w/ir/cache/builder/src/contest_related/file.cc',
-        '/b/s/w/ir/cache/builder/src/third_party/blink/a.cc'
     ]
     filtered_files = filter(lambda s: re.match(ios_pattern, s), files)
     self.assertEqual(0, len(filtered_files))

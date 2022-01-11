@@ -300,6 +300,11 @@ def _to_compressed_file_record(src_path, file_coverage_data, diff_mapping=None):
   if coverage_path.startswith('out/'):
     return None
 
+  # exclude third_party/ code except third_party/blink/
+  if ('third_party/' in coverage_path and
+      'third_party/blink/' not in coverage_path):
+    return None
+
   line_data, block_data = _extract_coverage_info(segments)
 
   if diff_mapping is not None and coverage_path in diff_mapping:

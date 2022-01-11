@@ -230,6 +230,10 @@ def _get_files_coverage_data(src_path,
       if exclusion_pattern and re.match(exclusion_pattern, file_path):
         continue
 
+      # exclude third_party/ code except third_party/blink/
+      if 'third_party/' in file_path and 'third_party/blink/' not in file_path:
+        continue
+
       logging.info('Processing file %s', '//' + file_path)
       file_coverage = _get_file_coverage_data(file_path, source_file,
                                               diff_mapping)
