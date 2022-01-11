@@ -2,7 +2,11 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+# Python version used to run the recipe itself.
 PYTHON_VERSION_COMPATIBILITY = "PY3"
+
+# Separately, python command used to run the steps in the recipe.
+PYTHON_CMD = ['python', '-u']
 
 DEPS = [
     'builder_group',
@@ -20,7 +24,6 @@ DEPS = [
     'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/properties',
-    'recipe_engine/python',
     'recipe_engine/step',
     'recipe_engine/time',
 ]
@@ -159,10 +162,11 @@ def _gn_gen_builds(api, memory_tool, skia, skia_paths, xfa, v8, target_cpu,
     args.append('target_cpu="x86"')
 
   with api.context(cwd=checkout):
-    api.python('gn gen', gn_cmd, [
-        '--check', '--root=' + str(checkout), 'gen', '//out/' + out_dir,
-        '--args=' + ' '.join(args)
-    ])
+    api.step(
+        'gn gen', PYTHON_CMD + [
+            gn_cmd, '--check', '--root=' + str(checkout), 'gen',
+            '//out/' + out_dir, '--args=' + ' '.join(args)
+        ])
 
   # convert the arguments to key values pairs for gold usage.
   return _gold_build_config(args)
@@ -257,19 +261,19 @@ def _run_tests(api, memory_tool, v8, xfa, out_dir, build_config, revision,
   if v8:
     javascript_path = str(api.path['checkout'].join('testing', 'tools',
                                                     'run_javascript_tests.py'))
+    javascript_tests_cmd = PYTHON_CMD + [javascript_path] + script_args
     with api.context(cwd=api.path['checkout'], env=env):
       additional_args = _get_modifiable_script_args(api, build_config)
       try:
-        api.python('javascript tests', javascript_path,
-                   script_args + additional_args)
+        api.step('javascript tests', javascript_tests_cmd + additional_args)
       except api.step.StepFailure as e:
         test_exception = e
 
       additional_args = _get_modifiable_script_args(
           api, build_config, javascript_disabled=True)
       try:
-        api.python('javascript tests (javascript disabled)', javascript_path,
-                   script_args + additional_args)
+        api.step('javascript tests (javascript disabled)',
+                 javascript_tests_cmd + additional_args)
       except api.step.StepFailure as e:
         test_exception = e
 
@@ -277,25 +281,26 @@ def _run_tests(api, memory_tool, v8, xfa, out_dir, build_config, revision,
         additional_args = _get_modifiable_script_args(
             api, build_config, xfa_disabled=True)
         try:
-          api.python('javascript tests (xfa disabled)', javascript_path,
-                     script_args + additional_args)
+          api.step('javascript tests (xfa disabled)',
+                   javascript_tests_cmd + additional_args)
         except api.step.StepFailure as e:
           test_exception = e
 
   pixel_tests_path = str(api.path['checkout'].join('testing', 'tools',
                                                    'run_pixel_tests.py'))
+  pixel_tests_cmd = PYTHON_CMD + [pixel_tests_path] + script_args
   with api.context(cwd=api.path['checkout'], env=env):
     additional_args = _get_modifiable_script_args(api, build_config)
     try:
-      api.python('pixel tests', pixel_tests_path, script_args + additional_args)
+      api.step('pixel tests', pixel_tests_cmd + additional_args)
     except api.step.StepFailure as e:
       test_exception = e
 
     additional_args = _get_modifiable_script_args(
         api, build_config) + ['--render-oneshot']
     try:
-      api.python('pixel tests (oneshot rendering enabled)', pixel_tests_path,
-                 script_args + additional_args)
+      api.step('pixel tests (oneshot rendering enabled)',
+               pixel_tests_cmd + additional_args)
     except api.step.StepFailure as e:
       test_exception = e
 
@@ -303,8 +308,8 @@ def _run_tests(api, memory_tool, v8, xfa, out_dir, build_config, revision,
       additional_args = _get_modifiable_script_args(
           api, build_config, javascript_disabled=True)
       try:
-        api.python('pixel tests (javascript disabled)', pixel_tests_path,
-                   script_args + additional_args)
+        api.step('pixel tests (javascript disabled)',
+                 pixel_tests_cmd + additional_args)
       except api.step.StepFailure as e:
         test_exception = e
 
@@ -312,8 +317,8 @@ def _run_tests(api, memory_tool, v8, xfa, out_dir, build_config, revision,
         additional_args = _get_modifiable_script_args(
             api, build_config, xfa_disabled=True)
         try:
-          api.python('pixel tests (xfa disabled)', pixel_tests_path,
-                     script_args + additional_args)
+          api.step('pixel tests (xfa disabled)',
+                   pixel_tests_cmd + additional_args)
         except api.step.StepFailure as e:
           test_exception = e
 
@@ -324,19 +329,19 @@ def _run_tests(api, memory_tool, v8, xfa, out_dir, build_config, revision,
 
   corpus_tests_path = str(api.path['checkout'].join('testing', 'tools',
                                                     'run_corpus_tests.py'))
+  corpus_tests_cmd = PYTHON_CMD + [corpus_tests_path] + script_args
   with api.context(cwd=api.path['checkout'], env=env):
     additional_args = _get_modifiable_script_args(api, build_config)
     try:
-      api.python('corpus tests', corpus_tests_path,
-                 script_args + additional_args)
+      api.step('corpus tests', corpus_tests_cmd + additional_args)
     except api.step.StepFailure as e:
       test_exception = e
 
     additional_args = _get_modifiable_script_args(
         api, build_config) + ['--render-oneshot']
     try:
-      api.python('corpus tests (oneshot rendering enabled)', corpus_tests_path,
-                 script_args + additional_args)
+      api.step('corpus tests (oneshot rendering enabled)',
+               corpus_tests_cmd + additional_args)
     except api.step.StepFailure as e:
       test_exception = e
 
@@ -344,8 +349,8 @@ def _run_tests(api, memory_tool, v8, xfa, out_dir, build_config, revision,
       additional_args = _get_modifiable_script_args(
           api, build_config, javascript_disabled=True)
       try:
-        api.python('corpus tests (javascript disabled)', corpus_tests_path,
-                   script_args + additional_args)
+        api.step('corpus tests (javascript disabled)',
+                 corpus_tests_cmd + additional_args)
       except api.step.StepFailure as e:
         test_exception = e
 
@@ -353,8 +358,8 @@ def _run_tests(api, memory_tool, v8, xfa, out_dir, build_config, revision,
         additional_args = _get_modifiable_script_args(
             api, build_config, xfa_disabled=True)
         try:
-          api.python('corpus tests (xfa disabled)', corpus_tests_path,
-                     script_args + additional_args)
+          api.step('corpus tests (xfa disabled)',
+                   corpus_tests_cmd + additional_args)
         except api.step.StepFailure as e:
           test_exception = e
 
