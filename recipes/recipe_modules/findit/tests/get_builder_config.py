@@ -2,14 +2,12 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import six
-
 from recipe_engine import post_process
 
 from RECIPE_MODULES.build import chromium
 from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 
-PYTHON_VERSION_COMPATIBILITY = "PY2+3"
+PYTHON_VERSION_COMPATIBILITY = "PY3"
 
 DEPS = [
     'chromium_tests_builder_config',
@@ -32,10 +30,8 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  builder_id = chromium.BuilderId.create_for_group(
-      six.u('fake-group'), six.u('fake-builder'))
-  tester_id = chromium.BuilderId.create_for_group(
-      six.u('fake-group'), six.u('fake-tester'))
+  builder_id = chromium.BuilderId.create_for_group('fake-group', 'fake-builder')
+  tester_id = chromium.BuilderId.create_for_group('fake-group', 'fake-tester')
 
   yield api.test(
       'src-side-builder',
