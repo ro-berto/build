@@ -292,7 +292,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "RECIPE_REPO[depot_tools]/gn.py",
       "--check",
@@ -708,7 +708,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "[CACHE]/builder/pdfium/testing/tools/run_javascript_tests.py",
       "--build-dir",
@@ -747,7 +747,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "[CACHE]/builder/pdfium/testing/tools/run_javascript_tests.py",
       "--build-dir",
@@ -787,7 +787,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "[CACHE]/builder/pdfium/testing/tools/run_javascript_tests.py",
       "--build-dir",
@@ -827,7 +827,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "[CACHE]/builder/pdfium/testing/tools/run_pixel_tests.py",
       "--build-dir",
@@ -866,7 +866,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "[CACHE]/builder/pdfium/testing/tools/run_pixel_tests.py",
       "--build-dir",
@@ -906,7 +906,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "[CACHE]/builder/pdfium/testing/tools/run_pixel_tests.py",
       "--build-dir",
@@ -946,7 +946,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "[CACHE]/builder/pdfium/testing/tools/run_pixel_tests.py",
       "--build-dir",
@@ -986,7 +986,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "[CACHE]/builder/pdfium/testing/tools/run_corpus_tests.py",
       "--build-dir",
@@ -1025,7 +1025,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "[CACHE]/builder/pdfium/testing/tools/run_corpus_tests.py",
       "--build-dir",
@@ -1065,7 +1065,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "[CACHE]/builder/pdfium/testing/tools/run_corpus_tests.py",
       "--build-dir",
@@ -1105,7 +1105,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "[CACHE]/builder/pdfium/testing/tools/run_corpus_tests.py",
       "--build-dir",
