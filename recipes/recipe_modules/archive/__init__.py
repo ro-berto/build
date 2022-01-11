@@ -17,6 +17,7 @@ DEPS = [
     'infra/zip',
     'infra/cloudkms',
     'infra/provenance',
+    'py3_migration',
     'recipe_engine/buildbucket',
     'recipe_engine/cipd',
     'recipe_engine/commit_position',

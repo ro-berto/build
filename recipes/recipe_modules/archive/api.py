@@ -872,7 +872,7 @@ class ArchiveApi(recipe_api.RecipeApi):
           archive_data.root_permission_override,
           str(temp_dir),
       ])
-    for filename in expanded_files:
+    for filename in self.m.py3_migration.consistent_ordering(expanded_files):
       tmp_file_path = self.m.path.join(temp_dir, filename)
       tmp_file_dir = self.m.path.dirname(tmp_file_path)
       if str(tmp_file_dir) != str(temp_dir):
@@ -1032,7 +1032,8 @@ class ArchiveApi(recipe_api.RecipeApi):
           provenance_manifest['sources'] = provenance_sources
 
       attestation_paths = {}
-      for f in uploads.keys():
+      for f in self.m.py3_migration.consistent_ordering(
+          uploads.keys(), key=str):
         # Generate the .attestation file next to the original.
         attestation_path = str(f) + '.attestation'
         file_hash = self.m.file.file_hash(f, test_data='deadbeef')
@@ -1047,7 +1048,8 @@ class ArchiveApi(recipe_api.RecipeApi):
         attestation_paths[attestation_path] = uploads[f] + '.attestation'
       uploads.update(attestation_paths)
 
-    for file_path in sorted(uploads.keys(), key=str):
+    for file_path in self.m.py3_migration.consistent_ordering(
+        uploads.keys(), key=str):
       self.m.gsutil.upload(
           file_path,
           bucket=gcs_bucket,
