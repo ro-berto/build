@@ -271,37 +271,6 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
 
-  findit_exoneration_output = {
-      'flakes': [{
-          'test': {
-              'step_ui_name': 'base_unittests (with patch)',
-              'test_name': 'Test.Two',
-          },
-          'affected_gerrit_changes': ['123', '234'],
-          'monorail_issue': '999',
-      }]
-  }
-  yield api.test(
-      'query_findit_with_invocation_results',
-      api.chromium.ci_build(builder_group='g', builder='linux-rel'),
-      api.properties(
-          swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
-          },
-          is_swarming_test=True,
-      ),
-      api.chromium_tests.gen_swarming_and_rdb_results(
-          'base_unittests', 'with patch', failures=['Test.Two']),
-      # The first query is used in the legacy decisions. The second is used in
-      # RDB-based decisions. If both report the same failing test as flaky, then
-      # the decision logic should match.
-      api.override_step_data('query known flaky failures on CQ',
-                             api.json.output(findit_exoneration_output)),
-      api.override_step_data('query known flaky failures on CQ (2)',
-                             api.json.output(findit_exoneration_output)),
-      api.post_process(post_process.DropExpectation),
-  )
-
   inv_bundle_with_different_test_name = {
       'invid':
           api.resultdb.Invocation(

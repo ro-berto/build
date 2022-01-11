@@ -560,81 +560,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     return should_abort
 
-  def _extract_retriable_suites_from_invocations(self, test_suites, suffix,
-                                                 retry_failed_shards,
-                                                 retry_invalid_shards):
-    """Examines tests results as reported by RDB for suites we want to retry.
-
-    We want to retry any suite that had at least one test with consistent
-    non-PASSing results.
-
-    Args:
-      test_suites: iterable of objects implementing the steps.Test interface
-      suffix: suffix indicating context of the test run
-      retry_failed_shards: If True, retry suites that contain non-PASSing
-        results.
-      retry_invalid_shards: If True, retry shards of swarming tests without
-        valid results.
-    Return:
-      Set of suite names containing tests we want to retry.
-    """
-    retriable_suites = set()
-    # RDB is unaware of suites with invalid results (eg: shards that never
-    # ran). So we need to keep a channel open to swarming to record shards
-    # that failed with BOT_DIED, EXPIRED, TIMED_OUT, etc.
-    if retry_invalid_shards:
-      for suite in test_suites:
-        results = suite.get_rdb_results(suffix)
-        if results and results.invalid and suite.runs_on_swarming:
-          retriable_suites.add(suite.name)
-    if not retry_failed_shards:
-      return retriable_suites
-
-    # Check if all unexpected failures are known to be flaky by FindIt, and
-    # mark them as flaky if so.
-    if suffix == 'with patch':
-      # Build the input FindIt's API expects: a list of dicts with just
-      # "step_ui_name" and "test_name".
-      find_it_input_test_list = []
-      for suite in test_suites:
-        for test in suite.get_rdb_results(suffix).unexpected_failing_tests:
-          # RDB reports test IDs in a different format than FindIt accepts. So
-          # convert from one to the other by removing the "ninja://..." prefix.
-          find_it_input_test_name = test.split(suite.test_id_prefix)[-1]
-          find_it_input_test_list.append({
-              'step_ui_name': suite.name_of_step_for_suffix(suffix),
-              'test_name': find_it_input_test_name,
-          })
-      # Mark all the failed tests as flaky if FindIt has a monorail issue
-      # on file for them.
-      known_flakes = self._query_flaky_failures(find_it_input_test_list)
-      for flake in known_flakes.get('flakes', []):
-        for suite in test_suites:
-          test_step_name = suite.name_of_step_for_suffix(suffix)
-          if test_step_name == flake['test']['step_ui_name']:
-            suite.add_known_flaky_failure(flake['test']['test_name'],
-                                          flake['monorail_issue'])
-
-    # Filter out suites whose failing tests are all known to be flaky, and
-    # only retry what's remaining.
-    for suite in test_suites:
-      if (not suite.runs_on_swarming or not suite.get_rdb_results(suffix) or
-          not suite.get_rdb_results(suffix).unexpected_failing_tests):
-        continue
-      # Convert the names of all failing tests in RDB's results to FindIt's
-      # format, and if every test name in that set was reported by FindIt to
-      # be flaky, then we can skip the retry.
-      failing_test_names = set(
-          t.split(suite.test_id_prefix)[-1]
-          for t in suite.get_rdb_results(suffix).unexpected_failing_tests)
-      if not failing_test_names.issubset(suite.known_flaky_failures):
-        retriable_suites.add(suite.name)
-
-    return retriable_suites
-
-  def _extract_retriable_suites_legacy(self, failed_suites, invalid_suites,
-                                       retry_failed_shards,
-                                       retry_invalid_shards):
+  def _extract_retriable_suites(self, failed_suites, invalid_suites,
+                                retry_failed_shards, retry_invalid_shards):
     target_suites = set()
     if retry_failed_shards:
       target_suites.update(failed_suites)
@@ -642,41 +569,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
       target_suites.update(invalid_suites)
     # Only Swarming suites can be usefully retried
     return [t for t in target_suites if t.runs_on_swarming]
-
-  def _retry_with_patch_target_suites(self, old_retriables,
-                                      new_retriable_names):
-    mismatch_string = ('Legacy decision for retries had length {}\n' +
-                       'New decision for retries had length {}').format(
-                           len(old_retriables), len(new_retriable_names))
-    set_diff_string_unformatted = (
-        'Legacy retries calculation contained extra elements {}\n' +
-        'New retries calculation contained extra elements {}')
-
-    # Overall logic here:
-    #   - If either source says that there should be retries, create a step
-    #   - If they don't have the same set, report a mismatch and detail the
-    #       differences which are present.
-    #   - Return the retry list purely based on the source of truth
-    if not old_retriables and not new_retriable_names:
-      return []
-
-    # Fetching names from protobufs gets unicode strings, so coerce to unicode
-    # in order to make the sets compare like with like
-    old_retriable_names = set(
-        six.text_type(suite.name) for suite in old_retriables)
-
-    if old_retriable_names.symmetric_difference(new_retriable_names):
-      mismatch = self.m.step.empty(
-          'Migration mismatch (informational)', step_text=mismatch_string)
-      mismatch.presentation.status = self.m.step.WARNING
-      extra_old_retriable_names = old_retriable_names - new_retriable_names
-      extra_new_retriable_names = new_retriable_names - old_retriable_names
-      discrepancy = self.m.step.empty(
-          'Migration mismatch (retriable suites, informational)',
-          step_text=set_diff_string_unformatted.format(
-              list(extra_old_retriable_names), list(extra_new_retriable_names)))
-      discrepancy.presentation.status = self.m.step.WARNING
-    return old_retriables
 
   def run_tests(self,
                 caller_api,
@@ -746,14 +638,9 @@ class TestUtilsApi(recipe_api.RecipeApi):
     if not (retry_failed_shards or retry_invalid_shards):
       return invalid_test_suites, failed_and_invalid_suites
 
-    retry_list_old = self._extract_retriable_suites_legacy(
+    swarming_test_suites = self._extract_retriable_suites(
         failed_test_suites, invalid_test_suites, retry_failed_shards,
         retry_invalid_shards)
-    retry_list_new = self._extract_retriable_suites_from_invocations(
-        test_suites, suffix, retry_failed_shards, retry_invalid_shards)
-
-    swarming_test_suites = self._retry_with_patch_target_suites(
-        retry_list_old, retry_list_new)
     if not swarming_test_suites:
       return invalid_test_suites, failed_and_invalid_suites
 
