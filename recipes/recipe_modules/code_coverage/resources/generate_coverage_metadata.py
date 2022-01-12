@@ -237,7 +237,10 @@ def _calculate_line_summary_metrics(line_data):
   return [{'name': 'line', 'covered': covered, 'total': len(line_data)}]
 
 
-def _to_compressed_file_record(src_path, file_coverage_data, diff_mapping=None):
+def _to_compressed_file_record(src_path,
+                               file_coverage_data,
+                               diff_mapping=None,
+                               third_party_inclusion_subdirs=None):
   """Converts the given Clang file coverage data to coverage metadata format.
 
   Coverage metadata format:
@@ -270,6 +273,8 @@ def _to_compressed_file_record(src_path, file_coverage_data, diff_mapping=None):
                   root, and the corresponding value is another map that maps
                   from local diff's line number to Gerrit diff's line number as
                   well as the line itself.
+    third_party_inclusion_subdirs (list): List of third_party subdirs to be
+                  included in the aggregation
 
   Returns:
     A json conforming to `File` proto representing the file coverage.
@@ -300,9 +305,9 @@ def _to_compressed_file_record(src_path, file_coverage_data, diff_mapping=None):
   if coverage_path.startswith('out/'):
     return None
 
-  # exclude third_party/ code except third_party/blink/
-  if ('third_party/' in coverage_path and
-      'third_party/blink/' not in coverage_path):
+  # exclude third_party/ code
+  if ('third_party/' in coverage_path and third_party_inclusion_subdirs and
+      not any([x in coverage_path for x in third_party_inclusion_subdirs])):
     return None
 
   line_data, block_data = _extract_coverage_info(segments)
@@ -598,6 +603,7 @@ def _generate_metadata(src_path,
                        sources,
                        diff_mapping=None,
                        exclusions=None,
+                       third_party_inclusion_subdirs=None,
                        arch=None):
   """Generates code coverage metadata.
 
@@ -615,12 +621,14 @@ def _generate_metadata(src_path,
     diff_mapping: A json object that stores the diff mapping. Only meaningful to
                   per-cl coverage.
     exclusions: A regex string to exclude matches from aggregation.
+    third_party_inclusion_subdirs (list): List of third_party subdirs to be
+              included in the aggregation
     arch: A string indicating the architecture of the binaries.
 
   Returns:
     A tuple (data, summaries) where:
     data: A data structure that can be serialized according to the
-                    coverage metadata format.                
+                    coverage metadata format.
     summaries: A dict that maps binary name to a summary of that binary's
                coverage data.
   """
@@ -639,7 +647,8 @@ def _generate_metadata(src_path,
   files_coverage = []
   for datum in data['data']:
     for file_data in datum['files']:
-      record = _to_compressed_file_record(src_path, file_data, diff_mapping)
+      record = _to_compressed_file_record(src_path, file_data, diff_mapping,
+                                          third_party_inclusion_subdirs)
       if record:
         files_coverage.append(record)
 
@@ -761,6 +770,11 @@ def _parse_args(args):
       type=str,
       help='regex pattern for sources to exclude from aggregation')
   parser.add_argument(
+      '--third-party-inclusion-subdirs',
+      nargs='*',
+      type=str,
+      help='third_party sub directories to include in aggregation')
+  parser.add_argument(
       '--arch',
       type=str,
       help='architecture of binaries',
@@ -815,12 +829,11 @@ def main():
       'component_mapping (for full-repo coverage) and diff_mapping '
       '(for per-cl coverage) cannot be specified at the same time.')
 
-  data, summaries = _generate_metadata(params.src_path, params.output_dir,
-                                       params.profdata_path, params.llvm_cov,
-                                       params.build_dir, params.binaries,
-                                       component_mapping, abs_sources,
-                                       diff_mapping, params.exclusion_pattern,
-                                       params.arch)
+  data, summaries = _generate_metadata(
+      params.src_path, params.output_dir, params.profdata_path, params.llvm_cov,
+      params.build_dir, params.binaries, component_mapping, abs_sources,
+      diff_mapping, params.exclusion_pattern,
+      params.third_party_inclusion_subdirs, params.arch)
 
   with open(os.path.join(params.output_dir, 'all.json.gz'), 'wb') as f:
     f.write(zlib.compress(json.dumps(data)))

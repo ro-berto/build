@@ -559,6 +559,8 @@ class CodeCoverageApi(recipe_api.RecipeApi):
                 self.platform][self._current_processing_test_type])
         ])
         args.extend(['--exclusion-pattern', constants.EXCLUDED_FILE_REGEX])
+        args.append('--third-party-inclusion-subdirs')
+        args.extend(constants.INCLUDED_THIRD_PARTY_SUBDIRS)
         self.m.python(
             'Generate Java coverage metadata',
             self.resource('generate_coverage_metadata_for_java.py'),
@@ -904,6 +906,8 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       ])
     else:
       args.extend(['--exclusion-pattern', constants.EXCLUDED_FILE_REGEX])
+      args.append('--third-party-inclusion-subdirs')
+      args.extend(constants.INCLUDED_THIRD_PARTY_SUBDIRS)
       if self._include_component_mapping:
         args.extend(['--dir-metadata-path', self._generate_dir_metadata()])
 

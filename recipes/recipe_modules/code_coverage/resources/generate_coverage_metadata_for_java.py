@@ -170,7 +170,8 @@ def _get_files_coverage_data(src_path,
                              source_dirs,
                              diff_mapping,
                              source_files,
-                             exclusion_pattern=None):
+                             exclusion_pattern=None,
+                             third_party_inclusion_subdirs=None):
   """Gets the files coverage data based on Jacoco XML report.
 
   Args:
@@ -182,6 +183,8 @@ def _get_files_coverage_data(src_path,
     source_files: List of source files to generate coverage data for,
       paths relative to code checkout. Only meaningful to per-cl coverage.
     exclusion_pattern: A regex string to exclude matches from aggregation.
+    third_party_inclusion_subdirs (list): List of third_party subdirs to be
+              included in the aggregation
 
   Returns:
     A list of files coverage data.
@@ -230,8 +233,9 @@ def _get_files_coverage_data(src_path,
       if exclusion_pattern and re.match(exclusion_pattern, file_path):
         continue
 
-      # exclude third_party/ code except third_party/blink/
-      if 'third_party/' in file_path and 'third_party/blink/' not in file_path:
+      # exclude third_party/ code
+      if ('third_party/' in file_path and third_party_inclusion_subdirs and
+          not any([x in file_path for x in third_party_inclusion_subdirs])):
         continue
 
       logging.info('Processing file %s', '//' + file_path)
@@ -256,7 +260,8 @@ def generate_json_coverage_metadata(src_path,
                                     component_mapping,
                                     diff_mapping,
                                     source_files,
-                                    exclusion_pattern=None):
+                                    exclusion_pattern=None,
+                                    third_party_inclusion_subdirs=None):
   """Generates a JSON representation based on Jacoco XML report.
 
   JSON format conforms to the proto:
@@ -273,6 +278,8 @@ def generate_json_coverage_metadata(src_path,
     source_files: List of source files to generate coverage data for,
       paths relative to code checkout. Only meaningful to per-cl coverage.
     exclusion_pattern: A regex string to exclude matches from aggregation.
+    third_party_inclusion_subdirs (list): List of third_party subdirs to be
+                included in the aggregation
 
   Returns:
     JSON format coverage metadata.
@@ -280,7 +287,8 @@ def generate_json_coverage_metadata(src_path,
   data = {}
   data['files'] = _get_files_coverage_data(src_path, root, source_dirs,
                                            diff_mapping, source_files,
-                                           exclusion_pattern)
+                                           exclusion_pattern,
+                                           third_party_inclusion_subdirs)
 
   # Add per directory and component coverage data.
   if data['files'] and component_mapping:
@@ -357,6 +365,11 @@ def _parse_args(args):
       '--exclusion-pattern',
       type=str,
       help='regex pattern for sources to exclude from aggregation')
+  parser.add_argument(
+      '--third-party-inclusion-subdirs',
+      nargs='*',
+      type=str,
+      help='third_party sub directories to include in aggregation')
   params = parser.parse_args(args=args)
 
   if params.dir_metadata_path and not os.path.isfile(params.dir_metadata_path):
@@ -451,10 +464,10 @@ def main():
       if not os.path.isfile(xml):
         raise Exception("File %s doesn't exist" % xml)
       root = ElementTree.parse(xml).getroot()
-      data = generate_json_coverage_metadata(params.src_path, root, source_dirs,
-                                             component_mapping, diff_mapping,
-                                             params.source_files,
-                                             params.exclusion_pattern)
+      data = generate_json_coverage_metadata(
+          params.src_path, root, source_dirs, component_mapping, diff_mapping,
+          params.source_files, params.exclusion_pattern,
+          params.third_party_inclusion_subdirs)
       logging.info('Writing fulfilled Java coverage metadata to %s',
                    params.output_dir)
       with open(os.path.join(params.output_dir, exported_filename), 'w') as f:
