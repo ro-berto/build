@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from google.protobuf import json_format
 from recipe_engine import recipe_api
 
 
@@ -35,6 +36,25 @@ class ChromiumBootstrapApi(recipe_api.RecipeApi):
   def skip_analysis_reasons(self):
     """Reasons to skip analysis as determined by the bootstrapper."""
     return self._skip_analysis_reasons
+
+  def update_trigger_properties(self, props):
+    """Update the properties used when triggering another builder.
+
+    This will ensure that the triggered builder will use be bootstrapped
+    in a manner that is consistent with the triggering builder:
+    * Properties will be read from the same revision as the triggering
+      builder (if the trigger specifies a gitiles commit for the config
+      repo, it will be used instead).
+    """
+    bootstrap_trigger_props = {}
+    if self._commits:
+      bootstrap_trigger_props['commit'] = self._commits
+    if bootstrap_trigger_props:
+      props.update({
+          '$bootstrap/trigger': {
+              'commits': [json_format.MessageToDict(c) for c in self._commits],
+          },
+      })
 
   def update_gclient_config(self, gclient_config=None):
     """Update the gclient config to be consistent with the bootstrapper.

@@ -898,6 +898,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     properties.update(additional_properties or {})
 
+    self.m.chromium_bootstrap.update_trigger_properties(properties)
+
     return properties
 
   def run_mb_and_compile(self,
