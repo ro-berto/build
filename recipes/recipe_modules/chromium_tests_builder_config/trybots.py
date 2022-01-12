@@ -730,6 +730,11 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.fyi',
                 buildername='fuchsia-fyi-x64-rel',
             ),
+        'fuchsia-fyi-x64-wst':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.fyi',
+                buildername='fuchsia-fyi-x64-wst',
+            ),
         'fuchsia_x64':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.linux',
