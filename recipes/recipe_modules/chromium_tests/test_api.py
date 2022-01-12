@@ -51,7 +51,8 @@ class ChromiumTestsApi(recipe_test_api.RecipeTestApi):
                                    extra_suffix=None,
                                    custom_os=None,
                                    invalid=False,
-                                   failures=None):
+                                   failures=None,
+                                   skips=None):
     """Adds overrides for the swarming-collect and rdb-query steps of a test.
 
     To mock a swarming test's results, step data needs to be provided for the
@@ -71,8 +72,10 @@ class ChromiumTestsApi(recipe_test_api.RecipeTestApi):
           test's step name.
       invalid: If True, marks the results as invalid.
       failures: List of names of test cases that failed.
+      skips: List of names of test cases that were unexpectedly skipped.
     """
     failures = failures if failures else []
+    skips = skips if skips else []
     swarming_step_name = suite_name
     if extra_suffix:
       swarming_step_name += ' ' + extra_suffix
@@ -90,9 +93,9 @@ class ChromiumTestsApi(recipe_test_api.RecipeTestApi):
     return self.override_step_data(
         swarming_step_name,
         self.m.chromium_swarming.canned_summary_output(
-            self.m.json.output({}), failure=bool(
-                invalid or failures))) + self.override_step_data(
-                    rdb_step_name,
-                    stdout=self.m.raw_io.output_text(
-                        self.m.test_utils.rdb_results(
-                            suite_name, failing_tests=failures)))
+            self.m.json.output({}), failure=bool(invalid or failures or skips))
+    ) + self.override_step_data(
+        rdb_step_name,
+        stdout=self.m.raw_io.output_text(
+            self.m.test_utils.rdb_results(
+                suite_name, failing_tests=failures, skipped_tests=skips)))

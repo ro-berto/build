@@ -355,6 +355,36 @@ def GenTests(api):
   )
 
   yield api.test(
+      'without_patch_notrun_failure',
+      custom_props(),
+      api.chromium_tests.read_source_side_spec(
+          'chromium.test', {
+              'retry-shards': {
+                  'gtest_tests': [{
+                      'test': 'base_unittests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True,
+                      }
+                  }],
+              },
+          }),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'base_unittests', 'with patch', failures=['Test.One']),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'base_unittests', 'retry shards with patch', failures=['Test.One']),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'base_unittests', 'without patch', skips=['Test.One']),
+      api.filter.suppress_analyze(),
+      api.post_process(post_process.MustRun,
+                       'base_unittests (retry shards with patch)'),
+      api.post_process(post_process.MustRun, 'base_unittests (without patch)'),
+      # A test that exits with FAILURE in 'with patch' then NOTRUN in
+      # 'without patch' should fail the build.
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
       'retry_shards_invalid',
       api.chromium_tests_builder_config.try_build(
           builder_group='tryserver.chromium.test',

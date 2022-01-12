@@ -721,6 +721,21 @@ class Test(object):
     assert suffix in self._rdb_results, failure_msg
     return self._rdb_results[suffix].unexpected_failing_tests
 
+  def notrun_failures(self, suffix):
+    """Returns tests that had status NOTRUN/UNKNOWN.
+
+    FindIt has special logic for handling for tests with status NOTRUN/UNKNOWN.
+    This method returns test for which every test run had a result of either
+    NOTRUN or UNKNOWN.
+
+    Returns:
+      not_run_tests: A set of strings. Only valid if valid_results is True.
+    """
+    assert self.has_valid_results(suffix), (
+        'notrun_failures must only be called when the test run is known to '
+        'have valid results.')
+    return self._rdb_results[suffix].unexpected_skipped_tests
+
   def name_of_step_for_suffix(self, suffix):
     """Returns the name of the step most relevant to the given suffix run.
 
@@ -816,21 +831,6 @@ class Test(object):
   def has_failures_to_summarize(self):
     _, failures = self.failures_including_retry('with patch')
     return bool(failures or self.known_flaky_failures)
-
-  def findit_notrun(self, suffix):
-    """Returns tests that had status NOTRUN/UNKNOWN.
-
-    FindIt has special logic for handling for tests with status NOTRUN/UNKNOWN.
-    This method returns test for which every test run had a result of either
-    NOTRUN or UNKNOWN.
-
-    Returns:
-      not_run_tests: A set of strings. Only valid if valid_results is True.
-    """
-    assert self.has_valid_results(suffix), (
-        'findit_notrun must only be called when the test run is known to have '
-        'valid results.')
-    return self._rdb_results[suffix].unexpected_skipped_tests
 
   def without_patch_failures_to_ignore(self):
     """Returns test failures that should be ignored.
@@ -1063,8 +1063,8 @@ class TestWrapper(Test):  # pragma: no cover
   def deterministic_failures(self, suffix):
     return self._test.deterministic_failures(suffix)
 
-  def findit_notrun(self, suffix):
-    return self._test.findit_notrun(suffix)
+  def notrun_failures(self, suffix):
+    return self._test.notrun_failures(suffix)
 
   def pass_fail_counts(self, suffix):
     return self._test.pass_fail_counts(suffix)
@@ -1213,7 +1213,7 @@ class ExperimentalTest(TestWrapper):
     """Check if the underlying test produced valid results.
 
     The ExperimentalTest reports that it always has valid results, so
-    various result methods (failures, findit_notrun, etc.) will be
+    various result methods (failures, notrun_failures, etc.) will be
     called. If the underlying test does not have valid results, then
     calling the superclass version of the method would violate the
     contract, so this method indicates if calling the superclass version
@@ -1275,12 +1275,12 @@ class ExperimentalTest(TestWrapper):
     return []
 
   #override
-  def findit_notrun(self, suffix):  # pragma: no cover
+  def notrun_failures(self, suffix):  # pragma: no cover
     if self._actually_has_valid_results(suffix):
       # Call the wrapped test's implementation in case it has side effects,
       # but ignore the result.
       super(ExperimentalTest,
-            self).findit_notrun(self._experimental_suffix(suffix))
+            self).notrun_failures(self._experimental_suffix(suffix))
     return set()
 
   def pass_fail_counts(self, suffix):

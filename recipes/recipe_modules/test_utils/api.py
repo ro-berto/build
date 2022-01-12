@@ -812,6 +812,20 @@ class TestUtilsApi(recipe_api.RecipeApi):
     assert valid_results, (
         "If there were no valid results, then there was no "
         "point in running 'without patch'. This is a recipe bug.")
+
+    # The FAILURE and NOTRUN test statuses are both considered deterministic
+    # failures. But some suites can have trouble during later phases, causing
+    # some tests that exited with FAILURE in the 'with patch' phase to exit
+    # with NOTRUN in the 'without patch' phase. So when a 'without patch' test
+    # fails with a different status, don't ignore it.
+    if ignored_failures:
+      with_patch_notruns = test_suite.notrun_failures('with patch')
+      without_patch_notruns = test_suite.notrun_failures('without patch')
+      for ignored_failure in ignored_failures.copy():
+        if ((ignored_failure in with_patch_notruns) !=
+            (ignored_failure in without_patch_notruns)):
+          ignored_failures.remove(ignored_failure)
+
     new_failures = failures - ignored_failures
 
     return self._summarize_new_and_ignored_failures(
@@ -869,7 +883,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     # FindIt wants to ignore failures that have status UNKNOWN/NOTRUN. This
     # logic will eventually live in FindIt, but for now, is implemented here.
-    not_run = test_suite.findit_notrun(suffix)
+    not_run = test_suite.notrun_failures(suffix)
     with_patch_failures = with_patch_failures - not_run
 
     # To reduce false positives, FindIt only wants tests to be marked as
