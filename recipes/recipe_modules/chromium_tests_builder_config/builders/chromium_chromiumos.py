@@ -63,6 +63,9 @@ def _config(name,
 
   return name, _chromium_chromiumos_spec(**cfg)
 
+# The config for the following builders is now specified src-side in
+# //infra/config/subprojects/chromium/ci/chromium.chromiumos.star
+# * chromeos-arm-generic-rel
 
 SPEC.update([
     _config(
@@ -112,11 +115,6 @@ SPEC.update([
         cros_boards_with_qemu_images='amd64-generic-vm'),
     _config(
         'chromeos-arm-generic-dbg',
-        cros_boards='arm-generic',
-        target_arch='arm',
-        target_bits=32),
-    _config(
-        'chromeos-arm-generic-rel',
         cros_boards='arm-generic',
         target_arch='arm',
         target_bits=32),
