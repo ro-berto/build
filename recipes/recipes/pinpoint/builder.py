@@ -31,8 +31,7 @@ _PINPOINT_MAPPING = {
     'Linux Builder Perf': ('chromium.perf', 'linux-builder-perf'),
     'Mac Builder Perf': ('chromium.perf', 'mac-builder-perf'),
     'Mac arm Builder Perf': ('chromium.perf', 'mac-arm-builder-perf'),
-    'mac-10_13_laptop_high_end-perf':
-        ('chromium.perf', 'mac-10_13_laptop_high_end-perf'),
+    'mac-laptop_high_end-perf': ('chromium.perf', 'mac-laptop_high_end-perf'),
     'Win Builder Perf': ('chromium.perf', 'win32-builder-perf'),
     'Win x64 Builder Perf': ('chromium.perf', 'win64-builder-perf'),
 }

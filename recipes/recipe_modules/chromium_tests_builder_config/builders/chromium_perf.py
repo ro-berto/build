@@ -248,8 +248,7 @@ _AddIsolatedTestSpec('Win 7 Perf', 'win', 'win32-builder-perf', target_bits=32)
 _AddIsolatedTestSpec('Win 7 Nvidia GPU Perf', 'win', 'win64-builder-perf')
 
 _AddIsolatedTestSpec('mac-10_12_laptop_low_end-perf', 'mac', 'mac-builder-perf')
-_AddIsolatedTestSpec('mac-10_13_laptop_high_end-perf', 'mac',
-                     'mac-builder-perf')
+_AddIsolatedTestSpec('mac-laptop_high_end-perf', 'mac', 'mac-builder-perf')
 _AddIsolatedTestSpec(
     'mac-m1_mini_2020-perf', 'mac', 'mac-arm-builder-perf', target_arch='arm')
 
@@ -281,5 +280,5 @@ _AddIsolatedTestSpec('win-10_amd-processor-perf', 'win', 'win-10_amd-perf')
 
 _AddIsolatedTestSpec('mac-10_12_laptop_low_end-processor-perf', 'mac',
                      'mac-10_12_laptop_low_end-perf')
-_AddIsolatedTestSpec('mac-10_13_laptop_high_end-processor-perf', 'mac',
-                     'mac-10_13_laptop_high_end-perf')
+_AddIsolatedTestSpec('mac-laptop_high_end-processor-perf', 'mac',
+                     'mac-laptop_high_end-perf')
