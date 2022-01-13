@@ -9,9 +9,8 @@ from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 from PB.recipes.build.android import sdk_packager
 
 import math
-import six
 
-PYTHON_VERSION_COMPATIBILITY = "PY2+3"
+PYTHON_VERSION_COMPATIBILITY = "PY3"
 
 DEPS = [
     'chromium',
@@ -55,8 +54,6 @@ def RunSteps(api, properties):
 
   api.step('extract version', None)
   version_num = math.floor(api.time.time() / 60 / 60 / 24)
-  if six.PY2:
-    version_num = int(version_num)
   version = 'cr-' + str(version_num)
   for yaml_line in yaml_lines:
     tokens = yaml_line.split()
