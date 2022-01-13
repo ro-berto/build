@@ -10,6 +10,7 @@ DEPS = [
     'recipe_engine/step',
     'chromium',
     'chromium_swarming',
+    'flakiness',
     'test_utils',
 ]
 

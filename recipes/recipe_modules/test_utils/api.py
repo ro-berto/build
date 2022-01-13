@@ -1069,14 +1069,24 @@ class TestGroup(object):
   def fetch_rdb_results(self,
                         test,
                         suffix,
-                        variants_with_unexpected_results=True):
+                        flakiness_api,
+                        force_fetch_all_results=False):
     """Queries RDB for the given test's results.
+
+    If Flake Endorser is enabled and the target result count is not too large
+    (the limit is set in flakiness module), the method collects all results.
+    Otherwise, the method collects only test results from variants that have
+    unexpected results. |force_fetch_all_results| can be used to override Flake
+    Endorser status and target result count limit.
 
     Args:
       test: steps.Test object for the given test.
       suffix: Test name suffix.
-      variants_with_unexpected_results: If True, return only test
-        results from variants that have unexpected results.
+      flakiness_api: Recipe API object for the flakiness recipe module.
+      force_fetch_all_results: If True, return all test results. If False, use
+        Flake Endorser enable status and result size to determine whether to
+        collect all results or only results from variants with unexpected
+        results.
     """
     invocation_names = test.get_invocation_names(suffix)
     if not invocation_names:
@@ -1087,6 +1097,11 @@ class TestGroup(object):
     else:
       test_stats = self.resultdb_api.query_test_result_statistics(
           invocations=invocation_names, step_name='%s stats' % test.name)
+      variants_with_unexpected_results = True
+      if (force_fetch_all_results or
+          (flakiness_api.check_for_flakiness and test_stats.total_test_results
+           <= flakiness_api.PER_TEST_OBJECT_RESULT_LIMIT)):
+        variants_with_unexpected_results = False
       unexpected_result_invocations = self.resultdb_api.query(
           inv_ids=self.resultdb_api.invocation_ids(invocation_names),
           variants_with_unexpected_results=variants_with_unexpected_results,
@@ -1116,7 +1131,7 @@ class LocalGroup(TestGroup):
     """Executes the |run| method of each test."""
     for t in self._test_suites:
       self._run_func(t, t.run, caller_api, suffix, True)
-      self.fetch_rdb_results(t, suffix)
+      self.fetch_rdb_results(t, suffix, caller_api.flakiness)
 
     self.include_rdb_invocation(
         suffix, step_name='include local test invocations')
@@ -1155,7 +1170,7 @@ class SwarmingGroup(TestGroup):
                 attempts=attempts))
         for task_set in finished_sets:
           test = self._task_ids_to_test[tuple(task_set)]
-          self.fetch_rdb_results(test, suffix)
+          self.fetch_rdb_results(test, suffix, caller_api.flakiness)
 
       for task_set in finished_sets:
         test = self._task_ids_to_test[tuple(task_set)]
@@ -1182,7 +1197,7 @@ class SwarmingGroup(TestGroup):
       for test in self._task_ids_to_test.values():
         # We won't collect any already collected tasks, as they're removed from
         # self._task_ids_to_test
-        self.fetch_rdb_results(test, suffix)
+        self.fetch_rdb_results(test, suffix, caller_api.flakiness)
         test.run(caller_api, suffix)
 
 
@@ -1216,7 +1231,8 @@ class SkylabGroup(TestGroup):
       # failures within their builds. So the same suffix may have multiple test
       # runs. We need to fetch all the results for a suffix, or the recipe
       # can not separate the flaky tests and deterministic failures.
-      self.fetch_rdb_results(t, suffix, variants_with_unexpected_results=False)
+      self.fetch_rdb_results(
+          t, suffix, caller_api.flakiness, force_fetch_all_results=True)
       self._run_func(t, t.run, caller_api, suffix, True)
 
     self.include_rdb_invocation(

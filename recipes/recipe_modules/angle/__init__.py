@@ -19,6 +19,7 @@ DEPS = [
     'depot_tools/depot_tools',
     'depot_tools/gclient',
     'depot_tools/tryserver',
+    'flakiness',
     'gn',
     'goma',
     'isolate',

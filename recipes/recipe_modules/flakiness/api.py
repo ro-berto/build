@@ -106,6 +106,11 @@ class FlakinessApi(recipe_api.RecipeApi):
     self._check_for_flakiness = properties.check_for_flakiness
     self._max_test_targets = properties.max_test_targets or 40
     self._repeat_count = properties.repeat_count or 20
+    # The max limit of test results in a test obejct, so that all results are
+    # fetched for current build. If result count is larger, only unexpected
+    # results are fetched. This means new tests in large suites are not
+    # identified, e.g. blink_web_test.
+    self.PER_TEST_OBJECT_RESULT_LIMIT = 50000
     self.COMMIT_FOOTER_KEY = 'Validate-Test-Flakiness'
     self.build_count = properties.build_count or 100
     self.historical_query_count = properties.historical_query_count or 1000
