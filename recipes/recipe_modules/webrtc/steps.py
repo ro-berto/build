@@ -129,6 +129,7 @@ def generate_tests(phase, bot, platform_name, build_out_dir, checkout_path,
     tests.append(SwarmingAndroidTest('modules_tests', shards=2))
     tests.append(SwarmingAndroidTest('modules_unittests', shards=6))
     tests.append(SwarmingAndroidTest('peerconnection_unittests', shards=4))
+    tests.append(SwarmingAndroidTest('rtc_pc_unittests'))
     tests.append(SwarmingAndroidTest('rtc_stats_unittests'))
     tests.append(SwarmingAndroidTest('rtc_unittests', shards=6))
     tests.append(SwarmingAndroidTest('system_wrappers_unittests'))
