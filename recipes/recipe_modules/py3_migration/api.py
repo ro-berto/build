@@ -60,3 +60,22 @@ class Py3MigrationApi(recipe_api.RecipeApi):
     key_value_str = ', '.join(
         '{!r}: {!r}'.format(k, v) for k, v in sorted(six.iteritems(d)))
     return '{{{}}}'.format(key_value_str)
+
+  def consistent_exception_repr(self, e):
+    """Get an exception repr that is the same between python versions.
+
+    This allows for producing consistent expectation files where some
+    aspect is determined by the repr of an exception, which will differ
+    between python2 and python3 due to python2 including a trailing
+    comma in the argument list when an exception is initialized with a
+    single argument.
+
+    Returns:
+      During recipe tests, a repr of the exception that will be the same
+      in python2 and python3. During actual recipe execution, the
+      default repr will be used.
+    """
+    s = repr(e)
+    if not self._test_data.enabled or six.PY3 or not s.endswith(',)'):
+      return s
+    return s[:-2] + ')'
