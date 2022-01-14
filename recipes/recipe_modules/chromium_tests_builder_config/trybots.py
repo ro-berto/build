@@ -1445,7 +1445,7 @@ TRYBOTS = try_spec.TryDatabase.create({
     'tryserver.chromium.mac': {
         'ios-catalyst':
             try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
+                builder_group='chromium.mac',
                 buildername='ios-catalyst',
             ),
         'ios-device':
