@@ -245,37 +245,7 @@ class WebRtcIsolatedGtest(steps.SwarmingIsolatedScriptTest):
     super(WebRtcIsolatedGtest, self).__init__(
         steps.SwarmingIsolatedScriptTestSpec.create(name, **kwargs))
     self._result_handlers = result_handlers or []
-    self._task = None
     self._has_collected = False
-
-  def pre_run(self, api):
-    """Launches the test on Swarming."""
-    assert self._task is None, ('Test %s was already triggered' % self.name
-                               )  # pragma no cover
-
-    # *.isolated may be missing if *_run target is misconfigured.
-    task_input = api.isolate.isolated_tests.get(self.isolate_target)
-    if not task_input:  # pragma no cover
-      return api.step.empty(
-          '[error] %s' % self.name,
-          status=api.step.FAILURE,
-          step_text=('*.isolated file for target %s is missing' %
-                     self.isolate_target))
-
-    self._task = self.create_task(api, task_input)
-
-    resultdb = ResultDB.create()
-    for s in self._task.request[0].command:
-      if '--dump_json_test_results=' in s:
-        resultdb = attr.evolve(
-            resultdb,
-            result_format='json',
-            result_file=s[len('--dump_json_test_results='):],
-        )
-    api.chromium_swarming.trigger_task(self._task, resultdb)
-    # Remove 'invocations/' because it is added again in include_invocations.
-    api.resultdb.include_invocations(
-        [i[len('invocations/'):] for i in self._task.get_invocation_names()])
 
   @recipe_api.composite_step
   def run(self, api):
@@ -285,24 +255,12 @@ class WebRtcIsolatedGtest(steps.SwarmingIsolatedScriptTest):
     self._has_collected = True
 
     step_result, has_valid_results = api.chromium_swarming.collect_task(
-        self._task, allow_missing_json=True)
+        self._tasks[''], allow_missing_json=True)
 
     for handler in self._result_handlers:
       handler(api, step_result, has_valid_results)
 
     return step_result
-
-  def create_task(self, api, task_input):
-    task = api.chromium_swarming.task(
-        name=self.name,
-        raw_cmd=self._raw_cmd,
-        relative_cwd=self._relative_cwd,
-        cas_input_root=task_input)
-
-    self._apply_swarming_task_config(
-        task, api, suffix='', filter_flag=None, filter_delimiter=None)
-    return task
-
 
 def InvalidResultsHandler(api, step_result, has_valid_results):
   if (api.step.active_result.retcode == 0 and not has_valid_results):
@@ -325,7 +283,12 @@ def LogcatHandler(api, step_result, has_valid_results):
 
 def SwarmingDesktopTest(name, **kwargs):
   return WebRtcIsolatedGtest(
-      name, result_handlers=[InvalidResultsHandler], **kwargs)
+      name,
+      result_handlers=[InvalidResultsHandler],
+      resultdb=ResultDB.create(
+          result_format='json',
+          result_file='${ISOLATED_OUTDIR}/gtest_output.json'),
+      **kwargs)
 
 
 def SwarmingPerfTest(name, args=None, **kwargs):
@@ -335,17 +298,6 @@ def SwarmingPerfTest(name, args=None, **kwargs):
     api.webrtc.upload_to_perf_dashboard(name, step_result)
 
   handlers = [InvalidResultsHandler, UploadToPerfDashboardHandler]
-
-  args = list(args or [])
-  # This flag is translated to --isolated_script_test_perf_output in
-  # gtest-parallel_wrapper.py and flags_compatibility.py. Why not pass the right
-  # flag right away? Unfortunately Chromium's android/test_runner.py does
-  # magical treatment of the dashed version of the flag, and we need that to
-  # get a writable out dir on Android, so we must have this translation step.
-  args.extend([
-      ('--isolated-script-test-perf-output='
-       '${ISOLATED_OUTDIR}/perftest-output.pb'),
-  ])
 
   # Perf tests are marked as not idempotent, which means they're re-run if they
   # did not change this build. This will give the dashboard some more variance
@@ -378,15 +330,6 @@ def SwarmingAndroidPerfTest(name, args=None, **kwargs):
       InvalidResultsHandler, LogcatHandler, UploadToPerfDashboardHandler
   ]
 
-  args = list(args or [])
-
-  # See SwarmingDesktopPerfTest for more details why we pass this rather than
-  # --isolated_script_test_perf_output.
-  args.extend([
-      ('--isolated-script-test-perf-output='
-       '${ISOLATED_OUTDIR}/perftest-output.pb'),
-  ])
-
   return WebRtcIsolatedGtest(
       name,
       result_handlers=handlers,
@@ -402,8 +345,11 @@ class Test(object):
     self._test = test
     self._name = name or test
 
-  def pre_run(self, api):
-    del api
+  def pre_run(self, api, suffix):
+    del api, suffix
+
+  def get_invocation_names(self, suffix):
+    del suffix
     return []
 
   def run(self, api):  # pragma: no cover
@@ -433,10 +379,6 @@ class PythonTest(Test):
       with api.context(env=self._env):
         return api.python(self._test, self._script, self._args)
 
-  @property
-  def runs_on_swarming(self):
-    return False
-
 
 class AndroidJunitTest(Test):
   """Runs an Android Junit test."""
@@ -447,10 +389,6 @@ class AndroidJunitTest(Test):
 
   def run(self, api):
     return api.chromium_android.run_java_unit_test_suite(self._name)
-
-  @property
-  def runs_on_swarming(self):
-    return False
 
 
 class IosTest(object):

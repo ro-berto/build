@@ -88,10 +88,7 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
       parent_rev = parent_got_revision or revision
       test += self.m.properties(parent_got_revision=parent_rev)
       test += self.m.properties(
-          swarming_command_lines={
-              'webrtc_perf_tests':
-                  ['./dummy_cmd', '--dump_json_test_results=./dummy.json']
-          })
+          swarming_command_lines={'webrtc_perf_tests': ['./dummy_cmd']})
 
     if fail_compile:
       test += self.step_data('compile', retcode=1)
@@ -100,7 +97,7 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
       # Unfortunately, we have no idea what type of test this is and what would
       # be appropriate test data to pass. We guess that this is a swarmed gtest.
       swarming_result = self.m.chromium_swarming.canned_summary_output_raw(
-          failure=True)
+          internal_failure=True)
       swarming_result['shards'][0]['output'] = "Tests failed"
       swarming_result['shards'][0]['exit_code'] = 1
 
@@ -192,7 +189,7 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
     # Tip: to see what's in the proto, use the tracing/bin/proto2json tool
     # in the Catapult repo.
     this_dir = os.path.abspath(os.path.dirname(os.path.realpath(__file__)))
-    proto = os.path.join(this_dir, 'testdata', 'perftest-output.pb')
+    proto = os.path.join(this_dir, 'testdata', 'perftest-output.json')
     with open(proto, "rb") as f:
       return f.read()
 

@@ -694,7 +694,11 @@ class WebRTCApi(recipe_api.RecipeApi):
         self.set_swarming_command_lines(tests)
 
         for test in tests:
-          test.pre_run(self.m)
+          test.pre_run(self.m, suffix='')
+          self.m.resultdb.include_invocations([
+              i[len('invocations/'):]
+              for i in test.get_invocation_names(suffix='')
+          ])
 
         # Build + upload archives while waiting for swarming tasks to finish.
         if self.bot.config.get('build_android_archive'):
@@ -796,6 +800,8 @@ class WebRTCApi(recipe_api.RecipeApi):
       self.m.gsutil.upload(zip_path, WEBRTC_GS_BUCKET, apk_upload_url,
                            args=['-a', 'public-read'], unauthenticated_url=True)
 
+  # TODO(bugs.webrtc.org/13569): Currently perftest-output.json stores a proto
+  # that is translated in a json with the script 'webrtc_dashboard_upload.py'.
   def upload_to_perf_dashboard(self, name, step_result):
     test_succeeded = (step_result.presentation.status == self.m.step.SUCCESS)
 
@@ -803,20 +809,21 @@ class WebRTCApi(recipe_api.RecipeApi):
       task_output_dir = {
         'logcats': 'foo',
       }
-      task_output_dir['0/perftest-output.pb'] = (self.test_api.example_proto())
+      task_output_dir['0/perftest-output.json'] = (
+          self.test_api.example_proto())
     else:
       task_output_dir = step_result.raw_io.output_dir  # pragma no cover
 
     results_to_upload = []
     for filepath in sorted(task_output_dir):
-      # If there are retries, you might see perftest-output_1.pb and so on.
-      if re.search(r'perftest-output.*\.pb$', filepath):
+      # If there are retries, you might see perftest-output_1.json and so on.
+      if re.search(r'perftest-output.*\.json$', filepath):
         results_to_upload.append(task_output_dir[filepath])
 
     if not results_to_upload and test_succeeded: # pragma: no cover
       raise self.m.step.InfraFailure(
-          'Missing perf output from the test; expected perftest-output(_x).pb '
-          'in the isolated-out from the test.')
+          'Missing perf output from the test; expected '
+          'perftest-output(_x).json in the isolated-out from the test.')
 
     perf_bot_group = 'WebRTCPerf'
     if self.m.runtime.is_experimental:
