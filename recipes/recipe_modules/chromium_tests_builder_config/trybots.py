@@ -936,6 +936,22 @@ TRYBOTS = try_spec.TryDatabase.create({
                 ],
                 regression_test_selection=try_spec.QUICK_RUN_ONLY,
             ),
+        'linux-rel-warmed':
+            try_spec.TrySpec.create(
+                mirrors=[
+                    try_spec.TryMirror.create(
+                        builder_group='chromium.linux',
+                        buildername='Linux Builder',
+                        tester='Linux Tests',
+                    ),
+                    try_spec.TryMirror.create(
+                        builder_group='chromium.gpu',
+                        buildername='GPU Linux Builder',
+                        tester='Linux Release (NVIDIA)',
+                    ),
+                ],
+                regression_test_selection=try_spec.QUICK_RUN_ONLY,
+            ),
         'linux-stable-filter-rel':
             try_spec.TrySpec.create(
                 mirrors=[
