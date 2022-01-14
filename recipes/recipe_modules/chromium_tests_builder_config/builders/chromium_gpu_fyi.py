@@ -21,8 +21,6 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'chrome_internal',
-                'angle_internal',
-                'angle_top_of_tree',
                 'no_kaleidoscope',
             ],
             chromium_config_kwargs={
@@ -72,8 +70,6 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'chrome_internal',
-                'angle_internal',
-                'angle_top_of_tree',
                 'no_kaleidoscope',
             ],
             chromium_config_kwargs={
@@ -91,8 +87,6 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'chrome_internal',
-                'angle_internal',
-                'angle_top_of_tree',
                 'no_kaleidoscope',
             ],
             chromium_config_kwargs={
@@ -128,8 +122,6 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'chrome_internal',
-                'angle_internal',
-                'angle_top_of_tree',
                 'no_kaleidoscope',
             ],
             chromium_config_kwargs={
@@ -147,8 +139,6 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'chrome_internal',
-                'angle_internal',
-                'angle_top_of_tree',
                 'no_kaleidoscope',
             ],
             chromium_config_kwargs={
@@ -338,8 +328,6 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'chrome_internal',
-                'angle_internal',
-                'angle_top_of_tree',
                 'no_kaleidoscope',
             ],
             chromium_config_kwargs={
@@ -393,8 +381,6 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'chrome_internal',
-                'angle_internal',
-                'angle_top_of_tree',
                 'no_kaleidoscope',
                 'enable_reclient',
             ],
@@ -431,8 +417,6 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'chrome_internal',
-                'angle_internal',
-                'angle_top_of_tree',
                 'no_kaleidoscope',
                 'enable_reclient',
             ],
@@ -607,8 +591,6 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'chrome_internal',
-                'angle_internal',
-                'angle_top_of_tree',
                 'no_kaleidoscope',
                 'enable_reclient',
             ],
@@ -653,8 +635,6 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'android',
-                'angle_internal',
-                'angle_top_of_tree',
                 'enable_reclient',
             ],
             chromium_config_kwargs={
@@ -672,8 +652,6 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'android',
-                'angle_internal',
-                'angle_top_of_tree',
                 'enable_reclient',
             ],
             chromium_config_kwargs={
@@ -691,8 +669,6 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'chrome_internal',
-                'angle_internal',
-                'angle_top_of_tree',
                 'fuchsia',
                 'no_kaleidoscope',
             ],
@@ -712,8 +688,6 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'chrome_internal',
-                'angle_internal',
-                'angle_top_of_tree',
                 'no_kaleidoscope',
             ],
             chromium_config_kwargs={
@@ -731,8 +705,6 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'chrome_internal',
-                'angle_internal',
-                'angle_top_of_tree',
                 'no_kaleidoscope',
             ],
             chromium_config_kwargs={
@@ -769,8 +741,6 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'chrome_internal',
-                'angle_internal',
-                'angle_top_of_tree',
                 'no_kaleidoscope',
             ],
             chromium_config_kwargs={
@@ -788,8 +758,6 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'chrome_internal',
-                'angle_internal',
-                'angle_top_of_tree',
                 'no_kaleidoscope',
             ],
             chromium_config_kwargs={
@@ -1013,8 +981,6 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'android',
-                'angle_internal',
-                'angle_top_of_tree',
                 'enable_reclient',
             ],
             chromium_config_kwargs={
@@ -1034,8 +1000,6 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'android',
-                'angle_internal',
-                'angle_top_of_tree',
                 'enable_reclient',
             ],
             chromium_config_kwargs={
@@ -1055,8 +1019,6 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'android',
-                'angle_internal',
-                'angle_top_of_tree',
                 'enable_reclient',
             ],
             chromium_config_kwargs={
@@ -1077,8 +1039,6 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'android',
-                'angle_internal',
-                'angle_top_of_tree',
                 'enable_reclient',
             ],
             chromium_config_kwargs={
@@ -1096,8 +1056,6 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'android',
-                'angle_internal',
-                'angle_top_of_tree',
                 'enable_reclient',
             ],
             chromium_config_kwargs={
@@ -1114,8 +1072,6 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'android',
-                'angle_internal',
-                'angle_top_of_tree',
                 'enable_reclient',
             ],
             chromium_config_kwargs={
@@ -1135,8 +1091,6 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'android',
-                'angle_internal',
-                'angle_top_of_tree',
                 'enable_reclient',
             ],
             chromium_config_kwargs={
@@ -1157,8 +1111,6 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'android',
-                'angle_internal',
-                'angle_top_of_tree',
                 'enable_reclient',
             ],
             chromium_config_kwargs={
@@ -1175,8 +1127,6 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'android',
-                'angle_internal',
-                'angle_top_of_tree',
                 'enable_reclient',
             ],
             chromium_config_kwargs={
@@ -1195,7 +1145,6 @@ SPEC = {
             ],
             gclient_config='chromium',
             gclient_apply_config=[
-                'angle_top_of_tree',
                 'chromeos',
             ],
             chromium_config_kwargs={
@@ -1216,7 +1165,6 @@ SPEC = {
             ],
             gclient_config='chromium',
             gclient_apply_config=[
-                'angle_top_of_tree',
                 'arm',
                 'chromeos',
             ],
