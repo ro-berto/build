@@ -325,7 +325,7 @@ def RunSteps(api, autoroller_config):
     def SplitValue(solution_name, value):
       assert '@' in value, (
           'Found %s value %s without pinned revision.' % (solution_name, name))
-      return value.split('@')
+      return value.split('@', 1)
 
     target_loc, target_ver = SplitValue(
         target_config['solution_name'], target_deps[name])
