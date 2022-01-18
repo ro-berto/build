@@ -69,8 +69,8 @@ def build_args(platform, artifact, artifact_type, server_url, api_key):
     # windows/symupload/symupload.cc#261
     # Specifically, "-p" is just a switch to activate v2 mode, and doesn't
     # take a <protocol> value, and the key is passed as the last positional
-    # arg, not with the "-k" flag.
-    cmd_args.extend(['-p', artifact, server_url, api_key])
+    # arg, not with the "-k" flag. '--i' enables it to generate inline info.
+    cmd_args.extend(['-p', '--i', artifact, server_url, api_key])
   else:
     # For types other than breakpad, tell symupload the type and basename.
     if artifact_type in {'macho', 'dsym'}:

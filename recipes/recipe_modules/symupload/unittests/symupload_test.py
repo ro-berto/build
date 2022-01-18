@@ -92,7 +92,7 @@ class SymuploadTest(unittest.TestCase):
     build_args = symupload.build_args(platform, artifact, artifact_type,
                                       server_url, api_key)
     sanitized_args = symupload.sanitize_args(build_args, api_key)
-    self.assertTrue(sanitized_args[3] == '********')
+    self.assertTrue(sanitized_args[4] == '********')
 
     for platform in ['mac', 'linux']:
       build_args = symupload.build_args(platform, artifact, artifact_type,
