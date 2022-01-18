@@ -4,7 +4,7 @@
 
 from PB.recipe_modules.build.chromium_3pp import properties
 
-PYTHON_VERSION_COMPATIBILITY = "PY2+3"
+PYTHON_VERSION_COMPATIBILITY = "PY3"
 
 DEPS = [
     'chromium_checkout',
