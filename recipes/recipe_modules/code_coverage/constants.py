@@ -30,7 +30,9 @@ EXCLUDED_FILE_REGEX = r'(^|.+\/)test(s|ing)?\/.+|.+(T|t)ests?\..*'
 
 # Third party code is excluded by default.
 # List of paths which are not to be excluded.
-INCLUDED_THIRD_PARTY_SUBDIRS = ['third_party/blink', 'third_party/wpt_tools']
+INCLUDED_THIRD_PARTY_SUBDIRS = [
+    'third_party/blink', 'third_party/wpt_tools', 'third_party/pdfium'
+]
 
 # Only generate coverage data for CLs in these gerrit projects.
 # This is a list of (host, project) pairs
