@@ -1222,16 +1222,19 @@ SPEC.update([
     stock_config(
         'VR Linux (reclient)', gclient_apply_config=['enable_reclient']),
     stock_config('Linux Viz', gclient_apply_config=['enable_reclient']),
-    stock_config('linux-annotator-rel'),
+    stock_config(
+        'linux-annotator-rel', gclient_apply_config=['enable_reclient']),
     stock_config(
         'linux-ash-chromium-builder-fyi-rel',
         gclient_apply_config=['chromeos']),
     stock_config('linux-blink-animation-use-time-delta', config='Debug'),
     stock_config('linux-blink-heap-concurrent-marking-tsan-rel'),
-    stock_config('linux-blink-heap-verification'),
+    stock_config(
+        'linux-blink-heap-verification',
+        gclient_apply_config=['enable_reclient']),
     stock_config('linux-blink-v8-oilpan'),
     stock_config('linux-fieldtrial-rel'),
-    stock_config('linux-gcc-rel'),
+    stock_config('linux-gcc-rel', gclient_apply_config=['enable_reclient']),
     stock_config(
         'linux-lacros-builder-fyi-rel', gclient_apply_config=['chromeos']),
     stock_config('linux-lacros-dbg-fyi', gclient_apply_config=['chromeos']),
