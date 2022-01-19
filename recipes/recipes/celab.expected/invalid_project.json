@@ -7,8 +7,8 @@
       "The recipe has crashed at point 'Uncaught exception'!",
       "",
       "Traceback (most recent call last):",
-      "  File \"RECIPE_REPO[build]/recipes/recipes/celab.py\", line 76, in RunSteps",
-      "    'Invalid `project`. Accepted values: celab, chromium, chrome.')",
+      "  File \"RECIPE_REPO[build]/recipes/recipes/celab.py\", line 83, in RunSteps",
+      "    raise ValueError(message)",
       "ValueError('Invalid `project`. Accepted values: celab, chromium, chrome.')"
     ]
   },

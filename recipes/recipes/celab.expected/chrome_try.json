@@ -1442,7 +1442,7 @@
     "cmd": [],
     "name": "test summary",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@exception 1st test@AssertionError('/file is not absolute',)@@@",
+      "@@@STEP_LOG_LINE@exception 1st test@AssertionError('/file is not absolute')@@@",
       "@@@STEP_LOG_END@exception 1st test@@@",
       "@@@STEP_FAILURE@@@"
     ]

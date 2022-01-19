@@ -620,7 +620,7 @@
     "cmd": [],
     "name": "test summary",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@exception 3rd test@Error(\"Step('read logs') failed 'EEXIST' with: file command encountered system error EEXIST\",)@@@",
+      "@@@STEP_LOG_LINE@exception 3rd test@Error(\"Step('read logs') failed 'EEXIST' with: file command encountered system error EEXIST\")@@@",
       "@@@STEP_LOG_END@exception 3rd test@@@",
       "@@@STEP_FAILURE@@@"
     ]

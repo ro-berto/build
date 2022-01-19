@@ -2,13 +2,25 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+import re
+from six.moves import range  # pylint: disable=redefined-builtin
+
+from recipe_engine import post_process
+
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
+
+from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
+
+# TODO(crbug.com/1256387) When removing python2 support, simplify expressions
+# that were changed due to expectation differences
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'builder_group',
     'chromium',
     'chromium_checkout',
     'chromium_tests',
+    'py3_migration',
     'test_results',
     'depot_tools/bot_update',
     'depot_tools/gclient',
@@ -26,14 +38,6 @@ DEPS = [
     'recipe_engine/step',
     'recipe_engine/time',
 ]
-
-from recipe_engine import post_process
-
-from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
-
-from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
-
-import re
 
 CELAB_REPO = "https://chromium.googlesource.com/enterprise/cel"
 CHROMIUM_REPO = "https://chromium.googlesource.com/chromium/src"
@@ -72,8 +76,11 @@ def RunSteps(api):
     if compile_failure:
       return compile_failure
   else:
-    raise ValueError(
-        'Invalid `project`. Accepted values: celab, chromium, chrome.')
+    # TODO(crbug.com/1256387) exception backtraces use different line numbers
+    # for multi-line expressions between python2 and python3. Once python2
+    # support is removed, the string can be passed directly.
+    message = 'Invalid `project`. Accepted values: celab, chromium, chrome.'
+    raise ValueError(message)
 
 
 def _RunStepsCelab(api):
@@ -91,12 +98,17 @@ def _RunStepsCelab(api):
   # Run tests for CI/Try builders that specify it.
   tests = api.properties.get('tests')
   if tests:
-    _RunTests(
-      api,
-      checkout.join('test'),
-      checkout.join('scripts').join('tests'),
-      '../../examples/schema/host/example.host.textpb',
-      tests)
+    # TODO(crbug.com/1256387) exception backtraces use different line numbers
+    # for multi-line expressions between python2 and python3. Once python2
+    # support is removed, the args can be passed directly.
+    run_tests_args = [
+        api,
+        checkout.join('test'),
+        checkout.join('scripts').join('tests'),
+        '../../examples/schema/host/example.host.textpb',
+        tests,
+    ]
+    _RunTests(*run_tests_args)
 
 
 def _GetCelabVersionFromVPython(api, path):
@@ -292,17 +304,16 @@ def _RunTests(api, test_root, test_scripts_root, host_file_template, tests,
 
     # Generate the host files that we'll use in ./run_tests.py.
     with api.context(cwd=test_scripts_root):
-      api.python('generate host files',
-        'generate_host_files.py',
-        [
-          '--template', host_file_template,
-          '--projects', ';'.join(["%s-%03d" % (pool_name, i) for i in xrange(
-              1, pool_size + 1)]),
-          '--storage_bucket', '%s-assets' % pool_name,
-          '--storage_prefix', storage_prefix,
-          '--destination_dir', host_dir
-        ],
-        venv=True)
+      api.python(
+          'generate host files',
+          'generate_host_files.py', [
+              '--template', host_file_template, '--projects', ';'.join([
+                  "%s-%03d" % (pool_name, i) for i in range(1, pool_size + 1)
+              ]), '--storage_bucket',
+              '%s-assets' % pool_name, '--storage_prefix', storage_prefix,
+              '--destination_dir', host_dir
+          ],
+          venv=True)
 
   # Run our tests and catch test failures.
   storage_logs = '%s-logs' % pool_name
@@ -421,7 +432,8 @@ def _ParseTestSummary(api, storage_logs, logs_dir):
               for link in upload_presentation.links:
                 test_presentation.links[link] = upload_presentation.links[link]
       except Exception as e:
-        summary_presentation.logs["exception %s" % test] = repr(e).splitlines()
+        summary_presentation.logs["exception %s" % test] = (
+            api.py3_migration.consistent_exception_repr(e))
 
     return tests_summary
 
