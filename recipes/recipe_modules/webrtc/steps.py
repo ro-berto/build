@@ -329,12 +329,6 @@ def SwarmingDesktopTest(name, **kwargs):
 
 
 def SwarmingPerfTest(name, args=None, **kwargs):
-  def UploadToPerfDashboardHandler(api, step_result, has_valid_results):
-    del has_valid_results
-
-    api.webrtc.upload_to_perf_dashboard(name, step_result)
-
-  handlers = [InvalidResultsHandler, UploadToPerfDashboardHandler]
 
   args = list(args or [])
   # This flag is translated to --isolated_script_test_perf_output in
@@ -352,9 +346,8 @@ def SwarmingPerfTest(name, args=None, **kwargs):
   # data to work with."""
   return WebRtcIsolatedGtest(
       name,
-      result_handlers=handlers,
+      result_handlers=[InvalidResultsHandler],
       args=args,
-      cipd_packages=ANDROID_CIPD_PACKAGES,
       shards=1,
       idempotent=False,
       **kwargs)
@@ -369,14 +362,6 @@ def SwarmingAndroidTest(name, **kwargs):
 
 
 def SwarmingAndroidPerfTest(name, args=None, **kwargs):
-  def UploadToPerfDashboardHandler(api, step_result, has_valid_results):
-    del has_valid_results
-
-    api.webrtc.upload_to_perf_dashboard(name, step_result)
-
-  handlers = [
-      InvalidResultsHandler, LogcatHandler, UploadToPerfDashboardHandler
-  ]
 
   args = list(args or [])
 
@@ -389,7 +374,7 @@ def SwarmingAndroidPerfTest(name, args=None, **kwargs):
 
   return WebRtcIsolatedGtest(
       name,
-      result_handlers=handlers,
+      result_handlers=[InvalidResultsHandler, LogcatHandler],
       args=args,
       shards=1,
       idempotent=False,
@@ -402,6 +387,10 @@ class Test(object):
     self._test = test
     self._name = name or test
 
+  def get_invocation_names(self, suffix):
+    del suffix
+    return []
+
   def pre_run(self, api):
     del api
     return []
@@ -409,6 +398,10 @@ class Test(object):
   def run(self, api):  # pragma: no cover
     del api
     return []
+
+  @property
+  def name(self):
+    return self._name
 
   @property
   def runs_on_swarming(self):  # pragma: no cover
@@ -424,33 +417,17 @@ class PythonTest(Test):
     self._env = env or {}
     self._name = test
 
-  @property
-  def name(self):
-    return self._name
-
   def run(self, api):
     with api.depot_tools.on_path():
       with api.context(env=self._env):
         return api.python(self._test, self._script, self._args)
 
-  @property
-  def runs_on_swarming(self):
-    return False
-
 
 class AndroidJunitTest(Test):
   """Runs an Android Junit test."""
 
-  @property
-  def name(self):
-    return self._name
-
   def run(self, api):
     return api.chromium_android.run_java_unit_test_suite(self._name)
-
-  @property
-  def runs_on_swarming(self):
-    return False
 
 
 class IosTest(object):

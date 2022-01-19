@@ -691,10 +691,14 @@ class WebRTCApi(recipe_api.RecipeApi):
           tests.append(t)
 
       if tests:
+        suffix = ''
         self.set_swarming_command_lines(tests)
 
         for test in tests:
           test.pre_run(self.m)
+          self.m.resultdb.include_invocations([
+              i[len('invocations/'):] for i in test.get_invocation_names(suffix)
+          ])
 
         # Build + upload archives while waiting for swarming tasks to finish.
         if self.bot.config.get('build_android_archive'):
@@ -705,7 +709,9 @@ class WebRTCApi(recipe_api.RecipeApi):
         failures = []
         for test in tests:
           try:
-            test.run(self.m)
+            step_result = test.run(self.m)
+            if self.bot.should_upload_perf_results:
+              self.upload_to_perf_dashboard(test.name, step_result)
           except self.m.step.StepFailure:
             failures.append(test.name)
 
