@@ -422,6 +422,7 @@ def stock_cronet_config(name, config='Release', **kwargs):
       name,
       config=config,
       chromium_apply_config=['cronet_builder'],
+      gclient_apply_config=['android', 'enable_reclient'],
       **kwargs)
 
 
