@@ -9,7 +9,7 @@ from recipe_engine import post_process
 import collections
 import textwrap
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'depot_tools/bot_update',
