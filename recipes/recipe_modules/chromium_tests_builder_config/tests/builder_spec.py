@@ -72,36 +72,6 @@ def RunSteps(api):
     )
   api.assertions.assertEqual(str(caught.exception), message)
 
-  # archive_build validations **************************************************
-  archive_build_spec = builder_spec.BuilderSpec.create(
-      archive_build=True,
-      gs_bucket='bucket',
-      gs_acl='acl',
-      gs_build_name='build-name',
-  )
-
-  # Required field when archive_build is True
-  message = "'gs_bucket' must be provided when 'archive_build' is True"
-  with api.assertions.assertRaises(AssertionError) as caught:
-    builder_spec.BuilderSpec.create(archive_build=True)
-  api.assertions.assertEqual(str(caught.exception), message)
-
-  with api.assertions.assertRaises(AssertionError) as caught:
-    archive_build_spec.evolve(gs_bucket=None)
-  api.assertions.assertEqual(str(caught.exception), message)
-
-  # Invalid fields when archive_build is falsey
-  message = ('The following fields are ignored unless '
-             "'archive_build' is set to True: {}".format(
-                 ['gs_bucket', 'gs_acl', 'gs_build_name']))
-  with api.assertions.assertRaises(AssertionError) as caught:
-    builder_spec.BuilderSpec.create(
-        gs_bucket='bucket',
-        gs_acl='acl',
-        gs_build_name='build-name',
-    )
-  api.assertions.assertEqual(str(caught.exception), message)
-
   # cf_archive_build validations ***********************************************
   cf_archive_build_spec = builder_spec.BuilderSpec.create(
       cf_archive_build=True,

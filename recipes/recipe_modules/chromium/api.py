@@ -1617,53 +1617,6 @@ class ChromiumApi(recipe_api.RecipeApi):
     except self.m.step.InfraFailure:
       pass
 
-  @_with_chromium_layout
-  def archive_build(self,
-                    step_name,
-                    gs_bucket,
-                    gs_acl=None,
-                    mode=None,
-                    build_name=None,
-                    **kwargs):
-    """Returns a step invoking archive_build.py to archive a Chromium build."""
-    if self.m.runtime.is_experimental:
-      gs_bucket += "/experimental"
-
-    sanitized_buildername = ''.join(
-        c if c.isalnum() else '_' for c in self.m.buildbucket.builder_name)
-
-    args = [
-        '--src-dir',
-        self.m.path['checkout'],
-        '--build-name',
-        build_name or sanitized_buildername,
-        '--staging-dir',
-        self.m.path['cache'].join('chrome_staging'),
-        '--gs-bucket',
-        'gs://%s' % gs_bucket,
-        '--target',
-        self.c.build_config_fs,
-    ]
-    if gs_acl is not None:
-      args += ['--gs-acl', gs_acl]
-    if self.c.TARGET_PLATFORM:
-      args += ['--target-os', self.c.TARGET_PLATFORM]
-
-    args += self.m.build.slave_utils_args
-    if self.build_properties:
-      args += [
-          '--build-properties',
-          self.m.json.dumps(self.build_properties),
-      ]
-    if mode:
-      args.extend(['--mode', mode])
-    self.m.build.python(
-        step_name,
-        self.repo_resource('recipes', 'chromium', 'archive_build.py'),
-        args,
-        infra_step=True,
-        **kwargs)
-
   def get_annotate_by_test_name(self, _):
     return 'graphing'
 

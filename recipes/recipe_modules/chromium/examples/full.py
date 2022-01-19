@@ -22,6 +22,7 @@ def RunSteps(api):
   out_dir = api.properties.get('out_dir', None)
   failfast = api.properties.get('failfast', False)
   configs = api.properties.get('configs', [])
+  assert api.chromium.build_properties == None
 
   with api.chromium.chromium_layout():
     builder_id, builder_config = (

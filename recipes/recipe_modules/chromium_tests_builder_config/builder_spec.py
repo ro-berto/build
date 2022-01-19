@@ -98,10 +98,6 @@ class BuilderSpec(object):
       assert self.parent_builder_group is None, (
           'Non-test-only builder must not specify parent builder group')
 
-    if self.archive_build:
-      assert self.gs_bucket, (
-          "'gs_bucket' must be provided when 'archive_build' is True")
-
     if self.cf_archive_build:
       assert self.cf_gs_bucket, (
           "'cf_gs_bucket' must be provided when 'cf_archive_build' is True")
