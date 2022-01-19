@@ -1001,8 +1001,10 @@ def GenTests(api):
       api.filter.suppress_analyze(),
       api.resultdb.query(
           inv_bundle=current_patchset_invocations,
-          step_name=('searching_for_new_tests.'
-                     'fetch test variants for current patchset')),
+          step_name=(
+              'collect tasks (with patch).'
+              'ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 results'),
+      ),
       api.resultdb.get_test_result_history(
           recent_run,
           step_name=(
@@ -1071,8 +1073,10 @@ def GenTests(api):
       api.filter.suppress_analyze(),
       api.resultdb.query(
           inv_bundle=current_patchset_invocations,
-          step_name=('searching_for_new_tests.'
-                     'fetch test variants for current patchset')),
+          step_name=(
+              'collect tasks (with patch).'
+              'ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 results'),
+      ),
       api.resultdb.get_test_result_history(
           recent_run,
           step_name=(
@@ -1144,8 +1148,10 @@ def GenTests(api):
       api.filter.suppress_analyze(),
       api.resultdb.query(
           inv_bundle=current_patchset_invocations,
-          step_name=('searching_for_new_tests.'
-                     'fetch test variants for current patchset')),
+          step_name=(
+              'collect tasks (with patch).'
+              'ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 results'),
+      ),
       api.resultdb.get_test_result_history(
           recent_run,
           step_name=(
@@ -1215,8 +1221,9 @@ def GenTests(api):
       api.filter.suppress_analyze(),
       api.resultdb.query(
           inv_bundle=current_patchset_invocations,
-          step_name=('searching_for_new_tests.'
-                     'fetch test variants for current patchset')),
+          step_name=(
+              'ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 results'),
+      ),
       api.resultdb.get_test_result_history(
           recent_run,
           step_name=(

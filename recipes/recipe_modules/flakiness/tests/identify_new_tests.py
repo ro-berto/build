@@ -15,9 +15,13 @@ from PB.go.chromium.org.luci.resultdb.proto.v1 \
 from recipe_engine import recipe_api
 from recipe_engine import recipe_test_api
 
+from RECIPE_MODULES.build.chromium_tests import steps
+from RECIPE_MODULES.build.test_utils import util
+
 PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
+    'chromium_tests',
     'flakiness',
     'depot_tools/tryserver',
     'recipe_engine/assertions',
@@ -26,16 +30,52 @@ DEPS = [
     'recipe_engine/json',
     'recipe_engine/properties',
     'recipe_engine/resultdb',
+    'test_utils',
 ]
 
 
 def RunSteps(api):
+  test_objects = []
+  non_experimental_tags = [
+      rdb_common_pb2.StringPair(
+          key='step_name', value='some test (with patch)')
+  ]
+  for i in range(5):
+    inv_bundle = {}
+    suite_name = 'some test %s' % str(i)
+    inv = "invocations/{}".format(i + 1)
+    test_id = 'ninja://sample/test:some_test/TestSuite.Test' + str(i)
+    # To test the case when test id is not complete.
+    if i == 4:
+      test_id = 'TestSuite.Test' + str(i)
+    test_results = [
+        test_result_pb2.TestResult(
+            test_id=test_id,
+            variant_hash='{}hash'.format(i),
+            expected=False,
+            status=test_result_pb2.FAIL,
+            tags=non_experimental_tags,
+        ),
+    ]
+    inv_bundle[inv] = api.resultdb.Invocation(test_results=test_results)
+    rdb_suite_results = util.RDBPerSuiteResults.create(inv_bundle, suite_name,
+                                                       1)
+    test_spec = steps.SwarmingGTestTestSpec.create(
+        suite_name,
+        test_id_prefix='ninja://sample/test:some_test/',
+        override_compile_targets=api.properties.get('override_compile_targets'),
+        isolate_coverage_data=api.properties.get('isolate_coverage_data',
+                                                 False))
+    test_object = test_spec.get_test()
+    test_object.update_rdb_results('with patch', rdb_suite_results)
+    test_objects.append(test_object)
+
   new_tests = {
       'ninja://sample/test:some_test/TestSuite.Test2_2hash_False',
       'ninja://sample/test:some_test/TestSuite.Test3_3hash_False',
       'ninja://sample/test:some_test/TestSuite.Test4_4hash_False',
   }
-  found_tests = api.flakiness.identify_new_tests()
+  found_tests = api.flakiness.identify_new_tests(test_objects)
   if found_tests:
     found_tests = set([
         str('_'.join([t.test_id, t.variant_hash,
@@ -45,30 +85,6 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  build_database, inv_bundle = [], {}
-  non_experimental_tags = [
-      rdb_common_pb2.StringPair(
-          key='step_name', value='some test (with patch)')
-  ]
-  for i in range(5):
-    inv = "invocations/{}".format(i + 1)
-    build = build_pb2.Build(
-        builder=builder_pb2.BuilderID(builder='Builder'),
-        infra=build_pb2.BuildInfra(
-            resultdb=build_pb2.BuildInfra.ResultDB(invocation=inv)),
-    )
-    build_database.append(build)
-    test_results = [
-        test_result_pb2.TestResult(
-            test_id='ninja://sample/test:some_test/TestSuite.Test' + str(i),
-            variant_hash='{}hash'.format(i),
-            expected=False,
-            status=test_result_pb2.FAIL,
-            tags=non_experimental_tags,
-        ),
-    ]
-    inv_bundle[inv] = api.resultdb.Invocation(test_results=test_results)
-
   basic_build = build_pb2.Build(
       builder=builder_pb2.BuilderID(
           builder='Builder', project='chromium', bucket='try'),
@@ -107,10 +123,6 @@ def GenTests(api):
           builds=[basic_build],
           step_name=('searching_for_new_tests.fetching associated builds with '
                      'current gerrit patchset')),
-      api.resultdb.query(
-          inv_bundle=inv_bundle,
-          step_name=('searching_for_new_tests.'
-                     'fetch test variants for current patchset')),
       api.step_data(
           'searching_for_new_tests.process precomputed test history',
           api.file.read_json([{

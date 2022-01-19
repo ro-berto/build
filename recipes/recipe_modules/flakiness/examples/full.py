@@ -85,12 +85,6 @@ def GenTests(api):
   all_mismatched = _generate_variant(
       os='Ubuntu-14.04',
       test_suite='ios_chrome_bookmarks_eg2tests_module_iPhone 11 14.4')
-  mismatched_test_suite = _generate_variant(
-      os='Mac-11',
-      test_suite='ios_chrome_bookmarks_eg2tests_module_iPhone 11 14.4')
-  mismatched_os = _generate_variant(
-      os='Ubuntu-14.04',
-      test_suite='ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4')
   correct_variant = _generate_variant(
       os='Mac-11',
       test_suite='ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4')
@@ -120,7 +114,7 @@ def GenTests(api):
         input=build_input)
 
   def _generate_test_result(test_id, test_variant, status=None):
-    status = status or test_result_pb2.FAIL
+    status = status or test_result_pb2.PASS
     vd = getattr(test_variant, 'def')
     vh_in = '\n'.join(
         '{}:{}'.format(k, v)
@@ -134,29 +128,32 @@ def GenTests(api):
         status=status,
     )
 
-  build_database, current_patchset_invocations = [], {}
+  build_database = []
+  current_patchset_bookmark_suite_invocations = {}
+  current_patchset_web_suite_invocations = {}
   for i in range(3):
     inv = "invocations/{}".format(i + 1)
     build = _generate_build(builder, inv)
     build_database.append(build)
 
     if i == 0:
-      test_results = [
-          _generate_test_result(test_id, all_mismatched),
-          _generate_test_result(test_id, mismatched_test_suite),
-          _generate_test_result(test_id, mismatched_os),
+      test_results_bookmark_suite = [
           _generate_test_result(test_id, correct_variant),
           _generate_test_result(same_suite_another_test_id, correct_variant),
-          _generate_test_result(another_suite_another_test_id,
-                                correct_variant_another_suite),
       ]
     else:
-      test_results = [
-          _generate_test_result(test_id, all_mismatched),
+      test_results_bookmark_suite = [
+          _generate_test_result(test_id, correct_variant),
       ]
-    current_patchset_invocations[inv] = api.resultdb.Invocation(
-        test_results=test_results)
+    current_patchset_bookmark_suite_invocations[inv] = api.resultdb.Invocation(
+        test_results=test_results_bookmark_suite)
 
+  test_results_web_suite = [
+      _generate_test_result(another_suite_another_test_id,
+                            correct_variant_another_suite),
+  ]
+  current_patchset_web_suite_invocations['invocations/web'] = (
+      api.resultdb.Invocation(test_results=test_results_web_suite))
   # This is what's been most recently run as part of verification, and will be
   # removed as it's a false positive.
   res = resultdb_pb2.GetTestResultHistoryResponse(entries=[
@@ -267,6 +264,16 @@ def GenTests(api):
                                      swarming=True,
                                  ),
                                  failure=False)),
+      api.resultdb.query(
+          current_patchset_bookmark_suite_invocations,
+          ('collect tasks (with patch).'
+           'ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 results'),
+      ),
+      api.resultdb.query(
+          current_patchset_web_suite_invocations,
+          ('collect tasks (with patch).'
+           'ios_chrome_web_eg2tests_module_iPad Air 2 14.4 results'),
+      ),
       # This overrides the file check to ensure that we have test files
       # in the given patch.
       api.step_data(
@@ -278,10 +285,6 @@ def GenTests(api):
           step_name=(
               'searching_for_new_tests.'
               'fetching associated builds with current gerrit patchset')),
-      api.resultdb.query(
-          inv_bundle=current_patchset_invocations,
-          step_name=('searching_for_new_tests.'
-                     'fetch test variants for current patchset')),
       # This is what's been recently run, and that isn't in the exclusion list
       # and so should be removed (false positive).
       api.resultdb.get_test_result_history(
@@ -318,7 +321,7 @@ def GenTests(api):
           api.resultdb.Invocation(test_results=[
               _generate_test_result(test_id, correct_variant),
               _generate_test_result(
-                  test_id, correct_variant, status=test_result_pb2.PASS)
+                  test_id, correct_variant, status=test_result_pb2.FAIL)
           ])
   }
 
@@ -375,6 +378,11 @@ def GenTests(api):
                   swarming=True,
               ),
               failure=False)),
+      api.resultdb.query(
+          current_patchset_bookmark_suite_invocations,
+          ('collect tasks (with patch).'
+           'ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 results'),
+      ),
       # This overrides the file check to ensure that we have test files
       # in the given patch.
       api.step_data(
@@ -386,10 +394,6 @@ def GenTests(api):
           step_name=(
               'searching_for_new_tests.'
               'fetching associated builds with current gerrit patchset')),
-      api.resultdb.query(
-          inv_bundle=current_patchset_invocations,
-          step_name=('searching_for_new_tests.'
-                     'fetch test variants for current patchset')),
       api.resultdb.get_test_result_history(
           res,
           step_name=(

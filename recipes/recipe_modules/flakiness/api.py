@@ -35,6 +35,8 @@ class TestDefinition():
             experimental is not True, the suffix 'experimental' is searched for
             in the tags to determine whether it was an experimental run.
     * test_id: (str) ResultDB's test_id (go/resultdb-concepts)
+    * test_object: (steps.Test or steps.ExperimentalTest) The test object where
+                   this test comes from.
     * variants: (dict) ResultDB's variant (go/resultdb-concepts)
     * variant_hash: (str) ResultDB's variant_hash (go/resultdb-concepts)
   """
@@ -43,6 +45,7 @@ class TestDefinition():
                test_id,
                is_experimental=False,
                tags=None,
+               test_object=None,
                variants=None,
                variant_hash=None):
     """
@@ -54,6 +57,8 @@ class TestDefinition():
         is present.
       * tags: (list) tags from ResultDB's TestResult. Used to determine whether
         the given run was experimental.
+      * test_object: (steps.Test or steps.ExperimentalTest) The test object
+        where this test comes from.
       * variants: either ResultDB's TestResult (dict) or a JSON string of
         key value variant definitions. The JSON string is parsed s.t. all key,
         value entries are flattened.
@@ -74,6 +79,8 @@ class TestDefinition():
 
     self.is_experimental = (
         is_experimental or self._set_experimental_from_tags(tags))
+
+    self.test_object = test_object
 
   def _parse_string_variants(self, variants):
     fin = {}
@@ -495,7 +502,7 @@ class FlakinessApi(recipe_api.RecipeApi):
 
     return new_tests
 
-  def identify_new_tests(self, variant_step=None, history_step=None):
+  def identify_new_tests(self, test_objects):
     """Coordinating method for identifying new tests on the current build.
 
     This method queries ResultDB for the historical tests run on the specified
@@ -504,15 +511,12 @@ class FlakinessApi(recipe_api.RecipeApi):
     from the current CL.
 
     Args:
-        variant_step (str): The name of the step where the test variants for the
-          current build are found.
-        history_step (str): The name of the step where the test variants for the
-          historical builds are found.
+        test_objects (list): List of step.Test objects with RDB results for
+          current build.
 
     Returns:
         A set of TestDefinition objects.
     """
-
     def join_tests(test_set):
       """Joins set of test_id, variant hash tuples into strings.
 
@@ -543,11 +547,22 @@ class FlakinessApi(recipe_api.RecipeApi):
           precomputed_json, set(excluded_invs))
       p.logs['historical_tests'] = join_tests(historical_tests)
 
-      current_inv = str(self.m.buildbucket.build.infra.resultdb.invocation)
-      current_tests = self.get_test_variants(
-          inv_list=[current_inv],
-          test_query_count=self.current_query_count,
-          step_name='fetch test variants for current patchset')
+      current_tests = set()
+      for test_object in test_objects:
+        rdb_suite_result = test_object.get_rdb_results('with patch')
+        for test_name in rdb_suite_result.individual_results:
+          test_id = test_name
+          # Prepend test_id_prefix if the test_name doesn't have it.
+          if not test_id.startswith(test_object.test_id_prefix):
+            test_id = test_object.test_id_prefix + test_id
+          current_tests.add(
+              TestDefinition(
+                  test_id,
+                  is_experimental=isinstance(test_object,
+                                             steps.ExperimentalTest),
+                  test_object=test_object,
+                  variant_hash=rdb_suite_result.variant_hash))
+
       p.logs['current_build_tests'] = join_tests(current_tests)
 
       # Comparing the current build test list to the ResultDB query test list to
@@ -617,35 +632,8 @@ class FlakinessApi(recipe_api.RecipeApi):
       self.m.step('no test files were detected with this change.', cmd=None)
       return []
 
-    new_tests = self.identify_new_tests()
+    new_tests = self.identify_new_tests(test_objects)
     new_tests = self.trim_new_tests(new_tests)
-
-    def _do_variants_match(test_object, new_test):
-      # The 3 basic variants include builder, os, and test_suite. We compare
-      # os through comparison of all dimensions.
-      # * Builder we don't need to check, since we're comparing test results
-      #   for the builder in question
-      # see http://shortn/_Z3mUIaeQrB for variant_hash hashing alg.
-
-      # Variants in testing/buildbot/ only update the naming. The device
-      # information isn't uploaded to ResultDB, so we compare with test's
-      # canonical name.
-      variants = new_test.variants
-      if ('test_suite' in variants and
-          variants['test_suite'] != test_object.canonical_name):
-        return False
-
-      if hasattr(test_object.spec, 'dimensions'):
-        dimensions = test_object.spec.dimensions
-        # Go through all variants, and if specified in 'dimensions', ensure that
-        # the values are the same.
-        for k, v in variants.items():
-          if k in dimensions and dimensions[k] != v:
-            return False
-
-      # Non-swarming Test runs only record builder and test_suite, so we assume
-      # that the other two basic variants match here.
-      return True
 
     # This operation is O(len(test_obj) * len(new_tests)) because parsing
     # test_id is only intended for LUCI UI grouping, see
@@ -658,7 +646,7 @@ class FlakinessApi(recipe_api.RecipeApi):
       # find whether the Test object has a matching test_id.
       for new_test in new_tests:
         if (test.test_id_prefix in new_test.test_id and
-            _do_variants_match(test, new_test)):
+            new_test.test_object == test):
           # test_id = test_id_prefix + {A full test_suite + test_name
           # representation}, so we use the test_id_prefix to split out
           # the test_suite and test_name

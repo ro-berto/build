@@ -9,7 +9,6 @@ PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 DEPS = [
     'chromium',
     'chromium_checkout',
-    'chromium_swarming',
     'depot_tools/bot_update',
     'depot_tools/gerrit',
     'depot_tools/gsutil',
