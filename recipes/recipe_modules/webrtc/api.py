@@ -695,7 +695,7 @@ class WebRTCApi(recipe_api.RecipeApi):
         self.set_swarming_command_lines(tests)
 
         for test in tests:
-          test.pre_run(self.m)
+          test.pre_run(self.m, suffix)
           self.m.resultdb.include_invocations([
               i[len('invocations/'):] for i in test.get_invocation_names(suffix)
           ])
@@ -709,7 +709,7 @@ class WebRTCApi(recipe_api.RecipeApi):
         failures = []
         for test in tests:
           try:
-            step_result = test.run(self.m)
+            step_result = test.run(self.m, suffix)
             if self.bot.should_upload_perf_results:
               self.upload_to_perf_dashboard(test.name, step_result)
           except self.m.step.StepFailure:

@@ -248,8 +248,9 @@ class WebRtcIsolatedGtest(steps.SwarmingIsolatedScriptTest):
     self._task = None
     self._has_collected = False
 
-  def pre_run(self, api):
+  def pre_run(self, api, suffix):
     """Launches the test on Swarming."""
+    del suffix
     assert self._task is None, ('Test %s was already triggered' % self.name
                                )  # pragma no cover
 
@@ -278,8 +279,9 @@ class WebRtcIsolatedGtest(steps.SwarmingIsolatedScriptTest):
         [i[len('invocations/'):] for i in self._task.get_invocation_names()])
 
   @recipe_api.composite_step
-  def run(self, api):
+  def run(self, api, suffix):
     """Waits for launched test to finish and collects the results."""
+    del suffix
     assert not self._has_collected, (  # pragma no cover
         'Results of %s were already collected' % self.name)
     self._has_collected = True
@@ -310,17 +312,6 @@ def InvalidResultsHandler(api, step_result, has_valid_results):
     # raise it as a step failure.
     raise api.step.StepFailure(
         api.test_utils.INVALID_RESULTS_MAGIC)  # pragma no cover
-
-
-def LogcatHandler(api, step_result, has_valid_results):
-  del has_valid_results
-  task_output_dir = api.step.active_result.raw_io.output_dir
-  result = ""
-  for file_name, contents in task_output_dir.items():
-    if file_name.endswith('logcats'):  # pragma: no cover
-      result += contents.decode()
-
-  step_result.presentation.logs['logcats'] = result.splitlines()
 
 
 def SwarmingDesktopTest(name, **kwargs):
@@ -354,31 +345,19 @@ def SwarmingPerfTest(name, args=None, **kwargs):
 
 
 def SwarmingAndroidTest(name, **kwargs):
-  return WebRtcIsolatedGtest(
-      name,
-      result_handlers=[InvalidResultsHandler, LogcatHandler],
-      cipd_packages=ANDROID_CIPD_PACKAGES,
-      **kwargs)
+  return steps.SwarmingGTestTest(
+      steps.SwarmingGTestTestSpec.create(
+          name, cipd_packages=ANDROID_CIPD_PACKAGES, **kwargs))
 
 
-def SwarmingAndroidPerfTest(name, args=None, **kwargs):
-
-  args = list(args or [])
-
+def SwarmingAndroidPerfTest(name, args, **kwargs):
   # See SwarmingDesktopPerfTest for more details why we pass this rather than
   # --isolated_script_test_perf_output.
   args.extend([
       ('--isolated-script-test-perf-output='
        '${ISOLATED_OUTDIR}/perftest-output.pb'),
   ])
-
-  return WebRtcIsolatedGtest(
-      name,
-      result_handlers=[InvalidResultsHandler, LogcatHandler],
-      args=args,
-      shards=1,
-      idempotent=False,
-      **kwargs)
+  return SwarmingAndroidTest(name, args=args, idempotent=False, **kwargs)
 
 
 class Test(object):
@@ -391,12 +370,12 @@ class Test(object):
     del suffix
     return []
 
-  def pre_run(self, api):
-    del api
+  def pre_run(self, api, suffix):
+    del api, suffix
     return []
 
-  def run(self, api):  # pragma: no cover
-    del api
+  def run(self, api, suffix):  # pragma: no cover
+    del api, suffix
     return []
 
   @property
@@ -417,7 +396,8 @@ class PythonTest(Test):
     self._env = env or {}
     self._name = test
 
-  def run(self, api):
+  def run(self, api, suffix):
+    del suffix
     with api.depot_tools.on_path():
       with api.context(env=self._env):
         return api.python(self._test, self._script, self._args)
@@ -426,7 +406,8 @@ class PythonTest(Test):
 class AndroidJunitTest(Test):
   """Runs an Android Junit test."""
 
-  def run(self, api):
+  def run(self, api, suffix):
+    del suffix
     return api.chromium_android.run_java_unit_test_suite(self._name)
 
 
