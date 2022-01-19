@@ -34,6 +34,9 @@ class SwarmingTestApi(recipe_test_api.RecipeTestApi):
                     'size_bytes': 73,
                 },
             },
+            'resultdb_info': {
+                'invocation': 'invocations/some-inv-name',
+            },
             'started_ts': '2014-09-25T01:42:11.123',
             'state': 'COMPLETED',
         } for i in shard_indices],

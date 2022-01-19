@@ -492,10 +492,6 @@ class iOSApi(recipe_api.RecipeApi):
             name='upload %s' % name,
         )
 
-  def bootstrap_swarming(self):
-    """Bootstraps Swarming."""
-    self.m.chromium_swarming.show_outputs_ref_in_collect_step = False
-
   @staticmethod
   def get_step_name(test):
     return str('%s (%s iOS %s)' % (
@@ -1069,9 +1065,6 @@ class iOSApi(recipe_api.RecipeApi):
     assert self.__config
 
     with self.m.context(cwd=self.m.path['checkout']):
-      with self.m.step.nest('bootstrap swarming'):
-        self.bootstrap_swarming()
-
       with self.m.step.nest('isolate'):
         tasks = self.isolate(scripts_dir=scripts_dir)
         if self.__config['triggered bots']:

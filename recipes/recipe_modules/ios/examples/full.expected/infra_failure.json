@@ -607,10 +607,6 @@
   },
   {
     "cmd": [],
-    "name": "bootstrap swarming"
-  },
-  {
-    "cmd": [],
     "name": "isolate"
   },
   {

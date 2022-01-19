@@ -197,7 +197,6 @@ class SwarmingApi(recipe_api.RecipeApi):
     self._default_tags = set()
     self._default_user = None
     self._pending_tasks = set()
-    self._show_outputs_ref_in_collect_step = True
     self._verbose = False
 
     # Record all durations of shards for aggregation.
@@ -409,15 +408,6 @@ class SwarmingApi(recipe_api.RecipeApi):
     """
     assert ':' in tag, tag
     self._default_tags.add(tag)
-
-  @property
-  def show_outputs_ref_in_collect_step(self):
-    """Show the shard's isolated out link in each collect step."""
-    return self._show_outputs_ref_in_collect_step
-
-  @show_outputs_ref_in_collect_step.setter
-  def show_outputs_ref_in_collect_step(self, value):
-    self._show_outputs_ref_in_collect_step = value
 
   @staticmethod
   def prefered_os_dimension(platform):
@@ -1720,13 +1710,14 @@ class SwarmingApi(recipe_api.RecipeApi):
           dispatched_task_ids.add(task_dict['task_id'])
         should_show_shard = task_id in dispatched_task_ids
 
-      if shard and self.show_outputs_ref_in_collect_step and should_show_shard:
-        cas_output_root = shard.get('cas_output_root')
-        if cas_output_root:
-          link_name = 'shard #%d cas output' % index
-          d = cas_output_root['digest']
-          links[link_name] = self.m.cas.viewer_url('%s/%s' %
-                                                   (d['hash'], d['size_bytes']))
+      if shard and should_show_shard:
+        inv_name = shard.get('resultdb_info', {}).get('invocation')
+        if inv_name:
+          if inv_name.startswith('invocations/'):
+            inv_name = 'inv/' + inv_name[12:]
+          shard_results_url = (
+              'https://luci-milo.appspot.com/ui/%s/test-results' % inv_name)
+          links['shard #%d test results' % index] = shard_results_url
 
       if url and should_show_shard:
         links[display_text] = url
