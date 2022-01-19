@@ -32,8 +32,8 @@ class ChromiumTestsBuilderConfigApi(recipe_api.RecipeApi):
     if not self._properties.HasField('builder_config'):
       return None
 
-    errors = proto.validate(self._properties,
-                            '$build/chromium_tests_builder_config')
+    errors = proto.VALIDATORS.validate(self._properties,
+                                       '$build/chromium_tests_builder_config')
     if errors:
       result = self.m.step('invalid chromium_tests_builder_config properties',
                            [])
@@ -43,7 +43,7 @@ class ChromiumTestsBuilderConfigApi(recipe_api.RecipeApi):
       result.presentation.status = self.m.step.EXCEPTION
       self.m.step.raise_on_failure(result)
 
-    return proto.convert(self._properties.builder_config)
+    return proto.convert_builder_config(self._properties.builder_config)
 
   # TODO(gbeaty) Remove the builder ID argument when it is possible. The builder
   # ID argument is only used for Findit and the compilator. Once those use cases

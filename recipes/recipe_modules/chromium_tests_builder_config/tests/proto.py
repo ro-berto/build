@@ -18,12 +18,12 @@ DEPS = [
 def RunSteps(api):
 
   def assert_invalid(obj, *expected_errors):
-    errors = proto.validate(obj, '$test')
+    errors = proto.VALIDATORS.validate(obj, '$test')
     for e in expected_errors:
       api.assertions.assertIn(e, errors)
 
   def assert_valid(obj):
-    errors = proto.validate(obj, '$test')
+    errors = proto.VALIDATORS.validate(obj, '$test')
     api.assertions.assertFalse(errors)
 
   # BuilderID
@@ -296,12 +296,6 @@ def RunSteps(api):
   )
 
   assert_invalid(InputProperties())
-
-  with api.assertions.assertRaises(TypeError) as caught:
-    proto.convert(InputProperties())
-  api.assertions.assertEqual(
-      str(caught.exception),
-      'no converter registered for {}'.format(InputProperties))
 
 
 def GenTests(api):
