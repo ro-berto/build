@@ -159,6 +159,31 @@ def GenTests(api):
   )
 
   yield api.test(
+      'basic_mac_arm',
+      api.chromium.generic_build(
+          builder_group='chromium.perf', builder='mac-arm-builder-perf'),
+      api.pgo(use_pgo=True),
+      api.platform('mac', 64, arch='arm'),
+      api.properties(mock_merged_profdata=True),
+      api.override_step_data(
+          'validate benchmark results and profile data.searching for '
+          'profdata files',
+          api.file.listdir([
+              '/performance_test_suite/performance_test_suite.profdata',
+              '/different_test_suite/different_test_suite.profdata'
+          ])),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(
+          post_process.StepCommandContains,
+          'Processing PGO .profraw data.gsutil upload artifact to GS', [
+              'gs://chromium-optimization-profiles/pgo_profiles/'
+              'chrome-mac-arm-main-1587876258-'
+              'ade24b3118b1feaa04cb4406253403f3f72a7f0e.profdata'
+          ]),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
       'merge errors',
       api.chromium.generic_build(
           builder_group='chromium.perf', builder='mac-builder-perf'),

@@ -65,8 +65,11 @@ class PgoApi(recipe_api.RecipeApi):
     profdata_template = 'chrome-%s-%s-%s-%s.profdata'
 
     # if is_win or if android, should append bits [32,64]
-    # note: android only arm supported.
+    # note: android only arm supported. mac appends -arm to the platform name
+    # to differentiate from non-arm mac.
     platform = self.m.platform.name
+    if platform == 'mac' and self.m.chromium.c.TARGET_ARCH == 'arm':
+      platform += '-arm'
     if self.m.chromium.c.TARGET_PLATFORM == 'android':
       platform = 'android'
     if self.m.platform.is_win or platform == 'android':
