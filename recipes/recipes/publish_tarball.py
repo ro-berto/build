@@ -9,7 +9,7 @@ from recipe_engine import post_process, recipe_api
 import contextlib
 import re
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'chromium',
@@ -243,7 +243,7 @@ def fetch_afdo_profile(api):
 
 def trigger_publish_tarball_jobs(api):
   ls_result = api.gsutil(['ls', 'gs://chromium-browser-official/'],
-                         stdout=api.raw_io.output()).stdout
+                         stdout=api.raw_io.output_text()).stdout
   missing_releases = set()
   # TODO(phajdan.jr): find better solution than hardcoding version number.
   # We do that currently (carryover from a solution this recipe is replacing)
@@ -268,7 +268,8 @@ def publish_tarball(api):
   version = api.properties['version']
 
   ls_result = api.gsutil(['ls', 'gs://chromium-browser-official/'],
-                         stdout=api.raw_io.output()).stdout
+                         stdout=api.raw_io.output_text()).stdout
+
   if published_all_tarballs(version, ls_result):
     return
 
@@ -339,7 +340,7 @@ def publish_tarball(api):
     result = api.step(
         'get gn version',
         [api.path['checkout'].join('buildtools', 'linux64', 'gn'), '--version'],
-        stdout=api.raw_io.output())
+        stdout=api.raw_io.output_text())
     match = re.match(r'\d+ \((.+)\)$', result.stdout.strip())
     commit = match.group(1)
     api.step('checkout gn commit', ['git', '-C', git_root, 'checkout', commit])
@@ -410,19 +411,20 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (api.test('basic') + api.buildbucket.generic_build() +
-         api.properties(version='87.0.4273.0') + api.platform('linux', 64) +
-         api.step_data('gsutil ls', stdout=api.raw_io.output('')) +
-         api.step_data(
-             'get gn version', stdout=api.raw_io.output('1496 (0790d304)')) +
-         api.path.exists(api.path['checkout'].join('third_party', 'node',
-                                                   'node_modules.tar.gz.sha1')))
+  yield (
+      api.test('basic') + api.buildbucket.generic_build() +
+      api.properties(version='87.0.4273.0') + api.platform('linux', 64) +
+      api.step_data('gsutil ls', stdout=api.raw_io.output_text('')) +
+      api.step_data(
+          'get gn version', stdout=api.raw_io.output_text('1496 (0790d304)')) +
+      api.path.exists(api.path['checkout'].join('third_party', 'node',
+                                                'node_modules.tar.gz.sha1')))
 
   yield (api.test('dupe') + api.buildbucket.generic_build() + api.properties(
       version='74.0.3729.169'
   ) + api.platform('linux', 64) + api.step_data(
       'gsutil ls',
-      stdout=api.raw_io.output(
+      stdout=api.raw_io.output_text(
           'gs://chromium-browser-official/chromium-74.0.3729.169.tar.xz\n'
           'gs://chromium-browser-official/chromium-74.0.3729.169-lite.tar.xz\n'
           'gs://chromium-browser-official/'
@@ -430,28 +432,29 @@ def GenTests(api):
           'gs://chromium-browser-official/chromium-74.0.3729.169-nacl.tar.xz\n')
   ))
 
-  yield (api.test('clang-no-fuchsia') + api.buildbucket.generic_build() +
-         api.properties(version='74.0.3729.169') + api.platform('linux', 64) +
-         api.step_data('gsutil ls', stdout=api.raw_io.output('')) +
-         api.step_data(
-             'get gn version', stdout=api.raw_io.output('1496 (0790d304)')) +
-         api.path.exists(api.path['checkout'].join('third_party', 'node',
-                                                   'node_modules.tar.gz.sha1')))
+  yield (
+      api.test('clang-no-fuchsia') + api.buildbucket.generic_build() +
+      api.properties(version='74.0.3729.169') + api.platform('linux', 64) +
+      api.step_data('gsutil ls', stdout=api.raw_io.output_text('')) +
+      api.step_data(
+          'get gn version', stdout=api.raw_io.output_text('1496 (0790d304)')) +
+      api.path.exists(api.path['checkout'].join('third_party', 'node',
+                                                'node_modules.tar.gz.sha1')))
 
   # This can be removed once M87 becomes stable.
   yield (api.test('afdo-old-script') + api.buildbucket.generic_build() +
          api.properties(version='85.0.4125.0') + api.platform('linux', 64) +
-         api.step_data('gsutil ls', stdout=api.raw_io.output('')) +
+         api.step_data('gsutil ls', stdout=api.raw_io.output_text('')) +
          api.step_data(
-             'get gn version', stdout=api.raw_io.output('1496 (0790d304)')) +
-         api.path.exists(api.path['checkout'].join(
+             'get gn version', stdout=api.raw_io.output_text('1496 (0790d304)'))
+         + api.path.exists(api.path['checkout'].join(
              'third_party', 'node', 'node_modules.tar.gz.sha1')) +
          api.path.exists(api.path['checkout'].join(
              'tools', 'download_cros_provided_profile.py')))
 
   yield (api.test('trigger') + api.buildbucket.generic_build() +
          api.platform('linux', 64) +
-         api.step_data('gsutil ls', stdout=api.raw_io.output('')))
+         api.step_data('gsutil ls', stdout=api.raw_io.output_text('')))
 
   yield (
       api.test('basic-m76') + api.buildbucket.generic_build() +
@@ -460,10 +463,10 @@ def GenTests(api):
           'python3', '.*/build.py', '--without-android', '--use-system-cmake',
           '--gcc-toolchain=/usr', '--skip-build', '--without-fuchsia'
       ]) + api.post_process(post_process.DropExpectation) + api.step_data(
-          'get gn version', stdout=api.raw_io.output('1496 (0790d304)')) +
+          'get gn version', stdout=api.raw_io.output_text('1496 (0790d304)')) +
       api.step_data(
           'gsutil ls',
-          stdout=api.raw_io.output(
+          stdout=api.raw_io.output_text(
               'gs://chromium-browser-official/chromium-74.0.3729.169.tar.xz\n'
               'gs://chromium-browser-official/'
               'chromium-74.0.3729.169-lite.tar.xz\n'
