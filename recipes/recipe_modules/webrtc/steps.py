@@ -141,15 +141,6 @@ def generate_tests(phase, bot, platform_name, build_out_dir, checkout_path,
     tests.append(AndroidJunitTest('android_examples_junit_tests'))
     tests.append(AndroidJunitTest('android_sdk_junit_tests'))
 
-    if bot.should_test_android_studio_project_generation:
-      tests.append(
-          PythonTest(
-              test='gradle_project_test',
-              script=checkout_path.join('examples', 'androidtests',
-                                        'gradle_project_test.py'),
-              args=[build_out_dir],
-              env={'GOMA_DISABLED': True}))
-
     if is_tryserver:
       tests.append(
           SwarmingAndroidTest(
@@ -358,49 +349,6 @@ def SwarmingAndroidPerfTest(name, args, **kwargs):
        '${ISOLATED_OUTDIR}/perftest-output.pb'),
   ])
   return SwarmingAndroidTest(name, args=args, idempotent=False, **kwargs)
-
-
-class Test(object):
-
-  def __init__(self, test, name=None):
-    self._test = test
-    self._name = name or test
-
-  def get_invocation_names(self, suffix):
-    del suffix
-    return []
-
-  def pre_run(self, api, suffix):
-    del api, suffix
-    return []
-
-  def run(self, api, suffix):  # pragma: no cover
-    del api, suffix
-    return []
-
-  @property
-  def name(self):
-    return self._name
-
-  @property
-  def runs_on_swarming(self):  # pragma: no cover
-    return False
-
-
-class PythonTest(Test):
-
-  def __init__(self, test, script, args, env):
-    super(PythonTest, self).__init__(test)
-    self._script = script
-    self._args = args
-    self._env = env or {}
-    self._name = test
-
-  def run(self, api, suffix):
-    del suffix
-    with api.depot_tools.on_path():
-      with api.context(env=self._env):
-        return api.python(self._test, self._script, self._args)
 
 
 def AndroidJunitTest(name):

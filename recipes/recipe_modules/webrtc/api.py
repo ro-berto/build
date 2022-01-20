@@ -76,10 +76,6 @@ class Bot(object):
     return self.bot_type in ('tester', 'builder_tester')
 
   @property
-  def should_test_android_studio_project_generation(self):
-    return self.config.get('test_android_studio_project_generation', False)
-
-  @property
   def should_upload_perf_results(self):
     return bool(self.config.get('perf_id'))
 
@@ -298,7 +294,7 @@ class WebRTCApi(recipe_api.RecipeApi):
             is_tryserver=self.m.tryserver.is_tryserver):
           if isinstance(test, (c_steps.SwarmingTest, steps.IosTest)):
             test_targets.add(test.name)
-          if isinstance(test, (c_steps.AndroidJunitTest, steps.PythonTest)):
+          if isinstance(test, (c_steps.AndroidJunitTest)):
             non_isolated_test_targets.add(test.name)
 
     if is_ios:

@@ -515,9 +515,6 @@ BUILDERS = freeze({
                 },
                 'archive_apprtc': True,
                 'build_android_archive': True,
-                # TODO(bugs.webrtc.org/8642): Re-enable when it is fixed and
-                # stable.
-                # 'test_android_studio_project_generation': True,
                 'swarming_dimensions': {
                     'device_os': 'MMB29Q',  # 6.0.1
                     'device_type': 'bullhead',  # Nexus 5X
@@ -1393,9 +1390,6 @@ BUILDERS = freeze({
                     'platform': 'linux'
                 },
                 'build_android_archive': True,
-                # TODO(bugs.webrtc.org/8642): Re-enable when it is fixed and
-                # stable.
-                # 'test_android_studio_project_generation': True,
                 'swarming_dimensions': {
                     'device_type': 'bullhead',  # Nexus 5X
                     'device_os': 'MMB29Q',  # 6.0.1
@@ -1434,26 +1428,6 @@ BUILDERS = freeze({
                 'testing': {
                     'platform': 'linux'
                 },
-                'swarming_dimensions': {
-                    'device_type': 'bullhead',  # Nexus 5X
-                    'device_os': 'MMB29Q',  # 6.0.1
-                    'os': 'Android',
-                    'android_devices': '1',
-                }
-            },
-            'android_experimental': {
-                'recipe_config': 'webrtc_android',
-                'chromium_config_kwargs': {
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_PLATFORM': 'android',
-                    'TARGET_ARCH': 'arm',
-                    'TARGET_BITS': 32,
-                },
-                'bot_type': 'builder_tester',
-                'testing': {
-                    'platform': 'linux'
-                },
-                'test_android_studio_project_generation': True,
                 'swarming_dimensions': {
                     'device_type': 'bullhead',  # Nexus 5X
                     'device_os': 'MMB29Q',  # 6.0.1
