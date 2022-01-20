@@ -435,7 +435,10 @@ SPEC.update([
         'android-bfcache-rel',
         chromium_apply_config=['download_vr_test_apks'],
         chromium_config_kwargs={'TARGET_BITS': 32}),
-    stock_config('android-incremental-dbg', config='Debug'),
+    stock_config(
+        'android-incremental-dbg',
+        config='Debug',
+        gclient_apply_config=['android', 'enable_reclient']),
     stock_config(
         'android-lollipop-arm-rel',
         chromium_apply_config=['download_vr_test_apks'],
