@@ -103,7 +103,10 @@ class CronetApi(recipe_api.RecipeApi):
           chartjson_file=True,
           perf_builder_name_alias=perf_builder_name_alias)
 
-  def run_perf_tests(self, perf_builder_name_alias):
+  def run_perf_tests(self,
+                     perf_builder_name_alias,
+                     use_goma=True,
+                     use_reclient=False):
     # Don't track performance on experimental bots.
     if self.m.runtime.is_experimental:
       return
@@ -134,7 +137,9 @@ class CronetApi(recipe_api.RecipeApi):
     raw_result = self.build(
         targets=['quic_server'],
         builder_id=chromium.BuilderId.create_for_group('chromium.linux',
-                                                       'Linux Builder'))
+                                                       'Linux Builder'),
+        use_goma=use_goma,
+        use_reclient=use_reclient)
     if raw_result.status != common_pb.SUCCESS:
       return raw_result
 

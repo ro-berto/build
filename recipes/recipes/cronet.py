@@ -66,7 +66,8 @@ def RunSteps(api):
     return raw_result
 
   if builder_config.get('run_perf_tests'):
-    return api.cronet.run_perf_tests(cronet_kwargs['PERF_ID'])
+    return api.cronet.run_perf_tests(cronet_kwargs['PERF_ID'], use_goma,
+                                     use_reclient)
 
 
 def _sanitize_nonalpha(text):
