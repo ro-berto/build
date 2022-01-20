@@ -296,11 +296,9 @@ class WebRTCApi(recipe_api.RecipeApi):
             build_out_dir=out_dir,
             checkout_path=self.m.path['checkout'],
             is_tryserver=self.m.tryserver.is_tryserver):
-          if isinstance(
-              test,
-              (c_steps.SwarmingTest, steps.WebRtcIsolatedGtest, steps.IosTest)):
+          if isinstance(test, (c_steps.SwarmingTest, steps.IosTest)):
             test_targets.add(test.name)
-          if isinstance(test, (steps.AndroidJunitTest, steps.PythonTest)):
+          if isinstance(test, (c_steps.AndroidJunitTest, steps.PythonTest)):
             non_isolated_test_targets.add(test.name)
 
     if is_ios:

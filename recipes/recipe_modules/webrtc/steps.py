@@ -403,12 +403,8 @@ class PythonTest(Test):
         return api.python(self._test, self._script, self._args)
 
 
-class AndroidJunitTest(Test):
-  """Runs an Android Junit test."""
-
-  def run(self, api, suffix):
-    del suffix
-    return api.chromium_android.run_java_unit_test_suite(self._name)
+def AndroidJunitTest(name):
+  return steps.AndroidJunitTest(steps.AndroidJunitTestSpec.create(name))
 
 
 class IosTest(object):
