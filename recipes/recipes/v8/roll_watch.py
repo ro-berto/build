@@ -115,7 +115,7 @@ def find_all_builds(api, roller, cl):
                 'patchset' : last_patch(cl)['_number'],
                 'project': roller['project'],
             }],
-            include_experimental=True,
+            include_experimental=False,
         ),
         limit=100,
         fields=['tags.*,steps.*'],
