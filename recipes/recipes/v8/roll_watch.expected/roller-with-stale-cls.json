@@ -88,7 +88,7 @@
       "-fields",
       "tags.*,steps.*",
       "-predicate",
-      "{\"gerritChanges\": [{\"change\": \"123\", \"host\": \"review.googlesource.com\", \"patchset\": \"1\", \"project\": \"v8/v8\"}]}"
+      "{\"gerritChanges\": [{\"change\": \"123\", \"host\": \"review.googlesource.com\", \"patchset\": \"1\", \"project\": \"v8/v8\"}], \"tags\": [{\"key\": \"cq_experimental\", \"value\": \"false\"}]}"
     ],
     "env_suffixes": {
       "DEPOT_TOOLS_UPDATE": [

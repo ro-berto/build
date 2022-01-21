@@ -116,6 +116,9 @@ def find_all_builds(api, roller, cl):
                 'project': roller['project'],
             }],
             include_experimental=False,
+            tags=[
+                StringPair(key='cq_experimental', value='false'),
+            ],
         ),
         limit=100,
         fields=['tags.*,steps.*'],

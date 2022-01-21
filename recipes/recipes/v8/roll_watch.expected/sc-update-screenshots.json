@@ -92,7 +92,7 @@
       "-fields",
       "tags.*,steps.*",
       "-predicate",
-      "{\"gerritChanges\": [{\"change\": \"123\", \"host\": \"chrome-internal-review.googlesource.com\", \"patchset\": \"1\", \"project\": \"devtools/devtools-internal\"}]}"
+      "{\"gerritChanges\": [{\"change\": \"123\", \"host\": \"chrome-internal-review.googlesource.com\", \"patchset\": \"1\", \"project\": \"devtools/devtools-internal\"}], \"tags\": [{\"key\": \"cq_experimental\", \"value\": \"false\"}]}"
     ],
     "env_suffixes": {
       "DEPOT_TOOLS_UPDATE": [
