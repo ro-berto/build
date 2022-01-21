@@ -236,14 +236,12 @@ class WebRtcIsolatedGtest(steps.SwarmingIsolatedScriptTest):
     super(WebRtcIsolatedGtest, self).__init__(
         steps.SwarmingIsolatedScriptTestSpec.create(name, **kwargs))
     self._result_handlers = result_handlers or []
-    self._task = None
     self._has_collected = False
 
   def pre_run(self, api, suffix):
     """Launches the test on Swarming."""
-    del suffix
-    assert self._task is None, ('Test %s was already triggered' % self.name
-                               )  # pragma no cover
+    assert self._tasks.get(suffix) is None, ('Test %s was already triggered' %
+                                             self.name)  # pragma no cover
 
     # *.isolated may be missing if *_run target is misconfigured.
     task_input = api.isolate.isolated_tests.get(self.isolate_target)
@@ -254,38 +252,26 @@ class WebRtcIsolatedGtest(steps.SwarmingIsolatedScriptTest):
           step_text=('*.isolated file for target %s is missing' %
                      self.isolate_target))
 
-    self._task = self.create_task(api, task_input)
+    self._tasks[suffix] = self.create_task(api, suffix, task_input)
 
-    resultdb = ResultDB.create()
-    for s in self._task.request[0].command:
-      if '--dump_json_test_results=' in s:
-        resultdb = attr.evolve(
-            resultdb,
-            result_format='json',
-            result_file=s[len('--dump_json_test_results='):],
-        )
-    api.chromium_swarming.trigger_task(self._task, resultdb)
-    # Remove 'invocations/' because it is added again in include_invocations.
-    api.resultdb.include_invocations(
-        [i[len('invocations/'):] for i in self._task.get_invocation_names()])
+    api.chromium_swarming.trigger_task(self._tasks[suffix], self.spec.resultdb)
 
   @recipe_api.composite_step
   def run(self, api, suffix):
     """Waits for launched test to finish and collects the results."""
-    del suffix
     assert not self._has_collected, (  # pragma no cover
         'Results of %s were already collected' % self.name)
     self._has_collected = True
 
     step_result, has_valid_results = api.chromium_swarming.collect_task(
-        self._task, allow_missing_json=True)
+        self._tasks[suffix], allow_missing_json=True)
 
     for handler in self._result_handlers:
       handler(api, step_result, has_valid_results)
 
     return step_result
 
-  def create_task(self, api, task_input):
+  def create_task(self, api, suffix, task_input):
     task = api.chromium_swarming.task(
         name=self.name,
         raw_cmd=self._raw_cmd,
@@ -293,7 +279,7 @@ class WebRtcIsolatedGtest(steps.SwarmingIsolatedScriptTest):
         cas_input_root=task_input)
 
     self._apply_swarming_task_config(
-        task, api, suffix='', filter_flag=None, filter_delimiter=None)
+        task, api, suffix, filter_flag=None, filter_delimiter=None)
     return task
 
 
@@ -307,7 +293,12 @@ def InvalidResultsHandler(api, step_result, has_valid_results):
 
 def SwarmingDesktopTest(name, **kwargs):
   return WebRtcIsolatedGtest(
-      name, result_handlers=[InvalidResultsHandler], **kwargs)
+      name,
+      result_handlers=[InvalidResultsHandler],
+      resultdb=ResultDB.create(
+          result_format='json',
+          result_file='${ISOLATED_OUTDIR}/gtest_output.json'),
+      **kwargs)
 
 
 def SwarmingPerfTest(name, args=None, **kwargs):
