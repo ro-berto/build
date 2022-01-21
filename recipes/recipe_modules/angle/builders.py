@@ -29,6 +29,7 @@ def _create_builder_config(platform,
 
 
 def _create_tester_config(platform, target_bits, parent_builder):
+  is_experimental = '-exp' in parent_builder
   return _angle_spec(
       gclient_config='angle',
       simulation_platform=platform,
@@ -39,6 +40,8 @@ def _create_tester_config(platform, target_bits, parent_builder):
       },
       execution_mode=builder_spec.TEST,
       parent_buildername=parent_builder,
+      # Serialize tests on exp builders since they are short on resources
+      serialize_tests=is_experimental,
   )
 
 
@@ -58,6 +61,7 @@ def _create_android_builder_config(config,
 
 
 def _create_android_tester_config(target_bits, parent_builder):
+  is_experimental = '-exp' in parent_builder
   return _angle_spec(
       gclient_config='angle_android',
       simulation_platform='linux',
@@ -69,6 +73,8 @@ def _create_android_tester_config(target_bits, parent_builder):
       },
       execution_mode=builder_spec.TEST,
       parent_buildername=parent_builder,
+      # Serialize tests on exp builders since they are short on resources
+      serialize_tests=is_experimental,
   )
 
 
@@ -81,10 +87,14 @@ _SPEC = {
         _create_android_builder_config('Debug', 64),
     'android-arm64-dbg-compile':
         _create_android_builder_config('Debug', 64),
+    'android-arm64-exp-test':
+        _create_android_builder_config('Release', 64),
     'android-arm64-pixel4':
         _create_android_tester_config(64, 'android-arm64-test'),
     'android-arm64-pixel4-perf':
         _create_android_tester_config(64, 'android-perf'),
+    'android-arm64-pixel6':
+        _create_android_tester_config(64, 'android-arm64-exp-test'),
     'android-arm64-test':
         _create_android_builder_config('Release', 64),
     'android-perf':
