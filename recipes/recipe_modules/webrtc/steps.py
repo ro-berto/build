@@ -336,9 +336,11 @@ def SwarmingPerfTest(name, args=None, **kwargs):
 
 
 def SwarmingAndroidTest(name, **kwargs):
-  return steps.SwarmingGTestTest(
-      steps.SwarmingGTestTestSpec.create(
-          name, cipd_packages=ANDROID_CIPD_PACKAGES, **kwargs))
+  return WebRtcIsolatedGtest(
+      name,
+      result_handlers=[InvalidResultsHandler],
+      cipd_packages=ANDROID_CIPD_PACKAGES,
+      **kwargs)
 
 
 def SwarmingAndroidPerfTest(name, args, **kwargs):
