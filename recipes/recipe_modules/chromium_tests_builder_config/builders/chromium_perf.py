@@ -282,3 +282,9 @@ _AddIsolatedTestSpec('mac-laptop_low_end-processor-perf', 'mac',
                      'mac-laptop_low_end-perf')
 _AddIsolatedTestSpec('mac-laptop_high_end-processor-perf', 'mac',
                      'mac-laptop_high_end-perf')
+
+# Deprecated in perf waterfall. Needed for pinpoint when running Chrome
+# Health on old commits.
+_AddIsolatedTestSpec('mac-10_12_laptop_low_end-perf', 'mac', 'mac-builder-perf')
+_AddIsolatedTestSpec('mac-10_13_laptop_high_end-perf', 'mac',
+                     'mac-builder-perf')
