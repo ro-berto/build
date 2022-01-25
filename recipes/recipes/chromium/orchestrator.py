@@ -13,7 +13,6 @@ PYTHON_VERSION_COMPATIBILITY = "PY3"
 DEPS = [
     'chromium',
     'chromium_orchestrator',
-    'chromium_tests',
     'code_coverage',
     'depot_tools/tryserver',
     'recipe_engine/cas',
@@ -24,7 +23,7 @@ DEPS = [
 
 
 def RunSteps(api):
-  api.chromium_tests.require_gerrit_cl()
+  api.tryserver.require_is_tryserver()
 
   with api.chromium.chromium_layout():
     return api.chromium_orchestrator.trybot_steps()

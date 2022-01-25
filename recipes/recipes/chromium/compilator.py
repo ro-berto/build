@@ -19,6 +19,7 @@ DEPS = [
     'chromium_tests',
     'chromium_tests_builder_config',
     'code_coverage',
+    'depot_tools/tryserver',
     'filter',
     'isolate',
     'recipe_engine/buildbucket',
@@ -36,7 +37,7 @@ PROPERTIES = InputProperties
 
 
 def compilator_steps(api, properties):
-  api.chromium_tests.require_gerrit_cl()
+  api.tryserver.require_is_tryserver()
 
   report_parent_orchestrator_build(api, properties)
 

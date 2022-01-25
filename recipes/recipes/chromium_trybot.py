@@ -41,7 +41,7 @@ DEPS = [
 
 
 def RunSteps(api):
-  api.chromium_tests.require_gerrit_cl()
+  api.tryserver.require_is_tryserver()
 
   builder_id, builder_config = (
       api.chromium_tests_builder_config.lookup_builder())
@@ -97,7 +97,7 @@ def GenTests(api):
           }),
       api.post_check(MustRun, 'not a tryjob'),
       api.post_check(StepTextContains, 'not a tryjob',
-                     ["run 'led edit-cr-cl <chromium/src CL URL>'"]),
+                     ["run 'led edit-cr-cl <source CL URL>'"]),
       api.post_check(StatusFailure),
       api.post_process(DropExpectation),
   )

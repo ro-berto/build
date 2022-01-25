@@ -98,19 +98,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     presentation = self.m.step.active_result.presentation
     presentation.logs.setdefault('stdout', []).append(message)
 
-  def require_gerrit_cl(self):
-    if self.m.tryserver.is_tryserver:
-      return
-
-    status = self.m.step.EXCEPTION
-    step_text = 'This recipe requires a gerrit CL for the source under test'
-    if self.m.led.launched_by_led:
-      status = self.m.step.FAILURE
-      step_text += (
-          "\n run 'led edit-cr-cl <chromium/src CL URL>' to attach a CL to test"
-      )
-    self.m.step.empty('not a tryjob', status=status, step_text=step_text)
-
   def fix_cros_boards_gclient_arg(self, cros_boards_with_qemu_images):
     """Returns a new value for cros_boards if VM-optimizations aren't ready yet.
 
