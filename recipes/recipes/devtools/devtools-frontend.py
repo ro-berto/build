@@ -42,6 +42,11 @@ PROPERTIES = {
             kind=bool,
             help='Turn the is_official_build gn flag on (default off)',
             default=False),
+    'devtools_skip_typecheck':
+        Property(
+            kind=bool,
+            help='Turn the devtools_skip_typecheck gn flag on (default off)',
+            default=False),
     'clobber':
         Property(
             kind=bool,
@@ -68,9 +73,10 @@ PROPERTIES = {
 
 REPO_URL = 'https://chromium.googlesource.com/devtools/devtools-frontend.git'
 
-def RunSteps(api, builder_config, is_official_build, clobber, e2e_env,
-             runner_args):
-  _configure(api, builder_config, is_official_build)
+
+def RunSteps(api, builder_config, is_official_build, devtools_skip_typecheck,
+             clobber, e2e_env, runner_args):
+  _configure(api, builder_config, is_official_build, devtools_skip_typecheck)
 
   with _in_builder_cache(api):
     api.bot_update.ensure_checkout()
@@ -117,9 +123,10 @@ def _is_debug(builder_config):
   return builder_config == 'Debug'
 
 
-def _configure(api, builder_config, is_official_build):
+def _configure(api, builder_config, is_official_build, devtools_skip_typecheck):
   _configure_source(api)
-  _configure_build(api, builder_config, is_official_build)
+  _configure_build(api, builder_config, is_official_build,
+                   devtools_skip_typecheck)
 
 
 def _configure_source(api):
@@ -132,13 +139,16 @@ def _configure_source(api):
   api.gclient.c = src_cfg
 
 
-def _configure_build(api, builder_config, is_official_build):
+def _configure_build(api, builder_config, is_official_build,
+                     devtools_skip_typecheck):
   build_cfg = api.chromium.make_config(BUILD_CONFIG=builder_config)
   build_cfg.build_config_fs = builder_config
   build_cfg.compile_py.compiler = 'goma'
   build_cfg.gn_args.append('devtools_dcheck_always_on=true')
   if is_official_build:
     build_cfg.gn_args.append('is_official_build=true')
+  if devtools_skip_typecheck:
+    build_cfg.gn_args.append('devtools_skip_typecheck=true')
   api.chromium.c = build_cfg
 
 
@@ -380,6 +390,14 @@ def GenTests(api):
       api.builder_group.for_current('tryserver.devtools-frontend'),
       ci_build(builder='linux'),
       api.properties(is_official_build=True),
+      api.post_process(post_process.Filter('gn'))
+  )
+
+  yield api.test(
+      'skip typecheck build',
+      api.builder_group.for_current('tryserver.devtools-frontend'),
+      ci_build(builder='linux'),
+      api.properties(devtools_skip_typecheck=True),
       api.post_process(post_process.Filter('gn'))
   )
 
