@@ -14,6 +14,9 @@ from PB.go.chromium.org.luci.buildbucket.proto \
     import builds_service as builds_service_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
 from PB.go.chromium.org.luci.resultdb.proto.v1 import predicate as predicate_pb2
+from PB.go.chromium.org.luci.resultdb.proto.v1 import (test_result as
+                                                       test_result_pb2)
+from PB.recipe_engine import result as result_pb2
 
 # A regular expression for file paths indicating that change in the matched file
 # might introduce new tests.
@@ -119,6 +122,9 @@ class FlakinessApi(recipe_api.RecipeApi):
     # identified, e.g. blink_web_test.
     self.PER_TEST_OBJECT_RESULT_LIMIT = 50000
     self.COMMIT_FOOTER_KEY = 'Validate-Test-Flakiness'
+    self.IDENTIFY_STEP_NAME = 'searching_for_new_tests'
+    self.RUN_TEST_STEP_NAME = 'test new tests for flakiness'
+
     self.build_count = properties.build_count or 100
     self.historical_query_count = properties.historical_query_count or 1000
     self.current_query_count = properties.current_query_count or 10000
@@ -532,7 +538,7 @@ class FlakinessApi(recipe_api.RecipeApi):
     if not self.check_for_flakiness:
       return set()
 
-    with self.m.step.nest('searching_for_new_tests') as p:
+    with self.m.step.nest(self.IDENTIFY_STEP_NAME) as p:
       excluded_invs = self.fetch_all_related_invocations()
       p.logs["excluded_invocation_list"] = sorted(excluded_invs)
       builder_name = self.m.buildbucket.builder_name
@@ -666,3 +672,108 @@ class FlakinessApi(recipe_api.RecipeApi):
         new_test_objects.append(test_copy)
 
     return new_test_objects
+
+  def _flakiness_summary_markdown(self, suite_test_stats):
+    """Creates a summary markdown using flakiness run results.
+
+    Args:
+      suite_test_stats: A dictionary mapping from test suite name to another
+        dictionary mapping from test names to result stats. Stats are tuple of
+        (# Unexpected runs, # total runs). Only test names with unexpected
+        results are included.
+        E.g.
+        {
+          'test_suite_1': {
+            'test_name_1': (1, 20),
+            'test_name_2': (1, 20),
+          },
+          'test_suite_2': {
+            'test_name_3': (2, 20),
+          },
+        }
+
+    Returns:
+      A list of line strs in markdown format presenting run stats of suites and
+      flaky tests.
+    """
+    lines = []
+    for test_suite in suite_test_stats:
+      lines.append('**%s (%s)**' % (test_suite, self.test_suffix))
+      test_stats = suite_test_stats[test_suite]
+      lines.extend([
+          '- test: {}, # of failures: {}, total # of runs: {}'.format(
+              k, v[0], v[1]) for k, v in test_stats.items()
+      ])
+    return lines
+
+  def check_run_results(self, test_objects):
+    """Calculates and presents flakiness info using test results from input.
+
+    Args:
+      test_objects: List of step.Test or steps.ExperimentalTest objects with
+          valid results for check flakiness suffix.
+
+    Returns:
+      A RawResult object with the status of the build and failure message if
+      there are flakiness. None if no flakiness.
+    """
+    # In this step, flaky tests in experimental suites (test objects) are non
+    # fatal, otherwise they are fatal and will fail the build.
+    flaky_non_experimental_test_stats = {}
+    flaky_experimental_test_stats = {}
+    with self.m.step.nest('calculate flake rates') as p:
+      p.step_text = (
+          'Tests that have exceeded the tolerated flake rate most likely '
+          'indicate flakiness. See logs for details of the flaky test '
+          'and the flake rate.')
+      for t in test_objects:
+        flaky_test_stats = {}
+        rdb_results = t.get_rdb_results(self.test_suffix)
+        for test_name, results in rdb_results.individual_results.items():
+          total = len(results)
+          unexpected = total - results.count(test_result_pb2.PASS)
+          if unexpected > 0:
+            flaky_test_stats[test_name] = (unexpected, total)
+        if flaky_test_stats:
+          if isinstance(t, steps.ExperimentalTest):
+            flaky_experimental_test_stats[t.name] = flaky_test_stats
+          else:
+            flaky_non_experimental_test_stats[t.name] = flaky_test_stats
+
+      non_experimental_summary_lines = []
+      if flaky_non_experimental_test_stats:
+        non_experimental_summary_lines.append(
+            'Flaky new test(s) in non-experimental suites (fatal):')
+        non_experimental_summary_lines.extend(
+            self._flakiness_summary_markdown(flaky_non_experimental_test_stats))
+
+      experimental_summary_lines = []
+      if flaky_experimental_test_stats:
+        experimental_summary_lines.append(
+            'Flaky new test(s) in experimental suites (non-fatal):')
+        experimental_summary_lines.extend(
+            self._flakiness_summary_markdown(flaky_experimental_test_stats))
+
+      if non_experimental_summary_lines or experimental_summary_lines:
+        p.logs['flaky tests'] = ('\n'.join(non_experimental_summary_lines +
+                                           experimental_summary_lines))
+
+        if non_experimental_summary_lines:
+          p.status = self.m.step.FAILURE
+          summary_lines = [
+              'Build failed because some new test(s) added from your CL appear '
+              'to be flaky. Please check "%s" step for test identification and '
+              '"%s" step for test rerun details.' %
+              (self.IDENTIFY_STEP_NAME, self.RUN_TEST_STEP_NAME)
+          ]
+          summary_lines.extend(non_experimental_summary_lines)
+          return result_pb2.RawResult(
+              summary_markdown='\n\n'.join(summary_lines),
+              status=common_pb2.FAILURE)
+
+        # When there is non fatal flakiness, let users know why the build
+        # doesn't fail.
+        p.step_text += ('\nFlaky tests in logs are non fatal because they come '
+                        'from experimental suites.')
+
+    return None

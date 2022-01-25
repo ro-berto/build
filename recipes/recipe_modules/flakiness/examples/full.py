@@ -405,10 +405,8 @@ def GenTests(api):
            '(check flakiness) on Mac-11'),
           api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_isolated_script_output(
-                  passing=False,
-                  is_win=False,
+                  passing=True,
                   swarming=True,
-                  isolated_script_passing=False,
               ),
               failure=True)),
       api.resultdb.query(
@@ -418,6 +416,100 @@ def GenTests(api):
               'collect tasks (check flakiness).'
               'ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 results')),
       api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'basic_ios_test_failure_experimental_suite',
+      api.chromium_tests_builder_config.try_build(
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
+          builder_db=builder_db,
+          try_db=ctbc.TryDatabase.create({
+              'fake-try-group': {
+                  'fake-try-builder':
+                      ctbc.TrySpec.create_for_single_mirror(
+                          builder_group='fake-group',
+                          buildername='fake-builder',
+                      ),
+              },
+          })),
+      api.properties(assert_tests=True),
+      api.chromium_tests.read_source_side_spec(
+          'fake-group', {
+              'fake-builder': {
+                  'isolated_scripts': [{
+                      "isolate_name":
+                          "ios_chrome_bookmarks_eg2tests_module",
+                      "name": ("ios_chrome_bookmarks_eg2tests_module_iPad "
+                               "Air 2 14.4"),
+                      "swarming": {
+                          "can_use_on_swarming_builders": True,
+                          "dimension_sets": [{
+                              "os": "Mac-11"
+                          }],
+                      },
+                      "experiment_percentage":
+                          100,
+                      "test_id_prefix":
+                          ("ninja://ios/chrome/test/earl_grey2:"
+                           "ios_chrome_bookmarks_eg2tests_module/")
+                  },],
+              },
+          }),
+      api.filter.suppress_analyze(),
+      api.flakiness(
+          check_for_flakiness=True,
+          build_count=10,
+          historical_query_count=2,
+          current_query_count=2,
+      ),
+      api.override_step_data(
+          ('ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 '
+           '(with patch, experimental) on Mac-11'),
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_isolated_script_output(
+                  passing=True,
+                  is_win=False,
+                  swarming=True,
+              ),
+              failure=False)),
+      api.resultdb.query(
+          current_patchset_bookmark_suite_invocations,
+          'ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 results',
+      ),
+      # This overrides the file check to ensure that we have test files
+      # in the given patch.
+      api.step_data(
+          'git diff to analyze patch (2)',
+          api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
+      # This is the related build that'll be excluded, which includes itself.
+      api.buildbucket.simulated_search_results(
+          builds=[excluded_build],
+          step_name=(
+              'searching_for_new_tests.'
+              'fetching associated builds with current gerrit patchset')),
+      api.resultdb.get_test_result_history(
+          res,
+          step_name=(
+              'searching_for_new_tests.'
+              'cross reference newly identified tests against ResultDB')),
+      api.override_step_data(
+          ('test new tests for flakiness.'
+           'ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 '
+           '(check flakiness, experimental) on Mac-11'),
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_isolated_script_output(
+                  passing=True,
+                  swarming=True,
+              ),
+              failure=True)),
+      api.resultdb.query(
+          inv_bundle=flaky_results,
+          step_name=(
+              'test new tests for flakiness.'
+              'ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 results')),
+      api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
 

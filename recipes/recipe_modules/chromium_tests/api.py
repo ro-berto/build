@@ -15,15 +15,12 @@ from recipe_engine import recipe_api
 from PB.recipe_engine import result as result_pb2
 from PB.recipe_modules.build.archive import properties as arch_prop
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
-from PB.go.chromium.org.luci.resultdb.proto.v1 import (test_result as
-                                                       test_result_pb2)
 
 from RECIPE_MODULES.build import chromium
 from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 from RECIPE_MODULES.build.chromium_tests_builder_config import try_spec
 
 from . import generators
-from .steps import ExperimentalTest
 from .targets_config import TargetsConfig
 
 # These account ids are obtained by looking at gerrit API responses.
@@ -1777,7 +1774,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def run_tests_for_flakiness(self, builder_config, new_test_objects):
     suffix = self.m.flakiness.test_suffix
 
-    with self.m.step.nest('test new tests for flakiness') as p:
+    with self.m.step.nest(self.m.flakiness.RUN_TEST_STEP_NAME) as p:
       p.step_text = ('If you see failures unrelated with flaky new tests, '
                      'please use "Validate-Test-Flakiness: skip" git footer to '
                      'skip new test flakiness check and file a crbug to '
@@ -1794,55 +1791,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                   invalid_test_suites, suffix),
               status=common_pb.FAILURE)
 
-    failure_counts = collections.defaultdict(int)
-    # In this step, flaky tests in experimental suites (test objects) are non
-    # fatal, otherwise they are fatal and will fail the build.
-    flaky_non_experimental_test_objects = []
-    flaky_experimental_test_objects = []
-    with self.m.step.nest('calculate flake rates') as p:
-      p.step_text = (
-          'Tests that have exceeded the tolerated flake rate most likely '
-          'indicate flakiness. See logs for details of the flaky test '
-          'and the flake rate.')
-      for t in new_test_objects:
-        flaky = False
-        rdb_results = t.get_rdb_results(suffix)
-        for test_name, results in rdb_results.individual_results.items():
-          for res in results:
-            if res != test_result_pb2.PASS:
-              key = '_'.join([t.name, test_name, rdb_results.variant_hash])
-              failure_counts[key] += 1
-              flaky = True
-        if flaky:
-          if isinstance(t, ExperimentalTest):
-            flaky_experimental_test_objects.append(t)
-          else:
-            flaky_non_experimental_test_objects.append(t)
-
-      # Equivalent to `if failure_counts:`.
-      if flaky_experimental_test_objects or flaky_non_experimental_test_objects:
-        p.logs['flaky tests'] = ('\n'.join([
-            'test: {}, # of failures: {}, total # of runs: {}'.format(
-                k, v, self.m.flakiness._repeat_count)
-            for k, v in failure_counts.items()
-        ]))
-
-        if flaky_non_experimental_test_objects:
-          p.status = self.m.step.FAILURE
-          # TODO(crbug/1204163) - Update the summary markdown to reflect flaky
-          # tests and their flake rates for easier identification for fatal and
-          # non-fatal flakiness.
-          return result_pb2.RawResult(
-              summary_markdown=self._format_unrecoverable_failures(
-                  flaky_non_experimental_test_objects, suffix),
-              status=common_pb.FAILURE)
-
-        # When there is non fatal flakiness, let users know why the build
-        # doesn't fail.
-        p.step_text += ('\nFlaky tests in logs are non fatal because they come '
-                        'from experimental suites.')
-
-    return None
+    return self.m.flakiness.check_run_results(new_test_objects)
 
   def determine_compilation_targets(self, builder_id, builder_config,
                                     affected_files, targets_config):
