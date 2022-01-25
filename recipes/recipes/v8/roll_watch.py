@@ -15,7 +15,7 @@ from PB.recipe_engine.result import RawResult
 
 from recipe_engine.recipe_api import Property
 from recipe_engine.post_process import (
-    DropExpectation, StatusFailure, StatusSuccess, StepSuccess)
+    DropExpectation, StatusFailure, StatusSuccess, StepSuccess, StepFailure)
 
 
 PYTHON_VERSION_COMPATIBILITY = "PY2"
@@ -87,7 +87,7 @@ def additional_criteria(roller):
 
 
 def process_cl(api, roller, cl):
-    with api.step.nest('Checking CL') as parent_step:
+    with api.step.nest('Checking CL {}'.format(cl['_number'])) as parent_step:
         present_cl_link(roller, cl, parent_step.presentation)
         builds = find_all_builds(api, roller, cl)
         cl['builds'] = builds
@@ -99,11 +99,12 @@ def process_cl(api, roller, cl):
 
 
 def find_cq_blocking_builds(cl):
-    return [build
-        for build in cl['builds']
-        if any(tag.key == 'cq_experimental' and tag.value =='false'
+    return [build for build in cl['builds'] if is_cq_build(build)]
+
+
+def is_cq_build(build):
+    return any(tag.key == 'cq_experimental' and tag.value == 'false'
             for tag in build.tags)
-    ]
 
 
 def find_all_builds(api, roller, cl):
@@ -115,10 +116,7 @@ def find_all_builds(api, roller, cl):
                 'patchset' : last_patch(cl)['_number'],
                 'project': roller['project'],
             }],
-            include_experimental=False,
-            tags=[
-                StringPair(key='cq_experimental', value='false'),
-            ],
+            include_experimental=True,
         ),
         limit=100,
         fields=['tags.*,steps.*'],
@@ -169,9 +167,11 @@ def tag_cl(api, roller, cl, tag_name, step_name):
 #Generic recovery functions {
 
 
-def just_fail(api, roller, cl):
+def just_fail(api, roller, cl, message=None):
     failure_step = api.step("Roller '{}' failed".format(roller['name']),
             cmd=None)
+    if message:
+        failure_step.presentation.step_text = message
     failure_step.presentation.status = api.step.FAILURE
     present_cl_link(roller, cl, failure_step.presentation)
     roller['has_failure'] = True
@@ -210,17 +210,18 @@ def apply_screenshot_patches(api, roller, cl):
         with api.context(cwd=work_dir):
             prepare_local_checkout(api, cl)
             patches_found = [
-                apply_patch_from_screenshot_builder(api, builder, work_dir, cl)
+                apply_patch_from_screenshot_builder(api, builder, cl)
                 for builder in roller['screenshot_builders']
             ]
+            outcome_message = 'No screenshot patches available'
             if any(patches_found):
                 git_output(api, 'commit', '-am', 'update screenshots')
-                git_output(api, 'cl', 'upload', '-f', '--bypass-hooks',
-                        '--use-commit-queue', '--set-bot-commit')
+                git_output(api, 'cl', 'upload',
+                        '-f', '--bypass-hooks', '--cq-dry-run')
                 tag_cl(api, roller, cl, roller['screenshots_applied_tag'],
                     'Mark CL as patched with new screenshots')
-            else:
-                api.step('No screenshot patches available', [])
+                outcome_message = 'Please review screenshot patch!'
+            just_fail(api, roller, cl, outcome_message)
 
 
 def is_unable_to_apply(api, roller, cl):
@@ -233,7 +234,7 @@ def is_unable_to_apply(api, roller, cl):
         api.step('Builders still in progress...', [])
         return True
     if any(has_failed(build) for build in screenshot_builds):
-        api.step('Unable to apply due to failed builder...', [])
+        just_fail(api, roller, cl, 'Unable to apply due to failed builder!')
         return True
     return False
 
@@ -251,8 +252,9 @@ def prepare_local_checkout(api, cl):
         git_output(api, 'cl', 'issue', cl['_number'])
 
 
-def apply_patch_from_screenshot_builder(api, builder, work_dir, cl):
+def apply_patch_from_screenshot_builder(api, builder, cl):
     with api.step.nest('Apply screenshot patch from {}'.format(builder)):
+        patch_dir = api.path.mkdtemp()
         gs_path = [ 'screenshots',
                 builder,
                 str(cl['_number']),
@@ -260,7 +262,7 @@ def apply_patch_from_screenshot_builder(api, builder, work_dir, cl):
                 'screenshot.patch']
         gs_location = '/'.join(gs_path)
         patch_platform = builder.split('_')[-2]
-        local_path = work_dir.join(patch_platform + '.patch')
+        local_path = patch_dir.join(patch_platform + '.patch')
         api.gsutil.download(
                 'devtools-internal-screenshots',
                 gs_location,
@@ -277,10 +279,12 @@ def trigger_screenshot_builders(api, roller, cl):
     if any(is_in_progress(build) for build in cl['builds']):
         api.step('Builders still in progress...', [])
         return
-    if any(has_mixed_failures(build, roller, api) for build in cl['builds']):
+    blocking_builds = find_cq_blocking_builds(cl)
+    if any(has_mixed_failures(build, roller, api) for build in blocking_builds):
         api.step('Some failures do not refer to screenshots...', [])
         tag_cl(api, roller, cl, roller['screenshots_unavailable_tag'],
-            'Tag no screenshots patch available for CL')
+            'Tag CL for no screenshots patch available')
+        just_fail(api, roller, cl, 'Failure cause is other than screenshots')
         return
     api.buildbucket.schedule([
             api.buildbucket.schedule_request(
@@ -295,7 +299,7 @@ def trigger_screenshot_builders(api, roller, cl):
                 )],
             ) for builder_name in roller['screenshot_builders']
         ],
-        step_name='Trigger sceenshot builders',
+        step_name='Trigger screenshots builders',
     )
     tag_cl(api, roller, cl, roller['screenshot_builders_triggered_tag'],
             'Tag CL for later screenshots retrieval')
@@ -379,7 +383,7 @@ def GenTests(api):
 
     def find_fake_builds(roller, *builds):
         return api.buildbucket.simulated_search_results(list(builds),
-            step_name = "Roller: '{}'.Checking CL."
+            step_name = "Roller: '{}'.Checking CL 123."
                     "buildbucket.search".format(roller['name']))
 
 
@@ -432,10 +436,10 @@ def GenTests(api):
         test("sc-no-trigger-builders-in-progress", screenshot_roller) +
         find_fake_cls(screenshot_roller) +
         find_fake_builds(screenshot_roller,
-                build(1, STARTED),
+                build(1, STARTED, experimental=True),
                 build(2, FAILURE),
         ) +
-        api.post_process(StepSuccess, "Roller: 'experiment'.Checking CL."
+        api.post_process(StepSuccess, "Roller: 'experiment'.Checking CL 123."
                 "Builders still in progress...")+
         api.post_process(DropExpectation))
 
@@ -448,10 +452,10 @@ def GenTests(api):
                 build(2, FAILURE, steps=[
                         Step(name='Test', status=FAILURE)]),
         ) +
-        api.post_process(StepSuccess, "Roller: 'experiment'.Checking CL."
+        api.post_process(StepSuccess, "Roller: 'experiment'.Checking CL 123."
                 "Some failures do not refer to screenshots...") +
-        api.post_process(StepSuccess, "Roller: 'experiment'.Checking CL."
-                "gerrit Tag no screenshots patch available for CL") +
+        api.post_process(StepSuccess, "Roller: 'experiment'.Checking CL 123."
+                "gerrit Tag CL for no screenshots patch available") +
         api.post_process(DropExpectation))
 
     yield (
@@ -463,7 +467,7 @@ def GenTests(api):
                 build(2, SUCCESS, builder_name="devtools_screenshot_linux_rel"),
         ) +
         api.override_step_data(
-            "Roller: 'experiment'.Checking CL.Apply screenshot patches."
+            "Roller: 'experiment'.Checking CL 123.Apply screenshot patches."
             "Apply screenshot patch from devtools_screenshot_linux_rel."
             "read patch for linux",
             api.file.read_text('patch contents'),
@@ -476,7 +480,7 @@ def GenTests(api):
         find_fake_builds(screenshot_roller,
                 build(1, FAILURE),
         ) +
-        api.post_process(StepSuccess, "Roller: 'experiment'.Checking CL."
+        api.post_process(StepSuccess, "Roller: 'experiment'.Checking CL 123."
                 "Apply screenshot patches.No screenshot builds found") +
         api.post_process(DropExpectation))
 
@@ -488,11 +492,11 @@ def GenTests(api):
                 build(1, FAILURE),
                 build(2, SUCCESS, builder_name="devtools_screenshot_linux_rel")
         ) +
-        api.post_process(StepSuccess, "Roller: 'experiment'.Checking CL."
+        api.post_process(StepSuccess, "Roller: 'experiment'.Checking CL 123."
                 "Apply screenshot patches.Apply screenshot patch from "
                 "devtools_screenshot_linux_rel.Empty patch") +
-        api.post_process(StepSuccess, "Roller: 'experiment'.Checking CL."
-                "Apply screenshot patches.No screenshot patches available") +
+        api.post_process(StepFailure, "Roller: 'experiment'.Checking CL 123."
+                "Apply screenshot patches.Roller 'experiment' failed") +
         api.post_process(DropExpectation))
 
     yield (
@@ -501,9 +505,10 @@ def GenTests(api):
                 hashtags=["screenshot_builders_triggered"]) +
         find_fake_builds(screenshot_roller,
                 build(1, FAILURE),
-                build(2, STARTED, builder_name="devtools_screenshot_linux_rel")
+                build(2, STARTED, experimental=True,
+                        builder_name="devtools_screenshot_linux_rel")
         ) +
-        api.post_process(StepSuccess, "Roller: 'experiment'.Checking CL."
+        api.post_process(StepSuccess, "Roller: 'experiment'.Checking CL 123."
                 "Apply screenshot patches.Builders still in progress...") +
         api.post_process(DropExpectation))
 
@@ -515,7 +520,7 @@ def GenTests(api):
                 build(1, FAILURE),
                 build(2, FAILURE, builder_name="devtools_screenshot_linux_rel")
         ) +
-        api.post_process(StepSuccess, "Roller: 'experiment'.Checking CL."
+        api.post_process(StepFailure, "Roller: 'experiment'.Checking CL 123."
                 "Apply screenshot patches."
-                "Unable to apply due to failed builder...") +
+                "Roller 'experiment' failed") +
         api.post_process(DropExpectation))

@@ -69,7 +69,7 @@
   },
   {
     "cmd": [],
-    "name": "Roller: 'roller'.Checking CL",
+    "name": "Roller: 'roller'.Checking CL 123",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@project1/+/123@https://review.googlesource.com/c/project1/+/123@@@"
@@ -88,7 +88,7 @@
       "-fields",
       "tags.*,steps.*",
       "-predicate",
-      "{\"gerritChanges\": [{\"change\": \"123\", \"host\": \"review.googlesource.com\", \"patchset\": \"1\", \"project\": \"v8/v8\"}], \"tags\": [{\"key\": \"cq_experimental\", \"value\": \"false\"}]}"
+      "{\"gerritChanges\": [{\"change\": \"123\", \"host\": \"review.googlesource.com\", \"patchset\": \"1\", \"project\": \"v8/v8\"}], \"includeExperimental\": true}"
     ],
     "env_suffixes": {
       "DEPOT_TOOLS_UPDATE": [
@@ -99,7 +99,7 @@
       ]
     },
     "infra_step": true,
-    "name": "Roller: 'roller'.Checking CL.buildbucket.search",
+    "name": "Roller: 'roller'.Checking CL 123.buildbucket.search",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_END@raw_io.output_text@@@"
@@ -107,7 +107,7 @@
   },
   {
     "cmd": [],
-    "name": "Roller: 'roller'.Checking CL.No CQ failures on this CL yet...",
+    "name": "Roller: 'roller'.Checking CL 123.No CQ failures on this CL yet...",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]

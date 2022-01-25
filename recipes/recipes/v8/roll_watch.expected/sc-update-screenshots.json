@@ -1,7 +1,10 @@
 [
   {
     "cmd": [],
-    "name": "Roller: 'experiment'"
+    "name": "Roller: 'experiment'",
+    "~followup_annotations": [
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "cmd": [
@@ -73,10 +76,11 @@
   },
   {
     "cmd": [],
-    "name": "Roller: 'experiment'.Checking CL",
+    "name": "Roller: 'experiment'.Checking CL 123",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@project1/+/123@https://chrome-internal-review.googlesource.com/c/project1/+/123@@@"
+      "@@@STEP_LINK@project1/+/123@https://chrome-internal-review.googlesource.com/c/project1/+/123@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -92,7 +96,7 @@
       "-fields",
       "tags.*,steps.*",
       "-predicate",
-      "{\"gerritChanges\": [{\"change\": \"123\", \"host\": \"chrome-internal-review.googlesource.com\", \"patchset\": \"1\", \"project\": \"devtools/devtools-internal\"}], \"tags\": [{\"key\": \"cq_experimental\", \"value\": \"false\"}]}"
+      "{\"gerritChanges\": [{\"change\": \"123\", \"host\": \"chrome-internal-review.googlesource.com\", \"patchset\": \"1\", \"project\": \"devtools/devtools-internal\"}], \"includeExperimental\": true}"
     ],
     "env_suffixes": {
       "DEPOT_TOOLS_UPDATE": [
@@ -103,7 +107,7 @@
       ]
     },
     "infra_step": true,
-    "name": "Roller: 'experiment'.Checking CL.buildbucket.search",
+    "name": "Roller: 'experiment'.Checking CL 123.buildbucket.search",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@raw_io.output_text@{\"builder\": {}, \"id\": \"1\", \"status\": \"FAILURE\", \"tags\": [{\"key\": \"cq_experimental\", \"value\": \"false\"}]}@@@",
@@ -113,14 +117,15 @@
   },
   {
     "cmd": [],
-    "name": "Roller: 'experiment'.Checking CL.Apply screenshot patches",
+    "name": "Roller: 'experiment'.Checking CL 123.Apply screenshot patches",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
     "cmd": [],
-    "name": "Roller: 'experiment'.Checking CL.Apply screenshot patches.Prepare local checkout",
+    "name": "Roller: 'experiment'.Checking CL 123.Apply screenshot patches.Prepare local checkout",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@3@@@"
     ]
@@ -142,7 +147,7 @@
       ]
     },
     "infra_step": true,
-    "name": "Roller: 'experiment'.Checking CL.Apply screenshot patches.Prepare local checkout.git clone",
+    "name": "Roller: 'experiment'.Checking CL 123.Apply screenshot patches.Prepare local checkout.git clone",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@4@@@",
       "@@@STEP_LOG_END@stdout@@@"
@@ -165,7 +170,7 @@
       ]
     },
     "infra_step": true,
-    "name": "Roller: 'experiment'.Checking CL.Apply screenshot patches.Prepare local checkout.git fetch",
+    "name": "Roller: 'experiment'.Checking CL 123.Apply screenshot patches.Prepare local checkout.git fetch",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@4@@@",
       "@@@STEP_LOG_END@stdout@@@"
@@ -189,7 +194,7 @@
       ]
     },
     "infra_step": true,
-    "name": "Roller: 'experiment'.Checking CL.Apply screenshot patches.Prepare local checkout.git checkout",
+    "name": "Roller: 'experiment'.Checking CL 123.Apply screenshot patches.Prepare local checkout.git checkout",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@4@@@",
       "@@@STEP_LOG_END@stdout@@@"
@@ -212,7 +217,7 @@
       ]
     },
     "infra_step": true,
-    "name": "Roller: 'experiment'.Checking CL.Apply screenshot patches.Prepare local checkout.git cl",
+    "name": "Roller: 'experiment'.Checking CL 123.Apply screenshot patches.Prepare local checkout.git cl",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@4@@@",
       "@@@STEP_LOG_END@stdout@@@"
@@ -220,7 +225,7 @@
   },
   {
     "cmd": [],
-    "name": "Roller: 'experiment'.Checking CL.Apply screenshot patches.Apply screenshot patch from devtools_screenshot_linux_rel",
+    "name": "Roller: 'experiment'.Checking CL 123.Apply screenshot patches.Apply screenshot patch from devtools_screenshot_linux_rel",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@3@@@"
     ]
@@ -235,7 +240,7 @@
       "----",
       "cp",
       "gs://devtools-internal-screenshots/screenshots/devtools_screenshot_linux_rel/123/1/screenshot.patch",
-      "[CLEANUP]/tmp_tmp_1/linux.patch"
+      "[CLEANUP]/tmp_tmp_2/linux.patch"
     ],
     "cwd": "[CLEANUP]/tmp_tmp_1",
     "env_suffixes": {
@@ -247,7 +252,7 @@
       ]
     },
     "infra_step": true,
-    "name": "Roller: 'experiment'.Checking CL.Apply screenshot patches.Apply screenshot patch from devtools_screenshot_linux_rel.gsutil Download patch from devtools_screenshot_linux_rel",
+    "name": "Roller: 'experiment'.Checking CL 123.Apply screenshot patches.Apply screenshot patch from devtools_screenshot_linux_rel.gsutil Download patch from devtools_screenshot_linux_rel",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@4@@@"
     ]
@@ -260,7 +265,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[CLEANUP]/tmp_tmp_1/linux.patch",
+      "[CLEANUP]/tmp_tmp_2/linux.patch",
       "/path/to/tmp/"
     ],
     "cwd": "[CLEANUP]/tmp_tmp_1",
@@ -273,7 +278,7 @@
       ]
     },
     "infra_step": true,
-    "name": "Roller: 'experiment'.Checking CL.Apply screenshot patches.Apply screenshot patch from devtools_screenshot_linux_rel.read patch for linux",
+    "name": "Roller: 'experiment'.Checking CL 123.Apply screenshot patches.Apply screenshot patch from devtools_screenshot_linux_rel.read patch for linux",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@4@@@",
       "@@@STEP_LOG_LINE@linux.patch@patch contents@@@",
@@ -284,7 +289,7 @@
     "cmd": [
       "git",
       "apply",
-      "[CLEANUP]/tmp_tmp_1/linux.patch"
+      "[CLEANUP]/tmp_tmp_2/linux.patch"
     ],
     "cwd": "[CLEANUP]/tmp_tmp_1",
     "env_suffixes": {
@@ -296,7 +301,7 @@
       ]
     },
     "infra_step": true,
-    "name": "Roller: 'experiment'.Checking CL.Apply screenshot patches.Apply screenshot patch from devtools_screenshot_linux_rel.git apply",
+    "name": "Roller: 'experiment'.Checking CL 123.Apply screenshot patches.Apply screenshot patch from devtools_screenshot_linux_rel.git apply",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@4@@@",
       "@@@STEP_LOG_END@stdout@@@"
@@ -319,7 +324,7 @@
       ]
     },
     "infra_step": true,
-    "name": "Roller: 'experiment'.Checking CL.Apply screenshot patches.git commit",
+    "name": "Roller: 'experiment'.Checking CL 123.Apply screenshot patches.git commit",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@3@@@",
       "@@@STEP_LOG_END@stdout@@@"
@@ -332,8 +337,7 @@
       "upload",
       "-f",
       "--bypass-hooks",
-      "--use-commit-queue",
-      "--set-bot-commit"
+      "--cq-dry-run"
     ],
     "cwd": "[CLEANUP]/tmp_tmp_1",
     "env_suffixes": {
@@ -345,7 +349,7 @@
       ]
     },
     "infra_step": true,
-    "name": "Roller: 'experiment'.Checking CL.Apply screenshot patches.git cl",
+    "name": "Roller: 'experiment'.Checking CL 123.Apply screenshot patches.git cl",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@3@@@",
       "@@@STEP_LOG_END@stdout@@@"
@@ -383,7 +387,7 @@
       ]
     },
     "infra_step": true,
-    "name": "Roller: 'experiment'.Checking CL.Apply screenshot patches.gerrit Mark CL as patched with new screenshots",
+    "name": "Roller: 'experiment'.Checking CL 123.Apply screenshot patches.gerrit Mark CL as patched with new screenshots",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@3@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
@@ -392,6 +396,20 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "Roller: 'experiment'.Checking CL 123.Apply screenshot patches.Roller 'experiment' failed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@3@@@",
+      "@@@STEP_TEXT@Please review screenshot patch!@@@",
+      "@@@STEP_LINK@project1/+/123@https://chrome-internal-review.googlesource.com/c/project1/+/123@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "failure": {
+      "failure": {},
+      "humanReason": ""
+    },
     "name": "$result"
   }
 ]

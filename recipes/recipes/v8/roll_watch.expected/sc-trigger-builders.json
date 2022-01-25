@@ -71,7 +71,7 @@
   },
   {
     "cmd": [],
-    "name": "Roller: 'experiment'.Checking CL",
+    "name": "Roller: 'experiment'.Checking CL 123",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@project1/+/123@https://chrome-internal-review.googlesource.com/c/project1/+/123@@@"
@@ -90,7 +90,7 @@
       "-fields",
       "tags.*,steps.*",
       "-predicate",
-      "{\"gerritChanges\": [{\"change\": \"123\", \"host\": \"chrome-internal-review.googlesource.com\", \"patchset\": \"1\", \"project\": \"devtools/devtools-internal\"}], \"tags\": [{\"key\": \"cq_experimental\", \"value\": \"false\"}]}"
+      "{\"gerritChanges\": [{\"change\": \"123\", \"host\": \"chrome-internal-review.googlesource.com\", \"patchset\": \"1\", \"project\": \"devtools/devtools-internal\"}], \"includeExperimental\": true}"
     ],
     "env_suffixes": {
       "DEPOT_TOOLS_UPDATE": [
@@ -101,7 +101,7 @@
       ]
     },
     "infra_step": true,
-    "name": "Roller: 'experiment'.Checking CL.buildbucket.search",
+    "name": "Roller: 'experiment'.Checking CL 123.buildbucket.search",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@raw_io.output_text@{\"builder\": {}, \"id\": \"1\", \"status\": \"SUCCESS\", \"tags\": [{\"key\": \"cq_experimental\", \"value\": \"false\"}]}@@@",
@@ -125,7 +125,7 @@
       ]
     },
     "infra_step": true,
-    "name": "Roller: 'experiment'.Checking CL.Trigger sceenshot builders",
+    "name": "Roller: 'experiment'.Checking CL 123.Trigger screenshots builders",
     "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"bucket\": \"try\", \"builder\": \"devtools_screenshot_linux_rel\", \"project\": \"devtools-internal\"}, \"experimental\": \"NO\", \"fields\": \"builder,createTime,createdBy,critical,endTime,id,infra,input,number,output,startTime,status,updateTime\", \"gerritChanges\": [{\"change\": \"123\", \"host\": \"chrome-internal-review.googlesource.com\", \"patchset\": \"1\", \"project\": \"project1\"}], \"requestId\": \"0-00000000-0000-0000-0000-000000001337\", \"tags\": [{\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -209,7 +209,7 @@
       ]
     },
     "infra_step": true,
-    "name": "Roller: 'experiment'.Checking CL.gerrit Tag CL for later screenshots retrieval",
+    "name": "Roller: 'experiment'.Checking CL 123.gerrit Tag CL for later screenshots retrieval",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
