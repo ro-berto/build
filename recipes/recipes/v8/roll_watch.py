@@ -18,7 +18,7 @@ from recipe_engine.post_process import (
     DropExpectation, StatusFailure, StatusSuccess, StepSuccess, StepFailure)
 
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'depot_tools/depot_tools',
@@ -132,7 +132,7 @@ def present_cl_link(roller, cl, presentation):
 
 
 def last_patch(cl):
-    return cl['revisions'].values()[0]
+    return list(cl['revisions'].values())[0]
 
 
 def has_failed(build):
@@ -295,7 +295,7 @@ def trigger_screenshot_builders(api, roller, cl):
                     host=roller['review-host'],
                     project=cl['project'],
                     change=cl['_number'],
-                    patchset=cl['revisions'].values()[0]['_number'],
+                    patchset=list(cl['revisions'].values())[0]['_number'],
                 )],
             ) for builder_name in roller['screenshot_builders']
         ],
