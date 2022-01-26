@@ -10,7 +10,7 @@ from recipe_engine.recipe_api import Property
 from recipe_engine.config import ConfigGroup, Dict, Single, List
 from recipe_engine.engine_types import freeze
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
   'depot_tools/bot_update',
@@ -195,7 +195,7 @@ def roll_chromium_pin(api):
   latest prebuilt versions.
   """
   with api.context(cwd=api.path['checkout']):
-    for var_name, url in sorted(CHROMIUM_PINS.iteritems()):
+    for var_name, url in sorted(CHROMIUM_PINS.items()):
       step_result = api.gclient(
           'get %s deps' % var_name,
           ['getdep', '--var=%s' % var_name],
@@ -473,15 +473,15 @@ src/buildtools:  https://chromium.googlesource.com/chromium/buildtools.git@5fd66
         ),
         api.override_step_data(
             'gclient get %s deps' % solution_name,
-            api.raw_io.stream_output(v8_deps_info, stream='stdout'),
+            api.raw_io.stream_output_text(v8_deps_info, stream='stdout'),
         ),
         api.override_step_data(
             'gclient get src deps',
-            api.raw_io.stream_output(cr_deps_info, stream='stdout'),
+            api.raw_io.stream_output_text(cr_deps_info, stream='stdout'),
         ),
         api.override_step_data(
             'git diff',
-            api.raw_io.stream_output('some difference', stream='stdout'),
+            api.raw_io.stream_output_text('some difference', stream='stdout'),
         ),
     )
 
@@ -492,17 +492,17 @@ src/buildtools:  https://chromium.googlesource.com/chromium/buildtools.git@5fd66
           retcode=1,
       ) + api.override_step_data(
           'look up build',
-          api.raw_io.stream_output(
+          api.raw_io.stream_output_text(
               'deadbeef\trefs/heads/main', stream='stdout'),
       ) + api.override_step_data(
           'look up base_trace_event_common',
-          api.raw_io.stream_output('', stream='stdout'),
+          api.raw_io.stream_output_text('', stream='stdout'),
       ) +
       # TODO(crbug.com/1222015): Temporary test data for fallback case. Once
       # all repos have a main branch, add back output for the call above.
       api.override_step_data(
           'look up base_trace_event_common (fallback)',
-          api.raw_io.stream_output(
+          api.raw_io.stream_output_text(
               'deadbeef\trefs/heads/main', stream='stdout'),
       ))
 
@@ -517,7 +517,7 @@ src/buildtools:  https://chromium.googlesource.com/chromium/buildtools.git@5fd66
       api.properties(autoroller_config=v8_deps_config),
       api.override_step_data(
           'gclient get src deps',
-          api.raw_io.stream_output(bad_cr_deps_info, stream='stdout'),
+          api.raw_io.stream_output_text(bad_cr_deps_info, stream='stdout'),
       ),
       api.expect_exception("Exception"),
   )
@@ -538,7 +538,8 @@ src/buildtools:  https://chromium.googlesource.com/chromium/buildtools.git@5fd66
       }) +
       api.override_step_data(
           'look up test_test262_data',
-          api.raw_io.stream_output('deadbeef\trefs/heads/main', stream='stdout'),
+          api.raw_io.stream_output_text(
+              'deadbeef\trefs/heads/main', stream='stdout'),
       ) +
       api.post_process(Filter('git commit', 'git cl'))
   )
@@ -577,14 +578,15 @@ src/buildtools:  https://chromium.googlesource.com/chromium/buildtools.git@5fd66
   important_steps = Filter().include_re(
       r'.*(?:chromium_linux|chromium_win|chromium_mac).*')
   yield (
-      template('roll chromium linux pin', 'Auto-roll - chromium somewhere', 'somewhere') +
+      template('roll chromium linux pin',
+               'Auto-roll - chromium somewhere', 'somewhere') +
       api.override_step_data(
           'gclient get chromium_linux deps',
-          api.raw_io.stream_output('122', stream='stdout'),
+          api.raw_io.stream_output_text('122', stream='stdout'),
       ) +
       api.override_step_data(
           'gclient get chromium_win deps',
-          api.raw_io.stream_output('123', stream='stdout'),
+          api.raw_io.stream_output_text('123', stream='stdout'),
       ) +
       api.properties(autoroller_config={
           'target_config': {
@@ -605,7 +607,7 @@ src/buildtools:  https://chromium.googlesource.com/chromium/buildtools.git@5fd66
       }) +
       api.override_step_data(
           'gclient get chromium_mac deps',
-          api.raw_io.stream_output('124', stream='stdout'),
+          api.raw_io.stream_output_text('124', stream='stdout'),
       ) +
       api.post_process(important_steps) +
       api.post_process(MustRun, 'gclient set chromium_linux deps') +

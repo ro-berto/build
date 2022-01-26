@@ -4,7 +4,7 @@
 
 import base64
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
   'chromium',
@@ -60,16 +60,15 @@ def is_gitiles_inconsistent(api):
       'https://chromium.googlesource.com/chromium/src',
       'DEPS',
       branch='refs/heads/main',
-      step_test_data= lambda: api.json.test_api.output({
-        'value': base64.b64encode(TEST_DEPS_FILE % 'deadbeef'),
-      }),
+      step_test_data=lambda: api.gitiles.test_api.make_encoded_file(
+          TEST_DEPS_FILE % 'deadbeef'),
   )
 
   # Get the deps file used by the auto roller.
   local_deps = api.git(
       'cat-file', 'blob', 'HEAD:DEPS',
       stdout=api.raw_io.output_text(),
-      step_test_data= lambda: api.raw_io.test_api.stream_output(
+      step_test_data= lambda: api.raw_io.test_api.stream_output_text(
           TEST_DEPS_FILE % 'deadbeef'),
   ).stdout
 
@@ -230,10 +229,10 @@ def GenTests(api):
       api.override_step_data('gerrit changes', api.json.output([])),
       api.override_step_data(
           'git cat-file',
-          api.raw_io.stream_output(TEST_DEPS_FILE % 'beefdead')),
+          api.raw_io.stream_output_text(TEST_DEPS_FILE % 'beefdead')),
       api.override_step_data(
           'gclient get local deps',
-          api.raw_io.stream_output('beefdead', stream='stdout'),
+          api.raw_io.stream_output_text('beefdead', stream='stdout'),
       ),
   )
   yield api.test(
