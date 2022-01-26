@@ -46,7 +46,7 @@ def RunSteps(api, properties):
         summary_markdown='Unable to delete androidx libs directory.')
 
   fetch_all_cmd = androidx_dir.join('fetch_all_androidx.py')
-  api.step('fetch_all', [fetch_all_cmd])
+  api.step('fetch_all', [fetch_all_cmd, '-v'])
   api.path.mock_add_paths(androidx_dir.join('cipd.yaml'))
 
   yaml_path = androidx_dir.join('cipd.yaml')
