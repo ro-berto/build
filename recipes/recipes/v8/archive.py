@@ -13,7 +13,7 @@ from recipe_engine.post_process import (
     DoesNotRun, DropExpectation, Filter, MustRun, StatusFailure)
 from recipe_engine.recipe_api import Property
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'chromium',
@@ -106,7 +106,8 @@ def make_archive(api,
 
   with api.step.nest('make archive' + step_suffix) as parent:
     # Make a list of files to archive.
-    file_list_test_data = map(str, map(build_dir.join, ['d8', 'icudtl.dat']))
+    files = ['d8', 'icudtl.dat']
+    file_list_test_data = [str(build_dir.join(f)) for f in files]
     file_list = api.python(
         'filter build files',
         api.path['checkout'].join('tools', 'release', 'filter_build_files.py'),
@@ -123,7 +124,8 @@ def make_archive(api,
     # Zip build.
     zip_file = api.path['cleanup'].join('archive.zip')
     package = api.zip.make_package(build_dir, zip_file)
-    map(package.add_file, map(api.path.abs_to_path, file_list))
+    for f in file_list:
+      package.add_file(api.path.abs_to_path(f))
     package.zip('zipping')
 
     if api.chromium.c.TARGET_ARCH != 'intel':
@@ -295,7 +297,7 @@ def GenTests(api):
         api.platform(platform, 64),
         api.v8.version_file(17, 'head', prefix='sync.'),
         api.override_step_data('sync.git describe',
-                               api.raw_io.stream_output('3.4.3.17')),
+                               api.raw_io.stream_output_text('3.4.3.17')),
         api.v8.check_param_equals(
             'sync.bot_update', '--revision', 'v8@refs/branch-heads/' +
             '3.4:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'),
@@ -405,7 +407,7 @@ def GenTests(api):
       api.properties(build_config='Release', target_bits=64),
       api.v8.version_file(17, 'head', prefix='sync.'),
       api.override_step_data('sync.git describe',
-                             api.raw_io.stream_output('3.4.3.17-blabla')),
+                             api.raw_io.stream_output_text('3.4.3.17-blabla')),
       api.post_process(MustRun, 'sync.Skipping due to missing tag.'),
       api.post_process(DoesNotRun, 'sync.gclient runhooks', 'build.gn',
                        'build.compile', 'make archive.zipping',
@@ -428,7 +430,7 @@ def GenTests(api):
       api.properties(build_config='Release', target_bits=64),
       api.v8.version_file(1, 'head', prefix='sync.'),
       api.override_step_data('sync.git describe',
-                             api.raw_io.stream_output('3.4.3.1')),
+                             api.raw_io.stream_output_text('3.4.3.1')),
       api.post_process(Filter().include_re('.*ref.*')),
   )
 
@@ -447,7 +449,7 @@ def GenTests(api):
       api.properties.generic(build_config='Release', target_bits=64),
       api.v8.version_file(1, 'head', prefix='sync.'),
       api.override_step_data('sync.git describe',
-                             api.raw_io.stream_output('3.4.3.1')),
+                             api.raw_io.stream_output_text('3.4.3.1')),
       api.post_process(
           Filter(
               'make archive.gsutil upload',
@@ -470,7 +472,7 @@ def GenTests(api):
       api.platform('linux', 64),
       api.v8.version_file(17, 'head', prefix='sync.'),
       api.override_step_data('sync.git describe',
-                             api.raw_io.stream_output('3.4.3.17')),
+                             api.raw_io.stream_output_text('3.4.3.17')),
       api.v8.check_param_equals(
           'sync.bot_update', '--revision', 'v8@refs/branch-heads/' +
           '3.4:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'),
@@ -493,7 +495,7 @@ def GenTests(api):
       api.platform('linux', 64),
       api.v8.version_file(17, 'head', prefix='sync.'),
       api.override_step_data('sync.git describe',
-                             api.raw_io.stream_output('3.4.3.17')),
+                             api.raw_io.stream_output_text('3.4.3.17')),
       api.v8.check_param_equals(
           'sync.bot_update', '--revision', 'v8@refs/branch-heads/' +
           '3.4:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'),
@@ -516,7 +518,7 @@ def GenTests(api):
       api.platform('linux', 64),
       api.v8.version_file(17, 'head', prefix='sync.'),
       api.override_step_data('sync.git describe',
-                             api.raw_io.stream_output('3.4.3.17')),
+                             api.raw_io.stream_output_text('3.4.3.17')),
       api.v8.check_param_equals(
           'sync.bot_update', '--revision', 'v8@refs/branch-heads/' +
           '3.4:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'),
@@ -539,7 +541,7 @@ def GenTests(api):
       api.properties(build_config='Release', target_bits=64),
       api.v8.version_file(1, 'head', prefix='sync.'),
       api.override_step_data('sync.git describe',
-                             api.raw_io.stream_output('3.4.3.1')),
+                             api.raw_io.stream_output_text('3.4.3.1')),
       api.step_data('build (ref).compile', retcode=1),
       api.post_process(StatusFailure),
       api.post_process(DropExpectation),
@@ -562,7 +564,7 @@ def GenTests(api):
           upload_archive=False), api.platform('linux', 64),
       api.v8.version_file(1, 'head', prefix='sync.'),
       api.override_step_data('sync.git describe',
-                             api.raw_io.stream_output('3.4.3.1')),
+                             api.raw_io.stream_output_text('3.4.3.1')),
       api.post_process(MustRun, 'sync.clobber', 'sync.gclient runhooks',
                        'build.gn', 'build.preprocess for reclient',
                        'build.compile', 'make archive.zipping'),
