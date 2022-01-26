@@ -310,7 +310,7 @@
       "[CACHE]/goma/client",
       "-v",
       "//out/Debug",
-      "{\"additional_compile_targets\": [\"all\"], \"files\": [\"foo.cc\"], \"test_targets\": [\"AppRTCMobile_test_apk\", \"android_instrumentation_test_apk\", \"audio_decoder_unittests\", \"common_audio_unittests\", \"common_video_unittests\", \"dcsctp_unittests\", \"modules_tests\", \"modules_unittests\", \"peerconnection_unittests\", \"rtc_pc_unittests\", \"rtc_stats_unittests\", \"rtc_unittests\", \"system_wrappers_unittests\", \"test_support_unittests\", \"tools_unittests\", \"video_engine_tests\", \"voip_unittests\", \"webrtc_nonparallel_tests\", \"webrtc_perf_tests\", \"android_examples_junit_tests\", \"android_sdk_junit_tests\"]}",
+      "{\"additional_compile_targets\": [\"all\"], \"files\": [\"foo.cc\"], \"test_targets\": [\"AppRTCMobile_test_apk\", \"android_instrumentation_test_apk\", \"audio_decoder_unittests\", \"common_audio_unittests\", \"common_video_unittests\", \"dcsctp_unittests\", \"modules_tests\", \"modules_unittests\", \"peerconnection_unittests\", \"rtc_media_unittests\", \"rtc_pc_unittests\", \"rtc_stats_unittests\", \"rtc_unittests\", \"system_wrappers_unittests\", \"test_support_unittests\", \"tools_unittests\", \"video_engine_tests\", \"voip_unittests\", \"webrtc_nonparallel_tests\", \"webrtc_perf_tests\", \"android_examples_junit_tests\", \"android_sdk_junit_tests\"]}",
       "/path/to/tmp/json",
       "--json-output",
       "/path/to/tmp/json"
@@ -347,6 +347,7 @@
       "@@@STEP_LOG_LINE@json.output@    \"modules_unittests\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"peerconnection_unittests\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"rtc_pc_unittests\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"rtc_media_unittests\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"rtc_stats_unittests\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"rtc_unittests\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"system_wrappers_unittests\", @@@",
@@ -371,6 +372,7 @@
       "@@@STEP_LOG_LINE@json.output@    \"modules_unittests\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"peerconnection_unittests\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"rtc_pc_unittests\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"rtc_media_unittests\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"rtc_stats_unittests\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"rtc_unittests\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"system_wrappers_unittests\", @@@",
@@ -446,7 +448,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "--swarming-targets-file",
-      "AppRTCMobile_test_apk\nandroid_instrumentation_test_apk\naudio_decoder_unittests\ncommon_audio_unittests\ncommon_video_unittests\ndcsctp_unittests\nmodules_tests\nmodules_unittests\npeerconnection_unittests\nrtc_pc_unittests\nrtc_stats_unittests\nrtc_unittests\nsystem_wrappers_unittests\ntest_support_unittests\ntools_unittests\nvideo_engine_tests\nvoip_unittests\nwebrtc_nonparallel_tests\nwebrtc_perf_tests\n",
+      "AppRTCMobile_test_apk\nandroid_instrumentation_test_apk\naudio_decoder_unittests\ncommon_audio_unittests\ncommon_video_unittests\ndcsctp_unittests\nmodules_tests\nmodules_unittests\npeerconnection_unittests\nrtc_media_unittests\nrtc_pc_unittests\nrtc_stats_unittests\nrtc_unittests\nsystem_wrappers_unittests\ntest_support_unittests\ntools_unittests\nvideo_engine_tests\nvoip_unittests\nwebrtc_nonparallel_tests\nwebrtc_perf_tests\n",
       "//out/android_arm64_dbg"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -480,6 +482,7 @@
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@modules_tests@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@modules_unittests@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@peerconnection_unittests@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@rtc_media_unittests@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@rtc_pc_unittests@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@rtc_stats_unittests@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@rtc_unittests@@@",
@@ -647,6 +650,7 @@
       "modules_tests",
       "modules_unittests",
       "peerconnection_unittests",
+      "rtc_media_unittests",
       "rtc_pc_unittests",
       "rtc_stats_unittests",
       "rtc_unittests",
@@ -699,6 +703,7 @@
       "modules_tests",
       "modules_unittests",
       "peerconnection_unittests",
+      "rtc_media_unittests",
       "rtc_pc_unittests",
       "rtc_stats_unittests",
       "rtc_unittests",
@@ -871,7 +876,7 @@
       "--ninja-log-outdir",
       "[CACHE]/builder/src/out/android_arm64_dbg",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/android_arm64_dbg\", \"-j\", 80, \"AppRTCMobile_test_apk\", \"android_examples_junit_tests\", \"android_instrumentation_test_apk\", \"android_sdk_junit_tests\", \"audio_decoder_unittests\", \"common_audio_unittests\", \"common_video_unittests\", \"dcsctp_unittests\", \"default\", \"modules_tests\", \"modules_unittests\", \"peerconnection_unittests\", \"rtc_pc_unittests\", \"rtc_stats_unittests\", \"rtc_unittests\", \"system_wrappers_unittests\", \"test_support_unittests\", \"tools_unittests\", \"video_engine_tests\", \"voip_unittests\", \"webrtc_nonparallel_tests\", \"webrtc_perf_tests\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/android_arm64_dbg\", \"-j\", 80, \"AppRTCMobile_test_apk\", \"android_examples_junit_tests\", \"android_instrumentation_test_apk\", \"android_sdk_junit_tests\", \"audio_decoder_unittests\", \"common_audio_unittests\", \"common_video_unittests\", \"dcsctp_unittests\", \"default\", \"modules_tests\", \"modules_unittests\", \"peerconnection_unittests\", \"rtc_media_unittests\", \"rtc_pc_unittests\", \"rtc_stats_unittests\", \"rtc_unittests\", \"system_wrappers_unittests\", \"test_support_unittests\", \"tools_unittests\", \"video_engine_tests\", \"voip_unittests\", \"webrtc_nonparallel_tests\", \"webrtc_perf_tests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -1051,6 +1056,7 @@
       "[CACHE]/builder/src/out/android_arm64_dbg/modules_tests.isolated.gen.json",
       "[CACHE]/builder/src/out/android_arm64_dbg/modules_unittests.isolated.gen.json",
       "[CACHE]/builder/src/out/android_arm64_dbg/peerconnection_unittests.isolated.gen.json",
+      "[CACHE]/builder/src/out/android_arm64_dbg/rtc_media_unittests.isolated.gen.json",
       "[CACHE]/builder/src/out/android_arm64_dbg/rtc_pc_unittests.isolated.gen.json",
       "[CACHE]/builder/src/out/android_arm64_dbg/rtc_stats_unittests.isolated.gen.json",
       "[CACHE]/builder/src/out/android_arm64_dbg/rtc_unittests.isolated.gen.json",
@@ -1086,6 +1092,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"modules_tests\": \"[dummy hash for modules_tests/dummy size]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"modules_unittests\": \"[dummy hash for modules_unittests/dummy size]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"peerconnection_unittests\": \"[dummy hash for peerconnection_unittests/dummy size]\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"rtc_media_unittests\": \"[dummy hash for rtc_media_unittests/dummy size]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"rtc_pc_unittests\": \"[dummy hash for rtc_pc_unittests/dummy size]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"rtc_stats_unittests\": \"[dummy hash for rtc_stats_unittests/dummy size]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"rtc_unittests\": \"[dummy hash for rtc_unittests/dummy size]\", @@@",
@@ -1098,7 +1105,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"webrtc_perf_tests\": \"[dummy hash for webrtc_perf_tests/dummy size]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"AppRTCMobile_test_apk\": \"[dummy hash for AppRTCMobile_test_apk/dummy size]\", \"android_instrumentation_test_apk\": \"[dummy hash for android_instrumentation_test_apk/dummy size]\", \"audio_decoder_unittests\": \"[dummy hash for audio_decoder_unittests/dummy size]\", \"common_audio_unittests\": \"[dummy hash for common_audio_unittests/dummy size]\", \"common_video_unittests\": \"[dummy hash for common_video_unittests/dummy size]\", \"dcsctp_unittests\": \"[dummy hash for dcsctp_unittests/dummy size]\", \"modules_tests\": \"[dummy hash for modules_tests/dummy size]\", \"modules_unittests\": \"[dummy hash for modules_unittests/dummy size]\", \"peerconnection_unittests\": \"[dummy hash for peerconnection_unittests/dummy size]\", \"rtc_pc_unittests\": \"[dummy hash for rtc_pc_unittests/dummy size]\", \"rtc_stats_unittests\": \"[dummy hash for rtc_stats_unittests/dummy size]\", \"rtc_unittests\": \"[dummy hash for rtc_unittests/dummy size]\", \"system_wrappers_unittests\": \"[dummy hash for system_wrappers_unittests/dummy size]\", \"test_support_unittests\": \"[dummy hash for test_support_unittests/dummy size]\", \"tools_unittests\": \"[dummy hash for tools_unittests/dummy size]\", \"video_engine_tests\": \"[dummy hash for video_engine_tests/dummy size]\", \"voip_unittests\": \"[dummy hash for voip_unittests/dummy size]\", \"webrtc_nonparallel_tests\": \"[dummy hash for webrtc_nonparallel_tests/dummy size]\", \"webrtc_perf_tests\": \"[dummy hash for webrtc_perf_tests/dummy size]\"}@@@"
+      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"AppRTCMobile_test_apk\": \"[dummy hash for AppRTCMobile_test_apk/dummy size]\", \"android_instrumentation_test_apk\": \"[dummy hash for android_instrumentation_test_apk/dummy size]\", \"audio_decoder_unittests\": \"[dummy hash for audio_decoder_unittests/dummy size]\", \"common_audio_unittests\": \"[dummy hash for common_audio_unittests/dummy size]\", \"common_video_unittests\": \"[dummy hash for common_video_unittests/dummy size]\", \"dcsctp_unittests\": \"[dummy hash for dcsctp_unittests/dummy size]\", \"modules_tests\": \"[dummy hash for modules_tests/dummy size]\", \"modules_unittests\": \"[dummy hash for modules_unittests/dummy size]\", \"peerconnection_unittests\": \"[dummy hash for peerconnection_unittests/dummy size]\", \"rtc_media_unittests\": \"[dummy hash for rtc_media_unittests/dummy size]\", \"rtc_pc_unittests\": \"[dummy hash for rtc_pc_unittests/dummy size]\", \"rtc_stats_unittests\": \"[dummy hash for rtc_stats_unittests/dummy size]\", \"rtc_unittests\": \"[dummy hash for rtc_unittests/dummy size]\", \"system_wrappers_unittests\": \"[dummy hash for system_wrappers_unittests/dummy size]\", \"test_support_unittests\": \"[dummy hash for test_support_unittests/dummy size]\", \"tools_unittests\": \"[dummy hash for tools_unittests/dummy size]\", \"video_engine_tests\": \"[dummy hash for video_engine_tests/dummy size]\", \"voip_unittests\": \"[dummy hash for voip_unittests/dummy size]\", \"webrtc_nonparallel_tests\": \"[dummy hash for webrtc_nonparallel_tests/dummy size]\", \"webrtc_perf_tests\": \"[dummy hash for webrtc_perf_tests/dummy size]\"}@@@"
     ]
   },
   {
@@ -4378,6 +4385,184 @@
       "-server",
       "https://example.swarmingserver.appspot.com",
       "-json-input",
+      "{\"requests\": [{\"name\": \"rtc_media_unittests/Android/[dummy has/android_arm64_dbg/-1\", \"priority\": \"30\", \"realm\": \"webrtc:try\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:android_arm64_dbg\", \"data:[dummy hash for rtc_media_unittests/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:rtc_media_unittests\", \"ninja_target:\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:android_arm64_dbg\", \"stepname:rtc_media_unittests on Android\", \"test_id_prefix:\", \"test_suite:rtc_media_unittests\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for rtc_media_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[CACHE]/builder",
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "[trigger] rtc_media_unittests on Android",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"tasks\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"name\": \"rtc_media_unittests/Android/[dummy has/android_arm64_dbg/-1\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"19\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"resultdb_info\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"invocation\": \"invocations/19\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        }@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@json.input@{@@@",
+      "@@@STEP_LOG_LINE@json.input@  \"requests\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@    {@@@",
+      "@@@STEP_LOG_LINE@json.input@      \"name\": \"rtc_media_unittests/Android/[dummy has/android_arm64_dbg/-1\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"priority\": \"30\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc:try\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"resultdb\": {@@@",
+      "@@@STEP_LOG_LINE@json.input@        \"enable\": true@@@",
+      "@@@STEP_LOG_LINE@json.input@      }, @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@        \"bucket:try\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"build_is_experimental:false\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"builder_group:tryserver.webrtc\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"buildername:android_arm64_dbg\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"data:[dummy hash for rtc_media_unittests/dummy size]\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"name:rtc_media_unittests\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"ninja_target:\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"patch_project:src\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"project:webrtc\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"purpose:ManualTS\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"purpose:pre-commit\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"slavename:fake-bot-id\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"spec_name:webrtc.try:android_arm64_dbg\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"stepname:rtc_media_unittests on Android\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"test_id_prefix:\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"test_suite:rtc_media_unittests\"@@@",
+      "@@@STEP_LOG_LINE@json.input@      ], @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"task_slices\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@        {@@@",
+      "@@@STEP_LOG_LINE@json.input@          \"expiration_secs\": \"3600\", @@@",
+      "@@@STEP_LOG_LINE@json.input@          \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@json.input@            \"cas_input_root\": {@@@",
+      "@@@STEP_LOG_LINE@json.input@              \"cas_instance\": \"projects/example-cas-server/instances/default_instance\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"digest\": {@@@",
+      "@@@STEP_LOG_LINE@json.input@                \"hash\": \"[dummy hash for rtc_media_unittests\", @@@",
+      "@@@STEP_LOG_LINE@json.input@                \"size_bytes\": \"dummy size]\"@@@",
+      "@@@STEP_LOG_LINE@json.input@              }@@@",
+      "@@@STEP_LOG_LINE@json.input@            }, @@@",
+      "@@@STEP_LOG_LINE@json.input@            \"cipd_input\": {@@@",
+      "@@@STEP_LOG_LINE@json.input@              \"packages\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@                {@@@",
+      "@@@STEP_LOG_LINE@json.input@                  \"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", @@@",
+      "@@@STEP_LOG_LINE@json.input@                  \"path\": \"bin\", @@@",
+      "@@@STEP_LOG_LINE@json.input@                  \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"@@@",
+      "@@@STEP_LOG_LINE@json.input@                }@@@",
+      "@@@STEP_LOG_LINE@json.input@              ]@@@",
+      "@@@STEP_LOG_LINE@json.input@            }, @@@",
+      "@@@STEP_LOG_LINE@json.input@            \"command\": [], @@@",
+      "@@@STEP_LOG_LINE@json.input@            \"containment\": {@@@",
+      "@@@STEP_LOG_LINE@json.input@              \"containment_type\": \"NONE\"@@@",
+      "@@@STEP_LOG_LINE@json.input@            }, @@@",
+      "@@@STEP_LOG_LINE@json.input@            \"dimensions\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@              {@@@",
+      "@@@STEP_LOG_LINE@json.input@                \"key\": \"android_devices\", @@@",
+      "@@@STEP_LOG_LINE@json.input@                \"value\": \"1\"@@@",
+      "@@@STEP_LOG_LINE@json.input@              }, @@@",
+      "@@@STEP_LOG_LINE@json.input@              {@@@",
+      "@@@STEP_LOG_LINE@json.input@                \"key\": \"device_os\", @@@",
+      "@@@STEP_LOG_LINE@json.input@                \"value\": \"MMB29Q\"@@@",
+      "@@@STEP_LOG_LINE@json.input@              }, @@@",
+      "@@@STEP_LOG_LINE@json.input@              {@@@",
+      "@@@STEP_LOG_LINE@json.input@                \"key\": \"device_type\", @@@",
+      "@@@STEP_LOG_LINE@json.input@                \"value\": \"bullhead\"@@@",
+      "@@@STEP_LOG_LINE@json.input@              }, @@@",
+      "@@@STEP_LOG_LINE@json.input@              {@@@",
+      "@@@STEP_LOG_LINE@json.input@                \"key\": \"os\", @@@",
+      "@@@STEP_LOG_LINE@json.input@                \"value\": \"Android\"@@@",
+      "@@@STEP_LOG_LINE@json.input@              }, @@@",
+      "@@@STEP_LOG_LINE@json.input@              {@@@",
+      "@@@STEP_LOG_LINE@json.input@                \"key\": \"pool\", @@@",
+      "@@@STEP_LOG_LINE@json.input@                \"value\": \"chromium.tests\"@@@",
+      "@@@STEP_LOG_LINE@json.input@              }@@@",
+      "@@@STEP_LOG_LINE@json.input@            ], @@@",
+      "@@@STEP_LOG_LINE@json.input@            \"env\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@              {@@@",
+      "@@@STEP_LOG_LINE@json.input@                \"key\": \"ISOLATED_OUTDIR\", @@@",
+      "@@@STEP_LOG_LINE@json.input@                \"value\": \"${ISOLATED_OUTDIR}\"@@@",
+      "@@@STEP_LOG_LINE@json.input@              }@@@",
+      "@@@STEP_LOG_LINE@json.input@            ], @@@",
+      "@@@STEP_LOG_LINE@json.input@            \"env_prefixes\": [], @@@",
+      "@@@STEP_LOG_LINE@json.input@            \"execution_timeout_secs\": \"3600\", @@@",
+      "@@@STEP_LOG_LINE@json.input@            \"grace_period_secs\": \"30\", @@@",
+      "@@@STEP_LOG_LINE@json.input@            \"idempotent\": true, @@@",
+      "@@@STEP_LOG_LINE@json.input@            \"io_timeout_secs\": \"1200\", @@@",
+      "@@@STEP_LOG_LINE@json.input@            \"outputs\": [], @@@",
+      "@@@STEP_LOG_LINE@json.input@            \"relative_cwd\": \"\"@@@",
+      "@@@STEP_LOG_LINE@json.input@          }, @@@",
+      "@@@STEP_LOG_LINE@json.input@          \"wait_for_capacity\": false@@@",
+      "@@@STEP_LOG_LINE@json.input@        }@@@",
+      "@@@STEP_LOG_LINE@json.input@      ]@@@",
+      "@@@STEP_LOG_LINE@json.input@    }@@@",
+      "@@@STEP_LOG_LINE@json.input@  ]@@@",
+      "@@@STEP_LOG_LINE@json.input@}@@@",
+      "@@@STEP_LOG_END@json.input@@@",
+      "@@@STEP_LINK@task UI: rtc_media_unittests/Android/[dummy has/android_arm64_dbg/-1@https://example.swarmingserver.appspot.com/task?id=19@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "rdb",
+      "rpc",
+      "luci.resultdb.v1.Recorder",
+      "UpdateIncludedInvocations",
+      "-include-update-token"
+    ],
+    "cwd": "[CACHE]/builder",
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "resultdb.update_included_invocations (11)",
+    "stdin": "{\"addInvocations\": [\"invocations/19\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@json.input@{@@@",
+      "@@@STEP_LOG_LINE@json.input@  \"addInvocations\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/19\"@@@",
+      "@@@STEP_LOG_LINE@json.input@  ], @@@",
+      "@@@STEP_LOG_LINE@json.input@  \"includingInvocation\": \"invocations/build:8945511751514863184\"@@@",
+      "@@@STEP_LOG_LINE@json.input@}@@@",
+      "@@@STEP_LOG_END@json.input@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
+      "spawn-tasks",
+      "-server",
+      "https://example.swarmingserver.appspot.com",
+      "-json-input",
       "{\"requests\": [{\"name\": \"rtc_stats_unittests/Android/[dummy has/android_arm64_dbg/-1\", \"priority\": \"30\", \"realm\": \"webrtc:try\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:android_arm64_dbg\", \"data:[dummy hash for rtc_stats_unittests/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:rtc_stats_unittests\", \"ninja_target:\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:android_arm64_dbg\", \"stepname:rtc_stats_unittests on Android\", \"test_id_prefix:\", \"test_suite:rtc_stats_unittests\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for rtc_stats_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"MMB29Q\"}, {\"key\": \"device_type\", \"value\": \"bullhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
@@ -4404,10 +4589,10 @@
       "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"name\": \"rtc_stats_unittests/Android/[dummy has/android_arm64_dbg/-1\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"19\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"20\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"resultdb_info\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"invocation\": \"invocations/19\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"invocation\": \"invocations/20\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
@@ -4510,7 +4695,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: rtc_stats_unittests/Android/[dummy has/android_arm64_dbg/-1@https://example.swarmingserver.appspot.com/task?id=19@@@"
+      "@@@STEP_LINK@task UI: rtc_stats_unittests/Android/[dummy has/android_arm64_dbg/-1@https://example.swarmingserver.appspot.com/task?id=20@@@"
     ]
   },
   {
@@ -4535,14 +4720,14 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "resultdb.update_included_invocations (11)",
-    "stdin": "{\"addInvocations\": [\"invocations/19\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
+    "name": "resultdb.update_included_invocations (12)",
+    "stdin": "{\"addInvocations\": [\"invocations/20\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@json.input@{@@@",
       "@@@STEP_LOG_LINE@json.input@  \"addInvocations\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@    \"invocations/19\"@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/20\"@@@",
       "@@@STEP_LOG_LINE@json.input@  ], @@@",
       "@@@STEP_LOG_LINE@json.input@  \"includingInvocation\": \"invocations/build:8945511751514863184\"@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
@@ -4582,10 +4767,10 @@
       "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"name\": \"rtc_unittests/Android/[dummy has/android_arm64_dbg/-1:0:6\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"20\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"21\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"resultdb_info\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"invocation\": \"invocations/20\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"invocation\": \"invocations/21\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
@@ -4696,7 +4881,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: rtc_unittests/Android/[dummy has/android_arm64_dbg/-1:0:6@https://example.swarmingserver.appspot.com/task?id=20@@@"
+      "@@@STEP_LINK@task UI: rtc_unittests/Android/[dummy has/android_arm64_dbg/-1:0:6@https://example.swarmingserver.appspot.com/task?id=21@@@"
     ]
   },
   {
@@ -4732,10 +4917,10 @@
       "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"name\": \"rtc_unittests/Android/[dummy has/android_arm64_dbg/-1:1:6\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"21\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"22\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"resultdb_info\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"invocation\": \"invocations/21\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"invocation\": \"invocations/22\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
@@ -4846,7 +5031,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: rtc_unittests/Android/[dummy has/android_arm64_dbg/-1:1:6@https://example.swarmingserver.appspot.com/task?id=21@@@"
+      "@@@STEP_LINK@task UI: rtc_unittests/Android/[dummy has/android_arm64_dbg/-1:1:6@https://example.swarmingserver.appspot.com/task?id=22@@@"
     ]
   },
   {
@@ -4882,10 +5067,10 @@
       "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"name\": \"rtc_unittests/Android/[dummy has/android_arm64_dbg/-1:2:6\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"22\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"23\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"resultdb_info\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"invocation\": \"invocations/22\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"invocation\": \"invocations/23\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
@@ -4996,7 +5181,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: rtc_unittests/Android/[dummy has/android_arm64_dbg/-1:2:6@https://example.swarmingserver.appspot.com/task?id=22@@@"
+      "@@@STEP_LINK@task UI: rtc_unittests/Android/[dummy has/android_arm64_dbg/-1:2:6@https://example.swarmingserver.appspot.com/task?id=23@@@"
     ]
   },
   {
@@ -5032,10 +5217,10 @@
       "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"name\": \"rtc_unittests/Android/[dummy has/android_arm64_dbg/-1:3:6\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"23\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"24\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"resultdb_info\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"invocation\": \"invocations/23\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"invocation\": \"invocations/24\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
@@ -5146,7 +5331,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: rtc_unittests/Android/[dummy has/android_arm64_dbg/-1:3:6@https://example.swarmingserver.appspot.com/task?id=23@@@"
+      "@@@STEP_LINK@task UI: rtc_unittests/Android/[dummy has/android_arm64_dbg/-1:3:6@https://example.swarmingserver.appspot.com/task?id=24@@@"
     ]
   },
   {
@@ -5182,10 +5367,10 @@
       "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"name\": \"rtc_unittests/Android/[dummy has/android_arm64_dbg/-1:4:6\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"24\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"25\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"resultdb_info\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"invocation\": \"invocations/24\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"invocation\": \"invocations/25\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
@@ -5296,7 +5481,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: rtc_unittests/Android/[dummy has/android_arm64_dbg/-1:4:6@https://example.swarmingserver.appspot.com/task?id=24@@@"
+      "@@@STEP_LINK@task UI: rtc_unittests/Android/[dummy has/android_arm64_dbg/-1:4:6@https://example.swarmingserver.appspot.com/task?id=25@@@"
     ]
   },
   {
@@ -5332,10 +5517,10 @@
       "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"name\": \"rtc_unittests/Android/[dummy has/android_arm64_dbg/-1:5:6\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"25\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"26\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"resultdb_info\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"invocation\": \"invocations/25\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"invocation\": \"invocations/26\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
@@ -5446,7 +5631,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: rtc_unittests/Android/[dummy has/android_arm64_dbg/-1:5:6@https://example.swarmingserver.appspot.com/task?id=25@@@"
+      "@@@STEP_LINK@task UI: rtc_unittests/Android/[dummy has/android_arm64_dbg/-1:5:6@https://example.swarmingserver.appspot.com/task?id=26@@@"
     ]
   },
   {
@@ -5471,19 +5656,19 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "resultdb.update_included_invocations (12)",
-    "stdin": "{\"addInvocations\": [\"invocations/20\", \"invocations/21\", \"invocations/22\", \"invocations/23\", \"invocations/24\", \"invocations/25\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
+    "name": "resultdb.update_included_invocations (13)",
+    "stdin": "{\"addInvocations\": [\"invocations/21\", \"invocations/22\", \"invocations/23\", \"invocations/24\", \"invocations/25\", \"invocations/26\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@json.input@{@@@",
       "@@@STEP_LOG_LINE@json.input@  \"addInvocations\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@    \"invocations/20\", @@@",
       "@@@STEP_LOG_LINE@json.input@    \"invocations/21\", @@@",
       "@@@STEP_LOG_LINE@json.input@    \"invocations/22\", @@@",
       "@@@STEP_LOG_LINE@json.input@    \"invocations/23\", @@@",
       "@@@STEP_LOG_LINE@json.input@    \"invocations/24\", @@@",
-      "@@@STEP_LOG_LINE@json.input@    \"invocations/25\"@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/25\", @@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/26\"@@@",
       "@@@STEP_LOG_LINE@json.input@  ], @@@",
       "@@@STEP_LOG_LINE@json.input@  \"includingInvocation\": \"invocations/build:8945511751514863184\"@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
@@ -5523,10 +5708,10 @@
       "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"name\": \"system_wrappers_unittests/Android/[dummy has/android_arm64_dbg/-1\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"26\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"27\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"resultdb_info\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"invocation\": \"invocations/26\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"invocation\": \"invocations/27\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
@@ -5629,7 +5814,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: system_wrappers_unittests/Android/[dummy has/android_arm64_dbg/-1@https://example.swarmingserver.appspot.com/task?id=26@@@"
+      "@@@STEP_LINK@task UI: system_wrappers_unittests/Android/[dummy has/android_arm64_dbg/-1@https://example.swarmingserver.appspot.com/task?id=27@@@"
     ]
   },
   {
@@ -5654,14 +5839,14 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "resultdb.update_included_invocations (13)",
-    "stdin": "{\"addInvocations\": [\"invocations/26\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
+    "name": "resultdb.update_included_invocations (14)",
+    "stdin": "{\"addInvocations\": [\"invocations/27\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@json.input@{@@@",
       "@@@STEP_LOG_LINE@json.input@  \"addInvocations\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@    \"invocations/26\"@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/27\"@@@",
       "@@@STEP_LOG_LINE@json.input@  ], @@@",
       "@@@STEP_LOG_LINE@json.input@  \"includingInvocation\": \"invocations/build:8945511751514863184\"@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
@@ -5701,10 +5886,10 @@
       "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"name\": \"test_support_unittests/Android/[dummy has/android_arm64_dbg/-1\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"27\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"28\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"resultdb_info\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"invocation\": \"invocations/27\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"invocation\": \"invocations/28\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
@@ -5807,7 +5992,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: test_support_unittests/Android/[dummy has/android_arm64_dbg/-1@https://example.swarmingserver.appspot.com/task?id=27@@@"
+      "@@@STEP_LINK@task UI: test_support_unittests/Android/[dummy has/android_arm64_dbg/-1@https://example.swarmingserver.appspot.com/task?id=28@@@"
     ]
   },
   {
@@ -5832,14 +6017,14 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "resultdb.update_included_invocations (14)",
-    "stdin": "{\"addInvocations\": [\"invocations/27\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
+    "name": "resultdb.update_included_invocations (15)",
+    "stdin": "{\"addInvocations\": [\"invocations/28\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@json.input@{@@@",
       "@@@STEP_LOG_LINE@json.input@  \"addInvocations\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@    \"invocations/27\"@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/28\"@@@",
       "@@@STEP_LOG_LINE@json.input@  ], @@@",
       "@@@STEP_LOG_LINE@json.input@  \"includingInvocation\": \"invocations/build:8945511751514863184\"@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
@@ -5879,10 +6064,10 @@
       "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"name\": \"tools_unittests/Android/[dummy has/android_arm64_dbg/-1\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"28\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"29\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"resultdb_info\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"invocation\": \"invocations/28\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"invocation\": \"invocations/29\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
@@ -5985,7 +6170,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: tools_unittests/Android/[dummy has/android_arm64_dbg/-1@https://example.swarmingserver.appspot.com/task?id=28@@@"
+      "@@@STEP_LINK@task UI: tools_unittests/Android/[dummy has/android_arm64_dbg/-1@https://example.swarmingserver.appspot.com/task?id=29@@@"
     ]
   },
   {
@@ -6010,14 +6195,14 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "resultdb.update_included_invocations (15)",
-    "stdin": "{\"addInvocations\": [\"invocations/28\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
+    "name": "resultdb.update_included_invocations (16)",
+    "stdin": "{\"addInvocations\": [\"invocations/29\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@json.input@{@@@",
       "@@@STEP_LOG_LINE@json.input@  \"addInvocations\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@    \"invocations/28\"@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/29\"@@@",
       "@@@STEP_LOG_LINE@json.input@  ], @@@",
       "@@@STEP_LOG_LINE@json.input@  \"includingInvocation\": \"invocations/build:8945511751514863184\"@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
@@ -6057,10 +6242,10 @@
       "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"name\": \"video_engine_tests/Android/[dummy has/android_arm64_dbg/-1:0:4\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"29\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"30\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"resultdb_info\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"invocation\": \"invocations/29\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"invocation\": \"invocations/30\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
@@ -6171,7 +6356,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: video_engine_tests/Android/[dummy has/android_arm64_dbg/-1:0:4@https://example.swarmingserver.appspot.com/task?id=29@@@"
+      "@@@STEP_LINK@task UI: video_engine_tests/Android/[dummy has/android_arm64_dbg/-1:0:4@https://example.swarmingserver.appspot.com/task?id=30@@@"
     ]
   },
   {
@@ -6207,10 +6392,10 @@
       "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"name\": \"video_engine_tests/Android/[dummy has/android_arm64_dbg/-1:1:4\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"30\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"31\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"resultdb_info\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"invocation\": \"invocations/30\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"invocation\": \"invocations/31\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
@@ -6321,7 +6506,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: video_engine_tests/Android/[dummy has/android_arm64_dbg/-1:1:4@https://example.swarmingserver.appspot.com/task?id=30@@@"
+      "@@@STEP_LINK@task UI: video_engine_tests/Android/[dummy has/android_arm64_dbg/-1:1:4@https://example.swarmingserver.appspot.com/task?id=31@@@"
     ]
   },
   {
@@ -6357,10 +6542,10 @@
       "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"name\": \"video_engine_tests/Android/[dummy has/android_arm64_dbg/-1:2:4\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"31\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"32\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"resultdb_info\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"invocation\": \"invocations/31\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"invocation\": \"invocations/32\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
@@ -6471,7 +6656,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: video_engine_tests/Android/[dummy has/android_arm64_dbg/-1:2:4@https://example.swarmingserver.appspot.com/task?id=31@@@"
+      "@@@STEP_LINK@task UI: video_engine_tests/Android/[dummy has/android_arm64_dbg/-1:2:4@https://example.swarmingserver.appspot.com/task?id=32@@@"
     ]
   },
   {
@@ -6507,10 +6692,10 @@
       "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"name\": \"video_engine_tests/Android/[dummy has/android_arm64_dbg/-1:3:4\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"32\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"33\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"resultdb_info\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"invocation\": \"invocations/32\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"invocation\": \"invocations/33\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
@@ -6621,7 +6806,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: video_engine_tests/Android/[dummy has/android_arm64_dbg/-1:3:4@https://example.swarmingserver.appspot.com/task?id=32@@@"
+      "@@@STEP_LINK@task UI: video_engine_tests/Android/[dummy has/android_arm64_dbg/-1:3:4@https://example.swarmingserver.appspot.com/task?id=33@@@"
     ]
   },
   {
@@ -6646,17 +6831,17 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "resultdb.update_included_invocations (16)",
-    "stdin": "{\"addInvocations\": [\"invocations/29\", \"invocations/30\", \"invocations/31\", \"invocations/32\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
+    "name": "resultdb.update_included_invocations (17)",
+    "stdin": "{\"addInvocations\": [\"invocations/30\", \"invocations/31\", \"invocations/32\", \"invocations/33\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@json.input@{@@@",
       "@@@STEP_LOG_LINE@json.input@  \"addInvocations\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@    \"invocations/29\", @@@",
       "@@@STEP_LOG_LINE@json.input@    \"invocations/30\", @@@",
       "@@@STEP_LOG_LINE@json.input@    \"invocations/31\", @@@",
-      "@@@STEP_LOG_LINE@json.input@    \"invocations/32\"@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/32\", @@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/33\"@@@",
       "@@@STEP_LOG_LINE@json.input@  ], @@@",
       "@@@STEP_LOG_LINE@json.input@  \"includingInvocation\": \"invocations/build:8945511751514863184\"@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
@@ -6696,10 +6881,10 @@
       "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"name\": \"voip_unittests/Android/[dummy has/android_arm64_dbg/-1\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"33\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"34\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"resultdb_info\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"invocation\": \"invocations/33\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"invocation\": \"invocations/34\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
@@ -6802,7 +6987,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: voip_unittests/Android/[dummy has/android_arm64_dbg/-1@https://example.swarmingserver.appspot.com/task?id=33@@@"
+      "@@@STEP_LINK@task UI: voip_unittests/Android/[dummy has/android_arm64_dbg/-1@https://example.swarmingserver.appspot.com/task?id=34@@@"
     ]
   },
   {
@@ -6827,14 +7012,14 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "resultdb.update_included_invocations (17)",
-    "stdin": "{\"addInvocations\": [\"invocations/33\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
+    "name": "resultdb.update_included_invocations (18)",
+    "stdin": "{\"addInvocations\": [\"invocations/34\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@json.input@{@@@",
       "@@@STEP_LOG_LINE@json.input@  \"addInvocations\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@    \"invocations/33\"@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/34\"@@@",
       "@@@STEP_LOG_LINE@json.input@  ], @@@",
       "@@@STEP_LOG_LINE@json.input@  \"includingInvocation\": \"invocations/build:8945511751514863184\"@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
@@ -6874,10 +7059,10 @@
       "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"name\": \"webrtc_nonparallel_tests/Android/[dummy has/android_arm64_dbg/-1\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"34\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"35\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"resultdb_info\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"invocation\": \"invocations/34\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"invocation\": \"invocations/35\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
@@ -6980,7 +7165,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: webrtc_nonparallel_tests/Android/[dummy has/android_arm64_dbg/-1@https://example.swarmingserver.appspot.com/task?id=34@@@"
+      "@@@STEP_LINK@task UI: webrtc_nonparallel_tests/Android/[dummy has/android_arm64_dbg/-1@https://example.swarmingserver.appspot.com/task?id=35@@@"
     ]
   },
   {
@@ -7005,14 +7190,14 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "resultdb.update_included_invocations (18)",
-    "stdin": "{\"addInvocations\": [\"invocations/34\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
+    "name": "resultdb.update_included_invocations (19)",
+    "stdin": "{\"addInvocations\": [\"invocations/35\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@json.input@{@@@",
       "@@@STEP_LOG_LINE@json.input@  \"addInvocations\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@    \"invocations/34\"@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/35\"@@@",
       "@@@STEP_LOG_LINE@json.input@  ], @@@",
       "@@@STEP_LOG_LINE@json.input@  \"includingInvocation\": \"invocations/build:8945511751514863184\"@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
@@ -7052,10 +7237,10 @@
       "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"name\": \"webrtc_perf_tests/Android/[dummy has/android_arm64_dbg/-1\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"35\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"36\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"resultdb_info\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"invocation\": \"invocations/35\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"invocation\": \"invocations/36\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
@@ -7180,7 +7365,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: webrtc_perf_tests/Android/[dummy has/android_arm64_dbg/-1@https://example.swarmingserver.appspot.com/task?id=35@@@"
+      "@@@STEP_LINK@task UI: webrtc_perf_tests/Android/[dummy has/android_arm64_dbg/-1@https://example.swarmingserver.appspot.com/task?id=36@@@"
     ]
   },
   {
@@ -7205,14 +7390,14 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "resultdb.update_included_invocations (19)",
-    "stdin": "{\"addInvocations\": [\"invocations/35\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
+    "name": "resultdb.update_included_invocations (20)",
+    "stdin": "{\"addInvocations\": [\"invocations/36\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@json.input@{@@@",
       "@@@STEP_LOG_LINE@json.input@  \"addInvocations\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@    \"invocations/35\"@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/36\"@@@",
       "@@@STEP_LOG_LINE@json.input@  ], @@@",
       "@@@STEP_LOG_LINE@json.input@  \"includingInvocation\": \"invocations/build:8945511751514863184\"@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
@@ -8477,7 +8662,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "rtc_stats_unittests on Android",
+    "name": "rtc_media_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -8554,7 +8739,103 @@
       "all",
       "-verbose",
       "-requests-json",
-      "{\"tasks\": [{\"task_id\": \"20\"}, {\"task_id\": \"21\"}, {\"task_id\": \"22\"}, {\"task_id\": \"23\"}, {\"task_id\": \"24\"}, {\"task_id\": \"25\"}]}"
+      "{\"tasks\": [{\"task_id\": \"20\"}]}"
+    ],
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
+      ]
+    },
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "rtc_stats_unittests on Android",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"bot_id\": \"vm30\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"cas_output_root\": {@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"cas_instance\": \"projects/example-project/instances/default_instance\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"digest\": {@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@          \"hash\": \"24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@          \"size_bytes\": 73@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        }@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      }, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"duration\": 31.5, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"exit_code\": 0, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"failure\": false, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"internal_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"modified_ts\": \"2014-09-25 01:42:00\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"name\": \"heartbeat-canary-2014-09-25_01:41:55-os=Windows\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"output\": \"Heart beat succeeded on win32.\\nFoo\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"resultdb_info\": {@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"invocation\": \"invocations/some-inv-name\"@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      }, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"started_ts\": \"2014-09-25T01:42:11.123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"state\": \"COMPLETED\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"task_id\": \"148aa78d7aa0000\"@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@    }@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
+      "@@@STEP_LOG_END@chromium_swarming.summary@@@",
+      "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
+      "@@@STEP_LOG_END@Merge script log@@@",
+      "@@@STEP_LINK@shard #0 test results@https://luci-milo.appspot.com/ui/inv/some-inv-name/test-results@@@",
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=20@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
+      "--verbose",
+      "-o",
+      "/path/to/tmp/json",
+      "--task-output-dir",
+      "[CLEANUP]/tmp_tmp_13",
+      "--merge-script",
+      "RECIPE_MODULE[build::chromium_swarming]/resources/noop_merge.py",
+      "--merge-script-stdout-file",
+      "/path/to/tmp/merge_script_log",
+      "--merge-additional-args",
+      "[]",
+      "--summary-json-file",
+      "/path/to/tmp/json",
+      "--allow-missing-json",
+      "--",
+      "swarming",
+      "collect",
+      "-server",
+      "https://example.swarmingserver.appspot.com",
+      "-worker",
+      "50",
+      "-task-summary-python",
+      "-task-output-stdout",
+      "all",
+      "-verbose",
+      "-requests-json",
+      "{\"tasks\": [{\"task_id\": \"21\"}, {\"task_id\": \"22\"}, {\"task_id\": \"23\"}, {\"task_id\": \"24\"}, {\"task_id\": \"25\"}, {\"task_id\": \"26\"}]}"
     ],
     "env_prefixes": {
       "PATH": [
@@ -8736,113 +9017,17 @@
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 test results@https://luci-milo.appspot.com/ui/inv/some-inv-name/test-results@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=20@@@",
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=21@@@",
       "@@@STEP_LINK@shard #1 test results@https://luci-milo.appspot.com/ui/inv/some-inv-name/test-results@@@",
-      "@@@STEP_LINK@shard #1 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=21@@@",
+      "@@@STEP_LINK@shard #1 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=22@@@",
       "@@@STEP_LINK@shard #2 test results@https://luci-milo.appspot.com/ui/inv/some-inv-name/test-results@@@",
-      "@@@STEP_LINK@shard #2 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=22@@@",
+      "@@@STEP_LINK@shard #2 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=23@@@",
       "@@@STEP_LINK@shard #3 test results@https://luci-milo.appspot.com/ui/inv/some-inv-name/test-results@@@",
-      "@@@STEP_LINK@shard #3 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=23@@@",
+      "@@@STEP_LINK@shard #3 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=24@@@",
       "@@@STEP_LINK@shard #4 test results@https://luci-milo.appspot.com/ui/inv/some-inv-name/test-results@@@",
-      "@@@STEP_LINK@shard #4 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=24@@@",
+      "@@@STEP_LINK@shard #4 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=25@@@",
       "@@@STEP_LINK@shard #5 test results@https://luci-milo.appspot.com/ui/inv/some-inv-name/test-results@@@",
-      "@@@STEP_LINK@shard #5 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=25@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
-      "--verbose",
-      "-o",
-      "/path/to/tmp/json",
-      "--task-output-dir",
-      "[CLEANUP]/tmp_tmp_13",
-      "--merge-script",
-      "RECIPE_MODULE[build::chromium_swarming]/resources/noop_merge.py",
-      "--merge-script-stdout-file",
-      "/path/to/tmp/merge_script_log",
-      "--merge-additional-args",
-      "[]",
-      "--summary-json-file",
-      "/path/to/tmp/json",
-      "--allow-missing-json",
-      "--",
-      "swarming",
-      "collect",
-      "-server",
-      "https://example.swarmingserver.appspot.com",
-      "-worker",
-      "50",
-      "-task-summary-python",
-      "-task-output-stdout",
-      "all",
-      "-verbose",
-      "-requests-json",
-      "{\"tasks\": [{\"task_id\": \"26\"}]}"
-    ],
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
-      ]
-    },
-    "luci_context": {
-      "realm": {
-        "name": "webrtc:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "system_wrappers_unittests on Android",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"bot_id\": \"vm30\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"cas_output_root\": {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"cas_instance\": \"projects/example-project/instances/default_instance\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"digest\": {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@          \"hash\": \"24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@          \"size_bytes\": 73@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@        }@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      }, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"duration\": 31.5, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"exit_code\": 0, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"failure\": false, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"internal_failure\": false, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"modified_ts\": \"2014-09-25 01:42:00\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"name\": \"heartbeat-canary-2014-09-25_01:41:55-os=Windows\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"output\": \"Heart beat succeeded on win32.\\nFoo\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"resultdb_info\": {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"invocation\": \"invocations/some-inv-name\"@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      }, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"started_ts\": \"2014-09-25T01:42:11.123\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"state\": \"COMPLETED\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"task_id\": \"148aa78d7aa0000\"@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@    }@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
-      "@@@STEP_LOG_END@chromium_swarming.summary@@@",
-      "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
-      "@@@STEP_LOG_END@Merge script log@@@",
-      "@@@STEP_LINK@shard #0 test results@https://luci-milo.appspot.com/ui/inv/some-inv-name/test-results@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=26@@@"
+      "@@@STEP_LINK@shard #5 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=26@@@"
     ]
   },
   {
@@ -8900,7 +9085,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "test_support_unittests on Android",
+    "name": "system_wrappers_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -8996,7 +9181,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "tools_unittests on Android",
+    "name": "test_support_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -9073,7 +9258,103 @@
       "all",
       "-verbose",
       "-requests-json",
-      "{\"tasks\": [{\"task_id\": \"29\"}, {\"task_id\": \"30\"}, {\"task_id\": \"31\"}, {\"task_id\": \"32\"}]}"
+      "{\"tasks\": [{\"task_id\": \"29\"}]}"
+    ],
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
+      ]
+    },
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "tools_unittests on Android",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"bot_id\": \"vm30\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"cas_output_root\": {@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"cas_instance\": \"projects/example-project/instances/default_instance\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"digest\": {@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@          \"hash\": \"24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@          \"size_bytes\": 73@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        }@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      }, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"duration\": 31.5, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"exit_code\": 0, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"failure\": false, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"internal_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"modified_ts\": \"2014-09-25 01:42:00\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"name\": \"heartbeat-canary-2014-09-25_01:41:55-os=Windows\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"output\": \"Heart beat succeeded on win32.\\nFoo\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"resultdb_info\": {@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"invocation\": \"invocations/some-inv-name\"@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      }, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"started_ts\": \"2014-09-25T01:42:11.123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"state\": \"COMPLETED\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"task_id\": \"148aa78d7aa0000\"@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@    }@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
+      "@@@STEP_LOG_END@chromium_swarming.summary@@@",
+      "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
+      "@@@STEP_LOG_END@Merge script log@@@",
+      "@@@STEP_LINK@shard #0 test results@https://luci-milo.appspot.com/ui/inv/some-inv-name/test-results@@@",
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=29@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
+      "--verbose",
+      "-o",
+      "/path/to/tmp/json",
+      "--task-output-dir",
+      "[CLEANUP]/tmp_tmp_17",
+      "--merge-script",
+      "RECIPE_MODULE[build::chromium_swarming]/resources/noop_merge.py",
+      "--merge-script-stdout-file",
+      "/path/to/tmp/merge_script_log",
+      "--merge-additional-args",
+      "[]",
+      "--summary-json-file",
+      "/path/to/tmp/json",
+      "--allow-missing-json",
+      "--",
+      "swarming",
+      "collect",
+      "-server",
+      "https://example.swarmingserver.appspot.com",
+      "-worker",
+      "50",
+      "-task-summary-python",
+      "-task-output-stdout",
+      "all",
+      "-verbose",
+      "-requests-json",
+      "{\"tasks\": [{\"task_id\": \"30\"}, {\"task_id\": \"31\"}, {\"task_id\": \"32\"}, {\"task_id\": \"33\"}]}"
     ],
     "env_prefixes": {
       "PATH": [
@@ -9205,109 +9486,13 @@
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 test results@https://luci-milo.appspot.com/ui/inv/some-inv-name/test-results@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=29@@@",
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=30@@@",
       "@@@STEP_LINK@shard #1 test results@https://luci-milo.appspot.com/ui/inv/some-inv-name/test-results@@@",
-      "@@@STEP_LINK@shard #1 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=30@@@",
+      "@@@STEP_LINK@shard #1 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=31@@@",
       "@@@STEP_LINK@shard #2 test results@https://luci-milo.appspot.com/ui/inv/some-inv-name/test-results@@@",
-      "@@@STEP_LINK@shard #2 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=31@@@",
+      "@@@STEP_LINK@shard #2 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=32@@@",
       "@@@STEP_LINK@shard #3 test results@https://luci-milo.appspot.com/ui/inv/some-inv-name/test-results@@@",
-      "@@@STEP_LINK@shard #3 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=32@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
-      "--verbose",
-      "-o",
-      "/path/to/tmp/json",
-      "--task-output-dir",
-      "[CLEANUP]/tmp_tmp_17",
-      "--merge-script",
-      "RECIPE_MODULE[build::chromium_swarming]/resources/noop_merge.py",
-      "--merge-script-stdout-file",
-      "/path/to/tmp/merge_script_log",
-      "--merge-additional-args",
-      "[]",
-      "--summary-json-file",
-      "/path/to/tmp/json",
-      "--allow-missing-json",
-      "--",
-      "swarming",
-      "collect",
-      "-server",
-      "https://example.swarmingserver.appspot.com",
-      "-worker",
-      "50",
-      "-task-summary-python",
-      "-task-output-stdout",
-      "all",
-      "-verbose",
-      "-requests-json",
-      "{\"tasks\": [{\"task_id\": \"33\"}]}"
-    ],
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
-      ]
-    },
-    "luci_context": {
-      "realm": {
-        "name": "webrtc:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "voip_unittests on Android",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"bot_id\": \"vm30\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"cas_output_root\": {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"cas_instance\": \"projects/example-project/instances/default_instance\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"digest\": {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@          \"hash\": \"24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@          \"size_bytes\": 73@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@        }@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      }, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"duration\": 31.5, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"exit_code\": 0, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"failure\": false, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"internal_failure\": false, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"modified_ts\": \"2014-09-25 01:42:00\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"name\": \"heartbeat-canary-2014-09-25_01:41:55-os=Windows\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"output\": \"Heart beat succeeded on win32.\\nFoo\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"resultdb_info\": {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"invocation\": \"invocations/some-inv-name\"@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      }, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"started_ts\": \"2014-09-25T01:42:11.123\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"state\": \"COMPLETED\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"task_id\": \"148aa78d7aa0000\"@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@    }@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
-      "@@@STEP_LOG_END@chromium_swarming.summary@@@",
-      "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
-      "@@@STEP_LOG_END@Merge script log@@@",
-      "@@@STEP_LINK@shard #0 test results@https://luci-milo.appspot.com/ui/inv/some-inv-name/test-results@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=33@@@"
+      "@@@STEP_LINK@shard #3 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=33@@@"
     ]
   },
   {
@@ -9365,7 +9550,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "webrtc_nonparallel_tests on Android",
+    "name": "voip_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -9404,6 +9589,102 @@
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 test results@https://luci-milo.appspot.com/ui/inv/some-inv-name/test-results@@@",
       "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=34@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
+      "--verbose",
+      "-o",
+      "/path/to/tmp/json",
+      "--task-output-dir",
+      "[CLEANUP]/tmp_tmp_19",
+      "--merge-script",
+      "RECIPE_MODULE[build::chromium_swarming]/resources/noop_merge.py",
+      "--merge-script-stdout-file",
+      "/path/to/tmp/merge_script_log",
+      "--merge-additional-args",
+      "[]",
+      "--summary-json-file",
+      "/path/to/tmp/json",
+      "--allow-missing-json",
+      "--",
+      "swarming",
+      "collect",
+      "-server",
+      "https://example.swarmingserver.appspot.com",
+      "-worker",
+      "50",
+      "-task-summary-python",
+      "-task-output-stdout",
+      "all",
+      "-verbose",
+      "-requests-json",
+      "{\"tasks\": [{\"task_id\": \"35\"}]}"
+    ],
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
+      ]
+    },
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "webrtc_nonparallel_tests on Android",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"bot_id\": \"vm30\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"cas_output_root\": {@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"cas_instance\": \"projects/example-project/instances/default_instance\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"digest\": {@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@          \"hash\": \"24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@          \"size_bytes\": 73@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        }@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      }, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"duration\": 31.5, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"exit_code\": 0, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"failure\": false, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"internal_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"modified_ts\": \"2014-09-25 01:42:00\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"name\": \"heartbeat-canary-2014-09-25_01:41:55-os=Windows\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"output\": \"Heart beat succeeded on win32.\\nFoo\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"resultdb_info\": {@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"invocation\": \"invocations/some-inv-name\"@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      }, @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"started_ts\": \"2014-09-25T01:42:11.123\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"state\": \"COMPLETED\", @@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"task_id\": \"148aa78d7aa0000\"@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@    }@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
+      "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
+      "@@@STEP_LOG_END@chromium_swarming.summary@@@",
+      "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
+      "@@@STEP_LOG_END@Merge script log@@@",
+      "@@@STEP_LINK@shard #0 test results@https://luci-milo.appspot.com/ui/inv/some-inv-name/test-results@@@",
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=35@@@"
     ]
   },
   {
@@ -9590,7 +9871,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[CLEANUP]/tmp_tmp_21",
+      "[CLEANUP]/tmp_tmp_22",
       "--merge-script",
       "RECIPE_MODULE[build::chromium_swarming]/resources/noop_merge.py",
       "--merge-script-stdout-file",
@@ -9612,7 +9893,7 @@
       "all",
       "-verbose",
       "-requests-json",
-      "{\"tasks\": [{\"task_id\": \"35\"}]}"
+      "{\"tasks\": [{\"task_id\": \"36\"}]}"
     ],
     "env_prefixes": {
       "PATH": [
@@ -9669,7 +9950,7 @@
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 test results@https://luci-milo.appspot.com/ui/inv/some-inv-name/test-results@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=35@@@"
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=36@@@"
     ]
   },
   {
