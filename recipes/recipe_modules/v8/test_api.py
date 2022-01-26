@@ -345,7 +345,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       'a1': 'gs://chromium-v8/v8-linux64-dbg/full-build-linux_a1.zip',
       'a3': 'gs://chromium-v8/v8-linux64-dbg/full-build-linux_a3.zip',
     }
-    return self.m.raw_io.stream_output(
+    return self.m.raw_io.stream_output_text(
         available_builds.get(revision, ''),
         stream='stdout',
     )
@@ -447,7 +447,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     suffix = ' (%d)' % count if count > 1 else ''
     return self.override_step_data(
         '%sCheck %s version file%s' % (prefix, desc, suffix),
-        self.m.raw_io.stream_output(
+        self.m.raw_io.stream_output_text(
             VERSION_FILE_TMPL % patch_level,
             stream='stdout'),
     )
@@ -622,7 +622,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
         for rx, fields in keep_fields_spec:
           if re.match(rx, name):
             to_ret[name] = {
-              k: v for k, v in step.to_step_dict().iteritems()
+              k: v for k, v in step.to_step_dict().items()
               if k in fields or k == 'name'
             }
             break

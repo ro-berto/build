@@ -8,7 +8,7 @@ from recipe_engine.post_process import (
     ResultReasonRE, StatusException, StatusFailure, StepException)
 from recipe_engine.recipe_api import Property
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
   'archive',
@@ -1017,7 +1017,8 @@ def GenTests(api):
         enable_swarming=False,
     ) +
     api.step_data(
-        'build.lookup GN args', api.raw_io.stream_output(fake_gn_args_x64)) +
+        'build.lookup GN args',
+        api.raw_io.stream_output_text(fake_gn_args_x64)) +
     api.v8.test_spec_in_checkout(
         'V8 Foobar',
         '{"tests": [{"name": "v8testing"}]}') +
@@ -1041,7 +1042,7 @@ def GenTests(api):
       coverage='gcov',
       enable_swarming=False,
   ) + api.step_data('build.lookup GN args',
-                    api.raw_io.stream_output(fake_gn_args_x64)) +
+                    api.raw_io.stream_output_text(fake_gn_args_x64)) +
          api.v8.test_spec_in_checkout('v8_foobar',
                                       '{"tests": [{"name": "v8testing"}]}') +
          api.post_process(MustRun, 'initialization.clobber') +
@@ -1085,7 +1086,7 @@ def GenTests(api):
       use_goma=False,
       use_remoteexec=True,
   ) + api.step_data('build.lookup GN args',
-                    api.raw_io.stream_output(fake_gn_args_x64_reclient)) +
+                    api.raw_io.stream_output_text(fake_gn_args_x64_reclient)) +
          api.post_process(DropExpectation))
 
   def check_gs_url_equals(check, steps, expected):

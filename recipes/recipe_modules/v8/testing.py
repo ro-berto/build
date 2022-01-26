@@ -6,7 +6,12 @@ import contextlib
 import itertools
 import json
 import six
-import urllib
+
+# TODO(https://crbug.com/1256445): Remove after migration.
+if six.PY2:
+  from urllib import quote
+else:
+  from urllib.parse import quote
 
 from RECIPE_MODULES.build import chromium_swarming
 from recipe_engine.engine_types import freeze
@@ -357,7 +362,7 @@ class V8Test(BaseTest):
     for failure in failures[:MAX_BUG_LINKS]:
       ui_label = self.api.v8.ui_test_label(failure.name)
       link_params = failure.get_monorail_params(
-          urllib.quote(self.api.buildbucket.build_url()))
+          quote(self.api.buildbucket.build_url()))
 
       presentation.links['%s (bugs)' % ui_label] = (
           MONORAIL_SEARCH_BUGS_TEMPLATE % link_params)
@@ -867,7 +872,7 @@ class Failure(object):
     }
     return 'bb add v8/try.triggered/v8_flako %s' % ' '.join(
         '-p \'%s=%s\'' % (k, json.dumps(v, sort_keys=True))
-        for k, v in sorted(properties.iteritems()))
+        for k, v in sorted(properties.items()))
 
   def log_lines(self):
     """Return a list of lines for logging all runs of this failure."""

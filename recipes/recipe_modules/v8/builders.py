@@ -187,7 +187,7 @@ class TestSpec(object):
     Returns: List of strings.
     """
     log = []
-    for builder, builder_spec in sorted(self._test_spec.iteritems()):
+    for builder, builder_spec in sorted(self._test_spec.items()):
       log.append(builder)
       for test in builder_spec['tests']:
         log.append('  ' + str(test))
