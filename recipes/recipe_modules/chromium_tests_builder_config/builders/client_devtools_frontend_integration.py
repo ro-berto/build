@@ -12,16 +12,18 @@ def _client_devtools_frontend_integration_spec(**kwargs):
       **kwargs)
 
 
+_common_config = _client_devtools_frontend_integration_spec(
+    chromium_config='chromium',
+    chromium_apply_config=['mb'],
+    gclient_config='chromium',
+    chromium_config_kwargs={
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+    },
+    simulation_platform='linux',
+)
+
 SPEC = {
-    'DevTools Linux':
-        _client_devtools_frontend_integration_spec(
-            chromium_config='chromium',
-            chromium_apply_config=['mb'],
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            simulation_platform='linux',
-        ),
+    'DevTools Linux': _common_config,
+    'DevTools Linux Fastbuild': _common_config,
 }
