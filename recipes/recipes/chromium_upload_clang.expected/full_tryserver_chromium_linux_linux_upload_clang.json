@@ -428,6 +428,33 @@
     "name": "package clang"
   },
   {
+    "cmd": [
+      "python3",
+      "[CACHE]/builder/src/tools/rust/build.py"
+    ],
+    "env_suffixes": {
+      "DEPOT_TOOLS_UPDATE": [
+        "0"
+      ],
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "luci_context": {
+      "realm": {
+        "name": "chromium:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "build rust"
+  },
+  {
     "name": "$result"
   }
 ]

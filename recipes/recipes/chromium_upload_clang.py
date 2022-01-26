@@ -96,6 +96,12 @@ def RunSteps(api):
                                                'package.py')
       ] + args)
 
+      # Rust build errors intentionally do not fail the bot.
+      api.step(
+          'build rust',
+          ['python3', api.path['checkout'].join('tools', 'rust', 'build.py')],
+          raise_on_failure=False)
+
 
 def GenTests(api):
   for test in api.chromium.gen_tests_for_builders(BUILDERS):
@@ -108,6 +114,8 @@ def GenTests(api):
           builder_group='tryserver.chromium.mac', builder='mac_upload_clang'),
       api.post_process(post_process.MustRun, 'install xcode'),
       api.post_process(post_process.MustRun, 'select XCode'),
+      api.post_process(post_process.MustRun, 'build rust'),
+      api.post_process(post_process.StepSuccess, 'build rust'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -118,6 +126,20 @@ def GenTests(api):
       api.chromium.try_build(
           builder_group='tryserver.chromium.linux',
           builder='linux_upload_clang'),
+      api.post_process(post_process.MustRun, 'build rust'),
+      api.post_process(post_process.StepSuccess, 'build rust'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'rust failure does not fail build',
+      api.platform.name('linux'),
+      api.chromium.try_build(
+          builder_group='tryserver.chromium.linux',
+          builder='linux_upload_clang'),
+      api.step_data('build rust', retcode=1),
+      api.post_process(post_process.StepFailure, 'build rust'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
