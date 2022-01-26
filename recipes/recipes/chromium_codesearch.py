@@ -122,7 +122,6 @@ SPEC = freeze({
                 'gpu_unittests',
                 'interactive_ui_tests',
                 'ipc_tests',
-                'jingle_unittests',
                 'media_unittests',
                 'message_center_unittests',
                 'nacl_loader_unittests',
