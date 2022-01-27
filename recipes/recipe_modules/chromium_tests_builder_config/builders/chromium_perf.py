@@ -7,6 +7,7 @@ from .. import builder_spec
 from RECIPE_MODULES.build.chromium import CONFIG_CTX as CHROMIUM_CONFIG_CTX
 
 SPEC = {}
+LEGACY_SPEC = {}
 
 
 @CHROMIUM_CONFIG_CTX(includes=[
@@ -285,6 +286,7 @@ _AddIsolatedTestSpec('mac-laptop_high_end-processor-perf', 'mac',
 
 # Deprecated in perf waterfall. Needed for pinpoint when running Chrome
 # Health on old commits.
-_AddIsolatedTestSpec('mac-10_12_laptop_low_end-perf', 'mac', 'mac-builder-perf')
-_AddIsolatedTestSpec('mac-10_13_laptop_high_end-perf', 'mac',
-                     'mac-builder-perf')
+LEGACY_SPEC['mac-10_12_laptop_low_end-perf'] = TestSpec('chromium_perf', 'mac',
+                                                        64, 'mac-builder-perf')
+LEGACY_SPEC['mac-10_13_laptop_high_end-perf'] = TestSpec(
+    'chromium_perf', 'mac', 64, 'mac-builder-perf')
