@@ -137,7 +137,7 @@ SPEC = {
             android_config='x64_builder_mb',
             simulation_platform='linux',
         ),
-    'android-web-platform-pie-x86-fyi-rel':
+    'android-chrome-pie-x86-wpt-fyi-rel':
         _chromium_android_fyi_spec(
             chromium_config='android',
             chromium_apply_config=['mb'],
