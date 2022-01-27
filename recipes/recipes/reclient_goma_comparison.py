@@ -30,7 +30,7 @@ DEPS = [
 ]
 
 COMPARISON_BUILDERS = freeze({
-    'Comparison Linux': {
+    'Comparison Linux (reclient)': {
         'chromium_config': 'chromium',
         'gclient_config': 'chromium',
         'chromium_apply_config': [
@@ -40,7 +40,7 @@ COMPARISON_BUILDERS = freeze({
         'platform': 'linux',
         'targets': ['all'],
     },
-    'Comparison Windows': {
+    'Comparison Windows (reclient)': {
         'chromium_config': 'chromium',
         'gclient_config': 'chromium',
         'chromium_apply_config': [
@@ -141,9 +141,11 @@ def GenTests(api):
   yield api.test(
       'first_build_compile_fail',
       api.chromium.ci_build(
-          builder_group=builder_group, builder='Comparison Linux'),
-      api.properties(buildername='Comparison Linux', buildnumber=571),
-      api.platform(COMPARISON_BUILDERS['Comparison Linux']['platform'], 64),
+          builder_group=builder_group, builder='Comparison Linux (reclient)'),
+      api.properties(
+          buildername='Comparison Linux (reclient)', buildnumber=571),
+      api.platform(
+          COMPARISON_BUILDERS['Comparison Linux (reclient)']['platform'], 64),
       api.properties(configuration='Release'),
       api.step_data('Goma build', retcode=1),
       api.post_process(post_process.StatusFailure),
@@ -153,9 +155,11 @@ def GenTests(api):
   yield api.test(
       'second_build_compile_fail',
       api.chromium.ci_build(
-          builder_group=builder_group, builder='Comparison Linux'),
-      api.properties(buildername='Comparison Linux', buildnumber=571),
-      api.platform(COMPARISON_BUILDERS['Comparison Linux']['platform'], 64),
+          builder_group=builder_group, builder='Comparison Linux (reclient)'),
+      api.properties(
+          buildername='Comparison Linux (reclient)', buildnumber=571),
+      api.platform(
+          COMPARISON_BUILDERS['Comparison Linux (reclient)']['platform'], 64),
       api.properties(configuration='Release'),
       api.step_data('Reclient build', retcode=1),
       api.post_process(post_process.StatusFailure),
