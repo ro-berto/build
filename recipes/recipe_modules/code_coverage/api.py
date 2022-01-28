@@ -123,6 +123,9 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     return (self.use_clang_coverage or self.use_java_coverage or
             self.use_javascript_coverage)
 
+  def set_is_per_cl_coverage(self, value):
+    self._is_per_cl_coverage = value
+
   def get_required_build_output_files(self, tests):
     """Get required build output files necessary to run code coverage
 
@@ -266,7 +269,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     """Filters source files with valid extensions.
 
     Args:
-      file_paths: A list of file paths relative to the checkout path.
+      file_paths: A list of string file paths relative to the checkout path.
       extensions: A list of extensions to filter source files.
 
     Returns:
@@ -278,6 +281,24 @@ class CodeCoverageApi(recipe_api.RecipeApi):
         source_files.append(file_path)
 
     return source_files
+
+  def filter_and_set_affected_source_files(self, affected_files):
+    """Filter affected_files and assigns them to self._affected_source_files
+
+    Args:
+      affected_files: A list of string file paths relative to the checkout path
+
+    Returns: None
+    """
+    if self.use_clang_coverage:
+      self._affected_source_files = self._filter_source_file(
+          affected_files, constants.TOOLS_TO_EXTENSIONS_MAP['clang'])
+    elif self.use_java_coverage:
+      self._affected_source_files = self._filter_source_file(
+          affected_files, constants.TOOLS_TO_EXTENSIONS_MAP['jacoco'])
+    if self.use_javascript_coverage:
+      self._affected_javascript_source_files = self._filter_source_file(
+          affected_files, constants.TOOLS_TO_EXTENSIONS_MAP['v8'])
 
   def _validate_test_types(self):
     """Validates that test type to process in build is supported."""
@@ -329,17 +350,9 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     if not output_dir:
       output_dir = self.m.chromium.output_dir
 
-    self._is_per_cl_coverage = True
+    self.set_is_per_cl_coverage(True)
 
-    if self.use_clang_coverage:
-      self._affected_source_files = self._filter_source_file(
-          affected_files, constants.TOOLS_TO_EXTENSIONS_MAP['clang'])
-    elif self.use_java_coverage:
-      self._affected_source_files = self._filter_source_file(
-          affected_files, constants.TOOLS_TO_EXTENSIONS_MAP['jacoco'])
-    if self.use_javascript_coverage:
-      self._affected_javascript_source_files = self._filter_source_file(
-          affected_files, constants.TOOLS_TO_EXTENSIONS_MAP['v8'])
+    self.filter_and_set_affected_source_files(affected_files)
 
     self.m.file.ensure_directory('create .code-coverage',
                                  self.m.path['checkout'].join('.code-coverage'))
