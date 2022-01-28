@@ -489,6 +489,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
            parent_buildername=None,
            parent_bot_config=None,
            git_ref='refs/heads/main',
+           experiments=None,
            **kwargs):
     """Convenience method to generate test data for V8 recipe runs.
 
@@ -577,6 +578,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
               user_agent='cq',
               buildset='patch/gerrit/chromium-review.googlesource.com/456789/12'
           ),
+          experiments=experiments,
       )
     else:
       test += self.m.buildbucket.ci_build(
@@ -591,6 +593,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
               buildset='commit/gitiles/chromium.googlesource.com/v8/v8/+/'
                        'deadbeefdeadbeefdeadbeefdeadbeefdeadbeef'
           ),
+          experiments=experiments,
       )
 
     # If use_goma is provided (not None), check if relevant steps either are

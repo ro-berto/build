@@ -229,7 +229,7 @@ class BaseTest(object):
     """Identifier for deduping identical test configs."""
     return self.test_step_config.name + self.test_step_config.step_name_suffix
 
-  def create_task(self, test, **kwargs):
+  def create_task(self, test, raw_cmd, **kwargs):
     isolated_target = test.get('isolated_target')
     if not isolated_target:
       # Normally we run only one test and the isolate name is the same as the
@@ -241,7 +241,16 @@ class BaseTest(object):
     assert cas_digest
     assert '/' in cas_digest
 
-    return self.api.chromium_swarming.task(cas_input_root=cas_digest, **kwargs)
+    if raw_cmd[0].endswith('.py'):
+      if ("v8.scripts.use_python3"
+          in self.api.buildbucket.build.input.experiments):
+        exe = 'python3'
+      else:
+        exe = 'python'
+      raw_cmd = [exe, '-u'] + raw_cmd
+
+    return self.api.chromium_swarming.task(
+        cas_input_root=cas_digest, raw_cmd=raw_cmd, **kwargs)
 
   @property
   def uses_swarming(self):

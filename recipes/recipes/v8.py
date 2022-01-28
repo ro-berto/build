@@ -426,6 +426,17 @@ def GenTests(api):
     api.post_process(DropExpectation)
   )
 
+  yield (
+    api.v8.test(
+        'client.v8',
+        'V8 Foobar',
+        'python3',
+        experiments=['v8.scripts.use_python3'],
+    ) +
+    api.v8.test_spec_in_checkout('V8 Foobar', test_spec) +
+    api.post_process(Filter('trigger tests.[trigger] Check'))
+  )
+
   # Test flako command line with interesting data.
   win_bot_config = {
     'testing': {
