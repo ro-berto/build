@@ -51,16 +51,3 @@ def node_ci(c):
 
   # Default to node-ci-centric revisions in UI.
   c.got_revision_reverse_mapping['got_revision'] = 'node-ci'
-
-
-@CONFIG_CTX()
-def node_js(c):
-  soln = c.solutions.add()
-  soln.name = 'node.js'
-  soln.url = ChromiumGitURL(c, 'external', 'github.com', 'v8', 'node')
-  soln.revision = 'vee-eight-lkgr'
-  c.got_revision_reverse_mapping['got_node_js_revision'] = soln.name
-
-  # Specify node-build for side-by-side V8 and node solutions.
-  c.solutions[0].custom_vars['build_for_node'] = 'True'
-  soln.custom_vars['build_for_node'] = 'True'

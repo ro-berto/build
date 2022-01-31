@@ -1,8 +1,0 @@
-[
-  {
-    "failure": {
-      "humanReason": "A ref for release branch must be specified."
-    },
-    "name": "$result"
-  }
-]

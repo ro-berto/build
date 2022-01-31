@@ -68,12 +68,6 @@ class V8Version(object):
     self.build = build
     self.patch = patch
 
-  def __eq__(self, other):
-    return (self.major == other.major and
-            self.minor == other.minor and
-            self.build == other.build and
-            self.patch == other.patch)
-
   def __str__(self):
     patch_str = '.%s' % self.patch if self.patch and self.patch != '0' else ''
     return '%s.%s.%s%s' % (self.major, self.minor, self.build, patch_str)
