@@ -4,7 +4,7 @@
 
 """Recipe for building and running tests for Open Screen stand-alone."""
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'code_coverage',
@@ -17,6 +17,7 @@ DEPS = [
     'depot_tools/tryserver',
     'goma',
     'profiles',
+    'py3_migration',
     'recipe_engine/buildbucket',
     'recipe_engine/context',
     'recipe_engine/file',
@@ -310,13 +311,15 @@ def SetCodeCoverageConstants(api, checkout_path, host_tool_label):
   api.code_coverage._include_component_mapping = False
 
   exists = {
-      p: api.path.exists(p) for p in [
+      str(p): api.path.exists(p) for p in [
           api.profiles.llvm_profdata_exec, api.code_coverage.cov_executable,
           merge_libs_dir
       ]
   }
   if not all(exists.values()):
-    result = ''.join('\nhas {}: {}'.format(p, e) for (p, e) in exists.items())
+    result = ''.join(
+        '\nhas {}: {}'.format(p, e)
+        for (p, e) in api.py3_migration.consistent_ordering(exists.items()))
     api.step.empty(
         'code coverage executable dependencies missing!',
         status=api.step.INFRA_FAILURE,
