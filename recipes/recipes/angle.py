@@ -6,7 +6,7 @@ from RECIPE_MODULES.build.chromium_tests_builder_config import (builder_db,
                                                                 builder_spec,
                                                                 try_spec)
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'angle',
