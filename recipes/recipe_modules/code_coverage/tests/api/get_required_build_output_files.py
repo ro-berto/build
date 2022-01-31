@@ -9,7 +9,7 @@ from RECIPE_MODULES.build import chromium_swarming
 from RECIPE_MODULES.build.chromium_tests import steps
 from RECIPE_MODULES.build.code_coverage import constants
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'chromium',
