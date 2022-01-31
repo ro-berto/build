@@ -35,7 +35,6 @@
       "@@@STEP_LOG_LINE@config@  \"cache_dir\": \"[CACHE]\\\\git\", @@@",
       "@@@STEP_LOG_LINE@config@  \"delete_unversioned_trees\": true, @@@",
       "@@@STEP_LOG_LINE@config@  \"deps_os\": {}, @@@",
-      "@@@STEP_LOG_LINE@config@  \"disable_syntax_validation\": false, @@@",
       "@@@STEP_LOG_LINE@config@  \"got_revision_mapping\": {}, @@@",
       "@@@STEP_LOG_LINE@config@  \"got_revision_reverse_mapping\": {@@@",
       "@@@STEP_LOG_LINE@config@    \"got_angle_revision\": \"src/third_party/angle\", @@@",
