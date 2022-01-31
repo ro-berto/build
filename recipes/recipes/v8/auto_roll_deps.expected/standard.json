@@ -51,13 +51,9 @@
     "cmd": [
       "python",
       "-u",
-      "import time; time.sleep(20)"
+      "RECIPE_MODULE[build::v8]/resources/sleep_20_seconds.py"
     ],
-    "name": "wait for consistency",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@import time; time.sleep(20)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
+    "name": "wait for consistency"
   },
   {
     "cmd": [

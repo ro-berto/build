@@ -19,7 +19,6 @@ DEPS = [
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/properties',
-  'recipe_engine/python',
   'recipe_engine/raw_io',
   'recipe_engine/runtime',
   'recipe_engine/service_account',
@@ -146,9 +145,9 @@ def RunSteps(api):
 
     # Make it more likely to avoid inconsistencies when hitting different
     # mirrors.
-    api.python.inline(
+    api.v8.python(
         'wait for consistency',
-        'import time; time.sleep(20)',
+        api.v8.resource('sleep_20_seconds.py'),
     )
 
     api.v8.checkout()
@@ -168,7 +167,7 @@ def RunSteps(api):
       if api.runtime.is_experimental:
         api.step('fake roll deps', cmd=None)
       else:
-        result = api.python(
+        result = api.v8.python(
             'roll deps',
             api.v8.checkout_root.join(
                 'v8', 'tools', 'release', 'auto_roll.py'),

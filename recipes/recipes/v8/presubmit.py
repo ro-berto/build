@@ -16,7 +16,6 @@ DEPS = [
   'recipe_engine/context',
   'recipe_engine/path',
   'recipe_engine/properties',
-  'recipe_engine/python',
   'v8',
 ]
 
@@ -28,7 +27,7 @@ def RunSteps(api):
   with api.context(
       cwd=api.path['checkout'],
       env_prefixes={'PATH': [api.v8.depot_tools_path]}):
-    api.python(
+    api.v8.python(
       'Presubmit',
       api.path['checkout'].join('tools', 'v8_presubmit.py'),
       ['--no-linter-cache'],

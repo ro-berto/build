@@ -14,7 +14,6 @@ DEPS = [
     'depot_tools/git',
     'recipe_engine/context',
     'recipe_engine/path',
-    'recipe_engine/python',
     'recipe_engine/raw_io',
     'recipe_engine/step',
     'v8',
@@ -39,10 +38,11 @@ def RunSteps(api):
     api.step('Build gcmole', [gcmole_root.join('bootstrap.sh')])
     api.step('Package gcmole', [gcmole_root.join('package.sh')])
 
-    api.python('upload_to_google_storage',
-               api.depot_tools.upload_to_google_storage_path,
-               ['-b', GS_BUCKET,
-                gcmole_root.join('gcmole-tools.tar.gz')])
+    api.v8.python(
+        'upload_to_google_storage',
+        api.depot_tools.upload_to_google_storage_path,
+        ['-b', GS_BUCKET, gcmole_root.join('gcmole-tools.tar.gz')],
+    )
 
     changes = api.git(
         'status', '--porcelain',

@@ -12,7 +12,6 @@ DEPS = [
   'recipe_engine/context',
   'recipe_engine/path',
   'recipe_engine/properties',
-  'recipe_engine/python',
   'recipe_engine/raw_io',
   'recipe_engine/service_account',
   'recipe_engine/step',
@@ -44,7 +43,7 @@ def RunSteps(api):
         # TODO(sergiyb): Replace with api.service_account.default().get_email()
         # when https://crbug.com/846923 is resolved.
         'v8-ci-autoroll-builder@chops-service-accounts.iam.gserviceaccount.com')
-    api.python(
+    api.v8.python(
         'push candidate',
         api.path['checkout'].join('tools', 'release', 'auto_push.py'),
         push_arg + [

@@ -31,7 +31,6 @@ DEPS = [
     'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/properties',
-    'recipe_engine/python',
     'recipe_engine/step',
     'v8',
 ]
@@ -184,7 +183,7 @@ def RunSteps(api, is_debug, triggers, v8_tot, use_remoteexec, use_rbe):
       ]
       if use_test_root:
         args += ['--test-root', build_output_path.join('gen', 'node', 'test')]
-      run_test = lambda step_name: api.python(
+      run_test = lambda step_name: api.v8.python(
           name=step_name,
           script=api.path.join('tools', 'test.py'),
           args=args + [suite],

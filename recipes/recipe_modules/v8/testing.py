@@ -294,7 +294,7 @@ class V8Test(BaseTest):
       self.api.json.output(add_json_log=False),
     ]
     with self.api.context(cwd=self.api.path['checkout'], env=env):
-      self.api.python(
+      self.api.v8.python(
         test['name'] + self.test_step_config.step_name_suffix,
         self.api.path['checkout'].join('tools', 'run-tests.py'),
         full_args,
@@ -484,6 +484,7 @@ class V8SwarmingTest(V8Test):
             task.collect_cmd_input()))
 
     with self.api.swarming.on_path():
+      # TODO(machenbach): Deprecate using legacy annotations.
       return self.api.build.python(
           name=self.test['name'] + self.test_step_config.step_name_suffix,
           script=self.api.v8.resource('collect_v8_task.py'),

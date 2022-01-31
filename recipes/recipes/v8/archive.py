@@ -26,7 +26,6 @@ DEPS = [
     'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/properties',
-    'recipe_engine/python',
     'recipe_engine/raw_io',
     'recipe_engine/step',
     'v8',
@@ -108,7 +107,7 @@ def make_archive(api,
     # Make a list of files to archive.
     files = ['d8', 'icudtl.dat']
     file_list_test_data = [str(build_dir.join(f)) for f in files]
-    file_list = api.python(
+    file_list = api.v8.python(
         'filter build files',
         api.path['checkout'].join('tools', 'release', 'filter_build_files.py'),
         [

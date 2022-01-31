@@ -116,6 +116,16 @@ class V8Api(recipe_api.RecipeApi):
     self.revision_cp = None
     self.revision_number = None
 
+  def _python(self, name, exe, script, args, **kwargs):
+    cmd = [exe, '-u', script] + list(args or [])
+    return self.m.step(name, cmd, **kwargs)
+
+  def python(self, name, script, args=None, **kwargs):
+    return self._python(name, 'python', script, args, **kwargs)
+
+  def vpython(self, name, script, args=None, **kwargs):
+    return self._python(name, 'vpython', script, args, **kwargs)
+
   def _use_reclient(self, gn_args):
     args = self.m.gn.parse_gn_args(gn_args)
     return args.get('use_remoteexec') == 'true' or args.get('use_rbe') == 'true'
@@ -795,7 +805,7 @@ class V8Api(recipe_api.RecipeApi):
       if self.bot_config.get('track_build_dependencies',
                              False) and not self._is_muted_branch():
         with self.m.context(env_prefixes={'PATH': [self.depot_tools_path]}):
-          deps = self.m.python(
+          deps = self.vpython(
               name='track build dependencies (fyi)',
               script=self.resource('build-dep-stats.py'),
               args=[
@@ -805,7 +815,6 @@ class V8Api(recipe_api.RecipeApi):
               ],
               step_test_data=self.test_api.example_build_dependencies,
               ok_ret='any',
-              venv=True,
           ).json.output
         if deps:
           self._upload_build_dependencies(deps)
