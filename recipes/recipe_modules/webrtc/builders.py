@@ -1007,6 +1007,38 @@ BUILDERS = freeze({
                     'cores': '12',
                 }
             },
+            'mac_rel_m1': {
+                'recipe_config': 'webrtc',
+                'chromium_config_kwargs': {
+                    'BUILD_CONFIG': 'Release',
+                    'TARGET_BITS': 64,
+                    'TARGET_ARCH': 'arm'
+                },
+                'bot_type': 'builder_tester',
+                'testing': {
+                    'platform': 'mac'
+                },
+                'swarming_dimensions': {
+                    'cpu': 'arm64-64-Apple_M1',
+                    'pool': 'WebRTC-baremetal-try',
+                },
+            },
+            'mac_dbg_m1': {
+                'recipe_config': 'webrtc',
+                'chromium_config_kwargs': {
+                    'BUILD_CONFIG': 'Debug',
+                    'TARGET_BITS': 64,
+                    'TARGET_ARCH': 'arm'
+                },
+                'bot_type': 'builder_tester',
+                'testing': {
+                    'platform': 'mac'
+                },
+                'swarming_dimensions': {
+                    'cpu': 'arm64-64-Apple_M1',
+                    'pool': 'WebRTC-baremetal-try',
+                },
+            },
             'linux_compile_dbg': {
                 'recipe_config': 'webrtc',
                 'chromium_config_kwargs': {
