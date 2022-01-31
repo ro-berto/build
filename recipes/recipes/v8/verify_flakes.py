@@ -2,7 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-PYTHON_VERSION_COMPATIBILITY = 'PY2+3'
 """Recipe to verify flaky tests (aka progression testing).
 
 The recipe reads flake config and for each entry triggers flako recipe in
@@ -22,7 +21,7 @@ from recipe_engine.post_process import (
     StatusFailure, StatusSuccess, StepException, StepFailure)
 
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'depot_tools/gitiles',
