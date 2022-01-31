@@ -862,25 +862,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.linux',
                 buildername='linux-no-base-tracing-rel',
             ),
-        'linux-ozone-rel':
-            try_spec.TrySpec.create([
-                try_spec.TryMirror.create(
-                    builder_group='chromium.linux',
-                    buildername='linux-ozone-rel',
-                    tester='Linux Ozone Tester (Headless)',
-                ),
-                try_spec.TryMirror.create(
-                    builder_group='chromium.linux',
-                    buildername='linux-ozone-rel',
-                    tester='Linux Ozone Tester (X11)',
-                ),
-                try_spec.TryMirror.create(
-                    builder_group='chromium.linux',
-                    buildername='linux-ozone-rel',
-                    tester='Linux Ozone Tester (Wayland)',
-                ),
-            ],
-            ),
         'linux-wayland-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.linux',
