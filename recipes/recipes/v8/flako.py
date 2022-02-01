@@ -28,7 +28,7 @@ from recipe_engine.recipe_api import Property
 
 
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'recipe_engine/json',
@@ -262,7 +262,7 @@ class Depot(object):
     """By default all lookups fail (i.e. no builds available). Override
     testdata in specific test cases to make lookups pass.
     """
-    return self.api.raw_io.test_api.stream_output(
+    return self.api.raw_io.test_api.stream_output_text(
         GSUTIL_NO_MATCH_TXT,
         stream='stderr',
         retcode=1,
@@ -569,7 +569,7 @@ def bisect(api, depot, initial_commit_offset, is_bad_func, offset):
       # range than 1 commit due to missing cas_digests.
       if from_offset - to_offset <= 1:
         return known_good, known_bad
-      middle_offset = to_offset + (from_offset - to_offset ) / 2
+      middle_offset = to_offset + (from_offset - to_offset) // 2
       build_offset = depot.find_closest_build(middle_offset, from_offset)
 
       if build_offset >= from_offset:
