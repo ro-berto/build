@@ -14,21 +14,14 @@
   },
   {
     "cmd": [
-      "[START_DIR]/cipd_tool/infra/tools/run_annotations/latest/run_annotations",
-      "--output",
-      "[CLEANUP]/tmp_tmp_1/sub_build.pb",
-      "--",
       "python",
       "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--temp-root-dir",
       "[TMP_BASE]",
       "--merged-test-output",
+      "/path/to/tmp/json",
+      "--warnings-json",
       "/path/to/tmp/json",
       "--",
       "collect",
@@ -43,13 +36,6 @@
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"0\"}]}"
     ],
-    "env": {
-      "MAC_CHROMIUM_TMPDIR": "[CLEANUP]/tmp_tmp_2",
-      "TEMP": "[CLEANUP]/tmp_tmp_2",
-      "TEMPDIR": "[CLEANUP]/tmp_tmp_2",
-      "TMP": "[CLEANUP]/tmp_tmp_2",
-      "TMPDIR": "[CLEANUP]/tmp_tmp_2"
-    },
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
@@ -69,12 +55,7 @@
       }
     },
     "name": "Check",
-    "stdin": "2\u0006\b\ufffd\u00af\ufffd\u0005:\u0006\b\ufffd\u00af\ufffd\u0005`\u0002",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@step.sub_build@{@@@",
-      "@@@STEP_LOG_LINE@step.sub_build@  \"status\": \"SUCCESS\"@@@",
-      "@@@STEP_LOG_LINE@step.sub_build@}@@@",
-      "@@@STEP_LOG_END@step.sub_build@@@",
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
       "@@@STEP_LOG_LINE@durations@00:00:101 mjsunit/Cool.Test2@@@",
       "@@@STEP_LOG_LINE@durations@@@@",

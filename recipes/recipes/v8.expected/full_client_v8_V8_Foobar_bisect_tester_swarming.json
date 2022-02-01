@@ -129,108 +129,15 @@
     "name": "trigger tests.[trigger] Test262"
   },
   {
-    "cmd": [],
-    "name": "install infra/tools/run_annotations"
-  },
-  {
     "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[START_DIR]/cipd_tool/infra/tools/run_annotations/latest"
-    ],
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
-      ]
-    },
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "v8:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "install infra/tools/run_annotations.ensure package directory",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "cipd",
-      "ensure",
-      "-root",
-      "[START_DIR]/cipd_tool/infra/tools/run_annotations/latest",
-      "-ensure-file",
-      "infra/tools/run_annotations/${platform} latest",
-      "-max-threads",
-      "0",
-      "-json-output",
-      "/path/to/tmp/json"
-    ],
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
-      ]
-    },
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "v8:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "install infra/tools/run_annotations.ensure_installed",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-latest----------\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/run_annotations/resolved-platform\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[START_DIR]/cipd_tool/infra/tools/run_annotations/latest/run_annotations",
-      "--output",
-      "[CLEANUP]/tmp_tmp_1/sub_build.pb",
-      "--",
       "python",
       "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--temp-root-dir",
       "[TMP_BASE]",
       "--merged-test-output",
+      "/path/to/tmp/json",
+      "--warnings-json",
       "/path/to/tmp/json",
       "--",
       "collect",
@@ -245,13 +152,6 @@
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"0\"}]}"
     ],
-    "env": {
-      "MAC_CHROMIUM_TMPDIR": "[CLEANUP]/tmp_tmp_2",
-      "TEMP": "[CLEANUP]/tmp_tmp_2",
-      "TEMPDIR": "[CLEANUP]/tmp_tmp_2",
-      "TMP": "[CLEANUP]/tmp_tmp_2",
-      "TMPDIR": "[CLEANUP]/tmp_tmp_2"
-    },
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
@@ -271,13 +171,8 @@
       }
     },
     "name": "Check",
-    "stdin": "2\u0006\b\ufffd\u00af\ufffd\u0005:\u0006\b\ufffd\u00af\ufffd\u0005`\u0002",
     "~followup_annotations": [
       "@@@STEP_TEXT@failures: 2<br/>@@@",
-      "@@@STEP_LOG_LINE@step.sub_build@{@@@",
-      "@@@STEP_LOG_LINE@step.sub_build@  \"status\": \"SUCCESS\"@@@",
-      "@@@STEP_LOG_LINE@step.sub_build@}@@@",
-      "@@@STEP_LOG_END@step.sub_build@@@",
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
       "@@@STEP_LOG_LINE@durations@00:00:101 mjsunit/Cool.Test2@@@",
       "@@@STEP_LOG_LINE@durations@@@@",
@@ -351,21 +246,14 @@
   },
   {
     "cmd": [
-      "[START_DIR]/cipd_tool/infra/tools/run_annotations/latest/run_annotations",
-      "--output",
-      "[CLEANUP]/tmp_tmp_3/sub_build.pb",
-      "--",
       "python",
       "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--temp-root-dir",
       "[TMP_BASE]",
       "--merged-test-output",
+      "/path/to/tmp/json",
+      "--warnings-json",
       "/path/to/tmp/json",
       "--",
       "collect",
@@ -380,13 +268,6 @@
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1\"}]}"
     ],
-    "env": {
-      "MAC_CHROMIUM_TMPDIR": "[CLEANUP]/tmp_tmp_4",
-      "TEMP": "[CLEANUP]/tmp_tmp_4",
-      "TEMPDIR": "[CLEANUP]/tmp_tmp_4",
-      "TMP": "[CLEANUP]/tmp_tmp_4",
-      "TMPDIR": "[CLEANUP]/tmp_tmp_4"
-    },
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
@@ -406,12 +287,7 @@
       }
     },
     "name": "Test262",
-    "stdin": "2\u0006\b\ufffd\u00af\ufffd\u0005:\u0006\b\ufffd\u00af\ufffd\u0005`\u0002",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@step.sub_build@{@@@",
-      "@@@STEP_LOG_LINE@step.sub_build@  \"status\": \"SUCCESS\"@@@",
-      "@@@STEP_LOG_LINE@step.sub_build@}@@@",
-      "@@@STEP_LOG_END@step.sub_build@@@",
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
       "@@@STEP_LOG_LINE@durations@00:00:101 mjsunit/Cool.Test2@@@",
       "@@@STEP_LOG_LINE@durations@@@@",
@@ -716,21 +592,14 @@
   },
   {
     "cmd": [
-      "[START_DIR]/cipd_tool/infra/tools/run_annotations/latest/run_annotations",
-      "--output",
-      "[CLEANUP]/tmp_tmp_5/sub_build.pb",
-      "--",
       "python",
       "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--temp-root-dir",
       "[TMP_BASE]",
       "--merged-test-output",
+      "/path/to/tmp/json",
+      "--warnings-json",
       "/path/to/tmp/json",
       "--",
       "collect",
@@ -745,13 +614,6 @@
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"2\"}]}"
     ],
-    "env": {
-      "MAC_CHROMIUM_TMPDIR": "[CLEANUP]/tmp_tmp_6",
-      "TEMP": "[CLEANUP]/tmp_tmp_6",
-      "TEMPDIR": "[CLEANUP]/tmp_tmp_6",
-      "TMP": "[CLEANUP]/tmp_tmp_6",
-      "TMPDIR": "[CLEANUP]/tmp_tmp_6"
-    },
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
@@ -771,13 +633,8 @@
       }
     },
     "name": "Bisect a0.Retry",
-    "stdin": "2\u0006\b\ufffd\u00af\ufffd\u0005:\u0006\b\ufffd\u00af\ufffd\u0005`\u0002",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@step.sub_build@{@@@",
-      "@@@STEP_LOG_LINE@step.sub_build@  \"status\": \"SUCCESS\"@@@",
-      "@@@STEP_LOG_LINE@step.sub_build@}@@@",
-      "@@@STEP_LOG_END@step.sub_build@@@",
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
       "@@@STEP_LOG_LINE@durations@00:00:101 mjsunit/Cool.Test2@@@",
       "@@@STEP_LOG_LINE@durations@@@@",
@@ -975,21 +832,14 @@
   },
   {
     "cmd": [
-      "[START_DIR]/cipd_tool/infra/tools/run_annotations/latest/run_annotations",
-      "--output",
-      "[CLEANUP]/tmp_tmp_7/sub_build.pb",
-      "--",
       "python",
       "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--temp-root-dir",
       "[TMP_BASE]",
       "--merged-test-output",
+      "/path/to/tmp/json",
+      "--warnings-json",
       "/path/to/tmp/json",
       "--",
       "collect",
@@ -1004,13 +854,6 @@
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"3\"}]}"
     ],
-    "env": {
-      "MAC_CHROMIUM_TMPDIR": "[CLEANUP]/tmp_tmp_8",
-      "TEMP": "[CLEANUP]/tmp_tmp_8",
-      "TEMPDIR": "[CLEANUP]/tmp_tmp_8",
-      "TMP": "[CLEANUP]/tmp_tmp_8",
-      "TMPDIR": "[CLEANUP]/tmp_tmp_8"
-    },
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
@@ -1030,13 +873,8 @@
       }
     },
     "name": "Bisect a1.Retry",
-    "stdin": "2\u0006\b\ufffd\u00af\ufffd\u0005:\u0006\b\ufffd\u00af\ufffd\u0005`\u0002",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@step.sub_build@{@@@",
-      "@@@STEP_LOG_LINE@step.sub_build@  \"status\": \"SUCCESS\"@@@",
-      "@@@STEP_LOG_LINE@step.sub_build@}@@@",
-      "@@@STEP_LOG_END@step.sub_build@@@",
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
       "@@@STEP_LOG_LINE@durations@00:00:101 mjsunit/Cool.Test2@@@",
       "@@@STEP_LOG_LINE@durations@@@@",

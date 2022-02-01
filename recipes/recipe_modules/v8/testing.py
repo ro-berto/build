@@ -466,8 +466,9 @@ class V8SwarmingTest(V8Test):
 
   def _v8_collect_step(self, task, **kwargs):
     """Produces a step that collects and processes a result of a v8 task."""
-    # Placeholder for the merged json output.
+    # Placeholders for the merged json output and warnings during collection.
     json_output = self.api.json.output(add_json_log=False)
+    warnings_json = self.api.json.output(name='warnings', add_json_log=False)
 
     # Shim script's own arguments.
     args = [
@@ -475,6 +476,8 @@ class V8SwarmingTest(V8Test):
         self.api.path['tmp_base'],
         '--merged-test-output',
         json_output,
+        '--warnings-json',
+        warnings_json,
     ]
 
     # Arguments for actual 'collect' command.
@@ -484,15 +487,19 @@ class V8SwarmingTest(V8Test):
             task.collect_cmd_input()))
 
     with self.api.swarming.on_path():
-      # TODO(machenbach): Deprecate using legacy annotations.
-      return self.api.build.python(
-          name=self.test['name'] + self.test_step_config.step_name_suffix,
-          script=self.api.v8.resource('collect_v8_task.py'),
-          args=args,
-          legacy_annotation=True,
-          infra_step=True,
-          step_test_data=kwargs.pop('step_test_data', None),
-          **kwargs)
+      with self.api.context(infra_steps=True):
+        return self.api.v8.python(
+            name=self.test['name'] + self.test_step_config.step_name_suffix,
+            script=self.api.v8.resource('collect_v8_task.py'),
+            args=args,
+            step_test_data=kwargs.pop('step_test_data', None),
+            **kwargs)
+
+  def _post_process_warnings(self):
+    step_result = self.api.step.active_result
+    warnings = step_result.json.outputs['warnings']
+    for warning in warnings or []:
+      step_result.presentation.logs[warning[0]] = warning[1].splitlines()
 
   def pre_run(self, test=None, **kwargs):
     # Set up arguments for test runner.
@@ -562,6 +569,8 @@ class V8SwarmingTest(V8Test):
       )
     except self.api.step.InfraFailure as e:
       result += TestResults.infra_failure(e)
+
+    self._post_process_warnings()
 
     return result + self.post_run(self.test)
 
