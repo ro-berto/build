@@ -2,7 +2,9 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+import six
+
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
   'recipe_engine/buildbucket',
@@ -541,7 +543,7 @@ _CONFIG_DISPATCH_MAP = {
 def RunSteps(api):
   builder_found = False
   buildername = api.buildbucket.builder_name
-  for builder_type, builder_config in _CONFIG_MAP.iteritems():
+  for builder_type, builder_config in six.iteritems(_CONFIG_MAP):
     if buildername in builder_config:
       builder_found = True
       builder_dict = builder_config[buildername]
