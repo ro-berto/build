@@ -111,8 +111,8 @@ class V8Api(recipe_api.RecipeApi):
     self.revision_number = None
 
   @property
-  def recipes_use_python3(self):
-    return ("luci.recipes.use_python3"
+  def steps_use_python3(self):
+    return ("v8.steps.use_python3"
             in self.m.buildbucket.build.input.experiments)
 
   @property
@@ -121,7 +121,7 @@ class V8Api(recipe_api.RecipeApi):
             in self.m.buildbucket.build.input.experiments)
 
   def _python(self, name, exe, script, args, **kwargs):
-    suffix = '3' if self.recipes_use_python3 else ''
+    suffix = '3' if self.steps_use_python3 else ''
     cmd = [exe + suffix, '-u', script] + list(args or [])
     return self.m.step(name, cmd, **kwargs)
 

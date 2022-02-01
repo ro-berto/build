@@ -434,7 +434,11 @@ def GenTests(api):
         'client.v8',
         'V8 Foobar',
         'python3',
-        experiments=['v8.scripts.use_python3', 'luci.recipes.use_python3'],
+        experiments=[
+          'v8.scripts.use_python3',
+          'v8.steps.use_python3',
+          'luci.recipes.use_python3',
+        ],
     ) +
     api.v8.test_spec_in_checkout('V8 Foobar', test_spec) +
     api.post_process(Filter('trigger tests.[trigger] Check', 'Check'))
