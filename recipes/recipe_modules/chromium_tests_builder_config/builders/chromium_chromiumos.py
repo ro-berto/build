@@ -99,6 +99,7 @@ SPEC.update([
         gclient_apply_config=['use_clang_coverage']),
     _config(
         'linux-lacros-tester-rel',
+        gclient_apply_config=['use_clang_coverage'],
         execution_mode=builder_spec.TEST,
         parent_buildername='linux-lacros-builder-rel'),
     _config('chromeos-amd64-generic-asan-rel', cros_boards='amd64-generic'),
