@@ -1157,6 +1157,27 @@ SPEC = {
             simulation_platform='linux',
             serialize_tests=True,
         ),
+    'gpu-fyi-chromeos-jacuzzi-exp':
+        _chromium_gpu_fyi_spec(
+            chromium_config='chromium',
+            chromium_apply_config=[
+                'mb',
+            ],
+            gclient_config='chromium',
+            gclient_apply_config=[
+                'arm',
+                'chromeos',
+            ],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_ARCH': 'arm',
+                'TARGET_BITS': 32,
+                'TARGET_CROS_BOARDS': 'jacuzzi',
+                'TARGET_PLATFORM': 'chromeos',
+            },
+            simulation_platform='linux',
+            serialize_tests=True,
+        ),
     'ChromeOS FYI Release (kevin)':
         _chromium_gpu_fyi_spec(
             chromium_config='chromium',

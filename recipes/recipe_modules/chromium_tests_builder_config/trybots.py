@@ -1433,6 +1433,11 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.gpu.fyi',
                 buildername='ChromeOS FYI Release (amd64-generic)',
             ),
+        'gpu-fyi-try-chromeos-jacuzzi-exp':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.gpu.fyi',
+                buildername='gpu-fyi-chromeos-jacuzzi-exp',
+            ),
         'gpu-fyi-try-chromeos-kevin':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.gpu.fyi',
