@@ -1343,6 +1343,8 @@
       "test_suite:angle_end2end_tests",
       "-tag",
       "step_name:angle_end2end_tests",
+      "-tag",
+      "target_platform:linux",
       "-coerce-negative-duration",
       "-new",
       "-realm",

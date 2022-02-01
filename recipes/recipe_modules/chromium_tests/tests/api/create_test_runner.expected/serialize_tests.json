@@ -13,6 +13,8 @@
       "test_suite:base_unittests",
       "-tag",
       "step_name:base_unittests",
+      "-tag",
+      "target_platform:linux",
       "-coerce-negative-duration",
       "-new",
       "-realm",

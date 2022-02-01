@@ -1284,6 +1284,8 @@
       "test_suite:basic_isolate_tests",
       "-tag",
       "step_name:basic_isolate_tests",
+      "-tag",
+      "target_platform:linux",
       "-coerce-negative-duration",
       "-new",
       "-realm",

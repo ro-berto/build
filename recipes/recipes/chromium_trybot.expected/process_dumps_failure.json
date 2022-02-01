@@ -1494,6 +1494,8 @@
       "test_suite:base_unittests",
       "-tag",
       "step_name:base_unittests (with patch)",
+      "-tag",
+      "target_platform:win",
       "-coerce-negative-duration",
       "-new",
       "-realm",

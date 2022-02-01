@@ -1600,6 +1600,8 @@
       "test_suite:webgl_conformance_gl_tests",
       "-tag",
       "step_name:webgl_conformance_gl_tests",
+      "-tag",
+      "target_platform:linux",
       "-coerce-negative-duration",
       "-new",
       "-realm",

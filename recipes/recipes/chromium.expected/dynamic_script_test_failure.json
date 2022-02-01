@@ -698,6 +698,8 @@
       "test_suite:test_script_with_broken_tests",
       "-tag",
       "step_name:test_script_with_broken_tests",
+      "-tag",
+      "target_platform:linux",
       "-coerce-negative-duration",
       "-new",
       "-realm",

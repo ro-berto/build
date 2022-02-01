@@ -807,6 +807,8 @@
       "test_suite:telemetry_gpu_unittests",
       "-tag",
       "step_name:telemetry_gpu_unittests",
+      "-tag",
+      "target_platform:linux",
       "-coerce-negative-duration",
       "-new",
       "-realm",

@@ -134,9 +134,10 @@ def GenTests(api):
       api.post_process(post_process.MustRun, 'junit_test'),
       api.post_process(post_process.StepCommandContains, 'junit_test', [
           'rdb', 'stream', '-var', 'builder:test-builder', '-var',
-          'test_suite:junit_test', '-tag', 'step_name:junit_test',
-          '-coerce-negative-duration', '-new', '-realm', 'chromium:ci',
-          '-include', '-exonerate-unexpected-pass', '--'
+          'test_suite:junit_test', '-tag', 'step_name:junit_test', '-tag',
+          'target_platform:android', '-coerce-negative-duration', '-new',
+          '-realm', 'chromium:ci', '-include', '-exonerate-unexpected-pass',
+          '--'
       ]),
       api.post_process(post_process.StepCommandContains, 'junit_test',
                        ['--foo=bar']),
@@ -155,14 +156,14 @@ def GenTests(api):
                   'enable': True,
                   'test_id_prefix': 'prefix'
               },
-          },
-      ),
+          },),
       api.post_process(post_process.MustRun, 'junit_test'),
       api.post_process(post_process.StepCommandContains, 'junit_test', [
           'rdb', 'stream', '-test-id-prefix', 'prefix', '-var',
           'builder:test-builder', '-var', 'test_suite:junit_test', '-tag',
-          'step_name:junit_test', '-coerce-negative-duration', '-new', '-realm',
-          'chromium:ci', '-include', '-exonerate-unexpected-pass', '--'
+          'step_name:junit_test', '-tag', 'target_platform:android',
+          '-coerce-negative-duration', '-new', '-realm', 'chromium:ci',
+          '-include', '-exonerate-unexpected-pass', '--'
       ]),
       api.post_process(post_process.StepCommandContains, 'junit_test',
                        ['--foo=bar']),

@@ -1240,6 +1240,8 @@
       "test_suite:base_junit_tests",
       "-tag",
       "step_name:base_junit_tests",
+      "-tag",
+      "target_platform:android",
       "-coerce-negative-duration",
       "-new",
       "-realm",

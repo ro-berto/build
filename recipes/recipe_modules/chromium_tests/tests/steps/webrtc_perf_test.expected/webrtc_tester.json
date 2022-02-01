@@ -329,6 +329,8 @@
       "test_suite:test_name",
       "-tag",
       "step_name:test_name",
+      "-tag",
+      "target_platform:linux",
       "-coerce-negative-duration",
       "-new",
       "-realm",

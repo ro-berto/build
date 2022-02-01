@@ -538,9 +538,13 @@ class Test(object):
     """
     temp = temp or api.path.mkstemp()
     artifact_dir = api.path.dirname(temp) if include_artifacts else ''
+    base_tags = None
+    if api.chromium.c and api.chromium.c.TARGET_PLATFORM:
+      base_tags = (('target_platform', api.chromium.c.TARGET_PLATFORM),)
     resultdb = attr.evolve(
         self.spec.resultdb,
         artifact_directory=artifact_dir,
+        base_tags=base_tags,
         base_variant=dict(
             self.spec.resultdb.base_variant or {},
             test_suite=self.canonical_name),
@@ -2171,8 +2175,14 @@ class SwarmingTest(Test):
     # Create task.
     self._tasks[suffix] = self.create_task(api, suffix, task_input)
 
-    api.chromium_swarming.trigger_task(
-        self._tasks[suffix], resultdb=self.resultdb)
+    # Export TARGET_PLATFORM to resultdb tags
+    resultdb = self.resultdb
+    if api.chromium.c and api.chromium.c.TARGET_PLATFORM:
+      resultdb = attr.evolve(
+          resultdb,
+          base_tags=(('target_platform', api.chromium.c.TARGET_PLATFORM),))
+
+    api.chromium_swarming.trigger_task(self._tasks[suffix], resultdb=resultdb)
 
   def validate_task_results(self, api, step_result):
     """Interprets output of a task (provided as StepResult object).

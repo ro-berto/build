@@ -658,6 +658,8 @@
       "test_suite:browser_tests",
       "-tag",
       "step_name:browser_tests",
+      "-tag",
+      "target_platform:linux",
       "-coerce-negative-duration",
       "-new",
       "-realm",
