@@ -545,16 +545,20 @@ class ArchiveApi(recipe_api.RecipeApi):
 
   def _get_channel_name(self):
     base_name = '/'.join(['chrome', 'VERSION'])
-    mock_milestone_str = '\n'.join(
-        ['MAJOR=91', 'MINOR=0', 'BUILD=4458', 'PATCH=0'])
+
+    def step_test_data():
+      contents = '\n'.join(['MAJOR=91', 'MINOR=0', 'BUILD=4458', 'PATCH=0'])
+      response_data = base64.b64encode(contents.encode('utf-8')).decode('ascii')
+      return self.m.json.test_api.output({
+          'value': response_data,
+      })
+
     contents = self.m.gitiles.download_file(
         "https://chromium.googlesource.com/chromium/src.git/",
         base_name,
         branch='refs/heads/main',
         step_name='fetch milestone_branch',
-        step_test_data=lambda: self.m.json.test_api.output({
-            'value': base64.b64encode(mock_milestone_str),
-        }),
+        step_test_data=step_test_data,
     )
     canary_milestone = int(contents.split('\n')[0].split('=')[1])
     milestone = int(self.m.chromium.get_version()['MAJOR'])

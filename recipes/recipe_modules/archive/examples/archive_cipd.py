@@ -5,7 +5,7 @@
 from PB.recipe_modules.build.archive import properties
 from recipe_engine import post_process
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'archive',
