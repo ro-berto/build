@@ -11,5 +11,65 @@
       "/path/to/tmp/json"
     ],
     "name": "trigger tests.[trigger] Check"
+  },
+  {
+    "cmd": [
+      "python3",
+      "-u",
+      "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
+      "--temp-root-dir",
+      "[TMP_BASE]",
+      "--merged-test-output",
+      "/path/to/tmp/json",
+      "--warnings-json",
+      "/path/to/tmp/json",
+      "--",
+      "collect",
+      "-server",
+      "https://example.swarmingserver.appspot.com",
+      "-worker",
+      "50",
+      "-task-summary-python",
+      "-task-output-stdout",
+      "all",
+      "-verbose",
+      "-requests-json",
+      "{\"tasks\": [{\"task_id\": \"0\"}]}"
+    ],
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
+      ]
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "Check",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@00:00:101 mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@@@@",
+      "@@@STEP_LOG_LINE@durations@Details:@@@",
+      "@@@STEP_LOG_LINE@durations@@@@",
+      "@@@STEP_LOG_LINE@durations@Test: mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@Flags: -f@@@",
+      "@@@STEP_LOG_LINE@durations@Command: d8 -f mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@Duration: 01:01:002@@@",
+      "@@@STEP_LOG_LINE@durations@Test: mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@Flags: -f -g@@@",
+      "@@@STEP_LOG_LINE@durations@Command: d8 -f mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@Duration: 00:00:101@@@",
+      "@@@STEP_LOG_END@durations@@@"
+    ]
   }
 ]
