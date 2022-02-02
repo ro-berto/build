@@ -761,6 +761,11 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.fyi',
                 buildername='linux-annotator-rel',
             ),
+        'linux-bfcache-rel':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.linux',
+                buildername='linux-bfcache-rel',
+            ),
         'linux-blink-heap-concurrent-marking-tsan-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
@@ -856,11 +861,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.linux',
                 buildername='linux-no-base-tracing-rel',
-            ),
-        'linux-no-bfcache-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.linux',
-                buildername='linux-no-bfcache-rel',
             ),
         'linux-wayland-rel':
             try_spec.TrySpec.create_for_single_mirror(
