@@ -440,12 +440,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='GPU FYI Android arm64 Builder',
                 tester='Android FYI Release (Nexus 5X)',
             ),
-        'gpu-fyi-try-android-m-nexus-5x-skgl-64':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Android arm64 Builder',
-                tester='Android FYI SkiaRenderer GL (Nexus 5X)',
-            ),
         'gpu-fyi-try-android-m-nexus-9-64':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.gpu.fyi',
@@ -463,12 +457,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.gpu.fyi',
                 buildername='GPU FYI Android arm Builder',
                 tester='Android FYI Release (Pixel 2)',
-            ),
-        'gpu-fyi-try-android-p-pixel-2-skv-32':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Android arm Builder',
-                tester='Android FYI SkiaRenderer Vulkan (Pixel 2)',
             ),
         'gpu-fyi-try-android-r-pixel-4-32':
             try_spec.TrySpec.create_for_single_mirror(
@@ -1204,18 +1192,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='GPU FYI Linux Builder',
                 tester='Linux FYI Release (Intel HD 630)',
             ),
-        'gpu-fyi-try-linux-intel-sk-dawn-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername=\
-                'Linux FYI SkiaRenderer Dawn Release (Intel HD 630)',
-            ),
-        'gpu-fyi-try-linux-intel-skv':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Linux Builder',
-                tester='Linux FYI SkiaRenderer Vulkan (Intel HD 630)',
-            ),
         'gpu-fyi-try-linux-nvidia-dbg':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.gpu.fyi',
@@ -1233,12 +1209,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.gpu.fyi',
                 buildername='GPU FYI Linux Builder',
                 tester='Linux FYI Release (NVIDIA)',
-            ),
-        'gpu-fyi-try-linux-nvidia-skv':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Linux Builder',
-                tester='Linux FYI SkiaRenderer Vulkan (NVIDIA)',
             ),
         'gpu-fyi-try-linux-nvidia-tsn':
             try_spec.TrySpec.create_for_single_mirror(
@@ -2015,11 +1985,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.gpu.fyi',
                 buildername='GPU FYI Win x64 Builder',
                 tester='Win10 FYI x64 Release (NVIDIA)',
-            ),
-        'gpu-fyi-try-win10-nvidia-sk-dawn-rel-64':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='Win10 FYI x64 SkiaRenderer Dawn Release (NVIDIA)',
             ),
     },
     # Dawn GPU bots

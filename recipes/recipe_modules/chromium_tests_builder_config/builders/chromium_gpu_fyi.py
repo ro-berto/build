@@ -291,18 +291,6 @@ SPEC = {
             simulation_platform='win',
             serialize_tests=True,
         ),
-    'Win10 FYI x64 SkiaRenderer Dawn Release (NVIDIA)':
-        builder_spec.BuilderSpec.create(
-            chromium_config='chromium',
-            chromium_apply_config=['mb'],
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            simulation_platform='win',
-            serialize_tests=True,
-        ),
     'Win7 FYI x64 Release (NVIDIA)':
         _chromium_gpu_fyi_spec(
             chromium_config='chromium',
@@ -504,38 +492,6 @@ SPEC = {
             simulation_platform='linux',
             serialize_tests=True,
         ),
-    'Linux FYI SkiaRenderer Vulkan (NVIDIA)':
-        _chromium_gpu_fyi_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            execution_mode=builder_spec.TEST,
-            parent_buildername='GPU FYI Linux Builder',
-            simulation_platform='linux',
-            serialize_tests=True,
-        ),
-    'Linux FYI SkiaRenderer Vulkan (Intel HD 630)':
-        _chromium_gpu_fyi_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            execution_mode=builder_spec.TEST,
-            parent_buildername='GPU FYI Linux Builder',
-            simulation_platform='linux',
-            serialize_tests=True,
-        ),
     'Linux FYI Release (Intel HD 630)':
         _chromium_gpu_fyi_spec(
             chromium_config='chromium',
@@ -614,18 +570,6 @@ SPEC = {
             },
             execution_mode=builder_spec.TEST,
             parent_buildername='GPU FYI Linux Builder',
-            simulation_platform='linux',
-            serialize_tests=True,
-        ),
-    'Linux FYI SkiaRenderer Dawn Release (Intel HD 630)':
-        _chromium_gpu_fyi_spec(
-            chromium_config='chromium',
-            chromium_apply_config=['mb'],
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
             simulation_platform='linux',
             serialize_tests=True,
         ),
@@ -1101,41 +1045,6 @@ SPEC = {
             parent_buildername='GPU FYI Android arm64 Builder',
             simulation_platform='linux',
             serialize_tests=True,
-        ),
-    'Android FYI SkiaRenderer GL (Nexus 5X)':
-        _chromium_gpu_fyi_spec(
-            chromium_config='android',
-            chromium_apply_config=[
-                'download_vr_test_apks',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'android',
-                'enable_reclient',
-            ],
-            chromium_config_kwargs={
-                'TARGET_PLATFORM': 'android',
-            },
-            android_config='arm64_builder_rel_mb',
-            execution_mode=builder_spec.TEST,
-            parent_buildername='GPU FYI Android arm64 Builder',
-            simulation_platform='linux',
-        ),
-    'Android FYI SkiaRenderer Vulkan (Pixel 2)':
-        _chromium_gpu_fyi_spec(
-            chromium_config='android',
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'android',
-                'enable_reclient',
-            ],
-            chromium_config_kwargs={
-                'TARGET_PLATFORM': 'android',
-            },
-            android_config='main_builder_rel_mb',
-            execution_mode=builder_spec.TEST,
-            parent_buildername='GPU FYI Android arm Builder',
-            simulation_platform='linux',
         ),
     'ChromeOS FYI Release (amd64-generic)':
         _chromium_gpu_fyi_spec(
