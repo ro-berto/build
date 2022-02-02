@@ -167,9 +167,9 @@ def tag_cl(api, roller, cl, tag_name, step_name):
 #Generic recovery functions {
 
 
-def just_fail(api, roller, cl, message=None):
-    failure_step = api.step("Roller '{}' failed".format(roller['name']),
-            cmd=None)
+def just_fail(api, roller, cl, title=None, message=None):
+    title = title or "Roller '{}' failed".format(roller['name'])
+    failure_step = api.step(title, cmd=None)
     if message:
         failure_step.presentation.step_text = message
     failure_step.presentation.status = api.step.FAILURE
@@ -213,6 +213,7 @@ def apply_screenshot_patches(api, roller, cl):
                 apply_patch_from_screenshot_builder(api, builder, cl)
                 for builder in roller['screenshot_builders']
             ]
+            outcome_title = None
             outcome_message = 'No screenshot patches available'
             if any(patches_found):
                 git_output(api, 'commit', '-am', 'update screenshots')
@@ -220,8 +221,11 @@ def apply_screenshot_patches(api, roller, cl):
                         '-f', '--bypass-hooks', '--cq-dry-run')
                 tag_cl(api, roller, cl, roller['screenshots_applied_tag'],
                     'Mark CL as patched with new screenshots')
+                outcome_title = 'CL needs review'
                 outcome_message = 'Please review screenshot patch!'
-            just_fail(api, roller, cl, outcome_message)
+            just_fail(api, roller, cl,
+                    title=outcome_title,
+                    message=outcome_message)
 
 
 def is_unable_to_apply(api, roller, cl):
@@ -234,7 +238,8 @@ def is_unable_to_apply(api, roller, cl):
         api.step('Builders still in progress...', [])
         return True
     if any(has_failed(build) for build in screenshot_builds):
-        just_fail(api, roller, cl, 'Unable to apply due to failed builder!')
+        just_fail(api, roller, cl,
+            message='Unable to apply due to failed builder!')
         return True
     return False
 

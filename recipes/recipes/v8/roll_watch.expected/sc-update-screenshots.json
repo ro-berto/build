@@ -397,7 +397,7 @@
   },
   {
     "cmd": [],
-    "name": "Roller: 'experiment'.Checking CL 123.Apply screenshot patches.Roller 'experiment' failed",
+    "name": "Roller: 'experiment'.Checking CL 123.Apply screenshot patches.CL needs review",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@3@@@",
       "@@@STEP_TEXT@Please review screenshot patch!@@@",
