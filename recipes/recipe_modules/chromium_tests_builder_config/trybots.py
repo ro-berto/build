@@ -126,6 +126,11 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.memory',
                 buildername='android-asan',
             ),
+        'android-bfcache-rel':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.android',
+                buildername='android-bfcache-rel',
+            ),
         'android-cronet-arm-dbg':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android',
@@ -256,11 +261,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.android',
                 buildername='android-marshmallow-x86-rel',
                 regression_test_selection=try_spec.ALWAYS,
-            ),
-        'android-no-bfcache-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android',
-                buildername='android-no-bfcache-rel',
             ),
         'android-nougat-arm64-rel':
             try_spec.TrySpec.create_for_single_mirror(

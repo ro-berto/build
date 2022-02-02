@@ -432,6 +432,10 @@ SPEC.update([
         chromium_apply_config=['download_vr_test_apks'],
         chromium_config_kwargs={'TARGET_BITS': 64}),
     stock_config(
+        'android-bfcache-rel',
+        chromium_apply_config=['download_vr_test_apks'],
+        chromium_config_kwargs={'TARGET_BITS': 32}),
+    stock_config(
         'android-incremental-dbg',
         config='Debug',
         gclient_apply_config=['android', 'enable_reclient']),
@@ -454,10 +458,6 @@ SPEC.update([
         'android-marshmallow-x86-rel-non-cq',
         gclient_apply_config=['android', 'enable_wpr_tests'],
         android_config='x86_builder'),
-    stock_config(
-        'android-no-bfcache-rel',
-        chromium_apply_config=['download_vr_test_apks'],
-        chromium_config_kwargs={'TARGET_BITS': 32}),
     stock_config(
         'android-nougat-arm64-rel',
         chromium_apply_config=['download_vr_test_apks'],
