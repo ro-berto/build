@@ -4,7 +4,7 @@
 
 from recipe_engine import post_process
 
-PYTHON_VERSION_COMPATIBILITY = "PY2"
+PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'chromium',
@@ -63,7 +63,7 @@ def RunSteps(api):
 def GenTests(api):
   yield (api.test("default test") + api.override_step_data(
       'git status',
-      api.raw_io.stream_output('some change', stream='stdout'),
+      api.raw_io.stream_output_text('some change', stream='stdout'),
   ) + api.post_process(post_process.StatusSuccess) +
          api.post_process(post_process.MustRun, 'git commit', 'git cl') +
          api.post_process(
@@ -71,7 +71,7 @@ def GenTests(api):
                                  'upload_to_google_storage', 'git cl')))
   yield (api.test("no change test") + api.override_step_data(
       'git status',
-      api.raw_io.stream_output('', stream='stdout'),
+      api.raw_io.stream_output_text('', stream='stdout'),
   ) + api.post_process(post_process.StatusSuccess) +
          api.post_process(post_process.DoesNotRun, 'git commit', 'git cl') +
          api.post_process(post_process.DropExpectation))
