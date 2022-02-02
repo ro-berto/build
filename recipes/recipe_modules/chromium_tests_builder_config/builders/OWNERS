@@ -5,20 +5,24 @@ estaab@chromium.org
 gatong@chromium.org
 
 per-file chromium_android*=bpastene@chromium.org
+per-file chromium_angle.py=bsheedy@chromium.org
 per-file chromium_angle.py=jmadill@chromium.org
 per-file chromium_angle.py=kbr@chromium.org
 per-file chromium_angle.py=ynovikov@chromium.org
 per-file chromium_clang.py=hans@chromium.org
 per-file chromium_clang.py=thakis@chromium.org
+per-file chromium_dawn.py=bsheedy@chromium.org
 per-file chromium_dawn.py=kbr@chromium.org
 per-file chromium_dawn.py=ynovikov@chromium.org
 per-file chromium_devtools_*=liviurau@chromium.org
 per-file chromium_devtools_*=machenbach@chromium.org
 per-file chromium_fyi.py=thakis@chromium.org
+per-file chromium_gpu*=bsheedy@chromium.org
 per-file chromium_gpu*=kbr@chromium.org
 per-file chromium_gpu*=ynovikov@chromium.org
 per-file chromium_perf*=wenbinzhang@google.com
 per-file chromium_perf*=johnchen@chromium.org
+per-file chromium_swangle.py=bsheedy@chromium.org
 per-file chromium_swangle.py=kbr@chromium.org
 per-file chromium_swangle.py=ynovikov@chromium.org
 per-file chromium_webrtc*.py=mbonadei@chromium.org
