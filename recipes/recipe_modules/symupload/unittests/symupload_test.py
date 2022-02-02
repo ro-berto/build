@@ -55,14 +55,12 @@ class SymuploadTest(unittest.TestCase):
     api_key = 'sample_key'
 
     build_args = symupload.build_args(platform, artifact, artifact_type,
-                                      server_url, api_key, True)
-    self.assertTrue(
-        ['--i', '--timeout', '60000', '-p', artifact, server_url, api_key],
-        build_args)
+                                      server_url, api_key)
+    self.assertTrue(['-p', artifact, server_url, api_key], build_args)
 
     for platform in ['mac', 'linux']:
       build_args = symupload.build_args(platform, artifact, artifact_type,
-                                        server_url, api_key, False)
+                                        server_url, api_key)
       self.assertTrue(
           ['-p', 'sym-upload-v2', '-k', api_key, artifact, server_url],
           build_args)
@@ -92,13 +90,13 @@ class SymuploadTest(unittest.TestCase):
     server_url = 'https://some.url.com'
     api_key = 'sample_key'
     build_args = symupload.build_args(platform, artifact, artifact_type,
-                                      server_url, api_key, True)
+                                      server_url, api_key)
     sanitized_args = symupload.sanitize_args(build_args, api_key)
-    self.assertTrue(sanitized_args[6] == '********')
+    self.assertTrue(sanitized_args[3] == '********')
 
     for platform in ['mac', 'linux']:
       build_args = symupload.build_args(platform, artifact, artifact_type,
-                                        server_url, api_key, False)
+                                        server_url, api_key)
       sanitized_args = symupload.sanitize_args(build_args, api_key)
       self.assertTrue(sanitized_args[3] == '********')
 

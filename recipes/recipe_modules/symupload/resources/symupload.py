@@ -48,8 +48,7 @@ def parse_arguments(input_args):
   return args
 
 
-def build_args(platform, artifact, artifact_type, server_url, api_key,
-               dump_inline):
+def build_args(platform, artifact, artifact_type, server_url, api_key):
   """
   Args:
     platform: (str) platform for args, one of [win, mac, linux]
@@ -71,10 +70,7 @@ def build_args(platform, artifact, artifact_type, server_url, api_key,
     # Specifically, "-p" is just a switch to activate v2 mode, and doesn't
     # take a <protocol> value, and the key is passed as the last positional
     # arg, not with the "-k" flag.
-    if dump_inline:
-      cmd_args.append('--i')
-    # Set timeout to 1 mins.
-    cmd_args.extend(['--timeout', '60000', '-p', artifact, server_url, api_key])
+    cmd_args.extend(['-p', artifact, server_url, api_key])
   else:
     # For types other than breakpad, tell symupload the type and basename.
     if artifact_type in {'macho', 'dsym'}:
@@ -110,15 +106,13 @@ def main(args):
   args = parse_arguments(args)
   api_key = read_api_key(args.api_key_file)
   symupload_binary_path = args.binary_path
-  dump_inline = False
+
   # Show the symupload help text, which could be useful to debug failures (e.g.
   # to see if the flags change).
   try:
     output = subprocess.check_output([symupload_binary_path, '-h'],
                                      stderr=subprocess.STDOUT)
-    output = output.decode('utf-8')
-    dump_inline = "[--i]" in output
-    print(output)
+    print(output.decode('utf-8'))
   except subprocess.CalledProcessError:
     pass
 
@@ -131,7 +125,7 @@ def main(args):
       print('Uploading %s to %s' % (artifact, url))
 
       cmd_args = build_args(args.platform, artifact, args.artifact_type, url,
-                            api_key, dump_inline)
+                            api_key)
       print('\n' + subprocess.list2cmdline([symupload_binary_path] +
                                            sanitize_args(cmd_args, api_key)))
 
