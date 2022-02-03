@@ -14,6 +14,7 @@ DEPS = [
     'archive',
     'build/chromium',
     'squashfs',
+    'recipe_engine/assertions',
     'recipe_engine/file',
     'recipe_engine/json',
     'recipe_engine/path',
@@ -21,6 +22,11 @@ DEPS = [
     'recipe_engine/properties',
     'recipe_engine/runtime',
 ]
+
+TEST_CHROME_VERSION = '''MAJOR=91
+MINOR=0
+BUILD=4711
+PATCH=0'''
 
 TEST_HASH_MAIN='5e3250aadda2b170692f8e762d43b7e8deadbeef'
 TEST_COMMIT_POSITON_MAIN='refs/heads/B1@{#123456}'
@@ -30,6 +36,12 @@ TEST_COMMIT_POSITON_COMPONENT='refs/heads/master@{#234}'
 
 
 def RunSteps(api):
+
+  if 'test_get_channel_name' in api.properties:
+    api.assertions.assertEqual(
+        api.properties.get('channel'), api.archive.get_channel_name())
+    return
+
   if 'build_archive_url' in api.properties:
     api.archive.zip_and_upload_build(
         step_name='zip build',
@@ -740,3 +752,10 @@ def GenTests(api):
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
+
+  yield api.test(
+      'test_get_channel_name',
+      api.properties(test_get_channel_name=True, channel='canary'),
+      api.step_data('get version', api.file.read_text(TEST_CHROME_VERSION)),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation))

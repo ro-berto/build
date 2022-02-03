@@ -543,7 +543,13 @@ class ArchiveApi(recipe_api.RecipeApi):
 
     return output_path
 
-  def _get_channel_name(self):
+  def get_channel_name(self):
+    """Get the current branch's channel name.
+
+    Returns:
+      The string of channel's name: it can be 'canary', 'dev', 'beta', 'stable',
+       or 'legacy88'. Or no return with an empty step.
+    """
     base_name = '/'.join(['chrome', 'VERSION'])
 
     def step_test_data():
@@ -596,7 +602,7 @@ class ArchiveApi(recipe_api.RecipeApi):
 
     channel_placeholder = '{%channel%}'
     if channel_placeholder in input_str:
-      channel = self._get_channel_name()
+      channel = self.get_channel_name()
       input_str = input_str.replace(channel_placeholder, channel)
 
     arch_placeholder = '{%arch%}'
