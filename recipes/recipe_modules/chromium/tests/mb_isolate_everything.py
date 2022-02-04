@@ -20,7 +20,7 @@ def GenTests(api):
   yield api.test(
       'basic',
       api.post_process(post_process.StepCommandRE, 'generate .isolate files', [
-          'python3', '-u', r'.*/tools/mb/mb\.py', 'isolate-everything', '-m',
+          'python', '-u', r'.*/tools/mb/mb\.py', 'isolate-everything', '-m',
           'test-group', '-b', 'test-builder', '--config-file',
           r'.*/tools/mb/mb_config\.pyl', '--goma-dir', '.*', '//out/Release'
       ]),

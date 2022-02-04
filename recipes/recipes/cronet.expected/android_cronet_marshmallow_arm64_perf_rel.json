@@ -409,7 +409,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "python",
       "-u",
       "[START_DIR]/src/tools/mb/mb.py",
       "lookup",
@@ -449,7 +449,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "python",
       "-u",
       "[START_DIR]/src/tools/mb/mb.py",
       "gen",
@@ -1078,7 +1078,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "python",
       "-u",
       "[START_DIR]/src/tools/mb/mb.py",
       "lookup",
@@ -1116,7 +1116,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "python",
       "-u",
       "[START_DIR]/src/tools/mb/mb.py",
       "gen",

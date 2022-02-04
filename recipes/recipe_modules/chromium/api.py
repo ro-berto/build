@@ -1290,9 +1290,13 @@ class ChromiumApi(recipe_api.RecipeApi):
     if self.c.project_generator.use_luci_auth:
       args += ['--luci-auth']
 
-    combined_args = args + (additional_args or [])
+    step_kwargs = {
+        'name': name,
+        'script': mb_path.join('mb.py'),
+        'args': args + (additional_args or []),
+    }
 
-    cmd = ['python3', '-u', mb_path.join('mb.py')] + combined_args
+    step_kwargs.update(kwargs)
 
     # If an environment was provided, copy it so that we don't modify the
     # caller's data
@@ -1314,7 +1318,7 @@ class ChromiumApi(recipe_api.RecipeApi):
         # TODO(phajdan.jr): get cwd from context, not kwargs.
         cwd=kwargs.get('cwd', self.m.path['checkout']),
         env=env):
-      return self.m.step(name, cmd, **kwargs)
+      return self.m.python(**step_kwargs)
 
   @_with_chromium_layout
   def mb_analyze(self,

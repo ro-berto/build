@@ -207,7 +207,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "python",
       "-u",
       "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
       "lookup",
@@ -248,7 +248,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "python",
       "-u",
       "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
       "gen",
@@ -713,7 +713,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "python",
       "-u",
       "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
       "lookup",
@@ -754,7 +754,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "python",
       "-u",
       "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
       "gen",
@@ -1219,7 +1219,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "python",
       "-u",
       "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
       "lookup",
@@ -1260,7 +1260,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "python",
       "-u",
       "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
       "gen",

@@ -773,7 +773,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "python",
       "-u",
       "[CACHE]/builder/src/tools/mb/mb.py",
       "analyze",
