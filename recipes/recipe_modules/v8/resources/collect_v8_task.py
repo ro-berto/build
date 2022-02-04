@@ -3,6 +3,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from __future__ import print_function
 import json
 import optparse
 import os
@@ -167,7 +168,7 @@ class TaskCollector(object):
       with open(path) as f:
         return json.load(f)
     except (IOError, ValueError):
-      print >> sys.stderr, 'Missing or invalid v8 JSON file: %s' % path
+      print('Missing or invalid v8 JSON file: %s' % path, file=sys.stderr)
       return None
 
 
