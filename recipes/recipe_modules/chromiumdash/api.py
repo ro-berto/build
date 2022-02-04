@@ -4,8 +4,6 @@
 
 """API for sending requests to ChromiumDash."""
 
-import six
-
 from recipe_engine import recipe_api
 
 
@@ -35,8 +33,7 @@ class ChromiumDashApi(recipe_api.RecipeApi):
 
     # TODO(crbug.com/1256051) When python2 support is removed, url_args
     # can be passed as provided
-    url_args = self.m.py3_migration.consistent_ordering(six.iteritems(url_args))
-
+    url_args = self.m.py3_migration.consistent_ordering(list(url_args.items()))
     url = (self.m.url.join(self.URL, endpoint) +
            ('?' + self.m.url.urlencode(url_args)) if url_args else '')
     return self.m.url.get_json(
