@@ -27,7 +27,7 @@ def RunSteps(api):
   with api.context(
       cwd=api.path['checkout'],
       env_prefixes={'PATH': [api.v8.depot_tools_path]}):
-    api.v8.python(
+    api.v8.vpython(
       'Presubmit',
       api.path['checkout'].join('tools', 'v8_presubmit.py'),
       ['--no-linter-cache'],

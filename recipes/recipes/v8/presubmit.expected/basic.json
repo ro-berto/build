@@ -1,7 +1,7 @@
 [
   {
     "cmd": [
-      "python",
+      "vpython",
       "-u",
       "[CACHE]/builder/v8/tools/v8_presubmit.py",
       "--no-linter-cache"
