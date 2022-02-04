@@ -252,7 +252,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
       "lookup",
@@ -291,7 +291,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
       "gen",

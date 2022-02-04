@@ -229,7 +229,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "[CACHE]/builder/v8/tools/mb/mb.py",
       "lookup",
@@ -271,7 +271,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "[CACHE]/builder/v8/tools/mb/mb.py",
       "gen",
@@ -717,7 +717,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "[CACHE]/builder/v8/tools/mb/mb.py",
       "lookup",
@@ -759,7 +759,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "[CACHE]/builder/v8/tools/mb/mb.py",
       "gen",
@@ -1065,7 +1065,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "[CACHE]/builder/v8/tools/mb/mb.py",
       "lookup",
@@ -1107,7 +1107,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "[CACHE]/builder/v8/tools/mb/mb.py",
       "gen",
@@ -1451,7 +1451,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "[CACHE]/builder/v8/tools/mb/mb.py",
       "lookup",
@@ -1493,7 +1493,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "[CACHE]/builder/v8/tools/mb/mb.py",
       "gen",

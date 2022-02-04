@@ -245,7 +245,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "[CACHE]\\builder\\angle\\tools\\mb\\mb.py",
       "lookup",
@@ -281,7 +281,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "[CACHE]\\builder\\angle\\tools\\mb\\mb.py",
       "gen",

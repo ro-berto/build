@@ -71,7 +71,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "None/tools/mb/mb.py",
       "lookup",
@@ -97,7 +97,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "None/tools/mb/mb.py",
       "gen",

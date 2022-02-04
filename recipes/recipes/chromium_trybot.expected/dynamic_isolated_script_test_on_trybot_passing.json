@@ -783,7 +783,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "[CACHE]/builder/src/tools/mb/mb.py",
       "analyze",
@@ -926,7 +926,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "[CACHE]/builder/src/tools/mb/mb.py",
       "lookup",
@@ -965,7 +965,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "[CACHE]/builder/src/tools/mb/mb.py",
       "gen",
