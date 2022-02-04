@@ -37,7 +37,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "None/tools/mb/mb.py",
       "analyze",
