@@ -225,20 +225,20 @@ TRYBOTS = try_spec.TryDatabase.create({
                     builder_group='chromium.gpu',
                     buildername='Android Release (Nexus 5X)',
                 ),
-            ],
-            ),
+            ],),
         'android-marshmallow-arm64-rel-rts':
-            try_spec.TrySpec.create([
-                try_spec.TryMirror.create(
-                    builder_group='tryserver.chromium.android',
-                    buildername='android-marshmallow-arm64-rel-rts',
-                ),
-                try_spec.TryMirror.create(
-                    builder_group='chromium.gpu',
-                    buildername='Android Release (Nexus 5X)',
-                ),
-            ],
-            regression_test_selection=try_spec.ALWAYS,
+            try_spec.TrySpec.create(
+                [
+                    try_spec.TryMirror.create(
+                        builder_group='tryserver.chromium.android',
+                        buildername='android-marshmallow-arm64-rel-rts',
+                    ),
+                    try_spec.TryMirror.create(
+                        builder_group='chromium.gpu',
+                        buildername='Android Release (Nexus 5X)',
+                    ),
+                ],
+                regression_test_selection=try_spec.ALWAYS,
             ),
         'android-marshmallow-x86-rel':
             try_spec.TrySpec.create_for_single_mirror(
@@ -250,7 +250,7 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android',
                 buildername='android-marshmallow-x86-rel-non-cq',
-           ),
+            ),
         'android-marshmallow-x86-rel-orchestrator':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android',
@@ -446,10 +446,10 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='GPU FYI Android arm64 Builder',
                 tester='Android FYI Release (Nexus 9)',
             ),
-        'gpu-fyi-try-android-n-nvidia-shield-tv-64':
+        'gpu-fyi-try-android-nvidia-shield-tv':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Android arm64 Builder',
+                buildername='GPU FYI Android arm Builder',
                 tester='Android FYI Release (NVIDIA Shield TV)',
             ),
         'gpu-fyi-try-android-p-pixel-2-32':
@@ -935,8 +935,7 @@ TRYBOTS = try_spec.TryDatabase.create({
                         tester='Linux Release (NVIDIA)',
                     ),
                 ],
-                filter_stable_test=try_spec.ALWAYS
-            ),
+                filter_stable_test=try_spec.ALWAYS),
         'linux-stable-filter-combined-rel':
             try_spec.TrySpec.create(
                 mirrors=[
@@ -967,8 +966,7 @@ TRYBOTS = try_spec.TryDatabase.create({
                         buildername='GPU Linux Builder',
                         tester='Linux Release (NVIDIA)',
                     ),
-                ],
-            ),
+                ],),
         'linux_chromium_asan_rel_ng':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.memory',
@@ -1062,7 +1060,7 @@ TRYBOTS = try_spec.TryDatabase.create({
                 tester='Linux TSan Tests',
                 regression_test_selection=try_spec.ALWAYS,
             ),
-         # TODO(crbug.com/1200904): Remove after migration
+        # TODO(crbug.com/1200904): Remove after migration
         'linux_chromium_tsan_rel_ng_bionic':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.memory',
@@ -1536,67 +1534,69 @@ TRYBOTS = try_spec.TryDatabase.create({
                     buildername='GPU Mac Builder',
                     tester='Mac Retina Release (AMD)',
                 ),
-            ],
-            ),
+            ],),
         'mac-rel':
-            try_spec.TrySpec.create([
-                try_spec.TryMirror.create(
-                    builder_group='chromium.mac',
-                    buildername='Mac Builder',
-                    tester='Mac11 Tests',
-                ),
-                try_spec.TryMirror.create(
-                    builder_group='chromium.gpu',
-                    buildername='GPU Mac Builder',
-                    tester='Mac Release (Intel)',
-                ),
-                try_spec.TryMirror.create(
-                    builder_group='chromium.gpu',
-                    buildername='GPU Mac Builder',
-                    tester='Mac Retina Release (AMD)',
-                ),
-            ],
-            regression_test_selection=try_spec.QUICK_RUN_ONLY,
+            try_spec.TrySpec.create(
+                [
+                    try_spec.TryMirror.create(
+                        builder_group='chromium.mac',
+                        buildername='Mac Builder',
+                        tester='Mac11 Tests',
+                    ),
+                    try_spec.TryMirror.create(
+                        builder_group='chromium.gpu',
+                        buildername='GPU Mac Builder',
+                        tester='Mac Release (Intel)',
+                    ),
+                    try_spec.TryMirror.create(
+                        builder_group='chromium.gpu',
+                        buildername='GPU Mac Builder',
+                        tester='Mac Retina Release (AMD)',
+                    ),
+                ],
+                regression_test_selection=try_spec.QUICK_RUN_ONLY,
             ),
         'mac-rel-orchestrator':
-            try_spec.TrySpec.create([
-                try_spec.TryMirror.create(
-                    builder_group='chromium.mac',
-                    buildername='Mac Builder',
-                    tester='Mac11 Tests',
-                ),
-                try_spec.TryMirror.create(
-                    builder_group='chromium.gpu',
-                    buildername='GPU Mac Builder',
-                    tester='Mac Release (Intel)',
-                ),
-                try_spec.TryMirror.create(
-                    builder_group='chromium.gpu',
-                    buildername='GPU Mac Builder',
-                    tester='Mac Retina Release (AMD)',
-                ),
-            ],
-            regression_test_selection=try_spec.QUICK_RUN_ONLY,
+            try_spec.TrySpec.create(
+                [
+                    try_spec.TryMirror.create(
+                        builder_group='chromium.mac',
+                        buildername='Mac Builder',
+                        tester='Mac11 Tests',
+                    ),
+                    try_spec.TryMirror.create(
+                        builder_group='chromium.gpu',
+                        buildername='GPU Mac Builder',
+                        tester='Mac Release (Intel)',
+                    ),
+                    try_spec.TryMirror.create(
+                        builder_group='chromium.gpu',
+                        buildername='GPU Mac Builder',
+                        tester='Mac Retina Release (AMD)',
+                    ),
+                ],
+                regression_test_selection=try_spec.QUICK_RUN_ONLY,
             ),
         'mac-rel-rts':
-            try_spec.TrySpec.create([
-                try_spec.TryMirror.create(
-                    builder_group='chromium.mac',
-                    buildername='Mac Builder',
-                    tester='Mac11 Tests',
-                ),
-                try_spec.TryMirror.create(
-                    builder_group='chromium.gpu',
-                    buildername='GPU Mac Builder',
-                    tester='Mac Release (Intel)',
-                ),
-                try_spec.TryMirror.create(
-                    builder_group='chromium.gpu',
-                    buildername='GPU Mac Builder',
-                    tester='Mac Retina Release (AMD)',
-                ),
-            ],
-            regression_test_selection=try_spec.ALWAYS,
+            try_spec.TrySpec.create(
+                [
+                    try_spec.TryMirror.create(
+                        builder_group='chromium.mac',
+                        buildername='Mac Builder',
+                        tester='Mac11 Tests',
+                    ),
+                    try_spec.TryMirror.create(
+                        builder_group='chromium.gpu',
+                        buildername='GPU Mac Builder',
+                        tester='Mac Release (Intel)',
+                    ),
+                    try_spec.TryMirror.create(
+                        builder_group='chromium.gpu',
+                        buildername='GPU Mac Builder',
+                        tester='Mac Retina Release (AMD)',
+                    ),
+                ],
+                regression_test_selection=try_spec.ALWAYS,
             ),
         'mac_chromium_10.11_rel_ng':
             try_spec.TrySpec.create_for_single_mirror(
@@ -1656,25 +1656,23 @@ TRYBOTS = try_spec.TryDatabase.create({
             ),
         # Optional GPU bots.
         'mac_optional_gpu_tests_rel':
-            try_spec.TrySpec.create(
-                [
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.gpu.fyi',
-                        buildername='GPU FYI Mac Builder DEPS ANGLE',
-                        tester='Optional Mac Release (Intel)',
-                    ),
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.gpu.fyi',
-                        buildername='GPU FYI Mac Builder DEPS ANGLE',
-                        tester='Optional Mac Retina Release (NVIDIA)',
-                    ),
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.gpu.fyi',
-                        buildername='GPU FYI Mac Builder DEPS ANGLE',
-                        tester='Optional Mac Retina Release (AMD)',
-                    ),
-                ],
-            ),
+            try_spec.TrySpec.create([
+                try_spec.TryMirror.create(
+                    builder_group='chromium.gpu.fyi',
+                    buildername='GPU FYI Mac Builder DEPS ANGLE',
+                    tester='Optional Mac Release (Intel)',
+                ),
+                try_spec.TryMirror.create(
+                    builder_group='chromium.gpu.fyi',
+                    buildername='GPU FYI Mac Builder DEPS ANGLE',
+                    tester='Optional Mac Retina Release (NVIDIA)',
+                ),
+                try_spec.TryMirror.create(
+                    builder_group='chromium.gpu.fyi',
+                    buildername='GPU FYI Mac Builder DEPS ANGLE',
+                    tester='Optional Mac Retina Release (AMD)',
+                ),
+            ],),
         # Manually triggered GPU trybots.
         'gpu-fyi-try-mac-amd-pro-rel':
             try_spec.TrySpec.create_for_single_mirror(
@@ -1835,40 +1833,40 @@ TRYBOTS = try_spec.TryDatabase.create({
                 tester='Win10 Tests x64 (dbg)',
             ),
         'win10_chromium_x64_rel_ng':
-            try_spec.TrySpec.create([
-                try_spec.TryMirror.create(
-                    builder_group='chromium.win',
-                    buildername='Win x64 Builder',
-                    tester='Win10 Tests x64',
-                ),
-                try_spec.TryMirror.create(
-                    builder_group='chromium.gpu',
-                    buildername='GPU Win x64 Builder',
-                    tester='Win10 x64 Release (NVIDIA)',
-                ),
-            ],
-            regression_test_selection=try_spec.QUICK_RUN_ONLY,
+            try_spec.TrySpec.create(
+                [
+                    try_spec.TryMirror.create(
+                        builder_group='chromium.win',
+                        buildername='Win x64 Builder',
+                        tester='Win10 Tests x64',
+                    ),
+                    try_spec.TryMirror.create(
+                        builder_group='chromium.gpu',
+                        buildername='GPU Win x64 Builder',
+                        tester='Win10 x64 Release (NVIDIA)',
+                    ),
+                ],
+                regression_test_selection=try_spec.QUICK_RUN_ONLY,
             ),
         'win10_chromium_x64_rel_ng_rts':
-            try_spec.TrySpec.create([
-                try_spec.TryMirror.create(
-                    builder_group='chromium.win',
-                    buildername='Win x64 Builder',
-                    tester='Win10 Tests x64',
-                ),
-                try_spec.TryMirror.create(
-                    builder_group='chromium.gpu',
-                    buildername='GPU Win x64 Builder',
-                    tester='Win10 x64 Release (NVIDIA)',
-                ),
-            ],
-            regression_test_selection=try_spec.ALWAYS,
+            try_spec.TrySpec.create(
+                [
+                    try_spec.TryMirror.create(
+                        builder_group='chromium.win',
+                        buildername='Win x64 Builder',
+                        tester='Win10 Tests x64',
+                    ),
+                    try_spec.TryMirror.create(
+                        builder_group='chromium.gpu',
+                        buildername='GPU Win x64 Builder',
+                        tester='Win10 x64 Release (NVIDIA)',
+                    ),
+                ],
+                regression_test_selection=try_spec.ALWAYS,
             ),
         'win11-x64-fyi-rel':
             try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
-                buildername='Win11 Tests x64'
-            ),
+                builder_group='chromium.fyi', buildername='Win11 Tests x64'),
         'win_chromium_compile_dbg_ng':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.win',
@@ -2213,7 +2211,7 @@ TRYBOTS = try_spec.TryDatabase.create({
                 tester='win10-updater-tester-rel',
             ),
         'mac-updater-try-builder-rel':
-           try_spec.TrySpec.create_for_single_mirror(
+            try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.updater',
                 buildername='mac-updater-builder-rel',
                 tester='mac10.15-updater-tester-rel',
@@ -2225,7 +2223,7 @@ TRYBOTS = try_spec.TryDatabase.create({
                 tester='win10-updater-tester-dbg',
             ),
         'mac-updater-try-builder-dbg':
-           try_spec.TrySpec.create_for_single_mirror(
+            try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.updater',
                 buildername='mac-updater-builder-dbg',
                 tester='mac10.15-updater-tester-dbg',
