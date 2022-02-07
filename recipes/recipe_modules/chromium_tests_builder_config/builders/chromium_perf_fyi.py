@@ -34,13 +34,6 @@ def _AddIsolatedTestSpec(name,
 
 
 _AddIsolatedTestSpec(
-    'android-nexus5x-perf-fyi',
-    'android',
-    parent_buildername='android-builder-perf',
-    parent_builder_group='chromium.perf',
-    target_bits=32)
-
-_AddIsolatedTestSpec(
     'android-pixel2-perf-aab-fyi',
     'android',
     parent_buildername='android_arm64-builder-perf',
@@ -114,20 +107,6 @@ _AddIsolatedTestSpec(
     'win',
     parent_buildername='win64-builder-perf',
     parent_builder_group='chromium.perf')
-
-_AddIsolatedTestSpec(
-    'win-7_laptop_low_end_x32-perf_Acer-Aspire-5',
-    'win',
-    parent_buildername='win32-builder-perf',
-    parent_builder_group='chromium.perf',
-    target_bits=32)
-
-_AddIsolatedTestSpec(
-    'win-7_laptop_low_end_x32-perf-Lenovo-ThinkPad',
-    'win',
-    parent_buildername='win32-builder-perf',
-    parent_builder_group='chromium.perf',
-    target_bits=32)
 
 _AddIsolatedTestSpec(
     'chromeos-kevin-perf-fyi',

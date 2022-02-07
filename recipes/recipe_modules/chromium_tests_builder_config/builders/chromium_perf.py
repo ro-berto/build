@@ -209,9 +209,6 @@ _AddBuildSpec('linux-builder-perf-rel', 'linux')
 _AddBuildSpec(
     'chromecast-linux-builder-perf', 'linux', bisect_archive_build=True)
 
-# Android: Clank, Webview, WebLayer
-_AddIsolatedTestSpec(
-    'Android Nexus5 Perf', 'android', 'android-builder-perf', target_bits=32)
 
 _AddIsolatedTestSpec(
     'android-go-perf', 'android', 'android-builder-perf', target_bits=32)
@@ -238,15 +235,10 @@ _AddIsolatedTestSpec('android-pixel4_weblayer-perf', 'android',
 _AddIsolatedTestSpec('android-pixel4a_power-perf', 'android',
                      'android_arm64-builder-perf')
 
-_AddIsolatedTestSpec('Android Nexus5X WebView Perf', 'android',
-                     'android_arm64-builder-perf')
-
 _AddIsolatedTestSpec('win-10-perf', 'win', 'win64-builder-perf')
 _AddIsolatedTestSpec('win-10_laptop_low_end-perf', 'win', 'win64-builder-perf')
 _AddIsolatedTestSpec('win-10_amd-perf', 'win', 'win64-builder-perf')
 _AddIsolatedTestSpec('win-10_amd_laptop-perf', 'win', 'win64-builder-perf')
-_AddIsolatedTestSpec('Win 7 Perf', 'win', 'win32-builder-perf', target_bits=32)
-_AddIsolatedTestSpec('Win 7 Nvidia GPU Perf', 'win', 'win64-builder-perf')
 
 _AddIsolatedTestSpec('mac-laptop_low_end-perf', 'mac', 'mac-builder-perf')
 _AddIsolatedTestSpec('mac-laptop_high_end-perf', 'mac', 'mac-builder-perf')
