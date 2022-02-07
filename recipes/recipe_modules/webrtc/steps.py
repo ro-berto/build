@@ -317,6 +317,7 @@ def SwarmingPerfTest(name, args=None, **kwargs):
   # magical treatment of the dashed version of the flag, and we need that to
   # get a writable out dir on Android, so we must have this translation step.
   args.extend([
+      '--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json',
       ('--isolated-script-test-perf-output='
        '${ISOLATED_OUTDIR}/perftest-output.pb'),
   ])
