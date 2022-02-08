@@ -58,22 +58,20 @@ class BuilderDetails(object):
 
 class _PropertiesBuilder(object):
 
-  def __init__(self, ctbc_test_api):
-    self._ctbc_test_api = ctbc_test_api
+  def __init__(self):
     self._builder_entries = []
     self._builder_ids = []
     self._builder_ids_in_scope_for_testing = []
 
   def build(self):
-    return self._ctbc_test_api.properties(
-        properties_pb.InputProperties(
-            builder_config=properties_pb.BuilderConfig(
-                builder_db=properties_pb.BuilderDatabase(
-                    entries=self._builder_entries),
-                builder_ids=self._builder_ids,
-                builder_ids_in_scope_for_testing=(
-                    self._builder_ids_in_scope_for_testing),
-            )))
+    return properties_pb.InputProperties(
+        builder_config=properties_pb.BuilderConfig(
+            builder_db=properties_pb.BuilderDatabase(
+                entries=self._builder_entries),
+            builder_ids=self._builder_ids,
+            builder_ids_in_scope_for_testing=(
+                self._builder_ids_in_scope_for_testing),
+        ))
 
   def add_builder(self, details):
     builder_id = builder_pb.BuilderID(
@@ -206,8 +204,8 @@ class _CiBuilderPropertiesBuilder(object):
     self._builder_spec = builder_spec
 
   @classmethod
-  def create(cls, ctbc_test_api, **kwargs):
-    props_builder = _PropertiesBuilder(ctbc_test_api)
+  def create(cls, **kwargs):
+    props_builder = _PropertiesBuilder()
     kwargs.setdefault('bucket', 'ci')
     details = BuilderDetails(
         execution_mode=_ExecutionMode.COMPILE_AND_TEST, parent=None, **kwargs)
@@ -236,8 +234,8 @@ class _CiTesterPropertiesBuilder(object):
     self._parent_details = None
 
   @classmethod
-  def create(cls, ctbc_test_api, **kwargs):
-    props_builder = _PropertiesBuilder(ctbc_test_api)
+  def create(cls, **kwargs):
+    props_builder = _PropertiesBuilder()
     kwargs.setdefault('bucket', 'ci')
     details = BuilderDetails(execution_mode=_ExecutionMode.TEST, **kwargs)
     return cls(props_builder, details)
@@ -273,7 +271,8 @@ class ChromiumTestsBuilderConfigApi(recipe_test_api.RecipeTestApi):
     return self.m.properties(
         **{'$build/chromium_tests_builder_config': properties})
 
-  def properties_builder_for_ci_builder(self, **kwargs):
+  @staticmethod
+  def properties_builder_for_ci_builder(**kwargs):
     """Get a properties builder for a CI builder.
 
     See BuilderDetails for information on the allowed keyword arguments.
@@ -287,9 +286,10 @@ class ChromiumTestsBuilderConfigApi(recipe_test_api.RecipeTestApi):
     * build - Creates the test data object that sets the properties for
       the module.
     """
-    return _CiBuilderPropertiesBuilder.create(self, **kwargs)
+    return _CiBuilderPropertiesBuilder.create(**kwargs)
 
-  def properties_builder_for_ci_tester(self, **kwargs):
+  @staticmethod
+  def properties_builder_for_ci_tester(**kwargs):
     """Get a properties builder for a CI tester.
 
     See BuilderDetails for information on the allowed keyword arguments.
@@ -304,7 +304,7 @@ class ChromiumTestsBuilderConfigApi(recipe_test_api.RecipeTestApi):
       the module. It is an error to call this before calling
       `with_parent`.
     """
-    return _CiTesterPropertiesBuilder.create(self, **kwargs)
+    return _CiTesterPropertiesBuilder.create(**kwargs)
 
   @staticmethod
   def _get_builder_id(builder_group, builder, **_):

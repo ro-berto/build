@@ -40,10 +40,11 @@ def GenTests(api):
           builder_ids=[builder_id],
           builder_ids_in_scope_for_testing=[builder_id],
       ),
-      api.chromium_tests_builder_config \
-          .properties_builder_for_ci_builder(
-              builder_group=builder_id.group, builder=builder_id.builder) \
-          .build(),
+      api.chromium_tests_builder_config.properties(
+          api.chromium_tests_builder_config.properties_builder_for_ci_builder(
+              builder_group=builder_id.group,
+              builder=builder_id.builder,
+          ).build()),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -54,12 +55,14 @@ def GenTests(api):
           builder_ids=[builder_id],
           builder_ids_in_scope_for_testing=[builder_id, tester_id],
       ),
-      api.chromium_tests_builder_config \
-          .properties_builder_for_ci_tester(
-              builder_group=tester_id.group, builder=tester_id.builder) \
-          .with_parent(
-              builder_group=builder_id.group, builder=builder_id.builder) \
-          .build(),
+      api.chromium_tests_builder_config.properties(
+          api.chromium_tests_builder_config.properties_builder_for_ci_tester(
+              builder_group=tester_id.group,
+              builder=tester_id.builder,
+          ).with_parent(
+              builder_group=builder_id.group,
+              builder=builder_id.builder,
+          ).build()),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -69,10 +72,11 @@ def GenTests(api):
       api.properties(
           target_builder_id=chromium.BuilderId.create_for_group(
               'fake-group', 'other-fake-builder')),
-      api.chromium_tests_builder_config \
-          .properties_builder_for_ci_builder(
-              builder_group=builder_id.group, builder=builder_id.builder) \
-          .build(),
+      api.chromium_tests_builder_config.properties(
+          api.chromium_tests_builder_config.properties_builder_for_ci_builder(
+              builder_group=builder_id.group,
+              builder=builder_id.builder,
+          ).build()),
       api.post_check(post_process.StepException, 'invalid target builder'),
       api.post_check(post_process.StatusException),
       api.post_process(post_process.DropExpectation),
