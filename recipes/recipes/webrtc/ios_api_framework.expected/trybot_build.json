@@ -343,7 +343,7 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython3",
       "-u",
       "[CACHE]/builder/src/tools_webrtc/ios/build_ios_libs.py",
       "--use-goma",
@@ -496,7 +496,7 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython3",
       "-u",
       "RECIPE_MODULE[build::webrtc]/resources/binary_sizes.py",
       "--base-dir",

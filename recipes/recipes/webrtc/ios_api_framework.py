@@ -18,7 +18,6 @@ DEPS = [
     'recipe_engine/context',
     'recipe_engine/path',
     'recipe_engine/properties',
-    'recipe_engine/python',
     'recipe_engine/runtime',
     'recipe_engine/step',
     'webrtc',
@@ -46,14 +45,12 @@ def RunSteps(api):
       api.step('cleanup', [build_script, '-c'])
       build_revision_number_args = ['-r', api.webrtc.revision_number]
 
-    step_result = api.python(
-        'build',
-        build_script,
-        args=[
-            '--use-goma',
-            '--extra-gn-args=goma_dir=\"%s\"' % goma_dir, '--verbose'
-        ] + build_revision_number_args,
-    )
+    args = [
+        '--use-goma',
+        '--extra-gn-args=goma_dir=\"%s\"' % goma_dir, '--verbose'
+    ]
+    cmd = ['vpython3', '-u', build_script] + args + build_revision_number_args
+    step_result = api.step('build', cmd)
     build_exit_status = step_result.retcode
   except api.step.StepFailure as e:
     build_exit_status = e.retcode

@@ -87,7 +87,7 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython3",
       "-u",
       "[CACHE]/builder/src/tools_webrtc/download_tools.py",
       "[CACHE]/builder/src/tools_webrtc/audio_quality"
@@ -907,7 +907,7 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython3",
       "-u",
       "RECIPE_MODULE[build::webrtc]/resources/binary_sizes.py",
       "--base-dir",
@@ -941,7 +941,7 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython3",
       "-u",
       "RECIPE_MODULE[build::chromium_tests]/resources/find_command_lines.py",
       "--build-dir",

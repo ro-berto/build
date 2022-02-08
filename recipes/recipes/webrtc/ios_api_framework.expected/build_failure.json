@@ -300,7 +300,7 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython3",
       "-u",
       "[CACHE]/builder/src/tools_webrtc/ios/build_ios_libs.py",
       "--use-goma",

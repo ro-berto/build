@@ -277,7 +277,7 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython3",
       "-u",
       "[CACHE]/builder/src/tools_webrtc/version_updater/update_version.py",
       "--clean"

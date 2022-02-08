@@ -308,7 +308,7 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython3",
       "-u",
       "[CACHE]/builder/src/tools_webrtc/autoroller/roll_deps.py",
       "--clean",

@@ -484,31 +484,43 @@ class WebRTCApi(recipe_api.RecipeApi):
                         include_subdirs=CHROMIUM_DEPS)
 
   def download_audio_quality_tools(self):
+    args = [self.m.path['checkout'].join('tools_webrtc', 'audio_quality')]
+    script = self.m.path['checkout'].join('tools_webrtc', 'download_tools.py')
+    cmd = ['vpython3', '-u', script] + args
+
     with self.m.depot_tools.on_path():
-      self.m.python('download audio quality tools',
-                    self.m.path['checkout'].join('tools_webrtc',
-                                                 'download_tools.py'),
-                    args=[self.m.path['checkout'].join('tools_webrtc',
-                                                       'audio_quality')])
+      self.m.step('download audio quality tools', cmd)
 
   def download_video_quality_tools(self):
     with self.m.depot_tools.on_path():
-      self.m.python('download video quality tools',
-                    self.m.path['checkout'].join('tools_webrtc',
-                                                 'download_tools.py'),
-                    args=[self.m.path['checkout'].join(
-                        'tools_webrtc', 'video_quality_toolchain', 'linux')])
-      self.m.python('download apprtc',
-                    self.m.depot_tools.download_from_google_storage_path,
-                    args=['--bucket=chromium-webrtc-resources',
-                          '--directory',
-                          self.m.path['checkout'].join('rtc_tools', 'testing')])
-      self.m.python('download golang',
-                    self.m.depot_tools.download_from_google_storage_path,
-                    args=['--bucket=chromium-webrtc-resources',
-                          '--directory',
-                          self.m.path['checkout'].join(
-                              'rtc_tools', 'testing', 'golang', 'linux')])
+      # Video quality tools
+      args_tools = [
+          self.m.path['checkout'].join('tools_webrtc',
+                                       'video_quality_toolchain', 'linux')
+      ]
+      script_tools = self.m.path['checkout'].join('tools_webrtc',
+                                                  'download_tools.py')
+      cmd_tools = ['vpython3', '-u', script_tools] + args_tools
+      self.m.step('download video quality tools', cmd_tools)
+
+      # AppRTC
+      args_apprtc = [
+          '--bucket=chromium-webrtc-resources', '--directory',
+          self.m.path['checkout'].join('rtc_tools', 'testing')
+      ]
+      script_apprtc = self.m.depot_tools.download_from_google_storage_path
+      cmd_apprtc = ['vpython3', '-u', script_apprtc] + args_apprtc
+      self.m.step('download apprtc', cmd_apprtc)
+
+      # Golang
+      args_golang = [
+          '--bucket=chromium-webrtc-resources', '--directory',
+          self.m.path['checkout'].join('rtc_tools', 'testing', 'golang',
+                                       'linux')
+      ]
+      script_golang = self.m.depot_tools.download_from_google_storage_path
+      cmd_golang = ['vpython3', '-u', script_golang] + args_golang
+      self.m.step('download golang', cmd_golang)
 
   @contextlib.contextmanager
   def ensure_sdk(self):
@@ -615,12 +627,15 @@ class WebRTCApi(recipe_api.RecipeApi):
           self.m.chromium.output_dir, targets=self._isolated_targets)
 
   def find_swarming_command_lines(self):
-    step_result = self.m.python(
+    args = [
+        '--build-dir', self.m.chromium.output_dir, '--output-json',
+        self.m.json.output()
+    ]
+    script = self.m.chromium_tests.resource('find_command_lines.py')
+    cmd = ['vpython3', '-u', script] + args
+    step_result = self.m.step(
         'find command lines',
-        self.m.chromium_tests.resource('find_command_lines.py'), [
-            '--build-dir', self.m.chromium.output_dir, '--output-json',
-            self.m.json.output()
-        ],
+        cmd,
         step_test_data=lambda: self.m.json.test_api.output({}))
     assert isinstance(step_result.json.output, dict)
     return step_result.json.output
@@ -655,14 +670,17 @@ class WebRTCApi(recipe_api.RecipeApi):
     if not files:
       return
 
-    result = self.m.python(
-      'get binary sizes',
-      self.resource('binary_sizes.py'),
-      ['--base-dir', base_dir or self.m.chromium.output_dir,
-       '--output', self.m.json.output(),
-       '--'] + list(files),
-      infra_step=True,
-      step_test_data=self.test_api.example_binary_sizes)
+    args = [
+        '--base-dir', base_dir or self.m.chromium.output_dir, '--output',
+        self.m.json.output(), '--'
+    ] + list(files)
+    cmd = ['vpython3', '-u', self.resource('binary_sizes.py')] + args
+
+    result = self.m.step(
+        'get binary sizes',
+        cmd,
+        infra_step=True,
+        step_test_data=self.test_api.example_binary_sizes)
     result.presentation.properties['binary_sizes'] = result.json.output
 
   def runtests(self, phase=None):
@@ -756,13 +774,11 @@ class WebRTCApi(recipe_api.RecipeApi):
         # To benefit from incremental builds for speed.
         args.append('--build-dir=out/android-archive')
 
+      cmd = ['vpython3', '-u', build_script] + args
+
       with self.m.context(cwd=self.m.path['checkout']):
         with self.m.depot_tools.on_path():
-          step_result = self.m.python(
-              'build android archive',
-              build_script,
-              args=args,
-          )
+          step_result = self.m.step('build android archive', cmd)
       build_exit_status = step_result.retcode
     except self.m.step.StepFailure as e:
       build_exit_status = e.retcode
@@ -836,14 +852,12 @@ class WebRTCApi(recipe_api.RecipeApi):
 
       upload_script = self.m.path['checkout'].join(
           'tools_webrtc', 'perf', 'webrtc_dashboard_upload.py')
-      self.m.python(
-          '%s Dashboard Upload' % name,
-          upload_script,
-          args,
+      cmd = ['vpython3', '-u', upload_script] + args
+      self.m.step(
+          '%s Dashboard upload' % name,
+          cmd,
           step_test_data=lambda: self.m.json.test_api.output({}),
-          venv=True,
           infra_step=True)
-
 
 def sanitize_file_name(name):
   safe_with_spaces = ''.join(c if c.isalnum() else ' ' for c in name)

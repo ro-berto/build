@@ -944,7 +944,7 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython3",
       "-u",
       "RECIPE_MODULE[build::webrtc]/resources/binary_sizes.py",
       "--base-dir",

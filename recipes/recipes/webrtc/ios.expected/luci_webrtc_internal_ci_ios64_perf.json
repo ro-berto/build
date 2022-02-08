@@ -1893,7 +1893,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "vpython3",
       "-u",
       "[CACHE]/builder/src/tools_webrtc/perf/webrtc_dashboard_upload.py",
       "--build-page-url",
@@ -1931,7 +1931,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "webrtc_perf_tests Dashboard Upload",
+    "name": "webrtc_perf_tests Dashboard upload",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
