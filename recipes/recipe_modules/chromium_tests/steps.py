@@ -2278,9 +2278,9 @@ class SwarmingGTestTest(SwarmingTest):
     json_override = None
     # TODO(crbug.com/1255217): Remove this android exception when logcats and
     # tombstones are in resultdb.
-    if api.chromium.c.TARGET_PLATFORM != 'android':
-      json_override = api.path.mkstemp()
-    task = api.chromium_swarming.gtest_task(
+    if self.chromium_tests_api.m.chromium.c.TARGET_PLATFORM != 'android':
+      json_override = self.chromium_tests_api.m.path.mkstemp()
+    task = self.chromium_tests_api.m.chromium_swarming.gtest_task(
         raw_cmd=self._raw_cmd,
         relative_cwd=self.relative_cwd,
         cas_input_root=cas_input_root,
@@ -2304,17 +2304,20 @@ class SwarmingGTestTest(SwarmingTest):
 
     # TODO(crbug.com/1255217): Remove this android exception when logcats and
     # tombstones are in resultdb.
-    if api.chromium.c.TARGET_PLATFORM == 'android':
-      raw_json_data = api.json.input(step_result.json.output)
+    if self.chromium_tests_api.m.chromium.c.TARGET_PLATFORM == 'android':
+      raw_json_data = self.chromium_tests_api.m.json.input(
+          step_result.json.output)
     else:
       raw_json_data = self._tasks[suffix].collect_json_output_override
 
     if raw_json_data:
-      chrome_revision_cp = api.bot_update.last_returned_properties.get(
-          'got_revision_cp', 'refs/x@{#0}')
-      _, chrome_revision = api.commit_position.parse(chrome_revision_cp)
+      chrome_revision_cp = (
+          self.chromium_tests_api.m.bot_update.last_returned_properties.get(
+              'got_revision_cp', 'refs/x@{#0}'))
+      _, chrome_revision = self.chromium_tests_api.m.commit_position.parse(
+          chrome_revision_cp)
       chrome_revision = str(chrome_revision)
-      api.test_results.upload(
+      self.chromium_tests_api.m.test_results.upload(
           raw_json_data, chrome_revision=chrome_revision, test_type=step_name)
 
     return step_result
@@ -2424,15 +2427,15 @@ class LocalIsolatedScriptTest(LocalTest):
     # TODO(nednguyen, kbr): define contract with the wrapper script to rerun
     # a subset of the tests. (crbug.com/533481)
 
-    temp = api.path.mkstemp()
-    json_results_file = api.json.output(leak_to=temp)
+    temp = self.chromium_tests_api.m.path.mkstemp()
+    json_results_file = self.chromium_tests_api.m.json.output(leak_to=temp)
     args.extend(['--isolated-script-test-output', json_results_file])
 
     step_test_data = lambda: (
-        api.json.test_api.output({
+        self.chromium_tests_api.m.json.test_api.output({
             'valid': True,
             'failures': []
-        }) + api.raw_io.test_api.stream_output_text(
+        }) + self.chromium_tests_api.m.raw_io.test_api.stream_output_text(
             'rdb-stream: included "invocations/test-name" in '
             '"invocations/build-inv"', 'stderr'))
 
@@ -2452,20 +2455,21 @@ class LocalIsolatedScriptTest(LocalTest):
           },
           # The results of the script will be isolated, and the .isolate will be
           # dumped to stdout.
-          'stdout': api.raw_io.output_text(),
+          'stdout': self.chromium_tests_api.m.raw_io.output_text(),
       })
 
     resultdb = self.prep_local_rdb(api, temp=temp)
 
-    step_result = api.isolate.run_isolated(
+    step_result = self.chromium_tests_api.m.isolate.run_isolated(
         self.step_name(suffix),
-        api.isolate.isolated_tests[self.target_name],
+        self.chromium_tests_api.m.isolate.isolated_tests[self.target_name],
         args,
         pre_args=pre_args,
         step_test_data=step_test_data,
         raise_on_failure=False,
         resultdb=resultdb if resultdb else None,
-        stderr=api.raw_io.output_text(add_output_log=True, name='stderr'),
+        stderr=self.chromium_tests_api.m.raw_io.output_text(
+            add_output_log=True, name='stderr'),
         **kwargs)
 
     status = step_result.presentation.status
@@ -2479,9 +2483,10 @@ class LocalIsolatedScriptTest(LocalTest):
     if step_result.retcode == 0 and not self.has_valid_results(suffix):
       # This failure won't be caught automatically. Need to manually
       # raise it as a step failure.
-      raise api.step.StepFailure(api.test_utils.INVALID_RESULTS_MAGIC)
+      raise self.chromium_tests_api.m.step.StepFailure(
+          self.chromium_tests_api.m.test_utils.INVALID_RESULTS_MAGIC)
 
-    return api.step.raise_on_failure(step_result, status)
+    return self.chromium_tests_api.m.step.raise_on_failure(step_result, status)
 
 
 @attrs()
@@ -2524,7 +2529,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     self._test_options = value
 
   def create_task(self, api, suffix, cas_input_root):
-    task = api.chromium_swarming.isolated_script_task(
+    task = self.chromium_tests_api.m.chromium_swarming.isolated_script_task(
         raw_cmd=self.raw_cmd,
         relative_cwd=self.relative_cwd,
         cas_input_root=cas_input_root)
@@ -2548,11 +2553,13 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
       # Only version 3 of results is supported by the upload server.
       upload_step_name = '.'.join(step_result.name_tokens)
       if results and results.get('version', None) == 3:
-        chrome_rev_cp = api.bot_update.last_returned_properties.get(
-            'got_revision_cp', 'refs/x@{#0}')
-        _, chrome_rev = api.commit_position.parse(str(chrome_rev_cp))
-        api.test_results.upload(
-            api.json.input(results),
+        chrome_rev_cp = (
+            self.chromium_tests_api.m.bot_update.last_returned_properties.get(
+                'got_revision_cp', 'refs/x@{#0}'))
+        _, chrome_rev = self.chromium_tests_api.m.commit_position.parse(
+            str(chrome_rev_cp))
+        self.chromium_tests_api.m.test_results.upload(
+            self.chromium_tests_api.m.json.input(results),
             chrome_revision=str(chrome_rev),
             test_type=upload_step_name)
       if self.spec.results_handler_name == 'layout tests':
@@ -2600,11 +2607,11 @@ class AndroidJunitTest(LocalTest):
   #override
   def run_tests(self, api, suffix, json_results_file):
     step_test_data = lambda: (
-        api.test_utils.test_api.canned_gtest_output(True) + api.raw_io.test_api.
-        stream_output_text(
+        self.chromium_tests_api.m.test_utils.test_api.canned_gtest_output(True)
+        + self.chromium_tests_api.m.raw_io.test_api.stream_output_text(
             'rdb-stream: included "invocations/test-name" in '
             '"invocations/build-inv"', 'stderr'))
-    return api.chromium_android.run_java_unit_test_suite(
+    return self.chromium_tests_api.m.chromium_android.run_java_unit_test_suite(
         self.name,
         target_name=self.spec.target_name,
         verbose=True,
@@ -2612,17 +2619,19 @@ class AndroidJunitTest(LocalTest):
         additional_args=self.spec.additional_args,
         json_results_file=json_results_file,
         step_test_data=step_test_data,
-        stderr=api.raw_io.output_text(add_output_log=True, name='stderr'),
+        stderr=self.chromium_tests_api.m.raw_io.output_text(
+            add_output_log=True, name='stderr'),
         resultdb=self.prep_local_rdb(api))
 
   @recipe_api.composite_step
   def run(self, api, suffix):
-    assert api.chromium.c.TARGET_PLATFORM == 'android'
+    assert self.chromium_tests_api.m.chromium.c.TARGET_PLATFORM == 'android'
 
-    json_results_file = api.test_utils.gtest_results(add_json_log=False)
+    json_results_file = self.chromium_tests_api.m.test_utils.gtest_results(
+        add_json_log=False)
     try:
       step_result = self.run_tests(api, suffix, json_results_file)
-    except api.step.StepFailure as f:
+    except self.chromium_tests_api.m.step.StepFailure as f:
       step_result = f.result
       raise
     finally:
@@ -2632,15 +2641,17 @@ class AndroidJunitTest(LocalTest):
 
       _present_info_messages(step_result.presentation, self)
 
-      presentation_step = api.step.empty('Report %s results' % self.name)
-      gtest_results = api.test_utils.present_gtest_failures(
-          step_result, presentation=presentation_step.presentation)
+      presentation_step = self.chromium_tests_api.m.step.empty(
+          'Report %s results' % self.name)
+      gtest_results = (
+          self.chromium_tests_api.m.test_utils.present_gtest_failures(
+              step_result, presentation=presentation_step.presentation))
       if gtest_results:
-        api.test_results.upload(
-            api.json.input(gtest_results.raw),
+        self.chromium_tests_api.m.test_results.upload(
+            self.chromium_tests_api.m.json.input(gtest_results.raw),
             test_type='.'.join(step_result.name_tokens),
-            chrome_revision=api.bot_update.last_returned_properties.get(
-                'got_revision_cp', 'refs/x@{#0}'))
+            chrome_revision=self.chromium_tests_api.m.bot_update
+            .last_returned_properties.get('got_revision_cp', 'refs/x@{#0}'))
 
 
     return step_result
@@ -2698,25 +2709,27 @@ class MockTest(Test):
   def _mock_exit_codes(self, api):
     try:
       yield
-    except api.step.StepFailure as f:
+    except self.chromium_tests_api.m.step.StepFailure as f:
       if f.result.retcode == self.ExitCodes.INFRA_FAILURE:
-        i = api.step.InfraFailure(f.name, result=f.result)
-        i.result.presentation.status = api.step.EXCEPTION
+        i = self.chromium_tests_api.m.step.InfraFailure(f.name, result=f.result)
+        i.result.presentation.status = self.chromium_tests_api.m.step.EXCEPTION
         raise i
       self._failures.append('test_failure')
       raise
 
   def pre_run(self, api, suffix):
     with self._mock_exit_codes(api):
-      api.step('pre_run {}'.format(self.step_name(suffix)), None)
+      self.chromium_tests_api.m.step(
+          'pre_run {}'.format(self.step_name(suffix)), None)
 
   @recipe_api.composite_step
   def run(self, api, suffix):
     with self._mock_exit_codes(api):
       try:
-        step_result = api.step(self.step_name(suffix), None)
+        step_result = self.chromium_tests_api.m.step(
+            self.step_name(suffix), None)
       finally:
-        result = api.step.active_result
+        result = self.chromium_tests_api.m.step.active_result
         self._suffix_step_name_map[suffix] = '.'.join(result.name_tokens)
 
     return step_result
