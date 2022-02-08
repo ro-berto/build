@@ -41,7 +41,7 @@ def RunSteps(api):
   test = steps.LocalGTestTestSpec.create(
       'base_unittests',
       resultdb=steps.ResultDB(result_format='gtest'),
-  ).get_test()
+  ).get_test(api.chromium_tests)
   assert not test.runs_on_swarming
 
   test_options = steps.TestOptions(

@@ -46,7 +46,7 @@ def RunSteps(api):
       'base_unittests',
       override_compile_targets=api.properties.get('override_compile_targets'),
       isolate_coverage_data=api.properties.get('isolate_coverage_data', False))
-  test = test_spec.get_test()
+  test = test_spec.get_test(api.chromium_tests)
 
   test_options = steps.TestOptions()
   test.test_options = test_options

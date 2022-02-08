@@ -47,7 +47,7 @@ def RunSteps(api):
       steps.SwarmingIsolatedScriptTestSpec.create('different_test_suite'),
   ]
 
-  tests = [s.get_test() for s in test_specs]
+  tests = [s.get_test(api.chromium_tests) for s in test_specs]
 
   for test in tests:
     step = test.name

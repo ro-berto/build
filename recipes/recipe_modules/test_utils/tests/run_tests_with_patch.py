@@ -10,6 +10,7 @@ DEPS = [
     'recipe_engine/step',
     'chromium',
     'chromium_swarming',
+    'chromium_tests',
     'flakiness',
     'test_utils',
 ]
@@ -50,7 +51,7 @@ def RunSteps(api, retry_failed_shards, test_kwargs_list):
       steps.MockTestSpec.create(name='test2', **_get_test_kwargs_by_index(1)),
   ]
 
-  tests = [s.get_test() for s in test_specs]
+  tests = [s.get_test(api.chromium_tests) for s in test_specs]
 
   invalid, failing = api.test_utils.run_tests_with_patch(
       api, tests, **run_tests_kwargs)

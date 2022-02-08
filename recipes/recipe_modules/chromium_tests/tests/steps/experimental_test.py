@@ -60,7 +60,7 @@ def RunSteps(api):
   if not experiment_on:
     return
 
-  experimental_test = experimental_test_spec.get_test()
+  experimental_test = experimental_test_spec.get_test(api.chromium_tests)
 
   api.step.empty('Configured experimental test %s' % experimental_test.name)
 

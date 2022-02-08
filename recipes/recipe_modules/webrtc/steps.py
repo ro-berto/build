@@ -34,7 +34,7 @@ ANDROID_CIPD_PACKAGES = [
 
 
 def generate_tests(phase, bot, platform_name, build_out_dir, checkout_path,
-                   is_tryserver):
+                   is_tryserver, chromium_tests_api):
   """Generate a list of tests to run on a bot.
 
   Args:
@@ -46,6 +46,7 @@ def generate_tests(phase, bot, platform_name, build_out_dir, checkout_path,
     build_out_dir: the out/ dir of the builder.
     checkout_path: the path to the checkout on the builder.
     is_tryserver: True if the tests needs to be generated for a tryserver.
+    chromium_tests_api: The chromium_tests recipe module API object.
 
   Returns:
     A list of steps.WebRtcIsolatedGtest to compile and run on a bot.
@@ -54,29 +55,32 @@ def generate_tests(phase, bot, platform_name, build_out_dir, checkout_path,
   tests = []
   test_suite = bot.test_suite
 
+  swarming_desktop_generator = functools.partial(
+      SwarmingDesktopTest, chromium_tests_api=chromium_tests_api)
   if test_suite in ('webrtc', 'webrtc_and_baremetal'):
-    tests.append(SwarmingDesktopTest('audio_decoder_unittests'))
-    tests.append(SwarmingDesktopTest('common_audio_unittests'))
-    tests.append(SwarmingDesktopTest('common_video_unittests'))
-    tests.append(SwarmingDesktopTest('dcsctp_unittests'))
-    tests.append(SwarmingDesktopTest('low_bandwidth_audio_test'))
-    tests.append(SwarmingDesktopTest('modules_tests', shards=2))
-    tests.append(SwarmingDesktopTest('modules_unittests', shards=6))
-    tests.append(SwarmingDesktopTest('peerconnection_unittests', shards=4))
-    tests.append(SwarmingDesktopTest('rtc_media_unittests'))
-    tests.append(SwarmingDesktopTest('rtc_pc_unittests'))
-    tests.append(SwarmingDesktopTest('rtc_stats_unittests'))
-    tests.append(SwarmingDesktopTest('rtc_unittests', shards=6))
-    tests.append(SwarmingDesktopTest('system_wrappers_unittests'))
-    tests.append(SwarmingDesktopTest('test_support_unittests'))
-    tests.append(SwarmingDesktopTest('tools_unittests'))
-    tests.append(SwarmingDesktopTest('video_engine_tests', shards=4))
-    tests.append(SwarmingDesktopTest('voip_unittests'))
-    tests.append(SwarmingDesktopTest('webrtc_nonparallel_tests'))
+    tests.append(swarming_desktop_generator('audio_decoder_unittests'))
+    tests.append(swarming_desktop_generator('common_audio_unittests'))
+    tests.append(swarming_desktop_generator('common_video_unittests'))
+    tests.append(swarming_desktop_generator('dcsctp_unittests'))
+    tests.append(swarming_desktop_generator('low_bandwidth_audio_test'))
+    tests.append(swarming_desktop_generator('modules_tests', shards=2))
+    tests.append(swarming_desktop_generator('modules_unittests', shards=6))
+    tests.append(
+        swarming_desktop_generator('peerconnection_unittests', shards=4))
+    tests.append(swarming_desktop_generator('rtc_media_unittests'))
+    tests.append(swarming_desktop_generator('rtc_pc_unittests'))
+    tests.append(swarming_desktop_generator('rtc_stats_unittests'))
+    tests.append(swarming_desktop_generator('rtc_unittests', shards=6))
+    tests.append(swarming_desktop_generator('system_wrappers_unittests'))
+    tests.append(swarming_desktop_generator('test_support_unittests'))
+    tests.append(swarming_desktop_generator('tools_unittests'))
+    tests.append(swarming_desktop_generator('video_engine_tests', shards=4))
+    tests.append(swarming_desktop_generator('voip_unittests'))
+    tests.append(swarming_desktop_generator('webrtc_nonparallel_tests'))
 
   if test_suite == 'webrtc_and_baremetal':
     baremetal_test = functools.partial(
-        SwarmingDesktopTest,
+        swarming_desktop_generator,
         dimensions=bot.config['baremetal_swarming_dimensions'])
 
     tests.append(baremetal_test('video_capture_tests'))
@@ -93,10 +97,12 @@ def generate_tests(phase, bot, platform_name, build_out_dir, checkout_path,
               ]))
 
   if test_suite == 'desktop_perf_swarming':
-    tests.append(SwarmingPerfTest('low_bandwidth_audio_perf_test'))
+    tests.append(
+        SwarmingPerfTest('low_bandwidth_audio_perf_test', chromium_tests_api))
     tests.append(
         SwarmingPerfTest(
             'webrtc_perf_tests',
+            chromium_tests_api,
             args=[
                 '--test_artifacts_dir=${ISOLATED_OUTDIR}',
                 '--save_worst_frame',
@@ -107,6 +113,7 @@ def generate_tests(phase, bot, platform_name, build_out_dir, checkout_path,
     tests.append(
         SwarmingAndroidPerfTest(
             'low_bandwidth_audio_perf_test',
+            chromium_tests_api,
             args=[
                 '--android',
                 '--adb-path',
@@ -115,38 +122,45 @@ def generate_tests(phase, bot, platform_name, build_out_dir, checkout_path,
     tests.append(
         SwarmingAndroidPerfTest(
             'webrtc_perf_tests',
+            chromium_tests_api,
             args=[
                 '--save_worst_frame',
                 '--nologs',
             ]))
 
+  swarming_android_generator = functools.partial(
+      SwarmingAndroidTest, chromium_tests_api=chromium_tests_api)
+  android_junit_generator = functools.partial(
+      AndroidJunitTest, chromium_tests_api=chromium_tests_api)
   if test_suite == 'android':
-    tests.append(SwarmingAndroidTest('AppRTCMobile_test_apk'))
-    tests.append(SwarmingAndroidTest('android_instrumentation_test_apk'))
-    tests.append(SwarmingAndroidTest('audio_decoder_unittests'))
-    tests.append(SwarmingAndroidTest('common_audio_unittests'))
-    tests.append(SwarmingAndroidTest('common_video_unittests'))
-    tests.append(SwarmingAndroidTest('dcsctp_unittests'))
-    tests.append(SwarmingAndroidTest('modules_tests', shards=2))
-    tests.append(SwarmingAndroidTest('modules_unittests', shards=6))
-    tests.append(SwarmingAndroidTest('peerconnection_unittests', shards=4))
-    tests.append(SwarmingAndroidTest('rtc_pc_unittests'))
-    tests.append(SwarmingAndroidTest('rtc_media_unittests'))
-    tests.append(SwarmingAndroidTest('rtc_stats_unittests'))
-    tests.append(SwarmingAndroidTest('rtc_unittests', shards=6))
-    tests.append(SwarmingAndroidTest('system_wrappers_unittests'))
-    tests.append(SwarmingAndroidTest('test_support_unittests'))
-    tests.append(SwarmingAndroidTest('tools_unittests'))
-    tests.append(SwarmingAndroidTest('video_engine_tests', shards=4))
-    tests.append(SwarmingAndroidTest('voip_unittests'))
-    tests.append(SwarmingAndroidTest('webrtc_nonparallel_tests'))
-    tests.append(AndroidJunitTest('android_examples_junit_tests'))
-    tests.append(AndroidJunitTest('android_sdk_junit_tests'))
+    tests.append(swarming_android_generator('AppRTCMobile_test_apk'))
+    tests.append(swarming_android_generator('android_instrumentation_test_apk'))
+    tests.append(swarming_android_generator('audio_decoder_unittests'))
+    tests.append(swarming_android_generator('common_audio_unittests'))
+    tests.append(swarming_android_generator('common_video_unittests'))
+    tests.append(swarming_android_generator('dcsctp_unittests'))
+    tests.append(swarming_android_generator('modules_tests', shards=2))
+    tests.append(swarming_android_generator('modules_unittests', shards=6))
+    tests.append(
+        swarming_android_generator('peerconnection_unittests', shards=4))
+    tests.append(swarming_android_generator('rtc_pc_unittests'))
+    tests.append(swarming_android_generator('rtc_media_unittests'))
+    tests.append(swarming_android_generator('rtc_stats_unittests'))
+    tests.append(swarming_android_generator('rtc_unittests', shards=6))
+    tests.append(swarming_android_generator('system_wrappers_unittests'))
+    tests.append(swarming_android_generator('test_support_unittests'))
+    tests.append(swarming_android_generator('tools_unittests'))
+    tests.append(swarming_android_generator('video_engine_tests', shards=4))
+    tests.append(swarming_android_generator('voip_unittests'))
+    tests.append(swarming_android_generator('webrtc_nonparallel_tests'))
+    tests.append(android_junit_generator('android_examples_junit_tests'))
+    tests.append(android_junit_generator('android_sdk_junit_tests'))
 
     if is_tryserver:
       tests.append(
           SwarmingAndroidTest(
               'webrtc_perf_tests',
+              chromium_tests_api,
               args=[
                   '--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/',
                   '--nologs',
@@ -214,7 +228,7 @@ def generate_tests(phase, bot, platform_name, build_out_dir, checkout_path,
 
   if test_suite == 'more_configs':
     if 'no_sctp' in phase:
-      tests.append(SwarmingDesktopTest('peerconnection_unittests'))
+      tests.append(swarming_desktop_generator('peerconnection_unittests'))
 
   return tests
 
@@ -226,7 +240,11 @@ class WebRtcIsolatedGtest(steps.SwarmingIsolatedScriptTest):
   the parts we don't need.
   """
 
-  def __init__(self, name, result_handlers=None, **kwargs):
+  def __init__(self,
+               name,
+               chromium_tests_api=None,
+               result_handlers=None,
+               **kwargs):
     """Constructs an instance of WebRtcIsolatedGtest.
 
     Args:
@@ -236,7 +254,8 @@ class WebRtcIsolatedGtest(steps.SwarmingIsolatedScriptTest):
           something into the step result).
     """
     super(WebRtcIsolatedGtest, self).__init__(
-        steps.SwarmingIsolatedScriptTestSpec.create(name, **kwargs))
+        steps.SwarmingIsolatedScriptTestSpec.create(name, **kwargs),
+        chromium_tests_api)
     self._result_handlers = result_handlers or []
     self._has_collected = False
 
@@ -293,7 +312,10 @@ def InvalidResultsHandler(api, step_result, has_valid_results):
         api.test_utils.INVALID_RESULTS_MAGIC)  # pragma no cover
 
 
-def SwarmingDesktopTest(name, use_gtest_parallel=True, **kwargs):
+def SwarmingDesktopTest(name,
+                        chromium_tests_api=None,
+                        use_gtest_parallel=True,
+                        **kwargs):
   resultdb = ResultDB.create()
   if use_gtest_parallel:
     resultdb = attr.evolve(
@@ -303,12 +325,13 @@ def SwarmingDesktopTest(name, use_gtest_parallel=True, **kwargs):
     )
   return WebRtcIsolatedGtest(
       name,
+      chromium_tests_api,
       result_handlers=[InvalidResultsHandler],
       resultdb=resultdb,
       **kwargs)
 
 
-def SwarmingPerfTest(name, args=None, **kwargs):
+def SwarmingPerfTest(name, chromium_test_api, args=None, **kwargs):
 
   args = list(args or [])
   # This flag is translated to --isolated_script_test_perf_output in
@@ -327,6 +350,7 @@ def SwarmingPerfTest(name, args=None, **kwargs):
   # data to work with."""
   return WebRtcIsolatedGtest(
       name,
+      chromium_test_api,
       result_handlers=[InvalidResultsHandler],
       args=args,
       shards=1,
@@ -334,26 +358,33 @@ def SwarmingPerfTest(name, args=None, **kwargs):
       **kwargs)
 
 
-def SwarmingAndroidTest(name, **kwargs):
+def SwarmingAndroidTest(name, chromium_tests_api, **kwargs):
   return WebRtcIsolatedGtest(
       name,
+      chromium_tests_api,
       result_handlers=[InvalidResultsHandler],
       cipd_packages=ANDROID_CIPD_PACKAGES,
       **kwargs)
 
 
-def SwarmingAndroidPerfTest(name, args, **kwargs):
+def SwarmingAndroidPerfTest(name, chromium_tests_api, args, **kwargs):
   # See SwarmingDesktopPerfTest for more details why we pass this rather than
   # --isolated_script_test_perf_output.
   args.extend([
       ('--isolated-script-test-perf-output='
        '${ISOLATED_OUTDIR}/perftest-output.pb'),
   ])
-  return SwarmingAndroidTest(name, args=args, idempotent=False, **kwargs)
+  return SwarmingAndroidTest(
+      name,
+      args=args,
+      chromium_tests_api=chromium_tests_api,
+      idempotent=False,
+      **kwargs)
 
 
-def AndroidJunitTest(name):
-  return steps.AndroidJunitTest(steps.AndroidJunitTestSpec.create(name))
+def AndroidJunitTest(name, chromium_tests_api):
+  return steps.AndroidJunitTest(
+      steps.AndroidJunitTestSpec.create(name), chromium_tests_api)
 
 
 class IosTest(object):

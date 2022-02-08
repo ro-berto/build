@@ -73,7 +73,7 @@ def RunSteps(api):
     override_shards = api.properties.get('shards')
     if override_shards:
       test_spec = test_spec.with_shards(override_shards)
-    test = test_spec.get_test()
+    test = test_spec.get_test(api.chromium_tests)
     api.chromium_swarming.set_default_dimension('pool', 'foo')
     assert test.runs_on_swarming
     assert test.shards > 0

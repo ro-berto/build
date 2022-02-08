@@ -41,7 +41,7 @@ def RunSteps(api):
       isolate_coverage_data=isolate_coverage_data,
       resultdb=resultdb)
 
-  test = test_spec.get_test()
+  test = test_spec.get_test(api.chromium_tests)
 
   assert not test.runs_on_swarming
 

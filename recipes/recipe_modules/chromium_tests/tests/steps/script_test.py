@@ -33,7 +33,7 @@ def RunSteps(api):
       all_compile_targets={'script.py': ['compile_target']},
       script_args=['some', 'args'],
       override_compile_targets=api.properties.get('override_compile_targets'))
-  test = test_spec.get_test()
+  test = test_spec.get_test(api.chromium_tests)
 
   try:
     test.run(api, '')

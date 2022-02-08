@@ -77,7 +77,7 @@ def RunSteps(api):
           'ios_chrome_smoke_eg2tests_module'),
       steps.SwarmingIsolatedScriptTestSpec.create('ios_web_view_inttests')
   ]
-  tests = [s.get_test() for s in test_specs]
+  tests = [s.get_test(api.chromium_tests) for s in test_specs]
   assert _NUM_TESTS == len(tests)
 
   for test in tests:

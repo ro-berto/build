@@ -1031,7 +1031,7 @@ class iOSApi(recipe_api.RecipeApi):
         service_account=self.swarming_service_account,
         upload_test_results=kwargs.pop('upload_test_results', True),
         **kwargs)
-    return test_spec.get_test()
+    return test_spec.get_test(self.m.chromium_tests)
 
   def collect(self, triggered_tests):
     failures = set()

@@ -19,7 +19,7 @@ def RunSteps(api):
   test_spec = steps.MockTestSpec.create(
       name=api.properties.get('test_name', 'MockTest'),
       abort_on_failure=api.properties.get('abort_on_failure', False))
-  test = test_spec.get_test()
+  test = test_spec.get_test(api.chromium_tests)
 
   test.pre_run(api.chromium_tests.m, '')
 

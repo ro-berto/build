@@ -68,7 +68,7 @@ def RunSteps(api):
             override_compile_targets=['other_target']))
   _, builder_config = api.chromium_tests_builder_config.lookup_builder()
   api.chromium_tests.configure_build(builder_config)
-  tests = [s.get_test() for s in test_specs]
+  tests = [s.get_test(api.chromium_tests) for s in test_specs]
   with api.chromium_tests.wrap_chromium_tests(builder_config, tests=tests):
     pass
 

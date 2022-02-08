@@ -115,7 +115,11 @@ def RunSteps(api, test_swarming, test_skylab, test_name, test_experimental,
         steps.MockTestSpec.create(name='test2')
     ]
 
-  tests = [s.get_test() for s in test_specs if not s.disabled_reason]
+  tests = [
+      s.get_test(api.chromium_tests)
+      for s in test_specs
+      if not s.disabled_reason
+  ]
   for t in [test for test in tests if test.is_skylabtest]:
     t.lacros_gcs_path = 'gs://dummy/lacros.zip'
     t.exe_rel_path = 'out/Lacros/chrome'

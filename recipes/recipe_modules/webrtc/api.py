@@ -183,7 +183,8 @@ class WebRTCApi(recipe_api.RecipeApi):
                                              self.m.chromium.c.build_config_fs)
       tests = steps.generate_tests(None, self.bot, self.m.platform.name,
                                    out_dir, self.m.path['checkout'],
-                                   self.m.tryserver.is_tryserver)
+                                   self.m.tryserver.is_tryserver,
+                                   self.m.chromium_tests)
       for test in tests:
         assert isinstance(test, steps.IosTest)
         test_dict = {
@@ -291,7 +292,8 @@ class WebRTCApi(recipe_api.RecipeApi):
             platform_name=self.m.platform.name,
             build_out_dir=out_dir,
             checkout_path=self.m.path['checkout'],
-            is_tryserver=self.m.tryserver.is_tryserver):
+            is_tryserver=self.m.tryserver.is_tryserver,
+            chromium_tests_api=self.m.chromium_tests):
           if isinstance(test, (c_steps.SwarmingTest, steps.IosTest)):
             test_targets.add(test.name)
           if isinstance(test, (c_steps.AndroidJunitTest)):
@@ -694,7 +696,8 @@ class WebRTCApi(recipe_api.RecipeApi):
                                              self.m.chromium.c.build_config_fs)
       all_tests = steps.generate_tests(phase, self.bot, self.m.platform.name,
                                        out_dir, self.m.path['checkout'],
-                                       self.m.tryserver.is_tryserver)
+                                       self.m.tryserver.is_tryserver,
+                                       self.m.chromium_tests)
       tests = []
       for t in all_tests:
         if t.name in self._isolated_targets:

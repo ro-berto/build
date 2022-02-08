@@ -286,7 +286,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       if reason:
         test_specs_by_disabled_reason[reason].append(test_spec)
       else:
-        tests.append(test_spec.get_test())
+        tests.append(test_spec.get_test(self.m))
 
     for reason, test_specs in sorted(test_specs_by_disabled_reason.items()):
       reason.report_tests(self, [t.name for t in test_specs])

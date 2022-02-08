@@ -50,7 +50,8 @@ def RunSteps(api):
   tests = []
   if api.properties.get('swarming_gtest'):
     tests.append(
-        steps.SwarmingGTestTestSpec.create('base_unittests').get_test())
+        steps.SwarmingGTestTestSpec.create('base_unittests').get_test(
+            api.chromium_tests))
 
   return api.chromium_tests.compile_specific_targets(
       builder_id,

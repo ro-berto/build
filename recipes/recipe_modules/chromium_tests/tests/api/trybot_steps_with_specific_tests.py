@@ -60,11 +60,7 @@ def RunSteps(api, fail_calculate_tests, fail_mb_and_compile,
   if api.properties.get('shards'):
     kwargs['shards'] = api.properties['shards']
 
-  test_specs = [
-      steps.SwarmingGTestTestSpec.create(
-          'base_unittests',
-          **kwargs)
-  ]
+  test_specs = [steps.SwarmingGTestTestSpec.create('base_unittests', **kwargs)]
 
   if api.properties.get('use_custom_dimensions', False):
     api.chromium_swarming.set_default_dimension('os', 'Windows-10')
@@ -77,7 +73,7 @@ def RunSteps(api, fail_calculate_tests, fail_mb_and_compile,
   for t in api.properties.get('additional_gtest_targets', []):
     test_specs.append(steps.SwarmingGTestTestSpec.create(t))
 
-  tests = [s.get_test() for s in test_specs]
+  tests = [s.get_test(api.chromium_tests) for s in test_specs]
 
   # Override build_affected_targets to run the desired test, in the desired
   # configuration.

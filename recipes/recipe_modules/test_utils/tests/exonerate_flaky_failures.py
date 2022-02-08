@@ -61,7 +61,7 @@ def RunSteps(api, known_flakes_expectations, exclude_failed_test,
                 'with patch': ['test%d' % i for i in range(1000)]
             }))
 
-  tests = [s.get_test() for s in test_specs]
+  tests = [s.get_test(api.chromium_tests) for s in test_specs]
 
   api.test_utils.run_tests(
       api.chromium_tests.m,

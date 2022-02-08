@@ -64,7 +64,7 @@ def RunSteps(api):
       service_account='swarming_service_account',
       upload_test_results=True,
       result_callback=result_callback)
-  test = test_spec.get_test()
+  test = test_spec.get_test(api.chromium_tests)
   assert test.runs_on_swarming
 
   test.pre_run(api.ios.m, '')

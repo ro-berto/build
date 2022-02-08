@@ -36,7 +36,7 @@ def RunSteps(api):
       'test_name',
       target_name=api.properties.get('target_name'),
   )
-  test = test_spec.get_test()
+  test = test_spec.get_test(api.chromium_tests)
 
   api.chromium.compile(targets=test.compile_targets(), name='compile')
 

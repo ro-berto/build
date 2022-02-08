@@ -290,7 +290,7 @@ class TestSpecBase(object):
   __metaclass__ = abc.ABCMeta
 
   @abc.abstractmethod
-  def get_test(self):
+  def get_test(self, chromium_tests_api):
     """Get a test instance described by the spec.
 
     Returns:
@@ -375,13 +375,13 @@ class TestSpec(TestSpecBase):
     """The test class associated with the spec."""
     raise NotImplementedError()  # pragma: no cover
 
-  def get_test(self):
+  def get_test(self, chromium_tests_api):
     """Get the test described by the spec.
 
     It is an error to call this method if disabled_reason is not None.
     """
     assert not self.disabled_reason
-    return self.test_class(self)
+    return self.test_class(self, chromium_tests_api)
 
   def disable(self, disabled_reason):
     return attr.evolve(self, disabled_reason=disabled_reason)
@@ -414,10 +414,11 @@ class Test(object):
   those modules; the state should already be stored in the configuration.
   """
 
-  def __init__(self, spec):
+  def __init__(self, spec, chromium_tests_api):
     super(Test, self).__init__()
 
     self.spec = spec
+    self.chromium_tests_api = chromium_tests_api
 
     self._test_options = TestOptions()
 
@@ -965,9 +966,10 @@ class TestWrapperSpec(TestSpecBase):
     """
     return cls(test_spec, **kwargs)
 
-  def get_test(self):
+  def get_test(self, chromium_tests_api):
     """Get the test described by the spec."""
-    return self.test_wrapper_class(self, self.test_spec.get_test())
+    return self.test_wrapper_class(self,
+                                   self.test_spec.get_test(chromium_tests_api))
 
   @property
   def disabled_reason(self):
@@ -997,7 +999,7 @@ class TestWrapper(Test):  # pragma: no cover
   """
 
   def __init__(self, spec, test):
-    super(TestWrapper, self).__init__(test.name)
+    super(TestWrapper, self).__init__(test.name, test.chromium_tests_api)
     self.spec = spec
     self._test = test
 
@@ -1317,8 +1319,8 @@ class LocalTest(Test):
 
   # pylint: disable=abstract-method
 
-  def __init__(self, spec):
-    super(LocalTest, self).__init__(spec)
+  def __init__(self, spec, chromium_tests_api):
+    super(LocalTest, self).__init__(spec, chromium_tests_api)
     self._suffix_to_invocation_names = {}
 
   def get_invocation_names(self, suffix):
@@ -1385,8 +1387,8 @@ class ScriptTest(LocalTest):  # pylint: disable=W0232
   All new tests are strongly encouraged to use this infrastructure.
   """
 
-  def __init__(self, spec):
-    super(ScriptTest, self).__init__(spec)
+  def __init__(self, spec, chromium_tests_api):
+    super(ScriptTest, self).__init__(spec, chromium_tests_api)
 
   def compile_targets(self):
     if self.spec.override_compile_targets:
@@ -1565,8 +1567,8 @@ class LocalGTestTestSpec(TestSpec):
 
 class LocalGTestTest(LocalTest):
 
-  def __init__(self, spec):
-    super(LocalGTestTest, self).__init__(spec)
+  def __init__(self, spec, chromium_tests_api):
+    super(LocalGTestTest, self).__init__(spec, chromium_tests_api)
     self._gtest_results = {}
 
   @Test.test_options.setter
@@ -1911,8 +1913,8 @@ class SwarmingTest(Test):
   # Some suffixes should have marginally higher priority. See crbug.com/937151.
   SUFFIXES_TO_INCREASE_PRIORITY = ['without patch', 'retry shards with patch']
 
-  def __init__(self, spec):
-    super(SwarmingTest, self).__init__(spec)
+  def __init__(self, spec, chromium_tests_api):
+    super(SwarmingTest, self).__init__(spec, chromium_tests_api)
 
     self._tasks = {}
     self._raw_cmd = []
@@ -2261,8 +2263,8 @@ class SwarmingGTestTestSpec(SwarmingTestSpec):
 
 class SwarmingGTestTest(SwarmingTest):
 
-  def __init__(self, spec):
-    super(SwarmingGTestTest, self).__init__(spec)
+  def __init__(self, spec, chromium_tests_api):
+    super(SwarmingGTestTest, self).__init__(spec, chromium_tests_api)
     self._gtest_results = {}
 
   @Test.test_options.setter
@@ -2358,8 +2360,8 @@ class LocalIsolatedScriptTestSpec(TestSpec):
 
 class LocalIsolatedScriptTest(LocalTest):
 
-  def __init__(self, spec):
-    super(LocalIsolatedScriptTest, self).__init__(spec)
+  def __init__(self, spec, chromium_tests_api):
+    super(LocalIsolatedScriptTest, self).__init__(spec, chromium_tests_api)
     self._raw_cmd = []
     self._relative_cwd = None
 
@@ -2510,8 +2512,8 @@ class SwarmingIsolatedScriptTestSpec(SwarmingTestSpec):
 
 class SwarmingIsolatedScriptTest(SwarmingTest):
 
-  def __init__(self, spec):
-    super(SwarmingIsolatedScriptTest, self).__init__(spec)
+  def __init__(self, spec, chromium_tests_api):
+    super(SwarmingIsolatedScriptTest, self).__init__(spec, chromium_tests_api)
     self._isolated_script_results = None
 
   def compile_targets(self):
@@ -2682,8 +2684,8 @@ class MockTest(Test):
     FAILURE = 1
     INFRA_FAILURE = 2
 
-  def __init__(self, spec):
-    super(MockTest, self).__init__(spec)
+  def __init__(self, spec, chromium_tests_api):
+    super(MockTest, self).__init__(spec, chromium_tests_api)
     # We mutate the set of failures depending on the exit code of the test
     # steps, so get a mutable copy
     self._failures = list(spec.failures)
@@ -2875,8 +2877,8 @@ class SwarmingIosTestSpec(SwarmingTestSpec):
 # off of it.
 class SwarmingIosTest(SwarmingTest):
 
-  def __init__(self, spec):
-    super(SwarmingIosTest, self).__init__(spec)
+  def __init__(self, spec, chromium_tests_api):
+    super(SwarmingIosTest, self).__init__(spec, chromium_tests_api)
 
     # Contains a record of deterministic failures, one for each suffix. Maps
     # suffix to a list of tests.
@@ -3135,8 +3137,8 @@ class SkylabTestSpec(TestSpec):
 
 class SkylabTest(Test):
 
-  def __init__(self, spec):
-    super(SkylabTest, self).__init__(spec)
+  def __init__(self, spec, chromium_tests_api):
+    super(SkylabTest, self).__init__(spec, chromium_tests_api)
     # cros_test_platform build, aka CTP is the entrance for the CrOS hardware
     # tests, which kicks off test_runner builds for our test suite.
     # Each test suite has a CTP build ID, as long as the buildbucket call is

@@ -66,7 +66,7 @@ def RunSteps(api):
         override_compile_targets=api.properties.get('override_compile_targets'),
         isolate_coverage_data=api.properties.get('isolate_coverage_data',
                                                  False))
-    test_object = test_spec.get_test()
+    test_object = test_spec.get_test(api.chromium_tests)
     test_object.update_rdb_results('with patch', rdb_suite_results)
     test_objects.append(test_object)
 

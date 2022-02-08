@@ -36,8 +36,10 @@ def RunSteps(api, expected_paths, target_platform):
   api.chromium.set_config('chromium', TARGET_PLATFORM=target_platform)
 
   tests = [
-      steps.SwarmingGTestTestSpec.create('browser_tests').get_test(),
-      steps.SwarmingGTestTestSpec.create('android_browsertests').get_test()
+      steps.SwarmingGTestTestSpec.create('browser_tests').get_test(
+          api.chromium_tests),
+      steps.SwarmingGTestTestSpec.create('android_browsertests').get_test(
+          api.chromium_tests)
   ]
 
   file_paths = api.code_coverage.get_required_build_output_files(tests)

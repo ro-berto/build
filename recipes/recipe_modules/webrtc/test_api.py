@@ -171,7 +171,8 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
               platform_name=platform_name,
               build_out_dir=build_out_dir,
               checkout_path=checkout_path,
-              is_tryserver=is_tryserver)
+              is_tryserver=is_tryserver,
+              chromium_tests_api=self.m.chromium_tests)
       ]
 
       analyze_output = {

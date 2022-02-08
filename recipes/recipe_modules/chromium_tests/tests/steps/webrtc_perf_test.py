@@ -41,7 +41,7 @@ def RunSteps(api):
       commit_position_property='got_revision_cp',
       resultdb=steps.ResultDB(enable=True, result_format='gtest'))
 
-  test = test_spec.get_test()
+  test = test_spec.get_test(api.chromium_tests)
 
   _, builder_config = api.chromium_tests_builder_config.lookup_builder()
   api.chromium_tests.configure_build(builder_config)
