@@ -10,6 +10,7 @@
 """
 
 import argparse
+from ast import dump
 import os
 import subprocess
 import sys
@@ -48,13 +49,15 @@ def parse_arguments(input_args):
   return args
 
 
-def build_args(platform, artifact, artifact_type, server_url, api_key):
+def build_args(platform, artifact, artifact_type, server_url, api_key,
+               dump_inline):
   """
   Args:
     platform: (str) platform for args, one of [win, mac, linux]
     artifact: (str) path to the binary file for upload
     server_url: (str) url for upload
     api_key: api key for V2 symupload.
+    dump_inline: if we should dump inline information on Windows.
   Returns:
     List of arguments for V2 protocol based on platform.
   """
@@ -70,7 +73,10 @@ def build_args(platform, artifact, artifact_type, server_url, api_key):
     # Specifically, "-p" is just a switch to activate v2 mode, and doesn't
     # take a <protocol> value, and the key is passed as the last positional
     # arg, not with the "-k" flag.
-    cmd_args.extend(['-p', artifact, server_url, api_key])
+    if dump_inline:
+      cmd_args.append('--i')
+    # Set timeout to 1 mins.
+    cmd_args.extend(['--timeout', '60000', '-p', artifact, server_url, api_key])
   else:
     # For types other than breakpad, tell symupload the type and basename.
     if artifact_type in {'macho', 'dsym'}:
@@ -102,17 +108,45 @@ def sanitize_args(cmd_args, api_key):
   return clean_args
 
 
+def upload_symbol_file(platform, artifact, artifact_type, url, api_key,
+                       symupload_binary_path, dump_inline):
+  print('Uploading %s to %s' % (artifact, url))
+
+  cmd_args = build_args(platform, artifact, artifact_type, url, api_key,
+                        dump_inline)
+  print('\n' + subprocess.list2cmdline([symupload_binary_path] +
+                                       sanitize_args(cmd_args, api_key)))
+
+  result = 0
+  try:
+    output = subprocess.check_output(
+        [symupload_binary_path] + cmd_args, stderr=subprocess.STDOUT)
+    print(output.decode('utf-8'))
+  except subprocess.CalledProcessError as e:
+    if e.returncode == 2:
+      print('Skipping upload for existing symbol.')
+    # Any other non-zero ret code returned as failure
+    else:
+      result = e.returncode
+      print('Failed to upload %s to %s. Return code %s with output %s' %
+            (artifact, url, result, e.output))
+  return result
+
+
 def main(args):
   args = parse_arguments(args)
   api_key = read_api_key(args.api_key_file)
   symupload_binary_path = args.binary_path
+  dump_inline = False
 
   # Show the symupload help text, which could be useful to debug failures (e.g.
   # to see if the flags change).
   try:
     output = subprocess.check_output([symupload_binary_path, '-h'],
                                      stderr=subprocess.STDOUT)
-    print(output.decode('utf-8'))
+    output = output.decode('utf-8')
+    dump_inline = "[--i]" in output
+    print(output)
   except subprocess.CalledProcessError:
     pass
 
@@ -122,25 +156,19 @@ def main(args):
   result = 0
   for artifact in artifacts:
     for url in server_urls:
-      print('Uploading %s to %s' % (artifact, url))
-
-      cmd_args = build_args(args.platform, artifact, args.artifact_type, url,
-                            api_key)
-      print('\n' + subprocess.list2cmdline([symupload_binary_path] +
-                                           sanitize_args(cmd_args, api_key)))
-
-      try:
-        output = subprocess.check_output(
-            [symupload_binary_path] + cmd_args, stderr=subprocess.STDOUT)
-        print(output.decode('utf-8'))
-      except subprocess.CalledProcessError as e:
-        if e.returncode == 2:
-          print('Skipping upload for existing symbol.')
-        # Any other non-zero ret code returned as failure
-        else:
-          result = e.returncode
-          print('Failed to upload %s to %s. Return code %s with output %s' %
-                (artifact, url, result, e.output))
+      return_code = upload_symbol_file(args.platform, artifact,
+                                       args.artifact_type, url, api_key,
+                                       symupload_binary_path, dump_inline)
+      if return_code != 0:
+        result = return_code
+        # TODO(crbug.com/1290471): remove the if and its body after we are
+        # sure that uploading doesn't fail due to '--i'.
+        if dump_inline:
+          print('WARNING: Failed to upload when --i is provided, fallback to '
+                'try again without --i')
+          result = upload_symbol_file(args.platform, artifact,
+                                      args.artifact_type, url, api_key,
+                                      symupload_binary_path, False)
 
   return result
 
