@@ -1360,6 +1360,12 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.chromiumos',
                 buildername='linux-chromeos-rel',
             ),
+        'linux-chromeos-rel-rts':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.chromiumos',
+                buildername='linux-chromeos-rel',
+                regression_test_selection=try_spec.ALWAYS,
+            ),
         'linux-chromeos-js-code-coverage':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.chromiumos',
