@@ -235,9 +235,9 @@ message BuilderConfig {
   repeated string analyze_names = 6;
 
   // Whether or not failed shards of tests should be retried
-  bool retry_failed_shards = 7;
+  optional bool retry_failed_shards = 7;
   // Whether or not failed test suites should be retried without patch
-  bool retry_without_patch = 8;
+  optional bool retry_without_patch = 8;
 
   // Configuration for RTS execution, see http://bit.ly/chromium-rts
   //

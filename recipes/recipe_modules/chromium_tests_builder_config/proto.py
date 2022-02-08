@@ -233,11 +233,17 @@ def convert_builder_config(obj):
           builder_id_by_builder_key[_builder_key(b)]
           for b in obj.builder_ids_in_scope_for_testing
       ],
+      mirroring_try_builders=[
+          BuilderId.create_for_group(x.group, x.builder)
+          for x in obj.mirroring_builder_group_and_names
+      ],
       include_all_triggered_testers=False,
       is_compile_only=obj.is_compile_only,
       analyze_names=obj.analyze_names,
-      retry_failed_shards=obj.retry_failed_shards,
-      retry_without_patch=obj.retry_without_patch,
+      retry_failed_shards=(obj.retry_failed_shards
+                           if obj.HasField('retry_failed_shards') else True),
+      retry_without_patch=(obj.retry_without_patch
+                           if obj.HasField('retry_without_patch') else True),
       regression_test_selection=obj.rts_config.condition or None,
       regression_test_selection_recall=obj.rts_config.recall or None,
   )
