@@ -3032,7 +3032,8 @@ class SwarmingIosTest(SwarmingTest):
 
       step_result.presentation.logs['test_summary.json'] = api.json.dumps(
           test_summary_json, indent=2).splitlines()
-      step_result.presentation.logs.update(logs)
+      step_result.presentation.logs.update(
+          api.py3_migration.consistent_ordering(six.iteritems(logs)))
       step_result.presentation.links.update(test_summary_json.get('links', {}))
       if test_summary_json.get('step_text'):
         step_result.presentation.step_text = '%s<br />%s' % (

@@ -21,6 +21,7 @@ DEPS = [
     'depot_tools/gsutil',
     'depot_tools/tryserver',
     'flakiness',
+    'py3_migration',
     'recipe_engine/buildbucket',
     'recipe_engine/cipd',
     'recipe_engine/context',

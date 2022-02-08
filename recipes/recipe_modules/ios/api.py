@@ -806,11 +806,9 @@ class iOSApi(recipe_api.RecipeApi):
     step_result = self.m.step(
         'shard EarlGrey test',
         cmd,
-        stdout=self.m.raw_io.output(),
-        step_test_data=(
-            lambda: self.m.raw_io.test_api.stream_output(
-                release_app_test_output)
-        ))
+        stdout=self.m.raw_io.output_text(),
+        step_test_data=(lambda: self.m.raw_io.test_api.stream_output_text(
+            release_app_test_output)))
     # For Release builds `otool -ov` command generates output that is
     # different from Debug builds.
     # Parsing implemented in such a way:
@@ -881,7 +879,8 @@ class iOSApi(recipe_api.RecipeApi):
     shards = [Shard() for i in range(swarming_tasks)]
     # Balances test classes between shards to have
     # approximately equal number of tests per shard.
-    for test_class, number_of_test_methods in test_counts.most_common():
+    for test_class, number_of_test_methods in (
+        self.m.py3_migration.consistent_ordering(test_counts.most_common())):
       min_shard = min(shards, key=lambda shard: shard.size)
       min_shard.test_classes.append(test_class)
       min_shard.size += number_of_test_methods

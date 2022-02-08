@@ -1683,10 +1683,10 @@
       "@@@STEP_LOG_LINE@test_summary.json@  \"step_text\": \"dummy step text\"@@@",
       "@@@STEP_LOG_LINE@test_summary.json@}@@@",
       "@@@STEP_LOG_END@test_summary.json@@@",
-      "@@@STEP_LOG_LINE@passed tests@PASSED_TEST@@@",
-      "@@@STEP_LOG_END@passed tests@@@",
       "@@@STEP_LOG_LINE@failed tests@FAILED_TEST@@@",
       "@@@STEP_LOG_END@failed tests@@@",
+      "@@@STEP_LOG_LINE@passed tests@PASSED_TEST@@@",
+      "@@@STEP_LOG_END@passed tests@@@",
       "@@@STEP_LINK@shard #0 test results@https://luci-milo.appspot.com/ui/inv/some-inv-name/test-results@@@",
       "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=0@@@"
     ]
