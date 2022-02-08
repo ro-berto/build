@@ -29,7 +29,8 @@ READELF_LINE_RE = re.compile(r'''
 
 def _get_elf_section_size_map(path_to_binary):
   """Parse raw readelf output and return a map {section name: size in bytes}."""
-  output = subprocess.check_output(['readelf', '-S', '-W', path_to_binary])
+  output = subprocess.check_output(['readelf', '-S', '-W', path_to_binary],
+                                   universal_newlines=True)
 
   elf_map = {}
   for m in READELF_LINE_RE.finditer(output):
