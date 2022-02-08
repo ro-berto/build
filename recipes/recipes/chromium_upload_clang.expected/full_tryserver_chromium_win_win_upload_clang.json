@@ -452,7 +452,7 @@
   {
     "cmd": [
       "python3",
-      "[CACHE]\\builder\\src\\tools\\rust\\build.py"
+      "[CACHE]\\builder\\src\\tools\\rust\\build_rust.py"
     ],
     "env_suffixes": {
       "DEPOT_TOOLS_UPDATE": [

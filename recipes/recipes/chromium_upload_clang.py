@@ -98,8 +98,10 @@ def RunSteps(api):
 
       # Rust build errors intentionally do not fail the bot.
       api.step(
-          'build rust',
-          ['python3', api.path['checkout'].join('tools', 'rust', 'build.py')],
+          'build rust', [
+              'python3', api.path['checkout'].join('tools', 'rust',
+                                                   'build_rust.py')
+          ],
           raise_on_failure=False)
 
 
