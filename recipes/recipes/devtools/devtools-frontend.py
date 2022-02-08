@@ -155,8 +155,8 @@ def _configure_build(api, builder_config, is_official_build,
 def run_script(api, step_name, script, args=None):
   with api.step.defer_results():
     sc_path = api.path['checkout'].join('scripts', 'test', script)
-    args = args or []
-    api.python(step_name, sc_path, args=args)
+    args = ["vpython3", "-u", sc_path] + (args or [])
+    api.step(step_name, args)
 
 
 def run_node_script(api, step_name, script, args=None, **kwargs):
@@ -164,7 +164,7 @@ def run_node_script(api, step_name, script, args=None, **kwargs):
     sc_path = api.path.join('third_party', 'node', 'node.py')
     node_args = ['--output', api.path.join('scripts', 'test', script)]
     node_args.extend(args or [])
-    api.python(step_name, sc_path, args=node_args, **kwargs)
+    api.step(step_name, ["vpython3", "-u", sc_path] + node_args, **kwargs)
 
 
 def run_unit_tests(api, builder_config):

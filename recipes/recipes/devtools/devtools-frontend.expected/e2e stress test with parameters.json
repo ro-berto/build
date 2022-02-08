@@ -4,7 +4,7 @@
       "rdb",
       "stream",
       "--",
-      "python",
+      "vpython3",
       "-u",
       "third_party/node/node.py",
       "--output",

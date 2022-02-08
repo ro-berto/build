@@ -799,7 +799,7 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython3",
       "-u",
       "[CACHE]/builder/devtools-frontend/scripts/test/run_unittests.py",
       "--target=Release",
@@ -829,7 +829,7 @@
       "rdb",
       "stream",
       "--",
-      "python",
+      "vpython3",
       "-u",
       "third_party/node/node.py",
       "--output",
@@ -862,7 +862,7 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython3",
       "-u",
       "third_party/node/node.py",
       "--output",
@@ -890,7 +890,7 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython3",
       "-u",
       "third_party/node/node.py",
       "--output",
@@ -921,7 +921,7 @@
       "rdb",
       "stream",
       "--",
-      "python",
+      "vpython3",
       "-u",
       "third_party/node/node.py",
       "--output",
