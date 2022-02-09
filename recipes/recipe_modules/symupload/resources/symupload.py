@@ -36,7 +36,6 @@ def parse_arguments(input_args):
       required=True,
       help='File containing the Symbol Server API key.')
   parser.add_argument('--binary-path', help='Path to the symupload binary.')
-  parser.add_argument('--build-dir', help='Path to the build output.')
   parser.add_argument(
       '--platform',
       help='Platform currently running on. Used to '

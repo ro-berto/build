@@ -26,8 +26,6 @@ class SymuploadTest(unittest.TestCase):
         '/some/path/api_key_file.txt',
         '--binary-path',
         '/some/symupload',
-        '--build-dir',
-        '/some/out/dir/',
         '--platform',
         'mac',
         '--server-urls',
@@ -41,7 +39,6 @@ class SymuploadTest(unittest.TestCase):
     self.assertTrue(artifacts[0] == '/some/out/dir/artifact1')
     self.assertTrue(args.api_key_file == '/some/path/api_key_file.txt')
     self.assertTrue(args.binary_path == '/some/symupload')
-    self.assertTrue(args.build_dir == '/some/out/dir/')
     self.assertTrue(args.platform == 'mac')
     server_urls = args.server_urls.split(',')
     self.assertEqual(len(server_urls), 2)
@@ -115,8 +112,6 @@ class SymuploadTest(unittest.TestCase):
         path,
         '--binary-path',
         '/some/symupload',
-        '--build-dir',
-        '/some/out/dir/',
         '--platform',
         'mac',
         '--server-urls',
@@ -153,8 +148,6 @@ class SymuploadTest(unittest.TestCase):
         path,
         '--binary-path',
         binary_path,
-        '--build-dir',
-        '/some/out/dir/',
         '--platform',
         'win',
         '--server-urls',
@@ -185,8 +178,8 @@ class SymuploadTest(unittest.TestCase):
 
     all_args = [
         '--artifacts', artifact + ',' + '/some/out/dir/artifact2',
-        '--api-key-file', path, '--binary-path', binary_path, '--build-dir',
-        '/some/out/dir/', '--platform', 'win', '--server-urls', server_url
+        '--api-key-file', path, '--binary-path', binary_path, '--platform',
+        'win', '--server-urls', server_url
     ]
 
     with mock.patch('symupload.open', mock.mock_open(read_data=key_content)):
