@@ -523,8 +523,6 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
       "[CACHE]/builder/emscripten-releases/src/build.py",
       "--sync-dir=[CACHE]/builder/emscripten-releases",
       "--build-dir=[CACHE]/builder/emscripten-releases/build",
@@ -843,8 +841,6 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
       "[CACHE]/builder/emscripten-releases/src/build.py",
       "--sync-dir=[CACHE]/builder/emscripten-releases",
       "--build-dir=[CACHE]/builder/emscripten-releases/build",
@@ -887,8 +883,6 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
       "[CACHE]/builder/emscripten-releases/src/build.py",
       "--sync-dir=[CACHE]/builder/emscripten-releases",
       "--build-dir=[CACHE]/builder/emscripten-releases/build",
