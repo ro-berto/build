@@ -427,3 +427,9 @@ def reclient_test(c):
 def reclient_clang_scan_deps(c):
   cv = c.solutions[0].custom_vars
   cv['reclient_version'] = 're_client_version:0.41.4.3f0d8bb'
+
+
+@CONFIG_CTX()
+def rust_in_tree(c):
+  c.solutions[0].custom_vars['checkout_clang_libs'] = 'True'
+  c.solutions[0].custom_vars['build_chromium_rust_toolchain'] = 'True'

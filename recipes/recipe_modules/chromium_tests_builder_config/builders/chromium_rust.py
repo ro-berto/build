@@ -35,7 +35,22 @@ def CreateLinuxBuilder():
   )
 
 
+def CreateLinuxInTreeToolchainBuilder():
+  return builder_spec.BuilderSpec.create(
+      chromium_config='chromium',
+      chromium_apply_config=['mb'],
+      gclient_config='chromium',
+      gclient_apply_config=['rust_in_tree'],
+      chromium_config_kwargs={
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+      },
+      simulation_platform='linux',
+  )
+
+
 SPEC = {
     'linux-rust-x64-rel': CreateLinuxBuilder(),
+    'linux-rust-intree-x64-rel': CreateLinuxInTreeToolchainBuilder(),
     'android-rust-arm-rel': CreateAndroidBuilder(),
 }

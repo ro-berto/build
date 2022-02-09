@@ -2133,6 +2133,11 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.rust',
                 buildername='linux-rust-x64-rel',
             ),
+        'linux-rust-intree-x64-rel':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.rust',
+                buildername='linux-rust-intree-x64-rel',
+            ),
     },
     # SWANGLE bots
     'tryserver.chromium.swangle': {
