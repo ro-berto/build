@@ -759,13 +759,10 @@ class ArchiveApi(recipe_api.RecipeApi):
     with self.m.step.nest('Generic Archiving Steps'):
       for archive_data in archive_config.archive_datas:
         if not archive_data.only_upload_on_tests_success:
-          gcs_uploads, gcs_vars = self.gcs_archive(build_dir, update_properties,
-                                                   archive_data,
-                                                   top_level_source,
-                                                   provenance_sources,
-                                                   custom_vars)
+          gcs_uploads = self.gcs_archive(build_dir, update_properties,
+                                         archive_data, top_level_source,
+                                         provenance_sources, custom_vars)
           upload_results['gcs'].append(gcs_uploads)
-          upload_results['gcs_vars'] = gcs_vars
       for cipd_archive_data in archive_config.cipd_archive_datas:
         upload_results['cipd'].update(
             self.cipd_archive(build_dir, update_properties, custom_vars,
@@ -1143,8 +1140,7 @@ class ArchiveApi(recipe_api.RecipeApi):
           dest=revisions_path,
           name="upload {}".format(revisions_path))
 
-    gcs_url = {'gcs_url': 'gs://' + gcs_bucket + '/' + gcs_path}
-    return uploads, gcs_url
+    return uploads
 
   def cipd_archive(self, build_dir, update_properties, custom_vars,
                    cipd_archive_data):
