@@ -2,9 +2,9 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import collections
 import collect_v8_task
 import json
-import os
 import unittest
 
 from pyfakefs import fake_filesystem_unittest
@@ -161,6 +161,61 @@ class TaskCollectorTestCase(fake_filesystem_unittest.TestCase):
     loaded_shard = task_collector.load_shard_json(
         output_dir='/', task_id='123', file_name='example_shard.json')
     self.assertIsNone(loaded_shard)
+
+  def test_merge_shard_results_when_all_shards_fail(self):
+    Options = collections.namedtuple('options', ['slow_tests_cutoff'])
+    example_options = Options(slow_tests_cutoff=10)
+    example_shards = [{
+        'task_id': 'a',
+        'exit_code': 0
+    }, {
+        'task_id': 'b',
+        'exit_code': 1
+    }]
+    task_collector = collect_v8_task.TaskCollector()
+    merged_shard_result = task_collector.merge_shard_results(
+        output_dir='/', shards=example_shards, options=example_options)
+    self.assertEqual(merged_shard_result, {
+        'slowest_tests': [],
+        'results': [],
+        'tags': ['UNRELIABLE_RESULTS']
+    })
+
+  def test_merge_test_results(self):
+    example_shards = [{
+        'task_id': 'a',
+        'exit_code': 0
+    }, {
+        'task_id': 'b',
+        'exit_code': 1
+    }]
+    example_merged_test_output = {
+        'slowest_tests': [],
+        'results': [],
+        'tags': ['UNRELIABLE_RESULTS']
+    }
+
+    self.setUpPyfakefs(allow_root_user=True)
+    self.fs.create_file('/merged_output.json')
+
+    with open('/merged_output.json', 'w') as f:
+      json.dump(example_merged_test_output, f)
+
+    Options = collections.namedtuple(
+        'options', ['merged_test_output', 'slow_tests_cutoff'])
+    example_options = Options(
+        merged_test_output='/merged_output.json', slow_tests_cutoff=10)
+    task_collector = collect_v8_task.TaskCollector()
+    task_collector.merge_test_results(
+        output_dir='/', shards=example_shards, options=example_options)
+
+    with open(example_options.merged_test_output, 'r') as f:
+      self.assertEqual(
+          json.load(f), {
+              'slowest_tests': [],
+              'results': [],
+              'tags': ['UNRELIABLE_RESULTS']
+          })
 
 
 if __name__ == '__main__':

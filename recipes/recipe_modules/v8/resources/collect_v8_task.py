@@ -143,7 +143,7 @@ class TaskCollector(object):
   def merge_test_results(self, output_dir, shards, options):
     with open(options.merged_test_output, 'wb') as f:
       merged_data = self.merge_shard_results(output_dir, shards, options)
-      json.dump(merged_data, f, separators=(',', ':'))
+      f.write(json.dumps(merged_data, separators=(',', ':')).encode('utf-8'))
 
 
   def merge_coverage_data(self, output_dir, shards, options):
