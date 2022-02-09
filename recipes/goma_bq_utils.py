@@ -143,7 +143,7 @@ def SendCompileEvent(
         f_out.write(json_out)
       args.append(temp.name)
       subprocess.check_call(args)
-      print 'Uploaded CompileEvent to BQ %s: %s' % (table_name, args)
+      print('Uploaded CompileEvent to BQ %s: %s' % (table_name, args))
     finally:
       os.remove(temp.name)
   except Exception as inst:  # safety net
