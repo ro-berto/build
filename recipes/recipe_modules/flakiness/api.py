@@ -8,11 +8,13 @@ import json
 import random
 import re
 
+from google.protobuf import timestamp_pb2
 from recipe_engine import recipe_api
 from RECIPE_MODULES.build.chromium_tests import steps
 from PB.go.chromium.org.luci.buildbucket.proto \
     import builds_service as builds_service_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
+from PB.go.chromium.org.luci.resultdb.proto.v1 import common as common_rdb_pb2
 from PB.go.chromium.org.luci.resultdb.proto.v1 import predicate as predicate_pb2
 from PB.go.chromium.org.luci.resultdb.proto.v1 import (test_result as
                                                        test_result_pb2)
@@ -448,8 +450,9 @@ class FlakinessApi(recipe_api.RecipeApi):
     """Verify the newly identified tests are new by cross-checking ResultDB.
 
     Queries ResultDB for the instances of the given test_ids on the builder for
-    the past day and iterates through response to eliminate any false positives
-    from the preliminary new test list.
+    the past hours and iterates through response to eliminate any false
+    positives from the preliminary new test list.
+
     Args:
       prelim_tests (set of TestDefinition objects): the set of TestDefinition
         objects identified as potential new tests to be cross-referenced
@@ -466,6 +469,13 @@ class FlakinessApi(recipe_api.RecipeApi):
       A set of TestDefinition objects.
 
     """
+    now = int(self.m.time.time())
+    # Time range is set as past 8 hours, to cover the gap of test history JSON
+    # generation (6 hours), plus a 2 hour buffer for generate builder runtime,
+    # etc.
+    time_range = common_rdb_pb2.TimeRange(
+        earliest=timestamp_pb2.Timestamp(seconds=now - 3600 * 8),
+        latest=timestamp_pb2.Timestamp(seconds=now))
     results = self.m.resultdb.get_test_result_history(
         realm=self.m.buildbucket.builder_realm,
         test_id_regexp='|'.join(
@@ -474,6 +484,7 @@ class FlakinessApi(recipe_api.RecipeApi):
             contains={'def': {
                 'builder': builder
             }}),
+        time_range=time_range,
         page_size=page_size,
         step_name='cross reference newly identified tests against ResultDB')
 
