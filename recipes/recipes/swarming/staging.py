@@ -117,19 +117,6 @@ def GenTests(api):
       builder_with_config('android-lollipop-arm-rel-swarming'),
   )
 
-  yield api.test(
-      'linux-rel-swarming-staging',
-      builder_with_config('linux-rel-swarming-staging', {
-        'gtest_tests': [{
-          'test': 'browser_tests',
-          'swarming': {
-            'can_use_on_swarming_builders': True,
-            'shards': 2,
-          }
-        },],
-      }),
-  )
-
   # One 'collect' fails due to a missing shard and failing test, should not
   # prevent the second 'collect' from running.
   yield api.test(

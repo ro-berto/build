@@ -95,6 +95,3 @@ SPEC = {
         ),
 }
 
-# Use the same config for builders using staging swarming instance.
-SPEC['linux-rel-swarming-staging'] = SPEC['linux-rel-swarming']
-SPEC['win-rel-swarming-staging'] = SPEC['win-rel-swarming']
