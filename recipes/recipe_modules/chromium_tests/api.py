@@ -174,7 +174,15 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     else:
       self.m.chromium.runhooks()
 
-  def create_targets_config(self, builder_config, update_step):
+  def create_targets_config(self, builder_config, got_revisions):
+    """
+    Args:
+      builder_config (BuilderConfig): config for the current builder
+      got_revisions (dict): revisions checked out for src and other deps.
+        Usually stored in the bot_update step presentation properties.
+
+    Returns: TargetsConfig for current builder
+    """
     # The scripts_compile_targets is indirected through a function so that we
     # don't execute unnecessary steps if there are no scripts that need to be
     # run
@@ -200,7 +208,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           builder_id.builder,
           builder_id.group,
           scripts_compile_targets_fn,
-          update_step,
+          got_revisions,
       )
       tests[builder_id] = builder_tests
 
@@ -258,14 +266,15 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     self.runhooks(update_step, suffix=runhooks_suffix)
 
-    targets_config = self.create_targets_config(builder_config, update_step)
+    targets_config = self.create_targets_config(
+        builder_config, update_step.presentation.properties)
 
     return update_step, targets_config
 
   def generate_tests_from_source_side_spec(self, source_side_spec, buildername,
                                            builder_group,
                                            scripts_compile_targets_fn,
-                                           bot_update_step):
+                                           got_revisions):
     test_specs = []
 
     # TODO(phajdan.jr): Switch everything to scripts generators and simplify.
@@ -276,7 +285,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
               builder_group,
               buildername,
               source_side_spec,
-              bot_update_step,
+              got_revisions,
               scripts_compile_targets_fn=scripts_compile_targets_fn))
 
     tests = []

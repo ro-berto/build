@@ -127,7 +127,7 @@ class ANGLEApi(recipe_api.RecipeApi):
           self.m.tryserver.is_tryserver,
           path_to_merge_scripts=script_dir)
       targets_config = self.m.chromium_tests.create_targets_config(
-          self._builder_config, update_step)
+          self._builder_config, update_step.presentation.properties)
 
       if self.m.tryserver.is_tryserver:
         affected_files = self.m.chromium_checkout.get_files_affected_by_patch(

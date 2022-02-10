@@ -30,7 +30,7 @@ def RunSteps(api):
   test_spec = single_spec if single_spec else {}
 
   test_args = generators.get_args_for_test(api.chromium_tests, test_spec,
-                                           update_step)
+                                           update_step.presentation.properties)
   if 'expected_args' in api.properties:
     # For some reason, we get expected_args as a tuple instead of a list
     api.assertions.assertEqual(

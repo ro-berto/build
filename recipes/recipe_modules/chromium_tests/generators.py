@@ -15,7 +15,7 @@ from recipe_engine import engine_types
 from RECIPE_MODULES.build import chromium_swarming
 
 
-def get_args_for_test(chromium_tests_api, raw_test_spec, bot_update_step):
+def get_args_for_test(chromium_tests_api, raw_test_spec, got_revisions):
   """Gets the argument list for a dynamically generated test, as
   provided by the JSON files in src/testing/buildbot/ in the Chromium
   workspace. This function provides the following build properties in
@@ -76,21 +76,19 @@ def get_args_for_test(chromium_tests_api, raw_test_spec, bot_update_step):
       # This is only set on Chromium when using ANGLE as a component. We
       # use the parent revision when available.
       'got_angle_revision':
-          bot_update_step.presentation.properties.get(
-              'parent_got_angle_revision',
-              bot_update_step.presentation.properties.get('got_angle_revision')
-          ),
+          got_revisions.get('parent_got_angle_revision',
+                            got_revisions.get('got_angle_revision')),
       # This is only ever set on builders where the primary repo is not
       # Chromium, such as V8 or WebRTC.
       'got_cr_revision':
-          bot_update_step.presentation.properties.get('got_cr_revision'),
-      'got_revision': (bot_update_step.presentation.properties.get(
-          'got_revision',
-          bot_update_step.presentation.properties.get('got_src_revision'))),
+          got_revisions.get('got_cr_revision'),
+      'got_revision':
+          (got_revisions.get('got_revision',
+                             got_revisions.get('got_src_revision'))),
       # Similar to got_cr_revision, but for use in repos where the primary
       # repo is not Chromium and got_cr_revision is not defined.
       'got_src_revision':
-          bot_update_step.presentation.properties.get('got_src_revision'),
+          got_revisions.get('got_src_revision'),
       'patch_issue':
           cl.change if cl else None,
       'patch_set':
@@ -360,7 +358,7 @@ def generate_gtests(chromium_tests_api,
                     builder_group,
                     buildername,
                     source_side_spec,
-                    bot_update_step,
+                    got_revisions,
                     scripts_compile_targets_fn=None):
   del scripts_compile_targets_fn
 
@@ -388,17 +386,17 @@ def generate_gtests(chromium_tests_api,
       generator = generate_gtests_from_one_spec
 
     for test_spec in generator(chromium_tests_api, builder_group, buildername,
-                               raw_spec, bot_update_step):
+                               raw_spec, got_revisions):
       yield _handle_ci_only(chromium_tests_api, raw_spec, test_spec)
 
 
 def generate_gtests_from_one_spec(chromium_tests_api, builder_group,
-                                  buildername, raw_test_spec, bot_update_step):
+                                  buildername, raw_test_spec, got_revisions):
 
   def gtest_delegate_common(raw_test_spec, **kwargs):
     del kwargs
     common_gtest_kwargs = {}
-    args = get_args_for_test(chromium_tests_api, raw_test_spec, bot_update_step)
+    args = get_args_for_test(chromium_tests_api, raw_test_spec, got_revisions)
     if raw_test_spec['shard_index'] != 0 or raw_test_spec['total_shards'] != 1:
       args.extend([
           '--test-launcher-shard-index=%d' % raw_test_spec['shard_index'],
@@ -446,9 +444,9 @@ def generate_junit_tests(chromium_tests_api,
                          builder_group,
                          buildername,
                          source_side_spec,
-                         bot_update_step,
+                         got_revisions,
                          scripts_compile_targets_fn=None):
-  del bot_update_step, scripts_compile_targets_fn
+  del got_revisions, scripts_compile_targets_fn
 
   for raw_spec in source_side_spec.get(buildername, {}).get('junit_tests', []):
     rdb_kwargs = dict(raw_spec.get('resultdb', {}))
@@ -469,10 +467,10 @@ def generate_script_tests(chromium_tests_api,
                           builder_group,
                           buildername,
                           source_side_spec,
-                          bot_update_step,
+                          got_revisions,
                           scripts_compile_targets_fn=None):
   # Unused arguments
-  del bot_update_step
+  del got_revisions
 
   for raw_spec in source_side_spec.get(buildername, {}).get('scripts', []):
     rdb_kwargs = dict(raw_spec.get('resultdb', {'enable': True}))
@@ -495,7 +493,7 @@ def generate_isolated_script_tests(chromium_tests_api,
                                    builder_group,
                                    buildername,
                                    source_side_spec,
-                                   bot_update_step,
+                                   got_revisions,
                                    scripts_compile_targets_fn=None):
   del scripts_compile_targets_fn
 
@@ -503,14 +501,13 @@ def generate_isolated_script_tests(chromium_tests_api,
                                        {}).get('isolated_scripts', []):
     for test_spec in generate_isolated_script_tests_from_one_spec(
         chromium_tests_api, builder_group, buildername, raw_spec,
-        bot_update_step):
+        got_revisions):
       yield _handle_ci_only(chromium_tests_api, raw_spec, test_spec)
 
 
 def generate_isolated_script_tests_from_one_spec(chromium_tests_api,
                                                  builder_group, buildername,
-                                                 raw_test_spec,
-                                                 bot_update_step):
+                                                 raw_test_spec, got_revisions):
 
   def isolated_script_delegate_common(test, name=None, **kwargs):
     del kwargs
@@ -521,7 +518,7 @@ def generate_isolated_script_tests_from_one_spec(chromium_tests_api,
     # could be supported for the other test types too, but that wasn't
     # desired at the time of this writing.
     common_kwargs['args'] = get_args_for_test(chromium_tests_api, test,
-                                              bot_update_step)
+                                              got_revisions)
     # This features is only needed for the cases in which the *_run compile
     # target is needed to generate isolate files that contains dynamically libs.
     # TODO(nednguyen, kbr): Remove this once all the GYP builds are converted
@@ -585,7 +582,7 @@ def generate_skylab_tests(chromium_tests_api,
                           builder_group,
                           buildername,
                           source_side_spec,
-                          bot_update_step,
+                          got_revisions,
                           swarming_dimensions=None,
                           scripts_compile_targets_fn=None):
   del scripts_compile_targets_fn, swarming_dimensions
@@ -604,7 +601,7 @@ def generate_skylab_tests(chromium_tests_api,
         {'builder': chromium_tests_api.m.buildbucket.builder_name})
     common_skylab_kwargs['resultdb'] = rdb_kwargs
     common_skylab_kwargs['test_args'] = get_args_for_test(
-        chromium_tests_api, skylab_test_spec, bot_update_step)
+        chromium_tests_api, skylab_test_spec, got_revisions)
     common_skylab_kwargs['target_name'] = skylab_test_spec.get('test')
     common_skylab_kwargs['waterfall_builder_group'] = builder_group
     common_skylab_kwargs['waterfall_buildername'] = buildername
