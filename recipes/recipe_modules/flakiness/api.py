@@ -26,6 +26,10 @@ from PB.recipe_engine import result as result_pb2
 # with '^(.+(BUILD\.gn|DEPS|\.gni)|src/chromeos/CHROMEOS_LKGM|.+[T|t]est.*)$'.
 _FILE_PATH_ADDING_TESTS_PATTERN = '^.+[T|t]est.*$'
 
+# Internal labels used when we need to trim test sets at different steps.
+_FINAL_TRIM = 'final'
+_CROSS_REFERENCE_TRIM = 'cross reference'
+
 
 class TestDefinition():
   """A class to contain ResultDB TestReuslt Proto information.
@@ -116,6 +120,16 @@ class FlakinessApi(recipe_api.RecipeApi):
   def __init__(self, properties, *args, **kwargs):
     super(FlakinessApi, self).__init__(*args, **kwargs)
     self._check_for_flakiness = properties.check_for_flakiness
+    # Input to cross reference step in "verify_new_tests" might be too large
+    # and cause step failure, when there are too many new tests to verify
+    # (caused by stale history JSON file, or a config roll adding new test
+    # targets or variant configs just landed). This constant limits the number
+    # of test variants passed to GetTestResultHistory RPC. The number is chosen
+    # because it's about the max possible number of test variants naturally
+    # added in a builder before a new test history JSON is generated.
+    # Context: crbug.com/1294973
+    self._max_test_variants_to_cross_reference = 1000
+    # This is to limit the final new test variants that's endorsed.
     self._max_test_targets = properties.max_test_targets or 40
     self._repeat_count = properties.repeat_count or 20
     # The max limit of test results in a test obejct, so that all results are
@@ -501,17 +515,22 @@ class FlakinessApi(recipe_api.RecipeApi):
 
     return prelim_tests
 
-  def trim_new_tests(self, new_tests):
-    if new_tests and len(new_tests) > self._max_test_targets:
+  def maybe_trim_new_tests(self, new_tests, trim_step_label):
+    assert trim_step_label in [_FINAL_TRIM, _CROSS_REFERENCE_TRIM]
+    limit = (
+        self._max_test_targets if trim_step_label == _FINAL_TRIM else
+        self._max_test_variants_to_cross_reference)
+
+    if new_tests and len(new_tests) > limit:
       # There are more new tests detected than what we're permitting, so we're
-      # taking a random subset to re-run
-      res = random.sample(new_tests, self._max_test_targets)
-      s = self.m.step('subset of new tests', cmd=None)
+      # taking a random subset for the specific step.
+      res = random.sample(new_tests, limit)
+      s = self.m.step('subset of new tests (%s)' % trim_step_label, cmd=None)
       s.presentation.step_text = (
-          'the total number of new tests identified exceed what we permit {}, '
-          'so a random subset of those tests have been selected.'.format(
-              self._max_test_targets))
-      s.presentation.logs['new_test_subset'] = '\n'.join([
+          'the total number of new tests at "{}" step exceed what we permit {},'
+          ' so a random subset of those tests have been selected.'.format(
+              trim_step_label, self._max_test_targets))
+      s.presentation.logs['new_test_subset(%s)' % trim_step_label] = '\n'.join([
           'test_id: {}, variant_hash: {}'.format(t.test_id, t.variant_hash)
           for t in res
       ])
@@ -587,6 +606,10 @@ class FlakinessApi(recipe_api.RecipeApi):
       preliminary_new_tests = current_tests.difference(historical_tests)
       p.logs['preliminary_tests'] = join_tests(preliminary_new_tests)
 
+      # Trim once before verify_new_tests to avoid input too large for RDB RPC.
+      preliminary_new_tests = self.maybe_trim_new_tests(preliminary_new_tests,
+                                                        _CROSS_REFERENCE_TRIM)
+
       # Cross-referencing the potential new tests with ResultDB to ensure they
       # are not present in existing builds.
       new_tests = self.verify_new_tests(
@@ -650,7 +673,7 @@ class FlakinessApi(recipe_api.RecipeApi):
       return []
 
     new_tests = self.identify_new_tests(test_objects)
-    new_tests = self.trim_new_tests(new_tests)
+    new_tests = self.maybe_trim_new_tests(new_tests, _FINAL_TRIM)
 
     # This operation is O(len(test_obj) * len(new_tests)) because parsing
     # test_id is only intended for LUCI UI grouping, see

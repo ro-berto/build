@@ -35,7 +35,7 @@ def RunSteps(api):
   for _ in range(15):
     new_tests.append(_generate_test_definition())
 
-  filtered_test = api.flakiness.trim_new_tests(new_tests)
+  filtered_test = api.flakiness.maybe_trim_new_tests(new_tests, 'final')
   api.assertions.assertEqual(
       len(filtered_test), api.flakiness._max_test_targets)
 
