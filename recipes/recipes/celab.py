@@ -293,16 +293,14 @@ def _RunTests(api, test_root, test_scripts_root, host_file_template, tests,
 
     # Generate the host files that we'll use in ./run_tests.py.
     with api.context(cwd=test_scripts_root):
-      api.python(
-          'generate host files',
-          'generate_host_files.py', [
-              '--template', host_file_template, '--projects', ';'.join([
-                  "%s-%03d" % (pool_name, i) for i in range(1, pool_size + 1)
-              ]), '--storage_bucket',
-              '%s-assets' % pool_name, '--storage_prefix', storage_prefix,
-              '--destination_dir', host_dir
-          ],
-          venv=True)
+      api.step('generate host files', [
+          'python3', 'generate_host_files.py', '--template', host_file_template,
+          '--projects', ';'.join([
+              "%s-%03d" % (pool_name, i) for i in range(1, pool_size + 1)
+          ]), '--storage_bucket',
+          '%s-assets' % pool_name, '--storage_prefix', storage_prefix,
+          '--destination_dir', host_dir
+      ])
 
   # Run our tests and catch test failures.
   storage_logs = '%s-logs' % pool_name
@@ -321,17 +319,15 @@ def _RunTests(api, test_root, test_scripts_root, host_file_template, tests,
       extra_args += ['--exclude', exclude_tests]
 
     try:
-      api.python('run all tests',
-        'run_tests.py',
-        [
-          '--tests', tests,
-          '--hosts', host_dir,
-          '--test_py', 'test.py',
-          '--shared_provider_storage', '%s-assets' % pool_name,
-          '--error_logs_dir', logs_dir,
-          '--noprogress', '-v', '1'
-        ] + extra_args,
-        venv=True)
+      api.step(
+          'run all tests',
+          [
+              'vpython3', '-u', 'run_tests.py', '--tests', tests, '--hosts',
+              host_dir, '--test_py', 'test.py', '--shared_provider_storage',
+              '%s-assets' % pool_name, '--error_logs_dir', logs_dir,
+              '--noprogress', '-v', '1'
+          ] + extra_args,
+      )
     except:
       # We upload *all* logs, including those we reupload in _ParseTestSummary.
       # It's better to upload (small) logs twice than to not upload them at

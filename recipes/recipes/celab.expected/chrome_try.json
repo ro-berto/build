@@ -1365,8 +1365,7 @@
   },
   {
     "cmd": [
-      "vpython",
-      "-u",
+      "python3",
       "generate_host_files.py",
       "--template",
       "template.host.textpb",
@@ -1399,7 +1398,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "vpython3",
       "-u",
       "run_tests.py",
       "--tests",

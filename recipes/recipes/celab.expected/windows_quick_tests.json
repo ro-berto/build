@@ -397,8 +397,7 @@
   },
   {
     "cmd": [
-      "vpython",
-      "-u",
+      "python3",
       "generate_host_files.py",
       "--template",
       "../../examples/schema/host/example.host.textpb",
@@ -431,7 +430,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "vpython3",
       "-u",
       "run_tests.py",
       "--tests",
