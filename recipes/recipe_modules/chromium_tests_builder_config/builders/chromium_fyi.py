@@ -1216,6 +1216,7 @@ SPEC.update([
         'linux-blink-heap-verification',
         gclient_apply_config=['enable_reclient']),
     stock_config('linux-blink-v8-oilpan'),
+    stock_config('linux-blink-v8-sandbox-future-dbg', config='Debug'),
     stock_config('linux-fieldtrial-rel'),
     stock_config('linux-gcc-rel', gclient_apply_config=['enable_reclient']),
     stock_config(
