@@ -1030,6 +1030,7 @@ class iOSApi(recipe_api.RecipeApi):
         task,
         service_account=self.swarming_service_account,
         upload_test_results=kwargs.pop('upload_test_results', True),
+        xcode_app_path=self.XCODE_APP_PATH,
         **kwargs)
     return test_spec.get_test(self.m.chromium_tests)
 

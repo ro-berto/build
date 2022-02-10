@@ -300,7 +300,7 @@ class WebRtcIsolatedGtest(steps.SwarmingIsolatedScriptTest):
         cas_input_root=task_input)
 
     self._apply_swarming_task_config(
-        task, api, suffix, filter_flag=None, filter_delimiter=None)
+        task, suffix, filter_flag=None, filter_delimiter=None)
     return task
 
 

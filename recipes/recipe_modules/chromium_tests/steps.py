@@ -555,9 +555,9 @@ class Test(object):
         base_variant=dict(
             self.spec.resultdb.base_variant or {},
             test_suite=self.canonical_name),
-        result_adapter_path=str(api.path['checkout'].join(
+        result_adapter_path=str(self.api.m.path['checkout'].join(
             'tools', 'resultdb', 'result_adapter')),
-        result_file=api.path.abspath(temp),
+        result_file=self.api.m.path.abspath(temp),
         # Give each local test suite its own invocation to make it easier to
         # fetch results.
         include=True)
@@ -1998,7 +1998,7 @@ class SwarmingTest(Test):
     """
     raise NotImplementedError()  # pragma: no cover
 
-  def _apply_swarming_task_config(self, task, api, suffix, filter_flag,
+  def _apply_swarming_task_config(self, task, suffix, filter_flag,
                                   filter_delimiter):
     """Applies shared configuration for swarming tasks.
     """
@@ -2008,7 +2008,9 @@ class SwarmingTest(Test):
     args = _merge_args_and_test_options(self, self.spec.args, test_options)
 
     # If we're in quick run set the shard count to any available quickrun shards
-    use_quickrun = api.cq.active and api.cq.run_mode == api.cq.QUICK_DRY_RUN
+    use_quickrun = (
+        self.api.m.cq.active and
+        (self.api.m.cq.run_mode == self.api.m.cq.QUICK_DRY_RUN))
     shards = self.spec.quickrun_shards if (
         use_quickrun and self.spec.quickrun_shards) else self.spec.shards
 
@@ -2035,7 +2037,7 @@ class SwarmingTest(Test):
     task_slice = task_request[0]
 
     merge = self.spec.merge
-    using_pgo = api.chromium_tests.m.pgo.using_pgo
+    using_pgo = self.api.m.chromium_tests.m.pgo.using_pgo
     if self.isolate_profile_data or using_pgo:
       # Targets built with 'use_clang_coverage' or 'use_clang_profiling' (also
       # set by chrome_pgo_phase=1) will look at this environment variable to
@@ -2051,7 +2053,7 @@ class SwarmingTest(Test):
       # profiles.
       if using_pgo:
         env_vars['CHROME_SHUTDOWN_TIMEOUT'] = '300'
-        if api.chromium.c.TARGET_PLATFORM == 'android':
+        if self.api.m.chromium.c.TARGET_PLATFORM == 'android':
           env_vars['CHROME_PGO_PROFILING'] = '1'
 
       task_slice = task_slice.with_env_vars(**env_vars)
@@ -2069,7 +2071,7 @@ class SwarmingTest(Test):
       # data. If the test object does not specify a merge script, use the one
       # defined by the swarming task in the chromium_swarm module. (The default
       # behavior for non-coverage/non-profile tests).
-      merge = api.chromium_tests.m.code_coverage.shard_merge(
+      merge = self.api.m.code_coverage.shard_merge(
           self.step_name(suffix),
           self.target_name,
           skip_validation=skip_validation,
@@ -2096,9 +2098,9 @@ class SwarmingTest(Test):
       # Regardless, we want to emit a failing step so that the error is not
       # overlooked.
       if len(task.shard_indices) == 0:  # pragma: no cover
-        api.step.empty(
+        self.api.m.step.empty(
             'missing failed shards',
-            status=api.step.FAILURE,
+            status=self.api.m.step.FAILURE,
             step_text=(
                 "Retry shards with patch is being run on {},"
                 " which has no failed shards."
@@ -2108,7 +2110,7 @@ class SwarmingTest(Test):
     else:
       task.shard_indices = range(task.shards)
 
-    task.build_properties = api.chromium.build_properties
+    task.build_properties = self.api.m.chromium.build_properties
     task.containment_type = self.spec.containment_type
     task.ignore_task_failure = self.spec.ignore_task_failure
     if merge:
@@ -2142,8 +2144,9 @@ class SwarmingTest(Test):
     task_dimensions.update(self.spec.dimensions)
     # Set default value.
     if 'os' not in task_dimensions:
-      task_dimensions['os'] = api.chromium_swarming.prefered_os_dimension(
-          api.platform.name)
+      task_dimensions['os'] = (
+          self.api.m.chromium_swarming.prefered_os_dimension(
+              self.api.m.platform.name))
     task_slice = task_slice.with_dimensions(**task_dimensions)
 
     # Add optional dimensions.
@@ -2178,11 +2181,11 @@ class SwarmingTest(Test):
     assert suffix not in self._tasks, ('Test %s was already triggered' %
                                        self.step_name(suffix))
 
-    task_input = api.isolate.isolated_tests.get(self.isolate_target)
+    task_input = self.api.m.isolate.isolated_tests.get(self.isolate_target)
     if not task_input:
-      return api.step.empty(
+      return self.api.m.step.empty(
           '[error] %s' % self.step_name(suffix),
-          status=api.step.INFRA_FAILURE,
+          status=self.api.m.step.INFRA_FAILURE,
           step_text=('*.isolated file for target %s is missing' %
                      self.isolate_target))
 
@@ -2191,12 +2194,14 @@ class SwarmingTest(Test):
 
     # Export TARGET_PLATFORM to resultdb tags
     resultdb = self.resultdb
-    if api.chromium.c and api.chromium.c.TARGET_PLATFORM:
+    if (self.api.m.chromium.c and self.api.m.chromium.c.TARGET_PLATFORM):
       resultdb = attr.evolve(
           resultdb,
-          base_tags=(('target_platform', api.chromium.c.TARGET_PLATFORM),))
+          base_tags=(('target_platform',
+                      self.api.m.chromium.c.TARGET_PLATFORM),))
 
-    api.chromium_swarming.trigger_task(self._tasks[suffix], resultdb=resultdb)
+    self.api.m.chromium_swarming.trigger_task(
+        self._tasks[suffix], resultdb=resultdb)
 
   def validate_task_results(self, api, step_result):
     """Interprets output of a task (provided as StepResult object).
@@ -2224,12 +2229,12 @@ class SwarmingTest(Test):
   @recipe_api.composite_step
   def run(self, api, suffix):
     """Waits for launched test to finish and collects the results."""
-    step_result, has_valid_results = api.chromium_swarming.collect_task(
-        self._tasks[suffix])
+    step_result, has_valid_results = (
+        self.api.m.chromium_swarming.collect_task(self._tasks[suffix]))
     self._suffix_step_name_map[suffix] = '.'.join(step_result.name_tokens)
 
     metadata = self.step_metadata(suffix)
-    step_result.presentation.logs['step_metadata'] = (api.json.dumps(
+    step_result.presentation.logs['step_metadata'] = (self.api.m.json.dumps(
         metadata, indent=2, sort_keys=True)).splitlines()
 
     # TODO(martiniss): Consider moving this into some sort of base
@@ -2298,7 +2303,7 @@ class SwarmingGTestTest(SwarmingTest):
         cas_input_root=cas_input_root,
         failure_as_exception=False,
         collect_json_output_override=json_override)
-    self._apply_swarming_task_config(task, api, suffix, '--gtest_filter', ':')
+    self._apply_swarming_task_config(task, suffix, '--gtest_filter', ':')
     return task
 
   def validate_task_results(self, api, step_result):
@@ -2544,7 +2549,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
         relative_cwd=self.relative_cwd,
         cas_input_root=cas_input_root)
 
-    self._apply_swarming_task_config(task, api, suffix,
+    self._apply_swarming_task_config(task, suffix,
                                      '--isolated-script-test-filter', '::')
     return task
 
@@ -2788,6 +2793,7 @@ class SwarmingIosTestSpec(SwarmingTestSpec):
       If the callback is not provided, the default is to upload
       performance results from perf_result.json
     * use_rdb - True if the tests results are to be uploaded to ResultDB.
+    * xcode_app_path - Swarming named cache path for the test's XCode.
   """
 
   platform = attrib(enum(['device', 'simulator']), default=None)
@@ -2796,6 +2802,7 @@ class SwarmingIosTestSpec(SwarmingTestSpec):
   upload_test_results = attrib(bool, default=False)
   result_callback = attrib(callable_, default=None)
   use_rdb = attrib(bool, default=False)
+  xcode_app_path = attrib(str, default=None)
 
   @classmethod
   def create(  # pylint: disable=arguments-differ
@@ -2943,20 +2950,21 @@ class SwarmingIosTest(SwarmingTest):
     return self._deterministic_failures[suffix]
 
   def update_test_run(self, api, suffix, test_run):
+    del api
     self._test_runs[suffix] = test_run
     self._deterministic_failures[suffix] = (
-        api.test_utils.canonical.deterministic_failures(
+        self.api.m.test_utils.canonical.deterministic_failures(
             self._test_runs[suffix]))
 
   def pre_run(self, api, suffix):
     task = self.spec.task
 
-    task_output_dir = api.path.mkdtemp(task['task_id'])
+    task_output_dir = self.api.m.path.mkdtemp(task['task_id'])
     raw_cmd = task.get('raw_cmd')
     if raw_cmd is not None:
       raw_cmd = list(raw_cmd)
 
-    swarming_task = api.chromium_swarming.task(
+    swarming_task = self.api.m.chromium_swarming.task(
         name=task['step name'],
         task_output_dir=task_output_dir,
         failure_as_exception=False,
@@ -2965,7 +2973,7 @@ class SwarmingIosTest(SwarmingTest):
         raw_cmd=raw_cmd)
 
     self._apply_swarming_task_config(
-        swarming_task, api, suffix, filter_flag=None, filter_delimiter=None)
+        swarming_task, suffix, filter_flag=None, filter_delimiter=None)
 
     task_slice = swarming_task.request[0]
 
@@ -2983,7 +2991,7 @@ class SwarmingIosTest(SwarmingTest):
 
     assert task.get('xcode build version')
     named_cache = 'xcode_ios_%s' % (task['xcode build version'])
-    swarming_task.named_caches[named_cache] = api.ios.XCODE_APP_PATH
+    swarming_task.named_caches[named_cache] = self.spec.xcode_app_path
 
     if self.spec.platform == 'simulator':
       runtime_cache_name = 'runtime_ios_%s' % str(task['test']['os']).replace(
@@ -2997,7 +3005,7 @@ class SwarmingIosTest(SwarmingTest):
     swarming_task.tags.add('test:%s' % str(task['test']['app']))
 
     resultdb = self.spec.resultdb if self.spec.use_rdb else None
-    api.chromium_swarming.trigger_task(swarming_task, resultdb)
+    self.api.m.chromium_swarming.trigger_task(swarming_task, resultdb)
     self._tasks[suffix] = swarming_task
 
   @recipe_api.composite_step
@@ -3008,16 +3016,16 @@ class SwarmingIosTest(SwarmingTest):
     assert swarming_task, ('The task should have been triggered and have an '
                            'associated swarming task')
 
-    step_result, has_valid_results = api.chromium_swarming.collect_task(
-        swarming_task)
+    step_result, has_valid_results = (
+        self.api.m.chromium_swarming.collect_task(swarming_task))
     self._suffix_step_name_map[suffix] = '.'.join(step_result.name_tokens)
 
     # Add any iOS test runner results to the display.
     shard_output_dir = swarming_task.get_task_shard_output_dirs()[0]
-    test_summary_path = api.path.join(shard_output_dir, 'summary.json')
+    test_summary_path = self.api.m.path.join(shard_output_dir, 'summary.json')
 
     if test_summary_path in step_result.raw_io.output_dir:
-      test_summary_json = api.json.loads(
+      test_summary_json = self.api.m.json.loads(
           step_result.raw_io.output_dir[test_summary_path])
 
       logs = test_summary_json.get('logs', {})
@@ -3043,66 +3051,69 @@ class SwarmingIosTest(SwarmingTest):
       for test in failed_tests:
         pass_fail_counts[test]['fail_count'] += 1
       test_count = len(passed_tests) + len(flaked_tests) + len(failed_tests)
-      canonical_results = api.test_utils.canonical.result_format(
-          valid=has_valid_results,
-          failures=failed_tests,
-          total_tests_ran=test_count,
-          pass_fail_counts=pass_fail_counts)
+      canonical_results = (
+          self.api.m.test_utils.canonical.result_format(
+              valid=has_valid_results,
+              failures=failed_tests,
+              total_tests_ran=test_count,
+              pass_fail_counts=pass_fail_counts))
       self.update_test_run(api, suffix, canonical_results)
 
-      step_result.presentation.logs['test_summary.json'] = api.json.dumps(
-          test_summary_json, indent=2).splitlines()
+      step_result.presentation.logs['test_summary.json'] = (
+          self.api.m.json.dumps(test_summary_json, indent=2).splitlines())
       step_result.presentation.logs.update(
-          api.py3_migration.consistent_ordering(six.iteritems(logs)))
+          self.api.m.py3_migration.consistent_ordering(six.iteritems(logs)))
       step_result.presentation.links.update(test_summary_json.get('links', {}))
       if test_summary_json.get('step_text'):
         step_result.presentation.step_text = '%s<br />%s' % (
             step_result.presentation.step_text, test_summary_json['step_text'])
     else:
       self.update_test_run(api, suffix,
-                           api.test_utils.canonical.result_format())
+                           self.api.m.test_utils.canonical.result_format())
     self.update_failure_on_exit(suffix, bool(swarming_task.failed_shards))
 
     # Upload test results JSON to the flakiness dashboard.
-    shard_output_dir_full_path = api.path.join(
+    shard_output_dir_full_path = self.api.m.path.join(
         swarming_task.task_output_dir,
         swarming_task.get_task_shard_output_dirs()[0])
-    if (api.bot_update.last_returned_properties and
+    if (self.api.m.bot_update.last_returned_properties and
         self.spec.upload_test_results):
-      test_results = api.path.join(shard_output_dir_full_path,
-                                   'full_results.json')
-      if api.path.exists(test_results):
-        api.test_results.upload(
+      test_results = self.api.m.path.join(shard_output_dir_full_path,
+                                          'full_results.json')
+      if self.api.m.path.exists(test_results):
+        self.api.m.test_results.upload(
             test_results,
             '.'.join(step_result.name_tokens),
-            api.bot_update.last_returned_properties.get('got_revision_cp',
-                                                        'refs/x@{#0}'),
+            self.api.m.bot_update.last_returned_properties.get(
+                'got_revision_cp', 'refs/x@{#0}'),
             builder_name_suffix='%s-%s' %
             (task['test']['device type'], task['test']['os']),
             test_results_server='test-results.appspot.com',
         )
 
     # Upload performance data result to the perf dashboard.
-    perf_results_path = api.path.join(shard_output_dir, 'Documents',
-                                      'perf_result.json')
+    perf_results_path = self.api.m.path.join(shard_output_dir, 'Documents',
+                                             'perf_result.json')
     if self.spec.result_callback:
       self.spec.result_callback(
           name=task['test']['app'], step_result=step_result)
     elif perf_results_path in step_result.raw_io.output_dir:
-      data = api.json.loads(step_result.raw_io.output_dir[perf_results_path])
+      data = self.api.m.json.loads(
+          step_result.raw_io.output_dir[perf_results_path])
       data_decode = data['Perf Data']
       data_result = []
       for testcase in data_decode:
         for trace in data_decode[testcase]['value']:
-          data_point = api.perf_dashboard.get_skeleton_point(
-              'chrome_ios_perf/%s/%s' % (testcase, trace),
-              # TODO(huangml): Use revision.
-              int(api.time.time()),
-              data_decode[testcase]['value'][trace])
+          data_point = (
+              self.api.m.perf_dashboard.get_skeleton_point(
+                  'chrome_ios_perf/%s/%s' % (testcase, trace),
+                  # TODO(huangml): Use revision.
+                  int(self.api.m.time.time()),
+                  data_decode[testcase]['value'][trace]))
           data_point['units'] = data_decode[testcase]['unit']
           data_result.extend([data_point])
-      api.perf_dashboard.set_default_config()
-      api.perf_dashboard.add_point(data_result)
+      self.api.m.perf_dashboard.set_default_config()
+      self.api.m.perf_dashboard.add_point(data_result)
 
     return step_result
 
@@ -3197,11 +3208,11 @@ class SkylabTest(Test):
         resultdb=self.prep_skylab_rdb(),
     ) if self.lacros_gcs_path else None
 
-  def _raise_failed_step(self, api, suffix, step, status, failure_msg):
+  def _raise_failed_step(self, suffix, step, status, failure_msg):
     step.presentation.status = status
     step.presentation.step_text += failure_msg
     self.update_failure_on_exit(suffix, True)
-    raise api.step.StepFailure(status)
+    raise self.api.m.step.StepFailure(status)
 
   def prep_skylab_rdb(self):
     var = dict(
@@ -3242,11 +3253,11 @@ class SkylabTest(Test):
     self._suffix_step_name_map[suffix] = self.step_name(suffix)
     bb_url = 'https://ci.chromium.org/b/%d'
 
-    with api.step.nest(self.step_name(suffix)) as step:
+    with self.api.m.step.nest(self.step_name(suffix)) as step:
       _present_info_messages(step, self)
       if not self.lacros_gcs_path:
         self._raise_failed_step(
-            api, suffix, step, api.step.FAILURE,
+            suffix, step, self.api.m.step.FAILURE,
             'Test was not scheduled because of absent lacros_gcs_path.')
 
       rdb_results = self._rdb_results.get(suffix)
@@ -3257,12 +3268,12 @@ class SkylabTest(Test):
       else:
         step.links['CTP Build'] = bb_url % self.ctp_build_id
         self._raise_failed_step(
-            api, suffix, step, api.step.EXCEPTION,
+            suffix, step, self.api.m.step.EXCEPTION,
             'Test did not run or failed to report to ResultDB.'
             'Check the CTP build for details.')
 
       if rdb_results.unexpected_failing_tests:
-        step.presentation.status = api.step.FAILURE
+        step.presentation.status = self.api.m.step.FAILURE
       self.present_rdb_results(step, rdb_results)
 
       if len(self.test_runner_builds) == 1:
@@ -3270,18 +3281,18 @@ class SkylabTest(Test):
       else:
         self.test_runner_builds.sort(key=lambda b: b.create_time.seconds)
         for i, b in enumerate(self.test_runner_builds):
-          with api.step.nest('attempt: #' + str(i + 1)) as attempt_step:
+          with self.api.m.step.nest('attempt: #' + str(i + 1)) as attempt_step:
             attempt_step.links['Test Run'] = bb_url % b.id
             if b.status == common_pb2.INFRA_FAILURE:
-              attempt_step.presentation.status = api.step.EXCEPTION
+              attempt_step.presentation.status = (self.api.m.step.EXCEPTION)
             elif b.status == common_pb2.FAILURE:
-              attempt_step.presentation.status = api.step.FAILURE
+              attempt_step.presentation.status = (self.api.m.step.FAILURE)
         # If the status of any test run is success, the parent step should be
         # success too. The "Test Results" tab could expose the detailed flaky
         # information.
         if any(
             [b.status == common_pb2.SUCCESS for b in self.test_runner_builds]):
-          step.presentation.status = api.step.SUCCESS
+          step.presentation.status = self.api.m.step.SUCCESS
           step.presentation.step_text = (
               'Test had failed runs. '
               'Check "Test Results" tab for the deterministic results.')
