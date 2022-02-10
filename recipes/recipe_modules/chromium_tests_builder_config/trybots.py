@@ -817,6 +817,11 @@ TRYBOTS = try_spec.TryDatabase.create({
                     tester='Linux Release (NVIDIA)',
                 ),
             ]),
+        'linux-fieldtrial-fyi-rel':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.fyi',
+                buildername='linux-fieldtrial-rel',
+            ),
         # This trybot mirrors linux-rel
         'linux-mbi-mode-per-render-process-host-rel':
             try_spec.TrySpec.create([
