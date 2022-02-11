@@ -152,6 +152,8 @@ class ReclientApi(recipe_api.RecipeApi):
     # _after_ the object is created.
     if 'RBE_server_address' not in self._rewrapper_env:
       self._rewrapper_env['RBE_server_address'] = self.server_address
+      if self._reclient_log_dir:
+        self._rewrapper_env['RBE_log_dir'] = self._reclient_log_dir
     return self._rewrapper_env
 
   @property
@@ -215,16 +217,16 @@ class ReclientApi(recipe_api.RecipeApi):
       ninja_command: Command used for build.
                      (e.g. ['ninja', '-C', 'out/Release'])
     """
-    reclient_log_dir = self.m.path.mkdtemp('reclient_log')
+    self._reclient_log_dir = self.m.path.mkdtemp('reclient_log')
     with self.m.step.nest('preprocess for reclient'):
       self._install_reclient_cfgs()
       self._make_reclient_cache_dir(self.deps_cache_path)
       self._list_reclient_cache_dir(self.deps_cache_path)
-      self._start_reproxy(reclient_log_dir, self.deps_cache_path)
+      self._start_reproxy(self._reclient_log_dir, self.deps_cache_path)
 
       # TODO: Shall we use the same project providing the RBE workers?
       cloudtail_project_id = 'goma-logs'
-      log_path = reclient_log_dir.join(
+      log_path = self._reclient_log_dir.join(
           self._get_platform_exe_name('reproxy') + '.INFO')
       self._start_cloudtail(cloudtail_project_id, log_path)
     p = BuildResultReceiver()
@@ -233,19 +235,19 @@ class ReclientApi(recipe_api.RecipeApi):
         yield p
     finally:
       with self.m.step.nest('postprocess for reclient'):
-        self._stop_reproxy(reclient_log_dir)
+        self._stop_reproxy(self._reclient_log_dir)
         self._stop_cloudtail()
-        self._upload_rbe_metrics(reclient_log_dir)
+        self._upload_rbe_metrics(self._reclient_log_dir)
         if self._props.publish_trace:
-          self._upload_reclient_traces(reclient_log_dir)
+          self._upload_reclient_traces(self._reclient_log_dir)
         gzip_name_maker = GzipFilenameMaker(self.m.time.utcnow(),
                                             self.m.uuid.random())
         if ninja_command:
           self._upload_ninja_log(ninja_step_name, ninja_command,
                                  p.build_exit_status, gzip_name_maker)
-        self._upload_rpl(reclient_log_dir, gzip_name_maker)
-        self._upload_logs(reclient_log_dir, gzip_name_maker)
-        self.m.file.rmtree('cleanup reclient log dir', reclient_log_dir)
+        self._upload_rpl(self._reclient_log_dir, gzip_name_maker)
+        self._upload_logs(self._reclient_log_dir, gzip_name_maker)
+        self.m.file.rmtree('cleanup reclient log dir', self._reclient_log_dir)
         if self._ensure_verified:
           status = self.m.step.SUCCESS
           if self._mismatch:
@@ -526,13 +528,17 @@ class ReclientApi(recipe_api.RecipeApi):
   def _upload_logs(self, reclient_log_dir, gzip_name_maker):
     tar_filename = gzip_name_maker.make_tgz('reclient_logs')
     tar_path = self._tmp_base_dir.join(tar_filename)
-    files = self.m.file.listdir('list reclient log directory', reclient_log_dir,
-                                test_data = ['reproxy.INFO'])
+    files = self.m.file.listdir(
+        'list reclient log directory',
+        reclient_log_dir,
+        test_data=['reproxy.INFO', 'rewrapper.INFO'])
     log_files = []
     log_levels = ['INFO', 'WARNING', 'ERROR', 'FATAL', 'log']
-    for f in files:
-      if any(x in str(f) for x in log_levels):
-        log_files.append(str(f))
+    for path in files:
+      full_file_name, file_name = str(path), path.pieces[-1]
+      if any(x in full_file_name for x in log_levels):
+        if not file_name.startswith('rewrapper'):
+          log_files.append(full_file_name)
     with io.BytesIO() as tar_out:
       with tarfile.open(fileobj=tar_out, mode='w:gz') as tf:
         for log in log_files:

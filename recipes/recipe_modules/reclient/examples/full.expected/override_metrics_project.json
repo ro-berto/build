@@ -174,6 +174,7 @@
       "out/Release"
     ],
     "env": {
+      "RBE_log_dir": "[CLEANUP]/reclient_log_tmp_1",
       "RBE_server_address": "unix:///[TMP_BASE]/reproxy.sock"
     },
     "luci_context": {
@@ -595,6 +596,7 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@listdir@[CLEANUP]/reclient_log_tmp_1/reproxy.INFO@@@",
+      "@@@STEP_LOG_LINE@listdir@[CLEANUP]/reclient_log_tmp_1/rewrapper.INFO@@@",
       "@@@STEP_LOG_END@listdir@@@"
     ]
   },

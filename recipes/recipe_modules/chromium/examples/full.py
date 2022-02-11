@@ -117,8 +117,10 @@ def GenTests(api):
           use_reclient=True,
           out_dir='/tmp',
       ),
-      api.post_check(lambda check, steps: check('RBE_server_address' in steps[
-          'compile'].env)), api.post_process(post_process.DropExpectation))
+      api.post_check(lambda check, steps: check({
+          'RBE_server_address', 'RBE_log_dir'
+      }.issubset(steps['compile'].env))),
+      api.post_process(post_process.DropExpectation))
 
   yield api.test(
       'basic_no_out_dir_with_goma_module',
