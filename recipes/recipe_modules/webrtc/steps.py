@@ -145,19 +145,25 @@ def generate_tests(phase, bot, is_tryserver, chromium_tests_api):
     # Cover tests only running on perf tests on our trybots:
     if is_tryserver:
       tests.append(
-          SwarmingDesktopTest(
+          SwarmingPerfTest(
               'webrtc_perf_tests',
               chromium_tests_api,
-              use_gtest_parallel=False,
               args=[QUICK_PERF_TEST, '--nologs'],
               dimensions=dimensions))
 
   if test_suite == 'desktop_perf_swarming':
     tests = [
-        SwarmingPerfTest('low_bandwidth_audio_perf_test', chromium_tests_api),
+        # Perf tests are marked as not idempotent, which means they're re-run
+        # if they did not change this build. This will give the dashboard some
+        # more variance data to work with.
+        SwarmingPerfTest(
+            'low_bandwidth_audio_perf_test',
+            chromium_tests_api,
+            idempotent=False),
         SwarmingPerfTest(
             'webrtc_perf_tests',
             chromium_tests_api,
+            idempotent=False,
             args=[
                 '--test_artifacts_dir=${ISOLATED_OUTDIR}',
                 '--save_worst_frame',
@@ -312,15 +318,11 @@ def InvalidResultsHandler(api, step_result, has_valid_results):
 
 def SwarmingDesktopTest(name,
                         chromium_tests_api,
-                        use_gtest_parallel=True,
                         **kwargs):
-  resultdb = ResultDB.create()
-  if use_gtest_parallel:
-    resultdb = attr.evolve(
-        resultdb,
-        result_format='json',
-        result_file='${ISOLATED_OUTDIR}/gtest_output.json',
-    )
+  resultdb = ResultDB.create(
+      result_format='json',
+      result_file='${ISOLATED_OUTDIR}/gtest_output.json',
+  )
   return WebRtcIsolatedGtest(
       name,
       chromium_tests_api,
@@ -344,16 +346,11 @@ def SwarmingPerfTest(name, chromium_test_api, args=None, **kwargs):
        '${ISOLATED_OUTDIR}/perftest-output.pb'),
   ])
 
-  # Perf tests are marked as not idempotent, which means they're re-run if they
-  # did not change this build. This will give the dashboard some more variance
-  # data to work with."""
   return WebRtcIsolatedGtest(
       name,
       chromium_test_api,
       result_handlers=[InvalidResultsHandler],
       args=args,
-      shards=1,
-      idempotent=False,
       **kwargs)
 
 
