@@ -160,17 +160,11 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
     if gn_analyze_output is None:
       bot = api.Bot(builders, recipe_configs, bucketname, buildername)
       self.m.tryserver.is_tryserver = True
-      platform_name = bot.platform_name()
-      build_out_dir = 'out/build_dir'
-      checkout_path = config_types.Path(config_types.RepoBasePath('foo', 'bar'))
       is_tryserver = 'try' in bucketname
       test_targets = [
           t.name for t in steps.generate_tests(
               phase=phase,
               bot=bot,
-              platform_name=platform_name,
-              build_out_dir=build_out_dir,
-              checkout_path=checkout_path,
               is_tryserver=is_tryserver,
               chromium_tests_api=self.m.chromium_tests)
       ]

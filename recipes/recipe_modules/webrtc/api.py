@@ -42,9 +42,6 @@ class Bot(object):
   def __repr__(self):  # pragma: no cover
     return '<Bot %s/%s>' % (self.bucket, self.builder)
 
-  def platform_name(self):
-    return self.config.get('testing').get('platform')
-
   @property
   def config(self):
     return self._builders[self.bucket]['builders'][self.builder]
@@ -179,10 +176,7 @@ class WebRTCApi(recipe_api.RecipeApi):
 
     ios_config['tests'] = []
     if self.bot.should_test:
-      out_dir = self.m.path['checkout'].join('out',
-                                             self.m.chromium.c.build_config_fs)
-      tests = steps.generate_tests(None, self.bot, self.m.platform.name,
-                                   out_dir, self.m.path['checkout'],
+      tests = steps.generate_tests(None, self.bot,
                                    self.m.tryserver.is_tryserver,
                                    self.m.chromium_tests)
       for test in tests:
@@ -284,14 +278,9 @@ class WebRTCApi(recipe_api.RecipeApi):
     non_isolated_test_targets = set()
     for bot in self.related_bots():
       if bot.should_test:
-        out_dir = self.m.path['checkout'].join(
-            'out', self.m.chromium.c.build_config_fs)
         for test in steps.generate_tests(
             phase=phase,
             bot=bot,
-            platform_name=self.m.platform.name,
-            build_out_dir=out_dir,
-            checkout_path=self.m.path['checkout'],
             is_tryserver=self.m.tryserver.is_tryserver,
             chromium_tests_api=self.m.chromium_tests):
           if isinstance(test, (c_steps.SwarmingTest, steps.IosTest)):
@@ -692,10 +681,7 @@ class WebRTCApi(recipe_api.RecipeApi):
       test_suite=The name of the test suite.
     """
     with self.m.context(cwd=self._working_dir):
-      out_dir = self.m.path['checkout'].join('out',
-                                             self.m.chromium.c.build_config_fs)
-      all_tests = steps.generate_tests(phase, self.bot, self.m.platform.name,
-                                       out_dir, self.m.path['checkout'],
+      all_tests = steps.generate_tests(phase, self.bot,
                                        self.m.tryserver.is_tryserver,
                                        self.m.chromium_tests)
       tests = []
