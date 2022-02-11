@@ -74,8 +74,9 @@ def build_args(platform, artifact, artifact_type, server_url, api_key,
     # arg, not with the "-k" flag.
     if dump_inline:
       cmd_args.append('--i')
-    # Set timeout to 1 mins.
-    cmd_args.extend(['--timeout', '60000', '-p', artifact, server_url, api_key])
+    # Set timeout to 3 mins.
+    cmd_args.extend(
+        ['--timeout', '180000', '-p', artifact, server_url, api_key])
   else:
     # For types other than breakpad, tell symupload the type and basename.
     if artifact_type in {'macho', 'dsym'}:
