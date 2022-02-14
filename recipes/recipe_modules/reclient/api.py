@@ -247,6 +247,7 @@ class ReclientApi(recipe_api.RecipeApi):
                                  p.build_exit_status, gzip_name_maker)
         self._upload_rpl(self._reclient_log_dir, gzip_name_maker)
         self._upload_logs(self._reclient_log_dir, gzip_name_maker)
+        self._perform_reclient_health_check()
         self.m.file.rmtree('cleanup reclient log dir', self._reclient_log_dir)
         if self._ensure_verified:
           status = self.m.step.SUCCESS
@@ -285,6 +286,9 @@ class ReclientApi(recipe_api.RecipeApi):
       reclient_log_dir: Directory to hold the logs produced by reclient.
                         Specifically, it contains the .rpl file, which can be of
                         several GB.
+      reclient_cache_dir: Directory from which to load
+                          the dependency cache at reproxy startup
+                          and update at shutdown
     """
     reproxy_bin_path = self._get_reclient_exe_path('reproxy')
     env = {
@@ -570,6 +574,10 @@ class ReclientApi(recipe_api.RecipeApi):
     return self.resource('cloudtail_wrapper.py')
 
   @property
+  def _health_check_path(self):
+    return self.resource('perform_health_check.py')
+
+  @property
   def _cloudtail_pid_file(self):
     return self._tmp_base_dir.join('cloudtail.pid')
 
@@ -613,6 +621,19 @@ class ReclientApi(recipe_api.RecipeApi):
         name='stop cloudtail',
         script=self._cloudtail_wrapper_path,
         args=['stop', '--killed-pid-file', self._cloudtail_pid_file],
+        infra_step=True)
+
+  def _perform_reclient_health_check(self):
+    """Perform reclient health check by verifing existence of FATAL logs
+
+    Raises:
+      InfraFailure if health check failed
+    """
+    self.m.step(
+        'perform reclient health check', [
+            'python3', self._health_check_path, '--reclient-log-dir',
+            self._reclient_log_dir
+        ],
         infra_step=True)
 
   def _verify_rewrapper_flags(self, rewrapper_env):

@@ -429,6 +429,19 @@
   },
   {
     "cmd": [
+      "python3",
+      "RECIPE_MODULE[build::reclient]\\resources\\perform_health_check.py",
+      "--reclient-log-dir",
+      "[CLEANUP]\\reclient_log_tmp_1"
+    ],
+    "infra_step": true,
+    "name": "postprocess for reclient.perform reclient health check",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
       "vpython",
       "-u",
       "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
