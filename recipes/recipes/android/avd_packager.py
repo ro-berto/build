@@ -16,7 +16,7 @@ DEPS = [
     'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/properties',
-    'recipe_engine/python',
+    'recipe_engine/step',
 ]
 
 
@@ -35,12 +35,13 @@ def RunSteps(api, properties):
   with api.context(cwd=chromium_src):
     for avd_config in properties.avd_configs:
       avd_config_path = chromium_src.join(avd_config)
-      create_result = api.python(
-          'avd create %s' % avd_config, avd_script_path, [
-              'create', '-v', '--avd-config', avd_config_path, '--snapshot',
-              '--cipd-json-output',
-              api.json.output()
-          ])
+      avd_commands = [
+          avd_script_path, 'create', '-v', '--avd-config', avd_config_path,
+          '--snapshot', '--cipd-json-output',
+          api.json.output()
+      ]
+      create_result = api.step('avd create %s' % avd_config,
+                               ['vpython3', '-u'] + avd_commands)
       if create_result.json.output:
         cipd_result = create_result.json.output.get('result', {})
         if 'package' in cipd_result and 'instance_id' in cipd_result:
