@@ -248,6 +248,7 @@ class WebRtcIsolatedGtest(steps.SwarmingIsolatedScriptTest):
                name,
                chromium_tests_api=None,
                result_handlers=None,
+               merge_script=None,
                **kwargs):
     """Constructs an instance of WebRtcIsolatedGtest.
 
@@ -261,6 +262,7 @@ class WebRtcIsolatedGtest(steps.SwarmingIsolatedScriptTest):
         steps.SwarmingIsolatedScriptTestSpec.create(name, **kwargs),
         chromium_tests_api)
     self._result_handlers = result_handlers or []
+    self._merge_script = merge_script
     self._has_collected = False
 
   def pre_run(self, api, suffix):
@@ -297,11 +299,16 @@ class WebRtcIsolatedGtest(steps.SwarmingIsolatedScriptTest):
     return step_result
 
   def create_task(self, api, suffix, task_input):
+    merge = None
+    if self._merge_script:
+      merge = chromium_swarming.MergeScript.create(
+          script=api.chromium_swarming.merge_script_path(self._merge_script))
     task = api.chromium_swarming.task(
         name=self.name,
         raw_cmd=self._raw_cmd,
         relative_cwd=self._relative_cwd,
-        cas_input_root=task_input)
+        cas_input_root=task_input,
+        merge=merge)
 
     self._apply_swarming_task_config(
         task, suffix, filter_flag=None, filter_delimiter=None)
@@ -316,17 +323,23 @@ def InvalidResultsHandler(api, step_result, has_valid_results):
         api.test_utils.INVALID_RESULTS_MAGIC)  # pragma no cover
 
 
-def SwarmingDesktopTest(name,
-                        chromium_tests_api,
-                        **kwargs):
+def SwarmingDesktopTest(name, chromium_tests_api, args=None, **kwargs):
+  args = list(args or [])
+  args.extend([
+      '--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json',
+      ('--isolated-script-test-perf-output='
+       '${ISOLATED_OUTDIR}/perftest-output.json'),
+  ])
   resultdb = ResultDB.create(
       result_format='json',
-      result_file='${ISOLATED_OUTDIR}/gtest_output.json',
+      result_file='${ISOLATED_OUTDIR}/output.json',
   )
   return WebRtcIsolatedGtest(
       name,
       chromium_tests_api,
       result_handlers=[InvalidResultsHandler],
+      merge_script='standard_isolated_script_merge.py',
+      args=args,
       resultdb=resultdb,
       shards=NUMBER_OF_SHARDS.get(name, 1),
       **kwargs)
