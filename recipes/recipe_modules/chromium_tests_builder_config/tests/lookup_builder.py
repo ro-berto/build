@@ -213,6 +213,9 @@ def GenTests(api):
                           builder='fake-tester',
                       ),
                   ],
+                  rts_config=properties_pb.BuilderConfig.RtsConfig(
+                      condition=properties_pb.BuilderConfig.RtsConfig.Condition
+                      .ALWAYS),
               ))),
       api.properties(
           expected_attrs=dict(
@@ -260,7 +263,7 @@ def GenTests(api):
               analyze_names=(),
               retry_failed_shards=True,
               retry_without_patch=True,
-              regression_test_selection=ctbc.NEVER,
+              regression_test_selection=ctbc.ALWAYS,
               regression_test_selection_recall=0.95,
           )),
       api.post_process(post_process.StatusSuccess),
