@@ -531,6 +531,31 @@ def GenTests(api):
   archive_data = properties.ArchiveData()
   archive_data.dirs.extend(['anydir'])
   archive_data.gcs_bucket = 'any-bucket'
+  archive_data.gcs_path = 'x86/{%position%}/chrome'
+  archive_data.archive_type = properties.ArchiveData.ARCHIVE_TYPE_SQUASHFS
+  archive_data.squashfs_algorithm = 'zstd'
+  archive_data.revisions_file.gcs_path = 'x86/{%position%}/REVISIONS'
+  input_properties.archive_datas.extend([archive_data])
+
+  yield api.test(
+      'generic_archive_squashfs_with_compression_algorithm',
+      api.properties(
+          gcs_archive=True,
+          update_properties={
+              'got_revision': TEST_HASH_MAIN,
+              'got_revision_cp': TEST_COMMIT_POSITON_MAIN,
+              'got_v8_revision': '466dd2d77f6dd56a9174d7389e788cb7367d818d',
+              'got_v8_revision_cp': 'refs/heads/9.7.48@{#1}'
+          },
+          **{'$build/archive': input_properties}),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  input_properties = properties.InputProperties()
+  archive_data = properties.ArchiveData()
+  archive_data.dirs.extend(['anydir'])
+  archive_data.gcs_bucket = 'any-bucket'
   archive_data.gcs_path = 'x86/{%chrome_version%}/chrome'
   archive_data.archive_type = properties.ArchiveData.ARCHIVE_TYPE_ZIP
   input_properties.archive_datas.extend([archive_data])

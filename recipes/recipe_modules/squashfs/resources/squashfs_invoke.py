@@ -14,17 +14,26 @@ def ProcessOptions():
       '--binary-path', help='Absolute binary path to execute.')
   argparser.add_argument('--folder', help='Folder to compress')
   argparser.add_argument('--output-file', help='Output file')
+  argparser.add_argument(
+      '--compression-algorithm', help='Optional. Set compression algorithm.')
+  argparser.add_argument(
+      '--compression-level', help='Optional. Set compression level.')
   args = argparser.parse_args()
   return args
 
 
-def Mksquashfs(binary_path, folder_to_compress, output_file_path):
-  subprocess.check_call([binary_path, folder_to_compress, output_file_path])
+def Mksquashfs(binary_path, args):
+  invoke_args = [binary_path, args.folder, args.output_file]
+  if args.compression_algorithm:
+    invoke_args.extend(['-comp', args.compression_algorithm])
+  if args.compression_level:
+    invoke_args.extend(['-Xcompression-level', args.compression_level])
+  subprocess.check_call(invoke_args)
 
 
 def main():
   args = ProcessOptions()
-  Mksquashfs(args.binary_path, args.folder, args.output_file)
+  Mksquashfs(args.binary_path, args)
 
 
 if '__main__' == __name__:

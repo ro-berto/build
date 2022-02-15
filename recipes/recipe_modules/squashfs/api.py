@@ -15,12 +15,18 @@ class SquashfsApi(recipe_api.RecipeApi):
     self.m.cipd.ensure(squashfs_dir, ensure_file)
     return squashfs_dir
 
-  def mksquashfs(self, folder_path, output_file_path):
+  def mksquashfs(self,
+                 folder_path,
+                 output_file_path,
+                 compression_algorithm=None,
+                 compression_level=None):
     """Archive a folder to a file using squashfs format.
 
     Args:
       folder_path: String representing the folder to compress.
       output_file_path: String representing the output image.
+      compression_algorithm: String the algorithm squashfs will use.
+      compression_level: int the compression level
 
     Example: mksquashfs('/abs/path/', '/abs/another/path/image.sqsh')
     Meaning call:
@@ -41,11 +47,14 @@ class SquashfsApi(recipe_api.RecipeApi):
           'Mksquashfs is not found',
           status=self.m.step.FAILURE,
           step_text='Binary not found at %s.' % binary_path)
-    self.m.build.python('mksquashfs', self.resource('squashfs_invoke.py'), [
+    invoke_args = [
         '--binary-path',
-        self.m.path.abspath(binary_path),
-        '--folder',
-        folder_path,
-        '--output-file',
-        output_file_path,
-    ])
+        self.m.path.abspath(binary_path), '--folder', folder_path,
+        '--output-file', output_file_path
+    ]
+    if compression_algorithm:
+      invoke_args.extend(['--compression-algorithm', compression_algorithm])
+    if compression_level:
+      invoke_args.extend(['--compression-level', str(compression_level)])
+    self.m.build.python('mksquashfs', self.resource('squashfs_invoke.py'),
+                        invoke_args)

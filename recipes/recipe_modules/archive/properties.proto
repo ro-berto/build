@@ -34,7 +34,7 @@ message ArchiveDirRename {
   string to_dir = 2;
 }
 
-// Next id: 15
+// Next id: 16
 message ArchiveData {
   // A list of relative paths to files that should be archived. All files are
   // relative to the build directory, which is passed alongside this proto to
@@ -149,6 +149,11 @@ message ArchiveData {
     ARCHIVE_TYPE_SQUASHFS = 6;
   }
   ArchiveType archive_type = 5;
+
+  // Only set this when archive_type is ARCHIVE_TYPE_SQUASHFS.
+  // If not set, it will use default compression algorithm gzip.
+  // Currently this can only be set to 'zstd'.
+  string squashfs_algorithm = 15;
 
   // When set, system will update the latest file.
   // Example:

@@ -19,11 +19,21 @@ def RunSteps(api):
     api.path.mock_add_paths(api.path['start_dir'].join('squashfs',
                                                        'squashfs-tools',
                                                        'mksquashfs'))
+  if 'compression_algorithm' in api.properties:
+    api.squashfs.mksquashfs('some/folder', 'out.squash',
+                            api.properties['compression_algorithm'],
+                            api.properties['compression_level'])
   api.squashfs.mksquashfs('some/folder', 'out.squash')
 
 
 def GenTests(api):
   yield api.test('basic')
+
+  yield api.test(
+      'zstd',
+      api.properties(compression_algorithm='zstd', compression_level=22),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation))
 
   yield api.test('fail_on_windows', api.platform('win', 64),
                  api.post_process(post_process.StatusFailure),
