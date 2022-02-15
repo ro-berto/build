@@ -80,7 +80,7 @@ class IsolateApi(recipe_api.RecipeApi):
       return
 
     # Take revision from https://ci.chromium.org/p/infra-internal/g/infra-packagers/console
-    version = 'git_revision:961fbb5b6e16a0c44d69e043fc15eb5dd577a11e'
+    version = 'git_revision:c4791d15e395b201e6a85336f7d8a21cce973dfa'
     if self._test_data.enabled:
       version = 'git_revision:mock_infra_git_revision'
     exe = self.m.cipd.ensure_tool('infra/tools/luci/isolate/${platform}',
