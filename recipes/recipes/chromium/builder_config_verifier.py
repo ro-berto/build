@@ -291,16 +291,22 @@ def _compare_builder_configs(api, recipe_config, src_side_config):
     return api.json.dumps(
         builder_config, indent=2, default=default_json_conversion).splitlines()
 
-  def trim_db(builder_config):
+  def normalize_recipe_config(builder_config):
     builder_db = builder_config.builder_db
     builders_by_group = {}
     for i in builder_config.builder_ids_in_scope_for_testing:
-      builders_by_group.setdefault(i.group, {})[i.builder] = builder_db[i]
+      builder_spec = builder_db[i]
+      # Recipe configs can omit the parent builder group, which is treated as
+      # the same builder group as the associated builder
+      if (builder_spec.parent_buildername and
+          not builder_spec.parent_builder_group):
+        builder_spec = attr.evolve(builder_spec, parent_builder_group=i.group)
+      builders_by_group.setdefault(i.group, {})[i.builder] = builder_spec
     return attr.evolve(
         builder_config,
         builder_db=ctbc.BuilderDatabase.create(builders_by_group))
 
-  recipe_config_json = convert_to_json(trim_db(recipe_config))
+  recipe_config_json = convert_to_json(normalize_recipe_config(recipe_config))
   src_side_config_json = convert_to_json(src_side_config)
 
   return list(
@@ -500,6 +506,17 @@ def GenTests(api):
 
   ctbc_api = api.chromium_tests_builder_config
 
+  ctbc_prop = (
+      ctbc_api.properties_builder_for_ci_builder(
+          bucket='bucket',
+          builder='matching-config',
+          builder_group='fake-group',
+          builder_spec=example_spec,
+      ).with_tester(
+          builder='matching-config-tester',
+          builder_group='fake-group',
+      ).build())
+
   yield api.test(
       'changed-builder-config-matching-recipe-config',
       api.buildbucket.try_build(),
@@ -508,13 +525,7 @@ def GenTests(api):
           'props-files/bucket/matching-config/properties.json',
           patched_content=dumps({
               '$build/chromium_tests_builder_config':
-                  json_format.MessageToDict(
-                      ctbc_api.properties_builder_for_ci_builder(
-                          bucket='bucket',
-                          builder='matching-config',
-                          builder_group='fake-group',
-                          builder_spec=example_spec,
-                      ).build()),
+                  json_format.MessageToDict(ctbc_prop),
               'builder_group':
                   'fake-group',
           }),
@@ -524,6 +535,12 @@ def GenTests(api):
               'fake-group': {
                   'matching-config':
                       attr.evolve(example_spec, simulation_platform='linux'),
+                  'matching-config-tester':
+                      attr.evolve(
+                          example_spec,
+                          execution_mode=ctbc.TEST,
+                          parent_buildername='matching-config',
+                      ),
               },
               # The recipe config will have the entire builder DB, so this
               # ensures that the verification accounts for that
