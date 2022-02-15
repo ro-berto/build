@@ -184,7 +184,7 @@ def _run_tests(api, builder_config, test_objects, requested_tests,
 
   # Run the tests.
   with api.chromium_tests.wrap_chromium_tests(builder_config, test_objects):
-    return api.test_utils.run_tests(api.chromium_tests.m, test_objects, '')
+    return api.test_utils.run_tests(test_objects, '')
 
 
 def GenTests(api):

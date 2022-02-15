@@ -64,7 +64,6 @@ def RunSteps(api, known_flakes_expectations, exclude_failed_test,
   tests = [s.get_test(api.chromium_tests) for s in test_specs]
 
   api.test_utils.run_tests(
-      api.chromium_tests.m,
       tests,
       'with patch',
       retry_failed_shards=True,

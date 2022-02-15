@@ -531,7 +531,7 @@ class Test(object):
     """Returns the chromium_tests RecipeApi object associated with the test."""
     return self._chromium_tests_api
 
-  def prep_local_rdb(self, api, temp=None, include_artifacts=True):
+  def prep_local_rdb(self, temp=None, include_artifacts=True):
     """Returns a ResultDB instance suitable for local test runs.
 
     Main difference between remote swarming runs and local test runs (ie:
@@ -594,13 +594,13 @@ class Test(object):
     """List of compile targets needed by this test."""
     raise NotImplementedError()  # pragma: no cover
 
-  def pre_run(self, api, suffix):  # pragma: no cover
+  def pre_run(self, suffix):  # pragma: no cover
     """Steps to execute before running the test."""
-    del api, suffix
+    del suffix
     return []
 
   @recipe_api.composite_step
-  def run(self, api, suffix):  # pragma: no cover
+  def run(self, suffix):  # pragma: no cover
     """Run the test.
 
     Implementations of this method must populate
@@ -1059,12 +1059,12 @@ class TestWrapper(Test):  # pragma: no cover
   def name_of_step_for_suffix(self, suffix):
     return self._test.name_of_step_for_suffix(suffix)
 
-  def pre_run(self, api, suffix):
-    return self._test.pre_run(api, suffix)
+  def pre_run(self, suffix):
+    return self._test.pre_run(suffix)
 
   @recipe_api.composite_step
-  def run(self, api, suffix):
-    return self._test.run(api, suffix)
+  def run(self, suffix):
+    return self._test.run(suffix)
 
   def has_valid_results(self, suffix):
     return self._test.has_valid_results(suffix)
@@ -1239,10 +1239,10 @@ class ExperimentalTest(TestWrapper):
     return False
 
   #override
-  def pre_run(self, api, suffix):
+  def pre_run(self, suffix):
     try:
       return super(ExperimentalTest,
-                   self).pre_run(api, self._experimental_suffix(suffix))
+                   self).pre_run(self._experimental_suffix(suffix))
     except self.api.m.step.StepFailure:
       pass
 
@@ -1254,10 +1254,10 @@ class ExperimentalTest(TestWrapper):
 
   #override
   @recipe_api.composite_step
-  def run(self, api, suffix):
+  def run(self, suffix):
     try:
       return super(ExperimentalTest,
-                   self).run(api, self._experimental_suffix(suffix))
+                   self).run(self._experimental_suffix(suffix))
     except self.api.m.step.StepFailure:
       pass
 
@@ -1411,7 +1411,7 @@ class ScriptTest(LocalTest):  # pylint: disable=W0232
     ]
 
   @recipe_api.composite_step
-  def run(self, api, suffix):
+  def run(self, suffix):
     run_args = []
 
     tests_to_retry = self._tests_to_retry(suffix)
@@ -1420,7 +1420,7 @@ class ScriptTest(LocalTest):  # pylint: disable=W0232
                        self.api.m.json.input(tests_to_retry)
                       ])  # pragma: no cover
 
-    resultdb = self.prep_local_rdb(api)
+    resultdb = self.prep_local_rdb()
 
     step_test_data = lambda: (
         self.api.m.json.test_api.output({
@@ -1600,11 +1600,6 @@ class LocalGTestTest(LocalTest):
   def compile_targets(self):
     return self.spec.override_compile_targets or [self.spec.target_name]
 
-  def _get_runtest_kwargs(self, api):
-    """Get additional keyword arguments to pass to runtest."""
-    del api
-    return {}
-
   def _get_revision(self, conf):
     substitutions = {
         'webrtc_got_rev':
@@ -1617,7 +1612,7 @@ class LocalGTestTest(LocalTest):
     }
 
   @recipe_api.composite_step
-  def run(self, api, suffix):
+  def run(self, suffix):
     tests_to_retry = self._tests_to_retry(suffix)
     test_options = _test_options_for_running(self.test_options, suffix,
                                              tests_to_retry)
@@ -1626,7 +1621,7 @@ class LocalGTestTest(LocalTest):
     if tests_to_retry:
       args = _merge_arg(args, '--gtest_filter', ':'.join(tests_to_retry))
 
-    resultdb = self.prep_local_rdb(api, include_artifacts=False)
+    resultdb = self.prep_local_rdb(include_artifacts=False)
     gtest_results_file = self.api.m.json.output(
         add_json_log=False, leak_to=resultdb.result_file)
 
@@ -1646,7 +1641,6 @@ class LocalGTestTest(LocalTest):
     kwargs['test_type'] = self.name
     kwargs['annotate'] = self.spec.annotate
     kwargs['test_launcher_summary_output'] = gtest_results_file
-    kwargs.update(self._get_runtest_kwargs(api))
 
     if self.spec.perf_config:
       kwargs['perf_config'] = self._get_revision(self.spec.perf_config)
@@ -1985,7 +1979,7 @@ class SwarmingTest(Test):
   def relative_cwd(self, value):
     self._relative_cwd = value
 
-  def create_task(self, api, suffix, task_input):
+  def create_task(self, suffix, task_input):
     """Creates a swarming task. Must be overridden in subclasses.
 
     Args:
@@ -2176,7 +2170,7 @@ class SwarmingTest(Test):
       return task.get_invocation_names()
     return []
 
-  def pre_run(self, api, suffix):
+  def pre_run(self, suffix):
     """Launches the test on Swarming."""
     assert suffix not in self._tasks, ('Test %s was already triggered' %
                                        self.step_name(suffix))
@@ -2190,7 +2184,7 @@ class SwarmingTest(Test):
                      self.isolate_target))
 
     # Create task.
-    self._tasks[suffix] = self.create_task(api, suffix, task_input)
+    self._tasks[suffix] = self.create_task(suffix, task_input)
 
     # Export TARGET_PLATFORM to resultdb tags
     resultdb = self.resultdb
@@ -2203,7 +2197,7 @@ class SwarmingTest(Test):
     self.api.m.chromium_swarming.trigger_task(
         self._tasks[suffix], resultdb=resultdb)
 
-  def validate_task_results(self, api, step_result):
+  def validate_task_results(self, step_result):
     """Interprets output of a task (provided as StepResult object).
 
     Called for successful and failed tasks.
@@ -2227,7 +2221,7 @@ class SwarmingTest(Test):
     raise NotImplementedError()  # pragma: no cover
 
   @recipe_api.composite_step
-  def run(self, api, suffix):
+  def run(self, suffix):
     """Waits for launched test to finish and collects the results."""
     step_result, has_valid_results = (
         self.api.m.chromium_swarming.collect_task(self._tasks[suffix]))
@@ -2239,7 +2233,7 @@ class SwarmingTest(Test):
 
     # TODO(martiniss): Consider moving this into some sort of base
     # validate_task_results implementation.
-    results = self.validate_task_results(api, step_result)
+    results = self.validate_task_results(step_result)
     if not has_valid_results:
       results['valid'] = False
 
@@ -2291,7 +2285,7 @@ class SwarmingGTestTest(SwarmingTest):
   def compile_targets(self):
     return self.spec.override_compile_targets or [self.spec.target_name]
 
-  def create_task(self, api, suffix, cas_input_root):
+  def create_task(self, suffix, cas_input_root):
     json_override = None
     # TODO(crbug.com/1255217): Remove this android exception when logcats and
     # tombstones are in resultdb.
@@ -2306,16 +2300,16 @@ class SwarmingGTestTest(SwarmingTest):
     self._apply_swarming_task_config(task, suffix, '--gtest_filter', ':')
     return task
 
-  def validate_task_results(self, api, step_result):
+  def validate_task_results(self, step_result):
     return {}
 
   def pass_fail_counts(self, suffix):
     return super(SwarmingGTestTest, self).pass_fail_counts(suffix)
 
   @recipe_api.composite_step
-  def run(self, api, suffix):
+  def run(self, suffix):
     """Waits for launched test to finish and collects the results."""
-    step_result = super(SwarmingGTestTest, self).run(api, suffix)
+    step_result = super(SwarmingGTestTest, self).run(suffix)
     step_name = '.'.join(step_result.name_tokens)
     self._suffix_step_name_map[suffix] = step_name
 
@@ -2428,7 +2422,7 @@ class LocalIsolatedScriptTest(LocalTest):
   # TODO(nednguyen, kbr): figure out what to do with Android.
   # (crbug.com/533480)
   @recipe_api.composite_step
-  def run(self, api, suffix):
+  def run(self, suffix):
     tests_to_retry = self._tests_to_retry(suffix)
     test_options = _test_options_for_running(self.test_options, suffix,
                                              tests_to_retry)
@@ -2473,7 +2467,7 @@ class LocalIsolatedScriptTest(LocalTest):
           'stdout': self.api.m.raw_io.output_text(),
       })
 
-    resultdb = self.prep_local_rdb(api, temp=temp)
+    resultdb = self.prep_local_rdb(temp=temp)
 
     step_result = self.api.m.isolate.run_isolated(
         self.step_name(suffix),
@@ -2543,7 +2537,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
   def test_options(self, value):
     self._test_options = value
 
-  def create_task(self, api, suffix, cas_input_root):
+  def create_task(self, suffix, cas_input_root):
     task = self.api.m.chromium_swarming.isolated_script_task(
         raw_cmd=self.raw_cmd,
         relative_cwd=self.relative_cwd,
@@ -2553,15 +2547,15 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
                                      '--isolated-script-test-filter', '::')
     return task
 
-  def validate_task_results(self, api, step_result):
+  def validate_task_results(self, step_result):
     # Store the JSON results so we can later send them to the legacy
     # test-results service, but don't inspect/verify them at all.
     self._isolated_script_results = step_result.json.output
     return {}
 
   @recipe_api.composite_step
-  def run(self, api, suffix):
-    step_result = super(SwarmingIsolatedScriptTest, self).run(api, suffix)
+  def run(self, suffix):
+    step_result = super(SwarmingIsolatedScriptTest, self).run(suffix)
     results = self._isolated_script_results
 
     if results:
@@ -2577,7 +2571,8 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
             chrome_revision=str(chrome_rev),
             test_type=upload_step_name)
       if self.spec.results_handler_name == 'layout tests':
-        _archive_layout_test_results(api, upload_step_name, step_suffix=suffix)
+        _archive_layout_test_results(
+            self.api.m, upload_step_name, step_suffix=suffix)
     return step_result
 
 
@@ -2619,7 +2614,7 @@ class AndroidJunitTest(LocalTest):
     return False
 
   #override
-  def run_tests(self, api, suffix, json_results_file):
+  def run_tests(self, suffix, json_results_file):
     step_test_data = lambda: (
         self.api.m.test_utils.test_api.canned_gtest_output(True) + self.api.m.
         raw_io.test_api.stream_output_text(
@@ -2635,15 +2630,15 @@ class AndroidJunitTest(LocalTest):
         step_test_data=step_test_data,
         stderr=self.api.m.raw_io.output_text(
             add_output_log=True, name='stderr'),
-        resultdb=self.prep_local_rdb(api))
+        resultdb=self.prep_local_rdb())
 
   @recipe_api.composite_step
-  def run(self, api, suffix):
+  def run(self, suffix):
     assert self.api.m.chromium.c.TARGET_PLATFORM == 'android'
 
     json_results_file = self.api.m.test_utils.gtest_results(add_json_log=False)
     try:
-      step_result = self.run_tests(api, suffix, json_results_file)
+      step_result = self.run_tests(suffix, json_results_file)
     except self.api.m.step.StepFailure as f:
       step_result = f.result
       raise
@@ -2729,12 +2724,12 @@ class MockTest(Test):
       self._failures.append('test_failure')
       raise
 
-  def pre_run(self, api, suffix):
+  def pre_run(self, suffix):
     with self._mock_exit_codes():
       self.api.m.step('pre_run {}'.format(self.step_name(suffix)), None)
 
   @recipe_api.composite_step
-  def run(self, api, suffix):
+  def run(self, suffix):
     with self._mock_exit_codes():
       try:
         step_result = self.api.m.step(self.step_name(suffix), None)
@@ -2949,14 +2944,13 @@ class SwarmingIosTest(SwarmingTest):
     assert suffix in self._deterministic_failures, failure_msg
     return self._deterministic_failures[suffix]
 
-  def update_test_run(self, api, suffix, test_run):
-    del api
+  def update_test_run(self, suffix, test_run):
     self._test_runs[suffix] = test_run
     self._deterministic_failures[suffix] = (
         self.api.m.test_utils.canonical.deterministic_failures(
             self._test_runs[suffix]))
 
-  def pre_run(self, api, suffix):
+  def pre_run(self, suffix):
     task = self.spec.task
 
     task_output_dir = self.api.m.path.mkdtemp(task['task_id'])
@@ -3009,7 +3003,7 @@ class SwarmingIosTest(SwarmingTest):
     self._tasks[suffix] = swarming_task
 
   @recipe_api.composite_step
-  def run(self, api, suffix):
+  def run(self, suffix):
     task = self.spec.task
     swarming_task = self._tasks[suffix]
 
@@ -3057,7 +3051,7 @@ class SwarmingIosTest(SwarmingTest):
               failures=failed_tests,
               total_tests_ran=test_count,
               pass_fail_counts=pass_fail_counts))
-      self.update_test_run(api, suffix, canonical_results)
+      self.update_test_run(suffix, canonical_results)
 
       step_result.presentation.logs['test_summary.json'] = (
           self.api.m.json.dumps(test_summary_json, indent=2).splitlines())
@@ -3068,7 +3062,7 @@ class SwarmingIosTest(SwarmingTest):
         step_result.presentation.step_text = '%s<br />%s' % (
             step_result.presentation.step_text, test_summary_json['step_text'])
     else:
-      self.update_test_run(api, suffix,
+      self.update_test_run(suffix,
                            self.api.m.test_utils.canonical.result_format())
     self.update_failure_on_exit(suffix, bool(swarming_task.failed_shards))
 
@@ -3117,10 +3111,10 @@ class SwarmingIosTest(SwarmingTest):
 
     return step_result
 
-  def validate_task_results(self, api, step_result):
+  def validate_task_results(self, step_result):
     raise NotImplementedError()  # pragma: no cover
 
-  def create_task(self, api, suffix, task_input):
+  def create_task(self, suffix, task_input):
     raise NotImplementedError()  # pragma: no cover
 
   def compile_targets(self):
@@ -3249,7 +3243,7 @@ class SkylabTest(Test):
     return inv_names
 
   @recipe_api.composite_step
-  def run(self, api, suffix):
+  def run(self, suffix):
     self._suffix_step_name_map[suffix] = self.step_name(suffix)
     bb_url = 'https://ci.chromium.org/b/%d'
 

@@ -9,6 +9,8 @@ PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 DEPS = [
     'build',
     'chromium',
+    'chromium_swarming',
+    'flakiness',
     'py3_migration',
     'traceback',
     'depot_tools/tryserver',

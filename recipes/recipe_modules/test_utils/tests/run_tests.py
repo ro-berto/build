@@ -125,7 +125,6 @@ def RunSteps(api, test_swarming, test_skylab, test_name, test_experimental,
     t.exe_rel_path = 'out/Lacros/chrome'
 
   _, failed_tests = api.test_utils.run_tests(
-      api.chromium_tests.m,
       tests,
       '',
       retry_failed_shards=retry_failed_shards,

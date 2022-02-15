@@ -62,8 +62,7 @@ def RunSteps(api):
     test.relative_cwd = relative_cwd
 
   try:
-    _, invalid_suites, failed_suites = api.test_utils.run_tests_once(
-        api.chromium_tests.m, [test], '')
+    _, invalid_suites, failed_suites = api.test_utils.run_tests_once([test], '')
   finally:
     api.step('details', [])
     api.step.active_result.presentation.logs['details'] = [

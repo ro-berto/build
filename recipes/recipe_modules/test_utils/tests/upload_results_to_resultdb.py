@@ -61,13 +61,12 @@ def RunSteps(api, is_swarming_test=True):
   api.chromium_swarming.set_default_dimension('pool', 'foo')
 
   api.test_utils.run_tests(
-      api.chromium_tests.m,
       tests,
       'with patch',
       retry_failed_shards=True,
       retry_invalid_shards=True)
 
-  api.test_utils.run_tests(api.chromium_tests.m, tests, 'without patch')
+  api.test_utils.run_tests(tests, 'without patch')
 
 
 def GenTests(api):

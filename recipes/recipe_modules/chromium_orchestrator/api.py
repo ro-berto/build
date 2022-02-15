@@ -200,7 +200,6 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
     with self.m.chromium_tests.wrap_chromium_tests(builder_config, tests):
       invalid_test_suites, failing_test_suites = (
           self.m.test_utils.run_tests_with_patch(
-              self.m.chromium_tests.m,
               tests,
               retry_failed_shards=builder_config.retry_failed_shards))
 
@@ -281,7 +280,6 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
     with self.m.chromium_tests.wrap_chromium_tests(builder_config,
                                                    failing_test_suites):
       self.m.test_utils.run_tests(
-          self.m.chromium_tests.m,
           failing_test_suites,
           'without patch',
           sort_by_shard=True)
@@ -455,7 +453,7 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
 
   def report_stats_and_flakiness(self, tests):
     self.m.chromium_swarming.report_stats()
-    self.m.test_utils.summarize_findit_flakiness(self.m.chromium_tests.m, tests)
+    self.m.test_utils.summarize_findit_flakiness(tests)
 
   def handle_failed_with_patch_tests(self, tests, failing_test_suites):
     """Summarizes test stats, flakiness, and test failures

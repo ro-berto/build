@@ -66,8 +66,8 @@ def RunSteps(api):
 
   suffix = api.properties.get('suffix', '')
 
-  experimental_test.pre_run(api.chromium_tests.m, suffix)
-  experimental_test.run(api.chromium_tests.m, suffix)
+  experimental_test.pre_run(suffix)
+  experimental_test.run(suffix)
 
   # Just for code coverage.
   experimental_test.get_invocation_names(suffix)

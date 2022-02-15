@@ -265,46 +265,48 @@ class WebRtcIsolatedGtest(steps.SwarmingIsolatedScriptTest):
     self._merge_script = merge_script
     self._has_collected = False
 
-  def pre_run(self, api, suffix):
+  def pre_run(self, suffix):
     """Launches the test on Swarming."""
     assert self._tasks.get(suffix) is None, ('Test %s was already triggered' %
                                              self.name)  # pragma no cover
 
     # *.isolated may be missing if *_run target is misconfigured.
-    task_input = api.isolate.isolated_tests.get(self.isolate_target)
+    task_input = self.api.m.isolate.isolated_tests.get(self.isolate_target)
     if not task_input:  # pragma no cover
-      return api.step.empty(
+      return self.api.m.step.empty(
           '[error] %s' % self.name,
-          status=api.step.FAILURE,
+          status=self.api.m.step.FAILURE,
           step_text=('*.isolated file for target %s is missing' %
                      self.isolate_target))
 
-    self._tasks[suffix] = self.create_task(api, suffix, task_input)
+    self._tasks[suffix] = self.create_task(suffix, task_input)
 
-    api.chromium_swarming.trigger_task(self._tasks[suffix], self.spec.resultdb)
+    self.api.m.chromium_swarming.trigger_task(self._tasks[suffix],
+                                              self.spec.resultdb)
 
   @recipe_api.composite_step
-  def run(self, api, suffix):
+  def run(self, suffix):
     """Waits for launched test to finish and collects the results."""
     assert not self._has_collected, (  # pragma no cover
         'Results of %s were already collected' % self.name)
     self._has_collected = True
 
-    step_result, has_valid_results = api.chromium_swarming.collect_task(
+    step_result, has_valid_results = self.api.m.chromium_swarming.collect_task(
         self._tasks[suffix], allow_missing_json=True)
     self.update_failure_on_exit(suffix, step_result.retcode != 0)
 
     for handler in self._result_handlers:
-      handler(api, step_result, has_valid_results)
+      handler(self.api.m, step_result, has_valid_results)
 
     return step_result
 
-  def create_task(self, api, suffix, task_input):
+  def create_task(self, suffix, task_input):
     merge = None
     if self._merge_script:
       merge = chromium_swarming.MergeScript.create(
-          script=api.chromium_swarming.merge_script_path(self._merge_script))
-    task = api.chromium_swarming.task(
+          script=self.api.m.chromium_swarming.merge_script_path(
+              self._merge_script))
+    task = self.api.m.chromium_swarming.task(
         name=self.name,
         raw_cmd=self._raw_cmd,
         relative_cwd=self._relative_cwd,

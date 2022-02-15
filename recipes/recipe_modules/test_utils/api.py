@@ -204,13 +204,10 @@ class TestUtilsApi(recipe_api.RecipeApi):
         failed_test_suites.append(t)
     return invalid_results, failed_test_suites
 
-  def run_tests_once(self, caller_api, test_suites, suffix,
-                     sort_by_shard=False):
+  def run_tests_once(self, test_suites, suffix, sort_by_shard=False):
     """Runs a set of tests once. Used as a helper function by run_tests.
 
     Args:
-      caller_api - caller's recipe API, may be different from self.m. See
-        run_test for details.
       test_suites - list of steps.Test objects representing tests to run
       suffix - string specifying the stage/type of run, e.g. "without patch" or
         "retry (with patch)".
@@ -250,10 +247,10 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     with self.m.step.nest(nest_name):
       for group in groups:
-        group.pre_run(caller_api, suffix)
+        group.pre_run(self.m, suffix)
 
     for group in groups:
-      group.run(caller_api, suffix)
+      group.run(self.m, suffix)
 
     all_rdb_results = []
     for t in test_suites:
@@ -571,7 +568,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
     return [t for t in target_suites if t.runs_on_swarming]
 
   def run_tests(self,
-                caller_api,
                 test_suites,
                 suffix,
                 sort_by_shard=False,
@@ -585,14 +581,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
     retrying deterministic failures that are already known to be flaky on ToT.
 
     Args:
-      caller_api - caller's recipe API; this is needed because self.m here
-                   is different than in the caller (different recipe modules
-                   get injected depending on caller's DEPS vs. this module's
-                   DEPS)
-                   This must include the 'swarming' recipe module, in order to
-                   use the grouping logic in this method. Unfortunately we can't
-                   import this module in the test_utils module, as it would
-                   cause a circular dependency.
       test_suites - iterable of objects implementing the steps.Test interface.
       suffix - custom suffix, e.g. "with patch", "without patch" indicating
                context of the test run
@@ -606,12 +594,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
       A tuple of (list of test suites with invalid results,
                   list of test suites which failed including invalid results)
     """
-    if not hasattr(caller_api, 'chromium_swarming'):
-      self.m.step.empty(
-          'invalid caller_api',
-          status=self.m.step.FAILURE,
-          step_text=(
-              'caller_api must include the chromium_swarming recipe module'))
     if not self.m.resultdb.enabled:
       self.m.step.empty(
           'resultdb not enabled',
@@ -619,8 +601,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
           step_text=('every build supported by chromium recipe code'
                      ' must have resultdb enabled'))
     rdb_results, invalid_test_suites, failed_test_suites = (
-        self.run_tests_once(
-            caller_api, test_suites, suffix, sort_by_shard=sort_by_shard))
+        self.run_tests_once(test_suites, suffix, sort_by_shard=sort_by_shard))
 
     if self.m.tryserver.is_tryserver and self._should_abort_tryjob(rdb_results):
       return invalid_test_suites, invalid_test_suites + failed_test_suites
@@ -648,7 +629,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     if suffix:
       retry_suffix += ' ' + suffix
     _, new_swarming_invalid_suites, _ = self.run_tests_once(
-        caller_api, swarming_test_suites, retry_suffix, sort_by_shard=True)
+        swarming_test_suites, retry_suffix, sort_by_shard=True)
 
     invalid_test_suites = self._still_invalid_suites(
         old_invalid_suites=invalid_test_suites,
@@ -668,13 +649,11 @@ class TestUtilsApi(recipe_api.RecipeApi):
     return invalid_test_suites, failed_and_invalid_suites
 
   def run_tests_with_patch(self,
-                           caller_api,
                            test_suites,
                            retry_failed_shards=False):
     """Runs tests and returns failures.
 
     Args:
-      caller_api: The api object given by the caller of this module.
       test_suites - iterable of objects implementing the steps.Test interface.
       retry_failed_shards: If true, attempts to retry failed shards of swarming
                            tests.
@@ -688,7 +667,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
           invalid_test_suites.
     """
     invalid_test_suites, all_failing_test_suites = self.run_tests(
-        caller_api,
         test_suites,
         'with patch',
         sort_by_shard=True,
@@ -781,7 +759,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     return not bool(new_failures)
 
-  def summarize_test_with_patch_deapplied(self, caller_api, test_suite):
+  def summarize_test_with_patch_deapplied(self, test_suite):
     """Summarizes test results after a CL has been retried with patch deapplied.
 
     Args:
@@ -834,7 +812,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
         self.NEW_FAILURES_TEXT, self.IGNORED_FAILURES_TEXT,
         self.IGNORED_FLAKES_TEXT)
 
-  def summarize_failing_test_with_no_retries(self, caller_api, test_suite):
+  def summarize_failing_test_with_no_retries(self, test_suite):
     """Summarizes a failing test suite that is not going to be retried."""
     valid_results, new_failures = (
         test_suite.with_patch_failures_including_retry())
@@ -857,7 +835,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
         ignored_failures_text=self.IGNORED_FAILURES_TEXT,
         ignored_flakes_text=self.IGNORED_FLAKES_TEXT)
 
-  def _findit_potential_test_flakes(self, caller_api, test_suite):
+  def _findit_potential_test_flakes(self, test_suite):
     """Returns test failures that FindIt views as potential flakes.
 
     This method returns tests that:
@@ -893,7 +871,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     return with_patch_failures - (ignored_failures if valid_results else set())
 
-  def summarize_findit_flakiness(self, caller_api, test_suites):
+  def summarize_findit_flakiness(self, test_suites):
     """Exports a summary of flakiness for post-processing by FindIt.
 
     There are several types of test flakiness. FindIt categories these by the
@@ -919,8 +897,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     step_layer_flakiness = {}
     step_layer_skipped_known_flakiness = {}
     for test_suite in test_suites:
-      potential_test_flakes = self._findit_potential_test_flakes(
-          caller_api, test_suite)
+      potential_test_flakes = self._findit_potential_test_flakes(test_suite)
 
       known_flaky_failures = (
           potential_test_flakes & test_suite.known_flaky_failures)
@@ -947,8 +924,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     potential_build_flakiness = {}
     for test_suite in test_suites:
-      potential_test_flakes = self._findit_potential_test_flakes(
-          caller_api, test_suite)
+      potential_test_flakes = self._findit_potential_test_flakes(test_suite)
 
       valid_retry_shards_results, retry_shards_successes, _ = (
           test_suite.shard_retry_with_patch_results())
@@ -972,7 +948,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
           'Failing With Patch Tests That Caused Build Failure':
               potential_build_flakiness,
       }
-      caller_api.step.empty(
+      self.m.step.empty(
           'FindIt Flakiness',
           step_text='Metadata for FindIt post processing.',
           log_name='step_metadata',
@@ -1022,31 +998,31 @@ class TestGroup(object):
     self._test_suites = test_suites
     self.resultdb_api = resultdb_api
 
-  def pre_run(self, caller_api, suffix):  # pragma: no cover
+  def pre_run(self, api, suffix):  # pragma: no cover
     """Executes the |pre_run| method of each test.
 
     Args:
-      caller_api - The api object given by the caller of this module.
+      api - The api object of this module.
       suffix - The test name suffix.
     """
     raise NotImplementedError()
 
-  def run(self, caller_api, suffix):  # pragma: no cover
+  def run(self, api, suffix):  # pragma: no cover
     """Executes the |run| method of each test.
 
     Args:
-      caller_api - The api object given by the caller of this module.
+      api - The api object of this module.
       suffix - The test name suffix.
     """
     raise NotImplementedError()
 
-  def _run_func(self, test, test_func, caller_api, suffix, raise_on_failure):
+  def _run_func(self, test, test_func, api, suffix, raise_on_failure):
     """Runs a function on a test, and handles errors appropriately."""
     try:
-      test_func(caller_api, suffix)
-    except caller_api.step.InfraFailure:
+      test_func(suffix)
+    except api.step.InfraFailure:
       raise
-    except caller_api.step.StepFailure:
+    except api.step.StepFailure:
       if raise_on_failure and test.abort_on_failure:
         raise
 
@@ -1122,16 +1098,16 @@ class LocalGroup(TestGroup):
   def __init__(self, test_suites, resultdb):
     super(LocalGroup, self).__init__(test_suites, resultdb)
 
-  def pre_run(self, caller_api, suffix):
+  def pre_run(self, api, suffix):
     """Executes the |pre_run| method of each test."""
     for t in self._test_suites:
-      self._run_func(t, t.pre_run, caller_api, suffix, False)
+      self._run_func(t, t.pre_run, api, suffix, False)
 
-  def run(self, caller_api, suffix):
+  def run(self, api, suffix):
     """Executes the |run| method of each test."""
     for t in self._test_suites:
-      self._run_func(t, t.run, caller_api, suffix, True)
-      self.fetch_rdb_results(t, suffix, caller_api.flakiness)
+      self._run_func(t, t.run, api, suffix, True)
+      self.fetch_rdb_results(t, suffix, api.flakiness)
 
     self.include_rdb_invocation(
         suffix, step_name='include local test invocations')
@@ -1143,10 +1119,10 @@ class SwarmingGroup(TestGroup):
     super(SwarmingGroup, self).__init__(test_suites, resultdb)
     self._task_ids_to_test = {}
 
-  def pre_run(self, caller_api, suffix):
+  def pre_run(self, api, suffix):
     """Executes the |pre_run| method of each test."""
     for t in self._test_suites:
-      t.pre_run(caller_api, suffix)
+      t.pre_run(suffix)
       task = t.get_task(suffix)
 
       task_ids = tuple(task.get_task_ids())
@@ -1155,26 +1131,26 @@ class SwarmingGroup(TestGroup):
     self.include_rdb_invocation(
         suffix, step_name='include swarming task invocations')
 
-  def run(self, caller_api, suffix):
+  def run(self, api, suffix):
     """Executes the |run| method of each test."""
     attempts = 0
     while self._task_ids_to_test:
       nest_name = 'collect tasks'
       if suffix:
         nest_name += ' (%s)' % suffix
-      with caller_api.step.nest(nest_name):
+      with api.step.nest(nest_name):
         finished_sets, attempts = (
-            caller_api.chromium_swarming.wait_for_finished_task_set(
+            api.chromium_swarming.wait_for_finished_task_set(
                 list(self._task_ids_to_test),
                 suffix=((' (%s)' % suffix) if suffix else ''),
                 attempts=attempts))
         for task_set in finished_sets:
           test = self._task_ids_to_test[tuple(task_set)]
-          self.fetch_rdb_results(test, suffix, caller_api.flakiness)
+          self.fetch_rdb_results(test, suffix, api.flakiness)
 
       for task_set in finished_sets:
         test = self._task_ids_to_test[tuple(task_set)]
-        test.run(caller_api, suffix)
+        test.run(suffix)
         del self._task_ids_to_test[task_set]
 
     # Testing this suite is hard, because the step_test_data for get_states
@@ -1183,9 +1159,9 @@ class SwarmingGroup(TestGroup):
     if self._task_ids_to_test:  # pragma: no cover
       # Something weird is going on, just collect tasks like normal, and log a
       # warning.
-      caller_api.step.empty(
+      api.step.empty(
           'swarming tasks.get_states issue',
-          status=caller_api.step.WARNING,
+          status=api.step.WARNING,
           step_text=(
               'swarming tasks.get_states seemed to indicate that all tasks for'
               ' this build were finished collecting, but the recipe thinks the'
@@ -1197,8 +1173,8 @@ class SwarmingGroup(TestGroup):
       for test in self._task_ids_to_test.values():
         # We won't collect any already collected tasks, as they're removed from
         # self._task_ids_to_test
-        self.fetch_rdb_results(test, suffix, caller_api.flakiness)
-        test.run(caller_api, suffix)
+        self.fetch_rdb_results(test, suffix, api.flakiness)
+        test.run(suffix)
 
 
 class SkylabGroup(TestGroup):
@@ -1208,7 +1184,7 @@ class SkylabGroup(TestGroup):
     self.ctp_build_by_tag = {}
     self.ctp_build_timeout_sec = 3600
 
-  def pre_run(self, caller_api, suffix):
+  def pre_run(self, api, suffix):
     """Schedule each Skylab test request to a CTP build."""
     reqs = [t.skylab_req for t in self._test_suites if t.skylab_req]
     if reqs:
@@ -1216,13 +1192,13 @@ class SkylabGroup(TestGroup):
       build_timeout = max([r.timeout_sec for r in reqs])
       if build_timeout > self.ctp_build_timeout_sec:
         self.ctp_build_timeout_sec = build_timeout
-      self.ctp_build_by_tag = caller_api.skylab.schedule_suites(reqs)
+      self.ctp_build_by_tag = api.skylab.schedule_suites(reqs)
 
-  def run(self, caller_api, suffix):
+  def run(self, api, suffix):
     """Fetch the responses for each test request."""
     tag_resp = {}
     if self.ctp_build_by_tag:
-      tag_resp = caller_api.skylab.wait_on_suites(
+      tag_resp = api.skylab.wait_on_suites(
           self.ctp_build_by_tag, timeout_seconds=self.ctp_build_timeout_sec)
     for t in self._test_suites:
       t.ctp_build_id = self.ctp_build_by_tag.get(t.name)
@@ -1232,8 +1208,8 @@ class SkylabGroup(TestGroup):
       # runs. We need to fetch all the results for a suffix, or the recipe
       # can not separate the flaky tests and deterministic failures.
       self.fetch_rdb_results(
-          t, suffix, caller_api.flakiness, force_fetch_all_results=True)
-      self._run_func(t, t.run, caller_api, suffix, True)
+          t, suffix, api.flakiness, force_fetch_all_results=True)
+      self._run_func(t, t.run, api, suffix, True)
 
     self.include_rdb_invocation(
         suffix, step_name='include skylab_test_runner invocations')

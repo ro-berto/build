@@ -53,7 +53,7 @@ def RunSteps(api):
 
   try:
     assert len(test.get_invocation_names('')) == 0
-    api.test_utils.run_tests_once(api.chromium_tests.m, [test], '')
+    api.test_utils.run_tests_once([test], '')
     assert len(test.get_invocation_names('')) > 0
     assert test.runs_on_swarming
   finally:

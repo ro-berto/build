@@ -26,7 +26,7 @@ def RunSteps(api):
   for task in tasks:
     test = api.ios.generate_test_from_task(task)
     if test:
-      test.pre_run(api.ios.m, suffix='')
+      test.pre_run(suffix='')
 
 
 def GenTests(api):

@@ -54,7 +54,7 @@ def RunSteps(api, retry_failed_shards, test_kwargs_list):
   tests = [s.get_test(api.chromium_tests) for s in test_specs]
 
   invalid, failing = api.test_utils.run_tests_with_patch(
-      api, tests, **run_tests_kwargs)
+      tests, **run_tests_kwargs)
 
   if invalid:
     api.step('%s invalid' % ','.join(sorted(t.name for t in invalid)), None)

@@ -1038,7 +1038,7 @@ class iOSApi(recipe_api.RecipeApi):
     failures = set()
     infra_failure = False
     for test in triggered_tests:
-      test.run(self.m, suffix='')
+      test.run(suffix='')
 
     self.m.chromium_swarming.report_stats()
 
@@ -1084,7 +1084,7 @@ class iOSApi(recipe_api.RecipeApi):
 
       invalid_test_suites, failing_test_suites = (
           self.m.test_utils.run_tests_with_patch(
-              self.m, tests, retry_failed_shards=retry_failed_shards))
+              tests, retry_failed_shards=retry_failed_shards))
       all_failures = invalid_test_suites + failing_test_suites
       if all_failures:
         exception_type = (

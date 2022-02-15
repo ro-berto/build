@@ -717,7 +717,7 @@ class WebRTCApi(recipe_api.RecipeApi):
       for test in local_test_suites + swarming_test_suites:
         group = groups[0] if test in local_test_suites else groups[1]
         group.fetch_rdb_results(test, suffix, self.m.flakiness)
-        step_result = test.run(self.m, suffix)
+        step_result = test.run(suffix)
         if self.bot.should_upload_perf_results:
           self.upload_to_perf_dashboard(test.name, step_result)
 

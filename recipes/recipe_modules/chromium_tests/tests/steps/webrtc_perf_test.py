@@ -48,7 +48,7 @@ def RunSteps(api):
   api.chromium_checkout.ensure_checkout(builder_config)
 
   try:
-    test.run(api, '')
+    test.run('')
   finally:
     api.step('details', [])
     api.step.active_result.presentation.logs['details'] = [

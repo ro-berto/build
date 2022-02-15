@@ -86,14 +86,14 @@ def RunSteps(api):
           run_disabled=bool(test_repeat_count))
 
   try:
-    api.test_utils.run_tests_once(api.chromium_tests.m, [test], 'with patch')
+    api.test_utils.run_tests_once([test], 'with patch')
 
   finally:
     if api.properties.get('run_without_patch'):
       test._only_retry_failed_tests = True
 
-      test.pre_run(api.chromium_tests.m, 'without patch')
-      test.run(api.chromium_tests.m, 'without patch')
+      test.pre_run('without patch')
+      test.run('without patch')
 
     result = api.step('details', [])
     result.presentation.logs['details'] = [

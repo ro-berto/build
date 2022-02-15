@@ -349,7 +349,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       failed_tests = set()
       for tl in tests_list:
         invalid_ts, failed_ts = self.m.test_utils.run_tests(
-            self.m,
             tl,
             suffix,
             retry_failed_shards=retry_failed_shards,
@@ -1171,10 +1170,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       if not t.has_failures_to_summarize():
         continue
       if t not in retried_without_patch_suites:
-        self.m.test_utils.summarize_failing_test_with_no_retries(self.m, t)
+        self.m.test_utils.summarize_failing_test_with_no_retries(t)
         continue
-      is_tot_fail = self.m.test_utils.summarize_test_with_patch_deapplied(
-          self.m, t)
+      is_tot_fail = self.m.test_utils.summarize_test_with_patch_deapplied(t)
       if not is_tot_fail:
         culpable_failures.append(t)
     return culpable_failures
@@ -1194,7 +1192,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       # Run the test. The isolates have already been created.
       invalid_test_suites, failing_test_suites = (
           self.m.test_utils.run_tests_with_patch(
-              self.m,
               task.test_suites,
               retry_failed_shards=task.should_retry_failures_with_changes()))
 
@@ -1228,7 +1225,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         return raw_result, []
 
       self.m.test_utils.run_tests(
-          self.m, failing_test_suites, 'without patch', sort_by_shard=True)
+          failing_test_suites, 'without patch', sort_by_shard=True)
 
       # Returns test suites whose failure is probably the CL's fault
       return None, self.summarize_test_failures(task.test_suites,
@@ -1680,7 +1677,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       self.m.chromium_swarming.report_stats()
 
-      self.m.test_utils.summarize_findit_flakiness(self.m, task.test_suites)
+      self.m.test_utils.summarize_findit_flakiness(task.test_suites)
 
       if unrecoverable_test_suites:
         self.handle_invalid_test_suites(unrecoverable_test_suites)
@@ -1792,7 +1789,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         # we don't need failed test_suites because they'll be analyzed for flake
         # rates anyways through their invocation ids below.
         _, invalid_test_suites, _ = (
-            self.m.test_utils.run_tests_once(self.m, new_test_objects, suffix))
+            self.m.test_utils.run_tests_once(new_test_objects, suffix))
 
         if invalid_test_suites:
           return result_pb2.RawResult(

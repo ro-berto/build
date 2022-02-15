@@ -36,7 +36,7 @@ def RunSteps(api):
   test = test_spec.get_test(api.chromium_tests)
 
   try:
-    test.run(api, '')
+    test.run('')
   finally:
     api.step('details', [])
     api.step.active_result.presentation.logs['details'] = [

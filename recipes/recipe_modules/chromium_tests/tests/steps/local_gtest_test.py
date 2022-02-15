@@ -49,7 +49,7 @@ def RunSteps(api):
   test.test_options = test_options
 
   try:
-    api.test_utils.run_tests_once(api.chromium_tests.m, [test], 'with patch')
+    api.test_utils.run_tests_once([test], 'with patch')
   finally:
     api.step('details', [])
     api.step.active_result.presentation.logs['details'] = [
@@ -60,7 +60,7 @@ def RunSteps(api):
         'uses_local_devices: %r' % test.uses_local_devices,
     ]
 
-    api.test_utils.run_tests_once(api.chromium_tests.m, [test], 'without patch')
+    api.test_utils.run_tests_once([test], 'without patch')
 
 
 def GenTests(api):

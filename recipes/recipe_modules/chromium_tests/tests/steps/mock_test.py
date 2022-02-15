@@ -21,10 +21,10 @@ def RunSteps(api):
       abort_on_failure=api.properties.get('abort_on_failure', False))
   test = test_spec.get_test(api.chromium_tests)
 
-  test.pre_run(api.chromium_tests.m, '')
+  test.pre_run('')
 
   try:
-    test.run(api.chromium_tests.m, '')
+    test.run('')
   except api.step.InfraFailure:
     api.step.empty('infra failure in %s' % test.name)
   except api.step.StepFailure:

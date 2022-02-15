@@ -41,8 +41,7 @@ def RunSteps(api):
   api.chromium.compile(targets=test.compile_targets(), name='compile')
 
   try:
-    _, invalid_suites, failed_suites = api.test_utils.run_tests_once(
-        api.chromium_tests.m, [test], '')
+    _, invalid_suites, failed_suites = api.test_utils.run_tests_once([test], '')
     if not invalid_suites:
       assert test.has_valid_results('')
   finally:
