@@ -11,7 +11,7 @@ class SquashfsApi(recipe_api.RecipeApi):
     squashfs_dir = self.m.path['start_dir'].join('squashfs')
     ensure_file = self.m.cipd.EnsureFile().add_package(
         'infra/3pp/tools/squashfs/linux-amd64',
-        'yGR4iGjoP3vDBNoniQnRJIDNMxN75xoE6-FsjyRIS1AC')
+        '97pLXFMaDo0YFKrWyL_wfrZHyTNXM9iO6T_uRHkMkrQC')
     self.m.cipd.ensure(squashfs_dir, ensure_file)
     return squashfs_dir
 
