@@ -358,12 +358,17 @@ def SwarmingPerfTest(name, chromium_test_api, args=None, **kwargs):
       ('--isolated-script-test-perf-output='
        '${ISOLATED_OUTDIR}/perftest-output.pb'),
   ])
+  resultdb = ResultDB.create(
+      result_format='gtest_json',
+      result_file='${ISOLATED_OUTDIR}/output.json',
+  )
 
   return WebRtcIsolatedGtest(
       name,
       chromium_test_api,
       result_handlers=[InvalidResultsHandler],
       args=args,
+      resultdb=resultdb,
       **kwargs)
 
 
