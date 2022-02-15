@@ -96,6 +96,7 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
     if failing_test:
       # Unfortunately, we have no idea what type of test this is and what would
       # be appropriate test data to pass. We guess that this is a swarmed gtest.
+      custom_os = bot_config.get('swarming_dimensions', {}).get('os', '')
       swarming_result = self.m.chromium_swarming.canned_summary_output_raw(
           failure=True)
       swarming_result['shards'][0]['output'] = "Tests failed"
@@ -104,7 +105,13 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
       test_step_data = self.m.chromium_swarming.summary(
           dispatched_task_step_test_data=None, data=swarming_result)
 
-      test += self.override_step_data(failing_test, test_step_data)
+      test += self.override_step_data('%s on %s' % (failing_test, custom_os),
+                                      test_step_data)
+      test += self.override_step_data(
+          '%s results' % failing_test,
+          stdout=self.m.raw_io.output_text(
+              self.m.test_utils.rdb_results(
+                  failing_test, failing_tests=[failing_test])))
 
     if fail_android_archive:
       step_test_data = recipe_test_api.StepTestData()

@@ -20,6 +20,7 @@ from . import builders as webrtc_builders
 from . import steps
 
 from RECIPE_MODULES.build import chromium
+from RECIPE_MODULES.build import test_utils
 from RECIPE_MODULES.build.chromium_tests import steps as c_steps
 
 
@@ -684,41 +685,48 @@ class WebRTCApi(recipe_api.RecipeApi):
       all_tests = steps.generate_tests(phase, self.bot,
                                        self.m.tryserver.is_tryserver,
                                        self.m.chromium_tests)
-      tests = []
+      swarming_test_suites = []
+      local_test_suites = []
       for t in all_tests:
         if t.name in self._isolated_targets:
-          tests.append(t)
+          swarming_test_suites.append(t)
         if t.name in self._non_isolated_targets:
-          tests.append(t)
+          local_test_suites.append(t)
 
-      if tests:
-        suffix = ''
-        self.set_swarming_command_lines(tests)
+      if not swarming_test_suites and not local_test_suites:
+        return
 
-        for test in tests:
-          test.pre_run(self.m, suffix)
-          self.m.resultdb.include_invocations([
-              i[len('invocations/'):] for i in test.get_invocation_names(suffix)
-          ])
+      self.set_swarming_command_lines(swarming_test_suites)
 
-        # Build + upload archives while waiting for swarming tasks to finish.
-        if self.bot.config.get('build_android_archive'):
-          self.build_android_archive()
-        if self.bot.config.get('archive_apprtc'):
-          self.package_apprtcmobile()
+      suffix = ''
+      groups = [
+          test_utils.api.LocalGroup(local_test_suites, self.m.resultdb),
+          test_utils.api.SwarmingGroup(swarming_test_suites, self.m.resultdb),
+      ]
 
-        failures = []
-        for test in tests:
-          try:
-            step_result = test.run(self.m, suffix)
-            if self.bot.should_upload_perf_results:
-              self.upload_to_perf_dashboard(test.name, step_result)
-          except self.m.step.StepFailure:
-            failures.append(test.name)
+      for group in groups:
+        group.pre_run(self.m, suffix)
 
-        if failures:
-          raise self.m.step.StepFailure('Test target(s) failed: %s' %
-                                        ', '.join(failures))
+      # Build + upload archives while waiting for swarming tasks to finish.
+      if self.bot.config.get('build_android_archive'):
+        self.build_android_archive()
+      if self.bot.config.get('archive_apprtc'):
+        self.package_apprtcmobile()
+
+      failures = []
+      for test in local_test_suites + swarming_test_suites:
+        group = groups[0] if test in local_test_suites else groups[1]
+        group.fetch_rdb_results(test, suffix, self.m.flakiness)
+        try:
+          step_result = test.run(self.m, suffix)
+          if self.bot.should_upload_perf_results:
+            self.upload_to_perf_dashboard(test.name, step_result)
+        except self.m.step.StepFailure:
+          failures.append(test.name)
+
+      if failures:
+        raise self.m.step.StepFailure('Test target(s) failed: %s' %
+                                      ', '.join(failures))
 
 
   def maybe_trigger(self):

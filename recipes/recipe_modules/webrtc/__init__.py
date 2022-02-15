@@ -26,6 +26,7 @@ DEPS = [
     'ios',
     'infra/zip',
     'isolate',
+    'flakiness',
     'perf_dashboard',
     'recipe_engine/buildbucket',
     'recipe_engine/cas',

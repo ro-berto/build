@@ -292,6 +292,7 @@ class WebRtcIsolatedGtest(steps.SwarmingIsolatedScriptTest):
 
     step_result, has_valid_results = api.chromium_swarming.collect_task(
         self._tasks[suffix], allow_missing_json=True)
+    self.update_failure_on_exit(suffix, step_result.retcode != 0)
 
     for handler in self._result_handlers:
       handler(api, step_result, has_valid_results)

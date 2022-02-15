@@ -100,9 +100,12 @@ def GenTests(api):
   buildername = 'Linux64 Debug'
   yield generate_builder(bucketname, buildername, revision=None,
                          suffix='_forced')
-  yield generate_builder(bucketname, buildername, revision='a' * 40,
-                         failing_test='rtc_unittests on Ubuntu-18.04',
-                         suffix='_failing_test')
+  yield generate_builder(
+      bucketname,
+      buildername,
+      revision='a' * 40,
+      failing_test='rtc_unittests',
+      suffix='_failing_test')
   yield generate_builder(
       bucketname,
       buildername,
@@ -141,13 +144,13 @@ def GenTests(api):
   yield generate_builder(
       'luci.webrtc.perf',
       'Perf Linux Bionic',
-      failing_test='webrtc_perf_tests on Ubuntu-18.04',
+      failing_test='webrtc_perf_tests',
       suffix='_failing_test',
       revision='a' * 40)
   yield generate_builder(
       'luci.webrtc.perf',
       'Perf Android64 (M Nexus5X)',
-      failing_test='webrtc_perf_tests on Android',
+      failing_test='webrtc_perf_tests',
       suffix='_failing_test',
       revision='a' * 40)
 
