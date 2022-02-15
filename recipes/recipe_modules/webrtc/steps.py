@@ -309,7 +309,8 @@ class WebRtcIsolatedGtest(steps.SwarmingIsolatedScriptTest):
         raw_cmd=self._raw_cmd,
         relative_cwd=self._relative_cwd,
         cas_input_root=task_input,
-        merge=merge)
+        merge=merge,
+        failure_as_exception=False)
 
     self._apply_swarming_task_config(
         task, suffix, filter_flag=None, filter_delimiter=None)
