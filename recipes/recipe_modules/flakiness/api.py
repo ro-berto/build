@@ -484,11 +484,11 @@ class FlakinessApi(recipe_api.RecipeApi):
 
     """
     now = int(self.m.time.time())
-    # Time range is set as past 8 hours, to cover the gap of test history JSON
-    # generation (6 hours), plus a 2 hour buffer for generate builder runtime,
+    # Time range is set as past 3 hours, to cover the gap of test history JSON
+    # generation (1 hour), plus a 2 hour buffer for generate builder runtime,
     # etc.
     time_range = common_rdb_pb2.TimeRange(
-        earliest=timestamp_pb2.Timestamp(seconds=now - 3600 * 8),
+        earliest=timestamp_pb2.Timestamp(seconds=now - 3600 * 3),
         latest=timestamp_pb2.Timestamp(seconds=now))
     results = self.m.resultdb.get_test_result_history(
         realm=self.m.buildbucket.builder_realm,

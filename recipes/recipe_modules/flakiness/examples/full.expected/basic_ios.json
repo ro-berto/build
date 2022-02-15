@@ -3422,7 +3422,7 @@
       }
     },
     "name": "searching_for_new_tests.cross reference newly identified tests against ResultDB",
-    "stdin": "{\"pageSize\": \"10000\", \"realm\": \"chromium:try\", \"testIdRegexp\": \"ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a|ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_b|ninja://ios/chrome/test/earl_grey2:ios_chrome_web_eg2tests_module/TestSuite.test_c\", \"timeRange\": {\"earliest\": \"2012-05-14T04:53:21Z\", \"latest\": \"2012-05-14T12:53:21Z\"}, \"variantPredicate\": {\"contains\": {\"def\": {\"builder\": \"fake-try-builder\"}}}}",
+    "stdin": "{\"pageSize\": \"10000\", \"realm\": \"chromium:try\", \"testIdRegexp\": \"ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a|ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_b|ninja://ios/chrome/test/earl_grey2:ios_chrome_web_eg2tests_module/TestSuite.test_c\", \"timeRange\": {\"earliest\": \"2012-05-14T09:53:21Z\", \"latest\": \"2012-05-14T12:53:21Z\"}, \"variantPredicate\": {\"contains\": {\"def\": {\"builder\": \"fake-try-builder\"}}}}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -3448,7 +3448,7 @@
       "@@@STEP_LOG_LINE@json.input@  \"realm\": \"chromium:try\", @@@",
       "@@@STEP_LOG_LINE@json.input@  \"testIdRegexp\": \"ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a|ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_eg2tests_module/TestSuite.test_b|ninja://ios/chrome/test/earl_grey2:ios_chrome_web_eg2tests_module/TestSuite.test_c\", @@@",
       "@@@STEP_LOG_LINE@json.input@  \"timeRange\": {@@@",
-      "@@@STEP_LOG_LINE@json.input@    \"earliest\": \"2012-05-14T04:53:21Z\", @@@",
+      "@@@STEP_LOG_LINE@json.input@    \"earliest\": \"2012-05-14T09:53:21Z\", @@@",
       "@@@STEP_LOG_LINE@json.input@    \"latest\": \"2012-05-14T12:53:21Z\"@@@",
       "@@@STEP_LOG_LINE@json.input@  }, @@@",
       "@@@STEP_LOG_LINE@json.input@  \"variantPredicate\": {@@@",
