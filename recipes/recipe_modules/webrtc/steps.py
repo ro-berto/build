@@ -266,7 +266,6 @@ class WebRtcIsolatedGtest(steps.SwarmingIsolatedScriptTest):
         steps.SwarmingIsolatedScriptTestSpec.create(name, **kwargs),
         chromium_tests_api)
     self._result_handlers = result_handlers or []
-    self._merge_script = merge_script
     self._has_collected = False
 
   def pre_run(self, suffix):
@@ -305,17 +304,11 @@ class WebRtcIsolatedGtest(steps.SwarmingIsolatedScriptTest):
     return step_result
 
   def create_task(self, suffix, task_input):
-    merge = None
-    if self._merge_script:
-      merge = chromium_swarming.MergeScript.create(
-          script=self.api.m.chromium_swarming.merge_script_path(
-              self._merge_script))
     task = self.api.m.chromium_swarming.task(
         name=self.name,
         raw_cmd=self._raw_cmd,
         relative_cwd=self._relative_cwd,
         cas_input_root=task_input,
-        merge=merge,
         failure_as_exception=False)
 
     self._apply_swarming_task_config(
@@ -331,26 +324,13 @@ def InvalidResultsHandler(api, step_result, has_valid_results):
         api.test_utils.INVALID_RESULTS_MAGIC)  # pragma no cover
 
 
-def SwarmingDesktopTest(name, chromium_tests_api, args=None, **kwargs):
-  args = list(args or [])
-  args.extend([
-      '--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json',
-      ('--isolated-script-test-perf-output='
-       '${ISOLATED_OUTDIR}/perftest-output.json'),
-  ])
-  resultdb = ResultDB.create(
-      result_format='json',
-      result_file='${ISOLATED_OUTDIR}/output.json',
-  )
-  return WebRtcIsolatedGtest(
-      name,
-      chromium_tests_api,
-      result_handlers=[InvalidResultsHandler],
-      merge_script='standard_isolated_script_merge.py',
-      args=args,
-      resultdb=resultdb,
-      shards=NUMBER_OF_SHARDS.get(name, 1),
-      **kwargs)
+def SwarmingDesktopTest(name, chromium_tests_api, **kwargs):
+  return steps.SwarmingIsolatedScriptTest(
+      steps.SwarmingIsolatedScriptTestSpec.create(
+          name,
+          resultdb=ResultDB(result_format='json'),
+          shards=NUMBER_OF_SHARDS.get(name, 1),
+          **kwargs), chromium_tests_api)
 
 
 def SwarmingPerfTest(name, chromium_test_api, args=None, **kwargs):
