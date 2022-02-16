@@ -193,3 +193,48 @@ def GenTests(api):
                        '.*process precomputed test history.*'),
       api.post_process(post_process.DropExpectation),
   )
+
+  yield api.test(
+      'no preliminary new tests',
+      api.buildbucket.build(basic_build),
+      api.flakiness(
+          check_for_flakiness=True,
+          build_count=10,
+          historical_query_count=2,
+          current_query_count=2,
+      ),
+      api.buildbucket.simulated_search_results(
+          builds=[basic_build],
+          step_name=('searching_for_new_tests.fetching associated builds with '
+                     'current gerrit patchset')),
+      api.step_data(
+          # All build tests are returned from history.
+          'searching_for_new_tests.process precomputed test history',
+          api.file.read_json([{
+              'test_id': 'ninja://sample/test:some_test/TestSuite.Test0',
+              'variant_hash': '0hash',
+              'invocation': ['invocation/3']
+          }, {
+              'test_id': 'ninja://sample/test:some_test/TestSuite.Test1',
+              'variant_hash': '1hash',
+              'tags': '[{"key":"step_name","value":"some test (with patch)"}]',
+              'invocation': ['invocation/1']
+          }, {
+              'test_id': 'ninja://sample/test:some_test/TestSuite.Test2',
+              'variant_hash': '2hash',
+              'tags': '[{"key":"step_name","value":"some test (with patch)"}]',
+              'invocation': ['invocation/1']
+          }, {
+              'test_id': 'ninja://sample/test:some_test/TestSuite.Test3',
+              'variant_hash': '3hash',
+              'tags': '[{"key":"step_name","value":"some test (with patch)"}]',
+              'invocation': ['invocation/1']
+          }, {
+              'test_id': 'ninja://sample/test:some_test/TestSuite.Test4',
+              'variant_hash': '4hash',
+              'tags': '[{"key":"step_name","value":"some test (with patch)"}]',
+              'invocation': ['invocation/1']
+          }])),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )

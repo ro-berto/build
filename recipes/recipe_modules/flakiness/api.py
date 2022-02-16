@@ -606,6 +606,9 @@ class FlakinessApi(recipe_api.RecipeApi):
       preliminary_new_tests = current_tests.difference(historical_tests)
       p.logs['preliminary_tests'] = join_tests(preliminary_new_tests)
 
+      if not preliminary_new_tests:
+        return set()
+
       # Trim once before verify_new_tests to avoid input too large for RDB RPC.
       preliminary_new_tests = self.maybe_trim_new_tests(preliminary_new_tests,
                                                         _CROSS_REFERENCE_TRIM)
