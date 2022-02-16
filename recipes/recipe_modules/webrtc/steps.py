@@ -172,15 +172,19 @@ def generate_tests(phase, bot, is_tryserver, chromium_tests_api):
     ]
 
   if test_suite == 'android_perf_swarming':
+    perftest_output = ('--isolated-script-test-perf-output='
+                       '${ISOLATED_OUTDIR}/perftest-output.pb')
     tests = [
-        SwarmingAndroidPerfTest(
+        SwarmingAndroidTest(
             'low_bandwidth_audio_perf_test',
             chromium_tests_api,
-            args=['--android', '--adb-path', ADB_PATH]),
-        SwarmingAndroidPerfTest(
+            idempotent=False,
+            args=['--android', '--adb-path', ADB_PATH, perftest_output]),
+        SwarmingAndroidTest(
             'webrtc_perf_tests',
             chromium_tests_api,
-            args=['--save_worst_frame', '--nologs'])
+            idempotent=False,
+            args=['--save_worst_frame', '--nologs', perftest_output])
     ]
 
   if test_suite == 'android':
@@ -377,28 +381,12 @@ def SwarmingPerfTest(name, chromium_test_api, args=None, **kwargs):
 
 
 def SwarmingAndroidTest(name, chromium_tests_api, **kwargs):
-  return WebRtcIsolatedGtest(
-      name,
-      chromium_tests_api,
-      result_handlers=[InvalidResultsHandler],
-      cipd_packages=ANDROID_CIPD_PACKAGES,
-      shards=NUMBER_OF_SHARDS.get(name, 1),
-      **kwargs)
-
-
-def SwarmingAndroidPerfTest(name, chromium_tests_api, args, **kwargs):
-  # See SwarmingDesktopPerfTest for more details why we pass this rather than
-  # --isolated_script_test_perf_output.
-  args.extend([
-      ('--isolated-script-test-perf-output='
-       '${ISOLATED_OUTDIR}/perftest-output.pb'),
-  ])
-  return SwarmingAndroidTest(
-      name,
-      args=args,
-      chromium_tests_api=chromium_tests_api,
-      idempotent=False,
-      **kwargs)
+  return steps.SwarmingGTestTest(
+      steps.SwarmingGTestTestSpec.create(
+          name,
+          cipd_packages=ANDROID_CIPD_PACKAGES,
+          shards=NUMBER_OF_SHARDS.get(name, 1),
+          **kwargs), chromium_tests_api)
 
 
 def AndroidJunitTest(name, chromium_tests_api):
