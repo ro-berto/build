@@ -1428,6 +1428,11 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.gpu.fyi',
                 buildername='ChromeOS FYI Release (kevin)',
             ),
+        'gpu-fyi-try-chromeos-octopus-exp':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.gpu.fyi',
+                buildername='gpu-fyi-chromeos-octopus-exp',
+            ),
     },
     'tryserver.chromium.mac': {
         'ios-asan':

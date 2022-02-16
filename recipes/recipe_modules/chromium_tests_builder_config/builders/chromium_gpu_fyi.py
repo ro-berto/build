@@ -1105,6 +1105,26 @@ SPEC = {
             simulation_platform='linux',
             serialize_tests=True,
         ),
+    'gpu-fyi-chromeos-octopus-exp':
+        _chromium_gpu_fyi_spec(
+            chromium_config='chromium',
+            chromium_apply_config=[
+                'mb',
+            ],
+            gclient_config='chromium',
+            gclient_apply_config=[
+                'chromeos',
+            ],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_ARCH': 'intel',
+                'TARGET_BITS': 64,
+                'TARGET_CROS_BOARDS': 'octopus',
+                'TARGET_PLATFORM': 'chromeos',
+            },
+            simulation_platform='linux',
+            serialize_tests=True,
+        ),
     'GPU Fake Linux Builder':
         _chromium_gpu_fyi_spec(
             chromium_config='chromium',
