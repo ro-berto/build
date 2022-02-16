@@ -172,9 +172,7 @@ def RunSteps(api):
 
 def GenTests(api):
   builders = BUILDERS
-  recipe_configs = RECIPE_CONFIGS
-  generate_builder = functools.partial(api.webrtc.generate_builder, builders,
-                                       recipe_configs)
+  generate_builder = functools.partial(api.webrtc.generate_builder, builders)
   phases = [
       'bwe_test_logging', 'dummy_audio_file_devices_no_protobuf', 'rtti_no_sctp'
   ]

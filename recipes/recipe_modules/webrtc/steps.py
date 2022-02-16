@@ -210,7 +210,7 @@ def generate_tests(phase, bot, is_tryserver, chromium_tests_api):
         'ios_sim_x64_dbg_ios13',
         'iOS64 Sim Debug (iOS 12)',
         'ios_sim_x64_dbg_ios12',
-    ]:
+    ]:  # pragma: no cover
       tests += [
           IosTest(
               'apprtcmobile_tests', xctest=True, xcode_parallelization=True),
