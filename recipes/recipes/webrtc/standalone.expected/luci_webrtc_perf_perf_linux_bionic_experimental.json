@@ -825,7 +825,7 @@
       "-server",
       "https://example.swarmingserver.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"low_bandwidth_audio_perf_test/Ubuntu-18.04/[dummy has/Perf Linux Bionic/-1\", \"priority\": \"40\", \"realm\": \"webrtc:perf\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:perf\", \"build_is_experimental:true\", \"builder_group:client.webrtc.perf\", \"buildername:Perf Linux Bionic\", \"data:[dummy hash for low_bandwidth_audio_perf_test/1]\", \"name:low_bandwidth_audio_perf_test\", \"ninja_target:\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.perf:Perf Linux Bionic\", \"stepname:low_bandwidth_audio_perf_test on Ubuntu-18.04\", \"test_id_prefix:\", \"test_suite:low_bandwidth_audio_perf_test\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for low_bandwidth_audio_perf_test\", \"size_bytes\": \"1]\"}}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:Perf Linux Bionic\", \"-var\", \"os:Ubuntu-18.04\", \"-var\", \"test_suite:low_bandwidth_audio_perf_test\", \"-tag\", \"step_name:low_bandwidth_audio_perf_test on Ubuntu-18.04\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"gtest_json\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json\", \"--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-18.04\"}, {\"key\": \"pool\", \"value\": \"WebRTC-perf\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"10800\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"10800\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"low_bandwidth_audio_perf_test/Ubuntu-18.04/[dummy has/Perf Linux Bionic/-1\", \"priority\": \"40\", \"realm\": \"webrtc:perf\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:perf\", \"build_is_experimental:true\", \"builder_group:client.webrtc.perf\", \"buildername:Perf Linux Bionic\", \"data:[dummy hash for low_bandwidth_audio_perf_test/1]\", \"name:low_bandwidth_audio_perf_test\", \"ninja_target:\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.perf:Perf Linux Bionic\", \"stepname:low_bandwidth_audio_perf_test on Ubuntu-18.04\", \"test_id_prefix:\", \"test_suite:low_bandwidth_audio_perf_test\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for low_bandwidth_audio_perf_test\", \"size_bytes\": \"1]\"}}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:Perf Linux Bionic\", \"-var\", \"os:Ubuntu-18.04\", \"-var\", \"test_suite:low_bandwidth_audio_perf_test\", \"-tag\", \"step_name:low_bandwidth_audio_perf_test on Ubuntu-18.04\", \"-tag\", \"target_platform:linux\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"gtest_json\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json\", \"--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-18.04\"}, {\"key\": \"pool\", \"value\": \"WebRTC-perf\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"10800\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"10800\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -910,6 +910,8 @@
       "@@@STEP_LOG_LINE@json.input@              \"test_suite:low_bandwidth_audio_perf_test\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-tag\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"step_name:low_bandwidth_audio_perf_test on Ubuntu-18.04\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-tag\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"target_platform:linux\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-coerce-negative-duration\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-location-tags-file\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"../../testing/location_tags.json\", @@@",
@@ -973,7 +975,7 @@
       "-server",
       "https://example.swarmingserver.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"webrtc_perf_tests/Ubuntu-18.04/[dummy has/Perf Linux Bionic/-1\", \"priority\": \"40\", \"realm\": \"webrtc:perf\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:perf\", \"build_is_experimental:true\", \"builder_group:client.webrtc.perf\", \"buildername:Perf Linux Bionic\", \"data:[dummy hash for webrtc_perf_tests/1]\", \"name:webrtc_perf_tests\", \"ninja_target:\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.perf:Perf Linux Bionic\", \"stepname:webrtc_perf_tests on Ubuntu-18.04\", \"test_id_prefix:\", \"test_suite:webrtc_perf_tests\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for webrtc_perf_tests\", \"size_bytes\": \"1]\"}}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:Perf Linux Bionic\", \"-var\", \"os:Ubuntu-18.04\", \"-var\", \"test_suite:webrtc_perf_tests\", \"-tag\", \"step_name:webrtc_perf_tests on Ubuntu-18.04\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"gtest_json\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"./dummy_cmd\", \"--test_artifacts_dir=${ISOLATED_OUTDIR}\", \"--save_worst_frame\", \"--nologs\", \"--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json\", \"--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-18.04\"}, {\"key\": \"pool\", \"value\": \"WebRTC-perf\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"10800\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"10800\", \"outputs\": [], \"relative_cwd\": \"out/Linux64_Builder\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"webrtc_perf_tests/Ubuntu-18.04/[dummy has/Perf Linux Bionic/-1\", \"priority\": \"40\", \"realm\": \"webrtc:perf\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:perf\", \"build_is_experimental:true\", \"builder_group:client.webrtc.perf\", \"buildername:Perf Linux Bionic\", \"data:[dummy hash for webrtc_perf_tests/1]\", \"name:webrtc_perf_tests\", \"ninja_target:\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.perf:Perf Linux Bionic\", \"stepname:webrtc_perf_tests on Ubuntu-18.04\", \"test_id_prefix:\", \"test_suite:webrtc_perf_tests\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for webrtc_perf_tests\", \"size_bytes\": \"1]\"}}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:Perf Linux Bionic\", \"-var\", \"os:Ubuntu-18.04\", \"-var\", \"test_suite:webrtc_perf_tests\", \"-tag\", \"step_name:webrtc_perf_tests on Ubuntu-18.04\", \"-tag\", \"target_platform:linux\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"gtest_json\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"./dummy_cmd\", \"--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json\", \"--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json\", \"--test_artifacts_dir=${ISOLATED_OUTDIR}\", \"--save_worst_frame\", \"--nologs\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-18.04\"}, {\"key\": \"pool\", \"value\": \"WebRTC-perf\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"10800\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"10800\", \"outputs\": [], \"relative_cwd\": \"out/Linux64_Builder\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -1058,6 +1060,8 @@
       "@@@STEP_LOG_LINE@json.input@              \"test_suite:webrtc_perf_tests\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-tag\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"step_name:webrtc_perf_tests on Ubuntu-18.04\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-tag\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"target_platform:linux\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-coerce-negative-duration\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-location-tags-file\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"../../testing/location_tags.json\", @@@",
@@ -1071,11 +1075,11 @@
       "@@@STEP_LOG_LINE@json.input@              \"${ISOLATED_OUTDIR}\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"--\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"./dummy_cmd\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"--test_artifacts_dir=${ISOLATED_OUTDIR}\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"--save_worst_frame\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"--nologs\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json\"@@@",
+      "@@@STEP_LOG_LINE@json.input@              \"--nologs\"@@@",
       "@@@STEP_LOG_LINE@json.input@            ], @@@",
       "@@@STEP_LOG_LINE@json.input@            \"containment\": {@@@",
       "@@@STEP_LOG_LINE@json.input@              \"containment_type\": \"NONE\"@@@",
@@ -1243,7 +1247,6 @@
       "[]",
       "--summary-json-file",
       "/path/to/tmp/json",
-      "--allow-missing-json",
       "--",
       "swarming",
       "collect",
@@ -1278,7 +1281,9 @@
     "name": "low_bandwidth_audio_perf_test on Ubuntu-18.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-18.04'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"version\": 3@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
@@ -1310,11 +1315,67 @@
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
       "@@@STEP_LOG_END@chromium_swarming.summary@@@",
-      "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
+      "@@@STEP_LOG_LINE@Merge script log@Merged succesfully@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
+      "@@@STEP_LOG_LINE@outdir_json@{}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@",
+      "@@@STEP_LOG_LINE@step_metadata@{@@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"low_bandwidth_audio_perf_test\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"dimensions\": {@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"cpu\": \"x86-64\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-18.04\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"WebRTC-perf\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"low_bandwidth_audio_perf_test on Ubuntu-18.04\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"low_bandwidth_audio_perf_test\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"0\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_builder_group\": null, @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null@@@",
+      "@@@STEP_LOG_LINE@step_metadata@}@@@",
+      "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 test results@https://luci-milo.appspot.com/ui/inv/some-inv-name/test-results@@@",
       "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=0@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
+      "--input-json",
+      "{\"version\": 3}",
+      "--builder-group",
+      "client.webrtc.perf",
+      "--builder-name",
+      "Perf Linux Bionic",
+      "--build-number",
+      "0",
+      "--test-type",
+      "low_bandwidth_audio_perf_test on Ubuntu-18.04",
+      "--chrome-revision",
+      "170242",
+      "--build-id",
+      "8945511751514863184",
+      "--test-results-server",
+      "test-results-test.appspot.com"
+    ],
+    "cwd": "[CACHE]/builder",
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:perf"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "Upload to test-results [low_bandwidth_audio_perf_test on Ubuntu-18.04]"
   },
   {
     "cmd": [
@@ -1451,7 +1512,6 @@
       "[]",
       "--summary-json-file",
       "/path/to/tmp/json",
-      "--allow-missing-json",
       "--",
       "swarming",
       "collect",
@@ -1486,7 +1546,9 @@
     "name": "webrtc_perf_tests on Ubuntu-18.04",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-18.04'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"version\": 3@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
@@ -1518,11 +1580,67 @@
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
       "@@@STEP_LOG_END@chromium_swarming.summary@@@",
-      "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
+      "@@@STEP_LOG_LINE@Merge script log@Merged succesfully@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
+      "@@@STEP_LOG_LINE@outdir_json@{}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@",
+      "@@@STEP_LOG_LINE@step_metadata@{@@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"webrtc_perf_tests\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"dimensions\": {@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"cpu\": \"x86-64\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-18.04\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"WebRTC-perf\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"webrtc_perf_tests on Ubuntu-18.04\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"webrtc_perf_tests\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_builder_group\": null, @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null@@@",
+      "@@@STEP_LOG_LINE@step_metadata@}@@@",
+      "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 test results@https://luci-milo.appspot.com/ui/inv/some-inv-name/test-results@@@",
       "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=1@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
+      "--input-json",
+      "{\"version\": 3}",
+      "--builder-group",
+      "client.webrtc.perf",
+      "--builder-name",
+      "Perf Linux Bionic",
+      "--build-number",
+      "0",
+      "--test-type",
+      "webrtc_perf_tests on Ubuntu-18.04",
+      "--chrome-revision",
+      "170242",
+      "--build-id",
+      "8945511751514863184",
+      "--test-results-server",
+      "test-results-test.appspot.com"
+    ],
+    "cwd": "[CACHE]/builder",
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:perf"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "Upload to test-results [webrtc_perf_tests on Ubuntu-18.04]"
   },
   {
     "cmd": [

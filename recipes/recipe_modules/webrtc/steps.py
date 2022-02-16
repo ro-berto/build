@@ -241,89 +241,6 @@ def generate_tests(phase, bot, is_tryserver, chromium_tests_api):
   return tests
 
 
-class WebRtcIsolatedGtest(steps.SwarmingIsolatedScriptTest):
-  """Triggers an isolated task to run a GTest binary, and collects the results.
-
-  This class is based off Chromium's SwarmingIsolatedScriptTest, but strips out
-  the parts we don't need.
-  """
-
-  def __init__(self,
-               name,
-               chromium_tests_api=None,
-               result_handlers=None,
-               merge_script=None,
-               **kwargs):
-    """Constructs an instance of WebRtcIsolatedGtest.
-
-    Args:
-      name: Displayed name of the test.
-      result_handlers: a list of callbacks that take (api, step_result,
-          has_valid_results) and take some action to it (typically writing
-          something into the step result).
-    """
-    super(WebRtcIsolatedGtest, self).__init__(
-        steps.SwarmingIsolatedScriptTestSpec.create(name, **kwargs),
-        chromium_tests_api)
-    self._result_handlers = result_handlers or []
-    self._has_collected = False
-
-  def pre_run(self, suffix):
-    """Launches the test on Swarming."""
-    assert self._tasks.get(suffix) is None, ('Test %s was already triggered' %
-                                             self.name)  # pragma no cover
-
-    # *.isolated may be missing if *_run target is misconfigured.
-    task_input = self.api.m.isolate.isolated_tests.get(self.isolate_target)
-    if not task_input:  # pragma no cover
-      return self.api.m.step.empty(
-          '[error] %s' % self.name,
-          status=self.api.m.step.FAILURE,
-          step_text=('*.isolated file for target %s is missing' %
-                     self.isolate_target))
-
-    self._tasks[suffix] = self.create_task(suffix, task_input)
-
-    self.api.m.chromium_swarming.trigger_task(self._tasks[suffix],
-                                              self.spec.resultdb)
-
-  @recipe_api.composite_step
-  def run(self, suffix):
-    """Waits for launched test to finish and collects the results."""
-    assert not self._has_collected, (  # pragma no cover
-        'Results of %s were already collected' % self.name)
-    self._has_collected = True
-
-    step_result, has_valid_results = self.api.m.chromium_swarming.collect_task(
-        self._tasks[suffix], allow_missing_json=True)
-    self.update_failure_on_exit(suffix, step_result.retcode != 0)
-
-    for handler in self._result_handlers:
-      handler(self.api.m, step_result, has_valid_results)
-
-    return step_result
-
-  def create_task(self, suffix, task_input):
-    task = self.api.m.chromium_swarming.task(
-        name=self.name,
-        raw_cmd=self._raw_cmd,
-        relative_cwd=self._relative_cwd,
-        cas_input_root=task_input,
-        failure_as_exception=False)
-
-    self._apply_swarming_task_config(
-        task, suffix, filter_flag=None, filter_delimiter=None)
-    return task
-
-
-def InvalidResultsHandler(api, step_result, has_valid_results):
-  if (api.step.active_result.retcode == 0 and not has_valid_results):
-    # This failure won't be caught automatically. Need to manually
-    # raise it as a step failure.
-    raise api.step.StepFailure(
-        api.test_utils.INVALID_RESULTS_MAGIC)  # pragma no cover
-
-
 def SwarmingDesktopTest(name, chromium_tests_api, **kwargs):
   return steps.SwarmingIsolatedScriptTest(
       steps.SwarmingIsolatedScriptTestSpec.create(
@@ -333,31 +250,15 @@ def SwarmingDesktopTest(name, chromium_tests_api, **kwargs):
           **kwargs), chromium_tests_api)
 
 
-def SwarmingPerfTest(name, chromium_test_api, args=None, **kwargs):
-
-  args = list(args or [])
-  # This flag is translated to --isolated_script_test_perf_output in
-  # gtest-parallel_wrapper.py and flags_compatibility.py. Why not pass the right
-  # flag right away? Unfortunately Chromium's android/test_runner.py does
-  # magical treatment of the dashed version of the flag, and we need that to
-  # get a writable out dir on Android, so we must have this translation step.
-  args.extend([
-      '--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json',
-      ('--isolated-script-test-perf-output='
-       '${ISOLATED_OUTDIR}/perftest-output.json'),
-  ])
-  resultdb = ResultDB.create(
-      result_format='gtest_json',
-      result_file='${ISOLATED_OUTDIR}/output.json',
-  )
-
-  return WebRtcIsolatedGtest(
-      name,
-      chromium_test_api,
-      result_handlers=[InvalidResultsHandler],
-      args=args,
-      resultdb=resultdb,
-      **kwargs)
+def SwarmingPerfTest(name, chromium_test_api, **kwargs):
+  merge = chromium_swarming.MergeScript(
+      script=chromium_test_api.m.chromium_swarming.resource('noop_merge.py'))
+  return steps.SwarmingIsolatedScriptTest(
+      steps.SwarmingIsolatedScriptTestSpec.create(
+          name,
+          merge=merge,
+          resultdb=ResultDB(result_format='gtest_json'),
+          **kwargs), chromium_test_api)
 
 
 def SwarmingAndroidTest(name, chromium_tests_api, **kwargs):
