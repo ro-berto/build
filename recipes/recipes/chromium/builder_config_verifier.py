@@ -294,14 +294,29 @@ def _compare_builder_configs(api, recipe_config, src_side_config):
   def normalize_recipe_config(builder_config):
     builder_db = builder_config.builder_db
     builders_by_group = {}
-    for i in builder_config.builder_ids_in_scope_for_testing:
+    examined = set()
+    to_examine = list(builder_config.builder_ids_in_scope_for_testing)
+    while to_examine:
+      i = to_examine.pop()
+      if i in examined:
+        continue
+      examined.add(i)
+
       builder_spec = builder_db[i]
       # Recipe configs can omit the parent builder group, which is treated as
       # the same builder group as the associated builder
-      if (builder_spec.parent_buildername and
-          not builder_spec.parent_builder_group):
-        builder_spec = attr.evolve(builder_spec, parent_builder_group=i.group)
+      if builder_spec.parent_buildername:
+        if not builder_spec.parent_builder_group:
+          builder_spec = attr.evolve(builder_spec, parent_builder_group=i.group)
+
+        # For testers, the parent won't appear in
+        # builder_ids_in_scope_for_testing, but it's still needed in the DB for
+        # some operations
+        parent_id = BuilderId.create_for_group(
+            builder_spec.parent_builder_group, builder_spec.parent_buildername)
+        to_examine.append(parent_id)
       builders_by_group.setdefault(i.group, {})[i.builder] = builder_spec
+
     return attr.evolve(
         builder_config,
         builder_db=ctbc.BuilderDatabase.create(builders_by_group))
@@ -551,6 +566,56 @@ def GenTests(api):
       api.post_check(
           check_verify,
           'verify props-files/bucket/matching-config/properties.json',
+          step_text='src-side config matches recipe config'),
+      api.post_check(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  ctbc_prop = (
+      ctbc_api.properties_builder_for_ci_tester(
+          bucket='bucket',
+          builder='matching-config-tester',
+          builder_group='fake-group',
+          builder_spec=example_spec,
+      ).with_parent(
+          builder='matching-config',
+          builder_group='fake-group',
+      ).build())
+
+  yield api.test(
+      'changed-tester-config-matching-recipe-config',
+      api.buildbucket.try_build(),
+      properties_file(
+          'props-files',
+          'props-files/bucket/matching-config-tester/properties.json',
+          patched_content=dumps({
+              '$build/chromium_tests_builder_config':
+                  json_format.MessageToDict(ctbc_prop),
+              'builder_group':
+                  'fake-group',
+          }),
+      ),
+      api.chromium_tests_builder_config.builder_db(
+          ctbc.BuilderDatabase.create({
+              'fake-group': {
+                  'matching-config':
+                      attr.evolve(example_spec, simulation_platform='linux'),
+                  'matching-config-tester':
+                      attr.evolve(
+                          example_spec,
+                          execution_mode=ctbc.TEST,
+                          parent_buildername='matching-config',
+                      ),
+              },
+              # The recipe config will have the entire builder DB, so this
+              # ensures that the verification accounts for that
+              'unrelated-group': {
+                  'unrelated-builder': example_spec,
+              },
+          })),
+      api.post_check(
+          check_verify,
+          'verify props-files/bucket/matching-config-tester/properties.json',
           step_text='src-side config matches recipe config'),
       api.post_check(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
