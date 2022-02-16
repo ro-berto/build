@@ -173,7 +173,7 @@ def generate_tests(phase, bot, is_tryserver, chromium_tests_api):
 
   if test_suite == 'android_perf_swarming':
     perftest_output = ('--isolated-script-test-perf-output='
-                       '${ISOLATED_OUTDIR}/perftest-output.pb')
+                       '${ISOLATED_OUTDIR}/perftest-output.json')
     tests = [
         SwarmingAndroidTest(
             'low_bandwidth_audio_perf_test',
@@ -344,7 +344,7 @@ def SwarmingPerfTest(name, chromium_test_api, args=None, **kwargs):
   args.extend([
       '--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json',
       ('--isolated-script-test-perf-output='
-       '${ISOLATED_OUTDIR}/perftest-output.pb'),
+       '${ISOLATED_OUTDIR}/perftest-output.json'),
   ])
   resultdb = ResultDB.create(
       result_format='gtest_json',
