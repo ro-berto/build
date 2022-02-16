@@ -300,7 +300,10 @@ def RunSteps(api):
   api.step.active_result.presentation.logs['no_clusterfuzz'] = (
       sorted(no_clusterfuzz))
   api.step.active_result.presentation.logs['targets'] = targets
-  raw_result = api.chromium.compile(targets=targets, use_goma_module=True)
+  raw_result = api.chromium.compile(
+      targets=targets,
+      use_goma_module=not use_reclient,
+      use_reclient=use_reclient)
   if raw_result.status != common_pb.SUCCESS:
     return raw_result
 
