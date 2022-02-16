@@ -886,20 +886,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 is_compile_only=True,
                 include_all_triggered_testers=True,
             ),
-        'linux-clang-tidy-dbg':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.linux',
-                buildername='Linux Builder (dbg)',
-                is_compile_only=True,
-                include_all_triggered_testers=True,
-            ),
-        'linux-clang-tidy-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.linux',
-                buildername='Linux Builder',
-                is_compile_only=True,
-                include_all_triggered_testers=True,
-            ),
         'linux-rel':
             try_spec.TrySpec.create(
                 mirrors=[
