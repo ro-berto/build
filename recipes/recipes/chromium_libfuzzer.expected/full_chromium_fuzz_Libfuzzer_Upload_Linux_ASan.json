@@ -89,6 +89,7 @@
       "@@@STEP_LOG_LINE@config@    {@@@",
       "@@@STEP_LOG_LINE@config@      \"custom_deps\": {}, @@@",
       "@@@STEP_LOG_LINE@config@      \"custom_vars\": {@@@",
+      "@@@STEP_LOG_LINE@config@        \"checkout_reclient\": \"True\", @@@",
       "@@@STEP_LOG_LINE@config@        \"checkout_telemetry_dependencies\": \"True\"@@@",
       "@@@STEP_LOG_LINE@config@      }, @@@",
       "@@@STEP_LOG_LINE@config@      \"deps_file\": \".DEPS.git\", @@@",
@@ -116,7 +117,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'checkout_reclient': 'True', 'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
       "--revision_mapping_file",
       "{\"got_angle_revision\": \"src/third_party/angle\", \"got_buildtools_revision\": \"src/buildtools\", \"got_dawn_revision\": \"src/third_party/dawn\", \"got_nacl_revision\": \"src/native_client\", \"got_revision\": \"src\", \"got_swiftshader_revision\": \"src/third_party/swiftshader\", \"got_v8_revision\": \"src/v8\", \"got_webrtc_revision\": \"src/third_party/webrtc\"}",
       "--git-cache-dir",
@@ -461,8 +462,7 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_USE_LOCAL": "false"
+      "CHROME_HEADLESS": "1"
     },
     "luci_context": {
       "realm": {
@@ -478,7 +478,7 @@
     },
     "name": "lookup GN args",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
+      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_reclient = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
     ]
   },
   {
@@ -502,8 +502,7 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_USE_LOCAL": "false"
+      "CHROME_HEADLESS": "1"
     },
     "luci_context": {
       "realm": {

@@ -81,6 +81,7 @@ BUILDERS = freeze({
                         'TARGET_PLATFORM': 'linux',
                         'TARGET_BITS': 32,
                     },
+                    gclient_apply_config=['enable_reclient'],
                     upload_bucket='chromium-browser-libfuzzer',
                     upload_directory='asan',
                 ),
@@ -93,6 +94,7 @@ BUILDERS = freeze({
                         'TARGET_PLATFORM': 'linux',
                         'TARGET_BITS': 32,
                     },
+                    gclient_apply_config=['enable_reclient'],
                     upload_bucket='chromium-browser-libfuzzer',
                     upload_directory='asan',
                 ),
@@ -133,6 +135,7 @@ BUILDERS = freeze({
                         'TARGET_PLATFORM': 'linux',
                         'TARGET_BITS': 64,
                     },
+                    gclient_apply_config=['enable_reclient'],
                     upload_bucket='chromium-browser-libfuzzer',
                     upload_directory='asan',
                 ),
@@ -145,6 +148,7 @@ BUILDERS = freeze({
                         'TARGET_PLATFORM': 'linux',
                         'TARGET_BITS': 64,
                     },
+                    gclient_apply_config=['enable_reclient'],
                     upload_bucket='chromium-browser-libfuzzer',
                     upload_directory='asan',
                 ),
@@ -185,6 +189,7 @@ BUILDERS = freeze({
                         'TARGET_PLATFORM': 'linux',
                         'TARGET_BITS': 64,
                     },
+                    gclient_apply_config=['enable_reclient'],
                     upload_bucket='chromium-browser-libfuzzer',
                     upload_directory='msan',
                 ),
@@ -197,6 +202,7 @@ BUILDERS = freeze({
                         'TARGET_PLATFORM': 'linux',
                         'TARGET_BITS': 64,
                     },
+                    gclient_apply_config=['enable_reclient'],
                     upload_bucket='chromium-browser-libfuzzer',
                     upload_directory='ubsan',
                 ),
@@ -234,10 +240,17 @@ def RunSteps(api):
 
   checkout_results = api.chromium_checkout.ensure_checkout(bot_config)
 
+  # Unlike other recipes, adding 'enable_reclient' to the gclient_apply_config
+  # list will turn on reclient usage.  This recipe assumes that if it is not
+  # using goma then it will be using reclient instead.  There is no local-only
+  # case.
+  use_reclient = 'enable_reclient' in bot_config.gclient_apply_config
+
   api.chromium.ensure_goma()
   api.chromium.ensure_toolchains()
   api.chromium.runhooks()
-  api.chromium.mb_gen(builder_id, use_goma=True)
+  api.chromium.mb_gen(
+      builder_id, use_goma=not use_reclient, use_reclient=use_reclient)
 
   with api.context(cwd=api.path['checkout'], env=api.chromium.get_env()):
     all_fuzzers = api.gn.refs(
