@@ -89,7 +89,7 @@ def GenTests(api):
           builder_ids=[builder_id],
           builder_ids_in_scope_for_testing=[builder_id],
       ),
-      api.chromium_tests_builder_config.builder_db(
+      api.chromium_tests_builder_config.databases(
           ctbc.BuilderDatabase.create({
               builder_id.group: {
                   builder_id.builder:
@@ -109,7 +109,7 @@ def GenTests(api):
           builder_ids=[builder_id],
           builder_ids_in_scope_for_testing=[builder_id, tester_id],
       ),
-      api.chromium_tests_builder_config.builder_db(
+      api.chromium_tests_builder_config.databases(
           ctbc.BuilderDatabase.create({
               builder_id.group: {
                   builder_id.builder:

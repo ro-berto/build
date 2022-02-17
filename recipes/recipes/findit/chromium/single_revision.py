@@ -272,7 +272,7 @@ def GenTests(api):
         ),
         api.properties(props_proto),
         api.chromium_tests.read_source_side_spec(*(spec or _default_spec)),
-        api.chromium_tests_builder_config.builder_db(_default_builders),
+        api.chromium_tests_builder_config.databases(_default_builders),
     ], api.empty_test_data())
     return t
 

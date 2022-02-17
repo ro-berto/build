@@ -504,7 +504,7 @@ def GenTests(api):
               'builder_group': 'fake-group',
           }),
       ),
-      api.chromium_tests_builder_config.builder_db(
+      api.chromium_tests_builder_config.databases(
           ctbc.BuilderDatabase.create({})),
       api.post_check(
           check_verify,
@@ -545,7 +545,7 @@ def GenTests(api):
                   'fake-group',
           }),
       ),
-      api.chromium_tests_builder_config.builder_db(
+      api.chromium_tests_builder_config.databases(
           ctbc.BuilderDatabase.create({
               'fake-group': {
                   'matching-config':
@@ -595,7 +595,7 @@ def GenTests(api):
                   'fake-group',
           }),
       ),
-      api.chromium_tests_builder_config.builder_db(
+      api.chromium_tests_builder_config.databases(
           ctbc.BuilderDatabase.create({
               'fake-group': {
                   'matching-config':
@@ -644,7 +644,7 @@ def GenTests(api):
                   'fake-group',
           }),
       ),
-      api.chromium_tests_builder_config.builder_db(
+      api.chromium_tests_builder_config.databases(
           ctbc.BuilderDatabase.create({
               'fake-group': {
                   'not-matching-config':

@@ -340,8 +340,7 @@ class ChromiumTestsBuilderConfigApi(recipe_test_api.RecipeTestApi):
                                           try_db if use_try_db else None)
 
     test_data = sum([
-        self.builder_db(builder_db),
-        self.try_db(try_db),
+        self.databases(builder_db, try_db),
         self.m.platform(
             builder_config.simulation_platform or 'linux',
             builder_config.chromium_config_kwargs.get('TARGET_BITS', 64)),
@@ -423,32 +422,21 @@ class ChromiumTestsBuilderConfigApi(recipe_test_api.RecipeTestApi):
   # TODO(https://crbug.com/1193832) Switch callers to use (generic|ci|try)_build
   @recipe_test_api.mod_test_data
   @staticmethod
-  def builder_db(builder_db):
-    """Override the default BuilderDatabase for a test.
+  def databases(builder_db, try_db=None):
+    """Override the default BuilderDatabase and TryDatabase for a test.
 
     Generally (generic|ci|try)_build should be preferred instead, use
     this only for tests of recipes that directly access
-    chromium_tests_builder_config.builder_db.
+    chromium_tests_builder_config.builder_db and/or lookup a builder
+    other than the "current" builder.
 
     Args:
       * builder_db - A BuilderDatabase to replace
         chromium_tests_builder_config.builder_db.
+      * try_db - A TryDatabase to replace
+        chromium_tests_builder_config.try_db. All builder IDs present in
+        the contained try specs must be present in `builder_db`.
     """
     assert isinstance(builder_db, BuilderDatabase)
-    return builder_db
-
-  @recipe_test_api.mod_test_data
-  @staticmethod
-  def try_db(try_db):
-    """Override the default TryDatabase for a test.
-
-    Generally (generic|ci|try)_build should be preferred instead, use
-    this only for tests of recipes that directly access
-    chromium_tests_builder_config.try_db.
-
-    Args:
-      * try_db - A TryDatabase to replace
-        chromium_tests_builder_config.try_db.
-    """
     assert try_db is None or isinstance(try_db, TryDatabase)
-    return try_db
+    return builder_db, try_db

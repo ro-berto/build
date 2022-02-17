@@ -332,8 +332,8 @@ def GenTests(api):
           }),
       api.chromium.try_build(
           builder='linux-rel-compilator', revision='deadbeef'),
-      api.chromium_tests_builder_config.try_db(_TEST_TRYBOTS),
-      api.chromium_tests_builder_config.builder_db(_TEST_BUILDERS),
+      api.chromium_tests_builder_config.databases(_TEST_BUILDERS,
+                                                  _TEST_TRYBOTS),
       api.properties(
           InputProperties(
               orchestrator=InputProperties.Orchestrator(
@@ -362,8 +362,8 @@ def GenTests(api):
           }),
       api.chromium.try_build(
           builder='linux-rel-compilator', revision='deadbeef'),
-      api.chromium_tests_builder_config.try_db(_TEST_TRYBOTS),
-      api.chromium_tests_builder_config.builder_db(_TEST_BUILDERS),
+      api.chromium_tests_builder_config.databases(_TEST_BUILDERS,
+                                                  _TEST_TRYBOTS),
       api.properties(
           InputProperties(
               orchestrator=InputProperties.Orchestrator(

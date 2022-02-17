@@ -15,10 +15,9 @@ class ChromiumTestsBuilderConfigApi(recipe_api.RecipeApi):
     self._builder_db = builders.BUILDERS
     self._try_db = trybots.TRYBOTS
     if self._test_data.enabled:
-      if 'builder_db' in self._test_data:
-        self._builder_db = self._test_data['builder_db']
-      if 'try_db' in self._test_data:
-        self._try_db = self._test_data['try_db']
+      databases = self._test_data.get('databases')
+      if databases is not None:
+        self._builder_db, self._try_db = databases
 
   @property
   def builder_db(self):
