@@ -721,10 +721,9 @@ class WebRTCApi(recipe_api.RecipeApi):
         if self.bot.should_upload_perf_results:
           self.upload_to_perf_dashboard(test.name, step_result)
 
-        if test.get_rdb_results(suffix).total_tests_ran > 0:
-          if not test.has_valid_results(suffix) or test.deterministic_failures(
-              suffix):
-            failures.append(test.name)
+        if not test.has_valid_results(suffix) or test.deterministic_failures(
+            suffix):
+          failures.append(test.name)
 
       if failures:
         raise self.m.step.StepFailure('Test target(s) failed: %s' %
