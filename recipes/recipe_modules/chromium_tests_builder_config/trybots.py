@@ -1300,12 +1300,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.chromiumos',
                 buildername='chromeos-amd64-generic-rel',
             ),
-        'chromeos-amd64-generic-rel-rts':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.chromiumos',
-                buildername='chromeos-amd64-generic-rel',
-                regression_test_selection=try_spec.ALWAYS,
-            ),
         'chromeos-arm-generic-dbg':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.chromiumos',
