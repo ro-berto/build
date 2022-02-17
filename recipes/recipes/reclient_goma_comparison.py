@@ -30,6 +30,24 @@ DEPS = [
 ]
 
 COMPARISON_BUILDERS = freeze({
+    'Comparison Android (reclient)': {
+        'chromium_config': 'android',
+        'gclient_config': 'chromium',
+        'chromium_apply_config': [
+            'mb', 'goma_enable_cache_silo', 'goma_large_cache_file',
+            'download_vr_test_apks'
+        ],
+        'gclient_apply_config': ['android', 'enable_reclient', 'reclient_test'],
+        'chromium_config_kwargs': {
+            'BUILD_CONFIG': 'Debug',
+            'TARGET_BITS': 32,
+            'TARGET_PLATFORM': 'android',
+        },
+        'android_config': 'main_builder_mb',
+        'simulation_platform': 'linux',
+        'platform': 'linux',
+        'targets': ['all'],
+    },
     'Comparison Linux (reclient)': {
         'chromium_config': 'chromium',
         'gclient_config': 'chromium',
