@@ -179,7 +179,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     if self.bot.should_test:
       tests = steps.generate_tests(None, self.bot,
                                    self.m.tryserver.is_tryserver,
-                                   self.m.chromium_tests)
+                                   self.m.chromium_tests, self.m.properties)
       for test in tests:
         assert isinstance(test, steps.IosTest)
         test_dict = {
@@ -279,11 +279,10 @@ class WebRTCApi(recipe_api.RecipeApi):
     non_isolated_test_targets = set()
     for bot in self.related_bots():
       if bot.should_test:
-        for test in steps.generate_tests(
-            phase=phase,
-            bot=bot,
-            is_tryserver=self.m.tryserver.is_tryserver,
-            chromium_tests_api=self.m.chromium_tests):
+        for test in steps.generate_tests(phase, bot,
+                                         self.m.tryserver.is_tryserver,
+                                         self.m.chromium_tests,
+                                         self.m.properties):
           if isinstance(test, (c_steps.SwarmingTest, steps.IosTest)):
             test_targets.add(test.name)
           if isinstance(test, (c_steps.AndroidJunitTest)):
@@ -562,12 +561,15 @@ class WebRTCApi(recipe_api.RecipeApi):
       # 'src' folder can be shared between builder types.
       self.m.chromium.c.build_config_fs = sanitize_file_name(self.buildername)
 
-    self.m.chromium.mb_gen(
-        self.builder_id,
-        phase=phase,
-        use_goma=True,
-        mb_path=self.m.path['checkout'].join('tools_webrtc', 'mb'),
-        isolated_targets=self._isolated_targets)
+    mac_toolchain_enabled = self.m.chromium.c.mac_toolchain.enabled
+    env = {'FORCE_MAC_TOOLCHAIN': ''} if mac_toolchain_enabled else {}
+    with self.m.context(env=env):
+      self.m.chromium.mb_gen(
+          self.builder_id,
+          phase=phase,
+          use_goma=True,
+          mb_path=self.m.path['checkout'].join('tools_webrtc', 'mb'),
+          isolated_targets=self._isolated_targets)
 
   def run_mb_ios(self):
     # Match the out path that ios recipe module uses.
@@ -687,7 +689,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     with self.m.context(cwd=self._working_dir):
       all_tests = steps.generate_tests(phase, self.bot,
                                        self.m.tryserver.is_tryserver,
-                                       self.m.chromium_tests)
+                                       self.m.chromium_tests, self.m.properties)
       swarming_test_suites = []
       local_test_suites = []
       for t in all_tests:

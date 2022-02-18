@@ -10,52 +10,62 @@ from __future__ import absolute_import
 from recipe_engine.engine_types import freeze
 
 RECIPE_CONFIGS = freeze({
-  'webrtc': {
-    'chromium_config': 'webrtc_default',
-    'gclient_config': 'webrtc',
-    'test_suite': 'webrtc',
-  },
-  'webrtc_and_baremetal': {
-    'chromium_config': 'webrtc_default',
-    'gclient_config': 'webrtc',
-    'test_suite': 'webrtc_and_baremetal',
-  },
-  'webrtc_desktop_perf_swarming': {
-    'chromium_config': 'webrtc_default',
-    'gclient_config': 'webrtc',
-    'test_suite': 'desktop_perf_swarming',
-  },
-  'webrtc_clang': {
-    'chromium_config': 'webrtc_clang',
-    'gclient_config': 'webrtc',
-    'test_suite': 'webrtc',
-  },
-  'webrtc_and_baremetal_clang': {
-    'chromium_config': 'webrtc_clang',
-    'gclient_config': 'webrtc',
-    'test_suite': 'webrtc_and_baremetal',
-  },
-  'webrtc_android': {
-    'chromium_config': 'android',
-    'chromium_android_config': 'webrtc',
-    'gclient_config': 'webrtc',
-    'gclient_apply_config': ['android'],
-    'test_suite': 'android',
-  },
-  'webrtc_android_perf_swarming': {
-    'chromium_config': 'webrtc_default',
-    'chromium_android_config': 'webrtc',
-    'gclient_config': 'webrtc',
-    'gclient_apply_config': ['android'],
-    'test_suite': 'android_perf_swarming',
-  },
-  'webrtc_android_asan': {
-    'chromium_config': 'android_asan',
-    'chromium_android_config': 'webrtc',
-    'gclient_config': 'webrtc',
-    'gclient_apply_config': ['android'],
-    'test_suite': 'android',
-  },
+    'webrtc': {
+        'chromium_config': 'webrtc_default',
+        'gclient_config': 'webrtc',
+        'test_suite': 'webrtc',
+    },
+    'webrtc_and_baremetal': {
+        'chromium_config': 'webrtc_default',
+        'gclient_config': 'webrtc',
+        'test_suite': 'webrtc_and_baremetal',
+    },
+    'webrtc_desktop_perf_swarming': {
+        'chromium_config': 'webrtc_default',
+        'gclient_config': 'webrtc',
+        'test_suite': 'desktop_perf_swarming',
+    },
+    'webrtc_clang': {
+        'chromium_config': 'webrtc_clang',
+        'gclient_config': 'webrtc',
+        'test_suite': 'webrtc',
+    },
+    'webrtc_and_baremetal_clang': {
+        'chromium_config': 'webrtc_clang',
+        'gclient_config': 'webrtc',
+        'test_suite': 'webrtc_and_baremetal',
+    },
+    'webrtc_android': {
+        'chromium_config': 'android',
+        'chromium_android_config': 'webrtc',
+        'gclient_config': 'webrtc',
+        'gclient_apply_config': ['android'],
+        'test_suite': 'android',
+    },
+    'webrtc_android_perf_swarming': {
+        'chromium_config': 'webrtc_default',
+        'chromium_android_config': 'webrtc',
+        'gclient_config': 'webrtc',
+        'gclient_apply_config': ['android'],
+        'test_suite': 'android_perf_swarming',
+    },
+    'webrtc_android_asan': {
+        'chromium_config': 'android_asan',
+        'chromium_android_config': 'webrtc',
+        'gclient_config': 'webrtc',
+        'gclient_apply_config': ['android'],
+        'test_suite': 'android',
+    },
+    'webrtc_ios_device': {
+        'chromium_config': 'webrtc_default',
+        'gclient_config': 'webrtc_ios',
+        'test_suite': 'ios_device',
+    },
+    'webrtc_ios_perf': {
+        'chromium_config': 'webrtc_default',
+        'gclient_config': 'webrtc_ios',
+        'test_suite': 'ios_perf',
+    },
 })
 
 BUILDERS = freeze({
@@ -1466,6 +1476,132 @@ BUILDERS = freeze({
                     'os': 'Android',
                     'android_devices': '1',
                 }
+            },
+        },
+    },
+    'luci.webrtc-internal.ci': {
+        'settings': {
+            'builder_group': 'internal.client.webrtc',
+        },
+        'builders': {
+            'iOS64 Debug': {
+                'recipe_config': 'webrtc_ios_device',
+                'chromium_apply_config': ['mac_toolchain'],
+                'chromium_config_kwargs': {
+                    'BUILD_CONFIG': 'Debug',
+                    'TARGET_PLATFORM': 'ios',
+                    'TARGET_ARCH': 'arm',
+                    'TARGET_BITS': 64,
+                },
+                'bot_type': 'builder_tester',
+                'testing': {
+                    'platform': 'mac'
+                },
+                'ensure_sdk': 'ios',
+                'ios_config': {
+                    'bucket': 'chromium-webrtc',
+                },
+                'swarming_dimensions': {
+                    'os': 'iOS-14.7',
+                    'pool': 'chrome.tests',
+                },
+            },
+            'iOS64 Release': {
+                'recipe_config': 'webrtc_ios_device',
+                'chromium_apply_config': ['mac_toolchain'],
+                'chromium_config_kwargs': {
+                    'BUILD_CONFIG': 'Release',
+                    'TARGET_PLATFORM': 'ios',
+                    'TARGET_ARCH': 'arm',
+                    'TARGET_BITS': 64,
+                },
+                'bot_type': 'builder_tester',
+                'testing': {
+                    'platform': 'mac'
+                },
+                'ensure_sdk': 'ios',
+                'ios_config': {
+                    'bucket': 'chromium-webrtc',
+                },
+                'swarming_dimensions': {
+                    'os': 'iOS-14.7',
+                    'pool': 'chrome.tests',
+                },
+            },
+            'iOS64 Perf': {
+                'recipe_config': 'webrtc_ios_perf',
+                'chromium_apply_config': ['mac_toolchain'],
+                'chromium_config_kwargs': {
+                    'BUILD_CONFIG': 'Release',
+                    'TARGET_PLATFORM': 'ios',
+                    'TARGET_ARCH': 'arm',
+                    'TARGET_BITS': 64,
+                },
+                'bot_type': 'builder_tester',
+                'perf_id': 'webrtc-ios-tests',
+                'testing': {
+                    'platform': 'mac'
+                },
+                'ensure_sdk': 'ios',
+                'ios_config': {
+                    'bucket': 'chromium-webrtc',
+                },
+                'swarming_dimensions': {
+                    'os': 'iOS-12.4.1',
+                    'pool': 'WebRTC',
+                },
+                'swarming_timeout': 7200,  # 2h
+            },
+        },
+    },
+    'luci.webrtc-internal.try': {
+        'settings': {
+            'builder_group': 'internal.tryserver.webrtc',
+        },
+        'builders': {
+            'ios_arm64_dbg': {
+                'recipe_config': 'webrtc_ios_device',
+                'chromium_apply_config': ['mac_toolchain'],
+                'chromium_config_kwargs': {
+                    'BUILD_CONFIG': 'Debug',
+                    'TARGET_PLATFORM': 'ios',
+                    'TARGET_ARCH': 'arm',
+                    'TARGET_BITS': 64,
+                },
+                'bot_type': 'builder_tester',
+                'testing': {
+                    'platform': 'mac'
+                },
+                'ensure_sdk': 'ios',
+                'ios_config': {
+                    'bucket': 'chromium-webrtc',
+                },
+                'swarming_dimensions': {
+                    'os': 'iOS-14.7',
+                    'pool': 'chrome.tests',
+                },
+            },
+            'ios_arm64_rel': {
+                'recipe_config': 'webrtc_ios_device',
+                'chromium_apply_config': ['mac_toolchain'],
+                'chromium_config_kwargs': {
+                    'BUILD_CONFIG': 'Release',
+                    'TARGET_PLATFORM': 'ios',
+                    'TARGET_ARCH': 'arm',
+                    'TARGET_BITS': 64,
+                },
+                'bot_type': 'builder_tester',
+                'testing': {
+                    'platform': 'mac'
+                },
+                'ensure_sdk': 'ios',
+                'ios_config': {
+                    'bucket': 'chromium-webrtc',
+                },
+                'swarming_dimensions': {
+                    'os': 'iOS-14.7',
+                    'pool': 'chrome.tests',
+                },
             },
         },
     },

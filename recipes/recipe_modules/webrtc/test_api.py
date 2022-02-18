@@ -72,6 +72,8 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
         self.m.runtime(is_experimental=is_experimental),
     )
 
+    if bot_config['testing']['platform'] == 'mac':
+      test += self.m.properties(xcode_build_version='dummy_xcode')
     if bot_config.get('parent_buildername'):
       test += self.m.properties(
           parent_buildername=bot_config['parent_buildername'])

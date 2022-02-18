@@ -86,6 +86,35 @@
     ]
   },
   {
+    "cmd": [
+      "vpython3",
+      "-u",
+      "[CACHE]/builder/src/tools_webrtc/download_tools.py",
+      "[CACHE]/builder/src/tools_webrtc/audio_quality"
+    ],
+    "env_suffixes": {
+      "DEPOT_TOOLS_UPDATE": [
+        "0"
+      ],
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "luci_context": {
+      "realm": {
+        "name": "webrtc-internal:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "download audio quality tools"
+  },
+  {
     "cmd": [],
     "name": "ensure_goma"
   },
@@ -174,6 +203,160 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "ensure xcode",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Ensuring Xcode version dummy_xcode in [CACHE]/xcode_ios_dummy_xcode.app@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
+      "[CACHE]/builder/src/build/ios_files"
+    ],
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc-internal:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "ensure xcode.delete deprecated Xcode cache",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[START_DIR]",
+      "-ensure-file",
+      "infra/tools/mac_toolchain/${platform} git_revision:ce6f859bf90d39c96271aba89a458b6c0b8e4ca2",
+      "-max-threads",
+      "0",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "luci_context": {
+      "realm": {
+        "name": "webrtc-internal:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "ensure xcode.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:ce6\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/mac_toolchain/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[START_DIR]/mac_toolchain",
+      "install",
+      "-kind",
+      "ios",
+      "-xcode-version",
+      "dummy_xcode",
+      "-output-dir",
+      "[CACHE]/xcode_ios_dummy_xcode.app"
+    ],
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc-internal:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "ensure xcode.install xcode",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "sudo",
+      "xcode-select",
+      "-switch",
+      "[CACHE]/xcode_ios_dummy_xcode.app"
+    ],
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc-internal:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "ensure xcode.select xcode",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "xcrun",
+      "simctl",
+      "list"
+    ],
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc-internal:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "ensure xcode.reload simctl",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
     "cmd": [
       "cipd",
       "ensure",
@@ -250,326 +433,6 @@
     "name": "gclient runhooks"
   },
   {
-    "cmd": [],
-    "name": "apply build config"
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[CLEANUP]/ios_tmp_1/luci.webrtc-internal.ci"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "webrtc-internal:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "apply build config.create temp directory",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "{\n  \"bucket\": \"chromium-webrtc\",\n  \"configuration\": \"Release\",\n  \"gn_args\": [\n    \"is_debug=false\",\n    \"target_cpu=\\\"arm\\\"\",\n    \"use_goma=true\"\n  ],\n  \"tests\": [\n    {\n      \"app\": \"webrtc_perf_tests\",\n      \"bot id\": \"build15-a7\",\n      \"device type\": \"iPhone 7\",\n      \"max runtime seconds\": 7200,\n      \"os\": \"12.4.1\",\n      \"pool\": \"WebRTC\",\n      \"priority\": 30,\n      \"test args\": [\n        \"--write_perf_output_on_ios\",\n        \"--nologs\"\n      ]\n    }\n  ],\n  \"xcode build version\": \"10l232m\"\n}",
-      "[CLEANUP]/ios_tmp_1/luci.webrtc-internal.ci/iOS64_Perf.json"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "webrtc-internal:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "apply build config.generate iOS64_Perf.json",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@iOS64_Perf.json@{@@@",
-      "@@@STEP_LOG_LINE@iOS64_Perf.json@  \"bucket\": \"chromium-webrtc\",@@@",
-      "@@@STEP_LOG_LINE@iOS64_Perf.json@  \"configuration\": \"Release\",@@@",
-      "@@@STEP_LOG_LINE@iOS64_Perf.json@  \"gn_args\": [@@@",
-      "@@@STEP_LOG_LINE@iOS64_Perf.json@    \"is_debug=false\",@@@",
-      "@@@STEP_LOG_LINE@iOS64_Perf.json@    \"target_cpu=\\\"arm\\\"\",@@@",
-      "@@@STEP_LOG_LINE@iOS64_Perf.json@    \"use_goma=true\"@@@",
-      "@@@STEP_LOG_LINE@iOS64_Perf.json@  ],@@@",
-      "@@@STEP_LOG_LINE@iOS64_Perf.json@  \"tests\": [@@@",
-      "@@@STEP_LOG_LINE@iOS64_Perf.json@    {@@@",
-      "@@@STEP_LOG_LINE@iOS64_Perf.json@      \"app\": \"webrtc_perf_tests\",@@@",
-      "@@@STEP_LOG_LINE@iOS64_Perf.json@      \"bot id\": \"build15-a7\",@@@",
-      "@@@STEP_LOG_LINE@iOS64_Perf.json@      \"device type\": \"iPhone 7\",@@@",
-      "@@@STEP_LOG_LINE@iOS64_Perf.json@      \"max runtime seconds\": 7200,@@@",
-      "@@@STEP_LOG_LINE@iOS64_Perf.json@      \"os\": \"12.4.1\",@@@",
-      "@@@STEP_LOG_LINE@iOS64_Perf.json@      \"pool\": \"WebRTC\",@@@",
-      "@@@STEP_LOG_LINE@iOS64_Perf.json@      \"priority\": 30,@@@",
-      "@@@STEP_LOG_LINE@iOS64_Perf.json@      \"test args\": [@@@",
-      "@@@STEP_LOG_LINE@iOS64_Perf.json@        \"--write_perf_output_on_ios\",@@@",
-      "@@@STEP_LOG_LINE@iOS64_Perf.json@        \"--nologs\"@@@",
-      "@@@STEP_LOG_LINE@iOS64_Perf.json@      ]@@@",
-      "@@@STEP_LOG_LINE@iOS64_Perf.json@    }@@@",
-      "@@@STEP_LOG_LINE@iOS64_Perf.json@  ],@@@",
-      "@@@STEP_LOG_LINE@iOS64_Perf.json@  \"xcode build version\": \"10l232m\"@@@",
-      "@@@STEP_LOG_LINE@iOS64_Perf.json@}@@@",
-      "@@@STEP_LOG_END@iOS64_Perf.json@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CLEANUP]/ios_tmp_1/luci.webrtc-internal.ci/iOS64_Perf.json",
-      "/path/to/tmp/json"
-    ],
-    "luci_context": {
-      "realm": {
-        "name": "webrtc-internal:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "apply build config.read build config",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"bucket\": \"chromium-webrtc\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"configuration\": \"Release\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"gn_args\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"is_debug=false\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"target_cpu=\\\"arm\\\"\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"use_goma=true\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tests\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"app\": \"webrtc_perf_tests\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"bot id\": \"build15-a7\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"device type\": \"iPhone 7\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"max runtime seconds\": 7200, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"os\": \"12.4.1\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"pool\": \"WebRTC\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"priority\": 30, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"test args\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"--write_perf_output_on_ios\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"--nologs\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      ]@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"xcode build version\": \"10l232m\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "apply build config.ensure_goma",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "cipd",
-      "ensure",
-      "-root",
-      "[CACHE]/goma/client",
-      "-ensure-file",
-      "infra_internal/goma/client/${platform} release",
-      "-max-threads",
-      "0",
-      "-json-output",
-      "/path/to/tmp/json"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "webrtc-internal:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "apply build config.ensure_goma.ensure_installed",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra_internal/goma/client/resolved-platform\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "cipd",
-      "ensure",
-      "-root",
-      "[CACHE]/goma/bqupload",
-      "-ensure-file",
-      "infra/tools/bqupload/${platform} bqupload_pin",
-      "-max-threads",
-      "0",
-      "-json-output",
-      "/path/to/tmp/json"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "webrtc-internal:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "apply build config.ensure_goma.ensure_installed (2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-bqupload_pin----\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/bqupload/resolved-platform\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "cipd",
-      "ensure",
-      "-root",
-      "[CACHE]/osx_sdk",
-      "-ensure-file",
-      "infra/tools/mac_toolchain/${platform} git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1",
-      "-max-threads",
-      "0",
-      "-json-output",
-      "/path/to/tmp/json"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "webrtc-internal:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "ensure_installed (2)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:723\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/mac_toolchain/resolved-platform\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/osx_sdk/mac_toolchain",
-      "install",
-      "-kind",
-      "ios",
-      "-xcode-version",
-      "10l232m",
-      "-output-dir",
-      "[CACHE]/osx_sdk/XCode.app"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "webrtc-internal:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "install xcode"
-  },
-  {
-    "cmd": [
-      "sudo",
-      "xcode-select",
-      "--switch",
-      "[CACHE]/osx_sdk/XCode.app"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "webrtc-internal:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "select XCode"
-  },
-  {
     "cmd": [
       "python3",
       "-u",
@@ -624,7 +487,9 @@
       "[CACHE]/goma/client",
       "--json-output",
       "/path/to/tmp/json",
-      "//out/Release-iphoneos"
+      "--swarming-targets-file",
+      "webrtc_perf_tests\n",
+      "//out/iOS64_Perf"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -647,7 +512,9 @@
     "name": "generate_build_files",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
-      "@@@STEP_LOG_END@json.output[failure_summary]@@@"
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@webrtc_perf_tests@@@",
+      "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
     ]
   },
   {
@@ -660,8 +527,7 @@
       "/path/to/tmp/json"
     ],
     "env": {
-      "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1"
+      "CHROME_HEADLESS": "1"
     },
     "luci_context": {
       "realm": {
@@ -731,7 +597,6 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/iOS64_Perf",
@@ -823,7 +688,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/Release-iphoneos",
+      "[CACHE]/builder/src/out/iOS64_Perf",
       "-j",
       "80",
       "default",
@@ -831,8 +696,7 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1"
+      "CHROME_HEADLESS": "1"
     },
     "luci_context": {
       "realm": {
@@ -854,7 +718,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/Release-iphoneos",
+      "[CACHE]/builder/src/out/iOS64_Perf",
       "-j",
       "80",
       "default",
@@ -865,8 +729,7 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1"
+      "CHROME_HEADLESS": "1"
     },
     "luci_context": {
       "realm": {
@@ -1018,9 +881,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[CACHE]/builder/src/out/Release-iphoneos",
+      "[CACHE]/builder/src/out/iOS64_Perf",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Release-iphoneos\", \"-j\", 80, \"default\", \"webrtc_perf_tests\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/iOS64_Perf\", \"-j\", 80, \"default\", \"webrtc_perf_tests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -1106,269 +969,8 @@
     ]
   },
   {
-    "cmd": [
-      "sudo",
-      "xcode-select",
-      "--reset"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "webrtc-internal:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "reset XCode"
-  },
-  {
     "cmd": [],
-    "name": "isolate"
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "{\"variables\": {\"command\": [\"src/ios/build/bots/scripts/run.py\", \"--app\", \"<(app_path)\", \"--host-app\", \"<(host_app_path)\", \"--args-json\", \"{\\\"test_args\\\": <(test_args), \\\"xctest\\\": <(xctest), \\\"test_cases\\\": <(test_cases), \\\"restart\\\": <(restart), \\\"xcode_parallelization\\\": <(xcode_parallelization), \\\"xcodebuild_device_runner\\\": <(xcodebuild_device_runner)}\", \"--out-dir\", \"${ISOLATED_OUTDIR}\", \"--retries\", \"3\", \"--shards\", \"<(shards)\", \"--xcode-build-version\", \"<(xcode_version)\", \"--mac-toolchain-cmd\", \"./mac_toolchain\", \"--xcode-path\", \"Xcode.app\", \"--wpr-tools-path\", \"<(wpr_tools_path)\", \"--replay-path\", \"<(replay_path)\"], \"files\": [\"<(app_path)/\", \"<(additional_app_path)/\", \"src/ios/build/bots/scripts/\", \"src/testing/scripts/variations_seed_access_helper.py\", \"src/.vpython\"]}}",
-      "[CACHE]/builder/template.isolate"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "webrtc-internal:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "isolate.generate template.isolate",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@template.isolate@{@@@",
-      "@@@STEP_LOG_LINE@template.isolate@  \"variables\": {@@@",
-      "@@@STEP_LOG_LINE@template.isolate@    \"command\": [@@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"src/ios/build/bots/scripts/run.py\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"--app\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"<(app_path)\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"--host-app\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"<(host_app_path)\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"--args-json\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"{\\\"test_args\\\": <(test_args), \\\"xctest\\\": <(xctest), \\\"test_cases\\\": <(test_cases), \\\"restart\\\": <(restart), \\\"xcode_parallelization\\\": <(xcode_parallelization), \\\"xcodebuild_device_runner\\\": <(xcodebuild_device_runner)}\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"--out-dir\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"${ISOLATED_OUTDIR}\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"--retries\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"3\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"--shards\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"<(shards)\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"--xcode-build-version\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"<(xcode_version)\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"--mac-toolchain-cmd\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"./mac_toolchain\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"--xcode-path\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"Xcode.app\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"--wpr-tools-path\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"<(wpr_tools_path)\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"--replay-path\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"<(replay_path)\"@@@",
-      "@@@STEP_LOG_LINE@template.isolate@    ], @@@",
-      "@@@STEP_LOG_LINE@template.isolate@    \"files\": [@@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"<(app_path)/\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"<(additional_app_path)/\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"src/ios/build/bots/scripts/\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"src/testing/scripts/variations_seed_access_helper.py\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"src/.vpython\"@@@",
-      "@@@STEP_LOG_LINE@template.isolate@    ]@@@",
-      "@@@STEP_LOG_LINE@template.isolate@  }@@@",
-      "@@@STEP_LOG_LINE@template.isolate@}@@@",
-      "@@@STEP_LOG_END@template.isolate@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "{\n  \"args\": [\n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/webrtc_perf_tests.app\", \n    \"--config-variable\", \n    \"host_app_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"restart\", \n    \"false\", \n    \"--config-variable\", \n    \"shards\", \n    \"1\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[\\\"--write_perf_output_on_ios\\\", \\\"--nologs\\\"]\", \n    \"--config-variable\", \n    \"xcode_parallelization\", \n    \"false\", \n    \"--config-variable\", \n    \"xcodebuild_device_runner\", \n    \"false\", \n    \"--config-variable\", \n    \"test_cases\", \n    \"[]\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--config-variable\", \n    \"use_trusted_cert\", \n    \"false\", \n    \"--config-variable\", \n    \"replay_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"wpr_tools_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"10l232m\", \n    \"--isolate\", \n    \"[CACHE]/builder/0.isolate\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/webrtc_perf_tests.app\", \n    \"--path-variable\", \n    \"additional_app_path\", \n    \"src/out/Release-iphoneos/webrtc_perf_tests.app\"\n  ], \n  \"dir\": \"[CACHE]/builder\", \n  \"version\": 1\n}",
-      "[CLEANUP]/isolate_tmp_1/0.isolated.gen.json"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "webrtc-internal:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "isolate.generate 0.isolated.gen.json",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@{@@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@  \"args\": [@@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"app_path\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"src/out/Release-iphoneos/webrtc_perf_tests.app\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"host_app_path\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"NO_PATH\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"restart\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"false\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"shards\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"1\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"test_args\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"[\\\"--write_perf_output_on_ios\\\", \\\"--nologs\\\"]\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"xcode_parallelization\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"false\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"xcodebuild_device_runner\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"false\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"test_cases\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"[]\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"xctest\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"false\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"use_trusted_cert\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"false\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"replay_path\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"NO_PATH\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"wpr_tools_path\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"NO_PATH\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"xcode_version\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"10l232m\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--isolate\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"[CACHE]/builder/0.isolate\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--path-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"app_path\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"src/out/Release-iphoneos/webrtc_perf_tests.app\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--path-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"additional_app_path\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"src/out/Release-iphoneos/webrtc_perf_tests.app\"@@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@  ], @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@  \"dir\": \"[CACHE]/builder\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@  \"version\": 1@@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@}@@@",
-      "@@@STEP_LOG_END@0.isolated.gen.json@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[CACHE]/builder/template.isolate",
-      "[CACHE]/builder/0.isolate"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "webrtc-internal:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "isolate.copy 0.isolate symlink",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@webrtc_perf_tests (iPhone 7 iOS 12.4.1)@@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@{@@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@  \"args\": [@@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"app_path\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"src/out/Release-iphoneos/webrtc_perf_tests.app\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"host_app_path\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"NO_PATH\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"restart\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"false\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"shards\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"1\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"test_args\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"[\\\"--write_perf_output_on_ios\\\", \\\"--nologs\\\"]\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"xcode_parallelization\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"false\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"xcodebuild_device_runner\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"false\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"test_cases\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"[]\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"xctest\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"false\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"use_trusted_cert\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"false\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"replay_path\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"NO_PATH\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"wpr_tools_path\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"NO_PATH\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"xcode_version\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"10l232m\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--isolate\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"[CACHE]/builder/0.isolate\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--path-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"app_path\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"src/out/Release-iphoneos/webrtc_perf_tests.app\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--path-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"additional_app_path\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"src/out/Release-iphoneos/webrtc_perf_tests.app\"@@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@  ], @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@  \"dir\": \"[CACHE]/builder\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@  \"version\": 1@@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@}@@@",
-      "@@@STEP_LOG_END@0.isolated.gen.json@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "isolate.install infra/tools/luci/isolate",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
+    "name": "install infra/tools/luci/isolate"
   },
   {
     "cmd": [
@@ -1395,9 +997,9 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "isolate.install infra/tools/luci/isolate.ensure package directory",
+    "name": "install infra/tools/luci/isolate.ensure package directory",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -1426,9 +1028,9 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "isolate.install infra/tools/luci/isolate.ensure_installed",
+    "name": "install infra/tools/luci/isolate.ensure_installed",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
@@ -1448,12 +1050,11 @@
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
-      "--verbose",
       "-cas-instance",
       "projects/example-cas-server/instances/default_instance",
       "-log-level",
       "debug",
-      "[CLEANUP]/isolate_tmp_1/0.isolated.gen.json"
+      "[CACHE]/builder/src/out/iOS64_Perf/webrtc_perf_tests.isolated.gen.json"
     ],
     "luci_context": {
       "realm": {
@@ -1467,26 +1068,47 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "isolate.isolate tests",
+    "name": "isolate tests",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"0\": \"[dummy hash for 0/dummy size]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"webrtc_perf_tests\": \"[dummy hash for webrtc_perf_tests/dummy size]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"0\": \"[dummy hash for 0/dummy size]\"}@@@"
+      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"webrtc_perf_tests\": \"[dummy hash for webrtc_perf_tests/dummy size]\"}@@@"
     ]
   },
   {
-    "cmd": [],
-    "name": "trigger"
-  },
-  {
-    "cmd": [],
-    "name": "trigger.install infra/tools/luci/swarming",
+    "cmd": [
+      "vpython3",
+      "-u",
+      "RECIPE_MODULE[build::chromium_tests]/resources/find_command_lines.py",
+      "--build-dir",
+      "[CACHE]/builder/src/out/iOS64_Perf",
+      "--output-json",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[CACHE]/builder",
+    "luci_context": {
+      "realm": {
+        "name": "webrtc-internal:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "find command lines",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
     ]
+  },
+  {
+    "cmd": [],
+    "name": "install infra/tools/luci/swarming"
   },
   {
     "cmd": [
@@ -1500,6 +1122,7 @@
       "0777",
       "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
     ],
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -1513,9 +1136,9 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "trigger.install infra/tools/luci/swarming.ensure package directory",
+    "name": "install infra/tools/luci/swarming.ensure package directory",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -1531,6 +1154,7 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -1544,9 +1168,9 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "trigger.install infra/tools/luci/swarming.ensure_installed",
+    "name": "install infra/tools/luci/swarming.ensure_installed",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
@@ -1567,10 +1191,11 @@
       "-server",
       "https://example.swarmingserver.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"webrtc_perf_tests (iPhone 7 iOS 12.4.1)/iOS-12.4.1/[dummy has/iOS64 Perf/-1\", \"priority\": \"30\", \"realm\": \"webrtc-internal:ci\", \"resultdb\": {\"enable\": true}, \"service_account\": \"chrome-tester@chops-service-accounts.iam.gserviceaccount.com\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:internal.client.webrtc\", \"buildername:iOS64 Perf\", \"data:[dummy hash for 0/dummy size]\", \"device_type:iPhone 7\", \"ios_version:12.4.1\", \"name:webrtc_perf_tests\", \"ninja_target:\", \"platform:device\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc-internal.ci:iOS64 Perf\", \"stepname:webrtc_perf_tests (iPhone 7 iOS 12.4.1) on iOS-12.4.1\", \"test:webrtc_perf_tests\", \"test_id_prefix:\", \"test_suite:webrtc_perf_tests (iPhone 7 iOS 12.4.1)\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"caches\": [{\"name\": \"xcode_ios_10l232m\", \"path\": \"Xcode.app\"}], \"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for 0\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/mac_toolchain/${platform}\", \"path\": \".\", \"version\": \"git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1\"}]}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:iOS64 Perf\", \"-var\", \"os:iOS-12.4.1\", \"-var\", \"test_suite:webrtc_perf_tests (iPhone 7 iOS 12.4.1)\", \"-tag\", \"step_name:webrtc_perf_tests (iPhone 7 iOS 12.4.1) on iOS-12.4.1\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"json\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"src/ios/build/bots/scripts/run.py\", \"--app\", \"src/out/Release-iphoneos/webrtc_perf_tests.app\", \"--host-app\", \"NO_PATH\", \"--out-dir\", \"${ISOLATED_OUTDIR}\", \"--retries\", \"3\", \"--shards\", \"1\", \"--xcode-build-version\", \"10l232m\", \"--mac-toolchain-cmd\", \"./mac_toolchain\", \"--xcode-path\", \"Xcode.app\", \"--wpr-tools-path\", \"NO_PATH\", \"--replay-path\", \"NO_PATH\", \"--args-json\", \"{\\\"test_args\\\": [\\\"--write_perf_output_on_ios\\\", \\\"--nologs\\\"]}\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"device\", \"value\": \"iPhone9,1\"}, {\"key\": \"device_status\", \"value\": \"available\"}, {\"key\": \"id\", \"value\": \"build15-a7\"}, {\"key\": \"os\", \"value\": \"iOS-12.4.1\"}, {\"key\": \"pool\", \"value\": \"WebRTC\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"7200\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \".\"}, \"wait_for_capacity\": true}]}]}",
+      "{\"requests\": [{\"name\": \"webrtc_perf_tests/iOS-12.4.1/[dummy has/iOS64 Perf/-1\", \"priority\": \"25\", \"realm\": \"webrtc-internal:ci\", \"resultdb\": {\"enable\": true}, \"service_account\": \"chrome-tester@chops-service-accounts.iam.gserviceaccount.com\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:internal.client.webrtc\", \"buildername:iOS64 Perf\", \"data:[dummy hash for webrtc_perf_tests/dummy size]\", \"name:webrtc_perf_tests\", \"ninja_target:\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc-internal.ci:iOS64 Perf\", \"stepname:webrtc_perf_tests on iOS-12.4.1\", \"test_id_prefix:\", \"test_suite:webrtc_perf_tests\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"caches\": [{\"name\": \"xcode_ios_dummy_xcode\", \"path\": \"Xcode.app\"}], \"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for webrtc_perf_tests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/mac_toolchain/${platform}\", \"path\": \".\", \"version\": \"git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1\"}]}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:iOS64 Perf\", \"-var\", \"os:iOS-12.4.1\", \"-var\", \"test_suite:webrtc_perf_tests\", \"-tag\", \"step_name:webrtc_perf_tests on iOS-12.4.1\", \"-tag\", \"target_platform:ios\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"json\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json\", \"--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json\", \"--write_perf_output_on_ios\", \"--nologs\", \"--xcode-build-version\", \"dummy_xcode\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"iOS-12.4.1\"}, {\"key\": \"pool\", \"value\": \"WebRTC\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"7200\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"7200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -1584,14 +1209,13 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "trigger.[trigger] webrtc_perf_tests (iPhone 7 iOS 12.4.1) on iOS-12.4.1",
+    "name": "[trigger] webrtc_perf_tests on iOS-12.4.1",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"name\": \"webrtc_perf_tests (iPhone 7 iOS 12.4.1)/iOS-12.4.1/[dummy has/iOS64 Perf/-1\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"name\": \"webrtc_perf_tests/iOS-12.4.1/[dummy has/iOS64 Perf/-1\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"0\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_result\": {@@@",
@@ -1606,8 +1230,8 @@
       "@@@STEP_LOG_LINE@json.input@{@@@",
       "@@@STEP_LOG_LINE@json.input@  \"requests\": [@@@",
       "@@@STEP_LOG_LINE@json.input@    {@@@",
-      "@@@STEP_LOG_LINE@json.input@      \"name\": \"webrtc_perf_tests (iPhone 7 iOS 12.4.1)/iOS-12.4.1/[dummy has/iOS64 Perf/-1\", @@@",
-      "@@@STEP_LOG_LINE@json.input@      \"priority\": \"30\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"name\": \"webrtc_perf_tests/iOS-12.4.1/[dummy has/iOS64 Perf/-1\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"priority\": \"25\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc-internal:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"resultdb\": {@@@",
       "@@@STEP_LOG_LINE@json.input@        \"enable\": true@@@",
@@ -1618,21 +1242,17 @@
       "@@@STEP_LOG_LINE@json.input@        \"build_is_experimental:false\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"builder_group:internal.client.webrtc\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"buildername:iOS64 Perf\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"data:[dummy hash for 0/dummy size]\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"device_type:iPhone 7\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"ios_version:12.4.1\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"data:[dummy hash for webrtc_perf_tests/dummy size]\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"name:webrtc_perf_tests\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"ninja_target:\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"platform:device\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"project:webrtc\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"purpose:CI\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"purpose:post-commit\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"slavename:fake-bot-id\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"spec_name:webrtc-internal.ci:iOS64 Perf\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"stepname:webrtc_perf_tests (iPhone 7 iOS 12.4.1) on iOS-12.4.1\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"test:webrtc_perf_tests\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"stepname:webrtc_perf_tests on iOS-12.4.1\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"test_id_prefix:\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"test_suite:webrtc_perf_tests (iPhone 7 iOS 12.4.1)\"@@@",
+      "@@@STEP_LOG_LINE@json.input@        \"test_suite:webrtc_perf_tests\"@@@",
       "@@@STEP_LOG_LINE@json.input@      ], @@@",
       "@@@STEP_LOG_LINE@json.input@      \"task_slices\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        {@@@",
@@ -1640,14 +1260,14 @@
       "@@@STEP_LOG_LINE@json.input@          \"properties\": {@@@",
       "@@@STEP_LOG_LINE@json.input@            \"caches\": [@@@",
       "@@@STEP_LOG_LINE@json.input@              {@@@",
-      "@@@STEP_LOG_LINE@json.input@                \"name\": \"xcode_ios_10l232m\", @@@",
+      "@@@STEP_LOG_LINE@json.input@                \"name\": \"xcode_ios_dummy_xcode\", @@@",
       "@@@STEP_LOG_LINE@json.input@                \"path\": \"Xcode.app\"@@@",
       "@@@STEP_LOG_LINE@json.input@              }@@@",
       "@@@STEP_LOG_LINE@json.input@            ], @@@",
       "@@@STEP_LOG_LINE@json.input@            \"cas_input_root\": {@@@",
       "@@@STEP_LOG_LINE@json.input@              \"cas_instance\": \"projects/example-cas-server/instances/default_instance\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"digest\": {@@@",
-      "@@@STEP_LOG_LINE@json.input@                \"hash\": \"[dummy hash for 0\", @@@",
+      "@@@STEP_LOG_LINE@json.input@                \"hash\": \"[dummy hash for webrtc_perf_tests\", @@@",
       "@@@STEP_LOG_LINE@json.input@                \"size_bytes\": \"dummy size]\"@@@",
       "@@@STEP_LOG_LINE@json.input@              }@@@",
       "@@@STEP_LOG_LINE@json.input@            }, @@@",
@@ -1668,9 +1288,11 @@
       "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"os:iOS-12.4.1\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"test_suite:webrtc_perf_tests (iPhone 7 iOS 12.4.1)\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"test_suite:webrtc_perf_tests\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-tag\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"step_name:webrtc_perf_tests (iPhone 7 iOS 12.4.1) on iOS-12.4.1\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"step_name:webrtc_perf_tests on iOS-12.4.1\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-tag\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"target_platform:ios\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-coerce-negative-duration\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-location-tags-file\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"../../testing/location_tags.json\", @@@",
@@ -1683,29 +1305,12 @@
       "@@@STEP_LOG_LINE@json.input@              \"-artifact-directory\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"${ISOLATED_OUTDIR}\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"--\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"src/ios/build/bots/scripts/run.py\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"--app\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"src/out/Release-iphoneos/webrtc_perf_tests.app\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"--host-app\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"NO_PATH\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"--out-dir\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"${ISOLATED_OUTDIR}\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"--retries\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"3\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"--shards\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"1\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"--write_perf_output_on_ios\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"--nologs\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"--xcode-build-version\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"10l232m\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"--mac-toolchain-cmd\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"./mac_toolchain\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"--xcode-path\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"Xcode.app\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"--wpr-tools-path\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"NO_PATH\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"--replay-path\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"NO_PATH\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"--args-json\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"{\\\"test_args\\\": [\\\"--write_perf_output_on_ios\\\", \\\"--nologs\\\"]}\"@@@",
+      "@@@STEP_LOG_LINE@json.input@              \"dummy_xcode\"@@@",
       "@@@STEP_LOG_LINE@json.input@            ], @@@",
       "@@@STEP_LOG_LINE@json.input@            \"containment\": {@@@",
       "@@@STEP_LOG_LINE@json.input@              \"containment_type\": \"NONE\"@@@",
@@ -1714,18 +1319,6 @@
       "@@@STEP_LOG_LINE@json.input@              {@@@",
       "@@@STEP_LOG_LINE@json.input@                \"key\": \"cpu\", @@@",
       "@@@STEP_LOG_LINE@json.input@                \"value\": \"x86-64\"@@@",
-      "@@@STEP_LOG_LINE@json.input@              }, @@@",
-      "@@@STEP_LOG_LINE@json.input@              {@@@",
-      "@@@STEP_LOG_LINE@json.input@                \"key\": \"device\", @@@",
-      "@@@STEP_LOG_LINE@json.input@                \"value\": \"iPhone9,1\"@@@",
-      "@@@STEP_LOG_LINE@json.input@              }, @@@",
-      "@@@STEP_LOG_LINE@json.input@              {@@@",
-      "@@@STEP_LOG_LINE@json.input@                \"key\": \"device_status\", @@@",
-      "@@@STEP_LOG_LINE@json.input@                \"value\": \"available\"@@@",
-      "@@@STEP_LOG_LINE@json.input@              }, @@@",
-      "@@@STEP_LOG_LINE@json.input@              {@@@",
-      "@@@STEP_LOG_LINE@json.input@                \"key\": \"id\", @@@",
-      "@@@STEP_LOG_LINE@json.input@                \"value\": \"build15-a7\"@@@",
       "@@@STEP_LOG_LINE@json.input@              }, @@@",
       "@@@STEP_LOG_LINE@json.input@              {@@@",
       "@@@STEP_LOG_LINE@json.input@                \"key\": \"os\", @@@",
@@ -1746,18 +1339,18 @@
       "@@@STEP_LOG_LINE@json.input@            \"execution_timeout_secs\": \"7200\", @@@",
       "@@@STEP_LOG_LINE@json.input@            \"grace_period_secs\": \"30\", @@@",
       "@@@STEP_LOG_LINE@json.input@            \"idempotent\": true, @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"io_timeout_secs\": \"1200\", @@@",
+      "@@@STEP_LOG_LINE@json.input@            \"io_timeout_secs\": \"7200\", @@@",
       "@@@STEP_LOG_LINE@json.input@            \"outputs\": [], @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"relative_cwd\": \".\"@@@",
+      "@@@STEP_LOG_LINE@json.input@            \"relative_cwd\": \"\"@@@",
       "@@@STEP_LOG_LINE@json.input@          }, @@@",
-      "@@@STEP_LOG_LINE@json.input@          \"wait_for_capacity\": true@@@",
+      "@@@STEP_LOG_LINE@json.input@          \"wait_for_capacity\": false@@@",
       "@@@STEP_LOG_LINE@json.input@        }@@@",
       "@@@STEP_LOG_LINE@json.input@      ]@@@",
       "@@@STEP_LOG_LINE@json.input@    }@@@",
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: webrtc_perf_tests (iPhone 7 iOS 12.4.1)/iOS-12.4.1/[dummy has/iOS64 Perf/-1@https://example.swarmingserver.appspot.com/task?id=0@@@"
+      "@@@STEP_LINK@task UI: webrtc_perf_tests/iOS-12.4.1/[dummy has/iOS64 Perf/-1@https://example.swarmingserver.appspot.com/task?id=0@@@"
     ]
   },
   {
@@ -1768,6 +1361,7 @@
       "UpdateIncludedInvocations",
       "-include-update-token"
     ],
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -1781,10 +1375,9 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "trigger.resultdb.update_included_invocations",
+    "name": "include swarming task invocations",
     "stdin": "{\"addInvocations\": [\"invocations/0\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@json.input@{@@@",
@@ -1794,6 +1387,71 @@
       "@@@STEP_LOG_LINE@json.input@  \"includingInvocation\": \"invocations/build:8945511751514863184\"@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "rdb",
+      "rpc",
+      "luci.resultdb.v1.ResultDB",
+      "QueryTestResultStatistics"
+    ],
+    "cwd": "[CACHE]/builder",
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc-internal:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "webrtc_perf_tests stats",
+    "stdin": "{\"invocations\": [\"invocations/0\"]}",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@json.input@{@@@",
+      "@@@STEP_LOG_LINE@json.input@  \"invocations\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/0\"@@@",
+      "@@@STEP_LOG_LINE@json.input@  ]@@@",
+      "@@@STEP_LOG_LINE@json.input@}@@@",
+      "@@@STEP_LOG_END@json.input@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "rdb",
+      "query",
+      "-json",
+      "-n",
+      "0",
+      "-u",
+      "-tr-fields",
+      "testId,variant,variantHash,status,tags,expected",
+      "0"
+    ],
+    "cwd": "[CACHE]/builder",
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc-internal:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "webrtc_perf_tests results",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
   },
   {
@@ -1810,9 +1468,9 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[CLEANUP]/0_tmp_1",
+      "[CLEANUP]/tmp_tmp_1",
       "--merge-script",
-      "RECIPE_MODULE[build::chromium_swarming]/resources/noop_merge.py",
+      "[CACHE]/builder/src/testing/merge_scripts/standard_isolated_script_merge.py",
       "--merge-script-stdout-file",
       "/path/to/tmp/merge_script_log",
       "--merge-additional-args",
@@ -1850,10 +1508,12 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "webrtc_perf_tests (iPhone 7 iOS 12.4.1) on iOS-12.4.1",
+    "name": "webrtc_perf_tests on iOS-12.4.1",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Bot id: 'build15-a7'<br/>Run on OS: 'iOS-12.4.1'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_TEXT@Run on OS: 'iOS-12.4.1'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"version\": 3@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
@@ -1885,11 +1545,67 @@
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
       "@@@STEP_LOG_END@chromium_swarming.summary@@@",
-      "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
+      "@@@STEP_LOG_LINE@Merge script log@Merged succesfully@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
+      "@@@STEP_LOG_LINE@outdir_json@{}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@",
+      "@@@STEP_LOG_LINE@step_metadata@{@@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"webrtc_perf_tests\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"dimensions\": {@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"cpu\": \"x86-64\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"iOS-12.4.1\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"WebRTC\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"webrtc_perf_tests on iOS-12.4.1\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"webrtc_perf_tests\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"0\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_builder_group\": null, @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null@@@",
+      "@@@STEP_LOG_LINE@step_metadata@}@@@",
+      "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 test results@https://luci-milo.appspot.com/ui/inv/some-inv-name/test-results@@@",
       "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=0@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
+      "--input-json",
+      "{\"version\": 3}",
+      "--builder-group",
+      "internal.client.webrtc",
+      "--builder-name",
+      "iOS64 Perf",
+      "--build-number",
+      "0",
+      "--test-type",
+      "webrtc_perf_tests on iOS-12.4.1",
+      "--chrome-revision",
+      "170242",
+      "--build-id",
+      "8945511751514863184",
+      "--test-results-server",
+      "test-results.appspot.com"
+    ],
+    "cwd": "[CACHE]/builder",
+    "luci_context": {
+      "realm": {
+        "name": "webrtc-internal:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "Upload to test-results [webrtc_perf_tests on iOS-12.4.1]"
   },
   {
     "cmd": [
@@ -1915,9 +1631,10 @@
       "--perf-dashboard-machine-group",
       "WebRTCPerf",
       "--outdir",
-      "[CACHE]/builder/src/out/Release-iphoneos",
+      "[CACHE]/builder/src/out/iOS64_Perf",
       "--wait-for-upload"
     ],
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -1938,20 +1655,6 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "Tests statistics",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>Stats<br/>Total shards: 1<br/>Total runtime: 32s <br/>@@@",
-      "@@@STEP_LOG_LINE@detailed stats@Total shards: 1@@@",
-      "@@@STEP_LOG_LINE@detailed stats@Total runtime: 32s @@@",
-      "@@@STEP_LOG_LINE@detailed stats@Min/mean/max: 32s / 32s / 32s@@@",
-      "@@@STEP_LOG_END@detailed stats@@@"
-    ]
-  },
-  {
-    "failure": {
-      "humanReason": "Failed webrtc_perf_tests (iPhone 7 iOS 12.4.1)."
-    },
     "name": "$result"
   }
 ]

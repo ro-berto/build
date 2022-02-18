@@ -32,6 +32,17 @@ ANDROID_CIPD_PACKAGES = [
     )
 ]
 
+MAC_TOOLCHAIN_CIPD_PACKAGES = [
+    chromium_swarming.CipdPackage.create(
+        name='infra/tools/mac_toolchain/${platform}',
+        version='git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1',
+        root='.',
+    )
+]
+
+INTERNAL_TEST_SERVICE_ACCOUNT = (
+    'chrome-tester@chops-service-accounts.iam.gserviceaccount.com')
+
 QUICK_PERF_TEST = '--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/'
 
 NUMBER_OF_SHARDS = {
@@ -43,7 +54,7 @@ NUMBER_OF_SHARDS = {
 }
 
 
-def generate_tests(phase, bot, is_tryserver, chromium_tests_api):
+def generate_tests(phase, bot, is_tryserver, chromium_tests_api, properties):
   """Generate a list of tests to run on a bot.
 
   Args:
@@ -223,12 +234,17 @@ def generate_tests(phase, bot, is_tryserver, chromium_tests_api):
     tests += [IosTest(t, xctest=True) for t in ios_tests]
 
   if test_suite == 'ios_device':
-    tests = [IosTest(t) for t in ios_device_tests]
+    tests = [
+        SwarmingIosInternalTest(t, chromium_tests_api, properties)
+        for t in ios_device_tests
+    ]
 
   if test_suite == 'ios_perf':
     tests = [
-        IosTest(
+        SwarmingIosInternalTest(
             'webrtc_perf_tests',
+            chromium_tests_api,
+            properties,
             args=['--write_perf_output_on_ios', '--nologs'])
     ]
 
@@ -261,6 +277,26 @@ def SwarmingPerfTest(name, chromium_test_api, **kwargs):
           **kwargs), chromium_test_api)
 
 
+def SwarmingIosInternalTest(name,
+                            chromium_test_api,
+                            properties,
+                            args=None,
+                            **kwargs):
+  xcode_version = properties['xcode_build_version']
+  args = args or []
+  args += ['--xcode-build-version', xcode_version]
+
+  return steps.SwarmingIsolatedScriptTest(
+      steps.SwarmingIsolatedScriptTestSpec.create(
+          name,
+          cipd_packages=MAC_TOOLCHAIN_CIPD_PACKAGES,
+          named_caches={'xcode_ios_' + xcode_version: 'Xcode.app'},
+          args=args,
+          resultdb=ResultDB(result_format='json'),
+          service_account=INTERNAL_TEST_SERVICE_ACCOUNT,
+          **kwargs), chromium_test_api)
+
+
 def SwarmingAndroidTest(name, chromium_tests_api, **kwargs):
   return steps.SwarmingGTestTest(
       steps.SwarmingGTestTestSpec.create(
@@ -278,12 +314,9 @@ def AndroidJunitTest(name, chromium_tests_api):
 class IosTest(object):
   """A fake shell of an iOS test. It is only read by apply_ios_config."""
 
-  def __init__(self, name, args=None, xctest=False,
-               xcode_parallelization=False):
+  def __init__(self, name, xctest=False, xcode_parallelization=False):
     self._name = name
     self.config = {'app': name}
-    if args:
-      self.config['test args'] = args
     if xctest:
       self.config['xctest'] = True
       # WebRTC iOS tests are in the process of being migrated to XCTest so
