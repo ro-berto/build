@@ -85,7 +85,7 @@
       "out/build",
       "--test-root",
       "[CACHE]/builder/v8/custom_deps/test_checkout/test",
-      "--random-seed=1",
+      "--random-seed=-1315714476",
       "foounit",
       "--variants=more,dev",
       "--rerun-failures-count=2",

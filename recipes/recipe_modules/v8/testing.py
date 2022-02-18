@@ -828,7 +828,7 @@ class Failure(object):
     return self.test.api
 
   def _format_swarming_dimensions(self, dims):
-    return ['%s:%s' % (k, v) for k, v in sorted(six.iteritems(dims))]
+    return ['%s:%s' % (k, v) for k, v in dims.items()]
 
   def _flako_cmd_line(self):
     """Returns the command line for bisecting this failure with flako."""
@@ -887,7 +887,7 @@ class Failure(object):
     }
     return 'bb add v8/try.triggered/v8_flako %s' % ' '.join(
         '-p \'%s=%s\'' % (k, json.dumps(v, sort_keys=True))
-        for k, v in sorted(properties.items()))
+        for k, v in properties.items())
 
   def log_lines(self):
     """Return a list of lines for logging all runs of this failure."""

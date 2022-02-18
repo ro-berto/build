@@ -10,7 +10,6 @@ import contextlib
 import datetime
 import difflib
 import functools
-from past.builtins import basestring # pylint: disable=redefined-builtin
 import random
 import re
 
@@ -380,20 +379,16 @@ class V8Api(recipe_api.RecipeApi):
     """
     r = random.Random()
     if self.isolated_tests:
-      r.seed(tuple(self.isolated_tests))
+      r.seed("".join(self.isolated_tests))
     elif self._test_data.enabled:
       r.seed(12345)
 
-    # TODO(https://crbug.com/1256445): Remove after migration.
-    if self._test_data.enabled:
-      return 1
-    else: # pragma: no cover
-      seed = 0
-      while not seed:
-        # Avoid 0 because v8 switches off usage of random seeds when
-        # passing 0 and creates a new one.
-        seed = r.randint(-2147483648, 2147483647)
-      return seed
+    seed = 0
+    while not seed:
+      # Avoid 0 because v8 switches off usage of random seeds when
+      # passing 0 and creates a new one.
+      seed = r.randint(-2147483648, 2147483647)
+    return seed
 
   def checkout(self, revision=None, **kwargs):
     # Set revision for bot_update.
@@ -673,7 +668,6 @@ class V8Api(recipe_api.RecipeApi):
     }
     points = []
     root = '/'.join(['v8.infra', 'build_dependencies', ''])
-    # TODO(https://crbug.com/1256445): Remove sorting after migration.
     for k, v in sorted(values.items()):
       p = self.m.perf_dashboard.get_skeleton_point(
           root + k, self.revision_number, str(v))
@@ -1222,9 +1216,7 @@ class V8Api(recipe_api.RecipeApi):
       for result in unique_results[label]:
         results_per_command[result['command']].append(result)
 
-      # TODO(https://crbug.com/1256445): Sorting not required after Py3
-      # migration.
-      for command in sorted(results_per_command.keys()):
+      for command in results_per_command.keys():
         results = results_per_command[command]
         # Determine flakiness.
         failure = failure_factory(results)
@@ -1255,7 +1247,7 @@ class V8Api(recipe_api.RecipeApi):
   @property
   def extra_flags(self):
     extra_flags = self.m.properties.get('extra_flags', '')
-    if isinstance(extra_flags, basestring):
+    if isinstance(extra_flags, str):
       extra_flags = extra_flags.split()
     assert isinstance(extra_flags, list) or isinstance(extra_flags, tuple)
     return list(extra_flags)
