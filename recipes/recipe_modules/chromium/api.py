@@ -1083,6 +1083,15 @@ class ChromiumApi(recipe_api.RecipeApi):
           'select xcode', ['sudo', 'xcode-select', '-switch', xcode_app_path],
           infra_step=True)
 
+      # Kill all ibtoold processes. When multiple Xcode version is used on the
+      # same bot, multiple ibtoold processes from different Xcode might cause
+      # compile failues. See crbug.com/1297159. The cmd returns 0 if processes
+      # found, 1 if not found.
+      self.m.step(
+          'kill ibtoold', ['pkill', '-f', '/ibtoold($| )'],
+          ok_ret=(0, 1),
+          infra_step=True)
+
       # (crbug.com/1115022) - When the last running simulator is from XCode
       # version n-1, XCode version n throws a failure message. Running simctl
       # w/ to do something as simple as listing devices helps work around this.

@@ -552,6 +552,15 @@ class WebRTCApi(recipe_api.RecipeApi):
           'select xcode', ['sudo', 'xcode-select', '-switch', xcode_app_path],
           infra_step=True)
 
+      # Kill all ibtoold processes. When multiple Xcode version is used on the
+      # same bot, multiple ibtoold processes from different Xcode might cause
+      # compile failues. See crbug.com/1297159. The cmd returns 0 if processes
+      # found, 1 if not found.
+      self.m.step(
+          'kill ibtoold', ['pkill', '-f', '/ibtoold($| )'],
+          ok_ret=(0, 1),
+          infra_step=True)
+
   def run_mb(self, phase=None):
     if phase:
       # Set the out folder to be the same as the phase name, so caches of

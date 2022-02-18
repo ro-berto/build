@@ -293,6 +293,18 @@
   },
   {
     "cmd": [
+      "pkill",
+      "-f",
+      "/ibtoold($| )"
+    ],
+    "infra_step": true,
+    "name": "ensure xcode.kill ibtoold",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
       "[CACHE]/builder/src/tools_webrtc/ios/build_ios_libs.py",
       "-c"
     ],
