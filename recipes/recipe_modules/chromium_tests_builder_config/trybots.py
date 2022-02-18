@@ -1509,6 +1509,11 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='Mac Builder (dbg)',
                 tester='Mac11 Tests (dbg)',
             ),
+        'mac-builder-next-rel':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.fyi',
+                buildername='Mac Builder Next',
+            ),
         'mac-osxbeta-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.mac',
