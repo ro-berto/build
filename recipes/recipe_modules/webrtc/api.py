@@ -256,7 +256,8 @@ class WebRTCApi(recipe_api.RecipeApi):
   @property
   def should_download_audio_quality_tools(self):
     for bot in self.related_bots():
-      if 'perf' in bot.test_suite:
+      # Perf test low_bandwidth_audio_perf_test doesn't run on iOS.
+      if 'perf' in bot.test_suite and bot.test_suite != 'ios_perf':
         return self.bot.should_build
     return False
 
