@@ -378,31 +378,6 @@ BUILDERS = freeze({
                     'pool': 'chrome.tests',
                 },
             },
-            'ios_arm64_perf': {
-                'recipe_config': 'webrtc_ios_perf',
-                'chromium_config_kwargs': {
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_PLATFORM': 'ios',
-                    'TARGET_ARCH': 'arm',
-                    'TARGET_BITS': 64,
-                },
-                'bot_type': 'builder_tester',
-                'testing': {
-                    'platform': 'mac'
-                },
-                'swarming_service_account': INTERNAL_TEST_SERVICE_ACCOUNT,
-                'ensure_sdk': 'ios',
-                'ios_config': {
-                    'bucket': 'chromium-webrtc',
-                },
-                'ios_testing': {
-                    'device type': 'iPhone 7',
-                    'os': '12.4.1',
-                    'bot id': 'build16-a7',
-                    'pool': 'WebRTC',
-                    'max runtime seconds': 7200,
-                },
-            },
         },
     },
 })
