@@ -2,15 +2,13 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import six
-
 from recipe_engine.post_process import (
     DoesNotRun, DropExpectation, Filter, MustRun)
 from recipe_engine.recipe_api import Property
 from recipe_engine.config import ConfigGroup, Dict, Single, List
 from recipe_engine.engine_types import freeze
 
-PYTHON_VERSION_COMPATIBILITY = "PY2+3"
+PYTHON_VERSION_COMPATIBILITY = "PY3"
 
 DEPS = [
   'depot_tools/bot_update',
@@ -37,7 +35,7 @@ PROPERTIES = {
         Property(
             kind=ConfigGroup(
                 # Subject of the rolling CL
-                subject=Single(six.string_types),
+                subject=Single(str),
                 # Configuration parameters of the project where dependencies
                 # will be rolled in. The source is always Chromium project.
                 target_config=ConfigGroup(
@@ -45,24 +43,24 @@ PROPERTIES = {
                     solution_name=Single(str, required=True),
                     # Project name. Together with the 'base_url' it will form
                     # the location for the project
-                    project_name=Single(six.string_types, required=True),
+                    project_name=Single(str, required=True),
                     # The name of the account used to create the roll CL
                     account=Single(str),
                     # Template for the commit message used with regular
                     # dependencies
-                    log_template=Single(six.string_types),
+                    log_template=Single(str),
                     # Template for the commit message used with cipd
                     # dependencies
-                    cipd_log_template=Single(six.string_types),
+                    cipd_log_template=Single(str),
                     # Gerrit URL to be used for rolling CL review
                     gerrit_base_url=Single(
-                        six.string_types,
+                        str,
                         required=True,
                         empty_val='https://chromium-review.googlesource.com'),
                     # Repo base URL together with 'project_name' to locate the
                     # repo where the rolling CL will be landed
                     base_url=Single(
-                        six.string_types,
+                        str,
                         required=True,
                         empty_val='https://chromium.googlesource.com/'),
                 ),
@@ -84,7 +82,7 @@ PROPERTIES = {
                 # Bugs included in roll CL description
                 # TODO(liviurau): Remove obsolete feature from configs and
                 # remove the parameters here afterwards
-                bugs=Single(six.string_types),
+                bugs=Single(str),
             )),
 }
 

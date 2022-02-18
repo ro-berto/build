@@ -14,7 +14,7 @@ from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 from PB.google.rpc import code as rpc_code_pb2
 
 
-PYTHON_VERSION_COMPATIBILITY = "PY2+3"
+PYTHON_VERSION_COMPATIBILITY = "PY3"
 
 DEPS = [
     'chromium',
