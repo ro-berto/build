@@ -161,7 +161,7 @@ def RunSteps(api):
       return
     webrtc.configure_isolate(phase)
     webrtc.run_mb(phase)
-    raw_result = webrtc.compile(phase)
+    raw_result = webrtc.compile()
     if raw_result.status != common_pb.SUCCESS:
       return raw_result
     webrtc.isolate()

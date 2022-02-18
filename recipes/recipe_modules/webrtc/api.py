@@ -586,16 +586,19 @@ class WebRTCApi(recipe_api.RecipeApi):
           # file
           isolated_targets=None)
 
-  def compile(self, phase=None, override_targets=None):
-    del phase
-    if override_targets is None:
-      targets = self._compile_targets
+  def compile(self):
+    if self.bot.bot_type == 'tester' and self.bot.should_upload_perf_results:
+      # Perf testers are a special case; they only need the catapult protos.
+      targets = ['webrtc_dashboard_upload']
     else:
-      targets = override_targets
+      targets = self._compile_targets
 
     return self.m.chromium.compile(targets=targets, use_goma_module=True)
 
   def isolate(self):
+    if self.bot.bot_type == 'tester':
+      # The tests running on a 'tester' bot are isolated by the 'builder'.
+      return
     if self.is_triggering_perf_tests and not self.m.tryserver.is_tryserver:
       # Set the swarm_hashes name so that it is found by pinpoint.
       commit_position = self.revision_cp.replace('@', '(at)')
