@@ -256,6 +256,9 @@ class BuilderConfig(object):
           for mirror in spec.mirrors:
             if builder_id in (mirror.builder_id, mirror.tester_id):
               return True
+            if (spec.include_all_triggered_testers and
+                builder_id in builder_db.builder_graph[mirror.builder_id]):
+              return True
           return False
 
         kwargs['mirroring_try_builders'] = [
