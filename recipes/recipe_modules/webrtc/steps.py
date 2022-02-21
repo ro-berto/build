@@ -181,7 +181,7 @@ def generate_tests(phase, bot, is_tryserver, chromium_tests_api, ios_config):
 
   if test_suite == 'android_perf_swarming':
     perftest_output = ('--isolated-script-test-perf-output='
-                       '${ISOLATED_OUTDIR}/perftest-output.json')
+                       '${ISOLATED_OUTDIR}/perftest-output.pb')
     tests = [
         SwarmingAndroidTest(
             'low_bandwidth_audio_perf_test',

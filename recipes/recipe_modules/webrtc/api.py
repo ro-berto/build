@@ -843,26 +843,23 @@ class WebRTCApi(recipe_api.RecipeApi):
   def upload_to_perf_dashboard(self, name, step_result):
     test_succeeded = (step_result.presentation.status == self.m.step.SUCCESS)
 
-    # TODO(crbug.com/webrtc/13569): perftest-output.json currently stores a
-    # proto file. This is because the file name is shared with Chromium.
     if self._test_data.enabled and test_succeeded:
-      task_output_dir = {
-        'logcats': 'foo',
-      }
-      task_output_dir['0/perftest-output.json'] = self.test_api.example_proto()
+      task_output_dir = {'0/perftest-output.pb': 'dummy_data'}
     else:
       task_output_dir = step_result.raw_io.output_dir  # pragma no cover
 
     results_to_upload = []
     for filepath in sorted(task_output_dir):
-      # If there are retries, you might see perftest-output_1.json and so on.
-      if re.search(r'perftest-output.*\.json$', filepath):
+      # Both .json and .pb files are accepted even though the file always
+      # stores a proto. This is in order to be compatible with Chromium.
+      # If there are retries, you might see perftest-output_1.pb and so on.
+      if re.search(r'perftest-output.*(\.json|\.pb)$', filepath):
         results_to_upload.append(task_output_dir[filepath])
 
     if not results_to_upload and test_succeeded: # pragma: no cover
       raise self.m.step.InfraFailure(
-          'Missing perf output from the test; expected '
-          'perftest-output(_x).json in the isolated-out from the test.')
+          'Missing perf output from the test; expected perftest-output(_x).pb '
+          'or perftest-output(_x).json in the isolated-out from the test.')
 
     perf_bot_group = 'WebRTCPerf'
     if self.m.runtime.is_experimental:

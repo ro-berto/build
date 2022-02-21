@@ -160,14 +160,6 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
     return self.override_step_data('analyze' + phase_suffix,
                                    self.m.json.output(gn_analyze_output))
 
-  def example_proto(self):
-    # Tip: to see what's in the proto, use the tracing/bin/proto2json tool
-    # in the Catapult repo.
-    this_dir = os.path.abspath(os.path.dirname(os.path.realpath(__file__)))
-    proto = os.path.join(this_dir, 'testdata', 'perftest-output.json')
-    with open(proto, "rb") as f:
-      return f.read()
-
 
 def _sanitize_builder_name(name):
   return api.sanitize_file_name(name.lower())
