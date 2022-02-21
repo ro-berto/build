@@ -1497,12 +1497,11 @@ BUILDERS = freeze({
                 'testing': {
                     'platform': 'mac'
                 },
-                'ensure_sdk': 'ios',
                 'ios_config': {
                     'bucket': 'chromium-webrtc',
                 },
                 'swarming_dimensions': {
-                    'os': 'iOS-14.7',
+                    'os': 'iOS-15.3',
                     'pool': 'chrome.tests',
                 },
             },
@@ -1519,12 +1518,11 @@ BUILDERS = freeze({
                 'testing': {
                     'platform': 'mac'
                 },
-                'ensure_sdk': 'ios',
                 'ios_config': {
                     'bucket': 'chromium-webrtc',
                 },
                 'swarming_dimensions': {
-                    'os': 'iOS-14.7',
+                    'os': 'iOS-15.3',
                     'pool': 'chrome.tests',
                 },
             },
@@ -1542,7 +1540,6 @@ BUILDERS = freeze({
                 'testing': {
                     'platform': 'mac'
                 },
-                'ensure_sdk': 'ios',
                 'ios_config': {
                     'bucket': 'chromium-webrtc',
                 },
@@ -1572,12 +1569,11 @@ BUILDERS = freeze({
                 'testing': {
                     'platform': 'mac'
                 },
-                'ensure_sdk': 'ios',
                 'ios_config': {
                     'bucket': 'chromium-webrtc',
                 },
                 'swarming_dimensions': {
-                    'os': 'iOS-14.7',
+                    'os': 'iOS-15.3',
                     'pool': 'chrome.tests',
                 },
             },
@@ -1594,12 +1590,11 @@ BUILDERS = freeze({
                 'testing': {
                     'platform': 'mac'
                 },
-                'ensure_sdk': 'ios',
                 'ios_config': {
                     'bucket': 'chromium-webrtc',
                 },
                 'swarming_dimensions': {
-                    'os': 'iOS-14.7',
+                    'os': 'iOS-15.3',
                     'pool': 'chrome.tests',
                 },
             },

@@ -94,6 +94,7 @@ class WebRTCApi(recipe_api.RecipeApi):
 
     self._builders = None
     self._recipe_configs = None
+    self._ios_config = None
     self.bot = None
 
     self.revision = None
@@ -133,7 +134,12 @@ class WebRTCApi(recipe_api.RecipeApi):
     if self.m.tryserver.is_tryserver:
       self.m.chromium.apply_config('trybot_flavor')
 
-    if self.bot.config.get('perf_id'):
+    if self.m.properties.get('xcode_build_version'):
+      self._ios_config = {
+          'xcode_build_version': self.m.properties['xcode_build_version'],
+      }
+
+    if self.bot.should_upload_perf_results:
       assert not self.m.tryserver.is_tryserver
       assert self.m.chromium.c.BUILD_CONFIG == 'Release', (
         'Perf tests should only be run with Release builds.')
@@ -179,7 +185,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     if self.bot.should_test:
       tests = steps.generate_tests(None, self.bot,
                                    self.m.tryserver.is_tryserver,
-                                   self.m.chromium_tests, self.m.properties)
+                                   self.m.chromium_tests, self._ios_config)
       for test in tests:
         assert isinstance(test, steps.IosTest)
         test_dict = {
@@ -283,7 +289,7 @@ class WebRTCApi(recipe_api.RecipeApi):
         for test in steps.generate_tests(phase, bot,
                                          self.m.tryserver.is_tryserver,
                                          self.m.chromium_tests,
-                                         self.m.properties):
+                                         self._ios_config):
           if isinstance(test, (c_steps.SwarmingTest, steps.IosTest)):
             test_targets.add(test.name)
           if isinstance(test, (c_steps.AndroidJunitTest)):
@@ -426,6 +432,11 @@ class WebRTCApi(recipe_api.RecipeApi):
           'swarming_timeout']
       self.m.chromium_swarming.default_io_timeout = self.bot.config[
           'swarming_timeout']
+    # Perf tests are marked as not idempotent, which means they're re-run
+    # if they did not change this build. This will give the dashboard some
+    # more variance data to work with.
+    if self.bot.should_upload_perf_results:
+      self.m.chromium_swarming.default_idempotent = False
 
   def _apply_patch(self, repository_url, patch_ref, include_subdirs=()):
     """Applies a patch by downloading the text diff from Gitiles."""
@@ -571,15 +582,12 @@ class WebRTCApi(recipe_api.RecipeApi):
       # 'src' folder can be shared between builder types.
       self.m.chromium.c.build_config_fs = sanitize_file_name(self.buildername)
 
-    mac_toolchain_enabled = self.m.chromium.c.mac_toolchain.enabled
-    env = {'FORCE_MAC_TOOLCHAIN': ''} if mac_toolchain_enabled else {}
-    with self.m.context(env=env):
-      self.m.chromium.mb_gen(
-          self.builder_id,
-          phase=phase,
-          use_goma=True,
-          mb_path=self.m.path['checkout'].join('tools_webrtc', 'mb'),
-          isolated_targets=self._isolated_targets)
+    self.m.chromium.mb_gen(
+        self.builder_id,
+        phase=phase,
+        use_goma=True,
+        mb_path=self.m.path['checkout'].join('tools_webrtc', 'mb'),
+        isolated_targets=self._isolated_targets)
 
   def run_mb_ios(self):
     # Match the out path that ios recipe module uses.
@@ -699,7 +707,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     with self.m.context(cwd=self._working_dir):
       all_tests = steps.generate_tests(phase, self.bot,
                                        self.m.tryserver.is_tryserver,
-                                       self.m.chromium_tests, self.m.properties)
+                                       self.m.chromium_tests, self._ios_config)
       swarming_test_suites = []
       local_test_suites = []
       for t in all_tests:

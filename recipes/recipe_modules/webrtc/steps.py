@@ -53,8 +53,14 @@ NUMBER_OF_SHARDS = {
     'video_engine_tests': 4,
 }
 
+USE_XCODE_PARALLELIZATION = [
+    'apprtcmobile_tests',
+    'sdk_unittests',
+    'sdk_framework_unittests',
+]
 
-def generate_tests(phase, bot, is_tryserver, chromium_tests_api, properties):
+
+def generate_tests(phase, bot, is_tryserver, chromium_tests_api, ios_config):
   """Generate a list of tests to run on a bot.
 
   Args:
@@ -63,6 +69,7 @@ def generate_tests(phase, bot, is_tryserver, chromium_tests_api, properties):
     bot: string with the name of the bot (e.g. 'linux_compile_rel').
     is_tryserver: True if the tests needs to be generated for a tryserver.
     chromium_tests_api: The chromium_tests recipe module API object.
+    ios_config: iOS configuration such as the xcode version.
 
   Returns:
     A list of steps.WebRtcIsolatedGtest to compile and run on a bot.
@@ -112,6 +119,11 @@ def generate_tests(phase, bot, is_tryserver, chromium_tests_api, properties):
       'webrtc_nonparallel_tests',
   ]
   ios_tests = [
+      # TODO(bugs.webrtc.org/12244): Some tests are skipped on iOS simulator
+      # platforms because they fail or they are flaky.
+      #'apprtcmobile_tests',
+      #'sdk_unittests',
+      'sdk_framework_unittests',
       'audio_decoder_unittests',
       'common_audio_unittests',
       'common_video_unittests',
@@ -164,17 +176,10 @@ def generate_tests(phase, bot, is_tryserver, chromium_tests_api, properties):
 
   if test_suite == 'desktop_perf_swarming':
     tests = [
-        # Perf tests are marked as not idempotent, which means they're re-run
-        # if they did not change this build. This will give the dashboard some
-        # more variance data to work with.
-        SwarmingPerfTest(
-            'low_bandwidth_audio_perf_test',
-            chromium_tests_api,
-            idempotent=False),
+        SwarmingPerfTest('low_bandwidth_audio_perf_test', chromium_tests_api),
         SwarmingPerfTest(
             'webrtc_perf_tests',
             chromium_tests_api,
-            idempotent=False,
             args=[
                 '--test_artifacts_dir=${ISOLATED_OUTDIR}',
                 '--save_worst_frame',
@@ -189,12 +194,10 @@ def generate_tests(phase, bot, is_tryserver, chromium_tests_api, properties):
         SwarmingAndroidTest(
             'low_bandwidth_audio_perf_test',
             chromium_tests_api,
-            idempotent=False,
             args=['--android', '--adb-path', ADB_PATH, perftest_output]),
         SwarmingAndroidTest(
             'webrtc_perf_tests',
             chromium_tests_api,
-            idempotent=False,
             args=['--save_worst_frame', '--nologs', perftest_output])
     ]
 
@@ -212,30 +215,11 @@ def generate_tests(phase, bot, is_tryserver, chromium_tests_api, properties):
               args=[QUICK_PERF_TEST, '--nologs']))
 
   if test_suite == 'ios':
-    # TODO(bugs.webrtc.org/12244): Some tests are skipped on iOS simulator
-    # platforms because they fail or they are flaky.
-    if bot.builder not in [
-        'iOS64 Sim Debug (iOS 14.0)',
-        'ios_sim_x64_dbg_ios14',
-        'iOS64 Sim Debug (iOS 13)',
-        'ios_sim_x64_dbg_ios13',
-        'iOS64 Sim Debug (iOS 12)',
-        'ios_sim_x64_dbg_ios12',
-    ]:  # pragma: no cover
-      tests += [
-          IosTest(
-              'apprtcmobile_tests', xctest=True, xcode_parallelization=True),
-          IosTest('sdk_unittests', xctest=True, xcode_parallelization=True)
-      ]
-
-    tests.append(
-        IosTest(
-            'sdk_framework_unittests', xctest=True, xcode_parallelization=True))
     tests += [IosTest(t, xctest=True) for t in ios_tests]
 
   if test_suite == 'ios_device':
     tests = [
-        SwarmingIosInternalTest(t, chromium_tests_api, properties)
+        SwarmingIosInternalTest(t, chromium_tests_api, ios_config)
         for t in ios_device_tests
     ]
 
@@ -244,7 +228,7 @@ def generate_tests(phase, bot, is_tryserver, chromium_tests_api, properties):
         SwarmingIosInternalTest(
             'webrtc_perf_tests',
             chromium_tests_api,
-            properties,
+            ios_config,
             args=['--write_perf_output_on_ios', '--nologs'])
     ]
 
@@ -279,10 +263,10 @@ def SwarmingPerfTest(name, chromium_test_api, **kwargs):
 
 def SwarmingIosInternalTest(name,
                             chromium_test_api,
-                            properties,
+                            ios_config,
                             args=None,
                             **kwargs):
-  xcode_version = properties['xcode_build_version']
+  xcode_version = ios_config['xcode_build_version']
   args = args or []
   args += ['--xcode-build-version', xcode_version]
 
@@ -292,7 +276,6 @@ def SwarmingIosInternalTest(name,
           cipd_packages=MAC_TOOLCHAIN_CIPD_PACKAGES,
           named_caches={'xcode_ios_' + xcode_version: 'Xcode.app'},
           args=args,
-          resultdb=ResultDB(result_format='json'),
           service_account=INTERNAL_TEST_SERVICE_ACCOUNT,
           **kwargs), chromium_test_api)
 
@@ -325,7 +308,7 @@ class IosTest(object):
         self.config['test args'] = []
       self.config['test args'].append(
           '--undefok="enable-run-ios-unittests-with-xctest"')
-    if xcode_parallelization:
+    if name in USE_XCODE_PARALLELIZATION:
       # TODO(crbug.com/1006881): "xctest" indicates how to run the targets but
       # not how to parse test outputs since recent iOS test runner changes.
       # This arg is needed for outputs to be parsed correctly.
