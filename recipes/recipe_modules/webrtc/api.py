@@ -135,8 +135,15 @@ class WebRTCApi(recipe_api.RecipeApi):
       self.m.chromium.apply_config('trybot_flavor')
 
     if self.m.properties.get('xcode_build_version'):
+      xcode_version = self.m.properties['xcode_build_version']
       self._ios_config = {
-          'xcode_build_version': self.m.properties['xcode_build_version'],
+          'service_account': self.bot.config.get('service_account'),
+          'named_caches': {
+              'xcode_ios_' + xcode_version: 'Xcode.app',
+          },
+          'args': {
+              '--xcode-build-version': xcode_version,
+          },
       }
 
     if self.bot.should_upload_perf_results:

@@ -4,7 +4,6 @@
 
 from __future__ import absolute_import
 
-import attr
 import functools
 import json
 import os
@@ -24,40 +23,33 @@ sys.path.append(os.path.join(os.path.dirname(THIS_DIR)))
 # adb path relative to out dir (e.g. out/Release)
 ADB_PATH = '../../third_party/android_sdk/public/platform-tools/adb'
 
-ANDROID_CIPD_PACKAGES = [
-    chromium_swarming.CipdPackage.create(
-        name='infra/tools/luci/logdog/butler/${platform}',
-        version='git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c',
-        root='bin',
-    )
-]
+ANDROID_CIPD_PACKAGE = chromium_swarming.CipdPackage.create(
+    name='infra/tools/luci/logdog/butler/${platform}',
+    version='git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c',
+    root='bin',
+)
 
-MAC_TOOLCHAIN_CIPD_PACKAGES = [
-    chromium_swarming.CipdPackage.create(
-        name='infra/tools/mac_toolchain/${platform}',
-        version='git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1',
-        root='.',
-    )
-]
-
-INTERNAL_TEST_SERVICE_ACCOUNT = (
-    'chrome-tester@chops-service-accounts.iam.gserviceaccount.com')
+MAC_TOOLCHAIN_CIPD_PACKAGE = chromium_swarming.CipdPackage.create(
+    name='infra/tools/mac_toolchain/${platform}',
+    version='git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1',
+    root='.',
+)
 
 QUICK_PERF_TEST = '--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/'
 
-NUMBER_OF_SHARDS = {
+NUMBER_OF_SHARDS = freeze({
     'modules_tests': 2,
     'modules_unittests': 6,
     'peerconnection_unittests': 4,
     'rtc_unittests': 6,
     'video_engine_tests': 4,
-}
+})
 
-USE_XCODE_PARALLELIZATION = [
+USE_XCODE_PARALLELIZATION = (
     'apprtcmobile_tests',
     'sdk_unittests',
     'sdk_framework_unittests',
-]
+)
 
 
 def generate_tests(phase, bot, is_tryserver, chromium_tests_api, ios_config):
@@ -77,7 +69,7 @@ def generate_tests(phase, bot, is_tryserver, chromium_tests_api, ios_config):
   tests = []
   test_suite = bot.test_suite
 
-  desktop_tests = [
+  desktop_tests = (
       'audio_decoder_unittests',
       'common_audio_unittests',
       'common_video_unittests',
@@ -96,8 +88,8 @@ def generate_tests(phase, bot, is_tryserver, chromium_tests_api, ios_config):
       'video_engine_tests',
       'voip_unittests',
       'webrtc_nonparallel_tests',
-  ]
-  android_tests = [
+  )
+  android_tests = (
       'AppRTCMobile_test_apk',
       'android_instrumentation_test_apk',
       'audio_decoder_unittests',
@@ -117,8 +109,8 @@ def generate_tests(phase, bot, is_tryserver, chromium_tests_api, ios_config):
       'video_engine_tests',
       'voip_unittests',
       'webrtc_nonparallel_tests',
-  ]
-  ios_tests = [
+  )
+  ios_tests = (
       # TODO(bugs.webrtc.org/12244): Some tests are skipped on iOS simulator
       # platforms because they fail or they are flaky.
       #'apprtcmobile_tests',
@@ -141,8 +133,8 @@ def generate_tests(phase, bot, is_tryserver, chromium_tests_api, ios_config):
       'video_engine_tests',
       'voip_unittests',
       'webrtc_nonparallel_tests',
-  ]
-  ios_device_tests = [
+  )
+  ios_device_tests = (
       'common_audio_unittests',
       'common_video_unittests',
       'modules_tests',
@@ -154,7 +146,7 @@ def generate_tests(phase, bot, is_tryserver, chromium_tests_api, ios_config):
       'tools_unittests',
       'video_capture_tests',
       'video_engine_tests',
-  ]
+  )
 
   if test_suite == 'webrtc':
     tests = [SwarmingDesktopTest(t, chromium_tests_api) for t in desktop_tests]
@@ -219,13 +211,13 @@ def generate_tests(phase, bot, is_tryserver, chromium_tests_api, ios_config):
 
   if test_suite == 'ios_device':
     tests = [
-        SwarmingIosInternalTest(t, chromium_tests_api, ios_config)
+        SwarmingIosTest(t, chromium_tests_api, ios_config)
         for t in ios_device_tests
     ]
 
   if test_suite == 'ios_perf':
     tests = [
-        SwarmingIosInternalTest(
+        SwarmingIosTest(
             'webrtc_perf_tests',
             chromium_tests_api,
             ios_config,
@@ -261,30 +253,25 @@ def SwarmingPerfTest(name, chromium_test_api, **kwargs):
           **kwargs), chromium_test_api)
 
 
-def SwarmingIosInternalTest(name,
-                            chromium_test_api,
-                            ios_config,
-                            args=None,
-                            **kwargs):
-  xcode_version = ios_config['xcode_build_version']
+def SwarmingIosTest(name, chromium_test_api, ios_config, args=None):
   args = args or []
-  args += ['--xcode-build-version', xcode_version]
+  for key, value in ios_config['args'].items():
+    args += [key, value] if value else []
 
   return steps.SwarmingIsolatedScriptTest(
       steps.SwarmingIsolatedScriptTestSpec.create(
           name,
-          cipd_packages=MAC_TOOLCHAIN_CIPD_PACKAGES,
-          named_caches={'xcode_ios_' + xcode_version: 'Xcode.app'},
-          args=args,
-          service_account=INTERNAL_TEST_SERVICE_ACCOUNT,
-          **kwargs), chromium_test_api)
+          cipd_packages=[MAC_TOOLCHAIN_CIPD_PACKAGE],
+          named_caches=ios_config['named_caches'],
+          service_account=ios_config['service_account'],
+          args=args), chromium_test_api)
 
 
 def SwarmingAndroidTest(name, chromium_tests_api, **kwargs):
   return steps.SwarmingGTestTest(
       steps.SwarmingGTestTestSpec.create(
           name,
-          cipd_packages=ANDROID_CIPD_PACKAGES,
+          cipd_packages=[ANDROID_CIPD_PACKAGE],
           shards=NUMBER_OF_SHARDS.get(name, 1),
           **kwargs), chromium_tests_api)
 

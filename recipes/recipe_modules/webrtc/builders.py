@@ -9,6 +9,9 @@ from __future__ import absolute_import
 
 from recipe_engine.engine_types import freeze
 
+CHROME_TEST_SERVICE_ACCOUNT = (
+    'chrome-tester@chops-service-accounts.iam.gserviceaccount.com')
+
 RECIPE_CONFIGS = freeze({
     'webrtc': {
         'chromium_config': 'webrtc_default',
@@ -1497,9 +1500,7 @@ BUILDERS = freeze({
                 'testing': {
                     'platform': 'mac'
                 },
-                'ios_config': {
-                    'bucket': 'chromium-webrtc',
-                },
+                'service_account': CHROME_TEST_SERVICE_ACCOUNT,
                 'swarming_dimensions': {
                     'os': 'iOS-15.3',
                     'pool': 'chrome.tests',
@@ -1518,9 +1519,7 @@ BUILDERS = freeze({
                 'testing': {
                     'platform': 'mac'
                 },
-                'ios_config': {
-                    'bucket': 'chromium-webrtc',
-                },
+                'service_account': CHROME_TEST_SERVICE_ACCOUNT,
                 'swarming_dimensions': {
                     'os': 'iOS-15.3',
                     'pool': 'chrome.tests',
@@ -1540,9 +1539,7 @@ BUILDERS = freeze({
                 'testing': {
                     'platform': 'mac'
                 },
-                'ios_config': {
-                    'bucket': 'chromium-webrtc',
-                },
+                'service_account': CHROME_TEST_SERVICE_ACCOUNT,
                 'swarming_dimensions': {
                     'os': 'iOS-12.4.1',
                     'pool': 'WebRTC',
@@ -1569,9 +1566,7 @@ BUILDERS = freeze({
                 'testing': {
                     'platform': 'mac'
                 },
-                'ios_config': {
-                    'bucket': 'chromium-webrtc',
-                },
+                'service_account': CHROME_TEST_SERVICE_ACCOUNT,
                 'swarming_dimensions': {
                     'os': 'iOS-15.3',
                     'pool': 'chrome.tests',
@@ -1590,9 +1585,7 @@ BUILDERS = freeze({
                 'testing': {
                     'platform': 'mac'
                 },
-                'ios_config': {
-                    'bucket': 'chromium-webrtc',
-                },
+                'service_account': CHROME_TEST_SERVICE_ACCOUNT,
                 'swarming_dimensions': {
                     'os': 'iOS-15.3',
                     'pool': 'chrome.tests',
