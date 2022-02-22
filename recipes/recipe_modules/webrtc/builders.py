@@ -1543,8 +1543,9 @@ BUILDERS = freeze({
                 'swarming_dimensions': {
                     'os': 'iOS-12.4.1',
                     'pool': 'WebRTC',
+                    'id': 'build15-a7',
                 },
-                'swarming_timeout': 7200,  # 2h
+                'swarming_timeout': 10800,  # 3h
             },
         },
     },
