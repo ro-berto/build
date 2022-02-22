@@ -166,6 +166,7 @@ class RDBPerSuiteResults(object):
   invalid = attrib(bool, default=False)
   test_name_to_test_id_mapping = attrib(mapping[str, str])
   individual_results = attrib(mapping[str, sequence[...]])
+  test_id_prefix = attrib(str, default='')
 
   @classmethod
   def create(cls,
@@ -181,6 +182,7 @@ class RDBPerSuiteResults(object):
           non-zero exit code. If this occurs and no unexpected failures were
           reported, it indicates invalid test results.
     """
+    test_id_prefix = ''
     results_by_test_id = collections.defaultdict(list)
     variant_hash = ''
     test_name_to_test_id_mapping = {}
@@ -202,7 +204,12 @@ class RDBPerSuiteResults(object):
         for tag in tr.tags:
           if tag.key == 'test_name':
             test_name = tag.value
+            # if test_name is provided, and the test id does match up
+            # with its name, use this to deduce the test_id_prefix.
+            if not test_id_prefix and test_name in tr.test_id:
+              test_id_prefix = tr.test_id[:tr.test_id.index(test_name)]
             break
+
         # Don't bother keeping a name map for tests with uninteresting results.
         if not tr.expected:
           test_name_to_test_id_mapping[test_name] = tr.test_id
@@ -238,7 +245,7 @@ class RDBPerSuiteResults(object):
     return cls(suite_name, variant_hash, total_tests_ran,
                unexpected_passing_tests, unexpected_failing_tests,
                unexpected_skipped_tests, invalid, test_name_to_test_id_mapping,
-               individual_results)
+               individual_results, test_id_prefix)
 
   def with_failure_on_exit(self, failure_on_exit):
     """Returns a new instance with an updated failure_on_exit value.

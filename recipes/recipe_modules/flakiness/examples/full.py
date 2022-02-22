@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import attr
 import base64
 
 from recipe_engine import post_process
@@ -113,20 +114,24 @@ def GenTests(api):
             resultdb=build_pb2.BuildInfra.ResultDB(invocation=invocation)),
         input=build_input)
 
-  def _generate_test_result(test_id, test_variant, status=None):
+  def _generate_test_result(test_id, test_variant, status=None, tags=None):
     status = status or test_result_pb2.PASS
     vd = getattr(test_variant, 'def')
     vh_in = '\n'.join(
         '{}:{}'.format(k, v)
         for k, v in api.py3_migration.consistent_ordering(vd.items()))
     vh = base64.b64encode(vh_in.encode('utf-8')).decode('utf-8')
-    return test_result_pb2.TestResult(
+    tr = test_result_pb2.TestResult(
         test_id=test_id,
         variant=test_variant,
         variant_hash=vh,
         expected=False,
         status=status,
     )
+    if tags:
+      all_tags = getattr(tr, 'tags')
+      all_tags.append(tags)
+    return tr
 
   build_database = []
   current_patchset_bookmark_suite_invocations = {}
@@ -180,6 +185,19 @@ def GenTests(api):
                   chromium_config='chromium',
                   gclient_config='chromium',
               ),
+          'fake-android-builder':
+              ctbc.BuilderSpec.create(
+                  android_config='main_builder_mb',
+                  chromium_config='android',
+                  gclient_config='chromium',
+                  gclient_apply_config=[
+                      'android',
+                  ],
+                  chromium_config_kwargs={
+                      'BUILD_CONFIG': 'Release',
+                      'TARGET_BITS': 32,
+                      'TARGET_PLATFORM': 'android',
+                  }),
       },
   })
 
@@ -314,6 +332,141 @@ def GenTests(api):
                                  ),
                                  failure=False)),
       api.post_process(post_process.StatusSuccess),
+  )
+
+  tags = resultdb_common.StringPair(key='test_name', value='Test:Test1')
+  linux_variant = _generate_variant(
+      os='Ubuntu-16', test_suite='base_junit_tests')
+  junit_invocations = {
+      'invocations/build:8945511751514863184':
+          api.resultdb.Invocation(test_results=[
+              _generate_test_result(
+                  test_id='ninja://base:base_junit_tests/Test:Test1',
+                  test_variant=linux_variant,
+                  tags=tags)
+          ])
+  }
+
+  yield api.test(
+      'basic_junit_tests',
+      api.chromium_tests_builder_config.try_build(
+          builder_group='fake-try-group',
+          builder='fake-android-try-builder',
+          builder_db=builder_db,
+          try_db=ctbc.TryDatabase.create({
+              'fake-try-group': {
+                  'fake-android-try-builder':
+                      ctbc.TrySpec.create_for_single_mirror(
+                          builder_group='fake-group',
+                          buildername='fake-android-builder',
+                      ),
+              },
+          })),
+      api.properties(assert_tests=True),
+      api.chromium_tests.read_source_side_spec(
+          'fake-group', {
+              'fake-android-builder': {
+                  'junit_tests': [{
+                      'isolate_profile_data': True,
+                      'name': 'base_junit_tests',
+                      'resultdb': {
+                          'enable': True,
+                          'has_native_resultdb_integration': True
+                      },
+                      'swarming': {},
+                      'test': 'base_junit_tests',
+                      'test_id_prefix': 'ninja://base:base_junit_tests/'
+                  }],
+              },
+          }),
+      api.filter.suppress_analyze(),
+      api.flakiness(
+          check_for_flakiness=True,
+          build_count=10,
+          historical_query_count=2,
+          current_query_count=2,
+      ),
+      api.resultdb.query(
+          junit_invocations,
+          ('base_junit_tests results'),
+      ),
+      api.step_data(
+          'git diff to analyze patch (2)',
+          api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
+      api.resultdb.get_test_result_history(
+          resultdb_pb2.GetTestResultHistoryResponse(entries=[]),
+          step_name=(
+              'searching_for_new_tests.'
+              'cross reference newly identified tests against ResultDB')),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  tags = resultdb_common.StringPair(
+      key='test_name', value='check_network_annotations')
+  linux_variant = _generate_variant(
+      os='Ubuntu-16', test_suite='check_network_annotations')
+  script_invocation = {
+      'invocations/build:8945511751514863184':
+          api.resultdb.Invocation(test_results=[
+              _generate_test_result(
+                  test_id='check_network_annotations',
+                  test_variant=linux_variant)
+          ])
+  }
+
+  yield api.test(
+      'basic_scripts_tests',
+      api.chromium_tests_builder_config.try_build(
+          builder_group='fake-try-group',
+          builder='fake-android-try-builder',
+          builder_db=builder_db,
+          try_db=ctbc.TryDatabase.create({
+              'fake-try-group': {
+                  'fake-android-try-builder':
+                      ctbc.TrySpec.create_for_single_mirror(
+                          builder_group='fake-group',
+                          buildername='fake-android-builder',
+                      ),
+              },
+          })),
+      api.properties(assert_tests=True),
+      api.chromium_tests.read_source_side_spec(
+          'fake-group', {
+              'fake-android-builder': {
+                  'scripts': [{
+                      'isolate_profile_data': True,
+                      'name': 'check_network_annotations',
+                      'resultdb': {
+                          'enable': True,
+                          'has_native_resultdb_integration': True
+                      },
+                      'script': 'check_network_annotations.py',
+                      'swarming': {}
+                  }],
+              },
+          }),
+      api.filter.suppress_analyze(),
+      api.flakiness(
+          check_for_flakiness=True,
+          build_count=10,
+          historical_query_count=2,
+          current_query_count=2,
+      ),
+      api.resultdb.query(
+          script_invocation,
+          ('check_network_annotations results'),
+      ),
+      api.step_data(
+          'git diff to analyze patch (2)',
+          api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
+      api.resultdb.get_test_result_history(
+          resultdb_pb2.GetTestResultHistoryResponse(entries=[]),
+          step_name=(
+              'searching_for_new_tests.'
+              'cross reference newly identified tests against ResultDB')),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
   )
 
   flaky_results = {

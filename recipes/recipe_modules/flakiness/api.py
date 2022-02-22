@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import attr
 import copy
 import inspect
 import json
@@ -588,9 +589,20 @@ class FlakinessApi(recipe_api.RecipeApi):
         rdb_suite_result = test_object.get_rdb_results('with patch')
         for test_name in rdb_suite_result.individual_results:
           test_id = test_name
+
+          # If the test_id_prefix isn't set for the object (ie/ Junit tests),
+          # fetch it from the ResultDB Test Result object. Note that some test
+          # ids won't always match up directly with it's name, so just use the
+          # test_id in this case. (go/chrome-test-id)
+          if not test_object.test_id_prefix and rdb_suite_result.test_id_prefix:
+            test_object.spec = attr.evolve(
+                test_object.spec,
+                test_id_prefix=rdb_suite_result.test_id_prefix)
           # Prepend test_id_prefix if the test_name doesn't have it.
-          if not test_id.startswith(test_object.test_id_prefix):
+          if test_object.test_id_prefix and not test_id.startswith(
+              test_object.test_id_prefix):
             test_id = test_object.test_id_prefix + test_id
+
           current_tests.add(
               TestDefinition(
                   test_id,
@@ -686,27 +698,47 @@ class FlakinessApi(recipe_api.RecipeApi):
     new_test_objects = []
     for test in test_objects:
       test_filter = []
+      test_id_prefix = test.test_id_prefix or ''
       # find whether the Test object has a matching test_id.
       for new_test in new_tests:
-        if (test.test_id_prefix in new_test.test_id and
-            new_test.test_object == test):
-          # test_id = test_id_prefix + {A full test_suite + test_name
-          # representation}, so we use the test_id_prefix to split out
-          # the test_suite and test_name
-          test_filter.append(new_test.test_id.split(test.test_id_prefix)[-1])
+        if (new_test.test_object == test):
+          # Some test objects, such as ScriptTest, don't have a test_id_prefix,
+          # so we just append the test_id to the test_filter.
+          # Note that test_id = test_id_prefix + {A full test_suite + test_name
+          # representation}
+          test_filter.append(new_test.test_id[len(test_id_prefix):])
       if test_filter:
-        test_copy = copy.copy(test)
-        options = steps.TestOptions(
-            test_filter=test_filter,
-            repeat_count=self._repeat_count,
-            retry_limit=0)
-        test_copy.test_options = options
+        if isinstance(test, steps.AndroidJunitTest):
+          # android junit need the spec's additional_args updated with the
+          # repeat and filter clauses.
+          additional_args = list([
+              '--gtest_repeat=%s' % str(self._repeat_count),
+              '--gtest_filter=%s' % str(':'.join(test_filter)),
+              '--shards=1',
+          ])
+          test.spec = attr.evolve(test.spec, additional_args=additional_args)
+          new_test_objects.append(test)
+        elif isinstance(test, steps.ScriptTest):
+          script_args = list([
+              '--gtest_repeat=%s' % str(self._repeat_count),
+              '--gtest_filter=%s' % str(':'.join(test_filter)),
+              '--shards=1',
+          ])
+          test.spec = attr.evolve(test.spec, script_args=script_args)
+          new_test_objects.append(test)
+        else:
+          test_copy = copy.copy(test)
+          options = steps.TestOptions(
+              test_filter=test_filter,
+              repeat_count=self._repeat_count,
+              retry_limit=0)
+          test_copy.test_options = options
 
-        # we only need one shard of the test spec to run a test instance
-        # multiple times, we override whatever shard value was set prior to 1
-        if isinstance(test.spec, steps.SwarmingTestSpec):
-          test_copy.spec = test.spec.with_shards(1)
-        new_test_objects.append(test_copy)
+          # we only need one shard of the test spec to run a test instance
+          # multiple times, we override whatever shard value was set prior to 1
+          if isinstance(test.spec, steps.SwarmingTestSpec):
+            test_copy.spec = test.spec.with_shards(1)
+          new_test_objects.append(test_copy)
 
     return new_test_objects
 

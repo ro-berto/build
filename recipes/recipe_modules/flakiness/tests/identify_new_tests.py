@@ -60,9 +60,12 @@ def RunSteps(api):
     inv_bundle[inv] = api.resultdb.Invocation(test_results=test_results)
     rdb_suite_results = util.RDBPerSuiteResults.create(inv_bundle, suite_name,
                                                        1)
+    test_id_prefix = 'ninja://sample/test:some_test/'
+    if i == 2:
+      test_id_prefix = None
     test_spec = steps.SwarmingGTestTestSpec.create(
         suite_name,
-        test_id_prefix='ninja://sample/test:some_test/',
+        test_id_prefix=test_id_prefix,
         override_compile_targets=api.properties.get('override_compile_targets'),
         isolate_coverage_data=api.properties.get('isolate_coverage_data',
                                                  False))
