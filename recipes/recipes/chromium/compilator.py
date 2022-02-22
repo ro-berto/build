@@ -10,17 +10,25 @@ from PB.recipe_engine import result as result_pb2
 from RECIPE_MODULES.build import chromium
 from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 from recipe_engine import post_process
+from PB.go.chromium.org.luci.resultdb.proto.v1 \
+    import common as resultdb_common
+from PB.go.chromium.org.luci.resultdb.proto.v1 \
+    import test_result as test_result_pb2
+from PB.go.chromium.org.luci.resultdb.proto.v1 \
+    import resultdb as resultdb_pb2
 
 PYTHON_VERSION_COMPATIBILITY = "PY3"
 
 DEPS = [
     'chromium',
     'chromium_checkout',
+    'chromium_swarming',
     'chromium_tests',
     'chromium_tests_builder_config',
     'code_coverage',
     'depot_tools/tryserver',
     'filter',
+    'flakiness',
     'isolate',
     'recipe_engine/buildbucket',
     'recipe_engine/json',
@@ -28,6 +36,8 @@ DEPS = [
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/python',
+    'recipe_engine/raw_io',
+    'recipe_engine/resultdb',
     'recipe_engine/runtime',
     'recipe_engine/step',
     'test_utils',
@@ -134,6 +144,14 @@ def compilator_steps(api, properties):
         if raw_result and raw_result.status != common_pb.SUCCESS:
           return raw_result
 
+      # check for new flaky tests on successful run w/ patch
+      if api.flakiness.check_for_flakiness:
+        new_tests = api.flakiness.find_tests_for_flakiness(
+            non_isolated_tests, affected_files=task.affected_files)
+        if new_tests:
+          return api.chromium_tests.run_tests_for_flakiness(
+              orch_builder_config, new_tests)
+
     return raw_result
 
 
@@ -211,7 +229,8 @@ def GenTests(api):
                     "isolate_profile_data": True,
                     "name": "check_static_initializers",
                     "script": "check_static_initializers.py",
-                    "swarming": {}
+                    "swarming": {},
+                    "test_id_prefix": "ninja://check_static_initializers/"
                 }],
             },
             'Linux Tests': {
@@ -491,6 +510,117 @@ def GenTests(api):
           'builder \'Linux Builder\' on group \'chromium.linux\''
       ]),
       api.post_process(post_process.MustRun, 'swarming trigger properties'),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  def _generate_test_result(test_id,
+                            test_variant,
+                            status=test_result_pb2.PASS,
+                            tags=None):
+    vh = 'variant_hash'
+    tr = test_result_pb2.TestResult(
+        test_id=test_id,
+        variant=test_variant,
+        variant_hash=vh,
+        expected=False,
+        status=status,
+    )
+    if tags:
+      all_tags = getattr(tr, 'tags')
+      all_tags.append(tags)
+    return tr
+
+  correct_variant = resultdb_common.Variant()
+  variant_def = getattr(correct_variant, 'def')
+  variant_def['os'] = 'Ubuntu-18'
+  variant_def['test_suite'] = ('check_static_initializers')
+
+  tags = resultdb_common.StringPair(key='test_name', value='Test:Test1')
+
+  test_id = ('ninja://check_static_initializers/Test:Test1')
+  inv = 'invocations/build:8945511751514863184'
+  current_patchset_invocations = {
+      inv:
+          api.resultdb.Invocation(test_results=[
+              _generate_test_result(test_id, correct_variant, tags=tags)
+          ])
+  }
+
+  recent_run = resultdb_pb2.GetTestResultHistoryResponse(entries=[])
+
+  yield api.test(
+      'basic_flakiness',
+      api.chromium.try_build(
+          builder='linux-rel-compilator', revision='deadbeef'),
+      api.platform.name('linux'),
+      api.path.exists(api.path['checkout'].join('out/Release/browser_tests')),
+      api.properties(
+          InputProperties(
+              orchestrator=InputProperties.Orchestrator(
+                  builder_name='linux-rel-orchestrator',
+                  builder_group='tryserver.chromium.linux'))),
+      # api.filter.suppress_analyze(),
+      override_test_spec(),
+      # This additional analyze step is run by the flakiness module to ensure
+      # that there's a test file change associated with the patch.
+      api.step_data(
+          'git diff to analyze patch',
+          api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
+      api.resultdb.query(
+          current_patchset_invocations,
+          ('check_static_initializers results'),
+      ),
+      api.flakiness(check_for_flakiness=True,),
+      api.resultdb.get_test_result_history(
+          recent_run,
+          step_name=(
+              'searching_for_new_tests.'
+              'cross reference newly identified tests against ResultDB')),
+      api.post_process(post_process.MustRun, 'searching_for_new_tests'),
+      api.post_process(post_process.MustRun, 'test new tests for flakiness'),
+      api.post_process(post_process.MustRun, 'calculate flake rates'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'flaky_test_failure',
+      api.chromium.try_build(
+          builder='linux-rel-compilator', revision='deadbeef'),
+      api.platform.name('linux'),
+      api.path.exists(api.path['checkout'].join('out/Release/browser_tests')),
+      api.properties(
+          InputProperties(
+              orchestrator=InputProperties.Orchestrator(
+                  builder_name='linux-rel-orchestrator',
+                  builder_group='tryserver.chromium.linux'))),
+      override_test_spec(),
+      # This additional analyze step is run by the flakiness module to ensure
+      # that there's a test file change associated with the patch.
+      api.step_data(
+          'git diff to analyze patch',
+          api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
+      api.resultdb.query(
+          current_patchset_invocations,
+          ('check_static_initializers results'),
+      ),
+      api.flakiness(check_for_flakiness=True,),
+      api.resultdb.get_test_result_history(
+          recent_run,
+          step_name=(
+              'searching_for_new_tests.'
+              'cross reference newly identified tests against ResultDB')),
+      api.override_step_data(
+          'test new tests for flakiness.check_static_initializers results',
+          stdout=api.json.invalid(
+              api.test_utils.rdb_results(
+                  'check_static_initializers',
+                  flaky_tests=['Test.One'],
+              ))),
+      api.post_process(post_process.ResultReasonRE,
+                       '.*check_static_initializers.*'),
+      api.post_process(post_process.MustRun, 'calculate flake rates'),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
   )

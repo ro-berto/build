@@ -207,13 +207,21 @@ class FlakinessApi(recipe_api.RecipeApi):
         str(build_number) if build_number else 'latest',
     ) + '{}.json.tar.gz'.format(builder.builder)
 
-  def should_check_for_flakiness(self):
-    """Returns whether the module should run checks for new test flakiness.
+  def is_test_file_present(self, affected_files=None):
+    """Checks the list of affected files and ensures there's a test file.
 
-    At this time, it checks the list of affected file to see if any file is
-    possible to add a new test.
+    This is used to determine whether the flakiness workflow should run.
+
+    Args:
+      * affected_files: (list) of files associated with the given change. see
+                        self.m.chromium_checkout.get_files_affected_by_patch.
+
+    Returns:
+      (bool) whether a test file is present.
     """
-    affected_files = self.m.chromium_checkout.get_files_affected_by_patch()
+    affected_files = (
+        affected_files or
+        self.m.chromium_checkout.get_files_affected_by_patch())
     pattern = re.compile(_FILE_PATH_ADDING_TESTS_PATTERN)
     return any(pattern.match(file_path) for file_path in affected_files)
 
@@ -640,7 +648,7 @@ class FlakinessApi(recipe_api.RecipeApi):
 
     return new_tests
 
-  def find_tests_for_flakiness(self, test_objects):
+  def find_tests_for_flakiness(self, test_objects, affected_files=None):
     """Searches for new tests in a given change
 
     This method coordinates the workflow for searching and identifying new
@@ -666,7 +674,8 @@ class FlakinessApi(recipe_api.RecipeApi):
 
     Args:
       * test_objects = list of step.Test objects
-
+      * affected_files = a list of affected files (Paths), provided by the
+                         analyze step.
     Returns:
       A list of step.Test objects
     """
@@ -683,7 +692,7 @@ class FlakinessApi(recipe_api.RecipeApi):
           cmd=None)
       return []
 
-    if not self.should_check_for_flakiness():
+    if not self.is_test_file_present(affected_files=affected_files):
       self.m.step('no test files were detected with this change.', cmd=None)
       return []
 
