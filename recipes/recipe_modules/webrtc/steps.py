@@ -242,14 +242,16 @@ def SwarmingDesktopTest(name, chromium_tests_api, **kwargs):
           **kwargs), chromium_tests_api)
 
 
-def SwarmingPerfTest(name, chromium_test_api, **kwargs):
-  merge = chromium_swarming.MergeScript(
-      script=chromium_test_api.m.chromium_swarming.resource('noop_merge.py'))
+def SwarmingPerfTest(name, chromium_test_api, args=None, **kwargs):
+  args = args or []
+  args.append('--gtest_output=json:${ISOLATED_OUTDIR}/gtest_output.json')
   return steps.SwarmingIsolatedScriptTest(
       steps.SwarmingIsolatedScriptTestSpec.create(
           name,
-          merge=merge,
-          resultdb=ResultDB(result_format='gtest_json'),
+          args=args,
+          resultdb=ResultDB(
+              result_format='gtest_json',
+              result_file='${ISOLATED_OUTDIR}/gtest_output.json'),
           **kwargs), chromium_test_api)
 
 
