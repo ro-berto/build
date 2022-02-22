@@ -14,6 +14,7 @@ DEPS = [
     'depot_tools/tryserver',
     'goma',
     'ios',
+    'recipe_engine/buildbucket',
     'recipe_engine/commit_position',
     'recipe_engine/context',
     'recipe_engine/path',
@@ -34,7 +35,10 @@ def RunSteps(api):
   api.goma.start()
   build_exit_status = 1
 
-  api.webrtc.ensure_xcode("13a233")
+  api.chromium.set_config(
+      'webrtc_default', TARGET_PLATFORM='ios', HOST_PLATFORM='mac')
+  api.chromium.apply_config('mac_toolchain')
+  api.chromium.ensure_toolchains()
 
   try:
     build_script = api.path['checkout'].join('tools_webrtc', 'ios',
@@ -70,21 +74,24 @@ def GenTests(api):
   yield api.test(
       'build_ok',
       api.builder_group.for_current('client.webrtc'),
-      api.properties.generic(buildername='iOS API Framework Builder'),
+      api.buildbucket.generic_build(builder='iOS API Framework Builder'),
+      api.properties(xcode_build_version='dummy_xcode'),
   )
 
   yield api.test(
       'build_failure',
       api.builder_group.for_current('client.webrtc'),
-      api.properties.generic(buildername='iOS API Framework Builder'),
+      api.buildbucket.generic_build(builder='iOS API Framework Builder'),
+      api.properties(xcode_build_version='dummy_xcode'),
       api.step_data('build', retcode=1),
   )
 
   yield api.test(
       'trybot_build',
       api.builder_group.for_current('tryserver.webrtc'),
-      api.properties.tryserver(
-          buildername='ios_api_framework',
+      api.buildbucket.try_build(builder='ios_api_framework'),
+      api.properties(
+          xcode_build_version='dummy_xcode',
           gerrit_url='https://webrtc-review.googlesource.com',
           gerrit_project='src'),
   )
