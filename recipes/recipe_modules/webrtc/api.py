@@ -143,6 +143,8 @@ class WebRTCApi(recipe_api.RecipeApi):
           },
           'args': {
               '--xcode-build-version': xcode_version,
+              '--platform': self.bot.config.get('platform'),
+              '--version': self.bot.config.get('version'),
           },
       }
 

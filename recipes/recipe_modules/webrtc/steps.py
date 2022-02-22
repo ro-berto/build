@@ -207,7 +207,12 @@ def generate_tests(phase, bot, is_tryserver, chromium_tests_api, ios_config):
               args=[QUICK_PERF_TEST, '--nologs']))
 
   if test_suite == 'ios':
-    tests += [IosTest(t, xctest=True) for t in ios_tests]
+    if is_tryserver:
+      tests += [IosTest(t, xctest=True) for t in ios_tests]
+    else:
+      tests += [
+          SwarmingIosTest(t, chromium_tests_api, ios_config) for t in ios_tests
+      ]
 
   if test_suite == 'ios_device':
     tests = [
@@ -259,6 +264,8 @@ def SwarmingIosTest(name, chromium_test_api, ios_config, args=None):
   args = args or []
   for key, value in ios_config['args'].items():
     args += [key, value] if value else []
+  if name in USE_XCODE_PARALLELIZATION:
+    args += ['--xcode-parallelization']
 
   return steps.SwarmingIsolatedScriptTest(
       steps.SwarmingIsolatedScriptTestSpec.create(

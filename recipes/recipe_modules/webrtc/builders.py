@@ -9,6 +9,9 @@ from __future__ import absolute_import
 
 from recipe_engine.engine_types import freeze
 
+CHROMIUM_TEST_SERVICE_ACCOUNT = (
+    'chromium-tester@chops-service-accounts.iam.gserviceaccount.com')
+
 CHROME_TEST_SERVICE_ACCOUNT = (
     'chrome-tester@chops-service-accounts.iam.gserviceaccount.com')
 
@@ -58,6 +61,11 @@ RECIPE_CONFIGS = freeze({
         'gclient_config': 'webrtc',
         'gclient_apply_config': ['android'],
         'test_suite': 'android',
+    },
+    'webrtc_ios': {
+        'chromium_config': 'webrtc_default',
+        'gclient_config': 'webrtc_ios',
+        'test_suite': 'ios',
     },
     'webrtc_ios_device': {
         'chromium_config': 'webrtc_default',
@@ -618,6 +626,94 @@ BUILDERS = freeze({
                     'luci.webrtc.perf/Perf Android64 (M Nexus5X)',
                     'luci.webrtc.perf/Perf Android64 (O Pixel2)',
                 ],
+            },
+            'iOS64 Debug': {
+                'recipe_config': 'webrtc_ios',
+                'chromium_apply_config': ['mac_toolchain'],
+                'chromium_config_kwargs': {
+                    'BUILD_CONFIG': 'Debug',
+                    'TARGET_PLATFORM': 'ios',
+                    'TARGET_ARCH': 'arm',
+                    'TARGET_BITS': 64,
+                },
+                'bot_type': 'builder',
+                'testing': {
+                    'platform': 'mac'
+                },
+            },
+            'iOS64 Release': {
+                'recipe_config': 'webrtc_ios',
+                'chromium_apply_config': ['mac_toolchain'],
+                'chromium_config_kwargs': {
+                    'BUILD_CONFIG': 'Release',
+                    'TARGET_PLATFORM': 'ios',
+                    'TARGET_ARCH': 'arm',
+                    'TARGET_BITS': 64,
+                },
+                'bot_type': 'builder',
+                'testing': {
+                    'platform': 'mac'
+                },
+            },
+            'iOS64 Sim Debug (iOS 14.0)': {
+                'recipe_config': 'webrtc_ios',
+                'chromium_apply_config': ['mac_toolchain'],
+                'chromium_config_kwargs': {
+                    'BUILD_CONFIG': 'Debug',
+                    'TARGET_PLATFORM': 'ios',
+                    'TARGET_ARCH': 'intel',
+                    'TARGET_BITS': 64,
+                },
+                'bot_type': 'builder_tester',
+                'testing': {
+                    'platform': 'mac'
+                },
+                'service_account': CHROMIUM_TEST_SERVICE_ACCOUNT,
+                'platform': 'iPhone X',
+                'version': '14.0',
+                'swarming_dimensions': {
+                    'os': 'Mac-11',
+                },
+            },
+            'iOS64 Sim Debug (iOS 13)': {
+                'recipe_config': 'webrtc_ios',
+                'chromium_apply_config': ['mac_toolchain'],
+                'chromium_config_kwargs': {
+                    'BUILD_CONFIG': 'Debug',
+                    'TARGET_PLATFORM': 'ios',
+                    'TARGET_ARCH': 'intel',
+                    'TARGET_BITS': 64,
+                },
+                'bot_type': 'builder_tester',
+                'testing': {
+                    'platform': 'mac'
+                },
+                'service_account': CHROMIUM_TEST_SERVICE_ACCOUNT,
+                'platform': 'iPhone X',
+                'version': '13.6',
+                'swarming_dimensions': {
+                    'os': 'Mac-11',
+                },
+            },
+            'iOS64 Sim Debug (iOS 12)': {
+                'recipe_config': 'webrtc_ios',
+                'chromium_apply_config': ['mac_toolchain'],
+                'chromium_config_kwargs': {
+                    'BUILD_CONFIG': 'Debug',
+                    'TARGET_PLATFORM': 'ios',
+                    'TARGET_ARCH': 'intel',
+                    'TARGET_BITS': 64,
+                },
+                'bot_type': 'builder_tester',
+                'testing': {
+                    'platform': 'mac'
+                },
+                'service_account': CHROMIUM_TEST_SERVICE_ACCOUNT,
+                'platform': 'iPhone X',
+                'version': '12.4',
+                'swarming_dimensions': {
+                    'os': 'Mac-11',
+                },
             },
         },
     },

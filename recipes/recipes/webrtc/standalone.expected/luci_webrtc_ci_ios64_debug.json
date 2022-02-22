@@ -21,7 +21,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "env": {
-      "DEPOT_TOOLS_REPORT_BUILD": "webrtc/ci/iOS64 Release/8945511751514863184",
+      "DEPOT_TOOLS_REPORT_BUILD": "webrtc/ci/iOS64 Debug/8945511751514863184",
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "1800"
     },
@@ -174,6 +174,184 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "ensure xcode",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Ensuring Xcode version dummy_xcode in [CACHE]/xcode_ios_dummy_xcode.app@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
+      "[CACHE]/builder/src/build/ios_files"
+    ],
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "ensure xcode.delete deprecated Xcode cache",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[START_DIR]",
+      "-ensure-file",
+      "infra/tools/mac_toolchain/${platform} git_revision:ce6f859bf90d39c96271aba89a458b6c0b8e4ca2",
+      "-max-threads",
+      "0",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "ensure xcode.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:ce6\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/mac_toolchain/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[START_DIR]/mac_toolchain",
+      "install",
+      "-kind",
+      "ios",
+      "-xcode-version",
+      "dummy_xcode",
+      "-output-dir",
+      "[CACHE]/xcode_ios_dummy_xcode.app"
+    ],
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "ensure xcode.install xcode",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "sudo",
+      "xcode-select",
+      "-switch",
+      "[CACHE]/xcode_ios_dummy_xcode.app"
+    ],
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "ensure xcode.select xcode",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "pkill",
+      "-f",
+      "/ibtoold($| )"
+    ],
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "ensure xcode.kill ibtoold",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "xcrun",
+      "simctl",
+      "list"
+    ],
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "ensure xcode.reload simctl",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
     "cmd": [
       "cipd",
       "ensure",
@@ -226,7 +404,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_REPORT_BUILD": "webrtc/ci/iOS64 Release/8945511751514863184",
+      "DEPOT_TOOLS_REPORT_BUILD": "webrtc/ci/iOS64 Debug/8945511751514863184",
       "GYP_DEFINES": "clang=1",
       "MAC_TOOLCHAIN_INSTALLER": "[START_DIR]/mac_toolchain"
     },
@@ -250,298 +428,6 @@
     "name": "gclient runhooks"
   },
   {
-    "cmd": [],
-    "name": "apply build config"
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[CLEANUP]/ios_tmp_1/luci.webrtc.ci"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "webrtc:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "apply build config.create temp directory",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "{\n  \"configuration\": \"Release\",\n  \"gn_args\": [\n    \"is_debug=false\",\n    \"target_cpu=\\\"arm\\\"\",\n    \"use_goma=true\"\n  ],\n  \"sdk\": \"iphoneos10.3\",\n  \"tests\": [],\n  \"xcode build version\": \"10l232m\"\n}",
-      "[CLEANUP]/ios_tmp_1/luci.webrtc.ci/iOS64_Release.json"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "webrtc:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "apply build config.generate iOS64_Release.json",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@iOS64_Release.json@{@@@",
-      "@@@STEP_LOG_LINE@iOS64_Release.json@  \"configuration\": \"Release\",@@@",
-      "@@@STEP_LOG_LINE@iOS64_Release.json@  \"gn_args\": [@@@",
-      "@@@STEP_LOG_LINE@iOS64_Release.json@    \"is_debug=false\",@@@",
-      "@@@STEP_LOG_LINE@iOS64_Release.json@    \"target_cpu=\\\"arm\\\"\",@@@",
-      "@@@STEP_LOG_LINE@iOS64_Release.json@    \"use_goma=true\"@@@",
-      "@@@STEP_LOG_LINE@iOS64_Release.json@  ],@@@",
-      "@@@STEP_LOG_LINE@iOS64_Release.json@  \"sdk\": \"iphoneos10.3\",@@@",
-      "@@@STEP_LOG_LINE@iOS64_Release.json@  \"tests\": [],@@@",
-      "@@@STEP_LOG_LINE@iOS64_Release.json@  \"xcode build version\": \"10l232m\"@@@",
-      "@@@STEP_LOG_LINE@iOS64_Release.json@}@@@",
-      "@@@STEP_LOG_END@iOS64_Release.json@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CLEANUP]/ios_tmp_1/luci.webrtc.ci/iOS64_Release.json",
-      "/path/to/tmp/json"
-    ],
-    "luci_context": {
-      "realm": {
-        "name": "webrtc:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "apply build config.read build config",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"configuration\": \"Release\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"gn_args\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"is_debug=false\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"target_cpu=\\\"arm\\\"\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"use_goma=true\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"sdk\": \"iphoneos10.3\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tests\": [], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"xcode build version\": \"10l232m\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "apply build config.ensure_goma",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "cipd",
-      "ensure",
-      "-root",
-      "[CACHE]/goma/client",
-      "-ensure-file",
-      "infra_internal/goma/client/${platform} release",
-      "-max-threads",
-      "0",
-      "-json-output",
-      "/path/to/tmp/json"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "webrtc:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "apply build config.ensure_goma.ensure_installed",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra_internal/goma/client/resolved-platform\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "cipd",
-      "ensure",
-      "-root",
-      "[CACHE]/goma/bqupload",
-      "-ensure-file",
-      "infra/tools/bqupload/${platform} bqupload_pin",
-      "-max-threads",
-      "0",
-      "-json-output",
-      "/path/to/tmp/json"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "webrtc:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "apply build config.ensure_goma.ensure_installed (2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-bqupload_pin----\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/bqupload/resolved-platform\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "cipd",
-      "ensure",
-      "-root",
-      "[CACHE]/osx_sdk",
-      "-ensure-file",
-      "infra/tools/mac_toolchain/${platform} git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1",
-      "-max-threads",
-      "0",
-      "-json-output",
-      "/path/to/tmp/json"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "webrtc:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "ensure_installed (2)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:723\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/mac_toolchain/resolved-platform\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/osx_sdk/mac_toolchain",
-      "install",
-      "-kind",
-      "ios",
-      "-xcode-version",
-      "10l232m",
-      "-output-dir",
-      "[CACHE]/osx_sdk/XCode.app"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "webrtc:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "install xcode"
-  },
-  {
-    "cmd": [
-      "sudo",
-      "xcode-select",
-      "--switch",
-      "[CACHE]/osx_sdk/XCode.app"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "webrtc:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "select XCode"
-  },
-  {
     "cmd": [
       "python3",
       "-u",
@@ -550,7 +436,7 @@
       "-m",
       "client.webrtc",
       "-b",
-      "iOS64 Release",
+      "iOS64 Debug",
       "--config-file",
       "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
       "--goma-dir",
@@ -560,7 +446,6 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "",
       "GOMA_USE_LOCAL": "false"
     },
     "luci_context": {
@@ -589,19 +474,18 @@
       "-m",
       "client.webrtc",
       "-b",
-      "iOS64 Release",
+      "iOS64 Debug",
       "--config-file",
       "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
       "--json-output",
       "/path/to/tmp/json",
-      "//out/Release-iphoneos"
+      "//out/iOS64_Debug"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "",
       "GOMA_USE_LOCAL": "false"
     },
     "luci_context": {
@@ -632,8 +516,7 @@
       "/path/to/tmp/json"
     ],
     "env": {
-      "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1"
+      "CHROME_HEADLESS": "1"
     },
     "luci_context": {
       "realm": {
@@ -670,7 +553,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/iOS64_Release"
+      "[CACHE]/goma/data/iOS64_Debug"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -703,10 +586,9 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/iOS64_Release",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/iOS64_Debug",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -795,15 +677,14 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/Release-iphoneos",
+      "[CACHE]/builder/src/out/iOS64_Debug",
       "-j",
       "80",
       "default"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1"
+      "CHROME_HEADLESS": "1"
     },
     "luci_context": {
       "realm": {
@@ -825,7 +706,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/Release-iphoneos",
+      "[CACHE]/builder/src/out/iOS64_Debug",
       "-j",
       "80",
       "default",
@@ -835,8 +716,7 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1"
+      "CHROME_HEADLESS": "1"
     },
     "luci_context": {
       "realm": {
@@ -988,9 +868,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[CACHE]/builder/src/out/Release-iphoneos",
+      "[CACHE]/builder/src/out/iOS64_Debug",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Release-iphoneos\", \"-j\", 80, \"default\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/iOS64_Debug\", \"-j\", 80, \"default\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -1006,9 +886,9 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"ci\", \"builder\": \"iOS64 Release\", \"project\": \"webrtc\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"iOS64 Debug\", \"project\": \"webrtc\"}",
       "--buildbot-buildername",
-      "iOS64 Release"
+      "iOS64 Debug"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -1074,27 +954,6 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
-  },
-  {
-    "cmd": [
-      "sudo",
-      "xcode-select",
-      "--reset"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "webrtc:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "reset XCode"
   },
   {
     "name": "$result"

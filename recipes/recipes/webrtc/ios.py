@@ -52,104 +52,6 @@ RECIPE_CONFIGS = freeze({
 })
 
 BUILDERS = freeze({
-    'luci.webrtc.ci': {
-        'settings': {
-            'builder_group': 'client.webrtc',
-        },
-        'builders': {
-            'iOS64 Debug': {
-                'recipe_config': 'webrtc_ios',
-                'chromium_config_kwargs': {
-                    'BUILD_CONFIG': 'Debug',
-                    'TARGET_PLATFORM': 'ios',
-                    'TARGET_ARCH': 'arm',
-                    'TARGET_BITS': 64,
-                },
-                'bot_type': 'builder',
-                'testing': {
-                    'platform': 'mac'
-                },
-                'ensure_sdk': 'ios',
-                'ios_config': {
-                    'sdk': 'iphoneos10.3',
-                },
-            },
-            'iOS64 Release': {
-                'recipe_config': 'webrtc_ios',
-                'chromium_config_kwargs': {
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_PLATFORM': 'ios',
-                    'TARGET_ARCH': 'arm',
-                    'TARGET_BITS': 64,
-                },
-                'bot_type': 'builder',
-                'testing': {
-                    'platform': 'mac'
-                },
-                'ensure_sdk': 'ios',
-                'ios_config': {
-                    'sdk': 'iphoneos10.3',
-                },
-            },
-            'iOS64 Sim Debug (iOS 14.0)': {
-                'recipe_config': 'webrtc_ios',
-                'chromium_config_kwargs': {
-                    'BUILD_CONFIG': 'Debug',
-                    'TARGET_PLATFORM': 'ios',
-                    'TARGET_ARCH': 'intel',
-                    'TARGET_BITS': 64,
-                },
-                'bot_type': 'builder_tester',
-                'testing': {
-                    'platform': 'mac'
-                },
-                'ensure_sdk': 'ios',
-                'ios_testing': {
-                    'device type': 'iPhone X',
-                    'os': '14.0',
-                    'host os': 'Mac-11',
-                },
-            },
-            'iOS64 Sim Debug (iOS 13)': {
-                'recipe_config': 'webrtc_ios',
-                'chromium_config_kwargs': {
-                    'BUILD_CONFIG': 'Debug',
-                    'TARGET_PLATFORM': 'ios',
-                    'TARGET_ARCH': 'intel',
-                    'TARGET_BITS': 64,
-                },
-                'bot_type': 'builder_tester',
-                'testing': {
-                    'platform': 'mac'
-                },
-                'ensure_sdk': 'ios',
-                'ios_testing': {
-                    'device type': 'iPhone X',
-                    'os': '13.6',
-                    'host os': 'Mac-11',
-                },
-            },
-            'iOS64 Sim Debug (iOS 12)': {
-                'recipe_config': 'webrtc_ios',
-                'chromium_config_kwargs': {
-                    'BUILD_CONFIG': 'Debug',
-                    'TARGET_PLATFORM': 'ios',
-                    'TARGET_ARCH': 'intel',
-                    'TARGET_BITS': 64,
-                },
-                'bot_type': 'builder_tester',
-                'testing': {
-                    'platform': 'mac'
-                },
-                'ensure_sdk': 'ios',
-                'ios_testing': {
-                    'device type': 'iPhone X',
-                    'os': '12.4',
-                    'host os': 'Mac-11',
-                },
-            },
-        },
-    },
     'luci.webrtc.try': {
         'settings': {
             'builder_group': 'tryserver.webrtc',
@@ -321,8 +223,8 @@ def GenTests(api):
       )
 
   yield (generate_builder(
-      'luci.webrtc.ci',
-      'iOS64 Debug',
+      'luci.webrtc.try',
+      'ios_compile_arm64_dbg',
       revision='b' * 40,
       suffix='_fail_compile',
       fail_compile=True) +
