@@ -125,7 +125,9 @@ class BinarySizeApi(recipe_api.RecipeApi):
           self.m.tryserver.gerrit_change.patchset)
       author = revision_info['commit']['author']['email']
       commit_message = revision_info['commit']['message']
-      is_revert = commit_message.startswith('Revert')
+      review_subject = revision_info['commit']['subject']
+      review_url = self.m.tryserver.gerrit_change_review_url
+      is_revert = review_subject.startswith('Revert')
       # get_footer returns a list of footer values.
       has_size_footer = bool(
           self.m.tryserver.get_footer('Binary-Size', patch_text=commit_message))
@@ -236,9 +238,15 @@ class BinarySizeApi(recipe_api.RecipeApi):
       with self.m.context(cwd=self.m.path['checkout']):
         size_results_path = staging_dir.join('size_results.json')
         self._create_diffs(
-            author, without_results_dir, with_results_dir,
-                           size_results_path, staging_dir, use_m87_flow,
-                           is_fuchsia=is_fuchsia)
+            author,
+            review_subject,
+            review_url,
+            without_results_dir,
+            with_results_dir,
+            size_results_path,
+            staging_dir,
+            use_m87_flow,
+            is_fuchsia=is_fuchsia)
         expectation_success = self._maybe_fail_for_expectation_files(
             expectations_with_patch_json, expectations_without_patch_json)
         binary_size_success = self._check_for_undocumented_increase(
@@ -466,22 +474,34 @@ class BinarySizeApi(recipe_api.RecipeApi):
                                                    normalized_log_name)
     return url
 
-  def _create_diffs(self, author, before_dir, after_dir, results_path,
-                    staging_dir, use_m87_flow, is_fuchsia=False):
+  def _create_diffs(self,
+                    author,
+                    review_subject,
+                    review_url,
+                    before_dir,
+                    after_dir,
+                    results_path,
+                    staging_dir,
+                    use_m87_flow,
+                    is_fuchsia=False):
     if is_fuchsia:
       return self._create_diffs_fuchsia(before_dir, after_dir, results_path)
     else:
-      return self._create_diffs_android(author, before_dir, after_dir,
-                                        results_path, staging_dir, use_m87_flow)
+      return self._create_diffs_android(author, review_subject, review_url,
+                                        before_dir, after_dir, results_path,
+                                        staging_dir, use_m87_flow)
 
-  def _create_diffs_android(self, author, before_dir, after_dir, results_path,
-                    staging_dir, use_m87_flow):
+  def _create_diffs_android(self, author, review_subject, review_url,
+                            before_dir, after_dir, results_path, staging_dir,
+                            use_m87_flow):
     checker_script = self.m.path['checkout'].join(
         'tools', 'binary_size', 'trybot_commit_size_checker.py')
 
     with self.m.context(env={'PYTHONUNBUFFERED': '1'}):
       cmd = [checker_script]
       cmd += ['--author', author]
+      cmd += ['--review-subject', review_subject]
+      cmd += ['--review-url', review_url]
       if use_m87_flow:  # pragma: no cover
         cmd += ['--apk-name', 'MonochromePublic.minimal.apks']
       else:

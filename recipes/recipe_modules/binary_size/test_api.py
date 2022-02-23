@@ -33,7 +33,8 @@ class BinarySizeTestApi(recipe_test_api.RecipeTestApi):
             'parents': [{
                 'commit': 'deadveggie12345'
             }],
-        }
+            'subject': commit_message.splitlines()[0],
+        },
     }
     footer_json = {}
     if size_footer:
