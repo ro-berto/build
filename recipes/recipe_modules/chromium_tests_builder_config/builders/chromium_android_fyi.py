@@ -124,6 +124,22 @@ SPEC = {
             android_config='x86_builder_mb',
             simulation_platform='linux',
         ),
+    'android-12-x64-dbg-tests':
+        _chromium_android_fyi_spec(
+            chromium_config='android',
+            gclient_config='chromium',
+            gclient_apply_config=['android'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'android',
+            },
+            parent_builder_group='chromium.android',
+            parent_buildername='Android x64 Builder (dbg)',
+            execution_mode=builder_spec.TEST,
+            android_config='x64_builder_mb',
+            simulation_platform='linux',
+        ),
     'android-12-x64-fyi-rel':
         _chromium_android_fyi_spec(
             chromium_config='android',
@@ -191,6 +207,22 @@ SPEC = {
                 'TARGET_PLATFORM': 'android',
             },
             android_config='x86_builder',
+            simulation_platform='linux',
+        ),
+    'android-webview-12-x64-dbg-tests':
+        _chromium_android_fyi_spec(
+            chromium_config='android',
+            gclient_config='chromium',
+            gclient_apply_config=['android'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'android',
+            },
+            parent_builder_group='chromium.android',
+            parent_buildername='Android x64 Builder (dbg)',
+            execution_mode=builder_spec.TEST,
+            android_config='x64_builder_mb',
             simulation_platform='linux',
         ),
     'android-webview-pie-x86-wpt-fyi-rel':
