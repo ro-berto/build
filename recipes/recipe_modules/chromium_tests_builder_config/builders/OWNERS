@@ -14,8 +14,7 @@ per-file chromium_clang.py=thakis@chromium.org
 per-file chromium_dawn.py=bsheedy@chromium.org
 per-file chromium_dawn.py=kbr@chromium.org
 per-file chromium_dawn.py=ynovikov@chromium.org
-per-file chromium_devtools_*=liviurau@chromium.org
-per-file chromium_devtools_*=machenbach@chromium.org
+per-file chromium_devtools_*=file://recipes/recipe_modules/v8/OWNERS
 per-file chromium_fyi.py=thakis@chromium.org
 per-file chromium_gpu*=bsheedy@chromium.org
 per-file chromium_gpu*=kbr@chromium.org
@@ -26,14 +25,11 @@ per-file chromium_swangle.py=bsheedy@chromium.org
 per-file chromium_swangle.py=kbr@chromium.org
 per-file chromium_swangle.py=ynovikov@chromium.org
 per-file chromium_webrtc*.py=mbonadei@chromium.org
-per-file client_devtools_*=liviurau@chromium.org
-per-file client_devtools_*=machenbach@chromium.org
+per-file client_devtools_*=file://recipes/recipe_modules/v8/OWNERS
 per-file client_openscreen*.py=file://recipes/recipes/openscreen.expected/OWNERS
-per-file client_v8_*=liviurau@chromium.org
-per-file client_v8_*=machenbach@chromium.org
+per-file client_v8_*=file://recipes/recipe_modules/v8/OWNERS
 per-file tryserver_webrtc.py=mbonadei@chromium.org
-per-file tryserver_devtools_frontend.py=liviurau@chromium.org
-per-file tryserver_devtools_frontend.py=machenbach@chromium.org
+per-file tryserver_devtools_frontend.py=file://recipes/recipe_modules/v8/OWNERS
 
 # For goma canary bots config.
 per-file chromium_goma_fyi.py=file://recipes/goma/GOMA_OWNERS
