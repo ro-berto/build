@@ -371,7 +371,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "vpython3",
       "-u",
       "RECIPE_REPO[depot_tools]/gclient.py",
       "revinfo",
@@ -416,7 +416,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "vpython3",
       "-u",
       "RECIPE_REPO[depot_tools]/gclient.py",
       "revinfo",
@@ -514,7 +514,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "vpython3",
       "-u",
       "RECIPE_REPO[depot_tools]/gclient.py",
       "setdep",
@@ -576,7 +576,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "vpython3",
       "-u",
       "RECIPE_REPO[depot_tools]/gclient.py",
       "setdep",
@@ -679,7 +679,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "vpython3",
       "-u",
       "RECIPE_REPO[depot_tools]/gclient.py",
       "setdep",
@@ -712,7 +712,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "vpython3",
       "-u",
       "RECIPE_REPO[depot_tools]/gclient.py",
       "setdep",
@@ -745,7 +745,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "vpython3",
       "-u",
       "RECIPE_REPO[depot_tools]/gclient.py",
       "setdep",

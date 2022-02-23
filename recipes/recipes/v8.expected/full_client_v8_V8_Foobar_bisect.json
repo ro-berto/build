@@ -92,7 +92,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "vpython3",
       "-u",
       "RECIPE_REPO[depot_tools]/gclient.py",
       "runhooks"
@@ -683,7 +683,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "vpython3",
       "-u",
       "RECIPE_REPO[depot_tools]/gclient.py",
       "runhooks"
@@ -1031,7 +1031,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "vpython3",
       "-u",
       "RECIPE_REPO[depot_tools]/gclient.py",
       "runhooks"
@@ -1417,7 +1417,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "vpython3",
       "-u",
       "RECIPE_REPO[depot_tools]/gclient.py",
       "runhooks"
