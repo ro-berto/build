@@ -262,8 +262,7 @@ def SwarmingPerfTest(name, chromium_test_api, args=None, **kwargs):
 
 def SwarmingIosTest(name, chromium_test_api, ios_config, args=None):
   args = args or []
-  for key, value in ios_config['args'].items():
-    args += [key, value] if value else []
+  args += ios_config['args']
   if name in USE_XCODE_PARALLELIZATION:
     args += ['--xcode-parallelization']
 

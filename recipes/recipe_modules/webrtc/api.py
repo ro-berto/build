@@ -136,16 +136,18 @@ class WebRTCApi(recipe_api.RecipeApi):
 
     if self.m.properties.get('xcode_build_version'):
       xcode_version = self.m.properties['xcode_build_version']
+      args = ['--xcode-build-version', xcode_version]
+      named_caches = {'xcode_ios_' + xcode_version: 'Xcode.app'}
+      if self.bot.config.get('platform') and self.bot.config.get('version'):
+        platform = self.bot.config['platform']
+        version = self.bot.config['version']
+        args += ['--platform', platform, '--version', version]
+        named_caches['runtime_ios_' +
+                     sanitize_file_name(version)] = 'Runtime-ios-' + version
       self._ios_config = {
           'service_account': self.bot.config.get('service_account'),
-          'named_caches': {
-              'xcode_ios_' + xcode_version: 'Xcode.app',
-          },
-          'args': {
-              '--xcode-build-version': xcode_version,
-              '--platform': self.bot.config.get('platform'),
-              '--version': self.bot.config.get('version'),
-          },
+          'named_caches': named_caches,
+          'args': args,
       }
 
     if self.bot.should_upload_perf_results:
