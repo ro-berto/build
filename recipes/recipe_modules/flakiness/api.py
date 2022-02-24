@@ -751,23 +751,33 @@ class FlakinessApi(recipe_api.RecipeApi):
 
     return new_test_objects
 
-  def _flakiness_summary_markdown(self, suite_test_stats):
+  def _flakiness_summary_markdown(self, test_stats):
     """Creates a summary markdown using flakiness run results.
 
     Args:
-      suite_test_stats: A dictionary mapping from test suite name to another
-        dictionary mapping from test names to result stats. Stats are tuple of
-        (# Unexpected runs, # total runs). Only test names with unexpected
-        results are included.
+      test_stats: A dictionary mapping from (test id, variant hash) tuple to
+        a tuple of (test name, list of test step names with failed runs,
+        count of unexpected runs, count of total runs).
+        Only tests with unexpected results are included.
+
         E.g.
         {
-          'test_suite_1': {
-            'test_name_1': (1, 20),
-            'test_name_2': (1, 20),
-          },
-          'test_suite_2': {
-            'test_name_3': (2, 20),
-          },
+          (test_id_1, variant_hash_1): ('test_name_1',
+                             ['test_suite_1 (check flakiness, 0)']),
+                             1,
+                             20),
+          (test_id_2, variant_hash_1): ('test_name_2',
+                             ['test_suite_1 (check flakiness, 0)']),
+                             1,
+                             20),
+          (test_id_3, variant_hash_2): ('test_name_3',
+                             [
+                               'test_suite_1 (check flakiness, 0)',
+                               'test_suite_1 (check flakiness, 1)'
+                             ]
+                             2,
+                             20
+                             )
         }
 
     Returns:
@@ -775,13 +785,17 @@ class FlakinessApi(recipe_api.RecipeApi):
       flaky tests.
     """
     lines = []
-    for test_suite in suite_test_stats:
-      lines.append('**%s (%s)**' % (test_suite, self.test_suffix))
-      test_stats = suite_test_stats[test_suite]
-      lines.extend([
-          '- test: {}, # of failures: {}, total # of runs: {}'.format(
-              k, v[0], v[1]) for k, v in test_stats.items()
-      ])
+    for test, stats in test_stats.items():
+      variant_hash = test[1]
+      test_name = stats[0]
+      infra_steps = stats[1]
+      failures = stats[2]
+      total = stats[3]
+      lines.append('Test: **{}**, variant hash: {}, # of failures: {}, '
+                   'total # of runs: {}. See failed runs in:'.format(
+                       test_name, variant_hash, failures, total))
+
+      lines.extend(['- %s' % step for step in infra_steps])
     return lines
 
   def check_run_results(self, test_objects):
@@ -805,18 +819,32 @@ class FlakinessApi(recipe_api.RecipeApi):
           'indicate flakiness. See logs for details of the flaky test '
           'and the flake rate.')
       for t in test_objects:
-        flaky_test_stats = {}
+        flaky_test_stats = (
+            flaky_experimental_test_stats
+            if isinstance(t, steps.ExperimentalTest) else
+            flaky_non_experimental_test_stats)
         rdb_results = t.get_rdb_results(self.test_suffix)
+        step_name = '%s (%s)' % (t.name, self.test_suffix)
         for test_name, results in rdb_results.individual_results.items():
+          # Key is a tuple of (test_id, variant_hash)
+          key = ('%s%s' % (t.test_id_prefix, test_name),
+                 rdb_results.variant_hash)
           total = len(results)
           unexpected = total - results.count(test_result_pb2.PASS)
+          # Value fields are: (test name, list of suites with failures,
+          # count of unexpected runs, count of all runs)
+          info = flaky_test_stats.get(key, ('', [], 0, 0))
           if unexpected > 0:
-            flaky_test_stats[test_name] = (unexpected, total)
-        if flaky_test_stats:
-          if isinstance(t, steps.ExperimentalTest):
-            flaky_experimental_test_stats[t.name] = flaky_test_stats
-          else:
-            flaky_non_experimental_test_stats[t.name] = flaky_test_stats
+            info[1].append(step_name)
+          flaky_test_stats[key] = (test_name, info[1], info[2] + unexpected,
+                                   info[3] + total)
+
+      # Keep only test variants with unexpected results.
+      test_stats_filter = lambda item: item[1][2] > 0
+      flaky_non_experimental_test_stats = dict(
+          filter(test_stats_filter, flaky_non_experimental_test_stats.items()))
+      flaky_experimental_test_stats = dict(
+          filter(test_stats_filter, flaky_experimental_test_stats.items()))
 
       non_experimental_summary_lines = []
       if flaky_non_experimental_test_stats:
