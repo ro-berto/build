@@ -112,6 +112,13 @@ def compilator_steps(api, properties):
           isolate_output_files_for_coverage=True)
       test_suites = task.test_suites
 
+      deleted_files = get_deleted_files(api, task.affected_files)
+      if deleted_files:
+        del_files_step = api.step.empty('deleted files')
+        del_files_step.presentation.properties['deleted_files'] = deleted_files
+        del_files_step.presentation.logs['deleted_files'] = (
+            api.json.dumps(deleted_files, indent=2))
+
     if raw_result and raw_result.status != common_pb.SUCCESS:
       return raw_result
 
@@ -153,6 +160,14 @@ def compilator_steps(api, properties):
               orch_builder_config, new_tests)
 
     return raw_result
+
+
+def get_deleted_files(api, affected_files):
+  deleted_files = []
+  for f in affected_files:
+    if not api.path.exists(api.path['checkout'].join(f)):
+      deleted_files.append(f)
+  return deleted_files
 
 
 def report_parent_orchestrator_build(api, properties):
@@ -335,6 +350,23 @@ def GenTests(api):
       api.post_process(post_process.MustRun,
                        'check_static_initializers (with patch)'),
       api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'output_deleted_files',
+      api.chromium.try_build(
+          builder='linux-rel-compilator', revision='deadbeef'),
+      api.properties(
+          InputProperties(
+              orchestrator=InputProperties.Orchestrator(
+                  builder_name='linux-rel-orchestrator',
+                  builder_group='tryserver.chromium.linux'))),
+      api.tryserver.get_files_affected_by_patch(['foo.cc', 'bar/baz.cc']),
+      api.path.exists(api.path['checkout'].join('foo.cc')),
+      api.post_process(post_process.MustRun, 'deleted files'),
+      api.post_process(post_process.PropertyEquals, 'deleted_files',
+                       ['bar/baz.cc']),
       api.post_process(post_process.DropExpectation),
   )
 
