@@ -7891,7 +7891,7 @@
       "0",
       "-u",
       "-tr-fields",
-      "testId,variant,variantHash,status,tags,expected",
+      "testId,variant,variantHash,status,tags,expected,duration",
       "0"
     ],
     "cwd": "[CACHE]/builder",
@@ -8107,7 +8107,7 @@
       "0",
       "-u",
       "-tr-fields",
-      "testId,variant,variantHash,status,tags,expected",
+      "testId,variant,variantHash,status,tags,expected,duration",
       "1"
     ],
     "cwd": "[CACHE]/builder",
@@ -8323,7 +8323,7 @@
       "0",
       "-u",
       "-tr-fields",
-      "testId,variant,variantHash,status,tags,expected",
+      "testId,variant,variantHash,status,tags,expected,duration",
       "2"
     ],
     "cwd": "[CACHE]/builder",
@@ -8539,7 +8539,7 @@
       "0",
       "-u",
       "-tr-fields",
-      "testId,variant,variantHash,status,tags,expected",
+      "testId,variant,variantHash,status,tags,expected,duration",
       "3"
     ],
     "cwd": "[CACHE]/builder",
@@ -8755,7 +8755,7 @@
       "0",
       "-u",
       "-tr-fields",
-      "testId,variant,variantHash,status,tags,expected",
+      "testId,variant,variantHash,status,tags,expected,duration",
       "4"
     ],
     "cwd": "[CACHE]/builder",
@@ -8971,7 +8971,7 @@
       "0",
       "-u",
       "-tr-fields",
-      "testId,variant,variantHash,status,tags,expected",
+      "testId,variant,variantHash,status,tags,expected,duration",
       "5"
     ],
     "cwd": "[CACHE]/builder",
@@ -9188,7 +9188,7 @@
       "0",
       "-u",
       "-tr-fields",
-      "testId,variant,variantHash,status,tags,expected",
+      "testId,variant,variantHash,status,tags,expected,duration",
       "6",
       "7"
     ],
@@ -9438,7 +9438,7 @@
       "0",
       "-u",
       "-tr-fields",
-      "testId,variant,variantHash,status,tags,expected",
+      "testId,variant,variantHash,status,tags,expected,duration",
       "8",
       "9",
       "10",
@@ -9802,7 +9802,7 @@
       "0",
       "-u",
       "-tr-fields",
-      "testId,variant,variantHash,status,tags,expected",
+      "testId,variant,variantHash,status,tags,expected,duration",
       "14",
       "15",
       "16",
@@ -10105,7 +10105,7 @@
       "0",
       "-u",
       "-tr-fields",
-      "testId,variant,variantHash,status,tags,expected",
+      "testId,variant,variantHash,status,tags,expected,duration",
       "18"
     ],
     "cwd": "[CACHE]/builder",
@@ -10321,7 +10321,7 @@
       "0",
       "-u",
       "-tr-fields",
-      "testId,variant,variantHash,status,tags,expected",
+      "testId,variant,variantHash,status,tags,expected,duration",
       "19"
     ],
     "cwd": "[CACHE]/builder",
@@ -10537,7 +10537,7 @@
       "0",
       "-u",
       "-tr-fields",
-      "testId,variant,variantHash,status,tags,expected",
+      "testId,variant,variantHash,status,tags,expected,duration",
       "20"
     ],
     "cwd": "[CACHE]/builder",
@@ -10758,7 +10758,7 @@
       "0",
       "-u",
       "-tr-fields",
-      "testId,variant,variantHash,status,tags,expected",
+      "testId,variant,variantHash,status,tags,expected,duration",
       "21",
       "22",
       "23",
@@ -11119,7 +11119,7 @@
       "0",
       "-u",
       "-tr-fields",
-      "testId,variant,variantHash,status,tags,expected",
+      "testId,variant,variantHash,status,tags,expected,duration",
       "27"
     ],
     "cwd": "[CACHE]/builder",
@@ -11335,7 +11335,7 @@
       "0",
       "-u",
       "-tr-fields",
-      "testId,variant,variantHash,status,tags,expected",
+      "testId,variant,variantHash,status,tags,expected,duration",
       "28"
     ],
     "cwd": "[CACHE]/builder",
@@ -11551,7 +11551,7 @@
       "0",
       "-u",
       "-tr-fields",
-      "testId,variant,variantHash,status,tags,expected",
+      "testId,variant,variantHash,status,tags,expected,duration",
       "29"
     ],
     "cwd": "[CACHE]/builder",
@@ -11770,7 +11770,7 @@
       "0",
       "-u",
       "-tr-fields",
-      "testId,variant,variantHash,status,tags,expected",
+      "testId,variant,variantHash,status,tags,expected,duration",
       "30",
       "31",
       "32",
@@ -12073,7 +12073,7 @@
       "0",
       "-u",
       "-tr-fields",
-      "testId,variant,variantHash,status,tags,expected",
+      "testId,variant,variantHash,status,tags,expected,duration",
       "34"
     ],
     "cwd": "[CACHE]/builder",
@@ -12289,7 +12289,7 @@
       "0",
       "-u",
       "-tr-fields",
-      "testId,variant,variantHash,status,tags,expected",
+      "testId,variant,variantHash,status,tags,expected,duration",
       "35"
     ],
     "cwd": "[CACHE]/builder",

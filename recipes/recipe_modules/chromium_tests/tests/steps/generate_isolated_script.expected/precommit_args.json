@@ -104,7 +104,7 @@
       "0",
       "-u",
       "-tr-fields",
-      "testId,variant,variantHash,status,tags,expected",
+      "testId,variant,variantHash,status,tags,expected,duration",
       "test-name"
     ],
     "cwd": "[CACHE]/builder",

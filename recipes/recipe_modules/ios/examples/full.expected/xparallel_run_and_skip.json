@@ -1953,7 +1953,7 @@
       "0",
       "-u",
       "-tr-fields",
-      "testId,variant,variantHash,status,tags,expected",
+      "testId,variant,variantHash,status,tags,expected,duration",
       "0"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -2020,7 +2020,7 @@
       "0",
       "-u",
       "-tr-fields",
-      "testId,variant,variantHash,status,tags,expected",
+      "testId,variant,variantHash,status,tags,expected,duration",
       "1"
     ],
     "cwd": "[CACHE]/builder/src",

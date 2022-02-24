@@ -58,7 +58,7 @@ def RunSteps(api):
                            set(api.properties.get('benchmark_failures', [])),
                            set([]),
                            not api.properties.get('benchmark_result', True), {},
-                           {}))
+                           {}, {}))
     # shard_merge already ensures the profile_subdir is generated w/ step_name
     api.code_coverage.shard_merge(
         step, test.target_name, additional_merge=getattr(test, '_merge', None))

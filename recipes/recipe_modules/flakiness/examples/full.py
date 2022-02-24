@@ -5,6 +5,7 @@
 import attr
 import base64
 
+from google.protobuf import duration_pb2
 from recipe_engine import post_process
 from RECIPE_MODULES.build.chromium_tests import steps
 from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
@@ -114,19 +115,26 @@ def GenTests(api):
             resultdb=build_pb2.BuildInfra.ResultDB(invocation=invocation)),
         input=build_input)
 
-  def _generate_test_result(test_id, test_variant, status=None, tags=None):
+  def _generate_test_result(test_id,
+                            test_variant,
+                            status=None,
+                            tags=None,
+                            test_duration=10):
     status = status or test_result_pb2.PASS
     vd = getattr(test_variant, 'def')
     vh_in = '\n'.join(
         '{}:{}'.format(k, v)
         for k, v in api.py3_migration.consistent_ordering(vd.items()))
     vh = base64.b64encode(vh_in.encode('utf-8')).decode('utf-8')
+    duration = duration_pb2.Duration()
+    duration.FromMilliseconds(test_duration)
     tr = test_result_pb2.TestResult(
         test_id=test_id,
         variant=test_variant,
         variant_hash=vh,
-        expected=False,
+        expected=True,
         status=status,
+        duration=duration,
     )
     if tags:
       all_tags = getattr(tr, 'tags')

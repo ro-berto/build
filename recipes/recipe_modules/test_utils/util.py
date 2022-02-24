@@ -153,7 +153,8 @@ class RDBPerSuiteResults(object):
   """
 
   NEEDED_FIELDS = [
-      'testId', 'variant', 'variantHash', 'status', 'tags', 'expected'
+      'testId', 'variant', 'variantHash', 'status', 'tags', 'expected',
+      'duration'
   ]
 
   suite_name = attrib(str)
@@ -165,6 +166,9 @@ class RDBPerSuiteResults(object):
   unexpected_skipped_tests = attrib(set)
   invalid = attrib(bool, default=False)
   test_name_to_test_id_mapping = attrib(mapping[str, str])
+  # Mapping from test name to duration (in milliseconds) of an expectedly passed
+  # run if available.
+  test_named_to_passed_run_duration = attrib(mapping[str, int])
   individual_results = attrib(mapping[str, sequence[...]])
   test_id_prefix = attrib(str, default='')
 
@@ -220,8 +224,15 @@ class RDBPerSuiteResults(object):
     unexpected_failing_tests = set()
     unexpected_passing_tests = set()
     unexpected_skipped_tests = set()
+    test_named_to_passed_run_duration = {}
     individual_results = {}
     for test_name, test_results in results_by_test_id.items():
+      for tr in test_results:
+        # Just use duration of the first passed expected result with duration.
+        if tr.expected and tr.status == test_result_pb2.PASS and tr.duration:
+          duration = int(tr.duration.seconds * 1000 +
+                         int(tr.duration.nanos / 1000000.0))
+          test_named_to_passed_run_duration[test_name] = duration
       individual_results[test_name] = list(tr.status for tr in test_results)
       # This filters out any tests that were auto-retried within the
       # invocation and finished with an expected result. eg: a test that's
@@ -245,7 +256,8 @@ class RDBPerSuiteResults(object):
     return cls(suite_name, variant_hash, total_tests_ran,
                unexpected_passing_tests, unexpected_failing_tests,
                unexpected_skipped_tests, invalid, test_name_to_test_id_mapping,
-               individual_results, test_id_prefix)
+               test_named_to_passed_run_duration, individual_results,
+               test_id_prefix)
 
   def with_failure_on_exit(self, failure_on_exit):
     """Returns a new instance with an updated failure_on_exit value.

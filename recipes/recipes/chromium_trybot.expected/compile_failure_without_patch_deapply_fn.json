@@ -1641,7 +1641,7 @@
       "0",
       "-u",
       "-tr-fields",
-      "testId,variant,variantHash,status,tags,expected",
+      "testId,variant,variantHash,status,tags,expected,duration",
       "some-inv-name"
     ],
     "cwd": "[CACHE]/builder",
