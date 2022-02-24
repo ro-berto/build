@@ -127,6 +127,13 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.android.fyi',
                 buildername='android-12-x64-fyi-rel',
             ),
+        'android-12-x64-dbg':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.android',
+                buildername='Android x64 Builder (dbg)',
+                tester_group='chromium.android.fyi',
+                tester='android-12-x64-dbg-tests',
+            ),
         'android-asan':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.memory',
@@ -404,6 +411,13 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.gpu.fyi',
                 buildername='Optional Android Release (Pixel 4)',
                 retry_failed_shards=False,
+            ),
+        'android-webview-12-x64-dbg':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.android',
+                buildername='Android x64 Builder (dbg)',
+                tester_group='chromium.android.fyi',
+                tester='android-webview-12-x64-dbg-tests',
             ),
         'android-webview-marshmallow-arm64-dbg':
             try_spec.TrySpec.create_for_single_mirror(
