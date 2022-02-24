@@ -46,7 +46,7 @@ class Task(object):
            objects that can run tests [possibly remotely via swarming] and
            parse the results. Running tests multiple times is not idempotent
            -- the results of previous runs affect future runs.
-      affected_files: A list of paths affected by the CL.
+      affected_files: A list of paths (strings) affected by the CL.
   """
 
   def __init__(self, builder_config, test_suites, bot_update_step,
