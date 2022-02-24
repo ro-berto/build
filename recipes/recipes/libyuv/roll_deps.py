@@ -14,7 +14,6 @@ DEPS = [
   'recipe_engine/context',
   'recipe_engine/json',
   'recipe_engine/path',
-  'recipe_engine/python',
   'recipe_engine/runtime',
   'recipe_engine/step',
 ]
@@ -72,8 +71,9 @@ def RunSteps(api):
     else:
       params.append('--cq-over=2000')
 
+    cmd = ['vpython3', '-u', script_path] + params
     with api.depot_tools.on_path():
-      api.python('autoroll DEPS', script_path, params)
+      api.step('autoroll DEPS', cmd)
 
 
 def GenTests(api):

@@ -135,7 +135,7 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython3",
       "-u",
       "[CACHE]/builder/src/tools_libyuv/autoroller/roll_deps.py",
       "--clean",
