@@ -954,26 +954,6 @@ SPEC = {
             parent_buildername='GPU FYI Android arm64 Builder',
             simulation_platform='linux',
         ),
-    'Android FYI Release (Nexus 9)':
-        _chromium_gpu_fyi_spec(
-            chromium_config='android',
-            chromium_apply_config=[
-                'download_vr_test_apks',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'android',
-                'enable_reclient',
-            ],
-            chromium_config_kwargs={
-                'TARGET_PLATFORM': 'android',
-            },
-            android_config='arm64_builder_rel_mb',
-            execution_mode=builder_spec.TEST,
-            parent_buildername='GPU FYI Android arm64 Builder',
-            simulation_platform='linux',
-            serialize_tests=True,
-        ),
     'Android FYI Release (NVIDIA Shield TV)':
         _chromium_gpu_fyi_spec(
             chromium_config='android',
