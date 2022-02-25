@@ -5,7 +5,6 @@
 from __future__ import absolute_import
 
 from RECIPE_MODULES.build.chromium_android import CONFIG_CTX
-from recipe_engine.config_types import Path
 
 
 @CONFIG_CTX(includes=['base_config', 'use_devil_provision'])

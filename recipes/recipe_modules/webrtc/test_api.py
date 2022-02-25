@@ -6,17 +6,12 @@
 
 from __future__ import absolute_import
 
-import os
 import base64
-import json
-
 import six
 
 from recipe_engine import recipe_test_api
-from recipe_engine import config_types
 from . import api
 from . import builders as webrtc_builders
-from . import steps
 
 
 class WebRTCTestApi(recipe_test_api.RecipeTestApi):

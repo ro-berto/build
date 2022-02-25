@@ -4,9 +4,6 @@
 
 from __future__ import absolute_import
 
-from recipe_engine.config import BadConf
-from recipe_engine.config_types import Path
-
 from RECIPE_MODULES.build.chromium import CONFIG_CTX
 
 

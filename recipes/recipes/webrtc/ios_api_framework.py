@@ -13,7 +13,6 @@ DEPS = [
     'depot_tools/gclient',
     'depot_tools/tryserver',
     'goma',
-    'ios',
     'recipe_engine/buildbucket',
     'recipe_engine/commit_position',
     'recipe_engine/context',

@@ -4,20 +4,10 @@
 
 from __future__ import absolute_import
 
-import functools
-import json
-import os
-import re
-import sys
-
-from recipe_engine import recipe_api
 from recipe_engine.engine_types import freeze
 from RECIPE_MODULES.build import chromium_swarming
 from RECIPE_MODULES.build.chromium_tests import steps
 from RECIPE_MODULES.build.chromium_tests.resultdb import ResultDB
-
-THIS_DIR = os.path.dirname(__file__)
-sys.path.append(os.path.join(os.path.dirname(THIS_DIR)))
 
 
 # adb path relative to out dir (e.g. out/Release)
@@ -30,9 +20,9 @@ ANDROID_CIPD_PACKAGE = chromium_swarming.CipdPackage.create(
 )
 
 MAC_TOOLCHAIN_CIPD_PACKAGE = chromium_swarming.CipdPackage.create(
-    name='infra/tools/mac_toolchain/${platform}',
-    version='git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1',
-    root='.',
+    name=steps.MAC_TOOLCHAIN_PACKAGE,
+    version=steps.MAC_TOOLCHAIN_VERSION,
+    root=steps.MAC_TOOLCHAIN_ROOT,
 )
 
 QUICK_PERF_TEST = '--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/'
