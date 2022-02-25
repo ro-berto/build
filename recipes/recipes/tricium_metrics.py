@@ -6,7 +6,7 @@ from recipe_engine import post_process
 from google.protobuf import json_format
 from PB.tricium.data import Data
 
-PYTHON_VERSION_COMPATIBILITY = "PY2+3"
+PYTHON_VERSION_COMPATIBILITY = "PY3"
 
 DEPS = [
     'chromium',
