@@ -257,7 +257,7 @@ SPEC = {
                 'TARGET_PLATFORM': 'android',
             },
             gclient_config='chromium',
-            gclient_apply_config=['android'],
+            gclient_apply_config=['android', 'enable_reclient'],
             simulation_platform='linux',
         ),
     'linux-ubsan-vptr':

@@ -295,7 +295,7 @@ SPEC = {
                 'mb',
             ],
             gclient_config='chromium',
-            gclient_apply_config=['android'],
+            gclient_apply_config=['android', 'enable_reclient'],
             chromium_config_kwargs={
                 'TARGET_PLATFORM': 'android',
                 'TARGET_ARCH': 'arm',
@@ -311,7 +311,7 @@ SPEC = {
                 'mb',
             ],
             gclient_config='chromium',
-            gclient_apply_config=['android'],
+            gclient_apply_config=['android', 'enable_reclient'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_PLATFORM': 'android',
@@ -328,7 +328,7 @@ SPEC = {
                 'mb',
             ],
             gclient_config='chromium',
-            gclient_apply_config=['android'],
+            gclient_apply_config=['android', 'enable_reclient'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_PLATFORM': 'android',

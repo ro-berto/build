@@ -413,7 +413,7 @@ def stock_config(name,
       'chromium_config': 'android',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
+      'gclient_apply_config': ['android', 'enable_reclient'],
       'chromium_config_kwargs': {
           'BUILD_CONFIG': config,
           'TARGET_BITS': 32,
@@ -451,10 +451,7 @@ SPEC.update([
         'android-bfcache-rel',
         chromium_apply_config=['download_vr_test_apks'],
         chromium_config_kwargs={'TARGET_BITS': 32}),
-    stock_config(
-        'android-incremental-dbg',
-        config='Debug',
-        gclient_apply_config=['android', 'enable_reclient']),
+    stock_config('android-incremental-dbg', config='Debug'),
     stock_config(
         'android-lollipop-arm-rel',
         chromium_apply_config=['download_vr_test_apks'],
@@ -464,15 +461,14 @@ SPEC.update([
         chromium_apply_config=[
             'download_vr_test_apks',
         ],
-        gclient_apply_config=['android', 'enable_reclient'],
         chromium_config_kwargs={'TARGET_BITS': 64}),
     stock_config(
         'android-marshmallow-x86-rel',
-        gclient_apply_config=['android', 'enable_wpr_tests'],
+        gclient_apply_config=['android', 'enable_wpr_tests', 'enable_reclient'],
         android_config='x86_builder'),
     stock_config(
         'android-marshmallow-x86-rel-non-cq',
-        gclient_apply_config=['android', 'enable_wpr_tests'],
+        gclient_apply_config=['android', 'enable_wpr_tests', 'enable_reclient'],
         android_config='x86_builder'),
     stock_config(
         'android-nougat-arm64-rel',
@@ -480,7 +476,9 @@ SPEC.update([
         chromium_config_kwargs={'TARGET_BITS': 64}),
     stock_config(
         'android-pie-arm64-coverage-experimental-rel',
-        gclient_apply_config=['android', 'use_clang_coverage'],
+        gclient_apply_config=[
+            'android', 'use_clang_coverage', 'enable_reclient'
+        ],
         chromium_config_kwargs={'TARGET_BITS': 64}),
     stock_config(
         'android-pie-arm64-rel', chromium_config_kwargs={'TARGET_BITS': 64}),
