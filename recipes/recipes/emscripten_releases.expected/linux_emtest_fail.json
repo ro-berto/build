@@ -1,7 +1,7 @@
 [
   {
     "cmd": [
-      "vpython3",
+      "python",
       "-u",
       "[CACHE]/builder/emscripten-releases/src/build.py",
       "--sync-dir=[CACHE]/builder/emscripten-releases",
