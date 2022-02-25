@@ -88,6 +88,11 @@ SPEC = {
             'win',
             execution_mode=builder_spec.TEST,
             parent_buildername='win-updater-builder-dbg'),
+    'win7-updater-tester-dbg-uac':
+        CreateBuilderConfig(
+            'win',
+            execution_mode=builder_spec.TEST,
+            parent_buildername='win-updater-builder-dbg'),
     'win10-updater-tester-dbg':
         CreateBuilderConfig(
             'win',
