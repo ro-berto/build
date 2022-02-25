@@ -80,6 +80,10 @@ CHROME_REQUIRED_FILES = {
     'fuchsia': [
         'chromedriver',
         'gen',
+        'gen/chrome',
+        'gen/chrome/app',
+        'gen/chrome/app/chrome',
+        'gen/chrome/app/chrome/chrome.far',
         'gen/fuchsia',
         'gen/fuchsia/runners',
         'gen/fuchsia/runners/cast_runner',
