@@ -77,6 +77,17 @@ RECIPE_CONFIGS = freeze({
         'gclient_config': 'webrtc_ios',
         'test_suite': 'ios_perf',
     },
+    'webrtc_more_configs': {
+        'chromium_config': 'webrtc_default',
+        'gclient_config': 'webrtc',
+        'test_suite': 'more_configs',
+    },
+    'webrtc_android_more_configs': {
+        'chromium_config': 'android',
+        'gclient_config': 'webrtc',
+        'gclient_apply_config': ['android'],
+        'test_suite': 'more_configs',
+    },
 })
 
 BUILDERS = freeze({
@@ -713,6 +724,63 @@ BUILDERS = freeze({
                 'version': '12.4',
                 'swarming_dimensions': {
                     'os': 'Mac-11',
+                },
+            },
+            'Linux (more configs)': {
+                'recipe_config': 'webrtc_more_configs',
+                'chromium_config_kwargs': {
+                    'BUILD_CONFIG': 'Debug',
+                    'TARGET_BITS': 64,
+                },
+                'bot_type': 'builder_tester',
+                'testing': {
+                    'platform': 'linux'
+                },
+                'phases': [
+                    'bwe_test_logging', 'dummy_audio_file_devices_no_protobuf',
+                    'rtti_no_sctp'
+                ],
+                'swarming_dimensions': {
+                    'os': 'Ubuntu-16.04',
+                    'cpu': 'x86-64',
+                },
+            },
+            'Android32 (more configs)': {
+                'recipe_config':
+                    'webrtc_android_more_configs',
+                'chromium_config_kwargs': {
+                    'BUILD_CONFIG': 'Debug',
+                    'TARGET_PLATFORM': 'android',
+                    'TARGET_ARCH': 'arm',
+                    'TARGET_BITS': 32,
+                },
+                'bot_type':
+                    'builder',
+                'testing': {
+                    'platform': 'linux'
+                },
+                'phases': [
+                    'bwe_test_logging', 'dummy_audio_file_devices_no_protobuf',
+                    'rtti_no_sctp'
+                ],
+            },
+            'Win (more configs)': {
+                'recipe_config': 'webrtc_more_configs',
+                'chromium_config_kwargs': {
+                    'BUILD_CONFIG': 'Debug',
+                    'TARGET_BITS': 64,
+                },
+                'bot_type': 'builder_tester',
+                'testing': {
+                    'platform': 'win'
+                },
+                'phases': [
+                    'bwe_test_logging', 'dummy_audio_file_devices_no_protobuf',
+                    'rtti_no_sctp'
+                ],
+                'swarming_dimensions': {
+                    'os': 'Windows-7-SP1',
+                    'cpu': 'x86-64',
                 },
             },
         },
@@ -1575,6 +1643,63 @@ BUILDERS = freeze({
                     'os': 'Android',
                     'android_devices': '1',
                 }
+            },
+            'linux_more_configs': {
+                'recipe_config': 'webrtc_more_configs',
+                'chromium_config_kwargs': {
+                    'BUILD_CONFIG': 'Debug',
+                    'TARGET_BITS': 64,
+                },
+                'bot_type': 'builder_tester',
+                'testing': {
+                    'platform': 'linux'
+                },
+                'phases': [
+                    'bwe_test_logging', 'dummy_audio_file_devices_no_protobuf',
+                    'rtti_no_sctp'
+                ],
+                'swarming_dimensions': {
+                    'os': 'Ubuntu-16.04',
+                    'cpu': 'x86-64',
+                },
+            },
+            'android_arm_more_configs': {
+                'recipe_config':
+                    'webrtc_android_more_configs',
+                'chromium_config_kwargs': {
+                    'BUILD_CONFIG': 'Debug',
+                    'TARGET_PLATFORM': 'android',
+                    'TARGET_ARCH': 'arm',
+                    'TARGET_BITS': 32,
+                },
+                'bot_type':
+                    'builder',
+                'testing': {
+                    'platform': 'linux'
+                },
+                'phases': [
+                    'bwe_test_logging', 'dummy_audio_file_devices_no_protobuf',
+                    'rtti_no_sctp'
+                ],
+            },
+            'win_x86_more_configs': {
+                'recipe_config': 'webrtc_more_configs',
+                'chromium_config_kwargs': {
+                    'BUILD_CONFIG': 'Debug',
+                    'TARGET_BITS': 64,
+                },
+                'bot_type': 'builder_tester',
+                'testing': {
+                    'platform': 'win'
+                },
+                'phases': [
+                    'bwe_test_logging', 'dummy_audio_file_devices_no_protobuf',
+                    'rtti_no_sctp'
+                ],
+                'swarming_dimensions': {
+                    'os': 'Windows-7-SP1',
+                    'cpu': 'x86-64',
+                },
             },
         },
     },

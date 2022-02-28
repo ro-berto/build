@@ -53,24 +53,25 @@ def RunSteps(api):
     api.chromium.ensure_toolchains()
     api.chromium.runhooks()
 
-  if not webrtc.is_compile_needed():
-    step_result = api.step('No further steps are necessary.', cmd=None)
-    step_result.presentation.status = api.step.SUCCESS
-    return
+  for phase in webrtc.bot.phases:
+    if not webrtc.is_compile_needed(phase):
+      step_result = api.step('No further steps are necessary.', cmd=None)
+      step_result.presentation.status = api.step.SUCCESS
+      return
 
-  webrtc.configure_isolate()
+    webrtc.configure_isolate()
 
-  if webrtc.bot.should_build:
-    webrtc.run_mb()
-    raw_result = webrtc.compile()
-    if raw_result.status != common_pb.SUCCESS:
-      return raw_result
-    webrtc.isolate()
+    if webrtc.bot.should_build:
+      webrtc.run_mb(phase)
+      raw_result = webrtc.compile()
+      if raw_result.status != common_pb.SUCCESS:
+        return raw_result
+      webrtc.isolate()
 
-  webrtc.get_binary_sizes()
+    webrtc.get_binary_sizes()
 
-  if webrtc.bot.should_test:
-    webrtc.runtests()
+    if webrtc.bot.should_test:
+      webrtc.runtests(phase)
 
   webrtc.maybe_trigger()
 

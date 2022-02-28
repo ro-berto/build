@@ -41,7 +41,6 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
                        fail_android_archive=False,
                        is_experimental=False,
                        gn_analyze_output=None,
-                       phases=None,
                        tags=None):
     builder_group = builders[bucketname]['settings'].get(
         'builder_group', bucketname)
@@ -120,12 +119,7 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
     _, project, short_bucket = bucketname.split('.')
     if 'try' in bucketname:
       if 'fuzzer' not in buildername:
-        phase_suffix = ''
-        test += self.override_gn_analyze(gn_analyze_output, phase_suffix)
-        if phases:
-          for phase_number in range(1, len(phases)):
-            phase_suffix = ' (%s)' % (phase_number + 1)
-            test += self.override_gn_analyze(gn_analyze_output, phase_suffix)
+        test += self.override_gn_analyze(gn_analyze_output)
 
       test += self.m.buildbucket.try_build(
           project=project,
@@ -146,16 +140,14 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
 
     return test
 
-  def override_gn_analyze(self,
-                          gn_analyze_output,
-                          phase_suffix=''):
+  def override_gn_analyze(self, gn_analyze_output):
     if gn_analyze_output is None:
       gn_analyze_output = {
           'compile_targets': ['default'],
           'status': 'Found dependency',
           'test_targets': ['common_audio_unittests'],
       }
-    return self.override_step_data('analyze' + phase_suffix,
+    return self.override_step_data('analyze',
                                    self.m.json.output(gn_analyze_output))
 
 

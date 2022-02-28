@@ -65,6 +65,10 @@ class Bot(object):
     return self.recipe_config.get('test_suite')
 
   @property
+  def phases(self):
+    return self.config.get('phases', [None])
+
+  @property
   def should_build(self):
     is_perf_tester = self.should_upload_perf_results and self.should_test
     return (self.bot_type in ('builder', 'builder_tester')) or is_perf_tester
