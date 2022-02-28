@@ -10,7 +10,7 @@ def CreateAndroidBuilder():
       chromium_config='android',
       chromium_apply_config=['android'],
       gclient_config='chromium',
-      gclient_apply_config=['android'],
+      gclient_apply_config=['android', 'enable_reclient'],
       chromium_config_kwargs={
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
