@@ -22,8 +22,11 @@ DEPS = [
 # Name of pinpoint try builder -> (perf builder group, perf builder name)
 _PINPOINT_MAPPING = {
     'Android Compile Perf': ('chromium.perf', 'android-builder-perf'),
+    'Android Compile Perf PGO': ('chromium.perf', 'android-builder-perf-pgo'),
     'Android arm64 Compile Perf':
         ('chromium.perf', 'android_arm64-builder-perf'),
+    'Android arm64 Compile Perf PGO':
+        ('chromium.perf', 'android_arm64-builder-perf-pgo'),
     'Chromecast Linux Builder Perf':
         ('chromium.perf', 'chromecast-linux-builder-perf'),
     'Chromeos Amd64 Generic Lacros Builder Perf':
@@ -32,11 +35,16 @@ _PINPOINT_MAPPING = {
     'Fuchsia Builder Perf x64':
         ('chromium.perf.fyi', 'fuchsia-builder-perf-x64'),
     'Linux Builder Perf': ('chromium.perf', 'linux-builder-perf'),
+    'Linux Builder Perf PGO': ('chromium.perf', 'linux-builder-perf-pgo'),
     'Mac Builder Perf': ('chromium.perf', 'mac-builder-perf'),
+    'Mac Builder Perf PGO': ('chromium.perf', 'mac-builder-perf-pgo'),
     'Mac arm Builder Perf': ('chromium.perf', 'mac-arm-builder-perf'),
+    'Mac arm Builder Perf PGO': ('chromium.perf', 'mac-arm-builder-perf-pgo'),
     'mac-laptop_high_end-perf': ('chromium.perf', 'mac-laptop_high_end-perf'),
     'Win Builder Perf': ('chromium.perf', 'win32-builder-perf'),
+    'Win Builder Perf PGO': ('chromium.perf', 'win32-builder-perf-pgo'),
     'Win x64 Builder Perf': ('chromium.perf', 'win64-builder-perf'),
+    'Win x64 Builder Perf PGO': ('chromium.perf', 'win64-builder-perf-pgo'),
 }
 
 
