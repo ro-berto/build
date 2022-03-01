@@ -1777,27 +1777,46 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return '\n\n'.join(test_summary_lines)
 
-  def run_tests_for_flakiness(self, builder_config, new_test_objects):
-    suffix = self.m.flakiness.test_suffix
+  def run_tests_for_flakiness(self, builder_config, test_objects_by_suffix):
+    """Runs tests for flake endorser.
 
-    with self.m.step.nest(self.m.flakiness.RUN_TEST_STEP_NAME) as p:
+
+    Args:
+       builder_config: The configuration of the running builder.
+       test_objects_by_suffix: A dict mapping from test suffixes to lists of
+         steps.Test objects.
+
+    Returns:
+      A RawResult object with the status of the build and failure message if
+      there are flakiness. None if no flakiness.
+    """
+    general_suffix = self.m.flakiness.test_suffix
+    flakiness_run_step_name = self.m.flakiness.RUN_TEST_STEP_NAME
+
+    with self.m.step.nest(flakiness_run_step_name) as p:
       p.step_text = ('If you see failures unrelated with flaky new tests, '
                      'please use "Validate-Test-Flakiness: skip" git footer to '
                      'skip new test flakiness check and file a crbug to '
                      'Infra>Test>Flakiness component.')
-      with self.wrap_chromium_tests(builder_config, new_test_objects):
-        # we don't need failed test_suites because they'll be analyzed for flake
-        # rates anyways through their invocation ids below.
-        _, invalid_test_suites, _ = (
-            self.m.test_utils.run_tests_once(new_test_objects, suffix))
+      # |general_suffix| is always in |test_objects_by_suffix| dict and all
+      # local tests are under this key.
+      with self.wrap_chromium_tests(builder_config,
+                                    test_objects_by_suffix[general_suffix]):
+        invalid_suites_by_suffix = (
+            self.m.test_utils.run_tests_for_flake_endorser(
+                test_objects_by_suffix))
 
-        if invalid_test_suites:
+        if invalid_suites_by_suffix:
+          summary = ('The following steps in %s didn\'t have valid results:\n' %
+                     flakiness_run_step_name)
+          for suffix, suites in invalid_suites_by_suffix.items():
+            for suite in suites:
+              summary += '- %s (%s)\n' % (suite.name, suffix)
+
           return result_pb2.RawResult(
-              summary_markdown=self._format_unrecoverable_failures(
-                  invalid_test_suites, suffix),
-              status=common_pb.FAILURE)
+              summary_markdown=summary, status=common_pb.FAILURE)
 
-    return self.m.flakiness.check_run_results(new_test_objects)
+    return self.m.flakiness.check_run_results(test_objects_by_suffix)
 
   def determine_compilation_targets(self, builder_id, builder_config,
                                     affected_files, targets_config):

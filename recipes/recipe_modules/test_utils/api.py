@@ -204,22 +204,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
         failed_test_suites.append(t)
     return invalid_results, failed_test_suites
 
-  def run_tests_once(self, test_suites, suffix, sort_by_shard=False):
-    """Runs a set of tests once. Used as a helper function by run_tests.
-
-    Args:
-      test_suites - list of steps.Test objects representing tests to run
-      suffix - string specifying the stage/type of run, e.g. "without patch" or
-        "retry (with patch)".
-      sort_by_shard - if True, trigger tests in descending order by number of
-        shards required to run the test. Performance optimization.
-    Returns:
-      rdb_results: util.RDBResults instance for test results as reported by RDB
-      invalid suites, list of test_suites which were malformed or otherwise
-          aborted
-      failed suites, list of test_suites which failed in any way. Superset of
-          invalids
-    """
+  def _create_groups(self, test_suites, sort_by_shard=False):
+    """Creates test groups by checking item type in |test_suites|."""
     local_test_suites = []
     swarming_test_suites = []
     skylab_test_suites = []
@@ -242,6 +228,26 @@ class TestUtilsApi(recipe_api.RecipeApi):
         SwarmingGroup(swarming_test_suites, self.m.resultdb),
         SkylabGroup(skylab_test_suites, self.m.resultdb),
     ]
+    return groups
+
+  def run_tests_once(self, test_suites, suffix, sort_by_shard=False):
+    """Runs a set of tests once. Used as a helper function by run_tests.
+
+    Args:
+      test_suites - list of steps.Test objects representing tests to run
+      suffix - string specifying the stage/type of run, e.g. "without patch" or
+        "retry (with patch)".
+      sort_by_shard - if True, trigger tests in descending order by number of
+        shards required to run the test. Performance optimization.
+
+    Returns:
+      rdb_results: util.RDBResults instance for test results as reported by RDB
+      invalid suites, list of test_suites which were malformed or otherwise
+          aborted
+      failed suites, list of test_suites which failed in any way. Superset of
+          invalids
+    """
+    groups = self._create_groups(test_suites, sort_by_shard)
 
     nest_name = 'test_pre_run (%s)' % suffix if suffix else 'test_pre_run'
 
@@ -272,6 +278,45 @@ class TestUtilsApi(recipe_api.RecipeApi):
          test_suites, suffix)
 
     return rdb_results, bad_results_dict['invalid'], bad_results_dict['failed']
+
+  def run_tests_for_flake_endorser(self, test_objects_by_suffix):
+    """Runs tests and return results for flake endorser test reruns.
+
+    RDB results and failed test_suites isn't returned because flake rates will
+    be analyzed with rdb results stored in test objects.
+
+    Args:
+      test_objects_by_suffix: A mapping from test suffixes to lists of
+        steps.Test objects.
+
+    Returns:
+      A dict mapping from suffixes to lists of test_suites which were malformed
+        or otherwise aborted.
+    """
+    suffixes = sorted(test_objects_by_suffix.keys())
+    groups_by_suffix = {}
+    for suffix in suffixes:
+      groups = self._create_groups(test_objects_by_suffix[suffix])
+      groups_by_suffix[suffix] = groups
+
+      nest_name = 'test_pre_run (%s)' % suffix
+      with self.m.step.nest(nest_name):
+        for group in groups:
+          group.pre_run(self.m, suffix)
+
+    for suffix in suffixes:
+      groups = groups_by_suffix[suffix]
+      for group in groups:
+        group.run(self.m, suffix)
+
+    invalid_suites_by_suffix = {}
+    for suffix in suffixes:
+      test_suites = test_objects_by_suffix[suffix]
+      invalid, _ = self._retrieve_bad_results(test_suites, suffix)
+      if invalid:
+        invalid_suites_by_suffix[suffix] = invalid
+
+    return invalid_suites_by_suffix
 
   def _exonerate_unrelated_failures(self, test_suites, suffix):
     """Notifies RDB of any unexpected test failure that doesn't fail the build.

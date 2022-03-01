@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import attr
+import collections
 import copy
 import inspect
 import json
@@ -40,6 +41,7 @@ class TestDefinition():
   overriding __eq__ and __hash__ methods.
 
   Attributes:
+    * duration_milliseconds: (int) Test duration in milliseconds.
     * is_experimental: (bool) Whether the test is from an experimental suite.
     * tags: (list) Tags in the ResultDB test result. If tags are provided, and
             experimental is not True, the suffix 'experimental' is searched for
@@ -53,6 +55,7 @@ class TestDefinition():
 
   def __init__(self,
                test_id,
+               duration_milliseconds=None,
                is_experimental=False,
                tags=None,
                test_object=None,
@@ -61,6 +64,7 @@ class TestDefinition():
     """
     Args:
       * test_id: (str) ResultDB test id
+      * duration_milliseconds: (int) Test duration in milliseconds.
       * is_experimental: (bool) Flag indicating whether test run was
         experimental. If tags are defined, and this is False, step_name is
         searched for in the tags to determine whether 'experimental)' suffix
@@ -79,6 +83,7 @@ class TestDefinition():
       * variant_hash: (str) ResultDB's variant hash
     """
     self.test_id = test_id
+    self.duration_milliseconds = duration_milliseconds
     self.variants = variants
     if variants and isinstance(variants, str):
       self.variants = self._parse_string_variants(variants)
@@ -133,6 +138,9 @@ class FlakinessApi(recipe_api.RecipeApi):
     # This is to limit the final new test variants that's endorsed.
     self._max_test_targets = properties.max_test_targets or 40
     self._repeat_count = properties.repeat_count or 20
+    # The module will shard test reruns for swarming tests so that test
+    # in each shard is shorter than this length.
+    self._MAX_SHARD_TIME_MINUTES = 20
     # The max limit of test results in a test obejct, so that all results are
     # fetched for current build. If result count is larger, only unexpected
     # results are fetched. This means new tests in large suites are not
@@ -148,7 +156,7 @@ class FlakinessApi(recipe_api.RecipeApi):
 
   @property
   def test_suffix(self):
-    return 'check flakiness'
+    return self._suffix_by_shard_index(0)
 
   @property
   def check_for_flakiness(self):
@@ -165,6 +173,10 @@ class FlakinessApi(recipe_api.RecipeApi):
   @property
   def gs_bucket(self):
     return 'flake_endorser'
+
+  def _suffix_by_shard_index(self, index):
+    """Suffix used for the input shard index when step.Test is sharded."""
+    return 'check flakiness shard #%d' % index
 
   def gs_source_template(self, experimental=False):
     """Provides template for generator recipe
@@ -597,6 +609,10 @@ class FlakinessApi(recipe_api.RecipeApi):
         rdb_suite_result = test_object.get_rdb_results('with patch')
         for test_name in rdb_suite_result.individual_results:
           test_id = test_name
+          # Use 0 as duration if the info doesn't exist.
+          duration_milliseconds = (
+              rdb_suite_result.test_named_to_passed_run_duration.get(
+                  test_name, 0))
 
           # If the test_id_prefix isn't set for the object (ie/ Junit tests),
           # fetch it from the ResultDB Test Result object. Note that some test
@@ -614,6 +630,7 @@ class FlakinessApi(recipe_api.RecipeApi):
           current_tests.add(
               TestDefinition(
                   test_id,
+                  duration_milliseconds=duration_milliseconds,
                   is_experimental=isinstance(test_object,
                                              steps.ExperimentalTest),
                   test_object=test_object,
@@ -648,6 +665,30 @@ class FlakinessApi(recipe_api.RecipeApi):
 
     return new_tests
 
+  def _shard_runs(self, total_duration_milliseconds):
+    """Calculates and shards endorser test runs considering test duration.
+
+    Args:
+      total_duration_milliseconds: Total duration in milliseconds for all tests
+        to run once.
+
+    Returns:
+      A list of integers representing test runs in each shard.
+    """
+    if total_duration_milliseconds == 0:
+      return [self._repeat_count]
+    max_shard_time_milliseconds = self._MAX_SHARD_TIME_MINUTES * 60 * 1000
+    # Max runs per shard confirming to |self._MAX_SHARD_TIME_MINUTES|. At least
+    # 1 run per shard.
+    runs_per_shard = int(
+        max(max_shard_time_milliseconds / total_duration_milliseconds, 1))
+    remaining = self._repeat_count
+    shards = []
+    while remaining > 0:
+      shards.append(min(remaining, runs_per_shard))
+      remaining = remaining - runs_per_shard
+    return shards
+
   def find_tests_for_flakiness(self, test_objects, affected_files=None):
     """Searches for new tests in a given change
 
@@ -677,7 +718,7 @@ class FlakinessApi(recipe_api.RecipeApi):
       * affected_files = a list of affected files (Paths), provided by the
                          analyze step.
     Returns:
-      A list of step.Test objects
+      A mapping from test suffixes to lists of steps.Test objects.
     """
     # Check if there are endorser footers to parse
     commit_footer_values = [
@@ -699,13 +740,15 @@ class FlakinessApi(recipe_api.RecipeApi):
     new_tests = self.identify_new_tests(test_objects)
     new_tests = self.maybe_trim_new_tests(new_tests, _FINAL_TRIM)
 
+    test_objects_by_suffix = collections.defaultdict(list)
+
     # This operation is O(len(test_obj) * len(new_tests)) because parsing
     # test_id is only intended for LUCI UI grouping, see
     # http://shortn/_StMScXolrz. max_test_targets will also bind the number of
     # iterations here. We loop the test objects and check all new tests to see
     # if the test_id start similarly.
-    new_test_objects = []
     for test in test_objects:
+      total_duration_milliseconds = 0
       test_filter = []
       test_id_prefix = test.test_id_prefix or ''
       # find whether the Test object has a matching test_id.
@@ -716,6 +759,7 @@ class FlakinessApi(recipe_api.RecipeApi):
           # Note that test_id = test_id_prefix + {A full test_suite + test_name
           # representation}
           test_filter.append(new_test.test_id[len(test_id_prefix):])
+          total_duration_milliseconds += (new_test.duration_milliseconds or 0)
       if test_filter:
         if isinstance(test, steps.AndroidJunitTest):
           # android junit need the spec's additional_args updated with the
@@ -726,7 +770,7 @@ class FlakinessApi(recipe_api.RecipeApi):
               '--shards=1',
           ])
           test.spec = attr.evolve(test.spec, additional_args=additional_args)
-          new_test_objects.append(test)
+          test_objects_by_suffix[self.test_suffix].append(test)
         elif isinstance(test, steps.ScriptTest):
           script_args = list([
               '--gtest_repeat=%s' % str(self._repeat_count),
@@ -734,7 +778,18 @@ class FlakinessApi(recipe_api.RecipeApi):
               '--shards=1',
           ])
           test.spec = attr.evolve(test.spec, script_args=script_args)
-          new_test_objects.append(test)
+          test_objects_by_suffix[self.test_suffix].append(test)
+        elif isinstance(test.spec, steps.SwarmingTestSpec):
+          shards = self._shard_runs(total_duration_milliseconds)
+          for index, shard_runs in enumerate(shards):
+            test_copy = copy.copy(test)
+            options = steps.TestOptions(
+                test_filter=test_filter, repeat_count=shard_runs, retry_limit=0)
+            test_copy.test_options = options
+            # we don't use swarming's shard mechanism for endorser runs.
+            test_copy.spec = test.spec.with_shards(1)
+            test_objects_by_suffix[self._suffix_by_shard_index(index)].append(
+                test_copy)
         else:
           test_copy = copy.copy(test)
           options = steps.TestOptions(
@@ -742,14 +797,9 @@ class FlakinessApi(recipe_api.RecipeApi):
               repeat_count=self._repeat_count,
               retry_limit=0)
           test_copy.test_options = options
+          test_objects_by_suffix[self.test_suffix].append(test_copy)
 
-          # we only need one shard of the test spec to run a test instance
-          # multiple times, we override whatever shard value was set prior to 1
-          if isinstance(test.spec, steps.SwarmingTestSpec):
-            test_copy.spec = test.spec.with_shards(1)
-          new_test_objects.append(test_copy)
-
-    return new_test_objects
+    return test_objects_by_suffix
 
   def _flakiness_summary_markdown(self, test_stats):
     """Creates a summary markdown using flakiness run results.
@@ -798,12 +848,12 @@ class FlakinessApi(recipe_api.RecipeApi):
       lines.extend(['- %s' % step for step in infra_steps])
     return lines
 
-  def check_run_results(self, test_objects):
+  def check_run_results(self, suffix_suites):
     """Calculates and presents flakiness info using test results from input.
 
     Args:
-      test_objects: List of step.Test or steps.ExperimentalTest objects with
-          valid results for check flakiness suffix.
+      suffix_suites: A mapping from test suffixes to lists of steps.Test
+        objects with valid results for the suffix.
 
     Returns:
       A RawResult object with the status of the build and failure message if
@@ -818,26 +868,27 @@ class FlakinessApi(recipe_api.RecipeApi):
           'Tests that have exceeded the tolerated flake rate most likely '
           'indicate flakiness. See logs for details of the flaky test '
           'and the flake rate.')
-      for t in test_objects:
-        flaky_test_stats = (
-            flaky_experimental_test_stats
-            if isinstance(t, steps.ExperimentalTest) else
-            flaky_non_experimental_test_stats)
-        rdb_results = t.get_rdb_results(self.test_suffix)
-        step_name = '%s (%s)' % (t.name, self.test_suffix)
-        for test_name, results in rdb_results.individual_results.items():
-          # Key is a tuple of (test_id, variant_hash)
-          key = ('%s%s' % (t.test_id_prefix, test_name),
-                 rdb_results.variant_hash)
-          total = len(results)
-          unexpected = total - results.count(test_result_pb2.PASS)
-          # Value fields are: (test name, list of suites with failures,
-          # count of unexpected runs, count of all runs)
-          info = flaky_test_stats.get(key, ('', [], 0, 0))
-          if unexpected > 0:
-            info[1].append(step_name)
-          flaky_test_stats[key] = (test_name, info[1], info[2] + unexpected,
-                                   info[3] + total)
+      for suffix, test_objects in suffix_suites.items():
+        for t in test_objects:
+          flaky_test_stats = (
+              flaky_experimental_test_stats if isinstance(
+                  t, steps.ExperimentalTest) else
+              flaky_non_experimental_test_stats)
+          rdb_results = t.get_rdb_results(suffix)
+          step_name = '%s (%s)' % (t.name, suffix)
+          for test_name, results in rdb_results.individual_results.items():
+            # Key is a tuple of (test_id, variant_hash)
+            key = ('%s%s' % (t.test_id_prefix, test_name),
+                   rdb_results.variant_hash)
+            total = len(results)
+            unexpected = total - results.count(test_result_pb2.PASS)
+            # Value fields are: (test name, list of suites with failures,
+            # count of unexpected runs, count of all runs)
+            info = flaky_test_stats.get(key, ('', [], 0, 0))
+            if unexpected > 0:
+              info[1].append(step_name)
+            flaky_test_stats[key] = (test_name, info[1], info[2] + unexpected,
+                                     info[3] + total)
 
       # Keep only test variants with unexpected results.
       test_stats_filter = lambda item: item[1][2] > 0
@@ -867,7 +918,7 @@ class FlakinessApi(recipe_api.RecipeApi):
         if non_experimental_summary_lines:
           p.status = self.m.step.FAILURE
           summary_lines = [
-              'Build failed because some new test(s) added from your CL appear '
+              'Some new test(s) added from your CL appear '
               'to be flaky. Please check "%s" step for test identification and '
               '"%s" step for test rerun details.' %
               (self.IDENTIFY_STEP_NAME, self.RUN_TEST_STEP_NAME)
