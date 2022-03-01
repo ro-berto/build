@@ -844,6 +844,39 @@ SPEC = {
             # From chromium_memory.py, _chromium_memory_spec
             build_gs_bucket='chromium-memory-archive',
         ),
+    'Win ASan Release (reclient shadow)':
+        builder_spec.BuilderSpec.create(
+            chromium_config='chromium_win_clang_asan',
+            chromium_apply_config=['mb', 'clobber'],
+            gclient_config='chromium',
+            gclient_apply_config=[
+                'enable_reclient',
+            ],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            cf_archive_build=False,
+            simulation_platform='win',
+        ),
+    'Win ASan Release Media (reclient shadow)':
+        builder_spec.BuilderSpec.create(
+            chromium_config='chromium_win_clang_asan',
+            chromium_apply_config=[
+                'mb',
+                'clobber',
+            ],
+            gclient_config='chromium',
+            gclient_apply_config=[
+                'enable_reclient',
+            ],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 32,
+            },
+            cf_archive_build=False,
+            simulation_platform='win',
+        ),
     'Linux CFI (reclient shadow)':
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
