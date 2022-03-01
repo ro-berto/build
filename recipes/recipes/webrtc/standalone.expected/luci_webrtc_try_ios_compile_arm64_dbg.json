@@ -6,7 +6,7 @@
       "RECIPE_REPO[depot_tools]/gerrit_client.py",
       "changes",
       "--host",
-      "https://chromium-review.googlesource.com",
+      "https://webrtc-review.googlesource.com",
       "--json_file",
       "/path/to/tmp/json",
       "--limit",
@@ -25,7 +25,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:try"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -61,11 +61,11 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'False'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]\ntarget_os = ['ios']",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://webrtc.googlesource.com/src'}]\ntarget_os = ['ios', 'mac']",
       "--patch_root",
       "src",
       "--revision_mapping_file",
-      "{\"got_angle_revision\": \"src/third_party/angle\", \"got_buildtools_revision\": \"src/buildtools\", \"got_cr_revision\": \"src\", \"got_dawn_revision\": \"src/third_party/dawn\", \"got_libvpx_revision\": \"src/third_party/libvpx/source\", \"got_nacl_revision\": \"src/native_client\", \"got_revision\": \"src/third_party/webrtc\", \"got_swiftshader_revision\": \"src/third_party/swiftshader\", \"got_v8_revision\": \"src/v8\"}",
+      "{\"got_revision\": \"src\"}",
       "--git-cache-dir",
       "[CACHE]/git",
       "--cleanup-dir",
@@ -73,17 +73,15 @@
       "--output_json",
       "/path/to/tmp/json",
       "--patch_ref",
-      "https://chromium.googlesource.com/chromium/src@refs/heads/main:refs/changes/56/123456/7",
+      "https://webrtc.googlesource.com/src@refs/heads/main:refs/changes/56/123456/7",
       "--revision",
-      "src@refs/heads/main",
-      "--revision",
-      "src/third_party/webrtc@HEAD",
+      "src@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "--refs",
       "refs/heads/main"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
-      "DEPOT_TOOLS_REPORT_BUILD": "chromium/try/ios/8945511751514863184",
+      "DEPOT_TOOLS_REPORT_BUILD": "webrtc/try/ios_compile_arm64_dbg/8945511751514863184",
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "1800"
     },
@@ -98,7 +96,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:try"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -114,68 +112,19 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src\": \"HEAD\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src/third_party/webrtc\": \"HEAD\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src/buildtools\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/buildtools.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"f0319a328b2809876916353cb994259692140934\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src/native_client\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/native_client.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src/third_party/angle\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/third_party/angle.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src/third_party/dawn\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/third_party/dawn.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src/third_party/libvpx/source\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/third_party/libvpx/source.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"9240a98dab275a8a92a3631502866a58dceb2a49\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src/third_party/swiftshader\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/third_party/swiftshader.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"44a40deda357aff750ab1cbfd94ec79dbc8bb754\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src/third_party/webrtc\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/third_party/webrtc.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"0f90628433546e61d9268596da93418c623137f4\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src/v8\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/v8.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"801ada225ddc271c132c3a35f03975671d43e399\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"src\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"properties\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_angle_revision_cp\": \"refs/heads/main@{#297276}\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_buildtools_revision_cp\": \"refs/heads/main@{#182578}\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_cr_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_cr_revision_cp\": \"refs/heads/main@{#170242}\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_dawn_revision_cp\": \"refs/heads/main@{#51819}\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_libvpx_revision\": \"9240a98dab275a8a92a3631502866a58dceb2a49\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_libvpx_revision_cp\": \"refs/heads/main@{#11245}\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_nacl_revision_cp\": \"refs/heads/main@{#274981}\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_revision\": \"0f90628433546e61d9268596da93418c623137f4\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_revision_cp\": \"refs/heads/main@{#120644}\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_swiftshader_revision\": \"44a40deda357aff750ab1cbfd94ec79dbc8bb754\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_swiftshader_revision_cp\": \"refs/heads/main@{#202157}\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_v8_revision_cp\": \"refs/heads/main@{#43426}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision_cp\": \"refs/heads/main@{#170242}\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"root\": \"src\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"source_manifest\": {@@@",
@@ -183,55 +132,7 @@
       "@@@STEP_LOG_LINE@json.output@      \"src\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/src.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"@@@",
-      "@@@STEP_LOG_LINE@json.output@        }@@@",
-      "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"src/buildtools\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/src/buildtools.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"f0319a328b2809876916353cb994259692140934\"@@@",
-      "@@@STEP_LOG_LINE@json.output@        }@@@",
-      "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"src/native_client\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/src/native_client.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\"@@@",
-      "@@@STEP_LOG_LINE@json.output@        }@@@",
-      "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"src/third_party/angle\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/src/third_party/angle.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\"@@@",
-      "@@@STEP_LOG_LINE@json.output@        }@@@",
-      "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"src/third_party/dawn\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/src/third_party/dawn.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\"@@@",
-      "@@@STEP_LOG_LINE@json.output@        }@@@",
-      "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"src/third_party/libvpx/source\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/src/third_party/libvpx/source.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"9240a98dab275a8a92a3631502866a58dceb2a49\"@@@",
-      "@@@STEP_LOG_LINE@json.output@        }@@@",
-      "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"src/third_party/swiftshader\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/src/third_party/swiftshader.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"44a40deda357aff750ab1cbfd94ec79dbc8bb754\"@@@",
-      "@@@STEP_LOG_LINE@json.output@        }@@@",
-      "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"src/third_party/webrtc\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/src/third_party/webrtc.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"0f90628433546e61d9268596da93418c623137f4\"@@@",
-      "@@@STEP_LOG_LINE@json.output@        }@@@",
-      "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"src/v8\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/src/v8.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"801ada225ddc271c132c3a35f03975671d43e399\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
@@ -240,64 +141,8 @@
       "@@@STEP_LOG_LINE@json.output@  \"step_text\": \"Some step text\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@got_angle_revision@\"fac9503c46405f77757b9a728eb85b8d7bc6080c\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_angle_revision_cp@\"refs/heads/main@{#297276}\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_buildtools_revision@\"f0319a328b2809876916353cb994259692140934\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_buildtools_revision_cp@\"refs/heads/main@{#182578}\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_cr_revision@\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_cr_revision_cp@\"refs/heads/main@{#170242}\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_dawn_revision@\"1b5c932bc9a9a35c66edea3914fb675742d57cc2\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_dawn_revision_cp@\"refs/heads/main@{#51819}\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_libvpx_revision@\"9240a98dab275a8a92a3631502866a58dceb2a49\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_libvpx_revision_cp@\"refs/heads/main@{#11245}\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_nacl_revision@\"d998e125e8253980d76e269b7982aeeefc1b9b50\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_nacl_revision_cp@\"refs/heads/main@{#274981}\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_revision@\"0f90628433546e61d9268596da93418c623137f4\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_revision_cp@\"refs/heads/main@{#120644}\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_swiftshader_revision@\"44a40deda357aff750ab1cbfd94ec79dbc8bb754\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_swiftshader_revision_cp@\"refs/heads/main@{#202157}\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_v8_revision@\"801ada225ddc271c132c3a35f03975671d43e399\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_v8_revision_cp@\"refs/heads/main@{#43426}\"@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CACHE]/builder/src/ios/build/bots/chromium.fake/ios.json",
-      "/path/to/tmp/json"
-    ],
-    "luci_context": {
-      "realm": {
-        "name": "chromium:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "read build config",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"gn_args\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"is_debug=false\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"target_cpu=\\\"arm\\\"\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"use_goma=true\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tests\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"app\": \"fake test\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"device type\": \"fake device\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"os\": \"8.1\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"xcode version\": \"6.1.1\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@SET_BUILD_PROPERTY@got_revision@\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_revision_cp@\"refs/heads/main@{#170242}\"@@@"
     ]
   },
   {
@@ -320,7 +165,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:try"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -362,7 +207,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:try"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -390,17 +235,9 @@
   },
   {
     "cmd": [],
-    "name": "\"xcode version\" is DEPRECATED",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Implicitly using \"xcode build version\": \"9c40b\" at top level.<br />Please update your configs.@@@",
-      "@@@STEP_FAILURE@@@"
-    ]
-  },
-  {
-    "cmd": [],
     "name": "ensure xcode",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Ensuring Xcode version 9c40b in [CACHE]/xcode_ios_9c40b.app@@@"
+      "@@@STEP_TEXT@Ensuring Xcode version dummy_xcode in [CACHE]/xcode_ios_dummy_xcode.app@@@"
     ]
   },
   {
@@ -411,12 +248,12 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CACHE]/builder/src/build/mac_files"
+      "[CACHE]/builder/src/build/ios_files"
     ],
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:try"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -446,7 +283,7 @@
     ],
     "luci_context": {
       "realm": {
-        "name": "chromium:try"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -479,14 +316,14 @@
       "-kind",
       "ios",
       "-xcode-version",
-      "9c40b",
+      "dummy_xcode",
       "-output-dir",
-      "[CACHE]/xcode_ios_9c40b.app"
+      "[CACHE]/xcode_ios_dummy_xcode.app"
     ],
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:try"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -506,12 +343,12 @@
       "sudo",
       "xcode-select",
       "-switch",
-      "[CACHE]/xcode_ios_9c40b.app"
+      "[CACHE]/xcode_ios_dummy_xcode.app"
     ],
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:try"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -535,7 +372,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:try"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -559,7 +396,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:try"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -576,6 +413,49 @@
   },
   {
     "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[START_DIR]",
+      "-ensure-file",
+      "infra/tools/mac_toolchain/${platform} git_revision:ce6f859bf90d39c96271aba89a458b6c0b8e4ca2",
+      "-max-threads",
+      "0",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:ce6\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/mac_toolchain/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "vpython3",
       "-u",
       "RECIPE_REPO[depot_tools]/gclient.py",
@@ -583,9 +463,10 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "DEPOT_TOOLS_REPORT_BUILD": "chromium/try/ios/8945511751514863184",
-      "FORCE_MAC_TOOLCHAIN": "",
-      "LANDMINES_VERBOSE": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_REPORT_BUILD": "webrtc/try/ios_compile_arm64_dbg/8945511751514863184",
+      "GYP_DEFINES": "clang=1",
+      "MAC_TOOLCHAIN_INSTALLER": "[START_DIR]/mac_toolchain"
     },
     "env_suffixes": {
       "PATH": [
@@ -594,7 +475,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "chromium:try"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -608,20 +489,18 @@
   },
   {
     "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[CACHE]/builder/src/out/Release"
+      "git",
+      "-c",
+      "core.quotePath=false",
+      "diff",
+      "--cached",
+      "--name-only"
     ],
+    "cwd": "[CACHE]/builder/src",
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:try"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -631,54 +510,78 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "ensure output directory"
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "This file exists while a build compiles and is removed at the end of\ncompilation. If the next build finds that the file exists prior to\ncompilation, it will wipe the output directory.\n\nSee https://crbug.com/959436 for more context.\n",
-      "[CACHE]/builder/src/out/Release/CR_COMPILE_GUARD.txt"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "chromium:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "create compile guard",
+    "name": "git diff to analyze patch",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@CR_COMPILE_GUARD.txt@This file exists while a build compiles and is removed at the end of@@@",
-      "@@@STEP_LOG_LINE@CR_COMPILE_GUARD.txt@compilation. If the next build finds that the file exists prior to@@@",
-      "@@@STEP_LOG_LINE@CR_COMPILE_GUARD.txt@compilation, it will wipe the output directory.@@@",
-      "@@@STEP_LOG_LINE@CR_COMPILE_GUARD.txt@@@@",
-      "@@@STEP_LOG_LINE@CR_COMPILE_GUARD.txt@See https://crbug.com/959436 for more context.@@@",
-      "@@@STEP_LOG_END@CR_COMPILE_GUARD.txt@@@"
+      "@@@STEP_LOG_LINE@files@foo.cc@@@",
+      "@@@STEP_LOG_END@files@@@"
     ]
   },
   {
     "cmd": [
       "python3",
       "-u",
-      "[CACHE]/builder/src/tools/mb/mb.py",
+      "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
+      "analyze",
+      "-m",
+      "tryserver.webrtc",
+      "-b",
+      "ios_compile_arm64_dbg",
+      "--config-file",
+      "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
+      "--goma-dir",
+      "[CACHE]/goma/client",
+      "-v",
+      "//out/Debug",
+      "{\"additional_compile_targets\": [\"all\"], \"files\": [\"foo.cc\"], \"test_targets\": []}",
+      "/path/to/tmp/json",
+      "--json-output",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "analyze",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"compile_targets\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"default\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"status\": \"Found dependency\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_targets\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"common_audio_unittests\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary] (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary] (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary] (exception)@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python3",
+      "-u",
+      "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
       "lookup",
       "-m",
-      "chromium.fake",
+      "tryserver.webrtc",
       "-b",
-      "ios",
+      "ios_compile_arm64_dbg",
       "--config-file",
-      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
+      "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
       "--quiet"
@@ -686,13 +589,11 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "",
-      "GOMA_USE_LOCAL": "false",
-      "LANDMINES_VERBOSE": "1"
+      "GOMA_USE_LOCAL": "false"
     },
     "luci_context": {
       "realm": {
-        "name": "chromium:try"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -711,30 +612,28 @@
     "cmd": [
       "python3",
       "-u",
-      "[CACHE]/builder/src/tools/mb/mb.py",
+      "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
       "gen",
       "-m",
-      "chromium.fake",
+      "tryserver.webrtc",
       "-b",
-      "ios",
+      "ios_compile_arm64_dbg",
       "--config-file",
-      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
+      "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
       "--json-output",
       "/path/to/tmp/json",
-      "//out/Release-iphoneos"
+      "//out/ios_compile_arm64_dbg"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "",
-      "GOMA_USE_LOCAL": "false",
-      "LANDMINES_VERBOSE": "1"
+      "GOMA_USE_LOCAL": "false"
     },
     "luci_context": {
       "realm": {
-        "name": "chromium:try"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -744,10 +643,43 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "generate build files (mb)",
+    "name": "generate_build_files",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
       "@@@STEP_LOG_END@json.output[failure_summary]@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python3",
+      "RECIPE_MODULE[build::chromium]/resources/clang_revision.py",
+      "--src-dir",
+      "[CACHE]/builder/src",
+      "--output-json",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "clang_revision",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@clang_revision@\"123456-7\"@@@"
     ]
   },
   {
@@ -764,12 +696,16 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/ios"
+      "[CACHE]/goma/data/ios_compile_arm64_dbg"
     ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:try"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -790,19 +726,23 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "restart"
     ],
+    "cwd": "[CACHE]/builder/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/ios",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/ios_compile_arm64_dbg",
+      "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
+      "GOMA_FAIL_FAST": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:try"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -843,10 +783,14 @@
       "--cloudtail-service-account-json",
       "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:try"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -863,21 +807,31 @@
   },
   {
     "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
+      "--ninja_info_output",
+      "/path/to/tmp/json",
+      "--failure_output",
+      "/path/to/tmp/",
+      "--no_prune_venv",
+      "--",
       "RECIPE_REPO[depot_tools]/ninja",
+      "-w",
+      "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/Release-iphoneos",
+      "[CACHE]/builder/src/out/ios_compile_arm64_dbg",
       "-j",
-      "50",
-      "fake test"
+      "80",
+      "default"
     ],
-    "cwd": "[CACHE]/builder/src/out/Release-iphoneos",
+    "cwd": "[CACHE]/builder/src",
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "",
-      "LANDMINES_VERBOSE": "1"
+      "CHROME_HEADLESS": "1"
     },
     "luci_context": {
       "realm": {
-        "name": "chromium:try"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -887,10 +841,39 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "compile",
-    "~followup_annotations": [
-      "@@@STEP_FAILURE@@@"
-    ]
+    "name": "compile"
+  },
+  {
+    "cmd": [
+      "RECIPE_REPO[depot_tools]/ninja",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[CACHE]/builder/src/out/ios_compile_arm64_dbg",
+      "-j",
+      "80",
+      "default",
+      "-d",
+      "explain",
+      "-n"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "compile confirm no-op"
   },
   {
     "cmd": [],
@@ -903,9 +886,10 @@
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
+    "cwd": "[CACHE]/builder/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/ios",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -914,7 +898,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "chromium:try"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -946,9 +930,10 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "stat"
     ],
+    "cwd": "[CACHE]/builder/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/ios",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -957,7 +942,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "chromium:try"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -978,9 +963,10 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "stop"
     ],
+    "cwd": "[CACHE]/builder/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/ios",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -989,7 +975,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "chromium:try"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1025,13 +1011,15 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[CACHE]/builder/src/out/Release-iphoneos",
+      "[CACHE]/builder/src/out/ios_compile_arm64_dbg",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-C\", \"[CACHE]/builder/src/out/Release-iphoneos\", \"-j\", \"50\", \"fake test\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/ios_compile_arm64_dbg\", \"-j\", 80, \"default\"]",
       "--build-exit-status",
-      "1",
+      "0",
+      "--build-step-name",
+      "compile",
       "--ninja-log-compiler",
-      "goma",
+      "goma-clang",
       "--goma-stats-file",
       "[TMP_BASE]/goma_stats",
       "--goma-counterz-file",
@@ -1041,13 +1029,17 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"try\", \"builder\": \"ios\", \"project\": \"chromium\"}",
+      "{\"bucket\": \"try\", \"builder\": \"ios_compile_arm64_dbg\", \"project\": \"webrtc\"}",
       "--buildbot-buildername",
-      "ios"
+      "ios_compile_arm64_dbg"
     ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "luci_context": {
       "realm": {
-        "name": "chromium:try"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1084,10 +1076,14 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:try"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1103,10 +1099,6 @@
     ]
   },
   {
-    "failure": {
-      "failure": {},
-      "humanReason": "Step('compile') (retcode: 1)"
-    },
     "name": "$result"
   }
 ]

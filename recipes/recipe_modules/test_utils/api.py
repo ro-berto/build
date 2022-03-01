@@ -77,10 +77,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
     self._min_failed_suites_to_skip_retry = (
         properties.min_failed_suites_to_skip_retry or 5)
 
-  @property
-  def canonical(self):
-    return canonical
-
   def limit_failures(self, failures, limit=None):
     """Limit failures of a step to prevent large results JSON.
 

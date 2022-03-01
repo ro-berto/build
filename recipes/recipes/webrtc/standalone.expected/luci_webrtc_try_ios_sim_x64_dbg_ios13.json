@@ -1,29 +1,87 @@
 [
   {
     "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_REPO[depot_tools]/gerrit_client.py",
+      "changes",
+      "--host",
+      "https://webrtc-review.googlesource.com",
+      "--json_file",
+      "/path/to/tmp/json",
+      "--limit",
+      "1",
+      "-p",
+      "change=123456",
+      "-o",
+      "ALL_REVISIONS",
+      "-o",
+      "DOWNLOAD_COMMANDS"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "gerrit fetch current CL info",
+    "timeout": 60,
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"branch\": \"main\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"owner\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"name\": \"John Doe\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"revisions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"184ebe53805e102605d11f6b143486d15c23a09c\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"_number\": \"7\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"ref\": \"refs/changes/56/123456/7\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "vpython3",
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'False'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]\ntarget_os = ['ios']",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://webrtc.googlesource.com/src'}]\ntarget_os = ['ios', 'mac']",
+      "--patch_root",
+      "src",
       "--revision_mapping_file",
-      "{\"got_angle_revision\": \"src/third_party/angle\", \"got_buildtools_revision\": \"src/buildtools\", \"got_cr_revision\": \"src\", \"got_dawn_revision\": \"src/third_party/dawn\", \"got_libvpx_revision\": \"src/third_party/libvpx/source\", \"got_nacl_revision\": \"src/native_client\", \"got_revision\": \"src/third_party/webrtc\", \"got_swiftshader_revision\": \"src/third_party/swiftshader\", \"got_v8_revision\": \"src/v8\"}",
+      "{\"got_revision\": \"src\"}",
       "--git-cache-dir",
       "[CACHE]/git",
       "--cleanup-dir",
       "[CLEANUP]/bot_update",
       "--output_json",
       "/path/to/tmp/json",
+      "--patch_ref",
+      "https://webrtc.googlesource.com/src@refs/heads/main:refs/changes/56/123456/7",
       "--revision",
-      "src@HEAD",
-      "--revision",
-      "src/third_party/webrtc@HEAD",
+      "src@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "--refs",
       "refs/heads/main"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
-      "DEPOT_TOOLS_REPORT_BUILD": "project/ci/ios/8945511751514863184",
+      "DEPOT_TOOLS_REPORT_BUILD": "webrtc/try/ios_sim_x64_dbg_ios13/8945511751514863184",
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "1800"
     },
@@ -38,7 +96,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -54,68 +112,19 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src\": \"HEAD\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src/third_party/webrtc\": \"HEAD\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src/buildtools\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/buildtools.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"f0319a328b2809876916353cb994259692140934\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src/native_client\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/native_client.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src/third_party/angle\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/third_party/angle.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src/third_party/dawn\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/third_party/dawn.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src/third_party/libvpx/source\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/third_party/libvpx/source.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"9240a98dab275a8a92a3631502866a58dceb2a49\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src/third_party/swiftshader\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/third_party/swiftshader.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"44a40deda357aff750ab1cbfd94ec79dbc8bb754\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src/third_party/webrtc\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/third_party/webrtc.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"0f90628433546e61d9268596da93418c623137f4\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src/v8\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/v8.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"801ada225ddc271c132c3a35f03975671d43e399\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"src\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"properties\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_angle_revision_cp\": \"refs/heads/main@{#297276}\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_buildtools_revision_cp\": \"refs/heads/main@{#182578}\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_cr_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_cr_revision_cp\": \"refs/heads/main@{#170242}\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_dawn_revision_cp\": \"refs/heads/main@{#51819}\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_libvpx_revision\": \"9240a98dab275a8a92a3631502866a58dceb2a49\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_libvpx_revision_cp\": \"refs/heads/main@{#11245}\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_nacl_revision_cp\": \"refs/heads/main@{#274981}\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_revision\": \"0f90628433546e61d9268596da93418c623137f4\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_revision_cp\": \"refs/heads/main@{#120644}\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_swiftshader_revision\": \"44a40deda357aff750ab1cbfd94ec79dbc8bb754\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_swiftshader_revision_cp\": \"refs/heads/main@{#202157}\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_v8_revision_cp\": \"refs/heads/main@{#43426}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision_cp\": \"refs/heads/main@{#170242}\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"root\": \"src\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"source_manifest\": {@@@",
@@ -123,55 +132,7 @@
       "@@@STEP_LOG_LINE@json.output@      \"src\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/src.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"@@@",
-      "@@@STEP_LOG_LINE@json.output@        }@@@",
-      "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"src/buildtools\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/src/buildtools.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"f0319a328b2809876916353cb994259692140934\"@@@",
-      "@@@STEP_LOG_LINE@json.output@        }@@@",
-      "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"src/native_client\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/src/native_client.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\"@@@",
-      "@@@STEP_LOG_LINE@json.output@        }@@@",
-      "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"src/third_party/angle\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/src/third_party/angle.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\"@@@",
-      "@@@STEP_LOG_LINE@json.output@        }@@@",
-      "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"src/third_party/dawn\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/src/third_party/dawn.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\"@@@",
-      "@@@STEP_LOG_LINE@json.output@        }@@@",
-      "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"src/third_party/libvpx/source\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/src/third_party/libvpx/source.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"9240a98dab275a8a92a3631502866a58dceb2a49\"@@@",
-      "@@@STEP_LOG_LINE@json.output@        }@@@",
-      "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"src/third_party/swiftshader\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/src/third_party/swiftshader.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"44a40deda357aff750ab1cbfd94ec79dbc8bb754\"@@@",
-      "@@@STEP_LOG_LINE@json.output@        }@@@",
-      "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"src/third_party/webrtc\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/src/third_party/webrtc.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"0f90628433546e61d9268596da93418c623137f4\"@@@",
-      "@@@STEP_LOG_LINE@json.output@        }@@@",
-      "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"src/v8\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/src/v8.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"801ada225ddc271c132c3a35f03975671d43e399\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
@@ -180,65 +141,8 @@
       "@@@STEP_LOG_LINE@json.output@  \"step_text\": \"Some step text\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@got_angle_revision@\"fac9503c46405f77757b9a728eb85b8d7bc6080c\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_angle_revision_cp@\"refs/heads/main@{#297276}\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_buildtools_revision@\"f0319a328b2809876916353cb994259692140934\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_buildtools_revision_cp@\"refs/heads/main@{#182578}\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_cr_revision@\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_cr_revision_cp@\"refs/heads/main@{#170242}\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_dawn_revision@\"1b5c932bc9a9a35c66edea3914fb675742d57cc2\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_dawn_revision_cp@\"refs/heads/main@{#51819}\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_libvpx_revision@\"9240a98dab275a8a92a3631502866a58dceb2a49\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_libvpx_revision_cp@\"refs/heads/main@{#11245}\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_nacl_revision@\"d998e125e8253980d76e269b7982aeeefc1b9b50\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_nacl_revision_cp@\"refs/heads/main@{#274981}\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_revision@\"0f90628433546e61d9268596da93418c623137f4\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_revision_cp@\"refs/heads/main@{#120644}\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_swiftshader_revision@\"44a40deda357aff750ab1cbfd94ec79dbc8bb754\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_swiftshader_revision_cp@\"refs/heads/main@{#202157}\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_v8_revision@\"801ada225ddc271c132c3a35f03975671d43e399\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_v8_revision_cp@\"refs/heads/main@{#43426}\"@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CACHE]/builder/src/ios/build/bots/chromium.fake/ios.json",
-      "/path/to/tmp/json"
-    ],
-    "luci_context": {
-      "realm": {
-        "name": "project:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "read build config",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"bucket\": \"fake-bucket-1\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"gn_args\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"is_debug=false\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"target_cpu=\\\"arm\\\"\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"use_goma=true\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tests\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"app\": \"fake test\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"device type\": \"iPhone X\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"os\": \"8.0\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"xcode version\": \"fake xcode version\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@SET_BUILD_PROPERTY@got_revision@\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_revision_cp@\"refs/heads/main@{#170242}\"@@@"
     ]
   },
   {
@@ -261,7 +165,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -303,7 +207,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -331,17 +235,9 @@
   },
   {
     "cmd": [],
-    "name": "\"xcode version\" is DEPRECATED",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Implicitly using \"xcode build version\": \"9c40b\" at top level.<br />Please update your configs.@@@",
-      "@@@STEP_FAILURE@@@"
-    ]
-  },
-  {
-    "cmd": [],
     "name": "ensure xcode",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Ensuring Xcode version 9c40b in [CACHE]/xcode_ios_9c40b.app@@@"
+      "@@@STEP_TEXT@Ensuring Xcode version dummy_xcode in [CACHE]/xcode_ios_dummy_xcode.app@@@"
     ]
   },
   {
@@ -352,12 +248,12 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CACHE]/builder/src/build/mac_files"
+      "[CACHE]/builder/src/build/ios_files"
     ],
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -387,7 +283,7 @@
     ],
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -420,14 +316,14 @@
       "-kind",
       "ios",
       "-xcode-version",
-      "9c40b",
+      "dummy_xcode",
       "-output-dir",
-      "[CACHE]/xcode_ios_9c40b.app"
+      "[CACHE]/xcode_ios_dummy_xcode.app"
     ],
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -447,12 +343,12 @@
       "sudo",
       "xcode-select",
       "-switch",
-      "[CACHE]/xcode_ios_9c40b.app"
+      "[CACHE]/xcode_ios_dummy_xcode.app"
     ],
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -476,7 +372,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -500,7 +396,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -517,6 +413,49 @@
   },
   {
     "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[START_DIR]",
+      "-ensure-file",
+      "infra/tools/mac_toolchain/${platform} git_revision:ce6f859bf90d39c96271aba89a458b6c0b8e4ca2",
+      "-max-threads",
+      "0",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:ce6\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/mac_toolchain/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "vpython3",
       "-u",
       "RECIPE_REPO[depot_tools]/gclient.py",
@@ -524,9 +463,10 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "DEPOT_TOOLS_REPORT_BUILD": "project/ci/ios/8945511751514863184",
-      "FORCE_MAC_TOOLCHAIN": "",
-      "LANDMINES_VERBOSE": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_REPORT_BUILD": "webrtc/try/ios_sim_x64_dbg_ios13/8945511751514863184",
+      "GYP_DEFINES": "clang=1",
+      "MAC_TOOLCHAIN_INSTALLER": "[START_DIR]/mac_toolchain"
     },
     "env_suffixes": {
       "PATH": [
@@ -535,7 +475,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -549,20 +489,18 @@
   },
   {
     "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[CACHE]/builder/src/out/Release"
+      "git",
+      "-c",
+      "core.quotePath=false",
+      "diff",
+      "--cached",
+      "--name-only"
     ],
+    "cwd": "[CACHE]/builder/src",
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -572,54 +510,78 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "ensure output directory"
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "This file exists while a build compiles and is removed at the end of\ncompilation. If the next build finds that the file exists prior to\ncompilation, it will wipe the output directory.\n\nSee https://crbug.com/959436 for more context.\n",
-      "[CACHE]/builder/src/out/Release/CR_COMPILE_GUARD.txt"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "project:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "create compile guard",
+    "name": "git diff to analyze patch",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@CR_COMPILE_GUARD.txt@This file exists while a build compiles and is removed at the end of@@@",
-      "@@@STEP_LOG_LINE@CR_COMPILE_GUARD.txt@compilation. If the next build finds that the file exists prior to@@@",
-      "@@@STEP_LOG_LINE@CR_COMPILE_GUARD.txt@compilation, it will wipe the output directory.@@@",
-      "@@@STEP_LOG_LINE@CR_COMPILE_GUARD.txt@@@@",
-      "@@@STEP_LOG_LINE@CR_COMPILE_GUARD.txt@See https://crbug.com/959436 for more context.@@@",
-      "@@@STEP_LOG_END@CR_COMPILE_GUARD.txt@@@"
+      "@@@STEP_LOG_LINE@files@foo.cc@@@",
+      "@@@STEP_LOG_END@files@@@"
     ]
   },
   {
     "cmd": [
       "python3",
       "-u",
-      "[CACHE]/builder/src/tools/mb/mb.py",
+      "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
+      "analyze",
+      "-m",
+      "tryserver.webrtc",
+      "-b",
+      "ios_sim_x64_dbg_ios13",
+      "--config-file",
+      "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
+      "--goma-dir",
+      "[CACHE]/goma/client",
+      "-v",
+      "//out/Debug",
+      "{\"additional_compile_targets\": [\"all\"], \"files\": [\"foo.cc\"], \"test_targets\": [\"audio_decoder_unittests\", \"common_audio_unittests\", \"common_video_unittests\", \"dcsctp_unittests\", \"modules_tests\", \"modules_unittests\", \"rtc_media_unittests\", \"rtc_pc_unittests\", \"rtc_stats_unittests\", \"rtc_unittests\", \"sdk_framework_unittests\", \"system_wrappers_unittests\", \"test_support_unittests\", \"tools_unittests\", \"video_capture_tests\", \"video_engine_tests\", \"voip_unittests\", \"webrtc_nonparallel_tests\"]}",
+      "/path/to/tmp/json",
+      "--json-output",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "analyze",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"compile_targets\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"default\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"status\": \"Found dependency\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_targets\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"common_audio_unittests\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary] (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary] (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary] (exception)@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python3",
+      "-u",
+      "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
       "lookup",
       "-m",
-      "chromium.fake",
+      "tryserver.webrtc",
       "-b",
-      "ios",
+      "ios_sim_x64_dbg_ios13",
       "--config-file",
-      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
+      "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
       "--quiet"
@@ -627,13 +589,11 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "",
-      "GOMA_USE_LOCAL": "false",
-      "LANDMINES_VERBOSE": "1"
+      "GOMA_USE_LOCAL": "false"
     },
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -652,30 +612,30 @@
     "cmd": [
       "python3",
       "-u",
-      "[CACHE]/builder/src/tools/mb/mb.py",
+      "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
       "gen",
       "-m",
-      "chromium.fake",
+      "tryserver.webrtc",
       "-b",
-      "ios",
+      "ios_sim_x64_dbg_ios13",
       "--config-file",
-      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
+      "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
       "--json-output",
       "/path/to/tmp/json",
-      "//out/Release-iphoneos"
+      "--swarming-targets-file",
+      "common_audio_unittests\n",
+      "//out/ios_sim_x64_dbg_ios13"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "",
-      "GOMA_USE_LOCAL": "false",
-      "LANDMINES_VERBOSE": "1"
+      "GOMA_USE_LOCAL": "false"
     },
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -685,10 +645,45 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "generate build files (mb)",
+    "name": "generate_build_files",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
-      "@@@STEP_LOG_END@json.output[failure_summary]@@@"
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@common_audio_unittests@@@",
+      "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python3",
+      "RECIPE_MODULE[build::chromium]/resources/clang_revision.py",
+      "--src-dir",
+      "[CACHE]/builder/src",
+      "--output-json",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "clang_revision",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@clang_revision@\"123456-7\"@@@"
     ]
   },
   {
@@ -705,12 +700,16 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/ios"
+      "[CACHE]/goma/data/ios_sim_x64_dbg_ios13"
     ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -731,19 +730,23 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "restart"
     ],
+    "cwd": "[CACHE]/builder/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/ios",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/ios_sim_x64_dbg_ios13",
+      "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
+      "GOMA_FAIL_FAST": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -784,10 +787,14 @@
       "--cloudtail-service-account-json",
       "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -804,21 +811,32 @@
   },
   {
     "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
+      "--ninja_info_output",
+      "/path/to/tmp/json",
+      "--failure_output",
+      "/path/to/tmp/",
+      "--no_prune_venv",
+      "--",
       "RECIPE_REPO[depot_tools]/ninja",
+      "-w",
+      "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/Release-iphoneos",
+      "[CACHE]/builder/src/out/ios_sim_x64_dbg_ios13",
       "-j",
-      "50",
-      "fake test"
+      "80",
+      "common_audio_unittests",
+      "default"
     ],
-    "cwd": "[CACHE]/builder/src/out/Release-iphoneos",
+    "cwd": "[CACHE]/builder/src",
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "",
-      "LANDMINES_VERBOSE": "1"
+      "CHROME_HEADLESS": "1"
     },
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -831,6 +849,39 @@
     "name": "compile"
   },
   {
+    "cmd": [
+      "RECIPE_REPO[depot_tools]/ninja",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[CACHE]/builder/src/out/ios_sim_x64_dbg_ios13",
+      "-j",
+      "80",
+      "common_audio_unittests",
+      "default",
+      "-d",
+      "explain",
+      "-n"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "compile confirm no-op"
+  },
+  {
     "cmd": [],
     "name": "postprocess_for_goma"
   },
@@ -841,9 +892,10 @@
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
+    "cwd": "[CACHE]/builder/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/ios",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -852,7 +904,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -884,9 +936,10 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "stat"
     ],
+    "cwd": "[CACHE]/builder/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/ios",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -895,7 +948,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -916,9 +969,10 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "stop"
     ],
+    "cwd": "[CACHE]/builder/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/ios",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -927,7 +981,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -963,13 +1017,15 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[CACHE]/builder/src/out/Release-iphoneos",
+      "[CACHE]/builder/src/out/ios_sim_x64_dbg_ios13",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-C\", \"[CACHE]/builder/src/out/Release-iphoneos\", \"-j\", \"50\", \"fake test\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/ios_sim_x64_dbg_ios13\", \"-j\", 80, \"common_audio_unittests\", \"default\"]",
       "--build-exit-status",
       "0",
+      "--build-step-name",
+      "compile",
       "--ninja-log-compiler",
-      "goma",
+      "goma-clang",
       "--goma-stats-file",
       "[TMP_BASE]/goma_stats",
       "--goma-counterz-file",
@@ -979,13 +1035,17 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"ci\", \"builder\": \"ios\", \"project\": \"project\"}",
+      "{\"bucket\": \"try\", \"builder\": \"ios_sim_x64_dbg_ios13\", \"project\": \"webrtc\"}",
       "--buildbot-buildername",
-      "ios"
+      "ios_sim_x64_dbg_ios13"
     ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1022,10 +1082,14 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1041,276 +1105,8 @@
     ]
   },
   {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "remove",
-      "[CACHE]/builder/src/out/Release/CR_COMPILE_GUARD.txt"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "project:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "remove compile guard"
-  },
-  {
     "cmd": [],
-    "name": "isolate"
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "{\"variables\": {\"command\": [\"src/ios/build/bots/scripts/run.py\", \"--app\", \"<(app_path)\", \"--host-app\", \"<(host_app_path)\", \"--args-json\", \"{\\\"test_args\\\": <(test_args), \\\"xctest\\\": <(xctest), \\\"test_cases\\\": <(test_cases), \\\"restart\\\": <(restart), \\\"xcode_parallelization\\\": <(xcode_parallelization), \\\"xcodebuild_device_runner\\\": <(xcodebuild_device_runner)}\", \"--out-dir\", \"${ISOLATED_OUTDIR}\", \"--retries\", \"3\", \"--shards\", \"<(shards)\", \"--xcode-build-version\", \"<(xcode_version)\", \"--mac-toolchain-cmd\", \"./mac_toolchain\", \"--xcode-path\", \"Xcode.app\", \"--wpr-tools-path\", \"<(wpr_tools_path)\", \"--replay-path\", \"<(replay_path)\"], \"files\": [\"<(app_path)/\", \"<(additional_app_path)/\", \"src/ios/build/bots/scripts/\", \"src/testing/scripts/variations_seed_access_helper.py\", \"src/.vpython\"]}}",
-      "[CACHE]/builder/template.isolate"
-    ],
-    "cwd": "[CACHE]/builder/src",
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "project:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "isolate.generate template.isolate",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@template.isolate@{@@@",
-      "@@@STEP_LOG_LINE@template.isolate@  \"variables\": {@@@",
-      "@@@STEP_LOG_LINE@template.isolate@    \"command\": [@@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"src/ios/build/bots/scripts/run.py\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"--app\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"<(app_path)\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"--host-app\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"<(host_app_path)\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"--args-json\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"{\\\"test_args\\\": <(test_args), \\\"xctest\\\": <(xctest), \\\"test_cases\\\": <(test_cases), \\\"restart\\\": <(restart), \\\"xcode_parallelization\\\": <(xcode_parallelization), \\\"xcodebuild_device_runner\\\": <(xcodebuild_device_runner)}\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"--out-dir\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"${ISOLATED_OUTDIR}\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"--retries\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"3\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"--shards\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"<(shards)\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"--xcode-build-version\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"<(xcode_version)\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"--mac-toolchain-cmd\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"./mac_toolchain\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"--xcode-path\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"Xcode.app\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"--wpr-tools-path\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"<(wpr_tools_path)\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"--replay-path\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"<(replay_path)\"@@@",
-      "@@@STEP_LOG_LINE@template.isolate@    ], @@@",
-      "@@@STEP_LOG_LINE@template.isolate@    \"files\": [@@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"<(app_path)/\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"<(additional_app_path)/\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"src/ios/build/bots/scripts/\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"src/testing/scripts/variations_seed_access_helper.py\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"src/.vpython\"@@@",
-      "@@@STEP_LOG_LINE@template.isolate@    ]@@@",
-      "@@@STEP_LOG_LINE@template.isolate@  }@@@",
-      "@@@STEP_LOG_LINE@template.isolate@}@@@",
-      "@@@STEP_LOG_END@template.isolate@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "{\n  \"args\": [\n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/fake test.app\", \n    \"--config-variable\", \n    \"host_app_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"restart\", \n    \"false\", \n    \"--config-variable\", \n    \"shards\", \n    \"1\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"xcode_parallelization\", \n    \"false\", \n    \"--config-variable\", \n    \"xcodebuild_device_runner\", \n    \"false\", \n    \"--config-variable\", \n    \"test_cases\", \n    \"[]\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--config-variable\", \n    \"use_trusted_cert\", \n    \"false\", \n    \"--config-variable\", \n    \"replay_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"wpr_tools_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"9c40b\", \n    \"--isolate\", \n    \"[CACHE]/builder/0.isolate\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Release-iphoneos/fake test.app\", \n    \"--path-variable\", \n    \"additional_app_path\", \n    \"src/out/Release-iphoneos/fake test.app\"\n  ], \n  \"dir\": \"[CACHE]/builder\", \n  \"version\": 1\n}",
-      "[CLEANUP]/isolate_tmp_1/0.isolated.gen.json"
-    ],
-    "cwd": "[CACHE]/builder/src",
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "project:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "isolate.generate 0.isolated.gen.json",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@{@@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@  \"args\": [@@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"app_path\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"src/out/Release-iphoneos/fake test.app\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"host_app_path\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"NO_PATH\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"restart\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"false\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"shards\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"1\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"test_args\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"[]\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"xcode_parallelization\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"false\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"xcodebuild_device_runner\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"false\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"test_cases\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"[]\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"xctest\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"false\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"use_trusted_cert\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"false\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"replay_path\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"NO_PATH\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"wpr_tools_path\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"NO_PATH\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"xcode_version\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"9c40b\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--isolate\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"[CACHE]/builder/0.isolate\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--path-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"app_path\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"src/out/Release-iphoneos/fake test.app\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--path-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"additional_app_path\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"src/out/Release-iphoneos/fake test.app\"@@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@  ], @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@  \"dir\": \"[CACHE]/builder\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@  \"version\": 1@@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@}@@@",
-      "@@@STEP_LOG_END@0.isolated.gen.json@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[CACHE]/builder/template.isolate",
-      "[CACHE]/builder/0.isolate"
-    ],
-    "cwd": "[CACHE]/builder/src",
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "project:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "isolate.copy 0.isolate symlink",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@fake test (iPhone X iOS 8.0)@@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@{@@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@  \"args\": [@@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"app_path\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"src/out/Release-iphoneos/fake test.app\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"host_app_path\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"NO_PATH\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"restart\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"false\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"shards\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"1\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"test_args\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"[]\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"xcode_parallelization\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"false\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"xcodebuild_device_runner\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"false\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"test_cases\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"[]\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"xctest\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"false\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"use_trusted_cert\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"false\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"replay_path\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"NO_PATH\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"wpr_tools_path\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"NO_PATH\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--config-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"xcode_version\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"9c40b\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--isolate\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"[CACHE]/builder/0.isolate\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--path-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"app_path\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"src/out/Release-iphoneos/fake test.app\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--path-variable\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"additional_app_path\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"src/out/Release-iphoneos/fake test.app\"@@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@  ], @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@  \"dir\": \"[CACHE]/builder\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@  \"version\": 1@@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@}@@@",
-      "@@@STEP_LOG_END@0.isolated.gen.json@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "isolate.install infra/tools/luci/isolate",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
+    "name": "install infra/tools/luci/isolate"
   },
   {
     "cmd": [
@@ -1324,11 +1120,10 @@
       "0777",
       "[START_DIR]/cipd_tool/infra/tools/luci/isolate/git_revision%3Amock_infra_git_revision"
     ],
-    "cwd": "[CACHE]/builder/src",
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1338,9 +1133,9 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "isolate.install infra/tools/luci/isolate.ensure package directory",
+    "name": "install infra/tools/luci/isolate.ensure package directory",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -1356,11 +1151,10 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]/builder/src",
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1370,9 +1164,9 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "isolate.install infra/tools/luci/isolate.ensure_installed",
+    "name": "install infra/tools/luci/isolate.ensure_installed",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
@@ -1392,17 +1186,15 @@
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
-      "--verbose",
       "-cas-instance",
       "projects/example-cas-server/instances/default_instance",
       "-log-level",
       "debug",
-      "[CLEANUP]/isolate_tmp_1/0.isolated.gen.json"
+      "[CACHE]/builder/src/out/ios_sim_x64_dbg_ios13/common_audio_unittests.isolated.gen.json"
     ],
-    "cwd": "[CACHE]/builder/src",
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1412,27 +1204,51 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "isolate.isolate tests",
+    "name": "isolate tests",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"0\": \"[dummy hash for 0/dummy size]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"common_audio_unittests\": \"[dummy hash for common_audio_unittests/dummy size]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"0\": \"[dummy hash for 0/dummy size]\"}@@@"
+      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"common_audio_unittests\": \"[dummy hash for common_audio_unittests/dummy size]\"}@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython3",
+      "-u",
+      "RECIPE_MODULE[build::chromium_tests]/resources/find_command_lines.py",
+      "--build-dir",
+      "[CACHE]/builder/src/out/ios_sim_x64_dbg_ios13",
+      "--output-json",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[CACHE]/builder",
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "find command lines",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
     "cmd": [],
-    "name": "trigger"
+    "name": "test_pre_run"
   },
   {
     "cmd": [],
-    "name": "test_pre_run (with patch)"
-  },
-  {
-    "cmd": [],
-    "name": "test_pre_run (with patch).install infra/tools/luci/swarming",
+    "name": "test_pre_run.install infra/tools/luci/swarming",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -1449,11 +1265,11 @@
       "0777",
       "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1463,7 +1279,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "test_pre_run (with patch).install infra/tools/luci/swarming.ensure package directory",
+    "name": "test_pre_run.install infra/tools/luci/swarming.ensure package directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -1481,11 +1297,11 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1495,7 +1311,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "test_pre_run (with patch).install infra/tools/luci/swarming.ensure_installed",
+    "name": "test_pre_run.install infra/tools/luci/swarming.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1518,15 +1334,15 @@
       "-server",
       "https://example.swarmingserver.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"fake test (iPhone X iOS 8.0) (with patch)/iOS-8.0/[dummy has/ios/-1\", \"priority\": \"200\", \"realm\": \"project:ci\", \"service_account\": \"ios-isolated-tester@chops-service-accounts.iam.gserviceaccount.com\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:chromium.fake\", \"buildername:ios\", \"data:[dummy hash for 0/dummy size]\", \"device_type:iPhone X\", \"ios_version:8.0\", \"name:fake\", \"ninja_target:\", \"platform:device\", \"slavename:fake-bot-id\", \"spec_name:project.ci:ios\", \"stepname:fake test (iPhone X iOS 8.0) (with patch) on iOS-8.0\", \"test:fake test\", \"test_id_prefix:\", \"test_suite:fake test (iPhone X iOS 8.0)\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"caches\": [{\"name\": \"xcode_ios_9c40b\", \"path\": \"Xcode.app\"}], \"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for 0\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/mac_toolchain/${platform}\", \"path\": \".\", \"version\": \"git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1\"}]}, \"command\": [\"src/ios/build/bots/scripts/run.py\", \"--app\", \"src/out/Release-iphoneos/fake test.app\", \"--host-app\", \"NO_PATH\", \"--out-dir\", \"${ISOLATED_OUTDIR}\", \"--retries\", \"3\", \"--shards\", \"1\", \"--xcode-build-version\", \"9c40b\", \"--mac-toolchain-cmd\", \"./mac_toolchain\", \"--xcode-path\", \"Xcode.app\", \"--wpr-tools-path\", \"NO_PATH\", \"--replay-path\", \"NO_PATH\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"device\", \"value\": \"iPhone10,3\"}, {\"key\": \"device_status\", \"value\": \"available\"}, {\"key\": \"os\", \"value\": \"iOS-8.0\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}, {\"key\": \"xcode_version\", \"value\": \"fake xcode version\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \".\"}, \"wait_for_capacity\": true}]}]}",
+      "{\"requests\": [{\"name\": \"common_audio_unittests/Mac-11/[dummy has/ios_sim_x64_dbg_ios13/-1\", \"priority\": \"30\", \"realm\": \"webrtc:try\", \"resultdb\": {\"enable\": true}, \"service_account\": \"chromium-tester@chops-service-accounts.iam.gserviceaccount.com\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:ios_sim_x64_dbg_ios13\", \"data:[dummy hash for common_audio_unittests/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:common_audio_unittests\", \"ninja_target:\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:ios_sim_x64_dbg_ios13\", \"stepname:common_audio_unittests on Mac-11\", \"test_id_prefix:\", \"test_suite:common_audio_unittests\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"caches\": [{\"name\": \"runtime_ios_13_6\", \"path\": \"Runtime-ios-13.6\"}, {\"name\": \"xcode_ios_dummy_xcode\", \"path\": \"Xcode.app\"}], \"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for common_audio_unittests\", \"size_bytes\": \"dummy size]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/mac_toolchain/${platform}\", \"path\": \".\", \"version\": \"git_revision:723fc1a6c8cdf2631a57851f5610e598db0c1de1\"}]}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:ios_sim_x64_dbg_ios13\", \"-var\", \"os:Mac-11\", \"-var\", \"test_suite:common_audio_unittests\", \"-tag\", \"step_name:common_audio_unittests on Mac-11\", \"-tag\", \"target_platform:ios\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json\", \"--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json\", \"--xcode-build-version\", \"dummy_xcode\", \"--platform\", \"iPhone X\", \"--version\", \"13.6\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Mac-11\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1536,14 +1352,14 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "test_pre_run (with patch).[trigger] fake test (iPhone X iOS 8.0) (with patch) on iOS-8.0",
+    "name": "test_pre_run.[trigger] common_audio_unittests on Mac-11",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"name\": \"fake test (iPhone X iOS 8.0) (with patch)/iOS-8.0/[dummy has/ios/-1\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"name\": \"common_audio_unittests/Mac-11/[dummy has/ios_sim_x64_dbg_ios13/-1\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"0\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_result\": {@@@",
@@ -1558,27 +1374,31 @@
       "@@@STEP_LOG_LINE@json.input@{@@@",
       "@@@STEP_LOG_LINE@json.input@  \"requests\": [@@@",
       "@@@STEP_LOG_LINE@json.input@    {@@@",
-      "@@@STEP_LOG_LINE@json.input@      \"name\": \"fake test (iPhone X iOS 8.0) (with patch)/iOS-8.0/[dummy has/ios/-1\", @@@",
-      "@@@STEP_LOG_LINE@json.input@      \"priority\": \"200\", @@@",
-      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"project:ci\", @@@",
-      "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"ios-isolated-tester@chops-service-accounts.iam.gserviceaccount.com\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"name\": \"common_audio_unittests/Mac-11/[dummy has/ios_sim_x64_dbg_ios13/-1\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"priority\": \"30\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc:try\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"resultdb\": {@@@",
+      "@@@STEP_LOG_LINE@json.input@        \"enable\": true@@@",
+      "@@@STEP_LOG_LINE@json.input@      }, @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"chromium-tester@chops-service-accounts.iam.gserviceaccount.com\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"bucket:try\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"build_is_experimental:false\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"builder_group:chromium.fake\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"buildername:ios\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"data:[dummy hash for 0/dummy size]\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"device_type:iPhone X\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"ios_version:8.0\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"name:fake\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"builder_group:tryserver.webrtc\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"buildername:ios_sim_x64_dbg_ios13\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"data:[dummy hash for common_audio_unittests/dummy size]\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"name:common_audio_unittests\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"ninja_target:\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"platform:device\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"patch_project:src\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"project:webrtc\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"purpose:ManualTS\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"purpose:pre-commit\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"slavename:fake-bot-id\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"spec_name:project.ci:ios\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"stepname:fake test (iPhone X iOS 8.0) (with patch) on iOS-8.0\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"test:fake test\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"spec_name:webrtc.try:ios_sim_x64_dbg_ios13\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"stepname:common_audio_unittests on Mac-11\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"test_id_prefix:\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"test_suite:fake test (iPhone X iOS 8.0)\"@@@",
+      "@@@STEP_LOG_LINE@json.input@        \"test_suite:common_audio_unittests\"@@@",
       "@@@STEP_LOG_LINE@json.input@      ], @@@",
       "@@@STEP_LOG_LINE@json.input@      \"task_slices\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        {@@@",
@@ -1586,14 +1406,18 @@
       "@@@STEP_LOG_LINE@json.input@          \"properties\": {@@@",
       "@@@STEP_LOG_LINE@json.input@            \"caches\": [@@@",
       "@@@STEP_LOG_LINE@json.input@              {@@@",
-      "@@@STEP_LOG_LINE@json.input@                \"name\": \"xcode_ios_9c40b\", @@@",
+      "@@@STEP_LOG_LINE@json.input@                \"name\": \"runtime_ios_13_6\", @@@",
+      "@@@STEP_LOG_LINE@json.input@                \"path\": \"Runtime-ios-13.6\"@@@",
+      "@@@STEP_LOG_LINE@json.input@              }, @@@",
+      "@@@STEP_LOG_LINE@json.input@              {@@@",
+      "@@@STEP_LOG_LINE@json.input@                \"name\": \"xcode_ios_dummy_xcode\", @@@",
       "@@@STEP_LOG_LINE@json.input@                \"path\": \"Xcode.app\"@@@",
       "@@@STEP_LOG_LINE@json.input@              }@@@",
       "@@@STEP_LOG_LINE@json.input@            ], @@@",
       "@@@STEP_LOG_LINE@json.input@            \"cas_input_root\": {@@@",
       "@@@STEP_LOG_LINE@json.input@              \"cas_instance\": \"projects/example-cas-server/instances/default_instance\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"digest\": {@@@",
-      "@@@STEP_LOG_LINE@json.input@                \"hash\": \"[dummy hash for 0\", @@@",
+      "@@@STEP_LOG_LINE@json.input@                \"hash\": \"[dummy hash for common_audio_unittests\", @@@",
       "@@@STEP_LOG_LINE@json.input@                \"size_bytes\": \"dummy size]\"@@@",
       "@@@STEP_LOG_LINE@json.input@              }@@@",
       "@@@STEP_LOG_LINE@json.input@            }, @@@",
@@ -1607,27 +1431,31 @@
       "@@@STEP_LOG_LINE@json.input@              ]@@@",
       "@@@STEP_LOG_LINE@json.input@            }, @@@",
       "@@@STEP_LOG_LINE@json.input@            \"command\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@              \"src/ios/build/bots/scripts/run.py\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"--app\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"src/out/Release-iphoneos/fake test.app\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"--host-app\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"NO_PATH\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"--out-dir\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"${ISOLATED_OUTDIR}\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"--retries\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"3\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"--shards\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"1\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"rdb\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"stream\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"builder:ios_sim_x64_dbg_ios13\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"os:Mac-11\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"test_suite:common_audio_unittests\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-tag\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"step_name:common_audio_unittests on Mac-11\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-tag\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"target_platform:ios\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-coerce-negative-duration\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-location-tags-file\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"../../testing/location_tags.json\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-exonerate-unexpected-pass\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"--\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"--xcode-build-version\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"9c40b\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"--mac-toolchain-cmd\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"./mac_toolchain\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"--xcode-path\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"Xcode.app\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"--wpr-tools-path\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"NO_PATH\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"--replay-path\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"NO_PATH\"@@@",
+      "@@@STEP_LOG_LINE@json.input@              \"dummy_xcode\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"--platform\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"iPhone X\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"--version\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"13.6\"@@@",
       "@@@STEP_LOG_LINE@json.input@            ], @@@",
       "@@@STEP_LOG_LINE@json.input@            \"containment\": {@@@",
       "@@@STEP_LOG_LINE@json.input@              \"containment_type\": \"NONE\"@@@",
@@ -1638,24 +1466,12 @@
       "@@@STEP_LOG_LINE@json.input@                \"value\": \"x86-64\"@@@",
       "@@@STEP_LOG_LINE@json.input@              }, @@@",
       "@@@STEP_LOG_LINE@json.input@              {@@@",
-      "@@@STEP_LOG_LINE@json.input@                \"key\": \"device\", @@@",
-      "@@@STEP_LOG_LINE@json.input@                \"value\": \"iPhone10,3\"@@@",
-      "@@@STEP_LOG_LINE@json.input@              }, @@@",
-      "@@@STEP_LOG_LINE@json.input@              {@@@",
-      "@@@STEP_LOG_LINE@json.input@                \"key\": \"device_status\", @@@",
-      "@@@STEP_LOG_LINE@json.input@                \"value\": \"available\"@@@",
-      "@@@STEP_LOG_LINE@json.input@              }, @@@",
-      "@@@STEP_LOG_LINE@json.input@              {@@@",
       "@@@STEP_LOG_LINE@json.input@                \"key\": \"os\", @@@",
-      "@@@STEP_LOG_LINE@json.input@                \"value\": \"iOS-8.0\"@@@",
+      "@@@STEP_LOG_LINE@json.input@                \"value\": \"Mac-11\"@@@",
       "@@@STEP_LOG_LINE@json.input@              }, @@@",
       "@@@STEP_LOG_LINE@json.input@              {@@@",
       "@@@STEP_LOG_LINE@json.input@                \"key\": \"pool\", @@@",
       "@@@STEP_LOG_LINE@json.input@                \"value\": \"chromium.tests\"@@@",
-      "@@@STEP_LOG_LINE@json.input@              }, @@@",
-      "@@@STEP_LOG_LINE@json.input@              {@@@",
-      "@@@STEP_LOG_LINE@json.input@                \"key\": \"xcode_version\", @@@",
-      "@@@STEP_LOG_LINE@json.input@                \"value\": \"fake xcode version\"@@@",
       "@@@STEP_LOG_LINE@json.input@              }@@@",
       "@@@STEP_LOG_LINE@json.input@            ], @@@",
       "@@@STEP_LOG_LINE@json.input@            \"env\": [@@@",
@@ -1667,19 +1483,19 @@
       "@@@STEP_LOG_LINE@json.input@            \"env_prefixes\": [], @@@",
       "@@@STEP_LOG_LINE@json.input@            \"execution_timeout_secs\": \"3600\", @@@",
       "@@@STEP_LOG_LINE@json.input@            \"grace_period_secs\": \"30\", @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"idempotent\": false, @@@",
+      "@@@STEP_LOG_LINE@json.input@            \"idempotent\": true, @@@",
       "@@@STEP_LOG_LINE@json.input@            \"io_timeout_secs\": \"1200\", @@@",
       "@@@STEP_LOG_LINE@json.input@            \"outputs\": [], @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"relative_cwd\": \".\"@@@",
+      "@@@STEP_LOG_LINE@json.input@            \"relative_cwd\": \"\"@@@",
       "@@@STEP_LOG_LINE@json.input@          }, @@@",
-      "@@@STEP_LOG_LINE@json.input@          \"wait_for_capacity\": true@@@",
+      "@@@STEP_LOG_LINE@json.input@          \"wait_for_capacity\": false@@@",
       "@@@STEP_LOG_LINE@json.input@        }@@@",
       "@@@STEP_LOG_LINE@json.input@      ]@@@",
       "@@@STEP_LOG_LINE@json.input@    }@@@",
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: fake test (iPhone X iOS 8.0) (with patch)/iOS-8.0/[dummy has/ios/-1@https://example.swarmingserver.appspot.com/task?id=0@@@"
+      "@@@STEP_LINK@task UI: common_audio_unittests/Mac-11/[dummy has/ios_sim_x64_dbg_ios13/-1@https://example.swarmingserver.appspot.com/task?id=0@@@"
     ]
   },
   {
@@ -1690,11 +1506,11 @@
       "UpdateIncludedInvocations",
       "-include-update-token"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1704,7 +1520,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "test_pre_run (with patch).include swarming task invocations",
+    "name": "test_pre_run.include swarming task invocations",
     "stdin": "{\"addInvocations\": [\"invocations/0\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1721,7 +1537,7 @@
   },
   {
     "cmd": [],
-    "name": "collect tasks (with patch)"
+    "name": "collect tasks"
   },
   {
     "cmd": [
@@ -1733,10 +1549,10 @@
       "--url",
       "https://chromium.googlesource.com/infra/luci/client-py.git"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[CACHE]/builder",
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1746,7 +1562,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "collect tasks (with patch).git setup (swarming_client)",
+    "name": "collect tasks.git setup (swarming_client)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -1765,7 +1581,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1775,7 +1591,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "collect tasks (with patch).git fetch (swarming_client)",
+    "name": "collect tasks.git fetch (swarming_client)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -1791,7 +1607,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1801,7 +1617,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "collect tasks (with patch).git checkout (swarming_client)",
+    "name": "collect tasks.git checkout (swarming_client)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -1816,7 +1632,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1826,7 +1642,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "collect tasks (with patch).read revision",
+    "name": "collect tasks.read revision",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@<br/>checked out 'deadbeef'<br/>@@@"
@@ -1844,7 +1660,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1854,7 +1670,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "collect tasks (with patch).git clean (swarming_client)",
+    "name": "collect tasks.git clean (swarming_client)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -1869,7 +1685,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1879,7 +1695,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "collect tasks (with patch).submodule sync (swarming_client)",
+    "name": "collect tasks.submodule sync (swarming_client)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -1896,7 +1712,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1906,7 +1722,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "collect tasks (with patch).submodule update (swarming_client)",
+    "name": "collect tasks.submodule update (swarming_client)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -1928,10 +1744,10 @@
       "0",
       "--verbose"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[CACHE]/builder",
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1941,7 +1757,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "collect tasks (with patch).wait for tasks (with patch)",
+    "name": "collect tasks.wait for tasks",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1962,11 +1778,11 @@
       "luci.resultdb.v1.ResultDB",
       "QueryTestResultStatistics"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1976,7 +1792,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "collect tasks (with patch).fake test (iPhone X iOS 8.0) stats",
+    "name": "collect tasks.common_audio_unittests stats",
     "stdin": "{\"invocations\": [\"invocations/0\"]}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2002,11 +1818,11 @@
       "testId,variant,variantHash,status,tags,expected,duration",
       "0"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -2016,7 +1832,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "collect tasks (with patch).fake test (iPhone X iOS 8.0) results",
+    "name": "collect tasks.common_audio_unittests results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@raw_io.output_text@@@"
@@ -2036,9 +1852,9 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[CLEANUP]/0_tmp_1",
+      "[CLEANUP]/tmp_tmp_1",
       "--merge-script",
-      "RECIPE_MODULE[build::chromium_swarming]/resources/noop_merge.py",
+      "[CACHE]/builder/src/testing/merge_scripts/standard_isolated_script_merge.py",
       "--merge-script-stdout-file",
       "/path/to/tmp/merge_script_log",
       "--merge-additional-args",
@@ -2066,7 +1882,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "webrtc:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -2076,10 +1892,12 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "fake test (iPhone X iOS 8.0) (with patch) on iOS-8.0",
+    "name": "common_audio_unittests on Mac-11",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'iOS-8.0'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_TEXT@Run on OS: 'Mac-11'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"version\": 3@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
@@ -2111,21 +1929,77 @@
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
       "@@@STEP_LOG_END@chromium_swarming.summary@@@",
-      "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
+      "@@@STEP_LOG_LINE@Merge script log@Merged succesfully@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
+      "@@@STEP_LOG_LINE@outdir_json@{}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@",
+      "@@@STEP_LOG_LINE@step_metadata@{@@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"common_audio_unittests\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"dimensions\": {@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"cpu\": \"x86-64\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Mac-11\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"chromium.tests\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"common_audio_unittests on Mac-11\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"common_audio_unittests\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"0\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_builder_group\": null, @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null@@@",
+      "@@@STEP_LOG_LINE@step_metadata@}@@@",
+      "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 test results@https://luci-milo.appspot.com/ui/inv/some-inv-name/test-results@@@",
       "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=0@@@"
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
+      "--input-json",
+      "{\"version\": 3}",
+      "--builder-group",
+      "tryserver.webrtc",
+      "--builder-name",
+      "ios_sim_x64_dbg_ios13",
+      "--build-number",
+      "0",
+      "--test-type",
+      "common_audio_unittests on Mac-11",
+      "--chrome-revision",
+      "170242",
+      "--build-id",
+      "8945511751514863184",
+      "--test-results-server",
+      "test-results.appspot.com"
+    ],
+    "cwd": "[CACHE]/builder",
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "Upload to test-results [common_audio_unittests on Mac-11]"
+  },
+  {
     "cmd": [],
-    "name": "$debug - all results (with patch)",
+    "name": "$debug - all results",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@serialzed results@{@@@",
       "@@@STEP_LOG_LINE@serialzed results@  \"all_suites\": [@@@",
       "@@@STEP_LOG_LINE@serialzed results@    {@@@",
       "@@@STEP_LOG_LINE@serialzed results@      \"invalid\": \"False\", @@@",
-      "@@@STEP_LOG_LINE@serialzed results@      \"suite_name\": \"fake test (iPhone X iOS 8.0)\", @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"suite_name\": \"common_audio_unittests\", @@@",
       "@@@STEP_LOG_LINE@serialzed results@      \"test_name_to_test_id_mapping\": {}, @@@",
       "@@@STEP_LOG_LINE@serialzed results@      \"total_tests_ran\": 0, @@@",
       "@@@STEP_LOG_LINE@serialzed results@      \"unexpected_failing_tests\": [], @@@",
@@ -2140,16 +2014,115 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "fake test (iPhone X iOS 8.0)",
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_REPO[depot_tools]/gerrit_client.py",
+      "changes",
+      "--host",
+      "https://webrtc-review.googlesource.com",
+      "--json_file",
+      "/path/to/tmp/json",
+      "--limit",
+      "1",
+      "-p",
+      "change=123456",
+      "-o",
+      "ALL_REVISIONS",
+      "-o",
+      "ALL_COMMITS"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "gerrit changes",
+    "timeout": 60,
     "~followup_annotations": [
-      "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@"
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"_number\": \"123456\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"branch\": \"main\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"change_id\": \"Ideadbeef\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"created\": \"2017-01-30 13:11:20.000000000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"has_review_started\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"project\": \"chromium/src\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"revisions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"184ebe53805e102605d11f6b143486d15c23a09c\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"_number\": \"7\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"commit\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"message\": \"Change commit message\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        }@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"status\": \"NEW\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"subject\": \"Change title\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
-    "failure": {
-      "humanReason": "Failed fake test (iPhone X iOS 8.0), fake test (iPhone X iOS 8.0)."
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[depot_tools]/git_footers.py",
+      "--json",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[CACHE]/builder",
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
+    "name": "parse description",
+    "stdin": "Change commit message",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output (exception)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "proceed with retry",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>fewer than 5 failures, continue with retries@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "Tests statistics",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>Stats<br/>Total shards: 1<br/>Total runtime: 32s <br/>@@@",
+      "@@@STEP_LOG_LINE@detailed stats@Total shards: 1@@@",
+      "@@@STEP_LOG_LINE@detailed stats@Total runtime: 32s @@@",
+      "@@@STEP_LOG_LINE@detailed stats@Min/mean/max: 32s / 32s / 32s@@@",
+      "@@@STEP_LOG_END@detailed stats@@@"
+    ]
+  },
+  {
     "name": "$result"
   }
 ]

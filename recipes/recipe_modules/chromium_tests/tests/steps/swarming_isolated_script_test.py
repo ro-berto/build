@@ -537,3 +537,28 @@ def GenTests(api):
           '(with patch)]'),
       api.post_process(post_process.DropExpectation),
   )
+
+  yield api.test(
+      'shard_timed_out_failure',
+      api.chromium.ci_build(
+          builder_group='chromium.linux',
+          builder='Linux Tests',
+      ),
+      api.properties(swarm_hashes={
+          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
+      }),
+      api.override_step_data(
+          'base_unittests on Intel GPU on Linux (with patch)',
+          api.chromium_swarming.summary(
+              dispatched_task_step_test_data=None,
+              data={
+                  'shards': [{
+                      'created_ts': '2014-09-25T01:41:00.123',
+                      'started_ts': '2014-09-25T01:42:11.123',
+                      'completed_ts': '2014-09-25T01:43:11.123',
+                      'duration': 31.5,
+                      'state': 'TIMED_OUT'
+                  }]
+              })),
+      api.post_process(post_process.DropExpectation),
+  )

@@ -174,7 +174,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     if shard.get('state') == 'COMPLETED':
       # This case, task finished successfully.
       return 0
-    return None
+    return None  # pragma: no cover
 
   def __init__(self, **kwargs):
     super(SwarmingApi, self).__init__(**kwargs)
@@ -1685,8 +1685,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         if duration is not None:
           display_text = (
               'shard #%d timed out after %s' % (index, fmt_time(duration)))
-        else: # pragma: no cover
-          # TODO(tikuta): Add coverage for this code.
+        else:
           display_text = (
               'shard #%d timed out, took too much time to complete' % index)
         expected_errors.append(display_text)

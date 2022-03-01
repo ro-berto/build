@@ -4,10 +4,7 @@
 
 from __future__ import absolute_import
 
-import contextlib
-import os
 import re
-import sys
 
 import six
 from six.moves import urllib
@@ -159,78 +156,6 @@ class WebRTCApi(recipe_api.RecipeApi):
       assert self.m.chromium.c.BUILD_CONFIG == 'Release', (
         'Perf tests should only be run with Release builds.')
 
-  def apply_ios_config(self):
-    """Generate a JSON config from bot config, apply it to ios recipe module."""
-
-    # The ios recipe module has only one way of configuring it - by passing a
-    # location of a JSON config file. The config covers everything from
-    # selecting GN args to running the tests. But we just want the part that
-    # runs tests, to be able to reuse the existing compilation code across all
-    # platforms. The module has many required parameters with global validation,
-    # so some dummy values are needed.
-    # It is possible to see the actual JSON files that it generates in
-    # ios.expected/*.json step "read build config". They are the direct
-    # replacement of the src-side config.
-
-    ios_config = {}
-
-    ios_config['configuration'] = self.m.chromium.c.BUILD_CONFIG
-    # Set the bare minimum GN args; these aren't used for building.
-    ios_config['gn_args'] = [
-      'is_debug=%s' % ('true' if self.m.chromium.c.BUILD_CONFIG != 'Release'
-                       else 'false'),
-      # HACK: ios recipe module looks for hardcoded values of CPU to determine
-      # real device vs simulator but doesn't directly use these values.
-      'target_cpu="%s"' % ('arm' if self.m.chromium.c.TARGET_ARCH == 'arm'
-                           else 'x64'),
-      'use_goma=true',
-    ]
-
-    # Note: 'xcode build version' property in the json is only informative.
-    # It's the depot_tools/osx_sdk recipe module that decides which xcode
-    # actually gets installed, and it does so based off $depot_tools/osx_sdk.
-    # $depot_tools/osx_sdk is set by our cr-buildbucket.cfg (i.e. config.star).
-    xcode_version = self.m.properties['$depot_tools/osx_sdk']['sdk_version']
-    ios_config['xcode build version'] = xcode_version
-
-    if 'ios_config' in self.bot.config:
-      ios_config.update(self.bot.config['ios_config'])
-
-    ios_config['tests'] = []
-    if self.bot.should_test:
-      tests = steps.generate_tests(None, self.bot,
-                                   self.m.tryserver.is_tryserver,
-                                   self.m.chromium_tests, self._ios_config)
-      for test in tests:
-        assert isinstance(test, steps.IosTest)
-        test_dict = {
-            'pool': 'chromium.tests',
-            'priority': 30,
-        }
-        # Apply generic parameters.
-        test_dict.update(self.bot.config.get('ios_testing', {}))
-        # Apply test-specific parameters.
-        test_dict.update(test.config)
-        ios_config['tests'].append(test_dict)
-
-    buildername = sanitize_file_name(self.buildername)
-    tmp_path = self.m.path.mkdtemp('ios')
-    self.m.file.ensure_directory(
-        'create temp directory',
-        tmp_path.join(self.bucketname))
-    self.m.file.write_text(
-        'generate %s.json' % buildername,
-        tmp_path.join(self.bucketname, '%s.json' % buildername),
-        self.m.json.dumps(ios_config, indent=2, separators=(',', ': ')))
-
-    # Make it read the actual config even in testing mode.
-    if self._test_data.enabled:
-      self.m.ios._test_data['build_config'] = ios_config
-    self.m.ios.read_build_config(
-        build_config_base_dir=tmp_path,
-        builder_group=self.bucketname,
-        buildername=buildername)
-
   @property
   def revision_number(self):
     branch, number = self.m.commit_position.parse(self.revision_cp)
@@ -296,7 +221,7 @@ class WebRTCApi(recipe_api.RecipeApi):
         return self.bot.should_build
     return False
 
-  def is_compile_needed(self, phase=None, is_ios=False):
+  def is_compile_needed(self, phase=None):
     test_targets = set()
     non_isolated_test_targets = set()
     for bot in self.related_bots():
@@ -305,18 +230,10 @@ class WebRTCApi(recipe_api.RecipeApi):
                                          self.m.tryserver.is_tryserver,
                                          self.m.chromium_tests,
                                          self._ios_config):
-          if isinstance(test, (c_steps.SwarmingTest, steps.IosTest)):
+          if isinstance(test, c_steps.SwarmingTest):
             test_targets.add(test.name)
-          if isinstance(test, (c_steps.AndroidJunitTest)):
+          if isinstance(test, c_steps.AndroidJunitTest):
             non_isolated_test_targets.add(test.name)
-
-    if is_ios:
-      # TODO(bugs.webrtc.org/11262): On iOS, the list of isolated targets
-      # to run is created in a different way (see webrtc.apply_ios_config()
-      # in this file) so we need to keep a copy of test_targets to add
-      # back to the list of targets to compile even if "gn analyze" considers
-      # them not needed.
-      ios_mandatory_test_targets = sorted(test_targets)
 
     # The default behavior is to always build the :default target and
     # the tests that need to be run.
@@ -349,21 +266,11 @@ class WebRTCApi(recipe_api.RecipeApi):
               list(sorted(non_isolated_test_targets)),
           'additional_compile_targets': ['all'],
       }
-      if not is_ios:
-        step_result = self.m.chromium.mb_analyze(
-            self.builder_id,
-            analyze_input,
-            mb_path=self.m.path['checkout'].join('tools_webrtc', 'mb'),
-            phase=phase)
-      else:
-        # Match the out path that ios recipe module uses.
-        self.m.chromium.c.build_config_fs = os.path.basename(
-            self.m.ios.most_recent_app_dir)
-        with self.m.context(env={'FORCE_MAC_TOOLCHAIN': ''}):
-          step_result = self.m.chromium.mb_analyze(
-              self.builder_id,
-              analyze_input,
-              mb_path=self.m.path['checkout'].join('tools_webrtc', 'mb'))
+      step_result = self.m.chromium.mb_analyze(
+          self.builder_id,
+          analyze_input,
+          mb_path=self.m.path['checkout'].join('tools_webrtc', 'mb'),
+          phase=phase)
 
       if 'error' in step_result.json.output:
         step_result.presentation.step_text = (
@@ -413,14 +320,6 @@ class WebRTCApi(recipe_api.RecipeApi):
               ['libjingle_peerconnection_so', 'AppRTCMobile']))
     elif self.buildername == 'linux_compile_rel':
       self._compile_targets = sorted(set(self._compile_targets + ['webrtc']))
-
-    if is_ios:
-      # TODO(bugs.webrtc.org/11262): On iOS, the list of isolated targets
-      # to run is created in a different way (see webrtc.apply_ios_config()
-      # in this file) so we have to re-add these targets back even if
-      # "gn analyze" considers them not affected by this CL.
-      self._compile_targets = sorted(
-          set(self._compile_targets + ios_mandatory_test_targets))
 
     self._compile_targets = sorted(set(self._compile_targets))
     return len(self._compile_targets) > 0
@@ -541,11 +440,6 @@ class WebRTCApi(recipe_api.RecipeApi):
       cmd_golang = ['vpython3', '-u', script_golang] + args_golang
       self.m.step('download golang', cmd_golang)
 
-  @contextlib.contextmanager
-  def ensure_sdk(self):
-    with self.m.osx_sdk(self.bot.config['ensure_sdk']):
-      yield
-
   def run_mb(self, phase=None):
     if phase:
       # Set the out folder to be the same as the phase name, so caches of
@@ -562,23 +456,6 @@ class WebRTCApi(recipe_api.RecipeApi):
         use_goma=True,
         mb_path=self.m.path['checkout'].join('tools_webrtc', 'mb'),
         isolated_targets=self._isolated_targets)
-
-  def run_mb_ios(self):
-    # Match the out path that ios recipe module uses.
-    self.m.chromium.c.build_config_fs = os.path.basename(
-        self.m.ios.most_recent_app_dir)
-    # TODO(oprypin): Allow configuring the path in ios recipe module and remove
-    # this override.
-
-    with self.m.context(env={'FORCE_MAC_TOOLCHAIN': ''}):
-      self.m.chromium.mb_gen(
-          self.builder_id,
-          use_goma=True,
-          mb_path=self.m.path['checkout'].join('tools_webrtc', 'mb'),
-          # mb isolate is not supported (and not needed) on iOS. The ios recipe
-          # module does isolation itself, it basically just includes the .app
-          # file
-          isolated_targets=None)
 
   def compile(self):
     if self.bot.bot_type == 'tester' and self.bot.should_upload_perf_results:

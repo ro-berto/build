@@ -199,12 +199,9 @@ def generate_tests(phase, bot, is_tryserver, chromium_tests_api, ios_config):
               args=[QUICK_PERF_TEST, '--nologs']))
 
   if test_suite == 'ios':
-    if is_tryserver:
-      tests += [IosTest(t, xctest=True) for t in ios_tests]
-    else:
-      tests += [
-          SwarmingIosTest(t, chromium_tests_api, ios_config) for t in ios_tests
-      ]
+    tests += [
+        SwarmingIosTest(t, chromium_tests_api, ios_config) for t in ios_tests
+    ]
 
   if test_suite == 'ios_device':
     tests = [
@@ -279,35 +276,3 @@ def SwarmingAndroidTest(name, chromium_tests_api, **kwargs):
 def AndroidJunitTest(name, chromium_tests_api):
   return steps.AndroidJunitTest(
       steps.AndroidJunitTestSpec.create(name), chromium_tests_api)
-
-
-class IosTest(object):
-  """A fake shell of an iOS test. It is only read by apply_ios_config."""
-
-  def __init__(self, name, xctest=False, xcode_parallelization=False):
-    self._name = name
-    self.config = {'app': name}
-    if xctest:
-      self.config['xctest'] = True
-      # WebRTC iOS tests are in the process of being migrated to XCTest so
-      # there is no need to have a flag to handle how they run.
-      if 'test args' not in self.config:
-        self.config['test args'] = []
-      self.config['test args'].append(
-          '--undefok="enable-run-ios-unittests-with-xctest"')
-    if name in USE_XCODE_PARALLELIZATION:
-      # TODO(crbug.com/1006881): "xctest" indicates how to run the targets but
-      # not how to parse test outputs since recent iOS test runner changes.
-      # This arg is needed for outputs to be parsed correctly.
-      self.config['xcode parallelization'] = True
-
-  @property
-  def name(self):
-    return self._name
-
-  @property
-  def runs_on_swarming(self):  # pragma: no cover
-    # Even if this sounds unrelated from Swarming, this is just a shell for an
-    # iOS test, the real test that will run is an instance of Chromium's
-    # SwarmingIosTest.
-    return True
