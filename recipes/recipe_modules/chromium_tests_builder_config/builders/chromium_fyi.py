@@ -1210,7 +1210,8 @@ SPEC.update([
     stock_config('Linux Viz', gclient_apply_config=['enable_reclient']),
     stock_config(
         'linux-annotator-rel', gclient_apply_config=['enable_reclient']),
-    stock_config('linux-chromeos-annotator-rel'),
+    stock_config(
+        'linux-chromeos-annotator-rel', gclient_apply_config=['chromeos']),
     stock_config(
         'linux-ash-chromium-builder-fyi-rel',
         gclient_apply_config=['chromeos']),
