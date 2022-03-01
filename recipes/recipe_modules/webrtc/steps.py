@@ -89,8 +89,8 @@ def generate_tests(phase, bot, is_tryserver, chromium_tests_api, ios_config):
       'modules_tests',
       'modules_unittests',
       'peerconnection_unittests',
-      'rtc_pc_unittests',
       'rtc_media_unittests',
+      'rtc_pc_unittests',
       'rtc_stats_unittests',
       'rtc_unittests',
       'system_wrappers_unittests',
@@ -104,8 +104,6 @@ def generate_tests(phase, bot, is_tryserver, chromium_tests_api, ios_config):
       # TODO(bugs.webrtc.org/12244): Some tests are skipped on iOS simulator
       # platforms because they fail or they are flaky.
       #'apprtcmobile_tests',
-      #'sdk_unittests',
-      'sdk_framework_unittests',
       'audio_decoder_unittests',
       'common_audio_unittests',
       'common_video_unittests',
@@ -116,6 +114,10 @@ def generate_tests(phase, bot, is_tryserver, chromium_tests_api, ios_config):
       'rtc_pc_unittests',
       'rtc_stats_unittests',
       'rtc_unittests',
+      'sdk_framework_unittests',
+      # TODO(bugs.webrtc.org/12244): Some tests are skipped on iOS simulator
+      # platforms because they fail or they are flaky.
+      #'sdk_unittests',
       'system_wrappers_unittests',
       'test_support_unittests',
       'tools_unittests',

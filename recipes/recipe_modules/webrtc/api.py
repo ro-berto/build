@@ -422,6 +422,7 @@ class WebRTCApi(recipe_api.RecipeApi):
       self._compile_targets = sorted(
           set(self._compile_targets + ios_mandatory_test_targets))
 
+    self._compile_targets = sorted(set(self._compile_targets))
     return len(self._compile_targets) > 0
 
   def configure_isolate(self, phase=None):
