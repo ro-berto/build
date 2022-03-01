@@ -131,7 +131,7 @@ def _RunStepsChromium(api):
   if raw_result.status != common_pb.SUCCESS:
     return raw_result
 
-  version = _GetCelabVersionFromVPython(api, test_root.join(".vpython"))
+  version = _GetCelabVersionFromVPython(api, test_root.join(".vpython3"))
   celab_bin_dir = _GetCelabFromCipd(api, version)
 
   # Run tests for all chromium bots.

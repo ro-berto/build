@@ -1150,7 +1150,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[CACHE]\\builder\\src\\chrome\\test\\enterprise\\e2e\\.vpython",
+      "[CACHE]\\builder\\src\\chrome\\test\\enterprise\\e2e\\.vpython3",
       "/path/to/tmp/"
     ],
     "infra_step": true,
@@ -1168,11 +1168,11 @@
     },
     "name": "read vpython file",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@.vpython@wheel: <@@@",
-      "@@@STEP_LOG_LINE@.vpython@              name: \"infra/celab/celab/windows-amd64\"@@@",
-      "@@@STEP_LOG_LINE@.vpython@              version: \"celab_package_version\"@@@",
-      "@@@STEP_LOG_LINE@.vpython@            >@@@",
-      "@@@STEP_LOG_END@.vpython@@@"
+      "@@@STEP_LOG_LINE@.vpython3@wheel: <@@@",
+      "@@@STEP_LOG_LINE@.vpython3@              name: \"infra/celab/celab/windows-amd64\"@@@",
+      "@@@STEP_LOG_LINE@.vpython3@              version: \"celab_package_version\"@@@",
+      "@@@STEP_LOG_LINE@.vpython3@            >@@@",
+      "@@@STEP_LOG_END@.vpython3@@@"
     ]
   },
   {
