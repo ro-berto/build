@@ -132,6 +132,10 @@ def x64_base(_):
   pass
 
 @config_ctx(includes=['x64_base'])
+def x64_builder(_):
+  pass
+
+@config_ctx(includes=['x64_builder'])
 def x64_builder_mb(_):
   pass
 

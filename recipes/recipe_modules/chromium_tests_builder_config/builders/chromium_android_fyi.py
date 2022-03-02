@@ -140,6 +140,8 @@ SPEC = {
             android_config='x64_builder_mb',
             simulation_platform='linux',
         ),
+    # TODO(crbug.com/1225851): Remote FYI config after
+    # android-12-x64-rel is  up and running.
     'android-12-x64-fyi-rel':
         _chromium_android_fyi_spec(
             chromium_config='android',

@@ -113,13 +113,17 @@ def arm_l_builder_lto(c):  # pragma: no cover
 def arm_l_builder_rel(_):  # pragma: no cover
   pass
 
-@CONFIG_CTX(includes=['base_config', 'default_compiler', 'goma', 'mb'],
+@CONFIG_CTX(includes=['base_config', 'default_compiler', 'goma'],
             config_vars={'TARGET_ARCH': 'intel', 'TARGET_BITS': 64})
-def x64_builder_mb(c):
+def x64_builder(c):
   if c.TARGET_ARCH != 'intel' or c.TARGET_BITS != 64:
     raise recipe_config.BadConf(
       'Cannot target x64 with TARGET_ARCH == %s, TARGET_BITS == %d'
        % (c.TARGET_ARCH, c.TARGET_BITS))  # pragma: no cover
+
+@CONFIG_CTX(includes=['x64_builder', 'mb'])
+def x64_builder_mb(_):
+  pass
 
 @CONFIG_CTX(includes=['base_config', 'default_compiler', 'goma'],
             config_vars={'TARGET_BITS': 64})

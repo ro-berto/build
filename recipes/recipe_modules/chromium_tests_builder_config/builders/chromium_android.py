@@ -492,6 +492,10 @@ SPEC.update([
         gclient_apply_config=['android', 'enable_wpr_tests', 'enable_reclient'],
         chromium_config_kwargs={'TARGET_BITS': 64}),
     stock_config('android-11-x86-rel', android_config='x86_builder'),
+    stock_config(
+        'android-12-x64-rel',
+        android_config='x64_builder',
+        chromium_config_kwargs={'TARGET_BITS': 64}),
     stock_cronet_config('android-cronet-arm-dbg', config='Debug'),
     stock_cronet_config('android-cronet-arm-rel'),
     stock_cronet_config('android-cronet-arm64-dbg', config='Debug'),
