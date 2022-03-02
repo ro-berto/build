@@ -310,7 +310,7 @@
       "[CACHE]/goma/client",
       "-v",
       "//out/Debug",
-      "{\"additional_compile_targets\": [\"all\"], \"files\": [\"foo.cc\"], \"test_targets\": [\"AppRTCMobile_test_apk\", \"android_instrumentation_test_apk\", \"audio_decoder_unittests\", \"common_audio_unittests\", \"common_video_unittests\", \"dcsctp_unittests\", \"modules_tests\", \"modules_unittests\", \"peerconnection_unittests\", \"rtc_media_unittests\", \"rtc_pc_unittests\", \"rtc_stats_unittests\", \"rtc_unittests\", \"system_wrappers_unittests\", \"test_support_unittests\", \"tools_unittests\", \"video_engine_tests\", \"voip_unittests\", \"webrtc_nonparallel_tests\", \"webrtc_perf_tests\", \"android_examples_junit_tests\", \"android_sdk_junit_tests\"]}",
+      "{\"additional_compile_targets\": [\"all\"], \"files\": [\"foo.cc\"], \"test_targets\": [\"AppRTCMobile_test_apk\", \"android_examples_junit_tests\", \"android_instrumentation_test_apk\", \"android_sdk_junit_tests\", \"audio_decoder_unittests\", \"common_audio_unittests\", \"common_video_unittests\", \"dcsctp_unittests\", \"modules_tests\", \"modules_unittests\", \"peerconnection_unittests\", \"rtc_media_unittests\", \"rtc_pc_unittests\", \"rtc_stats_unittests\", \"rtc_unittests\", \"system_wrappers_unittests\", \"test_support_unittests\", \"tools_unittests\", \"video_engine_tests\", \"voip_unittests\", \"webrtc_nonparallel_tests\", \"webrtc_perf_tests\"]}",
       "/path/to/tmp/json",
       "--json-output",
       "/path/to/tmp/json"

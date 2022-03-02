@@ -227,6 +227,35 @@ class WebRTCApi(recipe_api.RecipeApi):
         return self.bot.should_build
     return False
 
+  def run_mb_analyze(self, phase, affected_files, test_targets):
+    step_result = self.m.chromium.mb_analyze(
+        self.builder_id,
+        analyze_input={
+            'files': affected_files,
+            'test_targets': sorted(set(test_targets)),
+            'additional_compile_targets': ['all'],
+        },
+        mb_path=self.m.path['checkout'].join('tools_webrtc', 'mb'),
+        phase=phase)
+
+    if 'error' in step_result.json.output:
+      failure_msg = 'Error: ' + step_result.json.output['error']
+      step_result.presentation.step_text = failure_msg
+      step_result.presentation.status = self.m.step.FAILURE
+      raise self.m.step.StepFailure(failure_msg)
+
+    if 'invalid_targets' in step_result.json.output:
+      failure_msg = 'Error, following targets were not found: ' + ', '.join(
+          step_result.json.output['invalid_targets'])
+      raise self.m.step.StepFailure(failure_msg)
+
+    if 'Found dependency' not in step_result.json.output['status']:
+      step_result.presentation.step_text = 'No compile necessary'
+      return [], []
+
+    return (step_result.json.output['test_targets'],
+            step_result.json.output['compile_targets'])
+
   def get_compile_targets(self, phase):
     isolated_targets = []
     non_isolated_targets = []
@@ -264,6 +293,22 @@ class WebRTCApi(recipe_api.RecipeApi):
       # :default to "all".
       return sorted(set(['default'] + isolated_targets + non_isolated_targets))
 
+    tests_target, compile_targets = self.run_mb_analyze(
+        phase, affected_files, isolated_targets + non_isolated_targets)
+
+    self._isolated_targets = [
+        t for t in self._isolated_targets if t in tests_target
+    ]
+    self._non_isolated_targets = [
+        t for t in self._non_isolated_targets if t in tests_target
+    ]
+    if compile_targets:
+      # See crbug.com/557505 - we need to not prune meta
+      # targets that are part of 'test_targets', because otherwise
+      # we might not actually build all of the binaries needed for
+      # a given test, even if they aren't affected by the patch.
+      compile_targets += self._isolated_targets + self._non_isolated_targets
+
     # Some trybots are used to calculate the binary size impact of the current
     # CL. These targets should always be built.
     binary_size_targets = []
@@ -271,48 +316,6 @@ class WebRTCApi(recipe_api.RecipeApi):
       for binary_size_file in self.bot.config.get('binary_size_files', []):
         if binary_size_target in binary_size_file:
           binary_size_targets.append(binary_size_target)
-
-    step_result = self.m.chromium.mb_analyze(
-        self.builder_id,
-        analyze_input={
-            'files': affected_files,
-            'test_targets': self._isolated_targets + self._non_isolated_targets,
-            'additional_compile_targets': ['all'],
-        },
-        mb_path=self.m.path['checkout'].join('tools_webrtc', 'mb'),
-        phase=phase)
-
-    if 'error' in step_result.json.output:
-      failure_msg = 'Error: ' + step_result.json.output['error']
-      step_result.presentation.step_text = failure_msg
-      step_result.presentation.status = self.m.step.FAILURE
-      raise self.m.step.StepFailure(failure_msg)
-
-    if 'invalid_targets' in step_result.json.output:
-      failure_msg = 'Error, following targets were not found: ' + ', '.join(
-          step_result.json.output['invalid_targets'])
-      raise self.m.step.StepFailure(failure_msg)
-
-    if 'Found dependency' not in step_result.json.output['status']:
-      step_result.presentation.step_text = 'No compile necessary'
-      self._isolated_targets = []
-      self._non_isolated_targets = []
-      return binary_size_targets
-
-    self._isolated_targets = [
-        t for t in step_result.json.output['test_targets']
-        if t in self._isolated_targets
-    ]
-    self._non_isolated_targets = [
-        t for t in step_result.json.output['test_targets']
-        if t in self._non_isolated_targets
-    ]
-    compile_targets = step_result.json.output['compile_targets']
-    # See crbug.com/557505 - we need to not prune meta
-    # targets that are part of 'test_targets', because otherwise
-    # we might not actually build all of the binaries needed for
-    # a given test, even if they aren't affected by the patch.
-    compile_targets += self._isolated_targets + self._non_isolated_targets
 
     return sorted(set(compile_targets + binary_size_targets))
 
