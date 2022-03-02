@@ -325,10 +325,6 @@
     "name": "gclient runhooks"
   },
   {
-    "cmd": [],
-    "name": "check swarm_hashes"
-  },
-  {
     "cmd": [
       "python3",
       "-u",
@@ -829,6 +825,10 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
+  },
+  {
+    "cmd": [],
+    "name": "check swarm_hashes"
   },
   {
     "cmd": [],

@@ -59,8 +59,6 @@ def RunSteps(api):
       step_result.presentation.status = api.step.SUCCESS
       return
 
-    webrtc.configure_isolate()
-
     if webrtc.bot.should_build:
       webrtc.run_mb(phase)
       raw_result = webrtc.compile()
@@ -130,21 +128,10 @@ def GenTests(api):
       suffix='_forced',
       parent_got_revision='a' * 40,
       revision=None)
-  yield generate_builder(
-      'luci.webrtc.perf',
-      'Perf Android32 (M Nexus5)',
-      suffix='_forced_invalid',
-      revision=None)
 
   yield generate_builder(
       'luci.webrtc.perf',
       'Perf Linux Bionic',
-      failing_test='webrtc_perf_tests',
-      suffix='_failing_test',
-      revision='a' * 40)
-  yield generate_builder(
-      'luci.webrtc.perf',
-      'Perf Android64 (M Nexus5X)',
       failing_test='webrtc_perf_tests',
       suffix='_failing_test',
       revision='a' * 40)

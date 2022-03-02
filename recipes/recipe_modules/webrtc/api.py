@@ -154,7 +154,10 @@ class WebRTCApi(recipe_api.RecipeApi):
     if self.bot.should_upload_perf_results:
       assert not self.m.tryserver.is_tryserver
       assert self.m.chromium.c.BUILD_CONFIG == 'Release', (
-        'Perf tests should only be run with Release builds.')
+          'Perf tests should only be run with Release builds.')
+    if self.bot.bot_type == 'tester':
+      assert self.m.properties.get('parent_got_revision'), (
+          'Testers should only be run with "parent_got_revision" property.')
 
   @property
   def revision_number(self):
@@ -324,10 +327,6 @@ class WebRTCApi(recipe_api.RecipeApi):
     self._compile_targets = sorted(set(self._compile_targets))
     return len(self._compile_targets) > 0
 
-  def configure_isolate(self, phase=None):
-    if self.bot.config.get('parent_buildername'):
-      self.m.isolate.check_swarm_hashes(self._isolated_targets)
-
   def configure_swarming(self):
     self.m.chromium_swarming.configure_swarming(
         'webrtc',
@@ -372,11 +371,6 @@ class WebRTCApi(recipe_api.RecipeApi):
         raise
 
   def checkout(self, **kwargs):
-    if (self.bot and self.bot.bot_type == 'tester' and
-        not self.m.properties.get('parent_got_revision')):
-      raise self.m.step.InfraFailure(
-         'Testers must not be started without providing revision information.')
-
     self._working_dir = self.m.chromium_checkout.checkout_dir
 
     is_chromium = self.m.tryserver.gerrit_change_repo_url == CHROMIUM_REPO
@@ -469,8 +463,8 @@ class WebRTCApi(recipe_api.RecipeApi):
   def isolate(self):
     if self.bot.bot_type == 'tester':
       # The tests running on a 'tester' bot are isolated by the 'builder'.
-      return
-    if self.is_triggering_perf_tests and not self.m.tryserver.is_tryserver:
+      self.m.isolate.check_swarm_hashes(self._isolated_targets)
+    elif self.is_triggering_perf_tests and not self.m.tryserver.is_tryserver:
       # Set the swarm_hashes name so that it is found by pinpoint.
       commit_position = self.revision_cp.replace('@', '(at)')
       swarm_hashes_property_name = '_'.join(
