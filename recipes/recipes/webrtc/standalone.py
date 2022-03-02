@@ -54,14 +54,15 @@ def RunSteps(api):
     api.chromium.runhooks()
 
   for phase in webrtc.bot.phases:
-    if not webrtc.is_compile_needed(phase):
+    compile_targets = webrtc.get_compile_targets(phase)
+    if not compile_targets:
       step_result = api.step('No further steps are necessary.', cmd=None)
       step_result.presentation.status = api.step.SUCCESS
       return
 
     if webrtc.bot.should_build:
       webrtc.run_mb(phase)
-      raw_result = webrtc.compile()
+      raw_result = api.chromium.compile(compile_targets, use_goma_module=True)
       if raw_result.status != common_pb.SUCCESS:
         return raw_result
       webrtc.isolate()

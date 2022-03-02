@@ -87,7 +87,6 @@ class WebRTCApi(recipe_api.RecipeApi):
     self._env = {}
     self._isolated_targets = []
     self._non_isolated_targets = []
-    self._compile_targets = []
 
     # Keep track of working directory (which contains the checkout).
     # None means "default value".
@@ -224,92 +223,87 @@ class WebRTCApi(recipe_api.RecipeApi):
         return self.bot.should_build
     return False
 
-  def is_compile_needed(self, phase=None):
-    test_targets = set()
-    non_isolated_test_targets = set()
+  def get_compile_targets(self, phase):
+    self._isolated_targets = []
+    self._non_isolated_targets = []
     for bot in self.related_bots():
       if bot.should_test:
-        for test in steps.generate_tests(phase, bot,
-                                         self.m.tryserver.is_tryserver,
-                                         self.m.chromium_tests,
-                                         self._ios_config):
-          if isinstance(test, c_steps.SwarmingTest):
-            test_targets.add(test.name)
-          if isinstance(test, c_steps.AndroidJunitTest):
-            non_isolated_test_targets.add(test.name)
-
-    # The default behavior is to always build the :default target and
-    # the tests that need to be run.
-    # TODO(bugs.webrtc.org/11411): When "all" builds correctly change
-    # :default to "all".
-    self._isolated_targets = sorted(test_targets)
-    self._non_isolated_targets = sorted(non_isolated_test_targets)
-    self._compile_targets = [
-        'default'
-    ] + self._isolated_targets + self._non_isolated_targets
+        tests = steps.generate_tests(phase, bot, self.m.tryserver.is_tryserver,
+                                     self.m.chromium_tests, self._ios_config)
+        self._isolated_targets = sorted(
+            set(self._isolated_targets +
+                [t.name for t in tests if isinstance(t, c_steps.SwarmingTest)]))
+        self._non_isolated_targets = sorted(
+            set(self._non_isolated_targets + [
+                t.name for t in tests if isinstance(t, c_steps.AndroidJunitTest)
+            ]))
 
     patch_root = self.m.gclient.get_gerrit_patch_root()
     affected_files = self.m.chromium_checkout.get_files_affected_by_patch(
         relative_to=patch_root, cwd=self.m.path['checkout'])
 
+    # Perf testers are a special case; they only need the catapult protos.
+    if self.bot.bot_type == 'tester' and self.bot.should_upload_perf_results:
+      return ['webrtc_dashboard_upload']
+
     # If the main DEPS file has been changed by the current CL, skip the
     # analyze step and build/test everything. This is needed in order to
     # have safe Chromium Rolls since from the GN point of view, a DEPS
     # change doesn't affect anything.
-    is_deps_changed = 'DEPS' in affected_files
+    # The CI bots can rebuild everything; they're less time sensitive than
+    # trybots.
+    if 'DEPS' in affected_files or not self.m.tryserver.is_tryserver:
+      # The default behavior is to always build the :default target and
+      # the tests that need to be run.
+      # TODO(bugs.webrtc.org/11411): When "all" builds correctly change
+      # :default to "all".
+      return sorted(['default'] + self._isolated_targets +
+                    self._non_isolated_targets)
 
-    # Run gn analyze only on trybots. The CI bots can rebuild everything;
-    # they're less time sensitive than trybots.
-    if self.m.tryserver.is_tryserver and not is_deps_changed:
-      analyze_input = {
-          'files':
-              affected_files,
-          'test_targets':
-              list(sorted(test_targets)) +
-              list(sorted(non_isolated_test_targets)),
-          'additional_compile_targets': ['all'],
-      }
-      step_result = self.m.chromium.mb_analyze(
-          self.builder_id,
-          analyze_input,
-          mb_path=self.m.path['checkout'].join('tools_webrtc', 'mb'),
-          phase=phase)
+    analyze_input = {
+        'files': affected_files,
+        'test_targets': self._isolated_targets + self._non_isolated_targets,
+        'additional_compile_targets': ['all'],
+    }
+    step_result = self.m.chromium.mb_analyze(
+        self.builder_id,
+        analyze_input,
+        mb_path=self.m.path['checkout'].join('tools_webrtc', 'mb'),
+        phase=phase)
 
-      if 'error' in step_result.json.output:
-        step_result.presentation.step_text = (
-            'Error: ' + step_result.json.output['error'])
-        step_result.presentation.status = self.m.step.FAILURE
-        raise self.m.step.StepFailure('Error: ' +
-                                      step_result.json.output['error'])
+    if 'error' in step_result.json.output:
+      step_result.presentation.step_text = ('Error: ' +
+                                            step_result.json.output['error'])
+      step_result.presentation.status = self.m.step.FAILURE
+      raise self.m.step.StepFailure('Error: ' +
+                                    step_result.json.output['error'])
 
-      if 'invalid_targets' in step_result.json.output:
-        raise self.m.step.StepFailure(
-            'Error, following targets were not '
-            'found: ' + ', '.join(step_result.json.output['invalid_targets']))
+    if 'invalid_targets' in step_result.json.output:
+      raise self.m.step.StepFailure(
+          'Error, following targets were not '
+          'found: ' + ', '.join(step_result.json.output['invalid_targets']))
 
-      deps_status = ('Found dependency', 'Found dependency (all)')
-      if step_result.json.output['status'] in deps_status:
-        self._compile_targets = step_result.json.output['compile_targets']
-        self._isolated_targets = [
-            t for t in step_result.json.output['test_targets']
-            if t in test_targets
-        ]
-        self._non_isolated_targets = [
-            t for t in step_result.json.output['test_targets']
-            if t in non_isolated_test_targets
-        ]
-        # See crbug.com/557505 - we need to not prune meta
-        # targets that are part of 'test_targets', because otherwise
-        # we might not actually build all of the binaries needed for
-        # a given test, even if they aren't affected by the patch.
-        self._compile_targets = sorted(
-            set(self._compile_targets + self._isolated_targets +
-                self._non_isolated_targets))
-      else:
-        step_result.presentation.step_text = 'No compile necessary'
-        self._compile_targets = []
-        self._isolated_targets = []
-        self._non_isolated_targets = []
+    deps_status = ('Found dependency', 'Found dependency (all)')
+    if step_result.json.output['status'] in deps_status:
+      self._isolated_targets = [
+          t for t in step_result.json.output['test_targets']
+          if t in self._isolated_targets
+      ]
+      self._non_isolated_targets = [
+          t for t in step_result.json.output['test_targets']
+          if t in self._non_isolated_targets
+      ]
+      compile_targets = step_result.json.output['compile_targets']
+      # See crbug.com/557505 - we need to not prune meta
+      # targets that are part of 'test_targets', because otherwise
+      # we might not actually build all of the binaries needed for
+      # a given test, even if they aren't affected by the patch.
+      compile_targets += self._isolated_targets + self._non_isolated_targets
+    else:
+      step_result.presentation.step_text = 'No compile necessary'
+      compile_targets = []
+      self._isolated_targets = []
+      self._non_isolated_targets = []
 
     # TODO(bugs.webrtc.org/11262): Some trybots are used to calculate
     # the binary size impact of the current CL. These targets should
@@ -318,14 +312,11 @@ class WebRTCApi(recipe_api.RecipeApi):
     # in two places.
     if self.buildername in ('android_compile_arm_rel',
                             'android_compile_arm64_rel'):
-      self._compile_targets = sorted(
-          set(self._compile_targets +
-              ['libjingle_peerconnection_so', 'AppRTCMobile']))
+      compile_targets += ['libjingle_peerconnection_so', 'AppRTCMobile']
     elif self.buildername == 'linux_compile_rel':
-      self._compile_targets = sorted(set(self._compile_targets + ['webrtc']))
+      compile_targets += ['webrtc']
 
-    self._compile_targets = sorted(set(self._compile_targets))
-    return len(self._compile_targets) > 0
+    return sorted(set(compile_targets))
 
   def configure_swarming(self):
     self.m.chromium_swarming.configure_swarming(
@@ -450,15 +441,6 @@ class WebRTCApi(recipe_api.RecipeApi):
         use_goma=True,
         mb_path=self.m.path['checkout'].join('tools_webrtc', 'mb'),
         isolated_targets=self._isolated_targets)
-
-  def compile(self):
-    if self.bot.bot_type == 'tester' and self.bot.should_upload_perf_results:
-      # Perf testers are a special case; they only need the catapult protos.
-      targets = ['webrtc_dashboard_upload']
-    else:
-      targets = self._compile_targets
-
-    return self.m.chromium.compile(targets=targets, use_goma_module=True)
 
   def isolate(self):
     if self.bot.bot_type == 'tester':
