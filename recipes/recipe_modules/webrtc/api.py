@@ -24,10 +24,14 @@ from RECIPE_MODULES.build.chromium_tests import steps as c_steps
 CHROMIUM_REPO = 'https://chromium.googlesource.com/chromium/src'
 # WebRTC's dependencies on Chromium's subtree mirrors like
 # https://chromium.googlesource.com/chromium/src/build.git
-CHROMIUM_DEPS = ['base', 'build', 'ios', 'testing', 'third_party', 'tools']
+CHROMIUM_DEPS = ('base', 'build', 'ios', 'testing', 'third_party', 'tools')
 
-PERF_CONFIG = {'a_default_rev': 'r_webrtc_git'}
 DASHBOARD_UPLOAD_URL = 'https://chromeperf.appspot.com'
+BINARY_SIZE_TARGETS = (
+    'AppRTCMobile',
+    'libjingle_peerconnection_so',
+    'webrtc',
+)
 
 
 class Bot(object):
@@ -224,19 +228,20 @@ class WebRTCApi(recipe_api.RecipeApi):
     return False
 
   def get_compile_targets(self, phase):
-    self._isolated_targets = []
-    self._non_isolated_targets = []
+    isolated_targets = []
+    non_isolated_targets = []
     for bot in self.related_bots():
       if bot.should_test:
         tests = steps.generate_tests(phase, bot, self.m.tryserver.is_tryserver,
                                      self.m.chromium_tests, self._ios_config)
-        self._isolated_targets = sorted(
-            set(self._isolated_targets +
-                [t.name for t in tests if isinstance(t, c_steps.SwarmingTest)]))
-        self._non_isolated_targets = sorted(
-            set(self._non_isolated_targets + [
-                t.name for t in tests if isinstance(t, c_steps.AndroidJunitTest)
-            ]))
+        isolated_targets += [
+            t.name for t in tests if isinstance(t, c_steps.SwarmingTest)
+        ]
+        non_isolated_targets += [
+            t.name for t in tests if isinstance(t, c_steps.AndroidJunitTest)
+        ]
+    self._isolated_targets = sorted(set(isolated_targets))
+    self._non_isolated_targets = sorted(set(non_isolated_targets))
 
     patch_root = self.m.gclient.get_gerrit_patch_root()
     affected_files = self.m.chromium_checkout.get_files_affected_by_patch(
@@ -257,66 +262,59 @@ class WebRTCApi(recipe_api.RecipeApi):
       # the tests that need to be run.
       # TODO(bugs.webrtc.org/11411): When "all" builds correctly change
       # :default to "all".
-      return sorted(['default'] + self._isolated_targets +
-                    self._non_isolated_targets)
+      return sorted(set(['default'] + isolated_targets + non_isolated_targets))
 
-    analyze_input = {
-        'files': affected_files,
-        'test_targets': self._isolated_targets + self._non_isolated_targets,
-        'additional_compile_targets': ['all'],
-    }
+    # Some trybots are used to calculate the binary size impact of the current
+    # CL. These targets should always be built.
+    binary_size_targets = []
+    for binary_size_target in BINARY_SIZE_TARGETS:
+      for binary_size_file in self.bot.config.get('binary_size_files', []):
+        if binary_size_target in binary_size_file:
+          binary_size_targets.append(binary_size_target)
+
     step_result = self.m.chromium.mb_analyze(
         self.builder_id,
-        analyze_input,
+        analyze_input={
+            'files': affected_files,
+            'test_targets': self._isolated_targets + self._non_isolated_targets,
+            'additional_compile_targets': ['all'],
+        },
         mb_path=self.m.path['checkout'].join('tools_webrtc', 'mb'),
         phase=phase)
 
     if 'error' in step_result.json.output:
-      step_result.presentation.step_text = ('Error: ' +
-                                            step_result.json.output['error'])
+      failure_msg = 'Error: ' + step_result.json.output['error']
+      step_result.presentation.step_text = failure_msg
       step_result.presentation.status = self.m.step.FAILURE
-      raise self.m.step.StepFailure('Error: ' +
-                                    step_result.json.output['error'])
+      raise self.m.step.StepFailure(failure_msg)
 
     if 'invalid_targets' in step_result.json.output:
-      raise self.m.step.StepFailure(
-          'Error, following targets were not '
-          'found: ' + ', '.join(step_result.json.output['invalid_targets']))
+      failure_msg = 'Error, following targets were not found: ' + ', '.join(
+          step_result.json.output['invalid_targets'])
+      raise self.m.step.StepFailure(failure_msg)
 
-    deps_status = ('Found dependency', 'Found dependency (all)')
-    if step_result.json.output['status'] in deps_status:
-      self._isolated_targets = [
-          t for t in step_result.json.output['test_targets']
-          if t in self._isolated_targets
-      ]
-      self._non_isolated_targets = [
-          t for t in step_result.json.output['test_targets']
-          if t in self._non_isolated_targets
-      ]
-      compile_targets = step_result.json.output['compile_targets']
-      # See crbug.com/557505 - we need to not prune meta
-      # targets that are part of 'test_targets', because otherwise
-      # we might not actually build all of the binaries needed for
-      # a given test, even if they aren't affected by the patch.
-      compile_targets += self._isolated_targets + self._non_isolated_targets
-    else:
+    if 'Found dependency' not in step_result.json.output['status']:
       step_result.presentation.step_text = 'No compile necessary'
-      compile_targets = []
       self._isolated_targets = []
       self._non_isolated_targets = []
+      return binary_size_targets
 
-    # TODO(bugs.webrtc.org/11262): Some trybots are used to calculate
-    # the binary size impact of the current CL. These targets should
-    # always be built but we should find a better way to hook this up
-    # with the rest of the infrastructure to avoid to update the config
-    # in two places.
-    if self.buildername in ('android_compile_arm_rel',
-                            'android_compile_arm64_rel'):
-      compile_targets += ['libjingle_peerconnection_so', 'AppRTCMobile']
-    elif self.buildername == 'linux_compile_rel':
-      compile_targets += ['webrtc']
+    self._isolated_targets = [
+        t for t in step_result.json.output['test_targets']
+        if t in self._isolated_targets
+    ]
+    self._non_isolated_targets = [
+        t for t in step_result.json.output['test_targets']
+        if t in self._non_isolated_targets
+    ]
+    compile_targets = step_result.json.output['compile_targets']
+    # See crbug.com/557505 - we need to not prune meta
+    # targets that are part of 'test_targets', because otherwise
+    # we might not actually build all of the binaries needed for
+    # a given test, even if they aren't affected by the patch.
+    compile_targets += self._isolated_targets + self._non_isolated_targets
 
-    return sorted(set(compile_targets))
+    return sorted(set(compile_targets + binary_size_targets))
 
   def configure_swarming(self):
     self.m.chromium_swarming.configure_swarming(
