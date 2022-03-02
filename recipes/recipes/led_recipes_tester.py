@@ -146,12 +146,6 @@ CHROMIUM_SRC_TEST_CLS = collections.OrderedDict([
         'fast':
             'https://chromium-review.googlesource.com/c/chromium/src/+/3299047',
     }),
-    ('luci.chromium-m90.try', {
-        'slow':
-            'https://chromium-review.googlesource.com/c/chromium/src/+/2807827',
-        'fast':
-            'https://chromium-review.googlesource.com/c/chromium/src/+/2807949',
-    }),
     ('luci.chromium-m96.try', {
         'slow':
             'https://chromium-review.googlesource.com/c/chromium/src/+/3219347',
@@ -874,10 +868,10 @@ def GenTests(api):
       gerrit_change(footer_builder='luci.chromium.try:arbitrary-builder'),
       affected_recipes(RECIPE),
       default_builders(),
-      non_existent_builder('luci.chromium-m90.try:arbitrary-builder'),
+      non_existent_builder('luci.chromium-m96.try:arbitrary-builder'),
       api.post_check(
           post_process.StepWarning,
-          led_get_builder_name('luci.chromium-m90.try:arbitrary-builder')),
+          led_get_builder_name('luci.chromium-m96.try:arbitrary-builder')),
       api.post_check(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
