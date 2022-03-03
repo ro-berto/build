@@ -454,7 +454,8 @@
       "-C",
       "[CACHE]\\builder\\src\\out\\bwe_test_logging",
       "-j",
-      "80"
+      "80",
+      "default"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
@@ -484,6 +485,7 @@
       "[CACHE]\\builder\\src\\out\\bwe_test_logging",
       "-j",
       "80",
+      "default",
       "-d",
       "explain",
       "-n"
@@ -648,7 +650,7 @@
       "--ninja-log-outdir",
       "[CACHE]\\builder\\src\\out\\bwe_test_logging",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]\\\\builder\\\\src\\\\out\\\\bwe_test_logging\", \"-j\", 80]",
+      "[\"RECIPE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]\\\\builder\\\\src\\\\out\\\\bwe_test_logging\", \"-j\", 80, \"default\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -957,7 +959,8 @@
       "-C",
       "[CACHE]\\builder\\src\\out\\dummy_audio_file_devices_no_protobuf",
       "-j",
-      "80"
+      "80",
+      "default"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
@@ -987,6 +990,7 @@
       "[CACHE]\\builder\\src\\out\\dummy_audio_file_devices_no_protobuf",
       "-j",
       "80",
+      "default",
       "-d",
       "explain",
       "-n"
@@ -1151,7 +1155,7 @@
       "--ninja-log-outdir",
       "[CACHE]\\builder\\src\\out\\dummy_audio_file_devices_no_protobuf",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]\\\\builder\\\\src\\\\out\\\\dummy_audio_file_devices_no_protobuf\", \"-j\", 80]",
+      "[\"RECIPE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]\\\\builder\\\\src\\\\out\\\\dummy_audio_file_devices_no_protobuf\", \"-j\", 80, \"default\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -1464,7 +1468,9 @@
       "-C",
       "[CACHE]\\builder\\src\\out\\rtti_no_sctp",
       "-j",
-      "80"
+      "80",
+      "default",
+      "peerconnection_unittests"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
@@ -1494,6 +1500,8 @@
       "[CACHE]\\builder\\src\\out\\rtti_no_sctp",
       "-j",
       "80",
+      "default",
+      "peerconnection_unittests",
       "-d",
       "explain",
       "-n"
@@ -1658,7 +1666,7 @@
       "--ninja-log-outdir",
       "[CACHE]\\builder\\src\\out\\rtti_no_sctp",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]\\\\builder\\\\src\\\\out\\\\rtti_no_sctp\", \"-j\", 80]",
+      "[\"RECIPE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]\\\\builder\\\\src\\\\out\\\\rtti_no_sctp\", \"-j\", 80, \"default\", \"peerconnection_unittests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
