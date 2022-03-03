@@ -391,18 +391,19 @@ class ChromiumApi(recipe_api.RecipeApi):
           failure_summary=failure_summary, retcode=ninja_step_result.retcode)
 
     finally:
-      clang_crashreports_script = self.m.path['checkout'].join(
-          'tools', 'clang', 'scripts', 'process_crashreports.py')
-      if self.m.path.exists(clang_crashreports_script):
-        source = '%s-%s' % (self.m.builder_group.for_current,
-                            self.m.buildbucket.builder_name)
-        if self.m.buildbucket.build.number:
-          source += '-%s' % self.m.buildbucket.build.number
-        self.m.python(
-            'process clang crashes',
-            script=clang_crashreports_script,
-            args=['--source', source],
-            **kwargs)
+      if not self.m.runtime.in_global_shutdown:
+        clang_crashreports_script = self.m.path['checkout'].join(
+            'tools', 'clang', 'scripts', 'process_crashreports.py')
+        if self.m.path.exists(clang_crashreports_script):
+          source = '%s-%s' % (self.m.builder_group.for_current,
+                              self.m.buildbucket.builder_name)
+          if self.m.buildbucket.build.number:
+            source += '-%s' % self.m.buildbucket.build.number
+          self.m.python(
+              'process clang crashes',
+              script=clang_crashreports_script,
+              args=['--source', source],
+              **kwargs)
 
     ninja_command_explain = ninja_command + ['-d', 'explain', '-n']
 
@@ -491,12 +492,13 @@ class ChromiumApi(recipe_api.RecipeApi):
       build_exit_status = ninja_result.retcode
 
     finally:
-      self.m.goma.stop(
-          ninja_log_outdir=ninja_log_outdir,
-          ninja_log_compiler=ninja_log_compiler,
-          ninja_log_command=ninja_command,
-          build_exit_status=build_exit_status,
-          build_step_name=name)
+      if not self.m.runtime.in_global_shutdown:
+        self.m.goma.stop(
+            ninja_log_outdir=ninja_log_outdir,
+            ninja_log_compiler=ninja_log_compiler,
+            ninja_log_command=ninja_command,
+            build_exit_status=build_exit_status,
+            build_step_name=name)
     return ninja_result
 
   def _run_ninja_with_reclient(self,

@@ -5,12 +5,13 @@
 PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
-  'chromium',
-  'goma',
-  'recipe_engine/path',
-  'recipe_engine/properties',
-  'recipe_engine/raw_io',
-  'recipe_engine/json',
+    'chromium',
+    'goma',
+    'recipe_engine/json',
+    'recipe_engine/path',
+    'recipe_engine/properties',
+    'recipe_engine/raw_io',
+    'recipe_engine/runtime',
 ]
 
 from PB.recipe_engine import result as result_pb2
@@ -219,5 +220,15 @@ def GenTests(api):
           ##### ...The message was too long...
           #### More information in raw_io.output_text[failure_summary]
           """).strip()),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'cancel-during-compile',
+      api.path.exists(api.path['checkout'].join('tools', 'clang', 'scripts',
+                                                'process_crashreports.py')),
+      api.runtime.global_shutdown_on_step('compile'),
+      api.post_check(post_process.DoesNotRun, 'process clang crashes'),
+      api.post_check(post_process.DoesNotRun, 'postprocess_for_goma'),
       api.post_process(post_process.DropExpectation),
   )
