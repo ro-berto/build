@@ -43,15 +43,14 @@ def RunSteps(api):
   if api.platform.is_win:
     api.chromium.taskkill()
 
-  if webrtc.should_download_audio_quality_tools:
+  if webrtc.should_download_audio_quality_tools():
     webrtc.download_audio_quality_tools()
-  if webrtc.should_download_video_quality_tools:
+  if webrtc.should_download_video_quality_tools():
     webrtc.download_video_quality_tools()
 
-  if webrtc.bot.should_build:
-    api.chromium.ensure_goma()
-    api.chromium.ensure_toolchains()
-    api.chromium.runhooks()
+  api.chromium.ensure_goma()
+  api.chromium.ensure_toolchains()
+  api.chromium.runhooks()
 
   for phase in webrtc.bot.phases:
     compile_targets = webrtc.get_compile_targets(phase)
@@ -60,19 +59,17 @@ def RunSteps(api):
       step_result.presentation.status = api.step.SUCCESS
       return
 
-    if webrtc.bot.should_build:
-      webrtc.run_mb(phase)
-      raw_result = api.chromium.compile(compile_targets, use_goma_module=True)
-      if raw_result.status != common_pb.SUCCESS:
-        return raw_result
-      webrtc.isolate()
+    webrtc.run_mb(phase)
+    raw_result = api.chromium.compile(compile_targets, use_goma_module=True)
+    if raw_result.status != common_pb.SUCCESS:
+      return raw_result
+    webrtc.isolate()
 
     webrtc.get_binary_sizes()
 
-    if webrtc.bot.should_test:
-      webrtc.runtests(phase)
+    webrtc.runtests(phase)
 
-  webrtc.maybe_trigger()
+  webrtc.trigger_bots()
 
 
 def GenTests(api):

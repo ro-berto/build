@@ -41,9 +41,6 @@ class Bot(object):
     self.bucket = bucket
     self.builder = builder
 
-  def __repr__(self):  # pragma: no cover
-    return '<Bot %s/%s>' % (self.bucket, self.builder)
-
   @property
   def config(self):
     return self._builders[self.bucket]['builders'][self.builder]
@@ -51,11 +48,6 @@ class Bot(object):
   @property
   def bot_type(self):
     return self.config.get('bot_type', 'builder_tester')
-
-  def triggered_bots(self):
-    for builder in self.config.get('triggers', []):
-      bucketname, buildername = builder.split('/')
-      yield (bucketname, buildername)
 
   @property
   def recipe_config(self):
@@ -69,22 +61,18 @@ class Bot(object):
   def phases(self):
     return self.config.get('phases', [None])
 
-  @property
-  def should_build(self):
-    is_perf_tester = self.should_upload_perf_results and self.should_test
-    return (self.bot_type in ('builder', 'builder_tester')) or is_perf_tester
-
-  @property
-  def should_test(self):
-    return self.bot_type in ('tester', 'builder_tester')
-
-  @property
-  def should_upload_perf_results(self):
+  def is_running_perf_tests(self):
     return bool(self.config.get('perf_id'))
+
+  def triggered_bots(self):
+    for builder in self.config.get('triggers', []):
+      bucketname, buildername = builder.split('/')
+      yield Bot(self._builders, self._recipe_configs, bucketname, buildername)
 
 
 class WebRTCApi(recipe_api.RecipeApi):
-  WEBRTC_GS_BUCKET = WEBRTC_GS_BUCKET
+  BUILDERS = webrtc_builders.BUILDERS
+  RECIPE_CONFIGS = webrtc_builders.RECIPE_CONFIGS
 
   def __init__(self, **kwargs):
     super(WebRTCApi, self).__init__(**kwargs)
@@ -104,15 +92,11 @@ class WebRTCApi(recipe_api.RecipeApi):
     self.revision = None
     self.revision_cp = None
 
-  BUILDERS = webrtc_builders.BUILDERS
-  RECIPE_CONFIGS = webrtc_builders.RECIPE_CONFIGS
-
-
   def apply_bot_config(self, builders, recipe_configs):
     self._builders = builders
     self._recipe_configs = recipe_configs
 
-    self.bot = self.get_bot(self.bucketname, self.buildername)
+    self.bot = Bot(builders, recipe_configs, self.bucketname, self.buildername)
 
     self.set_config('webrtc', TEST_SUITE=self.bot.test_suite,
                     PERF_ID=self.bot.config.get('perf_id'))
@@ -154,7 +138,7 @@ class WebRTCApi(recipe_api.RecipeApi):
           'args': args,
       }
 
-    if self.bot.should_upload_perf_results:
+    if self.bot.is_running_perf_tests():
       assert not self.m.tryserver.is_tryserver
       assert self.m.chromium.c.BUILD_CONFIG == 'Release', (
           'Perf tests should only be run with Release builds.')
@@ -189,43 +173,25 @@ class WebRTCApi(recipe_api.RecipeApi):
             self.buildername),
         urllib.parse.quote(str(self.m.buildbucket.build.number)))
 
-  def get_bot(self, bucketname, buildername):
-    return Bot(self._builders, self._recipe_configs, bucketname, buildername)
-
-  @property
-  def group_config(self):
-    return self._builders[self.bucketname].get('settings', {})
-
   @property
   def builder_group(self):
-    return self.group_config.get('builder_group', self.bucketname)
+    group_config = self._builders[self.bucketname].get('settings', {})
+    return group_config.get('builder_group', self.bucketname)
 
   def related_bots(self):
-    yield self.bot
-    for triggered_bot in self.bot.triggered_bots():
-      yield self.get_bot(*triggered_bot)
+    return [self.bot] + list(self.bot.triggered_bots())
 
-  @property
   def should_download_audio_quality_tools(self):
-    for bot in self.related_bots():
-      # Perf test low_bandwidth_audio_perf_test doesn't run on iOS.
-      if 'perf' in bot.test_suite and bot.test_suite != 'ios_perf':
-        return self.bot.should_build
-    return False
+    # Perf test low_bandwidth_audio_perf_test doesn't run on iOS.
+    return any(bot.is_running_perf_tests() and 'ios' not in bot.test_suite
+               for bot in self.related_bots())
 
-  @property
   def should_download_video_quality_tools(self):
-    for bot in self.related_bots():
-      if 'android_perf' in bot.test_suite:
-        return self.bot.should_build
-    return False
+    return any(bot.is_running_perf_tests() and 'android' in bot.test_suite
+               for bot in self.related_bots())
 
-  @property
   def is_triggering_perf_tests(self):
-    for triggered_bot in self.bot.triggered_bots():
-      if self.get_bot(*triggered_bot).test_suite.endswith('perf_swarming'):
-        return self.bot.should_build
-    return False
+    return any(bot.is_running_perf_tests() for bot in self.bot.triggered_bots())
 
   def run_mb_analyze(self, phase, affected_files, test_targets):
     step_result = self.m.chromium.mb_analyze(
@@ -260,7 +226,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     isolated_targets = []
     non_isolated_targets = []
     for bot in self.related_bots():
-      if bot.should_test:
+      if bot.bot_type in ('tester', 'builder_tester'):
         tests = steps.generate_tests(phase, bot, self.m.tryserver.is_tryserver,
                                      self.m.chromium_tests, self._ios_config)
         isolated_targets += [
@@ -276,10 +242,6 @@ class WebRTCApi(recipe_api.RecipeApi):
     affected_files = self.m.chromium_checkout.get_files_affected_by_patch(
         relative_to=patch_root, cwd=self.m.path['checkout'])
 
-    # Perf testers are a special case; they only need the catapult protos.
-    if self.bot.bot_type == 'tester' and self.bot.should_upload_perf_results:
-      return ['webrtc_dashboard_upload']
-
     # If the main DEPS file has been changed by the current CL, skip the
     # analyze step and build/test everything. This is needed in order to
     # have safe Chromium Rolls since from the GN point of view, a DEPS
@@ -287,6 +249,9 @@ class WebRTCApi(recipe_api.RecipeApi):
     # The CI bots can rebuild everything; they're less time sensitive than
     # trybots.
     if 'DEPS' in affected_files or not self.m.tryserver.is_tryserver:
+      # Perf testers are a special case; they only need the catapult protos.
+      if self.bot.bot_type == 'tester' and self.bot.is_running_perf_tests():
+        return ['webrtc_dashboard_upload']
       return ['all']
 
     tests_target, compile_targets = self.run_mb_analyze(
@@ -307,13 +272,12 @@ class WebRTCApi(recipe_api.RecipeApi):
 
     # Some trybots are used to calculate the binary size impact of the current
     # CL. These targets should always be built.
-    binary_size_targets = []
     for binary_size_target in BINARY_SIZE_TARGETS:
       for binary_size_file in self.bot.config.get('binary_size_files', []):
         if binary_size_target in binary_size_file:
-          binary_size_targets.append(binary_size_target)
+          compile_targets += [binary_size_target]
 
-    return sorted(set(compile_targets + binary_size_targets))
+    return sorted(set(compile_targets))
 
   def configure_swarming(self):
     self.m.chromium_swarming.configure_swarming(
@@ -337,7 +301,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     # Perf tests are marked as not idempotent, which means they're re-run
     # if they did not change this build. This will give the dashboard some
     # more variance data to work with.
-    if self.bot.should_upload_perf_results:
+    if self.bot.is_running_perf_tests():
       self.m.chromium_swarming.default_idempotent = False
 
   def _apply_patch(self, repository_url, patch_ref, include_subdirs=()):
@@ -443,7 +407,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     if self.bot.bot_type == 'tester':
       # The tests running on a 'tester' bot are isolated by the 'builder'.
       self.m.isolate.check_swarm_hashes(self._isolated_targets)
-    elif self.is_triggering_perf_tests and not self.m.tryserver.is_tryserver:
+    elif self.is_triggering_perf_tests() and not self.m.tryserver.is_tryserver:
       # Set the swarm_hashes name so that it is found by pinpoint.
       commit_position = self.revision_cp.replace('@', '(at)')
       swarm_hashes_property_name = '_'.join(
@@ -565,7 +529,7 @@ class WebRTCApi(recipe_api.RecipeApi):
       if self.bot.config.get('archive_apprtc'):
         self.package_apprtcmobile()
 
-      if self.bot.should_upload_perf_results:
+      if self.bot.is_running_perf_tests():
         return self.run_perf_tests(tests)
 
       test_runner = self.m.chromium_tests.create_test_runner(tests)
@@ -573,8 +537,8 @@ class WebRTCApi(recipe_api.RecipeApi):
       if test_failure_summary:
         raise self.m.step.StepFailure(test_failure_summary.summary_markdown)
 
-  def maybe_trigger(self):
-    # If the builder is triggered by pinpoint, don't run the tests.
+  def trigger_bots(self):
+    # If the builder is triggered by pinpoint, don't trigger any bots.
     for tag in self.m.buildbucket.build.tags:
       if tag.key == 'pinpoint_job_id':
         return
@@ -596,7 +560,7 @@ class WebRTCApi(recipe_api.RecipeApi):
       self.m.scheduler.emit_trigger(
           self.m.scheduler.BuildbucketTrigger(properties=properties),
           project='webrtc',
-          jobs=[buildername for _, buildername in triggered_bots])
+          jobs=[bot.builder for bot in triggered_bots])
 
   def build_android_archive(self):
     # Build the Android .aar archive and upload it to Google storage (except for
