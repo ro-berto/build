@@ -677,6 +677,10 @@ TRYBOTS = try_spec.TryDatabase.create({
                 include_all_triggered_testers=True,
             ),
     },
+    # The config for the following builders is now specified src-side in
+    # //infra/config/subprojects/chromium/try/tryserver.chromium.linux.star
+    # * linux_chromium_compile_dbg_ng
+    # * linux_chromium_dbg_ng
     'tryserver.chromium.linux': {
         'cast_shell_linux':
             try_spec.TrySpec.create_for_single_mirror(
@@ -894,12 +898,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.memory',
                 buildername='WebKit Linux MSAN',
             ),
-        'linux_chromium_dbg_ng':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.linux',
-                buildername='Linux Builder (dbg)',
-                tester='Linux Tests (dbg)(1)',
-            ),
         'linux-1mbu-compile-fyi-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.linux',
@@ -1005,13 +1003,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='Linux ASan LSan Builder',
                 tester='Linux ASan LSan Tests (1)',
                 regression_test_selection=try_spec.ALWAYS,
-            ),
-        'linux_chromium_compile_dbg_ng':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.linux',
-                buildername='Linux Builder (dbg)',
-                is_compile_only=True,
-                include_all_triggered_testers=True,
             ),
         'linux_chromium_compile_rel_ng':
             try_spec.TrySpec.create_for_single_mirror(

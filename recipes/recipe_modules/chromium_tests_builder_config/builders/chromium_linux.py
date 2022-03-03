@@ -9,6 +9,10 @@ def _chromium_linux_spec(**kwargs):
   return builder_spec.BuilderSpec.create(
       build_gs_bucket='chromium-linux-archive', **kwargs)
 
+# The config for the following builders is now specified src-side in
+# //infra/config/subprojects/chromium/ci/chromium.linux.star
+# * Linux Builder (dbg)
+# * Linux Tests (dbg)(1)
 
 SPEC = {
     'fuchsia-arm64-cast':
@@ -223,34 +227,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 32,
             },
-            simulation_platform='linux',
-        ),
-    'Linux Builder (dbg)':
-        _chromium_linux_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=['enable_reclient'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 64,
-            },
-            simulation_platform='linux',
-        ),
-    'Linux Tests (dbg)(1)':
-        _chromium_linux_spec(
-            chromium_config='chromium',
-            chromium_apply_config=['mb'],
-            gclient_config='chromium',
-            gclient_apply_config=['enable_reclient'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 64,
-            },
-            execution_mode=builder_spec.TEST,
-            parent_buildername='Linux Builder (dbg)',
             simulation_platform='linux',
         ),
     'Cast Audio Linux':
