@@ -287,11 +287,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     # The CI bots can rebuild everything; they're less time sensitive than
     # trybots.
     if 'DEPS' in affected_files or not self.m.tryserver.is_tryserver:
-      # The default behavior is to always build the :default target and
-      # the tests that need to be run.
-      # TODO(bugs.webrtc.org/11411): When "all" builds correctly change
-      # :default to "all".
-      return sorted(set(['default'] + isolated_targets + non_isolated_targets))
+      return ['all']
 
     tests_target, compile_targets = self.run_mb_analyze(
         phase, affected_files, isolated_targets + non_isolated_targets)
