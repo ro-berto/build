@@ -13,6 +13,13 @@ from RECIPE_MODULES.build.chromium_tests_builder_config import try_spec
 from RECIPE_MODULES.build.chromium_orchestrator.api import (
     COMPILATOR_SWARMING_TASK_COLLECT_STEP)
 
+from PB.go.chromium.org.luci.resultdb.proto.v1 \
+    import common as resultdb_common
+from PB.go.chromium.org.luci.resultdb.proto.v1 \
+    import test_result as test_result_pb2
+from PB.go.chromium.org.luci.resultdb.proto.v1 \
+    import resultdb as resultdb_pb2
+
 PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
@@ -26,12 +33,14 @@ DEPS = [
     'depot_tools/gitiles',
     'depot_tools/tryserver',
     'filter',
+    'flakiness',
     'profiles',
     'recipe_engine/file',
     'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
+    'recipe_engine/resultdb',
     'recipe_engine/runtime',
     'recipe_engine/step',
     'recipe_engine/swarming',
@@ -1021,6 +1030,177 @@ def GenTests(api):
                             ))),
       api.post_process(post_process.MustRun, 'Tests statistics'),
       api.post_process(post_process.MustRun, 'FindIt Flakiness'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  def _generate_test_result(test_id,
+                            test_variant,
+                            status=test_result_pb2.PASS,
+                            tags=None):
+    vh = 'variant_hash'
+    tr = test_result_pb2.TestResult(
+        test_id=test_id,
+        variant=test_variant,
+        variant_hash=vh,
+        expected=False,
+        status=status,
+    )
+    if tags:
+      all_tags = getattr(tr, 'tags')
+      all_tags.append(tags)
+    return tr
+
+  correct_variant = resultdb_common.Variant()
+  variant_def = getattr(correct_variant, 'def')
+  variant_def['os'] = 'Ubuntu-18'
+  variant_def['test_suite'] = ('browser_tests')
+
+  tags = resultdb_common.StringPair(key='test_name', value='Test:Test1')
+
+  test_id = 'ninja://browser_tests/Test:Test1'
+  inv = 'invocations/build:8945511751514863184'
+  current_patchset_invocations = {
+      inv:
+          api.resultdb.Invocation(test_results=[
+              _generate_test_result(test_id, correct_variant, tags=tags)
+          ])
+  }
+  recent_run = resultdb_pb2.GetTestResultHistoryResponse(entries=[])
+
+  yield api.test(
+      'new_flaky_test',
+      api.chromium.try_build(builder='linux-rel-orchestrator',),
+      api.properties(
+          **{
+              '$build/chromium_orchestrator':
+                  InputProperties(
+                      compilator='linux-rel-compilator',
+                      compilator_watcher_git_revision='e841fc',
+                  ),
+          }),
+      api.chromium_orchestrator.override_compilator_build_proto_fetch(),
+      api.chromium_orchestrator.override_schedule_compilator_build(),
+      api.chromium_orchestrator.override_compilator_steps(),
+      api.chromium_orchestrator.override_compilator_steps(
+          is_swarming_phase=False),
+      api.chromium_orchestrator.fake_head_revision(),
+      api.chromium_orchestrator.override_test_spec(),
+      api.step_data(
+          'git diff to analyze patch',
+          api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
+      api.resultdb.query(
+          current_patchset_invocations,
+          ('collect tasks (with patch).browser_tests results'),
+      ),
+      api.flakiness(check_for_flakiness=True),
+      api.resultdb.get_test_result_history(
+          recent_run,
+          step_name=(
+              'searching_for_new_tests.'
+              'cross reference newly identified tests against ResultDB')),
+      api.override_step_data(('test new tests for flakiness.'
+                              'collect tasks (check flakiness shard #0).'
+                              'browser_tests results'),
+                             stdout=api.json.invalid(
+                                 api.test_utils.rdb_results(
+                                     'browser_tests',
+                                     flaky_tests=['Test.One'],
+                                 ))),
+      api.post_process(post_process.MustRun, 'calculate flake rates'),
+      api.post_process(post_process.ResultReasonRE, '.*browser_tests.*'),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'flaky_swarming_and_local_test_failure',
+      api.chromium.try_build(builder='linux-rel-orchestrator',),
+      api.properties(
+          **{
+              '$build/chromium_orchestrator':
+                  InputProperties(
+                      compilator='linux-rel-compilator',
+                      compilator_watcher_git_revision='e841fc',
+                  ),
+          }),
+      api.chromium_orchestrator.override_compilator_build_proto_fetch(),
+      api.chromium_orchestrator.override_schedule_compilator_build(),
+      api.chromium_orchestrator.override_compilator_build_proto_fetch(),
+      api.chromium_orchestrator.override_schedule_compilator_build(),
+      api.chromium_orchestrator.override_test_spec(
+          tests=['browser_tests', 'content_unittests']),
+      api.chromium_orchestrator.override_compilator_steps(
+          tests=['browser_tests', 'content_unittests']),
+      api.chromium_orchestrator.override_compilator_steps(
+          is_swarming_phase=False,
+          sub_build_status=common_pb.FAILURE,
+          sub_build_summary=("1 Test Suite(s) failed.\n\n"
+                             "**headless_python_unittests** failed.")),
+      api.chromium_orchestrator.fake_head_revision(),
+      api.step_data(
+          'git diff to analyze patch',
+          api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
+      api.resultdb.query(
+          current_patchset_invocations,
+          ('collect tasks (with patch).browser_tests results'),
+      ),
+      api.flakiness(check_for_flakiness=True),
+      api.resultdb.get_test_result_history(
+          recent_run,
+          step_name=(
+              'searching_for_new_tests.'
+              'cross reference newly identified tests against ResultDB')),
+      api.override_step_data(('test new tests for flakiness.'
+                              'collect tasks (check flakiness shard #0).'
+                              'browser_tests results'),
+                             stdout=api.json.invalid(
+                                 api.test_utils.rdb_results(
+                                     'browser_tests',
+                                     flaky_tests=['Test.One'],
+                                 ))),
+      api.post_process(post_process.MustRun, 'calculate flake rates'),
+      api.post_process(post_process.ResultReasonRE, '.*browser_tests.*'),
+      api.post_process(post_process.ResultReasonRE,
+                       '.*headless_python_unittests.*'),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'no_flaky_tests',
+      api.chromium.try_build(builder='linux-rel-orchestrator',),
+      api.properties(
+          **{
+              '$build/chromium_orchestrator':
+                  InputProperties(
+                      compilator='linux-rel-compilator',
+                      compilator_watcher_git_revision='e841fc',
+                  ),
+          }),
+      api.chromium_orchestrator.override_compilator_build_proto_fetch(),
+      api.chromium_orchestrator.override_schedule_compilator_build(),
+      api.chromium_orchestrator.override_schedule_compilator_build(),
+      api.chromium_orchestrator.override_test_spec(
+          tests=['browser_tests', 'content_unittests']),
+      api.chromium_orchestrator.override_compilator_steps(
+          tests=['browser_tests', 'content_unittests']),
+      api.chromium_orchestrator.override_compilator_steps(
+          is_swarming_phase=False),
+      api.chromium_orchestrator.fake_head_revision(),
+      api.step_data(
+          'git diff to analyze patch',
+          api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
+      api.resultdb.query(
+          current_patchset_invocations,
+          ('collect tasks (with patch).browser_tests results'),
+      ),
+      api.flakiness(check_for_flakiness=True),
+      api.resultdb.get_test_result_history(
+          recent_run,
+          step_name=(
+              'searching_for_new_tests.'
+              'cross reference newly identified tests against ResultDB')),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )

@@ -17,6 +17,7 @@ DEPS = [
     'depot_tools/gclient',
     'depot_tools/gitiles',
     'depot_tools/tryserver',
+    'flakiness',
     'isolate',
     'profiles',
     'recipe_engine/buildbucket',

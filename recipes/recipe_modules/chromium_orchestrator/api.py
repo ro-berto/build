@@ -215,12 +215,37 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
     _, local_tests_raw_result = self.process_sub_build(
         local_tests_sub_build, is_swarming_phase=False, with_patch=True)
 
-    # All of the swarming tests passed, so the final status of the tryjob
-    # depends on whether the local tests run by the compilator passed or not.
     if not failing_test_suites:
       self.report_stats_and_flakiness(tests)
       # There could be exonerated failed tests from FindIt flakes
       self.m.chromium_tests.summarize_test_failures(tests)
+
+      # Checks for new flaky tests are run on both the orchestrator and
+      # compilator for CQ builders that have flaky checks enabled.
+      if self.m.flakiness.check_for_flakiness:
+        new_tests = self.m.flakiness.find_tests_for_flakiness(
+            tests, affected_files=affected_files)
+        if new_tests:
+          result = self.m.chromium_tests.run_tests_for_flakiness(
+              builder_config, new_tests)
+
+          # If the swarming checks for flakiness succeed, we'll only need to
+          # check for the compilator's failures. On success, None is returned by
+          # run_tests_for_flakiness(). Otherwise, aggregate the summaries s.t.
+          # all flaky results can be presented to the user.
+          if not result:
+            return local_tests_raw_result
+
+          if (local_tests_raw_result and
+              local_tests_raw_result.status != common_pb.SUCCESS):
+            summary = result.summary_markdown
+            summary += '\n\n From compilator:\n {}'.format(
+                local_tests_raw_result.summary_markdown)
+            result.summary_markdown = summary
+          return result
+
+      # All of the swarming tests passed, so the final status of the tryjob
+      # depends on whether the local tests run by the compilator passed or not.
       return local_tests_raw_result
 
     # Exit without retry without patch if there were invalid tests or
