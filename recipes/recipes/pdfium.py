@@ -158,8 +158,8 @@ def _gn_gen_builds(api, memory_tool, skia, skia_paths, xfa, v8, target_cpu,
 
   if target_os:
     args.append('target_os="%s"' % target_os)
-  if target_cpu == 'x86':
-    args.append('target_cpu="x86"')
+  if target_cpu:
+    args.append('target_cpu="%s"' % target_cpu)
 
   with api.context(cwd=checkout):
     api.step(
@@ -766,6 +766,18 @@ def GenTests(api):
 
   yield api.test(
       'android',
+      api.platform('linux', 64),
+      api.builder_group.for_current('client.pdfium'),
+      api.properties(
+          bot_id='test_bot',
+          target_os='android',
+          target_cpu='arm64',
+          skip_test=True),
+      _gen_ci_build(api, 'android'),
+  )
+
+  yield api.test(
+      'android_32',
       api.platform('linux', 64),
       api.builder_group.for_current('client.pdfium'),
       api.properties(bot_id='test_bot', target_os='android', skip_test=True),
