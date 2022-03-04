@@ -1199,7 +1199,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "--",

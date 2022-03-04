@@ -163,7 +163,7 @@ def GenTests(api):
           post_process.StepCommandContains,
           'Generic Archiving Steps.gsutil upload '
           'dest_dir/path/to/another/file.txt', [
-              'python', '-u', 'RECIPE_MODULE[depot_tools::gsutil]/resources/'
+              'python3', '-u', 'RECIPE_MODULE[depot_tools::gsutil]/resources/'
               'gsutil_smart_retry.py', '--',
               'RECIPE_REPO[depot_tools]/gsutil.py', '----', 'cp',
               '/path/to/another/file.txt',
