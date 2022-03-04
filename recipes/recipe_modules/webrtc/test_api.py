@@ -152,4 +152,5 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
 
 
 def _sanitize_builder_name(name):
-  return api.sanitize_file_name(name.lower())
+  safe_with_spaces = ''.join(c if c.isalnum() else ' ' for c in name.lower())
+  return '_'.join(safe_with_spaces.split())

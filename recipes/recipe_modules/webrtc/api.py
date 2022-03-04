@@ -34,6 +34,18 @@ BINARY_SIZE_TARGETS = (
 )
 
 
+def _sanitize_file_name(name):
+  safe_with_spaces = ''.join(c if c.isalnum() else ' ' for c in name)
+  return '_'.join(safe_with_spaces.split())
+
+
+def _replace_string_in_dict(dict_input, old, new):
+  dict_output = {}
+  for key, values in dict_input.items():
+    dict_output[key] = [value.replace(old, new) for value in values]
+  return dict_output
+
+
 class Bot(object):
   def __init__(self, builders, recipe_configs, bucket, builder):
     self._builders = builders
@@ -76,7 +88,6 @@ class WebRTCApi(recipe_api.RecipeApi):
 
   def __init__(self, **kwargs):
     super(WebRTCApi, self).__init__(**kwargs)
-    self._env = {}
     self._isolated_targets = []
     self._non_isolated_targets = []
 
@@ -131,7 +142,7 @@ class WebRTCApi(recipe_api.RecipeApi):
         version = self.bot.config['version']
         args += ['--platform', platform, '--version', version]
         named_caches['runtime_ios_' +
-                     sanitize_file_name(version)] = 'Runtime-ios-' + version
+                     _sanitize_file_name(version)] = 'Runtime-ios-' + version
       self._ios_config = {
           'service_account': self.bot.config.get('service_account'),
           'named_caches': named_caches,
@@ -390,11 +401,11 @@ class WebRTCApi(recipe_api.RecipeApi):
     if phase:
       # Set the out folder to be the same as the phase name, so caches of
       # consecutive builds don't interfere with each other.
-      self.m.chromium.c.build_config_fs = sanitize_file_name(phase)
+      self.m.chromium.c.build_config_fs = _sanitize_file_name(phase)
     else:
       # Set the out folder to be the same as the builder name, so the whole
       # 'src' folder can be shared between builder types.
-      self.m.chromium.c.build_config_fs = sanitize_file_name(self.buildername)
+      self.m.chromium.c.build_config_fs = _sanitize_file_name(self.buildername)
 
     self.m.chromium.mb_gen(
         self.builder_id,
@@ -449,12 +460,12 @@ class WebRTCApi(recipe_api.RecipeApi):
       # so the swarming command line needs to be retrieved from build
       # parameters.
       raw_command_lines = self.m.properties.get('swarming_command_lines')
-      swarming_command_lines = replace_string_in_dict(
+      swarming_command_lines = _replace_string_in_dict(
           raw_command_lines, 'WILL_BE_ISOLATED_OUTDIR', 'ISOLATED_OUTDIR')
       # Tester builders run their tests in the parent builder out directory.
       output_dir = str(self.m.chromium.output_dir).replace(
-          sanitize_file_name(self.buildername),
-          sanitize_file_name(self.bot.config.get('parent_buildername')))
+          _sanitize_file_name(self.buildername),
+          _sanitize_file_name(self.bot.config.get('parent_buildername')))
     else:
       swarming_command_lines = self.find_swarming_command_lines()
       output_dir = self.m.chromium.output_dir
@@ -505,12 +516,7 @@ class WebRTCApi(recipe_api.RecipeApi):
       raise self.m.step.StepFailure('Test target(s) failed: %s' %
                                     ', '.join(failures))
 
-  def runtests(self, phase=None):
-    """Add a suite of test steps.
-
-    Args:
-      test_suite=The name of the test suite.
-    """
+  def runtests(self, phase):
     with self.m.context(cwd=self._working_dir):
       all_tests = steps.generate_tests(phase, self.bot,
                                        self.m.tryserver.is_tryserver,
@@ -545,18 +551,18 @@ class WebRTCApi(recipe_api.RecipeApi):
 
     triggered_bots = list(self.bot.triggered_bots())
     if triggered_bots:
+      raw_command_lines = self.find_swarming_command_lines()
+      # Replace ISOLATED_OUTDIR by WILL_BE_ISOLATED_OUTDIR to prevent
+      # the variable to be expanded by the builder instead of the tester.
+      swarming_command_lines = _replace_string_in_dict(
+          raw_command_lines, 'ISOLATED_OUTDIR', 'WILL_BE_ISOLATED_OUTDIR')
       properties = {
           'revision': self.revision,
           'parent_got_revision': self.revision,
           'parent_got_revision_cp': self.revision_cp,
+          'swarming_command_lines': swarming_command_lines,
+          'swarm_hashes': self.m.isolate.isolated_tests,
       }
-      raw_command_lines = self.find_swarming_command_lines()
-      # Replace ISOLATED_OUTDIR by WILL_BE_ISOLATED_OUTDIR to prevent
-      # the variable to be expanded by the builder instead of the tester.
-      properties['swarming_command_lines'] = replace_string_in_dict(
-          raw_command_lines, 'ISOLATED_OUTDIR', 'WILL_BE_ISOLATED_OUTDIR')
-      properties['swarm_hashes'] = self.m.isolate.isolated_tests
-
       self.m.scheduler.emit_trigger(
           self.m.scheduler.BuildbucketTrigger(properties=properties),
           project='webrtc',
@@ -662,14 +668,3 @@ class WebRTCApi(recipe_api.RecipeApi):
           cmd,
           step_test_data=lambda: self.m.json.test_api.output({}),
           infra_step=True)
-
-def sanitize_file_name(name):
-  safe_with_spaces = ''.join(c if c.isalnum() else ' ' for c in name)
-  return '_'.join(safe_with_spaces.split())
-
-
-def replace_string_in_dict(dict_input, old, new):
-  dict_output = {}
-  for key, values in dict_input.items():
-    dict_output[key] = [value.replace(old, new) for value in values]
-  return dict_output
