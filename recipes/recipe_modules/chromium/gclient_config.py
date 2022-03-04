@@ -430,6 +430,10 @@ def reclient_clang_scan_deps(c):
 
 
 @CONFIG_CTX()
-def rust_in_tree(c):
+def checkout_clang_libs(c):
   c.solutions[0].custom_vars['checkout_clang_libs'] = 'True'
+
+
+@CONFIG_CTX()
+def rust_in_tree(c):
   c.solutions[0].custom_vars['build_chromium_rust_toolchain'] = 'True'

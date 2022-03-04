@@ -10,7 +10,9 @@ def CreateAndroidBuilder():
       chromium_config='android',
       chromium_apply_config=['android'],
       gclient_config='chromium',
-      gclient_apply_config=['android', 'enable_reclient'],
+      gclient_apply_config=[
+          'android', 'enable_reclient', 'checkout_clang_libs'
+      ],
       chromium_config_kwargs={
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -27,6 +29,7 @@ def CreateLinuxBuilder():
       chromium_config='chromium',
       chromium_apply_config=['mb'],
       gclient_config='chromium',
+      gclient_apply_config=['checkout_clang_libs'],
       chromium_config_kwargs={
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -40,7 +43,7 @@ def CreateLinuxInTreeToolchainBuilder():
       chromium_config='chromium',
       chromium_apply_config=['mb'],
       gclient_config='chromium',
-      gclient_apply_config=['rust_in_tree'],
+      gclient_apply_config=['rust_in_tree', 'checkout_clang_libs'],
       chromium_config_kwargs={
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
