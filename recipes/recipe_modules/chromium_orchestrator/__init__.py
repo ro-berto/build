@@ -28,6 +28,7 @@ DEPS = [
     'recipe_engine/json',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
+    'recipe_engine/runtime',
     'recipe_engine/step',
     'recipe_engine/swarming',
     'test_utils',

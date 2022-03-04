@@ -220,6 +220,28 @@ def GenTests(api):
   )
 
   yield api.test(
+      'dont_fetch_comp_build_if_canceled',
+      api.chromium.try_build(builder='linux-rel-orchestrator',),
+      api.properties(
+          **{
+              '$build/chromium_orchestrator':
+                  InputProperties(
+                      compilator='linux-rel-compilator',
+                      compilator_watcher_git_revision='e841fc',
+                  ),
+          }),
+      api.runtime.global_shutdown_on_step('compilator steps (with patch)'),
+      api.chromium_orchestrator.override_schedule_compilator_build(),
+      api.chromium_orchestrator.override_compilator_steps(
+          sub_build_status=common_pb.INFRA_FAILURE, empty_props=True),
+      api.chromium_orchestrator.fake_head_revision(),
+      api.chromium_orchestrator.override_test_spec(),
+      api.post_process(post_process.DoesNotRun, 'fetch compilator build proto'),
+      api.post_process(post_process.StatusException),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
       'dont_collect_comp_task_if_not_ended',
       api.chromium.try_build(builder='linux-rel-orchestrator',),
       api.properties(
@@ -240,7 +262,6 @@ def GenTests(api):
       api.post_process(post_process.StatusException),
       api.post_process(post_process.DropExpectation),
   )
-
   yield api.test(
       'quick run rts',
       api.properties(

@@ -37,7 +37,8 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
     # If the orchestrator build is canceled or infra failed, the exception
     # should bubble up during test_patch() and the code below will not be
     # executed
-    if self.current_compilator_buildbucket_id:
+    if (self.current_compilator_buildbucket_id and
+        not self.m.runtime.in_global_shutdown):
       comp_build = self.m.buildbucket.get(
           step_name='fetch compilator build proto',
           build_id=self.current_compilator_buildbucket_id)

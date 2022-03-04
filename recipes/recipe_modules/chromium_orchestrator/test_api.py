@@ -85,7 +85,7 @@ class ChromiumOrchestratorApi(recipe_test_api.RecipeTestApi):
       name = 'compilator steps (without patch)'
     if not is_swarming_phase:
       name += ' (2)'
-    return self.override_step_data(
+    return self.step_data(
         name,
         self.m.step.sub_build(sub_build),
     )
