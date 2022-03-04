@@ -15,6 +15,7 @@ def CreateAndroidBuilderConfig(target_bits, internal):
   gclient_apply_config = [
       'android',
       'angle_top_of_tree',
+      'enable_reclient',
   ]
   if internal:
     gclient_apply_config += ['angle_internal']
