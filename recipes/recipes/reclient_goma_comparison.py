@@ -68,6 +68,24 @@ COMPARISON_BUILDERS = freeze({
         'platform': 'win',
         'targets': ['all'],
     },
+    'Comparison Simple Chrome (reclient)': {
+        'chromium_config': 'chromium',
+        'gclient_config': 'chromium',
+        'chromium_apply_config': [
+            'mb', 'goma_enable_cache_silo', 'goma_large_cache_file'
+        ],
+        'gclient_apply_config': [
+            'chromeos', 'enable_reclient', 'reclient_test'
+        ],
+        'platform': 'linux',
+        'chromium_config_kwargs': {
+            'TARGET_BITS': 64,
+            'TARGET_PLATFORM': 'chromeos',
+            'CROS_BOARDS_WITH_QEMU_IMAGES': 'amd64-generic:amd64-generic-vm',
+        },
+        'simulation_platform': 'linux',
+        'targets': ['all'],
+    },
 })
 
 
