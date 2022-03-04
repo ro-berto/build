@@ -361,7 +361,7 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"default\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"all\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"status\": \"Found dependency\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"test_targets\": [@@@",
@@ -631,9 +631,7 @@
       "-C",
       "[CACHE]\\builder\\src\\out\\win_asan",
       "-j",
-      "80",
-      "common_audio_unittests",
-      "default"
+      "80"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
@@ -663,8 +661,6 @@
       "[CACHE]\\builder\\src\\out\\win_asan",
       "-j",
       "80",
-      "common_audio_unittests",
-      "default",
       "-d",
       "explain",
       "-n"
@@ -829,7 +825,7 @@
       "--ninja-log-outdir",
       "[CACHE]\\builder\\src\\out\\win_asan",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]\\\\builder\\\\src\\\\out\\\\win_asan\", \"-j\", 80, \"common_audio_unittests\", \"default\"]",
+      "[\"RECIPE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]\\\\builder\\\\src\\\\out\\\\win_asan\", \"-j\", 80]",
       "--build-exit-status",
       "0",
       "--build-step-name",

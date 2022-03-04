@@ -143,7 +143,7 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
   def override_gn_analyze(self, gn_analyze_output):
     if gn_analyze_output is None:
       gn_analyze_output = {
-          'compile_targets': ['default'],
+          'compile_targets': ['all'],
           'status': 'Found dependency',
           'test_targets': ['common_audio_unittests'],
       }

@@ -252,11 +252,7 @@ class WebRTCApi(recipe_api.RecipeApi):
       # Perf testers are a special case; they only need the catapult protos.
       if self.bot.bot_type == 'tester' and self.bot.is_running_perf_tests():
         return ['webrtc_dashboard_upload']
-      # The default behavior is to always build the :default target and
-      # the tests that need to be run.
-      # TODO(bugs.webrtc.org/11411): When "all" builds correctly change
-      # :default to "all".
-      return sorted(set(['default'] + isolated_targets + non_isolated_targets))
+      return ['all']
 
     tests_target, compile_targets = self.run_mb_analyze(
         phase, affected_files, isolated_targets + non_isolated_targets)

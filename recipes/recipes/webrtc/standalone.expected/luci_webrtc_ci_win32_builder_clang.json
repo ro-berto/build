@@ -518,10 +518,7 @@
       "-C",
       "[CACHE]\\builder\\src\\out\\Win32_Builder_Clang",
       "-j",
-      "80",
-      "default",
-      "low_bandwidth_audio_perf_test",
-      "webrtc_perf_tests"
+      "80"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
@@ -551,9 +548,6 @@
       "[CACHE]\\builder\\src\\out\\Win32_Builder_Clang",
       "-j",
       "80",
-      "default",
-      "low_bandwidth_audio_perf_test",
-      "webrtc_perf_tests",
       "-d",
       "explain",
       "-n"
@@ -718,7 +712,7 @@
       "--ninja-log-outdir",
       "[CACHE]\\builder\\src\\out\\Win32_Builder_Clang",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]\\\\builder\\\\src\\\\out\\\\Win32_Builder_Clang\", \"-j\", 80, \"default\", \"low_bandwidth_audio_perf_test\", \"webrtc_perf_tests\"]",
+      "[\"RECIPE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]\\\\builder\\\\src\\\\out\\\\Win32_Builder_Clang\", \"-j\", 80]",
       "--build-exit-status",
       "0",
       "--build-step-name",
