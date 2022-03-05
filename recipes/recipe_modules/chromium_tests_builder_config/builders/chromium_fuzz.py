@@ -155,7 +155,6 @@ SPEC = {
             chromium_config='chromium_asan',
             chromium_apply_config=['mb', 'clobber'],
             gclient_config='chromium',
-            gclient_apply_config=['enable_reclient'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 32,
@@ -172,7 +171,6 @@ SPEC = {
             chromium_config='chromium_asan',
             chromium_apply_config=['mb', 'clobber'],
             gclient_config='chromium',
-            gclient_apply_config=['enable_reclient'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 32,
@@ -189,7 +187,6 @@ SPEC = {
             chromium_config='chromium_asan',
             chromium_apply_config=['mb', 'clobber'],
             gclient_config='chromium',
-            gclient_apply_config=['enable_reclient'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 32,
