@@ -13,18 +13,15 @@ from recipe_engine.engine_types import freeze
 PYTHON_VERSION_COMPATIBILITY = "PY3"
 
 DEPS = [
-  'archive',
-  'depot_tools/bot_update',
-  'depot_tools/depot_tools',
-  'chromium',
-  'recipe_engine/context',
-  'recipe_engine/json',
-  'recipe_engine/path',
-  'recipe_engine/platform',
-  'recipe_engine/properties',
-  'recipe_engine/raw_io',
-  'recipe_engine/step',
-  'webrtc',
+    'depot_tools/depot_tools',
+    'chromium',
+    'chromium_checkout',
+    'recipe_engine/context',
+    'recipe_engine/path',
+    'recipe_engine/platform',
+    'recipe_engine/raw_io',
+    'recipe_engine/step',
+    'webrtc',
 ]
 
 
@@ -72,7 +69,7 @@ def RunSteps(api):
   webrtc = api.webrtc
   webrtc.apply_bot_config(BUILDERS, webrtc.RECIPE_CONFIGS)
 
-  webrtc.checkout()
+  api.chromium_checkout.ensure_checkout()
   api.chromium.ensure_goma()
   api.chromium.runhooks()
   webrtc.run_mb()

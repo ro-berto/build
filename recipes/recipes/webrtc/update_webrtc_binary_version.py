@@ -5,7 +5,7 @@
 PYTHON_VERSION_COMPATIBILITY = "PY3"
 
 DEPS = [
-    'depot_tools/bot_update',
+    'chromium_checkout',
     'depot_tools/depot_tools',
     'depot_tools/gclient',
     'depot_tools/gerrit',
@@ -14,11 +14,7 @@ DEPS = [
     'recipe_engine/context',
     'recipe_engine/json',
     'recipe_engine/path',
-    'recipe_engine/raw_io',
-    'recipe_engine/runtime',
     'recipe_engine/step',
-    'recipe_engine/url',
-    'webrtc',
 ]
 
 GERRIT_URL = 'https://webrtc-review.googlesource.com'
@@ -28,7 +24,7 @@ GERRIT_PROJECT = 'src'
 def RunSteps(api):
   api.gclient.set_config('webrtc')
   api.gclient.c.target_os.add('linux')
-  api.webrtc.checkout()
+  api.chromium_checkout.ensure_checkout()
 
   with api.context(cwd=api.path['checkout']):
     # Check for an open CL.

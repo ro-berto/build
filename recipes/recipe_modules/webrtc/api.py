@@ -91,17 +91,10 @@ class WebRTCApi(recipe_api.RecipeApi):
     self._isolated_targets = []
     self._non_isolated_targets = []
 
-    # Keep track of working directory (which contains the checkout).
-    # None means "default value".
-    self._working_dir = None
-
     self._builders = None
     self._recipe_configs = None
     self._ios_config = None
     self.bot = None
-
-    self.revision = None
-    self.revision_cp = None
 
   def apply_bot_config(self, builders, recipe_configs):
     self._builders = builders
@@ -156,6 +149,14 @@ class WebRTCApi(recipe_api.RecipeApi):
     if self.bot.bot_type == 'tester':
       assert self.m.properties.get('parent_got_revision'), (
           'Testers should only be run with "parent_got_revision" property.')
+
+  @property
+  def revision(self):
+    return self.m.chromium.build_properties.get('got_revision')
+
+  @property
+  def revision_cp(self):
+    return self.m.chromium.build_properties.get('got_revision_cp')
 
   @property
   def revision_number(self):
@@ -295,8 +296,9 @@ class WebRTCApi(recipe_api.RecipeApi):
         'webrtc',
         precommit=self.m.tryserver.is_tryserver,
         builder_group=self.builder_group,
-        path_to_merge_scripts=self.m.path.join(self._working_dir, 'src',
-                                               'testing', 'merge_scripts'))
+        path_to_merge_scripts=self.m.path.join(
+            self.m.chromium_checkout.checkout_dir, 'src', 'testing',
+            'merge_scripts'))
     self.m.chromium_swarming.set_default_dimension(
         'os',
         self.m.chromium_swarming.prefered_os_dimension(
@@ -314,15 +316,6 @@ class WebRTCApi(recipe_api.RecipeApi):
     # more variance data to work with.
     if self.bot.is_running_perf_tests():
       self.m.chromium_swarming.default_idempotent = False
-
-  def checkout(self, **kwargs):
-    self._working_dir = self.m.chromium_checkout.checkout_dir
-
-    self.m.chromium_checkout.ensure_checkout(**kwargs)
-
-    # Whatever step is run right before this line needs to emit got_revision.
-    self.revision = self.m.chromium.build_properties.get('got_revision')
-    self.revision_cp = self.m.chromium.build_properties.get('got_revision_cp')
 
   def download_audio_quality_tools(self):
     args = [self.m.path['checkout'].join('tools_webrtc', 'audio_quality')]
@@ -483,7 +476,7 @@ class WebRTCApi(recipe_api.RecipeApi):
                                     ', '.join(failures))
 
   def runtests(self, phase):
-    with self.m.context(cwd=self._working_dir):
+    with self.m.context(cwd=self.m.chromium_checkout.checkout_dir):
       all_tests = steps.generate_tests(phase, self.bot,
                                        self.m.tryserver.is_tryserver,
                                        self.m.chromium_tests, self._ios_config)

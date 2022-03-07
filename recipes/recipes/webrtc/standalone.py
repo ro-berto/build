@@ -13,23 +13,10 @@ from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 PYTHON_VERSION_COMPATIBILITY = "PY3"
 
 DEPS = [
-  'archive',
-  'depot_tools/bot_update',
-  'chromium',
-  'chromium_android',
-  'chromium_swarming',
-  'depot_tools/gclient',
-  'depot_tools/tryserver',
-  'recipe_engine/buildbucket',
-  'recipe_engine/file',
-  'recipe_engine/json',
-  'recipe_engine/path',
-  'recipe_engine/platform',
-  'recipe_engine/properties',
-  'recipe_engine/runtime',
-  'recipe_engine/step',
-  'test_utils',
-  'webrtc',
+    'chromium',
+    'chromium_checkout',
+    'recipe_engine/step',
+    'webrtc',
 ]
 
 
@@ -37,7 +24,7 @@ def RunSteps(api):
   webrtc = api.webrtc
   webrtc.apply_bot_config(webrtc.BUILDERS, webrtc.RECIPE_CONFIGS)
 
-  webrtc.checkout()
+  api.chromium_checkout.ensure_checkout()
 
   webrtc.configure_swarming()
 

@@ -5,20 +5,15 @@
 PYTHON_VERSION_COMPATIBILITY = "PY3"
 
 DEPS = [
-    'archive',
     'builder_group',
     'chromium',
     'chromium_checkout',
-    'depot_tools/bot_update',
     'depot_tools/gclient',
     'depot_tools/tryserver',
     'goma',
     'recipe_engine/buildbucket',
-    'recipe_engine/commit_position',
-    'recipe_engine/context',
     'recipe_engine/path',
     'recipe_engine/properties',
-    'recipe_engine/runtime',
     'recipe_engine/step',
     'webrtc',
 ]
@@ -27,7 +22,7 @@ DEPS = [
 def RunSteps(api):
   api.gclient.set_config('webrtc_ios')
 
-  api.webrtc.checkout()
+  api.chromium_checkout.ensure_checkout()
   api.gclient.runhooks()
 
   goma_dir = api.goma.ensure_goma()
