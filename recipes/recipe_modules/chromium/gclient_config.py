@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from . import reclient
+
 from RECIPE_MODULES.depot_tools.gclient import CONFIG_CTX
 from RECIPE_MODULES.depot_tools.gclient import api as gclient_api
 from RECIPE_MODULES.depot_tools.gclient.config import (
@@ -408,7 +410,7 @@ def enable_reclient(c):
 @CONFIG_CTX()
 def reclient_staging(c):
   cv = c.solutions[0].custom_vars
-  cv['reclient_version'] = 're_client_version:0.56.0.8e249fc-gomaip'
+  cv['reclient_version'] = reclient.STAGING_VERSION
 
 
 # This configuration overrides the default reclient version
@@ -417,7 +419,7 @@ def reclient_staging(c):
 @CONFIG_CTX()
 def reclient_test(c):
   cv = c.solutions[0].custom_vars
-  cv['reclient_version'] = 're_client_version:0.57.0.4865132-gomaip'
+  cv['reclient_version'] = reclient.TEST_VERSION
 
 
 # This configuration overrides the default reclient version
@@ -426,7 +428,7 @@ def reclient_test(c):
 @CONFIG_CTX()
 def reclient_clang_scan_deps(c):
   cv = c.solutions[0].custom_vars
-  cv['reclient_version'] = 're_client_version:0.41.4.3f0d8bb'
+  cv['reclient_version'] = reclient.CLANG_SCAN_DEPS_VERSION
 
 
 @CONFIG_CTX()

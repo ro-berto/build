@@ -5,3 +5,6 @@
 
 machenbach@chromium.org
 tikuta@chromium.org
+
+per-file RECLIENT_OWNERS=file://recipes/recipe_modules/chromium/RECLIENT_OWNERS
+per-file reclient.py=file://recipes/recipe_modules/chromium/RECLIENT_OWNERS
