@@ -40,8 +40,6 @@ def RunSteps(api):
   webrtc.checkout()
 
   webrtc.configure_swarming()
-  if api.platform.is_win:
-    api.chromium.taskkill()
 
   if webrtc.should_download_audio_quality_tools():
     webrtc.download_audio_quality_tools()

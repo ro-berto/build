@@ -344,14 +344,11 @@ class WebRTCApi(recipe_api.RecipeApi):
 
       kwargs.setdefault('patch', False)
 
-    with self.m.context(cwd=self.m.context.cwd or self._working_dir):
-      update_step = self.m.bot_update.ensure_checkout(**kwargs)
-    assert update_step.json.output['did_run']
+    self.m.chromium_checkout.ensure_checkout(**kwargs)
 
     # Whatever step is run right before this line needs to emit got_revision.
-    revs = update_step.presentation.properties
-    self.revision = revs['got_revision']
-    self.revision_cp = revs.get('got_revision_cp')
+    self.revision = self.m.chromium.build_properties.get('got_revision')
+    self.revision_cp = self.m.chromium.build_properties.get('got_revision_cp')
 
     if is_chromium:
       self._apply_patch(self.m.tryserver.gerrit_change_repo_url,
