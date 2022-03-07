@@ -39,6 +39,10 @@ def no_archive(base_config):
   return base_config.evolve(
       archive_build=None, gs_bucket=None, gs_acl=None, gs_build_name=None)
 
+# The config for the following builders is now specified src-side in
+# //infra/config/subprojects/goma/goma.star
+# * chromeos-amd64-generic-rel-goma-rbe-canary
+# * chromeos-amd64-generic-rel-goma-rbe-latest
 
 SPEC = {
     # Canary RBE
@@ -51,10 +55,6 @@ SPEC = {
     'Linux Builder Goma RBE Canary':
         chromium_apply_configs(chromium_linux.SPEC['Linux Builder'],
                                ['goma_canary', 'goma_use_local']),
-    'chromeos-amd64-generic-rel-goma-rbe-canary':
-        chromium_apply_configs(
-            chromium_chromiumos.SPEC['chromeos-amd64-generic-rel'],
-            ['goma_canary']),
     'mac-archive-rel-goma-rbe-canary':
         chromium_apply_configs(
             no_archive(chromium.SPEC['mac-archive-rel']), ['goma_canary']),
@@ -101,10 +101,6 @@ SPEC = {
     'Linux Builder Goma RBE Latest Client':
         chromium_apply_configs(chromium_linux.SPEC['Linux Builder'],
                                ['goma_latest_client', 'goma_use_local']),
-    'chromeos-amd64-generic-rel-goma-rbe-latest':
-        chromium_apply_configs(
-            chromium_chromiumos.SPEC['chromeos-amd64-generic-rel'],
-            ['goma_latest_client']),
     'mac-archive-rel-goma-rbe-latest':
         chromium_apply_configs(
             no_archive(chromium.SPEC['mac-archive-rel']),

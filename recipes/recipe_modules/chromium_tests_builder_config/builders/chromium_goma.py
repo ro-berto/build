@@ -98,6 +98,11 @@ _WIN_CLOBBER_CONFIG = CreateStandardConfig('win', ['clobber'])
 
 _ANDROID32_CONFIG = CreateAndroidConfig(32)
 
+# The config for the following builders is now specified src-side in
+# //infra/config/subprojects/goma/goma.star
+# * chromeos-amd64-generic-rel-goma-rbe-staging
+# * chromeos-amd64-generic-rel-goma-rbe-tot
+
 SPEC = {
     # Linux RBE
     # TODO(crbug.com/1040754): ToT builders have temporarily been made 'clobber'
@@ -114,11 +119,6 @@ SPEC = {
         _LINUX_CONFIG,
     'Chromium Linux Goma RBE Staging (dbg) (clobber)':
         _LINUX_CLOBBER_CONFIG,
-    'chromeos-amd64-generic-rel-goma-rbe-tot':
-        chromium_chromiumos.SPEC['chromeos-amd64-generic-rel'].extend(
-            chromium_apply_config=['goma_client_candidate']),
-    'chromeos-amd64-generic-rel-goma-rbe-staging':
-        chromium_chromiumos.SPEC['chromeos-amd64-generic-rel'],
 
     # Mac RBE
     'Chromium Mac Goma RBE ToT':

@@ -65,6 +65,7 @@ def _config(name,
 
 # The config for the following builders is now specified src-side in
 # //infra/config/subprojects/chromium/ci/chromium.chromiumos.star
+# * chromeos-amd64-generic-rel
 # * chromeos-arm-generic-rel
 
 SPEC.update([
@@ -111,9 +112,6 @@ SPEC.update([
         cros_boards='amd64-generic',
         gclient_apply_config=['checkout_lacros_sdk'],
     ),
-    _config(
-        'chromeos-amd64-generic-rel',
-        cros_boards_with_qemu_images='amd64-generic-vm'),
     _config(
         'chromeos-arm-generic-dbg',
         cros_boards='arm-generic',

@@ -2,6 +2,10 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from recipe_engine import post_process
+
+from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
+
 PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
@@ -13,8 +17,6 @@ DEPS = [
     'recipe_engine/properties',
     'recipe_engine/raw_io',
 ]
-
-from recipe_engine import post_process
 
 def RunSteps(api):
   use_goma_module = api.properties.get('use_goma_module', False)
@@ -56,6 +58,8 @@ def RunSteps(api):
 
 
 def GenTests(api):
+  ctbc_api = api.chromium_tests_builder_config
+
   yield api.test(
       'basic_out_dir',
       api.chromium.ci_build(
@@ -310,6 +314,25 @@ def GenTests(api):
           bot_id='build1-a1',
           build_number=77457,
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_builder_for_ci_builder(
+              builder_group='chromium.chromiumos',
+              builder='chromeos-amd64-generic-rel',
+              builder_spec=ctbc.BuilderSpec.create(
+                  gclient_config='chromium',
+                  gclient_apply_config=['chromeos'],
+                  chromium_config='chromium',
+                  chromium_apply_config=['mb'],
+                  chromium_config_kwargs={
+                      'BUILD_CONFIG': 'Release',
+                      'TARGET_ARCH': 'intel',
+                      'TARGET_BITS': 64,
+                      'TARGET_PLATFORM': 'chromeos',
+                      'CROS_BOARDS_WITH_QEMU_IMAGES': 'amd64-generic-vm',
+                  },
+                  build_gs_bucket='chromium-chromiumos-archive',
+              ),
+          ).build()),
       api.properties(out_dir='/tmp'),
   )
 
