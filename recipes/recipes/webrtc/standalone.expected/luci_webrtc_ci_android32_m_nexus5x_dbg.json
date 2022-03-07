@@ -917,40 +917,10 @@
   },
   {
     "cmd": [
-      "vpython3",
-      "-u",
-      "RECIPE_MODULE[build::chromium_tests]/resources/find_command_lines.py",
-      "--build-dir",
-      "[CACHE]/builder/src/out/Android32_M_Nexus5X_dbg",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[CACHE]/builder",
-    "luci_context": {
-      "realm": {
-        "name": "webrtc:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "find command lines",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[infra::zip]/resources/zip.py"
     ],
-    "cwd": "[CACHE]/builder",
     "luci_context": {
       "realm": {
         "name": "webrtc:ci"
@@ -980,7 +950,6 @@
       "[START_DIR]/AppRTCMobile_apk.zip",
       "gs://chromium-webrtc/client.webrtc/Android32 (M Nexus5X)(dbg)/AppRTCMobile_apk_170242.zip"
     ],
-    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -997,6 +966,35 @@
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.googleapis.com/chromium-webrtc/client.webrtc/Android32%20(M%20Nexus5X)(dbg)/AppRTCMobile_apk_170242.zip@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython3",
+      "-u",
+      "RECIPE_MODULE[build::chromium_tests]/resources/find_command_lines.py",
+      "--build-dir",
+      "[CACHE]/builder/src/out/Android32_M_Nexus5X_dbg",
+      "--output-json",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[CACHE]/builder",
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "find command lines",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {

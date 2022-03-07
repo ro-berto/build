@@ -50,7 +50,12 @@ def RunSteps(api):
       return raw_result
     webrtc.isolate()
 
-    webrtc.get_binary_sizes()
+    if webrtc.bot.config.get('binary_size_files'):
+      webrtc.get_binary_sizes(webrtc.bot.config['binary_size_files'])
+    if webrtc.bot.config.get('build_android_archive'):
+      webrtc.build_android_archive()
+    if webrtc.bot.config.get('archive_apprtc'):
+      webrtc.package_apprtcmobile()
 
     webrtc.runtests(phase)
 

@@ -916,35 +916,6 @@
     ]
   },
   {
-    "cmd": [
-      "vpython3",
-      "-u",
-      "RECIPE_MODULE[build::chromium_tests]/resources/find_command_lines.py",
-      "--build-dir",
-      "[CACHE]/builder/src/out/Android32_M_Nexus5X",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "cwd": "[CACHE]/builder",
-    "luci_context": {
-      "realm": {
-        "name": "webrtc:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "find command lines",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
     "cmd": [],
     "name": "ensure_goma (2)"
   },
@@ -961,7 +932,6 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -1004,7 +974,6 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -1050,7 +1019,6 @@
       "0777",
       "[CACHE]/goma/data/Android32__M_Nexus5X_"
     ],
-    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -1075,7 +1043,6 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "restart"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Android32__M_Nexus5X_",
@@ -1129,7 +1096,6 @@
       "--cloudtail-service-account-json",
       "/creds/service_accounts/service-account-goma-cloudtail.json"
     ],
-    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -1192,7 +1158,6 @@
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Android32__M_Nexus5X_",
@@ -1236,7 +1201,6 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "stat"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Android32__M_Nexus5X_",
@@ -1269,7 +1233,6 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "stop"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Android32__M_Nexus5X_",
@@ -1333,7 +1296,6 @@
       "--buildbot-buildername",
       "Android32 (M Nexus5X)"
     ],
-    "cwd": "[CACHE]/builder",
     "luci_context": {
       "realm": {
         "name": "webrtc:ci"
@@ -1371,7 +1333,6 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -1404,7 +1365,6 @@
       "[CACHE]/builder/src/libwebrtc.aar",
       "gs://chromium-webrtc/android_archive/webrtc_android_170242.aar"
     ],
-    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -1429,7 +1389,6 @@
       "-u",
       "RECIPE_MODULE[infra::zip]/resources/zip.py"
     ],
-    "cwd": "[CACHE]/builder",
     "luci_context": {
       "realm": {
         "name": "webrtc:ci"
@@ -1459,7 +1418,6 @@
       "[START_DIR]/AppRTCMobile_apk.zip",
       "gs://chromium-webrtc/client.webrtc/Android32 (M Nexus5X)/AppRTCMobile_apk_170242.zip"
     ],
-    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -1476,6 +1434,35 @@
     "name": "gsutil upload (2)",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.googleapis.com/chromium-webrtc/client.webrtc/Android32%20(M%20Nexus5X)/AppRTCMobile_apk_170242.zip@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython3",
+      "-u",
+      "RECIPE_MODULE[build::chromium_tests]/resources/find_command_lines.py",
+      "--build-dir",
+      "[CACHE]/builder/src/out/Android32_M_Nexus5X",
+      "--output-json",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[CACHE]/builder",
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "find command lines",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {

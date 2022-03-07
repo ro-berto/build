@@ -437,12 +437,7 @@ class WebRTCApi(recipe_api.RecipeApi):
           test.raw_cmd = command_line
           test.relative_cwd = relative_cwd
 
-  def get_binary_sizes(self, files=None, base_dir=None):
-    if files is None:
-      files = self.bot.config.get('binary_size_files')
-    if not files:
-      return
-
+  def get_binary_sizes(self, files, base_dir=None):
     args = [
         '--base-dir', base_dir or self.m.chromium.output_dir, '--output',
         self.m.json.output(), '--'
@@ -455,6 +450,65 @@ class WebRTCApi(recipe_api.RecipeApi):
         infra_step=True,
         step_test_data=self.test_api.example_binary_sizes)
     result.presentation.properties['binary_sizes'] = result.json.output
+
+  def build_android_archive(self):
+    # Build the Android .aar archive and upload it to Google storage (except for
+    # trybots). This should only be run on a single bot or the archive will be
+    # overwritten (and it's a multi-arch build so one is enough).
+    goma_dir = self.m.goma.ensure_goma()
+    self.m.goma.start()
+    build_exit_status = 1
+    try:
+      build_script = self.m.path['checkout'].join('tools_webrtc', 'android',
+                                                  'build_aar.py')
+      args = [
+          '--use-goma', '--verbose', '--extra-gn-args',
+          'goma_dir=\"%s\"' % goma_dir
+      ]
+      if self.m.tryserver.is_tryserver:
+        # To benefit from incremental builds for speed.
+        args.append('--build-dir=out/android-archive')
+
+      cmd = ['vpython3', '-u', build_script] + args
+
+      with self.m.context(cwd=self.m.path['checkout']):
+        with self.m.depot_tools.on_path():
+          step_result = self.m.step('build android archive', cmd)
+      build_exit_status = step_result.retcode
+    except self.m.step.StepFailure as e:
+      build_exit_status = e.retcode
+      raise e
+    finally:
+      self.m.goma.stop(
+          ninja_log_compiler='goma', build_exit_status=build_exit_status)
+
+    if not self.m.tryserver.is_tryserver and not self.m.runtime.is_experimental:
+      self.m.gsutil.upload(
+          self.m.path['checkout'].join('libwebrtc.aar'),
+          'chromium-webrtc',
+          'android_archive/webrtc_android_%s.aar' % self.revision_number,
+          args=['-a', 'public-read'],
+          unauthenticated_url=True)
+
+  def package_apprtcmobile(self):
+    # Zip and upload out/{Debug,Release}/apks/AppRTCMobile.apk
+    apk_root = self.m.chromium.c.build_dir.join(
+        self.m.chromium.c.build_config_fs, 'apks')
+    zip_path = self.m.path['start_dir'].join('AppRTCMobile_apk.zip')
+
+    pkg = self.m.zip.make_package(apk_root, zip_path)
+    pkg.add_file(apk_root.join('AppRTCMobile.apk'))
+    pkg.zip('AppRTCMobile zip archive')
+
+    apk_upload_url = 'client.webrtc/%s/AppRTCMobile_apk_%s.zip' % (
+        self.buildername, self.revision_number)
+    if not self.m.runtime.is_experimental:
+      self.m.gsutil.upload(
+          zip_path,
+          WEBRTC_GS_BUCKET,
+          apk_upload_url,
+          args=['-a', 'public-read'],
+          unauthenticated_url=True)
 
   def run_perf_tests(self, tests):
     suffix = ''
@@ -489,10 +543,6 @@ class WebRTCApi(recipe_api.RecipeApi):
         return
 
       self.set_swarming_command_lines(tests)
-      if self.bot.config.get('build_android_archive'):
-        self.build_android_archive()
-      if self.bot.config.get('archive_apprtc'):
-        self.package_apprtcmobile()
 
       if self.bot.is_running_perf_tests():
         return self.run_perf_tests(tests)
@@ -526,61 +576,6 @@ class WebRTCApi(recipe_api.RecipeApi):
           self.m.scheduler.BuildbucketTrigger(properties=properties),
           project='webrtc',
           jobs=[bot.builder for bot in triggered_bots])
-
-  def build_android_archive(self):
-    # Build the Android .aar archive and upload it to Google storage (except for
-    # trybots). This should only be run on a single bot or the archive will be
-    # overwritten (and it's a multi-arch build so one is enough).
-    goma_dir = self.m.goma.ensure_goma()
-    self.m.goma.start()
-    build_exit_status = 1
-    try:
-      build_script = self.m.path['checkout'].join('tools_webrtc', 'android',
-                                                  'build_aar.py')
-      args = ['--use-goma',
-              '--verbose',
-              '--extra-gn-args', 'goma_dir=\"%s\"' % goma_dir]
-      if self.m.tryserver.is_tryserver:
-        # To benefit from incremental builds for speed.
-        args.append('--build-dir=out/android-archive')
-
-      cmd = ['vpython3', '-u', build_script] + args
-
-      with self.m.context(cwd=self.m.path['checkout']):
-        with self.m.depot_tools.on_path():
-          step_result = self.m.step('build android archive', cmd)
-      build_exit_status = step_result.retcode
-    except self.m.step.StepFailure as e:
-      build_exit_status = e.retcode
-      raise e
-    finally:
-      self.m.goma.stop(ninja_log_compiler='goma',
-                       build_exit_status=build_exit_status)
-
-    if not self.m.tryserver.is_tryserver and not self.m.runtime.is_experimental:
-      self.m.gsutil.upload(
-          self.m.path['checkout'].join('libwebrtc.aar'),
-          'chromium-webrtc',
-          'android_archive/webrtc_android_%s.aar' % self.revision_number,
-          args=['-a', 'public-read'],
-          unauthenticated_url=True)
-
-
-  def package_apprtcmobile(self):
-    # Zip and upload out/{Debug,Release}/apks/AppRTCMobile.apk
-    apk_root = self.m.chromium.c.build_dir.join(
-        self.m.chromium.c.build_config_fs, 'apks')
-    zip_path = self.m.path['start_dir'].join('AppRTCMobile_apk.zip')
-
-    pkg = self.m.zip.make_package(apk_root, zip_path)
-    pkg.add_file(apk_root.join('AppRTCMobile.apk'))
-    pkg.zip('AppRTCMobile zip archive')
-
-    apk_upload_url = 'client.webrtc/%s/AppRTCMobile_apk_%s.zip' % (
-        self.buildername, self.revision_number)
-    if not self.m.runtime.is_experimental:
-      self.m.gsutil.upload(zip_path, WEBRTC_GS_BUCKET, apk_upload_url,
-                           args=['-a', 'public-read'], unauthenticated_url=True)
 
   def upload_to_perf_dashboard(self, name, step_result):
     test_succeeded = (step_result.presentation.status == self.m.step.SUCCESS)
