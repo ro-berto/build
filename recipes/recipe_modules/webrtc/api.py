@@ -315,45 +315,14 @@ class WebRTCApi(recipe_api.RecipeApi):
     if self.bot.is_running_perf_tests():
       self.m.chromium_swarming.default_idempotent = False
 
-  def _apply_patch(self, repository_url, patch_ref, include_subdirs=()):
-    """Applies a patch by downloading the text diff from Gitiles."""
-    with self.m.context(cwd=self.m.path['checkout']):
-      patch_diff = self.m.gitiles.download_file(
-          repository_url, '', patch_ref + '^!',
-          step_name='download patch',
-          step_test_data=self.test_api.example_patch)
-
-      includes = ['--include=%s/*' % subdir for subdir in include_subdirs]
-      try:
-        self.m.git('apply', *includes,
-                   stdin=self.m.raw_io.input_text(patch_diff),
-                   name='apply patch', infra_step=False)
-      except recipe_api.StepFailure:  # pragma: no cover
-        self.m.step.active_result.presentation.step_text = 'Patch failure'
-        self.m.tryserver.set_patch_failure_tryjob_result()
-        raise
-
   def checkout(self, **kwargs):
     self._working_dir = self.m.chromium_checkout.checkout_dir
-
-    is_chromium = self.m.tryserver.gerrit_change_repo_url == CHROMIUM_REPO
-
-    if is_chromium:
-      for subdir in CHROMIUM_DEPS:
-        self.m.gclient.c.revisions['src/%s' % subdir] = 'HEAD'
-
-      kwargs.setdefault('patch', False)
 
     self.m.chromium_checkout.ensure_checkout(**kwargs)
 
     # Whatever step is run right before this line needs to emit got_revision.
     self.revision = self.m.chromium.build_properties.get('got_revision')
     self.revision_cp = self.m.chromium.build_properties.get('got_revision_cp')
-
-    if is_chromium:
-      self._apply_patch(self.m.tryserver.gerrit_change_repo_url,
-                        self.m.tryserver.gerrit_change_fetch_ref,
-                        include_subdirs=CHROMIUM_DEPS)
 
   def download_audio_quality_tools(self):
     args = [self.m.path['checkout'].join('tools_webrtc', 'audio_quality')]

@@ -10,7 +10,6 @@ import base64
 import six
 
 from recipe_engine import recipe_test_api
-from . import api
 from . import builders as webrtc_builders
 
 
@@ -21,13 +20,6 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
   def example_binary_sizes(self):
     return self.m.json.output({'some_binary': 123456})
 
-  def example_patch(self):
-    return self.m.json.output({
-        'value':
-            six.ensure_str(
-                base64.b64encode(b'diff --git a/a b/a\nnew file mode 100644\n'))
-    })
-
   def generate_builder(self,
                        builders,
                        bucketname,
@@ -37,7 +29,6 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
                        failing_test=None,
                        fail_compile=False,
                        suffix='',
-                       is_chromium=False,
                        fail_android_archive=False,
                        is_experimental=False,
                        gn_analyze_output=None,
@@ -114,8 +105,6 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
       test += self.override_step_data('build android archive', step_test_data)
 
     git_repo = 'https://webrtc.googlesource.com/src'
-    if is_chromium:
-      git_repo = 'https://chromium.googlesource.com/chromium/src'
     _, project, short_bucket = bucketname.split('.')
     if 'try' in bucketname:
       if 'fuzzer' not in buildername:

@@ -79,11 +79,6 @@ def GenTests(api):
     for buildername in group_config['builders'].keys():
       yield generate_builder(bucketname, buildername, revision='a' * 40)
 
-  bucketname = 'luci.webrtc.try'
-  buildername = 'linux_compile_arm_rel'
-  yield generate_builder(bucketname, buildername, revision=None,
-                         is_chromium=True, suffix='_chromium')
-
   # Forced builds (not specifying any revision) and test failures.
   bucketname = 'luci.webrtc.ci'
   buildername = 'Linux64 Debug'
