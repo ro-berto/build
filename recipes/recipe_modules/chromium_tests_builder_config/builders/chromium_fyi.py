@@ -228,6 +228,25 @@ SPEC = {
             simulation_platform='linux',
             test_results_config='staging_server',
         ),
+    'lacros-amd64-generic-rel-skylab-fyi':
+        builder_spec.BuilderSpec.create(
+            chromium_config='chromium',
+            # Some tests on this bot depend on being unauthenticated with GS, so
+            # don't run the tests inside a luci-auth context to avoid having the
+            # BOTO config setup for the task's service account.
+            # TODO(crbug.com/1217155): Fix this.
+            chromium_apply_config=['mb', 'mb_no_luci_auth'],
+            gclient_config='chromium',
+            gclient_apply_config=['chromeos', 'checkout_lacros_sdk'],
+            chromium_config_kwargs={
+                'TARGET_BITS': 64,
+                'TARGET_CROS_BOARDS': 'eve',
+                'CROS_BOARDS_WITH_QEMU_IMAGES': 'amd64-generic',
+                'TARGET_PLATFORM': 'chromeos',
+            },
+            simulation_platform='linux',
+            test_results_config='staging_server',
+        ),
     'linux-backuprefptr-x64-fyi-rel':
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
