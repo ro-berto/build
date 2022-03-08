@@ -506,14 +506,6 @@ SPEC.update([
         execution_mode=builder_spec.TEST,
         parent_buildername='android-cronet-arm-rel'),
     stock_cronet_config(
-        'android-cronet-arm-rel-lollipop-tests',
-        execution_mode=builder_spec.TEST,
-        parent_buildername='android-cronet-arm-rel'),
-    stock_cronet_config(
-        'android-cronet-arm64-rel-marshmallow-tests',
-        execution_mode=builder_spec.TEST,
-        parent_buildername='android-cronet-arm64-rel'),
-    stock_cronet_config(
         'android-cronet-x86-dbg', config='Debug', android_config='x86_builder'),
     stock_cronet_config(
         'android-cronet-x86-dbg-oreo-tests',

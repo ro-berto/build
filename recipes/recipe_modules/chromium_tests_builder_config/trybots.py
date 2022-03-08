@@ -177,18 +177,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='android-cronet-arm-rel',
                 tester='android-cronet-arm-rel-kitkat-tests',
             ),
-        'android-cronet-lollipop-arm-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android',
-                buildername='android-cronet-arm-rel',
-                tester='android-cronet-arm-rel-lollipop-tests',
-            ),
-        'android-cronet-marshmallow-arm64-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android',
-                buildername='android-cronet-arm64-rel',
-                tester='android-cronet-arm64-rel-marshmallow-tests',
-            ),
         'android-cronet-x86-dbg':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android',
