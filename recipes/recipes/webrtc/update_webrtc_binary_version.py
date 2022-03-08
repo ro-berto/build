@@ -15,6 +15,7 @@ DEPS = [
     'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/step',
+    'webrtc',
 ]
 
 GERRIT_URL = 'https://webrtc-review.googlesource.com'
