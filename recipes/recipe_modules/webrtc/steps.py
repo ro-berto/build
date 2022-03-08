@@ -205,7 +205,11 @@ def generate_tests(phase, bot, is_tryserver, chromium_tests_api, ios_config):
 
   if test_suite == 'ios_device':
     tests = [
-        SwarmingIosTest(t, chromium_tests_api, ios_config)
+        SwarmingIosTest(
+            t,
+            chromium_tests_api,
+            ios_config,
+            args=['--xctest', '--xcodebuild-device-runner'])
         for t in ios_device_tests
     ]
 
