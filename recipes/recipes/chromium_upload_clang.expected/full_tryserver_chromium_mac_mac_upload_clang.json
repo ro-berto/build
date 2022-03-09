@@ -515,7 +515,8 @@
   {
     "cmd": [
       "python3",
-      "[CACHE]/builder/src/tools/rust/build_rust.py"
+      "[CACHE]/builder/src/tools/rust/package_rust.py",
+      "--upload"
     ],
     "env_suffixes": {
       "DEPOT_TOOLS_UPDATE": [
@@ -537,7 +538,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "build rust"
+    "name": "package rust"
   },
   {
     "cmd": [

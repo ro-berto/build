@@ -98,9 +98,9 @@ def RunSteps(api):
 
       # Rust build errors intentionally do not fail the bot.
       api.step(
-          'build rust', [
-              'python3', api.path['checkout'].join('tools', 'rust',
-                                                   'build_rust.py')
+          'package rust', [
+              'python3', api.path['checkout'].join(
+                  'tools', 'rust', 'package_rust.py'), '--upload'
           ],
           raise_on_failure=False)
 
@@ -116,8 +116,8 @@ def GenTests(api):
           builder_group='tryserver.chromium.mac', builder='mac_upload_clang'),
       api.post_process(post_process.MustRun, 'install xcode'),
       api.post_process(post_process.MustRun, 'select XCode'),
-      api.post_process(post_process.MustRun, 'build rust'),
-      api.post_process(post_process.StepSuccess, 'build rust'),
+      api.post_process(post_process.MustRun, 'package rust'),
+      api.post_process(post_process.StepSuccess, 'package rust'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -128,8 +128,8 @@ def GenTests(api):
       api.chromium.try_build(
           builder_group='tryserver.chromium.linux',
           builder='linux_upload_clang'),
-      api.post_process(post_process.MustRun, 'build rust'),
-      api.post_process(post_process.StepSuccess, 'build rust'),
+      api.post_process(post_process.MustRun, 'package rust'),
+      api.post_process(post_process.StepSuccess, 'package rust'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -140,8 +140,8 @@ def GenTests(api):
       api.chromium.try_build(
           builder_group='tryserver.chromium.linux',
           builder='linux_upload_clang'),
-      api.step_data('build rust', retcode=1),
-      api.post_process(post_process.StepFailure, 'build rust'),
+      api.step_data('package rust', retcode=1),
+      api.post_process(post_process.StepFailure, 'package rust'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
