@@ -55,12 +55,13 @@ def RunSteps(api):
   kwargs = builder_config.get('kwargs', {})
   cronet_kwargs = builder_config.get('cronet_kwargs', {})
 
+  use_goma = builder_config.get('use_goma', False)
+  use_reclient = builder_config.get('use_reclient', True)
+
   api.cronet.init_and_sync(
       recipe_config, kwargs,
       chromium_apply_config=builder_config.get('chromium_apply_config'))
 
-  use_goma = builder_config.get('use_goma', True)
-  use_reclient = builder_config.get('use_reclient', False)
   raw_result = api.cronet.build(use_goma=use_goma, use_reclient=use_reclient)
   if raw_result.status != common_pb.SUCCESS:
     return raw_result

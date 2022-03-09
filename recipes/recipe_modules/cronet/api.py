@@ -33,6 +33,8 @@ class CronetApi(recipe_api.RecipeApi):
     self.m.chromium.apply_config('cronet_builder')
     for c in chromium_apply_config or []:
       self.m.chromium.apply_config(c)
+    self.m.gclient.set_config('chromium')
+    self.m.gclient.apply_config('enable_reclient')
     droid.init_and_sync(use_bot_update=True)
 
   def build(self,
