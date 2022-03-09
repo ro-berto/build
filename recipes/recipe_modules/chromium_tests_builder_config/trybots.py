@@ -773,11 +773,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.linux',
                 buildername='linux-bfcache-rel',
             ),
-        'linux-blink-heap-concurrent-marking-tsan-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
-                buildername='linux-blink-heap-concurrent-marking-tsan-rel',
-            ),
         'linux-blink-heap-verification-try':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',

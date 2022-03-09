@@ -1322,7 +1322,6 @@ SPEC.update([
         'linux-ash-chromium-builder-fyi-rel',
         gclient_apply_config=['chromeos']),
     stock_config('linux-blink-animation-use-time-delta', config='Debug'),
-    stock_config('linux-blink-heap-concurrent-marking-tsan-rel'),
     stock_config(
         'linux-blink-heap-verification',
         gclient_apply_config=['enable_reclient']),
