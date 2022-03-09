@@ -48,11 +48,6 @@ def RunSteps(api):
   if api.properties.get('mock_java_tests_metadata_path', True):
     api.path.mock_add_paths(
         api.chromium.output_dir.join('coverage').join('all.json.gz'))
-
-
-#   if api.properties.get('mock_java_unit_tests_metadata_path', True):
-#     api.path.mock_add_paths(
-#         api.chromium.output_dir.join('coverage').join('unit_tests.json.gz'))
   if api.properties.get('mock_javascript_metadata_path', True):
     api.path.mock_add_paths(
         api.chromium.output_dir.join('devtools_code_coverage').join(
@@ -373,7 +368,7 @@ def GenTests(api):
   )
 
   yield api.test(
-      'skip processing coverage data if not data is found',
+      'skip processing coverage data if no data is found',
       api.chromium.try_build(
           builder_group='tryserver.chromium.linux', builder='linux-rel'),
       api.code_coverage(use_clang_coverage=True),
@@ -496,7 +491,6 @@ def GenTests(api):
       api.post_process(
           post_process.MustRun,
           'skip processing coverage data because no source file changed'),
-      api.post_process(post_process.MustRun, 'Clean up Java coverage files'),
       api.post_process(post_process.DropExpectation),
   )
 

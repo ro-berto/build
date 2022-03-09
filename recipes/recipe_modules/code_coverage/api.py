@@ -27,9 +27,6 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     self._metadata_dir = None
     # When set, subset of source files to include in the coverage report.
     self._affected_source_files = []
-    # When set, subset of source files that are JavaScript. JS coverage can
-    # run at the same time as other coverage, so maintain a separate list.
-    self._affected_javascript_source_files = []
     # When set, indicates that current context is per-cl coverage for try jobs.
     self._is_per_cl_coverage = False
     # The list of profdata gs paths to be uploaded.
@@ -296,8 +293,8 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     elif self.use_java_coverage:
       self._affected_source_files = self._filter_source_file(
           affected_files, constants.TOOLS_TO_EXTENSIONS_MAP['jacoco'])
-    if self.use_javascript_coverage:
-      self._affected_javascript_source_files = self._filter_source_file(
+    elif self.use_javascript_coverage:
+      self._affected_source_files = self._filter_source_file(
           affected_files, constants.TOOLS_TO_EXTENSIONS_MAP['v8'])
 
   def _validate_test_types(self):
@@ -353,7 +350,6 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     self.set_is_per_cl_coverage(True)
 
     self.filter_and_set_affected_source_files(affected_files)
-
     self.m.file.ensure_directory('create .code-coverage',
                                  self.m.path['checkout'].join('.code-coverage'))
 
@@ -391,6 +387,10 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       return
 
     if self._is_per_cl_coverage:
+      if not self._affected_source_files:
+        self.m.step.empty(
+            'skip processing coverage data because no source file changed')
+        return
       unsupported_projects = self._get_unsupported_projects()
       if unsupported_projects:
         self.m.step.empty(
@@ -446,10 +446,6 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     """
     assert (tests and not binaries) or (not tests and binaries), \
         'One of tests or binaries must be provided'
-    if self._is_per_cl_coverage and not self._affected_source_files:
-      self.m.step.empty(
-          'skip processing coverage data because no source file changed')
-      return
 
     if not self.m.profiles.profile_subdirs:  # pragma: no cover.
       self.m.step.empty(
@@ -530,11 +526,6 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     Args:
       **kwargs: Kwargs for python and gsutil steps.
     """
-    if self._is_per_cl_coverage and not self._affected_source_files:
-      self.m.step.empty(
-          'skip processing coverage data because no source file changed')
-      return
-
     with self.m.step.nest('process java coverage (%s)' %
                           self._current_processing_test_type):
       try:
@@ -596,11 +587,6 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           raise
 
   def process_javascript_coverage_data(self):
-    if self._is_per_cl_coverage and not self._affected_javascript_source_files:
-      self.m.step.empty(
-          'skip processing coverage data because no source file changed')
-      return
-
     with self.m.step.nest('process javascript coverage'):
       try:
         coverage_dir = self.m.chromium.output_dir.join('devtools_code_coverage')
@@ -615,9 +601,9 @@ class CodeCoverageApi(recipe_api.RecipeApi):
 
         if self._is_per_cl_coverage:
           args.append('--source-files')
-          args.extend(self._affected_javascript_source_files)
+          args.extend(self._affected_source_files)
           self._generate_line_number_mapping_from_bot_to_gerrit(
-              self._affected_javascript_source_files, coverage_dir)
+              self._affected_source_files, coverage_dir)
           args.extend([
               '--diff-mapping-path',
               coverage_dir.join(
