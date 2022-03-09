@@ -166,16 +166,38 @@ _AddBuildSpec(
 
 # LUCI builder
 _AddBuildSpec(
+    'android-builder-perf-pgo',
+    'android',
+    target_bits=32,
+    bisect_archive_build=True)
+
+# LUCI builder
+_AddBuildSpec(
     'android_arm64-builder-perf',
     'android',
     target_bits=64,
     bisect_archive_build=True)
 
+_AddBuildSpec(
+    'android_arm64-builder-perf-pgo',
+    'android',
+    target_bits=64,
+    bisect_archive_build=True)
+
 _AddBuildSpec('win32-builder-perf', 'win', target_bits=32)
+_AddBuildSpec('win32-builder-perf-pgo', 'win', target_bits=32)
 _AddBuildSpec('win64-builder-perf', 'win', bisect_archive_build=True)
+_AddBuildSpec('win64-builder-perf-pgo', 'win', bisect_archive_build=True)
 _AddBuildSpec('mac-builder-perf', 'mac', bisect_archive_build=True)
+_AddBuildSpec('mac-builder-perf-pgo', 'mac', bisect_archive_build=True)
 _AddBuildSpec(
     'mac-arm-builder-perf',
+    'mac',
+    bisect_archive_build=True,
+    target_arch='arm',
+)
+_AddBuildSpec(
+    'mac-arm-builder-perf-pgo',
     'mac',
     bisect_archive_build=True,
     target_arch='arm',
@@ -204,6 +226,7 @@ SPEC.update({
 })
 
 _AddBuildSpec('linux-builder-perf', 'linux', bisect_archive_build=True)
+_AddBuildSpec('linux-builder-perf-pgo', 'linux', bisect_archive_build=True)
 _AddBuildSpec('linux-builder-perf-rel', 'linux')
 
 _AddBuildSpec(
