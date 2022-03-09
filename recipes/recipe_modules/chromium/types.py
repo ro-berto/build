@@ -23,6 +23,9 @@ class BuilderId(object):
   def create_for_group(cls, group, builder):
     return cls(group, builder)
 
+  def __str__(self):
+    return '{}:{}'.format(self.group, self.builder)
+
 
 @attrs()
 class BuilderSpec(FieldMapping):
