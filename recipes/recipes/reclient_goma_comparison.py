@@ -103,6 +103,10 @@ def ConfigureChromiumBuilder(api, recipe_config):
   for c in recipe_config.get('gclient_apply_config', []):
     api.gclient.apply_config(c)
 
+  if api.chromium.c.CROS_BOARDS_WITH_QEMU_IMAGES:
+    gclient_solution = api.gclient.c.solutions[0]
+    gclient_solution.custom_vars['cros_boards_with_qemu_images'] = (
+        api.chromium.c.CROS_BOARDS_WITH_QEMU_IMAGES)
   # Checkout chromium.
   api.bot_update.ensure_checkout()
 
