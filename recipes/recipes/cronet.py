@@ -43,8 +43,8 @@ BUILDERS = freeze({
         'chromium_apply_config': ['cronet_official'],
         # Explicitly set remote execution flags to avoid incorrect settings
         # during the goma->reclient migration.
-        'use_goma': True,
-        'use_reclient': False,
+        'use_goma': False,
+        'use_reclient': True,
     },
 })
 
