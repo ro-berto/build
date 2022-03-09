@@ -12,6 +12,8 @@ from RECIPE_MODULES.depot_tools.tryserver import api as tryserver
 from RECIPE_MODULES.build.chromium_tests_builder_config import try_spec
 from RECIPE_MODULES.build.chromium_orchestrator.api import (
     COMPILATOR_SWARMING_TASK_COLLECT_STEP)
+from RECIPE_MODULES.build.chromium_orchestrator.api import (
+    BUILD_CANCELED_SUMMARY)
 
 from PB.go.chromium.org.luci.resultdb.proto.v1 \
     import common as resultdb_common
@@ -216,6 +218,28 @@ def GenTests(api):
       api.post_process(post_process.MustRun,
                        'downloading cas digest all_test_binaries'),
       api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'sub_build_canceled_status_and_in_global_shutdown',
+      api.chromium.try_build(builder='linux-rel-orchestrator',),
+      api.properties(
+          **{
+              '$build/chromium_orchestrator':
+                  InputProperties(
+                      compilator='linux-rel-compilator',
+                      compilator_watcher_git_revision='e841fc',
+                  ),
+          }),
+      api.runtime.global_shutdown_on_step('compilator steps (with patch)'),
+      api.chromium_orchestrator.override_schedule_compilator_build(),
+      api.chromium_orchestrator.override_compilator_steps(
+          sub_build_status=common_pb.CANCELED, empty_props=True),
+      api.chromium_orchestrator.fake_head_revision(),
+      api.chromium_orchestrator.override_test_spec(),
+      api.post_process(post_process.ResultReasonRE, BUILD_CANCELED_SUMMARY),
+      api.post_process(post_process.StatusException),
       api.post_process(post_process.DropExpectation),
   )
 

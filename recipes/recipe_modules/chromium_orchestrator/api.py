@@ -15,6 +15,8 @@ PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 COMPILATOR_SWARMING_TASK_COLLECT_STEP = (
     'wait for compilator swarming task cleanup overhead')
 
+BUILD_CANCELED_SUMMARY = 'Build was canceled.'
+
 
 class ChromiumOrchestratorApi(recipe_api.RecipeApi):
 
@@ -423,7 +425,12 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
     # This condition should be rare as swarming only propagates
     # cancelations from parent -> child
     if sub_build.status == common_pb.CANCELED:
-      raise self.m.step.InfraFailure('Compilator was canceled')
+      if self.m.runtime.in_global_shutdown:
+        return None, result_pb2.RawResult(
+            status=common_pb.CANCELED, summary_markdown=BUILD_CANCELED_SUMMARY)
+      raise self.m.step.InfraFailure(
+          'Compilator was canceled before the parent orchestrator was canceled.'
+      )
 
     swarming_prop_key = 'swarming_trigger_properties'
     if is_swarming_phase and swarming_prop_key in sub_build.output.properties:
