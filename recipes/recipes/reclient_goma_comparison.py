@@ -18,7 +18,7 @@ PYTHON_VERSION_COMPATIBILITY = "PY3"
 DEPS = [
     'builder_group',
     'chromium',
-    'depot_tools/bot_update',
+    'chromium_checkout',
     'depot_tools/gclient',
     'isolate',
     'recipe_engine/buildbucket',
@@ -84,7 +84,7 @@ COMPARISON_BUILDERS = freeze({
             'CROS_BOARDS_WITH_QEMU_IMAGES': 'amd64-generic:amd64-generic-vm',
         },
         'simulation_platform': 'linux',
-        'targets': ['all'],
+        'targets': ['chrome'],
     },
 })
 
@@ -108,7 +108,7 @@ def ConfigureChromiumBuilder(api, recipe_config):
     gclient_solution.custom_vars['cros_boards_with_qemu_images'] = (
         api.chromium.c.CROS_BOARDS_WITH_QEMU_IMAGES)
   # Checkout chromium.
-  api.bot_update.ensure_checkout()
+  api.chromium_checkout.ensure_checkout()
 
 
 def RunSteps(api):
@@ -137,7 +137,7 @@ def RunSteps(api):
   # Do a first build and move the build artifact to the temp directory.
   builder_id = chromium.BuilderId.create_for_group(
       api.builder_group.for_current, buildername)
-  api.chromium.mb_gen(builder_id, phase='goma')
+  api.chromium.mb_gen(builder_id, phase='goma', recursive_lookup=True)
 
   raw_result = api.chromium.compile(
       targets, name='Goma build', use_goma_module=True)
@@ -147,7 +147,8 @@ def RunSteps(api):
   # Do the second build and move the build artifact to the temp directory.
   build_dir, target = None, None
 
-  api.chromium.mb_gen(builder_id, build_dir=build_dir, phase='reclient')
+  api.chromium.mb_gen(
+      builder_id, build_dir=build_dir, phase='reclient', recursive_lookup=True)
 
   raw_result = api.chromium.compile(
       targets,
