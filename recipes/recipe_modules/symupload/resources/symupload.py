@@ -161,14 +161,6 @@ def main(args):
                                        symupload_binary_path, dump_inline)
       if return_code != 0:
         result = return_code
-        # crbug.com/1290471: We still see occasional timeouts as a result of
-        # --i. Adding a retry helps prevent failing the build.
-        if dump_inline:
-          print('WARNING: Failed to upload when --i is provided, fallback to '
-                'try again without --i')
-          result = upload_symbol_file(args.platform, artifact,
-                                      args.artifact_type, url, api_key,
-                                      symupload_binary_path, False)
 
   return result
 

@@ -3,7 +3,9 @@
 # found in the LICENSE file.
 
 import base64
-from recipe_engine import recipe_api
+import datetime
+import logging
+from recipe_engine import recipe_api, util
 
 from PB.recipe_modules.build.symupload import properties as symupload_properties
 
@@ -219,13 +221,21 @@ class SymuploadApi(recipe_api.RecipeApi):
             self.m.file.write_raw('write encrypted api key', input_api_key,
                                   api_key_data)
 
-            self.symupload_v2(
-                artifacts=uploads,
-                artifact_type=symupload_data.artifact_type,
-                encrypted_key_path=input_api_key,
-                kms_key_path=symupload_data.kms_key_path,
-                server_url=symupload_data.url,
-                symupload_binary=symupload_binary)
+            # (crbug.com/1295894) Add retry to symupload_v2 step to mitigate
+            # flaky http request errors.
+            @util.exponential_retry(
+                retries=3, delay=datetime.timedelta(seconds=30))
+            def _retry_symupload():
+              logging.disable('ERROR')
+              self.symupload_v2(
+                  artifacts=uploads,
+                  artifact_type=symupload_data.artifact_type,
+                  encrypted_key_path=input_api_key,
+                  kms_key_path=symupload_data.kms_key_path,
+                  server_url=symupload_data.url,
+                  symupload_binary=symupload_binary)
+
+            _retry_symupload()
           else:
             # We'll continue to invoke the binary directly for V1.
             # TODO: Note that V1 is deprecated and will be removed once all
