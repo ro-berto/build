@@ -56,6 +56,9 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     # Determines whether a component mapping should be used for non-per-cl
     # coverage runs.
     self._include_component_mapping = True
+    # Absolute path to the file containing line number mappings from bot
+    # version of files to gerrit version
+    self._bot_to_gerrit_mapping_file = None
 
   @property
   def use_clang_coverage(self):
@@ -103,6 +106,34 @@ class CodeCoverageApi(recipe_api.RecipeApi):
         'ensure metadata dir for %s tests' % self._current_processing_test_type,
         metadata_test_type_dir)
     return metadata_test_type_dir
+
+  @property
+  def bot_to_gerrit_mapping_file(self):
+    """Generates the line number mapping from bot to Gerrit.
+
+    In order to correctly display the (un)covered line numbers on Gerrit.
+    Per-cl metadata's line numbers need to be rebased because the base
+    revision of the change in this build is different from the one on Gerrit.
+
+    The mapping get's generated and stored on the first access to the property.
+    """
+    if not self._bot_to_gerrit_mapping_file:
+      output_dir = self.m.path.mkdtemp()
+      gerrit_change = self.m.buildbucket.build.input.gerrit_changes[0]
+      local_to_gerrit_diff_mapping_file = output_dir.join(
+          constants.BOT_TO_GERRIT_LINE_NUM_MAPPING_FILE_NAME)
+      self.m.python(
+          'generate line number mapping from bot to Gerrit',
+          self.resource('rebase_line_number_from_bot_to_gerrit.py'),
+          args=[
+              '--host', gerrit_change.host, '--project', gerrit_change.project,
+              '--change', gerrit_change.change, '--patchset',
+              gerrit_change.patchset, '--src-path', self.m.path['checkout'],
+              '--output-file', local_to_gerrit_diff_mapping_file
+          ] + self._affected_source_files,
+          stdout=self.m.json.output())
+      self._bot_to_gerrit_mapping_file = local_to_gerrit_diff_mapping_file
+    return self._bot_to_gerrit_mapping_file
 
   def _compose_current_mimic_builder_name(self):
     """Current mimic builder name composed from the test type being processed.
@@ -544,13 +575,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
         if self._is_per_cl_coverage:
           args.append('--source-files')
           args.extend(self._affected_source_files)
-          self._generate_line_number_mapping_from_bot_to_gerrit(
-              self._affected_source_files, coverage_dir)
-          args.extend([
-              '--diff-mapping-path',
-              coverage_dir.join(
-                  constants.BOT_TO_GERRIT_LINE_NUM_MAPPING_FILE_NAME),
-          ])
+          args.extend(['--diff-mapping-path', self.bot_to_gerrit_mapping_file])
         else:
           dir_metadata_path = self._generate_dir_metadata()
           args.extend([
@@ -602,13 +627,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
         if self._is_per_cl_coverage:
           args.append('--source-files')
           args.extend(self._affected_source_files)
-          self._generate_line_number_mapping_from_bot_to_gerrit(
-              self._affected_source_files, coverage_dir)
-          args.extend([
-              '--diff-mapping-path',
-              coverage_dir.join(
-                  constants.BOT_TO_GERRIT_LINE_NUM_MAPPING_FILE_NAME),
-          ])
+          args.extend(['--diff-mapping-path', self.bot_to_gerrit_mapping_file])
         else:
           dir_metadata_path = self._generate_dir_metadata()
           args.extend([
@@ -892,17 +911,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       args.append('--sources')
       args.extend(self._affected_source_files)
 
-      # In order to correctly display the (un)covered line numbers on Gerrit.
-      # Per-cl metadata's line numbers need to be rebased because the base
-      # revision of the change in this build is different from the one on
-      # Gerrit.
-      self._generate_line_number_mapping_from_bot_to_gerrit(
-          self._affected_source_files, self.metadata_dir)
-      args.extend([
-          '--diff-mapping-path',
-          self.metadata_dir.join(
-              constants.BOT_TO_GERRIT_LINE_NUM_MAPPING_FILE_NAME)
-      ])
+      args.extend(['--diff-mapping-path', self.bot_to_gerrit_mapping_file])
     else:
       args.extend(['--exclusion-pattern', constants.EXCLUDED_FILE_REGEX])
       args.append('--third-party-inclusion-subdirs')
@@ -939,27 +948,3 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       self._coverage_metadata_gs_paths.append(gs_path)
       self._mimic_builder_names.append(
           self._compose_current_mimic_builder_name())
-
-  def _generate_line_number_mapping_from_bot_to_gerrit(self, source_files,
-                                                       output_dir):
-    """Generates the line number mapping from bot to Gerrit.
-
-    Args:
-      source_files: List of source files to generate line number mapping for,
-                    the paths are relative to the checkout path.
-      output_dir: The output directory to store
-                  constants.BOT_TO_GERRIT_LINE_NUM_MAPPING_FILE_NAME.
-    """
-    gerrit_change = self.m.buildbucket.build.input.gerrit_changes[0]
-    local_to_gerrit_diff_mapping_file = output_dir.join(
-        constants.BOT_TO_GERRIT_LINE_NUM_MAPPING_FILE_NAME)
-    self.m.python(
-        'generate line number mapping from bot to Gerrit',
-        self.resource('rebase_line_number_from_bot_to_gerrit.py'),
-        args=[
-            '--host', gerrit_change.host, '--project', gerrit_change.project,
-            '--change', gerrit_change.change, '--patchset',
-            gerrit_change.patchset, '--src-path', self.m.path['checkout'],
-            '--output-file', local_to_gerrit_diff_mapping_file
-        ] + source_files,
-        stdout=self.m.json.output())
