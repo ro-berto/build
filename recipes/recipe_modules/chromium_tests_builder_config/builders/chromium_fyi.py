@@ -257,6 +257,7 @@ SPEC = {
                 'TARGET_BITS': 64,
                 'TARGET_PLATFORM': 'linux',
             },
+            gclient_apply_config=['enable_reclient'],
             simulation_platform='linux',
             test_results_config='staging_server',
         ),
@@ -820,6 +821,7 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
+            gclient_apply_config=['enable_reclient'],
             simulation_platform='linux',
         ),
     'mac-upload-perfetto':
@@ -1320,12 +1322,15 @@ SPEC.update([
         'linux-chromeos-annotator-rel', gclient_apply_config=['chromeos']),
     stock_config(
         'linux-ash-chromium-builder-fyi-rel',
-        gclient_apply_config=['chromeos']),
+        gclient_apply_config=['chromeos', 'enable_reclient']),
     stock_config('linux-blink-animation-use-time-delta', config='Debug'),
     stock_config(
         'linux-blink-heap-verification',
         gclient_apply_config=['enable_reclient']),
-    stock_config('linux-blink-v8-sandbox-future-dbg', config='Debug'),
+    stock_config(
+        'linux-blink-v8-sandbox-future-dbg',
+        config='Debug',
+        gclient_apply_config=['enable_reclient']),
     stock_config('linux-fieldtrial-rel'),
     stock_config('linux-gcc-rel', gclient_apply_config=['enable_reclient']),
     stock_config(

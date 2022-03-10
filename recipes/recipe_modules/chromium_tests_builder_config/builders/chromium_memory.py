@@ -269,6 +269,7 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
+            gclient_apply_config=['enable_reclient'],
             simulation_platform='linux',
         ),
     'win-asan':
