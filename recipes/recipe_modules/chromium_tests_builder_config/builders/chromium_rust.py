@@ -5,7 +5,7 @@
 from .. import builder_spec
 
 
-def CreateAndroidBuilder():
+def CreateAndroidReleaseBuilder():
   return builder_spec.BuilderSpec.create(
       chromium_config='android',
       chromium_apply_config=['android'],
@@ -24,7 +24,26 @@ def CreateAndroidBuilder():
   )
 
 
-def CreateLinuxBuilder():
+def CreateAndroidDebugBuilder():
+  return builder_spec.BuilderSpec.create(
+      chromium_config='android',
+      chromium_apply_config=['android'],
+      gclient_config='chromium',
+      gclient_apply_config=[
+          'android', 'enable_reclient', 'checkout_clang_libs'
+      ],
+      chromium_config_kwargs={
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+      },
+      android_config='base_config',
+      simulation_platform='linux',
+  )
+
+
+def CreateLinuxReleaseBuilder():
   return builder_spec.BuilderSpec.create(
       chromium_config='chromium',
       chromium_apply_config=['mb'],
@@ -32,6 +51,20 @@ def CreateLinuxBuilder():
       gclient_apply_config=['checkout_clang_libs'],
       chromium_config_kwargs={
           'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+      },
+      simulation_platform='linux',
+  )
+
+
+def CreateLinuxDebugBuilder():
+  return builder_spec.BuilderSpec.create(
+      chromium_config='chromium',
+      chromium_apply_config=['mb'],
+      gclient_config='chromium',
+      gclient_apply_config=['checkout_clang_libs'],
+      chromium_config_kwargs={
+          'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
       },
       simulation_platform='linux',
@@ -53,7 +86,9 @@ def CreateLinuxInTreeToolchainBuilder():
 
 
 SPEC = {
-    'linux-rust-x64-rel': CreateLinuxBuilder(),
+    'linux-rust-x64-dbg': CreateLinuxDebugBuilder(),
+    'linux-rust-x64-rel': CreateLinuxReleaseBuilder(),
     'linux-rust-intree-x64-rel': CreateLinuxInTreeToolchainBuilder(),
-    'android-rust-arm-rel': CreateAndroidBuilder(),
+    'android-rust-arm-dbg': CreateAndroidDebugBuilder(),
+    'android-rust-arm-rel': CreateAndroidReleaseBuilder(),
 }

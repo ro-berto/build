@@ -2120,10 +2120,20 @@ TRYBOTS = try_spec.TryDatabase.create({
     },
     # Rust language bots
     'tryserver.chromium.rust': {
+        'android-rust-arm-dbg':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.rust',
+                buildername='android-rust-arm-dbg',
+            ),
         'android-rust-arm-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.rust',
                 buildername='android-rust-arm-rel',
+            ),
+        'linux-rust-x64-dbg':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.rust',
+                buildername='linux-rust-x64-dbg',
             ),
         'linux-rust-x64-rel':
             try_spec.TrySpec.create_for_single_mirror(
