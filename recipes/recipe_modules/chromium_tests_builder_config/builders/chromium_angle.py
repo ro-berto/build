@@ -125,6 +125,8 @@ def CreateBuilderConfig(platform, target_bits, internal):
   ]
   if internal:
     gclient_apply_config += ['angle_internal']
+  if platform == 'linux':
+    gclient_apply_config += ['enable_reclient']
   return _chromium_angle_spec(
       gclient_apply_config=gclient_apply_config,
       chromium_config='chromium',
