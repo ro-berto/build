@@ -26,7 +26,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     # Temp dir for metadata
     self._metadata_dir = None
     # When set, subset of source files to include in the coverage report.
-    self._affected_source_files = []
+    self._eligible_files = []
     # When set, indicates that current context is per-cl coverage for try jobs.
     self._is_per_cl_coverage = False
     # The list of profdata gs paths to be uploaded.
@@ -130,7 +130,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
               '--change', gerrit_change.change, '--patchset',
               gerrit_change.patchset, '--src-path', self.m.path['checkout'],
               '--output-file', local_to_gerrit_diff_mapping_file
-          ] + self._affected_source_files,
+          ] + self._eligible_files,
           stdout=self.m.json.output())
       self._bot_to_gerrit_mapping_file = local_to_gerrit_diff_mapping_file
     return self._bot_to_gerrit_mapping_file
@@ -293,40 +293,41 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     return sorted(binaries, key=str)
 
 
-  def _filter_source_file(self, file_paths, extensions):
-    """Filters source files with valid extensions.
+  def filter_and_set_eligible_files(self, candidate_files):
+    """Filter candidate_files and assigns them to self._eligible_files
 
     Args:
-      file_paths: A list of string file paths relative to the checkout path.
-      extensions: A list of extensions to filter source files.
-
-    Returns:
-      A sub-list of the input with valid extensions.
-    """
-    source_files = []
-    for file_path in file_paths:
-      if any([file_path.endswith(extension) for extension in extensions]):
-        source_files.append(file_path)
-
-    return source_files
-
-  def filter_and_set_affected_source_files(self, affected_files):
-    """Filter affected_files and assigns them to self._affected_source_files
-
-    Args:
-      affected_files: A list of string file paths relative to the checkout path
+      candidate_files: A list of string file paths relative to the checkout path
 
     Returns: None
     """
+
+    def _filter_source_file(file_paths, extensions):
+      """Filters source files with valid extensions.
+
+      Args:
+        file_paths: A list of string file paths relative to the checkout path.
+        extensions: A list of extensions to filter source files.
+
+      Returns:
+        A sub-list of the input with valid extensions.
+      """
+      source_files = []
+      for file_path in file_paths:
+        if any([file_path.endswith(extension) for extension in extensions]):
+          source_files.append(file_path)
+
+      return source_files
+
     if self.use_clang_coverage:
-      self._affected_source_files = self._filter_source_file(
-          affected_files, constants.TOOLS_TO_EXTENSIONS_MAP['clang'])
+      self._eligible_files = _filter_source_file(
+          candidate_files, constants.TOOLS_TO_EXTENSIONS_MAP['clang'])
     elif self.use_java_coverage:
-      self._affected_source_files = self._filter_source_file(
-          affected_files, constants.TOOLS_TO_EXTENSIONS_MAP['jacoco'])
+      self._eligible_files = _filter_source_file(
+          candidate_files, constants.TOOLS_TO_EXTENSIONS_MAP['jacoco'])
     elif self.use_javascript_coverage:
-      self._affected_source_files = self._filter_source_file(
-          affected_files, constants.TOOLS_TO_EXTENSIONS_MAP['v8'])
+      self._eligible_files = _filter_source_file(
+          candidate_files, constants.TOOLS_TO_EXTENSIONS_MAP['v8'])
 
   def _validate_test_types(self):
     """Validates that test type to process in build is supported."""
@@ -348,30 +349,30 @@ class CodeCoverageApi(recipe_api.RecipeApi):
         self._is_per_cl_coverage)
 
   def instrument(self,
-                 affected_files,
+                 candidate_files,
                  output_dir=None,
                  is_deps_only_change=False):
     """Saves source paths to generate coverage instrumentation for to a file.
 
     Args:
-      affected_files (list of str): paths to the files we want to instrument,
+      candidate_files (list of str): paths to the files we want to instrument,
           relative to the checkout path.
     """
-    if len(affected_files) > 200:
+    if len(candidate_files) > 200:
       # Skip instrumentation if there are too many files because:
       # 1. They cause problems such as crash due to too many cmd line arguments.
       # 2. These CLs typically does mechanial refactorings, and coverage
       #    information is useless.
       # 3. Has non-trivial performance implications in terms of CQ cycle time.
-      affected_files = []
+      candidate_files = []
       self.m.step.empty(
           'skip instrumenting code coverage because >200 files are modified')
     if is_deps_only_change:
       # Skip instrumentation if current change is a DEPS only change.
-      # This is because code_coverage recipe module expects affected_files to
+      # This is because code_coverage recipe module expects candidate_files to
       # belong to a chromium checkout, and in case of DEPS only change
-      # affected_files belong to third party code.
-      affected_files = []
+      # candidate_files belong to third party code.
+      candidate_files = []
       self.m.step.empty(
           'Skip instrumentating code coverage because DEPS only change')
 
@@ -380,7 +381,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
 
     self.set_is_per_cl_coverage(True)
 
-    self.filter_and_set_affected_source_files(affected_files)
+    self.filter_and_set_eligible_files(candidate_files)
     self.m.file.ensure_directory('create .code-coverage',
                                  self.m.path['checkout'].join('.code-coverage'))
 
@@ -395,7 +396,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
             self.m.path['checkout'],
             '--build-path',
             output_dir,
-        ] + self._affected_source_files,
+        ] + self._eligible_files,
         stdout=self.m.raw_io.output_text(add_output_log=True))
 
   def process_coverage_data(self, tests):
@@ -418,7 +419,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       return
 
     if self._is_per_cl_coverage:
-      if not self._affected_source_files:
+      if not self._eligible_files:
         self.m.step.empty(
             'skip processing coverage data because no source file changed')
         return
@@ -574,7 +575,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
 
         if self._is_per_cl_coverage:
           args.append('--source-files')
-          args.extend(self._affected_source_files)
+          args.extend(self._eligible_files)
           args.extend(['--diff-mapping-path', self.bot_to_gerrit_mapping_file])
         else:
           dir_metadata_path = self._generate_dir_metadata()
@@ -626,7 +627,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
 
         if self._is_per_cl_coverage:
           args.append('--source-files')
-          args.extend(self._affected_source_files)
+          args.extend(self._eligible_files)
           args.extend(['--diff-mapping-path', self.bot_to_gerrit_mapping_file])
         else:
           dir_metadata_path = self._generate_dir_metadata()
@@ -717,7 +718,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       A list of absolute paths to the binaries with valid coverage data.
     """
     if not (self.m.buildbucket.build.builder.bucket == 'try' and
-            self._is_per_cl_coverage and self._affected_source_files):
+            self._is_per_cl_coverage and self._eligible_files):
       # Only gets binaries with valid coverage data for per-cl coverage.
       return binaries
 
@@ -748,7 +749,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     the appropriate bucket.
     """
     if not (self.m.buildbucket.build.builder.bucket == 'try' and
-            self._is_per_cl_coverage and self._affected_source_files):
+            self._is_per_cl_coverage and self._eligible_files):
       # Only upload html report for CQ coverage bots.
       return
 
@@ -759,8 +760,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     ]
     args.extend(binaries)
     args.append('--sources')
-    args.extend(
-        [self.m.path['checkout'].join(s) for s in self._affected_source_files])
+    args.extend([self.m.path['checkout'].join(s) for s in self._eligible_files])
 
     if self.platform == 'ios':
       args.extend(['--arch', 'x86_64'])
@@ -909,8 +909,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     args.extend(binaries)
     if self._is_per_cl_coverage:
       args.append('--sources')
-      args.extend(self._affected_source_files)
-
+      args.extend(self._eligible_files)
       args.extend(['--diff-mapping-path', self.bot_to_gerrit_mapping_file])
     else:
       args.extend(['--exclusion-pattern', constants.EXCLUDED_FILE_REGEX])
