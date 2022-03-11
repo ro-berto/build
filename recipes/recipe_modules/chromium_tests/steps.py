@@ -124,6 +124,75 @@ class TestOptions(object):
     return self._test_filter
 
 
+class BaseTestArguments(object):
+  """Base class for supported test arguments.
+
+  The values are used when translating TestOptions into arguments, as different
+  test types use different arguments.
+
+  Arguments:
+    * filter_arg: (str) argument used to specify test filters.
+    * filter_delimiter: (str) the delimiter used when listing tests for the test
+        filter, usually one of ':' or '::'.
+    * repeat_arg: (str) argument used to define how many times to repeat tests.
+    * retry_limit_arg: (str) argument used to define the upper limit of retries.
+        supported only for GTest.
+    * run_disabled_arg: (str) flag used to run disabled tests. supported only
+        by GTest.
+    * batch_limit_arg: (str) gtest specific argument to set how many tests to
+        run in a given shard. TestOptions will use this to run tests in
+        isolation by setting the value to 1.
+  """
+
+  def __init__(self,
+               filter_arg=None,
+               filter_delimiter=None,
+               repeat_arg=None,
+               retry_limit_arg=None,
+               run_disabled_arg=None,
+               batch_limit_arg=None):
+    super(BaseTestArguments, self).__init__()
+    self.filter_arg = filter_arg
+    self.filter_delimiter = filter_delimiter
+    self.repeat_arg = repeat_arg
+    self.retry_limit_arg = retry_limit_arg
+    self.run_disabled_arg = run_disabled_arg
+    self.batch_limit_arg = batch_limit_arg
+
+
+class GTestArguments(BaseTestArguments):
+  """Arguments specific to GTests"""
+
+  def __init__(self):
+    super(GTestArguments, self).__init__(
+        filter_arg='--gtest_filter',
+        filter_delimiter=':',
+        repeat_arg='--gtest_repeat',
+        retry_limit_arg='--test-launcher-retry-limit',
+        run_disabled_arg='--gtest_also_run_disabled_tests',
+        batch_limit_arg='--test-launcher-batch-limit',
+    )
+
+
+class IsolatedScriptTestArguments(BaseTestArguments):
+  """Arguments specific to IsolatedScriptTests"""
+
+  def __init__(self):
+    super(IsolatedScriptTestArguments, self).__init__(
+        filter_arg='--isolated-script-test-filter',
+        filter_delimiter='::',
+        repeat_arg='--isolated-script-test-repeat')
+
+  def override_into_gtest_args(self):
+    """Overrides IsolatedScriptArguments into GTest arguments"""
+    gtest_args = GTestArguments()
+    self.filter_arg = gtest_args.filter_arg
+    self.filter_delimiter = gtest_args.filter_delimiter
+    self.repeat_arg = gtest_args.repeat_arg
+    self.retry_limit_arg = gtest_args.retry_limit_arg
+    self.run_disabled_arg = gtest_args.run_disabled_arg
+
+
 def _merge_arg(args, flag, value):
   args = [a for a in args if not a.startswith(flag)]
   if value is not None:
@@ -131,21 +200,10 @@ def _merge_arg(args, flag, value):
   else:
     return args + [flag]
 
-
-def _supports_test_arguments(test):
-  if isinstance(test, (SwarmingGTestTest, LocalGTestTest)):
-    return True
-  if (isinstance(test,
-                 (SwarmingIsolatedScriptTest, LocalIsolatedScriptTest)) and
-      'blink_web_tests' in test.target_name):
-    return True
-
-  return (test.api.m.chromium.c and
-          test.api.m.chromium.c.TARGET_PLATFORM == 'ios')
-
-
 def _merge_args_and_test_options(test, args, options):
   """Adds args from test options.
+
+  Args are derived from TestArguments that test classes inherit.
 
   Args:
     test: A test suite. An instance of a subclass of Test.
@@ -157,23 +215,18 @@ def _merge_args_and_test_options(test, args, options):
     The extended list of args.
   """
   args = list(args)
+  if test.filter_arg and test.filter_delimiter and options.test_filter:
+    args = _merge_arg(args, test.filter_arg,
+                      test.filter_delimiter.join(options.test_filter))
+  if test.repeat_arg and options.repeat_count and options.repeat_count > 1:
+    args = _merge_arg(args, test.repeat_arg, options.repeat_count)
+  if test.retry_limit_arg and options.retry_limit is not None:
+    args = _merge_arg(args, test.retry_limit_arg, options.retry_limit)
+  if test.run_disabled_arg and options.run_disabled:
+    args = _merge_arg(args, test.run_disabled_arg, value=None)
+  if test.batch_limit_arg and options._force_independent_tests:
+    args = _merge_arg(args, test.batch_limit_arg, 1)
 
-  if not _supports_test_arguments(test):
-    # The args that are being merged by this function are only supported
-    # by gtest and blink_web_tests.
-    return args
-
-  if options.test_filter:
-    args = _merge_arg(args, '--gtest_filter', ':'.join(options.test_filter))
-  if options.repeat_count and options.repeat_count > 1:
-    args = _merge_arg(args, '--gtest_repeat', options.repeat_count)
-  if options.retry_limit is not None:
-    args = _merge_arg(args, '--test-launcher-retry-limit', options.retry_limit)
-  if options.run_disabled:
-    args = _merge_arg(args, '--gtest_also_run_disabled_tests', value=None)
-  if options._force_independent_tests:
-    if isinstance(test, (SwarmingGTestTest, LocalGTestTest)):
-      args = _merge_arg(args, '--test-launcher-batch-limit', 1)
   return args
 
 
@@ -1550,7 +1603,7 @@ class LocalGTestTestSpec(TestSpec):
     return LocalGTestTest
 
 
-class LocalGTestTest(LocalTest):
+class LocalGTestTest(LocalTest, GTestArguments):
 
   def __init__(self, spec, chromium_tests_api):
     super(LocalGTestTest, self).__init__(spec, chromium_tests_api)
@@ -2247,7 +2300,7 @@ class SwarmingGTestTestSpec(SwarmingTestSpec):
     return SwarmingGTestTest
 
 
-class SwarmingGTestTest(SwarmingTest):
+class SwarmingGTestTest(SwarmingTest, GTestArguments):
 
   def __init__(self, spec, chromium_tests_api):
     super(SwarmingGTestTest, self).__init__(spec, chromium_tests_api)
@@ -2345,12 +2398,18 @@ class LocalIsolatedScriptTestSpec(TestSpec):
     return LocalIsolatedScriptTest
 
 
-class LocalIsolatedScriptTest(LocalTest):
+class LocalIsolatedScriptTest(LocalTest, IsolatedScriptTestArguments):
 
   def __init__(self, spec, chromium_tests_api):
     super(LocalIsolatedScriptTest, self).__init__(spec, chromium_tests_api)
     self._raw_cmd = []
     self._relative_cwd = None
+    # webkit_layout_tests were renamed to blink_web_tests, which only supports
+    # gtest style arguments. See crbug/831345 and crrev/c/1006067 for details.
+    # batch limit was never supported for webkit_layout_tests, so we'll exclude
+    # override of that variable.
+    if 'blink_web_tests' in self.target_name:
+      self.override_into_gtest_args()
 
   @property
   def raw_cmd(self):
@@ -2499,11 +2558,17 @@ class SwarmingIsolatedScriptTestSpec(SwarmingTestSpec):
     return SwarmingIsolatedScriptTest
 
 
-class SwarmingIsolatedScriptTest(SwarmingTest):
+class SwarmingIsolatedScriptTest(SwarmingTest, IsolatedScriptTestArguments):
 
   def __init__(self, spec, chromium_tests_api):
     super(SwarmingIsolatedScriptTest, self).__init__(spec, chromium_tests_api)
     self._isolated_script_results = None
+    # webkit_layout_tests were renamed to blink_web_tests, which only supports
+    # gtest style arguments. See crbug/831345 and crrev/c/1006067 for details.
+    # batch limit was never supported for webkit_layout_tests, so we'll exclude
+    # override of that variable.
+    if 'blink_web_tests' in self.target_name:
+      self.override_into_gtest_args()
 
   def compile_targets(self):
     return self.spec.override_compile_targets or [self.target_name]

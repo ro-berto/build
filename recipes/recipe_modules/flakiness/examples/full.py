@@ -356,6 +356,7 @@ def GenTests(api):
                                  ),
                                  failure=False)),
       api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
   )
 
   tags = resultdb_common.StringPair(key='test_name', value='Test:Test1')

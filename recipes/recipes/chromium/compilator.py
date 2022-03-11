@@ -592,7 +592,6 @@ def GenTests(api):
               orchestrator=InputProperties.Orchestrator(
                   builder_name='linux-rel-orchestrator',
                   builder_group='tryserver.chromium.linux'))),
-      # api.filter.suppress_analyze(),
       override_test_spec(),
       # This additional analyze step is run by the flakiness module to ensure
       # that there's a test file change associated with the patch.
