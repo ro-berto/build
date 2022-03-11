@@ -68,6 +68,16 @@ COMPARISON_BUILDERS = freeze({
         'platform': 'win',
         'targets': ['all'],
     },
+    'Comparison Windows (8 cores) (reclient)': {
+        'chromium_config': 'chromium',
+        'gclient_config': 'chromium',
+        'chromium_apply_config': [
+            'mb', 'goma_enable_cache_silo', 'goma_large_cache_file'
+        ],
+        'gclient_apply_config': ['enable_reclient', 'reclient_test'],
+        'platform': 'win',
+        'targets': ['all'],
+    },
     'Comparison Simple Chrome (reclient)': {
         'chromium_config': 'chromium',
         'gclient_config': 'chromium',
