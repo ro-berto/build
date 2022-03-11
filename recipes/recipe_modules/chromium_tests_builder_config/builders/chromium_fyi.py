@@ -511,6 +511,7 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
+            gclient_apply_config=['enable_reclient'],
             execution_mode=builder_spec.COMPILE_AND_TEST,
             simulation_platform='linux',
         ),
@@ -1295,6 +1296,7 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
+            gclient_apply_config=['enable_reclient'],
             execution_mode=builder_spec.COMPILE_AND_TEST,
             simulation_platform='linux',
         ),
@@ -1344,13 +1346,20 @@ SPEC.update([
         'linux-lacros-tester-fyi-rel',
         execution_mode=builder_spec.TEST,
         parent_buildername='linux-lacros-builder-fyi-rel'),
-    stock_config('linux-perfetto-rel'),
+    stock_config(
+        'linux-perfetto-rel', gclient_apply_config=['enable_reclient']),
     stock_config('linux-tcmalloc-rel'),
-    stock_config('linux-wpt-fyi-rel'),
+    stock_config('linux-wpt-fyi-rel', gclient_apply_config=['enable_reclient']),
     # Despite the FYI name, these are the "MVP bots" used by teams:
     # https://source.chromium.org/chromium/chromium/src/+/main:docs/testing/web_platform_tests_wptrunner.md;l=64;drc=5ce5d37c5ebfbd3b658f1f68173be7573a95d0ea
-    stock_config('linux-wpt-identity-fyi-rel', staging=False),
-    stock_config('linux-wpt-input-fyi-rel', staging=False),
+    stock_config(
+        'linux-wpt-identity-fyi-rel',
+        staging=False,
+        gclient_apply_config=['enable_reclient']),
+    stock_config(
+        'linux-wpt-input-fyi-rel',
+        staging=False,
+        gclient_apply_config=['enable_reclient']),
     stock_config('mac-hermetic-upgrade-rel'),
     stock_config('win-annotator-rel'),
     stock_config('win-pixel-builder-rel'),

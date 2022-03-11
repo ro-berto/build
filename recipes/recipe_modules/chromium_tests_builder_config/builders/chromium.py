@@ -237,7 +237,7 @@ SPEC = {
                 'mb',
             ],
             gclient_config='chromium',
-            gclient_apply_config=['checkout_pgo_profiles'],
+            gclient_apply_config=['checkout_pgo_profiles', 'enable_reclient'],
             chromium_config_kwargs={
                 'TARGET_BITS': 64,
             },
