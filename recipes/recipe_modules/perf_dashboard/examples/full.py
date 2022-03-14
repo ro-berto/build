@@ -45,12 +45,14 @@ def RunSteps(api):
 
 def GenTests(api):
   for platform in ('linux', 'win', 'mac'):
-    yield api.test(
-        platform,
-        api.platform.name(platform),
-        api.builder_group.for_current('client.dart.fyi'),
-        api.properties(
-            bot_id='multivm-windows-release',
-            buildername='multivm-windows-perf-be',
-            buildnumber=75),
-    )
+    for staging in (True, False):
+      yield api.test(
+          platform + ('-staging' if staging else ''),
+          api.platform.name(platform),
+          api.builder_group.for_current('client.dart.fyi'),
+          api.properties(
+              bot_id='multivm-windows-release',
+              buildername='multivm-windows-perf-be',
+              buildnumber=75,
+              staging=staging),
+      )

@@ -7,9 +7,18 @@ from six.moves.urllib.parse import urlencode
 
 from recipe_engine import recipe_api
 
+CHROMEPERF_URL = 'https://chromeperf.appspot.com'
+CHROMEPERF_STAGING_URL = 'https://chromeperf-stage.uc.r.appspot.com/'
+PINPOINT_URL = 'https://pinpoint-dot-chromeperf.appspot.com'
+PINPOINT_STAGING_URL = 'https://pinpoint-dot-chromeperf-stage.uc.r.appspot.com/'
 
-_BASE_URL = 'https://chromeperf.appspot.com'
-_PINPOINT_BASE_URL = 'https://pinpoint-dot-chromeperf.appspot.com'
+
+def _get_base_url(is_staging):
+  return CHROMEPERF_STAGING_URL if is_staging else CHROMEPERF_URL
+
+
+def _get_pinpoint_base_url(is_staging):
+  return PINPOINT_STAGING_URL if is_staging else PINPOINT_URL
 
 
 class PerfDashboardApi(recipe_api.RecipeApi):
@@ -59,15 +68,17 @@ class PerfDashboardApi(recipe_api.RecipeApi):
         ('tests', test),
         ('rev', revision),
     ])
-    presentation.links['Results Dashboard'] = (
-        '%s/report?%s' % (_BASE_URL, params))
+    base_url = _get_base_url(self.m.properties.get('staging', False))
+    presentation.links['Results Dashboard'] = ('%s/report?%s' %
+                                               (base_url, params))
 
   def set_default_config(self):
     # TODO: Remove.
     pass
 
   def add_point(self, data, halt_on_failure=False, name=None, **kwargs):
-    return self.post(name or 'perf dashboard post', '%s/add_point' % _BASE_URL,
+    base_url = _get_base_url(self.m.properties.get('staging', False))
+    return self.post(name or 'perf dashboard post', '%s/add_point' % base_url,
                      {'data': self.m.json.dumps(data)}, halt_on_failure,
                      **kwargs)
 
@@ -79,9 +90,11 @@ class PerfDashboardApi(recipe_api.RecipeApi):
         'isolate_server': isolate_server,
         'isolate_map': self.m.json.dumps(isolate_map),
     }
+    pinpoint_base_url = _get_pinpoint_base_url(
+        self.m.properties.get('staging', False))
     return self.post('pinpoint isolate upload',
-                     '%s/api/isolate' % _PINPOINT_BASE_URL,
-                     data, halt_on_failure, **kwargs)
+                     '%s/api/isolate' % pinpoint_base_url, data,
+                     halt_on_failure, **kwargs)
 
 
   def get_change_info(self, commits):

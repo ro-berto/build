@@ -1,0 +1,37 @@
+[
+  {
+    "cmd": [
+      "luci-auth",
+      "token",
+      "-lifetime",
+      "3m"
+    ],
+    "infra_step": true,
+    "name": "get access token for default account"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::perf_dashboard]\\resources\\post_json.py",
+      "https://chromeperf-stage.uc.r.appspot.com//add_point",
+      "-i",
+      "{\"data\": \"[{\\\"bot\\\": \\\"multivm-windows-perf-be\\\", \\\"buildername\\\": \\\"multivm-windows-perf-be\\\", \\\"buildnumber\\\": 75, \\\"error\\\": \\\"0.5\\\", \\\"master\\\": \\\"client.dart.fyi\\\", \\\"masterid\\\": \\\"client.dart.fyi\\\", \\\"revision\\\": 33241, \\\"supplemental_columns\\\": {\\\"d_supplemental\\\": \\\"167808\\\"}, \\\"test\\\": \\\"sunspider/string-unpack-code/ref\\\", \\\"units\\\": \\\"ms\\\", \\\"value\\\": \\\"18.5\\\"}, {\\\"bot\\\": \\\"multivm-windows-perf-be\\\", \\\"buildername\\\": \\\"multivm-windows-perf-be\\\", \\\"buildnumber\\\": 75, \\\"error\\\": \\\"0.4898\\\", \\\"master\\\": \\\"client.dart.fyi\\\", \\\"masterid\\\": \\\"client.dart.fyi\\\", \\\"revision\\\": 33241, \\\"supplemental_columns\\\": {\\\"d_supplemental\\\": \\\"167808\\\"}, \\\"test\\\": \\\"sunspider/string-unpack-code\\\", \\\"units\\\": \\\"ms\\\", \\\"value\\\": \\\"18.4\\\"}]\"}",
+      "-o",
+      "/path/to/tmp/json",
+      "-t",
+      "extra.secret.token.should.not.be.logged"
+    ],
+    "name": "perf dashboard post",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"status_code\": 200@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@Results Dashboard@https://chromeperf-stage.uc.r.appspot.com//report?masters=client.dart.fyi&bots=bot_name&tests=sunspider%2Fstring-unpack-code&rev=33241@@@"
+    ]
+  },
+  {
+    "name": "$result"
+  }
+]
