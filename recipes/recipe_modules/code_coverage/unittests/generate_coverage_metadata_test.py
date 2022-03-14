@@ -355,7 +355,7 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
   # Where the first column is the line number and the second column is the
   # expected number of times the line is executed.
   @mock.patch.object(generator, '_get_per_target_coverage_summary')
-  @mock.patch.object(generator, '_get_coverage_data_in_json')
+  @mock.patch.object(generator, '_create_and_fetch_coverage_json')
   def test_generate_metadata_for_per_cl_coverage(
       self, mock_get_coverage_data, mock_get_per_target_coverage_summary):
     mock_get_coverage_data.return_value = {
@@ -443,7 +443,7 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
   # expected number of times the line is executed.
   @mock.patch.object(generator, '_get_per_target_coverage_summary')
   @mock.patch.object(generator.repository_util, '_GetFileRevisions')
-  @mock.patch.object(generator, '_get_coverage_data_in_json')
+  @mock.patch.object(generator, '_create_and_fetch_coverage_json')
   def test_generate_metadata_for_full_repo_coverage(
       self, mock_get_coverage_data, mock__GetFileRevisions,
       mock_get_per_target_coverage_summary):

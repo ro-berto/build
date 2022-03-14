@@ -5,6 +5,10 @@
 
 DEFAULT_BUCKET_NAME = 'code-coverage-data'
 
+# GCS bucket corresponding to go/kalypsi. Uploading data to this bucket
+# enables showing coverage metrics in code search.
+ZOSS_BUCKET_NAME = "ng3-metrics"
+
 # Name of the file to store the directory metadata.
 DIR_METADATA_FILE_NAME = 'dir_metadata.json'
 

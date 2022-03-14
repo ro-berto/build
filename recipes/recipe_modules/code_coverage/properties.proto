@@ -22,4 +22,6 @@ message InputProperties {
   bool use_javascript_coverage = 6;
   // Hash of a past commit to be used for referenced coverage.
   string coverage_reference_commit = 7;
+  // Determines if coverage data is to be exported to zoss.
+  bool export_coverage_to_zoss = 8;
 }

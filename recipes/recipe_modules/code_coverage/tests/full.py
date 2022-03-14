@@ -164,6 +164,22 @@ def GenTests(api):
   )
 
   yield api.test(
+      'zoss_upload',
+      api.chromium.generic_build(
+          builder_group='chromium.fyi', builder='linux-code-coverage'),
+      api.code_coverage(use_clang_coverage=True, export_coverage_to_zoss=True),
+      api.post_process(post_process.MustRun, (
+          'process clang code coverage data for overall test coverage.generate '
+          'metadata for overall test coverage in %s tests' % _NUM_TESTS)),
+      api.post_process(
+          post_process.MustRun,
+          ('process clang code coverage data for overall test coverage.gsutil '
+           'export data to zoss')),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
       'javascript: full repo',
       api.chromium.generic_build(
           builder_group='chromium.fyi',

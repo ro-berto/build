@@ -449,9 +449,10 @@ def _show_system_resource_usage(proc):
     logging.warning('ValueError caught when showing system info: %s', error)
 
 
-def _get_coverage_data_in_json(profdata_path, llvm_cov_path, build_dir,
-                               binaries, sources, output_dir, exclusions, arch):
-  """Returns a json object of the coverage info."""
+def _create_and_fetch_coverage_json(profdata_path, llvm_cov_path, build_dir,
+                                    binaries, sources, output_dir, exclusions,
+                                    arch):
+  """Creates a coverage.json object in output_dir and returns its content."""
   coverage_json_file = os.path.join(output_dir, 'coverage.json')
   error_out_file = os.path.join(output_dir, 'llvm_cov.stderr.log')
   p = None
@@ -485,9 +486,6 @@ def _get_coverage_data_in_json(profdata_path, llvm_cov_path, build_dir,
         duration_seconds = min(duration_seconds * 2, max_duration_seconds)
 
   finally:
-    # Delete the coverage.json, because it could be huge.
-    # Keep it for now for testing/debug purpose.
-    # os.remove(coverage_json_file)
     # Wait for llvm in case the above code ran into uncaught exceptions.
     if p is not None:
       if p.wait() != 0:
@@ -634,9 +632,9 @@ def _generate_metadata(src_path,
   """
   logging.info('Generating coverage metadata ...')
   start_time = time.time()
-  data = _get_coverage_data_in_json(profdata_path, llvm_cov_path, build_dir,
-                                    binaries, sources, output_dir, exclusions,
-                                    arch)
+  data = _create_and_fetch_coverage_json(profdata_path, llvm_cov_path,
+                                         build_dir, binaries, sources,
+                                         output_dir, exclusions, arch)
   minutes = (time.time() - start_time) / 60
   logging.info(
       'Generating & loading coverage metadata with "llvm-cov export" '

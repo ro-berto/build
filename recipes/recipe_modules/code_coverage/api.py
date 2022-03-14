@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import json
+import os
 import re
 import sys
 
@@ -59,6 +60,8 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     # Absolute path to the file containing line number mappings from bot
     # version of files to gerrit version
     self._bot_to_gerrit_mapping_file = None
+    # Determines if the coverage data be exported to zoss or not
+    self._export_coverage_to_zoss = properties.export_coverage_to_zoss or False
 
   @property
   def use_clang_coverage(self):
@@ -77,6 +80,14 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     if not self._platform:
       self._platform = self.m.chromium.c.TARGET_PLATFORM
     return self._platform
+
+  @property
+  def build_id(self):
+    build = self.m.buildbucket.build
+    build_id = build.id
+    if self.m.led.launched_by_led:
+      build_id = self.m.swarming.task_id
+    return build_id
 
   @property
   def cov_executable(self):
@@ -852,9 +863,6 @@ class CodeCoverageApi(recipe_api.RecipeApi):
 
   def _compose_gs_path_for_coverage_data(self, data_type, mimic_builder_name):
     build = self.m.buildbucket.build
-    build_id = build.id
-    if self.m.led.launched_by_led:
-      build_id = self.m.swarming.task_id
     if build.input.gerrit_changes:
       # Assume that there is only one gerrit patchset which is true for
       # Chromium CQ in practice.
@@ -865,7 +873,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           gerrit_change.patchset,
           build.builder.bucket,
           mimic_builder_name,
-          build_id,
+          self.build_id,
           data_type,
       )
     else:
@@ -877,7 +885,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           commit.id,  # A commit HEX SHA1 is unique in a Gitiles project.
           build.builder.bucket,
           mimic_builder_name,
-          build_id,
+          self.build_id,
           data_type,
       )
 
@@ -930,6 +938,17 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           args=args,
           venv=True)
     finally:
+      # Upload data to zoss to show it on code search
+      if self._export_coverage_to_zoss:
+        self.m.gsutil.upload(
+            source=self.metadata_dir.join('coverage.json'),
+            bucket=constants.ZOSS_BUCKET_NAME,
+            dest=self._compose_gs_path_for_zoss_upload(
+                builder=self._compose_current_mimic_builder_name(),
+                build_id=self.build_id),
+            link_name=None,
+            multithreaded=True,
+            name='export data to zoss')
       gs_path = self._compose_gs_path_for_coverage_data(
           data_type='metadata',
           mimic_builder_name=self._compose_current_mimic_builder_name())
@@ -947,3 +966,9 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       self._coverage_metadata_gs_paths.append(gs_path)
       self._mimic_builder_names.append(
           self._compose_current_mimic_builder_name())
+
+  def _compose_gs_path_for_zoss_upload(self, builder, build_id):
+    commit = self.m.buildbucket.build.input.gitiles_commit
+    assert commit is not None, 'No gitiles commit'
+    return "ng3-coverage-chrome/absolute/%s/%s/%s/%s/%s" % (
+        commit.host, commit.project, commit.id, builder, build_id)
