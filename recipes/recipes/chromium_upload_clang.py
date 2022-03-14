@@ -83,8 +83,9 @@ def RunSteps(api):
 
   api.python('update win toolchain',
       api.path['checkout'].join('build', 'vs_toolchain.py'), ['update'])
-  api.python('update fuchsia sdk',
-      api.path['checkout'].join('build', 'fuchsia', 'update_sdk.py'))
+  api.step('update fuchsia sdk', [
+      'python3', api.path['checkout'].join('build', 'fuchsia', 'update_sdk.py')
+  ])
 
   with api.osx_sdk('ios'):
     with api.depot_tools.on_path():

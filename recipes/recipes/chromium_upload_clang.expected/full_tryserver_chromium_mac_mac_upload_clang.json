@@ -377,8 +377,7 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
+      "python3",
       "[CACHE]/builder/src/build/fuchsia/update_sdk.py"
     ],
     "luci_context": {
