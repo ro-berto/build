@@ -61,7 +61,6 @@ def _common_kwargs(execution_mode, config_name, platform, target_bits):
   elif platform == 'fuchsia':
     spec['chromium_config_kwargs']['TARGET_PLATFORM'] = 'fuchsia'
 
-  spec['luci_project'] = 'chrome'
   return spec
 
 

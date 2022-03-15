@@ -223,7 +223,6 @@ def GenTests(api):
                   'fake-group': {
                       'fake-builder':
                           ctbc.BuilderSpec.create(
-                              luci_project='fake-project',
                               execution_mode=ctbc.COMPILE_AND_TEST,
                               gclient_config='chromium',
                               chromium_config='chromium',
@@ -236,7 +235,6 @@ def GenTests(api):
                           ),
                       'fake-tester':
                           ctbc.BuilderSpec.create(
-                              luci_project='fake-project',
                               execution_mode=ctbc.TEST,
                               parent_builder_group='fake-group',
                               parent_buildername='fake-builder',

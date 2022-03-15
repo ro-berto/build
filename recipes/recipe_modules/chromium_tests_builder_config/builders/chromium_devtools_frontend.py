@@ -8,7 +8,6 @@ from .. import builder_spec
 def _chromium_devtools_frontend_spec(**kwargs):
   return builder_spec.BuilderSpec.create(
       build_gs_bucket='devtools-frontend',
-      luci_project='devtools-frontend',
       **kwargs)
 
 

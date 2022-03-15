@@ -5,13 +5,9 @@
 from .. import builder_spec
 
 
-def _client_openscreen_chromium_spec(**kwargs):
-  return builder_spec.BuilderSpec.create(luci_project='openscreen', **kwargs)
-
-
 SPEC = {
     'chromium_linux64_debug':
-        _client_openscreen_chromium_spec(
+        builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
             gclient_config='chromium',
@@ -23,7 +19,7 @@ SPEC = {
             simulation_platform='linux',
         ),
     'chromium_mac_debug':
-        _client_openscreen_chromium_spec(
+        builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],
             gclient_config='chromium',

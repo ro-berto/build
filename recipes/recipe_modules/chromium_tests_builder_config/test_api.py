@@ -39,9 +39,9 @@ class BuilderDetails(object):
   * builder_group - The builder group of the builder.
   * builder_spec - The builder spec that should be produced for the
     builder when converting the properties to in-memory representations.
-    The luci_project, execution_mode, parent_builder_group and
-    parent_buildername attributes will be ignored and set appropriately
-    based on the method that is adding the builder.
+    The execution_mode, parent_builder_group and parent_buildername
+    attributes will be ignored and set appropriately based on the method
+    that is adding the builder.
   """
 
   project = attrib(str, default='chromium')

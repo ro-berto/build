@@ -22,7 +22,6 @@ the following types with the specified additional keyword arguments:
     message BuilderID to the in-memory BuilderId, which uses the builder
     group instead of the project and bucket.
 * BuilderSpec
-  * luci_project - The LUCI project to set for the BuilderSpec.
   * builder_id_by_builder_key - A mapping from (project, bucket,
     builder) to chromium.BuilderId. This allows for converting the proto
     message BuilderID to the in-memory BuilderId, which uses the builder
@@ -103,7 +102,7 @@ _EXECUTION_MODE_MAP = {
 }
 
 
-def _convert_builder_spec(obj, luci_project, builder_id_by_builder_key):
+def _convert_builder_spec(obj, builder_id_by_builder_key):
   parent_id = builder_id_by_builder_key.get(_builder_key(obj.parent))
 
   legacy_chromium_config = obj.legacy_chromium_config
@@ -125,7 +124,6 @@ def _convert_builder_spec(obj, luci_project, builder_id_by_builder_key):
       chromium_config_kwargs[a.upper()] = ':'.join(val)
 
   return BuilderSpec.create(
-      luci_project=luci_project,
       execution_mode=_EXECUTION_MODE_MAP[obj.execution_mode],
       parent_builder_group=parent_id.group if parent_id else None,
       parent_buildername=parent_id.builder if parent_id else None,
@@ -174,7 +172,6 @@ def _convert_builder_database(obj, builder_id_by_builder_key):
     builder_id = builder_id_by_builder_key[_builder_key(entry.builder_id)]
     builders[builder_id.group][builder_id.builder] = _convert_builder_spec(
         entry.builder_spec,
-        luci_project=entry.builder_id.project,
         builder_id_by_builder_key=builder_id_by_builder_key)
   return BuilderDatabase.create(builders)
 

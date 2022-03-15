@@ -81,7 +81,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   def __init__(self, input_properties, **kwargs):
     super(ChromiumTestsApi, self).__init__(**kwargs)
-    self._project_trigger_overrides = input_properties.project_trigger_overrides
     self._fixed_revisions = input_properties.fixed_revisions
 
     self._swarming_command_lines = {}
@@ -707,19 +706,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       * builder_config - The `BuilderConfig` associated with `builder_id`.
 
     Returns:
-      A dict where the keys are the project name and the values are a
-      list of names of the builders within the project to trigger.
+      A list of the builder names to trigger.
     """
-    to_trigger = collections.defaultdict(set)
-    for child_id in sorted(builder_config.builder_db.builder_graph[builder_id]):
-      child_spec = builder_config.builder_db[child_id]
-      luci_project = self._project_trigger_overrides.get(
-          child_spec.luci_project, child_spec.luci_project)
-      to_trigger[luci_project].add(child_id.builder)
-    return {
-        luci_project: sorted(builders)
-        for luci_project, builders in six.iteritems(to_trigger)
-    }
+    return sorted(
+        set(b.builder
+            for b in builder_config.builder_db.builder_graph[builder_id]))
 
   def _trigger_led_builds(self, to_trigger, properties):
     """Trigger builders using led.
@@ -735,6 +726,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       property_args.append('-p')
       property_args.append('{}={}'.format(k, self.m.json.dumps(v)))
 
+    project = self.m.buildbucket.build.builder.project
+    bucket = self.m.buildbucket.build.builder.bucket
     with self.m.step.nest('trigger') as trigger_presentation:
       # Clear out SWARMING_TASK_ID in the environment so that the created tasks
       # do not have a parent task ID. This allows the triggered tasks to outlive
@@ -743,32 +736,20 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       # TODO(https://crbug.com/1140621) Use command-line option instead of
       # changing environment.
       with self.m.context(env={'SWARMING_TASK_ID': None}):
-        for child_project, builders in six.iteritems(to_trigger):
-          for child_builder in builders:
-            # We don't actually know the bucket for child builders because our
-            # config objects don't store anything about the bucket, but we
-            # haven't had a reason to trigger builders in other buckets yet and
-            # this is just for manual testing with led, so not important to
-            # worry about at this time. This can be addressed in the future when
-            # configuration is src-side and the bucket information can be
-            # supplied by the starlark generation.
-            child_bucket = self.m.buildbucket.build.builder.bucket
+        for child_builder in to_trigger:
+          child_builder_name = '{}/{}/{}'.format(project, bucket, child_builder)
+          with self.m.step.nest(child_builder_name) as builder_presentation:
+            led_builder_id = 'luci.{}.{}:{}'.format(project, bucket,
+                                                    child_builder)
+            led_job = self.m.led('get-builder', led_builder_id)
 
-            child_builder_name = '{}/{}/{}'.format(child_project, child_bucket,
-                                                   child_builder)
-            with self.m.step.nest(child_builder_name) as builder_presentation:
-              led_builder_id = 'luci.{}.{}:{}'.format(child_project,
-                                                      child_bucket,
-                                                      child_builder)
-              led_job = self.m.led('get-builder', led_builder_id)
+            led_job = self.m.led.inject_input_recipes(led_job)
+            led_job = led_job.then('edit', *property_args)
+            result = led_job.then('launch').launch_result
 
-              led_job = self.m.led.inject_input_recipes(led_job)
-              led_job = led_job.then('edit', *property_args)
-              result = led_job.then('launch').launch_result
-
-              swarming_task_url = result.swarming_task_url
-              builder_presentation.links['swarming task'] = swarming_task_url
-              trigger_presentation.links[child_builder_name] = swarming_task_url
+            swarming_task_url = result.swarming_task_url
+            builder_presentation.links['swarming task'] = swarming_task_url
+            trigger_presentation.links[child_builder_name] = swarming_task_url
 
   def trigger_child_builds(self,
                            builder_id,
@@ -835,9 +816,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           properties=properties,
       )
 
-      scheduler_triggers = []
-      for project, builders in six.iteritems(to_trigger):
-        scheduler_triggers.append((trigger, project, builders))
+      project = self.m.buildbucket.build.builder.project
+      scheduler_triggers = [(trigger, project, to_trigger)]
       self.m.scheduler.emit_triggers(scheduler_triggers, step_name='trigger')
 
   def _get_trigger_properties(self,

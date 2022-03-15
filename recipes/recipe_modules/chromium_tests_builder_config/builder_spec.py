@@ -107,6 +107,7 @@ class BuilderSpec(object):
                                      "'bisect_archive_build' is True")
 
   # The LUCI project that the builder belongs to
+  # TODO(gbeaty) Remove this once downstream repos no longer set it
   luci_project = attrib(str, default='chromium')
 
   # The execution mode of the builder

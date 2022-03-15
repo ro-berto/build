@@ -5,13 +5,9 @@
 from .. import builder_spec
 
 
-def _tryserver_webrtc_spec(**kwargs):
-  return builder_spec.BuilderSpec.create(luci_project='webrtc', **kwargs)
-
-
 SPEC = {
     'android_chromium_compile':
-        _tryserver_webrtc_spec(
+        builder_spec.BuilderSpec.create(
             android_config='base_config',
             chromium_apply_config=['dcheck', 'mb', 'android'],
             chromium_config='chromium',
@@ -26,7 +22,7 @@ SPEC = {
             simulation_platform='linux',
         ),
     'linux_chromium_compile':
-        _tryserver_webrtc_spec(
+        builder_spec.BuilderSpec.create(
             chromium_apply_config=['dcheck', 'mb'],
             chromium_config='chromium',
             chromium_config_kwargs={
@@ -38,7 +34,7 @@ SPEC = {
             simulation_platform='linux',
         ),
     'linux_chromium_compile_dbg':
-        _tryserver_webrtc_spec(
+        builder_spec.BuilderSpec.create(
             chromium_apply_config=['dcheck', 'mb'],
             chromium_config='chromium',
             chromium_config_kwargs={
@@ -50,7 +46,7 @@ SPEC = {
             simulation_platform='linux',
         ),
     'mac_chromium_compile':
-        _tryserver_webrtc_spec(
+        builder_spec.BuilderSpec.create(
             chromium_apply_config=['dcheck', 'mb'],
             chromium_config='chromium',
             chromium_config_kwargs={
@@ -62,7 +58,7 @@ SPEC = {
             simulation_platform='mac',
         ),
     'win_chromium_compile':
-        _tryserver_webrtc_spec(
+        builder_spec.BuilderSpec.create(
             chromium_apply_config=['dcheck', 'mb'],
             chromium_config='chromium',
             chromium_config_kwargs={
@@ -74,7 +70,7 @@ SPEC = {
             simulation_platform='win',
         ),
     'win_chromium_compile_dbg':
-        _tryserver_webrtc_spec(
+        builder_spec.BuilderSpec.create(
             chromium_apply_config=['dcheck', 'mb'],
             chromium_config='chromium',
             chromium_config_kwargs={

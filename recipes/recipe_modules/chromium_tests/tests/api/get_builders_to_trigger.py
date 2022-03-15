@@ -25,14 +25,8 @@ def RunSteps(api):
   api.chromium_tests.configure_build(builder_config)
   actual = api.chromium_tests._get_builders_to_trigger(builder_id,
                                                        builder_config)
-
-  # Convert the mappings to comparable types
-  actual = {k: sorted(v) for k, v in six.iteritems(actual)}
-  expected = {
-      k: sorted(v) for k, v in six.iteritems(api.properties['expected'])
-  }
-
-  api.assertions.assertEqual(actual, expected)
+  expected = api.properties['expected']
+  api.assertions.assertCountEqual(actual, expected)
 
 
 def GenTests(api):
@@ -42,9 +36,7 @@ def GenTests(api):
           builder_group='chromium.linux',
           builder='Linux Builder',
       ),
-      api.properties(expected={
-          'chromium': ['Linux Tests'],
-      }),
+      api.properties(expected=['Linux Tests']),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -60,7 +52,7 @@ def GenTests(api):
           builder_db=ctbc.BuilderDatabase.create({
               'fake-group': {
                   'fake-builder':
-                      ctbc.BuilderSpec.create(luci_project='foo-project'),
+                      ctbc.BuilderSpec.create(),
                   'fake-tester':
                       ctbc.BuilderSpec.create(
                           execution_mode=ctbc.TEST,
@@ -76,66 +68,7 @@ def GenTests(api):
                       ),
               },
           })),
-      api.properties(expected={
-          'chromium': ['fake-tester'],
-      }),
-      api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'luci-project-overridden-for-tester',
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='fake-group',
-          builder='fake-builder',
-          builder_db=ctbc.BuilderDatabase.create({
-              'fake-group': {
-                  'fake-builder':
-                      ctbc.BuilderSpec.create(),
-                  'fake-tester':
-                      ctbc.BuilderSpec.create(
-                          luci_project='fake-project',
-                          execution_mode=ctbc.TEST,
-                          parent_buildername='fake-builder',
-                      ),
-              },
-          })),
-      api.properties(expected={
-          'fake-project': ['fake-tester'],
-      }),
-      api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'same-project-trigger-override',
-      api.chromium_tests_builder_config.ci_build(
-          project='bar-project',
-          builder_group='fake-group',
-          builder='fake-builder',
-          builder_db=ctbc.BuilderDatabase.create({
-              'fake-group': {
-                  'fake-builder':
-                      ctbc.BuilderSpec.create(luci_project='foo-project'),
-                  'fake-tester':
-                      ctbc.BuilderSpec.create(
-                          execution_mode=ctbc.TEST,
-                          parent_buildername='fake-builder',
-                          luci_project='foo-project',
-                      ),
-              },
-          })),
-      api.properties(
-          expected={
-              'bar-project': ['fake-tester'],
-          },
-          **{
-              '$build/chromium_tests': {
-                  'project_trigger_overrides': {
-                      'foo-project': 'bar-project',
-                  },
-              },
-          }),
+      api.properties(expected=['fake-tester']),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
