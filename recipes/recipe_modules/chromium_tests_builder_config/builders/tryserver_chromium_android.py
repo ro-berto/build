@@ -38,8 +38,3 @@ SPEC = {
             simulation_platform='linux',
         ),
 }
-
-SPEC['android-marshmallow-arm64-rel-rts'] = chromium_android.SPEC[
-    'android-marshmallow-arm64-rel']
-SPEC['android-pie-arm64-rel-rts'] = chromium_android.SPEC[
-    'android-pie-arm64-rel']
