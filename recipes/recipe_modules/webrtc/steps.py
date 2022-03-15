@@ -193,7 +193,7 @@ def generate_tests(phase, bot, is_tryserver, chromium_tests_api, ios_config):
     tests += [generator.swarming_ios_test(t) for t in ios_tests]
 
   if test_suite == 'ios_device':
-    args = ['--xctest', '--xcodebuild-device-runner']
+    args = ['--xctest', '--undefok=enable-run-ios-unittests-with-xctest']
     tests = [generator.swarming_ios_test(t, args) for t in ios_device_tests]
 
   if test_suite == 'ios_perf':
