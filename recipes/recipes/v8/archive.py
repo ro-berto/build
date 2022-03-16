@@ -151,7 +151,7 @@ def make_archive(api,
           args=['-a', 'public-read'],
           name='update refbuild binaries',
       )
-      api.v8.buildbucket_trigger(
+      api.v8.trigger.buildbucket(
           [('v8_refbuild_bundler', {
               'revision': api.v8.revision,
               'platform': platform,

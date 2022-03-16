@@ -91,6 +91,126 @@ class V8Version(object):
     return sub(V8_PATCH, self.patch, blob)
 
 
+class Trigger(object):
+  def __init__(self, api):
+    self.api = api
+
+
+  def buildbucket(self, requests, project, bucket, step_name):
+    """Triggers builds via buildbucket.
+
+    Args:
+      requests: List of 2-tuples (builder_name, properties).
+      project: Project to trigger builds in (defaults to same as parent).
+      bucket: Bucket to trigger builds in (defaults to same as parent).
+      step_name: Name of the triggering step that appear on the build.
+
+    Returns:
+      List of api.buildbucket.build_pb2.Build messages.
+    """
+    raise NotImplementedError()  # pragma: no cover
+
+  def scheduler(self, builders, properties, test_spec):
+    """Triggers builds via scheduler. Typically used by CI builders.
+
+    Args:
+      builders: List of builder names to trigger.
+      properties: Properties common for every builder.
+      test_spec: Test specification object with configurations per builder.
+    """
+    raise NotImplementedError()  # pragma: no cover
+
+class ProdTrigger(Trigger):
+  def buildbucket(self, requests, project=None, bucket=None,
+                  step_name='trigger'):
+    project = project or self.api.buildbucket.INHERIT
+    bucket = bucket or self.api.buildbucket.INHERIT
+
+    # Add user_agent:cq to child builds if the parent is also triggered by CQ.
+    extra_tags = {}
+    if any(tag.key == 'user_agent' and tag.value == 'cq'
+           for tag in self.api.buildbucket.build.tags):
+      extra_tags['user_agent'] = 'cq'
+
+    return self.api.buildbucket.schedule([
+      self.api.buildbucket.schedule_request(
+        project=project,
+        bucket=bucket,
+        builder=builder_name,
+        tags=self.api.buildbucket.tags(**extra_tags),
+        properties=properties,
+      ) for builder_name, properties in requests
+    ], step_name=step_name)
+
+  def scheduler(self, builders, properties, test_spec):
+    with self.api.step.nest('trigger'):
+      jobs = self._get_v8_jobs()
+      pairs = self._builder_job_pairs(builders, jobs)
+      scheduler_triggers = [(self._scheduler_trigger(builder_name,
+                                                     properties,
+                                                     test_spec), 'v8', [job_id])
+                            for builder_name, job_id in pairs]
+      self.api.scheduler.emit_triggers(scheduler_triggers, step_name='trigger')
+
+  def _scheduler_trigger(self, builder_name, ci_properties, test_spec):
+    return self.api.scheduler.BuildbucketTrigger(
+        properties=dict(ci_properties,
+                        **test_spec.as_properties_dict(builder_name)),
+    )
+
+  def _builder_job_pairs(self, builders, jobs):
+    result = []
+    for builder in builders:
+      if builder in jobs:
+        job = builder
+      else:
+        bucket = self.api.buildbucket.build.builder.bucket
+        job = "%s-%s" % (bucket, builder)
+      result.append((builder, job))
+    return result
+
+  def _get_v8_jobs(self):
+    args = [
+        'prpc', 'call', '-format=json', 'luci-scheduler.appspot.com',
+        'scheduler.Scheduler.GetJobs'
+    ]
+    input_data = {"project": "v8"}
+    jobs_file = self.api.path['tmp_base'].join('jobs.json')
+    self.api.step(
+        "get V8 jobs",
+        args,
+        stdin=self.api.json.input(input_data),
+        stdout=self.api.json.output(leak_to=jobs_file),
+    )
+    response = self.api.json.read(
+        "read jobs json",
+        jobs_file,
+        step_test_data=lambda: self.api.json.test_api.output({'jobs': []})
+    ).json.output
+    return set(job['jobRef']['job'] for job in response['jobs'])
+
+
+class LedTrigger(Trigger):
+  def buildbucket(self, requests, project='v8', bucket=None,
+                  step_name=None):
+    bucket = bucket or self.api.buildbucket.build.builder.bucket
+    for builder_name, properties in requests:
+        self.api.led.trigger_builder(
+            project, bucket, builder_name, properties)
+    return []  # Empty list of production buildbucket builds.
+
+  def scheduler(self, builders, properties, test_spec):
+    bucket = self.api.buildbucket.build.builder.bucket
+    for builder_name in builders:
+        self.api.led.trigger_builder(
+            'v8', bucket, builder_name,
+            dict(
+                properties,
+                **test_spec.as_properties_dict(builder_name)
+            ),
+        )
+
+
 class V8Api(recipe_api.RecipeApi):
   VERSION_FILE = 'include/v8-version.h'
   EMPTY_TEST_SPEC = v8_builders.EmptyTestSpec
@@ -108,6 +228,13 @@ class V8Api(recipe_api.RecipeApi):
     self.revision = None
     self.revision_cp = None
     self.revision_number = None
+
+  @property
+  def trigger(self):
+    if self.m.led.launched_by_led:
+      return LedTrigger(self.m)
+    else:
+      return ProdTrigger(self.m)
 
   @property
   def steps_use_python3(self):
@@ -1395,127 +1522,28 @@ class V8Api(recipe_api.RecipeApi):
         trigger_props = {}
         self._copy_property(self.m.properties, trigger_props, 'revision')
         trigger_props.update(properties)
-        if self.m.led.launched_by_led:
-          self._trigger_led_builders(
-              triggers, trigger_props, test_spec, 'try.triggered')
-        else:
-          self.m.cq.record_triggered_builds(*self.buildbucket_trigger(
-              [(builder_name, dict(
-                trigger_props,
-                **test_spec.as_properties_dict(builder_name)
-              )) for builder_name in triggers],
-              bucket='try.triggered',
-          ))
+        self.m.cq.record_triggered_builds(*self.trigger.buildbucket(
+            [(builder_name, dict(
+              trigger_props,
+              **test_spec.as_properties_dict(builder_name)
+            )) for builder_name in triggers],
+            bucket='try.triggered',
+        ))
       else:
         ci_properties = dict(properties)
         #TODO(liviurau): rename or remove this property
         if self.bot_config.get('triggers_proxy'):
           ci_properties['archive'] = self._get_default_archive()
-        self._trigger_ci_builders(triggers, ci_properties, test_spec)
+        self.trigger.scheduler(triggers, ci_properties, test_spec)
 
     if triggers_proxy:
       proxy_properties = {'archive': self._get_default_archive()}
       proxy_properties.update(properties)
-      self.buildbucket_trigger(
+      self.trigger.buildbucket(
           [('v8_trigger_proxy', proxy_properties)],
           project='v8-internal',
           bucket='ci',
           step_name='trigger_internal')
-
-  def _trigger_ci_builders(self, builders, ci_properties, test_spec):
-    with self.m.step.nest('trigger'):
-      if self.m.led.launched_by_led:
-        self._trigger_led_builders(builders, ci_properties, test_spec)
-        return
-      jobs = self._get_v8_jobs()
-      pairs = self._builder_job_pairs(builders, jobs)
-      scheduler_triggers = [(self._scheduler_trigger(builder_name,
-                                                     ci_properties,
-                                                     test_spec), 'v8', [job_id])
-                            for builder_name, job_id in pairs]
-      self.m.scheduler.emit_triggers(scheduler_triggers, step_name='trigger')
-
-  def _scheduler_trigger(self, builder_name, ci_properties, test_spec):
-    return self.m.scheduler.BuildbucketTrigger(
-        properties=dict(ci_properties,
-                        **test_spec.as_properties_dict(builder_name)),)
-
-  def _trigger_led_builders(self, builders, properties, test_spec, bucket=None):
-    bucket = bucket or self.m.buildbucket.build.builder.bucket
-    for builder_name in builders:
-        self.m.led.trigger_builder(
-            'v8', bucket, builder_name,
-            dict(
-                properties,
-                **test_spec.as_properties_dict(builder_name)
-            ),
-        )
-
-  def _builder_job_pairs(self, builders, jobs):
-    result = []
-    for builder in builders:
-      if builder in jobs:
-        job = builder
-      else:
-        bucket = self.m.buildbucket.build.builder.bucket
-        job = "%s-%s" % (bucket, builder)
-      result.append((builder, job))
-    return result
-
-  def _get_v8_jobs(self):
-    args = [
-        'prpc', 'call', '-format=json', 'luci-scheduler.appspot.com',
-        'scheduler.Scheduler.GetJobs'
-    ]
-    input_data = {"project": "v8"}
-    jobs_file = self.m.path['tmp_base'].join('jobs.json')
-    self.m.step(
-        "get V8 jobs",
-        args,
-        stdin=self.m.json.input(input_data),
-        stdout=self.m.json.output(leak_to=jobs_file),
-    )
-    response = self.m.json.read(
-        "read jobs json",
-        jobs_file,
-        step_test_data=lambda: self.test_api.m.json.output({'jobs': []})
-    ).json.output
-    return set(job['jobRef']['job'] for job in response['jobs'])
-
-  def buildbucket_trigger(
-      self, requests, project=None, bucket=None, step_name='trigger'):
-    """Triggers builds via buildbucket.
-
-    Args:
-      requests: List of 2-tuples (builder_name, properties).
-      project: Project to trigger builds in (defaults to same as parent).
-      bucket: Bucket to trigger builds in (defaults to same as parent).
-      step_name: Name of the triggering step that appear on the build.
-
-    Returns:
-      List of api.buildbucket.build_pb2.Build messages.
-    """
-    if project is None:
-      project = self.m.buildbucket.INHERIT
-
-    if bucket is None:
-      bucket = self.m.buildbucket.INHERIT
-
-    # Add user_agent:cq to child builds if the parent is also triggered by CQ.
-    extra_tags = {}
-    if any(tag.key == 'user_agent' and tag.value == 'cq'
-           for tag in self.m.buildbucket.build.tags):
-      extra_tags['user_agent'] = 'cq'
-
-    return self.m.buildbucket.schedule([
-      self.m.buildbucket.schedule_request(
-        project=project,
-        bucket=bucket,
-        builder=builder_name,
-        tags=self.m.buildbucket.tags(**extra_tags),
-        properties=properties,
-      ) for builder_name, properties in requests
-    ], step_name=step_name)
 
   def get_change_range(self):
     if self.m.properties.get('override_triggers'):

@@ -150,7 +150,7 @@ def RunSteps(api, is_debug, triggers, v8_tot, use_remoteexec, use_rbe):
           ARCHIVE_LINK % (api.platform.name, archive_name))
 
     if triggers:
-      api.v8.buildbucket_trigger(
+      api.v8.trigger.buildbucket(
           [(builder_name, {
             'revision': revision,
             'parent_got_revision': revision,

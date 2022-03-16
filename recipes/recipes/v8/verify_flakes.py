@@ -104,7 +104,7 @@ def RunSteps(api):
           project='v8/v8',
           ref='refs/heads/main',
           id=v8_tot))
-  builds = api.v8.buildbucket_trigger([
+  builds = api.v8.trigger.buildbucket([
     (
       'v8_flako',
       dict(
