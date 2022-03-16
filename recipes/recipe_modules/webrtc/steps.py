@@ -27,7 +27,18 @@ _MAC_TOOLCHAIN_CIPD_PACKAGE = chromium_swarming.CipdPackage.create(
 
 _QUICK_PERF_TEST = '--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/'
 
-_PERF_TESTS = ('low_bandwidth_audio_perf_test', 'webrtc_perf_tests')
+_PERF_TESTS = (
+    'low_bandwidth_audio_perf_test',
+    'webrtc_perf_tests',
+)
+
+# Tests written with the XCTest framework.
+# The "fake" xctests are gtests using a XCTest wrapper when running on iOS.
+_REAL_XCTEST_TESTS = (
+    'apprtcmobile_tests',
+    'sdk_unittests',
+    'sdk_framework_unittests',
+)
 
 _NUMBER_OF_SHARDS = freeze({
     'modules_tests': 2,
@@ -36,12 +47,6 @@ _NUMBER_OF_SHARDS = freeze({
     'rtc_unittests': 6,
     'video_engine_tests': 4,
 })
-
-_USE_XCODE_PARALLELIZATION = (
-    'apprtcmobile_tests',
-    'sdk_unittests',
-    'sdk_framework_unittests',
-)
 
 
 def generate_tests(phase, bot, is_tryserver, chromium_tests_api, ios_config):
@@ -230,11 +235,12 @@ class TestGenerator:
 
   def swarming_ios_test(self, name, args=None):
     args = args or []
-    if name in _PERF_TESTS:
-      args = args + ['--write_perf_output_on_ios', '--nologs']
     args = args + self._ios_config['args']
-    if name in _USE_XCODE_PARALLELIZATION and '--version' in args:
-      args = args + ['--xcode-parallelization']
+    if name in _PERF_TESTS:
+      args += ['--write_perf_output_on_ios', '--nologs']
+    if name in _REAL_XCTEST_TESTS:
+      args.append('--xcode-parallelization' if '--version' in
+                  args else '--xcodebuild-device-runner')
     return steps.SwarmingIsolatedScriptTest(
         steps.SwarmingIsolatedScriptTestSpec.create(
             name,
