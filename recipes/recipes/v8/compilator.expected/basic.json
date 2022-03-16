@@ -1,5 +1,54 @@
 [
   {
+    "cmd": [],
+    "name": "build"
+  },
+  {
+    "cmd": [],
+    "name": "build.generate_build_files",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "build.compile",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "swarming trigger properties",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@swarming_trigger_properties@{@@@",
+      "@@@STEP_LOG_LINE@swarming_trigger_properties@  \"parent_test_spec\": {@@@",
+      "@@@STEP_LOG_LINE@swarming_trigger_properties@    \"swarming_dimensions\": {@@@",
+      "@@@STEP_LOG_LINE@swarming_trigger_properties@      \"cpu\": \"x86-64-avx2\", @@@",
+      "@@@STEP_LOG_LINE@swarming_trigger_properties@      \"os\": \"Ubuntu-18.04\"@@@",
+      "@@@STEP_LOG_LINE@swarming_trigger_properties@    }, @@@",
+      "@@@STEP_LOG_LINE@swarming_trigger_properties@    \"swarming_task_attrs\": {}, @@@",
+      "@@@STEP_LOG_LINE@swarming_trigger_properties@    \"tests\": [@@@",
+      "@@@STEP_LOG_LINE@swarming_trigger_properties@      [@@@",
+      "@@@STEP_LOG_LINE@swarming_trigger_properties@        \"v8testing\", @@@",
+      "@@@STEP_LOG_LINE@swarming_trigger_properties@        4, @@@",
+      "@@@STEP_LOG_LINE@swarming_trigger_properties@        null, @@@",
+      "@@@STEP_LOG_LINE@swarming_trigger_properties@        \"\", @@@",
+      "@@@STEP_LOG_LINE@swarming_trigger_properties@        [], @@@",
+      "@@@STEP_LOG_LINE@swarming_trigger_properties@        {}, @@@",
+      "@@@STEP_LOG_LINE@swarming_trigger_properties@        {}@@@",
+      "@@@STEP_LOG_LINE@swarming_trigger_properties@      ]@@@",
+      "@@@STEP_LOG_LINE@swarming_trigger_properties@    ]@@@",
+      "@@@STEP_LOG_LINE@swarming_trigger_properties@  }, @@@",
+      "@@@STEP_LOG_LINE@swarming_trigger_properties@  \"swarm_hashes\": {@@@",
+      "@@@STEP_LOG_LINE@swarming_trigger_properties@    \"bot_default\": \"800df08e7c70a1b55e262c29646b7df8c8a9a9704c9625190cb6d130899536df/319\"@@@",
+      "@@@STEP_LOG_LINE@swarming_trigger_properties@  }@@@",
+      "@@@STEP_LOG_LINE@swarming_trigger_properties@}@@@",
+      "@@@STEP_LOG_END@swarming_trigger_properties@@@",
+      "@@@SET_BUILD_PROPERTY@swarming_trigger_properties@{\"parent_test_spec\": {\"swarming_dimensions\": {\"cpu\": \"x86-64-avx2\", \"os\": \"Ubuntu-18.04\"}, \"swarming_task_attrs\": {}, \"tests\": [[\"v8testing\", 4, null, \"\", [], {}, {}]]}, \"swarm_hashes\": {\"bot_default\": \"800df08e7c70a1b55e262c29646b7df8c8a9a9704c9625190cb6d130899536df/319\"}}@@@"
+    ]
+  },
+  {
     "name": "$result"
   }
 ]
