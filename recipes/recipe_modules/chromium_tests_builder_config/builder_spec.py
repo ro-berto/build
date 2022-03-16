@@ -106,10 +106,6 @@ class BuilderSpec(object):
       assert self.bisect_gs_bucket, ("'bisect_gs_bucket' must be provided when "
                                      "'bisect_archive_build' is True")
 
-  # The LUCI project that the builder belongs to
-  # TODO(gbeaty) Remove this once downstream repos no longer set it
-  luci_project = attrib(str, default='chromium')
-
   # The execution mode of the builder
   # COMPILE_AND_TEST - Compile targets and optionally run tests and/or trigger
   #     a tester
