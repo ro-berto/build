@@ -29,5 +29,4 @@ class ReclientTestApi(recipe_test_api.RecipeTestApi):
                 'cache_silo': cache_silo,
                 'ensure_verified': ensure_verified,
             },
-        }) + self.m.buildbucket.ci_build(
-            project='chromium', bucket='ci', builder='Linux reclient')
+        })

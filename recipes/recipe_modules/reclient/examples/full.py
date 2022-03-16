@@ -9,6 +9,7 @@ import PB.go.chromium.org.foundry_x.re_client.api.stats.stats as stats_pb
 PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
+    'recipe_engine/buildbucket',
     'recipe_engine/context',
     'recipe_engine/file',
     'recipe_engine/path',
@@ -53,12 +54,14 @@ def GenTests(api):
 
   yield api.test(
       'override instance',
+      api.buildbucket.ci_build(project='chromium', builder='Linux reclient'),
       api.reclient.properties(instance='goma'),
       api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
       'override_metrics_project',
+      api.buildbucket.ci_build(project='chromium', builder='Linux reclient'),
       api.reclient.properties(metrics_project='goma'),
   )
 
@@ -69,6 +72,7 @@ def GenTests(api):
 
   yield api.test(
       'proper_rewrapper_flags',
+      api.buildbucket.ci_build(project='chromium', builder='Linux reclient'),
       api.reclient.properties(rewrapper_env={
           'RBE_FOO': 'foo',
           'RBE_BAR': 'bar'
@@ -78,6 +82,7 @@ def GenTests(api):
 
   yield api.test(
       'incorrect_rewrapper_flags',
+      api.buildbucket.ci_build(project='chromium', builder='Linux reclient'),
       api.reclient.properties(rewrapper_env={
           'MISSING_RBE_PREFIX': 'foo',
       }),
@@ -87,6 +92,7 @@ def GenTests(api):
 
   yield api.test(
       'profiler',
+      api.buildbucket.ci_build(project='chromium', builder='Linux reclient'),
       api.reclient.properties(profiler_service='reclient'),
       api.post_process(
           post_process.Filter(
@@ -95,6 +101,7 @@ def GenTests(api):
 
   yield api.test(
       'trace',
+      api.buildbucket.ci_build(project='chromium', builder='Linux reclient'),
       api.reclient.properties(publish_trace=True),
       api.post_process(
           post_process.Filter(
@@ -103,6 +110,7 @@ def GenTests(api):
 
   yield api.test(
       'ensure_verified_succeed',
+      api.buildbucket.ci_build(project='chromium', builder='Linux reclient'),
       api.reclient.properties(ensure_verified=True),
       api.step_data(
           'postprocess for reclient.load rbe_metrics.pb',
@@ -116,6 +124,7 @@ def GenTests(api):
 
   yield api.test(
       'ensure_verified_no_records',
+      api.buildbucket.ci_build(project='chromium', builder='Linux reclient'),
       api.reclient.properties(ensure_verified=True),
       api.step_data('postprocess for reclient.load rbe_metrics.pb',
                     api.file.read_raw(content=MakeTestRBEStats(num_records=0))),
@@ -127,6 +136,7 @@ def GenTests(api):
 
   yield api.test(
       'ensure_verified_no_verified_field',
+      api.buildbucket.ci_build(project='chromium', builder='Linux reclient'),
       api.reclient.properties(ensure_verified=True),
       api.step_data('postprocess for reclient.load rbe_metrics.pb',
                     api.file.read_raw(content=MakeTestRBEStats(num_records=1))),
@@ -138,6 +148,7 @@ def GenTests(api):
 
   yield api.test(
       'ensure_verified_no_verification',
+      api.buildbucket.ci_build(project='chromium', builder='Linux reclient'),
       api.reclient.properties(ensure_verified=True),
       api.step_data(
           'postprocess for reclient.load rbe_metrics.pb',
@@ -151,6 +162,7 @@ def GenTests(api):
 
   yield api.test(
       'ensure_verified_mismatches',
+      api.buildbucket.ci_build(project='chromium', builder='Linux reclient'),
       api.reclient.properties(ensure_verified=True),
       api.step_data(
           'postprocess for reclient.load rbe_metrics.pb',
