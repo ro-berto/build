@@ -1,0 +1,61 @@
+// Copyright 2022 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+syntax = "proto3";
+
+package recipes.build.chromium.builder_config_migration;
+
+// An operation to compute builder groupings for a project
+//
+// The groupings operation will compute the groupings for a LUCI project and
+// then output a JSON file containing the groupings. A grouping is all of the
+// builders that must have their config migrated src-side together, which is all
+// builders that are related through either a triggering relationship or a
+// mirroring relationship.
+//
+// The format of the groupings JSON is a dict where the keys are the stringified
+// form of a chromium.BuilderId and the values are a list of the stringified
+// forms of a chromium.BuilderId for all of the builders that are part of the
+// same grouping. The stringified form of a chromium.BuilderId is
+// `<builder-group>:<builder>`.
+//
+// Next ID: 3
+message GroupingsOperation {
+
+  // Required, the path to write the output to
+  string output_path = 1;
+
+  // Required, filter of the builder groups
+  //
+  // For each builder, its builder group will be checked against the filters in
+  // reverse order. The exclude value on the first filter that matches
+  // determines whether the builder is included in the output or not. This means
+  // more specific matches should appear later in the list. If a builder group
+  // does not match any entries, it will be excluded from the output.
+  message BuilderGroupFilter {
+
+    // Required, regular expression to match against builder groups
+    //
+    // The regular expression will be implicitly anchored at the start and end
+    // so it must match against the entire builder group name.
+    string builder_group_regex = 1;
+
+    // Whether or not a matching builder group should be excluded
+    //
+    // By default, if a filter entry matches, then the builder group will be
+    // included in the output. If this is set to true, the builder group will be
+    // excluded from the output instead.
+    bool exclude = 2;
+  }
+  repeated BuilderGroupFilter builder_group_filters = 2;
+}
+
+// Next ID: 2
+message InputProperties {
+
+  // The operation to perform, one must be set
+  oneof operation {
+    GroupingsOperation groupings_operation = 1;
+  }
+}
