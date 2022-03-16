@@ -1395,13 +1395,17 @@ class V8Api(recipe_api.RecipeApi):
         trigger_props = {}
         self._copy_property(self.m.properties, trigger_props, 'revision')
         trigger_props.update(properties)
-        self.m.cq.record_triggered_builds(*self.buildbucket_trigger(
-            [(builder_name, dict(
-              trigger_props,
-              **test_spec.as_properties_dict(builder_name)
-            )) for builder_name in triggers],
-            bucket='try.triggered',
-        ))
+        if self.m.led.launched_by_led:
+          self._trigger_led_builders(
+              triggers, trigger_props, test_spec, 'try.triggered')
+        else:
+          self.m.cq.record_triggered_builds(*self.buildbucket_trigger(
+              [(builder_name, dict(
+                trigger_props,
+                **test_spec.as_properties_dict(builder_name)
+              )) for builder_name in triggers],
+              bucket='try.triggered',
+          ))
       else:
         ci_properties = dict(properties)
         #TODO(liviurau): rename or remove this property
@@ -1420,6 +1424,9 @@ class V8Api(recipe_api.RecipeApi):
 
   def _trigger_ci_builders(self, builders, ci_properties, test_spec):
     with self.m.step.nest('trigger'):
+      if self.m.led.launched_by_led:
+        self._trigger_led_builders(builders, ci_properties, test_spec)
+        return
       jobs = self._get_v8_jobs()
       pairs = self._builder_job_pairs(builders, jobs)
       scheduler_triggers = [(self._scheduler_trigger(builder_name,
@@ -1432,6 +1439,17 @@ class V8Api(recipe_api.RecipeApi):
     return self.m.scheduler.BuildbucketTrigger(
         properties=dict(ci_properties,
                         **test_spec.as_properties_dict(builder_name)),)
+
+  def _trigger_led_builders(self, builders, properties, test_spec, bucket=None):
+    bucket = bucket or self.m.buildbucket.build.builder.bucket
+    for builder_name in builders:
+        self.m.led.trigger_builder(
+            'v8', bucket, builder_name,
+            dict(
+                properties,
+                **test_spec.as_properties_dict(builder_name)
+            ),
+        )
 
   def _builder_job_pairs(self, builders, jobs):
     result = []

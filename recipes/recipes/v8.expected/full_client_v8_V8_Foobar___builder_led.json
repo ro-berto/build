@@ -1,0 +1,159 @@
+[
+  {
+    "cmd": [],
+    "name": "trigger"
+  },
+  {
+    "cmd": [],
+    "name": "trigger.trigger v8/ci/V8 Foobar",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@swarming task@https://example.swarmingserver.appspot.com/task?id=fake-task-id@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "led",
+      "get-builder",
+      "v8/ci:V8 Foobar"
+    ],
+    "env": {
+      "SWARMING_TASK_ID": null
+    },
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "trigger.trigger v8/ci/V8 Foobar.led get-builder",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@proto.output@{@@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"buildbucket\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"bbagent_args\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"build\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"builder\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"bucket\": \"ci\",@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"builder\": \"V8 Foobar\",@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"project\": \"v8\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }@@@",
+      "@@@STEP_LOG_LINE@proto.output@      }@@@",
+      "@@@STEP_LOG_LINE@proto.output@    }@@@",
+      "@@@STEP_LOG_LINE@proto.output@  }@@@",
+      "@@@STEP_LOG_LINE@proto.output@}@@@",
+      "@@@STEP_LOG_END@proto.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "led",
+      "edit",
+      "-p",
+      "newest_gitiles_revision=\"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\"",
+      "-p",
+      "oldest_gitiles_revision=\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"",
+      "-p",
+      "parent_build=\"https://cr-buildbucket.appspot.com/build/8945511751514863184\"",
+      "-p",
+      "parent_buildername=\"V8 Foobar - builder\"",
+      "-p",
+      "parent_gn_args=[\"target_cpu = \\\"x86\\\"\", \"use_goma = true\"]",
+      "-p",
+      "parent_got_revision=\"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\"",
+      "-p",
+      "parent_got_revision_cp=\"refs/heads/main@{#50110}\"",
+      "-p",
+      "revision=\"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\""
+    ],
+    "env": {
+      "SWARMING_TASK_ID": null
+    },
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "trigger.trigger v8/ci/V8 Foobar.led edit",
+    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"ci\",\n          \"builder\": \"V8 Foobar\",\n          \"project\": \"v8\"\n        }\n      }\n    }\n  }\n}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@proto.output@{@@@",
+      "@@@STEP_LOG_LINE@proto.output@  \"buildbucket\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@    \"bbagent_args\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@      \"build\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"builder\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"bucket\": \"ci\",@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"builder\": \"V8 Foobar\",@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"project\": \"v8\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@        },@@@",
+      "@@@STEP_LOG_LINE@proto.output@        \"input\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@          \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"newest_gitiles_revision\": \"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"oldest_gitiles_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"parent_build\": \"https://cr-buildbucket.appspot.com/build/8945511751514863184\",@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"parent_buildername\": \"V8 Foobar - builder\",@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"parent_gn_args\": [@@@",
+      "@@@STEP_LOG_LINE@proto.output@              \"target_cpu = \\\"x86\\\"\",@@@",
+      "@@@STEP_LOG_LINE@proto.output@              \"use_goma = true\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@            ],@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"parent_got_revision\": \"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\",@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"parent_got_revision_cp\": \"refs/heads/main@{#50110}\",@@@",
+      "@@@STEP_LOG_LINE@proto.output@            \"revision\": \"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\"@@@",
+      "@@@STEP_LOG_LINE@proto.output@          }@@@",
+      "@@@STEP_LOG_LINE@proto.output@        }@@@",
+      "@@@STEP_LOG_LINE@proto.output@      }@@@",
+      "@@@STEP_LOG_LINE@proto.output@    }@@@",
+      "@@@STEP_LOG_LINE@proto.output@  }@@@",
+      "@@@STEP_LOG_LINE@proto.output@}@@@",
+      "@@@STEP_LOG_END@proto.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "led",
+      "launch"
+    ],
+    "env": {
+      "SWARMING_TASK_ID": null
+    },
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "trigger.trigger v8/ci/V8 Foobar.led launch",
+    "stdin": "{\n  \"buildbucket\": {\n    \"bbagent_args\": {\n      \"build\": {\n        \"builder\": {\n          \"bucket\": \"ci\",\n          \"builder\": \"V8 Foobar\",\n          \"project\": \"v8\"\n        },\n        \"input\": {\n          \"properties\": {\n            \"newest_gitiles_revision\": \"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\n            \"oldest_gitiles_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\n            \"parent_build\": \"https://cr-buildbucket.appspot.com/build/8945511751514863184\",\n            \"parent_buildername\": \"V8 Foobar - builder\",\n            \"parent_gn_args\": [\n              \"target_cpu = \\\"x86\\\"\",\n              \"use_goma = true\"\n            ],\n            \"parent_got_revision\": \"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\",\n            \"parent_got_revision_cp\": \"refs/heads/main@{#50110}\",\n            \"revision\": \"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\"\n          }\n        }\n      }\n    }\n  }\n}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"swarming\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"host_name\": \"example.swarmingserver.appspot.com\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"task_id\": \"fake-task-id\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@Swarming task@https://example.swarmingserver.appspot.com/task?id=fake-task-id@@@"
+    ]
+  }
+]

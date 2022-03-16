@@ -8,6 +8,8 @@ from recipe_engine.post_process import (
     ResultReasonRE, StatusException, StatusFailure, StepException)
 from recipe_engine.recipe_api import Property
 
+from PB.recipe_modules.recipe_engine.led import properties as led_properties_pb
+
 PYTHON_VERSION_COMPATIBILITY = "PY3"
 
 DEPS = [
@@ -971,6 +973,30 @@ def GenTests(api):
       api.v8.check_in_any_arg('build.generate_build_files', 'build') +
       api.v8.check_in_any_arg('build.compile', 'build') +
       api.post_process(Filter('trigger'))
+  )
+
+  # Test led run.
+  led_properties = {
+      '$recipe_engine/led':
+          led_properties_pb.InputProperties(
+              led_run_id='fake-run-id',
+          ),
+  }
+  yield (
+      api.v8.test('client.v8', 'V8 Foobar - builder', 'led',
+                  triggers=['V8 Foobar'],
+      ) +
+      api.properties(**led_properties) +
+      api.post_process(Filter().include_re(r'trigger.*'))
+  )
+
+  # As above but for tryserver.
+  yield (
+      api.v8.test('tryserver.v8', 'v8_foobar_rel_ng', 'led',
+                  triggers=['v8_foobar_rel_ng_triggered'],
+      ) +
+      api.properties(**led_properties) +
+      api.post_process(DropExpectation)
   )
 
   # Test mac builder.
