@@ -27,6 +27,7 @@ DEPS = [
     'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/properties',
+    'reclient',
 ]
 
 COMPARISON_BUILDERS = freeze({
@@ -182,6 +183,7 @@ def GenTests(api):
     yield api.test(
         test_name,
         api.chromium.ci_build(builder_group=builder_group, builder=buildername),
+        api.reclient.properties(),
         api.platform(COMPARISON_BUILDERS[buildername]['platform'], 64),
         api.properties(
             buildername=buildername, buildnumber=571, configuration='Release'),
@@ -193,6 +195,7 @@ def GenTests(api):
       'first_build_compile_fail',
       api.chromium.ci_build(
           builder_group=builder_group, builder='Comparison Linux (reclient)'),
+      api.reclient.properties(),
       api.properties(
           buildername='Comparison Linux (reclient)', buildnumber=571),
       api.platform(
@@ -207,6 +210,7 @@ def GenTests(api):
       'second_build_compile_fail',
       api.chromium.ci_build(
           builder_group=builder_group, builder='Comparison Linux (reclient)'),
+      api.reclient.properties(),
       api.properties(
           buildername='Comparison Linux (reclient)', buildnumber=571),
       api.platform(

@@ -16,6 +16,7 @@ DEPS = [
     'chromium',
     'chromium_checkout',
     'gn',
+    'reclient',
     'recipe_engine/context',
     'recipe_engine/json',
     'recipe_engine/path',
@@ -328,6 +329,7 @@ def RunSteps(api):
 
 def GenTests(api):
   for test in api.chromium.gen_tests_for_builders(BUILDERS):
+    test += api.reclient.properties()
     if 'Upload_iOS' in test.name:
       yield (test + api.properties(xcode_build_version='12345'))
     else:

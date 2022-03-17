@@ -28,6 +28,7 @@ DEPS = [
     'recipe_engine/properties',
     'recipe_engine/raw_io',
     'recipe_engine/step',
+    'reclient',
     'v8',
 ]
 
@@ -560,7 +561,9 @@ def GenTests(api):
           build_config='Release',
           target_bits=64,
           use_remoteexec=True,
-          upload_archive=False), api.platform('linux', 64),
+          upload_archive=False),
+      api.reclient.properties(),
+      api.platform('linux', 64),
       api.v8.version_file(1, 'head', prefix='sync.'),
       api.override_step_data('sync.git describe',
                              api.raw_io.stream_output_text('3.4.3.1')),
@@ -571,4 +574,5 @@ def GenTests(api):
       api.post_process(
           Filter('sync.bot_update', 'build.gn', 'build.preprocess for reclient',
                  'build.compile', 'build (libs).gn',
-                 'build (libs).preprocess for reclient')))
+                 'build (libs).preprocess for reclient')),
+  )

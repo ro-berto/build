@@ -13,25 +13,26 @@ from PB.recipe_modules.recipe_engine.led import properties as led_properties_pb
 PYTHON_VERSION_COMPATIBILITY = "PY3"
 
 DEPS = [
-  'archive',
-  'chromium',
-  'chromium_swarming',
-  'depot_tools/gclient',
-  'recipe_engine/buildbucket',
-  'recipe_engine/context',
-  'recipe_engine/json',
-  'recipe_engine/path',
-  'recipe_engine/platform',
-  'recipe_engine/properties',
-  'recipe_engine/raw_io',
-  'recipe_engine/scheduler',
-  'recipe_engine/step',
-  'recipe_engine/swarming',
-  'recipe_engine/url',
-  'recipe_engine/time',
-  'test_utils',
-  'depot_tools/tryserver',
-  'v8',
+    'archive',
+    'chromium',
+    'chromium_swarming',
+    'depot_tools/gclient',
+    'recipe_engine/buildbucket',
+    'recipe_engine/context',
+    'recipe_engine/json',
+    'recipe_engine/path',
+    'recipe_engine/platform',
+    'recipe_engine/properties',
+    'recipe_engine/raw_io',
+    'recipe_engine/scheduler',
+    'recipe_engine/step',
+    'recipe_engine/swarming',
+    'recipe_engine/url',
+    'recipe_engine/time',
+    'reclient',
+    'test_utils',
+    'depot_tools/tryserver',
+    'v8',
 ]
 
 PROPERTIES = {
@@ -1123,15 +1124,17 @@ def GenTests(api):
     ) +
     api.post_process(DropExpectation)
   )
-  yield (api.v8.test(
-      'client.v8',
-      'V8 Foobar',
-      'rbe',
-      use_goma=False,
-      use_remoteexec=True,
-  ) + api.step_data('build.lookup GN args',
+  yield (
+      api.v8.test(
+          'client.v8',
+          'V8 Foobar',
+          'rbe',
+          use_goma=False,
+          use_remoteexec=True,
+      ) + api.reclient.properties() +
+      api.step_data('build.lookup GN args',
                     api.raw_io.stream_output_text(fake_gn_args_x64_reclient)) +
-         api.post_process(DropExpectation))
+      api.post_process(DropExpectation))
 
   def check_gs_url_equals(check, steps, expected):
     check('gsutil upload' in steps)

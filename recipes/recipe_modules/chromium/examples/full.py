@@ -16,6 +16,7 @@ DEPS = [
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
+    'reclient',
 ]
 
 def RunSteps(api):
@@ -117,14 +118,17 @@ def GenTests(api):
           builder='Android arm Builder (dbg)',
           bot_id='build1-a1',
           build_number=77457,
-      ), api.properties(
+      ),
+      api.properties(
           use_reclient=True,
           out_dir='/tmp',
       ),
+      api.reclient.properties(),
       api.post_check(lambda check, steps: check({
           'RBE_server_address', 'RBE_log_dir'
       }.issubset(steps['compile'].env))),
-      api.post_process(post_process.DropExpectation))
+      api.post_process(post_process.DropExpectation),
+  )
 
   yield api.test(
       'basic_no_out_dir_with_goma_module',

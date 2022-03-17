@@ -45,10 +45,14 @@ def MakeTestRBEStats(num_records=0, total_verified=None, total_mismatches=None):
 
 
 def GenTests(api):
-  yield api.test('basic')
+  yield api.test(
+      'basic',
+      api.reclient.properties(),
+  )
 
   yield api.test(
       'basic windows',
+      api.reclient.properties(),
       api.platform('win', 64),
   )
 
@@ -63,6 +67,12 @@ def GenTests(api):
       'override_metrics_project',
       api.buildbucket.ci_build(project='chromium', builder='Linux reclient'),
       api.reclient.properties(metrics_project='goma'),
+  )
+
+  yield api.test(
+      'override_cache_silo',
+      api.buildbucket.ci_build(project='chromium', builder='Linux reclient'),
+      api.reclient.properties(cache_silo='goma'),
   )
 
   def env_checker(check, steps):

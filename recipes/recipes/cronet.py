@@ -15,6 +15,7 @@ DEPS = [
     'recipe_engine/buildbucket',
     'recipe_engine/path',
     'recipe_engine/properties',
+    'reclient',
 ]
 
 BUILDERS = freeze({
@@ -83,6 +84,7 @@ def GenTests(api):
             builder=builder,
             builder_group='chromium.android',
         ),
+        api.reclient.properties(),
     )
 
   yield api.test(
@@ -91,6 +93,7 @@ def GenTests(api):
           builder='local_test',
           builder_group='chromium.android',
       ),
+      api.reclient.properties(),
       api.step_data('compile', retcode=1),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),

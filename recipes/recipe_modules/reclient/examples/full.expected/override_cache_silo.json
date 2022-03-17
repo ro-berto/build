@@ -95,6 +95,7 @@
       "[CLEANUP]/reclient_log_tmp_1"
     ],
     "env": {
+      "RBE_cache_silo": "goma",
       "RBE_deps_cache_dir": "[CACHE]/builder/reclient/deps/Linux_reclient",
       "RBE_deps_cache_max_mb": "256",
       "RBE_fail_early_min_action_count": "4000",
@@ -205,15 +206,7 @@
       "-proxy_log_dir",
       "[CLEANUP]/reclient_log_tmp_1",
       "-server_address",
-      "unix:///[TMP_BASE]/reproxy.sock",
-      "-metrics_project",
-      "goma",
-      "-metrics_prefix",
-      "go.chromium.org",
-      "-metrics_namespace",
-      "test-rbe-project",
-      "-metrics_labels",
-      "project=chromium,bucket=ci,builder=Linux reclient,"
+      "unix:///[TMP_BASE]/reproxy.sock"
     ],
     "infra_step": true,
     "luci_context": {

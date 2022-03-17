@@ -22,6 +22,7 @@ DEPS = [
     'recipe_engine/properties',
     'recipe_engine/raw_io',
     'recipe_engine/step',
+    'reclient',
 ]
 
 BUILDERS = ctbc.BuilderDatabase.create({
@@ -88,6 +89,7 @@ def GenTests(api):
       api.chromium.ci_build(
           builder_group='chromium.fyi',
           builder='Linux Builder (j-500) (reclient)'),
+      api.reclient.properties(),
       api.properties(swarming_gtest=True),
       api.step_data('lookup GN args',
                     api.raw_io.stream_output_text('use_remoteexec = true\n')),

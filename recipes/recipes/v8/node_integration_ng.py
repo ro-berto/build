@@ -32,6 +32,7 @@ DEPS = [
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/step',
+    'reclient',
     'v8',
 ]
 
@@ -339,7 +340,7 @@ def GenTests(api):
       platform='linux',
       v8_tot=True,
       use_remoteexec=True,
-  ) + api.post_process(
+  ) + api.reclient.properties() + api.post_process(
       Filter('initialization.bot_update', 'build.gn',
              'build.preprocess for reclient',
              'build.postprocess for reclient')))

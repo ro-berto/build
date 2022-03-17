@@ -8,12 +8,12 @@ from recipe_engine import recipe_test_api
 class ReclientTestApi(recipe_test_api.RecipeTestApi):
 
   def properties(self,
-                 instance='example',
+                 instance='test-rbe-project',
                  metrics_project=None,
                  rewrapper_env=None,
                  profiler_service=None,
                  publish_trace=None,
-                 cache_silo="test silo",
+                 cache_silo=None,
                  ensure_verified=None):
     if rewrapper_env is None:
       rewrapper_env = {}

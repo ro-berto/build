@@ -100,8 +100,6 @@ class ReclientApi(recipe_api.RecipeApi):
       return self._instance
 
     self._instance = self._props.instance
-    if not self._instance and self._test_data.enabled:
-      self._instance = 'test-rbe-project'
 
     if self._instance and '/' not in self._instance:
       # Set full instance name if only project ID is given.
@@ -217,6 +215,7 @@ class ReclientApi(recipe_api.RecipeApi):
       ninja_command: Command used for build.
                      (e.g. ['ninja', '-C', 'out/Release'])
     """
+    assert self.instance, 'reclient is not configured'
     self._reclient_log_dir = self.m.path.mkdtemp('reclient_log')
     with self.m.step.nest('preprocess for reclient'):
       self._install_reclient_cfgs()
