@@ -90,6 +90,26 @@
   {
     "cmd": [
       "git",
+      "git",
+      "fetch",
+      "origin",
+      "--prune"
+    ],
+    "cwd": "[CACHE]/builder/v8",
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/v8/third_party/depot_tools"
+      ]
+    },
+    "infra_step": true,
+    "name": "git git",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@stdout@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
       "branch",
       "-r",
       "--list",

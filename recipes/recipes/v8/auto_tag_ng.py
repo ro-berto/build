@@ -66,6 +66,7 @@ def RunSteps(api, tracked_branches_count):
   with api.context(
       cwd=api.path['checkout'],
       env_prefixes={'PATH': [api.v8.depot_tools_path]}):
+    git_output(api, 'git', 'fetch', 'origin', '--prune')
     branches = last_branches(api)
     assert len(branches) >= tracked_branches_count
     performed_actions = []
