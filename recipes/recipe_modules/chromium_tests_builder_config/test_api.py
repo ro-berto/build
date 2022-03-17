@@ -264,6 +264,57 @@ class _CiTesterPropertiesAssembler(object):
     return self._props_assembler.assemble()
 
 
+class _TryBuilderPropertiesAssembler(object):
+
+  def __init__(self, props_assembler):
+    self._props_assembler = props_assembler
+    # ID and spec of the most recently added builder
+    self._builder_id = None
+    self._builder_spec = None
+
+  # TODO(gbeaty) Update this to accept arguments for changing the try settings
+  # (retry shards, RTS, etc.)
+  @classmethod
+  def create(cls):
+    props_assembler = _PropertiesAssembler()
+    return cls(props_assembler)
+
+  def with_mirrored_builder(self, **kwargs):
+    kwargs.setdefault('bucket', 'ci')
+    kwargs.setdefault('builder_spec', self._builder_spec)
+    details = BuilderDetails(
+        execution_mode=_ExecutionMode.COMPILE_AND_TEST, parent=None, **kwargs)
+
+    builder_id = self._props_assembler.add_builder(details)
+    self._props_assembler.add_builder_id(builder_id)
+
+    self._builder_id = builder_id
+    self._builder_spec = details.builder_spec
+
+    return self
+
+  def with_mirrored_tester(self, **kwargs):
+    if self._builder_id is None:
+      raise TypeError('`with_mirrored_builder` must be called'
+                      ' before calling `with_mirrored_tester`')
+
+    kwargs.setdefault('bucket', 'ci')
+    kwargs.setdefault('builder_spec', self._builder_spec)
+    details = BuilderDetails(
+        execution_mode=_ExecutionMode.TEST, parent=self._builder_id, **kwargs)
+
+    tester_id = self._props_assembler.add_builder(details)
+    self._props_assembler.add_builder_id_in_scope_for_testing(tester_id)
+
+    return self
+
+  def assemble(self):
+    if self._builder_id is None:
+      raise TypeError(
+          '`with_mirrored_builder` must be called before calling `assemble`')
+    return self._props_assembler.assemble()
+
+
 class ChromiumTestsBuilderConfigApi(recipe_test_api.RecipeTestApi):
 
   def properties(self, properties):
@@ -303,6 +354,25 @@ class ChromiumTestsBuilderConfigApi(recipe_test_api.RecipeTestApi):
       an error to call this before calling `with_parent`.
     """
     return _CiTesterPropertiesAssembler.create(**kwargs)
+
+  @staticmethod
+  def properties_assembler_for_try_builder():
+    """Get a properties assembler for a try builder.
+
+    The returned object has 3 methods:
+    * with_mirrored_builder - Adds a builder that the try builder
+      mirrors. If `builder_spec` is not specified, it will use the last
+      specified builder spec. Must be called at least once with
+      `builder_spec` set.
+    * with_mirrored_tester - Adds a tester with the most recently
+      mirrored builder as the parent. If `builder_spec` is not
+      specified, it will use the parent's builder spec.
+      `with_mirrored_builder` must be called at least once before
+      calling this.
+    * assemble - Creates the proto properties object for the module. It
+      is an error to call this before calling `with_mirrored_builder`.
+    """
+    return _TryBuilderPropertiesAssembler.create()
 
   @staticmethod
   def _get_builder_id(builder_group, builder, **_):

@@ -38,6 +38,22 @@ def RunSteps(api):
   api.assertions.assertEqual(
       str(caught.exception), '`with_parent` can only be called once')
 
+  # Building try builder without specifying mirrored builder
+  props_assembler = ctbc_test_api.properties_assembler_for_try_builder()
+  with api.assertions.assertRaises(TypeError) as caught:
+    props_assembler.assemble()
+  api.assertions.assertEqual(
+      str(caught.exception),
+      '`with_mirrored_builder` must be called before calling `assemble`')
+
+  # Adding a mirrored tester without specifying mirrored builder
+  props_assembler = ctbc_test_api.properties_assembler_for_try_builder()
+  with api.assertions.assertRaises(TypeError) as caught:
+    props_assembler.with_mirrored_tester()
+  api.assertions.assertEqual(
+      str(caught.exception), ('`with_mirrored_builder` must be called'
+                              ' before calling `with_mirrored_tester`'))
+
 
 def GenTests(api):
   yield api.test(

@@ -251,3 +251,101 @@ def GenTests(api):
       api.post_check(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
+
+  yield api.test(
+      'try-builder',
+      api.chromium_tests_builder_config.properties(
+          api.chromium_tests_builder_config
+          .properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).with_mirrored_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+          ).with_mirrored_tester(
+              builder_group='fake-group',
+              builder='fake-tester2',
+          ).assemble()),
+      api.properties(
+          expected_builder_ids=[builder_id],
+          expected_builder_ids_in_scope_for_testing=[
+              builder_id, tester_id, tester2_id
+          ],
+          expected_specs={
+              builder_id:
+                  ctbc.BuilderSpec.create(
+                      gclient_config='chromium',
+                      chromium_config='chromium',
+                  ),
+              tester_id:
+                  ctbc.BuilderSpec.create(
+                      execution_mode=ctbc.TEST,
+                      parent_builder_group='fake-group',
+                      parent_buildername='fake-builder',
+                      gclient_config='chromium',
+                      chromium_config='chromium',
+                  ),
+              tester2_id:
+                  ctbc.BuilderSpec.create(
+                      execution_mode=ctbc.TEST,
+                      parent_builder_group='fake-group',
+                      parent_buildername='fake-builder',
+                      gclient_config='chromium',
+                      chromium_config='chromium',
+                  ),
+          },
+      ),
+      api.post_check(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'try-builder-with-non-default-builder',
+      api.chromium_tests_builder_config.properties(
+          api.chromium_tests_builder_config
+          .properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+              builder_spec=ctbc.BuilderSpec.create(
+                  gclient_config='gclient-config',
+                  chromium_config='chromium-config',
+              ),
+          ).with_mirrored_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+          ).with_mirrored_tester(
+              builder_group='fake-group',
+              builder='fake-tester2',
+          ).assemble()),
+      api.properties(
+          expected_builder_ids=[builder_id],
+          expected_builder_ids_in_scope_for_testing=[
+              builder_id, tester_id, tester2_id
+          ],
+          expected_specs={
+              builder_id:
+                  ctbc.BuilderSpec.create(
+                      gclient_config='gclient-config',
+                      chromium_config='chromium-config',
+                  ),
+              tester_id:
+                  ctbc.BuilderSpec.create(
+                      execution_mode=ctbc.TEST,
+                      parent_builder_group='fake-group',
+                      parent_buildername='fake-builder',
+                      gclient_config='gclient-config',
+                      chromium_config='chromium-config',
+                  ),
+              tester2_id:
+                  ctbc.BuilderSpec.create(
+                      execution_mode=ctbc.TEST,
+                      parent_builder_group='fake-group',
+                      parent_buildername='fake-builder',
+                      gclient_config='gclient-config',
+                      chromium_config='chromium-config',
+                  ),
+          },
+      ),
+      api.post_check(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
