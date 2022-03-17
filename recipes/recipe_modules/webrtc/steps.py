@@ -131,12 +131,17 @@ def generate_tests(phase, bot, is_tryserver, chromium_tests_api, ios_config):
       'webrtc_nonparallel_tests',
   )
   ios_device_tests = (
+      # TODO(bugs.webrtc.org/11362): Real XCTests fail to start on devices.
+      #'apprtcmobile_tests',
       'common_audio_unittests',
       'common_video_unittests',
       'modules_tests',
       'modules_unittests',
       'rtc_pc_unittests',
       'rtc_stats_unittests',
+      # TODO(bugs.webrtc.org/11362): Real XCTests fail to start on devices.
+      #'sdk_framework_unittests',
+      #'sdk_unittests',
       'system_wrappers_unittests',
       'test_support_unittests',
       'tools_unittests',
