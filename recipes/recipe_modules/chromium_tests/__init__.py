@@ -51,6 +51,7 @@ DEPS = [
     'recipe_engine/step',
     'recipe_engine/swarming',
     'recipe_engine/time',
+    'reclient',
     'skylab',
     'symupload',
     'test_results',

@@ -52,11 +52,16 @@ def GenTests(api):
           builder_db=ctbc.BuilderDatabase.create({
               'fake-group': {
                   'fake-builder':
-                      ctbc.BuilderSpec.create(),
+                      ctbc.BuilderSpec.create(
+                          chromium_config='chromium',
+                          gclient_config='chromium',
+                      ),
                   'fake-tester':
                       ctbc.BuilderSpec.create(
                           execution_mode=ctbc.TEST,
                           parent_buildername='fake-builder',
+                          chromium_config='chromium',
+                          gclient_config='chromium',
                       ),
               },
               'fake-group2': {
@@ -65,6 +70,8 @@ def GenTests(api):
                           execution_mode=ctbc.TEST,
                           parent_builder_group='fake-group',
                           parent_buildername='fake-builder',
+                          chromium_config='chromium',
+                          gclient_config='chromium',
                       ),
               },
           })),
