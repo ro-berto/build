@@ -253,7 +253,7 @@
     "cmd": [],
     "name": "builder cache",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>builder cache is absent, expect a slow build@@@",
+      "@@@STEP_TEXT@builder cache is absent, expect a slow build@@@",
       "@@@SET_BUILD_PROPERTY@is_cached@false@@@"
     ]
   },

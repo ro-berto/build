@@ -242,11 +242,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         presentation.properties['is_cached'] = is_cached
         if is_cached:
           presentation.step_text = (
-              '\nbuilder cache is present, '
+              'builder cache is present, '
               'build may or may not be fast depending on state of cache')
         else:
           presentation.step_text = (
-              '\nbuilder cache is absent, expect a slow build')
+              'builder cache is absent, expect a slow build')
 
     # The root_solution_revision input property can be used to checkout
     # the root solution at a certain branch. This can be used when attempting
