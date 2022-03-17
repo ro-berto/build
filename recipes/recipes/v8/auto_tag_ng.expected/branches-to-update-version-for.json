@@ -90,7 +90,6 @@
   {
     "cmd": [
       "git",
-      "git",
       "fetch",
       "origin",
       "--prune"
@@ -102,7 +101,7 @@
       ]
     },
     "infra_step": true,
-    "name": "git git",
+    "name": "git fetch",
     "~followup_annotations": [
       "@@@STEP_LOG_END@stdout@@@"
     ]
