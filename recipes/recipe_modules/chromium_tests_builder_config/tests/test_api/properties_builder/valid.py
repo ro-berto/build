@@ -51,10 +51,10 @@ def GenTests(api):
   yield api.test(
       'builder',
       api.chromium_tests_builder_config.properties(
-          api.chromium_tests_builder_config.properties_builder_for_ci_builder(
+          api.chromium_tests_builder_config.properties_assembler_for_ci_builder(
               builder_group='fake-group',
               builder='fake-builder',
-          ).build()),
+          ).assemble()),
       api.properties(
           expected_builder_ids=[builder_id],
           expected_builder_ids_in_scope_for_testing=[builder_id],
@@ -73,7 +73,7 @@ def GenTests(api):
   yield api.test(
       'builder-with-testers',
       api.chromium_tests_builder_config.properties(
-          api.chromium_tests_builder_config.properties_builder_for_ci_builder(
+          api.chromium_tests_builder_config.properties_assembler_for_ci_builder(
               builder_group='fake-group',
               builder='fake-builder',
           ).with_tester(
@@ -82,7 +82,7 @@ def GenTests(api):
           ).with_tester(
               builder_group='fake-group',
               builder='fake-tester2',
-          ).build()),
+          ).assemble()),
       api.properties(
           expected_builder_ids=[builder_id],
           expected_builder_ids_in_scope_for_testing=[
@@ -121,7 +121,7 @@ def GenTests(api):
   yield api.test(
       'non-default-builder-with-tester',
       api.chromium_tests_builder_config.properties(
-          api.chromium_tests_builder_config.properties_builder_for_ci_builder(
+          api.chromium_tests_builder_config.properties_assembler_for_ci_builder(
               builder_group='fake-group',
               builder='fake-builder',
               builder_spec=ctbc.BuilderSpec.create(
@@ -140,7 +140,7 @@ def GenTests(api):
           ).with_tester(
               builder_group='fake-group',
               builder='fake-tester',
-          ).build()),
+          ).assemble()),
       api.properties(
           expected_builder_ids=[builder_id],
           expected_builder_ids_in_scope_for_testing=[builder_id, tester_id],
@@ -185,13 +185,13 @@ def GenTests(api):
   yield api.test(
       'tester',
       api.chromium_tests_builder_config.properties(
-          api.chromium_tests_builder_config.properties_builder_for_ci_tester(
+          api.chromium_tests_builder_config.properties_assembler_for_ci_tester(
               builder_group='fake-group',
               builder='fake-tester',
           ).with_parent(
               builder_group='fake-group',
               builder='fake-builder',
-          ).build()),
+          ).assemble()),
       api.properties(
           expected_builder_ids=[tester_id],
           expected_builder_ids_in_scope_for_testing=[tester_id],
@@ -218,7 +218,7 @@ def GenTests(api):
   yield api.test(
       'non-default-tester',
       api.chromium_tests_builder_config.properties(
-          api.chromium_tests_builder_config.properties_builder_for_ci_tester(
+          api.chromium_tests_builder_config.properties_assembler_for_ci_tester(
               builder_group='fake-group',
               builder='fake-tester',
               builder_spec=ctbc.BuilderSpec.create(
@@ -228,7 +228,7 @@ def GenTests(api):
           ).with_parent(
               builder_group='fake-group',
               builder='fake-builder',
-          ).build()),
+          ).assemble()),
       api.properties(
           expected_builder_ids=[tester_id],
           expected_builder_ids_in_scope_for_testing=[tester_id],

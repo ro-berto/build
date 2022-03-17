@@ -319,7 +319,7 @@ def GenTests(api):
           build_number=77457,
       ),
       ctbc_api.properties(
-          ctbc_api.properties_builder_for_ci_builder(
+          ctbc_api.properties_assembler_for_ci_builder(
               builder_group='chromium.chromiumos',
               builder='chromeos-amd64-generic-rel',
               builder_spec=ctbc.BuilderSpec.create(
@@ -336,7 +336,7 @@ def GenTests(api):
                   },
                   build_gs_bucket='chromium-chromiumos-archive',
               ),
-          ).build()),
+          ).assemble()),
       api.properties(out_dir='/tmp'),
   )
 

@@ -31,10 +31,10 @@ class BuilderDetails(object):
   """Details for specifying builders in properties.
 
   The following fields can be set by the caller when using the
-  properties builders:
+  properties assemblers:
   * project - The LUCI project of the builder.
   * bucket - The LUCI bucket of the builder. A default will be set by
-    the properties builders methods.
+    the properties assemblers methods.
   * builder - The name of the builder.
   * builder_group - The builder group of the builder.
   * builder_spec - The builder spec that should be produced for the
@@ -50,20 +50,20 @@ class BuilderDetails(object):
   builder_group = attrib(str)
   builder_spec = attrib(BuilderSpec, default=_DEFAULT_SPEC)
 
-  # Private fields, controlled by the properties builders and cannot be
+  # Private fields, controlled by the properties assemblers and cannot be
   # set by the caller
   execution_mode = attrib(enum(_ExecutionMode.values()))
   parent = attrib(builder_pb.BuilderID, default=None)
 
 
-class _PropertiesBuilder(object):
+class _PropertiesAssembler(object):
 
   def __init__(self):
     self._builder_entries = []
     self._builder_ids = []
     self._builder_ids_in_scope_for_testing = []
 
-  def build(self):
+  def assemble(self):
     return properties_pb.InputProperties(
         builder_config=properties_pb.BuilderConfig(
             builder_db=properties_pb.BuilderDatabase(
@@ -196,49 +196,49 @@ class _PropertiesBuilder(object):
     return None
 
 
-class _CiBuilderPropertiesBuilder(object):
+class _CiBuilderPropertiesAssembler(object):
 
-  def __init__(self, props_builder, builder_id, builder_spec):
-    self._props_builder = props_builder
+  def __init__(self, props_assembler, builder_id, builder_spec):
+    self._props_assembler = props_assembler
     self._builder_id = builder_id
     self._builder_spec = builder_spec
 
   @classmethod
   def create(cls, **kwargs):
-    props_builder = _PropertiesBuilder()
+    props_assembler = _PropertiesAssembler()
     kwargs.setdefault('bucket', 'ci')
     details = BuilderDetails(
         execution_mode=_ExecutionMode.COMPILE_AND_TEST, parent=None, **kwargs)
-    builder_id = props_builder.add_builder(details)
-    props_builder.add_builder_id(builder_id)
-    return cls(props_builder, builder_id, details.builder_spec)
+    builder_id = props_assembler.add_builder(details)
+    props_assembler.add_builder_id(builder_id)
+    return cls(props_assembler, builder_id, details.builder_spec)
 
   def with_tester(self, **kwargs):
     kwargs.setdefault('builder_spec', self._builder_spec)
     kwargs.setdefault('bucket', 'ci')
     details = BuilderDetails(
         execution_mode=_ExecutionMode.TEST, parent=self._builder_id, **kwargs)
-    tester_id = self._props_builder.add_builder(details)
-    self._props_builder.add_builder_id_in_scope_for_testing(tester_id)
+    tester_id = self._props_assembler.add_builder(details)
+    self._props_assembler.add_builder_id_in_scope_for_testing(tester_id)
     return self
 
-  def build(self):
-    return self._props_builder.build()
+  def assemble(self):
+    return self._props_assembler.assemble()
 
 
-class _CiTesterPropertiesBuilder(object):
+class _CiTesterPropertiesAssembler(object):
 
-  def __init__(self, props_builder, tester_details):
-    self._props_builder = props_builder
+  def __init__(self, props_assembler, tester_details):
+    self._props_assembler = props_assembler
     self._tester_details = tester_details
     self._parent_details = None
 
   @classmethod
   def create(cls, **kwargs):
-    props_builder = _PropertiesBuilder()
+    props_assembler = _PropertiesAssembler()
     kwargs.setdefault('bucket', 'ci')
     details = BuilderDetails(execution_mode=_ExecutionMode.TEST, **kwargs)
-    return cls(props_builder, details)
+    return cls(props_assembler, details)
 
   def with_parent(self, **kwargs):
     if self._parent_details is not None:
@@ -248,20 +248,20 @@ class _CiTesterPropertiesBuilder(object):
     kwargs.setdefault('bucket', 'ci')
     details = BuilderDetails(
         execution_mode=_ExecutionMode.COMPILE_AND_TEST, **kwargs)
-    builder_id = self._props_builder.add_builder(details)
+    builder_id = self._props_assembler.add_builder(details)
     self._parent_details = details
 
     tester_details = attr.evolve(self._tester_details, parent=builder_id)
-    tester_id = self._props_builder.add_builder(tester_details)
+    tester_id = self._props_assembler.add_builder(tester_details)
 
-    self._props_builder.add_builder_id(tester_id)
+    self._props_assembler.add_builder_id(tester_id)
 
     return self
 
-  def build(self):
+  def assemble(self):
     if self._parent_details is None:
-      raise TypeError('`with_parent` must be called before calling `build`')
-    return self._props_builder.build()
+      raise TypeError('`with_parent` must be called before calling `assemble`')
+    return self._props_assembler.assemble()
 
 
 class ChromiumTestsBuilderConfigApi(recipe_test_api.RecipeTestApi):
@@ -272,8 +272,8 @@ class ChromiumTestsBuilderConfigApi(recipe_test_api.RecipeTestApi):
         **{'$build/chromium_tests_builder_config': properties})
 
   @staticmethod
-  def properties_builder_for_ci_builder(**kwargs):
-    """Get a properties builder for a CI builder.
+  def properties_assembler_for_ci_builder(**kwargs):
+    """Get a properties assembler for a CI builder.
 
     See BuilderDetails for information on the allowed keyword arguments.
     The value of bucket will default to 'ci'.
@@ -282,15 +282,14 @@ class ChromiumTestsBuilderConfigApi(recipe_test_api.RecipeTestApi):
     * with_tester - Adds a tester to the properties with the CI builder
       as its parent. If `builder_spec` is not specified, it will use the
       value specified for the CI builder, if any. This can be called
-      multiple times before calling `build`.
-    * build - Creates the test data object that sets the properties for
-      the module.
+      multiple times before calling `assemble`.
+    * assemble - Creates the proto properties object for the module.
     """
-    return _CiBuilderPropertiesBuilder.create(**kwargs)
+    return _CiBuilderPropertiesAssembler.create(**kwargs)
 
   @staticmethod
-  def properties_builder_for_ci_tester(**kwargs):
-    """Get a properties builder for a CI tester.
+  def properties_assembler_for_ci_tester(**kwargs):
+    """Get a properties assembler for a CI tester.
 
     See BuilderDetails for information on the allowed keyword arguments.
     The value of bucket will default to 'ci'.
@@ -299,12 +298,11 @@ class ChromiumTestsBuilderConfigApi(recipe_test_api.RecipeTestApi):
     * with_parent - Adds the parent builder for the tester. If
       `builder_spec` is not specified, it will use the value specified
       for the CI tester, if any. This must be called exactly once before
-      calling `build`.
-    * build - Creates the test data object that sets the properties for
-      the module. It is an error to call this before calling
-      `with_parent`.
+      calling `assemble`.
+    * assemble - Creates the proto properties object for the module. It is
+      an error to call this before calling `with_parent`.
     """
-    return _CiTesterPropertiesBuilder.create(**kwargs)
+    return _CiTesterPropertiesAssembler.create(**kwargs)
 
   @staticmethod
   def _get_builder_id(builder_group, builder, **_):

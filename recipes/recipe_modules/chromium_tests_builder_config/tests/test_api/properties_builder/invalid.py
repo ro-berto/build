@@ -19,21 +19,21 @@ def RunSteps(api):
   ctbc_test_api = api.chromium_tests_builder_config.test_api
 
   # Building tester without specifying parent
-  props_builder = ctbc_test_api.properties_builder_for_ci_tester(
+  props_assembler = ctbc_test_api.properties_assembler_for_ci_tester(
       builder_group='fake-group', builder='fake-tester')
   with api.assertions.assertRaises(TypeError) as caught:
-    props_builder.build()
+    props_assembler.assemble()
   api.assertions.assertEqual(
       str(caught.exception),
-      '`with_parent` must be called before calling `build`')
+      '`with_parent` must be called before calling `assemble`')
 
   # Specifying parent multiple times
-  props_builder = ctbc_test_api \
-      .properties_builder_for_ci_tester(
+  props_assembler = ctbc_test_api \
+      .properties_assembler_for_ci_tester(
           builder_group='fake-group', builder='fake-tester') \
       .with_parent(builder_group='fake-group', builder='fake-builder')
   with api.assertions.assertRaises(TypeError) as caught:
-    props_builder.with_parent(
+    props_assembler.with_parent(
         builder_group='fake-group', builder='fake-builder')
   api.assertions.assertEqual(
       str(caught.exception), '`with_parent` can only be called once')

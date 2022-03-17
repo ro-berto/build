@@ -522,7 +522,7 @@ def GenTests(api):
   ctbc_api = api.chromium_tests_builder_config
 
   ctbc_prop = (
-      ctbc_api.properties_builder_for_ci_builder(
+      ctbc_api.properties_assembler_for_ci_builder(
           bucket='bucket',
           builder='matching-config',
           builder_group='fake-group',
@@ -530,7 +530,7 @@ def GenTests(api):
       ).with_tester(
           builder='matching-config-tester',
           builder_group='fake-group',
-      ).build())
+      ).assemble())
 
   yield api.test(
       'changed-builder-config-matching-recipe-config',
@@ -572,7 +572,7 @@ def GenTests(api):
   )
 
   ctbc_prop = (
-      ctbc_api.properties_builder_for_ci_tester(
+      ctbc_api.properties_assembler_for_ci_tester(
           bucket='bucket',
           builder='matching-config-tester',
           builder_group='fake-group',
@@ -580,7 +580,7 @@ def GenTests(api):
       ).with_parent(
           builder='matching-config',
           builder_group='fake-group',
-      ).build())
+      ).assemble())
 
   yield api.test(
       'changed-tester-config-matching-recipe-config',
@@ -622,12 +622,12 @@ def GenTests(api):
   )
 
   ctbc_prop = (
-      ctbc_api.properties_builder_for_ci_builder(
+      ctbc_api.properties_assembler_for_ci_builder(
           bucket='bucket',
           builder='not-matching-config',
           builder_group='fake-group',
           builder_spec=example_spec,
-      ).build())
+      ).assemble())
 
   yield api.test(
       'changed-builder-config-not-matching-recipe-config',
