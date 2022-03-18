@@ -29,8 +29,8 @@ def has_whitelisted_extension(filename):
   # Since the problems caused by whitelisting are more easily managed than those
   # caused by blacklisting, we whitelist below.
   extension_whitelist = {
-      'c', 'cc', 'cpp', 'css', 'h', 'html', 'inc', 'java', 'js', 'json',
-      'proto', 'py', 'strings', 'txt', 'xml'
+      'c', 'cc', 'cpp', 'css', 'desugardeps', 'h', 'html', 'inc', 'java', 'js',
+      'json', 'proto', 'py', 'strings', 'txt', 'xml'
   }
   dot_index = filename.rfind(".")
   return dot_index != -1 and filename[dot_index + 1:] in extension_whitelist
