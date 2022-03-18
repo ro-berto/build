@@ -4,6 +4,7 @@
 
 from __future__ import absolute_import
 
+import attr
 from recipe_engine.engine_types import freeze
 from RECIPE_MODULES.build import chromium_swarming
 from RECIPE_MODULES.build.chromium_tests import steps
@@ -223,6 +224,11 @@ class TestGenerator:
   def __init__(self, chromium_tests_api, ios_config):
     self._chromium_tests_api = chromium_tests_api
     self._ios_config = ios_config
+    # TODO(crbug.com/webrtc/13835): Replace process_perf_results_py2.py by
+    # process_perf_results.py.
+    self._merge = chromium_swarming.MergeScript.create(
+        script=chromium_tests_api.m.path['checkout'].join(
+            'tools_webrtc', 'perf', 'process_perf_results_py2.py'))
 
   def swarming_desktop_test(self, name, args=None, dimensions=None):
     args = args or []
@@ -243,8 +249,10 @@ class TestGenerator:
   def swarming_ios_test(self, name, args=None):
     args = args or []
     args = args + self._ios_config['args']
+    merge = None
     if name in _PERF_TESTS:
       args += ['--write_perf_output_on_ios', '--nologs']
+      merge = attr.evolve(self._merge, args=['--test-suite', name])
     if name in _REAL_XCTEST_TESTS:
       args.append('--xcode-parallelization' if '--version' in
                   args else '--xcodebuild-device-runner')
@@ -252,6 +260,7 @@ class TestGenerator:
         steps.SwarmingIsolatedScriptTestSpec.create(
             name,
             cipd_packages=[_MAC_TOOLCHAIN_CIPD_PACKAGE],
+            merge=merge,
             named_caches=self._ios_config['named_caches'],
             service_account=self._ios_config['service_account'],
             args=args), self._chromium_tests_api)

@@ -399,6 +399,19 @@ class WebRTCApi(recipe_api.RecipeApi):
       self.m.isolate.isolate_tests(
           self.m.chromium.output_dir, targets=self._isolated_targets)
 
+  def set_upload_build_properties(self):
+    perf_bot_group = 'WebRTCPerf'
+
+    self.m.chromium.set_build_properties({
+        'build_page_url': self.build_url,
+        'bot': self.c.PERF_ID,
+        'dashboard_url': DASHBOARD_UPLOAD_URL,
+        'commit_position': self.revision_number,
+        'webrtc_git_hash': self.revision,
+        'perf_dashboard_machine_group': perf_bot_group,
+        'outdir': self.m.chromium.output_dir,
+    })
+
   def find_swarming_command_lines(self):
     args = [
         '--build-dir', self.m.chromium.output_dir, '--output-json',
@@ -545,7 +558,10 @@ class WebRTCApi(recipe_api.RecipeApi):
       self.set_swarming_command_lines(tests)
 
       if self.bot.is_running_perf_tests():
-        return self.run_perf_tests(tests)
+        if 'ios' not in self.bot.test_suite:
+          return self.run_perf_tests(tests)
+        else:
+          self.set_upload_build_properties()
 
       test_runner = self.m.chromium_tests.create_test_runner(tests)
       test_failure_summary = test_runner()
