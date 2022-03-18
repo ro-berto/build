@@ -135,7 +135,9 @@ def generate_tests(phase, bot, is_tryserver, chromium_tests_api, ios_config):
       #'apprtcmobile_tests',
       'common_audio_unittests',
       'common_video_unittests',
-      'modules_tests',
+      # TODO(crbug.com/1306918): videocodec_test_av1 are hiting the iOS
+      # testrunner 3 minutes timeout which is currently not customizable.
+      #'modules_tests',
       'modules_unittests',
       'rtc_pc_unittests',
       'rtc_stats_unittests',
