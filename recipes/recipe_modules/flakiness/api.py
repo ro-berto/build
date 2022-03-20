@@ -149,6 +149,7 @@ class FlakinessApi(recipe_api.RecipeApi):
     self.COMMIT_FOOTER_KEY = 'Validate-Test-Flakiness'
     self.IDENTIFY_STEP_NAME = 'searching_for_new_tests'
     self.RUN_TEST_STEP_NAME = 'test new tests for flakiness'
+    self.CALCULATE_FLAKE_RATE_STEP_NAME = 'calculate flake rates'
 
     self.build_count = properties.build_count or 100
     self.historical_query_count = properties.historical_query_count or 1000
@@ -863,7 +864,7 @@ class FlakinessApi(recipe_api.RecipeApi):
     # fatal, otherwise they are fatal and will fail the build.
     flaky_non_experimental_test_stats = {}
     flaky_experimental_test_stats = {}
-    with self.m.step.nest('calculate flake rates') as p:
+    with self.m.step.nest(self.CALCULATE_FLAKE_RATE_STEP_NAME) as p:
       p.step_text = (
           'Tests that have exceeded the tolerated flake rate most likely '
           'indicate flakiness. See logs for details of the flaky test '
@@ -924,9 +925,12 @@ class FlakinessApi(recipe_api.RecipeApi):
               (self.IDENTIFY_STEP_NAME, self.RUN_TEST_STEP_NAME)
           ]
           summary_lines.extend(non_experimental_summary_lines)
+          summary_markdown = '\n\n'.join(summary_lines)[:3500]
+          summary_markdown += (
+              '\n\nSee full logs in "flaky tests" under %s step.' %
+              self.CALCULATE_FLAKE_RATE_STEP_NAME)
           return result_pb2.RawResult(
-              summary_markdown='\n\n'.join(summary_lines),
-              status=common_pb2.FAILURE)
+              summary_markdown=summary_markdown, status=common_pb2.FAILURE)
 
         # When there is non fatal flakiness, let users know why the build
         # doesn't fail.
