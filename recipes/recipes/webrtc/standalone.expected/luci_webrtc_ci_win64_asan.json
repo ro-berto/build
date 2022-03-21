@@ -978,7 +978,6 @@
       "--output-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]\\builder",
     "luci_context": {
       "realm": {
         "name": "webrtc:ci"
@@ -1020,7 +1019,6 @@
       "0777",
       "[START_DIR]\\cipd_tool\\infra\\tools\\luci\\swarming\\swarming_module_pin"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -1052,7 +1050,6 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -1093,7 +1090,6 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -1244,7 +1240,6 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -1395,7 +1390,6 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -1546,7 +1540,6 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -1697,7 +1690,6 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -1848,7 +1840,6 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -2007,7 +1998,6 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -2166,7 +2156,6 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -2325,7 +2314,6 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -2484,7 +2472,6 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -2643,7 +2630,6 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -2802,7 +2788,6 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -2961,7 +2946,6 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -3120,7 +3104,6 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -3279,7 +3262,6 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -3438,7 +3420,6 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -3597,7 +3578,6 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -3756,7 +3736,6 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -3907,7 +3886,6 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -4058,7 +4036,6 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -4209,7 +4186,6 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -4368,7 +4344,6 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -4527,7 +4502,6 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -4686,7 +4660,6 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -4845,7 +4818,6 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -5004,7 +4976,6 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -5163,7 +5134,6 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -5314,7 +5284,6 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -5465,7 +5434,6 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -5616,7 +5584,6 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -5775,7 +5742,6 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -5934,7 +5900,6 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -6093,7 +6058,6 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -6252,7 +6216,6 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -6403,7 +6366,6 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -6551,7 +6513,6 @@
       "UpdateIncludedInvocations",
       "-include-update-token"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -6628,7 +6589,6 @@
       "--url",
       "https://chromium.googlesource.com/infra/luci/client-py.git"
     ],
-    "cwd": "[CACHE]\\builder",
     "luci_context": {
       "realm": {
         "name": "webrtc:ci"
@@ -6823,7 +6783,6 @@
       "0",
       "--verbose"
     ],
-    "cwd": "[CACHE]\\builder",
     "luci_context": {
       "realm": {
         "name": "webrtc:ci"
@@ -6925,7 +6884,6 @@
       "luci.resultdb.v1.ResultDB",
       "QueryTestResultStatistics"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -6965,7 +6923,6 @@
       "testId,variant,variantHash,status,tags,expected,duration",
       "0"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -6992,7 +6949,6 @@
       "luci.resultdb.v1.ResultDB",
       "QueryTestResultStatistics"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -7032,7 +6988,6 @@
       "testId,variant,variantHash,status,tags,expected,duration",
       "1"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -7059,7 +7014,6 @@
       "luci.resultdb.v1.ResultDB",
       "QueryTestResultStatistics"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -7105,7 +7059,6 @@
       "15",
       "16"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -7132,7 +7085,6 @@
       "luci.resultdb.v1.ResultDB",
       "QueryTestResultStatistics"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -7172,7 +7124,6 @@
       "testId,variant,variantHash,status,tags,expected,duration",
       "17"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -7199,7 +7150,6 @@
       "luci.resultdb.v1.ResultDB",
       "QueryTestResultStatistics"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -7239,7 +7189,6 @@
       "testId,variant,variantHash,status,tags,expected,duration",
       "18"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -7266,7 +7215,6 @@
       "luci.resultdb.v1.ResultDB",
       "QueryTestResultStatistics"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -7306,7 +7254,6 @@
       "testId,variant,variantHash,status,tags,expected,duration",
       "19"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -7333,7 +7280,6 @@
       "luci.resultdb.v1.ResultDB",
       "QueryTestResultStatistics"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -7373,7 +7319,6 @@
       "testId,variant,variantHash,status,tags,expected,duration",
       "2"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -7400,7 +7345,6 @@
       "luci.resultdb.v1.ResultDB",
       "QueryTestResultStatistics"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -7450,7 +7394,6 @@
       "24",
       "25"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -7477,7 +7420,6 @@
       "luci.resultdb.v1.ResultDB",
       "QueryTestResultStatistics"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -7517,7 +7459,6 @@
       "testId,variant,variantHash,status,tags,expected,duration",
       "26"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -7544,7 +7485,6 @@
       "luci.resultdb.v1.ResultDB",
       "QueryTestResultStatistics"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -7584,7 +7524,6 @@
       "testId,variant,variantHash,status,tags,expected,duration",
       "27"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -7611,7 +7550,6 @@
       "luci.resultdb.v1.ResultDB",
       "QueryTestResultStatistics"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -7651,7 +7589,6 @@
       "testId,variant,variantHash,status,tags,expected,duration",
       "28"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -7678,7 +7615,6 @@
       "luci.resultdb.v1.ResultDB",
       "QueryTestResultStatistics"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -7724,7 +7660,6 @@
       "31",
       "32"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -7751,7 +7686,6 @@
       "luci.resultdb.v1.ResultDB",
       "QueryTestResultStatistics"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -7791,7 +7725,6 @@
       "testId,variant,variantHash,status,tags,expected,duration",
       "3"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -7818,7 +7751,6 @@
       "luci.resultdb.v1.ResultDB",
       "QueryTestResultStatistics"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -7858,7 +7790,6 @@
       "testId,variant,variantHash,status,tags,expected,duration",
       "33"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -7885,7 +7816,6 @@
       "luci.resultdb.v1.ResultDB",
       "QueryTestResultStatistics"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -7925,7 +7855,6 @@
       "testId,variant,variantHash,status,tags,expected,duration",
       "34"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -7952,7 +7881,6 @@
       "luci.resultdb.v1.ResultDB",
       "QueryTestResultStatistics"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -7992,7 +7920,6 @@
       "testId,variant,variantHash,status,tags,expected,duration",
       "4"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -8019,7 +7946,6 @@
       "luci.resultdb.v1.ResultDB",
       "QueryTestResultStatistics"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -8061,7 +7987,6 @@
       "5",
       "6"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -8088,7 +8013,6 @@
       "luci.resultdb.v1.ResultDB",
       "QueryTestResultStatistics"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -8138,7 +8062,6 @@
       "11",
       "12"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -8298,7 +8221,6 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[CACHE]\\builder",
     "luci_context": {
       "realm": {
         "name": "webrtc:ci"
@@ -8453,7 +8375,6 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[CACHE]\\builder",
     "luci_context": {
       "realm": {
         "name": "webrtc:ci"
@@ -8611,7 +8532,6 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[CACHE]\\builder",
     "luci_context": {
       "realm": {
         "name": "webrtc:ci"
@@ -8766,7 +8686,6 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[CACHE]\\builder",
     "luci_context": {
       "realm": {
         "name": "webrtc:ci"
@@ -8921,7 +8840,6 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[CACHE]\\builder",
     "luci_context": {
       "realm": {
         "name": "webrtc:ci"
@@ -9076,7 +8994,6 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[CACHE]\\builder",
     "luci_context": {
       "realm": {
         "name": "webrtc:ci"
@@ -9231,7 +9148,6 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[CACHE]\\builder",
     "luci_context": {
       "realm": {
         "name": "webrtc:ci"
@@ -9391,7 +9307,6 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[CACHE]\\builder",
     "luci_context": {
       "realm": {
         "name": "webrtc:ci"
@@ -9546,7 +9461,6 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[CACHE]\\builder",
     "luci_context": {
       "realm": {
         "name": "webrtc:ci"
@@ -9701,7 +9615,6 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[CACHE]\\builder",
     "luci_context": {
       "realm": {
         "name": "webrtc:ci"
@@ -9856,7 +9769,6 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[CACHE]\\builder",
     "luci_context": {
       "realm": {
         "name": "webrtc:ci"
@@ -10014,7 +9926,6 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[CACHE]\\builder",
     "luci_context": {
       "realm": {
         "name": "webrtc:ci"
@@ -10169,7 +10080,6 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[CACHE]\\builder",
     "luci_context": {
       "realm": {
         "name": "webrtc:ci"
@@ -10324,7 +10234,6 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[CACHE]\\builder",
     "luci_context": {
       "realm": {
         "name": "webrtc:ci"
@@ -10479,7 +10388,6 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[CACHE]\\builder",
     "luci_context": {
       "realm": {
         "name": "webrtc:ci"
@@ -10634,7 +10542,6 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[CACHE]\\builder",
     "luci_context": {
       "realm": {
         "name": "webrtc:ci"
@@ -10790,7 +10697,6 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[CACHE]\\builder",
     "luci_context": {
       "realm": {
         "name": "webrtc:ci"
@@ -10950,7 +10856,6 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[CACHE]\\builder",
     "luci_context": {
       "realm": {
         "name": "webrtc:ci"

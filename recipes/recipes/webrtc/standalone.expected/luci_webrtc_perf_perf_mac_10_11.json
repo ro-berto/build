@@ -886,7 +886,6 @@
       "0777",
       "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
     ],
-    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -918,7 +917,6 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -959,7 +957,6 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -1111,7 +1108,6 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -1264,7 +1260,6 @@
       "UpdateIncludedInvocations",
       "-include-update-token"
     ],
-    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -1308,7 +1303,6 @@
       "--url",
       "https://chromium.googlesource.com/infra/luci/client-py.git"
     ],
-    "cwd": "[CACHE]/builder",
     "luci_context": {
       "realm": {
         "name": "webrtc:perf"
@@ -1503,7 +1497,6 @@
       "0",
       "--verbose"
     ],
-    "cwd": "[CACHE]/builder",
     "luci_context": {
       "realm": {
         "name": "webrtc:perf"
@@ -1540,7 +1533,6 @@
       "luci.resultdb.v1.ResultDB",
       "QueryTestResultStatistics"
     ],
-    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -1580,7 +1572,6 @@
       "testId,variant,variantHash,status,tags,expected,duration",
       "0"
     ],
-    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -1607,7 +1598,6 @@
       "luci.resultdb.v1.ResultDB",
       "QueryTestResultStatistics"
     ],
-    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -1647,7 +1637,6 @@
       "testId,variant,variantHash,status,tags,expected,duration",
       "1"
     ],
-    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -1807,7 +1796,6 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[CACHE]/builder",
     "luci_context": {
       "realm": {
         "name": "webrtc:perf"
@@ -1962,7 +1950,6 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[CACHE]/builder",
     "luci_context": {
       "realm": {
         "name": "webrtc:perf"

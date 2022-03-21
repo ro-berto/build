@@ -524,19 +524,18 @@ class WebRTCApi(recipe_api.RecipeApi):
     if self.bot.is_running_perf_tests():
       self.set_upload_build_properties()
 
-    with self.m.context(cwd=self.m.chromium_checkout.checkout_dir):
-      all_tests = steps.generate_tests(phase, self.bot,
-                                       self.m.tryserver.is_tryserver,
-                                       self.m.chromium_tests, self._ios_config)
-      tests = [
-          t for t in all_tests
-          if t.name in self._isolated_targets + self._non_isolated_targets
-      ]
-      if not tests:
-        return
-      self.set_swarming_command_lines(tests)
-      test_runner = self.m.chromium_tests.create_test_runner(tests)
-      return test_runner()
+    all_tests = steps.generate_tests(phase, self.bot,
+                                     self.m.tryserver.is_tryserver,
+                                     self.m.chromium_tests, self._ios_config)
+    tests = [
+        t for t in all_tests
+        if t.name in self._isolated_targets + self._non_isolated_targets
+    ]
+    if not tests:
+      return
+    self.set_swarming_command_lines(tests)
+    test_runner = self.m.chromium_tests.create_test_runner(tests)
+    return test_runner()
 
   def trigger_bots(self):
     # If the builder is triggered by pinpoint, don't trigger any bots.
