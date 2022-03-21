@@ -5,13 +5,18 @@
 syntax = "proto3";
 package recipe_modules.build.archive;
 
-// Next id: 3
+// Next id: 4
 message LatestFile {
   // The file for the latest file. Format is the same as |ArchiveData.gcs_path|.
   string gcs_path = 1;
   // The content of the latest file. It supports the same string
   // substitutions as |ArchiveData.gcs_path|.
   string gcs_file_content = 2;
+  // The bucket to upload latest file. Format is the same as
+  // |ArchiveData.gcs_bucket|.
+  // If set, latest file will be uploaded to a separate bucket that other
+  // archives.
+  string gcs_bucket = 3;
 }
 
 // Next id: 2

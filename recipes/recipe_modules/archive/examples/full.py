@@ -727,6 +727,7 @@ def GenTests(api):
   archive_data.latest_upload.gcs_path = "x86/latest/latest.txt"
   archive_data.latest_upload.gcs_file_content = \
       '{%chromium_version%}'
+  archive_data.latest_upload.gcs_bucket = 'latest-bucket'
   input_properties.archive_datas.extend([archive_data])
 
   yield api.test(
@@ -741,6 +742,26 @@ def GenTests(api):
       api.post_process(post_process.StepCommandContains,
                        'Generic Archiving Steps.Write latest file',
                        ['1.2.3.4']),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'if_latest_gcs_bucket_set',
+      api.chromium.ci_build(builder='test'),
+      api.properties(
+          gcs_archive=True,
+          update_properties={},
+          **{'$build/archive': input_properties}),
+      api.step_data('Generic Archiving Steps.get version',
+                    api.file.read_text('MAJOR=0\nMINOR=0\nBUILD=0\nPATCH=0')),
+      api.post_process(post_process.StepCommandContains,
+                       'Generic Archiving Steps.Write latest file',
+                       ['1.2.3.4']),
+      api.post_process(post_process.StepCommandContains,
+                       'Generic Archiving Steps.gsutil upload '
+                       'latest-bucket/x86/latest/latest.txt',
+                       ['gs://latest-bucket/x86/latest/latest.txt']),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
