@@ -211,7 +211,9 @@
   {
     "cmd": [
       "vpython3",
-      "[START_DIR]/src/third_party/blink/tools/wpt_upload.py"
+      "[START_DIR]/src/third_party/blink/tools/wpt_upload.py",
+      "--credentials-json",
+      "[CLEANUP]/wpt-import-export.json"
     ],
     "name": "Upload WPT Result from Chromium CI to wpt.fyi"
   },

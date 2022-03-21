@@ -43,7 +43,8 @@ def RunSteps(api):
 
   script = api.path['checkout'].join('third_party', 'blink', 'tools',
                                      'wpt_upload.py')
-  cmd = ['vpython3', script]
+  args = ['--credentials-json', creds]
+  cmd = ['vpython3', script] + args
   api.step('Upload WPT Result from Chromium CI to wpt.fyi', cmd)
 
 
