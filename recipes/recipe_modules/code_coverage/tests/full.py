@@ -865,7 +865,7 @@ def GenTests(api):
       'tryserver_win',
       api.chromium.try_build(
           builder_group='tryserver.chromium.win',
-          builder='win10-rel-orchestrator'),
+          builder='win10_chromium_x64_rel_ng'),
       api.code_coverage(use_clang_coverage=True),
       api.properties(files_to_instrument=[
           'some/path/to/file.cc',

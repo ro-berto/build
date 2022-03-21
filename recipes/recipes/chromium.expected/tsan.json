@@ -6,7 +6,7 @@
       "@@@STEP_TEXT@<br/>running tester 'Linux TSan Tests' on group 'chromium.memory' against builder 'Linux TSan Builder' on group 'chromium.memory'@@@",
       "@@@STEP_LINK@Linux TSan Builder@https://ci.chromium.org/p/chromium/builders/ci/Linux%20TSan%20Builder@@@",
       "@@@STEP_LINK@Linux TSan Tests@https://ci.chromium.org/p/chromium/builders/ci/Linux%20TSan%20Tests@@@",
-      "@@@SET_BUILD_PROPERTY@mirrored_builders@[\"tryserver.chromium.linux:linux_chromium_tsan_rel_ng\", \"tryserver.chromium.linux:linux_chromium_tsan_rel_ng-orchestrator\", \"tryserver.chromium.linux:linux_chromium_tsan_rel_ng_rts\"]@@@"
+      "@@@SET_BUILD_PROPERTY@mirrored_builders@[\"tryserver.chromium.linux:linux_chromium_tsan_rel_ng\", \"tryserver.chromium.linux:linux_chromium_tsan_rel_ng_rts\"]@@@"
     ]
   },
   {

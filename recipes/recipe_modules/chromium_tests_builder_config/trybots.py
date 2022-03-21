@@ -250,11 +250,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.android',
                 buildername='android-marshmallow-x86-rel-non-cq',
             ),
-        'android-marshmallow-x86-rel-orchestrator':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android',
-                buildername='android-marshmallow-x86-rel',
-            ),
         'android-nougat-arm64-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android',
@@ -926,28 +921,7 @@ TRYBOTS = try_spec.TryDatabase.create({
                 filter_stable_test=try_spec.ALWAYS,
                 regression_test_selection=try_spec.ALWAYS,
             ),
-        'linux-rel-orchestrator':
-            try_spec.TrySpec.create(
-                mirrors=[
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.linux',
-                        buildername='Linux Builder',
-                        tester='Linux Tests',
-                    ),
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.gpu',
-                        buildername='GPU Linux Builder',
-                        tester='Linux Release (NVIDIA)',
-                    ),
-                ],),
         'linux_chromium_asan_rel_ng':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.memory',
-                buildername='Linux ASan LSan Builder',
-                tester='Linux ASan LSan Tests (1)',
-                regression_test_selection=try_spec.QUICK_RUN_ONLY,
-            ),
-        'linux_chromium_asan_rel_ng-orchestrator':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.memory',
                 buildername='Linux ASan LSan Builder',
@@ -1006,13 +980,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 tester='Linux MSan Tests',
             ),
         'linux_chromium_tsan_rel_ng':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.memory',
-                buildername='Linux TSan Builder',
-                tester='Linux TSan Tests',
-                regression_test_selection=try_spec.QUICK_RUN_ONLY,
-            ),
-        'linux_chromium_tsan_rel_ng-orchestrator':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.memory',
                 buildername='Linux TSan Builder',
@@ -1510,27 +1477,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 ],
                 regression_test_selection=try_spec.QUICK_RUN_ONLY,
             ),
-        'mac-rel-orchestrator':
-            try_spec.TrySpec.create(
-                [
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.mac',
-                        buildername='Mac Builder',
-                        tester='Mac11 Tests',
-                    ),
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.gpu',
-                        buildername='GPU Mac Builder',
-                        tester='Mac Release (Intel)',
-                    ),
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.gpu',
-                        buildername='GPU Mac Builder',
-                        tester='Mac Retina Release (AMD)',
-                    ),
-                ],
-                regression_test_selection=try_spec.QUICK_RUN_ONLY,
-            ),
         'mac_chromium_10.11_rel_ng':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.mac',
@@ -1731,19 +1677,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='Win Builder',
                 tester='Win7 Tests (1)',
             ),
-        'win10-rel-orchestrator':
-            try_spec.TrySpec.create([
-                try_spec.TryMirror.create(
-                    builder_group='chromium.win',
-                    buildername='Win x64 Builder',
-                    tester='Win10 Tests x64',
-                ),
-                try_spec.TryMirror.create(
-                    builder_group='chromium.gpu',
-                    buildername='GPU Win x64 Builder',
-                    tester='Win10 x64 Release (NVIDIA)',
-                ),
-            ]),
         # This trybot mirrors the trybot win10_chromium_x64_rel_ng with
         # analyze_deps_autorolls set to False
         'win10_chromium_inverse_fieldtrials_x64_fyi_rel_ng':
