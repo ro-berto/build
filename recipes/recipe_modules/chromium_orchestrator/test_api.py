@@ -16,7 +16,33 @@ from RECIPE_MODULES.build.chromium_tests.api import (
 
 class ChromiumOrchestratorApi(recipe_test_api.RecipeTestApi):
 
-  def override_test_spec(self, tests=None, shards=1):
+  def override_test_spec(self,
+                         builder_group,
+                         builder,
+                         tester=None,
+                         tests=None,
+                         shards=1):
+    """Override spec for the builder(s) mirrored by an orchestrator.
+
+    Args:
+      builder_group: The group of the builder that is mirrored.
+      builder: The name of the builder that is mirrored.
+      tester: The name of the tester that is mirrored. If not specified,
+        swarming tests will be set for the builder.
+      tests: The set of swarming tests that should be on the tester.
+      shards: The number of shards for the swarming tests.
+    """
+    source_side_spec = {
+        builder: {
+            'scripts': [{
+                "isolate_profile_data": True,
+                "name": "check_static_initializers",
+                "script": "check_static_initializers.py",
+                "swarming": {}
+            }],
+        },
+    }
+
     tests = tests or ['browser_tests']
     gtest_tests = [{
         'name': test,
@@ -26,20 +52,11 @@ class ChromiumOrchestratorApi(recipe_test_api.RecipeTestApi):
         },
         'isolate_coverage_data': True,
     } for test in tests]
-    return self.m.chromium_tests.read_source_side_spec(
-        'chromium.linux', {
-            'Linux Builder': {
-                'scripts': [{
-                    "isolate_profile_data": True,
-                    "name": "check_static_initializers",
-                    "script": "check_static_initializers.py",
-                    "swarming": {}
-                }],
-            },
-            'Linux Tests': {
-                'gtest_tests': gtest_tests
-            },
-        })
+    tester_dict = source_side_spec.setdefault(tester or builder, {})
+    tester_dict['gtest_tests'] = gtest_tests
+
+    return self.m.chromium_tests.read_source_side_spec(builder_group,
+                                                       source_side_spec)
 
   def get_fake_swarming_trigger_properties(self, tests):
     input_hash = (

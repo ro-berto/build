@@ -13,6 +13,7 @@ PYTHON_VERSION_COMPATIBILITY = "PY3"
 DEPS = [
     'chromium',
     'chromium_orchestrator',
+    'chromium_tests_builder_config',
     'code_coverage',
     'depot_tools/tryserver',
     'recipe_engine/cas',
@@ -30,14 +31,30 @@ def RunSteps(api):
 
 
 def GenTests(api):
+  ctbc_api = api.chromium_tests_builder_config
+
+  def ctbc_properties():
+    return ctbc_api.properties(
+        ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+            builder_group='fake-group',
+            builder='fake-builder',
+        ).with_mirrored_tester(
+            builder_group='fake-group',
+            builder='fake-tester',
+        ).assemble())
+
   yield api.test(
       'basic',
-      api.chromium.try_build(builder='linux-rel-orchestrator'),
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-orchestrator',
+      ),
+      ctbc_properties(),
       api.properties(
           **{
               '$build/chromium_orchestrator':
                   InputProperties(
-                      compilator='linux-rel-compilator',
+                      compilator='fake-compilator',
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
@@ -50,7 +67,11 @@ def GenTests(api):
                        ['--refs', 'refs/heads/main']),
       api.post_process(post_process.StepCommandContains, 'bot_update',
                        ['--patch_ref']),
-      api.chromium_orchestrator.override_test_spec(),
+      api.chromium_orchestrator.override_test_spec(
+          builder_group='fake-group',
+          builder='fake-builder',
+          tester='fake-tester',
+      ),
       api.post_process(
           post_process.StepCommandContains,
           'install infra/chromium/compilator_watcher.ensure_installed', [

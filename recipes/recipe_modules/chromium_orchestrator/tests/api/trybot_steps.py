@@ -59,14 +59,30 @@ def RunSteps(api):
 
 
 def GenTests(api):
+  ctbc_api = api.chromium_tests_builder_config
+
+  def ctbc_properties():
+    return ctbc_api.properties(
+        ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+            builder_group='fake-group',
+            builder='fake-builder',
+        ).with_mirrored_tester(
+            builder_group='fake-group',
+            builder='fake-tester',
+        ).assemble())
+
   yield api.test(
       'basic',
-      api.chromium.try_build(builder='linux-rel-orchestrator',),
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-orchestrator',
+      ),
+      ctbc_properties(),
       api.properties(
           **{
               '$build/chromium_orchestrator':
                   InputProperties(
-                      compilator='linux-rel-compilator',
+                      compilator='fake-compilator',
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
@@ -77,7 +93,11 @@ def GenTests(api):
       api.chromium_orchestrator.override_compilator_steps(
           is_swarming_phase=False),
       api.chromium_orchestrator.fake_head_revision(),
-      api.chromium_orchestrator.override_test_spec(),
+      api.chromium_orchestrator.override_test_spec(
+          builder_group='fake-group',
+          builder='fake-builder',
+          tester='fake-tester',
+      ),
       api.post_process(post_process.StepCommandContains, 'bot_update',
                        ['--refs', 'refs/heads/main']),
       api.post_process(post_process.StepCommandContains, 'bot_update',
@@ -100,19 +120,27 @@ def GenTests(api):
 
   yield api.test(
       'basic_branch',
-      api.chromium.try_build(builder='linux-rel-orchestrator',),
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-orchestrator',
+      ),
+      ctbc_properties(),
       api.properties(
           **{
               '$build/chromium_orchestrator':
                   InputProperties(
-                      compilator='linux-rel-compilator',
+                      compilator='fake-compilator',
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
       api.tryserver.gerrit_change_target_ref('refs/branch-heads/4472'),
       api.code_coverage(use_clang_coverage=True),
       api.chromium_orchestrator.fake_head_revision('refs/branch-heads/4472'),
-      api.chromium_orchestrator.override_test_spec(),
+      api.chromium_orchestrator.override_test_spec(
+          builder_group='fake-group',
+          builder='fake-builder',
+          tester='fake-tester',
+      ),
       api.chromium_orchestrator.override_compilator_steps(),
       api.chromium_orchestrator.override_compilator_steps(
           is_swarming_phase=False),
@@ -129,14 +157,15 @@ def GenTests(api):
   yield api.test(
       'non_src_CL',
       api.chromium.try_build(
-          builder='linux-rel-orchestrator',
+          builder='fake-orchestrator',
           git_repo='https://chromium.googlesource.com/v8/v8',
       ),
+      ctbc_properties(),
       api.properties(
           **{
               '$build/chromium_orchestrator':
                   InputProperties(
-                      compilator='linux-rel-compilator',
+                      compilator='fake-compilator',
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
@@ -147,7 +176,11 @@ def GenTests(api):
           api.m.json.output({'log': [{
               'commit': 'v8deadbeef'
           }]})),
-      api.chromium_orchestrator.override_test_spec(),
+      api.chromium_orchestrator.override_test_spec(
+          builder_group='fake-group',
+          builder='fake-builder',
+          tester='fake-tester',
+      ),
       api.chromium_orchestrator.override_compilator_steps(),
       api.chromium_orchestrator.override_compilator_steps(
           is_swarming_phase=False),
@@ -165,7 +198,10 @@ def GenTests(api):
 
   yield api.test(
       'no_builder_to_trigger_passed_in',
-      api.chromium.try_build(builder='linux-rel-orchestrator',),
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-orchestrator',
+      ),
       api.post_process(post_process.DoesNotRun,
                        'trigger compilator (with patch)'),
       api.post_process(post_process.StatusException),
@@ -174,12 +210,15 @@ def GenTests(api):
 
   yield api.test(
       'depend_on_footer_failure',
-      api.chromium.try_build(builder='linux-rel-orchestrator',),
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-orchestrator',
+      ),
       api.properties(
           **{
               '$build/chromium_orchestrator':
                   InputProperties(
-                      compilator='linux-rel-compilator',
+                      compilator='fake-compilator',
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
@@ -195,18 +234,26 @@ def GenTests(api):
 
   yield api.test(
       'missing_compilator_watcher_git_revision',
-      api.chromium.try_build(builder='linux-rel-orchestrator',),
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-orchestrator',
+      ),
+      ctbc_properties(),
       api.properties(
           **{
               '$build/chromium_orchestrator':
-                  InputProperties(compilator='linux-rel-compilator',),
+                  InputProperties(compilator='fake-compilator',),
           }),
       api.code_coverage(use_clang_coverage=True),
       api.chromium_orchestrator.override_compilator_steps(),
       api.chromium_orchestrator.override_compilator_steps(
           is_swarming_phase=False),
       api.chromium_orchestrator.fake_head_revision(),
-      api.chromium_orchestrator.override_test_spec(),
+      api.chromium_orchestrator.override_test_spec(
+          builder_group='fake-group',
+          builder='fake-builder',
+          tester='fake-tester',
+      ),
       api.post_process(
           post_process.StepCommandContains,
           'install infra/chromium/compilator_watcher.ensure_installed', [
@@ -223,12 +270,16 @@ def GenTests(api):
 
   yield api.test(
       'sub_build_canceled_status_and_in_global_shutdown',
-      api.chromium.try_build(builder='linux-rel-orchestrator',),
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-orchestrator',
+      ),
+      ctbc_properties(),
       api.properties(
           **{
               '$build/chromium_orchestrator':
                   InputProperties(
-                      compilator='linux-rel-compilator',
+                      compilator='fake-compilator',
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
@@ -237,7 +288,11 @@ def GenTests(api):
       api.chromium_orchestrator.override_compilator_steps(
           sub_build_status=common_pb.CANCELED, empty_props=True),
       api.chromium_orchestrator.fake_head_revision(),
-      api.chromium_orchestrator.override_test_spec(),
+      api.chromium_orchestrator.override_test_spec(
+          builder_group='fake-group',
+          builder='fake-builder',
+          tester='fake-tester',
+      ),
       api.post_process(post_process.ResultReasonRE, BUILD_CANCELED_SUMMARY),
       api.post_process(post_process.StatusException),
       api.post_process(post_process.DropExpectation),
@@ -245,12 +300,16 @@ def GenTests(api):
 
   yield api.test(
       'dont_fetch_comp_build_if_canceled',
-      api.chromium.try_build(builder='linux-rel-orchestrator',),
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-orchestrator',
+      ),
+      ctbc_properties(),
       api.properties(
           **{
               '$build/chromium_orchestrator':
                   InputProperties(
-                      compilator='linux-rel-compilator',
+                      compilator='fake-compilator',
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
@@ -259,7 +318,11 @@ def GenTests(api):
       api.chromium_orchestrator.override_compilator_steps(
           sub_build_status=common_pb.INFRA_FAILURE, empty_props=True),
       api.chromium_orchestrator.fake_head_revision(),
-      api.chromium_orchestrator.override_test_spec(),
+      api.chromium_orchestrator.override_test_spec(
+          builder_group='fake-group',
+          builder='fake-builder',
+          tester='fake-tester',
+      ),
       api.post_process(post_process.DoesNotRun, 'fetch compilator build proto'),
       api.post_process(post_process.StatusException),
       api.post_process(post_process.DropExpectation),
@@ -267,12 +330,16 @@ def GenTests(api):
 
   yield api.test(
       'dont_collect_comp_task_if_not_ended',
-      api.chromium.try_build(builder='linux-rel-orchestrator',),
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-orchestrator',
+      ),
+      ctbc_properties(),
       api.properties(
           **{
               '$build/chromium_orchestrator':
                   InputProperties(
-                      compilator='linux-rel-compilator',
+                      compilator='fake-compilator',
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
@@ -280,7 +347,11 @@ def GenTests(api):
       api.chromium_orchestrator.override_schedule_compilator_build(),
       api.chromium_orchestrator.override_compilator_steps(),
       api.chromium_orchestrator.fake_head_revision(),
-      api.chromium_orchestrator.override_test_spec(),
+      api.chromium_orchestrator.override_test_spec(
+          builder_group='fake-group',
+          builder='fake-builder',
+          tester='fake-tester',
+      ),
       api.post_process(post_process.DoesNotRun,
                        COMPILATOR_SWARMING_TASK_COLLECT_STEP),
       api.post_process(post_process.StatusException),
@@ -330,7 +401,7 @@ def GenTests(api):
           **{
               '$build/chromium_orchestrator':
                   InputProperties(
-                      compilator='linux-rel-compilator',
+                      compilator='fake-compilator',
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
@@ -351,40 +422,56 @@ def GenTests(api):
 
   yield api.test(
       'no_tests_to_trigger',
-      api.chromium.try_build(builder='linux-rel-orchestrator',),
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-orchestrator',
+      ),
+      ctbc_properties(),
       api.properties(
           **{
               '$build/chromium_orchestrator':
                   InputProperties(
-                      compilator='linux-rel-compilator',
+                      compilator='fake-compilator',
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
       api.chromium_orchestrator.fake_head_revision(),
-      api.chromium_orchestrator.override_test_spec(),
+      api.chromium_orchestrator.override_test_spec(
+          builder_group='fake-group',
+          builder='fake-builder',
+          tester='fake-tester',
+      ),
       api.chromium_orchestrator.override_compilator_steps(empty_props=True),
       api.post_process(post_process.MustRun, 'trigger compilator (with patch)'),
       api.post_process(post_process.DoesNotRun, 'browser_tests (with patch)'),
       api.post_process(post_process.LogContains,
                        'trigger compilator (with patch)', 'request',
-                       ['tryserver.chromium.linux', 'linux-rel-compilator']),
+                       ['fake-try-group', 'fake-compilator']),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
       'retry_shards',
-      api.chromium.try_build(builder='linux-rel-orchestrator',),
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-orchestrator',
+      ),
+      ctbc_properties(),
       api.properties(
           **{
               '$build/chromium_orchestrator':
                   InputProperties(
-                      compilator='linux-rel-compilator',
+                      compilator='fake-compilator',
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
       api.chromium_orchestrator.fake_head_revision(),
-      api.chromium_orchestrator.override_test_spec(),
+      api.chromium_orchestrator.override_test_spec(
+          builder_group='fake-group',
+          builder='fake-builder',
+          tester='fake-tester',
+      ),
       api.chromium_tests.gen_swarming_and_rdb_results(
           'browser_tests', 'with patch', failures=['Test.One']),
       api.chromium_orchestrator.override_compilator_steps(),
@@ -403,17 +490,24 @@ def GenTests(api):
   # without patch fails so failure is not due to CL
   yield api.test(
       'retry_shards_without_patch_fails_tryjob_succeeds',
-      api.chromium.try_build(builder='linux-rel-orchestrator',),
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-orchestrator',
+      ),
+      ctbc_properties(),
       api.properties(
           **{
               '$build/chromium_orchestrator':
                   InputProperties(
-                      compilator='linux-rel-compilator',
+                      compilator='fake-compilator',
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
       api.chromium_orchestrator.fake_head_revision(),
       api.chromium_orchestrator.override_test_spec(
+          builder_group='fake-group',
+          builder='fake-builder',
+          tester='fake-tester',
           tests=['browser_tests', 'content_unittests']),
       api.chromium_orchestrator.override_compilator_steps(
           tests=['browser_tests', 'content_unittests']),
@@ -442,17 +536,24 @@ def GenTests(api):
   # without patch passes so failure is due to CL
   yield api.test(
       'retry_without_patch_passes_tryjob_fails',
-      api.chromium.try_build(builder='linux-rel-orchestrator',),
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-orchestrator',
+      ),
+      ctbc_properties(),
       api.properties(
           **{
               '$build/chromium_orchestrator':
                   InputProperties(
-                      compilator='linux-rel-compilator',
+                      compilator='fake-compilator',
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
       api.chromium_orchestrator.fake_head_revision(),
       api.chromium_orchestrator.override_test_spec(
+          builder_group='fake-group',
+          builder='fake-builder',
+          tester='fake-tester',
           tests=['browser_tests', 'content_unittests']),
       api.chromium_orchestrator.override_compilator_steps(
           tests=['browser_tests', 'content_unittests']),
@@ -474,17 +575,25 @@ def GenTests(api):
 
   yield api.test(
       'retry_shards_invalid',
-      api.chromium.try_build(builder='linux-rel-orchestrator',),
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-orchestrator',
+      ),
+      ctbc_properties(),
       api.properties(
           **{
               '$build/chromium_orchestrator':
                   InputProperties(
-                      compilator='linux-rel-compilator',
+                      compilator='fake-compilator',
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
       api.chromium_orchestrator.fake_head_revision(),
-      api.chromium_orchestrator.override_test_spec(),
+      api.chromium_orchestrator.override_test_spec(
+          builder_group='fake-group',
+          builder='fake-builder',
+          tester='fake-tester',
+      ),
       api.override_step_data(
           'browser_tests (with patch)',
           api.chromium_swarming.canned_summary_output(
@@ -508,17 +617,25 @@ def GenTests(api):
 
   yield api.test(
       'retry_shards_invalid_retry',
-      api.chromium.try_build(builder='linux-rel-orchestrator',),
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-orchestrator',
+      ),
+      ctbc_properties(),
       api.properties(
           **{
               '$build/chromium_orchestrator':
                   InputProperties(
-                      compilator='linux-rel-compilator',
+                      compilator='fake-compilator',
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
       api.chromium_orchestrator.fake_head_revision(),
-      api.chromium_orchestrator.override_test_spec(),
+      api.chromium_orchestrator.override_test_spec(
+          builder_group='fake-group',
+          builder='fake-builder',
+          tester='fake-tester',
+      ),
       api.chromium_tests.gen_swarming_and_rdb_results(
           'browser_tests', 'with patch', failures=['Test.One']),
       api.chromium_tests.gen_swarming_and_rdb_results(
@@ -538,17 +655,25 @@ def GenTests(api):
 
   yield api.test(
       'retry_shards_all_invalid_results',
-      api.chromium.try_build(builder='linux-rel-orchestrator',),
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-orchestrator',
+      ),
+      ctbc_properties(),
       api.properties(
           **{
               '$build/chromium_orchestrator':
                   InputProperties(
-                      compilator='linux-rel-compilator',
+                      compilator='fake-compilator',
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
       api.chromium_orchestrator.fake_head_revision(),
-      api.chromium_orchestrator.override_test_spec(),
+      api.chromium_orchestrator.override_test_spec(
+          builder_group='fake-group',
+          builder='fake-builder',
+          tester='fake-tester',
+      ),
       api.override_step_data(
           'browser_tests (with patch)',
           api.chromium_swarming.canned_summary_output(
@@ -573,17 +698,25 @@ def GenTests(api):
 
   yield api.test(
       'skip_without_patch_local_tests_failed',
-      api.chromium.try_build(builder='linux-rel-orchestrator',),
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-orchestrator',
+      ),
+      ctbc_properties(),
       api.properties(
           **{
               '$build/chromium_orchestrator':
                   InputProperties(
-                      compilator='linux-rel-compilator',
+                      compilator='fake-compilator',
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
       api.chromium_orchestrator.fake_head_revision(),
-      api.chromium_orchestrator.override_test_spec(),
+      api.chromium_orchestrator.override_test_spec(
+          builder_group='fake-group',
+          builder='fake-builder',
+          tester='fake-tester',
+      ),
       api.chromium_orchestrator.override_compilator_steps(),
       api.chromium_orchestrator.override_compilator_steps(
           is_swarming_phase=False,
@@ -593,7 +726,7 @@ def GenTests(api):
       ),
       api.override_step_data(
           'git diff to analyze patch',
-          api.raw_io.stream_output('testing/buildbot/chromium.linux.json')),
+          api.raw_io.stream_output('testing/buildbot/fake-group.json')),
       api.chromium_tests.gen_swarming_and_rdb_results(
           'browser_tests', 'with patch', failures=['Test.One']),
       api.chromium_tests.gen_swarming_and_rdb_results(
@@ -615,17 +748,24 @@ def GenTests(api):
 
   yield api.test(
       'retry_without_patch_passes_local_tests_failed',
-      api.chromium.try_build(builder='linux-rel-orchestrator',),
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-orchestrator',
+      ),
+      ctbc_properties(),
       api.properties(
           **{
               '$build/chromium_orchestrator':
                   InputProperties(
-                      compilator='linux-rel-compilator',
+                      compilator='fake-compilator',
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
       api.chromium_orchestrator.fake_head_revision(),
       api.chromium_orchestrator.override_test_spec(
+          builder_group='fake-group',
+          builder='fake-builder',
+          tester='fake-tester',
           tests=['browser_tests', 'content_unittests']),
       api.chromium_orchestrator.override_compilator_steps(
           tests=['browser_tests', 'content_unittests']),
@@ -655,18 +795,26 @@ def GenTests(api):
 
   yield api.test(
       'code_coverage_trybot_with_patch',
-      api.chromium.try_build(builder='linux-rel-orchestrator',),
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-orchestrator',
+      ),
+      ctbc_properties(),
       api.properties(
           **{
               '$build/chromium_orchestrator':
                   InputProperties(
-                      compilator='linux-rel-compilator',
+                      compilator='fake-compilator',
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
       api.code_coverage(use_clang_coverage=True),
       api.chromium_orchestrator.fake_head_revision(),
-      api.chromium_orchestrator.override_test_spec(),
+      api.chromium_orchestrator.override_test_spec(
+          builder_group='fake-group',
+          builder='fake-builder',
+          tester='fake-tester',
+      ),
       api.chromium_orchestrator.override_compilator_steps(),
       api.chromium_orchestrator.override_compilator_steps(
           is_swarming_phase=False),
@@ -684,18 +832,26 @@ def GenTests(api):
 
   yield api.test(
       'code_coverage_trybot_retry_shards_with_patch',
-      api.chromium.try_build(builder='linux-rel-orchestrator',),
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-orchestrator',
+      ),
+      ctbc_properties(),
       api.properties(
           **{
               '$build/chromium_orchestrator':
                   InputProperties(
-                      compilator='linux-rel-compilator',
+                      compilator='fake-compilator',
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
       api.code_coverage(use_clang_coverage=True),
       api.chromium_orchestrator.fake_head_revision(),
-      api.chromium_orchestrator.override_test_spec(),
+      api.chromium_orchestrator.override_test_spec(
+          builder_group='fake-group',
+          builder='fake-builder',
+          tester='fake-tester',
+      ),
       api.chromium_orchestrator.override_compilator_steps(),
       api.chromium_orchestrator.override_compilator_steps(
           is_swarming_phase=False),
@@ -721,18 +877,26 @@ def GenTests(api):
 
   yield api.test(
       'code_coverage_trybot_without_patch',
-      api.chromium.try_build(builder='linux-rel-orchestrator',),
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-orchestrator',
+      ),
+      ctbc_properties(),
       api.properties(
           **{
               '$build/chromium_orchestrator':
                   InputProperties(
-                      compilator='linux-rel-compilator',
+                      compilator='fake-compilator',
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
       api.code_coverage(use_clang_coverage=True),
       api.chromium_orchestrator.fake_head_revision(),
-      api.chromium_orchestrator.override_test_spec(),
+      api.chromium_orchestrator.override_test_spec(
+          builder_group='fake-group',
+          builder='fake-builder',
+          tester='fake-tester',
+      ),
       api.chromium_orchestrator.override_compilator_steps(),
       api.chromium_orchestrator.override_compilator_steps(with_patch=False),
       api.chromium_orchestrator.override_compilator_steps(
@@ -755,17 +919,24 @@ def GenTests(api):
   )
   yield api.test(
       'retry_without_patch_fails_tests_and_local_tests',
-      api.chromium.try_build(builder='linux-rel-orchestrator',),
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-orchestrator',
+      ),
+      ctbc_properties(),
       api.properties(
           **{
               '$build/chromium_orchestrator':
                   InputProperties(
-                      compilator='linux-rel-compilator',
+                      compilator='fake-compilator',
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
       api.chromium_orchestrator.fake_head_revision(),
       api.chromium_orchestrator.override_test_spec(
+          builder_group='fake-group',
+          builder='fake-builder',
+          tester='fake-tester',
           tests=['browser_tests', 'content_unittests']),
       api.chromium_orchestrator.override_compilator_steps(
           tests=['browser_tests', 'content_unittests']),
@@ -797,17 +968,25 @@ def GenTests(api):
 
   yield api.test(
       'without_patch_compilator_missing_swarming_props',
-      api.chromium.try_build(builder='linux-rel-orchestrator',),
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-orchestrator',
+      ),
+      ctbc_properties(),
       api.properties(
           **{
               '$build/chromium_orchestrator':
                   InputProperties(
-                      compilator='linux-rel-compilator',
+                      compilator='fake-compilator',
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
       api.chromium_orchestrator.fake_head_revision(),
-      api.chromium_orchestrator.override_test_spec(),
+      api.chromium_orchestrator.override_test_spec(
+          builder_group='fake-group',
+          builder='fake-builder',
+          tester='fake-tester',
+      ),
       api.chromium_orchestrator.override_compilator_steps(),
       api.chromium_orchestrator.override_compilator_steps(
           with_patch=True, is_swarming_phase=False),
@@ -827,19 +1006,27 @@ def GenTests(api):
 
   yield api.test(
       'failed_compilator_while_waiting_for_swarming_props',
-      api.chromium.try_build(builder='linux-rel-orchestrator',),
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-orchestrator',
+      ),
+      ctbc_properties(),
       api.properties(
           **{
               '$build/chromium_orchestrator':
                   InputProperties(
-                      compilator='linux-rel-compilator',
+                      compilator='fake-compilator',
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
       api.chromium_orchestrator.override_compilator_build_proto_fetch(
           status=common_pb.FAILURE),
       api.chromium_orchestrator.override_schedule_compilator_build(),
-      api.chromium_orchestrator.override_test_spec(),
+      api.chromium_orchestrator.override_test_spec(
+          builder_group='fake-group',
+          builder='fake-builder',
+          tester='fake-tester',
+      ),
       api.chromium_orchestrator.fake_head_revision(),
       api.chromium_orchestrator.override_compilator_steps(
           sub_build_status=common_pb.FAILURE,
@@ -855,12 +1042,16 @@ def GenTests(api):
 
   yield api.test(
       'failed_wo_patch_compilator',
-      api.chromium.try_build(builder='linux-rel-orchestrator',),
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-orchestrator',
+      ),
+      ctbc_properties(),
       api.properties(
           **{
               '$build/chromium_orchestrator':
                   InputProperties(
-                      compilator='linux-rel-compilator',
+                      compilator='fake-compilator',
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
@@ -875,7 +1066,11 @@ def GenTests(api):
       api.chromium_orchestrator.override_compilator_build_proto_fetch(
           build_id=54321, status=common_pb.FAILURE),
       api.chromium_orchestrator.fake_head_revision(),
-      api.chromium_orchestrator.override_test_spec(),
+      api.chromium_orchestrator.override_test_spec(
+          builder_group='fake-group',
+          builder='fake-builder',
+          tester='fake-tester',
+      ),
       api.chromium_orchestrator.override_compilator_steps(
           with_patch=True, is_swarming_phase=False),
       api.chromium_orchestrator.override_compilator_steps(),
@@ -899,19 +1094,27 @@ def GenTests(api):
 
   yield api.test(
       'infra_failed_compilator_while_waiting_for_swarming_props',
-      api.chromium.try_build(builder='linux-rel-orchestrator',),
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-orchestrator',
+      ),
+      ctbc_properties(),
       api.properties(
           **{
               '$build/chromium_orchestrator':
                   InputProperties(
-                      compilator='linux-rel-compilator',
+                      compilator='fake-compilator',
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
       api.chromium_orchestrator.override_compilator_build_proto_fetch(
           status=common_pb.INFRA_FAILURE),
       api.chromium_orchestrator.override_schedule_compilator_build(),
-      api.chromium_orchestrator.override_test_spec(),
+      api.chromium_orchestrator.override_test_spec(
+          builder_group='fake-group',
+          builder='fake-builder',
+          tester='fake-tester',
+      ),
       api.chromium_orchestrator.fake_head_revision(),
       api.chromium_orchestrator.override_compilator_steps(
           sub_build_status=common_pb.INFRA_FAILURE,
@@ -927,16 +1130,24 @@ def GenTests(api):
 
   yield api.test(
       'canceled_compilator_while_waiting_for_swarming_props',
-      api.chromium.try_build(builder='linux-rel-orchestrator',),
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-orchestrator',
+      ),
+      ctbc_properties(),
       api.properties(
           **{
               '$build/chromium_orchestrator':
                   InputProperties(
-                      compilator='linux-rel-compilator',
+                      compilator='fake-compilator',
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
-      api.chromium_orchestrator.override_test_spec(),
+      api.chromium_orchestrator.override_test_spec(
+          builder_group='fake-group',
+          builder='fake-builder',
+          tester='fake-tester',
+      ),
       api.chromium_orchestrator.fake_head_revision(),
       api.chromium_orchestrator.override_compilator_steps(
           sub_build_status=common_pb.CANCELED,
@@ -948,17 +1159,25 @@ def GenTests(api):
 
   yield api.test(
       'failed_compilator_local_test',
-      api.chromium.try_build(builder='linux-rel-orchestrator',),
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-orchestrator',
+      ),
+      ctbc_properties(),
       api.properties(
           **{
               '$build/chromium_orchestrator':
                   InputProperties(
-                      compilator='linux-rel-compilator',
+                      compilator='fake-compilator',
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
       api.chromium_orchestrator.fake_head_revision(),
-      api.chromium_orchestrator.override_test_spec(),
+      api.chromium_orchestrator.override_test_spec(
+          builder_group='fake-group',
+          builder='fake-builder',
+          tester='fake-tester',
+      ),
       api.chromium_orchestrator.override_compilator_build_proto_fetch(
           status=common_pb.FAILURE),
       api.chromium_orchestrator.override_schedule_compilator_build(),
@@ -980,17 +1199,25 @@ def GenTests(api):
 
   yield api.test(
       'compilator_canceled_at_local_test_phase',
-      api.chromium.try_build(builder='linux-rel-orchestrator',),
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-orchestrator',
+      ),
+      ctbc_properties(),
       api.properties(
           **{
               '$build/chromium_orchestrator':
                   InputProperties(
-                      compilator='linux-rel-compilator',
+                      compilator='fake-compilator',
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
       api.chromium_orchestrator.fake_head_revision(),
-      api.chromium_orchestrator.override_test_spec(),
+      api.chromium_orchestrator.override_test_spec(
+          builder_group='fake-group',
+          builder='fake-builder',
+          tester='fake-tester',
+      ),
       api.chromium_orchestrator.override_compilator_steps(),
       api.chromium_orchestrator.override_compilator_steps(
           sub_build_status=common_pb.CANCELED,
@@ -1003,17 +1230,25 @@ def GenTests(api):
 
   yield api.test(
       'sub_build_infra_failed',
-      api.chromium.try_build(builder='linux-rel-orchestrator',),
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-orchestrator',
+      ),
+      ctbc_properties(),
       api.properties(
           **{
               '$build/chromium_orchestrator':
                   InputProperties(
-                      compilator='linux-rel-compilator',
+                      compilator='fake-compilator',
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
       api.chromium_orchestrator.override_schedule_compilator_build(),
-      api.chromium_orchestrator.override_test_spec(),
+      api.chromium_orchestrator.override_test_spec(
+          builder_group='fake-group',
+          builder='fake-builder',
+          tester='fake-tester',
+      ),
       api.chromium_orchestrator.fake_head_revision(),
       api.chromium_orchestrator.override_compilator_steps(
           sub_build_status=common_pb.INFRA_FAILURE),
@@ -1037,17 +1272,24 @@ def GenTests(api):
 
   yield api.test(
       'without_patch_tests_contain_command_lines_from_without_patch_compilator',
-      api.chromium.try_build(builder='linux-rel-orchestrator',),
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-orchestrator',
+      ),
+      ctbc_properties(),
       api.properties(
           **{
               '$build/chromium_orchestrator':
                   InputProperties(
-                      compilator='linux-rel-compilator',
+                      compilator='fake-compilator',
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
       api.chromium_orchestrator.fake_head_revision(),
       api.chromium_orchestrator.override_test_spec(
+          builder_group='fake-group',
+          builder='fake-builder',
+          tester='fake-tester',
           tests=['browser_tests', 'content_unittests']),
       api.chromium_orchestrator.override_compilator_steps(
           tests=['browser_tests', 'content_unittests']),
@@ -1115,12 +1357,16 @@ def GenTests(api):
 
   yield api.test(
       'new_flaky_test',
-      api.chromium.try_build(builder='linux-rel-orchestrator',),
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-orchestrator',
+      ),
+      ctbc_properties(),
       api.properties(
           **{
               '$build/chromium_orchestrator':
                   InputProperties(
-                      compilator='linux-rel-compilator',
+                      compilator='fake-compilator',
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
@@ -1130,7 +1376,11 @@ def GenTests(api):
       api.chromium_orchestrator.override_compilator_steps(
           is_swarming_phase=False),
       api.chromium_orchestrator.fake_head_revision(),
-      api.chromium_orchestrator.override_test_spec(),
+      api.chromium_orchestrator.override_test_spec(
+          builder_group='fake-group',
+          builder='fake-builder',
+          tester='fake-tester',
+      ),
       api.step_data(
           'git diff to analyze patch',
           api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
@@ -1160,12 +1410,16 @@ def GenTests(api):
 
   yield api.test(
       'flaky_swarming_and_local_test_failure',
-      api.chromium.try_build(builder='linux-rel-orchestrator',),
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-orchestrator',
+      ),
+      ctbc_properties(),
       api.properties(
           **{
               '$build/chromium_orchestrator':
                   InputProperties(
-                      compilator='linux-rel-compilator',
+                      compilator='fake-compilator',
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
@@ -1174,6 +1428,9 @@ def GenTests(api):
       api.chromium_orchestrator.override_compilator_build_proto_fetch(),
       api.chromium_orchestrator.override_schedule_compilator_build(),
       api.chromium_orchestrator.override_test_spec(
+          builder_group='fake-group',
+          builder='fake-builder',
+          tester='fake-tester',
           tests=['browser_tests', 'content_unittests']),
       api.chromium_orchestrator.override_compilator_steps(
           tests=['browser_tests', 'content_unittests']),
@@ -1214,12 +1471,16 @@ def GenTests(api):
 
   yield api.test(
       'no_flaky_tests',
-      api.chromium.try_build(builder='linux-rel-orchestrator',),
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-orchestrator',
+      ),
+      ctbc_properties(),
       api.properties(
           **{
               '$build/chromium_orchestrator':
                   InputProperties(
-                      compilator='linux-rel-compilator',
+                      compilator='fake-compilator',
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
@@ -1227,6 +1488,9 @@ def GenTests(api):
       api.chromium_orchestrator.override_schedule_compilator_build(),
       api.chromium_orchestrator.override_schedule_compilator_build(),
       api.chromium_orchestrator.override_test_spec(
+          builder_group='fake-group',
+          builder='fake-builder',
+          tester='fake-tester',
           tests=['browser_tests', 'content_unittests']),
       api.chromium_orchestrator.override_compilator_steps(
           tests=['browser_tests', 'content_unittests']),

@@ -47,13 +47,29 @@ def RunSteps(api, properties):
 
 
 def GenTests(api):
+  ctbc_api = api.chromium_tests_builder_config
+
+  def ctbc_properties():
+    return ctbc_api.properties(
+        ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+            builder_group='fake-group',
+            builder='fake-builder',
+        ).with_mirrored_tester(
+            builder_group='fake-group',
+            builder='fake-tester',
+        ).assemble())
+
   yield api.test(
       'compilator_isolates_all_tests',
       api.code_coverage(use_clang_coverage=True),
-      api.chromium.try_build(builder='linux-rel-compilator'),
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-compilator',
+      ),
+      ctbc_properties(),
       api.chromium_tests.read_source_side_spec(
-          'chromium.linux', {
-              'Linux Builder': {
+          'fake-group', {
+              'fake-builder': {
                   'scripts': [{
                       "isolate_profile_data": True,
                       "name": "check_static_initializers",
@@ -61,7 +77,7 @@ def GenTests(api):
                       "swarming": {}
                   }],
               },
-              'Linux Tests': {
+              'fake-tester': {
                   'gtest_tests': [{
                       'name': 'browser_tests',
                       'swarming': {
@@ -73,8 +89,8 @@ def GenTests(api):
       api.properties(
           InputProperties(
               orchestrator=InputProperties.Orchestrator(
-                  builder_name='linux-rel-orchestrator',
-                  builder_group='tryserver.chromium.linux'))),
+                  builder_name='fake-orchestrator',
+                  builder_group='fake-try-group'))),
       api.path.exists(api.path['checkout'].join('out/Release/browser_tests')),
       api.filter.suppress_analyze(),
       api.post_process(post_process.MustRun, 'isolate tests (with patch)'),

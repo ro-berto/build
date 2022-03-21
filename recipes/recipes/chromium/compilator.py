@@ -238,8 +238,8 @@ def GenTests(api):
 
   def override_test_spec():
     return api.chromium_tests.read_source_side_spec(
-        'chromium.linux', {
-            'Linux Builder': {
+        'fake-group', {
+            'fake-builder': {
                 'scripts': [{
                     "isolate_profile_data": True,
                     "name": "check_static_initializers",
@@ -248,7 +248,7 @@ def GenTests(api):
                     "test_id_prefix": "ninja://check_static_initializers/"
                 }],
             },
-            'Linux Tests': {
+            'fake-tester': {
                 'gtest_tests': [{
                     'name': 'browser_tests',
                     'swarming': {
@@ -258,22 +258,38 @@ def GenTests(api):
             },
         })
 
+  ctbc_api = api.chromium_tests_builder_config
+
+  def ctbc_properties():
+    return ctbc_api.properties(
+        ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+            builder_group='fake-group',
+            builder='fake-builder',
+        ).with_mirrored_tester(
+            builder_group='fake-group',
+            builder='fake-tester',
+        ).assemble())
+
   yield api.test(
       'basic',
       api.chromium.try_build(
-          builder='linux-rel-compilator', revision='deadbeef'),
+          builder_group='fake-try-group',
+          builder='fake-compilator',
+          revision='deadbeef',
+      ),
       api.platform.name('linux'),
       api.path.exists(api.path['checkout'].join('out/Release/browser_tests')),
+      ctbc_properties(),
       api.properties(
           InputProperties(
               orchestrator=InputProperties.Orchestrator(
-                  builder_name='linux-rel-orchestrator',
-                  builder_group='tryserver.chromium.linux'))),
+                  builder_name='fake-orchestrator',
+                  builder_group='fake-try-group'))),
       api.filter.suppress_analyze(),
       override_test_spec(),
       api.post_process(post_process.StepTextContains, 'report builders', [
-          "running tester 'Linux Tests' on group 'chromium.linux' against "
-          "builder 'Linux Builder' on group 'chromium.linux'"
+          "running tester 'fake-tester' on group 'fake-group' against "
+          "builder 'fake-builder' on group 'fake-group'"
       ]),
       api.post_process(post_process.StepCommandContains, 'bot_update',
                        ['--patch_ref']),
@@ -288,26 +304,32 @@ def GenTests(api):
 
   yield api.test(
       'missing_gitiles_commit_and_deps_revision_overrides',
-      api.chromium.try_build(builder='linux-rel-compilator'),
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-compilator',
+      ),
       api.platform.name('linux'),
       api.properties(
           InputProperties(
               orchestrator=InputProperties.Orchestrator(
-                  builder_name='linux-rel-orchestrator',
-                  builder_group='tryserver.chromium.linux'))),
+                  builder_name='fake-orchestrator',
+                  builder_group='fake-try-group'))),
       api.post_process(post_process.StatusException),
       api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
       'missing_root_solution_revision',
-      api.chromium.try_build(builder='linux-rel-compilator'),
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-compilator',
+      ),
       api.platform.name('linux'),
       api.properties(
           InputProperties(
               orchestrator=InputProperties.Orchestrator(
-                  builder_name='linux-rel-orchestrator',
-                  builder_group='tryserver.chromium.linux'),
+                  builder_name='fake-orchestrator',
+                  builder_group='fake-try-group'),
               deps_revision_overrides={'src/v8': 'v8deadbeef'})),
       api.post_process(post_process.StatusException),
       api.post_process(post_process.DropExpectation),
@@ -316,15 +338,18 @@ def GenTests(api):
   yield api.test(
       'deps_revision_overrides_and_root_solution_revision',
       api.chromium.try_build(
-          builder='linux-rel-compilator',
-          git_repo='https://chromium.googlesource.com/v8/v8'),
+          builder_group='fake-try-group',
+          builder='fake-compilator',
+          git_repo='https://chromium.googlesource.com/v8/v8',
+      ),
       api.platform.name('linux'),
       api.path.exists(api.path['checkout'].join('out/Release/browser_tests')),
+      ctbc_properties(),
       api.properties(
           InputProperties(
               orchestrator=InputProperties.Orchestrator(
-                  builder_name='linux-rel-orchestrator',
-                  builder_group='tryserver.chromium.linux'),
+                  builder_name='fake-orchestrator',
+                  builder_group='fake-try-group'),
               deps_revision_overrides={'src/v8': 'v8deadbeef'},
               root_solution_revision='srcdeadbeef')),
       api.override_step_data(
@@ -356,12 +381,16 @@ def GenTests(api):
   yield api.test(
       'output_deleted_files',
       api.chromium.try_build(
-          builder='linux-rel-compilator', revision='deadbeef'),
+          builder_group='fake-try-group',
+          builder='fake-compilator',
+          revision='deadbeef',
+      ),
+      ctbc_properties(),
       api.properties(
           InputProperties(
               orchestrator=InputProperties.Orchestrator(
-                  builder_name='linux-rel-orchestrator',
-                  builder_group='tryserver.chromium.linux'))),
+                  builder_name='fake-orchestrator',
+                  builder_group='fake-try-group'))),
       api.tryserver.get_files_affected_by_patch(['foo.cc', 'bar/baz.cc']),
       api.path.exists(api.path['checkout'].join('foo.cc')),
       api.post_process(post_process.MustRun, 'deleted files'),
@@ -382,7 +411,10 @@ def GenTests(api):
               }
           }),
       api.chromium.try_build(
-          builder='linux-rel-compilator', revision='deadbeef'),
+          builder_group='fake-try-group',
+          builder='fake-compilator',
+          revision='deadbeef',
+      ),
       api.chromium_tests_builder_config.databases(_TEST_BUILDERS,
                                                   _TEST_TRYBOTS),
       api.properties(
@@ -412,7 +444,10 @@ def GenTests(api):
               }
           }),
       api.chromium.try_build(
-          builder='linux-rel-compilator', revision='deadbeef'),
+          builder_group='fake-try-group',
+          builder='fake-compilator',
+          revision='deadbeef',
+      ),
       api.chromium_tests_builder_config.databases(_TEST_BUILDERS,
                                                   _TEST_TRYBOTS),
       api.properties(
@@ -433,14 +468,18 @@ def GenTests(api):
   yield api.test(
       'global_shutdown',
       api.chromium.try_build(
-          builder='linux-rel-compilator', revision='deadbeef'),
+          builder_group='fake-try-group',
+          builder='fake-compilator',
+          revision='deadbeef',
+      ),
       api.platform.name('linux'),
       api.path.exists(api.path['checkout'].join('out/Release/browser_tests')),
+      ctbc_properties(),
       api.properties(
           InputProperties(
               orchestrator=InputProperties.Orchestrator(
-                  builder_name='linux-rel-orchestrator',
-                  builder_group='tryserver.chromium.linux'))),
+                  builder_name='fake-orchestrator',
+                  builder_group='fake-try-group'))),
       override_test_spec(),
       api.filter.suppress_analyze(),
       api.runtime.global_shutdown_on_step('isolate tests (with patch)'),
@@ -453,20 +492,24 @@ def GenTests(api):
   yield api.test(
       'without_patch',
       api.chromium.try_build(
-          builder='linux-rel-compilator', revision='deadbeef'),
+          builder_group='fake-try-group',
+          builder='fake-compilator',
+          revision='deadbeef',
+      ),
       api.platform.name('linux'),
       api.code_coverage(use_clang_coverage=True),
       api.path.exists(api.path['checkout'].join('out/Release/browser_tests')),
+      ctbc_properties(),
       api.properties(
           InputProperties(
               orchestrator=InputProperties.Orchestrator(
-                  builder_name='linux-rel-orchestrator',
-                  builder_group='tryserver.chromium.linux'),
+                  builder_name='fake-orchestrator',
+                  builder_group='fake-try-group'),
               swarming_targets=['browser_tests'])),
       override_test_spec(),
       api.post_process(post_process.StepTextContains, 'report builders', [
-          "running tester 'Linux Tests' on group 'chromium.linux' against "
-          "builder 'Linux Builder' on group 'chromium.linux'"
+          "running tester 'fake-tester' on group 'fake-group' against "
+          "builder 'fake-builder' on group 'fake-group'"
       ]),
       api.post_process(post_process.StepCommandDoesNotContain,
                        'bot_update (without patch)', ['--patch_ref']),
@@ -484,16 +527,20 @@ def GenTests(api):
   yield api.test(
       'no_compile_no_isolate',
       api.chromium.try_build(
-          builder='linux-rel-compilator', revision='deadbeef'),
+          builder_group='fake-try-group',
+          builder='fake-compilator',
+          revision='deadbeef',
+      ),
+      ctbc_properties(),
       api.properties(
           InputProperties(
               orchestrator=InputProperties.Orchestrator(
-                  builder_name='linux-rel-orchestrator',
-                  builder_group='tryserver.chromium.linux'))),
+                  builder_name='fake-orchestrator',
+                  builder_group='fake-try-group'))),
       override_test_spec(),
       api.post_process(post_process.StepTextContains, 'report builders', [
-          'tester \'Linux Tests\' on group \'chromium.linux\'',
-          'builder \'Linux Builder\' on group \'chromium.linux\''
+          'tester \'fake-tester\' on group \'fake-group\'',
+          'builder \'fake-builder\' on group \'fake-group\''
       ]),
       api.post_process(post_process.DoesNotRun, 'compile (with patch)'),
       api.post_process(post_process.DoesNotRun, 'isolate tests (with patch)'),
@@ -505,18 +552,22 @@ def GenTests(api):
   yield api.test(
       'compile_failed',
       api.chromium.try_build(
-          builder='linux-rel-compilator', revision='deadbeef'),
+          builder_group='fake-try-group',
+          builder='fake-compilator',
+          revision='deadbeef',
+      ),
+      ctbc_properties(),
       api.properties(
           InputProperties(
               orchestrator=InputProperties.Orchestrator(
-                  builder_name='linux-rel-orchestrator',
-                  builder_group='tryserver.chromium.linux'))),
+                  builder_name='fake-orchestrator',
+                  builder_group='fake-try-group'))),
       override_test_spec(),
       api.filter.suppress_analyze(),
       api.override_step_data('compile (with patch)', retcode=1),
       api.post_process(post_process.StepTextContains, 'report builders', [
-          'tester \'Linux Tests\' on group \'chromium.linux\'',
-          'builder \'Linux Builder\' on group \'chromium.linux\''
+          'tester \'fake-tester\' on group \'fake-group\'',
+          'builder \'fake-builder\' on group \'fake-group\''
       ]),
       api.post_process(post_process.DoesNotRun, 'isolate tests (with patch)'),
       api.post_process(post_process.DoesNotRun, 'swarming trigger properties'),
@@ -527,19 +578,23 @@ def GenTests(api):
   yield api.test(
       'failing_local_test',
       api.chromium.try_build(
-          builder='linux-rel-compilator', revision='deadbeef'),
+          builder_group='fake-try-group',
+          builder='fake-compilator',
+          revision='deadbeef',
+      ),
+      ctbc_properties(),
       api.properties(
           InputProperties(
               orchestrator=InputProperties.Orchestrator(
-                  builder_name='linux-rel-orchestrator',
-                  builder_group='tryserver.chromium.linux'))),
+                  builder_name='fake-orchestrator',
+                  builder_group='fake-try-group'))),
       override_test_spec(),
       api.filter.suppress_analyze(),
       api.override_step_data('check_static_initializers (with patch)',
                              api.test_utils.canned_gtest_output(False)),
       api.post_process(post_process.StepTextContains, 'report builders', [
-          'tester \'Linux Tests\' on group \'chromium.linux\'',
-          'builder \'Linux Builder\' on group \'chromium.linux\''
+          'tester \'fake-tester\' on group \'fake-group\'',
+          'builder \'fake-builder\' on group \'fake-group\''
       ]),
       api.post_process(post_process.MustRun, 'swarming trigger properties'),
       api.post_process(post_process.StatusFailure),
@@ -584,14 +639,18 @@ def GenTests(api):
   yield api.test(
       'basic_flakiness',
       api.chromium.try_build(
-          builder='linux-rel-compilator', revision='deadbeef'),
+          builder_group='fake-try-group',
+          builder='fake-compilator',
+          revision='deadbeef',
+      ),
       api.platform.name('linux'),
       api.path.exists(api.path['checkout'].join('out/Release/browser_tests')),
+      ctbc_properties(),
       api.properties(
           InputProperties(
               orchestrator=InputProperties.Orchestrator(
-                  builder_name='linux-rel-orchestrator',
-                  builder_group='tryserver.chromium.linux'))),
+                  builder_name='fake-orchestrator',
+                  builder_group='fake-try-group'))),
       override_test_spec(),
       # This additional analyze step is run by the flakiness module to ensure
       # that there's a test file change associated with the patch.
@@ -618,14 +677,18 @@ def GenTests(api):
   yield api.test(
       'flaky_test_failure',
       api.chromium.try_build(
-          builder='linux-rel-compilator', revision='deadbeef'),
+          builder_group='fake-try-group',
+          builder='fake-compilator',
+          revision='deadbeef',
+      ),
       api.platform.name('linux'),
       api.path.exists(api.path['checkout'].join('out/Release/browser_tests')),
+      ctbc_properties(),
       api.properties(
           InputProperties(
               orchestrator=InputProperties.Orchestrator(
-                  builder_name='linux-rel-orchestrator',
-                  builder_group='tryserver.chromium.linux'))),
+                  builder_name='fake-orchestrator',
+                  builder_group='fake-try-group'))),
       override_test_spec(),
       # This additional analyze step is run by the flakiness module to ensure
       # that there's a test file change associated with the patch.
