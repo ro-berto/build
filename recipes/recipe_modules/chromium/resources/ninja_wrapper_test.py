@@ -4,11 +4,13 @@
 
 from __future__ import print_function
 
-import textwrap
-import unittest
 import mock
+import os
 import sys
+import textwrap
 import time
+import tempfile
+import unittest
 
 import ninja_wrapper
 
@@ -389,8 +391,10 @@ class NinjaWrapperTestCase(unittest.TestCase):
 
   def testParseArgs(self):
     expected_file_name = 'file.json'
-    expected_ninja_cmd = ['ninja', '-w', 'dupbuild=err', '-C',
-                          'build/path', 'target1', 'target2', '-o', 'target3']
+    expected_ninja_cmd = [
+        'ninja', '-w', 'dupbuild=err', '-C', 'build/path', 'target1', 'target2',
+        '-o', 'output'
+    ]
     args = ['-o', expected_file_name]
     args.append('--')
     args.extend(expected_ninja_cmd)
@@ -400,8 +404,10 @@ class NinjaWrapperTestCase(unittest.TestCase):
 
   def testParseArgsFullName(self):
     expected_file_name = 'file.json'
-    expected_ninja_cmd = ['ninja', '-w', 'dupbuild=err', '-C',
-                          'build/path', 'target1', 'target2', '-o', 'target3']
+    expected_ninja_cmd = [
+        'ninja', '-w', 'dupbuild=err', '-C', 'build/path', 'target1', 'target2',
+        '-o', 'output'
+    ]
     args = ['--ninja_info_output', expected_file_name]
     args.append('--')
     args.extend(expected_ninja_cmd)
@@ -429,7 +435,8 @@ class NinjaWrapperTestCase(unittest.TestCase):
     mock_popen_instance.stdout.readline.side_effect = ['a', 'b', 'c', '']
     mock_Popen.return_value = mock_popen_instance
 
-    ninja_wrapper.main(['-o', 'target3', '-t', '1', '--'] +
+    output_path = os.path.join(tempfile.mkdtemp(), 'output')
+    ninja_wrapper.main(['-o', output_path, '-t', '1', '--'] +
                        ['ninja', 'build/path', 'target1', 'target2'])
 
     self.assertEqual(mock_print.call_count, 3)
