@@ -15,7 +15,7 @@ from . import builders as webrtc_builders
 from . import steps
 
 from RECIPE_MODULES.build import chromium
-from RECIPE_MODULES.build.chromium_tests import steps as c_steps
+from RECIPE_MODULES.build.chromium_tests.steps import SwarmingTest
 
 
 CHROMIUM_REPO = 'https://chromium.googlesource.com/chromium/src'
@@ -41,6 +41,10 @@ def _replace_string_in_dict(dict_input, old, new):
   for key, values in dict_input.items():
     dict_output[key] = [value.replace(old, new) for value in values]
   return dict_output
+
+
+def _get_isolated_targets(tests):
+  return [t.name for t in tests or [] if isinstance(t, SwarmingTest)]
 
 
 class Bot(object):
@@ -85,8 +89,6 @@ class WebRTCApi(recipe_api.RecipeApi):
 
   def __init__(self, **kwargs):
     super(WebRTCApi, self).__init__(**kwargs)
-    self._isolated_targets = []
-    self._non_isolated_targets = []
 
     self._builders = None
     self._recipe_configs = None
@@ -231,21 +233,13 @@ class WebRTCApi(recipe_api.RecipeApi):
     return (step_result.json.output['test_targets'],
             step_result.json.output['compile_targets'])
 
-  def get_compile_targets(self, phase):
-    isolated_targets = []
-    non_isolated_targets = []
+  def get_tests_and_compile_targets(self, phase):
+    """ Returns the tests to run and the targets to compile."""
+    tests = []
     for bot in self.related_bots():
       if bot.bot_type in ('tester', 'builder_tester'):
-        tests = steps.generate_tests(phase, bot, self.m.tryserver.is_tryserver,
-                                     self.m.chromium_tests, self._ios_config)
-        isolated_targets += [
-            t.name for t in tests if isinstance(t, c_steps.SwarmingTest)
-        ]
-        non_isolated_targets += [
-            t.name for t in tests if isinstance(t, c_steps.AndroidJunitTest)
-        ]
-    self._isolated_targets = sorted(set(isolated_targets))
-    self._non_isolated_targets = sorted(set(non_isolated_targets))
+        tests += steps.generate_tests(phase, bot, self.m.tryserver.is_tryserver,
+                                      self.m.chromium_tests, self._ios_config)
 
     patch_root = self.m.gclient.get_gerrit_patch_root()
     affected_files = self.m.chromium_checkout.get_files_affected_by_patch(
@@ -260,24 +254,19 @@ class WebRTCApi(recipe_api.RecipeApi):
     if 'DEPS' in affected_files or not self.m.tryserver.is_tryserver:
       # Perf testers are a special case; they only need the catapult protos.
       if self.bot.bot_type == 'tester' and self.bot.is_running_perf_tests():
-        return ['webrtc_dashboard_upload']
-      return ['all']
+        return tests, ['webrtc_dashboard_upload']
+      return tests, ['all']
 
-    tests_target, compile_targets = self.run_mb_analyze(
-        phase, affected_files, isolated_targets + non_isolated_targets)
+    tests_target, compile_targets = self.run_mb_analyze(phase, affected_files,
+                                                        [t.name for t in tests])
+    tests = [t for t in tests if t.name in tests_target]
 
-    self._isolated_targets = [
-        t for t in self._isolated_targets if t in tests_target
-    ]
-    self._non_isolated_targets = [
-        t for t in self._non_isolated_targets if t in tests_target
-    ]
     if compile_targets:
       # See crbug.com/557505 - we need to not prune meta
       # targets that are part of 'test_targets', because otherwise
       # we might not actually build all of the binaries needed for
       # a given test, even if they aren't affected by the patch.
-      compile_targets += self._isolated_targets + self._non_isolated_targets
+      compile_targets += tests_target
 
     # Some trybots are used to calculate the binary size impact of the current
     # CL. These targets should always be built.
@@ -286,7 +275,7 @@ class WebRTCApi(recipe_api.RecipeApi):
         if binary_size_target in binary_size_file:
           compile_targets += [binary_size_target]
 
-    return sorted(set(compile_targets))
+    return tests, sorted(set(compile_targets))
 
   def configure_swarming(self):
     self.m.chromium_swarming.configure_swarming(
@@ -353,7 +342,7 @@ class WebRTCApi(recipe_api.RecipeApi):
       cmd_golang = ['vpython3', '-u', script_golang] + args_golang
       self.m.step('download golang', cmd_golang)
 
-  def run_mb(self, phase=None):
+  def run_mb(self, phase=None, tests=None):
     if phase:
       # Set the out folder to be the same as the phase name, so caches of
       # consecutive builds don't interfere with each other.
@@ -368,12 +357,12 @@ class WebRTCApi(recipe_api.RecipeApi):
         phase=phase,
         use_goma=True,
         mb_path=self.m.path['checkout'].join('tools_webrtc', 'mb'),
-        isolated_targets=self._isolated_targets)
+        isolated_targets=_get_isolated_targets(tests))
 
-  def isolate(self):
+  def isolate(self, tests):
     if self.bot.bot_type == 'tester':
       # The tests running on a 'tester' bot are isolated by the 'builder'.
-      self.m.isolate.check_swarm_hashes(self._isolated_targets)
+      self.m.isolate.check_swarm_hashes(_get_isolated_targets(tests))
     elif self.is_triggering_perf_tests() and not self.m.tryserver.is_tryserver:
       # Set the swarm_hashes name so that it is found by pinpoint.
       commit_position = self.revision_cp.replace('@', '(at)')
@@ -382,7 +371,7 @@ class WebRTCApi(recipe_api.RecipeApi):
 
       self.m.isolate.isolate_tests(
           self.m.chromium.output_dir,
-          targets=self._isolated_targets,
+          targets=_get_isolated_targets(tests),
           swarm_hashes_property_name=swarm_hashes_property_name)
 
       # Upload the input files to the pinpoint server.
@@ -394,7 +383,7 @@ class WebRTCApi(recipe_api.RecipeApi):
           }]), self.m.cas.instance, self.m.isolate.isolated_tests)
     else:
       self.m.isolate.isolate_tests(
-          self.m.chromium.output_dir, targets=self._isolated_targets)
+          self.m.chromium.output_dir, targets=_get_isolated_targets(tests))
 
   def set_upload_build_properties(self):
     perf_bot_group = 'WebRTCPerf'
@@ -520,19 +509,13 @@ class WebRTCApi(recipe_api.RecipeApi):
           args=['-a', 'public-read'],
           unauthenticated_url=True)
 
-  def runtests(self, phase):
+  def runtests(self, tests):
+    if not tests or self.bot.bot_type == 'builder':
+      return
+
     if self.bot.is_running_perf_tests():
       self.set_upload_build_properties()
 
-    all_tests = steps.generate_tests(phase, self.bot,
-                                     self.m.tryserver.is_tryserver,
-                                     self.m.chromium_tests, self._ios_config)
-    tests = [
-        t for t in all_tests
-        if t.name in self._isolated_targets + self._non_isolated_targets
-    ]
-    if not tests:
-      return
     self.set_swarming_command_lines(tests)
     test_runner = self.m.chromium_tests.create_test_runner(tests)
     return test_runner()

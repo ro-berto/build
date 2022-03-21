@@ -38,17 +38,17 @@ def RunSteps(api):
   api.chromium.runhooks()
 
   for phase in webrtc.bot.phases:
-    compile_targets = webrtc.get_compile_targets(phase)
+    tests, compile_targets = webrtc.get_tests_and_compile_targets(phase)
     if not compile_targets:
       step_result = api.step('No further steps are necessary.', cmd=None)
       step_result.presentation.status = api.step.SUCCESS
       return
 
-    webrtc.run_mb(phase)
+    webrtc.run_mb(phase, tests)
     raw_result = api.chromium.compile(compile_targets, use_goma_module=True)
     if raw_result.status != common_pb.SUCCESS:
       return raw_result
-    webrtc.isolate()
+    webrtc.isolate(tests)
 
     if webrtc.bot.config.get('binary_size_files'):
       webrtc.get_binary_sizes(webrtc.bot.config['binary_size_files'])
@@ -57,7 +57,7 @@ def RunSteps(api):
     if webrtc.bot.config.get('archive_apprtc'):
       webrtc.package_apprtcmobile()
 
-    test_failure_summary = webrtc.runtests(phase)
+    test_failure_summary = webrtc.runtests(tests)
     if test_failure_summary:
       return test_failure_summary
 
