@@ -20,7 +20,7 @@ import logging
 import sys
 import unittest
 
-import tricium_clang_tidy as tidy
+import tricium_clang_tidy_script as tidy
 
 
 def _to_stringio(contents):

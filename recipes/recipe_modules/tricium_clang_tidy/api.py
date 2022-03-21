@@ -189,7 +189,7 @@ class TriciumClangTidyApi(RecipeApi):
 
     tricium_clang_tidy_command = [
         'vpython3',
-        self.resource('tricium_clang_tidy.py'),
+        self.resource('tricium_clang_tidy_script.py'),
         '--out_dir=%s' % output_dir,
         '--findings_file=%s' % warnings_file,
         '--clang_tidy_binary=%s' % clang_tidy_location,
@@ -202,9 +202,10 @@ class TriciumClangTidyApi(RecipeApi):
 
     ninja_path = {'PATH': [self.m.path.dirname(self.m.depot_tools.ninja_path)]}
     with self.m.context(env_suffixes=ninja_path):
-      self.m.step('tricium_clang_tidy.py', tricium_clang_tidy_command)
+      self.m.step('tricium_clang_tidy_script.py', tricium_clang_tidy_command)
 
-    # Please see tricium_clang_tidy.py for full docs on what this contains.
+    # Please see tricium_clang_tidy_script.py for full docs on what this
+    # contains.
     clang_tidy_output = self.m.file.read_json('read tidy output', warnings_file)
 
     if clang_tidy_output.get('failed_src_files') or clang_tidy_output.get(

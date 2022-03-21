@@ -17,6 +17,10 @@ please see the nicely commented blob near the end of the script. :)
 # >
 # [VPYTHON:END]
 
+# TODO(crbug.com/1307542) Once pylint can correctly resolve the
+# tricium_clang_tidy import to this file instead of the recipe module, this can
+# be renamed back to tricium_clang_tidy.py
+
 import argparse
 import bisect
 import collections

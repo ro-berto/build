@@ -48,9 +48,14 @@ PYTHON3_ONLY_FILES = (
         'recipes/recipes/flakiness/generate_builder_test_data.resources/'
         'query_test.py'
     ),
-    'recipes/recipe_modules/tricium_clang_tidy/resources/tricium_clang_tidy.py',
-    'recipes/recipe_modules/tricium_clang_tidy/resources/'
-    'tricium_clang_tidy_test.py',
+    (
+        'recipes/recipe_modules/tricium_clang_tidy/resources/'
+        'tricium_clang_tidy_script.py'
+    ),
+    (
+        'recipes/recipe_modules/tricium_clang_tidy/resources/'
+        'tricium_clang_tidy_test.py'
+    ),
 )
 
 
