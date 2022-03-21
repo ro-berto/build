@@ -4,8 +4,6 @@
 
 from __future__ import absolute_import
 
-import re
-
 import six
 from six.moves import urllib
 
@@ -17,7 +15,6 @@ from . import builders as webrtc_builders
 from . import steps
 
 from RECIPE_MODULES.build import chromium
-from RECIPE_MODULES.build import test_utils
 from RECIPE_MODULES.build.chromium_tests import steps as c_steps
 
 
@@ -523,50 +520,23 @@ class WebRTCApi(recipe_api.RecipeApi):
           args=['-a', 'public-read'],
           unauthenticated_url=True)
 
-  def run_perf_tests(self, tests):
-    suffix = ''
-    group = test_utils.api.SwarmingGroup(tests, self.m.resultdb)
-    group.pre_run(self.m, suffix)
-
-    failures = []
-    for test in tests:
-      group.fetch_rdb_results(test, suffix, self.m.flakiness)
-      step_result = test.run(suffix)
-      self.upload_to_perf_dashboard(test.name, step_result)
-
-      if not test.has_valid_results(suffix) or test.deterministic_failures(
-          suffix):
-        failures.append(test.name)
-
-    if failures:
-      raise self.m.step.StepFailure('Test target(s) failed: %s' %
-                                    ', '.join(failures))
-
   def runtests(self, phase):
+    if self.bot.is_running_perf_tests():
+      self.set_upload_build_properties()
+
     with self.m.context(cwd=self.m.chromium_checkout.checkout_dir):
       all_tests = steps.generate_tests(phase, self.bot,
                                        self.m.tryserver.is_tryserver,
                                        self.m.chromium_tests, self._ios_config)
-
       tests = [
           t for t in all_tests
           if t.name in self._isolated_targets + self._non_isolated_targets
       ]
       if not tests:
         return
-
       self.set_swarming_command_lines(tests)
-
-      if self.bot.is_running_perf_tests():
-        if 'ios' not in self.bot.test_suite:
-          return self.run_perf_tests(tests)
-        else:
-          self.set_upload_build_properties()
-
       test_runner = self.m.chromium_tests.create_test_runner(tests)
-      test_failure_summary = test_runner()
-      if test_failure_summary:
-        raise self.m.step.StepFailure(test_failure_summary.summary_markdown)
+      return test_runner()
 
   def trigger_bots(self):
     # If the builder is triggered by pinpoint, don't trigger any bots.
@@ -592,49 +562,3 @@ class WebRTCApi(recipe_api.RecipeApi):
           self.m.scheduler.BuildbucketTrigger(properties=properties),
           project='webrtc',
           jobs=[bot.builder for bot in triggered_bots])
-
-  def upload_to_perf_dashboard(self, name, step_result):
-    test_succeeded = (step_result.presentation.status == self.m.step.SUCCESS)
-
-    if self._test_data.enabled and test_succeeded:
-      task_output_dir = {'0/perftest-output.pb': 'dummy_data'}
-    else:
-      task_output_dir = step_result.raw_io.output_dir  # pragma no cover
-
-    results_to_upload = []
-    for filepath in sorted(task_output_dir):
-      # Both .json and .pb files are accepted even though the file always
-      # stores a proto. This is in order to be compatible with Chromium.
-      # If there are retries, you might see perftest-output_1.pb and so on.
-      if re.search(r'perftest-output.*(\.json|\.pb)$', filepath):
-        results_to_upload.append(task_output_dir[filepath])
-
-    if not results_to_upload and test_succeeded: # pragma: no cover
-      raise self.m.step.InfraFailure(
-          'Missing perf output from the test; expected perftest-output(_x).pb '
-          'or perftest-output(_x).json in the isolated-out from the test.')
-
-    perf_bot_group = 'WebRTCPerf'
-    if self.m.runtime.is_experimental:
-      perf_bot_group = 'Experimental' + perf_bot_group
-
-    for perf_results in results_to_upload:
-      args = [
-          '--build-page-url', self.build_url, '--test-suite', name, '--bot',
-          self.c.PERF_ID, '--output-json-file',
-          self.m.json.output(), '--input-results-file',
-          self.m.raw_io.input(perf_results), '--dashboard-url',
-          DASHBOARD_UPLOAD_URL, '--commit-position', self.revision_number,
-          '--webrtc-git-hash', self.revision, '--perf-dashboard-machine-group',
-          perf_bot_group, '--outdir', self.m.chromium.output_dir,
-          '--wait-for-upload'
-      ]
-
-      upload_script = self.m.path['checkout'].join(
-          'tools_webrtc', 'perf', 'webrtc_dashboard_upload.py')
-      cmd = ['vpython3', '-u', upload_script] + args
-      self.m.step(
-          '%s Dashboard upload' % name,
-          cmd,
-          step_test_data=lambda: self.m.json.test_api.output({}),
-          infra_step=True)

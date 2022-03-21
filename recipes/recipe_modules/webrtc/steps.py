@@ -153,7 +153,7 @@ def generate_tests(phase, bot, is_tryserver, chromium_tests_api, ios_config):
   )
   tests = []
   test_suite = bot.test_suite
-  generator = TestGenerator(chromium_tests_api, ios_config)
+  generator = TestGenerator(chromium_tests_api, ios_config, is_tryserver)
 
   if test_suite == 'webrtc':
     tests = [generator.swarming_desktop_test(t) for t in desktop_tests]
@@ -221,14 +221,20 @@ def generate_tests(phase, bot, is_tryserver, chromium_tests_api, ios_config):
 
 class TestGenerator:
 
-  def __init__(self, chromium_tests_api, ios_config):
+  def __init__(self, chromium_tests_api, ios_config, is_tryserver):
     self._chromium_tests_api = chromium_tests_api
     self._ios_config = ios_config
-    # TODO(crbug.com/webrtc/13835): Replace process_perf_results_py2.py by
-    # process_perf_results.py.
-    self._merge = chromium_swarming.MergeScript.create(
-        script=chromium_tests_api.m.path['checkout'].join(
-            'tools_webrtc', 'perf', 'process_perf_results_py2.py'))
+    self._is_tryserver = is_tryserver
+
+  def _get_merge_script(self, name):
+    if name in _PERF_TESTS and not self._is_tryserver:
+      # TODO(crbug.com/webrtc/13835): Replace process_perf_results_py2.py with
+      # process_perf_results.py.
+      return chromium_swarming.MergeScript.create(
+          script=self._chromium_tests_api.m.path['checkout'].join(
+              'tools_webrtc', 'perf', 'process_perf_results_py2.py'),
+          args=['--test-suite', name])
+    return None
 
   def swarming_desktop_test(self, name, args=None, dimensions=None):
     args = args or []
@@ -243,16 +249,15 @@ class TestGenerator:
             name,
             args=args,
             resultdb=resultdb,
+            merge=self._get_merge_script(name),
             shards=_NUMBER_OF_SHARDS.get(name, 1),
             dimensions=dimensions or {}), self._chromium_tests_api)
 
   def swarming_ios_test(self, name, args=None):
     args = args or []
     args = args + self._ios_config['args']
-    merge = None
     if name in _PERF_TESTS:
       args += ['--write_perf_output_on_ios', '--nologs']
-      merge = attr.evolve(self._merge, args=['--test-suite', name])
     if name in _REAL_XCTEST_TESTS:
       args.append('--xcode-parallelization' if '--version' in
                   args else '--xcodebuild-device-runner')
@@ -260,7 +265,7 @@ class TestGenerator:
         steps.SwarmingIsolatedScriptTestSpec.create(
             name,
             cipd_packages=[_MAC_TOOLCHAIN_CIPD_PACKAGE],
-            merge=merge,
+            merge=self._get_merge_script(name),
             named_caches=self._ios_config['named_caches'],
             service_account=self._ios_config['service_account'],
             args=args), self._chromium_tests_api)
@@ -274,6 +279,7 @@ class TestGenerator:
         steps.SwarmingGTestTestSpec.create(
             name,
             cipd_packages=[_ANDROID_CIPD_PACKAGE],
+            merge=self._get_merge_script(name),
             shards=_NUMBER_OF_SHARDS.get(name, 1),
             args=args), self._chromium_tests_api)
 

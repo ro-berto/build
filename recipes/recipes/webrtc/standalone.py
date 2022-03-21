@@ -57,7 +57,9 @@ def RunSteps(api):
     if webrtc.bot.config.get('archive_apprtc'):
       webrtc.package_apprtcmobile()
 
-    webrtc.runtests(phase)
+    test_failure_summary = webrtc.runtests(phase)
+    if test_failure_summary:
+      return test_failure_summary
 
   webrtc.trigger_bots()
 
@@ -104,20 +106,6 @@ def GenTests(api):
   )
   yield generate_builder(bucketname, 'Android32 (M Nexus5X)', revision='a' * 40,
                          fail_android_archive=True, suffix='_failing_archive')
-
-  yield generate_builder(
-      'luci.webrtc.perf',
-      'Perf Android32 (M Nexus5)',
-      suffix='_forced',
-      parent_got_revision='a' * 40,
-      revision=None)
-
-  yield generate_builder(
-      'luci.webrtc.perf',
-      'Perf Linux Bionic',
-      failing_test='webrtc_perf_tests',
-      suffix='_failing_test',
-      revision='a' * 40)
 
   yield generate_builder(
       'luci.webrtc.perf',

@@ -782,7 +782,14 @@
   },
   {
     "cmd": [],
-    "name": "install infra/tools/luci/swarming"
+    "name": "test_pre_run"
+  },
+  {
+    "cmd": [],
+    "name": "test_pre_run.install infra/tools/luci/swarming",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -810,9 +817,9 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "install infra/tools/luci/swarming.ensure package directory",
+    "name": "test_pre_run.install infra/tools/luci/swarming.ensure package directory",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {
@@ -842,9 +849,9 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "install infra/tools/luci/swarming.ensure_installed",
+    "name": "test_pre_run.install infra/tools/luci/swarming.ensure_installed",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
@@ -883,8 +890,9 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "[trigger] low_bandwidth_audio_perf_test on Ubuntu-18.04",
+    "name": "test_pre_run.[trigger] low_bandwidth_audio_perf_test on Ubuntu-18.04",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
@@ -1034,8 +1042,9 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "[trigger] webrtc_perf_tests on Ubuntu-18.04",
+    "name": "test_pre_run.[trigger] webrtc_perf_tests on Ubuntu-18.04",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
@@ -1186,9 +1195,10 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "include swarming task invocations",
+    "name": "test_pre_run.include swarming task invocations",
     "stdin": "{\"addInvocations\": [\"invocations/0\", \"invocations/1\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@json.input@{@@@",
@@ -1199,6 +1209,245 @@
       "@@@STEP_LOG_LINE@json.input@  \"includingInvocation\": \"invocations/build:8945511751514863184\"@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "collect tasks"
+  },
+  {
+    "cmd": [
+      "python3",
+      "-u",
+      "RECIPE_MODULE[depot_tools::git]/resources/git_setup.py",
+      "--path",
+      "[START_DIR]/swarming.client",
+      "--url",
+      "https://chromium.googlesource.com/infra/luci/client-py.git"
+    ],
+    "cwd": "[CACHE]/builder",
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:perf"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "collect tasks.git setup (swarming_client)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "fetch",
+      "origin",
+      "--progress"
+    ],
+    "cwd": "[START_DIR]/swarming.client",
+    "env": {
+      "PATH": "RECIPE_REPO[depot_tools]:<PATH>"
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:perf"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "collect tasks.git fetch (swarming_client)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "checkout",
+      "-f",
+      "a32a1607f6093d338f756c7e7c7b4333b0c50c9c"
+    ],
+    "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:perf"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "collect tasks.git checkout (swarming_client)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:perf"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "collect tasks.read revision",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@<br/>checked out 'deadbeef'<br/>@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "clean",
+      "-f",
+      "-d",
+      "-x"
+    ],
+    "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:perf"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "collect tasks.git clean (swarming_client)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "submodule",
+      "sync"
+    ],
+    "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:perf"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "collect tasks.submodule sync (swarming_client)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "submodule",
+      "update",
+      "--init",
+      "--recursive"
+    ],
+    "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:perf"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "collect tasks.submodule update (swarming_client)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::chromium_swarming]/resources/wait_for_finished_task_set.py",
+      "--swarming-server",
+      "https://example.swarmingserver.appspot.com",
+      "--swarming-py-path",
+      "[START_DIR]/swarming.client/swarming.py",
+      "--output-json",
+      "/path/to/tmp/json",
+      "--input-json",
+      "[[\"0\"], [\"1\"]]",
+      "--attempts",
+      "0",
+      "--verbose"
+    ],
+    "cwd": "[CACHE]/builder",
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:perf"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "collect tasks.wait for tasks",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"attempts\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"sets\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"0\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ], @@@",
+      "@@@STEP_LOG_LINE@json.output@    [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"1\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
@@ -1222,9 +1471,10 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "low_bandwidth_audio_perf_test stats",
+    "name": "collect tasks.low_bandwidth_audio_perf_test stats",
     "stdin": "{\"invocations\": [\"invocations/0\"]}",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@json.input@{@@@",
@@ -1261,8 +1511,76 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "low_bandwidth_audio_perf_test results",
+    "name": "collect tasks.low_bandwidth_audio_perf_test results",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "rdb",
+      "rpc",
+      "luci.resultdb.v1.ResultDB",
+      "QueryTestResultStatistics"
+    ],
+    "cwd": "[CACHE]/builder",
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:perf"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "collect tasks.webrtc_perf_tests stats",
+    "stdin": "{\"invocations\": [\"invocations/1\"]}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@json.input@{@@@",
+      "@@@STEP_LOG_LINE@json.input@  \"invocations\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/1\"@@@",
+      "@@@STEP_LOG_LINE@json.input@  ]@@@",
+      "@@@STEP_LOG_LINE@json.input@}@@@",
+      "@@@STEP_LOG_END@json.input@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "rdb",
+      "query",
+      "-json",
+      "-n",
+      "0",
+      "-u",
+      "-tr-fields",
+      "testId,variant,variantHash,status,tags,expected,duration",
+      "1"
+    ],
+    "cwd": "[CACHE]/builder",
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:perf"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "collect tasks.webrtc_perf_tests results",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
   },
@@ -1282,13 +1600,13 @@
       "--task-output-dir",
       "[CLEANUP]/tmp_tmp_1",
       "--merge-script",
-      "[CACHE]/builder/src/testing/merge_scripts/standard_isolated_script_merge.py",
+      "[CACHE]/builder/src/tools_webrtc/perf/process_perf_results_py2.py",
       "--merge-script-stdout-file",
       "/path/to/tmp/merge_script_log",
       "--merge-additional-args",
-      "[]",
+      "[\"--test-suite\", \"low_bandwidth_audio_perf_test\"]",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"bot_id\": \"bot_id\", \"builder_group\": \"client.webrtc.perf\", \"buildername\": \"Perf Linux Bionic\", \"buildnumber\": 1337, \"got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"got_revision_cp\": \"refs/heads/main@{#1337}\", \"parent_buildername\": \"Linux64 Builder\", \"parent_got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"recipe\": \"webrtc/standalone\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"swarming_command_lines\": {\"webrtc_perf_tests\": [\"./dummy_cmd\"]}}",
+      "{\"BUILD_CONFIG\": \"Release\", \"bot\": \"webrtc-linux-tests-bionic\", \"bot_id\": \"bot_id\", \"build_page_url\": \"https://ci.chromium.org/p/webrtc/builders/luci.webrtc.perf/Perf%20Linux%20Bionic/0\", \"builder_group\": \"client.webrtc.perf\", \"buildername\": \"Perf Linux Bionic\", \"buildnumber\": 1337, \"commit_position\": 170242, \"dashboard_url\": \"https://chromeperf.appspot.com\", \"got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"got_revision_cp\": \"refs/heads/main@{#1337}\", \"outdir\": \"[CACHE]/builder/src/out/Perf_Linux_Bionic\", \"parent_buildername\": \"Linux64 Builder\", \"parent_got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"perf_dashboard_machine_group\": \"WebRTCPerf\", \"recipe\": \"webrtc/standalone\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"swarming_command_lines\": {\"webrtc_perf_tests\": [\"./dummy_cmd\"]}, \"webrtc_git_hash\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"}",
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
@@ -1423,118 +1741,6 @@
   },
   {
     "cmd": [
-      "vpython3",
-      "-u",
-      "[CACHE]/builder/src/tools_webrtc/perf/webrtc_dashboard_upload.py",
-      "--build-page-url",
-      "https://ci.chromium.org/p/webrtc/builders/luci.webrtc.perf/Perf%20Linux%20Bionic/0",
-      "--test-suite",
-      "low_bandwidth_audio_perf_test",
-      "--bot",
-      "webrtc-linux-tests-bionic",
-      "--output-json-file",
-      "/path/to/tmp/json",
-      "--input-results-file",
-      "dummy_data",
-      "--dashboard-url",
-      "https://chromeperf.appspot.com",
-      "--commit-position",
-      "170242",
-      "--webrtc-git-hash",
-      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-      "--perf-dashboard-machine-group",
-      "WebRTCPerf",
-      "--outdir",
-      "[CACHE]/builder/src/out/Perf_Linux_Bionic",
-      "--wait-for-upload"
-    ],
-    "cwd": "[CACHE]/builder",
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "webrtc:perf"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "low_bandwidth_audio_perf_test Dashboard upload",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "rdb",
-      "rpc",
-      "luci.resultdb.v1.ResultDB",
-      "QueryTestResultStatistics"
-    ],
-    "cwd": "[CACHE]/builder",
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "webrtc:perf"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "webrtc_perf_tests stats",
-    "stdin": "{\"invocations\": [\"invocations/1\"]}",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@json.input@{@@@",
-      "@@@STEP_LOG_LINE@json.input@  \"invocations\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@    \"invocations/1\"@@@",
-      "@@@STEP_LOG_LINE@json.input@  ]@@@",
-      "@@@STEP_LOG_LINE@json.input@}@@@",
-      "@@@STEP_LOG_END@json.input@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "rdb",
-      "query",
-      "-json",
-      "-n",
-      "0",
-      "-u",
-      "-tr-fields",
-      "testId,variant,variantHash,status,tags,expected,duration",
-      "1"
-    ],
-    "cwd": "[CACHE]/builder",
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "webrtc:perf"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "webrtc_perf_tests results",
-    "~followup_annotations": [
-      "@@@STEP_LOG_END@raw_io.output_text@@@"
-    ]
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "RECIPE_REPO[build]/scripts/tools/runit.py",
@@ -1549,13 +1755,13 @@
       "--task-output-dir",
       "[CLEANUP]/tmp_tmp_2",
       "--merge-script",
-      "[CACHE]/builder/src/testing/merge_scripts/standard_isolated_script_merge.py",
+      "[CACHE]/builder/src/tools_webrtc/perf/process_perf_results_py2.py",
       "--merge-script-stdout-file",
       "/path/to/tmp/merge_script_log",
       "--merge-additional-args",
-      "[]",
+      "[\"--test-suite\", \"webrtc_perf_tests\"]",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"bot_id\": \"bot_id\", \"builder_group\": \"client.webrtc.perf\", \"buildername\": \"Perf Linux Bionic\", \"buildnumber\": 1337, \"got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"got_revision_cp\": \"refs/heads/main@{#1337}\", \"parent_buildername\": \"Linux64 Builder\", \"parent_got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"recipe\": \"webrtc/standalone\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"swarming_command_lines\": {\"webrtc_perf_tests\": [\"./dummy_cmd\"]}}",
+      "{\"BUILD_CONFIG\": \"Release\", \"bot\": \"webrtc-linux-tests-bionic\", \"bot_id\": \"bot_id\", \"build_page_url\": \"https://ci.chromium.org/p/webrtc/builders/luci.webrtc.perf/Perf%20Linux%20Bionic/0\", \"builder_group\": \"client.webrtc.perf\", \"buildername\": \"Perf Linux Bionic\", \"buildnumber\": 1337, \"commit_position\": 170242, \"dashboard_url\": \"https://chromeperf.appspot.com\", \"got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"got_revision_cp\": \"refs/heads/main@{#1337}\", \"outdir\": \"[CACHE]/builder/src/out/Perf_Linux_Bionic\", \"parent_buildername\": \"Linux64 Builder\", \"parent_got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"perf_dashboard_machine_group\": \"WebRTCPerf\", \"recipe\": \"webrtc/standalone\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"swarming_command_lines\": {\"webrtc_perf_tests\": [\"./dummy_cmd\"]}, \"webrtc_git_hash\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"}",
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
@@ -1689,50 +1895,46 @@
     "name": "Upload to test-results [webrtc_perf_tests on Ubuntu-18.04]"
   },
   {
-    "cmd": [
-      "vpython3",
-      "-u",
-      "[CACHE]/builder/src/tools_webrtc/perf/webrtc_dashboard_upload.py",
-      "--build-page-url",
-      "https://ci.chromium.org/p/webrtc/builders/luci.webrtc.perf/Perf%20Linux%20Bionic/0",
-      "--test-suite",
-      "webrtc_perf_tests",
-      "--bot",
-      "webrtc-linux-tests-bionic",
-      "--output-json-file",
-      "/path/to/tmp/json",
-      "--input-results-file",
-      "dummy_data",
-      "--dashboard-url",
-      "https://chromeperf.appspot.com",
-      "--commit-position",
-      "170242",
-      "--webrtc-git-hash",
-      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-      "--perf-dashboard-machine-group",
-      "WebRTCPerf",
-      "--outdir",
-      "[CACHE]/builder/src/out/Perf_Linux_Bionic",
-      "--wait-for-upload"
-    ],
-    "cwd": "[CACHE]/builder",
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "webrtc:perf"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "webrtc_perf_tests Dashboard upload",
+    "cmd": [],
+    "name": "$debug - all results",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_LINE@serialzed results@{@@@",
+      "@@@STEP_LOG_LINE@serialzed results@  \"all_suites\": [@@@",
+      "@@@STEP_LOG_LINE@serialzed results@    {@@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"invalid\": \"False\", @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"suite_name\": \"low_bandwidth_audio_perf_test\", @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"test_name_to_test_id_mapping\": {}, @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"total_tests_ran\": 0, @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"unexpected_failing_tests\": [], @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"unexpected_passing_tests\": [], @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"unexpected_skipped_tests\": [], @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"variant_hash\": \"\"@@@",
+      "@@@STEP_LOG_LINE@serialzed results@    }, @@@",
+      "@@@STEP_LOG_LINE@serialzed results@    {@@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"invalid\": \"False\", @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"suite_name\": \"webrtc_perf_tests\", @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"test_name_to_test_id_mapping\": {}, @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"total_tests_ran\": 0, @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"unexpected_failing_tests\": [], @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"unexpected_passing_tests\": [], @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"unexpected_skipped_tests\": [], @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"variant_hash\": \"\"@@@",
+      "@@@STEP_LOG_LINE@serialzed results@    }@@@",
+      "@@@STEP_LOG_LINE@serialzed results@  ], @@@",
+      "@@@STEP_LOG_LINE@serialzed results@  \"unexpected_failing_suites\": []@@@",
+      "@@@STEP_LOG_LINE@serialzed results@}@@@",
+      "@@@STEP_LOG_END@serialzed results@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "Tests statistics",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>Stats<br/>Total shards: 2<br/>Total runtime: 1m 3s <br/>@@@",
+      "@@@STEP_LOG_LINE@detailed stats@Total shards: 2@@@",
+      "@@@STEP_LOG_LINE@detailed stats@Total runtime: 1m 3s @@@",
+      "@@@STEP_LOG_LINE@detailed stats@Min/mean/max: 32s / 32s / 32s@@@",
+      "@@@STEP_LOG_END@detailed stats@@@"
     ]
   },
   {

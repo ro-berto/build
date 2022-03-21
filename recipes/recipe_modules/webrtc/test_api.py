@@ -91,8 +91,6 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
       test += self.override_step_data('%s on %s' % (failing_test, custom_os),
                                       test_step_data)
       step_name = 'collect tasks.%s results' % failing_test
-      if bot_type == 'tester':
-        step_name = '%s results' % failing_test
       test += self.override_step_data(
           step_name,
           stdout=self.m.raw_io.output_text(
