@@ -143,12 +143,6 @@ class BuilderSpec(object):
   # The name of the config to use for the test_results recipe module
   test_results_config = attrib(str, default=None)
 
-  # Whether or not we should fetch tags for the repo being checked out
-  # TODO(https://crbug.com/1249938) Once the Android official testers are
-  # triggered with a gitiles commit containing the ref, this can be removed and
-  # we can always pass no_fetch_tags=True
-  fetch_tags = attrib(bool, default=False)
-
   # A path relative to the checkout to a file containing the Chrome version
   # information for Android
   android_version = attrib(str, default=None)

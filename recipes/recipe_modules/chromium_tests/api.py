@@ -1335,7 +1335,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         builder_config,
         timeout=3600,
         root_solution_revision=root_solution_revision,
-        no_fetch_tags=not builder_config.fetch_tags,
         add_blamelists=True)
     if builder_config.execution_mode == ctbc.TEST:
       self.lookup_builder_gn_args(

@@ -451,7 +451,8 @@
       "src@551be50f2e3dae7dd1b31522fce7a91374c0efab",
       "--refs",
       "refs/heads/main",
-      "--enforce_fetch"
+      "--enforce_fetch",
+      "--no_fetch_tags"
     ],
     "cwd": "[CACHE]/builder",
     "env": {

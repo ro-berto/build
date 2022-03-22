@@ -94,7 +94,8 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@HEAD"
+      "src@HEAD",
+      "--no_fetch_tags"
     ],
     "cwd": "[CACHE]/builder",
     "env": {

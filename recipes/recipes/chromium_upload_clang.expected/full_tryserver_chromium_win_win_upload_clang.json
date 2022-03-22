@@ -214,7 +214,8 @@
       "--revision",
       "src@refs/heads/main",
       "--refs",
-      "refs/heads/main"
+      "refs/heads/main",
+      "--no_fetch_tags"
     ],
     "cwd": "[CACHE]\\builder",
     "env": {

@@ -313,7 +313,8 @@
       "src@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "--refs",
       "refs/heads/main",
-      "--enforce_fetch"
+      "--enforce_fetch",
+      "--no_fetch_tags"
     ],
     "cwd": "[CACHE]/builder",
     "env": {

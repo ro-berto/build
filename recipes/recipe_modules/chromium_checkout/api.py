@@ -91,6 +91,7 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
     Args:
       timeout: (seconds) for tiemout of bot_update.ensure_checkout.
     """
+    kwargs.setdefault('no_fetch_tags', True)
     bot_config = bot_config or chromium.BuilderSpec.create()
 
     if self.m.platform.is_win:
