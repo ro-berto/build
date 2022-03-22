@@ -275,10 +275,9 @@ class BuilderConfig(object):
       try_spec_kwargs = attr.asdict(try_spec, recurse=False)
       mirrors = try_spec_kwargs.pop('mirrors')
       kwargs.update(try_spec_kwargs)
-      kwargs['builder_ids'] = [m.builder_id for m in mirrors]
-      kwargs['builder_ids_in_scope_for_testing'] = [
-          m.tester_id for m in mirrors if m.tester_id
-      ]
+      kwargs['builder_ids'] = set([m.builder_id for m in mirrors])
+      kwargs['builder_ids_in_scope_for_testing'] = set(
+          [m.tester_id for m in mirrors if m.tester_id])
 
     return cls.create(builder_db, step_api=step_api, **kwargs)
 
