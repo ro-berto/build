@@ -350,22 +350,25 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       else:
         tests_list = [tests]
 
-      failed_tests = set()
+      failed_tests = []
+      invalid_tests = []
       for tl in tests_list:
         invalid_ts, failed_ts = self.m.test_utils.run_tests(
             tl,
             suffix,
             retry_failed_shards=retry_failed_shards,
             retry_invalid_shards=retry_invalid_shards)
-        failed_tests = failed_tests.union(failed_ts, invalid_ts)
+        failed_tests += failed_ts
+        invalid_tests += invalid_ts
 
       self.m.chromium_swarming.report_stats()
 
-      if failed_tests:
+      if failed_tests or invalid_tests:
+        status = common_pb.FAILURE if failed_tests else common_pb.INFRA_FAILURE
         return result_pb2.RawResult(
-            status=common_pb.FAILURE,
+            status=status,
             summary_markdown=self._format_unrecoverable_failures(
-                failed_tests, suffix))
+                set(failed_tests + invalid_tests), suffix))
 
     return test_runner
 
