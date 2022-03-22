@@ -45,6 +45,7 @@ SPEC = {
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
+                'TARGET_ARCH': 'arm',
                 'TARGET_BITS': 64,
             },
             simulation_platform='mac',
