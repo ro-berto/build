@@ -22,5 +22,10 @@ message InputProperties {
   //   revisions, it adds the entries 'src': X and 'src/third_party/angle': Y.
   //   The tester will override the gclient config for those paths to get the
   //   same version.
+  //
+  // DEPRECATED: Use the deps_revision_overrides property instead
+  //
+  // TODO(gbeaty) Remove this once all builders pick up the change to set
+  // deps_revision_overrides instead
   map<string, string> fixed_revisions = 3;
 }

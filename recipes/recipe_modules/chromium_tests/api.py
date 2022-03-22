@@ -781,10 +781,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         with `parent_` prepended to the property and the same value. If
         `update_step.presentation.properties` contains a `got_revision`
         property, then the returned properties will have the `revision`
-        property set to the same value. The `fixed_revisions` field of
-        the `$build/chromium_tests` property will be set with a mapping
-        to ensure that the triggered build checks out the same versions
-        for the paths in `update_step.json.output['manifest']`.
+        property set to the same value. The `deps_revision_overrides`
+        property will be set with a mapping to ensure that the triggered
+        build checks out the same versions for the paths in
+        `update_step.json.output['manifest']`.
       * builder_config - The configuration of the running builder.
       * additional_properties - Additional properties to set for the
         triggered builds. These properties will take precedence over
@@ -848,10 +848,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         with `parent_` prepended to the property and the same value. If
         `update_step.presentation.properties` contains a `got_revision`
         property, then the returned properties will have the `revision`
-        property set to the same value. The `fixed_revisions` field of
-        the `$build/chromium_tests` property will be set with a mapping
-        to ensure that the triggered build checks out the same versions
-        for the paths in `update_step.json.output['manifest']`.
+        property set to the same value. The `deps_revision_overrides`
+        property will be set with a mapping to ensure that the triggered
+        build checks out the same versions for the paths in
+        `update_step.json.output['manifest']`.
       * additional_properties - Additional properties to set for the
         triggered builds. These properties will take precedence over
         properties computed from `builder_id` and `update_step`.
@@ -873,11 +873,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if 'parent_got_revision' in properties:
       properties['revision'] = properties['parent_got_revision']
 
-    properties['$build/chromium_tests'] = {
-        'fixed_revisions': {
-            path: update_step.json.output['manifest'][path]['revision']
-            for path in update_step.json.output['fixed_revisions']
-        }
+    properties['deps_revision_overrides'] = {
+        path: update_step.json.output['manifest'][path]['revision']
+        for path in update_step.json.output['fixed_revisions']
     }
 
     properties.update(additional_properties or {})

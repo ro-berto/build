@@ -72,11 +72,9 @@ def GenTests(api):
           })),
       api.properties(
           expected_trigger_properties={
-              '$build/chromium_tests': {
-                  'fixed_revisions': {
-                      'src': src_revision,
-                      'src/foo': api.bot_update.gen_revision('src/foo'),
-                  },
+              'deps_revision_overrides': {
+                  'src': src_revision,
+                  'src/foo': api.bot_update.gen_revision('src/foo'),
               },
           }),
       api.post_process(post_process.StatusSuccess),
