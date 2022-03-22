@@ -48,6 +48,19 @@ PYTHON3_ONLY_FILES = (
         'recipes/recipes/flakiness/generate_builder_test_data.resources/'
         'query_test.py'
     ),
+    'recipes/recipe_modules/chromium_tests_builder_config/PRESUBMIT.py',
+    (
+        'recipes/recipe_modules/chromium_tests_builder_config/migration/'
+        'scripts/generate_groupings.py'
+    ),
+    (
+        'recipes/recipe_modules/chromium_tests_builder_config/migration/'
+        'scripts/tests/generate_groupings_integration_test.py'
+    ),
+    (
+        'recipes/recipe_modules/chromium_tests_builder_config/migration/'
+        'scripts/tests/generate_groupings_unit_test.py'
+    ),
     (
         'recipes/recipe_modules/tricium_clang_tidy/resources/'
         'tricium_clang_tidy_script.py'
@@ -132,6 +145,8 @@ def CheckTestsOnCommit(input_api, output_api):
       ('scripts', 'common', 'unittests'),
       ('recipes', 'recipe_modules', '*', 'unittests'),
       ('recipes', 'recipe_modules', '*', 'resources'),
+      ('recipes', 'recipe_modules', 'chromium_tests_builder_config',
+       'migration', 'scripts', 'tests'),
       ('recipes', 'recipes', '*.resources'),
       ('recipes', 'recipes', '*', '*.resources'),
   ):

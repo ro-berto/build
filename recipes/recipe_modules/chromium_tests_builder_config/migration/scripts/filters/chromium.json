@@ -1,0 +1,23 @@
+[
+  {
+    "builder_group_regex": "(tryserver\\.)?chromium(\\..+)?"
+  },
+  {
+    "builder_group_regex": "tryserver\\.blink"
+  },
+  {
+    "_comment": "there are some clang builders in the chromium project and some in the chrome project, so we can't prevent new chromium builders without preventing new chrome builders",
+    "builder_group_regex": "(tryserver\\.)?chromium\\.clang(\\..+)?",
+    "exclude": true
+  },
+  {
+    "_comment": "perf builders are in the chrome project",
+    "builder_group_regex": "(tryserver\\.)?chromium\\.perf(\\..+)?",
+    "exclude": true
+  },
+  {
+    "_comment": "devtools-frontend builders are in the devtools-frontend project",
+    "builder_group_regex": "(tryserver\\.)?chromium\\.devtools(\\..+)?",
+    "exclude": true
+  }
+]

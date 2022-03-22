@@ -2166,4 +2166,20 @@ TRYBOTS = try_spec.TryDatabase.create({
                 include_all_triggered_testers=True,
             ),
     },
+
+    # These builders don't actually exist, the configs are created to provide a
+    # known set of configs for integration testing the migration tracking
+    # scripts
+    'tryserver.migration.testing': {
+        'foo':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='migration.testing',
+                buildername='foo',
+            ),
+        'bar':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='migration.testing',
+                buildername='bar',
+            ),
+    },
 })

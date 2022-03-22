@@ -1,0 +1,5 @@
+[
+  {
+    "builder_group_regex": "(tryserver\\.)?migration\\.testing(\\..+)?"
+  }
+]

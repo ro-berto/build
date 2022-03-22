@@ -40,6 +40,7 @@ from . import tryserver_chromium_android
 from . import tryserver_chromium_linux
 from . import tryserver_devtools_frontend
 from . import tryserver_webrtc
+from . import migration_testing
 
 BUILDERS = builder_db.BuilderDatabase.create({
     'chromium':
@@ -118,4 +119,8 @@ BUILDERS = builder_db.BuilderDatabase.create({
         tryserver_devtools_frontend.SPEC,
     'tryserver.webrtc':
         tryserver_webrtc.SPEC,
+
+    # For testing the migration scripts
+    'migration.testing':
+        migration_testing.SPEC,
 })
