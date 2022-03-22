@@ -970,5 +970,5 @@ class CodeCoverageApi(recipe_api.RecipeApi):
   def _compose_gs_path_for_zoss_upload(self, builder, build_id):
     commit = self.m.buildbucket.build.input.gitiles_commit
     assert commit is not None, 'No gitiles commit'
-    return "ng3-coverage-chrome/absolute/%s/%s/%s/%s/%s" % (
+    return "ng3-coverage-chrome/absolute/%s/%s/%s/%s/%s/coverage.json" % (
         commit.host, commit.project, commit.id, builder, build_id)
