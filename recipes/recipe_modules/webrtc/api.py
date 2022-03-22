@@ -9,22 +9,15 @@ from six.moves import urllib
 
 from recipe_engine import recipe_api
 
-WEBRTC_GS_BUCKET = 'chromium-webrtc'
-
 from . import builders as webrtc_builders
 from . import steps
 
 from RECIPE_MODULES.build import chromium
-from RECIPE_MODULES.build.chromium_tests.steps import SwarmingTest
 
-
-CHROMIUM_REPO = 'https://chromium.googlesource.com/chromium/src'
-# WebRTC's dependencies on Chromium's subtree mirrors like
-# https://chromium.googlesource.com/chromium/src/build.git
-CHROMIUM_DEPS = ('base', 'build', 'ios', 'testing', 'third_party', 'tools')
-
-DASHBOARD_UPLOAD_URL = 'https://chromeperf.appspot.com'
-BINARY_SIZE_TARGETS = (
+_WEBRTC_GS_BUCKET = 'chromium-webrtc'
+_DASHBOARD_UPLOAD_URL = 'https://chromeperf.appspot.com'
+_PERF_MACHINE_GROUP = 'WebRTCPerf'
+_BINARY_SIZE_TARGETS = (
     'AppRTCMobile',
     'libjingle_peerconnection_so',
     'webrtc',
@@ -44,7 +37,7 @@ def _replace_string_in_dict(dict_input, old, new):
 
 
 def _get_isolated_targets(tests):
-  return [t.name for t in tests or [] if isinstance(t, SwarmingTest)]
+  return [t.name for t in tests or [] if t.runs_on_swarming]
 
 
 class Bot(object):
@@ -270,7 +263,7 @@ class WebRTCApi(recipe_api.RecipeApi):
 
     # Some trybots are used to calculate the binary size impact of the current
     # CL. These targets should always be built.
-    for binary_size_target in BINARY_SIZE_TARGETS:
+    for binary_size_target in _BINARY_SIZE_TARGETS:
       for binary_size_file in self.bot.config.get('binary_size_files', []):
         if binary_size_target in binary_size_file:
           compile_targets += [binary_size_target]
@@ -386,15 +379,14 @@ class WebRTCApi(recipe_api.RecipeApi):
           self.m.chromium.output_dir, targets=_get_isolated_targets(tests))
 
   def set_upload_build_properties(self):
-    perf_bot_group = 'WebRTCPerf'
-
+    experiment_prefix = 'Experimental' if self.m.runtime.is_experimental else ''
     self.m.chromium.set_build_properties({
         'build_page_url': self.build_url,
         'bot': self.c.PERF_ID,
-        'dashboard_url': DASHBOARD_UPLOAD_URL,
+        'dashboard_url': _DASHBOARD_UPLOAD_URL,
         'commit_position': self.revision_number,
         'webrtc_git_hash': self.revision,
-        'perf_dashboard_machine_group': perf_bot_group,
+        'perf_dashboard_machine_group': experiment_prefix + _PERF_MACHINE_GROUP,
         'outdir': self.m.chromium.output_dir,
     })
 
@@ -491,7 +483,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     if not self.m.runtime.is_experimental:
       self.m.gsutil.upload(
           zip_path,
-          WEBRTC_GS_BUCKET,
+          _WEBRTC_GS_BUCKET,
           apk_upload_url,
           args=['-a', 'public-read'],
           unauthenticated_url=True)
