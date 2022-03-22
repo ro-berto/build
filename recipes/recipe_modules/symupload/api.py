@@ -234,6 +234,7 @@ class SymuploadApi(recipe_api.RecipeApi):
                   kms_key_path=symupload_data.kms_key_path,
                   server_url=symupload_data.url,
                   symupload_binary=symupload_binary)
+              presentation.status = self.m.step.SUCCESS
 
             _retry_symupload()
           else:
