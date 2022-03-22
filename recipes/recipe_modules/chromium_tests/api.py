@@ -569,16 +569,20 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             [t for t in tests if t.target_name in skylab_isolates])
       return raw_result
 
-  def set_test_command_lines(self, tests, suffix):
-    step_result = self.m.python(
-        'find command lines%s' % suffix,
-        self.resource('find_command_lines.py'), [
-            '--build-dir', self.m.chromium.output_dir, '--output-json',
-            self.m.json.output()
-        ],
+  def find_swarming_command_lines(self, suffix):
+    script = self.m.chromium_tests.resource('find_command_lines.py')
+    args = [
+        '--build-dir', self.m.chromium.output_dir, '--output-json',
+        self.m.json.output()
+    ]
+    step_result = self.m.step(
+        'find command lines%s' % suffix, ['vpython3', '-u', script] + args,
         step_test_data=lambda: self.m.json.test_api.output({}))
     assert isinstance(step_result.json.output, dict)
-    self._swarming_command_lines = step_result.json.output
+    return step_result.json.output
+
+  def set_test_command_lines(self, tests, suffix):
+    self._swarming_command_lines = self.find_swarming_command_lines(suffix)
     for test in tests:
       if test.runs_on_swarming or test.uses_isolate:
         command_line = self.swarming_command_lines.get(test.target_name, [])
