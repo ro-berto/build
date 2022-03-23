@@ -120,6 +120,8 @@ class FilterApi(recipe_api.RecipeApi):
                                  builder_id=None,
                                  mb_config_path=None,
                                  build_output_dir=None,
+                                 mb_path=None,
+                                 phase=None,
                                  **kwargs):
     """Check to see if the affected files require a compile or tests.
 
@@ -136,6 +138,9 @@ class FilterApi(recipe_api.RecipeApi):
       config_file_name: the config file to look up exclusions in.
       builder_id: the ID of the builder with the config to run MB against.
       mb_config_path: the path to the MB config file.
+      build_output_dir: the build output directory.
+      mb_path: the path to the source directory containing the mb.py script.
+      phase: string to distinguish the phase of a builder
 
     Within the file we concatenate "base.exclusions" and
     "|additional_names|.exclusions" (if |additional_names| is not none) to
@@ -245,8 +250,10 @@ class FilterApi(recipe_api.RecipeApi):
         step_result = self.m.chromium.mb_analyze(
             builder_id,
             analyze_input,
+            mb_path=mb_path,
             mb_config_path=mb_config_path,
-            build_dir=build_output_dir)
+            build_dir=build_output_dir,
+            phase=phase)
       else:
         step_result = self.m.python(
             'analyze',
@@ -301,11 +308,13 @@ class FilterApi(recipe_api.RecipeApi):
               affected_files,
               test_targets,
               additional_compile_targets,
-              config_file_name,
+              config_file_name='trybot_analyze_config.json',
               builder_id=None,
               mb_config_path=None,
               build_output_dir=None,
-              additional_names=None):
+              additional_names=None,
+              mb_path=None,
+              phase=None):
     """Runs "analyze" step to determine targets affected by the patch.
 
     Returns a tuple of:
@@ -325,7 +334,9 @@ class FilterApi(recipe_api.RecipeApi):
         use_mb=use_mb,
         builder_id=builder_id,
         mb_config_path=mb_config_path,
-        build_output_dir=build_output_dir)
+        build_output_dir=build_output_dir,
+        mb_path=mb_path,
+        phase=phase)
 
     compile_targets = self.compile_targets[:]
 
