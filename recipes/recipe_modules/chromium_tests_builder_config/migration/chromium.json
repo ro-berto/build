@@ -39,28 +39,12 @@
     "chromium.android.fyi:android-chrome-pie-x86-wpt-fyi-rel",
     "tryserver.chromium.android:android-chrome-pie-x86-wpt-fyi-rel"
   ],
-  "chromium.android.fyi:android-cronet-x86-dbg-kitkat-tests": [
-    "chromium.android:android-cronet-x86-dbg",
-    "chromium.android:android-cronet-x86-dbg-10-tests",
-    "chromium.android:android-cronet-x86-dbg-11-tests",
-    "chromium.android:android-cronet-x86-dbg-oreo-tests",
-    "chromium.android:android-cronet-x86-dbg-pie-tests",
-    "chromium.android.fyi:android-cronet-x86-dbg-kitkat-tests",
-    "chromium.android.fyi:android-cronet-x86-dbg-lollipop-tests",
-    "chromium.android.fyi:android-cronet-x86-dbg-marshmallow-tests",
-    "tryserver.chromium.android:android-cronet-x86-dbg",
-    "tryserver.chromium.android:android-cronet-x86-dbg-10-tests",
-    "tryserver.chromium.android:android-cronet-x86-dbg-11-tests",
-    "tryserver.chromium.android:android-cronet-x86-dbg-oreo-tests",
-    "tryserver.chromium.android:android-cronet-x86-dbg-pie-tests"
-  ],
   "chromium.android.fyi:android-cronet-x86-dbg-lollipop-tests": [
     "chromium.android:android-cronet-x86-dbg",
     "chromium.android:android-cronet-x86-dbg-10-tests",
     "chromium.android:android-cronet-x86-dbg-11-tests",
     "chromium.android:android-cronet-x86-dbg-oreo-tests",
     "chromium.android:android-cronet-x86-dbg-pie-tests",
-    "chromium.android.fyi:android-cronet-x86-dbg-kitkat-tests",
     "chromium.android.fyi:android-cronet-x86-dbg-lollipop-tests",
     "chromium.android.fyi:android-cronet-x86-dbg-marshmallow-tests",
     "tryserver.chromium.android:android-cronet-x86-dbg",
@@ -75,7 +59,6 @@
     "chromium.android:android-cronet-x86-dbg-11-tests",
     "chromium.android:android-cronet-x86-dbg-oreo-tests",
     "chromium.android:android-cronet-x86-dbg-pie-tests",
-    "chromium.android.fyi:android-cronet-x86-dbg-kitkat-tests",
     "chromium.android.fyi:android-cronet-x86-dbg-lollipop-tests",
     "chromium.android.fyi:android-cronet-x86-dbg-marshmallow-tests",
     "tryserver.chromium.android:android-cronet-x86-dbg",
@@ -83,6 +66,11 @@
     "tryserver.chromium.android:android-cronet-x86-dbg-11-tests",
     "tryserver.chromium.android:android-cronet-x86-dbg-oreo-tests",
     "tryserver.chromium.android:android-cronet-x86-dbg-pie-tests"
+  ],
+  "chromium.android.fyi:android-cronet-x86-rel-kitkat-tests": [
+    "chromium.android:android-cronet-x86-rel",
+    "chromium.android.fyi:android-cronet-x86-rel-kitkat-tests",
+    "tryserver.chromium.android:android-cronet-x86-rel"
   ],
   "chromium.android.fyi:android-marshmallow-x86-fyi-rel-reviver": [
     "chromium.android.fyi:android-marshmallow-x86-fyi-rel-reviver",
@@ -395,7 +383,6 @@
     "chromium.android:android-cronet-x86-dbg-11-tests",
     "chromium.android:android-cronet-x86-dbg-oreo-tests",
     "chromium.android:android-cronet-x86-dbg-pie-tests",
-    "chromium.android.fyi:android-cronet-x86-dbg-kitkat-tests",
     "chromium.android.fyi:android-cronet-x86-dbg-lollipop-tests",
     "chromium.android.fyi:android-cronet-x86-dbg-marshmallow-tests",
     "tryserver.chromium.android:android-cronet-x86-dbg",
@@ -410,7 +397,6 @@
     "chromium.android:android-cronet-x86-dbg-11-tests",
     "chromium.android:android-cronet-x86-dbg-oreo-tests",
     "chromium.android:android-cronet-x86-dbg-pie-tests",
-    "chromium.android.fyi:android-cronet-x86-dbg-kitkat-tests",
     "chromium.android.fyi:android-cronet-x86-dbg-lollipop-tests",
     "chromium.android.fyi:android-cronet-x86-dbg-marshmallow-tests",
     "tryserver.chromium.android:android-cronet-x86-dbg",
@@ -425,7 +411,6 @@
     "chromium.android:android-cronet-x86-dbg-11-tests",
     "chromium.android:android-cronet-x86-dbg-oreo-tests",
     "chromium.android:android-cronet-x86-dbg-pie-tests",
-    "chromium.android.fyi:android-cronet-x86-dbg-kitkat-tests",
     "chromium.android.fyi:android-cronet-x86-dbg-lollipop-tests",
     "chromium.android.fyi:android-cronet-x86-dbg-marshmallow-tests",
     "tryserver.chromium.android:android-cronet-x86-dbg",
@@ -440,7 +425,6 @@
     "chromium.android:android-cronet-x86-dbg-11-tests",
     "chromium.android:android-cronet-x86-dbg-oreo-tests",
     "chromium.android:android-cronet-x86-dbg-pie-tests",
-    "chromium.android.fyi:android-cronet-x86-dbg-kitkat-tests",
     "chromium.android.fyi:android-cronet-x86-dbg-lollipop-tests",
     "chromium.android.fyi:android-cronet-x86-dbg-marshmallow-tests",
     "tryserver.chromium.android:android-cronet-x86-dbg",
@@ -455,7 +439,6 @@
     "chromium.android:android-cronet-x86-dbg-11-tests",
     "chromium.android:android-cronet-x86-dbg-oreo-tests",
     "chromium.android:android-cronet-x86-dbg-pie-tests",
-    "chromium.android.fyi:android-cronet-x86-dbg-kitkat-tests",
     "chromium.android.fyi:android-cronet-x86-dbg-lollipop-tests",
     "chromium.android.fyi:android-cronet-x86-dbg-marshmallow-tests",
     "tryserver.chromium.android:android-cronet-x86-dbg",
@@ -466,6 +449,7 @@
   ],
   "chromium.android:android-cronet-x86-rel": [
     "chromium.android:android-cronet-x86-rel",
+    "chromium.android.fyi:android-cronet-x86-rel-kitkat-tests",
     "tryserver.chromium.android:android-cronet-x86-rel"
   ],
   "chromium.android:android-incremental-dbg": [
@@ -3787,7 +3771,6 @@
     "chromium.android:android-cronet-x86-dbg-11-tests",
     "chromium.android:android-cronet-x86-dbg-oreo-tests",
     "chromium.android:android-cronet-x86-dbg-pie-tests",
-    "chromium.android.fyi:android-cronet-x86-dbg-kitkat-tests",
     "chromium.android.fyi:android-cronet-x86-dbg-lollipop-tests",
     "chromium.android.fyi:android-cronet-x86-dbg-marshmallow-tests",
     "tryserver.chromium.android:android-cronet-x86-dbg",
@@ -3802,7 +3785,6 @@
     "chromium.android:android-cronet-x86-dbg-11-tests",
     "chromium.android:android-cronet-x86-dbg-oreo-tests",
     "chromium.android:android-cronet-x86-dbg-pie-tests",
-    "chromium.android.fyi:android-cronet-x86-dbg-kitkat-tests",
     "chromium.android.fyi:android-cronet-x86-dbg-lollipop-tests",
     "chromium.android.fyi:android-cronet-x86-dbg-marshmallow-tests",
     "tryserver.chromium.android:android-cronet-x86-dbg",
@@ -3817,7 +3799,6 @@
     "chromium.android:android-cronet-x86-dbg-11-tests",
     "chromium.android:android-cronet-x86-dbg-oreo-tests",
     "chromium.android:android-cronet-x86-dbg-pie-tests",
-    "chromium.android.fyi:android-cronet-x86-dbg-kitkat-tests",
     "chromium.android.fyi:android-cronet-x86-dbg-lollipop-tests",
     "chromium.android.fyi:android-cronet-x86-dbg-marshmallow-tests",
     "tryserver.chromium.android:android-cronet-x86-dbg",
@@ -3832,7 +3813,6 @@
     "chromium.android:android-cronet-x86-dbg-11-tests",
     "chromium.android:android-cronet-x86-dbg-oreo-tests",
     "chromium.android:android-cronet-x86-dbg-pie-tests",
-    "chromium.android.fyi:android-cronet-x86-dbg-kitkat-tests",
     "chromium.android.fyi:android-cronet-x86-dbg-lollipop-tests",
     "chromium.android.fyi:android-cronet-x86-dbg-marshmallow-tests",
     "tryserver.chromium.android:android-cronet-x86-dbg",
@@ -3847,7 +3827,6 @@
     "chromium.android:android-cronet-x86-dbg-11-tests",
     "chromium.android:android-cronet-x86-dbg-oreo-tests",
     "chromium.android:android-cronet-x86-dbg-pie-tests",
-    "chromium.android.fyi:android-cronet-x86-dbg-kitkat-tests",
     "chromium.android.fyi:android-cronet-x86-dbg-lollipop-tests",
     "chromium.android.fyi:android-cronet-x86-dbg-marshmallow-tests",
     "tryserver.chromium.android:android-cronet-x86-dbg",
@@ -3858,6 +3837,7 @@
   ],
   "tryserver.chromium.android:android-cronet-x86-rel": [
     "chromium.android:android-cronet-x86-rel",
+    "chromium.android.fyi:android-cronet-x86-rel-kitkat-tests",
     "tryserver.chromium.android:android-cronet-x86-rel"
   ],
   "tryserver.chromium.android:android-inverse-fieldtrials-pie-x86-fyi-rel": [
