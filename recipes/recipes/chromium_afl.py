@@ -20,6 +20,7 @@ DEPS = [
     'recipe_engine/python',
     'recipe_engine/raw_io',
     'recipe_engine/step',
+    'reclient',
 ]
 
 
@@ -42,6 +43,7 @@ BUILDERS = freeze({
                         'TARGET_PLATFORM': 'linux',
                         'TARGET_BITS': 64,
                     },
+                    gclient_apply_config=['enable_reclient'],
                     upload_bucket='chromium-browser-afl',
                     upload_directory='asan',
                 ),
@@ -69,6 +71,8 @@ def RunSteps(api):
 
   checkout_results = api.bot_update.ensure_checkout()
 
+  use_reclient = bool(api.reclient.instance)
+
   api.chromium.ensure_goma()
   api.chromium.runhooks()
   api.chromium.mb_gen(builder_id)
@@ -91,7 +95,10 @@ def RunSteps(api):
   api.step.active_result.presentation.logs['all_fuzzers'] = all_fuzzers
   api.step.active_result.presentation.logs['no_clusterfuzz'] = no_clusterfuzz
   api.step.active_result.presentation.logs['targets'] = targets
-  raw_result = api.chromium.compile(targets=targets, use_goma_module=True)
+  raw_result = api.chromium.compile(
+      targets=targets,
+      use_goma_module=not use_reclient,
+      use_reclient=use_reclient)
   if raw_result.status != common_pb.SUCCESS:
     return raw_result
 
@@ -106,17 +113,18 @@ def RunSteps(api):
 
 def GenTests(api):
   for test in api.chromium.gen_tests_for_builders(BUILDERS):
-    yield (test +
-           api.step_data('calculate all_fuzzers',
-               stdout=api.raw_io.output_text('target1 target2 target3')) +
-           api.step_data('calculate no_clusterfuzz',
-               stdout=api.raw_io.output_text('target1'))
-           )
+    yield (test + api.reclient.properties() + api.step_data(
+        'calculate all_fuzzers',
+        stdout=api.raw_io.output_text('target1 target2 target3')) +
+           api.step_data(
+               'calculate no_clusterfuzz',
+               stdout=api.raw_io.output_text('target1')))
 
   yield api.test(
       'compile_failure',
       api.chromium.ci_build(
           builder_group='chromium.fuzz', builder='Afl Upload Linux ASan'),
+      api.reclient.properties(),
       api.step_data('compile', retcode=1),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
