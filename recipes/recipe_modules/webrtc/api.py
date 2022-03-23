@@ -197,35 +197,6 @@ class WebRTCApi(recipe_api.RecipeApi):
   def is_triggering_perf_tests(self):
     return any(bot.is_running_perf_tests() for bot in self.bot.triggered_bots())
 
-  def run_mb_analyze(self, phase, affected_files, test_targets):
-    step_result = self.m.chromium.mb_analyze(
-        self.builder_id,
-        analyze_input={
-            'files': affected_files,
-            'test_targets': sorted(set(test_targets)),
-            'additional_compile_targets': ['all'],
-        },
-        mb_path=self.m.path['checkout'].join('tools_webrtc', 'mb'),
-        phase=phase)
-
-    if 'error' in step_result.json.output:
-      failure_msg = 'Error: ' + step_result.json.output['error']
-      step_result.presentation.step_text = failure_msg
-      step_result.presentation.status = self.m.step.FAILURE
-      raise self.m.step.StepFailure(failure_msg)
-
-    if 'invalid_targets' in step_result.json.output:
-      failure_msg = 'Error, following targets were not found: ' + ', '.join(
-          step_result.json.output['invalid_targets'])
-      raise self.m.step.StepFailure(failure_msg)
-
-    if 'Found dependency' not in step_result.json.output['status']:
-      step_result.presentation.step_text = 'No compile necessary'
-      return [], []
-
-    return (step_result.json.output['test_targets'],
-            step_result.json.output['compile_targets'])
-
   def get_tests_and_compile_targets(self, phase):
     """ Returns the tests to run and the targets to compile."""
     tests = []
@@ -250,24 +221,20 @@ class WebRTCApi(recipe_api.RecipeApi):
         return tests, ['webrtc_dashboard_upload']
       return tests, ['all']
 
-    tests_target, compile_targets = self.run_mb_analyze(phase, affected_files,
-                                                        [t.name for t in tests])
-    tests = [t for t in tests if t.name in tests_target]
-
-    if compile_targets:
-      # See crbug.com/557505 - we need to not prune meta
-      # targets that are part of 'test_targets', because otherwise
-      # we might not actually build all of the binaries needed for
-      # a given test, even if they aren't affected by the patch.
-      compile_targets += tests_target
+    tests_targets, compile_targets = self.m.filter.analyze(
+        affected_files,
+        test_targets=[t.name for t in tests],
+        additional_compile_targets=['all'],
+        mb_path=self.m.path['checkout'].join('tools_webrtc', 'mb'),
+        phase=phase)
 
     # Some trybots are used to calculate the binary size impact of the current
     # CL. These targets should always be built.
-    for binary_size_target in _BINARY_SIZE_TARGETS:
-      for binary_size_file in self.bot.config.get('binary_size_files', []):
-        if binary_size_target in binary_size_file:
-          compile_targets += [binary_size_target]
-
+    for binary_size_file in self.bot.config.get('binary_size_files', []):
+      compile_targets += [
+          t for t in _BINARY_SIZE_TARGETS if t in binary_size_file
+      ]
+    tests = [t for t in tests if t.name in tests_targets]
     return tests, sorted(set(compile_targets))
 
   def configure_swarming(self):
@@ -390,7 +357,7 @@ class WebRTCApi(recipe_api.RecipeApi):
         'outdir': self.m.chromium.output_dir,
     })
 
-  def set_swarming_command_lines(self, tests):
+  def set_test_command_lines(self, tests):
     if self.bot.bot_type in ('builder', 'builder_tester'):
       return self.m.chromium_tests.set_test_command_lines(tests, suffix='')
 
@@ -488,18 +455,18 @@ class WebRTCApi(recipe_api.RecipeApi):
           args=['-a', 'public-read'],
           unauthenticated_url=True)
 
-  def runtests(self, tests):
+  def run_tests(self, tests):
     if not tests or self.bot.bot_type == 'builder':
       return
 
     if self.bot.is_running_perf_tests():
       self.set_upload_build_properties()
 
-    self.set_swarming_command_lines(tests)
+    self.set_test_command_lines(tests)
     test_runner = self.m.chromium_tests.create_test_runner(tests)
     return test_runner()
 
-  def trigger_bots(self):
+  def trigger_child_builds(self):
     # If the builder is triggered by pinpoint, don't trigger any bots.
     for tag in self.m.buildbucket.build.tags:
       if tag.key == 'pinpoint_job_id':

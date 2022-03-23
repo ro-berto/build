@@ -4,7 +4,6 @@
 
 from __future__ import absolute_import
 
-import attr
 from recipe_engine.engine_types import freeze
 from RECIPE_MODULES.build import chromium_swarming
 from RECIPE_MODULES.build.chromium_tests import steps
@@ -203,7 +202,7 @@ def generate_tests(phase, bot, is_tryserver, chromium_tests_api, ios_config):
     ]
 
   if test_suite == 'ios':
-    tests += [generator.swarming_ios_test(t) for t in ios_tests]
+    tests = [generator.swarming_ios_test(t) for t in ios_tests]
 
   if test_suite == 'ios_device':
     args = ['--xctest', '--undefok=enable-run-ios-unittests-with-xctest']

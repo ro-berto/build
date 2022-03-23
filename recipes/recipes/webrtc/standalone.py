@@ -57,11 +57,11 @@ def RunSteps(api):
     if webrtc.bot.config.get('archive_apprtc'):
       webrtc.package_apprtcmobile()
 
-    test_failure_summary = webrtc.runtests(tests)
+    test_failure_summary = webrtc.run_tests(tests)
     if test_failure_summary:
       return test_failure_summary
 
-  webrtc.trigger_bots()
+  webrtc.trigger_child_builds()
 
 
 def GenTests(api):
@@ -73,11 +73,8 @@ def GenTests(api):
     for buildername in group_config['builders'].keys():
       yield generate_builder(bucketname, buildername, revision='a' * 40)
 
-  # Forced builds (not specifying any revision) and test failures.
   bucketname = 'luci.webrtc.ci'
   buildername = 'Linux64 Debug'
-  yield generate_builder(bucketname, buildername, revision=None,
-                         suffix='_forced')
   yield generate_builder(
       bucketname,
       buildername,
@@ -113,22 +110,6 @@ def GenTests(api):
       is_experimental=True,
       suffix='_experimental',
       revision='a' * 40)
-
-  gn_analyze_error_output = {'error': 'Wrong input'}
-  yield generate_builder(
-      'luci.webrtc.try',
-      'linux_compile_rel',
-      revision='a' * 40,
-      suffix='_gn_analyze_error',
-      gn_analyze_output=gn_analyze_error_output)
-
-  gn_analyze_invalid_output = {'invalid_targets': ['non_existent_target']}
-  yield generate_builder(
-      'luci.webrtc.try',
-      'linux_compile_rel',
-      revision='a' * 40,
-      suffix='_gn_analyze_invalid_targets',
-      gn_analyze_output=gn_analyze_invalid_output)
 
   gn_analyze_no_deps_output = {'status': ['No dependency']}
   yield generate_builder(

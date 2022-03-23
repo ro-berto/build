@@ -340,6 +340,43 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[CACHE]/builder/src/testing/buildbot/trybot_analyze_config.json",
+      "/path/to/tmp/json"
+    ],
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "read filter exclusion spec",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@path: Path([CHECKOUT], 'testing', 'buildbot', 'trybot_analyze_config.json')@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": []@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"chromium\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": []@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"ios\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": []@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "python3",
       "-u",
       "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
@@ -354,7 +391,7 @@
       "[CACHE]/goma/client",
       "-v",
       "//out/Debug",
-      "{\"additional_compile_targets\": [\"all\"], \"files\": [\"foo.cc\"], \"test_targets\": [\"AppRTCMobile_test_apk\", \"android_examples_junit_tests\", \"android_instrumentation_test_apk\", \"android_sdk_junit_tests\", \"audio_decoder_unittests\", \"common_audio_unittests\", \"common_video_unittests\", \"dcsctp_unittests\", \"modules_tests\", \"modules_unittests\", \"peerconnection_unittests\", \"rtc_media_unittests\", \"rtc_pc_unittests\", \"rtc_stats_unittests\", \"rtc_unittests\", \"system_wrappers_unittests\", \"test_support_unittests\", \"tools_unittests\", \"video_engine_tests\", \"voip_unittests\", \"webrtc_nonparallel_tests\", \"webrtc_perf_tests\"]}",
+      "{\"additional_compile_targets\": [\"all\"], \"files\": [\"foo.cc\"], \"test_targets\": [\"AppRTCMobile_test_apk\", \"android_instrumentation_test_apk\", \"audio_decoder_unittests\", \"common_audio_unittests\", \"common_video_unittests\", \"dcsctp_unittests\", \"modules_tests\", \"modules_unittests\", \"peerconnection_unittests\", \"rtc_media_unittests\", \"rtc_pc_unittests\", \"rtc_stats_unittests\", \"rtc_unittests\", \"system_wrappers_unittests\", \"test_support_unittests\", \"tools_unittests\", \"video_engine_tests\", \"voip_unittests\", \"webrtc_nonparallel_tests\", \"android_examples_junit_tests\", \"android_sdk_junit_tests\", \"webrtc_perf_tests\"]}",
       "/path/to/tmp/json",
       "--json-output",
       "/path/to/tmp/json"
@@ -362,6 +399,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
     },
     "luci_context": {
@@ -390,7 +428,48 @@
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_END@json.output[failure_summary] (invalid)@@@",
       "@@@STEP_LOG_LINE@json.output[failure_summary] (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output[failure_summary] (exception)@@@"
+      "@@@STEP_LOG_END@json.output[failure_summary] (exception)@@@",
+      "@@@STEP_LOG_LINE@analyze_details@{@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"additional_compile_targets\": [@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"all\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"all\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"common_audio_unittests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"all\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"common_audio_unittests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.test_targets\": [@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"common_audio_unittests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"test_targets\": [@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"AppRTCMobile_test_apk\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"android_instrumentation_test_apk\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"audio_decoder_unittests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"common_audio_unittests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"common_video_unittests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"dcsctp_unittests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"modules_tests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"modules_unittests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"peerconnection_unittests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"rtc_media_unittests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"rtc_pc_unittests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"rtc_stats_unittests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"rtc_unittests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"system_wrappers_unittests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"test_support_unittests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"tools_unittests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"video_engine_tests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"voip_unittests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"webrtc_nonparallel_tests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"android_examples_junit_tests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"android_sdk_junit_tests\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"webrtc_perf_tests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  ]@@@",
+      "@@@STEP_LOG_LINE@analyze_details@}@@@",
+      "@@@STEP_LOG_END@analyze_details@@@"
     ]
   },
   {

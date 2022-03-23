@@ -24,6 +24,7 @@ DEPS = [
     'goma',
     'infra/zip',
     'isolate',
+    'filter',
     'flakiness',
     'perf_dashboard',
     'recipe_engine/buildbucket',
