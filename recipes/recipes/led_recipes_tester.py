@@ -176,6 +176,12 @@ CHROMIUM_SRC_TEST_CLS = collections.OrderedDict([
         'fast':
             'https://chromium-review.googlesource.com/c/chromium/src/+/3498092',
     }),
+    ('luci.chromium-m101.try', {
+        'slow':
+            'https://chromium-review.googlesource.com/c/chromium/src/+/3543323',
+        'fast':
+            'https://chromium-review.googlesource.com/c/chromium/src/+/3543182',
+    }),
 ])
 
 
