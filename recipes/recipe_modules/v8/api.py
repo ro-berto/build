@@ -90,6 +90,13 @@ class V8Version(object):
     blob = sub(V8_BUILD, self.build, blob)
     return sub(V8_PATCH, self.patch, blob)
 
+  def with_incremented_minor(self):
+    new_minor = int(self.minor) + 1
+    new_major = int(self.major)
+    if new_minor == 10:
+      new_minor = 0
+      new_major += 1
+    return V8Version(str(new_major), str(new_minor), self.build, self.patch)
 
 class Trigger(object):
   def __init__(self, api):
@@ -1678,3 +1685,31 @@ class V8Api(recipe_api.RecipeApi):
     build = re.search(VERSION_LINE_RE % V8_BUILD, blob, re.M).group(1)
     patch = re.search(VERSION_LINE_RE % V8_PATCH, blob, re.M).group(1)
     return V8Version(major, minor, build, patch)
+
+  def latest_branches(self):
+    branch_step = self.m.git(
+        'branch',
+        '-r',
+        '--list',
+        'branch-heads/*',
+        stdout=self.m.raw_io.output_text(),
+        name='last branches')
+    output = branch_step.stdout
+    branch_step.presentation.logs['stdout'] = output.splitlines()
+    branch_pattern = re.compile(r"branch-heads/(\d+)\.(\d+)")
+    versions = []
+    for line in output.splitlines():
+        m = branch_pattern.match(line.strip())
+        if m:
+            versions.append(int(m.group(1))*10 + int(m.group(2)))
+    versions.sort()
+    versions.reverse()
+    return versions
+
+  def git_output(self, *args, **kwargs):
+    """Convenience wrapper."""
+    step_result = self.m.git(
+        *args, stdout=self.m.raw_io.output_text(), **kwargs)
+    result = step_result.stdout
+    step_result.presentation.logs['stdout'] = result.splitlines()
+    return result.strip()

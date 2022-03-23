@@ -19,9 +19,9 @@ from PB.go.chromium.org.luci.scheduler.api.scheduler.v1 import (
 
 # Excerpt of the v8 version file.
 VERSION_FILE_TMPL = """
-#define V8_MAJOR_VERSION 3
-#define V8_MINOR_VERSION 4
-#define V8_BUILD_NUMBER 3
+#define V8_MAJOR_VERSION %d
+#define V8_MINOR_VERSION %d
+#define V8_BUILD_NUMBER %d
 #define V8_PATCH_LEVEL %d
 """
 
@@ -440,13 +440,14 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     return self.post_process(
         Filter().include_re(r'^((?!(.*\.)?%s).)*$' % '|'.join(skip_fragments)))
 
-  def version_file(self, patch_level, desc, count=1, prefix=''):
+  def version_file(self, patch_level, desc,
+      count=1, prefix='', major=3, minor=4):
     # Recipe step name disambiguation.
     suffix = ' (%d)' % count if count > 1 else ''
     return self.override_step_data(
         '%sCheck %s version file%s' % (prefix, desc, suffix),
         self.m.raw_io.stream_output_text(
-            VERSION_FILE_TMPL % patch_level,
+            VERSION_FILE_TMPL % (major, minor, 3, patch_level),
             stream='stdout'),
     )
 
