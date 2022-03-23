@@ -30,90 +30,92 @@ DEPS = [
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/python',
+    'reclient',
 ]
 
 DETERMINISTIC_BUILDERS = freeze({
-  'Mac deterministic': {
-    'chromium_config': 'chromium',
-    'gclient_config': 'chromium',
-    'platform': 'mac',
-    'targets': ['all'],
-  },
-  'Windows deterministic': {
-    'chromium_config': 'chromium',
-    'gclient_config': 'chromium',
-    'platform': 'win',
-    'targets': ['all'],
-  },
+    'Mac deterministic': {
+        'chromium_config': 'chromium',
+        'gclient_config': 'chromium',
+        'platform': 'mac',
+        'targets': ['all'],
+    },
+    'Windows deterministic': {
+        'chromium_config': 'chromium',
+        'gclient_config': 'chromium',
+        'platform': 'win',
+        'targets': ['all'],
+    },
 
-  # Debug builders
-  'Mac deterministic (dbg)': {
-    'chromium_config': 'chromium',
-    'gclient_config': 'chromium',
-    'platform': 'mac',
-    'targets': ['all'],
-  },
-
-  'Deterministic Linux': {
-    'chromium_config': 'chromium',
-    'gclient_config': 'chromium',
-    'platform': 'linux',
-    'targets': ['all'],
-  },
-  'linux_chromium_clobber_deterministic': {
-    'chromium_config': 'chromium',
-    'gclient_config': 'chromium',
-    'platform': 'linux',
-    'targets': ['all'],
-  },
-  'Deterministic Linux (dbg)': {
-    'chromium_config': 'chromium',
-    'chromium_config_kwargs': {
-      'BUILD_CONFIG': 'Debug',
+    # Debug builders
+    'Mac deterministic (dbg)': {
+        'chromium_config': 'chromium',
+        'gclient_config': 'chromium',
+        'platform': 'mac',
+        'targets': ['all'],
     },
-    'gclient_config': 'chromium',
-    'platform': 'linux',
-    'targets': ['all'],
-    'compare_local': True,
-  },
-  'Deterministic Android': {
-    'chromium_config': 'android',
-    'android_config': 'main_builder',
-    'gclient_config': 'chromium',
-    'gclient_apply_config': ['android'],
-    'chromium_config_kwargs': {
-      'BUILD_CONFIG': 'Release',
-      'TARGET_BITS': 32,
-      'TARGET_PLATFORM': 'android',
+    'Deterministic Linux': {
+        'chromium_config': 'chromium',
+        'gclient_config': 'chromium',
+        'gclient_apply_config': ['enable_reclient'],
+        'platform': 'linux',
+        'targets': ['all'],
     },
-    'platform': 'linux',
-    'targets': ['all'],
-  },
-  'Deterministic Android (dbg)': {
-    'chromium_config': 'android',
-    'android_config': 'main_builder',
-    'gclient_config': 'chromium',
-    'gclient_apply_config': ['android'],
-    'chromium_config_kwargs': {
-      'BUILD_CONFIG': 'Debug',
-      'TARGET_BITS': 32,
-      'TARGET_PLATFORM': 'android',
+    'linux_chromium_clobber_deterministic': {
+        'chromium_config': 'chromium',
+        'gclient_config': 'chromium',
+        'platform': 'linux',
+        'targets': ['all'],
     },
-    'platform': 'linux',
-    'targets': ['all'],
-  },
-  'Deterministic Fuchsia (dbg)': {
-    'chromium_config': 'chromium',
-    'chromium_config_kwargs': {
-      'BUILD_CONFIG': 'Debug',
-      'TARGET_BITS': 64,
-      'TARGET_PLATFORM': 'fuchsia',
+    'Deterministic Linux (dbg)': {
+        'chromium_config': 'chromium',
+        'chromium_config_kwargs': {
+            'BUILD_CONFIG': 'Debug',
+        },
+        'gclient_config': 'chromium',
+        'gclient_apply_config': ['enable_reclient'],
+        'platform': 'linux',
+        'targets': ['all'],
+        'compare_local': True,
     },
-    'gclient_config': 'chromium',
-    'gclient_apply_config': ['fuchsia_x64'],
-    'platform': 'linux',
-    'targets': ['all'],
-  },
+    'Deterministic Android': {
+        'chromium_config': 'android',
+        'android_config': 'main_builder',
+        'gclient_config': 'chromium',
+        'gclient_apply_config': ['android', 'enable_reclient'],
+        'chromium_config_kwargs': {
+            'BUILD_CONFIG': 'Release',
+            'TARGET_BITS': 32,
+            'TARGET_PLATFORM': 'android',
+        },
+        'platform': 'linux',
+        'targets': ['all'],
+    },
+    'Deterministic Android (dbg)': {
+        'chromium_config': 'android',
+        'android_config': 'main_builder',
+        'gclient_config': 'chromium',
+        'gclient_apply_config': ['android', 'enable_reclient'],
+        'chromium_config_kwargs': {
+            'BUILD_CONFIG': 'Debug',
+            'TARGET_BITS': 32,
+            'TARGET_PLATFORM': 'android',
+        },
+        'platform': 'linux',
+        'targets': ['all'],
+    },
+    'Deterministic Fuchsia (dbg)': {
+        'chromium_config': 'chromium',
+        'chromium_config_kwargs': {
+            'BUILD_CONFIG': 'Debug',
+            'TARGET_BITS': 64,
+            'TARGET_PLATFORM': 'fuchsia',
+        },
+        'gclient_config': 'chromium',
+        'gclient_apply_config': ['fuchsia_x64'],
+        'platform': 'linux',
+        'targets': ['all'],
+    },
 })
 
 # Trybots to mirror the actions of builders
@@ -200,11 +202,7 @@ def RunSteps(api):
   # Whether do first build in local or use goma.
   compare_local = recipe_config.get('compare_local', False)
 
-  # Whether to use goma or reclient as the remote execution client.  This
-  # could be keyed off of the gclient_apply_config containing
-  # 'enable_reclient' or not, but I would prefer to keep it similar to the
-  # way other recipes work (a separate use_reclient flag).
-  use_reclient = recipe_config.get('use_reclient', False)
+  use_reclient = bool(api.reclient.instance)
   use_goma = not use_reclient
   remote_phase = 'goma' if use_goma else 'reclient'
 
