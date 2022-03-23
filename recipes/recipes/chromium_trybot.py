@@ -7,6 +7,8 @@ from recipe_engine.post_process import (Filter, DoesNotRun, DropExpectation,
                                         StatusSuccess, StepCommandContains,
                                         StepTextContains)
 
+from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
+
 PYTHON_VERSION_COMPATIBILITY = "PY3"
 
 DEPS = [
@@ -183,14 +185,20 @@ def GenTests(api):
 
   yield api.test(
       'dynamic_isolated_script_test_on_trybot_no_stdout',
-      api.chromium_tests_builder_config.try_build(
-          builder_group='tryserver.chromium.mac',
-          builder='mac-rel',
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
       ),
+      api.chromium_tests_builder_config.properties(
+          api.chromium_tests_builder_config
+          .properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       swarm_hashes(extra_swarmed_tests=['telemetry_gpu_unittests']),
       api.chromium_tests.read_source_side_spec(
-          'chromium.mac', {
-              'Mac11 Tests': {
+          'fake-group', {
+              'fake-builder': {
                   'isolated_scripts': [{
                       'isolate_name': 'telemetry_gpu_unittests',
                       'name': 'telemetry_gpu_unittests',

@@ -34,6 +34,9 @@ def stock_config(name, config='Release', target_bits=64, staging=True,
     bot_config['test_results_config'] = 'staging_server'
   return name, builder_spec.BuilderSpec.create(**bot_config)
 
+# The config for the following builders is now specified src-side in
+# //infra/config/subprojects/chromium/ci/chromium.mac.star
+# * mac-osxbeta-rel
 
 SPEC = {
     'Mac Builder Next':
@@ -48,24 +51,6 @@ SPEC = {
                 'TARGET_ARCH': 'arm',
                 'TARGET_BITS': 64,
             },
-            simulation_platform='mac',
-        ),
-    'mac-osxbeta-rel':
-        builder_spec.BuilderSpec.create(
-            chromium_config='chromium',
-            gclient_config='chromium',
-            chromium_apply_config=[
-                'mb',
-                'goma_use_local',  # to mitigate compile step timeout (crbug.com/1056935).
-            ],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            execution_mode=builder_spec.TEST,
-            test_results_config='staging_server',
-            parent_builder_group='chromium.mac',
-            parent_buildername='Mac Builder',
             simulation_platform='mac',
         ),
     'WebKit Linux layout_ng_disabled Builder':

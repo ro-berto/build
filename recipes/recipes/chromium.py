@@ -2,6 +2,10 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from recipe_engine import post_process
+
+from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
+
 PYTHON_VERSION_COMPATIBILITY = "PY3"
 
 DEPS = [
@@ -30,9 +34,6 @@ DEPS = [
     'test_results',
     'test_utils',
 ]
-
-from recipe_engine import post_process
-
 
 def RunSteps(api):
   builder_id, builder_config = (
@@ -150,18 +151,27 @@ def GenTests(api):
 
   yield api.test(
       'dynamic_swarmed_gtest_mac_gpu',
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.mac',
-          builder='Mac10.13 Tests',
-          parent_buildername='Mac Builder',
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-tester',
+          parent_buildername='fake-builder',
       ),
+      api.platform('mac', 64),
+      api.chromium_tests_builder_config.properties(
+          api.chromium_tests_builder_config.properties_assembler_for_ci_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+          ).with_parent(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(swarm_hashes={
           'gl_tests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
-          'chromium.mac',
+          'fake-group',
           {
-              'Mac10.13 Tests': {
+              'fake-tester': {
                   'gtest_tests': [
                       {
                           'test': 'gl_tests',
@@ -594,18 +604,27 @@ def GenTests(api):
 
   yield api.test(
       'dynamic_swarmed_isolated_script_test_mac_gpu',
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.mac',
-          builder='Mac10.13 Tests',
-          parent_buildername='Mac Builder',
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-tester',
+          parent_buildername='fake-builder',
       ),
+      api.platform('mac', 64),
+      api.chromium_tests_builder_config.properties(
+          api.chromium_tests_builder_config.properties_assembler_for_ci_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+          ).with_parent(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(swarm_hashes={
           'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
-          'chromium.mac',
+          'fake-group',
           {
-              'Mac10.13 Tests': {
+              'fake-tester': {
                   'isolated_scripts': [
                       {
                           'isolate_name': 'telemetry_gpu_unittests',

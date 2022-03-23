@@ -9,6 +9,11 @@ def _chromium_gpu_spec(**kwargs):
   return builder_spec.BuilderSpec.create(
       build_gs_bucket='chromium-gpu-archive', **kwargs)
 
+# The config for the following builders is now specified src-side in
+# //infra/config/subprojects/chromium/ci/chromium.gpu.star
+# * GPU Mac Builder
+# * Mac Release (Intel)
+# * Mac Retina Release (AMD)
 
 SPEC = {
     'GPU Win x64 Builder':
@@ -135,21 +140,6 @@ SPEC = {
             parent_buildername='GPU Linux Builder (dbg)',
             simulation_platform='linux',
         ),
-    'GPU Mac Builder':
-        _chromium_gpu_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-                'goma_use_local',  # to mitigate compile step timeout (crbug.com/1056935).
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=['use_clang_coverage'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            simulation_platform='mac',
-        ),
     'GPU Mac Builder (dbg)':
         _chromium_gpu_spec(
             chromium_config='chromium',
@@ -161,22 +151,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
             },
-            simulation_platform='mac',
-        ),
-    'Mac Release (Intel)':
-        _chromium_gpu_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-                'goma_use_local',  # to mitigate compile step timeout (crbug.com/1056935).
-            ],
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            execution_mode=builder_spec.TEST,
-            parent_buildername='GPU Mac Builder',
             simulation_platform='mac',
         ),
     'Mac Debug (Intel)':
@@ -192,22 +166,6 @@ SPEC = {
             },
             execution_mode=builder_spec.TEST,
             parent_buildername='GPU Mac Builder (dbg)',
-            simulation_platform='mac',
-        ),
-    'Mac Retina Release (AMD)':
-        _chromium_gpu_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-                'goma_use_local',  # to mitigate compile step timeout (crbug.com/1056935).
-            ],
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            execution_mode=builder_spec.TEST,
-            parent_buildername='GPU Mac Builder',
             simulation_platform='mac',
         ),
     'Mac Retina Debug (AMD)':

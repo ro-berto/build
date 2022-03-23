@@ -1318,6 +1318,17 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='gpu-fyi-chromeos-octopus-exp',
             ),
     },
+    # The config for the following builders is now specified src-side in
+    # //infra/config/subprojects/chromium/try/tryserver.chromium.mac.star
+    # * mac-inverse-fieldtrials-fyi-rel
+    # * mac-osxbeta-rel
+    # * mac-rel
+    # * mac_chromium_10.11_rel_ng
+    # * mac_chromium_10.12_rel_ng
+    # * mac_chromium_10.13_rel_ng
+    # * mac_chromium_10.14_rel_ng
+    # * mac_chromium_10.15_rel_ng
+    # * mac_chromium_11.0_rel_ng
     'tryserver.chromium.mac': {
         'ios-asan':
             try_spec.TrySpec.create_for_single_mirror(
@@ -1423,107 +1434,16 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.fyi',
                 buildername='Mac Builder Next',
             ),
-        'mac-osxbeta-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.mac',
-                buildername='Mac Builder',
-                tester_group='chromium.fyi',
-                tester='mac-osxbeta-rel',
-            ),
         'mac11-arm64-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.mac',
                 buildername='mac-arm64-rel',
                 tester='mac11-arm64-rel-tests',
             ),
-        # This trybot mirrors the trybot mac-rel with
-        # analyze_deps_autorolls set to False
-        'mac-inverse-fieldtrials-fyi-rel':
-            try_spec.TrySpec.create([
-                try_spec.TryMirror.create(
-                    builder_group='chromium.mac',
-                    buildername='Mac Builder',
-                    tester='Mac11 Tests',
-                ),
-                try_spec.TryMirror.create(
-                    builder_group='chromium.gpu',
-                    buildername='GPU Mac Builder',
-                    tester='Mac Release (Intel)',
-                ),
-                try_spec.TryMirror.create(
-                    builder_group='chromium.gpu',
-                    buildername='GPU Mac Builder',
-                    tester='Mac Retina Release (AMD)',
-                ),
-            ],),
-        'mac-rel':
-            try_spec.TrySpec.create(
-                [
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.mac',
-                        buildername='Mac Builder',
-                        tester='Mac11 Tests',
-                    ),
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.gpu',
-                        buildername='GPU Mac Builder',
-                        tester='Mac Release (Intel)',
-                    ),
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.gpu',
-                        buildername='GPU Mac Builder',
-                        tester='Mac Retina Release (AMD)',
-                    ),
-                ],
-                regression_test_selection=try_spec.QUICK_RUN_ONLY,
-            ),
-        'mac_chromium_10.11_rel_ng':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.mac',
-                buildername='Mac Builder',
-                tester='Mac10.11 Tests',
-            ),
-        'mac_chromium_10.12_rel_ng':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.mac',
-                buildername='Mac Builder',
-                tester='Mac10.12 Tests',
-            ),
-        'mac_chromium_10.13_rel_ng':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.mac',
-                buildername='Mac Builder',
-                tester='Mac10.13 Tests',
-            ),
-        'mac_chromium_10.14_rel_ng':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.mac',
-                buildername='Mac Builder',
-                tester='Mac10.14 Tests',
-            ),
-        'mac_chromium_10.15_rel_ng':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.mac',
-                buildername='Mac Builder',
-                tester='Mac10.15 Tests',
-            ),
-        'mac_chromium_11.0_rel_ng':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.mac',
-                buildername='Mac Builder',
-                tester='Mac11 Tests',
-            ),
         'mac_chromium_compile_dbg_ng':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.mac',
                 buildername='Mac Builder (dbg)',
-                is_compile_only=True,
-                include_all_triggered_testers=True,
-            ),
-        'mac_chromium_compile_rel_ng':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.mac',
-                buildername='Mac Builder',
                 is_compile_only=True,
                 include_all_triggered_testers=True,
             ),

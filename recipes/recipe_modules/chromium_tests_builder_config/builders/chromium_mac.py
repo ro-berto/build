@@ -9,6 +9,15 @@ def _chromium_mac_spec(**kwargs):
   return builder_spec.BuilderSpec.create(
       build_gs_bucket='chromium-mac-archive', **kwargs)
 
+# The config for the following builders is now specified src-side in
+# //infra/config/subprojects/chromium/ci/chromium.mac.star
+# * Mac Builder
+# * Mac10.11 Tests
+# * Mac10.12 Tests
+# * Mac10.13 Tests
+# * Mac10.14 Tests
+# * Mac10.15 Tests
+# * Mac11 Tests
 
 SPEC = {
     'ios-catalyst':
@@ -96,21 +105,6 @@ SPEC = {
             },
             simulation_platform='mac',
         ),
-    'Mac Builder':
-        _chromium_mac_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-                'goma_use_local',  # to mitigate compile step timeout (crbug.com/1056935).
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=['use_clang_coverage'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            simulation_platform='mac',
-        ),
     'mac-arm64-on-arm64-rel':
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
@@ -154,103 +148,6 @@ SPEC = {
             execution_mode=builder_spec.TEST,
             parent_builder_group='chromium.mac',
             parent_buildername='mac-arm64-rel',
-            simulation_platform='mac',
-        ),
-    'Mac10.11 Tests':
-        _chromium_mac_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-                'goma_use_local',  # to mitigate compile step timeout (crbug.com/1056935).
-            ],
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            execution_mode=builder_spec.TEST,
-            parent_buildername='Mac Builder',
-            simulation_platform='mac',
-        ),
-    'Mac10.12 Tests':
-        _chromium_mac_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-                'goma_use_local',  # to mitigate compile step timeout (crbug.com/1056935).
-            ],
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            execution_mode=builder_spec.TEST,
-            parent_buildername='Mac Builder',
-            simulation_platform='mac',
-        ),
-    'Mac10.13 Tests':
-        _chromium_mac_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-                'goma_use_local',  # to mitigate compile step timeout (crbug.com/1056935).
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=['use_clang_coverage'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            execution_mode=builder_spec.TEST,
-            parent_buildername='Mac Builder',
-            simulation_platform='mac',
-        ),
-    'Mac10.14 Tests':
-        _chromium_mac_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-                'goma_use_local',  # to mitigate compile step timeout (crbug.com/1056935).
-            ],
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            execution_mode=builder_spec.TEST,
-            parent_buildername='Mac Builder',
-            simulation_platform='mac',
-        ),
-    'Mac10.15 Tests':
-        _chromium_mac_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-                'goma_use_local',  # to mitigate compile step timeout (crbug.com/1056935).
-            ],
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            execution_mode=builder_spec.TEST,
-            parent_buildername='Mac Builder',
-            simulation_platform='mac',
-        ),
-    'Mac11 Tests':
-        builder_spec.BuilderSpec.create(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-                'goma_use_local',  # to mitigate compile step timeout (crbug.com/1056935).
-            ],
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            execution_mode=builder_spec.TEST,
-            parent_buildername='Mac Builder',
             simulation_platform='mac',
         ),
     'Mac11 Tests (dbg)':

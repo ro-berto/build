@@ -265,11 +265,16 @@ def GenTests(api):
       'mac_basic',
       api.platform('mac', 64),
       api.chromium.ci_build(
-          builder_group='chromium.mac',
-          builder='Mac Builder',
+          builder_group='fake-group',
+          builder='fake-builder',
           bot_id='build1-a1',
           build_number=77457,
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(
           out_dir='/tmp',
           target_platform='mac',
@@ -280,11 +285,16 @@ def GenTests(api):
       'mac_toolchain',
       api.platform('mac', 64),
       api.chromium.ci_build(
-          builder_group='chromium.mac',
-          builder='Mac Builder',
+          builder_group='fake-group',
+          builder='fake-builder',
           bot_id='build1-a1',
           build_number=77457,
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(
           out_dir='/tmp',
           target_platform='mac',
@@ -296,11 +306,16 @@ def GenTests(api):
       'mac_toolchain_properties',
       api.platform('mac', 64),
       api.chromium.ci_build(
-          builder_group='chromium.mac',
-          builder='Mac Builder',
+          builder_group='fake-group',
+          builder='fake-builder',
           bot_id='build1-a1',
           build_number=77457,
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(
           out_dir='/tmp',
           target_platform='mac',
