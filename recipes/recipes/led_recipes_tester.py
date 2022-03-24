@@ -125,7 +125,16 @@ FILES_TO_ALWAYS_IGNORE = (
             ' OWNERS files, which contain repository metadata and are not part'
             ' of the recipes:'),
     ),
-)
+    FilesToIgnore(
+        patterns=[
+            r'(.+/)?recipe_modules/chromium_tests_builder_config/migration/.+',
+        ],
+        step_name='ignoring src-side config migration files',
+        step_text=(
+            'The following affected files are being ignored because they are'
+            ' used for tracking the migration of builder configs src-side and'
+            ' are not part of the recipes:'),
+    ))
 
 # CL to use when testing a recipe which touches chromium source.
 # The first level of keys is the bucket of the builder. The second level of keys
@@ -724,6 +733,22 @@ def GenTests(api):
           affected_recipes_input_files_does_not_contain,
           builder_config_path('OWNERS'),
           'recipes/recipe_modules/chromium_tests/CHROMIUM_TESTS_OWNERS'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'src_side_migration_files_ignored',
+      gerrit_change(),
+      affected_recipes(RECIPE),
+      affected_files(
+          'recipes/foo.py',
+          builder_config_path('migration/chromium.json'),
+      ),
+      default_builders(),
+      api.post_check(post_process.MustRun,
+                     'ignoring src-side config migration files'),
+      api.post_check(affected_recipes_input_files_does_not_contain,
+                     builder_config_path('migration/chromium.json')),
       api.post_process(post_process.DropExpectation),
   )
 
