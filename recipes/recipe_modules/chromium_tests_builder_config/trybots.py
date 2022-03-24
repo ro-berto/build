@@ -721,12 +721,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.linux',
                 buildername='Fuchsia x64',
             ),
-        'fuchsia_x64_rts':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.linux',
-                buildername='Fuchsia x64',
-                regression_test_selection=try_spec.ALWAYS,
-            ),
         'fuchsia-x64-cast':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.linux',
@@ -928,13 +922,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 tester='Linux ASan LSan Tests (1)',
                 regression_test_selection=try_spec.QUICK_RUN_ONLY,
             ),
-        'linux_chromium_asan_rel_ng_rts':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.memory',
-                buildername='Linux ASan LSan Builder',
-                tester='Linux ASan LSan Tests (1)',
-                regression_test_selection=try_spec.ALWAYS,
-            ),
         'linux_chromium_compile_rel_ng':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.linux',
@@ -985,13 +972,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='Linux TSan Builder',
                 tester='Linux TSan Tests',
                 regression_test_selection=try_spec.QUICK_RUN_ONLY,
-            ),
-        'linux_chromium_tsan_rel_ng_rts':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.memory',
-                buildername='Linux TSan Builder',
-                tester='Linux TSan Tests',
-                regression_test_selection=try_spec.ALWAYS,
             ),
         # TODO(crbug.com/1200904): Remove after migration
         'linux_chromium_tsan_rel_ng_bionic':
@@ -1633,22 +1613,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                     ),
                 ],
                 regression_test_selection=try_spec.QUICK_RUN_ONLY,
-            ),
-        'win10_chromium_x64_rel_ng_rts':
-            try_spec.TrySpec.create(
-                [
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.win',
-                        buildername='Win x64 Builder',
-                        tester='Win10 Tests x64',
-                    ),
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.gpu',
-                        buildername='GPU Win x64 Builder',
-                        tester='Win10 x64 Release (NVIDIA)',
-                    ),
-                ],
-                regression_test_selection=try_spec.ALWAYS,
             ),
         'win11-x64-fyi-rel':
             try_spec.TrySpec.create_for_single_mirror(

@@ -1122,7 +1122,6 @@
     "chromium.win:Win10 Tests x64",
     "tryserver.chromium.win:win10_chromium_inverse_fieldtrials_x64_fyi_rel_ng",
     "tryserver.chromium.win:win10_chromium_x64_rel_ng",
-    "tryserver.chromium.win:win10_chromium_x64_rel_ng_rts",
     "tryserver.chromium.win:win11-x64-fyi-rel",
     "tryserver.chromium.win:win_chromium_x64_rel_ng"
   ],
@@ -2386,7 +2385,6 @@
     "chromium.win:Win10 Tests x64",
     "tryserver.chromium.win:win10_chromium_inverse_fieldtrials_x64_fyi_rel_ng",
     "tryserver.chromium.win:win10_chromium_x64_rel_ng",
-    "tryserver.chromium.win:win10_chromium_x64_rel_ng_rts",
     "tryserver.chromium.win:win11-x64-fyi-rel",
     "tryserver.chromium.win:win_chromium_x64_rel_ng"
   ],
@@ -2446,7 +2444,6 @@
     "chromium.win:Win10 Tests x64",
     "tryserver.chromium.win:win10_chromium_inverse_fieldtrials_x64_fyi_rel_ng",
     "tryserver.chromium.win:win10_chromium_x64_rel_ng",
-    "tryserver.chromium.win:win10_chromium_x64_rel_ng_rts",
     "tryserver.chromium.win:win11-x64-fyi-rel",
     "tryserver.chromium.win:win_chromium_x64_rel_ng"
   ],
@@ -2476,8 +2473,7 @@
   ],
   "chromium.linux:Fuchsia x64": [
     "chromium.linux:Fuchsia x64",
-    "tryserver.chromium.linux:fuchsia_x64",
-    "tryserver.chromium.linux:fuchsia_x64_rts"
+    "tryserver.chromium.linux:fuchsia_x64"
   ],
   "chromium.linux:Fuchsia x64 Cast Audio": [
     "chromium.linux:Fuchsia x64 Cast Audio",
@@ -2653,22 +2649,19 @@
     "chromium.memory:Linux ASan LSan Builder",
     "chromium.memory:Linux ASan LSan Tests (1)",
     "chromium.memory:Linux ASan Tests (sandboxed)",
-    "tryserver.chromium.linux:linux_chromium_asan_rel_ng",
-    "tryserver.chromium.linux:linux_chromium_asan_rel_ng_rts"
+    "tryserver.chromium.linux:linux_chromium_asan_rel_ng"
   ],
   "chromium.memory:Linux ASan LSan Tests (1)": [
     "chromium.memory:Linux ASan LSan Builder",
     "chromium.memory:Linux ASan LSan Tests (1)",
     "chromium.memory:Linux ASan Tests (sandboxed)",
-    "tryserver.chromium.linux:linux_chromium_asan_rel_ng",
-    "tryserver.chromium.linux:linux_chromium_asan_rel_ng_rts"
+    "tryserver.chromium.linux:linux_chromium_asan_rel_ng"
   ],
   "chromium.memory:Linux ASan Tests (sandboxed)": [
     "chromium.memory:Linux ASan LSan Builder",
     "chromium.memory:Linux ASan LSan Tests (1)",
     "chromium.memory:Linux ASan Tests (sandboxed)",
-    "tryserver.chromium.linux:linux_chromium_asan_rel_ng",
-    "tryserver.chromium.linux:linux_chromium_asan_rel_ng_rts"
+    "tryserver.chromium.linux:linux_chromium_asan_rel_ng"
   ],
   "chromium.memory:Linux CFI": [
     "chromium.memory:Linux CFI",
@@ -2711,14 +2704,12 @@
   "chromium.memory:Linux TSan Builder": [
     "chromium.memory:Linux TSan Builder",
     "chromium.memory:Linux TSan Tests",
-    "tryserver.chromium.linux:linux_chromium_tsan_rel_ng",
-    "tryserver.chromium.linux:linux_chromium_tsan_rel_ng_rts"
+    "tryserver.chromium.linux:linux_chromium_tsan_rel_ng"
   ],
   "chromium.memory:Linux TSan Tests": [
     "chromium.memory:Linux TSan Builder",
     "chromium.memory:Linux TSan Tests",
-    "tryserver.chromium.linux:linux_chromium_tsan_rel_ng",
-    "tryserver.chromium.linux:linux_chromium_tsan_rel_ng_rts"
+    "tryserver.chromium.linux:linux_chromium_tsan_rel_ng"
   ],
   "chromium.memory:Mac ASan 64 Builder": [
     "chromium.memory:Mac ASan 64 Builder",
@@ -3247,7 +3238,6 @@
     "chromium.win:Win10 Tests x64",
     "tryserver.chromium.win:win10_chromium_inverse_fieldtrials_x64_fyi_rel_ng",
     "tryserver.chromium.win:win10_chromium_x64_rel_ng",
-    "tryserver.chromium.win:win10_chromium_x64_rel_ng_rts",
     "tryserver.chromium.win:win11-x64-fyi-rel",
     "tryserver.chromium.win:win_chromium_x64_rel_ng"
   ],
@@ -3274,7 +3264,6 @@
     "chromium.win:Win10 Tests x64",
     "tryserver.chromium.win:win10_chromium_inverse_fieldtrials_x64_fyi_rel_ng",
     "tryserver.chromium.win:win10_chromium_x64_rel_ng",
-    "tryserver.chromium.win:win10_chromium_x64_rel_ng_rts",
     "tryserver.chromium.win:win11-x64-fyi-rel",
     "tryserver.chromium.win:win_chromium_x64_rel_ng"
   ],
@@ -3292,7 +3281,6 @@
     "chromium.win:Win10 Tests x64",
     "tryserver.chromium.win:win10_chromium_inverse_fieldtrials_x64_fyi_rel_ng",
     "tryserver.chromium.win:win10_chromium_x64_rel_ng",
-    "tryserver.chromium.win:win10_chromium_x64_rel_ng_rts",
     "tryserver.chromium.win:win11-x64-fyi-rel",
     "tryserver.chromium.win:win_chromium_x64_rel_ng"
   ],
@@ -4328,17 +4316,11 @@
   ],
   "tryserver.chromium.linux:fuchsia_x64": [
     "chromium.linux:Fuchsia x64",
-    "tryserver.chromium.linux:fuchsia_x64",
-    "tryserver.chromium.linux:fuchsia_x64_rts"
+    "tryserver.chromium.linux:fuchsia_x64"
   ],
   "tryserver.chromium.linux:fuchsia_x64_cast_audio": [
     "chromium.linux:Fuchsia x64 Cast Audio",
     "tryserver.chromium.linux:fuchsia_x64_cast_audio"
-  ],
-  "tryserver.chromium.linux:fuchsia_x64_rts": [
-    "chromium.linux:Fuchsia x64",
-    "tryserver.chromium.linux:fuchsia_x64",
-    "tryserver.chromium.linux:fuchsia_x64_rts"
   ],
   "tryserver.chromium.linux:gpu-fyi-try-lacros-amd-rel": [
     "chromium.gpu.fyi:GPU FYI Lacros x64 Builder",
@@ -4805,15 +4787,7 @@
     "chromium.memory:Linux ASan LSan Builder",
     "chromium.memory:Linux ASan LSan Tests (1)",
     "chromium.memory:Linux ASan Tests (sandboxed)",
-    "tryserver.chromium.linux:linux_chromium_asan_rel_ng",
-    "tryserver.chromium.linux:linux_chromium_asan_rel_ng_rts"
-  ],
-  "tryserver.chromium.linux:linux_chromium_asan_rel_ng_rts": [
-    "chromium.memory:Linux ASan LSan Builder",
-    "chromium.memory:Linux ASan LSan Tests (1)",
-    "chromium.memory:Linux ASan Tests (sandboxed)",
-    "tryserver.chromium.linux:linux_chromium_asan_rel_ng",
-    "tryserver.chromium.linux:linux_chromium_asan_rel_ng_rts"
+    "tryserver.chromium.linux:linux_chromium_asan_rel_ng"
   ],
   "tryserver.chromium.linux:linux_chromium_cfi_rel_ng": [
     "chromium.memory:Linux CFI",
@@ -4866,18 +4840,11 @@
   "tryserver.chromium.linux:linux_chromium_tsan_rel_ng": [
     "chromium.memory:Linux TSan Builder",
     "chromium.memory:Linux TSan Tests",
-    "tryserver.chromium.linux:linux_chromium_tsan_rel_ng",
-    "tryserver.chromium.linux:linux_chromium_tsan_rel_ng_rts"
+    "tryserver.chromium.linux:linux_chromium_tsan_rel_ng"
   ],
   "tryserver.chromium.linux:linux_chromium_tsan_rel_ng_bionic": [
     "chromium.memory:Linux TSan (bionic)",
     "tryserver.chromium.linux:linux_chromium_tsan_rel_ng_bionic"
-  ],
-  "tryserver.chromium.linux:linux_chromium_tsan_rel_ng_rts": [
-    "chromium.memory:Linux TSan Builder",
-    "chromium.memory:Linux TSan Tests",
-    "tryserver.chromium.linux:linux_chromium_tsan_rel_ng",
-    "tryserver.chromium.linux:linux_chromium_tsan_rel_ng_rts"
   ],
   "tryserver.chromium.linux:linux_chromium_ubsan_rel_ng": [
     "chromium.memory:linux-ubsan-vptr",
@@ -5452,7 +5419,6 @@
     "chromium.win:Win10 Tests x64",
     "tryserver.chromium.win:win10_chromium_inverse_fieldtrials_x64_fyi_rel_ng",
     "tryserver.chromium.win:win10_chromium_x64_rel_ng",
-    "tryserver.chromium.win:win10_chromium_x64_rel_ng_rts",
     "tryserver.chromium.win:win11-x64-fyi-rel",
     "tryserver.chromium.win:win_chromium_x64_rel_ng"
   ],
@@ -5470,20 +5436,6 @@
     "chromium.win:Win10 Tests x64",
     "tryserver.chromium.win:win10_chromium_inverse_fieldtrials_x64_fyi_rel_ng",
     "tryserver.chromium.win:win10_chromium_x64_rel_ng",
-    "tryserver.chromium.win:win10_chromium_x64_rel_ng_rts",
-    "tryserver.chromium.win:win11-x64-fyi-rel",
-    "tryserver.chromium.win:win_chromium_x64_rel_ng"
-  ],
-  "tryserver.chromium.win:win10_chromium_x64_rel_ng_rts": [
-    "chromium.fyi:Win11 Tests x64",
-    "chromium.gpu:GPU Win x64 Builder",
-    "chromium.gpu:Win10 x64 Release (NVIDIA)",
-    "chromium.win:Win 7 Tests x64 (1)",
-    "chromium.win:Win x64 Builder",
-    "chromium.win:Win10 Tests x64",
-    "tryserver.chromium.win:win10_chromium_inverse_fieldtrials_x64_fyi_rel_ng",
-    "tryserver.chromium.win:win10_chromium_x64_rel_ng",
-    "tryserver.chromium.win:win10_chromium_x64_rel_ng_rts",
     "tryserver.chromium.win:win11-x64-fyi-rel",
     "tryserver.chromium.win:win_chromium_x64_rel_ng"
   ],
@@ -5496,7 +5448,6 @@
     "chromium.win:Win10 Tests x64",
     "tryserver.chromium.win:win10_chromium_inverse_fieldtrials_x64_fyi_rel_ng",
     "tryserver.chromium.win:win10_chromium_x64_rel_ng",
-    "tryserver.chromium.win:win10_chromium_x64_rel_ng_rts",
     "tryserver.chromium.win:win11-x64-fyi-rel",
     "tryserver.chromium.win:win_chromium_x64_rel_ng"
   ],
@@ -5541,7 +5492,6 @@
     "chromium.win:Win10 Tests x64",
     "tryserver.chromium.win:win10_chromium_inverse_fieldtrials_x64_fyi_rel_ng",
     "tryserver.chromium.win:win10_chromium_x64_rel_ng",
-    "tryserver.chromium.win:win10_chromium_x64_rel_ng_rts",
     "tryserver.chromium.win:win11-x64-fyi-rel",
     "tryserver.chromium.win:win_chromium_x64_rel_ng"
   ],

@@ -5,7 +5,7 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>running builder 'Linux ASan LSan Builder' on group 'chromium.memory'@@@",
       "@@@STEP_LINK@Linux ASan LSan Builder@https://ci.chromium.org/p/chromium/builders/ci/Linux%20ASan%20LSan%20Builder@@@",
-      "@@@SET_BUILD_PROPERTY@mirrored_builders@[\"tryserver.chromium.linux:linux_chromium_asan_rel_ng\", \"tryserver.chromium.linux:linux_chromium_asan_rel_ng_rts\"]@@@"
+      "@@@SET_BUILD_PROPERTY@mirrored_builders@[\"tryserver.chromium.linux:linux_chromium_asan_rel_ng\"]@@@"
     ]
   },
   {
