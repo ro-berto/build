@@ -216,29 +216,7 @@ def _rebase_line_and_block_data(line_data, block_data, line_mapping):
   return rebased_line_data, rebased_block_data
 
 
-def _calculate_line_summary_metrics(line_data):
-  """Calculates summary metrics for a file.
-
-  This method only returns 'line' summary, as arg line_data
-  (presumably) have data for some of the lines removed. As a result, other
-  summary metrics like 'regions' and 'functions' are not feasible to calculate.
-  See `_get_clang_summary_metrics()` for contrast.
-
-  Args:
-    line_data (dict): Mapping from line number to corresponding execution count.
-  Returns:
-      A list that conforms to the Metric proto at
-      https://chromium.googlesource.com/infra/infra/+/refs/heads/main/appengine/findit/model/proto/code_coverage.proto
-  """
-  covered = 0
-  for _, count in line_data.iteritems():
-    if count > 0:
-      covered += 1
-  return [{'name': 'line', 'covered': covered, 'total': len(line_data)}]
-
-
-def _to_compressed_file_record(src_path,
-                               file_coverage_data,
+def _to_compressed_file_record(file_coverage_data,
                                diff_mapping=None,
                                third_party_inclusion_subdirs=None):
   """Converts the given Clang file coverage data to coverage metadata format.
@@ -247,7 +225,6 @@ def _to_compressed_file_record(src_path,
   https://chromium.googlesource.com/infra/infra/+/refs/heads/main/appengine/findit/model/proto/code_coverage.proto
 
   Args:
-    src_path (str): The absolute path to the root directory of the checkout.
     file_coverage_data (dict): The file coverage data from clang with format
       {
         "segments": [[3, 26, 1, True, True], ...],
@@ -279,38 +256,13 @@ def _to_compressed_file_record(src_path,
   Returns:
     A json conforming to `File` proto representing the file coverage.
   """
-  segments = file_coverage_data['segments']
-  if not segments:
-    return None
-
-  filename = file_coverage_data['filename']
-  # TODO(crbug.com/1010267) Remove prefixes when Clang supports relative paths
-  # for coverage.
-  prefixes = [
-      src_path,
-      r'C:\botcode\w',  # crbug.com/1010267
-      '/b/f/w',  # crbug.com/1061603
-      '/b/s/w/ir/cache/builder/src',  # crbug.com/1208128
-      '/this/path/is/set'  # crbug.com/1208128
-  ]
-  coverage_path = os.path.normpath(filename)
-  for prefix in prefixes:
-    if coverage_path.startswith(prefix):
-      coverage_path = coverage_path[len(prefix):]
-      break
-  coverage_path = _posix_path(coverage_path).lstrip('/')
-
-  # Do not generate coverage for out/ paths as it consists of automatically
-  # generated code.
-  if coverage_path.startswith('out/'):
-    return None
-
+  coverage_path = file_coverage_data['filename']
   # exclude third_party/ code
   if ('third_party/' in coverage_path and third_party_inclusion_subdirs and
       not any([x in coverage_path for x in third_party_inclusion_subdirs])):
     return None
 
-  line_data, block_data = _extract_coverage_info(segments)
+  line_data, block_data = _extract_coverage_info(file_coverage_data['segments'])
 
   if diff_mapping is not None and coverage_path in diff_mapping:
     line_mapping = diff_mapping[coverage_path]
@@ -449,11 +401,10 @@ def _show_system_resource_usage(proc):
     logging.warning('ValueError caught when showing system info: %s', error)
 
 
-def _create_and_fetch_coverage_json(profdata_path, llvm_cov_path, build_dir,
-                                    binaries, sources, output_dir, exclusions,
-                                    arch):
+def _get_raw_coverage_data(profdata_path, llvm_cov_path, build_dir, binaries,
+                           sources, output_dir, exclusions, arch):
   """Creates a coverage.json object in output_dir and returns its content."""
-  coverage_json_file = os.path.join(output_dir, 'coverage.json')
+  coverage_json_file = os.path.join(output_dir, 'coverage_raw.json')
   error_out_file = os.path.join(output_dir, 'llvm_cov.stderr.log')
   p = None
   try:
@@ -591,6 +542,55 @@ def _get_per_target_coverage_summary(profdata_path, llvm_cov_path, build_dir,
   return summaries
 
 
+def _cleanup_coverage_data(src_path, llvm_raw_data):
+  """Performs cleanup on raw coverage data like rebasing file paths etc.
+
+  Returns the cleaned up coverage data in the llvm format. For more details
+  on format see _to_compressed_file_record().
+  """
+  cleaned_file_data = []
+  for datum in llvm_raw_data['data']:
+    for file_coverage_data in datum['files']:
+      # TODO(crbug.com/1010267) Remove prefixes when Clang supports
+      # relative paths for coverage.
+      prefixes = [
+          src_path,
+          r'C:\botcode\w',  # crbug.com/1010267
+          '/b/f/w',  # crbug.com/1061603
+          '/b/s/w/ir/cache/builder/src',  # crbug.com/1208128
+          '/this/path/is/set'  # crbug.com/1208128
+      ]
+      filename = os.path.normpath(file_coverage_data['filename'])
+      for prefix in prefixes:
+        if filename.startswith(prefix):
+          filename = filename[len(prefix):]
+          break
+      filename = _posix_path(filename).lstrip('/')
+      # Do not generate coverage for out/ paths as it consists of automatically
+      # generated code.
+      if filename.startswith('out/'):
+        continue
+      segments = file_coverage_data['segments']
+      if not segments:
+        continue
+      cleaned_file_data.append({
+          'filename': filename,
+          'segments': segments,
+          'summary': file_coverage_data['summary']
+      })
+  return {'data': [{'files': cleaned_file_data}]}
+
+
+def _create_coverage_json(output_dir, data):
+  """Writes coverage data in json format to disk.
+
+  Creates a coverage.json file in the output directory
+  """
+  coverage_json_file = os.path.join(output_dir, 'coverage.json')
+  with open(coverage_json_file, 'w') as fp:
+    json.dumps(data, fp)
+
+
 def _generate_metadata(src_path,
                        output_dir,
                        profdata_path,
@@ -632,9 +632,11 @@ def _generate_metadata(src_path,
   """
   logging.info('Generating coverage metadata ...')
   start_time = time.time()
-  data = _create_and_fetch_coverage_json(profdata_path, llvm_cov_path,
-                                         build_dir, binaries, sources,
-                                         output_dir, exclusions, arch)
+  raw_data = _get_raw_coverage_data(profdata_path, llvm_cov_path, build_dir,
+                                    binaries, sources, output_dir, exclusions,
+                                    arch)
+  data = _cleanup_coverage_data(src_path, raw_data)
+  _create_coverage_json(output_dir, data)
   minutes = (time.time() - start_time) / 60
   logging.info(
       'Generating & loading coverage metadata with "llvm-cov export" '
@@ -645,7 +647,7 @@ def _generate_metadata(src_path,
   files_coverage = []
   for datum in data['data']:
     for file_data in datum['files']:
-      record = _to_compressed_file_record(src_path, file_data, diff_mapping,
+      record = _to_compressed_file_record(file_data, diff_mapping,
                                           third_party_inclusion_subdirs)
       if record:
         files_coverage.append(record)

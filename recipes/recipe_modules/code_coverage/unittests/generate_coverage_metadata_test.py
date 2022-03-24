@@ -103,7 +103,6 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
   # Where the first column is the line number and the second column is the
   # expected number of times the line is executed.
   def test_to_compressed_file_record(self):
-    src_path = '/path/to/chromium/src'
     file_coverage_data = {
         'segments': [
             [1, 12, 1, True, True],
@@ -122,8 +121,7 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
                 'count': 7,
             }
         },
-        'filename':
-            '/path/to/chromium/src/base/base.cc',
+        'filename': 'base/base.cc',
     }
     expected_record = {
         'path':
@@ -160,7 +158,7 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
         }],
     }
     self.maxDiff = None
-    record = generator._to_compressed_file_record(src_path, file_coverage_data)
+    record = generator._to_compressed_file_record(file_coverage_data)
     self.assertDictEqual(expected_record, record)
 
   # This test uses made-up segments, and the intention is to test that for
@@ -168,7 +166,6 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
   # times, when converted to compressed format, lines in different regions
   # shouldn't be merged together.
   def test_to_compressed_file_record_for_uncontinous_lines(self):
-    src_path = '/path/to/chromium/src'
     file_coverage_data = {
         'segments': [
             [102, 35, 4, True, True],
@@ -182,8 +179,7 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
                 'count': 6,
             }
         },
-        'filename':
-            '/path/to/chromium/src/base/base.cc',
+        'filename': 'base/base.cc',
     }
     expected_record = {
         'path':
@@ -207,7 +203,7 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
         ]
     }
     self.maxDiff = None
-    record = generator._to_compressed_file_record(src_path, file_coverage_data)
+    record = generator._to_compressed_file_record(file_coverage_data)
     self.assertDictEqual(expected_record, record)
 
   # This test uses the following code:
@@ -221,35 +217,7 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
   #
   # Where the first column is the line number and the second column is the
   # expected number of times the line is executed.
-  def test_rebase_line_and_block_data(self):
-    line_data = {1: 1, 2: 1, 3: 1, 4: 1, 5: 0, 6: 0, 7: 0}
-    block_data = {2: [[18, 24]]}
-    file_name = 'base/base.cc'
-    diff_mapping = {'base/base.cc': {'2': [16, 'A line added by the patch.']}}
-
-    rebased_line_data, rebased_block_data = (
-        generator._rebase_line_and_block_data(line_data, block_data,
-                                              diff_mapping[file_name]))
-
-    expected_line_data = {16: 1}
-    expected_block_data = {16: [[18, 24]]}
-    self.maxDiff = None
-    self.assertDictEqual(expected_line_data, rebased_line_data)
-    self.assertDictEqual(expected_block_data, rebased_block_data)
-
-  # This test uses the following code:
-  # 1|      1|int main() {
-  # 2|      1|  if ((2 > 1) || (3 > 2)) {
-  # 3|      1|    return 0;
-  # 4|      1|  }
-  # 5|      0|
-  # 6|      0|  return 1;
-  # 7|      0|}
-  #
-  # Where the first column is the line number and the second column is the
-  # expected number of times the line is executed.
   def test_to_compressed_file_record_with_diff_mapping(self):
-    src_path = '/path/to/chromium/src'
     file_coverage_data = {
         'segments': [
             [1, 12, 1, True, True],
@@ -268,8 +236,7 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
                 'count': 7,
             }
         },
-        'filename':
-            '/path/to/chromium/src/base/base.cc',
+        'filename': 'base/base.cc',
     }
     diff_mapping = {
         'base/base.cc': {
@@ -279,7 +246,7 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
         }
     }
 
-    record = generator._to_compressed_file_record(src_path, file_coverage_data,
+    record = generator._to_compressed_file_record(file_coverage_data,
                                                   diff_mapping)
 
     expected_record = {
@@ -313,6 +280,33 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
 
     self.maxDiff = None
     self.assertDictEqual(expected_record, record)
+
+  # This test uses the following code:
+  # 1|      1|int main() {
+  # 2|      1|  if ((2 > 1) || (3 > 2)) {
+  # 3|      1|    return 0;
+  # 4|      1|  }
+  # 5|      0|
+  # 6|      0|  return 1;
+  # 7|      0|}
+  #
+  # Where the first column is the line number and the second column is the
+  # expected number of times the line is executed.
+  def test_rebase_line_and_block_data(self):
+    line_data = {1: 1, 2: 1, 3: 1, 4: 1, 5: 0, 6: 0, 7: 0}
+    block_data = {2: [[18, 24]]}
+    file_name = 'base/base.cc'
+    diff_mapping = {'base/base.cc': {'2': [16, 'A line added by the patch.']}}
+
+    rebased_line_data, rebased_block_data = (
+        generator._rebase_line_and_block_data(line_data, block_data,
+                                              diff_mapping[file_name]))
+
+    expected_line_data = {16: 1}
+    expected_block_data = {16: [[18, 24]]}
+    self.maxDiff = None
+    self.assertDictEqual(expected_line_data, rebased_line_data)
+    self.assertDictEqual(expected_block_data, rebased_block_data)
 
   def test_compute_llvm_args(self):
     args = generator._compute_llvm_args(
@@ -354,10 +348,11 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
   #
   # Where the first column is the line number and the second column is the
   # expected number of times the line is executed.
+  @mock.patch.object(generator, '_create_coverage_json')
   @mock.patch.object(generator, '_get_per_target_coverage_summary')
-  @mock.patch.object(generator, '_create_and_fetch_coverage_json')
+  @mock.patch.object(generator, '_get_raw_coverage_data')
   def test_generate_metadata_for_per_cl_coverage(
-      self, mock_get_coverage_data, mock_get_per_target_coverage_summary):
+      self, mock_get_coverage_data, mock_get_per_target_coverage_summary, *_):
     mock_get_coverage_data.return_value = {
         'data': [{
             'files': [{
@@ -441,12 +436,14 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
   #
   # Where the first column is the line number and the second column is the
   # expected number of times the line is executed.
+
+  @mock.patch.object(generator, '_create_coverage_json')
   @mock.patch.object(generator, '_get_per_target_coverage_summary')
   @mock.patch.object(generator.repository_util, '_GetFileRevisions')
-  @mock.patch.object(generator, '_create_and_fetch_coverage_json')
+  @mock.patch.object(generator, '_get_raw_coverage_data')
   def test_generate_metadata_for_full_repo_coverage(
       self, mock_get_coverage_data, mock__GetFileRevisions,
-      mock_get_per_target_coverage_summary):
+      mock_get_per_target_coverage_summary, *_):
     # Number of files should not exceed 1000; otherwise sharding will happen.
     mock__GetFileRevisions.return_value = {
         '//dir1/file1.cc': ('hash1', 1234),
