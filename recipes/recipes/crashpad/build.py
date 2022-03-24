@@ -39,21 +39,6 @@ PROPERTIES = {
         Property(kind=str, help='x64, arm64, or ""', default=''),
 }
 
-FAKE_SWARMING_TEST_SPEC = """\
-[
-  {
-    'builders': ['crashpad_try_win_dbg'],
-    'step_name': 'run_tests_on_x86',
-    'isolate': 'out/Debug/run_tests.isolate',
-    'args': [
-       '-d', 'os', 'Windows-7',
-       '-d', 'os', 'x86-32',
-       '-d', 'os', 'Chrome',
-    ],
-  },
-]
-"""
-
 
 def RunSteps(api, config, target_os, target_cpu):
   """Generates the sequence of steps that will be run by the slave."""
@@ -208,10 +193,11 @@ def RunSteps(api, config, target_os, target_cpu):
     timeout_in_minutes = 10 if is_ios else 5
 
     with api.context(env=env):
-      api.python(
-          'run tests',
-          api.path['checkout'].join('build', 'run_tests.py'),
-          args=[build_dir],
+      api.step(
+          'run tests', [
+              'python3', '-u', api.path['checkout'].join(
+                  'build', 'run_tests.py'), build_dir
+          ],
           timeout=timeout_in_minutes * 60)
 
   ninja = api.depot_tools.ninja_path
@@ -228,28 +214,6 @@ def RunSteps(api, config, target_os, target_cpu):
       # On iOS, the tests need to be run before resetting the current SDK,
       # as they use tools from the installed version of Xcode.
       run_tests(path)
-
-  test_spec_path = api.path['checkout'].join(
-    'build', 'swarming_test_spec.pyl')
-  if api.path.exists(test_spec_path):
-    file_contents = api.file.read_text('read swarming_test_spec',
-        test_spec_path, test_data=FAKE_SWARMING_TEST_SPEC)
-
-    try:
-      swarming_test_spec = ast.literal_eval(file_contents)
-    except Exception: # pragma: no cover
-      # TODO(crbug.com/743139) figure out how to handle different kinds of
-      # errors cleanly.
-      api.step.fail()
-      return
-
-    for spec in swarming_test_spec:
-      if api.buildbucket.builder_name in spec['builders']:
-        api.python(
-            spec['step_name'],
-            api.path['checkout'].join('build', 'run_on_swarming.py'),
-            args=[api.path['checkout'].join(spec['isolate'][2:])] +
-                 spec['args'])
 
 
 def GenTests(api):
