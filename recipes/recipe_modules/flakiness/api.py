@@ -882,7 +882,8 @@ class FlakinessApi(recipe_api.RecipeApi):
             key = ('%s%s' % (t.test_id_prefix, test_name),
                    rdb_results.variant_hash)
             total = len(results)
-            unexpected = total - results.count(test_result_pb2.PASS)
+            unexpected = (
+                rdb_results.individual_unexpected_result_count[test_name])
             # Value fields are: (test name, list of suites with failures,
             # count of unexpected runs, count of all runs)
             info = flaky_test_stats.get(key, ('', [], 0, 0))

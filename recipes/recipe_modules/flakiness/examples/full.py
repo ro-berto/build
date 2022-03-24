@@ -134,7 +134,7 @@ def GenTests(api):
         test_id=test_id,
         variant=test_variant,
         variant_hash=vh,
-        expected=True,
+        expected=status == test_result_pb2.PASS,
         status=status,
         duration=duration,
     )
