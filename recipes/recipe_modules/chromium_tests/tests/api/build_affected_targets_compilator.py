@@ -43,7 +43,8 @@ def RunSteps(api, properties):
   api.chromium_tests.build_affected_targets(
       orch_builder_id,
       orch_builder_config,
-      isolate_output_files_for_coverage=True)
+      isolate_output_files_for_coverage=True,
+      append_additional_compile_target='infra_orchestrator:orchestrator_all')
 
 
 def GenTests(api):
@@ -93,6 +94,11 @@ def GenTests(api):
                   builder_group='fake-try-group'))),
       api.path.exists(api.path['checkout'].join('out/Release/browser_tests')),
       api.filter.suppress_analyze(),
+      api.post_process(
+          post_process.StepCommandContains,
+          'compile (with patch)',
+          ['browser_tests', 'infra_orchestrator:orchestrator_all'],
+      ),
       api.post_process(post_process.MustRun, 'isolate tests (with patch)'),
       api.post_process(post_process.LogContains, 'isolate tests (with patch)',
                        'json.output', [ALL_TEST_BINARIES_ISOLATE_NAME]),

@@ -1911,7 +1911,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                              builder_id,
                              builder_config,
                              root_solution_revision=None,
-                             isolate_output_files_for_coverage=False):
+                             isolate_output_files_for_coverage=False,
+                             append_additional_compile_target=None):
     """Builds targets affected by change.
 
     Args:
@@ -1923,6 +1924,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                      are in ChromiumTestsApi.
       isolate_output_files_for_coverage: Whether to also upload all test
         binaries and other required code coverage output files to one hash.
+      append_additional_compile_targets str: An extra compile target
+        that is specified recipe-side. Normally "additional_compile_targets"
+        are specified src-side in waterfalls.pyl, so this field should only be
+        used for special cases.
 
     Returns:
       A Tuple of
@@ -1968,6 +1973,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     # Compiles and isolates test suites.
     raw_result = result_pb2.RawResult(status=common_pb.SUCCESS)
+
+    if append_additional_compile_target:
+      compile_targets.append(append_additional_compile_target)
     if compile_targets:
       tests = self.tests_in_compile_targets(test_targets, tests)
 
