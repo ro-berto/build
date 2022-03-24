@@ -93,8 +93,7 @@ SPEC = freeze({
         'codesearch-gen-chromium-fuchsia': {
             'compile_targets': ['all',],
             'platform': 'fuchsia',
-            # Don't sync generated files for Fuchsia until they're verified.
-            'sync_generated_files': False,
+            'sync_generated_files': True,
             'gen_repo_branch': 'main',
             # Generated files will end up in out/fuchsia-Debug/gen.
             'gen_repo_out_dir': 'fuchsia-Debug',

@@ -1314,6 +1314,226 @@
     ]
   },
   {
+    "cmd": [
+      "python3",
+      "-u",
+      "RECIPE_MODULE[depot_tools::git]/resources/git_setup.py",
+      "--path",
+      "[CACHE]/generated",
+      "--url",
+      "https://chromium.googlesource.com/chromium/src/out"
+    ],
+    "env": {
+      "GIT_HTTP_LOW_SPEED_LIMIT": "0",
+      "GIT_HTTP_LOW_SPEED_TIME": "0"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "git setup"
+  },
+  {
+    "cmd": [
+      "git",
+      "fetch",
+      "origin",
+      "main",
+      "--progress"
+    ],
+    "cwd": "[CACHE]/generated",
+    "env": {
+      "GIT_HTTP_LOW_SPEED_LIMIT": "0",
+      "GIT_HTTP_LOW_SPEED_TIME": "0",
+      "PATH": "RECIPE_REPO[depot_tools]:<PATH>"
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "git fetch"
+  },
+  {
+    "cmd": [
+      "git",
+      "checkout",
+      "-f",
+      "FETCH_HEAD"
+    ],
+    "cwd": "[CACHE]/generated",
+    "env": {
+      "GIT_HTTP_LOW_SPEED_LIMIT": "0",
+      "GIT_HTTP_LOW_SPEED_TIME": "0"
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "git checkout"
+  },
+  {
+    "cmd": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "cwd": "[CACHE]/generated",
+    "env": {
+      "GIT_HTTP_LOW_SPEED_LIMIT": "0",
+      "GIT_HTTP_LOW_SPEED_TIME": "0"
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "read revision",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>checked out 'deadbeef'<br/>@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "clean",
+      "-f",
+      "-d",
+      "-x"
+    ],
+    "cwd": "[CACHE]/generated",
+    "env": {
+      "GIT_HTTP_LOW_SPEED_LIMIT": "0",
+      "GIT_HTTP_LOW_SPEED_TIME": "0"
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "git clean"
+  },
+  {
+    "cmd": [
+      "git",
+      "config",
+      "user.email",
+      "git-generated-files-sync@chromium.org"
+    ],
+    "cwd": "[CACHE]/generated",
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "git config"
+  },
+  {
+    "cmd": [
+      "git",
+      "config",
+      "user.name",
+      "Automatic Generated Files Sync"
+    ],
+    "cwd": "[CACHE]/generated",
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "git config (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::codesearch]/resources/sync_generated_files.py",
+      "--debug-dir",
+      "fuchsia-Debug",
+      "--message",
+      "Generated files from \"codesearch-gen-chromium-fuchsia\" build 571, revision f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "--dest-branch",
+      "main",
+      "[CACHE]/builder/src/out",
+      "[CACHE]/generated"
+    ],
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "sync generated files"
+  },
+  {
     "name": "$result"
   }
 ]
