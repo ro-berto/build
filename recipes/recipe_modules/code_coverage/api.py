@@ -943,12 +943,26 @@ class CodeCoverageApi(recipe_api.RecipeApi):
         self.m.gsutil.upload(
             source=self.metadata_dir.join('coverage.json'),
             bucket=constants.ZOSS_BUCKET_NAME,
-            dest=self._compose_gs_path_for_zoss_upload(
+            dest='%s/coverage.json' % self._compose_gs_path_for_zoss_upload(
                 builder=self._compose_current_mimic_builder_name(),
                 build_id=self.build_id),
             link_name=None,
             multithreaded=True,
-            name='export data to zoss')
+            name='export coverage data to zoss')
+        self.m.file.write_json(
+            name='create zoss metadata json',
+            dest=self.metadata_dir.join('zoss_metadata.json'),
+            data=self._get_zoss_metadata(coverage_format='LLVM'))
+        self.m.gsutil.upload(
+            source=self.metadata_dir.join('zoss_metadata.json'),
+            bucket=constants.ZOSS_BUCKET_NAME,
+            dest='%s/metadata.json' % self._compose_gs_path_for_zoss_upload(
+                builder=self._compose_current_mimic_builder_name(),
+                build_id=self.build_id),
+            link_name=None,
+            multithreaded=True,
+            name='export metadata to zoss')
+
       gs_path = self._compose_gs_path_for_coverage_data(
           data_type='metadata',
           mimic_builder_name=self._compose_current_mimic_builder_name())
@@ -970,5 +984,29 @@ class CodeCoverageApi(recipe_api.RecipeApi):
   def _compose_gs_path_for_zoss_upload(self, builder, build_id):
     commit = self.m.buildbucket.build.input.gitiles_commit
     assert commit is not None, 'No gitiles commit'
-    return "ng3-coverage-chrome/absolute/%s/%s/%s/%s/%s/coverage.json" % (
+    return "ng3-coverage-chrome/absolute/%s/%s/%s/%s/%s" % (
         commit.host, commit.project, commit.id, builder, build_id)
+
+  def _get_zoss_metadata(self, coverage_format):
+    """Returns a dict which has to be uploaded along with coverage data to zoss.
+
+    Args:
+      coverage_format (str): Coverage format supported by Zoss. Valid values
+                              are LCOV, LLVM, GO_COV and JACOCO_XML.
+    """
+    commit = self.m.buildbucket.build.input.gitiles_commit
+    ref = 'refs/heads/main'
+    return {
+        # host = chromium, if full host name is chromium.googlesource.com
+        'host': commit.host[:commit.host.find('.')],
+        'project': 'codesearch',
+        'trace_type': coverage_format,
+        # workspace_root is empty because the data being uploaded to zoss
+        # is expected to have src relative file paths
+        'workspace_root': '',
+        'git_project': commit.project,
+        'commit_id': commit.id,
+        'ref': ref,
+        # e.g. source = chromium/src:main
+        'source': '%s:%s' % (commit.project, ref[ref.rfind('/') + 1:])
+    }

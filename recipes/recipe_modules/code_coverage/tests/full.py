@@ -174,7 +174,15 @@ def GenTests(api):
       api.post_process(
           post_process.MustRun,
           ('process clang code coverage data for overall test coverage.gsutil '
-           'export data to zoss')),
+           'export coverage data to zoss')),
+      api.post_process(
+          post_process.MustRun,
+          ('process clang code coverage data for overall test coverage.'
+           'create zoss metadata json')),
+      api.post_process(
+          post_process.MustRun,
+          ('process clang code coverage data for overall test coverage.gsutil '
+           'export metadata to zoss')),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
