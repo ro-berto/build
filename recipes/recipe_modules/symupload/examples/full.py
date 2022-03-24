@@ -172,7 +172,7 @@ def GenTests(api):
   )
 
   yield api.test(
-      'retry_symupload_v2',
+      'retry_symupload_v2_failure',
       api.properties(target_platform='linux', host_platform='linux'),
       api.path.exists(api.path['tmp_base'].join('symupload')),
       api.symupload(input_properties_v2),
@@ -182,7 +182,18 @@ def GenTests(api):
                        'symupload.symupload_v2 (2)', []),
       api.step_data('symupload.symupload_v2 (2)', retcode=1),
       api.step_data('symupload.symupload_v2 (3)', retcode=1),
-      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.StepFailure, 'symupload'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'retry_symupload_v2_success',
+      api.properties(target_platform='linux', host_platform='linux'),
+      api.path.exists(api.path['tmp_base'].join('symupload')),
+      api.symupload(input_properties_v2),
+      api.step_data('symupload.symupload_v2', retcode=1),
+      api.step_data('symupload.symupload_v2 (2)', retcode=1),
+      api.post_process(post_process.StepSuccess, 'symupload'),
       api.post_process(post_process.DropExpectation),
   )
 
