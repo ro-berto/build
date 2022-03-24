@@ -872,7 +872,6 @@
   },
   {
     "failure": {
-      "failure": {},
       "humanReason": "1 Test Suite(s) failed.\n\n**telemetry_gpu_unittests** failed."
     },
     "name": "$result"

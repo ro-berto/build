@@ -1023,7 +1023,6 @@
   },
   {
     "failure": {
-      "failure": {},
       "humanReason": "1 Test Suite(s) failed.\n\n**base_unittests** failed."
     },
     "name": "$result"
