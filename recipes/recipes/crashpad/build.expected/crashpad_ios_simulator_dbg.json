@@ -155,7 +155,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "vpython3",
       "-u",
       "[CACHE]/builder/crashpad/build/run_tests.py",
       "[CACHE]/builder/crashpad/out/Debug-iphonesimulator"

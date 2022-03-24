@@ -195,7 +195,7 @@ def RunSteps(api, config, target_os, target_cpu):
     with api.context(env=env):
       api.step(
           'run tests', [
-              'python3', '-u', api.path['checkout'].join(
+              'vpython3', '-u', api.path['checkout'].join(
                   'build', 'run_tests.py'), build_dir
           ],
           timeout=timeout_in_minutes * 60)

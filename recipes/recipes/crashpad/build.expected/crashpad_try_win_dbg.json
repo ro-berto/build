@@ -675,7 +675,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "vpython3",
       "-u",
       "[START_DIR]/crashpad/build/run_tests.py",
       "[START_DIR]/crashpad/out/Debug_x86"
@@ -697,7 +697,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "vpython3",
       "-u",
       "[START_DIR]/crashpad/build/run_tests.py",
       "[START_DIR]/crashpad/out/Debug_x64"
