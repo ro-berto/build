@@ -529,12 +529,12 @@ class V8SwarmingTest(V8Test):
     if (cpu_dim == 'arm64' and os_dim.startswith('Mac')):
       cipd_packages = [
         chromium_swarming.CipdPackage.create(
-              name='infra/3pp/tools/cpython/mac-arm64',
-              version='version:2@2.7.18.chromium.39',
-              root='.mac_arm64_cpython',
+              name='infra/3pp/tools/cpython3/mac-arm64',
+              version='version:2@3.8.10.chromium.23',
+              root='.mac_arm64_cpython3',
           )
       ]
-      command = ['.mac_arm64_cpython/bin/python', '-u'] + command
+      command = ['.mac_arm64_cpython3/bin/python3', '-u'] + command
 
     # Initialize swarming task with custom data-collection step for v8
     # test-runner output.
