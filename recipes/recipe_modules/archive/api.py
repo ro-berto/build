@@ -716,7 +716,8 @@ class ArchiveApi(recipe_api.RecipeApi):
                       top_level_source=None,
                       provenance_sources=None,
                       custom_vars=None,
-                      config=None):
+                      config=None,
+                      report_artifacts=False):
     """Archives one or multiple packages to either google cloud storage or CIPD.
 
     The exact configuration of the archive is specified by InputProperties. See
@@ -734,6 +735,8 @@ class ArchiveApi(recipe_api.RecipeApi):
       config: An instance of archive/properties.proto:InputProperties.
               DEPRECATED: If None, this will default to the global property
               $build/archive.
+      report_artifacts: A boolean flag to enable artifact reporting. This is
+                        set by recipe that uses this module.
 
     Returns:
       A dictionary that stores custom_vars and update_properties, as well as
@@ -761,7 +764,8 @@ class ArchiveApi(recipe_api.RecipeApi):
         if not archive_data.only_upload_on_tests_success:
           gcs_uploads = self.gcs_archive(build_dir, update_properties,
                                          archive_data, top_level_source,
-                                         provenance_sources, custom_vars)
+                                         provenance_sources, custom_vars,
+                                         report_artifacts)
           upload_results['gcs'].append(gcs_uploads)
       for cipd_archive_data in archive_config.cipd_archive_datas:
         upload_results['cipd'].update(
@@ -814,7 +818,8 @@ class ArchiveApi(recipe_api.RecipeApi):
                   archive_data,
                   top_level_source=None,
                   provenance_sources=None,
-                  custom_vars=None):
+                  custom_vars=None,
+                  report_artifacts=False):
     """Archives a single package to google cloud storage.
 
     The exact configuration of the archive is specified by InputProperties. See
@@ -831,6 +836,7 @@ class ArchiveApi(recipe_api.RecipeApi):
                    E.g. custom_vars={'chrome_version':'1.2.3.4'}, then
                    gcs_path='gcs/{%chrome_version%}/path' will be replaced to
                    'gcs/1.2.3.4/path'.
+      report_artifacts: A boolean flag to enable artifact reporting.
     """
 
     def _sanitize_gcs_path(gcs_path, file_path):
@@ -1058,6 +1064,9 @@ class ArchiveApi(recipe_api.RecipeApi):
                                    manifest_path, attestation_path)
         # Upload the attestation file alongside the original.
         attestation_paths[attestation_path] = uploads[f] + '.attestation'
+        # TODO(akashmukherjee): Add support for custom backend url.
+        if report_artifacts:
+          self.m.snoopy.report_gcs(file_hash, f)
       uploads.update(attestation_paths)
 
     for file_path in self.m.py3_migration.consistent_ordering(

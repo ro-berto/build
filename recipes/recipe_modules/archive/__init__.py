@@ -17,6 +17,7 @@ DEPS = [
     'infra/zip',
     'infra/cloudkms',
     'infra/provenance',
+    'infra/snoopy',
     'py3_migration',
     'recipe_engine/buildbucket',
     'recipe_engine/cipd',
