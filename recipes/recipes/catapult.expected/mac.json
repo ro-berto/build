@@ -205,6 +205,8 @@
       "%(PYTHONPATH)s:[START_DIR]/google_appengine",
       "--platform",
       "mac",
+      "--platform_arch",
+      "intel",
       "--output-json",
       "/path/to/tmp/json"
     ],

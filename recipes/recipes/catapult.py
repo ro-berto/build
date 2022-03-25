@@ -51,6 +51,7 @@ def _RemoteSteps(api, app_engine_sdk_path, platform, dashboard_only, use_py3):
       '--api-path-checkout', api.path['checkout'],
       '--app-engine-sdk-pythonpath', app_engine_sdk_path,
       '--platform', platform or api.platform.name,
+      '--platform_arch', api.platform.arch,
   ]
   if dashboard_only:
     args.append('--dashboard_only')
@@ -70,10 +71,13 @@ def RunSteps(api, properties):
       '%(PYTHONPATH)s', str(sdk_path)])
 
   # Install the protoc package.
-  packages_root = api.path['start_dir'].join('packages')
-  ensure_file = api.cipd.EnsureFile().add_package(
-      'infra/tools/protoc/${platform}','protobuf_version:v3.6.1')
-  api.cipd.ensure(packages_root, ensure_file)
+  # TODO(crbug.com/1271700): Remove this condition once protoc mac-arm build
+  # is released.
+  if not (api.platform.name == 'mac' and api.platform.arch == 'arm'):
+    packages_root = api.path['start_dir'].join('packages')
+    ensure_file = api.cipd.EnsureFile().add_package(
+        'infra/tools/protoc/${platform}', 'protobuf_version:v3.6.1')
+    api.cipd.ensure(packages_root, ensure_file)
 
   with api.osx_sdk('mac'):
     with api.context(

@@ -152,6 +152,8 @@
       "%(PYTHONPATH)s:[START_DIR]/google_appengine",
       "--platform",
       "linux",
+      "--platform_arch",
+      "intel",
       "--dashboard_only",
       "--output-json",
       "/path/to/tmp/json"
