@@ -683,6 +683,11 @@ SPEC = {
                 'TARGET_PLATFORM': 'ios',
                 'HOST_PLATFORM': 'mac',
             },
+            cf_archive_build=True,
+            cf_gs_bucket='chromium-browser-asan',
+            cf_gs_acl='public-read',
+            cf_archive_name='ios-asan',
+            cf_archive_subdir_suffix='ios-asan',
             simulation_platform='mac',
         ),
     # TODO(crbug.com/1254986): remove after the migration.
