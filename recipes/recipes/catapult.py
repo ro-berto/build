@@ -70,11 +70,12 @@ def RunSteps(api, properties):
   app_engine_sdk_path = api.path.pathsep.join([
       '%(PYTHONPATH)s', str(sdk_path)])
 
+  packages_root = api.path['start_dir'].join('packages')
+
   # Install the protoc package.
   # TODO(crbug.com/1271700): Remove this condition once protoc mac-arm build
   # is released.
   if not (api.platform.name == 'mac' and api.platform.arch == 'arm'):
-    packages_root = api.path['start_dir'].join('packages')
     ensure_file = api.cipd.EnsureFile().add_package(
         'infra/tools/protoc/${platform}', 'protobuf_version:v3.6.1')
     api.cipd.ensure(packages_root, ensure_file)
@@ -110,6 +111,19 @@ def GenTests(api):
               'cmd': ['run_py_tests', '--no-hooks']
           },
       ),
+  )
+
+  yield api.test(
+    'mac-arm',
+    api.platform.name('mac'),
+    api.platform.arch('arm'),
+    api.generator_script(
+          'build_steps.py',
+          {
+              'name': 'Dashboard Tests',
+              'cmd': ['run_py_tests', '--no-hooks']
+          },
+    )
   )
 
   yield api.test(
