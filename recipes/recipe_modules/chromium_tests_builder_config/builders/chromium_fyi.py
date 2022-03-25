@@ -844,6 +844,7 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'enable_reclient',
+                'reclient_test',
             ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -862,6 +863,7 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'enable_reclient',
+                'reclient_test',
             ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
