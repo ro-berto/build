@@ -360,7 +360,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             retry_invalid_shards=retry_invalid_shards)
         failed_tests.update(failed_ts, invalid_ts)
         # Set infra_failure to False if some failed tests are not invalid.
-        if invalid_ts != failed_ts:
+        if set(invalid_ts) != set(failed_ts):
           infra_failure = False
 
       self.m.chromium_swarming.report_stats()
