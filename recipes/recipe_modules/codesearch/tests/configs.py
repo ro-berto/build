@@ -15,7 +15,7 @@ DEPS = [
 def RunSteps(api):
   api.codesearch.set_config(
       api.properties.get('codesearch_config', 'base'),
-      COMPILE_TARGETS=api.properties.get('compile_targets', []),
+      PROJECT=api.properties.get('project', 'chromium'),
       PLATFORM=api.properties.get('platform', 'linux'),
       SYNC_GENERATED_FILES=api.properties.get('sync_generated_files', True),
       GEN_REPO_BRANCH=api.properties.get('gen_repo_branch', 'main'),
@@ -34,11 +34,5 @@ def GenTests(api):
   yield api.test(
       'chromium',
       api.properties(codesearch_apply_config=['chromium']),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'compile_targets',
-      api.properties(compile_targets=['all']),
       api.post_process(post_process.DropExpectation),
   )

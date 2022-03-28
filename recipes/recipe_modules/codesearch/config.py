@@ -10,8 +10,8 @@ from recipe_engine.config import Single, Static, Dict, List
 from recipe_engine.config_types import Path
 
 
-def BaseConfig(CHECKOUT_PATH,
-               COMPILE_TARGETS=None,
+def BaseConfig(PROJECT,
+               CHECKOUT_PATH,
                PLATFORM=None,
                EXPERIMENTAL=False,
                SYNC_GENERATED_FILES=False,
@@ -23,9 +23,10 @@ def BaseConfig(CHECKOUT_PATH,
   """Filter out duplicate compilation units.
 
   Args:
+    PROJECT: The project this config is for. Only 'chromium' and 'chromiumos'
+      are supported currently.
     CHECKOUT_PATH: the source checkout path.
-    COMPILE_TARGETS: the compile targets.
-    PLATFORM: The platform for which the code is compiled.
+    PLATFORM: The platform or board for which the code is compiled.
     EXPERIMENTAL: If True, appends '_experimental' to the generated kzip file.
       Used to mark kzips that aren't ready for ingestion by Kythe.
     SYNC_GENERATED_FILES: Whether to sync generated files into a git repo.
@@ -34,45 +35,58 @@ def BaseConfig(CHECKOUT_PATH,
     CORPUS: Kythe corpus to specify in the kzip.
     BUILD_CONFIG: Kythe build config to specify in the kzip.
   """
-  if not COMPILE_TARGETS:
-    COMPILE_TARGETS = []
   return ConfigGroup(
-    CHECKOUT_PATH = Static(CHECKOUT_PATH),
-    COMPILE_TARGETS = List(COMPILE_TARGETS),
-    PLATFORM = Static(PLATFORM),
-    EXPERIMENTAL = Static(EXPERIMENTAL),
-    SYNC_GENERATED_FILES = Static(SYNC_GENERATED_FILES),
-    GEN_REPO_BRANCH = Static(GEN_REPO_BRANCH),
-    GEN_REPO_OUT_DIR = Static(GEN_REPO_OUT_DIR),
-    CORPUS = Static(CORPUS),
-    BUILD_CONFIG = Static(BUILD_CONFIG),
-    debug_path = Single(Path),
-    compile_commands_json_file = Single(Path),
-    gn_targets_json_file = Single(Path),
-    javac_extractor_output_dir = Single(Path),
-    bucket_name = Single(six.string_types, required=False),
-    chromium_git_url = Single(six.string_types, required=False,
-                              empty_val='https://chromium.googlesource.com'),
-    generated_repo = Single(six.string_types, required=False),
-    generated_author_email = Single(
-        six.string_types, required=False,
-        empty_val='git-generated-files-sync@chromium.org'),
-    generated_author_name = Single(six.string_types, required=False,
-                                   empty_val='Automatic Generated Files Sync'),
+      PROJECT=Static(PROJECT),
+      CHECKOUT_PATH=Static(CHECKOUT_PATH),
+      PLATFORM=Static(PLATFORM),
+      EXPERIMENTAL=Static(EXPERIMENTAL),
+      SYNC_GENERATED_FILES=Static(SYNC_GENERATED_FILES),
+      GEN_REPO_BRANCH=Static(GEN_REPO_BRANCH),
+      GEN_REPO_OUT_DIR=Static(GEN_REPO_OUT_DIR),
+      CORPUS=Static(CORPUS),
+      BUILD_CONFIG=Static(BUILD_CONFIG),
+      out_path=Single(Path),
+      compile_commands_json_file=Single(Path),
+      gn_targets_json_file=Single(Path),
+      javac_extractor_output_dir=Single(Path),
+      bucket_name=Single(six.string_types, required=False),
+      chromium_git_url=Single(
+          six.string_types,
+          required=False,
+          empty_val='https://chromium.googlesource.com'),
+      generated_repo=Single(six.string_types, required=False),
+      generated_author_email=Single(
+          six.string_types,
+          required=False,
+          empty_val='git-generated-files-sync@chromium.org'),
+      generated_author_name=Single(
+          six.string_types,
+          required=False,
+          empty_val='Automatic Generated Files Sync'),
   )
 
 config_ctx = config_item_context(BaseConfig)
 
 @config_ctx(is_root=True)
 def base(c):
-  c.debug_path = c.CHECKOUT_PATH.join('out', c.GEN_REPO_OUT_DIR or 'Debug')
-  c.compile_commands_json_file = c.debug_path.join('compile_commands.json')
-  c.gn_targets_json_file = c.debug_path.join('gn_targets.json')
-  c.javac_extractor_output_dir = c.debug_path.join('kzip')
+  c.out_path = c.CHECKOUT_PATH.join('out', c.GEN_REPO_OUT_DIR or 'Debug')
+  c.compile_commands_json_file = c.out_path.join('compile_commands.json')
+  c.gn_targets_json_file = c.out_path.join('gn_targets.json')
+  c.javac_extractor_output_dir = c.out_path.join('kzip')
+
 
 @config_ctx(includes=['generate_file', 'chromium_gs'])
 def chromium(_):
   pass
+
+
+@config_ctx(includes=['chromium_gs'])
+def chromiumos(c):
+  c.out_path = c.CHECKOUT_PATH.join('out', c.PLATFORM)
+  c.compile_commands_json_file = c.out_path.join('compile_commands.json')
+  c.gn_targets_json_file = c.out_path.join('gn_targets.json')
+  c.javac_extractor_output_dir = None
+
 
 @config_ctx()
 def chromium_gs(c):

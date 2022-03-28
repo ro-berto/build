@@ -205,7 +205,7 @@ def RunSteps(api, root_solution_revision, root_solution_revision_timestamp,
 
   api.codesearch.set_config(
       'chromium',
-      COMPILE_TARGETS=targets,
+      PROJECT='chromium',
       PLATFORM=platform,
       EXPERIMENTAL=experimental,
       SYNC_GENERATED_FILES=bot_config['sync_generated_files'],
@@ -294,7 +294,7 @@ def RunSteps(api, root_solution_revision, root_solution_revision_timestamp,
   api.file.remove('remove sentinel file', sentinel_path)
 
   # Download and run the clang tool.
-  api.codesearch.run_clang_tool()
+  api.codesearch.run_clang_tool(run_dirs=[api.context.cwd])
 
   # Process annotations and add kythe metadata.
   api.codesearch.add_kythe_metadata()

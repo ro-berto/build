@@ -34,6 +34,7 @@ BUILDERS = freeze({
     # - corpus: Kythe corpus to generate index packs under.
     # - gen_repo_branch: Which branch in the generated files repo to sync to.
     'codesearch-gen-chromium-linux': {
+        'project': 'chromium',
         'compile_targets': ['all',],
         'platform': 'linux',
         'sync_generated_files': True,
@@ -42,6 +43,7 @@ BUILDERS = freeze({
         'build_config': 'linux',
     },
     'codesearch-gen-chromium-win': {
+        'project': 'chromium',
         'compile_targets': ['all',],
         'platform': 'win',
         'sync_generated_files': True,
@@ -56,6 +58,7 @@ def RunSteps(api):
   builder_id = api.chromium.get_builder_id()
   builder = BUILDERS[builder_id.builder]
 
+  project = builder.get('project', 'chromium')
   platform = builder.get('platform', 'linux')
   corpus = builder.get('corpus', 'chromium-linux')
   build_config = builder.get('build_config', 'linux')
@@ -64,14 +67,13 @@ def RunSteps(api):
 
   api.codesearch.set_config(
       'chromium',
-      COMPILE_TARGETS=targets,
+      PROJECT=project,
       PLATFORM=platform,
       SYNC_GENERATED_FILES=builder['sync_generated_files'],
       GEN_REPO_BRANCH=builder['gen_repo_branch'],
       GEN_REPO_OUT_DIR=gen_repo_out_dir,
       CORPUS=corpus,
-      BUILD_CONFIG=build_config
-  )
+      BUILD_CONFIG=build_config)
 
   # Checkout the repositories that are needed for the compile.
   api.gclient.c = api.gclient.make_config('chromium_no_telemetry_dependencies')

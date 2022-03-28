@@ -132,7 +132,8 @@
       "-p",
       "None/out/Debug",
       "-o",
-      "None/out/Debug/compile_commands.json"
+      "None/out/Debug/compile_commands.json",
+      "all"
     ],
     "name": "generate compilation database",
     "~followup_annotations": [

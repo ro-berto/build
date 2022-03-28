@@ -1157,7 +1157,8 @@
     "cmd": [
       "python3",
       "[CACHE]/builder/src/tools/clang/scripts/update.py",
-      "--package=translation_unit"
+      "--package=translation_unit",
+      "--output-dir=[CLEANUP]/tmp_tmp_1"
     ],
     "luci_context": {
       "realm": {
@@ -1175,11 +1176,11 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
       "[CACHE]/builder/src/tools/clang/scripts/run_tool.py",
       "--tool",
-      "[CACHE]/builder/src/third_party/llvm-build/Release+Asserts/bin/translation_unit",
+      "translation_unit",
+      "--tool-path",
+      "[CLEANUP]/tmp_tmp_1/bin",
       "-p",
       "[CACHE]/builder/src/out/chromeos-Debug",
       "--all"
@@ -1321,10 +1322,10 @@
       "[CACHE]/builder/src/out/chromeos-Debug/chromium_chromeos.kzip",
       "--corpus",
       "chromium.googlesource.com/chromium/src",
-      "--build_config",
-      "chromeos",
       "--out_dir",
-      "src/out/chromeos-Debug"
+      "src/out/chromeos-Debug",
+      "--build_config",
+      "chromeos"
     ],
     "luci_context": {
       "realm": {

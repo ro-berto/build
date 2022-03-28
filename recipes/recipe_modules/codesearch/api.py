@@ -60,12 +60,12 @@ class CodesearchApi(recipe_api.RecipeApi):
                                     mb_config_path=None):
     self.m.chromium.mb_gen(
         chromium.BuilderId.create_for_group(builder_group, buildername),
-        build_dir=self.c.debug_path,
+        build_dir=self.c.out_path,
         name='generate build files',
         mb_config_path=mb_config_path)
 
     output_file = output_file or self.c.compile_commands_json_file
-    args = ['-p', self.c.debug_path, '-o', output_file] + list(targets)
+    args = ['-p', self.c.out_path, '-o', output_file] + list(targets)
 
     try:
       step_result = self.m.python(
@@ -82,10 +82,10 @@ class CodesearchApi(recipe_api.RecipeApi):
     output_file = output_file or self.c.gn_targets_json_file
     with self.m.context(cwd=self.m.path['checkout']):
       output = self.m.python(
-          'generate gn target list', self.m.depot_tools.gn_py_path,
-          ['desc', self.c.debug_path, '*', '--format=json'],
-          stdout=self.m.raw_io.output_text()
-      ).stdout
+          'generate gn target list',
+          self.m.depot_tools.gn_py_path,
+          ['desc', self.c.out_path, '*', '--format=json'],
+          stdout=self.m.raw_io.output_text()).stdout
     self.m.file.write_raw('write gn target list', output_file, output)
 
   def add_kythe_metadata(self):
@@ -103,34 +103,52 @@ class CodesearchApi(recipe_api.RecipeApi):
     self.m.build.python('add kythe metadata',
                         self.resource('add_kythe_metadata.py'), args)
 
-  def run_clang_tool(self):
+  def clone_clang_tools(self, clone_dir):
+    """Clone chromium/src clang tools."""
+    clang_dir = clone_dir.join('clang')
+    with self.m.context(cwd=clone_dir):
+      self.m.file.rmtree('remove previous instance of clang tools', clang_dir)
+      self.m.git('clone',
+                 'https://chromium.googlesource.com/chromium/src/tools/clang')
+    return clang_dir
+
+  def run_clang_tool(self, clang_dir=None, run_dirs=None):
     """Download and run the clang tool."""
+    clang_dir = clang_dir or self.m.path['checkout'].join('tools', 'clang')
+
     # Download the clang tool.
+    translation_unit_dir = self.m.path.mkdtemp()
     self.m.step(
         name='download translation_unit clang tool',
-        cmd=['python3',
-             self.m.path['checkout'].join(
-                 'tools', 'clang', 'scripts', 'update.py'),
-             '--package=translation_unit'])
+        cmd=[
+            'python3',
+            clang_dir.join('scripts',
+                           'update.py'), '--package=translation_unit',
+            '--output-dir=' + str(translation_unit_dir)
+        ])
 
     # Run the clang tool
-    args = ['--tool', self.m.path['checkout'].join('third_party', 'llvm-build',
-                                                   'Release+Asserts', 'bin',
-                                                   'translation_unit'),
-            '-p', self.c.debug_path, '--all']
-    try:
-      self.m.python(
-          'run translation_unit clang tool',
-          self.m.path['checkout'].join(
-              'tools', 'clang', 'scripts', 'run_tool.py'),
-          args)
-    except self.m.step.StepFailure as f:
-      # For some files, the clang tool produces errors. This is a known issue,
-      # but since it only affects very few files (currently 9), we ignore these
-      # errors for now. At least this means we can already have cross references
-      # support for the files where it works.
-      self.m.step.active_result.presentation.step_text = f.reason_message()
-      self.m.step.active_result.presentation.status = self.m.step.WARNING
+    args = [
+        '--tool', 'translation_unit', '--tool-path',
+        translation_unit_dir.join('bin'), '-p', self.c.out_path, '--all'
+    ]
+    if run_dirs is None:
+      run_dirs = [self.m.context.cwd]
+    for run_dir in run_dirs:
+      try:
+        with self.m.context(cwd=run_dir):
+          self.m.step(
+              name='run translation_unit clang tool',
+              cmd=[clang_dir.join('scripts', 'run_tool.py')] + args)
+
+      except self.m.step.StepFailure as f:
+        # For some files, the clang tool produces errors. This is a known issue,
+        # but since it only affects very few files (currently 9), we ignore
+        # these errors for now. At least this means we can already have cross
+        # reference support for the files where it works.
+        # TODO(crbug/1284439): Investigate translation_unit failures for CrOS.
+        self.m.step.active_result.presentation.step_text = f.reason_message()
+        self.m.step.active_result.presentation.status = self.m.step.WARNING
 
   def _get_commit_position(self):
     """Returns the commit position of the project.
@@ -160,16 +178,28 @@ class CodesearchApi(recipe_api.RecipeApi):
       commit_timestamp: Timestamp of the commit at which we're creating the
         index pack, in integer seconds since the UNIX epoch.
     """
-    commit_position = self._get_commit_position()
     commit_hash = commit_hash or self._get_revision()
-    index_pack_kythe_name = 'chromium_%s.kzip' % self.c.PLATFORM
     # TODO(jsca): Delete the second part of the below condition after LUCI
     # migration is complete.
     experimental_suffix = '_experimental' if (
         self.c.EXPERIMENTAL or self.m.runtime.is_experimental) else ''
-    index_pack_kythe_name_with_revision = 'chromium_%s_%s_%s+%d%s.kzip' % (
-        self.c.PLATFORM, commit_position, commit_hash, commit_timestamp,
-        experimental_suffix)
+
+    index_pack_kythe_base = '%s_%s' % (self.c.PROJECT, self.c.PLATFORM)
+    index_pack_kythe_name_with_id = ''
+    commit_position = ''
+    if self.c.PROJECT == 'chromium':
+      commit_position = self._get_commit_position()
+      index_pack_kythe_name_with_id = '%s_%s_%s+%d%s.kzip' % (
+          index_pack_kythe_base, commit_position, commit_hash, commit_timestamp,
+          experimental_suffix)
+    elif self.c.PROJECT == 'chromiumos':
+      index_pack_kythe_name_with_id = '%s_%s+%d%s.kzip' % (
+          index_pack_kythe_base, commit_hash, commit_timestamp,
+          experimental_suffix)
+    else:  # pragma: no cover
+      assert False, 'Unsupported codesearch project %s' % self.c.PROJECT
+
+    index_pack_kythe_name = '%s.kzip' % index_pack_kythe_base
     self._create_kythe_index_pack(index_pack_kythe_name)
 
     if self.m.tryserver.is_tryserver:
@@ -177,12 +207,13 @@ class CodesearchApi(recipe_api.RecipeApi):
 
     assert self.c.bucket_name, (
         'Trying to upload Kythe index pack but no google storage bucket name')
-    self._upload_kythe_index_pack(self.c.bucket_name, index_pack_kythe_name,
-                                  index_pack_kythe_name_with_revision)
+    self._upload_kythe_index_pack(self.c.bucket_name,
+                                  self.c.out_path.join(index_pack_kythe_name),
+                                  index_pack_kythe_name_with_id)
 
     # Also upload compile_commands.json for debugging purposes.
     compdb_name_with_revision = 'compile_commands_%s_%s.json' % (
-        self.c.PLATFORM, commit_position)
+        self.c.PLATFORM, commit_position or commit_hash)
     self._upload_compile_commands_json(self.c.bucket_name,
                                        compdb_name_with_revision)
 
@@ -198,31 +229,41 @@ class CodesearchApi(recipe_api.RecipeApi):
         '--checkout_dir', self.m.path['checkout'], '--path_to_compdb',
         self.c.compile_commands_json_file, '--path_to_gn_targets',
         self.c.gn_targets_json_file, '--path_to_java_kzips',
-        self.c.javac_extractor_output_dir, '--path_to_archive_output',
-        self.c.debug_path.join(index_pack_kythe_name), '--corpus', self.c.CORPUS
+        self.c.javac_extractor_output_dir or self.m.path.mkdtemp(),
+        '--path_to_archive_output',
+        self.c.out_path.join(index_pack_kythe_name), '--corpus', self.c.CORPUS
     ]
+
+    # If out_path is /path/to/src/out/foo and
+    # self.m.path['checkout'] is /path/to/src/,
+    # then out_dir wants src/out/foo.
+    args.extend([
+        '--out_dir',
+        self.m.path.relpath(
+            self.c.out_path,
+            self.m.path.dirname(self.m.path['checkout']),
+        )
+    ])
+
     if self.c.BUILD_CONFIG:
       args.extend(['--build_config', self.c.BUILD_CONFIG])
-    if self.c.GEN_REPO_OUT_DIR:
-      args.extend(['--out_dir', 'src/out/%s' % self.c.GEN_REPO_OUT_DIR])
     self.m.step('create kythe index pack', [exec_path] + args)
 
-  def _upload_kythe_index_pack(self, bucket_name, index_pack_kythe_name,
-                              index_pack_kythe_name_with_revision):
+  def _upload_kythe_index_pack(self, bucket_name, index_pack_kythe_path,
+                               index_pack_kythe_name_with_id):
     """Upload the kythe index pack to google storage.
 
     Args:
       bucket_name: Name of the google storage bucket to upload to
-      index_pack_kythe_name: Name of the Kythe index pack
+      index_pack_kythe_path: Path of the Kythe index pack
       index_pack_kythe_name_with_revision: Name of the Kythe index pack
-                                           with git commit revision
+                                           with identifier
     """
     self.m.gsutil.upload(
         name='upload kythe index pack',
-        source=self.c.debug_path.join(index_pack_kythe_name),
+        source=index_pack_kythe_path,
         bucket=bucket_name,
-        dest='prod/%s' % index_pack_kythe_name_with_revision
-    )
+        dest='prod/%s' % index_pack_kythe_name_with_id)
 
   def _upload_compile_commands_json(self, bucket_name,
                                     destination_filename):

@@ -25,7 +25,7 @@ def RunSteps(api):
   api.chromium.set_build_properties(properties)
   api.codesearch.set_config(
       api.properties.get('codesearch_config', 'chromium'),
-      COMPILE_TARGETS=api.properties.get('compile_targets', ['all']),
+      PROJECT=api.properties.get('project', 'chromium'),
       PLATFORM=api.properties.get('platform', 'linux'),
       SYNC_GENERATED_FILES=api.properties.get('sync_generated_files', True),
       GEN_REPO_BRANCH=api.properties.get('gen_repo_branch', 'main'),
@@ -38,6 +38,16 @@ def RunSteps(api):
 
 def GenTests(api):
   yield api.test('basic')
+
+  yield api.test(
+      'basic_chromium',
+      api.properties(codesearch_config='chromium', project='chromium'),
+  )
+
+  yield api.test(
+      'basic_chromiumos',
+      api.properties(codesearch_config='chromiumos', project='chromiumos'),
+  )
 
   yield api.test(
       'without_kythe_revision',

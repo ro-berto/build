@@ -15,16 +15,16 @@ def RunSteps(api):
   api.chromium.set_config('chromium')
   api.codesearch.set_config(
       api.properties.get('codesearch_config', 'chromium'),
-      COMPILE_TARGETS=api.properties.get('compile_targets', ['all']),
+      PROJECT=api.properties.get('project', 'chromium'),
       PLATFORM=api.properties.get('platform', 'linux'),
       SYNC_GENERATED_FILES=api.properties.get('sync_generated_files', True),
       GEN_REPO_BRANCH=api.properties.get('gen_repo_branch', 'main'),
       CORPUS=api.properties.get('corpus', 'chromium-linux'),
   )
   api.codesearch.generate_compilation_database(
-      api.codesearch.c.COMPILE_TARGETS,
-      builder_group='test_group',
-      buildername='test_builder')
+      targets=[
+          'all',
+      ], builder_group='test_group', buildername='test_builder')
 
 
 def GenTests(api):

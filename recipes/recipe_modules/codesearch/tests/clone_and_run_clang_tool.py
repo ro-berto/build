@@ -5,13 +5,15 @@
 PYTHON_VERSION_COMPATIBILITY = "PY3"
 
 DEPS = [
-  'codesearch',
+    'codesearch',
+    'recipe_engine/path',
 ]
 
 
 def RunSteps(api):
-  api.codesearch.set_config('base')
-  api.codesearch.run_clang_tool()
+  api.codesearch.set_config('chromium', PROJECT='chromium')
+  api.codesearch.clone_clang_tools(api.path['cache'])
+  api.codesearch.run_clang_tool(clang_dir=None, run_dirs=[api.path['cache']])
 
 
 def GenTests(api):
