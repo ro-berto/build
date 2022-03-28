@@ -181,7 +181,8 @@ class IsolatedScriptTestArguments(BaseTestArguments):
     super(IsolatedScriptTestArguments, self).__init__(
         filter_arg='--isolated-script-test-filter',
         filter_delimiter='::',
-        repeat_arg='--isolated-script-test-repeat')
+        repeat_arg='--isolated-script-test-repeat',
+        retry_limit_arg='--isolated-script-test-launcher-retry-limit')
 
   def override_into_gtest_args(self):
     """Overrides IsolatedScriptArguments into GTest arguments"""
