@@ -170,8 +170,8 @@ class RDBPerSuiteResults(object):
   # run if available.
   test_named_to_passed_run_duration = attrib(mapping[str, int])
   individual_results = attrib(mapping[str, sequence[...]])
-  # Mapping from test name to count of unexpected results of the test.
-  individual_unexpected_result_count = attrib(mapping[str, int])
+  # Mapping from test name to count of unexpected unpassed results of the test.
+  individual_unexpected_unpassed_result_count = attrib(mapping[str, int])
   test_id_prefix = attrib(str, default='')
 
   @classmethod
@@ -228,7 +228,7 @@ class RDBPerSuiteResults(object):
     unexpected_skipped_tests = set()
     test_named_to_passed_run_duration = {}
     individual_results = {}
-    individual_unexpected_result_count = {}
+    individual_unexpected_unpassed_result_count = {}
     for test_name, test_results in results_by_test_id.items():
       for tr in test_results:
         # Just use duration of the first passed expected result with duration.
@@ -237,8 +237,10 @@ class RDBPerSuiteResults(object):
                          int(tr.duration.nanos / 1000000.0))
           test_named_to_passed_run_duration[test_name] = duration
       individual_results[test_name] = list(tr.status for tr in test_results)
-      individual_unexpected_result_count[test_name] = len(
-          [tr for tr in test_results if not tr.expected])
+      individual_unexpected_unpassed_result_count[test_name] = len([
+          tr for tr in test_results
+          if (not tr.expected and tr.status != test_result_pb2.PASS)
+      ])
       # This filters out any tests that were auto-retried within the
       # invocation and finished with an expected result. eg: a test that's
       # expected to CRASH and runs with results [FAIL, CRASH]. RDB returns
@@ -262,7 +264,7 @@ class RDBPerSuiteResults(object):
                unexpected_passing_tests, unexpected_failing_tests,
                unexpected_skipped_tests, invalid, test_name_to_test_id_mapping,
                test_named_to_passed_run_duration, individual_results,
-               individual_unexpected_result_count, test_id_prefix)
+               individual_unexpected_unpassed_result_count, test_id_prefix)
 
   def with_failure_on_exit(self, failure_on_exit):
     """Returns a new instance with an updated failure_on_exit value.
