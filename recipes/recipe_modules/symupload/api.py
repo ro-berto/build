@@ -133,7 +133,11 @@ class SymuploadApi(recipe_api.RecipeApi):
 
     return binary_name
 
-  def __call__(self, build_dir, config_file_path=None, experimental=False):
+  def __call__(self,
+               build_dir,
+               config_file_path=None,
+               experimental=False,
+               symupload_binary=None):
     """
     Args:
       build_dir: The absolute path to the build output directory, e.g.
@@ -174,7 +178,8 @@ class SymuploadApi(recipe_api.RecipeApi):
 
     with self.m.step.nest('symupload') as presentation:
       # Check binary before moving on
-      symupload_binary = self.m.path.join(build_dir, self.symupload_binary)
+      if symupload_binary is None:
+        symupload_binary = self.m.path.join(build_dir, self.symupload_binary)
       if not self.m.path.exists(symupload_binary):
         raise self.m.step.StepFailure('The symupload binary cannot be found '
                                       'at %s. Please ensure targets symupload '
