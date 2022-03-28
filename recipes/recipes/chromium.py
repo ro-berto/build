@@ -1264,6 +1264,6 @@ def GenTests(api):
       ),
       api.override_step_data('browser_tests', retcode=1),
       api.post_process(post_process.StepFailure, 'browser_tests'),
-      api.post_process(post_process.StatusException),
+      api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
   )

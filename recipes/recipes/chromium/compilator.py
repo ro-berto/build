@@ -597,7 +597,7 @@ def GenTests(api):
           'builder \'fake-builder\' on group \'fake-group\''
       ]),
       api.post_process(post_process.MustRun, 'swarming trigger properties'),
-      api.post_process(post_process.StatusException),
+      api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
   )
 

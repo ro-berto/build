@@ -806,6 +806,6 @@ def GenTests(api):
           'blink_web_tests',
           api.test_utils.canned_isolated_script_output(
               passing=False, isolated_script_passing=False)),
-      api.post_check(post_process.StatusException),
+      api.post_check(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
   )
