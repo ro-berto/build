@@ -866,7 +866,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[CACHE]/builder/devtools-frontend/test/coverage-summary.json",
+      "[CACHE]/builder/devtools-frontend/karma-coverage/coverage-summary.json",
       "/path/to/tmp/"
     ],
     "env_prefixes": {

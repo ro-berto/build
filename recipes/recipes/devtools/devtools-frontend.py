@@ -276,7 +276,8 @@ def publish_coverage_points(api, builder_config):
 
   dimensions = ["lines", "statements", "functions", "branches"]
 
-  report_file = api.path['checkout'].join('test', 'coverage-summary.json')
+  report_file = api.path['checkout'].join('karma-coverage',
+                                          'coverage-summary.json')
   if not api.path.exists(report_file):
     return
 
@@ -370,7 +371,7 @@ def GenTests(api):
       ci_build(builder='linux'),
       api.properties(builder_config='Debug'),
       api.path.exists(api.path['checkout'].join(
-          'test',
+          'karma-coverage',
           'coverage-summary.json',
       )),
   )
