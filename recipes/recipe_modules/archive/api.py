@@ -1066,7 +1066,7 @@ class ArchiveApi(recipe_api.RecipeApi):
         attestation_paths[attestation_path] = uploads[f] + '.attestation'
         # TODO(akashmukherjee): Add support for custom backend url.
         if report_artifacts:
-          self.m.snoopy.report_gcs(file_hash, f)
+          self.m.snoopy.report_gcs(file_hash, uploads[f])
       uploads.update(attestation_paths)
 
     for file_path in self.m.py3_migration.consistent_ordering(
