@@ -34,6 +34,8 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
       "None/tools/clang/scripts/run_tool.py",
       "--tool",
       "translation_unit",

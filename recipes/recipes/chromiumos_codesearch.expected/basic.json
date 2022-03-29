@@ -261,6 +261,8 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
       "[CACHE]/builder/clang/scripts/run_tool.py",
       "--tool",
       "translation_unit",
@@ -275,6 +277,8 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
       "[CACHE]/builder/clang/scripts/run_tool.py",
       "--tool",
       "translation_unit",
@@ -289,6 +293,8 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
       "[CACHE]/builder/clang/scripts/run_tool.py",
       "--tool",
       "translation_unit",

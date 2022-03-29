@@ -137,11 +137,11 @@ class CodesearchApi(recipe_api.RecipeApi):
     for run_dir in run_dirs:
       try:
         with self.m.context(cwd=run_dir):
-          self.m.step(
-              name='run translation_unit clang tool',
-              cmd=[clang_dir.join('scripts', 'run_tool.py')] + args)
+          # run_tool currently only supports py2.
+          self.m.python('run translation_unit clang tool',
+                        clang_dir.join('scripts', 'run_tool.py'), args)
 
-      except self.m.step.StepFailure as f:
+      except self.m.step.StepFailure as f:  # pragma: nocover
         # For some files, the clang tool produces errors. This is a known issue,
         # but since it only affects very few files (currently 9), we ignore
         # these errors for now. At least this means we can already have cross

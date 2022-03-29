@@ -980,6 +980,8 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
       "[START_DIR]/src/tools/clang/scripts/run_tool.py",
       "--tool",
       "translation_unit",

@@ -1093,6 +1093,8 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
       "[CACHE]/builder/src/tools/clang/scripts/run_tool.py",
       "--tool",
       "translation_unit",
