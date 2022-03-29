@@ -205,8 +205,8 @@ def generate_tests(phase, bot, is_tryserver, chromium_tests_api, ios_config):
   if test_suite == 'ios_device':
     # Some tests exceed the default 180 seconds readline timeout.
     args = [
-        '--xctest', '--undefok=enable-run-ios-unittests-with-xctest',
-        '--readline-timeout=600', '--undefok=readline-timeout'
+        '--xctest', '--readline-timeout=600',
+        '--undefok=enable-run-ios-unittests-with-xctest,readline-timeout'
     ]
     tests = [generator.swarming_ios_test(t, args) for t in ios_device_tests]
 
