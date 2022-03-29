@@ -135,9 +135,7 @@ def generate_tests(phase, bot, is_tryserver, chromium_tests_api, ios_config):
       #'apprtcmobile_tests',
       'common_audio_unittests',
       'common_video_unittests',
-      # TODO(crbug.com/1306918): videocodec_test_av1 are hiting the iOS
-      # testrunner 3 minutes timeout which is currently not customizable.
-      #'modules_tests',
+      'modules_tests',
       'modules_unittests',
       'rtc_pc_unittests',
       'rtc_stats_unittests',
@@ -205,7 +203,11 @@ def generate_tests(phase, bot, is_tryserver, chromium_tests_api, ios_config):
     tests = [generator.swarming_ios_test(t) for t in ios_tests]
 
   if test_suite == 'ios_device':
-    args = ['--xctest', '--undefok=enable-run-ios-unittests-with-xctest']
+    # Some tests exceed the default 180 seconds readline timeout.
+    args = [
+        '--xctest', '--undefok=enable-run-ios-unittests-with-xctest',
+        '--readline-timeout=600', '--undefok=readline-timeout'
+    ]
     tests = [generator.swarming_ios_test(t, args) for t in ios_device_tests]
 
   if test_suite == 'ios_perf':
