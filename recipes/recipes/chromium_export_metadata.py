@@ -25,6 +25,7 @@ DEPS = [
     'depot_tools/bot_update',
     'depot_tools/depot_tools',
     'depot_tools/gclient',
+    'recipe_engine/buildbucket',
     'recipe_engine/context',
     'recipe_engine/path',
     'recipe_engine/step',
@@ -32,6 +33,8 @@ DEPS = [
 
 DEST_BUCKET = 'chrome-metadata'
 DEST_BUCKET_LEGACY = 'chromium-owners'
+DEST_BIGQUERY_TABLE = 'chrome-metadata.chromium.dir_metadata'
+
 
 def RunSteps(api):
   api.gclient.set_config('chromium')
@@ -55,6 +58,27 @@ def RunSteps(api):
     '-bucket-legacy', DEST_BUCKET_LEGACY,
   ])
 
+  # Use a separate command for bq write so that failures here won't affect
+  # updating cloud storage.
+  # TODO(crbug.com/1285078) merge steps.
+  bb_gitiles_commit = api.buildbucket.gitiles_commit
+  api.step('dirmd chromium-update bq write', [
+      api.path['checkout'].join('third_party', 'depot_tools', 'dirmd'),
+      'chromium-update',
+      '-chromium-checkout',
+      api.path['checkout'],
+      '-bigquery-table',
+      DEST_BIGQUERY_TABLE,
+      '-gitiles-host',
+      bb_gitiles_commit.host,
+      '-gitiles-project',
+      bb_gitiles_commit.project,
+      '-ref',
+      bb_gitiles_commit.ref,
+      '-revision',
+      bb_gitiles_commit.id,
+  ])
+
 
 def GenTests(api):
-  yield api.test('basic')
+  yield api.test('basic', api.chromium.ci_build())
