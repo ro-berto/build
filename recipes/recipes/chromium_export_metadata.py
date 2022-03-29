@@ -61,7 +61,7 @@ def RunSteps(api):
   # Use a separate command for bq write so that failures here won't affect
   # updating cloud storage.
   # TODO(crbug.com/1285078) merge steps.
-  bb_gitiles_commit = api.buildbucket.gitiles_commit
+  bb_git_commit = api.buildbucket.gitiles_commit
   api.step('dirmd chromium-update bq write', [
       api.path['checkout'].join('third_party', 'depot_tools', 'dirmd'),
       'chromium-update',
@@ -69,14 +69,14 @@ def RunSteps(api):
       api.path['checkout'],
       '-bigquery-table',
       DEST_BIGQUERY_TABLE,
-      '-gitiles-host',
-      bb_gitiles_commit.host,
-      '-gitiles-project',
-      bb_gitiles_commit.project,
+      '-git-host',
+      bb_git_commit.host,
+      '-git-project',
+      bb_git_commit.project,
       '-ref',
-      bb_gitiles_commit.ref,
+      bb_git_commit.ref,
       '-revision',
-      bb_gitiles_commit.id,
+      bb_git_commit.id,
   ])
 
 
