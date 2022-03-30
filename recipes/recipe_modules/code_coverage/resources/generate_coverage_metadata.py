@@ -588,7 +588,7 @@ def _create_coverage_json(output_dir, data):
   """
   coverage_json_file = os.path.join(output_dir, 'coverage.json')
   with open(coverage_json_file, 'w') as fp:
-    json.dumps(data, fp)
+    json.dump(data, fp)
 
 
 def _generate_metadata(src_path,

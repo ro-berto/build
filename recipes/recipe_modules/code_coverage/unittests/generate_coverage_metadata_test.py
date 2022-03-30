@@ -292,6 +292,72 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
   #
   # Where the first column is the line number and the second column is the
   # expected number of times the line is executed.
+  def test_cleanup_coverage_data(self):
+    src_path = '/path/to/chromium/src'
+    raw_data = {
+        'data': [{
+            'files': [{
+                'segments': [
+                    [1, 12, 1, True, True],
+                    [2, 7, 1, True, True],
+                    [2, 14, 1, True, False],
+                    [2, 18, 0, True, True],
+                    [2, 25, 1, True, False],
+                    [2, 27, 1, True, True],
+                    [4, 4, 0, True, False],
+                    [6, 3, 0, True, True],
+                    [7, 2, 0, False, False],
+                ],
+                'summary': {
+                    'lines': {
+                        'covered': 2,
+                        'count': 7,
+                    }
+                },
+                'filename': '/path/to/chromium/src/base/base.cc',
+            }]
+        }]
+    }
+    expected_cleaned_data = {
+        'data': [{
+            'files': [{
+                'segments': [
+                    [1, 12, 1, True, True],
+                    [2, 7, 1, True, True],
+                    [2, 14, 1, True, False],
+                    [2, 18, 0, True, True],
+                    [2, 25, 1, True, False],
+                    [2, 27, 1, True, True],
+                    [4, 4, 0, True, False],
+                    [6, 3, 0, True, True],
+                    [7, 2, 0, False, False],
+                ],
+                'summary': {
+                    'lines': {
+                        'covered': 2,
+                        'count': 7,
+                    }
+                },
+                'filename': 'base/base.cc',
+            }]
+        }]
+    }
+
+    cleaned_data = generator._cleanup_coverage_data(src_path, raw_data)
+    self.maxDiff = None
+    self.assertDictEqual(expected_cleaned_data, cleaned_data)
+
+  # This test uses the following code:
+  # 1|      1|int main() {
+  # 2|      1|  if ((2 > 1) || (3 > 2)) {
+  # 3|      1|    return 0;
+  # 4|      1|  }
+  # 5|      0|
+  # 6|      0|  return 1;
+  # 7|      0|}
+  #
+  # Where the first column is the line number and the second column is the
+  # expected number of times the line is executed.
   def test_rebase_line_and_block_data(self):
     line_data = {1: 1, 2: 1, 3: 1, 4: 1, 5: 0, 6: 0, 7: 0}
     block_data = {2: [[18, 24]]}
