@@ -191,6 +191,19 @@
   },
   {
     "cmd": [
+      "[CACHE]/builder/depot_tools/cros_sdk",
+      "--",
+      "build_packages",
+      "--board=amd64-generic"
+    ],
+    "cwd": "[CLEANUP]/builder/chromiumos",
+    "env": {
+      "DEPOT_TOOLS_UPDATE": "0"
+    },
+    "name": "build_packages"
+  },
+  {
+    "cmd": [
       "cp",
       "-r",
       "[CACHE]/builder/infra/go/src/infra/cmd/package_index_cros",
@@ -209,16 +222,11 @@
       "[CLEANUP]/builder/chromiumos/src/out/amd64-generic/gn_targets.json",
       "--compile-commands",
       "[CLEANUP]/builder/chromiumos/src/out/amd64-generic/compile_commands.json",
-      "chromeos-base/libbrillo",
-      "chromeos-base/policy_utils",
-      "chromeos-base/power_manager",
-      "chromeos-base/chaps",
-      "chromeos-base/cryptohome",
-      "chromeos-base/metrics",
-      "chromeos-base/oobe_config",
-      "chromeos-base/session_manager-client",
-      "chromeos-base/update_engine",
-      "chromeos-base/libchrome"
+      "virtual/target-chromium-os",
+      "virtual/target-chromium-os-dev",
+      "virtual/target-chromium-os-factory",
+      "virtual/target-chromium-os-factory-shim",
+      "virtual/target-chromium-os-test"
     ],
     "cwd": "[CLEANUP]/builder/chromiumos/src/scripts",
     "env": {

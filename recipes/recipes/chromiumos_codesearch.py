@@ -8,9 +8,6 @@ package_index, and generates then uploads a KZIP to GS.
 
 TODO(crbug/1284439): Create an initiator recipe that triggers builds for
 multiple boards.
-
-TODO(crbug/1284439): Since this is in build repo, dedupe/move code to the
-codesearch recipe module.
 """
 
 PYTHON_VERSION_COMPATIBILITY = 'PY3'
@@ -82,19 +79,12 @@ def RunSteps(api):
   experimental = False
   sync_generated_files = False
   corpus = 'chromium.googlesource.com/chromiumos'
-
-  # TODO(crbug/1284439): Increase coverage by using different packages.
   packages = [
-      'chromeos-base/libbrillo',
-      'chromeos-base/policy_utils',
-      'chromeos-base/power_manager',
-      'chromeos-base/chaps',
-      'chromeos-base/cryptohome',
-      'chromeos-base/metrics',
-      'chromeos-base/oobe_config',
-      'chromeos-base/session_manager-client',
-      'chromeos-base/update_engine',
-      'chromeos-base/libchrome',
+      'virtual/target-chromium-os',
+      'virtual/target-chromium-os-dev',
+      'virtual/target-chromium-os-factory',
+      'virtual/target-chromium-os-factory-shim',
+      'virtual/target-chromium-os-test',
   ]
 
   # Get infra/infra. Checking out infra automatically checks out depot_tools.
@@ -128,6 +118,9 @@ def RunSteps(api):
     api.step('cros_sdk', [cros_sdk])
     api.step('setup_board',
              [cros_sdk, '--', 'setup_board',
+              '--board=%s' % board])
+    api.step('build_packages',
+             [cros_sdk, '--', 'build_packages',
               '--board=%s' % board])
 
   # package_index_cros requires chromite/ in a parent directory.
