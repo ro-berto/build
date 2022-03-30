@@ -1616,7 +1616,10 @@ TRYBOTS = try_spec.TryDatabase.create({
             ),
         'win11-x64-fyi-rel':
             try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi', buildername='Win11 Tests x64'),
+                builder_group='chromium.win',
+                buildername='Win x64 Builder',
+                tester_group='chromium.fyi',
+                tester='Win11 Tests x64'),
         'win_chromium_compile_dbg_ng':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.win',
