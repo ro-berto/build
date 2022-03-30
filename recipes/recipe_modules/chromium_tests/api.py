@@ -1051,8 +1051,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     with self.m.context(cwd=self.m.path['checkout']):
       self.m.chromium.runhooks(name='runhooks (without patch)')
 
-  def build_and_isolate_failing_tests(self, builder_id, builder_config,
-                                      failing_tests, bot_update_step, suffix):
+  def build_and_isolate_failing_tests(self,
+                                      builder_id,
+                                      builder_config,
+                                      failing_tests,
+                                      bot_update_step,
+                                      suffix,
+                                      additional_compile_targets=None):
     """Builds and isolates test suites in |failing_tests|.
 
     Args:
@@ -1062,12 +1067,17 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                        set swarming properties.
       suffix: Should be 'without patch'. Used to annotate steps and swarming
               properties.
-
+      additional_compile_targets (List[str]): Additional compile targets
+        specified recipe-side. This field is intended for recipes to add
+        targets needed for recipe functionality and not for configuring builder
+        outputs (which should be specified src-side in waterfalls.pyl).
     Returns:
       A RawResult object with the failure message and status
     """
     compile_targets = list(
         itertools.chain(*[t.compile_targets() for t in failing_tests]))
+    if additional_compile_targets:
+      compile_targets.extend(additional_compile_targets)
     if compile_targets:
       # Remove duplicate targets.
       compile_targets = sorted(set(compile_targets))
@@ -1907,7 +1917,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                              builder_config,
                              root_solution_revision=None,
                              isolate_output_files_for_coverage=False,
-                             append_additional_compile_target=None):
+                             additional_compile_targets=None):
     """Builds targets affected by change.
 
     Args:
@@ -1919,10 +1929,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                      are in ChromiumTestsApi.
       isolate_output_files_for_coverage: Whether to also upload all test
         binaries and other required code coverage output files to one hash.
-      append_additional_compile_targets str: An extra compile target
-        that is specified recipe-side. Normally "additional_compile_targets"
-        are specified src-side in waterfalls.pyl, so this field should only be
-        used for special cases.
+      additional_compile_targets (List[str]): Additional compile targets
+        specified recipe-side. This field is intended for recipes to add
+        targets needed for recipe functionality and not for configuring builder
+        outputs (which should be specified src-side in waterfalls.pyl).
 
     Returns:
       A Tuple of
@@ -1969,8 +1979,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # Compiles and isolates test suites.
     raw_result = result_pb2.RawResult(status=common_pb.SUCCESS)
 
-    if append_additional_compile_target:
-      compile_targets.append(append_additional_compile_target)
+    if additional_compile_targets:
+      compile_targets.extend(additional_compile_targets)
     if compile_targets:
       tests = self.tests_in_compile_targets(test_targets, tests)
 

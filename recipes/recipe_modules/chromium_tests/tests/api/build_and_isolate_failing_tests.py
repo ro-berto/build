@@ -1,4 +1,4 @@
-# Copyright 2021 The Chromium Authors. All rights reserved.
+# Copyright 2022 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -40,10 +40,17 @@ def RunSteps(api, properties):
           builder_id=orch_builder_id))
   api.chromium_tests.configure_build(orch_builder_config)
 
-  api.chromium_tests.build_affected_targets(
+  update_step, targets_config = (
+      api.chromium_tests.prepare_checkout(orch_builder_config))
+
+  test_suites = [t for t in targets_config.all_tests if t.uses_isolate]
+
+  api.chromium_tests.build_and_isolate_failing_tests(
       orch_builder_id,
       orch_builder_config,
-      isolate_output_files_for_coverage=True,
+      test_suites,
+      update_step,
+      'without patch',
       additional_compile_targets=['infra_orchestrator:orchestrator_all'])
 
 
@@ -61,7 +68,7 @@ def GenTests(api):
         ).assemble())
 
   yield api.test(
-      'compilator_isolates_all_tests',
+      'builds_additional_compile_targets',
       api.code_coverage(use_clang_coverage=True),
       api.chromium.try_build(
           builder_group='fake-try-group',
@@ -93,15 +100,12 @@ def GenTests(api):
                   builder_name='fake-orchestrator',
                   builder_group='fake-try-group'))),
       api.path.exists(api.path['checkout'].join('out/Release/browser_tests')),
-      api.filter.suppress_analyze(),
       api.post_process(
           post_process.StepCommandContains,
-          'compile (with patch)',
+          'compile (without patch)',
           ['browser_tests', 'infra_orchestrator:orchestrator_all'],
       ),
-      api.post_process(post_process.MustRun, 'isolate tests (with patch)'),
-      api.post_process(post_process.LogContains, 'isolate tests (with patch)',
-                       'json.output', [ALL_TEST_BINARIES_ISOLATE_NAME]),
+      api.post_process(post_process.MustRun, 'isolate tests (without patch)'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
