@@ -1076,9 +1076,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     """
     compile_targets = list(
         itertools.chain(*[t.compile_targets() for t in failing_tests]))
-    if additional_compile_targets:
-      compile_targets.extend(additional_compile_targets)
     if compile_targets:
+      if additional_compile_targets:
+        compile_targets.extend(additional_compile_targets)
       # Remove duplicate targets.
       compile_targets = sorted(set(compile_targets))
       failing_swarming_tests = [
@@ -1979,9 +1979,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # Compiles and isolates test suites.
     raw_result = result_pb2.RawResult(status=common_pb.SUCCESS)
 
-    if additional_compile_targets:
-      compile_targets.extend(additional_compile_targets)
     if compile_targets:
+      if additional_compile_targets:
+        compile_targets.extend(additional_compile_targets)
       tests = self.tests_in_compile_targets(test_targets, tests)
 
       compile_targets = sorted(set(compile_targets))

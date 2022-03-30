@@ -105,3 +105,40 @@ def GenTests(api):
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
+
+  yield api.test(
+      'no_compile_with_additional_compile_targets_kwarg',
+      api.code_coverage(use_clang_coverage=True),
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-compilator',
+      ),
+      ctbc_properties(),
+      api.chromium_tests.read_source_side_spec(
+          'fake-group', {
+              'fake-builder': {
+                  'scripts': [{
+                      "isolate_profile_data": True,
+                      "name": "check_static_initializers",
+                      "script": "check_static_initializers.py",
+                      "swarming": {}
+                  }],
+              },
+              'fake-tester': {
+                  'gtest_tests': [{
+                      'name': 'browser_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True
+                      },
+                  }],
+              },
+          }),
+      api.properties(
+          InputProperties(
+              orchestrator=InputProperties.Orchestrator(
+                  builder_name='fake-orchestrator',
+                  builder_group='fake-try-group'))),
+      api.post_process(post_process.DoesNotRun, 'compile (with patch)'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
