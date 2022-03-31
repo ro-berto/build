@@ -38,7 +38,7 @@ def RunSteps(api):
         branches = api.v8.latest_branches()
         assert branches, "No branches found!"
         last_version = branches[0]
-        api.step('Last branch %s' % version_str(last_version), [])
+        api.step('Last branch %s' % api.v8.version_num2str(last_version), [])
 
         api.v8.git_output('checkout', 'infra/config')
         api.v8.git_output('pull')
@@ -48,7 +48,7 @@ def RunSteps(api):
         beta_version = infer_beta_version(defintions)
         if last_version != beta_version:
             with api.step.nest('New branch detected'):
-                defintions = calculate_versions(defintions, last_version)
+                defintions = calculate_versions(api, defintions, last_version)
                 update_branch_version(api, last_version)
                 update_main_version(api)
                 update_infra_config(api, defintions)
@@ -88,7 +88,7 @@ def version(version_text):
     major, minor = version_components[:2]
     return int(major)*10 + int(minor)
 
-def calculate_versions(defintions, last_version):
+def calculate_versions(api, defintions, last_version):
     contents = ast.parse(defintions, mode='exec')
     defined_versions = contents.body[0].value.values
 
@@ -101,25 +101,22 @@ def calculate_versions(defintions, last_version):
     stable_version = beta_version
     beta_version = last_version
 
-    defined_versions[0].s = version_str(beta_version)
-    defined_versions[1].s = version_str(stable_version)
-    defined_versions[2].s = version_str(extended_version)
+    defined_versions[0].s = api.v8.version_num2str(beta_version)
+    defined_versions[1].s = api.v8.version_num2str(stable_version)
+    defined_versions[2].s = api.v8.version_num2str(extended_version)
 
     return astunparse.unparse(contents)
 
 
-def version_str(version_number):
-    return '%s.%s' % divmod(version_number, 10)
-
-
 def update_branch_version(api, latest_version):
     with api.step.nest('Update on branch') as parent_step:
-        branch_ref = 'branch-heads/%s' % version_str(latest_version)
+        branch_ref = 'branch-heads/%s' % api.v8.version_num2str(latest_version)
         api.v8.git_output('checkout', branch_ref)
         version_at_branch_head = api.v8.read_version_from_ref(
                 "HEAD", branch_ref)
         version_at_branch_head = version_at_branch_head.with_incremented_patch()
-        update_version(api,branch_ref, version_at_branch_head, update_gn)
+        api.v8.increment_version_cl(branch_ref, version_at_branch_head,
+                push_account=PUSH_ACCOUNT, extra_edits=update_gn)
         issue = get_issue(api)
         parent_step.presentation.links[issue] = issue
 
@@ -131,60 +128,10 @@ def update_main_version(api):
         version_at_branch_head = api.v8.read_version_from_ref(
                 "HEAD", branch_ref)
         version_at_branch_head = version_at_branch_head.with_incremented_minor()
-        update_version(api,branch_ref, version_at_branch_head)
+        api.v8.increment_version_cl(branch_ref, version_at_branch_head,
+                push_account=PUSH_ACCOUNT)
         issue = get_issue(api)
         parent_step.presentation.links[issue] = issue
-
-
-def update_version(api, ref, latest_version, extra_edits=None):
-    """Increment the version on branch 'ref' to the next patch level.
-
-    Args:
-      api: The recipe api.
-      ref: Ref name where to change the version, e.g.
-           refs/remotes/branch-heads/1.2.
-      latest_version: The currently latest version to be incremented.
-    """
-
-    api.v8.git_output('branch', '-D', 'work', ok_ret='any')
-    api.v8.git_output('clean', '-ffd')
-
-    # Create a fresh work branch.
-    api.v8.git_output('new-branch', 'work', '--upstream', ref)
-    api.v8.git_output(
-        'config',
-        'user.name',
-        'V8 Autoroll',
-        name='git config user.name',
-    )
-    api.v8.git_output(
-        'config',
-        'user.email',
-        PUSH_ACCOUNT,
-        name='git config user.email',
-    )
-
-    # Increment patch level and update file content.
-    latest_version_file = api.v8.read_version_file(ref, 'latest')
-    latest_version_file = latest_version.update_version_file_blob(
-        latest_version_file)
-
-    # Write file to disk.
-    api.file.write_text(
-        'Increment version',
-        api.path['checkout'].join(api.v8.VERSION_FILE),
-        latest_version_file,
-    )
-
-    if extra_edits:
-        extra_edits(api)
-
-    # Commit and push changes.
-    api.v8.git_output('commit', '-am', 'Version %s' % latest_version)
-
-    api.v8.git_output('cl', 'upload', '-f', '--bypass-hooks', '--send-mail',
-            '--no-autocc')
-
 
 def get_issue(api):
     issue = api.v8.git_output('cl', 'issue')

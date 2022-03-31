@@ -255,8 +255,7 @@
     "infra_step": true,
     "name": "New branch detected.Update on branch.git branch",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_END@stdout@@@"
+      "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {
@@ -277,8 +276,7 @@
     "infra_step": true,
     "name": "New branch detected.Update on branch.git clean",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_END@stdout@@@"
+      "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {
@@ -301,8 +299,7 @@
     "infra_step": true,
     "name": "New branch detected.Update on branch.git new-branch",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_END@stdout@@@"
+      "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {
@@ -324,8 +321,7 @@
     "infra_step": true,
     "name": "New branch detected.Update on branch.git config user.name",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_END@stdout@@@"
+      "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {
@@ -347,8 +343,7 @@
     "infra_step": true,
     "name": "New branch detected.Update on branch.git config user.email",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_END@stdout@@@"
+      "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {
@@ -458,7 +453,7 @@
       "git",
       "commit",
       "-am",
-      "Version 3.4.3.5"
+      "Version 3.4.3.6"
     ],
     "cwd": "[CACHE]/builder/v8",
     "env_suffixes": {
@@ -472,8 +467,7 @@
     "infra_step": true,
     "name": "New branch detected.Update on branch.git commit",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_END@stdout@@@"
+      "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {
@@ -498,8 +492,7 @@
     "infra_step": true,
     "name": "New branch detected.Update on branch.git cl",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_END@stdout@@@"
+      "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {
@@ -595,8 +588,7 @@
     "infra_step": true,
     "name": "New branch detected.Update on main.git branch",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_END@stdout@@@"
+      "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {
@@ -617,8 +609,7 @@
     "infra_step": true,
     "name": "New branch detected.Update on main.git clean",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_END@stdout@@@"
+      "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {
@@ -641,8 +632,7 @@
     "infra_step": true,
     "name": "New branch detected.Update on main.git new-branch",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_END@stdout@@@"
+      "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {
@@ -664,8 +654,7 @@
     "infra_step": true,
     "name": "New branch detected.Update on main.git config user.name",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_END@stdout@@@"
+      "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {
@@ -687,8 +676,7 @@
     "infra_step": true,
     "name": "New branch detected.Update on main.git config user.email",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_END@stdout@@@"
+      "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {
@@ -744,7 +732,7 @@
       "git",
       "commit",
       "-am",
-      "Version 3.5.3.4"
+      "Version 3.5.3.5"
     ],
     "cwd": "[CACHE]/builder/v8",
     "env_suffixes": {
@@ -758,8 +746,7 @@
     "infra_step": true,
     "name": "New branch detected.Update on main.git commit",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_END@stdout@@@"
+      "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {
@@ -784,8 +771,7 @@
     "infra_step": true,
     "name": "New branch detected.Update on main.git cl",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_END@stdout@@@"
+      "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {

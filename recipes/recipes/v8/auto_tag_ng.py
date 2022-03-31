@@ -66,23 +66,23 @@ def RunSteps(api, tracked_branches_count):
   with api.context(
       cwd=api.path['checkout'],
       env_prefixes={'PATH': [api.v8.depot_tools_path]}):
-    git_output(api, 'fetch', 'origin', '--prune')
-    branches = last_branches(api)
-    assert len(branches) >= tracked_branches_count
+    api.v8.git_output('fetch', 'origin', '--prune')
+    branches = api.v8.latest_branches()
+    assert len(branches) >= tracked_branches_count, "Too few branches"
     performed_actions = []
-    for branch_version in branches[:tracked_branches_count]:
-      check_branch(api, branch_version, performed_actions)
+    for chromium_milestone in branches[:tracked_branches_count]:
+      chromium_milestone_str = api.v8.version_num2str(chromium_milestone)
+      check_branch(api, chromium_milestone_str, performed_actions)
     result = api.step('Summary', cmd=None)
     result.presentation.step_text = "\n".join(performed_actions or ["-none-"])
 
 
 def check_branch(api, branch_version, performed_actions):
-  with api.step.nest('Checking branch %s.%s' % branch_version):
-    branch_ref = 'branch-heads/%s.%s' % branch_version
-    git_output(api, 'checkout', branch_ref)
+  with api.step.nest('Checking branch %s' % branch_version):
+    branch_ref = 'branch-heads/%s' % branch_version
+    api.v8.git_output('checkout', branch_ref)
     version_at_branch_head = api.v8.read_version_from_ref("HEAD", branch_ref)
-    proof_of_version_change = git_output(
-        api,
+    proof_of_version_change = api.v8.git_output(
         'show',
         api.v8.VERSION_FILE,
         ok_ret='any',
@@ -96,39 +96,17 @@ def check_branch(api, branch_version, performed_actions):
                               performed_actions)
 
 
-def last_branches(api):
-  branch_step = api.git(
-      'branch',
-      '-r',
-      '--list',
-      'branch-heads/*',
-      stdout=api.raw_io.output_text(),
-      name='last branches')
-  output = branch_step.stdout
-  branch_step.presentation.logs['stdout'] = output.splitlines()
-  branch_pattern = re.compile(r"branch-heads/(\d+)\.(\d+)")
-  versions = []
-  for line in output.splitlines():
-    m = branch_pattern.match(line.strip())
-    if m:
-      versions.append((int(m.group(1)), int(m.group(2))))
-  versions.sort()
-  versions.reverse()
-  return versions
-
-
 def verify_tag(api, version_at_branch_head, performed_actions):
   with api.step.nest('Verify tag'):
-    commit_at_tag = git_output(
-        api,
+    commit_at_tag = api.v8.git_output(
         'show',
         '--format=%H',
         '--no-patch',
         'refs/tags/%s' % version_at_branch_head,
         name='Commit at %s' % version_at_branch_head,
         ok_ret='any')
-    commit_at_head = git_output(
-        api, 'show', '--format=%H', '--no-patch', 'HEAD', name='Commit at HEAD')
+    commit_at_head = api.v8.git_output(
+        'show', '--format=%H', '--no-patch', 'HEAD', name='Commit at HEAD')
     assert commit_at_head
     if commit_at_head != commit_at_tag:
       # Tag latest version.
@@ -143,7 +121,7 @@ def verify_tag(api, version_at_branch_head, performed_actions):
 def verify_lkgr(api, branch_version, version_at_branch_head,
         performed_actions):
   with api.step.nest('Verify LKGR'):
-    lkgr_ref = 'refs/heads/%s.%s-lkgr' % branch_version
+    lkgr_ref = 'refs/heads/%s-lkgr' % branch_version
     current_lkgr = get_commit_for_ref(api, lkgr_ref)
     branch_head = get_commit_for_ref(api,
                                      'refs/tags/%s' % version_at_branch_head)
@@ -163,17 +141,8 @@ def set_lkgr(api, branch_head, lkgr_ref, performed_actions):
   performed_actions.append("Ref updated %s" % lkgr_ref)
 
 
-def git_output(api, *args, **kwargs):
-  """Convenience wrapper."""
-  step_result = api.git(*args, stdout=api.raw_io.output_text(), **kwargs)
-  result = step_result.stdout
-  step_result.presentation.logs['stdout'] = result.splitlines()
-  return result.strip()
-
-
 def get_commit_for_ref(api, ref):
-  result = git_output(
-      api,
+  result = api.v8.git_output(
       'ls-remote',
       REMOTE_REPO_URL,
       ref,
@@ -206,63 +175,13 @@ def maybe_increment_version(api, ref, latest_version, performed_actions):
       step_result = api.step('Stale version change CL found!', cmd=None)
       step_result.presentation.status = 'FAILURE'
     else:
-      increment_version(api, ref, latest_version, performed_actions)
+      new_version = api.v8.increment_version_cl(
+          ref, latest_version, push_account=PUSH_ACCOUNT, bot_commit=True)
+      performed_actions.append("Version updated %s" % new_version)
 
 
 def subject(latest_version):
   return 'Version %s' % latest_version
-
-
-def increment_version(api, ref, latest_version, performed_actions):
-  """Increment the version on branch 'ref' to the next patch level.
-
-    Args:
-      api: The recipe api.
-      ref: Ref name where to change the version, e.g.
-           refs/remotes/branch-heads/1.2.
-      latest_version: The currently latest version to be incremented.
-    """
-  api.git('branch', '-D', 'work', ok_ret='any')
-  api.git('clean', '-ffd')
-
-  # Create a fresh work branch.
-  api.git('new-branch', 'work', '--upstream', ref)
-  api.git(
-      'config',
-      'user.name',
-      'V8 Autoroll',
-      name='git config user.name',
-  )
-  api.git(
-      'config',
-      'user.email',
-      PUSH_ACCOUNT,
-      name='git config user.email',
-  )
-
-  # Increment patch level and update file content.
-  latest_version_file = api.v8.read_version_file(ref, 'latest')
-  latest_version = latest_version.with_incremented_patch()
-  latest_version_file = latest_version.update_version_file_blob(
-      latest_version_file)
-
-  # Write file to disk.
-  api.file.write_text(
-      'Increment version',
-      api.path['checkout'].join(api.v8.VERSION_FILE),
-      latest_version_file,
-  )
-
-  # Commit and push changes.
-  api.git('commit', '-am', 'Version %s' % latest_version)
-
-  if api.properties.get('dry_run') or api.runtime.is_experimental:
-    api.step('Dry-run commit', cmd=None)
-  else:
-    api.git('cl', 'upload', '-f', '--bypass-hooks', '--send-mail',
-            '--no-autocc', '--set-bot-commit')
-    api.git('cl', 'land', '-f', '--bypass-hooks')
-  performed_actions.append("Version updated %s" % latest_version)
 
 
 def GenTests(api):

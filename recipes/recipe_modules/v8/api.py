@@ -1713,3 +1713,73 @@ class V8Api(recipe_api.RecipeApi):
     result = step_result.stdout
     step_result.presentation.logs['stdout'] = result.splitlines()
     return result.strip()
+
+  def increment_version_cl(self, ref, latest_version, push_account,
+      bot_commit=False, extra_edits=None):
+    """Increment the version on branch 'ref' to the next patch level.
+
+      Args:
+        api: The recipe api.
+        ref: Ref name where to change the version, e.g.
+            refs/remotes/branch-heads/1.2.
+        latest_version: The currently latest version to be incremented.
+        push_account: Account to be used for uploading the CL
+        bot_commit: Use True to allow a bot commit. This also force lands
+            the CL
+        extra_edits: Callback used to edit extra files before generating the CL
+      """
+    self.m.git('branch', '-D', 'work', ok_ret='any')
+    self.m.git('clean', '-ffd')
+
+    # Create a fresh work branch.
+    self.m.git('new-branch', 'work', '--upstream', ref)
+    self.m.git(
+        'config',
+        'user.name',
+        'V8 Autoroll',
+        name='git config user.name',
+    )
+    self.m.git(
+        'config',
+        'user.email',
+        push_account,
+        name='git config user.email',
+    )
+
+    # Increment patch level and update file content.
+    latest_version_file = self.read_version_file(ref, 'latest')
+    latest_version = latest_version.with_incremented_patch()
+    latest_version_file = latest_version.update_version_file_blob(
+        latest_version_file)
+
+    # Write file to disk.
+    self.m.file.write_text(
+        'Increment version',
+        self.m.path['checkout'].join(self.m.v8.VERSION_FILE),
+        latest_version_file,
+    )
+
+    if extra_edits:
+        extra_edits(self.m)
+
+    # Commit and push changes.
+    self.m.git('commit', '-am', 'Version %s' % latest_version)
+
+    if self.m.properties.get('dry_run') or self.m.runtime.is_experimental:
+      self.m.step('Dry-run commit', cmd=None)
+    else:
+      upload_cmd = ['cl', 'upload', '-f', '--bypass-hooks', '--send-mail',
+          '--no-autocc']
+      if bot_commit:
+          upload_cmd.append('--set-bot-commit')
+      self.m.git(*upload_cmd)
+      if bot_commit:
+          self.m.git('cl', 'land', '-f', '--bypass-hooks')
+    return latest_version
+
+
+  def version_num2str(self, version_number):
+    """Transforms a version number to a string formated version number
+    (i.e. 102  to '10.2')
+    """
+    return '%s.%s' % divmod(version_number, 10)
