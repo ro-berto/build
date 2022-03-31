@@ -136,10 +136,32 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CLEANUP]/builder/chromiumos"
+      "[CACHE]/builder/chromiumos"
     ],
     "infra_step": true,
     "name": "ensure chromiumos dir"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "glob",
+      "[CACHE]/builder/chromiumos",
+      ".repo",
+      "--hidden"
+    ],
+    "cwd": "[CACHE]/builder/chromiumos",
+    "env": {
+      "DEPOT_TOOLS_UPDATE": "0"
+    },
+    "infra_step": true,
+    "name": "Check for existing checkout (2)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@glob@@@"
+    ]
   },
   {
     "cmd": [
@@ -148,7 +170,7 @@
       "-u",
       "https://chromium.googlesource.com/chromiumos/manifest.git"
     ],
-    "cwd": "[CLEANUP]/builder/chromiumos",
+    "cwd": "[CACHE]/builder/chromiumos",
     "env": {
       "DEPOT_TOOLS_UPDATE": "0"
     },
@@ -160,7 +182,7 @@
       "sync",
       "-j6"
     ],
-    "cwd": "[CLEANUP]/builder/chromiumos",
+    "cwd": "[CACHE]/builder/chromiumos",
     "env": {
       "DEPOT_TOOLS_UPDATE": "0"
     },
@@ -170,7 +192,7 @@
     "cmd": [
       "[CACHE]/builder/depot_tools/cros_sdk"
     ],
-    "cwd": "[CLEANUP]/builder/chromiumos",
+    "cwd": "[CACHE]/builder/chromiumos",
     "env": {
       "DEPOT_TOOLS_UPDATE": "0"
     },
@@ -183,7 +205,7 @@
       "setup_board",
       "--board=amd64-generic"
     ],
-    "cwd": "[CLEANUP]/builder/chromiumos",
+    "cwd": "[CACHE]/builder/chromiumos",
     "env": {
       "DEPOT_TOOLS_UPDATE": "0"
     },
@@ -196,7 +218,7 @@
       "build_packages",
       "--board=amd64-generic"
     ],
-    "cwd": "[CLEANUP]/builder/chromiumos",
+    "cwd": "[CACHE]/builder/chromiumos",
     "env": {
       "DEPOT_TOOLS_UPDATE": "0"
     },
@@ -207,28 +229,28 @@
       "cp",
       "-r",
       "[CACHE]/builder/infra/go/src/infra/cmd/package_index_cros",
-      "[CLEANUP]/builder/chromiumos/src/scripts"
+      "[CACHE]/builder/chromiumos/src/scripts"
     ],
     "name": "copy package_index_cros to chromiumos/src/scripts"
   },
   {
     "cmd": [
       "python3",
-      "[CLEANUP]/builder/chromiumos/src/scripts/package_index_cros/main.py",
+      "[CACHE]/builder/chromiumos/src/scripts/package_index_cros/main.py",
       "--with-build",
       "--build-dir",
-      "[CLEANUP]/builder/chromiumos/src/out/amd64-generic",
+      "[CACHE]/builder/chromiumos/src/out/amd64-generic",
       "--gn-targets",
-      "[CLEANUP]/builder/chromiumos/src/out/amd64-generic/gn_targets.json",
+      "[CACHE]/builder/chromiumos/src/out/amd64-generic/gn_targets.json",
       "--compile-commands",
-      "[CLEANUP]/builder/chromiumos/src/out/amd64-generic/compile_commands.json",
+      "[CACHE]/builder/chromiumos/src/out/amd64-generic/compile_commands.json",
       "virtual/target-chromium-os",
       "virtual/target-chromium-os-dev",
       "virtual/target-chromium-os-factory",
       "virtual/target-chromium-os-factory-shim",
       "virtual/target-chromium-os-test"
     ],
-    "cwd": "[CLEANUP]/builder/chromiumos/src/scripts",
+    "cwd": "[CACHE]/builder/chromiumos/src/scripts",
     "env": {
       "PATH": "[CACHE]/builder/depot_tools:<PATH>"
     },
@@ -277,10 +299,10 @@
       "--tool-path",
       "[CLEANUP]/tmp_tmp_1/bin",
       "-p",
-      "[CLEANUP]/builder/chromiumos/src/out/amd64-generic",
+      "[CACHE]/builder/chromiumos/src/out/amd64-generic",
       "--all"
     ],
-    "cwd": "[CLEANUP]/builder/chromiumos/src/platform2",
+    "cwd": "[CACHE]/builder/chromiumos/src/platform2",
     "name": "run translation_unit clang tool"
   },
   {
@@ -293,10 +315,10 @@
       "--tool-path",
       "[CLEANUP]/tmp_tmp_1/bin",
       "-p",
-      "[CLEANUP]/builder/chromiumos/src/out/amd64-generic",
+      "[CACHE]/builder/chromiumos/src/out/amd64-generic",
       "--all"
     ],
-    "cwd": "[CLEANUP]/builder/chromiumos/src/aosp/external/libchrome",
+    "cwd": "[CACHE]/builder/chromiumos/src/aosp/external/libchrome",
     "name": "run translation_unit clang tool (2)"
   },
   {
@@ -309,10 +331,10 @@
       "--tool-path",
       "[CLEANUP]/tmp_tmp_1/bin",
       "-p",
-      "[CLEANUP]/builder/chromiumos/src/out/amd64-generic",
+      "[CACHE]/builder/chromiumos/src/out/amd64-generic",
       "--all"
     ],
-    "cwd": "[CLEANUP]/builder/chromiumos/src/aosp/system/update_engine",
+    "cwd": "[CACHE]/builder/chromiumos/src/aosp/system/update_engine",
     "name": "run translation_unit clang tool (3)"
   },
   {
@@ -371,15 +393,15 @@
     "cmd": [
       "[START_DIR]/cipd_tool/infra/tools/package_index/latest/package_index",
       "--checkout_dir",
-      "[CLEANUP]/builder/chromiumos/src",
+      "[CACHE]/builder/chromiumos/src",
       "--path_to_compdb",
-      "[CLEANUP]/builder/chromiumos/src/out/amd64-generic/compile_commands.json",
+      "[CACHE]/builder/chromiumos/src/out/amd64-generic/compile_commands.json",
       "--path_to_gn_targets",
-      "[CLEANUP]/builder/chromiumos/src/out/amd64-generic/gn_targets.json",
+      "[CACHE]/builder/chromiumos/src/out/amd64-generic/gn_targets.json",
       "--path_to_java_kzips",
       "[CLEANUP]/tmp_tmp_2",
       "--path_to_archive_output",
-      "[CLEANUP]/builder/chromiumos/src/out/amd64-generic/chromiumos_amd64-generic.kzip",
+      "[CACHE]/builder/chromiumos/src/out/amd64-generic/chromiumos_amd64-generic.kzip",
       "--corpus",
       "chromium.googlesource.com/chromiumos",
       "--out_dir",
@@ -396,7 +418,7 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[CLEANUP]/builder/chromiumos/src/out/amd64-generic/chromiumos_amd64-generic.kzip",
+      "[CACHE]/builder/chromiumos/src/out/amd64-generic/chromiumos_amd64-generic.kzip",
       "gs://chrome-codesearch/prod/chromiumos_amd64-generic_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa+100.kzip"
     ],
     "infra_step": true,
@@ -414,7 +436,7 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[CLEANUP]/builder/chromiumos/src/out/amd64-generic/compile_commands.json",
+      "[CACHE]/builder/chromiumos/src/out/amd64-generic/compile_commands.json",
       "gs://chrome-codesearch/debug/compile_commands_amd64-generic_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.json"
     ],
     "infra_step": true,

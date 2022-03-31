@@ -89,7 +89,6 @@ def RunSteps(api):
 
   # Get infra/infra. Checking out infra automatically checks out depot_tools.
   cache_dir = api.path['cache'].join('builder')
-  cleanup_dir = api.path['cleanup'].join('builder')
   with api.context(cwd=cache_dir):
     api.bot_update.ensure_checkout(gclient_config=gclient_config(api))
 
@@ -101,17 +100,20 @@ def RunSteps(api):
 
   # Set up and build ChromiumOS.
   # TODO(crbug/1284439): Add sentinel file and handle cleaning up chroot.
-  # cros_sdk may fail with an ImportError if ChromiumOS already exists. Place
-  # ChromiumOS in cleanup_dir.
   # TODO(crbug/1284439): Investigate cros_sdk ImportError failures.
-  chromiumos_dir = cleanup_dir.join('chromiumos')
+  chromiumos_dir = cache_dir.join('chromiumos')
   api.file.ensure_directory('ensure chromiumos dir', chromiumos_dir)
   with api.context(cwd=chromiumos_dir, env={'DEPOT_TOOLS_UPDATE': 0}):
     repo = depot_tools_dir.join('repo')
-    api.step('repo init', [
-        repo, 'init', '-u',
-        'https://chromium.googlesource.com/chromiumos/manifest.git'
-    ])
+    if not api.file.glob_paths(
+        'Check for existing checkout',
+        chromiumos_dir,
+        '.repo',
+        include_hidden=True):
+      api.step('repo init', [
+          repo, 'init', '-u',
+          'https://chromium.googlesource.com/chromiumos/manifest.git'
+      ])
     api.step('repo sync', [repo, 'sync', '-j6'])
 
     cros_sdk = depot_tools_dir.join('cros_sdk')
