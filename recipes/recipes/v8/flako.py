@@ -171,7 +171,7 @@ class Command(object):
       # 1024 is a rough approximation of commits since the flag below was
       # introduced.
       cmd.append('--exit-after-n-failures=%d' % self.min_failures)
-    return cmd
+    return ['python3', '-u'] + cmd
 
 
 def raw_gs_url_template(builder_group, buildername):
