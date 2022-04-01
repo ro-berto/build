@@ -119,35 +119,6 @@ def GenTests(api):
   )
 
   yield api.test(
-      'trigger-with-fixed-revisions',
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='fake-group',
-          builder='fake-tester',
-          builder_db=ctbc.BuilderDatabase.create({
-              'fake-group': {
-                  'fake-tester':
-                      ctbc.BuilderSpec.create(
-                          chromium_config='chromium',
-                          gclient_config='chromium',
-                      ),
-              },
-          })),
-      api.properties(
-          **{
-              '$build/chromium_tests':
-                  InputProperties(fixed_revisions={
-                      'src': 'fake-src-revision',
-                      'src/foo': 'fake-foo-revision',
-                  }),
-          }),
-      api.post_check(post_process.StepCommandContains, 'bot_update',
-                     ['--revision', 'src@fake-src-revision']),
-      api.post_check(post_process.StepCommandContains, 'bot_update',
-                     ['--revision', 'src/foo@fake-foo-revision']),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
       'mirror-with-non-child-tester',
       api.chromium_tests_builder_config.try_build(
           builder_group='fake-try-group',

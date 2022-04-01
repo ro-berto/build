@@ -81,7 +81,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   def __init__(self, input_properties, **kwargs):
     super(ChromiumTestsApi, self).__init__(**kwargs)
-    self._fixed_revisions = input_properties.fixed_revisions
 
     self._swarming_command_lines = {}
     self.filter_files_dir = None
@@ -159,8 +158,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       if self.m.chromium.c.TARGET_CROS_BOARDS:
         gclient_solution.custom_vars['cros_boards'] = (
             self.m.chromium.c.TARGET_CROS_BOARDS)
-
-    self.m.gclient.c.revisions.update(self._fixed_revisions)
 
     for c in builder_config.android_apply_config:
       self.m.chromium_android.apply_config(c)
