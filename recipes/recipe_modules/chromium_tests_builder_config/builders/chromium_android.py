@@ -508,6 +508,18 @@ SPEC.update([
     stock_cronet_config(
         'android-cronet-x86-dbg', config='Debug', android_config='x86_builder'),
     stock_cronet_config(
+        'android-cronet-x86-dbg-lollipop-tests',
+        config='Debug',
+        execution_mode=builder_spec.TEST,
+        parent_buildername='android-cronet-x86-dbg',
+        android_config='x86_builder'),
+    stock_cronet_config(
+        'android-cronet-x86-dbg-marshmallow-tests',
+        config='Debug',
+        execution_mode=builder_spec.TEST,
+        parent_buildername='android-cronet-x86-dbg',
+        android_config='x86_builder'),
+    stock_cronet_config(
         'android-cronet-x86-dbg-oreo-tests',
         config='Debug',
         execution_mode=builder_spec.TEST,
@@ -532,4 +544,9 @@ SPEC.update([
         parent_buildername='android-cronet-x86-dbg',
         android_config='x86_builder'),
     stock_cronet_config('android-cronet-x86-rel', android_config='x86_builder'),
+    stock_cronet_config(
+        'android-cronet-x86-rel-kitkat-tests',
+        execution_mode=builder_spec.TEST,
+        parent_buildername='android-cronet-x86-rel',
+        android_config='x86_builder'),
 ])
