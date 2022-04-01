@@ -17,9 +17,12 @@ The recipe will:
 
 import re
 
+
+from PB.go.chromium.org.luci.buildbucket.proto.common import FAILURE
 from recipe_engine.post_process import (
     DropExpectation, DoesNotRunRE, MustRun, StepFailure)
 from recipe_engine.recipe_api import Property
+from PB.recipe_engine.result import RawResult
 
 PYTHON_VERSION_COMPATIBILITY = "PY3"
 
@@ -58,6 +61,10 @@ PROPERTIES = {
             default=MAX_NUMBER_OF_TRACKED_BRANCHES)
 }
 
+class BuildResults:
+  def __init__(self):
+      self.success = True
+      self.performed_actions = []
 
 def RunSteps(api, tracked_branches_count):
   api.gclient.set_config('v8')
@@ -69,15 +76,20 @@ def RunSteps(api, tracked_branches_count):
     api.v8.git_output('fetch', 'origin', '--prune')
     branches = api.v8.latest_branches()
     assert len(branches) >= tracked_branches_count, "Too few branches"
-    performed_actions = []
+
+    build_results = BuildResults()
     for chromium_milestone in branches[:tracked_branches_count]:
       chromium_milestone_str = api.v8.version_num2str(chromium_milestone)
-      check_branch(api, chromium_milestone_str, performed_actions)
+      check_branch(api, chromium_milestone_str, build_results)
+
     result = api.step('Summary', cmd=None)
-    result.presentation.step_text = "\n".join(performed_actions or ["-none-"])
+    result.presentation.step_text = "\n".join(build_results.performed_actions
+        or ["-none-"])
+    if not build_results.success:
+      return RawResult(status=FAILURE)
 
 
-def check_branch(api, branch_version, performed_actions):
+def check_branch(api, branch_version, build_results):
   with api.step.nest('Checking branch %s' % branch_version):
     branch_ref = 'branch-heads/%s' % branch_version
     api.v8.git_output('checkout', branch_ref)
@@ -88,15 +100,15 @@ def check_branch(api, branch_version, performed_actions):
         ok_ret='any',
         name='Proof of version change')
     if proof_of_version_change:
-      verify_tag(api, version_at_branch_head, performed_actions)
+      verify_tag(api, version_at_branch_head, build_results)
       verify_lkgr(api, branch_version, version_at_branch_head,
-                  performed_actions)
+                  build_results)
     else:
       maybe_increment_version(api, branch_ref, version_at_branch_head,
-                              performed_actions)
+                              build_results)
 
 
-def verify_tag(api, version_at_branch_head, performed_actions):
+def verify_tag(api, version_at_branch_head, build_results):
   with api.step.nest('Verify tag'):
     commit_at_tag = api.v8.git_output(
         'show',
@@ -115,11 +127,12 @@ def verify_tag(api, version_at_branch_head, performed_actions):
       else:
         api.git('tag', str(version_at_branch_head), 'HEAD')
         api.git('push', REMOTE_REPO_URL, str(version_at_branch_head))
-      performed_actions.append("Tagged %s" % version_at_branch_head)
+      build_results.performed_actions.append(
+            "Tagged %s" % version_at_branch_head)
 
 
 def verify_lkgr(api, branch_version, version_at_branch_head,
-        performed_actions):
+        build_results):
   with api.step.nest('Verify LKGR'):
     lkgr_ref = 'refs/heads/%s-lkgr' % branch_version
     current_lkgr = get_commit_for_ref(api, lkgr_ref)
@@ -128,17 +141,17 @@ def verify_lkgr(api, branch_version, version_at_branch_head,
     api.step('LKGR commit %s' % current_lkgr, [])
     api.step('HEAD commit %s' % branch_head, [])
     if branch_head != current_lkgr:
-      set_lkgr(api, branch_head, lkgr_ref, performed_actions)
+      set_lkgr(api, branch_head, lkgr_ref, build_results)
     else:
       api.step('There is no new lkgr.', [])
 
 
-def set_lkgr(api, branch_head, lkgr_ref, performed_actions):
+def set_lkgr(api, branch_head, lkgr_ref, build_results):
   if api.properties.get('dry_run') or api.runtime.is_experimental:
     api.step('Dry-run lkgr update %s' % branch_head, cmd=None)
   else:
     push_ref(api, REMOTE_REPO_URL, lkgr_ref, branch_head)
-  performed_actions.append("Ref updated %s" % lkgr_ref)
+  build_results.performed_actions.append("Ref updated %s" % lkgr_ref)
 
 
 def get_commit_for_ref(api, ref):
@@ -159,7 +172,7 @@ def push_ref(api, repo, ref, hsh):
   api.git('push', repo, '+%s:%s' % (hsh, ref))
 
 
-def maybe_increment_version(api, ref, latest_version, performed_actions):
+def maybe_increment_version(api, ref, latest_version, build_results):
   with api.step.nest('Increment version from %s' % latest_version):
     commits = api.gerrit.get_changes(
         'https://chromium-review.googlesource.com',
@@ -174,10 +187,11 @@ def maybe_increment_version(api, ref, latest_version, performed_actions):
     if [c for c in commits if c['subject'] == subject(latest_version)]:
       step_result = api.step('Stale version change CL found!', cmd=None)
       step_result.presentation.status = 'FAILURE'
+      build_results.success = False
     else:
       new_version = api.v8.increment_version_cl(
-          ref, latest_version, push_account=PUSH_ACCOUNT, bot_commit=True)
-      performed_actions.append("Version updated %s" % new_version)
+        ref, latest_version, push_account=PUSH_ACCOUNT, bot_commit=True)
+      build_results.performed_actions.append("Version updated %s" % new_version)
 
 
 def subject(latest_version):

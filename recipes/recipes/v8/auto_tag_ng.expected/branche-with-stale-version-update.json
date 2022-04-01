@@ -255,6 +255,10 @@
     ]
   },
   {
+    "failure": {
+      "failure": {},
+      "humanReason": ""
+    },
     "name": "$result"
   }
 ]
