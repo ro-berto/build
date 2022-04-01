@@ -403,7 +403,7 @@
       "--path_to_archive_output",
       "[CACHE]/builder/chromiumos/src/out/amd64-generic/chromiumos_amd64-generic.kzip",
       "--corpus",
-      "chromium.googlesource.com/chromiumos",
+      "chromium.googlesource.com/chromiumos//main",
       "--out_dir",
       "src/out/amd64-generic"
     ],
