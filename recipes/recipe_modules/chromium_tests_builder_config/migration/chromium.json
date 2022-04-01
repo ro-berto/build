@@ -322,14 +322,6 @@
   ],
   "chromium.android:android-cronet-arm-rel": [
     "chromium.android:android-cronet-arm-rel",
-    "chromium.android:android-cronet-arm-rel-kitkat-tests",
-    "tryserver.chromium.android:android-cronet-kitkat-arm-rel",
-    "tryserver.chromium.android:android_cronet"
-  ],
-  "chromium.android:android-cronet-arm-rel-kitkat-tests": [
-    "chromium.android:android-cronet-arm-rel",
-    "chromium.android:android-cronet-arm-rel-kitkat-tests",
-    "tryserver.chromium.android:android-cronet-kitkat-arm-rel",
     "tryserver.chromium.android:android_cronet"
   ],
   "chromium.android:android-cronet-arm64-dbg": [
@@ -445,12 +437,14 @@
   "chromium.android:android-cronet-x86-rel": [
     "chromium.android:android-cronet-x86-rel",
     "chromium.android:android-cronet-x86-rel-kitkat-tests",
-    "tryserver.chromium.android:android-cronet-x86-rel"
+    "tryserver.chromium.android:android-cronet-x86-rel",
+    "tryserver.chromium.android:android-cronet-x86-rel-kitkat-tests"
   ],
   "chromium.android:android-cronet-x86-rel-kitkat-tests": [
     "chromium.android:android-cronet-x86-rel",
     "chromium.android:android-cronet-x86-rel-kitkat-tests",
-    "tryserver.chromium.android:android-cronet-x86-rel"
+    "tryserver.chromium.android:android-cronet-x86-rel",
+    "tryserver.chromium.android:android-cronet-x86-rel-kitkat-tests"
   ],
   "chromium.android:android-incremental-dbg": [
     "chromium.android:android-incremental-dbg"
@@ -3494,12 +3488,6 @@
     "chromium.android:android-cronet-asan-arm-rel",
     "tryserver.chromium.android:android-cronet-asan-arm-rel"
   ],
-  "tryserver.chromium.android:android-cronet-kitkat-arm-rel": [
-    "chromium.android:android-cronet-arm-rel",
-    "chromium.android:android-cronet-arm-rel-kitkat-tests",
-    "tryserver.chromium.android:android-cronet-kitkat-arm-rel",
-    "tryserver.chromium.android:android_cronet"
-  ],
   "tryserver.chromium.android:android-cronet-x86-dbg": [
     "chromium.android:android-cronet-x86-dbg",
     "chromium.android:android-cronet-x86-dbg-10-tests",
@@ -3573,7 +3561,14 @@
   "tryserver.chromium.android:android-cronet-x86-rel": [
     "chromium.android:android-cronet-x86-rel",
     "chromium.android:android-cronet-x86-rel-kitkat-tests",
-    "tryserver.chromium.android:android-cronet-x86-rel"
+    "tryserver.chromium.android:android-cronet-x86-rel",
+    "tryserver.chromium.android:android-cronet-x86-rel-kitkat-tests"
+  ],
+  "tryserver.chromium.android:android-cronet-x86-rel-kitkat-tests": [
+    "chromium.android:android-cronet-x86-rel",
+    "chromium.android:android-cronet-x86-rel-kitkat-tests",
+    "tryserver.chromium.android:android-cronet-x86-rel",
+    "tryserver.chromium.android:android-cronet-x86-rel-kitkat-tests"
   ],
   "tryserver.chromium.android:android-inverse-fieldtrials-pie-x86-fyi-rel": [
     "chromium.android:android-pie-x86-rel",
@@ -3857,8 +3852,6 @@
   ],
   "tryserver.chromium.android:android_cronet": [
     "chromium.android:android-cronet-arm-rel",
-    "chromium.android:android-cronet-arm-rel-kitkat-tests",
-    "tryserver.chromium.android:android-cronet-kitkat-arm-rel",
     "tryserver.chromium.android:android_cronet"
   ],
   "tryserver.chromium.android:android_mojo": [

@@ -171,12 +171,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.android',
                 buildername='android-cronet-asan-arm-rel',
             ),
-        'android-cronet-kitkat-arm-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android',
-                buildername='android-cronet-arm-rel',
-                tester='android-cronet-arm-rel-kitkat-tests',
-            ),
         'android-cronet-x86-dbg':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android',
@@ -210,6 +204,12 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.android',
                 buildername='android-cronet-x86-dbg',
                 tester='android-cronet-x86-dbg-pie-tests',
+            ),
+        'android-cronet-x86-rel-kitkat-tests':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.android',
+                buildername='android-cronet-x86-rel',
+                tester='android-cronet-x86-rel-kitkat-tests',
             ),
 
         # This trybot mirrors the trybot android-pie-x86-rel
