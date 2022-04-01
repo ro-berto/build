@@ -4,20 +4,19 @@
 
 from recipe_engine import post_process
 
-from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 from RECIPE_MODULES.depot_tools.gclient import (api as gclient, CONFIG_CTX as
                                                 GCLIENT_CONFIG_CTX)
 
 PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
-    'chromium',
     'chromium_checkout',
-    'chromium_tests',
-    'chromium_tests_builder_config',
+    'depot_tools/gclient',
+    'recipe_engine/buildbucket',
     'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/platform',
+    'recipe_engine/properties',
     'recipe_engine/step',
 ]
 
@@ -30,11 +29,9 @@ def revision_resolver(c):
 
 
 def RunSteps(api):
-  _, builder_config = api.chromium_tests_builder_config.lookup_builder()
+  api.gclient.set_config(api.properties.get('gclient_config', 'chromium'))
 
-  api.chromium_tests.configure_build(builder_config)
-
-  api.chromium_checkout.ensure_checkout(builder_config)
+  api.chromium_checkout.ensure_checkout()
 
   api.step('details', [])
   api.step.active_result.presentation.logs['details'] = [
@@ -47,7 +44,8 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'full',
-      api.chromium_tests_builder_config.generic_build(),
+      api.platform('linux', 64),
+      api.buildbucket.generic_build(),
   )
 
   def verify_checkout_dir(check, step_odict, expected_path):
@@ -58,20 +56,16 @@ def GenTests(api):
 
   yield api.test(
       'win',
-      api.chromium_tests_builder_config.try_build(
-          builder_group='tryserver.chromium.win',
-          builder='win10_chromium_x64_rel_ng',
-      ),
+      api.buildbucket.try_build(),
+      api.platform('win', 64),
       api.post_process(verify_checkout_dir,
                        api.path['cache'].join('builder', 'src')),
   )
 
   yield api.test(
       'linux',
-      api.chromium_tests_builder_config.try_build(
-          builder_group='tryserver.chromium.linux',
-          builder='linux-rel',
-      ),
+      api.buildbucket.try_build(),
+      api.platform('linux', 64),
       api.post_process(verify_checkout_dir,
                        api.path['cache'].join('builder', 'src')),
   )
@@ -82,19 +76,7 @@ def GenTests(api):
 
   yield api.test(
       'revision-resolver',
-      api.chromium_tests_builder_config.generic_build(
-          builder_group='fake-group',
-          builder='fake-builder',
-          builder_db=ctbc.BuilderDatabase.create({
-              'fake-group': {
-                  'fake-builder':
-                      ctbc.BuilderSpec.create(
-                          chromium_config='chromium',
-                          gclient_config='revision_resolver',
-                      ),
-              },
-          }),
-      ),
+      api.properties(gclient_config='revision_resolver'),
       api.post_check(verify_revision_resolver_in_log,
                      "*RevisionFallbackChain*"),
       api.post_process(post_process.DropExpectation),
