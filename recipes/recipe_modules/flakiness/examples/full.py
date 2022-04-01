@@ -359,16 +359,22 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
 
-  tags = resultdb_common.StringPair(key='test_name', value='Test:Test1')
+  tags = resultdb_common.StringPair(
+      key='test_name',
+      value=('org.chromium.chrome.browser.safety_check.'
+             'SafetyCheckMediatorTest#testUpdatesCheckUpdated[0]'))
   linux_variant = _generate_variant(
-      os='Ubuntu-16', test_suite='base_junit_tests')
+      os='Ubuntu-16', test_suite='chrome_junit_tests')
   junit_invocations = {
       'invocations/build:8945511751514863184':
           api.resultdb.Invocation(test_results=[
               _generate_test_result(
-                  test_id='ninja://base:base_junit_tests/Test:Test1',
+                  test_id=(
+                      'ninja://chrome/android:chrome_junit_tests/'
+                      'org.chromium.chrome.browser.safety_check.'
+                      'SafetyCheckMediatorTest#testUpdatesCheckUpdated[0]'),
                   test_variant=linux_variant,
-                  tags=tags)
+                  tags=tags),
           ])
   }
 
@@ -392,15 +398,19 @@ def GenTests(api):
           'fake-group', {
               'fake-android-builder': {
                   'junit_tests': [{
-                      'isolate_profile_data': True,
-                      'name': 'base_junit_tests',
+                      'isolate_profile_data':
+                          True,
+                      'name':
+                          'chrome_junit_tests',
                       'resultdb': {
                           'enable': True,
                           'has_native_resultdb_integration': True
                       },
                       'swarming': {},
-                      'test': 'base_junit_tests',
-                      'test_id_prefix': 'ninja://base:base_junit_tests/'
+                      'test':
+                          'chrome_junit_tests',
+                      'test_id_prefix':
+                          'ninja://chrome/android:chrome_junit_tests/'
                   }],
               },
           }),
@@ -413,7 +423,7 @@ def GenTests(api):
       ),
       api.resultdb.query(
           junit_invocations,
-          ('base_junit_tests results'),
+          ('chrome_junit_tests results'),
       ),
       api.step_data(
           'git diff to analyze patch (2)',
@@ -423,6 +433,93 @@ def GenTests(api):
           step_name=(
               'searching_for_new_tests.'
               'cross reference newly identified tests against ResultDB')),
+      api.post_process(
+          post_process.StepCommandContains,
+          ('test new tests for flakiness.chrome_junit_tests '
+           '(check flakiness shard #0)'),
+          ('--gtest_filter=org.chromium.chrome.browser.safety_check.'
+           'SafetyCheckMediatorTest#testUpdatesCheckUpdated\\[0\\]')),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  non_param_tags = resultdb_common.StringPair(
+      key='test_name',
+      value=('org.chromium.chrome.browser.safety_check.'
+             'SafetyCheckMediatorTest#testUpdatesCheckUpdated'))
+  junit_nonparameterized_invocation = {
+      'invocations/build:8945511751514863184':
+          api.resultdb.Invocation(test_results=[
+              _generate_test_result(
+                  test_id=('ninja://chrome/android:chrome_junit_tests/'
+                           'org.chromium.chrome.browser.safety_check.'
+                           'SafetyCheckMediatorTest#testUpdatesCheckUpdated'),
+                  test_variant=linux_variant,
+                  tags=non_param_tags),
+          ])
+  }
+
+  yield api.test(
+      'basic_junit_non_parameterized_tests',
+      api.chromium_tests_builder_config.try_build(
+          builder_group='fake-try-group',
+          builder='fake-android-try-builder',
+          builder_db=builder_db,
+          try_db=ctbc.TryDatabase.create({
+              'fake-try-group': {
+                  'fake-android-try-builder':
+                      ctbc.TrySpec.create_for_single_mirror(
+                          builder_group='fake-group',
+                          buildername='fake-android-builder',
+                      ),
+              },
+          })),
+      api.properties(assert_tests=True),
+      api.chromium_tests.read_source_side_spec(
+          'fake-group', {
+              'fake-android-builder': {
+                  'junit_tests': [{
+                      'isolate_profile_data':
+                          True,
+                      'name':
+                          'chrome_junit_tests',
+                      'resultdb': {
+                          'enable': True,
+                          'has_native_resultdb_integration': True
+                      },
+                      'swarming': {},
+                      'test':
+                          'chrome_junit_tests',
+                      'test_id_prefix':
+                          'ninja://chrome/android:chrome_junit_tests/'
+                  }],
+              },
+          }),
+      api.filter.suppress_analyze(),
+      api.flakiness(
+          check_for_flakiness=True,
+          build_count=10,
+          historical_query_count=2,
+          current_query_count=2,
+      ),
+      api.resultdb.query(
+          junit_nonparameterized_invocation,
+          ('chrome_junit_tests results'),
+      ),
+      api.step_data(
+          'git diff to analyze patch (2)',
+          api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
+      api.resultdb.get_test_result_history(
+          resultdb_pb2.GetTestResultHistoryResponse(entries=[]),
+          step_name=(
+              'searching_for_new_tests.'
+              'cross reference newly identified tests against ResultDB')),
+      api.post_process(
+          post_process.StepCommandContains,
+          ('test new tests for flakiness.chrome_junit_tests '
+           '(check flakiness shard #0)'),
+          ('--gtest_filter=org.chromium.chrome.browser.safety_check.'
+           'SafetyCheckMediatorTest#testUpdatesCheckUpdated')),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )

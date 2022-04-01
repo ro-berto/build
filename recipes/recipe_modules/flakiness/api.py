@@ -765,9 +765,25 @@ class FlakinessApi(recipe_api.RecipeApi):
         if isinstance(test, steps.AndroidJunitTest):
           # android junit need the spec's additional_args updated with the
           # repeat and filter clauses.
+
+          # TODO: (crbug/1311721) - parameterized tests have a [0], [1] suffix
+          # appended to indicate the parameter, but it won't map to a test in
+          # these filters, so we escape them with backslashes for now such that
+          # they don't fail.
+          # ie/ org.chromium.suite.SomeTest#testMethod[0] ->
+          #     org.chromium.suite.SomeTest#testMethod\[0\]
+          updated_filter = []
+          for test_id in test_filter:
+            if re.match('.*\[\d+\]$', test_id):
+              left = test_id[:test_id.
+                             rindex('[')] + "\\" + test_id[test_id.rindex('['):]
+              full = left[:left.rindex(']')] + "\\" + "]"
+              updated_filter.append(full)
+            else:
+              updated_filter.append(test_id)
           additional_args = list([
               '--gtest_repeat=%s' % str(self._repeat_count),
-              '--gtest_filter=%s' % str(':'.join(test_filter)),
+              '--gtest_filter=%s' % str(':'.join(updated_filter)),
               '--shards=1',
           ])
           test.spec = attr.evolve(test.spec, additional_args=additional_args)
