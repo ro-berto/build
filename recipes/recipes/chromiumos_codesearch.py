@@ -78,7 +78,7 @@ def RunSteps(api):
   board = 'amd64-generic'
   experimental = False
   sync_generated_files = False
-  corpus = 'chromium.googlesource.com/chromiumos//main'
+  corpus = 'chromium.googlesource.com/chromiumos/codesearch//main'
   packages = [
       'virtual/target-chromium-os',
       'virtual/target-chromium-os-dev',
