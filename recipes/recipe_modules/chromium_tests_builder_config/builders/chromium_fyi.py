@@ -877,60 +877,6 @@ SPEC = {
             cf_archive_build=False,
             simulation_platform='win',
         ),
-    'Win x64 Builder (dbg) (reclient shadow)':
-        builder_spec.BuilderSpec.create(
-            build_gs_bucket='chromium-win-archive',
-            chromium_config='chromium',
-            chromium_apply_config=['mb'],
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'enable_reclient',
-            ],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 64,
-            },
-            cf_archive_build=False,
-            simulation_platform='win',
-        ),
-    'win-archive-dbg (reclient shadow)':
-        builder_spec.BuilderSpec.create(
-            build_gs_bucket='chromium-win-archive',
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'clobber',
-                'mb',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'enable_reclient',
-            ],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 64,
-            },
-            cf_archive_build=False,
-            simulation_platform='win',
-        ),
-    'win-archive-rel (reclient shadow)':
-        builder_spec.BuilderSpec.create(
-            build_gs_bucket='chromium-win-archive',
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'clobber',
-                'mb',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'enable_reclient',
-            ],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            cf_archive_build=False,
-            simulation_platform='win',
-        ),
     'Linux CFI (reclient shadow)':
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',

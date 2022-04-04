@@ -1098,9 +1098,6 @@
   "chromium.fyi:Win ASan Release Media (reclient shadow)": [
     "chromium.fyi:Win ASan Release Media (reclient shadow)"
   ],
-  "chromium.fyi:Win x64 Builder (dbg) (reclient shadow)": [
-    "chromium.fyi:Win x64 Builder (dbg) (reclient shadow)"
-  ],
   "chromium.fyi:Win x64 Builder (reclient)": [
     "chromium.fyi:Win x64 Builder (reclient)"
   ],
@@ -1397,12 +1394,6 @@
   "chromium.fyi:win-annotator-rel": [
     "chromium.fyi:win-annotator-rel",
     "tryserver.chromium.win:win-annotator-rel"
-  ],
-  "chromium.fyi:win-archive-dbg (reclient shadow)": [
-    "chromium.fyi:win-archive-dbg (reclient shadow)"
-  ],
-  "chromium.fyi:win-archive-rel (reclient shadow)": [
-    "chromium.fyi:win-archive-rel (reclient shadow)"
   ],
   "chromium.fyi:win-backuprefptr-x64-fyi-rel": [
     "chromium.fyi:win-backuprefptr-x64-fyi-rel"
