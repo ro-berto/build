@@ -1582,7 +1582,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           patch=False,
           no_fetch_tags=True,
           update_presentation=False,
-          ignore_input_commit=True)
+          ignore_input_commit=True,
+          set_output_commit=False)
 
     with self.m.context(cwd=self.m.path['checkout']):
       # NOTE: "without patch" phrase is used to keep consistency with the API

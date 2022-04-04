@@ -287,7 +287,7 @@ def RunSteps(api, autoroller_config):
   api.gclient.c.target_os.add('android')
   api.gclient.c.target_os.add('win')
 
-  api.v8.checkout(ignore_input_commit=True)
+  api.v8.checkout(ignore_input_commit=True, set_output_commit=False)
 
   # Enforce a clean state.
   with api.context(
