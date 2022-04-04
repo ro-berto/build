@@ -1907,7 +1907,7 @@ BUILDERS = freeze({
     },
 })
 
-_CLIENT_WEBRTC_SPEC = {
+_SPEC = {
     'Linux64 Release':
         builder_spec.BuilderSpec.create(
             chromium_config='webrtc_default',
@@ -1916,28 +1916,6 @@ _CLIENT_WEBRTC_SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             }),
-    'Win32 Release (Clang)':
-        builder_spec.BuilderSpec.create(
-            chromium_config='webrtc_clang',
-            gclient_config='webrtc',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 32,
-            }),
 }
 
-_TRYSERVER_WEBRTC_SPEC = {
-    'linux_rel':
-        builder_spec.BuilderSpec.create(
-            chromium_config='webrtc_default',
-            gclient_config='webrtc',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            }),
-}
-
-BUILDERS_DB = builder_db.BuilderDatabase.create({
-    'client.webrtc': _CLIENT_WEBRTC_SPEC,
-    'tryserver.webrtc': _TRYSERVER_WEBRTC_SPEC,
-})
+BUILDERS_DB = builder_db.BuilderDatabase.create({'client.webrtc': _SPEC})
