@@ -8,7 +8,7 @@ import itertools
 import six
 import traceback
 
-from .builder_spec import BuilderSpec
+from .builder_spec import BuilderSpec, COMPILE_AND_TEST, TEST, PROVIDE_TEST_SPEC
 from .builder_db import BuilderDatabase
 from .try_spec import TryDatabase, ALWAYS, NEVER, QUICK_RUN_ONLY
 
@@ -279,7 +279,44 @@ class BuilderConfig(object):
       kwargs['builder_ids_in_scope_for_testing'] = set(
           [m.tester_id for m in mirrors if m.tester_id])
 
-    return cls.create(builder_db, step_api=step_api, **kwargs)
+    # Create the builder config first to ensure all of the necessary builders
+    # exist
+    builder_config = cls.create(builder_db, step_api=step_api, **kwargs)
+
+    # If there is a try spec, verify that it correctly labels builders as
+    # builders or testers. We only care if there is a try spec because otherwise
+    # the builder config is for a single LUCI builder which is allowed to be
+    # either a builder or tester.
+    try:
+      if try_spec:
+        for b in builder_config.builder_ids_in_scope_for_testing:
+          builder_spec = builder_db[b]
+          if b in builder_config.builder_ids:
+            if builder_spec.execution_mode != COMPILE_AND_TEST:
+              raise BuilderConfigException(
+                  "try builder '{}' specifies '{}' as a builder,"
+                  ' but it has execution mode {}, it must be {}'.format(
+                      builder_id, b, builder_spec.execution_mode,
+                      COMPILE_AND_TEST))
+          # This branch will be executed for builders that are specified as
+          # testers in the try mirrors
+          else:
+            if builder_spec.execution_mode == COMPILE_AND_TEST:
+              raise BuilderConfigException(
+                  "try builder '{}' specifies '{}' as a tester,"
+                  ' but it has execution mode {}, it must be one of {}'.format(
+                      builder_id, b, builder_spec.execution_mode,
+                      [TEST, PROVIDE_TEST_SPEC]))
+    except BuilderConfigException as e:
+      if step_api is not None:
+        step_api.empty(
+            str(e),
+            status=step_api.EXCEPTION,
+            log_name='details',
+            log_text=traceback.format_exc())
+      raise
+
+    return builder_config
 
   @cached_property
   def builder_ids_in_scope_for_testing(self):
