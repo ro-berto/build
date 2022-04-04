@@ -24,7 +24,7 @@ def RunSteps(api):
   webrtc = api.webrtc
   webrtc.apply_bot_config(webrtc.BUILDERS, webrtc.RECIPE_CONFIGS)
 
-  api.chromium_checkout.ensure_checkout()
+  update_step = api.chromium_checkout.ensure_checkout()
 
   webrtc.configure_swarming()
 
@@ -38,7 +38,8 @@ def RunSteps(api):
   api.chromium.runhooks()
 
   for phase in webrtc.bot.phases:
-    tests, compile_targets = webrtc.get_tests_and_compile_targets(phase)
+    tests, compile_targets = webrtc.get_tests_and_compile_targets(
+        phase, update_step)
     if not compile_targets:
       step_result = api.step('No further steps are necessary.', cmd=None)
       step_result.presentation.status = api.step.SUCCESS

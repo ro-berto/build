@@ -197,13 +197,29 @@ class WebRTCApi(recipe_api.RecipeApi):
   def is_triggering_perf_tests(self):
     return any(bot.is_running_perf_tests() for bot in self.bot.triggered_bots())
 
-  def get_tests_and_compile_targets(self, phase):
+  def get_tests_and_compile_targets(self, phase, update_step):
     """ Returns the tests to run and the targets to compile."""
     tests = []
     for bot in self.related_bots():
       if bot.bot_type in ('tester', 'builder_tester'):
         tests += steps.generate_tests(phase, bot, self.m.tryserver.is_tryserver,
                                       self.m.chromium_tests, self._ios_config)
+
+    if self.builder_id in webrtc_builders.BUILDERS_DB:
+      builder_config = self.m.chromium_tests_builder_config.lookup_builder(
+          builder_db=webrtc_builders.BUILDERS_DB)[1]
+      targets_config = self.m.chromium_tests.create_targets_config(
+          builder_config, update_step.presentation.properties)
+      # TODO(crbug.com/webrtc/13899): This is temporary code to make sure we're
+      # running the same tests while migrating to a .pyl configuration.
+      old_tests = set([t.name for t in tests])
+      new_tests = set([t.name for t in targets_config.all_tests])
+      if (not self._test_data.enabled and
+          old_tests != new_tests):  # pragma: no cover
+        self.m.step(str(old_tests), cmd=None)
+        self.m.step(str(new_tests), cmd=None)
+        assert False
+      tests = targets_config.all_tests
 
     patch_root = self.m.gclient.get_gerrit_patch_root()
     affected_files = self.m.chromium_checkout.get_files_affected_by_patch(

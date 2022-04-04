@@ -8,6 +8,8 @@
 from __future__ import absolute_import
 
 from recipe_engine.engine_types import freeze
+from RECIPE_MODULES.build.chromium_tests_builder_config import (builder_db,
+                                                                builder_spec)
 
 CHROMIUM_TEST_SERVICE_ACCOUNT = (
     'chromium-tester@chops-service-accounts.iam.gserviceaccount.com')
@@ -1904,3 +1906,16 @@ BUILDERS = freeze({
         },
     },
 })
+
+_SPEC = {
+    'Linux64 Release':
+        builder_spec.BuilderSpec.create(
+            chromium_config='webrtc_default',
+            gclient_config='webrtc',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            }),
+}
+
+BUILDERS_DB = builder_db.BuilderDatabase.create({'client.webrtc': _SPEC})

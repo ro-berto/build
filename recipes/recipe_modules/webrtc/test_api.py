@@ -9,6 +9,7 @@ from __future__ import absolute_import
 import base64
 import six
 
+from RECIPE_MODULES.build import chromium
 from recipe_engine import recipe_test_api
 from . import builders as webrtc_builders
 
@@ -124,6 +125,18 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
           revision=revision or 'a' * 40,
           tags=tags)
     test += self.m.properties(buildnumber=1337)
+
+    builder_id = chromium.BuilderId.create_for_group(builder_group, buildername)
+    if builder_id in webrtc_builders.BUILDERS_DB:
+      test += self.m.chromium_tests.read_source_side_spec(
+          builder_group,
+          contents={
+              buildername: {
+                  'gtest_tests': [{
+                      'test': 'common_audio_unittests'
+                  }]
+              }
+          })
 
     return test
 
