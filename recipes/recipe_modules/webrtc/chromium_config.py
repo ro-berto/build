@@ -9,6 +9,7 @@ from RECIPE_MODULES.build.chromium import CONFIG_CTX
 
 @CONFIG_CTX(includes=['ninja', 'default_compiler', 'goma'])
 def webrtc_default(c):
+  c.source_side_spec_dir = c.CHECKOUT_PATH.join('infra', 'specs')
   c.compile_py.default_targets = []
 
 
@@ -17,4 +18,5 @@ def webrtc_default(c):
 # depend on clang)
 @CONFIG_CTX(includes=['ninja', 'clang', 'goma'])
 def webrtc_clang(c):
+  c.source_side_spec_dir = c.CHECKOUT_PATH.join('infra', 'specs')
   c.compile_py.default_targets = []
