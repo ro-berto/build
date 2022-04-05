@@ -141,7 +141,12 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
         swarming_parent_run_id=self.m.swarming.task_id,
         properties=compilator_properties,
         gitiles_commit=gitiles_commit,
-        tags=self.m.buildbucket.tags(**{'hide-in-gerrit': 'pointless'}))
+        tags=self.m.buildbucket.tags(**{'hide-in-gerrit': 'pointless'}),
+        experiments={
+            'remove_src_checkout_experiment':
+                ('remove_src_checkout_experiment' in
+                 self.m.buildbucket.build.input.experiments)
+        })
 
     build = self.m.buildbucket.schedule(
         [request], step_name='trigger compilator (with patch)')[0]
@@ -280,7 +285,12 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
         swarming_parent_run_id=self.m.swarming.task_id,
         properties=compilator_properties,
         gitiles_commit=gitiles_commit,
-        tags=self.m.buildbucket.tags(**{'hide-in-gerrit': 'pointless'}))
+        tags=self.m.buildbucket.tags(**{'hide-in-gerrit': 'pointless'}),
+        experiments={
+            'remove_src_checkout_experiment':
+                ('remove_src_checkout_experiment' in
+                 self.m.buildbucket.build.input.experiments)
+        })
 
     wo_build = self.m.buildbucket.schedule(
         [request], step_name='trigger compilator (without patch)')[0]
