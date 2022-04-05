@@ -1986,6 +1986,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     if compile_targets:
       if additional_compile_targets:
+        compile_targets = list(compile_targets)
         compile_targets.extend(additional_compile_targets)
       tests = self.tests_in_compile_targets(test_targets, tests)
 
