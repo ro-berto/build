@@ -36,6 +36,7 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
                        tags=None):
     builder_group = builders[bucketname]['settings'].get(
         'builder_group', bucketname)
+    builder_id = chromium.BuilderId.create_for_group(builder_group, buildername)
     bot_config = builders[bucketname]['builders'][buildername]
     bot_type = bot_config.get('bot_type', 'builder_tester')
 
@@ -44,7 +45,11 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
           'Unexpected parent_buildername for builder %r on bucket %r.' %
               (buildername, bucketname))
 
-    chromium_kwargs = bot_config.get('chromium_config_kwargs', {})
+    if builder_id in webrtc_builders.BUILDERS_DB:
+      chromium_kwargs = webrtc_builders.BUILDERS_DB[
+          builder_id].chromium_config_kwargs
+    else:
+      chromium_kwargs = bot_config.get('chromium_config_kwargs', {})
     test = self.test(
         '%s_%s%s' % (_sanitize_builder_name(bucketname),
                      _sanitize_builder_name(buildername), suffix),
@@ -126,7 +131,6 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
           tags=tags)
     test += self.m.properties(buildnumber=1337)
 
-    builder_id = chromium.BuilderId.create_for_group(builder_group, buildername)
     if builder_id in webrtc_builders.BUILDERS_DB:
       test += self.m.chromium_tests.read_source_side_spec(
           builder_group,

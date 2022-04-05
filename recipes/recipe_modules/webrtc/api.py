@@ -78,6 +78,7 @@ class Bot(object):
 
 class WebRTCApi(recipe_api.RecipeApi):
   BUILDERS = webrtc_builders.BUILDERS
+  BUILDERS_DB = webrtc_builders.BUILDERS_DB
   RECIPE_CONFIGS = webrtc_builders.RECIPE_CONFIGS
 
   def __init__(self, **kwargs):
@@ -88,7 +89,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     self._ios_config = None
     self.bot = None
 
-  def apply_bot_config(self, builders, recipe_configs):
+  def apply_bot_config(self, builders, recipe_configs, builder_config=None):
     self._builders = builders
     self._recipe_configs = recipe_configs
 
@@ -97,23 +98,27 @@ class WebRTCApi(recipe_api.RecipeApi):
     self.set_config('webrtc', TEST_SUITE=self.bot.test_suite,
                     PERF_ID=self.bot.config.get('perf_id'))
 
-    chromium_kwargs = self.bot.config.get('chromium_config_kwargs', {})
-    if self.bot.recipe_config.get('chromium_android_config'):
-      self.m.chromium_android.set_config(
-          self.bot.recipe_config['chromium_android_config'], **chromium_kwargs)
+    if builder_config:
+      self.m.chromium_tests.configure_build(builder_config)
+    else:
+      chromium_kwargs = self.bot.config.get('chromium_config_kwargs', {})
+      if self.bot.recipe_config.get('chromium_android_config'):
+        self.m.chromium_android.set_config(
+            self.bot.recipe_config['chromium_android_config'],
+            **chromium_kwargs)
 
-    self.m.chromium.set_config(self.bot.recipe_config['chromium_config'],
-                               **chromium_kwargs)
-    gclient_config = self.bot.recipe_config['gclient_config']
-    self.m.gclient.set_config(gclient_config)
+      self.m.chromium.set_config(self.bot.recipe_config['chromium_config'],
+                                 **chromium_kwargs)
+      gclient_config = self.bot.recipe_config['gclient_config']
+      self.m.gclient.set_config(gclient_config)
 
-    # Support applying configs both at the bot and the recipe config level.
-    for c in self.bot.config.get('chromium_apply_config', []):
-      self.m.chromium.apply_config(c)
-    for c in self.bot.config.get('gclient_apply_config', []):
-      self.m.gclient.apply_config(c)
-    for c in self.bot.recipe_config.get('gclient_apply_config', []):
-      self.m.gclient.apply_config(c)
+      # Support applying configs both at the bot and the recipe config level.
+      for c in self.bot.config.get('chromium_apply_config', []):
+        self.m.chromium.apply_config(c)
+      for c in self.bot.config.get('gclient_apply_config', []):
+        self.m.gclient.apply_config(c)
+      for c in self.bot.recipe_config.get('gclient_apply_config', []):
+        self.m.gclient.apply_config(c)
 
     if self.m.tryserver.is_tryserver:
       self.m.chromium.apply_config('trybot_flavor')
@@ -197,7 +202,7 @@ class WebRTCApi(recipe_api.RecipeApi):
   def is_triggering_perf_tests(self):
     return any(bot.is_running_perf_tests() for bot in self.bot.triggered_bots())
 
-  def get_tests_and_compile_targets(self, phase, update_step):
+  def get_tests_and_compile_targets(self, phase, builder_config, update_step):
     """ Returns the tests to run and the targets to compile."""
     tests = []
     for bot in self.related_bots():
@@ -205,9 +210,7 @@ class WebRTCApi(recipe_api.RecipeApi):
         tests += steps.generate_tests(phase, bot, self.m.tryserver.is_tryserver,
                                       self.m.chromium_tests, self._ios_config)
 
-    if self.builder_id in webrtc_builders.BUILDERS_DB:
-      builder_config = self.m.chromium_tests_builder_config.lookup_builder(
-          builder_db=webrtc_builders.BUILDERS_DB)[1]
+    if builder_config:
       targets_config = self.m.chromium_tests.create_targets_config(
           builder_config, update_step.presentation.properties)
       # TODO(crbug.com/webrtc/13899): This is temporary code to make sure we're

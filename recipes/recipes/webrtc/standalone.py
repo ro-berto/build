@@ -10,11 +10,14 @@ import functools
 from recipe_engine import post_process
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
+from RECIPE_MODULES.build import chromium
+
 PYTHON_VERSION_COMPATIBILITY = "PY3"
 
 DEPS = [
     'chromium',
     'chromium_checkout',
+    'chromium_tests_builder_config',
     'recipe_engine/step',
     'webrtc',
 ]
@@ -22,7 +25,15 @@ DEPS = [
 
 def RunSteps(api):
   webrtc = api.webrtc
-  webrtc.apply_bot_config(webrtc.BUILDERS, webrtc.RECIPE_CONFIGS)
+  builder_config = None
+  builder_id = chromium.BuilderId.create_for_group(
+      webrtc.BUILDERS[webrtc.bucketname]['settings']['builder_group'],
+      webrtc.buildername)
+  if builder_id in webrtc.BUILDERS_DB:
+    builder_config = api.chromium_tests_builder_config.lookup_builder(
+        builder_db=webrtc.BUILDERS_DB)[1]
+  webrtc.apply_bot_config(webrtc.BUILDERS, webrtc.RECIPE_CONFIGS,
+                          builder_config)
 
   update_step = api.chromium_checkout.ensure_checkout()
 
@@ -39,7 +50,7 @@ def RunSteps(api):
 
   for phase in webrtc.bot.phases:
     tests, compile_targets = webrtc.get_tests_and_compile_targets(
-        phase, update_step)
+        phase, builder_config, update_step)
     if not compile_targets:
       step_result = api.step('No further steps are necessary.', cmd=None)
       step_result.presentation.status = api.step.SUCCESS

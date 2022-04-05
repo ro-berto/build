@@ -112,24 +112,10 @@ BUILDERS = freeze({
             },
             'Win32 Release (Clang)': {
                 'recipe_config': 'webrtc_and_baremetal_clang',
-                'chromium_config_kwargs': {
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_BITS': 32,
-                },
                 'bot_type': 'builder_tester',
                 'testing': {
                     'platform': 'win'
                 },
-                'swarming_dimensions': {
-                    'os': 'Windows-7-SP1',
-                    'cpu': 'x86-64',
-                },
-                'baremetal_swarming_dimensions': {
-                    'pool': 'WebRTC-baremetal',
-                    'os': 'Windows',
-                    'cpu': 'x86',
-                    'gpu': None,
-                }
             },
             'Win32 Builder (Clang)': {
                 'recipe_config': 'webrtc_clang',
@@ -334,23 +320,10 @@ BUILDERS = freeze({
             },
             'Linux64 Release': {
                 'recipe_config': 'webrtc_and_baremetal',
-                'chromium_config_kwargs': {
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_BITS': 64,
-                },
                 'bot_type': 'builder_tester',
                 'testing': {
                     'platform': 'linux'
                 },
-                'swarming_dimensions': {
-                    'os': 'Ubuntu-18.04',
-                    'cpu': 'x86-64',
-                },
-                'baremetal_swarming_dimensions': {
-                    'pool': 'WebRTC-baremetal',
-                    'os': 'Ubuntu',
-                    'gpu': None,
-                }
             },
             'Linux64 Builder': {
                 'recipe_config':
@@ -1258,23 +1231,10 @@ BUILDERS = freeze({
             },
             'linux_rel': {
                 'recipe_config': 'webrtc_and_baremetal',
-                'chromium_config_kwargs': {
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_BITS': 64,
-                },
                 'bot_type': 'builder_tester',
                 'testing': {
                     'platform': 'linux'
                 },
-                'swarming_dimensions': {
-                    'os': 'Ubuntu-18.04',
-                    'cpu': 'x86-64',
-                },
-                'baremetal_swarming_dimensions': {
-                    'pool': 'WebRTC-baremetal-try',
-                    'os': 'Ubuntu',
-                    'gpu': None,
-                }
             },
             'linux_compile_arm64_dbg': {
                 'recipe_config': 'webrtc',

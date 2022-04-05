@@ -156,7 +156,7 @@ def generate_tests(phase, bot, is_tryserver, chromium_tests_api, ios_config):
     tests = [generator.swarming_desktop_test(t) for t in desktop_tests]
 
   if test_suite == 'webrtc_and_baremetal':
-    dimensions = bot.config['baremetal_swarming_dimensions']
+    dimensions = bot.config.get('baremetal_swarming_dimensions')
     tests = [generator.swarming_desktop_test(t) for t in desktop_tests]
     tests.append(
         generator.swarming_desktop_test(
