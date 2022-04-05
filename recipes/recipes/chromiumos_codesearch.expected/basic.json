@@ -238,6 +238,7 @@
       "python3",
       "[CACHE]/builder/chromiumos/src/scripts/package_index_cros/main.py",
       "--with-build",
+      "--with-tests",
       "--build-dir",
       "[CACHE]/builder/chromiumos/src/out/amd64-generic",
       "--gn-targets",

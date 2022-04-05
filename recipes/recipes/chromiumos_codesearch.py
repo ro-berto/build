@@ -143,6 +143,7 @@ def RunSteps(api):
         'python3',
         package_index_cros_dir.join('main.py'),
         '--with-build',
+        '--with-tests',
         '--build-dir',
         build_dir,
         '--gn-targets',
