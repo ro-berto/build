@@ -482,7 +482,8 @@ class WebRTCApi(recipe_api.RecipeApi):
       self.set_upload_build_properties()
 
     self.set_test_command_lines(tests)
-    test_runner = self.m.chromium_tests.create_test_runner(tests)
+    test_runner = self.m.chromium_tests.create_test_runner(
+        tests, enable_infra_failure=True)
     return test_runner()
 
   def trigger_child_builds(self):
