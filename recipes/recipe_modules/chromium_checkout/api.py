@@ -76,6 +76,9 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
              'affected_files' if report_via_property else None
           ),
       )
+    return self.format_affected_file_paths(files, relative_to=relative_to)
+
+  def format_affected_file_paths(self, files, relative_to='src/'):
     for i, path in enumerate(files):
       path = str(path)
       files[i] = self.m.path.relpath(path, relative_to)

@@ -2,11 +2,13 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from google.protobuf.json_format import MessageToDict
 from recipe_engine import recipe_api
 
 from PB.go.chromium.org.luci.buildbucket.proto import build as build_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 from PB.recipe_engine import result as result_pb2
+from RECIPE_MODULES.build.attr_utils import attrib, attrs, mapping, sequence
 from RECIPE_MODULES.build.chromium_tests.api import (
     ALL_TEST_BINARIES_ISOLATE_NAME)
 
@@ -16,6 +18,25 @@ COMPILATOR_SWARMING_TASK_COLLECT_STEP = (
     'wait for compilator swarming task cleanup overhead')
 
 BUILD_CANCELED_SUMMARY = 'Build was canceled.'
+
+
+@attrs()
+class CompilatorOutputProps(object):
+  """Contains output properties from the triggered Compilator build
+
+  Attributes:
+    swarming_props: Dict containing swarming information to trigger tests
+    got_revisions: Dict containing revisions checked out for src and other deps
+    affected_files: List containing paths (str) of files affected by the patch
+    deleted_files: List containing paths (str) of files deleted by the patch
+    src_side_deps_digest: CAS digest hash (string) for downloading src-side deps
+  """
+
+  swarming_props = attrib(mapping[str, ...])
+  got_revisions = attrib(mapping[str, str])
+  affected_files = attrib(sequence[str])
+  deleted_files = attrib(sequence[str], default=None)
+  src_side_deps_digest = attrib(str, default=None)
 
 
 class ChromiumOrchestratorApi(recipe_api.RecipeApi):
@@ -176,7 +197,7 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
     sub_build = self.launch_compilator_watcher(
         build, is_swarming_phase=True, with_patch=True)
 
-    swarming_props, maybe_raw_result = self.process_sub_build(
+    comp_output, maybe_raw_result = self.process_sub_build(
         sub_build, is_swarming_phase=True, with_patch=True)
 
     # Can be either SUCCESS or FAILURE/INFRA_FAILURE result
@@ -186,8 +207,8 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
 
     # Now let's get all the tests ready with the swarming trigger info
     # outputed by the compilator
-    tests = self.process_swarming_props(swarming_props, builder_config,
-                                        targets_config)
+    tests = self.process_swarming_props(comp_output.swarming_props,
+                                        builder_config, targets_config)
 
     self.m.chromium_tests.configure_swarming(
         self.m.tryserver.is_tryserver, builder_group=builder_id.group)
@@ -303,7 +324,7 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
     # swarming trigger props for the tests to retrigger without patch
     sub_build = self.launch_compilator_watcher(
         wo_build, is_swarming_phase=True, with_patch=False)
-    swarming_props, maybe_raw_result = self.process_sub_build(
+    comp_output, maybe_raw_result = self.process_sub_build(
         sub_build, is_swarming_phase=True, with_patch=False)
 
     # FAILURE/INFRA_FAILURE result
@@ -312,7 +333,7 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
       return maybe_raw_result
 
     self.process_swarming_props(
-        swarming_props, builder_config, targets_config, tests=tests)
+        comp_output.swarming_props, builder_config, targets_config, tests=tests)
 
     # Trigger and wait for the (without patch) tests!
     with self.m.chromium_tests.wrap_chromium_tests(builder_config,
@@ -427,10 +448,9 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
       with_patch (bool): whether the Orchestrator is currently using a patch or
         not
 
-    Returns:
-      Tuple of
-        swarming trigger properties (dict or None),
-        RawResult object for Orchestrator build (result_pb2.RawResult or None)
+    Returns tuple of:
+      CompilatorOutputProps or None
+      RawResult object or None
     """
     # This condition should be rare as swarming only propagates
     # cancelations from parent -> child
@@ -444,7 +464,31 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
 
     swarming_prop_key = 'swarming_trigger_properties'
     if is_swarming_phase and swarming_prop_key in sub_build.output.properties:
-      return sub_build.output.properties[swarming_prop_key], None
+      output_props = sub_build.output.properties
+
+      got_revisions = {k: v for k, v in output_props.items() if 'got_' in k}
+
+      affected_files = None
+      if 'affected_files' in output_props:
+        affected_files = self.m.chromium_checkout.format_affected_file_paths(
+            output_props['affected_files']['first_100'])
+
+      deleted_files = None
+      if 'deleted_files' in output_props:
+        deleted_files = output_props['deleted_files']
+
+      src_side_deps_digest = None
+      if 'src_side_deps_digest' in output_props:
+        src_side_deps_digest = output_props['src_side_deps_digest']
+
+      comp_output = CompilatorOutputProps(
+          swarming_props=MessageToDict(output_props[swarming_prop_key]),
+          got_revisions=got_revisions,
+          affected_files=affected_files,
+          deleted_files=deleted_files,
+          src_side_deps_digest=src_side_deps_digest,
+      )
+      return comp_output, None
 
     if not with_patch and sub_build.status == common_pb.SUCCESS:
       raise self.m.step.InfraFailure(

@@ -269,6 +269,38 @@ def GenTests(api):
   )
 
   yield api.test(
+      'src_side_deps_digest',
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-orchestrator',
+      ),
+      ctbc_properties(),
+      api.properties(
+          **{
+              '$build/chromium_orchestrator':
+                  InputProperties(
+                      compilator='fake-compilator',
+                      compilator_watcher_git_revision='e841fc',
+                  ),
+          }),
+      api.code_coverage(use_clang_coverage=True),
+      api.chromium_orchestrator.override_compilator_build_proto_fetch(),
+      api.chromium_orchestrator.override_schedule_compilator_build(),
+      api.chromium_orchestrator.override_compilator_steps(
+          src_side_deps_digest='1a2b3c4d'),
+      api.chromium_orchestrator.override_compilator_steps(
+          is_swarming_phase=False, src_side_deps_digest='1a2b3c4d'),
+      api.chromium_orchestrator.fake_head_revision(),
+      api.chromium_orchestrator.override_test_spec(
+          builder_group='fake-group',
+          builder='fake-builder',
+          tester='fake-tester',
+      ),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
       'sub_build_canceled_status_and_in_global_shutdown',
       api.chromium.try_build(
           builder_group='fake-try-group',
