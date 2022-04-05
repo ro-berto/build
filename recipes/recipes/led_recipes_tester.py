@@ -167,18 +167,6 @@ CHROMIUM_SRC_TEST_CLS = collections.OrderedDict([
         'fast':
             'https://chromium-review.googlesource.com/c/chromium/src/+/3271783',
     }),
-    ('luci.chromium-m98.try', {
-        'slow':
-            'https://chromium-review.googlesource.com/c/chromium/src/+/3408113',
-        'fast':
-            'https://chromium-review.googlesource.com/c/chromium/src/+/3408118',
-    }),
-    ('luci.chromium-m99.try', {
-        'slow':
-            'https://chromium-review.googlesource.com/c/chromium/src/+/3408116',
-        'fast':
-            'https://chromium-review.googlesource.com/c/chromium/src/+/3408121',
-    }),
     ('luci.chromium-m100.try', {
         'slow':
             'https://chromium-review.googlesource.com/c/chromium/src/+/3498090',
