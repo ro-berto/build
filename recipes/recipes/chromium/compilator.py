@@ -31,8 +31,6 @@ DEPS = [
     'flakiness',
     'isolate',
     'recipe_engine/buildbucket',
-    'recipe_engine/cas',
-    'recipe_engine/file',
     'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/platform',
@@ -46,9 +44,6 @@ DEPS = [
 ]
 
 PROPERTIES = InputProperties
-
-ORCHESTRATOR_ALL_TARGET_NAME = 'infra/orchestrator:orchestrator_all'
-ORCHESTRATOR_RUNTIME_DEPS_FILE = 'orchestrator_all.runtime_deps'
 
 
 def compilator_steps(api, properties):
@@ -108,18 +103,13 @@ def compilator_steps(api, properties):
           if t.target_name in properties.swarming_targets and t.uses_isolate
       ]
       raw_result = api.chromium_tests.build_and_isolate_failing_tests(
-          orch_builder_id,
-          orch_builder_config,
-          test_suites,
-          bot_update_step,
-          'without patch',
-          additional_compile_targets=[ORCHESTRATOR_ALL_TARGET_NAME])
+          orch_builder_id, orch_builder_config, test_suites, bot_update_step,
+          'without patch')
     else:
       raw_result, task = api.chromium_tests.build_affected_targets(
           orch_builder_id,
           orch_builder_config,
-          isolate_output_files_for_coverage=True,
-          additional_compile_targets=[ORCHESTRATOR_ALL_TARGET_NAME])
+          isolate_output_files_for_coverage=True)
       test_suites = task.test_suites
 
       deleted_files = get_deleted_files(api, task.affected_files)
@@ -132,12 +122,8 @@ def compilator_steps(api, properties):
     if raw_result and raw_result.status != common_pb.SUCCESS:
       return raw_result
 
+    # Isolate the tests first so the Orchestrator can trigger them asap
     if any(t.uses_isolate for t in test_suites):
-      if ('remove_src_checkout_experiment' in
-          api.buildbucket.build.input.experiments):
-        archive_src_side_deps(api)
-
-      # Isolate the tests first so the Orchestrator can trigger them asap
       trigger_properties = {}
       trigger_properties['swarming_command_lines_digest'] = (
           api.chromium_tests.archive_command_lines(
@@ -174,51 +160,6 @@ def compilator_steps(api, properties):
               orch_builder_config, new_tests)
 
     return raw_result
-
-
-def archive_src_side_deps(api):
-  """Archives src-side deps that the Orchestrator needs to run tests/coverage"""
-  with api.step.nest('archive src-side dep paths') as nested_step:
-    dep_paths = get_src_side_dep_paths(api)
-
-    digest = api.cas.archive('archive src-side deps', str(api.path['checkout']),
-                             *dep_paths)
-    nested_step.presentation.properties['src_side_deps_digest'] = digest
-    nested_step.presentation.logs['dep paths'] = api.json.dumps(
-        dep_paths, indent=2)
-
-
-def get_src_side_dep_paths(api):
-  """Get src-side paths to archive.
-
-  The chromium compile step writes which src-side deps to archive.
-  The orchestrator build will use the CAS hash to download these deps to run
-  tests and code coverage.
-
-  Returns:
-    List of string paths
-  """
-  dep_paths = set()
-  runtime_deps_file = api.chromium.output_dir.join(
-      ORCHESTRATOR_RUNTIME_DEPS_FILE)
-  paths = (
-      api.file.read_text('read orchestrator_all.runtime_deps',
-                         runtime_deps_file).rstrip().split('\n'))
-  for path in paths:
-    # Paths written in these files look like '../../testing/X.py' relative
-    # to the output dir
-    file_path = api.path.relpath(
-        api.chromium.output_dir.join(path), api.path['checkout'])
-    file_path = api.path['checkout'].join(file_path)
-
-    # Path can be a regex pattern
-    if "*" in str(file_path):
-      paths = api.file.glob_paths('get files that match pattern',
-                                  api.path['checkout'], str(file_path))
-      dep_paths.update([str(p) for p in paths])
-    else:
-      dep_paths.add(str(file_path))
-  return list(dep_paths)
 
 
 def get_deleted_files(api, affected_files):
@@ -459,87 +400,6 @@ def GenTests(api):
   )
 
   yield api.test(
-      'archive_src_side_runtime_deps',
-      api.chromium.try_build(
-          builder_group='fake-try-group',
-          builder='fake-compilator',
-          revision='deadbeef',
-          experiments=['remove_src_checkout_experiment']),
-      api.platform.name('linux'),
-      api.path.exists(api.path['checkout'].join('out/Release/browser_tests')),
-      ctbc_properties(),
-      api.properties(
-          InputProperties(
-              orchestrator=InputProperties.Orchestrator(
-                  builder_name='fake-orchestrator',
-                  builder_group='fake-try-group'))),
-      api.filter.suppress_analyze(),
-      override_test_spec(),
-      api.step_data(
-          'archive src-side dep paths.read orchestrator_all.runtime_deps',
-          api.file.read_text(
-              '../../testing/merge_scripts/merge_api.py\n'
-              '../../testing/merge_scripts/standard_gtest_merge.py')),
-      api.post_process(
-          post_process.LogContains, 'archive src-side dep paths', 'dep paths', [
-              '[CACHE]/builder/src/testing/merge_scripts/merge_api.py',
-              '[CACHE]/builder/src/testing/merge_scripts/'
-              'standard_gtest_merge.py'
-          ]),
-      api.post_process(
-          post_process.StepCommandContains,
-          'compile (with patch)',
-          [ORCHESTRATOR_ALL_TARGET_NAME],
-      ),
-      api.post_process(post_process.MustRun,
-                       'archive src-side dep paths.archive src-side deps'),
-      api.post_process(post_process.PropertiesContain, 'src_side_deps_digest'),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'archive_src_side_runtime_deps_glob_pattern',
-      api.chromium.try_build(
-          builder_group='fake-try-group',
-          builder='fake-compilator',
-          revision='deadbeef',
-          experiments=['remove_src_checkout_experiment']),
-      api.platform.name('linux'),
-      api.path.exists(api.path['checkout'].join('out/Release/browser_tests')),
-      ctbc_properties(),
-      api.properties(
-          InputProperties(
-              orchestrator=InputProperties.Orchestrator(
-                  builder_name='fake-orchestrator',
-                  builder_group='fake-try-group'))),
-      api.filter.suppress_analyze(),
-      override_test_spec(),
-      api.step_data(
-          'archive src-side dep paths.read orchestrator_all.runtime_deps',
-          api.file.read_text('../../testing/buildbot/*.json')),
-      api.step_data(
-          'archive src-side dep paths.get files that match pattern',
-          api.file.glob_paths([
-              'testing/buildbot/chromium.linux.json',
-              'testing/buildbot/chromium.android.json'
-          ])),
-      api.post_process(
-          post_process.LogContains, 'archive src-side dep paths', 'dep paths', [
-              '[CACHE]/builder/src/testing/buildbot/chromium.linux.json',
-              '[CACHE]/builder/src/testing/buildbot/chromium.android.json'
-          ]),
-      api.post_process(
-          post_process.StepCommandContains,
-          'compile (with patch)',
-          [ORCHESTRATOR_ALL_TARGET_NAME],
-      ),
-      api.post_process(post_process.MustRun,
-                       'archive src-side dep paths.archive src-side deps'),
-      api.post_process(post_process.PropertiesContain, 'src_side_deps_digest'),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
       'quick run rts',
       api.properties(
           **{
@@ -685,7 +545,6 @@ def GenTests(api):
       api.post_process(post_process.DoesNotRun, 'compile (with patch)'),
       api.post_process(post_process.DoesNotRun, 'isolate tests (with patch)'),
       api.post_process(post_process.DoesNotRun, 'swarming trigger properties'),
-      api.post_process(post_process.DoesNotRun, 'archive src-side dep paths'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
