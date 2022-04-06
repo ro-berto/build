@@ -1545,6 +1545,12 @@ TRYBOTS = try_spec.TryDatabase.create({
                 tester='Mac Debug (Intel)',
             ),
     },
+    # The config for the following builders is now specified src-side in
+    # //infra/config/subprojects/chromium/try/tryserver.chromium.win.star
+    # * win_chromium_x64_rel_ng
+    # * win10_chromium_inverse_fieldtrials_x64_fyi_rel_ng
+    # * win10_chromium_x64_rel_ng
+    # * win11-x64-fyi-rel
     'tryserver.chromium.win': {
         'win-asan':
             try_spec.TrySpec.create_for_single_mirror(
@@ -1578,49 +1584,12 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='Win Builder',
                 tester='Win7 Tests (1)',
             ),
-        # This trybot mirrors the trybot win10_chromium_x64_rel_ng with
-        # analyze_deps_autorolls set to False
-        'win10_chromium_inverse_fieldtrials_x64_fyi_rel_ng':
-            try_spec.TrySpec.create([
-                try_spec.TryMirror.create(
-                    builder_group='chromium.win',
-                    buildername='Win x64 Builder',
-                    tester='Win10 Tests x64',
-                ),
-                try_spec.TryMirror.create(
-                    builder_group='chromium.gpu',
-                    buildername='GPU Win x64 Builder',
-                    tester='Win10 x64 Release (NVIDIA)',
-                ),
-            ]),
         'win10_chromium_x64_dbg_ng':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.win',
                 buildername='Win x64 Builder (dbg)',
                 tester='Win10 Tests x64 (dbg)',
             ),
-        'win10_chromium_x64_rel_ng':
-            try_spec.TrySpec.create(
-                [
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.win',
-                        buildername='Win x64 Builder',
-                        tester='Win10 Tests x64',
-                    ),
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.gpu',
-                        buildername='GPU Win x64 Builder',
-                        tester='Win10 x64 Release (NVIDIA)',
-                    ),
-                ],
-                regression_test_selection=try_spec.QUICK_RUN_ONLY,
-            ),
-        'win11-x64-fyi-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.win',
-                buildername='Win x64 Builder',
-                tester_group='chromium.fyi',
-                tester='Win11 Tests x64'),
         'win_chromium_compile_dbg_ng':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.win',
@@ -1634,12 +1603,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='Win Builder',
                 is_compile_only=True,
                 include_all_triggered_testers=True,
-            ),
-        'win_chromium_x64_rel_ng':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.win',
-                buildername='Win x64 Builder',
-                tester='Win 7 Tests x64 (1)',
             ),
         'win_mojo':
             try_spec.TrySpec.create_for_single_mirror(

@@ -2,12 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from .. import builder_spec
-from . import chromium
-from . import chromium_chromiumos
 from . import chromium_linux
-from . import chromium_mac
-from . import chromium_win
 
 
 def chromium_apply_configs(base_config, chromium_config_names,
@@ -29,22 +24,21 @@ def chromium_apply_configs(base_config, chromium_config_names,
   )
 
 
+# The config for the following builders is now specified src-side in
+# //infra/config/subprojects/reclient/reclient.star
+# * Win x64 Builder reclient staging
+# * Win x64 Builder reclient test
+
 SPEC = {
     # Staging reclient
     'Linux Builder reclient staging':
         chromium_apply_configs(chromium_linux.SPEC['Linux Builder'], [],
                                ['reclient_staging']),
-    'Win x64 Builder reclient staging':
-        chromium_apply_configs(chromium_win.SPEC['Win x64 Builder'], [],
-                               ['enable_reclient', 'reclient_staging']),
 
     # Test reclient
     'Linux Builder reclient test':
         chromium_apply_configs(chromium_linux.SPEC['Linux Builder'], [],
                                ['reclient_test']),
-    'Win x64 Builder reclient test':
-        chromium_apply_configs(chromium_win.SPEC['Win x64 Builder'], [],
-                               ['enable_reclient', 'reclient_test']),
 }
 
 # Many of the FYI specs are made by transforming specs from other files, so

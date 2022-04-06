@@ -17,8 +17,11 @@ DEPS = [
     'chromium_tests_builder_config',
     'code_coverage',
     'profiles',
+    'depot_tools/tryserver',
+    'recipe_engine/buildbucket',
     'recipe_engine/json',
     'recipe_engine/path',
+    'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
     'recipe_engine/step',
@@ -30,13 +33,13 @@ _NUM_TESTS = 7
 
 
 def RunSteps(api):
-  builder_id, builder_config = (
+  _, builder_config = (
       api.chromium_tests_builder_config.lookup_builder(use_try_db=True))
   api.chromium_tests.configure_build(builder_config)
   # Fake path.
   api.profiles._merge_scripts_dir = api.path['start_dir']
 
-  if 'tryserver' in builder_id.group:
+  if api.tryserver.is_tryserver:
     api.code_coverage.instrument(
         api.properties['files_to_instrument'],
         is_deps_only_change=api.properties.get('is_deps_only_change', False))
@@ -92,6 +95,8 @@ def RunSteps(api):
 
 
 def GenTests(api):
+  ctbc_api = api.chromium_tests_builder_config
+
   yield api.test(
       'basic',
       api.chromium.generic_build(
@@ -506,7 +511,7 @@ def GenTests(api):
 
   yield api.test(
       'skip collecting coverage data for java',
-      api.chromium.generic_build(
+      api.chromium.try_build(
           builder_group='tryserver.chromium.android',
           builder='android-marshmallow-arm64-rel'),
       api.code_coverage(use_java_coverage=True),
@@ -871,9 +876,14 @@ def GenTests(api):
 
   yield api.test(
       'tryserver_win',
+      api.platform('win', 64),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.win',
-          builder='win10_chromium_x64_rel_ng'),
+          builder_group='fake-try-group', builder='fake-try-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.code_coverage(use_clang_coverage=True),
       api.properties(files_to_instrument=[
           'some/path/to/file.cc',
@@ -894,7 +904,7 @@ def GenTests(api):
           post_process.StepCommandContains,
           'process clang code coverage data for overall test coverage.filter '
           'binaries with valid data for %s binaries' % (_NUM_TESTS - 2),
-          ['None/out/Release/content_shell.exe']),
+          ['None\\out\\Release\\content_shell.exe']),
       api.post_process(post_process.MustRun, (
           'process clang code coverage data for overall test coverage.generate '
           'html report for overall test coverage in %s tests' % _NUM_TESTS)),

@@ -1104,18 +1104,6 @@
   "chromium.fyi:Win x64 Builder (reclient)(cross)": [
     "chromium.fyi:Win x64 Builder (reclient)(cross)"
   ],
-  "chromium.fyi:Win11 Tests x64": [
-    "chromium.fyi:Win11 Tests x64",
-    "chromium.gpu:GPU Win x64 Builder",
-    "chromium.gpu:Win10 x64 Release (NVIDIA)",
-    "chromium.win:Win 7 Tests x64 (1)",
-    "chromium.win:Win x64 Builder",
-    "chromium.win:Win10 Tests x64",
-    "tryserver.chromium.win:win10_chromium_inverse_fieldtrials_x64_fyi_rel_ng",
-    "tryserver.chromium.win:win10_chromium_x64_rel_ng",
-    "tryserver.chromium.win:win11-x64-fyi-rel",
-    "tryserver.chromium.win:win_chromium_x64_rel_ng"
-  ],
   "chromium.fyi:android-backuprefptr-arm-fyi-rel": [
     "chromium.fyi:android-backuprefptr-arm-fyi-rel"
   ],
@@ -2361,18 +2349,6 @@
     "tryserver.chromium.mac:gpu-try-mac-amd-retina-dbg",
     "tryserver.chromium.mac:gpu-try-mac-intel-dbg"
   ],
-  "chromium.gpu:GPU Win x64 Builder": [
-    "chromium.fyi:Win11 Tests x64",
-    "chromium.gpu:GPU Win x64 Builder",
-    "chromium.gpu:Win10 x64 Release (NVIDIA)",
-    "chromium.win:Win 7 Tests x64 (1)",
-    "chromium.win:Win x64 Builder",
-    "chromium.win:Win10 Tests x64",
-    "tryserver.chromium.win:win10_chromium_inverse_fieldtrials_x64_fyi_rel_ng",
-    "tryserver.chromium.win:win10_chromium_x64_rel_ng",
-    "tryserver.chromium.win:win11-x64-fyi-rel",
-    "tryserver.chromium.win:win_chromium_x64_rel_ng"
-  ],
   "chromium.gpu:GPU Win x64 Builder (dbg)": [
     "chromium.gpu:GPU Win x64 Builder (dbg)",
     "chromium.gpu:Win10 x64 Debug (NVIDIA)"
@@ -2419,18 +2395,6 @@
   "chromium.gpu:Win10 x64 Debug (NVIDIA)": [
     "chromium.gpu:GPU Win x64 Builder (dbg)",
     "chromium.gpu:Win10 x64 Debug (NVIDIA)"
-  ],
-  "chromium.gpu:Win10 x64 Release (NVIDIA)": [
-    "chromium.fyi:Win11 Tests x64",
-    "chromium.gpu:GPU Win x64 Builder",
-    "chromium.gpu:Win10 x64 Release (NVIDIA)",
-    "chromium.win:Win 7 Tests x64 (1)",
-    "chromium.win:Win x64 Builder",
-    "chromium.win:Win10 Tests x64",
-    "tryserver.chromium.win:win10_chromium_inverse_fieldtrials_x64_fyi_rel_ng",
-    "tryserver.chromium.win:win10_chromium_x64_rel_ng",
-    "tryserver.chromium.win:win11-x64-fyi-rel",
-    "tryserver.chromium.win:win_chromium_x64_rel_ng"
   ],
   "chromium.linux:Cast Audio Linux": [
     "chromium.linux:Cast Audio Linux",
@@ -2753,12 +2717,6 @@
   ],
   "chromium.reclient.fyi:Linux Builder reclient test": [
     "chromium.reclient.fyi:Linux Builder reclient test"
-  ],
-  "chromium.reclient.fyi:Win x64 Builder reclient staging": [
-    "chromium.reclient.fyi:Win x64 Builder reclient staging"
-  ],
-  "chromium.reclient.fyi:Win x64 Builder reclient test": [
-    "chromium.reclient.fyi:Win x64 Builder reclient test"
   ],
   "chromium.rust:android-rust-arm-dbg": [
     "chromium.rust:android-rust-arm-dbg",
@@ -3214,18 +3172,6 @@
     "tryserver.chromium.win:win7-rel",
     "tryserver.chromium.win:win_chromium_compile_rel_ng"
   ],
-  "chromium.win:Win 7 Tests x64 (1)": [
-    "chromium.fyi:Win11 Tests x64",
-    "chromium.gpu:GPU Win x64 Builder",
-    "chromium.gpu:Win10 x64 Release (NVIDIA)",
-    "chromium.win:Win 7 Tests x64 (1)",
-    "chromium.win:Win x64 Builder",
-    "chromium.win:Win10 Tests x64",
-    "tryserver.chromium.win:win10_chromium_inverse_fieldtrials_x64_fyi_rel_ng",
-    "tryserver.chromium.win:win10_chromium_x64_rel_ng",
-    "tryserver.chromium.win:win11-x64-fyi-rel",
-    "tryserver.chromium.win:win_chromium_x64_rel_ng"
-  ],
   "chromium.win:Win Builder": [
     "chromium.win:WebKit Win10",
     "chromium.win:Win Builder",
@@ -3240,34 +3186,10 @@
     "tryserver.chromium.win:win_chromium_compile_dbg_ng",
     "tryserver.chromium.win:win_chromium_dbg_ng"
   ],
-  "chromium.win:Win x64 Builder": [
-    "chromium.fyi:Win11 Tests x64",
-    "chromium.gpu:GPU Win x64 Builder",
-    "chromium.gpu:Win10 x64 Release (NVIDIA)",
-    "chromium.win:Win 7 Tests x64 (1)",
-    "chromium.win:Win x64 Builder",
-    "chromium.win:Win10 Tests x64",
-    "tryserver.chromium.win:win10_chromium_inverse_fieldtrials_x64_fyi_rel_ng",
-    "tryserver.chromium.win:win10_chromium_x64_rel_ng",
-    "tryserver.chromium.win:win11-x64-fyi-rel",
-    "tryserver.chromium.win:win_chromium_x64_rel_ng"
-  ],
   "chromium.win:Win x64 Builder (dbg)": [
     "chromium.win:Win x64 Builder (dbg)",
     "chromium.win:Win10 Tests x64 (dbg)",
     "tryserver.chromium.win:win10_chromium_x64_dbg_ng"
-  ],
-  "chromium.win:Win10 Tests x64": [
-    "chromium.fyi:Win11 Tests x64",
-    "chromium.gpu:GPU Win x64 Builder",
-    "chromium.gpu:Win10 x64 Release (NVIDIA)",
-    "chromium.win:Win 7 Tests x64 (1)",
-    "chromium.win:Win x64 Builder",
-    "chromium.win:Win10 Tests x64",
-    "tryserver.chromium.win:win10_chromium_inverse_fieldtrials_x64_fyi_rel_ng",
-    "tryserver.chromium.win:win10_chromium_x64_rel_ng",
-    "tryserver.chromium.win:win11-x64-fyi-rel",
-    "tryserver.chromium.win:win_chromium_x64_rel_ng"
   ],
   "chromium.win:Win10 Tests x64 (dbg)": [
     "chromium.win:Win x64 Builder (dbg)",
@@ -5394,46 +5316,10 @@
     "chromium.memory:win-asan",
     "tryserver.chromium.win:win-asan"
   ],
-  "tryserver.chromium.win:win10_chromium_inverse_fieldtrials_x64_fyi_rel_ng": [
-    "chromium.fyi:Win11 Tests x64",
-    "chromium.gpu:GPU Win x64 Builder",
-    "chromium.gpu:Win10 x64 Release (NVIDIA)",
-    "chromium.win:Win 7 Tests x64 (1)",
-    "chromium.win:Win x64 Builder",
-    "chromium.win:Win10 Tests x64",
-    "tryserver.chromium.win:win10_chromium_inverse_fieldtrials_x64_fyi_rel_ng",
-    "tryserver.chromium.win:win10_chromium_x64_rel_ng",
-    "tryserver.chromium.win:win11-x64-fyi-rel",
-    "tryserver.chromium.win:win_chromium_x64_rel_ng"
-  ],
   "tryserver.chromium.win:win10_chromium_x64_dbg_ng": [
     "chromium.win:Win x64 Builder (dbg)",
     "chromium.win:Win10 Tests x64 (dbg)",
     "tryserver.chromium.win:win10_chromium_x64_dbg_ng"
-  ],
-  "tryserver.chromium.win:win10_chromium_x64_rel_ng": [
-    "chromium.fyi:Win11 Tests x64",
-    "chromium.gpu:GPU Win x64 Builder",
-    "chromium.gpu:Win10 x64 Release (NVIDIA)",
-    "chromium.win:Win 7 Tests x64 (1)",
-    "chromium.win:Win x64 Builder",
-    "chromium.win:Win10 Tests x64",
-    "tryserver.chromium.win:win10_chromium_inverse_fieldtrials_x64_fyi_rel_ng",
-    "tryserver.chromium.win:win10_chromium_x64_rel_ng",
-    "tryserver.chromium.win:win11-x64-fyi-rel",
-    "tryserver.chromium.win:win_chromium_x64_rel_ng"
-  ],
-  "tryserver.chromium.win:win11-x64-fyi-rel": [
-    "chromium.fyi:Win11 Tests x64",
-    "chromium.gpu:GPU Win x64 Builder",
-    "chromium.gpu:Win10 x64 Release (NVIDIA)",
-    "chromium.win:Win 7 Tests x64 (1)",
-    "chromium.win:Win x64 Builder",
-    "chromium.win:Win10 Tests x64",
-    "tryserver.chromium.win:win10_chromium_inverse_fieldtrials_x64_fyi_rel_ng",
-    "tryserver.chromium.win:win10_chromium_x64_rel_ng",
-    "tryserver.chromium.win:win11-x64-fyi-rel",
-    "tryserver.chromium.win:win_chromium_x64_rel_ng"
   ],
   "tryserver.chromium.win:win7-rel": [
     "chromium.win:WebKit Win10",
@@ -5466,18 +5352,6 @@
     "chromium.win:Win7 Tests (dbg)(1)",
     "tryserver.chromium.win:win_chromium_compile_dbg_ng",
     "tryserver.chromium.win:win_chromium_dbg_ng"
-  ],
-  "tryserver.chromium.win:win_chromium_x64_rel_ng": [
-    "chromium.fyi:Win11 Tests x64",
-    "chromium.gpu:GPU Win x64 Builder",
-    "chromium.gpu:Win10 x64 Release (NVIDIA)",
-    "chromium.win:Win 7 Tests x64 (1)",
-    "chromium.win:Win x64 Builder",
-    "chromium.win:Win10 Tests x64",
-    "tryserver.chromium.win:win10_chromium_inverse_fieldtrials_x64_fyi_rel_ng",
-    "tryserver.chromium.win:win10_chromium_x64_rel_ng",
-    "tryserver.chromium.win:win11-x64-fyi-rel",
-    "tryserver.chromium.win:win_chromium_x64_rel_ng"
   ],
   "tryserver.chromium.win:win_mojo": [
     "chromium.mojo:Mojo Windows",

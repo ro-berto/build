@@ -35,7 +35,8 @@ def stock_config(name, config='Release', target_bits=64, staging=True,
   return name, builder_spec.BuilderSpec.create(**bot_config)
 
 # The config for the following builders is now specified src-side in
-# //infra/config/subprojects/chromium/ci/chromium.mac.star
+# //infra/config/subprojects/chromium/ci/chromium.fyi.star
+# * Win11 Tests x64
 # * mac-osxbeta-rel
 
 SPEC = {
@@ -1036,22 +1037,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            simulation_platform='win',
-        ),
-    'Win11 Tests x64':
-        builder_spec.BuilderSpec.create(
-            chromium_config='chromium',
-            chromium_apply_config=['mb'],
-            gclient_config='chromium',
-            gclient_apply_config=['use_clang_coverage'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'win',
-            },
-            execution_mode=builder_spec.TEST,
-            parent_builder_group='chromium.win',
-            parent_buildername='Win x64 Builder',
             simulation_platform='win',
         ),
     'chromeos-amd64-generic-rel (reclient)':

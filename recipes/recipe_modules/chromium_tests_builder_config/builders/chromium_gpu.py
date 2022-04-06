@@ -12,25 +12,12 @@ def _chromium_gpu_spec(**kwargs):
 # The config for the following builders is now specified src-side in
 # //infra/config/subprojects/chromium/ci/chromium.gpu.star
 # * GPU Mac Builder
+# * GPU Win x64 Builder
 # * Mac Release (Intel)
 # * Mac Retina Release (AMD)
+# * Win10 x64 Release (NVIDIA)
 
 SPEC = {
-    'GPU Win x64 Builder':
-        _chromium_gpu_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=['use_clang_coverage'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'win',
-            },
-            simulation_platform='win',
-        ),
     'GPU Win x64 Builder (dbg)':
         _chromium_gpu_spec(
             chromium_config='chromium',
@@ -42,23 +29,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
             },
-            simulation_platform='win',
-        ),
-    'Win10 x64 Release (NVIDIA)':
-        _chromium_gpu_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=['use_clang_coverage'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'win',
-            },
-            execution_mode=builder_spec.TEST,
-            parent_buildername='GPU Win x64 Builder',
             simulation_platform='win',
         ),
     'Win10 x64 Debug (NVIDIA)':

@@ -9,6 +9,11 @@ def _chromium_win_spec(**kwargs):
   return builder_spec.BuilderSpec.create(
       build_gs_bucket='chromium-win-archive', **kwargs)
 
+# The config for the following builders is now specified src-side in
+# //infra/config/subprojects/chromium/ci/chromium.win.star
+# * Win 7 Tests x64 (1)
+# * Win x64 Builder
+# * Win10 Tests x64
 
 SPEC = {
     'WebKit Win10':
@@ -41,21 +46,6 @@ SPEC = {
             },
             simulation_platform='win',
         ),
-    'Win10 Tests x64':
-        _chromium_win_spec(
-            chromium_config='chromium',
-            chromium_apply_config=['mb'],
-            gclient_config='chromium',
-            gclient_apply_config=['use_clang_coverage'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'win',
-            },
-            execution_mode=builder_spec.TEST,
-            parent_buildername='Win x64 Builder',
-            simulation_platform='win',
-        ),
     'Win7 (32) Tests':
         _chromium_win_spec(
             chromium_config='chromium',
@@ -86,33 +76,6 @@ SPEC = {
             },
             execution_mode=builder_spec.TEST,
             parent_buildername='Win Builder',
-            simulation_platform='win',
-        ),
-    'Win x64 Builder':
-        _chromium_win_spec(
-            chromium_config='chromium',
-            chromium_apply_config=['mb'],
-            gclient_config='chromium',
-            gclient_apply_config=['use_clang_coverage'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'win',
-            },
-            simulation_platform='win',
-        ),
-    'Win 7 Tests x64 (1)':
-        _chromium_win_spec(
-            chromium_config='chromium',
-            chromium_apply_config=['mb'],
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'win',
-            },
-            execution_mode=builder_spec.TEST,
-            parent_buildername='Win x64 Builder',
             simulation_platform='win',
         ),
     'Win x64 Builder (dbg)':
