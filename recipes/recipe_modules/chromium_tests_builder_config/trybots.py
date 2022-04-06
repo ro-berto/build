@@ -105,6 +105,9 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='win32-official',
             ),
     },
+    # The config for the following builders is now specified src-side in
+    # //infra/config/subprojects/chromium/try/tryserver.chromium.android.star
+    # * android_compile_dbg
     'tryserver.chromium.android': {
         'android-10-x86-fyi-rel-tests':
             try_spec.TrySpec.create_for_single_mirror(
@@ -334,13 +337,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android',
                 buildername='Android arm64 Builder (dbg)',
-                is_compile_only=True,
-                include_all_triggered_testers=True,
-            ),
-        'android_compile_dbg':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android',
-                buildername='Android arm Builder (dbg)',
                 is_compile_only=True,
                 include_all_triggered_testers=True,
             ),

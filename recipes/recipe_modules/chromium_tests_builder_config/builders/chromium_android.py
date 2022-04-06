@@ -12,26 +12,12 @@ def _chromium_android_spec(**kwargs):
       build_gs_bucket='chromium-android-archive', **kwargs)
 
 
+# The config for the following builders is now specified src-side in
+# //infra/config/subprojects/chromium/ci/chromium.android.star
+# * Android arm Builder (dbg)
+# * Marshmallow Tablet Tester
+
 SPEC = {
-    'Android arm Builder (dbg)':
-        _chromium_android_spec(
-            chromium_config='android',
-            chromium_apply_config=[
-                'download_vr_test_apks',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'android',
-                'enable_reclient',
-            ],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 32,
-                'TARGET_PLATFORM': 'android',
-            },
-            android_config='main_builder_mb',
-            simulation_platform='linux',
-        ),
     'Android arm64 Builder (dbg)':
         _chromium_android_spec(
             chromium_config='android',
@@ -151,25 +137,6 @@ SPEC = {
             },
             android_config='main_builder_mb',
             simulation_platform='linux',
-        ),
-    'Marshmallow Tablet Tester':
-        _chromium_android_spec(
-            chromium_config='android',
-            chromium_apply_config=[
-                'download_vr_test_apks',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=['android'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 32,
-                'TARGET_PLATFORM': 'android',
-            },
-            parent_buildername='Android arm Builder (dbg)',
-            execution_mode=builder_spec.TEST,
-            android_config='main_builder_mb',
-            simulation_platform='linux',
-            serialize_tests=True,
         ),
     'Nougat Phone Tester':
         _chromium_android_spec(

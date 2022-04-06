@@ -129,7 +129,6 @@
       "@@@STEP_LOG_LINE@config@    {@@@",
       "@@@STEP_LOG_LINE@config@      \"custom_deps\": {}, @@@",
       "@@@STEP_LOG_LINE@config@      \"custom_vars\": {@@@",
-      "@@@STEP_LOG_LINE@config@        \"checkout_reclient\": \"True\", @@@",
       "@@@STEP_LOG_LINE@config@        \"checkout_telemetry_dependencies\": \"True\"@@@",
       "@@@STEP_LOG_LINE@config@      }, @@@",
       "@@@STEP_LOG_LINE@config@      \"deps_file\": \".DEPS.git\", @@@",
@@ -143,9 +142,7 @@
       "@@@STEP_LOG_LINE@config@  \"src_root\": null, @@@",
       "@@@STEP_LOG_LINE@config@  \"target_cpu\": [], @@@",
       "@@@STEP_LOG_LINE@config@  \"target_cpu_only\": false, @@@",
-      "@@@STEP_LOG_LINE@config@  \"target_os\": [@@@",
-      "@@@STEP_LOG_LINE@config@    \"android\"@@@",
-      "@@@STEP_LOG_LINE@config@  ], @@@",
+      "@@@STEP_LOG_LINE@config@  \"target_os\": [], @@@",
       "@@@STEP_LOG_LINE@config@  \"target_os_only\": false, @@@",
       "@@@STEP_LOG_LINE@config@  \"with_branch_heads\": false, @@@",
       "@@@STEP_LOG_LINE@config@  \"with_tags\": false@@@",
@@ -159,7 +156,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'checkout_reclient': 'True', 'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]\ntarget_os = ['android']",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
       "--revision_mapping_file",
       "{\"got_angle_revision\": \"src/third_party/angle\", \"got_buildtools_revision\": \"src/buildtools\", \"got_dawn_revision\": \"src/third_party/dawn\", \"got_nacl_revision\": \"src/native_client\", \"got_revision\": \"src\", \"got_swiftshader_revision\": \"src/third_party/swiftshader\", \"got_v8_revision\": \"src/v8\", \"got_webrtc_revision\": \"src/third_party/webrtc\"}",
       "--git-cache-dir",
@@ -177,7 +174,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_REPORT_BUILD": "chromium/ci/Android arm Builder (dbg)/8945511751514863184",
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/ci/fake-builder/8945511751514863184",
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "1800"
     },
@@ -443,9 +440,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_REPORT_BUILD": "chromium/ci/Android arm Builder (dbg)/8945511751514863184",
-      "DOWNLOAD_VR_TEST_APKS": "1",
-      "PATH": "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/ci/fake-builder/8945511751514863184"
     },
     "env_suffixes": {
       "PATH": [
@@ -471,7 +466,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CACHE]/builder/src/testing/buildbot/chromium.android.json",
+      "[CACHE]/builder/src/testing/buildbot/fake-group.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -490,9 +485,9 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "read test spec (chromium.android.json)",
+    "name": "read test spec (fake-group.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/chromium.android.json@@@",
+      "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/fake-group.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -504,23 +499,21 @@
       "[CACHE]/builder/src/tools/mb/mb.py",
       "lookup",
       "-m",
-      "chromium.android",
+      "fake-group",
       "-b",
-      "Android arm Builder (dbg)",
+      "fake-builder",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
       "--android-version-code=3",
       "--android-version-name=example",
-      "--luci-auth",
       "--quiet"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_USE_LOCAL": "false",
-      "PATH": "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
+      "GOMA_USE_LOCAL": "false"
     },
     "luci_context": {
       "realm": {
@@ -546,25 +539,23 @@
       "[CACHE]/builder/src/tools/mb/mb.py",
       "gen",
       "-m",
-      "chromium.android",
+      "fake-group",
       "-b",
-      "Android arm Builder (dbg)",
+      "fake-builder",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
       "--android-version-code=3",
       "--android-version-name=example",
-      "--luci-auth",
       "--json-output",
       "/path/to/tmp/json",
-      "//out/Debug"
+      "//out/Release"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_USE_LOCAL": "false",
-      "PATH": "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
+      "GOMA_USE_LOCAL": "false"
     },
     "luci_context": {
       "realm": {
@@ -601,7 +592,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/Android_arm_Builder__dbg_"
+      "[CACHE]/goma/data/fake_builder"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -635,15 +626,14 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/Android_arm_Builder__dbg_",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/fake_builder",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_FAIL_FAST": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "infra_step": true,
     "luci_context": {
@@ -770,9 +760,9 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"ci\", \"builder\": \"Android arm Builder (dbg)\", \"project\": \"chromium\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"fake-builder\", \"project\": \"chromium\"}",
       "--buildbot-buildername",
-      "Android arm Builder (dbg)"
+      "fake-builder"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

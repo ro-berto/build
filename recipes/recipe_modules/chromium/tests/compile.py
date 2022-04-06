@@ -118,6 +118,11 @@ def GenTests(api):
   )
 
   yield api.test(
+      'android',
+      api.properties(target_platform='android', chromium_config='android'),
+  )
+
+  yield api.test(
       'goma_canary',
       api.properties(
           chromium_apply_config=['goma_canary']),

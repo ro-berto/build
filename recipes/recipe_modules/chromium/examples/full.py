@@ -64,22 +64,32 @@ def GenTests(api):
   yield api.test(
       'basic_out_dir',
       api.chromium.ci_build(
-          builder_group='chromium.android',
-          builder='Android arm Builder (dbg)',
+          builder_group='fake-group',
+          builder='fake-builder',
           bot_id='build1-a1',
           build_number=77457,
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(out_dir='/tmp'),
   )
 
   yield api.test(
       'basic_out_dir_with_custom_mb_config',
       api.chromium.ci_build(
-          builder_group='chromium.android',
-          builder='Android arm Builder (dbg)',
+          builder_group='fake-group',
+          builder='fake-builder',
           bot_id='build1-a1',
           build_number=77457,
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(
           out_dir='/tmp',
           mb_config_path='/custom/config.pyl',
@@ -87,24 +97,18 @@ def GenTests(api):
   )
 
   yield api.test(
-      'basic_out_dir_without_compile_py',
-      api.chromium.ci_build(
-          builder_group='chromium.android',
-          builder='Android arm Builder (dbg)',
-          bot_id='build1-a1',
-          build_number=77457,
-      ),
-      api.properties(out_dir='/tmp'),
-  )
-
-  yield api.test(
       'basic_out_dir_with_goma_module',
       api.chromium.ci_build(
-          builder_group='chromium.android',
-          builder='Android arm Builder (dbg)',
+          builder_group='fake-group',
+          builder='fake-builder',
           bot_id='build1-a1',
           build_number=77457,
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(
           use_goma_module=True,
           out_dir='/tmp',
@@ -114,11 +118,16 @@ def GenTests(api):
   yield api.test(
       'basic_out_dir_with_reclient',
       api.chromium.ci_build(
-          builder_group='chromium.android',
-          builder='Android arm Builder (dbg)',
+          builder_group='fake-group',
+          builder='fake-builder',
           bot_id='build1-a1',
           build_number=77457,
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(
           use_reclient=True,
           out_dir='/tmp',
@@ -133,11 +142,16 @@ def GenTests(api):
   yield api.test(
       'basic_no_out_dir_with_goma_module',
       api.chromium.ci_build(
-          builder_group='chromium.android',
-          builder='Android arm Builder (dbg)',
+          builder_group='fake-group',
+          builder='fake-builder',
           bot_id='build1-a1',
           build_number=77457,
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(use_goma_module=True),
   )
 
@@ -157,11 +171,16 @@ def GenTests(api):
   yield api.test(
       'basic_out_dir_goma_module_build_failure',
       api.chromium.ci_build(
-          builder_group='chromium.android',
-          builder='Android arm Builder (dbg)',
+          builder_group='fake-group',
+          builder='fake-builder',
           bot_id='build1-a1',
           build_number=77457,
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(
           out_dir='/tmp',
           use_goma_module=True,
@@ -184,11 +203,16 @@ def GenTests(api):
   yield api.test(
       'basic_out_dir_ninja_build_failure',
       api.chromium.ci_build(
-          builder_group='chromium.android',
-          builder='Android arm Builder (dbg)',
+          builder_group='fake-group',
+          builder='fake-builder',
           bot_id='build1-a1',
           build_number=77457,
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(
           out_dir='/tmp',
           use_goma_module=False,
@@ -199,11 +223,16 @@ def GenTests(api):
   yield api.test(
       'basic_out_dir_ninja_no_op_failure',
       api.chromium.ci_build(
-          builder_group='chromium.android',
-          builder='Android arm Builder (dbg)',
+          builder_group='fake-group',
+          builder='fake-builder',
           bot_id='build1-a1',
           build_number=77457,
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(
           out_dir='/tmp',
           use_goma_module=True,
@@ -216,11 +245,16 @@ def GenTests(api):
   yield api.test(
       'basic_out_dir_goma_module_start_failure',
       api.chromium.ci_build(
-          builder_group='chromium.android',
-          builder='Android arm Builder (dbg)',
+          builder_group='fake-group',
+          builder='fake-builder',
           bot_id='build1-a1',
           build_number=77457,
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(
           out_dir='/tmp',
           use_goma_module=True,
@@ -239,11 +273,16 @@ def GenTests(api):
   yield api.test(
       'basic_out_dir_goma_module_ping_failure',
       api.chromium.ci_build(
-          builder_group='chromium.android',
-          builder='Android arm Builder (dbg)',
+          builder_group='fake-group',
+          builder='fake-builder',
           bot_id='build1-a1',
           build_number=77457,
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(
           out_dir='/tmp',
           use_goma_module=True,
@@ -358,11 +397,16 @@ def GenTests(api):
   yield api.test(
       'basic_out_dir_with_goma_cache_silo',
       api.chromium.ci_build(
-          builder_group='chromium.android',
-          builder='Android arm Builder (dbg)',
+          builder_group='fake-group',
+          builder='fake-builder',
           bot_id='build1-a1',
           build_number=77457,
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(
           **{
               'use_goma_module': True,
@@ -372,6 +416,6 @@ def GenTests(api):
               },
           }),
       api.post_check(lambda check, steps: check(steps['compile'].env[
-          'RBE_cache_silo'] == 'Android arm Builder (dbg)')),
+          'RBE_cache_silo'] == 'fake-builder')),
       api.post_process(post_process.DropExpectation),
   )

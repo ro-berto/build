@@ -184,11 +184,6 @@
     "tryserver.chromium.android:android_unswarmed_pixel_aosp",
     "tryserver.chromium.android:try-nougat-phone-tester"
   ],
-  "chromium.android:Android arm Builder (dbg)": [
-    "chromium.android:Android arm Builder (dbg)",
-    "chromium.android:Marshmallow Tablet Tester",
-    "tryserver.chromium.android:android_compile_dbg"
-  ],
   "chromium.android:Android arm64 Builder (dbg)": [
     "chromium.android:Android WebView M (dbg)",
     "chromium.android:Android WebView N (dbg)",
@@ -249,11 +244,6 @@
   ],
   "chromium.android:Marshmallow Phone Tester (rel)": [
     "chromium.android:Marshmallow Phone Tester (rel)"
-  ],
-  "chromium.android:Marshmallow Tablet Tester": [
-    "chromium.android:Android arm Builder (dbg)",
-    "chromium.android:Marshmallow Tablet Tester",
-    "tryserver.chromium.android:android_compile_dbg"
   ],
   "chromium.android:Nougat Phone Tester": [
     "chromium.android:Android WebView M (dbg)",
@@ -3745,11 +3735,6 @@
   ],
   "tryserver.chromium.android:android_blink_rel": [
     "tryserver.chromium.android:android_blink_rel"
-  ],
-  "tryserver.chromium.android:android_compile_dbg": [
-    "chromium.android:Android arm Builder (dbg)",
-    "chromium.android:Marshmallow Tablet Tester",
-    "tryserver.chromium.android:android_compile_dbg"
   ],
   "tryserver.chromium.android:android_compile_x64_dbg": [
     "chromium.android:Android x64 Builder (dbg)",
