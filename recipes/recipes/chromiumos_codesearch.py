@@ -90,7 +90,8 @@ def RunSteps(api):
   # Get infra/infra. Checking out infra automatically checks out depot_tools.
   cache_dir = api.path['cache'].join('builder')
   with api.context(cwd=cache_dir):
-    api.bot_update.ensure_checkout(gclient_config=gclient_config(api))
+    api.bot_update.ensure_checkout(
+        gclient_config=gclient_config(api), set_output_commit=False)
 
   # Get the hash and timestamp of the mirror repo before repo sync.
   mirror_hash, mirror_unix_timestamp = get_mirror_hash_and_timestamp(
