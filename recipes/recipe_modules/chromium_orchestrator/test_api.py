@@ -79,15 +79,38 @@ class ChromiumOrchestratorApi(recipe_test_api.RecipeTestApi):
                                 empty_props=False,
                                 is_swarming_phase=True,
                                 with_patch=True,
-                                tests=None):
+                                tests=None,
+                                src_side_deps_digest=None):
     tests = tests or ['browser_tests']
     output_json_obj = {}
     if is_swarming_phase:
       if not empty_props:
         output_json_obj = {
             'swarming_trigger_properties':
-                self.get_fake_swarming_trigger_properties(tests)
+                self.get_fake_swarming_trigger_properties(tests),
+            'got_angle_revision':
+                '18c36f8aa629231795c82831a2cf80e8f77f989a',
+            'got_revision':
+                '6eb925582a36cdba74ad60f01a19897866a92cca',
+            'got_revision_cp':
+                'refs/heads/main@{#984947}',
+            'got_v8_revision':
+                '7d776826a3c4ae0878f026c00beab82765fb4d23',
         }
+        if with_patch:
+          output_json_obj.update({
+              'affected_files': {
+                  'first_100': [
+                      'src/ash/root_window_controller.cc',
+                      'src/ash/root_window_controller.h',
+                      'src/deleted_file.cc',
+                  ],
+                  'total_count': 3
+              },
+              'deleted_files': ['src/deleted_file.cc'],
+          })
+        if src_side_deps_digest:
+          output_json_obj['src_side_deps_digest'] = src_side_deps_digest
 
     sub_build = build_pb2.Build(
         id=54321,
