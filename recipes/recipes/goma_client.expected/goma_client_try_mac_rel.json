@@ -145,6 +145,13 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "set_output_gitiles_commit",
+    "~followup_annotations": [
+      "@@@SET_BUILD_PROPERTY@$recipe_engine/buildbucket/output_gitiles_commit@{\"host\": \"fake.org\", \"id\": \"d2a04d71301a8915217dd5faf81d12cffd6cd958\", \"position\": 20945, \"project\": \"client\", \"ref\": \"refs/heads/main\"}@@@"
+    ]
+  },
+  {
     "cmd": [
       "vpython3",
       "-u",

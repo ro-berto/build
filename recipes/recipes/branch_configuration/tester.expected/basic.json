@@ -147,6 +147,13 @@
   },
   {
     "cmd": [],
+    "name": "set_output_gitiles_commit",
+    "~followup_annotations": [
+      "@@@SET_BUILD_PROPERTY@$recipe_engine/buildbucket/output_gitiles_commit@{\"host\": \"fake.org\", \"id\": \"98f54143ab4e86b28c3afee0f50f2f51cfb2ed38\", \"position\": 9859, \"project\": \"project\", \"ref\": \"refs/heads/main\"}@@@"
+    ]
+  },
+  {
+    "cmd": [],
     "name": "branch-config1"
   },
   {

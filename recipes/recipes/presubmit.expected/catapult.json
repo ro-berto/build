@@ -138,6 +138,13 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "set_output_gitiles_commit",
+    "~followup_annotations": [
+      "@@@SET_BUILD_PROPERTY@$recipe_engine/buildbucket/output_gitiles_commit@{\"host\": \"fake.org\", \"id\": \"c812fca9479aacda33f5f5a74d588acef2b4fb02\", \"position\": 287529, \"project\": \"catapult\", \"ref\": \"refs/heads/main\"}@@@"
+    ]
+  },
+  {
     "cmd": [
       "git",
       "-c",

@@ -146,6 +146,13 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "set_output_gitiles_commit",
+    "~followup_annotations": [
+      "@@@SET_BUILD_PROPERTY@$recipe_engine/buildbucket/output_gitiles_commit@{\"host\": \"fake.org\", \"id\": \"ad33769beb4224ffaadd7d5b01796fad5cc88cd4\", \"position\": 31067, \"project\": \"devtools-frontend\", \"ref\": \"refs/heads/main\"}@@@"
+    ]
+  },
+  {
     "cmd": [
       "git",
       "clean",

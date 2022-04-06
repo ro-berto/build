@@ -211,6 +211,13 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "set_output_gitiles_commit",
+    "~followup_annotations": [
+      "@@@SET_BUILD_PROPERTY@$recipe_engine/buildbucket/output_gitiles_commit@{\"host\": \"fake.org\", \"id\": \"188f5b8b6e02f58cda5b80085419b0f2a1572287\", \"position\": 170242, \"project\": \"src\", \"ref\": \"refs/tags/74.0.3729.169\"}@@@"
+    ]
+  },
+  {
     "cmd": [
       "git",
       "clean",
