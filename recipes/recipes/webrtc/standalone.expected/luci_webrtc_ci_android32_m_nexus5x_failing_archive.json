@@ -258,6 +258,42 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[CACHE]/builder/src/infra/specs/client.webrtc.json",
+      "/path/to/tmp/json"
+    ],
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "read test spec (client.webrtc.json)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@path: [CACHE]/builder/src/infra/specs/client.webrtc.json@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Android32 (M Nexus5X)\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"test\": \"common_audio_unittests\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "python3",
       "-u",
       "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
@@ -311,8 +347,6 @@
       "[CACHE]/goma/client",
       "--json-output",
       "/path/to/tmp/json",
-      "--swarming-targets-file",
-      "AppRTCMobile_test_apk\nandroid_instrumentation_test_apk\naudio_decoder_unittests\ncommon_audio_unittests\ncommon_video_unittests\ndcsctp_unittests\nmodules_tests\nmodules_unittests\npeerconnection_unittests\nrtc_media_unittests\nrtc_pc_unittests\nrtc_stats_unittests\nrtc_unittests\nsystem_wrappers_unittests\ntest_support_unittests\ntools_unittests\nvideo_engine_tests\nvoip_unittests\nwebrtc_nonparallel_tests\n",
       "//out/Android32_M_Nexus5X"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -336,27 +370,7 @@
     "name": "generate_build_files",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
-      "@@@STEP_LOG_END@json.output[failure_summary]@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@AppRTCMobile_test_apk@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@android_instrumentation_test_apk@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@audio_decoder_unittests@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@common_audio_unittests@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@common_video_unittests@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@dcsctp_unittests@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@modules_tests@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@modules_unittests@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@peerconnection_unittests@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@rtc_media_unittests@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@rtc_pc_unittests@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@rtc_stats_unittests@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@rtc_unittests@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@system_wrappers_unittests@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@test_support_unittests@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@tools_unittests@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@video_engine_tests@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@voip_unittests@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@webrtc_nonparallel_tests@@@",
-      "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@"
     ]
   },
   {
@@ -776,151 +790,6 @@
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "install infra/tools/luci/isolate"
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[START_DIR]/cipd_tool/infra/tools/luci/isolate/git_revision%3Amock_infra_git_revision"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "webrtc:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "install infra/tools/luci/isolate.ensure package directory",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "cipd",
-      "ensure",
-      "-root",
-      "[START_DIR]/cipd_tool/infra/tools/luci/isolate/git_revision%3Amock_infra_git_revision",
-      "-ensure-file",
-      "infra/tools/luci/isolate/${platform} git_revision:mock_infra_git_revision",
-      "-max-threads",
-      "0",
-      "-json-output",
-      "/path/to/tmp/json"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "webrtc:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "install infra/tools/luci/isolate.ensure_installed",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:moc\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/luci/isolate/resolved-platform\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[START_DIR]/cipd_tool/infra/tools/luci/isolate/git_revision%3Amock_infra_git_revision/isolate",
-      "batcharchive",
-      "--dump-json",
-      "/path/to/tmp/json",
-      "-cas-instance",
-      "projects/example-cas-server/instances/default_instance",
-      "-log-level",
-      "debug",
-      "[CACHE]/builder/src/out/Android32_M_Nexus5X/AppRTCMobile_test_apk.isolated.gen.json",
-      "[CACHE]/builder/src/out/Android32_M_Nexus5X/android_instrumentation_test_apk.isolated.gen.json",
-      "[CACHE]/builder/src/out/Android32_M_Nexus5X/audio_decoder_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Android32_M_Nexus5X/common_audio_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Android32_M_Nexus5X/common_video_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Android32_M_Nexus5X/dcsctp_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Android32_M_Nexus5X/modules_tests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Android32_M_Nexus5X/modules_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Android32_M_Nexus5X/peerconnection_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Android32_M_Nexus5X/rtc_media_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Android32_M_Nexus5X/rtc_pc_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Android32_M_Nexus5X/rtc_stats_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Android32_M_Nexus5X/rtc_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Android32_M_Nexus5X/system_wrappers_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Android32_M_Nexus5X/test_support_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Android32_M_Nexus5X/tools_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Android32_M_Nexus5X/video_engine_tests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Android32_M_Nexus5X/voip_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Android32_M_Nexus5X/webrtc_nonparallel_tests.isolated.gen.json"
-    ],
-    "luci_context": {
-      "realm": {
-        "name": "webrtc:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "isolate tests",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"AppRTCMobile_test_apk\": \"[dummy hash for AppRTCMobile_test_apk/dummy size]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"android_instrumentation_test_apk\": \"[dummy hash for android_instrumentation_test_apk/dummy size]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"audio_decoder_unittests\": \"[dummy hash for audio_decoder_unittests/dummy size]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"common_audio_unittests\": \"[dummy hash for common_audio_unittests/dummy size]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"common_video_unittests\": \"[dummy hash for common_video_unittests/dummy size]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"dcsctp_unittests\": \"[dummy hash for dcsctp_unittests/dummy size]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"modules_tests\": \"[dummy hash for modules_tests/dummy size]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"modules_unittests\": \"[dummy hash for modules_unittests/dummy size]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"peerconnection_unittests\": \"[dummy hash for peerconnection_unittests/dummy size]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"rtc_media_unittests\": \"[dummy hash for rtc_media_unittests/dummy size]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"rtc_pc_unittests\": \"[dummy hash for rtc_pc_unittests/dummy size]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"rtc_stats_unittests\": \"[dummy hash for rtc_stats_unittests/dummy size]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"rtc_unittests\": \"[dummy hash for rtc_unittests/dummy size]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"system_wrappers_unittests\": \"[dummy hash for system_wrappers_unittests/dummy size]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"test_support_unittests\": \"[dummy hash for test_support_unittests/dummy size]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tools_unittests\": \"[dummy hash for tools_unittests/dummy size]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"video_engine_tests\": \"[dummy hash for video_engine_tests/dummy size]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"voip_unittests\": \"[dummy hash for voip_unittests/dummy size]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"webrtc_nonparallel_tests\": \"[dummy hash for webrtc_nonparallel_tests/dummy size]\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"AppRTCMobile_test_apk\": \"[dummy hash for AppRTCMobile_test_apk/dummy size]\", \"android_instrumentation_test_apk\": \"[dummy hash for android_instrumentation_test_apk/dummy size]\", \"audio_decoder_unittests\": \"[dummy hash for audio_decoder_unittests/dummy size]\", \"common_audio_unittests\": \"[dummy hash for common_audio_unittests/dummy size]\", \"common_video_unittests\": \"[dummy hash for common_video_unittests/dummy size]\", \"dcsctp_unittests\": \"[dummy hash for dcsctp_unittests/dummy size]\", \"modules_tests\": \"[dummy hash for modules_tests/dummy size]\", \"modules_unittests\": \"[dummy hash for modules_unittests/dummy size]\", \"peerconnection_unittests\": \"[dummy hash for peerconnection_unittests/dummy size]\", \"rtc_media_unittests\": \"[dummy hash for rtc_media_unittests/dummy size]\", \"rtc_pc_unittests\": \"[dummy hash for rtc_pc_unittests/dummy size]\", \"rtc_stats_unittests\": \"[dummy hash for rtc_stats_unittests/dummy size]\", \"rtc_unittests\": \"[dummy hash for rtc_unittests/dummy size]\", \"system_wrappers_unittests\": \"[dummy hash for system_wrappers_unittests/dummy size]\", \"test_support_unittests\": \"[dummy hash for test_support_unittests/dummy size]\", \"tools_unittests\": \"[dummy hash for tools_unittests/dummy size]\", \"video_engine_tests\": \"[dummy hash for video_engine_tests/dummy size]\", \"voip_unittests\": \"[dummy hash for voip_unittests/dummy size]\", \"webrtc_nonparallel_tests\": \"[dummy hash for webrtc_nonparallel_tests/dummy size]\"}@@@"
     ]
   },
   {

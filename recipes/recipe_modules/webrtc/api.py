@@ -37,7 +37,7 @@ def _replace_string_in_dict(dict_input, old, new):
 
 
 def _get_isolated_targets(tests):
-  return [t.name for t in tests or [] if t.runs_on_swarming]
+  return [t.canonical_name for t in tests or [] if t.runs_on_swarming]
 
 
 class Bot(object):
@@ -215,8 +215,8 @@ class WebRTCApi(recipe_api.RecipeApi):
           builder_config, update_step.presentation.properties)
       # TODO(crbug.com/webrtc/13899): This is temporary code to make sure we're
       # running the same tests while migrating to a .pyl configuration.
-      old_tests = set([t.name for t in tests])
-      new_tests = set([t.name for t in targets_config.all_tests])
+      old_tests = set([t.canonical_name for t in tests])
+      new_tests = set([t.canonical_name for t in targets_config.all_tests])
       if (not self._test_data.enabled and
           old_tests != new_tests):  # pragma: no cover
         self.m.step(str(old_tests), cmd=None)
@@ -242,7 +242,7 @@ class WebRTCApi(recipe_api.RecipeApi):
 
     tests_targets, compile_targets = self.m.filter.analyze(
         affected_files,
-        test_targets=[t.name for t in tests],
+        test_targets=[t.canonical_name for t in tests],
         additional_compile_targets=['all'],
         mb_path=self.m.path['checkout'].join('tools_webrtc', 'mb'),
         phase=phase)
@@ -253,7 +253,7 @@ class WebRTCApi(recipe_api.RecipeApi):
       compile_targets += [
           t for t in _BINARY_SIZE_TARGETS if t in binary_size_file
       ]
-    tests = [t for t in tests if t.name in tests_targets]
+    tests = [t for t in tests if t.canonical_name in tests_targets]
     return tests, sorted(set(compile_targets))
 
   def configure_swarming(self):

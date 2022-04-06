@@ -20,3 +20,8 @@ def webrtc_default(c):
 def webrtc_clang(c):
   c.source_side_spec_dir = c.CHECKOUT_PATH.join('infra', 'specs')
   c.compile_py.default_targets = []
+
+
+@CONFIG_CTX(includes=['android'])
+def webrtc_android(c):
+  c.source_side_spec_dir = c.CHECKOUT_PATH.join('infra', 'specs')

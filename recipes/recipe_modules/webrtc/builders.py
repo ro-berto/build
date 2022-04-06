@@ -185,23 +185,10 @@ BUILDERS = freeze({
             },
             'Mac64 Release': {
                 'recipe_config': 'webrtc_and_baremetal',
-                'chromium_config_kwargs': {
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_BITS': 64,
-                },
                 'bot_type': 'builder_tester',
                 'testing': {
                     'platform': 'mac'
                 },
-                'swarming_dimensions': {
-                    'os': 'Mac-11',
-                    'cpu': 'x86-64',
-                },
-                'baremetal_swarming_dimensions': {
-                    'pool': 'WebRTC-baremetal',
-                    'os': 'Mac',
-                    'gpu': None,
-                }
             },
             'Mac64 Builder': {
                 'recipe_config': 'webrtc',
@@ -510,24 +497,12 @@ BUILDERS = freeze({
             },
             'Android32 (M Nexus5X)': {
                 'recipe_config': 'webrtc_android',
-                'chromium_config_kwargs': {
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_PLATFORM': 'android',
-                    'TARGET_ARCH': 'arm',
-                    'TARGET_BITS': 32,
-                },
                 'bot_type': 'builder_tester',
                 'testing': {
                     'platform': 'linux'
                 },
                 'archive_apprtc': True,
                 'build_android_archive': True,
-                'swarming_dimensions': {
-                    'device_os': 'MMB29Q',  # 6.0.1
-                    'device_type': 'bullhead',  # Nexus 5X
-                    'os': 'Android',
-                    'android_devices': '1',
-                }
             },
             'Android32 Builder arm': {
                 'recipe_config':
@@ -643,22 +618,9 @@ BUILDERS = freeze({
             },
             'iOS64 Sim Debug (iOS 14.0)': {
                 'recipe_config': 'webrtc_ios',
-                'chromium_apply_config': ['mac_toolchain'],
-                'chromium_config_kwargs': {
-                    'BUILD_CONFIG': 'Debug',
-                    'TARGET_PLATFORM': 'ios',
-                    'TARGET_ARCH': 'intel',
-                    'TARGET_BITS': 64,
-                },
                 'bot_type': 'builder_tester',
                 'testing': {
                     'platform': 'mac'
-                },
-                'service_account': CHROMIUM_TEST_SERVICE_ACCOUNT,
-                'platform': 'iPhone X',
-                'version': '14.0',
-                'swarming_dimensions': {
-                    'os': 'Mac-11',
                 },
             },
             'iOS64 Sim Debug (iOS 13)': {
@@ -1779,21 +1741,9 @@ BUILDERS = freeze({
             },
             'iOS64 Release': {
                 'recipe_config': 'webrtc_ios_device',
-                'chromium_apply_config': ['mac_toolchain'],
-                'chromium_config_kwargs': {
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_PLATFORM': 'ios',
-                    'TARGET_ARCH': 'arm',
-                    'TARGET_BITS': 64,
-                },
                 'bot_type': 'builder_tester',
                 'testing': {
                     'platform': 'mac'
-                },
-                'service_account': CHROME_TEST_SERVICE_ACCOUNT,
-                'swarming_dimensions': {
-                    'os': 'iOS-15.3',
-                    'pool': 'chrome.tests',
                 },
             },
             'iOS64 Perf': {
@@ -1868,7 +1818,27 @@ BUILDERS = freeze({
 })
 
 _CLIENT_WEBRTC_SPEC = {
+    'Android32 (M Nexus5X)':
+        builder_spec.BuilderSpec.create(
+            chromium_config='webrtc_android',
+            android_config='webrtc',
+            gclient_config='webrtc',
+            gclient_apply_config=['android'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_PLATFORM': 'android',
+                'TARGET_ARCH': 'arm',
+                'TARGET_BITS': 32,
+            }),
     'Linux64 Release':
+        builder_spec.BuilderSpec.create(
+            chromium_config='webrtc_default',
+            gclient_config='webrtc',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            }),
+    'Mac64 Release':
         builder_spec.BuilderSpec.create(
             chromium_config='webrtc_default',
             gclient_config='webrtc',
@@ -1883,6 +1853,31 @@ _CLIENT_WEBRTC_SPEC = {
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 32,
+            }),
+    'iOS64 Sim Debug (iOS 14.0)':
+        builder_spec.BuilderSpec.create(
+            chromium_config='webrtc_default',
+            gclient_config='webrtc_ios',
+            chromium_apply_config=['mac_toolchain'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_PLATFORM': 'ios',
+                'TARGET_ARCH': 'intel',
+                'TARGET_BITS': 64,
+            }),
+}
+
+_INTERNAL_CLIENT_WEBRTC = {
+    'iOS64 Release':
+        builder_spec.BuilderSpec.create(
+            chromium_config='webrtc_default',
+            gclient_config='webrtc_ios',
+            chromium_apply_config=['mac_toolchain'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_PLATFORM': 'ios',
+                'TARGET_ARCH': 'arm',
+                'TARGET_BITS': 64,
             }),
 }
 
@@ -1899,5 +1894,6 @@ _TRYSERVER_WEBRTC_SPEC = {
 
 BUILDERS_DB = builder_db.BuilderDatabase.create({
     'client.webrtc': _CLIENT_WEBRTC_SPEC,
+    'internal.client.webrtc': _INTERNAL_CLIENT_WEBRTC,
     'tryserver.webrtc': _TRYSERVER_WEBRTC_SPEC,
 })
