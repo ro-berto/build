@@ -354,6 +354,7 @@ def GenTests(api):
                           'can_use_on_swarming_builders':
                               True,
                           'dimension_sets': [{
+                              'id': 'botid',
                               'device_type': 'phone',
                               'device_os': 'android',
                               'gpu': 'nv',
