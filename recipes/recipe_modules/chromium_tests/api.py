@@ -1040,8 +1040,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           if require_device_steps:
             self.m.chromium_android.common_tests_final_steps(
                 checkout_dir=checkout_dir)
-          else:
-            self.m.chromium_android.test_report()
 
   def deapply_patch(self, bot_update_step):
     assert self.m.tryserver.is_tryserver

@@ -163,7 +163,6 @@ class LibyuvApi(recipe_api.RecipeApi):
           self.m.chromium_android.shutdown_device_monitor()
           self.m.chromium_android.logcat_dump()
           self.m.chromium_android.stack_tool_steps(force_latest_version=True)
-          self.m.chromium_android.test_report()
         else:
           # Ignoring --no-sandbox because libyuv uses absl/flags which
           # raises an error when flags are unknown to the binary.

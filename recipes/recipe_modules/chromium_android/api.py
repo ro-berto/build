@@ -856,22 +856,6 @@ class AndroidApi(recipe_api.RecipeApi):
     with self.m.context(env=env):
       self.m.step('stack_tool_for_tombstones', tombstones_cmd, infra_step=True)
 
-  def test_report(self):
-    dirpath = self.m.path['checkout'].join('out',
-                                           self.m.chromium.c.BUILD_CONFIG,
-                                           'test_logs')
-    with self.m.step.nest('test_report'):
-      for report in self.m.file.glob_paths(
-          'test_report_iteration',
-          dirpath,
-          '*.log',
-          test_data=('foo.log', 'bar.log')):
-        self.m.file.read_text(
-            "print report {}".format(report),
-            report,
-            test_data='contents of file {}'.format(report))
-        self.m.file.remove("clean up {}".format(report), report)
-
   def common_tests_setup_steps(self, **provision_kwargs):
     if self.c.use_devil_adb:
       self.use_devil_adb()
@@ -889,7 +873,6 @@ class AndroidApi(recipe_api.RecipeApi):
     self.shutdown_device_monitor()
     self.logcat_dump()
     self.stack_tool_steps(force_latest_version)
-    self.test_report()
 
     if checkout_dir:
       binary_dir = self.m.chromium.output_dir.join('lib.unstripped')
