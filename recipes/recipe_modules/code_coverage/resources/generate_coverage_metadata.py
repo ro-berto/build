@@ -578,7 +578,13 @@ def _cleanup_coverage_data(src_path, llvm_raw_data):
           'segments': segments,
           'summary': file_coverage_data['summary']
       })
-  return {'data': [{'files': cleaned_file_data}]}
+  return {
+      'data': [{
+          'files': cleaned_file_data
+      }],
+      'type': llvm_raw_data['type'],
+      'version': llvm_raw_data['version']
+  }
 
 
 def _create_coverage_json(output_dir, data):

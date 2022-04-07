@@ -316,7 +316,9 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
                 },
                 'filename': '/path/to/chromium/src/base/base.cc',
             }]
-        }]
+        }],
+        'type': 'llvm.coverage.json.export',
+        'version': '2.0.1'
     }
     expected_cleaned_data = {
         'data': [{
@@ -340,7 +342,9 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
                 },
                 'filename': 'base/base.cc',
             }]
-        }]
+        }],
+        'type': 'llvm.coverage.json.export',
+        'version': '2.0.1'
     }
 
     cleaned_data = generator._cleanup_coverage_data(src_path, raw_data)
@@ -434,10 +438,11 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
                         'percent': 57
                     },
                 },
-                'filename':
-                    '/path/to/src/dir/file.cc',
+                'filename': '/path/to/src/dir/file.cc',
             }]
-        }]
+        }],
+        'type': 'llvm.coverage.json.export',
+        'version': '2.0.1'
     }
 
     # We don't care about the summaries for this test.
@@ -516,31 +521,30 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
     }
     mock_get_coverage_data.return_value = {
         'data': [{
-            'files': [
-                {
-                    'segments': [
-                        [1, 12, 1, True, True],
-                        [2, 7, 1, True, True],
-                        [2, 14, 1, True, False],
-                        [2, 18, 0, True, True],
-                        [2, 25, 1, True, False],
-                        [2, 27, 1, True, True],
-                        [4, 4, 0, True, False],
-                        [6, 3, 0, True, True],
-                        [7, 2, 0, False, False],
-                    ],
-                    'summary': {
-                        'lines': {
-                            'count': 7,
-                            'covered': 4,
-                            'percent': 57
-                        },
+            'files': [{
+                'segments': [
+                    [1, 12, 1, True, True],
+                    [2, 7, 1, True, True],
+                    [2, 14, 1, True, False],
+                    [2, 18, 0, True, True],
+                    [2, 25, 1, True, False],
+                    [2, 27, 1, True, True],
+                    [4, 4, 0, True, False],
+                    [6, 3, 0, True, True],
+                    [7, 2, 0, False, False],
+                ],
+                'summary': {
+                    'lines': {
+                        'count': 7,
+                        'covered': 4,
+                        'percent': 57
                     },
-                    'filename':
-                        '/path/to/src/dir1/file1.cc',
                 },
-            ]
-        }]
+                'filename': '/path/to/src/dir1/file1.cc',
+            },]
+        }],
+        'type': 'llvm.coverage.json.export',
+        'version': '2.0.1'
     }
 
     # We don't care about the summaries for this test.
