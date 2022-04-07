@@ -83,22 +83,8 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
       test += self.step_data('compile', retcode=1)
 
     if failing_test:
-      # Unfortunately, we have no idea what type of test this is and what would
-      # be appropriate test data to pass. We guess that this is a swarmed gtest.
-      custom_os = bot_config.get('swarming_dimensions', {}).get('os', '')
-      swarming_result = self.m.chromium_swarming.canned_summary_output_raw(
-          failure=True)
-      swarming_result['shards'][0]['output'] = "Tests failed"
-      swarming_result['shards'][0]['exit_code'] = 1
-
-      test_step_data = self.m.chromium_swarming.summary(
-          dispatched_task_step_test_data=None, data=swarming_result)
-
-      test += self.override_step_data('%s on %s' % (failing_test, custom_os),
-                                      test_step_data)
-      step_name = 'collect tasks.%s results' % failing_test
       test += self.override_step_data(
-          step_name,
+          failing_test + ' results',
           stdout=self.m.raw_io.output_text(
               self.m.test_utils.rdb_results(
                   failing_test, failing_tests=[failing_test])))
@@ -132,15 +118,19 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
     test += self.m.properties(buildnumber=1337)
 
     if builder_id in webrtc_builders.BUILDERS_DB:
-      test += self.m.chromium_tests.read_source_side_spec(
-          builder_group,
-          contents={
-              buildername: {
-                  'gtest_tests': [{
-                      'test': 'common_audio_unittests'
-                  }]
-              }
-          })
+      phases = bot_config.get('phases', [None])
+      step_suffixes = [''] + [' (%d)' % i for i in range(2, len(phases) + 1)]
+      for step_suffix in step_suffixes:
+        test += self.m.chromium_tests.read_source_side_spec(
+            builder_group,
+            step_suffix=step_suffix,
+            contents={
+                buildername: {
+                    'gtest_tests': [{
+                        'test': 'common_audio_unittests'
+                    }]
+                }
+            })
 
     return test
 

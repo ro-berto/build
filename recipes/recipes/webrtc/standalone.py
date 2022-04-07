@@ -91,7 +91,7 @@ def GenTests(api):
       bucketname,
       buildername,
       revision='a' * 40,
-      failing_test='rtc_unittests',
+      failing_test='common_audio_unittests',
       suffix='_failing_test')
   yield generate_builder(
       bucketname,
