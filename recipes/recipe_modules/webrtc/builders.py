@@ -119,10 +119,6 @@ BUILDERS = freeze({
             },
             'Win32 Builder (Clang)': {
                 'recipe_config': 'webrtc_clang',
-                'chromium_config_kwargs': {
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_BITS': 32,
-                },
                 'bot_type': 'builder',
                 'testing': {
                     'platform': 'win'
@@ -192,10 +188,6 @@ BUILDERS = freeze({
             },
             'Mac64 Builder': {
                 'recipe_config': 'webrtc',
-                'chromium_config_kwargs': {
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_BITS': 64,
-                },
                 'bot_type': 'builder',
                 'testing': {
                     'platform': 'mac'
@@ -730,22 +722,12 @@ BUILDERS = freeze({
         'builders': {
             'Perf Win7': {
                 'recipe_config': 'webrtc_desktop_perf_swarming',
-                'chromium_config_kwargs': {
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_BITS': 32,
-                },
                 'perf_id': 'webrtc-win-large-tests',
                 'bot_type': 'tester',
                 'parent_buildername': 'Win32 Builder (Clang)',
                 'testing': {
                     'platform': 'win'
                 },
-                'swarming_dimensions': {
-                    'pool': 'WebRTC-perf',
-                    'gpu': None,
-                    'os': 'Windows',
-                },
-                'swarming_timeout': 10800,  # 3h
             },
             'Perf Mac 10.11': {
                 'recipe_config': 'webrtc_desktop_perf_swarming',
@@ -1748,25 +1730,11 @@ BUILDERS = freeze({
             },
             'iOS64 Perf': {
                 'recipe_config': 'webrtc_ios_perf',
-                'chromium_apply_config': ['mac_toolchain'],
-                'chromium_config_kwargs': {
-                    'BUILD_CONFIG': 'Release',
-                    'TARGET_PLATFORM': 'ios',
-                    'TARGET_ARCH': 'arm',
-                    'TARGET_BITS': 64,
-                },
                 'bot_type': 'builder_tester',
                 'perf_id': 'webrtc-ios-tests',
                 'testing': {
                     'platform': 'mac'
                 },
-                'service_account': CHROME_TEST_SERVICE_ACCOUNT,
-                'swarming_dimensions': {
-                    'os': 'iOS-12.4.1',
-                    'pool': 'WebRTC',
-                    'id': 'build15-a7',
-                },
-                'swarming_timeout': 10800,  # 3h
             },
         },
     },
@@ -1838,6 +1806,14 @@ _CLIENT_WEBRTC_SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             }),
+    'Mac64 Builder':
+        builder_spec.BuilderSpec.create(
+            chromium_config='webrtc_default',
+            gclient_config='webrtc',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            }),
     'Mac64 Release':
         builder_spec.BuilderSpec.create(
             chromium_config='webrtc_default',
@@ -1845,6 +1821,14 @@ _CLIENT_WEBRTC_SPEC = {
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
+            }),
+    'Win32 Builder (Clang)':
+        builder_spec.BuilderSpec.create(
+            chromium_config='webrtc_clang',
+            gclient_config='webrtc',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 32,
             }),
     'Win32 Release (Clang)':
         builder_spec.BuilderSpec.create(
@@ -1867,7 +1851,33 @@ _CLIENT_WEBRTC_SPEC = {
             }),
 }
 
+_CLIENT_WEBRTC_PERF_SPECS = {
+    'Perf Win7':
+        builder_spec.BuilderSpec.create(
+            chromium_config='webrtc_default',
+            gclient_config='webrtc',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 32,
+            },
+            execution_mode=builder_spec.TEST,
+            parent_builder_group='client.webrtc',
+            parent_buildername='Win32 Builder (Clang)',
+        ),
+}
+
 _INTERNAL_CLIENT_WEBRTC = {
+    'iOS64 Perf':
+        builder_spec.BuilderSpec.create(
+            chromium_config='webrtc_default',
+            gclient_config='webrtc_ios',
+            chromium_apply_config=['mac_toolchain'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_PLATFORM': 'ios',
+                'TARGET_ARCH': 'arm',
+                'TARGET_BITS': 64,
+            }),
     'iOS64 Release':
         builder_spec.BuilderSpec.create(
             chromium_config='webrtc_default',
@@ -1894,6 +1904,7 @@ _TRYSERVER_WEBRTC_SPEC = {
 
 BUILDERS_DB = builder_db.BuilderDatabase.create({
     'client.webrtc': _CLIENT_WEBRTC_SPEC,
+    'client.webrtc.perf': _CLIENT_WEBRTC_PERF_SPECS,
     'internal.client.webrtc': _INTERNAL_CLIENT_WEBRTC,
     'tryserver.webrtc': _TRYSERVER_WEBRTC_SPEC,
 })
