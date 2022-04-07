@@ -15,6 +15,7 @@ def _chromium_android_spec(**kwargs):
 # The config for the following builders is now specified src-side in
 # //infra/config/subprojects/chromium/ci/chromium.android.star
 # * Android arm Builder (dbg)
+# * Android x64 Builder (dbg)
 # * Marshmallow Tablet Tester
 
 SPEC = {
@@ -54,22 +55,6 @@ SPEC = {
                 'TARGET_PLATFORM': 'android',
             },
             android_config='clang_builder_mb',
-            simulation_platform='linux',
-        ),
-    'Android x64 Builder (dbg)':
-        _chromium_android_spec(
-            chromium_config='android',
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'android',
-                'enable_reclient',
-            ],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'android',
-            },
-            android_config='x64_builder_mb',
             simulation_platform='linux',
         ),
     'Android x86 Builder (dbg)':

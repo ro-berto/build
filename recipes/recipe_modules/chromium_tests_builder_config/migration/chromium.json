@@ -21,14 +21,6 @@
     "chromium.android.fyi:android-11-x86-fyi-rel",
     "tryserver.chromium.android:android-11-x86-fyi-rel"
   ],
-  "chromium.android.fyi:android-12-x64-dbg-tests": [
-    "chromium.android:Android x64 Builder (dbg)",
-    "chromium.android.fyi:android-12-x64-dbg-tests",
-    "chromium.android.fyi:android-webview-12-x64-dbg-tests",
-    "tryserver.chromium.android:android-12-x64-dbg",
-    "tryserver.chromium.android:android-webview-12-x64-dbg",
-    "tryserver.chromium.android:android_compile_x64_dbg"
-  ],
   "chromium.android.fyi:android-12-x64-fyi-rel": [
     "chromium.android.fyi:android-12-x64-fyi-rel",
     "tryserver.chromium.android:android-12-x64-fyi-rel"
@@ -80,14 +72,6 @@
     "chromium.android.fyi:android-weblayer-11-x86-rel-tests",
     "chromium.android.fyi:android-weblayer-with-aosp-webview-x86-fyi-rel",
     "tryserver.chromium.android:android-weblayer-11-x86-rel-tests"
-  ],
-  "chromium.android.fyi:android-webview-12-x64-dbg-tests": [
-    "chromium.android:Android x64 Builder (dbg)",
-    "chromium.android.fyi:android-12-x64-dbg-tests",
-    "chromium.android.fyi:android-webview-12-x64-dbg-tests",
-    "tryserver.chromium.android:android-12-x64-dbg",
-    "tryserver.chromium.android:android-webview-12-x64-dbg",
-    "tryserver.chromium.android:android_compile_x64_dbg"
   ],
   "chromium.android.fyi:android-webview-pie-x86-wpt-fyi-rel": [
     "chromium.android.fyi:android-webview-pie-x86-wpt-fyi-rel",
@@ -205,14 +189,6 @@
     "tryserver.chromium.android:android_n5x_swarming_dbg",
     "tryserver.chromium.android:android_unswarmed_pixel_aosp",
     "tryserver.chromium.android:try-nougat-phone-tester"
-  ],
-  "chromium.android:Android x64 Builder (dbg)": [
-    "chromium.android:Android x64 Builder (dbg)",
-    "chromium.android.fyi:android-12-x64-dbg-tests",
-    "chromium.android.fyi:android-webview-12-x64-dbg-tests",
-    "tryserver.chromium.android:android-12-x64-dbg",
-    "tryserver.chromium.android:android-webview-12-x64-dbg",
-    "tryserver.chromium.android:android_compile_x64_dbg"
   ],
   "chromium.android:Android x86 Builder (dbg)": [
     "chromium.android:Android x86 Builder (dbg)",
@@ -3352,14 +3328,6 @@
     "chromium.android:android-11-x86-rel",
     "tryserver.chromium.android:android-11-x86-rel"
   ],
-  "tryserver.chromium.android:android-12-x64-dbg": [
-    "chromium.android:Android x64 Builder (dbg)",
-    "chromium.android.fyi:android-12-x64-dbg-tests",
-    "chromium.android.fyi:android-webview-12-x64-dbg-tests",
-    "tryserver.chromium.android:android-12-x64-dbg",
-    "tryserver.chromium.android:android-webview-12-x64-dbg",
-    "tryserver.chromium.android:android_compile_x64_dbg"
-  ],
   "tryserver.chromium.android:android-12-x64-fyi-rel": [
     "chromium.android.fyi:android-12-x64-fyi-rel",
     "tryserver.chromium.android:android-12-x64-fyi-rel"
@@ -3613,14 +3581,6 @@
     "chromium.android.fyi:android-weblayer-pie-x86-wpt-smoketest",
     "tryserver.chromium.android:android-weblayer-pie-x86-wpt-smoketest"
   ],
-  "tryserver.chromium.android:android-webview-12-x64-dbg": [
-    "chromium.android:Android x64 Builder (dbg)",
-    "chromium.android.fyi:android-12-x64-dbg-tests",
-    "chromium.android.fyi:android-webview-12-x64-dbg-tests",
-    "tryserver.chromium.android:android-12-x64-dbg",
-    "tryserver.chromium.android:android-webview-12-x64-dbg",
-    "tryserver.chromium.android:android_compile_x64_dbg"
-  ],
   "tryserver.chromium.android:android-webview-marshmallow-arm64-dbg": [
     "chromium.android:Android WebView M (dbg)",
     "chromium.android:Android WebView N (dbg)",
@@ -3740,14 +3700,6 @@
   ],
   "tryserver.chromium.android:android_blink_rel": [
     "tryserver.chromium.android:android_blink_rel"
-  ],
-  "tryserver.chromium.android:android_compile_x64_dbg": [
-    "chromium.android:Android x64 Builder (dbg)",
-    "chromium.android.fyi:android-12-x64-dbg-tests",
-    "chromium.android.fyi:android-webview-12-x64-dbg-tests",
-    "tryserver.chromium.android:android-12-x64-dbg",
-    "tryserver.chromium.android:android-webview-12-x64-dbg",
-    "tryserver.chromium.android:android_compile_x64_dbg"
   ],
   "tryserver.chromium.android:android_compile_x86_dbg": [
     "chromium.android:Android x86 Builder (dbg)",

@@ -11,6 +11,10 @@ def _chromium_android_fyi_spec(**kwargs):
   return builder_spec.BuilderSpec.create(
       build_gs_bucket='chromium-android-archive', **kwargs)
 
+# The config for the following builders is now specified src-side in
+# //infra/config/subprojects/chromium/ci/chromium.android.fyi.star
+# * android-12-x64-dbg-tests
+# * android-webview-12-x64-dbg-tests
 
 SPEC = {
     'Android arm64 Builder (dbg) (reclient)':
@@ -124,22 +128,6 @@ SPEC = {
             android_config='x86_builder_mb',
             simulation_platform='linux',
         ),
-    'android-12-x64-dbg-tests':
-        _chromium_android_fyi_spec(
-            chromium_config='android',
-            gclient_config='chromium',
-            gclient_apply_config=['android'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'android',
-            },
-            parent_builder_group='chromium.android',
-            parent_buildername='Android x64 Builder (dbg)',
-            execution_mode=builder_spec.TEST,
-            android_config='x64_builder_mb',
-            simulation_platform='linux',
-        ),
     # TODO(crbug.com/1225851): Remote FYI config after
     # android-12-x64-rel is  up and running.
     'android-12-x64-fyi-rel':
@@ -226,22 +214,6 @@ SPEC = {
                 'TARGET_PLATFORM': 'android',
             },
             android_config='x86_builder',
-            simulation_platform='linux',
-        ),
-    'android-webview-12-x64-dbg-tests':
-        _chromium_android_fyi_spec(
-            chromium_config='android',
-            gclient_config='chromium',
-            gclient_apply_config=['android'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'android',
-            },
-            parent_builder_group='chromium.android',
-            parent_buildername='Android x64 Builder (dbg)',
-            execution_mode=builder_spec.TEST,
-            android_config='x64_builder_mb',
             simulation_platform='linux',
         ),
     'android-webview-pie-x86-wpt-fyi-rel':

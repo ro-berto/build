@@ -108,6 +108,9 @@ TRYBOTS = try_spec.TryDatabase.create({
     # The config for the following builders is now specified src-side in
     # //infra/config/subprojects/chromium/try/tryserver.chromium.android.star
     # * android_compile_dbg
+    # * android_compile_x64_dbg
+    # * android-12-x64-dbg
+    # * android-webview-12-x64-dbg
     'tryserver.chromium.android': {
         'android-10-x86-fyi-rel-tests':
             try_spec.TrySpec.create_for_single_mirror(
@@ -141,13 +144,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android',
                 buildername='android-12-x64-rel',
-            ),
-        'android-12-x64-dbg':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android',
-                buildername='Android x64 Builder (dbg)',
-                tester_group='chromium.android.fyi',
-                tester='android-12-x64-dbg-tests',
             ),
         'android-asan':
             try_spec.TrySpec.create_for_single_mirror(
@@ -345,13 +341,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 is_compile_only=True,
                 include_all_triggered_testers=True,
             ),
-        'android_compile_x64_dbg':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android',
-                buildername='Android x64 Builder (dbg)',
-                is_compile_only=True,
-                include_all_triggered_testers=True,
-            ),
         'android_compile_x86_dbg':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android',
@@ -381,13 +370,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.gpu.fyi',
                 buildername='Optional Android Release (Pixel 4)',
                 retry_failed_shards=False,
-            ),
-        'android-webview-12-x64-dbg':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android',
-                buildername='Android x64 Builder (dbg)',
-                tester_group='chromium.android.fyi',
-                tester='android-webview-12-x64-dbg-tests',
             ),
         'android-webview-marshmallow-arm64-dbg':
             try_spec.TrySpec.create_for_single_mirror(
