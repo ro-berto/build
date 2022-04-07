@@ -80,6 +80,12 @@ def _gn_gen_builds(api, target_cpu, debug, clang, use_goma, out_dir, static,
       'is_component_build=%s' % gn_bool[not static],
       'use_goma=%s' % gn_bool[use_goma],
       'dawn_use_swiftshader=%s' % gn_bool[swiftshader],
+      'tint_build_spv_reader=true',
+      'tint_build_spv_writer=true',
+      'tint_build_wgsl_reader=true',
+      'tint_build_wgsl_writer=true',
+      'tint_build_msl_writer=true',
+      'tint_build_hlsl_writer=true',
   ]
 
   if use_goma:
@@ -121,10 +127,15 @@ def _build_steps(api, out_dir, clang, use_goma, *targets):
     api.step('compile with ninja', ninja_cmd)
 
 
-def _run_unittests(api, out_dir):
+def _run_dawn_unittests(api, out_dir):
   test_path = api.path['checkout'].join('out', out_dir, 'dawn_unittests')
   api.step('Run the Dawn unittests', [test_path])
   api.step('Run the Dawn unittests with the wire', [test_path, '--use-wire'])
+
+
+def _run_tint_unittests(api, out_dir):
+  test_path = api.path['checkout'].join('out', out_dir, 'tint_unittests')
+  api.step('Run the Tint unittests', [test_path])
 
 
 def _run_tint_generator_unittests(api, out_dir):
@@ -241,8 +252,9 @@ def RunSteps(api, target_cpu, debug, clang, gen_fuzz_corpus):
           static=True,
           swiftshader=False)
       _build_steps(api, out_dir_static, clang, use_goma)
-      _run_unittests(api, out_dir_static)
+      _run_dawn_unittests(api, out_dir_static)
       _run_tint_generator_unittests(api, out_dir_static)
+      _run_tint_unittests(api, out_dir_static)
 
       # Component build and run dawn_end2end_tests with SwiftShader
       # When using SwiftShader a component build should be used.

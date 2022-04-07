@@ -245,7 +245,7 @@
       "--root=[CACHE]/builder/dawn",
       "gen",
       "//out/release_component",
-      "--args=is_debug=false is_component_build=true use_goma=true dawn_use_swiftshader=true goma_dir=\"[CACHE]/goma/client\" dawn_enable_d3d12=false"
+      "--args=is_debug=false is_component_build=true use_goma=true dawn_use_swiftshader=true tint_build_spv_reader=true tint_build_spv_writer=true tint_build_wgsl_reader=true tint_build_wgsl_writer=true tint_build_msl_writer=true tint_build_hlsl_writer=true goma_dir=\"[CACHE]/goma/client\" dawn_enable_d3d12=false"
     ],
     "cwd": "[CACHE]/builder/dawn",
     "luci_context": {
