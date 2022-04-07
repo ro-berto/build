@@ -18,7 +18,8 @@
     "tryserver.chromium.android:android-10-x86-fyi-rel-tests"
   ],
   "chromium.android.fyi:android-11-x86-fyi-rel": [
-    "chromium.android.fyi:android-11-x86-fyi-rel"
+    "chromium.android.fyi:android-11-x86-fyi-rel",
+    "tryserver.chromium.android:android-11-x86-fyi-rel"
   ],
   "chromium.android.fyi:android-12-x64-dbg-tests": [
     "chromium.android:Android x64 Builder (dbg)",
@@ -3342,6 +3343,10 @@
     "chromium.android.fyi:android-10-x86-fyi-rel-tests",
     "chromium.android.fyi:android-x86-fyi-rel",
     "tryserver.chromium.android:android-10-x86-fyi-rel-tests"
+  ],
+  "tryserver.chromium.android:android-11-x86-fyi-rel": [
+    "chromium.android.fyi:android-11-x86-fyi-rel",
+    "tryserver.chromium.android:android-11-x86-fyi-rel"
   ],
   "tryserver.chromium.android:android-11-x86-rel": [
     "chromium.android:android-11-x86-rel",
