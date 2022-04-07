@@ -51,11 +51,44 @@ message GroupingsOperation {
   repeated BuilderGroupFilter builder_group_filters = 2;
 }
 
-// Next ID: 2
+// An operation to produce the necessary changes to migrate a builder src-side
+//
+// The migration operation will determine the grouping of builders that must be
+// migrated together for the given builder and then produce a file containing
+// the snippets of starlark code that should be added to the builder
+// definitions.
+//
+// The format of the output file will be a line with the stringified form of a
+// chromium.BuilderId, then 1 or more lines of indented code that can be added
+// to the LUCI definition of the corresponding builder. This is repeated for
+// each builder that should be migrated together.
+//
+// Next ID: 3
+message MigrationOperation {
+
+  // Identifies a builder by group and name
+  //
+  // Next ID: 3
+  message BuilderGroupAndName {
+
+    // Required, the builder group of the builder to migrate
+    string builder_group = 1;
+
+    // Required, the builder to migrate
+    string builder = 2;
+  }
+  repeated BuilderGroupAndName builders_to_migrate = 1;
+
+  // Required, the path to write the output to
+  string output_path = 2;
+}
+
+// Next ID: 3
 message InputProperties {
 
   // The operation to perform, one must be set
   oneof operation {
     GroupingsOperation groupings_operation = 1;
+    MigrationOperation migration_operation = 2;
   }
 }
