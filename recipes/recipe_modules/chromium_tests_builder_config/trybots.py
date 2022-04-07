@@ -937,13 +937,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='Linux ChromiumOS MSan Builder',
                 tester='Linux ChromiumOS MSan Tests',
             ),
-        'linux_chromium_compile_dbg_32_ng':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.linux',
-                buildername='Linux Builder (dbg)(32)',
-                is_compile_only=True,
-                include_all_triggered_testers=True,
-            ),
         'linux_chromium_msan_rel_ng':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.memory',

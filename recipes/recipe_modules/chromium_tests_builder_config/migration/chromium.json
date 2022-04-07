@@ -2424,10 +2424,6 @@
     "chromium.linux:Linux Tests (Wayland)",
     "tryserver.chromium.linux:linux-wayland-rel"
   ],
-  "chromium.linux:Linux Builder (dbg)(32)": [
-    "chromium.linux:Linux Builder (dbg)(32)",
-    "tryserver.chromium.linux:linux_chromium_compile_dbg_32_ng"
-  ],
   "chromium.linux:Linux Tests": [
     "chromium.gpu:GPU Linux Builder",
     "chromium.gpu:Linux Release (NVIDIA)",
@@ -4655,10 +4651,6 @@
     "chromium:linux-archive-rel",
     "tryserver.chromium.linux:linux_chromium_archive_rel_ng",
     "tryserver.chromium.linux:linux_chromium_clobber_rel_ng"
-  ],
-  "tryserver.chromium.linux:linux_chromium_compile_dbg_32_ng": [
-    "chromium.linux:Linux Builder (dbg)(32)",
-    "tryserver.chromium.linux:linux_chromium_compile_dbg_32_ng"
   ],
   "tryserver.chromium.linux:linux_chromium_compile_rel_ng": [
     "chromium.gpu:GPU Linux Builder",

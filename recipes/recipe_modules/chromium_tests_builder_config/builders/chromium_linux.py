@@ -219,20 +219,6 @@ SPEC = {
             parent_buildername='Linux Builder',
             simulation_platform='linux',
         ),
-    'Linux Builder (dbg)(32)':
-        _chromium_linux_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=['enable_reclient'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 32,
-            },
-            simulation_platform='linux',
-        ),
     'Cast Audio Linux':
         _chromium_linux_spec(
             chromium_config='chromium_clang',
