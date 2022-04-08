@@ -97,14 +97,6 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "initialization.set_output_gitiles_commit",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@SET_BUILD_PROPERTY@$recipe_engine/buildbucket/output_gitiles_commit@{\"host\": \"fake.org\", \"id\": \"17ca4841220f8efef15d382e98f77ec51a964527\", \"position\": 50110, \"project\": \"v8\", \"ref\": \"refs/branch-heads/4.3:deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\"}@@@"
-    ]
-  },
-  {
     "failure": {
       "humanReason": "Infra Failure: Step('initialization.bot_update') (retcode: 1)"
     },

@@ -136,13 +136,6 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "set_output_gitiles_commit",
-    "~followup_annotations": [
-      "@@@SET_BUILD_PROPERTY@$recipe_engine/buildbucket/output_gitiles_commit@{\"host\": \"fake.org\", \"id\": \"d69d97171c17fdb12a52f78847e2ee2f0594eff1\", \"position\": 52055, \"project\": \"pdfium\", \"ref\": \"refs/heads/main\"}@@@"
-    ]
-  },
-  {
     "cmd": [
       "git",
       "-c",

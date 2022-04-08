@@ -124,14 +124,6 @@
   },
   {
     "cmd": [],
-    "name": "sync (ref).set_output_gitiles_commit",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@SET_BUILD_PROPERTY@$recipe_engine/buildbucket/output_gitiles_commit@{\"host\": \"fake.org\", \"id\": \"4c9777768598a998f790b8b1d5d84b1579b4059b\", \"position\": 50110, \"project\": \"v8\", \"ref\": \"refs/branch-heads/3.4:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"}@@@"
-    ]
-  },
-  {
-    "cmd": [],
     "name": "sync (ref).ensure_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
