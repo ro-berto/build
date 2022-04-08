@@ -330,6 +330,9 @@
       "@@@STEP_LOG_LINE@json.output@  \"Win32 Builder (Clang)\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"can_use_on_swarming_builders\": true@@@",
+      "@@@STEP_LOG_LINE@json.output@        }, @@@",
       "@@@STEP_LOG_LINE@json.output@        \"test\": \"common_audio_unittests\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
@@ -420,6 +423,8 @@
       "[CACHE]\\goma\\client",
       "--json-output",
       "/path/to/tmp/json",
+      "--swarming-targets-file",
+      "common_audio_unittests\n",
       "//out/Win32_Builder_Clang"
     ],
     "cwd": "[CACHE]\\builder\\src",
@@ -442,7 +447,9 @@
     "name": "generate_build_files",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
-      "@@@STEP_LOG_END@json.output[failure_summary]@@@"
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@common_audio_unittests@@@",
+      "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
     ]
   },
   {
@@ -899,6 +906,115 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "install infra/tools/luci/isolate"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[START_DIR]\\cipd_tool\\infra\\tools\\luci\\isolate\\git_revision%3Amock_infra_git_revision"
+    ],
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "install infra/tools/luci/isolate.ensure package directory",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "cipd.bat",
+      "ensure",
+      "-root",
+      "[START_DIR]\\cipd_tool\\infra\\tools\\luci\\isolate\\git_revision%3Amock_infra_git_revision",
+      "-ensure-file",
+      "infra/tools/luci/isolate/${platform} git_revision:mock_infra_git_revision",
+      "-max-threads",
+      "0",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "install infra/tools/luci/isolate.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:moc\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/luci/isolate/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[START_DIR]\\cipd_tool\\infra\\tools\\luci\\isolate\\git_revision%3Amock_infra_git_revision\\isolate",
+      "batcharchive",
+      "--dump-json",
+      "/path/to/tmp/json",
+      "-cas-instance",
+      "projects/example-cas-server/instances/default_instance",
+      "-log-level",
+      "debug",
+      "[CACHE]\\builder\\src\\out\\Win32_Builder_Clang\\common_audio_unittests.isolated.gen.json"
+    ],
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "isolate tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"common_audio_unittests\": \"[dummy hash for common_audio_unittests/dummy size]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@swarm_hashes_refs/heads/main(at){#170242}_without_patch@{\"common_audio_unittests\": \"[dummy hash for common_audio_unittests/dummy size]\"}@@@"
+    ]
+  },
+  {
     "cmd": [
       "luci-auth",
       "token",
@@ -927,7 +1043,7 @@
       "RECIPE_MODULE[build::perf_dashboard]\\resources\\post_json.py",
       "https://pinpoint-dot-chromeperf.appspot.com/api/isolate",
       "-i",
-      "{\"builder_name\": \"Win32 Builder (Clang)\", \"change\": \"{\\\"commits\\\": [{\\\"git_hash\\\": \\\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\\\", \\\"repository\\\": \\\"webrtc\\\"}]}\", \"isolate_map\": \"{}\", \"isolate_server\": \"projects/example-cas-server/instances/default_instance\"}",
+      "{\"builder_name\": \"Win32 Builder (Clang)\", \"change\": \"{\\\"commits\\\": [{\\\"git_hash\\\": \\\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\\\", \\\"repository\\\": \\\"webrtc\\\"}]}\", \"isolate_map\": \"{\\\"common_audio_unittests\\\": \\\"[dummy hash for common_audio_unittests/dummy size]\\\"}\", \"isolate_server\": \"projects/example-cas-server/instances/default_instance\"}",
       "-o",
       "/path/to/tmp/json",
       "-t",
@@ -1003,7 +1119,7 @@
       }
     },
     "name": "luci-scheduler.EmitTriggers",
-    "stdin": "{\"batches\": [{\"jobs\": [{\"job\": \"Perf Win7\", \"project\": \"webrtc\"}], \"trigger\": {\"buildbucket\": {\"properties\": {\"parent_got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"parent_got_revision_cp\": \"refs/heads/main@{#170242}\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"swarm_hashes\": {}, \"swarming_command_lines\": {}}, \"tags\": [\"buildset:commit/gitiles/webrtc.googlesource.com/src/+/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"gitiles_ref:refs/heads/main\", \"parent_buildername:Win32 Builder (Clang)\", \"user_agent:recipe\"]}, \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", \"title\": \"Win32 Builder (Clang)/0\"}}], \"timestamp\": 1337000001500000}",
+    "stdin": "{\"batches\": [{\"jobs\": [{\"job\": \"Perf Win7\", \"project\": \"webrtc\"}], \"trigger\": {\"buildbucket\": {\"properties\": {\"parent_got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"parent_got_revision_cp\": \"refs/heads/main@{#170242}\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"swarm_hashes\": {\"common_audio_unittests\": \"[dummy hash for common_audio_unittests/dummy size]\"}, \"swarming_command_lines\": {}}, \"tags\": [\"buildset:commit/gitiles/webrtc.googlesource.com/src/+/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"gitiles_ref:refs/heads/main\", \"parent_buildername:Win32 Builder (Clang)\", \"user_agent:recipe\"]}, \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", \"title\": \"Win32 Builder (Clang)/0\"}}], \"timestamp\": 1337000001500000}",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@input@{@@@",
       "@@@STEP_LOG_LINE@input@    \"batches\": [@@@",
@@ -1020,7 +1136,9 @@
       "@@@STEP_LOG_LINE@input@                        \"parent_got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", @@@",
       "@@@STEP_LOG_LINE@input@                        \"parent_got_revision_cp\": \"refs/heads/main@{#170242}\", @@@",
       "@@@STEP_LOG_LINE@input@                        \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", @@@",
-      "@@@STEP_LOG_LINE@input@                        \"swarm_hashes\": {}, @@@",
+      "@@@STEP_LOG_LINE@input@                        \"swarm_hashes\": {@@@",
+      "@@@STEP_LOG_LINE@input@                            \"common_audio_unittests\": \"[dummy hash for common_audio_unittests/dummy size]\"@@@",
+      "@@@STEP_LOG_LINE@input@                        }, @@@",
       "@@@STEP_LOG_LINE@input@                        \"swarming_command_lines\": {}@@@",
       "@@@STEP_LOG_LINE@input@                    }, @@@",
       "@@@STEP_LOG_LINE@input@                    \"tags\": [@@@",

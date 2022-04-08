@@ -2195,21 +2195,124 @@ _CLIENT_WEBRTC_SPEC = {
 }
 
 _CLIENT_WEBRTC_PERF_SPECS = {
+    'Perf Android32 (M AOSP Nexus6)':
+        builder_spec.BuilderSpec.create(
+            chromium_config='webrtc_default',
+            android_config='webrtc',
+            gclient_config='webrtc',
+            gclient_apply_config=['android'],
+            execution_mode=builder_spec.TEST,
+            parent_builder_group='client.webrtc',
+            parent_buildername='Android32 Builder arm',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_PLATFORM': 'android',
+                'TARGET_ARCH': 'arm',
+                'TARGET_BITS': 32,
+            }),
+    'Perf Android32 (M Nexus5)':
+        builder_spec.BuilderSpec.create(
+            chromium_config='webrtc_default',
+            android_config='webrtc',
+            gclient_config='webrtc',
+            gclient_apply_config=['android'],
+            execution_mode=builder_spec.TEST,
+            parent_builder_group='client.webrtc',
+            parent_buildername='Android32 Builder arm',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_PLATFORM': 'android',
+                'TARGET_ARCH': 'arm',
+                'TARGET_BITS': 32,
+            }),
+    'Perf Android64 (M Nexus5X)':
+        builder_spec.BuilderSpec.create(
+            chromium_config='webrtc_default',
+            android_config='webrtc',
+            gclient_config='webrtc',
+            gclient_apply_config=['android'],
+            execution_mode=builder_spec.TEST,
+            parent_builder_group='client.webrtc',
+            parent_buildername='Android64 Builder arm64',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_PLATFORM': 'android',
+                'TARGET_ARCH': 'arm',
+                'TARGET_BITS': 64,
+            }),
+    'Perf Android64 (O Pixel2)':
+        builder_spec.BuilderSpec.create(
+            chromium_config='webrtc_default',
+            android_config='webrtc',
+            gclient_config='webrtc',
+            gclient_apply_config=['android'],
+            execution_mode=builder_spec.TEST,
+            parent_builder_group='client.webrtc',
+            parent_buildername='Android64 Builder arm64',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_PLATFORM': 'android',
+                'TARGET_ARCH': 'arm',
+                'TARGET_BITS': 64,
+            }),
+    'Perf Linux Bionic':
+        builder_spec.BuilderSpec.create(
+            chromium_config='webrtc_default',
+            gclient_config='webrtc',
+            execution_mode=builder_spec.TEST,
+            parent_builder_group='client.webrtc',
+            parent_buildername='Linux64 Builder',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            }),
+    'Perf Linux Trusty':
+        builder_spec.BuilderSpec.create(
+            chromium_config='webrtc_default',
+            gclient_config='webrtc',
+            execution_mode=builder_spec.TEST,
+            parent_builder_group='client.webrtc',
+            parent_buildername='Linux64 Builder',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            }),
+    'Perf Mac 10.11':
+        builder_spec.BuilderSpec.create(
+            chromium_config='webrtc_default',
+            gclient_config='webrtc',
+            execution_mode=builder_spec.TEST,
+            parent_builder_group='client.webrtc',
+            parent_buildername='Mac64 Builder',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            }),
     'Perf Win7':
         builder_spec.BuilderSpec.create(
             chromium_config='webrtc_default',
             gclient_config='webrtc',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 32,
-            },
             execution_mode=builder_spec.TEST,
             parent_builder_group='client.webrtc',
             parent_buildername='Win32 Builder (Clang)',
-        ),
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 32,
+            }),
 }
 
 _INTERNAL_CLIENT_WEBRTC = {
+    'iOS64 Debug':
+        builder_spec.BuilderSpec.create(
+            chromium_config='webrtc_default',
+            gclient_config='webrtc_ios',
+            chromium_apply_config=['mac_toolchain'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_PLATFORM': 'ios',
+                'TARGET_ARCH': 'arm',
+                'TARGET_BITS': 64,
+            }),
     'iOS64 Perf':
         builder_spec.BuilderSpec.create(
             chromium_config='webrtc_default',

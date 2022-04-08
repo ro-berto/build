@@ -77,14 +77,14 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
       parent_rev = parent_got_revision or revision
       test += self.m.properties(parent_got_revision=parent_rev)
       test += self.m.properties(
-          swarming_command_lines={'webrtc_perf_tests': ['./dummy_cmd']})
+          swarming_command_lines={'common_audio_unittests': ['./dummy_cmd']})
 
     if fail_compile:
       test += self.step_data('compile', retcode=1)
 
     if failing_test:
       test += self.override_step_data(
-          failing_test + ' results',
+          'collect tasks.%s results' % failing_test,
           stdout=self.m.raw_io.output_text(
               self.m.test_utils.rdb_results(
                   failing_test, failing_tests=[failing_test])))
@@ -127,7 +127,10 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
             contents={
                 buildername: {
                     'gtest_tests': [{
-                        'test': 'common_audio_unittests'
+                        'test': 'common_audio_unittests',
+                        'swarming': {
+                            'can_use_on_swarming_builders': True
+                        }
                     }]
                 }
             })

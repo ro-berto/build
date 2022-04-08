@@ -370,6 +370,45 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[CACHE]/builder/src/infra/specs/client.webrtc.perf.json",
+      "/path/to/tmp/json"
+    ],
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:perf"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "read test spec (client.webrtc.perf.json)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@path: [CACHE]/builder/src/infra/specs/client.webrtc.perf.json@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Perf Android32 (M Nexus5)\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"can_use_on_swarming_builders\": true@@@",
+      "@@@STEP_LOG_LINE@json.output@        }, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"test\": \"common_audio_unittests\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "python3",
       "-u",
       "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
@@ -423,7 +462,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "--swarming-targets-file",
-      "low_bandwidth_audio_perf_test\nwebrtc_perf_tests\n",
+      "common_audio_unittests\n",
       "//out/Perf_Android32_M_Nexus5"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -447,8 +486,7 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
       "@@@STEP_LOG_END@json.output[failure_summary]@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@low_bandwidth_audio_perf_test@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@webrtc_perf_tests@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@common_audio_unittests@@@",
       "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
     ]
   },
@@ -964,7 +1002,7 @@
       "-server",
       "https://example.swarmingserver.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"low_bandwidth_audio_perf_test/Android/[dummy has/Perf Android32 (M Nexus5)/-1\", \"priority\": \"25\", \"realm\": \"webrtc:perf\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:perf\", \"build_is_experimental:false\", \"builder_group:client.webrtc.perf\", \"buildername:Perf Android32 (M Nexus5)\", \"data:[dummy hash for low_bandwidth_audio_perf_test/1]\", \"name:low_bandwidth_audio_perf_test\", \"ninja_target:\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.perf:Perf Android32 (M Nexus5)\", \"stepname:low_bandwidth_audio_perf_test on Android\", \"test_id_prefix:\", \"test_suite:low_bandwidth_audio_perf_test\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for low_bandwidth_audio_perf_test\", \"size_bytes\": \"1]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:Perf Android32 (M Nexus5)\", \"-var\", \"device_os:M\", \"-var\", \"device_type:hammerhead\", \"-var\", \"os:Android\", \"-var\", \"test_suite:low_bandwidth_audio_perf_test\", \"-tag\", \"step_name:low_bandwidth_audio_perf_test on Android\", \"-tag\", \"target_platform:android\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json\", \"--android\", \"--adb-path\", \"../../third_party/android_sdk/public/platform-tools/adb\", \"--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.pb\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"M\"}, {\"key\": \"device_type\", \"value\": \"hammerhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"WebRTC-perf\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"10800\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"10800\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"common_audio_unittests/Android/[dummy has/Perf Android32 (M Nexus5)/-1\", \"priority\": \"25\", \"realm\": \"webrtc:perf\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:perf\", \"build_is_experimental:false\", \"builder_group:client.webrtc.perf\", \"buildername:Perf Android32 (M Nexus5)\", \"data:[dummy hash for common_audio_unittests/1]\", \"name:common_audio_unittests\", \"ninja_target:\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.perf:Perf Android32 (M Nexus5)\", \"stepname:common_audio_unittests on Android\", \"test_id_prefix:\", \"test_suite:common_audio_unittests\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for common_audio_unittests\", \"size_bytes\": \"1]\"}}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:Perf Android32 (M Nexus5)\", \"-var\", \"device_os:M\", \"-var\", \"device_type:hammerhead\", \"-var\", \"os:Android\", \"-var\", \"test_suite:common_audio_unittests\", \"-tag\", \"step_name:common_audio_unittests on Android\", \"-tag\", \"target_platform:android\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"gtest\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"./dummy_cmd\", \"--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"M\"}, {\"key\": \"device_type\", \"value\": \"hammerhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"WebRTC-perf\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"10800\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"10800\", \"outputs\": [], \"relative_cwd\": \"out/Android32_Builder_arm\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -981,14 +1019,14 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "test_pre_run.[trigger] low_bandwidth_audio_perf_test on Android",
+    "name": "test_pre_run.[trigger] common_audio_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"name\": \"low_bandwidth_audio_perf_test/Android/[dummy has/Perf Android32 (M Nexus5)/-1\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"name\": \"common_audio_unittests/Android/[dummy has/Perf Android32 (M Nexus5)/-1\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"0\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_result\": {@@@",
@@ -1003,7 +1041,7 @@
       "@@@STEP_LOG_LINE@json.input@{@@@",
       "@@@STEP_LOG_LINE@json.input@  \"requests\": [@@@",
       "@@@STEP_LOG_LINE@json.input@    {@@@",
-      "@@@STEP_LOG_LINE@json.input@      \"name\": \"low_bandwidth_audio_perf_test/Android/[dummy has/Perf Android32 (M Nexus5)/-1\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"name\": \"common_audio_unittests/Android/[dummy has/Perf Android32 (M Nexus5)/-1\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"25\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc:perf\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"resultdb\": {@@@",
@@ -1015,17 +1053,17 @@
       "@@@STEP_LOG_LINE@json.input@        \"build_is_experimental:false\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"builder_group:client.webrtc.perf\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"buildername:Perf Android32 (M Nexus5)\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"data:[dummy hash for low_bandwidth_audio_perf_test/1]\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"name:low_bandwidth_audio_perf_test\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"data:[dummy hash for common_audio_unittests/1]\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"name:common_audio_unittests\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"ninja_target:\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"project:webrtc\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"purpose:CI\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"purpose:post-commit\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"slavename:fake-bot-id\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"spec_name:webrtc.perf:Perf Android32 (M Nexus5)\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"stepname:low_bandwidth_audio_perf_test on Android\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"stepname:common_audio_unittests on Android\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"test_id_prefix:\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"test_suite:low_bandwidth_audio_perf_test\"@@@",
+      "@@@STEP_LOG_LINE@json.input@        \"test_suite:common_audio_unittests\"@@@",
       "@@@STEP_LOG_LINE@json.input@      ], @@@",
       "@@@STEP_LOG_LINE@json.input@      \"task_slices\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        {@@@",
@@ -1034,18 +1072,9 @@
       "@@@STEP_LOG_LINE@json.input@            \"cas_input_root\": {@@@",
       "@@@STEP_LOG_LINE@json.input@              \"cas_instance\": \"projects/example-cas-server/instances/default_instance\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"digest\": {@@@",
-      "@@@STEP_LOG_LINE@json.input@                \"hash\": \"[dummy hash for low_bandwidth_audio_perf_test\", @@@",
+      "@@@STEP_LOG_LINE@json.input@                \"hash\": \"[dummy hash for common_audio_unittests\", @@@",
       "@@@STEP_LOG_LINE@json.input@                \"size_bytes\": \"1]\"@@@",
       "@@@STEP_LOG_LINE@json.input@              }@@@",
-      "@@@STEP_LOG_LINE@json.input@            }, @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"cipd_input\": {@@@",
-      "@@@STEP_LOG_LINE@json.input@              \"packages\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@                {@@@",
-      "@@@STEP_LOG_LINE@json.input@                  \"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", @@@",
-      "@@@STEP_LOG_LINE@json.input@                  \"path\": \"bin\", @@@",
-      "@@@STEP_LOG_LINE@json.input@                  \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"@@@",
-      "@@@STEP_LOG_LINE@json.input@                }@@@",
-      "@@@STEP_LOG_LINE@json.input@              ]@@@",
       "@@@STEP_LOG_LINE@json.input@            }, @@@",
       "@@@STEP_LOG_LINE@json.input@            \"command\": [@@@",
       "@@@STEP_LOG_LINE@json.input@              \"rdb\", @@@",
@@ -1059,9 +1088,9 @@
       "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"os:Android\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"test_suite:low_bandwidth_audio_perf_test\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"test_suite:common_audio_unittests\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-tag\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"step_name:low_bandwidth_audio_perf_test on Android\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"step_name:common_audio_unittests on Android\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-tag\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"target_platform:android\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-coerce-negative-duration\", @@@",
@@ -1069,178 +1098,15 @@
       "@@@STEP_LOG_LINE@json.input@              \"../../testing/location_tags.json\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-exonerate-unexpected-pass\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"--\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"--android\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"--adb-path\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"../../third_party/android_sdk/public/platform-tools/adb\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.pb\"@@@",
-      "@@@STEP_LOG_LINE@json.input@            ], @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"containment\": {@@@",
-      "@@@STEP_LOG_LINE@json.input@              \"containment_type\": \"NONE\"@@@",
-      "@@@STEP_LOG_LINE@json.input@            }, @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"dimensions\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@              {@@@",
-      "@@@STEP_LOG_LINE@json.input@                \"key\": \"android_devices\", @@@",
-      "@@@STEP_LOG_LINE@json.input@                \"value\": \"1\"@@@",
-      "@@@STEP_LOG_LINE@json.input@              }, @@@",
-      "@@@STEP_LOG_LINE@json.input@              {@@@",
-      "@@@STEP_LOG_LINE@json.input@                \"key\": \"device_os\", @@@",
-      "@@@STEP_LOG_LINE@json.input@                \"value\": \"M\"@@@",
-      "@@@STEP_LOG_LINE@json.input@              }, @@@",
-      "@@@STEP_LOG_LINE@json.input@              {@@@",
-      "@@@STEP_LOG_LINE@json.input@                \"key\": \"device_type\", @@@",
-      "@@@STEP_LOG_LINE@json.input@                \"value\": \"hammerhead\"@@@",
-      "@@@STEP_LOG_LINE@json.input@              }, @@@",
-      "@@@STEP_LOG_LINE@json.input@              {@@@",
-      "@@@STEP_LOG_LINE@json.input@                \"key\": \"os\", @@@",
-      "@@@STEP_LOG_LINE@json.input@                \"value\": \"Android\"@@@",
-      "@@@STEP_LOG_LINE@json.input@              }, @@@",
-      "@@@STEP_LOG_LINE@json.input@              {@@@",
-      "@@@STEP_LOG_LINE@json.input@                \"key\": \"pool\", @@@",
-      "@@@STEP_LOG_LINE@json.input@                \"value\": \"WebRTC-perf\"@@@",
-      "@@@STEP_LOG_LINE@json.input@              }@@@",
-      "@@@STEP_LOG_LINE@json.input@            ], @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"env\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@              {@@@",
-      "@@@STEP_LOG_LINE@json.input@                \"key\": \"ISOLATED_OUTDIR\", @@@",
-      "@@@STEP_LOG_LINE@json.input@                \"value\": \"${ISOLATED_OUTDIR}\"@@@",
-      "@@@STEP_LOG_LINE@json.input@              }@@@",
-      "@@@STEP_LOG_LINE@json.input@            ], @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"env_prefixes\": [], @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"execution_timeout_secs\": \"10800\", @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"grace_period_secs\": \"30\", @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"idempotent\": false, @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"io_timeout_secs\": \"10800\", @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"outputs\": [], @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"relative_cwd\": \"\"@@@",
-      "@@@STEP_LOG_LINE@json.input@          }, @@@",
-      "@@@STEP_LOG_LINE@json.input@          \"wait_for_capacity\": false@@@",
-      "@@@STEP_LOG_LINE@json.input@        }@@@",
-      "@@@STEP_LOG_LINE@json.input@      ]@@@",
-      "@@@STEP_LOG_LINE@json.input@    }@@@",
-      "@@@STEP_LOG_LINE@json.input@  ]@@@",
-      "@@@STEP_LOG_LINE@json.input@}@@@",
-      "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: low_bandwidth_audio_perf_test/Android/[dummy has/Perf Android32 (M Nexus5)/-1@https://example.swarmingserver.appspot.com/task?id=0@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
-      "spawn-tasks",
-      "-server",
-      "https://example.swarmingserver.appspot.com",
-      "-json-input",
-      "{\"requests\": [{\"name\": \"webrtc_perf_tests/Android/[dummy has/Perf Android32 (M Nexus5)/-1\", \"priority\": \"25\", \"realm\": \"webrtc:perf\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:perf\", \"build_is_experimental:false\", \"builder_group:client.webrtc.perf\", \"buildername:Perf Android32 (M Nexus5)\", \"data:[dummy hash for webrtc_perf_tests/1]\", \"name:webrtc_perf_tests\", \"ninja_target:\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.perf:Perf Android32 (M Nexus5)\", \"stepname:webrtc_perf_tests on Android\", \"test_id_prefix:\", \"test_suite:webrtc_perf_tests\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for webrtc_perf_tests\", \"size_bytes\": \"1]\"}}, \"cipd_input\": {\"packages\": [{\"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", \"path\": \"bin\", \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"}]}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:Perf Android32 (M Nexus5)\", \"-var\", \"device_os:M\", \"-var\", \"device_type:hammerhead\", \"-var\", \"os:Android\", \"-var\", \"test_suite:webrtc_perf_tests\", \"-tag\", \"step_name:webrtc_perf_tests on Android\", \"-tag\", \"target_platform:android\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"./dummy_cmd\", \"--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json\", \"--save_worst_frame\", \"--nologs\", \"--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.pb\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"android_devices\", \"value\": \"1\"}, {\"key\": \"device_os\", \"value\": \"M\"}, {\"key\": \"device_type\", \"value\": \"hammerhead\"}, {\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"WebRTC-perf\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"10800\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"10800\", \"outputs\": [], \"relative_cwd\": \"out/Android32_Builder_arm\"}, \"wait_for_capacity\": false}]}]}",
-      "-json-output",
-      "/path/to/tmp/json"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "webrtc:perf"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "test_pre_run.[trigger] webrtc_perf_tests on Android",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tasks\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"name\": \"webrtc_perf_tests/Android/[dummy has/Perf Android32 (M Nexus5)/-1\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_result\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"resultdb_info\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"invocation\": \"invocations/1\"@@@",
-      "@@@STEP_LOG_LINE@json.output@        }@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@json.input@{@@@",
-      "@@@STEP_LOG_LINE@json.input@  \"requests\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@    {@@@",
-      "@@@STEP_LOG_LINE@json.input@      \"name\": \"webrtc_perf_tests/Android/[dummy has/Perf Android32 (M Nexus5)/-1\", @@@",
-      "@@@STEP_LOG_LINE@json.input@      \"priority\": \"25\", @@@",
-      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc:perf\", @@@",
-      "@@@STEP_LOG_LINE@json.input@      \"resultdb\": {@@@",
-      "@@@STEP_LOG_LINE@json.input@        \"enable\": true@@@",
-      "@@@STEP_LOG_LINE@json.input@      }, @@@",
-      "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
-      "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@        \"bucket:perf\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"build_is_experimental:false\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"builder_group:client.webrtc.perf\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"buildername:Perf Android32 (M Nexus5)\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"data:[dummy hash for webrtc_perf_tests/1]\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"name:webrtc_perf_tests\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"ninja_target:\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"project:webrtc\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"purpose:CI\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"purpose:post-commit\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"slavename:fake-bot-id\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"spec_name:webrtc.perf:Perf Android32 (M Nexus5)\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"stepname:webrtc_perf_tests on Android\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"test_id_prefix:\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"test_suite:webrtc_perf_tests\"@@@",
-      "@@@STEP_LOG_LINE@json.input@      ], @@@",
-      "@@@STEP_LOG_LINE@json.input@      \"task_slices\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@        {@@@",
-      "@@@STEP_LOG_LINE@json.input@          \"expiration_secs\": \"3600\", @@@",
-      "@@@STEP_LOG_LINE@json.input@          \"properties\": {@@@",
-      "@@@STEP_LOG_LINE@json.input@            \"cas_input_root\": {@@@",
-      "@@@STEP_LOG_LINE@json.input@              \"cas_instance\": \"projects/example-cas-server/instances/default_instance\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"digest\": {@@@",
-      "@@@STEP_LOG_LINE@json.input@                \"hash\": \"[dummy hash for webrtc_perf_tests\", @@@",
-      "@@@STEP_LOG_LINE@json.input@                \"size_bytes\": \"1]\"@@@",
-      "@@@STEP_LOG_LINE@json.input@              }@@@",
-      "@@@STEP_LOG_LINE@json.input@            }, @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"cipd_input\": {@@@",
-      "@@@STEP_LOG_LINE@json.input@              \"packages\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@                {@@@",
-      "@@@STEP_LOG_LINE@json.input@                  \"package_name\": \"infra/tools/luci/logdog/butler/${platform}\", @@@",
-      "@@@STEP_LOG_LINE@json.input@                  \"path\": \"bin\", @@@",
-      "@@@STEP_LOG_LINE@json.input@                  \"version\": \"git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c\"@@@",
-      "@@@STEP_LOG_LINE@json.input@                }@@@",
-      "@@@STEP_LOG_LINE@json.input@              ]@@@",
-      "@@@STEP_LOG_LINE@json.input@            }, @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"command\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@              \"rdb\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"stream\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"builder:Perf Android32 (M Nexus5)\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"device_os:M\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"device_type:hammerhead\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"os:Android\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"test_suite:webrtc_perf_tests\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"-tag\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"step_name:webrtc_perf_tests on Android\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"-tag\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"target_platform:android\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"-coerce-negative-duration\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"-location-tags-file\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"../../testing/location_tags.json\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"-exonerate-unexpected-pass\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"result_adapter\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"gtest\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-result-file\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"${ISOLATED_OUTDIR}/output.json\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"-artifact-directory\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"${ISOLATED_OUTDIR}\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"--\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"./dummy_cmd\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"--save_worst_frame\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"--nologs\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.pb\"@@@",
+      "@@@STEP_LOG_LINE@json.input@              \"--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json\"@@@",
       "@@@STEP_LOG_LINE@json.input@            ], @@@",
       "@@@STEP_LOG_LINE@json.input@            \"containment\": {@@@",
       "@@@STEP_LOG_LINE@json.input@              \"containment_type\": \"NONE\"@@@",
@@ -1288,7 +1154,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: webrtc_perf_tests/Android/[dummy has/Perf Android32 (M Nexus5)/-1@https://example.swarmingserver.appspot.com/task?id=1@@@"
+      "@@@STEP_LINK@task UI: common_audio_unittests/Android/[dummy has/Perf Android32 (M Nexus5)/-1@https://example.swarmingserver.appspot.com/task?id=0@@@"
     ]
   },
   {
@@ -1313,15 +1179,14 @@
       }
     },
     "name": "test_pre_run.include swarming task invocations",
-    "stdin": "{\"addInvocations\": [\"invocations/0\", \"invocations/1\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
+    "stdin": "{\"addInvocations\": [\"invocations/0\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@json.input@{@@@",
       "@@@STEP_LOG_LINE@json.input@  \"addInvocations\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@    \"invocations/0\", @@@",
-      "@@@STEP_LOG_LINE@json.input@    \"invocations/1\"@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/0\"@@@",
       "@@@STEP_LOG_LINE@json.input@  ], @@@",
       "@@@STEP_LOG_LINE@json.input@  \"includingInvocation\": \"invocations/build:8945511751514863184\"@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
@@ -1531,7 +1396,7 @@
       "--output-json",
       "/path/to/tmp/json",
       "--input-json",
-      "[[\"0\"], [\"1\"]]",
+      "[[\"0\"]]",
       "--attempts",
       "0",
       "--verbose"
@@ -1556,9 +1421,6 @@
       "@@@STEP_LOG_LINE@json.output@  \"sets\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    [@@@",
       "@@@STEP_LOG_LINE@json.output@      \"0\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    ], @@@",
-      "@@@STEP_LOG_LINE@json.output@    [@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"1\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -1585,7 +1447,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "collect tasks.low_bandwidth_audio_perf_test stats",
+    "name": "collect tasks.common_audio_unittests stats",
     "stdin": "{\"invocations\": [\"invocations/0\"]}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1624,72 +1486,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "collect tasks.low_bandwidth_audio_perf_test results",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@raw_io.output_text@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "rdb",
-      "rpc",
-      "luci.resultdb.v1.ResultDB",
-      "QueryTestResultStatistics"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "webrtc:perf"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "collect tasks.webrtc_perf_tests stats",
-    "stdin": "{\"invocations\": [\"invocations/1\"]}",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@json.input@{@@@",
-      "@@@STEP_LOG_LINE@json.input@  \"invocations\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@    \"invocations/1\"@@@",
-      "@@@STEP_LOG_LINE@json.input@  ]@@@",
-      "@@@STEP_LOG_LINE@json.input@}@@@",
-      "@@@STEP_LOG_END@json.input@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "rdb",
-      "query",
-      "-json",
-      "-n",
-      "0",
-      "-u",
-      "-tr-fields",
-      "testId,variant,variantHash,status,tags,expected,duration",
-      "1"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "webrtc:perf"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "collect tasks.webrtc_perf_tests results",
+    "name": "collect tasks.common_audio_unittests results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@raw_io.output_text@@@"
@@ -1711,13 +1508,13 @@
       "--task-output-dir",
       "[CLEANUP]/tmp_tmp_1",
       "--merge-script",
-      "[CACHE]/builder/src/tools_webrtc/perf/process_perf_results_py2.py",
+      "[CACHE]/builder/src/testing/merge_scripts/standard_gtest_merge.py",
       "--merge-script-stdout-file",
       "/path/to/tmp/merge_script_log",
       "--merge-additional-args",
-      "[\"--test-suite\", \"low_bandwidth_audio_perf_test\"]",
+      "[]",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"bot\": \"webrtc-android-tests-nexus5-marshmallow\", \"bot_id\": \"bot_id\", \"build_page_url\": \"https://ci.chromium.org/p/webrtc/builders/luci.webrtc.perf/Perf%20Android32%20%28M%20Nexus5%29/0\", \"builder_group\": \"client.webrtc.perf\", \"buildername\": \"Perf Android32 (M Nexus5)\", \"buildnumber\": 1337, \"commit_position\": 170242, \"dashboard_url\": \"https://chromeperf.appspot.com\", \"got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"got_revision_cp\": \"refs/heads/main@{#1337}\", \"outdir\": \"[CACHE]/builder/src/out/Perf_Android32_M_Nexus5\", \"parent_buildername\": \"Android32 Builder arm\", \"parent_got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"perf_dashboard_machine_group\": \"WebRTCPerf\", \"recipe\": \"webrtc/standalone\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"swarming_command_lines\": {\"webrtc_perf_tests\": [\"./dummy_cmd\"]}, \"webrtc_git_hash\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"}",
+      "{\"BUILD_CONFIG\": \"Release\", \"bot\": \"webrtc-android-tests-nexus5-marshmallow\", \"bot_id\": \"bot_id\", \"build_page_url\": \"https://ci.chromium.org/p/webrtc/builders/luci.webrtc.perf/Perf%20Android32%20%28M%20Nexus5%29/0\", \"builder_group\": \"client.webrtc.perf\", \"buildername\": \"Perf Android32 (M Nexus5)\", \"buildnumber\": 1337, \"commit_position\": 170242, \"dashboard_url\": \"https://chromeperf.appspot.com\", \"got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"got_revision_cp\": \"refs/heads/main@{#1337}\", \"outdir\": \"[CACHE]/builder/src/out/Perf_Android32_M_Nexus5\", \"parent_buildername\": \"Android32 Builder arm\", \"parent_got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"perf_dashboard_machine_group\": \"WebRTCPerf\", \"recipe\": \"webrtc/standalone\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"swarming_command_lines\": {\"common_audio_unittests\": [\"./dummy_cmd\"]}, \"webrtc_git_hash\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"}",
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
@@ -1751,7 +1548,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "low_bandwidth_audio_perf_test on Android",
+    "name": "common_audio_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -1789,7 +1586,7 @@
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LOG_LINE@step_metadata@{@@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"low_bandwidth_audio_perf_test\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"common_audio_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"dimensions\": {@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"android_devices\": \"1\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"device_os\": \"M\", @@@",
@@ -1797,14 +1594,14 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Android\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"WebRTC-perf\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"low_bandwidth_audio_perf_test on Android\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"low_bandwidth_audio_perf_test\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"common_audio_unittests on Android\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"common_audio_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"0\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_builder_group\": null, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null@@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_builder_group\": \"client.webrtc.perf\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": \"Perf Android32 (M Nexus5)\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 test results@https://luci-milo.appspot.com/ui/inv/some-inv-name/test-results@@@",
@@ -1825,7 +1622,7 @@
       "--build-number",
       "0",
       "--test-type",
-      "low_bandwidth_audio_perf_test on Android",
+      "common_audio_unittests on Android",
       "--chrome-revision",
       "170242",
       "--build-id",
@@ -1845,159 +1642,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "Upload to test-results [low_bandwidth_audio_perf_test on Android]"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
-      "--verbose",
-      "-o",
-      "/path/to/tmp/json",
-      "--task-output-dir",
-      "[CLEANUP]/tmp_tmp_2",
-      "--merge-script",
-      "[CACHE]/builder/src/tools_webrtc/perf/process_perf_results_py2.py",
-      "--merge-script-stdout-file",
-      "/path/to/tmp/merge_script_log",
-      "--merge-additional-args",
-      "[\"--test-suite\", \"webrtc_perf_tests\"]",
-      "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"bot\": \"webrtc-android-tests-nexus5-marshmallow\", \"bot_id\": \"bot_id\", \"build_page_url\": \"https://ci.chromium.org/p/webrtc/builders/luci.webrtc.perf/Perf%20Android32%20%28M%20Nexus5%29/0\", \"builder_group\": \"client.webrtc.perf\", \"buildername\": \"Perf Android32 (M Nexus5)\", \"buildnumber\": 1337, \"commit_position\": 170242, \"dashboard_url\": \"https://chromeperf.appspot.com\", \"got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"got_revision_cp\": \"refs/heads/main@{#1337}\", \"outdir\": \"[CACHE]/builder/src/out/Perf_Android32_M_Nexus5\", \"parent_buildername\": \"Android32 Builder arm\", \"parent_got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"perf_dashboard_machine_group\": \"WebRTCPerf\", \"recipe\": \"webrtc/standalone\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"swarming_command_lines\": {\"webrtc_perf_tests\": [\"./dummy_cmd\"]}, \"webrtc_git_hash\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"}",
-      "--summary-json-file",
-      "/path/to/tmp/json",
-      "--",
-      "swarming",
-      "collect",
-      "-server",
-      "https://example.swarmingserver.appspot.com",
-      "-worker",
-      "50",
-      "-task-summary-python",
-      "-task-output-stdout",
-      "all",
-      "-verbose",
-      "-requests-json",
-      "{\"tasks\": [{\"task_id\": \"1\"}]}"
-    ],
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
-      ]
-    },
-    "luci_context": {
-      "realm": {
-        "name": "webrtc:perf"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "webrtc_perf_tests on Android",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"bot_id\": \"vm30\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"cas_output_root\": {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"cas_instance\": \"projects/example-project/instances/default_instance\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"digest\": {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@          \"hash\": \"24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@          \"size_bytes\": 73@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@        }@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      }, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"duration\": 31.5, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"exit_code\": 0, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"failure\": false, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"internal_failure\": false, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"modified_ts\": \"2014-09-25 01:42:00\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"name\": \"heartbeat-canary-2014-09-25_01:41:55-os=Windows\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"output\": \"Heart beat succeeded on win32.\\nFoo\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"resultdb_info\": {@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@        \"invocation\": \"invocations/some-inv-name\"@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      }, @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"started_ts\": \"2014-09-25T01:42:11.123\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"state\": \"COMPLETED\", @@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@      \"task_id\": \"148aa78d7aa0000\"@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@    }@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
-      "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
-      "@@@STEP_LOG_END@chromium_swarming.summary@@@",
-      "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
-      "@@@STEP_LOG_END@Merge script log@@@",
-      "@@@STEP_LOG_LINE@step_metadata@{@@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"webrtc_perf_tests\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"dimensions\": {@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"android_devices\": \"1\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"device_os\": \"M\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"device_type\": \"hammerhead\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Android\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"WebRTC-perf\"@@@",
-      "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"webrtc_perf_tests on Android\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"webrtc_perf_tests\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"1\"@@@",
-      "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_builder_group\": null, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null@@@",
-      "@@@STEP_LOG_LINE@step_metadata@}@@@",
-      "@@@STEP_LOG_END@step_metadata@@@",
-      "@@@STEP_LINK@shard #0 test results@https://luci-milo.appspot.com/ui/inv/some-inv-name/test-results@@@",
-      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
-      "--input-json",
-      "{}",
-      "--builder-group",
-      "client.webrtc.perf",
-      "--builder-name",
-      "Perf Android32 (M Nexus5)",
-      "--build-number",
-      "0",
-      "--test-type",
-      "webrtc_perf_tests on Android",
-      "--chrome-revision",
-      "170242",
-      "--build-id",
-      "8945511751514863184",
-      "--test-results-server",
-      "test-results.appspot.com"
-    ],
-    "luci_context": {
-      "realm": {
-        "name": "webrtc:perf"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "Upload to test-results [webrtc_perf_tests on Android]"
+    "name": "Upload to test-results [common_audio_unittests on Android]"
   },
   {
     "cmd": [],
@@ -2007,17 +1652,7 @@
       "@@@STEP_LOG_LINE@serialzed results@  \"all_suites\": [@@@",
       "@@@STEP_LOG_LINE@serialzed results@    {@@@",
       "@@@STEP_LOG_LINE@serialzed results@      \"invalid\": \"False\", @@@",
-      "@@@STEP_LOG_LINE@serialzed results@      \"suite_name\": \"low_bandwidth_audio_perf_test\", @@@",
-      "@@@STEP_LOG_LINE@serialzed results@      \"test_name_to_test_id_mapping\": {}, @@@",
-      "@@@STEP_LOG_LINE@serialzed results@      \"total_tests_ran\": 0, @@@",
-      "@@@STEP_LOG_LINE@serialzed results@      \"unexpected_failing_tests\": [], @@@",
-      "@@@STEP_LOG_LINE@serialzed results@      \"unexpected_passing_tests\": [], @@@",
-      "@@@STEP_LOG_LINE@serialzed results@      \"unexpected_skipped_tests\": [], @@@",
-      "@@@STEP_LOG_LINE@serialzed results@      \"variant_hash\": \"\"@@@",
-      "@@@STEP_LOG_LINE@serialzed results@    }, @@@",
-      "@@@STEP_LOG_LINE@serialzed results@    {@@@",
-      "@@@STEP_LOG_LINE@serialzed results@      \"invalid\": \"False\", @@@",
-      "@@@STEP_LOG_LINE@serialzed results@      \"suite_name\": \"webrtc_perf_tests\", @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"suite_name\": \"common_audio_unittests\", @@@",
       "@@@STEP_LOG_LINE@serialzed results@      \"test_name_to_test_id_mapping\": {}, @@@",
       "@@@STEP_LOG_LINE@serialzed results@      \"total_tests_ran\": 0, @@@",
       "@@@STEP_LOG_LINE@serialzed results@      \"unexpected_failing_tests\": [], @@@",
@@ -2035,9 +1670,9 @@
     "cmd": [],
     "name": "Tests statistics",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>Stats<br/>Total shards: 2<br/>Total runtime: 1m 3s <br/>@@@",
-      "@@@STEP_LOG_LINE@detailed stats@Total shards: 2@@@",
-      "@@@STEP_LOG_LINE@detailed stats@Total runtime: 1m 3s @@@",
+      "@@@STEP_TEXT@<br/>Stats<br/>Total shards: 1<br/>Total runtime: 32s <br/>@@@",
+      "@@@STEP_LOG_LINE@detailed stats@Total shards: 1@@@",
+      "@@@STEP_LOG_LINE@detailed stats@Total runtime: 32s @@@",
       "@@@STEP_LOG_LINE@detailed stats@Min/mean/max: 32s / 32s / 32s@@@",
       "@@@STEP_LOG_END@detailed stats@@@"
     ]
