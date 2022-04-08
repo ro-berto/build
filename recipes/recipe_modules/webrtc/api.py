@@ -404,7 +404,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     relative_cwd = self.m.path.relpath(output_dir, self.m.path['checkout'])
     for test in tests:
       if test.runs_on_swarming:
-        command_line = swarming_command_lines.get(test.name, [])
+        command_line = swarming_command_lines.get(test.canonical_name, [])
         if command_line:
           test.raw_cmd = command_line
           test.relative_cwd = relative_cwd
