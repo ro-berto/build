@@ -454,8 +454,9 @@
       "@@@STEP_LOG_LINE@deps@  \"build\": \"https://chromium.googlesource.com/chromium/src/build.git@d3f34f8dfaecc23202a6ef66957e83462d6c826d\", @@@",
       "@@@STEP_LOG_LINE@deps@  \"buildtools\": \"https://chromium.googlesource.com/chromium/buildtools.git@5fd66957f08bb752dca714a591c84587c9d70762\", @@@",
       "@@@STEP_LOG_LINE@deps@  \"foo/bar\": \"https://chromium.googlesource.com/external/github.com/foo/bar@29c23844494a7cc2fbebc6948d2cb0bcaddb24e7\", @@@",
+      "@@@STEP_LOG_LINE@deps@  \"package-latest:mock/package-latest\": \"https://chrome-infra-packages.appspot.com/mock/package-latest@6fd66957f08bb752dca714a591c84587c9d70763\", @@@",
+      "@@@STEP_LOG_LINE@deps@  \"package-without-latest-ref:mock/package-without-latest-ref\": \"https://chrome-infra-packages.appspot.com/mock/package-without-latest-ref@7fd66957f08bb752dca714a591c84587c9d70764\", @@@",
       "@@@STEP_LOG_LINE@deps@  \"test/test262/data\": \"https://chromium.googlesource.com/external/github.com/tc39/test262.git@29c23844494a7cc2fbebc6948d2cb0bcaddb24e7\", @@@",
-      "@@@STEP_LOG_LINE@deps@  \"tools/clang/dsymutil:chromium/llvm-build-tools/dsymutil\": \"https://chrome-infra-packages.appspot.com/chromium/llvm-build-tools/dsymutil@OWlhXkmj18li3yhJk59Kmjbc5KdgLh56TwCd1qBdzlIC\", @@@",
       "@@@STEP_LOG_LINE@deps@  \"tools/gyp\": \"https://chromium.googlesource.com/external/gyp.git@702ac58e477214c635d9b541932e75a95d349352\", @@@",
       "@@@STEP_LOG_LINE@deps@  \"tools/luci-go:infra/tools/luci/isolate/${platform}\": \"https://chrome-infra-packages.appspot.com/infra/tools/luci/isolate/${platform}@git_revision:8b15ba47cbaf07a56f93326e39f0c8e5069c19e9\"@@@",
       "@@@STEP_LOG_LINE@deps@}@@@",
@@ -617,10 +618,8 @@
   {
     "cmd": [
       "cipd",
-      "describe",
-      "chromium/llvm-build-tools/dsymutil",
-      "-version",
-      "latest",
+      "instances",
+      "mock/package-latest",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -636,40 +635,30 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "cipd describe chromium/llvm-build-tools/dsymutil",
+    "name": "cipd instances mock/package-latest",
     "~followup_annotations": [
-      "@@@STEP_TEXT@resolved-instance_id-of-latest----------@@@",
+      "@@@STEP_TEXT@resolved-instance_id-of-instance_id_1---@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"pin\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-latest----------\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"chromium/llvm-build-tools/dsymutil\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"refs\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"instances\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-latest----------\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"modified_by\": \"user:44-blablbla@developer.gserviceaccount.com\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"modified_ts\": 1446574210, @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"ref\": \"latest\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ], @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"registered_by\": \"user:44-blablbla@developer.gserviceaccount.com\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"registered_ts\": 1446574210, @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"tags\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"pin\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"instance_id\": \"resolved-instance_id-of-instance_id_1---\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"package\": \"mock/package-latest\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        }, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"refs\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"latest\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        ], @@@",
       "@@@STEP_LOG_LINE@json.output@        \"registered_by\": \"user:44-blablbla@developer.gserviceaccount.com\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"registered_ts\": 1446574210, @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"tag\": \"buildbot_build:some.waterfall/builder/1234\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"registered_ts\": 1446574209@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"pin\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"instance_id\": \"resolved-instance_id-of-instance_id_2---\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"package\": \"mock/package-latest\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        }, @@@",
       "@@@STEP_LOG_LINE@json.output@        \"registered_by\": \"user:44-blablbla@developer.gserviceaccount.com\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"registered_ts\": 1446574210, @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"tag\": \"git_repository:https://chromium.googlesource.com/some/repo\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"registered_by\": \"user:44-blablbla@developer.gserviceaccount.com\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"registered_ts\": 1446574210, @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"tag\": \"git_revision:397a2597cdc237f3026e6143b683be4b9ab60540\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"registered_ts\": 1446574208@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
@@ -684,7 +673,7 @@
       "RECIPE_REPO[depot_tools]/gclient.py",
       "setdep",
       "-r",
-      "tools/clang/dsymutil:chromium/llvm-build-tools/dsymutil@resolved-instance_id-of-latest----------"
+      "package-latest:mock/package-latest@resolved-instance_id-of-instance_id_1---"
     ],
     "cwd": "[CACHE]/builder/v8",
     "env": {
@@ -708,7 +697,81 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "gclient setdep tools_clang_dsymutil:chromium_llvm-build-tools_dsymutil"
+    "name": "gclient setdep package-latest:mock_package-latest"
+  },
+  {
+    "cmd": [
+      "cipd",
+      "instances",
+      "mock/package-without-latest-ref",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "cipd instances mock/package-without-latest-ref",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@resolved-instance_id-of-no-latest-------@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"instances\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"pin\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"instance_id\": \"resolved-instance_id-of-no-latest-------\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"package\": \"mock/package-without-latest-ref\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        }, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"refs\": null, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"registered_by\": \"user:doe@developer.gserviceaccount.com\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"registered_ts\": 1987654321@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython3",
+      "-u",
+      "RECIPE_REPO[depot_tools]/gclient.py",
+      "setdep",
+      "-r",
+      "package-without-latest-ref:mock/package-without-latest-ref@resolved-instance_id-of-no-latest-------"
+    ],
+    "cwd": "[CACHE]/builder/v8",
+    "env": {
+      "DEPOT_TOOLS_REPORT_BUILD": "v8/ci/Auto-roll - v8 deps/8945511751514863184"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "gclient setdep package-without-latest-ref:mock_package-without-latest-ref"
   },
   {
     "cmd": [
@@ -811,7 +874,9 @@
       "-m",
       "Rolling v8/build: https://chromium.googlesource.com/chromium/src/build/+log/d3f34f8..deadbee",
       "-m",
-      "Rolling v8/tools/clang/dsymutil: OWlhXkmj18li3yhJk59Kmjbc5KdgLh56TwCd1qBdzlIC..resolved-instance_id-of-latest----------",
+      "Rolling v8/package-latest: 6fd66957f08bb752dca714a591c84587c9d70763..resolved-instance_id-of-instance_id_1---",
+      "-m",
+      "Rolling v8/package-without-latest-ref: 7fd66957f08bb752dca714a591c84587c9d70764..resolved-instance_id-of-no-latest-------",
       "-m",
       "Rolling v8/tools/gyp: https://chromium.googlesource.com/external/gyp/+log/702ac58..e7079f0",
       "-m",

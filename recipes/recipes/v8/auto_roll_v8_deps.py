@@ -251,6 +251,21 @@ def get_key_mapper(autoroller_config):
     return lambda key: key
 
 
+def get_recent_instance_id(api, package_name):
+  """Returns the latest uploaded instance id for a package.
+
+  If a ref named `latest` is used, prefer this instance. Otherwise select the
+  most recently uploaded instance.
+  """
+  instances = api.cipd.instances(package_name, 0)
+
+  for instance in instances:
+    if instance.refs and 'latest' in instance.refs:
+      return instance.pin.instance_id
+
+  return instances[0].pin.instance_id
+
+
 def RunSteps(api, autoroller_config):
   target_config = autoroller_config['target_config']
 
@@ -345,9 +360,8 @@ def RunSteps(api, autoroller_config):
         continue
     else:
       if is_cipd_dep:
-        # Use the 'latest' ref for CIPD package.
-        new_ver = api.cipd.describe(
-            target_loc[len(CIPD_DEP_URL_PREFIX):], 'latest').pin.instance_id
+        new_ver = get_recent_instance_id(api,
+                                         target_loc[len(CIPD_DEP_URL_PREFIX):])
       else:
         # Use the ToT of the deps repo.
         new_ver = get_tot_revision(api, name, target_loc)
@@ -428,7 +442,8 @@ v8/test/test262/data: https://chromium.googlesource.com/external/github.com/tc39
 src/foo/bar: https://chromium.googlesource.com/external/github.com/foo/bar@29c23844494a7cc2fbebc6948d2cb0bcaddb24e7
 v8/tools/gyp: https://chromium.googlesource.com/external/gyp.git@702ac58e477214c635d9b541932e75a95d349352
 src/tools/luci-go:infra/tools/luci/isolate/${platform}: https://chrome-infra-packages.appspot.com/infra/tools/luci/isolate/${platform}@git_revision:8b15ba47cbaf07a56f93326e39f0c8e5069c19e9
-v8/tools/clang/dsymutil:chromium/llvm-build-tools/dsymutil: https://chrome-infra-packages.appspot.com/chromium/llvm-build-tools/dsymutil@OWlhXkmj18li3yhJk59Kmjbc5KdgLh56TwCd1qBdzlIC"""
+mock/package-without-latest-ref:mock/package-without-latest-ref: https://chrome-infra-packages.appspot.com/mock/package-without-latest-ref@7fd66957f08bb752dca714a591c84587c9d70764
+mock/package-latest:mock/package-latest: https://chrome-infra-packages.appspot.com/mock/package-latest@6fd66957f08bb752dca714a591c84587c9d70763"""
   cr_deps_info = """src: https://chromium.googlesource.com/chromium/src.git
 src/buildtools: https://chromium.googlesource.com/chromium/buildtools.git@5fd66957f08bb752dca714a591c84587c9d70762
 src/foo/bar: https://github.com/foo/bar.git@29c23844494a7cc2fbebc6948d2cb0bcaddb24e7
@@ -501,7 +516,21 @@ src/buildtools:  https://chromium.googlesource.com/chromium/buildtools.git@5fd66
           'look up base_trace_event_common (fallback)',
           api.raw_io.stream_output_text(
               'deadbeef\trefs/heads/main', stream='stdout'),
-      ))
+      ) + api.override_step_data(
+          'cipd instances mock/package-without-latest-ref',
+          api.cipd._resultify({
+              'instances': [{
+                  'pin': {
+                      'package':
+                          'mock/package-without-latest-ref',
+                      'instance_id':
+                          api.cipd.make_resolved_version('no-latest'),
+                  },
+                  'registered_by': 'user:doe@developer.gserviceaccount.com',
+                  'registered_ts': 1987654321,
+                  'refs': None,
+              }]
+          })))
 
   yield api.test(
       'bad-cr-roll',
