@@ -25,19 +25,14 @@ DEPS = [
 
 def RunSteps(api):
   webrtc = api.webrtc
-  builder_config = None
-  builder_id = chromium.BuilderId.create_for_group(
-      webrtc.BUILDERS[webrtc.bucketname]['settings']['builder_group'],
-      webrtc.buildername)
-  if builder_id in webrtc.BUILDERS_DB:
-    builder_config = api.chromium_tests_builder_config.lookup_builder(
-        builder_db=webrtc.BUILDERS_DB)[1]
+  builder_id, builder_config = api.chromium_tests_builder_config.lookup_builder(
+      builder_db=webrtc.BUILDERS_DB)
   webrtc.apply_bot_config(webrtc.BUILDERS, webrtc.RECIPE_CONFIGS,
                           builder_config)
 
   update_step = api.chromium_checkout.ensure_checkout()
 
-  webrtc.configure_swarming()
+  webrtc.configure_swarming(builder_id)
 
   if webrtc.should_download_audio_quality_tools():
     webrtc.download_audio_quality_tools()
@@ -56,7 +51,7 @@ def RunSteps(api):
       step_result.presentation.status = api.step.SUCCESS
       return
 
-    webrtc.run_mb(phase, tests)
+    webrtc.run_mb(builder_id, phase, tests)
     raw_result = api.chromium.compile(compile_targets, use_goma_module=True)
     if raw_result.status != common_pb.SUCCESS:
       return raw_result

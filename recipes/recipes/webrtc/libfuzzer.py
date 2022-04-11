@@ -16,6 +16,8 @@ DEPS = [
     'depot_tools/depot_tools',
     'chromium',
     'chromium_checkout',
+    'chromium_tests',
+    'chromium_tests_builder_config',
     'recipe_engine/context',
     'recipe_engine/path',
     'recipe_engine/platform',
@@ -67,12 +69,16 @@ BUILDERS = freeze({
 
 def RunSteps(api):
   webrtc = api.webrtc
-  webrtc.apply_bot_config(BUILDERS, webrtc.RECIPE_CONFIGS)
-
-  api.chromium_checkout.ensure_checkout()
+  builder_id, builder_config = api.chromium_tests_builder_config.lookup_builder(
+      builder_db=webrtc.BUILDERS_DB)
+  api.chromium_tests.configure_build(builder_config)
+  update_step = api.chromium_checkout.ensure_checkout()
   api.chromium.ensure_goma()
   api.chromium.runhooks()
-  webrtc.run_mb()
+
+  api.chromium_tests.create_targets_config(builder_config,
+                                           update_step.presentation.properties)
+  webrtc.run_mb(builder_id)
 
   with api.context(cwd=api.path['checkout']):
     args = [

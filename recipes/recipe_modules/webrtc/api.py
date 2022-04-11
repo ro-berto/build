@@ -10,7 +10,6 @@ from six.moves import urllib
 from recipe_engine import recipe_api
 
 from . import builders as webrtc_builders
-from . import steps
 
 from RECIPE_MODULES.build import chromium
 
@@ -97,7 +96,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     self._ios_config = None
     self.bot = None
 
-  def apply_bot_config(self, builders, recipe_configs, builder_config=None):
+  def apply_bot_config(self, builders, recipe_configs, builder_config):
     self._builders = builders
     self._recipe_configs = recipe_configs
 
@@ -106,29 +105,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     self.set_config('webrtc', TEST_SUITE=self.bot.test_suite,
                     PERF_ID=self.bot.config.get('perf_id'))
 
-    if builder_config:
-      self.m.chromium_tests.configure_build(builder_config)
-    else:  # pragma: no cover
-      # TODO(crbug.com/webrtc/13899): Remove this code when the migration
-      # to waterfalls.pyl is over.
-      chromium_kwargs = self.bot.config.get('chromium_config_kwargs', {})
-      if self.bot.recipe_config.get('chromium_android_config'):
-        self.m.chromium_android.set_config(
-            self.bot.recipe_config['chromium_android_config'],
-            **chromium_kwargs)
-
-      self.m.chromium.set_config(self.bot.recipe_config['chromium_config'],
-                                 **chromium_kwargs)
-      gclient_config = self.bot.recipe_config['gclient_config']
-      self.m.gclient.set_config(gclient_config)
-
-      # Support applying configs both at the bot and the recipe config level.
-      for c in self.bot.config.get('chromium_apply_config', []):
-        self.m.chromium.apply_config(c)
-      for c in self.bot.config.get('gclient_apply_config', []):
-        self.m.gclient.apply_config(c)
-      for c in self.bot.recipe_config.get('gclient_apply_config', []):
-        self.m.gclient.apply_config(c)
+    self.m.chromium_tests.configure_build(builder_config)
 
     if self.m.tryserver.is_tryserver:
       self.m.chromium.apply_config('trybot_flavor')
@@ -180,22 +157,12 @@ class WebRTCApi(recipe_api.RecipeApi):
     return self.m.buildbucket.builder_name
 
   @property
-  def builder_id(self):
-    return chromium.BuilderId.create_for_group(self.builder_group,
-                                               self.buildername)
-
-  @property
   def build_url(self):
     return 'https://ci.chromium.org/p/%s/builders/%s/%s/%s' % (
         urllib.parse.quote(self.m.buildbucket.build.builder.project),
         urllib.parse.quote(self.bucketname), urllib.parse.quote(
             self.buildername),
         urllib.parse.quote(str(self.m.buildbucket.build.number)))
-
-  @property
-  def builder_group(self):
-    group_config = self._builders[self.bucketname].get('settings', {})
-    return group_config.get('builder_group', self.bucketname)
 
   def related_bots(self):
     return [self.bot] + list(self.bot.triggered_bots())
@@ -214,25 +181,9 @@ class WebRTCApi(recipe_api.RecipeApi):
 
   def get_tests_and_compile_targets(self, phase, builder_config, update_step):
     """ Returns the tests to run and the targets to compile."""
-    tests = []
-    for bot in self.related_bots():
-      if bot.bot_type in ('tester', 'builder_tester'):
-        tests += steps.generate_tests(phase, bot, self.m.tryserver.is_tryserver,
-                                      self.m.chromium_tests, self._ios_config)
-
-    if builder_config:
-      targets_config = self.m.chromium_tests.create_targets_config(
-          builder_config, update_step.presentation.properties)
-      # TODO(crbug.com/webrtc/13899): This is temporary code to make sure we're
-      # running the same tests while migrating to a .pyl configuration.
-      old_tests = set([t.canonical_name for t in tests])
-      tests = _get_tests_from_targets_config(targets_config, phase)
-      new_tests = set([t.canonical_name for t in tests])
-      if (not self._test_data.enabled and
-          old_tests != new_tests):  # pragma: no cover
-        self.m.step(str(old_tests), cmd=None)
-        self.m.step(str(new_tests), cmd=None)
-        assert False
+    targets_config = self.m.chromium_tests.create_targets_config(
+        builder_config, update_step.presentation.properties)
+    tests = _get_tests_from_targets_config(targets_config, phase)
 
     patch_root = self.m.gclient.get_gerrit_patch_root()
     affected_files = self.m.chromium_checkout.get_files_affected_by_patch(
@@ -266,11 +217,11 @@ class WebRTCApi(recipe_api.RecipeApi):
     tests = [t for t in tests if t.canonical_name in tests_targets]
     return tests, sorted(set(compile_targets))
 
-  def configure_swarming(self):
+  def configure_swarming(self, builder_id):
     self.m.chromium_swarming.configure_swarming(
         'webrtc',
         precommit=self.m.tryserver.is_tryserver,
-        builder_group=self.builder_group,
+        builder_group=builder_id.group,
         path_to_merge_scripts=self.m.path.join(
             self.m.chromium_checkout.checkout_dir, 'src', 'testing',
             'merge_scripts'))
@@ -331,7 +282,7 @@ class WebRTCApi(recipe_api.RecipeApi):
       cmd_golang = ['vpython3', '-u', script_golang] + args_golang
       self.m.step('download golang', cmd_golang)
 
-  def run_mb(self, phase=None, tests=None):
+  def run_mb(self, builder_id, phase=None, tests=None):
     if phase:
       # Set the out folder to be the same as the phase name, so caches of
       # consecutive builds don't interfere with each other.
@@ -342,7 +293,7 @@ class WebRTCApi(recipe_api.RecipeApi):
       self.m.chromium.c.build_config_fs = _sanitize_file_name(self.buildername)
 
     self.m.chromium.mb_gen(
-        self.builder_id,
+        builder_id,
         phase=phase,
         use_goma=True,
         mb_path=self.m.path['checkout'].join('tools_webrtc', 'mb'),

@@ -45,16 +45,8 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
     bot_config = builders[bucketname]['builders'][buildername]
     bot_type = bot_config.get('bot_type', 'builder_tester')
 
-    if bot_type in ('builder', 'builder_tester'):
-      assert bot_config.get('parent_buildername') is None, (
-          'Unexpected parent_buildername for builder %r on bucket %r.' %
-              (buildername, bucketname))
-
-    if builder_id in webrtc_builders.BUILDERS_DB:
-      chromium_kwargs = webrtc_builders.BUILDERS_DB[
-          builder_id].chromium_config_kwargs
-    else:
-      chromium_kwargs = bot_config.get('chromium_config_kwargs', {})
+    chromium_kwargs = webrtc_builders.BUILDERS_DB[
+        builder_id].chromium_config_kwargs
     test = self.test(
         '%s_%s%s' % (_sanitize_builder_name(bucketname),
                      _sanitize_builder_name(buildername), suffix),
@@ -132,20 +124,19 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
           tags=tags)
     test += self.m.properties(buildnumber=1337)
 
-    if builder_id in webrtc_builders.BUILDERS_DB:
-      for step_suffix in step_suffixes:
-        test += self.m.chromium_tests.read_source_side_spec(
-            builder_group,
-            step_suffix=step_suffix,
-            contents={
-                buildername: {
-                    'gtest_tests': [{
-                        'test': 'common_audio_unittests',
-                        'swarming': {
-                            'can_use_on_swarming_builders': True
-                        }
-                    }]
-                }
-            })
+    for step_suffix in step_suffixes:
+      test += self.m.chromium_tests.read_source_side_spec(
+          builder_group,
+          step_suffix=step_suffix,
+          contents={
+              buildername: {
+                  'gtest_tests': [{
+                      'test': 'common_audio_unittests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True
+                      }
+                  }]
+              }
+          })
 
     return test

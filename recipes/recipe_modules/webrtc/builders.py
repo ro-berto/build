@@ -2039,6 +2039,14 @@ _CLIENT_WEBRTC_SPEC = {
                 'TARGET_ARCH': 'arm',
                 'TARGET_BITS': 64,
             }),
+    'Linux64 Release (Libfuzzer)':
+        builder_spec.BuilderSpec.create(
+            chromium_config='webrtc_default',
+            gclient_config='webrtc',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            }),
     'Mac Asan':
         builder_spec.BuilderSpec.create(
             chromium_config='webrtc_clang',
@@ -2301,7 +2309,7 @@ _CLIENT_WEBRTC_PERF_SPECS = {
             }),
 }
 
-_INTERNAL_CLIENT_WEBRTC = {
+_INTERNAL_CLIENT_WEBRTC_SPECS = {
     'iOS64 Debug':
         builder_spec.BuilderSpec.create(
             chromium_config='webrtc_default',
@@ -2325,6 +2333,31 @@ _INTERNAL_CLIENT_WEBRTC = {
                 'TARGET_BITS': 64,
             }),
     'iOS64 Release':
+        builder_spec.BuilderSpec.create(
+            chromium_config='webrtc_default',
+            gclient_config='webrtc_ios',
+            chromium_apply_config=['mac_toolchain'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_PLATFORM': 'ios',
+                'TARGET_ARCH': 'arm',
+                'TARGET_BITS': 64,
+            }),
+}
+
+_INTERNAL_TRYSERVER_WEBRTC_SPECS = {
+    'ios_arm64_dbg':
+        builder_spec.BuilderSpec.create(
+            chromium_config='webrtc_default',
+            gclient_config='webrtc_ios',
+            chromium_apply_config=['mac_toolchain'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_PLATFORM': 'ios',
+                'TARGET_ARCH': 'arm',
+                'TARGET_BITS': 64,
+            }),
+    'ios_arm64_rel':
         builder_spec.BuilderSpec.create(
             chromium_config='webrtc_default',
             gclient_config='webrtc_ios',
@@ -2621,6 +2654,14 @@ _TRYSERVER_WEBRTC_SPEC = {
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
             }),
+    'linux_libfuzzer_rel':
+        builder_spec.BuilderSpec.create(
+            chromium_config='webrtc_default',
+            gclient_config='webrtc',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            }),
     'linux_memcheck':
         builder_spec.BuilderSpec.create(
             chromium_config='webrtc_default',
@@ -2852,6 +2893,7 @@ _TRYSERVER_WEBRTC_SPEC = {
 BUILDERS_DB = builder_db.BuilderDatabase.create({
     'client.webrtc': _CLIENT_WEBRTC_SPEC,
     'client.webrtc.perf': _CLIENT_WEBRTC_PERF_SPECS,
-    'internal.client.webrtc': _INTERNAL_CLIENT_WEBRTC,
+    'internal.client.webrtc': _INTERNAL_CLIENT_WEBRTC_SPECS,
+    'internal.tryserver.webrtc': _INTERNAL_TRYSERVER_WEBRTC_SPECS,
     'tryserver.webrtc': _TRYSERVER_WEBRTC_SPEC,
 })
