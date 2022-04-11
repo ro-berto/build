@@ -108,7 +108,9 @@ class WebRTCApi(recipe_api.RecipeApi):
 
     if builder_config:
       self.m.chromium_tests.configure_build(builder_config)
-    else:
+    else:  # pragma: no cover
+      # TODO(crbug.com/webrtc/13899): Remove this code when the migration
+      # to waterfalls.pyl is over.
       chromium_kwargs = self.bot.config.get('chromium_config_kwargs', {})
       if self.bot.recipe_config.get('chromium_android_config'):
         self.m.chromium_android.set_config(

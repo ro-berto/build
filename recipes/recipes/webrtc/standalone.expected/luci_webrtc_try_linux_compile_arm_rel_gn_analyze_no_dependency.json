@@ -310,6 +310,45 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[CACHE]/builder/src/infra/specs/tryserver.webrtc.json",
+      "/path/to/tmp/json"
+    ],
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "read test spec (tryserver.webrtc.json)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@path: [CACHE]/builder/src/infra/specs/tryserver.webrtc.json@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"linux_compile_arm_rel\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"can_use_on_swarming_builders\": true@@@",
+      "@@@STEP_LOG_LINE@json.output@        }, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"test\": \"common_audio_unittests\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "git",
       "-c",
       "core.quotePath=false",
@@ -390,7 +429,7 @@
       "[CACHE]/goma/client",
       "-v",
       "//out/Release",
-      "{\"additional_compile_targets\": [\"all\"], \"files\": [\"foo.cc\"], \"test_targets\": []}",
+      "{\"additional_compile_targets\": [\"all\"], \"files\": [\"foo.cc\"], \"test_targets\": [\"common_audio_unittests\"]}",
       "/path/to/tmp/json",
       "--json-output",
       "/path/to/tmp/json"
@@ -431,7 +470,9 @@
       "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.test_targets\": [], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"test_targets\": []@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"test_targets\": [@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"common_audio_unittests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  ]@@@",
       "@@@STEP_LOG_LINE@analyze_details@}@@@",
       "@@@STEP_LOG_END@analyze_details@@@"
     ]
