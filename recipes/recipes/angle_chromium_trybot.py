@@ -127,8 +127,6 @@ def GenTests(api):
                       ),
                   'linux-angle-chromium-intel':
                       ctbc.BuilderSpec.create(
-                          execution_mode=ctbc.TEST,
-                          parent_buildername='linux-angle-chromium-builder',
                           gclient_config='chromium',
                           gclient_apply_config=[
                               'angle_top_of_tree',

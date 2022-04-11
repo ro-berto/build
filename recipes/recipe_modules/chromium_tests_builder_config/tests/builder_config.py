@@ -42,23 +42,6 @@ def RunSteps(api):
       },
   })
 
-  trybots = try_spec.TryDatabase.create({
-      'fake-try-group': {
-          'fake-try-builder-with-bad-builder':
-              try_spec.TrySpec.create_for_single_mirror(
-                  builder_group='fake-group',
-                  buildername='fake-tester',
-              ),
-          'fake-try-builder-with-bad-tester':
-              try_spec.TrySpec.create_for_single_mirror(
-                  builder_group='fake-group2',
-                  buildername='fake-builder2',
-                  tester_group='fake-group',
-                  tester='fake-builder',
-              ),
-      },
-  })
-
   # Test create failures
   with api.assertions.assertRaises(
       builder_config_module.BuilderConfigException) as caught:
@@ -90,49 +73,6 @@ def RunSteps(api):
         [BuilderId.create_for_group('non-existent-group', 'fake-builder')],
         step_api=api.step)
   name = "No configuration present for group 'non-existent-group'"
-  api.assertions.assertEqual(caught.exception.result.name, name)
-
-  # Test lookup failures
-  with api.assertions.assertRaises(
-      builder_config_module.BuilderConfigException) as caught:
-    builder_config_module.BuilderConfig.lookup(
-        BuilderId.create_for_group('fake-try-group',
-                                   'fake-try-builder-with-bad-builder'),
-        builders,
-        trybots,
-    )
-  message = (
-      "try builder 'fake-try-group:fake-try-builder-with-bad-builder' specifies"
-      " 'fake-group:fake-tester' as a builder, but it has execution mode test,"
-      " it must be compile/test")
-  api.assertions.assertEqual(str(caught.exception), message)
-
-  with api.assertions.assertRaises(
-      builder_config_module.BuilderConfigException) as caught:
-    builder_config_module.BuilderConfig.lookup(
-        BuilderId.create_for_group('fake-try-group',
-                                   'fake-try-builder-with-bad-tester'),
-        builders,
-        trybots,
-    )
-  message = ("try builder 'fake-try-group:fake-try-builder-with-bad-tester'"
-             " specifies 'fake-group:fake-builder' as a tester,"
-             " but it has execution mode compile/test,"
-             " it must be one of ['test', 'provide-test-spec']")
-  api.assertions.assertEqual(str(caught.exception), message)
-
-  # Test lookup failures when using step API
-  with api.assertions.assertRaises(api.step.InfraFailure) as caught:
-    builder_config_module.BuilderConfig.lookup(
-        BuilderId.create_for_group('fake-try-group',
-                                   'fake-try-builder-with-bad-builder'),
-        builders,
-        trybots,
-        step_api=api.step)
-  name = (
-      "try builder 'fake-try-group:fake-try-builder-with-bad-builder' specifies"
-      " 'fake-group:fake-tester' as a builder, but it has execution mode test,"
-      " it must be compile/test")
   api.assertions.assertEqual(caught.exception.result.name, name)
 
   # Test builder config
