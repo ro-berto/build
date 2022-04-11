@@ -14,6 +14,11 @@ from recipe_engine import recipe_test_api
 from . import builders as webrtc_builders
 
 
+def _sanitize_builder_name(name):
+  safe_with_spaces = ''.join(c if c.isalnum() else ' ' for c in name.lower())
+  return '_'.join(safe_with_spaces.split())
+
+
 class WebRTCTestApi(recipe_test_api.RecipeTestApi):
   BUILDERS = webrtc_builders.BUILDERS
   RECIPE_CONFIGS = webrtc_builders.RECIPE_CONFIGS
@@ -96,9 +101,19 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
 
     git_repo = 'https://webrtc.googlesource.com/src'
     _, project, short_bucket = bucketname.split('.')
+    phases = bot_config.get('phases', [None])
+    step_suffixes = [''] + [' (%d)' % i for i in range(2, len(phases) + 1)]
     if 'try' in bucketname:
       if 'fuzzer' not in buildername:
-        test += self.override_gn_analyze(gn_analyze_output)
+        for suffix in step_suffixes:
+          if gn_analyze_output is None:
+            gn_analyze_output = {
+                'compile_targets': ['all'],
+                'status': 'Found dependency',
+                'test_targets': ['common_audio_unittests'],
+            }
+          json_output = self.m.json.output(gn_analyze_output)
+          test += self.override_step_data('analyze' + suffix, json_output)
 
       test += self.m.buildbucket.try_build(
           project=project,
@@ -118,8 +133,6 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
     test += self.m.properties(buildnumber=1337)
 
     if builder_id in webrtc_builders.BUILDERS_DB:
-      phases = bot_config.get('phases', [None])
-      step_suffixes = [''] + [' (%d)' % i for i in range(2, len(phases) + 1)]
       for step_suffix in step_suffixes:
         test += self.m.chromium_tests.read_source_side_spec(
             builder_group,
@@ -136,18 +149,3 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
             })
 
     return test
-
-  def override_gn_analyze(self, gn_analyze_output):
-    if gn_analyze_output is None:
-      gn_analyze_output = {
-          'compile_targets': ['all'],
-          'status': 'Found dependency',
-          'test_targets': ['common_audio_unittests'],
-      }
-    return self.override_step_data('analyze',
-                                   self.m.json.output(gn_analyze_output))
-
-
-def _sanitize_builder_name(name):
-  safe_with_spaces = ''.join(c if c.isalnum() else ' ' for c in name.lower())
-  return '_'.join(safe_with_spaces.split())

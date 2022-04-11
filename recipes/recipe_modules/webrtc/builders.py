@@ -2338,6 +2338,216 @@ _INTERNAL_CLIENT_WEBRTC = {
 }
 
 _TRYSERVER_WEBRTC_SPEC = {
+    'android_compile_arm_dbg':
+        builder_spec.BuilderSpec.create(
+            chromium_config='webrtc_android',
+            android_config='webrtc',
+            gclient_config='webrtc',
+            gclient_apply_config=['android'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_PLATFORM': 'android',
+                'TARGET_ARCH': 'arm',
+                'TARGET_BITS': 32,
+            }),
+    'android_compile_arm_rel':
+        builder_spec.BuilderSpec.create(
+            chromium_config='webrtc_android',
+            android_config='webrtc',
+            gclient_config='webrtc',
+            gclient_apply_config=['android'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_PLATFORM': 'android',
+                'TARGET_ARCH': 'arm',
+                'TARGET_BITS': 32,
+            }),
+    'android_compile_arm64_dbg':
+        builder_spec.BuilderSpec.create(
+            chromium_config='webrtc_android',
+            android_config='webrtc',
+            gclient_config='webrtc',
+            gclient_apply_config=['android'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_PLATFORM': 'android',
+                'TARGET_ARCH': 'arm',
+                'TARGET_BITS': 64,
+            }),
+    'android_compile_arm64_rel':
+        builder_spec.BuilderSpec.create(
+            chromium_config='webrtc_android',
+            android_config='webrtc',
+            gclient_config='webrtc',
+            gclient_apply_config=['android'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_PLATFORM': 'android',
+                'TARGET_ARCH': 'arm',
+                'TARGET_BITS': 64,
+            }),
+    'android_compile_x86_dbg':
+        builder_spec.BuilderSpec.create(
+            chromium_config='webrtc_android',
+            android_config='webrtc',
+            gclient_config='webrtc',
+            gclient_apply_config=['android'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_PLATFORM': 'android',
+                'TARGET_ARCH': 'intel',
+                'TARGET_BITS': 32,
+            }),
+    'android_compile_x86_rel':
+        builder_spec.BuilderSpec.create(
+            chromium_config='webrtc_android',
+            android_config='webrtc',
+            gclient_config='webrtc',
+            gclient_apply_config=['android'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_PLATFORM': 'android',
+                'TARGET_ARCH': 'intel',
+                'TARGET_BITS': 32,
+            }),
+    'android_compile_x64_dbg':
+        builder_spec.BuilderSpec.create(
+            chromium_config='webrtc_android',
+            android_config='webrtc',
+            gclient_config='webrtc',
+            gclient_apply_config=['android'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_PLATFORM': 'android',
+                'TARGET_ARCH': 'intel',
+                'TARGET_BITS': 64,
+            }),
+    'android_compile_x64_rel':
+        builder_spec.BuilderSpec.create(
+            chromium_config='webrtc_android',
+            android_config='webrtc',
+            gclient_config='webrtc',
+            gclient_apply_config=['android'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_PLATFORM': 'android',
+                'TARGET_ARCH': 'intel',
+                'TARGET_BITS': 64,
+            }),
+    'android_arm_dbg':
+        builder_spec.BuilderSpec.create(
+            chromium_config='webrtc_android',
+            android_config='webrtc',
+            gclient_config='webrtc',
+            gclient_apply_config=['android'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_PLATFORM': 'android',
+                'TARGET_ARCH': 'arm',
+                'TARGET_BITS': 32,
+            }),
+    'android_arm_more_configs':
+        builder_spec.BuilderSpec.create(
+            chromium_config='webrtc_android',
+            gclient_config='webrtc',
+            gclient_apply_config=['android'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_PLATFORM': 'android',
+                'TARGET_ARCH': 'arm',
+                'TARGET_BITS': 32,
+            }),
+    'android_arm_rel':
+        builder_spec.BuilderSpec.create(
+            chromium_config='webrtc_android',
+            android_config='webrtc',
+            gclient_config='webrtc',
+            gclient_apply_config=['android'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_PLATFORM': 'android',
+                'TARGET_ARCH': 'arm',
+                'TARGET_BITS': 32,
+            }),
+    'android_arm64_dbg':
+        builder_spec.BuilderSpec.create(
+            chromium_config='webrtc_android',
+            android_config='webrtc',
+            gclient_config='webrtc',
+            gclient_apply_config=['android'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_PLATFORM': 'android',
+                'TARGET_ARCH': 'arm',
+                'TARGET_BITS': 64,
+            }),
+    'android_arm64_rel':
+        builder_spec.BuilderSpec.create(
+            chromium_config='webrtc_android',
+            android_config='webrtc',
+            gclient_config='webrtc',
+            gclient_apply_config=['android'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_PLATFORM': 'android',
+                'TARGET_ARCH': 'arm',
+                'TARGET_BITS': 64,
+            }),
+    'ios_compile_arm64_dbg':
+        builder_spec.BuilderSpec.create(
+            chromium_config='webrtc_default',
+            gclient_config='webrtc_ios',
+            chromium_apply_config=['mac_toolchain'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_PLATFORM': 'ios',
+                'TARGET_ARCH': 'arm',
+                'TARGET_BITS': 64,
+            }),
+    'ios_compile_arm64_rel':
+        builder_spec.BuilderSpec.create(
+            chromium_config='webrtc_default',
+            gclient_config='webrtc_ios',
+            chromium_apply_config=['mac_toolchain'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_PLATFORM': 'ios',
+                'TARGET_ARCH': 'arm',
+                'TARGET_BITS': 64,
+            }),
+    'ios_sim_x64_dbg_ios14':
+        builder_spec.BuilderSpec.create(
+            chromium_config='webrtc_default',
+            gclient_config='webrtc_ios',
+            chromium_apply_config=['mac_toolchain'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_PLATFORM': 'ios',
+                'TARGET_ARCH': 'intel',
+                'TARGET_BITS': 64,
+            }),
+    'ios_sim_x64_dbg_ios13':
+        builder_spec.BuilderSpec.create(
+            chromium_config='webrtc_default',
+            gclient_config='webrtc_ios',
+            chromium_apply_config=['mac_toolchain'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_PLATFORM': 'ios',
+                'TARGET_ARCH': 'intel',
+                'TARGET_BITS': 64,
+            }),
+    'ios_sim_x64_dbg_ios12':
+        builder_spec.BuilderSpec.create(
+            chromium_config='webrtc_default',
+            gclient_config='webrtc_ios',
+            chromium_apply_config=['mac_toolchain'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_PLATFORM': 'ios',
+                'TARGET_ARCH': 'intel',
+                'TARGET_BITS': 64,
+            }),
     'linux_asan':
         builder_spec.BuilderSpec.create(
             chromium_config='webrtc_clang',
@@ -2419,6 +2629,14 @@ _TRYSERVER_WEBRTC_SPEC = {
             gclient_apply_config=['webrtc_valgrind'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            }),
+    'linux_more_configs':
+        builder_spec.BuilderSpec.create(
+            chromium_config='webrtc_default',
+            gclient_config='webrtc',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
             }),
     'linux_msan':
@@ -2620,6 +2838,14 @@ _TRYSERVER_WEBRTC_SPEC = {
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 32,
+            }),
+    'win_x86_more_configs':
+        builder_spec.BuilderSpec.create(
+            chromium_config='webrtc_default',
+            gclient_config='webrtc',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_BITS': 64,
             }),
 }
 
