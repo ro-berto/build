@@ -620,6 +620,8 @@
       "cipd",
       "instances",
       "mock/package-latest",
+      "-limit",
+      "0",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -704,6 +706,8 @@
       "cipd",
       "instances",
       "mock/package-without-latest-ref",
+      "-limit",
+      "0",
       "-json-output",
       "/path/to/tmp/json"
     ],
