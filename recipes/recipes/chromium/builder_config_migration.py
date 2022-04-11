@@ -274,7 +274,7 @@ def _migrate_builder_spec(builder_id, builder_spec):
               'target_platform = builder_config.target_platform.{},'.format(
                   v.upper()))
         elif k in ('TARGET_CROS_BOARDS', 'CROS_BOARDS_WITH_QEMU_IMAGES'):
-          output.add_line('{} = [,'.format(k.lower()))
+          output.add_line('{} = ['.format(k.lower()))
           with output.increase_indent('],'):
             for e in v.split(':'):
               output.add_line('"{}",'.format(e))
@@ -647,11 +647,11 @@ def GenTests(api):
                   target_arch = builder_config.target_arch.ARM,
                   target_bits = 64,
                   target_platform = builder_config.target_platform.CHROMEOS,
-                  target_cros_boards = [,
+                  target_cros_boards = [
                       "fake-board1",
                       "fake-board2",
                   ],
-                  cros_boards_with_qemu_images = [,
+                  cros_boards_with_qemu_images = [
                       "fake-board1",
                       "fake-board2",
                   ],
