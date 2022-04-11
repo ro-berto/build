@@ -1667,7 +1667,7 @@ BUILDERS = freeze({
                     'TARGET_BITS': 32,
                 },
                 'bot_type':
-                    'builder',
+                    'builder_tester',
                 'testing': {
                     'platform': 'linux'
                 },
