@@ -939,7 +939,7 @@
       "-server",
       "https://example.swarmingserver.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"common_audio_unittests/Windows/[dummy has/Perf Win7/-1\", \"priority\": \"25\", \"realm\": \"webrtc:perf\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:perf\", \"build_is_experimental:false\", \"builder_group:client.webrtc.perf\", \"buildername:Perf Win7\", \"data:[dummy hash for common_audio_unittests/1]\", \"name:common_audio_unittests\", \"ninja_target:\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.perf:Perf Win7\", \"stepname:common_audio_unittests on Windows\", \"test_id_prefix:\", \"test_suite:common_audio_unittests\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for common_audio_unittests\", \"size_bytes\": \"1]\"}}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:Perf Win7\", \"-var\", \"os:Windows\", \"-var\", \"test_suite:common_audio_unittests\", \"-tag\", \"step_name:common_audio_unittests on Windows\", \"-tag\", \"target_platform:win\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter.exe\", \"gtest\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"./dummy_cmd\", \"--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Windows\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"out\\\\Win32_Builder_Clang\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"common_audio_unittests/Windows-7-SP1/[dummy has/Perf Win7/-1\", \"priority\": \"25\", \"realm\": \"webrtc:perf\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:perf\", \"build_is_experimental:false\", \"builder_group:client.webrtc.perf\", \"buildername:Perf Win7\", \"data:[dummy hash for common_audio_unittests/1]\", \"name:common_audio_unittests\", \"ninja_target:\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.perf:Perf Win7\", \"stepname:common_audio_unittests\", \"test_id_prefix:\", \"test_suite:common_audio_unittests\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for common_audio_unittests\", \"size_bytes\": \"1]\"}}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:Perf Win7\", \"-var\", \"os:Windows-7-SP1\", \"-var\", \"test_suite:common_audio_unittests\", \"-tag\", \"step_name:common_audio_unittests\", \"-tag\", \"target_platform:win\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter.exe\", \"gtest\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"./dummy_cmd\", \"--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Windows-7-SP1\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"out\\\\Win32_Builder_Clang\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -956,14 +956,14 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "test_pre_run.[trigger] common_audio_unittests on Windows",
+    "name": "test_pre_run.[trigger] common_audio_unittests",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"name\": \"common_audio_unittests/Windows/[dummy has/Perf Win7/-1\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"name\": \"common_audio_unittests/Windows-7-SP1/[dummy has/Perf Win7/-1\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"0\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_result\": {@@@",
@@ -978,7 +978,7 @@
       "@@@STEP_LOG_LINE@json.input@{@@@",
       "@@@STEP_LOG_LINE@json.input@  \"requests\": [@@@",
       "@@@STEP_LOG_LINE@json.input@    {@@@",
-      "@@@STEP_LOG_LINE@json.input@      \"name\": \"common_audio_unittests/Windows/[dummy has/Perf Win7/-1\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"name\": \"common_audio_unittests/Windows-7-SP1/[dummy has/Perf Win7/-1\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"25\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc:perf\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"resultdb\": {@@@",
@@ -998,7 +998,7 @@
       "@@@STEP_LOG_LINE@json.input@        \"purpose:post-commit\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"slavename:fake-bot-id\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"spec_name:webrtc.perf:Perf Win7\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"stepname:common_audio_unittests on Windows\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"stepname:common_audio_unittests\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"test_id_prefix:\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"test_suite:common_audio_unittests\"@@@",
       "@@@STEP_LOG_LINE@json.input@      ], @@@",
@@ -1019,11 +1019,11 @@
       "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"builder:Perf Win7\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"os:Windows\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"os:Windows-7-SP1\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"test_suite:common_audio_unittests\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-tag\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"step_name:common_audio_unittests on Windows\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"step_name:common_audio_unittests\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-tag\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"target_platform:win\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-coerce-negative-duration\", @@@",
@@ -1051,7 +1051,7 @@
       "@@@STEP_LOG_LINE@json.input@              }, @@@",
       "@@@STEP_LOG_LINE@json.input@              {@@@",
       "@@@STEP_LOG_LINE@json.input@                \"key\": \"os\", @@@",
-      "@@@STEP_LOG_LINE@json.input@                \"value\": \"Windows\"@@@",
+      "@@@STEP_LOG_LINE@json.input@                \"value\": \"Windows-7-SP1\"@@@",
       "@@@STEP_LOG_LINE@json.input@              }, @@@",
       "@@@STEP_LOG_LINE@json.input@              {@@@",
       "@@@STEP_LOG_LINE@json.input@                \"key\": \"pool\", @@@",
@@ -1067,7 +1067,7 @@
       "@@@STEP_LOG_LINE@json.input@            \"env_prefixes\": [], @@@",
       "@@@STEP_LOG_LINE@json.input@            \"execution_timeout_secs\": \"3600\", @@@",
       "@@@STEP_LOG_LINE@json.input@            \"grace_period_secs\": \"30\", @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"idempotent\": false, @@@",
+      "@@@STEP_LOG_LINE@json.input@            \"idempotent\": true, @@@",
       "@@@STEP_LOG_LINE@json.input@            \"io_timeout_secs\": \"1200\", @@@",
       "@@@STEP_LOG_LINE@json.input@            \"outputs\": [], @@@",
       "@@@STEP_LOG_LINE@json.input@            \"relative_cwd\": \"out\\\\Win32_Builder_Clang\"@@@",
@@ -1079,7 +1079,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: common_audio_unittests/Windows/[dummy has/Perf Win7/-1@https://example.swarmingserver.appspot.com/task?id=0@@@"
+      "@@@STEP_LINK@task UI: common_audio_unittests/Windows-7-SP1/[dummy has/Perf Win7/-1@https://example.swarmingserver.appspot.com/task?id=0@@@"
     ]
   },
   {
@@ -1473,9 +1473,9 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "common_audio_unittests on Windows",
+    "name": "common_audio_unittests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Windows'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
+      "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
@@ -1512,10 +1512,10 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"common_audio_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"dimensions\": {@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"cpu\": \"x86-64\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Windows\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Windows-7-SP1\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"chromium.tests\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"common_audio_unittests on Windows\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"common_audio_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"common_audio_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
@@ -1543,7 +1543,7 @@
       "--build-number",
       "0",
       "--test-type",
-      "common_audio_unittests on Windows",
+      "common_audio_unittests",
       "--chrome-revision",
       "170242",
       "--build-id",
@@ -1563,7 +1563,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "Upload to test-results [common_audio_unittests on Windows]"
+    "name": "Upload to test-results [common_audio_unittests]"
   },
   {
     "cmd": [],

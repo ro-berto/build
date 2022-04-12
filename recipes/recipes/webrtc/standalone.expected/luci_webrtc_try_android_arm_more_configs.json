@@ -2597,7 +2597,7 @@
       "-server",
       "https://example.swarmingserver.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"common_audio_unittests/Ubuntu/[dummy has/android_arm_more_configs/-1\", \"priority\": \"30\", \"realm\": \"webrtc:try\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:android_arm_more_configs\", \"data:[dummy hash for common_audio_unittests/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:common_audio_unittests\", \"ninja_target:\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:android_arm_more_configs\", \"stepname:common_audio_unittests on Ubuntu\", \"test_id_prefix:\", \"test_suite:common_audio_unittests\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for common_audio_unittests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:android_arm_more_configs\", \"-var\", \"os:Ubuntu\", \"-var\", \"test_suite:common_audio_unittests\", \"-tag\", \"step_name:common_audio_unittests on Ubuntu\", \"-tag\", \"target_platform:android\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"gtest\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"os\", \"value\": \"Ubuntu\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"common_audio_unittests/Android/[dummy has/android_arm_more_configs/-1\", \"priority\": \"30\", \"realm\": \"webrtc:try\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:tryserver.webrtc\", \"buildername:android_arm_more_configs\", \"data:[dummy hash for common_audio_unittests/dummy size]\", \"gerrit:https://webrtc-review.googlesource.com/c/123456/7\", \"name:common_audio_unittests\", \"ninja_target:\", \"patch_project:src\", \"project:webrtc\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.try:android_arm_more_configs\", \"stepname:common_audio_unittests on Android\", \"test_id_prefix:\", \"test_suite:common_audio_unittests\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for common_audio_unittests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:android_arm_more_configs\", \"-var\", \"os:Android\", \"-var\", \"test_suite:common_audio_unittests\", \"-tag\", \"step_name:common_audio_unittests on Android\", \"-tag\", \"target_platform:android\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"gtest\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -2614,14 +2614,14 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "test_pre_run.[trigger] common_audio_unittests on Ubuntu",
+    "name": "test_pre_run.[trigger] common_audio_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"name\": \"common_audio_unittests/Ubuntu/[dummy has/android_arm_more_configs/-1\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"name\": \"common_audio_unittests/Android/[dummy has/android_arm_more_configs/-1\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"0\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_result\": {@@@",
@@ -2636,7 +2636,7 @@
       "@@@STEP_LOG_LINE@json.input@{@@@",
       "@@@STEP_LOG_LINE@json.input@  \"requests\": [@@@",
       "@@@STEP_LOG_LINE@json.input@    {@@@",
-      "@@@STEP_LOG_LINE@json.input@      \"name\": \"common_audio_unittests/Ubuntu/[dummy has/android_arm_more_configs/-1\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"name\": \"common_audio_unittests/Android/[dummy has/android_arm_more_configs/-1\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"30\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc:try\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"resultdb\": {@@@",
@@ -2658,7 +2658,7 @@
       "@@@STEP_LOG_LINE@json.input@        \"purpose:pre-commit\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"slavename:fake-bot-id\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"spec_name:webrtc.try:android_arm_more_configs\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"stepname:common_audio_unittests on Ubuntu\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"stepname:common_audio_unittests on Android\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"test_id_prefix:\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"test_suite:common_audio_unittests\"@@@",
       "@@@STEP_LOG_LINE@json.input@      ], @@@",
@@ -2679,11 +2679,11 @@
       "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"builder:android_arm_more_configs\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"os:Ubuntu\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"os:Android\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"test_suite:common_audio_unittests\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-tag\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"step_name:common_audio_unittests on Ubuntu\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"step_name:common_audio_unittests on Android\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-tag\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"target_platform:android\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-coerce-negative-duration\", @@@",
@@ -2706,7 +2706,7 @@
       "@@@STEP_LOG_LINE@json.input@            \"dimensions\": [@@@",
       "@@@STEP_LOG_LINE@json.input@              {@@@",
       "@@@STEP_LOG_LINE@json.input@                \"key\": \"os\", @@@",
-      "@@@STEP_LOG_LINE@json.input@                \"value\": \"Ubuntu\"@@@",
+      "@@@STEP_LOG_LINE@json.input@                \"value\": \"Android\"@@@",
       "@@@STEP_LOG_LINE@json.input@              }, @@@",
       "@@@STEP_LOG_LINE@json.input@              {@@@",
       "@@@STEP_LOG_LINE@json.input@                \"key\": \"pool\", @@@",
@@ -2734,7 +2734,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: common_audio_unittests/Ubuntu/[dummy has/android_arm_more_configs/-1@https://example.swarmingserver.appspot.com/task?id=0@@@"
+      "@@@STEP_LINK@task UI: common_audio_unittests/Android/[dummy has/android_arm_more_configs/-1@https://example.swarmingserver.appspot.com/task?id=0@@@"
     ]
   },
   {
@@ -3128,9 +3128,9 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "common_audio_unittests on Ubuntu",
+    "name": "common_audio_unittests on Android",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
+      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
@@ -3168,10 +3168,10 @@
       "@@@STEP_LOG_LINE@step_metadata@{@@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"common_audio_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"dimensions\": {@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Android\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"chromium.tests\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"common_audio_unittests on Ubuntu\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"common_audio_unittests on Android\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"common_audio_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
@@ -3199,7 +3199,7 @@
       "--build-number",
       "0",
       "--test-type",
-      "common_audio_unittests on Ubuntu",
+      "common_audio_unittests on Android",
       "--chrome-revision",
       "170242",
       "--build-id",
@@ -3219,7 +3219,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "Upload to test-results [common_audio_unittests on Ubuntu]"
+    "name": "Upload to test-results [common_audio_unittests on Android]"
   },
   {
     "cmd": [],

@@ -174,32 +174,6 @@ class WebRTCApi(recipe_api.RecipeApi):
     tests = [t for t in tests if t.canonical_name in tests_targets]
     return tests, sorted(set(compile_targets))
 
-  def configure_swarming(self, builder_id):
-    self.m.chromium_swarming.configure_swarming(
-        'webrtc',
-        precommit=self.m.tryserver.is_tryserver,
-        builder_group=builder_id.group,
-        path_to_merge_scripts=self.m.path.join(
-            self.m.chromium_checkout.checkout_dir, 'src', 'testing',
-            'merge_scripts'))
-    self.m.chromium_swarming.set_default_dimension(
-        'os',
-        self.m.chromium_swarming.prefered_os_dimension(
-            self.m.platform.name).split('-', 1)[0])
-    for key, value in six.iteritems(
-        self.bot.config.get('swarming_dimensions', {})):
-      self.m.chromium_swarming.set_default_dimension(key, value)
-    if self.bot.config.get('swarming_timeout'):
-      self.m.chromium_swarming.default_hard_timeout = self.bot.config[
-          'swarming_timeout']
-      self.m.chromium_swarming.default_io_timeout = self.bot.config[
-          'swarming_timeout']
-    # Perf tests are marked as not idempotent, which means they're re-run
-    # if they did not change this build. This will give the dashboard some
-    # more variance data to work with.
-    if self.bot.is_running_perf_tests():
-      self.m.chromium_swarming.default_idempotent = False
-
   def download_audio_quality_tools(self):
     args = [self.m.path['checkout'].join('tools_webrtc', 'audio_quality')]
     script = self.m.path['checkout'].join('tools_webrtc', 'download_tools.py')

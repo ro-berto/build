@@ -19,6 +19,8 @@ DEPS = [
     'chromium',
     'chromium_checkout',
     'chromium_tests_builder_config',
+    'chromium_swarming',
+    'depot_tools/tryserver',
     'recipe_engine/step',
     'webrtc',
 ]
@@ -32,7 +34,8 @@ def RunSteps(api):
 
   update_step = api.chromium_checkout.ensure_checkout()
 
-  webrtc.configure_swarming(builder_id)
+  api.chromium_swarming.configure_swarming(
+      'webrtc', precommit=api.tryserver.is_tryserver)
 
   if webrtc.should_download_audio_quality_tools(builder_id):
     webrtc.download_audio_quality_tools()
