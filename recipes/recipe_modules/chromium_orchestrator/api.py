@@ -184,12 +184,11 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
 
     affected_files = self.m.chromium_checkout.get_files_affected_by_patch(
         report_via_property=True)
-    is_deps_only_change = affected_files == ["DEPS"]
 
     # Must happen before without patch steps.
     if self.m.code_coverage.using_coverage:
-      self.m.code_coverage.instrument(
-          affected_files, is_deps_only_change=is_deps_only_change)
+      self.m.code_coverage.set_is_per_cl_coverage(True)
+      self.m.code_coverage.filter_and_set_eligible_files(affected_files)
 
     # Now that we've finished the Orchestrator's bot_update and analyze, let's
     # check on the triggered compilator and display its steps (until it
