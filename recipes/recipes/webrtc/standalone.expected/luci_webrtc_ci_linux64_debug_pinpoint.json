@@ -1510,7 +1510,7 @@
       "--merge-additional-args",
       "[]",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"bot_id\": \"bot_id\", \"builder_group\": \"client.webrtc\", \"buildername\": \"Linux64 Debug\", \"buildnumber\": 1337, \"got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"got_revision_cp\": \"refs/heads/main@{#170242}\", \"recipe\": \"webrtc/standalone\"}",
+      "{\"BUILD_CONFIG\": \"Debug\", \"bot_id\": \"bot_id\", \"builder_group\": \"client.webrtc\", \"buildername\": \"Linux64 Debug\", \"buildnumber\": 1337, \"got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"got_revision_cp\": \"refs/heads/main@{#1337}\", \"recipe\": \"webrtc/standalone\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"}",
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",

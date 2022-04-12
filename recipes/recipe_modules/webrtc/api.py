@@ -78,8 +78,6 @@ class WebRTCApi(recipe_api.RecipeApi):
   def apply_bot_config(self, builder_id, builder_config):
     self.bot = Bot(self.bucketname, self.buildername)
 
-    self.set_config('webrtc')
-
     self.m.chromium_tests.configure_build(builder_config)
 
     if self.m.tryserver.is_tryserver:

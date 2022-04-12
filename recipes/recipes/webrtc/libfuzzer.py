@@ -6,7 +6,6 @@ from __future__ import absolute_import
 
 import functools
 
-from recipe_engine import post_process
 from RECIPE_MODULES.build.chromium_tests_builder_config import (builder_db,
                                                                 builder_spec)
 from RECIPE_MODULES.build import chromium
@@ -89,15 +88,11 @@ def GenTests(api):
   generate_builder = functools.partial(api.webrtc.generate_builder, builders_db)
 
   for builder_id in builders_db:
-    yield (generate_builder(builder_id, revision='a' * 40) + api.step_data(
+    yield (generate_builder(builder_id) + api.step_data(
         'calculate targets',
         stdout=api.raw_io.output_text('target1 target2 target3')))
 
   builder_id = chromium.BuilderId.create_for_group(
       'client.webrtc', 'Linux64 Release (Libfuzzer)')
-  yield (generate_builder(
-      builder_id,
-      revision='a' * 40,
-      suffix='_compile_failure',
-      fail_compile=True) + api.post_process(post_process.StatusFailure) +
-         api.post_process(post_process.DropExpectation))
+  yield generate_builder(
+      builder_id, suffix='_compile_failure', fail_compile=True)

@@ -6,6 +6,7 @@
 
 from __future__ import absolute_import
 
+from recipe_engine import post_process
 from recipe_engine import recipe_test_api
 from . import builders
 
@@ -23,8 +24,6 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
   def generate_builder(self,
                        builders_db,
                        builder_id,
-                       revision,
-                       parent_got_revision=None,
                        failing_test=None,
                        fail_compile=False,
                        suffix='',
@@ -52,14 +51,13 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
 
     if builder_config.simulation_platform == 'mac':
       test += self.m.properties(xcode_build_version='dummy_xcode')
-    if revision:
-      test += self.m.properties(
-          revision=revision,
-          got_revision='a' * 40,
-          got_revision_cp='refs/heads/main@{#1337}')
+    test += self.m.properties(
+        revision='a' * 40,
+        got_revision='a' * 40,
+        got_revision_cp='refs/heads/main@{#1337}')
     if builder_config.parent_buildername:
       parent_buildername = builder_config.parent_buildername
-      parent_rev = parent_got_revision or revision
+      parent_rev = 'a' * 40
       test += self.m.properties(parent_buildername=parent_buildername)
       test += self.m.properties(parent_got_revision=parent_rev)
       test += self.m.properties(
@@ -67,6 +65,8 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
 
     if fail_compile:
       test += self.step_data('compile', retcode=1)
+      test += self.post_process(post_process.StatusFailure)
+      test += self.post_process(post_process.DropExpectation)
 
     if failing_test:
       test += self.override_step_data(
@@ -102,7 +102,7 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
           bucket='try',
           builder=builder_id.builder,
           git_repo=git_repo,
-          revision=revision or None,
+          revision='a' * 40,
           tags=tags)
     else:
       test += self.m.buildbucket.ci_build(
@@ -110,7 +110,7 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
           bucket='perf' if 'perf' in builder_id.group else 'ci',
           builder=builder_id.builder,
           git_repo=git_repo,
-          revision=revision or 'a' * 40,
+          revision='a' * 40,
           tags=tags)
     test += self.m.properties(buildnumber=1337)
 
