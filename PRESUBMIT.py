@@ -171,23 +171,7 @@ def CheckTestsOnCommit(input_api, output_api):
         )
     )
 
-  # Fetch recipe dependencies once in serial so that we don't hit a race
-  # condition where multiple tests are trying to fetch at once.
-  output = input_api.RunTests([
-      input_api.Command(
-          name='recipes fetch',
-          cmd=[
-              input_api.python_executable,
-              input_api.os_path.join('recipes', 'recipes.py'), 'fetch'
-          ],
-          kwargs={},
-          message=output_api.PresubmitError,
-      )
-  ])
-  # Run the tests.
-  output.extend(input_api.RunTests(tests))
-
-  return output
+  return input_api.RunTests(tests)
 
 
 def CheckPanProjectChecksOnCommit(input_api, output_api):
