@@ -7,8 +7,9 @@ from __future__ import absolute_import
 import functools
 
 from recipe_engine import post_process
-from recipe_engine.engine_types import freeze
-
+from RECIPE_MODULES.build.chromium_tests_builder_config import (builder_db,
+                                                                builder_spec)
+from RECIPE_MODULES.build import chromium
 
 PYTHON_VERSION_COMPATIBILITY = "PY3"
 
@@ -27,50 +28,33 @@ DEPS = [
 ]
 
 
-BUILDERS = freeze({
-    'luci.webrtc.ci': {
-        'settings': {
-            'builder_group': 'client.webrtc',
-        },
-        'builders': {
-            'Linux64 Release (Libfuzzer)': {
-                'recipe_config': 'webrtc',
-                'chromium_config_kwargs': {
+BUILDERS_DB = builder_db.BuilderDatabase.create({
+    'client.webrtc': {
+        'Linux64 Release (Libfuzzer)':
+            builder_spec.BuilderSpec.create(
+                chromium_config='webrtc_default',
+                gclient_config='webrtc',
+                chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
                     'TARGET_BITS': 64,
-                },
-                'bot_type': 'builder',
-                'testing': {
-                    'platform': 'linux'
-                },
-            },
-        },
+                }),
     },
-    'luci.webrtc.try': {
-        'settings': {
-            'builder_group': 'tryserver.webrtc',
-        },
-        'builders': {
-            'linux_libfuzzer_rel': {
-                'recipe_config': 'webrtc',
-                'chromium_config_kwargs': {
+    'tryserver.webrtc': {
+        'linux_libfuzzer_rel':
+            builder_spec.BuilderSpec.create(
+                chromium_config='webrtc_default',
+                gclient_config='webrtc',
+                chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',
                     'TARGET_BITS': 64,
-                },
-                'bot_type': 'builder',
-                'testing': {
-                    'platform': 'linux'
-                },
-            },
-        },
+                }),
     },
 })
 
 
 def RunSteps(api):
-  webrtc = api.webrtc
   builder_id, builder_config = api.chromium_tests_builder_config.lookup_builder(
-      builder_db=webrtc.BUILDERS_DB)
+      builder_db=BUILDERS_DB)
   api.chromium_tests.configure_build(builder_config)
   update_step = api.chromium_checkout.ensure_checkout()
   api.chromium.ensure_goma()
@@ -78,7 +62,7 @@ def RunSteps(api):
 
   api.chromium_tests.create_targets_config(builder_config,
                                            update_step.presentation.properties)
-  webrtc.run_mb(builder_id)
+  api.webrtc.run_mb(builder_id)
 
   with api.context(cwd=api.path['checkout']):
     args = [
@@ -101,18 +85,18 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  builders = BUILDERS
-  generate_builder = functools.partial(api.webrtc.generate_builder, builders)
+  builders_db = BUILDERS_DB
+  generate_builder = functools.partial(api.webrtc.generate_builder, builders_db)
 
-  for bucketname in builders.keys():
-    group_config = builders[bucketname]
-    for buildername in group_config['builders'].keys():
-      yield (generate_builder(bucketname, buildername, revision='a' * 40) +
-             api.step_data('calculate targets',
-                 stdout=api.raw_io.output_text('target1 target2 target3')))
+  for builder_id in builders_db:
+    yield (generate_builder(builder_id, revision='a' * 40) + api.step_data(
+        'calculate targets',
+        stdout=api.raw_io.output_text('target1 target2 target3')))
+
+  builder_id = chromium.BuilderId.create_for_group(
+      'client.webrtc', 'Linux64 Release (Libfuzzer)')
   yield (generate_builder(
-      'luci.webrtc.ci',
-      'Linux64 Release (Libfuzzer)',
+      builder_id,
       revision='a' * 40,
       suffix='_compile_failure',
       fail_compile=True) + api.post_process(post_process.StatusFailure) +

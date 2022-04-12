@@ -6,12 +6,8 @@
 
 from __future__ import absolute_import
 
-import base64
-import six
-
-from RECIPE_MODULES.build import chromium
 from recipe_engine import recipe_test_api
-from . import builders as webrtc_builders
+from . import builders
 
 
 def _sanitize_builder_name(name):
@@ -20,16 +16,13 @@ def _sanitize_builder_name(name):
 
 
 class WebRTCTestApi(recipe_test_api.RecipeTestApi):
-  BUILDERS = webrtc_builders.BUILDERS
-  RECIPE_CONFIGS = webrtc_builders.RECIPE_CONFIGS
 
   def example_binary_sizes(self):
     return self.m.json.output({'some_binary': 123456})
 
   def generate_builder(self,
-                       builders,
-                       bucketname,
-                       buildername,
+                       builders_db,
+                       builder_id,
                        revision,
                        parent_got_revision=None,
                        failing_test=None,
@@ -39,39 +32,35 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
                        is_experimental=False,
                        gn_analyze_output=None,
                        tags=None):
-    builder_group = builders[bucketname]['settings'].get(
-        'builder_group', bucketname)
-    builder_id = chromium.BuilderId.create_for_group(builder_group, buildername)
-    bot_config = builders[bucketname]['builders'][buildername]
-    bot_type = bot_config.get('bot_type', 'builder_tester')
+    builder_config = builders_db[builder_id]
+    project = 'webrtc-internal' if 'internal' in builder_id.group else 'webrtc'
+    bucketname = builders.BUCKET_NAME[builder_id.group]
 
-    chromium_kwargs = webrtc_builders.BUILDERS_DB[
-        builder_id].chromium_config_kwargs
+    chromium_kwargs = builder_config.chromium_config_kwargs
     test = self.test(
         '%s_%s%s' % (_sanitize_builder_name(bucketname),
-                     _sanitize_builder_name(buildername), suffix),
-        self.m.builder_group.for_current(builder_group),
+                     _sanitize_builder_name(builder_id.builder), suffix),
+        self.m.builder_group.for_current(builder_id.group),
         self.m.properties(
-            buildername=buildername,
+            buildername=builder_id.builder,
             bot_id='bot_id',
             BUILD_CONFIG=chromium_kwargs['BUILD_CONFIG']),
-        self.m.platform(bot_config['testing']['platform'],
+        self.m.platform(builder_config.simulation_platform or 'linux',
                         chromium_kwargs.get('TARGET_BITS', 64)),
         self.m.runtime(is_experimental=is_experimental),
     )
 
-    if bot_config['testing']['platform'] == 'mac':
+    if builder_config.simulation_platform == 'mac':
       test += self.m.properties(xcode_build_version='dummy_xcode')
-    if bot_config.get('parent_buildername'):
-      test += self.m.properties(
-          parent_buildername=bot_config['parent_buildername'])
     if revision:
       test += self.m.properties(
           revision=revision,
           got_revision='a' * 40,
           got_revision_cp='refs/heads/main@{#1337}')
-    if bot_type == 'tester':
+    if builder_config.parent_buildername:
+      parent_buildername = builder_config.parent_buildername
       parent_rev = parent_got_revision or revision
+      test += self.m.properties(parent_buildername=parent_buildername)
       test += self.m.properties(parent_got_revision=parent_rev)
       test += self.m.properties(
           swarming_command_lines={'common_audio_unittests': ['./dummy_cmd']})
@@ -92,11 +81,12 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
       test += self.override_step_data('build android archive', step_test_data)
 
     git_repo = 'https://webrtc.googlesource.com/src'
-    _, project, short_bucket = bucketname.split('.')
-    phases = bot_config.get('phases', [None])
-    step_suffixes = [''] + [' (%d)' % i for i in range(2, len(phases) + 1)]
-    if 'try' in bucketname:
-      if 'fuzzer' not in buildername:
+    nb_phase = 1
+    if 'more_configs' in _sanitize_builder_name(builder_id.builder):
+      nb_phase = 3
+    step_suffixes = [''] + [' (%d)' % (i + 2) for i in range(nb_phase - 1)]
+    if 'try' in builder_id.group:
+      if 'fuzzer' not in builder_id.builder:
         for suffix in step_suffixes:
           if gn_analyze_output is None:
             gn_analyze_output = {
@@ -109,16 +99,16 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
 
       test += self.m.buildbucket.try_build(
           project=project,
-          bucket=short_bucket,
-          builder=buildername,
+          bucket='try',
+          builder=builder_id.builder,
           git_repo=git_repo,
           revision=revision or None,
           tags=tags)
     else:
       test += self.m.buildbucket.ci_build(
           project=project,
-          bucket=short_bucket,
-          builder=buildername,
+          bucket='perf' if 'perf' in builder_id.group else 'ci',
+          builder=builder_id.builder,
           git_repo=git_repo,
           revision=revision or 'a' * 40,
           tags=tags)
@@ -126,10 +116,10 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
 
     for step_suffix in step_suffixes:
       test += self.m.chromium_tests.read_source_side_spec(
-          builder_group,
+          builder_id.group,
           step_suffix=step_suffix,
           contents={
-              buildername: {
+              builder_id.builder: {
                   'gtest_tests': [{
                       'test': 'common_audio_unittests',
                       'swarming': {

@@ -8,10 +8,9 @@ import six
 from six.moves import urllib
 
 from recipe_engine import recipe_api
+from RECIPE_MODULES.build.chromium_tests_builder_config import builder_spec
 
-from . import builders as webrtc_builders
-
-from RECIPE_MODULES.build import chromium
+from . import builders
 
 _WEBRTC_GS_BUCKET = 'chromium-webrtc'
 _DASHBOARD_UPLOAD_URL = 'https://chromeperf.appspot.com'
@@ -48,31 +47,18 @@ def _get_tests_from_targets_config(targets_config, phase):
 
 
 class Bot(object):
-  def __init__(self, builders, recipe_configs, bucket, builder):
-    self._builders = builders
-    self._recipe_configs = recipe_configs
+
+  def __init__(self, bucket, builder):
     self.bucket = bucket
     self.builder = builder
 
   @property
   def config(self):
-    return self._builders[self.bucket]['builders'][self.builder]
+    return builders.BUILDERS[self.bucket]['builders'][self.builder]
 
   @property
   def bot_type(self):
     return self.config.get('bot_type', 'builder_tester')
-
-  @property
-  def recipe_config(self):
-    return self._recipe_configs[self.config['recipe_config']]
-
-  @property
-  def test_suite(self):
-    return self.recipe_config.get('test_suite')
-
-  @property
-  def phases(self):
-    return self.config.get('phases', [None])
 
   def is_running_perf_tests(self):
     return bool(self.config.get('perf_id'))
@@ -80,57 +66,30 @@ class Bot(object):
   def triggered_bots(self):
     for builder in self.config.get('triggers', []):
       bucketname, buildername = builder.split('/')
-      yield Bot(self._builders, self._recipe_configs, bucketname, buildername)
+      yield Bot(bucketname, buildername)
 
 
 class WebRTCApi(recipe_api.RecipeApi):
-  BUILDERS = webrtc_builders.BUILDERS
-  BUILDERS_DB = webrtc_builders.BUILDERS_DB
-  RECIPE_CONFIGS = webrtc_builders.RECIPE_CONFIGS
-
   def __init__(self, **kwargs):
     super(WebRTCApi, self).__init__(**kwargs)
 
-    self._builders = None
-    self._recipe_configs = None
-    self._ios_config = None
     self.bot = None
 
-  def apply_bot_config(self, builders, recipe_configs, builder_config):
-    self._builders = builders
-    self._recipe_configs = recipe_configs
+  def apply_bot_config(self, builder_id, builder_config):
+    self.bot = Bot(self.bucketname, self.buildername)
 
-    self.bot = Bot(builders, recipe_configs, self.bucketname, self.buildername)
-
-    self.set_config('webrtc', TEST_SUITE=self.bot.test_suite,
-                    PERF_ID=self.bot.config.get('perf_id'))
+    self.set_config('webrtc')
 
     self.m.chromium_tests.configure_build(builder_config)
 
     if self.m.tryserver.is_tryserver:
       self.m.chromium.apply_config('trybot_flavor')
 
-    if self.m.properties.get('xcode_build_version'):
-      xcode_version = self.m.properties['xcode_build_version']
-      args = ['--xcode-build-version', xcode_version]
-      named_caches = {'xcode_ios_' + xcode_version: 'Xcode.app'}
-      if self.bot.config.get('platform') and self.bot.config.get('version'):
-        platform = self.bot.config['platform']
-        version = self.bot.config['version']
-        args += ['--platform', platform, '--version', version]
-        named_caches['runtime_ios_' +
-                     _sanitize_file_name(version)] = 'Runtime-ios-' + version
-      self._ios_config = {
-          'service_account': self.bot.config.get('service_account'),
-          'named_caches': named_caches,
-          'args': args,
-      }
-
     if self.bot.is_running_perf_tests():
       assert not self.m.tryserver.is_tryserver
       assert self.m.chromium.c.BUILD_CONFIG == 'Release', (
           'Perf tests should only be run with Release builds.')
-    if self.bot.bot_type == 'tester':
+    if builders.BUILDERS_DB[builder_id].execution_mode == builder_spec.TEST:
       assert self.m.properties.get('parent_got_revision'), (
           'Testers should only be run with "parent_got_revision" property.')
 
@@ -156,30 +115,25 @@ class WebRTCApi(recipe_api.RecipeApi):
   def buildername(self):
     return self.m.buildbucket.builder_name
 
-  @property
-  def build_url(self):
-    return 'https://ci.chromium.org/p/%s/builders/%s/%s/%s' % (
-        urllib.parse.quote(self.m.buildbucket.build.builder.project),
-        urllib.parse.quote(self.bucketname), urllib.parse.quote(
-            self.buildername),
-        urllib.parse.quote(str(self.m.buildbucket.build.number)))
-
   def related_bots(self):
     return [self.bot] + list(self.bot.triggered_bots())
 
-  def should_download_audio_quality_tools(self):
+  def should_download_audio_quality_tools(self, builder_id):
     # Perf test low_bandwidth_audio_perf_test doesn't run on iOS.
-    return any(bot.is_running_perf_tests() and 'ios' not in bot.test_suite
+    is_ios = 'ios' in builder_id.builder.lower()
+    return any(bot.is_running_perf_tests() and not is_ios
                for bot in self.related_bots())
 
-  def should_download_video_quality_tools(self):
-    return any(bot.is_running_perf_tests() and 'android' in bot.test_suite
+  def should_download_video_quality_tools(self, builder_id):
+    is_android = 'android' in builder_id.builder.lower()
+    return any(bot.is_running_perf_tests() and is_android
                for bot in self.related_bots())
 
   def is_triggering_perf_tests(self):
     return any(bot.is_running_perf_tests() for bot in self.bot.triggered_bots())
 
-  def get_tests_and_compile_targets(self, phase, builder_config, update_step):
+  def get_tests_and_compile_targets(self, builder_id, builder_config, phase,
+                                    update_step):
     """ Returns the tests to run and the targets to compile."""
     targets_config = self.m.chromium_tests.create_targets_config(
         builder_config, update_step.presentation.properties)
@@ -197,7 +151,9 @@ class WebRTCApi(recipe_api.RecipeApi):
     # trybots.
     if 'DEPS' in affected_files or not self.m.tryserver.is_tryserver:
       # Perf testers are a special case; they only need the catapult protos.
-      if self.bot.bot_type == 'tester' and self.bot.is_running_perf_tests():
+      is_tester = builders.BUILDERS_DB[
+          builder_id].execution_mode == builder_spec.TEST
+      if is_tester and self.bot.is_running_perf_tests():
         return tests, ['webrtc_dashboard_upload']
       return tests, ['all']
 
@@ -210,7 +166,8 @@ class WebRTCApi(recipe_api.RecipeApi):
 
     # Some trybots are used to calculate the binary size impact of the current
     # CL. These targets should always be built.
-    for binary_size_file in self.bot.config.get('binary_size_files', []):
+    binary_size_files = builders.BUILDERS_DB[builder_id].binary_size_files or []
+    for binary_size_file in binary_size_files:
       compile_targets += [
           t for t in _BINARY_SIZE_TARGETS if t in binary_size_file
       ]
@@ -299,8 +256,8 @@ class WebRTCApi(recipe_api.RecipeApi):
         mb_path=self.m.path['checkout'].join('tools_webrtc', 'mb'),
         isolated_targets=_get_isolated_targets(tests))
 
-  def isolate(self, tests):
-    if self.bot.bot_type == 'tester':
+  def isolate(self, builder_id, tests):
+    if builders.BUILDERS_DB[builder_id].execution_mode == builder_spec.TEST:
       # The tests running on a 'tester' bot are isolated by the 'builder'.
       self.m.isolate.check_swarm_hashes(_get_isolated_targets(tests))
     elif self.is_triggering_perf_tests() and not self.m.tryserver.is_tryserver:
@@ -325,11 +282,16 @@ class WebRTCApi(recipe_api.RecipeApi):
       self.m.isolate.isolate_tests(
           self.m.chromium.output_dir, targets=_get_isolated_targets(tests))
 
-  def set_upload_build_properties(self):
+  def set_upload_build_properties(self, builder_id):
     experiment_prefix = 'Experimental' if self.m.runtime.is_experimental else ''
+    bucketname = builders.BUCKET_NAME[builder_id.group]
+    build_url = 'https://ci.chromium.org/p/%s/builders/%s/%s/%s' % (
+        urllib.parse.quote(self.m.buildbucket.build.builder.project),
+        urllib.parse.quote(bucketname), urllib.parse.quote(builder_id.builder),
+        urllib.parse.quote(str(self.m.buildbucket.build.number)))
     self.m.chromium.set_build_properties({
-        'build_page_url': self.build_url,
-        'bot': self.c.PERF_ID,
+        'build_page_url': build_url,
+        'bot': builders.BUILDERS_DB[builder_id].perf_id,
         'dashboard_url': _DASHBOARD_UPLOAD_URL,
         'commit_position': self.revision_number,
         'webrtc_git_hash': self.revision,
@@ -337,8 +299,8 @@ class WebRTCApi(recipe_api.RecipeApi):
         'outdir': self.m.chromium.output_dir,
     })
 
-  def set_test_command_lines(self, tests):
-    if self.bot.bot_type in ('builder', 'builder_tester'):
+  def set_test_command_lines(self, builder_id, tests):
+    if builders.BUILDERS_DB[builder_id].execution_mode != builder_spec.TEST:
       return self.m.chromium_tests.set_test_command_lines(tests, suffix='')
 
     # Tester builders only triggers swarming tests built on 'builder' bots
@@ -350,9 +312,10 @@ class WebRTCApi(recipe_api.RecipeApi):
         'ISOLATED_OUTDIR',
     )
     # Tester builders run their tests in the parent builder out directory.
+    parent_buildername = builders.BUILDERS_DB[builder_id].parent_buildername
     output_dir = str(self.m.chromium.output_dir).replace(
-        _sanitize_file_name(self.buildername),
-        _sanitize_file_name(self.bot.config.get('parent_buildername')))
+        _sanitize_file_name(builder_id.builder),
+        _sanitize_file_name(parent_buildername))
 
     relative_cwd = self.m.path.relpath(output_dir, self.m.path['checkout'])
     for test in tests:
@@ -435,14 +398,14 @@ class WebRTCApi(recipe_api.RecipeApi):
           args=['-a', 'public-read'],
           unauthenticated_url=True)
 
-  def run_tests(self, tests):
+  def run_tests(self, builder_id, tests):
     if not tests or self.bot.bot_type == 'builder':
       return
 
     if self.bot.is_running_perf_tests():
-      self.set_upload_build_properties()
+      self.set_upload_build_properties(builder_id)
 
-    self.set_test_command_lines(tests)
+    self.set_test_command_lines(builder_id, tests)
     test_runner = self.m.chromium_tests.create_test_runner(
         tests, enable_infra_failure=True)
     return test_runner()
