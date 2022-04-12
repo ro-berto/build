@@ -56,6 +56,7 @@ def GenTests(api):
                           '../../testing/buildbot/filters',
                           'gen/third_party',
                           '../../testing/buildbot/filters',
+                          'bin/lacros_fyi_tast_tests.filter'
                             ]}}
   """
 
@@ -150,6 +151,9 @@ def GenTests(api):
     mock_paths.append(api.path['checkout'].join('out', 'Release', 'chrome'))
     mock_paths.append(api.path['checkout'].join('out', 'Release', 'bin',
                                                 'run_%s' % target_name))
+
+    mock_paths.append(api.path['checkout'].join('out', 'Release', 'bin',
+                                                '%s.filter' % target_name))
     if isolate_file_exists:
       mock_paths.append(api.path['checkout'].join('out', 'Release',
                                                   '%s.isolate' % target_name))
@@ -197,6 +201,10 @@ def GenTests(api):
           ('prepare skylab tests.upload skylab runtime deps for %s.'
            'write metadata.json') % TAST_TARGET,
       ),
+      api.post_process(
+          _check_test_args,
+          'test_pre_run.schedule skylab tests.basic_EVE_TOT.schedule',
+          'tast_expr_file=out/Release/bin/%s.filter' % TAST_TARGET),
       api.override_step_data(
           'basic_EVE_TOT results',
           stdout=api.raw_io.output_text(

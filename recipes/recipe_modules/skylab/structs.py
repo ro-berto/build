@@ -45,6 +45,11 @@ class SkylabRequest(object):
           non-empty tast_expr, then tast_test.
     * tast_expr: The tast expression defines what tast test we run on the
           Skylab DUT, e.g. lacros.Basic.
+    * tast_expr_file: The relative path of the filter file for tast tests. The
+          filter stores tast expression in a dict. Users need to provide the
+          tast_expr_key to extract them.
+    * tast_expr_key: The key to extract the tast expression from the
+          tast_expr_file.
     * test_args: The runtime argument for test,
           e.g. '--gtest_filter="VaapiTest.*'.
     * autotest_name: The name of the autotest to be executed in Skylab.
@@ -68,6 +73,8 @@ class SkylabRequest(object):
   test_type = attrib(
       enum([SKYLAB_TAST_TEST, SKYLAB_GTEST]), default=SKYLAB_GTEST)
   tast_expr = attrib(str, default='')
+  tast_expr_file = attrib(str, default='')
+  tast_expr_key = attrib(str, default='')
   test_args = attrib(str, default='')
   autotest_name = attrib(str, default='')
   retries = attrib(enum([0, 1, 2, 3, 4, 5]), default=0)
@@ -75,5 +82,6 @@ class SkylabRequest(object):
 
   @classmethod
   def create(cls, **kwargs):
-    test_type = SKYLAB_TAST_TEST if kwargs.get('tast_expr') else SKYLAB_GTEST
+    test_type = SKYLAB_TAST_TEST if kwargs.get('tast_expr') or kwargs.get(
+        'tast_expr_file') else SKYLAB_GTEST
     return cls(test_type=test_type, **kwargs)

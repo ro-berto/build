@@ -31,11 +31,14 @@ def gen_skylab_req(tag,
                    dut_pool='',
                    secondary_board='',
                    secondary_cros_img='',
-                   autotest_name=''):
+                   autotest_name='',
+                   tast_expr_file=''):
   return SkylabRequest.create(
       request_tag=tag,
       board='eve',
       tast_expr=tast_expr,
+      tast_expr_file=tast_expr_file,
+      tast_expr_key='default',
       test_args=test_args,
       lacros_gcs_path=LACROS_GCS_PATH,
       exe_rel_path='out/Release/bin/run_foo_unittest',
@@ -56,7 +59,8 @@ REQUESTS = [
     gen_skylab_req(
         'm88_nearby_dut_pool',
         tast_expr=LACROS_TAST_EXPR,
-        dut_pool='cross_device_multi_cb'),
+        dut_pool='cross_device_multi_cb',
+        tast_expr_file='tast_expr_file.filter'),
     gen_skylab_req(
         'm88_nearby_multi_dut',
         secondary_board='eve',

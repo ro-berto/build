@@ -95,23 +95,32 @@ class SkylabApi(recipe_api.RecipeApi):
           if s.retries:
             cmd.extend(['-max-retries', str(int(s.retries))])
 
-          test_args = 'resultdb_settings=%s' % _base64_encode_str(rdb_str)
+          test_args = []
+          if s.test_args:
+            test_args.append(s.test_args)
+
+          test_args.append('resultdb_settings=%s' % _base64_encode_str(rdb_str))
 
           if s.tast_expr:
             # Due to crbug/1173329, skylab does not support arbitrary tast
             # expressions. As a workaround, we encode test argument which may
             # contain complicated patterns to base64.
-            test_args = test_args + (' tast_expr_b64=%s' %
-                                     _base64_encode_str(s.tast_expr))
+            test_args.append('tast_expr_b64=%s' %
+                             _base64_encode_str(s.tast_expr))
 
           if s.test_args:
-            test_args = test_args + (' test_args_b64=%s' %
-                                     _base64_encode_str(s.test_args))
+            test_args.append('test_args_b64=%s' %
+                             _base64_encode_str(s.test_args))
 
           if s.exe_rel_path:
-            test_args = test_args + (' exe_rel_path=%s' % s.exe_rel_path)
+            test_args.append('exe_rel_path=%s' % s.exe_rel_path)
 
-          cmd.extend(['-test-args', test_args])
+          if s.tast_expr_file:
+            test_args.append('tast_expr_file=%s' % s.tast_expr_file)
+            if s.tast_expr_key:
+              test_args.append('tast_expr_key=%s' % s.tast_expr_key)
+
+          cmd.extend(['-test-args', ' '.join(test_args)])
 
           if s.lacros_gcs_path:
             cmd.extend(['-lacros-path', s.lacros_gcs_path])

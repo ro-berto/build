@@ -2810,7 +2810,12 @@ class MockTest(Test):
 
 @attrs()
 class SkylabTestSpec(TestSpec):
-  """Spec for a suite that runs on CrOS Skylab."""
+  """
+  Spec for a suite that runs on CrOS Skylab.
+
+  See SkylabRequest in //recipes/recipe_modules/skylab/structs.py for
+  documentation on this class's attributes
+  """
   cros_board = attrib(str)
   cros_img = attrib(str)
   secondary_cros_board = attrib(str, default='')
@@ -2820,6 +2825,8 @@ class SkylabTestSpec(TestSpec):
   test_args = attrib(command_args, default=())
   autotest_name = attrib(str, default='')
   timeout_sec = attrib(int, default=3600)
+  tast_expr_file = attrib(str, default='')
+  tast_expr_key = attrib(str, default='default')
   # Enable retry for all Skylab tests by default. We see around 10% of tests
   # failed due to lab issues. Set retry into test requests, so that failed
   # tests could get rerun from OS infra side. We only bridged our CI builders
@@ -2861,6 +2868,7 @@ class SkylabTest(Test):
     self.test_runner_builds = []
     self.lacros_gcs_path = None
     self.exe_rel_path = None
+    self.tast_expr_file = None
 
   @property
   def is_skylabtest(self):
@@ -2884,6 +2892,8 @@ class SkylabTest(Test):
         dut_pool=self.spec.dut_pool,
         lacros_gcs_path=self.lacros_gcs_path,
         exe_rel_path=self.exe_rel_path,
+        tast_expr_file=self.tast_expr_file,
+        tast_expr_key=self.spec.tast_expr_key,
         timeout_sec=self.spec.timeout_sec,
         retries=self.spec.retries,
         resultdb=self.prep_skylab_rdb(),
