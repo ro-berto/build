@@ -1093,23 +1093,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='GPU Linux Builder',
                 tester='Linux Release (NVIDIA)',
             ),
-        'linux-bionic-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.linux',
-                buildername='linux-bionic-rel',
-            ),
-        'linux-experimental-next-rel':
-            try_spec.TrySpec.create([
-                try_spec.TryMirror.create(
-                    builder_group='chromium.linux',
-                    buildername='linux-bionic-rel',
-                ),
-                try_spec.TryMirror.create(
-                    builder_group='chromium.gpu',
-                    buildername='GPU Linux Builder',
-                    tester='Linux Release (NVIDIA)',
-                ),
-            ]),
         'linux-lacros-fyi-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
@@ -1120,11 +1103,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
                 buildername='linux-lacros-version-skew-fyi',
-            ),
-        'linux-trusty-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.linux',
-                buildername='linux-trusty-rel',
             ),
         'linux-wpt-fyi-rel':
             try_spec.TrySpec.create_for_single_mirror(
@@ -1140,11 +1118,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
                 buildername='linux-wpt-input-fyi-rel',
-            ),
-        'linux-xenial-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.linux',
-                buildername='linux-xenial-rel',
             ),
         'network_service_linux':
             try_spec.TrySpec.create_for_single_mirror(
