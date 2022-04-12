@@ -80,6 +80,7 @@ class ChromiumOrchestratorApi(recipe_test_api.RecipeTestApi):
                                 is_swarming_phase=True,
                                 with_patch=True,
                                 tests=None,
+                                affected_files=None,
                                 src_side_deps_digest=None):
     tests = tests or ['browser_tests']
     output_json_obj = {}
@@ -98,13 +99,16 @@ class ChromiumOrchestratorApi(recipe_test_api.RecipeTestApi):
                 '7d776826a3c4ae0878f026c00beab82765fb4d23',
         }
         if with_patch:
+          if not affected_files:
+            affected_files = [
+                'src/ash/root_window_controller.cc',
+                'src/ash/root_window_controller.h',
+                'src/deleted_file.cc',
+            ]
+
           output_json_obj.update({
               'affected_files': {
-                  'first_100': [
-                      'src/ash/root_window_controller.cc',
-                      'src/ash/root_window_controller.h',
-                      'src/deleted_file.cc',
-                  ],
+                  'first_100': affected_files,
                   'total_count': 3
               },
               'deleted_files': ['src/deleted_file.cc'],

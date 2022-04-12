@@ -154,6 +154,11 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
 
     self.m.gclient.c.revisions[gclient_soln_name] = patch_repo_head_revision
 
+    remove_src_checkout_experiment = False
+    if ('remove_src_checkout_experiment' in
+        self.m.buildbucket.build.input.experiments):
+      remove_src_checkout_experiment = True
+
     # Pass in any RTS mode input props
     compilator_properties.update(self.m.cq.props_for_child_build)
 
@@ -164,9 +169,7 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
         gitiles_commit=gitiles_commit,
         tags=self.m.buildbucket.tags(**{'hide-in-gerrit': 'pointless'}),
         experiments={
-            'remove_src_checkout_experiment':
-                ('remove_src_checkout_experiment' in
-                 self.m.buildbucket.build.input.experiments)
+            'remove_src_checkout_experiment': remove_src_checkout_experiment
         })
 
     build = self.m.buildbucket.schedule(
@@ -182,14 +185,6 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
         root_solution_revision=root_solution_revision,
         refs=[patch_repo_ref])
 
-    affected_files = self.m.chromium_checkout.get_files_affected_by_patch(
-        report_via_property=True)
-
-    # Must happen before without patch steps.
-    if self.m.code_coverage.using_coverage:
-      self.m.code_coverage.set_is_per_cl_coverage(True)
-      self.m.code_coverage.filter_and_set_eligible_files(affected_files)
-
     # Now that we've finished the Orchestrator's bot_update and analyze, let's
     # check on the triggered compilator and display its steps (until it
     # outputs the swarming trigger props).
@@ -204,6 +199,12 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
     if maybe_raw_result != None:
       return maybe_raw_result
 
+    if remove_src_checkout_experiment:
+      affected_files = comp_output.affected_files
+    else:
+      affected_files = self.m.chromium_checkout.get_files_affected_by_patch(
+          report_via_property=True)
+
     # Now let's get all the tests ready with the swarming trigger info
     # outputed by the compilator
     tests = self.process_swarming_props(comp_output.swarming_props,
@@ -213,6 +214,9 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
         self.m.tryserver.is_tryserver, builder_group=builder_id.group)
 
     if self.m.code_coverage.using_coverage:
+      self.m.code_coverage.set_is_per_cl_coverage(True)
+      self.m.code_coverage.filter_and_set_eligible_files(affected_files)
+
       # cas download raises "file exists" errors for android's json files
       self.m.file.rmcontents('clear out output directory',
                              self.m.chromium.output_dir)

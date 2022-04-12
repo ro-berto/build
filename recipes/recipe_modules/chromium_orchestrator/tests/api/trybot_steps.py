@@ -71,6 +71,16 @@ def GenTests(api):
             builder='fake-tester',
         ).assemble())
 
+  def get_try_build(remove_src_checkout_experiment):
+    experiments = []
+    if remove_src_checkout_experiment:
+      experiments = ['remove_src_checkout_experiment']
+    return api.chromium.try_build(
+        builder_group='fake-try-group',
+        builder='fake-orchestrator',
+        experiments=experiments,
+    )
+
   yield api.test(
       'basic',
       api.chromium.try_build(
@@ -786,7 +796,8 @@ def GenTests(api):
           builder='fake-builder',
           tester='fake-tester',
       ),
-      api.chromium_orchestrator.override_compilator_steps(),
+      api.chromium_orchestrator.override_compilator_steps(
+          affected_files=['src/testing/buildbot/fake-group.json']),
       api.chromium_orchestrator.override_compilator_steps(
           is_swarming_phase=False,
           sub_build_summary=("1 Test Suite(s) failed.\n\n"
@@ -862,87 +873,108 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
 
+  def code_coverage_trybot_with_patch(remove_src_checkout_experiment):
+    return sum(
+        [
+            get_try_build(remove_src_checkout_experiment),
+            ctbc_properties(),
+            api.properties(
+                **{
+                    '$build/chromium_orchestrator':
+                        InputProperties(
+                            compilator='fake-compilator',
+                            compilator_watcher_git_revision='e841fc',
+                        ),
+                }),
+            api.code_coverage(use_clang_coverage=True),
+            api.chromium_orchestrator.fake_head_revision(),
+            api.chromium_orchestrator.override_test_spec(
+                builder_group='fake-group',
+                builder='fake-builder',
+                tester='fake-tester',
+            ),
+            api.chromium_orchestrator.override_compilator_steps(),
+            api.chromium_orchestrator.override_compilator_steps(
+                is_swarming_phase=False),
+            api.post_process(post_process.MustRun,
+                             'browser_tests (with patch)'),
+            api.post_process(post_process.MustRun,
+                             'downloading cas digest all_test_binaries'),
+            api.post_process(
+                # Only generates coverage data for the with patch step.
+                post_process.MustRun,
+                'process clang code coverage data for overall test '
+                'coverage.generate metadata for overall test coverage in 1 '
+                'tests'),
+            api.post_process(post_process.StatusSuccess),
+            api.post_process(post_process.DropExpectation),
+        ],
+        api.empty_test_data())
+
   yield api.test(
       'code_coverage_trybot_with_patch',
-      api.chromium.try_build(
-          builder_group='fake-try-group',
-          builder='fake-orchestrator',
-      ),
-      ctbc_properties(),
-      api.properties(
-          **{
-              '$build/chromium_orchestrator':
-                  InputProperties(
-                      compilator='fake-compilator',
-                      compilator_watcher_git_revision='e841fc',
-                  ),
-          }),
-      api.code_coverage(use_clang_coverage=True),
-      api.chromium_orchestrator.fake_head_revision(),
-      api.chromium_orchestrator.override_test_spec(
-          builder_group='fake-group',
-          builder='fake-builder',
-          tester='fake-tester',
-      ),
-      api.chromium_orchestrator.override_compilator_steps(),
-      api.chromium_orchestrator.override_compilator_steps(
-          is_swarming_phase=False),
-      api.post_process(post_process.MustRun, 'browser_tests (with patch)'),
-      api.post_process(post_process.MustRun,
-                       'downloading cas digest all_test_binaries'),
-      api.post_process(
-          # Only generates coverage data for the with patch step.
-          post_process.MustRun,
-          'process clang code coverage data for overall test coverage.generate '
-          'metadata for overall test coverage in 1 tests'),
-      api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation),
-  )
+      code_coverage_trybot_with_patch(remove_src_checkout_experiment=False))
+
+  yield api.test(
+      'code_coverage_trybot_with_patch_with_remove_src_checkout',
+      code_coverage_trybot_with_patch(remove_src_checkout_experiment=True))
+
+  def code_coverage_trybot_retry_shards_with_patch(
+      remove_src_checkout_experiment):
+    return sum(
+        [
+            get_try_build(remove_src_checkout_experiment),
+            ctbc_properties(),
+            api.properties(
+                **{
+                    '$build/chromium_orchestrator':
+                        InputProperties(
+                            compilator='fake-compilator',
+                            compilator_watcher_git_revision='e841fc',
+                        ),
+                }),
+            api.code_coverage(use_clang_coverage=True),
+            api.chromium_orchestrator.fake_head_revision(),
+            api.chromium_orchestrator.override_test_spec(
+                builder_group='fake-group',
+                builder='fake-builder',
+                tester='fake-tester',
+            ),
+            api.chromium_orchestrator.override_compilator_steps(),
+            api.chromium_orchestrator.override_compilator_steps(
+                is_swarming_phase=False),
+            api.override_step_data(
+                'browser_tests (with patch)',
+                api.chromium_swarming.canned_summary_output(
+                    api.test_utils.canned_gtest_output(False), failure=True)),
+            api.override_step_data(
+                'browser_tests (retry shards with patch)',
+                api.chromium_swarming.canned_summary_output(
+                    api.test_utils.canned_gtest_output(True), failure=False)),
+            api.post_process(post_process.MustRun,
+                             'browser_tests (with patch)'),
+            api.post_process(post_process.MustRun,
+                             'downloading cas digest all_test_binaries'),
+            api.post_process(
+                # Only generates coverage data for the with patch step.
+                post_process.MustRun,
+                'process clang code coverage data for overall test '
+                'coverage.generate metadata for overall test coverage in 2 '
+                'tests'),
+            api.post_process(post_process.StatusSuccess),
+            api.post_process(post_process.DropExpectation),
+        ],
+        api.empty_test_data())
 
   yield api.test(
       'code_coverage_trybot_retry_shards_with_patch',
-      api.chromium.try_build(
-          builder_group='fake-try-group',
-          builder='fake-orchestrator',
-      ),
-      ctbc_properties(),
-      api.properties(
-          **{
-              '$build/chromium_orchestrator':
-                  InputProperties(
-                      compilator='fake-compilator',
-                      compilator_watcher_git_revision='e841fc',
-                  ),
-          }),
-      api.code_coverage(use_clang_coverage=True),
-      api.chromium_orchestrator.fake_head_revision(),
-      api.chromium_orchestrator.override_test_spec(
-          builder_group='fake-group',
-          builder='fake-builder',
-          tester='fake-tester',
-      ),
-      api.chromium_orchestrator.override_compilator_steps(),
-      api.chromium_orchestrator.override_compilator_steps(
-          is_swarming_phase=False),
-      api.override_step_data(
-          'browser_tests (with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(False), failure=True)),
-      api.override_step_data(
-          'browser_tests (retry shards with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(True), failure=False)),
-      api.post_process(post_process.MustRun, 'browser_tests (with patch)'),
-      api.post_process(post_process.MustRun,
-                       'downloading cas digest all_test_binaries'),
-      api.post_process(
-          # Only generates coverage data for the with patch step.
-          post_process.MustRun,
-          'process clang code coverage data for overall test coverage.generate '
-          'metadata for overall test coverage in 2 tests'),
-      api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation),
-  )
+      code_coverage_trybot_retry_shards_with_patch(
+          remove_src_checkout_experiment=False))
+
+  yield api.test(
+      'code_coverage_trybot_retry_shards_with_patch_with_remove_src_checkout',
+      code_coverage_trybot_retry_shards_with_patch(
+          remove_src_checkout_experiment=True))
 
   yield api.test(
       'code_coverage_trybot_without_patch',
@@ -1424,161 +1456,196 @@ def GenTests(api):
   }
   recent_run = resultdb_pb2.GetTestResultHistoryResponse(entries=[])
 
+  def new_flaky_test(remove_src_checkout_experiment):
+    steps = sum([
+        get_try_build(remove_src_checkout_experiment),
+        ctbc_properties(),
+        api.properties(
+            **{
+                '$build/chromium_orchestrator':
+                    InputProperties(
+                        compilator='fake-compilator',
+                        compilator_watcher_git_revision='e841fc',
+                    ),
+            }),
+        api.chromium_orchestrator.override_compilator_build_proto_fetch(),
+        api.chromium_orchestrator.override_schedule_compilator_build(),
+        api.chromium_orchestrator.override_compilator_steps(
+            affected_files=['src/chrome/test.cc', 'src/components/file2.cc']),
+        api.chromium_orchestrator.override_compilator_steps(
+            is_swarming_phase=False),
+        api.chromium_orchestrator.fake_head_revision(),
+        api.chromium_orchestrator.override_test_spec(
+            builder_group='fake-group',
+            builder='fake-builder',
+            tester='fake-tester',
+        ),
+        api.resultdb.query(
+            current_patchset_invocations,
+            ('collect tasks (with patch).browser_tests results'),
+        ),
+        api.flakiness(check_for_flakiness=True),
+        api.resultdb.get_test_result_history(
+            recent_run,
+            step_name=(
+                'searching_for_new_tests.'
+                'cross reference newly identified tests against ResultDB')),
+        api.override_step_data(('test new tests for flakiness.'
+                                'collect tasks (check flakiness shard #0).'
+                                'browser_tests results'),
+                               stdout=api.json.invalid(
+                                   api.test_utils.rdb_results(
+                                       'browser_tests',
+                                       flaky_tests=['Test.One'],
+                                   ))),
+        api.post_process(post_process.MustRun, 'calculate flake rates'),
+        api.post_process(post_process.ResultReasonRE, '.*browser_tests.*'),
+        api.post_process(post_process.StatusFailure),
+        api.post_process(post_process.DropExpectation),
+    ], api.empty_test_data())
+
+    if not remove_src_checkout_experiment:
+      steps += api.step_data(
+          'git diff to analyze patch',
+          api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc'))
+    return steps
+
   yield api.test(
       'new_flaky_test',
-      api.chromium.try_build(
-          builder_group='fake-try-group',
-          builder='fake-orchestrator',
-      ),
-      ctbc_properties(),
-      api.properties(
-          **{
-              '$build/chromium_orchestrator':
-                  InputProperties(
-                      compilator='fake-compilator',
-                      compilator_watcher_git_revision='e841fc',
-                  ),
-          }),
-      api.chromium_orchestrator.override_compilator_build_proto_fetch(),
-      api.chromium_orchestrator.override_schedule_compilator_build(),
-      api.chromium_orchestrator.override_compilator_steps(),
-      api.chromium_orchestrator.override_compilator_steps(
-          is_swarming_phase=False),
-      api.chromium_orchestrator.fake_head_revision(),
-      api.chromium_orchestrator.override_test_spec(
-          builder_group='fake-group',
-          builder='fake-builder',
-          tester='fake-tester',
-      ),
-      api.step_data(
-          'git diff to analyze patch',
-          api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
-      api.resultdb.query(
-          current_patchset_invocations,
-          ('collect tasks (with patch).browser_tests results'),
-      ),
-      api.flakiness(check_for_flakiness=True),
-      api.resultdb.get_test_result_history(
-          recent_run,
-          step_name=(
-              'searching_for_new_tests.'
-              'cross reference newly identified tests against ResultDB')),
-      api.override_step_data(('test new tests for flakiness.'
-                              'collect tasks (check flakiness shard #0).'
-                              'browser_tests results'),
-                             stdout=api.json.invalid(
-                                 api.test_utils.rdb_results(
-                                     'browser_tests',
-                                     flaky_tests=['Test.One'],
-                                 ))),
-      api.post_process(post_process.MustRun, 'calculate flake rates'),
-      api.post_process(post_process.ResultReasonRE, '.*browser_tests.*'),
-      api.post_process(post_process.StatusFailure),
-      api.post_process(post_process.DropExpectation),
+      new_flaky_test(remove_src_checkout_experiment=False),
   )
+
+  yield api.test(
+      'new_flaky_test_with_remove_src_checkout',
+      new_flaky_test(remove_src_checkout_experiment=True),
+  )
+
+  def flaky_swarming_and_local_test_failure(remove_src_checkout_experiment):
+    steps = sum([
+        get_try_build(remove_src_checkout_experiment),
+        ctbc_properties(),
+        api.properties(
+            **{
+                '$build/chromium_orchestrator':
+                    InputProperties(
+                        compilator='fake-compilator',
+                        compilator_watcher_git_revision='e841fc',
+                    ),
+            }),
+        api.chromium_orchestrator.override_compilator_build_proto_fetch(),
+        api.chromium_orchestrator.override_schedule_compilator_build(),
+        api.chromium_orchestrator.override_compilator_build_proto_fetch(),
+        api.chromium_orchestrator.override_schedule_compilator_build(),
+        api.chromium_orchestrator.override_test_spec(
+            builder_group='fake-group',
+            builder='fake-builder',
+            tester='fake-tester',
+            tests=['browser_tests', 'content_unittests']),
+        api.chromium_orchestrator.override_compilator_steps(
+            tests=['browser_tests', 'content_unittests'],
+            affected_files=['src/chrome/test.cc', 'src/components/file2.cc']),
+        api.chromium_orchestrator.override_compilator_steps(
+            is_swarming_phase=False,
+            sub_build_status=common_pb.FAILURE,
+            sub_build_summary=("1 Test Suite(s) failed.\n\n"
+                               "**headless_python_unittests** failed.")),
+        api.chromium_orchestrator.fake_head_revision(),
+        api.resultdb.query(
+            current_patchset_invocations,
+            ('collect tasks (with patch).browser_tests results'),
+        ),
+        api.flakiness(check_for_flakiness=True),
+        api.resultdb.get_test_result_history(
+            recent_run,
+            step_name=(
+                'searching_for_new_tests.'
+                'cross reference newly identified tests against ResultDB')),
+        api.override_step_data(('test new tests for flakiness.'
+                                'collect tasks (check flakiness shard #0).'
+                                'browser_tests results'),
+                               stdout=api.json.invalid(
+                                   api.test_utils.rdb_results(
+                                       'browser_tests',
+                                       flaky_tests=['Test.One'],
+                                   ))),
+        api.post_process(post_process.MustRun, 'calculate flake rates'),
+        api.post_process(post_process.ResultReasonRE, '.*browser_tests.*'),
+        api.post_process(post_process.ResultReasonRE,
+                         '.*headless_python_unittests.*'),
+        api.post_process(post_process.StatusFailure),
+        api.post_process(post_process.DropExpectation),
+    ], api.empty_test_data())
+
+    if not remove_src_checkout_experiment:
+      steps += api.step_data(
+          'git diff to analyze patch',
+          api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc'))
+    return steps
 
   yield api.test(
       'flaky_swarming_and_local_test_failure',
-      api.chromium.try_build(
-          builder_group='fake-try-group',
-          builder='fake-orchestrator',
-      ),
-      ctbc_properties(),
-      api.properties(
-          **{
-              '$build/chromium_orchestrator':
-                  InputProperties(
-                      compilator='fake-compilator',
-                      compilator_watcher_git_revision='e841fc',
-                  ),
-          }),
-      api.chromium_orchestrator.override_compilator_build_proto_fetch(),
-      api.chromium_orchestrator.override_schedule_compilator_build(),
-      api.chromium_orchestrator.override_compilator_build_proto_fetch(),
-      api.chromium_orchestrator.override_schedule_compilator_build(),
-      api.chromium_orchestrator.override_test_spec(
-          builder_group='fake-group',
-          builder='fake-builder',
-          tester='fake-tester',
-          tests=['browser_tests', 'content_unittests']),
-      api.chromium_orchestrator.override_compilator_steps(
-          tests=['browser_tests', 'content_unittests']),
-      api.chromium_orchestrator.override_compilator_steps(
-          is_swarming_phase=False,
-          sub_build_status=common_pb.FAILURE,
-          sub_build_summary=("1 Test Suite(s) failed.\n\n"
-                             "**headless_python_unittests** failed.")),
-      api.chromium_orchestrator.fake_head_revision(),
-      api.step_data(
-          'git diff to analyze patch',
-          api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
-      api.resultdb.query(
-          current_patchset_invocations,
-          ('collect tasks (with patch).browser_tests results'),
-      ),
-      api.flakiness(check_for_flakiness=True),
-      api.resultdb.get_test_result_history(
-          recent_run,
-          step_name=(
-              'searching_for_new_tests.'
-              'cross reference newly identified tests against ResultDB')),
-      api.override_step_data(('test new tests for flakiness.'
-                              'collect tasks (check flakiness shard #0).'
-                              'browser_tests results'),
-                             stdout=api.json.invalid(
-                                 api.test_utils.rdb_results(
-                                     'browser_tests',
-                                     flaky_tests=['Test.One'],
-                                 ))),
-      api.post_process(post_process.MustRun, 'calculate flake rates'),
-      api.post_process(post_process.ResultReasonRE, '.*browser_tests.*'),
-      api.post_process(post_process.ResultReasonRE,
-                       '.*headless_python_unittests.*'),
-      api.post_process(post_process.StatusFailure),
-      api.post_process(post_process.DropExpectation),
+      flaky_swarming_and_local_test_failure(
+          remove_src_checkout_experiment=False),
   )
 
   yield api.test(
-      'no_flaky_tests',
-      api.chromium.try_build(
-          builder_group='fake-try-group',
-          builder='fake-orchestrator',
-      ),
-      ctbc_properties(),
-      api.properties(
-          **{
-              '$build/chromium_orchestrator':
-                  InputProperties(
-                      compilator='fake-compilator',
-                      compilator_watcher_git_revision='e841fc',
-                  ),
-          }),
-      api.chromium_orchestrator.override_compilator_build_proto_fetch(),
-      api.chromium_orchestrator.override_schedule_compilator_build(),
-      api.chromium_orchestrator.override_schedule_compilator_build(),
-      api.chromium_orchestrator.override_test_spec(
-          builder_group='fake-group',
-          builder='fake-builder',
-          tester='fake-tester',
-          tests=['browser_tests', 'content_unittests']),
-      api.chromium_orchestrator.override_compilator_steps(
-          tests=['browser_tests', 'content_unittests']),
-      api.chromium_orchestrator.override_compilator_steps(
-          is_swarming_phase=False),
-      api.chromium_orchestrator.fake_head_revision(),
-      api.step_data(
+      'flaky_swarming_and_local_test_failure_with_remove_src_checkout',
+      flaky_swarming_and_local_test_failure(
+          remove_src_checkout_experiment=True),
+  )
+
+  def no_flaky_tests(remove_src_checkout_experiment):
+    steps = sum([
+        get_try_build(remove_src_checkout_experiment),
+        ctbc_properties(),
+        api.properties(
+            **{
+                '$build/chromium_orchestrator':
+                    InputProperties(
+                        compilator='fake-compilator',
+                        compilator_watcher_git_revision='e841fc',
+                    ),
+            }),
+        api.chromium_orchestrator.override_compilator_build_proto_fetch(),
+        api.chromium_orchestrator.override_schedule_compilator_build(),
+        api.chromium_orchestrator.override_schedule_compilator_build(),
+        api.chromium_orchestrator.override_test_spec(
+            builder_group='fake-group',
+            builder='fake-builder',
+            tester='fake-tester',
+            tests=['browser_tests', 'content_unittests']),
+        api.chromium_orchestrator.override_compilator_steps(
+            tests=['browser_tests', 'content_unittests'],
+            affected_files=['src/chrome/test.cc', 'src/components/file2.cc']),
+        api.chromium_orchestrator.override_compilator_steps(
+            is_swarming_phase=False),
+        api.chromium_orchestrator.fake_head_revision(),
+        api.resultdb.query(
+            current_patchset_invocations,
+            ('collect tasks (with patch).browser_tests results'),
+        ),
+        api.flakiness(check_for_flakiness=True),
+        api.resultdb.get_test_result_history(
+            recent_run,
+            step_name=(
+                'searching_for_new_tests.'
+                'cross reference newly identified tests against ResultDB')),
+        api.post_process(post_process.StatusSuccess),
+        api.post_process(post_process.DropExpectation),
+    ], api.empty_test_data())
+
+    if not remove_src_checkout_experiment:
+      steps += api.step_data(
           'git diff to analyze patch',
-          api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
-      api.resultdb.query(
-          current_patchset_invocations,
-          ('collect tasks (with patch).browser_tests results'),
-      ),
-      api.flakiness(check_for_flakiness=True),
-      api.resultdb.get_test_result_history(
-          recent_run,
-          step_name=(
-              'searching_for_new_tests.'
-              'cross reference newly identified tests against ResultDB')),
-      api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation),
+          api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc'))
+    return steps
+
+  yield api.test(
+      'no_flaky_tests',
+      no_flaky_tests(remove_src_checkout_experiment=False),
+  )
+
+  yield api.test(
+      'no_flaky_tests_with_remove_src_checkout',
+      no_flaky_tests(remove_src_checkout_experiment=True),
   )
