@@ -334,6 +334,17 @@ def GenTests(api):
           step_name=(
               'searching_for_new_tests.'
               'cross reference newly identified tests against ResultDB')),
+      # To ensure that multiple return values of the same type are handled.
+      api.resultdb.get_test_result_history(
+          res,
+          step_name=(
+              'searching_for_new_tests.'
+              'cross reference newly identified tests against ResultDB (2)')),
+      api.resultdb.get_test_result_history(
+          resultdb_pb2.GetTestResultHistoryResponse(entries=[]),
+          step_name=(
+              'searching_for_new_tests.'
+              'cross reference newly identified tests against ResultDB (3)')),
       api.override_step_data(
           ('test new tests for flakiness.'
            'ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 '
@@ -433,6 +444,16 @@ def GenTests(api):
           step_name=(
               'searching_for_new_tests.'
               'cross reference newly identified tests against ResultDB')),
+      api.resultdb.get_test_result_history(
+          resultdb_pb2.GetTestResultHistoryResponse(entries=[]),
+          step_name=(
+              'searching_for_new_tests.'
+              'cross reference newly identified tests against ResultDB (2)')),
+      api.resultdb.get_test_result_history(
+          resultdb_pb2.GetTestResultHistoryResponse(entries=[]),
+          step_name=(
+              'searching_for_new_tests.'
+              'cross reference newly identified tests against ResultDB (3)')),
       api.post_process(
           post_process.StepCommandContains,
           ('test new tests for flakiness.chrome_junit_tests '
@@ -514,6 +535,16 @@ def GenTests(api):
           step_name=(
               'searching_for_new_tests.'
               'cross reference newly identified tests against ResultDB')),
+      api.resultdb.get_test_result_history(
+          resultdb_pb2.GetTestResultHistoryResponse(entries=[]),
+          step_name=(
+              'searching_for_new_tests.'
+              'cross reference newly identified tests against ResultDB (2)')),
+      api.resultdb.get_test_result_history(
+          resultdb_pb2.GetTestResultHistoryResponse(entries=[]),
+          step_name=(
+              'searching_for_new_tests.'
+              'cross reference newly identified tests against ResultDB (3)')),
       api.post_process(
           post_process.StepCommandContains,
           ('test new tests for flakiness.chrome_junit_tests '
@@ -587,6 +618,16 @@ def GenTests(api):
           step_name=(
               'searching_for_new_tests.'
               'cross reference newly identified tests against ResultDB')),
+      api.resultdb.get_test_result_history(
+          resultdb_pb2.GetTestResultHistoryResponse(entries=[]),
+          step_name=(
+              'searching_for_new_tests.'
+              'cross reference newly identified tests against ResultDB (2)')),
+      api.resultdb.get_test_result_history(
+          resultdb_pb2.GetTestResultHistoryResponse(entries=[]),
+          step_name=(
+              'searching_for_new_tests.'
+              'cross reference newly identified tests against ResultDB (3)')),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -666,6 +707,16 @@ def GenTests(api):
           step_name=(
               'searching_for_new_tests.'
               'cross reference newly identified tests against ResultDB')),
+      api.resultdb.get_test_result_history(
+          resultdb_pb2.GetTestResultHistoryResponse(entries=[]),
+          step_name=(
+              'searching_for_new_tests.'
+              'cross reference newly identified tests against ResultDB (2)')),
+      api.resultdb.get_test_result_history(
+          resultdb_pb2.GetTestResultHistoryResponse(entries=[]),
+          step_name=(
+              'searching_for_new_tests.'
+              'cross reference newly identified tests against ResultDB (3)')),
       api.override_step_data(('test new tests for flakiness.'
                               'ios_chrome_web_eg2tests_module_iPad Air 2 14.4 '
                               '(check flakiness shard #0) on Mac-11'),
@@ -773,6 +824,16 @@ def GenTests(api):
           step_name=(
               'searching_for_new_tests.'
               'cross reference newly identified tests against ResultDB')),
+      api.resultdb.get_test_result_history(
+          resultdb_pb2.GetTestResultHistoryResponse(entries=[]),
+          step_name=(
+              'searching_for_new_tests.'
+              'cross reference newly identified tests against ResultDB (2)')),
+      api.resultdb.get_test_result_history(
+          resultdb_pb2.GetTestResultHistoryResponse(entries=[]),
+          step_name=(
+              'searching_for_new_tests.'
+              'cross reference newly identified tests against ResultDB (3)')),
       api.override_step_data(
           ('test new tests for flakiness.'
            'ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 '
@@ -868,6 +929,16 @@ def GenTests(api):
           step_name=(
               'searching_for_new_tests.'
               'cross reference newly identified tests against ResultDB')),
+      api.resultdb.get_test_result_history(
+          resultdb_pb2.GetTestResultHistoryResponse(entries=[]),
+          step_name=(
+              'searching_for_new_tests.'
+              'cross reference newly identified tests against ResultDB (2)')),
+      api.resultdb.get_test_result_history(
+          resultdb_pb2.GetTestResultHistoryResponse(entries=[]),
+          step_name=(
+              'searching_for_new_tests.'
+              'cross reference newly identified tests against ResultDB (3)')),
       api.override_step_data(
           ('test new tests for flakiness.'
            'ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 '

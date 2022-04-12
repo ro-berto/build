@@ -505,35 +505,58 @@ class FlakinessApi(recipe_api.RecipeApi):
       A set of TestDefinition objects.
 
     """
-    now = int(self.m.time.time())
-    # Time range is set as past 3 hours, to cover the gap of test history JSON
-    # generation (1 hour), plus a 2 hour buffer for generate builder runtime,
-    # etc.
-    time_range = common_rdb_pb2.TimeRange(
-        earliest=timestamp_pb2.Timestamp(seconds=now - 3600 * 3),
-        latest=timestamp_pb2.Timestamp(seconds=now))
-    results = self.m.resultdb.get_test_result_history(
-        realm=self.m.buildbucket.builder_realm,
-        test_id_regexp='|'.join(
-            sorted(set(t.test_id for t in list(prelim_tests)))),
-        variant_predicate=predicate_pb2.VariantPredicate(
-            contains={'def': {
-                'builder': builder
-            }}),
-        time_range=time_range,
-        page_size=page_size,
-        step_name='cross reference newly identified tests against ResultDB')
 
-    for entry in results.entries:
-      test = TestDefinition(
-          entry.result.test_id,
-          tags=entry.result.tags,
-          variants=entry.result.variant,
-          variant_hash=entry.result.variant_hash,
-      )
-      excluded = entry.result.name.split("/tests")[0] in excluded_invs
-      if test in prelim_tests and not excluded:
-        prelim_tests.remove(test)
+    def _ensure_new(time_search_range):
+      results = self.m.resultdb.get_test_result_history(
+          realm=self.m.buildbucket.builder_realm,
+          test_id_regexp='|'.join(
+              sorted(set(t.test_id for t in list(prelim_tests)))),
+          variant_predicate=predicate_pb2.VariantPredicate(
+              contains={'def': {
+                  'builder': builder
+              }}),
+          time_range=time_search_range,
+          page_size=page_size,
+          step_name='cross reference newly identified tests against ResultDB')
+
+      for entry in results.entries:
+        test = TestDefinition(
+            entry.result.test_id,
+            tags=entry.result.tags,
+            variants=entry.result.variant,
+            variant_hash=entry.result.variant_hash,
+        )
+        excluded = entry.result.name.split("/tests")[0] in excluded_invs
+        if test in prelim_tests and not excluded:
+          prelim_tests.remove(test)
+
+    # Time range is set as past 3 hours, to cover the gap of test history JSON
+    # generation (1 hour), plus a 2 hour buffer for generate builder runtime.
+
+    # TODO(crbug/1313712) - Timestamps in ResultDB and the way they're set up
+    # in Spanner are not first class citizens for the GetTestResultHistory RPC
+    # call. Providing a large time range in a single query can result in slow
+    # performance, so we break down the call from a single 3 hour time range
+    # into 3 separate calls, searching for an hour time range. There are some
+    # caches in place from ResultDB's side to quicken this, but for cold hits
+    # calls still may take up to 1 min. This is still much quicker than the 9
+    # min timeouts that were being hit prior.
+    now = int(self.m.time.time())
+    time_offset = 3
+
+    futures = []
+    while time_offset > 0:
+      earliest_time = now - 3600 * time_offset
+      next_offset = time_offset - 1
+      latest_time = now - 3600 * next_offset
+      search_range = common_rdb_pb2.TimeRange(
+          earliest=timestamp_pb2.Timestamp(seconds=earliest_time),
+          latest=timestamp_pb2.Timestamp(seconds=latest_time))
+      futures.append(self.m.futures.spawn(_ensure_new, search_range))
+      time_offset = next_offset
+
+    for f in futures:
+      f.result()
 
     return prelim_tests
 
