@@ -19,10 +19,6 @@ SPEC = {
                 'mb',
             ],
             gclient_config='chromium',
-            gclient_apply_config=[
-                'chrome_internal',
-                'no_kaleidoscope',
-            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 32,
@@ -68,10 +64,6 @@ SPEC = {
                 'mb',
             ],
             gclient_config='chromium',
-            gclient_apply_config=[
-                'chrome_internal',
-                'no_kaleidoscope',
-            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -85,10 +77,6 @@ SPEC = {
                 'mb',
             ],
             gclient_config='chromium',
-            gclient_apply_config=[
-                'chrome_internal',
-                'no_kaleidoscope',
-            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
@@ -103,9 +91,7 @@ SPEC = {
             ],
             gclient_config='chromium',
             gclient_apply_config=[
-                'chrome_internal',
                 'angle_internal',
-                'no_kaleidoscope',
             ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -120,10 +106,6 @@ SPEC = {
                 'mb',
             ],
             gclient_config='chromium',
-            gclient_apply_config=[
-                'chrome_internal',
-                'no_kaleidoscope',
-            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -137,10 +119,6 @@ SPEC = {
                 'mb',
             ],
             gclient_config='chromium',
-            gclient_apply_config=[
-                'chrome_internal',
-                'no_kaleidoscope',
-            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
@@ -314,10 +292,6 @@ SPEC = {
                 'mb',
             ],
             gclient_config='chromium',
-            gclient_apply_config=[
-                'chrome_internal',
-                'no_kaleidoscope',
-            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -368,8 +342,6 @@ SPEC = {
             ],
             gclient_config='chromium',
             gclient_apply_config=[
-                'chrome_internal',
-                'no_kaleidoscope',
                 'enable_reclient',
             ],
             chromium_config_kwargs={
@@ -386,9 +358,7 @@ SPEC = {
             ],
             gclient_config='chromium',
             gclient_apply_config=[
-                'chrome_internal',
                 'angle_internal',
-                'no_kaleidoscope',
             ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -404,8 +374,6 @@ SPEC = {
             ],
             gclient_config='chromium',
             gclient_apply_config=[
-                'chrome_internal',
-                'no_kaleidoscope',
                 'enable_reclient',
             ],
             chromium_config_kwargs={
@@ -546,8 +514,6 @@ SPEC = {
             chromium_apply_config=['mb'],
             gclient_config='chromium',
             gclient_apply_config=[
-                'chrome_internal',
-                'no_kaleidoscope',
                 'enable_reclient',
             ],
             chromium_config_kwargs={
@@ -612,9 +578,7 @@ SPEC = {
             ],
             gclient_config='chromium',
             gclient_apply_config=[
-                'chrome_internal',
                 'fuchsia',
-                'no_kaleidoscope',
             ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -630,10 +594,6 @@ SPEC = {
                 'mb',
             ],
             gclient_config='chromium',
-            gclient_apply_config=[
-                'chrome_internal',
-                'no_kaleidoscope',
-            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -647,10 +607,6 @@ SPEC = {
                 'mb',
             ],
             gclient_config='chromium',
-            gclient_apply_config=[
-                'chrome_internal',
-                'no_kaleidoscope',
-            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_ARCH': 'arm',
@@ -666,9 +622,7 @@ SPEC = {
             ],
             gclient_config='chromium',
             gclient_apply_config=[
-                'chrome_internal',
                 'angle_internal',
-                'no_kaleidoscope',
             ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -683,10 +637,6 @@ SPEC = {
                 'mb',
             ],
             gclient_config='chromium',
-            gclient_apply_config=[
-                'chrome_internal',
-                'no_kaleidoscope',
-            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -700,10 +650,6 @@ SPEC = {
                 'mb',
             ],
             gclient_config='chromium',
-            gclient_apply_config=[
-                'chrome_internal',
-                'no_kaleidoscope',
-            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
