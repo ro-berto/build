@@ -547,7 +547,7 @@ class ReclientApi(recipe_api.RecipeApi):
         for log in log_files:
           # reclient glog files are generally <100KB, so safe to load in memory.
           data_txt = self.m.file.read_text(
-              'read reclient log', log, test_data='fake', include_log=False)
+              'read %s' % log, log, test_data='fake', include_log=False)
           with contextlib.closing(io.BytesIO(data_txt.encode())) as fobj:
             tarinfo = tarfile.TarInfo(os.path.basename(log))
             tarinfo.size = len(fobj.getvalue())
