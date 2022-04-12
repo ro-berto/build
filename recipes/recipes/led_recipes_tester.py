@@ -50,11 +50,6 @@ class BuilderToTrigger(object):
   name = attrib(str)
   # The key of the CL to use when triggering the builder
   cl_key = attrib(enum(['fast', 'slow']), default='slow')
-  # An optional message to display if the call to 'led get-builder' fails
-  # If provided, the steps for the builder will have a warning status and the
-  # build's status will be unaffected
-  # Otherwise, the build will be considered a failure
-  provisional_warning = attrib(str, default='')
 
 
 DEFAULT_BUILDERS = (
@@ -139,47 +134,24 @@ FILES_TO_ALWAYS_IGNORE = (
 # CL to use when testing a recipe which touches chromium source.
 # The first level of keys is the bucket of the builder. The second level of keys
 # is the type of CL: 'fast' or 'slow', with the value being the CL to use.
-CHROMIUM_SRC_TEST_CLS = collections.OrderedDict([
-    # The slow CLs touch `DEPS` which causes analyze to compile and test all
-    # targets.
 
-    # The fast CLs touch `chrome/test/base/interactive_test_utils.cc`, resulting
-    # in just interactive_ui_tests being built and run. This is a relatively
-    # fast, but still swarmed w/ multiple shards, test suite. This fast
-    # verification is used for "upstream-only-changes" on the assumption that no
-    # upstream code would (should) have variable effects based on WHICH test
-    # suite is executed, so we just need to pick SOME test suite.
-    ('luci.chromium.try', {
+# The slow CLs touch `DEPS` which causes analyze to compile and test all
+# targets.
+
+# The fast CLs touch `chrome/test/base/interactive_test_utils.cc`, resulting
+# in just interactive_ui_tests being built and run. This is a relatively
+# fast, but still swarmed w/ multiple shards, test suite. This fast
+# verification is used for "upstream-only-changes" on the assumption that no
+# upstream code would (should) have variable effects based on WHICH test
+# suite is executed, so we just need to pick SOME test suite.
+CHROMIUM_SRC_TEST_CLS = {
+    'luci.chromium.try': {
         'slow':
             'https://chromium-review.googlesource.com/c/chromium/src/+/1286761',
         'fast':
             'https://chromium-review.googlesource.com/c/chromium/src/+/3299047',
-    }),
-    ('luci.chromium-m96.try', {
-        'slow':
-            'https://chromium-review.googlesource.com/c/chromium/src/+/3219347',
-        'fast':
-            'https://chromium-review.googlesource.com/c/chromium/src/+/3219377',
-    }),
-    ('luci.chromium-m97.try', {
-        'slow':
-            'https://chromium-review.googlesource.com/c/chromium/src/+/3271782',
-        'fast':
-            'https://chromium-review.googlesource.com/c/chromium/src/+/3271783',
-    }),
-    ('luci.chromium-m100.try', {
-        'slow':
-            'https://chromium-review.googlesource.com/c/chromium/src/+/3498090',
-        'fast':
-            'https://chromium-review.googlesource.com/c/chromium/src/+/3498092',
-    }),
-    ('luci.chromium-m101.try', {
-        'slow':
-            'https://chromium-review.googlesource.com/c/chromium/src/+/3543323',
-        'fast':
-            'https://chromium-review.googlesource.com/c/chromium/src/+/3543182',
-    }),
-])
+    },
+}
 
 
 def _get_recipe(led_builder):
@@ -214,31 +186,6 @@ def _process_footer_builders(api, builders):
   return [BuilderToTrigger(builder) for builder in builders]
 
 
-def _expand_builders(builders):
-  """Expand the initial set of builders to trigger.
-
-  In addition to the initial set of builders to trigger, branched
-  versions of those builders will also be considered.
-
-  Yields:
-    BuilderToTrigger instances for all of the builders that the recipe
-    should attempt to trigger.
-  """
-  for builder in builders:
-    yield builder
-  for bucket in CHROMIUM_SRC_TEST_CLS:
-    for builder in builders:
-      builder_bucket, name = builder.name.split(':', 1)
-      if builder_bucket == bucket:
-        continue
-      yield attr.evolve(
-          builder,
-          name='{}:{}'.format(bucket, name),
-          provisional_warning=(
-              'No equivalent to builder {} was found for bucket {}'.format(
-                  builder.name, bucket)))
-
-
 def _get_builders_to_check(api):
   """Get the set of builders to test the recipe change against.
 
@@ -266,7 +213,6 @@ def _get_builders_to_check(api):
     builders = DEFAULT_BUILDERS
     files_to_ignore.extend(DEFAULT_FILES_TO_IGNORE)
 
-  builders = list(_expand_builders(builders))
   files_to_ignore.extend(FILES_TO_ALWAYS_IGNORE)
 
   return builders, files_to_ignore
@@ -334,18 +280,11 @@ def _get_led_builders(api, builders):
       # helpful than 'led get-builder', 'led get-builder (2)',
       # 'led get-builder (3)', etc.
       with api.step.nest('get ' + builder.name):
-        try:
-          # By default, the priority of the tasks will be increased by 10, but
-          # since this builder runs as part of CQ for the recipe repos, we want
-          # the builds to run at regular priority
-          led_builders[builder.name] = api.led('get-builder',
-                                               '-adjust-priority', '0',
-                                               builder.name)
-        except api.step.StepFailure as e:
-          if not builder.provisional_warning:
-            raise
-          e.result.presentation.status = api.step.WARNING
-          e.result.presentation.step_text = '\n' + builder.provisional_warning
+        # By default, the priority of the tasks will be increased by 10, but
+        # since this builder runs as part of CQ for the recipe repos, we want
+        # the builds to run at regular priority
+        led_builders[builder.name] = api.led('get-builder', '-adjust-priority',
+                                             '0', builder.name)
 
   return led_builders
 
@@ -553,8 +492,6 @@ def RunSteps(api):
 
   futures = []
   for builder in builders_to_trigger:
-    if builder.name not in led_builders:
-      continue
     # Edit the recipe bundle in the main greenlet so that it is serialized to
     # avoid the concurrency issues of edit-recipe-bundle.
     #
@@ -879,19 +816,6 @@ def GenTests(api):
       api.post_check(affected_recipes_input_files_contains,
                      builder_config_path('builders/chromium.py'),
                      builder_config_path('trybots.py')),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'footer_builder_not_on_all_branches',
-      gerrit_change(footer_builder='luci.chromium.try:arbitrary-builder'),
-      affected_recipes(RECIPE),
-      default_builders(),
-      non_existent_builder('luci.chromium-m96.try:arbitrary-builder'),
-      api.post_check(
-          post_process.StepWarning,
-          led_get_builder_name('luci.chromium-m96.try:arbitrary-builder')),
-      api.post_check(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
 
