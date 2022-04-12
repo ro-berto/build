@@ -32,7 +32,8 @@ def check(val, potentials):
 # chromium/api.py:get_config_defaults().
 def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS, TARGET_PLATFORM,
                TARGET_ARCH, TARGET_BITS, BUILD_CONFIG, TARGET_CROS_BOARDS,
-               CROS_BOARDS_WITH_QEMU_IMAGES, CHECKOUT_PATH, **_kwargs):
+               CROS_BOARDS_WITH_QEMU_IMAGES, CHECKOUT_PATH, TEST_ONLY,
+               **_kwargs):
   equal_fn = lambda tup: ('%s=%s' % (tup[0], pipes.quote(str(tup[1]))))
   return ConfigGroup(
       compile_py=ConfigGroup(
@@ -122,6 +123,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS, TARGET_PLATFORM,
       TARGET_CROS_BOARDS=Static(TARGET_CROS_BOARDS),
       CROS_BOARDS_WITH_QEMU_IMAGES=Static(CROS_BOARDS_WITH_QEMU_IMAGES),
       CHECKOUT_PATH=Static(CHECKOUT_PATH),
+      TEST_ONLY=Static(TEST_ONLY),
       gn_args=List(six.string_types),
       clobber_before_runhooks=Single(
           bool, empty_val=False, required=False, hidden=False),
@@ -153,19 +155,22 @@ def validate_config(c):
     else:  # pragma: no cover
       assert False, "Not covering a platform: %s" % plat
 
-  potential_platforms = {
-      # host -> potential target platforms
-      'win': ('win',),
-      'mac': ('mac', 'ios'),
-      'linux': ('linux', 'chromeos', 'android', 'fuchsia', 'win'),
-  }.get(c.HOST_PLATFORM)
+  # TEST_ONLY builders are not compiling that are not limited by host platforms
+  # listed in the potential_platforms.
+  if not c.TEST_ONLY:
+    potential_platforms = {
+        # host -> potential target platforms
+        'win': ('win',),
+        'mac': ('mac', 'ios'),
+        'linux': ('linux', 'chromeos', 'android', 'fuchsia', 'win'),
+    }.get(c.HOST_PLATFORM)
 
-  if not potential_platforms:  # pragma: no cover
-    raise BadConf('Cannot build on "%s"' % c.HOST_PLATFORM)
+    if not potential_platforms:  # pragma: no cover
+      raise BadConf('Cannot build on "%s"' % c.HOST_PLATFORM)
 
-  if c.TARGET_PLATFORM not in potential_platforms:
-    raise BadConf('Can not compile "%s" on "%s"' %
-                  (c.TARGET_PLATFORM, c.HOST_PLATFORM))  # pragma: no cover
+    if c.TARGET_PLATFORM not in potential_platforms:
+      raise BadConf('Can not compile "%s" on "%s"' %
+                    (c.TARGET_PLATFORM, c.HOST_PLATFORM))  # pragma: no cover
 
   if c.TARGET_CROS_BOARDS:
     if not c.TARGET_PLATFORM == 'chromeos':  # pragma: no cover

@@ -119,8 +119,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     return ':'.join(set(new_boards))
 
   def configure_build(self, builder_config, use_rts=False):
-    self.m.chromium.set_config(builder_config.chromium_config,
-                               **builder_config.chromium_config_kwargs)
+    self.m.chromium.set_config(
+        builder_config.chromium_config,
+        TEST_ONLY=builder_config.execution_mode == ctbc.TEST,
+        **builder_config.chromium_config_kwargs)
 
     self.m.gclient.set_config(builder_config.gclient_config)
 
