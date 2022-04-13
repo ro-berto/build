@@ -93,8 +93,12 @@ def _run_builder_config_migration_recipe(project, output_path):
       json.dumps(properties),
       'chromium/builder_config_migration',
   ]
+
+  env = os.environ.copy()
+  env['RECIPES_USE_PY3'] = 'true'
+
   try:
-    subprocess.check_output(cmd, stderr=subprocess.STDOUT, text=True)
+    subprocess.check_output(cmd, stderr=subprocess.STDOUT, text=True, env=env)
   except subprocess.CalledProcessError as e:
     sys.stderr.write(e.output)
     raise

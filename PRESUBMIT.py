@@ -55,11 +55,23 @@ PYTHON3_ONLY_FILES = (
     ),
     (
         'recipes/recipe_modules/chromium_tests_builder_config/migration/'
+        'scripts/migrate.py'
+    ),
+    (
+        'recipes/recipe_modules/chromium_tests_builder_config/migration/'
         'scripts/tests/generate_groupings_integration_test.py'
     ),
     (
         'recipes/recipe_modules/chromium_tests_builder_config/migration/'
         'scripts/tests/generate_groupings_unit_test.py'
+    ),
+    (
+        'recipes/recipe_modules/chromium_tests_builder_config/migration/'
+        'scripts/tests/migrate_integration_test.py'
+    ),
+    (
+        'recipes/recipe_modules/chromium_tests_builder_config/migration/'
+        'scripts/tests/migrate_unit_test.py'
     ),
     (
         'recipes/recipe_modules/tricium_clang_tidy/resources/'
