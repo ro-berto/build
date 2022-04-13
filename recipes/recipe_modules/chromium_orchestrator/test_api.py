@@ -21,7 +21,8 @@ class ChromiumOrchestratorApi(recipe_test_api.RecipeTestApi):
                          builder,
                          tester=None,
                          tests=None,
-                         shards=1):
+                         shards=1,
+                         step_suffix=None):
     """Override spec for the builder(s) mirrored by an orchestrator.
 
     Args:
@@ -55,8 +56,8 @@ class ChromiumOrchestratorApi(recipe_test_api.RecipeTestApi):
     tester_dict = source_side_spec.setdefault(tester or builder, {})
     tester_dict['gtest_tests'] = gtest_tests
 
-    return self.m.chromium_tests.read_source_side_spec(builder_group,
-                                                       source_side_spec)
+    return self.m.chromium_tests.read_source_side_spec(
+        builder_group, source_side_spec, step_suffix=step_suffix)
 
   def get_fake_swarming_trigger_properties(self, tests):
     input_hash = (

@@ -201,6 +201,10 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
 
     if remove_src_checkout_experiment:
       affected_files = comp_output.affected_files
+      targets_config = self.m.chromium_tests.create_targets_config(
+          builder_config, comp_output.got_revisions)
+      # This is used to set build properties on swarming tasks
+      self.m.chromium.set_build_properties(comp_output.got_revisions)
     else:
       affected_files = self.m.chromium_checkout.get_files_affected_by_patch(
           report_via_property=True)
