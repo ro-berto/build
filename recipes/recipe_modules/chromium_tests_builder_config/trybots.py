@@ -354,11 +354,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='android-cronet-arm-rel',
                 is_compile_only=True,
             ),
-        'android_mojo':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.mojo',
-                buildername='Mojo Android',
-            ),
         'android_n5x_swarming_dbg':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android',
@@ -970,16 +965,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.fyi',
                 buildername='WebKit Linux layout_ng_disabled Builder',
             ),
-        'linux_mojo':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.mojo',
-                buildername='Mojo Linux',
-            ),
-        'linux_mojo_chromeos':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.mojo',
-                buildername='Mojo ChromiumOS',
-            ),
         'linux-perfetto-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
@@ -1551,11 +1536,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='Win Builder',
                 is_compile_only=True,
                 include_all_triggered_testers=True,
-            ),
-        'win_mojo':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.mojo',
-                buildername='Mojo Windows',
             ),
         # Optional GPU bots.
         # This trybot used to mirror "Optional Win7 Release (AMD)",

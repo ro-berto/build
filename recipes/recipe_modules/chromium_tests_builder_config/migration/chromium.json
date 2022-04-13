@@ -2616,25 +2616,6 @@
     "chromium.memory:win-asan",
     "tryserver.chromium.win:win-asan"
   ],
-  "chromium.mojo:Mojo Android": [
-    "chromium.mojo:Mojo Android",
-    "tryserver.chromium.android:android_mojo"
-  ],
-  "chromium.mojo:Mojo ChromiumOS": [
-    "chromium.mojo:Mojo ChromiumOS",
-    "tryserver.chromium.linux:linux_mojo_chromeos"
-  ],
-  "chromium.mojo:Mojo Linux": [
-    "chromium.mojo:Mojo Linux",
-    "tryserver.chromium.linux:linux_mojo"
-  ],
-  "chromium.mojo:Mojo Windows": [
-    "chromium.mojo:Mojo Windows",
-    "tryserver.chromium.win:win_mojo"
-  ],
-  "chromium.mojo:mac-mojo-rel": [
-    "chromium.mojo:mac-mojo-rel"
-  ],
   "chromium.reclient.fyi:Linux Builder reclient staging": [
     "chromium.reclient.fyi:Linux Builder reclient staging"
   ],
@@ -3665,10 +3646,6 @@
     "chromium.android:android-cronet-arm-rel",
     "tryserver.chromium.android:android_cronet"
   ],
-  "tryserver.chromium.android:android_mojo": [
-    "chromium.mojo:Mojo Android",
-    "tryserver.chromium.android:android_mojo"
-  ],
   "tryserver.chromium.android:android_n5x_swarming_dbg": [
     "chromium.android:Android WebView M (dbg)",
     "chromium.android:Android WebView N (dbg)",
@@ -4573,14 +4550,6 @@
     "chromium.fyi:WebKit Linux layout_ng_disabled Builder",
     "tryserver.chromium.linux:linux_layout_tests_layout_ng_disabled"
   ],
-  "tryserver.chromium.linux:linux_mojo": [
-    "chromium.mojo:Mojo Linux",
-    "tryserver.chromium.linux:linux_mojo"
-  ],
-  "tryserver.chromium.linux:linux_mojo_chromeos": [
-    "chromium.mojo:Mojo ChromiumOS",
-    "tryserver.chromium.linux:linux_mojo_chromeos"
-  ],
   "tryserver.chromium.linux:linux_optional_gpu_tests_rel": [
     "chromium.gpu.fyi:GPU FYI Linux Builder DEPS ANGLE",
     "chromium.gpu.fyi:Optional Linux Release (Intel HD 630)",
@@ -5165,10 +5134,6 @@
     "chromium.win:Win7 Tests (dbg)(1)",
     "tryserver.chromium.win:win_chromium_compile_dbg_ng",
     "tryserver.chromium.win:win_chromium_dbg_ng"
-  ],
-  "tryserver.chromium.win:win_mojo": [
-    "chromium.mojo:Mojo Windows",
-    "tryserver.chromium.win:win_mojo"
   ],
   "tryserver.chromium.win:win_optional_gpu_tests_rel": [
     "chromium.gpu.fyi:GPU FYI Win x64 Builder DEPS ANGLE",

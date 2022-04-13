@@ -20,7 +20,6 @@ from . import chromium_gpu_fyi
 from . import chromium_linux
 from . import chromium_mac
 from . import chromium_memory
-from . import chromium_mojo
 from . import chromium_perf
 from . import chromium_perf_fyi
 from . import chromium_perf_calibration
@@ -77,8 +76,6 @@ BUILDERS = builder_db.BuilderDatabase.create({
         chromium_mac.SPEC,
     'chromium.memory':
         chromium_memory.SPEC,
-    'chromium.mojo':
-        chromium_mojo.SPEC,
     'chromium.perf':
         chromium_perf.SPEC,
     'chromium.perf.fyi':
