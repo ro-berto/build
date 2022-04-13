@@ -398,7 +398,8 @@ TRYBOTS = try_spec.TryDatabase.create({
         'android_unswarmed_pixel_aosp':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android',
-                buildername='Android WebView N (dbg)',
+                buildername='Android arm64 Builder (dbg)',
+                tester='Android WebView N (dbg)',
             ),
         # Manually triggered GPU trybots.
         'gpu-fyi-try-android-l-nexus-5-32':
