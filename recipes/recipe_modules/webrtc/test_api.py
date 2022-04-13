@@ -8,7 +8,14 @@ from __future__ import absolute_import
 
 from recipe_engine import post_process
 from recipe_engine import recipe_test_api
-from . import builders
+
+_BUILDER_PREFIX = {
+    'client.webrtc': 'luci_webrtc_ci',
+    'client.webrtc.perf': 'luci_webrtc_perf',
+    'internal.client.webrtc': 'luci_webrtc_internal_ci',
+    'internal.tryserver.webrtc': 'luci_webrtc_internal_try',
+    'tryserver.webrtc': 'luci_webrtc_try',
+}
 
 
 def _sanitize_builder_name(name):
@@ -39,14 +46,13 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
                        gn_analyze_output=None,
                        tags=None):
     builder_config = builders_db[builder_id]
+    builder_name = _sanitize_builder_name(builder_id.builder)
     project = 'webrtc-internal' if 'internal' in builder_id.group else 'webrtc'
-    bucketname = builders.BUCKET_NAME[builder_id.group]
     test_target = 'dummy_test'
 
     chromium_kwargs = builder_config.chromium_config_kwargs
     test = self.test(
-        '%s_%s%s' % (_sanitize_builder_name(bucketname),
-                     _sanitize_builder_name(builder_id.builder), suffix),
+        '%s_%s%s' % (_BUILDER_PREFIX[builder_id.group], builder_name, suffix),
         self.m.builder_group.for_current(builder_id.group),
         self.m.properties(
             buildername=builder_id.builder,
@@ -89,11 +95,9 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
       test += self.override_step_data('build android archive', step_test_data)
 
     git_repo = 'https://webrtc.googlesource.com/src'
-    nb_phase = 1
-    if 'more_configs' in _sanitize_builder_name(builder_id.builder):
-      nb_phase = 3
+    nb_phase = 3 if 'more_configs' in builder_name else 1
     if 'try' in builder_id.group:
-      if 'fuzzer' not in builder_id.builder:
+      if 'fuzzer' not in builder_name:
         for i in range(nb_phase):
           run_tests = _run_tests(builder_id) and (nb_phase == 1 or i == 2)
           json_output = self.m.json.output(
