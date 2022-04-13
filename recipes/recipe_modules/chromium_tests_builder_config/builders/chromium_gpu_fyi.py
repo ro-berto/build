@@ -597,6 +597,7 @@ SPEC = {
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'mac',
             },
             simulation_platform='mac',
         ),
@@ -611,6 +612,7 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_ARCH': 'arm',
                 'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'mac',
             },
             simulation_platform='mac',
         ),
@@ -640,6 +642,7 @@ SPEC = {
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'mac',
             },
             simulation_platform='mac',
         ),
@@ -653,6 +656,7 @@ SPEC = {
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'mac',
             },
             simulation_platform='mac',
         ),
@@ -667,6 +671,7 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_ARCH': 'arm',
                 'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'mac',
             },
             execution_mode=builder_spec.TEST,
             parent_buildername='GPU FYI Mac arm64 Builder',
@@ -683,6 +688,7 @@ SPEC = {
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'mac',
             },
             execution_mode=builder_spec.TEST,
             parent_buildername='GPU FYI Mac Builder (asan)',
@@ -699,6 +705,7 @@ SPEC = {
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'mac',
             },
             execution_mode=builder_spec.TEST,
             parent_buildername='GPU FYI Mac Builder',
@@ -715,6 +722,7 @@ SPEC = {
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'mac',
             },
             execution_mode=builder_spec.TEST,
             parent_buildername='GPU FYI Mac Builder (dbg)',
@@ -731,6 +739,7 @@ SPEC = {
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'mac',
             },
             execution_mode=builder_spec.TEST,
             parent_buildername='GPU FYI Mac Builder',
@@ -747,6 +756,7 @@ SPEC = {
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'mac',
             },
             execution_mode=builder_spec.TEST,
             parent_buildername='GPU FYI Mac Builder',
@@ -763,6 +773,7 @@ SPEC = {
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'mac',
             },
             execution_mode=builder_spec.TEST,
             parent_buildername='GPU FYI Mac Builder (dbg)',
@@ -779,6 +790,7 @@ SPEC = {
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'mac',
             },
             execution_mode=builder_spec.TEST,
             parent_buildername='GPU FYI Mac Builder (asan)',
@@ -795,6 +807,7 @@ SPEC = {
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'mac',
             },
             execution_mode=builder_spec.TEST,
             parent_buildername='GPU FYI Mac Builder',
@@ -811,6 +824,7 @@ SPEC = {
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'mac',
             },
             execution_mode=builder_spec.TEST,
             parent_buildername='GPU FYI Mac Builder (dbg)',
@@ -827,6 +841,7 @@ SPEC = {
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'mac',
             },
             execution_mode=builder_spec.TEST,
             parent_buildername='GPU FYI Mac Builder',
@@ -843,6 +858,7 @@ SPEC = {
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'mac',
             },
             execution_mode=builder_spec.TEST,
             parent_buildername='GPU FYI Mac Builder',
@@ -859,6 +875,7 @@ SPEC = {
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'mac',
             },
             execution_mode=builder_spec.TEST,
             parent_buildername='GPU FYI Mac Builder',
