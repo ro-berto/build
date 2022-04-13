@@ -38,11 +38,11 @@ def _get_isolated_targets(tests):
   return [t.canonical_name for t in tests or [] if t.runs_on_swarming]
 
 
-def _get_tests_from_targets_config(targets_config, phase):
+def _get_test_targets_from_config(targets_config, phase):
   if phase is None:
-    return targets_config.all_tests
+    return [t.canonical_name for t in targets_config.all_tests]
   if phase == 'rtti_no_sctp':
-    return targets_config.all_tests
+    return [t.canonical_name for t in targets_config.all_tests]
   return []
 
 
@@ -55,10 +55,6 @@ class Bot(object):
   @property
   def config(self):
     return builders.BUILDERS[self.bucket]['builders'][self.builder]
-
-  @property
-  def bot_type(self):
-    return self.config.get('bot_type', 'builder_tester')
 
   def is_running_perf_tests(self):
     return bool(self.config.get('perf_id'))
@@ -130,12 +126,9 @@ class WebRTCApi(recipe_api.RecipeApi):
   def is_triggering_perf_tests(self):
     return any(bot.is_running_perf_tests() for bot in self.bot.triggered_bots())
 
-  def get_tests_and_compile_targets(self, builder_id, builder_config, phase,
-                                    update_step):
+  def determine_compilation_targets(self, builder_id, targets_config, phase):
     """ Returns the tests to run and the targets to compile."""
-    targets_config = self.m.chromium_tests.create_targets_config(
-        builder_config, update_step.presentation.properties)
-    tests = _get_tests_from_targets_config(targets_config, phase)
+    test_targets = _get_test_targets_from_config(targets_config, phase)
 
     patch_root = self.m.gclient.get_gerrit_patch_root()
     affected_files = self.m.chromium_checkout.get_files_affected_by_patch(
@@ -152,12 +145,12 @@ class WebRTCApi(recipe_api.RecipeApi):
       is_tester = builders.BUILDERS_DB[
           builder_id].execution_mode == builder_spec.TEST
       if is_tester and self.bot.is_running_perf_tests():
-        return tests, ['webrtc_dashboard_upload']
-      return tests, ['all']
+        return test_targets, ['webrtc_dashboard_upload']
+      return test_targets, ['all']
 
-    tests_targets, compile_targets = self.m.filter.analyze(
+    test_targets, compile_targets = self.m.filter.analyze(
         affected_files,
-        test_targets=[t.canonical_name for t in tests],
+        test_targets,
         additional_compile_targets=['all'],
         mb_path=self.m.path['checkout'].join('tools_webrtc', 'mb'),
         phase=phase)
@@ -169,8 +162,7 @@ class WebRTCApi(recipe_api.RecipeApi):
       compile_targets += [
           t for t in _BINARY_SIZE_TARGETS if t in binary_size_file
       ]
-    tests = [t for t in tests if t.canonical_name in tests_targets]
-    return tests, sorted(set(compile_targets))
+    return test_targets, sorted(set(compile_targets))
 
   def download_audio_quality_tools(self):
     args = [self.m.path['checkout'].join('tools_webrtc', 'audio_quality')]
@@ -371,7 +363,7 @@ class WebRTCApi(recipe_api.RecipeApi):
           unauthenticated_url=True)
 
   def run_tests(self, builder_id, tests):
-    if not tests or self.bot.bot_type == 'builder':
+    if not tests:
       return
 
     if self.bot.is_running_perf_tests():

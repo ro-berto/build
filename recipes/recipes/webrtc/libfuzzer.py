@@ -55,12 +55,10 @@ def RunSteps(api):
   builder_id, builder_config = api.chromium_tests_builder_config.lookup_builder(
       builder_db=BUILDERS_DB)
   api.chromium_tests.configure_build(builder_config)
-  update_step = api.chromium_checkout.ensure_checkout()
+  api.chromium_checkout.ensure_checkout()
   api.chromium.ensure_goma()
   api.chromium.runhooks()
 
-  api.chromium_tests.create_targets_config(builder_config,
-                                           update_step.presentation.properties)
   api.webrtc.run_mb(builder_id)
 
   with api.context(cwd=api.path['checkout']):

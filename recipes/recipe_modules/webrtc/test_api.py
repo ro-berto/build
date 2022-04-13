@@ -16,6 +16,13 @@ def _sanitize_builder_name(name):
   return '_'.join(safe_with_spaces.split())
 
 
+def _run_tests(builder_id):
+  # Decides which builder run tests based on the builder's name. It represents
+  # the builders that have a 'test_suites' section in waterfalls.pyl.
+  buildername = builder_id.builder.lower()
+  return not any(b in buildername for b in ('builder', 'fuzzer', 'compile'))
+
+
 class WebRTCTestApi(recipe_test_api.RecipeTestApi):
 
   def example_binary_sizes(self):
@@ -24,7 +31,7 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
   def generate_builder(self,
                        builders_db,
                        builder_id,
-                       failing_test=None,
+                       failing_test=False,
                        fail_compile=False,
                        suffix='',
                        fail_android_archive=False,
@@ -34,6 +41,7 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
     builder_config = builders_db[builder_id]
     project = 'webrtc-internal' if 'internal' in builder_id.group else 'webrtc'
     bucketname = builders.BUCKET_NAME[builder_id.group]
+    test_target = 'dummy_test'
 
     chromium_kwargs = builder_config.chromium_config_kwargs
     test = self.test(
@@ -49,7 +57,7 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
         self.m.runtime(is_experimental=is_experimental),
     )
 
-    if builder_config.simulation_platform == 'mac':
+    if 'mac_toolchain' in builder_config.chromium_apply_config:
       test += self.m.properties(xcode_build_version='dummy_xcode')
     test += self.m.properties(
         revision='a' * 40,
@@ -61,7 +69,7 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
       test += self.m.properties(parent_buildername=parent_buildername)
       test += self.m.properties(parent_got_revision=parent_rev)
       test += self.m.properties(
-          swarming_command_lines={'common_audio_unittests': ['./dummy_cmd']})
+          swarming_command_lines={test_target: ['./dummy_cmd']})
 
     if fail_compile:
       test += self.step_data('compile', retcode=1)
@@ -70,10 +78,10 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
 
     if failing_test:
       test += self.override_step_data(
-          'collect tasks.%s results' % failing_test,
+          'collect tasks.%s results' % test_target,
           stdout=self.m.raw_io.output_text(
               self.m.test_utils.rdb_results(
-                  failing_test, failing_tests=[failing_test])))
+                  test_target, failing_tests=[test_target])))
 
     if fail_android_archive:
       step_test_data = recipe_test_api.StepTestData()
@@ -84,17 +92,17 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
     nb_phase = 1
     if 'more_configs' in _sanitize_builder_name(builder_id.builder):
       nb_phase = 3
-    step_suffixes = [''] + [' (%d)' % (i + 2) for i in range(nb_phase - 1)]
     if 'try' in builder_id.group:
       if 'fuzzer' not in builder_id.builder:
-        for suffix in step_suffixes:
-          if gn_analyze_output is None:
-            gn_analyze_output = {
-                'compile_targets': ['all'],
-                'status': 'Found dependency',
-                'test_targets': ['common_audio_unittests'],
-            }
-          json_output = self.m.json.output(gn_analyze_output)
+        for i in range(nb_phase):
+          run_tests = _run_tests(builder_id) and (nb_phase == 1 or i == 2)
+          json_output = self.m.json.output(
+              gn_analyze_output or {
+                  'compile_targets': ['all'],
+                  'status': 'Found dependency',
+                  'test_targets': [test_target] if run_tests else [],
+              })
+          suffix = '' if i == 0 else ' (%d)' % (i + 1)
           test += self.override_step_data('analyze' + suffix, json_output)
 
       test += self.m.buildbucket.try_build(
@@ -114,14 +122,13 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
           tags=tags)
     test += self.m.properties(buildnumber=1337)
 
-    for step_suffix in step_suffixes:
+    if _run_tests(builder_id):
       test += self.m.chromium_tests.read_source_side_spec(
           builder_id.group,
-          step_suffix=step_suffix,
           contents={
               builder_id.builder: {
                   'gtest_tests': [{
-                      'test': 'common_audio_unittests',
+                      'test': test_target,
                       'swarming': {
                           'can_use_on_swarming_builders': True
                       }

@@ -154,6 +154,45 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[CACHE]\\builder\\src\\infra\\specs\\client.webrtc.json",
+      "/path/to/tmp/json"
+    ],
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "read test spec (client.webrtc.json)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@path: [CACHE]\\builder\\src\\infra\\specs\\client.webrtc.json@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Win64 ASan\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"can_use_on_swarming_builders\": true@@@",
+      "@@@STEP_LOG_LINE@json.output@        }, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"test\": \"dummy_test\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
     "cmd": [],
     "name": "ensure_goma"
   },
@@ -275,45 +314,6 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CACHE]\\builder\\src\\infra\\specs\\client.webrtc.json",
-      "/path/to/tmp/json"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "webrtc:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "read test spec (client.webrtc.json)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@path: [CACHE]\\builder\\src\\infra\\specs\\client.webrtc.json@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Win64 ASan\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"can_use_on_swarming_builders\": true@@@",
-      "@@@STEP_LOG_LINE@json.output@        }, @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"test\": \"common_audio_unittests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
       "python3",
       "-u",
       "[CACHE]\\builder\\src\\tools_webrtc\\mb\\mb.py",
@@ -367,7 +367,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "--swarming-targets-file",
-      "common_audio_unittests\n",
+      "dummy_test\n",
       "//out/Win64_ASan"
     ],
     "cwd": "[CACHE]\\builder\\src",
@@ -391,7 +391,7 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
       "@@@STEP_LOG_END@json.output[failure_summary]@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@common_audio_unittests@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@dummy_test@@@",
       "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
     ]
   },
@@ -934,7 +934,7 @@
       "projects/example-cas-server/instances/default_instance",
       "-log-level",
       "debug",
-      "[CACHE]\\builder\\src\\out\\Win64_ASan\\common_audio_unittests.isolated.gen.json"
+      "[CACHE]\\builder\\src\\out\\Win64_ASan\\dummy_test.isolated.gen.json"
     ],
     "luci_context": {
       "realm": {
@@ -951,10 +951,10 @@
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"common_audio_unittests\": \"[dummy hash for common_audio_unittests/dummy size]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"dummy_test\": \"[dummy hash for dummy_test/dummy size]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"common_audio_unittests\": \"[dummy hash for common_audio_unittests/dummy size]\"}@@@"
+      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"dummy_test\": \"[dummy hash for dummy_test/dummy size]\"}@@@"
     ]
   },
   {
@@ -1075,7 +1075,7 @@
       "-server",
       "https://example.swarmingserver.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"common_audio_unittests/Windows-7-SP1/[dummy has/Win64 ASan/-1\", \"priority\": \"25\", \"realm\": \"webrtc:ci\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Win64 ASan\", \"data:[dummy hash for common_audio_unittests/dummy size]\", \"name:common_audio_unittests\", \"ninja_target:\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Win64 ASan\", \"stepname:common_audio_unittests\", \"test_id_prefix:\", \"test_suite:common_audio_unittests\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for common_audio_unittests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:Win64 ASan\", \"-var\", \"os:Windows-7-SP1\", \"-var\", \"test_suite:common_audio_unittests\", \"-tag\", \"step_name:common_audio_unittests\", \"-tag\", \"target_platform:win\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter.exe\", \"gtest\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Windows-7-SP1\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"dummy_test/Windows-7-SP1/[dummy has/Win64 ASan/-1\", \"priority\": \"25\", \"realm\": \"webrtc:ci\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:Win64 ASan\", \"data:[dummy hash for dummy_test/dummy size]\", \"name:dummy_test\", \"ninja_target:\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:Win64 ASan\", \"stepname:dummy_test\", \"test_id_prefix:\", \"test_suite:dummy_test\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for dummy_test\", \"size_bytes\": \"dummy size]\"}}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:Win64 ASan\", \"-var\", \"os:Windows-7-SP1\", \"-var\", \"test_suite:dummy_test\", \"-tag\", \"step_name:dummy_test\", \"-tag\", \"target_platform:win\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter.exe\", \"gtest\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Windows-7-SP1\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -1092,14 +1092,14 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "test_pre_run.[trigger] common_audio_unittests",
+    "name": "test_pre_run.[trigger] dummy_test",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"name\": \"common_audio_unittests/Windows-7-SP1/[dummy has/Win64 ASan/-1\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"name\": \"dummy_test/Windows-7-SP1/[dummy has/Win64 ASan/-1\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"0\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_result\": {@@@",
@@ -1114,7 +1114,7 @@
       "@@@STEP_LOG_LINE@json.input@{@@@",
       "@@@STEP_LOG_LINE@json.input@  \"requests\": [@@@",
       "@@@STEP_LOG_LINE@json.input@    {@@@",
-      "@@@STEP_LOG_LINE@json.input@      \"name\": \"common_audio_unittests/Windows-7-SP1/[dummy has/Win64 ASan/-1\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"name\": \"dummy_test/Windows-7-SP1/[dummy has/Win64 ASan/-1\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"25\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"resultdb\": {@@@",
@@ -1126,17 +1126,17 @@
       "@@@STEP_LOG_LINE@json.input@        \"build_is_experimental:false\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"builder_group:client.webrtc\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"buildername:Win64 ASan\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"data:[dummy hash for common_audio_unittests/dummy size]\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"name:common_audio_unittests\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"data:[dummy hash for dummy_test/dummy size]\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"name:dummy_test\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"ninja_target:\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"project:webrtc\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"purpose:CI\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"purpose:post-commit\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"slavename:fake-bot-id\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"spec_name:webrtc.ci:Win64 ASan\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"stepname:common_audio_unittests\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"stepname:dummy_test\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"test_id_prefix:\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"test_suite:common_audio_unittests\"@@@",
+      "@@@STEP_LOG_LINE@json.input@        \"test_suite:dummy_test\"@@@",
       "@@@STEP_LOG_LINE@json.input@      ], @@@",
       "@@@STEP_LOG_LINE@json.input@      \"task_slices\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        {@@@",
@@ -1145,7 +1145,7 @@
       "@@@STEP_LOG_LINE@json.input@            \"cas_input_root\": {@@@",
       "@@@STEP_LOG_LINE@json.input@              \"cas_instance\": \"projects/example-cas-server/instances/default_instance\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"digest\": {@@@",
-      "@@@STEP_LOG_LINE@json.input@                \"hash\": \"[dummy hash for common_audio_unittests\", @@@",
+      "@@@STEP_LOG_LINE@json.input@                \"hash\": \"[dummy hash for dummy_test\", @@@",
       "@@@STEP_LOG_LINE@json.input@                \"size_bytes\": \"dummy size]\"@@@",
       "@@@STEP_LOG_LINE@json.input@              }@@@",
       "@@@STEP_LOG_LINE@json.input@            }, @@@",
@@ -1157,9 +1157,9 @@
       "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"os:Windows-7-SP1\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"test_suite:common_audio_unittests\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"test_suite:dummy_test\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-tag\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"step_name:common_audio_unittests\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"step_name:dummy_test\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-tag\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"target_platform:win\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-coerce-negative-duration\", @@@",
@@ -1214,7 +1214,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: common_audio_unittests/Windows-7-SP1/[dummy has/Win64 ASan/-1@https://example.swarmingserver.appspot.com/task?id=0@@@"
+      "@@@STEP_LINK@task UI: dummy_test/Windows-7-SP1/[dummy has/Win64 ASan/-1@https://example.swarmingserver.appspot.com/task?id=0@@@"
     ]
   },
   {
@@ -1507,7 +1507,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "collect tasks.common_audio_unittests stats",
+    "name": "collect tasks.dummy_test stats",
     "stdin": "{\"invocations\": [\"invocations/0\"]}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1546,7 +1546,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "collect tasks.common_audio_unittests results",
+    "name": "collect tasks.dummy_test results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@raw_io.output_text@@@"
@@ -1608,7 +1608,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "common_audio_unittests",
+    "name": "dummy_test",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
@@ -1644,14 +1644,14 @@
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LOG_LINE@step_metadata@{@@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"common_audio_unittests\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"dummy_test\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"dimensions\": {@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"cpu\": \"x86-64\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Windows-7-SP1\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"chromium.tests\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"common_audio_unittests\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"common_audio_unittests\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"dummy_test\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"dummy_test\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"0\"@@@",
@@ -1678,7 +1678,7 @@
       "--build-number",
       "0",
       "--test-type",
-      "common_audio_unittests",
+      "dummy_test",
       "--chrome-revision",
       "170242",
       "--build-id",
@@ -1698,7 +1698,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "Upload to test-results [common_audio_unittests]"
+    "name": "Upload to test-results [dummy_test]"
   },
   {
     "cmd": [],
@@ -1708,7 +1708,7 @@
       "@@@STEP_LOG_LINE@serialzed results@  \"all_suites\": [@@@",
       "@@@STEP_LOG_LINE@serialzed results@    {@@@",
       "@@@STEP_LOG_LINE@serialzed results@      \"invalid\": \"False\", @@@",
-      "@@@STEP_LOG_LINE@serialzed results@      \"suite_name\": \"common_audio_unittests\", @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"suite_name\": \"dummy_test\", @@@",
       "@@@STEP_LOG_LINE@serialzed results@      \"test_name_to_test_id_mapping\": {}, @@@",
       "@@@STEP_LOG_LINE@serialzed results@      \"total_tests_ran\": 0, @@@",
       "@@@STEP_LOG_LINE@serialzed results@      \"unexpected_failing_tests\": [], @@@",

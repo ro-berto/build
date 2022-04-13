@@ -33,6 +33,8 @@ def RunSteps(api):
   webrtc.apply_bot_config(builder_id, builder_config)
 
   update_step = api.chromium_checkout.ensure_checkout()
+  targets_config = api.chromium_tests.create_targets_config(
+      builder_config, update_step.presentation.properties)
 
   api.chromium_swarming.configure_swarming(
       'webrtc', precommit=api.tryserver.is_tryserver)
@@ -46,21 +48,24 @@ def RunSteps(api):
   api.chromium.ensure_toolchains()
   api.chromium.runhooks()
 
-  builder_spec = builders.BUILDERS_DB[builder_id]
-  for phase in builder_spec.phases:
-    tests, compile_targets = webrtc.get_tests_and_compile_targets(
-        builder_id, builder_config, phase, update_step)
+  for phase in builders.BUILDERS_DB[builder_id].phases:
+    test_targets, compile_targets = webrtc.determine_compilation_targets(
+        builder_id, targets_config, phase)
     if not compile_targets:
       step_result = api.step('No further steps are necessary.', cmd=None)
       step_result.presentation.status = api.step.SUCCESS
       return
 
-    webrtc.run_mb(builder_id, phase, tests)
+    tests_to_compile = [
+        t for t in targets_config.all_tests if t.canonical_name in test_targets
+    ]
+    webrtc.run_mb(builder_id, phase, tests_to_compile)
     raw_result = api.chromium.compile(compile_targets, use_goma_module=True)
     if raw_result.status != common_pb.SUCCESS:
       return raw_result
-    webrtc.isolate(builder_id, tests)
+    webrtc.isolate(builder_id, tests_to_compile)
 
+    builder_spec = builders.BUILDERS_DB[builder_id]
     if builder_spec.binary_size_files:
       webrtc.get_binary_sizes(builder_spec.binary_size_files)
     if builder_spec.build_android_archive:
@@ -68,7 +73,11 @@ def RunSteps(api):
     if builder_spec.archive_apprtc:
       webrtc.package_apprtcmobile()
 
-    test_failure_summary = webrtc.run_tests(builder_id, tests)
+    tests_to_run = [
+        t for t in targets_config.tests_on(builder_id)
+        if t.canonical_name in test_targets
+    ]
+    test_failure_summary = webrtc.run_tests(builder_id, tests_to_run)
     if test_failure_summary:
       return test_failure_summary
 
@@ -84,10 +93,7 @@ def GenTests(api):
 
   builder_id = chromium.BuilderId.create_for_group('client.webrtc',
                                                    'Linux64 Debug')
-  yield generate_builder(
-      builder_id,
-      failing_test='common_audio_unittests',
-      suffix='_failing_test')
+  yield generate_builder(builder_id, failing_test=True, suffix='_failing_test')
   yield generate_builder(
       builder_id,
       tags=[{

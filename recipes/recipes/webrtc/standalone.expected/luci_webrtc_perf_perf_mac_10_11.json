@@ -129,6 +129,45 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[CACHE]/builder/src/infra/specs/client.webrtc.perf.json",
+      "/path/to/tmp/json"
+    ],
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:perf"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "read test spec (client.webrtc.perf.json)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@path: [CACHE]/builder/src/infra/specs/client.webrtc.perf.json@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Perf Mac 10.11\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"can_use_on_swarming_builders\": true@@@",
+      "@@@STEP_LOG_LINE@json.output@        }, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"test\": \"dummy_test\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "vpython3",
       "-u",
       "[CACHE]/builder/src/tools_webrtc/download_tools.py",
@@ -323,45 +362,6 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CACHE]/builder/src/infra/specs/client.webrtc.perf.json",
-      "/path/to/tmp/json"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "webrtc:perf"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "read test spec (client.webrtc.perf.json)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@path: [CACHE]/builder/src/infra/specs/client.webrtc.perf.json@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Perf Mac 10.11\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"can_use_on_swarming_builders\": true@@@",
-      "@@@STEP_LOG_LINE@json.output@        }, @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"test\": \"common_audio_unittests\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
       "python3",
       "-u",
       "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
@@ -416,7 +416,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "--swarming-targets-file",
-      "common_audio_unittests\n",
+      "dummy_test\n",
       "//out/Perf_Mac_10_11"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -441,7 +441,7 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
       "@@@STEP_LOG_END@json.output[failure_summary]@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@common_audio_unittests@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@dummy_test@@@",
       "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
     ]
   },
@@ -992,7 +992,7 @@
       "-server",
       "https://example.swarmingserver.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"common_audio_unittests/Mac-10.13/[dummy has/Perf Mac 10.11/-1\", \"priority\": \"25\", \"realm\": \"webrtc:perf\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:perf\", \"build_is_experimental:false\", \"builder_group:client.webrtc.perf\", \"buildername:Perf Mac 10.11\", \"data:[dummy hash for common_audio_unittests/1]\", \"name:common_audio_unittests\", \"ninja_target:\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.perf:Perf Mac 10.11\", \"stepname:common_audio_unittests\", \"test_id_prefix:\", \"test_suite:common_audio_unittests\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for common_audio_unittests\", \"size_bytes\": \"1]\"}}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:Perf Mac 10.11\", \"-var\", \"os:Mac-10.13\", \"-var\", \"test_suite:common_audio_unittests\", \"-tag\", \"step_name:common_audio_unittests\", \"-tag\", \"target_platform:mac\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"gtest\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"./dummy_cmd\", \"--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Mac-10.13\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"out/Mac64_Builder\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"dummy_test/Mac-10.13/[dummy has/Perf Mac 10.11/-1\", \"priority\": \"25\", \"realm\": \"webrtc:perf\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:perf\", \"build_is_experimental:false\", \"builder_group:client.webrtc.perf\", \"buildername:Perf Mac 10.11\", \"data:[dummy hash for dummy_test/1]\", \"name:dummy_test\", \"ninja_target:\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.perf:Perf Mac 10.11\", \"stepname:dummy_test\", \"test_id_prefix:\", \"test_suite:dummy_test\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for dummy_test\", \"size_bytes\": \"1]\"}}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:Perf Mac 10.11\", \"-var\", \"os:Mac-10.13\", \"-var\", \"test_suite:dummy_test\", \"-tag\", \"step_name:dummy_test\", \"-tag\", \"target_platform:mac\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"gtest\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"./dummy_cmd\", \"--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Mac-10.13\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"out/Mac64_Builder\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -1009,14 +1009,14 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "test_pre_run.[trigger] common_audio_unittests",
+    "name": "test_pre_run.[trigger] dummy_test",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"name\": \"common_audio_unittests/Mac-10.13/[dummy has/Perf Mac 10.11/-1\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"name\": \"dummy_test/Mac-10.13/[dummy has/Perf Mac 10.11/-1\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"0\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_result\": {@@@",
@@ -1031,7 +1031,7 @@
       "@@@STEP_LOG_LINE@json.input@{@@@",
       "@@@STEP_LOG_LINE@json.input@  \"requests\": [@@@",
       "@@@STEP_LOG_LINE@json.input@    {@@@",
-      "@@@STEP_LOG_LINE@json.input@      \"name\": \"common_audio_unittests/Mac-10.13/[dummy has/Perf Mac 10.11/-1\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"name\": \"dummy_test/Mac-10.13/[dummy has/Perf Mac 10.11/-1\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"25\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc:perf\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"resultdb\": {@@@",
@@ -1043,17 +1043,17 @@
       "@@@STEP_LOG_LINE@json.input@        \"build_is_experimental:false\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"builder_group:client.webrtc.perf\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"buildername:Perf Mac 10.11\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"data:[dummy hash for common_audio_unittests/1]\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"name:common_audio_unittests\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"data:[dummy hash for dummy_test/1]\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"name:dummy_test\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"ninja_target:\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"project:webrtc\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"purpose:CI\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"purpose:post-commit\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"slavename:fake-bot-id\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"spec_name:webrtc.perf:Perf Mac 10.11\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"stepname:common_audio_unittests\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"stepname:dummy_test\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"test_id_prefix:\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"test_suite:common_audio_unittests\"@@@",
+      "@@@STEP_LOG_LINE@json.input@        \"test_suite:dummy_test\"@@@",
       "@@@STEP_LOG_LINE@json.input@      ], @@@",
       "@@@STEP_LOG_LINE@json.input@      \"task_slices\": [@@@",
       "@@@STEP_LOG_LINE@json.input@        {@@@",
@@ -1062,7 +1062,7 @@
       "@@@STEP_LOG_LINE@json.input@            \"cas_input_root\": {@@@",
       "@@@STEP_LOG_LINE@json.input@              \"cas_instance\": \"projects/example-cas-server/instances/default_instance\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"digest\": {@@@",
-      "@@@STEP_LOG_LINE@json.input@                \"hash\": \"[dummy hash for common_audio_unittests\", @@@",
+      "@@@STEP_LOG_LINE@json.input@                \"hash\": \"[dummy hash for dummy_test\", @@@",
       "@@@STEP_LOG_LINE@json.input@                \"size_bytes\": \"1]\"@@@",
       "@@@STEP_LOG_LINE@json.input@              }@@@",
       "@@@STEP_LOG_LINE@json.input@            }, @@@",
@@ -1074,9 +1074,9 @@
       "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"os:Mac-10.13\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"test_suite:common_audio_unittests\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"test_suite:dummy_test\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-tag\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"step_name:common_audio_unittests\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"step_name:dummy_test\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-tag\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"target_platform:mac\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-coerce-negative-duration\", @@@",
@@ -1132,7 +1132,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: common_audio_unittests/Mac-10.13/[dummy has/Perf Mac 10.11/-1@https://example.swarmingserver.appspot.com/task?id=0@@@"
+      "@@@STEP_LINK@task UI: dummy_test/Mac-10.13/[dummy has/Perf Mac 10.11/-1@https://example.swarmingserver.appspot.com/task?id=0@@@"
     ]
   },
   {
@@ -1425,7 +1425,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "collect tasks.common_audio_unittests stats",
+    "name": "collect tasks.dummy_test stats",
     "stdin": "{\"invocations\": [\"invocations/0\"]}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1464,7 +1464,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "collect tasks.common_audio_unittests results",
+    "name": "collect tasks.dummy_test results",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@raw_io.output_text@@@"
@@ -1492,7 +1492,7 @@
       "--merge-additional-args",
       "[]",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"bot\": \"webrtc-mac-large-tests\", \"bot_id\": \"bot_id\", \"build_page_url\": \"https://ci.chromium.org/p/webrtc/builders/luci.webrtc.perf/Perf%20Mac%2010.11/0\", \"builder_group\": \"client.webrtc.perf\", \"buildername\": \"Perf Mac 10.11\", \"buildnumber\": 1337, \"commit_position\": 170242, \"dashboard_url\": \"https://chromeperf.appspot.com\", \"got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"got_revision_cp\": \"refs/heads/main@{#1337}\", \"outdir\": \"[CACHE]/builder/src/out/Perf_Mac_10_11\", \"parent_buildername\": \"Mac64 Builder\", \"parent_got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"perf_dashboard_machine_group\": \"WebRTCPerf\", \"recipe\": \"webrtc/standalone\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"swarming_command_lines\": {\"common_audio_unittests\": [\"./dummy_cmd\"]}, \"webrtc_git_hash\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"xcode_build_version\": \"dummy_xcode\"}",
+      "{\"BUILD_CONFIG\": \"Release\", \"bot\": \"webrtc-mac-large-tests\", \"bot_id\": \"bot_id\", \"build_page_url\": \"https://ci.chromium.org/p/webrtc/builders/luci.webrtc.perf/Perf%20Mac%2010.11/0\", \"builder_group\": \"client.webrtc.perf\", \"buildername\": \"Perf Mac 10.11\", \"buildnumber\": 1337, \"commit_position\": 170242, \"dashboard_url\": \"https://chromeperf.appspot.com\", \"got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"got_revision_cp\": \"refs/heads/main@{#1337}\", \"outdir\": \"[CACHE]/builder/src/out/Perf_Mac_10_11\", \"parent_buildername\": \"Mac64 Builder\", \"parent_got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"perf_dashboard_machine_group\": \"WebRTCPerf\", \"recipe\": \"webrtc/standalone\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"swarming_command_lines\": {\"dummy_test\": [\"./dummy_cmd\"]}, \"webrtc_git_hash\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"}",
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
@@ -1526,7 +1526,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "common_audio_unittests",
+    "name": "dummy_test",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac-10.13'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
@@ -1562,14 +1562,14 @@
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LOG_LINE@step_metadata@{@@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"common_audio_unittests\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"dummy_test\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"dimensions\": {@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"cpu\": \"x86-64\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Mac-10.13\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"chromium.tests\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"common_audio_unittests\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"common_audio_unittests\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"dummy_test\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"dummy_test\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"0\"@@@",
@@ -1596,7 +1596,7 @@
       "--build-number",
       "0",
       "--test-type",
-      "common_audio_unittests",
+      "dummy_test",
       "--chrome-revision",
       "170242",
       "--build-id",
@@ -1616,7 +1616,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "Upload to test-results [common_audio_unittests]"
+    "name": "Upload to test-results [dummy_test]"
   },
   {
     "cmd": [],
@@ -1626,7 +1626,7 @@
       "@@@STEP_LOG_LINE@serialzed results@  \"all_suites\": [@@@",
       "@@@STEP_LOG_LINE@serialzed results@    {@@@",
       "@@@STEP_LOG_LINE@serialzed results@      \"invalid\": \"False\", @@@",
-      "@@@STEP_LOG_LINE@serialzed results@      \"suite_name\": \"common_audio_unittests\", @@@",
+      "@@@STEP_LOG_LINE@serialzed results@      \"suite_name\": \"dummy_test\", @@@",
       "@@@STEP_LOG_LINE@serialzed results@      \"test_name_to_test_id_mapping\": {}, @@@",
       "@@@STEP_LOG_LINE@serialzed results@      \"total_tests_ran\": 0, @@@",
       "@@@STEP_LOG_LINE@serialzed results@      \"unexpected_failing_tests\": [], @@@",
