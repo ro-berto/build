@@ -17,6 +17,7 @@ import dataclasses
 import io
 import json
 import logging
+import os
 import sys
 import unittest
 
@@ -105,9 +106,70 @@ class Tests(unittest.TestCase):
     ])
 
     with self.assertRaises(ValueError) as ex:
-      list(tidy._parse_compile_commands(_to_stringio(input_json)))
+      list(
+          tidy._parse_compile_commands(
+              _to_stringio(input_json), clang_cl=False))
 
     self.assertIn('lacks an output file', str(ex.exception))
+
+  def test_parse_compile_commands_works_for_win(self):
+
+    def compile_command(command):
+      return {
+          'command': command,
+          'directory': '/dir/ect/ory',
+          'file': 'foo.cc',
+      }
+
+    input_json = json.dumps([
+        compile_command('/path/to/clang-cl.exe foo /Fo foo.o'),
+        compile_command('/path/to/pnacl-clang++.exe foo /Fo foo-1.o'),
+        compile_command(
+            '/path/to/gomacc.exe /path/to/clang-cl.exe foo /Fo foo-2.o'),
+        compile_command(
+            '/path/to/gomacc.exe /path/to/pnacl-clang++.exe foo /Fo foo-3.o'),
+        compile_command('/path/to/nacl-clang++.exe foo -o foo-4.o'),
+        compile_command(
+            '/path/to/gomacc.exe /path/to/nacl-clang++.exe foo -o foo-5.o'),
+    ])
+
+    results = list(
+        tidy._parse_compile_commands(_to_stringio(input_json), clang_cl=True))
+    self.assertEqual(results, [
+        tidy._CompileCommand(
+            target_name='foo.o',
+            file_abspath='/dir/ect/ory/foo.cc',
+            file='foo.cc',
+            directory='/dir/ect/ory',
+            command='/path/to/clang-cl.exe foo /Fo foo.o',
+            is_clang_cl_command=True,
+        ),
+        tidy._CompileCommand(
+            target_name='foo-2.o',
+            file_abspath='/dir/ect/ory/foo.cc',
+            file='foo.cc',
+            directory='/dir/ect/ory',
+            command='/path/to/gomacc.exe /path/to/clang-cl.exe foo /Fo foo-2.o',
+            is_clang_cl_command=True,
+        ),
+        tidy._CompileCommand(
+            target_name='foo-4.o',
+            file_abspath='/dir/ect/ory/foo.cc',
+            file='foo.cc',
+            directory='/dir/ect/ory',
+            command='/path/to/nacl-clang++.exe foo -o foo-4.o',
+            is_clang_cl_command=False,
+        ),
+        tidy._CompileCommand(
+            target_name='foo-5.o',
+            file_abspath='/dir/ect/ory/foo.cc',
+            file='foo.cc',
+            directory='/dir/ect/ory',
+            command='/path/to/gomacc.exe /path/to/nacl-clang++.exe foo -o '
+            'foo-5.o',
+            is_clang_cl_command=False,
+        ),
+    ])
 
   def test_parse_compile_commands_skips_pnacl(self):
 
@@ -130,7 +192,8 @@ class Tests(unittest.TestCase):
             '/path/to/gomacc /some/clang /path/to/pnacl-helpers.c -o foo-6.o'),
     ])
 
-    results = list(tidy._parse_compile_commands(_to_stringio(input_json)))
+    results = list(
+        tidy._parse_compile_commands(_to_stringio(input_json), clang_cl=False))
     self.assertEqual(results, [
         tidy._CompileCommand(
             target_name='foo.o',
@@ -138,6 +201,7 @@ class Tests(unittest.TestCase):
             file='foo.cc',
             directory='/dir/ect/ory',
             command='/path/to/clang++ foo -o foo.o',
+            is_clang_cl_command=False,
         ),
         tidy._CompileCommand(
             target_name='foo-5.o',
@@ -145,6 +209,7 @@ class Tests(unittest.TestCase):
             file='foo.cc',
             directory='/dir/ect/ory',
             command='/some/clang /path/to/pnacl-helpers.c -o foo-5.o',
+            is_clang_cl_command=False,
         ),
         tidy._CompileCommand(
             target_name='foo-6.o',
@@ -153,6 +218,7 @@ class Tests(unittest.TestCase):
             directory='/dir/ect/ory',
             command='/path/to/gomacc /some/clang /path/to/pnacl-helpers.c -o '
             'foo-6.o',
+            is_clang_cl_command=False,
         ),
     ])
 
@@ -408,16 +474,28 @@ class Tests(unittest.TestCase):
     test_cases = [
         (1, {
             tidy._TidyAction(
-                cc_file='/foo.cc', target='foo.o', in_dir='/in',
-                flags='whee'): ['/foo.h'],
+                cc_file='/foo.cc',
+                target='foo.o',
+                in_dir='/in',
+                flags='whee',
+                flags_use_cl_driver_mode=False,
+            ): ['/foo.h'],
         }),
         (2, {
             tidy._TidyAction(
-                cc_file='/foo.cc', target='foo.o', in_dir='/in',
-                flags='whee'): ['/foo.h'],
+                cc_file='/foo.cc',
+                target='foo.o',
+                in_dir='/in',
+                flags='whee',
+                flags_use_cl_driver_mode=False,
+            ): ['/foo.h'],
             tidy._TidyAction(
-                cc_file='/bar.cc', target='bar.o', in_dir='/in',
-                flags='whee'): ['/foo.h'],
+                cc_file='/bar.cc',
+                target='bar.o',
+                in_dir='/in',
+                flags='whee',
+                flags_use_cl_driver_mode=False,
+            ): ['/foo.h'],
         }),
     ]
 
@@ -437,6 +515,7 @@ class Tests(unittest.TestCase):
                   file='foo.cc',
                   directory='/in',
                   command='whee',
+                  is_clang_cl_command=False,
               ),
               tidy._CompileCommand(
                   target_name='bar.o',
@@ -444,6 +523,7 @@ class Tests(unittest.TestCase):
                   file='bar.cc',
                   directory='/in',
                   command='whee',
+                  is_clang_cl_command=False,
               ),
           ],
           max_tidy_actions_per_file=max_actions)
@@ -465,6 +545,7 @@ class Tests(unittest.TestCase):
             file='foo.cc',
             directory='/in',
             command='whee',
+            is_clang_cl_command=False,
         ),
         tidy._CompileCommand(
             target_name='bar.o',
@@ -472,6 +553,7 @@ class Tests(unittest.TestCase):
             file='bar.cc',
             directory='/in',
             command='whee',
+            is_clang_cl_command=False,
         ),
     ]
 
@@ -486,11 +568,19 @@ class Tests(unittest.TestCase):
     self.assertEqual(
         actions, {
             tidy._TidyAction(
-                cc_file='/foo.cc', target='foo.o', in_dir='/in',
-                flags='whee'): ['/foo.cc'],
+                cc_file='/foo.cc',
+                target='foo.o',
+                in_dir='/in',
+                flags='whee',
+                flags_use_cl_driver_mode=False,
+            ): ['/foo.cc'],
             tidy._TidyAction(
-                cc_file='/bar.cc', target='bar.o', in_dir='/in',
-                flags='whee'): ['/bar.cc'],
+                cc_file='/bar.cc',
+                target='bar.o',
+                in_dir='/in',
+                flags='whee',
+                flags_use_cl_driver_mode=False,
+            ): ['/bar.cc'],
         })
 
   def test_generate_tidy_actions_includes_headers_in_output(self):
@@ -508,6 +598,7 @@ class Tests(unittest.TestCase):
             file='foo.cc',
             directory='/in',
             command='whee',
+            is_clang_cl_command=False,
         ),
         tidy._CompileCommand(
             target_name='bar.o',
@@ -515,6 +606,7 @@ class Tests(unittest.TestCase):
             file='bar.cc',
             directory='/in',
             command='whee',
+            is_clang_cl_command=False,
         ),
     ]
 
@@ -537,11 +629,19 @@ class Tests(unittest.TestCase):
     self.assertEqual(
         actions, {
             tidy._TidyAction(
-                cc_file='/foo.cc', target='foo.o', in_dir='/in',
-                flags='whee'): ['/foo.cc', '/foo.h'],
+                cc_file='/foo.cc',
+                target='foo.o',
+                in_dir='/in',
+                flags='whee',
+                flags_use_cl_driver_mode=False,
+            ): ['/foo.cc', '/foo.h'],
             tidy._TidyAction(
-                cc_file='/bar.cc', target='bar.o', in_dir='/in',
-                flags='whee'): ['/bar.cc'],
+                cc_file='/bar.cc',
+                target='bar.o',
+                in_dir='/in',
+                flags='whee',
+                flags_use_cl_driver_mode=False,
+            ): ['/bar.cc'],
         })
 
   def test_generate_tidy_actions_ignores_nonexistent_files(self):
@@ -565,6 +665,7 @@ class Tests(unittest.TestCase):
                 file='foo.cc',
                 directory='/in',
                 command='whee',
+                is_clang_cl_command=False,
             )
         ])
     self.assertEqual(failed, [])
@@ -574,7 +675,9 @@ class Tests(unittest.TestCase):
                 cc_file='/foo.cc',
                 target='foo.cc.o',
                 in_dir='/in',
-                flags='whee'): ['/foo.cc'],
+                flags='whee',
+                flags_use_cl_driver_mode=False,
+            ): ['/foo.cc'],
         })
 
   def test_generate_tidy_actions_functions_with_no_src_file_filter(self):
@@ -598,6 +701,7 @@ class Tests(unittest.TestCase):
                 file='foo.cc',
                 directory='/in',
                 command='whee',
+                is_clang_cl_command=False,
             )
         ])
 
@@ -608,7 +712,9 @@ class Tests(unittest.TestCase):
                 cc_file='/foo.cc',
                 target='foo.cc.o',
                 in_dir='/in',
-                flags='whee'): ['/foo.cc'],
+                flags='whee',
+                flags_use_cl_driver_mode=False,
+            ): ['/foo.cc'],
         })
 
   def test_generate_tidy_actions_reports_failures(self):
@@ -630,10 +736,15 @@ class Tests(unittest.TestCase):
                 file='foo.cc',
                 directory='/in',
                 command='whee',
+                is_clang_cl_command=True,
             )
         })
     expected_action = tidy._TidyAction(
-        cc_file='/foo.cc', target='foo.cc.o', in_dir='/in', flags='whee')
+        cc_file='/foo.cc',
+        target='foo.cc.o',
+        in_dir='/in',
+        flags='whee',
+        flags_use_cl_driver_mode=True)
     self.assertEqual(failed, [expected_action])
     self.assertEqual(actions, {expected_action: ['/foo.cc']})
 
@@ -643,11 +754,26 @@ class Tests(unittest.TestCase):
     binary = object()
     tidy_checks = object()
     timeout_action = tidy._TidyAction(
-        cc_file='timeout', target='timeout.o', in_dir='in/', flags='')
+        cc_file='timeout',
+        target='timeout.o',
+        in_dir='in/',
+        flags='',
+        flags_use_cl_driver_mode=False,
+    )
     fail_action = tidy._TidyAction(
-        cc_file='fail', target='fail.o', in_dir='in/', flags='')
+        cc_file='fail',
+        target='fail.o',
+        in_dir='in/',
+        flags='',
+        flags_use_cl_driver_mode=False,
+    )
     good_action = tidy._TidyAction(
-        cc_file='success', target='success.o', in_dir='in/', flags='')
+        cc_file='success',
+        target='success.o',
+        in_dir='in/',
+        flags='',
+        flags_use_cl_driver_mode=False,
+    )
     actions = [timeout_action, fail_action, good_action]
 
     good_diag = _build_tidy_diagnostic(
@@ -725,7 +851,12 @@ class Tests(unittest.TestCase):
     # I don't _expect_ for paths like these to exist. That said, logging and
     # dropping sounds better than crashing, or producing nonsensical output.
     main_action = tidy._TidyAction(
-        cc_file='/foo/bar.cc', target='bar.o', in_dir='in/', flags='')
+        cc_file='/foo/bar.cc',
+        target='bar.o',
+        in_dir='in/',
+        flags='',
+        flags_use_cl_driver_mode=False,
+    )
 
     result = tidy._convert_tidy_output_json_obj(
         base_path='/foo',
@@ -757,14 +888,26 @@ class Tests(unittest.TestCase):
     self._silence_logs()
 
     main_action = tidy._TidyAction(
-        cc_file='/foo/cc_file.cc', target='bar.o', in_dir='in/', flags='')
+        cc_file='/foo/cc_file.cc',
+        target='bar.o',
+        in_dir='in/',
+        flags='',
+        flags_use_cl_driver_mode=False,
+    )
     secondary_action = tidy._TidyAction(
         cc_file='/foo/secondary_file.cc',
         target='baz.o',
         in_dir='in/',
-        flags='')
+        flags='',
+        flags_use_cl_driver_mode=False,
+    )
     tertiary_action = tidy._TidyAction(
-        cc_file='/foo/tertiary_file.cc', target='qux.o', in_dir='in/', flags='')
+        cc_file='/foo/tertiary_file.cc',
+        target='qux.o',
+        in_dir='in/',
+        flags='',
+        flags_use_cl_driver_mode=False,
+    )
     result = tidy._convert_tidy_output_json_obj(
         base_path='/foo',
         tidy_actions={
@@ -815,12 +958,19 @@ class Tests(unittest.TestCase):
     self._silence_logs()
 
     main_action = tidy._TidyAction(
-        cc_file='/foo/cc_file.cc', target='bar.o', in_dir='in/', flags='')
+        cc_file='/foo/cc_file.cc',
+        target='bar.o',
+        in_dir='in/',
+        flags='',
+        flags_use_cl_driver_mode=False,
+    )
     secondary_action = tidy._TidyAction(
         cc_file='/foo/secondary_file.cc',
         target='baz.o',
         in_dir='in/',
-        flags='')
+        flags='',
+        flags_use_cl_driver_mode=False,
+    )
     result = tidy._convert_tidy_output_json_obj(
         base_path='/foo',
         tidy_actions={
@@ -846,7 +996,12 @@ class Tests(unittest.TestCase):
     self._silence_logs()
 
     main_action = tidy._TidyAction(
-        cc_file='/foo/src_file.cc', target='bar.o', in_dir='in/', flags='')
+        cc_file='/foo/src_file.cc',
+        target='bar.o',
+        in_dir='in/',
+        flags='',
+        flags_use_cl_driver_mode=False,
+    )
     result = tidy._convert_tidy_output_json_obj(
         base_path='/foo',
         tidy_actions={
@@ -889,7 +1044,12 @@ class Tests(unittest.TestCase):
     self._silence_logs()
 
     main_action = tidy._TidyAction(
-        cc_file='/foo/src_file.cc', target='bar.o', in_dir='in/', flags='')
+        cc_file='/foo/src_file.cc',
+        target='bar.o',
+        in_dir='in/',
+        flags='',
+        flags_use_cl_driver_mode=False,
+    )
     result = tidy._convert_tidy_output_json_obj(
         base_path='/foo',
         tidy_actions={
@@ -933,7 +1093,12 @@ class Tests(unittest.TestCase):
     self._silence_logs()
 
     main_action = tidy._TidyAction(
-        cc_file='/foo/src_file.cc', target='bar.o', in_dir='in/', flags='')
+        cc_file='/foo/src_file.cc',
+        target='bar.o',
+        in_dir='in/',
+        flags='',
+        flags_use_cl_driver_mode=False,
+    )
     result = tidy._convert_tidy_output_json_obj(
         base_path='/foo',
         tidy_actions={
@@ -1261,6 +1426,7 @@ class Tests(unittest.TestCase):
                 file='foo.cc',
                 directory='/in',
                 command='whee',
+                is_clang_cl_command=False,
             ),
         ])
     self.assertEqual(actions, {})

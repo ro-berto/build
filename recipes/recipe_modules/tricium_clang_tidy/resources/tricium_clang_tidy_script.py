@@ -63,7 +63,7 @@ def _temp_file() -> Generator[str, None, None]:
     os.unlink(path)
 
 
-def _generate_compile_commands(out_dir: str) -> str:
+def _generate_compile_commands(out_dir: str, gn: str) -> str:
   """Generates a compile_commands.json file, returning the path to it."""
   compile_commands = os.path.join(out_dir, 'compile_commands.json')
   # Regenerate compile_commands every time, since the user might've patched
@@ -75,7 +75,7 @@ def _generate_compile_commands(out_dir: str) -> str:
   subprocess.check_call(
       cwd=out_dir,
       args=[
-          'gn',
+          gn,
           'gen',
           '--export-compile-commands',
           '--args=' + args_gn,
@@ -295,9 +295,11 @@ class _DiagnosticNoteBuilder:
         for x in self._notes)
 
 
-def _parse_tidy_fixes_file(read_line_offsets: Callable[[str], _LineOffsetMap],
-                           stream: Any, tidy_invocation_dir: str
-                          ) -> Generator[_TidyDiagnostic, None, None]:
+def _parse_tidy_fixes_file(
+    read_line_offsets: Callable[[str], _LineOffsetMap],
+    stream: Any,
+    tidy_invocation_dir: str,
+) -> Generator[_TidyDiagnostic, None, None]:
   """Parses a clang-tidy YAML file.
 
   Args:
@@ -415,9 +417,14 @@ def _parse_tidy_fixes_file(read_line_offsets: Callable[[str], _LineOffsetMap],
     raise _ParseError('Broken yaml: missing key %r' % key_name) from k
 
 
-def _run_clang_tidy(clang_tidy_binary: str, checks: Optional[str], in_dir: str,
-                    cc_file: str, compile_command: str
-                   ) -> Tuple[Optional[int], str, List[_TidyDiagnostic]]:
+def _run_clang_tidy(
+    clang_tidy_binary: str,
+    checks: Optional[str],
+    in_dir: str,
+    cc_file: str,
+    compile_command: str,
+    use_cl_driver_mode: bool,
+) -> Tuple[Optional[int], str, List[_TidyDiagnostic]]:
   with _temp_file() as findings_file:
     command = [clang_tidy_binary]
 
@@ -430,7 +437,14 @@ def _run_clang_tidy(clang_tidy_binary: str, checks: Optional[str], in_dir: str,
         '--header-filter=.*',
         '--',
     ]
-    command.extend(shlex.split(compile_command))
+    pieces = shlex.split(compile_command)
+    if use_cl_driver_mode:
+      # HACK: Sometimes argv[0] is goma, so we write `gomacc --driver-mode=cl
+      # clang ...
+      # Clang itself seems to skip these, and we need --driver-mode=cl before
+      # any clang flags, so place it after
+      pieces.insert(1, '--driver-mode=cl')
+    command.extend(pieces)
 
     logging.debug('In %r, running %s', in_dir,
                   ' '.join(pipes.quote(c) for c in command))
@@ -485,12 +499,15 @@ def _run_clang_tidy(clang_tidy_binary: str, checks: Optional[str], in_dir: str,
     return return_code, stdout, findings
 
 
-_TidyAction = collections.namedtuple('_TidyAction',
-                                     ['in_dir', 'cc_file', 'flags', 'target'])
+_TidyAction = collections.namedtuple(
+    '_TidyAction',
+    ['in_dir', 'cc_file', 'flags', 'target', 'flags_use_cl_driver_mode'])
 
 
 def _run_tidy_action(
-    tidy_binary: str, checks: Optional[str], action: _TidyAction
+    tidy_binary: str,
+    checks: Optional[str],
+    action: _TidyAction,
 ) -> Optional[Tuple[Optional[int], str, List[_TidyDiagnostic]]]:
   """Runs clang-tidy, given a _TidyAction.
 
@@ -511,7 +528,8 @@ def _run_tidy_action(
         checks=checks,
         in_dir=action.in_dir,
         cc_file=action.cc_file,
-        compile_command=action.flags)
+        compile_command=action.flags,
+        use_cl_driver_mode=action.flags_use_cl_driver_mode)
     elapsed_time = time.time() - start_time
 
     if exit_code is None:
@@ -533,15 +551,24 @@ def _run_tidy_action(
     return None
 
 
-_CompileCommand = collections.namedtuple(
-    '_CompileCommand',
-    ['target_name', 'file_abspath', 'file', 'directory', 'command'])
+_CompileCommand = collections.namedtuple('_CompileCommand', [
+    'target_name', 'file_abspath', 'file', 'directory', 'command',
+    'is_clang_cl_command'
+])
 
 
-def _parse_compile_commands(stream: io.TextIOWrapper
+def _parse_compile_commands(stream: io.TextIOWrapper, clang_cl: bool
                            ) -> Generator[_CompileCommand, None, None]:
-  """Parses compile commands from the given input stream."""
+  """Parses compile commands from the given input stream.
+
+  If clang_cl is True, we'll parse commands with clang-cl (AKA windows)
+  compatibility where appropriate.
+  """
   compile_commands = json.load(stream)
+
+  clang_obj_re = re.compile(r'\s+-o\s+(\S+)')
+  if clang_cl:
+    clang_cl_obj_re = re.compile(r'\s+/Fo\s+(\S+)')
 
   for action in compile_commands:
     command = action['command']
@@ -559,7 +586,12 @@ def _parse_compile_commands(stream: io.TextIOWrapper
             pnacl in os.path.basename(pieces[1])):
           continue
 
-    m = re.search(r'-o\s+(\S+)', command)
+    is_clang_cl_command = clang_cl and 'cl.exe ' in command
+    if is_clang_cl_command:
+      m = clang_cl_obj_re.search(command)
+    else:
+      m = clang_obj_re.search(command)
+
     if not m:
       raise ValueError('compile_commands action %r lacks an output file' %
                        command)
@@ -571,6 +603,7 @@ def _parse_compile_commands(stream: io.TextIOWrapper
         file=action['file'],
         directory=action['directory'],
         command=command,
+        is_clang_cl_command=is_clang_cl_command,
     )
 
 
@@ -711,10 +744,10 @@ def _parse_gn_desc_output(full_desc: Dict[str, Any],
   return _GnDesc(per_target_srcs)
 
 
-def _parse_gn_desc(out_dir: str, chromium_root: str) -> _GnDesc:
+def _parse_gn_desc(out_dir: str, chromium_root: str, gn: str) -> _GnDesc:
   logging.info('Parsing gn desc...')
 
-  command = ['gn', 'desc', '.', '//*:*', '--format=json']
+  command = [gn, 'desc', '.', '//*:*', '--format=json']
   gn_desc = subprocess.Popen(
       command, stdout=subprocess.PIPE, cwd=out_dir, encoding='utf-8')
   assert gn_desc.stdout is not None
@@ -981,6 +1014,7 @@ def _generate_tidy_actions(
           target=target,
           in_dir=command.directory,
           flags=command.command,
+          flags_use_cl_driver_mode=command.is_clang_cl_command,
       )
       actions[tidy_action].append(src_file)
 
@@ -997,8 +1031,10 @@ def _run_all_tidy_actions(
     tidy_actions: List[_TidyAction],
     run_tidy_action: Callable[[str, Optional[str], _TidyAction],
                               Tuple[Optional[int], str, List[_TidyDiagnostic]]],
-    tidy_jobs: int, clang_tidy_binary: str, clang_tidy_checks: Optional[str],
-    use_threads: bool
+    tidy_jobs: int,
+    clang_tidy_binary: str,
+    clang_tidy_checks: Optional[str],
+    use_threads: bool,
 ) -> Tuple[Set[_TidyAction], Set[_TidyAction], Set[_TidyDiagnostic]]:
   """Runs a series of tidy actions, returning the status of all of that.
 
@@ -1016,6 +1052,8 @@ def _run_all_tidy_actions(
       explicit check list will be passed.
     use_threads: if True, we'll use a threadpool. Opts for a process pool
       otherwise.
+    use_cl_driver_mode: if True, we'll instruct clang-tidy to parse compiler
+      flags with cl (windows) compatibility.
 
   Returns:
     - A set of _TidyActions where tidy died with a non-zero exit code.
@@ -1319,6 +1357,19 @@ def main():
       help="An explicit value for clang-tidy's -checks=${foo} argument. If "
       'none is provided, clang-tidy will gather a check list from '
       '.clang-tidy files in the source tree.')
+  parser.add_argument(
+      '--gn',
+      default='gn',
+      help='The location of `gn`. This is directly used as argv[0], so '
+      '--gn=gn performs appropriate $PATH lookups.')
+  # Have this be a flag so it's easier to verify that we pick up the intended
+  # value on builders, and so we can more easily cross-OS-compile in the
+  # future.
+  parser.add_argument(
+      '--windows',
+      action='store_true',
+      help='Enable clang-cl-compatibility mode. When this is specified, this '
+      'script will expect compile_commands to use clang-cl arguments.')
   args = parser.parse_args()
 
   base_path = os.path.realpath(args.base_path)
@@ -1339,6 +1390,8 @@ def main():
   out_dir = os.path.abspath(args.out_dir)
   findings_file = os.path.abspath(args.findings_file)
   clang_tidy_binary = os.path.abspath(args.clang_tidy_binary)
+  gn = args.gn
+  is_windows = args.windows
 
   if args.all:
     only_src_files = None
@@ -1352,7 +1405,7 @@ def main():
       if not os.path.isfile(src_file):
         sys.exit('Provided src_file at %r does not exist' % src_file)
 
-  compile_commands_location = _generate_compile_commands(out_dir)
+  compile_commands_location = _generate_compile_commands(out_dir, gn)
 
   def run_ninja(out_dir, phony_targets, object_targets):
     return _run_ninja(
@@ -1368,8 +1421,8 @@ def main():
         only_src_files,
         run_ninja,
         _parse_ninja_deps,
-        gn_desc=_parse_gn_desc(out_dir, base_path),
-        compile_commands=list(_parse_compile_commands(f)))
+        gn_desc=_parse_gn_desc(out_dir, base_path, gn),
+        compile_commands=list(_parse_compile_commands(f, clang_cl=is_windows)))
 
   if logging.getLogger().isEnabledFor(logging.DEBUG):
     logging.debug('Plan to tidy %s.', [x.target for x in tidy_actions])
