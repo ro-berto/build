@@ -23,6 +23,9 @@ def RunSteps(api):
     api.squashfs.mksquashfs('some/folder', 'out.squash',
                             api.properties['compression_algorithm'],
                             api.properties['compression_level'])
+  if 'block_size' in api.properties:
+    api.squashfs.mksquashfs(
+        'some/folder', 'out.squash', block_size=api.properties['block_size'])
   api.squashfs.mksquashfs('some/folder', 'out.squash')
 
 
@@ -34,6 +37,10 @@ def GenTests(api):
       api.properties(compression_algorithm='zstd', compression_level=22),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation))
+
+  yield api.test('block_size', api.properties(block_size='256K'),
+                 api.post_process(post_process.StatusSuccess),
+                 api.post_process(post_process.DropExpectation))
 
   yield api.test('fail_on_windows', api.platform('win', 64),
                  api.post_process(post_process.StatusFailure),

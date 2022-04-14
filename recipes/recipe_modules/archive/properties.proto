@@ -39,7 +39,19 @@ message ArchiveDirRename {
   string to_dir = 2;
 }
 
-// Next id: 16
+// Next id: 3
+message SquashfsParams {
+  // If not set, it will use default compression algorithm gzip.
+  // Currently this can only be set to 'zstd'.
+  string algorithm = 1;
+  // Set the block_size. If not set, it will use default value 128K.
+  // Example value: 256K, 1M.
+  // Source of truth:
+  // https://github.com/plougher/squashfs-tools/blob/4.5.1/README-4.5.1#L250
+  string block_size = 2;
+}
+
+// Next id: 17
 message ArchiveData {
   // A list of relative paths to files that should be archived. All files are
   // relative to the build directory, which is passed alongside this proto to
@@ -155,10 +167,14 @@ message ArchiveData {
   }
   ArchiveType archive_type = 5;
 
+  // [Deprecated] Please use squashfs_params instead.
   // Only set this when archive_type is ARCHIVE_TYPE_SQUASHFS.
   // If not set, it will use default compression algorithm gzip.
   // Currently this can only be set to 'zstd'.
   string squashfs_algorithm = 15;
+
+  // Only set this when archive_type is ARCHIVE_TYPE_SQUASHFS.
+  SquashfsParams squashfs_params = 16;
 
   // When set, system will update the latest file.
   // Example:

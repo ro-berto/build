@@ -18,6 +18,7 @@ def ProcessOptions():
       '--compression-algorithm', help='Optional. Set compression algorithm.')
   argparser.add_argument(
       '--compression-level', help='Optional. Set compression level.')
+  argparser.add_argument('--block-size', help='Optional. Set block size.')
   args = argparser.parse_args()
   return args
 
@@ -28,6 +29,8 @@ def Mksquashfs(binary_path, args):
     invoke_args.extend(['-comp', args.compression_algorithm])
   if args.compression_level:
     invoke_args.extend(['-Xcompression-level', args.compression_level])
+  if args.block_size:
+    invoke_args.extend(['-b', args.block_size])
   subprocess.check_call(invoke_args)
 
 

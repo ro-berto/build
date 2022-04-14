@@ -1006,12 +1006,18 @@ class ArchiveApi(recipe_api.RecipeApi):
       gcs_args += ['-R']
     elif archive_data.archive_type == ArchiveData.ARCHIVE_TYPE_SQUASHFS:
       archive_file = self.m.path.mkdtemp().join('image.squash')
-      if archive_data.squashfs_algorithm == 'zstd':
+      algorithm = None
+      compression_level = None
+      block_size = None
+      if (archive_data.squashfs_params.algorithm == 'zstd' or
+          archive_data.squashfs_algorithm == 'zstd'):
+        algorithm = archive_data.squashfs_params.algorithm
         # We just set compression_level to 22(highest).
-        self.m.squashfs.mksquashfs(base_path, archive_file,
-                                   archive_data.squashfs_algorithm, 22)
-      else:
-        self.m.squashfs.mksquashfs(base_path, archive_file)
+        compression_level = 22
+      if archive_data.squashfs_params.block_size:
+        block_size = archive_data.squashfs_params.block_size
+      self.m.squashfs.mksquashfs(base_path, archive_file, algorithm,
+                                 compression_level, block_size)
       uploads = {archive_file: gcs_path}
     else:
       archive_file = self._create_zip_archive_for_upload(

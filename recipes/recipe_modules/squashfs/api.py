@@ -19,7 +19,8 @@ class SquashfsApi(recipe_api.RecipeApi):
                  folder_path,
                  output_file_path,
                  compression_algorithm=None,
-                 compression_level=None):
+                 compression_level=None,
+                 block_size=None):
     """Archive a folder to a file using squashfs format.
 
     Args:
@@ -56,5 +57,7 @@ class SquashfsApi(recipe_api.RecipeApi):
       invoke_args.extend(['--compression-algorithm', compression_algorithm])
     if compression_level:
       invoke_args.extend(['--compression-level', str(compression_level)])
+    if block_size:
+      invoke_args.extend(['--block-size', block_size])
     self.m.build.python('mksquashfs', self.resource('squashfs_invoke.py'),
                         invoke_args)
