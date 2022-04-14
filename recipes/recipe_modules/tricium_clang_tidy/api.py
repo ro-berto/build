@@ -109,11 +109,21 @@ class _SourceFileComments(object):
       yield subcategory, message + suffix + failure_suffix, line_number, ()
 
 
-def _parse_tidy_diagnostic(diagnostic, diagnostic_name):
+def _fix_win_file_path(file_path):
+  return file_path.replace('\\', '/')
+
+
+def _parse_tidy_diagnostic(diagnostic, diagnostic_name, is_windows):
   """Parses a single clang-tidy diagnostic into tricium-amenable messages."""
+  if is_windows:
+    fix_file_path = _fix_win_file_path
+  else:
+    fix_file_path = lambda x: x
+
   base_message = diagnostic['message']
   base_line_number = diagnostic['line_number']
-  base_file_path = diagnostic['file_path']
+  base_file_path = fix_file_path(diagnostic['file_path'])
+
   yield (
       base_message,
       base_line_number,
@@ -136,18 +146,21 @@ def _parse_tidy_diagnostic(diagnostic, diagnostic_name):
         base_file_path,
         base_line_number,
     )
-    yield message, note['line_number'], note['file_path'], note[
-        'expansion_locs']
+    yield message, note['line_number'], fix_file_path(
+        note['file_path']), note['expansion_locs']
 
 
 class TriciumClangTidyApi(RecipeApi):
 
-  def lint_source_files(self, output_dir, file_paths):
+  def lint_source_files(self, output_dir, file_paths, is_windows=False):
     """Runs clang-tidy on provided source files in file_paths, then writes
     warnings to Tricium.
 
     file_paths is an interable of Path, only files that exist and have C/C++
     extensions will be linted.
+
+    is_windows is a boolean; if true, we'll expect build commands to use
+    clang-cl, and use windows-compatible linting.
     """
     src_file_suffixes = {'.cc', '.cpp', '.cxx', '.c', '.h', '.hpp'}
     affected = [
@@ -166,7 +179,7 @@ class TriciumClangTidyApi(RecipeApi):
     with self.m.step.nest('clang-tidy'):
       with self.m.step.nest('generate-warnings'):
         per_file_comments = self._generate_clang_tidy_comments(
-            output_dir, affected)
+            output_dir, affected, is_windows)
 
       for file_path, comments in per_file_comments.items():
         for category, message, line_number, suggestions in comments:
@@ -181,7 +194,7 @@ class TriciumClangTidyApi(RecipeApi):
 
     self.m.tricium.write_comments()
 
-  def _generate_clang_tidy_comments(self, output_dir, file_paths):
+  def _generate_clang_tidy_comments(self, output_dir, file_paths, is_windows):
     clang_tidy_location = self.m.context.cwd.join(*_clang_tidy_path)
     per_file_comments = collections.defaultdict(_SourceFileComments)
 
@@ -196,9 +209,22 @@ class TriciumClangTidyApi(RecipeApi):
         '--base_path=%s' % self.m.context.cwd,
         '--ninja_jobs=%s' % self.m.goma.recommended_goma_jobs,
         '--verbose',
-        '--',
     ]
+
+    if is_windows:
+      # We need to call gn.exe on these builders.
+      tricium_clang_tidy_command += (
+          '--gn=' + str(self.m.context.cwd.join('buildtools', 'win', 'gn.exe')),
+          '--windows',
+      )
+
+    tricium_clang_tidy_command.append('--')
     tricium_clang_tidy_command += file_paths
+
+    if is_windows:
+      fix_file_path = _fix_win_file_path
+    else:
+      fix_file_path = lambda x: x
 
     ninja_path = {'PATH': [self.m.path.dirname(self.m.depot_tools.ninja_path)]}
     with self.m.context(env_suffixes=ninja_path):
@@ -212,17 +238,17 @@ class TriciumClangTidyApi(RecipeApi):
         'failed_tidy_files') or clang_tidy_output.get('timed_out_src_files'):
       self.m.step.active_result.presentation.status = 'WARNING'
 
-    for file_path in clang_tidy_output.get('failed_src_files', []):
-      per_file_comments[file_path].note_build_failed()
+    for file_path in clang_tidy_output.get('failed_src_files', ()):
+      per_file_comments[fix_file_path(file_path)].note_build_failed()
 
-    for file_path in clang_tidy_output.get('failed_tidy_files', []):
-      per_file_comments[file_path].note_tidy_failed()
+    for file_path in clang_tidy_output.get('failed_tidy_files', ()):
+      per_file_comments[fix_file_path(file_path)].note_tidy_failed()
 
-    for file_path in clang_tidy_output.get('timed_out_src_files', []):
-      per_file_comments[file_path].note_tidy_timed_out()
+    for file_path in clang_tidy_output.get('timed_out_src_files', ()):
+      per_file_comments[fix_file_path(file_path)].note_tidy_timed_out()
 
-    for diagnostic in clang_tidy_output.get('diagnostics', []):
-      file_path = diagnostic['file_path']
+    for diagnostic in clang_tidy_output.get('diagnostics', ()):
+      file_path = fix_file_path(diagnostic['file_path'])
       assert file_path, ("Empty paths should've been filtered "
                          "by tricium_clang_tidy: %s" % diagnostic)
 
@@ -252,16 +278,17 @@ class TriciumClangTidyApi(RecipeApi):
       #
       # Because all messages have the same diagnostic, we attach the same set
       # of replacements to each message.
-      for message, line, file_path, expansions in _parse_tidy_diagnostic(
-          diagnostic, diag_name):
-        if expansions:
+      for message, line, file_path, raw_expansions in _parse_tidy_diagnostic(
+          diagnostic, diag_name, is_windows=is_windows):
+        if raw_expansions:
           # Expansions are emitted by clang-tidy (thus tricium_clang_tidy) such
           # that item [i] "invokes" the expansion of [i+1]. So the last item in
           # this list should tell us where the original macro definition is.
-          e = expansions[-1]
+          e = raw_expansions[-1]
           # FIXME(gbiv): In general, notes should be handled here, as well. It's
           # unclear how to do so cleanly.
-          per_file_comments[e['file_path']].add_macro_expanded_tidy_diagnostic(
+          fp = fix_file_path(e['file_path'])
+          per_file_comments[fp].add_macro_expanded_tidy_diagnostic(
               message, e['line_number'], diag_name, suggestions, file_path,
               line)
         else:
