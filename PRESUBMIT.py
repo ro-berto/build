@@ -104,7 +104,9 @@ def GetFilesToSkip(input_api):
 
 
 def join(input_api, *args):
-  return input_api.os_path.join(input_api.PresubmitLocalPath(), *args)
+  return input_api.os_path.normpath(
+      input_api.os_path.join(input_api.PresubmitLocalPath(), *args)
+  )
 
 
 def CheckPylintOnCommit(input_api, output_api):
@@ -145,13 +147,65 @@ def CheckPylintOnCommit(input_api, output_api):
   return lints
 
 
-def CheckTestsOnCommit(input_api, output_api):
-  tests = []
+def _GetTests(input_api, output_api, test_files):
+  python3_only_files = set(join(input_api, f) for f in PYTHON3_ONLY_FILES)
+  non_python3_test_files = []
+  python3_test_files = []
+  for t in sorted(test_files):
+    if t in python3_only_files:
+      python3_test_files.append(t)
+    else:
+      non_python3_test_files.append(t)
 
-  test_suffix = '_test.py'
-  python3_only_tests = set(
-      join(input_api, f) for f in PYTHON3_ONLY_FILES if f.endswith(test_suffix)
+  tests = []
+  tests.extend(
+      input_api.canned_checks.GetUnitTests(
+          input_api,
+          output_api,
+          non_python3_test_files,
+      )
   )
+  tests.extend(
+      input_api.canned_checks.GetUnitTests(
+          input_api,
+          output_api,
+          python3_test_files,
+          run_on_python2=False,
+          run_on_python3=True,
+          skip_shebang_check=True,
+      )
+  )
+  return tests
+
+
+# The following tests invoke recipes.py which isn't safe in parallel, so they'll
+# be run in a separate check function that runs them sequentially
+RECIPES_PY_TESTS = [
+    'recipes/unittests/recipe_test.py',
+    (
+        'recipes/recipe_modules/chromium_tests_builder_config/migration/'
+        'scripts/tests/generate_groupings_integration_test.py'
+    ),
+    (
+        'recipes/recipe_modules/chromium_tests_builder_config/migration/'
+        'scripts/tests/migrate_integration_test.py'
+    ),
+]
+
+
+def _RecipesPyTestFiles(input_api):
+  return [join(input_api, f) for f in RECIPES_PY_TESTS]
+
+
+def CheckRecipesPyTestsOnCommit(input_api, output_api):
+  tests = _GetTests(input_api, output_api, _RecipesPyTestFiles(input_api))
+  return input_api.RunTests(tests, parallel=False)
+
+
+def CheckTestsOnCommit(input_api, output_api):
+  excluded_test_files = set(_RecipesPyTestFiles(input_api))
+
+  test_files = []
   for dir_glob in (
       ('recipes', 'unittests'),
       ('scripts', 'common', 'unittests'),
@@ -162,44 +216,14 @@ def CheckTestsOnCommit(input_api, output_api):
       ('recipes', 'recipes', '*.resources'),
       ('recipes', 'recipes', '*', '*.resources'),
   ):
-    glob = dir_glob + ('*' + test_suffix,)
-    test_files = [
+    glob = dir_glob + ('*_test.py',)
+    test_files.extend(
         x for x in input_api.glob(join(input_api, *glob))
-        if x not in python3_only_tests
-    ]
-    tests.extend(
-        input_api.canned_checks.GetUnitTests(input_api, output_api, test_files)
+        if x not in excluded_test_files
     )
 
-  if python3_only_tests:
-    tests.extend(
-        input_api.canned_checks.GetUnitTests(
-            input_api,
-            output_api,
-            sorted(python3_only_tests),
-            run_on_python2=False,
-            run_on_python3=True,
-            skip_shebang_check=True,
-        )
-    )
-
-  # Fetch recipe dependencies once in serial so that we don't hit a race
-  # condition where multiple tests are trying to fetch at once.
-  output = input_api.RunTests([
-      input_api.Command(
-          name='recipes fetch',
-          cmd=[
-              input_api.python_executable,
-              input_api.os_path.join('recipes', 'recipes.py'), 'fetch'
-          ],
-          kwargs={},
-          message=output_api.PresubmitError,
-      )
-  ])
-  # Run the tests.
-  output.extend(input_api.RunTests(tests))
-
-  return output
+  tests = _GetTests(input_api, output_api, test_files)
+  return input_api.RunTests(tests)
 
 
 def CheckPanProjectChecksOnCommit(input_api, output_api):
