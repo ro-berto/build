@@ -73,12 +73,10 @@ class WebRTCApi(recipe_api.RecipeApi):
 
   def apply_bot_config(self, builder_id, builder_config):
     self.m.chromium_tests.configure_build(builder_config)
-
     if self.m.tryserver.is_tryserver:
       self.m.chromium.apply_config('trybot_flavor')
 
     if builders.BUILDERS_DB[builder_id].perf_id:
-      assert not self.m.tryserver.is_tryserver
       assert self.m.chromium.c.BUILD_CONFIG == 'Release', (
           'Perf tests should only be run with Release builds.')
     if builders.BUILDERS_DB[builder_id].execution_mode == builder_spec.TEST:
@@ -93,13 +91,8 @@ class WebRTCApi(recipe_api.RecipeApi):
     affected_files = self.m.chromium_checkout.get_files_affected_by_patch(
         relative_to=patch_root, cwd=self.m.path['checkout'])
 
-    # If the main DEPS file has been changed by the current CL, skip the
-    # analyze step and build/test everything. This is needed in order to
-    # have safe Chromium Rolls since from the GN point of view, a DEPS
-    # change doesn't affect anything.
-    # The CI bots can rebuild everything; they're less time sensitive than
-    # trybots.
-    if 'DEPS' in affected_files or not self.m.tryserver.is_tryserver:
+    # CI bots can rebuild everything; they're less time sensitive than trybots.
+    if not self.m.tryserver.is_tryserver:
       # Perf testers are a special case; they only need the catapult protos.
       spec = builders.BUILDERS_DB[builder_id]
       if spec.execution_mode == builder_spec.TEST and spec.perf_id:
