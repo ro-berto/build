@@ -34,38 +34,52 @@ class GenerateGroupingsIntegrationTest(unittest.TestCase):
       self.maxDiff = None
       self.assertEqual(
           data, {
-              'migration.testing:foo': [
-                  'migration.testing:foo', 'migration.testing:foo-x-tests',
-                  'migration.testing:foo-y-tests',
-                  'tryserver.migration.testing:foo'
-              ],
-              'migration.testing:foo-x-tests': [
-                  'migration.testing:foo', 'migration.testing:foo-x-tests',
-                  'migration.testing:foo-y-tests',
-                  'tryserver.migration.testing:foo'
-              ],
-              'migration.testing:foo-y-tests': [
-                  'migration.testing:foo', 'migration.testing:foo-x-tests',
-                  'migration.testing:foo-y-tests',
-                  'tryserver.migration.testing:foo'
-              ],
-              'tryserver.migration.testing:foo': [
-                  'migration.testing:foo', 'migration.testing:foo-x-tests',
-                  'migration.testing:foo-y-tests',
-                  'tryserver.migration.testing:foo'
-              ],
-              'migration.testing:bar': [
-                  'migration.testing:bar', 'migration.testing:bar-tests',
-                  'tryserver.migration.testing:bar'
-              ],
-              'migration.testing:bar-tests': [
-                  'migration.testing:bar', 'migration.testing:bar-tests',
-                  'tryserver.migration.testing:bar'
-              ],
-              'tryserver.migration.testing:bar': [
-                  'migration.testing:bar', 'migration.testing:bar-tests',
-                  'tryserver.migration.testing:bar'
-              ],
+              'migration.testing:foo': {
+                  'builders': [
+                      'migration.testing:foo', 'migration.testing:foo-x-tests',
+                      'migration.testing:foo-y-tests',
+                      'tryserver.migration.testing:foo'
+                  ],
+              },
+              'migration.testing:foo-x-tests': {
+                  'builders': [
+                      'migration.testing:foo', 'migration.testing:foo-x-tests',
+                      'migration.testing:foo-y-tests',
+                      'tryserver.migration.testing:foo'
+                  ],
+              },
+              'migration.testing:foo-y-tests': {
+                  'builders': [
+                      'migration.testing:foo', 'migration.testing:foo-x-tests',
+                      'migration.testing:foo-y-tests',
+                      'tryserver.migration.testing:foo'
+                  ],
+              },
+              'tryserver.migration.testing:foo': {
+                  'builders': [
+                      'migration.testing:foo', 'migration.testing:foo-x-tests',
+                      'migration.testing:foo-y-tests',
+                      'tryserver.migration.testing:foo'
+                  ],
+              },
+              'migration.testing:bar': {
+                  'builders': [
+                      'migration.testing:bar', 'migration.testing:bar-tests',
+                      'tryserver.migration.testing:bar'
+                  ],
+              },
+              'migration.testing:bar-tests': {
+                  'builders': [
+                      'migration.testing:bar', 'migration.testing:bar-tests',
+                      'tryserver.migration.testing:bar'
+                  ],
+              },
+              'tryserver.migration.testing:bar': {
+                  'builders': [
+                      'migration.testing:bar', 'migration.testing:bar-tests',
+                      'tryserver.migration.testing:bar'
+                  ],
+              },
           })
 
   def test_validate_groupings(self):

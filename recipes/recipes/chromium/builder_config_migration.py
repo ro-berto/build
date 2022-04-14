@@ -20,6 +20,7 @@ from recipe_engine import post_process
 from RECIPE_MODULES.build import chromium
 from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 from RECIPE_MODULES.build import proto_validation
+from RECIPE_MODULES.build.attr_utils import attrs, attrib, sequence
 from RECIPE_MODULES.build.chromium import BuilderId
 
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
@@ -115,7 +116,12 @@ def _groupings_operation(api, groupings_operation):
 
   json = {}
   for b, grouping in groupings_by_builder_id.items():
-    json[str(b)] = [str(b2) for b2 in sorted(grouping)]
+    grouping_json = {
+        'builders': [str(b2) for b2 in sorted(grouping.builder_ids)],
+    }
+    if grouping.blockers:
+      grouping_json['blockers'] = sorted(grouping.blockers)
+    json[str(b)] = grouping_json
   output = api.json.dumps(json, indent=2, separators=(',', ': '))
 
   # Include log during the tests so that the expectation file is easier to
@@ -161,26 +167,29 @@ def _migration_operation(api, migration_operation):
     grouping = groupings_by_builder_id.get(builder_id)
     if grouping is None:
       return _failure("unknown builder '{}'".format(builder_id))
-    to_migrate.update(grouping)
+    if grouping.blockers:
+      return _failure(
+          "The grouping for '{}'"
+          " cannot be migrated for the following reasons:{}".format(
+              builder_id,
+              "".join("\n  {}".format(b) for b in sorted(grouping.blockers))))
+    to_migrate.update(grouping.builder_ids)
 
   builder_db = api.chromium_tests_builder_config.builder_db
   try_db = api.chromium_tests_builder_config.try_db
 
   output = _OutputCollector()
 
-  try:
-    for builder_id in sorted(to_migrate):
-      output.add_line(str(builder_id))
-      with output.increase_indent(''):
-        builder_spec = builder_db.get(builder_id)
-        if builder_spec is not None:
-          output.add_lines(_migrate_builder_spec(builder_id, builder_spec))
+  for builder_id in sorted(to_migrate):
+    output.add_line(str(builder_id))
+    with output.increase_indent(''):
+      builder_spec = builder_db.get(builder_id)
+      if builder_spec is not None:
+        output.add_lines(_migrate_builder_spec(builder_spec))
 
-        try_spec = try_db.get(builder_id)
-        if try_spec is not None:
-          output.add_lines(_migrate_try_spec(try_spec))
-  except MigrationError as e:
-    return _failure(e.summary)
+      try_spec = try_db.get(builder_id)
+      if try_spec is not None:
+        output.add_lines(_migrate_try_spec(try_spec))
 
   output_path = api.path.abspath(migration_operation.output_path)
   api.file.write_text('src-side snippets', output_path, '\n'.join(output.lines))
@@ -209,20 +218,10 @@ _UNSUPPORTED_ATTRS = (
 )
 
 
-class MigrationError(Exception):
-
-  def __init__(self, summary):
-    super(MigrationError, self).__init__(summary)
-    self.summary = summary
-
-
-def _migrate_builder_spec(builder_id, builder_spec):
-  output = _OutputCollector()
-
+def _builder_spec_migration_blocker(builder_id, builder_spec):
   if builder_spec.execution_mode == ctbc.PROVIDE_TEST_SPEC:
-    raise MigrationError(
-        "cannot migrate builder '{}' with {} execution_mode".format(
-            builder_id, builder_spec.execution_mode))
+    return "cannot migrate builder '{}' with {} execution_mode".format(
+        builder_id, builder_spec.execution_mode)
 
   invalid_attrs = [
       a for a in _UNSUPPORTED_ATTRS
@@ -235,7 +234,13 @@ def _migrate_builder_spec(builder_id, builder_spec):
     ]
     for a in invalid_attrs:
       message.append('* {}'.format(a))
-    raise MigrationError('\n'.join(message))
+    return '\n'.join(message)
+
+  return None
+
+
+def _migrate_builder_spec(builder_spec):
+  output = _OutputCollector()
 
   output.add_line('builder_spec = builder_config.builder_spec(')
   with output.increase_indent('),'):
@@ -391,10 +396,21 @@ def _migrate_try_spec(try_spec):
   return output.lines
 
 
+class Grouping(object):
+
+  def __init__(self):
+    self.builder_ids = set()
+    self.blockers = set()
+
+  def merge(self, other):
+    self.builder_ids.update(other.builder_ids)
+    self.blockers.update(other.blockers)
+
+
 def _compute_groupings(api, builder_filter=None):
   builder_filter = builder_filter or (lambda _: True)
 
-  groupings_by_builder_id = collections.defaultdict(set)
+  groupings_by_builder_id = collections.defaultdict(Grouping)
 
   def check_included(related_ids, step_name):
     included_by_builder_id = {}
@@ -414,22 +430,26 @@ def _compute_groupings(api, builder_filter=None):
             for builder_id, included in included_by_builder_id.items()
         ])
 
-  def update_groupings(builder_id, related_ids):
+  def update_groupings(builder_id, related_ids, blocker=None):
     grouping = groupings_by_builder_id[builder_id]
-    grouping.add(builder_id)
+    grouping.builder_ids.add(builder_id)
+    if blocker is not None:
+      grouping.blockers.add(blocker)
     for related_id in related_ids:
       related_grouping = groupings_by_builder_id[related_id]
-      related_grouping.add(related_id)
-      grouping.update(related_grouping)
-      for connected_id in related_grouping:
+      related_grouping.builder_ids.add(related_id)
+      grouping.merge(related_grouping)
+      for connected_id in related_grouping.builder_ids:
         groupings_by_builder_id[connected_id] = grouping
 
   builder_db = api.chromium_tests_builder_config.builder_db
   for builder_id, child_ids in builder_db.builder_graph.items():
     included = check_included([builder_id] + sorted(child_ids),
                               'invalid children for {}'.format(builder_id))
+    builder_spec = builder_db[builder_id]
+    blocker = _builder_spec_migration_blocker(builder_id, builder_spec)
     if included:
-      update_groupings(builder_id, child_ids)
+      update_groupings(builder_id, child_ids, blocker)
 
   try_db = api.chromium_tests_builder_config.try_db
   for try_id, try_spec in try_db.items():
@@ -447,6 +467,79 @@ def _compute_groupings(api, builder_filter=None):
 
 
 def GenTests(api):
+  expected_groupings = textwrap.dedent("""\
+      {
+        "migration.bar:bar-builder": {
+          "builders": [
+            "migration.bar:bar-builder",
+            "migration.bar:bar-tests",
+            "tryserver.migration.bar:bar-try-builder"
+          ]
+        },
+        "migration.bar:bar-tests": {
+          "builders": [
+            "migration.bar:bar-builder",
+            "migration.bar:bar-tests",
+            "tryserver.migration.bar:bar-try-builder"
+          ]
+        },
+        "migration.foo:foo-builder": {
+          "blockers": [
+            "cannot migrate builder 'migration.foo:foo-x-tests' with \
+provide-test-spec execution_mode"
+          ],
+          "builders": [
+            "migration.foo:foo-builder",
+            "migration.foo:foo-x-tests",
+            "migration.foo:foo-y-tests",
+            "tryserver.migration.foo:foo-try-builder"
+          ]
+        },
+        "migration.foo:foo-x-tests": {
+          "blockers": [
+            "cannot migrate builder 'migration.foo:foo-x-tests' with \
+provide-test-spec execution_mode"
+          ],
+          "builders": [
+            "migration.foo:foo-builder",
+            "migration.foo:foo-x-tests",
+            "migration.foo:foo-y-tests",
+            "tryserver.migration.foo:foo-try-builder"
+          ]
+        },
+        "migration.foo:foo-y-tests": {
+          "blockers": [
+            "cannot migrate builder 'migration.foo:foo-x-tests' with \
+provide-test-spec execution_mode"
+          ],
+          "builders": [
+            "migration.foo:foo-builder",
+            "migration.foo:foo-x-tests",
+            "migration.foo:foo-y-tests",
+            "tryserver.migration.foo:foo-try-builder"
+          ]
+        },
+        "tryserver.migration.bar:bar-try-builder": {
+          "builders": [
+            "migration.bar:bar-builder",
+            "migration.bar:bar-tests",
+            "tryserver.migration.bar:bar-try-builder"
+          ]
+        },
+        "tryserver.migration.foo:foo-try-builder": {
+          "blockers": [
+            "cannot migrate builder 'migration.foo:foo-x-tests' with \
+provide-test-spec execution_mode"
+          ],
+          "builders": [
+            "migration.foo:foo-builder",
+            "migration.foo:foo-x-tests",
+            "migration.foo:foo-y-tests",
+            "tryserver.migration.foo:foo-try-builder"
+          ]
+        }
+      }""")
+
   yield api.test(
       'groupings',
       api.properties(
@@ -470,8 +563,7 @@ def GenTests(api):
                       ctbc.BuilderSpec.create(),
                   'foo-x-tests':
                       ctbc.BuilderSpec.create(
-                          execution_mode=ctbc.TEST,
-                          parent_buildername='foo-builder',
+                          execution_mode=ctbc.PROVIDE_TEST_SPEC,
                       ),
                   'foo-y-tests':
                       ctbc.BuilderSpec.create(
@@ -522,6 +614,9 @@ def GenTests(api):
           }),
       ),
       api.post_check(post_process.StatusSuccess),
+      api.post_check(lambda check, steps: \
+          check(expected_groupings in steps['groupings'].cmd)),
+      api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
@@ -606,7 +701,7 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
 
-  expected_contents = textwrap.dedent("""\
+  expected_snippets = textwrap.dedent("""\
       bar-group:bar-builder
           builder_spec = builder_config.builder_spec(
               gclient_config = builder_config.gclient_config(
@@ -821,7 +916,7 @@ def GenTests(api):
       ),
       api.post_check(post_process.StatusSuccess),
       api.post_check(lambda check, steps: \
-          check(expected_contents in steps['src-side snippets'].cmd)),
+          check(expected_snippets in steps['src-side snippets'].cmd)),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -871,7 +966,7 @@ def GenTests(api):
       ),
       api.post_check(post_process.StatusException),
       api.post_check(
-          post_process.ResultReason,
+          post_process.ResultReasonRE,
           ("cannot migrate builder 'foo-group:foo-builder' "
            "with provide-test-spec execution_mode"),
       ),
@@ -912,22 +1007,22 @@ def GenTests(api):
       ),
       api.post_check(post_process.StatusException),
       api.post_check(
-          post_process.ResultReason,
+          post_process.ResultReasonRE,
           textwrap.dedent("""\
-              cannot migrate builder 'foo-group:foo-builder' with the \
+              \s*cannot migrate builder 'foo-group:foo-builder' with the \
 following unsupported attrs:
-              * set_output_commit
-              * archive_build
-              * gs_bucket
-              * gs_build_name
-              * cf_archive_build
-              * cf_gs_bucket
-              * cf_gs_acl
-              * cf_archive_name
-              * cf_archive_subdir_suffix
-              * bisect_archive_build
-              * bisect_gs_bucket
-              * bisect_gs_extra""")),
+              \s*\\* set_output_commit
+              \s*\\* archive_build
+              \s*\\* gs_bucket
+              \s*\\* gs_build_name
+              \s*\\* cf_archive_build
+              \s*\\* cf_gs_bucket
+              \s*\\* cf_gs_acl
+              \s*\\* cf_archive_name
+              \s*\\* cf_archive_subdir_suffix
+              \s*\\* bisect_archive_build
+              \s*\\* bisect_gs_bucket
+              \s*\\* bisect_gs_extra""")),
       api.post_process(post_process.DropExpectation),
   )
 
