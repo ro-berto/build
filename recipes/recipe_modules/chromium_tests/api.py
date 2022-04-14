@@ -118,10 +118,24 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     ]
     return ':'.join(set(new_boards))
 
-  def configure_build(self, builder_config, use_rts=False):
+  def configure_build(self, builder_config, use_rts=False, test_only=False):
+    """Configure the modules that will be used by chromium_tests code.
+
+    Args:
+      builder_config - The BuilderConfig instance that defines the
+        configuration to use for the various modules.
+      use_rts - Whether or not RTS is being used, which determins if the
+        RTS model is downloaded.
+      test_only - Whether or not the builder is just triggering tests.
+        If the builder is not performing compilation, then some
+        inapplicable validation is disabled. By default, the compilation
+        validation is skipped only if the builder config's
+        execution_mode is TEST.
+    """
+    test_only = test_only or builder_config.execution_mode == ctbc.TEST
     self.m.chromium.set_config(
         builder_config.chromium_config,
-        TEST_ONLY=builder_config.execution_mode == ctbc.TEST,
+        TEST_ONLY=test_only,
         **builder_config.chromium_config_kwargs)
 
     self.m.gclient.set_config(builder_config.gclient_config)

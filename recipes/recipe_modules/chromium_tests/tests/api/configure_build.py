@@ -16,22 +16,29 @@ DEPS = [
     'chromium_tests_builder_config',
     'depot_tools/gclient',
     'recipe_engine/assertions',
+    'recipe_engine/platform',
     'recipe_engine/properties',
 ]
 
 PROPERTIES = {
+    'test_only': Property(kind=bool, default=None),
     'expected_gclient_vars': Property(kind=Dict(), default={}),
 }
 
 
-def RunSteps(api, expected_gclient_vars):
+def RunSteps(api, test_only, expected_gclient_vars):
   _, builder_config = api.chromium_tests_builder_config.lookup_builder()
-  api.chromium_tests.configure_build(builder_config)
+  kwargs = {}
+  if test_only is not None:
+    kwargs['test_only'] = test_only
+  api.chromium_tests.configure_build(builder_config, **kwargs)
   for k, v in expected_gclient_vars.items():
     api.assertions.assertEqual(v, api.gclient.c.solutions[0].custom_vars.get(k))
 
 
 def GenTests(api):
+  ctbc_api = api.chromium_tests_builder_config
+
   yield api.test(
       'android_apply_config',
       api.chromium_tests_builder_config.ci_build(
@@ -181,6 +188,79 @@ def GenTests(api):
                       ),
               },
           })),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'target-platform-incompatible-with-host-platform',
+      api.platform('linux', 64),
+      api.chromium.generic_build(
+          builder_group='fake-group',
+          builder='fake-tester',
+      ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-tester',
+              builder_spec=ctbc.BuilderSpec.create(
+                  gclient_config='chromium',
+                  chromium_config='chromium',
+                  chromium_config_kwargs={
+                      'TARGET_PLATFORM': 'mac',
+                  },
+              ),
+          ).assemble()),
+      api.expect_exception('BadConf'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'tester-target-platform-incompatible-with-host-platform',
+      api.platform('linux', 64),
+      api.chromium.generic_build(
+          builder_group='fake-group',
+          builder='fake-tester',
+      ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+              builder_spec=ctbc.BuilderSpec.create(
+                  gclient_config='chromium',
+                  chromium_config='chromium',
+                  chromium_config_kwargs={
+                      'TARGET_PLATFORM': 'mac',
+                  },
+              ),
+          ).with_parent(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'test-only-override',
+      api.platform('linux', 64),
+      api.chromium.generic_build(
+          builder_group='fake-group',
+          builder='fake-builder',
+      ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+              builder_spec=ctbc.BuilderSpec.create(
+                  gclient_config='chromium',
+                  chromium_config='chromium',
+                  chromium_config_kwargs={
+                      'TARGET_PLATFORM': 'mac',
+                  },
+              ),
+          ).assemble()),
+      api.properties(test_only=True),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
