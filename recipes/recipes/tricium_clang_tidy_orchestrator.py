@@ -19,12 +19,22 @@ DEPS = [
     'recipe_engine/json',
     'recipe_engine/platform',
     'recipe_engine/step',
+    'recipe_engine/swarming',
     'recipe_engine/tricium',
 ]
 
-# TODO(crbug.com/1153919): These are largely redundant; find a better subset
-# of builders to start with.
-_CHILD_BUILDERS = ('linux-clang-tidy-dbg', 'linux-clang-tidy-rel')
+# TODO(crbug.com/1153919): Figure out which subset of these are the best
+# trade-off between coverage/cost and enable them.
+_CHILD_BUILDERS = (
+    #'android-clang-tidy-rel',
+    'linux-chromeos-clang-tidy-rel',
+    'linux-clang-tidy-rel',
+    #'linux-lacros-clang-tidy-rel',
+    #'fuchsia-clang-tidy-rel',
+    #'ios-clang-tidy-rel',
+    #'mac-clang-tidy-rel',
+    #'win10-clang-tidy-rel',
+)
 
 # This is a comment emitted by tricium. The intent is for it to have all of the
 # information that can possibly be passed to api.tricium.add_comment.
@@ -130,7 +140,11 @@ def RunSteps(api):
   # spawn N-1 children and do the build locally for the Nth configuration?
   with api.step.nest('schedule tidy builds'):
     build_requests = [
-        api.buildbucket.schedule_request(x) for x in _CHILD_BUILDERS
+        api.buildbucket.schedule_request(
+            x,
+            swarming_parent_run_id=api.swarming.task_id,
+            tags=api.buildbucket.tags(**{'hide-in-gerrit': 'true'}),
+        ) for x in _CHILD_BUILDERS
     ]
     builds = api.buildbucket.schedule(build_requests, step_name='schedule')
     build_ids = [x.id for x in builds]
