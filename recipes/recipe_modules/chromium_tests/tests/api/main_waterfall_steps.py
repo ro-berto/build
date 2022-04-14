@@ -218,6 +218,8 @@ def RunSteps(api, fail_compile):
 
 
 def GenTests(api):
+  ctbc_api = api.chromium_tests_builder_config
+
   yield api.test(
       'builder',
       api.chromium_tests_builder_config.ci_build(
@@ -255,6 +257,43 @@ def GenTests(api):
               'gtest_tests': ['base_unittests'],
           },
       }),
+  )
+
+  yield api.test(
+      'mac-thin-tester',
+      api.platform('linux', 64),
+      api.chromium.ci_build(builder_group='fake-group', builder='fake-tester'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+              builder_spec=ctbc.BuilderSpec.create(
+                  gclient_config='chromium',
+                  chromium_config='chromium',
+                  chromium_config_kwargs={
+                      'TARGET_PLATFORM': 'mac',
+                  },
+              ),
+          ).with_parent(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
+      api.properties(swarm_hashes={
+          'base_unittests': '[dummy hash for base_unittests/size]'
+      }),
+      api.chromium_tests.read_source_side_spec(
+          'fake-group', {
+              'fake-tester': {
+                  'gtest_tests': [{
+                      'test': 'base_unittests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True,
+                      }
+                  }],
+              },
+          }),
+      api.post_check(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
   )
 
   def check_gs_url_equals(check, steps, dest, expected):

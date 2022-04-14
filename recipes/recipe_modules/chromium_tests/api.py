@@ -2147,6 +2147,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # Make the chromium config that the parent would use
     parent_chromium_config = self.m.chromium.make_config(
         parent_builder_spec.chromium_config,
+        # Set TEST_ONLY so that it doesn't validate the builder's
+        # TARGET_PLATFORM against the tester's HOST_PLATFORM
+        TEST_ONLY=True,
         **parent_builder_spec.chromium_config_kwargs)
     for c in parent_builder_spec.chromium_apply_config:
       self.m.chromium.apply_config(c, parent_chromium_config)
