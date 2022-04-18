@@ -67,6 +67,7 @@ def _config(name,
 # //infra/config/subprojects/chromium/ci/chromium.chromiumos.star
 # * chromeos-amd64-generic-rel
 # * chromeos-arm-generic-rel
+# * chromeos-kevin-rel
 
 SPEC.update([
     _config(
@@ -117,11 +118,5 @@ SPEC.update([
         cros_boards='arm-generic',
         target_arch='arm',
         target_bits=32),
-    _config(
-        'chromeos-kevin-rel',
-        cros_boards='kevin',
-        target_arch='arm',
-        target_bits=32,
-        gclient_apply_config=['arm']),
     _config('linux-cfm-rel'),
 ])

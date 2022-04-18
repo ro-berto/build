@@ -877,13 +877,6 @@
       "tryserver.chromium.chromiumos:chromeos-arm-generic-dbg"
     ]
   },
-  "chromium.chromiumos:chromeos-kevin-rel": {
-    "builders": [
-      "chromium.chromiumos:chromeos-kevin-rel",
-      "tryserver.chromium.chromiumos:chromeos-kevin-compile-rel",
-      "tryserver.chromium.chromiumos:chromeos-kevin-rel"
-    ]
-  },
   "chromium.chromiumos:lacros-amd64-generic-binary-size-rel": {
     "builders": [
       "chromium.chromiumos:lacros-amd64-generic-binary-size-rel"
@@ -5351,20 +5344,6 @@
     "builders": [
       "chromium.chromiumos:chromeos-arm-generic-dbg",
       "tryserver.chromium.chromiumos:chromeos-arm-generic-dbg"
-    ]
-  },
-  "tryserver.chromium.chromiumos:chromeos-kevin-compile-rel": {
-    "builders": [
-      "chromium.chromiumos:chromeos-kevin-rel",
-      "tryserver.chromium.chromiumos:chromeos-kevin-compile-rel",
-      "tryserver.chromium.chromiumos:chromeos-kevin-rel"
-    ]
-  },
-  "tryserver.chromium.chromiumos:chromeos-kevin-rel": {
-    "builders": [
-      "chromium.chromiumos:chromeos-kevin-rel",
-      "tryserver.chromium.chromiumos:chromeos-kevin-compile-rel",
-      "tryserver.chromium.chromiumos:chromeos-kevin-rel"
     ]
   },
   "tryserver.chromium.chromiumos:gpu-fyi-try-chromeos-amd64-generic": {
