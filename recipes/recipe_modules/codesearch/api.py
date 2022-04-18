@@ -228,11 +228,12 @@ class CodesearchApi(recipe_api.RecipeApi):
     args = [
         '--checkout_dir', self.m.path['checkout'], '--path_to_compdb',
         self.c.compile_commands_json_file, '--path_to_gn_targets',
-        self.c.gn_targets_json_file, '--path_to_java_kzips',
-        self.c.javac_extractor_output_dir or self.m.path.mkdtemp(),
-        '--path_to_archive_output',
+        self.c.gn_targets_json_file, '--path_to_archive_output',
         self.c.out_path.join(index_pack_kythe_name), '--corpus', self.c.CORPUS
     ]
+
+    if self.c.javac_extractor_output_dir:
+      args.extend(['--path_to_java_kzips', self.c.javac_extractor_output_dir])
 
     # If out_path is /path/to/src/out/foo and
     # self.m.path['checkout'] is /path/to/src/,

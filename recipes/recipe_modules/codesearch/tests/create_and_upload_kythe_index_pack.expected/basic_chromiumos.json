@@ -229,8 +229,6 @@
       "[START_DIR]/src/out/linux/compile_commands.json",
       "--path_to_gn_targets",
       "[START_DIR]/src/out/linux/gn_targets.json",
-      "--path_to_java_kzips",
-      "[CLEANUP]/tmp_tmp_1",
       "--path_to_archive_output",
       "[START_DIR]/src/out/linux/chromiumos_linux.kzip",
       "--corpus",

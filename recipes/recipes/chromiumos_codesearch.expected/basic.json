@@ -402,8 +402,6 @@
       "[CACHE]/builder/chromiumos/src/out/amd64-generic/compile_commands.json",
       "--path_to_gn_targets",
       "[CACHE]/builder/chromiumos/src/out/amd64-generic/gn_targets.json",
-      "--path_to_java_kzips",
-      "[CLEANUP]/tmp_tmp_2",
       "--path_to_archive_output",
       "[CACHE]/builder/chromiumos/src/out/amd64-generic/chromiumos_amd64-generic.kzip",
       "--corpus",
