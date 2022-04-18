@@ -123,6 +123,11 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
         }
     }
 
+    remove_src_checkout_experiment = False
+    if ('remove_src_checkout_experiment' in
+        self.m.buildbucket.build.input.experiments):
+      remove_src_checkout_experiment = True
+
     gitiles_commit = None
     root_solution_revision = None
     patch_repo_head_revision = None
@@ -132,11 +137,12 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
 
     if gerrit_change_project == 'chromium/src':
       patch_repo_head_revision = src_head_revision
-      gitiles_commit = common_pb.GitilesCommit(
-          host=self.m.tryserver.gerrit_change_repo_host,
-          project=self.m.tryserver.gerrit_change.project,
-          ref=src_ref,
-          id=src_head_revision)
+      if not remove_src_checkout_experiment:
+        gitiles_commit = common_pb.GitilesCommit(
+            host=self.m.tryserver.gerrit_change_repo_host,
+            project=self.m.tryserver.gerrit_change.project,
+            ref=src_ref,
+            id=src_head_revision)
     else:
       patch_repo_head_revision, _ = self.m.gitiles.log(
           self.m.tryserver.gerrit_change_repo_url,
@@ -147,20 +153,18 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
       patch_repo_head_revision = patch_repo_head_revision[0]['commit']
       root_solution_revision = src_head_revision
 
-      compilator_properties['root_solution_revision'] = root_solution_revision
-      compilator_properties['deps_revision_overrides'] = {
-          gclient_soln_name: patch_repo_head_revision
-      }
+      if not remove_src_checkout_experiment:
+        compilator_properties['root_solution_revision'] = root_solution_revision
+        compilator_properties['deps_revision_overrides'] = {
+            gclient_soln_name: patch_repo_head_revision
+        }
 
     self.m.gclient.c.revisions[gclient_soln_name] = patch_repo_head_revision
 
-    remove_src_checkout_experiment = False
-    if ('remove_src_checkout_experiment' in
-        self.m.buildbucket.build.input.experiments):
-      remove_src_checkout_experiment = True
-
     # Pass in any RTS mode input props
     compilator_properties.update(self.m.cq.props_for_child_build)
+    if remove_src_checkout_experiment:
+      self.m.chromium_bootstrap.update_trigger_properties(compilator_properties)
 
     request = self.m.buildbucket.schedule_request(
         builder=self.compilator,
@@ -315,9 +319,7 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
         gitiles_commit=gitiles_commit,
         tags=self.m.buildbucket.tags(**{'hide-in-gerrit': 'pointless'}),
         experiments={
-            'remove_src_checkout_experiment':
-                ('remove_src_checkout_experiment' in
-                 self.m.buildbucket.build.input.experiments)
+            'remove_src_checkout_experiment': remove_src_checkout_experiment
         })
 
     wo_build = self.m.buildbucket.schedule(

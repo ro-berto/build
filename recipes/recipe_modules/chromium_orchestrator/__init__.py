@@ -9,6 +9,7 @@ PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 DEPS = [
     'builder_group',
     'chromium',
+    'chromium_bootstrap',
     'chromium_checkout',
     'chromium_swarming',
     'chromium_tests',

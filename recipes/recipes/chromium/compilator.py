@@ -56,8 +56,15 @@ def compilator_steps(api, properties):
 
   report_parent_orchestrator_build(api, properties)
 
-  if not api.buildbucket.gitiles_commit.id and not (
-      properties.deps_revision_overrides and properties.root_solution_revision):
+  remove_src_checkout_experiment = False
+  if ('remove_src_checkout_experiment' in
+      api.buildbucket.build.input.experiments):
+    remove_src_checkout_experiment = True
+
+  if (not remove_src_checkout_experiment and
+      not api.buildbucket.gitiles_commit.id and
+      not (properties.deps_revision_overrides and
+           properties.root_solution_revision)):
     raise api.step.InfraFailure(
         'Compilator requires gitiles_commit or deps_revision_overrides to know'
         ' which revision to check out')
@@ -78,11 +85,8 @@ def compilator_steps(api, properties):
     # so that the orchestrator can retry these swarming tests without patch
     use_rts, _ = api.chromium_tests.get_quickrun_options(orch_builder_config)
 
-    remove_src_checkout_experiment = False
     additional_compile_targets = None
-    if ('remove_src_checkout_experiment' in
-        api.buildbucket.build.input.experiments):
-      remove_src_checkout_experiment = True
+    if remove_src_checkout_experiment:
       additional_compile_targets = [ORCHESTRATOR_ALL_TARGET_NAME]
 
     if properties.swarming_targets:
@@ -386,6 +390,23 @@ def GenTests(api):
                   builder_name='fake-orchestrator',
                   builder_group='fake-try-group'))),
       api.post_process(post_process.StatusException),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'missing_gitiles_commit_and_deps_revision_overrides_with_experiment',
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-compilator',
+          experiments=['remove_src_checkout_experiment']),
+      api.platform.name('linux'),
+      ctbc_properties(),
+      api.properties(
+          InputProperties(
+              orchestrator=InputProperties.Orchestrator(
+                  builder_name='fake-orchestrator',
+                  builder_group='fake-try-group'))),
+      api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
 
