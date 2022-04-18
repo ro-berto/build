@@ -1130,12 +1130,6 @@ class ArchiveApi(recipe_api.RecipeApi):
       temp_dir = self.m.path.mkdtemp()
       output_file = temp_dir.join('latest.txt')
       self.m.file.write_text('Write latest file', output_file, content_ascii)
-      # TODO(crbug/1262407): Consolidate this after fully migrated.
-      self.m.gsutil.upload(
-          output_file,
-          bucket=gcs_bucket,
-          dest=latest_path,
-          name="upload {}".format(latest_path))
       if archive_data.latest_upload.gcs_bucket:
         latest_gcs_bucket = archive_data.latest_upload.gcs_bucket
         self.m.gsutil.upload(
@@ -1143,6 +1137,12 @@ class ArchiveApi(recipe_api.RecipeApi):
             bucket=latest_gcs_bucket,
             dest=latest_path,
             name="upload {}/{}".format(latest_gcs_bucket, latest_path))
+      else:
+        self.m.gsutil.upload(
+            output_file,
+            bucket=gcs_bucket,
+            dest=latest_path,
+            name="upload {}".format(latest_path))
 
     # Generates a REVISIONS file
     if archive_data.HasField('revisions_file'):
