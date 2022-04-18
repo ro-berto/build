@@ -1011,7 +1011,10 @@ class ArchiveApi(recipe_api.RecipeApi):
       block_size = None
       if (archive_data.squashfs_params.algorithm == 'zstd' or
           archive_data.squashfs_algorithm == 'zstd'):
-        algorithm = archive_data.squashfs_params.algorithm
+        if archive_data.squashfs_params.algorithm:
+          algorithm = archive_data.squashfs_params.algorithm
+        else:
+          algorithm = archive_data.squashfs_algorithm
         # We just set compression_level to 22(highest).
         compression_level = 22
       if archive_data.squashfs_params.block_size:
