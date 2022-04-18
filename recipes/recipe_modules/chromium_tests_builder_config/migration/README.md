@@ -173,7 +173,8 @@ builder configs out of this repo and into the src-side repos and scripts.
     1. Land the cherry-pick. If the only changes from the initial patchset are
        in generated properties files, you can use Rubber Stamper to land the
        cherry-pick by adding the src-side-builder-config hashtag. The hashtag
-       must be added before adding Rubber Stamper as a reviewer.
+       must be added before adding Rubber Stamper as a reviewer. See
+       <https://crrev.com/c/3588931> for an example.
 
 1. Land the chromium/tools/build CL from step #2.
 
