@@ -203,10 +203,6 @@ _UNSUPPORTED_ATTRS = (
 
     # The use of all of these fields should be replaced with the use of
     # the archive module
-    'archive_build',
-    'gs_bucket',
-    'gs_acl',
-    'gs_build_name',
     'cf_archive_build',
     'cf_gs_bucket',
     'cf_gs_acl',
@@ -989,9 +985,6 @@ provide-test-spec execution_mode"
                   'foo-builder':
                       ctbc.BuilderSpec.create(
                           set_output_commit=False,
-                          archive_build=True,
-                          gs_bucket='fake-gs-bucket',
-                          gs_build_name='fake-gs-build-name',
                           cf_archive_build=True,
                           cf_gs_bucket='fake-cf-gs-bucket',
                           cf_gs_acl='fake-cf-gs-acl',
@@ -1012,9 +1005,6 @@ provide-test-spec execution_mode"
               \s*cannot migrate builder 'foo-group:foo-builder' with the \
 following unsupported attrs:
               \s*\\* set_output_commit
-              \s*\\* archive_build
-              \s*\\* gs_bucket
-              \s*\\* gs_build_name
               \s*\\* cf_archive_build
               \s*\\* cf_gs_bucket
               \s*\\* cf_gs_acl

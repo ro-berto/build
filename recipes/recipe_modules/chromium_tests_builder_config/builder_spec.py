@@ -66,12 +66,6 @@ class BuilderSpec(object):
           "The following fields are ignored unless 'execution_mode' is {!r}: {}"
           .format(COMPILE_AND_TEST, invalid_attrs))
 
-    if not kwargs.get('archive_build'):
-      invalid_attrs = get_filtered_attrs('gs_bucket', 'gs_acl', 'gs_build_name')
-      assert not invalid_attrs, (
-          'The following fields are ignored unless '
-          "'archive_build' is set to True: {}".format(invalid_attrs))
-
     if not kwargs.get('cf_archive_build'):
       invalid_attrs = get_filtered_attrs('cf_gs_bucket', 'cf_archive_name',
                                          'cf_gs_acl',
@@ -181,19 +175,6 @@ class BuilderSpec(object):
   # chromium recipe. Only set this value if something other than a triggered
   # chromium builder needs to use the isolates created during a build execution.
   expose_trigger_properties = attrib(bool, default=False)
-
-  # A bool controlling whether to archive the build outputs
-  archive_build = attrib(bool, default=None)
-  # The bucket to archive the build to
-  # Must be provided when archive_build is True
-  # Cannot be provided when archive_build is not True
-  gs_bucket = attrib(str, default=None)
-  # The ACL to apply to the archived build
-  # Cannot be provided when archive_build is not True
-  gs_acl = attrib(str, default=None)
-  # The build name to apply to the archived build
-  # cannot be provided when archive_build is not True
-  gs_build_name = attrib(str, default=None)
 
   # A bool controlling whether to archive the build outputs for Clusterfuzz
   cf_archive_build = attrib(bool, default=False)
