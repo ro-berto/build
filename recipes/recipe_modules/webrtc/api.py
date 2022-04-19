@@ -34,7 +34,7 @@ def _replace_string_in_dict(dict_input, old, new):
 
 
 def _get_isolated_targets(tests):
-  return [t.canonical_name for t in tests or [] if t.runs_on_swarming]
+  return [t.canonical_name for t in tests if t.runs_on_swarming]
 
 
 def _get_test_targets_from_config(targets_config, phase):
@@ -48,11 +48,6 @@ def _get_test_targets_from_config(targets_config, phase):
 def _is_triggering_perf_tests(builder_id, builder_config):
   to_trigger = builder_config.builder_db.builder_graph[builder_id]
   return any(builders.BUILDERS_DB[b].perf_id for b in to_trigger)
-
-
-def _get_builders_to_trigger(builder_id, builder_config):
-  to_trigger = builder_config.builder_db.builder_graph[builder_id]
-  return sorted(set(b.builder for b in to_trigger))
 
 
 class WebRTCApi(recipe_api.RecipeApi):
@@ -180,7 +175,7 @@ class WebRTCApi(recipe_api.RecipeApi):
         builder_id,
         phase=phase,
         mb_path=self.m.path['checkout'].join('tools_webrtc', 'mb'),
-        isolated_targets=_get_isolated_targets(tests))
+        isolated_targets=_get_isolated_targets(tests or []))
 
   def isolate(self, builder_id, builder_config, tests):
     if builders.BUILDERS_DB[builder_id].execution_mode == builder_spec.TEST:
@@ -336,13 +331,12 @@ class WebRTCApi(recipe_api.RecipeApi):
         tests, enable_infra_failure=True)
     return test_runner()
 
-  def trigger_child_builds(self, builder_id, builder_config):
+  def trigger_child_builds(self, builder_id, builder_config, update_step):
     # If the builder is triggered by pinpoint, don't trigger any bots.
     if any('pinpoint_job_id' in t.key for t in self.m.buildbucket.build.tags):
       return
 
-    to_trigger = _get_builders_to_trigger(builder_id, builder_config)
-    if to_trigger:
+    if _is_triggering_perf_tests(builder_id, builder_config):
       # Replace ISOLATED_OUTDIR by WILL_BE_ISOLATED_OUTDIR to prevent
       # the variable to be expanded by the builder instead of the tester.
       swarming_command_lines = _replace_string_in_dict(
@@ -351,13 +345,9 @@ class WebRTCApi(recipe_api.RecipeApi):
           'WILL_BE_ISOLATED_OUTDIR',
       )
       properties = {
-          'revision': self.revision,
-          'parent_got_revision': self.revision,
-          'parent_got_revision_cp': self.revision_cp,
           'swarming_command_lines': swarming_command_lines,
           'swarm_hashes': self.m.isolate.isolated_tests,
       }
-      self.m.scheduler.emit_trigger(
-          self.m.scheduler.BuildbucketTrigger(properties=properties),
-          project='webrtc',
-          jobs=to_trigger)
+      self.m.chromium_tests.trigger_child_builds(
+          builder_id, update_step, builder_config, properties,
+          self.m.buildbucket.gitiles_commit)
