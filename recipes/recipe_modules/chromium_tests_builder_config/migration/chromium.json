@@ -4314,7 +4314,6 @@
   "chromium.win:Win Builder (dbg)": {
     "builders": [
       "chromium.win:Win Builder (dbg)",
-      "chromium.win:Win7 Tests (dbg)(1)",
       "tryserver.chromium.win:win_chromium_compile_dbg_ng"
     ]
   },
@@ -4350,13 +4349,6 @@
       "chromium.win:Win7 Tests (1)",
       "tryserver.chromium.win:win7-rel",
       "tryserver.chromium.win:win_chromium_compile_rel_ng"
-    ]
-  },
-  "chromium.win:Win7 Tests (dbg)(1)": {
-    "builders": [
-      "chromium.win:Win Builder (dbg)",
-      "chromium.win:Win7 Tests (dbg)(1)",
-      "tryserver.chromium.win:win_chromium_compile_dbg_ng"
     ]
   },
   "chromium:android-archive-dbg": {
@@ -6971,7 +6963,6 @@
   "tryserver.chromium.win:win_chromium_compile_dbg_ng": {
     "builders": [
       "chromium.win:Win Builder (dbg)",
-      "chromium.win:Win7 Tests (dbg)(1)",
       "tryserver.chromium.win:win_chromium_compile_dbg_ng"
     ]
   },

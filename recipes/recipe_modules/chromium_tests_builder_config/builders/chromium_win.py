@@ -100,19 +100,6 @@ SPEC = {
             },
             simulation_platform='win',
         ),
-    'Win7 Tests (dbg)(1)':
-        _chromium_win_spec(
-            chromium_config='chromium',
-            chromium_apply_config=['mb'],
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 32,
-            },
-            execution_mode=builder_spec.TEST,
-            parent_buildername='Win Builder (dbg)',
-            simulation_platform='win',
-        ),
     'Win10 Tests x64 (dbg)':
         _chromium_win_spec(
             chromium_config='chromium',
