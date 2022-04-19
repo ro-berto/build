@@ -93,10 +93,12 @@ def GenTests(api):
           builder='Android Compile Perf'),
       api.chromium_tests.read_source_side_spec(
           'chromium.perf', {
-              'Android One Perf': {
+              'android-go-perf': {
                   'isolated_scripts': [{
-                      'isolate_name': 'telemetry_perf_tests',
-                      'name': 'benchmark',
+                      'isolate_name':
+                          'performance_test_suite_android_clank_chrome',
+                      'name':
+                          'performance_test_suite',
                   },],
               },
           }),
@@ -119,10 +121,12 @@ def GenTests(api):
           builder='Android Compile Perf'),
       api.chromium_tests.read_source_side_spec(
           'chromium.perf', {
-              'Android One Perf': {
+              'android-go-perf': {
                   'isolated_scripts': [{
-                      'isolate_name': 'telemetry_perf_tests',
-                      'name': 'benchmark',
+                      'isolate_name':
+                          'performance_test_suite_android_clank_chrome',
+                      'name':
+                          'performance_test_suite',
                   },],
               },
           }),

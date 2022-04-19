@@ -541,11 +541,11 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/chromium.perf.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Android One Perf\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"android-go-perf\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"isolated_scripts\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"isolate_name\": \"telemetry_perf_tests\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"name\": \"benchmark\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"isolate_name\": \"performance_test_suite_android_clank_chrome\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"name\": \"performance_test_suite\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
@@ -747,6 +747,8 @@
       "[CACHE]/builder/src/clank/build/bot/gn_isolate_map.pyl",
       "--isolate-map-file",
       "[CACHE]/builder/src/testing/buildbot/gn_isolate_map.pyl",
+      "--swarming-targets-file",
+      "performance_test_suite_android_clank_chrome\n",
       "//out/Release"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -770,7 +772,9 @@
     "name": "generate_build_files",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
-      "@@@STEP_LOG_END@json.output[failure_summary]@@@"
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@performance_test_suite_android_clank_chrome@@@",
+      "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
     ]
   },
   {
@@ -949,7 +953,8 @@
       "-C",
       "[CACHE]/builder/src/out/Release",
       "-j",
-      "80"
+      "80",
+      "performance_test_suite_android_clank_chrome"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -982,6 +987,7 @@
       "[CACHE]/builder/src/out/Release",
       "-j",
       "80",
+      "performance_test_suite_android_clank_chrome",
       "-d",
       "explain",
       "-n"
@@ -1146,7 +1152,7 @@
       "--ninja-log-outdir",
       "[CACHE]/builder/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Release\", \"-j\", 80]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Release\", \"-j\", 80, \"performance_test_suite_android_clank_chrome\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -1258,6 +1264,217 @@
       }
     },
     "name": "remove compile guard"
+  },
+  {
+    "cmd": [],
+    "name": "install infra/tools/luci/isolate"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[START_DIR]/cipd_tool/infra/tools/luci/isolate/git_revision%3Amock_infra_git_revision"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "install infra/tools/luci/isolate.ensure package directory",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[START_DIR]/cipd_tool/infra/tools/luci/isolate/git_revision%3Amock_infra_git_revision",
+      "-ensure-file",
+      "infra/tools/luci/isolate/${platform} git_revision:mock_infra_git_revision",
+      "-max-threads",
+      "0",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "install infra/tools/luci/isolate.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:moc\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/luci/isolate/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[START_DIR]/cipd_tool/infra/tools/luci/isolate/git_revision%3Amock_infra_git_revision/isolate",
+      "batcharchive",
+      "--dump-json",
+      "/path/to/tmp/json",
+      "--verbose",
+      "-cas-instance",
+      "projects/example-cas-server/instances/default_instance",
+      "-log-level",
+      "debug",
+      "[CACHE]/builder/src/out/Release/performance_test_suite_android_clank_chrome.isolated.gen.json"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "isolate tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"performance_test_suite_android_clank_chrome\": \"[dummy hash for performance_test_suite_android_clank_chrome/dummy size]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@swarm_hashes_refs/heads/main(at){#170242}_without_patch@{\"performance_test_suite_android_clank_chrome\": \"[dummy hash for performance_test_suite_android_clank_chrome/dummy size]\"}@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython3",
+      "-u",
+      "RECIPE_MODULE[build::chromium_tests]/resources/find_command_lines.py",
+      "--build-dir",
+      "[CACHE]/builder/src/out/Release",
+      "--output-json",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "find command lines",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "luci-auth",
+      "token",
+      "-lifetime",
+      "3m"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "get access token for default account"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py",
+      "https://pinpoint-dot-chromeperf.appspot.com/api/isolate",
+      "-i",
+      "{\"builder_name\": \"Android Compile Perf\", \"change\": \"{\\\"commits\\\": [{\\\"git_hash\\\": \\\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\\\", \\\"repository\\\": \\\"chromium\\\"}]}\", \"isolate_map\": \"{\\\"performance_test_suite_android_clank_chrome\\\": \\\"[dummy hash for performance_test_suite_android_clank_chrome/dummy size]\\\"}\", \"isolate_server\": \"projects/example-cas-server/instances/default_instance\"}",
+      "-o",
+      "/path/to/tmp/json",
+      "-t",
+      "extra.secret.token.should.not.be.logged"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "pinpoint isolate upload",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"status_code\": 200@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "name": "$result"
