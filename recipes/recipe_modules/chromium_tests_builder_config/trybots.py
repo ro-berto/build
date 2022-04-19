@@ -8,8 +8,8 @@ TRYBOTS = try_spec.TryDatabase.create({
     'tryserver.blink': {
         'linux-blink-rel':
             try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
-                buildername='linux-blink-rel-dummy',
+                builder_group='tryserver.blink',
+                buildername='linux-blink-rel',
                 retry_failed_shards=False,
             ),
         'linux-blink-optional-highdpi-rel':
@@ -1875,11 +1875,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             ),
     },
     'tryserver.v8': {
-        'v8_linux_blink_rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
-                buildername='linux-blink-rel-dummy',
-            ),
         'v8_linux_chromium_gn_rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='client.v8.fyi',

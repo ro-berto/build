@@ -1715,13 +1715,6 @@
       "tryserver.blink:linux-blink-optional-highdpi-rel"
     ]
   },
-  "chromium.fyi:linux-blink-rel-dummy": {
-    "builders": [
-      "chromium.fyi:linux-blink-rel-dummy",
-      "tryserver.blink:linux-blink-rel",
-      "tryserver.v8:v8_linux_blink_rel"
-    ]
-  },
   "chromium.fyi:linux-blink-v8-sandbox-future-dbg": {
     "builders": [
       "chromium.fyi:linux-blink-v8-sandbox-future-dbg"
@@ -4486,9 +4479,7 @@
   },
   "tryserver.blink:linux-blink-rel": {
     "builders": [
-      "chromium.fyi:linux-blink-rel-dummy",
-      "tryserver.blink:linux-blink-rel",
-      "tryserver.v8:v8_linux_blink_rel"
+      "tryserver.blink:linux-blink-rel"
     ]
   },
   "tryserver.blink:mac10.12-blink-rel": {
@@ -7028,13 +7019,6 @@
     "builders": [
       "chromium:win32-official",
       "tryserver.chromium:win32-official"
-    ]
-  },
-  "tryserver.v8:v8_linux_blink_rel": {
-    "builders": [
-      "chromium.fyi:linux-blink-rel-dummy",
-      "tryserver.blink:linux-blink-rel",
-      "tryserver.v8:v8_linux_blink_rel"
     ]
   }
 }

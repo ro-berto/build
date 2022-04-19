@@ -1212,7 +1212,6 @@ SPEC = {
 }
 
 SPEC.update([
-    stock_config('linux-blink-rel-dummy', staging=False),
     stock_config('linux-blink-optional-highdpi-rel-dummy', staging=False),
     stock_config('mac10.12-blink-rel-dummy', staging=False),
     stock_config('mac10.13-blink-rel-dummy', staging=False),
