@@ -189,7 +189,7 @@ def _migration_operation(api, migration_operation):
 
       try_spec = try_db.get(builder_id)
       if try_spec is not None:
-        output.add_lines(_migrate_try_spec(try_spec))
+        output.add_lines(_migrate_try_spec(builder_id, try_spec))
 
   output_path = api.path.abspath(migration_operation.output_path)
   api.file.write_text('src-side snippets', output_path, '\n'.join(output.lines))
@@ -342,19 +342,21 @@ _SETTINGS_ATTRS = tuple(
     if a.name not in ('mirrors', 'regression_test_selection_recall'))
 
 
-def _migrate_try_spec(try_spec):
+def _migrate_try_spec(builder_id, try_spec):
   output = _OutputCollector()
 
-  output.add_line('mirrors = [')
-  mirrors = set()
-  with output.increase_indent('],'):
-    for m in try_spec.mirrors:
-      if m.builder_id not in mirrors:
-        output.add_line('"ci/{}",'.format(m.builder_id.builder))
-        mirrors.add(m.builder_id)
-      if m.tester_id and m.tester_id not in mirrors:
-        output.add_line('"ci/{}",'.format(m.tester_id.builder))
-        mirrors.add(m.tester_id)
+  mirrors = []
+  for m in try_spec.mirrors:
+    if m.builder_id != builder_id and m.builder_id not in mirrors:
+      mirrors.append(m.builder_id)
+    if m.tester_id and m.tester_id != builder_id and m.tester_id not in mirrors:
+      mirrors.append(m.tester_id)
+
+  if mirrors:
+    output.add_line('mirrors = [')
+    with output.increase_indent('],'):
+      for m in mirrors:
+        output.add_line('"ci/{}",'.format(m.builder))
 
   if any(
       getattr(try_spec, a) != getattr(_DEFAULT_TRY_SPEC, a)
@@ -913,6 +915,58 @@ provide-test-spec execution_mode"
       api.post_check(post_process.StatusSuccess),
       api.post_check(lambda check, steps: \
           check(expected_snippets in steps['src-side snippets'].cmd)),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  expected_standalone_snippet = textwrap.dedent("""\
+      try-group:try-builder
+          builder_spec = builder_config.builder_spec(
+              gclient_config = builder_config.gclient_config(
+                  config = "gclient-config",
+              ),
+              chromium_config = builder_config.chromium_config(
+                  config = "chromium-config",
+              ),
+          ),
+          try_settings = builder_config.try_settings(
+              retry_failed_shards = False,
+          ),
+      """)
+
+  yield api.test(
+      'migration-standalone-try-builder',
+      api.properties(
+          migration_operation={
+              'builders_to_migrate': [{
+                  'builder_group': 'try-group',
+                  'builder': 'try-builder',
+              }],
+              'output_path': '/fake/output/path',
+          }),
+      api.chromium_tests_builder_config.databases(
+          ctbc.BuilderDatabase.create({
+              'try-group': {
+                  'try-builder':
+                      ctbc.BuilderSpec.create(
+                          gclient_config='gclient-config',
+                          chromium_config='chromium-config',
+                      ),
+              },
+          }),
+          ctbc.TryDatabase.create({
+              'try-group': {
+                  'try-builder':
+                      ctbc.TrySpec.create_for_single_mirror(
+                          builder_group='try-group',
+                          buildername='try-builder',
+                          retry_failed_shards=False,
+                      ),
+              },
+          }),
+      ),
+      api.post_check(post_process.StatusSuccess),
+      api.post_check(lambda check, steps: \
+          check(expected_standalone_snippet in steps['src-side snippets'].cmd)),
       api.post_process(post_process.DropExpectation),
   )
 
