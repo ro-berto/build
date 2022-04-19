@@ -6,7 +6,7 @@
 from recipe_engine import post_process
 from PB.recipe_modules.build.chromium_orchestrator.properties import (
     InputProperties)
-from RECIPE_MODULES.depot_tools.tryserver import api as tryserver
+from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 
 PYTHON_VERSION_COMPATIBILITY = "PY3"
 
@@ -18,6 +18,7 @@ DEPS = [
     'depot_tools/tryserver',
     'recipe_engine/cas',
     'recipe_engine/json',
+    'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/step',
 ]
@@ -33,23 +34,20 @@ def RunSteps(api):
 def GenTests(api):
   ctbc_api = api.chromium_tests_builder_config
 
-  def ctbc_properties():
-    return ctbc_api.properties(
-        ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
-            builder_group='fake-group',
-            builder='fake-builder',
-        ).with_mirrored_tester(
-            builder_group='fake-group',
-            builder='fake-tester',
-        ).assemble())
-
   yield api.test(
       'basic',
       api.chromium.try_build(
           builder_group='fake-try-group',
           builder='fake-orchestrator',
       ),
-      ctbc_properties(),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).with_mirrored_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+          ).assemble()),
       api.properties(
           **{
               '$build/chromium_orchestrator':
@@ -71,6 +69,59 @@ def GenTests(api):
           builder_group='fake-group',
           builder='fake-builder',
           tester='fake-tester',
+      ),
+      api.post_process(
+          post_process.StepCommandContains,
+          'install infra/chromium/compilator_watcher.ensure_installed', [
+              '-ensure-file', 'infra/chromium/compilator_watcher/${platform} '
+              'git_revision:e841fc'
+          ]),
+      api.post_process(post_process.MustRun, 'trigger compilator (with patch)'),
+      api.post_process(post_process.MustRun, 'browser_tests (with patch)'),
+      api.post_process(post_process.MustRun,
+                       'downloading cas digest all_test_binaries'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'mac-on-linux',
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-orchestrator',
+      ),
+      api.platform('linux', 64),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+              builder_spec=ctbc.BuilderSpec.create(
+                  gclient_config='chromium',
+                  chromium_config='chromium',
+                  chromium_config_kwargs={
+                      'TARGET_PLATFORM': 'mac',
+                  },
+              )).assemble()),
+      api.properties(
+          **{
+              '$build/chromium_orchestrator':
+                  InputProperties(
+                      compilator='fake-compilator',
+                      compilator_watcher_git_revision='e841fc',
+                  ),
+          }),
+      api.code_coverage(use_clang_coverage=True),
+      api.chromium_orchestrator.override_compilator_steps(),
+      api.chromium_orchestrator.override_compilator_steps(
+          is_swarming_phase=False),
+      api.chromium_orchestrator.fake_head_revision(),
+      api.post_process(post_process.StepCommandContains, 'bot_update',
+                       ['--refs', 'refs/heads/main']),
+      api.post_process(post_process.StepCommandContains, 'bot_update',
+                       ['--patch_ref']),
+      api.chromium_orchestrator.override_test_spec(
+          builder_group='fake-group',
+          builder='fake-builder',
       ),
       api.post_process(
           post_process.StepCommandContains,
