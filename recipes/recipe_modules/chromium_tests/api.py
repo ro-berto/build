@@ -191,12 +191,16 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     else:
       self.m.chromium.runhooks()
 
-  def create_targets_config(self, builder_config, got_revisions):
+  def create_targets_config(self,
+                            builder_config,
+                            got_revisions,
+                            isolated_tests_only=False):
     """
     Args:
       builder_config (BuilderConfig): config for the current builder
       got_revisions (dict): revisions checked out for src and other deps.
         Usually stored in the bot_update step presentation properties.
+      isolated_tests_only (bool): only include targets for isolated tests
 
     Returns: TargetsConfig for current builder
     """
@@ -226,6 +230,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           builder_id.group,
           scripts_compile_targets_fn,
           got_revisions,
+          isolated_tests_only,
       )
       tests[builder_id] = builder_tests
 
@@ -291,7 +296,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def generate_tests_from_source_side_spec(self, source_side_spec, buildername,
                                            builder_group,
                                            scripts_compile_targets_fn,
-                                           got_revisions):
+                                           got_revisions, isolated_tests_only):
     test_specs = []
 
     # TODO(phajdan.jr): Switch everything to scripts generators and simplify.
@@ -303,6 +308,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
               buildername,
               source_side_spec,
               got_revisions,
+              isolated_tests_only,
               scripts_compile_targets_fn=scripts_compile_targets_fn))
 
     tests = []

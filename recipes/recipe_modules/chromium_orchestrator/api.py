@@ -206,7 +206,8 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
     if remove_src_checkout_experiment:
       affected_files = comp_output.affected_files
       targets_config = self.m.chromium_tests.create_targets_config(
-          builder_config, comp_output.got_revisions)
+          builder_config, comp_output.got_revisions, isolated_tests_only=True)
+      self.check_for_non_swarmed_isolated_tests(targets_config.all_tests)
       # This is used to set build properties on swarming tasks
       self.m.chromium.set_build_properties(comp_output.got_revisions)
     else:
@@ -561,3 +562,9 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
     self.report_stats_and_flakiness(tests)
     self.m.chromium_tests.summarize_test_failures(tests)
     self.m.chromium_tests.handle_invalid_test_suites(failing_test_suites)
+
+  def check_for_non_swarmed_isolated_tests(self, tests):
+    for t in tests:
+      if t.uses_isolate and not t.runs_on_swarming:
+        raise self.m.step.StepFailure(
+            '{} is an isolated test but is not swarmed.'.format(t.target_name))

@@ -537,6 +537,66 @@ def GenTests(api):
   )
 
   yield api.test(
+      'non_swarmed_isolated_test',
+      get_try_build(remove_src_checkout_experiment=True),
+      ctbc_properties(),
+      api.properties(
+          **{
+              '$build/chromium_orchestrator':
+                  InputProperties(
+                      compilator='fake-compilator',
+                      compilator_watcher_git_revision='e841fc',
+                  ),
+          }),
+      api.code_coverage(use_clang_coverage=True),
+      api.chromium_orchestrator.override_schedule_compilator_build(),
+      api.chromium_orchestrator.override_compilator_steps(),
+      api.chromium_orchestrator.fake_head_revision(),
+      api.chromium_tests.read_source_side_spec(
+          'fake-group',
+          {
+              'fake-builder': {
+                  'scripts': [{
+                      "isolate_profile_data": True,
+                      "name": "check_static_initializers",
+                      "script": "check_static_initializers.py",
+                      "swarming": {}
+                  }],
+              },
+              'fake-tester': {
+                  'gtest_tests': [{
+                      'name': 'browser_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True,
+                      },
+                      'isolate_coverage_data': True,
+                  },],
+                  'isolated_scripts': [{
+                      'isolate_name': 'angle_unittests',
+                      'name': 'angle_unittests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True,
+                      }
+                  }, {
+                      'isolate_name': 'angle_unittests_no_swarm',
+                      'name': 'angle_unittests_no_swarm',
+                      'swarming': {
+                          'can_use_on_swarming_builders': False,
+                      },
+                  }],
+              },
+          },
+          step_suffix=' (2)',
+      ),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(
+          post_process.ResultReason,
+          'angle_unittests_no_swarm is an isolated test but is not swarmed.',
+      ),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
       'no_tests_to_trigger',
       api.chromium.try_build(
           builder_group='fake-try-group',

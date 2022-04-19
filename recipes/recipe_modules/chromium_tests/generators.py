@@ -181,13 +181,14 @@ def _handle_ci_only(chromium_tests_api, raw_spec, test_spec):
 
 
 def generator_common(chromium_tests_api, raw_test_spec, swarming_delegate,
-                     local_delegate):
+                     local_delegate, isolated_tests_only):
   """Common logic for generating tests from JSON specs.
 
   Args:
     raw_test_spec: the configuration of the test(s) that should be generated.
     swarming_delegate: function to call to create a swarming test.
-    local_delgate: function to call to create a local test.
+    local_delegate: function to call to create a local test.
+    isolated_tests_only: whether to only yield isolated tests.
 
   Yields:
     instances of Test.
@@ -343,7 +344,9 @@ def generator_common(chromium_tests_api, raw_test_spec, swarming_delegate,
       tests.append(swarming_delegate(raw_test_spec, **kwargs))
 
   else:
-    tests.append(local_delegate(raw_test_spec, **kwargs))
+    test = local_delegate(raw_test_spec, isolated_tests_only, **kwargs)
+    if test:
+      tests.append(test)
 
   experiment_percentage = raw_test_spec.get('experiment_percentage')
   for t in tests:
@@ -359,6 +362,7 @@ def generate_gtests(chromium_tests_api,
                     buildername,
                     source_side_spec,
                     got_revisions,
+                    isolated_tests_only,
                     scripts_compile_targets_fn=None):
   del scripts_compile_targets_fn
 
@@ -386,12 +390,13 @@ def generate_gtests(chromium_tests_api,
       generator = generate_gtests_from_one_spec
 
     for test_spec in generator(chromium_tests_api, builder_group, buildername,
-                               raw_spec, got_revisions):
+                               raw_spec, got_revisions, isolated_tests_only):
       yield _handle_ci_only(chromium_tests_api, raw_spec, test_spec)
 
 
 def generate_gtests_from_one_spec(chromium_tests_api, builder_group,
-                                  buildername, raw_test_spec, got_revisions):
+                                  buildername, raw_test_spec, got_revisions,
+                                  isolated_tests_only):
 
   def gtest_delegate_common(raw_test_spec, **kwargs):
     del kwargs
@@ -423,7 +428,9 @@ def generate_gtests_from_one_spec(chromium_tests_api, builder_group,
     kwargs['resultdb'] = attr.evolve(kwargs['resultdb'], result_format='gtest')
     return steps.SwarmingGTestTestSpec.create(**kwargs)
 
-  def gtest_local_delegate(raw_test_spec, **kwargs):
+  def gtest_local_delegate(raw_test_spec, isolated_tests_only, **kwargs):
+    if isolated_tests_only:
+      return
     kwargs.update(gtest_delegate_common(raw_test_spec, **kwargs))
     kwargs['use_xvfb'] = raw_test_spec.get('use_xvfb', True)
 
@@ -436,7 +443,8 @@ def generate_gtests_from_one_spec(chromium_tests_api, builder_group,
     return steps.LocalGTestTestSpec.create(**kwargs)
 
   for t in generator_common(chromium_tests_api, raw_test_spec,
-                            gtest_swarming_delegate, gtest_local_delegate):
+                            gtest_swarming_delegate, gtest_local_delegate,
+                            isolated_tests_only):
     yield t
 
 
@@ -445,7 +453,11 @@ def generate_junit_tests(chromium_tests_api,
                          buildername,
                          source_side_spec,
                          got_revisions,
+                         isolated_tests_only,
                          scripts_compile_targets_fn=None):
+  if isolated_tests_only:
+    return
+
   del got_revisions, scripts_compile_targets_fn
 
   for raw_spec in source_side_spec.get(buildername, {}).get('junit_tests', []):
@@ -468,7 +480,11 @@ def generate_script_tests(chromium_tests_api,
                           buildername,
                           source_side_spec,
                           got_revisions,
+                          isolated_tests_only,
                           scripts_compile_targets_fn=None):
+  if isolated_tests_only:
+    return
+
   # Unused arguments
   del got_revisions
 
@@ -494,20 +510,22 @@ def generate_isolated_script_tests(chromium_tests_api,
                                    buildername,
                                    source_side_spec,
                                    got_revisions,
+                                   isolated_tests_only,
                                    scripts_compile_targets_fn=None):
   del scripts_compile_targets_fn
 
   for raw_spec in source_side_spec.get(buildername,
                                        {}).get('isolated_scripts', []):
     for test_spec in generate_isolated_script_tests_from_one_spec(
-        chromium_tests_api, builder_group, buildername, raw_spec,
-        got_revisions):
+        chromium_tests_api, builder_group, buildername, raw_spec, got_revisions,
+        isolated_tests_only):
       yield _handle_ci_only(chromium_tests_api, raw_spec, test_spec)
 
 
 def generate_isolated_script_tests_from_one_spec(chromium_tests_api,
                                                  builder_group, buildername,
-                                                 raw_test_spec, got_revisions):
+                                                 raw_test_spec, got_revisions,
+                                                 isolated_tests_only):
 
   def isolated_script_delegate_common(test, name=None, **kwargs):
     del kwargs
@@ -568,13 +586,15 @@ def generate_isolated_script_tests_from_one_spec(chromium_tests_api,
 
     return steps.SwarmingIsolatedScriptTestSpec.create(**kwargs)
 
-  def isolated_script_local_delegate(raw_test_spec, **kwargs):
+  def isolated_script_local_delegate(raw_test_spec, isolated_tests_only,
+                                     **kwargs):
     kwargs.update(isolated_script_delegate_common(raw_test_spec, **kwargs))
     return steps.LocalIsolatedScriptTestSpec.create(**kwargs)
 
   for t in generator_common(chromium_tests_api, raw_test_spec,
                             isolated_script_swarming_delegate,
-                            isolated_script_local_delegate):
+                            isolated_script_local_delegate,
+                            isolated_tests_only):
     yield t
 
 
@@ -583,8 +603,11 @@ def generate_skylab_tests(chromium_tests_api,
                           buildername,
                           source_side_spec,
                           got_revisions,
+                          isolated_tests_only,
                           swarming_dimensions=None,
                           scripts_compile_targets_fn=None):
+  if isolated_tests_only:
+    return
   del scripts_compile_targets_fn, swarming_dimensions
 
   def generate_skylab_tests_from_one_spec(builder_group, buildername,
