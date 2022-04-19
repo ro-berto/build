@@ -1496,12 +1496,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium',
                 buildername='win-archive-rel',
             ),
-        'win_chromium_dbg_ng':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.win',
-                buildername='Win Builder (dbg)',
-                tester='Win7 Tests (dbg)(1)',
-            ),
         'win7-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.win',
