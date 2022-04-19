@@ -6,7 +6,6 @@ from .. import builder_spec
 
 
 def _chromium_dawn_spec(os, bits, **kwargs):
-  is_tester = kwargs.get('execution_mode') == builder_spec.TEST
   return builder_spec.BuilderSpec.create(
       chromium_config='chromium',
       chromium_apply_config=['mb'],
@@ -14,12 +13,11 @@ def _chromium_dawn_spec(os, bits, **kwargs):
       chromium_config_kwargs={
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': bits,
-          'TARGET_PLATFORM': os,
       },
-      # The testers are running on linux thin bots regardless the os.
-      simulation_platform='linux' if is_tester else os,
+      simulation_platform=os,
       build_gs_bucket='chromium-dawn-archive',
       **kwargs)
+
 
 def CreateBuilderConfig(os, bits, top_of_tree):
   gclient_apply_config = ['dawn_top_of_tree'] if top_of_tree else []

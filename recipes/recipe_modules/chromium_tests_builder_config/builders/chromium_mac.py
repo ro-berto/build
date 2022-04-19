@@ -130,7 +130,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_ARCH': 'arm',
                 'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'mac',
             },
             simulation_platform='mac',
         ),
@@ -145,12 +144,11 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_ARCH': 'arm',
                 'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'mac',
             },
             execution_mode=builder_spec.TEST,
             parent_builder_group='chromium.mac',
             parent_buildername='mac-arm64-rel',
-            simulation_platform='linux',
+            simulation_platform='mac',
         ),
     'Mac11 Tests (dbg)':
         _chromium_mac_spec(
@@ -162,11 +160,10 @@ SPEC = {
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'mac',
             },
             execution_mode=builder_spec.TEST,
             parent_buildername='Mac Builder (dbg)',
-            simulation_platform='linux',
+            simulation_platform='mac',
         ),
     'Mac Builder (dbg)':
         _chromium_mac_spec(
@@ -178,7 +175,6 @@ SPEC = {
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'mac',
             },
             simulation_platform='mac',
         ),

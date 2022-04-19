@@ -6,7 +6,6 @@ from .. import builder_spec
 
 
 def CreateBuilderConfig(platform, config='Release', target_bits=64, **kwargs):
-  is_tester = kwargs.get('execution_mode') == builder_spec.TEST
   bot_config = {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
@@ -14,10 +13,8 @@ def CreateBuilderConfig(platform, config='Release', target_bits=64, **kwargs):
       'chromium_config_kwargs': {
           'BUILD_CONFIG': config,
           'TARGET_BITS': target_bits,
-          'TARGET_PLATFORM': platform,
       },
-      # The testers are running on linux thin bots regardless the platform.
-      'simulation_platform': 'linux' if is_tester else platform,
+      'simulation_platform': platform,
   }
   bot_config.update(**kwargs)
   return builder_spec.BuilderSpec.create(**bot_config)
