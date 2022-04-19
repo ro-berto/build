@@ -25,7 +25,7 @@ class ProfilesApi(recipe_api.RecipeApi):
     # TODO(crbug.com/1076055) - Refactor the code_coverage folder to a common
     # profiles folder
     if not self._merge_scripts_dir:  # pragma: no cover
-      self._merge_scripts_dir = self.m.chromium_checkout.working_dir.join(
+      self._merge_scripts_dir = self.m.chromium_checkout.checkout_dir.join(
           'src', 'testing', 'merge_scripts', 'code_coverage')
     return self._merge_scripts_dir
 

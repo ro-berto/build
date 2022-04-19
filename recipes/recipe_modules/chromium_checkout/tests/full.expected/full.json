@@ -297,7 +297,6 @@
     "cmd": [],
     "name": "details",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@details@working_dir: Path([CACHE], 'builder')@@@",
       "@@@STEP_LOG_LINE@details@affected_files: []@@@",
       "@@@STEP_LOG_END@details@@@"
     ]

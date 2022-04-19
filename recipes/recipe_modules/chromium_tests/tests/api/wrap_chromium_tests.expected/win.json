@@ -12,6 +12,7 @@
       "--target",
       "Release"
     ],
+    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {

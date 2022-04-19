@@ -5,6 +5,7 @@
       "-u",
       "[CACHE]/set_up_script"
     ],
+    "cwd": "[CACHE]/builder",
     "luci_context": {
       "realm": {
         "name": "chromium:ci"
@@ -25,6 +26,7 @@
       "-u",
       "[CACHE]/tear_down_script"
     ],
+    "cwd": "[CACHE]/builder",
     "luci_context": {
       "realm": {
         "name": "chromium:ci"

@@ -35,7 +35,6 @@ def RunSteps(api):
 
   api.step('details', [])
   api.step.active_result.presentation.logs['details'] = [
-    'working_dir: %r' % (api.chromium_checkout.working_dir,),
     'affected_files: %r' % (
         api.chromium_checkout.get_files_affected_by_patch(),),
   ]

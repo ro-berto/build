@@ -15,20 +15,8 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
 
   def __init__(self, input_properties, *args, **kwargs):
     super(ChromiumCheckoutApi, self).__init__(*args, **kwargs)
-    # Keep track of working directory (which contains the checkout).
-    # None means "default value".
-    self._working_dir = None
+
     self._timeout = input_properties.timeout
-
-  # TODO(gbeaty) Switch callers to use checkout_dir
-  @property
-  def working_dir(self):
-    """Returns parent directory of the checkout.
-
-    Requires |ensure_checkout| to be called first.
-    """
-    # TODO(phajdan.jr): assert ensure_checkout has been called.
-    return self._working_dir
 
   @property
   def timeout(self):
@@ -67,8 +55,7 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
     assert patch_root, (
         'local path is not configured for %s' %
             self.m.tryserver.gerrit_change_repo_url)
-    if not cwd and self.working_dir:
-      cwd = self.working_dir.join(patch_root)
+    cwd = cwd or self.checkout_dir.join(patch_root)
     with self.m.context(cwd=cwd):
       files = self.m.tryserver.get_files_affected_by_patch(
           patch_root,
@@ -100,15 +87,13 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
     if self.m.platform.is_win:
       self.m.chromium.taskkill()
 
-    self._working_dir = self.checkout_dir
-
     timeout = int(self.timeout) if self.timeout else timeout
 
     gclient_config = self.m.gclient.c
     self.m.chromium_bootstrap.update_gclient_config(gclient_config)
     self._report_gclient_config(gclient_config)
 
-    with self.m.context(cwd=self._working_dir):
+    with self.m.context(cwd=self.checkout_dir):
       update_step = self.m.bot_update.ensure_checkout(
           gclient_config=gclient_config,
           clobber=bot_config.clobber,

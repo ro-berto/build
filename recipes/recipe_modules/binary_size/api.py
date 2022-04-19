@@ -208,7 +208,7 @@ class BinarySizeApi(recipe_api.RecipeApi):
             staging_dir,
         )
       else:
-        with self.m.context(cwd=self.m.chromium_checkout.working_dir):
+        with self.m.context(cwd=self.m.chromium_checkout.checkout_dir):
           self.m.bot_update.deapply_patch(bot_update_step)
 
         with self.m.context(cwd=self.m.path['checkout']):

@@ -1020,7 +1020,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   @contextlib.contextmanager
   def wrap_chromium_tests(self, builder_config, tests=None):
     with self.m.context(
-        cwd=self.m.chromium_checkout.working_dir or self.m.path['start_dir'],
+        cwd=self.m.chromium_checkout.checkout_dir,
         env=self.m.chromium.get_env()):
       # Some recipes use this wrapper to setup devices and have their own way
       # to run tests. If platform is Android and tests is None, run device
@@ -1049,9 +1049,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         if self.m.platform.is_win:
           self.m.chromium.process_dumps()
 
-        checkout_dir = None
-        if self.m.chromium_checkout.working_dir:
-          checkout_dir = self.m.chromium_checkout.working_dir.join('src')
+        checkout_dir = self.m.chromium_checkout.checkout_dir.join('src')
         if self.m.chromium.c.TARGET_PLATFORM == 'android':
           if require_device_steps:
             self.m.chromium_android.common_tests_final_steps(
@@ -1063,7 +1061,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if self.m.platform.is_win:
       self.m.chromium.taskkill()
 
-    with self.m.context(cwd=self.m.chromium_checkout.working_dir):
+    with self.m.context(cwd=self.m.chromium_checkout.checkout_dir):
       self.m.bot_update.deapply_patch(bot_update_step)
 
     with self.m.context(cwd=self.m.path['checkout']):
@@ -1587,7 +1585,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     return valid, invalid
 
   def deapply_deps(self, bot_update_step):
-    with self.m.context(cwd=self.m.chromium_checkout.working_dir):
+    with self.m.context(cwd=self.m.chromium_checkout.checkout_dir):
       # If tests fail, we want to fix Chromium revision only. Tests will use
       # the dependencies versioned in 'src' tree.
       self.m.bot_update.resolve_fixed_revision(bot_update_step.json.output,

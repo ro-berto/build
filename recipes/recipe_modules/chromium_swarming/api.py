@@ -430,15 +430,12 @@ class SwarmingApi(recipe_api.RecipeApi):
   def merge_script_path(self, name):
     """Returns the path to a merge script.
 
-    This assumes that a chromium checkout exists, and the chromium module is
-    configured correctly.
+    This assumes that the testing/merge_scripts dir exists, and the chromium
+    module is configured correctly.
     """
     path_to_merge_scripts = self.path_to_merge_scripts
     if not path_to_merge_scripts:
-      assert self.m.chromium_checkout.working_dir, (
-          'path_to_merge_scripts must be set or'
-          ' chromium_checkout.ensure_checkout must be called')
-      path_to_merge_scripts = self.m.chromium_checkout.working_dir.join(
+      path_to_merge_scripts = self.m.chromium_checkout.checkout_dir.join(
           'src', 'testing', 'merge_scripts')
     return path_to_merge_scripts.join(name)
 
@@ -1819,7 +1816,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       path_to_merge_scripts: The path to a local directory mirroring
           https://chromium.googlesource.com/chromium/src/+/main/testing/merge_scripts/.
           This is needed for accessing the scripts used for merging outputs. If
-          unset, this module will look at self.m.chromium_checkout.working_dir.
+          unset, this module will look at self.m.chromium_checkout.checkout_dir.
     """
     # Set platform-specific default dims.
     target_platform = self.m.chromium.c.TARGET_PLATFORM
