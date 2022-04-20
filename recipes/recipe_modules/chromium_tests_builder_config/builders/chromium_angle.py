@@ -136,6 +136,7 @@ def CreateBuilderConfig(platform, target_bits, internal):
       chromium_config_kwargs={
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': target_bits,
+          'TARGET_PLATFORM': platform,
       },
       simulation_platform=platform,
   )
@@ -156,8 +157,10 @@ def CreateTesterConfig(platform, target_bits, parent_builder, internal):
       chromium_config_kwargs={
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': target_bits,
+          'TARGET_PLATFORM': platform,
       },
-      simulation_platform=platform,
+      # The testers are running on linux thin bots regardless the platform.
+      simulation_platform='linux',
       execution_mode=builder_spec.TEST,
       parent_buildername=parent_builder,
       serialize_tests=True,

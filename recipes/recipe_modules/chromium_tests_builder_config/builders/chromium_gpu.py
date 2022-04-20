@@ -120,6 +120,7 @@ SPEC = {
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'mac',
             },
             simulation_platform='mac',
         ),
@@ -133,10 +134,11 @@ SPEC = {
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'mac',
             },
             execution_mode=builder_spec.TEST,
             parent_buildername='GPU Mac Builder (dbg)',
-            simulation_platform='mac',
+            simulation_platform='linux',
         ),
     'Mac Retina Debug (AMD)':
         _chromium_gpu_spec(
@@ -148,10 +150,11 @@ SPEC = {
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'mac',
             },
             execution_mode=builder_spec.TEST,
             parent_buildername='GPU Mac Builder (dbg)',
-            simulation_platform='mac',
+            simulation_platform='linux',
         ),
     'Android Release (Nexus 5X)':
         _chromium_gpu_spec(
