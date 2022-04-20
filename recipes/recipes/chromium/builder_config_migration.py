@@ -195,6 +195,39 @@ def _migration_operation(api, migration_operation):
   api.file.write_text('src-side snippets', output_path, '\n'.join(output.lines))
 
 
+_NON_EXISTENT_BUILDERS = tuple(
+    chromium.BuilderId.create_for_group(group, builder)
+    for (group, builder) in (
+        ('chromium.fyi', 'linux-blink-rel-dummy'),
+        ('chromium.fyi', 'linux-blink-optional-highdpi-rel-dummy'),
+        ('chromium.fyi', 'mac10.12-blink-rel-dummy'),
+        ('chromium.fyi', 'mac10.13-blink-rel-dummy'),
+        ('chromium.fyi', 'mac10.14-blink-rel-dummy'),
+        ('chromium.fyi', 'mac10.15-blink-rel-dummy'),
+        ('chromium.fyi', 'mac11.0-blink-rel-dummy'),
+        ('chromium.fyi', 'mac11.0.arm64-blink-rel-dummy'),
+        ('chromium.fyi', 'win7-blink-rel-dummy'),
+        ('chromium.fyi', 'win10.20h2-blink-rel-dummy'),
+        ('chromium.fyi', 'win11-blink-rel-dummy'),
+        ('chromium.fyi', 'WebKit Linux layout_ng_disabled Builder'),
+        ('chromium.gpu.fyi', 'GPU FYI Fuchsia Builder'),
+        ('chromium.gpu.fyi', 'ANGLE GPU Android Release (Nexus 5X)'),
+        ('chromium.gpu.fyi', 'ANGLE GPU Linux Release (Intel HD 630)'),
+        ('chromium.gpu.fyi', 'ANGLE GPU Linux Release (NVIDIA)'),
+        ('chromium.gpu.fyi', 'Optional Android Release (Nexus 5X)'),
+        ('chromium.gpu.fyi', 'Optional Android Release (Pixel 4)'),
+        ('chromium.gpu.fyi', 'Optional Linux Release (Intel HD 630)'),
+        ('chromium.gpu.fyi', 'Optional Linux Release (NVIDIA)'),
+        ('chromium.gpu.fyi', 'Optional Mac Release (Intel)'),
+        ('chromium.gpu.fyi', 'Optional Mac Retina Release (AMD)'),
+        ('chromium.gpu.fyi', 'Optional Mac Retina Release (NVIDIA)'),
+        ('chromium.gpu.fyi', 'Optional Win10 x64 Release (Intel HD 630)'),
+        ('chromium.gpu.fyi', 'Optional Win10 x64 Release (NVIDIA)'),
+
+        # Test value
+        ('non.existent', 'non-existent-builder'),
+    ))
+
 _DEFAULT_BUILDER_SPEC = ctbc.BuilderSpec.create()
 _UNSUPPORTED_ATTRS = (
     # Resolve the issues that requires these attributes, then remove all
@@ -218,6 +251,9 @@ def _builder_spec_migration_blocker(builder_id, builder_spec):
   if builder_spec.execution_mode == ctbc.PROVIDE_TEST_SPEC:
     return "cannot migrate builder '{}' with {} execution_mode".format(
         builder_id, builder_spec.execution_mode)
+
+  if builder_id in _NON_EXISTENT_BUILDERS:
+    return "builder '{}' does not exist".format(builder_id)
 
   invalid_attrs = [
       a for a in _UNSUPPORTED_ATTRS
@@ -614,6 +650,44 @@ provide-test-spec execution_mode"
       api.post_check(post_process.StatusSuccess),
       api.post_check(lambda check, steps: \
           check(expected_groupings in steps['groupings'].cmd)),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  expected_non_existent_groupings = textwrap.dedent("""\
+      {
+        "non.existent:non-existent-builder": {
+          "blockers": [
+            "builder 'non.existent:non-existent-builder' does not exist"
+          ],
+          "builders": [
+            "non.existent:non-existent-builder"
+          ]
+        }
+      }""")
+
+  yield api.test(
+      'non-existent-builder',
+      api.properties(
+          groupings_operation={
+              'output_path':
+                  '/fake/output/path',
+              'builder_group_filters': [
+                  {
+                      'builder_group_regex': r'non\.existent',
+                  },
+              ],
+          }),
+      api.chromium_tests_builder_config.databases(
+          ctbc.BuilderDatabase.create({
+              'non.existent': {
+                  'non-existent-builder': ctbc.BuilderSpec.create(),
+              },
+          }),
+          ctbc.TryDatabase.create({}),
+      ),
+      api.post_check(post_process.StatusSuccess),
+      api.post_check(lambda check, steps: \
+          check(expected_non_existent_groupings in steps['groupings'].cmd)),
       api.post_process(post_process.DropExpectation),
   )
 
