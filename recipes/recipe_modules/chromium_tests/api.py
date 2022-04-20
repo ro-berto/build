@@ -93,31 +93,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     presentation = self.m.step.active_result.presentation
     presentation.logs.setdefault('stdout', []).append(message)
 
-  def fix_cros_boards_gclient_arg(self, cros_boards_with_qemu_images):
-    """Returns a new value for cros_boards if VM-optimizations aren't ready yet.
-
-    Support for 'amd64-generic-vm' was added in crrev.com/c/314085 and rolled
-    into chromium in crrev.com/c/3194491. So to safely swap builders to the new
-    board and avoid breaking older bots on branches, we replace that new board
-    with the old one for m95 and older.
-    FIXME: Remove this when m95 and anything older is no longer tested.
-    """
-    if 'amd64-generic-vm' not in cros_boards_with_qemu_images:
-      return cros_boards_with_qemu_images
-
-    milestone_re = re.match(r'.*-m(\d+)$',
-                            self.m.buildbucket.build.builder.project)
-    if not milestone_re or int(milestone_re.group(1)) > 95:
-      return cros_boards_with_qemu_images
-
-    # cros_boards_with_qemu_images is a colon-joined list of boards, so split,
-    # filter, then re-join.
-    new_boards = cros_boards_with_qemu_images.split(':')
-    new_boards = [
-        'amd64-generic' if b == 'amd64-generic-vm' else b for b in new_boards
-    ]
-    return ':'.join(set(new_boards))
-
   def configure_build(self, builder_config, use_rts=False, test_only=False):
     """Configure the modules that will be used by chromium_tests code.
 
@@ -169,8 +144,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       gclient_solution = self.m.gclient.c.solutions[0]
       if self.m.chromium.c.CROS_BOARDS_WITH_QEMU_IMAGES:
         gclient_solution.custom_vars['cros_boards_with_qemu_images'] = (
-            self.fix_cros_boards_gclient_arg(
-                self.m.chromium.c.CROS_BOARDS_WITH_QEMU_IMAGES))
+            self.m.chromium.c.CROS_BOARDS_WITH_QEMU_IMAGES)
       if self.m.chromium.c.TARGET_CROS_BOARDS:
         gclient_solution.custom_vars['cros_boards'] = (
             self.m.chromium.c.TARGET_CROS_BOARDS)

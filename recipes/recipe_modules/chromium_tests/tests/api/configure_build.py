@@ -111,61 +111,6 @@ def GenTests(api):
   )
 
   yield api.test(
-      'cros-boards-with-non-optimized-qemu-images',
-      api.properties(
-          expected_gclient_vars={
-              'cros_boards_with_qemu_images': 'amd64-generic'
-          },),
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='fake-group',
-          builder='fake-builder',
-          builder_db=ctbc.BuilderDatabase.create({
-              'fake-group': {
-                  'fake-builder':
-                      ctbc.BuilderSpec.create(
-                          chromium_config='chromium',
-                          gclient_config='chromium',
-                          chromium_config_kwargs={
-                              'TARGET_PLATFORM': 'chromeos',
-                              'CROS_BOARDS_WITH_QEMU_IMAGES': 'amd64-generic',
-                          },
-                      ),
-              },
-          })),
-      api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'cros-boards-with-qemu-images-pre-96',
-      api.properties(
-          expected_gclient_vars={
-              'cros_boards_with_qemu_images': 'amd64-generic'
-          },),
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='fake-group',
-          builder='fake-builder',
-          project='chromium-m95',
-          builder_db=ctbc.BuilderDatabase.create({
-              'fake-group': {
-                  'fake-builder':
-                      ctbc.BuilderSpec.create(
-                          chromium_config='chromium',
-                          gclient_config='chromium',
-                          chromium_config_kwargs={
-                              'TARGET_PLATFORM':
-                                  'chromeos',
-                              'CROS_BOARDS_WITH_QEMU_IMAGES':
-                                  'amd64-generic-vm',
-                          },
-                      ),
-              },
-          })),
-      api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
       'reclient',
       api.properties(
           expected_gclient_vars={
