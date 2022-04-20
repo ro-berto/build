@@ -53,6 +53,7 @@ TRYBOT_SPEC = freeze({
     }
 })
 
+# TODO(crbug/1317852): Move properties outside of recipe.
 SPEC = freeze({
     # The builders have the following parameters:
     # - compile_targets: the compile targets.

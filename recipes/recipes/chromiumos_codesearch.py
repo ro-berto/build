@@ -5,10 +5,12 @@
 
 Checks out and builds ChromiumOS for amd64-generic, does some preprocessing for
 package_index, and generates then uploads a KZIP to GS.
-
-TODO(crbug/1284439): Create an initiator recipe that triggers builds for
-multiple boards.
 """
+
+from recipe_engine import config
+from recipe_engine.engine_types import freeze
+from recipe_engine.post_process import StepCommandRE, DropExpectation
+from recipe_engine.recipe_api import Property
 
 PYTHON_VERSION_COMPATIBILITY = 'PY3'
 
@@ -19,16 +21,59 @@ DEPS = [
     'depot_tools/git',
     'depot_tools/gsutil',
     'depot_tools/tryserver',
+    'recipe_engine/buildbucket',
     'recipe_engine/cipd',
     'recipe_engine/context',
     'recipe_engine/file',
     'recipe_engine/path',
+    'recipe_engine/properties',
     'recipe_engine/step',
     'recipe_engine/time',
     'recipe_engine/raw_io',
 ]
 
-SOURCE_REPO = 'https://chromium.googlesource.com/chromiumos/codesearch'
+# TODO(crbug/1284439): Add build_config.
+# TODO(crbug/1317852): Move properties outside of recipe.
+SPEC = freeze({
+    # The builders have the following parameters:
+    # - board: the compile targets.
+    # - corpus: Kythe corpus to specify in the kzip.
+    # - packages: The platform for which the code is compiled.
+    # - sync_generated_files: Whether to sync generated files into a git repo.
+    # - experimental: Whether to mark Kythe uploads as experimental.
+    'builders': {
+        'codesearch-gen-chromiumos-amd64-generic': {
+            'board': 'amd64-generic',
+            'corpus': 'chromium.googlesource.com/chromiumos/codesearch//main',
+            'packages': [
+                'virtual/target-chromium-os',
+                'virtual/target-chromium-os-dev',
+                'virtual/target-chromium-os-factory',
+                'virtual/target-chromium-os-factory-shim',
+                'virtual/target-chromium-os-test',
+            ],
+            # TODO(crbug/1284439): Set sync_generated_files to True and
+            # configure syncing of chroot and out dirs.
+            'sync_generated_files': False,
+            'experimental': False,
+        },
+    },
+})
+
+# TODO(crbug/1284439): Replace timestamp with annealing manifest snapshot.
+PROPERTIES = {
+    'codesearch_mirror_revision':
+        Property(
+            kind=str,
+            help='The revision for codesearch to use for kythe references.',
+            default=None),
+    'codesearch_mirror_revision_timestamp':
+        Property(
+            kind=config.Single((int, float)),
+            help='The commit timestamp of the revision for codesearch to use, '
+            'in seconds since the UNIX epoch.',
+            default=None),
+}
 
 
 def gclient_config(api):
@@ -44,59 +89,24 @@ def gclient_config(api):
   return cfg
 
 
-def get_mirror_hash_and_timestamp(api, checkout_dir):
-  if not api.file.glob_paths('Check for existing checkout', checkout_dir,
-                             'chromiumos_codesearch'):
-    with api.context(cwd=checkout_dir):
-      api.git(
-          'clone',
-          '--depth=1',
-          SOURCE_REPO,
-          'chromiumos_codesearch',
-          name='clone mirror repo')
+def RunSteps(api, codesearch_mirror_revision,
+             codesearch_mirror_revision_timestamp):
+  builder = api.buildbucket.build.builder.builder
+  bot_config = SPEC.get('builders', {}).get(builder)
+  assert bot_config is not None, ('Could not find builder %s in SPEC' % builder)
 
-  with api.context(cwd=checkout_dir.join('chromiumos_codesearch')):
-    api.git('fetch')
-
-    mirror_hash = api.git(
-        'rev-parse',
-        'HEAD',
-        name='fetch mirror hash',
-        stdout=api.raw_io.output_text()).stdout.strip()
-    mirror_unix_timestamp = api.git(
-        'log',
-        '-1',
-        '--format=%ct',
-        'HEAD',
-        name='fetch mirror timestamp',
-        stdout=api.raw_io.output_text()).stdout.strip()
-  return mirror_hash, mirror_unix_timestamp
-
-
-def RunSteps(api):
-  # TODO(crbug/1284439): Parametrize this when using initiator recipe.
-  board = 'amd64-generic'
-  experimental = False
-  sync_generated_files = False
-  corpus = 'chromium.googlesource.com/chromiumos/codesearch//main'
-  packages = [
-      'virtual/target-chromium-os',
-      'virtual/target-chromium-os-dev',
-      'virtual/target-chromium-os-factory',
-      'virtual/target-chromium-os-factory-shim',
-      'virtual/target-chromium-os-test',
-  ]
+  board = bot_config.get('board', 'amd64-generic')
+  corpus = bot_config.get(
+      'corpus', 'chromium.googlesource.com/chromiumos/codesearch//main')
+  packages = bot_config.get('packages', ['virtual/target-chromium-os'])
+  sync_generated_files = bot_config.get('sync_generated_files', False)
+  experimental = bot_config.get('experimental', False)
 
   # Get infra/infra. Checking out infra automatically checks out depot_tools.
   cache_dir = api.path['cache'].join('builder')
   with api.context(cwd=cache_dir):
     api.bot_update.ensure_checkout(
         gclient_config=gclient_config(api), set_output_commit=False)
-
-  # Get the hash and timestamp of the mirror repo before repo sync.
-  mirror_hash, mirror_unix_timestamp = get_mirror_hash_and_timestamp(
-      api, cache_dir)
-
   depot_tools_dir = cache_dir.join('depot_tools')
 
   # Set up and build ChromiumOS.
@@ -151,7 +161,7 @@ def RunSteps(api):
         build_dir.join('gn_targets.json'),
         '--compile-commands',
         build_dir.join('compile_commands.json'),
-    ] + packages)
+    ] + list(packages))
 
   # The codesearch recipe module relies on checkout path to be set.
   chromiumos_src_dir = chromiumos_dir.join('src')
@@ -180,17 +190,29 @@ def RunSteps(api):
 
   # Create the kythe index pack and upload it to google storage.
   api.codesearch.create_and_upload_kythe_index_pack(
-      commit_hash=mirror_hash,
-      commit_timestamp=int(mirror_unix_timestamp or api.time.time()))
+      commit_hash=codesearch_mirror_revision,
+      commit_timestamp=int(codesearch_mirror_revision_timestamp or
+                           api.time.time()))
 
 
+# TODO(crbug/1284439): Add more tests.
 def GenTests(api):
   yield api.test(
       'basic',
-      api.step_data('fetch mirror hash',
-                    api.raw_io.stream_output_text('a' * 40, stream='stdout')),
-      api.step_data('fetch mirror timestamp',
-                    api.raw_io.stream_output_text('100', stream='stdout')),
+      api.buildbucket.generic_build(
+          builder='codesearch-gen-chromiumos-amd64-generic'),
       api.step_data('repo init'),
-      api.step_data('repo sync'),
-  )
+      api.properties(
+          codesearch_mirror_revision='a' * 40,
+          codesearch_mirror_revision_timestamp=1531887759))
+
+  yield api.test(
+      'repo sync to ToT',
+      api.buildbucket.generic_build(
+          builder='codesearch-gen-chromiumos-amd64-generic'),
+      api.step_data('repo init'), api.step_data('repo sync'),
+      api.properties(
+          codesearch_mirror_revision='a' * 40,
+          codesearch_mirror_revision_timestamp=1531887759),
+      api.post_process(StepCommandRE, 'repo sync', ['.*repo', 'sync', '-j6']),
+      api.post_process(DropExpectation))

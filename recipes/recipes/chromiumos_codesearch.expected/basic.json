@@ -19,7 +19,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "env": {
-      "DEPOT_TOOLS_COLLECT_METRICS": "0",
+      "DEPOT_TOOLS_REPORT_BUILD": "project/cron/codesearch-gen-chromiumos-amd64-generic/8945511751514863184",
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "1800"
     },
@@ -32,6 +32,18 @@
       ]
     },
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -76,72 +88,24 @@
       "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
-      "glob",
-      "[CACHE]/builder",
-      "chromiumos_codesearch"
-    ],
-    "infra_step": true,
-    "name": "Check for existing checkout",
-    "~followup_annotations": [
-      "@@@STEP_LOG_END@glob@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "clone",
-      "--depth=1",
-      "https://chromium.googlesource.com/chromiumos/codesearch",
-      "chromiumos_codesearch"
-    ],
-    "cwd": "[CACHE]/builder",
-    "infra_step": true,
-    "name": "clone mirror repo"
-  },
-  {
-    "cmd": [
-      "git",
-      "fetch"
-    ],
-    "cwd": "[CACHE]/builder/chromiumos_codesearch",
-    "infra_step": true,
-    "name": "git fetch"
-  },
-  {
-    "cmd": [
-      "git",
-      "rev-parse",
-      "HEAD"
-    ],
-    "cwd": "[CACHE]/builder/chromiumos_codesearch",
-    "infra_step": true,
-    "name": "fetch mirror hash"
-  },
-  {
-    "cmd": [
-      "git",
-      "log",
-      "-1",
-      "--format=%ct",
-      "HEAD"
-    ],
-    "cwd": "[CACHE]/builder/chromiumos_codesearch",
-    "infra_step": true,
-    "name": "fetch mirror timestamp"
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
       "ensure-directory",
       "--mode",
       "0777",
       "[CACHE]/builder/chromiumos"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "ensure chromiumos dir"
   },
   {
@@ -161,7 +125,19 @@
       "DEPOT_TOOLS_UPDATE": "0"
     },
     "infra_step": true,
-    "name": "Check for existing checkout (2)",
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "Check for existing checkout",
     "~followup_annotations": [
       "@@@STEP_LOG_END@glob@@@"
     ]
@@ -177,6 +153,18 @@
     "env": {
       "DEPOT_TOOLS_UPDATE": "0"
     },
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "repo init"
   },
   {
@@ -189,6 +177,18 @@
     "env": {
       "DEPOT_TOOLS_UPDATE": "0"
     },
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "repo sync"
   },
   {
@@ -198,6 +198,18 @@
     "cwd": "[CACHE]/builder/chromiumos",
     "env": {
       "DEPOT_TOOLS_UPDATE": "0"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "cros_sdk"
   },
@@ -212,6 +224,18 @@
     "env": {
       "DEPOT_TOOLS_UPDATE": "0"
     },
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "setup_board"
   },
   {
@@ -225,6 +249,18 @@
     "env": {
       "DEPOT_TOOLS_UPDATE": "0"
     },
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "build_packages"
   },
   {
@@ -234,6 +270,18 @@
       "[CACHE]/builder/infra/go/src/infra/cmd/package_index_cros",
       "[CACHE]/builder/chromiumos/src/scripts"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "copy package_index_cros to chromiumos/src/scripts"
   },
   {
@@ -258,6 +306,18 @@
     "env": {
       "PATH": "[CACHE]/builder/depot_tools:<PATH>"
     },
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "run package_index_cros"
   },
   {
@@ -272,6 +332,18 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "remove previous instance of clang tools"
   },
   {
@@ -282,6 +354,18 @@
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "git clone"
   },
   {
@@ -291,6 +375,18 @@
       "--package=translation_unit",
       "--output-dir=[CLEANUP]/tmp_tmp_1"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "download translation_unit clang tool"
   },
   {
@@ -307,6 +403,18 @@
       "--all"
     ],
     "cwd": "[CACHE]/builder/chromiumos/src/platform2",
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "run translation_unit clang tool"
   },
   {
@@ -323,6 +431,18 @@
       "--all"
     ],
     "cwd": "[CACHE]/builder/chromiumos/src/aosp/external/libchrome",
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "run translation_unit clang tool (2)"
   },
   {
@@ -339,6 +459,18 @@
       "--all"
     ],
     "cwd": "[CACHE]/builder/chromiumos/src/aosp/system/update_engine",
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "run translation_unit clang tool (3)"
   },
   {
@@ -358,6 +490,18 @@
       "[START_DIR]/cipd_tool/infra/tools/package_index/latest"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "install infra/tools/package_index.ensure package directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -377,6 +521,18 @@
       "/path/to/tmp/json"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "install infra/tools/package_index.ensure_installed",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -409,6 +565,18 @@
       "--out_dir",
       "src/out/amd64-generic"
     ],
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "create kythe index pack"
   },
   {
@@ -421,12 +589,24 @@
       "----",
       "cp",
       "[CACHE]/builder/chromiumos/src/out/amd64-generic/chromiumos_amd64-generic.kzip",
-      "gs://chrome-codesearch/prod/chromiumos_amd64-generic_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa+100.kzip"
+      "gs://chrome-codesearch/prod/chromiumos_amd64-generic_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa+1531887759.kzip"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "gsutil upload kythe index pack",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/prod/chromiumos_amd64-generic_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa+100.kzip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/prod/chromiumos_amd64-generic_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa+1531887759.kzip@@@"
     ]
   },
   {
@@ -442,6 +622,18 @@
       "gs://chrome-codesearch/debug/compile_commands_amd64-generic_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.json"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:cron"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "gsutil upload compile_commands.json",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/debug/compile_commands_amd64-generic_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.json@@@"
