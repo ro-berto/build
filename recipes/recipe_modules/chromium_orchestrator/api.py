@@ -95,24 +95,9 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
 
     builder_id, builder_config = self.configure_build()
 
-    patch_repo_ref = self.m.tryserver.gerrit_change_target_ref
-    gerrit_change_project = self.m.tryserver.gerrit_change.project
-
-    if gerrit_change_project == 'chromium/src':
-      # Usually refs/heads/main for ToT CLs, but can be branch heads for
-      # branch CLs
-      src_ref = patch_repo_ref
-    else:
-      # This assumes that non chromium/src projects only runs builds on
-      # the main branch of src.
-      src_ref = 'refs/heads/main'
-
-    src_head_revision, _ = self.m.gitiles.log(
-        'https://chromium.googlesource.com/chromium/src',
-        src_ref,
-        limit=1,
-        step_name='read src HEAD revision at {}'.format(src_ref))
-    src_head_revision = src_head_revision[0]['commit']
+    experiments = self.m.buildbucket.build.input.experiments
+    remove_src_checkout_experiment = (
+        'remove_src_checkout_experiment' in experiments)
 
     # Trigger compilator to compile and build targets with patch
     # Scheduled build inherits current build's project and bucket
@@ -123,43 +108,56 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
         }
     }
 
-    remove_src_checkout_experiment = False
-    if ('remove_src_checkout_experiment' in
-        self.m.buildbucket.build.input.experiments):
-      remove_src_checkout_experiment = True
-
     gitiles_commit = None
     root_solution_revision = None
     patch_repo_head_revision = None
 
-    gclient_soln_name = self.m.gclient.get_repo_path(
-        self.m.tryserver.gerrit_change_repo_url)
+    if not remove_src_checkout_experiment:
+      patch_repo_ref = self.m.tryserver.gerrit_change_target_ref
+      gerrit_change_project = self.m.tryserver.gerrit_change.project
 
-    if gerrit_change_project == 'chromium/src':
-      patch_repo_head_revision = src_head_revision
-      if not remove_src_checkout_experiment:
+      if gerrit_change_project == 'chromium/src':
+        # Usually refs/heads/main for ToT CLs, but can be branch heads for
+        # branch CLs
+        src_ref = patch_repo_ref
+      else:
+        # This assumes that non chromium/src projects only runs builds on
+        # the main branch of src.
+        src_ref = 'refs/heads/main'
+
+      src_head_revision, _ = self.m.gitiles.log(
+          'https://chromium.googlesource.com/chromium/src',
+          src_ref,
+          limit=1,
+          step_name='read src HEAD revision at {}'.format(src_ref))
+      src_head_revision = src_head_revision[0]['commit']
+
+      gclient_soln_name = self.m.gclient.get_repo_path(
+          self.m.tryserver.gerrit_change_repo_url)
+
+      if gerrit_change_project == 'chromium/src':
+        patch_repo_head_revision = src_head_revision
         gitiles_commit = common_pb.GitilesCommit(
             host=self.m.tryserver.gerrit_change_repo_host,
             project=self.m.tryserver.gerrit_change.project,
             ref=src_ref,
             id=src_head_revision)
-    else:
-      patch_repo_head_revision, _ = self.m.gitiles.log(
-          self.m.tryserver.gerrit_change_repo_url,
-          patch_repo_ref,
-          limit=1,
-          step_name='read {} HEAD revision at {}'.format(
-              gerrit_change_project, patch_repo_ref))
-      patch_repo_head_revision = patch_repo_head_revision[0]['commit']
-      root_solution_revision = src_head_revision
+      else:
+        patch_repo_head_revision, _ = self.m.gitiles.log(
+            self.m.tryserver.gerrit_change_repo_url,
+            patch_repo_ref,
+            limit=1,
+            step_name='read {} HEAD revision at {}'.format(
+                gerrit_change_project, patch_repo_ref))
+        patch_repo_head_revision = patch_repo_head_revision[0]['commit']
+        root_solution_revision = src_head_revision
 
-      if not remove_src_checkout_experiment:
         compilator_properties['root_solution_revision'] = root_solution_revision
         compilator_properties['deps_revision_overrides'] = {
             gclient_soln_name: patch_repo_head_revision
         }
 
-    self.m.gclient.c.revisions[gclient_soln_name] = patch_repo_head_revision
+      self.m.gclient.c.revisions[gclient_soln_name] = patch_repo_head_revision
 
     # Pass in any RTS mode input props
     compilator_properties.update(self.m.cq.props_for_child_build)
@@ -181,13 +179,14 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
 
     self.current_compilator_buildbucket_id = build.id
 
-    bot_update_step, targets_config = self.m.chromium_tests.prepare_checkout(
-        builder_config,
-        timeout=3600,
-        enforce_fetch=True,
-        no_fetch_tags=True,
-        root_solution_revision=root_solution_revision,
-        refs=[patch_repo_ref])
+    if not remove_src_checkout_experiment:
+      bot_update_step, targets_config = self.m.chromium_tests.prepare_checkout(
+          builder_config,
+          timeout=3600,
+          enforce_fetch=True,
+          no_fetch_tags=True,
+          root_solution_revision=root_solution_revision,
+          refs=[patch_repo_ref])
 
     # Now that we've finished the Orchestrator's bot_update and analyze, let's
     # check on the triggered compilator and display its steps (until it
@@ -204,6 +203,22 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
       return maybe_raw_result
 
     if remove_src_checkout_experiment:
+      self.m.path['checkout'] = self.m.chromium_checkout.checkout_dir.join(
+          'src')
+      self.m.file.rmcontents('clear checkout testing directory',
+                             self.m.path['checkout'].join('testing'))
+      self.m.file.rmcontents(
+          'clear checkout third_party/blink directory',
+          self.m.path['checkout'].join('third_party', 'blink'))
+      self.m.file.rmcontents(
+          'clear checkout third_party/llvm-build directory',
+          self.m.path['checkout'].join('third_party', 'llvm-build'))
+      self.m.cas.download(
+          'download src-side deps',
+          comp_output.src_side_deps_digest,
+          self.m.path['checkout'],
+      )
+
       affected_files = comp_output.affected_files
       targets_config = self.m.chromium_tests.create_targets_config(
           builder_config, comp_output.got_revisions, isolated_tests_only=True)
@@ -328,7 +343,8 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
 
     self.current_compilator_buildbucket_id = wo_build.id
 
-    self.m.chromium_tests.deapply_patch(bot_update_step)
+    if not remove_src_checkout_experiment:
+      self.m.chromium_tests.deapply_patch(bot_update_step)
 
     # Display steps of triggered (without patch) compilator until it outputs
     # swarming trigger props for the tests to retrigger without patch

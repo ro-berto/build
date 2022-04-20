@@ -81,8 +81,7 @@ class ChromiumOrchestratorApi(recipe_test_api.RecipeTestApi):
                                 is_swarming_phase=True,
                                 with_patch=True,
                                 tests=None,
-                                affected_files=None,
-                                src_side_deps_digest=None):
+                                affected_files=None):
     tests = tests or ['browser_tests']
     output_json_obj = {}
     if is_swarming_phase:
@@ -98,6 +97,8 @@ class ChromiumOrchestratorApi(recipe_test_api.RecipeTestApi):
                 'refs/heads/main@{#984947}',
             'got_v8_revision':
                 '7d776826a3c4ae0878f026c00beab82765fb4d23',
+            'src_side_deps_digest':
+                'ec4fc70b29359beb0490e/168',
         }
         if with_patch:
           if not affected_files:
@@ -114,8 +115,6 @@ class ChromiumOrchestratorApi(recipe_test_api.RecipeTestApi):
               },
               'deleted_files': ['src/deleted_file.cc'],
           })
-        if src_side_deps_digest:
-          output_json_obj['src_side_deps_digest'] = src_side_deps_digest
 
     sub_build = build_pb2.Build(
         id=54321,

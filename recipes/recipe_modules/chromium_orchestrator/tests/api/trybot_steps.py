@@ -82,7 +82,7 @@ def GenTests(api):
     )
 
   def basic(remove_src_checkout_experiment):
-    return sum([
+    steps = sum([
         get_try_build(remove_src_checkout_experiment),
         ctbc_properties(),
         api.properties(
@@ -99,17 +99,11 @@ def GenTests(api):
         api.chromium_orchestrator.override_compilator_steps(),
         api.chromium_orchestrator.override_compilator_steps(
             is_swarming_phase=False),
-        api.chromium_orchestrator.fake_head_revision(),
         api.chromium_orchestrator.override_test_spec(
             builder_group='fake-group',
             builder='fake-builder',
             tester='fake-tester',
-            step_suffix=' (2)' if remove_src_checkout_experiment else None,
         ),
-        api.post_process(post_process.StepCommandContains, 'bot_update',
-                         ['--refs', 'refs/heads/main']),
-        api.post_process(post_process.StepCommandContains, 'bot_update',
-                         ['--patch_ref']),
         api.post_process(
             post_process.StepCommandContains,
             'install infra/chromium/compilator_watcher.ensure_installed', [
@@ -124,8 +118,21 @@ def GenTests(api):
         api.post_process(post_process.MustRun,
                          COMPILATOR_SWARMING_TASK_COLLECT_STEP),
         api.post_process(post_process.StatusSuccess),
-        api.post_process(post_process.DropExpectation),
     ], api.empty_test_data())
+
+    if not remove_src_checkout_experiment:
+      steps += sum([
+          api.chromium_orchestrator.fake_head_revision(),
+          api.post_process(post_process.StepCommandContains, 'bot_update',
+                           ['--refs', 'refs/heads/main']),
+          api.post_process(post_process.StepCommandContains, 'bot_update',
+                           ['--patch_ref']),
+      ], api.empty_test_data())
+    else:
+      steps += api.post_process(post_process.MustRun, 'download src-side deps')
+
+    steps += api.post_process(post_process.DropExpectation)
+    return steps
 
   yield api.test(
       'basic',
@@ -185,32 +192,20 @@ def GenTests(api):
                     ),
             }),
         api.code_coverage(use_clang_coverage=True),
-        api.chromium_orchestrator.fake_head_revision(),
-        api.override_step_data(
-            'read v8/v8 HEAD revision at refs/heads/main',
-            api.m.json.output({'log': [{
-                'commit': 'v8deadbeef'
-            }]})),
         api.chromium_orchestrator.override_test_spec(
             builder_group='fake-group',
             builder='fake-builder',
             tester='fake-tester',
-            step_suffix=' (2)' if remove_src_checkout_experiment else None,
         ),
         api.chromium_orchestrator.override_compilator_steps(),
         api.chromium_orchestrator.override_compilator_steps(
             is_swarming_phase=False),
-        api.post_process(post_process.StepCommandContains, 'bot_update',
-                         ['--revision', 'src@{}'.format('deadbeef')]),
-        api.post_process(post_process.StepCommandContains, 'bot_update',
-                         ['--revision', 'src/v8@{}'.format('v8deadbeef')]),
         api.post_process(post_process.MustRun,
                          'trigger compilator (with patch)'),
         api.post_process(post_process.MustRun, 'browser_tests (with patch)'),
         api.post_process(post_process.MustRun,
                          'downloading cas digest all_test_binaries'),
         api.post_process(post_process.StatusSuccess),
-        api.post_process(post_process.DropExpectation),
     ], api.empty_test_data())
     if remove_src_checkout_experiment:
       steps += api.chromium.try_build(
@@ -219,10 +214,23 @@ def GenTests(api):
           experiments=['remove_src_checkout_experiment'],
       )
     else:
-      steps += api.chromium.try_build(
-          builder='fake-orchestrator',
-          git_repo='https://chromium.googlesource.com/v8/v8',
-      )
+      steps += sum([
+          api.chromium.try_build(
+              builder='fake-orchestrator',
+              git_repo='https://chromium.googlesource.com/v8/v8',
+          ),
+          api.override_step_data(
+              'read v8/v8 HEAD revision at refs/heads/main',
+              api.m.json.output({'log': [{
+                  'commit': 'v8deadbeef'
+              }]})),
+          api.chromium_orchestrator.fake_head_revision(),
+          api.post_process(post_process.StepCommandContains, 'bot_update',
+                           ['--revision', 'src@{}'.format('deadbeef')]),
+          api.post_process(post_process.StepCommandContains, 'bot_update',
+                           ['--revision', 'src/v8@{}'.format('v8deadbeef')]),
+      ], api.empty_test_data())
+    steps += api.post_process(post_process.DropExpectation)
     return steps
 
   yield api.test(
@@ -236,7 +244,7 @@ def GenTests(api):
   )
 
   def without_patch_compilator(remove_src_checkout_experiment):
-    return sum([
+    steps = sum([
         get_try_build(remove_src_checkout_experiment),
         ctbc_properties(),
         api.properties(
@@ -247,12 +255,10 @@ def GenTests(api):
                         compilator_watcher_git_revision='e841fc',
                     ),
             }),
-        api.chromium_orchestrator.fake_head_revision(),
         api.chromium_orchestrator.override_test_spec(
             builder_group='fake-group',
             builder='fake-builder',
             tester='fake-tester',
-            step_suffix=' (2)' if remove_src_checkout_experiment else None,
         ),
         api.chromium_orchestrator.override_compilator_steps(),
         api.chromium_orchestrator.override_compilator_steps(
@@ -269,6 +275,9 @@ def GenTests(api):
         api.post_process(post_process.StatusSuccess),
         api.post_process(post_process.DropExpectation),
     ], api.empty_test_data())
+    if not remove_src_checkout_experiment:
+      steps += api.chromium_orchestrator.fake_head_revision()
+    return steps
 
   yield api.test(
       'without_patch_compilator',
@@ -348,38 +357,6 @@ def GenTests(api):
       api.post_process(post_process.MustRun, 'browser_tests (with patch)'),
       api.post_process(post_process.MustRun,
                        'downloading cas digest all_test_binaries'),
-      api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'src_side_deps_digest',
-      api.chromium.try_build(
-          builder_group='fake-try-group',
-          builder='fake-orchestrator',
-      ),
-      ctbc_properties(),
-      api.properties(
-          **{
-              '$build/chromium_orchestrator':
-                  InputProperties(
-                      compilator='fake-compilator',
-                      compilator_watcher_git_revision='e841fc',
-                  ),
-          }),
-      api.code_coverage(use_clang_coverage=True),
-      api.chromium_orchestrator.override_compilator_build_proto_fetch(),
-      api.chromium_orchestrator.override_schedule_compilator_build(),
-      api.chromium_orchestrator.override_compilator_steps(
-          src_side_deps_digest='1a2b3c4d'),
-      api.chromium_orchestrator.override_compilator_steps(
-          is_swarming_phase=False, src_side_deps_digest='1a2b3c4d'),
-      api.chromium_orchestrator.fake_head_revision(),
-      api.chromium_orchestrator.override_test_spec(
-          builder_group='fake-group',
-          builder='fake-builder',
-          tester='fake-tester',
-      ),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -551,7 +528,6 @@ def GenTests(api):
       api.code_coverage(use_clang_coverage=True),
       api.chromium_orchestrator.override_schedule_compilator_build(),
       api.chromium_orchestrator.override_compilator_steps(),
-      api.chromium_orchestrator.fake_head_revision(),
       api.chromium_tests.read_source_side_spec(
           'fake-group',
           {
@@ -586,7 +562,6 @@ def GenTests(api):
                   }],
               },
           },
-          step_suffix=' (2)',
       ),
       api.post_process(post_process.StatusFailure),
       api.post_process(
@@ -971,7 +946,7 @@ def GenTests(api):
   )
 
   def code_coverage_trybot_with_patch(remove_src_checkout_experiment):
-    return sum(
+    steps = sum(
         [
             get_try_build(remove_src_checkout_experiment),
             ctbc_properties(),
@@ -984,12 +959,10 @@ def GenTests(api):
                         ),
                 }),
             api.code_coverage(use_clang_coverage=True),
-            api.chromium_orchestrator.fake_head_revision(),
             api.chromium_orchestrator.override_test_spec(
                 builder_group='fake-group',
                 builder='fake-builder',
                 tester='fake-tester',
-                step_suffix=' (2)' if remove_src_checkout_experiment else None,
             ),
             api.chromium_orchestrator.override_compilator_steps(),
             api.chromium_orchestrator.override_compilator_steps(
@@ -1008,6 +981,9 @@ def GenTests(api):
             api.post_process(post_process.DropExpectation),
         ],
         api.empty_test_data())
+    if not remove_src_checkout_experiment:
+      steps += api.chromium_orchestrator.fake_head_revision()
+    return steps
 
   yield api.test(
       'code_coverage_trybot_with_patch',
@@ -1019,7 +995,7 @@ def GenTests(api):
 
   def code_coverage_trybot_retry_shards_with_patch(
       remove_src_checkout_experiment):
-    return sum(
+    steps = sum(
         [
             get_try_build(remove_src_checkout_experiment),
             ctbc_properties(),
@@ -1032,12 +1008,10 @@ def GenTests(api):
                         ),
                 }),
             api.code_coverage(use_clang_coverage=True),
-            api.chromium_orchestrator.fake_head_revision(),
             api.chromium_orchestrator.override_test_spec(
                 builder_group='fake-group',
                 builder='fake-builder',
                 tester='fake-tester',
-                step_suffix=' (2)' if remove_src_checkout_experiment else None,
             ),
             api.chromium_orchestrator.override_compilator_steps(),
             api.chromium_orchestrator.override_compilator_steps(
@@ -1064,6 +1038,10 @@ def GenTests(api):
             api.post_process(post_process.DropExpectation),
         ],
         api.empty_test_data())
+
+    if not remove_src_checkout_experiment:
+      steps += api.chromium_orchestrator.fake_head_revision()
+    return steps
 
   yield api.test(
       'code_coverage_trybot_retry_shards_with_patch',
@@ -1573,12 +1551,10 @@ def GenTests(api):
             affected_files=['src/chrome/test.cc', 'src/components/file2.cc']),
         api.chromium_orchestrator.override_compilator_steps(
             is_swarming_phase=False),
-        api.chromium_orchestrator.fake_head_revision(),
         api.chromium_orchestrator.override_test_spec(
             builder_group='fake-group',
             builder='fake-builder',
             tester='fake-tester',
-            step_suffix=' (2)' if remove_src_checkout_experiment else None,
         ),
         api.resultdb.query(
             current_patchset_invocations,
@@ -1615,9 +1591,12 @@ def GenTests(api):
     ], api.empty_test_data())
 
     if not remove_src_checkout_experiment:
-      steps += api.step_data(
-          'git diff to analyze patch',
-          api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc'))
+      steps += sum([
+          api.step_data(
+              'git diff to analyze patch',
+              api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
+          api.chromium_orchestrator.fake_head_revision(),
+      ], api.empty_test_data())
     return steps
 
   yield api.test(
@@ -1651,7 +1630,6 @@ def GenTests(api):
             builder='fake-builder',
             tester='fake-tester',
             tests=['browser_tests', 'content_unittests'],
-            step_suffix=' (2)' if remove_src_checkout_experiment else None,
         ),
         api.chromium_orchestrator.override_compilator_steps(
             tests=['browser_tests', 'content_unittests'],
@@ -1661,7 +1639,6 @@ def GenTests(api):
             sub_build_status=common_pb.FAILURE,
             sub_build_summary=("1 Test Suite(s) failed.\n\n"
                                "**headless_python_unittests** failed.")),
-        api.chromium_orchestrator.fake_head_revision(),
         api.resultdb.query(
             current_patchset_invocations,
             ('collect tasks (with patch).browser_tests results'),
@@ -1699,9 +1676,12 @@ def GenTests(api):
     ], api.empty_test_data())
 
     if not remove_src_checkout_experiment:
-      steps += api.step_data(
-          'git diff to analyze patch',
-          api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc'))
+      steps += sum([
+          api.step_data(
+              'git diff to analyze patch',
+              api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
+          api.chromium_orchestrator.fake_head_revision(),
+      ], api.empty_test_data())
     return steps
 
   yield api.test(
@@ -1736,14 +1716,12 @@ def GenTests(api):
             builder='fake-builder',
             tester='fake-tester',
             tests=['browser_tests', 'content_unittests'],
-            step_suffix=' (2)' if remove_src_checkout_experiment else None,
         ),
         api.chromium_orchestrator.override_compilator_steps(
             tests=['browser_tests', 'content_unittests'],
             affected_files=['src/chrome/test.cc', 'src/components/file2.cc']),
         api.chromium_orchestrator.override_compilator_steps(
             is_swarming_phase=False),
-        api.chromium_orchestrator.fake_head_revision(),
         api.resultdb.query(
             current_patchset_invocations,
             ('collect tasks (with patch).browser_tests results'),
@@ -1769,9 +1747,12 @@ def GenTests(api):
     ], api.empty_test_data())
 
     if not remove_src_checkout_experiment:
-      steps += api.step_data(
-          'git diff to analyze patch',
-          api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc'))
+      steps += sum([
+          api.step_data(
+              'git diff to analyze patch',
+              api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
+          api.chromium_orchestrator.fake_head_revision(),
+      ], api.empty_test_data())
     return steps
 
   yield api.test(
