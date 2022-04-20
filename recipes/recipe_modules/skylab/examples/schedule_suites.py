@@ -89,3 +89,19 @@ def GenTests(api):
       api.skylab.wait_on_suites('find test runner build', len(REQUESTS)),
       api.post_process(post_process.DropExpectation),
   )
+
+  yield api.test(
+      'fail_request_continues',
+      api.step_data(
+          'schedule skylab tests.' + REQUESTS[0].request_tag + '.schedule',
+          retcode=1),
+      api.post_process(post_process.StepFailure, 'schedule skylab tests'),
+      api.post_process(
+          post_process.StepCommandContains,
+          'schedule skylab tests.' + REQUESTS[2].request_tag + '.schedule', [
+              'run', 'test', '-json', '-board', 'eve', '-pool',
+              'cross_device_multi_cb', '-image', 'eve-release/R88-13545.0.0',
+              '-timeout-mins', '60', '-qs-account', 'lacros'
+          ]),
+      api.post_process(post_process.DropExpectation),
+  )

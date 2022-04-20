@@ -139,6 +139,7 @@ class SkylabApi(recipe_api.RecipeApi):
           step_result = self.m.step(
               'schedule',
               cmd,
+              raise_on_failure=False,
               stdout=self.m.json.output(),
               step_test_data=lambda: self.m.json.test_api.output_stream(
                   {"Launches": [{
@@ -147,11 +148,13 @@ class SkylabApi(recipe_api.RecipeApi):
                       },
                   }]}))
 
-          build_id_by_tags[s.request_tag] = int(
-              step_result.stdout["Launches"][0]["Build"]["id"])
-          presentation.links[(
-              s.request_tag
-          )] = 'https://ci.chromium.org/b/%s' % build_id_by_tags[s.request_tag]
+          if step_result.retcode == 0:
+            build_id_by_tags[s.request_tag] = int(
+                step_result.stdout["Launches"][0]["Build"]["id"])
+            presentation.links[(
+                s.request_tag
+            )] = 'https://ci.chromium.org/b/%s' % build_id_by_tags[
+                s.request_tag]
     return build_id_by_tags
 
   def wait_on_suites(self, ctp_by_tag, timeout_seconds):

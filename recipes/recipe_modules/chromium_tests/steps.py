@@ -2941,8 +2941,6 @@ class SkylabTest(Test):
 
   @recipe_api.composite_step
   def run(self, suffix):
-    self._suffix_step_name_map[suffix] = self.step_name(suffix)
-    bb_url = 'https://ci.chromium.org/b/%d'
 
     with self.api.m.step.nest(self.step_name(suffix)) as step:
       _present_info_messages(step, self)
@@ -2951,13 +2949,16 @@ class SkylabTest(Test):
             suffix, step, self.api.m.step.FAILURE,
             'Test was not scheduled because of absent lacros_gcs_path.')
 
+      self._suffix_step_name_map[suffix] = self.step_name(suffix)
+      bb_url = 'https://ci.chromium.org/b/%d'
       rdb_results = self._rdb_results.get(suffix)
       if rdb_results.total_tests_ran:
         # If any test result was reported by RDB, the test run completed
         # its lifecycle as expected.
         self.update_failure_on_exit(suffix, False)
       else:
-        step.links['CTP Build'] = bb_url % self.ctp_build_id
+        if self.ctp_build_id:
+          step.links['CTP Build'] = bb_url % self.ctp_build_id
         self._raise_failed_step(
             suffix, step, self.api.m.step.EXCEPTION,
             'Test did not run or failed to report to ResultDB.'
