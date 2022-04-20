@@ -69,7 +69,7 @@ PROPERTIES = {
             default=None),
     'codesearch_mirror_revision_timestamp':
         Property(
-            kind=config.Single((int, float)),
+            kind=str,
             help='The commit timestamp of the revision for codesearch to use, '
             'in seconds since the UNIX epoch.',
             default=None),
@@ -204,7 +204,7 @@ def GenTests(api):
       api.step_data('repo init'),
       api.properties(
           codesearch_mirror_revision='a' * 40,
-          codesearch_mirror_revision_timestamp=1531887759))
+          codesearch_mirror_revision_timestamp='1531887759'))
 
   yield api.test(
       'repo sync to ToT',
@@ -213,6 +213,6 @@ def GenTests(api):
       api.step_data('repo init'), api.step_data('repo sync'),
       api.properties(
           codesearch_mirror_revision='a' * 40,
-          codesearch_mirror_revision_timestamp=1531887759),
+          codesearch_mirror_revision_timestamp='1531887759'),
       api.post_process(StepCommandRE, 'repo sync', ['.*repo', 'sync', '-j6']),
       api.post_process(DropExpectation))
