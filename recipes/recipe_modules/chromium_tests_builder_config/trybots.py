@@ -5,13 +5,10 @@
 from . import try_spec
 
 TRYBOTS = try_spec.TryDatabase.create({
+    # The config for the following builders is now specified src-side in
+    # //infra/config/subprojects/chromium/try/tryserver.blink.star
+    # * linux-blink-rel
     'tryserver.blink': {
-        'linux-blink-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='tryserver.blink',
-                buildername='linux-blink-rel',
-                retry_failed_shards=False,
-            ),
         'linux-blink-optional-highdpi-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',

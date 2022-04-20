@@ -4477,11 +4477,6 @@
       "tryserver.blink:linux-blink-optional-highdpi-rel"
     ]
   },
-  "tryserver.blink:linux-blink-rel": {
-    "builders": [
-      "tryserver.blink:linux-blink-rel"
-    ]
-  },
   "tryserver.blink:mac10.12-blink-rel": {
     "builders": [
       "chromium.fyi:mac10.12-blink-rel-dummy",
