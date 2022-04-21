@@ -3,6 +3,33 @@
 This directory contains files for performing and tracking the migration of
 builder configs out of this repo and into the src-side repos and scripts.
 
+## Task list
+
+Available and in progress bugs for the migration can be found at
+[go/builder-config-migration-bugs](http://go/builder-config-migration-bugs).
+Each bug is responsible for migrating one or more builders that are related via
+triggering and mirroring, but only a single builder is mentioned in the bug. The
+scripts used for performing the migration and the builder that verifies the
+src-side configs will account for all related builders. The
+Builder-Config-Migration-Blocker column lists blockers that require pre-work,
+see the [blockers](#migration-blockers) section for more information.
+
+[chromium.json](https://source.chromium.org/chromium/chromium/tools/build/+/main:recipes/recipe_modules/chromium_tests_builder_config/migration/chromium.json)
+provides information about the migrations required for all of the builders in
+the chromium project (except for builders in the chromium.clang builder group).
+For each builder in a related grouping of builders, an entry for the builder
+will appear in chromium.json. The value of the entry will be duplicated for all
+builders in the grouping. The value will contain the list of all of the builders
+that must be migrated together and a list of any blockers requiring work before
+they can be migrated.
+
+chromium.json is kept up-to-date by a presubmit and a presubmit uses the
+contents of chromium.json to prevent unnecessary new builder configs from being
+added. This is the reason that the chromium.clang builder group is excluded from
+chromium.json: that file is used to define builders in the chromium and chrome
+projects, so including it would prevent adding new chromium.clang builders in
+the chrome project.
+
 ## Migrating a builder
 
 1. Create a chromium/src CL to define the builder configs src-side
@@ -177,6 +204,70 @@ builder configs out of this repo and into the src-side repos and scripts.
        <https://crrev.com/c/3588931> for an example.
 
 1. Land the chromium/tools/build CL from step #2.
+
+### Migration blockers
+
+#### PROVIDE_TEST_SPEC execution mode
+
+The PROVIDE_TEST_SPEC execution mode is set in builder specs for builders that
+do not actually exist. The builder specs aren't able to set any other
+information, they exist only so they can be specified as a mirror in a trybot
+definition to enable reading the corresponding source side spec. This allows a
+try builder to run the same test suite against multiple different dimensions.
+The PROVIDE_TEST_SPEC execution mode is only used for GPU builders.
+
+The PROVIDE_TEST_SPEC execution mode is not being supported in src-side configs
+as there is a mechanism for supporting the same functionality that does not
+require non-existent builders that can be confusing. This functionality should
+be achievable by creating a source side spec for the try builder itself that
+uses compound test suites and variants. A builder spec should be added to the
+recipe config for the try builder and the trybot configuration for the try
+builder should be updated to include itself as a mirror, this will allow for the
+removal of the PROVIDE_TEST_SPEC builder specs.
+
+Bugs with the [Builder-Config-Migration-Blocker-PROVIDE_TEST_SPEC
+label](https://bugs.chromium.org/p/chromium/issues/list?q=label%3ABuilder-Config-Migration-Blocker-PROVIDE_TEST_SPEC)
+have such builders as blockers.
+
+#### Mirroring non-existent builders
+
+Similar to the case of PROVIDE_TEST_SPEC, a small number of try builders mirror
+CI builders that do not actually exist, but unlike PROVIDE_TEST_SPEC builders,
+the builders actually do specify information in their builder specs.
+
+Mirroring non-existent builders is not being supported in src-side configs as
+there is a mechanism for defining a standalone try builder; that is a try
+builder that defines its own spec. The try builder can be turned into a
+standalone try builder by first copying the mirrored builder's waterfalls.pyl
+and test_suite_exceptions.pyl entries to the try builder (be careful about
+mixins specified at the waterfall level). Once that is done, the trybot entry
+for the try builder can be replaced with a builder spec (if it sets any of the
+non-mirror fields, keep the trybot definition but have it mirror itself
+instead). See crbug.com/1317387 for an example bug where builders were turned
+into standalone try builders, one that required try-specific settings and one
+that did not.
+
+Bugs with the [Builder-Config-Migration-Blocker-nonexistent
+label](https://bugs.chromium.org/p/chromium/issues/list?q=label%3ABuilder-Config-Migration-Blocker-nonexistent)
+have such builders as blockers.
+
+#### Builders configuring clusterfuzz archiving
+
+Builders in the chromium.fuzz builder group, ios-asan in the chromium.fyi
+builder group and "CFI Linux CF" in the chromium.clang builder group configure
+clusterfuzz archiving, which is a bespoke archive operation in chromium_tests
+predating the generic_archive method in the archive module.
+
+We want the configuration of archiving to be done in a consistent manner, so the
+bespoke logic for configuring and performing clusterfuzz archiving is not being
+supported in src-side configs. Builders with cf_archive_build set in their spec
+should be updated to set module properties for the archive module instead so
+that the cf_archive_build field and the related cf_* fields can be removed from
+the builder spec type and such builders would be able to be migrated at that
+point.
+
+[crbug.com/1318621](https://crbug.com/1318621) tracks the removal of the
+clusterfuzz-specific configuration from chromium_tests.
 
 ## Directory contents
 
