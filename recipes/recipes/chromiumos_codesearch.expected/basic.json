@@ -110,42 +110,10 @@
   },
   {
     "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "glob",
-      "[CACHE]/builder/chromiumos",
-      ".repo",
-      "--hidden"
-    ],
-    "cwd": "[CACHE]/builder/chromiumos",
-    "env": {
-      "DEPOT_TOOLS_UPDATE": "0"
-    },
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "project:cron"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "Check for existing checkout",
-    "~followup_annotations": [
-      "@@@STEP_LOG_END@glob@@@"
-    ]
-  },
-  {
-    "cmd": [
       "[CACHE]/builder/depot_tools/repo",
       "init",
+      "-b",
+      "stable",
       "-u",
       "https://chromium.googlesource.com/chromiumos/manifest.git"
     ],

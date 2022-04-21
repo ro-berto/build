@@ -7,9 +7,9 @@ Checks out and builds ChromiumOS for amd64-generic, does some preprocessing for
 package_index, and generates then uploads a KZIP to GS.
 """
 
-from recipe_engine import config
 from recipe_engine.engine_types import freeze
-from recipe_engine.post_process import StepCommandRE, DropExpectation
+from recipe_engine.post_process import (StepCommandContains, StepCommandRE,
+                                        DropExpectation)
 from recipe_engine.recipe_api import Property
 
 PYTHON_VERSION_COMPATIBILITY = 'PY3'
@@ -116,15 +116,10 @@ def RunSteps(api, codesearch_mirror_revision,
   api.file.ensure_directory('ensure chromiumos dir', chromiumos_dir)
   with api.context(cwd=chromiumos_dir, env={'DEPOT_TOOLS_UPDATE': 0}):
     repo = depot_tools_dir.join('repo')
-    if not api.file.glob_paths(
-        'Check for existing checkout',
-        chromiumos_dir,
-        '.repo',
-        include_hidden=True):
-      api.step('repo init', [
-          repo, 'init', '-u',
-          'https://chromium.googlesource.com/chromiumos/manifest.git'
-      ])
+    api.step('repo init', [
+        repo, 'init', '-b', 'stable', '-u',
+        'https://chromium.googlesource.com/chromiumos/manifest.git'
+    ])
     api.step('repo sync', [repo, 'sync', '-j6'])
 
     cros_sdk = depot_tools_dir.join('cros_sdk')
@@ -207,12 +202,13 @@ def GenTests(api):
           codesearch_mirror_revision_timestamp='1531887759'))
 
   yield api.test(
-      'repo sync to ToT',
+      'repo sync to stable',
       api.buildbucket.generic_build(
           builder='codesearch-gen-chromiumos-amd64-generic'),
       api.step_data('repo init'), api.step_data('repo sync'),
       api.properties(
           codesearch_mirror_revision='a' * 40,
           codesearch_mirror_revision_timestamp='1531887759'),
+      api.post_process(StepCommandContains, 'repo init', ['-b', 'stable']),
       api.post_process(StepCommandRE, 'repo sync', ['.*repo', 'sync', '-j6']),
       api.post_process(DropExpectation))
