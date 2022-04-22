@@ -260,6 +260,10 @@
     ]
   },
   {
+    "failure": {
+      "failure": {},
+      "humanReason": "Step('calculate custom lkgr') (retcode: 2)"
+    },
     "name": "$result"
   }
 ]

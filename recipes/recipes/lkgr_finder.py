@@ -160,12 +160,6 @@ def RunSteps(api, project, repo, ref, config, lkgr_status_gs_path, allowed_lag,
       api.step(
           'calculate %s lkgr' % project, ['vpython'] + args,
           step_test_data=lambda: step_test_data)
-  except api.step.StepFailure as e:
-    # Don't fail the build if the LKGR is just stale.
-    if e.result.retcode == 2:
-      return
-    else:
-      raise
   finally:
     step_result = api.step.active_result
     html_status = None
@@ -228,17 +222,16 @@ def GenTests(api):
          api.runtime(is_experimental=True))
 
   for retcode, suffix in [(0, ''), (1, '_failure'), (2, '_stale')]:
-    yield (
-        api.test('custom_properties' + suffix) +
-        test_props_and_data('custom-lkgr-finder') +
-        api.step_data('calculate custom lkgr', retcode=retcode) +
-        api.properties(
-            project='custom',
-            repo='https://custom.googlesource.com/src',
-            ref='refs/heads/lkgr',
-            lkgr_status_gs_path='custom/lkgr-status') +
-        api.post_process(post_process.MustRun, 'calculate custom lkgr') +
-        api.post_process(post_process.StatusCodeIn, 1 if retcode == 1 else 0))
+    yield (api.test('custom_properties' + suffix) +
+           test_props_and_data('custom-lkgr-finder') +
+           api.step_data('calculate custom lkgr', retcode=retcode) +
+           api.properties(
+               project='custom',
+               repo='https://custom.googlesource.com/src',
+               ref='refs/heads/lkgr',
+               lkgr_status_gs_path='custom/lkgr-status') +
+           api.post_process(post_process.MustRun, 'calculate custom lkgr') +
+           api.post_process(post_process.StatusCodeIn, retcode))
 
   yield (api.test('missing_all_properties') +
          test_props('missing-lkgr-finder') +
