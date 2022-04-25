@@ -203,7 +203,7 @@
       "/path/to/tmp/",
       "--workdir",
       "[CACHE]/builder/lw",
-      "--allowed-lag=4",
+      "--allowed-lag=9",
       "--html",
       "/path/to/tmp/"
     ],

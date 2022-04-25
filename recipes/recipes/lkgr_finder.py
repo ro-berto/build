@@ -40,7 +40,8 @@ BUILDERS = freeze({
         'repo': 'https://chromium.googlesource.com/v8/v8',
         'ref': 'refs/heads/lkgr',
         'lkgr_status_gs_path': 'chromium-v8/lkgr-status',
-        'allowed_lag': 4,
+        # 10x9 h is the allowed lag in low commit periods (e.g. weekends)
+        'allowed_lag': 9,
     },
 })
 

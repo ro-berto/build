@@ -204,7 +204,7 @@
       "--workdir",
       "[CACHE]/builder/lw",
       "--email-errors",
-      "--allowed-lag=4",
+      "--allowed-lag=9",
       "--html",
       "/path/to/tmp/"
     ],
