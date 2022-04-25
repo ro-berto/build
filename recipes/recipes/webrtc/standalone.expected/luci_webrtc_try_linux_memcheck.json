@@ -191,9 +191,9 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::json]/resources/read.py",
       "[CACHE]/builder/src/infra/specs/tryserver.webrtc.json",
       "/path/to/tmp/json"
     ],
@@ -378,9 +378,9 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_MODULE[recipe_engine::json]/resources/read.py",
       "[CACHE]/builder/src/infra/specs/trybot_analyze_config.json",
       "/path/to/tmp/json"
     ],
