@@ -110,6 +110,19 @@ def GenTests(api):
               variant_hash='1hash',
               expected=False,
               status=test_result_pb2.FAIL,
+          )),
+      resultdb_pb2.GetTestResultHistoryResponse.Entry(
+          result=test_result_pb2.TestResult(
+              test_id='ninja://sample/test:some_unrelated_test/TestSuite.Test1',
+              variant_hash='1hash',
+              expected=False,
+              status=test_result_pb2.FAIL,
+              tags=[
+                  rdb_common_pb2.StringPair(
+                      key='step_name',
+                      value='some_unrelated_suite (experimental)',
+                  )
+              ],
           ))
   ])
 

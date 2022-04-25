@@ -442,42 +442,6 @@ class FlakinessApi(recipe_api.RecipeApi):
               variant_hash=test_entry.get('variant_hash', None)))
     return tests
 
-  def get_test_variants(self, inv_list, test_query_count=None, step_name=None):
-    """Gets a set of (test_id, variant hash) tuples found in specific builds.
-
-    This method searches ResultDB for the invocations specified, extracts the
-    test_id and variant_hash fields, concatenates them into strings, and
-    inserts them into a set for return.
-
-    Args:
-        inv_list (list of str): Invocation names for the invocations to query
-            from ResultDB.
-        test_query_count (int): The number of tests to query from ResultDB.
-        step_name (str): The name of the step in which this call is made.
-
-    Returns:
-        A set of TestDefinition objects.
-    """
-    test_query_count = test_query_count or self.historical_query_count
-    step_name = step_name or 'fetch test variants from ResultDB'
-    inv_dict = self.m.resultdb.query(
-        inv_ids=self.m.resultdb.invocation_ids(inv_list),
-        limit=test_query_count,
-        step_name=step_name)
-
-    test_set = set()
-    for inv in inv_dict.values():
-      for test_result in inv.test_results:
-        test_set.add(
-            TestDefinition(
-                test_result.test_id,
-                tags=test_result.tags,
-                variants=test_result.variant,
-                variant_hash=test_result.variant_hash,
-            ))
-
-    return test_set
-
   def verify_new_tests(self,
                        prelim_tests,
                        excluded_invs,
