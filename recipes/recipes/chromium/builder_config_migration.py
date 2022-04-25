@@ -493,7 +493,8 @@ def _compute_groupings(api, builder_filter=None):
       if mirror.tester_id:
         mirrored_ids.append(mirror.tester_id)
     included = check_included(
-        mirrored_ids, 'invalid mirroring configuration for {}'.format(try_id))
+        [try_id] + mirrored_ids,
+        'invalid mirroring configuration for {}'.format(try_id))
     if included:
       update_groupings(try_id, mirrored_ids)
 
@@ -747,9 +748,6 @@ provide-test-spec execution_mode"
           }),
       api.chromium_tests_builder_config.databases(
           ctbc.BuilderDatabase.create({
-              'migration': {
-                  'foo-builder': ctbc.BuilderSpec.create(),
-              },
               'migration.excluded': {
                   'bar-builder': ctbc.BuilderSpec.create(),
               },
@@ -758,8 +756,6 @@ provide-test-spec execution_mode"
               'tryserver.migration': {
                   'try-builder':
                       ctbc.TrySpec.create([
-                          BuilderId.create_for_group('migration',
-                                                     'foo-builder'),
                           BuilderId.create_for_group('migration.excluded',
                                                      'bar-builder'),
                       ]),
