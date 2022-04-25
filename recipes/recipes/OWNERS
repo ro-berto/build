@@ -28,6 +28,7 @@ per-file dawn.py=file:dawn.expected/OWNERS
 per-file emscripten_releases.py=file:emscripten_releases.expected/OWNERS
 per-file goma_client.py=file://recipes/goma/GOMA_OWNERS
 per-file goma_server.py=file://recipes/goma/GOMA_OWNERS
+per-file lkgr_finder.py=file:lkgr_finder.expected/OWNERS
 per-file nacl.py=bradnelson@chromium.org
 per-file nacl.py=dschuff@chromium.org
 per-file nacl.py=sbc@chromium.org
