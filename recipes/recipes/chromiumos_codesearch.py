@@ -127,9 +127,10 @@ def RunSteps(api, codesearch_mirror_revision,
     api.step('setup_board',
              [cros_sdk, '--', 'setup_board',
               '--board=%s' % board])
-    api.step('build_packages',
-             [cros_sdk, '--', 'build_packages',
-              '--board=%s' % board])
+    api.step('build_packages', [
+        cros_sdk, '--', 'build_packages', '--cleanbuild',
+        '--board=%s' % board
+    ])
 
   # package_index_cros requires chromite/ in a parent directory.
   chromiumos_scripts_dir = chromiumos_dir.join('src', 'scripts')

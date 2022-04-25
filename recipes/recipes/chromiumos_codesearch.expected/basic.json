@@ -211,6 +211,7 @@
       "[CACHE]/builder/depot_tools/cros_sdk",
       "--",
       "build_packages",
+      "--cleanbuild",
       "--board=amd64-generic"
     ],
     "cwd": "[CACHE]/builder/chromiumos",
