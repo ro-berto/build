@@ -23,7 +23,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:ci"
+        "name": "chromium:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -184,11 +184,70 @@
   },
   {
     "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_REPO[depot_tools]/gerrit_client.py",
+      "changes",
+      "--host",
+      "https://chromium-review.googlesource.com",
+      "--json_file",
+      "/path/to/tmp/json",
+      "--limit",
+      "1",
+      "-p",
+      "change=3592345",
+      "-o",
+      "ALL_REVISIONS",
+      "-o",
+      "DOWNLOAD_COMMANDS"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "gerrit fetch current CL info",
+    "timeout": 60,
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"branch\": \"main\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"owner\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"name\": \"John Doe\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"revisions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"184ebe53805e102605d11f6b143486d15c23a09c\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"_number\": \"1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"ref\": \"refs/changes/45/3592345/1\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "vpython3",
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
       "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_deps': {'src/chrome/test/data/firefox2_profile/searchplugins': None, 'src/chrome/test/data/firefox2_searchplugins': None, 'src/chrome/test/data/firefox3_profile/searchplugins': None, 'src/chrome/test/data/firefox3_searchplugins': None, 'src/chrome/test/data/osdd': None, 'src/chrome/test/data/perf/frame_rate/private': None, 'src/chrome/test/data/plugin': None, 'src/chrome/test/data/ssl/certs': None, 'src/data/autodiscovery': None, 'src/data/esctf': None, 'src/data/mach_ports': None, 'src/data/memory_test': None, 'src/data/mozilla_js_tests': None, 'src/data/page_cycler': None, 'src/data/selenium_core': None, 'src/data/tab_switching': None, 'src/tools/grit/grit/test/data': None, 'src/webkit/data/bmp_decoder': None, 'src/webkit/data/ico_decoder': None, 'src/webkit/data/test_shell/plugins': None, 'src/webkit/data/xbm_decoder': None}, 'custom_vars': {'checkout_mobile_internal': 'True', 'checkout_pgo_profiles': 'True', 'checkout_src_internal': 'True', 'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]\ntarget_os = ['android']",
+      "--patch_root",
+      "src/v8",
       "--revision_mapping_file",
       "{\"got_angle_revision\": \"src/third_party/angle\", \"got_buildtools_revision\": \"src/buildtools\", \"got_dawn_revision\": \"src/third_party/dawn\", \"got_nacl_revision\": \"src/native_client\", \"got_revision\": \"src\", \"got_src_internal_revision\": \"src-internal\", \"got_swiftshader_revision\": \"src/third_party/swiftshader\", \"got_v8_revision\": \"src/v8\", \"got_webrtc_revision\": \"src/third_party/webrtc\"}",
       "--git-cache-dir",
@@ -197,14 +256,18 @@
       "[CLEANUP]/bot_update",
       "--output_json",
       "/path/to/tmp/json",
+      "--patch_ref",
+      "https://chromium.googlesource.com/v8/v8@refs/heads/main:refs/changes/45/3592345/1",
       "--revision",
-      "src@HEAD",
+      "src@0cd310e5609606ca9c8531313142a1a9f16ae860",
+      "--refs",
+      "refs/heads/main",
       "--no_fetch_tags"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_REPORT_BUILD": "chromium/ci/Android Compile Perf/8945511751514863184",
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/try/Android Compile Perf/8945511751514863184",
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "1800"
     },
@@ -219,7 +282,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:ci"
+        "name": "chromium:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -235,12 +298,12 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src\": \"HEAD\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": \"0cd310e5609606ca9c8531313142a1a9f16ae860\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"0cd310e5609606ca9c8531313142a1a9f16ae860\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"src-internal\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src-internal.git\", @@@",
@@ -276,7 +339,7 @@
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"src\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"src/v8\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"properties\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_angle_revision_cp\": \"refs/heads/main@{#297276}\", @@@",
@@ -286,7 +349,7 @@
       "@@@STEP_LOG_LINE@json.output@    \"got_dawn_revision_cp\": \"refs/heads/main@{#51819}\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_nacl_revision_cp\": \"refs/heads/main@{#274981}\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision\": \"0cd310e5609606ca9c8531313142a1a9f16ae860\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_revision_cp\": \"refs/heads/main@{#170242}\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_src_internal_revision\": \"22e29375e81155a74a3217e770ee1ce27091b499\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_src_internal_revision_cp\": \"refs/heads/main@{#274229}\", @@@",
@@ -303,7 +366,7 @@
       "@@@STEP_LOG_LINE@json.output@      \"src\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/src.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"0cd310e5609606ca9c8531313142a1a9f16ae860\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"src-internal\": {@@@",
@@ -368,7 +431,7 @@
       "@@@SET_BUILD_PROPERTY@got_dawn_revision_cp@\"refs/heads/main@{#51819}\"@@@",
       "@@@SET_BUILD_PROPERTY@got_nacl_revision@\"d998e125e8253980d76e269b7982aeeefc1b9b50\"@@@",
       "@@@SET_BUILD_PROPERTY@got_nacl_revision_cp@\"refs/heads/main@{#274981}\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_revision@\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_revision@\"0cd310e5609606ca9c8531313142a1a9f16ae860\"@@@",
       "@@@SET_BUILD_PROPERTY@got_revision_cp@\"refs/heads/main@{#170242}\"@@@",
       "@@@SET_BUILD_PROPERTY@got_src_internal_revision@\"22e29375e81155a74a3217e770ee1ce27091b499\"@@@",
       "@@@SET_BUILD_PROPERTY@got_src_internal_revision_cp@\"refs/heads/main@{#274229}\"@@@",
@@ -384,7 +447,7 @@
     "cmd": [],
     "name": "set_output_gitiles_commit",
     "~followup_annotations": [
-      "@@@SET_BUILD_PROPERTY@$recipe_engine/buildbucket/output_gitiles_commit@{\"host\": \"fake.org\", \"id\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"position\": 170242, \"project\": \"src\", \"ref\": \"refs/heads/main\"}@@@"
+      "@@@SET_BUILD_PROPERTY@$recipe_engine/buildbucket/output_gitiles_commit@{\"host\": \"fake.org\", \"id\": \"0cd310e5609606ca9c8531313142a1a9f16ae860\", \"position\": 170242, \"project\": \"src\", \"ref\": \"refs/heads/main\"}@@@"
     ]
   },
   {
@@ -410,7 +473,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:ci"
+        "name": "chromium:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -455,7 +518,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:ci"
+        "name": "chromium:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -491,7 +554,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_REPORT_BUILD": "chromium/ci/Android Compile Perf/8945511751514863184",
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/try/Android Compile Perf/8945511751514863184",
       "PATH": "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
     },
     "env_suffixes": {
@@ -501,7 +564,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "chromium:ci"
+        "name": "chromium:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -511,7 +574,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "gclient runhooks"
+    "name": "gclient runhooks (with patch)"
   },
   {
     "cmd": [
@@ -527,7 +590,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:ci"
+        "name": "chromium:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -569,7 +632,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:ci"
+        "name": "chromium:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -607,7 +670,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "chromium:ci"
+        "name": "chromium:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -637,7 +700,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:ci"
+        "name": "chromium:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -647,7 +710,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "ensure output directory"
+    "name": "ensure output directory (with patch)"
   },
   {
     "cmd": [
@@ -666,7 +729,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:ci"
+        "name": "chromium:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -676,7 +739,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "create compile guard",
+    "name": "create compile guard (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@CR_COMPILE_GUARD.txt@This file exists while a build compiles and is removed at the end of@@@",
       "@@@STEP_LOG_LINE@CR_COMPILE_GUARD.txt@compilation. If the next build finds that the file exists prior to@@@",
@@ -711,7 +774,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "chromium:ci"
+        "name": "chromium:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -759,7 +822,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "chromium:ci"
+        "name": "chromium:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -769,7 +832,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "generate_build_files",
+    "name": "generate_build_files (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
       "@@@STEP_LOG_END@json.output[failure_summary]@@@",
@@ -794,7 +857,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:ci"
+        "name": "chromium:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -832,7 +895,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:ci"
+        "name": "chromium:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -859,12 +922,12 @@
       "CHROME_HEADLESS": "1",
       "CHROMIUM_BUILD": "_google_chrome",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/Android_Compile_Perf",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
+      "GOMA_FAIL_FAST": "true",
       "GOMA_HERMETIC": "fallback",
       "GOMA_MAX_ACTIVE_FAIL_FALLBACK_TASKS": "1024",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
@@ -873,7 +936,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:ci"
+        "name": "chromium:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -921,7 +984,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:ci"
+        "name": "chromium:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -966,7 +1029,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "chromium:ci"
+        "name": "chromium:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -976,7 +1039,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "compile"
+    "name": "compile (with patch)"
   },
   {
     "cmd": [
@@ -1002,7 +1065,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "chromium:ci"
+        "name": "chromium:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1012,7 +1075,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "compile confirm no-op"
+    "name": "compile (with patch) confirm no-op"
   },
   {
     "cmd": [],
@@ -1037,7 +1100,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "chromium:ci"
+        "name": "chromium:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1081,7 +1144,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "chromium:ci"
+        "name": "chromium:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1114,7 +1177,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "chromium:ci"
+        "name": "chromium:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1156,7 +1219,7 @@
       "--build-exit-status",
       "0",
       "--build-step-name",
-      "compile",
+      "compile (with patch)",
       "--ninja-log-compiler",
       "goma",
       "--goma-stats-file",
@@ -1168,7 +1231,7 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"ci\", \"builder\": \"Android Compile Perf\", \"project\": \"chromium\"}",
+      "{\"bucket\": \"try\", \"builder\": \"Android Compile Perf\", \"project\": \"chromium\"}",
       "--buildbot-buildername",
       "Android Compile Perf"
     ],
@@ -1178,7 +1241,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "chromium:ci"
+        "name": "chromium:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1222,7 +1285,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:ci"
+        "name": "chromium:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1253,7 +1316,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:ci"
+        "name": "chromium:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1263,7 +1326,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "remove compile guard"
+    "name": "remove compile guard (with patch)"
   },
   {
     "cmd": [],
@@ -1287,7 +1350,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:ci"
+        "name": "chromium:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1321,7 +1384,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:ci"
+        "name": "chromium:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1365,7 +1428,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "chromium:ci"
+        "name": "chromium:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1375,13 +1438,13 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "isolate tests",
+    "name": "isolate tests (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"performance_test_suite_android_clank_chrome\": \"[dummy hash for performance_test_suite_android_clank_chrome/dummy size]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes_refs/heads/main(at){#170242}_without_patch@{\"performance_test_suite_android_clank_chrome\": \"[dummy hash for performance_test_suite_android_clank_chrome/dummy size]\"}@@@"
+      "@@@SET_BUILD_PROPERTY@swarm_hashes_refs/heads/main(at){#170242}_with_patch@{\"performance_test_suite_android_clank_chrome\": \"[dummy hash for performance_test_suite_android_clank_chrome/dummy size]\"}@@@"
     ]
   },
   {
@@ -1399,7 +1462,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "chromium:ci"
+        "name": "chromium:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1409,7 +1472,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "find command lines",
+    "name": "find command lines (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -1428,7 +1491,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:ci"
+        "name": "chromium:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1447,7 +1510,7 @@
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py",
       "https://pinpoint-dot-chromeperf.appspot.com/api/isolate",
       "-i",
-      "{\"builder_name\": \"Android Compile Perf\", \"change\": \"{\\\"commits\\\": [{\\\"git_hash\\\": \\\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\\\", \\\"repository\\\": \\\"chromium\\\"}]}\", \"isolate_map\": \"{\\\"performance_test_suite_android_clank_chrome\\\": \\\"[dummy hash for performance_test_suite_android_clank_chrome/dummy size]\\\"}\", \"isolate_server\": \"projects/example-cas-server/instances/default_instance\"}",
+      "{\"builder_name\": \"Android Compile Perf\", \"change\": \"{\\\"commits\\\": [{\\\"git_hash\\\": \\\"0cd310e5609606ca9c8531313142a1a9f16ae860\\\", \\\"repository\\\": \\\"chromium\\\"}], \\\"patch\\\": {\\\"change\\\": 3592345, \\\"revision\\\": 1, \\\"server\\\": \\\"https://chromium-review.googlesource.com\\\"}}\", \"isolate_map\": \"{\\\"performance_test_suite_android_clank_chrome\\\": \\\"[dummy hash for performance_test_suite_android_clank_chrome/dummy size]\\\"}\", \"isolate_server\": \"projects/example-cas-server/instances/default_instance\"}",
       "-o",
       "/path/to/tmp/json",
       "-t",
@@ -1458,7 +1521,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "chromium:ci"
+        "name": "chromium:try"
       },
       "resultdb": {
         "current_invocation": {

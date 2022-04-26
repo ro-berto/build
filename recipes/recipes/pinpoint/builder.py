@@ -13,6 +13,7 @@ DEPS = [
     'chromium',
     'chromium_tests',
     'chromium_tests_builder_config',
+    'depot_tools/gclient',
     'recipe_engine/buildbucket',
     'recipe_engine/json',
     'recipe_engine/properties',
@@ -78,6 +79,10 @@ def RunSteps(api):
         builder_id, builder_db=new_builder_db, use_try_db=False)
 
     api.chromium_tests.configure_build(builder_config)
+    for key, value in api.gclient.c.repo_path_map.items():
+      if value[1] == 'HEAD':
+        # Pinpoint should use the exact revision given in DEPS, instead of HEAD.
+        api.gclient.c.repo_path_map[key] = (value[0], None)
     update_step, targets_config = (
         api.chromium_tests.prepare_checkout(builder_config))
     return api.chromium_tests.compile_specific_targets(
@@ -86,22 +91,41 @@ def RunSteps(api):
 
 
 def GenTests(api):
+  from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
+
+  # Data used in tests.
+  builder = {
+      'builder_group': 'tryserver.chromium.perf',
+      'builder': 'Android Compile Perf',
+  }
+  source_side_spec = ('chromium.perf', {
+      'android-go-perf': {
+          'isolated_scripts': [{
+              'isolate_name': 'performance_test_suite_android_clank_chrome',
+              'name': 'performance_test_suite',
+          },],
+      },
+  })
+
   yield api.test(
       'basic',
-      api.chromium.generic_build(
-          builder_group='tryserver.chromium.perf',
-          builder='Android Compile Perf'),
-      api.chromium_tests.read_source_side_spec(
-          'chromium.perf', {
-              'android-go-perf': {
-                  'isolated_scripts': [{
-                      'isolate_name':
-                          'performance_test_suite_android_clank_chrome',
-                      'name':
-                          'performance_test_suite',
-                  },],
-              },
-          }),
+      api.chromium.generic_build(**builder),
+      api.chromium_tests.read_source_side_spec(*source_side_spec),
+  )
+
+  yield api.test(
+      'with_patch',
+      api.chromium.try_build(
+          revision='0cd310e5609606ca9c8531313142a1a9f16ae860',
+          gerrit_changes=[
+              common_pb2.GerritChange(
+                  host='chromium-review.googlesource.com',
+                  project='v8/v8',
+                  change=3592345,
+                  patchset=1)
+          ],
+          **builder),
+      api.chromium_tests.read_source_side_spec(*source_side_spec),
   )
 
   yield api.test(
@@ -116,20 +140,8 @@ def GenTests(api):
 
   yield api.test(
       'compile_failure',
-      api.chromium.generic_build(
-          builder_group='tryserver.chromium.perf',
-          builder='Android Compile Perf'),
-      api.chromium_tests.read_source_side_spec(
-          'chromium.perf', {
-              'android-go-perf': {
-                  'isolated_scripts': [{
-                      'isolate_name':
-                          'performance_test_suite_android_clank_chrome',
-                      'name':
-                          'performance_test_suite',
-                  },],
-              },
-          }),
+      api.chromium.generic_build(**builder),
+      api.chromium_tests.read_source_side_spec(*source_side_spec),
       api.step_data('compile', retcode=1),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
