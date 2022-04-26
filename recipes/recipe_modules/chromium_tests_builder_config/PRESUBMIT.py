@@ -50,7 +50,7 @@ def CheckGroupings(input_api, output_api):
       if builder_id in old_groupings:
         continue
       # The builder is connected to a builder that is not new
-      if any(b in old_groupings for b in grouping):
+      if any(b in old_groupings for b in grouping['builders']):
         continue
       bad_builders.append(builder_id)
     if bad_builders:
