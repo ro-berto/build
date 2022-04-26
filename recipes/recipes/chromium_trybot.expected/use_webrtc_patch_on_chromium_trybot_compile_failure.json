@@ -767,12 +767,8 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"exclusions\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"f.*\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"third_party/webrtc/f.*\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \".+\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"chromium\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": []@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -834,7 +830,7 @@
     "name": "analyze_matched_exclusion",
     "~followup_annotations": [
       "@@@STEP_TEXT@Analyze disabled: matched exclusion@@@",
-      "@@@STEP_LOG_LINE@excluded_files@third_party/webrtc/foo.cc (regex = 'third_party/webrtc/f.*')@@@",
+      "@@@STEP_LOG_LINE@excluded_files@third_party/webrtc/foo.cc (regex = '.+')@@@",
       "@@@STEP_LOG_END@excluded_files@@@",
       "@@@STEP_LOG_LINE@analyze_details@{@@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"additional_compile_targets\": [], @@@",

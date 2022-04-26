@@ -6,16 +6,13 @@ from recipe_engine import recipe_test_api
 
 
 class FilterTestApi(recipe_test_api.RecipeTestApi):
-  def suppress_analyze(self, more_exclusions=None):
+
+  def suppress_analyze(self):
     """Overrides analyze step data so that all targets get compiled."""
     return self.override_step_data(
         'read filter exclusion spec',
         self.m.json.output({
             'base': {
-                'exclusions': ['f.*'] + (more_exclusions or []),
+                'exclusions': ['.+'],
             },
-            'chromium': {
-                'exclusions': [],
-            },
-        })
-    )
+        }))

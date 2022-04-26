@@ -466,7 +466,7 @@ def GenTests(api):
               'additional_compile_targets': ['base_unittests'],
           },
       }),
-      api.filter.suppress_analyze(['v8/f.*']),
+      api.filter.suppress_analyze(),
       api.step_data('compile (with patch)', retcode=1),
   )
 
@@ -636,7 +636,7 @@ def GenTests(api):
       api.chromium_tests_builder_config.try_build(
           git_repo='https://webrtc.googlesource.com/src',),
       base_unittests_additional_compile_target(),
-      api.filter.suppress_analyze(more_exclusions=['third_party/webrtc/f.*']),
+      api.filter.suppress_analyze(),
       api.step_data('compile (with patch)', retcode=1),
   )
 
