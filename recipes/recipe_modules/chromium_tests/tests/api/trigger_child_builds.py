@@ -25,17 +25,19 @@ DEPS = [
 
 PROPERTIES = {
     'commit': recipe_api.Property(default=None),
+    'set_output_commit': recipe_api.Property(default=True),
 }
 
 
-def RunSteps(api, commit):
+def RunSteps(api, commit, set_output_commit):
   # Create a nested step so that setup steps can be easily filtered out
   with api.step.nest('setup steps'):
     builder_id = api.chromium.get_builder_id()
     builder_id, builder_config = (
         api.chromium_tests_builder_config.lookup_builder())
     api.chromium_tests.configure_build(builder_config)
-    update_step, _ = api.chromium_tests.prepare_checkout(builder_config)
+    update_step, _ = api.chromium_tests.prepare_checkout(
+        builder_config, set_output_commit=set_output_commit)
     if commit is not None:
       commit = common_pb.GitilesCommit(**commit)
 
@@ -55,7 +57,7 @@ def GenTests(api):
 
     return api.post_process(step_filter)
 
-  def builder_with_tester_to_trigger(set_output_commit=True, **kwargs):
+  def builder_with_tester_to_trigger(**kwargs):
     return api.chromium_tests_builder_config.ci_build(
         builder_group='fake-group',
         builder='fake-builder',
@@ -65,7 +67,6 @@ def GenTests(api):
                     ctbc.BuilderSpec.create(
                         chromium_config='chromium',
                         gclient_config='chromium',
-                        set_output_commit=set_output_commit,
                     ),
                 'fake-tester':
                     ctbc.BuilderSpec.create(
@@ -87,7 +88,8 @@ def GenTests(api):
 
   yield api.test(
       'scheduler-with-no-commit',
-      builder_with_tester_to_trigger(set_output_commit=False),
+      builder_with_tester_to_trigger(),
+      api.properties(set_output_commit=False),
       api.post_check(post_process.MustRun, 'no commit for trigger'),
       api.post_check(post_process.StatusException),
       api.post_process(post_process.DropExpectation),

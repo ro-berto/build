@@ -214,12 +214,6 @@ class BuilderSpec(object):
   # https://source.chromium.org/chromium/infra/infra/+/main:recipes-py/recipe_modules/platform/test_api.py?q=symbol:name
   simulation_platform = attrib(str, default=None)
 
-  # Whether to set the buildbucket output commit for the build
-  # TODO(https://crbug.com/1249938) Remove this once we're able to specify
-  # gitiles input and properties so that Android official builders correctly
-  # propagate ref information to Android official testers
-  set_output_commit = attrib(bool, default=True)
-
   # The Google Storage bucket used by lacros on skylab pipeline.
   skylab_gs_bucket = attrib(str, default=None)
 

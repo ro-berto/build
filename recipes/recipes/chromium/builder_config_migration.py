@@ -230,10 +230,6 @@ _NON_EXISTENT_BUILDERS = tuple(
 
 _DEFAULT_BUILDER_SPEC = ctbc.BuilderSpec.create()
 _UNSUPPORTED_ATTRS = (
-    # Resolve the issues that requires these attributes, then remove all
-    # non-default uses
-    'set_output_commit',
-
     # The use of all of these fields should be replaced with the use of
     # the archive module
     'cf_archive_build',
@@ -1108,7 +1104,6 @@ provide-test-spec execution_mode"
               'foo-group': {
                   'foo-builder':
                       ctbc.BuilderSpec.create(
-                          set_output_commit=False,
                           cf_archive_build=True,
                           cf_gs_bucket='fake-cf-gs-bucket',
                           cf_gs_acl='fake-cf-gs-acl',
@@ -1128,7 +1123,6 @@ provide-test-spec execution_mode"
           textwrap.dedent("""\
               \s*cannot migrate builder 'foo-group:foo-builder' with the \
 following unsupported attrs:
-              \s*\\* set_output_commit
               \s*\\* cf_archive_build
               \s*\\* cf_gs_bucket
               \s*\\* cf_gs_acl

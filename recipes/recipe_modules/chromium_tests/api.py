@@ -216,7 +216,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def prepare_checkout(self,
                        builder_config,
                        report_cache_state=True,
-                       set_output_commit=None,
+                       set_output_commit=True,
                        root_solution_revision=None,
                        runhooks_suffix=None,
                        **kwargs):
@@ -224,8 +224,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     Args:
       runhooks_suffix: Suffix for gclient runhooks step name
     """
-    if set_output_commit is None:
-      set_output_commit = builder_config.set_output_commit
     if report_cache_state:
       with self.m.step.nest('builder cache') as presentation:
         contents = self.m.file.listdir('check if empty',

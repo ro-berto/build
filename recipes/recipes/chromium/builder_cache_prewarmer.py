@@ -52,7 +52,6 @@ def RunSteps(api, properties):
     api.chromium_tests.configure_build(builder_config)
     bot_update_step, targets_config = api.chromium_tests.prepare_checkout(
         builder_config,
-        set_output_commit=builder_config.set_output_commit,
         no_fetch_tags=True)
 
     # Get timestamp before compiling since that could take a while

@@ -98,7 +98,6 @@ def compilator_steps(api, properties):
       bot_update_step, targets_config = api.chromium_tests.prepare_checkout(
           orch_builder_config,
           timeout=3600,
-          set_output_commit=orch_builder_config.set_output_commit,
           no_fetch_tags=True,
           enforce_fetch=True,
           patch=False,
