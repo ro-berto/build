@@ -790,7 +790,7 @@ TRYBOTS = try_spec.TryDatabase.create({
                 ),
             ]),
         # This trybot mirrors linux-rel
-        'linux-mbi-mode-per-site-instance-host-rel':
+        'linux-mbi-mode-per-site-instance-rel':
             try_spec.TrySpec.create([
                 try_spec.TryMirror.create(
                     builder_group='chromium.linux',
