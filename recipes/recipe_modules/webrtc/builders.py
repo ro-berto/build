@@ -539,18 +539,6 @@ _CLIENT_WEBRTC_PERF_SPECS = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             }),
-    'Perf Linux Trusty':
-        WebRTCBuilderSpec.create(
-            perf_id='webrtc-linux-large-tests',
-            chromium_config='webrtc_default',
-            gclient_config='webrtc',
-            execution_mode=builder_spec.TEST,
-            parent_builder_group='client.webrtc',
-            parent_buildername='Linux64 Builder',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            }),
     'Perf Mac 10.11':
         WebRTCBuilderSpec.create(
             perf_id='webrtc-mac-large-tests',
