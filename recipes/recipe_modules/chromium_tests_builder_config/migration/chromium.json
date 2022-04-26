@@ -3272,8 +3272,6 @@
       "tryserver.chromium.linux:linux-mbi-mode-per-site-instance-host-rel",
       "tryserver.chromium.linux:linux-rel",
       "tryserver.chromium.linux:linux-rel-warmed",
-      "tryserver.chromium.linux:linux-stable-filter-combined-rel",
-      "tryserver.chromium.linux:linux-stable-filter-rel",
       "tryserver.chromium.linux:linux_chromium_compile_rel_ng"
     ]
   },
@@ -3320,8 +3318,6 @@
       "tryserver.chromium.linux:linux-mbi-mode-per-site-instance-host-rel",
       "tryserver.chromium.linux:linux-rel",
       "tryserver.chromium.linux:linux-rel-warmed",
-      "tryserver.chromium.linux:linux-stable-filter-combined-rel",
-      "tryserver.chromium.linux:linux-stable-filter-rel",
       "tryserver.chromium.linux:linux_chromium_compile_rel_ng"
     ]
   },
@@ -3417,8 +3413,6 @@
       "tryserver.chromium.linux:linux-mbi-mode-per-site-instance-host-rel",
       "tryserver.chromium.linux:linux-rel",
       "tryserver.chromium.linux:linux-rel-warmed",
-      "tryserver.chromium.linux:linux-stable-filter-combined-rel",
-      "tryserver.chromium.linux:linux-stable-filter-rel",
       "tryserver.chromium.linux:linux_chromium_compile_rel_ng"
     ]
   },
@@ -3443,8 +3437,6 @@
       "tryserver.chromium.linux:linux-mbi-mode-per-site-instance-host-rel",
       "tryserver.chromium.linux:linux-rel",
       "tryserver.chromium.linux:linux-rel-warmed",
-      "tryserver.chromium.linux:linux-stable-filter-combined-rel",
-      "tryserver.chromium.linux:linux-stable-filter-rel",
       "tryserver.chromium.linux:linux_chromium_compile_rel_ng"
     ]
   },
@@ -5878,8 +5870,6 @@
       "tryserver.chromium.linux:linux-mbi-mode-per-site-instance-host-rel",
       "tryserver.chromium.linux:linux-rel",
       "tryserver.chromium.linux:linux-rel-warmed",
-      "tryserver.chromium.linux:linux-stable-filter-combined-rel",
-      "tryserver.chromium.linux:linux-stable-filter-rel",
       "tryserver.chromium.linux:linux_chromium_compile_rel_ng"
     ]
   },
@@ -5909,8 +5899,6 @@
       "tryserver.chromium.linux:linux-mbi-mode-per-site-instance-host-rel",
       "tryserver.chromium.linux:linux-rel",
       "tryserver.chromium.linux:linux-rel-warmed",
-      "tryserver.chromium.linux:linux-stable-filter-combined-rel",
-      "tryserver.chromium.linux:linux-stable-filter-rel",
       "tryserver.chromium.linux:linux_chromium_compile_rel_ng"
     ]
   },
@@ -5956,8 +5944,6 @@
       "tryserver.chromium.linux:linux-mbi-mode-per-site-instance-host-rel",
       "tryserver.chromium.linux:linux-rel",
       "tryserver.chromium.linux:linux-rel-warmed",
-      "tryserver.chromium.linux:linux-stable-filter-combined-rel",
-      "tryserver.chromium.linux:linux-stable-filter-rel",
       "tryserver.chromium.linux:linux_chromium_compile_rel_ng"
     ]
   },
@@ -6005,8 +5991,6 @@
       "tryserver.chromium.linux:linux-mbi-mode-per-site-instance-host-rel",
       "tryserver.chromium.linux:linux-rel",
       "tryserver.chromium.linux:linux-rel-warmed",
-      "tryserver.chromium.linux:linux-stable-filter-combined-rel",
-      "tryserver.chromium.linux:linux-stable-filter-rel",
       "tryserver.chromium.linux:linux_chromium_compile_rel_ng"
     ]
   },
@@ -6042,8 +6026,6 @@
       "tryserver.chromium.linux:linux-mbi-mode-per-site-instance-host-rel",
       "tryserver.chromium.linux:linux-rel",
       "tryserver.chromium.linux:linux-rel-warmed",
-      "tryserver.chromium.linux:linux-stable-filter-combined-rel",
-      "tryserver.chromium.linux:linux-stable-filter-rel",
       "tryserver.chromium.linux:linux_chromium_compile_rel_ng"
     ]
   },
@@ -6061,8 +6043,6 @@
       "tryserver.chromium.linux:linux-mbi-mode-per-site-instance-host-rel",
       "tryserver.chromium.linux:linux-rel",
       "tryserver.chromium.linux:linux-rel-warmed",
-      "tryserver.chromium.linux:linux-stable-filter-combined-rel",
-      "tryserver.chromium.linux:linux-stable-filter-rel",
       "tryserver.chromium.linux:linux_chromium_compile_rel_ng"
     ]
   },
@@ -6092,8 +6072,6 @@
       "tryserver.chromium.linux:linux-mbi-mode-per-site-instance-host-rel",
       "tryserver.chromium.linux:linux-rel",
       "tryserver.chromium.linux:linux-rel-warmed",
-      "tryserver.chromium.linux:linux-stable-filter-combined-rel",
-      "tryserver.chromium.linux:linux-stable-filter-rel",
       "tryserver.chromium.linux:linux_chromium_compile_rel_ng"
     ]
   },
@@ -6117,46 +6095,6 @@
       "tryserver.chromium.linux:linux-mbi-mode-per-site-instance-host-rel",
       "tryserver.chromium.linux:linux-rel",
       "tryserver.chromium.linux:linux-rel-warmed",
-      "tryserver.chromium.linux:linux-stable-filter-combined-rel",
-      "tryserver.chromium.linux:linux-stable-filter-rel",
-      "tryserver.chromium.linux:linux_chromium_compile_rel_ng"
-    ]
-  },
-  "tryserver.chromium.linux:linux-stable-filter-combined-rel": {
-    "builders": [
-      "chromium.gpu:GPU Linux Builder",
-      "chromium.gpu:Linux Release (NVIDIA)",
-      "chromium.linux:Linux Builder",
-      "chromium.linux:Linux Tests",
-      "tryserver.chromium.linux:gpu-try-linux-nvidia-rel",
-      "tryserver.chromium.linux:linux-1mbu-compile-fyi-rel",
-      "tryserver.chromium.linux:linux-dcheck-off-rel",
-      "tryserver.chromium.linux:linux-inverse-fieldtrials-fyi-rel",
-      "tryserver.chromium.linux:linux-mbi-mode-per-render-process-host-rel",
-      "tryserver.chromium.linux:linux-mbi-mode-per-site-instance-host-rel",
-      "tryserver.chromium.linux:linux-rel",
-      "tryserver.chromium.linux:linux-rel-warmed",
-      "tryserver.chromium.linux:linux-stable-filter-combined-rel",
-      "tryserver.chromium.linux:linux-stable-filter-rel",
-      "tryserver.chromium.linux:linux_chromium_compile_rel_ng"
-    ]
-  },
-  "tryserver.chromium.linux:linux-stable-filter-rel": {
-    "builders": [
-      "chromium.gpu:GPU Linux Builder",
-      "chromium.gpu:Linux Release (NVIDIA)",
-      "chromium.linux:Linux Builder",
-      "chromium.linux:Linux Tests",
-      "tryserver.chromium.linux:gpu-try-linux-nvidia-rel",
-      "tryserver.chromium.linux:linux-1mbu-compile-fyi-rel",
-      "tryserver.chromium.linux:linux-dcheck-off-rel",
-      "tryserver.chromium.linux:linux-inverse-fieldtrials-fyi-rel",
-      "tryserver.chromium.linux:linux-mbi-mode-per-render-process-host-rel",
-      "tryserver.chromium.linux:linux-mbi-mode-per-site-instance-host-rel",
-      "tryserver.chromium.linux:linux-rel",
-      "tryserver.chromium.linux:linux-rel-warmed",
-      "tryserver.chromium.linux:linux-stable-filter-combined-rel",
-      "tryserver.chromium.linux:linux-stable-filter-rel",
       "tryserver.chromium.linux:linux_chromium_compile_rel_ng"
     ]
   },
@@ -6253,8 +6191,6 @@
       "tryserver.chromium.linux:linux-mbi-mode-per-site-instance-host-rel",
       "tryserver.chromium.linux:linux-rel",
       "tryserver.chromium.linux:linux-rel-warmed",
-      "tryserver.chromium.linux:linux-stable-filter-combined-rel",
-      "tryserver.chromium.linux:linux-stable-filter-rel",
       "tryserver.chromium.linux:linux_chromium_compile_rel_ng"
     ]
   },

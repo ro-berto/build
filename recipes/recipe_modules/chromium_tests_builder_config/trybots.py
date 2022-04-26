@@ -859,38 +859,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 ],
                 regression_test_selection=try_spec.QUICK_RUN_ONLY,
             ),
-        'linux-stable-filter-rel':
-            try_spec.TrySpec.create(
-                mirrors=[
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.linux',
-                        buildername='Linux Builder',
-                        tester='Linux Tests',
-                    ),
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.gpu',
-                        buildername='GPU Linux Builder',
-                        tester='Linux Release (NVIDIA)',
-                    ),
-                ],
-                filter_stable_test=try_spec.ALWAYS),
-        'linux-stable-filter-combined-rel':
-            try_spec.TrySpec.create(
-                mirrors=[
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.linux',
-                        buildername='Linux Builder',
-                        tester='Linux Tests',
-                    ),
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.gpu',
-                        buildername='GPU Linux Builder',
-                        tester='Linux Release (NVIDIA)',
-                    ),
-                ],
-                filter_stable_test=try_spec.ALWAYS,
-                regression_test_selection=try_spec.ALWAYS,
-            ),
         'linux_chromium_asan_rel_ng':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.memory',
