@@ -188,6 +188,7 @@ class RDBPerSuiteResults(object):
           non-zero exit code. If this occurs and no unexpected failures were
           reported, it indicates invalid test results.
     """
+    exists_unexpected_failing_result = False
     test_id_prefix = ''
     results_by_test_id = collections.defaultdict(list)
     variant_hash = ''
@@ -241,6 +242,8 @@ class RDBPerSuiteResults(object):
           tr for tr in test_results
           if (not tr.expected and tr.status != test_result_pb2.PASS)
       ])
+      if individual_unexpected_unpassed_result_count[test_name] > 0:
+        exists_unexpected_failing_result = True
       # This filters out any tests that were auto-retried within the
       # invocation and finished with an expected result. eg: a test that's
       # expected to CRASH and runs with results [FAIL, CRASH]. RDB returns
@@ -255,10 +258,10 @@ class RDBPerSuiteResults(object):
       else:
         unexpected_passing_tests.add(test_name)
 
-    # If there were no test failures, but the harness exited non-zero, assume
-    # something went wrong in the test setup/init (eg: failure in underlying
-    # hardware) and that the results are invalid.
-    invalid = failure_on_exit and not unexpected_failing_tests
+    # If there were no unexpected failing results, but the harness exited
+    # non-zero, assume something went wrong in the test setup/init (eg: failure
+    # in underlying hardware) and that the results are invalid.
+    invalid = failure_on_exit and not exists_unexpected_failing_result
 
     return cls(suite_name, variant_hash, total_tests_ran,
                unexpected_passing_tests, unexpected_failing_tests,
