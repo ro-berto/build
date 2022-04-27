@@ -191,6 +191,11 @@ the chrome project.
 1. If any of the builders in the chromium/src CL have a branch selector set,
    cherry-pick the CL to the appropriate branches.
 
+    * STABLE_MILESTONE - M100+
+    * DESKTOP_EXTEND_STABLE_MILESTONE - M100+
+    * CROS_LTS_MILESTONE - M96, M100+
+    * FUCHSIA_LTS_MILESTONE - M92, M97, M100+
+
     1. Cherry-pick the CL in gerrit. If there are no conflicts then land the CL
        by adding Rubber Stamper as a reviewer and set Auto-Submit+1.
     1. If there are conflicts or the cherry-pick can't be landed because the
