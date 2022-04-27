@@ -228,8 +228,8 @@ class SymuploadApi(recipe_api.RecipeApi):
 
             # (crbug.com/1295894) Add retry to symupload_v2 step to mitigate
             # flaky http request errors.
-            @util.exponential_retry(
-                retries=3, delay=datetime.timedelta(seconds=30))
+            @self.m.time.exponential_retry(
+                retries=2, delay=datetime.timedelta(seconds=30))
             def _retry_symupload():
               logging.disable('ERROR')
               self.symupload_v2(
