@@ -3726,12 +3726,6 @@
       "tryserver.chromium.rust:android-rust-arm-rel"
     ]
   },
-  "chromium.rust:linux-rust-intree-x64-rel": {
-    "builders": [
-      "chromium.rust:linux-rust-intree-x64-rel",
-      "tryserver.chromium.rust:linux-rust-intree-x64-rel"
-    ]
-  },
   "chromium.rust:linux-rust-x64-dbg": {
     "builders": [
       "chromium.rust:linux-rust-x64-dbg",
@@ -3741,7 +3735,8 @@
   "chromium.rust:linux-rust-x64-rel": {
     "builders": [
       "chromium.rust:linux-rust-x64-rel",
-      "tryserver.chromium.rust:linux-rust-x64-rel"
+      "tryserver.chromium.rust:linux-rust-x64-rel",
+      "tryserver.chromium.rust:linux-rust-x64-rel-android-toolchain"
     ]
   },
   "chromium.staging:android-lollipop-arm-rel-swarming": {
@@ -6641,12 +6636,6 @@
       "tryserver.chromium.rust:android-rust-arm-rel"
     ]
   },
-  "tryserver.chromium.rust:linux-rust-intree-x64-rel": {
-    "builders": [
-      "chromium.rust:linux-rust-intree-x64-rel",
-      "tryserver.chromium.rust:linux-rust-intree-x64-rel"
-    ]
-  },
   "tryserver.chromium.rust:linux-rust-x64-dbg": {
     "builders": [
       "chromium.rust:linux-rust-x64-dbg",
@@ -6656,7 +6645,15 @@
   "tryserver.chromium.rust:linux-rust-x64-rel": {
     "builders": [
       "chromium.rust:linux-rust-x64-rel",
-      "tryserver.chromium.rust:linux-rust-x64-rel"
+      "tryserver.chromium.rust:linux-rust-x64-rel",
+      "tryserver.chromium.rust:linux-rust-x64-rel-android-toolchain"
+    ]
+  },
+  "tryserver.chromium.rust:linux-rust-x64-rel-android-toolchain": {
+    "builders": [
+      "chromium.rust:linux-rust-x64-rel",
+      "tryserver.chromium.rust:linux-rust-x64-rel",
+      "tryserver.chromium.rust:linux-rust-x64-rel-android-toolchain"
     ]
   },
   "tryserver.chromium.swangle:linux-swangle-chromium-try-x64": {

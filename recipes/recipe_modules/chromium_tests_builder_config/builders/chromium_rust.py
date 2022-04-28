@@ -5,90 +5,36 @@
 from .. import builder_spec
 
 
-def CreateAndroidReleaseBuilder():
+def CreateRustBuilder(platform, is_dbg):
+  chromium_config = {
+      'BUILD_CONFIG': 'Debug' if is_dbg else 'Release',
+  }
+  if platform == 'android':
+    chromium_config.update({
+        'TARGET_BITS': 32,
+        'TARGET_PLATFORM': 'android',
+        'TARGET_ARCH': 'arm',
+    })
+  else:  # platform == 'linux'
+    chromium_config.update({
+        'TARGET_BITS': 64,
+    })
+
   return builder_spec.BuilderSpec.create(
-      chromium_config='android',
-      chromium_apply_config=['android'],
+      chromium_config='android' if platform == 'android' else 'chromium',
+      chromium_apply_config=['android' if platform == 'android' else 'mb'],
       gclient_config='chromium',
-      gclient_apply_config=[
-          'android', 'enable_reclient', 'checkout_clang_libs'
-      ],
-      chromium_config_kwargs={
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-      },
-      android_config='base_config',
-      simulation_platform='linux',
-  )
-
-
-def CreateAndroidDebugBuilder():
-  return builder_spec.BuilderSpec.create(
-      chromium_config='android',
-      chromium_apply_config=['android'],
-      gclient_config='chromium',
-      gclient_apply_config=[
-          'android', 'enable_reclient', 'checkout_clang_libs'
-      ],
-      chromium_config_kwargs={
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-      },
-      android_config='base_config',
-      simulation_platform='linux',
-  )
-
-
-def CreateLinuxReleaseBuilder():
-  return builder_spec.BuilderSpec.create(
-      chromium_config='chromium',
-      chromium_apply_config=['mb'],
-      gclient_config='chromium',
-      gclient_apply_config=['checkout_clang_libs', 'enable_reclient'],
-      chromium_config_kwargs={
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-      },
-      simulation_platform='linux',
-  )
-
-
-def CreateLinuxDebugBuilder():
-  return builder_spec.BuilderSpec.create(
-      chromium_config='chromium',
-      chromium_apply_config=['mb'],
-      gclient_config='chromium',
-      gclient_apply_config=['checkout_clang_libs', 'enable_reclient'],
-      chromium_config_kwargs={
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-      },
-      simulation_platform='linux',
-  )
-
-
-def CreateLinuxInTreeToolchainBuilder():
-  return builder_spec.BuilderSpec.create(
-      chromium_config='chromium',
-      chromium_apply_config=['mb'],
-      gclient_config='chromium',
-      gclient_apply_config=['rust_in_tree', 'checkout_clang_libs'],
-      chromium_config_kwargs={
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-      },
+      gclient_apply_config=['enable_reclient', 'use_rust'] +
+      (['android'] if platform == 'android' else []),
+      chromium_config_kwargs=chromium_config,
+      android_config='base_config' if platform == 'android' else None,
       simulation_platform='linux',
   )
 
 
 SPEC = {
-    'linux-rust-x64-dbg': CreateLinuxDebugBuilder(),
-    'linux-rust-x64-rel': CreateLinuxReleaseBuilder(),
-    'linux-rust-intree-x64-rel': CreateLinuxInTreeToolchainBuilder(),
-    'android-rust-arm-dbg': CreateAndroidDebugBuilder(),
-    'android-rust-arm-rel': CreateAndroidReleaseBuilder(),
+    'linux-rust-x64-dbg': CreateRustBuilder('linux', True),
+    'linux-rust-x64-rel': CreateRustBuilder('linux', False),
+    'android-rust-arm-dbg': CreateRustBuilder('android', True),
+    'android-rust-arm-rel': CreateRustBuilder('android', False),
 }
