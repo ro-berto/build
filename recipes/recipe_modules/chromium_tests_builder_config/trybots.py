@@ -70,6 +70,9 @@ TRYBOTS = try_spec.TryDatabase.create({
                 retry_failed_shards=False,
             ),
     },
+    # The config for the following builders is now specified src-side in
+    # //infra/config/subprojects/chromium/try/tryserver.chromium.star
+    # * win32-official
     'tryserver.chromium': {
         'android-official':
             try_spec.TrySpec.create_for_single_mirror(
@@ -95,11 +98,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium',
                 buildername='win-official',
-            ),
-        'win32-official':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium',
-                buildername='win32-official',
             ),
     },
     # The config for the following builders is now specified src-side in

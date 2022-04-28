@@ -4494,12 +4494,6 @@
       "chromium:win32-archive-tagged"
     ]
   },
-  "chromium:win32-official": {
-    "builders": [
-      "chromium:win32-official",
-      "tryserver.chromium:win32-official"
-    ]
-  },
   "tryserver.blink:linux-blink-optional-highdpi-rel": {
     "blockers": [
       "builder 'chromium.fyi:linux-blink-optional-highdpi-rel-dummy' does not exist"
@@ -7025,12 +7019,6 @@
     "builders": [
       "chromium:win-official",
       "tryserver.chromium:win-official"
-    ]
-  },
-  "tryserver.chromium:win32-official": {
-    "builders": [
-      "chromium:win32-official",
-      "tryserver.chromium:win32-official"
     ]
   }
 }

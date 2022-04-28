@@ -4,20 +4,11 @@
 
 from .. import builder_spec
 
+# The config for the following builders is now specified src-side in
+# //infra/config/subprojects/chromium/ci/chromium.star
+# * win32-official
+
 SPEC = {
-    'win32-official':
-        builder_spec.BuilderSpec.create(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=['checkout_pgo_profiles'],
-            chromium_config_kwargs={
-                'TARGET_BITS': 32,
-            },
-            simulation_platform='win',
-        ),
     'win32-archive-dbg':
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
