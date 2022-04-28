@@ -153,11 +153,8 @@
     "cmd": [],
     "name": "report builders",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>running builder 'GPU Linux Builder' on group 'chromium.gpu'<br/>running tester 'Linux Release (NVIDIA)' on group 'chromium.gpu' against builder 'GPU Linux Builder' on group 'chromium.gpu'<br/>running builder 'Linux Builder' on group 'chromium.linux'<br/>running tester 'Linux Tests' on group 'chromium.linux' against builder 'Linux Builder' on group 'chromium.linux'@@@",
-      "@@@STEP_LINK@GPU Linux Builder@https://ci.chromium.org/p/chromium/builders/ci/GPU%20Linux%20Builder@@@",
-      "@@@STEP_LINK@Linux Release (NVIDIA)@https://ci.chromium.org/p/chromium/builders/ci/Linux%20Release%20(NVIDIA)@@@",
-      "@@@STEP_LINK@Linux Builder@https://ci.chromium.org/p/chromium/builders/ci/Linux%20Builder@@@",
-      "@@@STEP_LINK@Linux Tests@https://ci.chromium.org/p/chromium/builders/ci/Linux%20Tests@@@"
+      "@@@STEP_TEXT@<br/>running builder 'fake-builder' on group 'fake-group'@@@",
+      "@@@STEP_LINK@fake-builder@https://ci.chromium.org/p/chromium/builders/ci/fake-builder@@@"
     ]
   },
   {
@@ -290,8 +287,6 @@
       "@@@STEP_LOG_LINE@config@    {@@@",
       "@@@STEP_LOG_LINE@config@      \"custom_deps\": {}, @@@",
       "@@@STEP_LOG_LINE@config@      \"custom_vars\": {@@@",
-      "@@@STEP_LOG_LINE@config@        \"checkout_clang_coverage_tools\": \"True\", @@@",
-      "@@@STEP_LOG_LINE@config@        \"checkout_reclient\": \"True\", @@@",
       "@@@STEP_LOG_LINE@config@        \"checkout_telemetry_dependencies\": \"True\"@@@",
       "@@@STEP_LOG_LINE@config@      }, @@@",
       "@@@STEP_LOG_LINE@config@      \"deps_file\": \".DEPS.git\", @@@",
@@ -319,7 +314,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'checkout_clang_coverage_tools': 'True', 'checkout_reclient': 'True', 'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
       "--patch_root",
       "src",
       "--revision_mapping_file",
@@ -341,7 +336,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_REPORT_BUILD": "chromium/try/linux-rel/8945511751514863184",
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/try/fake-try-builder/8945511751514863184",
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "1800"
     },
@@ -615,7 +610,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_REPORT_BUILD": "chromium/try/linux-rel/8945511751514863184"
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/try/fake-try-builder/8945511751514863184"
     },
     "env_suffixes": {
       "PATH": [
@@ -641,7 +636,7 @@
       "python3",
       "-u",
       "RECIPE_MODULE[recipe_engine::json]/resources/read.py",
-      "[CACHE]/builder/src/testing/buildbot/chromium.gpu.json",
+      "[CACHE]/builder/src/testing/buildbot/fake-group.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -660,42 +655,11 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "read test spec (chromium.gpu.json)",
+    "name": "read test spec (fake-group.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/chromium.gpu.json@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python3",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::json]/resources/read.py",
-      "[CACHE]/builder/src/testing/buildbot/chromium.linux.json",
-      "/path/to/tmp/json"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "chromium:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "read test spec (chromium.linux.json)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/chromium.linux.json@@@",
+      "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/fake-group.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Linux Tests\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"fake-builder\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      \"base_unittests\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
@@ -780,14 +744,13 @@
       "[CACHE]/builder/src/tools/mb/mb.py",
       "analyze",
       "-m",
-      "tryserver.chromium.linux",
+      "fake-try-group",
       "-b",
-      "linux-rel",
+      "fake-try-builder",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
-      "--luci-auth",
       "-v",
       "//out/Release",
       "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": [\"base_unittests\"]}",
@@ -923,14 +886,13 @@
       "[CACHE]/builder/src/tools/mb/mb.py",
       "lookup",
       "-m",
-      "tryserver.chromium.linux",
+      "fake-try-group",
       "-b",
-      "linux-rel",
+      "fake-try-builder",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
-      "--luci-auth",
       "--recursive"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -962,14 +924,13 @@
       "[CACHE]/builder/src/tools/mb/mb.py",
       "gen",
       "-m",
-      "tryserver.chromium.linux",
+      "fake-try-group",
       "-b",
-      "linux-rel",
+      "fake-try-builder",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
-      "--luci-auth",
       "--json-output",
       "/path/to/tmp/json",
       "//out/Release"
@@ -1043,7 +1004,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/linux_rel"
+      "[CACHE]/goma/data/fake_try_builder"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -1077,7 +1038,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux_rel",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/fake_try_builder",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -1378,9 +1339,9 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"try\", \"builder\": \"linux-rel\", \"project\": \"chromium\"}",
+      "{\"bucket\": \"try\", \"builder\": \"fake-try-builder\", \"project\": \"chromium\"}",
       "--buildbot-buildername",
-      "linux-rel"
+      "fake-try-builder"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -1488,7 +1449,7 @@
       "rdb",
       "stream",
       "-var",
-      "builder:linux-rel",
+      "builder:fake-try-builder",
       "-var",
       "test_suite:base_unittests",
       "-tag",
@@ -1519,13 +1480,13 @@
       "Release",
       "--xvfb",
       "--build-properties",
-      "{\"bot_id\": \"test_bot\", \"builder_group\": \"tryserver.chromium.linux\", \"recipe\": \"chromium_trybot\", \"slavename\": \"test_bot\"}",
+      "{\"bot_id\": \"test_bot\", \"builder_group\": \"fake-try-group\", \"recipe\": \"chromium_trybot\", \"slavename\": \"test_bot\"}",
       "--annotate=gtest",
       "--test-type=base_unittests",
       "--step-name=base_unittests (with patch)",
       "--test-launcher-summary-output",
       "[CLEANUP]/tmp_tmp_1",
-      "--builder-name=linux-rel",
+      "--builder-name=fake-try-builder",
       "--slave-name=test_bot",
       "--build-number=571",
       "base_unittests"
@@ -1561,9 +1522,9 @@
       "--input-json",
       "[CLEANUP]/tmp_tmp_1",
       "--builder-group",
-      "tryserver.chromium.linux",
+      "fake-try-group",
       "--builder-name",
-      "linux-rel",
+      "fake-try-builder",
       "--build-number",
       "571",
       "--test-type",
@@ -1842,7 +1803,7 @@
       "-u",
       "RECIPE_MODULE[build::test_utils]/resources/query_cq_flakes.py",
       "--input-path",
-      "{\"bucket\": \"try\", \"builder\": \"linux-rel\", \"project\": \"chromium\", \"tests\": [{\"step_ui_name\": \"base_unittests (with patch)\", \"test_name\": \"Test.One\"}]}",
+      "{\"bucket\": \"try\", \"builder\": \"fake-try-builder\", \"project\": \"chromium\", \"tests\": [{\"step_ui_name\": \"base_unittests (with patch)\", \"test_name\": \"Test.One\"}]}",
       "--output-path",
       "/path/to/tmp/json"
     ],
@@ -1870,7 +1831,7 @@
       "@@@STEP_LOG_END@json.output (exception)@@@",
       "@@@STEP_LOG_LINE@input@{@@@",
       "@@@STEP_LOG_LINE@input@  \"bucket\": \"try\", @@@",
-      "@@@STEP_LOG_LINE@input@  \"builder\": \"linux-rel\", @@@",
+      "@@@STEP_LOG_LINE@input@  \"builder\": \"fake-try-builder\", @@@",
       "@@@STEP_LOG_LINE@input@  \"project\": \"chromium\", @@@",
       "@@@STEP_LOG_LINE@input@  \"tests\": [@@@",
       "@@@STEP_LOG_LINE@input@    {@@@",
@@ -1890,7 +1851,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'checkout_clang_coverage_tools': 'True', 'checkout_reclient': 'True', 'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
       "--patch_root",
       "src",
       "--revision_mapping_file",
@@ -1908,7 +1869,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_REPORT_BUILD": "chromium/try/linux-rel/8945511751514863184",
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/try/fake-try-builder/8945511751514863184",
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "1800"
     },
@@ -2064,7 +2025,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_REPORT_BUILD": "chromium/try/linux-rel/8945511751514863184"
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/try/fake-try-builder/8945511751514863184"
     },
     "env_suffixes": {
       "PATH": [
@@ -2161,14 +2122,13 @@
       "[CACHE]/builder/src/tools/mb/mb.py",
       "lookup",
       "-m",
-      "tryserver.chromium.linux",
+      "fake-try-group",
       "-b",
-      "linux-rel",
+      "fake-try-builder",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
-      "--luci-auth",
       "--quiet"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -2200,14 +2160,13 @@
       "[CACHE]/builder/src/tools/mb/mb.py",
       "gen",
       "-m",
-      "tryserver.chromium.linux",
+      "fake-try-group",
       "-b",
-      "linux-rel",
+      "fake-try-builder",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
-      "--luci-auth",
       "--json-output",
       "/path/to/tmp/json",
       "//out/Release"
@@ -2282,7 +2241,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/linux_rel"
+      "[CACHE]/goma/data/fake_try_builder"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -2316,7 +2275,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux_rel",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/fake_try_builder",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -2617,9 +2576,9 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"try\", \"builder\": \"linux-rel\", \"project\": \"chromium\"}",
+      "{\"bucket\": \"try\", \"builder\": \"fake-try-builder\", \"project\": \"chromium\"}",
       "--buildbot-buildername",
-      "linux-rel"
+      "fake-try-builder"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -2724,7 +2683,7 @@
       "rdb",
       "stream",
       "-var",
-      "builder:linux-rel",
+      "builder:fake-try-builder",
       "-var",
       "test_suite:base_unittests",
       "-tag",
@@ -2755,13 +2714,13 @@
       "Release",
       "--xvfb",
       "--build-properties",
-      "{\"bot_id\": \"test_bot\", \"builder_group\": \"tryserver.chromium.linux\", \"recipe\": \"chromium_trybot\", \"slavename\": \"test_bot\"}",
+      "{\"bot_id\": \"test_bot\", \"builder_group\": \"fake-try-group\", \"recipe\": \"chromium_trybot\", \"slavename\": \"test_bot\"}",
       "--annotate=gtest",
       "--test-type=base_unittests",
       "--step-name=base_unittests (without patch)",
       "--test-launcher-summary-output",
       "[CLEANUP]/tmp_tmp_2",
-      "--builder-name=linux-rel",
+      "--builder-name=fake-try-builder",
       "--slave-name=test_bot",
       "--build-number=571",
       "base_unittests",
@@ -2801,9 +2760,9 @@
       "--input-json",
       "[CLEANUP]/tmp_tmp_2",
       "--builder-group",
-      "tryserver.chromium.linux",
+      "fake-try-group",
       "--builder-name",
-      "linux-rel",
+      "fake-try-builder",
       "--build-number",
       "571",
       "--test-type",

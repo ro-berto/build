@@ -6,8 +6,6 @@ import six
 
 from .. import builder_spec
 from . import chromium
-from . import chromium_chromiumos
-from . import chromium_linux
 from . import chromium_mac
 from . import chromium_win
 
@@ -30,6 +28,8 @@ def chromium_apply_configs(base_config, config_names):
 
 # The config for the following builders is now specified src-side in
 # //infra/config/subprojects/goma/goma.star
+# * Linux Builder Goma RBE Canary
+# * Linux Builder Goma RBE Latest Client
 # * chromeos-amd64-generic-rel-goma-rbe-canary
 # * chromeos-amd64-generic-rel-goma-rbe-latest
 
@@ -41,9 +41,6 @@ SPEC = {
     'linux-archive-rel-goma-rbe-ats-canary':
         chromium_apply_configs(chromium.SPEC['linux-archive-rel'],
                                ['goma_canary']),
-    'Linux Builder Goma RBE Canary':
-        chromium_apply_configs(chromium_linux.SPEC['Linux Builder'],
-                               ['goma_canary', 'goma_use_local']),
     'mac-archive-rel-goma-rbe-canary':
         chromium_apply_configs(chromium.SPEC['mac-archive-rel'],
                                ['goma_canary']),
@@ -85,9 +82,6 @@ SPEC = {
     'linux-archive-rel-goma-rbe-ats-latest':
         chromium_apply_configs(chromium.SPEC['linux-archive-rel'],
                                ['goma_latest_client']),
-    'Linux Builder Goma RBE Latest Client':
-        chromium_apply_configs(chromium_linux.SPEC['Linux Builder'],
-                               ['goma_latest_client', 'goma_use_local']),
     'mac-archive-rel-goma-rbe-latest':
         chromium_apply_configs(chromium.SPEC['mac-archive-rel'],
                                ['goma_latest_client']),

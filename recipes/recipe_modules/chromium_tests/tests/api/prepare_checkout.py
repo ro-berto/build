@@ -11,6 +11,7 @@ DEPS = [
     'recipe_engine/file',
     'recipe_engine/json',
     'recipe_engine/path',
+    'recipe_engine/platform',
     'recipe_engine/properties',
 ]
 
@@ -57,17 +58,30 @@ def RunSteps(api, runhooks_suffix):
 
 
 def GenTests(api):
+  ctbc_api = api.chromium_tests_builder_config
+
   yield api.test(
       'basic',
-      api.chromium.ci_build(
-          builder_group='chromium.linux', builder='Linux Builder'),
+      api.platform('linux', 64),
+      api.chromium.ci_build(builder_group='fake-group', builder='fake-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.post_process(post_process.MustRun, 'gclient runhooks'),
   )
 
   yield api.test(
       'basic_try',
+      api.platform('linux', 64),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='fake-try-group', builder='fake-try-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.post_process(post_process.MustRun, 'gclient runhooks (with patch)'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
@@ -76,7 +90,12 @@ def GenTests(api):
   yield api.test(
       'without_patch',
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='fake-try-group', builder='fake-try-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(runhooks_suffix='without patch'),
       api.post_process(post_process.MustRun,
                        'gclient runhooks (without patch)'),
@@ -86,8 +105,13 @@ def GenTests(api):
 
   yield api.test(
       'has cache',
-      api.chromium.ci_build(
-          builder_group='chromium.linux', builder='Linux Builder'),
+      api.platform('linux', 64),
+      api.chromium.ci_build(builder_group='fake-group', builder='fake-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.step_data('builder cache.check if empty',
                     api.file.listdir(['foo', 'bar'])),
       api.post_check(lambda check, steps: check(
@@ -98,8 +122,13 @@ def GenTests(api):
 
   yield api.test(
       'does not have cache',
-      api.chromium.ci_build(
-          builder_group='chromium.linux', builder='Linux Builder'),
+      api.platform('linux', 64),
+      api.chromium.ci_build(builder_group='fake-group', builder='fake-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.step_data('builder cache.check if empty', api.file.listdir([])),
       api.post_check(lambda check, steps: check(
           'builder cache is absent' in steps['builder cache'].step_text)),

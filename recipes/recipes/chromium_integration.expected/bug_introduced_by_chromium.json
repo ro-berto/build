@@ -1,10 +1,160 @@
 [
   {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_REPO[depot_tools]/gerrit_client.py",
+      "changes",
+      "--host",
+      "https://chromium-review.googlesource.com",
+      "--json_file",
+      "/path/to/tmp/json",
+      "--limit",
+      "1",
+      "-p",
+      "change=456789",
+      "-o",
+      "ALL_REVISIONS",
+      "-o",
+      "DOWNLOAD_COMMANDS"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "gerrit fetch current CL info",
+    "timeout": 60,
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"branch\": \"main\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"owner\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"name\": \"John Doe\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"revisions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"184ebe53805e102605d11f6b143486d15c23a09c\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"_number\": \"12\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"ref\": \"refs/changes/89/456789/12\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_REPO[depot_tools]/gerrit_client.py",
+      "changes",
+      "--host",
+      "https://chromium-review.googlesource.com",
+      "--json_file",
+      "/path/to/tmp/json",
+      "--limit",
+      "1",
+      "-p",
+      "change=456789",
+      "-o",
+      "ALL_REVISIONS",
+      "-o",
+      "ALL_COMMITS"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "gerrit changes",
+    "timeout": 60,
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"_number\": \"456789\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"branch\": \"main\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"change_id\": \"Ideadbeef\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"created\": \"2017-01-30 13:11:20.000000000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"has_review_started\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"id\": \"fully~qualified~changeid\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"project\": \"chromium/src\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"revisions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"184ebe53805e102605d11f6b143486d15c23a09c\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"_number\": \"12\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"commit\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"message\": \"Change commit message\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        }@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"status\": \"NEW\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"subject\": \"Change title\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[depot_tools]/git_footers.py",
+      "--json",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "project:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "parse description",
+    "stdin": "Change commit message",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output (exception)@@@"
+    ]
+  },
+  {
     "cmd": [],
     "name": "report builders",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>running builder 'Linux Builder' on group 'chromium.linux'@@@",
-      "@@@STEP_LINK@Linux Builder@https://ci.chromium.org/p/project/builders/ci/Linux%20Builder@@@"
+      "@@@STEP_TEXT@<br/>running builder 'fake-builder' on group 'fake-group'@@@",
+      "@@@STEP_LINK@fake-builder@https://ci.chromium.org/p/project/builders/ci/fake-builder@@@"
     ]
   },
   {
@@ -31,7 +181,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -137,8 +287,6 @@
       "@@@STEP_LOG_LINE@config@    {@@@",
       "@@@STEP_LOG_LINE@config@      \"custom_deps\": {}, @@@",
       "@@@STEP_LOG_LINE@config@      \"custom_vars\": {@@@",
-      "@@@STEP_LOG_LINE@config@        \"checkout_clang_coverage_tools\": \"True\", @@@",
-      "@@@STEP_LOG_LINE@config@        \"checkout_reclient\": \"True\", @@@",
       "@@@STEP_LOG_LINE@config@        \"checkout_telemetry_dependencies\": \"True\"@@@",
       "@@@STEP_LOG_LINE@config@      }, @@@",
       "@@@STEP_LOG_LINE@config@      \"deps_file\": \".DEPS.git\", @@@",
@@ -166,7 +314,9 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'checkout_clang_coverage_tools': 'True', 'checkout_reclient': 'True', 'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
+      "--patch_root",
+      "src/v8",
       "--revision_mapping_file",
       "{\"got_angle_revision\": \"src/third_party/angle\", \"got_buildtools_revision\": \"src/buildtools\", \"got_dawn_revision\": \"src/third_party/dawn\", \"got_nacl_revision\": \"src/native_client\", \"got_revision\": \"src\", \"got_swiftshader_revision\": \"src/third_party/swiftshader\", \"got_v8_revision\": \"src/v8\", \"got_webrtc_revision\": \"src/third_party/webrtc\"}",
       "--git-cache-dir",
@@ -175,16 +325,18 @@
       "[CLEANUP]/bot_update",
       "--output_json",
       "/path/to/tmp/json",
+      "--patch_ref",
+      "https://chromium.googlesource.com/v8/v8@refs/heads/main:refs/changes/89/456789/12",
       "--revision",
       "src@HEAD",
       "--revision",
-      "src/v8@2d72510e447ab60a9728aeea2362d8be2cbd7789",
+      "src/v8@refs/heads/main",
       "--no_fetch_tags"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_REPORT_BUILD": "project/ci/Linux Builder/8945511751514863184",
+      "DEPOT_TOOLS_REPORT_BUILD": "project/try/fake-try-builder/8945511751514863184",
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "1800"
     },
@@ -199,7 +351,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -217,7 +369,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": \"HEAD\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src/v8\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/v8\": \"HEAD\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
@@ -250,11 +402,11 @@
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"src/v8\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/src/v8.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"801ada225ddc271c132c3a35f03975671d43e399\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"src\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"src/v8\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"properties\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_angle_revision_cp\": \"refs/heads/main@{#297276}\", @@@",
@@ -268,7 +420,7 @@
       "@@@STEP_LOG_LINE@json.output@    \"got_revision_cp\": \"refs/heads/main@{#170242}\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_swiftshader_revision\": \"44a40deda357aff750ab1cbfd94ec79dbc8bb754\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_swiftshader_revision_cp\": \"refs/heads/main@{#202157}\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"got_v8_revision\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_v8_revision_cp\": \"refs/heads/main@{#43426}\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_webrtc_revision_cp\": \"refs/heads/main@{#120644}\"@@@",
@@ -321,7 +473,7 @@
       "@@@STEP_LOG_LINE@json.output@      \"src/v8\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/src/v8.git\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"801ada225ddc271c132c3a35f03975671d43e399\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
@@ -342,7 +494,7 @@
       "@@@SET_BUILD_PROPERTY@got_revision_cp@\"refs/heads/main@{#170242}\"@@@",
       "@@@SET_BUILD_PROPERTY@got_swiftshader_revision@\"44a40deda357aff750ab1cbfd94ec79dbc8bb754\"@@@",
       "@@@SET_BUILD_PROPERTY@got_swiftshader_revision_cp@\"refs/heads/main@{#202157}\"@@@",
-      "@@@SET_BUILD_PROPERTY@got_v8_revision@\"2d72510e447ab60a9728aeea2362d8be2cbd7789\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_v8_revision@\"801ada225ddc271c132c3a35f03975671d43e399\"@@@",
       "@@@SET_BUILD_PROPERTY@got_v8_revision_cp@\"refs/heads/main@{#43426}\"@@@",
       "@@@SET_BUILD_PROPERTY@got_webrtc_revision@\"0f90628433546e61d9268596da93418c623137f4\"@@@",
       "@@@SET_BUILD_PROPERTY@got_webrtc_revision_cp@\"refs/heads/main@{#120644}\"@@@"
@@ -378,7 +530,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -423,7 +575,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -459,7 +611,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_REPORT_BUILD": "project/ci/Linux Builder/8945511751514863184"
+      "DEPOT_TOOLS_REPORT_BUILD": "project/try/fake-try-builder/8945511751514863184"
     },
     "env_suffixes": {
       "PATH": [
@@ -468,7 +620,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -478,14 +630,14 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "gclient runhooks"
+    "name": "gclient runhooks (with patch)"
   },
   {
     "cmd": [
       "python3",
       "-u",
       "RECIPE_MODULE[recipe_engine::json]/resources/read.py",
-      "[CACHE]/builder/src/testing/buildbot/chromium.linux.json",
+      "[CACHE]/builder/src/testing/buildbot/fake-group.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -494,7 +646,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -504,11 +656,11 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "read test spec (chromium.linux.json)",
+    "name": "read test spec (fake-group.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/chromium.linux.json@@@",
+      "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/fake-group.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Linux Builder\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"fake-builder\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"isolated_scripts\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"isolate_name\": \"blink_web_tests\", @@@",
@@ -522,6 +674,150 @@
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "-c",
+      "core.quotePath=false",
+      "diff",
+      "--cached",
+      "--name-only"
+    ],
+    "cwd": "[CACHE]/builder/src/v8",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "git diff to analyze patch",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@files@v8/foo.cc@@@",
+      "@@@STEP_LOG_END@files@@@",
+      "@@@SET_BUILD_PROPERTY@affected_files@{\"first_100\": [\"src/v8/foo.cc\"], \"total_count\": 1}@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python3",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::json]/resources/read.py",
+      "[CACHE]/builder/src/testing/buildbot/trybot_analyze_config.json",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "project:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "read filter exclusion spec",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@path: Path([CHECKOUT], 'testing', 'buildbot', 'trybot_analyze_config.json')@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \".+\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python3",
+      "-u",
+      "[CACHE]/builder/src/tools/mb/mb.py",
+      "analyze",
+      "-m",
+      "fake-try-group",
+      "-b",
+      "fake-try-builder",
+      "--config-file",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[CACHE]/goma/client",
+      "-v",
+      "//out/Release",
+      "{\"additional_compile_targets\": [], \"files\": [\"v8/foo.cc\"], \"test_targets\": [\"blink_web_tests\"]}",
+      "/path/to/tmp/json",
+      "--json-output",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "project:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "analyze",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"compile_targets\": [], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"status\": \"No dependency\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_targets\": []@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "analyze_matched_exclusion",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Analyze disabled: matched exclusion@@@",
+      "@@@STEP_LOG_LINE@excluded_files@v8/foo.cc (regex = '.+')@@@",
+      "@@@STEP_LOG_END@excluded_files@@@",
+      "@@@STEP_LOG_LINE@analyze_details@{@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"additional_compile_targets\": [], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"blink_web_tests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"blink_web_tests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.test_targets\": [@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"blink_web_tests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"test_targets\": [@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"blink_web_tests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  ]@@@",
+      "@@@STEP_LOG_LINE@analyze_details@}@@@",
+      "@@@STEP_LOG_END@analyze_details@@@"
     ]
   },
   {
@@ -542,7 +838,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -552,7 +848,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "ensure output directory"
+    "name": "ensure output directory (with patch)"
   },
   {
     "cmd": [
@@ -571,7 +867,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -581,7 +877,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "create compile guard",
+    "name": "create compile guard (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@CR_COMPILE_GUARD.txt@This file exists while a build compiles and is removed at the end of@@@",
       "@@@STEP_LOG_LINE@CR_COMPILE_GUARD.txt@compilation. If the next build finds that the file exists prior to@@@",
@@ -598,14 +894,13 @@
       "[CACHE]/builder/src/tools/mb/mb.py",
       "lookup",
       "-m",
-      "chromium.linux",
+      "fake-try-group",
       "-b",
-      "Linux Builder",
+      "fake-try-builder",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
-      "--luci-auth",
       "--recursive"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -615,7 +910,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -637,14 +932,13 @@
       "[CACHE]/builder/src/tools/mb/mb.py",
       "gen",
       "-m",
-      "chromium.linux",
+      "fake-try-group",
       "-b",
-      "Linux Builder",
+      "fake-try-builder",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
-      "--luci-auth",
       "--json-output",
       "/path/to/tmp/json",
       "--swarming-targets-file",
@@ -658,7 +952,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -668,7 +962,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "generate_build_files",
+    "name": "generate_build_files (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
       "@@@STEP_LOG_END@json.output[failure_summary]@@@",
@@ -693,7 +987,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -722,7 +1016,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/Linux_Builder"
+      "[CACHE]/goma/data/fake_try_builder"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -731,7 +1025,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -756,19 +1050,19 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Builder",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/fake_try_builder",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
+      "GOMA_FAIL_FAST": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -816,7 +1110,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -858,7 +1152,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -868,7 +1162,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "compile"
+    "name": "compile (with patch)"
   },
   {
     "cmd": [
@@ -891,7 +1185,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -901,7 +1195,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "compile confirm no-op"
+    "name": "compile (with patch) confirm no-op"
   },
   {
     "cmd": [],
@@ -926,7 +1220,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -970,7 +1264,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1003,7 +1297,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1045,7 +1339,7 @@
       "--build-exit-status",
       "0",
       "--build-step-name",
-      "compile",
+      "compile (with patch)",
       "--ninja-log-compiler",
       "goma",
       "--goma-stats-file",
@@ -1057,9 +1351,9 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"ci\", \"builder\": \"Linux Builder\", \"project\": \"project\"}",
+      "{\"bucket\": \"try\", \"builder\": \"fake-try-builder\", \"project\": \"project\"}",
       "--buildbot-buildername",
-      "Linux Builder"
+      "fake-try-builder"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -1067,7 +1361,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1111,7 +1405,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1142,7 +1436,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1152,7 +1446,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "remove compile guard"
+    "name": "remove compile guard (with patch)"
   },
   {
     "cmd": [],
@@ -1176,7 +1470,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1210,7 +1504,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1254,7 +1548,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1264,13 +1558,13 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "isolate tests",
+    "name": "isolate tests (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"blink_web_tests\": \"[dummy hash for blink_web_tests/dummy size]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes_refs/heads/main(at){#170242}_without_patch@{\"blink_web_tests\": \"[dummy hash for blink_web_tests/dummy size]\"}@@@"
+      "@@@SET_BUILD_PROPERTY@swarm_hashes_refs/heads/main(at){#170242}_with_patch@{\"blink_web_tests\": \"[dummy hash for blink_web_tests/dummy size]\"}@@@"
     ]
   },
   {
@@ -1288,7 +1582,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1298,7 +1592,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "find command lines",
+    "name": "find command lines (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -1338,7 +1632,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1373,7 +1667,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1406,7 +1700,7 @@
       "-server",
       "https://example.swarmingserver.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"blink_web_tests (with patch)/Ubuntu-16.04/[dummy has/Linux Builder/571\", \"priority\": \"25\", \"realm\": \"project:ci\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:chromium.linux\", \"buildername:Linux Builder\", \"buildnumber:571\", \"data:[dummy hash for blink_web_tests/size]\", \"name:blink_web_tests\", \"ninja_target:\", \"project:chromium\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:project.ci:Linux Builder\", \"stepname:blink_web_tests (with patch)\", \"test_id_prefix:\", \"test_suite:blink_web_tests\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for blink_web_tests\", \"size_bytes\": \"size]\"}}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:Linux Builder\", \"-var\", \"os:Ubuntu-16.04\", \"-var\", \"test_suite:blink_web_tests\", \"-tag\", \"step_name:blink_web_tests (with patch)\", \"-tag\", \"target_platform:linux\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"json\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json\", \"--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-16.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"blink_web_tests (with patch)/Ubuntu-16.04/[dummy has/fake-try-builder/571\", \"priority\": \"30\", \"realm\": \"project:try\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:fake-try-group\", \"buildername:fake-try-builder\", \"buildnumber:571\", \"data:[dummy hash for blink_web_tests/size]\", \"gerrit:https://chromium-review.googlesource.com/c/456789/12\", \"name:blink_web_tests\", \"ninja_target:\", \"patch_project:v8/v8\", \"project:chromium\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:project.try:fake-try-builder\", \"stepname:blink_web_tests (with patch)\", \"test_id_prefix:\", \"test_suite:blink_web_tests\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for blink_web_tests\", \"size_bytes\": \"size]\"}}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:fake-try-builder\", \"-var\", \"os:Ubuntu-16.04\", \"-var\", \"test_suite:blink_web_tests\", \"-tag\", \"step_name:blink_web_tests (with patch)\", \"-tag\", \"target_platform:linux\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"json\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json\", \"--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-16.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -1417,7 +1711,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1434,7 +1728,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"name\": \"blink_web_tests (with patch)/Ubuntu-16.04/[dummy has/Linux Builder/571\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"name\": \"blink_web_tests (with patch)/Ubuntu-16.04/[dummy has/fake-try-builder/571\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"0\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_result\": {@@@",
@@ -1449,27 +1743,29 @@
       "@@@STEP_LOG_LINE@json.input@{@@@",
       "@@@STEP_LOG_LINE@json.input@  \"requests\": [@@@",
       "@@@STEP_LOG_LINE@json.input@    {@@@",
-      "@@@STEP_LOG_LINE@json.input@      \"name\": \"blink_web_tests (with patch)/Ubuntu-16.04/[dummy has/Linux Builder/571\", @@@",
-      "@@@STEP_LOG_LINE@json.input@      \"priority\": \"25\", @@@",
-      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"project:ci\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"name\": \"blink_web_tests (with patch)/Ubuntu-16.04/[dummy has/fake-try-builder/571\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"priority\": \"30\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"project:try\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"resultdb\": {@@@",
       "@@@STEP_LOG_LINE@json.input@        \"enable\": true@@@",
       "@@@STEP_LOG_LINE@json.input@      }, @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"bucket:try\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"build_is_experimental:false\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"builder_group:chromium.linux\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"buildername:Linux Builder\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"builder_group:fake-try-group\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"buildername:fake-try-builder\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"buildnumber:571\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"data:[dummy hash for blink_web_tests/size]\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"gerrit:https://chromium-review.googlesource.com/c/456789/12\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"name:blink_web_tests\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"ninja_target:\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"patch_project:v8/v8\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"project:chromium\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"purpose:CI\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"purpose:post-commit\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"purpose:ManualTS\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"purpose:pre-commit\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"slavename:fake-bot-id\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"spec_name:project.ci:Linux Builder\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"spec_name:project.try:fake-try-builder\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"stepname:blink_web_tests (with patch)\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"test_id_prefix:\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"test_suite:blink_web_tests\"@@@",
@@ -1489,7 +1785,7 @@
       "@@@STEP_LOG_LINE@json.input@              \"rdb\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"stream\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"builder:Linux Builder\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"builder:fake-try-builder\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"os:Ubuntu-16.04\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
@@ -1551,7 +1847,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: blink_web_tests (with patch)/Ubuntu-16.04/[dummy has/Linux Builder/571@https://example.swarmingserver.appspot.com/task?id=0@@@"
+      "@@@STEP_LINK@task UI: blink_web_tests (with patch)/Ubuntu-16.04/[dummy has/fake-try-builder/571@https://example.swarmingserver.appspot.com/task?id=0@@@"
     ]
   },
   {
@@ -1569,7 +1865,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1614,7 +1910,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1644,7 +1940,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1673,7 +1969,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1701,7 +1997,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1732,7 +2028,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1760,7 +2056,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1790,7 +2086,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1828,7 +2124,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1866,7 +2162,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1909,7 +2205,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -1949,7 +2245,7 @@
       "--merge-additional-args",
       "[]",
       "--build-properties",
-      "{\"bot_id\": \"test_bot\", \"builder_group\": \"chromium.linux\", \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"got_angle_revision_cp\": \"refs/heads/main@{#297276}\", \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \"got_buildtools_revision_cp\": \"refs/heads/main@{#182578}\", \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", \"got_dawn_revision_cp\": \"refs/heads/main@{#51819}\", \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/main@{#274981}\", \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"got_revision_cp\": \"refs/heads/main@{#170242}\", \"got_swiftshader_revision\": \"44a40deda357aff750ab1cbfd94ec79dbc8bb754\", \"got_swiftshader_revision_cp\": \"refs/heads/main@{#202157}\", \"got_v8_revision\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\", \"got_v8_revision_cp\": \"refs/heads/main@{#43426}\", \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"got_webrtc_revision_cp\": \"refs/heads/main@{#120644}\", \"recipe\": \"chromium_integration\", \"swarm_hashes\": {\"blink_web_tests\": \"[dummy hash for blink_web_tests/size]\"}}",
+      "{\"bot_id\": \"test_bot\", \"builder_group\": \"fake-try-group\", \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"got_angle_revision_cp\": \"refs/heads/main@{#297276}\", \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \"got_buildtools_revision_cp\": \"refs/heads/main@{#182578}\", \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", \"got_dawn_revision_cp\": \"refs/heads/main@{#51819}\", \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/main@{#274981}\", \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"got_revision_cp\": \"refs/heads/main@{#170242}\", \"got_swiftshader_revision\": \"44a40deda357aff750ab1cbfd94ec79dbc8bb754\", \"got_swiftshader_revision_cp\": \"refs/heads/main@{#202157}\", \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", \"got_v8_revision_cp\": \"refs/heads/main@{#43426}\", \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"got_webrtc_revision_cp\": \"refs/heads/main@{#120644}\", \"recipe\": \"chromium_integration\", \"swarm_hashes\": {\"blink_web_tests\": \"[dummy hash for blink_web_tests/size]\"}}",
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
@@ -1976,7 +2272,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -2038,8 +2334,8 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"0\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_builder_group\": \"chromium.linux\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": \"Linux Builder\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_builder_group\": \"fake-group\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": \"fake-builder\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 test results@https://luci-milo.appspot.com/ui/inv/some-inv-name/test-results@@@",
@@ -2078,11 +2374,114 @@
   },
   {
     "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_REPO[depot_tools]/gerrit_client.py",
+      "changes",
+      "--host",
+      "https://chromium-review.googlesource.com",
+      "--json_file",
+      "/path/to/tmp/json",
+      "--limit",
+      "1",
+      "-p",
+      "change=456789",
+      "-o",
+      "ALL_REVISIONS",
+      "-o",
+      "ALL_COMMITS"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "gerrit changes (2)",
+    "timeout": 60,
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"_number\": \"456789\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"branch\": \"main\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"change_id\": \"Ideadbeef\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"created\": \"2017-01-30 13:11:20.000000000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"has_review_started\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"id\": \"fully~qualified~changeid\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"project\": \"chromium/src\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"revisions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"184ebe53805e102605d11f6b143486d15c23a09c\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"_number\": \"12\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"commit\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"message\": \"Change commit message\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        }@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"status\": \"NEW\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"subject\": \"Change title\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[depot_tools]/git_footers.py",
+      "--json",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "project:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "parse description (2)",
+    "stdin": "Change commit message",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output (exception)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "proceed with retry",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>fewer than 5 failures, continue with retries@@@"
+    ]
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[build::test_utils]/resources/query_cq_flakes.py",
       "--input-path",
-      "{\"bucket\": \"ci\", \"builder\": \"Linux Builder\", \"project\": \"project\", \"tests\": [{\"step_ui_name\": \"blink_web_tests (with patch)\", \"test_name\": \"Test.One\"}]}",
+      "{\"bucket\": \"try\", \"builder\": \"fake-try-builder\", \"project\": \"project\", \"tests\": [{\"step_ui_name\": \"blink_web_tests (with patch)\", \"test_name\": \"Test.One\"}]}",
       "--output-path",
       "/path/to/tmp/json"
     ],
@@ -2093,7 +2492,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -2109,8 +2508,8 @@
       "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
       "@@@STEP_LOG_END@json.output (exception)@@@",
       "@@@STEP_LOG_LINE@input@{@@@",
-      "@@@STEP_LOG_LINE@input@  \"bucket\": \"ci\", @@@",
-      "@@@STEP_LOG_LINE@input@  \"builder\": \"Linux Builder\", @@@",
+      "@@@STEP_LOG_LINE@input@  \"bucket\": \"try\", @@@",
+      "@@@STEP_LOG_LINE@input@  \"builder\": \"fake-try-builder\", @@@",
       "@@@STEP_LOG_LINE@input@  \"project\": \"project\", @@@",
       "@@@STEP_LOG_LINE@input@  \"tests\": [@@@",
       "@@@STEP_LOG_LINE@input@    {@@@",
@@ -2135,7 +2534,7 @@
       "-server",
       "https://example.swarmingserver.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"blink_web_tests (retry shards with patch)/Ubuntu-16.04/[dummy has/Linux Builder/571\", \"priority\": \"24\", \"realm\": \"project:ci\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:chromium.linux\", \"buildername:Linux Builder\", \"buildnumber:571\", \"data:[dummy hash for blink_web_tests/size]\", \"name:blink_web_tests\", \"ninja_target:\", \"project:chromium\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:project.ci:Linux Builder\", \"stepname:blink_web_tests (retry shards with patch)\", \"test_id_prefix:\", \"test_suite:blink_web_tests\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for blink_web_tests\", \"size_bytes\": \"size]\"}}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:Linux Builder\", \"-var\", \"os:Ubuntu-16.04\", \"-var\", \"test_suite:blink_web_tests\", \"-tag\", \"step_name:blink_web_tests (retry shards with patch)\", \"-tag\", \"target_platform:linux\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"json\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json\", \"--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-16.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"blink_web_tests (retry shards with patch)/Ubuntu-16.04/[dummy has/fake-try-builder/571\", \"priority\": \"29\", \"realm\": \"project:try\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:fake-try-group\", \"buildername:fake-try-builder\", \"buildnumber:571\", \"data:[dummy hash for blink_web_tests/size]\", \"gerrit:https://chromium-review.googlesource.com/c/456789/12\", \"name:blink_web_tests\", \"ninja_target:\", \"patch_project:v8/v8\", \"project:chromium\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:project.try:fake-try-builder\", \"stepname:blink_web_tests (retry shards with patch)\", \"test_id_prefix:\", \"test_suite:blink_web_tests\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for blink_web_tests\", \"size_bytes\": \"size]\"}}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:fake-try-builder\", \"-var\", \"os:Ubuntu-16.04\", \"-var\", \"test_suite:blink_web_tests\", \"-tag\", \"step_name:blink_web_tests (retry shards with patch)\", \"-tag\", \"target_platform:linux\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"json\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json\", \"--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-16.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -2146,7 +2545,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -2163,7 +2562,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"name\": \"blink_web_tests (retry shards with patch)/Ubuntu-16.04/[dummy has/Linux Builder/571\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"name\": \"blink_web_tests (retry shards with patch)/Ubuntu-16.04/[dummy has/fake-try-builder/571\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_result\": {@@@",
@@ -2178,27 +2577,29 @@
       "@@@STEP_LOG_LINE@json.input@{@@@",
       "@@@STEP_LOG_LINE@json.input@  \"requests\": [@@@",
       "@@@STEP_LOG_LINE@json.input@    {@@@",
-      "@@@STEP_LOG_LINE@json.input@      \"name\": \"blink_web_tests (retry shards with patch)/Ubuntu-16.04/[dummy has/Linux Builder/571\", @@@",
-      "@@@STEP_LOG_LINE@json.input@      \"priority\": \"24\", @@@",
-      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"project:ci\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"name\": \"blink_web_tests (retry shards with patch)/Ubuntu-16.04/[dummy has/fake-try-builder/571\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"priority\": \"29\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"project:try\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"resultdb\": {@@@",
       "@@@STEP_LOG_LINE@json.input@        \"enable\": true@@@",
       "@@@STEP_LOG_LINE@json.input@      }, @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"bucket:try\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"build_is_experimental:false\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"builder_group:chromium.linux\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"buildername:Linux Builder\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"builder_group:fake-try-group\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"buildername:fake-try-builder\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"buildnumber:571\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"data:[dummy hash for blink_web_tests/size]\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"gerrit:https://chromium-review.googlesource.com/c/456789/12\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"name:blink_web_tests\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"ninja_target:\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"patch_project:v8/v8\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"project:chromium\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"purpose:CI\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"purpose:post-commit\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"purpose:ManualTS\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"purpose:pre-commit\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"slavename:fake-bot-id\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"spec_name:project.ci:Linux Builder\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"spec_name:project.try:fake-try-builder\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"stepname:blink_web_tests (retry shards with patch)\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"test_id_prefix:\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"test_suite:blink_web_tests\"@@@",
@@ -2218,7 +2619,7 @@
       "@@@STEP_LOG_LINE@json.input@              \"rdb\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"stream\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"builder:Linux Builder\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"builder:fake-try-builder\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"os:Ubuntu-16.04\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
@@ -2280,7 +2681,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: blink_web_tests (retry shards with patch)/Ubuntu-16.04/[dummy has/Linux Builder/571@https://example.swarmingserver.appspot.com/task?id=1@@@"
+      "@@@STEP_LINK@task UI: blink_web_tests (retry shards with patch)/Ubuntu-16.04/[dummy has/fake-try-builder/571@https://example.swarmingserver.appspot.com/task?id=1@@@"
     ]
   },
   {
@@ -2298,7 +2699,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -2350,7 +2751,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -2388,7 +2789,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -2431,7 +2832,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -2471,7 +2872,7 @@
       "--merge-additional-args",
       "[]",
       "--build-properties",
-      "{\"bot_id\": \"test_bot\", \"builder_group\": \"chromium.linux\", \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"got_angle_revision_cp\": \"refs/heads/main@{#297276}\", \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \"got_buildtools_revision_cp\": \"refs/heads/main@{#182578}\", \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", \"got_dawn_revision_cp\": \"refs/heads/main@{#51819}\", \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/main@{#274981}\", \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"got_revision_cp\": \"refs/heads/main@{#170242}\", \"got_swiftshader_revision\": \"44a40deda357aff750ab1cbfd94ec79dbc8bb754\", \"got_swiftshader_revision_cp\": \"refs/heads/main@{#202157}\", \"got_v8_revision\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\", \"got_v8_revision_cp\": \"refs/heads/main@{#43426}\", \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"got_webrtc_revision_cp\": \"refs/heads/main@{#120644}\", \"recipe\": \"chromium_integration\", \"swarm_hashes\": {\"blink_web_tests\": \"[dummy hash for blink_web_tests/size]\"}}",
+      "{\"bot_id\": \"test_bot\", \"builder_group\": \"fake-try-group\", \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"got_angle_revision_cp\": \"refs/heads/main@{#297276}\", \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \"got_buildtools_revision_cp\": \"refs/heads/main@{#182578}\", \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", \"got_dawn_revision_cp\": \"refs/heads/main@{#51819}\", \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/main@{#274981}\", \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"got_revision_cp\": \"refs/heads/main@{#170242}\", \"got_swiftshader_revision\": \"44a40deda357aff750ab1cbfd94ec79dbc8bb754\", \"got_swiftshader_revision_cp\": \"refs/heads/main@{#202157}\", \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", \"got_v8_revision_cp\": \"refs/heads/main@{#43426}\", \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"got_webrtc_revision_cp\": \"refs/heads/main@{#120644}\", \"recipe\": \"chromium_integration\", \"swarm_hashes\": {\"blink_web_tests\": \"[dummy hash for blink_web_tests/size]\"}}",
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
@@ -2498,7 +2899,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -2560,8 +2961,8 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"1\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_builder_group\": \"chromium.linux\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": \"Linux Builder\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_builder_group\": \"fake-group\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": \"fake-builder\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@Test.One@https://luci-milo.appspot.com/ui/inv/build:8945511751514863184/test-results?q=Test.One@@@",
@@ -2602,7 +3003,9 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'checkout_clang_coverage_tools': 'True', 'checkout_reclient': 'True', 'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
+      "--patch_root",
+      "src/v8",
       "--revision_mapping_file",
       "{\"got_angle_revision\": \"src/third_party/angle\", \"got_buildtools_revision\": \"src/buildtools\", \"got_dawn_revision\": \"src/third_party/dawn\", \"got_nacl_revision\": \"src/native_client\", \"got_revision\": \"src\", \"got_swiftshader_revision\": \"src/third_party/swiftshader\", \"got_v8_revision\": \"src/v8\", \"got_webrtc_revision\": \"src/third_party/webrtc\"}",
       "--git-cache-dir",
@@ -2613,12 +3016,14 @@
       "/path/to/tmp/json",
       "--revision",
       "src@f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "--revision",
+      "src/v8@HEAD",
       "--no_fetch_tags"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_REPORT_BUILD": "project/ci/Linux Builder/8945511751514863184",
+      "DEPOT_TOOLS_REPORT_BUILD": "project/try/fake-try-builder/8945511751514863184",
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "1800"
     },
@@ -2633,7 +3038,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -2649,7 +3054,8 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/v8\": \"HEAD\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
@@ -2686,7 +3092,7 @@
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"src\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"src/v8\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"properties\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_angle_revision_cp\": \"refs/heads/main@{#297276}\", @@@",
@@ -2774,7 +3180,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_REPORT_BUILD": "project/ci/Linux Builder/8945511751514863184"
+      "DEPOT_TOOLS_REPORT_BUILD": "project/try/fake-try-builder/8945511751514863184"
     },
     "env_suffixes": {
       "PATH": [
@@ -2783,7 +3189,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -2814,7 +3220,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -2844,7 +3250,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -2871,14 +3277,13 @@
       "[CACHE]/builder/src/tools/mb/mb.py",
       "lookup",
       "-m",
-      "chromium.linux",
+      "fake-try-group",
       "-b",
-      "Linux Builder",
+      "fake-try-builder",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
-      "--luci-auth",
       "--quiet"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -2888,7 +3293,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -2910,14 +3315,13 @@
       "[CACHE]/builder/src/tools/mb/mb.py",
       "gen",
       "-m",
-      "chromium.linux",
+      "fake-try-group",
       "-b",
-      "Linux Builder",
+      "fake-try-builder",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
-      "--luci-auth",
       "--json-output",
       "/path/to/tmp/json",
       "--swarming-targets-file",
@@ -2931,7 +3335,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -2967,7 +3371,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -2996,7 +3400,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/Linux_Builder"
+      "[CACHE]/goma/data/fake_try_builder"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -3005,7 +3409,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -3030,19 +3434,19 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/Linux_Builder",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/fake_try_builder",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
+      "GOMA_FAIL_FAST": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -3090,7 +3494,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -3132,7 +3536,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -3165,7 +3569,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -3200,7 +3604,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -3244,7 +3648,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -3277,7 +3681,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -3331,9 +3735,9 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"ci\", \"builder\": \"Linux Builder\", \"project\": \"project\"}",
+      "{\"bucket\": \"try\", \"builder\": \"fake-try-builder\", \"project\": \"project\"}",
       "--buildbot-buildername",
-      "Linux Builder"
+      "fake-try-builder"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -3341,7 +3745,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -3385,7 +3789,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -3417,7 +3821,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -3448,7 +3852,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -3483,7 +3887,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -3510,7 +3914,7 @@
       "-server",
       "https://example.swarmingserver.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"blink_web_tests (without patch)/Ubuntu-16.04/[dummy has/Linux Builder/571\", \"priority\": \"24\", \"realm\": \"project:ci\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:chromium.linux\", \"buildername:Linux Builder\", \"buildnumber:571\", \"data:[dummy hash for blink_web_tests/size]\", \"name:blink_web_tests\", \"ninja_target:\", \"project:chromium\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:project.ci:Linux Builder\", \"stepname:blink_web_tests (without patch)\", \"test_id_prefix:\", \"test_suite:blink_web_tests\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for blink_web_tests\", \"size_bytes\": \"size]\"}}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:Linux Builder\", \"-var\", \"os:Ubuntu-16.04\", \"-var\", \"test_suite:blink_web_tests\", \"-tag\", \"step_name:blink_web_tests (without patch)\", \"-tag\", \"target_platform:linux\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"json\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json\", \"--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json\", \"--gtest_repeat=10\", \"--test-launcher-retry-limit=0\", \"--isolated-script-test-filter=Test.One\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-16.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"blink_web_tests (without patch)/Ubuntu-16.04/[dummy has/fake-try-builder/571\", \"priority\": \"29\", \"realm\": \"project:try\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:try\", \"build_is_experimental:false\", \"builder_group:fake-try-group\", \"buildername:fake-try-builder\", \"buildnumber:571\", \"data:[dummy hash for blink_web_tests/size]\", \"gerrit:https://chromium-review.googlesource.com/c/456789/12\", \"name:blink_web_tests\", \"ninja_target:\", \"patch_project:v8/v8\", \"project:chromium\", \"purpose:ManualTS\", \"purpose:pre-commit\", \"slavename:fake-bot-id\", \"spec_name:project.try:fake-try-builder\", \"stepname:blink_web_tests (without patch)\", \"test_id_prefix:\", \"test_suite:blink_web_tests\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for blink_web_tests\", \"size_bytes\": \"size]\"}}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:fake-try-builder\", \"-var\", \"os:Ubuntu-16.04\", \"-var\", \"test_suite:blink_web_tests\", \"-tag\", \"step_name:blink_web_tests (without patch)\", \"-tag\", \"target_platform:linux\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"json\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json\", \"--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json\", \"--gtest_repeat=10\", \"--test-launcher-retry-limit=0\", \"--isolated-script-test-filter=Test.One\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Ubuntu-16.04\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -3521,7 +3925,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -3538,7 +3942,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"name\": \"blink_web_tests (without patch)/Ubuntu-16.04/[dummy has/Linux Builder/571\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"name\": \"blink_web_tests (without patch)/Ubuntu-16.04/[dummy has/fake-try-builder/571\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"2\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_result\": {@@@",
@@ -3553,27 +3957,29 @@
       "@@@STEP_LOG_LINE@json.input@{@@@",
       "@@@STEP_LOG_LINE@json.input@  \"requests\": [@@@",
       "@@@STEP_LOG_LINE@json.input@    {@@@",
-      "@@@STEP_LOG_LINE@json.input@      \"name\": \"blink_web_tests (without patch)/Ubuntu-16.04/[dummy has/Linux Builder/571\", @@@",
-      "@@@STEP_LOG_LINE@json.input@      \"priority\": \"24\", @@@",
-      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"project:ci\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"name\": \"blink_web_tests (without patch)/Ubuntu-16.04/[dummy has/fake-try-builder/571\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"priority\": \"29\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"project:try\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"resultdb\": {@@@",
       "@@@STEP_LOG_LINE@json.input@        \"enable\": true@@@",
       "@@@STEP_LOG_LINE@json.input@      }, @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"bucket:try\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"build_is_experimental:false\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"builder_group:chromium.linux\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"buildername:Linux Builder\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"builder_group:fake-try-group\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"buildername:fake-try-builder\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"buildnumber:571\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"data:[dummy hash for blink_web_tests/size]\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"gerrit:https://chromium-review.googlesource.com/c/456789/12\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"name:blink_web_tests\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"ninja_target:\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"patch_project:v8/v8\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"project:chromium\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"purpose:CI\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"purpose:post-commit\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"purpose:ManualTS\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"purpose:pre-commit\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"slavename:fake-bot-id\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"spec_name:project.ci:Linux Builder\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"spec_name:project.try:fake-try-builder\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"stepname:blink_web_tests (without patch)\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"test_id_prefix:\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"test_suite:blink_web_tests\"@@@",
@@ -3593,7 +3999,7 @@
       "@@@STEP_LOG_LINE@json.input@              \"rdb\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"stream\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"builder:Linux Builder\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"builder:fake-try-builder\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"os:Ubuntu-16.04\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
@@ -3658,7 +4064,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: blink_web_tests (without patch)/Ubuntu-16.04/[dummy has/Linux Builder/571@https://example.swarmingserver.appspot.com/task?id=2@@@"
+      "@@@STEP_LINK@task UI: blink_web_tests (without patch)/Ubuntu-16.04/[dummy has/fake-try-builder/571@https://example.swarmingserver.appspot.com/task?id=2@@@"
     ]
   },
   {
@@ -3688,7 +4094,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -3726,7 +4132,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -3769,7 +4175,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -3809,7 +4215,7 @@
       "--merge-additional-args",
       "[]",
       "--build-properties",
-      "{\"bot_id\": \"test_bot\", \"builder_group\": \"chromium.linux\", \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"got_angle_revision_cp\": \"refs/heads/main@{#297276}\", \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \"got_buildtools_revision_cp\": \"refs/heads/main@{#182578}\", \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", \"got_dawn_revision_cp\": \"refs/heads/main@{#51819}\", \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/main@{#274981}\", \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"got_revision_cp\": \"refs/heads/main@{#170242}\", \"got_swiftshader_revision\": \"44a40deda357aff750ab1cbfd94ec79dbc8bb754\", \"got_swiftshader_revision_cp\": \"refs/heads/main@{#202157}\", \"got_v8_revision\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\", \"got_v8_revision_cp\": \"refs/heads/main@{#43426}\", \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"got_webrtc_revision_cp\": \"refs/heads/main@{#120644}\", \"recipe\": \"chromium_integration\", \"swarm_hashes\": {\"blink_web_tests\": \"[dummy hash for blink_web_tests/size]\"}}",
+      "{\"bot_id\": \"test_bot\", \"builder_group\": \"fake-try-group\", \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"got_angle_revision_cp\": \"refs/heads/main@{#297276}\", \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \"got_buildtools_revision_cp\": \"refs/heads/main@{#182578}\", \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", \"got_dawn_revision_cp\": \"refs/heads/main@{#51819}\", \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/main@{#274981}\", \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"got_revision_cp\": \"refs/heads/main@{#170242}\", \"got_swiftshader_revision\": \"44a40deda357aff750ab1cbfd94ec79dbc8bb754\", \"got_swiftshader_revision_cp\": \"refs/heads/main@{#202157}\", \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", \"got_v8_revision_cp\": \"refs/heads/main@{#43426}\", \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"got_webrtc_revision_cp\": \"refs/heads/main@{#120644}\", \"recipe\": \"chromium_integration\", \"swarm_hashes\": {\"blink_web_tests\": \"[dummy hash for blink_web_tests/size]\"}}",
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
@@ -3836,7 +4242,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -3898,8 +4304,8 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"2\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_builder_group\": \"chromium.linux\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": \"Linux Builder\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_builder_group\": \"fake-group\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": \"fake-builder\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 test results@https://luci-milo.appspot.com/ui/inv/some-inv-name/test-results@@@",
@@ -3938,6 +4344,109 @@
   },
   {
     "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_REPO[depot_tools]/gerrit_client.py",
+      "changes",
+      "--host",
+      "https://chromium-review.googlesource.com",
+      "--json_file",
+      "/path/to/tmp/json",
+      "--limit",
+      "1",
+      "-p",
+      "change=456789",
+      "-o",
+      "ALL_REVISIONS",
+      "-o",
+      "ALL_COMMITS"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "gerrit changes (3)",
+    "timeout": 60,
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"_number\": \"456789\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"branch\": \"main\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"change_id\": \"Ideadbeef\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"created\": \"2017-01-30 13:11:20.000000000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"has_review_started\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"id\": \"fully~qualified~changeid\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"project\": \"chromium/src\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"revisions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"184ebe53805e102605d11f6b143486d15c23a09c\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"_number\": \"12\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"commit\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"message\": \"Change commit message\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        }@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"status\": \"NEW\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"subject\": \"Change title\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[depot_tools]/git_footers.py",
+      "--json",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "project:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "parse description (3)",
+    "stdin": "Change commit message",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output (exception)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "proceed with retry (2)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>fewer than 5 failures, continue with retries@@@"
+    ]
+  },
+  {
+    "cmd": [
       "rdb",
       "rpc",
       "luci.resultdb.v1.Recorder",
@@ -3951,7 +4460,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {
@@ -3997,7 +4506,7 @@
       "--build-number",
       "571",
       "--builder-name",
-      "Linux Builder",
+      "fake-try-builder",
       "--gs-bucket",
       "gs://chromium-layout-test-archives",
       "--dest-filename",
@@ -4011,7 +4520,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "project:ci"
+        "name": "project:try"
       },
       "resultdb": {
         "current_invocation": {

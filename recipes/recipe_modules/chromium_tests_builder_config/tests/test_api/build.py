@@ -124,10 +124,10 @@ def GenTests(api):
   yield api.test(
       'default-db',
       api.chromium_tests_builder_config.generic_build(
-          builder_group='chromium.linux', builder='Linux Builder'),
+          builder_group='migration.testing', builder='foo'),
       api.properties(
           expected_builder_id=chromium.BuilderId.create_for_group(
-              'chromium.linux', 'Linux Builder'),
+              'migration.testing', 'foo'),
           expected_builder_db=builders.BUILDERS,
           expected_try_db=trybots.TRYBOTS,
           expected_platform_name='linux',

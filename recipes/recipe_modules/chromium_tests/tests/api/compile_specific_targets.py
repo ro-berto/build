@@ -19,6 +19,7 @@ DEPS = [
     'chromium_tests_builder_config',
     'depot_tools/tryserver',
     'recipe_engine/buildbucket',
+    'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
     'recipe_engine/step',
@@ -65,6 +66,7 @@ def RunSteps(api):
 
 
 def GenTests(api):
+  ctbc_api = api.chromium_tests_builder_config
 
   def filter_out_setup_steps():
 
@@ -78,8 +80,19 @@ def GenTests(api):
 
   yield api.test(
       'linux_tests',
+      api.platform('linux', 64),
       api.chromium.ci_build(
-          builder_group='chromium.linux', builder='Linux Tests'),
+          builder_group='fake-group',
+          builder='fake-tester',
+          parent_buildername='fake-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+          ).with_parent(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(swarming_gtest=True),
       filter_out_setup_steps(),
   )
@@ -101,8 +114,19 @@ def GenTests(api):
 
   yield api.test(
       'failure',
+      api.platform('linux', 64),
       api.chromium.ci_build(
-          builder_group='chromium.linux', builder='Linux Tests'),
+          builder_group='fake-group',
+          builder='fake-tester',
+          parent_buildername='fake-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+          ).with_parent(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(swarming_gtest=True),
       api.step_data('compile', retcode=1),
       filter_out_setup_steps(),
@@ -110,8 +134,14 @@ def GenTests(api):
 
   yield api.test(
       'failure_tryserver',
+      api.platform('linux', 64),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='fake-try-group', builder='fake-try-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.step_data('compile (with patch)', retcode=1),
       filter_out_setup_steps(),
   )

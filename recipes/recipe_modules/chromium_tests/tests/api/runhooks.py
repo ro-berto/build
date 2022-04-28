@@ -9,7 +9,7 @@ DEPS = [
     'chromium_checkout',
     'chromium_tests',
     'chromium_tests_builder_config',
-    'recipe_engine/buildbucket',
+    'recipe_engine/platform',
     'recipe_engine/properties',
 ]
 
@@ -23,9 +23,16 @@ def RunSteps(api):
 
 
 def GenTests(api):
+  ctbc_api = api.chromium_tests_builder_config
   yield api.test(
       'failure',
+      api.platform('linux', 64),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='fake-try-group', builder='fake-try-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.override_step_data('gclient runhooks (with patch)', retcode=1),
   )

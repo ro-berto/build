@@ -11,7 +11,9 @@ def _chromium_linux_spec(**kwargs):
 
 # The config for the following builders is now specified src-side in
 # //infra/config/subprojects/chromium/ci/chromium.linux.star
+# * Linux Builder
 # * Linux Builder (dbg)
+# * Linux Tests
 # * Linux Tests (dbg)(1)
 
 SPEC = {
@@ -139,39 +141,6 @@ SPEC = {
             },
             execution_mode=builder_spec.TEST,
             parent_buildername='Linux Builder (Wayland)',
-            simulation_platform='linux',
-        ),
-    'Linux Builder':
-        _chromium_linux_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'use_clang_coverage',
-                'enable_reclient',
-            ],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            simulation_platform='linux',
-        ),
-    'Linux Tests':
-        _chromium_linux_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=['use_clang_coverage'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            execution_mode=builder_spec.TEST,
-            parent_buildername='Linux Builder',
             simulation_platform='linux',
         ),
     'Cast Audio Linux':

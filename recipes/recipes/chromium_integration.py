@@ -11,6 +11,8 @@ DEPS = [
     'chromium_swarming',
     'chromium_tests',
     'chromium_tests_builder_config',
+    'filter',
+    'recipe_engine/platform',
     'recipe_engine/properties',
     'test_utils',
 ]
@@ -24,10 +26,9 @@ def RunSteps(api):
 
 
 def GenTests(api):
+  ctbc_api = api.chromium_tests_builder_config
 
-  def ci_props(builder_group='chromium.linux',
-               builder='Linux Builder',
-               extra_swarmed_tests=None):
+  def try_props(extra_swarmed_tests=None):
     swarm_hashes = {}
     if extra_swarmed_tests:
       for test in extra_swarmed_tests:
@@ -35,32 +36,36 @@ def GenTests(api):
 
     return sum([
         api.properties(swarm_hashes=swarm_hashes),
-        api.chromium_tests_builder_config.ci_build(
+        api.platform('linux', 64),
+        api.chromium.try_build(
             project='project',
-            builder_group=builder_group,
-            builder=builder,
+            builder_group='fake-try-group',
+            builder='fake-try-builder',
             git_repo='https://chromium.googlesource.com/v8/v8.git',
         ),
+        ctbc_api.properties(ctbc_api.properties_assembler_for_try_builder()
+                            .with_mirrored_builder(
+                                builder_group='fake-group',
+                                builder='fake-builder',
+                            ).assemble()),
+        api.filter.suppress_analyze(),
     ], api.empty_test_data())
 
   def blink_test_setup():
-    return (
-      ci_props(extra_swarmed_tests=['blink_web_tests']) +
-      api.chromium_tests.read_source_side_spec(
-        'chromium.linux', {
-          'Linux Builder': {
-            'isolated_scripts': [
-              {
-                'isolate_name': 'blink_web_tests',
-                'name': 'blink_web_tests',
-                'swarming': {'can_use_on_swarming_builders': True},
-                'results_handler': 'layout tests',
-              },
-            ],
-          },
-        }
-      )
-    )
+    return (try_props(extra_swarmed_tests=['blink_web_tests']) +
+            api.chromium_tests.read_source_side_spec(
+                'fake-group', {
+                    'fake-builder': {
+                        'isolated_scripts': [{
+                            'isolate_name': 'blink_web_tests',
+                            'name': 'blink_web_tests',
+                            'swarming': {
+                                'can_use_on_swarming_builders': True
+                            },
+                            'results_handler': 'layout tests',
+                        },],
+                    },
+                }))
 
   def blink_test(
       succeeds_with_patch,

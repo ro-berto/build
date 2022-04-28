@@ -114,6 +114,24 @@ def RunSteps(api):
 
 
 def GenTests(api):
+  ctbc_api = api.chromium_tests_builder_config
+
+  def arbitrary_tester():
+    return sum([
+        api.platform('linux', 64),
+        api.chromium.ci_build(
+            builder_group='fake-group',
+            builder='fake-tester',
+            parent_buildername='fake-builder'),
+        ctbc_api.properties(
+            ctbc_api.properties_assembler_for_ci_tester(
+                builder_group='fake-group',
+                builder='fake-tester',
+            ).with_parent(
+                builder_group='fake-group',
+                builder='fake-builder',
+            ).assemble()),
+    ], api.empty_test_data())
 
   def filter_out_setup_steps():
 
@@ -127,10 +145,7 @@ def GenTests(api):
 
   yield api.test(
       'basic',
-      api.chromium.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-      ),
+      arbitrary_tester(),
       api.properties(swarm_hashes={
           'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/111',
       }),
@@ -139,10 +154,7 @@ def GenTests(api):
 
   yield api.test(
       'missing_shards',
-      api.chromium.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-      ),
+      arbitrary_tester(),
       api.properties(
           swarm_hashes={
               'blink_web_tests':
@@ -162,10 +174,7 @@ def GenTests(api):
 
   yield api.test(
       'isolate_coverage_data',
-      api.chromium.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-      ),
+      arbitrary_tester(),
       api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
@@ -186,10 +195,7 @@ def GenTests(api):
 
   yield api.test(
       'fail',
-      api.chromium.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-      ),
+      arbitrary_tester(),
       api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
@@ -204,10 +210,7 @@ def GenTests(api):
 
   yield api.test(
       'fail_many_failures',
-      api.chromium.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-      ),
+      arbitrary_tester(),
       api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
@@ -229,20 +232,14 @@ def GenTests(api):
 
   yield api.test(
       'fail_to_trigger',
-      api.chromium.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-      ),
+      arbitrary_tester(),
       api.post_process(post_process.StatusException),
       api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
       'without_patch_filter',
-      api.chromium.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-      ),
+      arbitrary_tester(),
       api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
@@ -261,10 +258,7 @@ def GenTests(api):
 
   yield api.test(
       'expected_failures',
-      api.chromium.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-      ),
+      arbitrary_tester(),
       api.properties(
           swarm_hashes={
               'blink_web_tests':
@@ -283,10 +277,7 @@ def GenTests(api):
 
   yield api.test(
       'customized_test_options',
-      api.chromium.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-      ),
+      arbitrary_tester(),
       api.properties(
           swarm_hashes={
               'blink_web_tests':
@@ -300,10 +291,7 @@ def GenTests(api):
 
   yield api.test(
       'override_compile_targets',
-      api.chromium.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-      ),
+      arbitrary_tester(),
       api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
@@ -314,10 +302,7 @@ def GenTests(api):
 
   yield api.test(
       'chartjson',
-      api.chromium.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-      ),
+      arbitrary_tester(),
       api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
@@ -329,10 +314,7 @@ def GenTests(api):
 
   yield api.test(
       'chartjson_ignore_task_failure',
-      api.chromium.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-      ),
+      arbitrary_tester(),
       api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
@@ -350,10 +332,7 @@ def GenTests(api):
 
   yield api.test(
       'chartjson_max_failures',
-      api.chromium.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-      ),
+      arbitrary_tester(),
       api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
@@ -370,10 +349,7 @@ def GenTests(api):
 
   yield api.test(
       'chartjson_no_results_failure',
-      api.chromium.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-      ),
+      arbitrary_tester(),
       api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
@@ -389,10 +365,7 @@ def GenTests(api):
 
   yield api.test(
       'histograms_LUCI_missing_perf_dashboard_machine_group_property',
-      api.chromium.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-      ),
+      arbitrary_tester(),
       api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
@@ -406,10 +379,7 @@ def GenTests(api):
 
   yield api.test(
       'dimensions_windows',
-      api.chromium.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-      ),
+      arbitrary_tester(),
       api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
@@ -423,10 +393,7 @@ def GenTests(api):
 
   yield api.test(
       'dimensions_mac',
-      api.chromium.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-      ),
+      arbitrary_tester(),
       api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
@@ -440,10 +407,7 @@ def GenTests(api):
 
   yield api.test(
       'dimensions_mac_hidpi',
-      api.chromium.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-      ),
+      arbitrary_tester(),
       api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
@@ -458,10 +422,7 @@ def GenTests(api):
 
   yield api.test(
       'dimensions_mac_intel_stable',
-      api.chromium.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-      ),
+      arbitrary_tester(),
       api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
@@ -497,10 +458,7 @@ def GenTests(api):
 
   yield api.test(
       'invalid_test_results',
-      api.chromium.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-      ),
+      arbitrary_tester(),
       api.properties(
           swarm_hashes={
               'blink_web_tests':
@@ -520,10 +478,7 @@ def GenTests(api):
   # in the json.
   yield api.test(
       'upload_to_legacy_results_dashboard',
-      api.chromium.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-      ),
+      arbitrary_tester(),
       api.properties(swarm_hashes={
           'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/111',
       }),
@@ -540,10 +495,7 @@ def GenTests(api):
 
   yield api.test(
       'shard_timed_out_failure',
-      api.chromium.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-      ),
+      arbitrary_tester(),
       api.properties(swarm_hashes={
           'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
       }),

@@ -136,7 +136,7 @@ def GenTests(api):
   yield api.test(
       'static-dbs',
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='tryserver.migration.testing', builder='foo'),
       api.properties(use_static_dbs=True),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),

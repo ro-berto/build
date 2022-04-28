@@ -279,7 +279,12 @@ def GenTests(api):
   yield api.test(
       'tryserver',
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='fake-try-group', builder='fake-try-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.code_coverage(use_clang_coverage=True),
       api.properties(files_to_instrument=[
           'some/path/to/file.cc',
@@ -327,7 +332,12 @@ def GenTests(api):
   yield api.test(
       'tryserver skip instrumenting if there are too many files',
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='fake-try-group', builder='fake-try-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.code_coverage(use_clang_coverage=True),
       api.properties(files_to_instrument=[
           'some/path/to/file%d.cc' % i for i in range(500)
@@ -339,7 +349,12 @@ def GenTests(api):
   yield api.test(
       'tryserver skip instrumenting if DEPS only change',
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='fake-try-group', builder='fake-try-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.code_coverage(use_clang_coverage=True),
       api.properties(files_to_instrument=['third_party/skia/file.cc']),
       api.properties(is_deps_only_change=True),
@@ -350,9 +365,14 @@ def GenTests(api):
   yield api.test(
       'tryserver unsupported repo',
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux',
-          builder='linux-rel',
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
           git_repo='https://chromium.googlesource.com/v8/v8'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.code_coverage(use_clang_coverage=True),
       api.properties(files_to_instrument=[
           'some/path/to/file.cc',
@@ -387,7 +407,14 @@ def GenTests(api):
   yield api.test(
       'skip collecting coverage data',
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
+          git_repo='https://chromium.googlesource.com/v8/v8'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.code_coverage(use_clang_coverage=True),
       api.properties(files_to_instrument=['some/path/to/non_source_file.txt']),
       api.post_process(
@@ -399,7 +426,12 @@ def GenTests(api):
   yield api.test(
       'skip processing coverage data if no data is found',
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='fake-try-group', builder='fake-try-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.code_coverage(use_clang_coverage=True),
       api.properties(files_to_instrument=[
           'some/path/to/file.cc',
@@ -441,7 +473,12 @@ def GenTests(api):
   yield api.test(
       'do not raise failure for per-cl coverage',
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='fake-try-group', builder='fake-try-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.code_coverage(use_clang_coverage=True),
       api.properties(files_to_instrument=[
           'some/path/to/file.cc',

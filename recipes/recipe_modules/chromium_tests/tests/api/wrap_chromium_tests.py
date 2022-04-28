@@ -74,6 +74,8 @@ def RunSteps(api):
 
 
 def GenTests(api):
+  ctbc_api = api.chromium_tests_builder_config
+
   test_builders = ctbc.BuilderDatabase.create({
       'chromium.example': {
           'android-basic':
@@ -125,21 +127,54 @@ def GenTests(api):
 
   yield api.test(
       'isolated_targets',
+      api.platform('linux', 64),
       api.chromium.ci_build(
-          builder_group='chromium.linux', builder='Linux Tests'),
+          builder_group='fake-group',
+          builder='fake-tester',
+          parent_buildername='fake-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+          ).with_parent(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(swarming_gtest=True),
   )
 
   yield api.test(
       'local_isolated_script_test',
+      api.platform('linux', 64),
       api.chromium.ci_build(
-          builder_group='chromium.linux', builder='Linux Tests'),
+          builder_group='fake-group',
+          builder='fake-tester',
+          parent_buildername='fake-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+          ).with_parent(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(local_isolated_script_test=True,),
   )
 
   yield api.test(
       'script_test',
+      api.platform('linux', 64),
       api.chromium.ci_build(
-          builder_group='chromium.linux', builder='Linux Tests'),
+          builder_group='fake-group',
+          builder='fake-tester',
+          parent_buildername='fake-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+          ).with_parent(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(script_test=True),
   )

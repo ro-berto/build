@@ -11,8 +11,10 @@ def _chromium_gpu_spec(**kwargs):
 
 # The config for the following builders is now specified src-side in
 # //infra/config/subprojects/chromium/ci/chromium.gpu.star
+# * GPU Linux Builder
 # * GPU Mac Builder
 # * GPU Win x64 Builder
+# * Linux Release (NVIDIA)
 # * Mac Release (Intel)
 # * Mac Retina Release (AMD)
 # * Win10 x64 Release (NVIDIA)
@@ -46,23 +48,6 @@ SPEC = {
             parent_buildername='GPU Win x64 Builder (dbg)',
             simulation_platform='win',
         ),
-    'GPU Linux Builder':
-        _chromium_gpu_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'use_clang_coverage',
-                'enable_reclient',
-            ],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            simulation_platform='linux',
-        ),
     'GPU Linux Builder (dbg)':
         _chromium_gpu_spec(
             chromium_config='chromium',
@@ -77,22 +62,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
             },
-            simulation_platform='linux',
-        ),
-    'Linux Release (NVIDIA)':
-        _chromium_gpu_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=['use_clang_coverage'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            execution_mode=builder_spec.TEST,
-            parent_buildername='GPU Linux Builder',
             simulation_platform='linux',
         ),
     'Linux Debug (NVIDIA)':

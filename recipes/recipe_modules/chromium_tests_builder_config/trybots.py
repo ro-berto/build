@@ -615,7 +615,16 @@ TRYBOTS = try_spec.TryDatabase.create({
     },
     # The config for the following builders is now specified src-side in
     # //infra/config/subprojects/chromium/try/tryserver.chromium.linux.star
+    # * gpu-try-linux-nvidia-rel
+    # * linux-1mbu-compile-fyi-rel
+    # * linux-dcheck-off-rel
+    # * linux-inverse-fieldtrials-fyi-rel
+    # * linux-mbi-mode-per-render-process-host-rel
+    # * linux-mbi-mode-per-site-instance-host-rel
+    # * linux-rel-warmed
+    # * linux-rel
     # * linux_chromium_compile_dbg_ng
+    # * linux_chromium_compile_rel_ng
     # * linux_chromium_dbg_ng
     'tryserver.chromium.linux': {
         'cast_shell_linux':
@@ -720,20 +729,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.fyi',
                 buildername='linux-blink-heap-verification',
             ),
-        # This trybot mirrors linux-rel
-        'linux-dcheck-off-rel':
-            try_spec.TrySpec.create([
-                try_spec.TryMirror.create(
-                    builder_group='chromium.linux',
-                    buildername='Linux Builder',
-                    tester='Linux Tests',
-                ),
-                try_spec.TryMirror.create(
-                    builder_group='chromium.gpu',
-                    buildername='GPU Linux Builder',
-                    tester='Linux Release (NVIDIA)',
-                ),
-            ]),
         'linux-example-builder':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
@@ -754,53 +749,11 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.fyi',
                 buildername='linux-headless-shell-rel',
             ),
-        # This trybot mirrors the trybot linux-rel
-        'linux-inverse-fieldtrials-fyi-rel':
-            try_spec.TrySpec.create([
-                try_spec.TryMirror.create(
-                    builder_group='chromium.linux',
-                    buildername='Linux Builder',
-                    tester='Linux Tests',
-                ),
-                try_spec.TryMirror.create(
-                    builder_group='chromium.gpu',
-                    buildername='GPU Linux Builder',
-                    tester='Linux Release (NVIDIA)',
-                ),
-            ]),
         'linux-fieldtrial-fyi-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
                 buildername='linux-fieldtrial-rel',
             ),
-        # This trybot mirrors linux-rel
-        'linux-mbi-mode-per-render-process-host-rel':
-            try_spec.TrySpec.create([
-                try_spec.TryMirror.create(
-                    builder_group='chromium.linux',
-                    buildername='Linux Builder',
-                    tester='Linux Tests',
-                ),
-                try_spec.TryMirror.create(
-                    builder_group='chromium.gpu',
-                    buildername='GPU Linux Builder',
-                    tester='Linux Release (NVIDIA)',
-                ),
-            ]),
-        # This trybot mirrors linux-rel
-        'linux-mbi-mode-per-site-instance-rel':
-            try_spec.TrySpec.create([
-                try_spec.TryMirror.create(
-                    builder_group='chromium.linux',
-                    buildername='Linux Builder',
-                    tester='Linux Tests',
-                ),
-                try_spec.TryMirror.create(
-                    builder_group='chromium.gpu',
-                    buildername='GPU Linux Builder',
-                    tester='Linux Release (NVIDIA)',
-                ),
-            ]),
         'linux-no-base-tracing-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.linux',
@@ -818,58 +771,12 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.memory',
                 buildername='WebKit Linux MSAN',
             ),
-        'linux-1mbu-compile-fyi-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.linux',
-                buildername='Linux Builder',
-                is_compile_only=True,
-                include_all_triggered_testers=True,
-            ),
-        'linux-rel':
-            try_spec.TrySpec.create(
-                mirrors=[
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.linux',
-                        buildername='Linux Builder',
-                        tester='Linux Tests',
-                    ),
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.gpu',
-                        buildername='GPU Linux Builder',
-                        tester='Linux Release (NVIDIA)',
-                    ),
-                ],
-                regression_test_selection=try_spec.QUICK_RUN_ONLY,
-            ),
-        'linux-rel-warmed':
-            try_spec.TrySpec.create(
-                mirrors=[
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.linux',
-                        buildername='Linux Builder',
-                        tester='Linux Tests',
-                    ),
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.gpu',
-                        buildername='GPU Linux Builder',
-                        tester='Linux Release (NVIDIA)',
-                    ),
-                ],
-                regression_test_selection=try_spec.QUICK_RUN_ONLY,
-            ),
         'linux_chromium_asan_rel_ng':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.memory',
                 buildername='Linux ASan LSan Builder',
                 tester='Linux ASan LSan Tests (1)',
                 regression_test_selection=try_spec.QUICK_RUN_ONLY,
-            ),
-        'linux_chromium_compile_rel_ng':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.linux',
-                buildername='Linux Builder',
-                is_compile_only=True,
-                include_all_triggered_testers=True,
             ),
         'linux_chromium_archive_rel_ng':
             try_spec.TrySpec.create_for_single_mirror(
@@ -1035,12 +942,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.gpu',
                 buildername='GPU Linux Builder (dbg)',
                 tester='Linux Debug (NVIDIA)',
-            ),
-        'gpu-try-linux-nvidia-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu',
-                buildername='GPU Linux Builder',
-                tester='Linux Release (NVIDIA)',
             ),
         'linux-lacros-fyi-rel':
             try_spec.TrySpec.create_for_single_mirror(

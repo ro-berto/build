@@ -222,8 +222,16 @@ def GenTests(api):
 
   yield api.test(
       'builder',
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.linux', builder='Linux Builder'),
+      api.platform('linux', 64),
+      api.chromium.ci_build(builder_group='fake-group', builder='fake-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).with_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+          ).assemble()),
       api.override_step_data(
           'trigger',
           stdout=api.raw_io.output_text("""
@@ -248,12 +256,26 @@ def GenTests(api):
 
   yield api.test(
       'tester',
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-          parent_buildername='Linux Builder'),
-      api.chromium_tests.read_source_side_spec('chromium.linux', {
-          'Linux Tests': {
+      api.platform('linux', 64),
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-tester',
+          parent_buildername='fake-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+              builder_spec=ctbc.BuilderSpec.create(
+                  gclient_config='chromium',
+                  chromium_config='chromium',
+                  build_gs_bucket='fake-gs-bucket',
+              ),
+          ).with_parent(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
+      api.chromium_tests.read_source_side_spec('fake-group', {
+          'fake-tester': {
               'gtest_tests': ['base_unittests'],
           },
       }),
@@ -310,13 +332,19 @@ def GenTests(api):
   input_properties.archive_datas.extend([archive_data])
   yield api.test(
       'archive_builder_no_chrome_version',
-      api.properties(
-          chrome_version=None, **{'$build/archive': input_properties}),
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Builder',
+      api.platform('linux', 64),
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-builder',
           revision='refs/tags/1.2.3.4',
           git_ref='refs/tags/1.2.3.4'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
+      api.properties(
+          chrome_version=None, **{'$build/archive': input_properties}),
       api.post_process(check_gs_url_equals, 'x86/1.2.3.4/chrome',
                        'gs://any-bucket/x86/1.2.3.4/chrome'),
       api.post_process(post_process.StatusSuccess),
@@ -325,13 +353,19 @@ def GenTests(api):
 
   yield api.test(
       'archive_builder_with_chrome_version',
-      api.properties(
-          chrome_version='2.2.2.2', **{'$build/archive': input_properties}),
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Builder',
+      api.platform('linux', 64),
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-builder',
           revision='refs/tags/1.2.3.4',
           git_ref='refs/tags/1.2.3.4'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
+      api.properties(
+          chrome_version='2.2.2.2', **{'$build/archive': input_properties}),
       api.post_process(check_gs_url_equals, 'x86/2.2.2.2/chrome',
                        'gs://any-bucket/x86/2.2.2.2/chrome'),
       api.post_process(post_process.StatusSuccess),
@@ -705,8 +739,13 @@ def GenTests(api):
 
   yield api.test(
       'compile_failure',
-      api.chromium.ci_build(
-          builder_group='chromium.linux', builder='Linux Builder'),
+      api.platform('linux', 64),
+      api.chromium.ci_build(builder_group='fake-group', builder='fake-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(fail_compile=True),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.ResultReason, 'Compile step failed.'),
@@ -724,18 +763,32 @@ def GenTests(api):
   }
   yield api.test(
       'skip_retrying_logic_is_limited_to_try_jobs',
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-          parent_buildername='Linux Builder'),
+      api.platform('linux', 64),
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-tester',
+          parent_buildername='fake-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+              builder_spec=ctbc.BuilderSpec.create(
+                  gclient_config='chromium',
+                  chromium_config='chromium',
+                  build_gs_bucket='fake-gs-bucket',
+              ),
+          ).with_parent(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(**{
           '$build/test_utils': {
               'min_failed_suites_to_skip_retry': 3,
           },
       }),
       api.chromium_tests.read_source_side_spec(
-          'chromium.linux', {
-              'Linux Tests': {
+          'fake-group', {
+              'fake-tester': {
                   'gtest_tests':
                       ['base_unittests', 'target1', 'target2', 'target3'],
               },

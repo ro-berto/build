@@ -2019,16 +2019,6 @@
       "chromium.goma.fyi:Android Builder (dbg)"
     ]
   },
-  "chromium.goma.fyi:Linux Builder Goma RBE Canary": {
-    "builders": [
-      "chromium.goma.fyi:Linux Builder Goma RBE Canary"
-    ]
-  },
-  "chromium.goma.fyi:Linux Builder Goma RBE Latest Client": {
-    "builders": [
-      "chromium.goma.fyi:Linux Builder Goma RBE Latest Client"
-    ]
-  },
   "chromium.goma.fyi:Mac Builder (dbg) Goma RBE Canary (clobber)": {
     "builders": [
       "chromium.goma.fyi:Mac Builder (dbg) Goma RBE Canary (clobber)"
@@ -3258,23 +3248,6 @@
       "tryserver.chromium.android:gpu-try-android-m-nexus-5x-64"
     ]
   },
-  "chromium.gpu:GPU Linux Builder": {
-    "builders": [
-      "chromium.gpu:GPU Linux Builder",
-      "chromium.gpu:Linux Release (NVIDIA)",
-      "chromium.linux:Linux Builder",
-      "chromium.linux:Linux Tests",
-      "tryserver.chromium.linux:gpu-try-linux-nvidia-rel",
-      "tryserver.chromium.linux:linux-1mbu-compile-fyi-rel",
-      "tryserver.chromium.linux:linux-dcheck-off-rel",
-      "tryserver.chromium.linux:linux-inverse-fieldtrials-fyi-rel",
-      "tryserver.chromium.linux:linux-mbi-mode-per-render-process-host-rel",
-      "tryserver.chromium.linux:linux-mbi-mode-per-site-instance-rel",
-      "tryserver.chromium.linux:linux-rel",
-      "tryserver.chromium.linux:linux-rel-warmed",
-      "tryserver.chromium.linux:linux_chromium_compile_rel_ng"
-    ]
-  },
   "chromium.gpu:GPU Linux Builder (dbg)": {
     "builders": [
       "chromium.gpu:GPU Linux Builder (dbg)",
@@ -3302,23 +3275,6 @@
       "chromium.gpu:GPU Linux Builder (dbg)",
       "chromium.gpu:Linux Debug (NVIDIA)",
       "tryserver.chromium.linux:gpu-try-linux-nvidia-dbg"
-    ]
-  },
-  "chromium.gpu:Linux Release (NVIDIA)": {
-    "builders": [
-      "chromium.gpu:GPU Linux Builder",
-      "chromium.gpu:Linux Release (NVIDIA)",
-      "chromium.linux:Linux Builder",
-      "chromium.linux:Linux Tests",
-      "tryserver.chromium.linux:gpu-try-linux-nvidia-rel",
-      "tryserver.chromium.linux:linux-1mbu-compile-fyi-rel",
-      "tryserver.chromium.linux:linux-dcheck-off-rel",
-      "tryserver.chromium.linux:linux-inverse-fieldtrials-fyi-rel",
-      "tryserver.chromium.linux:linux-mbi-mode-per-render-process-host-rel",
-      "tryserver.chromium.linux:linux-mbi-mode-per-site-instance-rel",
-      "tryserver.chromium.linux:linux-rel",
-      "tryserver.chromium.linux:linux-rel-warmed",
-      "tryserver.chromium.linux:linux_chromium_compile_rel_ng"
     ]
   },
   "chromium.gpu:Mac Debug (Intel)": {
@@ -3399,45 +3355,11 @@
       "tryserver.chromium.linux:leak_detection_linux"
     ]
   },
-  "chromium.linux:Linux Builder": {
-    "builders": [
-      "chromium.gpu:GPU Linux Builder",
-      "chromium.gpu:Linux Release (NVIDIA)",
-      "chromium.linux:Linux Builder",
-      "chromium.linux:Linux Tests",
-      "tryserver.chromium.linux:gpu-try-linux-nvidia-rel",
-      "tryserver.chromium.linux:linux-1mbu-compile-fyi-rel",
-      "tryserver.chromium.linux:linux-dcheck-off-rel",
-      "tryserver.chromium.linux:linux-inverse-fieldtrials-fyi-rel",
-      "tryserver.chromium.linux:linux-mbi-mode-per-render-process-host-rel",
-      "tryserver.chromium.linux:linux-mbi-mode-per-site-instance-rel",
-      "tryserver.chromium.linux:linux-rel",
-      "tryserver.chromium.linux:linux-rel-warmed",
-      "tryserver.chromium.linux:linux_chromium_compile_rel_ng"
-    ]
-  },
   "chromium.linux:Linux Builder (Wayland)": {
     "builders": [
       "chromium.linux:Linux Builder (Wayland)",
       "chromium.linux:Linux Tests (Wayland)",
       "tryserver.chromium.linux:linux-wayland-rel"
-    ]
-  },
-  "chromium.linux:Linux Tests": {
-    "builders": [
-      "chromium.gpu:GPU Linux Builder",
-      "chromium.gpu:Linux Release (NVIDIA)",
-      "chromium.linux:Linux Builder",
-      "chromium.linux:Linux Tests",
-      "tryserver.chromium.linux:gpu-try-linux-nvidia-rel",
-      "tryserver.chromium.linux:linux-1mbu-compile-fyi-rel",
-      "tryserver.chromium.linux:linux-dcheck-off-rel",
-      "tryserver.chromium.linux:linux-inverse-fieldtrials-fyi-rel",
-      "tryserver.chromium.linux:linux-mbi-mode-per-render-process-host-rel",
-      "tryserver.chromium.linux:linux-mbi-mode-per-site-instance-rel",
-      "tryserver.chromium.linux:linux-rel",
-      "tryserver.chromium.linux:linux-rel-warmed",
-      "tryserver.chromium.linux:linux_chromium_compile_rel_ng"
     ]
   },
   "chromium.linux:Linux Tests (Wayland)": {
@@ -3702,16 +3624,6 @@
     "builders": [
       "chromium.memory:win-asan",
       "tryserver.chromium.win:win-asan"
-    ]
-  },
-  "chromium.reclient.fyi:Linux Builder reclient staging": {
-    "builders": [
-      "chromium.reclient.fyi:Linux Builder reclient staging"
-    ]
-  },
-  "chromium.reclient.fyi:Linux Builder reclient test": {
-    "builders": [
-      "chromium.reclient.fyi:Linux Builder reclient test"
     ]
   },
   "chromium.rust:android-rust-arm-dbg": {
@@ -5845,23 +5757,6 @@
       "tryserver.chromium.linux:gpu-try-linux-nvidia-dbg"
     ]
   },
-  "tryserver.chromium.linux:gpu-try-linux-nvidia-rel": {
-    "builders": [
-      "chromium.gpu:GPU Linux Builder",
-      "chromium.gpu:Linux Release (NVIDIA)",
-      "chromium.linux:Linux Builder",
-      "chromium.linux:Linux Tests",
-      "tryserver.chromium.linux:gpu-try-linux-nvidia-rel",
-      "tryserver.chromium.linux:linux-1mbu-compile-fyi-rel",
-      "tryserver.chromium.linux:linux-dcheck-off-rel",
-      "tryserver.chromium.linux:linux-inverse-fieldtrials-fyi-rel",
-      "tryserver.chromium.linux:linux-mbi-mode-per-render-process-host-rel",
-      "tryserver.chromium.linux:linux-mbi-mode-per-site-instance-rel",
-      "tryserver.chromium.linux:linux-rel",
-      "tryserver.chromium.linux:linux-rel-warmed",
-      "tryserver.chromium.linux:linux_chromium_compile_rel_ng"
-    ]
-  },
   "tryserver.chromium.linux:layout_test_leak_detection": {
     "builders": [
       "chromium.memory:WebKit Linux Leak",
@@ -5872,23 +5767,6 @@
     "builders": [
       "chromium.linux:Leak Detection Linux",
       "tryserver.chromium.linux:leak_detection_linux"
-    ]
-  },
-  "tryserver.chromium.linux:linux-1mbu-compile-fyi-rel": {
-    "builders": [
-      "chromium.gpu:GPU Linux Builder",
-      "chromium.gpu:Linux Release (NVIDIA)",
-      "chromium.linux:Linux Builder",
-      "chromium.linux:Linux Tests",
-      "tryserver.chromium.linux:gpu-try-linux-nvidia-rel",
-      "tryserver.chromium.linux:linux-1mbu-compile-fyi-rel",
-      "tryserver.chromium.linux:linux-dcheck-off-rel",
-      "tryserver.chromium.linux:linux-inverse-fieldtrials-fyi-rel",
-      "tryserver.chromium.linux:linux-mbi-mode-per-render-process-host-rel",
-      "tryserver.chromium.linux:linux-mbi-mode-per-site-instance-rel",
-      "tryserver.chromium.linux:linux-rel",
-      "tryserver.chromium.linux:linux-rel-warmed",
-      "tryserver.chromium.linux:linux_chromium_compile_rel_ng"
     ]
   },
   "tryserver.chromium.linux:linux-annotator-rel": {
@@ -5917,23 +5795,6 @@
   "tryserver.chromium.linux:linux-blink-web-tests-force-accessibility-rel": {
     "builders": [
       "tryserver.chromium.linux:linux-blink-web-tests-force-accessibility-rel"
-    ]
-  },
-  "tryserver.chromium.linux:linux-dcheck-off-rel": {
-    "builders": [
-      "chromium.gpu:GPU Linux Builder",
-      "chromium.gpu:Linux Release (NVIDIA)",
-      "chromium.linux:Linux Builder",
-      "chromium.linux:Linux Tests",
-      "tryserver.chromium.linux:gpu-try-linux-nvidia-rel",
-      "tryserver.chromium.linux:linux-1mbu-compile-fyi-rel",
-      "tryserver.chromium.linux:linux-dcheck-off-rel",
-      "tryserver.chromium.linux:linux-inverse-fieldtrials-fyi-rel",
-      "tryserver.chromium.linux:linux-mbi-mode-per-render-process-host-rel",
-      "tryserver.chromium.linux:linux-mbi-mode-per-site-instance-rel",
-      "tryserver.chromium.linux:linux-rel",
-      "tryserver.chromium.linux:linux-rel-warmed",
-      "tryserver.chromium.linux:linux_chromium_compile_rel_ng"
     ]
   },
   "tryserver.chromium.linux:linux-example-builder": {
@@ -5966,23 +5827,6 @@
       "tryserver.chromium.linux:linux-headless-shell-rel"
     ]
   },
-  "tryserver.chromium.linux:linux-inverse-fieldtrials-fyi-rel": {
-    "builders": [
-      "chromium.gpu:GPU Linux Builder",
-      "chromium.gpu:Linux Release (NVIDIA)",
-      "chromium.linux:Linux Builder",
-      "chromium.linux:Linux Tests",
-      "tryserver.chromium.linux:gpu-try-linux-nvidia-rel",
-      "tryserver.chromium.linux:linux-1mbu-compile-fyi-rel",
-      "tryserver.chromium.linux:linux-dcheck-off-rel",
-      "tryserver.chromium.linux:linux-inverse-fieldtrials-fyi-rel",
-      "tryserver.chromium.linux:linux-mbi-mode-per-render-process-host-rel",
-      "tryserver.chromium.linux:linux-mbi-mode-per-site-instance-rel",
-      "tryserver.chromium.linux:linux-rel",
-      "tryserver.chromium.linux:linux-rel-warmed",
-      "tryserver.chromium.linux:linux_chromium_compile_rel_ng"
-    ]
-  },
   "tryserver.chromium.linux:linux-lacros-fyi-rel": {
     "builders": [
       "chromium.fyi:linux-lacros-builder-fyi-rel",
@@ -6001,40 +5845,6 @@
       "tryserver.chromium.linux:linux-layout-tests-edit-ng"
     ]
   },
-  "tryserver.chromium.linux:linux-mbi-mode-per-render-process-host-rel": {
-    "builders": [
-      "chromium.gpu:GPU Linux Builder",
-      "chromium.gpu:Linux Release (NVIDIA)",
-      "chromium.linux:Linux Builder",
-      "chromium.linux:Linux Tests",
-      "tryserver.chromium.linux:gpu-try-linux-nvidia-rel",
-      "tryserver.chromium.linux:linux-1mbu-compile-fyi-rel",
-      "tryserver.chromium.linux:linux-dcheck-off-rel",
-      "tryserver.chromium.linux:linux-inverse-fieldtrials-fyi-rel",
-      "tryserver.chromium.linux:linux-mbi-mode-per-render-process-host-rel",
-      "tryserver.chromium.linux:linux-mbi-mode-per-site-instance-rel",
-      "tryserver.chromium.linux:linux-rel",
-      "tryserver.chromium.linux:linux-rel-warmed",
-      "tryserver.chromium.linux:linux_chromium_compile_rel_ng"
-    ]
-  },
-  "tryserver.chromium.linux:linux-mbi-mode-per-site-instance-rel": {
-    "builders": [
-      "chromium.gpu:GPU Linux Builder",
-      "chromium.gpu:Linux Release (NVIDIA)",
-      "chromium.linux:Linux Builder",
-      "chromium.linux:Linux Tests",
-      "tryserver.chromium.linux:gpu-try-linux-nvidia-rel",
-      "tryserver.chromium.linux:linux-1mbu-compile-fyi-rel",
-      "tryserver.chromium.linux:linux-dcheck-off-rel",
-      "tryserver.chromium.linux:linux-inverse-fieldtrials-fyi-rel",
-      "tryserver.chromium.linux:linux-mbi-mode-per-render-process-host-rel",
-      "tryserver.chromium.linux:linux-mbi-mode-per-site-instance-rel",
-      "tryserver.chromium.linux:linux-rel",
-      "tryserver.chromium.linux:linux-rel-warmed",
-      "tryserver.chromium.linux:linux_chromium_compile_rel_ng"
-    ]
-  },
   "tryserver.chromium.linux:linux-no-base-tracing-rel": {
     "builders": [
       "chromium.linux:linux-no-base-tracing-rel",
@@ -6047,44 +5857,10 @@
       "tryserver.chromium.linux:linux-perfetto-rel"
     ]
   },
-  "tryserver.chromium.linux:linux-rel": {
-    "builders": [
-      "chromium.gpu:GPU Linux Builder",
-      "chromium.gpu:Linux Release (NVIDIA)",
-      "chromium.linux:Linux Builder",
-      "chromium.linux:Linux Tests",
-      "tryserver.chromium.linux:gpu-try-linux-nvidia-rel",
-      "tryserver.chromium.linux:linux-1mbu-compile-fyi-rel",
-      "tryserver.chromium.linux:linux-dcheck-off-rel",
-      "tryserver.chromium.linux:linux-inverse-fieldtrials-fyi-rel",
-      "tryserver.chromium.linux:linux-mbi-mode-per-render-process-host-rel",
-      "tryserver.chromium.linux:linux-mbi-mode-per-site-instance-rel",
-      "tryserver.chromium.linux:linux-rel",
-      "tryserver.chromium.linux:linux-rel-warmed",
-      "tryserver.chromium.linux:linux_chromium_compile_rel_ng"
-    ]
-  },
   "tryserver.chromium.linux:linux-rel-reclient": {
     "builders": [
       "chromium.fyi:Linux Builder (j-500) (reclient)",
       "tryserver.chromium.linux:linux-rel-reclient"
-    ]
-  },
-  "tryserver.chromium.linux:linux-rel-warmed": {
-    "builders": [
-      "chromium.gpu:GPU Linux Builder",
-      "chromium.gpu:Linux Release (NVIDIA)",
-      "chromium.linux:Linux Builder",
-      "chromium.linux:Linux Tests",
-      "tryserver.chromium.linux:gpu-try-linux-nvidia-rel",
-      "tryserver.chromium.linux:linux-1mbu-compile-fyi-rel",
-      "tryserver.chromium.linux:linux-dcheck-off-rel",
-      "tryserver.chromium.linux:linux-inverse-fieldtrials-fyi-rel",
-      "tryserver.chromium.linux:linux-mbi-mode-per-render-process-host-rel",
-      "tryserver.chromium.linux:linux-mbi-mode-per-site-instance-rel",
-      "tryserver.chromium.linux:linux-rel",
-      "tryserver.chromium.linux:linux-rel-warmed",
-      "tryserver.chromium.linux:linux_chromium_compile_rel_ng"
     ]
   },
   "tryserver.chromium.linux:linux-viz-rel": {
@@ -6164,23 +5940,6 @@
       "chromium:linux-archive-rel",
       "tryserver.chromium.linux:linux_chromium_archive_rel_ng",
       "tryserver.chromium.linux:linux_chromium_clobber_rel_ng"
-    ]
-  },
-  "tryserver.chromium.linux:linux_chromium_compile_rel_ng": {
-    "builders": [
-      "chromium.gpu:GPU Linux Builder",
-      "chromium.gpu:Linux Release (NVIDIA)",
-      "chromium.linux:Linux Builder",
-      "chromium.linux:Linux Tests",
-      "tryserver.chromium.linux:gpu-try-linux-nvidia-rel",
-      "tryserver.chromium.linux:linux-1mbu-compile-fyi-rel",
-      "tryserver.chromium.linux:linux-dcheck-off-rel",
-      "tryserver.chromium.linux:linux-inverse-fieldtrials-fyi-rel",
-      "tryserver.chromium.linux:linux-mbi-mode-per-render-process-host-rel",
-      "tryserver.chromium.linux:linux-mbi-mode-per-site-instance-rel",
-      "tryserver.chromium.linux:linux-rel",
-      "tryserver.chromium.linux:linux-rel-warmed",
-      "tryserver.chromium.linux:linux_chromium_compile_rel_ng"
     ]
   },
   "tryserver.chromium.linux:linux_chromium_msan_rel_ng": {

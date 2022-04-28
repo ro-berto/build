@@ -138,14 +138,22 @@ def RunSteps(api):
 
 
 def GenTests(api):
+  ctbc_api = api.chromium_tests_builder_config
+
   yield api.test(
       'basic',
+      api.platform('linux', 64),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux',
-          builder='linux-rel',
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
       ),
-      api.chromium_tests.read_source_side_spec('chromium.linux', {
-          'Linux Tests': {
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
+      api.chromium_tests.read_source_side_spec('fake-group', {
+          'fake-builder': {
               'gtest_tests': ['base_unittests'],
           },
       }),
@@ -154,12 +162,18 @@ def GenTests(api):
 
   yield api.test(
       'basic-branch',
+      api.platform('linux', 64),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux',
-          builder='linux-rel',
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
       ),
-      api.chromium_tests.read_source_side_spec('chromium.linux', {
-          'Linux Tests': {
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
+      api.chromium_tests.read_source_side_spec('fake-group', {
+          'fake-builder': {
               'gtest_tests': ['base_unittests'],
           },
       }),
@@ -202,18 +216,30 @@ def GenTests(api):
 
   yield api.test(
       'no_compile',
+      api.platform('linux', 64),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux',
-          builder='linux-rel',
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
   )
 
   yield api.test(
       'no_compile_no_source',
+      api.platform('linux', 64),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux',
-          builder='linux-rel',
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.override_step_data('git diff to analyze patch',
                              api.raw_io.stream_output('OWNERS')),
   )
@@ -534,17 +560,28 @@ def GenTests(api):
 
   yield api.test(
       'code_coverage_trybot_with_patch',
-      api.code_coverage(use_clang_coverage=True),
+      api.platform('linux', 64),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux',
-          builder='linux-rel',
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
+      api.chromium_tests.read_source_side_spec('fake-group', {
+          'fake-builder': {
+              'gtest_tests': ['base_unittests'],
+          },
+      }),
+      api.code_coverage(use_clang_coverage=True),
       api.properties(swarm_hashes={
           'base_unittests': '[dummy hash for base_unittests/size]'
       }),
       api.chromium_tests.read_source_side_spec(
-          'chromium.linux', {
-              'Linux Tests': {
+          'fake-group', {
+              'fake-builder': {
                   'gtest_tests': [{
                       'isolate_coverage_data': True,
                       'test': 'base_unittests',
@@ -571,17 +608,28 @@ def GenTests(api):
 
   yield api.test(
       'code_coverage_trybot_retry_shards_with_patch',
-      api.code_coverage(use_clang_coverage=True),
+      api.platform('linux', 64),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux',
-          builder='linux-rel',
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
+      api.chromium_tests.read_source_side_spec('fake-group', {
+          'fake-builder': {
+              'gtest_tests': ['base_unittests'],
+          },
+      }),
+      api.code_coverage(use_clang_coverage=True),
       api.properties(swarm_hashes={
           'base_unittests': '[dummy hash for base_unittests/size]'
       }),
       api.chromium_tests.read_source_side_spec(
-          'chromium.linux', {
-              'Linux Tests': {
+          'fake-group', {
+              'fake-builder': {
                   'gtest_tests': [{
                       'isolate_coverage_data': True,
                       'test': 'base_unittests',
@@ -613,17 +661,28 @@ def GenTests(api):
 
   yield api.test(
       'code_coverage_trybot_without_patch',
-      api.code_coverage(use_clang_coverage=True),
+      api.platform('linux', 64),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux',
-          builder='linux-rel',
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
+      api.chromium_tests.read_source_side_spec('fake-group', {
+          'fake-builder': {
+              'gtest_tests': ['base_unittests'],
+          },
+      }),
+      api.code_coverage(use_clang_coverage=True),
       api.properties(swarm_hashes={
           'base_unittests': '[dummy hash for base_unittests/size]'
       }),
       api.chromium_tests.read_source_side_spec(
-          'chromium.linux', {
-              'Linux Tests': {
+          'fake-group', {
+              'fake-builder': {
                   'gtest_tests': [{
                       'isolate_coverage_data': True,
                       'test': 'base_unittests',
@@ -714,23 +773,30 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
 
-  def multiple_base_unittests_additional_compile_target():
-    return api.chromium_tests.read_source_side_spec(
-        'chromium.linux', {
-            'Linux Tests': {
-                'gtest_tests': [
-                    'base_unittests1', 'base_unittests2', 'base_unittests3'
-                ],
-            },
-        })
-
   yield api.test(
       'many_invalid_results',
+      api.platform('linux', 64),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux',
-          builder='linux-rel',
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
       ),
-      multiple_base_unittests_additional_compile_target(),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
+      api.chromium_tests.read_source_side_spec('fake-group', {
+          'fake-builder': {
+              'gtest_tests': ['base_unittests'],
+          },
+      }),
+      api.chromium_tests.read_source_side_spec(
+          'fake-group', {
+              'fake-builder': {
+                  'gtest_tests':
+                      ['base_unittests1', 'base_unittests2', 'base_unittests3'],
+              },
+          }),
       api.filter.suppress_analyze(),
       api.chromium_tests.change_size_limit(2),
       api.override_step_data(
@@ -756,13 +822,19 @@ def GenTests(api):
 
   yield api.test(
       'basic dryrun',
-      api.properties(dry_run=True),
+      api.platform('linux', 64),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux',
-          builder='linux-rel',
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
       ),
-      api.chromium_tests.read_source_side_spec('chromium.linux', {
-          'Linux Tests': {
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
+      api.properties(dry_run=True),
+      api.chromium_tests.read_source_side_spec('fake-group', {
+          'fake-builder': {
               'gtest_tests': ['base_unittests'],
           },
       }),
@@ -825,10 +897,16 @@ def GenTests(api):
 
   yield api.test(
       'depend_on_footer_failure',
+      api.platform('linux', 64),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux',
-          builder='linux-rel',
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.step_data(
           'parse description',
           api.json.output(

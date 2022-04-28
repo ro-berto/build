@@ -24,35 +24,27 @@ def RunSteps(api):
   with api.chromium.chromium_layout():
     return api.chromium_tests.integration_steps(builder_id, builder_config)
 
-
 def GenTests(api):
-
-  def ci_props(config='Release',
-               builder_group='chromium.linux',
-               builder='Linux Builder',
-               extra_swarmed_tests=None,
-               **kwargs):
-    swarm_hashes = {}
-    if extra_swarmed_tests:
-      for test in extra_swarmed_tests:
-        swarm_hashes[test] = '[dummy hash for %s/size]' % test
-
-    return sum([
-        api.chromium_tests_builder_config.ci_build(
-            builder_group=builder_group,
-            builder=builder,
-            git_repo='https://chromium.googlesource.com/v8/v8.git',
-        ),
-        api.properties(
-            build_config=config, swarm_hashes=swarm_hashes, **kwargs),
-    ], api.empty_test_data())
+  ctbc_api = api.chromium_tests_builder_config
 
   yield api.test(
       'deapply_deps_after_failure',
-      ci_props(extra_swarmed_tests=['blink_web_tests']),
+      api.platform('linux', 64),
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-builder',
+          git_repo='https://chromium.googlesource.com/v8/v8.git'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
+      api.properties(swarm_hashes={
+          'blink_web_tests': 'dummy hash for blink_web_tests/size',
+      }),
       api.chromium_tests.read_source_side_spec(
-          'chromium.linux', {
-              'Linux Builder': {
+          'fake-group', {
+              'fake-builder': {
                   'isolated_scripts': [{
                       'isolate_name': 'blink_web_tests',
                       'name': 'blink_web_tests',

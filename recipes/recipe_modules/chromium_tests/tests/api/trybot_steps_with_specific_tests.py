@@ -26,6 +26,7 @@ DEPS = [
     'recipe_engine/assertions',
     'recipe_engine/json',
     'recipe_engine/path',
+    'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
     'recipe_engine/resultdb',
@@ -111,10 +112,20 @@ def RunSteps(api, fail_calculate_tests, fail_mb_and_compile,
 
 
 def GenTests(api):
+  ctbc_api = api.chromium_tests_builder_config
+
   yield api.test(
       'basic',
+      api.platform('linux', 64),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
+      ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(swarm_hashes={
           'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
       }),
@@ -126,8 +137,16 @@ def GenTests(api):
 
   yield api.test(
       'calculate_tests_compile_failure',
+      api.platform('linux', 64),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
+      ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(fail_calculate_tests=True),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.ResultReason,
@@ -137,8 +156,16 @@ def GenTests(api):
 
   yield api.test(
       'run_mb_and_compile_failure',
+      api.platform('linux', 64),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
+      ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(
           fail_mb_and_compile=True,
           swarm_hashes={
@@ -154,8 +181,16 @@ def GenTests(api):
 
   yield api.test(
       'test_failures_prevent_cq_retry',
+      api.platform('linux', 64),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
+      ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(
           retry_failed_shards=True,
           swarm_hashes={
@@ -171,8 +206,16 @@ def GenTests(api):
 
   yield api.test(
       'invalid_tests_does_not_prevent_cq_retry',
+      api.platform('linux', 64),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
+      ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(
           retry_failed_shards=True,
           swarm_hashes={
@@ -238,8 +281,16 @@ def GenTests(api):
 
   yield api.test(
       'bot_update_failure_does_not_prevent_cq_retry',
+      api.platform('linux', 64),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
+      ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(
           retry_failed_shards=True,
           swarm_hashes={
@@ -256,8 +307,16 @@ def GenTests(api):
   # If a test fails in 'with patch', it should be marked as a failing step.
   yield api.test(
       'recipe_step_is_failure_for_failing_test',
+      api.platform('linux', 64),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
+      ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(swarm_hashes={
           'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
       }),
@@ -274,8 +333,16 @@ def GenTests(api):
   # 'with patch'.
   yield api.test(
       'retry_swarming_priority',
+      api.platform('linux', 64),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
+      ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(swarm_hashes={
           'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
       }),
@@ -343,9 +410,16 @@ def GenTests(api):
 
     yield api.test(
         test_name,
+        api.platform('linux', 64),
         api.chromium.try_build(
-            builder_group='tryserver.chromium.linux',
-            builder='linux-rel'),
+            builder_group='fake-try-group',
+            builder='fake-try-builder',
+        ),
+        ctbc_api.properties(ctbc_api.properties_assembler_for_try_builder(
+            ).with_mirrored_builder(
+                builder_group='fake-group',
+                builder='fake-builder',
+            ).assemble()),
         api.properties(
             retry_failed_shards=True,
             shards=2,
@@ -404,8 +478,16 @@ def GenTests(api):
   }
   yield api.test(
       'findit_step_layer_flakiness_swarming_custom_dimensions',
+      api.platform('win', 64),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
+      ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(
           use_custom_dimensions=True,
           retry_failed_shards=True,
@@ -432,8 +514,16 @@ def GenTests(api):
   }
   yield api.test(
       'findit_step_layer_flakiness_invalid_initial_results',
+      api.platform('linux', 64),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
+      ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(
           retry_failed_shards=True,
           swarm_hashes={
@@ -464,8 +554,16 @@ def GenTests(api):
   # "Step Layer Flakiness".
   yield api.test(
       'findit_step_layer_flakiness_retry_shards_flaky_test',
+      api.platform('linux', 64),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
+      ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(
           retry_failed_shards=True,
           swarm_hashes={
@@ -489,8 +587,16 @@ def GenTests(api):
   }
   yield api.test(
       'findit_step_layer_flakiness_retry_shards',
+      api.platform('linux', 64),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
+      ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(
           retry_failed_shards=True,
           swarm_hashes={
@@ -524,8 +630,16 @@ def GenTests(api):
 
     yield api.test(
         'findit_build_layer_flakiness_' + status,
+        api.platform('linux', 64),
         api.chromium.try_build(
-            builder_group='tryserver.chromium.linux', builder='linux-rel'),
+            builder_group='fake-try-group',
+            builder='fake-try-builder',
+        ),
+        ctbc_api.properties(ctbc_api.properties_assembler_for_try_builder()
+                            .with_mirrored_builder(
+                                builder_group='fake-group',
+                                builder='fake-builder',
+                            ).assemble()),
         api.properties(
             retry_failed_shards=True,
             swarm_hashes={
@@ -567,8 +681,16 @@ def GenTests(api):
   }
   yield api.test(
       'findit_potential_build_layer_flakiness_skip_retry_with_patch',
+      api.platform('linux', 64),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
+      ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(swarm_hashes={
           'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
       }),
@@ -582,8 +704,16 @@ def GenTests(api):
 
   yield api.test(
       'failure_many_shards',
+      api.platform('linux', 64),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
+      ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(
           shards=20,
           swarm_hashes={
@@ -602,8 +732,16 @@ def GenTests(api):
   # flaky on tip of tree, and failures should be ignored.
   yield api.test(
       'retry_without_patch_any_failure',
+      api.platform('linux', 64),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
+      ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(swarm_hashes={
           'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
       }),
@@ -619,10 +757,18 @@ def GenTests(api):
 
   yield api.test(
       'disable_deapply_patch_affected_files',
+      api.platform('linux', 64),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
+      ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(
-          affected_files=['testing/buildbot/chromium.linux.json'],
+          affected_files=['testing/buildbot/fake-group.json'],
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
           }),
@@ -632,8 +778,16 @@ def GenTests(api):
 
   yield api.test(
       'nonzero_exit_code_no_gtest_output',
+      api.platform('linux', 64),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
+      ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(
           affected_files=['testing/buildbot/chromium.linux.json'],
           swarm_hashes={
@@ -649,8 +803,16 @@ def GenTests(api):
 
   yield api.test(
       'without_patch_only_retries_relevant_tests',
+      api.platform('linux', 64),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
+      ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(
           retry_failed_shards=True,
           swarm_hashes={
@@ -673,8 +835,16 @@ def GenTests(api):
   # "retry shards with patch" and "Test.Three" is ignored by "without patch".
   yield api.test(
       'unrecoverable_failure_results_exclude_ignored_failures',
+      api.platform('linux', 64),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
+      ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(
           retry_failed_shards=True,
           swarm_hashes={
@@ -710,8 +880,16 @@ def GenTests(api):
   }
   yield api.test(
       'succeeded_to_exonerate_flaky_failures',
+      api.platform('linux', 64),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
+      ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(
           retry_failed_shards=True,
           swarm_hashes={
@@ -762,8 +940,16 @@ def GenTests(api):
   }
   yield api.test(
       'failed_to_exonerate_flaky_failures',
+      api.platform('linux', 64),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
+      ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(
           retry_failed_shards=True,
           swarm_hashes={
@@ -812,8 +998,16 @@ def GenTests(api):
   # build is expected to be succeed without running "without patch" steps.
   yield api.test(
       'known_flaky_failure_failed_again_while_retrying',
+      api.platform('linux', 64),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
+      ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(
           retry_failed_shards=True,
           swarm_hashes={
@@ -873,8 +1067,16 @@ def GenTests(api):
   # expected to be retried during "without patch".
   yield api.test(
       'without_patch_only_retries_non_flaky_failures',
+      api.platform('linux', 64),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
+      ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(
           retry_failed_shards=True,
           swarm_hashes={
@@ -936,8 +1138,16 @@ def GenTests(api):
   # The test results of these two kinds should both be summarized correctly.
   yield api.test(
       'summarize_both_retried_and_not_retried_test_suites',
+      api.platform('linux', 64),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux', builder='linux-rel'),
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
+      ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(
           retry_failed_shards=True,
           additional_gtest_targets=['component_unittests', 'url_unittests'],

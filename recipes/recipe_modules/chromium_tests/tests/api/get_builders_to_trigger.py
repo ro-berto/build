@@ -15,6 +15,7 @@ DEPS = [
     'chromium_tests',
     'chromium_tests_builder_config',
     'recipe_engine/assertions',
+    'recipe_engine/platform',
     'recipe_engine/properties',
 ]
 
@@ -30,13 +31,24 @@ def RunSteps(api):
 
 
 def GenTests(api):
+  ctbc_api = api.chromium_tests_builder_config
+
   yield api.test(
       'basic',
+      api.platform('linux', 64),
       api.chromium.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Builder',
+          builder_group='fake-group',
+          builder='fake-builder',
       ),
-      api.properties(expected=['Linux Tests']),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).with_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+          ).assemble()),
+      api.properties(expected=['fake-tester']),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )

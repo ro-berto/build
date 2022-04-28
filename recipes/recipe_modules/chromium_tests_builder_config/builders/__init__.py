@@ -23,7 +23,6 @@ from . import chromium_memory
 from . import chromium_perf
 from . import chromium_perf_fyi
 from . import chromium_perf_calibration
-from . import chromium_reclient_fyi
 from . import chromium_rust
 from . import chromium_swangle
 from . import chromium_swarm
@@ -41,6 +40,9 @@ from . import tryserver_devtools_frontend
 from . import tryserver_v8
 from . import tryserver_webrtc
 from . import migration_testing
+
+# Builders for the chromium.reclient.fyi builder group are all defined
+# src-side in infra/config/subprojects/reclient/reclient.star
 
 BUILDERS = builder_db.BuilderDatabase.create({
     'chromium':
@@ -83,8 +85,6 @@ BUILDERS = builder_db.BuilderDatabase.create({
         chromium_perf_fyi.SPEC,
     'chromium.perf.calibration':
         chromium_perf_calibration.SPEC,
-    'chromium.reclient.fyi':
-        chromium_reclient_fyi.SPEC,
     'chromium.rust':
         chromium_rust.SPEC,
     'chromium.swangle':

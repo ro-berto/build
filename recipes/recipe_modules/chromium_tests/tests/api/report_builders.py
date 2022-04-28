@@ -34,7 +34,8 @@ TRYBOTS = ctbc.TryDatabase.create({
 def RunSteps(api):
   _, builder_config = api.chromium_tests_builder_config.lookup_builder(
       builder_db=BUILDERS, try_db=TRYBOTS)
-  api.chromium_tests.report_builders(builder_config)
+  api.chromium_tests.report_builders(
+      builder_config, report_mirroring_builders=True)
 
 
 def check_link(check, steps, expected_link):
@@ -60,3 +61,24 @@ def GenTests(api):
         api.post_check(check_link, expected_link),
         api.post_process(post_process.DropExpectation),
     )
+
+  ctbc_api = api.chromium_tests_builder_config
+  ctbc_props = ctbc_api.properties_assembler_for_ci_builder(
+      builder_group='fake-group',
+      builder='fake-builder',
+  ).assemble()
+  mirroring = ctbc_props.builder_config.mirroring_builder_group_and_names.add()
+  mirroring.group = 'fake-try-group'
+  mirroring.builder = 'fake-try-builder'
+
+  yield api.test(
+      'mirroring-try-builder',
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-builder',
+      ),
+      ctbc_api.properties(ctbc_props),
+      api.post_check(post_process.PropertyEquals, 'mirrored_builders',
+                     ['fake-try-group:fake-try-builder']),
+      api.post_process(post_process.DropExpectation),
+  )

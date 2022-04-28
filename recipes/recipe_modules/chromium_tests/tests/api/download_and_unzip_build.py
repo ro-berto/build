@@ -4,12 +4,15 @@
 
 from recipe_engine import post_process
 
+from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
+
 PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'chromium',
     'chromium_tests',
     'chromium_tests_builder_config',
+    'recipe_engine/platform',
     'recipe_engine/properties',
 ]
 
@@ -24,26 +27,54 @@ def RunSteps(api):
 
 
 def GenTests(api):
+  ctbc_api = api.chromium_tests_builder_config
+
   yield api.test(
       'read-gn-args',
+      api.platform('linux', 64),
       api.chromium.ci_build(
-          builder_group='chromium.linux', builder='Linux Tests'),
-      api.properties(
-          parent_builder_group='chromium.linux',
-          parent_buildername='Linux Builder',
-          kwargs=dict(read_gn_args=True)),
+          builder_group='fake-group',
+          builder='fake-tester',
+          parent_buildername='fake-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+              builder_spec=ctbc.BuilderSpec.create(
+                  gclient_config='chromium',
+                  chromium_config='chromium',
+                  build_gs_bucket='fake-gs-bucket',
+              ),
+          ).with_parent(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
+      api.properties(kwargs=dict(read_gn_args=True)),
       api.post_process(post_process.MustRun, 'read GN args'),
       api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
       'do-not-read-gn-args',
+      api.platform('linux', 64),
       api.chromium.ci_build(
-          builder_group='chromium.linux', builder='Linux Tests'),
-      api.properties(
-          parent_builder_group='chromium.linux',
-          parent_buildername='Linux Builder',
-          kwargs=dict(read_gn_args=False)),
+          builder_group='fake-group',
+          builder='fake-tester',
+          parent_buildername='fake-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+              builder_spec=ctbc.BuilderSpec.create(
+                  gclient_config='chromium',
+                  chromium_config='chromium',
+                  build_gs_bucket='fake-gs-bucket',
+              ),
+          ).with_parent(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
+      api.properties(kwargs=dict(read_gn_args=False)),
       api.post_process(post_process.DoesNotRun, 'read GN args'),
       api.post_process(post_process.DropExpectation),
   )

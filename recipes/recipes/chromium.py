@@ -43,16 +43,32 @@ def RunSteps(api):
 
 
 def GenTests(api):
+  ctbc_api = api.chromium_tests_builder_config
+
   yield api.test(
       'dynamic_gtest',
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-          parent_buildername='Linux Builder',
+      api.platform('linux', 64),
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-tester',
+          parent_buildername='fake-builder',
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+              builder_spec=ctbc.BuilderSpec.create(
+                  gclient_config='chromium',
+                  chromium_config='chromium',
+                  build_gs_bucket='fake-gs-bucket',
+              ),
+          ).with_parent(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.chromium_tests.read_source_side_spec(
-          'chromium.linux', {
-              'Linux Tests': {
+          'fake-group', {
+              'fake-tester': {
                   'gtest_tests': [
                       'base_unittests',
                       {
@@ -72,13 +88,19 @@ def GenTests(api):
 
   yield api.test(
       'dynamic_swarmed_gtest',
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Builder',
+      api.platform('linux', 64),
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-builder',
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.chromium_tests.read_source_side_spec(
-          'chromium.linux', {
-              'Linux Tests': {
+          'fake-group', {
+              'fake-builder': {
                   'gtest_tests': [{
                       'test': 'browser_tests',
                       'resultdb': {
@@ -92,24 +114,33 @@ def GenTests(api):
           }),
   )
 
+  # The chromium.gpu.fyi bots use serialize_tests in order to reduce load on the
+  # GPU bots in the Swarming pool.
   yield api.test(
       'dynamic_swarmed_serialized_gtests',
-      # The chromium.gpu.fyi bots use serialize_tests in order to reduce
-      # load on the GPU bots in the Swarming pool.
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.gpu.fyi',
-          builder='Linux FYI Release (NVIDIA)',
-          parent_buildername='GPU FYI Linux Builder',
+      api.platform('linux', 64),
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-tester',
+          parent_buildername='fake-builder',
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+          ).with_parent(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(
           swarm_hashes={
               'base_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
               'browser_tests': 'ffffffffffffffffffffffffffffff/size',
           }),
       api.chromium_tests.read_source_side_spec(
-          'chromium.gpu.fyi',
+          'fake-group',
           {
-              'Linux FYI Release (NVIDIA)': {
+              'fake-tester': {
                   'gtest_tests': [
                       {
                           'test': 'base_unittests',
@@ -200,16 +231,22 @@ def GenTests(api):
 
   yield api.test(
       'dynamic_swarmed_gtest_override_compile_targets',
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Builder',
+      api.platform('linux', 64),
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-builder',
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(swarm_hashes={
           'tab_capture_end2end_tests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
-          'chromium.linux', {
-              'Linux Tests': {
+          'fake-group', {
+              'fake-builder': {
                   'gtest_tests': [{
                       'test': 'tab_capture_end2end_tests',
                       'override_compile_targets':
@@ -224,13 +261,19 @@ def GenTests(api):
 
   yield api.test(
       'build_dynamic_isolated_script_test',
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Builder',
+      api.platform('linux', 64),
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-builder',
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.chromium_tests.read_source_side_spec(
-          'chromium.linux', {
-              'Linux Tests': {
+          'fake-group', {
+              'fake-builder': {
                   'isolated_scripts': [{
                       'isolate_name': 'telemetry_gpu_unittests',
                       'name': 'telemetry_gpu_unittests',
@@ -241,17 +284,26 @@ def GenTests(api):
 
   yield api.test(
       'dynamic_isolated_script_test',
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-          parent_buildername='Linux Builder',
+      api.platform('linux', 64),
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-tester',
+          parent_buildername='fake-builder',
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+          ).with_parent(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(swarm_hashes={
           'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
-          'chromium.linux', {
-              'Linux Tests': {
+          'fake-group', {
+              'fake-tester': {
                   'isolated_scripts': [{
                       'isolate_name':
                           'telemetry_gpu_unittests',
@@ -272,17 +324,26 @@ def GenTests(api):
 
   yield api.test(
       'dynamic_local_isolated_script_test_with_failed_json_results',
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-          parent_buildername='Linux Builder',
+      api.platform('linux', 64),
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-tester',
+          parent_buildername='fake-builder',
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+          ).with_parent(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(swarm_hashes={
           'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
-          'chromium.linux', {
-              'Linux Tests': {
+          'fake-group', {
+              'fake-tester': {
                   'isolated_scripts': [{
                       'isolate_name': 'telemetry_gpu_unittests',
                       'name': 'telemetry_gpu_unittests',
@@ -298,17 +359,26 @@ def GenTests(api):
 
   yield api.test(
       'dynamic_local_isolated_script_test_with_passed_json_results',
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-          parent_buildername='Linux Builder',
+      api.platform('linux', 64),
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-tester',
+          parent_buildername='fake-builder',
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+          ).with_parent(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(swarm_hashes={
           'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
-          'chromium.linux', {
-              'Linux Tests': {
+          'fake-group', {
+              'fake-tester': {
                   'isolated_scripts': [{
                       'isolate_name': 'telemetry_gpu_unittests',
                       'name': 'telemetry_gpu_unittests',
@@ -319,17 +389,26 @@ def GenTests(api):
 
   yield api.test(
       'dynamic_local_isolated_script_test_with_custom_results_handler',
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-          parent_buildername='Linux Builder',
+      api.platform('linux', 64),
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-tester',
+          parent_buildername='fake-builder',
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+          ).with_parent(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(swarm_hashes={
           'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
-          'chromium.linux', {
-              'Linux Tests': {
+          'fake-group', {
+              'fake-tester': {
                   'isolated_scripts': [{
                       'isolate_name': 'telemetry_gpu_unittests',
                       'name': 'telemetry_gpu_unittests',
@@ -346,17 +425,26 @@ def GenTests(api):
 
   yield api.test(
       'dynamic_isolated_script_test_harness_failure_no_json',
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-          parent_buildername='Linux Builder',
+      api.platform('linux', 64),
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-tester',
+          parent_buildername='fake-builder',
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+          ).with_parent(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(swarm_hashes={
           'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
-          'chromium.linux', {
-              'Linux Tests': {
+          'fake-group', {
+              'fake-tester': {
                   'isolated_scripts': [{
                       'isolate_name': 'telemetry_gpu_unittests',
                       'name': 'telemetry_gpu_unittests',
@@ -369,13 +457,19 @@ def GenTests(api):
 
   yield api.test(
       'build_dynamic_isolated_script_test_compile_target_overriden',
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Builder',
+      api.platform('linux', 64),
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-builder',
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.chromium_tests.read_source_side_spec(
-          'chromium.linux', {
-              'Linux Tests': {
+          'fake-group', {
+              'fake-builder': {
                   'isolated_scripts': [{
                       'isolate_name':
                           'telemetry_gpu_unittests',
@@ -390,13 +484,19 @@ def GenTests(api):
 
   yield api.test(
       'build_dynamic_swarmed_isolated_script_test',
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Builder',
+      api.platform('linux', 64),
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-builder',
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.chromium_tests.read_source_side_spec(
-          'chromium.linux', {
-              'Linux Tests': {
+          'fake-group', {
+              'fake-builder': {
                   'isolated_scripts': [{
                       'isolate_name': 'telemetry_gpu_unittests',
                       'name': 'telemetry_gpu_unittests',
@@ -410,13 +510,19 @@ def GenTests(api):
 
   yield api.test(
       'build_dynamic_swarmed_isolated_script_test_compile_target_overidden',
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Builder',
+      api.platform('linux', 64),
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-builder',
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.chromium_tests.read_source_side_spec(
-          'chromium.linux', {
-              'Linux Tests': {
+          'fake-group', {
+              'fake-builder': {
                   'isolated_scripts': [{
                       'isolate_name':
                           'telemetry_gpu_unittests',
@@ -434,17 +540,26 @@ def GenTests(api):
 
   yield api.test(
       'dynamic_swarmed_passed_isolated_script_test',
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-          parent_buildername='Linux Builder',
+      api.platform('linux', 64),
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-tester',
+          parent_buildername='fake-builder',
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+          ).with_parent(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(swarm_hashes={
           'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
-          'chromium.linux', {
-              'Linux Tests': {
+          'fake-group', {
+              'fake-tester': {
                   'isolated_scripts': [{
                       'isolate_name': 'telemetry_gpu_unittests',
                       'name': 'telemetry_gpu_unittests',
@@ -458,21 +573,28 @@ def GenTests(api):
 
   yield api.test(
       'dynamic_swarmed_sharded_passed_isolated_script_test',
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-          build_number=1234,
-          parent_buildername='Linux Builder',
-          revision='a' * 40,
+      api.platform('linux', 64),
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-tester',
+          parent_buildername='fake-builder',
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+          ).with_parent(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(
           version='v23523',
           swarm_hashes={
               'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size'
           }),
       api.chromium_tests.read_source_side_spec(
-          'chromium.linux', {
-              'Linux Tests': {
+          'fake-group', {
+              'fake-tester': {
                   'isolated_scripts': [{
                       'isolate_name': 'telemetry_gpu_unittests',
                       'name': 'telemetry_gpu_unittests',
@@ -487,17 +609,26 @@ def GenTests(api):
 
   yield api.test(
       'dynamic_swarmed_sharded_failed_isolated_script_test',
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-          parent_buildername='Linux Builder',
+      api.platform('linux', 64),
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-tester',
+          parent_buildername='fake-builder',
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+          ).with_parent(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(swarm_hashes={
           'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
-          'chromium.linux', {
-              'Linux Tests': {
+          'fake-group', {
+              'fake-tester': {
                   'isolated_scripts': [{
                       'isolate_name': 'telemetry_gpu_unittests',
                       'name': 'telemetry_gpu_unittests',
@@ -514,17 +645,26 @@ def GenTests(api):
 
   yield api.test(
       'dynamic_swarmed_sharded_isolated_chartjson_test_disabled',
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-          parent_buildername='Linux Builder',
+      api.platform('linux', 64),
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-tester',
+          parent_buildername='fake-builder',
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+          ).with_parent(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(swarm_hashes={
           'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
-          'chromium.linux', {
-              'Linux Tests': {
+          'fake-group', {
+              'fake-tester': {
                   'isolated_scripts': [{
                       'isolate_name': 'telemetry_gpu_unittests',
                       'name': 'telemetry_gpu_unittests',
@@ -539,17 +679,26 @@ def GenTests(api):
 
   yield api.test(
       'dynamic_swarmed_sharded_isolated_chartjson_test_missing_all_shards',
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-          parent_buildername='Linux Builder',
+      api.platform('linux', 64),
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-tester',
+          parent_buildername='fake-builder',
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+          ).with_parent(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(swarm_hashes={
           'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
-          'chromium.linux', {
-              'Linux Tests': {
+          'fake-group', {
+              'fake-tester': {
                   'isolated_scripts': [{
                       'isolate_name': 'telemetry_gpu_unittests',
                       'name': 'telemetry_gpu_unittests',
@@ -569,18 +718,27 @@ def GenTests(api):
 
   yield api.test(
       'dynamic_swarmed_isolated_script_test_linux_gpu',
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-          parent_buildername='Linux Builder',
+      api.platform('linux', 64),
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-tester',
+          parent_buildername='fake-builder',
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+          ).with_parent(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(swarm_hashes={
           'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
-          'chromium.linux',
+          'fake-group',
           {
-              'Linux Tests': {
+              'fake-tester': {
                   'isolated_scripts': [
                       {
                           'isolate_name': 'telemetry_gpu_unittests',
@@ -726,17 +884,26 @@ def GenTests(api):
 
   yield api.test(
       'dynamic_swarmed_failed_isolated_script_test',
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-          parent_buildername='Linux Builder',
+      api.platform('linux', 64),
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-tester',
+          parent_buildername='fake-builder',
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+          ).with_parent(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(swarm_hashes={
           'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
-          'chromium.linux', {
-              'Linux Tests': {
+          'fake-group', {
+              'fake-tester': {
                   'isolated_scripts': [{
                       'isolate_name': 'telemetry_gpu_unittests',
                       'name': 'telemetry_gpu_unittests',
@@ -752,17 +919,26 @@ def GenTests(api):
 
   yield api.test(
       'dynamic_swarmed_passed_with_bad_retcode_isolated_script_test',
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-          parent_buildername='Linux Builder',
+      api.platform('linux', 64),
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-tester',
+          parent_buildername='fake-builder',
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+          ).with_parent(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(swarm_hashes={
           'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
-          'chromium.linux', {
-              'Linux Tests': {
+          'fake-group', {
+              'fake-tester': {
                   'isolated_scripts': [{
                       'isolate_name': 'telemetry_gpu_unittests',
                       'name': 'telemetry_gpu_unittests',
@@ -793,13 +969,19 @@ def GenTests(api):
 
   yield api.test(
       'dynamic_gtest_on_builder',
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Builder',
+      api.platform('linux', 64),
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-builder',
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.chromium_tests.read_source_side_spec(
-          'chromium.linux', {
-              'Linux Tests': {
+          'fake-group', {
+              'fake-tester': {
                   'gtest_tests': [
                       'base_unittests',
                       {
@@ -916,15 +1098,29 @@ def GenTests(api):
 
   yield api.test(
       'buildnumber_zero',
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-          parent_buildername='Linux Builder',
+      api.platform('linux', 64),
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-tester',
+          parent_buildername='fake-builder',
           build_number=0,
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+              builder_spec=ctbc.BuilderSpec.create(
+                  gclient_config='chromium',
+                  chromium_config='chromium',
+                  build_gs_bucket='fake-gs-bucket',
+              ),
+          ).with_parent(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.chromium_tests.read_source_side_spec(
-          'chromium.linux', {
-              'Linux Tests': {
+          'fake-group', {
+              'fake-tester': {
                   'gtest_tests': [
                       'base_unittests',
                       {
@@ -939,14 +1135,28 @@ def GenTests(api):
 
   yield api.test(
       'one_failure_keeps_going_dynamic_tests',
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-          parent_buildername='Linux Builder',
+      api.platform('linux', 64),
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-tester',
+          parent_buildername='fake-builder',
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+              builder_spec=ctbc.BuilderSpec.create(
+                  gclient_config='chromium',
+                  chromium_config='chromium',
+                  build_gs_bucket='fake-gs-bucket',
+              ),
+          ).with_parent(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.chromium_tests.read_source_side_spec(
-          'chromium.linux', {
-              'Linux Tests': {
+          'fake-group', {
+              'fake-tester': {
                   'gtest_tests': [
                       'base_unittests',
                       {
@@ -962,14 +1172,28 @@ def GenTests(api):
 
   yield api.test(
       'dynamic_script_test_failure',
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-          parent_buildername='Linux Builder',
+      api.platform('linux', 64),
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-tester',
+          parent_buildername='fake-builder',
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+              builder_spec=ctbc.BuilderSpec.create(
+                  gclient_config='chromium',
+                  chromium_config='chromium',
+                  build_gs_bucket='fake-gs-bucket',
+              ),
+          ).with_parent(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.chromium_tests.read_source_side_spec(
-          'chromium.linux', {
-              'Linux Tests': {
+          'fake-group', {
+              'fake-tester': {
                   'scripts': [{
                       'name': 'test_script_with_broken_tests',
                       'script': 'test_script_with_broken_tests.py'
@@ -986,17 +1210,26 @@ def GenTests(api):
 
   yield api.test(
       'gtest_custom_merge_script',
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-          parent_buildername='Linux Builder',
+      api.platform('linux', 64),
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-tester',
+          parent_buildername='fake-builder',
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+          ).with_parent(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(swarm_hashes={
           'browser_tests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
-          'chromium.linux', {
-              'Linux Tests': {
+          'fake-group', {
+              'fake-tester': {
                   'gtest_tests': [{
                       'test': 'browser_tests',
                       'swarming': {
@@ -1013,17 +1246,26 @@ def GenTests(api):
 
   yield api.test(
       'gtest_bad_custom_merge_script',
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-          parent_buildername='Linux Builder',
+      api.platform('linux', 64),
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-tester',
+          parent_buildername='fake-builder',
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+          ).with_parent(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(swarm_hashes={
           'browser_tests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
-          'chromium.linux', {
-              'Linux Tests': {
+          'fake-group', {
+              'fake-tester': {
                   'gtest_tests': [{
                       'test': 'browser_tests',
                       'swarming': {
@@ -1039,17 +1281,26 @@ def GenTests(api):
 
   yield api.test(
       'isolated_script_test_custom_merge_script',
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-          parent_buildername='Linux Builder',
+      api.platform('linux', 64),
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-tester',
+          parent_buildername='fake-builder',
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+          ).with_parent(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(swarm_hashes={
           'fake_test': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
-          'chromium.linux', {
-              'Linux Tests': {
+          'fake-group', {
+              'fake-tester': {
                   'isolated_scripts': [{
                       'isolate_name': 'fake_test',
                       'name': 'fake_test',
@@ -1067,17 +1318,26 @@ def GenTests(api):
 
   yield api.test(
       'isolated_script_test_bad_custom_merge_script',
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-          parent_buildername='Linux Builder',
+      api.platform('linux', 64),
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-tester',
+          parent_buildername='fake-builder',
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+          ).with_parent(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(swarm_hashes={
           'fake_test': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
-          'chromium.linux', {
-              'Linux Tests': {
+          'fake-group', {
+              'fake-tester': {
                   'isolated_scripts': [{
                       'isolate_name': 'fake_test',
                       'name': 'fake_test',
@@ -1094,17 +1354,26 @@ def GenTests(api):
 
   yield api.test(
       'isolated_script_test_custom_merge_script_with_args',
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-          parent_buildername='Linux Builder',
+      api.platform('linux', 64),
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-tester',
+          parent_buildername='fake-builder',
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+          ).with_parent(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(swarm_hashes={
           'fake_test': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
-          'chromium.linux', {
-              'Linux Tests': {
+          'fake-group', {
+              'fake-tester': {
                   'isolated_scripts': [{
                       'isolate_name': 'fake_test',
                       'name': 'fake_test',
@@ -1126,17 +1395,26 @@ def GenTests(api):
 
   yield api.test(
       'isolated_script_test_custom_results_handler',
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-          parent_buildername='Linux Builder',
+      api.platform('linux', 64),
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-tester',
+          parent_buildername='fake-builder',
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+          ).with_parent(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(swarm_hashes={
           'fake_test': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
-          'chromium.linux', {
-              'Linux Tests': {
+          'fake-group', {
+              'fake-tester': {
                   'isolated_scripts': [{
                       'isolate_name': 'fake_test',
                       'name': 'fake_test',
@@ -1152,17 +1430,26 @@ def GenTests(api):
 
   yield api.test(
       'isolated_script_test_invalid_results_handler',
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-          parent_buildername='Linux Builder',
+      api.platform('linux', 64),
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-tester',
+          parent_buildername='fake-builder',
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+          ).with_parent(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(swarm_hashes={
           'fake_test': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
-          'chromium.linux', {
-              'Linux Tests': {
+          'fake-group', {
+              'fake-tester': {
                   'isolated_scripts': [{
                       'isolate_name': 'fake_test',
                       'name': 'fake_test',
