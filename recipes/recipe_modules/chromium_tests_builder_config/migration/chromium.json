@@ -5765,11 +5765,6 @@
       "tryserver.chromium.linux:linux-blink-heap-verification-try"
     ]
   },
-  "tryserver.chromium.linux:linux-blink-web-tests-force-accessibility-rel": {
-    "builders": [
-      "tryserver.chromium.linux:linux-blink-web-tests-force-accessibility-rel"
-    ]
-  },
   "tryserver.chromium.linux:linux-example-builder": {
     "builders": [
       "chromium.fyi:linux-example-builder",
