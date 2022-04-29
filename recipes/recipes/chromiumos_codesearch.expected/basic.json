@@ -259,6 +259,8 @@
       "[CACHE]/builder/chromiumos/src/scripts/package_index_cros/main.py",
       "--with-build",
       "--with-tests",
+      "--board",
+      "amd64-generic",
       "--build-dir",
       "[CACHE]/builder/chromiumos/src/out/amd64-generic",
       "--gn-targets",
