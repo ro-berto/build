@@ -22,6 +22,12 @@ DEPS = [
 def RunSteps(api):
   api.chromium.set_config('chromium')
   api.test_results.set_config('public_server')
+  api.chromium.set_build_properties({
+      'got_webrtc_revision': 'webrtc_sha',
+      'got_v8_revision': 'v8_sha',
+      'got_revision': 'd3adv3ggie',
+      'got_revision_cp': 'refs/heads/main@{#54321}',
+  })
 
   test_runner = api.chromium_tests.create_test_runner(
       tests=[

@@ -210,7 +210,9 @@ class WebRTCApi(recipe_api.RecipeApi):
         urllib.parse.quote(self.m.buildbucket.build.builder.project),
         urllib.parse.quote(bucketname), urllib.parse.quote(builder_id.builder),
         urllib.parse.quote(str(self.m.buildbucket.build.number)))
-    self.m.chromium.set_build_properties({
+    # Don't overwrite existing chromium build_properties
+    build_props = self.m.chromium.build_properties or {}
+    build_props.update({
         'build_page_url': build_url,
         'bot': builders.BUILDERS_DB[builder_id].perf_id,
         'dashboard_url': _DASHBOARD_UPLOAD_URL,
@@ -219,6 +221,7 @@ class WebRTCApi(recipe_api.RecipeApi):
         'perf_dashboard_machine_group': experiment_prefix + _PERF_MACHINE_GROUP,
         'outdir': self.m.chromium.output_dir,
     })
+    self.m.chromium.set_build_properties(build_props)
 
   def set_test_command_lines(self, builder_id, tests):
     if builders.BUILDERS_DB[builder_id].execution_mode != builder_spec.TEST:

@@ -2351,10 +2351,10 @@ class SwarmingGTestTest(SwarmingTest, GTestArguments):
     else:
       raw_json_data = self._tasks[suffix].collect_json_output_override
 
+
     if raw_json_data:
-      chrome_revision_cp = (
-          self.api.m.bot_update.last_returned_properties.get(
-              'got_revision_cp', 'refs/x@{#0}'))
+      chrome_revision_cp = self.api.m.chromium.build_properties.get(
+          'got_revision_cp', 'refs/x@{#0}')
       _, chrome_revision = self.api.m.commit_position.parse(chrome_revision_cp)
       chrome_revision = str(chrome_revision)
       self.api.m.test_results.upload(
@@ -2605,9 +2605,8 @@ class SwarmingIsolatedScriptTest(SwarmingTest, IsolatedScriptTestArguments):
       # Only version 3 of results is supported by the upload server.
       upload_step_name = '.'.join(step_result.name_tokens)
       if results and results.get('version', None) == 3:
-        chrome_rev_cp = (
-            self.api.m.bot_update.last_returned_properties.get(
-                'got_revision_cp', 'refs/x@{#0}'))
+        chrome_rev_cp = self.api.m.chromium.build_properties.get(
+            'got_revision_cp', 'refs/x@{#0}')
         _, chrome_rev = self.api.m.commit_position.parse(str(chrome_rev_cp))
         self.api.m.test_results.upload(
             self.api.m.json.input(results),

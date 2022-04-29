@@ -45,6 +45,13 @@ def RunSteps(api, is_swarming_test=True):
       'chromium',
       TARGET_PLATFORM=api.properties.get('target_platform', 'linux'))
 
+  api.chromium.set_build_properties({
+      'got_webrtc_revision': 'webrtc_sha',
+      'got_v8_revision': 'v8_sha',
+      'got_revision': 'd3adv3ggie',
+      'got_revision_cp': 'refs/heads/main@{#54321}',
+  })
+
   test_specs = []
   if not is_swarming_test:
     test_specs.append(
