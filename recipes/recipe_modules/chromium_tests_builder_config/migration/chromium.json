@@ -1531,12 +1531,6 @@
       "chromium.fyi:fuchsia-code-coverage"
     ]
   },
-  "chromium.fyi:fuchsia-fyi-arm64-dbg": {
-    "builders": [
-      "chromium.fyi:fuchsia-fyi-arm64-dbg",
-      "tryserver.chromium.linux:fuchsia-fyi-arm64-dbg"
-    ]
-  },
   "chromium.fyi:fuchsia-fyi-arm64-femu": {
     "builders": [
       "chromium.fyi:fuchsia-fyi-arm64-femu",
@@ -1547,17 +1541,6 @@
     "builders": [
       "chromium.fyi:fuchsia-fyi-arm64-rel",
       "tryserver.chromium.linux:fuchsia-fyi-arm64-rel"
-    ]
-  },
-  "chromium.fyi:fuchsia-fyi-x64-asan": {
-    "builders": [
-      "chromium.fyi:fuchsia-fyi-x64-asan"
-    ]
-  },
-  "chromium.fyi:fuchsia-fyi-x64-dbg": {
-    "builders": [
-      "chromium.fyi:fuchsia-fyi-x64-dbg",
-      "tryserver.chromium.linux:fuchsia-fyi-x64-dbg"
     ]
   },
   "chromium.fyi:fuchsia-fyi-x64-rel": {
@@ -5511,12 +5494,6 @@
       "tryserver.chromium.linux:fuchsia-compile-x64-dbg"
     ]
   },
-  "tryserver.chromium.linux:fuchsia-fyi-arm64-dbg": {
-    "builders": [
-      "chromium.fyi:fuchsia-fyi-arm64-dbg",
-      "tryserver.chromium.linux:fuchsia-fyi-arm64-dbg"
-    ]
-  },
   "tryserver.chromium.linux:fuchsia-fyi-arm64-femu": {
     "builders": [
       "chromium.fyi:fuchsia-fyi-arm64-femu",
@@ -5527,12 +5504,6 @@
     "builders": [
       "chromium.fyi:fuchsia-fyi-arm64-rel",
       "tryserver.chromium.linux:fuchsia-fyi-arm64-rel"
-    ]
-  },
-  "tryserver.chromium.linux:fuchsia-fyi-x64-dbg": {
-    "builders": [
-      "chromium.fyi:fuchsia-fyi-x64-dbg",
-      "tryserver.chromium.linux:fuchsia-fyi-x64-dbg"
     ]
   },
   "tryserver.chromium.linux:fuchsia-fyi-x64-rel": {

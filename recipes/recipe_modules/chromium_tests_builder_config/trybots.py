@@ -669,11 +669,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 is_compile_only=True,
                 include_all_triggered_testers=True,
             ),
-        'fuchsia-fyi-arm64-dbg':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
-                buildername='fuchsia-fyi-arm64-dbg',
-            ),
         'fuchsia-fyi-arm64-femu':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
@@ -683,11 +678,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
                 buildername='fuchsia-fyi-arm64-rel',
-            ),
-        'fuchsia-fyi-x64-dbg':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
-                buildername='fuchsia-fyi-x64-dbg',
             ),
         'fuchsia-fyi-x64-rel':
             try_spec.TrySpec.create_for_single_mirror(
