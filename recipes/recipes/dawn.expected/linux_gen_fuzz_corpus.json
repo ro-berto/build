@@ -233,7 +233,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "RECIPE_REPO[depot_tools]/gn.py",
       "--root=[CACHE]/builder/dawn",
       "gen",
@@ -727,9 +726,10 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
-      "\nimport hashlib\nfrom shutil import copyfile\nimport os\nimport sys\n\nfor arg in sys.argv[1:]:\n  h = hashlib.md5(open(arg, \"rb\").read()).hexdigest()\n  copyfile(arg, os.path.join(\"[TMP_BASE]/hashed_testcases\", \"trace_\" + h))\n"
+      "RECIPE[build::dawn].resources/hash_testcases.py",
+      "[TMP_BASE]/hashed_testcases"
     ],
     "luci_context": {
       "realm": {
@@ -743,19 +743,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "Hash testcases",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import hashlib@@@",
-      "@@@STEP_LOG_LINE@python.inline@from shutil import copyfile@@@",
-      "@@@STEP_LOG_LINE@python.inline@import os@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@for arg in sys.argv[1:]:@@@",
-      "@@@STEP_LOG_LINE@python.inline@  h = hashlib.md5(open(arg, \"rb\").read()).hexdigest()@@@",
-      "@@@STEP_LOG_LINE@python.inline@  copyfile(arg, os.path.join(\"[TMP_BASE]/hashed_testcases\", \"trace_\" + h))@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
+    "name": "Hash testcases"
   },
   {
     "cmd": [

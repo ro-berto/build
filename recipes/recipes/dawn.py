@@ -105,9 +105,14 @@ def _gn_gen_builds(api, target_cpu, debug, clang, use_goma, out_dir, static,
     args.append('target_cpu="%s"' % target_cpu)
 
   with api.context(cwd=checkout):
-    api.python('gn gen', gn_cmd,
-               ['--root=' + str(checkout), 'gen', '//out/' + out_dir,
-                '--args=' + ' '.join(args)])
+    api.step('gn gen', [
+        'python',
+        gn_cmd,
+        '--root=' + str(checkout),
+        'gen',
+        '//out/' + out_dir,
+        '--args=' + ' '.join(args),
+    ])
 
 
 def _build_steps(api, out_dir, clang, use_goma, *targets):
@@ -194,19 +199,13 @@ def _generate_fuzz_corpus(api, target_cpu, debug, clang, use_goma):
   testcases = api.file.listdir('listdir {}'.format(testcase_dir), testcase_dir)
 
   # Hash the traces so we have a unique name per trace.
-  api.python.inline(
-      'Hash testcases',
-      """
-    import hashlib
-    from shutil import copyfile
-    import os
-    import sys
-
-    for arg in sys.argv[1:]:
-      h = hashlib.md5(open(arg, "rb").read()).hexdigest()
-      copyfile(arg, os.path.join("%s", "trace_" + h))
-    """ % (hashed_testcase_dir),
-      args=testcases)
+  cmd = ([
+      'python3',
+      '-u',
+      api.resource('hash_testcases.py'),
+      hashed_testcase_dir,
+  ] + testcases)
+  api.step('Hash testcases', cmd)
 
   # Upload test cases to the fuzzer corpus directories
   for fuzzer_name in [
