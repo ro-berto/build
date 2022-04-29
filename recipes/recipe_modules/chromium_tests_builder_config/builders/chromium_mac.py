@@ -18,6 +18,7 @@ def _chromium_mac_spec(**kwargs):
 # * Mac10.14 Tests
 # * Mac10.15 Tests
 # * Mac11 Tests
+# * ios-simulator
 
 SPEC = {
     'ios-catalyst':
@@ -80,23 +81,6 @@ SPEC = {
             ],
             gclient_config='ios',
             gclient_apply_config=[],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'ios',
-                'HOST_PLATFORM': 'mac',
-            },
-            simulation_platform='mac',
-        ),
-    'ios-simulator':
-        _chromium_mac_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-                'mac_toolchain',
-            ],
-            gclient_config='ios',
-            gclient_apply_config=['use_clang_coverage'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,

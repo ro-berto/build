@@ -6,6 +6,7 @@ from recipe_engine import post_process
 
 from RECIPE_MODULES.build import chromium_swarming
 from RECIPE_MODULES.build.chromium_tests import steps
+from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 
 from PB.recipe_modules.recipe_engine.led.properties import InputProperties
 
@@ -804,8 +805,23 @@ def GenTests(api):
 
   yield api.test(
       'iOS code coverage tryserver',
+      api.platform('mac', 64),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.mac', builder='ios-simulator'),
+          builder_group='fake-try-group', builder='fake-try-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+              builder_spec=ctbc.BuilderSpec.create(
+                  gclient_config='ios',
+                  gclient_apply_config=['use_clang_coverage'],
+                  chromium_config='chromium',
+                  chromium_apply_config=['mb', 'mac_toolchain'],
+                  chromium_config_kwargs={
+                      'TARGET_PLATFORM': 'ios',
+                  },
+              ),
+          ).assemble()),
       api.code_coverage(use_clang_coverage=True, coverage_test_types=['unit']),
       api.properties(files_to_instrument=[
           'some/path/to/file.cc',
@@ -875,8 +891,14 @@ def GenTests(api):
 
   yield api.test(
       'process dual test types in per-cl coverage',
+      api.platform('linux', 64),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.mac', builder='ios-simulator'),
+          builder_group='fake-try-group', builder='fake-try-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.code_coverage(
           use_clang_coverage=True, coverage_test_types=['unit', 'overall']),
       api.properties(files_to_instrument=[
@@ -895,8 +917,14 @@ def GenTests(api):
 
   yield api.test(
       'skip processing when wrong test type',
+      api.platform('linux', 64),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.mac', builder='ios-simulator'),
+          builder_group='fake-try-group', builder='fake-try-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.code_coverage(
           use_clang_coverage=True, coverage_test_types=['instrument']),
       api.properties(files_to_instrument=[

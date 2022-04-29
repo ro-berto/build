@@ -1055,6 +1055,9 @@ TRYBOTS = try_spec.TryDatabase.create({
     },
     # The config for the following builders is now specified src-side in
     # //infra/config/subprojects/chromium/try/tryserver.chromium.mac.star
+    # * ios-simulator
+    # * ios-simulator-inverse-fieldtrials-fyi
+    # * ios-simulator-rts
     # * mac-inverse-fieldtrials-fyi-rel
     # * mac-osxbeta-rel
     # * mac-rel
@@ -1090,13 +1093,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.mac',
                 buildername='ios-simulator-full-configs',
             ),
-        # This trybot mirrors the trybot ios-simulator with
-        # analyze_deps_autorolls set to False
-        'ios-simulator-inverse-fieldtrials-fyi':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.mac',
-                buildername='ios-simulator',
-            ),
         'ios-simulator-multi-window':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
@@ -1106,17 +1102,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.mac',
                 buildername='ios-simulator-noncq',
-            ),
-        'ios-simulator':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.mac',
-                buildername='ios-simulator',
-            ),
-        'ios-simulator-rts':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.mac',
-                buildername='ios-simulator',
-                regression_test_selection=try_spec.ALWAYS,
             ),
         'ios13-beta-simulator':
             try_spec.TrySpec.create_for_single_mirror(
