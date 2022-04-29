@@ -208,8 +208,8 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
       self.m.file.rmcontents('clear checkout testing directory',
                              self.m.path['checkout'].join('testing'))
       self.m.file.rmcontents(
-          'clear checkout third_party/blink directory',
-          self.m.path['checkout'].join('third_party', 'blink'))
+          'clear checkout third_party/blink/tools directory',
+          self.m.path['checkout'].join('third_party', 'blink', 'tools'))
       self.m.file.rmcontents(
           'clear checkout third_party/llvm-build directory',
           self.m.path['checkout'].join('third_party', 'llvm-build'))
