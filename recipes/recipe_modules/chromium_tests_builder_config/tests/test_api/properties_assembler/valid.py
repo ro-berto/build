@@ -42,6 +42,12 @@ def RunSteps(api):
         'Spec for {}:\nexpected: {{second}}\nactual: {{first}}'.format(
             builder_id))
 
+  for k, v in six.iteritems(api.properties.get('expected_attrs', {})):
+    value = getattr(builder_config, k)
+    api.assertions.assertEqual(
+        value, v,
+        'builder_config.{}:\nexpected: {{second}}\nactual: {{first}}'.format(k))
+
 
 def GenTests(api):
   builder_id = chromium.BuilderId.create_for_group('fake-group', 'fake-builder')
@@ -256,7 +262,14 @@ def GenTests(api):
       'try-builder',
       api.chromium_tests_builder_config.properties(
           api.chromium_tests_builder_config
-          .properties_assembler_for_try_builder().with_mirrored_builder(
+          .properties_assembler_for_try_builder(
+              is_compile_only=True,
+              analyze_names=['foo', 'bar'],
+              retry_failed_shards=False,
+              retry_without_patch=False,
+              regression_test_selection=ctbc.ALWAYS,
+              regression_test_selection_recall=0.5,
+          ).with_mirrored_builder(
               builder_group='fake-group',
               builder='fake-builder',
           ).with_mirrored_tester(
@@ -293,6 +306,14 @@ def GenTests(api):
                       gclient_config='chromium',
                       chromium_config='chromium',
                   ),
+          },
+          expected_attrs={
+              'is_compile_only': True,
+              'analyze_names': ('foo', 'bar'),
+              'retry_failed_shards': False,
+              'retry_without_patch': False,
+              'regression_test_selection': ctbc.ALWAYS,
+              'regression_test_selection_recall': 0.5,
           },
       ),
       api.post_check(post_process.StatusSuccess),

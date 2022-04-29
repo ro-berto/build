@@ -16,7 +16,7 @@ from PB.recipe_modules.build.chromium_tests_builder_config import (properties as
                                                                   )
 
 from . import (builders, trybots, BuilderConfig, BuilderDatabase, BuilderSpec,
-               TryDatabase)
+               TryDatabase, ALWAYS, QUICK_RUN_ONLY, NEVER)
 
 _DEFAULT_SPEC = BuilderSpec.create(
     gclient_config='chromium',
@@ -63,7 +63,7 @@ class _PropertiesAssembler(object):
     self._builder_ids = []
     self._builder_ids_in_scope_for_testing = []
 
-  def assemble(self):
+  def assemble(self, **kwargs):
     return properties_pb.InputProperties(
         builder_config=properties_pb.BuilderConfig(
             builder_db=properties_pb.BuilderDatabase(
@@ -71,7 +71,7 @@ class _PropertiesAssembler(object):
             builder_ids=self._builder_ids,
             builder_ids_in_scope_for_testing=(
                 self._builder_ids_in_scope_for_testing),
-        ))
+            **kwargs))
 
   def add_builder(self, details):
     builder_id = builder_pb.BuilderID(
@@ -264,20 +264,56 @@ class _CiTesterPropertiesAssembler(object):
     return self._props_assembler.assemble()
 
 
+_RTS_CONDITION_MAP = {
+    NEVER:
+        properties_pb.BuilderConfig.RtsConfig.Condition.NEVER,
+    QUICK_RUN_ONLY:
+        properties_pb.BuilderConfig.RtsConfig.Condition.QUICK_RUN_ONLY,
+    ALWAYS:
+        properties_pb.BuilderConfig.RtsConfig.Condition.ALWAYS,
+}
+
+
 class _TryBuilderPropertiesAssembler(object):
 
-  def __init__(self, props_assembler):
+  def __init__(self, props_assembler, builder_config_kwargs):
     self._props_assembler = props_assembler
     # ID and spec of the most recently added builder
     self._builder_id = None
     self._builder_spec = None
+    self._builder_config_kwargs = builder_config_kwargs
 
-  # TODO(gbeaty) Update this to accept arguments for changing the try settings
-  # (retry shards, RTS, etc.)
   @classmethod
-  def create(cls):
+  def create(cls,
+             is_compile_only=False,
+             analyze_names=None,
+             retry_failed_shards=True,
+             retry_without_patch=True,
+             regression_test_selection=None,
+             regression_test_selection_recall=None):
     props_assembler = _PropertiesAssembler()
-    return cls(props_assembler)
+
+    builder_config_kwargs = {}
+    if is_compile_only:
+      builder_config_kwargs['is_compile_only'] = True
+    if analyze_names:
+      builder_config_kwargs['analyze_names'] = list(analyze_names)
+    if not retry_failed_shards:
+      builder_config_kwargs['retry_failed_shards'] = False
+    if not retry_without_patch:
+      builder_config_kwargs['retry_without_patch'] = False
+    if regression_test_selection_recall is not None:
+      assert regression_test_selection is not None, (
+          'regression_test_selection_recall can only be set when setting'
+          ' regression_test_selection')
+    if regression_test_selection:
+      rts_config = properties_pb.BuilderConfig.RtsConfig(
+          condition=_RTS_CONDITION_MAP[regression_test_selection])
+      if regression_test_selection_recall:
+        rts_config.recall = regression_test_selection_recall
+      builder_config_kwargs['rts_config'] = rts_config
+
+    return cls(props_assembler, builder_config_kwargs)
 
   def with_mirrored_builder(self, **kwargs):
     kwargs.setdefault('bucket', 'ci')
@@ -312,7 +348,7 @@ class _TryBuilderPropertiesAssembler(object):
     if self._builder_id is None:
       raise TypeError(
           '`with_mirrored_builder` must be called before calling `assemble`')
-    return self._props_assembler.assemble()
+    return self._props_assembler.assemble(**self._builder_config_kwargs)
 
 
 class ChromiumTestsBuilderConfigApi(recipe_test_api.RecipeTestApi):
@@ -356,11 +392,11 @@ class ChromiumTestsBuilderConfigApi(recipe_test_api.RecipeTestApi):
     return _CiTesterPropertiesAssembler.create(**kwargs)
 
   @staticmethod
-  def properties_assembler_for_try_builder():
+  def properties_assembler_for_try_builder(**kwargs):
     """Get a properties assembler for a try builder.
 
-    The returned object has 3 methods:
-    * with_mirrored_builder - Adds a builder that the try builder
+    The returned object has 3 methods: * with_mirrored_builder - Adds a
+    builder that the try builder
       mirrors. If `builder_spec` is not specified, it will use the last
       specified builder spec. Must be called at least once with
       `builder_spec` set.
@@ -371,8 +407,14 @@ class ChromiumTestsBuilderConfigApi(recipe_test_api.RecipeTestApi):
       calling this.
     * assemble - Creates the proto properties object for the module. It
       is an error to call this before calling `with_mirrored_builder`.
+
+    Args:
+      kwargs - Keyword arguments that will be used to set try-specific
+        settings for the builder. Valid arguments correspond to fields
+        in TrySpec, with the exception of the mirrors field, which will
+        be set based on the calls to with_mirrored_tester.
     """
-    return _TryBuilderPropertiesAssembler.create()
+    return _TryBuilderPropertiesAssembler.create(**kwargs)
 
   @staticmethod
   def _get_builder_id(builder_group, builder, **_):
