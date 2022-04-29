@@ -592,13 +592,6 @@
       "chromium.android:android-pie-arm64-wpt-rel-non-cq"
     ]
   },
-  "chromium.android:android-pie-x86-rel": {
-    "builders": [
-      "chromium.android:android-pie-x86-rel",
-      "tryserver.chromium.android:android-inverse-fieldtrials-pie-x86-fyi-rel",
-      "tryserver.chromium.android:android-pie-x86-rel"
-    ]
-  },
   "chromium.android:android-weblayer-10-x86-rel-tests": {
     "builders": [
       "chromium.android:android-weblayer-10-x86-rel-tests",
@@ -4633,13 +4626,6 @@
       "tryserver.chromium.android:android-cronet-x86-rel-kitkat-tests"
     ]
   },
-  "tryserver.chromium.android:android-inverse-fieldtrials-pie-x86-fyi-rel": {
-    "builders": [
-      "chromium.android:android-pie-x86-rel",
-      "tryserver.chromium.android:android-inverse-fieldtrials-pie-x86-fyi-rel",
-      "tryserver.chromium.android:android-pie-x86-rel"
-    ]
-  },
   "tryserver.chromium.android:android-lollipop-arm-rel": {
     "builders": [
       "chromium.android:android-lollipop-arm-rel",
@@ -4757,13 +4743,6 @@
     "builders": [
       "chromium.android.fyi:android-pie-arm64-wpt-rel-non-cq",
       "tryserver.chromium.android:android-pie-arm64-wpt-rel-non-cq"
-    ]
-  },
-  "tryserver.chromium.android:android-pie-x86-rel": {
-    "builders": [
-      "chromium.android:android-pie-x86-rel",
-      "tryserver.chromium.android:android-inverse-fieldtrials-pie-x86-fyi-rel",
-      "tryserver.chromium.android:android-pie-x86-rel"
     ]
   },
   "tryserver.chromium.android:android-weblayer-10-x86-rel-tests": {

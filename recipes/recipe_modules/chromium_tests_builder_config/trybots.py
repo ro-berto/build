@@ -105,6 +105,8 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * android_compile_dbg
     # * android_compile_x64_dbg
     # * android-12-x64-dbg
+    # * android-inverse-fieldtrials-pie-x86-fyi-rel
+    # * android-pie-x86-rel
     # * android-webview-12-x64-dbg
     'tryserver.chromium.android': {
         'android-10-x86-fyi-rel-tests':
@@ -210,13 +212,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='android-cronet-x86-rel',
                 tester='android-cronet-x86-rel-kitkat-tests',
             ),
-
-        # This trybot mirrors the trybot android-pie-x86-rel
-        'android-inverse-fieldtrials-pie-x86-fyi-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android',
-                buildername='android-pie-x86-rel',
-            ),
         'android-lollipop-arm-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android',
@@ -318,11 +313,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android.fyi',
                 buildername='android-webview-pie-x86-wpt-fyi-rel',
-            ),
-        'android-pie-x86-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android',
-                buildername='android-pie-x86-rel',
             ),
         'android_archive_rel_ng':
             try_spec.TrySpec.create_for_single_mirror(
