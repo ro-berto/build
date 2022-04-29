@@ -2457,15 +2457,8 @@
     ]
   },
   "chromium.gpu.fyi:GPU FYI Linux Builder DEPS ANGLE": {
-    "blockers": [
-      "cannot migrate builder 'chromium.gpu.fyi:Optional Linux Release (Intel HD 630)' with provide-test-spec execution_mode",
-      "cannot migrate builder 'chromium.gpu.fyi:Optional Linux Release (NVIDIA)' with provide-test-spec execution_mode"
-    ],
     "builders": [
-      "chromium.gpu.fyi:GPU FYI Linux Builder DEPS ANGLE",
-      "chromium.gpu.fyi:Optional Linux Release (Intel HD 630)",
-      "chromium.gpu.fyi:Optional Linux Release (NVIDIA)",
-      "tryserver.chromium.linux:linux_optional_gpu_tests_rel"
+      "chromium.gpu.fyi:GPU FYI Linux Builder DEPS ANGLE"
     ]
   },
   "chromium.gpu.fyi:GPU FYI Mac Builder": {
@@ -2972,26 +2965,18 @@
   },
   "chromium.gpu.fyi:Optional Linux Release (Intel HD 630)": {
     "blockers": [
-      "cannot migrate builder 'chromium.gpu.fyi:Optional Linux Release (Intel HD 630)' with provide-test-spec execution_mode",
-      "cannot migrate builder 'chromium.gpu.fyi:Optional Linux Release (NVIDIA)' with provide-test-spec execution_mode"
+      "cannot migrate builder 'chromium.gpu.fyi:Optional Linux Release (Intel HD 630)' with provide-test-spec execution_mode"
     ],
     "builders": [
-      "chromium.gpu.fyi:GPU FYI Linux Builder DEPS ANGLE",
-      "chromium.gpu.fyi:Optional Linux Release (Intel HD 630)",
-      "chromium.gpu.fyi:Optional Linux Release (NVIDIA)",
-      "tryserver.chromium.linux:linux_optional_gpu_tests_rel"
+      "chromium.gpu.fyi:Optional Linux Release (Intel HD 630)"
     ]
   },
   "chromium.gpu.fyi:Optional Linux Release (NVIDIA)": {
     "blockers": [
-      "cannot migrate builder 'chromium.gpu.fyi:Optional Linux Release (Intel HD 630)' with provide-test-spec execution_mode",
       "cannot migrate builder 'chromium.gpu.fyi:Optional Linux Release (NVIDIA)' with provide-test-spec execution_mode"
     ],
     "builders": [
-      "chromium.gpu.fyi:GPU FYI Linux Builder DEPS ANGLE",
-      "chromium.gpu.fyi:Optional Linux Release (Intel HD 630)",
-      "chromium.gpu.fyi:Optional Linux Release (NVIDIA)",
-      "tryserver.chromium.linux:linux_optional_gpu_tests_rel"
+      "chromium.gpu.fyi:Optional Linux Release (NVIDIA)"
     ]
   },
   "chromium.gpu.fyi:Optional Mac Release (Intel)": {
@@ -5966,14 +5951,7 @@
     ]
   },
   "tryserver.chromium.linux:linux_optional_gpu_tests_rel": {
-    "blockers": [
-      "cannot migrate builder 'chromium.gpu.fyi:Optional Linux Release (Intel HD 630)' with provide-test-spec execution_mode",
-      "cannot migrate builder 'chromium.gpu.fyi:Optional Linux Release (NVIDIA)' with provide-test-spec execution_mode"
-    ],
     "builders": [
-      "chromium.gpu.fyi:GPU FYI Linux Builder DEPS ANGLE",
-      "chromium.gpu.fyi:Optional Linux Release (Intel HD 630)",
-      "chromium.gpu.fyi:Optional Linux Release (NVIDIA)",
       "tryserver.chromium.linux:linux_optional_gpu_tests_rel"
     ]
   },

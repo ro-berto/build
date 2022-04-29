@@ -41,4 +41,20 @@ SPEC = {
             test_results_config='staging_server',
             simulation_platform='linux',
         ),
+    'linux_optional_gpu_tests_rel':
+        builder_spec.BuilderSpec.create(
+            chromium_config='chromium',
+            chromium_apply_config=[
+                'mb',
+            ],
+            gclient_config='chromium',
+            gclient_apply_config=[
+                'angle_internal',
+            ],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            simulation_platform='linux',
+            build_gs_bucket='chromium-gpu-fyi-archive'),
 }

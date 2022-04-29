@@ -868,19 +868,9 @@ TRYBOTS = try_spec.TryDatabase.create({
             ),
         # Optional GPU bots.
         'linux_optional_gpu_tests_rel':
-            try_spec.TrySpec.create(
-                [
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.gpu.fyi',
-                        buildername='GPU FYI Linux Builder DEPS ANGLE',
-                        tester='Optional Linux Release (NVIDIA)',
-                    ),
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.gpu.fyi',
-                        buildername='GPU FYI Linux Builder DEPS ANGLE',
-                        tester='Optional Linux Release (Intel HD 630)',
-                    ),
-                ],
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='tryserver.chromium.linux',
+                buildername='linux_optional_gpu_tests_rel',
                 retry_failed_shards=False,
             ),
         # Manually triggered GPU trybots.
