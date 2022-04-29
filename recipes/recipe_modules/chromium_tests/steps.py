@@ -1748,6 +1748,8 @@ def _archive_layout_test_results(api, step_name, step_suffix=None):
       'gs://chromium-layout-test-archives',
       '--staging-dir',
       api.path['cache'].join('chrome_staging'),
+      '--revision',
+      api.chromium.build_properties['got_revision'],
   ]
   if not api.tryserver.is_tryserver:
     archive_layout_test_args.append('--store-latest')

@@ -61,11 +61,9 @@ def archive_layout(args):
       staging_dir, results_dir_basename, file_list, args.results_dir
   )[1]
 
-  wc_dir = os.path.dirname(chrome_dir)
-  last_change = slave_utils.GetHashOrRevision(wc_dir)
-
   builder_name = re.sub('[ .()]', '_', args.builder_name)
   build_number = str(args.build_number)
+  last_change = args.revision
 
   print 'last change: %s' % last_change
   print 'build name: %s' % builder_name
@@ -186,6 +184,15 @@ def _ParseArgs():
       type=int,
       required=True,
       help='Build number of the builder running this script.'
+  )
+  parser.add_argument(
+      '--revision',
+      type=str,
+      required=True,
+      help=(
+          'Revision checked out. If this is not passed in, it will use the '
+          'head revision from the working dir checkout.'
+      )
   )
   parser.add_argument(
       '--step-name',

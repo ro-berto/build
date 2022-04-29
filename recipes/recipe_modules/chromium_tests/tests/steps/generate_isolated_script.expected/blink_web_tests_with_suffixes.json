@@ -402,6 +402,8 @@
       "gs://chromium-layout-test-archives",
       "--staging-dir",
       "[CACHE]/chrome_staging",
+      "--revision",
+      "2d72510e447ab60a9728aeea2362d8be2cbd7789",
       "--store-latest",
       "--step-name",
       "blink_web_tests",

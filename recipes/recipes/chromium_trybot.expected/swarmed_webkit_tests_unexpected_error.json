@@ -3017,6 +3017,8 @@
       "gs://chromium-layout-test-archives",
       "--staging-dir",
       "[CACHE]/chrome_staging",
+      "--revision",
+      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--step-name",
       "blink_web_tests (retry shards with patch)",
       "--slave-utils-gsutil-py-path",

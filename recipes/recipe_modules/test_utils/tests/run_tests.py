@@ -56,6 +56,12 @@ def RunSteps(api, test_swarming, test_skylab, test_name, test_experimental,
   api.chromium_swarming.path_to_merge_scripts = (
       api.path['cache'].join('merge_scripts'))
   api.chromium_swarming.set_default_dimension('pool', 'foo')
+  api.chromium.set_build_properties({
+      'got_webrtc_revision': 'webrtc_sha',
+      'got_v8_revision': 'v8_sha',
+      'got_revision': 'd3adv3ggie',
+      'got_revision_cp': 'refs/heads/main@{#54321}',
+  })
 
   class MockSwarmingTestSpec(steps.SwarmingIsolatedScriptTestSpec):
 
