@@ -275,14 +275,17 @@ def _compare_builder_configs(api, recipe_config, src_side_config):
         # Simulation platform is only used for running recipe tests, it doesn't
         # appear in the proto
         d.pop('simulation_platform', None)
+        # It doesn't make sense to set HOST_ values to anything other than what
+        # the default values should be, setting them src-side isn't even
+        # supported
+        chromium_config_kwargs = thaw(d['chromium_config_kwargs'])
+        d['chromium_config_kwargs'] = chromium_config_kwargs
+        for k in list(chromium_config_kwargs):
+          if k.startswith('HOST_'):
+            chromium_config_kwargs.pop(k)
         return d
 
       return d  # pragma: no cover
-
-    # FrozenDict is not JSON serializable, so thaw it out
-    thawed = thaw(obj)
-    if thawed is not obj:
-      return thawed
 
     raise TypeError(
         '{!r} is not JSON serializable'.format(obj))  # pragma: no cover
@@ -549,7 +552,11 @@ def GenTests(api):
           ctbc.BuilderDatabase.create({
               'fake-group': {
                   'matching-config':
-                      attr.evolve(example_spec, simulation_platform='linux'),
+                      attr.evolve(
+                          example_spec,
+                          simulation_platform='linux',
+                          chromium_config_kwargs={'HOST_PLATFORM': 'linux'},
+                      ),
                   'matching-config-tester':
                       attr.evolve(
                           example_spec,
