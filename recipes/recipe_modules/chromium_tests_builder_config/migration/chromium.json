@@ -854,12 +854,6 @@
       "chromium.chromiumos:chromeos-amd64-generic-asan-rel"
     ]
   },
-  "chromium.chromiumos:chromeos-amd64-generic-cfi-thin-lto-rel": {
-    "builders": [
-      "chromium.chromiumos:chromeos-amd64-generic-cfi-thin-lto-rel",
-      "tryserver.chromium.chromiumos:chromeos-amd64-generic-cfi-thin-lto-rel"
-    ]
-  },
   "chromium.chromiumos:chromeos-amd64-generic-dbg": {
     "builders": [
       "chromium.chromiumos:chromeos-amd64-generic-dbg",
@@ -5276,12 +5270,6 @@
       "chromium.angle:win10-angle-x64-nvidia",
       "chromium.angle:win7-angle-x64-nvidia",
       "tryserver.chromium.angle:win-angle-x64-try"
-    ]
-  },
-  "tryserver.chromium.chromiumos:chromeos-amd64-generic-cfi-thin-lto-rel": {
-    "builders": [
-      "chromium.chromiumos:chromeos-amd64-generic-cfi-thin-lto-rel",
-      "tryserver.chromium.chromiumos:chromeos-amd64-generic-cfi-thin-lto-rel"
     ]
   },
   "tryserver.chromium.chromiumos:chromeos-amd64-generic-dbg": {
