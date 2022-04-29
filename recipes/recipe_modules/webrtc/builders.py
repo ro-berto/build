@@ -539,7 +539,7 @@ _CLIENT_WEBRTC_PERF_SPECS = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             }),
-    'Perf Mac 10.11':
+    'Perf Mac 11':
         WebRTCBuilderSpec.create(
             perf_id='webrtc-mac-large-tests',
             chromium_config='webrtc_default',
