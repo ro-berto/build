@@ -3172,12 +3172,6 @@
       "tryserver.chromium.mac:ios-device"
     ]
   },
-  "chromium.mac:ios-simulator-noncq": {
-    "builders": [
-      "chromium.mac:ios-simulator-noncq",
-      "tryserver.chromium.mac:ios-simulator-noncq"
-    ]
-  },
   "chromium.mac:mac-arm64-on-arm64-rel": {
     "builders": [
       "chromium.mac:mac-arm64-on-arm64-rel",
@@ -5661,12 +5655,6 @@
     "builders": [
       "chromium.fyi:ios-simulator-multi-window",
       "tryserver.chromium.mac:ios-simulator-multi-window"
-    ]
-  },
-  "tryserver.chromium.mac:ios-simulator-noncq": {
-    "builders": [
-      "chromium.mac:ios-simulator-noncq",
-      "tryserver.chromium.mac:ios-simulator-noncq"
     ]
   },
   "tryserver.chromium.mac:ios13-beta-simulator": {

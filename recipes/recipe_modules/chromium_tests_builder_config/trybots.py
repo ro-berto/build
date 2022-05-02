@@ -1000,6 +1000,7 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * ios-simulator
     # * ios-simulator-full-configs
     # * ios-simulator-inverse-fieldtrials-fyi
+    # * ios-simulator-noncq
     # * ios-simulator-rts
     # * mac_chromium_10.11_rel_ng
     # * mac_chromium_10.12_rel_ng
@@ -1036,11 +1037,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
                 buildername='ios-simulator-multi-window',
-            ),
-        'ios-simulator-noncq':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.mac',
-                buildername='ios-simulator-noncq',
             ),
         'ios13-beta-simulator':
             try_spec.TrySpec.create_for_single_mirror(

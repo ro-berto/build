@@ -20,6 +20,7 @@ def _chromium_mac_spec(**kwargs):
 # * Mac11 Tests
 # * ios-simulator
 # * ios-simulator-full-configs
+# * ios-simulator-noncq
 # * mac-arm64-rel
 # * mac11-arm64-rel-tests
 
@@ -52,23 +53,6 @@ SPEC = {
             gclient_apply_config=[],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'ios',
-                'HOST_PLATFORM': 'mac',
-            },
-            simulation_platform='mac',
-        ),
-    'ios-simulator-noncq':
-        _chromium_mac_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-                'mac_toolchain',
-            ],
-            gclient_config='ios',
-            gclient_apply_config=[],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
                 'TARGET_PLATFORM': 'ios',
                 'HOST_PLATFORM': 'mac',
