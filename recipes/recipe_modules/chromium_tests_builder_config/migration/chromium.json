@@ -1872,11 +1872,6 @@
       "chromium.goma.fyi:ios-device-goma-rbe-latest-clobber"
     ]
   },
-  "chromium.goma.fyi:ios-device-m1-goma-rbe-canary-clobber": {
-    "builders": [
-      "chromium.goma.fyi:ios-device-m1-goma-rbe-canary-clobber"
-    ]
-  },
   "chromium.goma.fyi:linux-archive-rel-goma-rbe-ats-canary": {
     "builders": [
       "chromium.goma.fyi:linux-archive-rel-goma-rbe-ats-canary"

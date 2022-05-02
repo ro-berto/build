@@ -56,9 +56,6 @@ SPEC = {
     'Mac M1 Builder (dbg) Goma RBE Canary (clobber)':
         chromium_apply_configs(chromium_mac.SPEC['Mac Builder (dbg)'],
                                ['goma_canary', 'clobber']),
-    'ios-device-m1-goma-rbe-canary-clobber':
-        chromium_apply_configs(chromium_mac.SPEC['ios-device'],
-                               ['goma_canary', 'clobber']),
     'Win Builder Goma RBE Canary':
         chromium_apply_configs(chromium_win.SPEC['Win Builder'],
                                ['goma_canary', 'goma_use_local']),
