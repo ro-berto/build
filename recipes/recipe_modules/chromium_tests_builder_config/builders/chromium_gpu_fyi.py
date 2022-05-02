@@ -10,6 +10,11 @@ def _chromium_gpu_fyi_spec(**kwargs):
     kwargs.setdefault('build_gs_bucket', 'chromium-gpu-fyi-archive')
   return builder_spec.BuilderSpec.create(**kwargs)
 
+# The config for the following virtual builders were removed since their trybot
+# mirrors were migrated src-side:
+# * GPU FYI Linux Builder DEPS ANGLE
+# * Optional Linux Release (Intel HD 630)
+# * Optional Linux Release (NVIDIA)
 
 SPEC = {
     'GPU FYI Win Builder':
@@ -343,22 +348,6 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'enable_reclient',
-            ],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            simulation_platform='linux',
-        ),
-    'GPU FYI Linux Builder DEPS ANGLE':
-        _chromium_gpu_fyi_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'angle_internal',
             ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -1102,10 +1091,6 @@ SPEC = {
     'Optional Win10 x64 Release (NVIDIA)':
         _chromium_gpu_fyi_spec(execution_mode=builder_spec.PROVIDE_TEST_SPEC),
     'Optional Win10 x64 Release (Intel HD 630)':
-        _chromium_gpu_fyi_spec(execution_mode=builder_spec.PROVIDE_TEST_SPEC),
-    'Optional Linux Release (NVIDIA)':
-        _chromium_gpu_fyi_spec(execution_mode=builder_spec.PROVIDE_TEST_SPEC),
-    'Optional Linux Release (Intel HD 630)':
         _chromium_gpu_fyi_spec(execution_mode=builder_spec.PROVIDE_TEST_SPEC),
     'Optional Mac Release (Intel)':
         _chromium_gpu_fyi_spec(execution_mode=builder_spec.PROVIDE_TEST_SPEC),

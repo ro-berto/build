@@ -2225,11 +2225,6 @@
       "tryserver.chromium.linux:gpu-fyi-try-linux-nvidia-dbg"
     ]
   },
-  "chromium.gpu.fyi:GPU FYI Linux Builder DEPS ANGLE": {
-    "builders": [
-      "chromium.gpu.fyi:GPU FYI Linux Builder DEPS ANGLE"
-    ]
-  },
   "chromium.gpu.fyi:GPU FYI Mac Builder": {
     "builders": [
       "chromium.gpu.fyi:GPU FYI Mac Builder",
@@ -2730,22 +2725,6 @@
     "builders": [
       "chromium.gpu.fyi:Optional Android Release (Pixel 4)",
       "tryserver.chromium.android:android_optional_gpu_tests_rel"
-    ]
-  },
-  "chromium.gpu.fyi:Optional Linux Release (Intel HD 630)": {
-    "blockers": [
-      "cannot migrate builder 'chromium.gpu.fyi:Optional Linux Release (Intel HD 630)' with provide-test-spec execution_mode"
-    ],
-    "builders": [
-      "chromium.gpu.fyi:Optional Linux Release (Intel HD 630)"
-    ]
-  },
-  "chromium.gpu.fyi:Optional Linux Release (NVIDIA)": {
-    "blockers": [
-      "cannot migrate builder 'chromium.gpu.fyi:Optional Linux Release (NVIDIA)' with provide-test-spec execution_mode"
-    ],
-    "builders": [
-      "chromium.gpu.fyi:Optional Linux Release (NVIDIA)"
     ]
   },
   "chromium.gpu.fyi:Optional Mac Release (Intel)": {
@@ -5428,11 +5407,6 @@
     "builders": [
       "chromium.fyi:WebKit Linux layout_ng_disabled Builder",
       "tryserver.chromium.linux:linux_layout_tests_layout_ng_disabled"
-    ]
-  },
-  "tryserver.chromium.linux:linux_optional_gpu_tests_rel": {
-    "builders": [
-      "tryserver.chromium.linux:linux_optional_gpu_tests_rel"
     ]
   },
   "tryserver.chromium.linux:linux_vr": {
