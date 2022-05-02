@@ -3155,12 +3155,6 @@
       "tryserver.chromium.mac:mac_chromium_dbg_ng"
     ]
   },
-  "chromium.mac:ios-catalyst": {
-    "builders": [
-      "chromium.mac:ios-catalyst",
-      "tryserver.chromium.mac:ios-catalyst"
-    ]
-  },
   "chromium.mac:ios-device": {
     "builders": [
       "chromium.mac:ios-device",
@@ -5626,12 +5620,6 @@
     "builders": [
       "chromium.fyi:ios-asan",
       "tryserver.chromium.mac:ios-asan"
-    ]
-  },
-  "tryserver.chromium.mac:ios-catalyst": {
-    "builders": [
-      "chromium.mac:ios-catalyst",
-      "tryserver.chromium.mac:ios-catalyst"
     ]
   },
   "tryserver.chromium.mac:ios-device": {
