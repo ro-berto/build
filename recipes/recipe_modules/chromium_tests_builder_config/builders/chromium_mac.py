@@ -4,11 +4,6 @@
 
 from .. import builder_spec
 
-
-def _chromium_mac_spec(**kwargs):
-  return builder_spec.BuilderSpec.create(
-      build_gs_bucket='chromium-mac-archive', **kwargs)
-
 # The config for the following builders is now specified src-side in
 # //infra/config/subprojects/chromium/ci/chromium.mac.star
 # * Mac Builder
@@ -21,6 +16,7 @@ def _chromium_mac_spec(**kwargs):
 # * Mac11 Tests
 # * Mac11 Tests (dbg)
 # * ios-catalyst
+# * ios-device
 # * ios-simulator
 # * ios-simulator-full-configs
 # * ios-simulator-noncq
@@ -28,23 +24,6 @@ def _chromium_mac_spec(**kwargs):
 # * mac11-arm64-rel-tests
 
 SPEC = {
-    'ios-device':
-        _chromium_mac_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-                'mac_toolchain',
-            ],
-            gclient_config='ios',
-            gclient_apply_config=[],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'ios',
-                'HOST_PLATFORM': 'mac',
-            },
-            simulation_platform='mac',
-        ),
     'mac-arm64-on-arm64-rel':
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',

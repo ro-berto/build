@@ -6,7 +6,6 @@ import six
 
 from .. import builder_spec
 from . import chromium
-from . import chromium_mac
 from . import chromium_win
 
 RESULTS_URL = 'https://chromeperf.appspot.com'
@@ -35,6 +34,8 @@ def chromium_apply_configs(base_config, config_names):
 # * Mac M1 Builder (dbg) Goma RBE Canary (clobber)
 # * chromeos-amd64-generic-rel-goma-rbe-canary
 # * chromeos-amd64-generic-rel-goma-rbe-latest
+# * ios-device-goma-rbe-canary-clobber
+# * ios-device-goma-rbe-latest-clobber
 
 SPEC = {
     # Canary RBE
@@ -47,9 +48,6 @@ SPEC = {
     'mac-archive-rel-goma-rbe-canary':
         chromium_apply_configs(chromium.SPEC['mac-archive-rel'],
                                ['goma_canary']),
-    'ios-device-goma-rbe-canary-clobber':
-        chromium_apply_configs(chromium_mac.SPEC['ios-device'],
-                               ['goma_canary', 'clobber']),
     'mac-m1-archive-rel-goma-rbe-canary':
         chromium_apply_configs(chromium.SPEC['mac-archive-rel'],
                                ['goma_canary']),
@@ -79,9 +77,6 @@ SPEC = {
     'mac-archive-rel-goma-rbe-latest':
         chromium_apply_configs(chromium.SPEC['mac-archive-rel'],
                                ['goma_latest_client']),
-    'ios-device-goma-rbe-latest-clobber':
-        chromium_apply_configs(chromium_mac.SPEC['ios-device'],
-                               ['goma_latest_client', 'clobber']),
     'Win Builder Goma RBE Latest Client':
         chromium_apply_configs(chromium_win.SPEC['Win Builder'],
                                ['goma_latest_client', 'goma_use_local']),

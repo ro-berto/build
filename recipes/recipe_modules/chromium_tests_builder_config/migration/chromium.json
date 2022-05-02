@@ -1847,16 +1847,6 @@
       "chromium.goma.fyi:android-archive-dbg-goma-rbe-latest"
     ]
   },
-  "chromium.goma.fyi:ios-device-goma-rbe-canary-clobber": {
-    "builders": [
-      "chromium.goma.fyi:ios-device-goma-rbe-canary-clobber"
-    ]
-  },
-  "chromium.goma.fyi:ios-device-goma-rbe-latest-clobber": {
-    "builders": [
-      "chromium.goma.fyi:ios-device-goma-rbe-latest-clobber"
-    ]
-  },
   "chromium.goma.fyi:linux-archive-rel-goma-rbe-ats-canary": {
     "builders": [
       "chromium.goma.fyi:linux-archive-rel-goma-rbe-ats-canary"
@@ -3122,12 +3112,6 @@
     "builders": [
       "chromium.linux:linux-no-base-tracing-rel",
       "tryserver.chromium.linux:linux-no-base-tracing-rel"
-    ]
-  },
-  "chromium.mac:ios-device": {
-    "builders": [
-      "chromium.mac:ios-device",
-      "tryserver.chromium.mac:ios-device"
     ]
   },
   "chromium.mac:mac-arm64-on-arm64-rel": {
@@ -5589,12 +5573,6 @@
     "builders": [
       "chromium.fyi:ios-asan",
       "tryserver.chromium.mac:ios-asan"
-    ]
-  },
-  "tryserver.chromium.mac:ios-device": {
-    "builders": [
-      "chromium.mac:ios-device",
-      "tryserver.chromium.mac:ios-device"
     ]
   },
   "tryserver.chromium.mac:ios-simulator-cronet": {
