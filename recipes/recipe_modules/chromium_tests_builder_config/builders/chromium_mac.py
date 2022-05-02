@@ -19,6 +19,8 @@ def _chromium_mac_spec(**kwargs):
 # * Mac10.15 Tests
 # * Mac11 Tests
 # * ios-simulator
+# * mac-arm64-rel
+# * mac11-arm64-rel-tests
 
 SPEC = {
     'ios-catalyst':
@@ -102,39 +104,6 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             simulation_platform='mac',
-        ),
-    'mac-arm64-rel':
-        builder_spec.BuilderSpec.create(
-            chromium_config='chromium',
-            gclient_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_ARCH': 'arm',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'mac',
-            },
-            simulation_platform='mac',
-        ),
-    'mac11-arm64-rel-tests':
-        builder_spec.BuilderSpec.create(
-            chromium_config='chromium',
-            gclient_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_ARCH': 'arm',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'mac',
-            },
-            execution_mode=builder_spec.TEST,
-            parent_builder_group='chromium.mac',
-            parent_buildername='mac-arm64-rel',
-            simulation_platform='linux',
         ),
     'Mac11 Tests (dbg)':
         _chromium_mac_spec(

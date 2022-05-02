@@ -3211,20 +3211,6 @@
       "tryserver.chromium.mac:mac-arm64-on-arm64-rel"
     ]
   },
-  "chromium.mac:mac-arm64-rel": {
-    "builders": [
-      "chromium.mac:mac-arm64-rel",
-      "chromium.mac:mac11-arm64-rel-tests",
-      "tryserver.chromium.mac:mac11-arm64-rel"
-    ]
-  },
-  "chromium.mac:mac11-arm64-rel-tests": {
-    "builders": [
-      "chromium.mac:mac-arm64-rel",
-      "chromium.mac:mac11-arm64-rel-tests",
-      "tryserver.chromium.mac:mac11-arm64-rel"
-    ]
-  },
   "chromium.memory:Linux ASan LSan Builder": {
     "builders": [
       "chromium.memory:Linux ASan LSan Builder",
@@ -5767,13 +5753,6 @@
     "builders": [
       "chromium.fyi:Mac Builder Next",
       "tryserver.chromium.mac:mac-builder-next-rel"
-    ]
-  },
-  "tryserver.chromium.mac:mac11-arm64-rel": {
-    "builders": [
-      "chromium.mac:mac-arm64-rel",
-      "chromium.mac:mac11-arm64-rel-tests",
-      "tryserver.chromium.mac:mac11-arm64-rel"
     ]
   },
   "tryserver.chromium.mac:mac_chromium_archive_rel_ng": {
