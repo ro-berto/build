@@ -1004,6 +1004,7 @@ TRYBOTS = try_spec.TryDatabase.create({
     # The config for the following builders is now specified src-side in
     # //infra/config/subprojects/chromium/try/tryserver.chromium.mac.star
     # * ios-simulator
+    # * ios-simulator-full-configs
     # * ios-simulator-inverse-fieldtrials-fyi
     # * ios-simulator-rts
     # * mac_chromium_10.11_rel_ng
@@ -1036,11 +1037,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
                 buildername='ios-simulator-cronet',
-            ),
-        'ios-simulator-full-configs':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.mac',
-                buildername='ios-simulator-full-configs',
             ),
         'ios-simulator-multi-window':
             try_spec.TrySpec.create_for_single_mirror(
