@@ -126,7 +126,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "None/tools/clang/scripts/generate_compdb.py",
       "-p",

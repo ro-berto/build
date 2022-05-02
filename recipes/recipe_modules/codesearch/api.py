@@ -65,14 +65,13 @@ class CodesearchApi(recipe_api.RecipeApi):
         mb_config_path=mb_config_path)
 
     output_file = output_file or self.c.compile_commands_json_file
-    args = ['-p', self.c.out_path, '-o', output_file] + list(targets)
 
     try:
-      step_result = self.m.python(
-          'generate compilation database',
-          self.m.path['checkout'].join(
-              'tools', 'clang', 'scripts', 'generate_compdb.py'),
-          args)
+      step_result = self.m.step('generate compilation database', [
+          'python3', '-u', self.m.path['checkout'].join(
+              'tools', 'clang', 'scripts', 'generate_compdb.py'), '-p',
+          self.c.out_path, '-o', output_file
+      ] + list(targets))
     except self.m.step.StepFailure as e:
       raise e
 
@@ -81,10 +80,11 @@ class CodesearchApi(recipe_api.RecipeApi):
   def generate_gn_target_list(self, output_file=None):
     output_file = output_file or self.c.gn_targets_json_file
     with self.m.context(cwd=self.m.path['checkout']):
-      output = self.m.python(
-          'generate gn target list',
-          self.m.depot_tools.gn_py_path,
-          ['desc', self.c.out_path, '*', '--format=json'],
+      output = self.m.step(
+          'generate gn target list', [
+              'python', '-u', self.m.depot_tools.gn_py_path, 'desc',
+              self.c.out_path, '*', '--format=json'
+          ],
           stdout=self.m.raw_io.output_text()).stdout
     self.m.file.write_raw('write gn target list', output_file, output)
 
@@ -121,7 +121,7 @@ class CodesearchApi(recipe_api.RecipeApi):
     self.m.step(
         name='download translation_unit clang tool',
         cmd=[
-            'python3',
+            'python3', '-u',
             clang_dir.join('scripts',
                            'update.py'), '--package=translation_unit',
             '--output-dir=' + str(translation_unit_dir)
@@ -138,8 +138,10 @@ class CodesearchApi(recipe_api.RecipeApi):
       try:
         with self.m.context(cwd=run_dir):
           # run_tool currently only supports py2.
-          self.m.python('run translation_unit clang tool',
-                        clang_dir.join('scripts', 'run_tool.py'), args)
+          self.m.step(
+              'run translation_unit clang tool',
+              ['python', '-u',
+               clang_dir.join('scripts', 'run_tool.py')] + args)
 
       except self.m.step.StepFailure as f:  # pragma: nocover
         # For some files, the clang tool produces errors. This is a known issue,

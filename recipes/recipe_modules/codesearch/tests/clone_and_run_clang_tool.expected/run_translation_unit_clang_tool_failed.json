@@ -26,6 +26,7 @@
   {
     "cmd": [
       "python3",
+      "-u",
       "None/tools/clang/scripts/update.py",
       "--package=translation_unit",
       "--output-dir=[CLEANUP]/tmp_tmp_1"

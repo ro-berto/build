@@ -439,7 +439,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "[CACHE]/builder/src/tools/clang/scripts/generate_compdb.py",
       "-p",
@@ -1080,6 +1080,7 @@
   {
     "cmd": [
       "python3",
+      "-u",
       "[CACHE]/builder/src/tools/clang/scripts/update.py",
       "--package=translation_unit",
       "--output-dir=[CLEANUP]/tmp_tmp_1"
