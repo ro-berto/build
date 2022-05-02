@@ -7,7 +7,16 @@ from . import try_spec
 TRYBOTS = try_spec.TryDatabase.create({
     # The config for the following builders is now specified src-side in
     # //infra/config/subprojects/chromium/try/tryserver.blink.star
+    # * android-oreo-arm64-dbg
+    # * android-webview-marshmallow-arm64-dbg
+    # * android-webview-nougat-arm64-dbg
+    # * android-webview-oreo-arm64-dbg
+    # * android-webview-pie-arm64-dbg
+    # * android_arm64_dbg_recipe
+    # * android_n5x_swarming_dbg
+    # * android_unswarmed_pixel_aosp
     # * linux-blink-rel
+    # * try-nougat-phone-tester
     'tryserver.blink': {
         'linux-blink-optional-highdpi-rel':
             try_spec.TrySpec.create_for_single_mirror(
@@ -319,13 +328,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium',
                 buildername='android-archive-rel',
             ),
-        'android_arm64_dbg_recipe':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android',
-                buildername='Android arm64 Builder (dbg)',
-                is_compile_only=True,
-                include_all_triggered_testers=True,
-            ),
         'android_compile_x86_dbg':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android',
@@ -339,52 +341,16 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='android-cronet-arm-rel',
                 is_compile_only=True,
             ),
-        'android_n5x_swarming_dbg':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android',
-                buildername='Android arm64 Builder (dbg)',
-                tester='Marshmallow 64 bit Tester',
-            ),
         'android_optional_gpu_tests_rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.gpu.fyi',
                 buildername='Optional Android Release (Pixel 4)',
                 retry_failed_shards=False,
             ),
-        'android-webview-marshmallow-arm64-dbg':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android',
-                buildername='Android arm64 Builder (dbg)',
-                tester='Android WebView M (dbg)',
-            ),
-        'android-webview-nougat-arm64-dbg':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android',
-                buildername='Android arm64 Builder (dbg)',
-                tester='Android WebView N (dbg)',
-            ),
-        'android-webview-oreo-arm64-dbg':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android',
-                buildername='Android arm64 Builder (dbg)',
-                tester='Android WebView O (dbg)',
-            ),
-        'android-webview-pie-arm64-dbg':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android',
-                buildername='Android arm64 Builder (dbg)',
-                tester='Android WebView P (dbg)',
-            ),
         'cast_shell_android':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android',
                 buildername='Cast Android (dbg)',
-            ),
-        'android_unswarmed_pixel_aosp':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android',
-                buildername='Android arm64 Builder (dbg)',
-                tester='Android WebView N (dbg)',
             ),
         # Manually triggered GPU trybots.
         'gpu-fyi-try-android-l-nexus-5-32':
@@ -427,24 +393,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.gpu',
                 buildername='Android Release (Nexus 5X)',
-            ),
-        'try-nougat-phone-tester':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android',
-                buildername='Android arm64 Builder (dbg)',
-                tester='Nougat Phone Tester',
-            ),
-        'android-oreo-arm64-dbg':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android',
-                buildername='Android arm64 Builder (dbg)',
-                tester='Oreo Phone Tester',
-            ),
-        'android-pie-arm64-dbg':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android',
-                buildername='Android arm64 Builder (dbg)',
-                tester='android-pie-arm64-dbg',
             ),
         'android-pie-arm64-fyi-rel':
             try_spec.TrySpec.create_for_single_mirror(

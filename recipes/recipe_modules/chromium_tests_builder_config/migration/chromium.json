@@ -127,121 +127,6 @@
       "chromium.android:Android ASAN (dbg)"
     ]
   },
-  "chromium.android:Android WebView M (dbg)": {
-    "builders": [
-      "chromium.android:Android WebView M (dbg)",
-      "chromium.android:Android WebView N (dbg)",
-      "chromium.android:Android WebView O (dbg)",
-      "chromium.android:Android WebView P (dbg)",
-      "chromium.android:Android arm64 Builder (dbg)",
-      "chromium.android:Marshmallow 64 bit Tester",
-      "chromium.android:Nougat Phone Tester",
-      "chromium.android:Oreo Phone Tester",
-      "chromium.android:android-pie-arm64-dbg",
-      "tryserver.chromium.android:android-oreo-arm64-dbg",
-      "tryserver.chromium.android:android-pie-arm64-dbg",
-      "tryserver.chromium.android:android-webview-marshmallow-arm64-dbg",
-      "tryserver.chromium.android:android-webview-nougat-arm64-dbg",
-      "tryserver.chromium.android:android-webview-oreo-arm64-dbg",
-      "tryserver.chromium.android:android-webview-pie-arm64-dbg",
-      "tryserver.chromium.android:android_arm64_dbg_recipe",
-      "tryserver.chromium.android:android_n5x_swarming_dbg",
-      "tryserver.chromium.android:android_unswarmed_pixel_aosp",
-      "tryserver.chromium.android:try-nougat-phone-tester"
-    ]
-  },
-  "chromium.android:Android WebView N (dbg)": {
-    "builders": [
-      "chromium.android:Android WebView M (dbg)",
-      "chromium.android:Android WebView N (dbg)",
-      "chromium.android:Android WebView O (dbg)",
-      "chromium.android:Android WebView P (dbg)",
-      "chromium.android:Android arm64 Builder (dbg)",
-      "chromium.android:Marshmallow 64 bit Tester",
-      "chromium.android:Nougat Phone Tester",
-      "chromium.android:Oreo Phone Tester",
-      "chromium.android:android-pie-arm64-dbg",
-      "tryserver.chromium.android:android-oreo-arm64-dbg",
-      "tryserver.chromium.android:android-pie-arm64-dbg",
-      "tryserver.chromium.android:android-webview-marshmallow-arm64-dbg",
-      "tryserver.chromium.android:android-webview-nougat-arm64-dbg",
-      "tryserver.chromium.android:android-webview-oreo-arm64-dbg",
-      "tryserver.chromium.android:android-webview-pie-arm64-dbg",
-      "tryserver.chromium.android:android_arm64_dbg_recipe",
-      "tryserver.chromium.android:android_n5x_swarming_dbg",
-      "tryserver.chromium.android:android_unswarmed_pixel_aosp",
-      "tryserver.chromium.android:try-nougat-phone-tester"
-    ]
-  },
-  "chromium.android:Android WebView O (dbg)": {
-    "builders": [
-      "chromium.android:Android WebView M (dbg)",
-      "chromium.android:Android WebView N (dbg)",
-      "chromium.android:Android WebView O (dbg)",
-      "chromium.android:Android WebView P (dbg)",
-      "chromium.android:Android arm64 Builder (dbg)",
-      "chromium.android:Marshmallow 64 bit Tester",
-      "chromium.android:Nougat Phone Tester",
-      "chromium.android:Oreo Phone Tester",
-      "chromium.android:android-pie-arm64-dbg",
-      "tryserver.chromium.android:android-oreo-arm64-dbg",
-      "tryserver.chromium.android:android-pie-arm64-dbg",
-      "tryserver.chromium.android:android-webview-marshmallow-arm64-dbg",
-      "tryserver.chromium.android:android-webview-nougat-arm64-dbg",
-      "tryserver.chromium.android:android-webview-oreo-arm64-dbg",
-      "tryserver.chromium.android:android-webview-pie-arm64-dbg",
-      "tryserver.chromium.android:android_arm64_dbg_recipe",
-      "tryserver.chromium.android:android_n5x_swarming_dbg",
-      "tryserver.chromium.android:android_unswarmed_pixel_aosp",
-      "tryserver.chromium.android:try-nougat-phone-tester"
-    ]
-  },
-  "chromium.android:Android WebView P (dbg)": {
-    "builders": [
-      "chromium.android:Android WebView M (dbg)",
-      "chromium.android:Android WebView N (dbg)",
-      "chromium.android:Android WebView O (dbg)",
-      "chromium.android:Android WebView P (dbg)",
-      "chromium.android:Android arm64 Builder (dbg)",
-      "chromium.android:Marshmallow 64 bit Tester",
-      "chromium.android:Nougat Phone Tester",
-      "chromium.android:Oreo Phone Tester",
-      "chromium.android:android-pie-arm64-dbg",
-      "tryserver.chromium.android:android-oreo-arm64-dbg",
-      "tryserver.chromium.android:android-pie-arm64-dbg",
-      "tryserver.chromium.android:android-webview-marshmallow-arm64-dbg",
-      "tryserver.chromium.android:android-webview-nougat-arm64-dbg",
-      "tryserver.chromium.android:android-webview-oreo-arm64-dbg",
-      "tryserver.chromium.android:android-webview-pie-arm64-dbg",
-      "tryserver.chromium.android:android_arm64_dbg_recipe",
-      "tryserver.chromium.android:android_n5x_swarming_dbg",
-      "tryserver.chromium.android:android_unswarmed_pixel_aosp",
-      "tryserver.chromium.android:try-nougat-phone-tester"
-    ]
-  },
-  "chromium.android:Android arm64 Builder (dbg)": {
-    "builders": [
-      "chromium.android:Android WebView M (dbg)",
-      "chromium.android:Android WebView N (dbg)",
-      "chromium.android:Android WebView O (dbg)",
-      "chromium.android:Android WebView P (dbg)",
-      "chromium.android:Android arm64 Builder (dbg)",
-      "chromium.android:Marshmallow 64 bit Tester",
-      "chromium.android:Nougat Phone Tester",
-      "chromium.android:Oreo Phone Tester",
-      "chromium.android:android-pie-arm64-dbg",
-      "tryserver.chromium.android:android-oreo-arm64-dbg",
-      "tryserver.chromium.android:android-pie-arm64-dbg",
-      "tryserver.chromium.android:android-webview-marshmallow-arm64-dbg",
-      "tryserver.chromium.android:android-webview-nougat-arm64-dbg",
-      "tryserver.chromium.android:android-webview-oreo-arm64-dbg",
-      "tryserver.chromium.android:android-webview-pie-arm64-dbg",
-      "tryserver.chromium.android:android_arm64_dbg_recipe",
-      "tryserver.chromium.android:android_n5x_swarming_dbg",
-      "tryserver.chromium.android:android_unswarmed_pixel_aosp",
-      "tryserver.chromium.android:try-nougat-phone-tester"
-    ]
-  },
   "chromium.android:Android x86 Builder (dbg)": {
     "builders": [
       "chromium.android:Android x86 Builder (dbg)",
@@ -254,78 +139,9 @@
       "tryserver.chromium.android:cast_shell_android"
     ]
   },
-  "chromium.android:Marshmallow 64 bit Tester": {
-    "builders": [
-      "chromium.android:Android WebView M (dbg)",
-      "chromium.android:Android WebView N (dbg)",
-      "chromium.android:Android WebView O (dbg)",
-      "chromium.android:Android WebView P (dbg)",
-      "chromium.android:Android arm64 Builder (dbg)",
-      "chromium.android:Marshmallow 64 bit Tester",
-      "chromium.android:Nougat Phone Tester",
-      "chromium.android:Oreo Phone Tester",
-      "chromium.android:android-pie-arm64-dbg",
-      "tryserver.chromium.android:android-oreo-arm64-dbg",
-      "tryserver.chromium.android:android-pie-arm64-dbg",
-      "tryserver.chromium.android:android-webview-marshmallow-arm64-dbg",
-      "tryserver.chromium.android:android-webview-nougat-arm64-dbg",
-      "tryserver.chromium.android:android-webview-oreo-arm64-dbg",
-      "tryserver.chromium.android:android-webview-pie-arm64-dbg",
-      "tryserver.chromium.android:android_arm64_dbg_recipe",
-      "tryserver.chromium.android:android_n5x_swarming_dbg",
-      "tryserver.chromium.android:android_unswarmed_pixel_aosp",
-      "tryserver.chromium.android:try-nougat-phone-tester"
-    ]
-  },
   "chromium.android:Marshmallow Phone Tester (rel)": {
     "builders": [
       "chromium.android:Marshmallow Phone Tester (rel)"
-    ]
-  },
-  "chromium.android:Nougat Phone Tester": {
-    "builders": [
-      "chromium.android:Android WebView M (dbg)",
-      "chromium.android:Android WebView N (dbg)",
-      "chromium.android:Android WebView O (dbg)",
-      "chromium.android:Android WebView P (dbg)",
-      "chromium.android:Android arm64 Builder (dbg)",
-      "chromium.android:Marshmallow 64 bit Tester",
-      "chromium.android:Nougat Phone Tester",
-      "chromium.android:Oreo Phone Tester",
-      "chromium.android:android-pie-arm64-dbg",
-      "tryserver.chromium.android:android-oreo-arm64-dbg",
-      "tryserver.chromium.android:android-pie-arm64-dbg",
-      "tryserver.chromium.android:android-webview-marshmallow-arm64-dbg",
-      "tryserver.chromium.android:android-webview-nougat-arm64-dbg",
-      "tryserver.chromium.android:android-webview-oreo-arm64-dbg",
-      "tryserver.chromium.android:android-webview-pie-arm64-dbg",
-      "tryserver.chromium.android:android_arm64_dbg_recipe",
-      "tryserver.chromium.android:android_n5x_swarming_dbg",
-      "tryserver.chromium.android:android_unswarmed_pixel_aosp",
-      "tryserver.chromium.android:try-nougat-phone-tester"
-    ]
-  },
-  "chromium.android:Oreo Phone Tester": {
-    "builders": [
-      "chromium.android:Android WebView M (dbg)",
-      "chromium.android:Android WebView N (dbg)",
-      "chromium.android:Android WebView O (dbg)",
-      "chromium.android:Android WebView P (dbg)",
-      "chromium.android:Android arm64 Builder (dbg)",
-      "chromium.android:Marshmallow 64 bit Tester",
-      "chromium.android:Nougat Phone Tester",
-      "chromium.android:Oreo Phone Tester",
-      "chromium.android:android-pie-arm64-dbg",
-      "tryserver.chromium.android:android-oreo-arm64-dbg",
-      "tryserver.chromium.android:android-pie-arm64-dbg",
-      "tryserver.chromium.android:android-webview-marshmallow-arm64-dbg",
-      "tryserver.chromium.android:android-webview-nougat-arm64-dbg",
-      "tryserver.chromium.android:android-webview-oreo-arm64-dbg",
-      "tryserver.chromium.android:android-webview-pie-arm64-dbg",
-      "tryserver.chromium.android:android_arm64_dbg_recipe",
-      "tryserver.chromium.android:android_n5x_swarming_dbg",
-      "tryserver.chromium.android:android_unswarmed_pixel_aosp",
-      "tryserver.chromium.android:try-nougat-phone-tester"
     ]
   },
   "chromium.android:android-10-arm64-rel": {
@@ -556,29 +372,6 @@
     "builders": [
       "chromium.android:android-pie-arm64-coverage-experimental-rel",
       "tryserver.chromium.android:android-pie-arm64-coverage-experimental-rel"
-    ]
-  },
-  "chromium.android:android-pie-arm64-dbg": {
-    "builders": [
-      "chromium.android:Android WebView M (dbg)",
-      "chromium.android:Android WebView N (dbg)",
-      "chromium.android:Android WebView O (dbg)",
-      "chromium.android:Android WebView P (dbg)",
-      "chromium.android:Android arm64 Builder (dbg)",
-      "chromium.android:Marshmallow 64 bit Tester",
-      "chromium.android:Nougat Phone Tester",
-      "chromium.android:Oreo Phone Tester",
-      "chromium.android:android-pie-arm64-dbg",
-      "tryserver.chromium.android:android-oreo-arm64-dbg",
-      "tryserver.chromium.android:android-pie-arm64-dbg",
-      "tryserver.chromium.android:android-webview-marshmallow-arm64-dbg",
-      "tryserver.chromium.android:android-webview-nougat-arm64-dbg",
-      "tryserver.chromium.android:android-webview-oreo-arm64-dbg",
-      "tryserver.chromium.android:android-webview-pie-arm64-dbg",
-      "tryserver.chromium.android:android_arm64_dbg_recipe",
-      "tryserver.chromium.android:android_n5x_swarming_dbg",
-      "tryserver.chromium.android:android_unswarmed_pixel_aosp",
-      "tryserver.chromium.android:try-nougat-phone-tester"
     ]
   },
   "chromium.android:android-pie-arm64-rel": {
@@ -4661,29 +4454,6 @@
       "tryserver.chromium.android:android-opus-arm-rel"
     ]
   },
-  "tryserver.chromium.android:android-oreo-arm64-dbg": {
-    "builders": [
-      "chromium.android:Android WebView M (dbg)",
-      "chromium.android:Android WebView N (dbg)",
-      "chromium.android:Android WebView O (dbg)",
-      "chromium.android:Android WebView P (dbg)",
-      "chromium.android:Android arm64 Builder (dbg)",
-      "chromium.android:Marshmallow 64 bit Tester",
-      "chromium.android:Nougat Phone Tester",
-      "chromium.android:Oreo Phone Tester",
-      "chromium.android:android-pie-arm64-dbg",
-      "tryserver.chromium.android:android-oreo-arm64-dbg",
-      "tryserver.chromium.android:android-pie-arm64-dbg",
-      "tryserver.chromium.android:android-webview-marshmallow-arm64-dbg",
-      "tryserver.chromium.android:android-webview-nougat-arm64-dbg",
-      "tryserver.chromium.android:android-webview-oreo-arm64-dbg",
-      "tryserver.chromium.android:android-webview-pie-arm64-dbg",
-      "tryserver.chromium.android:android_arm64_dbg_recipe",
-      "tryserver.chromium.android:android_n5x_swarming_dbg",
-      "tryserver.chromium.android:android_unswarmed_pixel_aosp",
-      "tryserver.chromium.android:try-nougat-phone-tester"
-    ]
-  },
   "tryserver.chromium.android:android-pie-arm64-coverage-experimental-rel": {
     "builders": [
       "chromium.android:android-pie-arm64-coverage-experimental-rel",
@@ -4694,29 +4464,6 @@
     "builders": [
       "chromium.fyi:android-code-coverage-native",
       "tryserver.chromium.android:android-pie-arm64-coverage-rel"
-    ]
-  },
-  "tryserver.chromium.android:android-pie-arm64-dbg": {
-    "builders": [
-      "chromium.android:Android WebView M (dbg)",
-      "chromium.android:Android WebView N (dbg)",
-      "chromium.android:Android WebView O (dbg)",
-      "chromium.android:Android WebView P (dbg)",
-      "chromium.android:Android arm64 Builder (dbg)",
-      "chromium.android:Marshmallow 64 bit Tester",
-      "chromium.android:Nougat Phone Tester",
-      "chromium.android:Oreo Phone Tester",
-      "chromium.android:android-pie-arm64-dbg",
-      "tryserver.chromium.android:android-oreo-arm64-dbg",
-      "tryserver.chromium.android:android-pie-arm64-dbg",
-      "tryserver.chromium.android:android-webview-marshmallow-arm64-dbg",
-      "tryserver.chromium.android:android-webview-nougat-arm64-dbg",
-      "tryserver.chromium.android:android-webview-oreo-arm64-dbg",
-      "tryserver.chromium.android:android-webview-pie-arm64-dbg",
-      "tryserver.chromium.android:android_arm64_dbg_recipe",
-      "tryserver.chromium.android:android_n5x_swarming_dbg",
-      "tryserver.chromium.android:android_unswarmed_pixel_aosp",
-      "tryserver.chromium.android:try-nougat-phone-tester"
     ]
   },
   "tryserver.chromium.android:android-pie-arm64-fyi-rel": {
@@ -4783,98 +4530,6 @@
       "tryserver.chromium.android:android-weblayer-pie-x86-wpt-smoketest"
     ]
   },
-  "tryserver.chromium.android:android-webview-marshmallow-arm64-dbg": {
-    "builders": [
-      "chromium.android:Android WebView M (dbg)",
-      "chromium.android:Android WebView N (dbg)",
-      "chromium.android:Android WebView O (dbg)",
-      "chromium.android:Android WebView P (dbg)",
-      "chromium.android:Android arm64 Builder (dbg)",
-      "chromium.android:Marshmallow 64 bit Tester",
-      "chromium.android:Nougat Phone Tester",
-      "chromium.android:Oreo Phone Tester",
-      "chromium.android:android-pie-arm64-dbg",
-      "tryserver.chromium.android:android-oreo-arm64-dbg",
-      "tryserver.chromium.android:android-pie-arm64-dbg",
-      "tryserver.chromium.android:android-webview-marshmallow-arm64-dbg",
-      "tryserver.chromium.android:android-webview-nougat-arm64-dbg",
-      "tryserver.chromium.android:android-webview-oreo-arm64-dbg",
-      "tryserver.chromium.android:android-webview-pie-arm64-dbg",
-      "tryserver.chromium.android:android_arm64_dbg_recipe",
-      "tryserver.chromium.android:android_n5x_swarming_dbg",
-      "tryserver.chromium.android:android_unswarmed_pixel_aosp",
-      "tryserver.chromium.android:try-nougat-phone-tester"
-    ]
-  },
-  "tryserver.chromium.android:android-webview-nougat-arm64-dbg": {
-    "builders": [
-      "chromium.android:Android WebView M (dbg)",
-      "chromium.android:Android WebView N (dbg)",
-      "chromium.android:Android WebView O (dbg)",
-      "chromium.android:Android WebView P (dbg)",
-      "chromium.android:Android arm64 Builder (dbg)",
-      "chromium.android:Marshmallow 64 bit Tester",
-      "chromium.android:Nougat Phone Tester",
-      "chromium.android:Oreo Phone Tester",
-      "chromium.android:android-pie-arm64-dbg",
-      "tryserver.chromium.android:android-oreo-arm64-dbg",
-      "tryserver.chromium.android:android-pie-arm64-dbg",
-      "tryserver.chromium.android:android-webview-marshmallow-arm64-dbg",
-      "tryserver.chromium.android:android-webview-nougat-arm64-dbg",
-      "tryserver.chromium.android:android-webview-oreo-arm64-dbg",
-      "tryserver.chromium.android:android-webview-pie-arm64-dbg",
-      "tryserver.chromium.android:android_arm64_dbg_recipe",
-      "tryserver.chromium.android:android_n5x_swarming_dbg",
-      "tryserver.chromium.android:android_unswarmed_pixel_aosp",
-      "tryserver.chromium.android:try-nougat-phone-tester"
-    ]
-  },
-  "tryserver.chromium.android:android-webview-oreo-arm64-dbg": {
-    "builders": [
-      "chromium.android:Android WebView M (dbg)",
-      "chromium.android:Android WebView N (dbg)",
-      "chromium.android:Android WebView O (dbg)",
-      "chromium.android:Android WebView P (dbg)",
-      "chromium.android:Android arm64 Builder (dbg)",
-      "chromium.android:Marshmallow 64 bit Tester",
-      "chromium.android:Nougat Phone Tester",
-      "chromium.android:Oreo Phone Tester",
-      "chromium.android:android-pie-arm64-dbg",
-      "tryserver.chromium.android:android-oreo-arm64-dbg",
-      "tryserver.chromium.android:android-pie-arm64-dbg",
-      "tryserver.chromium.android:android-webview-marshmallow-arm64-dbg",
-      "tryserver.chromium.android:android-webview-nougat-arm64-dbg",
-      "tryserver.chromium.android:android-webview-oreo-arm64-dbg",
-      "tryserver.chromium.android:android-webview-pie-arm64-dbg",
-      "tryserver.chromium.android:android_arm64_dbg_recipe",
-      "tryserver.chromium.android:android_n5x_swarming_dbg",
-      "tryserver.chromium.android:android_unswarmed_pixel_aosp",
-      "tryserver.chromium.android:try-nougat-phone-tester"
-    ]
-  },
-  "tryserver.chromium.android:android-webview-pie-arm64-dbg": {
-    "builders": [
-      "chromium.android:Android WebView M (dbg)",
-      "chromium.android:Android WebView N (dbg)",
-      "chromium.android:Android WebView O (dbg)",
-      "chromium.android:Android WebView P (dbg)",
-      "chromium.android:Android arm64 Builder (dbg)",
-      "chromium.android:Marshmallow 64 bit Tester",
-      "chromium.android:Nougat Phone Tester",
-      "chromium.android:Oreo Phone Tester",
-      "chromium.android:android-pie-arm64-dbg",
-      "tryserver.chromium.android:android-oreo-arm64-dbg",
-      "tryserver.chromium.android:android-pie-arm64-dbg",
-      "tryserver.chromium.android:android-webview-marshmallow-arm64-dbg",
-      "tryserver.chromium.android:android-webview-nougat-arm64-dbg",
-      "tryserver.chromium.android:android-webview-oreo-arm64-dbg",
-      "tryserver.chromium.android:android-webview-pie-arm64-dbg",
-      "tryserver.chromium.android:android_arm64_dbg_recipe",
-      "tryserver.chromium.android:android_n5x_swarming_dbg",
-      "tryserver.chromium.android:android_unswarmed_pixel_aosp",
-      "tryserver.chromium.android:try-nougat-phone-tester"
-    ]
-  },
   "tryserver.chromium.android:android-webview-pie-arm64-fyi-rel": {
     "builders": [
       "chromium.android.fyi:Android WebView P FYI (rel)",
@@ -4891,29 +4546,6 @@
     "builders": [
       "chromium:android-archive-rel",
       "tryserver.chromium.android:android_archive_rel_ng"
-    ]
-  },
-  "tryserver.chromium.android:android_arm64_dbg_recipe": {
-    "builders": [
-      "chromium.android:Android WebView M (dbg)",
-      "chromium.android:Android WebView N (dbg)",
-      "chromium.android:Android WebView O (dbg)",
-      "chromium.android:Android WebView P (dbg)",
-      "chromium.android:Android arm64 Builder (dbg)",
-      "chromium.android:Marshmallow 64 bit Tester",
-      "chromium.android:Nougat Phone Tester",
-      "chromium.android:Oreo Phone Tester",
-      "chromium.android:android-pie-arm64-dbg",
-      "tryserver.chromium.android:android-oreo-arm64-dbg",
-      "tryserver.chromium.android:android-pie-arm64-dbg",
-      "tryserver.chromium.android:android-webview-marshmallow-arm64-dbg",
-      "tryserver.chromium.android:android-webview-nougat-arm64-dbg",
-      "tryserver.chromium.android:android-webview-oreo-arm64-dbg",
-      "tryserver.chromium.android:android-webview-pie-arm64-dbg",
-      "tryserver.chromium.android:android_arm64_dbg_recipe",
-      "tryserver.chromium.android:android_n5x_swarming_dbg",
-      "tryserver.chromium.android:android_unswarmed_pixel_aosp",
-      "tryserver.chromium.android:try-nougat-phone-tester"
     ]
   },
   "tryserver.chromium.android:android_blink_rel": {
@@ -4933,29 +4565,6 @@
       "tryserver.chromium.android:android_cronet"
     ]
   },
-  "tryserver.chromium.android:android_n5x_swarming_dbg": {
-    "builders": [
-      "chromium.android:Android WebView M (dbg)",
-      "chromium.android:Android WebView N (dbg)",
-      "chromium.android:Android WebView O (dbg)",
-      "chromium.android:Android WebView P (dbg)",
-      "chromium.android:Android arm64 Builder (dbg)",
-      "chromium.android:Marshmallow 64 bit Tester",
-      "chromium.android:Nougat Phone Tester",
-      "chromium.android:Oreo Phone Tester",
-      "chromium.android:android-pie-arm64-dbg",
-      "tryserver.chromium.android:android-oreo-arm64-dbg",
-      "tryserver.chromium.android:android-pie-arm64-dbg",
-      "tryserver.chromium.android:android-webview-marshmallow-arm64-dbg",
-      "tryserver.chromium.android:android-webview-nougat-arm64-dbg",
-      "tryserver.chromium.android:android-webview-oreo-arm64-dbg",
-      "tryserver.chromium.android:android-webview-pie-arm64-dbg",
-      "tryserver.chromium.android:android_arm64_dbg_recipe",
-      "tryserver.chromium.android:android_n5x_swarming_dbg",
-      "tryserver.chromium.android:android_unswarmed_pixel_aosp",
-      "tryserver.chromium.android:try-nougat-phone-tester"
-    ]
-  },
   "tryserver.chromium.android:android_optional_gpu_tests_rel": {
     "blockers": [
       "builder 'chromium.gpu.fyi:Optional Android Release (Pixel 4)' does not exist"
@@ -4963,29 +4572,6 @@
     "builders": [
       "chromium.gpu.fyi:Optional Android Release (Pixel 4)",
       "tryserver.chromium.android:android_optional_gpu_tests_rel"
-    ]
-  },
-  "tryserver.chromium.android:android_unswarmed_pixel_aosp": {
-    "builders": [
-      "chromium.android:Android WebView M (dbg)",
-      "chromium.android:Android WebView N (dbg)",
-      "chromium.android:Android WebView O (dbg)",
-      "chromium.android:Android WebView P (dbg)",
-      "chromium.android:Android arm64 Builder (dbg)",
-      "chromium.android:Marshmallow 64 bit Tester",
-      "chromium.android:Nougat Phone Tester",
-      "chromium.android:Oreo Phone Tester",
-      "chromium.android:android-pie-arm64-dbg",
-      "tryserver.chromium.android:android-oreo-arm64-dbg",
-      "tryserver.chromium.android:android-pie-arm64-dbg",
-      "tryserver.chromium.android:android-webview-marshmallow-arm64-dbg",
-      "tryserver.chromium.android:android-webview-nougat-arm64-dbg",
-      "tryserver.chromium.android:android-webview-oreo-arm64-dbg",
-      "tryserver.chromium.android:android-webview-pie-arm64-dbg",
-      "tryserver.chromium.android:android_arm64_dbg_recipe",
-      "tryserver.chromium.android:android_n5x_swarming_dbg",
-      "tryserver.chromium.android:android_unswarmed_pixel_aosp",
-      "tryserver.chromium.android:try-nougat-phone-tester"
     ]
   },
   "tryserver.chromium.android:cast_shell_android": {
@@ -5070,29 +4656,6 @@
       "chromium.gpu:Android Release (Nexus 5X)",
       "tryserver.chromium.android:android-marshmallow-arm64-rel",
       "tryserver.chromium.android:gpu-try-android-m-nexus-5x-64"
-    ]
-  },
-  "tryserver.chromium.android:try-nougat-phone-tester": {
-    "builders": [
-      "chromium.android:Android WebView M (dbg)",
-      "chromium.android:Android WebView N (dbg)",
-      "chromium.android:Android WebView O (dbg)",
-      "chromium.android:Android WebView P (dbg)",
-      "chromium.android:Android arm64 Builder (dbg)",
-      "chromium.android:Marshmallow 64 bit Tester",
-      "chromium.android:Nougat Phone Tester",
-      "chromium.android:Oreo Phone Tester",
-      "chromium.android:android-pie-arm64-dbg",
-      "tryserver.chromium.android:android-oreo-arm64-dbg",
-      "tryserver.chromium.android:android-pie-arm64-dbg",
-      "tryserver.chromium.android:android-webview-marshmallow-arm64-dbg",
-      "tryserver.chromium.android:android-webview-nougat-arm64-dbg",
-      "tryserver.chromium.android:android-webview-oreo-arm64-dbg",
-      "tryserver.chromium.android:android-webview-pie-arm64-dbg",
-      "tryserver.chromium.android:android_arm64_dbg_recipe",
-      "tryserver.chromium.android:android_n5x_swarming_dbg",
-      "tryserver.chromium.android:android_unswarmed_pixel_aosp",
-      "tryserver.chromium.android:try-nougat-phone-tester"
     ]
   },
   "tryserver.chromium.angle:android-angle-chromium-try": {

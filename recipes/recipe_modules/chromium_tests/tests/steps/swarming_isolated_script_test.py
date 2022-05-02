@@ -440,10 +440,7 @@ def GenTests(api):
 
   yield api.test(
       'dimensions_android',
-      api.chromium.ci_build(
-          builder_group='chromium.android',
-          builder='Android arm64 Builder (dbg)',
-      ),
+      arbitrary_tester(),
       api.properties(
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',

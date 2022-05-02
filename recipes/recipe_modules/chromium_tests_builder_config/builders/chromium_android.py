@@ -15,29 +15,19 @@ def _chromium_android_spec(**kwargs):
 # The config for the following builders is now specified src-side in
 # //infra/config/subprojects/chromium/ci/chromium.android.star
 # * Android arm Builder (dbg)
+# * Android arm64 Builder (dbg)
 # * Android x64 Builder (dbg)
+# * Android WebView M (dbg)
+# * Android WebView N (dbg)
+# * Android WebView O (dbg)
+# * Android WebView P (dbg)
 # * Marshmallow Tablet Tester
+# * Marshmallow 64 bit Tester
+# * Nougat Phone Tester
+# * Oreo Phone Tester
+# * android-pie-arm64-dbg
 
 SPEC = {
-    'Android arm64 Builder (dbg)':
-        _chromium_android_spec(
-            chromium_config='android',
-            chromium_apply_config=[
-                'download_vr_test_apks',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'android',
-                'enable_reclient',
-            ],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'android',
-            },
-            android_config='main_builder_mb',
-            simulation_platform='linux',
-        ),
     'Android ASAN (dbg)':
         _chromium_android_spec(
             chromium_config='android_clang',
@@ -89,24 +79,6 @@ SPEC = {
             android_config='cast_builder',
             simulation_platform='linux',
         ),
-    'Marshmallow 64 bit Tester':
-        _chromium_android_spec(
-            chromium_config='android',
-            chromium_apply_config=[
-                'download_vr_test_apks',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=['android', 'enable_wpr_tests'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'android',
-            },
-            parent_buildername='Android arm64 Builder (dbg)',
-            execution_mode=builder_spec.TEST,
-            android_config='main_builder_mb',
-            simulation_platform='linux',
-        ),
     'Marshmallow Phone Tester (rel)':
         _chromium_android_spec(
             chromium_config='android',
@@ -121,144 +93,6 @@ SPEC = {
                 'TARGET_PLATFORM': 'android',
             },
             android_config='main_builder_mb',
-            simulation_platform='linux',
-        ),
-    'Nougat Phone Tester':
-        _chromium_android_spec(
-            chromium_config='android',
-            chromium_apply_config=[
-                'download_vr_test_apks',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=['android'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'android',
-            },
-            parent_buildername='Android arm64 Builder (dbg)',
-            execution_mode=builder_spec.TEST,
-            android_config='main_builder_mb',
-            simulation_platform='linux',
-        ),
-    'Oreo Phone Tester':
-        _chromium_android_spec(
-            chromium_config='android',
-            chromium_apply_config=[
-                'download_vr_test_apks',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=['android'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'android',
-            },
-            parent_buildername='Android arm64 Builder (dbg)',
-            execution_mode=builder_spec.TEST,
-            android_config='main_builder_mb',
-            simulation_platform='linux',
-        ),
-    'android-pie-arm64-dbg':
-        _chromium_android_spec(
-            chromium_config='android',
-            chromium_apply_config=[
-                'download_vr_test_apks',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=['android'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'android',
-            },
-            parent_buildername='Android arm64 Builder (dbg)',
-            execution_mode=builder_spec.TEST,
-            android_config='main_builder_mb',
-            simulation_platform='linux',
-        ),
-    'Android WebView M (dbg)':
-        _chromium_android_spec(
-            chromium_config='android',
-            chromium_apply_config=[
-                'download_vr_test_apks',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'android',
-            ],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'android',
-            },
-            parent_buildername='Android arm64 Builder (dbg)',
-            execution_mode=builder_spec.TEST,
-            android_config='main_builder_mb',
-            android_apply_config=['remove_all_system_webviews'],
-            simulation_platform='linux',
-        ),
-    'Android WebView N (dbg)':
-        _chromium_android_spec(
-            chromium_config='android',
-            chromium_apply_config=[
-                'download_vr_test_apks',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'android',
-            ],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'android',
-            },
-            parent_buildername='Android arm64 Builder (dbg)',
-            execution_mode=builder_spec.TEST,
-            android_config='main_builder_mb',
-            android_apply_config=['remove_all_system_webviews'],
-            simulation_platform='linux',
-        ),
-    'Android WebView O (dbg)':
-        _chromium_android_spec(
-            chromium_config='android',
-            chromium_apply_config=[
-                'download_vr_test_apks',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'android',
-            ],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'android',
-            },
-            parent_buildername='Android arm64 Builder (dbg)',
-            execution_mode=builder_spec.TEST,
-            android_config='main_builder_mb',
-            android_apply_config=['remove_all_system_webviews'],
-            simulation_platform='linux',
-        ),
-    'Android WebView P (dbg)':
-        _chromium_android_spec(
-            chromium_config='android',
-            chromium_apply_config=[
-                'download_vr_test_apks',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'android',
-            ],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'android',
-            },
-            parent_buildername='Android arm64 Builder (dbg)',
-            execution_mode=builder_spec.TEST,
-            android_config='main_builder_mb',
-            android_apply_config=['remove_all_system_webviews'],
             simulation_platform='linux',
         ),
     'android-weblayer-with-aosp-webview-x86-rel':
