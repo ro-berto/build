@@ -2,7 +2,6 @@
   {
     "cmd": [
       "vpython",
-      "-u",
       "RECIPE_REPO[depot_tools]/gerrit_client.py",
       "changes",
       "--host",
@@ -180,7 +179,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "RECIPE_REPO[depot_tools]/gn.py",
       "--root=[CACHE]/builder/src",
       "gen",
@@ -208,7 +206,6 @@
   {
     "cmd": [
       "vpython",
-      "-u",
       "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
       "--ninja_info_output",
       "/path/to/tmp/json",

@@ -12,7 +12,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "RECIPE_MODULE[build::perf_dashboard]\\resources\\post_json.py",
       "https://chromeperf.appspot.com/add_point",
       "-i",

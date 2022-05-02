@@ -21,7 +21,6 @@
   {
     "cmd": [
       "vpython",
-      "-u",
       "RECIPE_REPO[depot_tools]/gerrit_client.py",
       "changes",
       "--host",
@@ -396,7 +395,6 @@
       "vpython",
       "-vpython-spec",
       "[START_DIR]/send_ts_mon_values/infra/tools/send_ts_mon_values/standalone.vpython",
-      "-u",
       "-m",
       "infra.tools.send_ts_mon_values",
       "--ts-mon-target-type",

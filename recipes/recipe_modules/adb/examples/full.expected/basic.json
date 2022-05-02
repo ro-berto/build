@@ -11,7 +11,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "RECIPE_MODULE[build::adb]/resources/list_devices.py",
       "['None/custom/adb/path', 'devices']",
       "/path/to/tmp/json"
@@ -27,7 +26,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "\nfrom __future__ import print_function\nimport subprocess\nimport sys\nadb_path = sys.argv[1]\nfor device in sys.argv[2:]:\n  print('Attempting to root device %s ...' % device)\n  subprocess.check_call([adb_path, '-s', device, 'root'])\n  subprocess.check_call([adb_path, '-s', device, 'wait-for-device'])\n  print('Finished rooting device %s' % device)\n",
       "None/custom/adb/path",
       "014E1F310401C009"

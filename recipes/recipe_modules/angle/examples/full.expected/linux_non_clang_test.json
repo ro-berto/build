@@ -127,7 +127,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "[CACHE]/builder/angle/src/commit_id.py",
       "position"
     ],

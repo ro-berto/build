@@ -2,7 +2,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "None/build/android/provision_devices.py",
       "--adb-path",
       "None/third_party/android_sdk/public/platform-tools/adb",

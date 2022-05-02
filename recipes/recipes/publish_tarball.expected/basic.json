@@ -289,7 +289,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "[START_DIR]/src/build/util/lastchange.py",
       "-o",
       "[START_DIR]/src/build/util/LASTCHANGE"
@@ -361,7 +360,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "[START_DIR]/src/tools/update_pgo_profiles.py",
       "--target=linux",
       "update",
@@ -384,7 +382,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "RECIPE_REPO[depot_tools]/download_from_google_storage.py",
       "--no_resume",
       "--extract",
@@ -473,7 +470,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "[CLEANUP]/gn_tmp_1/gn/build/gen.py"
     ],
     "luci_context": {
@@ -625,7 +621,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "RECIPE_MODULE[build::chromium]/resources/export_tarball.py",
       "--remove-nonessential-files",
       "chromium-87.0.4273.0",
@@ -684,7 +679,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "RECIPE_MODULE[build::chromium]/resources/generate_hashes.py",
       "[CLEANUP]/export_tarball_tmp_1/chromium-87.0.4273.0.tar.xz",
       "/path/to/tmp/"
@@ -816,7 +810,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "RECIPE_MODULE[build::chromium]/resources/export_tarball.py",
       "--test-data",
       "chromium-87.0.4273.0",
@@ -875,7 +868,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "RECIPE_MODULE[build::chromium]/resources/generate_hashes.py",
       "[CLEANUP]/export_tarball_tmp_2/chromium-87.0.4273.0.tar.xz",
       "/path/to/tmp/"
@@ -1597,7 +1589,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "RECIPE_MODULE[build::chromium]/resources/export_tarball.py",
       "--remove-nonessential-files",
       "chromium-87.0.4273.0",
@@ -1656,7 +1647,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "RECIPE_MODULE[build::chromium]/resources/generate_hashes.py",
       "[CLEANUP]/export_tarball_tmp_3/chromium-87.0.4273.0.tar.xz",
       "/path/to/tmp/"
@@ -1787,7 +1777,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "[CLEANUP]/tmp_tmp_2/src/native_client/toolchain_build/toolchain_build_pnacl.py",
       "--verbose",
       "--sync",
@@ -1811,7 +1800,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "RECIPE_MODULE[build::chromium]/resources/export_tarball.py",
       "--remove-nonessential-files",
       "chromium-87.0.4273.0",
@@ -1870,7 +1858,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "RECIPE_MODULE[build::chromium]/resources/generate_hashes.py",
       "[CLEANUP]/export_tarball_tmp_4/chromium-87.0.4273.0.tar.xz",
       "/path/to/tmp/"

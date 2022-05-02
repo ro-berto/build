@@ -2,7 +2,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "[CACHE]/fake_custom_trigger_script.py",
       "foo",
       "bar",

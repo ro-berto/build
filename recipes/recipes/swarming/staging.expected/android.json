@@ -448,7 +448,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "\nimport shutil, sys, os\nshutil.rmtree(sys.argv[1], True)\nshutil.rmtree(sys.argv[2], True)\ntry:\n  os.remove(sys.argv[3])\nexcept OSError:\n  pass\nfor base, _dirs, files in os.walk(sys.argv[4]):\n  for f in files:\n    if f.endswith('.pyc'):\n      os.remove(os.path.join(base, f))\n",
       "[CACHE]/builder/src/out/Release/debug_info_dumps",
       "[CACHE]/builder/src/out/Release/test_logs",
@@ -805,7 +804,6 @@
   {
     "cmd": [
       "vpython",
-      "-u",
       "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
       "--ninja_info_output",
       "/path/to/tmp/json",

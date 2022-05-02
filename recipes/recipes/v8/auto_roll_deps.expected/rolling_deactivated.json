@@ -51,7 +51,6 @@
       "vpython",
       "-vpython-spec",
       "[START_DIR]/send_ts_mon_values/infra/tools/send_ts_mon_values/standalone.vpython",
-      "-u",
       "-m",
       "infra.tools.send_ts_mon_values",
       "--ts-mon-target-type",

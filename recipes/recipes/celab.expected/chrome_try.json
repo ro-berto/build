@@ -171,7 +171,6 @@
   {
     "cmd": [
       "vpython",
-      "-u",
       "RECIPE_REPO[depot_tools]\\gerrit_client.py",
       "changes",
       "--host",
@@ -861,7 +860,6 @@
   {
     "cmd": [
       "vpython",
-      "-u",
       "RECIPE_MODULE[build::chromium]\\resources\\ninja_wrapper.py",
       "--ninja_info_output",
       "/path/to/tmp/json",
@@ -1495,7 +1493,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "RECIPE_MODULE[build::test_results]\\resources\\upload_test_results.py",
       "--input-json",
       "{\"per_iteration_data\": [{\"1st test\": [{\"elapsed_time_ms\": 0, \"status\": \"FAILURE\"}]}]}",

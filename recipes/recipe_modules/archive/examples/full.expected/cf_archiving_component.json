@@ -59,7 +59,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "RECIPE_MODULE[build::archive]/resources/filter_build_files.py",
       "--dir",
       "[START_DIR]/src/out/Release",

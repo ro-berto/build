@@ -2,7 +2,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "\nfrom __future__ import print_function\nimport os, sys\n\nbuild_path = sys.argv[1]\nif os.path.exists(build_path):\n  for (path, dir, files) in os.walk(build_path):\n    for cur_file in files:\n      if cur_file.endswith('index.lock'):\n        path_to_file = os.path.join(path, cur_file)\n        print('deleting %s' % path_to_file)\n        os.remove(path_to_file)\n",
       "[START_DIR]"
     ],
@@ -225,7 +224,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "\nimport shutil, sys, os\nshutil.rmtree(sys.argv[1], True)\nshutil.rmtree(sys.argv[2], True)\ntry:\n  os.remove(sys.argv[3])\nexcept OSError:\n  pass\nfor base, _dirs, files in os.walk(sys.argv[4]):\n  for f in files:\n    if f.endswith('.pyc'):\n      os.remove(os.path.join(base, f))\n",
       "[START_DIR]/src/out/Release/debug_info_dumps",
       "[START_DIR]/src/out/Release/test_logs",
@@ -471,7 +469,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "RECIPE_MODULE[build::adb]/resources/list_devices.py",
       "['[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb', 'devices']",
       "/path/to/tmp/json"
@@ -499,7 +496,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "\nfrom __future__ import print_function\nimport subprocess\nimport sys\nadb_path = sys.argv[1]\nfor device in sys.argv[2:]:\n  print('Attempting to root device %s ...' % device)\n  subprocess.check_call([adb_path, '-s', device, 'root'])\n  subprocess.check_call([adb_path, '-s', device, 'wait-for-device'])\n  print('Finished rooting device %s' % device)\n",
       "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb",
       "014E1F310401C009"
@@ -567,7 +563,6 @@
   {
     "cmd": [
       "vpython",
-      "-u",
       "[START_DIR]/src/third_party/catapult/devil/devil/android/tools/device_recovery.py",
       "--denylist-file",
       "[START_DIR]/src/out/bad_devices.json",
@@ -726,7 +721,6 @@
   {
     "cmd": [
       "vpython",
-      "-u",
       "[START_DIR]/src/third_party/catapult/devil/devil/android/tools/device_recovery.py",
       "--denylist-file",
       "[START_DIR]/src/out/bad_devices.json",
@@ -885,7 +879,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "[START_DIR]/src/third_party/catapult/devil/devil/android/tools/provision_devices.py",
       "--adb-path",
       "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb",
@@ -922,7 +915,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "[START_DIR]/src/build/symlink.py",
       "-f",
       "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb",
@@ -1047,7 +1039,6 @@
   {
     "cmd": [
       "vpython",
-      "-u",
       "[START_DIR]/src/third_party/catapult/devil/devil/android/tools/device_recovery.py",
       "--denylist-file",
       "[START_DIR]/src/out/bad_devices.json",
@@ -1078,7 +1069,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "[START_DIR]/src/third_party/catapult/devil/devil/android/tools/provision_devices.py",
       "--adb-path",
       "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb",
@@ -1342,7 +1332,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "RECIPE_REPO[build]/recipes/tee.py",
       "[START_DIR]/src/out/Release/full_log",
       "--",

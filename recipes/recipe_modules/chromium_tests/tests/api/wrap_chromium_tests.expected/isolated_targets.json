@@ -2,7 +2,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "[CACHE]/set_up_script"
     ],
     "cwd": "[CACHE]/builder",
@@ -23,7 +22,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "[CACHE]/tear_down_script"
     ],
     "cwd": "[CACHE]/builder",

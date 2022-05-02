@@ -29,7 +29,6 @@
   {
     "cmd": [
       "vpython",
-      "-u",
       "RECIPE_REPO[depot_tools]/gerrit_client.py",
       "changes",
       "--host",
@@ -684,7 +683,6 @@
   {
     "cmd": [
       "vpython",
-      "-u",
       "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
       "--ninja_info_output",
       "/path/to/tmp/json",
@@ -979,7 +977,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "\nimport os\nimport shutil\nimport sys\nif os.path.exists(sys.argv[2]):\n  shutil.rmtree(sys.argv[2])\nshutil.move(sys.argv[1], sys.argv[2])",
       "[CACHE]/builder/src/out/Debug",
       "[CACHE]/builder/src/out/Debug.1"
@@ -1252,7 +1249,6 @@
   {
     "cmd": [
       "vpython",
-      "-u",
       "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
       "--ninja_info_output",
       "/path/to/tmp/json",
@@ -1547,7 +1543,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "\nimport os\nimport shutil\nimport sys\nif os.path.exists(sys.argv[2]):\n  shutil.rmtree(sys.argv[2])\nshutil.move(sys.argv[1], sys.argv[2])",
       "[CACHE]/builder/src/out/Debug",
       "[CACHE]/builder/src/out/Debug.2"
@@ -1579,7 +1574,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "[CACHE]/builder/src/tools/determinism/compare_build_artifacts.py",
       "--first-build-dir",
       "[CACHE]/builder/src/out/Debug.1",
@@ -1621,7 +1615,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "[CACHE]/builder/src/tools/determinism/create_diffs_tarball.py",
       "--first-build-dir",
       "[CACHE]/builder/src/out/Debug.1",

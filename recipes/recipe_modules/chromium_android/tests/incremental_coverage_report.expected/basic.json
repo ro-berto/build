@@ -2,7 +2,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "build/android/emma_coverage_stats.py",
       "-v",
       "--out",

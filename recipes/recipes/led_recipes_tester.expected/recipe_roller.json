@@ -2,7 +2,6 @@
   {
     "cmd": [
       "vpython",
-      "-u",
       "RECIPE_REPO[depot_tools]/gerrit_client.py",
       "changes",
       "--host",
@@ -178,7 +177,6 @@
   {
     "cmd": [
       "vpython",
-      "-u",
       "RECIPE_REPO[depot_tools]/gerrit_client.py",
       "changes",
       "--host",
@@ -231,7 +229,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "RECIPE_REPO[depot_tools]/git_footers.py",
       "--json",
       "/path/to/tmp/json"
@@ -506,7 +503,6 @@
   {
     "cmd": [
       "vpython",
-      "-u",
       "[START_DIR]/cipd_tool/infra/recipe_bundles/chromium.googlesource.com/infra/luci/recipes-py/refs/heads/main/recipe_engine/recipes.py",
       "--package",
       "[CACHE]/builder/baz/infra/config/recipes.cfg",

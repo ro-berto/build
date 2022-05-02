@@ -2,7 +2,6 @@
   {
     "cmd": [
       "vpython",
-      "-u",
       "RECIPE_REPO[depot_tools]/gerrit_client.py",
       "changes",
       "--host",
@@ -333,7 +332,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "RECIPE_MODULE[build::code_coverage]/resources/write_paths_to_instrument.py",
       "--write-to",
       "[START_DIR]/openscreen/.code-coverage/files_to_instrument.txt",
@@ -376,7 +374,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "RECIPE_REPO[depot_tools]/gn.py",
       "gen",
       "[START_DIR]/openscreen/out/Default",
@@ -923,7 +920,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "[START_DIR]/openscreen/build/code_coverage/merge_results.py",
       "--task-output-dir",
       "[START_DIR]/openscreen",
@@ -1004,7 +1000,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "[START_DIR]/openscreen/build/code_coverage/merge_steps.py",
       "--input-dir",
       "[CLEANUP]/tmp_tmp_1",

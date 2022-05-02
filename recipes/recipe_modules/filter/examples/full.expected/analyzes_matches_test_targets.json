@@ -91,7 +91,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "[START_DIR]/build/gyp_chromium",
       "--analyzer",
       "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": [\"foo\", \"bar\"]}",

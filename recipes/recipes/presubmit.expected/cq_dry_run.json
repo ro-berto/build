@@ -2,7 +2,6 @@
   {
     "cmd": [
       "vpython",
-      "-u",
       "RECIPE_REPO[depot_tools]/gerrit_client.py",
       "changes",
       "--host",
@@ -209,7 +208,6 @@
       "stream",
       "--",
       "vpython",
-      "-u",
       "RECIPE_REPO[depot_tools]/presubmit_support.py",
       "--issue",
       "123456",

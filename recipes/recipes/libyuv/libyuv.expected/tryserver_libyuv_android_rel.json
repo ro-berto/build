@@ -2,7 +2,6 @@
   {
     "cmd": [
       "vpython",
-      "-u",
       "RECIPE_REPO[depot_tools]/gerrit_client.py",
       "changes",
       "--host",
@@ -268,7 +267,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "RECIPE_REPO[depot_tools]/gn.py",
       "--root=[CACHE]/builder/src",
       "gen",
@@ -422,7 +420,6 @@
   {
     "cmd": [
       "vpython",
-      "-u",
       "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
       "--ninja_info_output",
       "/path/to/tmp/json",
@@ -717,7 +714,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "[CACHE]/builder/src/build/symlink.py",
       "-f",
       "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools/adb",
@@ -846,7 +842,6 @@
   {
     "cmd": [
       "vpython",
-      "-u",
       "[CACHE]/builder/src/third_party/catapult/devil/devil/android/tools/device_recovery.py",
       "--denylist-file",
       "[CACHE]/builder/src/out/bad_devices.json",
@@ -878,7 +873,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "[CACHE]/builder/src/build/android/provision_devices.py",
       "--adb-path",
       "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools/adb",
@@ -1099,7 +1093,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "[CACHE]/builder/src/build/android/adb_logcat_printer.py",
       "--output-path",
       "[CACHE]/builder/src/out/Release/full_log",

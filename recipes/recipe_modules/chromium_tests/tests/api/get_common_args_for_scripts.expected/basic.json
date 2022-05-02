@@ -2,7 +2,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "None/testing/scripts/example.py",
       "--build-config-fs",
       "Release",

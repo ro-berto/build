@@ -1267,7 +1267,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "RECIPE_MODULE[build::chromium_swarming]/resources/wait_for_finished_task_set.py",
       "--swarming-server",
       "https://example.swarmingserver.appspot.com",

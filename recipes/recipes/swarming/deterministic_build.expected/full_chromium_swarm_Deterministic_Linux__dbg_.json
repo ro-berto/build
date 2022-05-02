@@ -529,7 +529,6 @@
   {
     "cmd": [
       "vpython",
-      "-u",
       "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
       "--ninja_info_output",
       "/path/to/tmp/json",
@@ -874,7 +873,6 @@
   {
     "cmd": [
       "vpython",
-      "-u",
       "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
       "--ninja_info_output",
       "/path/to/tmp/json",
@@ -1167,7 +1165,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "[CACHE]/builder/src/tools/determinism/compare_build_artifacts.py",
       "--first-build-dir",
       "[CACHE]/builder/src/out/Debug",
@@ -1209,7 +1206,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "[CACHE]/builder/src/tools/determinism/create_diffs_tarball.py",
       "--first-build-dir",
       "[CACHE]/builder/src/out/Debug",

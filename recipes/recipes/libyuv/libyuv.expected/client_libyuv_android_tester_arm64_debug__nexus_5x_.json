@@ -187,7 +187,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "[CACHE]/builder/src/build/symlink.py",
       "-f",
       "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools/adb",
@@ -316,7 +315,6 @@
   {
     "cmd": [
       "vpython",
-      "-u",
       "[CACHE]/builder/src/third_party/catapult/devil/devil/android/tools/device_recovery.py",
       "--denylist-file",
       "[CACHE]/builder/src/out/bad_devices.json",
@@ -348,7 +346,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "[CACHE]/builder/src/build/android/provision_devices.py",
       "--adb-path",
       "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools/adb",
@@ -569,7 +566,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "[CACHE]/builder/src/build/android/adb_logcat_printer.py",
       "--output-path",
       "[CACHE]/builder/src/out/Debug/full_log",

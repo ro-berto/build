@@ -526,7 +526,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "RECIPE_REPO[depot_tools]/gn.py",
       "refs",
       "-q",
@@ -560,7 +559,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "RECIPE_REPO[depot_tools]/gn.py",
       "refs",
       "-q",
@@ -817,7 +815,6 @@
   {
     "cmd": [
       "vpython",
-      "-u",
       "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
       "--ninja_info_output",
       "/path/to/tmp/json",
@@ -1530,7 +1527,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "RECIPE_MODULE[build::archive]/resources/filter_build_files.py",
       "--dir",
       "[CACHE]/builder/src/out/Debug",

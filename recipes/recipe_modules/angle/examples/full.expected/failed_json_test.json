@@ -127,7 +127,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "[CACHE]/builder/angle/src/commit_id.py",
       "position"
     ],
@@ -649,7 +648,6 @@
   {
     "cmd": [
       "vpython",
-      "-u",
       "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
       "--ninja_info_output",
       "/path/to/tmp/json",

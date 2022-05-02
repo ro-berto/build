@@ -500,7 +500,6 @@
   {
     "cmd": [
       "vpython",
-      "-u",
       "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
       "--ninja_info_output",
       "/path/to/tmp/json",
@@ -904,7 +903,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "RECIPE_MODULE[infra::zip]/resources/zip.py"
     ],
     "luci_context": {
@@ -1440,7 +1438,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "RECIPE_MODULE[build::chromium_swarming]/resources/wait_for_finished_task_set.py",
       "--swarming-server",
       "https://example.swarmingserver.appspot.com",
@@ -1661,7 +1658,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
       "--input-json",
       "{}",

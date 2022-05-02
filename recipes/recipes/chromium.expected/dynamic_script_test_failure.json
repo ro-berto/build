@@ -528,7 +528,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "[CACHE]/builder/src/testing/scripts/get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",

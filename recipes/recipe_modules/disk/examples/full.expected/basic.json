@@ -2,7 +2,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "RECIPE_MODULE[build::disk]/resources/statvfs.py",
       "[START_DIR]"
     ],
@@ -19,7 +18,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "RECIPE_MODULE[build::disk]/resources/statvfs.py",
       "[START_DIR]"
     ],

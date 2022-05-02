@@ -2,7 +2,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "None/tools/determinism/compare_build_artifacts.py",
       "--first-build-dir",
       "first_dir",
@@ -34,7 +33,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "None/tools/determinism/create_diffs_tarball.py",
       "--first-build-dir",
       "first_dir",
