@@ -1009,6 +1009,8 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * mac_chromium_10.14_rel_ng
     # * mac_chromium_10.15_rel_ng
     # * mac_chromium_11.0_rel_ng
+    # * mac_chromium_compile_dbg_ng
+    # * mac_chromium_dbg_ng
     # * mac-inverse-fieldtrials-fyi-rel
     # * mac-osxbeta-rel
     # * mac-rel
@@ -1074,23 +1076,10 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium',
                 buildername='mac-archive-rel',
             ),
-        'mac_chromium_dbg_ng':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.mac',
-                buildername='Mac Builder (dbg)',
-                tester='Mac11 Tests (dbg)',
-            ),
         'mac-builder-next-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
                 buildername='Mac Builder Next',
-            ),
-        'mac_chromium_compile_dbg_ng':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.mac',
-                buildername='Mac Builder (dbg)',
-                is_compile_only=True,
-                include_all_triggered_testers=True,
             ),
         'mac_chromium_asan_rel_ng':
             try_spec.TrySpec.create_for_single_mirror(

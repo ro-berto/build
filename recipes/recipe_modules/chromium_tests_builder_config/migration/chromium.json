@@ -1782,21 +1782,6 @@
       "chromium.goma.fyi:Android Builder (dbg)"
     ]
   },
-  "chromium.goma.fyi:Mac Builder (dbg) Goma RBE Canary (clobber)": {
-    "builders": [
-      "chromium.goma.fyi:Mac Builder (dbg) Goma RBE Canary (clobber)"
-    ]
-  },
-  "chromium.goma.fyi:Mac Builder (dbg) Goma RBE Latest Client (clobber)": {
-    "builders": [
-      "chromium.goma.fyi:Mac Builder (dbg) Goma RBE Latest Client (clobber)"
-    ]
-  },
-  "chromium.goma.fyi:Mac M1 Builder (dbg) Goma RBE Canary (clobber)": {
-    "builders": [
-      "chromium.goma.fyi:Mac M1 Builder (dbg) Goma RBE Canary (clobber)"
-    ]
-  },
   "chromium.goma.fyi:Win Builder (dbg) Goma RBE ATS Canary": {
     "builders": [
       "chromium.goma.fyi:Win Builder (dbg) Goma RBE ATS Canary"
@@ -3137,22 +3122,6 @@
     "builders": [
       "chromium.linux:linux-no-base-tracing-rel",
       "tryserver.chromium.linux:linux-no-base-tracing-rel"
-    ]
-  },
-  "chromium.mac:Mac Builder (dbg)": {
-    "builders": [
-      "chromium.mac:Mac Builder (dbg)",
-      "chromium.mac:Mac11 Tests (dbg)",
-      "tryserver.chromium.mac:mac_chromium_compile_dbg_ng",
-      "tryserver.chromium.mac:mac_chromium_dbg_ng"
-    ]
-  },
-  "chromium.mac:Mac11 Tests (dbg)": {
-    "builders": [
-      "chromium.mac:Mac Builder (dbg)",
-      "chromium.mac:Mac11 Tests (dbg)",
-      "tryserver.chromium.mac:mac_chromium_compile_dbg_ng",
-      "tryserver.chromium.mac:mac_chromium_dbg_ng"
     ]
   },
   "chromium.mac:ios-device": {
@@ -5699,22 +5668,6 @@
       "chromium.memory:Mac ASan 64 Builder",
       "chromium.memory:Mac ASan 64 Tests (1)",
       "tryserver.chromium.mac:mac_chromium_asan_rel_ng"
-    ]
-  },
-  "tryserver.chromium.mac:mac_chromium_compile_dbg_ng": {
-    "builders": [
-      "chromium.mac:Mac Builder (dbg)",
-      "chromium.mac:Mac11 Tests (dbg)",
-      "tryserver.chromium.mac:mac_chromium_compile_dbg_ng",
-      "tryserver.chromium.mac:mac_chromium_dbg_ng"
-    ]
-  },
-  "tryserver.chromium.mac:mac_chromium_dbg_ng": {
-    "builders": [
-      "chromium.mac:Mac Builder (dbg)",
-      "chromium.mac:Mac11 Tests (dbg)",
-      "tryserver.chromium.mac:mac_chromium_compile_dbg_ng",
-      "tryserver.chromium.mac:mac_chromium_dbg_ng"
     ]
   },
   "tryserver.chromium.mac:mac_optional_gpu_tests_rel": {

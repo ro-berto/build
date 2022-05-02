@@ -30,6 +30,9 @@ def chromium_apply_configs(base_config, config_names):
 # //infra/config/subprojects/goma/goma.star
 # * Linux Builder Goma RBE Canary
 # * Linux Builder Goma RBE Latest Client
+# * Mac Builder (dbg) Goma RBE Canary (clobber)
+# * Mac Builder (dbg) Goma RBE Latest Client (clobber)
+# * Mac M1 Builder (dbg) Goma RBE Canary (clobber)
 # * chromeos-amd64-generic-rel-goma-rbe-canary
 # * chromeos-amd64-generic-rel-goma-rbe-latest
 
@@ -44,18 +47,12 @@ SPEC = {
     'mac-archive-rel-goma-rbe-canary':
         chromium_apply_configs(chromium.SPEC['mac-archive-rel'],
                                ['goma_canary']),
-    'Mac Builder (dbg) Goma RBE Canary (clobber)':
-        chromium_apply_configs(chromium_mac.SPEC['Mac Builder (dbg)'],
-                               ['goma_canary', 'clobber']),
     'ios-device-goma-rbe-canary-clobber':
         chromium_apply_configs(chromium_mac.SPEC['ios-device'],
                                ['goma_canary', 'clobber']),
     'mac-m1-archive-rel-goma-rbe-canary':
         chromium_apply_configs(chromium.SPEC['mac-archive-rel'],
                                ['goma_canary']),
-    'Mac M1 Builder (dbg) Goma RBE Canary (clobber)':
-        chromium_apply_configs(chromium_mac.SPEC['Mac Builder (dbg)'],
-                               ['goma_canary', 'clobber']),
     'Win Builder Goma RBE Canary':
         chromium_apply_configs(chromium_win.SPEC['Win Builder'],
                                ['goma_canary', 'goma_use_local']),
@@ -82,9 +79,6 @@ SPEC = {
     'mac-archive-rel-goma-rbe-latest':
         chromium_apply_configs(chromium.SPEC['mac-archive-rel'],
                                ['goma_latest_client']),
-    'Mac Builder (dbg) Goma RBE Latest Client (clobber)':
-        chromium_apply_configs(chromium_mac.SPEC['Mac Builder (dbg)'],
-                               ['goma_latest_client', 'clobber']),
     'ios-device-goma-rbe-latest-clobber':
         chromium_apply_configs(chromium_mac.SPEC['ios-device'],
                                ['goma_latest_client', 'clobber']),
