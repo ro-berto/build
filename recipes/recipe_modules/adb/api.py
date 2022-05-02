@@ -28,14 +28,18 @@ class AdbApi(recipe_api.RecipeApi):
 
   def list_devices(self, step_test_data=None, **kwargs):
     cmd = [
-        str(self.adb_path()),
-        'devices',
+        'python',
+        self.resource('list_devices.py'),
+        repr([
+            str(self.adb_path()),
+            'devices',
+        ]),
+        self.m.json.output(),
     ]
 
-    result = self.m.python(
+    result = self.m.step(
         'List adb devices',
-        self.resource('list_devices.py'),
-        args=[ repr(cmd), self.m.json.output() ],
+        cmd,
         step_test_data=step_test_data or self.test_api.device_list,
         **kwargs)
 
@@ -49,18 +53,9 @@ class AdbApi(recipe_api.RecipeApi):
 
   def root_devices(self, **kwargs):
     self.list_devices(**kwargs)
-    self.m.python.inline(
-        'Root devices',
-        """
-        from __future__ import print_function
-        import subprocess
-        import sys
-        adb_path = sys.argv[1]
-        for device in sys.argv[2:]:
-          print('Attempting to root device %s ...' % device)
-          subprocess.check_call([adb_path, '-s', device, 'root'])
-          subprocess.check_call([adb_path, '-s', device, 'wait-for-device'])
-          print('Finished rooting device %s' % device)
-        """,
-        args=[self.adb_path()] + self.devices,
-        **kwargs)
+    cmd = ([
+        'python3',
+        self.resource('root_devices.py'),
+        self.adb_path(),
+    ] + self.devices)
+    self.m.step('Root devices', cmd, **kwargs)
