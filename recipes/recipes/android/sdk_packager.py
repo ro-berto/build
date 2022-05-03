@@ -22,7 +22,6 @@ DEPS = [
     'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/properties',
-    'recipe_engine/python',
     'recipe_engine/raw_io',
     'recipe_engine/step',
 ]
@@ -55,13 +54,14 @@ def RunSteps(api, properties):
     list_output = api.step(
         'list', list_cmd, stdout=api.raw_io.output_text()).stdout
 
-    parse_result = api.python(
-        'parse',
+    parse_result = api.step('parse', [
+        'python',
         api.resource('parse_sdkmanager_list.py'),
-        [
-            '--raw-input', api.raw_io.input_text(list_output),
-            '--json-output', api.json.output(),
-        ])
+        '--raw-input',
+        api.raw_io.input_text(list_output),
+        '--json-output',
+        api.json.output(),
+    ])
     if not parse_result.json.output:
       return result_pb.RawResult(
           status=common_pb.INFRA_FAILURE,
