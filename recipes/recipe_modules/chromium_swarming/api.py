@@ -1012,19 +1012,19 @@ class SwarmingApi(recipe_api.RecipeApi):
         'The list of shards being dispatched should be the enumeration of '
         'task.shards.'
     )
+    cmd = ['python', script] + pre_trigger_args
     uses_trigger_script = bool(task.trigger_script)
     if task.shards > 1:
       assert uses_trigger_script, ('--shard won\'t be supported on the default '
                                    'swarming client (crbug.com/894045)')
-      pre_trigger_args += ['--shards', str(task.shards)]
-    args = pre_trigger_args + post_trigger_args
+      cmd += ['--shards', str(task.shards)]
+    cmd += post_trigger_args
 
     # The step can fail only on infra failures, so mark it as 'infra_step'.
     step_name_suffix = ' (custom trigger script)' if uses_trigger_script else ''
-    step_result = self.m.python(
+    step_result = self.m.step(
         name=self.get_step_name('trigger' + step_name_suffix, task),
-        script=script,
-        args=args,
+        cmd=cmd,
         step_test_data=functools.partial(self._gen_trigger_step_test_data, task,
                                          shard_indices),
         infra_step=True,
@@ -1060,17 +1060,16 @@ class SwarmingApi(recipe_api.RecipeApi):
     script, pre_trigger_args, post_trigger_args = (
         self._generate_trigger_task_shard_args(task, resultdb))
 
+    cmd = ['python', script] + pre_trigger_args
     if task.shards > 1:
-      pre_trigger_args += ['--shard-index', str(shard_index)]
-      pre_trigger_args += ['--shards', str(task.shards)]
-
-    args = pre_trigger_args + post_trigger_args
+      cmd += ['--shard-index', str(shard_index)]
+      cmd += ['--shards', str(task.shards)]
+    cmd += post_trigger_args
 
     # The step can fail only on infra failures, so mark it as 'infra_step'.
-    step_result = self.m.python(
+    step_result = self.m.step(
         name=self.get_step_name('trigger (custom trigger script)', task),
-        script=script,
-        args=args,
+        cmd=cmd,
         step_test_data=functools.partial(self._gen_trigger_step_test_data, task,
                                          [shard_index]),
         infra_step=True,
@@ -1487,7 +1486,9 @@ class SwarmingApi(recipe_api.RecipeApi):
     Uses the 'get_states' endpoint on the swarming server."""
     # TODO(gbeaty) Sorting can be removed when python2 support is removed
     task_sets = sorted(task_sets)
-    args = [
+    cmd = [
+        'python',
+        self.resource('wait_for_finished_task_set.py'),
         '--swarming-server',
         self.m.swarming.current_server,
         '--swarming-py-path',
@@ -1501,14 +1502,13 @@ class SwarmingApi(recipe_api.RecipeApi):
         '--verbose',
     ]
 
-    result = self.m.python(
+    result = self.m.step(
         'wait for tasks%s' % (suffix or ''),
-        self.resource('wait_for_finished_task_set.py'),
+        cmd,
         step_test_data=lambda: self.m.json.test_api.output(data={
             'attempts': 0,
             'sets': task_sets,
-        }),
-        args=args)
+        }))
     return [
         tuple(task_set) for task_set in result.json.output['sets']
     ], result.json.output['attempts']
