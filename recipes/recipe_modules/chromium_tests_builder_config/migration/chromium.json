@@ -3605,7 +3605,6 @@
       "chromium.updater:win-updater-builder-dbg",
       "chromium.updater:win10-updater-tester-dbg",
       "chromium.updater:win10-updater-tester-dbg-uac",
-      "chromium.updater:win7-updater-tester-dbg",
       "chromium.updater:win7-updater-tester-dbg-uac",
       "tryserver.chromium.updater:win-updater-try-builder-dbg"
     ]
@@ -3623,7 +3622,6 @@
       "chromium.updater:win-updater-builder-dbg",
       "chromium.updater:win10-updater-tester-dbg",
       "chromium.updater:win10-updater-tester-dbg-uac",
-      "chromium.updater:win7-updater-tester-dbg",
       "chromium.updater:win7-updater-tester-dbg-uac",
       "tryserver.chromium.updater:win-updater-try-builder-dbg"
     ]
@@ -3633,7 +3631,6 @@
       "chromium.updater:win-updater-builder-dbg",
       "chromium.updater:win10-updater-tester-dbg",
       "chromium.updater:win10-updater-tester-dbg-uac",
-      "chromium.updater:win7-updater-tester-dbg",
       "chromium.updater:win7-updater-tester-dbg-uac",
       "tryserver.chromium.updater:win-updater-try-builder-dbg"
     ]
@@ -3670,22 +3667,11 @@
       "chromium.updater:win7(32)-updater-tester-rel"
     ]
   },
-  "chromium.updater:win7-updater-tester-dbg": {
-    "builders": [
-      "chromium.updater:win-updater-builder-dbg",
-      "chromium.updater:win10-updater-tester-dbg",
-      "chromium.updater:win10-updater-tester-dbg-uac",
-      "chromium.updater:win7-updater-tester-dbg",
-      "chromium.updater:win7-updater-tester-dbg-uac",
-      "tryserver.chromium.updater:win-updater-try-builder-dbg"
-    ]
-  },
   "chromium.updater:win7-updater-tester-dbg-uac": {
     "builders": [
       "chromium.updater:win-updater-builder-dbg",
       "chromium.updater:win10-updater-tester-dbg",
       "chromium.updater:win10-updater-tester-dbg-uac",
-      "chromium.updater:win7-updater-tester-dbg",
       "chromium.updater:win7-updater-tester-dbg-uac",
       "tryserver.chromium.updater:win-updater-try-builder-dbg"
     ]
@@ -5785,7 +5771,6 @@
       "chromium.updater:win-updater-builder-dbg",
       "chromium.updater:win10-updater-tester-dbg",
       "chromium.updater:win10-updater-tester-dbg-uac",
-      "chromium.updater:win7-updater-tester-dbg",
       "chromium.updater:win7-updater-tester-dbg-uac",
       "tryserver.chromium.updater:win-updater-try-builder-dbg"
     ]
