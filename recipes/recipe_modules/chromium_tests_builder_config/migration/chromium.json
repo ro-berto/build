@@ -3114,12 +3114,6 @@
       "tryserver.chromium.linux:linux-no-base-tracing-rel"
     ]
   },
-  "chromium.mac:mac-arm64-on-arm64-rel": {
-    "builders": [
-      "chromium.mac:mac-arm64-on-arm64-rel",
-      "tryserver.chromium.mac:mac-arm64-on-arm64-rel"
-    ]
-  },
   "chromium.memory:Linux ASan LSan Builder": {
     "builders": [
       "chromium.memory:Linux ASan LSan Builder",
@@ -5621,12 +5615,6 @@
     "builders": [
       "chromium.fyi:ios15-sdk-simulator",
       "tryserver.chromium.mac:ios15-sdk-simulator"
-    ]
-  },
-  "tryserver.chromium.mac:mac-arm64-on-arm64-rel": {
-    "builders": [
-      "chromium.mac:mac-arm64-on-arm64-rel",
-      "tryserver.chromium.mac:mac-arm64-on-arm64-rel"
     ]
   },
   "tryserver.chromium.mac:mac-builder-next-rel": {

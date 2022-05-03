@@ -1012,6 +1012,7 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * mac_chromium_11.0_rel_ng
     # * mac_chromium_compile_dbg_ng
     # * mac_chromium_dbg_ng
+    # * mac-arm64-on-arm64-rel
     # * mac-inverse-fieldtrials-fyi-rel
     # * mac-osxbeta-rel
     # * mac-rel
@@ -1061,11 +1062,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
                 buildername='ios15-sdk-simulator',
-            ),
-        'mac-arm64-on-arm64-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.mac',
-                buildername='mac-arm64-on-arm64-rel',
             ),
         'mac_chromium_archive_rel_ng':
             try_spec.TrySpec.create_for_single_mirror(

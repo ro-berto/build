@@ -18,7 +18,6 @@ from . import chromium_goma_fyi
 from . import chromium_gpu
 from . import chromium_gpu_fyi
 from . import chromium_linux
-from . import chromium_mac
 from . import chromium_memory
 from . import chromium_perf
 from . import chromium_perf_fyi
@@ -41,6 +40,8 @@ from . import tryserver_v8
 from . import tryserver_webrtc
 from . import migration_testing
 
+# Builders for the chromium.mac builder group are all defined src-side in
+# src-side in infra/config/subprojects/chromium/ci/chromium.mac.star
 # Builders for the chromium.reclient.fyi builder group are all defined
 # src-side in infra/config/subprojects/reclient/reclient.star
 
@@ -75,8 +76,6 @@ BUILDERS = builder_db.BuilderDatabase.create({
         chromium_gpu_fyi.SPEC,
     'chromium.linux':
         chromium_linux.SPEC,
-    'chromium.mac':
-        chromium_mac.SPEC,
     'chromium.memory':
         chromium_memory.SPEC,
     'chromium.perf':
