@@ -337,9 +337,10 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     CompileResult = collections.namedtuple('CompileResult',
                                            'failure_summary retcode')
-    script = self.resource('ninja_wrapper.py')
 
-    script_args = [
+    cmd = [
+        'vpython',
+        self.resource('ninja_wrapper.py'),
         '--ninja_info_output',
         self.m.json.output(add_json_log='on_failure', name='ninja_info'),
         '--failure_output',
@@ -348,9 +349,9 @@ class ChromiumApi(recipe_api.RecipeApi):
     ]
     if kwargs.get('no_prune_venv'):
       kwargs.pop('no_prune_venv')
-      script_args.append('--no_prune_venv')
-    script_args.append('--')
-    script_args.extend(ninja_command)
+      cmd.append('--no_prune_venv')
+    cmd.append('--')
+    cmd.extend(ninja_command)
 
     example_json = {
         'failures': [{
@@ -370,13 +371,8 @@ class ChromiumApi(recipe_api.RecipeApi):
             example_failure_output, name='failure_summary'))
     try:
       with self.m.context(env=ninja_env):
-        ninja_step_result = self.m.python(
-            name or 'compile',
-            script=script,
-            args=script_args,
-            step_test_data=step_test_data,
-            venv=True,
-            **kwargs)
+        ninja_step_result = self.m.step(
+            name or 'compile', cmd, step_test_data=step_test_data, **kwargs)
     except self.m.step.StepFailure as ex:
       ninja_step_result = ex.result
       if ninja_step_result.retcode != 1:
@@ -400,11 +396,9 @@ class ChromiumApi(recipe_api.RecipeApi):
                               self.m.buildbucket.builder_name)
           if self.m.buildbucket.build.number:
             source += '-%s' % self.m.buildbucket.build.number
-          self.m.python(
-              'process clang crashes',
-              script=clang_crashreports_script,
-              args=['--source', source],
-              **kwargs)
+          self.m.step('process clang crashes',
+                      ['python', clang_crashreports_script, '--source', source],
+                      **kwargs)
 
     ninja_command_explain = ninja_command + ['-d', 'explain', '-n']
 
@@ -1201,18 +1195,18 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     gn_args.extend(self.c.project_generator.args)
 
-    step_args = [
+    cmd = [
+        gn_path,
         '--root=%s' % str(self.m.path['checkout']),
         'gen',
         build_dir,
         '--args=%s' % ' '.join(gn_args),
     ]
+    if str(gn_path).endswith('.py'):
+      cmd = ['python'] + cmd
     with self.m.context(
         cwd=kwargs.get('cwd', self.m.path['checkout']), env=gn_env):
-      if str(gn_path).endswith('.py'):
-        self.m.python(name='gn', script=gn_path, args=step_args, **kwargs)
-      else:
-        self.m.step(name='gn', cmd=[gn_path] + step_args, **kwargs)
+      self.m.step(name='gn', cmd=cmd, **kwargs)
 
   def _mb_isolate_map_file_args(self):
     for isolate_map_path in self.c.project_generator.isolate_map_paths:
