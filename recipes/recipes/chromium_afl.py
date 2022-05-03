@@ -17,7 +17,6 @@ DEPS = [
     'depot_tools/depot_tools',
     'recipe_engine/json',
     'recipe_engine/path',
-    'recipe_engine/python',
     'recipe_engine/raw_io',
     'recipe_engine/step',
     'reclient',
@@ -56,13 +55,16 @@ def gn_refs(api, step_name, args):
   """Runs gn refs with given additional arguments.
   Returns: the list of matched targets.
   """
-  step_result = api.python(step_name,
+  step_result = api.step(
+      step_name,
+      [
+          'python',
           api.depot_tools.gn_py_path,
-          ['--root=%s' % str(api.path['checkout']),
-           'refs',
-           str(api.chromium.output_dir),
-          ] + args,
-          stdout=api.raw_io.output_text())
+          '--root=%s' % str(api.path['checkout']),
+          'refs',
+          str(api.chromium.output_dir),
+      ] + args,
+      stdout=api.raw_io.output_text())
   return step_result.stdout.split()
 
 
