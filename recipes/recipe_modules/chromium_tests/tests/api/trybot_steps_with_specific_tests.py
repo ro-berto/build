@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import attr
+
 from six.moves import range  # pylint: disable=redefined-builtin
 
 from google.protobuf import json_format
@@ -79,9 +81,10 @@ def RunSteps(api, fail_calculate_tests, fail_mb_and_compile,
   # Override build_affected_targets to run the desired test, in the desired
   # configuration.
   def config_override(builder_id, builder_config, **kwargs):
+    builder_config = attr.evolve(
+        builder_config, retry_failed_shards=retry_failed_shards)
     task = api.chromium_tests.Task(builder_config, tests, update_step,
                                    affected_files)
-    task.should_retry_failures_with_changes = lambda: retry_failed_shards
     raw_result = result_pb2.RawResult(status=common_pb.SUCCESS)
     if fail_calculate_tests:
       raw_result.summary_markdown = (

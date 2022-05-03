@@ -87,7 +87,7 @@ def RunSteps(api):
         api.chromium_tests.prepare_checkout(builder_config))
     return api.chromium_tests.compile_specific_targets(
         builder_id, builder_config, update_step, targets_config,
-        targets_config.compile_targets, targets_config.all_tests)
+        targets_config.compile_targets, targets_config.all_tests)[0]
 
 
 def GenTests(api):
