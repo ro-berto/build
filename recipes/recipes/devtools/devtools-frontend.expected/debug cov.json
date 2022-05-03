@@ -909,6 +909,34 @@
   },
   {
     "cmd": [
+      "git",
+      "rev-list",
+      "--count",
+      "2d72510e447ab60a9728aeea2362d8be2cbd7789"
+    ],
+    "cwd": "[CACHE]/builder/devtools-frontend",
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/builder/devtools-frontend/third_party"
+      ]
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "devtools:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "Retrieve commit count"
+  },
+  {
+    "cmd": [
       "luci-auth",
       "token",
       "-lifetime",
@@ -940,7 +968,7 @@
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py",
       "https://chromeperf.appspot.com/add_point",
       "-i",
-      "{\"data\": \"[{\\\"bot\\\": \\\"linux\\\", \\\"buildername\\\": \\\"linux\\\", \\\"buildnumber\\\": 0, \\\"master\\\": \\\"tryserver.devtools-frontend\\\", \\\"masterid\\\": \\\"tryserver.devtools-frontend\\\", \\\"revision\\\": 0, \\\"supplemental_columns\\\": {\\\"a_default_rev\\\": \\\"r_devtools_git\\\", \\\"r_devtools_git\\\": \\\"2d72510e447ab60a9728aeea2362d8be2cbd7789\\\"}, \\\"test\\\": \\\"devtools.infra/coverage/lines\\\", \\\"value\\\": 11.11}, {\\\"bot\\\": \\\"linux\\\", \\\"buildername\\\": \\\"linux\\\", \\\"buildnumber\\\": 0, \\\"master\\\": \\\"tryserver.devtools-frontend\\\", \\\"masterid\\\": \\\"tryserver.devtools-frontend\\\", \\\"revision\\\": 0, \\\"supplemental_columns\\\": {\\\"a_default_rev\\\": \\\"r_devtools_git\\\", \\\"r_devtools_git\\\": \\\"2d72510e447ab60a9728aeea2362d8be2cbd7789\\\"}, \\\"test\\\": \\\"devtools.infra/coverage/statements\\\", \\\"value\\\": 11.12}, {\\\"bot\\\": \\\"linux\\\", \\\"buildername\\\": \\\"linux\\\", \\\"buildnumber\\\": 0, \\\"master\\\": \\\"tryserver.devtools-frontend\\\", \\\"masterid\\\": \\\"tryserver.devtools-frontend\\\", \\\"revision\\\": 0, \\\"supplemental_columns\\\": {\\\"a_default_rev\\\": \\\"r_devtools_git\\\", \\\"r_devtools_git\\\": \\\"2d72510e447ab60a9728aeea2362d8be2cbd7789\\\"}, \\\"test\\\": \\\"devtools.infra/coverage/functions\\\", \\\"value\\\": 11.13}, {\\\"bot\\\": \\\"linux\\\", \\\"buildername\\\": \\\"linux\\\", \\\"buildnumber\\\": 0, \\\"master\\\": \\\"tryserver.devtools-frontend\\\", \\\"masterid\\\": \\\"tryserver.devtools-frontend\\\", \\\"revision\\\": 0, \\\"supplemental_columns\\\": {\\\"a_default_rev\\\": \\\"r_devtools_git\\\", \\\"r_devtools_git\\\": \\\"2d72510e447ab60a9728aeea2362d8be2cbd7789\\\"}, \\\"test\\\": \\\"devtools.infra/coverage/branches\\\", \\\"value\\\": 11.14}]\"}",
+      "{\"data\": \"[{\\\"bot\\\": \\\"linux\\\", \\\"buildername\\\": \\\"linux\\\", \\\"buildnumber\\\": 0, \\\"master\\\": \\\"tryserver.devtools-frontend\\\", \\\"masterid\\\": \\\"tryserver.devtools-frontend\\\", \\\"revision\\\": 123, \\\"supplemental_columns\\\": {\\\"a_default_rev\\\": \\\"r_devtools_git\\\", \\\"r_devtools_git\\\": \\\"2d72510e447ab60a9728aeea2362d8be2cbd7789\\\"}, \\\"test\\\": \\\"devtools.infra/coverage_v2/lines\\\", \\\"value\\\": 11.11}, {\\\"bot\\\": \\\"linux\\\", \\\"buildername\\\": \\\"linux\\\", \\\"buildnumber\\\": 0, \\\"master\\\": \\\"tryserver.devtools-frontend\\\", \\\"masterid\\\": \\\"tryserver.devtools-frontend\\\", \\\"revision\\\": 123, \\\"supplemental_columns\\\": {\\\"a_default_rev\\\": \\\"r_devtools_git\\\", \\\"r_devtools_git\\\": \\\"2d72510e447ab60a9728aeea2362d8be2cbd7789\\\"}, \\\"test\\\": \\\"devtools.infra/coverage_v2/statements\\\", \\\"value\\\": 11.12}, {\\\"bot\\\": \\\"linux\\\", \\\"buildername\\\": \\\"linux\\\", \\\"buildnumber\\\": 0, \\\"master\\\": \\\"tryserver.devtools-frontend\\\", \\\"masterid\\\": \\\"tryserver.devtools-frontend\\\", \\\"revision\\\": 123, \\\"supplemental_columns\\\": {\\\"a_default_rev\\\": \\\"r_devtools_git\\\", \\\"r_devtools_git\\\": \\\"2d72510e447ab60a9728aeea2362d8be2cbd7789\\\"}, \\\"test\\\": \\\"devtools.infra/coverage_v2/functions\\\", \\\"value\\\": 11.13}, {\\\"bot\\\": \\\"linux\\\", \\\"buildername\\\": \\\"linux\\\", \\\"buildnumber\\\": 0, \\\"master\\\": \\\"tryserver.devtools-frontend\\\", \\\"masterid\\\": \\\"tryserver.devtools-frontend\\\", \\\"revision\\\": 123, \\\"supplemental_columns\\\": {\\\"a_default_rev\\\": \\\"r_devtools_git\\\", \\\"r_devtools_git\\\": \\\"2d72510e447ab60a9728aeea2362d8be2cbd7789\\\"}, \\\"test\\\": \\\"devtools.infra/coverage_v2/branches\\\", \\\"value\\\": 11.14}]\"}",
       "-o",
       "/path/to/tmp/json",
       "-t",

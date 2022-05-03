@@ -27,6 +27,7 @@ DEPS = [
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/python',
+    'recipe_engine/raw_io',
     'recipe_engine/resultdb',
     'recipe_engine/step',
 ]
@@ -289,18 +290,38 @@ def publish_coverage_points(api, builder_config):
       for dim in dimensions
   ])
 
-  points = [_point(api, dim, summary['total']) for dim in dimensions]
+  with api.context(cwd=api.path['checkout']):
+    git_revision = api.bot_update.last_returned_properties['got_revision']
+
+    commit_count = api.git(
+        'rev-list',
+        '--count',
+        git_revision,
+        name='Retrieve commit count',
+        stdout=api.raw_io.output_text(),
+        step_test_data=lambda: api.raw_io.test_api.stream_output_text('123\n')
+    ).stdout.strip()
+
+  points = [
+      _point(api, dim, summary['total'], commit_count) for dim in dimensions
+  ]
   #TODO(liviurau) find another way arroud 400 error "Invalid ID (revision) 1055;
   #compared to previous ID 0, it was larger or smaller by too much."
   api.perf_dashboard.add_point(points, halt_on_failure=False)
 
 
-def _point(api, dimension, totals):
-  p = api.perf_dashboard.get_skeleton_point(
-      '/'.join(['devtools.infra', 'coverage', dimension]),
-      api.buildbucket.build.number,
-      totals[dimension]['pct'],
-  )
+def _point(api, dimension, totals, commit_count):
+  p = {
+      'master': api.m.builder_group.for_current,
+      'bot': api.m.buildbucket.builder_name,
+      'test': '/'.join(['devtools.infra', 'coverage_v2', dimension]),
+      'revision': int(commit_count),
+      'value': totals[dimension]['pct'],
+      'masterid': api.m.builder_group.for_current,
+      'buildername': api.m.buildbucket.builder_name,
+      'buildnumber': api.m.buildbucket.build.number,
+  }
+
   p['supplemental_columns'] = {
       'a_default_rev': 'r_devtools_git',
       'r_devtools_git': api.bot_update.last_returned_properties['got_revision'],
