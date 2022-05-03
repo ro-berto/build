@@ -202,7 +202,8 @@ _AddBuildSpec(
     target_arch='arm',
 )
 
-# Adapted from 'lacros-amd64-generic-chrome' to measure binary size.
+# Adapted from 'lacros-amd64-generic-chrome' and 'lacros-arm-generic-chrome'
+# to measure binary size.
 SPEC.update({
     'chromeos-amd64-generic-lacros-builder-perf':
         builder_spec.BuilderSpec.create(
@@ -215,6 +216,24 @@ SPEC.update({
                 'TARGET_ARCH': 'intel',
                 'TARGET_BITS': 64,
                 'TARGET_CROS_BOARDS': 'amd64-generic:eve',
+                'TARGET_PLATFORM': 'chromeos',
+            },
+            simulation_platform='linux',
+            bisect_archive_build=True,
+            bisect_gs_bucket='chrome-test-builds',
+            bisect_gs_extra='official-by-commit',
+        ),
+    'chromeos-arm-generic-lacros-builder-perf':
+        builder_spec.BuilderSpec.create(
+            chromium_config='chromium_perf',
+            gclient_apply_config=['chromeos', 'checkout_lacros_sdk'],
+            gclient_config='chromium_perf',
+            perf_isolate_upload=True,
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_ARCH': 'arm',
+                'TARGET_BITS': 32,
+                'TARGET_CROS_BOARDS': 'arm-generic',
                 'TARGET_PLATFORM': 'chromeos',
             },
             simulation_platform='linux',
