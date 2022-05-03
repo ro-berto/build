@@ -61,9 +61,9 @@ class TarApi(recipe_api.RecipeApi):
       'tar_file': str(tar_file),
       'quiet': quiet,
     }
-    self.m.python(
+    self.m.step(
         name=step_name,
-        script=self.resource('untar.py'),
+        cmd=['python', self.resource('untar.py')],
         stdin=self.m.json.input(script_input))
 
 
@@ -120,9 +120,9 @@ class TarPackage(object):
       'compression': str(self._compression),
       'root': str(self._root),
     }
-    step_result = self._module.m.python(
+    step_result = self._module.m.step(
         name=step_name,
-        script=self._module.resource('tar.py'),
+        cmd=['python', self._module.resource('tar.py')],
         stdin=self._module.m.json.input(script_input))
     self._module.m.path.mock_add_paths(self._output)
     return step_result
