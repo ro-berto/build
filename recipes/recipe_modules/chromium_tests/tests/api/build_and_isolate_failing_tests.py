@@ -45,32 +45,27 @@ def RunSteps(api, properties):
 
   test_suites = [t for t in targets_config.all_tests if t.uses_isolate]
 
-  additional_compile_targets = []
-  if not api.properties.get('no_extra_compile_targets'):
-    additional_compile_targets.append('infra_orchestrator:orchestrator_all')
-
   api.chromium_tests.build_and_isolate_failing_tests(
       orch_builder_id,
       orch_builder_config,
       test_suites,
       update_step,
       'without patch',
-      additional_compile_targets=additional_compile_targets)
+      additional_compile_targets=['infra_orchestrator:orchestrator_all'])
 
 
 def GenTests(api):
   ctbc_api = api.chromium_tests_builder_config
 
-  def ctbc_properties(**kwargs):
+  def ctbc_properties():
     return ctbc_api.properties(
-        ctbc_api.properties_assembler_for_try_builder(
-            **kwargs).with_mirrored_builder(
-                builder_group='fake-group',
-                builder='fake-builder',
-            ).with_mirrored_tester(
-                builder_group='fake-group',
-                builder='fake-tester',
-            ).assemble())
+        ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+            builder_group='fake-group',
+            builder='fake-builder',
+        ).with_mirrored_tester(
+            builder_group='fake-group',
+            builder='fake-tester',
+        ).assemble())
 
   yield api.test(
       'builds_additional_compile_targets',
@@ -111,18 +106,6 @@ def GenTests(api):
           ['browser_tests', 'infra_orchestrator:orchestrator_all'],
       ),
       api.post_process(post_process.MustRun, 'isolate tests (without patch)'),
-      api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'no_compile_targets',
-      api.chromium.try_build(
-          builder_group='fake-try-group',
-          builder='fake-compilator',
-      ),
-      ctbc_properties(),
-      api.properties(no_extra_compile_targets=True),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )

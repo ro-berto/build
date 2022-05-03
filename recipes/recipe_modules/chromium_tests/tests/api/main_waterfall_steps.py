@@ -207,8 +207,7 @@ def RunSteps(api, fail_compile):
   # override compile_specific_targets to control compile step failure state
   def compile_override(*args, **kwargs):
     return result_pb2.RawResult(
-        status=common_pb2.FAILURE,
-        summary_markdown='Compile step failed.'), None
+        status=common_pb2.FAILURE, summary_markdown='Compile step failed.')
 
   if fail_compile:
     api.chromium_tests.compile_specific_targets = compile_override
@@ -869,65 +868,6 @@ def GenTests(api):
                        'archive command lines to RBE-CAS'),
       api.post_process(PropertyExists, 'trigger_properties'),
       api.post_process(post_process.DoesNotRun, 'mark: before_tests'),
-      api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  def LogDoesNotEqual(check, step_odict, step, log, expected):
-    check(step_odict[step].logs[log] != expected)
-
-  fake_triggered_builder = fake_builder + '-tests'
-  # Triggered testers can also be configured to expose trigger properties.
-  yield api.test(
-      'ci_triggered_tester_expose_trigger_properties',
-      api.properties(
-          config='Release',
-          swarm_hashes={fake_test: 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size'},
-          swarming_command_lines_digest='deadbeef/20',
-      ),
-      api.platform('linux', 64),
-      api.chromium_tests_builder_config.ci_build(
-          builder_group=fake_group,
-          builder=fake_triggered_builder,
-          builder_db=ctbc.BuilderDatabase.create({
-              fake_group: {
-                  fake_builder:
-                      ctbc.BuilderSpec.create(
-                          chromium_config='chromium',
-                          gclient_config='chromium',
-                          expose_trigger_properties=True,
-                      ),
-                  fake_triggered_builder:
-                      ctbc.BuilderSpec.create(
-                          chromium_config='chromium',
-                          gclient_config='chromium',
-                          expose_trigger_properties=True,
-                          parent_buildername=fake_builder,
-                          execution_mode=ctbc.TEST,
-                      ),
-              }
-          })),
-      api.chromium_tests.read_source_side_spec(
-          fake_group, {
-              fake_triggered_builder: {
-                  'isolated_scripts': [{
-                      'name': fake_test,
-                      'swarming': {
-                          'can_use_on_swarming_builders': True,
-                      }
-                  }],
-              }
-          }),
-      api.step_data('read command lines',
-                    api.file.read_json({fake_test: ['command', 'args']})),
-      api.post_process(post_process.DoesNotRun, 'isolate tests'),
-      api.post_process(LogDoesNotEqual, 'write command lines',
-                       'command_lines.json', '{}'),
-      api.post_process(post_process.MustRun,
-                       'archive command lines to RBE-CAS'),
-      api.post_process(PropertyExists, 'trigger_properties'),
-      api.post_process(post_process.DoesNotRun, 'mark: before_tests'),
-      api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
 

@@ -75,7 +75,7 @@ def RunSteps(api, properties):
   api.goma.configure_enable_ats()
 
   if compile_targets:
-    compile_result, _ = api.chromium_tests.compile_specific_targets(
+    compile_result = api.chromium_tests.compile_specific_targets(
         builder_id,
         builder_config,
         bot_update_step,

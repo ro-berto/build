@@ -62,7 +62,7 @@ def RunSteps(api):
       targets_config,
       compile_targets=['base_unittests'],
       tests=tests,
-      override_execution_mode=ctbc.COMPILE_AND_TEST)[0]
+      override_execution_mode=ctbc.COMPILE_AND_TEST)
 
 
 def GenTests(api):

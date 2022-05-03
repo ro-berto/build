@@ -60,7 +60,7 @@ def RunSteps(api, properties):
     if api.code_coverage.using_coverage:
       api.code_coverage.instrument([])
 
-    raw_result, _ = api.chromium_tests.compile_specific_targets(
+    raw_result = api.chromium_tests.compile_specific_targets(
         builder_id, builder_config, bot_update_step, targets_config,
         targets_config.compile_targets, targets_config.all_tests)
 
