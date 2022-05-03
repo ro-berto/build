@@ -760,11 +760,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.memory',
                 buildername='linux-ubsan-vptr',
             ),
-        'linux_layout_tests_layout_ng_disabled':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
-                buildername='WebKit Linux layout_ng_disabled Builder',
-            ),
         'linux-perfetto-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',

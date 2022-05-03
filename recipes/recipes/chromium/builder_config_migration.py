@@ -209,7 +209,6 @@ _NON_EXISTENT_BUILDERS = tuple(
         ('chromium.fyi', 'win7-blink-rel-dummy'),
         ('chromium.fyi', 'win10.20h2-blink-rel-dummy'),
         ('chromium.fyi', 'win11-blink-rel-dummy'),
-        ('chromium.fyi', 'WebKit Linux layout_ng_disabled Builder'),
         ('chromium.gpu.fyi', 'GPU FYI Fuchsia Builder'),
         ('chromium.gpu.fyi', 'ANGLE GPU Android Release (Nexus 5X)'),
         ('chromium.gpu.fyi', 'ANGLE GPU Linux Release (Intel HD 630)'),

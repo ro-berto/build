@@ -1242,15 +1242,6 @@
       "chromium.fyi:WebKit Linux MSAN (reclient shadow)"
     ]
   },
-  "chromium.fyi:WebKit Linux layout_ng_disabled Builder": {
-    "blockers": [
-      "builder 'chromium.fyi:WebKit Linux layout_ng_disabled Builder' does not exist"
-    ],
-    "builders": [
-      "chromium.fyi:WebKit Linux layout_ng_disabled Builder",
-      "tryserver.chromium.linux:linux_layout_tests_layout_ng_disabled"
-    ]
-  },
   "chromium.fyi:Win 10 Fast Ring": {
     "builders": [
       "chromium.fyi:Win 10 Fast Ring"
@@ -5317,11 +5308,7 @@
     ]
   },
   "tryserver.chromium.linux:linux_layout_tests_layout_ng_disabled": {
-    "blockers": [
-      "builder 'chromium.fyi:WebKit Linux layout_ng_disabled Builder' does not exist"
-    ],
     "builders": [
-      "chromium.fyi:WebKit Linux layout_ng_disabled Builder",
       "tryserver.chromium.linux:linux_layout_tests_layout_ng_disabled"
     ]
   },

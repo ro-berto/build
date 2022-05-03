@@ -54,18 +54,6 @@ SPEC = {
             },
             simulation_platform='mac',
         ),
-    'WebKit Linux layout_ng_disabled Builder':
-        builder_spec.BuilderSpec.create(
-            chromium_config='chromium',
-            chromium_apply_config=['mb'],
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            test_results_config='staging_server',
-            simulation_platform='linux',
-        ),
     'fuchsia-fyi-arm64-femu':
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
