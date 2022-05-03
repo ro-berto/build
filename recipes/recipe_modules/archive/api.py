@@ -288,16 +288,19 @@ class ArchiveApi(recipe_api.RecipeApi):
           pass
 
     # Build the list of files to archive.
-    filter_result = self.m.python(
+    cmd = [
+        'python',
+        self.resource('filter_build_files.py'),
+        '--dir',
+        build_dir,
+        '--platform',
+        self.m.platform.name,
+        '--output',
+        self.m.json.output(),
+    ]
+    filter_result = self.m.step(
         'filter build_dir',
-        self.resource('filter_build_files.py'), [
-            '--dir',
-            build_dir,
-            '--platform',
-            self.m.platform.name,
-            '--output',
-            self.m.json.output(),
-        ],
+        cmd,
         infra_step=True,
         step_test_data=lambda: self.m.json.test_api.output(['file1', 'file2']),
         **kwargs)
