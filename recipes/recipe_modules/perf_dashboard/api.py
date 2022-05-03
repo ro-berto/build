@@ -90,8 +90,16 @@ class PerfDashboardApi(recipe_api.RecipeApi):
         'isolate_server': isolate_server,
         'isolate_map': self.m.json.dumps(isolate_map),
     }
-    pinpoint_base_url = _get_pinpoint_base_url(
-        self.m.properties.get('staging', False))
+
+    is_staging = self.m.properties.get('staging', False)
+
+    # Update data store on staging to allow build reuse on linux-builder-perf.
+    if not is_staging and builder_name == 'linux-builder-perf':
+      self.post('pinpoint isolate upload (staging)',
+                '%s/api/isolate' % PINPOINT_STAGING_URL, data, False, **kwargs)
+
+    pinpoint_base_url = _get_pinpoint_base_url(is_staging)
+
     return self.post('pinpoint isolate upload',
                      '%s/api/isolate' % pinpoint_base_url, data,
                      halt_on_failure, **kwargs)
