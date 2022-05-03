@@ -126,6 +126,7 @@ def GenTests(api):
           ],
           **builder),
       api.chromium_tests.read_source_side_spec(*source_side_spec),
+      api.post_process(post_process.Filter('bot_update')),
   )
 
   yield api.test(
