@@ -3005,30 +3005,6 @@
       "tryserver.chromium.linux:cast_shell_linux_dbg"
     ]
   },
-  "chromium.linux:Fuchsia ARM64": {
-    "builders": [
-      "chromium.linux:Fuchsia ARM64",
-      "tryserver.chromium.linux:fuchsia_arm64"
-    ]
-  },
-  "chromium.linux:Fuchsia ARM64 Cast Audio": {
-    "builders": [
-      "chromium.linux:Fuchsia ARM64 Cast Audio",
-      "tryserver.chromium.linux:fuchsia_arm64_cast_audio"
-    ]
-  },
-  "chromium.linux:Fuchsia x64": {
-    "builders": [
-      "chromium.linux:Fuchsia x64",
-      "tryserver.chromium.linux:fuchsia_x64"
-    ]
-  },
-  "chromium.linux:Fuchsia x64 Cast Audio": {
-    "builders": [
-      "chromium.linux:Fuchsia x64 Cast Audio",
-      "tryserver.chromium.linux:fuchsia_x64_cast_audio"
-    ]
-  },
   "chromium.linux:Leak Detection Linux": {
     "builders": [
       "chromium.linux:Leak Detection Linux",
@@ -3053,24 +3029,6 @@
     "builders": [
       "chromium.linux:Network Service Linux",
       "tryserver.chromium.linux:network_service_linux"
-    ]
-  },
-  "chromium.linux:fuchsia-arm64-cast": {
-    "builders": [
-      "chromium.linux:fuchsia-arm64-cast",
-      "tryserver.chromium.linux:fuchsia-arm64-cast"
-    ]
-  },
-  "chromium.linux:fuchsia-x64-cast": {
-    "builders": [
-      "chromium.linux:fuchsia-x64-cast",
-      "tryserver.chromium.linux:fuchsia-x64-cast"
-    ]
-  },
-  "chromium.linux:fuchsia-x64-dbg": {
-    "builders": [
-      "chromium.linux:fuchsia-x64-dbg",
-      "tryserver.chromium.linux:fuchsia-compile-x64-dbg"
     ]
   },
   "chromium.linux:linux-bfcache-rel": {
@@ -4813,18 +4771,6 @@
       "tryserver.chromium.linux:cast_shell_linux_dbg"
     ]
   },
-  "tryserver.chromium.linux:fuchsia-arm64-cast": {
-    "builders": [
-      "chromium.linux:fuchsia-arm64-cast",
-      "tryserver.chromium.linux:fuchsia-arm64-cast"
-    ]
-  },
-  "tryserver.chromium.linux:fuchsia-compile-x64-dbg": {
-    "builders": [
-      "chromium.linux:fuchsia-x64-dbg",
-      "tryserver.chromium.linux:fuchsia-compile-x64-dbg"
-    ]
-  },
   "tryserver.chromium.linux:fuchsia-fyi-arm64-femu": {
     "builders": [
       "chromium.fyi:fuchsia-fyi-arm64-femu",
@@ -4847,36 +4793,6 @@
     "builders": [
       "chromium.fyi:fuchsia-fyi-x64-wst",
       "tryserver.chromium.linux:fuchsia-fyi-x64-wst"
-    ]
-  },
-  "tryserver.chromium.linux:fuchsia-x64-cast": {
-    "builders": [
-      "chromium.linux:fuchsia-x64-cast",
-      "tryserver.chromium.linux:fuchsia-x64-cast"
-    ]
-  },
-  "tryserver.chromium.linux:fuchsia_arm64": {
-    "builders": [
-      "chromium.linux:Fuchsia ARM64",
-      "tryserver.chromium.linux:fuchsia_arm64"
-    ]
-  },
-  "tryserver.chromium.linux:fuchsia_arm64_cast_audio": {
-    "builders": [
-      "chromium.linux:Fuchsia ARM64 Cast Audio",
-      "tryserver.chromium.linux:fuchsia_arm64_cast_audio"
-    ]
-  },
-  "tryserver.chromium.linux:fuchsia_x64": {
-    "builders": [
-      "chromium.linux:Fuchsia x64",
-      "tryserver.chromium.linux:fuchsia_x64"
-    ]
-  },
-  "tryserver.chromium.linux:fuchsia_x64_cast_audio": {
-    "builders": [
-      "chromium.linux:Fuchsia x64 Cast Audio",
-      "tryserver.chromium.linux:fuchsia_x64_cast_audio"
     ]
   },
   "tryserver.chromium.linux:gpu-fyi-try-lacros-amd-rel": {

@@ -586,28 +586,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.linux',
                 buildername='Cast Audio Linux',
             ),
-        'fuchsia_arm64':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.linux',
-                buildername='Fuchsia ARM64',
-            ),
-        'fuchsia-arm64-cast':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.linux',
-                buildername='fuchsia-arm64-cast',
-            ),
-        'fuchsia_arm64_cast_audio':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.linux',
-                buildername='Fuchsia ARM64 Cast Audio',
-            ),
-        'fuchsia-compile-x64-dbg':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.linux',
-                buildername='fuchsia-x64-dbg',
-                is_compile_only=True,
-                include_all_triggered_testers=True,
-            ),
         'fuchsia-fyi-arm64-femu':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
@@ -627,21 +605,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
                 buildername='fuchsia-fyi-x64-wst',
-            ),
-        'fuchsia_x64':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.linux',
-                buildername='Fuchsia x64',
-            ),
-        'fuchsia-x64-cast':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.linux',
-                buildername='fuchsia-x64-cast',
-            ),
-        'fuchsia_x64_cast_audio':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.linux',
-                buildername='Fuchsia x64 Cast Audio',
             ),
         'linux-annotator-rel':
             try_spec.TrySpec.create_for_single_mirror(

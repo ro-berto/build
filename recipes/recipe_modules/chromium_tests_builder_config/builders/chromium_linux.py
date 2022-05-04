@@ -17,45 +17,6 @@ def _chromium_linux_spec(**kwargs):
 # * Linux Tests (dbg)(1)
 
 SPEC = {
-    'fuchsia-arm64-cast':
-        _chromium_linux_spec(
-            chromium_config='chromium',
-            chromium_apply_config=['mb'],
-            gclient_config='chromium',
-            gclient_apply_config=['fuchsia_arm64'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'fuchsia',
-            },
-            simulation_platform='linux',
-        ),
-    'fuchsia-x64-cast':
-        _chromium_linux_spec(
-            chromium_config='chromium',
-            chromium_apply_config=['mb'],
-            gclient_config='chromium',
-            gclient_apply_config=['fuchsia_x64'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'fuchsia',
-            },
-            simulation_platform='linux',
-        ),
-    'fuchsia-x64-dbg':
-        _chromium_linux_spec(
-            chromium_config='chromium',
-            chromium_apply_config=['mb'],
-            gclient_config='chromium',
-            gclient_apply_config=['fuchsia_x64', 'enable_reclient'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'fuchsia',
-            },
-            simulation_platform='linux',
-        ),
     'linux-bfcache-rel':
         _chromium_linux_spec(
             chromium_config='chromium',
@@ -189,58 +150,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_ARCH': 'arm',
                 'TARGET_BITS': 64,
-            },
-            simulation_platform='linux',
-        ),
-    'Fuchsia ARM64 Cast Audio':
-        _chromium_linux_spec(
-            chromium_config='chromium',
-            chromium_apply_config=['mb'],
-            gclient_config='chromium',
-            gclient_apply_config=['fuchsia_arm64'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'fuchsia',
-            },
-            simulation_platform='linux',
-        ),
-    'Fuchsia ARM64':
-        _chromium_linux_spec(
-            chromium_config='chromium',
-            chromium_apply_config=['mb'],
-            gclient_config='chromium',
-            gclient_apply_config=['fuchsia_arm64', 'fuchsia_arm64_host'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'fuchsia',
-            },
-            simulation_platform='linux',
-        ),
-    'Fuchsia x64 Cast Audio':
-        _chromium_linux_spec(
-            chromium_config='chromium',
-            chromium_apply_config=['mb'],
-            gclient_config='chromium',
-            gclient_apply_config=['fuchsia_x64'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'fuchsia',
-            },
-            simulation_platform='linux',
-        ),
-    'Fuchsia x64':
-        _chromium_linux_spec(
-            chromium_config='chromium',
-            chromium_apply_config=['mb'],
-            gclient_config='chromium',
-            gclient_apply_config=['fuchsia_x64'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'fuchsia',
             },
             simulation_platform='linux',
         ),
