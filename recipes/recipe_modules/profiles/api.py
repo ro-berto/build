@@ -112,7 +112,9 @@ class ProfilesApi(recipe_api.RecipeApi):
       sparse (bool): (optional) flag to invoke the merge script with sparse.
         Defaults to False.
     """
-    args = [
+    cmd = [
+        'python',
+        self.merge_steps_script,
         '--input-dir',
         self.profile_dir(),
         '--output-file',
@@ -122,20 +124,17 @@ class ProfilesApi(recipe_api.RecipeApi):
     ]
 
     if profdata_filename_pattern:
-      args += [
+      cmd += [
           '--profdata-filename-pattern',
           profdata_filename_pattern,
       ]
 
     if sparse:
-      args += [
+      cmd += [
           '--sparse',
       ]
 
-    self.m.python(
-        'merge all profile files into a single .profdata',
-        self.merge_steps_script,
-        args=args)
+    self.m.step('merge all profile files into a single .profdata', cmd)
 
   def upload(self, bucket, path, local_artifact, args=None, link_name=None):
     """Invokes gsutil recipe module to upload.
@@ -164,10 +163,13 @@ class ProfilesApi(recipe_api.RecipeApi):
 
   def find_merge_errors(self):
     """Search for any profiles that failed to merge"""
-    step_result = self.m.python(
-        'Finding profile merge errors',
-        self.resource('load_merge_errors.py'),
-        args=['--root-dir', self.profile_dir()],
+    step_result = self.m.step(
+        'Finding profile merge errors', [
+            'python',
+            self.resource('load_merge_errors.py'),
+            '--root-dir',
+            self.profile_dir(),
+        ],
         stdout=self.m.json.output())
 
     return step_result
