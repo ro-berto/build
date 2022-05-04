@@ -194,7 +194,7 @@
       "0",
       "-u",
       "-tr-fields",
-      "testId,variant,variantHash,status,tags,expected,duration",
+      "testId,variant,variantHash,status,tags,expected,duration,failureReason",
       "0"
     ],
     "cwd": "[CACHE]/builder",

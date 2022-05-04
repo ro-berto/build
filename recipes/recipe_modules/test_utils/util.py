@@ -153,8 +153,14 @@ class RDBPerSuiteResults(object):
   """
 
   NEEDED_FIELDS = [
-      'testId', 'variant', 'variantHash', 'status', 'tags', 'expected',
-      'duration'
+      'testId',
+      'variant',
+      'variantHash',
+      'status',
+      'tags',
+      'expected',
+      'duration',
+      'failureReason',
   ]
 
   suite_name = attrib(str)
@@ -166,6 +172,8 @@ class RDBPerSuiteResults(object):
   unexpected_skipped_tests = attrib(set)
   invalid = attrib(bool, default=False)
   test_name_to_test_id_mapping = attrib(mapping[str, str])
+  # maps unexpected failing test to failure reason
+  failing_test_to_failure_reason_mapping = attrib(mapping[str, str])
   # Mapping from test name to duration (in milliseconds) of an expectedly passed
   # run if available.
   test_named_to_passed_run_duration = attrib(mapping[str, int])
@@ -225,6 +233,7 @@ class RDBPerSuiteResults(object):
 
     total_tests_ran = total_tests_ran or total_unexpected_results
     unexpected_failing_tests = set()
+    failing_test_to_failure_reason_mapping = {}
     unexpected_passing_tests = set()
     unexpected_skipped_tests = set()
     test_named_to_passed_run_duration = {}
@@ -253,6 +262,8 @@ class RDBPerSuiteResults(object):
         continue
       if all(tr.status != test_result_pb2.PASS for tr in test_results):
         unexpected_failing_tests.add(test_name)
+        failing_test_to_failure_reason_mapping[test_name] = (
+            tr.failure_reason.primary_error_message)
         if all(tr.status == test_result_pb2.SKIP for tr in test_results):
           unexpected_skipped_tests.add(test_name)
       else:
@@ -263,11 +274,22 @@ class RDBPerSuiteResults(object):
     # in underlying hardware) and that the results are invalid.
     invalid = failure_on_exit and not exists_unexpected_failing_result
 
-    return cls(suite_name, variant_hash, total_tests_ran,
-               unexpected_passing_tests, unexpected_failing_tests,
-               unexpected_skipped_tests, invalid, test_name_to_test_id_mapping,
-               test_named_to_passed_run_duration, individual_results,
-               individual_unexpected_unpassed_result_count, test_id_prefix)
+    return cls(
+        suite_name=suite_name,
+        variant_hash=variant_hash,
+        total_tests_ran=total_tests_ran,
+        unexpected_passing_tests=unexpected_passing_tests,
+        unexpected_failing_tests=unexpected_failing_tests,
+        failing_test_to_failure_reason_mapping=(
+            failing_test_to_failure_reason_mapping),
+        unexpected_skipped_tests=unexpected_skipped_tests,
+        invalid=invalid,
+        test_name_to_test_id_mapping=test_name_to_test_id_mapping,
+        test_named_to_passed_run_duration=test_named_to_passed_run_duration,
+        individual_results=individual_results,
+        individual_unexpected_unpassed_result_count=(
+            individual_unexpected_unpassed_result_count),
+        test_id_prefix=test_id_prefix)
 
   def with_failure_on_exit(self, failure_on_exit):
     """Returns a new instance with an updated failure_on_exit value.
@@ -289,13 +311,23 @@ class RDBPerSuiteResults(object):
 
   def to_jsonish(self):
     jsonish_repr = {
-        'suite_name': self.suite_name,
-        'variant_hash': self.variant_hash,
-        'invalid': str(self.invalid),
-        'total_tests_ran': self.total_tests_ran,
-        'unexpected_passing_tests': sorted(self.unexpected_passing_tests),
-        'unexpected_failing_tests': sorted(self.unexpected_failing_tests),
-        'unexpected_skipped_tests': sorted(self.unexpected_skipped_tests),
-        'test_name_to_test_id_mapping': self.test_name_to_test_id_mapping,
+        'suite_name':
+            self.suite_name,
+        'variant_hash':
+            self.variant_hash,
+        'invalid':
+            str(self.invalid),
+        'total_tests_ran':
+            self.total_tests_ran,
+        'unexpected_passing_tests':
+            sorted(self.unexpected_passing_tests),
+        'unexpected_failing_tests':
+            sorted(self.unexpected_failing_tests),
+        'unexpected_skipped_tests':
+            sorted(self.unexpected_skipped_tests),
+        'test_name_to_test_id_mapping':
+            self.test_name_to_test_id_mapping,
+        'failing_test_to_failure_reason_mapping':
+            self.failing_test_to_failure_reason_mapping,
     }
     return jsonish_repr

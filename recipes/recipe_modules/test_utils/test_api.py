@@ -8,6 +8,8 @@ from recipe_engine import recipe_test_api
 
 from PB.go.chromium.org.luci.resultdb.proto.v1 import (invocation as
                                                        rdb_invocation)
+from PB.go.chromium.org.luci.resultdb.proto.v1 import (failure_reason as
+                                                       rdb_failure_reason)
 from PB.go.chromium.org.luci.resultdb.proto.v1 import (test_result as
                                                        rdb_test_result)
 from PB.go.chromium.org.luci.resultdb.proto.v1 import common as rdb_common
@@ -209,6 +211,11 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
     """
 
     def _generate_invocation(test, status):
+      failure_reason = None
+      if status == rdb_test_result.FAIL:
+        failure_reason = rdb_failure_reason.FailureReason(
+            primary_error_message='paint_op_writer.cc(106): Check failed:')
+
       test_result = rdb_test_result.TestResult(
           test_id=test,
           variant=rdb_common.Variant(**{
@@ -218,7 +225,8 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
           }),
           expected=status == rdb_test_result.PASS,
           variant_hash=suite_name + '_hash',
-          status=status)
+          status=status,
+          failure_reason=failure_reason)
       return self.m.resultdb.Invocation(
           proto=rdb_invocation.Invocation(
               state=rdb_invocation.Invocation.FINALIZED,
