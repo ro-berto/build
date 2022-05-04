@@ -13,7 +13,6 @@ _BUILDER_PREFIX = {
     'client.webrtc': 'luci_webrtc_ci',
     'client.webrtc.perf': 'luci_webrtc_perf',
     'internal.client.webrtc': 'luci_webrtc_internal_ci',
-    'internal.tryserver.webrtc': 'luci_webrtc_internal_try',
     'tryserver.webrtc': 'luci_webrtc_try',
 }
 
