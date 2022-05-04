@@ -17,7 +17,6 @@ DEPS = [
     'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/properties',
-    'recipe_engine/python',
     'recipe_engine/step',
 ]
 
@@ -103,9 +102,14 @@ def _gn_gen_builds(api, target_cpu, debug, clang, out_dir):
     args.append('target_cpu="%s"' % target_cpu)
 
   with api.context(cwd=checkout):
-    api.python('gn gen', gn_cmd, [
-        '--root=' + str(checkout), 'gen', '//out/' + out_dir, '--check',
-        '--args=' + ' '.join(args)
+    api.step('gn gen', [
+        'python',
+        gn_cmd,
+        '--root=' + str(checkout),
+        'gen',
+        '//out/' + out_dir,
+        '--check',
+        '--args=' + ' '.join(args),
     ])
 
 
