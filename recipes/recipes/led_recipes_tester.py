@@ -27,7 +27,6 @@ DEPS = [
     'recipe_engine/led',
     'recipe_engine/path',
     'recipe_engine/properties',
-    'recipe_engine/python',
     'recipe_engine/raw_io',
     'recipe_engine/step',
     'recipe_engine/swarming',
@@ -309,6 +308,8 @@ def _determine_affected_recipes(api, affected_files, recipes, recipes_py_path,
     StepFailure if analyzing the recipes fails.
   """
   cmd = [
+      'vpython',
+      recipes_py_path,
       '--package',
       recipes_cfg_path,
       'analyze',
@@ -320,12 +321,10 @@ def _determine_affected_recipes(api, affected_files, recipes, recipes_py_path,
   ]
 
   step_name = 'determine affected recipes'
-  result = api.python(
+  result = api.step(
       step_name,
-      recipes_py_path,
       cmd,
       ok_ret='any',
-      venv=True,
       step_test_data=lambda: api.json.test_api.output({'recipes': []}),
   )
 
