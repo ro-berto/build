@@ -9,6 +9,9 @@ def _chromium_chromiumos_spec(**kwargs):
   return builder_spec.BuilderSpec.create(
       build_gs_bucket='chromium-chromiumos-archive', **kwargs)
 
+# The config for the following builders is now specified src-side in
+# infra/config/subprojects/chromium/ci/chromium.chromiumos.star
+# * linux-chromeos-rel
 
 SPEC = {
     'Linux ChromiumOS Full':
@@ -88,7 +91,6 @@ SPEC.update([
         gclient_apply_config=['checkout_lacros_sdk'],
     ),
     _config('linux-ash-chromium-generator-rel'),
-    _config('linux-chromeos-rel', gclient_apply_config=['use_clang_coverage']),
     _config('linux-chromeos-dbg',),
     _config(
         'linux-chromeos-js-code-coverage',

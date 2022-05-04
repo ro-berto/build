@@ -703,14 +703,6 @@
       "tryserver.chromium.chromiumos:linux-chromeos-js-code-coverage"
     ]
   },
-  "chromium.chromiumos:linux-chromeos-rel": {
-    "builders": [
-      "chromium.chromiumos:linux-chromeos-rel",
-      "tryserver.chromium.chromiumos:linux-chromeos-inverse-fieldtrials-fyi-rel",
-      "tryserver.chromium.chromiumos:linux-chromeos-rel",
-      "tryserver.chromium.chromiumos:linux-chromeos-rel-rts"
-    ]
-  },
   "chromium.chromiumos:linux-lacros-builder-rel": {
     "builders": [
       "chromium.chromiumos:linux-lacros-builder-rel",
@@ -4708,34 +4700,10 @@
       "tryserver.chromium.chromiumos:linux-chromeos-dbg"
     ]
   },
-  "tryserver.chromium.chromiumos:linux-chromeos-inverse-fieldtrials-fyi-rel": {
-    "builders": [
-      "chromium.chromiumos:linux-chromeos-rel",
-      "tryserver.chromium.chromiumos:linux-chromeos-inverse-fieldtrials-fyi-rel",
-      "tryserver.chromium.chromiumos:linux-chromeos-rel",
-      "tryserver.chromium.chromiumos:linux-chromeos-rel-rts"
-    ]
-  },
   "tryserver.chromium.chromiumos:linux-chromeos-js-code-coverage": {
     "builders": [
       "chromium.chromiumos:linux-chromeos-js-code-coverage",
       "tryserver.chromium.chromiumos:linux-chromeos-js-code-coverage"
-    ]
-  },
-  "tryserver.chromium.chromiumos:linux-chromeos-rel": {
-    "builders": [
-      "chromium.chromiumos:linux-chromeos-rel",
-      "tryserver.chromium.chromiumos:linux-chromeos-inverse-fieldtrials-fyi-rel",
-      "tryserver.chromium.chromiumos:linux-chromeos-rel",
-      "tryserver.chromium.chromiumos:linux-chromeos-rel-rts"
-    ]
-  },
-  "tryserver.chromium.chromiumos:linux-chromeos-rel-rts": {
-    "builders": [
-      "chromium.chromiumos:linux-chromeos-rel",
-      "tryserver.chromium.chromiumos:linux-chromeos-inverse-fieldtrials-fyi-rel",
-      "tryserver.chromium.chromiumos:linux-chromeos-rel",
-      "tryserver.chromium.chromiumos:linux-chromeos-rel-rts"
     ]
   },
   "tryserver.chromium.chromiumos:linux-lacros-dbg": {

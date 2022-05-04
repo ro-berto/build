@@ -889,6 +889,9 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * chromeos-arm-generic-rel
     # * chromeos-kevin-compile-rel
     # * chromeos-kevin-rel
+    # * linux-chromeos-inverse-fieldtrials-fyi-rel
+    # * linux-chromeos-rel
+    # * linux-chromeos-rel-rts
     'tryserver.chromium.chromiumos': {
         'chromeos-amd64-generic-dbg':
             try_spec.TrySpec.create_for_single_mirror(
@@ -921,24 +924,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.chromiumos',
                 buildername='linux-chromeos-dbg',
-            ),
-        # This trybot mirrors the trybot linux-chromeos-rel with
-        # analyze_deps_autorolls set to False
-        'linux-chromeos-inverse-fieldtrials-fyi-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.chromiumos',
-                buildername='linux-chromeos-rel',
-            ),
-        'linux-chromeos-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.chromiumos',
-                buildername='linux-chromeos-rel',
-            ),
-        'linux-chromeos-rel-rts':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.chromiumos',
-                buildername='linux-chromeos-rel',
-                regression_test_selection=try_spec.ALWAYS,
             ),
         'linux-chromeos-js-code-coverage':
             try_spec.TrySpec.create_for_single_mirror(
