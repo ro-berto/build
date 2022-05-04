@@ -225,17 +225,19 @@ class IsolateApi(recipe_api.RecipeApi):
 
     t = self.m.path.mkdtemp('deterministic_build')
     output = self.m.path.join(t, TARBALL_NAME)
-    self.m.python('create tarball',
-                  script=self.m.path.join(self.m.path['checkout'],
-                                          'tools',
-                                          'determinism',
-                                          'create_diffs_tarball.py'),
-                  args=[
-                      '--first-build-dir', first_dir,
-                      '--second-build-dir', second_dir,
-                      '--json-input', self.m.json.input(diffs),
-                      '--output', output,
-                  ])
+    self.m.step('create tarball', [
+        'python',
+        self.m.path.join(self.m.path['checkout'], 'tools', 'determinism',
+                         'create_diffs_tarball.py'),
+        '--first-build-dir',
+        first_dir,
+        '--second-build-dir',
+        second_dir,
+        '--json-input',
+        self.m.json.input(diffs),
+        '--output',
+        output,
+    ])
     self.m.gsutil.upload(
         output, GS_BUCKET,
         '{}/{}/{}'.format(self.m.properties['buildername'],
@@ -243,23 +245,27 @@ class IsolateApi(recipe_api.RecipeApi):
 
   def compare_build_artifacts(self, first_dir, second_dir):
     """Compare the artifacts from 2 builds."""
-    args = [
-        '--first-build-dir', first_dir,
-        '--second-build-dir', second_dir,
-        '--target-platform', self.m.chromium.c.TARGET_PLATFORM,
-        '--json-output', self.m.json.output(),
-        '--ninja-path', self.m.depot_tools.ninja_path,
-        '--use-isolate-files'
+    cmd = [
+        'python',
+        self.m.path.join(self.m.path['checkout'], 'tools', 'determinism',
+                         'compare_build_artifacts.py'),
+        '--first-build-dir',
+        first_dir,
+        '--second-build-dir',
+        second_dir,
+        '--target-platform',
+        self.m.chromium.c.TARGET_PLATFORM,
+        '--json-output',
+        self.m.json.output(),
+        '--ninja-path',
+        self.m.depot_tools.ninja_path,
+        '--use-isolate-files',
     ]
     try:
       with self.m.context(cwd=self.m.path['start_dir']):
-        step_result = self.m.python(
+        step_result = self.m.step(
             'compare_build_artifacts',
-            self.m.path.join(self.m.path['checkout'],
-                             'tools',
-                             'determinism',
-                             'compare_build_artifacts.py'),
-            args=args,
+            cmd,
             step_test_data=(lambda: self.m.json.test_api.output({
                 'expected_diffs': ['flatc'],
                 'unexpected_diffs': ['base_unittest'],
