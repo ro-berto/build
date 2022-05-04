@@ -7,6 +7,7 @@ from .. import builder_spec
 # The config for the following builder(s) is now specified src-side in
 # //infra/config/subprojects/chromium/try/tryserver.chromium.linux.star
 # * linux-blink-web-tests-force-accessibility-rel
+# * linux_layout_tests_layout_ng_disabled
 # * linux_optional_gpu_tests_rel
 
 SPEC = {
@@ -23,18 +24,6 @@ SPEC = {
             simulation_platform='linux',
         ),
     'linux-layout-tests-edit-ng':
-        builder_spec.BuilderSpec.create(
-            chromium_config='chromium',
-            chromium_apply_config=['mb'],
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            test_results_config='staging_server',
-            simulation_platform='linux',
-        ),
-    'linux_layout_tests_layout_ng_disabled':
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             chromium_apply_config=['mb'],

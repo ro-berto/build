@@ -5238,11 +5238,6 @@
       "tryserver.chromium.linux:linux_chromium_ubsan_rel_ng"
     ]
   },
-  "tryserver.chromium.linux:linux_layout_tests_layout_ng_disabled": {
-    "builders": [
-      "tryserver.chromium.linux:linux_layout_tests_layout_ng_disabled"
-    ]
-  },
   "tryserver.chromium.linux:linux_vr": {
     "builders": [
       "chromium.fyi:VR Linux",
