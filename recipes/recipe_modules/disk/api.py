@@ -44,11 +44,9 @@ class DiskApi(recipe_api.RecipeApi):
 
     step = None
     try:
-      step = self.m.python(
-          name,
-          self.resource('statvfs.py'),
+      step = self.m.step(
+          name, ['python', self.resource('statvfs.py'), path],
           stdout=self.m.json.output(),
-          args=[path],
           **kwargs)
       capacity_mb = step.stdout['capacity'] / 1024.0 / 1024.0
       used_mb = step.stdout['used'] / 1024.0 / 1024.0
