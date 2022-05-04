@@ -142,37 +142,21 @@ class AndroidApi(recipe_api.RecipeApi):
 
     return result
 
-  def clean_local_files(self, clean_pyc_files=True):
+  def clean_local_files(self):
     target = self.c.BUILD_CONFIG
     debug_info_dumps = self.m.path['checkout'].join('out', target,
                                                     'debug_info_dumps')
     test_logs = self.m.path['checkout'].join('out', target, 'test_logs')
     build_product = self.m.path['checkout'].join('out', 'build_product.zip')
-    python_inline_script = textwrap.dedent("""
-        import shutil, sys, os
-        shutil.rmtree(sys.argv[1], True)
-        shutil.rmtree(sys.argv[2], True)
-        try:
-          os.remove(sys.argv[3])
-        except OSError:
-          pass
-        """)
-    if clean_pyc_files:
-      python_inline_script += textwrap.dedent("""\
-          for base, _dirs, files in os.walk(sys.argv[4]):
-            for f in files:
-              if f.endswith('.pyc'):
-                os.remove(os.path.join(base, f))
-      """)
-
-    self.m.python.inline(
-        'clean local files',
-        python_inline_script,
-        args=[
-            debug_info_dumps, test_logs, build_product, self.m.path['checkout']
-        ],
-        infra_step=True,
-    )
+    cmd = [
+        'python3',
+        self.resource('clean_local_files.py'),
+        debug_info_dumps,
+        test_logs,
+        build_product,
+        self.m.path['checkout'],
+    ]
+    self.m.step('clean local files', cmd, infra_step=True)
 
   def run_tree_truth(self, additional_repos=None):
     # TODO(sivachandra): The downstream ToT builder will require
@@ -305,16 +289,8 @@ class AndroidApi(recipe_api.RecipeApi):
     # TODO(crbug.com/1067294): Remove this after resolving.
     devil_path = self.m.path['checkout'].join('third_party', 'catapult',
                                               'devil')
-    self.m.python.inline(
-        'initialize devil',
-        """
-        import sys
-        sys.path.append(sys.argv[1])
-        from devil import devil_env
-        devil_env.config.Initialize()
-        devil_env.config.PrefetchPaths(dependencies=['adb'])
-        """,
-        args=[devil_path])
+    cmd = ['python3', self.resource('initialize_devil.py'), devil_path]
+    self.m.step('initialize devil', cmd)
     self.m.adb.set_adb_path(
         devil_path.join('bin', 'deps', 'linux2', 'x86_64', 'bin', 'adb'))
 
