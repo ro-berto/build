@@ -20,7 +20,6 @@ DEPS = [
     'recipe_engine/legacy_annotation',
     'recipe_engine/path',
     'recipe_engine/properties',
-    'recipe_engine/python',
     'recipe_engine/raw_io',
     'recipe_engine/resultdb',
     'recipe_engine/step',

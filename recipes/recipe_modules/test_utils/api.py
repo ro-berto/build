@@ -450,10 +450,11 @@ class TestUtilsApi(recipe_api.RecipeApi):
                 tests_to_check, key=lambda d: sorted(six.iteritems(d))),
     }
 
-    result = self.m.python(
+    result = self.m.step(
         'query known flaky failures on CQ',
-        self.resource('query_cq_flakes.py'),
-        args=[
+        [
+            'python',
+            self.resource('query_cq_flakes.py'),
             '--input-path',
             self.m.json.input(flakes_input),
             '--output-path',
