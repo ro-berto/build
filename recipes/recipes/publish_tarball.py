@@ -26,7 +26,6 @@ DEPS = [
     'recipe_engine/scheduler',
     'recipe_engine/platform',
     'recipe_engine/properties',
-    'recipe_engine/python',
     'recipe_engine/raw_io',
     'recipe_engine/step',
 ]
@@ -74,8 +73,8 @@ def export_tarball(api, args, source, destination):
   try:
     temp_dir = api.path.mkdtemp('export_tarball')
     with api.context(cwd=temp_dir):
-      api.python('export_tarball', api.chromium.resource('export_tarball.py'),
-                 args)
+      api.step('export_tarball',
+               ['python', api.chromium.resource('export_tarball.py')] + args)
     gsutil_upload(
         api,
         api.path.join(temp_dir, source),
@@ -83,13 +82,17 @@ def export_tarball(api, args, source, destination):
         destination,
         args=['-a', 'public-read'])
 
-    hashes_result = api.python(
+    hashes_result = api.step(
         'generate_hashes',
-        api.chromium.resource('generate_hashes.py'),
-        [api.path.join(temp_dir, source),
-         api.raw_io.output()],
+        [
+            'python',
+            api.chromium.resource('generate_hashes.py'),
+            api.path.join(temp_dir, source),
+            api.raw_io.output(),
+        ],
         step_test_data=lambda: api.raw_io.test_api.output(
-            'md5  164ebd6889588da166a52ca0d57b9004  bash'))
+            'md5  164ebd6889588da166a52ca0d57b9004  bash'),
+    )
     gsutil_upload(
         api,
         api.raw_io.input(hashes_result.raw_io.output),
@@ -196,11 +199,15 @@ def export_nacl_tarball(api, version):
   with copytree_checkout(api) as dest_dir:
     # Based on instructions from https://sites.google.com/a/chromium.org/dev/
     # nativeclient/pnacl/building-pnacl-components-for-distribution-packagers
-    api.python(
-        'download pnacl toolchain dependencies',
+    api.step('download pnacl toolchain dependencies', [
+        'python',
         api.path.join(dest_dir, 'native_client', 'toolchain_build',
                       'toolchain_build_pnacl.py'),
-        ['--verbose', '--sync', '--sync-only', '--disable-git-cache'])
+        '--verbose',
+        '--sync',
+        '--sync-only',
+        '--disable-git-cache',
+    ])
 
     export_tarball(
         api,
@@ -217,28 +224,32 @@ def export_nacl_tarball(api, version):
 
 @recipe_api.composite_step
 def fetch_pgo_profiles(api):
-  pgo_script_path = api.path['checkout'].join('tools', 'update_pgo_profiles.py')
-  pgo_script_args = [
-      '--target=linux', 'update',
-      '--gs-url-base=chromium-optimization-profiles/pgo_profiles'
+  cmd = [
+      'python',
+      api.path['checkout'].join('tools', 'update_pgo_profiles.py'),
+      '--target=linux',
+      'update',
+      '--gs-url-base=chromium-optimization-profiles/pgo_profiles',
   ]
-  api.python('fetch Linux PGO profiles', pgo_script_path, pgo_script_args)
+  api.step('fetch Linux PGO profiles', cmd)
 
 
 @recipe_api.composite_step
 def fetch_afdo_profile(api):
   android_profile_path = api.path['checkout'].join('chrome', 'android',
                                                    'profiles')
-  afdo_script_path = api.path['checkout'].join(
-      'tools', 'download_optimization_profile.py')
-  afdo_script_args = [
+  cmd = [
+      'python',
+      api.path['checkout'].join('tools', 'download_optimization_profile.py'),
       '--newest_state',
-      android_profile_path.join('newest.txt'), '--local_state',
-      android_profile_path.join('local.txt'), '--output_name',
+      android_profile_path.join('newest.txt'),
+      '--local_state',
+      android_profile_path.join('local.txt'),
+      '--output_name',
       android_profile_path.join('afdo.prof'),
-      '--gs_url_base=chromeos-prebuilt/afdo-job/llvm'
+      '--gs_url_base=chromeos-prebuilt/afdo-job/llvm',
   ]
-  api.python('fetch android AFDO profile', afdo_script_path, afdo_script_args)
+  api.step('fetch android AFDO profile', cmd)
 
 
 def trigger_publish_tarball_jobs(api):
@@ -290,9 +301,12 @@ def publish_tarball(api):
                                          'i18n_process_css_test.html')
   ])
 
-  api.python('Generate LASTCHANGE',
-             api.path['checkout'].join('build', 'util', 'lastchange.py'),
-             ['-o', api.path['checkout'].join('build', 'util', 'LASTCHANGE')])
+  api.step('Generate LASTCHANGE', [
+      'python',
+      api.path['checkout'].join('build', 'util', 'lastchange.py'),
+      '-o',
+      api.path['checkout'].join('build', 'util', 'LASTCHANGE'),
+  ])
 
   api.file.copy(
       'copy clang-format', api.chromium.resource('clang-format'),
@@ -319,16 +333,17 @@ def publish_tarball(api):
   node_modules_sha_path = api.path['checkout'].join('third_party', 'node',
                                                     'node_modules.tar.gz.sha1')
   if api.path.exists(node_modules_sha_path):
-    api.python('webui_node_modules',
-               api.depot_tools.download_from_google_storage_path, [
-                   '--no_resume',
-                   '--extract',
-                   '--no_auth',
-                   '--bucket',
-                   'chromium-nodejs',
-                   '-s',
-                   node_modules_sha_path,
-               ])
+    api.step('webui_node_modules', [
+        'python',
+        api.depot_tools.download_from_google_storage_path,
+        '--no_resume',
+        '--extract',
+        '--no_auth',
+        '--bucket',
+        'chromium-nodejs',
+        '-s',
+        node_modules_sha_path,
+    ])
 
   try:
     temp_dir = api.path.mkdtemp('gn')
@@ -346,8 +361,8 @@ def publish_tarball(api):
     api.step('checkout gn commit', ['git', '-C', git_root, 'checkout', commit])
 
     tools_gn = api.path['checkout'].join('tools', 'gn')
-    api.python('generate last_commit_position.h',
-               git_root.join('build', 'gen.py'))
+    api.step('generate last_commit_position.h',
+             ['python', git_root.join('build', 'gen.py')])
     api.file.remove('rm README.md', tools_gn.join('README.md'))
     for f in api.file.listdir(
         'listdir gn', git_root, test_data=['build', '.git']):
