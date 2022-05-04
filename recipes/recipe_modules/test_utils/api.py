@@ -343,6 +343,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
                   test_id=test_id,
                   variant_hash=results.variant_hash,
                   explanation_html=explanation_html,
+                  reason=test_result_pb2.ExonerationReason.NOT_CRITICAL,
               ))
       elif suffix == 'without patch':
         # Any unexpected failure in the "without patch" phase should be
@@ -367,6 +368,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
                   # TODO(crbug.com/1076096): add deep link to the Milo UI to
                   #  display the exonerated test results.
                   explanation_html=explanation_html,
+                  reason=test_result_pb2.ExonerationReason.OCCURS_ON_MAINLINE,
               ))
       # Any failure known by FindIt to be flaky should also be exonerated.
       elif suffix == 'with patch':
@@ -381,6 +383,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
                   # TODO(crbug.com/1076096): add deep link to the Milo UI to
                   #  display the exonerated test results.
                   explanation_html=explanation_html,
+                  reason=test_result_pb2.ExonerationReason.OCCURS_ON_OTHER_CLS,
               ))
 
     if exonerations:

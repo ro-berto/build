@@ -4458,7 +4458,7 @@
       }
     },
     "name": "exonerate unrelated test failures",
-    "stdin": "{\"invocation\": \"invocations/build:8945511751514863184\", \"requestId\": \"00000000-0000-0000-0000-000000001337\", \"requests\": [{\"testExoneration\": {\"explanationHtml\": \"The test failed in both (with patch) and (without patch) steps, so the CL is exonerated for the test failures.(https://source.chromium.org/chromium/chromium/tools/build/+/main:recipes/recipe_modules/chromium_tests/steps.py;drc=137053ea;l=907)\", \"testId\": \"Test.One\", \"variantHash\": \"blink_web_tests_hash\"}}]}",
+    "stdin": "{\"invocation\": \"invocations/build:8945511751514863184\", \"requestId\": \"00000000-0000-0000-0000-000000001337\", \"requests\": [{\"testExoneration\": {\"explanationHtml\": \"The test failed in both (with patch) and (without patch) steps, so the CL is exonerated for the test failures.(https://source.chromium.org/chromium/chromium/tools/build/+/main:recipes/recipe_modules/chromium_tests/steps.py;drc=137053ea;l=907)\", \"reason\": \"OCCURS_ON_MAINLINE\", \"testId\": \"Test.One\", \"variantHash\": \"blink_web_tests_hash\"}}]}",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
@@ -4469,6 +4469,7 @@
       "@@@STEP_LOG_LINE@json.input@    {@@@",
       "@@@STEP_LOG_LINE@json.input@      \"testExoneration\": {@@@",
       "@@@STEP_LOG_LINE@json.input@        \"explanationHtml\": \"The test failed in both (with patch) and (without patch) steps, so the CL is exonerated for the test failures.(https://source.chromium.org/chromium/chromium/tools/build/+/main:recipes/recipe_modules/chromium_tests/steps.py;drc=137053ea;l=907)\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"reason\": \"OCCURS_ON_MAINLINE\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"testId\": \"Test.One\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"variantHash\": \"blink_web_tests_hash\"@@@",
       "@@@STEP_LOG_LINE@json.input@      }@@@",
