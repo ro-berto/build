@@ -547,9 +547,10 @@ class BinarySizeApi(recipe_api.RecipeApi):
           'success': True,
           'failed_messages': [],
       })
-      step_result = self.m.python(
-          'Run Expectations Script' + suffix,
-          checker_script, [
+      step_result = self.m.step(
+          'Run Expectations Script' + suffix, [
+              'python',
+              checker_script,
               '--check-expectations',
               '--results-path',
               self.m.json.output(),
@@ -602,9 +603,10 @@ class BinarySizeApi(recipe_api.RecipeApi):
     # empty, then there are no expectation files regardless. If the problem is
     # more serious, it will be caught later in
     # _check_for_failed_expectation_files.
-    self.m.python(
-        'Clear Expectation Files',
-        checker_script, [
+    self.m.step(
+        'Clear Expectation Files', [
+            'python',
+            checker_script,
             '--clear-expectations',
             '--output-directory',
             self.m.chromium.output_dir,
