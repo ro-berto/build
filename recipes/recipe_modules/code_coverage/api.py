@@ -133,14 +133,23 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       gerrit_change = self.m.buildbucket.build.input.gerrit_changes[0]
       local_to_gerrit_diff_mapping_file = output_dir.join(
           constants.BOT_TO_GERRIT_LINE_NUM_MAPPING_FILE_NAME)
-      self.m.python(
+      self.m.step(
           'generate line number mapping from bot to Gerrit',
-          self.resource('rebase_line_number_from_bot_to_gerrit.py'),
-          args=[
-              '--host', gerrit_change.host, '--project', gerrit_change.project,
-              '--change', gerrit_change.change, '--patchset',
-              gerrit_change.patchset, '--src-path', self.m.path['checkout'],
-              '--output-file', local_to_gerrit_diff_mapping_file
+          [
+              'python',
+              self.resource('rebase_line_number_from_bot_to_gerrit.py'),
+              '--host',
+              gerrit_change.host,
+              '--project',
+              gerrit_change.project,
+              '--change',
+              gerrit_change.change,
+              '--patchset',
+              gerrit_change.patchset,
+              '--src-path',
+              self.m.path['checkout'],
+              '--output-file',
+              local_to_gerrit_diff_mapping_file,
           ] + self._eligible_files,
           stdout=self.m.json.output())
       self._bot_to_gerrit_mapping_file = local_to_gerrit_diff_mapping_file
@@ -181,13 +190,14 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     ]
 
     if self.platform == 'android':
-      step_result = self.m.python(
-          'Get jacoco and jar files for java coverage',
+      step_result = self.m.step('Get jacoco and jar files for java coverage', [
+          'python',
           self.resource('get_jacoco_and_jar_files_for_java.py'),
-          args=[
-              '--sources-json-dir', self.m.chromium.output_dir, '--output-json',
-              self.m.json.output()
-          ])
+          '--sources-json-dir',
+          self.m.chromium.output_dir,
+          '--output-json',
+          self.m.json.output(),
+      ])
       paths = step_result.json.output
 
       files.extend([self.m.path.abs_to_path(f) for f in paths])
@@ -213,14 +223,14 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     # The unstripped artifacts will be generated under lib.unstripped/ or
     # exe.unstripped/.
     if self.platform in ('android', 'fuchsia'):
-      step_result = self.m.python(
-          'Get all unstripped artifacts paths',
+      step_result = self.m.step('Get all unstripped artifacts paths', [
+          'python',
           self.resource('get_unstripped_paths.py'),
-          args=[
-              '--chromium-output-dir', self.m.chromium.output_dir,
-              '--output-json',
-              self.m.json.output()
-          ])
+          '--chromium-output-dir',
+          self.m.chromium.output_dir,
+          '--output-json',
+          self.m.json.output(),
+      ])
       unstripped_paths = step_result.json.output
 
     for t in tests:
@@ -396,10 +406,11 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     self.m.file.ensure_directory('create .code-coverage',
                                  self.m.path['checkout'].join('.code-coverage'))
 
-    self.m.python(
+    self.m.step(
         'save paths of affected files',
-        self.resource('write_paths_to_instrument.py'),
-        args=[
+        [
+            'python',
+            self.resource('write_paths_to_instrument.py'),
             '--write-to',
             self.m.path['checkout'].join('.code-coverage',
                                          'files_to_instrument.txt'),
@@ -452,15 +463,14 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           self._current_processing_test_type = test_type
           self.process_java_coverage_data()
       finally:
-        self.m.python(
-            'Clean up Java coverage files',
+        self.m.step('Clean up Java coverage files', [
+            'python',
             self.resource('clean_up_java_coverage_files.py'),
-            args=[
-                '--sources-json-dir',
-                self.m.chromium.output_dir,
-                '--java-coverage-dir',
-                self.m.chromium.output_dir.join('coverage'),
-            ])
+            '--sources-json-dir',
+            self.m.chromium.output_dir,
+            '--java-coverage-dir',
+            self.m.chromium.output_dir.join('coverage'),
+        ])
 
     if self.use_javascript_coverage:
       self.process_javascript_coverage_data()
@@ -573,7 +583,9 @@ class CodeCoverageApi(recipe_api.RecipeApi):
                           self._current_processing_test_type):
       try:
         coverage_dir = self.m.chromium.output_dir.join('coverage')
-        args = [
+        cmd = [
+            'python',
+            self.resource('generate_coverage_metadata_for_java.py'),
             '--src-path',
             self.m.path['checkout'],
             '--output-dir',
@@ -585,28 +597,24 @@ class CodeCoverageApi(recipe_api.RecipeApi):
         ]
 
         if self._is_per_cl_coverage:
-          args.append('--source-files')
-          args.extend(self._eligible_files)
-          args.extend(['--diff-mapping-path', self.bot_to_gerrit_mapping_file])
+          cmd.append('--source-files')
+          cmd.extend(self._eligible_files)
+          cmd.extend(['--diff-mapping-path', self.bot_to_gerrit_mapping_file])
         else:
           dir_metadata_path = self._generate_dir_metadata()
-          args.extend([
+          cmd.extend([
               '--dir-metadata-path',
               dir_metadata_path,
           ])
-        args.extend([
+        cmd.extend([
             '--exec-filename-pattern',
             ("%s\.exec" % constants.PLATFORM_TO_TARGET_NAME_PATTERN_MAP[
                 self.platform][self._current_processing_test_type])
         ])
-        args.extend(['--exclusion-pattern', constants.EXCLUDED_FILE_REGEX])
-        args.append('--third-party-inclusion-subdirs')
-        args.extend(constants.INCLUDED_THIRD_PARTY_SUBDIRS)
-        self.m.python(
-            'Generate Java coverage metadata',
-            self.resource('generate_coverage_metadata_for_java.py'),
-            args=args,
-            **kwargs)
+        cmd.extend(['--exclusion-pattern', constants.EXCLUDED_FILE_REGEX])
+        cmd.append('--third-party-inclusion-subdirs')
+        cmd.extend(constants.INCLUDED_THIRD_PARTY_SUBDIRS)
+        self.m.step('Generate Java coverage metadata', cmd, **kwargs)
 
         metadata_path = coverage_dir.join('all.json.gz')
         if not self.m.path.exists(metadata_path):
@@ -627,7 +635,9 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     with self.m.step.nest('process javascript coverage'):
       try:
         coverage_dir = self.m.chromium.output_dir.join('devtools_code_coverage')
-        args = [
+        cmd = [
+            'python',
+            self.resource('generate_coverage_metadata_for_javascript.py'),
             '--src-path',
             self.m.path['checkout'],
             '--output-dir',
@@ -637,20 +647,17 @@ class CodeCoverageApi(recipe_api.RecipeApi):
         ]
 
         if self._is_per_cl_coverage:
-          args.append('--source-files')
-          args.extend(self._eligible_files)
-          args.extend(['--diff-mapping-path', self.bot_to_gerrit_mapping_file])
+          cmd.append('--source-files')
+          cmd.extend(self._eligible_files)
+          cmd.extend(['--diff-mapping-path', self.bot_to_gerrit_mapping_file])
         else:
           dir_metadata_path = self._generate_dir_metadata()
-          args.extend([
+          cmd.extend([
               '--dir-metadata-path',
               dir_metadata_path,
           ])
 
-        self.m.python(
-            'Generate JavaScript coverage metadata',
-            self.resource('generate_coverage_metadata_for_javascript.py'),
-            args=args)
+        self.m.step('Generate JavaScript coverage metadata', cmd)
 
         metadata_path = coverage_dir.join('all.json.gz')
         self._persist_coverage_data_as_json(
@@ -733,24 +740,28 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       # Only gets binaries with valid coverage data for per-cl coverage.
       return binaries
 
-    args = [
-        '--profdata-path', profdata_path, '--llvm-cov', self.cov_executable,
+    cmd = [
+        'python',
+        self.resource('get_binaries_with_valid_coverage_data.py'),
+        '--profdata-path',
+        profdata_path,
+        '--llvm-cov',
+        self.cov_executable,
         '--output-json',
-        self.m.json.output()
+        self.m.json.output(),
     ]
 
-    args.extend(binaries)
+    cmd.extend(binaries)
 
     if self.platform == 'ios':
-      args.extend(['--arch', 'x86_64'])
+      cmd.extend(['--arch', 'x86_64'])
 
-    step_result = self.m.python(
+    step_result = self.m.step(
         'filter binaries with valid data for %s binaries' % len(binaries),
-        self.resource('get_binaries_with_valid_coverage_data.py'),
-        args=args,
-        step_test_data=lambda: self.m.json.test_api.output([
-            '/path/to/base_unittests',
-            '/path/to/content_shell',]))
+        cmd,
+        step_test_data=lambda: self.m.json.test_api.output(
+            ['/path/to/base_unittests', '/path/to/content_shell']),
+    )
     return step_result.json.output
 
   def _generate_and_upload_html_report_on_trybot(self, binaries, profdata_path):
@@ -764,24 +775,32 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       # Only upload html report for CQ coverage bots.
       return
 
-    args = [
-        '--report-directory', self.report_dir, '--profdata-path', profdata_path,
-        '--llvm-cov', self.cov_executable, '--compilation-directory',
-        self.m.chromium.output_dir, '--binaries'
+    cmd = [
+        'python',
+        self.resource('make_report.py'),
+        '--report-directory',
+        self.report_dir,
+        '--profdata-path',
+        profdata_path,
+        '--llvm-cov',
+        self.cov_executable,
+        '--compilation-directory',
+        self.m.chromium.output_dir,
+        '--binaries',
     ]
-    args.extend(binaries)
-    args.append('--sources')
-    args.extend([self.m.path['checkout'].join(s) for s in self._eligible_files])
+    cmd.extend(binaries)
+    cmd.append('--sources')
+    cmd.extend([self.m.path['checkout'].join(s) for s in self._eligible_files])
 
     if self.platform == 'ios':
-      args.extend(['--arch', 'x86_64'])
+      cmd.extend(['--arch', 'x86_64'])
 
-    self.m.python(
-        'generate html report for %s test coverage in %d tests'
-        % (self._current_processing_test_type,
-           len(self.m.profiles.profile_subdirs)),
-        self.resource('make_report.py'),
-        args=args)
+    self.m.step(
+        ('generate html report for %s test coverage in %d tests' %
+         (self._current_processing_test_type,
+          len(self.m.profiles.profile_subdirs))),
+        cmd,
+    )
 
     html_report_gs_path = self._compose_gs_path_for_coverage_data(
         data_type='html_report',
@@ -901,7 +920,9 @@ class CodeCoverageApi(recipe_api.RecipeApi):
 
   def _generate_and_upload_metadata(self, binaries, profdata_path):
     """Generates the coverage info in metadata format."""
-    args = [
+    cmd = [
+        'vpython',
+        self.resource('generate_coverage_metadata.py'),
         '--build-dir',
         self.m.chromium.output_dir,
         '--src-path',
@@ -914,29 +935,26 @@ class CodeCoverageApi(recipe_api.RecipeApi):
         self.cov_executable,
         '--binaries',
     ]
-    args.extend(binaries)
+    cmd.extend(binaries)
     if self._is_per_cl_coverage:
-      args.append('--sources')
-      args.extend(self._eligible_files)
-      args.extend(['--diff-mapping-path', self.bot_to_gerrit_mapping_file])
+      cmd.append('--sources')
+      cmd.extend(self._eligible_files)
+      cmd.extend(['--diff-mapping-path', self.bot_to_gerrit_mapping_file])
     else:
-      args.extend(['--exclusion-pattern', constants.EXCLUDED_FILE_REGEX])
-      args.append('--third-party-inclusion-subdirs')
-      args.extend(constants.INCLUDED_THIRD_PARTY_SUBDIRS)
+      cmd.extend(['--exclusion-pattern', constants.EXCLUDED_FILE_REGEX])
+      cmd.append('--third-party-inclusion-subdirs')
+      cmd.extend(constants.INCLUDED_THIRD_PARTY_SUBDIRS)
       if self._include_component_mapping:
-        args.extend(['--dir-metadata-path', self._generate_dir_metadata()])
+        cmd.extend(['--dir-metadata-path', self._generate_dir_metadata()])
 
     if self.platform == 'ios':
-      args.extend(['--arch', 'x86_64'])
+      cmd.extend(['--arch', 'x86_64'])
 
     try:
-      self.m.python(
+      self.m.step(
           'generate metadata for %s test coverage in %d tests' %
           (self._current_processing_test_type,
-           len(self.m.profiles.profile_subdirs)),
-          self.resource('generate_coverage_metadata.py'),
-          args=args,
-          venv=True)
+           len(self.m.profiles.profile_subdirs)), cmd)
     finally:
       # Upload data to zoss to show it on code search
       if self._export_coverage_to_zoss:
