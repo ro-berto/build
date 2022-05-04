@@ -1012,17 +1012,16 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       for test in (tests or []):
         for set_up_step in (test.set_up or []):
-          self.m.python(
-              set_up_step.name, set_up_step.script, args=set_up_step.args)
+          self.m.step(set_up_step.name,
+                      ['python', set_up_step.script] + list(set_up_step.args))
       try:
         yield
       finally:
         for test in (tests or []):
           for tear_down_step in (test.tear_down or []):
-            self.m.python(
+            self.m.step(
                 tear_down_step.name,
-                tear_down_step.script,
-                args=tear_down_step.args)
+                (['python', tear_down_step.script] + list(tear_down_step.args)))
 
         if self.m.platform.is_win:
           self.m.chromium.process_dumps()
@@ -1297,11 +1296,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     TODO:
       * Only gather targets for the scripts that we might concievably run.
     """
-    result = self.m.python(
+    result = self.m.step(
         name='get compile targets for scripts',
-        script=self.m.path['checkout'].join('testing', 'scripts',
-                                            'get_compile_targets.py'),
-        args=[
+        cmd=[
+            'python',
+            self.m.path['checkout'].join('testing', 'scripts',
+                                         'get_compile_targets.py'),
             '--output',
             self.m.json.output(),
             '--',

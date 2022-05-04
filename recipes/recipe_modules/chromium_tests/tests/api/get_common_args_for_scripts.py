@@ -9,17 +9,17 @@ DEPS = [
     'chromium_tests',
     'chromium_tests_builder_config',
     'recipe_engine/path',
-    'recipe_engine/python',
+    'recipe_engine/step',
 ]
 
 
 def RunSteps(api):
   _, builder_config = api.chromium_tests_builder_config.lookup_builder()
   api.chromium_tests.configure_build(builder_config)
-  api.python(
+  api.step(
       'sample script',
-      api.path['checkout'].join('testing', 'scripts', 'example.py'),
-      api.chromium_tests.get_common_args_for_scripts(),
+      ['python', api.path['checkout'].join('testing', 'scripts', 'example.py')]
+      + api.chromium_tests.get_common_args_for_scripts(),
   )
 
 
