@@ -28,7 +28,7 @@ TEST_HISTORY_QUERY = """
       test_id,
       variant_hash,
       variant,
-      CONTAINS_SUBSTR(tag, \'{})\') AS is_experimental,
+      CONTAINS_SUBSTR(tag, \'{}\') AS is_experimental,
       ARRAY_AGG(invocation) AS invocation
     FROM
       `chrome-flakiness.flake_endorser.try_historical_test_data_7_days`
