@@ -51,7 +51,9 @@ BUILDERS = freeze({
                         'BUILD_CONFIG': 'Release',
                         'TARGET_PLATFORM': 'mac',
                         'TARGET_BITS': 64,
-                    },),
+                    },
+                    gclient_apply_config=['fuchsia'],
+                ),
             'mac_upload_clang_arm':
                 chromium.BuilderSpec.create(
                     chromium_config_kwargs={
@@ -82,9 +84,6 @@ def RunSteps(api):
 
   api.step('update win toolchain', [
       'python', api.path['checkout'].join('build', 'vs_toolchain.py'), 'update'
-  ])
-  api.step('update fuchsia sdk', [
-      'python3', api.path['checkout'].join('build', 'fuchsia', 'update_sdk.py')
   ])
 
   with api.osx_sdk('ios'):

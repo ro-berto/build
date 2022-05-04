@@ -102,7 +102,9 @@
       "@@@STEP_LOG_LINE@config@  \"src_root\": null, @@@",
       "@@@STEP_LOG_LINE@config@  \"target_cpu\": [], @@@",
       "@@@STEP_LOG_LINE@config@  \"target_cpu_only\": false, @@@",
-      "@@@STEP_LOG_LINE@config@  \"target_os\": [], @@@",
+      "@@@STEP_LOG_LINE@config@  \"target_os\": [@@@",
+      "@@@STEP_LOG_LINE@config@    \"fuchsia\"@@@",
+      "@@@STEP_LOG_LINE@config@  ], @@@",
       "@@@STEP_LOG_LINE@config@  \"target_os_only\": false, @@@",
       "@@@STEP_LOG_LINE@config@  \"with_branch_heads\": false, @@@",
       "@@@STEP_LOG_LINE@config@  \"with_tags\": false@@@",
@@ -171,7 +173,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]\ntarget_os = ['fuchsia']",
       "--patch_root",
       "src",
       "--revision_mapping_file",
@@ -373,25 +375,6 @@
       }
     },
     "name": "update win toolchain"
-  },
-  {
-    "cmd": [
-      "python3",
-      "[CACHE]/builder/src/build/fuchsia/update_sdk.py"
-    ],
-    "luci_context": {
-      "realm": {
-        "name": "chromium:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "update fuchsia sdk"
   },
   {
     "cmd": [

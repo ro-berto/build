@@ -380,25 +380,6 @@
   {
     "cmd": [
       "python3",
-      "[CACHE]/builder/src/build/fuchsia/update_sdk.py"
-    ],
-    "luci_context": {
-      "realm": {
-        "name": "chromium:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "update fuchsia sdk"
-  },
-  {
-    "cmd": [
-      "python3",
       "[CACHE]/builder/src/tools/clang/scripts/package.py",
       "--upload"
     ],
