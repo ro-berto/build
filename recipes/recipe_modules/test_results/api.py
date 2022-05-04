@@ -38,7 +38,9 @@ class TestResultsApi(recipe_api.RecipeApi):
     builder_group = self.m.builder_group.for_current
     assert builder_group
     try:
-      upload_test_results_args = [
+      cmd = [
+          'python',
+          self.resource('upload_test_results.py'),
           '--input-json',
           results_file,
           '--builder-group',
@@ -53,20 +55,13 @@ class TestResultsApi(recipe_api.RecipeApi):
           chrome_revision,
       ]
       if self.m.buildbucket.build_id is not None:
-        upload_test_results_args.extend(['--build-id',
-                                         self.m.buildbucket.build_id])
+        cmd.extend(['--build-id', self.m.buildbucket.build_id])
 
       test_results_server = test_results_server or self.c.test_results_server
       if test_results_server:
-        upload_test_results_args.extend([
-            '--test-results-server',
-            test_results_server
-        ])
+        cmd.extend(['--test-results-server', test_results_server])
 
-      return self.m.python(
-          name='Upload to test-results [%s]' % test_type,
-          script=self.resource('upload_test_results.py'),
-          args=upload_test_results_args)
+      return self.m.step('Upload to test-results [%s]' % test_type, cmd)
     except self.m.step.StepFailure as f:
       if downgrade_error_to_warning:
         f.result.presentation.status = self.m.step.WARNING
