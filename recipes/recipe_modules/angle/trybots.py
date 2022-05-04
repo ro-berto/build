@@ -229,11 +229,6 @@ _SPEC = {
                 try_spec.TryMirror.create(
                     builder_group='angle',
                     buildername='win-x86-test',
-                    tester='win7-x86-amd',
-                ),
-                try_spec.TryMirror.create(
-                    builder_group='angle',
-                    buildername='win-x86-test',
                     tester='win10-x86-swiftshader',
                 ),
             ],

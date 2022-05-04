@@ -170,8 +170,6 @@ _SPEC = {
         _create_builder_config('win', 'Release', 64, is_clang=False),
     'winuwp-dbg-compile':
         _create_builder_config('win', 'Debug', 64, is_clang=False),
-    'win7-x86-amd':
-        _create_tester_config('win', 32, 'win-x86-test'),
     'win10-x64-intel':
         _create_tester_config('win', 64, 'win-test'),
     'win10-x64-intel-perf':
