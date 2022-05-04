@@ -121,13 +121,20 @@ class CronetApi(recipe_api.RecipeApi):
     # Prevent clobbering by clearing landmines that would otherwise go off
     # when runhooks is run.It's safe to ignore landmines now because we just
     # did a clobber build.
-    cmd = [
-        'python3',
-        self.resource('clear_landmines.py'),
-        self.m.path['checkout'].join('build', 'get_landmines.py'),
-        self.m.path['checkout'].join('.landmines'),
-    ]
-    self.m.step('clear landmines', cmd)
+    self.m.python.inline(
+        'clear landmines',
+        """
+        import subprocess, sys
+        proc = subprocess.Popen(
+            sys.argv[1], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        out, err = proc.communicate()
+        with open(sys.argv[2], 'w') as f:
+          f.writelines(out)
+        """,
+        args=[
+            self.m.path['checkout'].join('build', 'get_landmines.py'),
+            self.m.path['checkout'].join('.landmines')
+        ])
     raw_result = self.build(
         targets=['quic_server'],
         builder_id=chromium.BuilderId.create_for_group('chromium.linux',
@@ -138,15 +145,12 @@ class CronetApi(recipe_api.RecipeApi):
       return raw_result
 
     data_dir = self.m.path.mkdtemp('perf_data')
-    self.m.step('performance test', [
-        'python',
+    args = ['--output-format', 'histograms', '--output-dir', data_dir]
+    self.m.python(
+        'performance test',
         self.m.path['checkout'].join('components', 'cronet', 'android', 'test',
                                      'javaperftests', 'run.py'),
-        '--output-format',
-        'histograms',
-        '--output-dir',
-        data_dir,
-    ])
+        args=args)
 
     oauth_token = self.m.puppet_service_account.get_access_token('cronet-perf')
 
