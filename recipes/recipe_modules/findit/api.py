@@ -59,11 +59,16 @@ class FinditApi(recipe_api.RecipeApi):
       self.m.chromium.mb_gen(builder_id, name='generate_build_files')
 
     # Run ninja to check existences of targets.
-    args = ['--target-build-dir', self.m.chromium.output_dir]
-    args.extend(['--ninja-path', self.m.depot_tools.ninja_path])
+    cmd = [
+        'python',
+        self.resource('check_target_existence.py'),
+        '--target-build-dir',
+        self.m.chromium.output_dir,
+        '--ninja-path',
+        self.m.depot_tools.ninja_path,
+    ]
     for target in targets:
-      args.extend(['--target', target])
-    args.extend(['--json-output', self.m.json.output()])
-    step = self.m.python(
-        'check_targets', self.resource('check_target_existence.py'), args=args)
+      cmd.extend(['--target', target])
+    cmd.extend(['--json-output', self.m.json.output()])
+    step = self.m.step('check_targets', cmd)
     return step.json.output['found']
