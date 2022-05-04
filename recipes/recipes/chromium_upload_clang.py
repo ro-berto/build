@@ -20,7 +20,6 @@ DEPS = [
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
-  'recipe_engine/python',
   'recipe_engine/runtime',
   'recipe_engine/step',
 ]
@@ -81,8 +80,9 @@ def RunSteps(api):
 
   api.chromium_checkout.ensure_checkout(bot_config)
 
-  api.python('update win toolchain',
-      api.path['checkout'].join('build', 'vs_toolchain.py'), ['update'])
+  api.step('update win toolchain', [
+      'python', api.path['checkout'].join('build', 'vs_toolchain.py'), 'update'
+  ])
   api.step('update fuchsia sdk', [
       'python3', api.path['checkout'].join('build', 'fuchsia', 'update_sdk.py')
   ])
