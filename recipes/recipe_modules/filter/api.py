@@ -255,13 +255,13 @@ class FilterApi(recipe_api.RecipeApi):
             build_dir=build_output_dir,
             phase=phase)
       else:
-        step_result = self.m.python(
-            'analyze',
-            self.m.path['checkout'].join('build', 'gyp_chromium'),
-            args=[
+        step_result = self.m.step(
+            'analyze', [
+                'python',
+                self.m.path['checkout'].join('build', 'gyp_chromium'),
                 '--analyzer',
                 self.m.json.input(analyze_input),
-                self.m.json.output()
+                self.m.json.output(),
             ],
             step_test_data=lambda: self.m.json.test_api.output(test_output),
             **kwargs)
