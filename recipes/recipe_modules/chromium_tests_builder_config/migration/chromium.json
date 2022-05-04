@@ -3588,7 +3588,6 @@
       "chromium.updater:win-updater-builder-dbg",
       "chromium.updater:win10-updater-tester-dbg",
       "chromium.updater:win10-updater-tester-dbg-uac",
-      "chromium.updater:win7-updater-tester-dbg-uac",
       "tryserver.chromium.updater:win-updater-try-builder-dbg"
     ]
   },
@@ -3605,7 +3604,6 @@
       "chromium.updater:win-updater-builder-dbg",
       "chromium.updater:win10-updater-tester-dbg",
       "chromium.updater:win10-updater-tester-dbg-uac",
-      "chromium.updater:win7-updater-tester-dbg-uac",
       "tryserver.chromium.updater:win-updater-try-builder-dbg"
     ]
   },
@@ -3614,7 +3612,6 @@
       "chromium.updater:win-updater-builder-dbg",
       "chromium.updater:win10-updater-tester-dbg",
       "chromium.updater:win10-updater-tester-dbg-uac",
-      "chromium.updater:win7-updater-tester-dbg-uac",
       "tryserver.chromium.updater:win-updater-try-builder-dbg"
     ]
   },
@@ -3628,8 +3625,7 @@
   },
   "chromium.updater:win32-updater-builder-dbg": {
     "builders": [
-      "chromium.updater:win32-updater-builder-dbg",
-      "chromium.updater:win7(32)-updater-tester-dbg"
+      "chromium.updater:win32-updater-builder-dbg"
     ]
   },
   "chromium.updater:win32-updater-builder-rel": {
@@ -3638,25 +3634,10 @@
       "chromium.updater:win7(32)-updater-tester-rel"
     ]
   },
-  "chromium.updater:win7(32)-updater-tester-dbg": {
-    "builders": [
-      "chromium.updater:win32-updater-builder-dbg",
-      "chromium.updater:win7(32)-updater-tester-dbg"
-    ]
-  },
   "chromium.updater:win7(32)-updater-tester-rel": {
     "builders": [
       "chromium.updater:win32-updater-builder-rel",
       "chromium.updater:win7(32)-updater-tester-rel"
-    ]
-  },
-  "chromium.updater:win7-updater-tester-dbg-uac": {
-    "builders": [
-      "chromium.updater:win-updater-builder-dbg",
-      "chromium.updater:win10-updater-tester-dbg",
-      "chromium.updater:win10-updater-tester-dbg-uac",
-      "chromium.updater:win7-updater-tester-dbg-uac",
-      "tryserver.chromium.updater:win-updater-try-builder-dbg"
     ]
   },
   "chromium.updater:win7-updater-tester-rel": {
@@ -3733,8 +3714,7 @@
   "chromium.webrtc.fyi:WebRTC Chromium FYI Win Builder": {
     "builders": [
       "chromium.webrtc.fyi:WebRTC Chromium FYI Win Builder",
-      "chromium.webrtc.fyi:WebRTC Chromium FYI Win10 Tester",
-      "chromium.webrtc.fyi:WebRTC Chromium FYI Win7 Tester"
+      "chromium.webrtc.fyi:WebRTC Chromium FYI Win10 Tester"
     ]
   },
   "chromium.webrtc.fyi:WebRTC Chromium FYI Win Builder (dbg)": {
@@ -3745,15 +3725,7 @@
   "chromium.webrtc.fyi:WebRTC Chromium FYI Win10 Tester": {
     "builders": [
       "chromium.webrtc.fyi:WebRTC Chromium FYI Win Builder",
-      "chromium.webrtc.fyi:WebRTC Chromium FYI Win10 Tester",
-      "chromium.webrtc.fyi:WebRTC Chromium FYI Win7 Tester"
-    ]
-  },
-  "chromium.webrtc.fyi:WebRTC Chromium FYI Win7 Tester": {
-    "builders": [
-      "chromium.webrtc.fyi:WebRTC Chromium FYI Win Builder",
-      "chromium.webrtc.fyi:WebRTC Chromium FYI Win10 Tester",
-      "chromium.webrtc.fyi:WebRTC Chromium FYI Win7 Tester"
+      "chromium.webrtc.fyi:WebRTC Chromium FYI Win10 Tester"
     ]
   },
   "chromium.webrtc.fyi:WebRTC Chromium FYI ios-device": {
@@ -3805,22 +3777,13 @@
   "chromium.webrtc:WebRTC Chromium Win Builder": {
     "builders": [
       "chromium.webrtc:WebRTC Chromium Win Builder",
-      "chromium.webrtc:WebRTC Chromium Win10 Tester",
-      "chromium.webrtc:WebRTC Chromium Win7 Tester"
+      "chromium.webrtc:WebRTC Chromium Win10 Tester"
     ]
   },
   "chromium.webrtc:WebRTC Chromium Win10 Tester": {
     "builders": [
       "chromium.webrtc:WebRTC Chromium Win Builder",
-      "chromium.webrtc:WebRTC Chromium Win10 Tester",
-      "chromium.webrtc:WebRTC Chromium Win7 Tester"
-    ]
-  },
-  "chromium.webrtc:WebRTC Chromium Win7 Tester": {
-    "builders": [
-      "chromium.webrtc:WebRTC Chromium Win Builder",
-      "chromium.webrtc:WebRTC Chromium Win10 Tester",
-      "chromium.webrtc:WebRTC Chromium Win7 Tester"
+      "chromium.webrtc:WebRTC Chromium Win10 Tester"
     ]
   },
   "chromium.win:WebKit Win10": {
@@ -5726,7 +5689,6 @@
       "chromium.updater:win-updater-builder-dbg",
       "chromium.updater:win10-updater-tester-dbg",
       "chromium.updater:win10-updater-tester-dbg-uac",
-      "chromium.updater:win7-updater-tester-dbg-uac",
       "tryserver.chromium.updater:win-updater-try-builder-dbg"
     ]
   },

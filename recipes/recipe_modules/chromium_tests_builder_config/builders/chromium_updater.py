@@ -86,11 +86,6 @@ SPEC = {
     # win debug builders and testers
     'win-updater-builder-dbg':
         CreateBuilderConfig('win'),
-    'win7-updater-tester-dbg-uac':
-        CreateBuilderConfig(
-            'win',
-            execution_mode=builder_spec.TEST,
-            parent_buildername='win-updater-builder-dbg'),
     'win10-updater-tester-dbg':
         CreateBuilderConfig(
             'win',
@@ -104,11 +99,6 @@ SPEC = {
     # win32 debug builders and testers
     'win32-updater-builder-dbg':
         CreateBuilderConfig('win'),
-    'win7(32)-updater-tester-dbg':
-        CreateBuilderConfig(
-            'win',
-            execution_mode=builder_spec.TEST,
-            parent_buildername='win32-updater-builder-dbg'),
     # mac debug builders and testers
     'mac-updater-builder-dbg':
         CreateBuilderConfig('mac'),

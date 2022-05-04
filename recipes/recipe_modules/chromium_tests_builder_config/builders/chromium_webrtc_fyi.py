@@ -250,19 +250,4 @@ SPEC = {
             test_results_config='public_server',
             simulation_platform='win',
         ),
-    'WebRTC Chromium FYI Win7 Tester':
-        _chromium_webrtc_fyi_spec(
-            execution_mode=builder_spec.TEST,
-            chromium_apply_config=['dcheck', 'mb'],
-            chromium_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 32
-            },
-            gclient_apply_config=['webrtc_test_resources'],
-            gclient_config='chromium_webrtc_tot',
-            parent_buildername='WebRTC Chromium FYI Win Builder',
-            test_results_config='public_server',
-            simulation_platform='win',
-        ),
 }
