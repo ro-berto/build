@@ -3903,12 +3903,6 @@
       "chromium:win-archive-tagged"
     ]
   },
-  "chromium:win-official": {
-    "builders": [
-      "chromium:win-official",
-      "tryserver.chromium:win-official"
-    ]
-  },
   "chromium:win32-archive-dbg": {
     "builders": [
       "chromium:win32-archive-dbg"
@@ -5846,12 +5840,6 @@
     "builders": [
       "chromium:mac-official",
       "tryserver.chromium:mac-official"
-    ]
-  },
-  "tryserver.chromium:win-official": {
-    "builders": [
-      "chromium:win-official",
-      "tryserver.chromium:win-official"
     ]
   }
 }
