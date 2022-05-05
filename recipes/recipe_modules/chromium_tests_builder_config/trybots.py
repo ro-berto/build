@@ -838,6 +838,7 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * linux-chromeos-inverse-fieldtrials-fyi-rel
     # * linux-chromeos-rel
     # * linux-chromeos-rel-rts
+    # * linux-lacros-dbg
     'tryserver.chromium.chromiumos': {
         'chromeos-amd64-generic-dbg':
             try_spec.TrySpec.create_for_single_mirror(
@@ -875,12 +876,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.chromiumos',
                 buildername='linux-chromeos-js-code-coverage',
-            ),
-        # TODO(crbug.com/1233247) Adds the CI tester when it's available.
-        'linux-lacros-dbg':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.chromiumos',
-                buildername='linux-lacros-dbg',
             ),
         'linux-lacros-rel':
             try_spec.TrySpec.create_for_single_mirror(

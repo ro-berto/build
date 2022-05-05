@@ -72,6 +72,7 @@ def _config(name,
 # * chromeos-amd64-generic-rel
 # * chromeos-arm-generic-rel
 # * chromeos-kevin-rel
+# * linux-lacros-dbg
 
 SPEC.update([
     _config(
@@ -97,7 +98,6 @@ SPEC.update([
         gclient_apply_config=['use_clang_coverage']),
     _config('linux-chromeos-annotator-rel'),
     _config('linux-lacros-builder-rel'),
-    _config('linux-lacros-dbg'),
     _config('linux-lacros-rel'),
     _config(
         'linux-lacros-rel-code-coverage',

@@ -687,12 +687,6 @@
       "tryserver.chromium.chromiumos:linux-lacros-rel-code-coverage"
     ]
   },
-  "chromium.chromiumos:linux-lacros-dbg": {
-    "builders": [
-      "chromium.chromiumos:linux-lacros-dbg",
-      "tryserver.chromium.chromiumos:linux-lacros-dbg"
-    ]
-  },
   "chromium.chromiumos:linux-lacros-rel": {
     "builders": [
       "chromium.chromiumos:linux-lacros-rel"
@@ -4532,12 +4526,6 @@
     "builders": [
       "chromium.chromiumos:linux-chromeos-js-code-coverage",
       "tryserver.chromium.chromiumos:linux-chromeos-js-code-coverage"
-    ]
-  },
-  "tryserver.chromium.chromiumos:linux-lacros-dbg": {
-    "builders": [
-      "chromium.chromiumos:linux-lacros-dbg",
-      "tryserver.chromium.chromiumos:linux-lacros-dbg"
     ]
   },
   "tryserver.chromium.chromiumos:linux-lacros-rel": {
