@@ -193,8 +193,7 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation))
   yield api.test(
       'pass_because_of_size_footer',
-      api.binary_size.build(size_footer=True),
-      override_analyze(),
+      api.binary_size.build(fuchsia_size_footer=True), override_analyze(),
       api.override_step_data(
           constants.RESULT_JSON_STEP_NAME,
           api.json.output({
@@ -204,6 +203,19 @@ def GenTests(api):
               'links': [],
           })),
       api.post_process(post_process.StepSuccess, constants.RESULTS_STEP_NAME),
+      api.post_process(post_process.DropExpectation))
+  yield api.test(
+      'fail_because_of_wrong_size_footer',
+      api.binary_size.build(android_size_footer=True), override_analyze(),
+      api.override_step_data(
+          constants.RESULT_JSON_STEP_NAME,
+          api.json.output({
+              'status_code': 1,
+              'summary': '\n!summary!',
+              'archive_filenames': [],
+              'links': [],
+          })),
+      api.post_process(post_process.StepFailure, constants.RESULTS_STEP_NAME),
       api.post_process(post_process.DropExpectation))
   yield api.test(
       'pass_because_of_revert',

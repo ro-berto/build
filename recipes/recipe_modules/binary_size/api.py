@@ -129,8 +129,12 @@ class BinarySizeApi(recipe_api.RecipeApi):
       review_url = self.m.tryserver.gerrit_change_review_url
       is_revert = review_subject.startswith('Revert')
       # get_footer returns a list of footer values.
+      binary_size_footer = 'Binary-Size'
+      if is_fuchsia:
+        binary_size_footer = 'Fuchsia-Binary-Size'
       has_size_footer = bool(
-          self.m.tryserver.get_footer('Binary-Size', patch_text=commit_message))
+          self.m.tryserver.get_footer(
+              binary_size_footer, patch_text=commit_message))
       allow_regressions = is_revert or has_size_footer
 
       if not use_gs_analysis:  # pragma: no cover

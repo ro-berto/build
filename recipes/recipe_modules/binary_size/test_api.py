@@ -17,7 +17,8 @@ class BinarySizeTestApi(recipe_test_api.RecipeTestApi):
 
   def build(self,
             commit_message='message',
-            size_footer=False,
+            android_size_footer=False,
+            fuchsia_size_footer=False,
             recent_upload_cp=constants.TEST_RECENT_UPLOAD_CP,
             patch_parent_cp=constants.TEST_PATCH_PARENT_CP,
             override_commit_log=False,
@@ -37,8 +38,10 @@ class BinarySizeTestApi(recipe_test_api.RecipeTestApi):
         },
     }
     footer_json = {}
-    if size_footer:
+    if android_size_footer:
       footer_json['Binary-Size'] = ['Totally worth it.']
+    if fuchsia_size_footer:
+      footer_json['Fuchsia-Binary-Size'] = ['Totally worth it for Fuchsia.']
     commit_log_overrides = []
     if override_commit_log:
       recent_upload_commit_log = {
