@@ -3806,11 +3806,6 @@
       "tryserver.chromium:fuchsia-official"
     ]
   },
-  "chromium:linux-archive-dbg": {
-    "builders": [
-      "chromium:linux-archive-dbg"
-    ]
-  },
   "chromium:linux-archive-rel": {
     "builders": [
       "chromium:linux-archive-rel",
