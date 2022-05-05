@@ -22,7 +22,6 @@ DEPS = [
     'recipe_engine/futures',
     'recipe_engine/path',
     'recipe_engine/platform',
-    'recipe_engine/python',
     'recipe_engine/runtime',
     'recipe_engine/step',
     'recipe_engine/time',
@@ -297,14 +296,16 @@ def compose_build_summary(api, model_dir):
 
 
 def run_integration_tests(api, exec_path, model_dir, checkout_dir):
-  api.python(
-    'integration_tests',
-    api.resource('integration_tests.py'),
-    [
-        '--rts-exec', exec_path, \
-        '--model-dir', model_dir, \
-        '--chromium-checkout', checkout_dir, \
-    ])
+  api.step('integration_tests', [
+      'python',
+      api.resource('integration_tests.py'),
+      '--rts-exec',
+      exec_path,
+      '--model-dir',
+      model_dir,
+      '--chromium-checkout',
+      checkout_dir,
+  ])
 
 
 def GenTests(api):
