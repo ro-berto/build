@@ -1239,16 +1239,6 @@
       "chromium.fyi:Win 10 Fast Ring"
     ]
   },
-  "chromium.fyi:Win ASan Release (reclient shadow)": {
-    "builders": [
-      "chromium.fyi:Win ASan Release (reclient shadow)"
-    ]
-  },
-  "chromium.fyi:Win ASan Release Media (reclient shadow)": {
-    "builders": [
-      "chromium.fyi:Win ASan Release Media (reclient shadow)"
-    ]
-  },
   "chromium.fyi:Win x64 Builder (reclient)": {
     "builders": [
       "chromium.fyi:Win x64 Builder (reclient)"
