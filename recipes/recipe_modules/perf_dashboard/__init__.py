@@ -8,14 +8,13 @@ DEPS = [
     'builder_group',
     'depot_tools/tryserver',
     'recipe_engine/buildbucket',
-    'recipe_engine/python',
+    'recipe_engine/json',
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
     'recipe_engine/runtime',
     'recipe_engine/service_account',
     'recipe_engine/step',
-    'recipe_engine/json',
 ]
 
 

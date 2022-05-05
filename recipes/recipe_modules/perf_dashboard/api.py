@@ -141,16 +141,21 @@ class PerfDashboardApi(recipe_api.RecipeApi):
           request.
     """
     token = self.m.service_account.default().get_access_token()
-    post_json_args = [
+    cmd = [
+        'python',
+        self.resource('post_json.py'),
         url,
-        '-i', self.m.json.input(data),
-        '-o', self.m.json.output(),
-        '-t', self.m.raw_io.input_text(token)]
+        '-i',
+        self.m.json.input(data),
+        '-o',
+        self.m.json.output(),
+        '-t',
+        self.m.raw_io.input_text(token),
+    ]
     step_test_data = step_test_data or (
         lambda: self.m.json.test_api.output({'status_code': 200}))
-    step_result = self.m.python(
-        name=name, script=self.resource('post_json.py'), args=post_json_args,
-        step_test_data=step_test_data, **kwargs)
+    step_result = self.m.step(
+        name=name, cmd=cmd, step_test_data=step_test_data, **kwargs)
 
     response = step_result.json.output
     if not response or response['status_code'] != 200:  # pragma: no cover
