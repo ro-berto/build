@@ -40,10 +40,12 @@ class ANGLEApi(recipe_api.RecipeApi):
     self.m.chromium_tests.configure_build(self._builder_config)
 
   def _get_angle_commit_pos(self):
-    stepdata = self.m.python(
-        'get commit position',
-        self.m.path.join(self.m.path['checkout'], 'src', 'commit_id.py'),
-        args=['position'],
+    stepdata = self.m.step(
+        'get commit position', [
+            'python',
+            self.m.path.join(self.m.path['checkout'], 'src', 'commit_id.py'),
+            'position',
+        ],
         stdout=self.m.raw_io.output_text(add_output_log=True))
     commit_pos = int(stepdata.stdout.strip())
     stepdata.presentation.step_text = '<br/>commit position: %d' % commit_pos
