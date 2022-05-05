@@ -205,11 +205,14 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
     if remove_src_checkout_experiment:
       self.m.path['checkout'] = self.m.chromium_checkout.checkout_dir.join(
           'src')
+      # Remove directories before downloading
       self.m.file.rmcontents('clear checkout testing directory',
                              self.m.path['checkout'].join('testing'))
       self.m.file.rmcontents(
           'clear checkout third_party/blink/tools directory',
           self.m.path['checkout'].join('third_party', 'blink', 'tools'))
+      # TODO (kimstephanie): Remove llvm-build dir removal once it's removed
+      # from src-side deps
       self.m.file.rmcontents(
           'clear checkout third_party/llvm-build directory',
           self.m.path['checkout'].join('third_party', 'llvm-build'))
@@ -255,6 +258,20 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
           self.m.isolate.isolated_tests[ALL_TEST_BINARIES_ISOLATE_NAME],
           self.m.chromium.output_dir,
       )
+
+      # Only downloaded if the builder runs clang coverage
+      clang_update_script = self.m.path['checkout'].join(
+          'tools', 'clang', 'scripts', 'update.py')
+      args = ['python3', clang_update_script, '--package', 'coverage_tools']
+      self.m.step(
+          'run tools/clang/scripts/update.py',
+          args,
+      )
+      # TODO(kimstephanie): For debugging. Remove later.
+      self.m.file.listdir(
+          'inspect third_party/llvm-build',
+          self.m.path['checkout'].join('third_party', 'llvm-build'),
+          recursive=True)
 
     # Trigger and wait for the tests (and process coverage data, if enabled)!
     with self.m.chromium_tests.wrap_chromium_tests(builder_config, tests):

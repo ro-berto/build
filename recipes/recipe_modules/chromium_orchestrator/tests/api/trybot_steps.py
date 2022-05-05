@@ -117,6 +117,8 @@ def GenTests(api):
                          'downloading cas digest all_test_binaries'),
         api.post_process(post_process.MustRun,
                          COMPILATOR_SWARMING_TASK_COLLECT_STEP),
+        api.post_process(post_process.MustRun,
+                         'run tools/clang/scripts/update.py'),
         api.post_process(post_process.StatusSuccess),
     ], api.empty_test_data())
 
@@ -129,7 +131,11 @@ def GenTests(api):
                            ['--patch_ref']),
       ], api.empty_test_data())
     else:
-      steps += api.post_process(post_process.MustRun, 'download src-side deps')
+      steps += sum([
+          api.post_process(post_process.MustRun, 'download src-side deps'),
+          api.post_process(post_process.MustRun,
+                           'run tools/clang/scripts/update.py'),
+      ], api.empty_test_data())
 
     steps += api.post_process(post_process.DropExpectation)
     return steps
@@ -287,6 +293,32 @@ def GenTests(api):
   yield api.test(
       'without_patch_compilator_remove_src_checkout',
       without_patch_compilator(remove_src_checkout_experiment=True),
+  )
+
+  yield api.test(
+      'coverage_not_enabled',
+      get_try_build(remove_src_checkout_experiment=True),
+      ctbc_properties(),
+      api.properties(
+          **{
+              '$build/chromium_orchestrator':
+                  InputProperties(
+                      compilator='fake-compilator',
+                      compilator_watcher_git_revision='e841fc',
+                  ),
+          }),
+      api.chromium_orchestrator.override_test_spec(
+          builder_group='fake-group',
+          builder='fake-builder',
+          tester='fake-tester',
+      ),
+      api.chromium_orchestrator.override_compilator_steps(),
+      api.chromium_orchestrator.override_compilator_steps(
+          with_patch=True, is_swarming_phase=False),
+      api.post_process(post_process.DoesNotRun,
+                       'run tools/clang/scripts/update.py'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
