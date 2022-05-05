@@ -1494,11 +1494,6 @@
       "tryserver.chromium.linux:linux-fieldtrial-fyi-rel"
     ]
   },
-  "chromium.fyi:linux-gcc-rel": {
-    "builders": [
-      "chromium.fyi:linux-gcc-rel"
-    ]
-  },
   "chromium.fyi:linux-headless-shell-rel": {
     "builders": [
       "chromium.fyi:linux-headless-shell-rel",
@@ -3031,12 +3026,6 @@
     "builders": [
       "chromium.linux:linux-extended-tracing-rel",
       "tryserver.chromium.linux:linux-extended-tracing-rel"
-    ]
-  },
-  "chromium.linux:linux-gcc-rel": {
-    "builders": [
-      "chromium.linux:linux-gcc-rel",
-      "tryserver.chromium.linux:linux-gcc-rel"
     ]
   },
   "chromium.linux:linux-no-base-tracing-rel": {
@@ -4949,12 +4938,6 @@
     "builders": [
       "chromium.fyi:linux-fieldtrial-rel",
       "tryserver.chromium.linux:linux-fieldtrial-fyi-rel"
-    ]
-  },
-  "tryserver.chromium.linux:linux-gcc-rel": {
-    "builders": [
-      "chromium.linux:linux-gcc-rel",
-      "tryserver.chromium.linux:linux-gcc-rel"
     ]
   },
   "tryserver.chromium.linux:linux-headless-shell-rel": {

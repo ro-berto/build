@@ -41,22 +41,6 @@ SPEC = {
             gclient_apply_config=['enable_reclient'],
             simulation_platform='linux',
         ),
-    'linux-gcc-rel':
-        _chromium_linux_spec(
-            chromium_config='chromium_no_goma',
-            chromium_apply_config=[
-                'mb',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'enable_reclient',
-            ],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            simulation_platform='linux',
-        ),
     'linux-no-base-tracing-rel':
         _chromium_linux_spec(
             chromium_config='chromium',

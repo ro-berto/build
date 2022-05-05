@@ -1146,7 +1146,6 @@ SPEC.update([
         config='Debug',
         gclient_apply_config=['enable_reclient']),
     stock_config('linux-fieldtrial-rel'),
-    stock_config('linux-gcc-rel', gclient_apply_config=['enable_reclient']),
     stock_config(
         'linux-lacros-builder-fyi-rel', gclient_apply_config=['chromeos']),
     stock_config('linux-lacros-dbg-fyi', gclient_apply_config=['chromeos']),
