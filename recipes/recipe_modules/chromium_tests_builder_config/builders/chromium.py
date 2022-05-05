@@ -7,6 +7,7 @@ from .. import builder_spec
 # The config for the following builders is now specified src-side in
 # //infra/config/subprojects/chromium/ci/chromium.star
 # * android-archive-dbg
+# * android-archive-rel
 # * win-archive-rel
 # * win-official
 # * win32-archive-rel
@@ -251,23 +252,6 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=['android', 'enable_reclient'],
             chromium_config_kwargs={
-                'TARGET_PLATFORM': 'android',
-                'TARGET_ARCH': 'arm',
-            },
-            android_config='main_builder',
-            simulation_platform='linux',
-        ),
-    'android-archive-rel':
-        builder_spec.BuilderSpec.create(
-            chromium_config='android',
-            chromium_apply_config=[
-                'clobber',
-                'mb',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=['android', 'enable_reclient'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
                 'TARGET_PLATFORM': 'android',
                 'TARGET_ARCH': 'arm',
             },

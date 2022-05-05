@@ -3804,12 +3804,6 @@
       "tryserver.chromium.win:win_chromium_compile_rel_ng"
     ]
   },
-  "chromium:android-archive-rel": {
-    "builders": [
-      "chromium:android-archive-rel",
-      "tryserver.chromium.android:android_archive_rel_ng"
-    ]
-  },
   "chromium:android-official": {
     "builders": [
       "chromium:android-official",
@@ -4296,12 +4290,6 @@
     "builders": [
       "chromium.android.fyi:android-webview-pie-x86-wpt-fyi-rel",
       "tryserver.chromium.android:android-webview-pie-x86-wpt-fyi-rel"
-    ]
-  },
-  "tryserver.chromium.android:android_archive_rel_ng": {
-    "builders": [
-      "chromium:android-archive-rel",
-      "tryserver.chromium.android:android_archive_rel_ng"
     ]
   },
   "tryserver.chromium.android:android_blink_rel": {

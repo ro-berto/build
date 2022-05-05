@@ -107,6 +107,7 @@ TRYBOTS = try_spec.TryDatabase.create({
     },
     # The config for the following builders is now specified src-side in
     # //infra/config/subprojects/chromium/try/tryserver.chromium.android.star
+    # * android_archive_rel_ng
     # * android_compile_dbg
     # * android_compile_x64_dbg
     # * android-12-x64-dbg
@@ -318,11 +319,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android.fyi',
                 buildername='android-webview-pie-x86-wpt-fyi-rel',
-            ),
-        'android_archive_rel_ng':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium',
-                buildername='android-archive-rel',
             ),
         'android_compile_x86_dbg':
             try_spec.TrySpec.create_for_single_mirror(
