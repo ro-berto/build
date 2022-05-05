@@ -3804,11 +3804,6 @@
       "tryserver.chromium.win:win_chromium_compile_rel_ng"
     ]
   },
-  "chromium:android-archive-dbg": {
-    "builders": [
-      "chromium:android-archive-dbg"
-    ]
-  },
   "chromium:android-archive-rel": {
     "builders": [
       "chromium:android-archive-rel",
