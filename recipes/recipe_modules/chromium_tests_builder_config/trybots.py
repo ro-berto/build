@@ -1132,6 +1132,7 @@ TRYBOTS = try_spec.TryDatabase.create({
     # The config for the following builders is now specified src-side in
     # //infra/config/subprojects/chromium/try/tryserver.chromium.win.star
     # * win_chromium_x64_rel_ng
+    # * win_x64_archive
     # * win10_chromium_inverse_fieldtrials_x64_fyi_rel_ng
     # * win10_chromium_x64_rel_ng
     # * win11-x64-fyi-rel
@@ -1146,11 +1147,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
                 buildername='win-annotator-rel',
-            ),
-        'win_x64_archive':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium',
-                buildername='win-archive-rel',
             ),
         'win7-rel':
             try_spec.TrySpec.create_for_single_mirror(

@@ -6,6 +6,7 @@ from .. import builder_spec
 
 # The config for the following builders is now specified src-side in
 # //infra/config/subprojects/chromium/ci/chromium.star
+# * win-archive-rel
 # * win-official
 # * win32-archive-rel
 # * win32-official
@@ -49,20 +50,6 @@ SPEC = {
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 64,
-            },
-            simulation_platform='win',
-        ),
-    'win-archive-rel':
-        builder_spec.BuilderSpec.create(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'clobber',
-                'mb',
-            ],
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
             simulation_platform='win',

@@ -3892,12 +3892,6 @@
       "chromium:win-archive-dbg"
     ]
   },
-  "chromium:win-archive-rel": {
-    "builders": [
-      "chromium:win-archive-rel",
-      "tryserver.chromium.win:win_x64_archive"
-    ]
-  },
   "chromium:win-archive-tagged": {
     "builders": [
       "chromium:win-archive-tagged"
@@ -5810,12 +5804,6 @@
       "chromium.gpu.fyi:Optional Win10 x64 Release (Intel HD 630)",
       "chromium.gpu.fyi:Optional Win10 x64 Release (NVIDIA)",
       "tryserver.chromium.win:win_optional_gpu_tests_rel"
-    ]
-  },
-  "tryserver.chromium.win:win_x64_archive": {
-    "builders": [
-      "chromium:win-archive-rel",
-      "tryserver.chromium.win:win_x64_archive"
     ]
   },
   "tryserver.chromium:android-official": {
