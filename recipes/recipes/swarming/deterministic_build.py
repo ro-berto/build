@@ -29,7 +29,7 @@ DEPS = [
     'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/properties',
-    'recipe_engine/python',
+    'recipe_engine/step',
     'reclient',
 ]
 
@@ -126,15 +126,8 @@ DETERMINISTIC_TRYBOTS = freeze({
 })
 
 def MoveBuildDirectory(api, src_dir, dst_dir):
-  api.python.inline('Move %s to %s' % (src_dir, dst_dir),
-                    """
-                    import os
-                    import shutil
-                    import sys
-                    if os.path.exists(sys.argv[2]):
-                      shutil.rmtree(sys.argv[2])
-                    shutil.move(sys.argv[1], sys.argv[2])""",
-                    args=[src_dir, dst_dir])
+  cmd = ['python3', api.resource('move.py'), src_dir, dst_dir]
+  api.step('Move %s to %s' % (src_dir, dst_dir), cmd)
 
 
 def ConfigureChromiumBuilder(api, recipe_config):

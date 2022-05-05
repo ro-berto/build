@@ -917,8 +917,8 @@
   },
   {
     "cmd": [
-      "python",
-      "\nimport os\nimport shutil\nimport sys\nif os.path.exists(sys.argv[2]):\n  shutil.rmtree(sys.argv[2])\nshutil.move(sys.argv[1], sys.argv[2])",
+      "python3",
+      "RECIPE[build::swarming/deterministic_build].resources/move.py",
       "[CACHE]/builder/src/out/Debug",
       "[CACHE]/builder/src/out/Debug.1"
     ],
@@ -934,17 +934,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "Move [CACHE]/builder/src/out/Debug to [CACHE]/builder/src/out/Debug.1",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import os@@@",
-      "@@@STEP_LOG_LINE@python.inline@import shutil@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[2]):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  shutil.rmtree(sys.argv[2])@@@",
-      "@@@STEP_LOG_LINE@python.inline@shutil.move(sys.argv[1], sys.argv[2])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
+    "name": "Move [CACHE]/builder/src/out/Debug to [CACHE]/builder/src/out/Debug.1"
   },
   {
     "cmd": [
@@ -1483,8 +1473,8 @@
   },
   {
     "cmd": [
-      "python",
-      "\nimport os\nimport shutil\nimport sys\nif os.path.exists(sys.argv[2]):\n  shutil.rmtree(sys.argv[2])\nshutil.move(sys.argv[1], sys.argv[2])",
+      "python3",
+      "RECIPE[build::swarming/deterministic_build].resources/move.py",
       "[CACHE]/builder/src/out/Debug",
       "[CACHE]/builder/src/out/Debug.2"
     ],
@@ -1500,17 +1490,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "Move [CACHE]/builder/src/out/Debug to [CACHE]/builder/src/out/Debug.2",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import os@@@",
-      "@@@STEP_LOG_LINE@python.inline@import shutil@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[2]):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  shutil.rmtree(sys.argv[2])@@@",
-      "@@@STEP_LOG_LINE@python.inline@shutil.move(sys.argv[1], sys.argv[2])@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
+    "name": "Move [CACHE]/builder/src/out/Debug to [CACHE]/builder/src/out/Debug.2"
   },
   {
     "cmd": [
