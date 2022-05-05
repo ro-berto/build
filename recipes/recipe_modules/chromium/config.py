@@ -632,6 +632,8 @@ def codesearch(c):
   # -k 0 prevents stopping on errors, so the compile step tries to do as much as
   # possible.
   c.compile_py.build_args = ['-k', '0']
+  if c.TARGET_PLATFORM == 'mac':
+    c.env.FORCE_MAC_TOOLCHAIN = 1
 
 
 @config_ctx()

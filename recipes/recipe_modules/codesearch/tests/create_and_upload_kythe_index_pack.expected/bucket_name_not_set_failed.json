@@ -250,7 +250,7 @@
       "Traceback (most recent call last):",
       "  File \"RECIPE_REPO[build]/recipes/recipe_modules/codesearch/tests/create_and_upload_kythe_index_pack.py\", line 35, in RunSteps",
       "    api.codesearch.create_and_upload_kythe_index_pack(",
-      "  File \"RECIPE_REPO[build]/recipes/recipe_modules/codesearch/api.py\", line 210, in create_and_upload_kythe_index_pack",
+      "  File \"RECIPE_REPO[build]/recipes/recipe_modules/codesearch/api.py\", line 211, in create_and_upload_kythe_index_pack",
       "    assert self.c.bucket_name, (",
       "AssertionError('Trying to upload Kythe index pack but no google storage bucket name')"
     ]

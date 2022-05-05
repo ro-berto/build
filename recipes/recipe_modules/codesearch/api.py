@@ -79,7 +79,8 @@ class CodesearchApi(recipe_api.RecipeApi):
 
   def generate_gn_target_list(self, output_file=None):
     output_file = output_file or self.c.gn_targets_json_file
-    with self.m.context(cwd=self.m.path['checkout']):
+    with self.m.context(
+        cwd=self.m.path['checkout'], env=self.m.chromium.get_env()):
       output = self.m.step(
           'generate gn target list', [
               'python', '-u', self.m.depot_tools.gn_py_path, 'desc',

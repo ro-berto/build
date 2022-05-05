@@ -116,6 +116,10 @@ def main():
     if opts.verbose:
       print('Adding metadata to %s' % filename)
     with open(filename, 'a+') as f:
+      # Depending on the OS and python version, "a+" will put the pointer
+      # at the end of the file and without seek(), `contents` would be an
+      # empty string.
+      f.seek(0)
       contents = f.read()
       metadata = _GenerateMetadata(filename, contents, opts.corpus,
                                    opts.verbose)

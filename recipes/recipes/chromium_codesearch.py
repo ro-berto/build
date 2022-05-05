@@ -49,6 +49,7 @@ TRYBOT_SPEC = freeze({
         'gen-fuchsia-try': 'codesearch-gen-chromium-fuchsia',
         'gen-lacros-try': 'codesearch-gen-chromium-lacros',
         'gen-linux-try': 'codesearch-gen-chromium-linux',
+        'gen-mac-try': 'codesearch-gen-chromium-mac',
         'gen-win-try': 'codesearch-gen-chromium-win',
     }
 })
@@ -144,6 +145,16 @@ SPEC = freeze({
             'corpus': 'chromium.googlesource.com/chromium/src',
             'build_config': 'chromeos',
         },
+        'codesearch-gen-chromium-mac': {
+            'compile_targets': ['all',],
+            'platform': 'mac',
+            'sync_generated_files': True,
+            # Generated files will end up in out/mac-Debug/gen.
+            'gen_repo_out_dir': 'mac-Debug',
+            'gen_repo_branch': 'main',
+            'corpus': 'chromium.googlesource.com/chromium/src',
+            'build_config': 'mac',
+        },
         'codesearch-gen-chromium-win': {
             'compile_targets': ['all',],
             'platform': 'win',
@@ -218,12 +229,18 @@ def RunSteps(api, root_solution_revision, root_solution_revision_timestamp,
 
   # Checkout the repositories that are needed for the compile.
   gclient_config = api.gclient.make_config('chromium_no_telemetry_dependencies')
+  target_os = 'linux'
+  host_os = 'linux'
   if platform == 'android':
-    gclient_config.target_os = ['android']
+    target_os = 'android'
   elif platform == 'chromeos' or platform == 'lacros':
-    gclient_config.target_os = ['chromeos']
+    target_os = 'chromeos'
   elif platform == 'fuchsia':
-    gclient_config.target_os = ['fuchsia']
+    target_os = 'fuchsia'
+  elif platform == 'mac':
+    target_os = 'mac'
+    host_os = 'mac'
+  gclient_config.target_os = [target_os]
   api.gclient.c = gclient_config
 
   api.gclient.apply_config('android_prebuilts_build_tools')
@@ -240,7 +257,12 @@ def RunSteps(api, root_solution_revision, root_solution_revision_timestamp,
   api.file.rmtree('llvm-build',
                   api.path['checkout'].join('third_party', 'llvm-build'))
 
-  api.chromium.set_config('codesearch', BUILD_CONFIG='Debug')
+  api.chromium.set_config(
+      'codesearch',
+      BUILD_CONFIG='Debug',
+      TARGET_PLATFORM=target_os,
+      HOST_PLATFORM=host_os)
+
   api.chromium.ensure_goma()
   # CHROME_HEADLESS makes sure that running 'gclient runhooks' doesn't require
   # entering 'y' to agree to a license.

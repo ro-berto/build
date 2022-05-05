@@ -37,6 +37,7 @@ BUILDERS = [
     'codesearch-gen-chromium-fuchsia',
     'codesearch-gen-chromium-lacros',
     'codesearch-gen-chromium-linux',
+    'codesearch-gen-chromium-mac',
     'codesearch-gen-chromium-win',
 ]
 
