@@ -113,6 +113,7 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * android-12-x64-dbg
     # * android-inverse-fieldtrials-pie-x86-fyi-rel
     # * android-pie-x86-rel
+    # * android-weblayer-pie-x86-rel-tests
     # * android-webview-12-x64-dbg
     'tryserver.chromium.android': {
         'android-10-x86-fyi-rel-tests':
@@ -308,12 +309,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android.fyi',
                 buildername='android-weblayer-pie-x86-wpt-smoketest',
-            ),
-        'android-weblayer-pie-x86-rel-tests':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android',
-                buildername='android-weblayer-x86-rel',
-                tester='android-weblayer-pie-x86-rel-tests',
             ),
         'android-webview-pie-x86-wpt-fyi-rel':
             try_spec.TrySpec.create_for_single_mirror(
