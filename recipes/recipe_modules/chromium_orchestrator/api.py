@@ -213,6 +213,10 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
       self.m.file.rmcontents(
           'clear checkout third_party/llvm-build directory',
           self.m.path['checkout'].join('third_party', 'llvm-build'))
+      self.m.file.remove(
+          'remove tools/clang/scripts/update.py',
+          self.m.path['checkout'].join('tools', 'clang', 'scripts',
+                                       'update.py'))
       self.m.cas.download(
           'download src-side deps',
           comp_output.src_side_deps_digest,
