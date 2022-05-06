@@ -211,11 +211,6 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
       self.m.file.rmcontents(
           'clear checkout third_party/blink/tools directory',
           self.m.path['checkout'].join('third_party', 'blink', 'tools'))
-      # TODO (kimstephanie): Remove llvm-build dir removal once it's removed
-      # from src-side deps
-      self.m.file.rmcontents(
-          'clear checkout third_party/llvm-build directory',
-          self.m.path['checkout'].join('third_party', 'llvm-build'))
       self.m.file.remove(
           'remove tools/clang/scripts/update.py',
           self.m.path['checkout'].join('tools', 'clang', 'scripts',
