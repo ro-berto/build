@@ -73,6 +73,7 @@ PYTHON3_ONLY_FILES = (
         'recipes/recipe_modules/chromium_tests_builder_config/migration/'
         'scripts/tests/migrate_unit_test.py'
     ),
+    'recipes/recipe_modules/cronet/resources/clear_landmines.py',
     (
         'recipes/recipe_modules/tricium_clang_tidy/resources/'
         'tricium_clang_tidy_script.py'
