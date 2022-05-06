@@ -1,0 +1,8 @@
+# Waterfall owners should be able to update chromium.json.
+per-file chromium.json=bsheedy@chromium.org
+per-file chromium.json=kbr@chromium.org
+per-file chromium.json=hans@chromium.org
+per-file chromium.json=machenbach@chromium.org
+per-file chromium.json=mbonadei@chromium.org
+per-file chromium.json=thakis@chromium.org
+per-file chromium.json=ynovikov@chromium.org
