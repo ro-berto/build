@@ -158,7 +158,10 @@ class ANGLEApi(recipe_api.RecipeApi):
           targets=compile_targets,
           verbose=True,
       )
-      self.m.chromium_tests.set_test_command_lines(tests, "")
+      self.m.chromium_tests.set_swarming_test_execution_info(
+          tests, self.m.chromium_tests.find_swarming_command_lines(""),
+          self.m.path.relpath(self.m.chromium.output_dir,
+                              self.m.path['checkout']))
       # ANGLE marks entire failing shards as invalid. We retry them here.
       invalid_test_suites, failing_test_suites = (
           self.m.test_utils.run_tests(tests, "", retry_invalid_shards=True))

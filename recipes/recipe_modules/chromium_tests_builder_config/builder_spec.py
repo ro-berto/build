@@ -174,6 +174,7 @@ class BuilderSpec(object):
   # automatically does this if your build triggers another build using the
   # chromium recipe. Only set this value if something other than a triggered
   # chromium builder needs to use the isolates created during a build execution.
+  # TODO(martiniss): Rename this to expose_execution_properties.
   expose_trigger_properties = attrib(bool, default=False)
 
   # A bool controlling whether to archive the build outputs for Clusterfuzz

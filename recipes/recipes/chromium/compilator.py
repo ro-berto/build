@@ -117,19 +117,21 @@ def compilator_steps(api, properties):
           t for t in targets_config.all_tests
           if t.target_name in properties.swarming_targets and t.uses_isolate
       ]
-      raw_result = api.chromium_tests.build_and_isolate_failing_tests(
-          orch_builder_id,
-          orch_builder_config,
-          test_suites,
-          bot_update_step,
-          'without patch',
-          additional_compile_targets=additional_compile_targets)
+      raw_result, execution_info = (
+          api.chromium_tests.build_and_isolate_failing_tests(
+              orch_builder_id,
+              orch_builder_config,
+              test_suites,
+              bot_update_step,
+              'without patch',
+              additional_compile_targets=additional_compile_targets))
     else:
       raw_result, task = api.chromium_tests.build_affected_targets(
           orch_builder_id,
           orch_builder_config,
           isolate_output_files_for_coverage=True,
           additional_compile_targets=additional_compile_targets)
+      execution_info = task.swarming_execution_info
       test_suites = task.test_suites
 
       deleted_files = get_deleted_files(api, task.affected_files)
@@ -147,13 +149,8 @@ def compilator_steps(api, properties):
         archive_src_side_deps(api)
 
       # Isolate the tests first so the Orchestrator can trigger them asap
-      trigger_properties = {}
-      trigger_properties['swarming_command_lines_digest'] = (
-          api.chromium_tests.archive_command_lines(
-              api.chromium_tests.swarming_command_lines))
-      trigger_properties['swarming_command_lines_cwd'] = (
-          api.m.path.relpath(api.m.chromium.output_dir, api.m.path['checkout']))
-      trigger_properties['swarm_hashes'] = api.isolate.isolated_tests
+      trigger_properties = execution_info.ensure_command_lines_archived(
+          api.chromium_tests).as_trigger_prop()
 
       properties_step = api.step('swarming trigger properties', [])
       properties_step.presentation.properties[

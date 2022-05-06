@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import attr
 import collections
 import contextlib
 import itertools
@@ -10,7 +11,7 @@ import six
 
 from six.moves.urllib.parse import urlencode
 
-from recipe_engine import recipe_api
+from recipe_engine import recipe_api, step_data
 
 from PB.recipe_engine import result as result_pb2
 from PB.recipe_modules.build.archive import properties as arch_prop
@@ -18,9 +19,10 @@ from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 from RECIPE_MODULES.build import chromium
 from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
+from RECIPE_MODULES.build.attr_utils import attrib, mapping, sequence, attrs
 from RECIPE_MODULES.build.chromium_tests_builder_config import try_spec
 
-from . import generators
+from . import generators, steps
 from .targets_config import TargetsConfig
 
 # These account ids are obtained by looking at gerrit API responses.
@@ -33,45 +35,86 @@ AUTOROLLER_ACCOUNT_IDS = (1302611, 1274527)
 ALL_TEST_BINARIES_ISOLATE_NAME = 'all_test_binaries'
 
 
+@attrs()
+class SwarmingExecutionInfo(object):
+  """Information about how to execute a set of swarming tests."""
+  # Maps isolate names to the digest for that isolate.
+  # Should be renamed to 'digest_by_isolate_name'.
+  digest_by_isolate_name = attrib(mapping[str, str], default={})
+
+  # The CAS digest for a file which contains the command lines needed to execute
+  # each test.
+  # Should be renamed to 'command_lines_file_digest'
+  command_lines_file_digest = attrib(str, default='')
+
+  # The mapping of isolate to command lines.
+  command_lines = attrib(mapping[str, sequence], default={})
+
+  # The working directory to run the isolates in (usually something like
+  # out/Release).
+  # Should be renamed to 'command_line_cwd'
+  command_lines_cwd = attrib(str, default='')
+
+  def ensure_command_lines_archived(self, chromium_tests_api):
+    """Ensures the command lines are archived to CAS.
+
+    Makes sure that the data stored in self.command_lines is archived to CAS,
+    and the digest of the file containing this information is stored in
+    self.swarming_command_lines_digest.
+    """
+    assert not self.command_lines_file_digest, (
+        'Only should try to archive command lines once.')
+
+    return attr.evolve(
+        self,
+        command_lines_file_digest=(chromium_tests_api.archive_command_lines(
+            self.command_lines)))
+
+  def as_trigger_prop(self):
+    """Gets the set of properties needed to trigger a child build.
+
+    Builds depending on the tests compiled and isolated in this build need to
+    know the corresponding CAS digest for each isolate target, as well as
+    the command line to run it.
+
+    Command line information is passed between builders via CAS, since the
+    command line information can be a few MB, which is too large for properties.
+
+    This uses different field names than the actual field names on this object.
+    This is because these are put into properties, where the names aren't in
+    the context of this object. Also, current code relies on the names, so
+    it's tricky to rename them.
+    """
+    return {
+        'swarm_hashes': {k: v for k, v in self.digest_by_isolate_name.items()},
+        'swarming_command_lines_digest': self.command_lines_file_digest,
+        'swarming_command_lines_cwd': self.command_lines_cwd,
+    }
+
+
+@attrs()
 class Task(object):
-  """Represents the configuration for build/test tasks.
+  """Represents the configuration for build/test tasks."""
 
-  The fields in the task are immutable.
+  # BuilderConfig of the task runner bot.
+  builder_config = attrib(ctbc.BuilderConfig)
 
-  Attributes:
-    builder_config: BuilderConfig of the task runner bot.
-    bot_update_step: Holds state on build properties. Used to pass state
-                     between methods.
-    tests: A list of Test objects [see chromium_tests/steps.py]. Stateful
-           objects that can run tests [possibly remotely via swarming] and
-           parse the results. Running tests multiple times is not idempotent
-           -- the results of previous runs affect future runs.
-      affected_files: A list of paths (strings) affected by the CL.
-  """
+  # A list of Test objects [see chromium_tests/steps.py]. Stateful objects
+  # that can run tests [possibly remotely via swarming] and parse the
+  # results. Running tests multiple times is not idempotent the
+  # results of previous runs affect future runs.
+  test_suites = attrib(sequence[steps.Test])
 
-  def __init__(self, builder_config, test_suites, bot_update_step,
-               affected_files):
-    self._builder_config = builder_config
-    self._test_suites = test_suites
-    self._bot_update_step = bot_update_step
-    self._affected_files = affected_files
+  # Holds state on build properties. Used to pass state between methods.
+  bot_update_step = attrib(step_data.StepData)
+
+  # A list of paths (strings) affected by the CL.
+  affected_files = attrib(sequence[str])
+
+  # How to execute each test in 'tests' which runs on swarming.
+  swarming_execution_info = attrib(SwarmingExecutionInfo, default=None)
 
   @property
-  def builder_config(self):
-    return self._builder_config
-
-  @property
-  def test_suites(self):
-    return self._test_suites
-
-  @property
-  def bot_update_step(self):
-    return self._bot_update_step
-
-  @property
-  def affected_files(self):
-    return self._affected_files
-
   def should_retry_failures_with_changes(self):
     return self.builder_config.retry_failed_shards
 
@@ -82,12 +125,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def __init__(self, input_properties, **kwargs):
     super(ChromiumTestsApi, self).__init__(**kwargs)
 
-    self._swarming_command_lines = {}
     self.filter_files_dir = None
-
-  @property
-  def swarming_command_lines(self):
-    return self._swarming_command_lines
 
   def log(self, message):
     presentation = self.m.step.active_result.presentation
@@ -430,6 +468,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     Allows finer-grained control about exact compile targets used.
 
+    If we're compiling tests which run on swarming, this method also isolates
+    those tests, and (possibly) updates build properties with relevant execution
+    information.
+
     Args:
       builder_id - A BuilderId identifying the configuration to use when running
         mb.
@@ -462,7 +504,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       use_st - A boolean indicating whether to filter out stable tests
 
     Returns:
-      RawResult object with compile step status and failure message
+      A tuple of
+        RawResult object with compile step status and failure message or None
+          if the compile was successful.
+        SwarmingExecutionInfo describing how to execute any isolated tests that
+          were compiled and isolated. May be None.
+
     """
 
     assert isinstance(targets_config, TargetsConfig), \
@@ -473,96 +520,87 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self.m.chromium_android.clean_local_files()
       self.m.chromium_android.run_tree_truth()
 
-    if execution_mode == ctbc.COMPILE_AND_TEST:
-      isolated_targets = [t.isolate_target for t in tests if t.uses_isolate]
-      # Skylab tests pretend to be isolated_targets at run_mb_and_compile step,
-      # for generating the runtime deps. We upload the deps to GCS instead of
-      # isolate server, because skylab DUT does not support isolate.
-      skylab_isolates = [
-          t.target_name
-          for t in tests
-          # Skylab test has different runner script and dependencies. A skylab
-          # test target should not appear in isolated_targets.
-          if t.is_skylabtest and not t.target_name in isolated_targets
-      ]
+    if execution_mode != ctbc.COMPILE_AND_TEST:
+      return None, None
 
-      name_suffix = ''
-      if self.m.tryserver.is_tryserver:
-        name_suffix = ' (with patch)'
+    isolated_tests = [t for t in tests if t.uses_isolate]
+    # Skylab tests pretend to be isolated_tests at run_mb_and_compile step,
+    # for generating the runtime deps. We upload the deps to GCS instead of
+    # isolate server, because skylab DUT does not support isolate.
+    skylab_isolates = [
+        t.target_name
+        for t in tests
+        # Skylab test has different runner script and dependencies. A skylab
+        # test should not appear in isolated_tests.
+        if t.is_skylabtest and not t in isolated_tests
+    ]
 
-      android_version_name, android_version_code = (
-          self.get_android_version_details(
-              builder_config.android_version, log_details=True))
+    suffix = ''
+    name_suffix = ''
+    if self.m.tryserver.is_tryserver:
+      suffix = 'with patch'
+      name_suffix = ' (with patch)'
 
-      raw_result = self.run_mb_and_compile(
-          builder_id,
-          compile_targets,
-          isolated_targets + skylab_isolates,
-          name_suffix=name_suffix,
-          mb_phase=mb_phase,
-          mb_config_path=mb_config_path,
-          mb_recursive_lookup=mb_recursive_lookup,
-          android_version_code=android_version_code,
-          android_version_name=android_version_name,
-          use_rts=use_rts,
-          rts_recall=rts_recall,
-          use_st=use_st)
+    android_version_name, android_version_code = (
+        self.get_android_version_details(
+            builder_config.android_version, log_details=True))
 
-      if raw_result.status != common_pb.SUCCESS:
-        self.m.tryserver.set_compile_failure_tryjob_result()
-        return raw_result
+    raw_result = self.run_mb_and_compile(
+        builder_id,
+        compile_targets,
+        [t.isolate_target for t in isolated_tests] + skylab_isolates,
+        name_suffix=name_suffix,
+        mb_phase=mb_phase,
+        mb_config_path=mb_config_path,
+        mb_recursive_lookup=mb_recursive_lookup,
+        android_version_code=android_version_code,
+        android_version_name=android_version_name,
+        use_rts=use_rts,
+        rts_recall=rts_recall,
+        use_st=use_st)
 
-      if isolated_targets:
-        has_patch = self.m.tryserver.is_tryserver
-        swarm_hashes_property_name = ''  # By default do not yield as property.
-        if 'got_revision_cp' in update_step.presentation.properties:
-          # Some recipes such as Findit's may build different revisions in the
-          # same build. Hence including the commit position as part of the
-          # property name.
-          swarm_hashes_property_name = 'swarm_hashes_%s_%s_patch' % (
-              update_step.presentation.properties['got_revision_cp'].replace(
-                  # At sign may clash with annotations format.
-                  '@',
-                  '(at)'),
-              'with' if has_patch else 'without')
+    if raw_result.status != common_pb.SUCCESS:
+      self.m.tryserver.set_compile_failure_tryjob_result()
+      return raw_result, None
 
-        if isolate_output_files_for_coverage:
-          file_paths = self.m.code_coverage.get_required_build_output_files(
-              [t for t in tests if t.uses_isolate])
+    execution_info = None
 
-          self.m.isolate.write_isolate_files_for_binary_file_paths(
-              file_paths, ALL_TEST_BINARIES_ISOLATE_NAME,
-              self.m.chromium.output_dir)
+    if isolated_tests:
+      additional_isolate_targets = []
+      if isolate_output_files_for_coverage:
+        file_paths = self.m.code_coverage.get_required_build_output_files(
+            isolated_tests)
 
-          isolated_targets.append(ALL_TEST_BINARIES_ISOLATE_NAME)
+        self.m.isolate.write_isolate_files_for_binary_file_paths(
+            file_paths, ALL_TEST_BINARIES_ISOLATE_NAME,
+            self.m.chromium.output_dir)
 
-        # 'compile' just prepares all information needed for the isolation,
-        # and the isolation is a separate step.
-        self.m.isolate.isolate_tests(
-            self.m.chromium.output_dir,
-            suffix=name_suffix,
-            targets=list(set(isolated_targets)),
-            verbose=True,
-            swarm_hashes_property_name=swarm_hashes_property_name)
+        additional_isolate_targets.append(ALL_TEST_BINARIES_ISOLATE_NAME)
 
-        self.set_test_command_lines(tests, name_suffix)
+      # 'compile' just prepares all information needed for the isolation,
+      # and the isolation is a separate step.
+      execution_info = self.isolate_tests(
+          builder_config,
+          isolated_tests,
+          suffix,
+          update_step.presentation.properties.get('got_revision_cp'),
+          additional_isolate_targets=additional_isolate_targets)
 
-        if builder_config.perf_isolate_upload:
-          instance = self.m.cas.instance
-          self.m.perf_dashboard.upload_isolate(
-              self.m.buildbucket.builder_name,
-              self.m.perf_dashboard.get_change_info([{
-                  'repository':
-                      'chromium',
-                  'git_hash':
-                      update_step.presentation.properties['got_revision'],
-              }]), instance, self.m.isolate.isolated_tests)
+      if builder_config.perf_isolate_upload:
+        instance = self.m.cas.instance
+        self.m.perf_dashboard.upload_isolate(
+            self.m.buildbucket.builder_name,
+            self.m.perf_dashboard.get_change_info([{
+                'repository': 'chromium',
+                'git_hash': update_step.presentation.properties['got_revision'],
+            }]), instance, self.m.isolate.isolated_tests)
 
-      if skylab_isolates:
-        self._prepare_artifact_for_skylab(
-            builder_config,
-            [t for t in tests if t.target_name in skylab_isolates])
-      return raw_result
+    if skylab_isolates:
+      self._prepare_artifact_for_skylab(
+          builder_config,
+          [t for t in tests if t.target_name in skylab_isolates])
+
+    return raw_result, execution_info
 
   def find_swarming_command_lines(self, suffix):
     script = self.m.chromium_tests.resource('find_command_lines.py')
@@ -576,16 +614,126 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     assert isinstance(step_result.json.output, dict)
     return step_result.json.output
 
-  def set_test_command_lines(self, tests, suffix):
-    self._swarming_command_lines = self.find_swarming_command_lines(suffix)
+  def isolate_tests(self,
+                    builder_config,
+                    tests,
+                    suffix,
+                    got_revision_cp,
+                    swarm_hashes_property_name='',
+                    additional_isolate_targets=None):
+    """Isolates a set of tests.
+
+    This also updates the test objects with the commands which are generated
+    when we create the isolates for the tests. See
+    set_swarming_test_execution_info for its potential side effects.
+
+    Args:
+      * builder_config: The builder we're isolating tests for.
+      * tests: A list of Test objects we should isolate. The isolate_target
+        attribute for each test will be isolated.
+      * suffix: A suffix to add to each step.
+      * got_revision_cp: The commit position for the main repository we're
+        checking out. If this is set, swarm_hashes_property_name is changed
+        to include the revision, as well as if we're running tests with a
+        patch applied.
+      * swarm_hashes_property_name: The property name to output swarming hashes
+        into.
+      * additional_isolate_targets: Any additional isolate targets which aren't
+        already included in 'tests'.
+
+    Returns:
+      SwarmingExecutionInfo describing how to execute the isolate tests in the
+        tests input.
+    """
+    if got_revision_cp:
+      # Some recipes such as Findit's may build different revisions in the
+      # same build. Hence including the commit position as part of the
+      # property name.
+      swarm_hashes_property_name = 'swarm_hashes_%s_%s' % (
+          got_revision_cp.replace(
+              # At sign may clash with annotations format.
+              '@',
+              '(at)'),
+          # We include without_patch when there's no suffix because existing
+          # builders and systems do this, and we don't want to break anything
+          # which depends on that in the property name.
+          suffix.replace(' ', '_') if suffix else 'without_patch')
+    targets = list(set([t.isolate_target for t in tests]))
+    if additional_isolate_targets:
+      targets.extend(additional_isolate_targets)
+
+    # These functions append suffix to step names, but expect it to be wrapped
+    # in parentheses, if it exists. Suffix currently is something like 'with
+    # patch', with no parentheses, or ''. Wrap it in parens if needed.
+    name_suffix = ' (%s)' % suffix if suffix else '',
+    # This has the side effect of setting self.m.isolate.isolated_tests,
+    # which we use elsewhere. We should probably instead return that and pass it
+    # around.
+    self.m.isolate.isolate_tests(
+        self.m.chromium.output_dir,
+        targets,
+        suffix=name_suffix,
+        swarm_hashes_property_name=swarm_hashes_property_name,
+        verbose=True)
+
+    return self.set_swarming_test_execution_info(
+        tests,
+        self.find_swarming_command_lines(name_suffix),
+        self.m.path.relpath(self.m.chromium.output_dir,
+                            self.m.path['checkout']),
+        expose_to_properties=builder_config.expose_trigger_properties)
+
+  def set_swarming_test_execution_info(self,
+                                       tests,
+                                       command_lines,
+                                       rel_cwd,
+                                       expose_to_properties=False):
+    """Sets the execution information for a list of swarming tests.
+
+    Each test gets the command line in 'command_lines' corresponding to
+    the test's 'target_name', as well as the relative working directory to run
+    the command line from.
+
+    It also optionally exposes the execution information as build properties,
+    which can be used by other processes to use the results of this build.
+
+    Args:
+      * tests: The list of tests to set command lines for.
+      * command_lines: A dict mapping target name to a list of strings that
+        represent the command line invocation to execute that test.
+      * rel_cwd: The relative path to the current working directory for a
+        Chromium checkout.
+      * expose_to_properties: If we should expose the execution information as
+        build properties.
+
+    Returns:
+      An instance of SwarmingExecutionInfo which describes how to execute these
+      tests.
+    """
     for test in tests:
       if test.runs_on_swarming or test.uses_isolate:
-        command_line = self.swarming_command_lines.get(test.target_name, [])
+        command_line = command_lines.get(test.target_name, [])
 
         if command_line:
           test.raw_cmd = command_line
-          test.relative_cwd = self.m.path.relpath(self.m.chromium.output_dir,
-                                                  self.m.path['checkout'])
+          test.relative_cwd = rel_cwd
+
+    execution_info = SwarmingExecutionInfo(
+        digest_by_isolate_name=self.m.isolate.isolated_tests,
+        command_lines=command_lines,
+        command_lines_cwd=rel_cwd,
+    )
+
+    if expose_to_properties:
+      execution_info.ensure_command_lines_archived(self)
+
+      step_result = self.m.step.empty('expose execution properties')
+      step_result.presentation.properties[
+          'trigger_properties'] = execution_info.as_trigger_prop()
+      step_result.presentation.properties[
+          'swarming_execution_properties'] = execution_info.as_trigger_prop()
+
+    return execution_info
 
   def package_build(self, builder_id, update_step, builder_config,
                     reasons=None):
@@ -948,18 +1096,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if execution_mode != ctbc.TEST:  # pragma: no cover
       return
 
-    # Protect against hard to debug mismatches between directory names
-    # used to run tests from and extract build to. We've had several cases
-    # where a stale build directory was used on a tester, and the extracted
-    # build was not used at all, leading to confusion why source code changes
-    # are not taking effect.
-    #
-    # The best way to ensure the old build directory is not used is to
-    # remove it.
-    self.m.file.rmtree(
-        'remove build directory',
-        self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))
-
     legacy_build_url = None
     build_revision = (
         build_revision or self.m.properties.get('parent_got_revision') or
@@ -1065,47 +1201,48 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         targets needed for recipe functionality and not for configuring builder
         outputs (which should be specified src-side in waterfalls.pyl).
     Returns:
-      A RawResult object with the failure message and status
+      A tuple of:
+        A RawResult object with the failure message and status or None if
+          nothing failed.
+        A SwarmingExecutionInfo object containing information about how
+          to execute the swarming tests in failing_tests.
+
     """
     compile_targets = list(
         itertools.chain(*[t.compile_targets() for t in failing_tests]))
-    if compile_targets:
-      if additional_compile_targets:
-        compile_targets.extend(additional_compile_targets)
-      # Remove duplicate targets.
-      compile_targets = sorted(set(compile_targets))
-      failing_swarming_tests = [
-          t.isolate_target for t in failing_tests if t.uses_isolate
-      ]
 
-      raw_result = self.run_mb_and_compile(builder_id, compile_targets,
-                                           failing_swarming_tests,
-                                           ' (%s)' % suffix)
-      if raw_result:
-        # Clobber the bot upon compile failure without patch.
-        # See crbug.com/724533 for more detail.
-        if raw_result.status == common_pb.FAILURE:
-          self.m.file.rmtree('clobber', self.m.chromium.output_dir)
+    if additional_compile_targets:
+      compile_targets.extend(additional_compile_targets)
 
-        if raw_result.status != common_pb.SUCCESS:
-          return raw_result
+    if not compile_targets:
+      return None, None
 
-      if failing_swarming_tests:
-        swarm_hashes_property_name = 'swarm_hashes'
-        if 'got_revision_cp' in bot_update_step.presentation.properties:
-          revision_cp = (
-              bot_update_step.presentation.properties['got_revision_cp']
-              .replace('@', '(at)'))
-          swarm_hashes_property_name = 'swarm_hashes_%s_%s' % (
-              revision_cp, suffix.replace(' ', '_'))
-        self.m.isolate.isolate_tests(
-            self.m.chromium.output_dir,
-            failing_swarming_tests,
-            suffix=' (%s)' % suffix,
-            swarm_hashes_property_name=swarm_hashes_property_name,
-            verbose=True)
+    # Remove duplicate targets.
+    compile_targets = sorted(set(compile_targets))
+    failing_swarming_tests = [t for t in failing_tests if t.uses_isolate]
 
-        self.set_test_command_lines(failing_tests, suffix=' (%s)' % suffix)
+    raw_result = self.run_mb_and_compile(
+        builder_id, compile_targets,
+        [t.isolate_target for t in failing_swarming_tests], ' (%s)' % suffix)
+    if raw_result:
+      # Clobber the bot upon compile failure without patch.
+      # See crbug.com/724533 for more detail.
+      if raw_result.status == common_pb.FAILURE:
+        self.m.file.rmtree('clobber', self.m.chromium.output_dir)
+
+      if raw_result.status != common_pb.SUCCESS:
+        return raw_result, None
+
+    if not failing_swarming_tests:
+      return None, None
+
+    return None, self.isolate_tests(
+        builder_config,
+        failing_swarming_tests,
+        suffix,
+        bot_update_step.presentation.properties.get('got_revision_cp'),
+        swarm_hashes_property_name='swarm_hashes',
+    )
 
   def should_skip_without_patch(self, builder_config, affected_files):
     """Determine whether the without patch steps should be skipped.
@@ -1183,7 +1320,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       invalid_test_suites, failing_test_suites = (
           self.m.test_utils.run_tests_with_patch(
               task.test_suites,
-              retry_failed_shards=task.should_retry_failures_with_changes()))
+              retry_failed_shards=task.should_retry_failures_with_changes))
 
       if self.m.code_coverage.using_coverage:
         self.m.code_coverage.process_coverage_data(task.test_suites)
@@ -1206,11 +1343,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         return None, failing_test_suites
 
       deapply_changes(task.bot_update_step)
-      raw_result = self.build_and_isolate_failing_tests(builder_id,
-                                                        task.builder_config,
-                                                        failing_test_suites,
-                                                        task.bot_update_step,
-                                                        'without patch')
+      raw_result, _ = self.build_and_isolate_failing_tests(
+          builder_id, task.builder_config, failing_test_suites,
+          task.bot_update_step, 'without patch')
       if raw_result and raw_result.status != common_pb.SUCCESS:
         return raw_result, []
 
@@ -1344,7 +1479,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           mb_config_path=mb_config_path,
           mb_phase=mb_phase)
 
-    compile_result = self.compile_specific_targets(
+    compile_result, swarming_execution_info = self.compile_specific_targets(
         builder_id,
         builder_config,
         update_step,
@@ -1357,8 +1492,18 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if compile_result and compile_result.status != common_pb.SUCCESS:
       return compile_result
 
+    inbound_info = self.inbound_transfer(builder_config, builder_id,
+                                         update_step, targets_config)
     additional_trigger_properties = self.outbound_transfer(
-        builder_id, builder_config, update_step, targets_config)
+        builder_id,
+        builder_config,
+        update_step,
+        targets_config,
+        # Only one of these should ever be set; either:
+        #   * we compile our own tests, in which case compile gives us
+        #   execution information
+        #   * we download the execution information in inbound_transfer
+        swarming_execution_info or inbound_info)
 
     self.trigger_child_builds(
         builder_id,
@@ -1368,21 +1513,24 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     upload_results = self.archive_build(builder_id, update_step, builder_config)
 
-    self.inbound_transfer(builder_config, builder_id, update_step,
-                          targets_config)
 
     tests = targets_config.tests_on(builder_id)
     return self.run_tests(builder_id, builder_config, tests, upload_results)
 
-  def outbound_transfer(self, builder_id, builder_config, bot_update_step,
-                        targets_config):
+  def outbound_transfer(self,
+                        builder_id,
+                        builder_config,
+                        bot_update_step,
+                        targets_config,
+                        execution_info=None):
     """Handles the builder half of the builder->tester transfer flow.
 
     We support two different transfer mechanisms:
      - Isolate transfer: builders upload tests + any required runtime
-       dependencies to isolate, then pass the isolate hashes to testers via
-       properties. Testers use those hashes to trigger swarming tasks but do
-       not directly download the isolates.
+       dependencies to isolate, then pass the isolate hashes and command line
+       information to testers via properties. Testers use those hashes and
+       command line information to trigger swarming tasks but do not directly
+       download the isolates.
      - Package transfer: builders package and upload some of the output
        directory (see package_build for details). Testers download the zip
        and proceed to run tests.
@@ -1392,51 +1540,33 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     doesn't, would run both the isolate transfer flow *and* the package
     transfer flow.
 
-    For isolate-based transfers, this function just sets a trigger property,
-    as tests get isolated immediately after compilation (see
+    For isolate-based transfers, this function just determines trigger
+    properties, as tests get isolated immediately after compilation (see
     compile_specific_targets).
 
     For package-based transfers, this uploads some of the output directory
     to GS. (See package_build for more details.)
 
     Args:
+      builder_id: a BuilderId object for the currently executing builder.
       builder_config: a BuilderConfig object for the currently executing
         builder.
       bot_update_step: the result of a previously executed bot_update step.
       targets_config: a TargetsConfig object.
+      execution_info: A SwarmingExecutionInfo object describing how to
+        execute the tests configured for this build.
     Returns:
       A dict containing additional properties that should be added to any
       triggered child builds.
     """
     isolate_transfer = any(
-        t.uses_isolate for t in targets_config.tests_triggered_by(builder_id)
-    ) or builder_config.expose_trigger_properties
+        t.uses_isolate for t in targets_config.tests_triggered_by(builder_id))
     non_isolated_tests = [
         t for t in targets_config.tests_triggered_by(builder_id)
         if not t.uses_isolate
     ]
     package_transfer = (
         bool(non_isolated_tests) or builder_config.bisect_archive_build)
-
-    additional_trigger_properties = {}
-
-    if isolate_transfer:
-      additional_trigger_properties['swarm_hashes'] = (
-          self.m.isolate.isolated_tests)
-
-      if self.m.chromium.c.project_generator.tool == 'mb':
-        additional_trigger_properties['swarming_command_lines_digest'] = (
-            self.archive_command_lines(self.swarming_command_lines))
-        additional_trigger_properties['swarming_command_lines_cwd'] = (
-            self.m.path.relpath(self.m.chromium.output_dir,
-                                self.m.path['checkout']))
-
-      # This gets set if we don't trigger builds. Whatever wants the output of
-      # this build probably wants access to the same properties, so expose them
-      # here.
-      if builder_config.expose_trigger_properties:
-        self.m.step.active_result.presentation.properties[
-            'trigger_properties'] = additional_trigger_properties
 
     if (package_transfer and
         builder_config.execution_mode == ctbc.COMPILE_AND_TEST):
@@ -1446,7 +1576,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           builder_config,
           reasons=self._explain_package_transfer(builder_config,
                                                  non_isolated_tests))
-    return additional_trigger_properties
+
+    if not isolate_transfer or not execution_info:
+      return {}
+
+    return execution_info.ensure_command_lines_archived(self).as_trigger_prop()
 
   def inbound_transfer(self, builder_config, builder_id, bot_update_step,
                        targets_config):
@@ -1461,34 +1595,32 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       builder_config: a BuilderConfig object for the currently executing tester.
       bot_update_step: the result of a previously executed bot_update step.
       targets_config: a TargetsConfig object.
+    Returns:
+      None, or a SwarmingExecutionInfo object describing how the tests
+        configured for this build should be executed.
     """
     if builder_config.execution_mode != ctbc.TEST:
-      return
+      return SwarmingExecutionInfo()
 
     tests = targets_config.tests_on(builder_id)
 
     tests_using_isolates = [t for t in tests if t.uses_isolate]
 
-    non_isolated_tests = [t for t in tests if not t.uses_isolate]
+    # Protect against hard to debug mismatches between directory names
+    # used to run tests from and extract build to. We've had several cases
+    # where a stale build directory was used on a tester, and the extracted
+    # build was not used at all, leading to confusion why source code changes
+    # are not taking effect.
+    #
+    # The best way to ensure the old build directory is not used is to
+    # remove it.
+    self.m.file.rmtree(
+        'remove build directory',
+        self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))
 
-    isolate_transfer = not non_isolated_tests
-    # The inbound portion of the isolate transfer is a strict subset of the
-    # inbound portion of the package transfer. A builder that has to handle
-    # the package transfer logic does not need to do the isolate logic under
-    # any circumstance, as it'd just be deleting the output directory twice.
-    package_transfer = not isolate_transfer
-
-    if isolate_transfer:
-      # This was lifted from download_and_unzip_build out of an abundance of
-      # caution during the initial implementation of isolate transfer. It may
-      # be possible to remove it, though there likely isn't a significant
-      # benefit to doing so.
-      self.m.file.rmtree(
-          'remove build directory',
-          self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))
-
-    if package_transfer:
-      # No need to read the GN args since we looked them up for testers already
+    if tests_using_isolates != tests:
+      # There are some tests which don't run via swarming. These need the source
+      # checkout in order to execute.
       self.download_and_unzip_build(
           builder_id,
           bot_update_step,
@@ -1497,32 +1629,41 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self.m.step.empty(
           'explain extract build',
           log_name='why is this running?',
-          log_text=self._explain_package_transfer(builder_config,
-                                                  non_isolated_tests))
+          log_text=self._explain_package_transfer(
+              builder_config, [t for t in tests if not t.uses_isolate]))
 
-    self.download_command_lines_for_tests(tests_using_isolates, builder_config)
+    return self.download_command_lines_for_tests(tests_using_isolates,
+                                                 builder_config)
 
   def download_command_lines_for_tests(self,
                                        tests,
                                        builder_config,
                                        swarming_command_lines_digest=None,
                                        swarming_command_lines_cwd=None):
+    """Download and set command lines for tests.
+
+    This method checks the 'swarming_command_lines_digest' and
+    'swarming_command_lines_cwd' input properties to find the appropriate digest
+    to download.
+
+    Args:
+      tests: The tests to download command line arguments for.
+      builder_config: The currently configured builder.
+      swarming_command_lines_digest: If set, the digest we should download.
+      swarming_command_lines_cwd: If set, the cwd for command lines.
+    """
     digest = (
         swarming_command_lines_digest or
-        self.m.properties.get('swarming_command_lines_digest', ''))
-    cwd = (
+        self.m.properties.get('swarming_command_lines_digest'))
+    rel_cwd = (
         swarming_command_lines_cwd or
-        self.m.properties.get('swarming_command_lines_cwd', ''))
+        self.m.properties.get('swarming_command_lines_cwd'))
     if digest:
-      self._swarming_command_lines = self._download_command_lines(digest)
-      for test in tests:
-        if test.runs_on_swarming:
-          command_line = self.swarming_command_lines.get(test.target_name, [])
-          if command_line:
-            # lists come back from properties as tuples, but the swarming
-            # api expects this to be an actual list.
-            test.raw_cmd = list(command_line)
-            test.relative_cwd = cwd
+      self.set_swarming_test_execution_info(
+          tests,
+          self._download_command_lines(digest),
+          rel_cwd,
+          expose_to_properties=builder_config.expose_trigger_properties)
 
   def _explain_package_transfer(self, builder_config, non_isolated_tests):
     package_transfer_reasons = [
@@ -1973,6 +2114,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     # Compiles and isolates test suites.
     raw_result = result_pb2.RawResult(status=common_pb.SUCCESS)
+    execution_info = None
 
     if compile_targets:
       if additional_compile_targets:
@@ -1981,7 +2123,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       tests = self.tests_in_compile_targets(test_targets, tests)
 
       compile_targets = sorted(set(compile_targets))
-      raw_result = self.compile_specific_targets(
+      raw_result, execution_info = self.compile_specific_targets(
           builder_id,
           builder_config,
           bot_update_step,
@@ -2004,7 +2146,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         tests = []
 
     return raw_result, Task(builder_config, tests, bot_update_step,
-                            affected_files)
+                            affected_files, execution_info)
 
   def get_first_tag(self, key):
     '''Returns the first buildbucket tag value for a given key

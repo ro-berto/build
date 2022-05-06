@@ -229,7 +229,10 @@ class WebRTCApi(recipe_api.RecipeApi):
 
   def set_test_command_lines(self, builder_id, tests):
     if builders.BUILDERS_DB[builder_id].execution_mode != builder_spec.TEST:
-      return self.m.chromium_tests.set_test_command_lines(tests, suffix='')
+      return self.m.chromium_tests.set_swarming_test_execution_info(
+          tests, self.m.chromium_tests.find_swarming_command_lines(''),
+          self.m.path.relpath(self.m.chromium.output_dir,
+                              self.m.path['checkout']))
 
     # Tester builders only triggers swarming tests built on 'builder' bots
     # so the swarming command line needs to be retrieved from build
