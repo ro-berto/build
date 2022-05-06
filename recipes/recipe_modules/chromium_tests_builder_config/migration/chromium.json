@@ -529,7 +529,6 @@
   "chromium.angle:win-angle-chromium-x86-builder": {
     "builders": [
       "chromium.angle:win-angle-chromium-x86-builder",
-      "chromium.angle:win7-angle-chromium-x86-amd",
       "tryserver.chromium.angle:win-angle-chromium-x86-try"
     ]
   },
@@ -538,7 +537,6 @@
       "chromium.angle:win-angle-x64-builder",
       "chromium.angle:win10-angle-x64-intel",
       "chromium.angle:win10-angle-x64-nvidia",
-      "chromium.angle:win7-angle-x64-nvidia",
       "tryserver.chromium.angle:win-angle-x64-try"
     ]
   },
@@ -563,7 +561,6 @@
       "chromium.angle:win-angle-x64-builder",
       "chromium.angle:win10-angle-x64-intel",
       "chromium.angle:win10-angle-x64-nvidia",
-      "chromium.angle:win7-angle-x64-nvidia",
       "tryserver.chromium.angle:win-angle-x64-try"
     ]
   },
@@ -572,23 +569,6 @@
       "chromium.angle:win-angle-x64-builder",
       "chromium.angle:win10-angle-x64-intel",
       "chromium.angle:win10-angle-x64-nvidia",
-      "chromium.angle:win7-angle-x64-nvidia",
-      "tryserver.chromium.angle:win-angle-x64-try"
-    ]
-  },
-  "chromium.angle:win7-angle-chromium-x86-amd": {
-    "builders": [
-      "chromium.angle:win-angle-chromium-x86-builder",
-      "chromium.angle:win7-angle-chromium-x86-amd",
-      "tryserver.chromium.angle:win-angle-chromium-x86-try"
-    ]
-  },
-  "chromium.angle:win7-angle-x64-nvidia": {
-    "builders": [
-      "chromium.angle:win-angle-x64-builder",
-      "chromium.angle:win10-angle-x64-intel",
-      "chromium.angle:win10-angle-x64-nvidia",
-      "chromium.angle:win7-angle-x64-nvidia",
       "tryserver.chromium.angle:win-angle-x64-try"
     ]
   },
@@ -2163,11 +2143,7 @@
     "builders": [
       "chromium.gpu.fyi:GPU FYI Win Builder",
       "chromium.gpu.fyi:Win10 FYI x86 Release (NVIDIA)",
-      "chromium.gpu.fyi:Win7 FYI Release (AMD)",
-      "chromium.gpu.fyi:Win7 FYI Release (NVIDIA)",
-      "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-rel-32",
-      "tryserver.chromium.win:gpu-fyi-try-win7-amd-rel-32",
-      "tryserver.chromium.win:gpu-fyi-try-win7-nvidia-rel-32"
+      "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-rel-32"
     ]
   },
   "chromium.gpu.fyi:GPU FYI Win x64 Builder": {
@@ -2178,13 +2154,11 @@
       "chromium.gpu.fyi:Win10 FYI x64 Release (AMD RX 5500 XT)",
       "chromium.gpu.fyi:Win10 FYI x64 Release (Intel HD 630)",
       "chromium.gpu.fyi:Win10 FYI x64 Release (NVIDIA)",
-      "chromium.gpu.fyi:Win7 FYI x64 Release (NVIDIA)",
       "tryserver.chromium.win:gpu-fyi-try-win10-amd-rel-64",
       "tryserver.chromium.win:gpu-fyi-try-win10-intel-exp-64",
       "tryserver.chromium.win:gpu-fyi-try-win10-intel-rel-64",
       "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-exp-64",
-      "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-rel-64",
-      "tryserver.chromium.win:gpu-fyi-try-win7-nvidia-rel-64"
+      "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-rel-64"
     ]
   },
   "chromium.gpu.fyi:GPU FYI Win x64 Builder (dbg)": {
@@ -2696,13 +2670,11 @@
       "chromium.gpu.fyi:Win10 FYI x64 Release (AMD RX 5500 XT)",
       "chromium.gpu.fyi:Win10 FYI x64 Release (Intel HD 630)",
       "chromium.gpu.fyi:Win10 FYI x64 Release (NVIDIA)",
-      "chromium.gpu.fyi:Win7 FYI x64 Release (NVIDIA)",
       "tryserver.chromium.win:gpu-fyi-try-win10-amd-rel-64",
       "tryserver.chromium.win:gpu-fyi-try-win10-intel-exp-64",
       "tryserver.chromium.win:gpu-fyi-try-win10-intel-rel-64",
       "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-exp-64",
-      "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-rel-64",
-      "tryserver.chromium.win:gpu-fyi-try-win7-nvidia-rel-64"
+      "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-rel-64"
     ]
   },
   "chromium.gpu.fyi:Win10 FYI x64 Exp Release (NVIDIA)": {
@@ -2713,13 +2685,11 @@
       "chromium.gpu.fyi:Win10 FYI x64 Release (AMD RX 5500 XT)",
       "chromium.gpu.fyi:Win10 FYI x64 Release (Intel HD 630)",
       "chromium.gpu.fyi:Win10 FYI x64 Release (NVIDIA)",
-      "chromium.gpu.fyi:Win7 FYI x64 Release (NVIDIA)",
       "tryserver.chromium.win:gpu-fyi-try-win10-amd-rel-64",
       "tryserver.chromium.win:gpu-fyi-try-win10-intel-exp-64",
       "tryserver.chromium.win:gpu-fyi-try-win10-intel-rel-64",
       "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-exp-64",
-      "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-rel-64",
-      "tryserver.chromium.win:gpu-fyi-try-win7-nvidia-rel-64"
+      "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-rel-64"
     ]
   },
   "chromium.gpu.fyi:Win10 FYI x64 Release (AMD RX 5500 XT)": {
@@ -2730,13 +2700,11 @@
       "chromium.gpu.fyi:Win10 FYI x64 Release (AMD RX 5500 XT)",
       "chromium.gpu.fyi:Win10 FYI x64 Release (Intel HD 630)",
       "chromium.gpu.fyi:Win10 FYI x64 Release (NVIDIA)",
-      "chromium.gpu.fyi:Win7 FYI x64 Release (NVIDIA)",
       "tryserver.chromium.win:gpu-fyi-try-win10-amd-rel-64",
       "tryserver.chromium.win:gpu-fyi-try-win10-intel-exp-64",
       "tryserver.chromium.win:gpu-fyi-try-win10-intel-rel-64",
       "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-exp-64",
-      "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-rel-64",
-      "tryserver.chromium.win:gpu-fyi-try-win7-nvidia-rel-64"
+      "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-rel-64"
     ]
   },
   "chromium.gpu.fyi:Win10 FYI x64 Release (Intel HD 630)": {
@@ -2747,13 +2715,11 @@
       "chromium.gpu.fyi:Win10 FYI x64 Release (AMD RX 5500 XT)",
       "chromium.gpu.fyi:Win10 FYI x64 Release (Intel HD 630)",
       "chromium.gpu.fyi:Win10 FYI x64 Release (NVIDIA)",
-      "chromium.gpu.fyi:Win7 FYI x64 Release (NVIDIA)",
       "tryserver.chromium.win:gpu-fyi-try-win10-amd-rel-64",
       "tryserver.chromium.win:gpu-fyi-try-win10-intel-exp-64",
       "tryserver.chromium.win:gpu-fyi-try-win10-intel-rel-64",
       "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-exp-64",
-      "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-rel-64",
-      "tryserver.chromium.win:gpu-fyi-try-win7-nvidia-rel-64"
+      "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-rel-64"
     ]
   },
   "chromium.gpu.fyi:Win10 FYI x64 Release (NVIDIA)": {
@@ -2764,13 +2730,11 @@
       "chromium.gpu.fyi:Win10 FYI x64 Release (AMD RX 5500 XT)",
       "chromium.gpu.fyi:Win10 FYI x64 Release (Intel HD 630)",
       "chromium.gpu.fyi:Win10 FYI x64 Release (NVIDIA)",
-      "chromium.gpu.fyi:Win7 FYI x64 Release (NVIDIA)",
       "tryserver.chromium.win:gpu-fyi-try-win10-amd-rel-64",
       "tryserver.chromium.win:gpu-fyi-try-win10-intel-exp-64",
       "tryserver.chromium.win:gpu-fyi-try-win10-intel-rel-64",
       "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-exp-64",
-      "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-rel-64",
-      "tryserver.chromium.win:gpu-fyi-try-win7-nvidia-rel-64"
+      "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-rel-64"
     ]
   },
   "chromium.gpu.fyi:Win10 FYI x64 Release XR Perf (NVIDIA)": {
@@ -2783,50 +2747,7 @@
     "builders": [
       "chromium.gpu.fyi:GPU FYI Win Builder",
       "chromium.gpu.fyi:Win10 FYI x86 Release (NVIDIA)",
-      "chromium.gpu.fyi:Win7 FYI Release (AMD)",
-      "chromium.gpu.fyi:Win7 FYI Release (NVIDIA)",
-      "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-rel-32",
-      "tryserver.chromium.win:gpu-fyi-try-win7-amd-rel-32",
-      "tryserver.chromium.win:gpu-fyi-try-win7-nvidia-rel-32"
-    ]
-  },
-  "chromium.gpu.fyi:Win7 FYI Release (AMD)": {
-    "builders": [
-      "chromium.gpu.fyi:GPU FYI Win Builder",
-      "chromium.gpu.fyi:Win10 FYI x86 Release (NVIDIA)",
-      "chromium.gpu.fyi:Win7 FYI Release (AMD)",
-      "chromium.gpu.fyi:Win7 FYI Release (NVIDIA)",
-      "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-rel-32",
-      "tryserver.chromium.win:gpu-fyi-try-win7-amd-rel-32",
-      "tryserver.chromium.win:gpu-fyi-try-win7-nvidia-rel-32"
-    ]
-  },
-  "chromium.gpu.fyi:Win7 FYI Release (NVIDIA)": {
-    "builders": [
-      "chromium.gpu.fyi:GPU FYI Win Builder",
-      "chromium.gpu.fyi:Win10 FYI x86 Release (NVIDIA)",
-      "chromium.gpu.fyi:Win7 FYI Release (AMD)",
-      "chromium.gpu.fyi:Win7 FYI Release (NVIDIA)",
-      "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-rel-32",
-      "tryserver.chromium.win:gpu-fyi-try-win7-amd-rel-32",
-      "tryserver.chromium.win:gpu-fyi-try-win7-nvidia-rel-32"
-    ]
-  },
-  "chromium.gpu.fyi:Win7 FYI x64 Release (NVIDIA)": {
-    "builders": [
-      "chromium.gpu.fyi:GPU FYI Win x64 Builder",
-      "chromium.gpu.fyi:Win10 FYI x64 Exp Release (Intel HD 630)",
-      "chromium.gpu.fyi:Win10 FYI x64 Exp Release (NVIDIA)",
-      "chromium.gpu.fyi:Win10 FYI x64 Release (AMD RX 5500 XT)",
-      "chromium.gpu.fyi:Win10 FYI x64 Release (Intel HD 630)",
-      "chromium.gpu.fyi:Win10 FYI x64 Release (NVIDIA)",
-      "chromium.gpu.fyi:Win7 FYI x64 Release (NVIDIA)",
-      "tryserver.chromium.win:gpu-fyi-try-win10-amd-rel-64",
-      "tryserver.chromium.win:gpu-fyi-try-win10-intel-exp-64",
-      "tryserver.chromium.win:gpu-fyi-try-win10-intel-rel-64",
-      "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-exp-64",
-      "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-rel-64",
-      "tryserver.chromium.win:gpu-fyi-try-win7-nvidia-rel-64"
+      "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-rel-32"
     ]
   },
   "chromium.gpu.fyi:gpu-fyi-chromeos-jacuzzi-exp": {
@@ -4393,7 +4314,6 @@
   "tryserver.chromium.angle:win-angle-chromium-x86-try": {
     "builders": [
       "chromium.angle:win-angle-chromium-x86-builder",
-      "chromium.angle:win7-angle-chromium-x86-amd",
       "tryserver.chromium.angle:win-angle-chromium-x86-try"
     ]
   },
@@ -4402,7 +4322,6 @@
       "chromium.angle:win-angle-x64-builder",
       "chromium.angle:win10-angle-x64-intel",
       "chromium.angle:win10-angle-x64-nvidia",
-      "chromium.angle:win7-angle-x64-nvidia",
       "tryserver.chromium.angle:win-angle-x64-try"
     ]
   },
@@ -5446,13 +5365,11 @@
       "chromium.gpu.fyi:Win10 FYI x64 Release (AMD RX 5500 XT)",
       "chromium.gpu.fyi:Win10 FYI x64 Release (Intel HD 630)",
       "chromium.gpu.fyi:Win10 FYI x64 Release (NVIDIA)",
-      "chromium.gpu.fyi:Win7 FYI x64 Release (NVIDIA)",
       "tryserver.chromium.win:gpu-fyi-try-win10-amd-rel-64",
       "tryserver.chromium.win:gpu-fyi-try-win10-intel-exp-64",
       "tryserver.chromium.win:gpu-fyi-try-win10-intel-rel-64",
       "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-exp-64",
-      "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-rel-64",
-      "tryserver.chromium.win:gpu-fyi-try-win7-nvidia-rel-64"
+      "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-rel-64"
     ]
   },
   "tryserver.chromium.win:gpu-fyi-try-win10-intel-exp-64": {
@@ -5463,13 +5380,11 @@
       "chromium.gpu.fyi:Win10 FYI x64 Release (AMD RX 5500 XT)",
       "chromium.gpu.fyi:Win10 FYI x64 Release (Intel HD 630)",
       "chromium.gpu.fyi:Win10 FYI x64 Release (NVIDIA)",
-      "chromium.gpu.fyi:Win7 FYI x64 Release (NVIDIA)",
       "tryserver.chromium.win:gpu-fyi-try-win10-amd-rel-64",
       "tryserver.chromium.win:gpu-fyi-try-win10-intel-exp-64",
       "tryserver.chromium.win:gpu-fyi-try-win10-intel-rel-64",
       "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-exp-64",
-      "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-rel-64",
-      "tryserver.chromium.win:gpu-fyi-try-win7-nvidia-rel-64"
+      "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-rel-64"
     ]
   },
   "tryserver.chromium.win:gpu-fyi-try-win10-intel-rel-64": {
@@ -5480,13 +5395,11 @@
       "chromium.gpu.fyi:Win10 FYI x64 Release (AMD RX 5500 XT)",
       "chromium.gpu.fyi:Win10 FYI x64 Release (Intel HD 630)",
       "chromium.gpu.fyi:Win10 FYI x64 Release (NVIDIA)",
-      "chromium.gpu.fyi:Win7 FYI x64 Release (NVIDIA)",
       "tryserver.chromium.win:gpu-fyi-try-win10-amd-rel-64",
       "tryserver.chromium.win:gpu-fyi-try-win10-intel-exp-64",
       "tryserver.chromium.win:gpu-fyi-try-win10-intel-rel-64",
       "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-exp-64",
-      "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-rel-64",
-      "tryserver.chromium.win:gpu-fyi-try-win7-nvidia-rel-64"
+      "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-rel-64"
     ]
   },
   "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-dbg-64": {
@@ -5518,24 +5431,18 @@
       "chromium.gpu.fyi:Win10 FYI x64 Release (AMD RX 5500 XT)",
       "chromium.gpu.fyi:Win10 FYI x64 Release (Intel HD 630)",
       "chromium.gpu.fyi:Win10 FYI x64 Release (NVIDIA)",
-      "chromium.gpu.fyi:Win7 FYI x64 Release (NVIDIA)",
       "tryserver.chromium.win:gpu-fyi-try-win10-amd-rel-64",
       "tryserver.chromium.win:gpu-fyi-try-win10-intel-exp-64",
       "tryserver.chromium.win:gpu-fyi-try-win10-intel-rel-64",
       "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-exp-64",
-      "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-rel-64",
-      "tryserver.chromium.win:gpu-fyi-try-win7-nvidia-rel-64"
+      "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-rel-64"
     ]
   },
   "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-rel-32": {
     "builders": [
       "chromium.gpu.fyi:GPU FYI Win Builder",
       "chromium.gpu.fyi:Win10 FYI x86 Release (NVIDIA)",
-      "chromium.gpu.fyi:Win7 FYI Release (AMD)",
-      "chromium.gpu.fyi:Win7 FYI Release (NVIDIA)",
-      "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-rel-32",
-      "tryserver.chromium.win:gpu-fyi-try-win7-amd-rel-32",
-      "tryserver.chromium.win:gpu-fyi-try-win7-nvidia-rel-32"
+      "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-rel-32"
     ]
   },
   "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-rel-64": {
@@ -5546,52 +5453,11 @@
       "chromium.gpu.fyi:Win10 FYI x64 Release (AMD RX 5500 XT)",
       "chromium.gpu.fyi:Win10 FYI x64 Release (Intel HD 630)",
       "chromium.gpu.fyi:Win10 FYI x64 Release (NVIDIA)",
-      "chromium.gpu.fyi:Win7 FYI x64 Release (NVIDIA)",
       "tryserver.chromium.win:gpu-fyi-try-win10-amd-rel-64",
       "tryserver.chromium.win:gpu-fyi-try-win10-intel-exp-64",
       "tryserver.chromium.win:gpu-fyi-try-win10-intel-rel-64",
       "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-exp-64",
-      "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-rel-64",
-      "tryserver.chromium.win:gpu-fyi-try-win7-nvidia-rel-64"
-    ]
-  },
-  "tryserver.chromium.win:gpu-fyi-try-win7-amd-rel-32": {
-    "builders": [
-      "chromium.gpu.fyi:GPU FYI Win Builder",
-      "chromium.gpu.fyi:Win10 FYI x86 Release (NVIDIA)",
-      "chromium.gpu.fyi:Win7 FYI Release (AMD)",
-      "chromium.gpu.fyi:Win7 FYI Release (NVIDIA)",
-      "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-rel-32",
-      "tryserver.chromium.win:gpu-fyi-try-win7-amd-rel-32",
-      "tryserver.chromium.win:gpu-fyi-try-win7-nvidia-rel-32"
-    ]
-  },
-  "tryserver.chromium.win:gpu-fyi-try-win7-nvidia-rel-32": {
-    "builders": [
-      "chromium.gpu.fyi:GPU FYI Win Builder",
-      "chromium.gpu.fyi:Win10 FYI x86 Release (NVIDIA)",
-      "chromium.gpu.fyi:Win7 FYI Release (AMD)",
-      "chromium.gpu.fyi:Win7 FYI Release (NVIDIA)",
-      "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-rel-32",
-      "tryserver.chromium.win:gpu-fyi-try-win7-amd-rel-32",
-      "tryserver.chromium.win:gpu-fyi-try-win7-nvidia-rel-32"
-    ]
-  },
-  "tryserver.chromium.win:gpu-fyi-try-win7-nvidia-rel-64": {
-    "builders": [
-      "chromium.gpu.fyi:GPU FYI Win x64 Builder",
-      "chromium.gpu.fyi:Win10 FYI x64 Exp Release (Intel HD 630)",
-      "chromium.gpu.fyi:Win10 FYI x64 Exp Release (NVIDIA)",
-      "chromium.gpu.fyi:Win10 FYI x64 Release (AMD RX 5500 XT)",
-      "chromium.gpu.fyi:Win10 FYI x64 Release (Intel HD 630)",
-      "chromium.gpu.fyi:Win10 FYI x64 Release (NVIDIA)",
-      "chromium.gpu.fyi:Win7 FYI x64 Release (NVIDIA)",
-      "tryserver.chromium.win:gpu-fyi-try-win10-amd-rel-64",
-      "tryserver.chromium.win:gpu-fyi-try-win10-intel-exp-64",
-      "tryserver.chromium.win:gpu-fyi-try-win10-intel-rel-64",
-      "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-exp-64",
-      "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-rel-64",
-      "tryserver.chromium.win:gpu-fyi-try-win7-nvidia-rel-64"
+      "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-rel-64"
     ]
   },
   "tryserver.chromium.win:win-annotator-rel": {

@@ -505,7 +505,8 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.angle',
                 buildername='win-angle-chromium-x86-builder',
-                tester='win7-angle-chromium-x86-amd',
+                is_compile_only=True,
+                include_all_triggered_testers=True,
                 retry_failed_shards=False,
             ),
         'win-angle-x64-try':
@@ -1160,24 +1161,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 retry_failed_shards=False,
             ),
         # Manually triggered GPU trybots.
-        'gpu-fyi-try-win7-amd-rel-32':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Win Builder',
-                tester='Win7 FYI Release (AMD)',
-            ),
-        'gpu-fyi-try-win7-nvidia-rel-32':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Win Builder',
-                tester='Win7 FYI Release (NVIDIA)',
-            ),
-        'gpu-fyi-try-win7-nvidia-rel-64':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Win x64 Builder',
-                tester='Win7 FYI x64 Release (NVIDIA)',
-            ),
         'gpu-fyi-try-win10-amd-rel-64':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.gpu.fyi',

@@ -216,13 +216,8 @@ SPEC = {
             'win', 64, 'win-angle-chromium-x64-builder', internal=False),
     'win-angle-chromium-x86-builder':
         CreateBuilderConfig('win', 32, internal=False),
-    'win7-angle-chromium-x86-amd':
-        CreateTesterConfig(
-            'win', 32, 'win-angle-chromium-x86-builder', internal=False),
     'win-angle-x64-builder':
         CreateBuilderConfig('win', 64, internal=True),
-    'win7-angle-x64-nvidia':
-        CreateTesterConfig('win', 64, 'win-angle-x64-builder', internal=True),
     'win10-angle-x64-intel':
         CreateTesterConfig('win', 64, 'win-angle-x64-builder', internal=True),
     'win10-angle-x64-nvidia':
