@@ -165,6 +165,10 @@ class WebRTCApi(recipe_api.RecipeApi):
       # Set the out folder to be the same as the phase name, so caches of
       # consecutive builds don't interfere with each other.
       self.m.chromium.c.build_config_fs = _sanitize_file_name(phase)
+    elif 'ios' in builder_id.builder.lower():
+      # TODO(crbug.com/1048758): The out folder is hardcoded when calling otool
+      # in the ios script logic for running the tests on multiple shards.
+      pass
     else:
       # Set the out folder to be the same as the builder name, so the whole
       # 'src' folder can be shared between builder types.

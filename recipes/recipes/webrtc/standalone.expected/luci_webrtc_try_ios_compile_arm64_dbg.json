@@ -746,7 +746,7 @@
       "[CACHE]/goma/client",
       "--json-output",
       "/path/to/tmp/json",
-      "//out/ios_compile_arm64_dbg"
+      "//out/Debug"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -941,7 +941,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/ios_compile_arm64_dbg",
+      "[CACHE]/builder/src/out/Debug",
       "-j",
       "80"
     ],
@@ -969,7 +969,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/ios_compile_arm64_dbg",
+      "[CACHE]/builder/src/out/Debug",
       "-j",
       "80",
       "-d",
@@ -1130,9 +1130,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[CACHE]/builder/src/out/ios_compile_arm64_dbg",
+      "[CACHE]/builder/src/out/Debug",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/ios_compile_arm64_dbg\", \"-j\", 80]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Debug\", \"-j\", 80]",
       "--build-exit-status",
       "0",
       "--build-step-name",

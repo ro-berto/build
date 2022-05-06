@@ -567,7 +567,7 @@
       "/path/to/tmp/json",
       "--swarming-targets-file",
       "dummy_test\n",
-      "//out/iOS64_Perf"
+      "//out/Release"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -764,7 +764,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/iOS64_Perf",
+      "[CACHE]/builder/src/out/Release",
       "-j",
       "80"
     ],
@@ -792,7 +792,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/iOS64_Perf",
+      "[CACHE]/builder/src/out/Release",
       "-j",
       "80",
       "-d",
@@ -953,9 +953,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[CACHE]/builder/src/out/iOS64_Perf",
+      "[CACHE]/builder/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/iOS64_Perf\", \"-j\", 80]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Release\", \"-j\", 80]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -1126,7 +1126,7 @@
       "projects/example-cas-server/instances/default_instance",
       "-log-level",
       "debug",
-      "[CACHE]/builder/src/out/iOS64_Perf/dummy_test.isolated.gen.json"
+      "[CACHE]/builder/src/out/Release/dummy_test.isolated.gen.json"
     ],
     "luci_context": {
       "realm": {
@@ -1155,7 +1155,7 @@
       "-u",
       "RECIPE_MODULE[build::chromium_tests]/resources/find_command_lines.py",
       "--build-dir",
-      "[CACHE]/builder/src/out/iOS64_Perf",
+      "[CACHE]/builder/src/out/Release",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -1765,7 +1765,7 @@
       "--merge-additional-args",
       "[]",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"bot\": \"webrtc-ios-tests\", \"bot_id\": \"bot_id\", \"build_page_url\": \"https://ci.chromium.org/p/webrtc-internal/builders/luci.webrtc-internal.ci/iOS64%20Perf/0\", \"builder_group\": \"internal.client.webrtc\", \"buildername\": \"iOS64 Perf\", \"buildnumber\": 1337, \"commit_position\": 170242, \"dashboard_url\": \"https://chromeperf.appspot.com\", \"got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"got_revision_cp\": \"refs/heads/main@{#1337}\", \"outdir\": \"[CACHE]/builder/src/out/iOS64_Perf\", \"perf_dashboard_machine_group\": \"WebRTCPerf\", \"recipe\": \"webrtc/standalone\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"webrtc_git_hash\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"xcode_build_version\": \"dummy_xcode\"}",
+      "{\"BUILD_CONFIG\": \"Release\", \"bot\": \"webrtc-ios-tests\", \"bot_id\": \"bot_id\", \"build_page_url\": \"https://ci.chromium.org/p/webrtc-internal/builders/luci.webrtc-internal.ci/iOS64%20Perf/0\", \"builder_group\": \"internal.client.webrtc\", \"buildername\": \"iOS64 Perf\", \"buildnumber\": 1337, \"commit_position\": 170242, \"dashboard_url\": \"https://chromeperf.appspot.com\", \"got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"got_revision_cp\": \"refs/heads/main@{#1337}\", \"outdir\": \"[CACHE]/builder/src/out/Release\", \"perf_dashboard_machine_group\": \"WebRTCPerf\", \"recipe\": \"webrtc/standalone\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"webrtc_git_hash\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"xcode_build_version\": \"dummy_xcode\"}",
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",

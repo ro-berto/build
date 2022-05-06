@@ -767,7 +767,7 @@
       "/path/to/tmp/json",
       "--swarming-targets-file",
       "dummy_test\n",
-      "//out/ios_sim_x64_dbg_ios14"
+      "//out/Debug"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -964,7 +964,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/ios_sim_x64_dbg_ios14",
+      "[CACHE]/builder/src/out/Debug",
       "-j",
       "80"
     ],
@@ -992,7 +992,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/ios_sim_x64_dbg_ios14",
+      "[CACHE]/builder/src/out/Debug",
       "-j",
       "80",
       "-d",
@@ -1153,9 +1153,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[CACHE]/builder/src/out/ios_sim_x64_dbg_ios14",
+      "[CACHE]/builder/src/out/Debug",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/ios_sim_x64_dbg_ios14\", \"-j\", 80]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Debug\", \"-j\", 80]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -1326,7 +1326,7 @@
       "projects/example-cas-server/instances/default_instance",
       "-log-level",
       "debug",
-      "[CACHE]/builder/src/out/ios_sim_x64_dbg_ios14/dummy_test.isolated.gen.json"
+      "[CACHE]/builder/src/out/Debug/dummy_test.isolated.gen.json"
     ],
     "luci_context": {
       "realm": {
@@ -1355,7 +1355,7 @@
       "-u",
       "RECIPE_MODULE[build::chromium_tests]/resources/find_command_lines.py",
       "--build-dir",
-      "[CACHE]/builder/src/out/ios_sim_x64_dbg_ios14",
+      "[CACHE]/builder/src/out/Debug",
       "--output-json",
       "/path/to/tmp/json"
     ],
