@@ -183,10 +183,19 @@ def GenTests(api):
 
   yield api.test(
       'analyze_compile_mode',
+      api.platform('linux', 64),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.linux',
-          builder='linux_chromium_clobber_rel_ng',
-      ),
+          builder_group='fake-try-group', builder='fake-try-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+              builder_spec=ctbc.BuilderSpec.create(
+                  gclient_config='chromium',
+                  chromium_config='chromium',
+                  chromium_apply_config=['clobber'],
+              ),
+          ).assemble()),
   )
 
   yield api.test(

@@ -535,6 +535,8 @@ TRYBOTS = try_spec.TryDatabase.create({
     # The config for the following builders is now specified src-side in
     # //infra/config/subprojects/chromium/try/tryserver.chromium.linux.star
     # * gpu-try-linux-nvidia-rel
+    # * linux_chromium_archive_rel_ng
+    # * linux_chromium_clobber_rel_ng
     # * linux-1mbu-compile-fyi-rel
     # * linux-dcheck-off-rel
     # * linux-gcc-rel
@@ -646,18 +648,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='Linux ASan LSan Builder',
                 tester='Linux ASan LSan Tests (1)',
                 regression_test_selection=try_spec.QUICK_RUN_ONLY,
-            ),
-        'linux_chromium_archive_rel_ng':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium',
-                buildername='linux-archive-rel',
-            ),
-        'linux_chromium_clobber_rel_ng':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium',
-                buildername='linux-archive-rel',
-                is_compile_only=True,
-                include_all_triggered_testers=True,
             ),
         'linux_chromium_chromeos_asan_rel_ng':
             try_spec.TrySpec.create_for_single_mirror(

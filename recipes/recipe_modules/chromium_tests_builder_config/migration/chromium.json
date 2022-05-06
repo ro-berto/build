@@ -1771,26 +1771,6 @@
       "chromium.goma.fyi:android-archive-dbg-goma-rbe-latest"
     ]
   },
-  "chromium.goma.fyi:linux-archive-rel-goma-rbe-ats-canary": {
-    "builders": [
-      "chromium.goma.fyi:linux-archive-rel-goma-rbe-ats-canary"
-    ]
-  },
-  "chromium.goma.fyi:linux-archive-rel-goma-rbe-ats-latest": {
-    "builders": [
-      "chromium.goma.fyi:linux-archive-rel-goma-rbe-ats-latest"
-    ]
-  },
-  "chromium.goma.fyi:linux-archive-rel-goma-rbe-canary": {
-    "builders": [
-      "chromium.goma.fyi:linux-archive-rel-goma-rbe-canary"
-    ]
-  },
-  "chromium.goma.fyi:linux-archive-rel-goma-rbe-latest": {
-    "builders": [
-      "chromium.goma.fyi:linux-archive-rel-goma-rbe-latest"
-    ]
-  },
   "chromium.goma.fyi:mac-archive-rel-goma-rbe-canary": {
     "builders": [
       "chromium.goma.fyi:mac-archive-rel-goma-rbe-canary"
@@ -3751,13 +3731,6 @@
       "tryserver.chromium:fuchsia-official"
     ]
   },
-  "chromium:linux-archive-rel": {
-    "builders": [
-      "chromium:linux-archive-rel",
-      "tryserver.chromium.linux:linux_chromium_archive_rel_ng",
-      "tryserver.chromium.linux:linux_chromium_clobber_rel_ng"
-    ]
-  },
   "chromium:linux-archive-tagged": {
     "builders": [
       "chromium:linux-archive-tagged"
@@ -4954,13 +4927,6 @@
       "tryserver.chromium.linux:linux-wpt-input-fyi-rel"
     ]
   },
-  "tryserver.chromium.linux:linux_chromium_archive_rel_ng": {
-    "builders": [
-      "chromium:linux-archive-rel",
-      "tryserver.chromium.linux:linux_chromium_archive_rel_ng",
-      "tryserver.chromium.linux:linux_chromium_clobber_rel_ng"
-    ]
-  },
   "tryserver.chromium.linux:linux_chromium_asan_rel_ng": {
     "builders": [
       "chromium.memory:Linux ASan LSan Builder",
@@ -4987,13 +4953,6 @@
       "chromium.memory:Linux ChromiumOS MSan Builder",
       "chromium.memory:Linux ChromiumOS MSan Tests",
       "tryserver.chromium.linux:linux_chromium_chromeos_msan_rel_ng"
-    ]
-  },
-  "tryserver.chromium.linux:linux_chromium_clobber_rel_ng": {
-    "builders": [
-      "chromium:linux-archive-rel",
-      "tryserver.chromium.linux:linux_chromium_archive_rel_ng",
-      "tryserver.chromium.linux:linux_chromium_clobber_rel_ng"
     ]
   },
   "tryserver.chromium.linux:linux_chromium_msan_rel_ng": {

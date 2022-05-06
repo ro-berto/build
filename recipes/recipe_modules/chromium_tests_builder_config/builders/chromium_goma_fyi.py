@@ -36,15 +36,13 @@ def chromium_apply_configs(base_config, config_names):
 # * chromeos-amd64-generic-rel-goma-rbe-latest
 # * ios-device-goma-rbe-canary-clobber
 # * ios-device-goma-rbe-latest-clobber
+# * linux-archive-rel-goma-rbe-ats-canary
+# * linux-archive-rel-goma-rbe-ats-latest
+# * linux-archive-rel-goma-rbe-canary
+# * linux-archive-rel-goma-rbe-latest
 
 SPEC = {
     # Canary RBE
-    'linux-archive-rel-goma-rbe-canary':
-        chromium_apply_configs(chromium.SPEC['linux-archive-rel'],
-                               ['goma_canary']),
-    'linux-archive-rel-goma-rbe-ats-canary':
-        chromium_apply_configs(chromium.SPEC['linux-archive-rel'],
-                               ['goma_canary']),
     'mac-archive-rel-goma-rbe-canary':
         chromium_apply_configs(chromium.SPEC['mac-archive-rel'],
                                ['goma_canary']),
@@ -68,12 +66,6 @@ SPEC = {
                                ['goma_canary']),
 
     # Latest RBE
-    'linux-archive-rel-goma-rbe-latest':
-        chromium_apply_configs(chromium.SPEC['linux-archive-rel'],
-                               ['goma_latest_client']),
-    'linux-archive-rel-goma-rbe-ats-latest':
-        chromium_apply_configs(chromium.SPEC['linux-archive-rel'],
-                               ['goma_latest_client']),
     'mac-archive-rel-goma-rbe-latest':
         chromium_apply_configs(chromium.SPEC['mac-archive-rel'],
                                ['goma_latest_client']),

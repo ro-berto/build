@@ -9,6 +9,7 @@ from .. import builder_spec
 # * android-archive-dbg
 # * android-archive-rel
 # * linux-archive-dbg
+# * linux-archive-rel
 # * win-archive-rel
 # * win-official
 # * win32-archive-rel
@@ -195,21 +196,6 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=['checkout_pgo_profiles', 'enable_reclient'],
             chromium_config_kwargs={
-                'TARGET_BITS': 64,
-            },
-            simulation_platform='linux',
-        ),
-    'linux-archive-rel':
-        builder_spec.BuilderSpec.create(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'clobber',
-                'mb',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=['enable_reclient'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
             simulation_platform='linux',
