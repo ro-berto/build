@@ -725,7 +725,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     )
 
     if expose_to_properties:
-      execution_info.ensure_command_lines_archived(self)
+      execution_info = execution_info.ensure_command_lines_archived(self)
 
       step_result = self.m.step.empty('expose execution properties')
       step_result.presentation.properties[
