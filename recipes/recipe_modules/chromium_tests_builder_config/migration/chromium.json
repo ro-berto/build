@@ -20,13 +20,6 @@
       "chromium.android.fyi:Memory Infra Tester"
     ]
   },
-  "chromium.android.fyi:android-10-x86-fyi-rel-tests": {
-    "builders": [
-      "chromium.android.fyi:android-10-x86-fyi-rel-tests",
-      "chromium.android.fyi:android-x86-fyi-rel",
-      "tryserver.chromium.android:android-10-x86-fyi-rel-tests"
-    ]
-  },
   "chromium.android.fyi:android-11-x86-fyi-rel": {
     "builders": [
       "chromium.android.fyi:android-11-x86-fyi-rel",
@@ -113,13 +106,6 @@
     "builders": [
       "chromium.android.fyi:android-webview-pie-x86-wpt-fyi-rel",
       "tryserver.chromium.android:android-webview-pie-x86-wpt-fyi-rel"
-    ]
-  },
-  "chromium.android.fyi:android-x86-fyi-rel": {
-    "builders": [
-      "chromium.android.fyi:android-10-x86-fyi-rel-tests",
-      "chromium.android.fyi:android-x86-fyi-rel",
-      "tryserver.chromium.android:android-10-x86-fyi-rel-tests"
     ]
   },
   "chromium.android:Android ASAN (dbg)": {
@@ -3934,13 +3920,6 @@
     "builders": [
       "chromium.android:android-10-arm64-rel",
       "tryserver.chromium.android:android-10-arm64-rel"
-    ]
-  },
-  "tryserver.chromium.android:android-10-x86-fyi-rel-tests": {
-    "builders": [
-      "chromium.android.fyi:android-10-x86-fyi-rel-tests",
-      "chromium.android.fyi:android-x86-fyi-rel",
-      "tryserver.chromium.android:android-10-x86-fyi-rel-tests"
     ]
   },
   "tryserver.chromium.android:android-11-x86-fyi-rel": {
