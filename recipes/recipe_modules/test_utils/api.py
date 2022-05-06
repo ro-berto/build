@@ -265,7 +265,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     step_result = self.m.step(
         '$debug - all results%s' % ('' if not suffix else ' (%s)' % suffix),
         cmd=None)
-    step_result.presentation.logs['serialzed results'] = (
+    step_result.presentation.logs['serialized results'] = (
         self.m.json.dumps(rdb_results.to_jsonish(), indent=2).splitlines())
 
     bad_results_dict = {}
