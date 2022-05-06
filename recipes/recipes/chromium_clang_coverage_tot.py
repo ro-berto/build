@@ -17,7 +17,6 @@ DEPS = [
     'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/platform',
-    'recipe_engine/python',
     'recipe_engine/step'
 ]
 
@@ -94,22 +93,23 @@ def _RunStepsInBuilderCacheDir(api, builder_id, bot_config):
   output_dir_name = 'clang_tot_coverage_report'
   output_dir_path = api.path['checkout'].join('out', output_dir_name)
   build_dir = api.chromium.output_dir
-  cmd_args = []
-  cmd_args.extend(SAMPLE_TARGETS)
+
+  cmd = ['python', coverage_script_path]
+  cmd.extend(SAMPLE_TARGETS)
 
   for target in SAMPLE_TARGETS:
-    cmd_args.extend(['-c', build_dir.join(target)])
+    cmd.extend(['-c', build_dir.join(target)])
 
-  cmd_args.extend(['-b', build_dir])
-  cmd_args.extend(['-o', output_dir_path])
+  cmd.extend(['-b', build_dir])
+  cmd.extend(['-o', output_dir_path])
 
   coverage_tools_dir_path = api.path['checkout'].join(
       'third_party', 'llvm-build', 'Release+Asserts', 'bin')
-  cmd_args.extend(['--coverage-tools-dir', coverage_tools_dir_path])
+  cmd.extend(['--coverage-tools-dir', coverage_tools_dir_path])
 
-  cmd_args.extend(['-v'])
+  cmd.extend(['-v'])
   with api.depot_tools.on_path():
-    api.python('run coverage script', coverage_script_path, cmd_args)
+    api.step('run coverage script', cmd)
 
   # Following steps are added for debugging purpose.
   for target in SAMPLE_TARGETS:
