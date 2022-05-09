@@ -1079,8 +1079,8 @@ class ArchiveApi(recipe_api.RecipeApi):
         # TODO(akashmukherjee): Add support for custom backend url.
         # Need to report full destination path of the artifact.
         if report_artifacts:
-          self.m.snoopy.report_gcs(file_hash,
-                                   'gs://%s/%s' % (gcs_bucket, uploads[f]))
+          self.m.bcid_reporter.report_gcs(
+              file_hash, 'gs://%s/%s' % (gcs_bucket, uploads[f]))
       uploads.update(attestation_paths)
 
     for file_path in self.m.py3_migration.consistent_ordering(
