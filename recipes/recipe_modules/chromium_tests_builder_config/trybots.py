@@ -922,7 +922,7 @@ TRYBOTS = try_spec.TryDatabase.create({
     'tryserver.chromium.mac': {
         'ios-asan':
             try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
+                builder_group='chromium.memory',
                 buildername='ios-asan',
             ),
         'ios-simulator-cronet':

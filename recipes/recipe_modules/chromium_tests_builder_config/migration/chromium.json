@@ -1249,8 +1249,7 @@
       "cannot migrate builder 'chromium.fyi:ios-asan' with the following unsupported attrs:\n* cf_archive_build\n* cf_gs_bucket\n* cf_gs_acl\n* cf_archive_name\n* cf_archive_subdir_suffix"
     ],
     "builders": [
-      "chromium.fyi:ios-asan",
-      "tryserver.chromium.mac:ios-asan"
+      "chromium.fyi:ios-asan"
     ]
   },
   "chromium.fyi:ios-reclient": {
@@ -2985,6 +2984,15 @@
     "builders": [
       "chromium.memory:android-asan",
       "tryserver.chromium.android:android-asan"
+    ]
+  },
+  "chromium.memory:ios-asan": {
+    "blockers": [
+      "cannot migrate builder 'chromium.memory:ios-asan' with the following unsupported attrs:\n* cf_archive_build\n* cf_gs_bucket\n* cf_gs_acl\n* cf_archive_name\n* cf_archive_subdir_suffix"
+    ],
+    "builders": [
+      "chromium.memory:ios-asan",
+      "tryserver.chromium.mac:ios-asan"
     ]
   },
   "chromium.memory:linux-ubsan-vptr": {
@@ -5084,10 +5092,10 @@
   },
   "tryserver.chromium.mac:ios-asan": {
     "blockers": [
-      "cannot migrate builder 'chromium.fyi:ios-asan' with the following unsupported attrs:\n* cf_archive_build\n* cf_gs_bucket\n* cf_gs_acl\n* cf_archive_name\n* cf_archive_subdir_suffix"
+      "cannot migrate builder 'chromium.memory:ios-asan' with the following unsupported attrs:\n* cf_archive_build\n* cf_gs_bucket\n* cf_gs_acl\n* cf_archive_name\n* cf_archive_subdir_suffix"
     ],
     "builders": [
-      "chromium.fyi:ios-asan",
+      "chromium.memory:ios-asan",
       "tryserver.chromium.mac:ios-asan"
     ]
   },
