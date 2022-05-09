@@ -981,25 +981,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='Mac ASan 64 Builder',
                 tester='Mac ASan 64 Tests (1)',
             ),
-        # Optional GPU bots.
-        'mac_optional_gpu_tests_rel':
-            try_spec.TrySpec.create([
-                try_spec.TryMirror.create(
-                    builder_group='chromium.gpu.fyi',
-                    buildername='GPU FYI Mac Builder DEPS ANGLE',
-                    tester='Optional Mac Release (Intel)',
-                ),
-                try_spec.TryMirror.create(
-                    builder_group='chromium.gpu.fyi',
-                    buildername='GPU FYI Mac Builder DEPS ANGLE',
-                    tester='Optional Mac Retina Release (NVIDIA)',
-                ),
-                try_spec.TryMirror.create(
-                    builder_group='chromium.gpu.fyi',
-                    buildername='GPU FYI Mac Builder DEPS ANGLE',
-                    tester='Optional Mac Retina Release (AMD)',
-                ),
-            ],),
         # Manually triggered GPU trybots.
         'gpu-fyi-try-mac-amd-pro-rel':
             try_spec.TrySpec.create_for_single_mirror(

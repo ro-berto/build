@@ -2113,17 +2113,8 @@
     ]
   },
   "chromium.gpu.fyi:GPU FYI Mac Builder DEPS ANGLE": {
-    "blockers": [
-      "cannot migrate builder 'chromium.gpu.fyi:Optional Mac Release (Intel)' with provide-test-spec execution_mode",
-      "cannot migrate builder 'chromium.gpu.fyi:Optional Mac Retina Release (AMD)' with provide-test-spec execution_mode",
-      "cannot migrate builder 'chromium.gpu.fyi:Optional Mac Retina Release (NVIDIA)' with provide-test-spec execution_mode"
-    ],
     "builders": [
-      "chromium.gpu.fyi:GPU FYI Mac Builder DEPS ANGLE",
-      "chromium.gpu.fyi:Optional Mac Release (Intel)",
-      "chromium.gpu.fyi:Optional Mac Retina Release (AMD)",
-      "chromium.gpu.fyi:Optional Mac Retina Release (NVIDIA)",
-      "tryserver.chromium.mac:mac_optional_gpu_tests_rel"
+      "chromium.gpu.fyi:GPU FYI Mac Builder DEPS ANGLE"
     ]
   },
   "chromium.gpu.fyi:GPU FYI Mac arm64 Builder": {
@@ -2571,44 +2562,26 @@
   },
   "chromium.gpu.fyi:Optional Mac Release (Intel)": {
     "blockers": [
-      "cannot migrate builder 'chromium.gpu.fyi:Optional Mac Release (Intel)' with provide-test-spec execution_mode",
-      "cannot migrate builder 'chromium.gpu.fyi:Optional Mac Retina Release (AMD)' with provide-test-spec execution_mode",
-      "cannot migrate builder 'chromium.gpu.fyi:Optional Mac Retina Release (NVIDIA)' with provide-test-spec execution_mode"
+      "cannot migrate builder 'chromium.gpu.fyi:Optional Mac Release (Intel)' with provide-test-spec execution_mode"
     ],
     "builders": [
-      "chromium.gpu.fyi:GPU FYI Mac Builder DEPS ANGLE",
-      "chromium.gpu.fyi:Optional Mac Release (Intel)",
-      "chromium.gpu.fyi:Optional Mac Retina Release (AMD)",
-      "chromium.gpu.fyi:Optional Mac Retina Release (NVIDIA)",
-      "tryserver.chromium.mac:mac_optional_gpu_tests_rel"
+      "chromium.gpu.fyi:Optional Mac Release (Intel)"
     ]
   },
   "chromium.gpu.fyi:Optional Mac Retina Release (AMD)": {
     "blockers": [
-      "cannot migrate builder 'chromium.gpu.fyi:Optional Mac Release (Intel)' with provide-test-spec execution_mode",
-      "cannot migrate builder 'chromium.gpu.fyi:Optional Mac Retina Release (AMD)' with provide-test-spec execution_mode",
-      "cannot migrate builder 'chromium.gpu.fyi:Optional Mac Retina Release (NVIDIA)' with provide-test-spec execution_mode"
+      "cannot migrate builder 'chromium.gpu.fyi:Optional Mac Retina Release (AMD)' with provide-test-spec execution_mode"
     ],
     "builders": [
-      "chromium.gpu.fyi:GPU FYI Mac Builder DEPS ANGLE",
-      "chromium.gpu.fyi:Optional Mac Release (Intel)",
-      "chromium.gpu.fyi:Optional Mac Retina Release (AMD)",
-      "chromium.gpu.fyi:Optional Mac Retina Release (NVIDIA)",
-      "tryserver.chromium.mac:mac_optional_gpu_tests_rel"
+      "chromium.gpu.fyi:Optional Mac Retina Release (AMD)"
     ]
   },
   "chromium.gpu.fyi:Optional Mac Retina Release (NVIDIA)": {
     "blockers": [
-      "cannot migrate builder 'chromium.gpu.fyi:Optional Mac Release (Intel)' with provide-test-spec execution_mode",
-      "cannot migrate builder 'chromium.gpu.fyi:Optional Mac Retina Release (AMD)' with provide-test-spec execution_mode",
       "cannot migrate builder 'chromium.gpu.fyi:Optional Mac Retina Release (NVIDIA)' with provide-test-spec execution_mode"
     ],
     "builders": [
-      "chromium.gpu.fyi:GPU FYI Mac Builder DEPS ANGLE",
-      "chromium.gpu.fyi:Optional Mac Release (Intel)",
-      "chromium.gpu.fyi:Optional Mac Retina Release (AMD)",
-      "chromium.gpu.fyi:Optional Mac Retina Release (NVIDIA)",
-      "tryserver.chromium.mac:mac_optional_gpu_tests_rel"
+      "chromium.gpu.fyi:Optional Mac Retina Release (NVIDIA)"
     ]
   },
   "chromium.gpu.fyi:Optional Win10 x64 Release (Intel HD 630)": {
@@ -5186,16 +5159,7 @@
     ]
   },
   "tryserver.chromium.mac:mac_optional_gpu_tests_rel": {
-    "blockers": [
-      "cannot migrate builder 'chromium.gpu.fyi:Optional Mac Release (Intel)' with provide-test-spec execution_mode",
-      "cannot migrate builder 'chromium.gpu.fyi:Optional Mac Retina Release (AMD)' with provide-test-spec execution_mode",
-      "cannot migrate builder 'chromium.gpu.fyi:Optional Mac Retina Release (NVIDIA)' with provide-test-spec execution_mode"
-    ],
     "builders": [
-      "chromium.gpu.fyi:GPU FYI Mac Builder DEPS ANGLE",
-      "chromium.gpu.fyi:Optional Mac Release (Intel)",
-      "chromium.gpu.fyi:Optional Mac Retina Release (AMD)",
-      "chromium.gpu.fyi:Optional Mac Retina Release (NVIDIA)",
       "tryserver.chromium.mac:mac_optional_gpu_tests_rel"
     ]
   },
