@@ -610,12 +610,6 @@
       "tryserver.chromium.chromiumos:lacros-amd64-generic-rel"
     ]
   },
-  "chromium.chromiumos:lacros-arm-generic-rel": {
-    "builders": [
-      "chromium.chromiumos:lacros-arm-generic-rel",
-      "tryserver.chromium.chromiumos:lacros-arm-generic-rel"
-    ]
-  },
   "chromium.chromiumos:linux-ash-chromium-generator-rel": {
     "builders": [
       "chromium.chromiumos:linux-ash-chromium-generator-rel"
@@ -4365,12 +4359,6 @@
     "builders": [
       "chromium.chromiumos:lacros-amd64-generic-rel",
       "tryserver.chromium.chromiumos:lacros-amd64-generic-rel"
-    ]
-  },
-  "tryserver.chromium.chromiumos:lacros-arm-generic-rel": {
-    "builders": [
-      "chromium.chromiumos:lacros-arm-generic-rel",
-      "tryserver.chromium.chromiumos:lacros-arm-generic-rel"
     ]
   },
   "tryserver.chromium.chromiumos:linux-cfm-rel": {

@@ -72,6 +72,7 @@ def _config(name,
 # * chromeos-amd64-generic-rel
 # * chromeos-arm-generic-rel
 # * chromeos-kevin-rel
+# * lacros-arm-generic-rel
 # * linux-lacros-dbg
 
 SPEC.update([
@@ -84,11 +85,6 @@ SPEC.update([
         'lacros-amd64-generic-rel',
         cros_boards='eve',
         cros_boards_with_qemu_images='amd64-generic',
-        gclient_apply_config=['checkout_lacros_sdk'],
-    ),
-    _config(
-        'lacros-arm-generic-rel',
-        cros_boards='arm-generic',
         gclient_apply_config=['checkout_lacros_sdk'],
     ),
     _config('linux-ash-chromium-generator-rel'),

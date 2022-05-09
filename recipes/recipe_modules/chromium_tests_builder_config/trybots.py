@@ -820,6 +820,7 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * chromeos-arm-generic-rel
     # * chromeos-kevin-compile-rel
     # * chromeos-kevin-rel
+    # * lacros-arm-generic-rel
     # * linux-chromeos-inverse-fieldtrials-fyi-rel
     # * linux-chromeos-rel
     # * linux-chromeos-rel-rts
@@ -839,11 +840,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.chromiumos',
                 buildername='lacros-amd64-generic-rel',
-            ),
-        'lacros-arm-generic-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.chromiumos',
-                buildername='lacros-arm-generic-rel',
             ),
         'linux-chromeos-compile-dbg':
             try_spec.TrySpec.create_for_single_mirror(
