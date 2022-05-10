@@ -13,7 +13,9 @@ def _chromium_win_spec(**kwargs):
 # //infra/config/subprojects/chromium/ci/chromium.win.star
 # * Win 7 Tests x64 (1)
 # * Win x64 Builder
+# * Win x64 Builder (dbg)
 # * Win10 Tests x64
+# * Win10 Tests x64 (dbg)
 
 SPEC = {
     'WebKit Win10':
@@ -78,17 +80,6 @@ SPEC = {
             parent_buildername='Win Builder',
             simulation_platform='win',
         ),
-    'Win x64 Builder (dbg)':
-        _chromium_win_spec(
-            chromium_config='chromium',
-            chromium_apply_config=['mb'],
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 64,
-            },
-            simulation_platform='win',
-        ),
     'Win Builder (dbg)':
         _chromium_win_spec(
             chromium_config='chromium',
@@ -98,19 +89,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 32,
             },
-            simulation_platform='win',
-        ),
-    'Win10 Tests x64 (dbg)':
-        _chromium_win_spec(
-            chromium_config='chromium',
-            chromium_apply_config=['mb'],
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 64,
-            },
-            execution_mode=builder_spec.TEST,
-            parent_buildername='Win x64 Builder (dbg)',
             simulation_platform='win',
         ),
 }

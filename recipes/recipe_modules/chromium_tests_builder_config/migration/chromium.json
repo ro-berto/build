@@ -3581,20 +3581,6 @@
       "tryserver.chromium.win:win_chromium_compile_dbg_ng"
     ]
   },
-  "chromium.win:Win x64 Builder (dbg)": {
-    "builders": [
-      "chromium.win:Win x64 Builder (dbg)",
-      "chromium.win:Win10 Tests x64 (dbg)",
-      "tryserver.chromium.win:win10_chromium_x64_dbg_ng"
-    ]
-  },
-  "chromium.win:Win10 Tests x64 (dbg)": {
-    "builders": [
-      "chromium.win:Win x64 Builder (dbg)",
-      "chromium.win:Win10 Tests x64 (dbg)",
-      "tryserver.chromium.win:win10_chromium_x64_dbg_ng"
-    ]
-  },
   "chromium.win:Win7 (32) Tests": {
     "builders": [
       "chromium.win:WebKit Win10",
@@ -5430,13 +5416,6 @@
     "builders": [
       "chromium.memory:win-asan",
       "tryserver.chromium.win:win-asan"
-    ]
-  },
-  "tryserver.chromium.win:win10_chromium_x64_dbg_ng": {
-    "builders": [
-      "chromium.win:Win x64 Builder (dbg)",
-      "chromium.win:Win10 Tests x64 (dbg)",
-      "tryserver.chromium.win:win10_chromium_x64_dbg_ng"
     ]
   },
   "tryserver.chromium.win:win7-rel": {

@@ -1078,6 +1078,7 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * win_chromium_x64_rel_ng
     # * win_x64_archive
     # * win10_chromium_inverse_fieldtrials_x64_fyi_rel_ng
+    # * win10_chromium_x64_dbg_ng
     # * win10_chromium_x64_rel_ng
     # * win11-x64-fyi-rel
     # * win_archive
@@ -1097,12 +1098,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.win',
                 buildername='Win Builder',
                 tester='Win7 Tests (1)',
-            ),
-        'win10_chromium_x64_dbg_ng':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.win',
-                buildername='Win x64 Builder (dbg)',
-                tester='Win10 Tests x64 (dbg)',
             ),
         'win_chromium_compile_dbg_ng':
             try_spec.TrySpec.create_for_single_mirror(
