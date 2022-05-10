@@ -10,6 +10,7 @@ from .. import builder_spec
 # * android-archive-rel
 # * linux-archive-dbg
 # * linux-archive-rel
+# * mac-arm64-archive-rel
 # * win-archive-rel
 # * win-official
 # * win32-archive-rel
@@ -139,21 +140,6 @@ SPEC = {
             gclient_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 64,
-            },
-            simulation_platform='mac',
-        ),
-    'mac-arm64-archive-rel':
-        builder_spec.BuilderSpec.create(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'clobber',
-                'mb',
-                'goma_use_local',  # to mitigate compile step timeout (crbug.com/1056935).
-            ],
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
             simulation_platform='mac',

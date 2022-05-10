@@ -3633,11 +3633,6 @@
       "chromium:mac-arm64-archive-dbg"
     ]
   },
-  "chromium:mac-arm64-archive-rel": {
-    "builders": [
-      "chromium:mac-arm64-archive-rel"
-    ]
-  },
   "chromium:mac-arm64-archive-tagged": {
     "builders": [
       "chromium:mac-arm64-archive-tagged"
