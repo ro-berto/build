@@ -9,6 +9,9 @@ def _chromium_memory_spec(**kwargs):
   return builder_spec.BuilderSpec.create(
       build_gs_bucket='chromium-memory-archive', **kwargs)
 
+# The config for the following builders is now specified src-side in
+# //infra/config/subprojects/chromium/ci/chromium.memory.star
+# * win-asan
 
 SPEC = {
     'ios-asan':
@@ -293,16 +296,5 @@ SPEC = {
             },
             gclient_apply_config=['enable_reclient'],
             simulation_platform='linux',
-        ),
-    'win-asan':
-        _chromium_memory_spec(
-            chromium_config='chromium_win_clang_asan',
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            chromium_apply_config=['mb'],
-            simulation_platform='win',
         ),
 }

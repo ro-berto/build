@@ -3001,12 +3001,6 @@
       "tryserver.chromium.linux:linux_chromium_ubsan_rel_ng"
     ]
   },
-  "chromium.memory:win-asan": {
-    "builders": [
-      "chromium.memory:win-asan",
-      "tryserver.chromium.win:win-asan"
-    ]
-  },
   "chromium.rust:android-rust-arm-dbg": {
     "builders": [
       "chromium.rust:android-rust-arm-dbg",
@@ -5410,12 +5404,6 @@
     "builders": [
       "chromium.fyi:win-annotator-rel",
       "tryserver.chromium.win:win-annotator-rel"
-    ]
-  },
-  "tryserver.chromium.win:win-asan": {
-    "builders": [
-      "chromium.memory:win-asan",
-      "tryserver.chromium.win:win-asan"
     ]
   },
   "tryserver.chromium.win:win7-rel": {
