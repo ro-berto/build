@@ -26,8 +26,11 @@ def _chromium_android_spec(**kwargs):
 # * Nougat Phone Tester
 # * Oreo Phone Tester
 # * android-pie-arm64-dbg
+# * android-weblayer-10-x86-rel-tests
+# * android-weblayer-marshmallow-x86-rel-tests
 # * android-weblayer-oreo-x86-rel-tests
 # * android-weblayer-pie-x86-rel-tests
+# * android-weblayer-with-aosp-webview-x86-rel
 # * android-weblayer-x86-rel
 
 SPEC = {
@@ -96,52 +99,6 @@ SPEC = {
                 'TARGET_PLATFORM': 'android',
             },
             android_config='main_builder_mb',
-            simulation_platform='linux',
-        ),
-    'android-weblayer-with-aosp-webview-x86-rel':
-        _chromium_android_spec(
-            chromium_config='android',
-            chromium_apply_config=['mb'],
-            gclient_config='chromium',
-            gclient_apply_config=['android', 'enable_reclient'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 32,
-                'TARGET_PLATFORM': 'android',
-            },
-            android_config='x86_builder',
-            simulation_platform='linux',
-        ),
-    'android-weblayer-10-x86-rel-tests':
-        _chromium_android_spec(
-            chromium_config='android',
-            chromium_apply_config=['mb'],
-            gclient_config='chromium',
-            gclient_apply_config=['android'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 32,
-                'TARGET_PLATFORM': 'android',
-            },
-            parent_buildername='android-weblayer-with-aosp-webview-x86-rel',
-            execution_mode=builder_spec.TEST,
-            android_config='x86_builder',
-            simulation_platform='linux',
-        ),
-    'android-weblayer-marshmallow-x86-rel-tests':
-        _chromium_android_spec(
-            chromium_config='android',
-            chromium_apply_config=['mb'],
-            gclient_config='chromium',
-            gclient_apply_config=['android'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 32,
-                'TARGET_PLATFORM': 'android',
-            },
-            parent_buildername='android-weblayer-with-aosp-webview-x86-rel',
-            execution_mode=builder_spec.TEST,
-            android_config='x86_builder',
             simulation_platform='linux',
         ),
 }
