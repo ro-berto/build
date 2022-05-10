@@ -72,15 +72,11 @@ def _config(name,
 # * chromeos-amd64-generic-rel
 # * chromeos-arm-generic-rel
 # * chromeos-kevin-rel
+# * lacros-amd64-generic-binary-size-rel
 # * lacros-arm-generic-rel
 # * linux-lacros-dbg
 
 SPEC.update([
-    _config(
-        'lacros-amd64-generic-binary-size-rel',
-        cros_boards='amd64-generic',
-        gclient_apply_config=['checkout_lacros_sdk'],
-    ),
     _config(
         'lacros-amd64-generic-rel',
         cros_boards='eve',

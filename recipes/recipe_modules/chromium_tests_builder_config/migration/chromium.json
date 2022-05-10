@@ -599,11 +599,6 @@
       "tryserver.chromium.chromiumos:chromeos-arm-generic-dbg"
     ]
   },
-  "chromium.chromiumos:lacros-amd64-generic-binary-size-rel": {
-    "builders": [
-      "chromium.chromiumos:lacros-amd64-generic-binary-size-rel"
-    ]
-  },
   "chromium.chromiumos:lacros-amd64-generic-rel": {
     "builders": [
       "chromium.chromiumos:lacros-amd64-generic-rel",
