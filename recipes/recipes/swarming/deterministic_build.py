@@ -43,6 +43,7 @@ DETERMINISTIC_BUILDERS = freeze({
     'Windows deterministic': {
         'chromium_config': 'chromium',
         'gclient_config': 'chromium',
+        'gclient_apply_config': ['enable_reclient'],
         'platform': 'win',
         'targets': ['all'],
     },
