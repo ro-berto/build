@@ -145,12 +145,7 @@ class RDBResults(object):
 
 @attrs()
 class RDBPerSuiteResults(object):
-  """Contains results of a single test suite as returned by RDB.
-
-  This class is not expected to track tests with expected results. eg: If a
-  test's expectations expect it to FAIL, and it FAILs, we do not track that
-  here.
-  """
+  """Contains results of a single test suite as returned by RDB."""
 
   NEEDED_FIELDS = [
       'testId',
@@ -171,21 +166,21 @@ class RDBPerSuiteResults(object):
   # unexpected_skipped_tests should be a subset of unexpected_failing_tests.
   unexpected_skipped_tests = attrib(set)
   invalid = attrib(bool, default=False)
-  test_name_to_test_id_mapping = attrib(mapping[str, str])
-  # maps unexpected failing test to failure reason
-  failing_test_to_failure_reason_mapping = attrib(mapping[str, str])
-  # Mapping from test name to duration (in milliseconds) of an expectedly passed
-  # run if available.
-  test_named_to_passed_run_duration = attrib(mapping[str, int])
-  individual_results = attrib(mapping[str, sequence[...]])
-  # Mapping from test name to count of unexpected unpassed results of the test.
-  individual_unexpected_unpassed_result_count = attrib(mapping[str, int])
+  # A mapping from test name str to its |RDBPerIndividualTestResults| object
+  # for tests without any expected results.
+  individual_unexpected_test_by_test_name = attrib(mapping[str, ...])
+  # A list of all |RDBPerIndividualTestResults| objects within this class.
+  all_tests = attrib(sequence[...])
+  # |test_id_prefix| from the test specs in testing/buildbot. Empty str if it's
+  # not set, or if any test IDs from invocations don't have the exact prefix
+  # as input.
   test_id_prefix = attrib(str, default='')
 
   @classmethod
   def create(cls,
              invocations,
              suite_name,
+             test_id_prefix,
              total_tests_ran,
              failure_on_exit=False):
     """
@@ -197,13 +192,13 @@ class RDBPerSuiteResults(object):
           reported, it indicates invalid test results.
     """
     exists_unexpected_failing_result = False
-    test_id_prefix = ''
     results_by_test_id = collections.defaultdict(list)
     variant_hash = ''
-    test_name_to_test_id_mapping = {}
-    total_unexpected_results = 0
+    total_results = 0
+    test_id_prefix = test_id_prefix or ''
+
     for inv in invocations.values():
-      total_unexpected_results += len(inv.test_results)
+      total_results += len(inv.test_results)
       for tr in inv.test_results:
         variant_def = getattr(tr.variant, 'def')
         inv_name = variant_def['test_suite']
@@ -212,47 +207,24 @@ class RDBPerSuiteResults(object):
         if inv_name and suite_name:
           assert inv_name == suite_name, "Mismatched invocations, %s vs %s" % (
               inv_name, suite_name)
-        # The test's ID may not always directly match up with its name (see
-        # go/chrome-test-id for context). So lookup the test's name in the tags,
-        # but preserve a mapping from name to ID for easier look-up.
-        test_name = tr.test_id
-        for tag in tr.tags:
-          if tag.key == 'test_name':
-            test_name = tag.value
-            # if test_name is provided, and the test id does match up
-            # with its name, use this to deduce the test_id_prefix.
-            if not test_id_prefix and test_name in tr.test_id:
-              test_id_prefix = tr.test_id[:tr.test_id.index(test_name)]
-            break
-
-        # Don't bother keeping a name map for tests with uninteresting results.
-        if not tr.expected:
-          test_name_to_test_id_mapping[test_name] = tr.test_id
         variant_hash = tr.variant_hash
-        results_by_test_id[test_name].append(tr)
+        results_by_test_id[tr.test_id].append(tr)
+        # Use empty test_id_prefix if there is conflict.
+        if not tr.test_id.startswith(test_id_prefix):
+          test_id_prefix = ''
 
-    total_tests_ran = total_tests_ran or total_unexpected_results
+    total_tests_ran = total_tests_ran or total_results
     unexpected_failing_tests = set()
-    failing_test_to_failure_reason_mapping = {}
     unexpected_passing_tests = set()
     unexpected_skipped_tests = set()
-    test_named_to_passed_run_duration = {}
-    individual_results = {}
-    individual_unexpected_unpassed_result_count = {}
-    for test_name, test_results in results_by_test_id.items():
-      for tr in test_results:
-        # Just use duration of the first passed expected result with duration.
-        if tr.expected and tr.status == test_result_pb2.PASS and tr.duration:
-          duration = int(tr.duration.seconds * 1000 +
-                         int(tr.duration.nanos / 1000000.0))
-          test_named_to_passed_run_duration[test_name] = duration
-      individual_results[test_name] = list(tr.status for tr in test_results)
-      individual_unexpected_unpassed_result_count[test_name] = len([
-          tr for tr in test_results
-          if (not tr.expected and tr.status != test_result_pb2.PASS)
-      ])
-      if individual_unexpected_unpassed_result_count[test_name] > 0:
+    individual_unexpected_test_by_test_name = {}
+    all_tests = []
+    for test_id, test_results in results_by_test_id.items():
+      individual_test = RDBPerIndividualTestResults.create(
+          test_id, test_results, test_id_prefix)
+      if individual_test.unexpected_unpassed_count() > 0:
         exists_unexpected_failing_result = True
+      all_tests.append(individual_test)
       # This filters out any tests that were auto-retried within the
       # invocation and finished with an expected result. eg: a test that's
       # expected to CRASH and runs with results [FAIL, CRASH]. RDB returns
@@ -260,14 +232,14 @@ class RDBPerSuiteResults(object):
       # purposes of recipe retry/pass/fail decisions.
       if any(tr.expected for tr in test_results):
         continue
+      individual_unexpected_test_by_test_name[
+          individual_test.test_name] = individual_test
       if all(tr.status != test_result_pb2.PASS for tr in test_results):
-        unexpected_failing_tests.add(test_name)
-        failing_test_to_failure_reason_mapping[test_name] = (
-            tr.failure_reason.primary_error_message)
+        unexpected_failing_tests.add(individual_test)
         if all(tr.status == test_result_pb2.SKIP for tr in test_results):
-          unexpected_skipped_tests.add(test_name)
+          unexpected_skipped_tests.add(individual_test)
       else:
-        unexpected_passing_tests.add(test_name)
+        unexpected_passing_tests.add(individual_test)
 
     # If there were no unexpected failing results, but the harness exited
     # non-zero, assume something went wrong in the test setup/init (eg: failure
@@ -280,15 +252,11 @@ class RDBPerSuiteResults(object):
         total_tests_ran=total_tests_ran,
         unexpected_passing_tests=unexpected_passing_tests,
         unexpected_failing_tests=unexpected_failing_tests,
-        failing_test_to_failure_reason_mapping=(
-            failing_test_to_failure_reason_mapping),
         unexpected_skipped_tests=unexpected_skipped_tests,
         invalid=invalid,
-        test_name_to_test_id_mapping=test_name_to_test_id_mapping,
-        test_named_to_passed_run_duration=test_named_to_passed_run_duration,
-        individual_results=individual_results,
-        individual_unexpected_unpassed_result_count=(
-            individual_unexpected_unpassed_result_count),
+        individual_unexpected_test_by_test_name=(
+            individual_unexpected_test_by_test_name),
+        all_tests=all_tests,
         test_id_prefix=test_id_prefix)
 
   def with_failure_on_exit(self, failure_on_exit):
@@ -310,9 +278,15 @@ class RDBPerSuiteResults(object):
         self, invalid=(failure_on_exit and not self.unexpected_failing_tests))
 
   def to_jsonish(self):
+
+    def _names_of_tests(tests):
+      return sorted([t.test_name for t in tests])
+
     jsonish_repr = {
         'suite_name':
             self.suite_name,
+        'test_id_prefix':
+            self.test_id_prefix,
         'variant_hash':
             self.variant_hash,
         'invalid':
@@ -320,14 +294,83 @@ class RDBPerSuiteResults(object):
         'total_tests_ran':
             self.total_tests_ran,
         'unexpected_passing_tests':
-            sorted(self.unexpected_passing_tests),
+            _names_of_tests(self.unexpected_passing_tests),
         'unexpected_failing_tests':
-            sorted(self.unexpected_failing_tests),
+            _names_of_tests(self.unexpected_failing_tests),
         'unexpected_skipped_tests':
-            sorted(self.unexpected_skipped_tests),
-        'test_name_to_test_id_mapping':
-            self.test_name_to_test_id_mapping,
-        'failing_test_to_failure_reason_mapping':
-            self.failing_test_to_failure_reason_mapping,
+            _names_of_tests(self.unexpected_skipped_tests),
+        'all_tests':
+            _names_of_tests(self.all_tests),
     }
     return jsonish_repr
+
+
+@attrs()
+class RDBPerIndividualTestResults(object):
+  """Contains result info of an individual test as returned by RDB.
+
+  "individual test" is uniquely identified by test id. For each individual test
+  within a test_suite, there could be multiple test results from being retried,
+  or repeated within shards of the suite. These result info are stored in
+  |statuses|, |expectednesses|, etc.
+  """
+  # Read from any result's test_name tag. If not exist, use the part of test_id
+  # after test_id_prefix.
+  # e.g. Service/FeatureInfoTest.Basic/0
+  test_name = attrib(str)
+  # Full test ID.
+  # e.g. ninja://gpu:gpu_unittests/FeatureInfoTest.Basic/Service.0
+  test_id = attrib(str)
+  # A duration of any passed run.
+  duration_milliseconds = attrib(int, default=None)
+  # |statuses| and |expectednesses| are outcomes of single results.
+  # Values at each index are for the same test run.
+  statuses = attrib(sequence[...])
+  expectednesses = attrib(sequence[bool])
+  # Reasons of all results corresponding to |statuses|. Empty str if the
+  # raw RDB result doesn't have this stored.
+  failure_reasons = attrib(sequence[str])
+
+  @classmethod
+  def create(cls, test_id, test_results, test_id_prefix):
+    """
+    Args:
+      test_id: The test ID of results.
+      test_results: All results of the test id.
+      test_id_prefix: The test ID prefix of the |RDBPerSuiteResults| where this
+        result is grouped into.
+    """
+    duration_milliseconds = None
+    test_name = None
+    test_id = ''
+    statuses = [tr.status for tr in test_results]
+    expectednesses = [tr.expected for tr in test_results]
+    failure_reasons = [
+        tr.failure_reason.primary_error_message or '' for tr in test_results
+    ]
+    for tr in test_results:
+      test_id = tr.test_id
+      # Use duration of the last passed expected result with duration.
+      if tr.expected and tr.status == test_result_pb2.PASS and tr.duration:
+        duration_milliseconds = int(tr.duration.seconds * 1000 +
+                                    int(tr.duration.nanos / 1000000.0))
+      # Use test name tag of the last result with the tag.
+      for tag in tr.tags:
+        if tag.key == 'test_name':
+          test_name = tag.value
+
+    assert test_id.startswith(test_id_prefix)
+    # If not found in tags, use the part after test id prefix in test ID.
+    if not test_name:
+      test_name = test_id[len(test_id_prefix):]
+
+    return cls(test_name, test_id, duration_milliseconds, statuses,
+               expectednesses, failure_reasons)
+
+  def total_test_count(self):
+    return len(self.statuses)
+
+  def unexpected_unpassed_count(self):
+    return sum([(status != test_result_pb2.PASS and not expected)
+                for status, expected in zip(self.statuses, self.expectednesses)
+               ])

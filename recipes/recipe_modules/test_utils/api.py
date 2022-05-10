@@ -335,12 +335,10 @@ class TestUtilsApi(recipe_api.RecipeApi):
         explanation_html = (
             'The test is marked as experimental, meaning any failures will '
             'not fail the build.')
-        for test_name in results.unexpected_failing_tests:
-          test_id = results.test_name_to_test_id_mapping.get(
-              test_name, test_name)
+        for t in results.unexpected_failing_tests:
           exonerations.append(
               test_result_pb2.TestExoneration(
-                  test_id=test_id,
+                  test_id=t.test_id,
                   variant_hash=results.variant_hash,
                   explanation_html=explanation_html,
                   reason=test_result_pb2.ExonerationReason.NOT_CRITICAL,
@@ -358,12 +356,10 @@ class TestUtilsApi(recipe_api.RecipeApi):
             '(https://source.chromium.org/chromium/chromium/tools/build/+/main:recipes/recipe_modules/chromium_tests/steps.py;drc=137053ea;l=907)'
             # pylint: enable=line-too-long
         )
-        for test_name in results.unexpected_failing_tests:
-          test_id = results.test_name_to_test_id_mapping.get(
-              test_name, test_name)
+        for t in results.unexpected_failing_tests:
           exonerations.append(
               test_result_pb2.TestExoneration(
-                  test_id=test_id,
+                  test_id=t.test_id,
                   variant_hash=results.variant_hash,
                   # TODO(crbug.com/1076096): add deep link to the Milo UI to
                   #  display the exonerated test results.
@@ -374,11 +370,10 @@ class TestUtilsApi(recipe_api.RecipeApi):
       elif suffix == 'with patch':
         explanation_html = 'FindIt reported this test as being flaky.'
         for known_flake in suite.known_flaky_failures:
-          test_id = results.test_name_to_test_id_mapping.get(
-              known_flake, known_flake)
           exonerations.append(
               test_result_pb2.TestExoneration(
-                  test_id=test_id,
+                  test_id=(results.individual_unexpected_test_by_test_name[
+                      known_flake].test_id),
                   variant_hash=results.variant_hash,
                   # TODO(crbug.com/1076096): add deep link to the Milo UI to
                   #  display the exonerated test results.
@@ -1114,7 +1109,8 @@ class TestGroup(object):
       res = RDBPerSuiteResults.create({},
                                       failure_on_exit=True,
                                       total_tests_ran=0,
-                                      suite_name=test.canonical_name)
+                                      suite_name=test.canonical_name,
+                                      test_id_prefix=test.test_id_prefix)
     else:
       test_stats = self.resultdb_api.query_test_result_statistics(
           invocations=invocation_names, step_name='%s stats' % test.name)
@@ -1134,7 +1130,8 @@ class TestGroup(object):
           unexpected_result_invocations,
           suite_name=test.canonical_name,
           total_tests_ran=test_stats.total_test_results,
-          failure_on_exit=test.failure_on_exit(suffix))
+          failure_on_exit=test.failure_on_exit(suffix),
+          test_id_prefix=test.test_id_prefix)
     test.update_rdb_results(suffix, res)
 
 

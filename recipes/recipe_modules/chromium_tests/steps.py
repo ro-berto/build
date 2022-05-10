@@ -687,10 +687,12 @@ class Test(object):
     """
     results = self.get_rdb_results(suffix)
     pass_fail_counts = {}
-    for t, runs in six.iteritems(results.individual_results):
-      pass_fail_counts[t] = {
-          'pass_count': len([r for r in runs if r == test_result_pb2.PASS]),
-          'fail_count': len([r for r in runs if r != test_result_pb2.PASS]),
+    for t in results.all_tests:
+      pass_fail_counts[t.test_name] = {
+          'pass_count':
+              len([s for s in t.statuses if s == test_result_pb2.PASS]),
+          'fail_count':
+              len([s for s in t.statuses if s != test_result_pb2.PASS]),
       }
     return pass_fail_counts
 
@@ -744,22 +746,26 @@ class Test(object):
                 original_num_shards), num_tests_to_retry))
 
   def failures(self, suffix):
-    """Return tests that failed at least once (list of strings)."""
+    """Return tests that failed at least once (set of strings)."""
     failure_msg = (
         'There is no data for the test run suffix ({0}). This should never '
         'happen as all calls to failures() should first check that the data '
         'exists.'.format(suffix))
     assert suffix in self._rdb_results, failure_msg
-    return self._rdb_results[suffix].unexpected_failing_tests
+    return set([
+        t.test_name for t in self._rdb_results[suffix].unexpected_failing_tests
+    ])
 
   def deterministic_failures(self, suffix):
-    """Return tests that failed on every test run(list of strings)."""
+    """Return tests that failed on every test run(set of strings)."""
     failure_msg = (
         'There is no data for the test run suffix ({0}). This should never '
         'happen as all calls to deterministic_failures() should first check '
         'that the data exists.'.format(suffix))
     assert suffix in self._rdb_results, failure_msg
-    return self._rdb_results[suffix].unexpected_failing_tests
+    return set([
+        t.test_name for t in self._rdb_results[suffix].unexpected_failing_tests
+    ])
 
   def notrun_failures(self, suffix):
     """Returns tests that had status NOTRUN/UNKNOWN.
@@ -774,7 +780,9 @@ class Test(object):
     assert self.has_valid_results(suffix), (
         'notrun_failures must only be called when the test run is known to '
         'have valid results.')
-    return self._rdb_results[suffix].unexpected_skipped_tests
+    return set([
+        t.test_name for t in self._rdb_results[suffix].unexpected_skipped_tests
+    ])
 
   def name_of_step_for_suffix(self, suffix):
     """Returns the name of the step most relevant to the given suffix run.
@@ -971,7 +979,7 @@ class Test(object):
       return
 
     failures, failures_text = self.api.m.test_utils.limit_failures(
-        sorted(rdb_results.unexpected_failing_tests))
+        sorted([t.test_name for t in rdb_results.unexpected_failing_tests]))
     step_result.presentation.step_text += (
         self.api.m.presentation_utils.format_step_text(
             [['deterministic failures [caused step to fail]:', failures_text]]))
@@ -2722,6 +2730,8 @@ class MockTestSpec(TestSpec):
     * per_suffix_valid - A mapping of suffix to whether the test has
       valid results for the suffix.
     * runs_on_swarming - Whether the test runs on swarming.
+    * invocation_names - Used as return value in |MockTest|'s
+      |get_invocation_names| method.
   """
 
   abort_on_failure = attrib(bool, default=False)
@@ -2730,6 +2740,7 @@ class MockTestSpec(TestSpec):
   per_suffix_failures = attrib(mapping[str, sequence[str]], default={})
   per_suffix_valid = attrib(mapping[str, bool], default={})
   runs_on_swarming = attrib(bool, default=False)
+  invocation_names = attrib(sequence[str], default=[])
 
   @property
   def test_class(self):
@@ -2802,7 +2813,7 @@ class MockTest(Test):
     return []
 
   def get_invocation_names(self, _suffix):
-    return []
+    return self.spec.invocation_names
 
   @property
   def abort_on_failure(self):

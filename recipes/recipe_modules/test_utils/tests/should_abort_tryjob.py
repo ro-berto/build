@@ -47,7 +47,7 @@ def RunSteps(api):
             ])
     }
     rdb_suite_results.append(
-        util.RDBPerSuiteResults.create(invocation_dict, suite, 1))
+        util.RDBPerSuiteResults.create(invocation_dict, suite, suite, 1))
   rdb_results = util.RDBResults.create(rdb_suite_results)
   should_abort = api.test_utils._should_abort_tryjob(rdb_results)
 

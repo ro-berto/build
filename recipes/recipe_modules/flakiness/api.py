@@ -55,6 +55,7 @@ class TestDefinition():
 
   def __init__(self,
                test_id,
+               test_name=None,
                duration_milliseconds=None,
                is_experimental=False,
                tags=None,
@@ -64,6 +65,7 @@ class TestDefinition():
     """
     Args:
       * test_id: (str) ResultDB test id
+      * test_name: (str) Test name to input to test suites.
       * duration_milliseconds: (int) Test duration in milliseconds.
       * is_experimental: (bool) Flag indicating whether test run was
         experimental. If tags are defined, and this is False, step_name is
@@ -83,6 +85,7 @@ class TestDefinition():
       * variant_hash: (str) ResultDB's variant hash
     """
     self.test_id = test_id
+    self.test_name = test_name
     self.duration_milliseconds = duration_milliseconds
     self.variants = variants
     if variants and isinstance(variants, str):
@@ -595,29 +598,14 @@ class FlakinessApi(recipe_api.RecipeApi):
       current_tests = set()
       for test_object in test_objects:
         rdb_suite_result = test_object.get_rdb_results('with patch')
-        for test_name in rdb_suite_result.individual_results:
-          test_id = test_name
+        for individual_test in rdb_suite_result.all_tests:
           # Use 0 as duration if the info doesn't exist.
-          duration_milliseconds = (
-              rdb_suite_result.test_named_to_passed_run_duration.get(
-                  test_name, 0))
-
-          # If the test_id_prefix isn't set for the object (ie/ Junit tests),
-          # fetch it from the ResultDB Test Result object. Note that some test
-          # ids won't always match up directly with it's name, so just use the
-          # test_id in this case. (go/chrome-test-id)
-          if not test_object.test_id_prefix and rdb_suite_result.test_id_prefix:
-            test_object.spec = attr.evolve(
-                test_object.spec,
-                test_id_prefix=rdb_suite_result.test_id_prefix)
-          # Prepend test_id_prefix if the test_name doesn't have it.
-          if test_object.test_id_prefix and not test_id.startswith(
-              test_object.test_id_prefix):
-            test_id = test_object.test_id_prefix + test_id
+          duration_milliseconds = individual_test.duration_milliseconds or 0
 
           current_tests.add(
               TestDefinition(
-                  test_id,
+                  individual_test.test_id,
+                  test_name=individual_test.test_name,
                   duration_milliseconds=duration_milliseconds,
                   is_experimental=isinstance(test_object,
                                              steps.ExperimentalTest),
@@ -738,15 +726,10 @@ class FlakinessApi(recipe_api.RecipeApi):
     for test in test_objects:
       total_duration_milliseconds = 0
       test_filter = []
-      test_id_prefix = test.test_id_prefix or ''
       # find whether the Test object has a matching test_id.
       for new_test in new_tests:
         if (new_test.test_object == test):
-          # Some test objects, such as ScriptTest, don't have a test_id_prefix,
-          # so we just append the test_id to the test_filter.
-          # Note that test_id = test_id_prefix + {A full test_suite + test_name
-          # representation}
-          test_filter.append(new_test.test_id[len(test_id_prefix):])
+          test_filter.append(new_test.test_name)
           total_duration_milliseconds += (new_test.duration_milliseconds or 0)
       if test_filter:
         if isinstance(test, steps.AndroidJunitTest):
@@ -760,14 +743,15 @@ class FlakinessApi(recipe_api.RecipeApi):
           # ie/ org.chromium.suite.SomeTest#testMethod[0] ->
           #     org.chromium.suite.SomeTest#testMethod\[0\]
           updated_filter = []
-          for test_id in test_filter:
-            if re.match('.*\[\d+\]$', test_id):
-              left = test_id[:test_id.
-                             rindex('[')] + "\\" + test_id[test_id.rindex('['):]
+          for test_name in test_filter:
+            if re.match('.*\[\d+\]$', test_name):
+              left = (
+                  test_name[:test_name.rindex('[')] + "\\" +
+                  test_name[test_name.rindex('['):])
               full = left[:left.rindex(']')] + "\\" + "]"
               updated_filter.append(full)
             else:
-              updated_filter.append(test_id)
+              updated_filter.append(test_name)
           additional_args = list([
               '--gtest_repeat=%s' % str(self._repeat_count),
               '--gtest_filter=%s' % str(':'.join(updated_filter)),
@@ -880,20 +864,19 @@ class FlakinessApi(recipe_api.RecipeApi):
               flaky_non_experimental_test_stats)
           rdb_results = t.get_rdb_results(suffix)
           step_name = '%s (%s)' % (t.name, suffix)
-          for test_name, results in rdb_results.individual_results.items():
+          for test in rdb_results.all_tests:
+            test_name = test.test_name
             # Key is a tuple of (test_id, variant_hash)
-            key = ('%s%s' % (t.test_id_prefix, test_name),
-                   rdb_results.variant_hash)
-            total = len(results)
-            unexpected = (
-                rdb_results
-                .individual_unexpected_unpassed_result_count[test_name])
+            key = (test.test_id, rdb_results.variant_hash)
+            total = test.total_test_count()
+            unexpected_unpassed = test.unexpected_unpassed_count()
             # Value fields are: (test name, list of suites with failures,
-            # count of unexpected runs, count of all runs)
+            # count of unexpected unpassed runs, count of all runs)
             info = flaky_test_stats.get(key, ('', [], 0, 0))
-            if unexpected > 0:
+            if unexpected_unpassed > 0:
               info[1].append(step_name)
-            flaky_test_stats[key] = (test_name, info[1], info[2] + unexpected,
+            flaky_test_stats[key] = (test_name, info[1],
+                                     info[2] + unexpected_unpassed,
                                      info[3] + total)
 
       # Keep only test variants with unexpected results.

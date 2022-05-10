@@ -7,6 +7,7 @@ PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 DEPS = [
     'recipe_engine/json',
     'recipe_engine/properties',
+    'recipe_engine/raw_io',
     'recipe_engine/step',
     'chromium',
     'chromium_tests',
@@ -50,6 +51,7 @@ def RunSteps(api, known_flakes_expectations, exclude_failed_test,
             name='failed_test',
             runs_on_swarming=True,
             per_suffix_failures={'with patch': ['testA', 'testB']},
+            invocation_names=['invocations/whatever'],
         ))
 
   if has_too_many_failures:
@@ -186,6 +188,11 @@ def GenTests(api):
   yield api.test(
       'part of the tests are marked as known flaky',
       api.chromium.generic_build(builder_group='g', builder='b'),
+      api.override_step_data(
+          'failed_test results',
+          stdout=api.raw_io.output_text(
+              api.test_utils.rdb_results(
+                  'failed_test', failing_tests=['testA']))),
       api.properties(
           known_flakes_expectations={
               'failed_test': ['testA'],
@@ -220,6 +227,11 @@ def GenTests(api):
   yield api.test(
       'all of the tests are marked as known flaky',
       api.chromium.generic_build(builder_group='g', builder='b'),
+      api.override_step_data(
+          'failed_test results',
+          stdout=api.raw_io.output_text(
+              api.test_utils.rdb_results(
+                  'failed_test', failing_tests=['testA', 'testB']))),
       api.properties(
           known_flakes_expectations={
               'failed_test': ['testA', 'testB'],

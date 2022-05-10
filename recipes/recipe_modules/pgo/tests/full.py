@@ -4,8 +4,12 @@
 
 from recipe_engine import post_process
 
+from PB.go.chromium.org.luci.resultdb.proto.v1 import (test_result as
+                                                       test_result_pb2)
+
 from RECIPE_MODULES.build.chromium_tests import steps
-from RECIPE_MODULES.build.test_utils.util import RDBPerSuiteResults
+from RECIPE_MODULES.build.test_utils.util import (RDBPerSuiteResults,
+                                                  RDBPerIndividualTestResults)
 
 PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
@@ -51,14 +55,26 @@ def RunSteps(api):
 
   for test in tests:
     step = test.name
+    unexpected_failing_tests = set([])
+    all_tests = []
+    for test_name in api.properties.get('benchmark_failures', []):
+      individual_test = RDBPerIndividualTestResults.create(
+          test_name, [
+              test_result_pb2.TestResult(
+                  test_id='ninja://chromium/tests:browser_tests/t1',
+                  expected=False,
+                  status=test_result_pb2.FAIL,
+              )
+          ], '')
+      unexpected_failing_tests.add(individual_test)
+      all_tests.append(individual_test)
     # Preprocessing for test
     test.update_rdb_results(
         '',
-        RDBPerSuiteResults(test.name, '', 0, set([]),
-                           set(api.properties.get('benchmark_failures', [])),
+        RDBPerSuiteResults(test.name, '', 0, set([]), unexpected_failing_tests,
                            set([]),
                            not api.properties.get('benchmark_result', True), {},
-                           {}, {}, {}, {}))
+                           all_tests, ''))
     # shard_merge already ensures the profile_subdir is generated w/ step_name
     api.code_coverage.shard_merge(
         step, test.target_name, additional_merge=getattr(test, '_merge', None))

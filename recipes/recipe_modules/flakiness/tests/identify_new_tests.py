@@ -45,9 +45,14 @@ def RunSteps(api):
     suite_name = 'some test %s' % str(i)
     inv = "invocations/{}".format(i + 1)
     test_id = 'ninja://sample/test:some_test/TestSuite.Test' + str(i)
+    test_id_prefix = 'ninja://sample/test:some_test/'
     # To test the case when test id is not complete.
     if i == 4:
       test_id = 'TestSuite.Test' + str(i)
+      test_id_prefix = None
+    # To test the case when test id complete but test_id_prefix is absent.
+    if i == 2:
+      test_id_prefix = None
     test_results = [
         test_result_pb2.TestResult(
             test_id=test_id,
@@ -59,10 +64,7 @@ def RunSteps(api):
     ]
     inv_bundle[inv] = api.resultdb.Invocation(test_results=test_results)
     rdb_suite_results = util.RDBPerSuiteResults.create(inv_bundle, suite_name,
-                                                       1)
-    test_id_prefix = 'ninja://sample/test:some_test/'
-    if i == 2:
-      test_id_prefix = None
+                                                       test_id_prefix, 1)
     test_spec = steps.SwarmingGTestTestSpec.create(
         suite_name,
         test_id_prefix=test_id_prefix,
@@ -76,7 +78,7 @@ def RunSteps(api):
   new_tests = {
       'ninja://sample/test:some_test/TestSuite.Test2_2hash_False',
       'ninja://sample/test:some_test/TestSuite.Test3_3hash_False',
-      'ninja://sample/test:some_test/TestSuite.Test4_4hash_False',
+      'TestSuite.Test4_4hash_False',
   }
   found_tests = api.flakiness.identify_new_tests(test_objects)
   if found_tests:
@@ -256,7 +258,7 @@ def GenTests(api):
               'tags': '[{"key":"step_name","value":"some test (with patch)"}]',
               'invocation': ['invocation/1']
           }, {
-              'test_id': 'ninja://sample/test:some_test/TestSuite.Test4',
+              'test_id': 'TestSuite.Test4',
               'variant_hash': '4hash',
               'tags': '[{"key":"step_name","value":"some test (with patch)"}]',
               'invocation': ['invocation/1']
