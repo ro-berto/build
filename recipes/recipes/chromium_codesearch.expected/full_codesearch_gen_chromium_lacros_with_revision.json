@@ -1235,6 +1235,8 @@
       "[CACHE]/builder/src/out/Debug/chromium_lacros.kzip",
       "--corpus",
       "chromium.googlesource.com/chromium/src",
+      "--project",
+      "chromium",
       "--path_to_java_kzips",
       "[CACHE]/builder/src/out/Debug/kzip",
       "--out_dir",

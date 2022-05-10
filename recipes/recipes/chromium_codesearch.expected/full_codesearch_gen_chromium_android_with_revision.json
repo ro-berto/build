@@ -1235,6 +1235,8 @@
       "[CACHE]/builder/src/out/android-Debug/chromium_android.kzip",
       "--corpus",
       "chromium.googlesource.com/chromium/src",
+      "--project",
+      "chromium",
       "--path_to_java_kzips",
       "[CACHE]/builder/src/out/android-Debug/kzip",
       "--out_dir",

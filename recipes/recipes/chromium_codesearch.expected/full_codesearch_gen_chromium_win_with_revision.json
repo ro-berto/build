@@ -1238,6 +1238,8 @@
       "[CACHE]/builder/src/out/win-Debug/chromium_win.kzip",
       "--corpus",
       "chromium.googlesource.com/chromium/src",
+      "--project",
+      "chromium",
       "--path_to_java_kzips",
       "[CACHE]/builder/src/out/win-Debug/kzip",
       "--out_dir",

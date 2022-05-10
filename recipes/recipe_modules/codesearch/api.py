@@ -229,10 +229,18 @@ class CodesearchApi(recipe_api.RecipeApi):
     exec_path = self.m.cipd.ensure_tool("infra/tools/package_index/${platform}",
                                         "latest")
     args = [
-        '--checkout_dir', self.m.path['checkout'], '--path_to_compdb',
-        self.c.compile_commands_json_file, '--path_to_gn_targets',
-        self.c.gn_targets_json_file, '--path_to_archive_output',
-        self.c.out_path.join(index_pack_kythe_name), '--corpus', self.c.CORPUS
+        '--checkout_dir',
+        self.m.path['checkout'],
+        '--path_to_compdb',
+        self.c.compile_commands_json_file,
+        '--path_to_gn_targets',
+        self.c.gn_targets_json_file,
+        '--path_to_archive_output',
+        self.c.out_path.join(index_pack_kythe_name),
+        '--corpus',
+        self.c.CORPUS,
+        '--project',
+        self.c.PROJECT,
     ]
 
     if self.c.javac_extractor_output_dir:

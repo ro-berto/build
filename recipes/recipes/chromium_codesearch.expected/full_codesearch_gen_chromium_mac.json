@@ -1289,6 +1289,8 @@
       "[CACHE]/builder/src/out/mac-Debug/chromium_mac.kzip",
       "--corpus",
       "chromium.googlesource.com/chromium/src",
+      "--project",
+      "chromium",
       "--path_to_java_kzips",
       "[CACHE]/builder/src/out/mac-Debug/kzip",
       "--out_dir",

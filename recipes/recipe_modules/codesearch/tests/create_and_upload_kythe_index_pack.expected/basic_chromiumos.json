@@ -233,6 +233,8 @@
       "[START_DIR]/src/out/linux/chromiumos_linux.kzip",
       "--corpus",
       "chromium",
+      "--project",
+      "chromiumos",
       "--out_dir",
       "src/out/linux"
     ],

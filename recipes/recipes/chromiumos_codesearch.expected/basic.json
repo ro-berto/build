@@ -534,6 +534,8 @@
       "[CACHE]/builder/chromiumos/src/out/amd64-generic/chromiumos_amd64-generic.kzip",
       "--corpus",
       "chromium.googlesource.com/chromiumos/codesearch//main",
+      "--project",
+      "chromiumos",
       "--out_dir",
       "src/out/amd64-generic"
     ],

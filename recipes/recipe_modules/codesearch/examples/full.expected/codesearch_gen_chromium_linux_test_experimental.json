@@ -1123,6 +1123,8 @@
       "[START_DIR]/src/out/Debug/chromium_linux.kzip",
       "--corpus",
       "chromium-linux",
+      "--project",
+      "chromium",
       "--path_to_java_kzips",
       "[START_DIR]/src/out/Debug/kzip",
       "--out_dir",
