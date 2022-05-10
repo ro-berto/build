@@ -833,6 +833,8 @@ def GenTests(api):
     properties = post_process.GetBuildProperties(step_odict)
     check(key in properties)
 
+  fake_triggered_builder = fake_builder + '-tests'
+
   yield api.test(
       'ci_bot_expose_trigger_properties',
       api.properties(
@@ -851,11 +853,19 @@ def GenTests(api):
                           gclient_config='chromium',
                           expose_trigger_properties=True,
                       ),
+                  fake_triggered_builder:
+                      ctbc.BuilderSpec.create(
+                          chromium_config='chromium',
+                          gclient_config='chromium',
+                          expose_trigger_properties=True,
+                          parent_buildername=fake_builder,
+                          execution_mode=ctbc.TEST,
+                      ),
               }
           })),
       api.chromium_tests.read_source_side_spec(
           fake_group, {
-              fake_builder: {
+              fake_triggered_builder: {
                   'isolated_scripts': [{
                       'name': fake_test,
                       'swarming': {
@@ -876,7 +886,6 @@ def GenTests(api):
   def LogDoesNotEqual(check, step_odict, step, log, expected):
     check(step_odict[step].logs[log] != expected)
 
-  fake_triggered_builder = fake_builder + '-tests'
   # Triggered testers can also be configured to expose trigger properties.
   yield api.test(
       'ci_triggered_tester_expose_trigger_properties',

@@ -62,8 +62,8 @@ class SwarmingExecutionInfo(object):
     and the digest of the file containing this information is stored in
     self.swarming_command_lines_digest.
     """
-    assert not self.command_lines_file_digest, (
-        'Only should try to archive command lines once.')
+    if self.command_lines_file_digest:
+      return self
 
     return attr.evolve(
         self,
