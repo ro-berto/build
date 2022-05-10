@@ -2845,12 +2845,6 @@
       "tryserver.chromium.linux:linux-bfcache-rel"
     ]
   },
-  "chromium.linux:linux-extended-tracing-rel": {
-    "builders": [
-      "chromium.linux:linux-extended-tracing-rel",
-      "tryserver.chromium.linux:linux-extended-tracing-rel"
-    ]
-  },
   "chromium.linux:linux-no-base-tracing-rel": {
     "builders": [
       "chromium.linux:linux-no-base-tracing-rel",
@@ -4702,12 +4696,6 @@
     "builders": [
       "chromium.fyi:linux-example-builder",
       "tryserver.chromium.linux:linux-example-builder"
-    ]
-  },
-  "tryserver.chromium.linux:linux-extended-tracing-rel": {
-    "builders": [
-      "chromium.linux:linux-extended-tracing-rel",
-      "tryserver.chromium.linux:linux-extended-tracing-rel"
     ]
   },
   "tryserver.chromium.linux:linux-fieldtrial-fyi-rel": {

@@ -15,21 +15,10 @@ def _chromium_linux_spec(**kwargs):
 # * Linux Builder (dbg)
 # * Linux Tests
 # * Linux Tests (dbg)(1)
+# * linux-extended-tracing-rel
 
 SPEC = {
     'linux-bfcache-rel':
-        _chromium_linux_spec(
-            chromium_config='chromium',
-            chromium_apply_config=['mb'],
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            gclient_apply_config=['enable_reclient'],
-            simulation_platform='linux',
-        ),
-    'linux-extended-tracing-rel':
         _chromium_linux_spec(
             chromium_config='chromium',
             chromium_apply_config=['mb'],

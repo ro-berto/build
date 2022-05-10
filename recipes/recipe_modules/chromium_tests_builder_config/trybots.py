@@ -540,6 +540,7 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * linux_chromium_clobber_rel_ng
     # * linux-1mbu-compile-fyi-rel
     # * linux-dcheck-off-rel
+    # * linux-extended-tracing-rel
     # * linux-gcc-rel
     # * linux-inverse-fieldtrials-fyi-rel
     # * linux-mbi-mode-per-render-process-host-rel
@@ -610,11 +611,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
                 buildername='linux-example-builder',
-            ),
-        'linux-extended-tracing-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.linux',
-                buildername='linux-extended-tracing-rel',
             ),
         'linux-headless-shell-rel':
             try_spec.TrySpec.create_for_single_mirror(
