@@ -232,6 +232,7 @@ BUILDERS = freeze({
                         'TARGET_PLATFORM': 'win',
                         'TARGET_BITS': 64,
                     },
+                    gclient_apply_config=['enable_reclient'],
                     upload_bucket='chromium-browser-libfuzzer',
                     upload_directory='asan',
                 ),
