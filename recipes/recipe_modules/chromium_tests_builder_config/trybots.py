@@ -1072,6 +1072,7 @@ TRYBOTS = try_spec.TryDatabase.create({
     # The config for the following builders is now specified src-side in
     # //infra/config/subprojects/chromium/try/tryserver.chromium.win.star
     # * win_archive
+    # * win_chromium_compile_dbg_ng
     # * win_chromium_x64_rel_ng
     # * win_x64_archive
     # * win-asan
@@ -1090,13 +1091,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.win',
                 buildername='Win Builder',
                 tester='Win7 Tests (1)',
-            ),
-        'win_chromium_compile_dbg_ng':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.win',
-                buildername='Win Builder (dbg)',
-                is_compile_only=True,
-                include_all_triggered_testers=True,
             ),
         'win_chromium_compile_rel_ng':
             try_spec.TrySpec.create_for_single_mirror(

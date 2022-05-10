@@ -12,6 +12,7 @@ def _chromium_win_spec(**kwargs):
 # The config for the following builders is now specified src-side in
 # //infra/config/subprojects/chromium/ci/chromium.win.star
 # * Win 7 Tests x64 (1)
+# * Win Builder (dbg)
 # * Win x64 Builder
 # * Win x64 Builder (dbg)
 # * Win10 Tests x64
@@ -78,17 +79,6 @@ SPEC = {
             },
             execution_mode=builder_spec.TEST,
             parent_buildername='Win Builder',
-            simulation_platform='win',
-        ),
-    'Win Builder (dbg)':
-        _chromium_win_spec(
-            chromium_config='chromium',
-            chromium_apply_config=['mb'],
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 32,
-            },
             simulation_platform='win',
         ),
 }

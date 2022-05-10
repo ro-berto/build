@@ -1674,26 +1674,6 @@
       "chromium.goma.fyi:Android Builder (dbg)"
     ]
   },
-  "chromium.goma.fyi:Win Builder (dbg) Goma RBE ATS Canary": {
-    "builders": [
-      "chromium.goma.fyi:Win Builder (dbg) Goma RBE ATS Canary"
-    ]
-  },
-  "chromium.goma.fyi:Win Builder (dbg) Goma RBE ATS Latest Client": {
-    "builders": [
-      "chromium.goma.fyi:Win Builder (dbg) Goma RBE ATS Latest Client"
-    ]
-  },
-  "chromium.goma.fyi:Win Builder (dbg) Goma RBE Canary": {
-    "builders": [
-      "chromium.goma.fyi:Win Builder (dbg) Goma RBE Canary"
-    ]
-  },
-  "chromium.goma.fyi:Win Builder (dbg) Goma RBE Latest Client": {
-    "builders": [
-      "chromium.goma.fyi:Win Builder (dbg) Goma RBE Latest Client"
-    ]
-  },
   "chromium.goma.fyi:Win Builder Goma RBE ATS Canary": {
     "builders": [
       "chromium.goma.fyi:Win Builder Goma RBE ATS Canary"
@@ -3558,12 +3538,6 @@
       "tryserver.chromium.win:win_chromium_compile_rel_ng"
     ]
   },
-  "chromium.win:Win Builder (dbg)": {
-    "builders": [
-      "chromium.win:Win Builder (dbg)",
-      "tryserver.chromium.win:win_chromium_compile_dbg_ng"
-    ]
-  },
   "chromium.win:Win7 (32) Tests": {
     "builders": [
       "chromium.win:WebKit Win10",
@@ -5392,12 +5366,6 @@
       "chromium.win:Win7 Tests (1)",
       "tryserver.chromium.win:win7-rel",
       "tryserver.chromium.win:win_chromium_compile_rel_ng"
-    ]
-  },
-  "tryserver.chromium.win:win_chromium_compile_dbg_ng": {
-    "builders": [
-      "chromium.win:Win Builder (dbg)",
-      "tryserver.chromium.win:win_chromium_compile_dbg_ng"
     ]
   },
   "tryserver.chromium.win:win_chromium_compile_rel_ng": {
