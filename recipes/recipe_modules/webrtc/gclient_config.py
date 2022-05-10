@@ -23,6 +23,13 @@ def webrtc_ios(c):
   c.target_os.add('mac')
   c.target_os.add('ios')
 
+
+@CONFIG_CTX(includes=['webrtc'])
+def webrtc_linux_mac_crosscompile(c):
+  # Compiling webrtc on Linux for mac requires fetching mac dependencies.
+  c.target_os.add('mac')
+
+
 @CONFIG_CTX(includes=['webrtc'])
 def webrtc_valgrind(c):
   """Add Valgrind binaries to the gclient solution."""
