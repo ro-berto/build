@@ -25,9 +25,10 @@ def webrtc_ios(c):
 
 
 @CONFIG_CTX(includes=['webrtc'])
-def webrtc_linux_mac_crosscompile(c):
+def webrtc_linux_mac_crosscompile_arm64(c):
   # Compiling webrtc on Linux for mac requires fetching mac dependencies.
   c.target_os.add('mac')
+  c.target_cpu.add('arm64')
 
 
 @CONFIG_CTX(includes=['webrtc'])

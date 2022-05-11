@@ -301,7 +301,7 @@ _CLIENT_WEBRTC_SPEC = {
     'MacArm64 Builder':
         WebRTCBuilderSpec.create(
             chromium_config='webrtc_default',
-            gclient_config='webrtc_linux_mac_crosscompile',
+            gclient_config='webrtc_linux_mac_crosscompile_arm64',
             simulation_platform='mac',
             chromium_config_kwargs={
                 'TARGET_ARCH': 'arm',
@@ -566,7 +566,7 @@ _CLIENT_WEBRTC_PERF_SPECS = {
         WebRTCBuilderSpec.create(
             perf_id='webrtc-mac-large-tests',
             chromium_config='webrtc_default',
-            gclient_config='webrtc_linux_mac_crosscompile',
+            gclient_config='webrtc_linux_mac_crosscompile_arm64',
             execution_mode=builder_spec.TEST,
             parent_builder_group='client.webrtc',
             parent_buildername='MacArm64 Builder',
