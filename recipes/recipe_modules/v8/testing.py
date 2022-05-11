@@ -516,25 +516,8 @@ class V8SwarmingTest(V8Test):
     if self.api.v8.c.testing.may_shard:
       shards = self.test_step_config.shards
 
-    cipd_packages = None
     command = ['tools/%s.py' % self.test.get('tool', 'run-tests')]
     idempotent = self.test.get('idempotent')
-
-    # TODO(crbug.com/1210489, crbug.com/1219410): We overwrite the python
-    # from the pool template for mac-arm64 as it points to amd64 and causes
-    # crashes. Remove this as soon as the python from the pool template is
-    # mac-arm64.
-    cpu_dim = self.test_step_config.swarming_dimensions.get('cpu', '')
-    os_dim = self.test_step_config.swarming_dimensions.get('os', '')
-    if (cpu_dim == 'arm64' and os_dim.startswith('Mac')):
-      cipd_packages = [
-        chromium_swarming.CipdPackage.create(
-              name='infra/3pp/tools/cpython3/mac-arm64',
-              version='version:2@3.8.10.chromium.23',
-              root='.mac_arm64_cpython3',
-          )
-      ]
-      command = ['.mac_arm64_cpython3/bin/python3', '-u'] + command
 
     # Initialize swarming task with custom data-collection step for v8
     # test-runner output.
@@ -543,7 +526,6 @@ class V8SwarmingTest(V8Test):
         name=self.test['name'] + self.test_step_config.step_name_suffix,
         idempotent=idempotent,
         shards=shards,
-        cipd_packages=cipd_packages,
         raw_cmd=command + extra_args,
         **kwargs
     )
