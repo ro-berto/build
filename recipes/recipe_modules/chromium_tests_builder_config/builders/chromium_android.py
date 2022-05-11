@@ -25,6 +25,7 @@ def _chromium_android_spec(**kwargs):
 # * Marshmallow 64 bit Tester
 # * Nougat Phone Tester
 # * Oreo Phone Tester
+# * android-cronet-arm-dbg
 # * android-pie-arm64-dbg
 # * android-weblayer-10-x86-rel-tests
 # * android-weblayer-marshmallow-x86-rel-tests
@@ -195,7 +196,6 @@ SPEC.update([
         'android-12-x64-rel',
         android_config='x64_builder',
         chromium_config_kwargs={'TARGET_BITS': 64}),
-    stock_cronet_config('android-cronet-arm-dbg', config='Debug'),
     stock_cronet_config('android-cronet-arm-rel'),
     stock_cronet_config('android-cronet-arm64-dbg', config='Debug'),
     stock_cronet_config('android-cronet-arm64-rel'),

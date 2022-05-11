@@ -159,12 +159,6 @@
       "tryserver.chromium.android:android-bfcache-rel"
     ]
   },
-  "chromium.android:android-cronet-arm-dbg": {
-    "builders": [
-      "chromium.android:android-cronet-arm-dbg",
-      "tryserver.chromium.android:android-cronet-arm-dbg"
-    ]
-  },
   "chromium.android:android-cronet-arm-rel": {
     "builders": [
       "chromium.android:android-cronet-arm-rel",
@@ -3710,12 +3704,6 @@
     "builders": [
       "chromium.android.fyi:android-chrome-pie-x86-wpt-fyi-rel",
       "tryserver.chromium.android:android-chrome-pie-x86-wpt-fyi-rel"
-    ]
-  },
-  "tryserver.chromium.android:android-cronet-arm-dbg": {
-    "builders": [
-      "chromium.android:android-cronet-arm-dbg",
-      "tryserver.chromium.android:android-cronet-arm-dbg"
     ]
   },
   "tryserver.chromium.android:android-cronet-arm64-dbg": {

@@ -107,6 +107,7 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * android_compile_dbg
     # * android_compile_x64_dbg
     # * android-12-x64-dbg
+    # * android-cronet-arm-dbg
     # * android-inverse-fieldtrials-pie-x86-fyi-rel
     # * android-pie-x86-rel
     # * android-weblayer-10-x86-rel-tests
@@ -150,11 +151,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android',
                 buildername='android-bfcache-rel',
-            ),
-        'android-cronet-arm-dbg':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android',
-                buildername='android-cronet-arm-dbg',
             ),
         'android-cronet-arm64-dbg':
             try_spec.TrySpec.create_for_single_mirror(
