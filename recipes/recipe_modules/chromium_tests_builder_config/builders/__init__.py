@@ -35,7 +35,6 @@ from . import client_v8_chromium
 from . import client_v8_fyi
 from . import tryserver_chromium_android
 from . import tryserver_chromium_linux
-from . import tryserver_chromium_mac
 from . import tryserver_devtools_frontend
 from . import tryserver_v8
 from . import tryserver_webrtc
@@ -113,8 +112,6 @@ BUILDERS = builder_db.BuilderDatabase.create({
         tryserver_chromium_android.SPEC,
     'tryserver.chromium.linux':
         tryserver_chromium_linux.SPEC,
-    'tryserver.chromium.mac':
-        tryserver_chromium_mac.SPEC,
     'tryserver.devtools-frontend':
         tryserver_devtools_frontend.SPEC,
     'tryserver.v8':

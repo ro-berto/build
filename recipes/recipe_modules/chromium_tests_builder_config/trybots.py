@@ -541,6 +541,7 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * linux_chromium_compile_rel_ng
     # * linux_chromium_dbg_ng
     # * linux_optional_gpu_tests_rel
+    # * mac_optional_gpu_tests_rel
     'tryserver.chromium.linux': {
         'cast_shell_linux':
             try_spec.TrySpec.create_for_single_mirror(

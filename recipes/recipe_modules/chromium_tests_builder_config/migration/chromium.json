@@ -5036,11 +5036,6 @@
       "tryserver.chromium.mac:mac_chromium_asan_rel_ng"
     ]
   },
-  "tryserver.chromium.mac:mac_optional_gpu_tests_rel": {
-    "builders": [
-      "tryserver.chromium.mac:mac_optional_gpu_tests_rel"
-    ]
-  },
   "tryserver.chromium.rust:android-rust-arm-dbg": {
     "builders": [
       "chromium.rust:android-rust-arm-dbg",
