@@ -43,6 +43,11 @@ ESSENTIAL_FILES = (
     # TODO(rockot): Remove this once web_ui_test.mojom is no longer in the
     # chrome/test directory (https://crbug.com/926270).
     'chrome/test/data/webui/web_ui_test.mojom',
+
+    # Allows the orchestrator_all target to work with gn gen
+    'third_party/blink/tools/BUILD.gn',
+    'third_party/blink/tools/blinkpy/web_tests/merge_results.pydeps',
+    'third_party/blink/tools/merge_web_test_results.pydeps',
     'v8/test/torque/test-torque.tq',
 )
 
