@@ -1107,13 +1107,19 @@ class ArchiveApi(recipe_api.RecipeApi):
       content = self._replace_placeholders(
           update_properties, custom_vars,
           archive_data.latest_upload.gcs_file_content)
+
+      if archive_data.latest_upload.gcs_bucket:
+        latest_gcs_bucket = archive_data.latest_upload.gcs_bucket
+      else:
+        latest_gcs_bucket = gcs_bucket
+
       if '{%chromium_version%}' in archive_data.latest_upload.gcs_file_content:
         file_name = self.m.path.basename(latest_path)
         dest_path = self.m.path.mkdtemp().join(file_name)
 
         try:
           self.m.gsutil.download(
-              bucket=gcs_bucket, source=latest_path, dest=dest_path)
+              bucket=latest_gcs_bucket, source=latest_path, dest=dest_path)
           last_version = self.m.file.read_text(
               'Read in last version', dest_path, test_data='1.2.3.4')
         except Exception:
@@ -1133,19 +1139,11 @@ class ArchiveApi(recipe_api.RecipeApi):
       temp_dir = self.m.path.mkdtemp()
       output_file = temp_dir.join('latest.txt')
       self.m.file.write_text('Write latest file', output_file, content_ascii)
-      if archive_data.latest_upload.gcs_bucket:
-        latest_gcs_bucket = archive_data.latest_upload.gcs_bucket
-        self.m.gsutil.upload(
-            output_file,
-            bucket=latest_gcs_bucket,
-            dest=latest_path,
-            name="upload {}/{}".format(latest_gcs_bucket, latest_path))
-      else:
-        self.m.gsutil.upload(
-            output_file,
-            bucket=gcs_bucket,
-            dest=latest_path,
-            name="upload {}".format(latest_path))
+      self.m.gsutil.upload(
+          output_file,
+          bucket=latest_gcs_bucket,
+          dest=latest_path,
+          name="upload {}/{}".format(latest_gcs_bucket, latest_path))
 
     # Generates a REVISIONS file
     if archive_data.HasField('revisions_file'):
