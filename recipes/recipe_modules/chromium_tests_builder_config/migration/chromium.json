@@ -1230,12 +1230,6 @@
       "chromium.fyi:ios-simulator-code-coverage"
     ]
   },
-  "chromium.fyi:ios-simulator-cronet": {
-    "builders": [
-      "chromium.fyi:ios-simulator-cronet",
-      "tryserver.chromium.mac:ios-simulator-cronet"
-    ]
-  },
   "chromium.fyi:ios-simulator-multi-window": {
     "builders": [
       "chromium.fyi:ios-simulator-multi-window",
@@ -4979,12 +4973,6 @@
     "builders": [
       "chromium.memory:ios-asan",
       "tryserver.chromium.mac:ios-asan"
-    ]
-  },
-  "tryserver.chromium.mac:ios-simulator-cronet": {
-    "builders": [
-      "chromium.fyi:ios-simulator-cronet",
-      "tryserver.chromium.mac:ios-simulator-cronet"
     ]
   },
   "tryserver.chromium.mac:ios-simulator-multi-window": {

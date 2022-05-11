@@ -37,6 +37,7 @@ def stock_config(name, config='Release', target_bits=64, staging=True,
 # The config for the following builders is now specified src-side in
 # //infra/config/subprojects/chromium/ci/chromium.fyi.star
 # * Win11 Tests x64
+# * ios-simulator-cronet
 # * mac-osxbeta-rel
 
 SPEC = {
@@ -440,23 +441,6 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             simulation_platform='linux',
-        ),
-    'ios-simulator-cronet':
-        builder_spec.BuilderSpec.create(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-                'mac_toolchain',
-            ],
-            gclient_config='ios',
-            gclient_apply_config=[],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'ios',
-                'HOST_PLATFORM': 'mac',
-            },
-            simulation_platform='mac',
         ),
     'ios-webkit-tot':
         builder_spec.BuilderSpec.create(

@@ -888,6 +888,7 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * ios-catalyst
     # * ios-device
     # * ios-simulator
+    # * ios-simulator-cronet
     # * ios-simulator-full-configs
     # * ios-simulator-inverse-fieldtrials-fyi
     # * ios-simulator-noncq
@@ -910,11 +911,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.memory',
                 buildername='ios-asan',
-            ),
-        'ios-simulator-cronet':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
-                buildername='ios-simulator-cronet',
             ),
         'ios-simulator-multi-window':
             try_spec.TrySpec.create_for_single_mirror(
