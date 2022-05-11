@@ -3569,12 +3569,6 @@
       "chromium:mac-arm64-archive-tagged"
     ]
   },
-  "chromium:mac-official": {
-    "builders": [
-      "chromium:mac-official",
-      "tryserver.chromium:mac-official"
-    ]
-  },
   "chromium:win-archive-dbg": {
     "builders": [
       "chromium:win-archive-dbg"
@@ -5339,12 +5333,6 @@
     "builders": [
       "chromium:linux-official",
       "tryserver.chromium:linux-official"
-    ]
-  },
-  "tryserver.chromium:mac-official": {
-    "builders": [
-      "chromium:mac-official",
-      "tryserver.chromium:mac-official"
     ]
   }
 }

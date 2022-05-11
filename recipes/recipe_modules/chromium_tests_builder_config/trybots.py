@@ -81,6 +81,7 @@ TRYBOTS = try_spec.TryDatabase.create({
     },
     # The config for the following builders is now specified src-side in
     # //infra/config/subprojects/chromium/try/tryserver.chromium.star
+    # * mac-official
     # * win-official
     # * win32-official
     'tryserver.chromium': {
@@ -98,11 +99,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium',
                 buildername='linux-official',
-            ),
-        'mac-official':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium',
-                buildername='mac-official',
             ),
     },
     # The config for the following builders is now specified src-side in

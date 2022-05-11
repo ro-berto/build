@@ -12,6 +12,7 @@ from .. import builder_spec
 # * linux-archive-rel
 # * mac-arm64-archive-dbg
 # * mac-arm64-archive-rel
+# * mac-official
 # * win-archive-rel
 # * win-official
 # * win32-archive-rel
@@ -73,19 +74,6 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             simulation_platform='win',
-        ),
-    'mac-official':
-        builder_spec.BuilderSpec.create(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=['checkout_pgo_profiles'],
-            chromium_config_kwargs={
-                'TARGET_BITS': 64,
-            },
-            simulation_platform='mac',
         ),
     'mac-archive-dbg':
         builder_spec.BuilderSpec.create(
