@@ -25,7 +25,6 @@ DEPS = [
     'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/properties',
-    'recipe_engine/python',
     'recipe_engine/step',
     'recipe_engine/swarming',
 ]
@@ -339,14 +338,17 @@ def CalculateCodeCoverage(api, paths):
   temp_dir = api.profiles.profile_dir('profdata')
 
   # Process the raw code coverage data.
-  api.python(
-      'process raw coverage data',
+  api.step('process raw coverage data', [
+      'python',
       api.profiles.merge_results_script,
-      args=[
-          '--task-output-dir', paths.checkout_path, '--profdata-dir', temp_dir,
-          '--llvm-profdata', api.profiles.llvm_profdata_exec,
-          '--per-cl-coverage'
-      ])
+      '--task-output-dir',
+      paths.checkout_path,
+      '--profdata-dir',
+      temp_dir,
+      '--llvm-profdata',
+      api.profiles.llvm_profdata_exec,
+      '--per-cl-coverage',
+  ])
 
   # Validate that the script worked as expected, then bubble this up to
   # the trybot UI.
@@ -504,9 +506,13 @@ def RunSteps(api):
           coverage_step.status = api.step.FAILURE
           use_coverage = False
 
-    api.python('gn gen', api.depot_tools.gn_py_path, [
-        'gen', paths.output_path, '--check',
-        '--args=' + FormatGnArgs(api.properties)
+    api.step('gn gen', [
+        'python',
+        api.depot_tools.gn_py_path,
+        'gen',
+        paths.output_path,
+        '--check',
+        '--args=' + FormatGnArgs(api.properties),
     ])
 
     # NOTE: The following just runs Ninja without setting up the Mac toolchain
