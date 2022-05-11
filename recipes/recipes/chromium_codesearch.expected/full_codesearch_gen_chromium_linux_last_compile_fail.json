@@ -406,7 +406,7 @@
       "[CACHE]/goma/client",
       "--json-output",
       "/path/to/tmp/json",
-      "[CACHE]/builder/src/out/Debug"
+      "[CACHE]/builder/src/out/linux-Debug"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -437,9 +437,9 @@
       "-u",
       "[CACHE]/builder/src/tools/clang/scripts/generate_compdb.py",
       "-p",
-      "[CACHE]/builder/src/out/Debug",
+      "[CACHE]/builder/src/out/linux-Debug",
       "-o",
-      "[CACHE]/builder/src/out/Debug/compile_commands.json",
+      "[CACHE]/builder/src/out/linux-Debug/compile_commands.json",
       "all"
     ],
     "luci_context": {
@@ -462,7 +462,7 @@
       "-u",
       "RECIPE_REPO[depot_tools]/gn.py",
       "desc",
-      "[CACHE]/builder/src/out/Debug",
+      "[CACHE]/builder/src/out/linux-Debug",
       "*",
       "--format=json"
     ],
@@ -490,7 +490,7 @@
       "/path/to/tmp/json",
       "copy",
       "",
-      "[CACHE]/builder/src/out/Debug/gn_targets.json"
+      "[CACHE]/builder/src/out/linux-Debug/gn_targets.json"
     ],
     "infra_step": true,
     "luci_context": {
@@ -517,7 +517,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/builder/src/out/Debug/kzip"
+      "[CACHE]/builder/src/out/linux-Debug/kzip"
     ],
     "infra_step": true,
     "luci_context": {
@@ -572,7 +572,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "KYTHE_CORPUS": "chromium.googlesource.com/chromium/src",
-      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/Debug/kzip",
+      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/linux-Debug/kzip",
       "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
     },
     "luci_context": {
@@ -616,7 +616,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "KYTHE_CORPUS": "chromium.googlesource.com/chromium/src",
-      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/Debug/kzip",
+      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/linux-Debug/kzip",
       "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
     },
     "infra_step": true,
@@ -656,7 +656,7 @@
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "KYTHE_CORPUS": "chromium.googlesource.com/chromium/src",
-      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/Debug/kzip",
+      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/linux-Debug/kzip",
       "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
     },
     "infra_step": true,
@@ -707,7 +707,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "KYTHE_CORPUS": "chromium.googlesource.com/chromium/src",
-      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/Debug/kzip",
+      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/linux-Debug/kzip",
       "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
     },
     "infra_step": true,
@@ -742,7 +742,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/Debug",
+      "[CACHE]/builder/src/out/linux-Debug",
       "-k",
       "0",
       "-j",
@@ -753,7 +753,7 @@
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false",
       "KYTHE_CORPUS": "chromium.googlesource.com/chromium/src",
-      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/Debug/kzip",
+      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/linux-Debug/kzip",
       "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
     },
     "luci_context": {
@@ -776,7 +776,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/Debug",
+      "[CACHE]/builder/src/out/linux-Debug",
       "-k",
       "0",
       "-j",
@@ -790,7 +790,7 @@
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false",
       "KYTHE_CORPUS": "chromium.googlesource.com/chromium/src",
-      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/Debug/kzip",
+      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/linux-Debug/kzip",
       "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
     },
     "luci_context": {
@@ -828,7 +828,7 @@
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "KYTHE_CORPUS": "chromium.googlesource.com/chromium/src",
-      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/Debug/kzip",
+      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/linux-Debug/kzip",
       "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
     },
     "luci_context": {
@@ -875,7 +875,7 @@
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "KYTHE_CORPUS": "chromium.googlesource.com/chromium/src",
-      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/Debug/kzip",
+      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/linux-Debug/kzip",
       "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
     },
     "luci_context": {
@@ -911,7 +911,7 @@
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "KYTHE_CORPUS": "chromium.googlesource.com/chromium/src",
-      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/Debug/kzip",
+      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/linux-Debug/kzip",
       "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
     },
     "luci_context": {
@@ -952,9 +952,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[CACHE]/builder/src/out/Debug",
+      "[CACHE]/builder/src/out/linux-Debug",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Debug\", \"-k\", \"0\", \"-j\", 80]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/linux-Debug\", \"-k\", \"0\", \"-j\", 80]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -978,7 +978,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "KYTHE_CORPUS": "chromium.googlesource.com/chromium/src",
-      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/Debug/kzip",
+      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/linux-Debug/kzip",
       "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
     },
     "luci_context": {
@@ -1024,7 +1024,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "KYTHE_CORPUS": "chromium.googlesource.com/chromium/src",
-      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/Debug/kzip",
+      "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/linux-Debug/kzip",
       "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
     },
     "infra_step": true,
@@ -1102,7 +1102,7 @@
       "--tool-path",
       "[CLEANUP]/tmp_tmp_1/bin",
       "-p",
-      "[CACHE]/builder/src/out/Debug",
+      "[CACHE]/builder/src/out/linux-Debug",
       "--all"
     ],
     "luci_context": {
@@ -1131,7 +1131,7 @@
       "RECIPE_MODULE[build::codesearch]/resources/add_kythe_metadata.py",
       "--corpus",
       "chromium.googlesource.com/chromium/src",
-      "[CACHE]/builder/src/out/Debug"
+      "[CACHE]/builder/src/out/linux-Debug"
     ],
     "luci_context": {
       "realm": {
@@ -1229,19 +1229,19 @@
       "--checkout_dir",
       "[CACHE]/builder/src",
       "--path_to_compdb",
-      "[CACHE]/builder/src/out/Debug/compile_commands.json",
+      "[CACHE]/builder/src/out/linux-Debug/compile_commands.json",
       "--path_to_gn_targets",
-      "[CACHE]/builder/src/out/Debug/gn_targets.json",
+      "[CACHE]/builder/src/out/linux-Debug/gn_targets.json",
       "--path_to_archive_output",
-      "[CACHE]/builder/src/out/Debug/chromium_linux.kzip",
+      "[CACHE]/builder/src/out/linux-Debug/chromium_linux.kzip",
       "--corpus",
       "chromium.googlesource.com/chromium/src",
       "--project",
       "chromium",
       "--path_to_java_kzips",
-      "[CACHE]/builder/src/out/Debug/kzip",
+      "[CACHE]/builder/src/out/linux-Debug/kzip",
       "--out_dir",
-      "src/out/Debug",
+      "src/out/linux-Debug",
       "--build_config",
       "linux"
     ],
@@ -1268,7 +1268,7 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[CACHE]/builder/src/out/Debug/chromium_linux.kzip",
+      "[CACHE]/builder/src/out/linux-Debug/chromium_linux.kzip",
       "gs://chrome-codesearch/prod/chromium_linux_170242_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9+1337000001.kzip"
     ],
     "infra_step": true,
@@ -1298,7 +1298,7 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[CACHE]/builder/src/out/Debug/compile_commands.json",
+      "[CACHE]/builder/src/out/linux-Debug/compile_commands.json",
       "gs://chrome-codesearch/debug/compile_commands_linux_170242.json"
     ],
     "infra_step": true,
@@ -1516,6 +1516,8 @@
       "--",
       "python",
       "RECIPE_MODULE[build::codesearch]/resources/sync_generated_files.py",
+      "--debug-dir",
+      "linux-Debug",
       "--message",
       "Generated files from \"codesearch-gen-chromium-linux\" build 571, revision f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--dest-branch",

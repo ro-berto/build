@@ -14,6 +14,7 @@ per-file chromium.py=iannucci@chromium.org
 per-file chromium.py=martiniss@chromium.org
 per-file chromium_3pp.py=hypan@google.com
 per-file chromium_clang_coverage_tot.py=file:chromium_clang_coverage_tot.expected/OWNERS
+per-file chromium_codesearch.proto=file:chromium_codesearch.expected/OWNERS
 per-file chromium_codesearch.py=file:chromium_codesearch.expected/OWNERS
 per-file chromiumos_codesearch_initiator.py=file:chromiumos_codesearch_initiator.expected/OWNERS
 per-file chromiumos_codesearch.py=file:chromiumos_codesearch.expected/OWNERS

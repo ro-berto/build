@@ -1,0 +1,55 @@
+// Copyright 2022 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+syntax = "proto3";
+
+package recipes.build.chromium_codesearch;
+
+message InputProperties {
+  // The revision to checkout and build.
+  string root_solution_revision = 1;
+
+  // The commit timestamp of the revision to checkout and build, in seconds
+  // since the UNIX epoch.
+  int32 root_solution_revision_timestamp = 2;
+
+  // The revision for codesearch to use for kythe references. Uses
+  // root_solution_revision if not available.
+  string codesearch_mirror_revision = 3;
+
+  // The commit timestamp of the revision for codesearch to use, in seconds
+  // since the UNIX epoch. Uses root_solution_revision_timestamp if not
+  // available.
+  int32 codesearch_mirror_revision_timestamp = 4;
+
+  // Properties set by builder configs. These can be found in infra/infra, e.g.
+  // https://source.chromium.org/chromium/infra/infra/+/main:infra/config/subprojects/codesearch.star;l=299;drc=7c743693569e6fd3b60d3a94ac899a2c4357bc6d
+  RecipeProperties recipe_properties = 5;
+}
+
+message RecipeProperties {
+  // The compile targets.
+  repeated string compile_targets = 1;
+
+  // The platform for which the code is compiled.
+  string platform = 2;
+
+  // Whether to mark Kythe uploads as experimental.
+  bool experimental = 3;
+
+  // Whether to sync generated files into a git repo.
+  bool sync_generated_files = 4;
+
+  // Kythe corpus to specify in the kzip.
+  string corpus = 5;
+
+  // Kythe build config to specify in the kzip.
+  string build_config = 6;
+
+  // Which branch in the generated files repo to sync to.
+  string gen_repo_branch = 7;
+
+  // Which directory under src/out to write gen files to.
+  string gen_repo_out_dir = 8;
+}

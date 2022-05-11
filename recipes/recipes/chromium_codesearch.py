@@ -2,13 +2,13 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import six
-
-from recipe_engine import config
 from recipe_engine.engine_types import freeze
-from recipe_engine.recipe_api import Property
 
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
+from PB.recipes.build.chromium_codesearch import (InputProperties,
+                                                  RecipeProperties)
+
+PROPERTIES = InputProperties
 
 PYTHON_VERSION_COMPATIBILITY = "PY3"
 
@@ -54,148 +54,8 @@ TRYBOT_SPEC = freeze({
     }
 })
 
-# TODO(crbug/1317852): Move properties outside of recipe.
-SPEC = freeze({
-    # The builders have the following parameters:
-    # - compile_targets: the compile targets.
-    # - platform: The platform for which the code is compiled.
-    # - experimental: Whether to mark Kythe uploads as experimental.
-    # - sync_generated_files: Whether to sync generated files into a git repo.
-    # - corpus: Kythe corpus to specify in the kzip.
-    # - build_config: Kythe build config to specify in the kzip.
-    # - gen_repo_branch: Which branch in the generated files repo to sync to.
-    # - gen_repo_out_dir: Which directory under src/out to write gen files to.
-    'builders': {
-        'codesearch-gen-chromium-android': {
-            'compile_targets': ['all',],
-            'platform': 'android',
-            'sync_generated_files': True,
-            'gen_repo_branch': 'main',
-            # Generated files will end up in out/android-Debug/gen.
-            'gen_repo_out_dir': 'android-Debug',
-            'corpus': 'chromium.googlesource.com/chromium/src',
-            'build_config': 'android',
-        },
-        'codesearch-gen-chromium-lacros': {
-            'compile_targets': ['all',],
-            'platform': 'lacros',
-            'sync_generated_files': True,
-            'gen_repo_branch': 'main',
-            'corpus': 'chromium.googlesource.com/chromium/src',
-            'build_config': 'lacros',
-        },
-        'codesearch-gen-chromium-linux': {
-            'compile_targets': ['all',],
-            'platform': 'linux',
-            'sync_generated_files': True,
-            'gen_repo_branch': 'main',
-            'corpus': 'chromium.googlesource.com/chromium/src',
-            'build_config': 'linux',
-        },
-        'codesearch-gen-chromium-fuchsia': {
-            'compile_targets': ['all',],
-            'platform': 'fuchsia',
-            'sync_generated_files': True,
-            'gen_repo_branch': 'main',
-            # Generated files will end up in out/fuchsia-Debug/gen.
-            'gen_repo_out_dir': 'fuchsia-Debug',
-            'corpus': 'chromium.googlesource.com/chromium/src',
-            'build_config': 'fuchsia',
-        },
-        'codesearch-gen-chromium-chromiumos': {
-            # TODO(emso): Get the below compile targets.
-            # from the chromium_tests recipe module.
-            # Compile targets used by the 'Linux ChromiumOS Full' builder
-            # (2016-12-16)
-            'compile_targets': [
-                'base_unittests',
-                'browser_tests',
-                'chromeos_unittests',
-                'components_unittests',
-                'compositor_unittests',
-                'content_browsertests',
-                'content_unittests',
-                'crypto_unittests',
-                'dbus_unittests',
-                'device_unittests',
-                'gcm_unit_tests',
-                'google_apis_unittests',
-                'gpu_unittests',
-                'interactive_ui_tests',
-                'ipc_tests',
-                'media_unittests',
-                'message_center_unittests',
-                'nacl_loader_unittests',
-                'net_unittests',
-                'ppapi_unittests',
-                'printing_unittests',
-                'remoting_unittests',
-                'sandbox_linux_unittests',
-                'sql_unittests',
-                'ui_base_unittests',
-                'unit_tests',
-                'url_unittests',
-                'views_unittests',
-            ],
-            'platform': 'chromeos',
-            'sync_generated_files': True,
-            'gen_repo_branch': 'main',
-            # Generated files will end up in out/chromeos-Debug/gen.
-            'gen_repo_out_dir': 'chromeos-Debug',
-            'corpus': 'chromium.googlesource.com/chromium/src',
-            'build_config': 'chromeos',
-        },
-        'codesearch-gen-chromium-mac': {
-            'compile_targets': ['all',],
-            'platform': 'mac',
-            'sync_generated_files': True,
-            # Generated files will end up in out/mac-Debug/gen.
-            'gen_repo_out_dir': 'mac-Debug',
-            'gen_repo_branch': 'main',
-            'corpus': 'chromium.googlesource.com/chromium/src',
-            'build_config': 'mac',
-        },
-        'codesearch-gen-chromium-win': {
-            'compile_targets': ['all',],
-            'platform': 'win',
-            'sync_generated_files': True,
-            'gen_repo_branch': 'main',
-            # Generated files will end up in out/win-Debug/gen.
-            'gen_repo_out_dir': 'win-Debug',
-            'corpus': 'chromium.googlesource.com/chromium/src',
-            'build_config': 'win',
-        },
-    },
-})
 
-PROPERTIES = {
-    'root_solution_revision':
-        Property(
-            kind=str, help='The revision to checkout and build.', default=None),
-    'root_solution_revision_timestamp':
-        Property(
-            kind=config.Single((int, float)),
-            help='The commit timestamp of the revision to checkout and build, '
-            'in seconds since the UNIX epoch.',
-            default=None),
-    'codesearch_mirror_revision':
-        Property(
-            kind=str,
-            help='The revision for codesearch to use for kythe references. '
-            'Uses root_solution_revision if not available.',
-            default=None),
-    'codesearch_mirror_revision_timestamp':
-        Property(
-            kind=config.Single((int, float)),
-            help='The commit timestamp of the revision for codesearch to use, '
-            'in seconds since the UNIX epoch. Uses '
-            'root_solution_revision_timestamp if not available.',
-            default=None),
-}
-
-
-def RunSteps(api, root_solution_revision, root_solution_revision_timestamp,
-             codesearch_mirror_revision, codesearch_mirror_revision_timestamp):
+def RunSteps(api, properties):
   name_suffix = ''
   builder_id = api.chromium.get_builder_id()
   if api.tryserver.is_tryserver:
@@ -205,22 +65,23 @@ def RunSteps(api, root_solution_revision, root_solution_revision_timestamp,
                                  (builder_id.group, builder_id.builder))
   else:
     builder = builder_id.builder
-  bot_config = SPEC.get('builders', {}).get(builder)
+  bot_config = properties.recipe_properties
   assert bot_config is not None, ('Could not find builder %s in SPEC' % builder)
-  platform = bot_config.get('platform', 'linux')
-  experimental = bot_config.get('experimental', False)
-  corpus = bot_config.get('corpus', 'chromium-linux')
-  build_config = bot_config.get('build_config', '')
-  targets = bot_config.get('compile_targets', [])
-  gen_repo_branch = bot_config.get('gen_repo_branch', 'main')
-  gen_repo_out_dir = bot_config.get('gen_repo_out_dir', '')
+  platform = bot_config.platform or 'linux'
+  experimental = bot_config.experimental or False
+  corpus = bot_config.corpus or 'chromium-linux'
+  build_config = bot_config.build_config or ''
+  # compile_targets is of type RepeatedScalarFieldContainer.
+  targets = list(bot_config.compile_targets or [])
+  gen_repo_branch = bot_config.gen_repo_branch or 'main'
+  gen_repo_out_dir = bot_config.gen_repo_out_dir or ''
 
   api.codesearch.set_config(
       'chromium',
       PROJECT='chromium',
       PLATFORM=platform,
       EXPERIMENTAL=experimental,
-      SYNC_GENERATED_FILES=bot_config['sync_generated_files'],
+      SYNC_GENERATED_FILES=bot_config.sync_generated_files,
       GEN_REPO_BRANCH=gen_repo_branch,
       GEN_REPO_OUT_DIR=gen_repo_out_dir,
       CORPUS=corpus,
@@ -248,7 +109,7 @@ def RunSteps(api, root_solution_revision, root_solution_revision_timestamp,
   checkout_dir = api.path['cache'].join('builder')
   with api.context(cwd=checkout_dir, env={'PACKFILE_OFFLOADING': 1}):
     update_step = api.bot_update.ensure_checkout(
-        root_solution_revision=root_solution_revision)
+        root_solution_revision=properties.root_solution_revision)
   api.chromium.set_build_properties(update_step.json.output['properties'])
 
   # Remove the llvm-build directory, so that gclient runhooks will download
@@ -324,9 +185,10 @@ def RunSteps(api, root_solution_revision, root_solution_revision_timestamp,
 
   # Create the kythe index pack and upload it to google storage.
   api.codesearch.create_and_upload_kythe_index_pack(
-      commit_hash=codesearch_mirror_revision or None,
-      commit_timestamp=int(codesearch_mirror_revision_timestamp or
-                           root_solution_revision_timestamp or api.time.time()))
+      commit_hash=properties.codesearch_mirror_revision or None,
+      commit_timestamp=int(properties.codesearch_mirror_revision_timestamp or
+                           properties.root_solution_revision_timestamp or
+                           api.time.time()))
 
   # Check out the generated files repo and sync the generated files
   # into this checkout. This may fail due to other builders pushing to the
@@ -352,6 +214,11 @@ def _RunStepWithRetry(api, step_function, max_tries=3):
 def _sanitize_nonalpha(text):
   return ''.join(c if c.isalnum() else '_' for c in text)
 
+
+def _format_builder_name(platform):
+  return 'codesearch-gen-chromium-%s' % platform
+
+
 SAMPLE_GN_DESC_OUTPUT = '''
 {
    "//ipc:mojom_constants__generator": {
@@ -371,17 +238,37 @@ SAMPLE_GN_DESC_OUTPUT = '''
 '''
 
 def GenTests(api):
-  for buildername, _ in six.iteritems(SPEC['builders']):
+
+  def props(platform):
+    return api.properties(
+        root_solution_revision='HEAD',
+        root_solution_revision_timestamp=1337000001,
+        recipe_properties=RecipeProperties(
+            compile_targets=['all'],
+            platform=platform,
+            experimental=False,
+            sync_generated_files=True,
+            corpus='chromium.googlesource.com/chromium/src',
+            build_config=platform,
+            gen_repo_branch='main',
+            gen_repo_out_dir='%s-Debug' % platform,
+        ))
+
+  for platform in ('android', 'lacros', 'linux', 'fuchsia', 'chromiumos', 'mac',
+                   'win'):
+    buildername = _format_builder_name(platform)
+
     yield api.test(
         'full_%s' % (_sanitize_nonalpha(buildername)),
+        props(platform),
         api.chromium.generic_build(builder=buildername),
         api.step_data('generate gn target list',
                       api.raw_io.stream_output_text(SAMPLE_GN_DESC_OUTPUT)),
     )
 
-  for buildername, _ in six.iteritems(SPEC['builders']):
     yield api.test(
         'full_%s_with_revision' % (_sanitize_nonalpha(buildername)),
+        props(platform),
         api.chromium.generic_build(builder=buildername),
         api.step_data('generate gn target list',
                       api.raw_io.stream_output_text(SAMPLE_GN_DESC_OUTPUT)),
@@ -392,6 +279,7 @@ def GenTests(api):
 
   yield api.test(
       'full_%s_with_patch' % _sanitize_nonalpha('gen-linux-try'),
+      props('linux'),
       api.chromium.try_build(
           builder_group='tryserver.chromium.codesearch',
           builder='gen-linux-try'),
@@ -402,6 +290,7 @@ def GenTests(api):
   yield api.test(
       'full_%s_delete_generated_files_fail' %
       _sanitize_nonalpha('codesearch-gen-chromium-win'),
+      props('win'),
       api.chromium.generic_build(builder='codesearch-gen-chromium-win'),
       api.step_data('delete old generated files', retcode=1),
       api.step_data('generate gn target list',
@@ -411,6 +300,7 @@ def GenTests(api):
   yield api.test(
       'full_%s_compile_fail' %
       _sanitize_nonalpha('codesearch-gen-chromium-linux'),
+      props('linux'),
       api.chromium.generic_build(builder='codesearch-gen-chromium-linux'),
       api.step_data('compile', retcode=1),
   )
@@ -418,6 +308,7 @@ def GenTests(api):
   yield api.test(
       'full_%s_last_compile_fail' %
       _sanitize_nonalpha('codesearch-gen-chromium-linux'),
+      props('linux'),
       api.chromium.generic_build(builder='codesearch-gen-chromium-linux'),
       api.path.exists(api.path['cache'].join('builder', 'cr-cs-sentinel')),
   )
@@ -425,6 +316,7 @@ def GenTests(api):
   yield api.test(
       'full_%s_translation_unit_fail' %
       _sanitize_nonalpha('codesearch-gen-chromium-chromiumos'),
+      props('chromiumos'),
       api.chromium.generic_build(builder='codesearch-gen-chromium-chromiumos'),
       api.step_data('run translation_unit clang tool', retcode=2),
       api.step_data('generate gn target list',
@@ -434,6 +326,7 @@ def GenTests(api):
   yield api.test(
       'full_%s_generate_compile_database_fail' %
       _sanitize_nonalpha('codesearch-gen-chromium-chromiumos'),
+      props('chromiumos'),
       api.chromium.generic_build(builder='codesearch-gen-chromium-chromiumos'),
       api.step_data('generate compilation database', retcode=1),
   )
@@ -441,6 +334,7 @@ def GenTests(api):
   yield api.test(
       'full_%s_git_config_fail' %
       _sanitize_nonalpha('codesearch-gen-chromium-win'),
+      props('win'),
       api.chromium.generic_build(builder='codesearch-gen-chromium-win'),
       api.step_data('set core.longpaths', retcode=1),
       api.step_data('generate gn target list',
@@ -450,6 +344,7 @@ def GenTests(api):
   yield api.test(
       'full_%s_sync_generated_files_fail' %
       _sanitize_nonalpha('codesearch-gen-chromium-linux'),
+      props('linux'),
       api.chromium.generic_build(builder='codesearch-gen-chromium-linux'),
       api.step_data('sync generated files', retcode=1),
       api.step_data('generate gn target list',
