@@ -2095,15 +2095,8 @@
     ]
   },
   "chromium.gpu.fyi:GPU FYI Win x64 Builder DEPS ANGLE": {
-    "blockers": [
-      "cannot migrate builder 'chromium.gpu.fyi:Optional Win10 x64 Release (Intel HD 630)' with provide-test-spec execution_mode",
-      "cannot migrate builder 'chromium.gpu.fyi:Optional Win10 x64 Release (NVIDIA)' with provide-test-spec execution_mode"
-    ],
     "builders": [
-      "chromium.gpu.fyi:GPU FYI Win x64 Builder DEPS ANGLE",
-      "chromium.gpu.fyi:Optional Win10 x64 Release (Intel HD 630)",
-      "chromium.gpu.fyi:Optional Win10 x64 Release (NVIDIA)",
-      "tryserver.chromium.win:win_optional_gpu_tests_rel"
+      "chromium.gpu.fyi:GPU FYI Win x64 Builder DEPS ANGLE"
     ]
   },
   "chromium.gpu.fyi:GPU FYI Win x64 DX12 Vulkan Builder": {
@@ -2527,26 +2520,18 @@
   },
   "chromium.gpu.fyi:Optional Win10 x64 Release (Intel HD 630)": {
     "blockers": [
-      "cannot migrate builder 'chromium.gpu.fyi:Optional Win10 x64 Release (Intel HD 630)' with provide-test-spec execution_mode",
-      "cannot migrate builder 'chromium.gpu.fyi:Optional Win10 x64 Release (NVIDIA)' with provide-test-spec execution_mode"
+      "cannot migrate builder 'chromium.gpu.fyi:Optional Win10 x64 Release (Intel HD 630)' with provide-test-spec execution_mode"
     ],
     "builders": [
-      "chromium.gpu.fyi:GPU FYI Win x64 Builder DEPS ANGLE",
-      "chromium.gpu.fyi:Optional Win10 x64 Release (Intel HD 630)",
-      "chromium.gpu.fyi:Optional Win10 x64 Release (NVIDIA)",
-      "tryserver.chromium.win:win_optional_gpu_tests_rel"
+      "chromium.gpu.fyi:Optional Win10 x64 Release (Intel HD 630)"
     ]
   },
   "chromium.gpu.fyi:Optional Win10 x64 Release (NVIDIA)": {
     "blockers": [
-      "cannot migrate builder 'chromium.gpu.fyi:Optional Win10 x64 Release (Intel HD 630)' with provide-test-spec execution_mode",
       "cannot migrate builder 'chromium.gpu.fyi:Optional Win10 x64 Release (NVIDIA)' with provide-test-spec execution_mode"
     ],
     "builders": [
-      "chromium.gpu.fyi:GPU FYI Win x64 Builder DEPS ANGLE",
-      "chromium.gpu.fyi:Optional Win10 x64 Release (Intel HD 630)",
-      "chromium.gpu.fyi:Optional Win10 x64 Release (NVIDIA)",
-      "tryserver.chromium.win:win_optional_gpu_tests_rel"
+      "chromium.gpu.fyi:Optional Win10 x64 Release (NVIDIA)"
     ]
   },
   "chromium.gpu.fyi:Win10 FYI x64 DX12 Vulkan Debug (NVIDIA)": {
@@ -5306,14 +5291,7 @@
     ]
   },
   "tryserver.chromium.win:win_optional_gpu_tests_rel": {
-    "blockers": [
-      "cannot migrate builder 'chromium.gpu.fyi:Optional Win10 x64 Release (Intel HD 630)' with provide-test-spec execution_mode",
-      "cannot migrate builder 'chromium.gpu.fyi:Optional Win10 x64 Release (NVIDIA)' with provide-test-spec execution_mode"
-    ],
     "builders": [
-      "chromium.gpu.fyi:GPU FYI Win x64 Builder DEPS ANGLE",
-      "chromium.gpu.fyi:Optional Win10 x64 Release (Intel HD 630)",
-      "chromium.gpu.fyi:Optional Win10 x64 Release (NVIDIA)",
       "tryserver.chromium.win:win_optional_gpu_tests_rel"
     ]
   },
