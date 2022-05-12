@@ -2422,8 +2422,7 @@
       "builder 'chromium.gpu.fyi:Optional Android Release (Pixel 4)' does not exist"
     ],
     "builders": [
-      "chromium.gpu.fyi:Optional Android Release (Pixel 4)",
-      "tryserver.chromium.android:android_optional_gpu_tests_rel"
+      "chromium.gpu.fyi:Optional Android Release (Pixel 4)"
     ]
   },
   "chromium.gpu.fyi:Optional Mac Release (Intel)": {
@@ -3815,11 +3814,7 @@
     ]
   },
   "tryserver.chromium.android:android_optional_gpu_tests_rel": {
-    "blockers": [
-      "builder 'chromium.gpu.fyi:Optional Android Release (Pixel 4)' does not exist"
-    ],
     "builders": [
-      "chromium.gpu.fyi:Optional Android Release (Pixel 4)",
       "tryserver.chromium.android:android_optional_gpu_tests_rel"
     ]
   },

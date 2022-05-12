@@ -306,8 +306,8 @@ TRYBOTS = try_spec.TryDatabase.create({
             ),
         'android_optional_gpu_tests_rel':
             try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='Optional Android Release (Pixel 4)',
+                builder_group='tryserver.chromium.android',
+                buildername='android_optional_gpu_tests_rel',
                 retry_failed_shards=False,
             ),
         'cast_shell_android':
