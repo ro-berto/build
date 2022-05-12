@@ -191,7 +191,7 @@ the chrome project.
 1. If any of the builders in the chromium/src CL have a branch selector set,
    cherry-pick the CL to the appropriate branches.
 
-    * STABLE_MILESTONE - M101+
+    * STANDARD_MILESTONE - M101+
     * DESKTOP_EXTEND_STABLE_MILESTONE - M100+
     * CROS_LTS_MILESTONE - M96, M101+
     * FUCHSIA_LTS_MILESTONE - M92, M97, M101+
