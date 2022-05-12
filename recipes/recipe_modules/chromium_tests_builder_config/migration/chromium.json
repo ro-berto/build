@@ -3480,11 +3480,6 @@
       "tryserver.chromium:fuchsia-official"
     ]
   },
-  "chromium:linux-archive-tagged": {
-    "builders": [
-      "chromium:linux-archive-tagged"
-    ]
-  },
   "chromium:linux-official": {
     "builders": [
       "chromium:linux-official",
@@ -3502,34 +3497,14 @@
       "tryserver.chromium.mac:mac_chromium_archive_rel_ng"
     ]
   },
-  "chromium:mac-archive-tagged": {
-    "builders": [
-      "chromium:mac-archive-tagged"
-    ]
-  },
-  "chromium:mac-arm64-archive-tagged": {
-    "builders": [
-      "chromium:mac-arm64-archive-tagged"
-    ]
-  },
   "chromium:win-archive-dbg": {
     "builders": [
       "chromium:win-archive-dbg"
     ]
   },
-  "chromium:win-archive-tagged": {
-    "builders": [
-      "chromium:win-archive-tagged"
-    ]
-  },
   "chromium:win32-archive-dbg": {
     "builders": [
       "chromium:win32-archive-dbg"
-    ]
-  },
-  "chromium:win32-archive-tagged": {
-    "builders": [
-      "chromium:win32-archive-tagged"
     ]
   },
   "tryserver.blink:linux-blink-optional-highdpi-rel": {
