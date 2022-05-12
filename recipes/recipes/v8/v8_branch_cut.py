@@ -95,7 +95,7 @@ def calculate_versions(api, defintions, last_version):
     stable_version = version(defined_versions[1].s)
     extended_version = version(defined_versions[2].s)
 
-    if stable_version - extended_version > 1:
+    if stable_version - extended_version >= 1:
         extended_version = beta_version
     stable_version = beta_version
     beta_version = last_version
@@ -169,9 +169,9 @@ def GenTests(api):
         stdout('last branches', 'branch-heads/10.0\n'
                 'branch-heads/9.9\n'
                 'branch-heads/9.8\n'
-                'branch-heads/9.7') +
+                'branch-heads/9.8') +
         stdout('Read branch definitions', 'versions = {'
-            '"beta": "9.9", "stable": "9.8", "extended": "9.7"}') +
+            '"beta": "9.9", "stable": "9.8", "extended": "9.8"}') +
         api.v8.version_file(4, 'branch-heads/10.0',
                 prefix='New branch detected.Update on branch.',
                 major=9, minor=9) +

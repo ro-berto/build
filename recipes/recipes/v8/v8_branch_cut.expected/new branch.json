@@ -110,7 +110,7 @@
       "@@@STEP_LOG_LINE@stdout@branch-heads/10.0@@@",
       "@@@STEP_LOG_LINE@stdout@branch-heads/9.9@@@",
       "@@@STEP_LOG_LINE@stdout@branch-heads/9.8@@@",
-      "@@@STEP_LOG_LINE@stdout@branch-heads/9.7@@@",
+      "@@@STEP_LOG_LINE@stdout@branch-heads/9.8@@@",
       "@@@STEP_LOG_END@stdout@@@"
     ]
   },
@@ -177,7 +177,7 @@
     "infra_step": true,
     "name": "Read branch definitions",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@stdout@versions = {\"beta\": \"9.9\", \"stable\": \"9.8\", \"extended\": \"9.7\"}@@@",
+      "@@@STEP_LOG_LINE@stdout@versions = {\"beta\": \"9.9\", \"stable\": \"9.8\", \"extended\": \"9.8\"}@@@",
       "@@@STEP_LOG_END@stdout@@@"
     ]
   },
@@ -946,7 +946,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "\nversions = {'beta': '10.0', 'stable': '9.9', 'extended': '9.7'}\n",
+      "\nversions = {'beta': '10.0', 'stable': '9.9', 'extended': '9.8'}\n",
       "[CACHE]/builder/v8/definitions.star"
     ],
     "cwd": "[CACHE]/builder/v8",
@@ -963,7 +963,7 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@definitions.star@@@@",
-      "@@@STEP_LOG_LINE@definitions.star@versions = {'beta': '10.0', 'stable': '9.9', 'extended': '9.7'}@@@",
+      "@@@STEP_LOG_LINE@definitions.star@versions = {'beta': '10.0', 'stable': '9.9', 'extended': '9.8'}@@@",
       "@@@STEP_LOG_END@definitions.star@@@"
     ]
   },
