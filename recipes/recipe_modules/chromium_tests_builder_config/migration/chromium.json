@@ -554,12 +554,6 @@
       "chromium.chromiumos:chromeos-amd64-generic-lacros-dbg"
     ]
   },
-  "chromium.chromiumos:chromeos-arm-generic-dbg": {
-    "builders": [
-      "chromium.chromiumos:chromeos-arm-generic-dbg",
-      "tryserver.chromium.chromiumos:chromeos-arm-generic-dbg"
-    ]
-  },
   "chromium.chromiumos:lacros-amd64-generic-rel": {
     "builders": [
       "chromium.chromiumos:lacros-amd64-generic-rel",
@@ -4117,12 +4111,6 @@
       "chromium.angle:win10-angle-x64-intel",
       "chromium.angle:win10-angle-x64-nvidia",
       "tryserver.chromium.angle:win-angle-x64-try"
-    ]
-  },
-  "tryserver.chromium.chromiumos:chromeos-arm-generic-dbg": {
-    "builders": [
-      "chromium.chromiumos:chromeos-arm-generic-dbg",
-      "tryserver.chromium.chromiumos:chromeos-arm-generic-dbg"
     ]
   },
   "tryserver.chromium.chromiumos:gpu-fyi-try-chromeos-amd64-generic": {

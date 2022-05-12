@@ -71,6 +71,7 @@ def _config(name,
 # * chromeos-amd64-generic-cfi-thin-lto-rel
 # * chromeos-amd64-generic-dbg
 # * chromeos-amd64-generic-rel
+# * chromeos-arm-generic-dbg
 # * chromeos-arm-generic-rel
 # * chromeos-kevin-rel
 # * lacros-amd64-generic-binary-size-rel
@@ -106,10 +107,5 @@ SPEC.update([
         cros_boards='amd64-generic',
         gclient_apply_config=['checkout_lacros_sdk'],
     ),
-    _config(
-        'chromeos-arm-generic-dbg',
-        cros_boards='arm-generic',
-        target_arch='arm',
-        target_bits=32),
     _config('linux-cfm-rel'),
 ])
