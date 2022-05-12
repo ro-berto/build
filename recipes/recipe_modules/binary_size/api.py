@@ -282,8 +282,8 @@ class BinarySizeApi(recipe_api.RecipeApi):
     cmd += ['--build-out-dir', self.m.chromium.output_dir]
 
 
-    size_path = self.m.path['checkout'].join('fuchsia', 'release', 'size_tests',
-                                 'fyi_sizes.json')
+    size_path = self.m.path['checkout'].join('tools', 'fuchsia', 'size_tests',
+                                             'fyi_sizes.json')
     cmd += ['--sizes-path', size_path]
 
     output_file = self.m.chromium.output_dir.join('plugin.json')
