@@ -809,30 +809,6 @@
       "tryserver.chromium.dawn:dawn-try-win10-x86-rel"
     ]
   },
-  "chromium.dawn:Dawn Win10 x86 DEPS Builder": {
-    "builders": [
-      "chromium.dawn:Dawn Win10 x86 DEPS Builder",
-      "chromium.dawn:Dawn Win10 x86 DEPS Release (Intel HD 630)",
-      "chromium.dawn:Dawn Win10 x86 DEPS Release (NVIDIA)",
-      "tryserver.chromium.dawn:dawn-win10-x86-deps-rel"
-    ]
-  },
-  "chromium.dawn:Dawn Win10 x86 DEPS Release (Intel HD 630)": {
-    "builders": [
-      "chromium.dawn:Dawn Win10 x86 DEPS Builder",
-      "chromium.dawn:Dawn Win10 x86 DEPS Release (Intel HD 630)",
-      "chromium.dawn:Dawn Win10 x86 DEPS Release (NVIDIA)",
-      "tryserver.chromium.dawn:dawn-win10-x86-deps-rel"
-    ]
-  },
-  "chromium.dawn:Dawn Win10 x86 DEPS Release (NVIDIA)": {
-    "builders": [
-      "chromium.dawn:Dawn Win10 x86 DEPS Builder",
-      "chromium.dawn:Dawn Win10 x86 DEPS Release (Intel HD 630)",
-      "chromium.dawn:Dawn Win10 x86 DEPS Release (NVIDIA)",
-      "tryserver.chromium.dawn:dawn-win10-x86-deps-rel"
-    ]
-  },
   "chromium.dawn:Dawn Win10 x86 Release (Intel HD 630)": {
     "builders": [
       "chromium.dawn:Dawn Win10 x86 Builder",
@@ -4204,14 +4180,6 @@
       "chromium.dawn:Dawn Win10 x64 DEPS Release (Intel HD 630)",
       "chromium.dawn:Dawn Win10 x64 DEPS Release (NVIDIA)",
       "tryserver.chromium.dawn:dawn-win10-x64-deps-rel"
-    ]
-  },
-  "tryserver.chromium.dawn:dawn-win10-x86-deps-rel": {
-    "builders": [
-      "chromium.dawn:Dawn Win10 x86 DEPS Builder",
-      "chromium.dawn:Dawn Win10 x86 DEPS Release (Intel HD 630)",
-      "chromium.dawn:Dawn Win10 x86 DEPS Release (NVIDIA)",
-      "tryserver.chromium.dawn:dawn-win10-x86-deps-rel"
     ]
   },
   "tryserver.chromium.dawn:linux-dawn-rel": {

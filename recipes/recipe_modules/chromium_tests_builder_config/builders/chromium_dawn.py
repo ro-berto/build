@@ -43,6 +43,12 @@ def CreateTesterConfig(os, bits, builder):
   )
 
 
+# The config for the following builders is now specified src-side in
+# //infra/config/subprojects/chromium/ci/chromium.dawn.star
+# * Dawn Win10 x86 DEPS Builder
+# * Dawn Win10 x86 DEPS Release (Intel HD 630)
+# * Dawn Win10 x86 DEPS Release (NVIDIA)
+
 SPEC = {
     'Dawn Linux x64 Builder':
         CreateBuilderConfig('linux', 64, top_of_tree=True),
@@ -86,16 +92,10 @@ SPEC = {
         CreateTesterConfig('win', 32, 'Dawn Win10 x86 Builder'),
     'Dawn Win10 x64 Release (NVIDIA)':
         CreateTesterConfig('win', 64, 'Dawn Win10 x64 Builder'),
-    'Dawn Win10 x86 DEPS Builder':
-        CreateBuilderConfig('win', 32, top_of_tree=False),
     'Dawn Win10 x64 DEPS Builder':
         CreateBuilderConfig('win', 64, top_of_tree=False),
-    'Dawn Win10 x86 DEPS Release (Intel HD 630)':
-        CreateTesterConfig('win', 32, 'Dawn Win10 x86 DEPS Builder'),
     'Dawn Win10 x64 DEPS Release (Intel HD 630)':
         CreateTesterConfig('win', 64, 'Dawn Win10 x64 DEPS Builder'),
-    'Dawn Win10 x86 DEPS Release (NVIDIA)':
-        CreateTesterConfig('win', 32, 'Dawn Win10 x86 DEPS Builder'),
     'Dawn Win10 x64 DEPS Release (NVIDIA)':
         CreateTesterConfig('win', 64, 'Dawn Win10 x64 DEPS Builder'),
     'Dawn Win10 x64 ASAN Release':
