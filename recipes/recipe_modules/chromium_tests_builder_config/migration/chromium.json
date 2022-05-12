@@ -3475,11 +3475,6 @@
       "tryserver.chromium:linux-official"
     ]
   },
-  "chromium:mac-archive-dbg": {
-    "builders": [
-      "chromium:mac-archive-dbg"
-    ]
-  },
   "chromium:mac-archive-rel": {
     "builders": [
       "chromium:mac-archive-rel",

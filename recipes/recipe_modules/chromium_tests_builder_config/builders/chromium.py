@@ -47,20 +47,6 @@ SPEC = {
             },
             simulation_platform='win',
         ),
-    'mac-archive-dbg':
-        builder_spec.BuilderSpec.create(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'clobber',
-                'mb',
-            ],
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 64,
-            },
-            simulation_platform='mac',
-        ),
     'mac-archive-rel':
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
