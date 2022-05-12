@@ -5206,11 +5206,6 @@
       "tryserver.chromium.win:win_chromium_compile_rel_ng"
     ]
   },
-  "tryserver.chromium.win:win_optional_gpu_tests_rel": {
-    "builders": [
-      "tryserver.chromium.win:win_optional_gpu_tests_rel"
-    ]
-  },
   "tryserver.chromium:android-official": {
     "builders": [
       "chromium:android-official",

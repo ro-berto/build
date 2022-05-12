@@ -535,6 +535,7 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * linux_chromium_dbg_ng
     # * linux_optional_gpu_tests_rel
     # * mac_optional_gpu_tests_rel
+    # * win_optional_gpu_tests_rel
     'tryserver.chromium.linux': {
         'cast_shell_linux':
             try_spec.TrySpec.create_for_single_mirror(
@@ -1065,15 +1066,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='Win Builder',
                 is_compile_only=True,
                 include_all_triggered_testers=True,
-            ),
-        # Optional GPU bots.
-        # This trybot used to mirror "Optional Win7 Release (AMD)",
-        # but that had to be disabled due to capacity constraints.
-        'win_optional_gpu_tests_rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='tryserver.chromium.win',
-                buildername='win_optional_gpu_tests_rel',
-                retry_failed_shards=False,
             ),
         # Manually triggered GPU trybots.
         'gpu-fyi-try-win10-amd-rel-64':
