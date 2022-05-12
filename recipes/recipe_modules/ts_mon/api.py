@@ -99,18 +99,23 @@ class TSMonApi(recipe_api.RecipeApi):
 
     serialized_data = '\n'.join(self.m.json.dumps(d) for d in metric_data)
     with self.m.context(cwd=self._send_ts_mon_pkg_path):
-      result = self.m.python(
-          step_name,
-          '-m',
-          [
-            'infra.tools.send_ts_mon_values',
-            '--ts-mon-target-type', 'task',
-            '--ts-mon-task-service-name', service_name,
-            '--ts-mon-task-job-name', job_name,
-            '--%s-file' % metric_type, self.m.raw_io.input(serialized_data),
+      result = self.m.step(
+          step_name, [
+              'vpython',
+              '-vpython-spec',
+              self._send_ts_mon_pkg_path.join(
+                  'infra', 'tools', 'send_ts_mon_values', 'standalone.vpython'),
+              '-m',
+              'infra.tools.send_ts_mon_values',
+              '--ts-mon-target-type',
+              'task',
+              '--ts-mon-task-service-name',
+              service_name,
+              '--ts-mon-task-job-name',
+              job_name,
+              '--%s-file' % metric_type,
+              self.m.raw_io.input(serialized_data),
           ],
-          infra_step=True,
-          venv=self._send_ts_mon_pkg_path.join(
-              'infra', 'tools', 'send_ts_mon_values', 'standalone.vpython'))
+          infra_step=True)
     result.presentation.logs['metric_data'] = self.m.json.dumps(
         metric_data, indent=2, separators=(',', ': ')).splitlines()
