@@ -31,8 +31,6 @@ def CreateBuilderConfig(os, bits, angle_tot, swiftshader_tot):
 SPEC = {
     'linux-swangle-chromium-x64':
         CreateBuilderConfig('linux', 64, angle_tot=True, swiftshader_tot=True),
-    'linux-swangle-tot-angle-x64':
-        CreateBuilderConfig('linux', 64, angle_tot=True, swiftshader_tot=False),
     'linux-swangle-tot-swiftshader-x64':
         CreateBuilderConfig('linux', 64, angle_tot=False, swiftshader_tot=True),
     'linux-swangle-x64':
@@ -42,10 +40,6 @@ SPEC = {
         CreateBuilderConfig('mac', 64, angle_tot=True, swiftshader_tot=True),
     'win-swangle-chromium-x86':
         CreateBuilderConfig('win', 32, angle_tot=True, swiftshader_tot=True),
-    'win-swangle-tot-angle-x64':
-        CreateBuilderConfig('win', 64, angle_tot=True, swiftshader_tot=False),
-    'win-swangle-tot-angle-x86':
-        CreateBuilderConfig('win', 32, angle_tot=True, swiftshader_tot=False),
     'win-swangle-tot-swiftshader-x64':
         CreateBuilderConfig('win', 64, angle_tot=False, swiftshader_tot=True),
     'win-swangle-tot-swiftshader-x86':

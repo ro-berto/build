@@ -153,7 +153,7 @@
       "--deps-file=[CLEANUP]/angle_tmp_1/DEPS"
     ],
     "env": {
-      "DEPOT_TOOLS_REPORT_BUILD": "chromium/try/linux-swangle-try-tot-angle-x64/8945511751514863184"
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/try/linux-angle-chromium-try/8945511751514863184"
     },
     "env_suffixes": {
       "PATH": [
@@ -274,8 +274,9 @@
     "cmd": [],
     "name": "report builders",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>running builder 'linux-swangle-tot-angle-x64' on group 'chromium.swangle'@@@",
-      "@@@STEP_LINK@linux-swangle-tot-angle-x64@https://ci.chromium.org/p/chromium/builders/ci/linux-swangle-tot-angle-x64@@@"
+      "@@@STEP_TEXT@<br/>running builder 'linux-angle-chromium-builder' on group 'chromium.angle'<br/>running tester 'linux-angle-chromium-intel' on group 'chromium.angle' against builder 'linux-angle-chromium-builder' on group 'chromium.angle'@@@",
+      "@@@STEP_LINK@linux-angle-chromium-builder@https://ci.chromium.org/p/chromium/builders/ci/linux-angle-chromium-builder@@@",
+      "@@@STEP_LINK@linux-angle-chromium-intel@https://ci.chromium.org/p/chromium/builders/ci/linux-angle-chromium-intel@@@"
     ]
   },
   {
@@ -459,7 +460,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_REPORT_BUILD": "chromium/try/linux-swangle-try-tot-angle-x64/8945511751514863184",
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/try/linux-angle-chromium-try/8945511751514863184",
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "1800"
     },
@@ -734,7 +735,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_REPORT_BUILD": "chromium/try/linux-swangle-try-tot-angle-x64/8945511751514863184"
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/try/linux-angle-chromium-try/8945511751514863184"
     },
     "env_suffixes": {
       "PATH": [
@@ -760,7 +761,7 @@
       "python3",
       "-u",
       "RECIPE_MODULE[recipe_engine::json]/resources/read.py",
-      "[CACHE]/builder/src/testing/buildbot/chromium.swangle.json",
+      "[CACHE]/builder/src/testing/buildbot/chromium.angle.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -779,14 +780,15 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "read test spec (chromium.swangle.json)",
+    "name": "read test spec (chromium.angle.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/chromium.swangle.json@@@",
+      "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/chromium.angle.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"linux-swangle-try-tot-angle-x64\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"linux-angle-chromium-intel\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"isolated_scripts\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"test\": \"angle_end2end_tests\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"isolate_name\": \"telemetry_gpu_integration_test\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"name\": \"webgl_conformance_gl_tests\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
@@ -874,16 +876,16 @@
       "[CACHE]/builder/src/tools/mb/mb.py",
       "analyze",
       "-m",
-      "tryserver.chromium.swangle",
+      "tryserver.chromium.angle",
       "-b",
-      "linux-swangle-try-tot-angle-x64",
+      "linux-angle-chromium-try",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
       "-v",
       "//out/Release",
-      "{\"additional_compile_targets\": [], \"files\": [\"third_party/angle/foo.cc\"], \"test_targets\": []}",
+      "{\"additional_compile_targets\": [], \"files\": [\"third_party/angle/foo.cc\"], \"test_targets\": [\"telemetry_gpu_integration_test\"]}",
       "/path/to/tmp/json",
       "--json-output",
       "/path/to/tmp/json"
@@ -921,7 +923,9 @@
       "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.test_targets\": [], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"test_targets\": []@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"test_targets\": [@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"telemetry_gpu_integration_test\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  ]@@@",
       "@@@STEP_LOG_LINE@analyze_details@}@@@",
       "@@@STEP_LOG_END@analyze_details@@@"
     ]

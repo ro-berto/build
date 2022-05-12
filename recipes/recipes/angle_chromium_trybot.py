@@ -110,7 +110,7 @@ def RunSteps(api):
 
 def GenTests(api):
   yield api.test(
-      'linux-angle-chromium-try',
+      'linux-angle-chromium-try-chromium',
       api.chromium_tests_builder_config.try_build(
           builder_group='tryserver.chromium.angle',
           builder='linux-angle-chromium-try',
@@ -167,15 +167,25 @@ def GenTests(api):
   )
 
   yield api.test(
-      'linux-swangle-try-tot-angle-x64',
+      'linux-angle-chromium-try-angle',
       api.chromium_tests_builder_config.try_build(
           git_repo='https://chromium.googlesource.com/angle/angle/',
-          builder_group='tryserver.chromium.swangle',
-          builder='linux-swangle-try-tot-angle-x64',
+          builder_group='tryserver.chromium.angle',
+          builder='linux-angle-chromium-try',
           builder_db=ctbc.BuilderDatabase.create({
-              'chromium.swangle': {
-                  'linux-swangle-tot-angle-x64':
+              'chromium.angle': {
+                  'linux-angle-chromium-builder':
                       ctbc.BuilderSpec.create(
+                          gclient_config='chromium',
+                          gclient_apply_config=[
+                              'angle_top_of_tree',
+                          ],
+                          chromium_config='chromium',
+                      ),
+                  'linux-angle-chromium-intel':
+                      ctbc.BuilderSpec.create(
+                          execution_mode=ctbc.TEST,
+                          parent_buildername='linux-angle-chromium-builder',
                           gclient_config='chromium',
                           gclient_apply_config=[
                               'angle_top_of_tree',
@@ -185,23 +195,25 @@ def GenTests(api):
               },
           }),
           try_db=ctbc.TryDatabase.create({
-              'tryserver.chromium.swangle': {
-                  'linux-swangle-try-tot-angle-x64':
+              'tryserver.chromium.angle': {
+                  'linux-angle-chromium-try':
                       ctbc.TrySpec.create(mirrors=[
                           ctbc.TryMirror.create(
-                              builder_group='chromium.swangle',
-                              buildername='linux-swangle-tot-angle-x64',
+                              builder_group='chromium.angle',
+                              buildername='linux-angle-chromium-builder',
+                              tester='linux-angle-chromium-intel',
                           ),
                       ]),
               },
           }),
       ),
       api.chromium_tests.read_source_side_spec(
-          'chromium.swangle',
+          'chromium.angle',
           {
-              'linux-swangle-try-tot-angle-x64': {
-                  'gtest_tests': [{
-                      'test': 'angle_end2end_tests',
+              'linux-angle-chromium-intel': {
+                  'isolated_scripts': [{
+                      'isolate_name': 'telemetry_gpu_integration_test',
+                      'name': 'webgl_conformance_gl_tests',
                   }],
               },
           },
