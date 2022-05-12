@@ -2904,12 +2904,6 @@
       "tryserver.chromium.mac:ios-asan"
     ]
   },
-  "chromium.memory:linux-ubsan-vptr": {
-    "builders": [
-      "chromium.memory:linux-ubsan-vptr",
-      "tryserver.chromium.linux:linux_chromium_ubsan_rel_ng"
-    ]
-  },
   "chromium.rust:android-rust-arm-dbg": {
     "builders": [
       "chromium.rust:android-rust-arm-dbg",
@@ -4674,12 +4668,6 @@
     "builders": [
       "chromium.memory:Linux TSan (bionic)",
       "tryserver.chromium.linux:linux_chromium_tsan_rel_ng_bionic"
-    ]
-  },
-  "tryserver.chromium.linux:linux_chromium_ubsan_rel_ng": {
-    "builders": [
-      "chromium.memory:linux-ubsan-vptr",
-      "tryserver.chromium.linux:linux_chromium_ubsan_rel_ng"
     ]
   },
   "tryserver.chromium.linux:linux_vr": {

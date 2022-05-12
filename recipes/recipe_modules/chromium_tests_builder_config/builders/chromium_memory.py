@@ -11,6 +11,7 @@ def _chromium_memory_spec(**kwargs):
 
 # The config for the following builders is now specified src-side in
 # //infra/config/subprojects/chromium/ci/chromium.memory.star
+# * linux-ubsan-vptr
 # * win-asan
 
 SPEC = {
@@ -283,18 +284,6 @@ SPEC = {
             },
             gclient_config='chromium',
             gclient_apply_config=['android', 'enable_reclient'],
-            simulation_platform='linux',
-        ),
-    'linux-ubsan-vptr':
-        _chromium_memory_spec(
-            chromium_config='chromium',
-            chromium_apply_config=['mb'],
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            gclient_apply_config=['enable_reclient'],
             simulation_platform='linux',
         ),
 }

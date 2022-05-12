@@ -529,6 +529,7 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * linux-mbi-mode-per-site-instance-host-rel
     # * linux-rel-warmed
     # * linux-rel
+    # * linux_chromium_ubsan_rel_ng
     # * linux_chromium_compile_dbg_ng
     # * linux_chromium_compile_rel_ng
     # * linux_chromium_dbg_ng
@@ -664,11 +665,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.memory',
                 buildername='Linux CFI',
-            ),
-        'linux_chromium_ubsan_rel_ng':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.memory',
-                buildername='linux-ubsan-vptr',
             ),
         'linux-perfetto-rel':
             try_spec.TrySpec.create_for_single_mirror(
