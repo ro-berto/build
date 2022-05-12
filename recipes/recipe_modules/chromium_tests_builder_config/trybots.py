@@ -521,6 +521,7 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * linux_chromium_archive_rel_ng
     # * linux_chromium_clobber_rel_ng
     # * linux-1mbu-compile-fyi-rel
+    # * linux-bfcache-rel
     # * linux-dcheck-off-rel
     # * linux-extended-tracing-rel
     # * linux-gcc-rel
@@ -582,11 +583,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
                 buildername='linux-annotator-rel',
-            ),
-        'linux-bfcache-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.linux',
-                buildername='linux-bfcache-rel',
             ),
         'linux-blink-heap-verification-try':
             try_spec.TrySpec.create_for_single_mirror(

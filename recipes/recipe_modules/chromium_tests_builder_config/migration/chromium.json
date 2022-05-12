@@ -2713,12 +2713,6 @@
       "tryserver.chromium.linux:network_service_linux"
     ]
   },
-  "chromium.linux:linux-bfcache-rel": {
-    "builders": [
-      "chromium.linux:linux-bfcache-rel",
-      "tryserver.chromium.linux:linux-bfcache-rel"
-    ]
-  },
   "chromium.linux:linux-no-base-tracing-rel": {
     "builders": [
       "chromium.linux:linux-no-base-tracing-rel",
@@ -4432,12 +4426,6 @@
   "tryserver.chromium.linux:linux-autofill-assistant": {
     "builders": [
       "tryserver.chromium.linux:linux-autofill-assistant"
-    ]
-  },
-  "tryserver.chromium.linux:linux-bfcache-rel": {
-    "builders": [
-      "chromium.linux:linux-bfcache-rel",
-      "tryserver.chromium.linux:linux-bfcache-rel"
     ]
   },
   "tryserver.chromium.linux:linux-blink-heap-verification-try": {
