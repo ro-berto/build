@@ -13,7 +13,9 @@ but are marked by kythe with the synthetic commit hash so cross references can
 linked by commit hash.
 """
 
-from datetime import datetime
+from PB.recipes.build.chromium_codesearch_initiator import InputProperties
+
+PROPERTIES = InputProperties
 
 PYTHON_VERSION_COMPATIBILITY = "PY3"
 
@@ -31,20 +33,8 @@ DEPS = [
     'recipe_engine/url',
 ]
 
-BUILDERS = [
-    'codesearch-gen-chromium-android',
-    'codesearch-gen-chromium-chromiumos',
-    'codesearch-gen-chromium-fuchsia',
-    'codesearch-gen-chromium-lacros',
-    'codesearch-gen-chromium-linux',
-    'codesearch-gen-chromium-mac',
-    'codesearch-gen-chromium-win',
-]
 
-SOURCE_REPO = 'https://chromium.googlesource.com/codesearch/chromium/src'
-
-
-def RunSteps(api):
+def RunSteps(api, properties):
   env = {
       # Turn off the low speed limit, since checkout will be long.
       'GIT_HTTP_LOW_SPEED_LIMIT': '0',
@@ -55,7 +45,7 @@ def RunSteps(api):
   if not api.file.glob_paths('Check for existing checkout', checkout_dir,
                              'src'):
     with api.context(cwd=checkout_dir, env=env):
-      api.git('clone', '--progress', SOURCE_REPO, 'src')
+      api.git('clone', '--progress', properties.source_repo, 'src')
 
   api.path['checkout'] = checkout_dir.join('src')
   with api.context(cwd=api.path['checkout'], env=env):
@@ -94,29 +84,36 @@ def RunSteps(api):
             name='fetch source timestamp',
             stdout=api.raw_io.output_text()).stdout.strip())
 
-    # The head of SOURCE_REPO will be lost the next time a synthetic commit
-    # is added to codesource/chromium/src.  Add a ref to the current head so
-    # that it doesn't get garbage collected, and references to it in codesearch
-    # links stay valid.
-    api.git('push', SOURCE_REPO, mirror_hash + ':refs/kythe/' + commit_hash)
+    # The head of source_repo will be lost the next time a synthetic commit
+    # is added to it. Add a ref to the current head so that it doesn't get
+    # garbage collected, and references to it in codesearch links stay valid.
+    api.git('push', properties.source_repo,
+            mirror_hash + ':refs/kythe/' + commit_hash)
 
-    # Trigger the chromium_codesearch builders.
-    properties = {
-        'root_solution_revision': commit_hash,
-        'root_solution_revision_timestamp': unix_timestamp,
-        'codesearch_mirror_revision': mirror_hash,
-        'codesearch_mirror_revision_timestamp': mirror_unix_timestamp
-    }
-
+    # Trigger the codesearch builders in the same project.
     api.scheduler.emit_trigger(
-        api.scheduler.BuildbucketTrigger(properties=properties),
-        project='infra',
-        jobs=BUILDERS)
+        api.scheduler.BuildbucketTrigger(
+            properties={
+                'root_solution_revision': commit_hash,
+                'root_solution_revision_timestamp': unix_timestamp,
+                'codesearch_mirror_revision': mirror_hash,
+                'codesearch_mirror_revision_timestamp': mirror_unix_timestamp
+            }),
+        project=api.buildbucket.build.builder.project,
+        jobs=properties.builders)
 
 
 def GenTests(api):
+  platforms = ('android', 'chromiumos', 'fuchsia', 'lacros', 'linux', 'mac',
+               'win')
   yield api.test(
       'basic',
+      api.buildbucket.generic_build(project='infra'),
+      api.properties(
+          builders=['codesearch-gen-chromium-%s' % p for p in platforms],
+          source_repo=(
+              'https://chromium.googlesource.com/codesearch/chromium/src'),
+      ),
       api.step_data('fetch mirror hash',
                     api.raw_io.stream_output_text('a' * 40, stream='stdout')),
       api.step_data('fetch mirror timestamp',
