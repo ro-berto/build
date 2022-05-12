@@ -69,6 +69,7 @@ def _config(name,
 # The config for the following builders is now specified src-side in
 # //infra/config/subprojects/chromium/ci/chromium.chromiumos.star
 # * chromeos-amd64-generic-cfi-thin-lto-rel
+# * chromeos-amd64-generic-dbg
 # * chromeos-amd64-generic-rel
 # * chromeos-arm-generic-rel
 # * chromeos-kevin-rel
@@ -100,7 +101,6 @@ SPEC.update([
         execution_mode=builder_spec.TEST,
         parent_buildername='linux-lacros-builder-rel'),
     _config('chromeos-amd64-generic-asan-rel', cros_boards='amd64-generic'),
-    _config('chromeos-amd64-generic-dbg', cros_boards='amd64-generic'),
     _config(
         'chromeos-amd64-generic-lacros-dbg',
         cros_boards='amd64-generic',

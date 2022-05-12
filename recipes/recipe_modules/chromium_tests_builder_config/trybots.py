@@ -795,6 +795,7 @@ TRYBOTS = try_spec.TryDatabase.create({
     # The config for the following builders is now specified src-side in
     # //infra/config/subprojects/chromium/try/tryserver.chromium.chromiumos.star
     # * chromeos-amd64-generic-cfi-thin-lto-rel
+    # * chromeos-amd64-generic-dbg
     # * chromeos-amd64-generic-rel
     # * chromeos-arm-generic-rel
     # * chromeos-kevin-compile-rel
@@ -805,11 +806,6 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * linux-chromeos-rel-rts
     # * linux-lacros-dbg
     'tryserver.chromium.chromiumos': {
-        'chromeos-amd64-generic-dbg':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.chromiumos',
-                buildername='chromeos-amd64-generic-dbg',
-            ),
         'chromeos-arm-generic-dbg':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.chromiumos',
