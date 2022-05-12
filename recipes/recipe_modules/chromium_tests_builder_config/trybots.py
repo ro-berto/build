@@ -534,6 +534,7 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * linux_chromium_compile_rel_ng
     # * linux_chromium_dbg_ng
     # * linux_optional_gpu_tests_rel
+    # * linux_vr
     # * mac_optional_gpu_tests_rel
     # * win_optional_gpu_tests_rel
     'tryserver.chromium.linux': {
@@ -681,11 +682,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
                 buildername='Linux Viz',
-            ),
-        'linux_vr':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
-                buildername='VR Linux',
             ),
         'leak_detection_linux':
             try_spec.TrySpec.create_for_single_mirror(

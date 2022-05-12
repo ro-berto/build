@@ -36,6 +36,7 @@ def stock_config(name, config='Release', target_bits=64, staging=True,
 
 # The config for the following builders is now specified src-side in
 # //infra/config/subprojects/chromium/ci/chromium.fyi.star
+# * VR Linux
 # * Win11 Tests x64
 # * ios-simulator-cronet
 # * mac-osxbeta-rel
@@ -1110,9 +1111,6 @@ SPEC.update([
     stock_config('win7-blink-rel-dummy', target_bits=32, staging=False),
     stock_config('win10.20h2-blink-rel-dummy', target_bits=32, staging=False),
     stock_config('win11-blink-rel-dummy', staging=False),
-    stock_config('VR Linux', gclient_apply_config=['enable_reclient']),
-    stock_config(
-        'VR Linux (reclient)', gclient_apply_config=['enable_reclient']),
     stock_config('Linux Viz', gclient_apply_config=['enable_reclient']),
     stock_config(
         'linux-annotator-rel', gclient_apply_config=['enable_reclient']),

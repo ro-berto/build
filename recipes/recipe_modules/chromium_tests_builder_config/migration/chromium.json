@@ -1088,17 +1088,6 @@
       "chromium.fyi:Site Isolation Android"
     ]
   },
-  "chromium.fyi:VR Linux": {
-    "builders": [
-      "chromium.fyi:VR Linux",
-      "tryserver.chromium.linux:linux_vr"
-    ]
-  },
-  "chromium.fyi:VR Linux (reclient)": {
-    "builders": [
-      "chromium.fyi:VR Linux (reclient)"
-    ]
-  },
   "chromium.fyi:WebKit Linux ASAN (reclient shadow)": {
     "builders": [
       "chromium.fyi:WebKit Linux ASAN (reclient shadow)"
@@ -4631,12 +4620,6 @@
     "builders": [
       "chromium.memory:Linux TSan (bionic)",
       "tryserver.chromium.linux:linux_chromium_tsan_rel_ng_bionic"
-    ]
-  },
-  "tryserver.chromium.linux:linux_vr": {
-    "builders": [
-      "chromium.fyi:VR Linux",
-      "tryserver.chromium.linux:linux_vr"
     ]
   },
   "tryserver.chromium.linux:network_service_linux": {
