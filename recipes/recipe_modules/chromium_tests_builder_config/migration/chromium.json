@@ -1633,21 +1633,6 @@
       "chromium.goma.fyi:android-archive-dbg-goma-rbe-latest"
     ]
   },
-  "chromium.goma.fyi:mac-archive-rel-goma-rbe-canary": {
-    "builders": [
-      "chromium.goma.fyi:mac-archive-rel-goma-rbe-canary"
-    ]
-  },
-  "chromium.goma.fyi:mac-archive-rel-goma-rbe-latest": {
-    "builders": [
-      "chromium.goma.fyi:mac-archive-rel-goma-rbe-latest"
-    ]
-  },
-  "chromium.goma.fyi:mac-m1-archive-rel-goma-rbe-canary": {
-    "builders": [
-      "chromium.goma.fyi:mac-m1-archive-rel-goma-rbe-canary"
-    ]
-  },
   "chromium.goma:Chromium Android ARM 32-bit Goma RBE Staging": {
     "builders": [
       "chromium.goma:Chromium Android ARM 32-bit Goma RBE Staging"
@@ -3445,12 +3430,6 @@
       "tryserver.chromium:linux-official"
     ]
   },
-  "chromium:mac-archive-rel": {
-    "builders": [
-      "chromium:mac-archive-rel",
-      "tryserver.chromium.mac:mac_chromium_archive_rel_ng"
-    ]
-  },
   "chromium:win-archive-dbg": {
     "builders": [
       "chromium:win-archive-dbg"
@@ -4843,12 +4822,6 @@
     "builders": [
       "chromium.fyi:Mac Builder Next",
       "tryserver.chromium.mac:mac-builder-next-rel"
-    ]
-  },
-  "tryserver.chromium.mac:mac_chromium_archive_rel_ng": {
-    "builders": [
-      "chromium:mac-archive-rel",
-      "tryserver.chromium.mac:mac_chromium_archive_rel_ng"
     ]
   },
   "tryserver.chromium.mac:mac_chromium_asan_rel_ng": {

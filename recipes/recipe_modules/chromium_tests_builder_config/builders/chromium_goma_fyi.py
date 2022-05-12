@@ -44,15 +44,11 @@ def chromium_apply_configs(base_config, config_names):
 # * linux-archive-rel-goma-rbe-ats-latest
 # * linux-archive-rel-goma-rbe-canary
 # * linux-archive-rel-goma-rbe-latest
+# * mac-archive-rel-goma-rbe-canary
+# * mac-archive-rel-goma-rbe-latest
 
 SPEC = {
     # Canary RBE
-    'mac-archive-rel-goma-rbe-canary':
-        chromium_apply_configs(chromium.SPEC['mac-archive-rel'],
-                               ['goma_canary']),
-    'mac-m1-archive-rel-goma-rbe-canary':
-        chromium_apply_configs(chromium.SPEC['mac-archive-rel'],
-                               ['goma_canary']),
     'Win Builder Goma RBE Canary':
         chromium_apply_configs(chromium_win.SPEC['Win Builder'],
                                ['goma_canary', 'goma_use_local']),
@@ -64,9 +60,6 @@ SPEC = {
                                ['goma_canary', 'goma_use_local']),
 
     # Latest RBE
-    'mac-archive-rel-goma-rbe-latest':
-        chromium_apply_configs(chromium.SPEC['mac-archive-rel'],
-                               ['goma_latest_client']),
     'Win Builder Goma RBE Latest Client':
         chromium_apply_configs(chromium_win.SPEC['Win Builder'],
                                ['goma_latest_client', 'goma_use_local']),
