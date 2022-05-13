@@ -70,6 +70,7 @@ def _config(name,
 # //infra/config/subprojects/chromium/ci/chromium.chromiumos.star
 # * chromeos-amd64-generic-cfi-thin-lto-rel
 # * chromeos-amd64-generic-dbg
+# * chromeos-amd64-generic-lacros-dbg
 # * chromeos-amd64-generic-rel
 # * chromeos-arm-generic-dbg
 # * chromeos-arm-generic-rel
@@ -102,10 +103,5 @@ SPEC.update([
         execution_mode=builder_spec.TEST,
         parent_buildername='linux-lacros-builder-rel'),
     _config('chromeos-amd64-generic-asan-rel', cros_boards='amd64-generic'),
-    _config(
-        'chromeos-amd64-generic-lacros-dbg',
-        cros_boards='amd64-generic',
-        gclient_apply_config=['checkout_lacros_sdk'],
-    ),
     _config('linux-cfm-rel'),
 ])
