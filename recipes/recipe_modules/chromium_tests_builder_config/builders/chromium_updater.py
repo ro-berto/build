@@ -22,21 +22,13 @@ def CreateBuilderConfig(platform, config='Release', target_bits=64, **kwargs):
   bot_config.update(**kwargs)
   return builder_spec.BuilderSpec.create(**bot_config)
 
+# The config for the following builders is now specified src-side in
+# //infra/config/subprojects/chromium/ci/chromium.updater.star
+# * win-updater-builder-rel
+# * win10-updater-tester-rel
+# * win7-updater-tester-rel
 
 SPEC = {
-    # win release builders and testers
-    'win-updater-builder-rel':
-        CreateBuilderConfig('win'),
-    'win7-updater-tester-rel':
-        CreateBuilderConfig(
-            'win',
-            execution_mode=builder_spec.TEST,
-            parent_buildername='win-updater-builder-rel'),
-    'win10-updater-tester-rel':
-        CreateBuilderConfig(
-            'win',
-            execution_mode=builder_spec.TEST,
-            parent_buildername='win-updater-builder-rel'),
     # win 32 release builders and testers
     'win32-updater-builder-rel':
         CreateBuilderConfig('win'),

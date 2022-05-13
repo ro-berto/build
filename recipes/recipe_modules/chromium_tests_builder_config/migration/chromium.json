@@ -3171,14 +3171,6 @@
       "tryserver.chromium.updater:win-updater-try-builder-dbg"
     ]
   },
-  "chromium.updater:win-updater-builder-rel": {
-    "builders": [
-      "chromium.updater:win-updater-builder-rel",
-      "chromium.updater:win10-updater-tester-rel",
-      "chromium.updater:win7-updater-tester-rel",
-      "tryserver.chromium.updater:win-updater-try-builder-rel"
-    ]
-  },
   "chromium.updater:win10-updater-tester-dbg": {
     "builders": [
       "chromium.updater:win-updater-builder-dbg",
@@ -3193,14 +3185,6 @@
       "chromium.updater:win10-updater-tester-dbg",
       "chromium.updater:win10-updater-tester-dbg-uac",
       "tryserver.chromium.updater:win-updater-try-builder-dbg"
-    ]
-  },
-  "chromium.updater:win10-updater-tester-rel": {
-    "builders": [
-      "chromium.updater:win-updater-builder-rel",
-      "chromium.updater:win10-updater-tester-rel",
-      "chromium.updater:win7-updater-tester-rel",
-      "tryserver.chromium.updater:win-updater-try-builder-rel"
     ]
   },
   "chromium.updater:win32-updater-builder-dbg": {
@@ -3218,14 +3202,6 @@
     "builders": [
       "chromium.updater:win32-updater-builder-rel",
       "chromium.updater:win7(32)-updater-tester-rel"
-    ]
-  },
-  "chromium.updater:win7-updater-tester-rel": {
-    "builders": [
-      "chromium.updater:win-updater-builder-rel",
-      "chromium.updater:win10-updater-tester-rel",
-      "chromium.updater:win7-updater-tester-rel",
-      "tryserver.chromium.updater:win-updater-try-builder-rel"
     ]
   },
   "chromium.webrtc.fyi:WebRTC Chromium FYI Android Builder": {
@@ -4939,14 +4915,6 @@
       "chromium.updater:win10-updater-tester-dbg",
       "chromium.updater:win10-updater-tester-dbg-uac",
       "tryserver.chromium.updater:win-updater-try-builder-dbg"
-    ]
-  },
-  "tryserver.chromium.updater:win-updater-try-builder-rel": {
-    "builders": [
-      "chromium.updater:win-updater-builder-rel",
-      "chromium.updater:win10-updater-tester-rel",
-      "chromium.updater:win7-updater-tester-rel",
-      "tryserver.chromium.updater:win-updater-try-builder-rel"
     ]
   },
   "tryserver.chromium.win:gpu-fyi-try-win10-amd-rel-64": {
