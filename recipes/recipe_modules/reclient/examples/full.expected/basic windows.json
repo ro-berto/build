@@ -135,6 +135,9 @@
       "-server_address",
       "pipe://reproxy.pipe"
     ],
+    "env": {
+      "RBE_log_dir": "[CLEANUP]\\reclient_log_tmp_1"
+    },
     "infra_step": true,
     "name": "postprocess for reclient.shutdown reproxy via bootstrap",
     "~followup_annotations": [

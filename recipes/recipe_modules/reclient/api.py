@@ -357,7 +357,12 @@ class ReclientApi(recipe_api.RecipeApi):
       if labels != '':
         args += ['-metrics_labels', labels]
 
-    self.m.step('shutdown reproxy via bootstrap', args, infra_step=True)
+    env = {
+        # glog's logging directory
+        'RBE_log_dir': reclient_log_dir,
+    }
+    with self.m.context(env=env):
+      self.m.step('shutdown reproxy via bootstrap', args, infra_step=True)
 
   def _upload_rbe_metrics(self, reclient_log_dir):
     bq_pb = rbe_metrics_bq.RbeMetricsBq()

@@ -931,7 +931,8 @@
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "RBE_log_dir": "[CLEANUP]\\reclient_log_tmp_1"
     },
     "infra_step": true,
     "luci_context": {

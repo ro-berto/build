@@ -215,6 +215,9 @@
       "-metrics_labels",
       "project=chromium,bucket=ci,builder=Linux reclient,"
     ],
+    "env": {
+      "RBE_log_dir": "[CLEANUP]/reclient_log_tmp_1"
+    },
     "infra_step": true,
     "luci_context": {
       "realm": {
