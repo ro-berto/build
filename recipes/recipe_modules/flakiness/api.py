@@ -32,6 +32,16 @@ _FILE_PATH_ADDING_TESTS_PATTERN = '^.+[T|t]est.*$'
 _FINAL_TRIM = 'final'
 _CROSS_REFERENCE_TRIM = 'cross reference'
 
+# This is a hard coded test suite name list to opt out from Flake Endorser
+# logic. Current names in list are these failing at test filter and repeat
+# arguments.
+# TODO(crbug.com/1325017): Use test configuration instead of this list.
+_EXCLUDED_TEST_SUITE_NAMES = [
+    'chromedriver_py_tests',
+    'rendering_representative_perf_tests',
+    'telemetry_desktop_minidump_unittests',
+]
+
 
 class TestDefinition():
   """A class to contain ResultDB TestReuslt Proto information.
@@ -595,8 +605,14 @@ class FlakinessApi(recipe_api.RecipeApi):
           precomputed_json, set(excluded_invs))
       p.logs['historical_tests'] = join_tests(historical_tests)
 
+      # For logging purpose only.
+      skipped_test_suites = set([])
+
       current_tests = set()
       for test_object in test_objects:
+        if test_object.canonical_name in _EXCLUDED_TEST_SUITE_NAMES:
+          skipped_test_suites.add(test_object.canonical_name)
+          continue
         rdb_suite_result = test_object.get_rdb_results('with patch')
         for individual_test in rdb_suite_result.all_tests:
           # Use 0 as duration if the info doesn't exist.
@@ -613,6 +629,8 @@ class FlakinessApi(recipe_api.RecipeApi):
                   variant_hash=rdb_suite_result.variant_hash))
 
       p.logs['current_build_tests'] = join_tests(current_tests)
+      if skipped_test_suites:
+        p.logs['skipped_test_suites'] = '\n'.join(sorted(skipped_test_suites))
 
       # Comparing the current build test list to the ResultDB query test list to
       # get a preliminary set of potential new tests.

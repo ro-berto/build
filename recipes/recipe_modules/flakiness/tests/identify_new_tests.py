@@ -40,12 +40,15 @@ def RunSteps(api):
       rdb_common_pb2.StringPair(
           key='step_name', value='some test (with patch)')
   ]
-  for i in range(5):
+  for i in range(6):
     inv_bundle = {}
     suite_name = 'some test %s' % str(i)
     inv = "invocations/{}".format(i + 1)
     test_id = 'ninja://sample/test:some_test/TestSuite.Test' + str(i)
     test_id_prefix = 'ninja://sample/test:some_test/'
+    # To cover the case when some suite is skipped.
+    if i == 5:
+      suite_name = 'chromedriver_py_tests'
     # To test the case when test id is not complete.
     if i == 4:
       test_id = 'TestSuite.Test' + str(i)
