@@ -175,6 +175,9 @@ class RDBPerSuiteResults(object):
   # not set, or if any test IDs from invocations don't have the exact prefix
   # as input.
   test_id_prefix = attrib(str, default='')
+  # This is a field used in |with_failure_on_exit| method.
+  # TODO(crbug.com/1245085): Remove this when |with_failure_on_exit| is removed.
+  exists_unexpected_failing_result = attrib(bool, default=False)
 
   @classmethod
   def create(cls,
@@ -257,10 +260,11 @@ class RDBPerSuiteResults(object):
         individual_unexpected_test_by_test_name=(
             individual_unexpected_test_by_test_name),
         all_tests=all_tests,
-        test_id_prefix=test_id_prefix)
+        test_id_prefix=test_id_prefix,
+        exists_unexpected_failing_result=exists_unexpected_failing_result)
 
   def with_failure_on_exit(self, failure_on_exit):
-    """Returns a new instance with an updated failure_on_exit value.
+    """Returns a new instance with an updated |invalid| value.
 
     We may end up fetching a test's RDB results before we know its exit code.
     (e.g. We query RDB before we collect swarming tasks.)
@@ -271,11 +275,12 @@ class RDBPerSuiteResults(object):
 
     Args:
       failure_on_exit: If True, indicates the test harness/runner exited with a
-          non-zero exit code. If this occurs and no unexpected failures were
+          non-zero exit code. If this occurs and no unexpected results were
           reported, it indicates invalid test results.
     """
     return attr.evolve(
-        self, invalid=(failure_on_exit and not self.unexpected_failing_tests))
+        self,
+        invalid=(failure_on_exit and not self.exists_unexpected_failing_result))
 
   def to_jsonish(self):
 
