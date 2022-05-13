@@ -106,7 +106,7 @@ def RunSteps(api, builder_config, is_official_build, devtools_skip_typecheck,
 
     run_unit_tests(api, builder_config)
     run_interactions(api, builder_config)
-    publish_coverage_points(api, builder_config)
+    publish_coverage_points(api)
 
     if _is_debug(builder_config):
       return
@@ -267,8 +267,9 @@ def test_cov_data():
       }
   }
 
-def publish_coverage_points(api, builder_config):
-  if api.tryserver.is_tryserver or not _is_debug(builder_config):
+
+def publish_coverage_points(api):
+  if api.tryserver.is_tryserver:
     return
 
   run_node_script(api, 'Combining coverage reports',
@@ -348,12 +349,6 @@ def GenTests(api):
       'basic try',
       api.builder_group.for_current('tryserver.devtools-frontend'),
       try_build(builder='linux'),
-  )
-
-  yield api.test(
-      'basic no cov',
-      api.builder_group.for_current('devtools-frontend'),
-      ci_build(builder='linux'),
   )
 
   yield api.test(

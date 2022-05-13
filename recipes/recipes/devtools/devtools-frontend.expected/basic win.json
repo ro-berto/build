@@ -808,6 +808,34 @@
       "-u",
       "third_party\\node\\node.py",
       "--output",
+      "scripts\\test\\merge_coverage_reports.js"
+    ],
+    "cwd": "[CACHE]\\builder\\devtools-frontend",
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]\\builder\\devtools-frontend\\third_party"
+      ]
+    },
+    "luci_context": {
+      "realm": {
+        "name": "devtools:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "Combining coverage reports"
+  },
+  {
+    "cmd": [
+      "vpython3",
+      "-u",
+      "third_party\\node\\node.py",
+      "--output",
       "scripts\\test\\run_lint_check_js.js"
     ],
     "cwd": "[CACHE]\\builder\\devtools-frontend",
