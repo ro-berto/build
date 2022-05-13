@@ -254,6 +254,8 @@ _AddBuildSpec(
 _AddIsolatedTestSpec(
     'android-go-perf', 'android', 'android-builder-perf', target_bits=32)
 _AddIsolatedTestSpec(
+    'android-go-perf-pgo', 'android', 'android-builder-perf', target_bits=32)
+_AddIsolatedTestSpec(
     'android-go_webview-perf',
     'android',
     'android-builder-perf',
@@ -261,31 +263,53 @@ _AddIsolatedTestSpec(
 
 _AddIsolatedTestSpec('android-pixel2-perf', 'android',
                      'android_arm64-builder-perf')
+_AddIsolatedTestSpec('android-pixel2-perf-pgo', 'android',
+                     'android_arm64-builder-perf')
 _AddIsolatedTestSpec('android-pixel2_webview-perf', 'android',
+                     'android_arm64-builder-perf')
+_AddIsolatedTestSpec('android-pixel2_webview-perf-pgo', 'android',
                      'android_arm64-builder-perf')
 _AddIsolatedTestSpec('android-pixel2_weblayer-perf', 'android',
                      'android_arm64-builder-perf')
 
 _AddIsolatedTestSpec('android-pixel4-perf', 'android',
                      'android_arm64-builder-perf')
+_AddIsolatedTestSpec('android-pixel4-perf-pgo', 'android',
+                     'android_arm64-builder-perf')
 _AddIsolatedTestSpec('android-pixel4_webview-perf', 'android',
                      'android_arm64-builder-perf')
 _AddIsolatedTestSpec('android-pixel4_weblayer-perf', 'android',
                      'android_arm64-builder-perf')
+_AddIsolatedTestSpec('android-pixel4_weblayer-perf-pgo', 'android',
+                     'android_arm64-builder-perf')
 
 _AddIsolatedTestSpec('android-pixel4a_power-perf', 'android',
                      'android_arm64-builder-perf')
+_AddIsolatedTestSpec('android-pixel4a_power-perf-pgo', 'android',
+                     'android_arm64-builder-perf')
 
 _AddIsolatedTestSpec('win-10-perf', 'win', 'win64-builder-perf')
+_AddIsolatedTestSpec('win-10-perf-pgo', 'win', 'win64-builder-perf')
 _AddIsolatedTestSpec('win-10_laptop_low_end-perf', 'win', 'win64-builder-perf')
+_AddIsolatedTestSpec('win-10_laptop_low_end-perf-pgo', 'win',
+                     'win64-builder-perf')
 _AddIsolatedTestSpec('win-10_amd_laptop-perf', 'win', 'win64-builder-perf')
+_AddIsolatedTestSpec('win-10_amd_laptop-perf-pgo', 'win', 'win64-builder-perf')
 
 _AddIsolatedTestSpec('mac-laptop_low_end-perf', 'mac', 'mac-builder-perf')
+_AddIsolatedTestSpec('mac-laptop_low_end-perf-pgo', 'mac', 'mac-builder-perf')
 _AddIsolatedTestSpec('mac-laptop_high_end-perf', 'mac', 'mac-builder-perf')
+_AddIsolatedTestSpec('mac-laptop_high_end-perf-pgo', 'mac', 'mac-builder-perf')
 _AddIsolatedTestSpec(
     'mac-m1_mini_2020-perf', 'mac', 'mac-arm-builder-perf', target_arch='arm')
+_AddIsolatedTestSpec(
+    'mac-m1_mini_2020-perf-pgo',
+    'mac',
+    'mac-arm-builder-perf',
+    target_arch='arm')
 
 _AddIsolatedTestSpec('linux-perf', 'linux', 'linux-builder-perf')
+_AddIsolatedTestSpec('linux-perf-pgo', 'linux', 'linux-builder-perf')
 _AddIsolatedTestSpec('linux-perf-rel', 'linux', 'linux-builder-perf-rel')
 
 _AddIsolatedTestSpec(
