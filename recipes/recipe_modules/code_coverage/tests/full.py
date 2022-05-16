@@ -56,6 +56,8 @@ def RunSteps(api):
     api.path.mock_add_paths(
         api.chromium.output_dir.join('devtools_code_coverage').join(
             'all.json.gz'))
+  if api.properties.get('build_dir'):
+    api.code_coverage.build_dir = api.properties.get('build_dir')
 
   test_specs = [
       steps.LocalIsolatedScriptTestSpec.create('checkdeps'),
@@ -1011,6 +1013,20 @@ def GenTests(api):
           'process clang code coverage data for overall test coverage.gsutil '
           'upload coverage metadata'
       ].cmd[-1])),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'custom build dir',
+      api.chromium.generic_build(
+          builder_group='chromium.fyi', builder='linux-code-coverage'),
+      api.code_coverage(use_clang_coverage=True),
+      api.properties(build_dir='my/custom/build/dir'),
+      api.post_process(
+          post_process.MustRun,
+          'process clang code coverage data for overall test coverage.gsutil '
+          'upload coverage metadata'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )

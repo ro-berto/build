@@ -26,6 +26,8 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     self._report_dir = None
     # Temp dir for metadata
     self._metadata_dir = None
+    # Path to director containing the build artifacts e.g. <root>/out/coverage
+    self._build_dir = None
     # When set, subset of source files to include in the coverage report.
     self._eligible_files = []
     # When set, indicates that current context is per-cl coverage for try jobs.
@@ -119,6 +121,14 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     return metadata_test_type_dir
 
   @property
+  def build_dir(self):
+    return self._build_dir or self.m.chromium.output_dir
+
+  @build_dir.setter
+  def build_dir(self, value):
+    self._build_dir = value
+
+  @property
   def bot_to_gerrit_mapping_file(self):
     """Generates the line number mapping from bot to Gerrit.
 
@@ -194,7 +204,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           'python',
           self.resource('get_jacoco_and_jar_files_for_java.py'),
           '--sources-json-dir',
-          self.m.chromium.output_dir,
+          self.build_dir,
           '--output-json',
           self.m.json.output(),
       ])
@@ -227,7 +237,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           'python',
           self.resource('get_unstripped_paths.py'),
           '--chromium-output-dir',
-          self.m.chromium.output_dir,
+          self.build_dir,
           '--output-json',
           self.m.json.output(),
       ])
@@ -299,15 +309,14 @@ class CodeCoverageApi(recipe_api.RecipeApi):
         elif self.platform == 'ios':
           if binary == 'ios_web_view_inttests':
             binaries.add(
-                self.m.chromium.output_dir.join('ChromeWebView.framework',
-                                                'ChromeWebView'))
+                self.build_dir.join('ChromeWebView.framework', 'ChromeWebView'))
             break
           # Actual binary file is at {binary}.app/{binary} for iOS.
-          binaries.add(self.m.chromium.output_dir.join(binary + '.app', binary))
+          binaries.add(self.build_dir.join(binary + '.app', binary))
         elif self.platform == 'win':
-          binaries.add(self.m.chromium.output_dir.join(binary + '.exe'))
+          binaries.add(self.build_dir.join(binary + '.exe'))
         else:
-          binaries.add(self.m.chromium.output_dir.join(binary))
+          binaries.add(self.build_dir.join(binary))
 
         break
 
@@ -467,9 +476,9 @@ class CodeCoverageApi(recipe_api.RecipeApi):
             'python',
             self.resource('clean_up_java_coverage_files.py'),
             '--sources-json-dir',
-            self.m.chromium.output_dir,
+            self.build_dir,
             '--java-coverage-dir',
-            self.m.chromium.output_dir.join('coverage'),
+            self.build_dir.join('coverage'),
         ])
 
     if self.use_javascript_coverage:
@@ -582,7 +591,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     with self.m.step.nest('process java coverage (%s)' %
                           self._current_processing_test_type):
       try:
-        coverage_dir = self.m.chromium.output_dir.join('coverage')
+        coverage_dir = self.build_dir.join('coverage')
         cmd = [
             'python',
             self.resource('generate_coverage_metadata_for_java.py'),
@@ -593,7 +602,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
             '--coverage-dir',
             coverage_dir,
             '--sources-json-dir',
-            self.m.chromium.output_dir,
+            self.build_dir,
         ]
 
         if self._is_per_cl_coverage:
@@ -634,7 +643,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
   def process_javascript_coverage_data(self):
     with self.m.step.nest('process javascript coverage'):
       try:
-        coverage_dir = self.m.chromium.output_dir.join('devtools_code_coverage')
+        coverage_dir = self.build_dir.join('devtools_code_coverage')
         cmd = [
             'python',
             self.resource('generate_coverage_metadata_for_javascript.py'),
@@ -785,7 +794,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
         '--llvm-cov',
         self.cov_executable,
         '--compilation-directory',
-        self.m.chromium.output_dir,
+        self.build_dir,
         '--binaries',
     ]
     cmd.extend(binaries)
@@ -850,7 +859,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     if self.use_java_coverage:
       args.extend([
           '--java-coverage-dir',
-          self.m.chromium.output_dir.join('coverage'),
+          self.build_dir.join('coverage'),
           '--jacococli-path',
           self.m.path['checkout'].join('third_party', 'jacoco', 'lib',
                                        'jacococli.jar'),
@@ -860,7 +869,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     if self.use_javascript_coverage:
       args.extend([
           '--javascript-coverage-dir',
-          self.m.chromium.output_dir.join('devtools_code_coverage'),
+          self.build_dir.join('devtools_code_coverage'),
           '--merged-js-cov-filename',
           self.m.profiles.normalize(step_name),
       ])
@@ -924,7 +933,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
         'vpython',
         self.resource('generate_coverage_metadata.py'),
         '--build-dir',
-        self.m.chromium.output_dir,
+        self.build_dir,
         '--src-path',
         self.m.path['checkout'],
         '--output-dir',
