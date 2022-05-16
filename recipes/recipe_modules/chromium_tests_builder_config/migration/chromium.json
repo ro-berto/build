@@ -2670,12 +2670,6 @@
       "tryserver.chromium.linux:linux-wayland-rel"
     ]
   },
-  "chromium.linux:Network Service Linux": {
-    "builders": [
-      "chromium.linux:Network Service Linux",
-      "tryserver.chromium.linux:network_service_linux"
-    ]
-  },
   "chromium.linux:linux-no-base-tracing-rel": {
     "builders": [
       "chromium.linux:linux-no-base-tracing-rel",
@@ -4484,12 +4478,6 @@
     "builders": [
       "chromium.memory:Linux TSan (bionic)",
       "tryserver.chromium.linux:linux_chromium_tsan_rel_ng_bionic"
-    ]
-  },
-  "tryserver.chromium.linux:network_service_linux": {
-    "builders": [
-      "chromium.linux:Network Service Linux",
-      "tryserver.chromium.linux:network_service_linux"
     ]
   },
   "tryserver.chromium.mac:gpu-fyi-try-mac-amd-pro-rel": {

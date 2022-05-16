@@ -17,6 +17,7 @@ def _chromium_linux_spec(**kwargs):
 # * Linux Tests (dbg)(1)
 # * linux-bfcache-rel
 # * linux-extended-tracing-rel
+# * Network Service Linux
 
 SPEC = {
     'linux-no-base-tracing-rel':
@@ -128,18 +129,6 @@ SPEC = {
             },
             gclient_apply_config=['enable_reclient'],
             test_results_config='staging_server',
-            simulation_platform='linux',
-        ),
-    'Network Service Linux':
-        _chromium_linux_spec(
-            chromium_config='chromium',
-            chromium_apply_config=['mb'],
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            gclient_apply_config=['enable_reclient'],
             simulation_platform='linux',
         ),
 }

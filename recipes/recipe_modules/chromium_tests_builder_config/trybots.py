@@ -537,6 +537,7 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * linux_optional_gpu_tests_rel
     # * linux_vr
     # * mac_optional_gpu_tests_rel
+    # * network_service_linux
     # * win_optional_gpu_tests_rel
     'tryserver.chromium.linux': {
         'cast_shell_linux':
@@ -774,11 +775,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
                 buildername='linux-wpt-input-fyi-rel',
-            ),
-        'network_service_linux':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.linux',
-                buildername='Network Service Linux',
             ),
     },
     # The config for the following builders is now specified src-side in
