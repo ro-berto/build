@@ -370,6 +370,7 @@ class TestSpec(TestSpecBase):
   resultdb = attrib(ResultDB, default=ResultDB.create())
   # TODO(crbug/1106965): remove test_id_prefix, if deriver gets turned down.
   test_id_prefix = attrib(str, default=None)
+  check_flakiness_for_new_tests = attrib(bool, default=True)
 
   @property
   def name(self):
@@ -515,6 +516,14 @@ class Test(object):
   def full_test_target(self):
     """A fully qualified Ninja target, e.g. "//chrome/test:browser_tests"."""
     return self.spec.full_test_target
+
+  @property
+  def check_flakiness_for_new_tests(self):
+    """Whether to check flakiness for new tests in try jobs.
+
+    Default True unless specified in test spec json files.
+    """
+    return self.spec.check_flakiness_for_new_tests
 
   @property
   def test_id_prefix(self):
@@ -1073,6 +1082,10 @@ class TestWrapper(Test):  # pragma: no cover
   @property
   def full_test_target(self):
     return self._test.full_test_target
+
+  @property
+  def check_flakiness_for_new_tests(self):
+    return self._test.check_flakiness_for_new_tests
 
   @property
   def test_id_prefix(self):

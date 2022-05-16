@@ -204,6 +204,8 @@ def generator_common(chromium_tests_api, raw_test_spec, swarming_delegate,
   # TODO(crbug.com/1074033): Remove full_test_target.
   kwargs['full_test_target'] = raw_test_spec.get('test_target')
   kwargs['test_id_prefix'] = raw_test_spec.get('test_id_prefix')
+  kwargs['check_flakiness_for_new_tests'] = raw_test_spec.get(
+      'check_flakiness_for_new_tests', True)
   kwargs['name'] = name
 
   rdb_kwargs = dict(raw_test_spec.get('resultdb', {}))

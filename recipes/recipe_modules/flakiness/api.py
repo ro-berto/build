@@ -32,16 +32,6 @@ _FILE_PATH_ADDING_TESTS_PATTERN = '^.+[T|t]est.*$'
 _FINAL_TRIM = 'final'
 _CROSS_REFERENCE_TRIM = 'cross reference'
 
-# This is a hard coded test suite name list to opt out from Flake Endorser
-# logic. Current names in list are these failing at test filter and repeat
-# arguments.
-# TODO(crbug.com/1325017): Use test configuration instead of this list.
-_EXCLUDED_TEST_SUITE_NAMES = [
-    'chromedriver_py_tests',
-    'rendering_representative_perf_tests',
-    'telemetry_desktop_minidump_unittests',
-]
-
 
 class TestDefinition():
   """A class to contain ResultDB TestReuslt Proto information.
@@ -610,7 +600,7 @@ class FlakinessApi(recipe_api.RecipeApi):
 
       current_tests = set()
       for test_object in test_objects:
-        if test_object.canonical_name in _EXCLUDED_TEST_SUITE_NAMES:
+        if not test_object.check_flakiness_for_new_tests:
           skipped_test_suites.add(test_object.canonical_name)
           continue
         rdb_suite_result = test_object.get_rdb_results('with patch')

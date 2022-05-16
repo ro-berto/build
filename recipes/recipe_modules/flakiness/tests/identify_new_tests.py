@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import attr
+
 from recipe_engine import post_process
 from PB.go.chromium.org.luci.buildbucket.proto import build as build_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import builder as builder_pb2
@@ -46,9 +48,6 @@ def RunSteps(api):
     inv = "invocations/{}".format(i + 1)
     test_id = 'ninja://sample/test:some_test/TestSuite.Test' + str(i)
     test_id_prefix = 'ninja://sample/test:some_test/'
-    # To cover the case when some suite is skipped.
-    if i == 5:
-      suite_name = 'chromedriver_py_tests'
     # To test the case when test id is not complete.
     if i == 4:
       test_id = 'TestSuite.Test' + str(i)
@@ -74,6 +73,9 @@ def RunSteps(api):
         override_compile_targets=api.properties.get('override_compile_targets'),
         isolate_coverage_data=api.properties.get('isolate_coverage_data',
                                                  False))
+    # For coverage that the suite opts out Flake Endorser.
+    if i == 5:
+      test_spec = attr.evolve(test_spec, check_flakiness_for_new_tests=False)
     test_object = test_spec.get_test(api.chromium_tests)
     test_object.update_rdb_results('with patch', rdb_suite_results)
     test_objects.append(test_object)
