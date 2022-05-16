@@ -11,6 +11,9 @@ def _chromium_memory_spec(**kwargs):
 
 # The config for the following builders is now specified src-side in
 # //infra/config/subprojects/chromium/ci/chromium.memory.star
+# * Linux ASan LSan Builder
+# * Linux ASan LSan Tests (1)
+# * Linux ASan Tests (sandboxed)
 # * linux-ubsan-vptr
 # * win-asan
 
@@ -36,49 +39,6 @@ SPEC = {
             cf_archive_name='ios-asan',
             cf_archive_subdir_suffix='ios-asan',
             simulation_platform='mac',
-        ),
-    'Linux ASan LSan Builder':
-        _chromium_memory_spec(
-            chromium_config='chromium_asan',
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            # This doesn't affect the build, but ensures that trybots get
-            # the right runtime flags.
-            chromium_apply_config=['lsan', 'mb'],
-            simulation_platform='linux',
-        ),
-    'Linux ASan LSan Tests (1)':
-        _chromium_memory_spec(
-            chromium_config='chromium_asan',
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            # Enable LSan at runtime. This disables the sandbox in browser
-            # tests. http://crbug.com/336218
-            chromium_apply_config=['lsan', 'mb'],
-            execution_mode=builder_spec.TEST,
-            parent_buildername='Linux ASan LSan Builder',
-            simulation_platform='linux',
-        ),
-    'Linux ASan Tests (sandboxed)':
-        _chromium_memory_spec(
-            chromium_config='chromium_asan',
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            chromium_apply_config=['mb'],
-            # We want to test ASan+sandbox as well, so run browser tests
-            # again, this time with LSan disabled.
-            execution_mode=builder_spec.TEST,
-            parent_buildername='Linux ASan LSan Builder',
-            simulation_platform='linux',
         ),
     'Linux CFI':
         _chromium_memory_spec(
