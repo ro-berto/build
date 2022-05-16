@@ -26,6 +26,13 @@ def _chromium_android_spec(**kwargs):
 # * Nougat Phone Tester
 # * Oreo Phone Tester
 # * android-cronet-arm-dbg
+# * android-cronet-x86-dbg
+# * android-cronet-x86-dbg-10-tests
+# * android-cronet-x86-dbg-11-tests
+# * android-cronet-x86-dbg-lollipop-tests
+# * android-cronet-x86-dbg-marshmallow-tests
+# * android-cronet-x86-dbg-oreo-tests
+# * android-cronet-x86-dbg-pie-tests
 # * android-pie-arm64-dbg
 # * android-weblayer-10-x86-rel-tests
 # * android-weblayer-marshmallow-x86-rel-tests
@@ -200,44 +207,6 @@ SPEC.update([
     stock_cronet_config('android-cronet-arm64-dbg', config='Debug'),
     stock_cronet_config('android-cronet-arm64-rel'),
     stock_cronet_config('android-cronet-asan-arm-rel'),
-    stock_cronet_config(
-        'android-cronet-x86-dbg', config='Debug', android_config='x86_builder'),
-    stock_cronet_config(
-        'android-cronet-x86-dbg-lollipop-tests',
-        config='Debug',
-        execution_mode=builder_spec.TEST,
-        parent_buildername='android-cronet-x86-dbg',
-        android_config='x86_builder'),
-    stock_cronet_config(
-        'android-cronet-x86-dbg-marshmallow-tests',
-        config='Debug',
-        execution_mode=builder_spec.TEST,
-        parent_buildername='android-cronet-x86-dbg',
-        android_config='x86_builder'),
-    stock_cronet_config(
-        'android-cronet-x86-dbg-oreo-tests',
-        config='Debug',
-        execution_mode=builder_spec.TEST,
-        parent_buildername='android-cronet-x86-dbg',
-        android_config='x86_builder'),
-    stock_cronet_config(
-        'android-cronet-x86-dbg-pie-tests',
-        config='Debug',
-        execution_mode=builder_spec.TEST,
-        parent_buildername='android-cronet-x86-dbg',
-        android_config='x86_builder'),
-    stock_cronet_config(
-        'android-cronet-x86-dbg-10-tests',
-        config='Debug',
-        execution_mode=builder_spec.TEST,
-        parent_buildername='android-cronet-x86-dbg',
-        android_config='x86_builder'),
-    stock_cronet_config(
-        'android-cronet-x86-dbg-11-tests',
-        config='Debug',
-        execution_mode=builder_spec.TEST,
-        parent_buildername='android-cronet-x86-dbg',
-        android_config='x86_builder'),
     stock_cronet_config('android-cronet-x86-rel', android_config='x86_builder'),
     stock_cronet_config(
         'android-cronet-x86-rel-kitkat-tests',

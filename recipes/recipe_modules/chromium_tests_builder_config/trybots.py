@@ -108,6 +108,11 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * android_compile_x64_dbg
     # * android-12-x64-dbg
     # * android-cronet-arm-dbg
+    # * android-cronet-x86-dbg
+    # * android-cronet-x86-dbg-10-tests
+    # * android-cronet-x86-dbg-11-tests
+    # * android-cronet-x86-dbg-oreo-tests
+    # * android-cronet-x86-dbg-pie-tests
     # * android-inverse-fieldtrials-pie-x86-fyi-rel
     # * android-pie-x86-rel
     # * android-weblayer-10-x86-rel-tests
@@ -167,39 +172,10 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.android',
                 buildername='android-cronet-asan-arm-rel',
             ),
-        'android-cronet-x86-dbg':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android',
-                buildername='android-cronet-x86-dbg',
-            ),
         'android-cronet-x86-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android',
                 buildername='android-cronet-x86-rel',
-            ),
-        'android-cronet-x86-dbg-10-tests':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android',
-                buildername='android-cronet-x86-dbg',
-                tester='android-cronet-x86-dbg-10-tests',
-            ),
-        'android-cronet-x86-dbg-11-tests':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android',
-                buildername='android-cronet-x86-dbg',
-                tester='android-cronet-x86-dbg-11-tests',
-            ),
-        'android-cronet-x86-dbg-oreo-tests':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android',
-                buildername='android-cronet-x86-dbg',
-                tester='android-cronet-x86-dbg-oreo-tests',
-            ),
-        'android-cronet-x86-dbg-pie-tests':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android',
-                buildername='android-cronet-x86-dbg',
-                tester='android-cronet-x86-dbg-pie-tests',
             ),
         'android-cronet-x86-rel-kitkat-tests':
             try_spec.TrySpec.create_for_single_mirror(
