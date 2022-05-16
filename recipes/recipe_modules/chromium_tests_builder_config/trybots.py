@@ -119,6 +119,7 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * android-weblayer-marshmallow-x86-rel-tests
     # * android-weblayer-pie-x86-rel-tests
     # * android-webview-12-x64-dbg
+    # * android_optional_gpu_tests_rel
     'tryserver.chromium.android': {
         'android-10-arm64-rel':
             try_spec.TrySpec.create_for_single_mirror(
@@ -279,12 +280,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.android',
                 buildername='android-cronet-arm-rel',
                 is_compile_only=True,
-            ),
-        'android_optional_gpu_tests_rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='tryserver.chromium.android',
-                buildername='android_optional_gpu_tests_rel',
-                retry_failed_shards=False,
             ),
         'cast_shell_android':
             try_spec.TrySpec.create_for_single_mirror(
@@ -513,9 +508,7 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * linux_chromium_dbg_ng
     # * linux_optional_gpu_tests_rel
     # * linux_vr
-    # * mac_optional_gpu_tests_rel
     # * network_service_linux
-    # * win_optional_gpu_tests_rel
     'tryserver.chromium.linux': {
         'cast_shell_linux':
             try_spec.TrySpec.create_for_single_mirror(
@@ -837,6 +830,7 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * mac-osxbeta-rel
     # * mac-rel
     # * mac11-arm64-rel
+    # * mac_optional_gpu_tests_rel
     'tryserver.chromium.mac': {
         'ios-asan':
             try_spec.TrySpec.create_for_single_mirror(
@@ -992,6 +986,7 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * win10_chromium_x64_dbg_ng
     # * win10_chromium_x64_rel_ng
     # * win11-x64-fyi-rel
+    # * win_optional_gpu_tests_rel
     'tryserver.chromium.win': {
         'win-annotator-rel':
             try_spec.TrySpec.create_for_single_mirror(

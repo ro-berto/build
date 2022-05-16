@@ -37,18 +37,4 @@ SPEC = {
             gclient_apply_config=['android'],
             simulation_platform='linux',
         ),
-    'android_optional_gpu_tests_rel':
-        builder_spec.BuilderSpec.create(
-            chromium_config='android',
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'android',
-            ],
-            chromium_config_kwargs={
-                'TARGET_PLATFORM': 'android',
-            },
-            android_config='main_builder',
-            simulation_platform='linux',
-            build_gs_bucket='chromium-gpu-fyi-archive',
-        ),
 }

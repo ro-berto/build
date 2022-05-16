@@ -3546,11 +3546,6 @@
       "tryserver.chromium.android:android_cronet"
     ]
   },
-  "tryserver.chromium.android:android_optional_gpu_tests_rel": {
-    "builders": [
-      "tryserver.chromium.android:android_optional_gpu_tests_rel"
-    ]
-  },
   "tryserver.chromium.android:cast_shell_android": {
     "builders": [
       "chromium.android:Cast Android (dbg)",
