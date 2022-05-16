@@ -530,7 +530,6 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * linux-mbi-mode-per-site-instance-host-rel
     # * linux-rel-warmed
     # * linux-rel
-    # * linux_chromium_asan_rel_ng
     # * linux_chromium_ubsan_rel_ng
     # * linux_chromium_compile_dbg_ng
     # * linux_chromium_compile_rel_ng
@@ -621,6 +620,13 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.memory',
                 buildername='WebKit Linux MSAN',
+            ),
+        'linux_chromium_asan_rel_ng':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.memory',
+                buildername='Linux ASan LSan Builder',
+                tester='Linux ASan LSan Tests (1)',
+                regression_test_selection=try_spec.QUICK_RUN_ONLY,
             ),
         'linux_chromium_chromeos_asan_rel_ng':
             try_spec.TrySpec.create_for_single_mirror(

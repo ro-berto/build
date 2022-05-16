@@ -2698,6 +2698,30 @@
       "tryserver.chromium.linux:linux-no-base-tracing-rel"
     ]
   },
+  "chromium.memory:Linux ASan LSan Builder": {
+    "builders": [
+      "chromium.memory:Linux ASan LSan Builder",
+      "chromium.memory:Linux ASan LSan Tests (1)",
+      "chromium.memory:Linux ASan Tests (sandboxed)",
+      "tryserver.chromium.linux:linux_chromium_asan_rel_ng"
+    ]
+  },
+  "chromium.memory:Linux ASan LSan Tests (1)": {
+    "builders": [
+      "chromium.memory:Linux ASan LSan Builder",
+      "chromium.memory:Linux ASan LSan Tests (1)",
+      "chromium.memory:Linux ASan Tests (sandboxed)",
+      "tryserver.chromium.linux:linux_chromium_asan_rel_ng"
+    ]
+  },
+  "chromium.memory:Linux ASan Tests (sandboxed)": {
+    "builders": [
+      "chromium.memory:Linux ASan LSan Builder",
+      "chromium.memory:Linux ASan LSan Tests (1)",
+      "chromium.memory:Linux ASan Tests (sandboxed)",
+      "tryserver.chromium.linux:linux_chromium_asan_rel_ng"
+    ]
+  },
   "chromium.memory:Linux CFI": {
     "builders": [
       "chromium.memory:Linux CFI",
@@ -4444,6 +4468,14 @@
     "builders": [
       "chromium.fyi:linux-wpt-input-fyi-rel",
       "tryserver.chromium.linux:linux-wpt-input-fyi-rel"
+    ]
+  },
+  "tryserver.chromium.linux:linux_chromium_asan_rel_ng": {
+    "builders": [
+      "chromium.memory:Linux ASan LSan Builder",
+      "chromium.memory:Linux ASan LSan Tests (1)",
+      "chromium.memory:Linux ASan Tests (sandboxed)",
+      "tryserver.chromium.linux:linux_chromium_asan_rel_ng"
     ]
   },
   "tryserver.chromium.linux:linux_chromium_cfi_rel_ng": {

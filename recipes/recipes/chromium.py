@@ -1015,6 +1015,39 @@ def GenTests(api):
           }),
   )
 
+  # Tests switching on asan and swiching off lsan for sandbox tester.
+  yield api.test(
+      'dynamic_gtest_memory_asan_no_lsan',
+      api.chromium_tests_builder_config.ci_build(
+          builder_group='chromium.memory',
+          builder='Linux ASan Tests (sandboxed)',
+          parent_buildername='Linux ASan LSan Builder',
+      ),
+      api.chromium_tests.read_source_side_spec('chromium.memory', {
+          'Linux ASan Tests (sandboxed)': {
+              'gtest_tests': ['browser_tests',],
+          },
+      }),
+  )
+
+  # Tests that the memory builder is using the correct compile targets.
+  yield api.test(
+      'dynamic_gtest_memory_builder',
+      api.chromium_tests_builder_config.ci_build(
+          builder_group='chromium.memory',
+          builder='Linux ASan LSan Builder',
+          parent_buildername=None,
+          revision='a' * 40,
+      ),
+      # The builder should build 'browser_tests', because there exists a child
+      # tester that uses that test.
+      api.chromium_tests.read_source_side_spec('chromium.memory', {
+          'Linux ASan Tests (sandboxed)': {
+              'gtest_tests': ['browser_tests',],
+          },
+      }),
+  )
+
   # Tests that the memory mac tester is using the correct test flags.
   yield api.test(
       'dynamic_gtest_memory_mac64',
