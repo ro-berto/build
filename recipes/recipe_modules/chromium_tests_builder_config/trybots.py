@@ -795,6 +795,8 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * linux-chromeos-rel
     # * linux-chromeos-rel-rts
     # * linux-lacros-dbg
+    # * linux-lacros-rel
+    # * linux-lacros-rel-code-coverage
     'tryserver.chromium.chromiumos': {
         'lacros-amd64-generic-rel':
             try_spec.TrySpec.create_for_single_mirror(
@@ -817,18 +819,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.chromiumos',
                 buildername='linux-chromeos-js-code-coverage',
-            ),
-        'linux-lacros-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.chromiumos',
-                buildername='linux-lacros-builder-rel',
-                tester='linux-lacros-tester-rel',
-            ),
-        'linux-lacros-rel-code-coverage':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.chromiumos',
-                buildername='linux-lacros-builder-rel',
-                tester='linux-lacros-tester-rel',
             ),
         'linux-cfm-rel':
             try_spec.TrySpec.create_for_single_mirror(

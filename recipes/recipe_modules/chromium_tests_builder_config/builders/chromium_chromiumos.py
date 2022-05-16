@@ -77,7 +77,9 @@ def _config(name,
 # * chromeos-kevin-rel
 # * lacros-amd64-generic-binary-size-rel
 # * lacros-arm-generic-rel
+# * linux-lacros-builder-rel
 # * linux-lacros-dbg
+# * linux-lacros-tester-rel
 
 SPEC.update([
     _config(
@@ -92,16 +94,10 @@ SPEC.update([
         'linux-chromeos-js-code-coverage',
         gclient_apply_config=['use_clang_coverage']),
     _config('linux-chromeos-annotator-rel'),
-    _config('linux-lacros-builder-rel'),
     _config('linux-lacros-rel'),
     _config(
         'linux-lacros-rel-code-coverage',
         gclient_apply_config=['use_clang_coverage']),
-    _config(
-        'linux-lacros-tester-rel',
-        gclient_apply_config=['use_clang_coverage'],
-        execution_mode=builder_spec.TEST,
-        parent_buildername='linux-lacros-builder-rel'),
     _config('chromeos-amd64-generic-asan-rel', cros_boards='amd64-generic'),
     _config('linux-cfm-rel'),
 ])

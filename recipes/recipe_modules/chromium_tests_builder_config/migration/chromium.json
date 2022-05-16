@@ -584,14 +584,6 @@
       "tryserver.chromium.chromiumos:linux-chromeos-js-code-coverage"
     ]
   },
-  "chromium.chromiumos:linux-lacros-builder-rel": {
-    "builders": [
-      "chromium.chromiumos:linux-lacros-builder-rel",
-      "chromium.chromiumos:linux-lacros-tester-rel",
-      "tryserver.chromium.chromiumos:linux-lacros-rel",
-      "tryserver.chromium.chromiumos:linux-lacros-rel-code-coverage"
-    ]
-  },
   "chromium.chromiumos:linux-lacros-rel": {
     "builders": [
       "chromium.chromiumos:linux-lacros-rel"
@@ -600,14 +592,6 @@
   "chromium.chromiumos:linux-lacros-rel-code-coverage": {
     "builders": [
       "chromium.chromiumos:linux-lacros-rel-code-coverage"
-    ]
-  },
-  "chromium.chromiumos:linux-lacros-tester-rel": {
-    "builders": [
-      "chromium.chromiumos:linux-lacros-builder-rel",
-      "chromium.chromiumos:linux-lacros-tester-rel",
-      "tryserver.chromium.chromiumos:linux-lacros-rel",
-      "tryserver.chromium.chromiumos:linux-lacros-rel-code-coverage"
     ]
   },
   "chromium.dawn:Dawn Linux x64 Builder": {
@@ -4041,22 +4025,6 @@
     "builders": [
       "chromium.chromiumos:linux-chromeos-js-code-coverage",
       "tryserver.chromium.chromiumos:linux-chromeos-js-code-coverage"
-    ]
-  },
-  "tryserver.chromium.chromiumos:linux-lacros-rel": {
-    "builders": [
-      "chromium.chromiumos:linux-lacros-builder-rel",
-      "chromium.chromiumos:linux-lacros-tester-rel",
-      "tryserver.chromium.chromiumos:linux-lacros-rel",
-      "tryserver.chromium.chromiumos:linux-lacros-rel-code-coverage"
-    ]
-  },
-  "tryserver.chromium.chromiumos:linux-lacros-rel-code-coverage": {
-    "builders": [
-      "chromium.chromiumos:linux-lacros-builder-rel",
-      "chromium.chromiumos:linux-lacros-tester-rel",
-      "tryserver.chromium.chromiumos:linux-lacros-rel",
-      "tryserver.chromium.chromiumos:linux-lacros-rel-code-coverage"
     ]
   },
   "tryserver.chromium.dawn:dawn-linux-x64-deps-rel": {
