@@ -157,7 +157,7 @@ def _run_swiftshader_end2end_tests(api, out_dir):
 def _run_swangle_end2end_tests(api, out_dir):
   test_path = api.path['checkout'].join('out', out_dir, 'dawn_end2end_tests')
   api.step('Run the Dawn end2end tests with ANGLE/SwiftShader',
-           [test_path, '--backend=opengles'])
+           [test_path, '--backend=opengles', '--use-angle=swiftshader'])
 
 
 def _generate_fuzz_corpus(api, target_cpu, debug, clang, use_goma):

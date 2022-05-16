@@ -1237,7 +1237,8 @@
   {
     "cmd": [
       "[CACHE]\\builder\\dawn\\out\\release_clang_component\\dawn_end2end_tests",
-      "--backend=opengles"
+      "--backend=opengles",
+      "--use-angle=swiftshader"
     ],
     "env": {
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"

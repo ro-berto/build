@@ -1153,7 +1153,8 @@
   {
     "cmd": [
       "[CACHE]/builder/dawn/out/release_component/dawn_end2end_tests",
-      "--backend=opengles"
+      "--backend=opengles",
+      "--use-angle=swiftshader"
     ],
     "luci_context": {
       "realm": {
