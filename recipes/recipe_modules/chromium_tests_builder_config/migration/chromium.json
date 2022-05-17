@@ -2135,54 +2135,6 @@
       "tryserver.chromium.mac:gpu-fyi-try-mac-nvidia-retina-rel"
     ]
   },
-  "chromium.gpu.fyi:Optional Android Release (Pixel 4)": {
-    "blockers": [
-      "builder 'chromium.gpu.fyi:Optional Android Release (Pixel 4)' does not exist"
-    ],
-    "builders": [
-      "chromium.gpu.fyi:Optional Android Release (Pixel 4)"
-    ]
-  },
-  "chromium.gpu.fyi:Optional Mac Release (Intel)": {
-    "blockers": [
-      "cannot migrate builder 'chromium.gpu.fyi:Optional Mac Release (Intel)' with provide-test-spec execution_mode"
-    ],
-    "builders": [
-      "chromium.gpu.fyi:Optional Mac Release (Intel)"
-    ]
-  },
-  "chromium.gpu.fyi:Optional Mac Retina Release (AMD)": {
-    "blockers": [
-      "cannot migrate builder 'chromium.gpu.fyi:Optional Mac Retina Release (AMD)' with provide-test-spec execution_mode"
-    ],
-    "builders": [
-      "chromium.gpu.fyi:Optional Mac Retina Release (AMD)"
-    ]
-  },
-  "chromium.gpu.fyi:Optional Mac Retina Release (NVIDIA)": {
-    "blockers": [
-      "cannot migrate builder 'chromium.gpu.fyi:Optional Mac Retina Release (NVIDIA)' with provide-test-spec execution_mode"
-    ],
-    "builders": [
-      "chromium.gpu.fyi:Optional Mac Retina Release (NVIDIA)"
-    ]
-  },
-  "chromium.gpu.fyi:Optional Win10 x64 Release (Intel HD 630)": {
-    "blockers": [
-      "cannot migrate builder 'chromium.gpu.fyi:Optional Win10 x64 Release (Intel HD 630)' with provide-test-spec execution_mode"
-    ],
-    "builders": [
-      "chromium.gpu.fyi:Optional Win10 x64 Release (Intel HD 630)"
-    ]
-  },
-  "chromium.gpu.fyi:Optional Win10 x64 Release (NVIDIA)": {
-    "blockers": [
-      "cannot migrate builder 'chromium.gpu.fyi:Optional Win10 x64 Release (NVIDIA)' with provide-test-spec execution_mode"
-    ],
-    "builders": [
-      "chromium.gpu.fyi:Optional Win10 x64 Release (NVIDIA)"
-    ]
-  },
   "chromium.gpu.fyi:Win10 FYI x64 DX12 Vulkan Debug (NVIDIA)": {
     "builders": [
       "chromium.gpu.fyi:GPU FYI Win x64 DX12 Vulkan Builder (dbg)",

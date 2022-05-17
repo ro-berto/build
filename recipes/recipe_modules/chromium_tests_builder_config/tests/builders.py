@@ -86,9 +86,7 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  for builder_id, builder_spec in sorted(six.iteritems(ctbc.builders.BUILDERS)):
-    if builder_spec.execution_mode == ctbc.PROVIDE_TEST_SPEC:
-      continue
+  for builder_id, _ in sorted(six.iteritems(ctbc.builders.BUILDERS)):
     builder_group = builder_id.group
     buildername = builder_id.builder
     yield api.test(

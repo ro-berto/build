@@ -50,17 +50,7 @@ class BuilderSpec(object):
       return [a for a in attributes if a in kwargs]
 
     execution_mode = kwargs.get('execution_mode', COMPILE_AND_TEST)
-
-    if execution_mode == PROVIDE_TEST_SPEC:
-      # Builders with execution mode PROVIDE_TEST_SPEC should never be executed,
-      # so most fields are invalid
-      invalid_attrs = get_filtered_attrs(
-          *[a for a in attr.fields_dict(cls) if a != 'execution_mode'])
-      assert not invalid_attrs, (
-          "The following fields are ignored when 'execution_mode' is {!r}: {}"
-          .format(PROVIDE_TEST_SPEC, invalid_attrs))
-
-    elif execution_mode != COMPILE_AND_TEST:
+    if execution_mode != COMPILE_AND_TEST:
       invalid_attrs = get_filtered_attrs('compile_targets')
       assert not invalid_attrs, (
           "The following fields are ignored unless 'execution_mode' is {!r}: {}"

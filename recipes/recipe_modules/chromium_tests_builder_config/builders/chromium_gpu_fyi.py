@@ -5,9 +5,8 @@
 from .. import builder_spec
 
 
-def _chromium_gpu_fyi_spec(**kwargs):
-  if kwargs.get('execution_mode') != builder_spec.PROVIDE_TEST_SPEC:
-    kwargs.setdefault('build_gs_bucket', 'chromium-gpu-fyi-archive')
+def _chromium_gpu_fyi_spec(build_gs_bucket='chromium-gpu-fyi-archive',
+                           **kwargs):
   return builder_spec.BuilderSpec.create(**kwargs)
 
 # The config for the following virtual builders were removed since their trybot
@@ -1016,34 +1015,6 @@ SPEC = {
             },
             execution_mode=builder_spec.TEST,
             parent_buildername='GPU Fake Linux Builder',
-            simulation_platform='linux',
-        ),
-
-    # The following machines don't actually exist. They are specified
-    # here only in order to allow the associated src-side JSON entries
-    # to be read, and the "optional" GPU tryservers to be specified in
-    # terms of them.
-    'Optional Win10 x64 Release (NVIDIA)':
-        _chromium_gpu_fyi_spec(execution_mode=builder_spec.PROVIDE_TEST_SPEC),
-    'Optional Win10 x64 Release (Intel HD 630)':
-        _chromium_gpu_fyi_spec(execution_mode=builder_spec.PROVIDE_TEST_SPEC),
-    'Optional Mac Release (Intel)':
-        _chromium_gpu_fyi_spec(execution_mode=builder_spec.PROVIDE_TEST_SPEC),
-    'Optional Mac Retina Release (NVIDIA)':
-        _chromium_gpu_fyi_spec(execution_mode=builder_spec.PROVIDE_TEST_SPEC),
-    'Optional Mac Retina Release (AMD)':
-        _chromium_gpu_fyi_spec(execution_mode=builder_spec.PROVIDE_TEST_SPEC),
-    'Optional Android Release (Pixel 4)':
-        _chromium_gpu_fyi_spec(
-            chromium_config='android',
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'android',
-            ],
-            chromium_config_kwargs={
-                'TARGET_PLATFORM': 'android',
-            },
-            android_config='main_builder',
             simulation_platform='linux',
         ),
 }
