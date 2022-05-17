@@ -224,12 +224,6 @@
       "tryserver.chromium.android:android-marshmallow-x86-rel"
     ]
   },
-  "chromium.android:android-marshmallow-x86-rel-non-cq": {
-    "builders": [
-      "chromium.android:android-marshmallow-x86-rel-non-cq",
-      "tryserver.chromium.android:android-marshmallow-x86-rel-non-cq"
-    ]
-  },
   "chromium.android:android-nougat-arm64-rel": {
     "builders": [
       "chromium.android:android-nougat-arm64-rel",
@@ -3245,12 +3239,6 @@
     "builders": [
       "chromium.android:android-marshmallow-x86-rel",
       "tryserver.chromium.android:android-marshmallow-x86-rel"
-    ]
-  },
-  "tryserver.chromium.android:android-marshmallow-x86-rel-non-cq": {
-    "builders": [
-      "chromium.android:android-marshmallow-x86-rel-non-cq",
-      "tryserver.chromium.android:android-marshmallow-x86-rel-non-cq"
     ]
   },
   "tryserver.chromium.android:android-nougat-arm64-rel": {
