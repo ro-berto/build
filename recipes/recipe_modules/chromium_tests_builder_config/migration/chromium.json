@@ -2377,12 +2377,6 @@
       "tryserver.chromium.linux:cast_shell_linux_arm64"
     ]
   },
-  "chromium.linux:Cast Linux Debug": {
-    "builders": [
-      "chromium.linux:Cast Linux Debug",
-      "tryserver.chromium.linux:cast_shell_linux_dbg"
-    ]
-  },
   "chromium.linux:Leak Detection Linux": {
     "builders": [
       "chromium.linux:Leak Detection Linux",
@@ -3644,12 +3638,6 @@
     "builders": [
       "chromium.linux:Cast Linux ARM64",
       "tryserver.chromium.linux:cast_shell_linux_arm64"
-    ]
-  },
-  "tryserver.chromium.linux:cast_shell_linux_dbg": {
-    "builders": [
-      "chromium.linux:Cast Linux Debug",
-      "tryserver.chromium.linux:cast_shell_linux_dbg"
     ]
   },
   "tryserver.chromium.linux:fuchsia-fyi-arm64-femu": {
