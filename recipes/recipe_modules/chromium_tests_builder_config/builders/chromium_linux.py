@@ -13,8 +13,10 @@ def _chromium_linux_spec(**kwargs):
 # //infra/config/subprojects/chromium/ci/chromium.linux.star
 # * Linux Builder
 # * Linux Builder (dbg)
+# * Linux Builder (Wayland)
 # * Linux Tests
 # * Linux Tests (dbg)(1)
+# * Linux Tests (Wayland)
 # * linux-bfcache-rel
 # * linux-extended-tracing-rel
 # * Network Service Linux
@@ -29,42 +31,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            simulation_platform='linux',
-        ),
-    'Linux Builder (Wayland)':
-        _chromium_linux_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'use_clang_coverage',
-                'enable_reclient',
-            ],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            simulation_platform='linux',
-        ),
-    'Linux Tests (Wayland)':
-        _chromium_linux_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'use_clang_coverage',
-                'enable_reclient',
-            ],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            execution_mode=builder_spec.TEST,
-            parent_buildername='Linux Builder (Wayland)',
             simulation_platform='linux',
         ),
     'Cast Audio Linux':

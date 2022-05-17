@@ -2544,20 +2544,6 @@
       "tryserver.chromium.linux:leak_detection_linux"
     ]
   },
-  "chromium.linux:Linux Builder (Wayland)": {
-    "builders": [
-      "chromium.linux:Linux Builder (Wayland)",
-      "chromium.linux:Linux Tests (Wayland)",
-      "tryserver.chromium.linux:linux-wayland-rel"
-    ]
-  },
-  "chromium.linux:Linux Tests (Wayland)": {
-    "builders": [
-      "chromium.linux:Linux Builder (Wayland)",
-      "chromium.linux:Linux Tests (Wayland)",
-      "tryserver.chromium.linux:linux-wayland-rel"
-    ]
-  },
   "chromium.linux:linux-no-base-tracing-rel": {
     "builders": [
       "chromium.linux:linux-no-base-tracing-rel",
@@ -4178,13 +4164,6 @@
     "builders": [
       "chromium.fyi:Linux Viz",
       "tryserver.chromium.linux:linux-viz-rel"
-    ]
-  },
-  "tryserver.chromium.linux:linux-wayland-rel": {
-    "builders": [
-      "chromium.linux:Linux Builder (Wayland)",
-      "chromium.linux:Linux Tests (Wayland)",
-      "tryserver.chromium.linux:linux-wayland-rel"
     ]
   },
   "tryserver.chromium.linux:linux-webkit-msan-rel": {
