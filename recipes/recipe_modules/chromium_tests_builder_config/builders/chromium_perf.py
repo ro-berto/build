@@ -7,7 +7,7 @@ from .. import builder_spec
 from RECIPE_MODULES.build.chromium import CONFIG_CTX as CHROMIUM_CONFIG_CTX
 
 SPEC = {}
-LEGACY_SPEC = {}
+PINPOINT_SPEC = {}
 
 
 @CHROMIUM_CONFIG_CTX(includes=[
@@ -139,6 +139,22 @@ def _AddIsolatedTestSpec(name,
       cros_boards=cros_boards,
       target_arch=target_arch)
   SPEC[name] = spec
+
+
+def _AddPinpointPGOTestSpec(name,
+                            platform,
+                            parent_buildername,
+                            target_bits=64,
+                            target_arch=None,
+                            cros_boards=None):
+  spec = TestSpec(
+      'chromium_perf',
+      platform,
+      target_bits,
+      parent_buildername=parent_buildername,
+      cros_boards=cros_boards,
+      target_arch=target_arch)
+  PINPOINT_SPEC[name] = spec
 
 
 def _AddBuildSpec(name,
@@ -317,7 +333,31 @@ _AddIsolatedTestSpec('mac-laptop_high_end-processor-perf', 'mac',
 
 # Deprecated in perf waterfall. Needed for pinpoint when running Chrome
 # Health on old commits.
-LEGACY_SPEC['mac-10_12_laptop_low_end-perf'] = TestSpec('chromium_perf', 'mac',
-                                                        64, 'mac-builder-perf')
-LEGACY_SPEC['mac-10_13_laptop_high_end-perf'] = TestSpec(
-    'chromium_perf', 'mac', 64, 'mac-builder-perf')
+_AddPinpointPGOTestSpec('mac-10_12_laptop_low_end-perf', 'mac',
+                        'mac-builder-perf')
+_AddPinpointPGOTestSpec('mac-10_13_laptop_high_end-perf', 'mac',
+                        'mac-builder-perf')
+
+# Pinpoint PGO bots
+_AddPinpointPGOTestSpec(
+    'android-go-perf-pgo', 'android', 'android-builder-perf', target_bits=32)
+_AddPinpointPGOTestSpec('android-pixel2-perf-pgo', 'android',
+                        'android_arm64-builder-perf')
+_AddPinpointPGOTestSpec('android-pixel2_webview-perf-pgo', 'android',
+                        'android_arm64-builder-perf')
+_AddPinpointPGOTestSpec('android-pixel4-perf-pgo', 'android',
+                        'android_arm64-builder-perf')
+_AddPinpointPGOTestSpec('android-pixel4_weblayer-perf-pgo', 'android',
+                        'android_arm64-builder-perf')
+_AddPinpointPGOTestSpec('android-pixel4a_power-perf-pgo', 'android',
+                        'android_arm64-builder-perf')
+_AddPinpointPGOTestSpec('win-10_laptop_low_end-perf-pgo', 'win',
+                        'win64-builder-perf')
+_AddPinpointPGOTestSpec('win-10_amd_laptop-perf-pgo', 'win',
+                        'win64-builder-perf')
+_AddPinpointPGOTestSpec(
+    'mac-m1_mini_2020-perf-pgo',
+    'mac',
+    'mac-arm-builder-perf',
+    target_arch='arm')
+_AddPinpointPGOTestSpec('linux-perf-pgo', 'linux', 'linux-builder-perf')
