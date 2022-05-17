@@ -2484,12 +2484,6 @@
       "chromium.gpu:Win10 x64 Debug (NVIDIA)"
     ]
   },
-  "chromium.linux:Cast Audio Linux": {
-    "builders": [
-      "chromium.linux:Cast Audio Linux",
-      "tryserver.chromium.linux:cast_shell_audio_linux"
-    ]
-  },
   "chromium.linux:Cast Linux": {
     "builders": [
       "chromium.linux:Cast Linux",
@@ -3804,12 +3798,6 @@
       "chromium.dawn:Dawn Win10 x64 Release (Intel HD 630)",
       "chromium.dawn:Dawn Win10 x64 Release (NVIDIA)",
       "tryserver.chromium.dawn:win-dawn-rel"
-    ]
-  },
-  "tryserver.chromium.linux:cast_shell_audio_linux": {
-    "builders": [
-      "chromium.linux:Cast Audio Linux",
-      "tryserver.chromium.linux:cast_shell_audio_linux"
     ]
   },
   "tryserver.chromium.linux:cast_shell_linux": {
