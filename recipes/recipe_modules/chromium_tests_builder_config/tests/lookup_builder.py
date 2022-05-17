@@ -31,7 +31,13 @@ PROPERTIES = {
 
 BUILDER_DB = ctbc.BuilderDatabase.create({
     'fake-group': {
-        'fake-builder': ctbc.BuilderSpec.create(),
+        'fake-builder':
+            ctbc.BuilderSpec.create(),
+        'fake-tester':
+            ctbc.BuilderSpec.create(
+                execution_mode=ctbc.TEST,
+                parent_buildername='fake-builder',
+            ),
     },
 })
 
@@ -41,6 +47,7 @@ TRY_DB = ctbc.TryDatabase.create({
             ctbc.TrySpec.create_for_single_mirror(
                 'fake-group',
                 'fake-builder',
+                include_all_triggered_testers=True,
                 is_compile_only=True,
                 analyze_names=('foo', 'bar'),
                 retry_failed_shards=False,
@@ -75,8 +82,33 @@ def GenTests(api):
                   'fake-try-group', 'fake-try-builder'),),
               builder_ids=(
                   BuilderId.create_for_group('fake-group', 'fake-builder'),),
+              builder_ids_in_scope_for_testing=set([
+                  BuilderId.create_for_group('fake-group', 'fake-builder'),
+                  BuilderId.create_for_group('fake-group', 'fake-tester')
+              ]),
+              include_all_triggered_testers=True,
+              is_compile_only=False,
+              analyze_names=(),
+              retry_failed_shards=True,
+              retry_without_patch=True,
+              regression_test_selection=ctbc.NEVER,
+              regression_test_selection_recall=0.95,
+          )),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'tester',
+      api.chromium.ci_build(builder_group='fake-group', builder='fake-tester'),
+      api.properties(
+          expected_attrs=dict(
+              mirroring_try_builders=(BuilderId.create_for_group(
+                  'fake-try-group', 'fake-try-builder'),),
+              builder_ids=(
+                  BuilderId.create_for_group('fake-group', 'fake-tester'),),
               builder_ids_in_scope_for_testing=set(
-                  [BuilderId.create_for_group('fake-group', 'fake-builder')]),
+                  [BuilderId.create_for_group('fake-group', 'fake-tester')]),
               include_all_triggered_testers=True,
               is_compile_only=False,
               analyze_names=(),
@@ -119,9 +151,11 @@ def GenTests(api):
               mirroring_try_builders=(),
               builder_ids=(
                   BuilderId.create_for_group('fake-group', 'fake-builder'),),
-              builder_ids_in_scope_for_testing=set(
-                  [BuilderId.create_for_group('fake-group', 'fake-builder')]),
-              include_all_triggered_testers=False,
+              builder_ids_in_scope_for_testing=set([
+                  BuilderId.create_for_group('fake-group', 'fake-builder'),
+                  BuilderId.create_for_group('fake-group', 'fake-tester')
+              ]),
+              include_all_triggered_testers=True,
               is_compile_only=True,
               analyze_names=('foo', 'bar'),
               retry_failed_shards=False,

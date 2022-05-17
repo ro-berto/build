@@ -150,9 +150,8 @@
     "cmd": [],
     "name": "report builders",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>running builder 'Win Builder' on group 'chromium.win'<br/>running tester 'Win7 Tests (1)' on group 'chromium.win' against builder 'Win Builder' on group 'chromium.win'@@@",
-      "@@@STEP_LINK@Win Builder@https://ci.chromium.org/p/chromium/builders/ci/Win%20Builder@@@",
-      "@@@STEP_LINK@Win7 Tests (1)@https://ci.chromium.org/p/chromium/builders/ci/Win7%20Tests%20(1)@@@"
+      "@@@STEP_TEXT@<br/>running builder 'fake-builder' on group 'fake-group'@@@",
+      "@@@STEP_LINK@fake-builder@https://ci.chromium.org/p/chromium/builders/ci/fake-builder@@@"
     ]
   },
   {
@@ -363,7 +362,7 @@
     "cwd": "[CACHE]\\builder",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_REPORT_BUILD": "chromium/try/win7-rel/8945511751514863184",
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/try/fake-try-builder/8945511751514863184",
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "1800"
     },
@@ -637,7 +636,7 @@
     "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_REPORT_BUILD": "chromium/try/win7-rel/8945511751514863184"
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/try/fake-try-builder/8945511751514863184"
     },
     "env_suffixes": {
       "PATH": [
@@ -663,7 +662,7 @@
       "python3",
       "-u",
       "RECIPE_MODULE[recipe_engine::json]\\resources\\read.py",
-      "[CACHE]\\builder\\src\\testing\\buildbot\\chromium.win.json",
+      "[CACHE]\\builder\\src\\testing\\buildbot\\fake-group.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -682,11 +681,11 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "read test spec (chromium.win.json)",
+    "name": "read test spec (fake-group.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [CACHE]\\builder\\src\\testing\\buildbot\\chromium.win.json@@@",
+      "@@@STEP_TEXT@path: [CACHE]\\builder\\src\\testing\\buildbot\\fake-group.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Win7 Tests (1)\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"fake-builder\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      \"base_unittests\"@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
@@ -771,14 +770,13 @@
       "[CACHE]\\builder\\src\\tools\\mb\\mb.py",
       "analyze",
       "-m",
-      "tryserver.chromium.win",
+      "fake-try-group",
       "-b",
-      "win7-rel",
+      "fake-try-builder",
       "--config-file",
       "[CACHE]\\builder\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
       "[CACHE]\\goma\\client",
-      "--luci-auth",
       "-v",
       "//out/Release",
       "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": [\"base_unittests\"]}",
@@ -914,14 +912,13 @@
       "[CACHE]\\builder\\src\\tools\\mb\\mb.py",
       "lookup",
       "-m",
-      "tryserver.chromium.win",
+      "fake-try-group",
       "-b",
-      "win7-rel",
+      "fake-try-builder",
       "--config-file",
       "[CACHE]\\builder\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
       "[CACHE]\\goma\\client",
-      "--luci-auth",
       "--recursive"
     ],
     "cwd": "[CACHE]\\builder\\src",
@@ -953,14 +950,13 @@
       "[CACHE]\\builder\\src\\tools\\mb\\mb.py",
       "gen",
       "-m",
-      "tryserver.chromium.win",
+      "fake-try-group",
       "-b",
-      "win7-rel",
+      "fake-try-builder",
       "--config-file",
       "[CACHE]\\builder\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
       "[CACHE]\\goma\\client",
-      "--luci-auth",
       "--json-output",
       "/path/to/tmp/json",
       "//out/Release"
@@ -1034,7 +1030,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]\\goma\\data\\win7_rel"
+      "[CACHE]\\goma\\data\\fake_try_builder"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
@@ -1069,12 +1065,11 @@
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_ARBITRARY_TOOLCHAIN_SUPPORT": "true",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\win7_rel",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\fake_try_builder",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_ENABLE_GLOBAL_FILE_STAT_CACHE": "true",
       "GOMA_FAIL_FAST": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
@@ -1373,9 +1368,9 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"try\", \"builder\": \"win7-rel\", \"project\": \"chromium\"}",
+      "{\"bucket\": \"try\", \"builder\": \"fake-try-builder\", \"project\": \"chromium\"}",
       "--buildbot-buildername",
-      "win7-rel"
+      "fake-try-builder"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
@@ -1483,7 +1478,7 @@
       "rdb",
       "stream",
       "-var",
-      "builder:win7-rel",
+      "builder:fake-try-builder",
       "-var",
       "test_suite:base_unittests",
       "-tag",
@@ -1513,13 +1508,13 @@
       "--target",
       "Release",
       "--build-properties",
-      "{\"bot_id\": \"test_bot\", \"builder_group\": \"tryserver.chromium.win\", \"recipe\": \"chromium_trybot\", \"slavename\": \"test_bot\"}",
+      "{\"bot_id\": \"test_bot\", \"builder_group\": \"fake-try-group\", \"recipe\": \"chromium_trybot\", \"slavename\": \"test_bot\"}",
       "--annotate=gtest",
       "--test-type=base_unittests",
       "--step-name=base_unittests (with patch)",
       "--test-launcher-summary-output",
       "[CLEANUP]\\tmp_tmp_1",
-      "--builder-name=win7-rel",
+      "--builder-name=fake-try-builder",
       "--slave-name=test_bot",
       "--build-number=571",
       "base_unittests.exe"
@@ -1554,9 +1549,9 @@
       "--input-json",
       "[CLEANUP]\\tmp_tmp_1",
       "--builder-group",
-      "tryserver.chromium.win",
+      "fake-try-group",
       "--builder-name",
-      "win7-rel",
+      "fake-try-builder",
       "--build-number",
       "571",
       "--test-type",

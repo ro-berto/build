@@ -120,9 +120,16 @@ def GenTests(api):
 
   yield api.test(
       'win',
-      api.platform.name('win'),
+      api.platform('win', 64),
       api.chromium.try_build(
-          builder_group='tryserver.chromium.win', builder='win7-rel'),
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
+      ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
   )
 
   yield api.test(

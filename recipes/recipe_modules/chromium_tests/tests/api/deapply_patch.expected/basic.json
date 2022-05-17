@@ -48,7 +48,7 @@
     ],
     "cwd": "[CACHE]\\builder",
     "env": {
-      "DEPOT_TOOLS_REPORT_BUILD": "chromium/try/win7-rel/8945511751514863184",
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/try/fake-try-builder/8945511751514863184",
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "1800"
     },
@@ -204,7 +204,7 @@
     "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_REPORT_BUILD": "chromium/try/win7-rel/8945511751514863184"
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/try/fake-try-builder/8945511751514863184"
     },
     "env_suffixes": {
       "PATH": [

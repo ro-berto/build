@@ -973,32 +973,21 @@ TRYBOTS = try_spec.TryDatabase.create({
     # //infra/config/subprojects/chromium/try/tryserver.chromium.win.star
     # * win_archive
     # * win_chromium_compile_dbg_ng
+    # * win_chromium_compile_rel_ng
     # * win_chromium_x64_rel_ng
+    # * win_optional_gpu_tests_rel
     # * win_x64_archive
     # * win-asan
     # * win10_chromium_inverse_fieldtrials_x64_fyi_rel_ng
     # * win10_chromium_x64_dbg_ng
     # * win10_chromium_x64_rel_ng
     # * win11-x64-fyi-rel
-    # * win_optional_gpu_tests_rel
+    # * win7-rel
     'tryserver.chromium.win': {
         'win-annotator-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
                 buildername='win-annotator-rel',
-            ),
-        'win7-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.win',
-                buildername='Win Builder',
-                tester='Win7 Tests (1)',
-            ),
-        'win_chromium_compile_rel_ng':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.win',
-                buildername='Win Builder',
-                is_compile_only=True,
-                include_all_triggered_testers=True,
             ),
         # Manually triggered GPU trybots.
         'gpu-fyi-try-win10-amd-rel-64':

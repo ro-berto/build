@@ -811,18 +811,27 @@ def GenTests(api):
 
   yield api.test(
       'dynamic_swarmed_isolated_script_test_win_gpu',
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.win',
-          builder='Win7 Tests (1)',
-          parent_buildername='Win Builder',
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-tester',
+          parent_buildername='fake-builder',
       ),
+      api.platform('win', 64),
+      api.chromium_tests_builder_config.properties(
+          api.chromium_tests_builder_config.properties_assembler_for_ci_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+          ).with_parent(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(swarm_hashes={
           'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
-          'chromium.win',
+          'fake-group',
           {
-              'Win7 Tests (1)': {
+              'fake-tester': {
                   'isolated_scripts': [
                       {
                           'isolate_name': 'telemetry_gpu_unittests',
@@ -856,17 +865,26 @@ def GenTests(api):
 
   yield api.test(
       'dynamic_swarmed_isolated_script_test_win_non_gpu',
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.win',
-          builder='Win7 Tests (1)',
-          parent_buildername='Win Builder',
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-tester',
+          parent_buildername='fake-builder',
       ),
+      api.platform('win', 64),
+      api.chromium_tests_builder_config.properties(
+          api.chromium_tests_builder_config.properties_assembler_for_ci_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+          ).with_parent(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(swarm_hashes={
           'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size',
       }),
       api.chromium_tests.read_source_side_spec(
-          'chromium.win', {
-              'Win7 Tests (1)': {
+          'fake-group', {
+              'fake-tester': {
                   'isolated_scripts': [{
                       'isolate_name': 'telemetry_gpu_unittests',
                       'name': 'telemetry_gpu_unittests',
@@ -995,14 +1013,28 @@ def GenTests(api):
 
   yield api.test(
       'dynamic_gtest_win',
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.win',
-          builder='Win7 Tests (1)',
-          parent_buildername='Win Builder',
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-tester',
+          parent_buildername='fake-builder',
       ),
+      api.platform('win', 64),
+      api.chromium_tests_builder_config.properties(
+          api.chromium_tests_builder_config.properties_assembler_for_ci_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+              builder_spec=ctbc.BuilderSpec.create(
+                  gclient_config='chromium',
+                  chromium_config='chromium',
+                  build_gs_bucket='fake-gs-bucket',
+              ),
+          ).with_parent(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.chromium_tests.read_source_side_spec(
-          'chromium.win', {
-              'Win7 Tests (1)': {
+          'fake-group', {
+              'fake-tester': {
                   'gtest_tests': [
                       'aura_unittests',
                       {

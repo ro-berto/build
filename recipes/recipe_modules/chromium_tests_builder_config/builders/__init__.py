@@ -28,7 +28,6 @@ from . import chromium_swarm
 from . import chromium_updater
 from . import chromium_webrtc
 from . import chromium_webrtc_fyi
-from . import chromium_win
 from . import client_devtools_frontend_integration
 from . import client_openscreen_chromium
 from . import client_v8_chromium
@@ -41,9 +40,11 @@ from . import tryserver_webrtc
 from . import migration_testing
 
 # Builders for the chromium.mac builder group are all defined src-side in
-# src-side in infra/config/subprojects/chromium/ci/chromium.mac.star
+# infra/config/subprojects/chromium/ci/chromium.mac.star
 # Builders for the chromium.reclient.fyi builder group are all defined
 # src-side in infra/config/subprojects/reclient/reclient.star
+# Builders for the chromium.win builder group are all defined src-side in
+# infra/config/subprojects/chromium/ci/chromium.win.star
 
 BUILDERS = builder_db.BuilderDatabase.create({
     'chromium':
@@ -98,8 +99,6 @@ BUILDERS = builder_db.BuilderDatabase.create({
         chromium_webrtc.SPEC,
     'chromium.webrtc.fyi':
         chromium_webrtc_fyi.SPEC,
-    'chromium.win':
-        chromium_win.SPEC,
     'client.devtools-frontend.integration':
         client_devtools_frontend_integration.SPEC,
     'client.openscreen.chromium':

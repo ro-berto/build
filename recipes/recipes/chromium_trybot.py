@@ -126,12 +126,18 @@ def GenTests(api):
   # http://crbug.com/520660
   yield api.test(
       'process_dumps_failure',
-      api.chromium_tests_builder_config.try_build(
-          builder_group='tryserver.chromium.win',
-          builder='win7-rel',
+      api.platform('win', 64),
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
       ),
-      api.chromium_tests.read_source_side_spec('chromium.win', {
-          'Win7 Tests (1)': {
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
+      api.chromium_tests.read_source_side_spec('fake-group', {
+          'fake-builder': {
               'gtest_tests': ['base_unittests'],
           },
       }),
@@ -528,10 +534,16 @@ def GenTests(api):
 
   yield api.test(
       'runhooks_failure',
-      api.chromium_tests_builder_config.try_build(
-          builder='win7-rel',
-          builder_group='tryserver.chromium.win',
+      api.platform('linux', 64),
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.step_data('gclient runhooks (with patch)', retcode=1),
       api.step_data('gclient runhooks (without patch)', retcode=1),
   )
@@ -810,11 +822,17 @@ def GenTests(api):
 
   yield api.test(
       'use_v8_patch_on_chromium_trybot',
-      api.chromium_tests_builder_config.try_build(
-          builder='win7-rel',
-          builder_group='tryserver.chromium.win',
+      api.platform('linux', 64),
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
           git_repo='https://chromium.googlesource.com/v8/v8',
       ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
   )
 
   yield api.test(
@@ -875,11 +893,16 @@ def GenTests(api):
 
   yield api.test(
       'use_skia_patch_on_chromium_trybot',
-      api.chromium_tests_builder_config.try_build(
-          builder='win7-rel',
-          builder_group='tryserver.chromium.win',
-          git_repo='https://skia.googlesource.com/skia',
-      ),
+      api.platform('linux', 64),
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
+          git_repo='https://skia.googlesource.com/skia'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
   )
 
   def swarmed_webkit_tests():

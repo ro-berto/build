@@ -2,7 +2,7 @@
   {
     "cmd": [
       "vpython",
-      "RECIPE_REPO[depot_tools]\\gerrit_client.py",
+      "RECIPE_REPO[depot_tools]/gerrit_client.py",
       "changes",
       "--host",
       "https://chromium-review.googlesource.com",
@@ -19,7 +19,7 @@
     ],
     "env": {
       "CHROME_HEADLESS": "1",
-      "PATH": "<PATH>;RECIPE_REPO[depot_tools]"
+      "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
     },
     "infra_step": true,
     "luci_context": {
@@ -57,7 +57,7 @@
   {
     "cmd": [
       "vpython",
-      "RECIPE_REPO[depot_tools]\\gerrit_client.py",
+      "RECIPE_REPO[depot_tools]/gerrit_client.py",
       "changes",
       "--host",
       "https://chromium-review.googlesource.com",
@@ -74,7 +74,7 @@
     ],
     "env": {
       "CHROME_HEADLESS": "1",
-      "PATH": "<PATH>;RECIPE_REPO[depot_tools]"
+      "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
     },
     "infra_step": true,
     "luci_context": {
@@ -119,7 +119,7 @@
   {
     "cmd": [
       "python",
-      "RECIPE_REPO[depot_tools]\\git_footers.py",
+      "RECIPE_REPO[depot_tools]/git_footers.py",
       "--json",
       "/path/to/tmp/json"
     ],
@@ -150,9 +150,8 @@
     "cmd": [],
     "name": "report builders",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>running builder 'Win Builder' on group 'chromium.win'<br/>running tester 'Win7 Tests (1)' on group 'chromium.win' against builder 'Win Builder' on group 'chromium.win'@@@",
-      "@@@STEP_LINK@Win Builder@https://ci.chromium.org/p/chromium/builders/ci/Win%20Builder@@@",
-      "@@@STEP_LINK@Win7 Tests (1)@https://ci.chromium.org/p/chromium/builders/ci/Win7%20Tests%20(1)@@@"
+      "@@@STEP_TEXT@<br/>running builder 'fake-builder' on group 'fake-group'@@@",
+      "@@@STEP_LINK@fake-builder@https://ci.chromium.org/p/chromium/builders/ci/fake-builder@@@"
     ]
   },
   {
@@ -167,11 +166,11 @@
     "cmd": [
       "vpython",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "listdir",
-      "[CACHE]\\builder"
+      "[CACHE]/builder"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -196,42 +195,13 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_REPO[build]\\recipes\\kill_processes.py"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "chromium:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "taskkill"
-  },
-  {
     "cmd": [],
     "name": "gclient config",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@config@{@@@",
       "@@@STEP_LOG_LINE@config@  \"BUILDSPEC_VERSION\": null, @@@",
       "@@@STEP_LOG_LINE@config@  \"USE_MIRROR\": true, @@@",
-      "@@@STEP_LOG_LINE@config@  \"cache_dir\": \"[CACHE]\\\\git\", @@@",
+      "@@@STEP_LOG_LINE@config@  \"cache_dir\": \"[CACHE]/git\", @@@",
       "@@@STEP_LOG_LINE@config@  \"delete_unversioned_trees\": true, @@@",
       "@@@STEP_LOG_LINE@config@  \"deps_os\": {}, @@@",
       "@@@STEP_LOG_LINE@config@  \"got_revision_mapping\": {}, @@@",
@@ -339,17 +309,17 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
+      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]\\\\git'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
       "--patch_root",
       "src",
       "--revision_mapping_file",
       "{\"got_angle_revision\": \"src/third_party/angle\", \"got_buildtools_revision\": \"src/buildtools\", \"got_dawn_revision\": \"src/third_party/dawn\", \"got_nacl_revision\": \"src/native_client\", \"got_revision\": \"src\", \"got_swiftshader_revision\": \"src/third_party/swiftshader\", \"got_v8_revision\": \"src/v8\", \"got_webrtc_revision\": \"src/third_party/webrtc\"}",
       "--git-cache-dir",
-      "[CACHE]\\git",
+      "[CACHE]/git",
       "--cleanup-dir",
-      "[CLEANUP]\\bot_update",
+      "[CLEANUP]/bot_update",
       "--output_json",
       "/path/to/tmp/json",
       "--patch_ref",
@@ -360,10 +330,10 @@
       "refs/heads/main",
       "--no_fetch_tags"
     ],
-    "cwd": "[CACHE]\\builder",
+    "cwd": "[CACHE]/builder",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_REPORT_BUILD": "chromium/try/win7-rel/8945511751514863184",
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/try/fake-try-builder/8945511751514863184",
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "1800"
     },
@@ -539,10 +509,10 @@
   },
   {
     "cmd": [
-      "cipd.bat",
+      "cipd",
       "ensure",
       "-root",
-      "[CACHE]\\goma\\client",
+      "[CACHE]/goma/client",
       "-ensure-file",
       "infra_internal/goma/client/${platform} release",
       "-max-threads",
@@ -584,10 +554,10 @@
   },
   {
     "cmd": [
-      "cipd.bat",
+      "cipd",
       "ensure",
       "-root",
-      "[CACHE]\\goma\\bqupload",
+      "[CACHE]/goma/bqupload",
       "-ensure-file",
       "infra/tools/bqupload/${platform} bqupload_pin",
       "-max-threads",
@@ -631,13 +601,13 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_REPO[depot_tools]\\gclient.py",
+      "RECIPE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_REPORT_BUILD": "chromium/try/win7-rel/8945511751514863184"
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/try/fake-try-builder/8945511751514863184"
     },
     "env_suffixes": {
       "PATH": [
@@ -663,58 +633,29 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_REPO[build]\\recipes\\kill_processes.py"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "chromium:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "taskkill (2)"
-  },
-  {
-    "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
+      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]\\\\git'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
       "--patch_root",
       "src",
       "--revision_mapping_file",
       "{\"got_angle_revision\": \"src/third_party/angle\", \"got_buildtools_revision\": \"src/buildtools\", \"got_dawn_revision\": \"src/third_party/dawn\", \"got_nacl_revision\": \"src/native_client\", \"got_revision\": \"src\", \"got_swiftshader_revision\": \"src/third_party/swiftshader\", \"got_v8_revision\": \"src/v8\", \"got_webrtc_revision\": \"src/third_party/webrtc\"}",
       "--git-cache-dir",
-      "[CACHE]\\git",
+      "[CACHE]/git",
       "--cleanup-dir",
-      "[CLEANUP]\\bot_update",
+      "[CLEANUP]/bot_update",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
       "src@f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--no_fetch_tags"
     ],
-    "cwd": "[CACHE]\\builder",
+    "cwd": "[CACHE]/builder",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_REPORT_BUILD": "chromium/try/win7-rel/8945511751514863184",
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/try/fake-try-builder/8945511751514863184",
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "1800"
     },
@@ -864,13 +805,13 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_REPO[depot_tools]\\gclient.py",
+      "RECIPE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_REPORT_BUILD": "chromium/try/win7-rel/8945511751514863184"
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/try/fake-try-builder/8945511751514863184"
     },
     "env_suffixes": {
       "PATH": [

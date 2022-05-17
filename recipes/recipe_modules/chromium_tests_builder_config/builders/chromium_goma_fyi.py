@@ -6,7 +6,6 @@ import six
 
 from .. import builder_spec
 from . import chromium
-from . import chromium_win
 
 RESULTS_URL = 'https://chromeperf.appspot.com'
 
@@ -33,9 +32,14 @@ def chromium_apply_configs(base_config, config_names):
 # * Mac Builder (dbg) Goma RBE Latest Client (clobber)
 # * Mac M1 Builder (dbg) Goma RBE Canary (clobber)
 # * Win Builder (dbg) Goma RBE ATS Canary
-# * Win Builder (dbg) Goma RBE Canary
 # * Win Builder (dbg) Goma RBE ATS Latest Client
+# * Win Builder (dbg) Goma RBE Canary
 # * Win Builder (dbg) Goma RBE Latest Client
+# * Win Builder Goma RBE ATS Canary
+# * Win Builder Goma RBE ATS Latest Client
+# * Win Builder Goma RBE Canary
+# * Win Builder Goma RBE Canary (clobber)
+# * Win Builder Goma RBE Latest Client
 # * chromeos-amd64-generic-rel-goma-rbe-canary
 # * chromeos-amd64-generic-rel-goma-rbe-latest
 # * ios-device-goma-rbe-canary-clobber
@@ -48,25 +52,6 @@ def chromium_apply_configs(base_config, config_names):
 # * mac-archive-rel-goma-rbe-latest
 
 SPEC = {
-    # Canary RBE
-    'Win Builder Goma RBE Canary':
-        chromium_apply_configs(chromium_win.SPEC['Win Builder'],
-                               ['goma_canary', 'goma_use_local']),
-    'Win Builder Goma RBE Canary (clobber)':
-        chromium_apply_configs(chromium_win.SPEC['Win Builder'],
-                               ['goma_canary', 'goma_use_local', 'clobber']),
-    'Win Builder Goma RBE ATS Canary':
-        chromium_apply_configs(chromium_win.SPEC['Win Builder'],
-                               ['goma_canary', 'goma_use_local']),
-
-    # Latest RBE
-    'Win Builder Goma RBE Latest Client':
-        chromium_apply_configs(chromium_win.SPEC['Win Builder'],
-                               ['goma_latest_client', 'goma_use_local']),
-    'Win Builder Goma RBE ATS Latest Client':
-        chromium_apply_configs(chromium_win.SPEC['Win Builder'],
-                               ['goma_latest_client', 'goma_use_local']),
-
     # This builder no longer exists, but keep it around so that
     # Goma's canary bots can copy its config.
     'Android Builder (dbg)':
