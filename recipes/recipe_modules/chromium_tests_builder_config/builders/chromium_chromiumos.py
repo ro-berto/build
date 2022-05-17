@@ -68,6 +68,7 @@ def _config(name,
 
 # The config for the following builders is now specified src-side in
 # //infra/config/subprojects/chromium/ci/chromium.chromiumos.star
+# * chromeos-amd64-generic-asan-rel
 # * chromeos-amd64-generic-cfi-thin-lto-rel
 # * chromeos-amd64-generic-dbg
 # * chromeos-amd64-generic-lacros-dbg
@@ -98,6 +99,5 @@ SPEC.update([
     _config(
         'linux-lacros-rel-code-coverage',
         gclient_apply_config=['use_clang_coverage']),
-    _config('chromeos-amd64-generic-asan-rel', cros_boards='amd64-generic'),
     _config('linux-cfm-rel'),
 ])

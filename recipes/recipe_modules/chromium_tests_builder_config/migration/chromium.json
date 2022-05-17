@@ -432,11 +432,6 @@
       "chromium.chromiumos:Linux ChromiumOS Full"
     ]
   },
-  "chromium.chromiumos:chromeos-amd64-generic-asan-rel": {
-    "builders": [
-      "chromium.chromiumos:chromeos-amd64-generic-asan-rel"
-    ]
-  },
   "chromium.chromiumos:lacros-amd64-generic-rel": {
     "builders": [
       "chromium.chromiumos:lacros-amd64-generic-rel",
