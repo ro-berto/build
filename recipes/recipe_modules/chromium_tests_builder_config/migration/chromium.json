@@ -1570,61 +1570,6 @@
       "chromium.goma:Chromium iOS Goma RBE ToT"
     ]
   },
-  "chromium.gpu.fyi:ANGLE GPU Android Release (Nexus 5X)": {
-    "blockers": [
-      "builder 'chromium.gpu.fyi:ANGLE GPU Android Release (Nexus 5X)' does not exist"
-    ],
-    "builders": [
-      "chromium.gpu.fyi:ANGLE GPU Android Release (Nexus 5X)",
-      "tryserver.chromium.angle:android_angle_rel_ng"
-    ]
-  },
-  "chromium.gpu.fyi:ANGLE GPU Linux Release (Intel HD 630)": {
-    "blockers": [
-      "cannot migrate builder 'chromium.gpu.fyi:ANGLE GPU Linux Release (Intel HD 630)' with provide-test-spec execution_mode",
-      "cannot migrate builder 'chromium.gpu.fyi:ANGLE GPU Linux Release (NVIDIA)' with provide-test-spec execution_mode"
-    ],
-    "builders": [
-      "chromium.gpu.fyi:ANGLE GPU Linux Release (Intel HD 630)",
-      "chromium.gpu.fyi:ANGLE GPU Linux Release (NVIDIA)",
-      "chromium.gpu.fyi:GPU FYI Linux Builder",
-      "chromium.gpu.fyi:Linux FYI Experimental Release (Intel HD 630)",
-      "chromium.gpu.fyi:Linux FYI Experimental Release (NVIDIA)",
-      "chromium.gpu.fyi:Linux FYI Release (AMD RX 5500 XT)",
-      "chromium.gpu.fyi:Linux FYI Release (Intel HD 630)",
-      "chromium.gpu.fyi:Linux FYI Release (Intel UHD 630)",
-      "chromium.gpu.fyi:Linux FYI Release (NVIDIA)",
-      "tryserver.chromium.angle:linux-angle-rel",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-amd-rel",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-intel-exp",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-intel-rel",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-nvidia-exp",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-nvidia-rel"
-    ]
-  },
-  "chromium.gpu.fyi:ANGLE GPU Linux Release (NVIDIA)": {
-    "blockers": [
-      "cannot migrate builder 'chromium.gpu.fyi:ANGLE GPU Linux Release (Intel HD 630)' with provide-test-spec execution_mode",
-      "cannot migrate builder 'chromium.gpu.fyi:ANGLE GPU Linux Release (NVIDIA)' with provide-test-spec execution_mode"
-    ],
-    "builders": [
-      "chromium.gpu.fyi:ANGLE GPU Linux Release (Intel HD 630)",
-      "chromium.gpu.fyi:ANGLE GPU Linux Release (NVIDIA)",
-      "chromium.gpu.fyi:GPU FYI Linux Builder",
-      "chromium.gpu.fyi:Linux FYI Experimental Release (Intel HD 630)",
-      "chromium.gpu.fyi:Linux FYI Experimental Release (NVIDIA)",
-      "chromium.gpu.fyi:Linux FYI Release (AMD RX 5500 XT)",
-      "chromium.gpu.fyi:Linux FYI Release (Intel HD 630)",
-      "chromium.gpu.fyi:Linux FYI Release (Intel UHD 630)",
-      "chromium.gpu.fyi:Linux FYI Release (NVIDIA)",
-      "tryserver.chromium.angle:linux-angle-rel",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-amd-rel",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-intel-exp",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-intel-rel",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-nvidia-exp",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-nvidia-rel"
-    ]
-  },
   "chromium.gpu.fyi:Android FYI Release (NVIDIA Shield TV)": {
     "builders": [
       "chromium.gpu.fyi:Android FYI Release (NVIDIA Shield TV)",
@@ -1735,15 +1680,6 @@
       "tryserver.chromium.android:gpu-fyi-try-android-pixel-6-64"
     ]
   },
-  "chromium.gpu.fyi:GPU FYI Fuchsia Builder": {
-    "blockers": [
-      "builder 'chromium.gpu.fyi:GPU FYI Fuchsia Builder' does not exist"
-    ],
-    "builders": [
-      "chromium.gpu.fyi:GPU FYI Fuchsia Builder",
-      "tryserver.chromium.angle:fuchsia-angle-rel"
-    ]
-  },
   "chromium.gpu.fyi:GPU FYI Lacros x64 Builder": {
     "builders": [
       "chromium.gpu.fyi:GPU FYI Lacros x64 Builder",
@@ -1754,13 +1690,7 @@
     ]
   },
   "chromium.gpu.fyi:GPU FYI Linux Builder": {
-    "blockers": [
-      "cannot migrate builder 'chromium.gpu.fyi:ANGLE GPU Linux Release (Intel HD 630)' with provide-test-spec execution_mode",
-      "cannot migrate builder 'chromium.gpu.fyi:ANGLE GPU Linux Release (NVIDIA)' with provide-test-spec execution_mode"
-    ],
     "builders": [
-      "chromium.gpu.fyi:ANGLE GPU Linux Release (Intel HD 630)",
-      "chromium.gpu.fyi:ANGLE GPU Linux Release (NVIDIA)",
       "chromium.gpu.fyi:GPU FYI Linux Builder",
       "chromium.gpu.fyi:Linux FYI Experimental Release (Intel HD 630)",
       "chromium.gpu.fyi:Linux FYI Experimental Release (NVIDIA)",
@@ -1768,7 +1698,6 @@
       "chromium.gpu.fyi:Linux FYI Release (Intel HD 630)",
       "chromium.gpu.fyi:Linux FYI Release (Intel UHD 630)",
       "chromium.gpu.fyi:Linux FYI Release (NVIDIA)",
-      "tryserver.chromium.angle:linux-angle-rel",
       "tryserver.chromium.linux:gpu-fyi-try-linux-amd-rel",
       "tryserver.chromium.linux:gpu-fyi-try-linux-intel-exp",
       "tryserver.chromium.linux:gpu-fyi-try-linux-intel-rel",
@@ -1920,13 +1849,7 @@
     ]
   },
   "chromium.gpu.fyi:Linux FYI Experimental Release (Intel HD 630)": {
-    "blockers": [
-      "cannot migrate builder 'chromium.gpu.fyi:ANGLE GPU Linux Release (Intel HD 630)' with provide-test-spec execution_mode",
-      "cannot migrate builder 'chromium.gpu.fyi:ANGLE GPU Linux Release (NVIDIA)' with provide-test-spec execution_mode"
-    ],
     "builders": [
-      "chromium.gpu.fyi:ANGLE GPU Linux Release (Intel HD 630)",
-      "chromium.gpu.fyi:ANGLE GPU Linux Release (NVIDIA)",
       "chromium.gpu.fyi:GPU FYI Linux Builder",
       "chromium.gpu.fyi:Linux FYI Experimental Release (Intel HD 630)",
       "chromium.gpu.fyi:Linux FYI Experimental Release (NVIDIA)",
@@ -1934,7 +1857,6 @@
       "chromium.gpu.fyi:Linux FYI Release (Intel HD 630)",
       "chromium.gpu.fyi:Linux FYI Release (Intel UHD 630)",
       "chromium.gpu.fyi:Linux FYI Release (NVIDIA)",
-      "tryserver.chromium.angle:linux-angle-rel",
       "tryserver.chromium.linux:gpu-fyi-try-linux-amd-rel",
       "tryserver.chromium.linux:gpu-fyi-try-linux-intel-exp",
       "tryserver.chromium.linux:gpu-fyi-try-linux-intel-rel",
@@ -1943,13 +1865,7 @@
     ]
   },
   "chromium.gpu.fyi:Linux FYI Experimental Release (NVIDIA)": {
-    "blockers": [
-      "cannot migrate builder 'chromium.gpu.fyi:ANGLE GPU Linux Release (Intel HD 630)' with provide-test-spec execution_mode",
-      "cannot migrate builder 'chromium.gpu.fyi:ANGLE GPU Linux Release (NVIDIA)' with provide-test-spec execution_mode"
-    ],
     "builders": [
-      "chromium.gpu.fyi:ANGLE GPU Linux Release (Intel HD 630)",
-      "chromium.gpu.fyi:ANGLE GPU Linux Release (NVIDIA)",
       "chromium.gpu.fyi:GPU FYI Linux Builder",
       "chromium.gpu.fyi:Linux FYI Experimental Release (Intel HD 630)",
       "chromium.gpu.fyi:Linux FYI Experimental Release (NVIDIA)",
@@ -1957,7 +1873,6 @@
       "chromium.gpu.fyi:Linux FYI Release (Intel HD 630)",
       "chromium.gpu.fyi:Linux FYI Release (Intel UHD 630)",
       "chromium.gpu.fyi:Linux FYI Release (NVIDIA)",
-      "tryserver.chromium.angle:linux-angle-rel",
       "tryserver.chromium.linux:gpu-fyi-try-linux-amd-rel",
       "tryserver.chromium.linux:gpu-fyi-try-linux-intel-exp",
       "tryserver.chromium.linux:gpu-fyi-try-linux-intel-rel",
@@ -1972,13 +1887,7 @@
     ]
   },
   "chromium.gpu.fyi:Linux FYI Release (AMD RX 5500 XT)": {
-    "blockers": [
-      "cannot migrate builder 'chromium.gpu.fyi:ANGLE GPU Linux Release (Intel HD 630)' with provide-test-spec execution_mode",
-      "cannot migrate builder 'chromium.gpu.fyi:ANGLE GPU Linux Release (NVIDIA)' with provide-test-spec execution_mode"
-    ],
     "builders": [
-      "chromium.gpu.fyi:ANGLE GPU Linux Release (Intel HD 630)",
-      "chromium.gpu.fyi:ANGLE GPU Linux Release (NVIDIA)",
       "chromium.gpu.fyi:GPU FYI Linux Builder",
       "chromium.gpu.fyi:Linux FYI Experimental Release (Intel HD 630)",
       "chromium.gpu.fyi:Linux FYI Experimental Release (NVIDIA)",
@@ -1986,7 +1895,6 @@
       "chromium.gpu.fyi:Linux FYI Release (Intel HD 630)",
       "chromium.gpu.fyi:Linux FYI Release (Intel UHD 630)",
       "chromium.gpu.fyi:Linux FYI Release (NVIDIA)",
-      "tryserver.chromium.angle:linux-angle-rel",
       "tryserver.chromium.linux:gpu-fyi-try-linux-amd-rel",
       "tryserver.chromium.linux:gpu-fyi-try-linux-intel-exp",
       "tryserver.chromium.linux:gpu-fyi-try-linux-intel-rel",
@@ -1995,13 +1903,7 @@
     ]
   },
   "chromium.gpu.fyi:Linux FYI Release (Intel HD 630)": {
-    "blockers": [
-      "cannot migrate builder 'chromium.gpu.fyi:ANGLE GPU Linux Release (Intel HD 630)' with provide-test-spec execution_mode",
-      "cannot migrate builder 'chromium.gpu.fyi:ANGLE GPU Linux Release (NVIDIA)' with provide-test-spec execution_mode"
-    ],
     "builders": [
-      "chromium.gpu.fyi:ANGLE GPU Linux Release (Intel HD 630)",
-      "chromium.gpu.fyi:ANGLE GPU Linux Release (NVIDIA)",
       "chromium.gpu.fyi:GPU FYI Linux Builder",
       "chromium.gpu.fyi:Linux FYI Experimental Release (Intel HD 630)",
       "chromium.gpu.fyi:Linux FYI Experimental Release (NVIDIA)",
@@ -2009,7 +1911,6 @@
       "chromium.gpu.fyi:Linux FYI Release (Intel HD 630)",
       "chromium.gpu.fyi:Linux FYI Release (Intel UHD 630)",
       "chromium.gpu.fyi:Linux FYI Release (NVIDIA)",
-      "tryserver.chromium.angle:linux-angle-rel",
       "tryserver.chromium.linux:gpu-fyi-try-linux-amd-rel",
       "tryserver.chromium.linux:gpu-fyi-try-linux-intel-exp",
       "tryserver.chromium.linux:gpu-fyi-try-linux-intel-rel",
@@ -2018,13 +1919,7 @@
     ]
   },
   "chromium.gpu.fyi:Linux FYI Release (Intel UHD 630)": {
-    "blockers": [
-      "cannot migrate builder 'chromium.gpu.fyi:ANGLE GPU Linux Release (Intel HD 630)' with provide-test-spec execution_mode",
-      "cannot migrate builder 'chromium.gpu.fyi:ANGLE GPU Linux Release (NVIDIA)' with provide-test-spec execution_mode"
-    ],
     "builders": [
-      "chromium.gpu.fyi:ANGLE GPU Linux Release (Intel HD 630)",
-      "chromium.gpu.fyi:ANGLE GPU Linux Release (NVIDIA)",
       "chromium.gpu.fyi:GPU FYI Linux Builder",
       "chromium.gpu.fyi:Linux FYI Experimental Release (Intel HD 630)",
       "chromium.gpu.fyi:Linux FYI Experimental Release (NVIDIA)",
@@ -2032,7 +1927,6 @@
       "chromium.gpu.fyi:Linux FYI Release (Intel HD 630)",
       "chromium.gpu.fyi:Linux FYI Release (Intel UHD 630)",
       "chromium.gpu.fyi:Linux FYI Release (NVIDIA)",
-      "tryserver.chromium.angle:linux-angle-rel",
       "tryserver.chromium.linux:gpu-fyi-try-linux-amd-rel",
       "tryserver.chromium.linux:gpu-fyi-try-linux-intel-exp",
       "tryserver.chromium.linux:gpu-fyi-try-linux-intel-rel",
@@ -2041,13 +1935,7 @@
     ]
   },
   "chromium.gpu.fyi:Linux FYI Release (NVIDIA)": {
-    "blockers": [
-      "cannot migrate builder 'chromium.gpu.fyi:ANGLE GPU Linux Release (Intel HD 630)' with provide-test-spec execution_mode",
-      "cannot migrate builder 'chromium.gpu.fyi:ANGLE GPU Linux Release (NVIDIA)' with provide-test-spec execution_mode"
-    ],
     "builders": [
-      "chromium.gpu.fyi:ANGLE GPU Linux Release (Intel HD 630)",
-      "chromium.gpu.fyi:ANGLE GPU Linux Release (NVIDIA)",
       "chromium.gpu.fyi:GPU FYI Linux Builder",
       "chromium.gpu.fyi:Linux FYI Experimental Release (Intel HD 630)",
       "chromium.gpu.fyi:Linux FYI Experimental Release (NVIDIA)",
@@ -2055,7 +1943,6 @@
       "chromium.gpu.fyi:Linux FYI Release (Intel HD 630)",
       "chromium.gpu.fyi:Linux FYI Release (Intel UHD 630)",
       "chromium.gpu.fyi:Linux FYI Release (NVIDIA)",
-      "tryserver.chromium.angle:linux-angle-rel",
       "tryserver.chromium.linux:gpu-fyi-try-linux-amd-rel",
       "tryserver.chromium.linux:gpu-fyi-try-linux-intel-exp",
       "tryserver.chromium.linux:gpu-fyi-try-linux-intel-rel",
@@ -3554,24 +3441,6 @@
       "tryserver.chromium.angle:android-angle-try"
     ]
   },
-  "tryserver.chromium.angle:android_angle_rel_ng": {
-    "blockers": [
-      "builder 'chromium.gpu.fyi:ANGLE GPU Android Release (Nexus 5X)' does not exist"
-    ],
-    "builders": [
-      "chromium.gpu.fyi:ANGLE GPU Android Release (Nexus 5X)",
-      "tryserver.chromium.angle:android_angle_rel_ng"
-    ]
-  },
-  "tryserver.chromium.angle:fuchsia-angle-rel": {
-    "blockers": [
-      "builder 'chromium.gpu.fyi:GPU FYI Fuchsia Builder' does not exist"
-    ],
-    "builders": [
-      "chromium.gpu.fyi:GPU FYI Fuchsia Builder",
-      "tryserver.chromium.angle:fuchsia-angle-rel"
-    ]
-  },
   "tryserver.chromium.angle:fuchsia-angle-try": {
     "builders": [
       "chromium.angle:fuchsia-angle-builder",
@@ -3591,29 +3460,6 @@
       "chromium.angle:linux-angle-chromium-intel",
       "chromium.angle:linux-angle-chromium-nvidia",
       "tryserver.chromium.angle:linux-angle-chromium-try"
-    ]
-  },
-  "tryserver.chromium.angle:linux-angle-rel": {
-    "blockers": [
-      "cannot migrate builder 'chromium.gpu.fyi:ANGLE GPU Linux Release (Intel HD 630)' with provide-test-spec execution_mode",
-      "cannot migrate builder 'chromium.gpu.fyi:ANGLE GPU Linux Release (NVIDIA)' with provide-test-spec execution_mode"
-    ],
-    "builders": [
-      "chromium.gpu.fyi:ANGLE GPU Linux Release (Intel HD 630)",
-      "chromium.gpu.fyi:ANGLE GPU Linux Release (NVIDIA)",
-      "chromium.gpu.fyi:GPU FYI Linux Builder",
-      "chromium.gpu.fyi:Linux FYI Experimental Release (Intel HD 630)",
-      "chromium.gpu.fyi:Linux FYI Experimental Release (NVIDIA)",
-      "chromium.gpu.fyi:Linux FYI Release (AMD RX 5500 XT)",
-      "chromium.gpu.fyi:Linux FYI Release (Intel HD 630)",
-      "chromium.gpu.fyi:Linux FYI Release (Intel UHD 630)",
-      "chromium.gpu.fyi:Linux FYI Release (NVIDIA)",
-      "tryserver.chromium.angle:linux-angle-rel",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-amd-rel",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-intel-exp",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-intel-rel",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-nvidia-exp",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-nvidia-rel"
     ]
   },
   "tryserver.chromium.angle:linux-angle-try": {
@@ -3861,13 +3707,7 @@
     ]
   },
   "tryserver.chromium.linux:gpu-fyi-try-linux-amd-rel": {
-    "blockers": [
-      "cannot migrate builder 'chromium.gpu.fyi:ANGLE GPU Linux Release (Intel HD 630)' with provide-test-spec execution_mode",
-      "cannot migrate builder 'chromium.gpu.fyi:ANGLE GPU Linux Release (NVIDIA)' with provide-test-spec execution_mode"
-    ],
     "builders": [
-      "chromium.gpu.fyi:ANGLE GPU Linux Release (Intel HD 630)",
-      "chromium.gpu.fyi:ANGLE GPU Linux Release (NVIDIA)",
       "chromium.gpu.fyi:GPU FYI Linux Builder",
       "chromium.gpu.fyi:Linux FYI Experimental Release (Intel HD 630)",
       "chromium.gpu.fyi:Linux FYI Experimental Release (NVIDIA)",
@@ -3875,7 +3715,6 @@
       "chromium.gpu.fyi:Linux FYI Release (Intel HD 630)",
       "chromium.gpu.fyi:Linux FYI Release (Intel UHD 630)",
       "chromium.gpu.fyi:Linux FYI Release (NVIDIA)",
-      "tryserver.chromium.angle:linux-angle-rel",
       "tryserver.chromium.linux:gpu-fyi-try-linux-amd-rel",
       "tryserver.chromium.linux:gpu-fyi-try-linux-intel-exp",
       "tryserver.chromium.linux:gpu-fyi-try-linux-intel-rel",
@@ -3884,13 +3723,7 @@
     ]
   },
   "tryserver.chromium.linux:gpu-fyi-try-linux-intel-exp": {
-    "blockers": [
-      "cannot migrate builder 'chromium.gpu.fyi:ANGLE GPU Linux Release (Intel HD 630)' with provide-test-spec execution_mode",
-      "cannot migrate builder 'chromium.gpu.fyi:ANGLE GPU Linux Release (NVIDIA)' with provide-test-spec execution_mode"
-    ],
     "builders": [
-      "chromium.gpu.fyi:ANGLE GPU Linux Release (Intel HD 630)",
-      "chromium.gpu.fyi:ANGLE GPU Linux Release (NVIDIA)",
       "chromium.gpu.fyi:GPU FYI Linux Builder",
       "chromium.gpu.fyi:Linux FYI Experimental Release (Intel HD 630)",
       "chromium.gpu.fyi:Linux FYI Experimental Release (NVIDIA)",
@@ -3898,7 +3731,6 @@
       "chromium.gpu.fyi:Linux FYI Release (Intel HD 630)",
       "chromium.gpu.fyi:Linux FYI Release (Intel UHD 630)",
       "chromium.gpu.fyi:Linux FYI Release (NVIDIA)",
-      "tryserver.chromium.angle:linux-angle-rel",
       "tryserver.chromium.linux:gpu-fyi-try-linux-amd-rel",
       "tryserver.chromium.linux:gpu-fyi-try-linux-intel-exp",
       "tryserver.chromium.linux:gpu-fyi-try-linux-intel-rel",
@@ -3907,13 +3739,7 @@
     ]
   },
   "tryserver.chromium.linux:gpu-fyi-try-linux-intel-rel": {
-    "blockers": [
-      "cannot migrate builder 'chromium.gpu.fyi:ANGLE GPU Linux Release (Intel HD 630)' with provide-test-spec execution_mode",
-      "cannot migrate builder 'chromium.gpu.fyi:ANGLE GPU Linux Release (NVIDIA)' with provide-test-spec execution_mode"
-    ],
     "builders": [
-      "chromium.gpu.fyi:ANGLE GPU Linux Release (Intel HD 630)",
-      "chromium.gpu.fyi:ANGLE GPU Linux Release (NVIDIA)",
       "chromium.gpu.fyi:GPU FYI Linux Builder",
       "chromium.gpu.fyi:Linux FYI Experimental Release (Intel HD 630)",
       "chromium.gpu.fyi:Linux FYI Experimental Release (NVIDIA)",
@@ -3921,7 +3747,6 @@
       "chromium.gpu.fyi:Linux FYI Release (Intel HD 630)",
       "chromium.gpu.fyi:Linux FYI Release (Intel UHD 630)",
       "chromium.gpu.fyi:Linux FYI Release (NVIDIA)",
-      "tryserver.chromium.angle:linux-angle-rel",
       "tryserver.chromium.linux:gpu-fyi-try-linux-amd-rel",
       "tryserver.chromium.linux:gpu-fyi-try-linux-intel-exp",
       "tryserver.chromium.linux:gpu-fyi-try-linux-intel-rel",
@@ -3937,13 +3762,7 @@
     ]
   },
   "tryserver.chromium.linux:gpu-fyi-try-linux-nvidia-exp": {
-    "blockers": [
-      "cannot migrate builder 'chromium.gpu.fyi:ANGLE GPU Linux Release (Intel HD 630)' with provide-test-spec execution_mode",
-      "cannot migrate builder 'chromium.gpu.fyi:ANGLE GPU Linux Release (NVIDIA)' with provide-test-spec execution_mode"
-    ],
     "builders": [
-      "chromium.gpu.fyi:ANGLE GPU Linux Release (Intel HD 630)",
-      "chromium.gpu.fyi:ANGLE GPU Linux Release (NVIDIA)",
       "chromium.gpu.fyi:GPU FYI Linux Builder",
       "chromium.gpu.fyi:Linux FYI Experimental Release (Intel HD 630)",
       "chromium.gpu.fyi:Linux FYI Experimental Release (NVIDIA)",
@@ -3951,7 +3770,6 @@
       "chromium.gpu.fyi:Linux FYI Release (Intel HD 630)",
       "chromium.gpu.fyi:Linux FYI Release (Intel UHD 630)",
       "chromium.gpu.fyi:Linux FYI Release (NVIDIA)",
-      "tryserver.chromium.angle:linux-angle-rel",
       "tryserver.chromium.linux:gpu-fyi-try-linux-amd-rel",
       "tryserver.chromium.linux:gpu-fyi-try-linux-intel-exp",
       "tryserver.chromium.linux:gpu-fyi-try-linux-intel-rel",
@@ -3960,13 +3778,7 @@
     ]
   },
   "tryserver.chromium.linux:gpu-fyi-try-linux-nvidia-rel": {
-    "blockers": [
-      "cannot migrate builder 'chromium.gpu.fyi:ANGLE GPU Linux Release (Intel HD 630)' with provide-test-spec execution_mode",
-      "cannot migrate builder 'chromium.gpu.fyi:ANGLE GPU Linux Release (NVIDIA)' with provide-test-spec execution_mode"
-    ],
     "builders": [
-      "chromium.gpu.fyi:ANGLE GPU Linux Release (Intel HD 630)",
-      "chromium.gpu.fyi:ANGLE GPU Linux Release (NVIDIA)",
       "chromium.gpu.fyi:GPU FYI Linux Builder",
       "chromium.gpu.fyi:Linux FYI Experimental Release (Intel HD 630)",
       "chromium.gpu.fyi:Linux FYI Experimental Release (NVIDIA)",
@@ -3974,7 +3786,6 @@
       "chromium.gpu.fyi:Linux FYI Release (Intel HD 630)",
       "chromium.gpu.fyi:Linux FYI Release (Intel UHD 630)",
       "chromium.gpu.fyi:Linux FYI Release (NVIDIA)",
-      "tryserver.chromium.angle:linux-angle-rel",
       "tryserver.chromium.linux:gpu-fyi-try-linux-amd-rel",
       "tryserver.chromium.linux:gpu-fyi-try-linux-intel-exp",
       "tryserver.chromium.linux:gpu-fyi-try-linux-intel-rel",

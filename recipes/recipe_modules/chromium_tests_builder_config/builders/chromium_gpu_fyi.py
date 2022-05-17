@@ -511,23 +511,6 @@ SPEC = {
             android_config='arm64_builder_rel_mb',
             simulation_platform='linux',
         ),
-    'GPU FYI Fuchsia Builder':
-        _chromium_gpu_fyi_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'fuchsia',
-            ],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'fuchsia',
-            },
-            simulation_platform='linux',
-        ),
     'GPU FYI Mac Builder':
         _chromium_gpu_fyi_spec(
             chromium_config='chromium',
@@ -1063,28 +1046,4 @@ SPEC = {
             android_config='main_builder',
             simulation_platform='linux',
         ),
-
-    # This following machines don't exist either; they are separate
-    # configurations because we don't have the capacity to run all of
-    # the tests on the GPU try servers. And to specify tests for
-    # ANGLE's try servers separately from the gpu.fyi waterfall.
-    'ANGLE GPU Android Release (Nexus 5X)':
-        _chromium_gpu_fyi_spec(
-            chromium_config='android',
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'android',
-                'angle_internal',
-                'angle_top_of_tree',
-            ],
-            chromium_config_kwargs={
-                'TARGET_PLATFORM': 'android',
-            },
-            android_config='arm64_builder_rel_mb',
-            simulation_platform='linux',
-        ),
-    'ANGLE GPU Linux Release (NVIDIA)':
-        _chromium_gpu_fyi_spec(execution_mode=builder_spec.PROVIDE_TEST_SPEC),
-    'ANGLE GPU Linux Release (Intel HD 630)':
-        _chromium_gpu_fyi_spec(execution_mode=builder_spec.PROVIDE_TEST_SPEC),
 }

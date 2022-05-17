@@ -354,12 +354,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 tester='android-angle-arm64-nexus5x',
                 retry_failed_shards=False,
             ),
-        'android_angle_rel_ng':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='ANGLE GPU Android Release (Nexus 5X)',
-                retry_failed_shards=False,
-            ),
         'fuchsia-angle-try':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.angle',
@@ -386,22 +380,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                         builder_group='chromium.angle',
                         buildername='linux-angle-chromium-builder',
                         tester='linux-angle-chromium-nvidia',
-                    ),
-                ],
-                retry_failed_shards=False,
-            ),
-        'linux-angle-rel':
-            try_spec.TrySpec.create(
-                mirrors=[
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.gpu.fyi',
-                        buildername='GPU FYI Linux Builder',
-                        tester='ANGLE GPU Linux Release (NVIDIA)',
-                    ),
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.gpu.fyi',
-                        buildername='GPU FYI Linux Builder',
-                        tester='ANGLE GPU Linux Release (Intel HD 630)',
                     ),
                 ],
                 retry_failed_shards=False,
@@ -477,13 +455,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                     ),
                 ],
                 retry_failed_shards=False,
-            ),
-        'fuchsia-angle-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Fuchsia Builder',
-                is_compile_only=True,
-                include_all_triggered_testers=True,
             ),
     },
     # The config for the following builders is now specified src-side in
