@@ -13,6 +13,8 @@ def _chromium_memory_spec(**kwargs):
 # //infra/config/subprojects/chromium/ci/chromium.memory.star
 # * Linux ASan LSan Builder
 # * Linux ASan LSan Tests (1)
+# * Linux ChromiumOS MSan Builder
+# * Linux ChromiumOS MSan Tests
 # * Linux ASan Tests (sandboxed)
 # * linux-ubsan-vptr
 # * win-asan
@@ -75,32 +77,6 @@ SPEC = {
             },
             execution_mode=builder_spec.TEST,
             parent_buildername='Linux MSan Builder',
-            simulation_platform='linux',
-        ),
-    'Linux ChromiumOS MSan Builder':
-        _chromium_memory_spec(
-            chromium_config='chromium_msan',
-            gclient_config='chromium',
-            gclient_apply_config=['chromeos'],
-            chromium_apply_config=['mb'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            simulation_platform='linux',
-        ),
-    'Linux ChromiumOS MSan Tests':
-        _chromium_memory_spec(
-            chromium_config='chromium_msan',
-            gclient_config='chromium',
-            gclient_apply_config=['chromeos'],
-            chromium_apply_config=['mb'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            execution_mode=builder_spec.TEST,
-            parent_buildername='Linux ChromiumOS MSan Builder',
             simulation_platform='linux',
         ),
     'Linux TSan Builder':

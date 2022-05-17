@@ -15,6 +15,7 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * android_arm64_dbg_recipe
     # * android_n5x_swarming_dbg
     # * android_unswarmed_pixel_aosp
+    # * linux_chromium_chromeos_msan_rel_ng
     # * linux-blink-rel
     # * try-nougat-phone-tester
     'tryserver.blink': {
@@ -550,12 +551,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.memory',
                 buildername='Linux Chromium OS ASan LSan Builder',
                 tester='Linux Chromium OS ASan LSan Tests (1)',
-            ),
-        'linux_chromium_chromeos_msan_rel_ng':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.memory',
-                buildername='Linux ChromiumOS MSan Builder',
-                tester='Linux ChromiumOS MSan Tests',
             ),
         'linux_chromium_msan_rel_ng':
             try_spec.TrySpec.create_for_single_mirror(
