@@ -197,10 +197,8 @@ def _merge_summary(merge_dest, merge_src):
   adds the 'total' and 'covered' field of each metric in the second parameter
   to the corresponding field in the first parameter.
 
-  Each parameter is expected to be in the following format:
-  [{'name': 'line', 'total': 10, 'covered': 9},
-   {'name': 'region', 'total': 10, 'covered': 9},
-   {'name': 'function', 'total': 10, 'covered': 9}]
+  Each parameter is expected to be list of dict where each dict structure is
+  {'name': <name>, 'total': <total_lines>, 'covered': <covered_lines>}
   """
 
   def get_metrics(summaries):

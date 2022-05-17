@@ -691,21 +691,33 @@ def _get_clang_summary_metrics(clang_summary):
   """Converts Clang summary format to metadata format.
 
   Args:
-    clang_summary (dict): A dict whose keys are ('lines', 'regions',
-                          'functions'), and corresponding values are other
-                          dicts with format: {'covered': int, 'count': int}.
-
-  Returns:
+    clang_summary (dict): A dict whose keys are ('lines', 'branches', ...), 
+                    and corresponding values are other dicts with format:
+                     {'covered': int, 'count': int}.turns:
     A list that conforms to the Metric proto at
     https://chromium.googlesource.com/infra/infra/+/refs/heads/main/appengine/findit/model/proto/code_coverage.proto
   """
-  # Clang uses 'lines', 'regions', 'functions', whereas it's preferrable to use
+  # Clang uses 'lines'/'branches'... whereas it's preferrable to use
   # singular forms in metadata format.
-  return [{
-      'name': k[:-1],
-      'covered': v['covered'],
-      'total': v['count']
-  } for k, v in sorted(clang_summary.iteritems())]
+  singular = {
+      'lines': 'line',
+      'branches': 'branch',
+      'regions': 'region',
+      'functions': 'function',
+      'instantiations': 'instantiation'
+  }
+  summaries = []
+  for k, v in clang_summary.items():
+    if k in singular:
+      summary = {
+          'name': singular[k],
+          'covered': v['covered'],
+          'total': v['count']
+      }
+      summaries.append(summary)
+    else:
+      raise Exception("Unexpected coverage metric")
+  return summaries
 
 
 def _create_index_html(output_dir):
