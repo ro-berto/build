@@ -1026,6 +1026,10 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     return {
         # host = chromium, if full host name is chromium.googlesource.com
         'host': commit.host[:commit.host.find('.')],
+        # This field is used if the code is hosted on internal version of
+        # codesearch. Since this is not true for chromium/src, this is set
+        # to a generic value i.e. codesearch. Actual value would be the name of
+        # repo on codesearch.
         'project': 'codesearch',
         'trace_type': coverage_format,
         # workspace_root is empty because the data being uploaded to zoss
