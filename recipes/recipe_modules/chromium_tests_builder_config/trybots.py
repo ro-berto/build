@@ -739,6 +739,7 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * mac_chromium_10.15_rel_ng
     # * mac_chromium_11.0_rel_ng
     # * mac_chromium_archive_rel_ng
+    # * mac_chromium_asan_rel_ng
     # * mac_chromium_compile_dbg_ng
     # * mac_chromium_dbg_ng
     # * mac-arm64-on-arm64-rel
@@ -792,12 +793,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
                 buildername='Mac Builder Next',
-            ),
-        'mac_chromium_asan_rel_ng':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.memory',
-                buildername='Mac ASan 64 Builder',
-                tester='Mac ASan 64 Tests (1)',
             ),
         # Manually triggered GPU trybots.
         'gpu-fyi-try-mac-amd-pro-rel':

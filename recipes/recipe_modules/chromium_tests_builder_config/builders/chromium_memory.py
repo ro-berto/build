@@ -16,11 +16,13 @@ def _chromium_memory_spec(**kwargs):
 # * Linux ChromiumOS MSan Builder
 # * Linux ChromiumOS MSan Tests
 # * Linux ASan Tests (sandboxed)
+# * Mac ASan 64 Builder
+# * Mac ASan 64 Tests (1)
 # * WebKit Linux ASAN
 # * WebKit Linux Leak
+# * WebKit Linux MSAN
 # * linux-ubsan-vptr
 # * win-asan
-# * WebKit Linux MSAN
 
 SPEC = {
     'ios-asan':
@@ -120,34 +122,6 @@ SPEC = {
             execution_mode=builder_spec.TEST,
             parent_buildername='Linux TSan Builder',
             simulation_platform='linux',
-        ),
-    'Mac ASan 64 Builder':
-        _chromium_memory_spec(
-            chromium_config='chromium_asan',
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            chromium_apply_config=[
-                'mb',
-            ],
-            simulation_platform='mac',
-        ),
-    'Mac ASan 64 Tests (1)':
-        _chromium_memory_spec(
-            chromium_config='chromium_asan',
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            chromium_apply_config=[
-                'mb',
-            ],
-            execution_mode=builder_spec.TEST,
-            parent_buildername='Mac ASan 64 Builder',
-            simulation_platform='mac',
         ),
     'Linux Chromium OS ASan LSan Builder':
         _chromium_memory_spec(

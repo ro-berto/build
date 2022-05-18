@@ -2338,20 +2338,6 @@
       "tryserver.chromium.linux:linux_chromium_tsan_rel_ng"
     ]
   },
-  "chromium.memory:Mac ASan 64 Builder": {
-    "builders": [
-      "chromium.memory:Mac ASan 64 Builder",
-      "chromium.memory:Mac ASan 64 Tests (1)",
-      "tryserver.chromium.mac:mac_chromium_asan_rel_ng"
-    ]
-  },
-  "chromium.memory:Mac ASan 64 Tests (1)": {
-    "builders": [
-      "chromium.memory:Mac ASan 64 Builder",
-      "chromium.memory:Mac ASan 64 Tests (1)",
-      "tryserver.chromium.mac:mac_chromium_asan_rel_ng"
-    ]
-  },
   "chromium.memory:android-asan": {
     "builders": [
       "chromium.memory:android-asan",
@@ -4001,13 +3987,6 @@
     "builders": [
       "chromium.fyi:Mac Builder Next",
       "tryserver.chromium.mac:mac-builder-next-rel"
-    ]
-  },
-  "tryserver.chromium.mac:mac_chromium_asan_rel_ng": {
-    "builders": [
-      "chromium.memory:Mac ASan 64 Builder",
-      "chromium.memory:Mac ASan 64 Tests (1)",
-      "tryserver.chromium.mac:mac_chromium_asan_rel_ng"
     ]
   },
   "tryserver.chromium.rust:android-rust-arm-dbg": {

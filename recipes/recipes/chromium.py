@@ -1047,53 +1047,6 @@ def GenTests(api):
           }),
   )
 
-  # Tests that the memory mac tester is using the correct test flags.
-  yield api.test(
-      'dynamic_gtest_memory_mac64',
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.memory',
-          builder='Mac ASan 64 Tests (1)',
-          parent_buildername='Mac ASan 64 Builder',
-      ),
-      api.chromium_tests.read_source_side_spec('chromium.memory', {
-          'Mac ASan 64 Tests (1)': {
-              'gtest_tests': ['browser_tests',],
-          },
-      }),
-  )
-
-  yield api.test(
-      'tsan',
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.memory',
-          builder='Linux TSan Tests',
-          parent_buildername='Linux TSan Builder',
-      ),
-      api.chromium_tests.read_source_side_spec(
-          'chromium.memory', {
-              'Linux TSan Tests': {
-                  'compile_targets': ['base_unittests'],
-                  'gtest_tests': ['base_unittests'],
-              },
-          }),
-  )
-
-  yield api.test(
-      'msan',
-      api.chromium_tests_builder_config.ci_build(
-          builder_group='chromium.memory',
-          builder='Linux MSan Tests',
-          parent_buildername='Linux MSan Builder',
-      ),
-      api.chromium_tests.read_source_side_spec(
-          'chromium.memory', {
-              'Linux MSan Tests': {
-                  'compile_targets': ['base_unittests'],
-                  'gtest_tests': ['base_unittests'],
-              },
-          }),
-  )
-
   yield api.test(
       'buildnumber_zero',
       api.platform('linux', 64),
