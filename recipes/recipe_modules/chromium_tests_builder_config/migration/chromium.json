@@ -2387,11 +2387,6 @@
       "tryserver.chromium.mac:mac_chromium_asan_rel_ng"
     ]
   },
-  "chromium.memory:WebKit Linux ASAN": {
-    "builders": [
-      "chromium.memory:WebKit Linux ASAN"
-    ]
-  },
   "chromium.memory:android-asan": {
     "builders": [
       "chromium.memory:android-asan",
