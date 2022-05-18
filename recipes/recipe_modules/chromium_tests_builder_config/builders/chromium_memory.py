@@ -19,6 +19,7 @@ def _chromium_memory_spec(**kwargs):
 # * WebKit Linux Leak
 # * linux-ubsan-vptr
 # * win-asan
+# * WebKit Linux MSAN
 
 SPEC = {
     'ios-asan':
@@ -174,18 +175,6 @@ SPEC = {
             simulation_platform='linux',
         ),
     'WebKit Linux ASAN':
-        _chromium_memory_spec(
-            chromium_config='chromium_clang',
-            gclient_config='chromium',
-            gclient_apply_config=['enable_reclient'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            chromium_apply_config=['asan', 'mb'],
-            simulation_platform='linux',
-        ),
-    'WebKit Linux MSAN':
         _chromium_memory_spec(
             chromium_config='chromium_clang',
             gclient_config='chromium',

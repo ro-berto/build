@@ -2407,12 +2407,6 @@
       "chromium.memory:WebKit Linux ASAN"
     ]
   },
-  "chromium.memory:WebKit Linux MSAN": {
-    "builders": [
-      "chromium.memory:WebKit Linux MSAN",
-      "tryserver.chromium.linux:linux-webkit-msan-rel"
-    ]
-  },
   "chromium.memory:android-asan": {
     "builders": [
       "chromium.memory:android-asan",
@@ -3774,12 +3768,6 @@
     "builders": [
       "chromium.fyi:Linux Viz",
       "tryserver.chromium.linux:linux-viz-rel"
-    ]
-  },
-  "tryserver.chromium.linux:linux-webkit-msan-rel": {
-    "builders": [
-      "chromium.memory:WebKit Linux MSAN",
-      "tryserver.chromium.linux:linux-webkit-msan-rel"
     ]
   },
   "tryserver.chromium.linux:linux-wpt-fyi-rel": {
