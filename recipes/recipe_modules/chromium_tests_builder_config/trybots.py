@@ -15,6 +15,7 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * android_arm64_dbg_recipe
     # * android_n5x_swarming_dbg
     # * android_unswarmed_pixel_aosp
+    # * layout_test_leak_detection
     # * linux_chromium_chromeos_msan_rel_ng
     # * linux-blink-rel
     # * try-nougat-phone-tester
@@ -595,11 +596,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.linux',
                 buildername='Leak Detection Linux',
-            ),
-        'layout_test_leak_detection':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.memory',
-                buildername='WebKit Linux Leak',
             ),
         # Manually triggered GPU trybots.
         'gpu-fyi-try-lacros-amd-rel':

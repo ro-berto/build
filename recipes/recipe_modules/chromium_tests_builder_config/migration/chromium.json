@@ -2414,12 +2414,6 @@
       "chromium.memory:WebKit Linux ASAN"
     ]
   },
-  "chromium.memory:WebKit Linux Leak": {
-    "builders": [
-      "chromium.memory:WebKit Linux Leak",
-      "tryserver.chromium.linux:layout_test_leak_detection"
-    ]
-  },
   "chromium.memory:WebKit Linux MSAN": {
     "builders": [
       "chromium.memory:WebKit Linux MSAN",
@@ -3718,12 +3712,6 @@
       "chromium.gpu:GPU Linux Builder (dbg)",
       "chromium.gpu:Linux Debug (NVIDIA)",
       "tryserver.chromium.linux:gpu-try-linux-nvidia-dbg"
-    ]
-  },
-  "tryserver.chromium.linux:layout_test_leak_detection": {
-    "builders": [
-      "chromium.memory:WebKit Linux Leak",
-      "tryserver.chromium.linux:layout_test_leak_detection"
     ]
   },
   "tryserver.chromium.linux:leak_detection_linux": {
