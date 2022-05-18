@@ -448,13 +448,6 @@
       "chromium.chromiumos:linux-chromeos-annotator-rel"
     ]
   },
-  "chromium.chromiumos:linux-chromeos-dbg": {
-    "builders": [
-      "chromium.chromiumos:linux-chromeos-dbg",
-      "tryserver.chromium.chromiumos:linux-chromeos-compile-dbg",
-      "tryserver.chromium.chromiumos:linux-chromeos-dbg"
-    ]
-  },
   "chromium.chromiumos:linux-chromeos-js-code-coverage": {
     "builders": [
       "chromium.chromiumos:linux-chromeos-js-code-coverage",
@@ -3448,20 +3441,6 @@
     "builders": [
       "chromium.chromiumos:linux-cfm-rel",
       "tryserver.chromium.chromiumos:linux-cfm-rel"
-    ]
-  },
-  "tryserver.chromium.chromiumos:linux-chromeos-compile-dbg": {
-    "builders": [
-      "chromium.chromiumos:linux-chromeos-dbg",
-      "tryserver.chromium.chromiumos:linux-chromeos-compile-dbg",
-      "tryserver.chromium.chromiumos:linux-chromeos-dbg"
-    ]
-  },
-  "tryserver.chromium.chromiumos:linux-chromeos-dbg": {
-    "builders": [
-      "chromium.chromiumos:linux-chromeos-dbg",
-      "tryserver.chromium.chromiumos:linux-chromeos-compile-dbg",
-      "tryserver.chromium.chromiumos:linux-chromeos-dbg"
     ]
   },
   "tryserver.chromium.chromiumos:linux-chromeos-js-code-coverage": {

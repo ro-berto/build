@@ -78,6 +78,7 @@ def _config(name,
 # * chromeos-kevin-rel
 # * lacros-amd64-generic-binary-size-rel
 # * lacros-arm-generic-rel
+# * linux-chromeos-dbg
 # * linux-lacros-builder-rel
 # * linux-lacros-dbg
 # * linux-lacros-tester-rel
@@ -90,7 +91,6 @@ SPEC.update([
         gclient_apply_config=['checkout_lacros_sdk'],
     ),
     _config('linux-ash-chromium-generator-rel'),
-    _config('linux-chromeos-dbg',),
     _config(
         'linux-chromeos-js-code-coverage',
         gclient_apply_config=['use_clang_coverage']),
