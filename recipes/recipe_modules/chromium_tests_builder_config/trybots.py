@@ -1157,6 +1157,7 @@ TRYBOTS = try_spec.TryDatabase.create({
     },
     # The config for the following builders is now specified src-side in
     # //infra/config/subprojects/chromium/try/tryserver.chromium.updater.star
+    # * win-updater-try-builder-dbg
     # * win-updater-try-builder-rel
     'tryserver.chromium.updater': {
         'mac-updater-try-builder-rel':
@@ -1164,12 +1165,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.updater',
                 buildername='mac-updater-builder-rel',
                 tester='mac10.15-updater-tester-rel',
-            ),
-        'win-updater-try-builder-dbg':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.updater',
-                buildername='win-updater-builder-dbg',
-                tester='win10-updater-tester-dbg',
             ),
         'mac-updater-try-builder-dbg':
             try_spec.TrySpec.create_for_single_mirror(
