@@ -9,27 +9,6 @@ def _chromium_chromiumos_spec(**kwargs):
   return builder_spec.BuilderSpec.create(
       build_gs_bucket='chromium-chromiumos-archive', **kwargs)
 
-# The config for the following builders is now specified src-side in
-# infra/config/subprojects/chromium/ci/chromium.chromiumos.star
-# * linux-chromeos-rel
-
-SPEC = {
-    'Linux ChromiumOS Full':
-        _chromium_chromiumos_spec(
-            chromium_config='chromium',
-            chromium_apply_config=['mb'],
-            gclient_config='chromium',
-            gclient_apply_config=['chromeos'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'chromeos',
-            },
-            simulation_platform='linux',
-        ),
-}
-
-
 def _config(name,
             cros_boards=None,
             cros_boards_with_qemu_images=None,
@@ -68,6 +47,7 @@ def _config(name,
 
 # The config for the following builders is now specified src-side in
 # //infra/config/subprojects/chromium/ci/chromium.chromiumos.star
+# * Linux ChromiumOS Full
 # * chromeos-amd64-generic-asan-rel
 # * chromeos-amd64-generic-cfi-thin-lto-rel
 # * chromeos-amd64-generic-dbg
@@ -79,11 +59,12 @@ def _config(name,
 # * lacros-amd64-generic-binary-size-rel
 # * lacros-arm-generic-rel
 # * linux-chromeos-dbg
+# * linux-chromeos-rel
 # * linux-lacros-builder-rel
 # * linux-lacros-dbg
 # * linux-lacros-tester-rel
 
-SPEC.update([
+SPEC = dict([
     _config(
         'lacros-amd64-generic-rel',
         cros_boards='eve',

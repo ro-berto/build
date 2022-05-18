@@ -421,11 +421,6 @@
       "tryserver.chromium.angle:win-angle-x64-try"
     ]
   },
-  "chromium.chromiumos:Linux ChromiumOS Full": {
-    "builders": [
-      "chromium.chromiumos:Linux ChromiumOS Full"
-    ]
-  },
   "chromium.chromiumos:lacros-amd64-generic-rel": {
     "builders": [
       "chromium.chromiumos:lacros-amd64-generic-rel",
