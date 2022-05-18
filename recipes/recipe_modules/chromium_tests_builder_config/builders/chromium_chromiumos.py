@@ -58,6 +58,7 @@ def _config(name,
 # * chromeos-kevin-rel
 # * lacros-amd64-generic-binary-size-rel
 # * lacros-arm-generic-rel
+# * linux-cfm-rel
 # * linux-chromeos-dbg
 # * linux-chromeos-rel
 # * linux-lacros-builder-rel
@@ -80,5 +81,4 @@ SPEC = dict([
     _config(
         'linux-lacros-rel-code-coverage',
         gclient_apply_config=['use_clang_coverage']),
-    _config('linux-cfm-rel'),
 ])

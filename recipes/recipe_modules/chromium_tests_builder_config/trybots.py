@@ -680,6 +680,7 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * chromeos-kevin-compile-rel
     # * chromeos-kevin-rel
     # * lacros-arm-generic-rel
+    # * linux-cfm-rel
     # * linux-chromeos-compile-dbg
     # * linux-chromeos-dbg
     # * linux-chromeos-inverse-fieldtrials-fyi-rel
@@ -698,11 +699,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.chromiumos',
                 buildername='linux-chromeos-js-code-coverage',
-            ),
-        'linux-cfm-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.chromiumos',
-                buildername='linux-cfm-rel',
             ),
         # Manually triggered GPU trybots.
         'gpu-fyi-try-chromeos-amd64-generic':
