@@ -453,6 +453,7 @@ TRYBOTS = try_spec.TryDatabase.create({
     # The config for the following builders is now specified src-side in
     # //infra/config/subprojects/chromium/try/tryserver.chromium.linux.star
     # * cast_shell_audio_linux
+    # * cast_shell_linux_arm64
     # * cast_shell_linux_dbg
     # * gpu-try-linux-nvidia-rel
     # * linux_chromium_archive_rel_ng
@@ -481,11 +482,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.linux',
                 buildername='Cast Linux',
-            ),
-        'cast_shell_linux_arm64':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.linux',
-                buildername='Cast Linux ARM64',
             ),
         'fuchsia-fyi-arm64-femu':
             try_spec.TrySpec.create_for_single_mirror(
