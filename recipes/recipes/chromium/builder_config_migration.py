@@ -200,7 +200,6 @@ _NON_EXISTENT_BUILDERS = tuple(
     for (group, builder) in (
         ('chromium.fyi', 'linux-blink-rel-dummy'),
         ('chromium.fyi', 'linux-blink-optional-highdpi-rel-dummy'),
-        ('chromium.fyi', 'mac10.12-blink-rel-dummy'),
         ('chromium.fyi', 'mac10.13-blink-rel-dummy'),
         ('chromium.fyi', 'mac10.14-blink-rel-dummy'),
         ('chromium.fyi', 'mac10.15-blink-rel-dummy'),

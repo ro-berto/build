@@ -27,12 +27,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='linux-blink-optional-highdpi-rel-dummy',
                 retry_failed_shards=False,
             ),
-        'mac10.12-blink-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
-                buildername='mac10.12-blink-rel-dummy',
-                retry_failed_shards=False,
-            ),
         'mac10.13-blink-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',

@@ -964,7 +964,7 @@ def GenTests(api):
       'use_skia_patch_on_blink_trybot',
       api.chromium_tests_builder_config.try_build(
           builder_group='tryserver.blink',
-          builder='mac10.12-blink-rel',
+          builder='mac11.0-blink-rel',
           git_repo='https://skia.googlesource.com/skia',
       ),
   )
@@ -973,7 +973,7 @@ def GenTests(api):
       'use_v8_patch_on_blink_trybot',
       api.chromium_tests_builder_config.try_build(
           builder_group='tryserver.blink',
-          builder='mac10.12-blink-rel',
+          builder='mac11.0-blink-rel',
           git_repo='https://chromium.googlesource.com/v8/v8',
       ),
   )

@@ -1308,15 +1308,6 @@
       "chromium.fyi:mac-upload-perfetto"
     ]
   },
-  "chromium.fyi:mac10.12-blink-rel-dummy": {
-    "blockers": [
-      "builder 'chromium.fyi:mac10.12-blink-rel-dummy' does not exist"
-    ],
-    "builders": [
-      "chromium.fyi:mac10.12-blink-rel-dummy",
-      "tryserver.blink:mac10.12-blink-rel"
-    ]
-  },
   "chromium.fyi:mac10.13-blink-rel-dummy": {
     "blockers": [
       "builder 'chromium.fyi:mac10.13-blink-rel-dummy' does not exist"
@@ -2963,15 +2954,6 @@
     "builders": [
       "chromium.fyi:linux-blink-optional-highdpi-rel-dummy",
       "tryserver.blink:linux-blink-optional-highdpi-rel"
-    ]
-  },
-  "tryserver.blink:mac10.12-blink-rel": {
-    "blockers": [
-      "builder 'chromium.fyi:mac10.12-blink-rel-dummy' does not exist"
-    ],
-    "builders": [
-      "chromium.fyi:mac10.12-blink-rel-dummy",
-      "tryserver.blink:mac10.12-blink-rel"
     ]
   },
   "tryserver.blink:mac10.13-blink-rel": {
