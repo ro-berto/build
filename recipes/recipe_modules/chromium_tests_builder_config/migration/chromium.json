@@ -148,11 +148,6 @@
       "tryserver.chromium.android:android-12-x64-rel"
     ]
   },
-  "chromium.android:android-arm64-proguard-rel": {
-    "builders": [
-      "chromium.android:android-arm64-proguard-rel"
-    ]
-  },
   "chromium.android:android-bfcache-rel": {
     "builders": [
       "chromium.android:android-bfcache-rel",
