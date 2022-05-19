@@ -194,7 +194,7 @@ the chrome project.
     * STANDARD_MILESTONE - M101+
     * DESKTOP_EXTEND_STABLE_MILESTONE - M100+
     * CROS_LTS_MILESTONE - M96, M101+
-    * FUCHSIA_LTS_MILESTONE - M92, M97, M101+
+    * FUCHSIA_LTS_MILESTONE - M92, M97, M100+
 
     1. Cherry-pick the CL in gerrit. If there are no conflicts then land the CL
        by adding Rubber Stamper as a reviewer and set Auto-Submit+1.
