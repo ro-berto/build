@@ -13,9 +13,11 @@ def _chromium_memory_spec(**kwargs):
 # //infra/config/subprojects/chromium/ci/chromium.memory.star
 # * Linux ASan LSan Builder
 # * Linux ASan LSan Tests (1)
+# * Linux ASan Tests (sandboxed)
 # * Linux ChromiumOS MSan Builder
 # * Linux ChromiumOS MSan Tests
-# * Linux ASan Tests (sandboxed)
+# * Linux MSan Builder
+# * Linux MSan Tests
 # * Mac ASan 64 Builder
 # * Mac ASan 64 Tests (1)
 # * WebKit Linux ASAN
@@ -56,32 +58,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            simulation_platform='linux',
-        ),
-    'Linux MSan Builder':
-        _chromium_memory_spec(
-            chromium_config='chromium_msan',
-            gclient_config='chromium',
-            gclient_apply_config=['enable_reclient'],
-            chromium_apply_config=['mb'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            simulation_platform='linux',
-        ),
-    'Linux MSan Tests':
-        _chromium_memory_spec(
-            chromium_config='chromium_msan',
-            gclient_config='chromium',
-            gclient_apply_config=['enable_reclient'],
-            chromium_apply_config=['mb'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            execution_mode=builder_spec.TEST,
-            parent_buildername='Linux MSan Builder',
             simulation_platform='linux',
         ),
     'Linux TSan Builder':
