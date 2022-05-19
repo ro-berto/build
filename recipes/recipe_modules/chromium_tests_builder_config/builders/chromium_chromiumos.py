@@ -10,11 +10,8 @@ def _chromium_chromiumos_spec(**kwargs):
       build_gs_bucket='chromium-chromiumos-archive', **kwargs)
 
 def _config(name,
-            cros_boards=None,
-            cros_boards_with_qemu_images=None,
             target_arch='intel',
             target_bits=64,
-            chromium_apply_config=None,
             gclient_apply_config=None,
             **kwargs):
   gclient_apply_config = gclient_apply_config or []
@@ -35,13 +32,6 @@ def _config(name,
       'simulation_platform': 'linux',
   }
   cfg.update(**kwargs)
-  if cros_boards:
-    cfg['chromium_config_kwargs']['TARGET_CROS_BOARDS'] = cros_boards
-    cfg['chromium_config_kwargs']['TARGET_PLATFORM'] = 'chromeos'
-  if cros_boards_with_qemu_images:
-    cfg['chromium_config_kwargs'][
-        'CROS_BOARDS_WITH_QEMU_IMAGES'] = cros_boards_with_qemu_images
-    cfg['chromium_config_kwargs']['TARGET_PLATFORM'] = 'chromeos'
 
   return name, _chromium_chromiumos_spec(**cfg)
 
@@ -57,6 +47,7 @@ def _config(name,
 # * chromeos-arm-generic-rel
 # * chromeos-kevin-rel
 # * lacros-amd64-generic-binary-size-rel
+# * lacros-amd64-generic-rel
 # * lacros-arm-generic-rel
 # * linux-cfm-rel
 # * linux-chromeos-dbg
@@ -66,12 +57,6 @@ def _config(name,
 # * linux-lacros-tester-rel
 
 SPEC = dict([
-    _config(
-        'lacros-amd64-generic-rel',
-        cros_boards='eve',
-        cros_boards_with_qemu_images='amd64-generic',
-        gclient_apply_config=['checkout_lacros_sdk'],
-    ),
     _config('linux-ash-chromium-generator-rel'),
     _config(
         'linux-chromeos-js-code-coverage',

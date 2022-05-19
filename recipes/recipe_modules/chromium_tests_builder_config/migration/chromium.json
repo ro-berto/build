@@ -416,12 +416,6 @@
       "tryserver.chromium.angle:win-angle-x64-try"
     ]
   },
-  "chromium.chromiumos:lacros-amd64-generic-rel": {
-    "builders": [
-      "chromium.chromiumos:lacros-amd64-generic-rel",
-      "tryserver.chromium.chromiumos:lacros-amd64-generic-rel"
-    ]
-  },
   "chromium.chromiumos:linux-ash-chromium-generator-rel": {
     "builders": [
       "chromium.chromiumos:linux-ash-chromium-generator-rel"
@@ -3310,12 +3304,6 @@
     "builders": [
       "chromium.gpu.fyi:gpu-fyi-chromeos-octopus-exp",
       "tryserver.chromium.chromiumos:gpu-fyi-try-chromeos-octopus-exp"
-    ]
-  },
-  "tryserver.chromium.chromiumos:lacros-amd64-generic-rel": {
-    "builders": [
-      "chromium.chromiumos:lacros-amd64-generic-rel",
-      "tryserver.chromium.chromiumos:lacros-amd64-generic-rel"
     ]
   },
   "tryserver.chromium.chromiumos:linux-chromeos-js-code-coverage": {
