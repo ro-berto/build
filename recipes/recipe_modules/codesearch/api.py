@@ -190,7 +190,7 @@ class CodesearchApi(recipe_api.RecipeApi):
     index_pack_kythe_base = '%s_%s' % (self.c.PROJECT, self.c.PLATFORM)
     index_pack_kythe_name_with_id = ''
     commit_position = ''
-    if self.c.PROJECT == 'chromium':
+    if self.c.PROJECT in ('chromium', 'chrome'):
       commit_position = self._get_commit_position()
       index_pack_kythe_name_with_id = '%s_%s_%s+%d%s.kzip' % (
           index_pack_kythe_base, commit_position, commit_hash, commit_timestamp,

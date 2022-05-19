@@ -52,4 +52,7 @@ message RecipeProperties {
 
   // Which directory under src/out to write gen files to.
   string gen_repo_out_dir = 8;
+
+  // Whether to checkout internal code.
+  bool internal = 9;
 }

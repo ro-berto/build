@@ -65,8 +65,10 @@ def RunSteps(api, properties):
                                  (builder_id.group, builder_id.builder))
   else:
     builder = builder_id.builder
+
   bot_config = properties.recipe_properties
-  assert bot_config is not None, ('Could not find builder %s in SPEC' % builder)
+  assert bot_config is not None, (
+      'Could not find "recipe_properties" input property')
   platform = bot_config.platform or 'linux'
   experimental = bot_config.experimental or False
   corpus = bot_config.corpus or 'chromium-linux'
@@ -75,10 +77,12 @@ def RunSteps(api, properties):
   targets = list(bot_config.compile_targets or [])
   gen_repo_branch = bot_config.gen_repo_branch or 'main'
   gen_repo_out_dir = bot_config.gen_repo_out_dir or ''
+  internal = bot_config.internal or False
 
+  project = 'chromium' if not internal else 'chrome'
   api.codesearch.set_config(
-      'chromium',
-      PROJECT='chromium',
+      project,
+      PROJECT=project,
       PLATFORM=platform,
       EXPERIMENTAL=experimental,
       SYNC_GENERATED_FILES=bot_config.sync_generated_files,
@@ -105,6 +109,9 @@ def RunSteps(api, properties):
   api.gclient.c = gclient_config
 
   api.gclient.apply_config('android_prebuilts_build_tools')
+
+  if internal:
+    api.gclient.apply_config('chrome_internal')
 
   checkout_dir = api.path['cache'].join('builder')
   with api.context(cwd=checkout_dir, env={'PACKFILE_OFFLOADING': 1}):
@@ -215,8 +222,11 @@ def _sanitize_nonalpha(text):
   return ''.join(c if c.isalnum() else '_' for c in text)
 
 
-def _format_builder_name(platform):
-  return 'codesearch-gen-chromium-%s' % platform
+def _format_builder_name(platform, internal=False):
+  name = 'codesearch-gen-chromium-%s' % platform
+  if internal:
+    name += '-internal'
+  return name
 
 
 SAMPLE_GN_DESC_OUTPUT = '''
@@ -239,7 +249,7 @@ SAMPLE_GN_DESC_OUTPUT = '''
 
 def GenTests(api):
 
-  def props(platform):
+  def props(platform, internal=False):
     return api.properties(
         root_solution_revision='HEAD',
         root_solution_revision_timestamp=1337000001,
@@ -252,30 +262,31 @@ def GenTests(api):
             build_config=platform,
             gen_repo_branch='main',
             gen_repo_out_dir='%s-Debug' % platform,
+            internal=internal,
         ))
 
   for platform in ('android', 'lacros', 'linux', 'fuchsia', 'chromiumos', 'mac',
                    'win'):
-    buildername = _format_builder_name(platform)
+    for internal in (True, False):
+      buildername = _format_builder_name(platform, internal)
+      yield api.test(
+          'full_%s' % (_sanitize_nonalpha(buildername)),
+          props(platform, internal),
+          api.chromium.generic_build(builder=buildername),
+          api.step_data('generate gn target list',
+                        api.raw_io.stream_output_text(SAMPLE_GN_DESC_OUTPUT)),
+      )
 
-    yield api.test(
-        'full_%s' % (_sanitize_nonalpha(buildername)),
-        props(platform),
-        api.chromium.generic_build(builder=buildername),
-        api.step_data('generate gn target list',
-                      api.raw_io.stream_output_text(SAMPLE_GN_DESC_OUTPUT)),
-    )
-
-    yield api.test(
-        'full_%s_with_revision' % (_sanitize_nonalpha(buildername)),
-        props(platform),
-        api.chromium.generic_build(builder=buildername),
-        api.step_data('generate gn target list',
-                      api.raw_io.stream_output_text(SAMPLE_GN_DESC_OUTPUT)),
-        api.properties(
-            root_solution_revision='a' * 40,
-            root_solution_revision_timestamp=1531887759),
-    )
+      yield api.test(
+          'full_%s_with_revision' % (_sanitize_nonalpha(buildername)),
+          props(platform, internal),
+          api.chromium.generic_build(builder=buildername),
+          api.step_data('generate gn target list',
+                        api.raw_io.stream_output_text(SAMPLE_GN_DESC_OUTPUT)),
+          api.properties(
+              root_solution_revision='a' * 40,
+              root_solution_revision_timestamp=1531887759),
+      )
 
   yield api.test(
       'full_%s_with_patch' % _sanitize_nonalpha('gen-linux-try'),

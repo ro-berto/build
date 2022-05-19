@@ -36,3 +36,9 @@ def GenTests(api):
       api.properties(codesearch_apply_config=['chromium']),
       api.post_process(post_process.DropExpectation),
   )
+
+  yield api.test(
+      'chrome',
+      api.properties(codesearch_apply_config=['chrome']),
+      api.post_process(post_process.DropExpectation),
+  )

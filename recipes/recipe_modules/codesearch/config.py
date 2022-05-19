@@ -3,10 +3,9 @@
 # found in the LICENSE file.
 
 import six
-import types
 
 from recipe_engine.config import config_item_context, ConfigGroup
-from recipe_engine.config import Single, Static, Dict, List
+from recipe_engine.config import Single, Static
 from recipe_engine.config_types import Path
 
 
@@ -23,8 +22,8 @@ def BaseConfig(PROJECT,
   """Filter out duplicate compilation units.
 
   Args:
-    PROJECT: The project this config is for. Only 'chromium' and 'chromiumos'
-      are supported currently.
+    PROJECT: The project this config is for. Only 'chromium', 'chrome', and
+      'chromiumos' are supported currently.
     CHECKOUT_PATH: the source checkout path.
     PLATFORM: The platform or board for which the code is compiled.
     EXPERIMENTAL: If True, appends '_experimental' to the generated kzip file.
@@ -50,10 +49,6 @@ def BaseConfig(PROJECT,
       gn_targets_json_file=Single(Path),
       javac_extractor_output_dir=Single(Path),
       bucket_name=Single(six.string_types, required=False),
-      chromium_git_url=Single(
-          six.string_types,
-          required=False,
-          empty_val='https://chromium.googlesource.com'),
       generated_repo=Single(six.string_types, required=False),
       generated_author_email=Single(
           six.string_types,
@@ -75,9 +70,9 @@ def base(c):
   c.javac_extractor_output_dir = c.out_path.join('kzip')
 
 
-@config_ctx(includes=['generate_file', 'chromium_gs'])
-def chromium(_):
-  pass
+@config_ctx(includes=['chromium_gs'])
+def chromium(c):
+  c.generated_repo = 'https://chromium.googlesource.com/chromium/src/out'
 
 
 @config_ctx(includes=['chromium_gs'])
@@ -92,6 +87,13 @@ def chromiumos(c):
 def chromium_gs(c):
   c.bucket_name = 'chrome-codesearch'
 
+
+@config_ctx(includes=['chrome_gs'])
+def chrome(c):
+  c.generated_repo = (
+      'https://chrome-internal.googlesource.com/chrome/src-internal/out')
+
+
 @config_ctx()
-def generate_file(c):
-  c.generated_repo = '%s/chromium/src/out' % c.chromium_git_url
+def chrome_gs(c):
+  c.bucket_name = 'chrome-internal-codesearch'
