@@ -14,6 +14,8 @@ def _chromium_memory_spec(**kwargs):
 # * Linux ASan LSan Builder
 # * Linux ASan LSan Tests (1)
 # * Linux ASan Tests (sandboxed)
+# * Linux Chromium OS ASan LSan Builder
+# * Linux Chromium OS ASan LSan Tests (1)
 # * Linux ChromiumOS MSan Builder
 # * Linux ChromiumOS MSan Tests
 # * Linux MSan Builder
@@ -97,32 +99,6 @@ SPEC = {
             },
             execution_mode=builder_spec.TEST,
             parent_buildername='Linux TSan Builder',
-            simulation_platform='linux',
-        ),
-    'Linux Chromium OS ASan LSan Builder':
-        _chromium_memory_spec(
-            chromium_config='chromium_asan',
-            gclient_config='chromium',
-            gclient_apply_config=['chromeos'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            chromium_apply_config=['lsan', 'mb'],
-            simulation_platform='linux',
-        ),
-    'Linux Chromium OS ASan LSan Tests (1)':
-        _chromium_memory_spec(
-            chromium_config='chromium_asan',
-            gclient_config='chromium',
-            gclient_apply_config=['chromeos'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            chromium_apply_config=['lsan', 'mb'],
-            parent_buildername='Linux Chromium OS ASan LSan Builder',
-            execution_mode=builder_spec.TEST,
             simulation_platform='linux',
         ),
     'android-asan':

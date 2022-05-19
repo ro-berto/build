@@ -2273,20 +2273,6 @@
       "tryserver.chromium.linux:linux_chromium_cfi_rel_ng"
     ]
   },
-  "chromium.memory:Linux Chromium OS ASan LSan Builder": {
-    "builders": [
-      "chromium.memory:Linux Chromium OS ASan LSan Builder",
-      "chromium.memory:Linux Chromium OS ASan LSan Tests (1)",
-      "tryserver.chromium.linux:linux_chromium_chromeos_asan_rel_ng"
-    ]
-  },
-  "chromium.memory:Linux Chromium OS ASan LSan Tests (1)": {
-    "builders": [
-      "chromium.memory:Linux Chromium OS ASan LSan Builder",
-      "chromium.memory:Linux Chromium OS ASan LSan Tests (1)",
-      "tryserver.chromium.linux:linux_chromium_chromeos_asan_rel_ng"
-    ]
-  },
   "chromium.memory:Linux TSan (bionic)": {
     "builders": [
       "chromium.memory:Linux TSan (bionic)",
@@ -3627,13 +3613,6 @@
     "builders": [
       "chromium.memory:Linux CFI",
       "tryserver.chromium.linux:linux_chromium_cfi_rel_ng"
-    ]
-  },
-  "tryserver.chromium.linux:linux_chromium_chromeos_asan_rel_ng": {
-    "builders": [
-      "chromium.memory:Linux Chromium OS ASan LSan Builder",
-      "chromium.memory:Linux Chromium OS ASan LSan Tests (1)",
-      "tryserver.chromium.linux:linux_chromium_chromeos_asan_rel_ng"
     ]
   },
   "tryserver.chromium.linux:linux_chromium_tsan_rel_ng": {

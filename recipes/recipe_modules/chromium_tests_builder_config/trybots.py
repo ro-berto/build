@@ -16,6 +16,7 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * android_n5x_swarming_dbg
     # * android_unswarmed_pixel_aosp
     # * layout_test_leak_detection
+    # * linux_chromium_chromeos_asan_rel_ng
     # * linux_chromium_chromeos_msan_rel_ng
     # * linux_chromium_msan_rel_ng
     # * linux-blink-rel
@@ -529,12 +530,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.linux',
                 buildername='linux-no-base-tracing-rel',
-            ),
-        'linux_chromium_chromeos_asan_rel_ng':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.memory',
-                buildername='Linux Chromium OS ASan LSan Builder',
-                tester='Linux Chromium OS ASan LSan Tests (1)',
             ),
         'linux_chromium_tsan_rel_ng':
             try_spec.TrySpec.create_for_single_mirror(
