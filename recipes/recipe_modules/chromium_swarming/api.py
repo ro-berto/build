@@ -1750,9 +1750,6 @@ class SwarmingApi(recipe_api.RecipeApi):
         '-server',
         self.m.swarming.current_server,
 
-        # TODO(tikuta): Tuning this if necessary.
-        '-worker',
-        50,
         '-task-summary-python',
         '-task-output-stdout',
         self.task_output_stdout,

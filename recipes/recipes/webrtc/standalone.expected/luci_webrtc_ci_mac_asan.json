@@ -1599,8 +1599,6 @@
       "collect",
       "-server",
       "https://example.swarmingserver.appspot.com",
-      "-worker",
-      "50",
       "-task-summary-python",
       "-task-output-stdout",
       "all",
