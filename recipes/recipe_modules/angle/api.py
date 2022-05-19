@@ -101,6 +101,8 @@ class ANGLEApi(recipe_api.RecipeApi):
                               'GLES 2.0 trace tests')
         self._run_trace_tests(checkout, '*/ES3_Vulkan_SwiftShader',
                               'GLES 3.0 trace tests')
+        self._run_trace_tests(checkout, '*/ES3_1_Vulkan_SwiftShader',
+                              'GLES 3.1 trace tests')
         self._run_trace_tests(checkout, '*/ES1_Vulkan_SwiftShader',
                               'GLES 1.0 trace tests')
       finally:
