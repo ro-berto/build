@@ -947,22 +947,10 @@ TRYBOTS = try_spec.TryDatabase.create({
     # Dawn GPU bots
     # The config for the following builders is now specified src-side in
     # //infra/config/subprojects/chromium/try/tryserver.chromium.dawn.star
+    # * dawn-linux-x64-deps-rel
     # * dawn-win10-x64-deps-rel
     # * dawn-win10-x86-deps-rel
     'tryserver.chromium.dawn': {
-        'dawn-linux-x64-deps-rel':
-            try_spec.TrySpec.create([
-                try_spec.TryMirror.create(
-                    builder_group='chromium.dawn',
-                    buildername='Dawn Linux x64 DEPS Builder',
-                    tester='Dawn Linux x64 DEPS Release (Intel HD 630)',
-                ),
-                try_spec.TryMirror.create(
-                    builder_group='chromium.dawn',
-                    buildername='Dawn Linux x64 DEPS Builder',
-                    tester='Dawn Linux x64 DEPS Release (NVIDIA)',
-                ),
-            ]),
         'dawn-mac-x64-deps-rel':
             try_spec.TrySpec.create([
                 try_spec.TryMirror.create(

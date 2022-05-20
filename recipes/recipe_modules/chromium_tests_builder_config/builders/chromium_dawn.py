@@ -45,6 +45,9 @@ def CreateTesterConfig(os, bits, builder):
 
 # The config for the following builders is now specified src-side in
 # //infra/config/subprojects/chromium/ci/chromium.dawn.star
+# * Dawn Linux x64 DEPS Builder
+# * Dawn Linux x64 DEPS Release (Intel HD 630)
+# * Dawn Linux x64 DEPS Release (NVIDIA)
 # * Dawn Win10 x64 DEPS Builder
 # * Dawn Win10 x64 DEPS Release (Intel HD 630)
 # * Dawn Win10 x64 DEPS Release (NVIDIA)
@@ -59,12 +62,6 @@ SPEC = {
         CreateTesterConfig('linux', 64, 'Dawn Linux x64 Builder'),
     'Dawn Linux x64 Release (NVIDIA)':
         CreateTesterConfig('linux', 64, 'Dawn Linux x64 Builder'),
-    'Dawn Linux x64 DEPS Builder':
-        CreateBuilderConfig('linux', 64, top_of_tree=False),
-    'Dawn Linux x64 DEPS Release (Intel HD 630)':
-        CreateTesterConfig('linux', 64, 'Dawn Linux x64 DEPS Builder'),
-    'Dawn Linux x64 DEPS Release (NVIDIA)':
-        CreateTesterConfig('linux', 64, 'Dawn Linux x64 DEPS Builder'),
     'Dawn Mac x64 Builder':
         CreateBuilderConfig('mac', 64, top_of_tree=True),
     # The Dawn Mac testers are actually running on thin Linux VMs.

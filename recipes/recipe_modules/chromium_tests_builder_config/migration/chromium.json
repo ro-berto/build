@@ -450,30 +450,6 @@
       "tryserver.chromium.dawn:linux-dawn-rel"
     ]
   },
-  "chromium.dawn:Dawn Linux x64 DEPS Builder": {
-    "builders": [
-      "chromium.dawn:Dawn Linux x64 DEPS Builder",
-      "chromium.dawn:Dawn Linux x64 DEPS Release (Intel HD 630)",
-      "chromium.dawn:Dawn Linux x64 DEPS Release (NVIDIA)",
-      "tryserver.chromium.dawn:dawn-linux-x64-deps-rel"
-    ]
-  },
-  "chromium.dawn:Dawn Linux x64 DEPS Release (Intel HD 630)": {
-    "builders": [
-      "chromium.dawn:Dawn Linux x64 DEPS Builder",
-      "chromium.dawn:Dawn Linux x64 DEPS Release (Intel HD 630)",
-      "chromium.dawn:Dawn Linux x64 DEPS Release (NVIDIA)",
-      "tryserver.chromium.dawn:dawn-linux-x64-deps-rel"
-    ]
-  },
-  "chromium.dawn:Dawn Linux x64 DEPS Release (NVIDIA)": {
-    "builders": [
-      "chromium.dawn:Dawn Linux x64 DEPS Builder",
-      "chromium.dawn:Dawn Linux x64 DEPS Release (Intel HD 630)",
-      "chromium.dawn:Dawn Linux x64 DEPS Release (NVIDIA)",
-      "tryserver.chromium.dawn:dawn-linux-x64-deps-rel"
-    ]
-  },
   "chromium.dawn:Dawn Linux x64 Release (Intel HD 630)": {
     "builders": [
       "chromium.dawn:Dawn Linux x64 Builder",
@@ -3282,14 +3258,6 @@
     "builders": [
       "chromium.chromiumos:linux-chromeos-js-code-coverage",
       "tryserver.chromium.chromiumos:linux-chromeos-js-code-coverage"
-    ]
-  },
-  "tryserver.chromium.dawn:dawn-linux-x64-deps-rel": {
-    "builders": [
-      "chromium.dawn:Dawn Linux x64 DEPS Builder",
-      "chromium.dawn:Dawn Linux x64 DEPS Release (Intel HD 630)",
-      "chromium.dawn:Dawn Linux x64 DEPS Release (NVIDIA)",
-      "tryserver.chromium.dawn:dawn-linux-x64-deps-rel"
     ]
   },
   "tryserver.chromium.dawn:dawn-mac-x64-deps-rel": {
