@@ -552,8 +552,12 @@ def GenTests(api):
   yield api.test(
       'skip collecting coverage data for java',
       api.chromium.try_build(
-          builder_group='tryserver.chromium.android',
-          builder='android-marshmallow-arm64-rel'),
+          builder_group='fake-group', builder='fake-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.code_coverage(use_java_coverage=True),
       api.properties(files_to_instrument=['some/path/to/non_source_file.txt']),
       api.post_process(post_process.MustRun, 'save paths of affected files'),
@@ -566,8 +570,12 @@ def GenTests(api):
   yield api.test(
       'process java coverage for per-cl',
       api.chromium.try_build(
-          builder_group='tryserver.chromium.android',
-          builder='android-marshmallow-arm64-rel'),
+          builder_group='fake-group', builder='fake-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.code_coverage(use_java_coverage=True),
       api.properties(files_to_instrument=[
           'some/path/to/file.java',
@@ -591,8 +599,12 @@ def GenTests(api):
   yield api.test(
       'java metadata for tests does not exist',
       api.chromium.try_build(
-          builder_group='tryserver.chromium.android',
-          builder='android-marshmallow-arm64-rel'),
+          builder_group='fake-group', builder='fake-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.code_coverage(use_java_coverage=True),
       api.properties(files_to_instrument=[
           'some/path/to/FileTest.java',
@@ -630,8 +642,12 @@ def GenTests(api):
   yield api.test(
       'do not raise failure for java per-cl coverage',
       api.chromium.try_build(
-          builder_group='tryserver.chromium.android',
-          builder='android-marshmallow-arm64-rel'),
+          builder_group='fake-group', builder='fake-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.code_coverage(use_java_coverage=True),
       api.properties(files_to_instrument=[
           'some/path/to/file.java',

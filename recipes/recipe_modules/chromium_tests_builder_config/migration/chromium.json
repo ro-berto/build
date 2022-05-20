@@ -205,14 +205,6 @@
       "tryserver.chromium.android:android-lollipop-arm-rel"
     ]
   },
-  "chromium.android:android-marshmallow-arm64-rel": {
-    "builders": [
-      "chromium.android:android-marshmallow-arm64-rel",
-      "chromium.gpu:Android Release (Nexus 5X)",
-      "tryserver.chromium.android:android-marshmallow-arm64-rel",
-      "tryserver.chromium.android:gpu-try-android-m-nexus-5x-64"
-    ]
-  },
   "chromium.android:android-marshmallow-x86-rel": {
     "builders": [
       "chromium.android:android-marshmallow-x86-rel",
@@ -2158,14 +2150,6 @@
       "tryserver.chromium.chromiumos:gpu-fyi-try-chromeos-octopus-exp"
     ]
   },
-  "chromium.gpu:Android Release (Nexus 5X)": {
-    "builders": [
-      "chromium.android:android-marshmallow-arm64-rel",
-      "chromium.gpu:Android Release (Nexus 5X)",
-      "tryserver.chromium.android:android-marshmallow-arm64-rel",
-      "tryserver.chromium.android:gpu-try-android-m-nexus-5x-64"
-    ]
-  },
   "chromium.gpu:GPU Linux Builder (dbg)": {
     "builders": [
       "chromium.gpu:GPU Linux Builder (dbg)",
@@ -2951,14 +2935,6 @@
       "tryserver.chromium.android:android-lollipop-arm-rel"
     ]
   },
-  "tryserver.chromium.android:android-marshmallow-arm64-rel": {
-    "builders": [
-      "chromium.android:android-marshmallow-arm64-rel",
-      "chromium.gpu:Android Release (Nexus 5X)",
-      "tryserver.chromium.android:android-marshmallow-arm64-rel",
-      "tryserver.chromium.android:gpu-try-android-m-nexus-5x-64"
-    ]
-  },
   "tryserver.chromium.android:android-marshmallow-x86-fyi-rel-reviver": {
     "builders": [
       "chromium.android.fyi:android-marshmallow-x86-fyi-rel-reviver",
@@ -3135,14 +3111,6 @@
       "tryserver.chromium.android:gpu-fyi-try-android-nvidia-shield-tv",
       "tryserver.chromium.android:gpu-fyi-try-android-p-pixel-2-32",
       "tryserver.chromium.android:gpu-fyi-try-android-r-pixel-4-32"
-    ]
-  },
-  "tryserver.chromium.android:gpu-try-android-m-nexus-5x-64": {
-    "builders": [
-      "chromium.android:android-marshmallow-arm64-rel",
-      "chromium.gpu:Android Release (Nexus 5X)",
-      "tryserver.chromium.android:android-marshmallow-arm64-rel",
-      "tryserver.chromium.android:gpu-try-android-m-nexus-5x-64"
     ]
   },
   "tryserver.chromium.angle:android-angle-chromium-try": {

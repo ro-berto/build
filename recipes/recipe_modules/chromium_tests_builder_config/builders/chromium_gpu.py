@@ -11,6 +11,7 @@ def _chromium_gpu_spec(**kwargs):
 
 # The config for the following builders is now specified src-side in
 # //infra/config/subprojects/chromium/ci/chromium.gpu.star
+# * Android Release (Nexus 5X)
 # * GPU Linux Builder
 # * GPU Mac Builder
 # * GPU Win x64 Builder
@@ -123,26 +124,6 @@ SPEC = {
             },
             execution_mode=builder_spec.TEST,
             parent_buildername='GPU Mac Builder (dbg)',
-            simulation_platform='linux',
-        ),
-    'Android Release (Nexus 5X)':
-        _chromium_gpu_spec(
-            chromium_config='android',
-            chromium_apply_config=[
-                'download_vr_test_apks',
-                'mb',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'android',
-                'enable_reclient',
-            ],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'android',
-            },
-            android_config='main_builder',
             simulation_platform='linux',
         ),
 }

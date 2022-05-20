@@ -113,6 +113,7 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * android-cronet-x86-dbg-oreo-tests
     # * android-cronet-x86-dbg-pie-tests
     # * android-inverse-fieldtrials-pie-x86-fyi-rel
+    # * android-marshmallow-arm64-rel
     # * android-marshmallow-x86-rel-non-cq
     # * android-pie-x86-rel
     # * android-weblayer-10-x86-rel-tests
@@ -120,6 +121,7 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * android-weblayer-pie-x86-rel-tests
     # * android-webview-12-x64-dbg
     # * android_optional_gpu_tests_rel
+    # * gpu-try-android-m-nexus-5x-64
     'tryserver.chromium.android': {
         'android-10-arm64-rel':
             try_spec.TrySpec.create_for_single_mirror(
@@ -189,17 +191,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.android',
                 buildername='android-lollipop-arm-rel',
             ),
-        'android-marshmallow-arm64-rel':
-            try_spec.TrySpec.create([
-                try_spec.TryMirror.create(
-                    builder_group='chromium.android',
-                    buildername='android-marshmallow-arm64-rel',
-                ),
-                try_spec.TryMirror.create(
-                    builder_group='chromium.gpu',
-                    buildername='Android Release (Nexus 5X)',
-                ),
-            ],),
         'android-marshmallow-x86-fyi-rel-reviver':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android.fyi',
@@ -317,11 +308,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.gpu.fyi',
                 buildername='GPU FYI Android arm64 Builder',
                 tester='Android FYI Release (Pixel 6)',
-            ),
-        'gpu-try-android-m-nexus-5x-64':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu',
-                buildername='Android Release (Nexus 5X)',
             ),
         'android-pie-arm64-fyi-rel':
             try_spec.TrySpec.create_for_single_mirror(
