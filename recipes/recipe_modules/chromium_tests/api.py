@@ -1162,7 +1162,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         if self.m.platform.is_win:
           self.m.chromium.process_dumps()
 
-        checkout_dir = self.m.chromium_checkout.checkout_dir.join('src')
+        checkout_dir = self.m.chromium_checkout.src_dir
         if self.m.chromium.c.TARGET_PLATFORM == 'android':
           if require_device_steps:
             self.m.chromium_android.common_tests_final_steps(

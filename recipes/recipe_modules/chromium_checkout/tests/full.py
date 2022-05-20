@@ -39,6 +39,9 @@ def RunSteps(api):
         api.chromium_checkout.get_files_affected_by_patch(),),
   ]
 
+  src_path = api.chromium_checkout.src_dir
+  assert src_path == api.chromium_checkout.checkout_dir.join('src')
+
 
 def GenTests(api):
   yield api.test(

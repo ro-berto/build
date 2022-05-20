@@ -197,7 +197,7 @@ def checkout_chromium(api):
   """Checks out chromium/src and returns its path."""
   api.gclient.set_config('chromium_empty')
   api.chromium_checkout.ensure_checkout()
-  return api.chromium_checkout.checkout_dir.join('src')
+  return api.chromium_checkout.src_dir
 
 
 def _fetch_model_data(api, exec_path, rejection_date_range,

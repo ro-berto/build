@@ -39,7 +39,17 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
     # It's important to maintain the same mounted location because file paths
     # can end up in cached goma keys/objects; mounting the named cache to an
     # alternate location could result in goma cache bloating.
+    # TODO(kimstephanie): Add option to override this path. Will be used by
+    # the Orchestrator to point to a cleanup/ dir instead.
     return self.m.path['cache'].join('builder')
+
+  # TODO (kimstephanie): Recipes should pass in the src path as an argument to
+  # recipe_modules instead of recipe_modules using src_dir and checkout_dir to
+  # construct these paths.
+  @property
+  def src_dir(self):
+    """Returns the path to the src checkout directory."""
+    return self.checkout_dir.join('src')
 
   def get_files_affected_by_patch(self, relative_to='src/', cwd=None,
                                   report_via_property=False):

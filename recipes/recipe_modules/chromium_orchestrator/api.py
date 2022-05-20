@@ -203,8 +203,9 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
       return maybe_raw_result
 
     if remove_src_checkout_experiment:
-      self.m.path['checkout'] = self.m.chromium_checkout.checkout_dir.join(
-          'src')
+      # TODO (kimstephanie): Remove this line once self.m.path['checkout']
+      # call sites are removed.
+      self.m.path['checkout'] = self.m.chromium_checkout.src_dir
       # Remove directories before downloading
       self.m.file.rmcontents('clear checkout testing directory',
                              self.m.path['checkout'].join('testing'))

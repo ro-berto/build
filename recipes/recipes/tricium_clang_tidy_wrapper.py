@@ -133,7 +133,7 @@ def RunSteps(api):
 
     api.chromium.runhooks(name='runhooks (with patch)')
 
-    src_dir = api.chromium_checkout.checkout_dir.join('src')
+    src_dir = api.chromium_checkout.src_dir
     with api.context(cwd=src_dir):
       affected = [
           src_dir.join(_normalize_path_for_os(api, f))
