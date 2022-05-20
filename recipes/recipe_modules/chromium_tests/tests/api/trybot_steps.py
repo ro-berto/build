@@ -247,54 +247,6 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
 
-  yield api.test(
-      'dummy-tester',
-      api.chromium_tests_builder_config.try_build(
-          builder_group='fake-group', builder='fake-try-builder',
-          builder_db=ctbc.BuilderDatabase.create({
-              'fake-group': {
-                  'fake-builder':
-                  ctbc.BuilderSpec.create(
-                      chromium_config='chromium',
-                      gclient_config='chromium',
-                  ),
-                  'fake-dummy-tester':
-                  ctbc.BuilderSpec.create(
-                      execution_mode=ctbc.PROVIDE_TEST_SPEC),
-              },
-          }),
-          try_db=ctbc.TryDatabase.create({
-              'fake-group': {
-                  'fake-try-builder':
-                  ctbc.TrySpec.create(mirrors=[
-                      ctbc.TryMirror.create(
-                          builder_group='fake-group',
-                          buildername='fake-builder',
-                          tester='fake-dummy-tester',
-                      )
-                  ]),
-              },
-          }),
-          ),
-      api.filter.suppress_analyze(),
-      api.chromium_tests.read_source_side_spec(
-          'fake-group',
-          {
-              'fake-dummy-tester': {
-                  'gtest_tests': [{
-                      'test': 'fake-test',
-                  }],
-              },
-          },
-      ),
-      api.post_check(
-          lambda check, steps: \
-          check('fake-test' in steps['compile (with patch)'].cmd)
-      ),
-      api.post_check(post_process.MustRun, 'fake-test (with patch)'),
-      api.post_process(post_process.DropExpectation),
-  )
-
   def custom_props():
     return sum([
         api.chromium_tests_builder_config.try_build(

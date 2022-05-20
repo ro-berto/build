@@ -8,7 +8,7 @@ import itertools
 import six
 import traceback
 
-from .builder_spec import BuilderSpec, COMPILE_AND_TEST, TEST, PROVIDE_TEST_SPEC
+from .builder_spec import BuilderSpec, COMPILE_AND_TEST, TEST
 from .builder_db import BuilderDatabase
 from .try_spec import TryDatabase, ALWAYS, NEVER, QUICK_RUN_ONLY
 
@@ -301,12 +301,11 @@ class BuilderConfig(object):
           # This branch will be executed for builders that are specified as
           # testers in the try mirrors
           else:
-            if builder_spec.execution_mode == COMPILE_AND_TEST:
+            if builder_spec.execution_mode != TEST:
               raise BuilderConfigException(
                   "try builder '{}' specifies '{}' as a tester,"
-                  ' but it has execution mode {}, it must be one of {}'.format(
-                      builder_id, b, builder_spec.execution_mode,
-                      [TEST, PROVIDE_TEST_SPEC]))
+                  ' but it has execution mode {}, it must be {}'.format(
+                      builder_id, b, builder_spec.execution_mode, TEST))
     except BuilderConfigException as e:
       if step_api is not None:
         step_api.empty(

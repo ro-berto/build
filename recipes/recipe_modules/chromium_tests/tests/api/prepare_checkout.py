@@ -159,11 +159,18 @@ def GenTests(api):
                           chromium_config='chromium',
                           gclient_config='chromium',
                       ),
+                  'fake-builder2':
+                      ctbc.BuilderSpec.create(
+                          chromium_config='chromium',
+                          gclient_config='chromium',
+                      ),
               },
               'fake-tester-group': {
                   'fake-tester':
                       ctbc.BuilderSpec.create(
-                          execution_mode=ctbc.PROVIDE_TEST_SPEC),
+                          execution_mode=ctbc.TEST,
+                          parent_builder_group='fake-group',
+                          parent_buildername='fake-builder2'),
               },
           }),
           try_db=ctbc.TryDatabase.create({

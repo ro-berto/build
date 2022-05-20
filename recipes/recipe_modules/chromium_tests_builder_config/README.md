@@ -14,8 +14,8 @@ following types and constants are available to be imported:
   mirror multiple builders and/or testers. The *chromium_tests* recipe module
   requires a `BuilderConfig` for nearly all of its operations.
 * `BuilderSpec` - The configuration information for a single builder.
-  * `COMPILE_AND_TEST`, `TEST`, `PROVIDE_TEST_SPEC` - Constants that the
-    `execution_mode` field of BuilderSpec can be set to.
+  * `COMPILE_AND_TEST`, `TEST` - Constants that the `execution_mode` field of
+  BuilderSpec can be set to.
 * `BuilderDatabase` - A mapping enabling looking up the `BuilderSpec` for a
   builder given its `BuilderId`.
 * `TryMirror` - The configuration information specifying the builder and

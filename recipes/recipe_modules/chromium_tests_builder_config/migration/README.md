@@ -212,33 +212,12 @@ the chrome project.
 
 ### Migration blockers
 
-#### PROVIDE_TEST_SPEC execution mode
-
-The PROVIDE_TEST_SPEC execution mode is set in builder specs for builders that
-do not actually exist. The builder specs aren't able to set any other
-information, they exist only so they can be specified as a mirror in a trybot
-definition to enable reading the corresponding source side spec. This allows a
-try builder to run the same test suite against multiple different dimensions.
-The PROVIDE_TEST_SPEC execution mode is only used for GPU builders.
-
-The PROVIDE_TEST_SPEC execution mode is not being supported in src-side configs
-as there is a mechanism for supporting the same functionality that does not
-require non-existent builders that can be confusing. This functionality should
-be achievable by creating a source side spec for the try builder itself that
-uses compound test suites and variants. A builder spec should be added to the
-recipe config for the try builder and the trybot configuration for the try
-builder should be updated to include itself as a mirror, this will allow for the
-removal of the PROVIDE_TEST_SPEC builder specs.
-
-Bugs with the [Builder-Config-Migration-Blocker-PROVIDE_TEST_SPEC
-label](https://bugs.chromium.org/p/chromium/issues/list?q=label%3ABuilder-Config-Migration-Blocker-PROVIDE_TEST_SPEC)
-have such builders as blockers.
-
 #### Mirroring non-existent builders
 
-Similar to the case of PROVIDE_TEST_SPEC, a small number of try builders mirror
-CI builders that do not actually exist, but unlike PROVIDE_TEST_SPEC builders,
-the builders actually do specify information in their builder specs.
+A small number of try builders mirror CI builders that do not actually exist.
+The builder spec from these non-existent builders are used by the mirroring try
+builder and the test specs are looked up using the non-existent builder's group
+and name.
 
 Mirroring non-existent builders is not being supported in src-side configs as
 there is a mechanism for defining a standalone try builder; that is a try

@@ -11,10 +11,6 @@ from RECIPE_MODULES.build.attr_utils import (attrib, attrs, enum, mapping,
 
 COMPILE_AND_TEST = 'compile/test'
 TEST = 'test'
-# The type of a bot that is never actually executed, it is only used as the
-# tester in a trybot-mirror configuration so that src-side information can be
-# specified providing different test configurations
-PROVIDE_TEST_SPEC = 'provide-test-spec'
 
 
 @attrs()
@@ -95,12 +91,8 @@ class BuilderSpec(object):
   #     a tester
   # TEST - Run tests, requires a parent builder, some ancestor must have
   #     COMPILE_AND_TEST execution mode
-  # PROVIDE_TEST_SPEC - Cannot actually be executed, can only be specified as a
-  #     tester in a trybot's mirror in order to provide an additional test spec
-  #     to read
   execution_mode = attrib(
-      enum([COMPILE_AND_TEST, TEST, PROVIDE_TEST_SPEC]),
-      default=COMPILE_AND_TEST)
+      enum([COMPILE_AND_TEST, TEST]), default=COMPILE_AND_TEST)
 
   # An optional group of the bot's parent builder - if parent_buildername is
   # provided and parent_builder_group is not, the parent's builder_group is the

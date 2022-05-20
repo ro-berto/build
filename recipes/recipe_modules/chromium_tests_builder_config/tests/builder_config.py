@@ -116,8 +116,7 @@ def RunSteps(api):
     )
   message = ("try builder 'fake-try-group:fake-try-builder-with-bad-tester'"
              " specifies 'fake-group:fake-builder' as a tester,"
-             " but it has execution mode compile/test,"
-             " it must be one of ['test', 'provide-test-spec']")
+             " but it has execution mode compile/test, it must be test")
   api.assertions.assertEqual(str(caught.exception), message)
 
   # Test lookup failures when using step API

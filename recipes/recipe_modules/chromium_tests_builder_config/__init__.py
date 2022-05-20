@@ -21,6 +21,6 @@ PROPERTIES = properties.InputProperties
 from .builder_config import (BuilderConfig, BuilderConfigException,
                              delegate_to_builder_spec)
 from .builder_db import BuilderDatabase
-from .builder_spec import BuilderSpec, COMPILE_AND_TEST, TEST, PROVIDE_TEST_SPEC
+from .builder_spec import BuilderSpec, COMPILE_AND_TEST, TEST
 from .try_spec import (TryDatabase, TryMirror, TrySpec, COMPILE_AND_TEST,
                        COMPILE, ALWAYS, NEVER, QUICK_RUN_ONLY)

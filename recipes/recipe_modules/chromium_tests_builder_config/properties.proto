@@ -28,18 +28,6 @@ message BuilderSpec {
     // already compiled and either isolated or transferred using the legacy
     // package transfer mechanism.
     TEST = 2;
-    // The builder will not actually be executed and instead exists only to
-    // provide an additional testing spec that can be referred to in a mirror
-    // spec to provide additional test configurations.
-    //
-    // This is used by GPU try builders to run the same test against multiple
-    // hardware configurations, which was otherwise unsupported when they were
-    // implemented.
-    //
-    // Eventually, this execution mode will be removed once testing specs are
-    // moved out of source side spec files and into the starlark builder
-    // definitions.
-    PROVIDE_TEST_SPEC = 3;
   }
   ExecutionMode execution_mode = 2;
 

@@ -39,7 +39,7 @@ from PB.recipe_modules.build.chromium_tests_builder_config import (properties as
                                                                   )
 
 from . import (BuilderConfig, BuilderDatabase, BuilderSpec, COMPILE_AND_TEST,
-               TEST, PROVIDE_TEST_SPEC, NEVER, QUICK_RUN_ONLY, ALWAYS)
+               TEST, NEVER, QUICK_RUN_ONLY, ALWAYS)
 
 VALIDATORS = proto_validation.Registry()
 
@@ -93,12 +93,8 @@ def _validate_builder_spec(obj, ctx):
 
 
 _EXECUTION_MODE_MAP = {
-    properties_pb.BuilderSpec.ExecutionMode.COMPILE_AND_TEST:
-        COMPILE_AND_TEST,
-    properties_pb.BuilderSpec.ExecutionMode.TEST:
-        TEST,
-    properties_pb.BuilderSpec.ExecutionMode.PROVIDE_TEST_SPEC:
-        PROVIDE_TEST_SPEC,
+    properties_pb.BuilderSpec.ExecutionMode.COMPILE_AND_TEST: COMPILE_AND_TEST,
+    properties_pb.BuilderSpec.ExecutionMode.TEST: TEST,
 }
 
 

@@ -238,10 +238,6 @@ _UNSUPPORTED_ATTRS = (
 
 
 def _builder_spec_migration_blocker(builder_id, builder_spec):
-  if builder_spec.execution_mode == ctbc.PROVIDE_TEST_SPEC:
-    return "cannot migrate builder '{}' with {} execution_mode".format(
-        builder_id, builder_spec.execution_mode)
-
   if builder_id in _NON_EXISTENT_BUILDERS:
     return "builder '{}' does not exist".format(builder_id)
 
@@ -509,10 +505,6 @@ def GenTests(api):
           ]
         },
         "migration.foo:foo-builder": {
-          "blockers": [
-            "cannot migrate builder 'migration.foo:foo-x-tests' with \
-provide-test-spec execution_mode"
-          ],
           "builders": [
             "migration.foo:foo-builder",
             "migration.foo:foo-x-tests",
@@ -521,10 +513,6 @@ provide-test-spec execution_mode"
           ]
         },
         "migration.foo:foo-x-tests": {
-          "blockers": [
-            "cannot migrate builder 'migration.foo:foo-x-tests' with \
-provide-test-spec execution_mode"
-          ],
           "builders": [
             "migration.foo:foo-builder",
             "migration.foo:foo-x-tests",
@@ -533,10 +521,6 @@ provide-test-spec execution_mode"
           ]
         },
         "migration.foo:foo-y-tests": {
-          "blockers": [
-            "cannot migrate builder 'migration.foo:foo-x-tests' with \
-provide-test-spec execution_mode"
-          ],
           "builders": [
             "migration.foo:foo-builder",
             "migration.foo:foo-x-tests",
@@ -552,10 +536,6 @@ provide-test-spec execution_mode"
           ]
         },
         "tryserver.migration.foo:foo-try-builder": {
-          "blockers": [
-            "cannot migrate builder 'migration.foo:foo-x-tests' with \
-provide-test-spec execution_mode"
-          ],
           "builders": [
             "migration.foo:foo-builder",
             "migration.foo:foo-x-tests",
@@ -588,7 +568,8 @@ provide-test-spec execution_mode"
                       ctbc.BuilderSpec.create(),
                   'foo-x-tests':
                       ctbc.BuilderSpec.create(
-                          execution_mode=ctbc.PROVIDE_TEST_SPEC,
+                          execution_mode=ctbc.TEST,
+                          parent_buildername='foo-builder',
                       ),
                   'foo-y-tests':
                       ctbc.BuilderSpec.create(
@@ -1051,35 +1032,6 @@ provide-test-spec execution_mode"
       api.post_check(post_process.StatusException),
       api.post_check(post_process.ResultReason,
                      "unknown builder 'foo-group:foo-builder'"),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'migration-provide-test-spec',
-      api.properties(
-          migration_operation={
-              'builders_to_migrate': [{
-                  'builder_group': 'foo-group',
-                  'builder': 'foo-builder',
-              }],
-              'output_path': '/fake/output/path',
-          }),
-      api.chromium_tests_builder_config.databases(
-          ctbc.BuilderDatabase.create({
-              'foo-group': {
-                  'foo-builder':
-                      ctbc.BuilderSpec.create(
-                          execution_mode=ctbc.PROVIDE_TEST_SPEC),
-              }
-          }),
-          ctbc.TryDatabase.create({}),
-      ),
-      api.post_check(post_process.StatusException),
-      api.post_check(
-          post_process.ResultReasonRE,
-          ("cannot migrate builder 'foo-group:foo-builder' "
-           "with provide-test-spec execution_mode"),
-      ),
       api.post_process(post_process.DropExpectation),
   )
 
