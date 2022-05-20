@@ -543,8 +543,8 @@ class FlakinessApi(recipe_api.RecipeApi):
           ' so a random subset of those tests have been selected.'.format(
               trim_step_label, self._max_test_targets))
       s.presentation.logs['new_test_subset(%s)' % trim_step_label] = '\n'.join([
-          'test_id: {}, variant_hash: {}'.format(t.test_id, t.variant_hash)
-          for t in res
+          'test_id: {}, variant_hash: {}, duration_milliseconds: {}'.format(
+              t.test_id, t.variant_hash, t.duration_milliseconds) for t in res
       ])
       return res
 
@@ -641,8 +641,10 @@ class FlakinessApi(recipe_api.RecipeApi):
           excluded_invs=excluded_invs,
           builder=builder_name)
       p.logs['new_tests'] = ('new tests: \n\n{}'.format('\n'.join([
-          'test_id: {}, variant_hash: {}, experimental: {}'.format(
-              t.test_id, t.variant_hash, t.is_experimental)
+          'test_id: {}, variant_hash: {}, experimental: {},'
+          ' duration_milliseconds: {}'.format(t.test_id, t.variant_hash,
+                                              t.is_experimental,
+                                              t.duration_milliseconds)
           for t in self.m.py3_migration.consistent_ordering(
               new_tests, key=lambda t: (t.test_id, t.variant_hash))
       ])))
@@ -726,6 +728,8 @@ class FlakinessApi(recipe_api.RecipeApi):
 
     test_objects_by_suffix = collections.defaultdict(list)
 
+    s = self.m.step('match single new tests with test suites', cmd=None)
+
     # This operation is O(len(test_obj) * len(new_tests)) because parsing
     # test_id is only intended for LUCI UI grouping, see
     # http://shortn/_StMScXolrz. max_test_targets will also bind the number of
@@ -733,13 +737,27 @@ class FlakinessApi(recipe_api.RecipeApi):
     # if the test_id start similarly.
     for test in test_objects:
       total_duration_milliseconds = 0
-      test_filter = []
+      new_tests_in_test_object = []
       # find whether the Test object has a matching test_id.
       for new_test in new_tests:
         if (new_test.test_object == test):
-          test_filter.append(new_test.test_name)
+          new_tests_in_test_object.append(new_test)
           total_duration_milliseconds += (new_test.duration_milliseconds or 0)
-      if test_filter:
+      if new_tests_in_test_object:
+
+        log_lines = [
+            'test_id: {}, variant_hash: {}, duration_milliseconds: {}'.format(
+                t.test_id, t.variant_hash, t.duration_milliseconds)
+            for t in new_tests_in_test_object
+        ]
+        log_lines.append('total_duration_milliseconds: %d' %
+                         total_duration_milliseconds)
+        s.presentation.logs['new tests to run in %s' %
+                            test.canonical_name] = '\n'.join(log_lines)
+
+        test_filter = [
+            new_test.test_name for new_test in new_tests_in_test_object
+        ]
         if isinstance(test, steps.AndroidJunitTest):
           # android junit need the spec's additional_args updated with the
           # repeat and filter clauses.
