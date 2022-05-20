@@ -751,16 +751,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.fyi',
                 buildername='ios13-sdk-simulator',
             ),
-        'ios14-beta-simulator':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
-                buildername='ios14-beta-simulator',
-            ),
-        'ios14-sdk-simulator':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
-                buildername='ios14-sdk-simulator',
-            ),
         'ios15-beta-simulator':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',

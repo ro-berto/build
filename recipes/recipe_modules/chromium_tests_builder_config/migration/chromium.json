@@ -984,18 +984,6 @@
       "tryserver.chromium.mac:ios13-sdk-simulator"
     ]
   },
-  "chromium.fyi:ios14-beta-simulator": {
-    "builders": [
-      "chromium.fyi:ios14-beta-simulator",
-      "tryserver.chromium.mac:ios14-beta-simulator"
-    ]
-  },
-  "chromium.fyi:ios14-sdk-simulator": {
-    "builders": [
-      "chromium.fyi:ios14-sdk-simulator",
-      "tryserver.chromium.mac:ios14-sdk-simulator"
-    ]
-  },
   "chromium.fyi:ios15-beta-simulator": {
     "builders": [
       "chromium.fyi:ios15-beta-simulator",
@@ -3830,18 +3818,6 @@
     "builders": [
       "chromium.fyi:ios13-sdk-simulator",
       "tryserver.chromium.mac:ios13-sdk-simulator"
-    ]
-  },
-  "tryserver.chromium.mac:ios14-beta-simulator": {
-    "builders": [
-      "chromium.fyi:ios14-beta-simulator",
-      "tryserver.chromium.mac:ios14-beta-simulator"
-    ]
-  },
-  "tryserver.chromium.mac:ios14-sdk-simulator": {
-    "builders": [
-      "chromium.fyi:ios14-sdk-simulator",
-      "tryserver.chromium.mac:ios14-sdk-simulator"
     ]
   },
   "tryserver.chromium.mac:ios15-beta-simulator": {
