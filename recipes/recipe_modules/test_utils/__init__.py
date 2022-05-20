@@ -13,6 +13,7 @@ DEPS = [
     'flakiness',
     'py3_migration',
     'traceback',
+    'weetbix',
     'depot_tools/tryserver',
     'presentation_utils',
     'recipe_engine/buildbucket',

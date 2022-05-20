@@ -18,6 +18,7 @@ from recipe_engine.recipe_api import Property
 from recipe_engine import post_process
 
 from RECIPE_MODULES.build.chromium_tests import steps
+from RECIPE_MODULES.build.weetbix.api import CLUSTER_STEP_NAME
 
 PROPERTIES = {
     # This property is a dictionary that specifies the expectations of the
@@ -271,6 +272,78 @@ def GenTests(api):
                        'testA'),
       api.post_process(CheckStepInput, 'exonerate unrelated test failures',
                        'testB'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'cluster failures with weetbix',
+      api.chromium.generic_build(
+          builder_group='g',
+          builder='b',
+          experiments=['enable_weetbix_queries'],
+      ),
+      api.override_step_data(
+          'failed_test results',
+          stdout=api.raw_io.output_text(
+              api.test_utils.rdb_results(
+                  'failed_test', failing_tests=['testA', 'testB']))),
+      api.properties(
+          known_flakes_expectations={
+              'failed_test': ['testA', 'testB'],
+          },
+          **{
+              '$build/test_utils': {
+                  'should_exonerate_flaky_failures': True,
+              },
+          }),
+      api.step_data(
+          'query known flaky failures on CQ',
+          api.json.output({
+              'flakes': [
+                  {
+                      'test': {
+                          'step_ui_name': 'failed_test (with patch)',
+                          'test_name': 'testA',
+                      },
+                      'affected_gerrit_changes': ['123', '234'],
+                      'monorail_issue': '999',
+                  },
+                  {
+                      'test': {
+                          'step_ui_name': 'failed_test (with patch)',
+                          'test_name': 'testB',
+                      },
+                      'affected_gerrit_changes': ['567', '678'],
+                      'monorail_issue': '998',
+                  },
+              ]
+          })),
+      api.step_data(
+          CLUSTER_STEP_NAME,
+          stdout=api.raw_io.output_text(
+              api.json.dumps({
+                  'clusteredTestResults': [{
+                      'requestTag':
+                          'ninja://gpu:suite_1_test_one_reason_0',
+                      'clusters': [{
+                          'clusterId': {
+                              'algorithm': 'reason-v3',
+                              'id': 'fa4a547e837c48d87ea1f9dfb3d44173',
+                              'bug': {
+                                  'system':
+                                      'monorail',
+                                  'id':
+                                      '12345',
+                                  'link_text':
+                                      'crbug.com/12345',
+                                  'url': ('bugs.chromium.org/p/chromium/issues/'
+                                          'detail?id=12345'),
+                              },
+                          }
+                      }],
+                  }]
+              }))),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )

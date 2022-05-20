@@ -529,6 +529,12 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
       tests_to_check.extend(tests)
 
+    experiments = self.m.buildbucket.build.input.experiments
+    if 'enable_weetbix_queries' in experiments:
+      self.m.weetbix.get_clusters_for_failing_test_results(failed_test_suites)
+      # TODO (kimstephanie): Process clusters and output cluster weetbix flake
+      # info for data analysis
+
     known_flakes = self._query_flaky_failures(tests_to_check)
     if not known_flakes:
       return
