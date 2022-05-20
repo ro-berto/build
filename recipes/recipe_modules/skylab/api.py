@@ -57,9 +57,8 @@ class SkylabApi(recipe_api.RecipeApi):
       A dict of CTP build ID keyed by request_tag(see SkylabRequest).
     """
     # Ensure the crosfleet cipd package is installed
-    # TODO(crbug.com/1273634): We need to pin the version of crosfleet to use.
     crosfleet_tool = self.m.cipd.ensure_tool(
-        'chromiumos/infra/crosfleet/${platform}', 'latest')
+        'chromiumos/infra/crosfleet/${platform}', 'prod')
 
     build_id_by_tags = {}
     with self.m.step.nest(step_name) as presentation:

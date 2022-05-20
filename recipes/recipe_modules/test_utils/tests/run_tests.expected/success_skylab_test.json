@@ -20,7 +20,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[START_DIR]/cipd_tool/chromiumos/infra/crosfleet/latest"
+      "[START_DIR]/cipd_tool/chromiumos/infra/crosfleet/prod"
     ],
     "infra_step": true,
     "luci_context": {
@@ -45,9 +45,9 @@
       "cipd",
       "ensure",
       "-root",
-      "[START_DIR]/cipd_tool/chromiumos/infra/crosfleet/latest",
+      "[START_DIR]/cipd_tool/chromiumos/infra/crosfleet/prod",
       "-ensure-file",
-      "chromiumos/infra/crosfleet/${platform} latest",
+      "chromiumos/infra/crosfleet/${platform} prod",
       "-max-threads",
       "0",
       "-json-output",
@@ -73,7 +73,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-latest----------\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-prod------------\", @@@",
       "@@@STEP_LOG_LINE@json.output@        \"package\": \"chromiumos/infra/crosfleet/resolved-platform\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
@@ -99,7 +99,7 @@
   },
   {
     "cmd": [
-      "[START_DIR]/cipd_tool/chromiumos/infra/crosfleet/latest/crosfleet",
+      "[START_DIR]/cipd_tool/chromiumos/infra/crosfleet/prod/crosfleet",
       "run",
       "test",
       "-json",
