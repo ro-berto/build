@@ -476,13 +476,7 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
+      "python3",
       "RECIPE_REPO[build]\\recipes\\kill_processes.py"
     ],
     "infra_step": true,

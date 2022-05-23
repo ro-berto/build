@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -16,7 +16,7 @@ import time
 
 
 def Log(message):
-  print '%s: %s' % (time.asctime(), message)
+  print('%s: %s' % (time.asctime(), message))
 
 
 def KillAll(process_names, must_die=True):
@@ -96,8 +96,8 @@ def KillProcessesUsingCurrentDirectory(handle_exe):
                                '/accepteula'],
                               stdout=subprocess.PIPE,
                               stderr=subprocess.PIPE)
-  except WindowsError, e:  # pylint: disable=E0602
-    print e
+  except WindowsError as e:  # pylint: disable=E0602
+    print(e)
     return False
   stdout, stderr = handle.communicate()
 

@@ -1602,9 +1602,10 @@ class ChromiumApi(recipe_api.RecipeApi):
       raise
 
   def taskkill(self):
-    self.m.build.python(
+    self.m.step(
         'taskkill',
-        self.repo_resource('recipes', 'kill_processes.py'),
+        ['python3',
+         self.repo_resource('recipes', 'kill_processes.py')],
         infra_step=True)
 
   def process_dumps(self, **kwargs):
