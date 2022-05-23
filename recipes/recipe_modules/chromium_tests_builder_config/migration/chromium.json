@@ -142,12 +142,6 @@
       "tryserver.chromium.android:android-11-x86-rel"
     ]
   },
-  "chromium.android:android-12-x64-rel": {
-    "builders": [
-      "chromium.android:android-12-x64-rel",
-      "tryserver.chromium.android:android-12-x64-rel"
-    ]
-  },
   "chromium.android:android-bfcache-rel": {
     "builders": [
       "chromium.android:android-bfcache-rel",
@@ -2869,12 +2863,6 @@
     "builders": [
       "chromium.android.fyi:android-12-x64-fyi-rel",
       "tryserver.chromium.android:android-12-x64-fyi-rel"
-    ]
-  },
-  "tryserver.chromium.android:android-12-x64-rel": {
-    "builders": [
-      "chromium.android:android-12-x64-rel",
-      "tryserver.chromium.android:android-12-x64-rel"
     ]
   },
   "tryserver.chromium.android:android-asan": {
