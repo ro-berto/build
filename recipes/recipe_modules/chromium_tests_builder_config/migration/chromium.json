@@ -133,8 +133,7 @@
   },
   "chromium.android:android-11-x86-rel": {
     "builders": [
-      "chromium.android:android-11-x86-rel",
-      "tryserver.chromium.android:android-11-x86-rel"
+      "chromium.android:android-11-x86-rel"
     ]
   },
   "chromium.android:android-cronet-arm-rel": {
@@ -2698,12 +2697,6 @@
     "builders": [
       "chromium.android.fyi:android-11-x86-fyi-rel",
       "tryserver.chromium.android:android-11-x86-fyi-rel"
-    ]
-  },
-  "tryserver.chromium.android:android-11-x86-rel": {
-    "builders": [
-      "chromium.android:android-11-x86-rel",
-      "tryserver.chromium.android:android-11-x86-rel"
     ]
   },
   "tryserver.chromium.android:android-12-x64-fyi-rel": {

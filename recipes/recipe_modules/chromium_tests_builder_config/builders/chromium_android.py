@@ -26,6 +26,7 @@ def _chromium_android_spec(**kwargs):
 # * Marshmallow 64 bit Tester
 # * Nougat Phone Tester
 # * Oreo Phone Tester
+# * android-11-x86-rel
 # * android-12-x64-rel
 # * android-arm64-proguard-rel
 # * android-bfcache-rel
