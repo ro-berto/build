@@ -48,6 +48,8 @@ def GenTests(api):
       'full',
       api.platform('linux', 64),
       api.buildbucket.generic_build(),
+      api.path.exists(
+          api.chromium_checkout.src_dir.join('out/Release/browser_tests')),
   )
 
   def verify_checkout_dir(check, step_odict, expected_path):

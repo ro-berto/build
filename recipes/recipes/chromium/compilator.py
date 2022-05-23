@@ -187,8 +187,8 @@ def archive_src_side_deps(api):
   with api.step.nest('archive src-side dep paths') as nested_step:
     dep_paths = get_src_side_dep_paths(api)
 
-    digest = api.cas.archive('archive src-side deps', str(api.path['checkout']),
-                             *dep_paths)
+    digest = api.cas.archive('archive src-side deps',
+                             str(api.chromium_checkout.src_dir), *dep_paths)
     nested_step.presentation.properties['src_side_deps_digest'] = digest
     nested_step.presentation.logs['dep paths'] = api.json.dumps(
         dep_paths, indent=2)
@@ -214,13 +214,13 @@ def get_src_side_dep_paths(api):
     # Paths written in these files look like '../../testing/X.py' relative
     # to the output dir
     file_path = api.path.relpath(
-        api.chromium.output_dir.join(path), api.path['checkout'])
-    file_path = api.path['checkout'].join(file_path)
+        api.chromium.output_dir.join(path), api.chromium_checkout.src_dir)
+    file_path = api.chromium_checkout.src_dir.join(file_path)
 
     # Path can be a regex pattern
     if "*" in str(file_path):
       paths = api.file.glob_paths('get files that match pattern',
-                                  api.path['checkout'], str(file_path))
+                                  api.chromium_checkout.src_dir, str(file_path))
       dep_paths.update([str(p) for p in paths])
     else:
       dep_paths.add(str(file_path))
@@ -230,7 +230,7 @@ def get_src_side_dep_paths(api):
 def get_deleted_files(api, affected_files):
   deleted_files = []
   for f in affected_files:
-    if not api.path.exists(api.path['checkout'].join(f)):
+    if not api.path.exists(api.chromium_checkout.src_dir.join(f)):
       deleted_files.append(f)
   return deleted_files
 
@@ -343,7 +343,8 @@ def GenTests(api):
           revision='deadbeef',
       ),
       api.platform.name('linux'),
-      api.path.exists(api.path['checkout'].join('out/Release/browser_tests')),
+      api.path.exists(
+          api.chromium_checkout.src_dir.join('out/Release/browser_tests')),
       ctbc_properties(),
       api.properties(
           InputProperties(
@@ -430,7 +431,8 @@ def GenTests(api):
           git_repo='https://chromium.googlesource.com/v8/v8',
       ),
       api.platform.name('linux'),
-      api.path.exists(api.path['checkout'].join('out/Release/browser_tests')),
+      api.path.exists(
+          api.chromium_checkout.src_dir.join('out/Release/browser_tests')),
       ctbc_properties(),
       api.properties(
           InputProperties(
@@ -479,7 +481,7 @@ def GenTests(api):
                   builder_name='fake-orchestrator',
                   builder_group='fake-try-group'))),
       api.tryserver.get_files_affected_by_patch(['foo.cc', 'bar/baz.cc']),
-      api.path.exists(api.path['checkout'].join('foo.cc')),
+      api.path.exists(api.chromium_checkout.src_dir.join('foo.cc')),
       api.post_process(post_process.MustRun, 'deleted files'),
       api.post_process(post_process.PropertyEquals, 'deleted_files',
                        ['bar/baz.cc']),
@@ -494,7 +496,8 @@ def GenTests(api):
           revision='deadbeef',
           experiments=['remove_src_checkout_experiment']),
       api.platform.name('linux'),
-      api.path.exists(api.path['checkout'].join('out/Release/browser_tests')),
+      api.path.exists(
+          api.chromium_checkout.src_dir.join('out/Release/browser_tests')),
       ctbc_properties(),
       api.properties(
           InputProperties(
@@ -533,7 +536,8 @@ def GenTests(api):
           revision='deadbeef',
           experiments=['remove_src_checkout_experiment']),
       api.platform.name('linux'),
-      api.path.exists(api.path['checkout'].join('out/Release/browser_tests')),
+      api.path.exists(
+          api.chromium_checkout.src_dir.join('out/Release/browser_tests')),
       ctbc_properties(),
       api.properties(
           InputProperties(
@@ -641,7 +645,8 @@ def GenTests(api):
           revision='deadbeef',
       ),
       api.platform.name('linux'),
-      api.path.exists(api.path['checkout'].join('out/Release/browser_tests')),
+      api.path.exists(
+          api.chromium_checkout.src_dir.join('out/Release/browser_tests')),
       ctbc_properties(),
       api.properties(
           InputProperties(
@@ -666,7 +671,8 @@ def GenTests(api):
       ),
       api.platform.name('linux'),
       api.code_coverage(use_clang_coverage=True),
-      api.path.exists(api.path['checkout'].join('out/Release/browser_tests')),
+      api.path.exists(
+          api.chromium_checkout.src_dir.join('out/Release/browser_tests')),
       ctbc_properties(),
       api.properties(
           InputProperties(
@@ -813,7 +819,8 @@ def GenTests(api):
           revision='deadbeef',
       ),
       api.platform.name('linux'),
-      api.path.exists(api.path['checkout'].join('out/Release/browser_tests')),
+      api.path.exists(
+          api.chromium_checkout.src_dir.join('out/Release/browser_tests')),
       ctbc_properties(),
       api.properties(
           InputProperties(
@@ -861,7 +868,8 @@ def GenTests(api):
           revision='deadbeef',
       ),
       api.platform.name('linux'),
-      api.path.exists(api.path['checkout'].join('out/Release/browser_tests')),
+      api.path.exists(
+          api.chromium_checkout.src_dir.join('out/Release/browser_tests')),
       ctbc_properties(),
       api.properties(
           InputProperties(
