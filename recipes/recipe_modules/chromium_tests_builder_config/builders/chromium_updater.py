@@ -43,16 +43,6 @@ SPEC = {
     # mac release builders and testers
     'mac-updater-builder-rel':
         CreateBuilderConfig('mac'),
-    'mac10.11-updater-tester-rel':
-        CreateBuilderConfig(
-            'mac',
-            execution_mode=builder_spec.TEST,
-            parent_buildername='mac-updater-builder-rel'),
-    'mac10.12-updater-tester-rel':
-        CreateBuilderConfig(
-            'mac',
-            execution_mode=builder_spec.TEST,
-            parent_buildername='mac-updater-builder-rel'),
     'mac10.13-updater-tester-rel':
         CreateBuilderConfig(
             'mac',
@@ -84,16 +74,6 @@ SPEC = {
     # mac debug builders and testers
     'mac-updater-builder-dbg':
         CreateBuilderConfig('mac'),
-    'mac10.11-updater-tester-dbg':
-        CreateBuilderConfig(
-            'mac',
-            execution_mode=builder_spec.TEST,
-            parent_buildername='mac-updater-builder-dbg'),
-    'mac10.12-updater-tester-dbg':
-        CreateBuilderConfig(
-            'mac',
-            execution_mode=builder_spec.TEST,
-            parent_buildername='mac-updater-builder-dbg'),
     'mac10.13-updater-tester-dbg':
         CreateBuilderConfig(
             'mac',
