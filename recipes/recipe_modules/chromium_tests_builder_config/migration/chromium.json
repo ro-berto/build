@@ -137,12 +137,6 @@
       "tryserver.chromium.android:android-11-x86-rel"
     ]
   },
-  "chromium.android:android-bfcache-rel": {
-    "builders": [
-      "chromium.android:android-bfcache-rel",
-      "tryserver.chromium.android:android-bfcache-rel"
-    ]
-  },
   "chromium.android:android-cronet-arm-rel": {
     "builders": [
       "chromium.android:android-cronet-arm-rel",
@@ -2788,12 +2782,6 @@
     "builders": [
       "chromium.memory:android-asan",
       "tryserver.chromium.android:android-asan"
-    ]
-  },
-  "tryserver.chromium.android:android-bfcache-rel": {
-    "builders": [
-      "chromium.android:android-bfcache-rel",
-      "tryserver.chromium.android:android-bfcache-rel"
     ]
   },
   "tryserver.chromium.android:android-chrome-pie-x86-wpt-fyi-rel": {

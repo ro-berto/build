@@ -28,6 +28,7 @@ def _chromium_android_spec(**kwargs):
 # * Oreo Phone Tester
 # * android-12-x64-rel
 # * android-arm64-proguard-rel
+# * android-bfcache-rel
 # * android-cronet-arm-dbg
 # * android-cronet-x86-dbg
 # * android-cronet-x86-dbg-10-tests
@@ -137,10 +138,6 @@ def stock_cronet_config(name, config='Release', **kwargs):
 
 
 SPEC.update([
-    stock_config(
-        'android-bfcache-rel',
-        chromium_apply_config=['download_vr_test_apks'],
-        chromium_config_kwargs={'TARGET_BITS': 32}),
     stock_config('android-incremental-dbg', config='Debug'),
     stock_config(
         'android-lollipop-arm-rel',
