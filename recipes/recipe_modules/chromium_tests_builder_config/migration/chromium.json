@@ -108,11 +108,6 @@
       "tryserver.chromium.android:android-webview-pie-x86-wpt-fyi-rel"
     ]
   },
-  "chromium.android:Android ASAN (dbg)": {
-    "builders": [
-      "chromium.android:Android ASAN (dbg)"
-    ]
-  },
   "chromium.android:Android x86 Builder (dbg)": {
     "builders": [
       "chromium.android:Android x86 Builder (dbg)",
