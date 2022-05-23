@@ -805,33 +805,6 @@ def GenTests(api):
   )
 
   yield api.test(
-      'quick run stable filter',
-      api.properties(
-          **{
-              "$recipe_engine/cq": {
-                  "active": True,
-                  "dryRun": True,
-                  "runMode": "QUICK_DRY_RUN",
-                  "topLevel": True
-              }
-          }),
-      api.chromium_tests_builder_config.try_build(
-          builder_group='tryserver.chromium.test',
-          builder='st-rel',
-          builder_db=_TEST_BUILDERS,
-          try_db=_TEST_TRYBOTS,
-      ),
-      api.chromium_tests.read_source_side_spec('chromium.test', {
-          'chromium-rel': {
-              'gtest_tests': ['base_unittests'],
-          },
-      }),
-      api.post_process(post_process.MustRun, 'quick run options'),
-      api.post_process(post_process.DropExpectation),
-      api.filter.suppress_analyze(),
-  )
-
-  yield api.test(
       'depend_on_footer_failure',
       api.platform('linux', 64),
       api.chromium.try_build(

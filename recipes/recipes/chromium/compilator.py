@@ -82,7 +82,7 @@ def compilator_steps(api, properties):
 
     # Implies that this compilator build must be compiled without a patch
     # so that the orchestrator can retry these swarming tests without patch
-    use_rts, _ = api.chromium_tests.get_quickrun_options(orch_builder_config)
+    use_rts = api.chromium_tests.get_quickrun_options(orch_builder_config)
 
     additional_compile_targets = None
     if remove_src_checkout_experiment:

@@ -43,8 +43,7 @@ def RunSteps(api):
       android_version_code=3,
       android_version_name='example',
       use_rts=api.properties.get('use_rts', False),
-      rts_recall=api.properties.get('rts_recall', None),
-      use_st=api.properties.get('use_st', False))
+      rts_recall=api.properties.get('rts_recall', None))
 
 
 def GenTests(api):
@@ -172,13 +171,4 @@ def GenTests(api):
   yield api.test(
       'use_rts',
       api.properties(use_rts=True, rts_recall=.98),
-  )
-
-  yield api.test(
-      'use_st',
-      api.properties(use_st=True),
-      api.post_process(post_process.StepCommandContains, 'generate_build_files',
-                       ['--use-st']),
-      api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation),
   )

@@ -418,7 +418,7 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
     builder_id, builder_config = (
         self.m.chromium_tests_builder_config.lookup_builder())
 
-    use_rts, _ = self.m.chromium_tests.get_quickrun_options(builder_config)
+    use_rts = self.m.chromium_tests.get_quickrun_options(builder_config)
     self.m.chromium_tests.configure_build(
         builder_config, use_rts, test_only=True)
 
