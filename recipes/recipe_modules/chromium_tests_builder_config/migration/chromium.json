@@ -2369,17 +2369,6 @@
       "tryserver.chromium.updater:mac-updater-try-builder-dbg"
     ]
   },
-  "chromium.updater:mac-arm64-updater-tester-rel": {
-    "builders": [
-      "chromium.updater:mac-arm64-updater-tester-rel",
-      "chromium.updater:mac-updater-builder-rel",
-      "chromium.updater:mac10.13-updater-tester-rel",
-      "chromium.updater:mac10.14-updater-tester-rel",
-      "chromium.updater:mac10.15-updater-tester-rel",
-      "chromium.updater:mac11.0-updater-tester-rel",
-      "tryserver.chromium.updater:mac-updater-try-builder-rel"
-    ]
-  },
   "chromium.updater:mac-updater-builder-dbg": {
     "builders": [
       "chromium.updater:mac-arm64-updater-tester-dbg",
@@ -2389,17 +2378,6 @@
       "chromium.updater:mac10.15-updater-tester-dbg",
       "chromium.updater:mac11.0-updater-tester-dbg",
       "tryserver.chromium.updater:mac-updater-try-builder-dbg"
-    ]
-  },
-  "chromium.updater:mac-updater-builder-rel": {
-    "builders": [
-      "chromium.updater:mac-arm64-updater-tester-rel",
-      "chromium.updater:mac-updater-builder-rel",
-      "chromium.updater:mac10.13-updater-tester-rel",
-      "chromium.updater:mac10.14-updater-tester-rel",
-      "chromium.updater:mac10.15-updater-tester-rel",
-      "chromium.updater:mac11.0-updater-tester-rel",
-      "tryserver.chromium.updater:mac-updater-try-builder-rel"
     ]
   },
   "chromium.updater:mac10.13-updater-tester-dbg": {
@@ -2413,17 +2391,6 @@
       "tryserver.chromium.updater:mac-updater-try-builder-dbg"
     ]
   },
-  "chromium.updater:mac10.13-updater-tester-rel": {
-    "builders": [
-      "chromium.updater:mac-arm64-updater-tester-rel",
-      "chromium.updater:mac-updater-builder-rel",
-      "chromium.updater:mac10.13-updater-tester-rel",
-      "chromium.updater:mac10.14-updater-tester-rel",
-      "chromium.updater:mac10.15-updater-tester-rel",
-      "chromium.updater:mac11.0-updater-tester-rel",
-      "tryserver.chromium.updater:mac-updater-try-builder-rel"
-    ]
-  },
   "chromium.updater:mac10.14-updater-tester-dbg": {
     "builders": [
       "chromium.updater:mac-arm64-updater-tester-dbg",
@@ -2433,17 +2400,6 @@
       "chromium.updater:mac10.15-updater-tester-dbg",
       "chromium.updater:mac11.0-updater-tester-dbg",
       "tryserver.chromium.updater:mac-updater-try-builder-dbg"
-    ]
-  },
-  "chromium.updater:mac10.14-updater-tester-rel": {
-    "builders": [
-      "chromium.updater:mac-arm64-updater-tester-rel",
-      "chromium.updater:mac-updater-builder-rel",
-      "chromium.updater:mac10.13-updater-tester-rel",
-      "chromium.updater:mac10.14-updater-tester-rel",
-      "chromium.updater:mac10.15-updater-tester-rel",
-      "chromium.updater:mac11.0-updater-tester-rel",
-      "tryserver.chromium.updater:mac-updater-try-builder-rel"
     ]
   },
   "chromium.updater:mac10.15-updater-tester-dbg": {
@@ -2457,17 +2413,6 @@
       "tryserver.chromium.updater:mac-updater-try-builder-dbg"
     ]
   },
-  "chromium.updater:mac10.15-updater-tester-rel": {
-    "builders": [
-      "chromium.updater:mac-arm64-updater-tester-rel",
-      "chromium.updater:mac-updater-builder-rel",
-      "chromium.updater:mac10.13-updater-tester-rel",
-      "chromium.updater:mac10.14-updater-tester-rel",
-      "chromium.updater:mac10.15-updater-tester-rel",
-      "chromium.updater:mac11.0-updater-tester-rel",
-      "tryserver.chromium.updater:mac-updater-try-builder-rel"
-    ]
-  },
   "chromium.updater:mac11.0-updater-tester-dbg": {
     "builders": [
       "chromium.updater:mac-arm64-updater-tester-dbg",
@@ -2477,17 +2422,6 @@
       "chromium.updater:mac10.15-updater-tester-dbg",
       "chromium.updater:mac11.0-updater-tester-dbg",
       "tryserver.chromium.updater:mac-updater-try-builder-dbg"
-    ]
-  },
-  "chromium.updater:mac11.0-updater-tester-rel": {
-    "builders": [
-      "chromium.updater:mac-arm64-updater-tester-rel",
-      "chromium.updater:mac-updater-builder-rel",
-      "chromium.updater:mac10.13-updater-tester-rel",
-      "chromium.updater:mac10.14-updater-tester-rel",
-      "chromium.updater:mac10.15-updater-tester-rel",
-      "chromium.updater:mac11.0-updater-tester-rel",
-      "tryserver.chromium.updater:mac-updater-try-builder-rel"
     ]
   },
   "chromium.updater:win32-updater-builder-dbg": {
@@ -3796,17 +3730,6 @@
       "chromium.updater:mac10.15-updater-tester-dbg",
       "chromium.updater:mac11.0-updater-tester-dbg",
       "tryserver.chromium.updater:mac-updater-try-builder-dbg"
-    ]
-  },
-  "tryserver.chromium.updater:mac-updater-try-builder-rel": {
-    "builders": [
-      "chromium.updater:mac-arm64-updater-tester-rel",
-      "chromium.updater:mac-updater-builder-rel",
-      "chromium.updater:mac10.13-updater-tester-rel",
-      "chromium.updater:mac10.14-updater-tester-rel",
-      "chromium.updater:mac10.15-updater-tester-rel",
-      "chromium.updater:mac11.0-updater-tester-rel",
-      "tryserver.chromium.updater:mac-updater-try-builder-rel"
     ]
   },
   "tryserver.chromium.win:gpu-fyi-try-win10-amd-rel-64": {
