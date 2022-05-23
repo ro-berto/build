@@ -108,12 +108,6 @@
       "tryserver.chromium.android:android-webview-pie-x86-wpt-fyi-rel"
     ]
   },
-  "chromium.android:Android x86 Builder (dbg)": {
-    "builders": [
-      "chromium.android:Android x86 Builder (dbg)",
-      "tryserver.chromium.android:android_compile_x86_dbg"
-    ]
-  },
   "chromium.android:Cast Android (dbg)": {
     "builders": [
       "chromium.android:Cast Android (dbg)",
@@ -2833,12 +2827,6 @@
   "tryserver.chromium.android:android_blink_rel": {
     "builders": [
       "tryserver.chromium.android:android_blink_rel"
-    ]
-  },
-  "tryserver.chromium.android:android_compile_x86_dbg": {
-    "builders": [
-      "chromium.android:Android x86 Builder (dbg)",
-      "tryserver.chromium.android:android_compile_x86_dbg"
     ]
   },
   "tryserver.chromium.android:android_cronet": {

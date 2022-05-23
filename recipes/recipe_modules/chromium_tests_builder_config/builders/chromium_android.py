@@ -18,6 +18,7 @@ def _chromium_android_spec(**kwargs):
 # * Android arm64 Builder (dbg)
 # * Android ASAN (dbg)
 # * Android x64 Builder (dbg)
+# * Android x86 Builder (dbg)
 # * Android WebView M (dbg)
 # * Android WebView N (dbg)
 # * Android WebView O (dbg)
@@ -50,22 +51,6 @@ def _chromium_android_spec(**kwargs):
 # * android-weblayer-x86-rel
 
 SPEC = {
-    'Android x86 Builder (dbg)':
-        _chromium_android_spec(
-            chromium_config='android',
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'android',
-                'enable_reclient',
-            ],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 32,
-                'TARGET_PLATFORM': 'android',
-            },
-            android_config='x86_builder_mb',
-            simulation_platform='linux',
-        ),
     'Cast Android (dbg)':
         _chromium_android_spec(
             chromium_config='android',
