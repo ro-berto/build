@@ -26,6 +26,7 @@ def _chromium_android_spec(**kwargs):
 # * Marshmallow 64 bit Tester
 # * Nougat Phone Tester
 # * Oreo Phone Tester
+# * android-10-arm64-rel
 # * android-11-x86-rel
 # * android-12-x64-rel
 # * android-arm64-proguard-rel
@@ -162,11 +163,6 @@ SPEC.update([
         'android-pie-arm64-rel', chromium_config_kwargs={'TARGET_BITS': 64}),
     stock_config(
         'android-pie-arm64-wpt-rel-non-cq',
-        chromium_config_kwargs={'TARGET_BITS': 64}),
-    stock_config(
-        'android-10-arm64-rel',
-        chromium_apply_config=['download_vr_test_apks'],
-        gclient_apply_config=['android', 'enable_wpr_tests', 'enable_reclient'],
         chromium_config_kwargs={'TARGET_BITS': 64}),
     stock_config('android-11-x86-rel', android_config='x86_builder'),
     stock_cronet_config('android-cronet-arm-rel'),

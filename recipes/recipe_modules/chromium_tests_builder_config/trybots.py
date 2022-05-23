@@ -105,6 +105,7 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * android_archive_rel_ng
     # * android_compile_dbg
     # * android_compile_x64_dbg
+    # * android-10-arm64-rel
     # * android-11-x86-rel
     # * android-12-x64-dbg
     # * android-12-x64-rel
@@ -126,11 +127,6 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * android_optional_gpu_tests_rel
     # * gpu-try-android-m-nexus-5x-64
     'tryserver.chromium.android': {
-        'android-10-arm64-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android',
-                buildername='android-10-arm64-rel',
-            ),
         'android-11-x86-fyi-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android.fyi',

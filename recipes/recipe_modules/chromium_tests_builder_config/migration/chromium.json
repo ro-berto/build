@@ -125,12 +125,6 @@
       "chromium.android:Marshmallow Phone Tester (rel)"
     ]
   },
-  "chromium.android:android-10-arm64-rel": {
-    "builders": [
-      "chromium.android:android-10-arm64-rel",
-      "tryserver.chromium.android:android-10-arm64-rel"
-    ]
-  },
   "chromium.android:android-11-x86-rel": {
     "builders": [
       "chromium.android:android-11-x86-rel"
@@ -2685,12 +2679,6 @@
     "builders": [
       "chromium.fyi:win7-blink-rel-dummy",
       "tryserver.blink:win7-blink-rel"
-    ]
-  },
-  "tryserver.chromium.android:android-10-arm64-rel": {
-    "builders": [
-      "chromium.android:android-10-arm64-rel",
-      "tryserver.chromium.android:android-10-arm64-rel"
     ]
   },
   "tryserver.chromium.android:android-11-x86-fyi-rel": {
