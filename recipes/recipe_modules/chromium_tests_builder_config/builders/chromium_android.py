@@ -23,6 +23,7 @@ def _chromium_android_spec(**kwargs):
 # * Android WebView N (dbg)
 # * Android WebView O (dbg)
 # * Android WebView P (dbg)
+# * Cast Android (dbg)
 # * Marshmallow Tablet Tester
 # * Marshmallow 64 bit Tester
 # * Nougat Phone Tester
@@ -51,22 +52,6 @@ def _chromium_android_spec(**kwargs):
 # * android-weblayer-x86-rel
 
 SPEC = {
-    'Cast Android (dbg)':
-        _chromium_android_spec(
-            chromium_config='android',
-            chromium_apply_config=[
-                'mb',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=['android', 'enable_reclient'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 32,
-                'TARGET_PLATFORM': 'android',
-            },
-            android_config='cast_builder',
-            simulation_platform='linux',
-        ),
     'Marshmallow Phone Tester (rel)':
         _chromium_android_spec(
             chromium_config='android',
