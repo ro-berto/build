@@ -49,7 +49,8 @@ FLAGFUZZ_BUG_DEFAULTS = {
 }
 
 MAX_BUG_LINKS = 5
-
+REPRO_TIMEOUT_DEFAULT = 60
+REPRO_TOTAL_TIMEOUT_DEFAULT = 120
 
 # pylint: disable=abstract-method
 
@@ -812,8 +813,7 @@ class Failure(object):
   def _format_swarming_dimensions(self, dims):
     return ['%s:%s' % (k, v) for k, v in dims.items()]
 
-  def _flako_cmd_line(self):
-    """Returns the command line for bisecting this failure with flako."""
+  def _flako_properties(self):
     test_config = self.api.v8.test_configs[self.test.name]
 
     # In order to use the test runner to also repro cases from the number
@@ -856,10 +856,10 @@ class Failure(object):
             self.name,
         # Add timeout default for convenience.
         'timeout_sec':
-            60,
+            REPRO_TIMEOUT_DEFAULT,
         # Add total timeout default for convenience.
         'total_timeout_sec':
-            120,
+            REPRO_TOTAL_TIMEOUT_DEFAULT,
         # The variant the failing test ran in.
         'variant':
             variant,
@@ -867,9 +867,30 @@ class Failure(object):
         'extra_args':
             extra_args,
     }
+
+    return properties
+
+  def _local_repro_cmd_line(self):
+    """Returns the command line for reproducing the flake locally."""
+    test_properties = self._flako_properties()
+    base_cmd = [
+        'tools/run-tests.py', '--outdir=SET_OUTDIR_HERE',
+        '--variants=%s' % test_properties['variant'],
+        '--random-seed-stress-count=1000000',
+        '--total-timeout-sec=%d' % test_properties['total_timeout_sec'],
+        '--exit-after-n-failures=1'
+    ]
+
+    base_cmd += test_properties['extra_args']
+    base_cmd.append(test_properties['test_name'])
+
+    return ' '.join(base_cmd)
+
+  def _flako_cmd_line(self):
+    """Returns the command line for bisecting this failure with flako."""
     return 'bb add v8/try.triggered/v8_flako %s' % ' '.join(
         '-p \'%s=%s\'' % (k, json.dumps(v, sort_keys=True))
-        for k, v in properties.items())
+        for k, v in self._flako_properties().items())
 
   def log_lines(self):
     """Return a list of lines for logging all runs of this failure."""
@@ -890,12 +911,15 @@ class Failure(object):
       lines.extend(self.api.v8.gn_args)
     lines.append('')
 
-    # Print the command line for flake bisect. Only supports tests run on
-    # swarming and CI.
+    # Print the command line for flake bisect.
     if (isinstance(self.test, V8SwarmingTest) and
         not self.api.tryserver.is_tryserver):
       lines.append('Trigger flake bisect on command line:')
       lines.append(self._flako_cmd_line())
+      lines.append('')
+
+      lines.append('Local flake reproduction on command line:')
+      lines.append(self._local_repro_cmd_line())
       lines.append('')
 
     # Add results for each run of a command.
