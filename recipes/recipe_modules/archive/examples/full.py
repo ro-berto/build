@@ -722,6 +722,20 @@ def GenTests(api):
               "[CLEANUP]/tmp_tmp_5/artifact.zip.attestation",
               "gs://any-bucket/dest_dir/files.zip.attestation"
           ]),
+      api.post_process(
+          post_process.StepCommandContains,
+          'Generic Archiving Steps.gsutil upload '
+          'dest_dir/path/to/some/file.txt.l1.attestation', [
+              '/path/to/some/file.txt.l1.attestation',
+              'gs://any-bucket/dest_dir/path/to/some/file.txt.l1.attestation',
+          ]),
+      api.post_process(
+          post_process.StepCommandContains,
+          'Generic Archiving Steps.gsutil upload '
+          'dest_dir/files.zip.l1.attestation', [
+              "[CLEANUP]/tmp_tmp_5/artifact.zip.l1.attestation",
+              "gs://any-bucket/dest_dir/files.zip.l1.attestation"
+          ]),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -740,6 +754,14 @@ def GenTests(api):
               '/path/to/some/file.txt.attestation',
               ('gs://any-bucket/experimental/dest_dir/path/to/'
                'some/file.txt.attestation'),
+          ]),
+      api.post_process(
+          post_process.StepCommandContains,
+          'Generic Archiving Steps.gsutil upload '
+          'dest_dir/path/to/some/file.txt.l1.attestation', [
+              '/path/to/some/file.txt.l1.attestation',
+              ('gs://any-bucket/experimental/dest_dir/path/to/'
+               'some/file.txt.l1.attestation'),
           ]),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),

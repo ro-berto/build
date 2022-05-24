@@ -1061,11 +1061,14 @@ class ArchiveApi(recipe_api.RecipeApi):
         if provenance_sources:
           provenance_manifest['sources'] = provenance_sources
 
+      # TODO(crbug/1310625): Remove all provenance code.
       attestation_paths = {}
+      l1_attestation_paths = {}
       for f in self.m.py3_migration.consistent_ordering(
           uploads.keys(), key=str):
         # Generate the .attestation file next to the original.
         attestation_path = str(f) + '.attestation'
+        l1_attestation_path = str(f) + '.l1.attestation'
         file_hash = self.m.file.file_hash(f, test_data='deadbeef')
         provenance_manifest['subjectHash'] = file_hash
         temp_dir = self.m.path.mkdtemp('tmp')
@@ -1074,14 +1077,19 @@ class ArchiveApi(recipe_api.RecipeApi):
                                self.m.json.dumps(provenance_manifest))
         self.m.provenance.generate(archive_data.verifiable_key_path,
                                    manifest_path, attestation_path)
+        self.m.provenance.generate(archive_data.verifiable_key_path,
+                                   manifest_path, l1_attestation_path)
         # Upload the attestation file alongside the original.
         attestation_paths[attestation_path] = uploads[f] + '.attestation'
+        l1_attestation_paths[
+            l1_attestation_path] = uploads[f] + '.l1.attestation'
         # TODO(akashmukherjee): Add support for custom backend url.
         # Need to report full destination path of the artifact.
         if report_artifacts:
           self.m.bcid_reporter.report_gcs(
               file_hash, 'gs://%s/%s' % (gcs_bucket, uploads[f]))
       uploads.update(attestation_paths)
+      uploads.update(l1_attestation_paths)
 
     for file_path in self.m.py3_migration.consistent_ordering(
         uploads.keys(), key=str):
