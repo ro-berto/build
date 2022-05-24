@@ -109,8 +109,9 @@ class WebRTCApi(recipe_api.RecipeApi):
     return test_targets, sorted(set(compile_targets))
 
   def should_download_audio_quality_tools(self, builder_id, builder_config):
-    # Perf test low_bandwidth_audio_perf_test doesn't run on iOS.
-    if 'ios' in builder_id.builder.lower():
+    # Perf test low_bandwidth_audio_perf_test doesn't run on iOS and Mac M1
+    # Arm64, presumably because the tools are not compiled for arm64.
+    if any(b in builder_id.builder.lower() for b in ('ios', 'm1 arm64')):
       return False
     return (builders.BUILDERS_DB[builder_id].perf_id or
             _is_triggering_perf_tests(builder_id, builder_config))
