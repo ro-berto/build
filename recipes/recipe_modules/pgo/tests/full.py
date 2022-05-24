@@ -35,7 +35,7 @@ def RunSteps(api):
   _, builder_config = api.chromium_tests_builder_config.lookup_builder()
   api.chromium_tests.configure_build(builder_config)
   # Fake path.
-  api.profiles._merge_scripts_dir = api.path['start_dir']
+  api.profiles.src_dir = api.path['start_dir']
   # We're forcing the root profile dir to '/', such that the file.listdir
   # call being made by ensure_profdata_files can be overridden in the test run.
   # There's no way to translate a generated Path object into a string in

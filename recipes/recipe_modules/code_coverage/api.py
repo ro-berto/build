@@ -26,6 +26,8 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     self._report_dir = None
     # Temp dir for metadata
     self._metadata_dir = None
+    # Path to checked out repo
+    self._src_dir = None
     # Path to director containing the build artifacts e.g. <root>/out/coverage
     self._build_dir = None
     # When set, subset of source files to include in the coverage report.
@@ -129,6 +131,15 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     self._build_dir = value
 
   @property
+  def src_dir(self):
+    assert self._src_dir, 'src_dir must be set for this recipe_module'
+    return self._src_dir
+
+  @src_dir.setter
+  def src_dir(self, value):
+    self._src_dir = value
+
+  @property
   def bot_to_gerrit_mapping_file(self):
     """Generates the line number mapping from bot to Gerrit.
 
@@ -157,7 +168,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
               '--patchset',
               gerrit_change.patchset,
               '--src-path',
-              self.m.path['checkout'],
+              self.src_dir,
               '--output-file',
               local_to_gerrit_diff_mapping_file,
           ] + self._eligible_files,
@@ -413,7 +424,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
 
     self.filter_and_set_eligible_files(candidate_files)
     self.m.file.ensure_directory('create .code-coverage',
-                                 self.m.path['checkout'].join('.code-coverage'))
+                                 self.src_dir.join('.code-coverage'))
 
     self.m.step(
         'save paths of affected files',
@@ -421,10 +432,9 @@ class CodeCoverageApi(recipe_api.RecipeApi):
             'python',
             self.resource('write_paths_to_instrument.py'),
             '--write-to',
-            self.m.path['checkout'].join('.code-coverage',
-                                         'files_to_instrument.txt'),
+            self.src_dir.join('.code-coverage', 'files_to_instrument.txt'),
             '--src-path',
-            self.m.path['checkout'],
+            self.src_dir,
             '--build-path',
             output_dir,
         ] + self._eligible_files,
@@ -596,7 +606,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
             'python',
             self.resource('generate_coverage_metadata_for_java.py'),
             '--src-path',
-            self.m.path['checkout'],
+            self.src_dir,
             '--output-dir',
             coverage_dir,
             '--coverage-dir',
@@ -648,7 +658,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
             'python',
             self.resource('generate_coverage_metadata_for_javascript.py'),
             '--src-path',
-            self.m.path['checkout'],
+            self.src_dir,
             '--output-dir',
             coverage_dir,
             '--coverage-dir',
@@ -799,7 +809,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     ]
     cmd.extend(binaries)
     cmd.append('--sources')
-    cmd.extend([self.m.path['checkout'].join(s) for s in self._eligible_files])
+    cmd.extend([self.src_dir.join(s) for s in self._eligible_files])
 
     if self.platform == 'ios':
       cmd.extend(['--arch', 'x86_64'])
@@ -861,8 +871,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           '--java-coverage-dir',
           self.build_dir.join('coverage'),
           '--jacococli-path',
-          self.m.path['checkout'].join('third_party', 'jacoco', 'lib',
-                                       'jacococli.jar'),
+          self.src_dir.join('third_party', 'jacoco', 'lib', 'jacococli.jar'),
           '--merged-jacoco-filename',
           self.m.profiles.normalize(step_name),
       ])
@@ -920,10 +929,10 @@ class CodeCoverageApi(recipe_api.RecipeApi):
   def _generate_dir_metadata(self):
     """Extracts directory metadata, e.g. mapping to monorail component."""
     dir_metadata = self.m.path.mkdtemp().join(constants.DIR_METADATA_FILE_NAME)
-    with self.m.context(cwd=self.m.path['checkout']):
+    with self.m.context(cwd=self.src_dir):
       self.m.step('Extract directory metadata', [
-          self.m.path['checkout'].join('third_party', 'depot_tools', 'dirmd'),
-          'export', '-out', dir_metadata
+          self.src_dir.join('third_party', 'depot_tools', 'dirmd'), 'export',
+          '-out', dir_metadata
       ])
     return dir_metadata
 
@@ -935,7 +944,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
         '--build-dir',
         self.build_dir,
         '--src-path',
-        self.m.path['checkout'],
+        self.src_dir,
         '--output-dir',
         self.metadata_dir,
         '--profdata-path',

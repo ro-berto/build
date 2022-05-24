@@ -16,6 +16,7 @@ DEPS = [
 
 
 def RunSteps(api):
+  api.profiles.src_dir = api.chromium_checkout.src_dir
   api.profiles.merge_profdata('some_artifact', '.*', sparse=True)
 
 

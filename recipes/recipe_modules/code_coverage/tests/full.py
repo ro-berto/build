@@ -38,12 +38,14 @@ def RunSteps(api):
       api.chromium_tests_builder_config.lookup_builder(use_try_db=True))
   api.chromium_tests.configure_build(builder_config)
   # Fake path.
-  api.profiles._merge_scripts_dir = api.path['start_dir']
+  api.profiles.src_dir = api.path['start_dir']
+  api.code_coverage.src_dir = api.path['start_dir']
 
   if api.tryserver.is_tryserver:
     api.code_coverage.instrument(
         api.properties['files_to_instrument'],
-        is_deps_only_change=api.properties.get('is_deps_only_change', False))
+        is_deps_only_change=api.properties.get('is_deps_only_change', False),
+    )
   if api.properties.get('mock_merged_profdata', True):
     api.path.mock_add_paths(
         api.profiles.profile_dir().join('unit-merged.profdata'))
@@ -89,7 +91,8 @@ def RunSteps(api):
         test.target_name,
         additional_merge=getattr(test.spec, 'merge', None),
         skip_validation=True,
-        sparse=True)
+        sparse=True,
+    )
 
   api.code_coverage.process_coverage_data(tests)
 

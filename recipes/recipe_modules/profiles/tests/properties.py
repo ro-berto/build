@@ -15,6 +15,7 @@ DEPS = [
 
 def RunSteps(api):
   # coverage only
+  api.profiles.src_dir = api.chromium_checkout.src_dir
   _ = api.profiles.merge_scripts_dir
   _ = api.profiles.merge_steps_script
   _ = api.profiles.merge_results_script

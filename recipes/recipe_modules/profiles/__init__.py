@@ -5,7 +5,6 @@
 PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
-    'chromium_checkout',
     'depot_tools/gsutil',
     'recipe_engine/file',
     'recipe_engine/json',

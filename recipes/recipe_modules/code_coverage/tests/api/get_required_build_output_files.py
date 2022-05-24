@@ -13,10 +13,12 @@ PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'chromium',
+    'chromium_checkout',
     'chromium_tests',
     'chromium_tests_builder_config',
     'code_coverage',
     'profiles',
+    'recipe_engine/assertions',
     'recipe_engine/file',
     'recipe_engine/json',
     'recipe_engine/path',
@@ -41,13 +43,14 @@ def RunSteps(api, expected_paths, target_platform):
           api.chromium_tests)
   ]
 
+  api.code_coverage.src_dir = api.chromium_checkout.src_dir
+  api.code_coverage.build_dir = api.chromium_checkout.src_dir.join(
+      'out', 'Release')
   file_paths = api.code_coverage.get_required_build_output_files(tests)
 
-  assert len(file_paths) == len(expected_paths)
-
-  str_file_paths = [str(p) for p in file_paths]
-  for path in expected_paths:
-    assert str(path) in str_file_paths
+  str_file_paths = [str(f) for f in file_paths]
+  str_expected_paths = [str(f) for f in expected_paths]
+  api.assertions.assertCountEqual(str_file_paths, str_expected_paths)
 
 
 def GenTests(api):
@@ -57,10 +60,11 @@ def GenTests(api):
       api.chromium.try_build(builder='linux-rel'),
       api.properties(
           expected_paths=[
-              api.path['checkout'].join('out/Release/browser_tests')
+              api.chromium_checkout.src_dir.join('out/Release/browser_tests')
           ],
           target_platform='linux'),
-      api.path.exists(api.path['checkout'].join('out/Release/browser_tests')),
+      api.path.exists(
+          api.chromium_checkout.src_dir.join('out/Release/browser_tests')),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -77,21 +81,24 @@ def GenTests(api):
       api.code_coverage(use_java_coverage=True),
       api.properties(
           expected_paths=[
-              api.path['checkout'].join(android_test_path),
-              api.path['checkout'].join('out/Release/{}'.format(jacoco_file)),
-              api.path['checkout'].join('out/Release/{}'.format(
+              api.chromium_checkout.src_dir.join(android_test_path),
+              api.chromium_checkout.src_dir.join(
+                  'out/Release/{}'.format(jacoco_file)),
+              api.chromium_checkout.src_dir.join('out/Release/{}'.format(
                   'chrome/browser/java__process_device.filter.jar'))
           ],
           target_platform='android'),
-      api.path.exists(api.path['checkout'].join(android_test_path)),
+      api.path.exists(api.chromium_checkout.src_dir.join(android_test_path)),
       api.override_step_data(
           'Get all unstripped artifacts paths',
-          api.json.output(['None/{}'.format(android_test_path)])),
+          api.json.output(['[CACHE]/builder/src/{}'.format(android_test_path)
+                          ])),
       api.override_step_data(
           'Get jacoco and jar files for java coverage',
           api.json.output([
-              'None/out/Release/{}'.format(jacoco_file),
-              'None/out/Release/chrome/browser/java__process_device.filter.jar',
+              '[CACHE]/builder/src/out/Release/{}'.format(jacoco_file),
+              ('[CACHE]/builder/src/out/Release/chrome/browser/'
+               'java__process_device.filter.jar'),
           ]),
       ),
       api.post_process(post_process.StatusSuccess),

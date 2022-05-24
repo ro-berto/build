@@ -36,7 +36,7 @@ def RunSteps(api):
       TARGET_PLATFORM=api.properties.get('target_platform', 'linux'))
 
   # Fake path, as the real one depends on having done a chromium checkout.
-  api.profiles._merge_scripts_dir = api.path['start_dir']
+  api.profiles.src_dir = api.path['start_dir']
   api.chromium_swarming.path_to_merge_scripts = (
       api.path['cache'].join('merge_scripts'))
   api.chromium_swarming.set_default_dimension('pool', 'foo')

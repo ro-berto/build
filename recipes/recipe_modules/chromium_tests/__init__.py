@@ -30,6 +30,7 @@ DEPS = [
     'perf_dashboard',
     'pgo',
     'presentation_utils',
+    'profiles',
     'puppet_service_account',
     'py3_migration',
     'recipe_engine/buildbucket',
