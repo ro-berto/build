@@ -396,9 +396,10 @@ class ChromiumApi(recipe_api.RecipeApi):
                               self.m.buildbucket.builder_name)
           if self.m.buildbucket.build.number:
             source += '-%s' % self.m.buildbucket.build.number
-          self.m.step('process clang crashes',
-                      ['python', clang_crashreports_script, '--source', source],
-                      **kwargs)
+          self.m.step(
+              'process clang crashes',
+              ['python3', clang_crashreports_script, '--source', source],
+              **kwargs)
 
     ninja_command_explain = ninja_command + ['-d', 'explain', '-n']
 
