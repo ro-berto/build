@@ -339,25 +339,37 @@ _AddPinpointPGOTestSpec('mac-10_13_laptop_high_end-perf', 'mac',
                         'mac-builder-perf')
 
 # Pinpoint PGO bots
+# android
 _AddPinpointPGOTestSpec(
-    'android-go-perf-pgo', 'android', 'android-builder-perf', target_bits=32)
+    'android-go-perf-pgo',
+    'android',
+    'android-builder-perf-pgo',
+    target_bits=32)
 _AddPinpointPGOTestSpec('android-pixel2-perf-pgo', 'android',
-                        'android_arm64-builder-perf')
+                        'android_arm64-builder-perf-pgo')
 _AddPinpointPGOTestSpec('android-pixel2_webview-perf-pgo', 'android',
-                        'android_arm64-builder-perf')
+                        'android_arm64-builder-perf-pgo')
 _AddPinpointPGOTestSpec('android-pixel4-perf-pgo', 'android',
-                        'android_arm64-builder-perf')
+                        'android_arm64-builder-perf-pgo')
 _AddPinpointPGOTestSpec('android-pixel4_weblayer-perf-pgo', 'android',
-                        'android_arm64-builder-perf')
+                        'android_arm64-builder-perf-pgo')
 _AddPinpointPGOTestSpec('android-pixel4a_power-perf-pgo', 'android',
-                        'android_arm64-builder-perf')
-_AddPinpointPGOTestSpec('win-10_laptop_low_end-perf-pgo', 'win',
-                        'win64-builder-perf')
-_AddPinpointPGOTestSpec('win-10_amd_laptop-perf-pgo', 'win',
-                        'win64-builder-perf')
+                        'android_arm64-builder-perf-pgo')
+# linux
+_AddPinpointPGOTestSpec('linux-perf-pgo', 'linux', 'linux-builder-perf-pgo')
+# mac
+_AddPinpointPGOTestSpec('mac-laptop_low_end-perf-pgo', 'mac',
+                        'mac-builder-perf-pgo')
+_AddPinpointPGOTestSpec('mac-laptop_high_end-perf-pgo', 'mac',
+                        'mac-builder-perf-pgo')
 _AddPinpointPGOTestSpec(
     'mac-m1_mini_2020-perf-pgo',
     'mac',
-    'mac-arm-builder-perf',
+    'mac-arm-builder-perf-pgo',
     target_arch='arm')
-_AddPinpointPGOTestSpec('linux-perf-pgo', 'linux', 'linux-builder-perf')
+# windows
+_AddPinpointPGOTestSpec('win-10-perf-pgo', 'win', 'win64-builder-perf-pgo')
+_AddPinpointPGOTestSpec('win-10_laptop_low_end-perf-pgo', 'win',
+                        'win64-builder-perf-pgo')
+_AddPinpointPGOTestSpec('win-10_amd_laptop-perf-pgo', 'win',
+                        'win64-builder-perf-pgo')
