@@ -1432,7 +1432,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     result = self.m.step(
         name='get compile targets for scripts',
         cmd=[
-            'python',
+            'vpython3',
             self.m.chromium_checkout.src_dir.join('testing', 'scripts',
                                                   'get_compile_targets.py'),
             '--output',
