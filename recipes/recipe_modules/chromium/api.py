@@ -1134,8 +1134,9 @@ class ChromiumApi(recipe_api.RecipeApi):
       # accordingly.
       runhooks_env.update(self.c.gyp_env.as_jsonish())
 
-    with self.m.context(env=runhooks_env):
-      self.m.gclient.runhooks(**kwargs)
+    with self.m.gsutil.configure_gsutil():
+      with self.m.context(env=runhooks_env):
+        self.m.gclient.runhooks(**kwargs)
 
   @_with_chromium_layout
   def run_gn(self,
