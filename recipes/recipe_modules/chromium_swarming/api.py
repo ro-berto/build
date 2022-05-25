@@ -1432,10 +1432,14 @@ class SwarmingApi(recipe_api.RecipeApi):
         # TODO(erikchen): Once we switch over to the go implementation of
         # swarming, we should stop accepting all return codes.
         # https://crbug.com/944179.
-        step_result = self.m.build.python(
-            name=name,
-            script=self.resource('collect_task.py'),
-            args=task_args,
+        cmd = [
+            'vpython',
+            self.resource('collect_task.py'),
+        ]
+        cmd += task_args
+        step_result = self.m.step(
+            name,
+            cmd,
             ok_ret='any',
             step_test_data=gen_step_test_data,
             **kwargs)

@@ -567,13 +567,7 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
+      "vpython",
       "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
       "--verbose",
       "-o",
