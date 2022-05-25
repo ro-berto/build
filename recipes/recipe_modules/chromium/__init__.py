@@ -34,6 +34,7 @@ DEPS = [
     'recipe_engine/raw_io',
     'recipe_engine/runtime',
     'recipe_engine/step',
+    'xcode',
 ]
 
 # Forward symbols for other modules to import

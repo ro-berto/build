@@ -294,7 +294,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           client_type=self.m.chromium.c.compile_py.goma_client_type)
 
     # Installs toolchains configured in the current bot, if any.
-    self.m.chromium.ensure_toolchains()
+    self.m.chromium.ensure_toolchains(
+        checkout_dir=self.m.chromium_checkout.checkout_dir)
 
     self.runhooks(update_step, suffix=runhooks_suffix)
 

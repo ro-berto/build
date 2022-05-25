@@ -51,6 +51,8 @@ class ChromiumApi(recipe_api.RecipeApi):
     self._build_properties = None
     self._version = None
     self._clang_version = None
+    # TODO(yueshe@) - migrate this property to xcode module once downstream
+    # no longer sets this property
     self._xcode_build_version = input_properties.xcode_build_version
     self._goma_cache_silo = input_properties.goma_cache_silo
 
@@ -1036,14 +1038,16 @@ class ChromiumApi(recipe_api.RecipeApi):
         'build', '%s_files' % self.m.chromium.c.TARGET_PLATFORM)
     self.m.file.rmtree('delete deprecated Xcode cache', old_cache)
 
-  def ensure_mac_toolchain(self):
+  def ensure_mac_toolchain(self, checkout_dir=None):
     if not self.c.mac_toolchain.enabled or self.c.HOST_PLATFORM != 'mac':
       return
 
-    # TODO(jeffyoon@)- Remove reading from self.m.properties after xcode
-    # build version has been migrated to set xcode version as a chromium
-    # recipe module property
+    # Currently the xcode version is being read from the repo
+    # for non-branched builders.
+    # For branched builders, xcode version is read from xcode_build_version,
+    # when xcode configs file path is not specified.
     xcode_build_version = (
+        self.m.xcode.get_xcode_version(checkout_dir) or
         self.xcode_build_version or
         self.m.properties.get('xcode_build_version', None))
 
@@ -1095,9 +1099,9 @@ class ChromiumApi(recipe_api.RecipeApi):
       # w/ to do something as simple as listing devices helps work around this.
       self.m.step('reload simctl', ['xcrun', 'simctl', 'list'], infra_step=True)
 
-  def ensure_toolchains(self):
+  def ensure_toolchains(self, checkout_dir=None):
     if self.c.HOST_PLATFORM == 'mac':
-      self.ensure_mac_toolchain()
+      self.ensure_mac_toolchain(checkout_dir)
 
   def clobber_if_needed(self):
     """Add an explicit clobber step if requested."""

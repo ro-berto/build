@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package recipe_modules.build.xcode;
+
+message InputProperties {
+
+    // The path (relative to checkout_dir) to the file containing
+    // xcode config (currently only supporting xcode version).
+
+    // An example file looks like
+    // {
+    //   "version": "13c100"
+    // }
+    string xcode_config_path = 1;
+}

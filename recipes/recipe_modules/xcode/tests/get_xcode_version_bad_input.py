@@ -1,0 +1,30 @@
+from PB.recipe_modules.build.xcode\
+  import properties as xcode_properties
+
+PYTHON_VERSION_COMPATIBILITY = "PY3"
+
+DEPS = [
+    'xcode',
+    'recipe_engine/properties',
+    'recipe_engine/assertions',
+    'recipe_engine/file',
+    'recipe_engine/path',
+]
+
+
+def RunSteps(api):
+  actual_version = api.xcode.get_xcode_version(
+      api.path['cache'].join('builder'))
+  api.assertions.assertIsNone(actual_version)
+
+
+def GenTests(api):
+  yield api.test('testing xcode version retrieval with no input',)
+
+  config_path = 'some-path/test_xcode_config.json'
+  xcode_input_properties = xcode_properties.InputProperties(
+      xcode_config_path=config_path)
+  yield api.test(
+      'testing xcode version when file does not exist',
+      api.properties(**{'$build/xcode': xcode_input_properties}),
+  )
