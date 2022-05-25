@@ -564,7 +564,7 @@ _CLIENT_WEBRTC_PERF_SPECS = {
             }),
     'Perf Mac M1 Arm64 12':
         WebRTCBuilderSpec.create(
-            perf_id='webrtc-mac-large-tests',
+            perf_id='webrtc-mac-arm64-large-tests',
             chromium_config='webrtc_default',
             gclient_config='webrtc',
             execution_mode=builder_spec.TEST,
