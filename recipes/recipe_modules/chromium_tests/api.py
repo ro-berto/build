@@ -419,7 +419,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       return None, None
 
     version = self.m.chromium.get_version_from_file(
-        self.m.chromium_checkout.src_dir.join(version_file))
+        self.m.path['checkout'].join(version_file))
 
     chromium_config = self.m.chromium.c
     arch_id = chromium_config.TARGET_ARCH, chromium_config.TARGET_BITS
@@ -678,7 +678,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         tests,
         self.find_swarming_command_lines(name_suffix),
         self.m.path.relpath(self.m.chromium.output_dir,
-                            self.m.chromium_checkout.src_dir),
+                            self.m.path['checkout']),
         expose_to_properties=builder_config.expose_trigger_properties)
 
   def set_swarming_test_execution_info(self,
@@ -1176,7 +1176,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     with self.m.context(cwd=self.m.chromium_checkout.checkout_dir):
       self.m.bot_update.deapply_patch(bot_update_step)
 
-    with self.m.context(cwd=self.m.chromium_checkout.src_dir):
+    with self.m.context(cwd=self.m.path['checkout']):
       self.m.chromium.runhooks(name='runhooks (without patch)')
 
   def build_and_isolate_failing_tests(self,
@@ -1387,7 +1387,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     args.extend(['--build-config-fs', self.m.chromium.c.build_config_fs])
 
     paths = {
-        'checkout': self.m.chromium_checkout.src_dir,
+        'checkout': self.m.path['checkout'],
         'runit.py': self.repo_resource('scripts', 'tools', 'runit.py'),
         'runtest.py': self.repo_resource('scripts', 'slave', 'runtest.py'),
     }
@@ -1434,8 +1434,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         name='get compile targets for scripts',
         cmd=[
             'vpython3',
-            self.m.chromium_checkout.src_dir.join('testing', 'scripts',
-                                                  'get_compile_targets.py'),
+            self.m.path['checkout'].join('testing', 'scripts',
+                                         'get_compile_targets.py'),
             '--output',
             self.m.json.output(),
             '--',
@@ -1722,7 +1722,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           ignore_input_commit=True,
           set_output_commit=False)
 
-    with self.m.context(cwd=self.m.chromium_checkout.src_dir):
+    with self.m.context(cwd=self.m.path['checkout']):
       # NOTE: "without patch" phrase is used to keep consistency with the API
       self.m.chromium.runhooks(name='runhooks (without patch)')
 
@@ -1990,7 +1990,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       analyze_names = ['chromium'] + list(builder_config.analyze_names)
       mb_config_path = (
           self.m.chromium.c.project_generator.config_path or
-          self.m.chromium_checkout.src_dir.join('tools', 'mb', 'mb_config.pyl'))
+          self.m.path['checkout'].join('tools', 'mb', 'mb_config.pyl'))
       analyze_names.append(self.m.chromium.c.TARGET_PLATFORM)
       test_targets, compile_targets = self.m.filter.analyze(
           affected_files,
@@ -2298,7 +2298,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           isolate file.
     """
     with self.m.step.nest('collect runtime deps for %s' % target) as step:
-      src_dir = self.m.chromium_checkout.src_dir
+      src_dir = self.m.path['checkout']
       build_dir = self.m.chromium.output_dir
       abs_runtime_deps = build_dir.join(target + '.isolate')
       if not self.m.path.exists(abs_runtime_deps):
@@ -2331,10 +2331,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                                       runtime_deps):
 
     def is_dir(rel_path):
-      return self.m.path.isdir(self.m.chromium_checkout.src_dir.join(rel_path))
+      return self.m.path.isdir(self.m.path['checkout'].join(rel_path))
 
     def is_file(rel_path):
-      return self.m.path.isfile(self.m.chromium_checkout.src_dir.join(rel_path))
+      return self.m.path.isfile(self.m.path['checkout'].join(rel_path))
 
     # Allow other account to access files we send to skylab.
     # Some tests may use non-root account to run the executable in
@@ -2342,10 +2342,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # we make the squashfs image account agnostic by expanding its
     # content's mode bit of others, e.g. 750 to 755 or 640 to 644.
     def _update_perm(rel_path):
-      self.m.step('update permissions for %s' % rel_path, [
-          'chmod', '-R', 'o=g',
-          str(self.m.chromium_checkout.src_dir.join(rel_path))
-      ])
+      self.m.step(
+          'update permissions for %s' % rel_path,
+          ['chmod', '-R', 'o=g',
+           str(self.m.path['checkout'].join(rel_path))])
       return rel_path
 
     with self.m.step.nest('upload skylab runtime deps for %s' % target):

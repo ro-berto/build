@@ -14,7 +14,6 @@ PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'chromium',
-    'chromium_checkout',
     'chromium_tests',
     'chromium_tests_builder_config',
     'code_coverage',
@@ -105,8 +104,7 @@ def GenTests(api):
               orchestrator=InputProperties.Orchestrator(
                   builder_name='fake-orchestrator',
                   builder_group='fake-try-group'))),
-      api.path.exists(
-          api.chromium_checkout.src_dir.join('out/Release/browser_tests')),
+      api.path.exists(api.path['checkout'].join('out/Release/browser_tests')),
       api.post_process(
           post_process.StepCommandContains,
           'compile (without patch)',

@@ -6,7 +6,6 @@ PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'chromium',
-    'chromium_checkout',
     'chromium_tests',
     'chromium_tests_builder_config',
     'recipe_engine/path',
@@ -19,10 +18,8 @@ def RunSteps(api):
   api.chromium_tests.configure_build(builder_config)
   api.step(
       'sample script',
-      [
-          'python',
-          api.chromium_checkout.src_dir.join('testing', 'scripts', 'example.py')
-      ] + api.chromium_tests.get_common_args_for_scripts(),
+      ['python', api.path['checkout'].join('testing', 'scripts', 'example.py')]
+      + api.chromium_tests.get_common_args_for_scripts(),
   )
 
 

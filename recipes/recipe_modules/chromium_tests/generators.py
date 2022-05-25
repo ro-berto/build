@@ -218,7 +218,7 @@ def generator_common(chromium_tests_api, raw_test_spec, swarming_delegate,
     if script:
       if script.startswith('//'):
         set_up = dict(s)
-        set_up['script'] = chromium_tests_api.m.chromium_checkout.src_dir.join(
+        set_up['script'] = chromium_tests_api.m.path['checkout'].join(
             script[2:].replace('/', chromium_tests_api.m.path.sep))
         processed_set_ups.append(steps.SetUpScript.create(**set_up))
       else:
@@ -241,9 +241,8 @@ def generator_common(chromium_tests_api, raw_test_spec, swarming_delegate,
     if script:
       if script.startswith('//'):
         tear_down = dict(t)
-        tear_down[
-            'script'] = chromium_tests_api.m.chromium_checkout.src_dir.join(
-                script[2:].replace('/', chromium_tests_api.m.path.sep))
+        tear_down['script'] = chromium_tests_api.m.path['checkout'].join(
+            script[2:].replace('/', chromium_tests_api.m.path.sep))
         processed_tear_downs.append(steps.TearDownScript.create(**tear_down))
       else:
         chromium_tests_api.m.step.empty(
@@ -298,7 +297,7 @@ def generator_common(chromium_tests_api, raw_test_spec, swarming_delegate,
       merge_script = merge.get('script')
       if merge_script:
         if merge_script.startswith('//'):
-          merge['script'] = chromium_tests_api.m.chromium_checkout.src_dir.join(
+          merge['script'] = chromium_tests_api.m.path['checkout'].join(
               merge_script[2:].replace('/', chromium_tests_api.m.path.sep))
         else:
           chromium_tests_api.m.step.empty(
@@ -320,10 +319,9 @@ def generator_common(chromium_tests_api, raw_test_spec, swarming_delegate,
       trigger_script_path = trigger_script.get('script')
       if trigger_script_path:
         if trigger_script_path.startswith('//'):
-          trigger_script[
-              'script'] = chromium_tests_api.m.chromium_checkout.src_dir.join(
-                  trigger_script_path[2:].replace(
-                      '/', chromium_tests_api.m.path.sep))
+          trigger_script['script'] = chromium_tests_api.m.path['checkout'].join(
+              trigger_script_path[2:].replace('/',
+                                              chromium_tests_api.m.path.sep))
         else:
           chromium_tests_api.m.step.empty(
               'test spec format error',
