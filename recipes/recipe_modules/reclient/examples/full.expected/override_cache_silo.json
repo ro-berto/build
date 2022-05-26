@@ -130,13 +130,7 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
+      "python3",
       "RECIPE_MODULE[build::reclient]/resources/cloudtail_wrapper.py",
       "start",
       "--cloudtail-path",
@@ -231,13 +225,7 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
+      "python3",
       "RECIPE_MODULE[build::reclient]/resources/cloudtail_wrapper.py",
       "stop",
       "--killed-pid-file",
@@ -502,13 +490,7 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
+      "python3",
       "RECIPE_MODULE[build::reclient]/resources/generate_rpl_gzip.py",
       "--reclient-log-dir",
       "[CLEANUP]/reclient_log_tmp_1",
