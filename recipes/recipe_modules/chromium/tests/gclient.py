@@ -133,3 +133,9 @@ def GenTests(api):
       api.properties(apply_gclient_config='use_rust'),
       api.post_process(post_process.DropExpectation),
   )
+  yield api.test(
+      'disable_vpython_common_crbug_1329052',
+      api.properties(
+          apply_gclient_config='disable_vpython_common_crbug_1329052'),
+      api.post_process(post_process.DropExpectation),
+  )

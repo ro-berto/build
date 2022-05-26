@@ -434,3 +434,11 @@ def reclient_clang_scan_deps(c):
 @CONFIG_CTX()
 def use_rust(c):
   c.solutions[0].custom_vars['use_rust'] = 'True'
+
+
+# This disables vpython_common DEPS hook for py2 less builders.
+# TODO(crbug.com/1329052): remove this after removing .vpython from
+# chromium/src.
+@CONFIG_CTX()
+def disable_vpython_common_crbug_1329052(c):
+  c.solutions[0].custom_vars['enable_vpython_common_crbug_1329052'] = 'False'
