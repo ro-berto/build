@@ -48,6 +48,9 @@ def CreateTesterConfig(os, bits, builder):
 # * Dawn Linux x64 DEPS Builder
 # * Dawn Linux x64 DEPS Release (Intel HD 630)
 # * Dawn Linux x64 DEPS Release (NVIDIA)
+# * Dawn Mac x64 DEPS Builder
+# * Dawn Mac x64 DEPS Release (AMD)
+# * Dawn Mac x64 DEPS Release (Intel)
 # * Dawn Win10 x64 DEPS Builder
 # * Dawn Win10 x64 DEPS Release (Intel HD 630)
 # * Dawn Win10 x64 DEPS Release (NVIDIA)
@@ -73,13 +76,6 @@ SPEC = {
         CreateTesterConfig('mac', 64, 'Dawn Mac x64 Builder'),
     'Dawn Mac x64 Release (Intel)':
         CreateTesterConfig('mac', 64, 'Dawn Mac x64 Builder'),
-    'Dawn Mac x64 DEPS Builder':
-        CreateBuilderConfig('mac', 64, top_of_tree=False),
-    # The Dawn Mac testers are actually running on thin Linux VMs.
-    'Dawn Mac x64 DEPS Release (AMD)':
-        CreateTesterConfig('mac', 64, 'Dawn Mac x64 DEPS Builder'),
-    'Dawn Mac x64 DEPS Release (Intel)':
-        CreateTesterConfig('mac', 64, 'Dawn Mac x64 DEPS Builder'),
     'Dawn Win10 x86 Builder':
         CreateBuilderConfig('win', 32, top_of_tree=True),
     'Dawn Win10 x64 Builder':

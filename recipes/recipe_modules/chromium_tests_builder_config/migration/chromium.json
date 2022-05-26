@@ -434,30 +434,6 @@
       "tryserver.chromium.dawn:mac-dawn-rel"
     ]
   },
-  "chromium.dawn:Dawn Mac x64 DEPS Builder": {
-    "builders": [
-      "chromium.dawn:Dawn Mac x64 DEPS Builder",
-      "chromium.dawn:Dawn Mac x64 DEPS Release (AMD)",
-      "chromium.dawn:Dawn Mac x64 DEPS Release (Intel)",
-      "tryserver.chromium.dawn:dawn-mac-x64-deps-rel"
-    ]
-  },
-  "chromium.dawn:Dawn Mac x64 DEPS Release (AMD)": {
-    "builders": [
-      "chromium.dawn:Dawn Mac x64 DEPS Builder",
-      "chromium.dawn:Dawn Mac x64 DEPS Release (AMD)",
-      "chromium.dawn:Dawn Mac x64 DEPS Release (Intel)",
-      "tryserver.chromium.dawn:dawn-mac-x64-deps-rel"
-    ]
-  },
-  "chromium.dawn:Dawn Mac x64 DEPS Release (Intel)": {
-    "builders": [
-      "chromium.dawn:Dawn Mac x64 DEPS Builder",
-      "chromium.dawn:Dawn Mac x64 DEPS Release (AMD)",
-      "chromium.dawn:Dawn Mac x64 DEPS Release (Intel)",
-      "tryserver.chromium.dawn:dawn-mac-x64-deps-rel"
-    ]
-  },
   "chromium.dawn:Dawn Mac x64 Experimental Release (AMD)": {
     "builders": [
       "chromium.dawn:Dawn Mac x64 Builder",
@@ -3000,14 +2976,6 @@
     "builders": [
       "chromium.chromiumos:linux-chromeos-js-code-coverage",
       "tryserver.chromium.chromiumos:linux-chromeos-js-code-coverage"
-    ]
-  },
-  "tryserver.chromium.dawn:dawn-mac-x64-deps-rel": {
-    "builders": [
-      "chromium.dawn:Dawn Mac x64 DEPS Builder",
-      "chromium.dawn:Dawn Mac x64 DEPS Release (AMD)",
-      "chromium.dawn:Dawn Mac x64 DEPS Release (Intel)",
-      "tryserver.chromium.dawn:dawn-mac-x64-deps-rel"
     ]
   },
   "tryserver.chromium.dawn:dawn-try-mac-amd-exp": {
