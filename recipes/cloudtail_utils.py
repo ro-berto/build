@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # Copyright 2020 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -6,7 +7,6 @@ import errno
 import os
 import signal
 import subprocess
-import sys
 import time
 
 
@@ -24,7 +24,7 @@ def start_cloudtail(args):
   """
 
   kwargs = {}
-  if sys.platform == 'win32':
+  if subprocess.mswindows:
     kwargs['creationflags'] = subprocess.CREATE_NEW_PROCESS_GROUP
 
   cloudtail_cmd = [

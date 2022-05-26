@@ -520,12 +520,12 @@ class ReclientApi(recipe_api.RecipeApi):
   def _upload_rpl(self, reclient_log_dir, gzip_name_maker):
     gzip_filename = gzip_name_maker.make('reproxy_rpl')
     gzip_path = self._tmp_base_dir.join(gzip_filename)
-    self.m.step(
+    self.m.build.python(
         name='gzip reproxy RPL',
-        cmd=[
-            'python3',
-            self.resource('generate_rpl_gzip.py'), '--reclient-log-dir',
-            reclient_log_dir, '--output-gzip-path', gzip_path
+        script=self.resource('generate_rpl_gzip.py'),
+        args=[
+            '--reclient-log-dir', reclient_log_dir, '--output-gzip-path',
+            gzip_path
         ],
         infra_step=True)
     gs_filename = '%s/reclient/%s' % (
@@ -598,15 +598,16 @@ class ReclientApi(recipe_api.RecipeApi):
       InfraFailure if it fails to start cloudtail
     """
     cloudtail_args = [
-        'python3', self._cloudtail_wrapper_path, 'start', '--cloudtail-path',
-        self._cloudtail_exe_path, '--cloudtail-project-id', project_id,
-        '--cloudtail-log-path', log_path, '--pid-file',
+        'start', '--cloudtail-path', self._cloudtail_exe_path,
+        '--cloudtail-project-id', project_id, '--cloudtail-log-path', log_path,
+        '--pid-file',
         self.m.raw_io.output_text(leak_to=self._cloudtail_pid_file)
     ]
 
-    step_result = self.m.step(
+    step_result = self.m.build.python(
         name='start cloudtail',
-        cmd=cloudtail_args,
+        script=self._cloudtail_wrapper_path,
+        args=cloudtail_args,
         step_test_data=(lambda: self.m.raw_io.test_api.output_text('12345')),
         infra_step=True)
     step_result.presentation.links['cloudtail'] = (
@@ -620,12 +621,10 @@ class ReclientApi(recipe_api.RecipeApi):
     Raises:
       InfraFailure if it fails to stop cloudtail
     """
-    self.m.step(
+    self.m.build.python(
         name='stop cloudtail',
-        cmd=[
-            'python3', self._cloudtail_wrapper_path, 'stop',
-            '--killed-pid-file', self._cloudtail_pid_file
-        ],
+        script=self._cloudtail_wrapper_path,
+        args=['stop', '--killed-pid-file', self._cloudtail_pid_file],
         infra_step=True)
 
   def _perform_reclient_health_check(self):
