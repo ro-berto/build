@@ -9,37 +9,31 @@ from __future__ import print_function
 import argparse
 import errno
 import os.path
-import re
 import shutil
 import subprocess
 import sys
-import zipfile
 
-from kythe.proto import analysis_pb2
-
-
-def has_allowed_extension(filename):
+def has_whitelisted_extension(filename):
   """ Checks if this file has one of the approved extensions. """
 
   # Exclude everything except generated source code.
-  # Note that we use a allowlist here instead of a blacklist, because:
-  # 1. If we allowlist, the problem is that some legit files might be excluded.
-  #    The solution to this is simple; we just allowlist the filetype and then
+  # Note that we use a whitelist here instead of a blacklist, because:
+  # 1. If we whitelist, the problem is that some legit files might be excluded.
+  #    The solution to this is simple; we just whitelist the filetype and then
   #    they show up in CS a few hours later.
   # 2. If we blacklist, the problem is that some large binary files of a new
   #    filetype may show up. This could go undetected for a long time, causing
   #    the Git repo to start expanding until it gets too big for the builders to
   #    fetch. The fix in this case is essentially to blow away the generated Git
   #    repo and start again.
-  # Since the problems caused by allowlisting are more easily managed than those
-  # caused by blacklisting, we allowlist below.
-  allowed_extensions = {
+  # Since the problems caused by whitelisting are more easily managed than those
+  # caused by blacklisting, we whitelist below.
+  extension_whitelist = {
       'c', 'cc', 'cpp', 'css', 'desugardeps', 'h', 'html', 'inc', 'java', 'js',
       'json', 'proto', 'py', 'strings', 'txt', 'xml'
   }
   dot_index = filename.rfind(".")
-  return dot_index != -1 and filename[dot_index + 1:] in allowed_extensions
-
+  return dot_index != -1 and filename[dot_index + 1:] in extension_whitelist
 
 def translate_root(source_root, target_root, filename):
   """ Given a root path (source_root), a path under that path (filename) and
@@ -53,81 +47,29 @@ def translate_root(source_root, target_root, filename):
   relative_to_root = os.path.join(filename[len(source_root) + 1:])
   return os.path.join(target_root, relative_to_root)
 
+def copy_generated_files(source, dest, debug_dir):
+  source_root = os.path.join(source, debug_dir, "gen")
+  dest_root = os.path.join(dest, debug_dir, "gen")
 
-def kzip_input_paths(kzip_path):
-  """ Get the set of all required_inputs in the kzip. """
-
-  required_inputs = set()
-  try:
-    with zipfile.ZipFile(
-        kzip_path, 'r', zipfile.ZIP_DEFLATED, allowZip64=True) as kzip:
-
-      for zip_info in kzip.infolist():
-        # kzip should contain following structure:
-        # foo/
-        # foo/files
-        # foo/files/bar
-        # foo/pbunits
-        # foo/pbunits/bar
-        # We only care for the compilation units in foo/pbunits/*. See
-        # https://kythe.io/docs/kythe-kzip.html for more on kzips.
-        if not re.match(r'.*/pbunits/\w*', zip_info.filename):
-          continue
-
-        cu = analysis_pb2.IndexedCompilation()
-        with kzip.open(zip_info, 'r') as f:
-          cu.ParseFromString(f.read())
-
-        for r in cu.unit.required_input:
-          p = r.v_name.path
-
-          # Absolute paths refer to libraries. Ignore these.
-          if not os.path.isabs(p) and has_allowed_extension(p):
-            required_inputs.add(p)
-  except zipfile.BadZipfile as e:
-    print('Error reading kzip file %s: %s' % (kzip_path, e))
-
-  return required_inputs
-
-
-def copy_generated_files(source_root, dest_root, kzip_input_suffixes=None):
   try:
     os.makedirs(dest_root)
   except OSError as e:
     if e.errno != errno.EEXIST:
       raise
 
-  def is_referenced(path):
-    # Since kzip_input_suffixes is a set of path endings, check each ending
-    # of dest_file for membership in the set. Checking this way is faster than
-    # linear time search with endswith.
-    dest_parts = path.split(os.sep)
-    for i in range(len(dest_parts)):
-      # Kzips use forward slashes.
-      check = '/'.join(dest_parts[-i:])
-      if check in kzip_input_suffixes:
-        return True
-    return False
-
-  # First, delete everything in dest that:
-  #   * isn't in source or
-  #   * doesn't match the allowed extensions or
-  #   * (if kzip is provided,) isn't referenced in the kzip
+  # First, delete everything in dest that either isn't in source, or doesn't
+  # match the whitelist.
   for dirpath, _, filenames in os.walk(dest_root):
     for filename in filenames:
       dest_file = os.path.join(dirpath, filename)
       source_file = translate_root(dest_root, source_root, dest_file)
 
       if not os.path.exists(source_file) or \
-          not has_allowed_extension(source_file):
-        print('Deleting file:', dest_file)
-        os.remove(dest_file)
-      elif kzip_input_suffixes and not is_referenced(dest_file):
-        print('Deleting file not referenced by kzip:', dest_file)
+          not has_whitelisted_extension(source_file):
+        print("DELETING FILE:", dest_file)
         os.remove(dest_file)
 
-  # Second, copy everything that matches the allowlist from source to dest. If
-  # kzip is provided, don't copy files that aren't referenced.
+  # Second, copy everything that matches the whitelist from source to dest.
   for dirpath, _, filenames in os.walk(source_root):
     if dirpath != source_root:
       try:
@@ -137,15 +79,14 @@ def copy_generated_files(source_root, dest_root, kzip_input_suffixes=None):
           raise
 
     for filename in filenames:
-      if not has_allowed_extension(filename) \
-          or kzip_input_suffixes and not is_referenced(filename):
+      if not has_whitelisted_extension(filename):
         continue
 
       source_file = os.path.join(dirpath, filename)
       dest_file = translate_root(source_root, dest_root, source_file)
 
       if not os.path.exists(dest_file):
-        print('Adding file:', dest_file)
+        print("ADDING FILE:", dest_file)
       shutil.copyfile(source_file, dest_file)
 
   # Finally, delete any empty directories. We keep going to a fixed point, to
@@ -158,7 +99,7 @@ def copy_generated_files(source_root, dest_root, kzip_input_suffixes=None):
     # We make no effort to deduplicate paths in dirs_to_examine, so we might
     # have already removed this path.
     if os.path.exists(d) and os.listdir(d) == []:
-      print('Deleting empty directory:', d)
+      print("DELETING DIRECTORY:", d)
       os.rmdir(d)
 
       # The parent dir might be empty now, so add it back into the list.
@@ -179,10 +120,6 @@ def main():
       'in the checked-in repo',
       default='Debug')
   parser.add_argument(
-      '--kzip-prune',
-      help='kzip to reference when selecting which source files to copy',
-      default='')
-  parser.add_argument(
       '--dry-run',
       action='store_true',
       help='if set, does a dry run of push to remote repo.')
@@ -190,13 +127,7 @@ def main():
   parser.add_argument('dest', help='git checkout to copy files to')
   opts = parser.parse_args()
 
-  source_root = os.path.join(opts.source, opts.debug_dir, "gen")
-  dest_root = os.path.join(opts.dest, opts.debug_dir, "gen")
-
-  if opts.kzip_prune:
-    kzip_input_suffixes = kzip_input_paths(opts.kzip_prune)
-
-  copy_generated_files(source_root, dest_root, kzip_input_suffixes)
+  copy_generated_files(opts.source, opts.dest, opts.debug_dir)
 
   # Add the files to the git index, exit if there were no changes.
   check_call(['git', 'add', '--', '.'], cwd=opts.dest)

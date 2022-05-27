@@ -357,7 +357,6 @@ class CodesearchApi(recipe_api.RecipeApi):
       args = ['--debug-dir', self.c.GEN_REPO_OUT_DIR] + args
     if self.m.runtime.is_experimental:
       args.append('--dry-run')
-    # TODO(crbug.com/1329364): Add kzip flag after dedicated repos are set up.
     self.m.build.python('sync generated files',
                         self.resource('sync_generated_files.py'),
                         args)
