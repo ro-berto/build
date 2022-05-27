@@ -1,12 +1,18 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # Copyright 2020 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
 import argparse
+import os
 import sys
 
-from recipes import cloudtail_utils
+THIS_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(
+    0,
+    os.path.abspath(
+        os.path.join(THIS_DIR, os.pardir, os.pardir, os.pardir)))
+import cloudtail_utils
 
 
 def start_cloudtail(args):
