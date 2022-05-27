@@ -1,3 +1,7 @@
+# Copyright 2022 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
 from PB.recipe_modules.build.xcode import properties
 
 PYTHON_VERSION_COMPATIBILITY = "PY3"

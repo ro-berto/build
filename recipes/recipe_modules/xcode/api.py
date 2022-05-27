@@ -1,3 +1,7 @@
+# Copyright 2022 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
 from recipe_engine import recipe_api
 
 
@@ -28,5 +32,4 @@ class XcodeApi(recipe_api.RecipeApi):
               'version': '0.0',
           })
       return xcode_confg['version']
-    else:
-      return None
+    return None

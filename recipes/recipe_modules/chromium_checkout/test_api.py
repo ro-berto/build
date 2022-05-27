@@ -8,5 +8,9 @@ from recipe_engine import recipe_test_api
 class ChromiumCheckoutTestApi(recipe_test_api.RecipeTestApi):
 
   @property
+  def checkout_dir(self):
+    return self.m.path['cache'].join('builder')
+
+  @property
   def src_dir(self):
-    return self.m.path['cache'].join('builder', 'src')
+    return self.checkout_dir.join('src')
