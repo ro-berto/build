@@ -76,7 +76,7 @@ class GomaApi(recipe_api.RecipeApi):
     return self.m.puppet_service_account.get_key_path('goma-client')
 
   @property
-  def cloudtail_service_account_json_path(self):
+  def _cloudtail_service_account_json_path(self):
     return self.m.puppet_service_account.get_key_path('goma-cloudtail')
 
   @property
@@ -85,7 +85,7 @@ class GomaApi(recipe_api.RecipeApi):
     return self.m.path['tmp_base'].join('goma_counterz')
 
   @property
-  def bigquery_service_account_json_path(self):
+  def _bigquery_service_account_json_path(self):
     return self.m.puppet_service_account.get_key_path('goma-bigquery')
 
   @property
@@ -294,9 +294,12 @@ class GomaApi(recipe_api.RecipeApi):
         self.m.raw_io.output_text(leak_to=self.cloudtail_pid_file)
     ]
     if not self._use_luci_auth:
+      self.m.step.empty(
+        'global goma cloudtail account is used',
+        step_text='task account should be used for http://b/234124657 instead.')
       cloudtail_args.extend([
           '--cloudtail-service-account-json',
-          self.cloudtail_service_account_json_path,
+          self._cloudtail_service_account_json_path,
       ])
 
     self.m.build.python(
@@ -541,9 +544,12 @@ class GomaApi(recipe_api.RecipeApi):
         self._default_bqupload_path,
     ]
     if not self._use_luci_auth:
+      self.m.step.empty(
+        'global goma bigquery account is used',
+        step_text='task account should be used for http://b/234124657 instead.')
       args += [
           '--bigquery-service-account-json',
-          self.bigquery_service_account_json_path,
+          self._bigquery_service_account_json_path,
       ]
 
     json_test_data = {
