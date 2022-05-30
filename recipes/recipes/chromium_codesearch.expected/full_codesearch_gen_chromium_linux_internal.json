@@ -667,6 +667,7 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "KYTHE_CORPUS": "chromium.googlesource.com/chromium/src",
       "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/linux-Debug/kzip",
       "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
@@ -688,6 +689,13 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "preprocess_for_goma.goma_with_global_service_account",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -839,6 +847,7 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "KYTHE_CORPUS": "chromium.googlesource.com/chromium/src",
       "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/linux-Debug/kzip",
       "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
@@ -885,6 +894,7 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "KYTHE_CORPUS": "chromium.googlesource.com/chromium/src",
       "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/linux-Debug/kzip",
       "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"
@@ -920,6 +930,7 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "KYTHE_CORPUS": "chromium.googlesource.com/chromium/src",
       "KYTHE_OUTPUT_DIRECTORY": "[CACHE]/builder/src/out/linux-Debug/kzip",
       "KYTHE_ROOT_DIRECTORY": "[CACHE]/builder/src"

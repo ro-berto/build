@@ -751,7 +751,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "luci_context": {
       "realm": {

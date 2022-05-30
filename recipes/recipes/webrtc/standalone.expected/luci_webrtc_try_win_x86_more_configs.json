@@ -455,7 +455,8 @@
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "luci_context": {
       "realm": {
@@ -636,7 +637,8 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_FAIL_FAST": "true",
-      "GOMA_HERMETIC": "error"
+      "GOMA_HERMETIC": "error",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "infra_step": true,
     "luci_context": {
@@ -655,6 +657,13 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "preprocess_for_goma.goma_with_global_service_account",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -793,7 +802,8 @@
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_HERMETIC": "error"
+      "GOMA_HERMETIC": "error",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "luci_context": {
       "realm": {
@@ -837,7 +847,8 @@
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_HERMETIC": "error"
+      "GOMA_HERMETIC": "error",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "luci_context": {
       "realm": {
@@ -870,7 +881,8 @@
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_HERMETIC": "error"
+      "GOMA_HERMETIC": "error",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "luci_context": {
       "realm": {
@@ -1096,7 +1108,8 @@
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "luci_context": {
       "realm": {
@@ -1277,7 +1290,8 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_FAIL_FAST": "true",
-      "GOMA_HERMETIC": "error"
+      "GOMA_HERMETIC": "error",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "infra_step": true,
     "luci_context": {
@@ -1296,6 +1310,13 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "preprocess_for_goma (2).goma_with_global_service_account",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -1434,7 +1455,8 @@
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_HERMETIC": "error"
+      "GOMA_HERMETIC": "error",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "luci_context": {
       "realm": {
@@ -1478,7 +1500,8 @@
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_HERMETIC": "error"
+      "GOMA_HERMETIC": "error",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "luci_context": {
       "realm": {
@@ -1511,7 +1534,8 @@
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_HERMETIC": "error"
+      "GOMA_HERMETIC": "error",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "luci_context": {
       "realm": {
@@ -1737,7 +1761,8 @@
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "luci_context": {
       "realm": {
@@ -1930,7 +1955,8 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_FAIL_FAST": "true",
-      "GOMA_HERMETIC": "error"
+      "GOMA_HERMETIC": "error",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "infra_step": true,
     "luci_context": {
@@ -1949,6 +1975,13 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "preprocess_for_goma (3).goma_with_global_service_account",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -2087,7 +2120,8 @@
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_HERMETIC": "error"
+      "GOMA_HERMETIC": "error",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "luci_context": {
       "realm": {
@@ -2131,7 +2165,8 @@
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_HERMETIC": "error"
+      "GOMA_HERMETIC": "error",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "luci_context": {
       "realm": {
@@ -2164,7 +2199,8 @@
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_HERMETIC": "error"
+      "GOMA_HERMETIC": "error",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "luci_context": {
       "realm": {
