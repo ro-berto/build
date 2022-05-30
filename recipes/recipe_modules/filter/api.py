@@ -241,8 +241,6 @@ class FilterApi(recipe_api.RecipeApi):
     cwd = None
     if not use_mb:
       env.update(self.m.chromium.c.gyp_env.as_jsonish())
-    env['GOMA_SERVICE_ACCOUNT_JSON_FILE'] = \
-        self.m.goma.service_account_json_path
 
     with self.m.context(cwd=cwd, env=env):
       if use_mb:
