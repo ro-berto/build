@@ -69,7 +69,8 @@ def generate_json_results_file_for_json(results_json, builder_name,
   # updated
   results_json['master_name'] = builder_group
   with open(json_results_file_path, 'w') as f:
-    json.dump(results_json, f)
+    # Remove the space after each comma and colon.
+    json.dump(results_json, f, separators=(',', ':'))
   return [(FULL_RESULTS_FILENAME, json_results_file_path)]
 
 
