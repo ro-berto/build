@@ -1544,13 +1544,12 @@
       "--",
       "python",
       "RECIPE_MODULE[build::codesearch]/resources/sync_generated_files.py",
-      "--debug-dir",
-      "fuchsia-Debug",
+      "--copy",
+      "[CACHE]/builder/src/out/fuchsia-Debug/gen:fuchsia-Debug/gen",
       "--message",
       "Generated files from \"codesearch-gen-chromium-fuchsia-internal\" build 571, revision aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "--dest-branch",
       "main",
-      "[CACHE]/builder/src/out",
       "[CACHE]/generated"
     ],
     "luci_context": {

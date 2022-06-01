@@ -1418,11 +1418,12 @@
       "--",
       "python",
       "RECIPE_MODULE[build::codesearch]/resources/sync_generated_files.py",
+      "--copy",
+      "foo:bar",
       "--message",
       "Generated files from \"codesearch-gen-chromium-linux\" build 571, revision f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--dest-branch",
       "main",
-      "[START_DIR]/src/out",
       "[CACHE]/generated",
       "--dry-run"
     ],

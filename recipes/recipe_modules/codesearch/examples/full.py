@@ -116,7 +116,8 @@ def RunSteps(api):
 
   # Check out the generated files repo and sync the generated files
   # into this checkout.
-  api.codesearch.checkout_generated_files_repo_and_sync()
+  api.codesearch.checkout_generated_files_repo_and_sync({'foo': 'bar'})
+
 
 def GenTests(api):
   sanitize = lambda s: ''.join(c if c.isalnum() else '_' for c in s)
