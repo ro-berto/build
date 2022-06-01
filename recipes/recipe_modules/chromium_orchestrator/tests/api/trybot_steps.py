@@ -322,6 +322,37 @@ def GenTests(api):
   )
 
   yield api.test(
+      'clang_coverage_not_enabled',
+      get_try_build(remove_src_checkout_experiment=True),
+      ctbc_properties(),
+      api.properties(
+          **{
+              '$build/chromium_orchestrator':
+                  InputProperties(
+                      compilator='fake-compilator',
+                      compilator_watcher_git_revision='e841fc',
+                  ),
+          }),
+      api.code_coverage(use_java_coverage=True),
+      api.chromium_orchestrator.override_test_spec(
+          builder_group='fake-group',
+          builder='fake-builder',
+          tester='fake-tester',
+      ),
+      api.chromium_orchestrator.override_compilator_build_proto_fetch(),
+      api.chromium_orchestrator.override_schedule_compilator_build(),
+      api.chromium_orchestrator.override_compilator_steps(),
+      api.chromium_orchestrator.override_compilator_steps(
+          is_swarming_phase=False),
+      api.post_process(post_process.MustRun,
+                       'downloading cas digest all_test_binaries'),
+      api.post_process(post_process.DoesNotRun,
+                       'run tools/clang/scripts/update.py'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
       'no_builder_to_trigger_passed_in',
       api.chromium.try_build(
           builder_group='fake-try-group',

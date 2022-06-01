@@ -255,19 +255,14 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
           self.m.chromium.output_dir,
       )
 
-      # Only downloaded if the builder runs clang coverage
-      clang_update_script = self.m.path['checkout'].join(
-          'tools', 'clang', 'scripts', 'update.py')
-      args = ['python3', clang_update_script, '--package', 'coverage_tools']
-      self.m.step(
-          'run tools/clang/scripts/update.py',
-          args,
-      )
-      # TODO(kimstephanie): For debugging. Remove later.
-      self.m.file.listdir(
-          'inspect third_party/llvm-build',
-          self.m.path['checkout'].join('third_party', 'llvm-build'),
-          recursive=True)
+      if self.m.code_coverage.use_clang_coverage:
+        clang_update_script = self.m.path['checkout'].join(
+            'tools', 'clang', 'scripts', 'update.py')
+        args = ['python3', clang_update_script, '--package', 'coverage_tools']
+        self.m.step(
+            'run tools/clang/scripts/update.py',
+            args,
+        )
 
     # Trigger and wait for the tests (and process coverage data, if enabled)!
     with self.m.chromium_tests.wrap_chromium_tests(builder_config, tests):
