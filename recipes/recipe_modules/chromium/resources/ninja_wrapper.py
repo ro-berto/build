@@ -1,3 +1,4 @@
+#!/usr/bin/env vpython3
 # Copyright 2017 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -14,7 +15,7 @@ Ninja environment should be set before calling wrapper from recipe:
     self.m.python(name, ninja_wrapper.py)
 
 Example:
-python ninja_wrapper.py \
+vpython3 ninja_wrapper.py \
   [--ninja_info_output file_name.json] \
   [--failure_output failure_output] \
   -- /absolute/path/to/ninja -C build/path build_target
@@ -33,8 +34,6 @@ The wrapper writes detailed info in JSON format:
 }
 
 """
-
-from __future__ import print_function
 
 from gevent import monkey
 monkey.patch_all()
@@ -78,7 +77,7 @@ _FAILED_RE = re.compile(r'^FAILED: (.*)$')
 _FAILED_END_RE = re.compile(r'^ninja: build stopped:.*')
 
 
-class WarningCollector(object):
+class WarningCollector:
 
   def __init__(self):
     self._warnings = []
@@ -121,7 +120,7 @@ def run_ninja_tool(ninja_cmd, warning_collector):
   return data
 
 
-class Node(object):
+class Node:
   """Represents a node in ninja build graph."""
 
   def __init__(self):
@@ -131,7 +130,7 @@ class Node(object):
     self.node_name = None
 
 
-class Edge(object):
+class Edge:
   """Represents an edge in ninja build graph."""
 
   def __init__(self, name):
@@ -144,7 +143,7 @@ class Edge(object):
     self.output_nodes = []
 
 
-class Graph(object):
+class Graph:
   """Parses output of ninja graph tool and saves the build graph."""
 
   def __init__(self, warning_collector):
@@ -261,7 +260,7 @@ class Graph(object):
     return root_deps
 
 
-class DepsInfo(object):
+class DepsInfo:
   """Stores the deps information.
 
   Attributes:
@@ -330,7 +329,7 @@ def parse_ninja_deps(ninja_deps_output, warning_collector):
   return deps
 
 
-class NinjaBuildOutputStreamingParser(object):
+class NinjaBuildOutputStreamingParser:
   """Parses ninja's stdout of build command in streaming way."""
 
   def __init__(self, warning_collector):
@@ -416,7 +415,7 @@ def get_detailed_info(ninja_path, build_path, failed_target_list,
     ninja_deps_output = run_ninja_tool(deps_command, warning_collector)
     deps_dict = parse_ninja_deps(ninja_deps_output, warning_collector)
     auto_generated_deps = []
-    for _, deps in deps_dict.iteritems():
+    for deps in deps_dict.values():
       auto_generated_deps.extend(deps.auto_generated_deps)
     graph_dict = collections.defaultdict(list)
     if auto_generated_deps:
