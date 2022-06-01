@@ -2,13 +2,15 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from __future__ import print_function
+
+import mock
 import os
 import sys
-import tempfile
 import textwrap
 import time
+import tempfile
 import unittest
-import unittest.mock
 
 import ninja_wrapper
 
@@ -256,8 +258,8 @@ class NinjaWrapperTestCase(unittest.TestCase):
     file_name = '../../123123'
     self.assertFalse(ninja_wrapper.is_auto_generated(file_name))
 
-  @unittest.mock.patch(
-      'ninja_wrapper.run_ninja_tool', side_effect=[_DEPS_RETURN, _GRAPH_RETURN])
+  @mock.patch('ninja_wrapper.run_ninja_tool',
+              side_effect=[_DEPS_RETURN, _GRAPH_RETURN])
   def testGetDetailedInfo(self, _):
     failed_target_list = [{
         'output_nodes': ['a.o', 'b.o'],
@@ -301,8 +303,8 @@ class NinjaWrapperTestCase(unittest.TestCase):
                         expected_deps3)
     self.assertListEqual(warning_collector.get(), [])
 
-  @unittest.mock.patch(
-      'ninja_wrapper.run_ninja_tool', side_effect=['', _GRAPH_RETURN])
+  @mock.patch('ninja_wrapper.run_ninja_tool',
+              side_effect=['', _GRAPH_RETURN])
   def testGetDetailedInfoErrorDeps(self, _):
     failed_target_list = [{
         'output_nodes': ['a.o', 'b.o'],
@@ -357,9 +359,8 @@ class NinjaWrapperTestCase(unittest.TestCase):
                         expected_deps4)
     self.assertListEqual(warning_collector.get(), [])
 
-  @unittest.mock.patch(
-      'ninja_wrapper.run_ninja_tool',
-      side_effect=[_DEPS_NOT_FOUND_RETURN, _GRAPH_RETURN])
+  @mock.patch('ninja_wrapper.run_ninja_tool',
+              side_effect=[_DEPS_NOT_FOUND_RETURN, _GRAPH_RETURN])
   def testGetDetailedInfoMixedRules(self, _):
     warning_collector = ninja_wrapper.WarningCollector()
     ninja_parser = ninja_wrapper.NinjaBuildOutputStreamingParser(
@@ -425,12 +426,12 @@ class NinjaWrapperTestCase(unittest.TestCase):
     self.assertIsNone(options.ninja_info_output)
 
 
-  @unittest.mock.patch('ninja_wrapper.print')
-  @unittest.mock.patch('ninja_wrapper.subprocess.Popen')
+  @mock.patch('ninja_wrapper.print')
+  @mock.patch('ninja_wrapper.subprocess.Popen')
   def testMainWithTimeoutOk(self, mock_Popen, mock_print):
     """Test main() with a timeout that is not raised"""
 
-    mock_popen_instance = unittest.mock.MagicMock()
+    mock_popen_instance = mock.MagicMock()
     mock_popen_instance.stdout.readline.side_effect = ['a', 'b', 'c', '']
     mock_Popen.return_value = mock_popen_instance
 
@@ -441,9 +442,9 @@ class NinjaWrapperTestCase(unittest.TestCase):
     self.assertEqual(mock_print.call_count, 3)
     mock_popen_instance.stdout.close.assert_called()
 
-  @unittest.mock.patch('ninja_wrapper.print')
-  @unittest.mock.patch('ninja_wrapper.subprocess.Popen')
-  @unittest.mock.patch('ninja_wrapper.subprocess.call')
+  @mock.patch('ninja_wrapper.print')
+  @mock.patch('ninja_wrapper.subprocess.Popen')
+  @mock.patch('ninja_wrapper.subprocess.call')
   def testMainWithTimeoutNotOk(self, mock_call, mock_Popen, mock_print):
     """Test main() with a timeout that is raised"""
 
@@ -455,9 +456,9 @@ class NinjaWrapperTestCase(unittest.TestCase):
           'This should not be reached, a timeout should have occurred')
 
     # Makes faulty_readline behave like a regular function not like a generator
-    faulty_readline = faulty_readline_sequence().__next__
+    faulty_readline = iter(faulty_readline_sequence()).next
 
-    mock_popen_instance = unittest.mock.MagicMock()
+    mock_popen_instance = mock.MagicMock()
     mock_popen_instance.stdout.readline = faulty_readline
     mock_Popen.return_value = mock_popen_instance
 

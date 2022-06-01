@@ -48,8 +48,6 @@ PYTHON3_ONLY_FILES = (
         'recipes/recipes/flakiness/generate_builder_test_data.resources/'
         'query_test.py'
     ),
-    'recipes/recipe_modules/chromium/resources/ninja_wrapper.py',
-    'recipes/recipe_modules/chromium/resources/ninja_wrapper_test.py',
     'recipes/recipe_modules/chromium_tests_builder_config/PRESUBMIT.py',
     (
         'recipes/recipe_modules/chromium_tests_builder_config/migration/'

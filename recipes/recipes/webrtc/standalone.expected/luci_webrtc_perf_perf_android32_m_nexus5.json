@@ -623,7 +623,7 @@
   },
   {
     "cmd": [
-      "vpython3",
+      "vpython",
       "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
       "--ninja_info_output",
       "/path/to/tmp/json",
