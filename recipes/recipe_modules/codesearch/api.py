@@ -97,7 +97,10 @@ class CodesearchApi(recipe_api.RecipeApi):
     added to the generated file by the Mojo compiler.
     """
 
-    args = ['--corpus', self.c.CORPUS, self.c.out_path]
+    args = [
+        '--corpus', self.c.CORPUS,
+        self.m.path['checkout'].join('out', self.c.GEN_REPO_OUT_DIR or 'Debug')
+    ]
     self.m.build.python('add kythe metadata',
                         self.resource('add_kythe_metadata.py'), args)
 
@@ -293,25 +296,9 @@ class CodesearchApi(recipe_api.RecipeApi):
     )
 
 
-  def checkout_generated_files_repo_and_sync(self, copy):
+  def checkout_generated_files_repo_and_sync(self):
     """Check out the generated files repo and sync the generated files
        into this checkout.
-
-    Args:
-      copy: A dict that describes how generated files should be synced. Keys are
-        paths to local directories and values are where they are copied to in
-        the generated files repo.
-
-          {
-              '/path/to/foo': 'foo',
-              '/path/to/bar': 'baz/bar',
-          }
-
-        The above copy config would result in a generated files repo like:
-
-          repo/
-          repo/foo/
-          repo/baz/bar/
     """
     if not self.c.SYNC_GENERATED_FILES:
       return
@@ -357,18 +344,17 @@ class CodesearchApi(recipe_api.RecipeApi):
       self.m.git('config', 'user.name', self.c.generated_author_name)
 
     # Sync the generated files into this checkout.
-    args = []
-    for src, dest in copy.items():
-      args.extend(['--copy', '%s:%s' % (src, dest)])
-    args.extend([
-        '--message',
-        'Generated files from "%s" build %d, revision %s' %
-        (self.m.buildbucket.builder_name, self.m.buildbucket.build.number,
-         self._get_revision()),
-        '--dest-branch',
-        self.c.GEN_REPO_BRANCH,
-        generated_repo_dir,
-    ])
+    args = ['--message',
+            'Generated files from "%s" build %d, revision %s' % (
+                self.m.buildbucket.builder_name,
+                self.m.buildbucket.build.number,
+                self._get_revision()),
+            '--dest-branch',
+            self.c.GEN_REPO_BRANCH,
+            self.m.path['checkout'].join('out'),
+            generated_repo_dir]
+    if self.c.GEN_REPO_OUT_DIR:
+      args = ['--debug-dir', self.c.GEN_REPO_OUT_DIR] + args
     if self.m.runtime.is_experimental:
       args.append('--dry-run')
     # TODO(crbug.com/1329364): Add kzip flag after dedicated repos are set up.

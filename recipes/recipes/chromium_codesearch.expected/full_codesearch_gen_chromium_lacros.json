@@ -1530,12 +1530,13 @@
       "--",
       "python",
       "RECIPE_MODULE[build::codesearch]/resources/sync_generated_files.py",
-      "--copy",
-      "[CACHE]/builder/src/out/lacros-Debug/gen:lacros-Debug/gen",
+      "--debug-dir",
+      "lacros-Debug",
       "--message",
       "Generated files from \"codesearch-gen-chromium-lacros\" build 571, revision f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--dest-branch",
       "main",
+      "[CACHE]/builder/src/out",
       "[CACHE]/generated"
     ],
     "luci_context": {

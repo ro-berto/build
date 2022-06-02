@@ -1544,12 +1544,13 @@
       "--",
       "python",
       "RECIPE_MODULE[build::codesearch]/resources/sync_generated_files.py",
-      "--copy",
-      "[CACHE]/builder/src/out/chromiumos-Debug/gen:chromiumos-Debug/gen",
+      "--debug-dir",
+      "chromiumos-Debug",
       "--message",
       "Generated files from \"codesearch-gen-chromium-chromiumos-internal\" build 571, revision aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "--dest-branch",
       "main",
+      "[CACHE]/builder/src/out",
       "[CACHE]/generated"
     ],
     "luci_context": {

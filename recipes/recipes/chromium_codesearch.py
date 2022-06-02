@@ -76,7 +76,7 @@ def RunSteps(api, properties):
   # compile_targets is of type RepeatedScalarFieldContainer.
   targets = list(bot_config.compile_targets or [])
   gen_repo_branch = bot_config.gen_repo_branch or 'main'
-  gen_repo_out_dir = bot_config.gen_repo_out_dir or 'Debug'
+  gen_repo_out_dir = bot_config.gen_repo_out_dir or ''
   internal = bot_config.internal or False
 
   project = 'chromium' if not internal else 'chrome'
@@ -179,7 +179,7 @@ def RunSteps(api, properties):
         name='compile%s' % name_suffix,
         use_goma_module=True,
         out_dir='out',
-        target=gen_repo_out_dir)
+        target=gen_repo_out_dir or 'Debug')
   if raw_result.status != common_pb.SUCCESS:
     return raw_result
 
@@ -202,13 +202,7 @@ def RunSteps(api, properties):
   # Check out the generated files repo and sync the generated files
   # into this checkout. This may fail due to other builders pushing to the
   # remote repo at the same time, so we retry this 3 times before giving up.
-  copy_config = {
-      api.path['checkout'].join('out', gen_repo_out_dir, 'gen'):
-          api.path.join(gen_repo_out_dir, 'gen')
-  }
-  _RunStepWithRetry(
-      api, lambda: api.codesearch.checkout_generated_files_repo_and_sync(
-          copy_config))
+  _RunStepWithRetry(api, api.codesearch.checkout_generated_files_repo_and_sync)
 
 
 def _RunStepWithRetry(api, step_function, max_tries=3):

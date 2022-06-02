@@ -90,9 +90,9 @@ def kzip_input_paths(kzip_path):
   return required_inputs
 
 
-def copy_generated_files(source_dir, dest_dir, kzip_input_suffixes=None):
+def copy_generated_files(source_root, dest_root, kzip_input_suffixes=None):
   try:
-    os.makedirs(dest_dir)
+    os.makedirs(dest_root)
   except OSError as e:
     if e.errno != errno.EEXIST:
       raise
@@ -113,10 +113,10 @@ def copy_generated_files(source_dir, dest_dir, kzip_input_suffixes=None):
   #   * isn't in source or
   #   * doesn't match the allowed extensions or
   #   * (if kzip is provided,) isn't referenced in the kzip
-  for dirpath, _, filenames in os.walk(dest_dir):
+  for dirpath, _, filenames in os.walk(dest_root):
     for filename in filenames:
       dest_file = os.path.join(dirpath, filename)
-      source_file = translate_root(dest_dir, source_dir, dest_file)
+      source_file = translate_root(dest_root, source_root, dest_file)
 
       if not os.path.exists(source_file) or \
           not has_allowed_extension(source_file):
@@ -128,10 +128,10 @@ def copy_generated_files(source_dir, dest_dir, kzip_input_suffixes=None):
 
   # Second, copy everything that matches the allowlist from source to dest. If
   # kzip is provided, don't copy files that aren't referenced.
-  for dirpath, _, filenames in os.walk(source_dir):
-    if dirpath != source_dir:
+  for dirpath, _, filenames in os.walk(source_root):
+    if dirpath != source_root:
       try:
-        os.mkdir(translate_root(source_dir, dest_dir, dirpath))
+        os.mkdir(translate_root(source_root, dest_root, dirpath))
       except OSError as e:
         if e.errno != errno.EEXIST:
           raise
@@ -142,7 +142,7 @@ def copy_generated_files(source_dir, dest_dir, kzip_input_suffixes=None):
         continue
 
       source_file = os.path.join(dirpath, filename)
-      dest_file = translate_root(source_dir, dest_dir, source_file)
+      dest_file = translate_root(source_root, dest_root, source_file)
 
       if not os.path.exists(dest_file):
         print('Adding file:', dest_file)
@@ -150,9 +150,8 @@ def copy_generated_files(source_dir, dest_dir, kzip_input_suffixes=None):
 
   # Finally, delete any empty directories. We keep going to a fixed point, to
   # remove directories that contain only other empty directories.
-  dirs_to_examine = [
-      dirpath for dirpath, _, _ in os.walk(dest_dir) if dirpath != dest_dir
-  ]
+  dirs_to_examine = [dirpath for dirpath, _, _ in os.walk(dest_root)
+                     if dirpath != dest_root]
   while dirs_to_examine != []:
     d = dirs_to_examine.pop()
 
@@ -164,7 +163,7 @@ def copy_generated_files(source_dir, dest_dir, kzip_input_suffixes=None):
 
       # The parent dir might be empty now, so add it back into the list.
       parent_dir = os.path.dirname(d.rstrip(os.sep))
-      if parent_dir != dest_dir:
+      if parent_dir != dest_root:
         dirs_to_examine.append(parent_dir)
 
 def main():
@@ -175,6 +174,11 @@ def main():
       help='git branch in the destination repo to sync to',
       default='main')
   parser.add_argument(
+      '--debug-dir',
+      help='optional dir containing the gen folder to include '
+      'in the checked-in repo',
+      default='Debug')
+  parser.add_argument(
       '--kzip-prune',
       help='kzip to reference when selecting which source files to copy',
       default='')
@@ -182,47 +186,42 @@ def main():
       '--dry-run',
       action='store_true',
       help='if set, does a dry run of push to remote repo.')
-  parser.add_argument(
-      '--copy',
-      action='append',
-      help=('a copy configuration that maps a source dir to a target dir in '
-            'dest_repo. takes the format /path/to/src:dest_dir'),
-      required=True)
-  parser.add_argument('dest_repo', help='git checkout to copy files to')
+  parser.add_argument('source', help='directory to copy files from')
+  parser.add_argument('dest', help='git checkout to copy files to')
   opts = parser.parse_args()
+
+  source_root = os.path.join(opts.source, opts.debug_dir, "gen")
+  dest_root = os.path.join(opts.dest, opts.debug_dir, "gen")
 
   kzip_input_suffixes = None
   if opts.kzip_prune:
     kzip_input_suffixes = kzip_input_paths(opts.kzip_prune)
 
-  for c in opts.copy:
-    source, dest = c.split(':')
-    copy_generated_files(source, os.path.join(opts.dest_repo, dest),
-                         kzip_input_suffixes)
+  copy_generated_files(source_root, dest_root, kzip_input_suffixes)
 
   # Add the files to the git index, exit if there were no changes.
-  check_call(['git', 'add', '--', '.'], cwd=opts.dest_repo)
-  check_call(['git', 'status'], cwd=opts.dest_repo)
-  check_call(['git', 'diff'], cwd=opts.dest_repo)
-  status = subprocess.check_output(['git', 'status', '--porcelain'],
-                                   cwd=opts.dest_repo)
+  check_call(['git', 'add', '--', '.'], cwd=opts.dest)
+  check_call(['git', 'status'], cwd=opts.dest)
+  check_call(['git', 'diff'], cwd=opts.dest)
+  status = subprocess.check_output(
+      ['git', 'status', '--porcelain'], cwd=opts.dest)
   if not status:
     print('No changes, exiting')
     return 0
 
-  check_call(['git', 'commit', '-m', opts.message], cwd=opts.dest_repo)
+  check_call(['git', 'commit', '-m', opts.message], cwd=opts.dest)
   if opts.dry_run:
     check_call([
         'git', 'push', '-o', 'nokeycheck', '--dry-run', 'origin',
         'HEAD:%s' % opts.dest_branch
     ],
-               cwd=opts.dest_repo)
+               cwd=opts.dest)
   else:
     check_call([
         'git', 'push', '-o', 'nokeycheck', 'origin',
         'HEAD:%s' % opts.dest_branch
     ],
-               cwd=opts.dest_repo)
+               cwd=opts.dest)
 
 
 def check_call(cmd, cwd=None):

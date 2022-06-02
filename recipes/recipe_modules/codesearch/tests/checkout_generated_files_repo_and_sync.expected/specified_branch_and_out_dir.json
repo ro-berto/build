@@ -280,12 +280,13 @@
       "--",
       "python",
       "RECIPE_MODULE[build::codesearch]/resources/sync_generated_files.py",
-      "--copy",
-      "foo:bar",
+      "--debug-dir",
+      "chromium-android",
       "--message",
       "Generated files from \"test_buildername\" build 123, revision f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--dest-branch",
       "android",
+      "[START_DIR]/src/out",
       "[CACHE]/generated"
     ],
     "name": "sync generated files"
