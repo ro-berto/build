@@ -1586,13 +1586,12 @@
       "--",
       "python",
       "RECIPE_MODULE[build::codesearch]/resources/sync_generated_files.py",
-      "--debug-dir",
-      "mac-Debug",
+      "--copy",
+      "[CACHE]/builder/src/out/mac-Debug/gen;mac-Debug/gen",
       "--message",
       "Generated files from \"codesearch-gen-chromium-mac-internal\" build 571, revision f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--dest-branch",
       "main",
-      "[CACHE]/builder/src/out",
       "[CACHE]/generated"
     ],
     "luci_context": {

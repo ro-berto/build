@@ -1435,13 +1435,12 @@
       "--",
       "python",
       "RECIPE_MODULE[build::codesearch]/resources/sync_generated_files.py",
-      "--debug-dir",
-      "win-Debug",
+      "--copy",
+      "foo;bar",
       "--message",
       "Generated files from \"codesearch-gen-chromium-win\" build 571, revision f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--dest-branch",
       "win",
-      "[START_DIR]/src/out",
       "[CACHE]/generated"
     ],
     "luci_context": {

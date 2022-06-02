@@ -16,21 +16,13 @@ import sync_generated_files as sync
 class SyncGeneratedFilesCodesearchTest(unittest.TestCase):
   def setUp(self):
     super(SyncGeneratedFilesCodesearchTest, self).setUp()
-    self.src_dir = tempfile.mkdtemp(suffix='_%s_src' % self._testMethodName)
-    self.src_root = self.formatDebugGenDir(self.src_dir)
-    os.makedirs(self.src_root)
-
-    self.dest_dir = tempfile.mkdtemp(suffix='_%s_dest' % self._testMethodName)
-    self.dest_root = self.formatDebugGenDir(self.dest_dir)
-    os.makedirs(self.dest_root)
+    self.src_root = tempfile.mkdtemp(suffix='_%s_src' % self._testMethodName)
+    self.dest_root = tempfile.mkdtemp(suffix='_%s_dest' % self._testMethodName)
 
   def tearDown(self):
     super(SyncGeneratedFilesCodesearchTest, self).tearDown()
-    shutil.rmtree(self.src_dir)
-    shutil.rmtree(self.dest_dir)
-
-  def formatDebugGenDir(self, path):
-    return os.path.join(path, 'Debug', 'gen')
+    shutil.rmtree(self.src_root)
+    shutil.rmtree(self.dest_root)
 
   def testCopyFilesBasic(self):
     with open(os.path.join(self.src_root, 'foo.cc'), 'w') as f:
