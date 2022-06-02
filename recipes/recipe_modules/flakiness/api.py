@@ -9,6 +9,7 @@ import inspect
 import json
 import random
 import re
+import sys
 
 from google.protobuf import timestamp_pb2
 from recipe_engine import recipe_api
@@ -272,7 +273,12 @@ class FlakinessApi(recipe_api.RecipeApi):
     # same CL but from different patch sets to exclude from our historical
     # data, ensuring all tests new to the CL are detected as new.
     predicates = []
-    for i in range(1, change.patchset + 1):
+    # Only check the latest 30 patchsets on win due to windows cmd line size
+    # limitation (8191 chars). Input char size is around 250 chars per patchset.
+    start_patchset = (
+        max(1, change.patchset - 30) if sys.platform == 'win32' else 1)
+
+    for i in range(start_patchset, change.patchset + 1):
       predicates.append(
           builds_service_pb2.BuildPredicate(
               builder=self.m.buildbucket.build.builder,
