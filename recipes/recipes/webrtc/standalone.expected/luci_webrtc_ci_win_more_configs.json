@@ -516,7 +516,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "vpython3",
       "RECIPE_MODULE[build::chromium]\\resources\\ninja_wrapper.py",
       "--ninja_info_output",
       "/path/to/tmp/json",
@@ -1022,7 +1022,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "vpython3",
       "RECIPE_MODULE[build::chromium]\\resources\\ninja_wrapper.py",
       "--ninja_info_output",
       "/path/to/tmp/json",
@@ -1532,7 +1532,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "vpython3",
       "RECIPE_MODULE[build::chromium]\\resources\\ninja_wrapper.py",
       "--ninja_info_output",
       "/path/to/tmp/json",

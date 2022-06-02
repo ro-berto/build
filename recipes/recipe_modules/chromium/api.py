@@ -341,7 +341,7 @@ class ChromiumApi(recipe_api.RecipeApi):
                                            'failure_summary retcode')
 
     cmd = [
-        'vpython',
+        'vpython3',
         self.resource('ninja_wrapper.py'),
         '--ninja_info_output',
         self.m.json.output(add_json_log='on_failure', name='ninja_info'),
