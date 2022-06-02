@@ -290,7 +290,9 @@ class GomaApi(recipe_api.RecipeApi):
     """
 
     cloudtail_args = [
-        'start', '--cloudtail-path', self.cloudtail_exe, '--pid-file',
+        'python3',
+        self.resource('cloudtail_utils.py'), 'start', '--cloudtail-path',
+        self.cloudtail_exe, '--pid-file',
         self.m.raw_io.output_text(leak_to=self.cloudtail_pid_file)
     ]
     if not self._use_luci_auth:
@@ -302,10 +304,9 @@ class GomaApi(recipe_api.RecipeApi):
           self._cloudtail_service_account_json_path,
       ])
 
-    self.m.build.python(
+    self.m.step(
         name='start cloudtail',
-        script=self.resource('cloudtail_utils.py'),
-        args=cloudtail_args,
+        cmd=cloudtail_args,
         step_test_data=(lambda: self.m.raw_io.test_api.output_text('12345')),
         infra_step=True)
     self._cloudtail_running = True
@@ -340,10 +341,13 @@ class GomaApi(recipe_api.RecipeApi):
       InfraFailure if it fails to stop cloudtail
     """
 
-    self.m.build.python(
+    self.m.step(
         name='stop cloudtail',
-        script=self.resource('cloudtail_utils.py'),
-        args=['stop', '--killed-pid-file', self.cloudtail_pid_file],
+        cmd=[
+            'python3',
+            self.resource('cloudtail_utils.py'), 'stop', '--killed-pid-file',
+            self.cloudtail_pid_file
+        ],
         infra_step=True)
 
   def start(self, env=None, **kwargs):

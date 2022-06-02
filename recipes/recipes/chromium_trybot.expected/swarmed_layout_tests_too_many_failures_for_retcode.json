@@ -1094,13 +1094,7 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
+      "python3",
       "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
       "start",
       "--cloudtail-path",
@@ -1400,13 +1394,7 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
+      "python3",
       "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
       "stop",
       "--killed-pid-file",
@@ -3457,13 +3445,7 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
+      "python3",
       "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
       "start",
       "--cloudtail-path",
@@ -3763,13 +3745,7 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
+      "python3",
       "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
       "stop",
       "--killed-pid-file",

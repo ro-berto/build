@@ -5,6 +5,9 @@
 """Functions specific to build slaves, shared by several buildbot scripts.
 """
 
+from __future__ import absolute_import
+from __future__ import print_function
+
 import datetime
 import glob
 import optparse
@@ -344,7 +347,7 @@ def GSUtilCopy(
     metadata['Content-Type'] = mimetype
   if cache_control:
     metadata['Cache-Control'] = cache_control
-  for k, v in sorted(metadata.iteritems(), key=lambda (k, _): k):
+  for k, v in sorted(metadata.iteritems(), key=lambda x: x[0]):
     field = GSUtilGetMetadataField(k)
     param = (field) if v is None else ('%s:%s' % (field, v))
     command += ['-h', param]
@@ -496,16 +499,16 @@ def LogAndRemoveFiles(temp_dir, regex_pattern):
   for dir_item in os.listdir(temp_dir):
     if regex.search(dir_item):
       full_path = os.path.join(temp_dir, dir_item)
-      print 'Removing leaked temp item: %s' % full_path
+      print('Removing leaked temp item: %s' % full_path)
       try:
         if os.path.islink(full_path) or os.path.isfile(full_path):
           os.remove(full_path)
         elif os.path.isdir(full_path):
           chromium_utils.RemoveDirectory(full_path)
         else:
-          print 'Temp item wasn\'t a file or directory?'
-      except OSError, e:
-        print >> sys.stderr, e
+          print('Temp item wasn\'t a file or directory?')
+      except OSError as e:
+        print(e, file=sys.stderr)
         # Don't fail.
 
 
@@ -522,11 +525,11 @@ def RemoveOldSnapshots(desktop):
       to_delete.append(snapshot)
   # Delete the collected snapshots.
   for snapshot in to_delete:
-    print 'Removing old snapshot: %s' % snapshot
+    print('Removing old snapshot: %s' % snapshot)
     try:
       os.remove(snapshot)
-    except OSError, e:
-      print >> sys.stderr, e
+    except OSError as e:
+      print(e, file=sys.stderr)
 
 
 def RemoveChromeDesktopFiles():
@@ -587,12 +590,12 @@ def WriteLogLines(logname, lines, perf=None):
   logname = logname.rstrip()
   lines = [line.rstrip() for line in lines]
   for line in lines:
-    print '@@@STEP_LOG_LINE@%s@%s@@@' % (logname, line)
+    print('@@@STEP_LOG_LINE@%s@%s@@@' % (logname, line))
   if perf:
     perf = perf.rstrip()
-    print '@@@STEP_LOG_END_PERF@%s@%s@@@' % (logname, perf)
+    print('@@@STEP_LOG_END_PERF@%s@%s@@@' % (logname, perf))
   else:
-    print '@@@STEP_LOG_END@%s@@@' % logname
+    print('@@@STEP_LOG_END@%s@@@' % logname)
 
 
 def ZipAndUpload(bucket, archive, *targets):

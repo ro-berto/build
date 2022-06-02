@@ -8,11 +8,11 @@ from __future__ import print_function
 from contextlib import contextmanager
 import ast
 import base64
-import cStringIO
 import copy
 import errno
 import fnmatch
 import glob
+import io
 import json
 import math
 import multiprocessing
@@ -971,7 +971,7 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
 
     try:
       in_byte = proc.stdout.read(1)
-      in_line = cStringIO.StringIO()
+      in_line = io.StringIO()
       while in_byte:
         # Capture all characters except \r.
         if in_byte != '\r':
@@ -990,7 +990,7 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
               writefh.write(filtered_line)
           else:
             writefh.write(in_line.getvalue())
-          in_line = cStringIO.StringIO()
+          in_line = io.StringIO()
         if debug and proc.poll() is not None:
           print('Child process has terminated')
         in_byte = proc.stdout.read(1)

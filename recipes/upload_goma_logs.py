@@ -1,4 +1,4 @@
-#!/usr/bin/env vpython
+#!/usr/bin/env vpython3
 # Copyright (c) 2015 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -13,8 +13,8 @@ import json
 import os
 import sys
 
-from recipes import goma_bq_utils
-from recipes import goma_utils
+import goma_bq_utils
+import goma_utils
 
 
 def main():

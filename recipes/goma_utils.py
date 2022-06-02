@@ -5,6 +5,9 @@
 """Functions specific to handle goma related info.
 """
 
+from __future__ import absolute_import
+from __future__ import print_function
+
 import base64
 import datetime
 import getpass
@@ -23,8 +26,13 @@ import tarfile
 import tempfile
 import time
 
+THIS_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(
+    0, os.path.abspath(os.path.join(THIS_DIR, os.pardir, 'scripts'))
+)
+
 from common import chromium_utils
-from recipes import slave_utils
+import slave_utils
 
 # The Google Cloud Storage bucket to store logs related to goma.
 GOMA_LOG_GS_BUCKET = 'chrome-goma-log'
@@ -175,7 +183,7 @@ def UploadToGomaLogGS(
     slave_utils.GSUtilCopy(
         temp.name, gs_path, metadata=metadata, override_gsutil=override_gsutil
     )
-    print "Copied log file to %s" % gs_path
+    print("Copied log file to %s" % gs_path)
   finally:
     os.remove(temp.name)
   return log_path
@@ -217,10 +225,10 @@ def UploadGomaCompilerProxyInfo(
         override_gsutil=override_gsutil
     )
   else:
-    print 'No compiler_proxy-subproc.INFO to upload'
+    print('No compiler_proxy-subproc.INFO to upload')
   latest_info = GetLatestGomaCompilerProxyInfo()
   if not latest_info:
-    print 'No compiler_proxy.INFO to upload'
+    print('No compiler_proxy.INFO to upload')
     return
   # Since a filename of compiler_proxy.INFO is fairly unique,
   # we might be able to upload it as-is.
@@ -233,7 +241,7 @@ def UploadGomaCompilerProxyInfo(
   viewer_url = (
       'https://chromium-build-stats.appspot.com/compiler_proxy_log/' + log_path
   )
-  print 'Visualization at %s' % viewer_url
+  print('Visualization at %s' % viewer_url)
 
   gomacc_logs = GetListOfGomaccInfoAfterCompilerProxyStart()
   if gomacc_logs:
@@ -302,8 +310,8 @@ def UploadNinjaLog(
   try:
     st = os.stat(ninja_log_path)
     mtime = datetime.datetime.fromtimestamp(st.st_mtime)
-  except OSError, e:
-    print e
+  except OSError as e:
+    print(e)
     return
 
   cwd = os.getcwd()
@@ -341,7 +349,7 @@ def UploadNinjaLog(
       override_gsutil=override_gsutil
   )
   viewer_url = 'https://chromium-build-stats.appspot.com/ninja_log/' + log_path
-  print 'Visualization at %s' % viewer_url
+  print('Visualization at %s' % viewer_url)
 
   return viewer_url
 
@@ -453,7 +461,7 @@ def SendCountersToTsMon(counters):
   try:
     infra_python_dir = INFRA_PYTHON_DIR.get(os.name)
     if not infra_python_dir:
-      print 'Unknown os.name: %s' % os.name
+      print('Unknown os.name: %s' % os.name)
       return
 
     counters_json = []
@@ -480,7 +488,7 @@ def SendCountersToTsMon(counters):
     )
     if retcode:
       print('Execution of send_ts_mon_values failed with code %s' % retcode)
-      print '\n'.join(cmd_filter.text)
+      print('\n'.join(cmd_filter.text))
   except Exception as ex:
     print(
         'error while sending counters to ts_mon: counter=%s: %s' %
