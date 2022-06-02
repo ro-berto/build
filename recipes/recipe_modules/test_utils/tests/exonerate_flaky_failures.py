@@ -287,10 +287,10 @@ def GenTests(api):
           'failed_test results',
           stdout=api.raw_io.output_text(
               api.test_utils.rdb_results(
-                  'failed_test', failing_tests=['testA', 'testB']))),
+                  'failed_test', failing_tests=['testA']))),
       api.properties(
           known_flakes_expectations={
-              'failed_test': ['testA', 'testB'],
+              'failed_test': ['testA'],
           },
           **{
               '$build/test_utils': {
@@ -300,32 +300,22 @@ def GenTests(api):
       api.step_data(
           'query known flaky failures on CQ',
           api.json.output({
-              'flakes': [
-                  {
-                      'test': {
-                          'step_ui_name': 'failed_test (with patch)',
-                          'test_name': 'testA',
-                      },
-                      'affected_gerrit_changes': ['123', '234'],
-                      'monorail_issue': '999',
+              'flakes': [{
+                  'test': {
+                      'step_ui_name': 'failed_test (with patch)',
+                      'test_name': 'testA',
                   },
-                  {
-                      'test': {
-                          'step_ui_name': 'failed_test (with patch)',
-                          'test_name': 'testB',
-                      },
-                      'affected_gerrit_changes': ['567', '678'],
-                      'monorail_issue': '998',
-                  },
-              ]
+                  'affected_gerrit_changes': ['123', '234'],
+                  'monorail_issue': '999',
+              }],
           })),
       api.step_data(
-          CLUSTER_STEP_NAME,
+          CLUSTER_STEP_NAME + '.rpc call',
           stdout=api.raw_io.output_text(
               api.json.dumps({
                   'clusteredTestResults': [{
                       'requestTag':
-                          'ninja://gpu:suite_1_test_one_reason_0',
+                          'testA_reason_0',
                       'clusters': [{
                           'clusterId': {
                               'algorithm': 'reason-v3',
@@ -340,9 +330,9 @@ def GenTests(api):
                                   'url': ('bugs.chromium.org/p/chromium/issues/'
                                           'detail?id=12345'),
                               },
-                          }
+                          },
                       }],
-                  }]
+                  }],
               }))),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
