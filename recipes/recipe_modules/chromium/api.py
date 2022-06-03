@@ -1609,18 +1609,6 @@ class ChromiumApi(recipe_api.RecipeApi):
          self.repo_resource('recipes', 'kill_processes.py')],
         infra_step=True)
 
-  def process_dumps(self, **kwargs):
-    # Dumps are especially useful when other steps (e.g. tests) are failing.
-    try:
-      self.m.build.python(
-          'process_dumps',
-          self.repo_resource('recipes', 'process_dumps.py'),
-          ['--target', self.c.build_config_fs],
-          infra_step=True,
-          **kwargs)
-    except self.m.step.InfraFailure:
-      pass
-
   def get_annotate_by_test_name(self, _):
     return 'graphing'
 

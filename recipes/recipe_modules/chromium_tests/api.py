@@ -1158,9 +1158,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                 tear_down_step.name,
                 (['python', tear_down_step.script] + list(tear_down_step.args)))
 
-        if self.m.platform.is_win:
-          self.m.chromium.process_dumps()
-
         checkout_dir = self.m.chromium_checkout.src_dir
         if self.m.chromium.c.TARGET_PLATFORM == 'android':
           if require_device_steps:

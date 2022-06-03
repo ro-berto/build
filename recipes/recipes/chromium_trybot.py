@@ -122,30 +122,6 @@ def GenTests(api):
           })),
   )
 
-  # Do not fail the build if process_dumps fails.
-  # http://crbug.com/520660
-  yield api.test(
-      'process_dumps_failure',
-      api.platform('win', 64),
-      api.chromium.try_build(
-          builder_group='fake-try-group',
-          builder='fake-try-builder',
-      ),
-      ctbc_api.properties(
-          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
-              builder_group='fake-group',
-              builder='fake-builder',
-          ).assemble()),
-      api.chromium_tests.read_source_side_spec('fake-group', {
-          'fake-builder': {
-              'gtest_tests': ['base_unittests'],
-          },
-      }),
-      api.filter.suppress_analyze(),
-      api.override_step_data('process_dumps',
-                             api.legacy_annotation.failure_step),
-  )
-
   yield api.test(
       'local_gtest_with_invalid_results',
       api.platform('linux', 64),
