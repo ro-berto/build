@@ -100,8 +100,6 @@ def RunSteps(api, properties):
     target_os = 'android'
   elif platform == 'chromeos' or platform == 'lacros':
     target_os = 'chromeos'
-    # Request from: https://crbug.com/1084365 to include evdev_gestures
-    gclient_config.solutions[0].custom_vars['use_evdev_gestures'] = 'True'
   elif platform == 'fuchsia':
     target_os = 'fuchsia'
   elif platform == 'mac':
