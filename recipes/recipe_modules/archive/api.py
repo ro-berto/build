@@ -894,8 +894,11 @@ class ArchiveApi(recipe_api.RecipeApi):
       if str(tmp_file_dir) != str(temp_dir):
         self.m.file.ensure_directory(
             'Create temp dir %s' % os.path.dirname(filename), tmp_file_dir)
-      self.m.file.copy("Copy file %s" % filename,
-                       self.m.path.join(base_path, filename), tmp_file_path)
+      self.m.file.copy(
+          "Copy file %s" % filename,
+          self.m.path.join(base_path, filename),
+          tmp_file_path,
+          skip_empty_source=archive_data.skip_empty_source)
 
     updated_dirs = list(archive_data.dirs)
     for directory in archive_data.dirs:
@@ -903,7 +906,8 @@ class ArchiveApi(recipe_api.RecipeApi):
           "Copy folder %s" % directory,
           self.m.path.join(base_path, directory),
           self.m.path.join(temp_dir, directory),
-          symlinks=True)
+          symlinks=True,
+          skip_empty_source=archive_data.skip_empty_source)
 
     # Starting here, we will only need to care about the temporary folder
     # which holds the files. So reset the base_path to temp_dir.

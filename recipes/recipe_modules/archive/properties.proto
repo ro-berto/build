@@ -51,7 +51,7 @@ message SquashfsParams {
   string block_size = 2;
 }
 
-// Next id: 17
+// Next id: 18
 message ArchiveData {
   // A list of relative paths to files that should be archived. All files are
   // relative to the build directory, which is passed alongside this proto to
@@ -222,6 +222,10 @@ message ArchiveData {
   // to 755.
   // Accept any file mode bit in string, e.g. "755" or operators like "g+rwx".
   string root_permission_override = 12;
+
+  // If set to true, the archive step will not fail if one of the referenced
+  // directories or files does not exist.
+  bool skip_empty_source = 17;
 }
 
 message Compression {
