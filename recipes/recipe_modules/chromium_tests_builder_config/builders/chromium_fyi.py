@@ -1098,11 +1098,6 @@ SPEC.update([
         gclient_apply_config=['enable_reclient']),
     stock_config('mac-hermetic-upgrade-rel'),
     stock_config('win-annotator-rel'),
-    stock_config('win-pixel-builder-rel'),
-    stock_config(
-        'win-pixel-tester-rel',
-        execution_mode=builder_spec.TEST,
-        parent_buildername='win-pixel-builder-rel'),
 ])
 
 # Many of the FYI specs are made by transforming specs from other files, so

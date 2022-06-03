@@ -1211,18 +1211,6 @@
       "chromium.fyi:win-backuprefptr-x86-fyi-rel"
     ]
   },
-  "chromium.fyi:win-pixel-builder-rel": {
-    "builders": [
-      "chromium.fyi:win-pixel-builder-rel",
-      "chromium.fyi:win-pixel-tester-rel"
-    ]
-  },
-  "chromium.fyi:win-pixel-tester-rel": {
-    "builders": [
-      "chromium.fyi:win-pixel-builder-rel",
-      "chromium.fyi:win-pixel-tester-rel"
-    ]
-  },
   "chromium.fyi:win-upload-perfetto": {
     "builders": [
       "chromium.fyi:win-upload-perfetto"
