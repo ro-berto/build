@@ -113,7 +113,8 @@ def prune_virtual_env():
 def run_ninja_tool(ninja_cmd, warning_collector):
   data = ''
   try:
-    data = subprocess.check_output(ninja_cmd, stderr=subprocess.STDOUT)
+    data = subprocess.check_output(
+        ninja_cmd, stderr=subprocess.STDOUT, universal_newlines=True)
   except Exception as e:
     warning_collector.add(
         'Exception occurs when running ninja tool: %r' % e)
