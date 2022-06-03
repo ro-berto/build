@@ -26,7 +26,7 @@ DEPS = [
 # TODO(crbug.com/1153919): Figure out which subset of these are the best
 # trade-off between coverage/cost and enable them.
 _CHILD_BUILDERS = (
-    #'android-clang-tidy-rel',
+    'android-clang-tidy-rel',
     'linux-chromeos-clang-tidy-rel',
     'linux-clang-tidy-rel',
     #'linux-lacros-clang-tidy-rel',
@@ -135,9 +135,6 @@ def RunSteps(api):
   if _should_skip_linting(api):
     return
 
-  # TODO(gbiv): This is sitting on a fully equipped builder, and ultimately
-  # ends up doing very little with that hardware. Maybe we should have this
-  # spawn N-1 children and do the build locally for the Nth configuration?
   with api.step.nest('schedule tidy builds'):
     build_requests = [
         api.buildbucket.schedule_request(
@@ -354,16 +351,12 @@ def GenTests(api):
   yield (test(
       'all_bot_failure',
       bot_status_overrides={
-          _CHILD_BUILDERS[0]: infra_failure,
-          _CHILD_BUILDERS[1]: infra_failure,
+          builder: infra_failure for builder in _CHILD_BUILDERS
       },
-      tricium_data={
-          _CHILD_BUILDERS[0]: [comment0],
-          _CHILD_BUILDERS[1]: [comment0],
-      }) + api.post_process(post_process.StatusException) +
+      tricium_data={builder: [comment0] for builder in _CHILD_BUILDERS}) +
+         api.post_process(post_process.StatusException) +
          api.post_process(post_process.StepWarning, 'schedule tidy builds') +
          api.post_process(
              _tricium_has_comment,
-             _note_observed_on([_CHILD_BUILDERS[0], _CHILD_BUILDERS[1]],
-                               _CHILD_BUILDERS, comment0),
+             _note_observed_on(_CHILD_BUILDERS, _CHILD_BUILDERS, comment0),
          ) + api.post_process(post_process.DropExpectation))
