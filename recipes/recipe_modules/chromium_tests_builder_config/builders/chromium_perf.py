@@ -199,8 +199,6 @@ _AddBuildSpec(
     target_bits=64,
     bisect_archive_build=True)
 
-_AddBuildSpec('win32-builder-perf', 'win', target_bits=32)
-_AddBuildSpec('win32-builder-perf-pgo', 'win', target_bits=32)
 _AddBuildSpec('win64-builder-perf', 'win', bisect_archive_build=True)
 _AddBuildSpec('win64-builder-perf-pgo', 'win', bisect_archive_build=True)
 _AddBuildSpec('mac-builder-perf', 'mac', bisect_archive_build=True)

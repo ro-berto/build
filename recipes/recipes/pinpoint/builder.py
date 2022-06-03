@@ -42,8 +42,6 @@ _PINPOINT_MAPPING = {
     'Mac arm Builder Perf': ('chromium.perf', 'mac-arm-builder-perf'),
     'Mac arm Builder Perf PGO': ('chromium.perf', 'mac-arm-builder-perf-pgo'),
     'mac-laptop_high_end-perf': ('chromium.perf', 'mac-laptop_high_end-perf'),
-    'Win Builder Perf': ('chromium.perf', 'win32-builder-perf'),
-    'Win Builder Perf PGO': ('chromium.perf', 'win32-builder-perf-pgo'),
     'Win x64 Builder Perf': ('chromium.perf', 'win64-builder-perf'),
     'Win x64 Builder Perf PGO': ('chromium.perf', 'win64-builder-perf-pgo'),
 }
