@@ -458,7 +458,7 @@ _CLIENT_WEBRTC_SPEC = {
                 'TARGET_ARCH': 'intel',
                 'TARGET_BITS': 64,
             }),
-    'iOS64 Sim Debug (iOS 14.0)':
+    'iOS64 Sim Debug (iOS 14)':
         WebRTCBuilderSpec.create(
             chromium_config='webrtc_default',
             gclient_config='webrtc_ios',

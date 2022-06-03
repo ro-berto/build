@@ -66,7 +66,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "env": {
-      "DEPOT_TOOLS_REPORT_BUILD": "webrtc/ci/iOS64 Sim Debug (iOS 14.0)/8945511751514863184",
+      "DEPOT_TOOLS_REPORT_BUILD": "webrtc/ci/iOS64 Sim Debug (iOS 14)/8945511751514863184",
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "1800"
     },
@@ -155,7 +155,7 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [CACHE]/builder/src/infra/specs/client.webrtc.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"iOS64 Sim Debug (iOS 14.0)\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"iOS64 Sim Debug (iOS 14)\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
@@ -488,7 +488,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_REPORT_BUILD": "webrtc/ci/iOS64 Sim Debug (iOS 14.0)/8945511751514863184",
+      "DEPOT_TOOLS_REPORT_BUILD": "webrtc/ci/iOS64 Sim Debug (iOS 14)/8945511751514863184",
       "GYP_DEFINES": "clang=1",
       "MAC_TOOLCHAIN_INSTALLER": "[START_DIR]/mac_toolchain"
     },
@@ -520,7 +520,7 @@
       "-m",
       "client.webrtc",
       "-b",
-      "iOS64 Sim Debug (iOS 14.0)",
+      "iOS64 Sim Debug (iOS 14)",
       "--config-file",
       "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
       "--goma-dir",
@@ -558,7 +558,7 @@
       "-m",
       "client.webrtc",
       "-b",
-      "iOS64 Sim Debug (iOS 14.0)",
+      "iOS64 Sim Debug (iOS 14)",
       "--config-file",
       "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
       "--goma-dir",
@@ -641,7 +641,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/iOS64_Sim_Debug__iOS_14_0_"
+      "[CACHE]/goma/data/iOS64_Sim_Debug__iOS_14_"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -676,7 +676,7 @@
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/iOS64_Sim_Debug__iOS_14_0_",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/iOS64_Sim_Debug__iOS_14_",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -981,9 +981,9 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"ci\", \"builder\": \"iOS64 Sim Debug (iOS 14.0)\", \"project\": \"webrtc\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"iOS64 Sim Debug (iOS 14)\", \"project\": \"webrtc\"}",
       "--buildbot-buildername",
-      "iOS64 Sim Debug (iOS 14.0)"
+      "iOS64 Sim Debug (iOS 14)"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -1271,7 +1271,7 @@
       "-server",
       "https://example.swarmingserver.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"dummy_test/Mac-10.13/[dummy has/iOS64 Sim Debug (iOS 14.0)/-1\", \"priority\": \"25\", \"realm\": \"webrtc:ci\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:iOS64 Sim Debug (iOS 14.0)\", \"data:[dummy hash for dummy_test/dummy size]\", \"name:dummy_test\", \"ninja_target:\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:iOS64 Sim Debug (iOS 14.0)\", \"stepname:dummy_test\", \"test_id_prefix:\", \"test_suite:dummy_test\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for dummy_test\", \"size_bytes\": \"dummy size]\"}}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:iOS64 Sim Debug (iOS 14.0)\", \"-var\", \"os:Mac-10.13\", \"-var\", \"test_suite:dummy_test\", \"-tag\", \"step_name:dummy_test\", \"-tag\", \"target_platform:ios\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"gtest\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Mac-10.13\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"dummy_test/Mac-10.13/[dummy has/iOS64 Sim Debug (iOS 14)/-1\", \"priority\": \"25\", \"realm\": \"webrtc:ci\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:client.webrtc\", \"buildername:iOS64 Sim Debug (iOS 14)\", \"data:[dummy hash for dummy_test/dummy size]\", \"name:dummy_test\", \"ninja_target:\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.ci:iOS64 Sim Debug (iOS 14)\", \"stepname:dummy_test\", \"test_id_prefix:\", \"test_suite:dummy_test\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for dummy_test\", \"size_bytes\": \"dummy size]\"}}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:iOS64 Sim Debug (iOS 14)\", \"-var\", \"os:Mac-10.13\", \"-var\", \"test_suite:dummy_test\", \"-tag\", \"step_name:dummy_test\", \"-tag\", \"target_platform:ios\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"gtest\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Mac-10.13\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -1295,7 +1295,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"name\": \"dummy_test/Mac-10.13/[dummy has/iOS64 Sim Debug (iOS 14.0)/-1\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"name\": \"dummy_test/Mac-10.13/[dummy has/iOS64 Sim Debug (iOS 14)/-1\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"0\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_result\": {@@@",
@@ -1310,7 +1310,7 @@
       "@@@STEP_LOG_LINE@json.input@{@@@",
       "@@@STEP_LOG_LINE@json.input@  \"requests\": [@@@",
       "@@@STEP_LOG_LINE@json.input@    {@@@",
-      "@@@STEP_LOG_LINE@json.input@      \"name\": \"dummy_test/Mac-10.13/[dummy has/iOS64 Sim Debug (iOS 14.0)/-1\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"name\": \"dummy_test/Mac-10.13/[dummy has/iOS64 Sim Debug (iOS 14)/-1\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"25\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"resultdb\": {@@@",
@@ -1321,7 +1321,7 @@
       "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"build_is_experimental:false\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"builder_group:client.webrtc\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"buildername:iOS64 Sim Debug (iOS 14.0)\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"buildername:iOS64 Sim Debug (iOS 14)\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"data:[dummy hash for dummy_test/dummy size]\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"name:dummy_test\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"ninja_target:\", @@@",
@@ -1329,7 +1329,7 @@
       "@@@STEP_LOG_LINE@json.input@        \"purpose:CI\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"purpose:post-commit\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"slavename:fake-bot-id\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"spec_name:webrtc.ci:iOS64 Sim Debug (iOS 14.0)\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"spec_name:webrtc.ci:iOS64 Sim Debug (iOS 14)\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"stepname:dummy_test\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"test_id_prefix:\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"test_suite:dummy_test\"@@@",
@@ -1349,7 +1349,7 @@
       "@@@STEP_LOG_LINE@json.input@              \"rdb\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"stream\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"builder:iOS64 Sim Debug (iOS 14.0)\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"builder:iOS64 Sim Debug (iOS 14)\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"os:Mac-10.13\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
@@ -1410,7 +1410,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: dummy_test/Mac-10.13/[dummy has/iOS64 Sim Debug (iOS 14.0)/-1@https://example.swarmingserver.appspot.com/task?id=0@@@"
+      "@@@STEP_LINK@task UI: dummy_test/Mac-10.13/[dummy has/iOS64 Sim Debug (iOS 14)/-1@https://example.swarmingserver.appspot.com/task?id=0@@@"
     ]
   },
   {
@@ -1763,7 +1763,7 @@
       "--merge-additional-args",
       "[]",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"bot_id\": \"bot_id\", \"builder_group\": \"client.webrtc\", \"buildername\": \"iOS64 Sim Debug (iOS 14.0)\", \"buildnumber\": 1337, \"got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"got_revision_cp\": \"refs/heads/main@{#1337}\", \"recipe\": \"webrtc/standalone\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"xcode_build_version\": \"dummy_xcode\"}",
+      "{\"BUILD_CONFIG\": \"Debug\", \"bot_id\": \"bot_id\", \"builder_group\": \"client.webrtc\", \"buildername\": \"iOS64 Sim Debug (iOS 14)\", \"buildnumber\": 1337, \"got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"got_revision_cp\": \"refs/heads/main@{#1337}\", \"recipe\": \"webrtc/standalone\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"xcode_build_version\": \"dummy_xcode\"}",
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
@@ -1844,7 +1844,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"0\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_builder_group\": \"client.webrtc\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": \"iOS64 Sim Debug (iOS 14.0)\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": \"iOS64 Sim Debug (iOS 14)\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 test results@https://luci-milo.appspot.com/ui/inv/some-inv-name/test-results@@@",
@@ -1860,7 +1860,7 @@
       "--builder-group",
       "client.webrtc",
       "--builder-name",
-      "iOS64 Sim Debug (iOS 14.0)",
+      "iOS64 Sim Debug (iOS 14)",
       "--build-number",
       "0",
       "--test-type",
