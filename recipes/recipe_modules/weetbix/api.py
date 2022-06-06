@@ -99,7 +99,11 @@ class WeetbixApi(recipe_api.RecipeApi):
           'rpc call',
           'weetbix.v1.Clusters.Cluster',
           cluster_request,
-      )['clusteredTestResults']
+      ).get('clusteredTestResults')
+
+      if not clustered_test_results:
+        raise self.m.step.StepWarning(
+            'Missing clusteredTestResults in response')
 
       mapped_clusters = self._format_cluster_response(test_info_for_zip,
                                                       clustered_test_results)

@@ -184,6 +184,39 @@ def GenTests(api):
   )
 
   yield api.test(
+      'missing_cluster_response',
+      api.properties(
+          test_suite_to_results=[
+              {
+                  'suite_1': {
+                      'failing':
+                          set([
+                              RDBPerIndividualTestResults(
+                                  test_name='test_one',
+                                  test_id='ninja://gpu:suite_1/test_one',
+                                  statuses=[
+                                      test_result_pb2.FAIL, test_result_pb2.FAIL
+                                  ],
+                                  expectednesses=[False, False],
+                                  failure_reasons=['failure reason', ''],
+                              ),
+                          ]),
+                      'passing':
+                          set()
+                  }
+              },
+          ],
+          expected_mapping={},
+      ),
+      api.step_data(
+          CLUSTER_STEP_NAME + '.rpc call',
+          stdout=api.raw_io.output_text(api.json.dumps({}))),
+      api.post_process(post_process.StepWarning, CLUSTER_STEP_NAME),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
       'dont_cluster_for_passing_test',
       api.properties(
           test_suite_to_results=[{

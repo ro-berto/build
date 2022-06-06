@@ -339,6 +339,46 @@ def GenTests(api):
   )
 
   yield api.test(
+      'weetbix_cluster_warning_exception',
+      api.chromium.generic_build(
+          builder_group='g',
+          builder='b',
+          experiments=['enable_weetbix_queries'],
+      ),
+      api.override_step_data(
+          'failed_test results',
+          stdout=api.raw_io.output_text(
+              api.test_utils.rdb_results(
+                  'failed_test', failing_tests=['testA']))),
+      api.properties(
+          known_flakes_expectations={
+              'failed_test': ['testA'],
+          },
+          **{
+              '$build/test_utils': {
+                  'should_exonerate_flaky_failures': True,
+              },
+          }),
+      api.step_data(
+          'query known flaky failures on CQ',
+          api.json.output({
+              'flakes': [{
+                  'test': {
+                      'step_ui_name': 'failed_test (with patch)',
+                      'test_name': 'testA',
+                  },
+                  'affected_gerrit_changes': ['123', '234'],
+                  'monorail_issue': '999',
+              }],
+          })),
+      api.step_data(
+          CLUSTER_STEP_NAME + '.rpc call',
+          stdout=api.raw_io.output_text(api.json.dumps({}))),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
       'skip querying if there are too many failures',
       api.chromium.generic_build(builder_group='g', builder='b'),
       api.properties(
