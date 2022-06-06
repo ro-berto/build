@@ -49,7 +49,7 @@ BUILDERS = freeze({
                         'TARGET_PLATFORM': 'chromeos',
                         'TARGET_BITS': 64,
                     },
-                    gclient_apply_config=['chromeos'],
+                    gclient_apply_config=['chromeos', 'enable_reclient'],
                     archive_prefix='libfuzzer-chromeos',
                     upload_bucket='chromium-browser-libfuzzer',
                     upload_directory='chromeos-asan',
