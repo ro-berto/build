@@ -1483,20 +1483,23 @@ class ScriptTest(LocalTest):  # pylint: disable=W0232
     script_args = []
     if self.spec.script_args:
       script_args = ['--args', self.api.m.json.input(self.spec.script_args)]
-    result = self.api.m.build.python(
-        self.step_name(suffix),
-        # Enforce that all scripts are in the specified directory for
-        # consistency.
-        self.api.m.path['checkout'].join(
-            'testing', 'scripts', self.api.m.path.basename(self.spec.script)),
-        args=(self.api.m.chromium_tests.get_common_args_for_scripts() +
-              script_args +
-              ['run', '--output', self.api.m.json.output()] + run_args),
+
+    # Enforce that all scripts are in the specified directory for
+    # consistency.
+    cmd = ([
+        'vpython3', self.api.m.path['checkout'].join(
+            'testing', 'scripts', self.api.m.path.basename(self.spec.script))
+    ] + self.api.m.chromium_tests.get_common_args_for_scripts() + script_args +
+           ['run', '--output', self.api.m.json.output()] + run_args)
+    step_name = self.step_name(suffix)
+    if resultdb:
+      cmd = resultdb.wrap(self.api.m, cmd, step_name=step_name)
+    result = self.api.m.step(
+        step_name,
+        cmd=cmd,
         raise_on_failure=False,
-        resultdb=resultdb if resultdb else None,
         stderr=self.api.m.raw_io.output_text(
             add_output_log=True, name='stderr'),
-        venv=True,  # Runs the test through vpython.
         step_test_data=step_test_data)
 
     status = result.presentation.status
