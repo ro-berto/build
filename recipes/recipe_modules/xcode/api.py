@@ -29,7 +29,7 @@ class XcodeApi(recipe_api.RecipeApi):
           'Read xcode_configs from repo',
           full_path,
           test_data={
-              'version': '0.0',
+              'xcode_build_version': '0.0',
           })
-      return xcode_confg['version']
+      return xcode_confg['xcode_build_version']
     return None
