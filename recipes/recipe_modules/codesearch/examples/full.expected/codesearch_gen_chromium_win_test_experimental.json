@@ -1439,7 +1439,9 @@
       "--dest-branch",
       "win",
       "[CACHE]/generated",
-      "--dry-run"
+      "--dry-run",
+      "--kzip-prune",
+      "/path/to/kzip"
     ],
     "luci_context": {
       "realm": {

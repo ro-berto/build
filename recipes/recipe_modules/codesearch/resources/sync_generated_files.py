@@ -137,11 +137,11 @@ def copy_generated_files(source_dir, dest_dir, kzip_input_suffixes=None):
           raise
 
     for filename in filenames:
-      if not has_allowed_extension(filename) \
-          or kzip_input_suffixes and not is_referenced(filename):
+      source_file = os.path.join(dirpath, filename)
+      if not has_allowed_extension(source_file) \
+          or kzip_input_suffixes and not is_referenced(source_file):
         continue
 
-      source_file = os.path.join(dirpath, filename)
       dest_file = translate_root(source_dir, dest_dir, source_file)
 
       if not os.path.exists(dest_file):

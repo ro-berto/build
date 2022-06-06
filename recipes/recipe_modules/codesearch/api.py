@@ -177,6 +177,9 @@ class CodesearchApi(recipe_api.RecipeApi):
         if None use got_revision.
       commit_timestamp: Timestamp of the commit at which we're creating the
         index pack, in integer seconds since the UNIX epoch.
+
+    Returns:
+      Path to the generated index pack.
     """
     commit_hash = commit_hash or self._get_revision()
     # TODO(jsca): Delete the second part of the below condition after LUCI
@@ -200,15 +203,15 @@ class CodesearchApi(recipe_api.RecipeApi):
       assert False, 'Unsupported codesearch project %s' % self.c.PROJECT
 
     index_pack_kythe_name = '%s.kzip' % index_pack_kythe_base
-    self._create_kythe_index_pack(index_pack_kythe_name)
+    index_pack_kythe_path = self.c.out_path.join(index_pack_kythe_name)
+    self._create_kythe_index_pack(index_pack_kythe_path)
 
     if self.m.tryserver.is_tryserver:
-      return
+      return index_pack_kythe_path
 
     assert self.c.bucket_name, (
         'Trying to upload Kythe index pack but no google storage bucket name')
-    self._upload_kythe_index_pack(self.c.bucket_name,
-                                  self.c.out_path.join(index_pack_kythe_name),
+    self._upload_kythe_index_pack(self.c.bucket_name, index_pack_kythe_path,
                                   index_pack_kythe_name_with_id)
 
     # Also upload compile_commands.json for debugging purposes.
@@ -217,11 +220,13 @@ class CodesearchApi(recipe_api.RecipeApi):
     self._upload_compile_commands_json(self.c.bucket_name,
                                        compdb_name_with_revision)
 
-  def _create_kythe_index_pack(self, index_pack_kythe_name):
+    return index_pack_kythe_path
+
+  def _create_kythe_index_pack(self, index_pack_kythe_path):
     """Create the kythe index pack.
 
     Args:
-      index_pack_kythe_name: Name of the Kythe index pack
+      index_pack_kythe_path: Path to the Kythe index pack
     """
     exec_path = self.m.cipd.ensure_tool("infra/tools/package_index/${platform}",
                                         "latest")
@@ -233,7 +238,7 @@ class CodesearchApi(recipe_api.RecipeApi):
         '--path_to_gn_targets',
         self.c.gn_targets_json_file,
         '--path_to_archive_output',
-        self.c.out_path.join(index_pack_kythe_name),
+        index_pack_kythe_path,
         '--corpus',
         self.c.CORPUS,
         '--project',
@@ -293,7 +298,10 @@ class CodesearchApi(recipe_api.RecipeApi):
     )
 
 
-  def checkout_generated_files_repo_and_sync(self, copy):
+  def checkout_generated_files_repo_and_sync(self,
+                                             copy,
+                                             kzip_path=None,
+                                             revision=None):
     """Check out the generated files repo and sync the generated files
        into this checkout.
 
@@ -312,6 +320,9 @@ class CodesearchApi(recipe_api.RecipeApi):
           repo/
           repo/foo/
           repo/baz/bar/
+
+      kzip_path: Path to kzip that will be used to prune uploded files.
+      revision: A commit hash to be used in the commit message.
     """
     if not self.c.SYNC_GENERATED_FILES:
       return
@@ -364,14 +375,16 @@ class CodesearchApi(recipe_api.RecipeApi):
         '--message',
         'Generated files from "%s" build %d, revision %s' %
         (self.m.buildbucket.builder_name, self.m.buildbucket.build.number,
-         self._get_revision()),
+         revision or self._get_revision()),
         '--dest-branch',
         self.c.GEN_REPO_BRANCH,
         generated_repo_dir,
     ])
     if self.m.runtime.is_experimental:
       args.append('--dry-run')
-    # TODO(crbug.com/1329364): Add kzip flag after dedicated repos are set up.
+    if kzip_path:
+      args.extend(['--kzip-prune', kzip_path])
+
     self.m.build.python('sync generated files',
                         self.resource('sync_generated_files.py'),
                         args,

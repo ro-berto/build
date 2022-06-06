@@ -26,7 +26,8 @@ def RunSteps(api):
       GEN_REPO_OUT_DIR=api.properties.get('gen_repo_out_dir', ''),
       CORPUS=api.properties.get('corpus', 'chromium-linux'),
   )
-  api.codesearch.checkout_generated_files_repo_and_sync({'foo': 'bar'})
+  api.codesearch.checkout_generated_files_repo_and_sync({'foo': 'bar'},
+                                                        '/path/to/kzip')
 
 
 def GenTests(api):

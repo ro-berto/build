@@ -52,9 +52,7 @@ SPEC = freeze({
                 'virtual/target-chromium-os-factory-shim',
                 'virtual/target-chromium-os-test',
             ],
-            # TODO(crbug/1284439): Set sync_generated_files to True and
-            # configure syncing of chroot and out dirs.
-            'sync_generated_files': False,
+            'sync_generated_files': True,
             'experimental': False,
         },
     },
@@ -187,10 +185,22 @@ def RunSteps(api, codesearch_mirror_revision,
       ])
 
   # Create the kythe index pack and upload it to google storage.
-  api.codesearch.create_and_upload_kythe_index_pack(
+  kzip_path = api.codesearch.create_and_upload_kythe_index_pack(
       commit_hash=codesearch_mirror_revision,
       commit_timestamp=int(codesearch_mirror_revision_timestamp or
                            api.time.time()))
+
+  # Check out the generated files repo and sync the generated files
+  # into this checkout.
+  copy_config = {
+      # ~/chromiumos/src/out/${board};src/out/${board}
+      build_dir: api.path.join('src', 'out', board),
+
+      # ~/chromiumos/chroot;chroot
+      chromiumos_dir.join('chroot'): 'chroot'
+  }
+  api.codesearch.checkout_generated_files_repo_and_sync(
+      copy_config, kzip_path, codesearch_mirror_revision)
 
 
 # TODO(crbug/1284439): Add more tests.

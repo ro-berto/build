@@ -286,7 +286,9 @@
       "Generated files from \"test_buildername\" build 123, revision f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--dest-branch",
       "main",
-      "[CACHE]/generated"
+      "[CACHE]/generated",
+      "--kzip-prune",
+      "/path/to/kzip"
     ],
     "name": "sync generated files"
   },
