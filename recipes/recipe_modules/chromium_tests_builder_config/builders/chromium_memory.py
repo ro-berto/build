@@ -14,6 +14,7 @@ def _chromium_memory_spec(**kwargs):
 # * Linux ASan LSan Builder
 # * Linux ASan LSan Tests (1)
 # * Linux ASan Tests (sandboxed)
+# * Linux CFI
 # * Linux Chromium OS ASan LSan Builder
 # * Linux Chromium OS ASan LSan Tests (1)
 # * Linux ChromiumOS MSan Builder
@@ -50,17 +51,6 @@ SPEC = {
             cf_archive_name='ios-asan',
             cf_archive_subdir_suffix='ios-asan',
             simulation_platform='mac',
-        ),
-    'Linux CFI':
-        _chromium_memory_spec(
-            chromium_config='chromium',
-            chromium_apply_config=['mb'],
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            simulation_platform='linux',
         ),
     'Linux TSan Builder':
         _chromium_memory_spec(

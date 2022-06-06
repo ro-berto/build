@@ -2135,12 +2135,6 @@
       "tryserver.chromium.linux:linux-no-base-tracing-rel"
     ]
   },
-  "chromium.memory:Linux CFI": {
-    "builders": [
-      "chromium.memory:Linux CFI",
-      "tryserver.chromium.linux:linux_chromium_cfi_rel_ng"
-    ]
-  },
   "chromium.memory:Linux TSan (bionic)": {
     "builders": [
       "chromium.memory:Linux TSan (bionic)",
@@ -3265,12 +3259,6 @@
     "builders": [
       "chromium.fyi:linux-wpt-input-fyi-rel",
       "tryserver.chromium.linux:linux-wpt-input-fyi-rel"
-    ]
-  },
-  "tryserver.chromium.linux:linux_chromium_cfi_rel_ng": {
-    "builders": [
-      "chromium.memory:Linux CFI",
-      "tryserver.chromium.linux:linux_chromium_cfi_rel_ng"
     ]
   },
   "tryserver.chromium.linux:linux_chromium_tsan_rel_ng": {
