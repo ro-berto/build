@@ -5,7 +5,6 @@
 PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
-    'build',
     'builder_group',
     'depot_tools/depot_tools',
     'depot_tools/gclient',

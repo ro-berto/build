@@ -1308,12 +1308,7 @@
   },
   {
     "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--",
-      "python",
+      "vpython3",
       "RECIPE_REPO[build]/recipes/upload_goma_logs.py",
       "--upload-compiler-proxy-info",
       "--log-url-json-file",
@@ -2545,12 +2540,7 @@
   },
   {
     "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--",
-      "python",
+      "vpython3",
       "RECIPE_REPO[build]/recipes/upload_goma_logs.py",
       "--upload-compiler-proxy-info",
       "--log-url-json-file",

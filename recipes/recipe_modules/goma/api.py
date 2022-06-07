@@ -635,11 +635,10 @@ class GomaApi(recipe_api.RecipeApi):
     if self.m.buildbucket.builder_name:
       args.extend(['--buildbot-buildername', self.m.buildbucket.builder_name])
 
-    result = self.m.build.python(
+    result = self.m.step(
         name=name or 'upload_log',
-        script=self.repo_resource('recipes', 'upload_goma_logs.py'),
-        args=args,
-        venv=True,
+        cmd=['vpython3',
+             self.repo_resource('recipes', 'upload_goma_logs.py')] + args,
         timeout=300,  # 5 min
         step_test_data=(lambda: self.m.json.test_api.output(json_test_data)))
 
