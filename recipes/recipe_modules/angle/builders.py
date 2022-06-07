@@ -99,6 +99,8 @@ _SPEC = {
         _create_android_builder_config('Release', 64),
     'android-perf':
         _create_android_builder_config('Release', 64, perf_isolate_upload=True),
+    'linux-amd':
+        _create_tester_config('linux', 64, 'linux-test'),
     'linux-asan-test':
         _create_builder_config('linux', 'Release', 64),
     'linux-dbg-compile':

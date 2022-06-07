@@ -104,6 +104,11 @@ _SPEC = {
                 try_spec.TryMirror.create(
                     builder_group='angle',
                     buildername='linux-test',
+                    tester='linux-amd',
+                ),
+                try_spec.TryMirror.create(
+                    builder_group='angle',
+                    buildername='linux-test',
                     tester='linux-intel',
                 ),
                 try_spec.TryMirror.create(
