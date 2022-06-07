@@ -136,12 +136,13 @@ class Command(object):
     self.total_timeout_sec = total_timeout_sec
     self.min_failures = 1 if repro_only else MIN_FLAKE_THRESHOLD
     self.base_cmd = [
-      'tools/run-tests.py',
-      '--progress=verbose',
-      '--outdir=%s' % (outdir or 'out/build'),
-      '--timeout=%d' % timeout,
-      '--swarming',
-      '--variants=%s' % variant,
+        'tools/run-tests.py',
+        '--progress=verbose',
+        '--outdir=%s' % (outdir or 'out/build'),
+        '--timeout=%d' % timeout,
+        '--swarming',
+        '--variants=%s' % variant,
+        '--exit-after-n-failures=%d' % self.min_failures,
     ]
     if repro_only:
       # In repro-only mode we keep running skipped tests.
@@ -165,12 +166,6 @@ class Command(object):
     else:
       cmd.append(
           '--random-seed-stress-count=%d' % (self.repetitions * multiplier))
-    if offset <= 1024:
-      # TODO(machenbach): Make this unconditional in 2019, when the feature has
-      # become old enough to be compatible with long backwards bisection.
-      # 1024 is a rough approximation of commits since the flag below was
-      # introduced.
-      cmd.append('--exit-after-n-failures=%d' % self.min_failures)
     return ['python3', '-u'] + cmd
 
 
@@ -195,7 +190,6 @@ def fallback_buildername(buildername):
     return buildername[:-len(' builder')]
   return buildername
 
-
 class Depot(object):
   """Helper class for interacting with remote storage (GS bucket and git)."""
 
@@ -213,6 +207,7 @@ class Depot(object):
     self.api = api
     self.isolated_name = isolated_name
     self.revision = revision
+    self.commit_position_zero = None
     # Two templates for looking up the builder before and after a potential
     # split into builder/tester.
     self.gs_url_template_first = raw_gs_url_template(
@@ -244,6 +239,21 @@ class Depot(object):
     """
     return self.gs_url_template_first != self.gs_url_template_second
 
+  def parse_commit_position(self, value):
+    """Returns (ref, revision_number) tuple."""
+    RE_COMMIT_POSITION = re.compile(
+        r'Cr-Commit-Position: (?P<ref>refs/[^@]+)@{#(?P<revision>\d+)}')
+    matches = [
+        match.groupdict() for match in RE_COMMIT_POSITION.finditer(value)
+    ]
+    if not matches:
+      raise ValueError('Commit position "%s" does not match r"%s"' %
+                       (value, RE_COMMIT_POSITION.pattern))
+    return int(matches[len(matches) - 1]['revision'])
+
+  def get_commit_position(self, offset):
+    return self.commit_position_zero - offset
+
   def get_revision(self, offset):
     """Returns the git revision at the given offset (cached)."""
     revision = self.revisions.get(offset)
@@ -256,6 +266,10 @@ class Depot(object):
         # Gitiles returns several commits. Fill our cache to avoid subsequent
         # calls.
         self.revisions[offset + i] = commit['commit']
+
+      commit_position = self.parse_commit_position(commits[0]['message'])
+      self.commit_position_zero = commit_position + offset
+
     return self.revisions[offset]
 
   def _lookup_build_test_data(self):
@@ -529,7 +543,9 @@ def bisect(api, depot, initial_commit_offset, is_bad_func, offset):
 
   def report_revision(text, offset):
     rev = depot.get_revision(offset)
-    step_result = api.step(text % ('#%d' % offset), cmd=None)
+    rev_cp = depot.get_commit_position(offset)
+    step_result = api.step(
+        text % ('#%d (commit position: %d)' % (offset, rev_cp)), cmd=None)
     step_result.presentation.links[rev[:8]] = '%s/+/%s' % (REPO, rev)
 
   def bisect_back(to_offset):
@@ -723,9 +739,28 @@ def GenTests(api):
   def get_revisions(offset, *revisions):
     return api.step_data(
         'get revision #%d' % offset,
-        api.json.output({'log': [
-          {'commit': revision} for revision in revisions
-        ]}),
+        api.json.output({
+            'log': [{
+                'commit':
+                    revisions[i],
+                'message': ('> Cr-Commit-Position: refs/heads/main@{#%d}\n' +
+                            'Cr-Commit-Position: refs/heads/main@{#%d}') %
+                           (i + 9999, i + 10000)
+            } for i in range(len(revisions))]
+        }),
+    )
+
+  def get_revisions_with_incorrect_cp(offset, *revisions):
+    return api.step_data(
+        'get revision #%d' % offset,
+        api.json.output({
+            'log': [{
+                'commit':
+                    revisions[i],
+                'message':
+                    'Cr-Commit-Position-Incorrect: refs/heads/main@{#%d}' % i
+            } for i in range(len(revisions))]
+        }),
     )
 
   def is_flaky(offset, shard, flakes, calibration_attempt=0,
@@ -935,3 +970,7 @@ def GenTests(api):
           'calibration attempt 1.check mjsunit/foobar at #0.'
           'check mjsunit/foobar at #0 - shard 1'))
   )
+
+  yield (test('bisect_attempt_with_wrong_commit_position') +
+         get_revisions_with_incorrect_cp(1, 'a1', 'a2', 'a3') +
+         api.expect_exception('ValueError') + api.post_process(DropExpectation))
