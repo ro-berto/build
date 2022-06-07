@@ -9,13 +9,9 @@ import json
 import os
 import subprocess
 import tempfile
-import sys
-
-THIS_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, os.path.abspath(os.path.join(THIS_DIR, os.pardir)))
-sys.path.insert(0, os.path.abspath(os.path.join(THIS_DIR, 'goma')))
 
 from google.protobuf import json_format
+from infra_libs import bqh
 from recipes.goma import compile_events_pb2
 from recipes import goma_utils
 
