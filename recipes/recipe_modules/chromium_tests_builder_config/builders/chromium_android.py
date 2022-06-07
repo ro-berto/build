@@ -44,6 +44,7 @@ def _chromium_android_spec(**kwargs):
 # * android-marshmallow-arm64-rel
 # * android-marshmallow-x86-rel-non-cq
 # * android-pie-arm64-dbg
+# * android-pie-arm64-rel
 # * android-weblayer-10-x86-rel-tests
 # * android-weblayer-marshmallow-x86-rel-tests
 # * android-weblayer-oreo-x86-rel-tests
@@ -129,8 +130,6 @@ SPEC.update([
             'android', 'use_clang_coverage', 'enable_reclient'
         ],
         chromium_config_kwargs={'TARGET_BITS': 64}),
-    stock_config(
-        'android-pie-arm64-rel', chromium_config_kwargs={'TARGET_BITS': 64}),
     stock_config(
         'android-pie-arm64-wpt-rel-non-cq',
         chromium_config_kwargs={'TARGET_BITS': 64}),

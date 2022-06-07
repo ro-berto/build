@@ -187,12 +187,6 @@
       "tryserver.chromium.android:android-pie-arm64-coverage-experimental-rel"
     ]
   },
-  "chromium.android:android-pie-arm64-rel": {
-    "builders": [
-      "chromium.android:android-pie-arm64-rel",
-      "tryserver.chromium.android:android-pie-arm64-rel"
-    ]
-  },
   "chromium.android:android-pie-arm64-wpt-rel-non-cq": {
     "builders": [
       "chromium.android:android-pie-arm64-wpt-rel-non-cq"
@@ -2722,12 +2716,6 @@
     "builders": [
       "chromium.android.fyi:android-pie-arm64-fyi-rel",
       "tryserver.chromium.android:android-pie-arm64-fyi-rel"
-    ]
-  },
-  "tryserver.chromium.android:android-pie-arm64-rel": {
-    "builders": [
-      "chromium.android:android-pie-arm64-rel",
-      "tryserver.chromium.android:android-pie-arm64-rel"
     ]
   },
   "tryserver.chromium.android:android-pie-arm64-wpt-rel-non-cq": {
