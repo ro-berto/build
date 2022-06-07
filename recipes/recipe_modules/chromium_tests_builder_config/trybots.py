@@ -421,15 +421,7 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * cast_shell_linux_dbg
     # * gpu-try-linux-nvidia-rel
     # * linux_chromium_archive_rel_ng
-    # * linux_chromium_asan_rel_ng
     # * linux_chromium_clobber_rel_ng
-    # * linux_chromium_compile_dbg_ng
-    # * linux_chromium_compile_rel_ng
-    # * linux_chromium_dbg_ng
-    # * linux_chromium_tsan_rel_ng
-    # * linux_chromium_ubsan_rel_ng
-    # * linux_optional_gpu_tests_rel
-    # * linux_vr
     # * linux-1mbu-compile-fyi-rel
     # * linux-bfcache-rel
     # * linux-dcheck-off-rel
@@ -438,9 +430,16 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * linux-inverse-fieldtrials-fyi-rel
     # * linux-mbi-mode-per-render-process-host-rel
     # * linux-mbi-mode-per-site-instance-host-rel
-    # * linux-rel
     # * linux-rel-warmed
+    # * linux-rel
+    # * linux_chromium_asan_rel_ng
+    # * linux_chromium_ubsan_rel_ng
+    # * linux_chromium_compile_dbg_ng
+    # * linux_chromium_compile_rel_ng
+    # * linux_chromium_dbg_ng
+    # * linux_optional_gpu_tests_rel
     # * linux-wayland-rel
+    # * linux_vr
     # * network_service_linux
     'tryserver.chromium.linux': {
         'fuchsia-fyi-arm64-femu':
@@ -492,6 +491,13 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.linux',
                 buildername='linux-no-base-tracing-rel',
+            ),
+        'linux_chromium_tsan_rel_ng':
+            try_spec.TrySpec.create_for_single_mirror(
+                builder_group='chromium.memory',
+                buildername='Linux TSan Builder',
+                tester='Linux TSan Tests',
+                regression_test_selection=try_spec.QUICK_RUN_ONLY,
             ),
         # TODO(crbug.com/1200904): Remove after migration
         'linux_chromium_tsan_rel_ng_bionic':

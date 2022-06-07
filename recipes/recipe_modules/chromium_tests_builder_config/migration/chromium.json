@@ -2141,6 +2141,20 @@
       "tryserver.chromium.linux:linux_chromium_tsan_rel_ng_bionic"
     ]
   },
+  "chromium.memory:Linux TSan Builder": {
+    "builders": [
+      "chromium.memory:Linux TSan Builder",
+      "chromium.memory:Linux TSan Tests",
+      "tryserver.chromium.linux:linux_chromium_tsan_rel_ng"
+    ]
+  },
+  "chromium.memory:Linux TSan Tests": {
+    "builders": [
+      "chromium.memory:Linux TSan Builder",
+      "chromium.memory:Linux TSan Tests",
+      "tryserver.chromium.linux:linux_chromium_tsan_rel_ng"
+    ]
+  },
   "chromium.memory:android-asan": {
     "builders": [
       "chromium.memory:android-asan",
@@ -3245,6 +3259,13 @@
     "builders": [
       "chromium.fyi:linux-wpt-input-fyi-rel",
       "tryserver.chromium.linux:linux-wpt-input-fyi-rel"
+    ]
+  },
+  "tryserver.chromium.linux:linux_chromium_tsan_rel_ng": {
+    "builders": [
+      "chromium.memory:Linux TSan Builder",
+      "chromium.memory:Linux TSan Tests",
+      "tryserver.chromium.linux:linux_chromium_tsan_rel_ng"
     ]
   },
   "tryserver.chromium.linux:linux_chromium_tsan_rel_ng_bionic": {

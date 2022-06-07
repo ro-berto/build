@@ -21,8 +21,6 @@ def _chromium_memory_spec(**kwargs):
 # * Linux ChromiumOS MSan Tests
 # * Linux MSan Builder
 # * Linux MSan Tests
-# * Linux TSan Builder
-# * Linux TSan Tests
 # * Mac ASan 64 Builder
 # * Mac ASan 64 Tests (1)
 # * WebKit Linux ASAN
@@ -54,6 +52,18 @@ SPEC = {
             cf_archive_subdir_suffix='ios-asan',
             simulation_platform='mac',
         ),
+    'Linux TSan Builder':
+        _chromium_memory_spec(
+            chromium_config='chromium_tsan2',
+            gclient_config='chromium',
+            gclient_apply_config=['enable_reclient'],
+            chromium_apply_config=['mb'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            simulation_platform='linux',
+        ),
     # TODO(crbug.com/1200904): Remove after migration
     'Linux TSan (bionic)':
         _chromium_memory_spec(
@@ -65,6 +75,20 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             execution_mode=builder_spec.COMPILE_AND_TEST,
+            simulation_platform='linux',
+        ),
+    'Linux TSan Tests':
+        _chromium_memory_spec(
+            chromium_config='chromium_tsan2',
+            gclient_config='chromium',
+            gclient_apply_config=['enable_reclient'],
+            chromium_apply_config=['mb'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            },
+            execution_mode=builder_spec.TEST,
+            parent_buildername='Linux TSan Builder',
             simulation_platform='linux',
         ),
     'android-asan':
