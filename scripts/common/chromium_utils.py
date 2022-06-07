@@ -975,7 +975,7 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
       while in_byte:
         # Capture all characters except \r.
         if in_byte != '\r':
-          in_line.write(in_byte)
+          in_line.write(in_byte.decode())
 
         # Write and flush on newline.
         if in_byte == '\n':
