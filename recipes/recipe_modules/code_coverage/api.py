@@ -1041,9 +1041,6 @@ class CodeCoverageApi(recipe_api.RecipeApi):
         # repo on codesearch.
         'project': 'codesearch',
         'trace_type': coverage_format,
-        # workspace_root is empty because the data being uploaded to zoss
-        # is expected to have src relative file paths
-        'workspace_root': '',
         'git_project': commit.project,
         'commit_id': commit.id,
         'ref': ref,
