@@ -111,14 +111,13 @@
       "[CACHE]/builder/src/tools/mb/mb.py",
       "lookup",
       "-m",
-      "chromium.android",
+      "fake.group",
       "-b",
-      "android-cronet-arm-rel",
+      "Cronet",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
-      "--luci-auth",
       "--recursive"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -151,14 +150,13 @@
       "[CACHE]/builder/src/tools/mb/mb.py",
       "gen",
       "-m",
-      "chromium.android",
+      "fake.group",
       "-b",
-      "android-cronet-arm-rel",
+      "Cronet",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
-      "--luci-auth",
       "--json-output",
       "/path/to/tmp/json",
       "//out/Release"
@@ -230,7 +228,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/android_cronet_arm_rel"
+      "[CACHE]/goma/data/Cronet"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -265,7 +263,7 @@
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/android_cronet_arm_rel",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/Cronet",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -577,9 +575,9 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"ci\", \"builder\": \"android-cronet-arm-rel\", \"project\": \"chromium\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"Cronet\", \"project\": \"chromium\"}",
       "--buildbot-buildername",
-      "android-cronet-arm-rel"
+      "Cronet"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

@@ -10,6 +10,7 @@ from recipe_engine.post_process import Filter
 
 from RECIPE_MODULES.build.chromium_tests import steps
 from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
+from RECIPE_MODULES.build.chromium_tests_builder_config import builder_spec
 
 PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
@@ -36,7 +37,22 @@ BUILDERS = ctbc.BuilderDatabase.create({
                 test_results_config='public_server',
                 android_version='chrome/Version',
             ),
-    },
+        'Cronet':
+            ctbc.BuilderSpec.create(
+                chromium_config='android',
+                chromium_apply_config=['cronet_builder'],
+                gclient_apply_config=['android', 'enable_reclient'],
+                gclient_config='chromium',
+                chromium_config_kwargs={
+                    'BUILD_CONFIG': 'Release',
+                    'TARGET_BITS': 32,
+                    'TARGET_PLATFORM': 'android',
+                },
+                android_config='main_builder',
+                execution_mode=builder_spec.COMPILE_AND_TEST,
+                simulation_platform='linux',
+            )
+    }
 })
 
 
@@ -160,8 +176,9 @@ def GenTests(api):
 
   yield api.test(
       'android',
-      api.chromium.ci_build(
-          builder_group='chromium.android', builder='android-cronet-arm-rel'),
+      api.platform.arch('arm'),
+      api.chromium_tests_builder_config.ci_build(
+          builder_group='fake.group', builder='Cronet', builder_db=BUILDERS),
       filter_out_setup_steps(),
   )
 

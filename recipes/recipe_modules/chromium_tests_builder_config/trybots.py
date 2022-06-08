@@ -112,6 +112,7 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * android-12-x64-dbg
     # * android-12-x64-rel
     # * android-bfcache-rel
+    # * android_cronet
     # * android-cronet-arm-dbg
     # * android-cronet-x86-dbg
     # * android-cronet-x86-dbg-10-tests
@@ -230,12 +231,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android.fyi',
                 buildername='android-webview-pie-x86-wpt-fyi-rel',
-            ),
-        'android_cronet':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android',
-                buildername='android-cronet-arm-rel',
-                is_compile_only=True,
             ),
         # Manually triggered GPU trybots.
         'gpu-fyi-try-android-l-nexus-5-32':
