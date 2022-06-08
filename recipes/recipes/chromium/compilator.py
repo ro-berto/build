@@ -190,6 +190,11 @@ def archive_src_side_deps(api):
 
     digest = api.cas.archive('archive src-side deps', str(api.path['checkout']),
                              *dep_paths)
+    relative_test_spec_dir = api.path.relpath(
+        api.chromium.c.source_side_spec_dir, api.path['checkout'])
+
+    nested_step.presentation.properties['src_side_test_spec_dir'] = (
+        relative_test_spec_dir)
     nested_step.presentation.properties['src_side_deps_digest'] = digest
     nested_step.presentation.logs['dep paths'] = api.json.dumps(
         dep_paths, indent=2)
@@ -523,6 +528,8 @@ def GenTests(api):
       api.post_process(post_process.MustRun,
                        'archive src-side dep paths.archive src-side deps'),
       api.post_process(post_process.PropertiesContain, 'src_side_deps_digest'),
+      api.post_process(post_process.PropertiesContain,
+                       'src_side_test_spec_dir'),
       api.post_process(post_process.DropExpectation),
   )
 
