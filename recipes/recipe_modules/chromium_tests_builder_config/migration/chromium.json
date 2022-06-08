@@ -1226,15 +1226,6 @@
       "chromium.fyi:win32-arm64-rel"
     ]
   },
-  "chromium.fyi:win7-blink-rel-dummy": {
-    "blockers": [
-      "builder 'chromium.fyi:win7-blink-rel-dummy' does not exist"
-    ],
-    "builders": [
-      "chromium.fyi:win7-blink-rel-dummy",
-      "tryserver.blink:win7-blink-rel"
-    ]
-  },
   "chromium.goma.fyi:Android Builder (dbg)": {
     "builders": [
       "chromium.goma.fyi:Android Builder (dbg)"
@@ -2576,15 +2567,6 @@
     "builders": [
       "chromium.fyi:win11-blink-rel-dummy",
       "tryserver.blink:win11-blink-rel"
-    ]
-  },
-  "tryserver.blink:win7-blink-rel": {
-    "blockers": [
-      "builder 'chromium.fyi:win7-blink-rel-dummy' does not exist"
-    ],
-    "builders": [
-      "chromium.fyi:win7-blink-rel-dummy",
-      "tryserver.blink:win7-blink-rel"
     ]
   },
   "tryserver.chromium.android:android-11-x86-fyi-rel": {

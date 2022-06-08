@@ -205,7 +205,6 @@ _NON_EXISTENT_BUILDERS = tuple(
         ('chromium.fyi', 'mac10.15-blink-rel-dummy'),
         ('chromium.fyi', 'mac11.0-blink-rel-dummy'),
         ('chromium.fyi', 'mac11.0.arm64-blink-rel-dummy'),
-        ('chromium.fyi', 'win7-blink-rel-dummy'),
         ('chromium.fyi', 'win10.20h2-blink-rel-dummy'),
         ('chromium.fyi', 'win11-blink-rel-dummy'),
         ('chromium.gpu.fyi', 'Optional Android Release (Nexus 5X)'),
