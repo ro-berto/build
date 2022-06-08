@@ -120,6 +120,7 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * android-cronet-x86-dbg-pie-tests
     # * android-inverse-fieldtrials-pie-x86-fyi-rel
     # * android-marshmallow-arm64-rel
+    # * android-marshmallow-x86-rel
     # * android-marshmallow-x86-rel-non-cq
     # * android-pie-arm64-rel
     # * android-pie-x86-rel
@@ -183,12 +184,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android.fyi',
                 buildername='android-marshmallow-x86-fyi-rel-reviver',
-            ),
-        'android-marshmallow-x86-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android',
-                buildername='android-marshmallow-x86-rel',
-                regression_test_selection=try_spec.QUICK_RUN_ONLY,
             ),
         'android-nougat-arm64-rel':
             try_spec.TrySpec.create_for_single_mirror(

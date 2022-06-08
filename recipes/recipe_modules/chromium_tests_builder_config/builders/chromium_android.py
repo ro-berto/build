@@ -42,6 +42,7 @@ def _chromium_android_spec(**kwargs):
 # * android-cronet-x86-dbg-oreo-tests
 # * android-cronet-x86-dbg-pie-tests
 # * android-marshmallow-arm64-rel
+# * android-marshmallow-x86-rel
 # * android-marshmallow-x86-rel-non-cq
 # * android-pie-arm64-dbg
 # * android-pie-arm64-rel
@@ -116,10 +117,6 @@ SPEC.update([
         'android-lollipop-arm-rel',
         chromium_apply_config=['download_vr_test_apks'],
         chromium_config_kwargs={'TARGET_BITS': 32}),
-    stock_config(
-        'android-marshmallow-x86-rel',
-        gclient_apply_config=['android', 'enable_wpr_tests', 'enable_reclient'],
-        android_config='x86_builder'),
     stock_config(
         'android-nougat-arm64-rel',
         chromium_apply_config=['download_vr_test_apks'],
