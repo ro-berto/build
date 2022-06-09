@@ -98,7 +98,7 @@ def main():
 
   # For CompileEvents.
   parser.add_argument(
-      '--build-id', default=0, type=int, help='unique ID of the current build'
+      '--build-id', default=0, type=long, help='unique ID of the current build'
   )
   parser.add_argument(
       '--build-step-name', default='', help='step name of the current build'
