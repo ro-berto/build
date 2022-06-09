@@ -235,24 +235,6 @@ Bugs with the [Builder-Config-Migration-Blocker-nonexistent
 label](https://bugs.chromium.org/p/chromium/issues/list?q=label%3ABuilder-Config-Migration-Blocker-nonexistent)
 have such builders as blockers.
 
-#### Builders configuring clusterfuzz archiving
-
-Builders in the chromium.fuzz builder group, ios-asan in the chromium.fyi
-builder group and "CFI Linux CF" in the chromium.clang builder group configure
-clusterfuzz archiving, which is a bespoke archive operation in chromium_tests
-predating the generic_archive method in the archive module.
-
-We want the configuration of archiving to be done in a consistent manner, so the
-bespoke logic for configuring and performing clusterfuzz archiving is not being
-supported in src-side configs. Builders with cf_archive_build set in their spec
-should be updated to set module properties for the archive module instead so
-that the cf_archive_build field and the related cf_* fields can be removed from
-the builder spec type and such builders would be able to be migrated at that
-point.
-
-[crbug.com/1318621](https://crbug.com/1318621) tracks the removal of the
-clusterfuzz-specific configuration from chromium_tests.
-
 ## Directory contents
 
 * \<*project*\>.json - Per-project files tracking the builders that are in scope
