@@ -52,6 +52,8 @@ SPEC = {
     # mac debug builders and testers
     'mac-updater-builder-dbg':
         CreateBuilderConfig('mac'),
+    'mac-updater-builder-arm64-dbg':
+        CreateBuilderConfig('mac'),
     'mac10.13-updater-tester-dbg':
         CreateBuilderConfig(
             'mac',
@@ -76,5 +78,5 @@ SPEC = {
         CreateBuilderConfig(
             'mac',
             execution_mode=builder_spec.TEST,
-            parent_buildername='mac-updater-builder-dbg'),
+            parent_buildername='mac-updater-builder-arm64-dbg'),
 }

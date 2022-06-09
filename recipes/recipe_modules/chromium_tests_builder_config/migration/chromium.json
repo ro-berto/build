@@ -2257,17 +2257,17 @@
   "chromium.updater:mac-arm64-updater-tester-dbg": {
     "builders": [
       "chromium.updater:mac-arm64-updater-tester-dbg",
-      "chromium.updater:mac-updater-builder-dbg",
-      "chromium.updater:mac10.13-updater-tester-dbg",
-      "chromium.updater:mac10.14-updater-tester-dbg",
-      "chromium.updater:mac10.15-updater-tester-dbg",
-      "chromium.updater:mac11.0-updater-tester-dbg",
-      "tryserver.chromium.updater:mac-updater-try-builder-dbg"
+      "chromium.updater:mac-updater-builder-arm64-dbg"
+    ]
+  },
+  "chromium.updater:mac-updater-builder-arm64-dbg": {
+    "builders": [
+      "chromium.updater:mac-arm64-updater-tester-dbg",
+      "chromium.updater:mac-updater-builder-arm64-dbg"
     ]
   },
   "chromium.updater:mac-updater-builder-dbg": {
     "builders": [
-      "chromium.updater:mac-arm64-updater-tester-dbg",
       "chromium.updater:mac-updater-builder-dbg",
       "chromium.updater:mac10.13-updater-tester-dbg",
       "chromium.updater:mac10.14-updater-tester-dbg",
@@ -2278,7 +2278,6 @@
   },
   "chromium.updater:mac10.13-updater-tester-dbg": {
     "builders": [
-      "chromium.updater:mac-arm64-updater-tester-dbg",
       "chromium.updater:mac-updater-builder-dbg",
       "chromium.updater:mac10.13-updater-tester-dbg",
       "chromium.updater:mac10.14-updater-tester-dbg",
@@ -2289,7 +2288,6 @@
   },
   "chromium.updater:mac10.14-updater-tester-dbg": {
     "builders": [
-      "chromium.updater:mac-arm64-updater-tester-dbg",
       "chromium.updater:mac-updater-builder-dbg",
       "chromium.updater:mac10.13-updater-tester-dbg",
       "chromium.updater:mac10.14-updater-tester-dbg",
@@ -2300,7 +2298,6 @@
   },
   "chromium.updater:mac10.15-updater-tester-dbg": {
     "builders": [
-      "chromium.updater:mac-arm64-updater-tester-dbg",
       "chromium.updater:mac-updater-builder-dbg",
       "chromium.updater:mac10.13-updater-tester-dbg",
       "chromium.updater:mac10.14-updater-tester-dbg",
@@ -2311,7 +2308,6 @@
   },
   "chromium.updater:mac11.0-updater-tester-dbg": {
     "builders": [
-      "chromium.updater:mac-arm64-updater-tester-dbg",
       "chromium.updater:mac-updater-builder-dbg",
       "chromium.updater:mac10.13-updater-tester-dbg",
       "chromium.updater:mac10.14-updater-tester-dbg",
@@ -3553,7 +3549,6 @@
   },
   "tryserver.chromium.updater:mac-updater-try-builder-dbg": {
     "builders": [
-      "chromium.updater:mac-arm64-updater-tester-dbg",
       "chromium.updater:mac-updater-builder-dbg",
       "chromium.updater:mac10.13-updater-tester-dbg",
       "chromium.updater:mac10.14-updater-tester-dbg",
