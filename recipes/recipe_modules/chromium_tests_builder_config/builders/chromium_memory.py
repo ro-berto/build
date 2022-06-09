@@ -28,32 +28,11 @@ def _chromium_memory_spec(**kwargs):
 # * WebKit Linux ASAN
 # * WebKit Linux Leak
 # * WebKit Linux MSAN
+# * ios-asan
 # * linux-ubsan-vptr
 # * win-asan
 
 SPEC = {
-    'ios-asan':
-        builder_spec.BuilderSpec.create(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-                'mac_toolchain',
-            ],
-            gclient_config='ios',
-            gclient_apply_config=[],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'ios',
-                'HOST_PLATFORM': 'mac',
-            },
-            cf_archive_build=True,
-            cf_gs_bucket='chromium-browser-asan',
-            cf_gs_acl='public-read',
-            cf_archive_name='ios-asan',
-            cf_archive_subdir_suffix='ios-asan',
-            simulation_platform='mac',
-        ),
     # TODO(crbug.com/1200904): Remove after migration
     'Linux TSan (bionic)':
         _chromium_memory_spec(

@@ -640,6 +640,7 @@ TRYBOTS = try_spec.TryDatabase.create({
     },
     # The config for the following builders is now specified src-side in
     # //infra/config/subprojects/chromium/try/tryserver.chromium.mac.star
+    # * ios-asan
     # * ios-catalyst
     # * ios-device
     # * ios-simulator
@@ -665,11 +666,6 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * mac11-arm64-rel
     # * mac_optional_gpu_tests_rel
     'tryserver.chromium.mac': {
-        'ios-asan':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.memory',
-                buildername='ios-asan',
-            ),
         'ios-simulator-multi-window':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',

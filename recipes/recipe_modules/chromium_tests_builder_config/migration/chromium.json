@@ -2075,12 +2075,6 @@
       "tryserver.chromium.android:android-asan"
     ]
   },
-  "chromium.memory:ios-asan": {
-    "builders": [
-      "chromium.memory:ios-asan",
-      "tryserver.chromium.mac:ios-asan"
-    ]
-  },
   "chromium.rust:android-rust-arm-dbg": {
     "builders": [
       "chromium.rust:android-rust-arm-dbg",
@@ -3360,12 +3354,6 @@
       "chromium.gpu:Mac Retina Debug (AMD)",
       "tryserver.chromium.mac:gpu-try-mac-amd-retina-dbg",
       "tryserver.chromium.mac:gpu-try-mac-intel-dbg"
-    ]
-  },
-  "tryserver.chromium.mac:ios-asan": {
-    "builders": [
-      "chromium.memory:ios-asan",
-      "tryserver.chromium.mac:ios-asan"
     ]
   },
   "tryserver.chromium.mac:ios-simulator-multi-window": {
