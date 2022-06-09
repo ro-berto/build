@@ -65,7 +65,7 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64
             },
-            gclient_apply_config=['webrtc_test_resources'],
+            gclient_apply_config=[],
             gclient_config='chromium_webrtc',
             parent_buildername='WebRTC Chromium Linux Builder',
             test_results_config='public_server',
@@ -92,7 +92,7 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64
             },
-            gclient_apply_config=['webrtc_test_resources'],
+            gclient_apply_config=[],
             gclient_config='chromium_webrtc',
             parent_buildername='WebRTC Chromium Mac Builder',
             test_results_config='public_server',
@@ -119,7 +119,7 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 32
             },
-            gclient_apply_config=['webrtc_test_resources'],
+            gclient_apply_config=[],
             gclient_config='chromium_webrtc',
             parent_buildername='WebRTC Chromium Win Builder',
             test_results_config='public_server',
