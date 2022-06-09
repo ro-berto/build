@@ -570,137 +570,86 @@
     ]
   },
   "chromium.fuzz:ASAN Debug": {
-    "blockers": [
-      "cannot migrate builder 'chromium.fuzz:ASAN Debug' with the following unsupported attrs:\n* cf_archive_build\n* cf_gs_bucket\n* cf_gs_acl\n* cf_archive_name"
-    ],
     "builders": [
       "chromium.fuzz:ASAN Debug"
     ]
   },
   "chromium.fuzz:ASAN Release": {
-    "blockers": [
-      "cannot migrate builder 'chromium.fuzz:ASAN Release' with the following unsupported attrs:\n* cf_archive_build\n* cf_gs_bucket\n* cf_gs_acl\n* cf_archive_name"
-    ],
     "builders": [
       "chromium.fuzz:ASAN Release"
     ]
   },
   "chromium.fuzz:ASAN Release Media": {
-    "blockers": [
-      "cannot migrate builder 'chromium.fuzz:ASAN Release Media' with the following unsupported attrs:\n* cf_archive_build\n* cf_gs_bucket\n* cf_gs_acl\n* cf_archive_name"
-    ],
     "builders": [
       "chromium.fuzz:ASAN Release Media"
     ]
   },
   "chromium.fuzz:ASan Debug (32-bit x86 with V8-ARM)": {
-    "blockers": [
-      "cannot migrate builder 'chromium.fuzz:ASan Debug (32-bit x86 with V8-ARM)' with the following unsupported attrs:\n* cf_archive_build\n* cf_gs_bucket\n* cf_gs_acl\n* cf_archive_name\n* cf_archive_subdir_suffix"
-    ],
     "builders": [
       "chromium.fuzz:ASan Debug (32-bit x86 with V8-ARM)"
     ]
   },
   "chromium.fuzz:ASan Release (32-bit x86 with V8-ARM)": {
-    "blockers": [
-      "cannot migrate builder 'chromium.fuzz:ASan Release (32-bit x86 with V8-ARM)' with the following unsupported attrs:\n* cf_archive_build\n* cf_gs_bucket\n* cf_gs_acl\n* cf_archive_name\n* cf_archive_subdir_suffix"
-    ],
     "builders": [
       "chromium.fuzz:ASan Release (32-bit x86 with V8-ARM)"
     ]
   },
   "chromium.fuzz:ASan Release Media (32-bit x86 with V8-ARM)": {
-    "blockers": [
-      "cannot migrate builder 'chromium.fuzz:ASan Release Media (32-bit x86 with V8-ARM)' with the following unsupported attrs:\n* cf_archive_build\n* cf_gs_bucket\n* cf_gs_acl\n* cf_archive_name\n* cf_archive_subdir_suffix"
-    ],
     "builders": [
       "chromium.fuzz:ASan Release Media (32-bit x86 with V8-ARM)"
     ]
   },
   "chromium.fuzz:ChromiumOS ASAN Release": {
-    "blockers": [
-      "cannot migrate builder 'chromium.fuzz:ChromiumOS ASAN Release' with the following unsupported attrs:\n* cf_archive_build\n* cf_gs_bucket\n* cf_gs_acl\n* cf_archive_name\n* cf_archive_subdir_suffix"
-    ],
     "builders": [
       "chromium.fuzz:ChromiumOS ASAN Release"
     ]
   },
   "chromium.fuzz:MSAN Release (chained origins)": {
-    "blockers": [
-      "cannot migrate builder 'chromium.fuzz:MSAN Release (chained origins)' with the following unsupported attrs:\n* cf_archive_build\n* cf_gs_bucket\n* cf_gs_acl\n* cf_archive_name"
-    ],
     "builders": [
       "chromium.fuzz:MSAN Release (chained origins)"
     ]
   },
   "chromium.fuzz:MSAN Release (no origins)": {
-    "blockers": [
-      "cannot migrate builder 'chromium.fuzz:MSAN Release (no origins)' with the following unsupported attrs:\n* cf_archive_build\n* cf_gs_bucket\n* cf_gs_acl\n* cf_archive_name"
-    ],
     "builders": [
       "chromium.fuzz:MSAN Release (no origins)"
     ]
   },
   "chromium.fuzz:Mac ASAN Release": {
-    "blockers": [
-      "cannot migrate builder 'chromium.fuzz:Mac ASAN Release' with the following unsupported attrs:\n* cf_archive_build\n* cf_gs_bucket\n* cf_gs_acl\n* cf_archive_name"
-    ],
     "builders": [
       "chromium.fuzz:Mac ASAN Release"
     ]
   },
   "chromium.fuzz:Mac ASAN Release Media": {
-    "blockers": [
-      "cannot migrate builder 'chromium.fuzz:Mac ASAN Release Media' with the following unsupported attrs:\n* cf_archive_build\n* cf_gs_bucket\n* cf_gs_acl\n* cf_archive_name"
-    ],
     "builders": [
       "chromium.fuzz:Mac ASAN Release Media"
     ]
   },
   "chromium.fuzz:TSAN Debug": {
-    "blockers": [
-      "cannot migrate builder 'chromium.fuzz:TSAN Debug' with the following unsupported attrs:\n* cf_archive_build\n* cf_gs_bucket\n* cf_gs_acl\n* cf_archive_name"
-    ],
     "builders": [
       "chromium.fuzz:TSAN Debug"
     ]
   },
   "chromium.fuzz:TSAN Release": {
-    "blockers": [
-      "cannot migrate builder 'chromium.fuzz:TSAN Release' with the following unsupported attrs:\n* cf_archive_build\n* cf_gs_bucket\n* cf_gs_acl\n* cf_archive_name"
-    ],
     "builders": [
       "chromium.fuzz:TSAN Release"
     ]
   },
   "chromium.fuzz:UBSan Release": {
-    "blockers": [
-      "cannot migrate builder 'chromium.fuzz:UBSan Release' with the following unsupported attrs:\n* cf_archive_build\n* cf_gs_bucket\n* cf_gs_acl\n* cf_archive_name"
-    ],
     "builders": [
       "chromium.fuzz:UBSan Release"
     ]
   },
   "chromium.fuzz:UBSan vptr Release": {
-    "blockers": [
-      "cannot migrate builder 'chromium.fuzz:UBSan vptr Release' with the following unsupported attrs:\n* cf_archive_build\n* cf_gs_bucket\n* cf_gs_acl\n* cf_archive_name\n* cf_archive_subdir_suffix"
-    ],
     "builders": [
       "chromium.fuzz:UBSan vptr Release"
     ]
   },
   "chromium.fuzz:Win ASan Release": {
-    "blockers": [
-      "cannot migrate builder 'chromium.fuzz:Win ASan Release' with the following unsupported attrs:\n* cf_archive_build\n* cf_gs_bucket\n* cf_gs_acl\n* cf_archive_name"
-    ],
     "builders": [
       "chromium.fuzz:Win ASan Release"
     ]
   },
   "chromium.fuzz:Win ASan Release Media": {
-    "blockers": [
-      "cannot migrate builder 'chromium.fuzz:Win ASan Release Media' with the following unsupported attrs:\n* cf_archive_build\n* cf_gs_bucket\n* cf_gs_acl\n* cf_archive_name"
-    ],
     "builders": [
       "chromium.fuzz:Win ASan Release Media"
     ]
@@ -2127,9 +2076,6 @@
     ]
   },
   "chromium.memory:ios-asan": {
-    "blockers": [
-      "cannot migrate builder 'chromium.memory:ios-asan' with the following unsupported attrs:\n* cf_archive_build\n* cf_gs_bucket\n* cf_gs_acl\n* cf_archive_name\n* cf_archive_subdir_suffix"
-    ],
     "builders": [
       "chromium.memory:ios-asan",
       "tryserver.chromium.mac:ios-asan"
@@ -3417,9 +3363,6 @@
     ]
   },
   "tryserver.chromium.mac:ios-asan": {
-    "blockers": [
-      "cannot migrate builder 'chromium.memory:ios-asan' with the following unsupported attrs:\n* cf_archive_build\n* cf_gs_bucket\n* cf_gs_acl\n* cf_archive_name\n* cf_archive_subdir_suffix"
-    ],
     "builders": [
       "chromium.memory:ios-asan",
       "tryserver.chromium.mac:ios-asan"

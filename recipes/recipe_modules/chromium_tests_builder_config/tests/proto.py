@@ -83,6 +83,17 @@ def RunSteps(api):
 
   assert_valid(BuilderSpec.SkylabUploadLocation(gs_bucket='gs_bucket'))
 
+  # ClusterfuzzArchive
+  assert_invalid(
+      BuilderSpec.ClusterfuzzArchive(),
+      '$test.gs_bucket is not set',
+      '$test.archive_name_prefix is not set',
+  )
+
+  assert_valid(
+      BuilderSpec.ClusterfuzzArchive(
+          gs_bucket='gs_bucket', archive_name_prefix='archive_name_prefix'))
+
   # BuilderSpec
   assert_invalid(
       BuilderSpec(),

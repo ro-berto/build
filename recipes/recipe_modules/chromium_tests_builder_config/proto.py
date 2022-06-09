@@ -81,6 +81,12 @@ def _validate_skylab_upload_location(obj, ctx):
   ctx.validate_field(obj, 'gs_bucket')
 
 
+@VALIDATORS.register(properties_pb.BuilderSpec.ClusterfuzzArchive)
+def _validate_clusterfuzz_archive(obj, ctx):
+  ctx.validate_field(obj, 'gs_bucket')
+  ctx.validate_field(obj, 'archive_name_prefix')
+
+
 @VALIDATORS.register(properties_pb.BuilderSpec)
 def _validate_builder_spec(obj, ctx):
   ctx.validate_field(obj, 'builder_group')
@@ -90,6 +96,7 @@ def _validate_builder_spec(obj, ctx):
   ctx.validate_field(obj, 'legacy_android_config', optional=True)
   ctx.validate_field(obj, 'legacy_test_results_config', optional=True)
   ctx.validate_field(obj, 'skylab_upload_location', optional=True)
+  ctx.validate_field(obj, 'clusterfuzz_archive', optional=True)
 
 
 _EXECUTION_MODE_MAP = {
@@ -119,6 +126,18 @@ def _convert_builder_spec(obj, builder_id_by_builder_key):
     if val:
       chromium_config_kwargs[a.upper()] = ':'.join(val)
 
+  kwargs = {}
+  if obj.HasField('clusterfuzz_archive'):
+    kwargs.update(
+        dict(
+            cf_archive_build=True,
+            cf_gs_bucket=obj.clusterfuzz_archive.gs_bucket or None,
+            cf_gs_acl=obj.clusterfuzz_archive.gs_acl or None,
+            cf_archive_name=obj.clusterfuzz_archive.archive_name_prefix or None,
+            cf_archive_subdir_suffix=obj.clusterfuzz_archive.archive_subdir or
+            None,
+        ))
+
   return BuilderSpec.create(
       execution_mode=_EXECUTION_MODE_MAP[obj.execution_mode],
       parent_builder_group=parent_id.group if parent_id else None,
@@ -138,7 +157,7 @@ def _convert_builder_spec(obj, builder_id_by_builder_key):
       expose_trigger_properties=obj.expose_trigger_properties,
       skylab_gs_bucket=obj.skylab_upload_location.gs_bucket or None,
       skylab_gs_extra=obj.skylab_upload_location.gs_extra or None,
-  )
+      **kwargs)
 
 
 @VALIDATORS.register(properties_pb.BuilderDatabase.Entry)

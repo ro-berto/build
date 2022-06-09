@@ -9,7 +9,7 @@ import "go.chromium.org/luci/buildbucket/proto/builder.proto";
 
 // The details configuring execution for a single builder
 //
-// Next ID: 16
+// Next ID: 17
 message BuilderSpec {
   // Required, the builder group that the builder is a part of
   //
@@ -165,6 +165,27 @@ message BuilderSpec {
       string gs_extra = 2;
   }
   SkylabUploadLocation skylab_upload_location = 15;
+
+  // Details of an archive to be created containing artifacts for use by
+  // clusterfuzz.
+  //
+  // Next ID: 5
+  message ClusterfuzzArchive {
+      // Required, the Google Storage bucket to upload the archive containing
+      // artifacts for clusterfuzz
+      string gs_bucket = 1;
+      // A canned ACL to apply to the uploaded archive
+      string gs_acl = 2;
+      // Required, the prefix of the name of the archive to create
+      //
+      // The name of the archive will begin with the prefix and include
+      // additional details such as platform and target, among others.
+      string archive_name_prefix = 3;
+      // An additional subdirectory within the target/platform directory for
+      // uploading the archive to
+      string archive_subdir = 4;
+  }
+  ClusterfuzzArchive clusterfuzz_archive = 16;
 }
 
 // A database of builder specs that can be used during a build

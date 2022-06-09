@@ -126,6 +126,8 @@ class _PropertiesAssembler(object):
             builder_spec.expose_trigger_properties,
         'skylab_upload_location':
             self._get_skylab_upload_location(builder_spec),
+        'clusterfuzz_archive':
+            self._get_clusterfuzz_archive(builder_spec),
     }
 
     return properties_pb.BuilderSpec(
@@ -194,6 +196,22 @@ class _PropertiesAssembler(object):
     if kwargs:
       return properties_pb.BuilderSpec.SkylabUploadLocation(**kwargs)
     return None
+
+  @staticmethod
+  def _get_clusterfuzz_archive(builder_spec):
+    if not builder_spec.cf_archive_build:
+      return None
+    kwargs = {}
+    for (src, dst) in (
+        ('cf_gs_bucket', 'gs_bucket'),
+        ('cf_gs_acl', 'gs_acl'),
+        ('cf_archive_name', 'archive_name_prefix'),
+        ('cf_archive_subdir_suffix', 'archive_subdir'),
+    ):
+      val = getattr(builder_spec, src)
+      if val is not None:
+        kwargs[dst] = val
+    return properties_pb.BuilderSpec.ClusterfuzzArchive(**kwargs)
 
 
 class _CiBuilderPropertiesAssembler(object):

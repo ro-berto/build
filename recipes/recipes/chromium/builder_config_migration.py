@@ -225,11 +225,6 @@ _DEFAULT_BUILDER_SPEC = ctbc.BuilderSpec.create()
 _UNSUPPORTED_ATTRS = (
     # The use of all of these fields should be replaced with the use of
     # the archive module
-    'cf_archive_build',
-    'cf_gs_bucket',
-    'cf_gs_acl',
-    'cf_archive_name',
-    'cf_archive_subdir_suffix',
     'bisect_archive_build',
     'bisect_gs_bucket',
     'bisect_gs_extra',
@@ -347,6 +342,19 @@ def _migrate_builder_spec(builder_spec):
         if builder_spec.skylab_gs_extra:
           output.add_line('gs_extra = "{}"'.format(
               builder_spec.skylab_gs_extra))
+
+    if builder_spec.cf_archive_build:
+      output.add_line('clusterfuzz_archive = '
+                      'builder_config.clusterfuzz_archive(')
+      with output.increase_indent('),'):
+        output.add_line('gs_bucket = "{}",'.format(builder_spec.cf_gs_bucket))
+        if builder_spec.cf_gs_acl:
+          output.add_line('gs_acl = "{}",'.format(builder_spec.cf_gs_acl))
+        output.add_line('archive_name_prefix = "{}",'.format(
+            builder_spec.cf_archive_name))
+        if builder_spec.cf_archive_subdir_suffix:
+          output.add_line('archive_subdir = "{}",'.format(
+              builder_spec.cf_archive_subdir_suffix))
 
   return output.lines
 
@@ -809,6 +817,12 @@ def GenTests(api):
                   gs_bucket = "skylab-gs-bucket"
                   gs_extra = "skylab-gs-extra"
               ),
+              clusterfuzz_archive = builder_config.clusterfuzz_archive(
+                  gs_bucket = "clusterfuzz-gs-bucket",
+                  gs_acl = "clusterfuzz-gs-acl",
+                  archive_name_prefix = "clusterfuzz-archive-name-prefix",
+                  archive_subdir = "clusterfuzz-archive-subdir",
+              ),
           ),
 
       foo-group:foo-tester
@@ -899,6 +913,11 @@ def GenTests(api):
                           expose_trigger_properties=True,
                           skylab_gs_bucket='skylab-gs-bucket',
                           skylab_gs_extra='skylab-gs-extra',
+                          cf_archive_build=True,
+                          cf_gs_bucket="clusterfuzz-gs-bucket",
+                          cf_gs_acl="clusterfuzz-gs-acl",
+                          cf_archive_name="clusterfuzz-archive-name-prefix",
+                          cf_archive_subdir_suffix="clusterfuzz-archive-subdir",
                       ),
                   'foo-tester':
                       ctbc.BuilderSpec.create(
@@ -1049,11 +1068,6 @@ def GenTests(api):
               'foo-group': {
                   'foo-builder':
                       ctbc.BuilderSpec.create(
-                          cf_archive_build=True,
-                          cf_gs_bucket='fake-cf-gs-bucket',
-                          cf_gs_acl='fake-cf-gs-acl',
-                          cf_archive_name='fake-cf-archive-name',
-                          cf_archive_subdir_suffix='fake-cf-archive-suffix',
                           bisect_archive_build=True,
                           bisect_gs_bucket='fake-bisect-gs-bucket',
                           bisect_gs_extra='fake-bisect-gs-extra',
@@ -1068,11 +1082,6 @@ def GenTests(api):
           textwrap.dedent("""\
               \s*cannot migrate builder 'foo-group:foo-builder' with the \
 following unsupported attrs:
-              \s*\\* cf_archive_build
-              \s*\\* cf_gs_bucket
-              \s*\\* cf_gs_acl
-              \s*\\* cf_archive_name
-              \s*\\* cf_archive_subdir_suffix
               \s*\\* bisect_archive_build
               \s*\\* bisect_gs_bucket
               \s*\\* bisect_gs_extra""")),
