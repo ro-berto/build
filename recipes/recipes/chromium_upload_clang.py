@@ -60,7 +60,9 @@ BUILDERS = freeze({
                         'BUILD_CONFIG': 'Release',
                         'TARGET_PLATFORM': 'mac',
                         'TARGET_BITS': 64,
-                    },),
+                    },
+                    gclient_apply_config=['fuchsia'],
+                ),
         },
     },
     'tryserver.chromium.win': {
