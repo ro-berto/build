@@ -25,11 +25,13 @@ def CreateBuilderConfig(platform, config='Release', target_bits=64, **kwargs):
 # The config for the following builders is now specified src-side in
 # //infra/config/subprojects/chromium/ci/chromium.updater.star
 # * mac-updater-builder-rel
+# * mac-updater-builder-arm64-dbg
 # * mac10.13-updater-tester-rel
 # * mac10.14-updater-tester-rel
 # * mac10.15-updater-tester-rel
 # * mac11.0-updater-tester-rel
 # * mac-arm64-updater-tester-rel
+# * mac-arm64-updater-tester-dbg
 # * win-updater-builder-dbg
 # * win-updater-builder-rel
 # * win10-updater-tester-dbg
@@ -52,8 +54,6 @@ SPEC = {
     # mac debug builders and testers
     'mac-updater-builder-dbg':
         CreateBuilderConfig('mac'),
-    'mac-updater-builder-arm64-dbg':
-        CreateBuilderConfig('mac'),
     'mac10.13-updater-tester-dbg':
         CreateBuilderConfig(
             'mac',
@@ -74,9 +74,4 @@ SPEC = {
             'mac',
             execution_mode=builder_spec.TEST,
             parent_buildername='mac-updater-builder-dbg'),
-    'mac-arm64-updater-tester-dbg':
-        CreateBuilderConfig(
-            'mac',
-            execution_mode=builder_spec.TEST,
-            parent_buildername='mac-updater-builder-arm64-dbg'),
 }

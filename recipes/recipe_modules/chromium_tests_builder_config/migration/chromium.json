@@ -2194,18 +2194,6 @@
       "tryserver.chromium.swangle:win-swangle-try-x86"
     ]
   },
-  "chromium.updater:mac-arm64-updater-tester-dbg": {
-    "builders": [
-      "chromium.updater:mac-arm64-updater-tester-dbg",
-      "chromium.updater:mac-updater-builder-arm64-dbg"
-    ]
-  },
-  "chromium.updater:mac-updater-builder-arm64-dbg": {
-    "builders": [
-      "chromium.updater:mac-arm64-updater-tester-dbg",
-      "chromium.updater:mac-updater-builder-arm64-dbg"
-    ]
-  },
   "chromium.updater:mac-updater-builder-dbg": {
     "builders": [
       "chromium.updater:mac-updater-builder-dbg",
