@@ -2200,8 +2200,7 @@
       "chromium.updater:mac10.13-updater-tester-dbg",
       "chromium.updater:mac10.14-updater-tester-dbg",
       "chromium.updater:mac10.15-updater-tester-dbg",
-      "chromium.updater:mac11.0-updater-tester-dbg",
-      "tryserver.chromium.updater:mac-updater-try-builder-dbg"
+      "chromium.updater:mac11.0-updater-tester-dbg"
     ]
   },
   "chromium.updater:mac10.13-updater-tester-dbg": {
@@ -2210,8 +2209,7 @@
       "chromium.updater:mac10.13-updater-tester-dbg",
       "chromium.updater:mac10.14-updater-tester-dbg",
       "chromium.updater:mac10.15-updater-tester-dbg",
-      "chromium.updater:mac11.0-updater-tester-dbg",
-      "tryserver.chromium.updater:mac-updater-try-builder-dbg"
+      "chromium.updater:mac11.0-updater-tester-dbg"
     ]
   },
   "chromium.updater:mac10.14-updater-tester-dbg": {
@@ -2220,8 +2218,7 @@
       "chromium.updater:mac10.13-updater-tester-dbg",
       "chromium.updater:mac10.14-updater-tester-dbg",
       "chromium.updater:mac10.15-updater-tester-dbg",
-      "chromium.updater:mac11.0-updater-tester-dbg",
-      "tryserver.chromium.updater:mac-updater-try-builder-dbg"
+      "chromium.updater:mac11.0-updater-tester-dbg"
     ]
   },
   "chromium.updater:mac10.15-updater-tester-dbg": {
@@ -2230,8 +2227,7 @@
       "chromium.updater:mac10.13-updater-tester-dbg",
       "chromium.updater:mac10.14-updater-tester-dbg",
       "chromium.updater:mac10.15-updater-tester-dbg",
-      "chromium.updater:mac11.0-updater-tester-dbg",
-      "tryserver.chromium.updater:mac-updater-try-builder-dbg"
+      "chromium.updater:mac11.0-updater-tester-dbg"
     ]
   },
   "chromium.updater:mac11.0-updater-tester-dbg": {
@@ -2240,8 +2236,7 @@
       "chromium.updater:mac10.13-updater-tester-dbg",
       "chromium.updater:mac10.14-updater-tester-dbg",
       "chromium.updater:mac10.15-updater-tester-dbg",
-      "chromium.updater:mac11.0-updater-tester-dbg",
-      "tryserver.chromium.updater:mac-updater-try-builder-dbg"
+      "chromium.updater:mac11.0-updater-tester-dbg"
     ]
   },
   "chromium.updater:win32-updater-builder-dbg": {
@@ -3464,16 +3459,6 @@
     "builders": [
       "chromium.swangle:win-swangle-x86",
       "tryserver.chromium.swangle:win-swangle-try-x86"
-    ]
-  },
-  "tryserver.chromium.updater:mac-updater-try-builder-dbg": {
-    "builders": [
-      "chromium.updater:mac-updater-builder-dbg",
-      "chromium.updater:mac10.13-updater-tester-dbg",
-      "chromium.updater:mac10.14-updater-tester-dbg",
-      "chromium.updater:mac10.15-updater-tester-dbg",
-      "chromium.updater:mac11.0-updater-tester-dbg",
-      "tryserver.chromium.updater:mac-updater-try-builder-dbg"
     ]
   },
   "tryserver.chromium.win:gpu-fyi-try-win10-amd-rel-64": {
