@@ -39,8 +39,6 @@ import os
 import sys
 import traceback
 
-import six
-
 
 # Export for bootstrapping.
 __all__ = [
@@ -177,7 +175,7 @@ class PythonPath(collections.Sequence):
     self._components = []
     for component in (components or ()):
       component = os.path.abspath(component)
-      assert isinstance(component, six.string_types), (
+      assert isinstance(component, basestring), (
           "Path component '%s' is not a string (%s)" % (
                 component, type(component).__name__))
       if component in seen:
@@ -210,7 +208,7 @@ class PythonPath(collections.Sequence):
     """
     result = []
     for path in paths:
-      if not isinstance(path, six.string_types):
+      if not isinstance(path, basestring):
         # Assume it's an iterable of paths.
         result += cls.Flatten(*path)
       else:

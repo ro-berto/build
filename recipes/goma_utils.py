@@ -172,11 +172,11 @@ def UploadToGomaLogGS(
   today = datetime.datetime.utcnow().date()
   log_path = '%s/%s/%s.gz' % (today.strftime('%Y/%m/%d'), hostname, gs_filename)
   gs_path = 'gs://%s/%s' % (GOMA_LOG_GS_BUCKET, log_path)
-  temp = tempfile.NamedTemporaryFile(mode='wb', delete=False)
+  temp = tempfile.NamedTemporaryFile(delete=False)
   try:
     with temp as f_out:
-      with gzip.GzipFile(fileobj=f_out, mode='wb') as gzipf_out:
-        with open(file_path, 'rb') as f_in:
+      with gzip.GzipFile(fileobj=f_out) as gzipf_out:
+        with open(file_path) as f_in:
           shutil.copyfileobj(f_in, gzipf_out)
         if text_to_append:
           gzipf_out.write(text_to_append)

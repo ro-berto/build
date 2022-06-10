@@ -10,8 +10,6 @@ import sys
 import tempfile
 import unittest
 
-import mock
-
 import test_env  # pylint: disable=relative-import
 
 import goma_utils
@@ -75,15 +73,6 @@ class GomaUtilTest(unittest.TestCase):
     self.createInfoLog('gomacc', datetime.datetime(2021, 1, 2, 15, 4, 4))
     gomacc_infos = goma_utils.GetListOfGomaccInfoAfterCompilerProxyStart()
     self.assertEquals([], gomacc_infos)
-
-  def testUploadToGomaLogGS(self):
-    file_path = os.path.join(self._tmp_dir, 'file')
-    with open(file_path, 'w') as f:
-      f.write('test')
-
-    with mock.patch('slave_utils.GSUtilCopy') as mocked_GSUtilCopy:
-      goma_utils.UploadToGomaLogGS(file_path, 'gs_filename')
-      mocked_GSUtilCopy.assert_called_once()
 
 
 if __name__ == '__main__':
