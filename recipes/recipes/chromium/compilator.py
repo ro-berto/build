@@ -192,6 +192,9 @@ def archive_src_side_deps(api):
                              *dep_paths)
     relative_test_spec_dir = api.path.relpath(
         api.chromium.c.source_side_spec_dir, api.path['checkout'])
+    # On windows compilators, this would use a `\\` path separator instead of
+    # a `/` that the linux orchestrators need to construct Paths
+    relative_test_spec_dir = relative_test_spec_dir.replace(api.path.sep, '/')
 
     nested_step.presentation.properties['src_side_test_spec_dir'] = (
         relative_test_spec_dir)
@@ -572,6 +575,33 @@ def GenTests(api):
       api.post_process(post_process.MustRun,
                        'archive src-side dep paths.archive src-side deps'),
       api.post_process(post_process.PropertiesContain, 'src_side_deps_digest'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'win_src_test_spec_dir_prop',
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-compilator',
+          revision='deadbeef',
+          experiments=['remove_src_checkout_experiment'],
+      ),
+      api.platform.name('win'),
+      api.path.exists(api.path['checkout'].join('out\\Release\\browser_tests')),
+      ctbc_properties(),
+      api.properties(
+          InputProperties(
+              orchestrator=InputProperties.Orchestrator(
+                  builder_name='fake-orchestrator',
+                  builder_group='fake-try-group'))),
+      api.filter.suppress_analyze(),
+      override_test_spec(),
+      api.post_process(
+          post_process.PropertyEquals,
+          'src_side_test_spec_dir',
+          'testing/buildbot',
+      ),
+      api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
 
