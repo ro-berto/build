@@ -50,6 +50,7 @@ TEST_HISTORY_QUERY = """
 
 def fetch_builders(bq, args):
   logging.info('Searching for all try builders.')
+  logging.info(FETCH_BUILDER_QUERY)
   query_job = bq.query(FETCH_BUILDER_QUERY)
   rows = query_job.result()
   logging.info('Query complete. Processing results.')
@@ -73,6 +74,7 @@ def query_test_history(bq, args):
                (project, builder_bucket, builder))
   query = TEST_HISTORY_QUERY.format(EXPERIMENTAL_STEP_NAME_SUBSTRING, builder,
                                     project, builder_bucket)
+  logging.info(query)
   query_job = bq.query(query)
   query_job.result()
   logging.info('Query completed. Uploading results to GS bucket.')
