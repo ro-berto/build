@@ -13,35 +13,39 @@ from google.cloud import bigquery
 PROJECT = 'chrome-flakiness'
 FETCH_BUILDER_QUERY = """
     SELECT DISTINCT
-      bot,
-      project,
+      builder_name,
+      builder_project,
       bucket,
     FROM
-      `chrome-flakiness.flake_endorser.try_historical_test_data_7_days`
+      `chrome-flakiness.flake_endorser.test_history_7_days`
   """
 # A substring that only appears in step_name tag of experimental tests' results.
 # "experimental" is the last part of step suffix (wrapped in brackets) which is
 # part of the step name. (https://bit.ly/3I4Enc6)
 EXPERIMENTAL_STEP_NAME_SUBSTRING = 'experimental)'
+
+# `chrome-flakiness.flake_endorser.test_history_7_days` already has data for
+# the most recent 500 invocations. This query utilizes this data to determine
+# the test history per cq try builder.
 TEST_HISTORY_QUERY = """
     SELECT
       test_id,
       variant_hash,
       variant,
       CONTAINS_SUBSTR(tag, \'{}\') AS is_experimental,
-      ARRAY_AGG(invocation) AS invocation
+      ARRAY_AGG(invocation)
     FROM
-      `chrome-flakiness.flake_endorser.try_historical_test_data_7_days`
+      `chrome-flakiness.flake_endorser.test_history_7_days`
     WHERE
-      bot = \'{}\' AND
-      project = \'{}\' AND
+      builder_name = \'{}\' AND
+      builder_project = \'{}\' AND
       bucket = \'{}\'
     GROUP BY
       test_id,
       variant_hash,
       variant,
       is_experimental
-  """
+"""
 
 
 def fetch_builders(bq, args):
@@ -50,8 +54,8 @@ def fetch_builders(bq, args):
   rows = query_job.result()
   logging.info('Query complete. Processing results.')
   builders = [{
-      'bot': row.bot,
-      'project': row.project,
+      'builder_name': row.builder_name,
+      'builder_project': row.builder_project,
       'bucket': row.bucket
   } for row in rows]
 
@@ -93,13 +97,25 @@ def query_test_history(bq, args):
 
 def format_file(bq, args):
   results = []
-  for json_file in args.file:
-    with open(json_file, 'r') as f:
-      for line in f:
-        results.append(json.loads(line))
+  logging.info('Formatting results into json object.')
+  try:
+    for json_file in args.file:
+      with open(json_file, 'r') as f:
+        for line in f:
+          results.append(json.loads(line))
+  except Exception as e:
+    logging.error('Failed formatting file %s. line: %s' % (json_file, line))
+    logging.error(e)
+    raise e
 
-  with open(args.output_file, 'w') as f:
-    json.dump(results, f)
+  logging.info('Writing out to disk...')
+  try:
+    with open(args.output_file, 'w') as f:
+      json.dump(results, f)
+  except Exception as e:
+    logging.error('Failed to write file to disk.')
+    logging.error(e)
+    raise e
 
   return json.dumps(results)
 

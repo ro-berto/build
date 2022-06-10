@@ -118,10 +118,10 @@ def RunSteps(api):
           api.futures.spawn(
               analyze_try_builder_test_history,
               api,
-              b['bot'],
+              b['builder_name'],
               gs_bucket,
               build_number,
-              b['project'],
+              b['builder_project'],
               b['bucket'],
           ))
 
@@ -136,8 +136,8 @@ def GenTests(api):
       api.step_data(
           'search for try builders',
           api.json.output([{
-              'bot': 'builder1',
-              'project': 'chromium',
+              'builder_name': 'builder1',
+              'builder_project': 'chromium',
               'bucket': 'try',
           }])),
       api.post_check(
