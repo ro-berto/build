@@ -41,17 +41,17 @@ class ClangTidySpec(chromium.BuilderSpec):
 
 
 BUILDERS = freeze({
-    'tryserver.chromium.android': {
+    'tryserver.chromium.tricium': {
         'builders': {
             'android-clang-tidy-rel':
                 ClangTidySpec(
                     chromium_apply_config=['android'],
                     gclient_apply_config=['android'],
                 ),
-        },
-    },
-    'tryserver.chromium.chromiumos': {
-        'builders': {
+            'fuchsia-clang-tidy-rel':
+                ClangTidySpec(gclient_apply_config=['fuchsia'],),
+            'ios-clang-tidy-rel':
+                ClangTidySpec(chromium_apply_config=['mac_toolchain']),
             'linux-chromeos-clang-tidy-rel':
                 ClangTidySpec(
                     gclient_apply_config=['chromeos'],
@@ -60,6 +60,8 @@ BUILDERS = freeze({
                         'TARGET_PLATFORM': 'chromeos',
                     },
                 ),
+            'linux-clang-tidy-rel':
+                ClangTidySpec(),
             'linux-lacros-clang-tidy-rel':
                 ClangTidySpec(
                     gclient_apply_config=['chromeos', 'checkout_lacros_sdk'],
@@ -68,35 +70,13 @@ BUILDERS = freeze({
                         'TARGET_PLATFORM': 'chromeos',
                     },
                 ),
-        },
-    },
-    'tryserver.chromium.linux': {
-        'builders': {
-            'fuchsia-clang-tidy-rel':
-                ClangTidySpec(gclient_apply_config=['fuchsia'],),
-            'linux-clang-tidy-rel':
+            'mac-clang-tidy-rel':
+                ClangTidySpec(chromium_apply_config=['mac_toolchain']),
+            'win10-clang-tidy-rel':
                 ClangTidySpec(),
         },
     },
-    # FIXME(crbug.com/1153919): These fail for want of xcode_build_version
-    # (currently 11c29). I have a local hack to work around this, but they
-    # won't work without that. ...Seems this is part of the bot config itself,
-    # so that's a Chromium thing? 13c100.
-    'tryserver.chromium.mac': {
-        'builders': {
-            'ios-clang-tidy-rel':
-                ClangTidySpec(chromium_apply_config=['mac_toolchain']),
-            'mac-clang-tidy-rel':
-                ClangTidySpec(chromium_apply_config=['mac_toolchain']),
-        },
-    },
-    'tryserver.chromium.win': {
-        'builders': {
-            'win10-clang-tidy-rel': ClangTidySpec(),
-        },
-    },
 })
-
 
 def _should_skip_linting(api):
   revision_info = api.gerrit.get_revision_info(
@@ -162,7 +142,7 @@ def GenTests(api):
                       affected_files,
                       is_revert=False,
                       author='gbiv@google.com',
-                      builder_group='tryserver.chromium.linux',
+                      builder_group='tryserver.chromium.tricium',
                       builder='linux-clang-tidy-rel'):
     commit_message = 'Revert foo' if is_revert else 'foo'
     commit_message += '\nTriciumTest'
