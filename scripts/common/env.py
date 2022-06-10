@@ -39,6 +39,9 @@ import os
 import sys
 import traceback
 
+# This script is called from non-vpython, so cannot use six.
+if sys.version_info.major == 3:
+  basestring = str  # pylint: disable=redefined-builtin
 
 # Export for bootstrapping.
 __all__ = [
