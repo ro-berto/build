@@ -83,7 +83,12 @@ def kzip_input_paths(kzip_path):
 
           # Absolute paths refer to libraries. Ignore these.
           if not os.path.isabs(p) and has_allowed_extension(p):
-            required_inputs.add(p)
+            # package_index may adjust vname paths. Add possible adjustments to
+            # the required_inputs set.
+            parts = p.split(os.sep)
+            for i in range(len(parts)):
+              # Kzips use forward slashes.
+              required_inputs.add('/'.join(parts[i:]))
   except zipfile.BadZipfile as e:
     print('Error reading kzip file %s: %s' % (kzip_path, e))
 
@@ -104,7 +109,7 @@ def copy_generated_files(source_dir, dest_dir, kzip_input_suffixes=None):
     dest_parts = path.split(os.sep)
     for i in range(len(dest_parts)):
       # Kzips use forward slashes.
-      check = '/'.join(dest_parts[-i:])
+      check = '/'.join(dest_parts[i:])
       if check in kzip_input_suffixes:
         return True
     return False
