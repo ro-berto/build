@@ -86,6 +86,11 @@ def kzip_input_paths(kzip_path):
             # package_index may adjust vname paths. Add possible adjustments to
             # the required_inputs set.
             parts = p.split(os.sep)
+
+            # Don't sync any temporary files. These aren't actually referenced.
+            if 'tmp' in parts:
+              continue
+
             for i in range(len(parts)):
               # Kzips use forward slashes.
               required_inputs.add('/'.join(parts[i:]))
