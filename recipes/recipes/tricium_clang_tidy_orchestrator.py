@@ -167,9 +167,11 @@ def RunSteps(api):
     lints = {}
     for builder_name, build_result in builds:
       properties = build_result.output.properties
-      if 'tricium' in properties:
-        comments = json.loads(properties['tricium'])['comments']
-        lints[builder_name] = _parse_comments_from_json_list(comments)
+      if 'tricium' not in properties:
+        continue
+
+      comments = json.loads(properties['tricium']).get('comments', ())
+      lints[builder_name] = _parse_comments_from_json_list(comments)
 
     tricium_lints = _dedup_and_fixup_tricium_lints(_CHILD_BUILDERS, lints)
 
@@ -253,9 +255,11 @@ def GenTests(api):
       builder_indices = {n: i for i, n in enumerate(_CHILD_BUILDERS)}
       for builder_name, comments in tricium_data.items():
         n = builder_indices[builder_name]
-        build_output[n].output.properties['tricium'] = api.json.dumps({
-            'comments': [x._asdict() for x in comments],
-        })
+        tricium_section = {}
+        if comments:
+          tricium_section['comments'] = [x._asdict() for x in comments]
+        build_output[n].output.properties['tricium'] = api.json.dumps(
+            tricium_section)
 
     return make_test(
         api.buildbucket.simulated_collect_output(
