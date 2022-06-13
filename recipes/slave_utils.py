@@ -347,7 +347,7 @@ def GSUtilCopy(
     metadata['Content-Type'] = mimetype
   if cache_control:
     metadata['Cache-Control'] = cache_control
-  for k, v in sorted(metadata.iteritems(), key=lambda x: x[0]):
+  for k, v in sorted(metadata.items(), key=lambda x: x[0]):
     field = GSUtilGetMetadataField(k)
     param = (field) if v is None else ('%s:%s' % (field, v))
     command += ['-h', param]

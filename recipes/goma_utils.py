@@ -144,7 +144,7 @@ def SetBuilderIDToCounter(builder_id, counter):
     builder_id: BuilderId dictionary to use.
     counter: ts_mon counter dictionary to be updated.
   """
-  for key, value in builder_id.iteritems():
+  for key, value in builder_id.items():
     counter[key] = value
 
 
@@ -179,7 +179,7 @@ def UploadToGomaLogGS(
         with open(file_path, 'rb') as f_in:
           shutil.copyfileobj(f_in, gzipf_out)
         if text_to_append:
-          gzipf_out.write(text_to_append)
+          gzipf_out.write(text_to_append.encode('utf-8'))
     slave_utils.GSUtilCopy(
         temp.name, gs_path, metadata=metadata, override_gsutil=override_gsutil
     )
@@ -326,7 +326,7 @@ def UploadNinjaLog(
       'cmdline': command, 'cwd': cwd, 'platform': platform, 'exit': exit_status,
       'build_id': build_id, 'step_name': step_name, 'env': {}
   }
-  for k, v in os.environ.iteritems():
+  for k, v in os.environ.items():
     info['env'][k] = v
   if compiler:
     info['compiler'] = compiler
