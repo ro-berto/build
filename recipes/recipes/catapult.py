@@ -72,12 +72,13 @@ def RunSteps(api, properties):
   packages_root = api.path['start_dir'].join('packages')
 
   # Install the protoc package.
-  # TODO(crbug.com/1271700): Remove this condition once protoc mac-arm build
-  # is released.
-  if not (api.platform.name == 'mac' and api.platform.arch == 'arm'):
+  if (api.platform.name == 'mac' and api.platform.arch == 'arm'):
+    ensure_file = api.cipd.EnsureFile().add_package(
+        'infra/3pp/tools/protoc/${platform}', 'version:2@21.1')
+  else:
     ensure_file = api.cipd.EnsureFile().add_package(
         'infra/tools/protoc/${platform}', 'protobuf_version:v3.6.1')
-    api.cipd.ensure(packages_root, ensure_file)
+  api.cipd.ensure(packages_root, ensure_file)
 
   with api.osx_sdk('mac'):
     with api.context(
