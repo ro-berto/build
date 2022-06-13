@@ -1492,13 +1492,6 @@
       "chromium.gpu.fyi:GPU FYI Mac Builder DEPS ANGLE"
     ]
   },
-  "chromium.gpu.fyi:GPU FYI Mac arm64 Builder": {
-    "builders": [
-      "chromium.gpu.fyi:GPU FYI Mac arm64 Builder",
-      "chromium.gpu.fyi:Mac FYI Release (Apple M1)",
-      "tryserver.chromium.mac:gpu-fyi-try-mac-arm64-apple-m1-rel"
-    ]
-  },
   "chromium.gpu.fyi:GPU FYI Win Builder": {
     "builders": [
       "chromium.gpu.fyi:GPU FYI Win Builder",
@@ -1761,13 +1754,6 @@
       "tryserver.chromium.mac:gpu-fyi-try-mac-intel-rel",
       "tryserver.chromium.mac:gpu-fyi-try-mac-nvidia-retina-exp",
       "tryserver.chromium.mac:gpu-fyi-try-mac-nvidia-retina-rel"
-    ]
-  },
-  "chromium.gpu.fyi:Mac FYI Release (Apple M1)": {
-    "builders": [
-      "chromium.gpu.fyi:GPU FYI Mac arm64 Builder",
-      "chromium.gpu.fyi:Mac FYI Release (Apple M1)",
-      "tryserver.chromium.mac:gpu-fyi-try-mac-arm64-apple-m1-rel"
     ]
   },
   "chromium.gpu.fyi:Mac FYI Release (Intel)": {
@@ -3205,13 +3191,6 @@
       "tryserver.chromium.mac:gpu-fyi-try-mac-intel-rel",
       "tryserver.chromium.mac:gpu-fyi-try-mac-nvidia-retina-exp",
       "tryserver.chromium.mac:gpu-fyi-try-mac-nvidia-retina-rel"
-    ]
-  },
-  "tryserver.chromium.mac:gpu-fyi-try-mac-arm64-apple-m1-rel": {
-    "builders": [
-      "chromium.gpu.fyi:GPU FYI Mac arm64 Builder",
-      "chromium.gpu.fyi:Mac FYI Release (Apple M1)",
-      "tryserver.chromium.mac:gpu-fyi-try-mac-arm64-apple-m1-rel"
     ]
   },
   "tryserver.chromium.mac:gpu-fyi-try-mac-intel-asan": {

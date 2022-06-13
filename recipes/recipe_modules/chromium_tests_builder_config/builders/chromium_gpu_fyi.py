@@ -524,21 +524,6 @@ SPEC = {
             },
             simulation_platform='mac',
         ),
-    'GPU FYI Mac arm64 Builder':
-        _chromium_gpu_fyi_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_ARCH': 'arm',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'mac',
-            },
-            simulation_platform='mac',
-        ),
     'GPU FYI Mac Builder DEPS ANGLE':
         _chromium_gpu_fyi_spec(
             chromium_config='chromium',
@@ -582,24 +567,6 @@ SPEC = {
                 'TARGET_PLATFORM': 'mac',
             },
             simulation_platform='mac',
-        ),
-    'Mac FYI Release (Apple M1)':
-        _chromium_gpu_fyi_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_ARCH': 'arm',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'mac',
-            },
-            execution_mode=builder_spec.TEST,
-            parent_buildername='GPU FYI Mac arm64 Builder',
-            simulation_platform='linux',
-            serialize_tests=True,
         ),
     'Mac FYI ASAN (Intel)':
         _chromium_gpu_fyi_spec(
