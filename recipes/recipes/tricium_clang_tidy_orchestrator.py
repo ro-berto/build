@@ -97,13 +97,43 @@ def _should_skip_linting(api):
   return commit_message.startswith('Revert')
 
 
-def _note_observed_on(platforms, all_platforms, lint):
-  backquote = lambda s: '`%s`' % s
+def _build_textual_bot_list(bots, conjunction):
+  """Converts a list of bots into a human readable string listing them."""
+  bots = ['`%s`' % x for x in bots]
+  if not bots:
+    return ''
 
-  msg = 'Lint observed on ' + ', '.join(backquote(x) for x in platforms)
+  if len(bots) == 1:
+    return bots[0]
+
+  if len(bots) == 2:
+    return ' '.join((bots[0], conjunction, bots[1]))
+
+  return '%s, %s %s' % (', '.join(bots[:-1]), conjunction, bots[-1])
+
+
+def _note_observed_on(platforms, all_platforms, lint):
+  """Returns a lint noting where the given lint was observed.
+
+  >>> _note_observed_on(['foo'], ['foo', 'bar'], some_lint)
+  some_lint.replace(
+      message=lint.message + '\n\n(Lint observed on foo, but not bar)')
+  >>> _note_observed_on(['foo', 'bar'], ['foo', 'bar'], some_lint)
+  some_lint.replace(
+      message=lint.message + '\n\n(Lint observed on foo and bar)')
+  >>> _note_observed_on(['foo'], ['foo', 'bar', 'baz'], some_lint)
+  some_lint.replace(
+      message=lint.message + '\n\n(Lint observed on foo, but not bar or baz)')
+  """
+  msg = 'Lint observed on ' + _build_textual_bot_list(
+      platforms,
+      conjunction='and',
+  )
   platforms_set = set(platforms)
-  not_observed_on = ', '.join(
-      backquote(p) for p in all_platforms if p not in platforms_set)
+  not_observed_on = _build_textual_bot_list(
+      (p for p in all_platforms if p not in platforms_set),
+      conjunction='or',
+  )
   if not_observed_on:
     msg += ', but not on ' + not_observed_on
 
