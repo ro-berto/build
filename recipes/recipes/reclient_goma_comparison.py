@@ -97,6 +97,22 @@ COMPARISON_BUILDERS = freeze({
         'simulation_platform': 'linux',
         'targets': ['chrome'],
     },
+    'Comparison ios (reclient)': {
+        'chromium_config': 'chromium',
+        'gclient_config': 'chromium',
+        'chromium_apply_config': [
+            'mb', 'mac_toolchain', 'goma_enable_cache_silo',
+            'goma_large_cache_file'
+        ],
+        'gclient_apply_config': ['enable_reclient', 'reclient_test'],
+        'platform': 'mac',
+        'chromium_config_kwargs': {
+            'TARGET_BITS': 64,
+            'TARGET_PLATFORM': 'ios',
+        },
+        'simulation_platform': 'mac',
+        'targets': ['all'],
+    },
 })
 
 
