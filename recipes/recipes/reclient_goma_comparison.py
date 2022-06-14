@@ -155,6 +155,11 @@ def RunSteps(api):
   if raw_result.status != common_pb.SUCCESS:
     return raw_result
 
+  api.file.move(
+      'Move %s to %s.2' % (api.chromium.output_dir, api.chromium.output_dir),
+      api.chromium.output_dir,
+      api.path.abs_to_path(str(api.chromium.output_dir).rstrip('\\/') + '.2'))
+
   # Do the second build and move the build artifact to the temp directory.
   build_dir, target = None, None
 
