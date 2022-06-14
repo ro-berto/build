@@ -4,7 +4,7 @@
 
 import itertools
 import json
-from typing import Any, Dict, List, NamedTuple, Tuple
+from typing import Any, Dict, List, NamedTuple, Optional, Tuple
 
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
 from recipe_engine import post_process
@@ -36,21 +36,92 @@ _CHILD_BUILDERS = (
     #'win10-clang-tidy-rel',
 )
 
-# This is a comment emitted by tricium. The intent is for it to have all of the
-# information that can possibly be passed to api.tricium.add_comment.
-_TriciumComment = NamedTuple(
-    '_TriciumComment',
+# Go's protobuf package outputs camelCase JSON, whereas Python prefers
+# snake_case; handle that transformation here.
+_TRICIUM_KEY_TRANSFORMATIONS = {
+    'startLine': 'start_line',
+    'endLine': 'end_line',
+    'startChar': 'start_char',
+    'endChar': 'end_char',
+}
+
+# A singular `Replacement` emitted by Tricium.
+_TriciumReplacement = NamedTuple(
+    '_TriciumReplacement',
     (
-        ('category', str),
-        ('message', str),
         ('path', str),
+        ('replacement', str),
         ('start_line', int),
         ('end_line', int),
         ('start_char', int),
         ('end_char', int),
-        ('suggestions', Dict[str, Any]),
     ),
 )
+
+
+class _TriciumSuggestion(
+    NamedTuple(
+        '_TriciumSuggestion',
+        (
+            ('description', str),
+            ('replacements', Tuple[_TriciumReplacement]),
+        ),
+    )):
+  """A `suggestion` emitted by Tricium."""
+
+  def as_json_dict(self):
+    """Converts `self` to a dict that can be serialized as JSON."""
+    as_dict = self._asdict()
+    as_dict['replacements'] = [x._asdict() for x in as_dict['replacements']]
+    return as_dict
+
+
+class _TriciumComment(
+    NamedTuple(
+        '_TriciumComment',
+        (
+            ('category', str),
+            ('message', str),
+            ('path', str),
+            ('start_line', int),
+            ('end_line', int),
+            ('start_char', int),
+            ('end_char', int),
+            ('suggestions', Tuple[_TriciumSuggestion]),
+        ),
+    )):
+  """A full comment emitted by tricium.
+
+  The intent is for it to have all of the information that can possibly be
+  passed to api.tricium.add_comment.
+  """
+
+  def as_json_dict(self):
+    """Converts `self` to a dict that can be serialized as JSON."""
+    as_dict = self._asdict()
+    as_dict['suggestions'] = [x.as_json_dict() for x in as_dict['suggestions']]
+    return as_dict
+
+
+def _parse_tricium_replacement(replacement):
+  # Start with defaults, and update below to overwrite them as necessary.
+  full_replacement = {
+      'replacement': '',
+      'start_line': 0,
+      'end_line': 0,
+      'start_char': 0,
+      'end_char': 0,
+  }
+  for k, v in replacement.items():
+    full_replacement[_TRICIUM_KEY_TRANSFORMATIONS.get(k, k)] = v
+  return _TriciumReplacement(**full_replacement)
+
+
+def _parse_tricium_suggestion_with_defaults(description='', replacements=()):
+  return _TriciumSuggestion(
+      description=description,
+      replacements=tuple(_parse_tricium_replacement(x) for x in replacements),
+  )
 
 
 def _build_tricium_comment_with_defaults(category,
@@ -66,18 +137,15 @@ def _build_tricium_comment_with_defaults(category,
 
 
 def _parse_comments_from_json_list(json_list):
-  # Go's protobuf package outputs camelCase JSON, whereas Python prefers
-  # snake_case; handle that transformation here.
-  key_transformations = {
-      'startLine': 'start_line',
-      'endLine': 'end_line',
-      'startChar': 'start_char',
-      'endChar': 'end_char',
-  }
-
   results = []
+  # Use `**s` in cases below so we crash if unknown keys are found. That
+  # indicates that this code should be updated to deal with the new keys.
   for x in json_list:
-    x = {key_transformations.get(k, k): v for k, v in x.items()}
+    x = {_TRICIUM_KEY_TRANSFORMATIONS.get(k, k): v for k, v in x.items()}
+    if 'suggestions' in x:
+      x['suggestions'] = tuple(
+          _parse_tricium_suggestion_with_defaults(**s)
+          for s in x['suggestions'])
     results.append(_build_tricium_comment_with_defaults(**x))
   return results
 
@@ -207,7 +275,7 @@ def RunSteps(api):
 
   with api.step.nest('emit comments'):
     for lint in tricium_lints:
-      api.tricium.add_comment(**lint._asdict())
+      api.tricium.add_comment(**lint.as_json_dict())
     api.tricium.write_comments()
 
   if all_failures:
@@ -287,7 +355,7 @@ def GenTests(api):
         n = builder_indices[builder_name]
         tricium_section = {}
         if comments:
-          tricium_section['comments'] = [x._asdict() for x in comments]
+          tricium_section['comments'] = [x.as_json_dict() for x in comments]
         build_output[n].output.properties['tricium'] = api.json.dumps(
             tricium_section)
 
@@ -342,14 +410,17 @@ def GenTests(api):
       category='some other category',
       message='some other message',
       path='foo2.cpp',
-      suggestions=[{
-          'description':
-              'foo',
-          'replacements': [{
-              'path': '/path/to/foo.cc',
-              'replacement': 'replaced',
-          }],
-      }],
+      suggestions=(_TriciumSuggestion(
+          description='foo',
+          replacements=(_TriciumReplacement(
+              path='/path/to/foo.cc',
+              replacement='replaced',
+              start_line=0,
+              end_line=0,
+              start_char=0,
+              end_char=0,
+          ),),
+      ),),
   )
   yield (test(
       'multibot_multicomment_tidy_output_works',
@@ -363,6 +434,59 @@ def GenTests(api):
       ) + api.post_process(
           _tricium_has_comment,
           _note_observed_on([_CHILD_BUILDERS[1]], _CHILD_BUILDERS, comment1),
+      ) + api.post_process(post_process.DropExpectation))
+
+  comment1_with_new_replacement = comment1._replace(
+      suggestions=(_TriciumSuggestion(
+          description='foo',
+          replacements=(_TriciumReplacement(
+              path='/path/to/foo.cc',
+              replacement='replaced',
+              start_line=0,
+              end_line=0,
+              start_char=0,
+              end_char=1,
+          ),),
+      ),),)
+
+  # crbug.com/1336328
+  yield (test(
+      'messages_with_replacements_must_sort',
+      tricium_data={
+          _CHILD_BUILDERS[0]: [comment1],
+          _CHILD_BUILDERS[1]: [comment1, comment1_with_new_replacement],
+      }) + api.post_process(post_process.StatusSuccess) + api.post_process(
+          _tricium_has_comment,
+          _note_observed_on([_CHILD_BUILDERS[0], _CHILD_BUILDERS[1]],
+                            _CHILD_BUILDERS, comment1),
+      ) + api.post_process(
+          _tricium_has_comment,
+          _note_observed_on([_CHILD_BUILDERS[1]], _CHILD_BUILDERS,
+                            comment1_with_new_replacement),
+      ) + api.post_process(post_process.DropExpectation))
+
+  comment1_with_empty_replacement = comment1._replace(
+      suggestions=(_TriciumSuggestion(
+          description='foo',
+          replacements=(_TriciumReplacement(
+              path='/path/to/foo.cc',
+              replacement='',
+              start_line=0,
+              end_line=0,
+              start_char=0,
+              end_char=1,
+          ),),
+      ),),)
+
+  yield (test(
+      'messages_with_empty_replacements_must_work',
+      tricium_data={
+          _CHILD_BUILDERS[0]: [comment1_with_empty_replacement],
+          _CHILD_BUILDERS[1]: [comment1_with_empty_replacement],
+      }) + api.post_process(post_process.StatusSuccess) + api.post_process(
+          _tricium_has_comment,
+          _note_observed_on([_CHILD_BUILDERS[0], _CHILD_BUILDERS[1]],
+                            _CHILD_BUILDERS, comment1_with_empty_replacement),
       ) + api.post_process(post_process.DropExpectation))
 
   step_failure = 'FAILURE'
