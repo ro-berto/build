@@ -11,7 +11,6 @@ per-file catapult.py=file:catapult.expected/OWNERS
 per-file celab.py=file:celab.expected/OWNERS
 per-file chromium.py=gbeaty@chromium.org
 per-file chromium.py=iannucci@chromium.org
-per-file chromium.py=martiniss@chromium.org
 per-file chromium_3pp.py=hypan@google.com
 per-file chromium_clang_coverage_tot.py=file:chromium_clang_coverage_tot.expected/OWNERS
 per-file chromium_codesearch_initiator.proto=file:chromium_codesearch_initiator.expected/OWNERS
@@ -24,7 +23,6 @@ per-file chromium_integration.py=tmrts@chromium.org
 per-file chromium_libfuzzer.py=file:chromium_libfuzzer.expected/OWNERS
 per-file chromium_trybot.py=gbeaty@chromium.org
 per-file chromium_trybot.py=iannucci@chromium.org
-per-file chromium_trybot.py=martiniss@chromium.org
 per-file chromium_trybot.py=tmrts@chromium.org
 per-file cronet.py=file:cronet.expected/OWNERS
 per-file dawn.py=file:dawn.expected/OWNERS
@@ -45,4 +43,3 @@ per-file v8.py=file:v8.expected/OWNERS
 
 # Generic owners, if the file isn't listed above.
 gbeaty@chromium.org
-martiniss@chromium.org
