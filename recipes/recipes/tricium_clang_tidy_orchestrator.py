@@ -181,7 +181,7 @@ def RunSteps(api):
     api.tricium.write_comments()
 
   if all_failures:
-    raise api.step.InfraFailure('all sub-linting tasks failed')
+    raise api.step.StepFailure('all sub-linting tasks failed')
 
 
 def _get_tricium_comments(steps):
@@ -335,11 +335,11 @@ def GenTests(api):
           _note_observed_on([_CHILD_BUILDERS[1]], _CHILD_BUILDERS, comment1),
       ) + api.post_process(post_process.DropExpectation))
 
-  infra_failure = 'INFRA_FAILURE'
+  step_failure = 'FAILURE'
   yield (test(
       'single_bot_failure',
       bot_status_overrides={
-          _CHILD_BUILDERS[0]: infra_failure,
+          _CHILD_BUILDERS[0]: step_failure,
       },
       tricium_data={
           _CHILD_BUILDERS[0]: [comment0],
@@ -355,10 +355,10 @@ def GenTests(api):
   yield (test(
       'all_bot_failure',
       bot_status_overrides={
-          builder: infra_failure for builder in _CHILD_BUILDERS
+          builder: step_failure for builder in _CHILD_BUILDERS
       },
       tricium_data={builder: [comment0] for builder in _CHILD_BUILDERS}) +
-         api.post_process(post_process.StatusException) +
+         api.post_process(post_process.StatusFailure) +
          api.post_process(post_process.StepWarning, 'schedule tidy builds') +
          api.post_process(
              _tricium_has_comment,
