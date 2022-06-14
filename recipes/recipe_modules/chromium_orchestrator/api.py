@@ -29,7 +29,9 @@ class CompilatorOutputProps(object):
     got_revisions: Dict containing revisions checked out for src and other deps
     affected_files: List containing paths (str) of files affected by the patch
     deleted_files: List containing paths (str) of files deleted by the patch
-    src_side_deps_digest: CAS digest hash (string) for downloading src-side deps
+    src_side_deps_digest: CAS digest hash (str) for downloading src-side deps
+    src_side_test_spec_dir: Path (str) to downloaded src-side directory that
+      contains test specs, relative to the root of the downloaded src-side deps
   """
 
   swarming_props = attrib(mapping[str, ...])
@@ -37,6 +39,7 @@ class CompilatorOutputProps(object):
   affected_files = attrib(sequence[str], default=None)
   deleted_files = attrib(sequence[str], default=None)
   src_side_deps_digest = attrib(str, default=None)
+  src_side_test_spec_dir = attrib(str, default=None)
 
 
 class ChromiumOrchestratorApi(recipe_api.RecipeApi):
@@ -224,7 +227,12 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
 
       affected_files = comp_output.affected_files
       targets_config = self.m.chromium_tests.create_targets_config(
-          builder_config, comp_output.got_revisions, isolated_tests_only=True)
+          builder_config,
+          comp_output.got_revisions,
+          self.m.chromium_checkout.src_dir,
+          source_side_spec_dir=self.m.chromium_checkout.src_dir.join(
+              comp_output.src_side_test_spec_dir),
+          isolated_tests_only=True)
       self.check_for_non_swarmed_isolated_tests(targets_config.all_tests)
       # This is used to set build properties on swarming tasks
       self.m.chromium.set_build_properties(comp_output.got_revisions)
@@ -319,7 +327,9 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
     # Exit without retry without patch if there were invalid tests or
     # (without patch) should be skipped
     if invalid_test_suites or self.m.chromium_tests.should_skip_without_patch(
-        builder_config, affected_files):
+        builder_config, affected_files,
+        self.m.chromium_checkout.src_dir.join(
+            comp_output.src_side_test_spec_dir)):
       self.handle_failed_with_patch_tests(tests, failing_test_suites)
 
       summary_markdown = self.m.chromium_tests._format_unrecoverable_failures(
@@ -517,8 +527,10 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
         deleted_files = output_props['deleted_files']
 
       src_side_deps_digest = None
+      src_side_test_spec_dir = None
       if 'src_side_deps_digest' in output_props:
         src_side_deps_digest = output_props['src_side_deps_digest']
+        src_side_test_spec_dir = output_props['src_side_test_spec_dir']
 
       comp_output = CompilatorOutputProps(
           swarming_props=MessageToDict(output_props[swarming_prop_key]),
@@ -526,6 +538,7 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
           affected_files=affected_files,
           deleted_files=deleted_files,
           src_side_deps_digest=src_side_deps_digest,
+          src_side_test_spec_dir=src_side_test_spec_dir,
       )
       return comp_output, None
 

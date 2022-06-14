@@ -11,6 +11,7 @@ PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
     'chromium',
+    'chromium_checkout',
     'chromium_tests',
     'chromium_tests_builder_config',
     'recipe_engine/assertions',
@@ -21,6 +22,7 @@ DEPS = [
 PROPERTIES = {
     'isolated_tests_only': Property(default=False),
     'expected_tests': Property(default=[]),
+    'source_side_spec_dir': Property(default=None),
 }
 
 FAKE_TEST_SPEC = {
@@ -71,7 +73,7 @@ FAKE_TEST_SPEC = {
 }
 
 
-def RunSteps(api, isolated_tests_only, expected_tests):
+def RunSteps(api, isolated_tests_only, expected_tests, source_side_spec_dir):
   _, builder_config = api.chromium_tests_builder_config.lookup_builder()
   api.chromium_tests.configure_build(builder_config)
   targets_config = api.chromium_tests.create_targets_config(
@@ -85,6 +87,8 @@ def RunSteps(api, isolated_tests_only, expected_tests):
           "got_webrtc_revision": "a19f0c7409f1dc4316bb6a6d9a97d3261539a84d",
           "got_webrtc_revision_cp": "refs/heads/main@{#36539}",
       },
+      api.chromium_checkout.src_dir,
+      source_side_spec_dir=source_side_spec_dir,
       isolated_tests_only=isolated_tests_only)
   tests = []
   for t in targets_config.all_tests:
@@ -127,6 +131,38 @@ def GenTests(api):
       api.chromium.try_build(
           builder_group='fake-try-group',
           builder='fake-try-builder',
+      ),
+      api.post_process(
+          post_process.StepTextContains,
+          'read test spec (fake-group.json)',
+          ['testing/buildbot'],
+      ),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'source_side_spec_dir',
+      ctbc_properties(),
+      api.properties(
+          isolated_tests_only=False,
+          expected_tests=[
+              'angle_unittests', 'angle_unittests_no_swarm', 'browser_tests',
+              'browser_tests_no_swarm', 'android_webview_junit_tests',
+              'check_static_initializers'
+          ],
+          source_side_spec_dir=api.chromium_checkout.src_dir.join(
+              'infra/specs'),
+      ),
+      fake_test_spec(),
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
+      ),
+      api.post_process(
+          post_process.StepTextContains,
+          'read test spec (fake-group.json)',
+          ['infra/specs'],
       ),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),

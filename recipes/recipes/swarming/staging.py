@@ -66,7 +66,8 @@ def RunSteps(api):
 
   targets_config = (
       api.chromium_tests.create_targets_config(
-          builder_config, update_step.presentation.properties))
+          builder_config, update_step.presentation.properties,
+          api.chromium_checkout.src_dir))
 
   # Build all supported tests.
   api.chromium.ensure_goma()

@@ -21,6 +21,7 @@ DEPS = [
     'chromium_tests_builder_config',
     'chromium_swarming',
     'depot_tools/tryserver',
+    'recipe_engine/path',
     'recipe_engine/step',
     'webrtc',
 ]
@@ -33,7 +34,7 @@ def RunSteps(api):
 
   update_step = api.chromium_checkout.ensure_checkout()
   targets_config = api.chromium_tests.create_targets_config(
-      builder_config, update_step.presentation.properties)
+      builder_config, update_step.presentation.properties, api.path['checkout'])
 
   api.chromium_swarming.configure_swarming(
       'webrtc', precommit=api.tryserver.is_tryserver)
