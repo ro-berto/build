@@ -207,6 +207,50 @@
   },
   {
     "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "RECIPE_REPO[depot_tools]/.cipd_bin",
+      "-ensure-file",
+      "RECIPE_REPO[depot_tools]/cipd_manifest.txt",
+      "-max-threads",
+      "0",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "GOCACHE": "[CACHE]/gocache",
+      "GOFLAGS": "-mod=readonly",
+      "GOPATH": "[CACHE]/gopath",
+      "GOROOT": "[START_DIR]/boringssl/util/bot/golang"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/boringssl/util/bot/golang/bin"
+      ]
+    },
+    "luci_context": {
+      "realm": {
+        "name": "boringssl:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "ensure depot_tools/.cipd_bin",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {}@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "[START_DIR]/boringssl/util/bot/cmake-linux64/bin/cmake",
       "-GNinja",
       "-DASAN=1",
