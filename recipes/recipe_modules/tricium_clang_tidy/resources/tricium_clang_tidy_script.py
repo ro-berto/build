@@ -1314,6 +1314,14 @@ def _convert_tidy_output_json_obj(base_path: str,
   }
 
 
+def _init_logging(debug: bool):
+  """Sets up logging."""
+  logging.basicConfig(
+      format='%(asctime)s: %(levelname)s: %(filename)s@%(lineno)d: %(message)s',
+      level=logging.DEBUG if debug else logging.INFO,
+  )
+
+
 def main():
   parser = argparse.ArgumentParser(
       description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -1372,6 +1380,8 @@ def main():
       'script will expect compile_commands to use clang-cl arguments.')
   args = parser.parse_args()
 
+  _init_logging(args.debug)
+
   base_path = os.path.realpath(args.base_path)
   if not os.path.isfile(os.path.join(base_path, 'BUILD.gn')):
     parser.error('base_path should be pointing to a gn build root. Did you '
@@ -1381,11 +1391,6 @@ def main():
   # emulate that here.
   if bool(args.src_file) == args.all:
     parser.error('Please either specify files to lint, or pass --all')
-
-  logging.basicConfig(
-      format='%(asctime)s: %(levelname)s: %(filename)s@%(lineno)d: %(message)s',
-      level=logging.DEBUG if args.debug else logging.INFO,
-  )
 
   out_dir = os.path.abspath(args.out_dir)
   findings_file = os.path.abspath(args.findings_file)

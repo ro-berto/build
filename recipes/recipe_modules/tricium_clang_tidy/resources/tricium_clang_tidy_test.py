@@ -462,6 +462,7 @@ class Tests(unittest.TestCase):
             tidy_invocation_dir='/tidy'), tidy_diags)
 
   def test_generate_tidy_actions_only_generates_up_to_n_actions_per_src(self):
+    self._silence_logs()
 
     def parse_ninja_deps(_):
       return [
@@ -531,6 +532,7 @@ class Tests(unittest.TestCase):
       self.assertEqual(actions, expected_actions)
 
   def test_generate_tidy_actions_works_with_cc_files(self):
+    self._silence_logs()
 
     def run_ninja(out_dir, phony_targets, object_targets):
       self.assertEqual(out_dir, '/out')
@@ -584,6 +586,7 @@ class Tests(unittest.TestCase):
         })
 
   def test_generate_tidy_actions_includes_headers_in_output(self):
+    self._silence_logs()
 
     def run_ninja(out_dir, phony_targets, object_targets):
       self.assertEqual(out_dir, '/out')
@@ -681,6 +684,7 @@ class Tests(unittest.TestCase):
         })
 
   def test_generate_tidy_actions_functions_with_no_src_file_filter(self):
+    self._silence_logs()
 
     def run_ninja(out_dir, phony_targets, object_targets):
       self.assertEqual(out_dir, '/out')
@@ -1462,4 +1466,7 @@ class Tests(unittest.TestCase):
 
 
 if __name__ == '__main__':
+  # Init logging here so users can remove `self._silence_logs()` from any of
+  # the tests to get more verbose output.
+  tidy._init_logging(debug=True)
   unittest.main()
