@@ -371,6 +371,7 @@ class TestSpec(TestSpecBase):
   # TODO(crbug/1106965): remove test_id_prefix, if deriver gets turned down.
   test_id_prefix = attrib(str, default=None)
   check_flakiness_for_new_tests = attrib(bool, default=True)
+  results_handler_name = attrib(str, default=None)
 
   @property
   def name(self):

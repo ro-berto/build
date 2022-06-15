@@ -766,8 +766,10 @@ class TestUtilsApi(recipe_api.RecipeApi):
     ignored_flakes = sorted(ignored_flakes)
 
     suffix = 'test results summary'
-    if test_suite.name == 'blink_web_tests':
-      dest_file = '%s.json' % suffix.replace(' ', '_')
+    # There can be multiple blink_web_tests or blink_wpt_tests steps. Archive
+    # the summaries to different files.
+    if test_suite.spec.results_handler_name == 'layout tests':
+      dest_file = '%s_%s.json' % (test_suite.name, suffix.replace(' ', '_'))
       self._archive_test_results_summary(
           {
               'failures': new_failures,

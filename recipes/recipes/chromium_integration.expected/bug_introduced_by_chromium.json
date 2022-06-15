@@ -4511,7 +4511,7 @@
       "--gs-bucket",
       "gs://chromium-layout-test-archives",
       "--dest-filename",
-      "test_results_summary.json",
+      "blink_web_tests_test_results_summary.json",
       "--slave-utils-gsutil-py-path",
       "RECIPE_REPO[depot_tools]/gsutil.py"
     ],
