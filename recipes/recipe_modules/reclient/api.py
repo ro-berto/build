@@ -539,33 +539,42 @@ class ReclientApi(recipe_api.RecipeApi):
     files = self.m.file.listdir(
         'list reclient log directory',
         reclient_log_dir,
-        test_data=['reproxy.INFO', 'rewrapper.INFO'])
+        test_data=['reproxy.INFO', 'rewrapper.INFO', 'reproxy.rpl'])
     log_files = []
-    log_levels = ['INFO', 'WARNING', 'ERROR', 'FATAL', 'log']
-    for path in files:
-      full_file_name, file_name = str(path), path.pieces[-1]
-      if any(x in full_file_name for x in log_levels):
-        if not file_name.startswith('rewrapper'):
-          log_files.append(full_file_name)
-    with io.BytesIO() as tar_out:
-      with tarfile.open(fileobj=tar_out, mode='w:gz') as tf:
-        for log in log_files:
-          # reclient glog files are generally <100KB, so safe to load in memory.
-          data_txt = self.m.file.read_text(
-              'read %s' % log, log, test_data='fake', include_log=False)
-          with contextlib.closing(io.BytesIO(data_txt.encode())) as fobj:
-            tarinfo = tarfile.TarInfo(os.path.basename(log))
-            tarinfo.size = len(fobj.getvalue())
-            tarinfo.mtime = time.time()
-            tf.addfile(tarinfo, fileobj=fobj)
-      tar_data = tar_out.getvalue()
-      if self._test_data.enabled:
-        tar_data = 'fake tar contents'
-      self.m.file.write_raw('create reclient log tar', tar_path, tar_data)
-    gs_filename = '%s/reclient/%s' % (
-        gzip_name_maker.timestamp.date().strftime('%Y/%m/%d'), tar_filename)
-    self.m.gsutil.upload(tar_path, _GS_BUCKET, gs_filename,
-                         name='upload reclient logs')
+    log_suffixes = ['INFO', 'WARNING', 'ERROR', 'FATAL', 'log', 'rpi']
+    with self.m.step.nest('upload logs'):
+      for path in files:
+        full_file_name, file_name = str(path), path.pieces[-1]
+        if any(file_name.endswith(x) for x in log_suffixes):
+          if not file_name.startswith('rewrapper'):
+            log_files.append(full_file_name)
+      with io.BytesIO() as tar_out:
+        with tarfile.open(fileobj=tar_out, mode='w:gz') as tf:
+          for log in log_files:
+            # reclient glog files are generally <100KB, safe to load in memory.
+            data_txt = self.m.file.read_text(
+                'read %s' % log, log, test_data='fake', include_log=False)
+            filename = '%s/reclient/%s' % (
+                gzip_name_maker.timestamp.date().strftime('%Y/%m/%d'),
+                os.path.basename(log))
+            self.m.gsutil.upload(
+                log,
+                _GS_BUCKET,
+                filename,
+                name='upload %s' % (os.path.basename(log)))
+            with contextlib.closing(io.BytesIO(data_txt.encode())) as fobj:
+              tarinfo = tarfile.TarInfo(os.path.basename(log))
+              tarinfo.size = len(fobj.getvalue())
+              tarinfo.mtime = time.time()
+              tf.addfile(tarinfo, fileobj=fobj)
+        tar_data = tar_out.getvalue()
+        if self._test_data.enabled:
+          tar_data = 'fake tar contents'
+        self.m.file.write_raw('create reclient log tar', tar_path, tar_data)
+      gs_filename = '%s/reclient/%s' % (
+          gzip_name_maker.timestamp.date().strftime('%Y/%m/%d'), tar_filename)
+      self.m.gsutil.upload(
+          tar_path, _GS_BUCKET, gs_filename, name='upload reclient logs')
 
   @property
   def _cloudtail_exe_path(self):
