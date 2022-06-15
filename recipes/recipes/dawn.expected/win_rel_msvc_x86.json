@@ -212,6 +212,35 @@
   },
   {
     "cmd": [
+      "vpython3",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "RECIPE_REPO[depot_tools]\\.cipd_bin\\ninja.exe",
+      "RECIPE_REPO[depot_tools]\\ninja.exe"
+    ],
+    "env": {
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "dawn:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "copy depot_tools/.cipd_bin/ninja.exe to depot_tools/"
+  },
+  {
+    "cmd": [
       "RECIPE_REPO[depot_tools]\\ninja.exe",
       "-C",
       "[CACHE]\\builder\\dawn\\out\\release_x86_static"

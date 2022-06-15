@@ -203,6 +203,32 @@
   },
   {
     "cmd": [
+      "vpython3",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "RECIPE_REPO[depot_tools]\\.cipd_bin\\ninja.exe",
+      "RECIPE_REPO[depot_tools]\\ninja.exe"
+    ],
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "pdfium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "copy depot_tools/.cipd_bin/ninja.exe to depot_tools/"
+  },
+  {
+    "cmd": [
       "RECIPE_REPO[depot_tools]\\ninja.exe",
       "-C",
       "[CACHE]\\builder\\pdfium\\out\\debug_xfa_v8_msvc",
