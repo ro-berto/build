@@ -1,12 +1,13 @@
 # Copyright 2022 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
-"""A recipe for picking and tagging a stable manifest snapshot for ChromiumOS.
+"""Initialize ChromiumOS codesearch builders to create kzips.
 
-This recipe initializes codesearch builders to create kzips.
-
-TODO(crbug.com/1284439): Use snapshot to sync instead of ToT.
+Checks out chromiumos manifest repo and uses the latest snapshot commit hash
+to initialize chromiumos codesearch builders.
 """
+
+from recipe_engine.post_process import LogContains
 
 PYTHON_VERSION_COMPATIBILITY = "PY3"
 
@@ -29,53 +30,54 @@ BUILDERS = [
     'codesearch-gen-chromiumos-amd64-generic',
 ]
 
-SOURCE_REPO = 'https://chromium.googlesource.com/chromiumos/codesearch'
+CODESEARCH_REPO = 'https://chromium.googlesource.com/chromiumos/codesearch'
+MANIFEST_REPO = 'https://chromium.googlesource.com/chromiumos/manifest'
 
 
-def RunSteps(api):
-  env = {
-      # Turn off the low speed limit, since checkout will be long.
-      'GIT_HTTP_LOW_SPEED_LIMIT': '0',
-      'GIT_HTTP_LOW_SPEED_TIME': '0',
-  }
+def latestRefInfo(api, clone_dir, repo, branch=None):
+  """Return the hash and timestamp of the latest commit on a branch."""
+  clone_base_dir = api.context.cwd or api.path['cache'].join('builder')
+  if not api.file.glob_paths('Check for existing checkout', clone_base_dir,
+                             clone_dir):
+    clone_args = ['--depth=1']
+    if branch:
+      clone_args.extend(['-b', branch])
+    clone_args.extend([
+        repo,
+        clone_dir,
+    ])
 
-  checkout_dir = api.path['cache'].join('builder')
-  if not api.file.glob_paths('Check for existing checkout', checkout_dir,
-                             'src'):
-    with api.context(cwd=checkout_dir, env=env):
-      api.git('clone', '--progress', SOURCE_REPO, 'src')
+    api.git('clone', *clone_args, name='clone %s branch of %s' % (branch, repo))
 
-  api.path['checkout'] = checkout_dir.join('src')
-  if not api.file.glob_paths('Check for existing checkout', checkout_dir,
-                             'chromiumos_codesearch'):
-    with api.context(cwd=checkout_dir):
-      api.git(
-          'clone',
-          '--depth=1',
-          SOURCE_REPO,
-          'chromiumos_codesearch',
-          name='clone mirror repo')
-
-  with api.context(cwd=checkout_dir.join('chromiumos_codesearch')):
+  with api.context(cwd=clone_base_dir.join(clone_dir)):
     api.git('fetch')
 
-    mirror_hash = api.git(
-        'rev-parse',
-        'HEAD',
-        name='fetch mirror hash',
+    commit_hash = api.git(
+        'rev-parse', 'HEAD', name='fetch hash',
         stdout=api.raw_io.output_text()).stdout.strip()
-    mirror_unix_timestamp = api.git(
+    timestamp = api.git(
         'log',
         '-1',
         '--format=%ct',
         'HEAD',
-        name='fetch mirror timestamp',
+        name='fetch timestamp',
         stdout=api.raw_io.output_text()).stdout.strip()
+
+    return commit_hash, timestamp
+
+
+def RunSteps(api):
+  mirror_hash, mirror_unix_timestamp = latestRefInfo(api,
+                                                     'chromiumos_codesearch',
+                                                     CODESEARCH_REPO)
+  manifest_hash, _ = latestRefInfo(api, 'chromiumos_manifest', MANIFEST_REPO,
+                                   'stable')
 
   # Trigger the chromiumos_codesearch builders.
   properties = {
       'codesearch_mirror_revision': mirror_hash,
-      'codesearch_mirror_revision_timestamp': mirror_unix_timestamp
+      'codesearch_mirror_revision_timestamp': mirror_unix_timestamp,
+      'manifest_hash': manifest_hash,
   }
 
   api.scheduler.emit_trigger(
@@ -88,8 +90,7 @@ def RunSteps(api):
 def GenTests(api):
   yield api.test(
       'basic',
-      api.step_data('fetch mirror hash',
-                    api.raw_io.stream_output_text('a' * 40, stream='stdout')),
-      api.step_data('fetch mirror timestamp',
-                    api.raw_io.stream_output_text('100', stream='stdout')),
-  )
+      api.step_data('fetch hash',
+                    api.raw_io.stream_output_text('d3adb33f', stream='stdout')),
+      api.post_process(LogContains, 'luci-scheduler.EmitTriggers', 'input',
+                       ['d3adb33f']))

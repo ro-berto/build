@@ -71,6 +71,9 @@ PROPERTIES = {
             help='The commit timestamp of the revision for codesearch to use, '
             'in seconds since the UNIX epoch.',
             default=None),
+    'manifest_hash':
+        Property(
+            kind=str, help='The snapshot revision to sync to.', default=None),
 }
 
 
@@ -88,7 +91,7 @@ def gclient_config(api):
 
 
 def RunSteps(api, codesearch_mirror_revision,
-             codesearch_mirror_revision_timestamp):
+             codesearch_mirror_revision_timestamp, manifest_hash):
   builder = api.buildbucket.build.builder.builder
   bot_config = SPEC.get('builders', {}).get(builder)
   assert bot_config is not None, ('Could not find builder %s in SPEC' % builder)
@@ -115,7 +118,7 @@ def RunSteps(api, codesearch_mirror_revision,
   with api.context(cwd=chromiumos_dir, env={'DEPOT_TOOLS_UPDATE': 0}):
     repo = depot_tools_dir.join('repo')
     api.step('repo init', [
-        repo, 'init', '-b', 'stable', '-u',
+        repo, 'init', '-b', manifest_hash, '-u',
         'https://chromium.googlesource.com/chromiumos/manifest.git'
     ])
     api.step('repo sync', [repo, 'sync', '-j6'])
@@ -212,16 +215,18 @@ def GenTests(api):
       api.step_data('repo init'),
       api.properties(
           codesearch_mirror_revision='a' * 40,
-          codesearch_mirror_revision_timestamp='1531887759'))
+          codesearch_mirror_revision_timestamp='1531887759',
+          manifest_hash='d3adb33f'))
 
   yield api.test(
-      'repo sync to stable',
+      'repo sync to manifest_hash',
       api.buildbucket.generic_build(
           builder='codesearch-gen-chromiumos-amd64-generic'),
       api.step_data('repo init'), api.step_data('repo sync'),
       api.properties(
           codesearch_mirror_revision='a' * 40,
-          codesearch_mirror_revision_timestamp='1531887759'),
-      api.post_process(StepCommandContains, 'repo init', ['-b', 'stable']),
+          codesearch_mirror_revision_timestamp='1531887759',
+          manifest_hash='d3adb33f'),
+      api.post_process(StepCommandContains, 'repo init', ['-b', 'd3adb33f']),
       api.post_process(StepCommandRE, 'repo sync', ['.*repo', 'sync', '-j6']),
       api.post_process(DropExpectation))

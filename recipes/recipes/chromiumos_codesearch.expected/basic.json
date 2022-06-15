@@ -113,7 +113,7 @@
       "[CACHE]/builder/depot_tools/repo",
       "init",
       "-b",
-      "stable",
+      "d3adb33f",
       "-u",
       "https://chromium.googlesource.com/chromiumos/manifest.git"
     ],

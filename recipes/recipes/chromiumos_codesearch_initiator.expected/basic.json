@@ -8,43 +8,10 @@
       "/path/to/tmp/json",
       "glob",
       "[CACHE]/builder",
-      "src"
-    ],
-    "infra_step": true,
-    "name": "Check for existing checkout",
-    "~followup_annotations": [
-      "@@@STEP_LOG_END@glob@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "clone",
-      "--progress",
-      "https://chromium.googlesource.com/chromiumos/codesearch",
-      "src"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "GIT_HTTP_LOW_SPEED_LIMIT": "0",
-      "GIT_HTTP_LOW_SPEED_TIME": "0"
-    },
-    "infra_step": true,
-    "name": "git clone"
-  },
-  {
-    "cmd": [
-      "vpython3",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "glob",
-      "[CACHE]/builder",
       "chromiumos_codesearch"
     ],
     "infra_step": true,
-    "name": "Check for existing checkout (2)",
+    "name": "Check for existing checkout",
     "~followup_annotations": [
       "@@@STEP_LOG_END@glob@@@"
     ]
@@ -57,9 +24,9 @@
       "https://chromium.googlesource.com/chromiumos/codesearch",
       "chromiumos_codesearch"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "None",
     "infra_step": true,
-    "name": "clone mirror repo"
+    "name": "clone None branch of https://chromium.googlesource.com/chromiumos/codesearch"
   },
   {
     "cmd": [
@@ -78,7 +45,7 @@
     ],
     "cwd": "[CACHE]/builder/chromiumos_codesearch",
     "infra_step": true,
-    "name": "fetch mirror hash"
+    "name": "fetch hash"
   },
   {
     "cmd": [
@@ -90,7 +57,69 @@
     ],
     "cwd": "[CACHE]/builder/chromiumos_codesearch",
     "infra_step": true,
-    "name": "fetch mirror timestamp"
+    "name": "fetch timestamp"
+  },
+  {
+    "cmd": [
+      "vpython3",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "glob",
+      "[CACHE]/builder",
+      "chromiumos_manifest"
+    ],
+    "infra_step": true,
+    "name": "Check for existing checkout (2)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@glob@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "clone",
+      "--depth=1",
+      "-b",
+      "stable",
+      "https://chromium.googlesource.com/chromiumos/manifest",
+      "chromiumos_manifest"
+    ],
+    "cwd": "None",
+    "infra_step": true,
+    "name": "clone stable branch of https://chromium.googlesource.com/chromiumos/manifest"
+  },
+  {
+    "cmd": [
+      "git",
+      "fetch"
+    ],
+    "cwd": "[CACHE]/builder/chromiumos_manifest",
+    "infra_step": true,
+    "name": "git fetch (2)"
+  },
+  {
+    "cmd": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "cwd": "[CACHE]/builder/chromiumos_manifest",
+    "infra_step": true,
+    "name": "fetch hash (2)"
+  },
+  {
+    "cmd": [
+      "git",
+      "log",
+      "-1",
+      "--format=%ct",
+      "HEAD"
+    ],
+    "cwd": "[CACHE]/builder/chromiumos_manifest",
+    "infra_step": true,
+    "name": "fetch timestamp (2)"
   },
   {
     "cmd": [
@@ -102,7 +131,7 @@
     ],
     "infra_step": true,
     "name": "luci-scheduler.EmitTriggers",
-    "stdin": "{\"batches\": [{\"jobs\": [{\"job\": \"codesearch-gen-chromiumos-amd64-generic\", \"project\": \"infra\"}], \"trigger\": {\"buildbucket\": {\"properties\": {\"codesearch_mirror_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"codesearch_mirror_revision_timestamp\": \"100\"}, \"tags\": [\"user_agent:recipe\"]}, \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", \"title\": \"/0\"}}], \"timestamp\": 1337000001500000}",
+    "stdin": "{\"batches\": [{\"jobs\": [{\"job\": \"codesearch-gen-chromiumos-amd64-generic\", \"project\": \"infra\"}], \"trigger\": {\"buildbucket\": {\"properties\": {\"codesearch_mirror_revision\": \"d3adb33f\", \"codesearch_mirror_revision_timestamp\": \"\", \"manifest_hash\": \"\"}, \"tags\": [\"user_agent:recipe\"]}, \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", \"title\": \"/0\"}}], \"timestamp\": 1337000001500000}",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@input@{@@@",
       "@@@STEP_LOG_LINE@input@    \"batches\": [@@@",
@@ -116,8 +145,9 @@
       "@@@STEP_LOG_LINE@input@            \"trigger\": {@@@",
       "@@@STEP_LOG_LINE@input@                \"buildbucket\": {@@@",
       "@@@STEP_LOG_LINE@input@                    \"properties\": {@@@",
-      "@@@STEP_LOG_LINE@input@                        \"codesearch_mirror_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", @@@",
-      "@@@STEP_LOG_LINE@input@                        \"codesearch_mirror_revision_timestamp\": \"100\"@@@",
+      "@@@STEP_LOG_LINE@input@                        \"codesearch_mirror_revision\": \"d3adb33f\", @@@",
+      "@@@STEP_LOG_LINE@input@                        \"codesearch_mirror_revision_timestamp\": \"\", @@@",
+      "@@@STEP_LOG_LINE@input@                        \"manifest_hash\": \"\"@@@",
       "@@@STEP_LOG_LINE@input@                    }, @@@",
       "@@@STEP_LOG_LINE@input@                    \"tags\": [@@@",
       "@@@STEP_LOG_LINE@input@                        \"user_agent:recipe\"@@@",
