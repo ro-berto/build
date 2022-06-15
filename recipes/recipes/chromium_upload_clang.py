@@ -89,6 +89,9 @@ def RunSteps(api):
   ])
 
   with api.osx_sdk('ios'):
+    # TODO(crbug.com/1336592): workaround to call depot_tools._cipd_bin_setup()
+    # remove after https://crrev.com/c/3704921 gets rolled out.
+    _ = api.depot_tools.ninja_path
     with api.depot_tools.on_path():
       args = ['--upload']
       if api.buildbucket.builder_name == 'mac_upload_clang_arm':
