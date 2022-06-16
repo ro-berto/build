@@ -94,6 +94,8 @@ def _RunUntracedMemberAnalyzer(api, src_dir, affected):
 def RunSteps(api):
   assert api.tryserver.is_tryserver
 
+  api.buildbucket.hide_current_build_in_gerrit()
+
   change = _ChangeDetails(api)
   if change.should_skip_linting:
     return
