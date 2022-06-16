@@ -24,9 +24,9 @@
       "https://chromium.googlesource.com/chromiumos/codesearch",
       "chromiumos_codesearch"
     ],
-    "cwd": "None",
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "clone None branch of https://chromium.googlesource.com/chromiumos/codesearch"
+    "name": "clone HEAD of https://chromium.googlesource.com/chromiumos/codesearch"
   },
   {
     "cmd": [
@@ -82,13 +82,13 @@
       "clone",
       "--depth=1",
       "-b",
-      "stable",
+      "snapshot",
       "https://chromium.googlesource.com/chromiumos/manifest",
       "chromiumos_manifest"
     ],
-    "cwd": "None",
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "clone stable branch of https://chromium.googlesource.com/chromiumos/manifest"
+    "name": "clone snapshot of https://chromium.googlesource.com/chromiumos/manifest"
   },
   {
     "cmd": [

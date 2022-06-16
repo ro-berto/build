@@ -39,15 +39,19 @@ def latestRefInfo(api, clone_dir, repo, branch=None):
   clone_base_dir = api.context.cwd or api.path['cache'].join('builder')
   if not api.file.glob_paths('Check for existing checkout', clone_base_dir,
                              clone_dir):
-    clone_args = ['--depth=1']
-    if branch:
-      clone_args.extend(['-b', branch])
-    clone_args.extend([
-        repo,
-        clone_dir,
-    ])
+    with api.context(cwd=clone_base_dir):
+      clone_args = ['--depth=1']
+      if branch:
+        clone_args.extend(['-b', branch])
+      clone_args.extend([
+          repo,
+          clone_dir,
+      ])
 
-    api.git('clone', *clone_args, name='clone %s branch of %s' % (branch, repo))
+      api.git(
+          'clone',
+          *clone_args,
+          name='clone %s of %s' % (branch or 'HEAD', repo))
 
   with api.context(cwd=clone_base_dir.join(clone_dir)):
     api.git('fetch')
@@ -71,7 +75,7 @@ def RunSteps(api):
                                                      'chromiumos_codesearch',
                                                      CODESEARCH_REPO)
   manifest_hash, _ = latestRefInfo(api, 'chromiumos_manifest', MANIFEST_REPO,
-                                   'stable')
+                                   'snapshot')
 
   # Trigger the chromiumos_codesearch builders.
   properties = {
