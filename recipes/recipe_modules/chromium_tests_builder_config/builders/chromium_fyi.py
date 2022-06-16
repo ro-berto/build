@@ -1052,7 +1052,6 @@ SPEC.update([
     stock_config('mac11.0-blink-rel-dummy', staging=False),
     stock_config('mac11.0.arm64-blink-rel-dummy', staging=False),
     stock_config('win10.20h2-blink-rel-dummy', target_bits=32, staging=False),
-    stock_config('win11-blink-rel-dummy', staging=False),
     stock_config('Linux Viz', gclient_apply_config=['enable_reclient']),
     stock_config(
         'linux-annotator-rel', gclient_apply_config=['enable_reclient']),

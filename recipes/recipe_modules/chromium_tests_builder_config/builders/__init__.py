@@ -32,6 +32,7 @@ from . import client_devtools_frontend_integration
 from . import client_openscreen_chromium
 from . import client_v8_chromium
 from . import client_v8_fyi
+from . import tryserver_blink
 from . import tryserver_chromium_android
 from . import tryserver_chromium_linux
 from . import tryserver_devtools_frontend
@@ -117,6 +118,8 @@ BUILDERS = builder_db.BuilderDatabase.create({
         tryserver_v8.SPEC,
     'tryserver.webrtc':
         tryserver_webrtc.SPEC,
+    'tryserver.blink':
+        tryserver_blink.SPEC,
 
     # For testing the migration scripts
     'migration.testing':
