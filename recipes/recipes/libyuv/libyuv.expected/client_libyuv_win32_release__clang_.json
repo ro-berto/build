@@ -42,38 +42,6 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "RECIPE_REPO[depot_tools]\\.cipd_bin\\ninja.exe",
-      "RECIPE_REPO[depot_tools]\\ninja.exe"
-    ],
-    "cwd": "[CACHE]\\builder",
-    "env": {
-      "DEPOT_TOOLS_REPORT_BUILD": "libyuv/ci/Win32 Release (Clang)/8945511751514863184",
-      "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
-      "GIT_HTTP_LOW_SPEED_TIME": "1800"
-    },
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "libyuv:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "copy depot_tools/.cipd_bin/ninja.exe to depot_tools/"
-  },
-  {
-    "cmd": [
-      "vpython3",
-      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
       "--spec-path",
       "cache_dir = '[CACHE]\\\\git'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/libyuv/libyuv'}]",

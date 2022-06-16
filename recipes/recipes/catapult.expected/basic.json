@@ -29,25 +29,6 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "RECIPE_REPO[depot_tools]\\.cipd_bin\\ninja.exe",
-      "RECIPE_REPO[depot_tools]\\ninja.exe"
-    ],
-    "env": {
-      "DEPOT_TOOLS_COLLECT_METRICS": "0",
-      "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
-      "GIT_HTTP_LOW_SPEED_TIME": "1800"
-    },
-    "infra_step": true,
-    "name": "copy depot_tools/.cipd_bin/ninja.exe to depot_tools/"
-  },
-  {
-    "cmd": [
-      "vpython3",
-      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
       "--spec-path",
       "cache_dir = '[CACHE]\\\\git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'catapult', 'url': 'https://chromium.googlesource.com/catapult'}]",
