@@ -1,0 +1,172 @@
+{
+  "task_slices": [
+    {
+      "expiration_secs": "3600",
+      "wait_for_capacity": false,
+      "properties": {
+        "outputs": [],
+        "cas_input_root": {
+          "cas_instance": "projects/chromium-swarm/instances/default_instance",
+          "digest": {
+            "size_bytes": "24",
+            "hash": "b7c329e532e221e23809ba23f9af5b309aa17d490d845580207493d381998bd9"
+          }
+        },
+        "cipd_input": {
+          "packages": [
+            {
+              "path": ".task_template_packages",
+              "version": "git_revision:3c772505f229adbbf2144a08e9935c12ad873a91",
+              "package_name": "infra/tools/luci-auth/${platform}"
+            },
+            {
+              "path": ".task_template_packages",
+              "version": "git_revision:3c772505f229adbbf2144a08e9935c12ad873a91",
+              "package_name": "infra/tools/luci/logdog/butler/${platform}"
+            },
+            {
+              "path": ".task_template_packages",
+              "version": "git_revision:989cbdae535864ca81ea3c6a74a982a3ebc7ccf1",
+              "package_name": "infra/tools/luci/vpython-native/${platform}"
+            },
+            {
+              "path": ".task_template_packages",
+              "version": "git_revision:989cbdae535864ca81ea3c6a74a982a3ebc7ccf1",
+              "package_name": "infra/tools/luci/vpython/${platform}"
+            },
+            {
+              "path": ".task_template_packages",
+              "version": "git_revision:46a6d3351759b681ccff4991efef423963049d15",
+              "package_name": "infra/tools/rdb/${platform}"
+            },
+            {
+              "path": ".task_template_packages",
+              "version": "git_revision:85307d92db5d3acade9a07ccbe881ec7c3ce1ee1",
+              "package_name": "infra/tools/result_adapter/${platform}"
+            },
+            {
+              "path": ".task_template_packages/cpython",
+              "version": "version:2@2.7.18.chromium.39",
+              "package_name": "infra/3pp/tools/cpython/${platform}"
+            },
+            {
+              "path": ".task_template_packages/cpython3",
+              "version": "version:2@3.8.10.chromium.23",
+              "package_name": "infra/3pp/tools/cpython3/${platform}"
+            }
+          ]
+        },
+        "io_timeout_secs": "1200",
+        "grace_period_secs": "30",
+        "dimensions": [
+          {
+            "value": "x86-64",
+            "key": "cpu"
+          },
+          {
+            "value": "Windows-11-22000",
+            "key": "os"
+          },
+          {
+            "value": "chromium.tests",
+            "key": "pool"
+          }
+        ],
+        "relative_cwd": "out\\Release_x64",
+        "idempotent": true,
+        "command": [
+          "rdb",
+          "stream",
+          "-test-id-prefix",
+          "ninja://base:base_unittests/",
+          "-var",
+          "builder:Win11 Tests x64",
+          "-var",
+          "os:Windows-11-22000",
+          "-var",
+          "test_suite:base_unittests",
+          "-tag",
+          "step_name:base_unittests on Windows-11-22000",
+          "-tag",
+          "target_platform:win",
+          "-coerce-negative-duration",
+          "-location-tags-file",
+          "../../testing/location_tags.json",
+          "-exonerate-unexpected-pass",
+          "--",
+          "result_adapter",
+          "gtest",
+          "-result-file",
+          "${ISOLATED_OUTDIR}/output.json",
+          "-artifact-directory",
+          "${ISOLATED_OUTDIR}",
+          "--",
+          "luci-auth.exe",
+          "context",
+          "--",
+          "vpython3",
+          "../../testing/test_env.py",
+          "./base_unittests.exe",
+          "--test-launcher-bot-mode",
+          "--asan=0",
+          "--lsan=0",
+          "--msan=0",
+          "--tsan=0",
+          "--cfi-diag=0",
+          "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
+        ],
+        "env": [
+          {
+            "value": "${ISOLATED_OUTDIR}",
+            "key": "ISOLATED_OUTDIR"
+          },
+          {
+            "value": "${ISOLATED_OUTDIR}/profraw/default-%2m.profraw",
+            "key": "LLVM_PROFILE_FILE"
+          },
+          {
+            "value": "bar",
+            "key": "foo"
+          }
+        ],
+        "containment": {
+          "containment_type": "NONE"
+        },
+        "execution_timeout_secs": "3600",
+        "caches": [
+          {
+            "path": ".task_template_vpython_cache/vpython",
+            "name": "task_template_vpython_cache"
+          }
+        ],
+        "env_prefixes": [
+          {
+            "value": [
+              ".task_template_packages",
+              ".task_template_packages/cpython/bin",
+              ".task_template_packages/cpython3/bin"
+            ],
+            "key": "PATH"
+          },
+          {
+            "value": [
+              ".task_template_vpython_cache/vpython"
+            ],
+            "key": "VPYTHON_VIRTUALENV_ROOT"
+          }
+        ]
+      }
+    }
+  ],
+  "name": "led: base_unittests",
+  "tags": [
+    "authenticated:user:chromium-ci-builder@chops-service-accounts.iam.gserviceaccount.com",
+    "bucket:ci"
+  ],
+  "priority": "25",
+  "service_account": "none",
+  "realm": "chromium:ci",
+  "resultdb": {
+    "enable": true
+  }
+}

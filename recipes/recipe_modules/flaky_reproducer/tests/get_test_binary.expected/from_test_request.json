@@ -1,13 +1,78 @@
 [
   {
     "cmd": [],
-    "name": "get_test_result_summary"
+    "name": "get_test_binary",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@test_binary.json@{@@@",
+      "@@@STEP_LOG_LINE@test_binary.json@  \"cas_input_root\": \"b7c329e532e221e23809ba23f9af5b309aa17d490d845580207493d381998bd9/24\", @@@",
+      "@@@STEP_LOG_LINE@test_binary.json@  \"command\": [@@@",
+      "@@@STEP_LOG_LINE@test_binary.json@    \"rdb\", @@@",
+      "@@@STEP_LOG_LINE@test_binary.json@    \"stream\", @@@",
+      "@@@STEP_LOG_LINE@test_binary.json@    \"-test-id-prefix\", @@@",
+      "@@@STEP_LOG_LINE@test_binary.json@    \"ninja://base:base_unittests/\", @@@",
+      "@@@STEP_LOG_LINE@test_binary.json@    \"-var\", @@@",
+      "@@@STEP_LOG_LINE@test_binary.json@    \"builder:Win11 Tests x64\", @@@",
+      "@@@STEP_LOG_LINE@test_binary.json@    \"-var\", @@@",
+      "@@@STEP_LOG_LINE@test_binary.json@    \"os:Windows-11-22000\", @@@",
+      "@@@STEP_LOG_LINE@test_binary.json@    \"-var\", @@@",
+      "@@@STEP_LOG_LINE@test_binary.json@    \"test_suite:base_unittests\", @@@",
+      "@@@STEP_LOG_LINE@test_binary.json@    \"-tag\", @@@",
+      "@@@STEP_LOG_LINE@test_binary.json@    \"step_name:base_unittests on Windows-11-22000\", @@@",
+      "@@@STEP_LOG_LINE@test_binary.json@    \"-tag\", @@@",
+      "@@@STEP_LOG_LINE@test_binary.json@    \"target_platform:win\", @@@",
+      "@@@STEP_LOG_LINE@test_binary.json@    \"-coerce-negative-duration\", @@@",
+      "@@@STEP_LOG_LINE@test_binary.json@    \"-location-tags-file\", @@@",
+      "@@@STEP_LOG_LINE@test_binary.json@    \"../../testing/location_tags.json\", @@@",
+      "@@@STEP_LOG_LINE@test_binary.json@    \"-exonerate-unexpected-pass\", @@@",
+      "@@@STEP_LOG_LINE@test_binary.json@    \"--\", @@@",
+      "@@@STEP_LOG_LINE@test_binary.json@    \"result_adapter\", @@@",
+      "@@@STEP_LOG_LINE@test_binary.json@    \"gtest\", @@@",
+      "@@@STEP_LOG_LINE@test_binary.json@    \"-result-file\", @@@",
+      "@@@STEP_LOG_LINE@test_binary.json@    \"${ISOLATED_OUTDIR}/output.json\", @@@",
+      "@@@STEP_LOG_LINE@test_binary.json@    \"-artifact-directory\", @@@",
+      "@@@STEP_LOG_LINE@test_binary.json@    \"${ISOLATED_OUTDIR}\", @@@",
+      "@@@STEP_LOG_LINE@test_binary.json@    \"--\", @@@",
+      "@@@STEP_LOG_LINE@test_binary.json@    \"luci-auth.exe\", @@@",
+      "@@@STEP_LOG_LINE@test_binary.json@    \"context\", @@@",
+      "@@@STEP_LOG_LINE@test_binary.json@    \"--\", @@@",
+      "@@@STEP_LOG_LINE@test_binary.json@    \"vpython3\", @@@",
+      "@@@STEP_LOG_LINE@test_binary.json@    \"../../testing/test_env.py\", @@@",
+      "@@@STEP_LOG_LINE@test_binary.json@    \"./base_unittests.exe\", @@@",
+      "@@@STEP_LOG_LINE@test_binary.json@    \"--test-launcher-bot-mode\", @@@",
+      "@@@STEP_LOG_LINE@test_binary.json@    \"--asan=0\", @@@",
+      "@@@STEP_LOG_LINE@test_binary.json@    \"--lsan=0\", @@@",
+      "@@@STEP_LOG_LINE@test_binary.json@    \"--msan=0\", @@@",
+      "@@@STEP_LOG_LINE@test_binary.json@    \"--tsan=0\", @@@",
+      "@@@STEP_LOG_LINE@test_binary.json@    \"--cfi-diag=0\", @@@",
+      "@@@STEP_LOG_LINE@test_binary.json@    \"--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json\"@@@",
+      "@@@STEP_LOG_LINE@test_binary.json@  ], @@@",
+      "@@@STEP_LOG_LINE@test_binary.json@  \"cwd\": \"out\\\\Release_x64\", @@@",
+      "@@@STEP_LOG_LINE@test_binary.json@  \"dimensions\": {@@@",
+      "@@@STEP_LOG_LINE@test_binary.json@    \"cpu\": \"x86-64\", @@@",
+      "@@@STEP_LOG_LINE@test_binary.json@    \"os\": \"Windows-11-22000\", @@@",
+      "@@@STEP_LOG_LINE@test_binary.json@    \"pool\": \"chromium.tests\"@@@",
+      "@@@STEP_LOG_LINE@test_binary.json@  }, @@@",
+      "@@@STEP_LOG_LINE@test_binary.json@  \"env_vars\": {@@@",
+      "@@@STEP_LOG_LINE@test_binary.json@    \"ISOLATED_OUTDIR\": \"${ISOLATED_OUTDIR}\", @@@",
+      "@@@STEP_LOG_LINE@test_binary.json@    \"LLVM_PROFILE_FILE\": \"${ISOLATED_OUTDIR}/profraw/default-%2m.profraw\", @@@",
+      "@@@STEP_LOG_LINE@test_binary.json@    \"foo\": \"bar\"@@@",
+      "@@@STEP_LOG_LINE@test_binary.json@  }@@@",
+      "@@@STEP_LOG_LINE@test_binary.json@}@@@",
+      "@@@STEP_LOG_END@test_binary.json@@@"
+    ]
   },
   {
     "cmd": [],
-    "name": "get_test_result_summary.install infra/tools/luci/swarming",
+    "name": "get_test_binary.get_test_binary",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "get_test_binary.get_test_binary.install infra/tools/luci/swarming",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {
@@ -23,9 +88,9 @@
       "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
     ],
     "infra_step": true,
-    "name": "get_test_result_summary.install infra/tools/luci/swarming.ensure package directory",
+    "name": "get_test_binary.get_test_binary.install infra/tools/luci/swarming.ensure package directory",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
+      "@@@STEP_NEST_LEVEL@3@@@"
     ]
   },
   {
@@ -42,9 +107,9 @@
       "/path/to/tmp/json"
     ],
     "infra_step": true,
-    "name": "get_test_result_summary.install infra/tools/luci/swarming.ensure_installed",
+    "name": "get_test_binary.get_test_binary.install infra/tools/luci/swarming.ensure_installed",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_NEST_LEVEL@3@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
@@ -61,162 +126,15 @@
   {
     "cmd": [
       "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
-      "collect",
-      "-server",
-      "https://example.swarmingserver.appspot.com",
-      "-task-summary-json",
-      "/path/to/tmp/json",
-      "-task-output-stdout",
-      "json",
-      "54321fffffabc123"
-    ],
-    "cost": {
-      "cpu": 100,
-      "disk": 0,
-      "memory": 50,
-      "net": 0
-    },
-    "infra_step": true,
-    "name": "get_test_result_summary.swarming collect",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"54321fffffabc123\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"output\": \"hello world!\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"outputs\": [], @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"results\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"bot_id\": \"vm-123\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"cas_output_root\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"cas_instance\": \"projects/example-project/instances/default_instance\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"digest\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"hash\": \"24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"size_bytes\": \"73\"@@@",
-      "@@@STEP_LOG_LINE@json.output@        }@@@",
-      "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"duration\": 62.35, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"exit_code\": \"0\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"name\": \"my_task_0\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"resultdb_info\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"invocation\": \"invocations/some-inv-name\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"state\": \"COMPLETED\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"54321fffffabc123\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@task stdout+stderr: my_task_0@hello world!@@@",
-      "@@@STEP_LOG_END@task stdout+stderr: my_task_0@@@",
-      "@@@STEP_LINK@task cas outputs: my_task_0@https://cas-viewer.appspot.com/projects/example-project/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "vpython3",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "RECIPE_MODULE[recipe_engine::cas]/resources/infra.sha1",
-      "/path/to/tmp/"
-    ],
-    "infra_step": true,
-    "name": "get_test_result_summary.read infra revision",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@infra.sha1@git_revision:mock_infra_git_revision@@@",
-      "@@@STEP_LOG_END@infra.sha1@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "get_test_result_summary.install infra/tools/luci/cas",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "vpython3",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[START_DIR]/cipd_tool/infra/tools/luci/cas/git_revision%3Amock_infra_git_revision"
-    ],
-    "infra_step": true,
-    "name": "get_test_result_summary.install infra/tools/luci/cas.ensure package directory",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "cipd",
-      "ensure",
-      "-root",
-      "[START_DIR]/cipd_tool/infra/tools/luci/cas/git_revision%3Amock_infra_git_revision",
-      "-ensure-file",
-      "infra/tools/luci/cas/${platform} git_revision:mock_infra_git_revision",
-      "-max-threads",
-      "0",
-      "-json-output",
-      "/path/to/tmp/json"
-    ],
-    "infra_step": true,
-    "name": "get_test_result_summary.install infra/tools/luci/cas.ensure_installed",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:moc\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/luci/cas/resolved-platform\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[START_DIR]/cipd_tool/infra/tools/luci/cas/git_revision%3Amock_infra_git_revision/cas",
-      "download",
-      "-cas-instance",
-      "projects/example-cas-server/instances/default_instance",
-      "-digest",
-      "24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73",
-      "-dir",
-      "[CLEANUP]/tmp_tmp_1"
-    ],
-    "infra_step": true,
-    "name": "get_test_result_summary.download swarming outputs",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "get_test_binary"
-  },
-  {
-    "cmd": [
-      "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "request-show",
       "-server",
       "https://example.swarmingserver.appspot.com",
       "54321fffffabc123"
     ],
     "infra_step": true,
-    "name": "get_test_binary.show request",
+    "name": "get_test_binary.get_test_binary.show request",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"name\": \"led: base_unittests\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"priority\": \"25\", @@@",
@@ -390,21 +308,6 @@
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "choose_strategies"
-  },
-  {
-    "cmd": [],
-    "name": "choose_best_reproducing_step"
-  },
-  {
-    "cmd": [],
-    "name": "result",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@foobar@@@"
     ]
   },
   {

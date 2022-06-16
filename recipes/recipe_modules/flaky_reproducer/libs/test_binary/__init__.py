@@ -8,4 +8,4 @@ from .gtest_test_binary import GTestTestBinary
 def create_test_binary_from_task_request(task_request):
   """Factory method for TestBinary(s) that distinguish and create the correct
   TestBinary object."""
-  return GTestTestBinary()
+  return GTestTestBinary.from_task_request(task_request)

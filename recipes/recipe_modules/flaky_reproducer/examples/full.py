@@ -38,7 +38,12 @@ def GenTests(api):
               'output.json':
                   api.flaky_reproducer.get_test_data('gtest_good_output.json'),
           })),
-      api.step_data('get_test_binary.show request', api.json.output_stream({})),
+      api.step_data(
+          'get_test_binary.show request',
+          api.json.output_stream(
+              api.json.loads(
+                  api.flaky_reproducer.get_test_data(
+                      'gtest_task_request.json')))),
   )
 
   yield api.test(
