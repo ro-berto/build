@@ -504,10 +504,13 @@ class Tests(unittest.TestCase):
       actions, _ = tidy._generate_tidy_actions(
           out_dir='/out',
           only_src_files=['/foo.h'],
-          run_ninja=lambda out_dir, phony_targets, object_targets: (),
-          gn_desc=tidy._GnDesc({
-              '//rule': ['/foo.h', '/foo.cc', '/bar.cc'],
-          }),
+          run_ninja=lambda out_dir, object_targets: (),
+          gn_desc=tidy._GnDesc(
+              per_target_srcs={
+                  '//rule': ['/foo.h', '/foo.cc', '/bar.cc'],
+              },
+              deps={},
+          ),
           parse_ninja_deps=parse_ninja_deps,
           compile_commands=[
               tidy._CompileCommand(
@@ -534,9 +537,8 @@ class Tests(unittest.TestCase):
   def test_generate_tidy_actions_works_with_cc_files(self):
     self._silence_logs()
 
-    def run_ninja(out_dir, phony_targets, object_targets):
+    def run_ninja(out_dir, object_targets):
       self.assertEqual(out_dir, '/out')
-      self.assertEqual(phony_targets, [])
       self.assertEqual(object_targets, ['bar.o', 'foo.o'])
       return ()
 
@@ -563,7 +565,7 @@ class Tests(unittest.TestCase):
         out_dir='/out',
         only_src_files=['/foo.cc', '/bar.cc'],
         run_ninja=run_ninja,
-        gn_desc=tidy._GnDesc({}),
+        gn_desc=tidy._GnDesc({}, {}),
         parse_ninja_deps=lambda _: (),
         compile_commands=compile_commands)
     self.assertEqual(failed, [])
@@ -588,9 +590,8 @@ class Tests(unittest.TestCase):
   def test_generate_tidy_actions_includes_headers_in_output(self):
     self._silence_logs()
 
-    def run_ninja(out_dir, phony_targets, object_targets):
+    def run_ninja(out_dir, object_targets):
       self.assertEqual(out_dir, '/out')
-      self.assertEqual(phony_targets, [])
       self.assertEqual(object_targets, ['bar.o', 'foo.o'])
       return ()
 
@@ -623,9 +624,10 @@ class Tests(unittest.TestCase):
         out_dir='/out',
         only_src_files=['/foo.cc', '/foo.h', '/bar.cc'],
         run_ninja=run_ninja,
-        gn_desc=tidy._GnDesc({
-            '//my/awesome:target': ['/foo.cc', '/bar.cc', '/baz.cc'],
-        }),
+        gn_desc=tidy._GnDesc(
+            {
+                '//my/awesome:target': ['/foo.cc', '/bar.cc', '/baz.cc'],
+            }, {}),
         parse_ninja_deps=parse_ninja_deps,
         compile_commands=compile_commands)
     self.assertEqual(failed, [])
@@ -650,16 +652,15 @@ class Tests(unittest.TestCase):
   def test_generate_tidy_actions_ignores_nonexistent_files(self):
     self._silence_logs()
 
-    def run_ninja(out_dir, phony_targets, object_targets):
-      if phony_targets != ['all']:
-        self.assertEqual(object_targets, ['foo.cc.o'])
+    def run_ninja(out_dir, object_targets):
+      self.assertEqual(object_targets, ['foo.cc.o'])
       return ()
 
     actions, failed = tidy._generate_tidy_actions(
         out_dir='/out',
         only_src_files=['/foo.cc', '/bar.cc'],
         run_ninja=run_ninja,
-        gn_desc=tidy._GnDesc({}),
+        gn_desc=tidy._GnDesc({}, {}),
         parse_ninja_deps=lambda _: (),
         compile_commands=[
             tidy._CompileCommand(
@@ -686,9 +687,8 @@ class Tests(unittest.TestCase):
   def test_generate_tidy_actions_functions_with_no_src_file_filter(self):
     self._silence_logs()
 
-    def run_ninja(out_dir, phony_targets, object_targets):
+    def run_ninja(out_dir, object_targets):
       self.assertEqual(out_dir, '/out')
-      self.assertEqual(phony_targets, [])
       self.assertEqual(object_targets, ['foo.cc.o'])
       return ()
 
@@ -697,7 +697,7 @@ class Tests(unittest.TestCase):
         only_src_files=None,
         run_ninja=run_ninja,
         parse_ninja_deps=lambda _: (),
-        gn_desc=tidy._GnDesc({}),
+        gn_desc=tidy._GnDesc({}, {}),
         compile_commands=[
             tidy._CompileCommand(
                 target_name='foo.cc.o',
@@ -724,7 +724,7 @@ class Tests(unittest.TestCase):
   def test_generate_tidy_actions_reports_failures(self):
     self._silence_logs()
 
-    def run_ninja(out_dir, phony_targets, object_targets):
+    def run_ninja(out_dir, object_targets):
       return list(object_targets)
 
     actions, failed = tidy._generate_tidy_actions(
@@ -732,7 +732,7 @@ class Tests(unittest.TestCase):
         only_src_files=None,
         run_ninja=run_ninja,
         parse_ninja_deps=lambda _: (),
-        gn_desc=tidy._GnDesc({}),
+        gn_desc=tidy._GnDesc({}, {}),
         compile_commands={
             tidy._CompileCommand(
                 target_name='foo.cc.o',
@@ -1227,7 +1227,7 @@ class Tests(unittest.TestCase):
         '/foo.h': ['foo.h.o'],
     }
 
-    no_desc = tidy._GnDesc({})
+    no_desc = tidy._GnDesc({}, {})
     for target in cc_to_target_map:
       self.assertEqual(
           tidy._buildable_src_files_for(target, cc_to_target_map, no_desc),
@@ -1238,7 +1238,7 @@ class Tests(unittest.TestCase):
         '/foo.cc': ['foo.o'],
     }
 
-    no_desc = tidy._GnDesc({})
+    no_desc = tidy._GnDesc({}, {})
     self.assertEqual(
         tidy._buildable_src_files_for('/foo.inc', cc_to_target_map, no_desc),
         [])
@@ -1248,12 +1248,12 @@ class Tests(unittest.TestCase):
         '/foo.cc': ['foo.o'],
     }
 
-    no_desc = tidy._GnDesc({})
+    no_desc = tidy._GnDesc({}, {})
     self.assertEqual(
         tidy._buildable_src_files_for('/foo.h', cc_to_target_map, no_desc),
         ['/foo.cc'])
 
-  def test_perform_build_builds_all_src_phony_and_object_targets(self):
+  def test_perform_build_builds_all_targets(self):
     self._silence_logs()
 
     cc_to_target_map = {
@@ -1261,8 +1261,7 @@ class Tests(unittest.TestCase):
         '/bar.cc': ['bar.o'],
     }
 
-    def run_ninja(out_dir, phony_targets, object_targets):
-      self.assertEqual(phony_targets, [])
+    def run_ninja(out_dir, object_targets):
       self.assertEqual(sorted(object_targets), ['bar.o', 'foo.o'])
       return ()
 
@@ -1271,27 +1270,28 @@ class Tests(unittest.TestCase):
         run_ninja=run_ninja,
         parse_ninja_deps=lambda _: [('foo.o', ['/foo.cc', '/foo.h'])],
         cc_to_target_map=cc_to_target_map,
-        gn_desc=tidy._GnDesc(per_target_srcs={
-            '//path/to/my:targ': ['/foo.cc', '/bar.cc', '/foo.h']
-        }),
+        gn_desc=tidy._GnDesc(
+            per_target_srcs={
+                '//path/to/my:targ': ['/foo.cc', '/bar.cc', '/foo.h']
+            },
+            deps={},
+        ),
         potential_src_cc_file_deps={
             '/foo.h': ['/foo.cc', '/bar.cc'],
         })
 
-  def test_perform_build_falls_back_to_all_if_deps_werent_found(self):
+  def test_perform_build_falls_back_to_deps_build_if_deps_werent_found(self):
     self._silence_logs()
 
     cc_to_target_map = {
         '/foo.cc': ['foo.o'],
         '/bar.cc': ['bar.o'],
-        '/baz.cc': ['baz.o'],
+        '/rdep.cc': ['rdep.o'],
     }
 
     built_objects = []
-    built_targets = []
 
-    def run_ninja(out_dir, phony_targets, object_targets):
-      built_targets.append(phony_targets)
+    def run_ninja(out_dir, object_targets):
       built_objects.append(object_targets)
       return ()
 
@@ -1300,43 +1300,19 @@ class Tests(unittest.TestCase):
         run_ninja=run_ninja,
         parse_ninja_deps=lambda _: [('foo.o', ['/foo.cc'])],
         cc_to_target_map=cc_to_target_map,
-        gn_desc=tidy._GnDesc(per_target_srcs={
-            '//path/to/my:targ': ['/foo.cc', '/foo.h'],
-        }),
+        gn_desc=tidy._GnDesc(
+            per_target_srcs={
+                '//path/to/my:targ': ['/foo.cc', '/foo.h'],
+                '//path/to/my:rdep': ['/rdep.cc', '/rdep.h'],
+            },
+            deps={
+                '//path/to/my:rdep': ['//path/to/my:targ'],
+            }),
         potential_src_cc_file_deps={
             '/foo.h': ['/foo.cc'],
         })
 
-    self.assertEqual(built_objects, [['foo.o'], []])
-    self.assertEqual(built_targets, [[], ['all']])
-
-  def test_perform_build_doesnt_fall_back_if_only_cc_files_werent_found(self):
-    self._silence_logs()
-
-    built_objects = []
-    built_targets = []
-
-    def run_ninja(out_dir, phony_targets, object_targets):
-      built_targets.append(phony_targets)
-      built_objects.append(object_targets)
-      return ()
-
-    tidy._perform_build(
-        out_dir='/out',
-        run_ninja=run_ninja,
-        parse_ninja_deps=lambda _: [],
-        cc_to_target_map={
-            '/foo.cc': ['foo.o'],
-        },
-        gn_desc=tidy._GnDesc(per_target_srcs={
-            '//path/to/my:targ': ['/foo.cc', '/foo.h'],
-        }),
-        potential_src_cc_file_deps={
-            '/foo.cc': ['/foo.cc'],
-        })
-
-    self.assertEqual(built_objects, [['foo.o']])
-    self.assertEqual(built_targets, [[]])
+    self.assertEqual(built_objects, [['foo.o'], ['rdep.o']])
 
   def test_perform_build_reported_dependency_information_is_correct(self):
     self._silence_logs()
@@ -1349,16 +1325,21 @@ class Tests(unittest.TestCase):
 
     src_file_to_target_map, _ = tidy._perform_build(
         out_dir='/out',
-        run_ninja=lambda out_dir, phony_targets, object_targets: (),
+        run_ninja=lambda out_dir, object_targets: (),
         parse_ninja_deps=lambda _: [
             ('foo.o', ['/foo.cc', '/foo.h']),
             ('bar.o', ['/bar.cc', '/foo.h']),
             ('baz.o', ['/baz.cc']),
         ],
         cc_to_target_map=cc_to_target_map,
-        gn_desc=tidy._GnDesc(per_target_srcs={
-            '//path/to/my:targ': ['/foo.cc', '/foo.h', '/bar.cc', '/baz.cc'],
-        }),
+        gn_desc=tidy._GnDesc(
+            per_target_srcs={
+                '//path/to/my:targ': [
+                    '/foo.cc', '/foo.h', '/bar.cc', '/baz.cc'
+                ],
+            },
+            deps={},
+        ),
         potential_src_cc_file_deps={
             '/foo.h': ['/foo.cc', '/bar.cc', '/baz.cc'],
         })
@@ -1367,43 +1348,62 @@ class Tests(unittest.TestCase):
         '/foo.h': {'foo.o', 'bar.o'},
     })
 
-  def test_perform_build_includes_dep_info_from_build_of_all(self):
+  def test_perform_build_traverses_transitive_rdeps_for_ones_with_sources(self):
     self._silence_logs()
 
     cc_to_target_map = {
         '/foo.cc': ['foo.o'],
         '/bar.cc': ['bar.o'],
-        '/baz.cc': ['baz.o'],
+        '/rdep.cc': ['rdep.o'],
+        '/rdep2.cc': ['rdep2.o'],
+        '/rdep3.cc': ['rdep3.o'],
+        '/rdep4.cc': ['rdep4.o'],
     }
 
-    built_objects = set()
-    built_targets = set()
+    built_objects = []
 
-    def run_ninja(out_dir, phony_targets, object_targets):
-      built_targets.update(phony_targets)
-      built_objects.update(object_targets)
+    def run_ninja(out_dir, object_targets):
+      built_objects.append(object_targets)
       return ()
 
-    def parse_ninja_deps(out_dir):
-      self.assertEqual(out_dir, '/out')
-      if 'all' in built_targets:
-        return [('foo.o', ['/foo.cc', '/foo.h'])]
-      return ()
-
-    src_file_to_target_map, _ = tidy._perform_build(
+    tidy._perform_build(
         out_dir='/out',
         run_ninja=run_ninja,
-        parse_ninja_deps=parse_ninja_deps,
+        parse_ninja_deps=lambda _: [('foo.o', ['/foo.cc'])],
         cc_to_target_map=cc_to_target_map,
-        gn_desc=tidy._GnDesc({}),
+        gn_desc=tidy._GnDesc(
+            per_target_srcs={
+                '//path/to/my:targ': ['/foo.cc', '/foo.h'],
+                '//path/to/my:rdep': ['/rdep.cc', '/rdep.h'],
+                '//path/to/my:srcless_rdep2.1': ['/rdep2.cc', '/rdep2.h'],
+                '//path/to/my:srcless_rdep2.2.1': ['/rdep3.cc', '/rdep3.h'],
+                '//path/to/my:srcless_rdep2.3': ['/rdep4.h'],
+                '//path/to/my:srcless_rdep2.3.1': ['/rdep4.cc'],
+            },
+            deps={
+                '//path/to/my:rdep': ['//path/to/my:targ'],
+                '//path/to/my:srcless_rdep': ['//path/to/my:targ'],
+                '//path/to/my:srcless_rdep2': ['//path/to/my:srcless_rdep'],
+                # Branch out to an rdep with no sources.
+                '//path/to/my:srcless_rdep2.1': ['//path/to/my:srcless_rdep2'],
+                # ...And to an rdep which has sources in the singular rdep of
+                # it.
+                '//path/to/my:srcless_rdep2.2': ['//path/to/my:srcless_rdep2'],
+                '//path/to/my:srcless_rdep2.2.1': [
+                    '//path/to/my:srcless_rdep2.2'
+                ],
+                # ...And to an rdep that has header-only sources associated.
+                '//path/to/my:srcless_rdep2.3': ['//path/to/my:srcless_rdep2'],
+                '//path/to/my:srcless_rdep2.3.1': [
+                    '//path/to/my:srcless_rdep2.3'
+                ],
+            }),
         potential_src_cc_file_deps={
-            '/foo.h': ['/baz.cc'],
+            '/foo.h': ['/foo.cc'],
         })
 
-    self.assertIn('all', built_targets)
-    self.assertEqual(src_file_to_target_map, {
-        '/foo.h': {'foo.o'},
-    })
+    self.assertEqual(built_objects,
+                     [['foo.o'], ['rdep.o', 'rdep2.o', 'rdep3.o', 'rdep4.o']])
 
   def test_generate_tidy_actions_copes_with_unknown_objects(self):
     self._silence_logs()
@@ -1418,10 +1418,13 @@ class Tests(unittest.TestCase):
     actions, _ = tidy._generate_tidy_actions(
         out_dir='/out',
         only_src_files=['/foo.h'],
-        run_ninja=lambda out_dir, phony_targets, object_targets: (),
-        gn_desc=tidy._GnDesc({
-            '//rule': ['/foo.h', '/foo.cc'],
-        }),
+        run_ninja=lambda out_dir, object_targets: (),
+        gn_desc=tidy._GnDesc(
+            {
+                '//rule': ['/foo.h', '/foo.cc'],
+            },
+            deps={},
+        ),
         parse_ninja_deps=parse_ninja_deps,
         compile_commands=[
             tidy._CompileCommand(
@@ -1434,35 +1437,6 @@ class Tests(unittest.TestCase):
             ),
         ])
     self.assertEqual(actions, {})
-
-  def test_perform_build_doesnt_build_all_for_candidates_with_no_potential(
-      self):
-    self._silence_logs()
-
-    cc_to_target_map = {
-        '/foo.cc': ['foo.o'],
-    }
-
-    def run_ninja(out_dir, phony_targets, object_targets):
-      self.assertEqual(phony_targets, [])
-      self.assertEqual(object_targets, [])
-      return ()
-
-    def parse_ninja_deps(out_dir):
-      self.assertEqual(out_dir, '/out')
-      return ()
-
-    src_file_to_target_map, _ = tidy._perform_build(
-        out_dir='/out',
-        run_ninja=run_ninja,
-        parse_ninja_deps=parse_ninja_deps,
-        cc_to_target_map=cc_to_target_map,
-        gn_desc=tidy._GnDesc({}),
-        potential_src_cc_file_deps={
-            '/foo.h': [],
-        })
-
-    self.assertEqual(src_file_to_target_map, {})
 
 
 if __name__ == '__main__':

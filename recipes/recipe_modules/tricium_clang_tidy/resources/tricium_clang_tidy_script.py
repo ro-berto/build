@@ -87,7 +87,6 @@ def _generate_compile_commands(out_dir: str, gn: str) -> str:
 
 
 def _run_ninja(out_dir: str,
-               phony_targets: List[str],
                object_targets: List[str],
                jobs: Optional[int] = None,
                max_targets_per_invocation: int = 500,
@@ -96,8 +95,6 @@ def _run_ninja(out_dir: str,
 
   Args:
     out_dir: The directory to perform the build in.
-    phony_targets: 'phonies' to pass into ninja. Errors in building these will
-      not be reported to the caller.
     object_targets: Object files to build. Errors in building these will be
       reported to the caller.
     jobs: How many jobs to use. If None, lets `ninja` pick a value.
@@ -124,15 +121,6 @@ def _run_ninja(out_dir: str,
 
   # 500 targets per invocation is arbitrary, but we start hitting OS argv size
   # limits around 1K in my experience.
-  #
-  # In builds where both are specified, phony_targets are meant to be redundant
-  # with the given object_targets. Essentially, the goal is to get ninja to
-  # build more things per command, since more build actions per command lets us
-  # better saturate our ninja job limit. In practice, on pathological cases
-  # (e.g., base/ header changes where the file isn't built on Linux, but
-  # there's no way to tell), this cuts our total wall-time by over 30% when
-  # goma's cache is hot; more otherwise.
-
   def make_ninja_command(targets):
     ninja_cmd = ['ninja', '-k', '1000000']
     if jobs is not None:
@@ -141,13 +129,6 @@ def _run_ninja(out_dir: str,
     ninja_cmd.append('--')
     ninja_cmd += targets
     return ninja_cmd
-
-  phonies_built = 0
-  for phonies in _chunk_iterable(phony_targets, max_targets_per_invocation):
-    logging.info("Building phonies %d-%d/%d...", phonies_built,
-                 phonies_built + len(phonies), len(phony_targets))
-    subprocess.call(make_ninja_command(phonies), cwd=out_dir)
-    phonies_built += len(phonies)
 
   objects_built = 0
   objects_implicitly_built = 0
@@ -710,7 +691,8 @@ def _parse_ninja_deps(out_dir: str
 class _GnDesc:
   """Represents the output of `gn desc` in an efficiently-usable manner."""
 
-  def __init__(self, per_target_srcs: Dict[str, List[str]]):
+  def __init__(self, per_target_srcs: Dict[str, List[str]],
+               deps: Dict[str, List[str]]):
     self._per_target_srcs = per_target_srcs
 
     targets_containing = collections.defaultdict(list)
@@ -719,18 +701,30 @@ class _GnDesc:
         targets_containing[src].append(target)
     self._targets_containing = targets_containing
 
+    direct_reverse_depends = collections.defaultdict(list)
+    for target, depends_on in deps.items():
+      for rev_dep in depends_on:
+        direct_reverse_depends[rev_dep].append(target)
+    self._direct_reverse_depends = direct_reverse_depends
+
   def targets_containing(self, src_file: str) -> Iterable[str]:
     return self._targets_containing.get(src_file, ())
 
   def source_files_for_target(self, target: str) -> Iterable[str]:
     return self._per_target_srcs.get(target, ())
 
+  def targets_which_directly_depend_on(self, target: str) -> Iterable[str]:
+    return self._direct_reverse_depends.get(target, ())
+
 
 def _parse_gn_desc_output(full_desc: Dict[str, Any],
                           chromium_root: str) -> _GnDesc:
   """Given the full, parsed output of `gn desc`, generates a _GnDesc object."""
   per_target_srcs = {}
+  deps = {}
   for target, val in full_desc.items():
+    deps[target] = val.get('deps', ())
+
     all_srcs = val.get('sources')
     if not all_srcs:
       continue
@@ -741,16 +735,14 @@ def _parse_gn_desc_output(full_desc: Dict[str, Any],
       srcs.append(os.path.join(chromium_root, src[2:]))
     per_target_srcs[target] = srcs
 
-  return _GnDesc(per_target_srcs)
+  return _GnDesc(per_target_srcs, deps)
 
 
 def _parse_gn_desc(out_dir: str, chromium_root: str, gn: str) -> _GnDesc:
   logging.info('Parsing gn desc...')
-
   command = [gn, 'desc', '.', '//*:*', '--format=json']
   gn_desc = subprocess.Popen(
       command, stdout=subprocess.PIPE, cwd=out_dir, encoding='utf-8')
-  assert gn_desc.stdout is not None
   full_desc = json.load(gn_desc.stdout)
   return_code = gn_desc.wait()
   if return_code:
@@ -771,9 +763,7 @@ def _buildable_src_files_for(src_file: str,
 
   Returns:
     All results are source files that might depend on src_file, in the order of
-    more => less likely to contain src_file. This is presented as a list of
-    lists; the intent is that the first sublist should be explored entirely
-    before the second, etc.
+    more => less likely to contain src_file.
   """
   if src_file in cc_to_target_map:
     return [src_file]
@@ -801,6 +791,63 @@ def _buildable_src_files_for(src_file: str,
   return result
 
 
+def _reverse_dependencies_with_cc_sources(base_target: str,
+                                          gn_desc: _GnDesc) -> Set[str]:
+  """Returns reverse dependencies of `base_target` that contain C sources.
+
+  Each reverse dependency is searched transitively until a target with C or C++
+  source files is found. If all direct reverse dependencies of `base_target`
+  have sources, this set will simply contain those.
+
+  For example, consider the following GN desc:
+  >>> gn_desc = _GnDesc(
+    per_target_srcs={
+      'A': ['foo.cc'],
+      'C': ['bar.cc'],
+    },
+    deps={
+      'A': ['B'],
+      'B': ['C', 'D'],
+      'C': ['D'],
+      'D': [],
+    },
+  )
+
+  The non-transitive reverse dependencies of 'D' are 'C' and 'B', since both
+  'C' and 'B' depend directly on 'D'.
+
+  It's important to note that this function works on transitive reverse
+  dependencies, however. Calling this function for 'D', the following output is
+  expected:
+  >>> _reverse_dependencies_with_cc_sources('D', gn_desc)
+  {'A', 'C'}
+
+  This is because D has two reverse dependencies. 'C' has an associated C
+  source file (`bar.cc`), so that ends up in the result set, and this function
+  stops caring about 'C'. However, 'B' has no source files, so we search the
+  singular reverse dependency of 'B' (which is 'A') to determine whether that
+  has any associated source file. It does, so 'A' is included in the output. If
+  'A' had no associated C source files, the output would simply be {'C'}.
+  """
+  result = set()
+  seen = set()
+  stack = list(gn_desc.targets_which_directly_depend_on(base_target))
+  while stack:
+    target = stack.pop()
+    # Since we're returning a set, there's no point in re-exploring targets.
+    if target in seen:
+      continue
+    seen.add(target)
+
+    src_files = gn_desc.source_files_for_target(target)
+    if any(x.endswith(e) for x in src_files for e in _CC_FILE_EXTENSIONS):
+      result.add(target)
+      continue
+
+    stack += gn_desc.targets_which_directly_depend_on(target)
+  return result
+
+
 def _perform_build(out_dir: str, run_ninja: Any, parse_ninja_deps: Callable[
     [str], Generator[Tuple[str, List[str]], None, None]],
                    cc_to_target_map: Dict[str, List[str]], gn_desc: _GnDesc,
@@ -813,7 +860,6 @@ def _perform_build(out_dir: str, run_ninja: Any, parse_ninja_deps: Callable[
     run_ninja: a function that runs `ninja` on the given targets. Takes three
       kwargs:
         out_dir: the out dir mentioned above.
-        phony_targets: a list of phony ninja targets to build.
         object_targets: a list of file-backed ninja targets to build.
       Builds them all, returns a best-effort subset of `object_targets` that
       failed.
@@ -863,7 +909,7 @@ def _perform_build(out_dir: str, run_ninja: Any, parse_ninja_deps: Callable[
   # len(object_targets) is, say, <1.5K files, which should be the
   # overwhelmingly common case.
   failed_targets = run_ninja(
-      out_dir=out_dir, phony_targets=[], object_targets=sorted(all_targets))
+      out_dir=out_dir, object_targets=sorted(all_targets))
 
   src_file_to_target_map = parse_deps(
       only_targets=all_targets,
@@ -880,38 +926,49 @@ def _perform_build(out_dir: str, run_ninja: Any, parse_ninja_deps: Callable[
       src_file for src_file in potential_src_cc_file_deps
       if src_file not in src_file_to_target_map
   }
+  logging.info('Still missing deps for %r', sorted(still_missing))
 
-  def likely_found_by_all_build(src_file: str) -> bool:
-    # It's possible for .cc files to be in `still_missing` if they're only
-    # built for certain OSes. It's highly unlikely that an `all` build will
-    # reveal users of them, so we skip this if .cc files are all that we're
-    # missing dependency info for.
-    if os.path.splitext(src_file)[1] in _CC_FILE_EXTENSIONS:
-      return False
+  # Any non-cc files (e.g., headers) that are still missing might be found by
+  # building reverse dependencies.
+  likely_found_in_rdeps = sorted(
+      x for x in still_missing
+      if os.path.splitext(x)[1] not in _CC_FILE_EXTENSIONS)
 
-    # Otherwise, if we found nothing that _might_ depend on the file, just
-    # assume that it's not built on this target and move on.
-    return bool(potential_src_cc_file_deps[src_file])
+  if likely_found_in_rdeps:
+    logging.info('Falling back to building reverse dependencies to locate %r.',
+                 likely_found_in_rdeps)
 
-  likely_found = sorted(
-      x for x in still_missing if likely_found_by_all_build(x))
+    reverse_dependency_targets = set()
+    for src_file in likely_found_in_rdeps:
+      for target in gn_desc.targets_containing(src_file):
+        reverse_dependency_targets.update(
+            _reverse_dependencies_with_cc_sources(target, gn_desc))
+    reverse_dependency_targets = sorted(reverse_dependency_targets)
 
-  logging.info(
-      'Still missing deps for %r, of which, %r may be used if we build `all`.',
-      sorted(still_missing), likely_found)
+    all_targets = set()
+    for rdep in reverse_dependency_targets:
+      for src_file in gn_desc.source_files_for_target(rdep):
+        all_targets.update(cc_to_target_map.get(src_file, ()))
 
-  # Heuristics failed, so some header files don't have a cc_file that depends
-  # on them. Build the world in a last-ditch effort to see if we can find
-  # candidates.
-  if likely_found:
-    logging.info('Falling back to a full build')
-    # It's not super easy (and probably not very valuable?) to pick out all of
-    # the failures here. If any source files fail, let them fail silently.
-    run_ninja(out_dir=out_dir, phony_targets=['all'], object_targets=[])
+    logging.info('Identified %r as potential targets (%d obj files); building',
+                 reverse_dependency_targets, len(all_targets))
+
+    # Ninja provides a convenient shorthand to refer to an entire target.
+    # Explicitly ask for each object file to be built instead, since building a
+    # target can imply many, many more build actions (e.g., building runtime
+    # dependencies, building libraries that the binary produced by a target
+    # would depend on, etc). All we need is the object files, anyway.
+    #
+    # It's also not super easy (and probably not very valuable?) to associate
+    # failures here with targets. If any source files fail, let them fail
+    # silently.
+    run_ninja(out_dir=out_dir, object_targets=sorted(all_targets))
 
     missing_deps = parse_deps(
         only_targets=None, interesting_src_files=still_missing)
 
+    logging.info('Building rdeps found the following extra targets: %r',
+                 missing_deps)
     shared = set(src_file_to_target_map.keys()) & set(missing_deps.keys())
     assert len(shared) == 0, shared
     src_file_to_target_map.update(missing_deps)
@@ -1412,10 +1469,9 @@ def main():
 
   compile_commands_location = _generate_compile_commands(out_dir, gn)
 
-  def run_ninja(out_dir, phony_targets, object_targets):
+  def run_ninja(out_dir, object_targets):
     return _run_ninja(
         out_dir,
-        phony_targets,
         object_targets,
         jobs=args.ninja_jobs,
         force_clean=args.clean)
