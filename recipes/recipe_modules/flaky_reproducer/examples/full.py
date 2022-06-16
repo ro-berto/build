@@ -32,10 +32,12 @@ def GenTests(api):
   yield api.test(
       'happy_path',
       api.properties(task_id='54321fffffabc123', test_name='foo.bar'),
-      api.step_data('get_test_result_summary.download swarming outputs',
-                    api.raw_io.output_dir({
-                        'output.json': b'{}',
-                    })),
+      api.step_data(
+          'get_test_result_summary.download swarming outputs',
+          api.raw_io.output_dir({
+              'output.json':
+                  api.flaky_reproducer.get_test_data('gtest_good_output.json'),
+          })),
       api.step_data('get_test_binary.show request', api.json.output_stream({})),
   )
 

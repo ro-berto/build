@@ -2,10 +2,19 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import os
 from recipe_engine import recipe_test_api
+
+THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 class FlakyReproducerTestApi(recipe_test_api.RecipeTestApi):
 
   def __init__(self, *args, **kwargs):
     super(FlakyReproducerTestApi, self).__init__(*args, **kwargs)
+
+  @staticmethod
+  def get_test_data(filename):
+    """Return test data as str"""
+    with open(os.path.join(THIS_DIR, 'testdata', filename), 'rb') as fp:
+      return fp.read()

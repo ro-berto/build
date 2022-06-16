@@ -2,10 +2,11 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from .base_result_summary import TestStatus, TestResult
 from .gtest_result_summary import GTestTestResultSummary
 
 
-def create_result_summary_from_output_json(json):
+def create_result_summary_from_output_json(json_data):
   """Factory method for TestResultSummary(s) that distinguish and create the
   correct TestResultSummary object."""
-  return GTestTestResultSummary()
+  return GTestTestResultSummary.from_output_json(json_data)

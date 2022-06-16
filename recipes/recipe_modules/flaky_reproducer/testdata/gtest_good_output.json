@@ -1,0 +1,107 @@
+{
+  "all_tests": [
+    "MockTimerTest.DoesNotRetainClosure",
+    "MockTimerTest.FiresOnce",
+    "MockTimerTest.FiresRepeatedly",
+    "MockTimerTest.Stops",
+    "MockUnitTests.CrashTest",
+    "MockUnitTests.FailTest",
+    "MockUnitTests.NoRunTest",
+    "MockUnitTests.PassTest"
+  ],
+  "disabled_tests": [
+    "MockUnitTests.CrashTest",
+    "MockUnitTests.FailTest",
+    "MockUnitTests.NoRunTest",
+    "MockUnitTests.PassTest"
+  ],
+  "global_tags": [
+    "CPU_64_BITS",
+    "MODE_RELEASE",
+    "OS_LINUX",
+    "OS_POSIX"
+  ],
+  "per_iteration_data": [
+    {
+      "MockUnitTests.CrashTest": [
+        {
+          "elapsed_time_ms": 0,
+          "losless_snippet": true,
+          "output_snippet": "",
+          "output_snippet_base64": "",
+          "process_num": 0,
+          "result_parts": [],
+          "status": "CRASH",
+          "thread_id": 3026892,
+          "timestamp": "2022-05-27T23:24:57.211Z"
+        }
+      ],
+      "MockUnitTests.FailTest": [
+        {
+          "elapsed_time_ms": 0,
+          "losless_snippet": true,
+          "output_snippet": "",
+          "output_snippet_base64": "",
+          "process_num": 0,
+          "result_parts": [
+            {
+              "file": "../../base/test/launcher/test_launcher_unittest.cc",
+              "line": 847,
+              "lossless_message": true,
+              "lossless_summary": true,
+              "message": "Value of: false\n  Actual: false\nExpected: true\nStack trace:\n#0 0x561e15459d59 base::(anonymous namespace)::MockUnitTests_DISABLED_FailTest_Test::TestBody()\n",
+              "message_base64": "VmFsdWUgb2Y6IGZhbHNlCiAgQWN0dWFsOiBmYWxzZQpFeHBlY3RlZDogdHJ1ZQpTdGFjayB0cmFjZToKIzAgMHg1NjFlMTU0NTlkNTkgYmFzZTo6KGFub255bW91cyBuYW1lc3BhY2UpOjpNb2NrVW5pdFRlc3RzX0RJU0FCTEVEX0ZhaWxUZXN0X1Rlc3Q6OlRlc3RCb2R5KCkK",
+              "summary": "Value of: false\n  Actual: false\nExpected: true",
+              "summary_base64": "VmFsdWUgb2Y6IGZhbHNlCiAgQWN0dWFsOiBmYWxzZQpFeHBlY3RlZDogdHJ1ZQ==",
+              "type": "fatal_failure"
+            }
+          ],
+          "status": "FAILURE",
+          "thread_id": 3026892,
+          "timestamp": "2022-05-27T23:24:57.210Z"
+        }
+      ],
+      "MockUnitTests.NoRunTest": [
+        {
+          "elapsed_time_ms": 0,
+          "losless_snippet": true,
+          "output_snippet": "",
+          "output_snippet_base64": "",
+          "result_parts": [],
+          "status": "NOTRUN"
+        }
+      ],
+      "MockUnitTests.PassTest": [
+        {
+          "elapsed_time_ms": 0,
+          "losless_snippet": true,
+          "output_snippet": "",
+          "output_snippet_base64": "",
+          "process_num": 0,
+          "result_parts": [],
+          "status": "SUCCESS",
+          "thread_id": 3026892,
+          "timestamp": "2022-05-27T23:24:57.210Z"
+        }
+      ]
+    }
+  ],
+  "test_locations": {
+    "MockUnitTests.CrashTest": {
+      "file": "../../base/test/launcher/test_launcher_unittest.cc",
+      "line": 850
+    },
+    "MockUnitTests.FailTest": {
+      "file": "../../base/test/launcher/test_launcher_unittest.cc",
+      "line": 846
+    },
+    "MockUnitTests.NoRunTest": {
+      "file": "../../base/test/launcher/test_launcher_unittest.cc",
+      "line": 854
+    },
+    "MockUnitTests.PassTest": {
+      "file": "../../base/test/launcher/test_launcher_unittest.cc",
+      "line": 842
+    }
+  }
+}
