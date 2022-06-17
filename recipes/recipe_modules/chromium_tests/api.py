@@ -466,7 +466,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   def _use_reclient(self, gn_args):
     args = self.m.gn.parse_gn_args(gn_args)
-    return args.get('use_remoteexec') == 'true' or args.get('use_rbe') == 'true'
+    return args.get('use_remoteexec') == 'true'
 
   def compile_specific_targets(self,
                                builder_id,
