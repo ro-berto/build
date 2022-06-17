@@ -55,10 +55,35 @@ SPEC = freeze({
             'sync_generated_files': True,
             'experimental': False,
         },
+        'codesearch-gen-chromiumos-arm-generic': {
+            'board': 'arm-generic',
+            'corpus': 'chromium.googlesource.com/chromiumos/codesearch//main',
+            'packages': [
+                'virtual/target-chromium-os',
+                'virtual/target-chromium-os-dev',
+                'virtual/target-chromium-os-factory',
+                'virtual/target-chromium-os-factory-shim',
+                'virtual/target-chromium-os-test',
+            ],
+            'sync_generated_files': True,
+            'experimental': False,
+        },
+        'codesearch-gen-chromiumos-arm64-generic': {
+            'board': 'arm64-generic',
+            'corpus': 'chromium.googlesource.com/chromiumos/codesearch//main',
+            'packages': [
+                'virtual/target-chromium-os',
+                'virtual/target-chromium-os-dev',
+                'virtual/target-chromium-os-factory',
+                'virtual/target-chromium-os-factory-shim',
+                'virtual/target-chromium-os-test',
+            ],
+            'sync_generated_files': True,
+            'experimental': False,
+        },
     },
 })
 
-# TODO(crbug/1284439): Replace timestamp with annealing manifest snapshot.
 PROPERTIES = {
     'codesearch_mirror_revision':
         Property(
@@ -208,15 +233,16 @@ def RunSteps(api, codesearch_mirror_revision,
 
 # TODO(crbug/1284439): Add more tests.
 def GenTests(api):
-  yield api.test(
-      'basic',
-      api.buildbucket.generic_build(
-          builder='codesearch-gen-chromiumos-amd64-generic'),
-      api.step_data('repo init'),
-      api.properties(
-          codesearch_mirror_revision='a' * 40,
-          codesearch_mirror_revision_timestamp='1531887759',
-          manifest_hash='d3adb33f'))
+  for b in ('amd64', 'arm', 'arm64'):
+    yield api.test(
+        'basic_%s' % b,
+        api.buildbucket.generic_build(
+            builder='codesearch-gen-chromiumos-%s-generic' % b),
+        api.step_data('repo init'),
+        api.properties(
+            codesearch_mirror_revision='a' * 40,
+            codesearch_mirror_revision_timestamp='1531887759',
+            manifest_hash='d3adb33f'))
 
   yield api.test(
       'repo sync to manifest_hash',

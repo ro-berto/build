@@ -25,9 +25,10 @@ DEPS = [
     'recipe_engine/url',
 ]
 
-# TODO(crbug.com/1284439): Add other builders.
 BUILDERS = [
     'codesearch-gen-chromiumos-amd64-generic',
+    'codesearch-gen-chromiumos-arm-generic',
+    'codesearch-gen-chromiumos-arm64-generic',
 ]
 
 CODESEARCH_REPO = 'https://chromium.googlesource.com/chromiumos/codesearch'
