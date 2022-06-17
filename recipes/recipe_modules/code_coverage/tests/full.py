@@ -3,7 +3,6 @@
 # found in the LICENSE file.
 
 from recipe_engine import post_process
-from recipe_engine.recipe_api import Property
 
 from RECIPE_MODULES.build import chromium_swarming
 from RECIPE_MODULES.build.chromium_tests import steps
@@ -33,13 +32,8 @@ DEPS = [
 # Number of tests. Needed by the tests.
 _NUM_TESTS = 7
 
-PROPERTIES = {
-    'files_to_instrument': Property(default=[]),
-    'deleted_files': Property(default=[]),
-}
 
-
-def RunSteps(api, files_to_instrument, deleted_files):
+def RunSteps(api):
   _, builder_config = (
       api.chromium_tests_builder_config.lookup_builder(use_try_db=True))
   api.chromium_tests.configure_build(builder_config)
@@ -48,10 +42,8 @@ def RunSteps(api, files_to_instrument, deleted_files):
   api.code_coverage.src_dir = api.path['start_dir']
 
   if api.tryserver.is_tryserver:
-    for p in set(files_to_instrument) - set(deleted_files):
-      api.path.mock_add_paths(api.code_coverage.src_dir.join(p))
     api.code_coverage.instrument(
-        files_to_instrument,
+        api.properties['files_to_instrument'],
         is_deps_only_change=api.properties.get('is_deps_only_change', False),
     )
   if api.properties.get('mock_merged_profdata', True):
@@ -339,32 +331,6 @@ def GenTests(api):
           post_process.MustRun,
           'process clang code coverage data for overall test coverage.gsutil '
           'upload coverage metadata'),
-      api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'tryserver_with_deleted_files',
-      api.chromium.try_build(
-          builder_group='fake-try-group', builder='fake-try-builder'),
-      ctbc_api.properties(
-          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
-              builder_group='fake-group',
-              builder='fake-builder',
-          ).assemble()),
-      api.code_coverage(use_clang_coverage=True),
-      api.properties(
-          files_to_instrument=[
-              'some/path/to/deleted_file.cc',
-              'some/other/path/to/file.cc',
-          ],
-          deleted_files=['some/path/to/deleted_file.cc']),
-      api.post_process(
-          post_process.StepCommandDoesNotContain,
-          ('process clang code coverage data for overall test coverage.'
-           'generate line number mapping from bot to Gerrit'),
-          ['some/path/to/deleted_file.cc'],
-      ),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )

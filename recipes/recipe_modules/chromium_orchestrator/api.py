@@ -250,15 +250,7 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
 
     if self.m.code_coverage.using_coverage:
       self.m.code_coverage.set_is_per_cl_coverage(True)
-      if comp_output.deleted_files:
-        deleted_files = list(comp_output.deleted_files)
-      else:
-        deleted_files = []
-
-      self.m.code_coverage.filter_and_set_eligible_files(
-          affected_files,
-          look_for_deleted_files=False,
-          deleted_files=deleted_files)
+      self.m.code_coverage.filter_and_set_eligible_files(affected_files)
 
       # cas download raises "file exists" errors for android's json files
       self.m.file.rmcontents('clear out output directory',
@@ -532,8 +524,7 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
 
       deleted_files = None
       if 'deleted_files' in output_props:
-        deleted_files = self.m.chromium_checkout.format_affected_file_paths(
-            output_props['deleted_files'])
+        deleted_files = output_props['deleted_files']
 
       src_side_deps_digest = None
       src_side_test_spec_dir = None

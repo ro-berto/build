@@ -333,27 +333,12 @@ class CodeCoverageApi(recipe_api.RecipeApi):
 
     return sorted(binaries, key=str)
 
-  def _look_for_deleted_files(self, files):
-    deleted_files = []
-    for s in files:
-      if not self.m.path.isfile(self.src_dir.join(s)):
-        deleted_files.append(str(s))
-    return deleted_files
 
-  def filter_and_set_eligible_files(self,
-                                    candidate_files,
-                                    look_for_deleted_files=True,
-                                    deleted_files=None):
+  def filter_and_set_eligible_files(self, candidate_files):
     """Filter candidate_files and assigns them to self._eligible_files
 
     Args:
       candidate_files: A list of string file paths relative to the checkout path
-      look_for_deleted_files: Whether to check if each candidate file exists in
-        the local checkout
-      deleted_files: A list of deleted string file paths relative to the
-        checkout path. This should be a subset of candidate_files. If
-        look_for_deleted_files is True, these files will not be included in
-        self._eligible_files.
 
     Returns: None
     """
@@ -374,11 +359,6 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           source_files.append(file_path)
 
       return source_files
-
-    if look_for_deleted_files:
-      deleted_files = self._look_for_deleted_files(candidate_files)
-
-    candidate_files = list(set(candidate_files) - set(deleted_files))
 
     if self.use_clang_coverage:
       self._eligible_files = _filter_source_file(
