@@ -25,6 +25,7 @@ PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 DEPS = [
     'chromium',
     'chromium_android',
+    'chromium_checkout',
     'chromium_swarming',
     'chromium_tests',
     'chromium_tests_builder_config',
@@ -130,6 +131,8 @@ def RunSteps(api):
       api.profiles.profile_dir().join('overall-merged.profdata'))
   api.path.mock_add_paths(api.profiles.profile_dir().join(
       api.pgo.TEMP_PROFDATA_FILENAME))
+  # foo.cc is the step_test_data for tryserver.get_files_affected_by_patch()
+  api.path.mock_add_paths(api.chromium_checkout.src_dir.join('foo.cc'))
 
   builder_id, builder_config = (
       api.chromium_tests_builder_config.lookup_builder())

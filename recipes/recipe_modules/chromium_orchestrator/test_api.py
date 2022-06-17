@@ -81,7 +81,9 @@ class ChromiumOrchestratorApi(recipe_test_api.RecipeTestApi):
                                 is_swarming_phase=True,
                                 with_patch=True,
                                 tests=None,
-                                affected_files=None):
+                                affected_files=None,
+                                deleted_files=None,
+                                include_deleted_files=True):
     tests = tests or ['browser_tests']
     output_json_obj = {}
     if is_swarming_phase:
@@ -115,8 +117,11 @@ class ChromiumOrchestratorApi(recipe_test_api.RecipeTestApi):
                   'first_100': affected_files,
                   'total_count': 3
               },
-              'deleted_files': ['src/deleted_file.cc'],
           })
+          if include_deleted_files:
+            output_json_obj['deleted_files'] = deleted_files or [
+                'src/deleted_file.cc'
+            ]
 
     sub_build = build_pb2.Build(
         id=54321,

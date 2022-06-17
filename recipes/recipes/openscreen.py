@@ -115,6 +115,8 @@ def GenerateCoverageTestConstants(api, paths):
     api.path.mock_add_paths(llvm_dir.join('llvm-profdata'))
     api.path.mock_add_paths(llvm_dir.join('llvm-cov'))
     api.path.mock_add_paths(paths.output_path.join('default.profraw'))
+    # foo.cc is the step_test_data for tryserver.get_files_affected_by_patch()
+    api.path.mock_add_paths(paths.checkout_path.join('../../openscreen/foo.cc'))
 
   # Add fake .profraw data and destination path
   if api.properties.get('generate_test_profraw', False):
