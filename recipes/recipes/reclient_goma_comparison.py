@@ -149,47 +149,56 @@ def RunSteps(api):
   with api.context(cwd=solution_path):
     ConfigureChromiumBuilder(api, recipe_config)
 
-  # Since disk lacks in Mac, we need to remove files before build.
-  # In check_different_build_dirs, only the .2 build dir exists here.
-  for ext in '12':
-    p = str(api.chromium.output_dir).rstrip('\\/') + '.' + ext
-    api.file.rmtree('rmtree %s' % p, p)
+  out_dirs = [
+      str(api.chromium.output_dir).rstrip('\\/') + '.' + ext for ext in '12'
+  ]
+
+  # Clear output directories for build
+  for out_dir in out_dirs:
+    api.file.rmtree('rmtree %s' % out_dir, out_dir)
 
   targets = recipe_config['targets']
 
   api.chromium.ensure_goma()
   with api.context(cwd=solution_path):
     api.chromium.runhooks()
+  try:
+    # Do goma build .1 out directory
+    target = '%s.1' % api.chromium.c.build_config_fs
+    build_dir = '//out/%s' % target
 
-  # Do a first build and move the build artifact to the temp directory.
-  builder_id = chromium.BuilderId.create_for_group(
-      api.builder_group.for_current, buildername)
-  api.chromium.mb_gen(builder_id, phase='goma', recursive_lookup=True)
+    builder_id = chromium.BuilderId.create_for_group(
+        api.builder_group.for_current, buildername)
+    api.chromium.mb_gen(
+        builder_id, build_dir=build_dir, phase='goma', recursive_lookup=True)
 
-  raw_result = api.chromium.compile(
-      targets, name='Goma build', use_goma_module=True)
-  if raw_result.status != common_pb.SUCCESS:
-    return raw_result
+    raw_result = api.chromium.compile(
+        targets, name='Goma build', use_goma_module=True, target=target)
+    if raw_result.status != common_pb.SUCCESS:
+      return raw_result
 
-  api.file.move(
-      'Move %s to %s.2' % (api.chromium.output_dir, api.chromium.output_dir),
-      api.chromium.output_dir,
-      api.path.abs_to_path(str(api.chromium.output_dir).rstrip('\\/') + '.2'))
+    # Do reclient build in .2 out directory
+    target = '%s.2' % api.chromium.c.build_config_fs
+    build_dir = '//out/%s' % target
 
-  # Do the second build and move the build artifact to the temp directory.
-  build_dir, target = None, None
+    api.chromium.mb_gen(
+        builder_id,
+        build_dir=build_dir,
+        phase='reclient',
+        recursive_lookup=True)
 
-  api.chromium.mb_gen(
-      builder_id, build_dir=build_dir, phase='reclient', recursive_lookup=True)
-
-  raw_result = api.chromium.compile(
-      targets,
-      name='Reclient build',
-      use_goma_module=False,
-      use_reclient=True,
-      target=target)
-  if raw_result.status != common_pb.SUCCESS:
-    return raw_result
+    raw_result = api.chromium.compile(
+        targets,
+        name='Reclient build',
+        use_goma_module=False,
+        use_reclient=True,
+        target=target)
+    if raw_result.status != common_pb.SUCCESS:
+      return raw_result
+  finally:
+    # Always clean output directories after build
+    for out_dir in out_dirs:
+      api.file.rmtree('rmtree %s' % out_dir, out_dir)
 
 
 def _sanitize_nonalpha(text):
