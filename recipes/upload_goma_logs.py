@@ -136,7 +136,7 @@ def main():
   override_gsutil = None
   if args.gsutil_py_path:
     # Needs to add '--', otherwise gsutil options will be passed to gsutil.py.
-    override_gsutil = ['python', args.gsutil_py_path, '--']
+    override_gsutil = ['python3', args.gsutil_py_path, '--']
 
   viewer_urls = {}
 
