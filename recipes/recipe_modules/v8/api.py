@@ -202,20 +202,18 @@ class LedTrigger(Trigger):
                   step_name=None):
     bucket = bucket or self.api.buildbucket.build.builder.bucket
     for builder_name, properties in requests:
-        self.api.led.trigger_builder(
-            project, bucket, builder_name, properties)
+      self.api.led.trigger_builder(project, bucket, builder_name, properties)
     return []  # Empty list of production buildbucket builds.
 
   def scheduler(self, builders, properties, test_spec):
     bucket = self.api.buildbucket.build.builder.bucket
     for builder_name in builders:
-        self.api.led.trigger_builder(
-            'v8', bucket, builder_name,
-            dict(
-                properties,
-                **test_spec.as_properties_dict(builder_name)
-            ),
-        )
+      self.api.led.trigger_builder(
+          'v8',
+          bucket,
+          builder_name,
+          dict(properties, **test_spec.as_properties_dict(builder_name)),
+      )
 
 
 class V8Api(recipe_api.RecipeApi):
@@ -266,7 +264,7 @@ class V8Api(recipe_api.RecipeApi):
 
   def _use_reclient(self, gn_args):
     args = self.m.gn.parse_gn_args(gn_args)
-    return args.get('use_remoteexec') == 'true' or args.get('use_rbe') == 'true'
+    return args.get('use_remoteexec') == 'true'
 
   def bot_config_by_buildername(self,
                                 builders=None,
@@ -1699,9 +1697,9 @@ class V8Api(recipe_api.RecipeApi):
     branch_pattern = re.compile(r"branch-heads/(\d+)\.(\d+)")
     versions = []
     for line in output.splitlines():
-        m = branch_pattern.match(line.strip())
-        if m:
-            versions.append(int(m.group(1))*10 + int(m.group(2)))
+      m = branch_pattern.match(line.strip())
+      if m:
+        versions.append(int(m.group(1)) * 10 + int(m.group(2)))
     versions.sort()
     versions.reverse()
     return versions
@@ -1760,7 +1758,7 @@ class V8Api(recipe_api.RecipeApi):
     )
 
     if extra_edits:
-        extra_edits(self.m)
+      extra_edits(self.m)
 
     # Commit and push changes.
     self.m.git('commit', '-am', 'Version %s' % latest_version)
@@ -1771,10 +1769,10 @@ class V8Api(recipe_api.RecipeApi):
       upload_cmd = ['cl', 'upload', '-f', '--bypass-hooks', '--send-mail',
           '--no-autocc']
       if bot_commit:
-          upload_cmd.append('--set-bot-commit')
+        upload_cmd.append('--set-bot-commit')
       self.m.git(*upload_cmd)
       if bot_commit:
-          self.m.git('cl', 'land', '-f', '--bypass-hooks')
+        self.m.git('cl', 'land', '-f', '--bypass-hooks')
     return latest_version
 
 

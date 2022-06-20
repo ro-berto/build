@@ -45,8 +45,6 @@ PROPERTIES = {
     'v8_tot': Property(default=False, kind=bool),
     # Weather to use reclient for compilation.
     'use_remoteexec': Property(default=False, kind=bool),
-    # Whether to use reclient for compilation (depreceted).
-    'use_rbe': Property(default=False, kind=bool),
 }
 
 ARCHIVE_PATH = 'chromium-v8/node-%s-rel'
@@ -75,9 +73,7 @@ def run_with_retry(api, step_name, step_fun):
   return True
 
 
-def RunSteps(api, is_debug, triggers, v8_tot, use_remoteexec, use_rbe):
-  # Handle both deprecated and replacement reclient settings.
-  use_remoteexec = use_remoteexec or use_rbe
+def RunSteps(api, is_debug, triggers, v8_tot, use_remoteexec):
   use_goma = not use_remoteexec
   with api.step.nest('initialization'):
     if is_debug:
