@@ -221,13 +221,17 @@ class ReclientApi(recipe_api.RecipeApi):
       self._install_reclient_cfgs()
       self._make_reclient_cache_dir(self.deps_cache_path)
       self._list_reclient_cache_dir(self.deps_cache_path)
-      self._start_reproxy(self._reclient_log_dir, self.deps_cache_path)
 
       # TODO: Shall we use the same project providing the RBE workers?
       cloudtail_project_id = 'goma-logs'
-      log_path = self._reclient_log_dir.join(
-          self._get_platform_exe_name('reproxy') + '.INFO')
-      self._start_cloudtail(cloudtail_project_id, log_path)
+      log_dir = self._reclient_log_dir
+      self._start_cloudtail(cloudtail_project_id, log_dir,
+                            self._get_platform_exe_name('reproxy') + '.INFO')
+      self._start_cloudtail(cloudtail_project_id, log_dir,
+                            'reproxy-gomaip.INFO')
+
+      self._start_reproxy(self._reclient_log_dir, self.deps_cache_path)
+
     p = BuildResultReceiver()
     try:
       with self.m.context(env=self.rewrapper_env):
@@ -235,7 +239,8 @@ class ReclientApi(recipe_api.RecipeApi):
     finally:
       with self.m.step.nest('postprocess for reclient'):
         self._stop_reproxy(self._reclient_log_dir)
-        self._stop_cloudtail()
+        self._stop_cloudtail(self._get_platform_exe_name('reproxy') + '.INFO')
+        self._stop_cloudtail('reproxy-gomaip.INFO')
         self._upload_rbe_metrics(self._reclient_log_dir)
         if self._props.publish_trace:
           self._upload_reclient_traces(self._reclient_log_dir)
@@ -590,11 +595,10 @@ class ReclientApi(recipe_api.RecipeApi):
   def _health_check_path(self):
     return self.resource('perform_health_check.py')
 
-  @property
-  def _cloudtail_pid_file(self):
-    return self._tmp_base_dir.join('cloudtail.pid')
+  def _get_cloudtail_pid_file(self, log_name):
+    return self._tmp_base_dir.join('cloudtail_' + log_name + '.pid')
 
-  def _start_cloudtail(self, project_id, log_path):
+  def _start_cloudtail(self, project_id, log_dir, log_name):
     """Start cloudtail to upload reproxy INFO log.
 
     'cloudtail' binary should be in PATH already.
@@ -609,12 +613,14 @@ class ReclientApi(recipe_api.RecipeApi):
     cloudtail_args = [
         'python3', self._cloudtail_wrapper_path, 'start', '--cloudtail-path',
         self._cloudtail_exe_path, '--cloudtail-project-id', project_id,
-        '--cloudtail-log-path', log_path, '--pid-file',
-        self.m.raw_io.output_text(leak_to=self._cloudtail_pid_file)
+        '--cloudtail-log-path',
+        log_dir.join(log_name), '--pid-file',
+        self.m.raw_io.output_text(
+            leak_to=self._get_cloudtail_pid_file(log_name))
     ]
 
     step_result = self.m.step(
-        name='start cloudtail',
+        name='start cloudtail: ' + log_name,
         cmd=cloudtail_args,
         step_test_data=(lambda: self.m.raw_io.test_api.output_text('12345')),
         infra_step=True)
@@ -623,7 +629,7 @@ class ReclientApi(recipe_api.RecipeApi):
         'project=%s&resource=gce_instance%%2F'
         'instance_id%%2F%s' % (project_id, self._hostname))
 
-  def _stop_cloudtail(self):
+  def _stop_cloudtail(self, log_name):
     """Stop cloudtail started by _start_cloudtail
 
     Raises:
@@ -633,7 +639,8 @@ class ReclientApi(recipe_api.RecipeApi):
         name='stop cloudtail',
         cmd=[
             'python3', self._cloudtail_wrapper_path, 'stop',
-            '--killed-pid-file', self._cloudtail_pid_file
+            '--killed-pid-file',
+            self._get_cloudtail_pid_file(log_name)
         ],
         infra_step=True)
 
