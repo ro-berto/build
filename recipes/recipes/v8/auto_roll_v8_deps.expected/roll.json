@@ -644,7 +644,10 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "gclient setdep build"
+    "name": "gclient setdep build",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@5fd66957f08bb752dca714a591c84587c9d70762@@@"
+    ]
   },
   {
     "cmd": [],
@@ -813,7 +816,10 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "gclient setdep package-without-latest-ref:mock_package-without-latest-ref"
+    "name": "gclient setdep package-without-latest-ref:mock_package-without-latest-ref",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@e7079f0e0e14108ab0dba58728ff219637458563@@@"
+    ]
   },
   {
     "cmd": [
@@ -846,7 +852,10 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "gclient setdep tools_gyp"
+    "name": "gclient setdep tools_gyp",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@git_revision:3d8f881462b1a93c7525499381fafc8a08691be7@@@"
+    ]
   },
   {
     "cmd": [
@@ -981,8 +990,8 @@
       "-f",
       "--use-commit-queue",
       "--bypass-hooks",
-      "--set-bot-commit",
-      "--send-mail"
+      "--send-mail",
+      "--set-bot-commit"
     ],
     "cwd": "[CACHE]/builder/v8",
     "env_prefixes": {

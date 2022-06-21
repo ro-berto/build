@@ -2,8 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from recipe_engine.post_process import (
-    DoesNotRun, DropExpectation, Filter, MustRun)
+from recipe_engine.post_process import (DoesNotRun, DropExpectation, Filter,
+                                        MustRun, StepCommandDoesNotContain)
 from recipe_engine.recipe_api import Property
 from recipe_engine.config import ConfigGroup, Dict, Single, List
 from recipe_engine.engine_types import freeze
@@ -79,6 +79,13 @@ PROPERTIES = {
                 show_commit_log=Single(bool),
                 # Flag for rolling the binary chromium pin in target project
                 roll_chromium_pin=Single(bool, empty_val=False),
+                # Do not roll dependencies from untrusted origins (cipd,
+                # repository ToT)
+                skip_untrusted_origins=Single(bool, empty_val=False),
+                # Do not roll dependencies from chromium/src
+                skip_chromium_deps=Single(bool, empty_val=False),
+                # Upload CL with or without bot-commit label
+                disable_bot_commit=Single(bool, empty_val=False),
                 # Bugs included in roll CL description
                 # TODO(liviurau): Remove obsolete feature from configs and
                 # remove the parameters here afterwards
@@ -327,6 +334,9 @@ def RunSteps(api, autoroller_config):
   # Map deps keys between destination and source
   key_mapper = get_key_mapper(autoroller_config)
 
+  skip_untrusted_origins = autoroller_config.get('skip_untrusted_origins')
+  skip_chromium_deps = autoroller_config.get('skip_chromium_deps')
+
   # Iterate over all target deps.
   failed_deps = []
   for name in sorted(target_deps.keys()):
@@ -343,8 +353,12 @@ def RunSteps(api, autoroller_config):
         target_config['solution_name'], target_deps[name])
     cr_value = cr_deps.get(key_mapper(name))
     is_cipd_dep = target_loc.startswith(CIPD_DEP_URL_PREFIX)
+
+    # Use the given revision from chromium's DEPS file.
+    if cr_value and skip_chromium_deps:
+      continue
+
     if cr_value:
-      # Use the given revision from chromium's DEPS file.
       cr_repo, new_ver = SplitValue('src', cr_value)
       if target_loc != cr_repo:
         # The gclient tool does not have commands that allow overriding the
@@ -358,14 +372,21 @@ def RunSteps(api, autoroller_config):
         step_result.presentation.status = api.step.FAILURE
         failed_deps.append(name)
         continue
+
+    # The remaining approaches roll from untrusted origins
+    elif skip_untrusted_origins:
+      continue
+
+    # Use the latest cipd version.
+    elif is_cipd_dep:
+      cipd_name = target_loc[len(CIPD_DEP_URL_PREFIX):]
+      new_ver = get_recent_instance_id(api, cipd_name)
+
+    # Use the ToT of the deps repo.
     else:
-      if is_cipd_dep:
-        new_ver = get_recent_instance_id(api,
-                                         target_loc[len(CIPD_DEP_URL_PREFIX):])
-      else:
-        # Use the ToT of the deps repo.
-        new_ver = get_tot_revision(api, name, target_loc)
-      api.step.active_result.presentation.step_text += new_ver
+      new_ver = get_tot_revision(api, name, target_loc)
+
+    api.step.active_result.presentation.step_text += new_ver
 
     # Check if an update is necessary.
     if target_ver != new_ver:
@@ -421,9 +442,15 @@ def RunSteps(api, autoroller_config):
       api.git(*args, **kwargs)
       api.git('show')
       upload_args = [
-          'cl', 'upload', '-f', '--use-commit-queue', '--bypass-hooks',
-          '--set-bot-commit', '--send-mail',
+          'cl',
+          'upload',
+          '-f',
+          '--use-commit-queue',
+          '--bypass-hooks',
+          '--send-mail',
       ]
+      if not autoroller_config.get('disable_bot_commit'):
+        upload_args.append('--set-bot-commit')
       if 'bugs' in autoroller_config:
         upload_args += ['-b', autoroller_config['bugs']]
       api.git(*upload_args)
@@ -473,6 +500,9 @@ src/buildtools:  https://chromium.googlesource.com/chromium/buildtools.git@5fd66
         ],
         'show_commit_log': False,
     }
+
+  cipd_roll_step = "cipd instances mock/package-latest"
+  chromium_roll_step = "gclient setdep tools_gyp"
 
   def template(testname, buildername, solution_name='v8'):
     return api.test(
@@ -530,7 +560,28 @@ src/buildtools:  https://chromium.googlesource.com/chromium/buildtools.git@5fd66
                   'registered_ts': 1987654321,
                   'refs': None,
               }]
-          })))
+          })) + api.post_check(MustRun, cipd_roll_step))
+
+  yield (template(
+      'skip_untrusted_origins', 'Auto-roll - trusted version') + api.properties(
+          autoroller_config=dict(skip_untrusted_origins=True, **v8_deps_config))
+         + api.post_check(MustRun, chromium_roll_step) +
+         api.post_check(DoesNotRun, cipd_roll_step) +
+         api.post_process(DropExpectation))
+
+  yield (template(
+      'skip_chromium_deps', 'Auto-roll - trusted version') + api.properties(
+          autoroller_config=dict(skip_chromium_deps=True, **v8_deps_config)) +
+         api.post_check(DoesNotRun, chromium_roll_step) +
+         api.post_check(MustRun, cipd_roll_step) +
+         api.post_process(DropExpectation))
+
+  yield (
+      template('disable_bot_commit', 'Roll without bot commit') +
+      api.properties(
+          autoroller_config=dict(disable_bot_commit=True, **v8_deps_config)) +
+      api.post_process(StepCommandDoesNotContain, 'git cl', '--bot-commit') +
+      api.post_process(DropExpectation))
 
   yield api.test(
       'bad-cr-roll',
@@ -539,13 +590,14 @@ src/buildtools:  https://chromium.googlesource.com/chromium/buildtools.git@5fd66
           git_repo='https://chromium.googlesource.com/v8/v8',
           builder='Auto-roll - v8 deps',
           revision='',
-      ) +
-      api.properties(autoroller_config=v8_deps_config),
+      ) + api.properties(autoroller_config=v8_deps_config),
       api.override_step_data(
           'gclient get src deps',
           api.raw_io.stream_output_text(bad_cr_deps_info, stream='stdout'),
       ),
+      api.post_check(MustRun, 'gclient get src deps'),
       api.expect_exception("Exception"),
+      api.post_process(DropExpectation),
   )
 
   yield (
