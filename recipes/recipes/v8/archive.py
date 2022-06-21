@@ -44,8 +44,6 @@ PROPERTIES = {
     'target_platform': Property(default=None, kind=str),
     # Whether to use reclient for compilation.
     'use_remoteexec': Property(default=False, kind=bool),
-    # Whether to use reclient for compilation (deprecated).
-    'use_rbe': Property(default=False, kind=bool),
     # Whether to upload archive.
     'upload_archive': Property(default=True, kind=bool),
 }
@@ -196,11 +194,8 @@ def make_archive(api,
 
 
 def RunSteps(api, build_config, target_arch, target_bits, target_platform,
-             use_remoteexec, use_rbe, upload_archive):
+             use_remoteexec, upload_archive):
   target_bits = int(target_bits)
-
-  # Handle both deprecated and replacement reclient settings.
-  use_remoteexec = use_remoteexec or use_rbe
 
   with api.step.nest('initialization'):
     # Ensure a proper branch is specified.
