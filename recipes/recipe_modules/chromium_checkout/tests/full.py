@@ -12,6 +12,7 @@ PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 DEPS = [
     'chromium_checkout',
     'depot_tools/gclient',
+    'recipe_engine/assertions',
     'recipe_engine/buildbucket',
     'recipe_engine/json',
     'recipe_engine/path',
@@ -39,8 +40,12 @@ def RunSteps(api):
         api.chromium_checkout.get_files_affected_by_patch(),),
   ]
 
-  src_path = api.chromium_checkout.src_dir
-  assert src_path == api.chromium_checkout.checkout_dir.join('src')
+  # Verify that checkout_dir can be overridden
+  api.chromium_checkout.checkout_dir = api.path['cleanup']
+  api.assertions.assertEqual(api.chromium_checkout.checkout_dir,
+                             api.path['cleanup'])
+  api.assertions.assertEqual(api.chromium_checkout.src_dir,
+                             api.path['cleanup'].join('src'))
 
 
 def GenTests(api):
