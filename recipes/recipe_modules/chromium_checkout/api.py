@@ -15,7 +15,7 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
 
   def __init__(self, input_properties, *args, **kwargs):
     super(ChromiumCheckoutApi, self).__init__(*args, **kwargs)
-
+    self._checkout_dir = None
     self._timeout = input_properties.timeout
 
   @property
@@ -39,9 +39,13 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
     # It's important to maintain the same mounted location because file paths
     # can end up in cached goma keys/objects; mounting the named cache to an
     # alternate location could result in goma cache bloating.
-    # TODO(kimstephanie): Add option to override this path. Will be used by
-    # the Orchestrator to point to a cleanup/ dir instead.
-    return self.m.path['cache'].join('builder')
+    if not self._checkout_dir:
+      self._checkout_dir = self.m.path['cache'].join('builder')
+    return self._checkout_dir
+
+  @checkout_dir.setter
+  def checkout_dir(self, value):
+    self._checkout_dir = value
 
   # TODO (kimstephanie): Recipes should pass in the src path as an argument to
   # recipe_modules instead of recipe_modules using src_dir and checkout_dir to

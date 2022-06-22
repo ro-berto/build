@@ -213,23 +213,12 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
       return maybe_raw_result
 
     if remove_src_checkout_experiment:
-      # TODO (kimstephanie): Remove this line once self.m.path['checkout']
-      # call sites are removed.
-      self.m.path['checkout'] = self.m.chromium_checkout.src_dir
-      # Remove directories before downloading
-      self.m.file.rmcontents('clear checkout testing directory',
-                             self.m.path['checkout'].join('testing'))
-      self.m.file.rmcontents(
-          'clear checkout third_party/blink/tools directory',
-          self.m.path['checkout'].join('third_party', 'blink', 'tools'))
-      self.m.file.remove(
-          'remove tools/clang/scripts/update.py',
-          self.m.path['checkout'].join('tools', 'clang', 'scripts',
-                                       'update.py'))
+      self.m.chromium_checkout.checkout_dir = self.m.path['cleanup']
+
       self.m.cas.download(
           'download src-side deps',
           comp_output.src_side_deps_digest,
-          self.m.path['checkout'],
+          self.m.chromium_checkout.src_dir,
       )
 
       affected_files = comp_output.affected_files
@@ -259,19 +248,25 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
       self.m.code_coverage.set_is_per_cl_coverage(True)
       self.m.code_coverage.filter_and_set_eligible_files(affected_files)
 
+      output_dir = self.m.chromium_checkout.src_dir.join(
+          'out', self.m.chromium.c.build_config_fs)
+      self.m.code_coverage.build_dir = output_dir
+
+      # TODO(crbug/1287228): Remove once all orchestrators have
+      # remove_src_checkout_experiment enabled
       # cas download raises "file exists" errors for android's json files
-      self.m.file.rmcontents('clear out output directory',
-                             self.m.chromium.output_dir)
-      self.m.file.ensure_directory('ensure output directory',
-                                   self.m.chromium.output_dir)
+      if not remove_src_checkout_experiment:
+        self.m.file.rmcontents('clear out output directory', output_dir)
+
+      self.m.file.ensure_directory('ensure output directory', output_dir)
       self.m.cas.download(
           'downloading cas digest {}'.format(ALL_TEST_BINARIES_ISOLATE_NAME),
           self.m.isolate.isolated_tests[ALL_TEST_BINARIES_ISOLATE_NAME],
-          self.m.chromium.output_dir,
+          output_dir,
       )
 
       if self.m.code_coverage.use_clang_coverage:
-        clang_update_script = self.m.path['checkout'].join(
+        clang_update_script = self.m.chromium_checkout.src_dir.join(
             'tools', 'clang', 'scripts', 'update.py')
         args = ['python3', clang_update_script, '--package', 'coverage_tools']
         self.m.step(
