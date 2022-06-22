@@ -135,11 +135,6 @@ def GenTests(api):
           api.post_process(post_process.MustRun, 'download src-side deps'),
           api.post_process(post_process.MustRun,
                            'run tools/clang/scripts/update.py'),
-          api.post_process(
-              post_process.StepTextContains,
-              'read test spec (fake-group.json)',
-              ['[CLEANUP]/src/testing/buildbot/fake-group.json'],
-          ),
       ], api.empty_test_data())
 
     steps += api.post_process(post_process.DropExpectation)
