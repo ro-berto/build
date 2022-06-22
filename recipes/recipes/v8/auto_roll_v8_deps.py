@@ -81,10 +81,10 @@ PROPERTIES = {
                 roll_chromium_pin=Single(bool, empty_val=False),
                 # Do not roll dependencies from untrusted origins (cipd,
                 # repository ToT)
-                skip_untrusted_origins=Single(bool, empty_val=False),
+                skip_untrusted_origins=Single(bool, empty_val=True),
                 # Do not roll dependencies from chromium/src
                 skip_chromium_deps=Single(bool, empty_val=False),
-                # Upload CL with or without bot-commit label
+                # Remove the bot commit flag from the cl upload
                 disable_bot_commit=Single(bool, empty_val=False),
                 # Bugs included in roll CL description
                 # TODO(liviurau): Remove obsolete feature from configs and
@@ -274,6 +274,11 @@ def get_recent_instance_id(api, package_name):
 
 
 def RunSteps(api, autoroller_config):
+  disable_bot_commit = autoroller_config.get('disable_bot_commit')
+  skip_untrusted_origins = autoroller_config.get('skip_untrusted_origins')
+  skip_chromium_deps = autoroller_config.get('skip_chromium_deps')
+  excludes = autoroller_config.get('excludes')
+  includes = autoroller_config.get('includes')
   target_config = autoroller_config['target_config']
 
   # Look for overrides for the default base and gerrit locations
@@ -327,15 +332,15 @@ def RunSteps(api, autoroller_config):
 
   commit_message = []
 
-  # Include/exclude certain deps keys.
-  excludes = autoroller_config.get('excludes')
-  includes = autoroller_config.get('includes')
-
   # Map deps keys between destination and source
   key_mapper = get_key_mapper(autoroller_config)
 
-  skip_untrusted_origins = autoroller_config.get('skip_untrusted_origins')
-  skip_chromium_deps = autoroller_config.get('skip_chromium_deps')
+  # Provide hints for insecure property combinations
+  secure_combination = (not target_deps or disable_bot_commit or
+                        skip_untrusted_origins or includes is not None)
+  assert secure_combination, (
+      "You must either disable bot commit, skip untrusted origins, or "
+      "explicitly define trusted dependencies.")
 
   # Iterate over all target deps.
   failed_deps = []
@@ -449,7 +454,7 @@ def RunSteps(api, autoroller_config):
           '--bypass-hooks',
           '--send-mail',
       ]
-      if not autoroller_config.get('disable_bot_commit'):
+      if not disable_bot_commit:
         upload_args.append('--set-bot-commit')
       if 'bugs' in autoroller_config:
         upload_args += ['-b', autoroller_config['bugs']]
@@ -487,19 +492,32 @@ src/buildtools:  https://chromium.googlesource.com/chromium/buildtools.git@5fd66
     'log_template': 'Rolling v8/%s: %s/+log/%s..%s',
     'cipd_log_template': 'Rolling v8/%s: %s..%s',
   }
+  v8_dep_names = [
+      "base/trace_event/common",
+      "build",
+      "buildtools",
+      "test/test262/data",
+      "foo/bar",
+      "tools/gyp",
+      "tools/luci-go:infra/tools/luci/isolate/${platform}",
+      "package-without-latest-ref:mock/package-without-latest-ref",
+      "package-latest:mock/package-latest",
+  ]
   v8_deps_config = {
-        'target_config': target_config_v8,
-        'subject': 'Update V8 DEPS.',
-        'excludes': [
-            'third_party/protobuf',
-            'test/test262/data',
-        ],
-        'reviewers': [
-            'anybody@chromium.org',
-            'ciciobello@chromium.org',
-        ],
-        'show_commit_log': False,
-    }
+      'target_config': target_config_v8,
+      'subject': 'Update V8 DEPS.',
+      'excludes': [
+          'third_party/protobuf',
+          'test/test262/data',
+      ],
+      'includes': v8_dep_names,
+      'reviewers': [
+          'anybody@chromium.org',
+          'ciciobello@chromium.org',
+      ],
+      'show_commit_log': False,
+      'skip_untrusted_origins': False,
+  }
 
   cipd_roll_step = "cipd instances mock/package-latest"
   chromium_roll_step = "gclient setdep tools_gyp"
@@ -562,10 +580,11 @@ src/buildtools:  https://chromium.googlesource.com/chromium/buildtools.git@5fd66
               }]
           })) + api.post_check(MustRun, cipd_roll_step))
 
-  yield (template(
-      'skip_untrusted_origins', 'Auto-roll - trusted version') + api.properties(
-          autoroller_config=dict(skip_untrusted_origins=True, **v8_deps_config))
-         + api.post_check(MustRun, chromium_roll_step) +
+  untrusted_origin_config = dict(**v8_deps_config)
+  untrusted_origin_config['skip_untrusted_origins'] = True
+  yield (template('skip_untrusted_origins', 'Auto-roll - trusted version') +
+         api.properties(autoroller_config=untrusted_origin_config) +
+         api.post_check(MustRun, chromium_roll_step) +
          api.post_check(DoesNotRun, cipd_roll_step) +
          api.post_process(DropExpectation))
 
@@ -575,6 +594,33 @@ src/buildtools:  https://chromium.googlesource.com/chromium/buildtools.git@5fd66
          api.post_check(DoesNotRun, chromium_roll_step) +
          api.post_check(MustRun, cipd_roll_step) +
          api.post_process(DropExpectation))
+
+  # Insecure property configuration
+  insecure_config = dict(**v8_deps_config)
+  insecure_config['includes'] = None
+  insecure_config['skip_untrusted_origins'] = False
+  insecure_config['disable_bot_commit'] = False
+  yield api.test(
+      'insecure_property_config',
+      api.buildbucket.ci_build(
+          project='v8',
+          git_repo='https://chromium.googlesource.com/v8/v8',
+          builder='Auto-roll - untrusted deps',
+          revision='',
+      ),
+      api.override_step_data(
+          'gclient get v8 deps',
+          api.raw_io.stream_output_text(v8_deps_info, stream='stdout'),
+      ),
+      api.override_step_data(
+          'gclient get src deps',
+          api.raw_io.stream_output_text(cr_deps_info, stream='stdout'),
+      ),
+      api.properties(autoroller_config=insecure_config),
+      api.post_check(MustRun, 'gclient get v8 deps'),
+      api.expect_exception("AssertionError"),
+      api.post_process(DropExpectation),
+  )
 
   yield (
       template('disable_bot_commit', 'Roll without bot commit') +
@@ -600,27 +646,22 @@ src/buildtools:  https://chromium.googlesource.com/chromium/buildtools.git@5fd66
       api.post_process(DropExpectation),
   )
 
-  yield (
-      template('commit log', 'Roll with commit log') +
-      api.properties(autoroller_config={
+  yield (template('commit log', 'Roll with commit log') + api.properties(
+      autoroller_config={
           'target_config': target_config_v8,
           'subject': 'Update Test262.',
           'includes': [
               # Only roll these dependencies (list without solution name prefix).
               'test/test262/data',
           ],
-          'reviewers': [
-              'anybody@chromium.org',
-          ],
+          'reviewers': ['anybody@chromium.org',],
           'show_commit_log': True,
-      }) +
-      api.override_step_data(
+          'skip_untrusted_origins': False,
+      }) + api.override_step_data(
           'look up test_test262_data',
           api.raw_io.stream_output_text(
               'deadbeef\trefs/heads/main', stream='stdout'),
-      ) +
-      api.post_process(Filter('git commit', 'git cl'))
-  )
+      ) + api.post_process(Filter('git commit', 'git cl')))
 
   yield (template('p1-roller', 'New roller', 'p1') + api.post_process(
       Filter('git commit', 'git cl')
@@ -643,6 +684,7 @@ src/buildtools:  https://chromium.googlesource.com/chromium/buildtools.git@5fd66
                   "https://other-source.com/",
           },
           "subject": "Update DevTools New DEPS.",
+          "includes": v8_dep_names,
           "reviewers": ["liviurau@chromium.org"],
           "deps_key_mapping": {
               "dep1": "third_party/dep1/src"
@@ -656,42 +698,41 @@ src/buildtools:  https://chromium.googlesource.com/chromium/buildtools.git@5fd66
   important_steps = Filter().include_re(
       r'.*(?:chromium_linux|chromium_win|chromium_mac).*')
   yield (
-      template('roll chromium linux pin',
-               'Auto-roll - chromium somewhere', 'somewhere') +
-      api.override_step_data(
-          'gclient get chromium_linux deps',
-          api.raw_io.stream_output_text('122', stream='stdout'),
-      ) +
-      api.override_step_data(
-          'gclient get chromium_win deps',
-          api.raw_io.stream_output_text('123', stream='stdout'),
-      ) +
-      api.properties(autoroller_config={
-          'target_config': {
-            'solution_name': 'somewhere',
-            'project_name': 'home/somewhere',
-            'account': 'somebot@chops-service-accounts.iam.gserviceaccount.com',
-            'log_template': 'Rolling %s: %s/+log/%s..%s',
-            'cipd_log_template': 'Rolling %s: %s..%s',
-          },
-          'subject': 'Update Somewhere Chromium DEPS.',
-          # Don't roll any of the other dependencies.
-          'includes': [],
-          'reviewers': [
-              'neicanimeni@chromium.org',
-          ],
-          'show_commit_log': False,
-          'roll_chromium_pin': True,
-      }) +
-      api.override_step_data(
-          'gclient get chromium_mac deps',
-          api.raw_io.stream_output_text('124', stream='stdout'),
-      ) +
-      api.post_process(important_steps) +
+      template('roll chromium linux pin', 'Auto-roll - chromium somewhere',
+               'somewhere') + api.override_step_data(
+                   'gclient get chromium_linux deps',
+                   api.raw_io.stream_output_text('122', stream='stdout'),
+               ) + api.override_step_data(
+                   'gclient get chromium_win deps',
+                   api.raw_io.stream_output_text('123', stream='stdout'),
+               ) +
+      api.properties(
+          autoroller_config={
+              'target_config': {
+                  'solution_name':
+                      'somewhere',
+                  'project_name':
+                      'home/somewhere',
+                  'account':
+                      'somebot@chops-service-accounts.iam.gserviceaccount.com',
+                  'log_template':
+                      'Rolling %s: %s/+log/%s..%s',
+                  'cipd_log_template':
+                      'Rolling %s: %s..%s',
+              },
+              'subject': 'Update Somewhere Chromium DEPS.',
+              # Don't roll any of the other dependencies.
+              'includes': [],
+              'reviewers': ['neicanimeni@chromium.org',],
+              'show_commit_log': False,
+              'roll_chromium_pin': True,
+          }) + api.override_step_data(
+              'gclient get chromium_mac deps',
+              api.raw_io.stream_output_text('124', stream='stdout'),
+          ) + api.post_process(important_steps) +
       api.post_process(MustRun, 'gclient set chromium_linux deps') +
       api.post_process(DoesNotRun, 'gclient set chromium_win deps') +
-      api.post_process(DoesNotRun, 'gclient set chromium_mac deps')
-  )
+      api.post_process(DoesNotRun, 'gclient set chromium_mac deps'))
 
   yield api.test(
       'stale_roll',
