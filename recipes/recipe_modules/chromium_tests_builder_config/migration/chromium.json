@@ -381,11 +381,6 @@
       "chromium.chromiumos:linux-lacros-rel"
     ]
   },
-  "chromium.chromiumos:linux-lacros-rel-code-coverage": {
-    "builders": [
-      "chromium.chromiumos:linux-lacros-rel-code-coverage"
-    ]
-  },
   "chromium.dawn:Dawn Linux x64 Builder": {
     "builders": [
       "chromium.dawn:Dawn Linux x64 Builder",

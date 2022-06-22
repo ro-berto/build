@@ -609,7 +609,6 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * linux-chromeos-rel-rts
     # * linux-lacros-dbg
     # * linux-lacros-rel
-    # * linux-lacros-rel-code-coverage
     'tryserver.chromium.chromiumos': {
         'linux-chromeos-js-code-coverage':
             try_spec.TrySpec.create_for_single_mirror(

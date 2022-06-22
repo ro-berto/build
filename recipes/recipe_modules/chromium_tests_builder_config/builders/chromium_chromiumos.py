@@ -63,7 +63,4 @@ SPEC = dict([
         gclient_apply_config=['use_clang_coverage']),
     _config('linux-chromeos-annotator-rel'),
     _config('linux-lacros-rel'),
-    _config(
-        'linux-lacros-rel-code-coverage',
-        gclient_apply_config=['use_clang_coverage']),
 ])
