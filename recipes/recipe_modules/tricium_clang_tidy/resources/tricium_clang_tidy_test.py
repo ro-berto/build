@@ -1438,6 +1438,163 @@ class Tests(unittest.TestCase):
         ])
     self.assertEqual(actions, {})
 
+  def test_rdep_determination_respects_limits(self):
+    self._silence_logs()
+
+    gn_desc = tidy._GnDesc(
+        per_target_srcs={
+            '//foo': ['foo.h'],
+            '//foo_user': ['foo_user.cc'],
+        },
+        deps={
+            '//foo_user': ['//foo'],
+        },
+    )
+
+    cc_to_target_map = {
+        'foo_user.cc': ['foo_user_1.o', 'foo_user_2.o'],
+    }
+
+    rdeps = tidy._determine_rdeps_to_build_for(
+        missing_files=['foo.h'],
+        gn_desc=gn_desc,
+        cc_to_target_map=cc_to_target_map,
+        action_limit=1,
+    )
+    self.assertEqual(rdeps, [])
+
+    rdeps = tidy._determine_rdeps_to_build_for(
+        missing_files=['foo.h'],
+        gn_desc=gn_desc,
+        cc_to_target_map=cc_to_target_map,
+        action_limit=2,
+    )
+    self.assertEqual(rdeps, ['//foo_user'])
+
+  def test_rdep_determination_prioritizes_targets_refed_by_many_rdeps(self):
+    self._silence_logs()
+
+    gn_desc = tidy._GnDesc(
+        per_target_srcs={
+            '//foo': ['foo.h'],
+            '//foo_user': ['foo_user.cc'],
+            '//bar': ['bar.h'],
+            '//bar_user': ['bar_user.cc'],
+            '//foo_and_bar_user': ['foo_and_bar_user.cc'],
+        },
+        deps={
+            '//foo_user': ['//foo'],
+            '//bar_user': ['//bar'],
+            '//foo_and_bar_user': ['//bar', '//foo'],
+        },
+    )
+
+    cc_to_target_map = {
+        'foo_user.cc': ['foo_user_1.o', 'foo_user_2.o'],
+        'bar_user.cc': ['bar_user_1.o', 'bar_user_2.o'],
+        'foo_and_bar_user.cc': ['foo_and_bar_user_1.o', 'foo_and_bar_user_2.o'],
+    }
+
+    rdeps = tidy._determine_rdeps_to_build_for(
+        missing_files=['bar.h', 'foo.h'],
+        gn_desc=gn_desc,
+        cc_to_target_map=cc_to_target_map,
+        action_limit=2,
+    )
+    self.assertEqual(rdeps, ['//foo_and_bar_user'])
+
+  def test_rdep_determination_prioritizes_targets_with_fewer_objects(self):
+    self._silence_logs()
+
+    gn_desc = tidy._GnDesc(
+        per_target_srcs={
+            '//foo': ['foo.h'],
+            '//large_foo_user': ['large_foo_user.cc'],
+            '//small_foo_user': ['small_foo_user.cc'],
+        },
+        deps={
+            '//large_foo_user': ['//foo'],
+            '//small_foo_user': ['//foo'],
+        },
+    )
+
+    cc_to_target_map = {
+        'large_foo_user.cc': ['large1.o', 'large2.o', 'large3.o'],
+        'small_foo_user.cc': ['small1.o', 'small2.o'],
+    }
+
+    rdeps = tidy._determine_rdeps_to_build_for(
+        missing_files=['foo.h'],
+        gn_desc=gn_desc,
+        cc_to_target_map=cc_to_target_map,
+        action_limit=3,
+    )
+    self.assertEqual(rdeps, ['//small_foo_user'])
+
+  def test_rdep_determination_ignores_empty_rdeps(self):
+    self._silence_logs()
+
+    gn_desc = tidy._GnDesc(
+        per_target_srcs={
+            '//foo': ['foo.h'],
+            '//foo_user': ['foo_user.cc'],
+            '//empty_foo_user1': ['empty_foo_user1.cc'],
+            '//empty_foo_user2': ['empty_foo_user2.cc'],
+        },
+        deps={
+            '//foo_user': ['//foo'],
+            '//empty_foo_user1': ['//foo'],
+            '//empty_foo_user2': ['//foo'],
+        },
+    )
+
+    cc_to_target_map = {
+        'foo_user.cc': ['foo_user_1.o', 'foo_user_2.o'],
+        'empty_foo_user1.cc': (),
+    }
+
+    rdeps = tidy._determine_rdeps_to_build_for(
+        missing_files=['foo.h'],
+        gn_desc=gn_desc,
+        cc_to_target_map=cc_to_target_map,
+    )
+    self.assertEqual(rdeps, ['//foo_user'])
+
+  def test_rdep_determination_works_with_empty_cases(self):
+    self._silence_logs()
+
+    rdeps = tidy._determine_rdeps_to_build_for(
+        missing_files=['foo.h'],
+        gn_desc=tidy._GnDesc(
+            per_target_srcs={},
+            deps={},
+        ),
+        cc_to_target_map={},
+    )
+    self.assertEqual(rdeps, [])
+
+    rdeps = tidy._determine_rdeps_to_build_for(
+        missing_files=['foo.h'],
+        gn_desc=tidy._GnDesc(
+            per_target_srcs={'//foo': ['foo.h']},
+            deps={},
+        ),
+        cc_to_target_map={},
+    )
+    self.assertEqual(rdeps, [])
+
+    rdeps = tidy._determine_rdeps_to_build_for(
+        missing_files=['foo.h'],
+        gn_desc=tidy._GnDesc(
+            per_target_srcs={'//foo': ['foo.h']},
+            deps={
+                '//foo_user': ['foo_user.cc'],
+            },
+        ),
+        cc_to_target_map={},
+    )
+    self.assertEqual(rdeps, [])
+
 
 if __name__ == '__main__':
   # Init logging here so users can remove `self._silence_logs()` from any of

@@ -848,6 +848,76 @@ def _reverse_dependencies_with_cc_sources(base_target: str,
   return result
 
 
+def _determine_rdeps_to_build_for(
+    missing_files: Iterable[str],
+    gn_desc: _GnDesc,
+    cc_to_target_map: Dict[str, List[str]],
+    # Experimentally, having to build 20K+ objects often hits timeouts on
+    # builders.
+    action_limit: int = 10000) -> List[str]:
+  """Determines targets to build in order to find users of `missing_files`.
+
+  Returns a list of target names to build. If the set of targets necessary to
+  build `missing_files` would build > `action_limit` objects, this uses
+  heuristics to trim the set down. The list is sorted alphabetically.
+
+  Note that this function may under-estimate how many _build_ actions actually
+  need to happen: ninja may have to build transitive dependencies of a given
+  object in order to build the object itself.
+  """
+  # The idea here is ultimately pretty simple, and encapsulated in
+  # `target_scores` below: return the most valuable targets that collectively
+  # have < `action_limit` actions. The more `missing_files` that refer to a
+  # target, the better. Similarly, the fewer files that a target builds, the
+  # better.
+  targets = collections.Counter()
+  for missing_file in missing_files:
+    for target in gn_desc.targets_containing(missing_file):
+      targets.update(_reverse_dependencies_with_cc_sources(target, gn_desc))
+
+  def calculate_number_of_actions(target: str) -> int:
+    """Calculates how many objects can be built out of `target`."""
+    return sum(
+        len(cc_to_target_map.get(src_file, ()))
+        for src_file in gn_desc.source_files_for_target(target))
+
+  action_counts = {
+      target: calculate_number_of_actions(target) for target in targets
+  }
+
+  empty_targets = [x for x in targets if not action_counts[x]]
+  for target in empty_targets:
+    logging.debug('Target %s has no actions; ignoring', target)
+    del action_counts[target]
+    del targets[target]
+
+  total_targets = sum(action_counts.values())
+  if total_targets <= action_limit:
+    return sorted(targets)
+
+  logging.info('Rdep targets for %s had %d potential actions. Trimming...',
+               missing_files, total_targets)
+
+  # Score targets based on how desirable they are to look for `missing_files`
+  # in. Targets with more action counts are less desirable, and targets with
+  # more covered files are more desirable. Lower scores = more strongly
+  # preferred. For determinism, ties are broken by alphabetical ordering.
+  target_scores = sorted((action_counts[target] / covered_files, target)
+                         for target, covered_files in targets.items())
+
+  cur_actions = total_targets
+  trimmed = []
+  while cur_actions > action_limit:
+    _, target = target_scores.pop()
+    cur_actions -= action_counts[target]
+    trimmed.append(target)
+
+  trimmed.sort()
+  logging.info('Saved %d actions by trimming %s', total_targets - cur_actions,
+               trimmed)
+  return sorted(target for _, target in target_scores)
+
+
 def _perform_build(out_dir: str, run_ninja: Any, parse_ninja_deps: Callable[
     [str], Generator[Tuple[str, List[str]], None, None]],
                    cc_to_target_map: Dict[str, List[str]], gn_desc: _GnDesc,
@@ -938,12 +1008,8 @@ def _perform_build(out_dir: str, run_ninja: Any, parse_ninja_deps: Callable[
     logging.info('Falling back to building reverse dependencies to locate %r.',
                  likely_found_in_rdeps)
 
-    reverse_dependency_targets = set()
-    for src_file in likely_found_in_rdeps:
-      for target in gn_desc.targets_containing(src_file):
-        reverse_dependency_targets.update(
-            _reverse_dependencies_with_cc_sources(target, gn_desc))
-    reverse_dependency_targets = sorted(reverse_dependency_targets)
+    reverse_dependency_targets = _determine_rdeps_to_build_for(
+        likely_found_in_rdeps, gn_desc, cc_to_target_map)
 
     all_targets = set()
     for rdep in reverse_dependency_targets:
