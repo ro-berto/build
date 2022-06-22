@@ -141,7 +141,7 @@ def SendCompileEvent(
 
     # To make bqupload work on Windows, we need to close before bqupload
     # touches it.
-    temp = tempfile.NamedTemporaryFile(delete=False)
+    temp = tempfile.NamedTemporaryFile(delete=False, mode='w')
     try:
       with temp as f_out:
         f_out.write(json_out)
