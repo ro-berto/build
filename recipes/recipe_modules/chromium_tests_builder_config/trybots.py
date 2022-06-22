@@ -7,22 +7,7 @@ from . import try_spec
 TRYBOTS = try_spec.TryDatabase.create({
     # The config for the following builders is now specified src-side in
     # //infra/config/subprojects/chromium/try/tryserver.blink.star
-    # * android-oreo-arm64-dbg
-    # * android-webview-marshmallow-arm64-dbg
-    # * android-webview-nougat-arm64-dbg
-    # * android-webview-oreo-arm64-dbg
-    # * android-webview-pie-arm64-dbg
-    # * android_arm64_dbg_recipe
-    # * android_n5x_swarming_dbg
-    # * android_unswarmed_pixel_aosp
-    # * layout_test_leak_detection
-    # * linux_chromium_cfi_rel_ng
-    # * linux_chromium_chromeos_asan_rel_ng
-    # * linux_chromium_chromeos_msan_rel_ng
-    # * linux_chromium_msan_rel_ng
     # * linux-blink-rel
-    # * linux-webkit-msan-rel
-    # * try-nougat-phone-tester
     'tryserver.blink': {
         'linux-blink-optional-highdpi-rel':
             try_spec.TrySpec.create_for_single_mirror(
@@ -98,9 +83,13 @@ TRYBOTS = try_spec.TryDatabase.create({
     # The config for the following builders is now specified src-side in
     # //infra/config/subprojects/chromium/try/tryserver.chromium.android.star
     # * android_archive_rel_ng
+    # * android_arm64_dbg_recipe
     # * android_compile_dbg
     # * android_compile_x64_dbg
     # * android_compile_x86_dbg
+    # * android_n5x_swarming_dbg
+    # * android_optional_gpu_tests_rel
+    # * android_unswarmed_pixel_aosp
     # * android-10-arm64-rel
     # * android-11-x86-rel
     # * android-12-x64-dbg
@@ -116,15 +105,20 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * android-marshmallow-arm64-rel
     # * android-marshmallow-x86-rel
     # * android-marshmallow-x86-rel-non-cq
+    # * android-oreo-arm64-dbg
     # * android-pie-arm64-rel
     # * android-pie-x86-rel
     # * android-weblayer-10-x86-rel-tests
     # * android-weblayer-marshmallow-x86-rel-tests
     # * android-weblayer-pie-x86-rel-tests
     # * android-webview-12-x64-dbg
-    # * android_optional_gpu_tests_rel
+    # * android-webview-marshmallow-arm64-dbg
+    # * android-webview-nougat-arm64-dbg
+    # * android-webview-oreo-arm64-dbg
+    # * android-webview-pie-arm64-dbg
     # * cast_shell_android
     # * gpu-try-android-m-nexus-5x-64
+    # * try-nougat-phone-tester
     'tryserver.chromium.android': {
         'android-11-x86-fyi-rel':
             try_spec.TrySpec.create_for_single_mirror(
@@ -404,12 +398,17 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * cast_shell_linux_arm64
     # * cast_shell_linux_dbg
     # * gpu-try-linux-nvidia-rel
+    # * layout_test_leak_detection
     # * linux_chromium_archive_rel_ng
     # * linux_chromium_asan_rel_ng
+    # * linux_chromium_cfi_rel_ng
+    # * linux_chromium_chromeos_asan_rel_ng
+    # * linux_chromium_chromeos_msan_rel_ng
     # * linux_chromium_clobber_rel_ng
     # * linux_chromium_compile_dbg_ng
     # * linux_chromium_compile_rel_ng
     # * linux_chromium_dbg_ng
+    # * linux_chromium_msan_rel_ng
     # * linux_chromium_tsan_rel_ng
     # * linux_chromium_ubsan_rel_ng
     # * linux_optional_gpu_tests_rel
@@ -425,6 +424,7 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * linux-rel
     # * linux-rel-warmed
     # * linux-wayland-rel
+    # * linux-webkit-msan-rel
     # * network_service_linux
     'tryserver.chromium.linux': {
         'fuchsia-fyi-arm64-femu':
