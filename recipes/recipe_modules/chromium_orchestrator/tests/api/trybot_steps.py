@@ -79,6 +79,7 @@ def GenTests(api):
         builder_group='fake-try-group',
         builder='fake-orchestrator',
         experiments=experiments,
+        revision='d3advegg13',
     )
 
   def basic(remove_src_checkout_experiment):
