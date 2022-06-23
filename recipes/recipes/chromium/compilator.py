@@ -9,6 +9,9 @@ from PB.recipes.build.chromium.compilator import InputProperties
 from PB.recipe_engine import result as result_pb2
 from RECIPE_MODULES.build import chromium
 from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
+from RECIPE_MODULES.build.chromium_tests.api import (
+    ALL_TEST_BINARIES_ISOLATE_NAME)
+from RECIPE_MODULES.build.code_coverage.api import MAX_CANDIDATE_FILES
 from recipe_engine import post_process
 from PB.go.chromium.org.luci.resultdb.proto.v1 \
     import common as resultdb_common
@@ -147,7 +150,12 @@ def compilator_steps(api, properties):
 
     if any(t.uses_isolate for t in test_suites):
       if remove_src_checkout_experiment:
-        archive_src_side_deps(api)
+        affected_files_to_archive = []
+        if not api.code_coverage.skipping_coverage:
+          affected_files_to_archive = [
+              api.path['checkout'].join(f) for f in task.affected_files
+          ]
+        archive_src_side_deps(api, affected_files_to_archive)
 
       # Isolate the tests first so the Orchestrator can trigger them asap
       trigger_properties = execution_info.ensure_command_lines_archived(
@@ -183,10 +191,16 @@ def compilator_steps(api, properties):
     return raw_result
 
 
-def archive_src_side_deps(api):
-  """Archives src-side deps that the Orchestrator needs to run tests/coverage"""
+def archive_src_side_deps(api, affected_files):
+  """Archives src-side deps that the Orchestrator needs to run tests/coverage.
+
+  Affected files is also needed by the orchestrator to run code coverage
+
+  Args:
+    affected_files (list): List of string paths
+  """
   with api.step.nest('archive src-side dep paths') as nested_step:
-    dep_paths = get_src_side_dep_paths(api)
+    dep_paths = get_src_side_dep_paths(api) + affected_files
 
     digest = api.cas.archive('archive src-side deps', str(api.path['checkout']),
                              *dep_paths)
@@ -518,10 +532,16 @@ def GenTests(api):
               '../../testing/merge_scripts/merge_api.py\n'
               '../../testing/merge_scripts/standard_gtest_merge.py')),
       api.post_process(
-          post_process.LogContains, 'archive src-side dep paths', 'dep paths', [
+          post_process.LogContains,
+          'archive src-side dep paths',
+          'dep paths',
+          [
               '[CACHE]/builder/src/testing/merge_scripts/merge_api.py',
               '[CACHE]/builder/src/testing/merge_scripts/'
-              'standard_gtest_merge.py'
+              'standard_gtest_merge.py',
+              # foo.cc is the step_test_data for
+              # tryserver.get_files_affected_by_patch()
+              '[CACHE]/builder/src/foo.cc',
           ]),
       api.post_process(
           post_process.StepCommandContains,
@@ -533,6 +553,68 @@ def GenTests(api):
       api.post_process(post_process.PropertiesContain, 'src_side_deps_digest'),
       api.post_process(post_process.PropertiesContain,
                        'src_side_test_spec_dir'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  def make_git_diff_affected_files(count):
+    file_dir = '[CACHE]/builder/src/'
+    output = ''
+    for i in range(count):
+      output += file_dir + 'foo{}.cc'.format(i) + '\n'
+    return output
+
+  yield api.test(
+      'archive_src_side_runtime_deps_skipping_coverage',
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-compilator',
+          revision='deadbeef',
+          experiments=['remove_src_checkout_experiment']),
+      api.platform.name('linux'),
+      api.path.exists(api.path['checkout'].join('out/Release/browser_tests')),
+      api.code_coverage(use_clang_coverage=True),
+      ctbc_properties(),
+      api.properties(
+          InputProperties(
+              orchestrator=InputProperties.Orchestrator(
+                  builder_name='fake-orchestrator',
+                  builder_group='fake-try-group'))),
+      api.filter.suppress_analyze(),
+      override_test_spec(),
+      api.step_data(
+          'git diff to analyze patch',
+          api.raw_io.stream_output(
+              make_git_diff_affected_files(MAX_CANDIDATE_FILES + 1)),
+      ),
+      api.step_data(
+          'archive src-side dep paths.read orchestrator_all.runtime_deps',
+          api.file.read_text(
+              '../../testing/merge_scripts/merge_api.py\n'
+              '../../testing/merge_scripts/standard_gtest_merge.py')),
+      api.post_process(
+          post_process.LogDoesNotContain, 'archive src-side dep paths',
+          'dep paths',
+          make_git_diff_affected_files(MAX_CANDIDATE_FILES + 1).split()),
+      api.post_process(
+          post_process.LogContains, 'archive src-side dep paths', 'dep paths', [
+              '[CACHE]/builder/src/testing/merge_scripts/merge_api.py',
+              '[CACHE]/builder/src/testing/merge_scripts/'
+              'standard_gtest_merge.py',
+          ]),
+      api.post_process(
+          post_process.StepCommandContains,
+          'compile (with patch)',
+          [ORCHESTRATOR_ALL_TARGET_NAME],
+      ),
+      api.post_process(
+          post_process.LogDoesNotContain,
+          'isolate tests (with patch)',
+          'json.output',
+          [ALL_TEST_BINARIES_ISOLATE_NAME],
+      ),
+      api.post_process(post_process.PropertyEquals, 'skipping_coverage', True),
+      api.post_process(post_process.MustRun,
+                       'archive src-side dep paths.archive src-side deps'),
       api.post_process(post_process.DropExpectation),
   )
 
