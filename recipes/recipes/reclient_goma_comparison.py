@@ -99,7 +99,7 @@ COMPARISON_BUILDERS = freeze({
     },
     'Comparison ios (reclient)': {
         'chromium_config': 'chromium',
-        'gclient_config': 'chromium',
+        'gclient_config': 'ios',
         'chromium_apply_config': [
             'mb', 'mac_toolchain', 'goma_enable_cache_silo',
             'goma_large_cache_file'
