@@ -36,12 +36,9 @@ def start_cloudtail(args):
       args.cloudtail_log_id,
       '--path',
       args.cloudtail_log_path,
+      '--service-account-json',
+      ':gce',
   ]
-  if args.cloudtail_service_account_json:
-    cloudtail_cmd.extend([
-        '--service-account-json',
-        args.cloudtail_service_account_json,
-    ])
 
   proc = subprocess.Popen(cloudtail_cmd, **kwargs)
 

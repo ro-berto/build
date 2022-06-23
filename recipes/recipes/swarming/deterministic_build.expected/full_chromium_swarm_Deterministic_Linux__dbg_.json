@@ -870,14 +870,6 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "preprocess_for_goma.global goma cloudtail account is used",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@task account should be used for http://b/234124657 instead.@@@"
-    ]
-  },
-  {
     "cmd": [
       "python3",
       "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
@@ -885,9 +877,7 @@
       "--cloudtail-path",
       "cloudtail",
       "--pid-file",
-      "[TMP_BASE]/cloudtail.pid",
-      "--cloudtail-service-account-json",
-      "/creds/service_accounts/service-account-goma-cloudtail.json"
+      "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

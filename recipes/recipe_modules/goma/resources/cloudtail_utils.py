@@ -33,9 +33,6 @@ def main():
   parser_start.set_defaults(command='start')
   parser_start.add_argument(
       '--cloudtail-path', required=True, help='path of cloudtail binary')
-  parser_start.add_argument(
-      '--cloudtail-service-account-json',
-      help='path of cloudtail service account json file')
 
   parser_start.add_argument(
       '--pid-file', required=True, help='file written pid')

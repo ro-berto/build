@@ -76,10 +76,6 @@ class GomaApi(recipe_api.RecipeApi):
     return self.m.puppet_service_account.get_key_path('goma-client')
 
   @property
-  def _cloudtail_service_account_json_path(self):
-    return self.m.puppet_service_account.get_key_path('goma-cloudtail')
-
-  @property
   def counterz_path(self):
     assert self._goma_dir
     return self.m.path['tmp_base'].join('goma_counterz')
@@ -295,14 +291,6 @@ class GomaApi(recipe_api.RecipeApi):
         self.cloudtail_exe, '--pid-file',
         self.m.raw_io.output_text(leak_to=self.cloudtail_pid_file)
     ]
-    if not self._use_luci_auth:
-      self.m.step.empty(
-        'global goma cloudtail account is used',
-        step_text='task account should be used for http://b/234124657 instead.')
-      cloudtail_args.extend([
-          '--cloudtail-service-account-json',
-          self._cloudtail_service_account_json_path,
-      ])
 
     self.m.step(
         name='start cloudtail',

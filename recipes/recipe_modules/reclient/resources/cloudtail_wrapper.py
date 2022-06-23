@@ -17,7 +17,6 @@ import cloudtail_utils
 
 def start_cloudtail(args):
   args.cloudtail_log_id = 'chromium_reclient'
-  args.cloudtail_service_account_json = None
   return cloudtail_utils.start_cloudtail(args)
 
 
