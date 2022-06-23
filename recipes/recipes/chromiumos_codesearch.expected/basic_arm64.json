@@ -298,6 +298,7 @@
       "[CACHE]/builder/chromiumos/src/scripts/package_index_cros/main.py",
       "--with-build",
       "--with-tests",
+      "--keep-going",
       "--board",
       "arm64-generic",
       "--build-dir",
