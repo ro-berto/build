@@ -192,8 +192,9 @@ def RunSteps(api, properties):
 
   # Create the kythe index pack and upload it to google storage.
   api.codesearch.create_and_upload_kythe_index_pack(
-      commit_hash=properties.root_solution_revision or None,
-      commit_timestamp=int(properties.root_solution_revision_timestamp or
+      commit_hash=properties.codesearch_mirror_revision or None,
+      commit_timestamp=int(properties.codesearch_mirror_revision_timestamp or
+                           properties.root_solution_revision_timestamp or
                            api.time.time()))
 
   # Check out the generated files repo and sync the generated files
@@ -256,7 +257,7 @@ def GenTests(api):
 
   def props(platform, internal=False):
     return api.properties(
-        root_solution_revision='0000000000000000000000000000000000000000',
+        root_solution_revision='HEAD',
         root_solution_revision_timestamp=1337000001,
         recipe_properties=RecipeProperties(
             compile_targets=['all'],

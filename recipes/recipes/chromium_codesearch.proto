@@ -16,13 +16,11 @@ message InputProperties {
 
   // The revision for codesearch to use for kythe references. Uses
   // root_solution_revision if not available.
-  // DEPRECATED: This field is no longer used.
   string codesearch_mirror_revision = 3;
 
   // The commit timestamp of the revision for codesearch to use, in seconds
   // since the UNIX epoch. Uses root_solution_revision_timestamp if not
   // available.
-  // DEPRECATED: This field is no longer used.
   int32 codesearch_mirror_revision_timestamp = 4;
 
   // Properties set by builder configs. These can be found in infra/infra, e.g.
