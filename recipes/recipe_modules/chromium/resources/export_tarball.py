@@ -164,6 +164,13 @@ def main(argv):
                      cwd=options.src_dir) != 0:
     print 'Could not run build/util/lastchange.py to update skia_commit_hash.h.'
     return 1
+  if subprocess.call([
+      'python', 'build/util/lastchange.py', '-s', 'third_party/dawn',
+      '--revision', 'gpu/webgpu/DAWN_VERSION'
+  ],
+                     cwd=options.src_dir) != 0:
+    print 'Could not run build/util/lastchange.py to update DAWN_VERSION.'
+    return 1
   # The --revision-id-only option was introduced in M64; so we need to skip
   # this call when building earlier milestones.
   if version_major >= 64:
