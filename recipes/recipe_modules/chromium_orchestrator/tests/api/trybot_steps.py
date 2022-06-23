@@ -1014,46 +1014,6 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
 
-  yield api.test(
-      'compilator_skipping_coverage',
-      api.chromium.try_build(
-          builder_group='fake-try-group',
-          builder='fake-orchestrator',
-          experiments=['remove_src_checkout_experiment'],
-      ),
-      ctbc_properties(),
-      api.properties(
-          **{
-              '$build/chromium_orchestrator':
-                  InputProperties(
-                      compilator='fake-compilator',
-                      compilator_watcher_git_revision='e841fc',
-                  ),
-          }),
-      api.code_coverage(use_clang_coverage=True),
-      api.chromium_orchestrator.override_test_spec(
-          builder_group='fake-group',
-          builder='fake-builder',
-          tester='fake-tester',
-      ),
-      api.chromium_orchestrator.override_compilator_steps(
-          skipping_coverage=True),
-      api.chromium_orchestrator.override_compilator_steps(
-          is_swarming_phase=False),
-      api.post_process(post_process.MustRun, 'browser_tests (with patch)'),
-      api.post_process(post_process.DoesNotRun,
-                       'downloading cas digest all_test_binaries'),
-      api.post_process(post_process.MustRun, 'download src-side deps'),
-      api.post_process(
-          # Only generates coverage data for the with patch step.
-          post_process.DoesNotRun,
-          'process clang code coverage data for overall test '
-          'coverage.generate metadata for overall test coverage in 1 '
-          'tests'),
-      api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation),
-  )
-
   def code_coverage_trybot_with_patch(remove_src_checkout_experiment):
     steps = sum(
         [

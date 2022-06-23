@@ -108,7 +108,7 @@ class Task(object):
   # Holds state on build properties. Used to pass state between methods.
   bot_update_step = attrib(step_data.StepData)
 
-  # A list of paths (strings) affected by the CL, relative to the checkout.
+  # A list of paths (strings) affected by the CL.
   affected_files = attrib(sequence[str])
 
   # How to execute each test in 'tests' which runs on swarming.
@@ -2066,9 +2066,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                      trybot to configurations of the mirrored CI bot. Defaults
                      are in ChromiumTestsApi.
       isolate_output_files_for_coverage: Whether to also upload all test
-        binaries and other required code coverage output files to one hash. If
-        code_coverage.instrument sets skipping_coverage to True, then this
-        kwarg will be overriden to be False.
+        binaries and other required code coverage output files to one hash.
       additional_compile_targets (List[str]): Additional compile targets
         specified recipe-side. This field is intended for recipes to add
         targets needed for recipe functionality and not for configuring builder
@@ -2109,10 +2107,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self.m.code_coverage.src_dir = self.m.chromium_checkout.src_dir
       self.m.code_coverage.instrument(
           affected_files, is_deps_only_change=is_deps_only_change)
-      # Don't isolate output files if coverage is skipped anyway
-      isolate_output_files_for_coverage = (
-          isolate_output_files_for_coverage and
-          not self.m.code_coverage.skipping_coverage)
 
     tests = []
     if not builder_config.is_compile_only:

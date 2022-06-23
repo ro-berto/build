@@ -32,8 +32,6 @@ class CompilatorOutputProps(object):
     src_side_deps_digest: CAS digest hash (str) for downloading src-side deps
     src_side_test_spec_dir: Path (str) to downloaded src-side directory that
       contains test specs, relative to the root of the downloaded src-side deps
-    skipping_coverage: Whether coverage is being skipped. The compilator
-      determines this by checking the len of affected eligible files.
   """
 
   swarming_props = attrib(mapping[str, ...])
@@ -42,7 +40,6 @@ class CompilatorOutputProps(object):
   deleted_files = attrib(sequence[str], default=None)
   src_side_deps_digest = attrib(str, default=None)
   src_side_test_spec_dir = attrib(str, default=None)
-  skipping_coverage = attrib(bool, default=None)
 
 
 class ChromiumOrchestratorApi(recipe_api.RecipeApi):
@@ -247,8 +244,7 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
     self.m.chromium_tests.configure_swarming(
         self.m.tryserver.is_tryserver, builder_group=builder_id.group)
 
-    if (self.m.code_coverage.using_coverage and
-        not comp_output.skipping_coverage):
+    if self.m.code_coverage.using_coverage:
       self.m.code_coverage.set_is_per_cl_coverage(True)
       self.m.code_coverage.filter_and_set_eligible_files(affected_files)
 
@@ -285,8 +281,7 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
               tests,
               retry_failed_shards=builder_config.retry_failed_shards))
 
-      if (self.m.code_coverage.using_coverage and
-          not comp_output.skipping_coverage):
+      if self.m.code_coverage.using_coverage:
         self.m.code_coverage.process_coverage_data(tests)
 
     # Let's check back on the compilator to see the results of the local
@@ -520,7 +515,7 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
 
     swarming_prop_key = 'swarming_trigger_properties'
     if is_swarming_phase and swarming_prop_key in sub_build.output.properties:
-      output_props = MessageToDict(sub_build.output.properties)
+      output_props = sub_build.output.properties
 
       got_revisions = {k: v for k, v in output_props.items() if 'got_' in k}
 
@@ -529,8 +524,6 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
         affected_files = self.m.chromium_checkout.format_affected_file_paths(
             output_props['affected_files']['first_100'])
 
-      # TODO (kimstephanie): Replace deleted_files and src_side_.* with
-      # output_props.get() in a separate CL
       deleted_files = None
       if 'deleted_files' in output_props:
         deleted_files = output_props['deleted_files']
@@ -542,13 +535,12 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
         src_side_test_spec_dir = output_props['src_side_test_spec_dir']
 
       comp_output = CompilatorOutputProps(
-          swarming_props=output_props[swarming_prop_key],
+          swarming_props=MessageToDict(output_props[swarming_prop_key]),
           got_revisions=got_revisions,
           affected_files=affected_files,
           deleted_files=deleted_files,
           src_side_deps_digest=src_side_deps_digest,
           src_side_test_spec_dir=src_side_test_spec_dir,
-          skipping_coverage=output_props.get('skipping_coverage'),
       )
       return comp_output, None
 
