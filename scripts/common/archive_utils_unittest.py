@@ -15,7 +15,6 @@ import zipfile
 BASE_DIR = os.path.join(
     os.path.dirname(os.path.abspath(__file__)), '..', '..')
 sys.path.append(os.path.join(BASE_DIR, 'scripts'))
-sys.path.append(os.path.join(BASE_DIR, 'site_config'))
 
 from common import archive_utils
 

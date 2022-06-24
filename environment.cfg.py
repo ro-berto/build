@@ -20,6 +20,5 @@ def Extend(pythonpath, cwd):
       cwd,
       os.path.join(cwd, 'scripts'),
       os.path.join(cwd, 'recipes'),
-      os.path.join(cwd, 'site_config'),
   ]
   return pythonpath.Append(*build_path)

@@ -1697,26 +1697,6 @@ def FileExclusions():
   return all_platforms
 
 
-def DatabaseSetup(buildmaster_config):
-  """Configure the database settings for the buildbot master."""
-
-  # By default nothing is ever deleted from the database.  We set a
-  # changeHorizon here to put an upper bound on the database size.
-  if 'changeHorizon' not in buildmaster_config:
-    buildmaster_config['changeHorizon'] = 30000
-
-  # Read database credentials in the master directory.
-  if os.path.isfile('.dbconfig'):
-    values = {}
-    execfile('.dbconfig', values)
-    if 'password' not in values:
-      raise Exception('could not get db password')
-
-    buildmaster_config['db_url'] = 'postgresql://%s:%s@%s/%s' % (
-        values['username'], values['password'],
-        values.get('hostname', 'localhost'), values['dbname'])
-
-
 def IsClangWinBuild(build_dir, target):
   """Check if a ninja build has been build with Clang on Windows."""
   if not IsWindows():

@@ -258,14 +258,6 @@ def GSUtilSetup():
       gsutil += '.bat'
     gsutil = [gsutil]
 
-  # Get the path to the boto file containing the password.
-  boto_file = os.path.join(os.path.dirname(__file__), '..', '..', 'site_config',
-                           '.boto')
-
-  # Make sure gsutil uses this boto file if it exists.
-  if os.path.exists(boto_file):
-    os.environ['AWS_CREDENTIAL_FILE'] = boto_file
-    os.environ['BOTO_CONFIG'] = boto_file
   return gsutil
 
 

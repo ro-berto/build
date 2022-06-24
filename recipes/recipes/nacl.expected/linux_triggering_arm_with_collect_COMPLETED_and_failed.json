@@ -299,7 +299,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GOMA_TMP_DIR": "[TMP_BASE]/goma",
       "NOCONTROL_GOMA": "1",
-      "PYTHONPATH": "RECIPE_REPO[build]/scripts:RECIPE_REPO[build]/site_config"
+      "PYTHONPATH": "RECIPE_REPO[build]/scripts"
     },
     "infra_step": true,
     "luci_context": {
@@ -384,7 +384,7 @@
       "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_TMP_DIR": "[TMP_BASE]/goma",
       "NOCONTROL_GOMA": "1",
-      "PYTHONPATH": "RECIPE_REPO[build]/scripts:RECIPE_REPO[build]/site_config"
+      "PYTHONPATH": "RECIPE_REPO[build]/scripts"
     },
     "env_suffixes": {
       "DEPOT_TOOLS_UPDATE": [
@@ -438,7 +438,7 @@
       "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_TMP_DIR": "[TMP_BASE]/goma",
       "NOCONTROL_GOMA": "1",
-      "PYTHONPATH": "RECIPE_REPO[build]/scripts:RECIPE_REPO[build]/site_config"
+      "PYTHONPATH": "RECIPE_REPO[build]/scripts"
     },
     "env_suffixes": {
       "DEPOT_TOOLS_UPDATE": [
@@ -501,7 +501,7 @@
       "GOMA_TMP_DIR": "[TMP_BASE]/goma",
       "MAC_CHROMIUM_TMPDIR": "[CLEANUP]/tmp_tmp_2",
       "NOCONTROL_GOMA": "1",
-      "PYTHONPATH": "RECIPE_REPO[build]/scripts:RECIPE_REPO[build]/site_config",
+      "PYTHONPATH": "RECIPE_REPO[build]/scripts",
       "TEMP": "[CLEANUP]/tmp_tmp_2",
       "TEMPDIR": "[CLEANUP]/tmp_tmp_2",
       "TMP": "[CLEANUP]/tmp_tmp_2",
@@ -1095,7 +1095,7 @@
       "-server",
       "https://example.swarmingserver.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"odroid_32-newlib-arm_hw-pnacl-dbg\", \"priority\": \"200\", \"realm\": \"project:ci\", \"service_account\": \"\", \"task_slices\": [{\"expiration_secs\": \"7200\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\", \"size_bytes\": \"0\"}}, \"command\": [\"python\", \"buildbot/buildbot_selector.py\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"builder\", \"value\": \"odroid_32-newlib-arm_hw-pnacl-dbg\"}, {\"key\": \"pool\", \"value\": \"luci.flex.ci\"}], \"env\": [{\"key\": \"BOT_TYPE\", \"value\": \"arm_hw_bot\"}, {\"key\": \"BUILDBOT_BUILDERNAME\", \"value\": \"odroid_32-newlib-arm_hw-pnacl-dbg\"}, {\"key\": \"BUILDBOT_MASTERNAME\", \"value\": \"client.nacl\"}, {\"key\": \"BUILDBOT_SLAVE_TYPE\", \"value\": \"BuilderTester\"}, {\"key\": \"PYTHONPATH\", \"value\": \"RECIPE_REPO[build]/scripts:RECIPE_REPO[build]/site_config\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"60\", \"outputs\": [], \"relative_cwd\": \"native_client\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"odroid_32-newlib-arm_hw-pnacl-dbg\", \"priority\": \"200\", \"realm\": \"project:ci\", \"service_account\": \"\", \"task_slices\": [{\"expiration_secs\": \"7200\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\", \"size_bytes\": \"0\"}}, \"command\": [\"python\", \"buildbot/buildbot_selector.py\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"builder\", \"value\": \"odroid_32-newlib-arm_hw-pnacl-dbg\"}, {\"key\": \"pool\", \"value\": \"luci.flex.ci\"}], \"env\": [{\"key\": \"BOT_TYPE\", \"value\": \"arm_hw_bot\"}, {\"key\": \"BUILDBOT_BUILDERNAME\", \"value\": \"odroid_32-newlib-arm_hw-pnacl-dbg\"}, {\"key\": \"BUILDBOT_MASTERNAME\", \"value\": \"client.nacl\"}, {\"key\": \"BUILDBOT_SLAVE_TYPE\", \"value\": \"BuilderTester\"}, {\"key\": \"PYTHONPATH\", \"value\": \"RECIPE_REPO[build]/scripts\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"60\", \"outputs\": [], \"relative_cwd\": \"native_client\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -1184,7 +1184,7 @@
       "@@@STEP_LOG_LINE@json.input@              }, @@@",
       "@@@STEP_LOG_LINE@json.input@              {@@@",
       "@@@STEP_LOG_LINE@json.input@                \"key\": \"PYTHONPATH\", @@@",
-      "@@@STEP_LOG_LINE@json.input@                \"value\": \"RECIPE_REPO[build]/scripts:RECIPE_REPO[build]/site_config\"@@@",
+      "@@@STEP_LOG_LINE@json.input@                \"value\": \"RECIPE_REPO[build]/scripts\"@@@",
       "@@@STEP_LOG_LINE@json.input@              }@@@",
       "@@@STEP_LOG_LINE@json.input@            ], @@@",
       "@@@STEP_LOG_LINE@json.input@            \"env_prefixes\": [], @@@",

@@ -302,7 +302,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GOMA_TMP_DIR": "[TMP_BASE]/goma",
       "NOCONTROL_GOMA": "1",
-      "PYTHONPATH": "RECIPE_REPO[build]/scripts:RECIPE_REPO[build]/site_config"
+      "PYTHONPATH": "RECIPE_REPO[build]/scripts"
     },
     "infra_step": true,
     "luci_context": {
@@ -384,7 +384,7 @@
       "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_TMP_DIR": "[TMP_BASE]/goma",
       "NOCONTROL_GOMA": "1",
-      "PYTHONPATH": "RECIPE_REPO[build]/scripts:RECIPE_REPO[build]/site_config"
+      "PYTHONPATH": "RECIPE_REPO[build]/scripts"
     },
     "env_suffixes": {
       "DEPOT_TOOLS_UPDATE": [
@@ -446,7 +446,7 @@
       "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_TMP_DIR": "[TMP_BASE]/goma",
       "NOCONTROL_GOMA": "1",
-      "PYTHONPATH": "RECIPE_REPO[build]/scripts:RECIPE_REPO[build]/site_config"
+      "PYTHONPATH": "RECIPE_REPO[build]/scripts"
     },
     "env_suffixes": {
       "DEPOT_TOOLS_UPDATE": [
@@ -491,7 +491,7 @@
       "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_TMP_DIR": "[TMP_BASE]/goma",
       "NOCONTROL_GOMA": "1",
-      "PYTHONPATH": "RECIPE_REPO[build]/scripts:RECIPE_REPO[build]/site_config"
+      "PYTHONPATH": "RECIPE_REPO[build]/scripts"
     },
     "env_suffixes": {
       "DEPOT_TOOLS_UPDATE": [
@@ -545,7 +545,7 @@
       "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_TMP_DIR": "[TMP_BASE]/goma",
       "NOCONTROL_GOMA": "1",
-      "PYTHONPATH": "RECIPE_REPO[build]/scripts:RECIPE_REPO[build]/site_config"
+      "PYTHONPATH": "RECIPE_REPO[build]/scripts"
     },
     "env_suffixes": {
       "DEPOT_TOOLS_UPDATE": [
@@ -599,7 +599,7 @@
       "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_TMP_DIR": "[TMP_BASE]/goma",
       "NOCONTROL_GOMA": "1",
-      "PYTHONPATH": "RECIPE_REPO[build]/scripts:RECIPE_REPO[build]/site_config"
+      "PYTHONPATH": "RECIPE_REPO[build]/scripts"
     },
     "env_suffixes": {
       "DEPOT_TOOLS_UPDATE": [
@@ -662,7 +662,7 @@
       "GOMA_TMP_DIR": "[TMP_BASE]/goma",
       "MAC_CHROMIUM_TMPDIR": "[CLEANUP]/tmp_tmp_2",
       "NOCONTROL_GOMA": "1",
-      "PYTHONPATH": "RECIPE_REPO[build]/scripts:RECIPE_REPO[build]/site_config",
+      "PYTHONPATH": "RECIPE_REPO[build]/scripts",
       "TEMP": "[CLEANUP]/tmp_tmp_2",
       "TEMPDIR": "[CLEANUP]/tmp_tmp_2",
       "TMP": "[CLEANUP]/tmp_tmp_2",
@@ -716,7 +716,7 @@
       "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_TMP_DIR": "[TMP_BASE]/goma",
       "NOCONTROL_GOMA": "1",
-      "PYTHONPATH": "RECIPE_REPO[build]/scripts:RECIPE_REPO[build]/site_config"
+      "PYTHONPATH": "RECIPE_REPO[build]/scripts"
     },
     "env_suffixes": {
       "DEPOT_TOOLS_UPDATE": [

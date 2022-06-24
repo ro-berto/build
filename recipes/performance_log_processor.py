@@ -403,8 +403,7 @@ class GraphingLogProcessor(PerformanceLogProcessor):
   """
 
   # The file into which the GraphingLogProcessor will save a list of graph
-  # names for use by the JS doing the plotting. Match the value of
-  # Master.perf_graph_list in //build/site_config/config_bootstrap.py.
+  # names for use by the JS doing the plotting.
   GRAPH_LIST = 'graphs.dat'
 
   RESULTS_REGEX = re.compile(r'(?P<IMPORTANT>\*)?RESULT '

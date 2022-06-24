@@ -93,27 +93,15 @@ def AnnotatedStepsSteps(api, got_revision, checkout_path,
                         compiled_sources_path):
   # Default environment; required by all builders.
   env = {
-      'BETWEEN_BUILDERS':
-          str(compiled_sources_path),
-      'BOT_TYPE':
-          'builder_bot',
-      'BUILDBOT_MASTERNAME':
-          api.builder_group.for_current,
-      'BUILDBOT_BUILDERNAME':
-          api.buildbucket.builder_name,
-      'BUILDBOT_REVISION':
-          api.buildbucket.gitiles_commit.id,
-      'BUILDBOT_BUILDNUMBER':
-          api.buildbucket.build.number,
-      'BUILDBOT_GOT_REVISION':
-          got_revision,
-      'BUILDBOT_SLAVE_TYPE':
-          api.properties['slavetype'],
-      'PYTHONPATH':
-          api.path.pathsep.join([
-              str(api.repo_resource('scripts')),
-              str(api.repo_resource('site_config'))
-          ]),
+      'BETWEEN_BUILDERS': str(compiled_sources_path),
+      'BOT_TYPE': 'builder_bot',
+      'BUILDBOT_MASTERNAME': api.builder_group.for_current,
+      'BUILDBOT_BUILDERNAME': api.buildbucket.builder_name,
+      'BUILDBOT_REVISION': api.buildbucket.gitiles_commit.id,
+      'BUILDBOT_BUILDNUMBER': api.buildbucket.build.number,
+      'BUILDBOT_GOT_REVISION': got_revision,
+      'BUILDBOT_SLAVE_TYPE': api.properties['slavetype'],
+      'PYTHONPATH': str(api.repo_resource('scripts')),
   }
   goma_dir = None
   # HACK(yyanagisawa): won't set up goma client on 32bit OSes.
@@ -211,19 +199,11 @@ def TriggerHardwareTests(api, got_revision, checkout_path,
   isolated_digest = UploadFilesToCAS(api, isolated_files)
 
   environment_vars = {
-      'BUILDBOT_MASTERNAME':
-          api.builder_group.for_current,
-      'BUILDBOT_BUILDERNAME':
-          dimensions['builder'],
-      'BUILDBOT_SLAVE_TYPE':
-          api.properties['slavetype'],
-      'PYTHONPATH':
-          api.path.pathsep.join([
-              str(api.repo_resource('scripts')),
-              str(api.repo_resource('site_config'))
-          ]),
-      'BOT_TYPE':
-          'arm_hw_bot',
+      'BUILDBOT_MASTERNAME': api.builder_group.for_current,
+      'BUILDBOT_BUILDERNAME': dimensions['builder'],
+      'BUILDBOT_SLAVE_TYPE': api.properties['slavetype'],
+      'PYTHONPATH': str(api.repo_resource('scripts')),
+      'BOT_TYPE': 'arm_hw_bot',
   }
 
   # Generate the swarming request
