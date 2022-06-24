@@ -84,7 +84,7 @@ def SetStepInfo(json_file, exit_status, step_info):
 
 def SendCompileEvent(
     goma_stats_file, goma_counterz_file, json_file, exit_status,
-    goma_crash_report, build_id, step_name, bqupload, service_account_json
+    goma_crash_report, build_id, step_name, bqupload
 ):
   """Insert CompileEvent to BigQuery table.
 
@@ -98,7 +98,6 @@ def SendCompileEvent(
     build_id: Build ID string.
     step_name: a name of a compile step.
     bqupload: a path to the bqupload command.
-    service_account_json: a service account json file, or luci auth.
   """
   event = compile_events_pb2.CompileEvent()
   event.build_id = build_id
@@ -134,10 +133,7 @@ def SendCompileEvent(
     table_name = '%s.%s.%s' % (
         COMPILE_EVENTS_PROJECT, COMPILE_EVENTS_DATASET, COMPILE_EVENTS_TABLE
     )
-    args = [bqupload]
-    if service_account_json:
-      args += ['-service-account-json', service_account_json]
-    args.append(table_name)
+    args = [bqupload, table_name]
 
     # To make bqupload work on Windows, we need to close before bqupload
     # touches it.

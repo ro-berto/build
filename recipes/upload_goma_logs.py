@@ -104,12 +104,6 @@ def main():
       '--build-step-name', default='', help='step name of the current build'
   )
   parser.add_argument(
-      '--bigquery-service-account-json',
-      default='',
-      metavar='FILENAME',
-      help='Service account json for BigQuery'
-  )
-  parser.add_argument(
       '--bqupload-path',
       default='',
       metavar='FILENAME',
@@ -183,7 +177,6 @@ def main():
         args.goma_stats_file, args.goma_counterz_file, args.json_status,
         args.build_exit_status, args.goma_crash_report_id_file, args.build_id,
         args.build_step_name, args.bqupload_path,
-        args.bigquery_service_account_json
     )
 
   if args.goma_stats_file:

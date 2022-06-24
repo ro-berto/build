@@ -620,14 +620,6 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "postprocess_for_goma.global goma bigquery account is used",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@task account should be used for http://b/234124657 instead.@@@"
-    ]
-  },
-  {
     "cmd": [
       "vpython3",
       "RECIPE_REPO[build]/recipes/upload_goma_logs.py",
@@ -638,8 +630,6 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "--bqupload-path",
       "[CACHE]/goma/bqupload/bqupload",
-      "--bigquery-service-account-json",
-      "/creds/service_accounts/service-account-goma-bigquery.json",
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
@@ -1141,14 +1131,6 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "postprocess_for_goma (2).global goma bigquery account is used",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@task account should be used for http://b/234124657 instead.@@@"
-    ]
-  },
-  {
     "cmd": [
       "vpython3",
       "RECIPE_REPO[build]/recipes/upload_goma_logs.py",
@@ -1159,8 +1141,6 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "--bqupload-path",
       "[CACHE]/goma/bqupload/bqupload",
-      "--bigquery-service-account-json",
-      "/creds/service_accounts/service-account-goma-bigquery.json",
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
