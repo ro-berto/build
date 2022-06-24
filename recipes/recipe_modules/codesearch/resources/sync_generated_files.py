@@ -148,8 +148,20 @@ def copy_generated_files(source_dir, dest_dir, kzip_input_suffixes=None):
 
     for filename in filenames:
       source_file = os.path.join(dirpath, filename)
+
+      # Don't sync any temporary files. These aren't actually referenced.
+      source_parts = source_file.split(os.sep)
+      if 'tmp' in source_parts:
+        continue
+
       if not has_allowed_extension(source_file) \
           or kzip_input_suffixes and not is_referenced(source_file):
+        continue
+
+      # arm-generic builder runs into an issue where source_file disappears by
+      # the time it's copied. Check source_file so the builder doesn't fail.
+      if not os.path.exists(source_file):
+        print('File does not exist:', source_file)
         continue
 
       dest_file = translate_root(source_dir, dest_dir, source_file)
