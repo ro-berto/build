@@ -58,13 +58,6 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
     self.current_compilator_buildbucket_id = None
 
   def trybot_steps(self):
-    # The buildbucket input gitiles_commit is populated by the bootstrapper.
-    # If the builder does not use the bootstrapper, gitiles_commit will not
-    # be populated.
-    if self.m.buildbucket.build.input.HasField('gitiles_commit'):
-      self.m.buildbucket.set_output_gitiles_commit(
-          self.m.buildbucket.build.input.gitiles_commit)
-
     raw_result = self.test_patch()
 
     # If the orchestrator build is canceled or infra failed, the exception
@@ -211,6 +204,21 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
     # SUCCESS means that there's no swarming tests to trigger
     if maybe_raw_result != None:
       return maybe_raw_result
+
+    # TODO (crbug/1339426): Once the compilator_watcher has been updated, use
+    # the gitiles commit from the processed sub_build instead.
+    # The buildbucket input gitiles_commit is populated by the bootstrapper.
+    # If the builder does not use the bootstrapper, gitiles_commit will not
+    # be populated.
+    if self.m.buildbucket.build.input.HasField('gitiles_commit'):
+      gitiles_commit = self.m.buildbucket.build.input.gitiles_commit
+      commit_position = comp_output.got_revisions.get('got_revision_cp')
+      if commit_position:
+        gitiles_commit.position = (
+            self.m.commit_position.parse(commit_position)[1])
+
+      self.m.buildbucket.set_output_gitiles_commit(
+          self.m.buildbucket.build.input.gitiles_commit)
 
     if remove_src_checkout_experiment:
       self.m.chromium_checkout.checkout_dir = self.m.path['cleanup']
