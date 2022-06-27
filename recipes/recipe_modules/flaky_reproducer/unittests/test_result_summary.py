@@ -6,10 +6,11 @@ import json
 import unittest
 from unittest.mock import patch
 
-from testdata import get_test_data
 from libs.result_summary import (create_result_summary_from_output_json,
                                  TestResult, TestStatus)
+from libs.result_summary.base_result_summary import BaseResultSummary
 from libs.result_summary.gtest_result_summary import GTestTestResultSummary
+from testdata import get_test_data
 
 
 class ResultSummaryFactoryTest(unittest.TestCase):
@@ -39,3 +40,8 @@ class ResultSummaryFactoryTest(unittest.TestCase):
     self.assertEqual(
         repr(invalid_result),
         'STATUS_UNSPECIFIED(unexpected) - test.foo.bar.invalid')
+
+  def test_should_not_implement_in_base(self):
+    result_summary = BaseResultSummary()
+    with self.assertRaises(NotImplementedError):
+      result_summary.dump_raw_data()

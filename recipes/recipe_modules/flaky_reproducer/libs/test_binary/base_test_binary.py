@@ -33,8 +33,8 @@ class BaseTestBinary:
     self.dimensions = kwargs.get('dimensions', {})
     self.cas_input_root = kwargs.get('cas_input_root', None)
     # with_* info
-    self.tests = None
-    self.repeat = None
+    self.tests = kwargs.get('tests', None)
+    self.repeat = kwargs.get('repeat', None)
 
   @classmethod
   def from_task_request(cls, task_request):
@@ -65,14 +65,16 @@ class BaseTestBinary:
 
   def to_jsonish(self):
     """Return a JSON-serializable dict."""
-    ret = dict(
+    return dict(
+        class_name=self.__class__.__name__,
         command=self.command,
         cwd=self.cwd,
         env_vars=self.env_vars,
         dimensions=self.dimensions,
         cas_input_root=self.cas_input_root,
+        tests=self.tests,
+        repeat=self.repeat,
     )
-    return ret
 
   @classmethod
   def from_jsonish(cls, d):
@@ -148,7 +150,12 @@ class TestBinaryWithBatchMixin:
 
   def __init__(self, *args, **kwargs):
     super().__init__(*args, **kwargs)
-    self.single_batch = None
+    self.single_batch = kwargs.get('single_batch', None)
+
+  def to_jsonish(self):
+    ret = super().to_jsonish()
+    ret['single_batch'] = self.single_batch
+    return ret
 
   def with_single_batch(self):
     """Sets the tests run in same batch.
@@ -166,7 +173,12 @@ class TestBinaryWithParallelMixin:
 
   def __init__(self, *args, **kwargs):
     super().__init__(*args, **kwargs)
-    self.parallel_jobs = None
+    self.parallel_jobs = kwargs.get('parallel_jobs', None)
+
+  def to_jsonish(self):
+    ret = super().to_jsonish()
+    ret['parallel_jobs'] = self.parallel_jobs
+    return ret
 
   def with_parallel_jobs(self, jobs):
     """Sets the tests run in given parallel jobs.

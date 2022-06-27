@@ -7,7 +7,7 @@ import json
 import unittest
 from unittest.mock import patch
 
-from libs.test_binary import utils
+from libs.test_binary import utils, create_test_binary_from_jsonish
 from libs.test_binary.base_test_binary import (BaseTestBinary,
                                                TestBinaryWithBatchMixin,
                                                TestBinaryWithParallelMixin)
@@ -63,18 +63,57 @@ class TestBinaryUtilsTest(unittest.TestCase):
     mock_popen.assert_called_once_with(cmd, env={}, cwd='out\\Release_x64')
 
 
+class TestBinaryFactoryTest(unittest.TestCase):
+
+  def setUp(self):
+    self.maxDiff = None
+
+  def test_from_jsonish_no_class_name(self):
+    jsonish = json.loads(get_test_data('gtest_test_binary.json'))
+    jsonish.pop('class_name')
+    with self.assertRaises(ValueError):
+      create_test_binary_from_jsonish(jsonish)
+
+  def test_from_jsonish_unknown_class_name(self):
+    jsonish = json.loads(get_test_data('gtest_test_binary.json'))
+    jsonish['class_name'] = 'UnknownTestBinary'
+    with self.assertRaises(ValueError):
+      create_test_binary_from_jsonish(jsonish)
+
+  def test_to_jsonish_should_support_with_methods(self):
+    jsonish = json.loads(get_test_data('gtest_test_binary_with_overrides.json'))
+    test_binary = create_test_binary_from_jsonish(jsonish)
+    test_binary = test_binary.with_tests([
+        "MockUnitTests.CrashTest", "MockUnitTests.PassTest"
+    ]).with_repeat(3).with_single_batch().with_parallel_jobs(5)
+    to_jsonish = test_binary.to_jsonish()
+    test_binary_from_jsonish = create_test_binary_from_jsonish(to_jsonish)
+    self.assertEqual(test_binary_from_jsonish.tests, test_binary.tests)
+    self.assertEqual(test_binary_from_jsonish.repeat, test_binary.repeat)
+    self.assertEqual(test_binary_from_jsonish.single_batch,
+                     test_binary.single_batch)
+    self.assertEqual(test_binary_from_jsonish.parallel_jobs,
+                     test_binary.parallel_jobs)
+
+  def test_from_jsonish(self):
+    jsonish = json.loads(get_test_data('gtest_test_binary.json'))
+    test_binary = create_test_binary_from_jsonish(jsonish)
+    to_jsonish = test_binary.to_jsonish()
+    self.assertEqual(to_jsonish, jsonish)
+
+  def test_from_jsonish_with_overrides(self):
+    jsonish = json.loads(get_test_data('gtest_test_binary_with_overrides.json'))
+    test_binary = create_test_binary_from_jsonish(jsonish)
+    to_jsonish = test_binary.to_jsonish()
+    self.assertEqual(to_jsonish, jsonish)
+
+
 class BaseTestBinaryTest(unittest.TestCase):
 
   def setUp(self):
+    # Note: BaseTestBinary can not created via create_test_binary_from_jsonish
     jsonish = json.loads(get_test_data('gtest_test_binary.json'))
     self.test_binary = BaseTestBinary.from_jsonish(jsonish)
-
-  def test_from_to_jsonish(self):
-    self.maxDiff = None
-    jsonish = json.loads(get_test_data('gtest_test_binary.json'))
-    test_binary = BaseTestBinary.from_jsonish(jsonish)
-    to_jsonish = test_binary.to_jsonish()
-    self.assertEqual(to_jsonish, jsonish)
 
   def test_strip_for_bots(self):
     test_binary = self.test_binary.strip_for_bots()

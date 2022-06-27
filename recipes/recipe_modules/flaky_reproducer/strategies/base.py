@@ -30,7 +30,3 @@ class BaseStrategy:
     self.test_binary = test_binary
     self.result_summary = result_summary
     self.test_name = test_name
-
-  def launch_strategy_in_swarming(self):
-    """Launches the swarming task that runs the strategy logic."""
-    return ReproducingStep(self.test_binary)

@@ -15,12 +15,20 @@ DEPS = [
 ]
 
 PROPERTIES = {
-    'task_id': Property(default=None, kind=str),
-    'test_name': Property(default=None, kind=str),
+    'task_id':
+        Property(default=None, kind=str),
+    'test_name':
+        Property(default=None, kind=str),
+    'trigger':
+        Property(
+            default='auto',
+            help="The task is (manual|auto)-ly triggerd.",
+            kind=str),
 }
 
 
-def RunSteps(api, task_id, test_name):
+def RunSteps(api, trigger, task_id, test_name):
+  api.flaky_reproducer.set_config(trigger)
   api.flaky_reproducer.run(task_id, test_name)
 
 
@@ -31,7 +39,8 @@ from recipe_engine.post_process import (DropExpectation, StatusFailure,
 def GenTests(api):
   yield api.test(
       'happy_path',
-      api.properties(task_id='54321fffffabc123', test_name='foo.bar'),
+      api.properties(
+          task_id='54321fffffabc123', test_name='foo.bar', trigger='manual'),
       api.step_data(
           'get_test_result_summary.download swarming outputs',
           api.raw_io.output_dir({

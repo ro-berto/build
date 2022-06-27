@@ -52,8 +52,11 @@
     "ISOLATED_OUTDIR": "${ISOLATED_OUTDIR}",
     "LLVM_PROFILE_FILE": "${ISOLATED_OUTDIR}/profraw/default-%2m.profraw"
   },
-  "tests": null,
-  "repeat": null,
-  "single_batch": null,
-  "parallel_jobs": null
+  "tests": [
+    "MockUnitTests.CrashTest",
+    "MockUnitTests.PassTest"
+  ],
+  "repeat": 3,
+  "single_batch": true,
+  "parallel_jobs": 5
 }

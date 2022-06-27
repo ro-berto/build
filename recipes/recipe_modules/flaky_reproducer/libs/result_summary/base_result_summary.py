@@ -159,3 +159,7 @@ class BaseResultSummary:
       A list of TestResult of all tests matching the given test_name.
     """
     return [r for r in self if r.test_name == test_name]
+
+  def dump_raw_data(self):
+    """Return the raw data of the result summary as string"""
+    raise NotImplementedError('Method should be implemented in sub-classes.')

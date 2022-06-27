@@ -2,11 +2,14 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import sys
+from strategies import strategies
 
-def main():
+
+def main(argv):
   """Entrypoint for the execution of a strategy on a swarming task."""
-  pass
+  print(argv)
 
 
 if __name__ == '__main__':
-  pass
+  main(sys.argv)

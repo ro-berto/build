@@ -2,8 +2,9 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from .base import ReproducingStep
 from .repeat import RepeatStrategy
 
 strategies = {
-    'repeat': RepeatStrategy,
+    RepeatStrategy.name: RepeatStrategy,
 }
