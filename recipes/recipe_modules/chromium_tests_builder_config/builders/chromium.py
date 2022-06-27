@@ -16,24 +16,11 @@ from .. import builder_spec
 # * mac-official
 # * win-archive-rel
 # * win-official
+# * win32-archive-dbg
 # * win32-archive-rel
 # * win32-official
 
 SPEC = {
-    'win32-archive-dbg':
-        builder_spec.BuilderSpec.create(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'clobber',
-                'mb',
-            ],
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 32,
-            },
-            simulation_platform='win',
-        ),
     'win-archive-dbg':
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',

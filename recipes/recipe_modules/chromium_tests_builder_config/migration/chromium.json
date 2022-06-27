@@ -2389,11 +2389,6 @@
       "chromium:win-archive-dbg"
     ]
   },
-  "chromium:win32-archive-dbg": {
-    "builders": [
-      "chromium:win32-archive-dbg"
-    ]
-  },
   "tryserver.blink:linux-blink-optional-highdpi-rel": {
     "blockers": [
       "builder 'chromium.fyi:linux-blink-optional-highdpi-rel-dummy' does not exist"
