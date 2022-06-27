@@ -88,7 +88,7 @@ class CollectTaskTest(unittest.TestCase):
                 summary_json,
             ],
             [
-                sys.executable,
+                'vpython',
                 'merge.py',
                 '--build-properties', build_props_json,
                 '--task-output-dir',
@@ -139,7 +139,7 @@ class CollectTaskTest(unittest.TestCase):
             '-task-summary-json', summary_json,
           ],
           [
-            sys.executable,
+            'vpython',
             merge_script,
             '--build-properties', build_props_json,
             '--summary-json', summary_json,
@@ -184,7 +184,7 @@ class CollectTaskTest(unittest.TestCase):
             '-task-summary-json', summary_json,
           ],
           [
-            sys.executable,
+            'vpython',
             merge_script,
             '--build-properties', build_props_json,
             '--task-output-dir',
@@ -232,7 +232,7 @@ class CollectTaskTest(unittest.TestCase):
             '-task-summary-json', summary_json,
           ],
           [
-            sys.executable,
+            'vpython',
             merge_script,
             '--build-properties', build_props,
             '--task-output-dir',
@@ -289,7 +289,7 @@ class CollectTaskTest(unittest.TestCase):
                 summary_json,
             ],
             [
-                sys.executable,
+                'vpython',
                 'merge.py',
                 '--build-properties', build_props_json,
                 '--task-output-dir',
