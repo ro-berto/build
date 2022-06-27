@@ -81,7 +81,8 @@ class ChromiumOrchestratorApi(recipe_test_api.RecipeTestApi):
                                 is_swarming_phase=True,
                                 with_patch=True,
                                 tests=None,
-                                affected_files=None):
+                                affected_files=None,
+                                skipping_coverage=None):
     tests = tests or ['browser_tests']
     output_json_obj = {}
     if is_swarming_phase:
@@ -117,6 +118,8 @@ class ChromiumOrchestratorApi(recipe_test_api.RecipeTestApi):
               },
               'deleted_files': ['src/deleted_file.cc'],
           })
+          if skipping_coverage is not None:
+            output_json_obj['skipping_coverage'] = skipping_coverage
 
     sub_build = build_pb2.Build(
         id=54321,
