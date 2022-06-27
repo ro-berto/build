@@ -70,61 +70,98 @@ class GTestTestBinaryTest(unittest.TestCase):
         "--gtest_also_run_disabled_tests",
     ])
 
-  @patch('libs.test_binary.base_test_binary.BaseTestBinary.run_cmd')
+  @patch('libs.test_binary.utils.run_cmd')
   @patch(
       'builtins.open',
       new=mock_open(read_data=get_test_data('gtest_good_output.json')))
   @patch('os.unlink')
   def test_run_tests(self, mock_unlink, mock_run_cmd):
-    mock_run_cmd.return_value = 0
-
     test_binary = self.test_binary.strip_for_bots()
-    test_binary.run_tests(['MockUnitTests.CrashTest'] * 2)
+    test_binary.with_tests(
+        ['MockUnitTests.CrashTest'] *
+        2).with_repeat(1).with_single_batch().with_parallel_jobs(1).run()
     mock_run_cmd.assert_called_once_with([
         'vpython3', '../../testing/test_env.py', './base_unittests.exe',
         '--test-launcher-bot-mode', '--asan=0', '--lsan=0', '--msan=0',
         '--tsan=0', '--cfi-diag=0', '--test-launcher-retry-limit=0',
-        '--isolated-script-test-repeat=1',
         ('--isolated-script-test-filter='
          'MockUnitTests.CrashTest:MockUnitTests.CrashTest'),
+        '--isolated-script-test-repeat=1', '--test-launcher-batch-limit=0',
+        '--test-launcher-jobs=1',
         '--test-launcher-summary-output=/mock-tmp/mock-temp-1.json'
-    ])
+    ],
+                                         cwd=test_binary.cwd)
     mock_unlink.assert_called()
 
-  @patch('libs.test_binary.base_test_binary.BaseTestBinary.run_cmd')
+  @patch('libs.test_binary.utils.run_cmd')
   @patch(
       'builtins.open',
       new=mock_open(read_data=get_test_data('gtest_good_output.json')))
   @patch('os.unlink')
   def test_run_tests_with_multiple_tests(self, mock_unlink, mock_run_cmd):
-    mock_run_cmd.return_value = 0
-
     test_binary = self.test_binary.strip_for_bots()
-    test_binary.run_tests(['MockUnitTests.CrashTest'] * 10)
+    test_binary.with_tests(['MockUnitTests.CrashTest'] * 10).run()
     mock_run_cmd.assert_called_once_with([
         'vpython3', '../../testing/test_env.py', './base_unittests.exe',
         '--test-launcher-bot-mode', '--asan=0', '--lsan=0', '--msan=0',
         '--tsan=0', '--cfi-diag=0', '--test-launcher-retry-limit=0',
-        '--isolated-script-test-repeat=1',
-        '--test-launcher-filter-file=/mock-tmp/mock-temp-1',
+        '--test-launcher-filter-file=/mock-tmp/mock-temp-1.filter',
         '--test-launcher-summary-output=/mock-tmp/mock-temp-2.json'
-    ])
+    ],
+                                         cwd=test_binary.cwd)
     mock_unlink.assert_called()
 
-  @patch('libs.test_binary.base_test_binary.BaseTestBinary.run_cmd')
+  @patch('libs.test_binary.utils.run_cmd')
   @patch('os.unlink')
   def test_run_tests_with_error(self, mock_unlink, mock_run_cmd):
-    mock_run_cmd.return_value = 1
+    mock_run_cmd.side_effect = ChildProcessError(
+        'Run command failed with code 1.')
 
     test_binary = self.test_binary.strip_for_bots()
     with self.assertRaises(ChildProcessError):
-      test_binary.run_tests(['MockUnitTests.CrashTest'])
+      test_binary.with_tests(['MockUnitTests.CrashTest']).run()
     mock_run_cmd.assert_called_once_with([
         'vpython3', '../../testing/test_env.py', './base_unittests.exe',
         '--test-launcher-bot-mode', '--asan=0', '--lsan=0', '--msan=0',
         '--tsan=0', '--cfi-diag=0', '--test-launcher-retry-limit=0',
-        '--isolated-script-test-repeat=1',
         '--isolated-script-test-filter=MockUnitTests.CrashTest',
         '--test-launcher-summary-output=/mock-tmp/mock-temp-1.json'
-    ])
+    ],
+                                         cwd=test_binary.cwd)
     mock_unlink.assert_called()
+
+  def test_readable_command(self):
+    self.maxDiff = None
+    test_binary = self.test_binary.strip_for_bots()
+    readable_info = test_binary\
+      .with_tests(['MockUnitTests.CrashTest'])\
+      .readable_command()
+    self.assertEqual(
+        readable_info,
+        ('vpython3 ../../testing/test_env.py ./base_unittests.exe'
+         ' --test-launcher-bot-mode --asan=0 --lsan=0 --msan=0 --tsan=0'
+         ' --cfi-diag=0 --test-launcher-retry-limit=0'
+         ' --isolated-script-test-filter=MockUnitTests.CrashTest'))
+
+    readable_info = test_binary\
+      .with_tests(['MockUnitTests.CrashTest']*10)\
+      .readable_command()
+    self.assertEqual(
+        readable_info,
+        ('''cat <<EOF > tests.filter
+MockUnitTests.CrashTest
+MockUnitTests.CrashTest
+MockUnitTests.CrashTest
+MockUnitTests.CrashTest
+MockUnitTests.CrashTest
+MockUnitTests.CrashTest
+MockUnitTests.CrashTest
+MockUnitTests.CrashTest
+MockUnitTests.CrashTest
+MockUnitTests.CrashTest
+EOF
+'''
+         'vpython3 ../../testing/test_env.py ./base_unittests.exe'
+         ' --test-launcher-bot-mode --asan=0 --lsan=0 --msan=0 --tsan=0'
+         ' --cfi-diag=0 --test-launcher-retry-limit=0'
+         ' --test-launcher-filter-file=tests.filter'))

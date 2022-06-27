@@ -7,9 +7,60 @@ import json
 import unittest
 from unittest.mock import patch
 
+from libs.test_binary import utils
 from libs.test_binary.base_test_binary import (BaseTestBinary,
-                                               strip_command_switches)
+                                               TestBinaryWithBatchMixin,
+                                               TestBinaryWithParallelMixin)
 from testdata import get_test_data
+
+
+class TestBinaryUtilsTest(unittest.TestCase):
+
+  def test_strip_command_switches(self):
+    self.assertEqual(
+        utils.strip_command_switches(['--foo', '1', '2', '3', '4'], {'foo': 0}),
+        ['1', '2', '3', '4'])
+    self.assertEqual(
+        utils.strip_command_switches(['--foo', '1', '2', '3', '4'], {'foo': 2}),
+        ['3', '4'])
+    self.assertEqual(
+        utils.strip_command_switches(['--foo', '1', '--bar', '3', '4'],
+                                     {'foo': 2}), ['--bar', '3', '4'])
+    self.assertEqual(
+        utils.strip_command_switches(['--foo', '1', '--bar', '3', '4'], {
+            'foo': 2,
+            'bar': 1
+        }), ['4'])
+    # --switch=value shouldn't take multiple values.
+    self.assertEqual(
+        utils.strip_command_switches(['--foo=1', '--foo=2', '1', '2', '3', '4'],
+                                     {'foo': 2}), ['1', '2', '3', '4'])
+    # I don't know if -foo= 1 2 is valid, but I would expect following behavior.
+    self.assertEqual(
+        utils.strip_command_switches(['--foo=', '1', '2', '3', '4'],
+                                     {'foo': 2}), ['3', '4'])
+
+  @patch('subprocess.Popen')
+  @patch('sys.stderr', new_callable=io.StringIO)
+  @patch('os.environ', new={'foo': 'bar'})
+  def test_run_cmd(self, mock_stdout, mock_popen):
+    mock_popen.return_value.wait.return_value = 0
+    cmd = ['./exec', '--args']
+    utils.run_cmd(cmd, env={}, cwd='out\\Release_x64')
+    self.assertEqual(
+        mock_stdout.getvalue(),
+        "Running ['./exec', '--args'] in 'out\\\\Release_x64' with {}\n")
+    mock_popen.assert_called_once_with(cmd, env={}, cwd='out\\Release_x64')
+
+  @patch('subprocess.Popen')
+  @patch('sys.stderr', new_callable=io.StringIO)
+  @patch('os.environ', new={'foo': 'bar'})
+  def test_run_cmd_with_failure(self, mock_stdout, mock_popen):
+    mock_popen.return_value.wait.return_value = 1
+    cmd = ['./exec', '--args']
+    with self.assertRaises(ChildProcessError):
+      utils.run_cmd(cmd, env={}, cwd='out\\Release_x64')
+    mock_popen.assert_called_once_with(cmd, env={}, cwd='out\\Release_x64')
 
 
 class BaseTestBinaryTest(unittest.TestCase):
@@ -24,30 +75,6 @@ class BaseTestBinaryTest(unittest.TestCase):
     test_binary = BaseTestBinary.from_jsonish(jsonish)
     to_jsonish = test_binary.to_jsonish()
     self.assertEqual(to_jsonish, jsonish)
-
-  def test_strip_command_switches(self):
-    self.assertEqual(
-        strip_command_switches(['--foo', '1', '2', '3', '4'], {'foo': 0}),
-        ['1', '2', '3', '4'])
-    self.assertEqual(
-        strip_command_switches(['--foo', '1', '2', '3', '4'], {'foo': 2}),
-        ['3', '4'])
-    self.assertEqual(
-        strip_command_switches(['--foo', '1', '--bar', '3', '4'], {'foo': 2}),
-        ['--bar', '3', '4'])
-    self.assertEqual(
-        strip_command_switches(['--foo', '1', '--bar', '3', '4'], {
-            'foo': 2,
-            'bar': 1
-        }), ['4'])
-    # --switch=value shouldn't take multiple values.
-    self.assertEqual(
-        strip_command_switches(['--foo=1', '--foo=2', '1', '2', '3', '4'],
-                               {'foo': 2}), ['1', '2', '3', '4'])
-    # I don't know if -foo= 1 2 is valid, but I would expect following behavior.
-    self.assertEqual(
-        strip_command_switches(['--foo=', '1', '2', '3', '4'], {'foo': 2}),
-        ['3', '4'])
 
   def test_strip_for_bots(self):
     test_binary = self.test_binary.strip_for_bots()
@@ -89,25 +116,44 @@ class BaseTestBinaryTest(unittest.TestCase):
                                 'Command line contains unknown wrapper:'):
       test_binary.strip_for_bots()
 
-  @patch('subprocess.Popen')
-  @patch('sys.stderr', new_callable=io.StringIO)
-  @patch('os.environ', new={'foo': 'bar'})
-  def test_run_cmd(self, mock_stdout, mock_popen):
-    cmd = ['./exec', '--args']
-    self.test_binary.run_cmd(cmd)
-    self.assertEqual(mock_stdout.getvalue(),
-                     "Running ['./exec', '--args'] in 'out\\\\Release_x64'\n")
-    mock_popen.assert_called_once_with(cmd, cwd='out\\Release_x64')
+  def test_with_methods(self):
+    tests = ['abc.aaa', 'cba.bbb']
+    ret = self.test_binary.with_tests(tests)
+    self.assertIsNot(ret, self.test_binary)
+    self.assertIsNot(ret.tests, tests)
+    self.assertEqual(ret.tests, tests)
 
-  @patch('subprocess.Popen')
-  @patch('sys.stderr', new_callable=io.StringIO)
-  def test_run_cmd_should_override_cwd(self, mock_stdout, mock_popen):
-    cmd = ['./exec', '--args']
-    self.test_binary.run_cmd(cmd, cwd='somewhere')
-    self.assertEqual(mock_stdout.getvalue(),
-                     "Running ['./exec', '--args'] in 'somewhere'\n")
-    mock_popen.assert_called_once_with(cmd, cwd='somewhere')
+    ret = self.test_binary.with_repeat(3)
+    self.assertIsNot(ret, self.test_binary)
+    self.assertEqual(ret.repeat, 3)
 
   def test_should_not_implement_in_base_class(self):
     with self.assertRaises(NotImplementedError):
-      self.test_binary.run_tests([], 1)
+      self.test_binary.run()
+    with self.assertRaises(NotImplementedError):
+      self.test_binary.readable_command()
+
+
+class TestBinaryMixinTest(unittest.TestCase):
+
+  def test_TestBinaryWithBatchMixin(self):
+
+    class NewTestBinary(TestBinaryWithBatchMixin, BaseTestBinary):
+      pass
+
+    test_binary = NewTestBinary(['abc'])
+    self.assertEqual(test_binary.command, ['abc'])
+    self.assertTrue(hasattr(test_binary, 'with_single_batch'))
+    ret = test_binary.with_single_batch()
+    self.assertTrue(ret.single_batch)
+
+  def test_TestBinaryWithParallelMixin(self):
+
+    class NewTestBinary(TestBinaryWithParallelMixin, BaseTestBinary):
+      pass
+
+    test_binary = NewTestBinary(['abc'])
+    self.assertEqual(test_binary.command, ['abc'])
+    self.assertTrue(hasattr(test_binary, 'with_parallel_jobs'))
+    ret = test_binary.with_parallel_jobs(3)
+    self.assertEqual(ret.parallel_jobs, 3)

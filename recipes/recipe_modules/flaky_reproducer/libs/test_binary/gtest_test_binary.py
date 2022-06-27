@@ -6,12 +6,14 @@ import json
 import os
 import tempfile
 
-from .base_test_binary import (BaseTestBinary, strip_command_switches,
-                               strip_env_vars)
+from . import utils
+from .base_test_binary import (BaseTestBinary, TestBinaryWithBatchMixin,
+                               TestBinaryWithParallelMixin)
 from ..result_summary.gtest_result_summary import GTestTestResultSummary
 
 
-class GTestTestBinary(BaseTestBinary):
+class GTestTestBinary(TestBinaryWithBatchMixin, TestBinaryWithParallelMixin,
+                      BaseTestBinary):
 
   def strip_for_bots(self):
     ret = super().strip_for_bots()
@@ -19,44 +21,69 @@ class GTestTestBinary(BaseTestBinary):
     gtest_strip_switches = {
         key: 1
         for key in ('test-launcher-summary-output', 'test-launcher-retry-limit',
-                    'isolated-script-test-repeat', 'test-launcher-filter-file',
+                    'isolated-script-test-repeat', 'test-launcher-batch-limit',
+                    'test-launcher-jobs', 'test-launcher-filter-file',
                     'isolated-script-test-filter', 'gtest_filter')
     }
-    ret.command = strip_command_switches(ret.command, gtest_strip_switches)
+    ret.command = utils.strip_command_switches(ret.command,
+                                               gtest_strip_switches)
 
     gtest_env_keys = ('GTEST_SHARD_INDEX', 'GTEST_TOTAL_SHARDS')
-    ret.env_vars = strip_env_vars(ret.env_vars, gtest_env_keys)
+    ret.env_vars = utils.strip_env_vars(ret.env_vars, gtest_env_keys)
 
     return ret
 
-  def run_tests(self, tests, repeat=1):
+  def _get_command(self, filter_file=None, output_json=None):
+    """Get the command line with switches applied."""
+    cmd = self.command[:]
+    cmd.append('--test-launcher-retry-limit=0')  # Disable retry.
+    if filter_file:
+      cmd.append("--test-launcher-filter-file={0}".format(filter_file))
+    elif self.tests:
+      cmd.append("--isolated-script-test-filter={0}".format(':'.join(
+          self.tests)))
+    if self.repeat:
+      cmd.append("--isolated-script-test-repeat={0}".format(self.repeat))
+    if self.single_batch:
+      cmd.append("--test-launcher-batch-limit=0")
+    if self.parallel_jobs:
+      cmd.append("--test-launcher-jobs={0}".format(self.parallel_jobs))
+    if output_json:
+      cmd.append("--test-launcher-summary-output={0}".format(output_json))
+    return cmd
+
+  def run(self):
     tmp_files = []
+    filter_file = None
+    output_json = None
     try:
-      cmd = self.command[:]
-      cmd.append('--test-launcher-retry-limit=0')  # Disable retry.
-      cmd.append("--isolated-script-test-repeat={0}".format(repeat))
+      if self.tests and len(self.tests) >= 10:
+        fp = tempfile.NamedTemporaryFile(suffix='.filter', delete=False)
+        tmp_files.append(fp.name)
+        fp.writelines(self.tests)
+        fp.close()
+        filter_file = fp.name
 
-      if len(tests) >= 10:
-        filter_file = tempfile.NamedTemporaryFile(delete=False)
-        tmp_files.append(filter_file)
-        filter_file.writelines(tests)
-        filter_file.close()
-        cmd.append("--test-launcher-filter-file={0.name}".format(filter_file))
-      else:
-        cmd.append("--isolated-script-test-filter={0}".format(':'.join(tests)))
+      fp = tempfile.NamedTemporaryFile(suffix='.json', delete=False)
+      tmp_files.append(fp.name)
+      fp.close()
+      output_json = fp.name
 
-      output_json = tempfile.NamedTemporaryFile(suffix=".json", delete=False)
-      tmp_files.append(output_json)
-      output_json.close()
-      cmd.append("--test-launcher-summary-output={0.name}".format(output_json))
-
-      ret_code = self.run_cmd(cmd)
-      if ret_code != 0:
-        raise ChildProcessError(
-            "Run command failed with code {0}.".format(ret_code))
+      cmd = self._get_command(filter_file, output_json)
+      utils.run_cmd(cmd, cwd=self.cwd)
 
       return GTestTestResultSummary.from_output_json(
-          json.load(open(output_json.name)))
+          json.load(open(output_json)))
     finally:
       for f in tmp_files:
-        os.unlink(f.name)
+        os.unlink(f)
+
+  def readable_command(self):
+    filter_message = ''
+    filter_file = None
+    if self.tests and len(self.tests) >= 10:
+      filter_file = 'tests.filter'
+      filter_message = "cat <<EOF > {0}\n{1}\nEOF\n".format(
+          filter_file, '\n'.join(self.tests))
+    cmd = self._get_command(filter_file)
+    return filter_message + ' '.join(cmd)
