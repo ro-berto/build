@@ -1,0 +1,130 @@
+# Copyright 2022 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+import io
+import json
+import unittest
+from unittest.mock import patch, mock_open
+
+from libs.test_binary.gtest_test_binary import GTestTestBinary
+from testdata import get_test_data
+
+
+class GTestTestBinaryTest(unittest.TestCase):
+
+  def setUp(self):
+    jsonish = json.loads(get_test_data('gtest_test_binary.json'))
+    self.test_binary = GTestTestBinary.from_jsonish(jsonish)
+
+    # @patch('tempfile.NamedTemporaryFile') for all tests
+    tmp_patcher = patch('tempfile.NamedTemporaryFile')
+    self.addClassCleanup(tmp_patcher.stop)
+    mock_NamedTemporaryFile = tmp_patcher.start()
+
+    def new_NamedTemporaryFile(
+        suffix=None,
+        prefix=None,
+        dir=None,  # pylint: disable=redefined-builtin
+        *args,
+        **kwargs):
+      fp = io.StringIO()
+      fp.name = "/{0}/{1}mock-temp-{2}{3}".format(
+          dir or 'mock-tmp', prefix or '', mock_NamedTemporaryFile.call_count,
+          suffix or '')
+      return fp
+
+    mock_NamedTemporaryFile.side_effect = new_NamedTemporaryFile
+
+  def test_strip_for_bots(self):
+    test_binary = self.test_binary.strip_for_bots()
+    self.assertEqual(test_binary.command, [
+        "vpython3",
+        "../../testing/test_env.py",
+        "./base_unittests.exe",
+        "--test-launcher-bot-mode",
+        "--asan=0",
+        "--lsan=0",
+        "--msan=0",
+        "--tsan=0",
+        "--cfi-diag=0",
+    ])
+    self.assertNotIn('LLVM_PROFILE_FILE', test_binary.env_vars)
+
+    # should strip GTEST_STRIP_SWITCHES with it's value
+    test_binary = GTestTestBinary([
+        "./unittests",
+        "--gtest_filter=AAA.bbb",
+        # should be kept as it's a switch named "gtest_filte AAA.bbb"
+        "--gtest_filte AAA.bbb",
+        "--isolated-script-test-filter",
+        "AAA.bbb",
+        "--isolated-script-test-repeat",
+        # should be kept as it's not an value of switch
+        "--gtest_also_run_disabled_tests",
+        "--test-launcher-filter-file",
+    ])
+    self.assertEqual(test_binary.strip_for_bots().command, [
+        "./unittests",
+        "--gtest_filte AAA.bbb",
+        "--gtest_also_run_disabled_tests",
+    ])
+
+  @patch('libs.test_binary.base_test_binary.BaseTestBinary.run_cmd')
+  @patch(
+      'builtins.open',
+      new=mock_open(read_data=get_test_data('gtest_good_output.json')))
+  @patch('os.unlink')
+  def test_run_tests(self, mock_unlink, mock_run_cmd):
+    mock_run_cmd.return_value = 0
+
+    test_binary = self.test_binary.strip_for_bots()
+    test_binary.run_tests(['MockUnitTests.CrashTest'] * 2)
+    mock_run_cmd.assert_called_once_with([
+        'vpython3', '../../testing/test_env.py', './base_unittests.exe',
+        '--test-launcher-bot-mode', '--asan=0', '--lsan=0', '--msan=0',
+        '--tsan=0', '--cfi-diag=0', '--test-launcher-retry-limit=0',
+        '--isolated-script-test-repeat=1',
+        ('--isolated-script-test-filter='
+         'MockUnitTests.CrashTest:MockUnitTests.CrashTest'),
+        '--test-launcher-summary-output=/mock-tmp/mock-temp-1.json'
+    ])
+    mock_unlink.assert_called()
+
+  @patch('libs.test_binary.base_test_binary.BaseTestBinary.run_cmd')
+  @patch(
+      'builtins.open',
+      new=mock_open(read_data=get_test_data('gtest_good_output.json')))
+  @patch('os.unlink')
+  def test_run_tests_with_multiple_tests(self, mock_unlink, mock_run_cmd):
+    mock_run_cmd.return_value = 0
+
+    test_binary = self.test_binary.strip_for_bots()
+    test_binary.run_tests(['MockUnitTests.CrashTest'] * 10)
+    mock_run_cmd.assert_called_once_with([
+        'vpython3', '../../testing/test_env.py', './base_unittests.exe',
+        '--test-launcher-bot-mode', '--asan=0', '--lsan=0', '--msan=0',
+        '--tsan=0', '--cfi-diag=0', '--test-launcher-retry-limit=0',
+        '--isolated-script-test-repeat=1',
+        '--test-launcher-filter-file=/mock-tmp/mock-temp-1',
+        '--test-launcher-summary-output=/mock-tmp/mock-temp-2.json'
+    ])
+    mock_unlink.assert_called()
+
+  @patch('libs.test_binary.base_test_binary.BaseTestBinary.run_cmd')
+  @patch('os.unlink')
+  def test_run_tests_with_error(self, mock_unlink, mock_run_cmd):
+    mock_run_cmd.return_value = 1
+
+    test_binary = self.test_binary.strip_for_bots()
+    with self.assertRaises(ChildProcessError):
+      test_binary.run_tests(['MockUnitTests.CrashTest'])
+    mock_run_cmd.assert_called_once_with([
+        'vpython3', '../../testing/test_env.py', './base_unittests.exe',
+        '--test-launcher-bot-mode', '--asan=0', '--lsan=0', '--msan=0',
+        '--tsan=0', '--cfi-diag=0', '--test-launcher-retry-limit=0',
+        '--isolated-script-test-repeat=1',
+        '--isolated-script-test-filter=MockUnitTests.CrashTest',
+        '--test-launcher-summary-output=/mock-tmp/mock-temp-1.json'
+    ])
+    mock_unlink.assert_called()
