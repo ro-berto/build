@@ -7,7 +7,6 @@ from recipe_engine import post_process
 from RECIPE_MODULES.build import chromium_swarming
 from RECIPE_MODULES.build.chromium_tests import steps
 from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
-from RECIPE_MODULES.build.code_coverage.api import MAX_CANDIDATE_FILES
 
 from PB.recipe_modules.recipe_engine.led.properties import InputProperties
 
@@ -20,7 +19,6 @@ DEPS = [
     'code_coverage',
     'profiles',
     'depot_tools/tryserver',
-    'recipe_engine/assertions',
     'recipe_engine/buildbucket',
     'recipe_engine/json',
     'recipe_engine/path',
@@ -48,8 +46,6 @@ def RunSteps(api):
         api.properties['files_to_instrument'],
         is_deps_only_change=api.properties.get('is_deps_only_change', False),
     )
-    if len(api.properties['files_to_instrument']) > MAX_CANDIDATE_FILES:
-      api.assertions.assertTrue(api.code_coverage.skipping_coverage)
   if api.properties.get('mock_merged_profdata', True):
     api.path.mock_add_paths(
         api.profiles.profile_dir().join('unit-merged.profdata'))
@@ -352,7 +348,6 @@ def GenTests(api):
       api.properties(files_to_instrument=[
           'some/path/to/file%d.cc' % i for i in range(500)
       ]),
-      api.post_process(post_process.PropertyEquals, 'skipping_coverage', True),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
