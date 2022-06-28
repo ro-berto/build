@@ -716,8 +716,6 @@ class ArchiveApi(recipe_api.RecipeApi):
   def generic_archive(self,
                       build_dir,
                       update_properties,
-                      top_level_source=None,
-                      provenance_sources=None,
                       custom_vars=None,
                       config=None,
                       report_artifacts=False):
@@ -766,8 +764,7 @@ class ArchiveApi(recipe_api.RecipeApi):
       for archive_data in archive_config.archive_datas:
         if not archive_data.only_upload_on_tests_success:
           gcs_uploads = self.gcs_archive(build_dir, update_properties,
-                                         archive_data, top_level_source,
-                                         provenance_sources, custom_vars,
+                                         archive_data, custom_vars,
                                          report_artifacts)
           upload_results['gcs'].append(gcs_uploads)
       for cipd_archive_data in archive_config.cipd_archive_datas:
@@ -819,8 +816,6 @@ class ArchiveApi(recipe_api.RecipeApi):
                   build_dir,
                   update_properties,
                   archive_data,
-                  top_level_source=None,
-                  provenance_sources=None,
                   custom_vars=None,
                   report_artifacts=False):
     """Archives a single package to google cloud storage.

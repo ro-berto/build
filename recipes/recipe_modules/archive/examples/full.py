@@ -59,8 +59,6 @@ def RunSteps(api):
     upload_results = api.archive.generic_archive(
         build_dir=build_dir,
         update_properties=update_properties,
-        top_level_source=('repo', 'branch', 'revision'),
-        provenance_sources={'some': 'source'},
         custom_vars=custom_vars,
         report_artifacts=True)
     api.archive.generic_archive_after_tests(
