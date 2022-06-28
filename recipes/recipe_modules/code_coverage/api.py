@@ -13,6 +13,8 @@ from RECIPE_MODULES.build import chromium_swarming
 
 from . import constants
 
+MAX_CANDIDATE_FILES = 200
+
 
 class CodeCoverageApi(recipe_api.RecipeApi):
   """This module contains apis to generate code coverage data."""
@@ -66,6 +68,8 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     self._bot_to_gerrit_mapping_file = None
     # Determines if the coverage data be exported to zoss or not
     self._export_coverage_to_zoss = properties.export_coverage_to_zoss or False
+    # Whether to skip coverage
+    self._skipping_coverage = False
 
   @property
   def use_clang_coverage(self):
@@ -92,6 +96,10 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     if self.m.led.launched_by_led:
       build_id = self.m.swarming.task_id
     return build_id
+
+  @property
+  def skipping_coverage(self):
+    return self._skipping_coverage
 
   @property
   def cov_executable(self):
@@ -399,23 +407,31 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       candidate_files (list of str): paths to the files we want to instrument,
           relative to the checkout path.
     """
-    if len(candidate_files) > 200:
+    skip_step = None
+    if len(candidate_files) > MAX_CANDIDATE_FILES:
       # Skip instrumentation if there are too many files because:
       # 1. They cause problems such as crash due to too many cmd line arguments.
       # 2. These CLs typically does mechanial refactorings, and coverage
       #    information is useless.
       # 3. Has non-trivial performance implications in terms of CQ cycle time.
       candidate_files = []
-      self.m.step.empty(
-          'skip instrumenting code coverage because >200 files are modified')
+      skipping_coverage_message = (
+          'skip instrumenting code coverage because >{} files are modified')
+      skip_step = self.m.step.empty(
+          skipping_coverage_message.format(MAX_CANDIDATE_FILES))
     if is_deps_only_change:
       # Skip instrumentation if current change is a DEPS only change.
       # This is because code_coverage recipe module expects candidate_files to
       # belong to a chromium checkout, and in case of DEPS only change
       # candidate_files belong to third party code.
       candidate_files = []
-      self.m.step.empty(
+      skip_step = self.m.step.empty(
           'Skip instrumentating code coverage because DEPS only change')
+    # This will let other builders (like orchestrator) know that coverage is
+    # being skipped so files will not be instrumented.
+    if skip_step:
+      skip_step.presentation.properties['skipping_coverage'] = True
+      self._skipping_coverage = True
 
     if not output_dir:
       output_dir = self.m.chromium.output_dir
