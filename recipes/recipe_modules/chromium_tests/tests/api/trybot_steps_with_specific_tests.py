@@ -327,39 +327,7 @@ def GenTests(api):
           'base_unittests', 'with patch', failures=['Test.One']),
       api.chromium_tests.gen_swarming_and_rdb_results(
           'base_unittests', 'without patch', failures=['Test.One']),
-      api.post_process(
-          post_process.StepTextContains,
-          'base_unittests (test results summary)', [
-              'Tests failed with patch, but ignored as they also fail without '
-              'patch'
-          ]),
       api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.StepFailure, 'base_unittests (with patch)'),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  # If a test unexpectedly fails in 'with patch' and then expectedly fails in
-  # 'without patch', the build should still fail.
-  yield api.test(
-      'unexpected_failures_not_forgiven_in_without_patch',
-      api.platform('linux', 64),
-      api.chromium.try_build(
-          builder_group='fake-try-group',
-          builder='fake-try-builder',
-      ),
-      ctbc_api.properties(
-          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
-              builder_group='fake-group',
-              builder='fake-builder',
-          ).assemble()),
-      api.properties(swarm_hashes={
-          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
-      }),
-      api.chromium_tests.gen_swarming_and_rdb_results(
-          'base_unittests', 'with patch', failures=['Test.One']),
-      api.chromium_tests.gen_swarming_and_rdb_results(
-          'base_unittests', 'without patch', expected_failures=['Test.One']),
-      api.post_process(post_process.StatusFailure),
       api.post_process(post_process.StepFailure, 'base_unittests (with patch)'),
       api.post_process(post_process.DropExpectation),
   )
