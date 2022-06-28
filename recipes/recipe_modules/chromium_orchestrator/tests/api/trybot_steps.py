@@ -111,6 +111,7 @@ def GenTests(api):
                 '-ensure-file', 'infra/chromium/compilator_watcher/${platform} '
                 'git_revision:e841fc'
             ]),
+        api.post_process(post_process.MustRun, 'set_output_gitiles_commit'),
         api.post_process(post_process.MustRun,
                          'trigger compilator (with patch)'),
         api.post_process(post_process.MustRun, 'browser_tests (with patch)'),

@@ -72,6 +72,12 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
           step_name='fetch compilator build proto',
           build_id=self.current_compilator_buildbucket_id)
 
+      # The compilator build's gitiles_commit contains the commit position too,
+      # so use this instead of the gitiles_commit fed in by the bootstrapper.
+      if comp_build.output.HasField('gitiles_commit'):
+        self.m.buildbucket.set_output_gitiles_commit(
+            comp_build.output.gitiles_commit)
+
       # test_patch() waits for the compilator build to finish
       # so this assertion should always be True.
       # If there is some regression that changes this, this prevents the
@@ -207,21 +213,6 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
     # SUCCESS means that there's no swarming tests to trigger
     if maybe_raw_result != None:
       return maybe_raw_result
-
-    # TODO (crbug/1339426): Once the compilator_watcher has been updated, use
-    # the gitiles commit from the processed sub_build instead.
-    # The buildbucket input gitiles_commit is populated by the bootstrapper.
-    # If the builder does not use the bootstrapper, gitiles_commit will not
-    # be populated.
-    if self.m.buildbucket.build.input.HasField('gitiles_commit'):
-      gitiles_commit = self.m.buildbucket.build.input.gitiles_commit
-      commit_position = comp_output.got_revisions.get('got_revision_cp')
-      if commit_position:
-        gitiles_commit.position = (
-            self.m.commit_position.parse(commit_position)[1])
-
-      self.m.buildbucket.set_output_gitiles_commit(
-          self.m.buildbucket.build.input.gitiles_commit)
 
     if remove_src_checkout_experiment:
       self.m.chromium_checkout.checkout_dir = self.m.path['cleanup']

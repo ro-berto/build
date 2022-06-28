@@ -154,9 +154,19 @@ class ChromiumOrchestratorApi(recipe_test_api.RecipeTestApi):
   def override_compilator_build_proto_fetch(self,
                                             build_id=12345,
                                             status=common_pb.SUCCESS):
+    gitiles_commit = {
+        'host': 'chromium.googlesource.com',
+        'id': '6eb925582a36cdba74ad60f01a19897866a92cca',
+        'position': 984947,
+        'project': 'chromium/src',
+        'ref': 'refs/heads/main',
+    }
     fake_build = build_pb2.Build(
         id=build_id,
         status=status,
+        output=dict(
+            gitiles_commit=json_format.Parse(
+                self.m.json.dumps(gitiles_commit), common_pb.GitilesCommit()),),
         infra=build_pb2.BuildInfra(
             swarming=build_pb2.BuildInfra.Swarming(task_id='57d9108e76b91310')))
     return self.m.buildbucket.simulated_get(
