@@ -197,6 +197,7 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
   def rdb_results(self,
                   suite_name,
                   failing_tests=None,
+                  expected_failing_tests=None,
                   skipped_tests=None,
                   flaky_tests=None):
     """Returns a JSON blob used to override data for 'query test results'.
@@ -205,12 +206,14 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
       suite_name: Name of the suite.
       failing_tests: List of test cases to create results for. Each test case
           will have a single rdb_test_result.FAIL result.
+      expected_failing_tests: Like failing_tests above, but resultdb will report
+          these tests as expected to fail.
       skipped_tests: Same as failing_tests above, but with rdb_test_result.SKIP.
       flaky_tests: List of test cases which has two invocations,
           rdb_test_result.PASS and rdb_test_result.FAIL.
     """
 
-    def _generate_invocation(test, status):
+    def _generate_invocation(test, status, expected):
       failure_reason = None
       if status == rdb_test_result.FAIL:
         failure_reason = rdb_failure_reason.FailureReason(
@@ -223,7 +226,7 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
                   'test_suite': suite_name,
               },
           }),
-          expected=status == rdb_test_result.PASS,
+          expected=expected,
           variant_hash=suite_name + '_hash',
           status=status,
           failure_reason=failure_reason)
@@ -233,17 +236,16 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
               name=suite_name + '_results'),
           test_results=[test_result])
 
-    failing_tests = failing_tests or []
-    skipped_tests = skipped_tests or []
-    flaky_tests = flaky_tests or []
     invocations = []
-    for test in failing_tests:
-      invocations.append(_generate_invocation(test, rdb_test_result.FAIL))
-    for test in skipped_tests:
-      invocations.append(_generate_invocation(test, rdb_test_result.SKIP))
-    for test in flaky_tests:
-      invocations.append(_generate_invocation(test, rdb_test_result.PASS))
-      invocations.append(_generate_invocation(test, rdb_test_result.FAIL))
+    for t in failing_tests or []:
+      invocations.append(_generate_invocation(t, rdb_test_result.FAIL, False))
+    for t in expected_failing_tests or []:
+      invocations.append(_generate_invocation(t, rdb_test_result.FAIL, True))
+    for t in skipped_tests or []:
+      invocations.append(_generate_invocation(t, rdb_test_result.SKIP, False))
+    for t in flaky_tests or []:
+      invocations.append(_generate_invocation(t, rdb_test_result.PASS, True))
+      invocations.append(_generate_invocation(t, rdb_test_result.FAIL, False))
 
     invocations_by_inv_id = {}
     for i, inv in enumerate(invocations):
