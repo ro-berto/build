@@ -702,29 +702,6 @@ def GenTests(api):
               'base_dir': 'src-internal',
           },
       ],)
-  yield api.test(
-      'verifiable_key_path',
-      api.properties(
-          gcs_archive=True,
-          update_properties={},
-          **{'$build/archive': input_properties}),
-      api.post_process(
-          post_process.StepCommandContains,
-          'Generic Archiving Steps.gsutil upload '
-          'dest_dir/path/to/some/file.txt.l1.attestation', [
-              '/path/to/some/file.txt.l1.attestation',
-              'gs://any-bucket/dest_dir/path/to/some/file.txt.l1.attestation',
-          ]),
-      api.post_process(
-          post_process.StepCommandContains,
-          'Generic Archiving Steps.gsutil upload '
-          'dest_dir/files.zip.l1.attestation', [
-              "[CLEANUP]/tmp_tmp_5/artifact.zip.l1.attestation",
-              "gs://any-bucket/dest_dir/files.zip.l1.attestation"
-          ]),
-      api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation),
-  )
 
   yield api.test(
       'experimental',
@@ -733,14 +710,6 @@ def GenTests(api):
           gcs_archive=True,
           update_properties={},
           **{'$build/archive': input_properties}),
-      api.post_process(
-          post_process.StepCommandContains,
-          'Generic Archiving Steps.gsutil upload '
-          'dest_dir/path/to/some/file.txt.l1.attestation', [
-              '/path/to/some/file.txt.l1.attestation',
-              ('gs://any-bucket/experimental/dest_dir/path/to/'
-               'some/file.txt.l1.attestation'),
-          ]),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )

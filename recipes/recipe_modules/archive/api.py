@@ -1034,60 +1034,19 @@ class ArchiveApi(recipe_api.RecipeApi):
           base_path, expanded_files, updated_dirs)
       uploads = {archive_file: gcs_path}
 
-    # Attach provenance files for chain-of-custody. This is done just before
-    # uploading to ensure all the artifact prep work is done (e.g. packaging
-    # files into zip archives), so provenance can be attached to any type of
-    # artifact and not just individual build files.
-    # NOTE: Provenance is not supported for recursive directory uploads because
-    # that handling doesn't currently look at individual files. It would be
-    # possible to walk the recursed dirs to add provenance to each file, but
-    # directories of files are probably better archived as a zip in that case,
-    # with a single provenance attached to the whole zip file.
+    # Report artifacts that require provenance.
     if (archive_data.verifiable_key_path and
         not archive_data.archive_type == ArchiveData.ARCHIVE_TYPE_RECURSIVE):
 
-      # Generates provenance to built artifacts.
-      provenance_manifest = {
-          'recipe': self.m.properties.get('recipe'),
-          'exp': 0,
-      }
-
-      # Include more source info for artifacts chain of custody.
-      if top_level_source:
-        git_repo = {
-            'git_repo': {
-                'uri': top_level_source[0],
-                'branch': top_level_source[1],
-                'commit': top_level_source[2]
-            }
-        }
-        provenance_manifest['topLevelSource'] = git_repo
-        if provenance_sources:
-          provenance_manifest['sources'] = provenance_sources
-
-      # TODO(crbug/1310625): Remove all provenance code.
-      l1_attestation_paths = {}
       for f in self.m.py3_migration.consistent_ordering(
           uploads.keys(), key=str):
-        # Generate the .attestation file next to the original.
-        l1_attestation_path = str(f) + '.l1.attestation'
+        # Report artifacts for provenance generation.
         file_hash = self.m.file.file_hash(f, test_data='deadbeef')
-        provenance_manifest['subjectHash'] = file_hash
-        temp_dir = self.m.path.mkdtemp('tmp')
-        manifest_path = self.m.path.join(temp_dir, 'manifest.json')
-        self.m.file.write_text('Provenance manifest', manifest_path,
-                               self.m.json.dumps(provenance_manifest))
-        self.m.provenance.generate(archive_data.verifiable_key_path,
-                                   manifest_path, l1_attestation_path)
-        # Upload the attestation file alongside the original.
-        l1_attestation_paths[
-            l1_attestation_path] = uploads[f] + '.l1.attestation'
         # TODO(akashmukherjee): Add support for custom backend url.
         # Need to report full destination path of the artifact.
         if report_artifacts:
           self.m.bcid_reporter.report_gcs(
               file_hash, 'gs://%s/%s' % (gcs_bucket, uploads[f]))
-      uploads.update(l1_attestation_paths)
 
     for file_path in self.m.py3_migration.consistent_ordering(
         uploads.keys(), key=str):

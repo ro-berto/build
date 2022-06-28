@@ -15,8 +15,6 @@ DEPS = [
     'depot_tools/gitiles',
     'depot_tools/gsutil',
     'infra/zip',
-    'infra/cloudkms',
-    'infra/provenance',
     'py3_migration',
     'recipe_engine/bcid_reporter',
     'recipe_engine/buildbucket',
