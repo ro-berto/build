@@ -21,29 +21,9 @@ def RunSteps(api):
     api.build.python('runtest', 'foo.py', args=['--foo', '--bar'])
 
   api.build.python(
-      'unbuffered vpython',
-      'foo.py',
-      unbuffered=False,
-      venv=api.path['cache'].join('path', 'to', 'venv'),
-  )
-
-  api.build.python(
-      'legacy annotation',
-      'foo.py',
-      legacy_annotation=True,
-  )
-
-  api.build.python(
       'vpython with resultdb',
       'foo.py',
       venv=api.path['cache'].join('path', 'to', 'venv'),
-      resultdb=ResultDB.create(enable=True),
-  )
-
-  api.build.python(
-      'legacy with resultdb',
-      'foo.py',
-      legacy_annotation=True,
       resultdb=ResultDB.create(enable=True),
   )
 

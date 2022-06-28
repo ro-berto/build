@@ -1194,7 +1194,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
@@ -1581,7 +1580,6 @@
   {
     "cmd": [
       "vpython",
-      "-u",
       "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--",

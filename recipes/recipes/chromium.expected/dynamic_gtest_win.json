@@ -659,7 +659,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
@@ -740,7 +739,6 @@
       "[CLEANUP]\\tmp_tmp_1",
       "--",
       "python",
-      "-u",
       "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
@@ -919,7 +917,6 @@
       "[CLEANUP]\\tmp_tmp_2",
       "--",
       "python",
-      "-u",
       "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",

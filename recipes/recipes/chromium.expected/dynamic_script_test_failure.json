@@ -669,7 +669,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
@@ -744,7 +743,6 @@
       "-exonerate-unexpected-pass",
       "--",
       "vpython",
-      "-u",
       "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--",

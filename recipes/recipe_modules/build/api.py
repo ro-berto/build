@@ -42,10 +42,7 @@ class ToolsBuildApi(recipe_api.RecipeApi):
              name,
              script,
              args=None,
-             show_path=True,
-             unbuffered=True,
              venv=None,
-             legacy_annotation=False,
              resultdb=None,
              **kwargs):
     """Bootstraps a Python through "tools/build"'s "runit.py".
@@ -54,12 +51,6 @@ class ToolsBuildApi(recipe_api.RecipeApi):
     __call__ method. It augments the call to run the invoked script through
     "runit.py", which runs the targeted script within the "tools/build"
     Python path environment.
-
-    If legacy_annotation is set to true, it means the script we are running will
-    emit legacy @@@annotation@@@. The script will be executed via
-    `legacy_annotation` module from recipe_engine to adapt to the new luciexe
-    protocol. Note that this feature is DEPRECATED and all new usecase should
-    use StepPresentation instead to modify build.
 
     resultdb is an instance of chromium_tests.steps.ResultDB.
     If resultdb.enable is set to True, then the python script is wrapped
@@ -71,16 +62,10 @@ class ToolsBuildApi(recipe_api.RecipeApi):
       cmd += ['-vpython-spec', venv]
     assert isinstance(resultdb,
                       (type(None), ResultDB)), "%s: %s" % (name, resultdb)
-    env = None
-    if unbuffered:
-      cmd.append('-u')
-    else:
-      env = {'PYTHONUNBUFFERED': None}
 
     # Replace "script" positional argument with "runit.py".
     cmd.append(self.runit_py)
-    if show_path:
-      cmd.append('--show-path')
+    cmd.append('--show-path')
     if not venv:
       cmd.append('--with-third-party-lib')
     cmd.extend(['--', 'python', script])
@@ -90,11 +75,5 @@ class ToolsBuildApi(recipe_api.RecipeApi):
     if resultdb:
       cmd = resultdb.wrap(self.m, cmd, step_name=name)
 
-    with self.m.context(env=env, infra_steps=kwargs.pop('infra_step', None)):
-      if legacy_annotation:
-        for std_handle in ('stdin', 'stdout', 'stderr'):
-          if kwargs.pop(std_handle, None) is not None:  # pragma: no cover
-            raise ValueError('std placeholder is not supported in'
-                             'legacy_annotation mode; got %s' % (std_handle,))
-        return self.m.legacy_annotation(name, cmd, **kwargs)
+    with self.m.context(infra_steps=kwargs.pop('infra_step', None)):
       return self.m.step(name, cmd, **kwargs)

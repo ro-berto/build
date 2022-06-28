@@ -2,7 +2,6 @@
   {
     "cmd": [
       "python",
-      "-u",
       "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
@@ -31,153 +30,6 @@
   },
   {
     "cmd": [
-      "vpython",
-      "-vpython-spec",
-      "[CACHE]/path/to/venv",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--",
-      "python",
-      "foo.py"
-    ],
-    "env": {
-      "PYTHONUNBUFFERED": null
-    },
-    "luci_context": {
-      "realm": {
-        "name": "project:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "unbuffered vpython"
-  },
-  {
-    "cmd": [],
-    "name": "install infra/tools/run_annotations"
-  },
-  {
-    "cmd": [
-      "vpython3",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[START_DIR]/cipd_tool/infra/tools/run_annotations/latest"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "project:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "install infra/tools/run_annotations.ensure package directory",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "cipd",
-      "ensure",
-      "-root",
-      "[START_DIR]/cipd_tool/infra/tools/run_annotations/latest",
-      "-ensure-file",
-      "infra/tools/run_annotations/${platform} latest",
-      "-max-threads",
-      "0",
-      "-json-output",
-      "/path/to/tmp/json"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "project:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "install infra/tools/run_annotations.ensure_installed",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-latest----------\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/run_annotations/resolved-platform\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[START_DIR]/cipd_tool/infra/tools/run_annotations/latest/run_annotations",
-      "--output",
-      "[CLEANUP]/tmp_tmp_1/sub_build.pb",
-      "--",
-      "python",
-      "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "foo.py"
-    ],
-    "env": {
-      "MAC_CHROMIUM_TMPDIR": "[CLEANUP]/tmp_tmp_2",
-      "TEMP": "[CLEANUP]/tmp_tmp_2",
-      "TEMPDIR": "[CLEANUP]/tmp_tmp_2",
-      "TMP": "[CLEANUP]/tmp_tmp_2",
-      "TMPDIR": "[CLEANUP]/tmp_tmp_2"
-    },
-    "luci_context": {
-      "realm": {
-        "name": "project:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "legacy annotation",
-    "stdin": "2\u0006\b\ufffd\u00af\ufffd\u0005:\u0006\b\ufffd\u00af\ufffd\u0005`\u0002",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@step.sub_build@{@@@",
-      "@@@STEP_LOG_LINE@step.sub_build@  \"status\": \"SUCCESS\"@@@",
-      "@@@STEP_LOG_LINE@step.sub_build@}@@@",
-      "@@@STEP_LOG_END@step.sub_build@@@"
-    ]
-  },
-  {
-    "cmd": [
       "rdb",
       "stream",
       "-var",
@@ -190,7 +42,6 @@
       "vpython",
       "-vpython-spec",
       "[CACHE]/path/to/venv",
-      "-u",
       "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--",
@@ -210,58 +61,6 @@
       }
     },
     "name": "vpython with resultdb"
-  },
-  {
-    "cmd": [
-      "[START_DIR]/cipd_tool/infra/tools/run_annotations/latest/run_annotations",
-      "--output",
-      "[CLEANUP]/tmp_tmp_3/sub_build.pb",
-      "--",
-      "rdb",
-      "stream",
-      "-var",
-      "builder:builder",
-      "-tag",
-      "step_name:legacy with resultdb",
-      "-coerce-negative-duration",
-      "-exonerate-unexpected-pass",
-      "--",
-      "python",
-      "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "foo.py"
-    ],
-    "env": {
-      "MAC_CHROMIUM_TMPDIR": "[CLEANUP]/tmp_tmp_4",
-      "TEMP": "[CLEANUP]/tmp_tmp_4",
-      "TEMPDIR": "[CLEANUP]/tmp_tmp_4",
-      "TMP": "[CLEANUP]/tmp_tmp_4",
-      "TMPDIR": "[CLEANUP]/tmp_tmp_4"
-    },
-    "luci_context": {
-      "realm": {
-        "name": "project:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "legacy with resultdb",
-    "stdin": "2\u0006\b\ufffd\u00af\ufffd\u0005:\u0006\b\ufffd\u00af\ufffd\u0005`\u0002",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@step.sub_build@{@@@",
-      "@@@STEP_LOG_LINE@step.sub_build@  \"status\": \"SUCCESS\"@@@",
-      "@@@STEP_LOG_LINE@step.sub_build@}@@@",
-      "@@@STEP_LOG_END@step.sub_build@@@"
-    ]
   },
   {
     "name": "$result"
