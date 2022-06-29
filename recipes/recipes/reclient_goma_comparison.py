@@ -170,7 +170,8 @@ def ConfigureChromiumBuilder(api, recipe_config):
 
 
 def RunSteps(api):
-  buildername = api.buildbucket.builder_name
+  # Use the same recipe_config for CQ and CI comparison builders
+  buildername = api.buildbucket.builder_name.replace("(CQ)", "")
   recipe_config = COMPARISON_BUILDERS[buildername]
 
   # Set up a named cache so runhooks doesn't redownload everything on each run.
