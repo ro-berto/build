@@ -121,6 +121,45 @@ def CheckPylintOnCommit(input_api, output_api):
       'C0321',  # More than one statement on a single line
       'W0613',  # Unused argument
       'W0403',  # Relative import. TODO(crbug.com/1095510): remove this
+
+      # Below warnings are disabled for pylint version update, but better to
+      # remove if possible.
+      'C0201',  # consider-iterating-dictionary
+      'C0301',  # line-too-long
+      'C0415',  # import-outside-toplevel
+      'E0001',  # syntax-error
+      'E0012',  # bad-option-value
+      'E0702',  # raising-bad-type
+      'E1101',  # no-member
+      'E1120',  # no-value-for-parameter
+      'E1137',  # unsupported-assignment-operation
+      'R0205',  # useless-object-inheritance
+      'R1701',  # consider-merging-isinstance
+      'R1704',  # redefined-argument-from-local
+      'R1705',  # no-else-return
+      'R1706',  # consider-using-ternary
+      'R1707',  # trailing-comma-tuple
+      'R1710',  # inconsistent-return-statements
+      'R1711',  # useless-return
+      'R1714',  # consider-using-in
+      'R1716',  # chained-comparison
+      'R1718',  # consider-using-set-comprehension
+      'R1720',  # no-else-raise
+      'R1721',  # unnecessary-comprehension
+      'R1723',  # no-else-break
+      'R1725',  # super-with-arguments
+      'R1729',  # use-a-generator
+      'W0104',  # pointless-statement
+      'W0106',  # expression-not-assigned
+      'W0107',  # unnecessary-pass
+      'W0221',  # arguments-differ
+      'W0235',  # useless-super-delegation
+      'W0621',  # redefined-outer-name
+      'W0622',  # redefined-builtin
+      'W0707',  # raise-missing-from
+      'W0715',  # raising-format-tuple
+      'W1113',  # keyword-arg-before-vararg
+      'W1404',  # implicit-str-concat
   ]
   extra_paths_list = infra_path + [
       # Initially, a separate run was done for unit tests but now that
