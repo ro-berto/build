@@ -50,10 +50,13 @@ def RunSteps(api):
 
   if 'gcs_archive' in api.properties:
     api.chromium.set_config('chromium')
+
+    build_dir = api.m.path.mkdtemp()
+    api.path.mock_add_paths(build_dir.join('existing-dir'))
+    api.path.mock_add_paths(build_dir.join('existing-file.json'))
     api.path.mock_add_paths(api.path['start_dir'].join('squashfs',
                                                        'squashfs-tools',
                                                        'mksquashfs'))
-    build_dir = api.m.path.mkdtemp()
     update_properties = api.properties.get('update_properties')
     custom_vars = api.properties.get('custom_vars')
     upload_results = api.archive.generic_archive(
@@ -210,6 +213,15 @@ def GenTests(api):
                              api.json.output(['chrome', 'resources'])),
   )
 
+  def check_stdin(check, step_odict, step, included_args, excluded_args=None):
+    for included_arg in included_args:
+      check('stdin for step %s contained %s' % (step, included_arg),
+            included_arg in step_odict[step].stdin)
+    excluded_args = excluded_args or []
+    for excluded_arg in excluded_args:
+      check('stdin for step %s did not contain %s' % (step, excluded_arg),
+            excluded_arg not in step_odict[step].stdin)
+
   for archive_type, archive_filename, include_dirs in (
       (properties.ArchiveData.ARCHIVE_TYPE_UNSPECIFIED, 'any-path.zip', True),
       (properties.ArchiveData.ARCHIVE_TYPE_ZIP, 'any-path.zip', True),
@@ -231,6 +243,8 @@ def GenTests(api):
           'directory1',
           'directory2',
           'path/to/directory3',
+          'locales',
+          'swiftshader',
       ])
       rename_dir = properties.ArchiveDirRename()
       rename_dir.from_dir = "directory1"
@@ -255,8 +269,6 @@ def GenTests(api):
     rename_file_dir.to_dir = "folder_one"
     archive_data.rename_dirs.extend([rename_file_dir])
     archive_data.file_globs.append('glob*.txt')
-    if include_dirs:
-      archive_data.dirs.extend(['locales', 'swiftshader'])
     archive_data.gcs_bucket = 'any-bucket'
     archive_data.gcs_path = ('{%position%}/{%commit%}/{%timestamp%}/'
                              '{%chromium_version%}' + archive_filename)
@@ -316,11 +328,6 @@ def GenTests(api):
                     "[CLEANUP]/tmp_tmp_2/archive_root"
                 ]))
       return sum(post_tests, api.empty_test_data())
-
-    def check_stdin(check, step_odict, step, argument_sequence):
-      for arg in argument_sequence:
-        check('stdin for step %s contained %s' % (step, arg),
-              arg in step_odict[step].stdin)
 
     def add_naming_checks(archive_type):
       post_tests = []
@@ -466,6 +473,89 @@ def GenTests(api):
           ['123456_5e3250aadda2b170692f8e762d43b7e8deadbeef_'
            '20120514125323']),
       api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  input_properties = properties.InputProperties()
+  archive_data = properties.ArchiveData()
+  archive_data.dirs.extend(['missing-dir', 'existing-dir'])
+  archive_data.files.extend(['missing-file.json', 'existing-file.json'])
+  archive_data.archive_type = properties.ArchiveData.ARCHIVE_TYPE_ZIP
+  archive_data.skip_empty_source = True
+  input_properties.archive_datas.extend([archive_data])
+
+  yield api.test(
+      'generic_archive_skip_empty_sources',
+      api.properties(
+          gcs_archive=True,
+          update_properties={
+              'got_revision': TEST_HASH_MAIN,
+              'got_revision_cp': TEST_COMMIT_POSITON_MAIN,
+          },
+          **{'$build/archive': input_properties}),
+      api.post_process(
+          post_process.MustRun,
+          'Generic Archiving Steps.Copy file existing-file.json'),
+      api.post_process(
+          post_process.MustRun,
+          'Generic Archiving Steps.Copy folder existing-dir'),
+      api.post_process(
+          post_process.DoesNotRun,
+          'Generic Archiving Steps.Copy file missing-file.json'),
+      api.post_process(
+          post_process.DoesNotRun,
+          'Generic Archiving Steps.Copy folder missing-dir'),
+      api.post_process(
+          check_stdin, 'Generic Archiving Steps.Create generic archive', [
+              '[CLEANUP]/tmp_tmp_2/existing-file.json',
+              '[CLEANUP]/tmp_tmp_2/existing-dir',
+          ], [
+              '[CLEANUP]/tmp_tmp_2/missing-file.json',
+              '[CLEANUP]/tmp_tmp_2/missing-dir',
+          ]),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  input_properties = properties.InputProperties()
+  archive_data = properties.ArchiveData()
+  archive_data.files.extend(['missing-file.json', 'existing-file.json'])
+  archive_data.archive_type = properties.ArchiveData.ARCHIVE_TYPE_ZIP
+  input_properties.archive_datas.extend([archive_data])
+
+  yield api.test(
+      'generic_archive_fail_missing_files',
+      api.properties(
+          gcs_archive=True,
+          update_properties={
+              'got_revision': TEST_HASH_MAIN,
+              'got_revision_cp': TEST_COMMIT_POSITON_MAIN,
+          },
+          **{'$build/archive': input_properties}),
+      api.post_process(post_process.StepFailure,
+                       'Generic Archiving Steps.Validate files'),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  input_properties = properties.InputProperties()
+  archive_data = properties.ArchiveData()
+  archive_data.dirs.extend(['missing-dir', 'existing-dir'])
+  archive_data.archive_type = properties.ArchiveData.ARCHIVE_TYPE_ZIP
+  input_properties.archive_datas.extend([archive_data])
+
+  yield api.test(
+      'generic_archive_fail_missing_dirs',
+      api.properties(
+          gcs_archive=True,
+          update_properties={
+              'got_revision': TEST_HASH_MAIN,
+              'got_revision_cp': TEST_COMMIT_POSITON_MAIN,
+          },
+          **{'$build/archive': input_properties}),
+      api.post_process(post_process.StepFailure,
+                       'Generic Archiving Steps.Validate directories'),
+      api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -684,7 +774,7 @@ def GenTests(api):
   input_properties = properties.InputProperties(
       archive_datas=[
           {
-              'files': ['/path/to/some/file.txt'],
+              'files': ['path/to/some/file.txt'],
               'gcs_bucket': 'any-bucket',
               'gcs_path': 'dest_dir/',
               'archive_type': properties.ArchiveData.ARCHIVE_TYPE_FILES,
@@ -692,7 +782,7 @@ def GenTests(api):
               'base_dir': 'src-internal',
           },
           {
-              'files': ['/path/to/file.txt', 'path/tp/file2.txt'],
+              'files': ['path/to/file.txt', 'path/tp/file2.txt'],
               'gcs_bucket': 'any-bucket',
               'gcs_path': 'dest_dir/files.zip',
               'archive_type': properties.ArchiveData.ARCHIVE_TYPE_ZIP,

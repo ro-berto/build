@@ -713,6 +713,34 @@ class ArchiveApi(recipe_api.RecipeApi):
           ignore_unknown_fields=True)
     return config
 
+  def _validate_paths(self, name, archive_data, base_path, paths):
+    """Checks all paths for existence.
+
+    Raises an error if at least one path is missing. If skip_empty_sources is
+    set, return existing paths instead.
+    """
+    # In test mode, all paths exist by default and do not need to be mocked.
+    if self._test_data.enabled:
+      # These paths are used for testing the validation step
+      if not ('missing-file.json' in paths or 'missing-dir' in paths):
+        return paths
+
+    with self.m.step.nest('Validate %s' % name) as presentation:
+      valid = []
+      missing = []
+      for path in paths:
+        path_exists = self.m.path.exists(self.m.path.join(base_path, path))
+        (missing, valid)[path_exists].append(path)
+
+      if missing:
+        msg = 'The following %s are missing: %s' % (name, ', '.join(missing))
+        presentation.step_text = msg
+
+        if not archive_data.skip_empty_source:
+          raise recipe_api.StepFailure('Missing %s' % name)
+
+    return valid
+
   def generic_archive(self,
                       build_dir,
                       update_properties,
@@ -874,6 +902,12 @@ class ArchiveApi(recipe_api.RecipeApi):
         common_pieces = f.pieces[len(base_path.pieces):]
         expanded_files.add(os.path.sep.join(common_pieces))
 
+    expanded_files = set(self._validate_paths(
+        'files',
+        archive_data,
+        base_path,
+        self.m.py3_migration.consistent_ordering(expanded_files)))
+
     # Copy all files to a temporary directory. Keeping the structure.
     # This directory will be used for archiving.
     temp_dir = self.m.path.mkdtemp()
@@ -892,17 +926,17 @@ class ArchiveApi(recipe_api.RecipeApi):
       self.m.file.copy(
           "Copy file %s" % filename,
           self.m.path.join(base_path, filename),
-          tmp_file_path,
-          skip_empty_source=archive_data.skip_empty_source)
+          tmp_file_path)
 
-    updated_dirs = list(archive_data.dirs)
-    for directory in archive_data.dirs:
+    updated_dirs = self._validate_paths(
+        'directories', archive_data, base_path, list(archive_data.dirs))
+
+    for directory in updated_dirs:
       self.m.file.copytree(
           "Copy folder %s" % directory,
           self.m.path.join(base_path, directory),
           self.m.path.join(temp_dir, directory),
-          symlinks=True,
-          skip_empty_source=archive_data.skip_empty_source)
+          symlinks=True)
 
     # Starting here, we will only need to care about the temporary folder
     # which holds the files. So reset the base_path to temp_dir.
