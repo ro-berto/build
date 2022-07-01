@@ -30,3 +30,11 @@ class BaseStrategy:
     self.test_binary = test_binary
     self.result_summary = result_summary
     self.test_name = test_name
+
+  def run(self, timeout=45 * 60):
+    """ Run the strategy logic.
+
+    Returns the best ReproducingStep or None if not reproducible.
+    The strategy should finish in [timeout] seconds.
+    """
+    raise NotImplementedError()

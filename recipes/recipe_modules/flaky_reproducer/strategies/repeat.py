@@ -8,5 +8,5 @@ from .base import BaseStrategy
 class RepeatStrategy(BaseStrategy):
   name = 'repeat'
 
-  def __init__(self, *args, **kwargs):
-    super().__init__(*args, **kwargs)
+  def run(self, timeout=45 * 60):
+    pass
