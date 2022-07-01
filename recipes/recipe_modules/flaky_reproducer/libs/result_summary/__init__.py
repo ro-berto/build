@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from .base_result_summary import TestStatus, TestResult
+from .base_result_summary import TestStatus, TestResult, UnexpectedTestResult
 from .gtest_result_summary import GTestTestResultSummary
 
 

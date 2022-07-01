@@ -31,5 +31,5 @@ def auto(c):
 
 @config_ctx(group='trigger_mode')
 def manual(c):
-  c.priority = 20
+  c.priority = 30
   c.expiration = 60 * 60  # 1 hours

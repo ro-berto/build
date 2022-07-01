@@ -5,10 +5,10 @@
 import json
 import unittest
 
-from testdata import get_test_data
 from libs.result_summary import TestStatus
 from libs.result_summary.gtest_result_summary import (
     GTestTestResultSummary, extract_primary_error_message)
+from testdata import get_test_data
 
 
 class GTestTestResultSummaryFactoryTest(unittest.TestCase):

@@ -27,6 +27,13 @@ class GTestTestBinary(TestBinaryWithBatchMixin, TestBinaryWithParallelMixin,
     }
     ret.command = utils.strip_command_switches(ret.command,
                                                gtest_strip_switches)
+    # Should strip all wrappers
+    is_local = len(ret.command) >= 1 and ret.command[0].startswith('.')
+    is_test_env_py = len(ret.command) >= 2 and ret.command[1].strip('./\\') in (
+        'testing/test_env.py', 'testing/xvfb.py')
+    if not (is_local or is_test_env_py):
+      raise ValueError('Command line contains unknown wrapper: {0}'.format(
+          ret.command))
 
     gtest_env_keys = ('GTEST_SHARD_INDEX', 'GTEST_TOTAL_SHARDS')
     ret.env_vars = utils.strip_env_vars(ret.env_vars, gtest_env_keys)

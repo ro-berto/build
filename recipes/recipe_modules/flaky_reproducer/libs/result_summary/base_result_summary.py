@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import re
 from enum import Enum
 
 
@@ -126,6 +127,44 @@ class TestResult(object):
         'expected' if self.expected else 'unexpected',
         self.test_name,
     )
+
+  def similar_with(self, other):
+    """Return if TestResult similar with the other test.
+
+    ResultSummary of different test harness might override this method to
+    provide customized TestResult comparison.
+    """
+    return self.status == other.status
+
+
+class TestResultErrorMessageRegexSimilarityMixin:
+  """Implements Weetbix regex test reason clustering algorithm, that ignore the
+  numbers in the error message: http://go/weetbix-bugs-dd.
+  """
+
+  def similar_with(self, other):
+    if not super().similar_with(other):
+      return False
+    if self.primary_error_message == other.primary_error_message:
+      return True
+    elif self.primary_error_message and other.primary_error_message:
+      remove_number = re.compile(r'([0-9]+|[0-9a-fx]{8,})', re.IGNORECASE)
+      a_message = remove_number.sub('0', self.primary_error_message)
+      b_message = remove_number.sub('0', other.primary_error_message)
+      if a_message == b_message:
+        return True
+    return False
+
+
+class UnexpectedTestResult(TestResult):
+  """A TestResult that similar_with any unexpected results.
+
+  It's a helper class to accept any unexpected TestResult while reproducing when
+  no TestResult could be found.
+  """
+
+  def similar_with(self, other):
+    return not other.expected
 
 
 class BaseResultSummary:

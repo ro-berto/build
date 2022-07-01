@@ -5,10 +5,10 @@
 import json
 import unittest
 
-from testdata import get_test_data
 from libs.test_binary import create_test_binary_from_jsonish
 from libs.result_summary import create_result_summary_from_output_json
-from strategies.base import BaseStrategy
+from libs.strategies.base_strategy import BaseStrategy
+from testdata import get_test_data
 
 
 class BaseStrategyTest(unittest.TestCase):

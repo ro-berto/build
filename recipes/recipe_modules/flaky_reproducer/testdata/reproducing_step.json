@@ -1,0 +1,38 @@
+{
+  "test_binary": {
+    "class_name": "GTestTestBinary",
+    "command": [
+      "vpython3",
+      "../../testing/test_env.py",
+      "./base_unittests.exe",
+      "--test-launcher-bot-mode",
+      "--asan=0",
+      "--lsan=0",
+      "--msan=0",
+      "--tsan=0",
+      "--cfi-diag=0"
+    ],
+    "cwd": "out\\Release_x64",
+    "env_vars": {
+      "ISOLATED_OUTDIR": "${ISOLATED_OUTDIR}",
+      "LLVM_PROFILE_FILE": "${ISOLATED_OUTDIR}/profraw/default-%2m.profraw"
+    },
+    "dimensions": {
+      "cpu": "x86-64",
+      "os": "Windows-11-22000",
+      "pool": "chromium.tests"
+    },
+    "cas_input_root": "b7c329e532e221e23809ba23f9af5b309aa17d490d845580207493d381998bd9/24",
+    "tests": [
+      "MockUnitTests.CrashTest",
+      "MockUnitTests.PassTest"
+    ],
+    "repeat": 3,
+    "parallel_jobs": 5,
+    "single_batch": true
+  },
+  "reproducing_rate": 0.9,
+  "duration": 123,
+  "reproduced_cnt": 1,
+  "total_retries": 30
+}

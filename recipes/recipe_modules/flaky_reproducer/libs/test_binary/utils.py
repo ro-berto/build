@@ -37,12 +37,6 @@ def strip_command_wrappers(command, strip_wrappers):
       stripped = True
   if not cmd:
     raise ValueError('Empty command after strip: {0}'.format(command))
-  # Should strip all wrappers
-  is_local = len(cmd) >= 1 and cmd[0].startswith('.')
-  is_test_env_py = len(cmd) >= 2 and cmd[1].endswith('testing/test_env.py')
-  if not (is_local or is_test_env_py):
-    raise ValueError('Command line contains unknown wrapper: {0} in {1}'.format(
-        cmd[0], command))
   return cmd
 
 
@@ -100,9 +94,6 @@ def run_cmd(argv, cwd=None, env=None):
     argv (list[str]): Sequence of program arguments.
     cwd (str): Change working directory.
     env (dict): Dict of environment variables.
-
-  Raise:
-    ChildProcessError if command return code is not 0.
   """
   # FIXME(kuanhuang): This method could be improved to handle the swarming
   # signals. Inheriting and merging the current process' environment.
@@ -110,7 +101,4 @@ def run_cmd(argv, cwd=None, env=None):
       'Running {0!r} in {1!r} with {2!r}'.format(argv, cwd, env),
       file=sys.stderr)
   process = subprocess.Popen(argv, env=env, cwd=cwd)
-  ret_code = process.wait()
-  if ret_code != 0:
-    raise ChildProcessError(
-        "Run command failed with code {0}.".format(ret_code))
+  return process.wait()

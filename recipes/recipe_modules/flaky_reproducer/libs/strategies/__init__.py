@@ -2,11 +2,9 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from .base import BaseStrategy
+from .reproducing_step import ReproducingStep
+from .repeat_strategy import RepeatStrategy
 
-
-class RepeatStrategy(BaseStrategy):
-  name = 'repeat'
-
-  def run(self, timeout=45 * 60):
-    pass
+strategies = {
+    RepeatStrategy.name: RepeatStrategy,
+}

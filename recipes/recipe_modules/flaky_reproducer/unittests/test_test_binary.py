@@ -58,9 +58,9 @@ class TestBinaryUtilsTest(unittest.TestCase):
   def test_run_cmd_with_failure(self, mock_stdout, mock_popen):
     mock_popen.return_value.wait.return_value = 1
     cmd = ['./exec', '--args']
-    with self.assertRaises(ChildProcessError):
-      utils.run_cmd(cmd, env={}, cwd='out\\Release_x64')
+    ret = utils.run_cmd(cmd, env={}, cwd='out\\Release_x64')
     mock_popen.assert_called_once_with(cmd, env={}, cwd='out\\Release_x64')
+    self.assertEqual(ret, 1)
 
 
 class TestBinaryFactoryTest(unittest.TestCase):
@@ -148,11 +148,6 @@ class BaseTestBinaryTest(unittest.TestCase):
 
     test_binary = BaseTestBinary(['rdb', '--'])
     with self.assertRaisesRegex(ValueError, 'Empty command after strip:'):
-      test_binary.strip_for_bots()
-
-    test_binary = BaseTestBinary(['rdb', '--', 'echo', '123'])
-    with self.assertRaisesRegex(ValueError,
-                                'Command line contains unknown wrapper:'):
       test_binary.strip_for_bots()
 
   def test_with_methods(self):

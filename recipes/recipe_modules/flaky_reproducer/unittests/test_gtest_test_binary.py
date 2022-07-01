@@ -7,6 +7,7 @@ import json
 import unittest
 from unittest.mock import patch, mock_open
 
+from libs.test_binary import utils
 from libs.test_binary.gtest_test_binary import GTestTestBinary
 from testdata import get_test_data
 
@@ -70,7 +71,12 @@ class GTestTestBinaryTest(unittest.TestCase):
         "--gtest_also_run_disabled_tests",
     ])
 
-  @patch('libs.test_binary.utils.run_cmd')
+    test_binary = GTestTestBinary(['rdb', '--', 'echo', '123'])
+    with self.assertRaisesRegex(ValueError,
+                                'Command line contains unknown wrapper:'):
+      test_binary.strip_for_bots()
+
+  @patch.object(utils, 'run_cmd')
   @patch(
       'builtins.open',
       new=mock_open(read_data=get_test_data('gtest_good_output.json')))
@@ -93,7 +99,7 @@ class GTestTestBinaryTest(unittest.TestCase):
                                          cwd=test_binary.cwd)
     mock_unlink.assert_called()
 
-  @patch('libs.test_binary.utils.run_cmd')
+  @patch.object(utils, 'run_cmd')
   @patch(
       'builtins.open',
       new=mock_open(read_data=get_test_data('gtest_good_output.json')))
@@ -107,25 +113,6 @@ class GTestTestBinaryTest(unittest.TestCase):
         '--tsan=0', '--cfi-diag=0', '--test-launcher-retry-limit=0',
         '--test-launcher-filter-file=/mock-tmp/mock-temp-1.filter',
         '--test-launcher-summary-output=/mock-tmp/mock-temp-2.json'
-    ],
-                                         cwd=test_binary.cwd)
-    mock_unlink.assert_called()
-
-  @patch('libs.test_binary.utils.run_cmd')
-  @patch('os.unlink')
-  def test_run_tests_with_error(self, mock_unlink, mock_run_cmd):
-    mock_run_cmd.side_effect = ChildProcessError(
-        'Run command failed with code 1.')
-
-    test_binary = self.test_binary.strip_for_bots()
-    with self.assertRaises(ChildProcessError):
-      test_binary.with_tests(['MockUnitTests.CrashTest']).run()
-    mock_run_cmd.assert_called_once_with([
-        'vpython3', '../../testing/test_env.py', './base_unittests.exe',
-        '--test-launcher-bot-mode', '--asan=0', '--lsan=0', '--msan=0',
-        '--tsan=0', '--cfi-diag=0', '--test-launcher-retry-limit=0',
-        '--isolated-script-test-filter=MockUnitTests.CrashTest',
-        '--test-launcher-summary-output=/mock-tmp/mock-temp-1.json'
     ],
                                          cwd=test_binary.cwd)
     mock_unlink.assert_called()

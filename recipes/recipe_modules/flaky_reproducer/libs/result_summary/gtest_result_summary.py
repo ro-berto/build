@@ -5,7 +5,12 @@
 import json
 
 from datetime import datetime
-from .base_result_summary import BaseResultSummary, TestStatus, TestResult
+from .base_result_summary import (BaseResultSummary, TestStatus, TestResult,
+                                  TestResultErrorMessageRegexSimilarityMixin)
+
+
+class GTestTestResult(TestResultErrorMessageRegexSimilarityMixin, TestResult):
+  pass
 
 # https://source.chromium.org/chromium/infra/infra/+/main:go/src/infra/tools/result_adapter/gtest.go;l=277;drc=6cc18e2763e180929d70c786b419c1f8e6bcc66c
 GTEST_STATUS_MAP = {
@@ -79,7 +84,7 @@ class GTestTestResultSummary(BaseResultSummary):
       for test_name, runs in iteration.items():
         for run in runs:
           result.add(
-              TestResult(
+              GTestTestResult(
                   test_name,
                   expected=is_expected_status(run.get('status')),
                   status=parse_status(run.get('status')),

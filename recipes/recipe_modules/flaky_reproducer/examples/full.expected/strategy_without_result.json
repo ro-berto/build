@@ -622,9 +622,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"0\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"output\": \"some-output\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"outputs\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"reproducing_step.json\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    ], @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"outputs\": [], @@@",
       "@@@STEP_LOG_LINE@json.output@    \"results\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"bot_id\": \"vm-123\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"cas_output_root\": {@@@",
@@ -636,7 +634,7 @@
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"duration\": 62.35, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"exit_code\": \"0\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"name\": \"flaky reproducer strategy repeat for MockUnitTests.FailTest\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"name\": \"flaky reproducer strategy batch for MockUnitTests.FailTest\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"resultdb_info\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"invocation\": \"invocations/some-inv-name\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
@@ -646,64 +644,9 @@
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@task stdout+stderr: flaky reproducer strategy repeat for MockUnitTests.FailTest@some-output@@@",
-      "@@@STEP_LOG_END@task stdout+stderr: flaky reproducer strategy repeat for MockUnitTests.FailTest@@@",
-      "@@@STEP_LINK@task cas outputs: flaky reproducer strategy repeat for MockUnitTests.FailTest@https://cas-viewer.appspot.com/projects/example-project/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "vpython3",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[CLEANUP]/tmp_tmp_3/0/reproducing_step.json",
-      "/path/to/tmp/"
-    ],
-    "infra_step": true,
-    "name": "load ReproducingStep",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@reproducing_step.json@{@@@",
-      "@@@STEP_LOG_LINE@reproducing_step.json@  \"duration\": 123,@@@",
-      "@@@STEP_LOG_LINE@reproducing_step.json@  \"reproduced_cnt\": 1,@@@",
-      "@@@STEP_LOG_LINE@reproducing_step.json@  \"reproducing_rate\": 0.9,@@@",
-      "@@@STEP_LOG_LINE@reproducing_step.json@  \"test_binary\": {@@@",
-      "@@@STEP_LOG_LINE@reproducing_step.json@    \"cas_input_root\": \"b7c329e532e221e23809ba23f9af5b309aa17d490d845580207493d381998bd9/24\",@@@",
-      "@@@STEP_LOG_LINE@reproducing_step.json@    \"class_name\": \"GTestTestBinary\",@@@",
-      "@@@STEP_LOG_LINE@reproducing_step.json@    \"command\": [@@@",
-      "@@@STEP_LOG_LINE@reproducing_step.json@      \"vpython3\",@@@",
-      "@@@STEP_LOG_LINE@reproducing_step.json@      \"../../testing/test_env.py\",@@@",
-      "@@@STEP_LOG_LINE@reproducing_step.json@      \"./base_unittests.exe\",@@@",
-      "@@@STEP_LOG_LINE@reproducing_step.json@      \"--test-launcher-bot-mode\",@@@",
-      "@@@STEP_LOG_LINE@reproducing_step.json@      \"--asan=0\",@@@",
-      "@@@STEP_LOG_LINE@reproducing_step.json@      \"--lsan=0\",@@@",
-      "@@@STEP_LOG_LINE@reproducing_step.json@      \"--msan=0\",@@@",
-      "@@@STEP_LOG_LINE@reproducing_step.json@      \"--tsan=0\",@@@",
-      "@@@STEP_LOG_LINE@reproducing_step.json@      \"--cfi-diag=0\"@@@",
-      "@@@STEP_LOG_LINE@reproducing_step.json@    ],@@@",
-      "@@@STEP_LOG_LINE@reproducing_step.json@    \"cwd\": \"out\\\\Release_x64\",@@@",
-      "@@@STEP_LOG_LINE@reproducing_step.json@    \"dimensions\": {@@@",
-      "@@@STEP_LOG_LINE@reproducing_step.json@      \"cpu\": \"x86-64\",@@@",
-      "@@@STEP_LOG_LINE@reproducing_step.json@      \"os\": \"Windows-11-22000\",@@@",
-      "@@@STEP_LOG_LINE@reproducing_step.json@      \"pool\": \"chromium.tests\"@@@",
-      "@@@STEP_LOG_LINE@reproducing_step.json@    },@@@",
-      "@@@STEP_LOG_LINE@reproducing_step.json@    \"env_vars\": {@@@",
-      "@@@STEP_LOG_LINE@reproducing_step.json@      \"ISOLATED_OUTDIR\": \"${ISOLATED_OUTDIR}\",@@@",
-      "@@@STEP_LOG_LINE@reproducing_step.json@      \"LLVM_PROFILE_FILE\": \"${ISOLATED_OUTDIR}/profraw/default-%2m.profraw\"@@@",
-      "@@@STEP_LOG_LINE@reproducing_step.json@    },@@@",
-      "@@@STEP_LOG_LINE@reproducing_step.json@    \"parallel_jobs\": 5,@@@",
-      "@@@STEP_LOG_LINE@reproducing_step.json@    \"repeat\": 3,@@@",
-      "@@@STEP_LOG_LINE@reproducing_step.json@    \"single_batch\": true,@@@",
-      "@@@STEP_LOG_LINE@reproducing_step.json@    \"tests\": [@@@",
-      "@@@STEP_LOG_LINE@reproducing_step.json@      \"MockUnitTests.CrashTest\",@@@",
-      "@@@STEP_LOG_LINE@reproducing_step.json@      \"MockUnitTests.PassTest\"@@@",
-      "@@@STEP_LOG_LINE@reproducing_step.json@    ]@@@",
-      "@@@STEP_LOG_LINE@reproducing_step.json@  },@@@",
-      "@@@STEP_LOG_LINE@reproducing_step.json@  \"total_retries\": 30@@@",
-      "@@@STEP_LOG_LINE@reproducing_step.json@}@@@",
-      "@@@STEP_LOG_END@reproducing_step.json@@@"
+      "@@@STEP_LOG_LINE@task stdout+stderr: flaky reproducer strategy batch for MockUnitTests.FailTest@some-output@@@",
+      "@@@STEP_LOG_END@task stdout+stderr: flaky reproducer strategy batch for MockUnitTests.FailTest@@@",
+      "@@@STEP_LINK@task cas outputs: flaky reproducer strategy batch for MockUnitTests.FailTest@https://cas-viewer.appspot.com/projects/example-project/instances/default_instance/blobs/24b2420bc49d8b8fdc1d011a163708927532b37dc9f91d7d8d6877e3a86559ca/73/tree@@@"
     ]
   },
   {
@@ -714,7 +657,7 @@
     "cmd": [],
     "name": "result",
     "~followup_annotations": [
-      "@@@STEP_TEXT@This failure could be reproduced (90.0%) with command on Windows-11-22000:<br/>vpython3 ../../testing/test_env.py ./base_unittests.exe --test-launcher-bot-mode --asan=0 --lsan=0 --msan=0 --tsan=0 --cfi-diag=0 --test-launcher-retry-limit=0 --isolated-script-test-filter=MockUnitTests.CrashTest:MockUnitTests.PassTest --isolated-script-test-repeat=3 --test-launcher-batch-limit=0 --test-launcher-jobs=5@@@"
+      "@@@STEP_TEXT@Not reproducible.@@@"
     ]
   },
   {

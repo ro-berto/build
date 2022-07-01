@@ -5,9 +5,9 @@
 import io
 import os
 import unittest
-import strategy_runner
-
 from unittest.mock import patch, mock_open
+
+import strategy_runner
 from testdata import get_test_data
 
 
@@ -29,6 +29,11 @@ class StrategyRunnerTest(unittest.TestCase):
     self.addClassCleanup(open_patcher.stop)
     open_patcher.start()
 
+    # @patch('os.chdir')
+    chdir_patcher = patch('os.chdir')
+    self.addClassCleanup(chdir_patcher.stop)
+    self.mock_chdir = chdir_patcher.start()
+
   @patch.object(
       strategy_runner, 'strategies', new={
           'repeat': None,
@@ -49,12 +54,34 @@ class StrategyRunnerTest(unittest.TestCase):
     self.assertRegexpMatches(mock_stderr.getvalue(), r'arguments are required')
 
   @patch.object(strategy_runner.strategies['repeat'], 'run')
-  def test_main(self, mock_strategy_run):
+  @patch('sys.stdout', new_callable=io.StringIO)
+  def test_main(self, mock_stdout, mock_strategy_run):
+    mock_strategy_run.return_value.to_jsonish.return_value = {}
+    mock_strategy_run.return_value.debug_info = {}
     strategy_runner.main([
         'repeat', '--test-binary=gtest_test_binary.json',
         '--result-summary=gtest_good_output.json', 'MockUnitTests.FailTest'
     ])
+    self.mock_chdir.assert_called()
     mock_strategy_run.assert_called()
+    stdout = mock_stdout.getvalue()
+    self.assertIn('REPRODUCING_STEP.READABLE_INFO:', stdout)
+    self.assertIn('REPRODUCING_STEP.JSON:', stdout)
+
+  @patch.object(strategy_runner.strategies['repeat'], 'run')
+  @patch('sys.stdout', new_callable=io.StringIO)
+  def test_main_with_output(self, mock_stdout, mock_strategy_run):
+    mock_strategy_run.return_value.to_jsonish.return_value = {}
+    mock_strategy_run.return_value.debug_info = {}
+    strategy_runner.main([
+        'repeat', '--test-binary=gtest_test_binary.json',
+        '--result-summary=gtest_good_output.json',
+        '--output=reproducing_step.json', 'MockUnitTests.FailTest'
+    ])
+    mock_strategy_run.assert_called()
+    stdout = mock_stdout.getvalue()
+    self.assertIn('REPRODUCING_STEP.READABLE_INFO:', stdout)
+    self.assertNotIn('REPRODUCING_STEP.JSON:', stdout)
 
   @patch.object(strategy_runner.strategies['repeat'], 'run')
   def test_main_test_not_found(self, mock_strategy_run):

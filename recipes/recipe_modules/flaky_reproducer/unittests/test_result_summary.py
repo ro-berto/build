@@ -6,9 +6,10 @@ import json
 import unittest
 from unittest.mock import patch
 
-from libs.result_summary import (create_result_summary_from_output_json,
-                                 TestResult, TestStatus)
-from libs.result_summary.base_result_summary import BaseResultSummary
+from libs.result_summary import create_result_summary_from_output_json
+from libs.result_summary.base_result_summary import (
+    BaseResultSummary, TestResultErrorMessageRegexSimilarityMixin, TestResult,
+    TestStatus)
 from libs.result_summary.gtest_result_summary import GTestTestResultSummary
 from testdata import get_test_data
 
@@ -40,6 +41,70 @@ class ResultSummaryFactoryTest(unittest.TestCase):
     self.assertEqual(
         repr(invalid_result),
         'STATUS_UNSPECIFIED(unexpected) - test.foo.bar.invalid')
+
+
+class TestResultTest(unittest.TestCase):
+
+  def test_similar_with(self):
+    pass_result = TestResult('test.foo.bar.pass', True, TestStatus.PASS)
+    fail_result = TestResult(
+        'test.foo.bar.fail',
+        False,
+        TestStatus.FAIL,
+        primary_error_message='failed with foo')
+    fail_result_bar = TestResult(
+        'test.foo.bar.fail',
+        False,
+        TestStatus.FAIL,
+        primary_error_message='failed with bar')
+    self.assertFalse(pass_result.similar_with(fail_result))
+    self.assertTrue(fail_result.similar_with(fail_result_bar))
+
+  def test_error_msg_similar_with(self):
+
+    class NewTestResult(TestResultErrorMessageRegexSimilarityMixin, TestResult):
+      pass
+
+    pass_result = NewTestResult('test.foo.bar.pass', True, TestStatus.PASS)
+    fail_result = NewTestResult(
+        'test.foo.bar.fail',
+        False,
+        TestStatus.FAIL,
+        primary_error_message='failed with foo')
+    self.assertFalse(pass_result.similar_with(fail_result))
+
+    fail_result_foo = NewTestResult(
+        'test.foo.bar.fail',
+        False,
+        TestStatus.FAIL,
+        primary_error_message='failed with foo')
+    fail_result_bar = NewTestResult(
+        'test.foo.bar.fail',
+        False,
+        TestStatus.FAIL,
+        primary_error_message='failed with bar')
+    self.assertTrue(fail_result.similar_with(fail_result_foo))
+    self.assertFalse(fail_result.similar_with(fail_result_bar))
+
+  def test_error_msg_similar_with_num(self):
+
+    class NewTestResult(TestResultErrorMessageRegexSimilarityMixin, TestResult):
+      pass
+
+    fail_result = NewTestResult(
+        'test.foo.bar.fail',
+        False,
+        TestStatus.FAIL,
+        primary_error_message='failed with 21')
+    fail_result_43 = NewTestResult(
+        'test.foo.bar.fail',
+        False,
+        TestStatus.FAIL,
+        primary_error_message='failed with 43')
+    self.assertTrue(fail_result.similar_with(fail_result_43))
+
+
+class BaseResultSummaryTest(unittest.TestCase):
 
   def test_should_not_implement_in_base(self):
     result_summary = BaseResultSummary()

@@ -5,8 +5,8 @@
 from recipe_engine import recipe_api
 
 from .libs import (create_test_binary_from_task_request,
-                   create_result_summary_from_output_json)
-from .strategies import strategies, ReproducingStep
+                   create_result_summary_from_output_json, strategies,
+                   ReproducingStep)
 
 
 def nest_step(func):
@@ -30,6 +30,7 @@ class FlakyReproducer(recipe_api.RecipeApi):
   RUNNER_PACKAGE_PATH = 'flaky_reproducer_runner'
   TEST_BINARY_JSON_FILENAME = 'test_binary.json'
   RESULT_SUMMARY_FILENAME = 'result_summary.json'
+  REPRODUCING_STEP_FILENAME = 'reproducing_step.json'
 
   def __init__(self, *args, **kwargs):
     super(FlakyReproducer, self).__init__(*args, **kwargs)
@@ -106,34 +107,31 @@ class FlakyReproducer(recipe_api.RecipeApi):
         strategy.name,
         '--test-binary={0}'.format(self.TEST_BINARY_JSON_FILENAME),
         '--result-summary={0}'.format(self.RESULT_SUMMARY_FILENAME),
+        '--output=${{ISOLATED_OUTDIR}}/{0}'.format(
+            self.REPRODUCING_STEP_FILENAME),
         strategy.test_name,
     ]
 
-    # yapf: disable
-    request = (self.m.swarming.task_request().
-      with_name("flaky reproducer strategy {0} for {1}".format(
-                strategy.name, strategy.test_name)).
-      with_priority(self.c.priority)
+    request = (
+        self.m.swarming.task_request()  # go/pyformat-break
+        .with_name("flaky reproducer strategy {0} for {1}".format(
+            strategy.name, strategy.test_name))  #
+        .with_priority(self.c.priority)  #
     )
-    request_slice = (request[0].
-      with_command(command).
-      with_relative_cwd(self.RUNNER_PACKAGE_PATH).
-      with_cas_input_root(repacked_cas_input_root).
-      with_env_vars(**strategy.test_binary.env_vars).
-      with_dimensions(**strategy.test_binary.dimensions).
-      with_execution_timeout_secs(self.c.strategy_timeout).
-      with_expiration_secs(self.c.expiration)
+    request_slice = (
+        request[0]  # go/pyformat-break
+        .with_command(command)  #
+        .with_relative_cwd(self.RUNNER_PACKAGE_PATH)  #
+        .with_cas_input_root(repacked_cas_input_root)  #
+        .with_env_vars(**strategy.test_binary.env_vars)  #
+        .with_dimensions(**strategy.test_binary.dimensions)  #
+        .with_execution_timeout_secs(self.c.strategy_timeout)  #
+        .with_expiration_secs(self.c.expiration)  #
     )
     request = request.with_slice(0, request_slice)
-    # yapf: enable
 
     return self.m.swarming.trigger(
         "swarming strategy {0}".format(strategy.name), [request])[0]
-
-  def collect_swarming_result(self, output):
-    """Collect strategy result from swarming task output."""
-    # TODO(kuanhuang): implementation.
-    return ReproducingStep(None)
 
   @nest_step
   def choose_strategies(self, test_binary, result_summary, test_name):
@@ -155,13 +153,23 @@ class FlakyReproducer(recipe_api.RecipeApi):
           strategy_cls(test_binary, result_summary, test_name))
     return chosen_strategies
 
+  def collect_strategy_result(self, task_result):
+    """Collect strategy result from swarming task output."""
+    if self.REPRODUCING_STEP_FILENAME not in task_result.outputs:
+      return None
+    return ReproducingStep.from_jsonish(
+        self.m.file.read_json(
+            'load ReproducingStep',
+            task_result.outputs[self.REPRODUCING_STEP_FILENAME]))
+
   @nest_step
   def choose_best_reproducing_step(self, reproducing_steps):
     """Chooses the best ReproducingStep produced by the strategies."""
-    # TODO(kuanhuang): actually choose the best step.
-    if not reproducing_steps:
-      raise self.m.step.StepFailure('No reproducible step could be found.')
-    return reproducing_steps[0]
+    best_step = None
+    for step in reproducing_steps:
+      if not best_step or step.better_tan(best_step):
+        best_step = step
+    return best_step
 
   @nest_step
   def verify_reproducing_step(self):
@@ -181,6 +189,10 @@ class FlakyReproducer(recipe_api.RecipeApi):
       4. Summarize the results of above.
     """
     result_summary = self.get_test_result_summary(task_id)
+    if test_name not in result_summary:
+      raise self.m.step.StepFailure(
+          'Cannot find test {0} in test result for task {1}.'.format(
+              test_name, task_id))
     test_binary = self.get_test_binary(task_id)
     repacked_cas = self.repack_test_binary(test_binary, result_summary)
 
@@ -189,13 +201,20 @@ class FlakyReproducer(recipe_api.RecipeApi):
                                            test_name):
       swarming_tasks.append(
           self.launch_strategy_in_swarming(strategy, repacked_cas))
-    strategy_results = self.m.swarming.collect('collect strategy results',
-                                               swarming_tasks)
+    strategy_results = self.m.swarming.collect(
+        'collect strategy results',
+        swarming_tasks,
+        output_dir=self.m.path.mkdtemp())
 
     reproducing_steps = []
     for task_result in strategy_results:
       task_result.analyze()
-      reproducing_steps.append(self.collect_swarming_result(task_result.output))
+      step = self.collect_strategy_result(task_result)
+      if step:
+        reproducing_steps.append(step)
     reproducing_step = self.choose_best_reproducing_step(reproducing_steps)
 
-    self.m.step.empty('result', step_text=reproducing_step.readable_info())
+    if reproducing_step:
+      self.m.step.empty('result', step_text=reproducing_step.readable_info())
+    else:
+      self.m.step.empty('result', step_text='Not reproducible.')
