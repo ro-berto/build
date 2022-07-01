@@ -168,7 +168,7 @@ def GenTests(api):
                                     'clang-tidy.generate-warnings') +
          api.post_process(post_process.StatusSuccess) + api.post_process(
              _tricium_has_message, 'hello, world 1 (https://clang.llvm.org/'
-             'extra/clang-tidy/checks/super-cool-diag.html)') +
+             'extra/clang-tidy/checks/super/cool-diag.html)') +
          api.post_process(post_process.DropExpectation))
 
   yield (test_with_patch(
@@ -189,7 +189,7 @@ def GenTests(api):
                                  'clang-tidy.generate-warnings') +
          api.post_process(post_process.StatusSuccess) + api.post_process(
              _tricium_has_message, 'hello, world 1 (https://clang.llvm.org/'
-             'extra/clang-tidy/checks/super-cool-diag.html)') +
+             'extra/clang-tidy/checks/super/cool-diag.html)') +
          api.post_process(post_process.DropExpectation))
 
   yield (test_with_patch(
@@ -373,7 +373,7 @@ def GenTests(api):
             'path': 'path/to/some/cc/file.h',
             'message':
                 'grrr '
-                '(https://clang.llvm.org/extra/clang-tidy/checks/tidy-is-angry'
+                '(https://clang.llvm.org/extra/clang-tidy/checks/tidy/is-angry'
                 '.html)'
                 '\n\nExpanded from path/to/some/cc/file0.cpp:2' + suffix,
             'startLine': 3,
@@ -415,7 +415,7 @@ def GenTests(api):
                  'path': 'path/to/some/cc/file.cpp',
                  'message': 'base message '
                             '(https://clang.llvm.org/extra/clang-tidy/checks/'
-                            'bugprone-use-after-move.html)',
+                            'bugprone/use-after-move.html)',
                  'startLine': 2,
              },
              {
@@ -424,7 +424,7 @@ def GenTests(api):
                  'message': 'A `move` operation occurred here, which caused '
                             "'base message' at path/to/some/cc/file.cpp:2 "
                             '(https://clang.llvm.org/extra/clang-tidy/checks/'
-                            'bugprone-use-after-move.html)',
+                            'bugprone/use-after-move.html)',
                  'startLine': 321,
              },
          ]) + api.post_process(post_process.DropExpectation))

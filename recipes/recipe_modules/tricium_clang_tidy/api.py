@@ -69,8 +69,13 @@ class _SourceFileComments(object):
       yield category, message, 0, ()
 
     def fix_message(message, check_name):
+      if '-' in check_name:
+        check_category, check_name = check_name.split('-', 1)
+        url_path = '%s/%s' % (check_category, check_name)
+      else:
+        url_path = check_name
       return (message + ' (https://clang.llvm.org/extra/clang-tidy/checks/'
-              '%s.html)' % check_name)
+              '%s.html)' % url_path)
 
     if self._build_failed:
       failure_suffix = ('\n\n(Note: building this file or its dependencies '
