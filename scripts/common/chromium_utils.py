@@ -1014,6 +1014,16 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
           writefh.write(in_line.getvalue())
     finally:
       print(threading.currentThread(), 'ProcessRead: cleaning up.')
+
+      # Consume outputs from proc to prevent deadlock in wait due to full of
+      # buffer in process pipes.
+      # See note in https://docs.python.org/3/library/subprocess.html#subprocess.Popen.wait
+      proc_out, proc_err = proc.communicate()
+      if proc_out:
+        print('stdout from proc: %s', proc_out)
+      if proc_err:
+        print('stderr from proc: %s', proc_err)
+
       kill_event.set()
       flush_thread.join()
       writefh.flush()

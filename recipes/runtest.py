@@ -41,6 +41,11 @@ import tempfile
 # which I really don't understand).
 sys.path.insert(0, os.path.abspath('src/tools/python'))
 
+THIS_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(
+    0, os.path.abspath(os.path.join(THIS_DIR, os.pardir, 'scripts'))
+)
+
 from common import chromium_utils
 from common import gtest_utils
 
