@@ -27,6 +27,7 @@ DEPS = [
     'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/properties',
+    'recipe_engine/step',
     'reclient',
 ]
 
@@ -181,13 +182,12 @@ def RunSteps(api):
   with api.context(cwd=solution_path):
     ConfigureChromiumBuilder(api, recipe_config)
 
-  out_dirs = [
-      str(api.chromium.output_dir).rstrip('\\/') + '.' + ext for ext in '12'
-  ]
+  base_out_dir = str(api.chromium.output_dir).rstrip('\\/')
+
+  out_dirs = [base_out_dir] + [base_out_dir + '.' + ext for ext in '12']
 
   # Clear output directories for build
-  for out_dir in out_dirs:
-    api.file.rmtree('rmtree %s' % out_dir, out_dir)
+  clean_output_dirs(api, out_dirs)
 
   targets = recipe_config['targets']
 
@@ -209,6 +209,9 @@ def RunSteps(api):
     if raw_result.status != common_pb.SUCCESS:
       return raw_result
 
+    # Clear output directories for build
+    clean_output_dirs(api, out_dirs)
+
     # Do reclient build in .2 out directory
     target = '%s.2' % api.chromium.c.build_config_fs
     build_dir = '//out/%s' % target
@@ -229,6 +232,11 @@ def RunSteps(api):
       return raw_result
   finally:
     # Always clean output directories after build
+    clean_output_dirs(api, out_dirs)
+
+
+def clean_output_dirs(api, out_dirs):
+  with api.step.nest('clean_output_dirs'):
     for out_dir in out_dirs:
       api.file.rmtree('rmtree %s' % out_dir, out_dir)
 
