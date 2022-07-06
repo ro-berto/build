@@ -118,12 +118,6 @@
       "chromium.android:android-11-x86-rel"
     ]
   },
-  "chromium.android:android-cronet-arm-rel": {
-    "builders": [
-      "chromium.android:android-cronet-arm-rel",
-      "tryserver.chromium.android:android_cronet"
-    ]
-  },
   "chromium.android:android-cronet-arm64-dbg": {
     "builders": [
       "chromium.android:android-cronet-arm64-dbg",
@@ -2592,12 +2586,6 @@
   "tryserver.chromium.android:android_blink_rel": {
     "builders": [
       "tryserver.chromium.android:android_blink_rel"
-    ]
-  },
-  "tryserver.chromium.android:android_cronet": {
-    "builders": [
-      "chromium.android:android-cronet-arm-rel",
-      "tryserver.chromium.android:android_cronet"
     ]
   },
   "tryserver.chromium.android:gpu-fyi-try-android-l-nexus-5-32": {

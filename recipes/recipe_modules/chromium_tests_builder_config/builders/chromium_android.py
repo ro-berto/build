@@ -34,6 +34,7 @@ def _chromium_android_spec(**kwargs):
 # * android-arm64-proguard-rel
 # * android-bfcache-rel
 # * android-cronet-arm-dbg
+# * android-cronet-arm-rel
 # * android-cronet-x86-dbg
 # * android-cronet-x86-dbg-10-tests
 # * android-cronet-x86-dbg-11-tests
@@ -131,7 +132,6 @@ SPEC.update([
         'android-pie-arm64-wpt-rel-non-cq',
         chromium_config_kwargs={'TARGET_BITS': 64}),
     stock_config('android-11-x86-rel', android_config='x86_builder'),
-    stock_cronet_config('android-cronet-arm-rel'),
     stock_cronet_config('android-cronet-arm64-dbg', config='Debug'),
     stock_cronet_config('android-cronet-arm64-rel'),
     stock_cronet_config('android-cronet-asan-arm-rel'),
