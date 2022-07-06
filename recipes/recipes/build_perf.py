@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 """Recipe to measure build step performance.
+   See also go/build-perf-builder
 """
 
 from recipe_engine import post_process
@@ -14,6 +15,7 @@ PYTHON_VERSION_COMPATIBILITY = "PY3"
 DEPS = [
     'builder_group',
     'chromium',
+    'chromium_android',
     'chromium_checkout',
     'depot_tools/gclient',
     'recipe_engine/buildbucket',
@@ -25,7 +27,6 @@ DEPS = [
     'reclient',
 ]
 
-# TODO(b/234807316): add build configs for each platform.
 BUILD_PERF_BUILDERS = freeze({
     'Build Perf Linux': {
         'chromium_config': 'chromium',
@@ -33,6 +34,28 @@ BUILD_PERF_BUILDERS = freeze({
         'gclient_config': 'chromium',
         'gclient_apply_config': ['enable_reclient'],
         'platform': 'linux',
+        'targets': [['all'], ['chrome']],
+    },
+    'Build Perf Android': {
+        'chromium_config': 'android',
+        'chromium_apply_config': ['mb'],
+        'chromium_config_kwargs': {
+            'BUILD_CONFIG': 'Release',
+            'TARGET_BITS': 64,
+            'TARGET_PLATFORM': 'android',
+        },
+        'gclient_config': 'chromium',
+        'gclient_apply_config': ['android', 'enable_reclient'],
+        'android_config': 'main_builder',
+        'platform': 'linux',
+        'targets': [['all'], ['chrome_public_apk']],
+    },
+    'Build Perf Windows': {
+        'chromium_config': 'chromium',
+        'chromium_apply_config': ['mb'],
+        'gclient_config': 'chromium',
+        'gclient_apply_config': ['enable_reclient'],
+        'platform': 'win',
         'targets': [['all'], ['chrome']],
     },
 })
@@ -51,6 +74,11 @@ def ConfigureChromiumBuilder(api, recipe_config):
 
   for c in recipe_config.get('gclient_apply_config', []):
     api.gclient.apply_config(c)
+
+  if recipe_config.get('android_config'):
+    api.chromium_android.configure_from_properties(
+        recipe_config.get('android_config'),
+        **recipe_config.get('chromium_config_kwargs', {}))
 
   # Checkout chromium.
   api.chromium_checkout.ensure_checkout()
