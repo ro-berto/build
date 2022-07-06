@@ -1321,6 +1321,14 @@ class ExperimentalTest(TestWrapper):
     return True
 
   #override
+  def failure_on_exit(self, suffix):
+    # Call the wrapped test's implementation in case it has side effects, but
+    # ignore the result.
+    super(ExperimentalTest,
+          self).failure_on_exit(self._experimental_suffix(suffix))
+    return False
+
+  #override
   def failures(self, suffix):
     if self._actually_has_valid_results(suffix):
       # Call the wrapped test's implementation in case it has side effects,
