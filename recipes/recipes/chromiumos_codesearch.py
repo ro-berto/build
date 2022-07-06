@@ -30,6 +30,7 @@ DEPS = [
     'recipe_engine/step',
     'recipe_engine/time',
     'recipe_engine/raw_io',
+    'chromeos/repo',
 ]
 
 # TODO(crbug/1284439): Add build_config.
@@ -141,12 +142,12 @@ def RunSteps(api, codesearch_mirror_revision,
   chromiumos_dir = cache_dir.join('chromiumos')
   api.file.ensure_directory('ensure chromiumos dir', chromiumos_dir)
   with api.context(cwd=chromiumos_dir, env={'DEPOT_TOOLS_UPDATE': 0}):
-    repo = depot_tools_dir.join('repo')
-    api.step('repo init', [
-        repo, 'init', '-b', manifest_hash, '-u',
-        'https://chromium.googlesource.com/chromiumos/manifest.git'
-    ])
-    api.step('repo sync', [repo, 'sync', '-j6'])
+    api.repo.init(
+        manifest_url=(
+            'https://chromium.googlesource.com/chromiumos/manifest.git'),
+        manifest_branch=manifest_hash,
+    )
+    api.repo.sync(jobs=6)
 
     cros_sdk = depot_tools_dir.join('cros_sdk')
     api.step('cros_sdk', [cros_sdk])
@@ -239,7 +240,6 @@ def GenTests(api):
         'basic_%s' % b,
         api.buildbucket.generic_build(
             builder='codesearch-gen-chromiumos-%s-generic' % b),
-        api.step_data('repo init'),
         api.properties(
             codesearch_mirror_revision='a' * 40,
             codesearch_mirror_revision_timestamp='1531887759',
@@ -249,11 +249,27 @@ def GenTests(api):
       'repo sync to manifest_hash',
       api.buildbucket.generic_build(
           builder='codesearch-gen-chromiumos-amd64-generic'),
-      api.step_data('repo init'), api.step_data('repo sync'),
       api.properties(
           codesearch_mirror_revision='a' * 40,
           codesearch_mirror_revision_timestamp='1531887759',
           manifest_hash='d3adb33f'),
-      api.post_process(StepCommandContains, 'repo init', ['-b', 'd3adb33f']),
-      api.post_process(StepCommandRE, 'repo sync', ['.*repo', 'sync', '-j6']),
-      api.post_process(DropExpectation))
+      api.post_process(StepCommandContains, 'repo init', [
+          'RECIPE_REPO[depot_tools]/repo',
+          'init',
+          '--manifest-url',
+          'https://chromium.googlesource.com/chromiumos/manifest.git',
+          '--groups',
+          'all',
+          '--manifest-branch',
+          'd3adb33f',
+          '--repo-rev=stable',
+          '--verbose',
+      ]),
+      api.post_process(StepCommandContains, 'repo sync', [
+          'RECIPE_REPO[depot_tools]/repo',
+          '--event-log=[CLEANUP]/event_log__tmp_1',
+          'sync',
+          '--jobs',
+          '6',
+          '--verbose',
+      ]), api.post_process(DropExpectation))
