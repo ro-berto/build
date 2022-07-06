@@ -145,11 +145,6 @@
   {
     "cmd": [
       "python",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
       "RECIPE_REPO[build]/recipes/extract_build.py",
       "--gsutil-py-path",
       "RECIPE_REPO[depot_tools]/gsutil.py",
@@ -168,6 +163,13 @@
       "--build-number",
       "1337"
     ],
+    "env_prefixes": {
+      "PYTHONPATH": [
+        "RECIPE_REPO[build]",
+        "RECIPE_REPO[build]/recipes",
+        "RECIPE_REPO[build]/scripts"
+      ]
+    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -210,11 +212,6 @@
   {
     "cmd": [
       "python",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
       "RECIPE_REPO[build]/recipes/daemonizer.py",
       "--",
       "[CACHE]/builder/src/build/android/adb_logcat_monitor.py",
@@ -224,6 +221,13 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "PATH": "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
+    },
+    "env_prefixes": {
+      "PYTHONPATH": [
+        "RECIPE_REPO[build]",
+        "RECIPE_REPO[build]/recipes",
+        "RECIPE_REPO[build]/scripts"
+      ]
     },
     "infra_step": true,
     "luci_context": {
@@ -243,11 +247,6 @@
   {
     "cmd": [
       "python",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
       "RECIPE_REPO[build]/recipes/daemonizer.py",
       "--action",
       "restart",
@@ -261,6 +260,13 @@
       "[CACHE]/builder/src/out/bad_devices.json"
     ],
     "cwd": "[CACHE]/builder",
+    "env_prefixes": {
+      "PYTHONPATH": [
+        "RECIPE_REPO[build]",
+        "RECIPE_REPO[build]/recipes",
+        "RECIPE_REPO[build]/scripts"
+      ]
+    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -279,11 +285,6 @@
   {
     "cmd": [
       "python",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
       "RECIPE_REPO[build]/recipes/android/authorize_adb_devices.py",
       "--verbose",
       "--adb-path",
@@ -292,6 +293,13 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "PATH": "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
+    },
+    "env_prefixes": {
+      "PYTHONPATH": [
+        "RECIPE_REPO[build]",
+        "RECIPE_REPO[build]/recipes",
+        "RECIPE_REPO[build]/scripts"
+      ]
     },
     "infra_step": true,
     "luci_context": {
@@ -531,11 +539,6 @@
   {
     "cmd": [
       "python",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
       "RECIPE_REPO[build]/recipes/daemonizer.py",
       "--action",
       "stop",
@@ -543,6 +546,13 @@
       "/tmp/device_monitor.pid"
     ],
     "cwd": "[CACHE]/builder",
+    "env_prefixes": {
+      "PYTHONPATH": [
+        "RECIPE_REPO[build]",
+        "RECIPE_REPO[build]/recipes",
+        "RECIPE_REPO[build]/scripts"
+      ]
+    },
     "infra_step": true,
     "luci_context": {
       "realm": {

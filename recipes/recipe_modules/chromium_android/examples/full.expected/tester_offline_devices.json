@@ -502,11 +502,6 @@
   {
     "cmd": [
       "python",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
       "RECIPE_REPO[build]/recipes/daemonizer.py",
       "--",
       "[START_DIR]/src/build/android/adb_logcat_monitor.py",
@@ -515,6 +510,13 @@
     ],
     "env": {
       "PATH": "[START_DIR]/src/third_party/android_sdk/public/platform-tools:[START_DIR]/src/build/android:<PATH>"
+    },
+    "env_prefixes": {
+      "PYTHONPATH": [
+        "RECIPE_REPO[build]",
+        "RECIPE_REPO[build]/recipes",
+        "RECIPE_REPO[build]/scripts"
+      ]
     },
     "infra_step": true,
     "luci_context": {
@@ -825,11 +827,6 @@
   {
     "cmd": [
       "python",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
       "RECIPE_REPO[build]/recipes/daemonizer.py",
       "--",
       "[START_DIR]/src/build/android/adb_logcat_monitor.py",
@@ -838,6 +835,13 @@
     ],
     "env": {
       "PATH": "[START_DIR]/src/third_party/android_sdk/public/platform-tools:[START_DIR]/src/build/android:<PATH>"
+    },
+    "env_prefixes": {
+      "PYTHONPATH": [
+        "RECIPE_REPO[build]",
+        "RECIPE_REPO[build]/recipes",
+        "RECIPE_REPO[build]/scripts"
+      ]
     },
     "infra_step": true,
     "luci_context": {
@@ -857,11 +861,6 @@
   {
     "cmd": [
       "python",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
       "RECIPE_REPO[build]/recipes/daemonizer.py",
       "--action",
       "restart",
@@ -874,6 +873,13 @@
       "--denylist-file",
       "[START_DIR]/src/out/bad_devices.json"
     ],
+    "env_prefixes": {
+      "PYTHONPATH": [
+        "RECIPE_REPO[build]",
+        "RECIPE_REPO[build]/recipes",
+        "RECIPE_REPO[build]/scripts"
+      ]
+    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -892,11 +898,6 @@
   {
     "cmd": [
       "python",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
       "RECIPE_REPO[build]/recipes/android/authorize_adb_devices.py",
       "--verbose",
       "--adb-path",
@@ -904,6 +905,13 @@
     ],
     "env": {
       "PATH": "[START_DIR]/src/third_party/android_sdk/public/platform-tools:[START_DIR]/src/build/android:<PATH>"
+    },
+    "env_prefixes": {
+      "PYTHONPATH": [
+        "RECIPE_REPO[build]",
+        "RECIPE_REPO[build]/recipes",
+        "RECIPE_REPO[build]/scripts"
+      ]
     },
     "infra_step": true,
     "luci_context": {

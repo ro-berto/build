@@ -86,11 +86,6 @@
   {
     "cmd": [
       "python",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
       "[START_DIR]/swarming.client/run_isolated.py",
       "--verbose",
       "--cas-instance",
@@ -98,15 +93,17 @@
       "--cas-digest",
       "hash1"
     ],
+    "env_prefixes": {
+      "PYTHONPATH": [
+        "RECIPE_REPO[build]",
+        "RECIPE_REPO[build]/recipes",
+        "RECIPE_REPO[build]/scripts"
+      ]
+    },
     "name": "Run isolated test 'hash1'"
   },
   {
     "cmd": [
-      "python",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
       "python",
       "[START_DIR]/swarming.client/run_isolated.py",
       "--verbose",
@@ -115,6 +112,13 @@
       "--cas-digest",
       "hash2"
     ],
+    "env_prefixes": {
+      "PYTHONPATH": [
+        "RECIPE_REPO[build]",
+        "RECIPE_REPO[build]/recipes",
+        "RECIPE_REPO[build]/scripts"
+      ]
+    },
     "name": "Run isolated test 'hash2'"
   },
   {

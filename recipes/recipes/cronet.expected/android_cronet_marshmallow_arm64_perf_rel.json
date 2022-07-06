@@ -2403,11 +2403,6 @@
   {
     "cmd": [
       "python",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
       "RECIPE_REPO[build]/recipes/upload_perf_dashboard_results.py",
       "--results-file",
       "[CLEANUP]/perf_data_tmp_1/histograms.json",
@@ -2431,6 +2426,13 @@
       "[START_DIR]/src/out",
       "--send-as-histograms"
     ],
+    "env_prefixes": {
+      "PYTHONPATH": [
+        "RECIPE_REPO[build]",
+        "RECIPE_REPO[build]/recipes",
+        "RECIPE_REPO[build]/scripts"
+      ]
+    },
     "luci_context": {
       "realm": {
         "name": "chromium:ci"

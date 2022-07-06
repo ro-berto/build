@@ -1146,17 +1146,19 @@
   {
     "cmd": [
       "python",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
       "RECIPE_MODULE[build::archive]/resources/zip_archive.py",
       "[CLEANUP]/chrome_staging",
       "libfuzzer-mac-release-170242",
       "[\"file1\", \"file2\"]",
       "[CACHE]/builder/src/out/Release"
     ],
+    "env_prefixes": {
+      "PYTHONPATH": [
+        "RECIPE_REPO[build]",
+        "RECIPE_REPO[build]/recipes",
+        "RECIPE_REPO[build]/scripts"
+      ]
+    },
     "infra_step": true,
     "luci_context": {
       "realm": {

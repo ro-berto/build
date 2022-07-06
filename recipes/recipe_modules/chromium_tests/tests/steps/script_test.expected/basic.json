@@ -19,10 +19,6 @@
       "-exonerate-unexpected-pass",
       "--",
       "vpython",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--",
-      "python",
       "None/testing/scripts/script.py",
       "--build-config-fs",
       "Release",
@@ -36,6 +32,13 @@
       "--output",
       "/path/to/tmp/json"
     ],
+    "env_prefixes": {
+      "PYTHONPATH": [
+        "RECIPE_REPO[build]",
+        "RECIPE_REPO[build]/recipes",
+        "RECIPE_REPO[build]/scripts"
+      ]
+    },
     "luci_context": {
       "realm": {
         "name": "chromium:ci"

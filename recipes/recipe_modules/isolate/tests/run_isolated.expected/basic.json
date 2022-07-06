@@ -86,11 +86,6 @@
   {
     "cmd": [
       "python",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
       "[START_DIR]/swarming.client/run_isolated.py",
       "--verbose",
       "--cas-instance",
@@ -101,15 +96,17 @@
       "some",
       "args"
     ],
+    "env_prefixes": {
+      "PYTHONPATH": [
+        "RECIPE_REPO[build]",
+        "RECIPE_REPO[build]/recipes",
+        "RECIPE_REPO[build]/scripts"
+      ]
+    },
     "name": "run_isolated"
   },
   {
     "cmd": [
-      "python",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
       "python",
       "[START_DIR]/swarming.client/run_isolated.py",
       "--verbose",
@@ -121,15 +118,17 @@
       "some",
       "args"
     ],
+    "env_prefixes": {
+      "PYTHONPATH": [
+        "RECIPE_REPO[build]",
+        "RECIPE_REPO[build]/recipes",
+        "RECIPE_REPO[build]/scripts"
+      ]
+    },
     "name": "run_isolated (2)"
   },
   {
     "cmd": [
-      "python",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
       "python",
       "[START_DIR]/swarming.client/run_isolated.py",
       "--verbose",
@@ -143,6 +142,13 @@
       "some",
       "args"
     ],
+    "env_prefixes": {
+      "PYTHONPATH": [
+        "RECIPE_REPO[build]",
+        "RECIPE_REPO[build]/recipes",
+        "RECIPE_REPO[build]/scripts"
+      ]
+    },
     "name": "run_isolated (3)"
   },
   {

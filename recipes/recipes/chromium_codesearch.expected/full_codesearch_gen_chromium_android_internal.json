@@ -1114,16 +1114,18 @@
   {
     "cmd": [
       "python",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
       "RECIPE_MODULE[build::codesearch]/resources/add_kythe_metadata.py",
       "--corpus",
       "chromium.googlesource.com/chromium/src",
       "[CACHE]/builder/src/out/android-Debug"
     ],
+    "env_prefixes": {
+      "PYTHONPATH": [
+        "RECIPE_REPO[build]",
+        "RECIPE_REPO[build]/recipes",
+        "RECIPE_REPO[build]/scripts"
+      ]
+    },
     "luci_context": {
       "realm": {
         "name": "chromium:ci"
@@ -1500,10 +1502,6 @@
   {
     "cmd": [
       "vpython",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--",
-      "python",
       "RECIPE_MODULE[build::codesearch]/resources/sync_generated_files.py",
       "--copy",
       "[CACHE]/builder/src/out/android-Debug/gen;android-Debug/gen",
@@ -1513,6 +1511,13 @@
       "main",
       "[CACHE]/generated"
     ],
+    "env_prefixes": {
+      "PYTHONPATH": [
+        "RECIPE_REPO[build]",
+        "RECIPE_REPO[build]/recipes",
+        "RECIPE_REPO[build]/scripts"
+      ]
+    },
     "luci_context": {
       "realm": {
         "name": "chromium:ci"

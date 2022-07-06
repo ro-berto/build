@@ -208,10 +208,6 @@
   {
     "cmd": [
       "vpython",
-      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
-      "--show-path",
-      "--",
-      "python",
       "RECIPE_REPO[build]\\recipes\\upload_goma_logs.py",
       "--gsutil-py-path",
       "RECIPE_REPO[depot_tools]\\gsutil.py",
@@ -228,6 +224,13 @@
     "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1"
+    },
+    "env_prefixes": {
+      "PYTHONPATH": [
+        "RECIPE_REPO[build]",
+        "RECIPE_REPO[build]\\recipes",
+        "RECIPE_REPO[build]\\scripts"
+      ]
     },
     "luci_context": {
       "realm": {
@@ -246,11 +249,6 @@
   {
     "cmd": [
       "python",
-      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
       "RECIPE_REPO[build]\\recipes\\runtest.py",
       "--target",
       "Release_x64",
@@ -267,6 +265,13 @@
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]\\gsutil.py",
       "CHROME_HEADLESS": "1"
+    },
+    "env_prefixes": {
+      "PYTHONPATH": [
+        "RECIPE_REPO[build]",
+        "RECIPE_REPO[build]\\recipes",
+        "RECIPE_REPO[build]\\scripts"
+      ]
     },
     "luci_context": {
       "realm": {

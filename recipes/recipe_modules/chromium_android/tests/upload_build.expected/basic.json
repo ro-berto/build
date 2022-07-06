@@ -2,11 +2,6 @@
   {
     "cmd": [
       "python",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
       "RECIPE_REPO[build]/recipes/android/archive_build.py",
       "--target",
       "Release",
@@ -32,6 +27,13 @@
       ".ninja_*"
     ],
     "cwd": "None",
+    "env_prefixes": {
+      "PYTHONPATH": [
+        "RECIPE_REPO[build]",
+        "RECIPE_REPO[build]/recipes",
+        "RECIPE_REPO[build]/scripts"
+      ]
+    },
     "infra_step": true,
     "name": "zip_build_product"
   },

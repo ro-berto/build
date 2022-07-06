@@ -113,11 +113,6 @@
   {
     "cmd": [
       "python",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
       "RECIPE_MODULE[build::symupload]/resources/symupload.py",
       "--artifacts",
       "[TMP_BASE]/glob1.txt,[TMP_BASE]/glob2.txt,[TMP_BASE]/some_artifact.txt",
@@ -130,6 +125,13 @@
       "--server-urls",
       "https://some.url.com"
     ],
+    "env_prefixes": {
+      "PYTHONPATH": [
+        "RECIPE_REPO[build]",
+        "RECIPE_REPO[build]/recipes",
+        "RECIPE_REPO[build]/scripts"
+      ]
+    },
     "name": "symupload.symupload_v2",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
