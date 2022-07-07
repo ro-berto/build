@@ -116,7 +116,6 @@ class ChromiumOrchestratorApi(recipe_test_api.RecipeTestApi):
                   'first_100': affected_files,
                   'total_count': 3
               },
-              'deleted_files': ['src/deleted_file.cc'],
           })
           if skipping_coverage is not None:
             output_json_obj['skipping_coverage'] = skipping_coverage

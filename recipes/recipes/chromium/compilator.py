@@ -138,13 +138,6 @@ def compilator_steps(api, properties):
       execution_info = task.swarming_execution_info
       test_suites = task.test_suites
 
-      deleted_files = get_deleted_files(api, task.affected_files)
-      if deleted_files:
-        del_files_step = api.step.empty('deleted files')
-        del_files_step.presentation.properties['deleted_files'] = deleted_files
-        del_files_step.presentation.logs['deleted_files'] = (
-            api.json.dumps(deleted_files, indent=2))
-
     if raw_result and raw_result.status != common_pb.SUCCESS:
       return raw_result
 
@@ -155,6 +148,7 @@ def compilator_steps(api, properties):
         # "without patch" so there's no affected files to archive
         if (not properties.swarming_targets and
             not api.code_coverage.skipping_coverage):
+          deleted_files = get_deleted_files(api, task.affected_files)
           affected_files_to_archive = [
               # In case this is a windows compilator
               str(api.path['checkout'].join(f)).replace('/', api.path.sep)
@@ -499,27 +493,6 @@ def GenTests(api):
       api.post_process(post_process.MustRun,
                        'check_static_initializers (with patch)'),
       api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'output_deleted_files',
-      api.chromium.try_build(
-          builder_group='fake-try-group',
-          builder='fake-compilator',
-          revision='deadbeef',
-      ),
-      ctbc_properties(),
-      api.properties(
-          InputProperties(
-              orchestrator=InputProperties.Orchestrator(
-                  builder_name='fake-orchestrator',
-                  builder_group='fake-try-group'))),
-      api.tryserver.get_files_affected_by_patch(['foo.cc', 'bar/baz.cc']),
-      api.path.exists(api.path['checkout'].join('foo.cc')),
-      api.post_process(post_process.MustRun, 'deleted files'),
-      api.post_process(post_process.PropertyEquals, 'deleted_files',
-                       ['bar/baz.cc']),
       api.post_process(post_process.DropExpectation),
   )
 

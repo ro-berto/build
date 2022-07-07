@@ -28,7 +28,6 @@ class CompilatorOutputProps(object):
     swarming_props: Dict containing swarming information to trigger tests
     got_revisions: Dict containing revisions checked out for src and other deps
     affected_files: List containing paths (str) of files affected by the patch
-    deleted_files: List containing paths (str) of files deleted by the patch
     src_side_deps_digest: CAS digest hash (str) for downloading src-side deps
     src_side_test_spec_dir: Path (str) to downloaded src-side directory that
       contains test specs, relative to the root of the downloaded src-side deps
@@ -39,7 +38,6 @@ class CompilatorOutputProps(object):
   swarming_props = attrib(mapping[str, ...])
   got_revisions = attrib(mapping[str, str])
   affected_files = attrib(sequence[str], default=None)
-  deleted_files = attrib(sequence[str], default=None)
   src_side_deps_digest = attrib(str, default=None)
   src_side_test_spec_dir = attrib(str, default=None)
   skipping_coverage = attrib(bool, default=None)
@@ -523,12 +521,8 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
         affected_files = self.m.chromium_checkout.format_affected_file_paths(
             output_props['affected_files']['first_100'])
 
-      # TODO (kimstephanie): Replace deleted_files and src_side_.* with
+      # TODO (kimstephanie): Replace src_side_.* with
       # output_props.get() in a separate CL
-      deleted_files = None
-      if 'deleted_files' in output_props:
-        deleted_files = output_props['deleted_files']
-
       src_side_deps_digest = None
       src_side_test_spec_dir = None
       if 'src_side_deps_digest' in output_props:
@@ -539,7 +533,6 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
           swarming_props=output_props[swarming_prop_key],
           got_revisions=got_revisions,
           affected_files=affected_files,
-          deleted_files=deleted_files,
           src_side_deps_digest=src_side_deps_digest,
           src_side_test_spec_dir=src_side_test_spec_dir,
           skipping_coverage=output_props.get('skipping_coverage'),
