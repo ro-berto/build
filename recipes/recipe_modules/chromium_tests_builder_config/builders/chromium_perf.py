@@ -229,7 +229,7 @@ SPEC.update({
                 'BUILD_CONFIG': 'Release',
                 'TARGET_ARCH': 'intel',
                 'TARGET_BITS': 64,
-                'TARGET_CROS_BOARDS': 'amd64-generic:eve',
+                'TARGET_CROS_BOARDS': 'amd64-generic:eve:octopus',
                 'TARGET_PLATFORM': 'chromeos',
             },
             simulation_platform='linux',
@@ -308,7 +308,15 @@ _AddIsolatedTestSpec(
     'chromeos-amd64-generic-lacros-builder-perf',
     target_bits=64,
     target_arch='intel',
-    cros_boards='amd64-generic:eve')
+    cros_boards='amd64-generic:eve:octopus')
+
+_AddIsolatedTestSpec(
+    'lacros-x86-perf',
+    'chromeos',
+    'chromeos-amd64-generic-lacros-builder-perf',
+    target_bits=64,
+    target_arch='intel',
+    cros_boards='amd64-generic:eve:octopus')
 
 # Perf result processors
 _AddIsolatedTestSpec('linux-processor-perf', 'linux', 'linux-perf')
