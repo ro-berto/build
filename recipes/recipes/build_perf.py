@@ -93,12 +93,11 @@ def Compile(api, targets):
   buildername = api.buildbucket.builder_name
   builder_id = chromium.BuilderId.create_for_group(
       api.builder_group.for_current, buildername)
-  phase = 'build %s' % ','.join(targets)
-  api.chromium.mb_gen(builder_id, phase=phase, recursive_lookup=True)
+  api.chromium.mb_gen(builder_id, recursive_lookup=True)
   try:
     return api.chromium.compile(
         targets,
-        name=phase.capitalize(),
+        name='Build %s' % ','.join(targets),
         use_goma_module=False,
         use_reclient=True)
   finally:
