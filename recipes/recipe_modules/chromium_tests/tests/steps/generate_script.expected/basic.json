@@ -18,7 +18,7 @@
       "-include",
       "-exonerate-unexpected-pass",
       "--",
-      "vpython",
+      "vpython3",
       "[CACHE]/builder/src/testing/scripts/gtest_test.py",
       "--build-config-fs",
       "Release",
@@ -31,13 +31,6 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder",
-    "env_prefixes": {
-      "PYTHONPATH": [
-        "RECIPE_REPO[build]",
-        "RECIPE_REPO[build]/recipes",
-        "RECIPE_REPO[build]/scripts"
-      ]
-    },
     "luci_context": {
       "realm": {
         "name": "chromium:ci"
