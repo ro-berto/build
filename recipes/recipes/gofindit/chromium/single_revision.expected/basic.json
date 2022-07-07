@@ -1,0 +1,13 @@
+[
+  {
+    "cmd": [
+      "echo",
+      "hello",
+      "GoFindit"
+    ],
+    "name": "Print GoFindit"
+  },
+  {
+    "name": "$result"
+  }
+]
