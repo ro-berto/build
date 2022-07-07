@@ -192,6 +192,7 @@ def RunSteps(api):
   targets = recipe_config['targets']
 
   api.chromium.ensure_goma()
+  api.chromium.ensure_toolchains()
   with api.context(cwd=solution_path):
     api.chromium.runhooks()
   try:
@@ -250,13 +251,20 @@ def GenTests(api):
   for buildername in COMPARISON_BUILDERS:
     test_name = 'full_%s_%s' % (_sanitize_nonalpha(builder_group),
                                 _sanitize_nonalpha(buildername))
+    mac_test_props = {
+        'xcode_build_version': '12345',
+        'configs': ['mac_toolchain']
+    } if COMPARISON_BUILDERS[buildername]['platform'] == 'mac' else {}
     yield api.test(
         test_name,
         api.chromium.ci_build(builder_group=builder_group, builder=buildername),
         api.reclient.properties(),
         api.platform(COMPARISON_BUILDERS[buildername]['platform'], 64),
         api.properties(
-            buildername=buildername, buildnumber=571, configuration='Release'),
+            buildername=buildername,
+            buildnumber=571,
+            configuration='Release',
+            **mac_test_props),
         api.post_process(post_process.StatusSuccess),
         api.post_process(post_process.DropExpectation),
     )
