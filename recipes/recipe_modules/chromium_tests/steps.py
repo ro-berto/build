@@ -901,16 +901,18 @@ class Test(object):
       valid_results: A Boolean indicating whether failures_to_ignore is valid.
       failures_to_ignore: A set of strings. Only valid if valid_results is True.
     """
-    if not self.has_valid_results('without patch'):
+    results = self.get_rdb_results('without patch')
+    if not self.has_valid_results('without patch') or not results:
       return (False, None)
 
-    pass_fail_counts = self.pass_fail_counts('without patch')
     ignored_failures = set()
-    for test_name, results in six.iteritems(pass_fail_counts):
-      # If a test fails at least once, then it's flaky on tip of tree and we
-      # should ignore it.
-      if results['fail_count'] > 0:
-        ignored_failures.add(test_name)
+    for test in results.all_tests:
+      for i, status in enumerate(test.statuses):
+        expected = test.expectednesses[i]
+        if status != test_result_pb2.PASS and not expected:
+          ignored_failures.add(test.test_name)
+          break
+
     return (True, ignored_failures)
 
   def shard_retry_with_patch_results(self):
