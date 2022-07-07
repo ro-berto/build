@@ -273,18 +273,6 @@ class AndroidApi(recipe_api.RecipeApi):
           infra_step=True,
       )
 
-  def zip_and_upload_build(self, _):
-    # TODO(luqui): Unify make_zip_archive and upload_build with this
-    # (or at least make the difference clear).
-    self.m.archive.zip_and_upload_build(
-        'zip_build',
-        target=self.m.chromium.c.BUILD_CONFIG,
-        # We send None as the path so that zip_build.py gets it from build
-        # properties.
-        build_url=None,
-        src_dir=self.m.path['start_dir'].join('src'),
-        exclude_files='lib.target,gen,android_webview,jingle_unittests')
-
   def use_devil_adb(self):
     # TODO(crbug.com/1067294): Remove this after resolving.
     devil_path = self.m.path['checkout'].join('third_party', 'catapult',
