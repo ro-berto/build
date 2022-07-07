@@ -78,17 +78,12 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
         self.m.buildbucket.set_output_gitiles_commit(
             comp_build.output.gitiles_commit)
 
-      # test_patch() waits for the compilator build to finish
-      # so this assertion should always be True.
-      # If there is some regression that changes this, this prevents the
-      # orchestrator build from waiting for an unfinished compilator build
-      assert comp_build.status & common_pb.ENDED_MASK
       # crbug.com/1271287#c22
       # Wait for compilator task overhead to complete
       self.m.swarming.collect(
           name=COMPILATOR_SWARMING_TASK_COLLECT_STEP,
           tasks=[comp_build.infra.swarming.task_id],
-          timeout="3m")
+          timeout="4m")
 
     return raw_result
 
