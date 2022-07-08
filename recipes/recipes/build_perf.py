@@ -94,18 +94,22 @@ def _rm_build_dir(api):
                   str(api.chromium.output_dir))
 
 
-def Compile(api, targets):
+def _compile(api, targets, with_remote_cache):
   buildername = api.buildbucket.builder_name
   builder_id = chromium.BuilderId.create_for_group(
       api.builder_group.for_current, buildername)
   api.chromium.mb_gen(builder_id, recursive_lookup=True)
-
+  step_name = 'Build %s' % ','.join(targets)
+  env = {}
+  if with_remote_cache:
+    step_name += ' with remote cache'
+  else:
+    step_name += ' without remote cache'
+    env['RBE_remote_accept_cache'] = "false"
   try:
-    return api.chromium.compile(
-        targets,
-        name='Build %s' % ','.join(targets),
-        use_goma_module=False,
-        use_reclient=True)
+    with api.context(env=env):
+      return api.chromium.compile(
+          targets, name=step_name, use_goma_module=False, use_reclient=True)
   finally:
     _rm_build_dir(api)
 
@@ -127,12 +131,13 @@ def RunSteps(api):
   _rm_build_dir(api)
 
   for targets in recipe_config['targets']:
-    # TODO(b/234807316): specify remote_accept_cache=false.
-    raw_result = Compile(api, targets)
+    # First build without remote cache.
+    raw_result = _compile(api, targets, with_remote_cache=False)
     if raw_result.status != common_pb.SUCCESS:
       return raw_result
 
-    raw_result = Compile(api, targets)
+    # Second build with remote cache produced by the previous build.
+    raw_result = _compile(api, targets, with_remote_cache=True)
     if raw_result.status != common_pb.SUCCESS:
       return raw_result
 
@@ -159,7 +164,8 @@ def GenTests(api):
 
   buildername = 'Build Perf Linux'
   for step in [
-      'Build all', 'Build all (2)', 'Build chrome', 'Build chrome (2)'
+      'Build all without remote cache', 'Build all with remote cache',
+      'Build chrome without remote cache', 'Build chrome with remote cache'
   ]:
     yield api.test(
         '%s_compile_fail' % (_sanitize_nonalpha(step)),

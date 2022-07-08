@@ -623,7 +623,8 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "RBE_instance": "projects/test-rbe-project/instances/default_instance"
+      "RBE_instance": "projects/test-rbe-project/instances/default_instance",
+      "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
     "luci_context": {
@@ -657,7 +658,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
     "luci_context": {
@@ -689,7 +691,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
     "luci_context": {
@@ -726,7 +729,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
     "luci_context": {
@@ -763,7 +767,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
     "luci_context": {
@@ -802,6 +807,7 @@
       "RBE_log_format": "reducedtext",
       "RBE_proxy_log_dir": "[CLEANUP]/reclient_log_tmp_1",
       "RBE_re_proxy": "[CACHE]/builder/src/buildtools/reclient/reproxy",
+      "RBE_remote_accept_cache": "false",
       "RBE_server_address": "unix:///[TMP_BASE]/reproxy.sock",
       "RBE_service": "remotebuildexecution.googleapis.com:443",
       "RBE_use_application_default_credentials": "false",
@@ -846,6 +852,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_log_dir": "[CLEANUP]/reclient_log_tmp_1",
+      "RBE_remote_accept_cache": "false",
       "RBE_server_address": "unix:///[TMP_BASE]/reproxy.sock"
     },
     "luci_context": {
@@ -860,7 +867,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "Build all"
+    "name": "Build all without remote cache"
   },
   {
     "cmd": [
@@ -879,6 +886,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_log_dir": "[CLEANUP]/reclient_log_tmp_1",
+      "RBE_remote_accept_cache": "false",
       "RBE_server_address": "unix:///[TMP_BASE]/reproxy.sock"
     },
     "luci_context": {
@@ -893,7 +901,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "Build all confirm no-op"
+    "name": "Build all without remote cache confirm no-op"
   },
   {
     "cmd": [],
@@ -915,7 +923,8 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "RBE_log_dir": "[CLEANUP]/reclient_log_tmp_1"
+      "RBE_log_dir": "[CLEANUP]/reclient_log_tmp_1",
+      "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
     "luci_context": {
@@ -945,7 +954,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
     "luci_context": {
@@ -975,7 +985,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
     "luci_context": {
@@ -1008,7 +1019,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
     "luci_context": {
@@ -1049,7 +1061,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
     "luci_context": {
@@ -1084,7 +1097,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
     "luci_context": {
@@ -1122,7 +1136,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
     "luci_context": {
@@ -1173,7 +1188,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
     "luci_context": {
@@ -1206,7 +1222,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
     "luci_context": {
@@ -1240,7 +1257,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
     "luci_context": {
@@ -1273,7 +1291,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
     "luci_context": {
@@ -1307,7 +1326,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
     "luci_context": {
@@ -1340,7 +1360,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
     "luci_context": {
@@ -1384,7 +1405,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
     "luci_context": {
@@ -1418,7 +1440,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
     "luci_context": {
@@ -1452,7 +1475,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
     "luci_context": {
@@ -1486,7 +1510,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
     "luci_context": {
@@ -1516,7 +1541,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
     "luci_context": {
@@ -1548,7 +1574,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
     "luci_context": {
@@ -1923,7 +1950,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "Build all (2)"
+    "name": "Build all with remote cache"
   },
   {
     "cmd": [
@@ -1956,7 +1983,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "Build all confirm no-op (2)"
+    "name": "Build all with remote cache confirm no-op"
   },
   {
     "cmd": [],
@@ -2662,7 +2689,8 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "RBE_instance": "projects/test-rbe-project/instances/default_instance"
+      "RBE_instance": "projects/test-rbe-project/instances/default_instance",
+      "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
     "luci_context": {
@@ -2696,7 +2724,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
     "luci_context": {
@@ -2728,7 +2757,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
     "luci_context": {
@@ -2765,7 +2795,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
     "luci_context": {
@@ -2802,7 +2833,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
     "luci_context": {
@@ -2841,6 +2873,7 @@
       "RBE_log_format": "reducedtext",
       "RBE_proxy_log_dir": "[CLEANUP]/reclient_log_tmp_3",
       "RBE_re_proxy": "[CACHE]/builder/src/buildtools/reclient/reproxy",
+      "RBE_remote_accept_cache": "false",
       "RBE_server_address": "unix:///[TMP_BASE]/reproxy.sock",
       "RBE_service": "remotebuildexecution.googleapis.com:443",
       "RBE_use_application_default_credentials": "false",
@@ -2886,6 +2919,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_log_dir": "[CLEANUP]/reclient_log_tmp_1",
+      "RBE_remote_accept_cache": "false",
       "RBE_server_address": "unix:///[TMP_BASE]/reproxy.sock"
     },
     "luci_context": {
@@ -2900,7 +2934,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "Build chrome"
+    "name": "Build chrome without remote cache"
   },
   {
     "cmd": [
@@ -2920,6 +2954,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_log_dir": "[CLEANUP]/reclient_log_tmp_1",
+      "RBE_remote_accept_cache": "false",
       "RBE_server_address": "unix:///[TMP_BASE]/reproxy.sock"
     },
     "luci_context": {
@@ -2934,7 +2969,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "Build chrome confirm no-op"
+    "name": "Build chrome without remote cache confirm no-op"
   },
   {
     "cmd": [],
@@ -2956,7 +2991,8 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "RBE_log_dir": "[CLEANUP]/reclient_log_tmp_3"
+      "RBE_log_dir": "[CLEANUP]/reclient_log_tmp_3",
+      "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
     "luci_context": {
@@ -2986,7 +3022,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
     "luci_context": {
@@ -3016,7 +3053,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
     "luci_context": {
@@ -3049,7 +3087,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
     "luci_context": {
@@ -3076,7 +3115,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
     "luci_context": {
@@ -3127,7 +3167,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
     "luci_context": {
@@ -3160,7 +3201,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
     "luci_context": {
@@ -3194,7 +3236,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
     "luci_context": {
@@ -3227,7 +3270,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
     "luci_context": {
@@ -3261,7 +3305,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
     "luci_context": {
@@ -3294,7 +3339,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
     "luci_context": {
@@ -3338,7 +3384,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
     "luci_context": {
@@ -3372,7 +3419,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
     "luci_context": {
@@ -3406,7 +3454,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
     "luci_context": {
@@ -3440,7 +3489,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
     "luci_context": {
@@ -3470,7 +3520,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
     "luci_context": {
@@ -3502,7 +3553,8 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
     "luci_context": {
@@ -3878,7 +3930,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "Build chrome (2)"
+    "name": "Build chrome with remote cache"
   },
   {
     "cmd": [
@@ -3912,7 +3964,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "Build chrome confirm no-op (2)"
+    "name": "Build chrome with remote cache confirm no-op"
   },
   {
     "cmd": [],
