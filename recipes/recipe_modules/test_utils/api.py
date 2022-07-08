@@ -531,13 +531,10 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     experiments = self.m.buildbucket.build.input.experiments
     if 'enable_weetbix_queries' in experiments:
-      try:
-        self.m.weetbix.get_clusters_for_failing_test_results(failed_test_suites)
-        # TODO (kimstephanie): Process clusters and output cluster weetbix flake
-        # info for data analysis
-      except self.m.step.StepWarning:
-        # Don't let a StepWarning from a weetbix call determine the build status
-        pass
+      self.m.weetbix.query_failure_rate(failed_test_suites)
+
+      # TODO (crbug/1314194): Process failure rates for test flakiness and
+      # report difference
 
     known_flakes = self._query_flaky_failures(tests_to_check)
     if not known_flakes:
