@@ -35,6 +35,8 @@ import repository_util
 # 'input_path':
 #   '$CHROMIUM_OUTPUT_DIR/\
 #    obj/chrome/android/features/tab_ui/java__process_prebuilt-filtered.jar'
+#
+# 'output_dir': $CHROMIUM_OUTPUT_DIR
 
 SOURCES_JSON_FILES_SUFFIX = '__jacoco_sources.json'
 
@@ -414,7 +416,18 @@ def main():
   for f in sources_json_files:
     with open(f) as json_file:
       json_file_data = json.load(json_file)
-      class_files.extend(json_file_data['input_path'])
+      input_paths = json_file_data['input_path']
+      output_dir = json_file_data['output_dir']
+      # The orchestrator downloads affected src-side files into a cleanup/ dir
+      # instead of the usual cache/builder/src chromium checkout dir. This
+      # extracts the relpath out of the input_path and joins it with
+      # params.src_path.
+      corrected_input_paths = []
+      for input_path in input_paths:
+        rel_input_path = os.path.relpath(input_path, output_dir)
+        corrected_input_paths.append(
+            os.path.join(params.src_path, rel_input_path))
+      class_files.extend(corrected_input_paths)
       source_dirs.extend(json_file_data['source_dirs'])
 
   if not class_files:
