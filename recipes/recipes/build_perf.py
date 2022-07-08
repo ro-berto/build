@@ -17,6 +17,7 @@ DEPS = [
     'chromium',
     'chromium_android',
     'chromium_checkout',
+    'code_coverage',
     'depot_tools/gclient',
     'recipe_engine/buildbucket',
     'recipe_engine/context',
@@ -83,6 +84,10 @@ def ConfigureChromiumBuilder(api, recipe_config):
   # Checkout chromium.
   api.chromium_checkout.ensure_checkout()
 
+  if api.code_coverage.using_coverage:
+    api.code_coverage.src_dir = api.chromium_checkout.src_dir
+    api.code_coverage.instrument([])
+
 
 def _rm_build_dir(api):
   api.file.rmtree('rmtree %s' % str(api.chromium.output_dir),
@@ -94,6 +99,7 @@ def Compile(api, targets):
   builder_id = chromium.BuilderId.create_for_group(
       api.builder_group.for_current, buildername)
   api.chromium.mb_gen(builder_id, recursive_lookup=True)
+
   try:
     return api.chromium.compile(
         targets,
@@ -148,6 +154,7 @@ def GenTests(api):
         api.properties(
             buildername=buildername, buildnumber=571, configuration='Release'),
         api.post_process(post_process.StatusSuccess),
+        api.code_coverage(use_clang_coverage=True),
     )
 
   buildername = 'Build Perf Linux'
