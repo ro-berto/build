@@ -375,30 +375,6 @@
       "chromium.chromiumos:linux-lacros-rel"
     ]
   },
-  "chromium.dawn:Dawn Linux x64 Builder": {
-    "builders": [
-      "chromium.dawn:Dawn Linux x64 Builder",
-      "chromium.dawn:Dawn Linux x64 Release (Intel HD 630)",
-      "chromium.dawn:Dawn Linux x64 Release (NVIDIA)",
-      "tryserver.chromium.dawn:linux-dawn-rel"
-    ]
-  },
-  "chromium.dawn:Dawn Linux x64 Release (Intel HD 630)": {
-    "builders": [
-      "chromium.dawn:Dawn Linux x64 Builder",
-      "chromium.dawn:Dawn Linux x64 Release (Intel HD 630)",
-      "chromium.dawn:Dawn Linux x64 Release (NVIDIA)",
-      "tryserver.chromium.dawn:linux-dawn-rel"
-    ]
-  },
-  "chromium.dawn:Dawn Linux x64 Release (NVIDIA)": {
-    "builders": [
-      "chromium.dawn:Dawn Linux x64 Builder",
-      "chromium.dawn:Dawn Linux x64 Release (Intel HD 630)",
-      "chromium.dawn:Dawn Linux x64 Release (NVIDIA)",
-      "tryserver.chromium.dawn:linux-dawn-rel"
-    ]
-  },
   "chromium.dawn:Dawn Mac x64 Builder": {
     "builders": [
       "chromium.dawn:Dawn Mac x64 Builder",
@@ -2797,14 +2773,6 @@
       "chromium.dawn:Dawn Win10 x86 Release (Intel HD 630)",
       "chromium.dawn:Dawn Win10 x86 Release (NVIDIA)",
       "tryserver.chromium.dawn:dawn-try-win10-x86-rel"
-    ]
-  },
-  "tryserver.chromium.dawn:linux-dawn-rel": {
-    "builders": [
-      "chromium.dawn:Dawn Linux x64 Builder",
-      "chromium.dawn:Dawn Linux x64 Release (Intel HD 630)",
-      "chromium.dawn:Dawn Linux x64 Release (NVIDIA)",
-      "tryserver.chromium.dawn:linux-dawn-rel"
     ]
   },
   "tryserver.chromium.dawn:mac-dawn-rel": {

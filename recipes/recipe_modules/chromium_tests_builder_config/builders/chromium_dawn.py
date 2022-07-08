@@ -23,8 +23,6 @@ def _chromium_dawn_spec(os, bits, **kwargs):
 
 def CreateBuilderConfig(os, bits, top_of_tree):
   gclient_apply_config = ['dawn_top_of_tree'] if top_of_tree else []
-  if os == 'linux':
-    gclient_apply_config.append('enable_reclient')
   return _chromium_dawn_spec(
       os,
       bits,
@@ -57,14 +55,11 @@ def CreateTesterConfig(os, bits, builder):
 # * Dawn Win10 x86 DEPS Builder
 # * Dawn Win10 x86 DEPS Release (Intel HD 630)
 # * Dawn Win10 x86 DEPS Release (NVIDIA)
+# * Dawn Linux x64 Builder
+# * Dawn Linux x64 Release (Intel HD 630)
+# * Dawn Linux x64 Release (NVIDIA)
 
 SPEC = {
-    'Dawn Linux x64 Builder':
-        CreateBuilderConfig('linux', 64, top_of_tree=True),
-    'Dawn Linux x64 Release (Intel HD 630)':
-        CreateTesterConfig('linux', 64, 'Dawn Linux x64 Builder'),
-    'Dawn Linux x64 Release (NVIDIA)':
-        CreateTesterConfig('linux', 64, 'Dawn Linux x64 Builder'),
     'Dawn Mac x64 Builder':
         CreateBuilderConfig('mac', 64, top_of_tree=True),
     # The Dawn Mac testers are actually running on thin Linux VMs.

@@ -855,6 +855,7 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * dawn-mac-x64-deps-rel
     # * dawn-win10-x64-deps-rel
     # * dawn-win10-x86-deps-rel
+    # * linux-dawn-rel
     'tryserver.chromium.dawn': {
         'dawn-try-mac-amd-exp':
             try_spec.TrySpec.create([
@@ -870,19 +871,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                     builder_group='chromium.dawn',
                     buildername='Dawn Mac x64 Builder',
                     tester='Dawn Mac x64 Experimental Release (Intel)',
-                ),
-            ]),
-        'linux-dawn-rel':
-            try_spec.TrySpec.create([
-                try_spec.TryMirror.create(
-                    builder_group='chromium.dawn',
-                    buildername='Dawn Linux x64 Builder',
-                    tester='Dawn Linux x64 Release (Intel HD 630)',
-                ),
-                try_spec.TryMirror.create(
-                    builder_group='chromium.dawn',
-                    buildername='Dawn Linux x64 Builder',
-                    tester='Dawn Linux x64 Release (NVIDIA)',
                 ),
             ]),
         'mac-dawn-rel':
