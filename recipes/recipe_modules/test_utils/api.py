@@ -942,6 +942,9 @@ class TestUtilsApi(recipe_api.RecipeApi):
     This function emits a step with a fixed name, and metadata for FindIt.
     Before making changes to this function, check with the FindIt team to ensure
     that their post-processing will still work correctly.
+
+    TODO(crbug.com/1243174): Remove this step when FindIt no longer needs it
+    for bug-filing.
     """
     step_layer_flakiness = {}
     step_layer_skipped_known_flakiness = {}
