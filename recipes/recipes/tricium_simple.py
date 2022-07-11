@@ -12,7 +12,6 @@ DEPS = [
     'depot_tools/gclient',
     'depot_tools/gerrit',
     'depot_tools/tryserver',
-    'recipe_engine/buildbucket',
     'recipe_engine/cipd',
     'recipe_engine/platform',
     'recipe_engine/json',
@@ -30,7 +29,6 @@ def RunSteps(api):
   """
   # All the analyzers run here must run on 64-bit Linux.
   assert api.platform.is_linux and api.platform.bits == 64
-  api.buildbucket.hide_current_build_in_gerrit()
   commit_message = api.gerrit.get_change_description(
       'https://%s' % api.tryserver.gerrit_change.host,
       api.tryserver.gerrit_change.change, api.tryserver.gerrit_change.patchset)

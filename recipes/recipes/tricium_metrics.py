@@ -60,8 +60,6 @@ def _RunMetricsAnalyzer(api, src_dir, prev_dir, metrics_paths, patch_path):
 def RunSteps(api):
   assert api.tryserver.is_tryserver
 
-  api.buildbucket.hide_current_build_in_gerrit()
-
   # Do not run if "Tricium-Skip-Metrics" is in the commit message footer.
   if bool(api.tryserver.get_footer('Tricium-Skip-Metrics')):
     return
