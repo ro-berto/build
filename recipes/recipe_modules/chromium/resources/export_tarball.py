@@ -216,10 +216,12 @@ def main(argv):
         stdout=subprocess.PIPE,
         stderr=sys.stdout)
     with open(output_fullname + '.xz', 'w') as f:
-      rc = subprocess.call(['xz', '-9', '-'], stdin=pv.stdout, stdout=f)
+      rc = subprocess.call(['xz', '-T', '0', '-9', '-'],
+                           stdin=pv.stdout,
+                           stdout=f)
     pv.wait()
   else:
-    rc = subprocess.call(['xz', '-9', output_fullname])
+    rc = subprocess.call(['xz', '-T', '0', '-9', output_fullname])
 
   if rc != 0:
     print 'xz -9 failed!'
