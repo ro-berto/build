@@ -19,7 +19,9 @@ class Chromium3ppApi(recipe_api.RecipeApi):
     self._gclient_config = properties.gclient_config
     self._gclient_apply_config = properties.gclient_apply_config
 
-    self._checkout_path = None
+    # If local_checkout_dir exist, it will be used instead of a fresh checkout.
+    # This is used to test creating and building new 3pp packages locally.
+    self._checkout_path = properties.local_checkout_dir
 
   def prepare(self):
     """Sets up a chromium 3pp run.
@@ -28,11 +30,19 @@ class Chromium3ppApi(recipe_api.RecipeApi):
      * Setting up the given configs.
      * setting up the checkout w/ bot_update
     """
-    self.m.gclient.set_config(self._gclient_config)
-    for c in self._gclient_apply_config:
-      self.m.gclient.apply_config(c)
-    self.m.chromium_checkout.ensure_checkout()
-    self._checkout_path = self.m.chromium_checkout.checkout_dir
+    if self._checkout_path:
+      # Avoid running gclient or ensure_checkout so that local changes are not
+      # overwritten. This must be done in the experimental repo.
+      assert self.m.runtime.is_experimental, (
+          'When local_checkout_dir is defined, is_experimental is required. '
+          'See https://crrev.com/c/3749816 for context.')
+      self._checkout_path = self.m.path.abs_to_path(self._checkout_path)
+    else:
+      self.m.gclient.set_config(self._gclient_config)
+      for c in self._gclient_apply_config:
+        self.m.gclient.apply_config(c)
+      self.m.chromium_checkout.ensure_checkout()
+      self._checkout_path = self.m.chromium_checkout.checkout_dir
 
   def _get_git_diff(self, name, staged_only=False):
     """Get the local git diff.

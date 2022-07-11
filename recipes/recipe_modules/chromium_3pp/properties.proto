@@ -56,5 +56,8 @@ message InputProperties {
 
   // A list of config to apply for "gclient" recipe module.
   repeated string gclient_apply_config = 7;
+
+  // Override of src path for testing locally.
+  string local_checkout_dir = 8;
 }
 

@@ -22,15 +22,18 @@ def RunSteps(api):
 
 def GenTests(api):
 
-  def generate_properties(**kwargs):
-    properties = {
+  def generate_properties(runtime_properties=None, **kwargs):
+    chromium_3pp_properties = {
         'platform': 'linux-amd64',
         'package_prefix': 'chromium',
         'gclient_config': 'chromium',
         'gclient_apply_config': ['android'],
     }
-    properties.update(**kwargs)
-    return api.properties(**{'$build/chromium_3pp': properties})
+    chromium_3pp_properties.update(**kwargs)
+    properties = {'$build/chromium_3pp': chromium_3pp_properties}
+    if runtime_properties is not None:
+      properties['$recipe_engine/runtime'] = runtime_properties
+    return api.properties(**properties)
 
   package_spec_other = '''
   create {
@@ -101,6 +104,15 @@ def GenTests(api):
           post_process.MustRun,
           'Load to-build packages from third_party/bar/some',
       ),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'basic_with_local_src',
+      generate_properties(
+          runtime_properties={'is_experimental': True},
+          local_checkout_dir='[CACHE]/hi'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
