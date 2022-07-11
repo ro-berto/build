@@ -590,8 +590,38 @@ def _cleanup_coverage_data(src_path, llvm_raw_data):
 def _create_coverage_json(output_dir, data):
   """Writes coverage data in json format to disk.
 
+  Args:
+    output_dir(string): Directory where coverage data would be materialized.
+    data(dict): Coverage data of following format
+      {
+        'data': [{
+            'files': file_data
+        }],
+        'type': 'llvm.coverage.json.export',
+        'version': '2.0.1'
+      }
+    where file_data is a list of file coverage data. See
+    _to_compressed_file_record() to understand how file coverage data looks
+    like.
+
   Creates a coverage.json file in the output directory
   """
+  # TODO(crbug/1305015): Remove this block once debugging is done.
+  # pick the coverage data of first file in the dataset
+  if 'data' in data and len(
+      data['data']) > 0 and 'files' in data['data'][0] and len(
+          data['data'][0]['files']) > 0:
+    single_file_coverage_data = data['data'][0]['files'][0]
+    reduced_data_for_debugging = {
+        'data': [{
+            'files': [single_file_coverage_data]
+        }],
+        'type': data['type'],
+        'version': data['version']
+    }
+    data = reduced_data_for_debugging
+  #####################################
+
   coverage_json_file = os.path.join(output_dir, 'coverage.json')
   with open(coverage_json_file, 'w') as fp:
     json.dump(data, fp)
