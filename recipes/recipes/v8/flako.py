@@ -48,6 +48,8 @@ PROPERTIES = {
     'bisect_buildername': Property(kind=str),
     # Extra arguments to V8's run-tests.py script.
     'extra_args': Property(default=None, kind=list),
+    # Regular expression that must match in the output of failing tests.
+    'failure_regexp': Property(default=None, kind=str),
     # Number of commits, backwards bisection will initially leap over.
     'initial_commit_offset': Property(default=1, kind=Single((int, float))),
     # The maximum number of calibration attempts (safeguard to prevent infinite
@@ -362,7 +364,7 @@ class Depot(object):
 class Runner(object):
   """Helper class for executing the V8 test runner to check for flakes."""
   def __init__(self, api, depot, command, num_shards, repro_only,
-               max_calibration_attempts):
+               max_calibration_attempts, failure_regexp):
     self.api = api
     self.depot = depot
     self.command = command
@@ -370,6 +372,9 @@ class Runner(object):
     self.repro_only = repro_only
     self.multiplier = 1
     self.max_calibration_attempts = max_calibration_attempts
+    self.failure_regexp = None
+    if failure_regexp:
+      self.failure_regexp = re.compile(failure_regexp)
 
   def calibrate(self, offset):
     """Calibrates the multiplier for test time or repetitions of the runner for
@@ -402,12 +407,42 @@ class Runner(object):
   def _default_task_pass_test_data(self):
     test_data = self.api.chromium_swarming.test_api.canned_summary_output_raw()
     test_data['shards'][0]['output'] = TEST_PASSED_TEXT
+    test_data['shards'][0]['exit_code'] = 0
     return (
         self.api.chromium_swarming.test_api.summary(
             self.api.json.test_api.output({}) +
             self.api.raw_io.test_api.output(''),
             test_data)
     )
+
+  def num_failures(self, step_result):
+    """Determine the number of failures from the results of one swarming shard.
+    """
+    data = step_result.chromium_swarming.summary['shards'][0]
+    assert data['exit_code'] is not None, (
+        'The bot might have died. Please restart the analysis')
+    if data['exit_code'] == EXIT_CODE_NO_TESTS:
+      # The desired test doesn't exist in this revision. This counts
+      # as good as no test means no flaky test.
+      return 0  # pragma: no cover
+
+    output = data.get('output')
+
+    # TODO(machenbach): Add this information to the V8 test runner's json
+    # output as parsing stdout is brittle.
+    if TEST_PASSED_TEXT in output:
+      return 0
+
+    # TODO(https://crbug.com/v8/13011): For now we only verify one overall
+    # match of this regular expression and afterwards count all the test
+    # failures. We might still count test failures where the expression didn't
+    # match. This can be fixed by using V8's json test output instead.
+    if self.failure_regexp and not self.failure_regexp.search(output):
+      return 0
+
+    match = re.search(r'=== (\d+) tests failed', output)
+    assert match
+    return int(match.group(1))
 
   def check_num_flakes(self, offset):
     """Stress tests the given revision and returns the number of failures.
@@ -463,38 +498,9 @@ class Runner(object):
         step_result, _ = self.api.chromium_swarming.collect_task(
           task, allow_missing_json=True,
           gen_step_test_data=self._default_task_pass_test_data)
-        # TODO(machenbach): Handle valid results data.
-        data = step_result.chromium_swarming.summary['shards'][0]
-        # Sanity checks.
-        # TODO(machenbach): Add this information to the V8 test runner's json
-        # output as parsing stdout is brittle.
-
-        output = data.get('output')
-        assert TEST_PASSED_TEXT in output
-        return 0
+        return self.num_failures(step_result)
       except self.api.step.StepFailure as e:
-        data = e.result.chromium_swarming.summary['shards'][0]
-        assert data['exit_code'], (
-            'The bot might have died. Please restart the analysis')
-        if data['exit_code'] == EXIT_CODE_NO_TESTS:
-          # The desired tests seem to not exist in this revision.
-          # TODO(machenbach): Add special logic for dealing with tests not
-          # existing. They might have been added in a revision and are flaky
-          # since then. Treat them as good revisions for now.
-          # Maybe we should not do this during initialization to make sure it's
-          # not a setup error?
-          return 0  # pragma: no cover
-
-        output = data.get('output')
-        if TEST_PASSED_TEXT in output:  # pragma: no cover
-          # It's possible that the return code is non-zero due to a test runner
-          # leak.
-          # TODO(machenbach): Remove this when https://crbug.com/v8/8001 is
-          # resolved.
-          return 0
-        match = re.search(r'=== (\d+) tests failed', output)
-        assert match
-        return int(match.group(1))
+        return self.num_failures(e.result)
 
     # TODO(sergiyb): Make bisect more robust to infra failures, e.g. we trigger
     # several dozen of tasks during bisect and currently if one expires, the
@@ -623,8 +629,8 @@ def setup_swarming(
     api.chromium_swarming.set_default_dimension(k, v)
 
 
-def RunSteps(api, bisect_builder_group, bisect_buildername,
-             extra_args, initial_commit_offset, max_calibration_attempts,
+def RunSteps(api, bisect_builder_group, bisect_buildername, extra_args,
+             failure_regexp, initial_commit_offset, max_calibration_attempts,
              isolated_name, num_shards, outdir, repetitions, repro_only,
              swarming_dimensions, swarming_priority, swarming_expiration,
              test_name, timeout_sec, total_timeout_sec, to_revision, variant):
@@ -648,7 +654,8 @@ def RunSteps(api, bisect_builder_group, bisect_buildername,
       test_name, variant, repetitions, repro_only, total_timeout_sec,
       timeout_sec, extra_args, outdir)
   runner = Runner(
-      api, depot, command, num_shards, repro_only, max_calibration_attempts)
+      api, depot, command, num_shards, repro_only, max_calibration_attempts,
+      failure_regexp)
 
   to_offset = depot.find_closest_build(0)
 
@@ -764,9 +771,10 @@ def GenTests(api):
     )
 
   def is_flaky(offset, shard, flakes, calibration_attempt=0,
-               test_name='mjsunit/foobar'):
+               test_name='mjsunit/foobar', output_prefix=''):
     test_data = api.chromium_swarming.canned_summary_output_raw()
-    test_data['shards'][0]['output'] = TEST_FAILED_TEMPLATE % flakes
+    test_data['shards'][0]['output'] = (
+        output_prefix + TEST_FAILED_TEMPLATE % flakes)
     test_data['shards'][0]['exit_code'] = 1
     step_prefix = ''
     if calibration_attempt:
@@ -918,6 +926,27 @@ def GenTests(api):
       api.post_process(MustRun, 'gsutil lookup cas_digests for #1') +
       api.post_process(MustRun, 'gsutil lookup cas_digests for #1 (fallback)') +
       api.post_process(DoesNotRun, 'gsutil lookup cas_digests for #2') +
+      api.post_process(DropExpectation)
+  )
+
+  # Simulate repro-only mode reproducing a flake by regexp.
+  yield (
+      test('repro_regexp_match') +
+      api.properties(repro_only=True, failure_regexp='foo.*bar') +
+      successful_lookup(0) +
+      is_flaky(0, 0, 1, calibration_attempt=1,
+               output_prefix='has foo and bar in the output...\n') +
+      api.post_process(MustRun, 'Flake still reproduces.') +
+      api.post_process(DropExpectation)
+  )
+
+  # Simulate repro-only mode not reproducing a flake by regexp.
+  yield (
+      test('repro_regexp_no_match') +
+      api.properties(repro_only=True, failure_regexp='foo.*bar') +
+      successful_lookup(0) +
+      is_flaky(0, 0, 1, calibration_attempt=1) +
+      api.post_process(ResultReasonRE, 'Could not reproduce flake.') +
       api.post_process(DropExpectation)
   )
 
