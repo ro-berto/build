@@ -28,14 +28,15 @@ DEPS = [
     'recipe_engine/properties',
     'recipe_engine/raw_io',
     'recipe_engine/step',
+    'recipe_engine/url',
 ]
 
 # Sometimes a revision will be bad because the checkout will fail, causing
 # publish_tarball to fail.  The version will stay in the omaha version list for
 # several months and publish_tarball will keep re-running on the same broken
-# version.  This blacklist exists to exclude those broken versions so the bot
+# version.  This denylist exists to exclude those broken versions so the bot
 # doesn't keep retrying and sending build failure emails out.
-BLACKLISTED_VERSIONS = [
+DENYLISTED_VERSIONS = [
     '84.0.4104.56',
     '84.0.4147.4',
 ]
@@ -69,11 +70,11 @@ def published_all_tarballs(version, ls_result):
 
 
 @recipe_api.composite_step
-def export_tarball(api, args, source, destination):
+def export_tarball(api, args, source, destination, step_name_suffix):
   try:
     temp_dir = api.path.mkdtemp('export_tarball')
     with api.context(cwd=temp_dir):
-      api.step('export_tarball',
+      api.step('export_tarball for %s' % step_name_suffix,
                ['python', api.chromium.resource('export_tarball.py')] + args)
     gsutil_upload(
         api,
@@ -83,7 +84,7 @@ def export_tarball(api, args, source, destination):
         args=['-a', 'public-read'])
 
     hashes_result = api.step(
-        'generate_hashes',
+        'generate_hashes for %s' % step_name_suffix,
         [
             'python',
             api.chromium.resource('generate_hashes.py'),
@@ -190,7 +191,8 @@ def export_lite_tarball(api, version):
             dest_dir
         ],
         'chromium-%s.tar.xz' % version,
-        'chromium-%s-lite.tar.xz' % version)
+        'chromium-%s-lite.tar.xz' % version,
+        'lite')
 
 
 @recipe_api.composite_step
@@ -219,7 +221,8 @@ def export_nacl_tarball(api, version):
             dest_dir
         ],
         'chromium-%s.tar.xz' % version,
-        'chromium-%s-nacl.tar.xz' % version)
+        'chromium-%s-nacl.tar.xz' % version,
+        'nacl')
 
 
 @recipe_api.composite_step
@@ -253,8 +256,9 @@ def fetch_afdo_profile(api):
 
 
 def trigger_publish_tarball_jobs(api):
-  ls_result = api.gsutil(['ls', 'gs://chromium-browser-official/'],
-                         stdout=api.raw_io.output_text()).stdout
+  ls_result = api.gsutil(
+      ['ls', 'gs://chromium-browser-official/'],
+      stdout=api.raw_io.output_text(add_output_log=True)).stdout
   missing_releases = set()
   # TODO(phajdan.jr): find better solution than hardcoding version number.
   # We do that currently (carryover from a solution this recipe is replacing)
@@ -267,19 +271,29 @@ def trigger_publish_tarball_jobs(api):
     version = release['version']
     if not published_all_tarballs(version, ls_result):
       missing_releases.add(version)
+  if not missing_releases:
+    api.step.empty('no new releases need publishing')
+  else:
+    step_result = api.step.empty('%d new releases need publishing' %
+                                 len(missing_releases))
+    step_result.presentation.logs['missing release'] = '\n'.join(
+        missing_releases)
+
   for version in missing_releases:
-    if version not in BLACKLISTED_VERSIONS:
+    if version not in DENYLISTED_VERSIONS:
       api.scheduler.emit_trigger(
           api.scheduler.BuildbucketTrigger(properties={'version': version}),
           project='infra',
-          jobs=['publish_tarball'])
+          jobs=['publish_tarball'],
+          step_name='trigger publish_tarball for %s' % version)
 
 
 def publish_tarball(api):
   version = api.properties['version']
 
-  ls_result = api.gsutil(['ls', 'gs://chromium-browser-official/'],
-                         stdout=api.raw_io.output_text()).stdout
+  ls_result = api.gsutil(
+      ['ls', 'gs://chromium-browser-official/'],
+      stdout=api.raw_io.output_text(add_output_log=True)).stdout
 
   if published_all_tarballs(version, ls_result):
     return
@@ -387,7 +401,8 @@ def publish_tarball(api):
               api.path['checkout']
           ],
           'chromium-%s.tar.xz' % version,
-          'chromium-%s.tar.xz' % version)
+          'chromium-%s.tar.xz' % version,
+          'full')
 
       # Trigger a tarball build now that the full tarball has been uploaded.
       api.scheduler.emit_trigger(
@@ -407,7 +422,8 @@ def publish_tarball(api):
               api.path['checkout']
           ],
           'chromium-%s.tar.xz' % version,
-          'chromium-%s-testdata.tar.xz' % version)
+          'chromium-%s-testdata.tar.xz' % version,
+          'testdata')
 
     if not published_lite_tarball(version, ls_result):
       export_lite_tarball(api, version)
@@ -470,6 +486,27 @@ def GenTests(api):
   yield (api.test('trigger') + api.buildbucket.generic_build() +
          api.platform('linux', 64) +
          api.step_data('gsutil ls', stdout=api.raw_io.output_text('')))
+
+  yield api.test(
+      'trigger_noop',
+      api.buildbucket.generic_build(),
+      api.platform('linux', 64),
+      api.url.text(
+          'GET https://omahaproxy.appspot.com/history',
+          """os,channel,version,timestamp
+        linux,canary,87.0.4273.0,2018-07-16 07:25:01.309860"""),
+      api.step_data(
+          'gsutil ls',
+          stdout=api.raw_io.output_text(
+              'gs://chromium-browser-official/chromium-87.0.4273.0.tar.xz\n'
+              'gs://chromium-browser-official/chromium-87.0.4273.0-lite.tar.xz\n'
+              'gs://chromium-browser-official/chromium-87.0.4273.0-testdata.tar.xz\n'
+              'gs://chromium-browser-official/chromium-87.0.4273.0-nacl.tar.xz\n'
+          )),
+      api.post_process(post_process.MustRun, 'no new releases need publishing'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
 
   yield (
       api.test('basic-m76') + api.buildbucket.generic_build() +

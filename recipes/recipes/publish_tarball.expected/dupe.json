@@ -23,7 +23,14 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "gsutil ls"
+    "name": "gsutil ls",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@raw_io.output_text@gs://chromium-browser-official/chromium-74.0.3729.169.tar.xz@@@",
+      "@@@STEP_LOG_LINE@raw_io.output_text@gs://chromium-browser-official/chromium-74.0.3729.169-lite.tar.xz@@@",
+      "@@@STEP_LOG_LINE@raw_io.output_text@gs://chromium-browser-official/chromium-74.0.3729.169-testdata.tar.xz@@@",
+      "@@@STEP_LOG_LINE@raw_io.output_text@gs://chromium-browser-official/chromium-74.0.3729.169-nacl.tar.xz@@@",
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
+    ]
   },
   {
     "name": "$result"

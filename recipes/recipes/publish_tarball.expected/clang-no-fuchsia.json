@@ -23,7 +23,10 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "gsutil ls"
+    "name": "gsutil ls",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
+    ]
   },
   {
     "cmd": [
@@ -646,7 +649,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "export_tarball"
+    "name": "export_tarball for full"
   },
   {
     "cmd": [
@@ -699,7 +702,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "generate_hashes"
+    "name": "generate_hashes for full"
   },
   {
     "cmd": [
@@ -835,7 +838,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "export_tarball (2)"
+    "name": "export_tarball for testdata"
   },
   {
     "cmd": [
@@ -888,7 +891,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "generate_hashes (2)"
+    "name": "generate_hashes for testdata"
   },
   {
     "cmd": [
@@ -1614,7 +1617,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "export_tarball (3)"
+    "name": "export_tarball for lite"
   },
   {
     "cmd": [
@@ -1667,7 +1670,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "generate_hashes (3)"
+    "name": "generate_hashes for lite"
   },
   {
     "cmd": [
@@ -1825,7 +1828,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "export_tarball (4)"
+    "name": "export_tarball for nacl"
   },
   {
     "cmd": [
@@ -1878,7 +1881,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "generate_hashes (4)"
+    "name": "generate_hashes for nacl"
   },
   {
     "cmd": [
