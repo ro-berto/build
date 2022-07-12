@@ -1012,7 +1012,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         'The list of shards being dispatched should be the enumeration of '
         'task.shards.'
     )
-    executable = 'python3' if task.trigger_script.trigger_in_py3 else 'python'
+    executable = 'vpython3' if task.trigger_script.trigger_in_py3 else 'python'
     cmd = [executable, script] + pre_trigger_args
     uses_trigger_script = bool(task.trigger_script)
     if task.shards > 1:
