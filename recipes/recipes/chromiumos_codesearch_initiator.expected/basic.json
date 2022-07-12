@@ -82,13 +82,13 @@
       "clone",
       "--depth=1",
       "-b",
-      "snapshot",
+      "stable",
       "https://chromium.googlesource.com/chromiumos/manifest",
       "chromiumos_manifest"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "clone snapshot of https://chromium.googlesource.com/chromiumos/manifest"
+    "name": "clone stable of https://chromium.googlesource.com/chromiumos/manifest"
   },
   {
     "cmd": [

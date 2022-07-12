@@ -76,7 +76,7 @@ def RunSteps(api):
                                                      'chromiumos_codesearch',
                                                      CODESEARCH_REPO)
   manifest_hash, _ = latestRefInfo(api, 'chromiumos_manifest', MANIFEST_REPO,
-                                   'snapshot')
+                                   'stable')
 
   # Trigger the chromiumos_codesearch builders.
   properties = {
