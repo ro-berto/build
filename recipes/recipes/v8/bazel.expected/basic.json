@@ -3,6 +3,7 @@
     "cmd": [
       "[CACHE]/builder/v8/tools/bazel/bazel",
       "build",
+      "--config=clang",
       "--verbose_failures",
       ":v8ci"
     ],
