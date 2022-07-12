@@ -29,7 +29,21 @@ DEPS = [
 ]
 
 BUILD_PERF_BUILDERS = freeze({
-    'Build Perf Linux': {
+    'build-perf-android': {
+        'chromium_config': 'android',
+        'chromium_apply_config': ['mb'],
+        'chromium_config_kwargs': {
+            'BUILD_CONFIG': 'Release',
+            'TARGET_BITS': 64,
+            'TARGET_PLATFORM': 'android',
+        },
+        'gclient_config': 'chromium',
+        'gclient_apply_config': ['android', 'enable_reclient'],
+        'android_config': 'main_builder',
+        'platform': 'linux',
+        'targets': [['all'], ['chrome_public_apk']],
+    },
+    'build-perf-linux': {
         'chromium_config': 'chromium',
         'chromium_apply_config': ['mb'],
         'gclient_config': 'chromium',
@@ -37,6 +51,15 @@ BUILD_PERF_BUILDERS = freeze({
         'platform': 'linux',
         'targets': [['all'], ['chrome']],
     },
+    'build-perf-windows': {
+        'chromium_config': 'chromium',
+        'chromium_apply_config': ['mb'],
+        'gclient_config': 'chromium',
+        'gclient_apply_config': ['enable_reclient'],
+        'platform': 'win',
+        'targets': [['all'], ['chrome']],
+    },
+    # TODO(b/234807316): remove after renaming the builders.
     'Build Perf Android': {
         'chromium_config': 'android',
         'chromium_apply_config': ['mb'],
@@ -50,6 +73,14 @@ BUILD_PERF_BUILDERS = freeze({
         'android_config': 'main_builder',
         'platform': 'linux',
         'targets': [['all'], ['chrome_public_apk']],
+    },
+    'Build Perf Linux': {
+        'chromium_config': 'chromium',
+        'chromium_apply_config': ['mb'],
+        'gclient_config': 'chromium',
+        'gclient_apply_config': ['enable_reclient'],
+        'platform': 'linux',
+        'targets': [['all'], ['chrome']],
     },
     'Build Perf Windows': {
         'chromium_config': 'chromium',
@@ -162,7 +193,7 @@ def GenTests(api):
         api.code_coverage(use_clang_coverage=True),
     )
 
-  buildername = 'Build Perf Linux'
+  buildername = 'build-perf-linux'
   for step in [
       'Build all without remote cache', 'Build all with remote cache',
       'Build chrome without remote cache', 'Build chrome with remote cache'
