@@ -139,9 +139,6 @@ class BuilderConfig(object):
   regression_test_selection = attrib(
       enum([ALWAYS, QUICK_RUN_ONLY, NEVER]), default=NEVER)
   regression_test_selection_recall = attrib(float, default=0.95)
-  # When to filter out tests that have not failed recently
-  filter_stable_test = attrib(
-      enum([ALWAYS, QUICK_RUN_ONLY, NEVER]), default=NEVER)
 
   @classmethod
   def create(cls,

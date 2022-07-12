@@ -85,7 +85,7 @@ def compilator_steps(api, properties):
 
     # Implies that this compilator build must be compiled without a patch
     # so that the orchestrator can retry these swarming tests without patch
-    use_rts = api.chromium_tests.get_quickrun_options(orch_builder_config)
+    rts_setting = api.chromium_tests.get_quickrun_options(orch_builder_config)
 
     additional_compile_targets = None
     if remove_src_checkout_experiment:
@@ -94,7 +94,7 @@ def compilator_steps(api, properties):
     if properties.swarming_targets:
       api.chromium_tests.configure_build(
           orch_builder_config,
-          use_rts,
+          rts_setting,
       )
       api.chromium.apply_config('trybot_flavor')
       bot_update_step, targets_config = api.chromium_tests.prepare_checkout(
@@ -754,6 +754,44 @@ def GenTests(api):
           },
       }),
       api.post_process(post_process.MustRun, 'quick run options'),
+      api.post_process(post_process.PropertyEquals, 'rts_setting',
+                       'rts-chromium'),
+      api.post_process(post_process.DropExpectation),
+      api.filter.suppress_analyze(),
+  )
+
+  yield api.test(
+      'quick run experimental rts',
+      api.properties(
+          **{
+              "$recipe_engine/cq": {
+                  "active": True,
+                  "dryRun": True,
+                  "runMode": "QUICK_DRY_RUN",
+                  "topLevel": True
+              }
+          }),
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-compilator',
+          experiments=['chromium_rts.experimental_model'],
+          revision='deadbeef',
+      ),
+      api.chromium_tests_builder_config.databases(_TEST_BUILDERS,
+                                                  _TEST_TRYBOTS),
+      api.properties(
+          InputProperties(
+              orchestrator=InputProperties.Orchestrator(
+                  builder_group='tryserver.chromium.test',
+                  builder_name='rts-rel'))),
+      api.chromium_tests.read_source_side_spec('chromium.test', {
+          'chromium-rel': {
+              'gtest_tests': ['base_unittests'],
+          },
+      }),
+      api.post_process(post_process.MustRun, 'quick run options'),
+      api.post_process(post_process.PropertyEquals, 'rts_setting',
+                       'rts-ml-chromium'),
       api.post_process(post_process.DropExpectation),
       api.filter.suppress_analyze(),
   )

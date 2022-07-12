@@ -131,14 +131,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     presentation = self.m.step.active_result.presentation
     presentation.logs.setdefault('stdout', []).append(message)
 
-  def configure_build(self, builder_config, use_rts=False, test_only=False):
+  def configure_build(self, builder_config, rts_setting=None, test_only=False):
     """Configure the modules that will be used by chromium_tests code.
 
     Args:
       builder_config - The BuilderConfig instance that defines the
         configuration to use for the various modules.
-      use_rts - Whether or not RTS is being used, which determins if the
-        RTS model is downloaded.
+      rts_setting - What RTS model to download and use. None will disable RTS.
       test_only - Whether or not the builder is just triggering tests.
         If the builder is not performing compilation, then some
         inapplicable validation is disabled. By default, the compilation
@@ -174,8 +173,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         'enable_reclient' not in builder_config.gclient_apply_config):
       self.m.gclient.apply_config('enable_reclient')
 
-    if use_rts:
+    if rts_setting == 'rts-chromium':
       self.m.gclient.c.solutions[0].custom_vars['checkout_rts_model'] = 'True'
+    elif rts_setting == 'rts-ml-chromium':
+      self.m.gclient.c.solutions[0].custom_vars[
+          'checkout_rts_experimental_model'] = 'True'
 
     if (self.m.chromium.c.TARGET_CROS_BOARDS or
         self.m.chromium.c.CROS_BOARDS_WITH_QEMU_IMAGES):
@@ -479,7 +481,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                                mb_config_path=None,
                                mb_recursive_lookup=True,
                                override_execution_mode=None,
-                               use_rts=False,
+                               rts_setting=None,
                                rts_recall=None,
                                isolate_output_files_for_coverage=False):
     """Runs compile and related steps for given builder.
@@ -512,8 +514,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         output will contain the include statement.
       override_execution_mode - An optional override to change the execution
         mode.
-      use_rts - A boolean indicating whether to use regression test selection
-        (bit.ly/chromium-rts)
+      rts_setting - A string indicating which RTS model to use regression test
+        selection. None will disable RTS (bit.ly/chromium-rts)
       rts_recall - A float from (0 to 1] indicating what change recall rts
         should aim for, 0 being the fastest and 1 being the safest, and
         typically between .9 and 1
@@ -572,7 +574,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         mb_recursive_lookup=mb_recursive_lookup,
         android_version_code=android_version_code,
         android_version_name=android_version_name,
-        use_rts=use_rts,
+        rts_setting=rts_setting,
         rts_recall=rts_recall)
 
     if raw_result.status != common_pb.SUCCESS:
@@ -1053,7 +1055,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                          mb_recursive_lookup=False,
                          android_version_code=None,
                          android_version_name=None,
-                         use_rts=False,
+                         rts_setting=None,
                          rts_recall=None):
     with self.m.chromium.guard_compile(suffix=name_suffix):
       use_goma_module = False
@@ -1069,7 +1071,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             recursive_lookup=mb_recursive_lookup,
             android_version_code=android_version_code,
             android_version_name=android_version_name,
-            use_rts=use_rts,
+            rts_setting=rts_setting,
             rts_recall=rts_recall)
         use_goma_in_gn_args = self._use_goma_set_in_gn_args(gn_args)
         if use_goma_module and not use_goma_in_gn_args:
@@ -2028,12 +2030,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self.m.chromium_swarming.task_output_stdout = task_output_stdout
 
   def get_quickrun_options(self, builder_config):
+    rts_setting = None
     use_rts = (
         self.m.cq.active and self.m.cq.run_mode == self.m.cq.QUICK_DRY_RUN and
         builder_config.regression_test_selection == try_spec.QUICK_RUN_ONLY
     ) or builder_config.regression_test_selection == try_spec.ALWAYS
 
     if use_rts:
+      rts_setting = 'rts-chromium'
       step_result = self.m.step('quick run options', [])
 
       step_result.presentation.properties['rts_was_used'] = use_rts
@@ -2048,7 +2052,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       if builder_config.regression_test_selection == try_spec.QUICK_RUN_ONLY:
         self.m.cq.allow_reuse_for(self.m.cq.QUICK_DRY_RUN)
 
-    return use_rts
+      if 'chromium_rts.experimental_model' in self.m.buildbucket.build.input.experiments:
+        rts_setting = 'rts-ml-chromium'
+
+      step_result.presentation.properties['rts_setting'] = rts_setting
+
+    return rts_setting
 
   def build_affected_targets(self,
                              builder_id,
@@ -2080,9 +2089,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           and the failure message if it failed
         Configuration of the build/test.
     """
-    use_rts = self.get_quickrun_options(builder_config)
+    rts_setting = self.get_quickrun_options(builder_config)
 
-    self.configure_build(builder_config, use_rts)
+    self.configure_build(builder_config, rts_setting=rts_setting)
 
     self.m.chromium.apply_config('trybot_flavor')
 
@@ -2140,7 +2149,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           compile_targets,
           tests,
           override_execution_mode=ctbc.COMPILE_AND_TEST,
-          use_rts=use_rts,
+          rts_setting=rts_setting,
           rts_recall=builder_config.regression_test_selection_recall,
           isolate_output_files_for_coverage=isolate_output_files_for_coverage)
     else:

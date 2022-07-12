@@ -109,7 +109,7 @@ _TEST_TRYBOTS = ctbc.TryDatabase.create({
                 ],
                 regression_test_selection=try_spec.QUICK_RUN_ONLY,
             ),
-        'st-rel':
+        'rts-exp-rel':
             ctbc.TrySpec.create(
                 mirrors=[
                     ctbc.TryMirror.create(
@@ -118,7 +118,7 @@ _TEST_TRYBOTS = ctbc.TryDatabase.create({
                         tester='chromium-rel',
                     ),
                 ],
-                filter_stable_test=try_spec.QUICK_RUN_ONLY,
+                regression_test_selection=try_spec.QUICK_RUN_ONLY,
             ),
     }
 })
@@ -778,6 +778,36 @@ def GenTests(api):
   )
 
   yield api.test(
+      'quick run experimental rts',
+      api.properties(
+          **{
+              "$recipe_engine/cq": {
+                  "active": True,
+                  "dryRun": True,
+                  "runMode": "QUICK_DRY_RUN",
+                  "topLevel": True
+              }
+          }),
+      api.chromium_tests_builder_config.try_build(
+          builder_group='tryserver.chromium.test',
+          builder='rts-exp-rel',
+          builder_db=_TEST_BUILDERS,
+          try_db=_TEST_TRYBOTS,
+          experiments=['chromium_rts.experimental_model'],
+      ),
+      api.chromium_tests.read_source_side_spec('chromium.test', {
+          'chromium-rel': {
+              'gtest_tests': ['base_unittests'],
+          },
+      }),
+      api.post_process(post_process.MustRun, 'quick run options'),
+      api.post_process(post_process.PropertyEquals, 'rts_setting',
+                       'rts-ml-chromium'),
+      api.post_process(post_process.DropExpectation),
+      api.filter.suppress_analyze(),
+  )
+
+  yield api.test(
       'quick run rts',
       api.properties(
           **{
@@ -800,6 +830,8 @@ def GenTests(api):
           },
       }),
       api.post_process(post_process.MustRun, 'quick run options'),
+      api.post_process(post_process.PropertyEquals, 'rts_setting',
+                       'rts-chromium'),
       api.post_process(post_process.DropExpectation),
       api.filter.suppress_analyze(),
   )
