@@ -102,6 +102,21 @@ class BaseTestBinary:
     ret.env_vars = utils.strip_env_vars(ret.env_vars, ('LLVM_PROFILE_FILE',))
     return ret
 
+  def with_options_from_other(self, other):
+    """Sets the with_* options from another TestBinary.
+
+    Args:
+      other (TestBinary): The other TestBinary that contains with_* options that
+        self copy from.
+
+    Returns:
+      A copy of TestBinary with given options.
+    """
+    ret = copy.deepcopy(self)
+    ret.tests = other.tests
+    ret.repeat = other.repeat
+    return ret
+
   def with_tests(self, tests):
     """Sets the tests to run.
 
@@ -144,6 +159,17 @@ class BaseTestBinary:
     """
     raise NotImplementedError('Method should be implemented in sub-classes.')
 
+  def as_command(self, output=None):
+    """Return a executable command line.
+
+    Args:
+      output (str): output summary filename.
+
+    Returns:
+      Command line args array for the TestBinary.
+    """
+    raise NotImplementedError('Method should be implemented in sub-classes.')
+
 
 class TestBinaryWithBatchMixin:
   """Mixin class for TestBinary that support tests batching."""
@@ -155,6 +181,11 @@ class TestBinaryWithBatchMixin:
   def to_jsonish(self):
     ret = super().to_jsonish()
     ret['single_batch'] = self.single_batch
+    return ret
+
+  def with_options_from_other(self, other):
+    ret = super().with_options_from_other(other)
+    ret.single_batch = other.single_batch
     return ret
 
   def with_single_batch(self):
@@ -178,6 +209,11 @@ class TestBinaryWithParallelMixin:
   def to_jsonish(self):
     ret = super().to_jsonish()
     ret['parallel_jobs'] = self.parallel_jobs
+    return ret
+
+  def with_options_from_other(self, other):
+    ret = super().with_options_from_other(other)
+    ret.parallel_jobs = other.parallel_jobs
     return ret
 
   def with_parallel_jobs(self, jobs):

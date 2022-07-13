@@ -33,6 +33,7 @@
   },
   "reproducing_rate": 0.9,
   "duration": 123,
+  "strategy_name": "repeat",
   "reproduced_cnt": 1,
   "total_retries": 30
 }

@@ -8,7 +8,6 @@ import time
 from . import utils
 from .base_strategy import BaseStrategy
 from .reproducing_step import ReproducingStep
-from ..result_summary import UnexpectedTestResult
 
 
 class RepeatStrategy(BaseStrategy):
@@ -24,7 +23,7 @@ class RepeatStrategy(BaseStrategy):
     # Reproduces up to 3 times or MAX_RETRIES or reaches the deadline.
     reproduced = 0
     running_history = []
-    failing_test_sample = self._find_failing_test_sample()
+    failing_sample = self.result_summary.get_failing_sample(self.test_name)
     single_round_retries = self._calc_single_round_retries()
     while (reproduced < 3 and len(running_history) < self.MAX_RETRIES and
            time.time() < deadline):
@@ -39,17 +38,11 @@ class RepeatStrategy(BaseStrategy):
             "Target test wasn't executed during reproducing: {0}".format(
                 self.test_name))
       for r in test_history:
-        if failing_test_sample.similar_with(r):
+        if failing_sample.similar_with(r):
           reproduced += 1
       running_history += test_history
       single_round_retries = self._calc_single_round_retries(running_history)
     return self._generate_reproducing_step(reproduced, running_history)
-
-  def _find_failing_test_sample(self):
-    for r in self.result_summary.get_all(self.test_name):
-      if not r.expected:
-        return r
-    return UnexpectedTestResult(self.test_name)
 
   def _calc_single_round_retries(self, running_history=None):
     """Limit the run time of each round within SINGLE_ROUND_SECONDS."""
@@ -87,5 +80,6 @@ class RepeatStrategy(BaseStrategy):
         test_binary,
         reproducing_rate=reproducing_rate,
         duration=avg_duration * suggested_repeat,
+        strategy_name=self.name,
         reproduced_cnt=reproduced_cnt,
         total_retries=len(running_history))

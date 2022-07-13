@@ -9,7 +9,7 @@ from unittest.mock import patch
 from libs.result_summary import create_result_summary_from_output_json
 from libs.result_summary.base_result_summary import (
     BaseResultSummary, TestResultErrorMessageRegexSimilarityMixin, TestResult,
-    TestStatus)
+    TestStatus, UnexpectedTestResult)
 from libs.result_summary.gtest_result_summary import GTestTestResultSummary
 from testdata import get_test_data
 
@@ -105,6 +105,26 @@ class TestResultTest(unittest.TestCase):
 
 
 class BaseResultSummaryTest(unittest.TestCase):
+
+  def test_get_failing_sample(self):
+    result_summary = BaseResultSummary()
+    pass_test = TestResult('test.foo.bar.pass', True, TestStatus.PASS)
+    fail_test = TestResult('test.foo.bar.fail', False, TestStatus.FAIL)
+    result_summary.add(pass_test)
+    result_summary.add(fail_test)
+
+    self.assertIsInstance(
+        result_summary.get_failing_sample('test.foo.bar.pass'),
+        UnexpectedTestResult)
+    self.assertIsNone(
+        result_summary.get_failing_sample('test.foo.bar.pass', default=None))
+    self.assertIsNone(
+        result_summary.get_failing_sample('test.not.exists', default=None))
+    self.assertIs(
+        result_summary.get_failing_sample(
+            'test.foo.bar.pass', default=fail_test), fail_test)
+    self.assertIs(
+        result_summary.get_failing_sample('test.foo.bar.fail'), fail_test)
 
   def test_should_not_implement_in_base(self):
     result_summary = BaseResultSummary()

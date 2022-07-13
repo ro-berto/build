@@ -166,6 +166,8 @@ class BaseTestBinaryTest(unittest.TestCase):
       self.test_binary.run()
     with self.assertRaises(NotImplementedError):
       self.test_binary.readable_command()
+    with self.assertRaises(NotImplementedError):
+      self.test_binary.as_command()
 
 
 class TestBinaryMixinTest(unittest.TestCase):
@@ -191,3 +193,20 @@ class TestBinaryMixinTest(unittest.TestCase):
     self.assertTrue(hasattr(test_binary, 'with_parallel_jobs'))
     ret = test_binary.with_parallel_jobs(3)
     self.assertEqual(ret.parallel_jobs, 3)
+
+  def test_with_options_from_other(self):
+
+    class NewTestBinary(TestBinaryWithBatchMixin, TestBinaryWithParallelMixin,
+                        BaseTestBinary):
+      pass
+
+    test_binary = NewTestBinary(['abc'])
+    test_binary = (
+        test_binary  # go/pyformat-break
+        .with_tests(['a', 'b'])  #
+        .with_repeat(10)  #
+        .with_single_batch()  #
+        .with_parallel_jobs(10))
+    new_test_binary = NewTestBinary(['abc'])
+    new_test_binary = new_test_binary.with_options_from_other(test_binary)
+    self.assertDictEqual(test_binary.to_jsonish(), new_test_binary.to_jsonish())

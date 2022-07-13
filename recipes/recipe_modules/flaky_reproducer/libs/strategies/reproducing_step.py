@@ -11,7 +11,10 @@ class ReproducingStep:
   Attributes:
     test_binary (TestBinary): The test binary with preset settings using with_*
       methods.
-    reproducing_rate (float): Reproducing rate by using the given test binary.
+    reproducing_rate (float): Reproducing rate by running the given test binary.
+      This is different from failure rate, as failed runs / total runs. A test
+      binary could rerun the test multiple times and only need to fail once to
+      be counted as reproduced.
     duration (int): Duration in milliseconds of the total running time of the
       given test binary. It should contains all the retries if applied.
   """
@@ -42,11 +45,16 @@ class ReproducingStep:
           self.test_binary.dimensions.get('os', 'unknown-os'))
     message = []
     message.append(
-        'This failure could be reproduced ({0:.1f}%) with command on {1}:'
-        .format(self.reproducing_rate * 100,
-                self.test_binary.dimensions.get('os', 'unknown-os')))
+        'This failure could be reproduced ({0:.1f}%) with command'.format(
+            self.reproducing_rate * 100))
+    if self.test_binary.dimensions.get('os', None):
+      message.append(' on {0}'.format(self.test_binary.dimensions['os']))
+    if self.debug_info.get('strategy_name', None):
+      message.append(' with {0}'.format(self.debug_info['strategy_name']))
+    message.append(':')
+    message.append('\n\n')
     message.append(self.test_binary.readable_command())
-    return '\n'.join(message)
+    return ''.join(message)
 
   def better_than(self, other):
     """Returns if this reproducing step works better than the other.

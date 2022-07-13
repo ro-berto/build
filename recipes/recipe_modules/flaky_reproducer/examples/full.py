@@ -12,6 +12,7 @@ DEPS = [
     'recipe_engine/json',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
+    'recipe_engine/resultdb',
     'recipe_engine/swarming',
 ]
 
@@ -30,11 +31,17 @@ PROPERTIES = {
 
 def RunSteps(api, trigger, task_id, test_name):
   api.flaky_reproducer.set_config(trigger)
-  api.flaky_reproducer.run(task_id, test_name)
+  return api.flaky_reproducer.run(task_id, test_name)
 
 
 from recipe_engine.post_process import (DropExpectation, StatusFailure,
                                         ResultReason)
+from PB.go.chromium.org.luci.resultdb.proto.v1 import (
+    common as common_pb2,  # go/pyformat-break
+    invocation as invocation_pb2,  #
+    resultdb as resultdb_pb2,  #
+    test_result as test_result_pb2,  #
+)
 
 
 def GenTests(api):
@@ -44,6 +51,66 @@ def GenTests(api):
       state=api.swarming.TaskState.COMPLETED,
       output='some-output',
       outputs=('reproducing_step.json',))
+  resultdb_invocation = api.resultdb.Invocation(
+      proto=invocation_pb2.Invocation(
+          state=invocation_pb2.Invocation.FINALIZED,
+          realm='chromium:ci',
+      ),
+      test_results=[
+          test_result_pb2.TestResult(
+              test_id='ninja://base:base_unittests/MockUnitTests.FailTest',
+              name='test_name_1',
+              expected=False,
+              status=test_result_pb2.FAIL,
+              variant=common_pb2.Variant(
+                  **{
+                      'def': {
+                          'builder': 'Linux Tests',
+                          'test_suite': 'base_unittests',
+                      }
+                  }),
+              tags=[
+                  common_pb2.StringPair(
+                      key="test_name", value="MockUnitTests.FailTest"),
+              ],
+          ),
+      ],
+  )
+  test_running_history = resultdb_pb2.GetTestResultHistoryResponse(entries=[
+      resultdb_pb2.GetTestResultHistoryResponse.Entry(
+          result=test_result_pb2.TestResult(
+              test_id='ninja://base:base_unittests/MockUnitTests.FailTest',
+              name=('invocations/task-example.swarmingserver.appspot.com'
+                    '-54321fffffabc001/result-1'),
+              variant=common_pb2.Variant(**{'def': {
+                  'builder': 'Linux Tests',
+              }}),
+          )),
+      resultdb_pb2.GetTestResultHistoryResponse.Entry(
+          result=test_result_pb2.TestResult(
+              test_id='ninja://base:base_unittests/MockUnitTests.FailTest',
+              name='unknown-name-format',
+              variant=common_pb2.Variant(**{'def': {
+                  'builder': 'Mac11 Tests',
+              }}),
+          )),
+      resultdb_pb2.GetTestResultHistoryResponse.Entry(
+          result=test_result_pb2.TestResult(
+              test_id='ninja://base:base_unittests/MockUnitTests.FailTest',
+              name=('invocations/task-example.swarmingserver.appspot.com'
+                    '-54321fffffabc001/result-1'),
+              variant=common_pb2.Variant(
+                  **{'def': {
+                      'builder': 'Not Supported Builder',
+                  }}),
+          )),
+  ])
+  verify_swarming_result = api.swarming.task_result(
+      id='1',
+      name='flaky reproducer verify on Linux Tests for MockUnitTests.FailTest',
+      state=api.swarming.TaskState.COMPLETED,
+      output='some-output',
+      outputs=('result_summary_0.json', 'result_summary_1.json'))
   yield api.test(
       'happy_path',
       api.properties(
@@ -70,6 +137,35 @@ def GenTests(api):
               api.json.loads(
                   api.flaky_reproducer.get_test_data(
                       'reproducing_step.json')))),
+      api.resultdb.query(
+          {
+              'task-example.swarmingserver.appspot.com-54321fffffabc123':
+                  resultdb_invocation,
+          },
+          step_name='verify_reproducing_step.rdb query'),
+      api.resultdb.get_test_result_history(
+          test_running_history,
+          step_name='verify_reproducing_step.get_test_result_history'),
+      api.step_data(
+          'verify_reproducing_step.get_test_binary.show request',
+          api.json.output_stream(
+              api.json.loads(
+                  api.flaky_reproducer.get_test_data(
+                      'gtest_task_request.json')))),
+      api.step_data('verify_reproducing_step.collect verify results',
+                    api.swarming.collect([verify_swarming_result])),
+      api.step_data(
+          'verify_reproducing_step.load verify result',
+          api.file.read_json(
+              api.json.loads(
+                  api.flaky_reproducer.get_test_data(
+                      'gtest_good_output.json')))),
+      api.step_data(
+          'verify_reproducing_step.load verify result (2)',
+          api.file.read_json(
+              api.json.loads(
+                  api.flaky_reproducer.get_test_data(
+                      'gtest_good_output.json')))),
   )
 
   yield api.test(

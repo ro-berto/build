@@ -655,12 +655,34 @@
   },
   {
     "cmd": [],
-    "name": "result",
+    "name": "verify_reproducing_step",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Not reproducible.@@@"
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
+    "cmd": [
+      "rdb",
+      "query",
+      "-json",
+      "-n",
+      "0",
+      "-tr-fields",
+      "testId,variant,tags",
+      "task-example.swarmingserver.appspot.com-54321fffffabc123"
+    ],
+    "infra_step": true,
+    "name": "verify_reproducing_step.rdb query",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
+    ]
+  },
+  {
+    "failure": {
+      "failure": {},
+      "humanReason": "Cannot retrieve invocation for task 54321fffffabc123."
+    },
     "name": "$result"
   }
 ]

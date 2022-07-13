@@ -31,7 +31,7 @@ class ReproducingStepTest(unittest.TestCase):
     self.assertEqual(
         step.readable_info(),
         ('This failure could be reproduced (90.0%) with command on'
-         ' Windows-11-22000:\n'
+         ' Windows-11-22000 with repeat:\n\n'
          'vpython3 ../../testing/test_env.py ./base_unittests.exe'
          ' --test-launcher-bot-mode --asan=0 --lsan=0 --msan=0 --tsan=0'
          ' --cfi-diag=0 --test-launcher-retry-limit=0 '

@@ -152,3 +152,23 @@ EOF
          ' --test-launcher-bot-mode --asan=0 --lsan=0 --msan=0 --tsan=0'
          ' --cfi-diag=0 --test-launcher-retry-limit=0'
          ' --test-launcher-filter-file=tests.filter'))
+
+  def test_as_command(self):
+    self.maxDiff = None
+    test_binary = self.test_binary.strip_for_bots()
+    command = test_binary\
+      .with_tests(['MockUnitTests.CrashTest'])\
+      .as_command('${ISOLATED_OUTDIR}/output-$N$.json')
+    self.assertEqual(command, [
+        'vpython3', '../../testing/test_env.py', './base_unittests.exe',
+        '--test-launcher-bot-mode', '--asan=0', '--lsan=0', '--msan=0',
+        '--tsan=0', '--cfi-diag=0', '--test-launcher-retry-limit=0',
+        '--isolated-script-test-filter=MockUnitTests.CrashTest',
+        '--test-launcher-summary-output=${ISOLATED_OUTDIR}/output-$N$.json'
+    ])
+
+    with self.assertRaisesRegex(
+        Exception, 'Too many tests, filter file not supported in as_command'):
+      test_binary\
+        .with_tests(['MockUnitTests.CrashTest']*10)\
+        .as_command()

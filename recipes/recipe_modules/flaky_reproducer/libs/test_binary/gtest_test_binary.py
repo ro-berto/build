@@ -5,6 +5,7 @@
 import json
 import os
 import tempfile
+import shlex
 
 from . import utils
 from .base_test_binary import (BaseTestBinary, TestBinaryWithBatchMixin,
@@ -93,4 +94,9 @@ class GTestTestBinary(TestBinaryWithBatchMixin, TestBinaryWithParallelMixin,
       filter_message = "cat <<EOF > {0}\n{1}\nEOF\n".format(
           filter_file, '\n'.join(self.tests))
     cmd = self._get_command(filter_file)
-    return filter_message + ' '.join(cmd)
+    return filter_message + ' '.join(map(shlex.quote, cmd))
+
+  def as_command(self, output=None):
+    if self.tests and len(self.tests) >= 10:
+      raise Exception('Too many tests, filter file not supported in as_command')
+    return self._get_command(output_json=output)

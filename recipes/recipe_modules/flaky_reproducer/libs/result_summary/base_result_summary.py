@@ -199,6 +199,16 @@ class BaseResultSummary:
     """
     return [r for r in self if r.test_name == test_name]
 
+  def get_failing_sample(self, test_name, default=UnexpectedTestResult):
+    """Get an unexpected sample for |test_name|, or |default| if not found."""
+    for r in self.get_all(test_name):
+      if not r.expected:
+        return r
+    if default is UnexpectedTestResult:
+      return UnexpectedTestResult(test_name)
+    else:
+      return default
+
   def dump_raw_data(self):
     """Return the raw data of the result summary as string"""
     raise NotImplementedError('Method should be implemented in sub-classes.')
