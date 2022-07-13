@@ -419,6 +419,7 @@ def _get_raw_coverage_data(profdata_path, llvm_cov_path, build_dir, binaries,
           sources,
           exclusions=exclusions,
           arch=arch)
+      logging.info('LLVM command = %s', ' '.join(args))
       p = subprocess.Popen(args, stdout=f_out, stderr=f_error)
       llvm_cov_proc = None
       try:
