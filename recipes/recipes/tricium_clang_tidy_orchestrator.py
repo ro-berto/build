@@ -279,7 +279,15 @@ def RunSteps(api):
     api.tricium.write_comments()
 
   if all_failures:
-    raise api.step.StepFailure('all sub-linting tasks failed')
+    # crbug.com/1343619: There are many reasons that a bot may fail (a broken
+    # patch being one of the key ones). That said, if one's patches aren't
+    # recent enough (mid-Jun 2022), they may see constant clang-tidy redness.
+    # Make the fix obvious for those cases.
+    raise api.step.StepFailure('All sub-linting tasks failed. This may be '
+                               'because your change needs to be rebased past '
+                               'src@522320443539084c901edd659dd29079c8aaadc0. '
+                               'Please note that clang-tidy failures do not '
+                               'block the CQ.')
 
 
 def _get_tricium_comments(steps):
