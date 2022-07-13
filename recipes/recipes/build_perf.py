@@ -59,37 +59,6 @@ BUILD_PERF_BUILDERS = freeze({
         'platform': 'win',
         'targets': [['all'], ['chrome']],
     },
-    # TODO(b/234807316): remove after renaming the builders.
-    'Build Perf Android': {
-        'chromium_config': 'android',
-        'chromium_apply_config': ['mb'],
-        'chromium_config_kwargs': {
-            'BUILD_CONFIG': 'Release',
-            'TARGET_BITS': 64,
-            'TARGET_PLATFORM': 'android',
-        },
-        'gclient_config': 'chromium',
-        'gclient_apply_config': ['android', 'enable_reclient'],
-        'android_config': 'main_builder',
-        'platform': 'linux',
-        'targets': [['all'], ['chrome_public_apk']],
-    },
-    'Build Perf Linux': {
-        'chromium_config': 'chromium',
-        'chromium_apply_config': ['mb'],
-        'gclient_config': 'chromium',
-        'gclient_apply_config': ['enable_reclient'],
-        'platform': 'linux',
-        'targets': [['all'], ['chrome']],
-    },
-    'Build Perf Windows': {
-        'chromium_config': 'chromium',
-        'chromium_apply_config': ['mb'],
-        'gclient_config': 'chromium',
-        'gclient_apply_config': ['enable_reclient'],
-        'platform': 'win',
-        'targets': [['all'], ['chrome']],
-    },
 })
 
 
