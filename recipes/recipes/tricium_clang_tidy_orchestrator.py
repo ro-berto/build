@@ -230,6 +230,8 @@ def _dedup_and_fixup_tricium_lints(all_platforms, lints):
 def RunSteps(api):
   assert api.tryserver.is_tryserver
 
+  api.buildbucket.hide_current_build_in_gerrit()
+
   if _should_skip_linting(api):
     return
 
