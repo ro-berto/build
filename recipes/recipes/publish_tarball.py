@@ -187,8 +187,8 @@ def export_lite_tarball(api, version):
         # is produced for a long time.
         [
             '--remove-nonessential-files',
-            'chromium-%s' % version, '--verbose', '--progress', '--src-dir',
-            dest_dir
+            'chromium-%s' % version, '--verbose', '--progress', '--version',
+            version, '--src-dir', dest_dir
         ],
         'chromium-%s.tar.xz' % version,
         'chromium-%s-lite.tar.xz' % version,
@@ -217,8 +217,8 @@ def export_nacl_tarball(api, version):
         # is produced for a long time.
         [
             '--remove-nonessential-files',
-            'chromium-%s' % version, '--verbose', '--progress', '--src-dir',
-            dest_dir
+            'chromium-%s' % version, '--verbose', '--progress', '--version',
+            version, '--src-dir', dest_dir
         ],
         'chromium-%s.tar.xz' % version,
         'chromium-%s-nacl.tar.xz' % version,
@@ -397,8 +397,8 @@ def publish_tarball(api):
           # is produced for a long time.
           [
               '--remove-nonessential-files',
-              'chromium-%s' % version, '--verbose', '--progress', '--src-dir',
-              api.path['checkout']
+              'chromium-%s' % version, '--verbose', '--progress', '--version',
+              version, '--src-dir', api.path['checkout']
           ],
           'chromium-%s.tar.xz' % version,
           'chromium-%s.tar.xz' % version,
@@ -418,8 +418,8 @@ def publish_tarball(api):
           # is produced for a long time.
           [
               '--test-data',
-              'chromium-%s' % version, '--verbose', '--progress', '--src-dir',
-              api.path['checkout']
+              'chromium-%s' % version, '--verbose', '--progress', '--version',
+              version, '--src-dir', api.path['checkout']
           ],
           'chromium-%s.tar.xz' % version,
           'chromium-%s-testdata.tar.xz' % version,

@@ -633,6 +633,8 @@
       "chromium-74.0.3729.169",
       "--verbose",
       "--progress",
+      "--version",
+      "74.0.3729.169",
       "--src-dir",
       "[START_DIR]/src"
     ],
@@ -822,6 +824,8 @@
       "chromium-74.0.3729.169",
       "--verbose",
       "--progress",
+      "--version",
+      "74.0.3729.169",
       "--src-dir",
       "[START_DIR]/src"
     ],
@@ -1601,6 +1605,8 @@
       "chromium-74.0.3729.169",
       "--verbose",
       "--progress",
+      "--version",
+      "74.0.3729.169",
       "--src-dir",
       "[CLEANUP]/tmp_tmp_1/src"
     ],
@@ -1812,6 +1818,8 @@
       "chromium-74.0.3729.169",
       "--verbose",
       "--progress",
+      "--version",
+      "74.0.3729.169",
       "--src-dir",
       "[CLEANUP]/tmp_tmp_2/src"
     ],

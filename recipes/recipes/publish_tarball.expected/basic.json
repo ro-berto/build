@@ -629,6 +629,8 @@
       "chromium-87.0.4273.0",
       "--verbose",
       "--progress",
+      "--version",
+      "87.0.4273.0",
       "--src-dir",
       "[START_DIR]/src"
     ],
@@ -818,6 +820,8 @@
       "chromium-87.0.4273.0",
       "--verbose",
       "--progress",
+      "--version",
+      "87.0.4273.0",
       "--src-dir",
       "[START_DIR]/src"
     ],
@@ -1597,6 +1601,8 @@
       "chromium-87.0.4273.0",
       "--verbose",
       "--progress",
+      "--version",
+      "87.0.4273.0",
       "--src-dir",
       "[CLEANUP]/tmp_tmp_1/src"
     ],
@@ -1808,6 +1814,8 @@
       "chromium-87.0.4273.0",
       "--verbose",
       "--progress",
+      "--version",
+      "87.0.4273.0",
       "--src-dir",
       "[CLEANUP]/tmp_tmp_2/src"
     ],

@@ -132,6 +132,7 @@ def main(argv):
   parser.add_option("--verbose", action="store_true", default=False)
   parser.add_option("--progress", action="store_true", default=False)
   parser.add_option("--src-dir")
+  parser.add_option("--version")
 
   options, args = parser.parse_args(argv)
 
@@ -140,17 +141,15 @@ def main(argv):
     print '(without .tar.xz extension).'
     return 1
 
+  if not options.version:
+    print('A version number must be provided via the --version option.')
+    return 1
+
   if not os.path.exists(options.src_dir):
     print 'Cannot find the src directory ' + options.src_dir
     return 1
 
-  # Read Chromium's version number so we can take different code paths
-  # depending on the milestone.
-  # For now, we are only interested in the milestone number.
-  version_major = int(subprocess.check_output(
-      ['python', 'build/util/version.py', '-f', 'chrome/VERSION',
-       '-t', '@MAJOR@'],
-      cwd=options.src_dir).strip())
+  version = [int(field) for field in options.version.split('.')]
 
   # These commands are from src/DEPS; please keep them in sync.
   if subprocess.call(['python', 'build/util/lastchange.py', '-o',
@@ -166,7 +165,7 @@ def main(argv):
     return 1
   # The --revision options was introduced starting with 105.0.5148.2, so we
   # need to skip this call when building before that.
-  if version_major >= 105:
+  if version >= [105, 0, 5148, 2]:
     if subprocess.call([
         'python', 'build/util/lastchange.py', '-s', 'third_party/dawn',
         '--revision', 'gpu/webgpu/DAWN_VERSION'
@@ -176,7 +175,7 @@ def main(argv):
       return 1
   # The --revision-id-only option was introduced in M64; so we need to skip
   # this call when building earlier milestones.
-  if version_major >= 64:
+  if version >= [64, 0, 0, 0]:
     if subprocess.call(['python', 'build/util/lastchange.py',
                         '-m', 'GPU_LISTS_VERSION',
                         '--revision-id-only',
