@@ -74,6 +74,18 @@ _SPEC = {
         ),
     'linux-dbg-compile':
         _create_compile_spec('linux-dbg-compile'),
+    'linux-exp-test':
+        try_spec.TrySpec.create(
+            mirrors=[
+                try_spec.TryMirror.create(
+                    builder_group='angle',
+                    buildername='linux-exp-test',
+                    tester='linux-exp-intel',
+                ),
+            ],
+            analyze_names=['angle'],
+            retry_failed_shards=False,
+        ),
     'linux-intel-hd630-perf':
         try_spec.TrySpec.create(
             mirrors=[

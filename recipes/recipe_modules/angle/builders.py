@@ -105,6 +105,10 @@ _SPEC = {
         _create_builder_config('linux', 'Release', 64),
     'linux-dbg-compile':
         _create_builder_config('linux', 'Debug', 64),
+    'linux-exp-intel':
+        _create_tester_config('linux', 64, 'linux-exp-test'),
+    'linux-exp-test':
+        _create_builder_config('linux', 'Release', 64),
     'linux-intel':
         _create_tester_config('linux', 64, 'linux-test'),
     'linux-intel-perf':
