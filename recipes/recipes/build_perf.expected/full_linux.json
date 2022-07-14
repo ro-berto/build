@@ -3,13 +3,13 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]\\builder"
+      "[CACHE]/builder"
     ],
     "infra_step": true,
     "luci_context": {
@@ -27,34 +27,13 @@
     "name": "init cache if not exists"
   },
   {
-    "cmd": [
-      "python3",
-      "RECIPE_REPO[build]\\recipes\\kill_processes.py"
-    ],
-    "cwd": "[CACHE]\\builder",
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "chromium:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "taskkill"
-  },
-  {
     "cmd": [],
     "name": "gclient config",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@config@{@@@",
       "@@@STEP_LOG_LINE@config@  \"BUILDSPEC_VERSION\": null, @@@",
       "@@@STEP_LOG_LINE@config@  \"USE_MIRROR\": true, @@@",
-      "@@@STEP_LOG_LINE@config@  \"cache_dir\": \"[CACHE]\\\\git\", @@@",
+      "@@@STEP_LOG_LINE@config@  \"cache_dir\": \"[CACHE]/git\", @@@",
       "@@@STEP_LOG_LINE@config@  \"delete_unversioned_trees\": true, @@@",
       "@@@STEP_LOG_LINE@config@  \"deps_os\": {}, @@@",
       "@@@STEP_LOG_LINE@config@  \"got_revision_mapping\": {}, @@@",
@@ -163,15 +142,15 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
+      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]\\\\git'\nsolutions = [{'custom_vars': {'checkout_reclient': 'True', 'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'checkout_reclient': 'True', 'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
       "--revision_mapping_file",
       "{\"got_angle_revision\": \"src/third_party/angle\", \"got_buildtools_revision\": \"src/buildtools\", \"got_dawn_revision\": \"src/third_party/dawn\", \"got_nacl_revision\": \"src/native_client\", \"got_revision\": \"src\", \"got_swiftshader_revision\": \"src/third_party/swiftshader\", \"got_v8_revision\": \"src/v8\", \"got_webrtc_revision\": \"src/third_party/webrtc\"}",
       "--git-cache-dir",
-      "[CACHE]\\git",
+      "[CACHE]/git",
       "--cleanup-dir",
-      "[CLEANUP]\\bot_update",
+      "[CLEANUP]/bot_update",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -180,9 +159,9 @@
       "refs/heads/main",
       "--no_fetch_tags"
     ],
-    "cwd": "[CACHE]\\builder",
+    "cwd": "[CACHE]/builder",
     "env": {
-      "DEPOT_TOOLS_REPORT_BUILD": "chromium/ci/build-perf-windows/8945511751514863184",
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/ci/fake-builder/8945511751514863184",
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "1800"
     },
@@ -348,15 +327,14 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]\\builder\\src\\.code-coverage"
+      "[CACHE]/builder/src/.code-coverage"
     ],
-    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -375,15 +353,14 @@
   {
     "cmd": [
       "python",
-      "RECIPE_MODULE[build::code_coverage]\\resources\\write_paths_to_instrument.py",
+      "RECIPE_MODULE[build::code_coverage]/resources/write_paths_to_instrument.py",
       "--write-to",
-      "[CACHE]\\builder\\src\\.code-coverage\\files_to_instrument.txt",
+      "[CACHE]/builder/src/.code-coverage/files_to_instrument.txt",
       "--src-path",
-      "[CACHE]\\builder\\src",
+      "[CACHE]/builder/src",
       "--build-path",
-      "[CACHE]\\builder\\src\\out\\Release"
+      "[CACHE]/builder/src/out/Release"
     ],
-    "cwd": "[CACHE]\\builder",
     "luci_context": {
       "realm": {
         "name": "chromium:ci"
@@ -405,13 +382,13 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_REPO[depot_tools]\\gclient.py",
+      "RECIPE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[CACHE]\\builder",
+    "cwd": "[CACHE]/builder",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_REPORT_BUILD": "chromium/ci/build-perf-windows/8945511751514863184"
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/ci/fake-builder/8945511751514863184"
     },
     "env_suffixes": {
       "PATH": [
@@ -436,11 +413,11 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CACHE]\\builder\\src\\out\\Release"
+      "[CACHE]/builder/src/out/Release"
     ],
     "infra_step": true,
     "luci_context": {
@@ -455,7 +432,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "rmtree [CACHE]\\builder\\src\\out\\Release"
+    "name": "rmtree [CACHE]/builder/src/out/Release"
   },
   {
     "cmd": [],
@@ -463,10 +440,10 @@
   },
   {
     "cmd": [
-      "cipd.bat",
+      "cipd",
       "ensure",
       "-root",
-      "[CACHE]\\goma\\client",
+      "[CACHE]/goma/client",
       "-ensure-file",
       "infra_internal/goma/client/${platform} release",
       "-max-threads",
@@ -508,10 +485,10 @@
   },
   {
     "cmd": [
-      "cipd.bat",
+      "cipd",
       "ensure",
       "-root",
-      "[CACHE]\\goma\\bqupload",
+      "[CACHE]/goma/bqupload",
       "-ensure-file",
       "infra/tools/bqupload/${platform} bqupload_pin",
       "-max-threads",
@@ -555,20 +532,19 @@
     "cmd": [
       "python3",
       "-u",
-      "[CACHE]\\builder\\src\\tools\\mb\\mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "lookup",
       "-m",
-      "chromium.fyi",
+      "fake-group",
       "-b",
-      "build-perf-windows",
+      "fake-builder",
       "--config-file",
-      "[CACHE]\\builder\\src\\tools\\mb\\mb_config.pyl",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
-      "[CACHE]\\goma\\client",
-      "--luci-auth",
+      "[CACHE]/goma/client",
       "--recursive"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -594,22 +570,21 @@
     "cmd": [
       "python3",
       "-u",
-      "[CACHE]\\builder\\src\\tools\\mb\\mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "gen",
       "-m",
-      "chromium.fyi",
+      "fake-group",
       "-b",
-      "build-perf-windows",
+      "fake-builder",
       "--config-file",
-      "[CACHE]\\builder\\src\\tools\\mb\\mb_config.pyl",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
-      "[CACHE]\\goma\\client",
-      "--luci-auth",
+      "[CACHE]/goma/client",
       "--json-output",
       "/path/to/tmp/json",
       "//out/Release"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -639,9 +614,9 @@
   {
     "cmd": [
       "vpython3",
-      "[CACHE]\\builder\\src\\buildtools\\reclient_cfgs\\fetch_reclient_cfgs.py"
+      "[CACHE]/builder/src/buildtools/reclient_cfgs/fetch_reclient_cfgs.py"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_instance": "projects/test-rbe-project/instances/default_instance",
@@ -669,15 +644,15 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]\\builder\\reclient\\deps\\build_perf_windows"
+      "[CACHE]/builder/reclient/deps/fake_builder"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_remote_accept_cache": "false"
@@ -704,13 +679,13 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "listdir",
-      "[CACHE]\\builder\\reclient\\deps\\build_perf_windows"
+      "[CACHE]/builder/reclient/deps/fake_builder"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_remote_accept_cache": "false"
@@ -737,18 +712,18 @@
   {
     "cmd": [
       "python3",
-      "RECIPE_MODULE[build::reclient]\\resources\\cloudtail_wrapper.py",
+      "RECIPE_MODULE[build::reclient]/resources/cloudtail_wrapper.py",
       "start",
       "--cloudtail-path",
-      "cloudtail.exe",
+      "cloudtail",
       "--cloudtail-project-id",
       "goma-logs",
       "--cloudtail-log-path",
-      "[CLEANUP]\\reclient_log_tmp_1\\reproxy.exe.INFO",
+      "[CLEANUP]/reclient_log_tmp_1/reproxy.INFO",
       "--pid-file",
-      "[TMP_BASE]\\cloudtail_reproxy.exe.INFO.pid"
+      "[TMP_BASE]/cloudtail_reproxy.INFO.pid"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_remote_accept_cache": "false"
@@ -766,7 +741,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "preprocess for reclient.start cloudtail: reproxy.exe.INFO",
+    "name": "preprocess for reclient.start cloudtail: reproxy.INFO",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9@@@"
@@ -775,18 +750,18 @@
   {
     "cmd": [
       "python3",
-      "RECIPE_MODULE[build::reclient]\\resources\\cloudtail_wrapper.py",
+      "RECIPE_MODULE[build::reclient]/resources/cloudtail_wrapper.py",
       "start",
       "--cloudtail-path",
-      "cloudtail.exe",
+      "cloudtail",
       "--cloudtail-project-id",
       "goma-logs",
       "--cloudtail-log-path",
-      "[CLEANUP]\\reclient_log_tmp_1\\reproxy-gomaip.INFO",
+      "[CLEANUP]/reclient_log_tmp_1/reproxy-gomaip.INFO",
       "--pid-file",
-      "[TMP_BASE]\\cloudtail_reproxy-gomaip.INFO.pid"
+      "[TMP_BASE]/cloudtail_reproxy-gomaip.INFO.pid"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_remote_accept_cache": "false"
@@ -812,24 +787,24 @@
   },
   {
     "cmd": [
-      "[CACHE]\\builder\\src\\buildtools\\reclient\\bootstrap.exe",
+      "[CACHE]/builder/src/buildtools/reclient/bootstrap",
       "-output_dir",
-      "[CLEANUP]\\reclient_log_tmp_1"
+      "[CLEANUP]/reclient_log_tmp_1"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "RBE_deps_cache_dir": "[CACHE]\\builder\\reclient\\deps\\build_perf_windows",
+      "RBE_deps_cache_dir": "[CACHE]/builder/reclient/deps/fake_builder",
       "RBE_deps_cache_max_mb": "256",
       "RBE_fail_early_min_action_count": "4000",
       "RBE_fail_early_min_fallback_ratio": "0.5",
       "RBE_instance": "projects/test-rbe-project/instances/default_instance",
-      "RBE_log_dir": "[CLEANUP]\\reclient_log_tmp_1",
+      "RBE_log_dir": "[CLEANUP]/reclient_log_tmp_1",
       "RBE_log_format": "reducedtext",
-      "RBE_proxy_log_dir": "[CLEANUP]\\reclient_log_tmp_1",
-      "RBE_re_proxy": "[CACHE]\\builder\\src\\buildtools\\reclient\\reproxy.exe",
+      "RBE_proxy_log_dir": "[CLEANUP]/reclient_log_tmp_1",
+      "RBE_re_proxy": "[CACHE]/builder/src/buildtools/reclient/reproxy",
       "RBE_remote_accept_cache": "false",
-      "RBE_server_address": "pipe://reproxy.pipe",
+      "RBE_server_address": "unix:///[TMP_BASE]/reproxy.sock",
       "RBE_service": "remotebuildexecution.googleapis.com:443",
       "RBE_use_application_default_credentials": "false",
       "RBE_use_gce_credentials": "true"
@@ -855,26 +830,26 @@
   {
     "cmd": [
       "vpython3",
-      "RECIPE_MODULE[build::chromium]\\resources\\ninja_wrapper.py",
+      "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
       "--ninja_info_output",
       "/path/to/tmp/json",
       "--failure_output",
       "/path/to/tmp/",
       "--",
-      "RECIPE_REPO[depot_tools]\\ninja.exe",
+      "RECIPE_REPO[depot_tools]/ninja",
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]\\builder\\src\\out\\Release",
+      "[CACHE]/builder/src/out/Release",
       "-j",
       "80"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "RBE_log_dir": "[CLEANUP]\\reclient_log_tmp_1",
+      "RBE_log_dir": "[CLEANUP]/reclient_log_tmp_1",
       "RBE_remote_accept_cache": "false",
-      "RBE_server_address": "pipe://reproxy.pipe"
+      "RBE_server_address": "unix:///[TMP_BASE]/reproxy.sock"
     },
     "luci_context": {
       "realm": {
@@ -892,23 +867,23 @@
   },
   {
     "cmd": [
-      "RECIPE_REPO[depot_tools]\\ninja.exe",
+      "RECIPE_REPO[depot_tools]/ninja",
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]\\builder\\src\\out\\Release",
+      "[CACHE]/builder/src/out/Release",
       "-j",
       "80",
       "-d",
       "explain",
       "-n"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "RBE_log_dir": "[CLEANUP]\\reclient_log_tmp_1",
+      "RBE_log_dir": "[CLEANUP]/reclient_log_tmp_1",
       "RBE_remote_accept_cache": "false",
-      "RBE_server_address": "pipe://reproxy.pipe"
+      "RBE_server_address": "unix:///[TMP_BASE]/reproxy.sock"
     },
     "luci_context": {
       "realm": {
@@ -930,21 +905,21 @@
   },
   {
     "cmd": [
-      "[CACHE]\\builder\\src\\buildtools\\reclient\\bootstrap.exe",
+      "[CACHE]/builder/src/buildtools/reclient/bootstrap",
       "-shutdown",
       "-log_format",
       "reducedtext",
       "-output_dir",
-      "[CLEANUP]\\reclient_log_tmp_1",
+      "[CLEANUP]/reclient_log_tmp_1",
       "-proxy_log_dir",
-      "[CLEANUP]\\reclient_log_tmp_1",
+      "[CLEANUP]/reclient_log_tmp_1",
       "-server_address",
-      "pipe://reproxy.pipe"
+      "unix:///[TMP_BASE]/reproxy.sock"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "RBE_log_dir": "[CLEANUP]\\reclient_log_tmp_1",
+      "RBE_log_dir": "[CLEANUP]/reclient_log_tmp_1",
       "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
@@ -968,12 +943,12 @@
   {
     "cmd": [
       "python3",
-      "RECIPE_MODULE[build::reclient]\\resources\\cloudtail_wrapper.py",
+      "RECIPE_MODULE[build::reclient]/resources/cloudtail_wrapper.py",
       "stop",
       "--killed-pid-file",
-      "[TMP_BASE]\\cloudtail_reproxy.exe.INFO.pid"
+      "[TMP_BASE]/cloudtail_reproxy.INFO.pid"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_remote_accept_cache": "false"
@@ -999,12 +974,12 @@
   {
     "cmd": [
       "python3",
-      "RECIPE_MODULE[build::reclient]\\resources\\cloudtail_wrapper.py",
+      "RECIPE_MODULE[build::reclient]/resources/cloudtail_wrapper.py",
       "stop",
       "--killed-pid-file",
-      "[TMP_BASE]\\cloudtail_reproxy-gomaip.INFO.pid"
+      "[TMP_BASE]/cloudtail_reproxy-gomaip.INFO.pid"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_remote_accept_cache": "false"
@@ -1031,14 +1006,14 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[CLEANUP]\\reclient_log_tmp_1\\rbe_metrics.pb",
+      "[CLEANUP]/reclient_log_tmp_1/rbe_metrics.pb",
       "/path/to/tmp/"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_remote_accept_cache": "false"
@@ -1072,15 +1047,15 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "ensure-directory",
       "--mode",
       "0777",
-      "[START_DIR]\\cipd_tool\\infra\\tools\\bqupload\\latest"
+      "[START_DIR]/cipd_tool/infra/tools/bqupload/latest"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_remote_accept_cache": "false"
@@ -1105,10 +1080,10 @@
   },
   {
     "cmd": [
-      "cipd.bat",
+      "cipd",
       "ensure",
       "-root",
-      "[START_DIR]\\cipd_tool\\infra\\tools\\bqupload\\latest",
+      "[START_DIR]/cipd_tool/infra/tools/bqupload/latest",
       "-ensure-file",
       "infra/tools/bqupload/${platform} latest",
       "-max-threads",
@@ -1116,7 +1091,7 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_remote_accept_cache": "false"
@@ -1152,10 +1127,10 @@
   },
   {
     "cmd": [
-      "[START_DIR]\\cipd_tool\\infra\\tools\\bqupload\\latest\\bqupload",
+      "[START_DIR]/cipd_tool/infra/tools/bqupload/latest/bqupload",
       "goma-logs.rbe_metrics.builds"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_remote_accept_cache": "false"
@@ -1200,14 +1175,14 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[CACHE]\\builder\\src\\out\\Release\\.ninja_log",
+      "[CACHE]/builder/src/out/Release/.ninja_log",
       "/path/to/tmp/"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_remote_accept_cache": "false"
@@ -1234,14 +1209,14 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "copy",
       "fake gzip data",
-      "[TMP_BASE]\\ninja_log.20120514-125323.00000000-0000-0000-0000-000000001337.gz"
+      "[TMP_BASE]/ninja_log.20120514-125323.00000000-0000-0000-0000-000000001337.gz"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_remote_accept_cache": "false"
@@ -1268,15 +1243,15 @@
     "cmd": [
       "python3",
       "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
-      "RECIPE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]\\ninja_log.20120514-125323.00000000-0000-0000-0000-000000001337.gz",
+      "[TMP_BASE]/ninja_log.20120514-125323.00000000-0000-0000-0000-000000001337.gz",
       "gs://chrome-goma-log/2012/05/14/reclient/ninja_log.20120514-125323.00000000-0000-0000-0000-000000001337.gz"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_remote_accept_cache": "false"
@@ -1304,13 +1279,13 @@
   {
     "cmd": [
       "python3",
-      "RECIPE_MODULE[build::reclient]\\resources\\generate_rpl_gzip.py",
+      "RECIPE_MODULE[build::reclient]/resources/generate_rpl_gzip.py",
       "--reclient-log-dir",
-      "[CLEANUP]\\reclient_log_tmp_1",
+      "[CLEANUP]/reclient_log_tmp_1",
       "--output-gzip-path",
-      "[TMP_BASE]\\reproxy_rpl.20120514-125323.00000000-0000-0000-0000-000000001337.gz"
+      "[TMP_BASE]/reproxy_rpl.20120514-125323.00000000-0000-0000-0000-000000001337.gz"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_remote_accept_cache": "false"
@@ -1337,15 +1312,15 @@
     "cmd": [
       "python3",
       "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
-      "RECIPE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]\\reproxy_rpl.20120514-125323.00000000-0000-0000-0000-000000001337.gz",
+      "[TMP_BASE]/reproxy_rpl.20120514-125323.00000000-0000-0000-0000-000000001337.gz",
       "gs://chrome-goma-log/2012/05/14/reclient/reproxy_rpl.20120514-125323.00000000-0000-0000-0000-000000001337.gz"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_remote_accept_cache": "false"
@@ -1373,13 +1348,13 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "listdir",
-      "[CLEANUP]\\reclient_log_tmp_1"
+      "[CLEANUP]/reclient_log_tmp_1"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_remote_accept_cache": "false"
@@ -1400,9 +1375,9 @@
     "name": "postprocess for reclient.list reclient log directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@listdir@[CLEANUP]\\reclient_log_tmp_1\\reproxy.INFO@@@",
-      "@@@STEP_LOG_LINE@listdir@[CLEANUP]\\reclient_log_tmp_1\\reproxy.rpl@@@",
-      "@@@STEP_LOG_LINE@listdir@[CLEANUP]\\reclient_log_tmp_1\\rewrapper.INFO@@@",
+      "@@@STEP_LOG_LINE@listdir@[CLEANUP]/reclient_log_tmp_1/reproxy.INFO@@@",
+      "@@@STEP_LOG_LINE@listdir@[CLEANUP]/reclient_log_tmp_1/reproxy.rpl@@@",
+      "@@@STEP_LOG_LINE@listdir@[CLEANUP]/reclient_log_tmp_1/rewrapper.INFO@@@",
       "@@@STEP_LOG_END@listdir@@@"
     ]
   },
@@ -1417,14 +1392,14 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[CLEANUP]\\reclient_log_tmp_1\\reproxy.INFO",
+      "[CLEANUP]/reclient_log_tmp_1/reproxy.INFO",
       "/path/to/tmp/"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_remote_accept_cache": "false"
@@ -1442,7 +1417,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "postprocess for reclient.upload logs.read [CLEANUP]\\reclient_log_tmp_1\\reproxy.INFO",
+    "name": "postprocess for reclient.upload logs.read [CLEANUP]/reclient_log_tmp_1/reproxy.INFO",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -1451,15 +1426,15 @@
     "cmd": [
       "python3",
       "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
-      "RECIPE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[CLEANUP]\\reclient_log_tmp_1\\reproxy.INFO",
-      "gs://chrome-goma-log/2012/05/14/reclient/[CLEANUP]\\reclient_log_tmp_1\\reproxy.INFO"
+      "[CLEANUP]/reclient_log_tmp_1/reproxy.INFO",
+      "gs://chrome-goma-log/2012/05/14/reclient/reproxy.INFO"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_remote_accept_cache": "false"
@@ -1477,24 +1452,24 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "postprocess for reclient.upload logs.gsutil upload [CLEANUP]\\reclient_log_tmp_1\\reproxy.INFO",
+    "name": "postprocess for reclient.upload logs.gsutil upload reproxy.INFO",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-goma-log/2012/05/14/reclient/[CLEANUP]\\reclient_log_tmp_1\\reproxy.INFO@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-goma-log/2012/05/14/reclient/reproxy.INFO@@@"
     ]
   },
   {
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "copy",
       "fake tar contents",
-      "[TMP_BASE]\\reclient_logs.20120514-125323.00000000-0000-0000-0000-000000001337.tar.gz"
+      "[TMP_BASE]/reclient_logs.20120514-125323.00000000-0000-0000-0000-000000001337.tar.gz"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_remote_accept_cache": "false"
@@ -1521,15 +1496,15 @@
     "cmd": [
       "python3",
       "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
-      "RECIPE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]\\reclient_logs.20120514-125323.00000000-0000-0000-0000-000000001337.tar.gz",
+      "[TMP_BASE]/reclient_logs.20120514-125323.00000000-0000-0000-0000-000000001337.tar.gz",
       "gs://chrome-goma-log/2012/05/14/reclient/reclient_logs.20120514-125323.00000000-0000-0000-0000-000000001337.tar.gz"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_remote_accept_cache": "false"
@@ -1556,11 +1531,11 @@
   {
     "cmd": [
       "python3",
-      "RECIPE_MODULE[build::reclient]\\resources\\perform_health_check.py",
+      "RECIPE_MODULE[build::reclient]/resources/perform_health_check.py",
       "--reclient-log-dir",
-      "[CLEANUP]\\reclient_log_tmp_1"
+      "[CLEANUP]/reclient_log_tmp_1"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_remote_accept_cache": "false"
@@ -1587,13 +1562,13 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]\\reclient_log_tmp_1"
+      "[CLEANUP]/reclient_log_tmp_1"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_remote_accept_cache": "false"
@@ -1620,11 +1595,11 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CACHE]\\builder\\src\\out\\Release"
+      "[CACHE]/builder/src/out/Release"
     ],
     "infra_step": true,
     "luci_context": {
@@ -1639,26 +1614,25 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "rmtree [CACHE]\\builder\\src\\out\\Release (2)"
+    "name": "rmtree [CACHE]/builder/src/out/Release (2)"
   },
   {
     "cmd": [
       "python3",
       "-u",
-      "[CACHE]\\builder\\src\\tools\\mb\\mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "lookup",
       "-m",
-      "chromium.fyi",
+      "fake-group",
       "-b",
-      "build-perf-windows",
+      "fake-builder",
       "--config-file",
-      "[CACHE]\\builder\\src\\tools\\mb\\mb_config.pyl",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
-      "[CACHE]\\goma\\client",
-      "--luci-auth",
+      "[CACHE]/goma/client",
       "--recursive"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -1684,22 +1658,21 @@
     "cmd": [
       "python3",
       "-u",
-      "[CACHE]\\builder\\src\\tools\\mb\\mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "gen",
       "-m",
-      "chromium.fyi",
+      "fake-group",
       "-b",
-      "build-perf-windows",
+      "fake-builder",
       "--config-file",
-      "[CACHE]\\builder\\src\\tools\\mb\\mb_config.pyl",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
-      "[CACHE]\\goma\\client",
-      "--luci-auth",
+      "[CACHE]/goma/client",
       "--json-output",
       "/path/to/tmp/json",
       "//out/Release"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -1729,9 +1702,9 @@
   {
     "cmd": [
       "vpython3",
-      "[CACHE]\\builder\\src\\buildtools\\reclient_cfgs\\fetch_reclient_cfgs.py"
+      "[CACHE]/builder/src/buildtools/reclient_cfgs/fetch_reclient_cfgs.py"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_instance": "projects/test-rbe-project/instances/default_instance"
@@ -1758,15 +1731,15 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]\\builder\\reclient\\deps\\build_perf_windows"
+      "[CACHE]/builder/reclient/deps/fake_builder"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -1792,13 +1765,13 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "listdir",
-      "[CACHE]\\builder\\reclient\\deps\\build_perf_windows"
+      "[CACHE]/builder/reclient/deps/fake_builder"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -1824,18 +1797,18 @@
   {
     "cmd": [
       "python3",
-      "RECIPE_MODULE[build::reclient]\\resources\\cloudtail_wrapper.py",
+      "RECIPE_MODULE[build::reclient]/resources/cloudtail_wrapper.py",
       "start",
       "--cloudtail-path",
-      "cloudtail.exe",
+      "cloudtail",
       "--cloudtail-project-id",
       "goma-logs",
       "--cloudtail-log-path",
-      "[CLEANUP]\\reclient_log_tmp_2\\reproxy.exe.INFO",
+      "[CLEANUP]/reclient_log_tmp_2/reproxy.INFO",
       "--pid-file",
-      "[TMP_BASE]\\cloudtail_reproxy.exe.INFO.pid"
+      "[TMP_BASE]/cloudtail_reproxy.INFO.pid"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -1852,7 +1825,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "preprocess for reclient (2).start cloudtail: reproxy.exe.INFO",
+    "name": "preprocess for reclient (2).start cloudtail: reproxy.INFO",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9@@@"
@@ -1861,18 +1834,18 @@
   {
     "cmd": [
       "python3",
-      "RECIPE_MODULE[build::reclient]\\resources\\cloudtail_wrapper.py",
+      "RECIPE_MODULE[build::reclient]/resources/cloudtail_wrapper.py",
       "start",
       "--cloudtail-path",
-      "cloudtail.exe",
+      "cloudtail",
       "--cloudtail-project-id",
       "goma-logs",
       "--cloudtail-log-path",
-      "[CLEANUP]\\reclient_log_tmp_2\\reproxy-gomaip.INFO",
+      "[CLEANUP]/reclient_log_tmp_2/reproxy-gomaip.INFO",
       "--pid-file",
-      "[TMP_BASE]\\cloudtail_reproxy-gomaip.INFO.pid"
+      "[TMP_BASE]/cloudtail_reproxy-gomaip.INFO.pid"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -1897,23 +1870,23 @@
   },
   {
     "cmd": [
-      "[CACHE]\\builder\\src\\buildtools\\reclient\\bootstrap.exe",
+      "[CACHE]/builder/src/buildtools/reclient/bootstrap",
       "-output_dir",
-      "[CLEANUP]\\reclient_log_tmp_2"
+      "[CLEANUP]/reclient_log_tmp_2"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "RBE_deps_cache_dir": "[CACHE]\\builder\\reclient\\deps\\build_perf_windows",
+      "RBE_deps_cache_dir": "[CACHE]/builder/reclient/deps/fake_builder",
       "RBE_deps_cache_max_mb": "256",
       "RBE_fail_early_min_action_count": "4000",
       "RBE_fail_early_min_fallback_ratio": "0.5",
       "RBE_instance": "projects/test-rbe-project/instances/default_instance",
-      "RBE_log_dir": "[CLEANUP]\\reclient_log_tmp_2",
+      "RBE_log_dir": "[CLEANUP]/reclient_log_tmp_2",
       "RBE_log_format": "reducedtext",
-      "RBE_proxy_log_dir": "[CLEANUP]\\reclient_log_tmp_2",
-      "RBE_re_proxy": "[CACHE]\\builder\\src\\buildtools\\reclient\\reproxy.exe",
-      "RBE_server_address": "pipe://reproxy.pipe",
+      "RBE_proxy_log_dir": "[CLEANUP]/reclient_log_tmp_2",
+      "RBE_re_proxy": "[CACHE]/builder/src/buildtools/reclient/reproxy",
+      "RBE_server_address": "unix:///[TMP_BASE]/reproxy.sock",
       "RBE_service": "remotebuildexecution.googleapis.com:443",
       "RBE_use_application_default_credentials": "false",
       "RBE_use_gce_credentials": "true"
@@ -1939,25 +1912,25 @@
   {
     "cmd": [
       "vpython3",
-      "RECIPE_MODULE[build::chromium]\\resources\\ninja_wrapper.py",
+      "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
       "--ninja_info_output",
       "/path/to/tmp/json",
       "--failure_output",
       "/path/to/tmp/",
       "--",
-      "RECIPE_REPO[depot_tools]\\ninja.exe",
+      "RECIPE_REPO[depot_tools]/ninja",
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]\\builder\\src\\out\\Release",
+      "[CACHE]/builder/src/out/Release",
       "-j",
       "80"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "RBE_log_dir": "[CLEANUP]\\reclient_log_tmp_1",
-      "RBE_server_address": "pipe://reproxy.pipe"
+      "RBE_log_dir": "[CLEANUP]/reclient_log_tmp_1",
+      "RBE_server_address": "unix:///[TMP_BASE]/reproxy.sock"
     },
     "luci_context": {
       "realm": {
@@ -1975,22 +1948,22 @@
   },
   {
     "cmd": [
-      "RECIPE_REPO[depot_tools]\\ninja.exe",
+      "RECIPE_REPO[depot_tools]/ninja",
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]\\builder\\src\\out\\Release",
+      "[CACHE]/builder/src/out/Release",
       "-j",
       "80",
       "-d",
       "explain",
       "-n"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "RBE_log_dir": "[CLEANUP]\\reclient_log_tmp_1",
-      "RBE_server_address": "pipe://reproxy.pipe"
+      "RBE_log_dir": "[CLEANUP]/reclient_log_tmp_1",
+      "RBE_server_address": "unix:///[TMP_BASE]/reproxy.sock"
     },
     "luci_context": {
       "realm": {
@@ -2012,21 +1985,21 @@
   },
   {
     "cmd": [
-      "[CACHE]\\builder\\src\\buildtools\\reclient\\bootstrap.exe",
+      "[CACHE]/builder/src/buildtools/reclient/bootstrap",
       "-shutdown",
       "-log_format",
       "reducedtext",
       "-output_dir",
-      "[CLEANUP]\\reclient_log_tmp_2",
+      "[CLEANUP]/reclient_log_tmp_2",
       "-proxy_log_dir",
-      "[CLEANUP]\\reclient_log_tmp_2",
+      "[CLEANUP]/reclient_log_tmp_2",
       "-server_address",
-      "pipe://reproxy.pipe"
+      "unix:///[TMP_BASE]/reproxy.sock"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "RBE_log_dir": "[CLEANUP]\\reclient_log_tmp_2"
+      "RBE_log_dir": "[CLEANUP]/reclient_log_tmp_2"
     },
     "infra_step": true,
     "luci_context": {
@@ -2049,12 +2022,12 @@
   {
     "cmd": [
       "python3",
-      "RECIPE_MODULE[build::reclient]\\resources\\cloudtail_wrapper.py",
+      "RECIPE_MODULE[build::reclient]/resources/cloudtail_wrapper.py",
       "stop",
       "--killed-pid-file",
-      "[TMP_BASE]\\cloudtail_reproxy.exe.INFO.pid"
+      "[TMP_BASE]/cloudtail_reproxy.INFO.pid"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -2079,12 +2052,12 @@
   {
     "cmd": [
       "python3",
-      "RECIPE_MODULE[build::reclient]\\resources\\cloudtail_wrapper.py",
+      "RECIPE_MODULE[build::reclient]/resources/cloudtail_wrapper.py",
       "stop",
       "--killed-pid-file",
-      "[TMP_BASE]\\cloudtail_reproxy-gomaip.INFO.pid"
+      "[TMP_BASE]/cloudtail_reproxy-gomaip.INFO.pid"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -2110,14 +2083,14 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[CLEANUP]\\reclient_log_tmp_2\\rbe_metrics.pb",
+      "[CLEANUP]/reclient_log_tmp_2/rbe_metrics.pb",
       "/path/to/tmp/"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -2141,10 +2114,10 @@
   },
   {
     "cmd": [
-      "[START_DIR]\\cipd_tool\\infra\\tools\\bqupload\\latest\\bqupload",
+      "[START_DIR]/cipd_tool/infra/tools/bqupload/latest/bqupload",
       "goma-logs.rbe_metrics.builds"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -2188,14 +2161,14 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[CACHE]\\builder\\src\\out\\Release\\.ninja_log",
+      "[CACHE]/builder/src/out/Release/.ninja_log",
       "/path/to/tmp/"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -2221,14 +2194,14 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "copy",
       "fake gzip data",
-      "[TMP_BASE]\\ninja_log.20120514-125326.00000000-0000-0000-0000-00000000133a.gz"
+      "[TMP_BASE]/ninja_log.20120514-125326.00000000-0000-0000-0000-00000000133a.gz"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -2254,15 +2227,15 @@
     "cmd": [
       "python3",
       "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
-      "RECIPE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]\\ninja_log.20120514-125326.00000000-0000-0000-0000-00000000133a.gz",
+      "[TMP_BASE]/ninja_log.20120514-125326.00000000-0000-0000-0000-00000000133a.gz",
       "gs://chrome-goma-log/2012/05/14/reclient/ninja_log.20120514-125326.00000000-0000-0000-0000-00000000133a.gz"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -2289,13 +2262,13 @@
   {
     "cmd": [
       "python3",
-      "RECIPE_MODULE[build::reclient]\\resources\\generate_rpl_gzip.py",
+      "RECIPE_MODULE[build::reclient]/resources/generate_rpl_gzip.py",
       "--reclient-log-dir",
-      "[CLEANUP]\\reclient_log_tmp_2",
+      "[CLEANUP]/reclient_log_tmp_2",
       "--output-gzip-path",
-      "[TMP_BASE]\\reproxy_rpl.20120514-125326.00000000-0000-0000-0000-00000000133a.gz"
+      "[TMP_BASE]/reproxy_rpl.20120514-125326.00000000-0000-0000-0000-00000000133a.gz"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -2321,15 +2294,15 @@
     "cmd": [
       "python3",
       "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
-      "RECIPE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]\\reproxy_rpl.20120514-125326.00000000-0000-0000-0000-00000000133a.gz",
+      "[TMP_BASE]/reproxy_rpl.20120514-125326.00000000-0000-0000-0000-00000000133a.gz",
       "gs://chrome-goma-log/2012/05/14/reclient/reproxy_rpl.20120514-125326.00000000-0000-0000-0000-00000000133a.gz"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -2356,13 +2329,13 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "listdir",
-      "[CLEANUP]\\reclient_log_tmp_2"
+      "[CLEANUP]/reclient_log_tmp_2"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -2382,9 +2355,9 @@
     "name": "postprocess for reclient (2).list reclient log directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@listdir@[CLEANUP]\\reclient_log_tmp_2\\reproxy.INFO@@@",
-      "@@@STEP_LOG_LINE@listdir@[CLEANUP]\\reclient_log_tmp_2\\reproxy.rpl@@@",
-      "@@@STEP_LOG_LINE@listdir@[CLEANUP]\\reclient_log_tmp_2\\rewrapper.INFO@@@",
+      "@@@STEP_LOG_LINE@listdir@[CLEANUP]/reclient_log_tmp_2/reproxy.INFO@@@",
+      "@@@STEP_LOG_LINE@listdir@[CLEANUP]/reclient_log_tmp_2/reproxy.rpl@@@",
+      "@@@STEP_LOG_LINE@listdir@[CLEANUP]/reclient_log_tmp_2/rewrapper.INFO@@@",
       "@@@STEP_LOG_END@listdir@@@"
     ]
   },
@@ -2399,14 +2372,14 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[CLEANUP]\\reclient_log_tmp_2\\reproxy.INFO",
+      "[CLEANUP]/reclient_log_tmp_2/reproxy.INFO",
       "/path/to/tmp/"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -2423,7 +2396,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "postprocess for reclient (2).upload logs.read [CLEANUP]\\reclient_log_tmp_2\\reproxy.INFO",
+    "name": "postprocess for reclient (2).upload logs.read [CLEANUP]/reclient_log_tmp_2/reproxy.INFO",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -2432,15 +2405,15 @@
     "cmd": [
       "python3",
       "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
-      "RECIPE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[CLEANUP]\\reclient_log_tmp_2\\reproxy.INFO",
-      "gs://chrome-goma-log/2012/05/14/reclient/[CLEANUP]\\reclient_log_tmp_2\\reproxy.INFO"
+      "[CLEANUP]/reclient_log_tmp_2/reproxy.INFO",
+      "gs://chrome-goma-log/2012/05/14/reclient/reproxy.INFO"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -2457,24 +2430,24 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "postprocess for reclient (2).upload logs.gsutil upload [CLEANUP]\\reclient_log_tmp_2\\reproxy.INFO",
+    "name": "postprocess for reclient (2).upload logs.gsutil upload reproxy.INFO",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-goma-log/2012/05/14/reclient/[CLEANUP]\\reclient_log_tmp_2\\reproxy.INFO@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-goma-log/2012/05/14/reclient/reproxy.INFO@@@"
     ]
   },
   {
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "copy",
       "fake tar contents",
-      "[TMP_BASE]\\reclient_logs.20120514-125326.00000000-0000-0000-0000-00000000133a.tar.gz"
+      "[TMP_BASE]/reclient_logs.20120514-125326.00000000-0000-0000-0000-00000000133a.tar.gz"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -2500,15 +2473,15 @@
     "cmd": [
       "python3",
       "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
-      "RECIPE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]\\reclient_logs.20120514-125326.00000000-0000-0000-0000-00000000133a.tar.gz",
+      "[TMP_BASE]/reclient_logs.20120514-125326.00000000-0000-0000-0000-00000000133a.tar.gz",
       "gs://chrome-goma-log/2012/05/14/reclient/reclient_logs.20120514-125326.00000000-0000-0000-0000-00000000133a.tar.gz"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -2534,11 +2507,11 @@
   {
     "cmd": [
       "python3",
-      "RECIPE_MODULE[build::reclient]\\resources\\perform_health_check.py",
+      "RECIPE_MODULE[build::reclient]/resources/perform_health_check.py",
       "--reclient-log-dir",
-      "[CLEANUP]\\reclient_log_tmp_2"
+      "[CLEANUP]/reclient_log_tmp_2"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -2564,13 +2537,13 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]\\reclient_log_tmp_2"
+      "[CLEANUP]/reclient_log_tmp_2"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -2596,11 +2569,11 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CACHE]\\builder\\src\\out\\Release"
+      "[CACHE]/builder/src/out/Release"
     ],
     "infra_step": true,
     "luci_context": {
@@ -2615,26 +2588,25 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "rmtree [CACHE]\\builder\\src\\out\\Release (3)"
+    "name": "rmtree [CACHE]/builder/src/out/Release (3)"
   },
   {
     "cmd": [
       "python3",
       "-u",
-      "[CACHE]\\builder\\src\\tools\\mb\\mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "lookup",
       "-m",
-      "chromium.fyi",
+      "fake-group",
       "-b",
-      "build-perf-windows",
+      "fake-builder",
       "--config-file",
-      "[CACHE]\\builder\\src\\tools\\mb\\mb_config.pyl",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
-      "[CACHE]\\goma\\client",
-      "--luci-auth",
+      "[CACHE]/goma/client",
       "--recursive"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -2660,22 +2632,21 @@
     "cmd": [
       "python3",
       "-u",
-      "[CACHE]\\builder\\src\\tools\\mb\\mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "gen",
       "-m",
-      "chromium.fyi",
+      "fake-group",
       "-b",
-      "build-perf-windows",
+      "fake-builder",
       "--config-file",
-      "[CACHE]\\builder\\src\\tools\\mb\\mb_config.pyl",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
-      "[CACHE]\\goma\\client",
-      "--luci-auth",
+      "[CACHE]/goma/client",
       "--json-output",
       "/path/to/tmp/json",
       "//out/Release"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -2705,9 +2676,9 @@
   {
     "cmd": [
       "vpython3",
-      "[CACHE]\\builder\\src\\buildtools\\reclient_cfgs\\fetch_reclient_cfgs.py"
+      "[CACHE]/builder/src/buildtools/reclient_cfgs/fetch_reclient_cfgs.py"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_instance": "projects/test-rbe-project/instances/default_instance",
@@ -2735,15 +2706,15 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]\\builder\\reclient\\deps\\build_perf_windows"
+      "[CACHE]/builder/reclient/deps/fake_builder"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_remote_accept_cache": "false"
@@ -2770,13 +2741,13 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "listdir",
-      "[CACHE]\\builder\\reclient\\deps\\build_perf_windows"
+      "[CACHE]/builder/reclient/deps/fake_builder"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_remote_accept_cache": "false"
@@ -2803,18 +2774,18 @@
   {
     "cmd": [
       "python3",
-      "RECIPE_MODULE[build::reclient]\\resources\\cloudtail_wrapper.py",
+      "RECIPE_MODULE[build::reclient]/resources/cloudtail_wrapper.py",
       "start",
       "--cloudtail-path",
-      "cloudtail.exe",
+      "cloudtail",
       "--cloudtail-project-id",
       "goma-logs",
       "--cloudtail-log-path",
-      "[CLEANUP]\\reclient_log_tmp_3\\reproxy.exe.INFO",
+      "[CLEANUP]/reclient_log_tmp_3/reproxy.INFO",
       "--pid-file",
-      "[TMP_BASE]\\cloudtail_reproxy.exe.INFO.pid"
+      "[TMP_BASE]/cloudtail_reproxy.INFO.pid"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_remote_accept_cache": "false"
@@ -2832,7 +2803,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "preprocess for reclient (3).start cloudtail: reproxy.exe.INFO",
+    "name": "preprocess for reclient (3).start cloudtail: reproxy.INFO",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9@@@"
@@ -2841,18 +2812,18 @@
   {
     "cmd": [
       "python3",
-      "RECIPE_MODULE[build::reclient]\\resources\\cloudtail_wrapper.py",
+      "RECIPE_MODULE[build::reclient]/resources/cloudtail_wrapper.py",
       "start",
       "--cloudtail-path",
-      "cloudtail.exe",
+      "cloudtail",
       "--cloudtail-project-id",
       "goma-logs",
       "--cloudtail-log-path",
-      "[CLEANUP]\\reclient_log_tmp_3\\reproxy-gomaip.INFO",
+      "[CLEANUP]/reclient_log_tmp_3/reproxy-gomaip.INFO",
       "--pid-file",
-      "[TMP_BASE]\\cloudtail_reproxy-gomaip.INFO.pid"
+      "[TMP_BASE]/cloudtail_reproxy-gomaip.INFO.pid"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_remote_accept_cache": "false"
@@ -2878,24 +2849,24 @@
   },
   {
     "cmd": [
-      "[CACHE]\\builder\\src\\buildtools\\reclient\\bootstrap.exe",
+      "[CACHE]/builder/src/buildtools/reclient/bootstrap",
       "-output_dir",
-      "[CLEANUP]\\reclient_log_tmp_3"
+      "[CLEANUP]/reclient_log_tmp_3"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "RBE_deps_cache_dir": "[CACHE]\\builder\\reclient\\deps\\build_perf_windows",
+      "RBE_deps_cache_dir": "[CACHE]/builder/reclient/deps/fake_builder",
       "RBE_deps_cache_max_mb": "256",
       "RBE_fail_early_min_action_count": "4000",
       "RBE_fail_early_min_fallback_ratio": "0.5",
       "RBE_instance": "projects/test-rbe-project/instances/default_instance",
-      "RBE_log_dir": "[CLEANUP]\\reclient_log_tmp_3",
+      "RBE_log_dir": "[CLEANUP]/reclient_log_tmp_3",
       "RBE_log_format": "reducedtext",
-      "RBE_proxy_log_dir": "[CLEANUP]\\reclient_log_tmp_3",
-      "RBE_re_proxy": "[CACHE]\\builder\\src\\buildtools\\reclient\\reproxy.exe",
+      "RBE_proxy_log_dir": "[CLEANUP]/reclient_log_tmp_3",
+      "RBE_re_proxy": "[CACHE]/builder/src/buildtools/reclient/reproxy",
       "RBE_remote_accept_cache": "false",
-      "RBE_server_address": "pipe://reproxy.pipe",
+      "RBE_server_address": "unix:///[TMP_BASE]/reproxy.sock",
       "RBE_service": "remotebuildexecution.googleapis.com:443",
       "RBE_use_application_default_credentials": "false",
       "RBE_use_gce_credentials": "true"
@@ -2921,27 +2892,27 @@
   {
     "cmd": [
       "vpython3",
-      "RECIPE_MODULE[build::chromium]\\resources\\ninja_wrapper.py",
+      "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
       "--ninja_info_output",
       "/path/to/tmp/json",
       "--failure_output",
       "/path/to/tmp/",
       "--",
-      "RECIPE_REPO[depot_tools]\\ninja.exe",
+      "RECIPE_REPO[depot_tools]/ninja",
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]\\builder\\src\\out\\Release",
+      "[CACHE]/builder/src/out/Release",
       "-j",
       "80",
       "chrome"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "RBE_log_dir": "[CLEANUP]\\reclient_log_tmp_1",
+      "RBE_log_dir": "[CLEANUP]/reclient_log_tmp_1",
       "RBE_remote_accept_cache": "false",
-      "RBE_server_address": "pipe://reproxy.pipe"
+      "RBE_server_address": "unix:///[TMP_BASE]/reproxy.sock"
     },
     "luci_context": {
       "realm": {
@@ -2959,11 +2930,11 @@
   },
   {
     "cmd": [
-      "RECIPE_REPO[depot_tools]\\ninja.exe",
+      "RECIPE_REPO[depot_tools]/ninja",
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]\\builder\\src\\out\\Release",
+      "[CACHE]/builder/src/out/Release",
       "-j",
       "80",
       "chrome",
@@ -2971,12 +2942,12 @@
       "explain",
       "-n"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "RBE_log_dir": "[CLEANUP]\\reclient_log_tmp_1",
+      "RBE_log_dir": "[CLEANUP]/reclient_log_tmp_1",
       "RBE_remote_accept_cache": "false",
-      "RBE_server_address": "pipe://reproxy.pipe"
+      "RBE_server_address": "unix:///[TMP_BASE]/reproxy.sock"
     },
     "luci_context": {
       "realm": {
@@ -2998,21 +2969,21 @@
   },
   {
     "cmd": [
-      "[CACHE]\\builder\\src\\buildtools\\reclient\\bootstrap.exe",
+      "[CACHE]/builder/src/buildtools/reclient/bootstrap",
       "-shutdown",
       "-log_format",
       "reducedtext",
       "-output_dir",
-      "[CLEANUP]\\reclient_log_tmp_3",
+      "[CLEANUP]/reclient_log_tmp_3",
       "-proxy_log_dir",
-      "[CLEANUP]\\reclient_log_tmp_3",
+      "[CLEANUP]/reclient_log_tmp_3",
       "-server_address",
-      "pipe://reproxy.pipe"
+      "unix:///[TMP_BASE]/reproxy.sock"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "RBE_log_dir": "[CLEANUP]\\reclient_log_tmp_3",
+      "RBE_log_dir": "[CLEANUP]/reclient_log_tmp_3",
       "RBE_remote_accept_cache": "false"
     },
     "infra_step": true,
@@ -3036,12 +3007,12 @@
   {
     "cmd": [
       "python3",
-      "RECIPE_MODULE[build::reclient]\\resources\\cloudtail_wrapper.py",
+      "RECIPE_MODULE[build::reclient]/resources/cloudtail_wrapper.py",
       "stop",
       "--killed-pid-file",
-      "[TMP_BASE]\\cloudtail_reproxy.exe.INFO.pid"
+      "[TMP_BASE]/cloudtail_reproxy.INFO.pid"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_remote_accept_cache": "false"
@@ -3067,12 +3038,12 @@
   {
     "cmd": [
       "python3",
-      "RECIPE_MODULE[build::reclient]\\resources\\cloudtail_wrapper.py",
+      "RECIPE_MODULE[build::reclient]/resources/cloudtail_wrapper.py",
       "stop",
       "--killed-pid-file",
-      "[TMP_BASE]\\cloudtail_reproxy-gomaip.INFO.pid"
+      "[TMP_BASE]/cloudtail_reproxy-gomaip.INFO.pid"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_remote_accept_cache": "false"
@@ -3099,14 +3070,14 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[CLEANUP]\\reclient_log_tmp_3\\rbe_metrics.pb",
+      "[CLEANUP]/reclient_log_tmp_3/rbe_metrics.pb",
       "/path/to/tmp/"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_remote_accept_cache": "false"
@@ -3131,10 +3102,10 @@
   },
   {
     "cmd": [
-      "[START_DIR]\\cipd_tool\\infra\\tools\\bqupload\\latest\\bqupload",
+      "[START_DIR]/cipd_tool/infra/tools/bqupload/latest/bqupload",
       "goma-logs.rbe_metrics.builds"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_remote_accept_cache": "false"
@@ -3179,14 +3150,14 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[CACHE]\\builder\\src\\out\\Release\\.ninja_log",
+      "[CACHE]/builder/src/out/Release/.ninja_log",
       "/path/to/tmp/"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_remote_accept_cache": "false"
@@ -3213,14 +3184,14 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "copy",
       "fake gzip data",
-      "[TMP_BASE]\\ninja_log.20120514-125329.00000000-0000-0000-0000-00000000133d.gz"
+      "[TMP_BASE]/ninja_log.20120514-125329.00000000-0000-0000-0000-00000000133d.gz"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_remote_accept_cache": "false"
@@ -3247,15 +3218,15 @@
     "cmd": [
       "python3",
       "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
-      "RECIPE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]\\ninja_log.20120514-125329.00000000-0000-0000-0000-00000000133d.gz",
+      "[TMP_BASE]/ninja_log.20120514-125329.00000000-0000-0000-0000-00000000133d.gz",
       "gs://chrome-goma-log/2012/05/14/reclient/ninja_log.20120514-125329.00000000-0000-0000-0000-00000000133d.gz"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_remote_accept_cache": "false"
@@ -3283,13 +3254,13 @@
   {
     "cmd": [
       "python3",
-      "RECIPE_MODULE[build::reclient]\\resources\\generate_rpl_gzip.py",
+      "RECIPE_MODULE[build::reclient]/resources/generate_rpl_gzip.py",
       "--reclient-log-dir",
-      "[CLEANUP]\\reclient_log_tmp_3",
+      "[CLEANUP]/reclient_log_tmp_3",
       "--output-gzip-path",
-      "[TMP_BASE]\\reproxy_rpl.20120514-125329.00000000-0000-0000-0000-00000000133d.gz"
+      "[TMP_BASE]/reproxy_rpl.20120514-125329.00000000-0000-0000-0000-00000000133d.gz"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_remote_accept_cache": "false"
@@ -3316,15 +3287,15 @@
     "cmd": [
       "python3",
       "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
-      "RECIPE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]\\reproxy_rpl.20120514-125329.00000000-0000-0000-0000-00000000133d.gz",
+      "[TMP_BASE]/reproxy_rpl.20120514-125329.00000000-0000-0000-0000-00000000133d.gz",
       "gs://chrome-goma-log/2012/05/14/reclient/reproxy_rpl.20120514-125329.00000000-0000-0000-0000-00000000133d.gz"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_remote_accept_cache": "false"
@@ -3352,13 +3323,13 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "listdir",
-      "[CLEANUP]\\reclient_log_tmp_3"
+      "[CLEANUP]/reclient_log_tmp_3"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_remote_accept_cache": "false"
@@ -3379,9 +3350,9 @@
     "name": "postprocess for reclient (3).list reclient log directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@listdir@[CLEANUP]\\reclient_log_tmp_3\\reproxy.INFO@@@",
-      "@@@STEP_LOG_LINE@listdir@[CLEANUP]\\reclient_log_tmp_3\\reproxy.rpl@@@",
-      "@@@STEP_LOG_LINE@listdir@[CLEANUP]\\reclient_log_tmp_3\\rewrapper.INFO@@@",
+      "@@@STEP_LOG_LINE@listdir@[CLEANUP]/reclient_log_tmp_3/reproxy.INFO@@@",
+      "@@@STEP_LOG_LINE@listdir@[CLEANUP]/reclient_log_tmp_3/reproxy.rpl@@@",
+      "@@@STEP_LOG_LINE@listdir@[CLEANUP]/reclient_log_tmp_3/rewrapper.INFO@@@",
       "@@@STEP_LOG_END@listdir@@@"
     ]
   },
@@ -3396,14 +3367,14 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[CLEANUP]\\reclient_log_tmp_3\\reproxy.INFO",
+      "[CLEANUP]/reclient_log_tmp_3/reproxy.INFO",
       "/path/to/tmp/"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_remote_accept_cache": "false"
@@ -3421,7 +3392,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "postprocess for reclient (3).upload logs.read [CLEANUP]\\reclient_log_tmp_3\\reproxy.INFO",
+    "name": "postprocess for reclient (3).upload logs.read [CLEANUP]/reclient_log_tmp_3/reproxy.INFO",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -3430,15 +3401,15 @@
     "cmd": [
       "python3",
       "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
-      "RECIPE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[CLEANUP]\\reclient_log_tmp_3\\reproxy.INFO",
-      "gs://chrome-goma-log/2012/05/14/reclient/[CLEANUP]\\reclient_log_tmp_3\\reproxy.INFO"
+      "[CLEANUP]/reclient_log_tmp_3/reproxy.INFO",
+      "gs://chrome-goma-log/2012/05/14/reclient/reproxy.INFO"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_remote_accept_cache": "false"
@@ -3456,24 +3427,24 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "postprocess for reclient (3).upload logs.gsutil upload [CLEANUP]\\reclient_log_tmp_3\\reproxy.INFO",
+    "name": "postprocess for reclient (3).upload logs.gsutil upload reproxy.INFO",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-goma-log/2012/05/14/reclient/[CLEANUP]\\reclient_log_tmp_3\\reproxy.INFO@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-goma-log/2012/05/14/reclient/reproxy.INFO@@@"
     ]
   },
   {
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "copy",
       "fake tar contents",
-      "[TMP_BASE]\\reclient_logs.20120514-125329.00000000-0000-0000-0000-00000000133d.tar.gz"
+      "[TMP_BASE]/reclient_logs.20120514-125329.00000000-0000-0000-0000-00000000133d.tar.gz"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_remote_accept_cache": "false"
@@ -3500,15 +3471,15 @@
     "cmd": [
       "python3",
       "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
-      "RECIPE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]\\reclient_logs.20120514-125329.00000000-0000-0000-0000-00000000133d.tar.gz",
+      "[TMP_BASE]/reclient_logs.20120514-125329.00000000-0000-0000-0000-00000000133d.tar.gz",
       "gs://chrome-goma-log/2012/05/14/reclient/reclient_logs.20120514-125329.00000000-0000-0000-0000-00000000133d.tar.gz"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_remote_accept_cache": "false"
@@ -3535,11 +3506,11 @@
   {
     "cmd": [
       "python3",
-      "RECIPE_MODULE[build::reclient]\\resources\\perform_health_check.py",
+      "RECIPE_MODULE[build::reclient]/resources/perform_health_check.py",
       "--reclient-log-dir",
-      "[CLEANUP]\\reclient_log_tmp_3"
+      "[CLEANUP]/reclient_log_tmp_3"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_remote_accept_cache": "false"
@@ -3566,13 +3537,13 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]\\reclient_log_tmp_3"
+      "[CLEANUP]/reclient_log_tmp_3"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_remote_accept_cache": "false"
@@ -3599,11 +3570,11 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CACHE]\\builder\\src\\out\\Release"
+      "[CACHE]/builder/src/out/Release"
     ],
     "infra_step": true,
     "luci_context": {
@@ -3618,26 +3589,25 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "rmtree [CACHE]\\builder\\src\\out\\Release (4)"
+    "name": "rmtree [CACHE]/builder/src/out/Release (4)"
   },
   {
     "cmd": [
       "python3",
       "-u",
-      "[CACHE]\\builder\\src\\tools\\mb\\mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "lookup",
       "-m",
-      "chromium.fyi",
+      "fake-group",
       "-b",
-      "build-perf-windows",
+      "fake-builder",
       "--config-file",
-      "[CACHE]\\builder\\src\\tools\\mb\\mb_config.pyl",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
-      "[CACHE]\\goma\\client",
-      "--luci-auth",
+      "[CACHE]/goma/client",
       "--recursive"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -3663,22 +3633,21 @@
     "cmd": [
       "python3",
       "-u",
-      "[CACHE]\\builder\\src\\tools\\mb\\mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "gen",
       "-m",
-      "chromium.fyi",
+      "fake-group",
       "-b",
-      "build-perf-windows",
+      "fake-builder",
       "--config-file",
-      "[CACHE]\\builder\\src\\tools\\mb\\mb_config.pyl",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
-      "[CACHE]\\goma\\client",
-      "--luci-auth",
+      "[CACHE]/goma/client",
       "--json-output",
       "/path/to/tmp/json",
       "//out/Release"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -3708,9 +3677,9 @@
   {
     "cmd": [
       "vpython3",
-      "[CACHE]\\builder\\src\\buildtools\\reclient_cfgs\\fetch_reclient_cfgs.py"
+      "[CACHE]/builder/src/buildtools/reclient_cfgs/fetch_reclient_cfgs.py"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "RBE_instance": "projects/test-rbe-project/instances/default_instance"
@@ -3737,15 +3706,15 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]\\builder\\reclient\\deps\\build_perf_windows"
+      "[CACHE]/builder/reclient/deps/fake_builder"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -3771,13 +3740,13 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "listdir",
-      "[CACHE]\\builder\\reclient\\deps\\build_perf_windows"
+      "[CACHE]/builder/reclient/deps/fake_builder"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -3803,18 +3772,18 @@
   {
     "cmd": [
       "python3",
-      "RECIPE_MODULE[build::reclient]\\resources\\cloudtail_wrapper.py",
+      "RECIPE_MODULE[build::reclient]/resources/cloudtail_wrapper.py",
       "start",
       "--cloudtail-path",
-      "cloudtail.exe",
+      "cloudtail",
       "--cloudtail-project-id",
       "goma-logs",
       "--cloudtail-log-path",
-      "[CLEANUP]\\reclient_log_tmp_4\\reproxy.exe.INFO",
+      "[CLEANUP]/reclient_log_tmp_4/reproxy.INFO",
       "--pid-file",
-      "[TMP_BASE]\\cloudtail_reproxy.exe.INFO.pid"
+      "[TMP_BASE]/cloudtail_reproxy.INFO.pid"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -3831,7 +3800,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "preprocess for reclient (4).start cloudtail: reproxy.exe.INFO",
+    "name": "preprocess for reclient (4).start cloudtail: reproxy.INFO",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9@@@"
@@ -3840,18 +3809,18 @@
   {
     "cmd": [
       "python3",
-      "RECIPE_MODULE[build::reclient]\\resources\\cloudtail_wrapper.py",
+      "RECIPE_MODULE[build::reclient]/resources/cloudtail_wrapper.py",
       "start",
       "--cloudtail-path",
-      "cloudtail.exe",
+      "cloudtail",
       "--cloudtail-project-id",
       "goma-logs",
       "--cloudtail-log-path",
-      "[CLEANUP]\\reclient_log_tmp_4\\reproxy-gomaip.INFO",
+      "[CLEANUP]/reclient_log_tmp_4/reproxy-gomaip.INFO",
       "--pid-file",
-      "[TMP_BASE]\\cloudtail_reproxy-gomaip.INFO.pid"
+      "[TMP_BASE]/cloudtail_reproxy-gomaip.INFO.pid"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -3876,23 +3845,23 @@
   },
   {
     "cmd": [
-      "[CACHE]\\builder\\src\\buildtools\\reclient\\bootstrap.exe",
+      "[CACHE]/builder/src/buildtools/reclient/bootstrap",
       "-output_dir",
-      "[CLEANUP]\\reclient_log_tmp_4"
+      "[CLEANUP]/reclient_log_tmp_4"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "RBE_deps_cache_dir": "[CACHE]\\builder\\reclient\\deps\\build_perf_windows",
+      "RBE_deps_cache_dir": "[CACHE]/builder/reclient/deps/fake_builder",
       "RBE_deps_cache_max_mb": "256",
       "RBE_fail_early_min_action_count": "4000",
       "RBE_fail_early_min_fallback_ratio": "0.5",
       "RBE_instance": "projects/test-rbe-project/instances/default_instance",
-      "RBE_log_dir": "[CLEANUP]\\reclient_log_tmp_4",
+      "RBE_log_dir": "[CLEANUP]/reclient_log_tmp_4",
       "RBE_log_format": "reducedtext",
-      "RBE_proxy_log_dir": "[CLEANUP]\\reclient_log_tmp_4",
-      "RBE_re_proxy": "[CACHE]\\builder\\src\\buildtools\\reclient\\reproxy.exe",
-      "RBE_server_address": "pipe://reproxy.pipe",
+      "RBE_proxy_log_dir": "[CLEANUP]/reclient_log_tmp_4",
+      "RBE_re_proxy": "[CACHE]/builder/src/buildtools/reclient/reproxy",
+      "RBE_server_address": "unix:///[TMP_BASE]/reproxy.sock",
       "RBE_service": "remotebuildexecution.googleapis.com:443",
       "RBE_use_application_default_credentials": "false",
       "RBE_use_gce_credentials": "true"
@@ -3918,26 +3887,26 @@
   {
     "cmd": [
       "vpython3",
-      "RECIPE_MODULE[build::chromium]\\resources\\ninja_wrapper.py",
+      "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
       "--ninja_info_output",
       "/path/to/tmp/json",
       "--failure_output",
       "/path/to/tmp/",
       "--",
-      "RECIPE_REPO[depot_tools]\\ninja.exe",
+      "RECIPE_REPO[depot_tools]/ninja",
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]\\builder\\src\\out\\Release",
+      "[CACHE]/builder/src/out/Release",
       "-j",
       "80",
       "chrome"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "RBE_log_dir": "[CLEANUP]\\reclient_log_tmp_1",
-      "RBE_server_address": "pipe://reproxy.pipe"
+      "RBE_log_dir": "[CLEANUP]/reclient_log_tmp_1",
+      "RBE_server_address": "unix:///[TMP_BASE]/reproxy.sock"
     },
     "luci_context": {
       "realm": {
@@ -3955,11 +3924,11 @@
   },
   {
     "cmd": [
-      "RECIPE_REPO[depot_tools]\\ninja.exe",
+      "RECIPE_REPO[depot_tools]/ninja",
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]\\builder\\src\\out\\Release",
+      "[CACHE]/builder/src/out/Release",
       "-j",
       "80",
       "chrome",
@@ -3967,11 +3936,11 @@
       "explain",
       "-n"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "RBE_log_dir": "[CLEANUP]\\reclient_log_tmp_1",
-      "RBE_server_address": "pipe://reproxy.pipe"
+      "RBE_log_dir": "[CLEANUP]/reclient_log_tmp_1",
+      "RBE_server_address": "unix:///[TMP_BASE]/reproxy.sock"
     },
     "luci_context": {
       "realm": {
@@ -3993,21 +3962,21 @@
   },
   {
     "cmd": [
-      "[CACHE]\\builder\\src\\buildtools\\reclient\\bootstrap.exe",
+      "[CACHE]/builder/src/buildtools/reclient/bootstrap",
       "-shutdown",
       "-log_format",
       "reducedtext",
       "-output_dir",
-      "[CLEANUP]\\reclient_log_tmp_4",
+      "[CLEANUP]/reclient_log_tmp_4",
       "-proxy_log_dir",
-      "[CLEANUP]\\reclient_log_tmp_4",
+      "[CLEANUP]/reclient_log_tmp_4",
       "-server_address",
-      "pipe://reproxy.pipe"
+      "unix:///[TMP_BASE]/reproxy.sock"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "RBE_log_dir": "[CLEANUP]\\reclient_log_tmp_4"
+      "RBE_log_dir": "[CLEANUP]/reclient_log_tmp_4"
     },
     "infra_step": true,
     "luci_context": {
@@ -4030,12 +3999,12 @@
   {
     "cmd": [
       "python3",
-      "RECIPE_MODULE[build::reclient]\\resources\\cloudtail_wrapper.py",
+      "RECIPE_MODULE[build::reclient]/resources/cloudtail_wrapper.py",
       "stop",
       "--killed-pid-file",
-      "[TMP_BASE]\\cloudtail_reproxy.exe.INFO.pid"
+      "[TMP_BASE]/cloudtail_reproxy.INFO.pid"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -4060,12 +4029,12 @@
   {
     "cmd": [
       "python3",
-      "RECIPE_MODULE[build::reclient]\\resources\\cloudtail_wrapper.py",
+      "RECIPE_MODULE[build::reclient]/resources/cloudtail_wrapper.py",
       "stop",
       "--killed-pid-file",
-      "[TMP_BASE]\\cloudtail_reproxy-gomaip.INFO.pid"
+      "[TMP_BASE]/cloudtail_reproxy-gomaip.INFO.pid"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -4091,14 +4060,14 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[CLEANUP]\\reclient_log_tmp_4\\rbe_metrics.pb",
+      "[CLEANUP]/reclient_log_tmp_4/rbe_metrics.pb",
       "/path/to/tmp/"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -4122,10 +4091,10 @@
   },
   {
     "cmd": [
-      "[START_DIR]\\cipd_tool\\infra\\tools\\bqupload\\latest\\bqupload",
+      "[START_DIR]/cipd_tool/infra/tools/bqupload/latest/bqupload",
       "goma-logs.rbe_metrics.builds"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -4169,14 +4138,14 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[CACHE]\\builder\\src\\out\\Release\\.ninja_log",
+      "[CACHE]/builder/src/out/Release/.ninja_log",
       "/path/to/tmp/"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -4202,14 +4171,14 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "copy",
       "fake gzip data",
-      "[TMP_BASE]\\ninja_log.20120514-125332.00000000-0000-0000-0000-000000001340.gz"
+      "[TMP_BASE]/ninja_log.20120514-125332.00000000-0000-0000-0000-000000001340.gz"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -4235,15 +4204,15 @@
     "cmd": [
       "python3",
       "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
-      "RECIPE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]\\ninja_log.20120514-125332.00000000-0000-0000-0000-000000001340.gz",
+      "[TMP_BASE]/ninja_log.20120514-125332.00000000-0000-0000-0000-000000001340.gz",
       "gs://chrome-goma-log/2012/05/14/reclient/ninja_log.20120514-125332.00000000-0000-0000-0000-000000001340.gz"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -4270,13 +4239,13 @@
   {
     "cmd": [
       "python3",
-      "RECIPE_MODULE[build::reclient]\\resources\\generate_rpl_gzip.py",
+      "RECIPE_MODULE[build::reclient]/resources/generate_rpl_gzip.py",
       "--reclient-log-dir",
-      "[CLEANUP]\\reclient_log_tmp_4",
+      "[CLEANUP]/reclient_log_tmp_4",
       "--output-gzip-path",
-      "[TMP_BASE]\\reproxy_rpl.20120514-125332.00000000-0000-0000-0000-000000001340.gz"
+      "[TMP_BASE]/reproxy_rpl.20120514-125332.00000000-0000-0000-0000-000000001340.gz"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -4302,15 +4271,15 @@
     "cmd": [
       "python3",
       "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
-      "RECIPE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]\\reproxy_rpl.20120514-125332.00000000-0000-0000-0000-000000001340.gz",
+      "[TMP_BASE]/reproxy_rpl.20120514-125332.00000000-0000-0000-0000-000000001340.gz",
       "gs://chrome-goma-log/2012/05/14/reclient/reproxy_rpl.20120514-125332.00000000-0000-0000-0000-000000001340.gz"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -4337,13 +4306,13 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "listdir",
-      "[CLEANUP]\\reclient_log_tmp_4"
+      "[CLEANUP]/reclient_log_tmp_4"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -4363,9 +4332,9 @@
     "name": "postprocess for reclient (4).list reclient log directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@listdir@[CLEANUP]\\reclient_log_tmp_4\\reproxy.INFO@@@",
-      "@@@STEP_LOG_LINE@listdir@[CLEANUP]\\reclient_log_tmp_4\\reproxy.rpl@@@",
-      "@@@STEP_LOG_LINE@listdir@[CLEANUP]\\reclient_log_tmp_4\\rewrapper.INFO@@@",
+      "@@@STEP_LOG_LINE@listdir@[CLEANUP]/reclient_log_tmp_4/reproxy.INFO@@@",
+      "@@@STEP_LOG_LINE@listdir@[CLEANUP]/reclient_log_tmp_4/reproxy.rpl@@@",
+      "@@@STEP_LOG_LINE@listdir@[CLEANUP]/reclient_log_tmp_4/rewrapper.INFO@@@",
       "@@@STEP_LOG_END@listdir@@@"
     ]
   },
@@ -4380,14 +4349,14 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[CLEANUP]\\reclient_log_tmp_4\\reproxy.INFO",
+      "[CLEANUP]/reclient_log_tmp_4/reproxy.INFO",
       "/path/to/tmp/"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -4404,7 +4373,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "postprocess for reclient (4).upload logs.read [CLEANUP]\\reclient_log_tmp_4\\reproxy.INFO",
+    "name": "postprocess for reclient (4).upload logs.read [CLEANUP]/reclient_log_tmp_4/reproxy.INFO",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]
@@ -4413,15 +4382,15 @@
     "cmd": [
       "python3",
       "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
-      "RECIPE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[CLEANUP]\\reclient_log_tmp_4\\reproxy.INFO",
-      "gs://chrome-goma-log/2012/05/14/reclient/[CLEANUP]\\reclient_log_tmp_4\\reproxy.INFO"
+      "[CLEANUP]/reclient_log_tmp_4/reproxy.INFO",
+      "gs://chrome-goma-log/2012/05/14/reclient/reproxy.INFO"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -4438,24 +4407,24 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "postprocess for reclient (4).upload logs.gsutil upload [CLEANUP]\\reclient_log_tmp_4\\reproxy.INFO",
+    "name": "postprocess for reclient (4).upload logs.gsutil upload reproxy.INFO",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-goma-log/2012/05/14/reclient/[CLEANUP]\\reclient_log_tmp_4\\reproxy.INFO@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-goma-log/2012/05/14/reclient/reproxy.INFO@@@"
     ]
   },
   {
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "copy",
       "fake tar contents",
-      "[TMP_BASE]\\reclient_logs.20120514-125332.00000000-0000-0000-0000-000000001340.tar.gz"
+      "[TMP_BASE]/reclient_logs.20120514-125332.00000000-0000-0000-0000-000000001340.tar.gz"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -4481,15 +4450,15 @@
     "cmd": [
       "python3",
       "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
-      "RECIPE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]\\reclient_logs.20120514-125332.00000000-0000-0000-0000-000000001340.tar.gz",
+      "[TMP_BASE]/reclient_logs.20120514-125332.00000000-0000-0000-0000-000000001340.tar.gz",
       "gs://chrome-goma-log/2012/05/14/reclient/reclient_logs.20120514-125332.00000000-0000-0000-0000-000000001340.tar.gz"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -4515,11 +4484,11 @@
   {
     "cmd": [
       "python3",
-      "RECIPE_MODULE[build::reclient]\\resources\\perform_health_check.py",
+      "RECIPE_MODULE[build::reclient]/resources/perform_health_check.py",
       "--reclient-log-dir",
-      "[CLEANUP]\\reclient_log_tmp_4"
+      "[CLEANUP]/reclient_log_tmp_4"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -4545,13 +4514,13 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CLEANUP]\\reclient_log_tmp_4"
+      "[CLEANUP]/reclient_log_tmp_4"
     ],
-    "cwd": "[CACHE]\\builder\\src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -4577,11 +4546,11 @@
     "cmd": [
       "vpython3",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[CACHE]\\builder\\src\\out\\Release"
+      "[CACHE]/builder/src/out/Release"
     ],
     "infra_step": true,
     "luci_context": {
@@ -4596,7 +4565,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "rmtree [CACHE]\\builder\\src\\out\\Release (5)"
+    "name": "rmtree [CACHE]/builder/src/out/Release (5)"
   },
   {
     "name": "$result"

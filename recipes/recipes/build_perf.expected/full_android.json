@@ -163,7 +163,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "env": {
-      "DEPOT_TOOLS_REPORT_BUILD": "chromium/ci/build-perf-android/8945511751514863184",
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/ci/fake-builder/8945511751514863184",
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "1800"
     },
@@ -337,7 +337,6 @@
       "0777",
       "[CACHE]/builder/src/.code-coverage"
     ],
-    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -364,7 +363,6 @@
       "--build-path",
       "[CACHE]/builder/src/out/Release"
     ],
-    "cwd": "[CACHE]/builder",
     "luci_context": {
       "realm": {
         "name": "chromium:ci"
@@ -392,7 +390,7 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_REPORT_BUILD": "chromium/ci/build-perf-android/8945511751514863184",
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/ci/fake-builder/8945511751514863184",
       "PATH": "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
     },
     "env_suffixes": {
@@ -540,9 +538,9 @@
       "[CACHE]/builder/src/tools/mb/mb.py",
       "lookup",
       "-m",
-      "chromium.fyi",
+      "fake-group",
       "-b",
-      "build-perf-android",
+      "fake-builder",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -579,9 +577,9 @@
       "[CACHE]/builder/src/tools/mb/mb.py",
       "gen",
       "-m",
-      "chromium.fyi",
+      "fake-group",
       "-b",
-      "build-perf-android",
+      "fake-builder",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -657,7 +655,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/builder/reclient/deps/build_perf_android"
+      "[CACHE]/builder/reclient/deps/fake_builder"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -690,7 +688,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "listdir",
-      "[CACHE]/builder/reclient/deps/build_perf_android"
+      "[CACHE]/builder/reclient/deps/fake_builder"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -801,7 +799,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "RBE_deps_cache_dir": "[CACHE]/builder/reclient/deps/build_perf_android",
+      "RBE_deps_cache_dir": "[CACHE]/builder/reclient/deps/fake_builder",
       "RBE_deps_cache_max_mb": "256",
       "RBE_fail_early_min_action_count": "4000",
       "RBE_fail_early_min_fallback_ratio": "0.5",
@@ -1632,9 +1630,9 @@
       "[CACHE]/builder/src/tools/mb/mb.py",
       "lookup",
       "-m",
-      "chromium.fyi",
+      "fake-group",
       "-b",
-      "build-perf-android",
+      "fake-builder",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -1671,9 +1669,9 @@
       "[CACHE]/builder/src/tools/mb/mb.py",
       "gen",
       "-m",
-      "chromium.fyi",
+      "fake-group",
       "-b",
-      "build-perf-android",
+      "fake-builder",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -1748,7 +1746,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/builder/reclient/deps/build_perf_android"
+      "[CACHE]/builder/reclient/deps/fake_builder"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -1780,7 +1778,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "listdir",
-      "[CACHE]/builder/reclient/deps/build_perf_android"
+      "[CACHE]/builder/reclient/deps/fake_builder"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -1888,7 +1886,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "RBE_deps_cache_dir": "[CACHE]/builder/reclient/deps/build_perf_android",
+      "RBE_deps_cache_dir": "[CACHE]/builder/reclient/deps/fake_builder",
       "RBE_deps_cache_max_mb": "256",
       "RBE_fail_early_min_action_count": "4000",
       "RBE_fail_early_min_fallback_ratio": "0.5",
@@ -2610,9 +2608,9 @@
       "[CACHE]/builder/src/tools/mb/mb.py",
       "lookup",
       "-m",
-      "chromium.fyi",
+      "fake-group",
       "-b",
-      "build-perf-android",
+      "fake-builder",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -2649,9 +2647,9 @@
       "[CACHE]/builder/src/tools/mb/mb.py",
       "gen",
       "-m",
-      "chromium.fyi",
+      "fake-group",
       "-b",
-      "build-perf-android",
+      "fake-builder",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -2727,7 +2725,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/builder/reclient/deps/build_perf_android"
+      "[CACHE]/builder/reclient/deps/fake_builder"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -2760,7 +2758,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "listdir",
-      "[CACHE]/builder/reclient/deps/build_perf_android"
+      "[CACHE]/builder/reclient/deps/fake_builder"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -2871,7 +2869,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "RBE_deps_cache_dir": "[CACHE]/builder/reclient/deps/build_perf_android",
+      "RBE_deps_cache_dir": "[CACHE]/builder/reclient/deps/fake_builder",
       "RBE_deps_cache_max_mb": "256",
       "RBE_fail_early_min_action_count": "4000",
       "RBE_fail_early_min_fallback_ratio": "0.5",
@@ -3615,9 +3613,9 @@
       "[CACHE]/builder/src/tools/mb/mb.py",
       "lookup",
       "-m",
-      "chromium.fyi",
+      "fake-group",
       "-b",
-      "build-perf-android",
+      "fake-builder",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -3654,9 +3652,9 @@
       "[CACHE]/builder/src/tools/mb/mb.py",
       "gen",
       "-m",
-      "chromium.fyi",
+      "fake-group",
       "-b",
-      "build-perf-android",
+      "fake-builder",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -3731,7 +3729,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/builder/reclient/deps/build_perf_android"
+      "[CACHE]/builder/reclient/deps/fake_builder"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -3763,7 +3761,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "listdir",
-      "[CACHE]/builder/reclient/deps/build_perf_android"
+      "[CACHE]/builder/reclient/deps/fake_builder"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -3871,7 +3869,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "RBE_deps_cache_dir": "[CACHE]/builder/reclient/deps/build_perf_android",
+      "RBE_deps_cache_dir": "[CACHE]/builder/reclient/deps/fake_builder",
       "RBE_deps_cache_max_mb": "256",
       "RBE_fail_early_min_action_count": "4000",
       "RBE_fail_early_min_fallback_ratio": "0.5",

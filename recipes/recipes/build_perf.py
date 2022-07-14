@@ -9,14 +9,16 @@ from recipe_engine import post_process
 from recipe_engine.engine_types import freeze
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 from RECIPE_MODULES.build import chromium
+from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 
 PYTHON_VERSION_COMPATIBILITY = "PY3"
 
 DEPS = [
     'builder_group',
     'chromium',
-    'chromium_android',
     'chromium_checkout',
+    'chromium_tests',
+    'chromium_tests_builder_config',
     'code_coverage',
     'depot_tools/gclient',
     'recipe_engine/buildbucket',
@@ -28,77 +30,20 @@ DEPS = [
     'reclient',
 ]
 
-BUILD_PERF_BUILDERS = freeze({
-    'build-perf-android': {
-        'chromium_config': 'android',
-        'chromium_apply_config': ['mb'],
-        'chromium_config_kwargs': {
-            'BUILD_CONFIG': 'Release',
-            'TARGET_BITS': 64,
-            'TARGET_PLATFORM': 'android',
-        },
-        'gclient_config': 'chromium',
-        'gclient_apply_config': ['android', 'enable_reclient'],
-        'android_config': 'main_builder',
-        'platform': 'linux',
-        'targets': [['all'], ['chrome_public_apk']],
-    },
-    'build-perf-linux': {
-        'chromium_config': 'chromium',
-        'chromium_apply_config': ['mb'],
-        'gclient_config': 'chromium',
-        'gclient_apply_config': ['enable_reclient'],
-        'platform': 'linux',
-        'targets': [['all'], ['chrome']],
-    },
-    'build-perf-windows': {
-        'chromium_config': 'chromium',
-        'chromium_apply_config': ['mb'],
-        'gclient_config': 'chromium',
-        'gclient_apply_config': ['enable_reclient'],
-        'platform': 'win',
-        'targets': [['all'], ['chrome']],
-    },
-})
-
-
-def ConfigureChromiumBuilder(api, recipe_config):
-  api.chromium.set_config(
-      recipe_config['chromium_config'],
-      **recipe_config.get('chromium_config_kwargs',
-                          {'BUILD_CONFIG': 'Release'}))
-  api.gclient.set_config(recipe_config['gclient_config'],
-                         **recipe_config.get('gclient_config_kwargs', {}))
-
-  for c in recipe_config.get('chromium_apply_config', []):
-    api.chromium.apply_config(c)
-
-  for c in recipe_config.get('gclient_apply_config', []):
-    api.gclient.apply_config(c)
-
-  if recipe_config.get('android_config'):
-    api.chromium_android.configure_from_properties(
-        recipe_config.get('android_config'),
-        **recipe_config.get('chromium_config_kwargs', {}))
-
-  # Checkout chromium.
-  api.chromium_checkout.ensure_checkout()
-
-  if api.code_coverage.using_coverage:
-    api.code_coverage.src_dir = api.chromium_checkout.src_dir
-    api.code_coverage.instrument([])
-
 
 def _rm_build_dir(api):
   api.file.rmtree('rmtree %s' % str(api.chromium.output_dir),
                   str(api.chromium.output_dir))
 
 
-def _compile(api, targets, with_remote_cache):
+def _get_builder_id(api):
   buildername = api.buildbucket.builder_name
-  builder_id = chromium.BuilderId.create_for_group(
-      api.builder_group.for_current, buildername)
-  api.chromium.mb_gen(builder_id, recursive_lookup=True)
+  return chromium.BuilderId.create_for_group(api.builder_group.for_current,
+                                             buildername)
+
+
+def _compile(api, targets, with_remote_cache):
+  api.chromium.mb_gen(_get_builder_id(api), recursive_lookup=True)
   step_name = 'Build %s' % ','.join(targets)
   env = {}
   if with_remote_cache:
@@ -114,32 +59,46 @@ def _compile(api, targets, with_remote_cache):
     _rm_build_dir(api)
 
 
-def RunSteps(api):
-  buildername = api.buildbucket.builder_name
-  recipe_config = BUILD_PERF_BUILDERS[buildername]
+def _compile_with_and_without_remote_cache(api, targets):
+  # First build without remote cache.
+  raw_result = _compile(api, targets, with_remote_cache=False)
+  if raw_result.status != common_pb.SUCCESS:
+    return raw_result
 
+  # Second build with remote cache produced by the previous build.
+  return _compile(api, targets, with_remote_cache=True)
+
+
+def RunSteps(api):
   # Set up a named cache so runhooks doesn't redownload everything on each run.
   solution_path = api.path['cache'].join('builder')
   api.file.ensure_directory('init cache if not exists', solution_path)
 
-  with api.context(cwd=solution_path):
-    ConfigureChromiumBuilder(api, recipe_config)
+  _, builder_config = api.chromium_tests_builder_config.lookup_builder(
+      _get_builder_id(api), use_try_db=False)
+  api.chromium_tests.configure_build(builder_config)
+
+  api.chromium_checkout.ensure_checkout()
+
+  if api.code_coverage.using_coverage:
+    api.code_coverage.src_dir = api.chromium_checkout.src_dir
+    api.code_coverage.instrument([])
 
   with api.context(cwd=solution_path):
     api.chromium.runhooks()
 
   _rm_build_dir(api)
 
-  for targets in recipe_config['targets']:
-    # First build without remote cache.
-    raw_result = _compile(api, targets, with_remote_cache=False)
-    if raw_result.status != common_pb.SUCCESS:
-      return raw_result
+  # Build target: all
+  raw_result = _compile_with_and_without_remote_cache(api, ['all'])
+  if raw_result.status != common_pb.SUCCESS:
+    return raw_result
 
-    # Second build with remote cache produced by the previous build.
-    raw_result = _compile(api, targets, with_remote_cache=True)
-    if raw_result.status != common_pb.SUCCESS:
-      return raw_result
+  # Build target: chrome or chrome_public_apk
+  chrome_targets = ['chrome']
+  if builder_config.chromium_config == 'android':
+    chrome_targets = ['chrome_public_apk']
+  return _compile_with_and_without_remote_cache(api, chrome_targets)
 
 
 def _sanitize_nonalpha(text):
@@ -147,33 +106,80 @@ def _sanitize_nonalpha(text):
 
 
 def GenTests(api):
-  builder_group = 'chromium.fyi'
-  for buildername, recipe_config in BUILD_PERF_BUILDERS.items():
-    test_name = 'full_%s_%s' % (_sanitize_nonalpha(builder_group),
-                                _sanitize_nonalpha(buildername))
-    yield api.test(
-        test_name,
-        api.chromium.ci_build(builder_group=builder_group, builder=buildername),
-        api.reclient.properties(),
-        api.platform(recipe_config['platform'], 64),
-        api.properties(
-            buildername=buildername, buildnumber=571, configuration='Release'),
-        api.post_process(post_process.StatusSuccess),
-        api.code_coverage(use_clang_coverage=True),
-    )
+  ctbc_api = api.chromium_tests_builder_config
 
-  buildername = 'build-perf-linux'
+  # Test data.
+  builder = {
+      'builder_group': 'fake-group',
+      'builder': 'fake-builder',
+  }
+
+  yield api.test(
+      'full_linux',
+      api.chromium.ci_build(**builder),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_spec=ctbc.BuilderSpec.create(
+                  gclient_config='chromium',
+                  chromium_config='chromium',
+                  build_gs_bucket=None,
+              ),
+              **builder).assemble()),
+      api.reclient.properties(),
+      api.post_process(post_process.StatusSuccess),
+      api.code_coverage(use_clang_coverage=True),
+  )
+
+  yield api.test(
+      'full_android',
+      api.chromium.ci_build(**builder),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_spec=ctbc.BuilderSpec.create(
+                  gclient_config='chromium',
+                  gclient_apply_config=['android'],
+                  chromium_config='android',
+                  build_gs_bucket=None,
+              ),
+              **builder).assemble()),
+      api.reclient.properties(),
+      api.post_process(post_process.StatusSuccess),
+      api.code_coverage(use_clang_coverage=True),
+  )
+
+  yield api.test(
+      'full_windows',
+      api.platform('win', 64),
+      api.chromium.ci_build(**builder),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_spec=ctbc.BuilderSpec.create(
+                  gclient_config='chromium',
+                  chromium_config='chromium',
+                  build_gs_bucket=None,
+              ),
+              **builder).assemble()),
+      api.reclient.properties(),
+      api.post_process(post_process.StatusSuccess),
+      api.code_coverage(use_clang_coverage=True),
+  )
+
   for step in [
       'Build all without remote cache', 'Build all with remote cache',
       'Build chrome without remote cache', 'Build chrome with remote cache'
   ]:
     yield api.test(
         '%s_compile_fail' % (_sanitize_nonalpha(step)),
-        api.chromium.ci_build(builder_group=builder_group, builder=buildername),
+        api.chromium.ci_build(**builder),
+        ctbc_api.properties(
+            ctbc_api.properties_assembler_for_ci_builder(
+                builder_spec=ctbc.BuilderSpec.create(
+                    gclient_config='chromium',
+                    chromium_config='chromium',
+                    build_gs_bucket=None,
+                ),
+                **builder).assemble()),
         api.reclient.properties(),
-        api.properties(buildername=buildername, buildnumber=571),
-        api.platform(BUILD_PERF_BUILDERS[buildername]['platform'], 64),
-        api.properties(configuration='Release'),
         api.step_data(step, retcode=1),
         api.post_process(post_process.StatusFailure),
         api.post_process(post_process.DropExpectation),
