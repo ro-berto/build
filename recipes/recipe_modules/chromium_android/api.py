@@ -80,28 +80,30 @@ class AndroidApi(recipe_api.RecipeApi):
       include_filters: List of globs to be included in the archive.
       exclude_filters: List of globs to be excluded from the archive.
     """
-    archive_args = [
-        '--target', self.m.chromium.c.BUILD_CONFIG, '--name', archive_name
+    cmd = [
+        'python',
+        self.repo_resource('recipes', 'android', 'archive_build.py'),
+        '--target',
+        self.m.chromium.c.BUILD_CONFIG,
+        '--name',
+        archive_name,
     ]
 
     # TODO(luqui): Clean up when these are covered by the external builders.
     if files:  # pragma: no cover
-      archive_args.extend(['--files', ','.join(files)])
+      cmd.extend(['--files', ','.join(files)])
     if include_filters:
       for f in include_filters:
-        archive_args.extend(['--include-filter', f])
+        cmd.extend(['--include-filter', f])
     if exclude_filters:
       for f in exclude_filters:
-        archive_args.extend(['--exclude-filter', f])
+        cmd.extend(['--exclude-filter', f])
     if not preserve_paths:  # pragma: no cover
-      archive_args.append('--ignore-subfolder-names')
+      cmd.append('--ignore-subfolder-names')
 
-    self.m.build.python(
-        step_name,
-        self.repo_resource('recipes', 'android', 'archive_build.py'),
-        archive_args,
-        infra_step=True,
-        **kwargs)
+    with self.m.build.scripts_pythonpath():
+      self.m.step(step_name, cmd, infra_step=True, **kwargs)
+
 
   def init_and_sync(self,
                     gclient_config='android_bare',
@@ -295,45 +297,70 @@ class AndroidApi(recipe_api.RecipeApi):
 
   def spawn_logcat_monitor(self):
     with self.m.context(env=self.m.chromium.get_env()):
-      self.m.build.python(
+      self.m.step(
           'spawn_logcat_monitor',
-          self.repo_resource('recipes', 'daemonizer.py'), [
+          [
+              'python',
+              self.repo_resource('recipes', 'daemonizer.py'),
               '--',
               self.c.cr_build_android.join('adb_logcat_monitor.py'),
               self.m.chromium.c.build_dir.join('logcat'),
-              self.m.adb.adb_path()
+              self.m.adb.adb_path(),
           ],
-          infra_step=True)
+          infra_step=True,
+      )
 
   def spawn_device_monitor(self):
-    script = self.repo_resource('recipes', 'daemonizer.py')
-    args = [
-        '--action', 'restart', '--pid-file-path', '/tmp/device_monitor.pid',
-        '--', self.m.path['checkout'].join('third_party', 'catapult', 'devil',
-                                           'devil', 'android', 'tools',
-                                           'device_monitor.py'), '--adb-path',
-        self.m.adb.adb_path(), '--denylist-file', self.denylist_file
-    ]
-    self.m.build.python('spawn_device_monitor', script, args, infra_step=True)
+    device_monitor_script = self.m.path['checkout'].join(
+        'third_party', 'catapult', 'devil', 'devil', 'android', 'tools',
+        'device_monitor.py')
+    self.m.step(
+        'spawn_device_monitor',
+        [
+            'python',
+            self.repo_resource('recipes', 'daemonizer.py'),
+            '--action',
+            'restart',
+            '--pid-file-path',
+            '/tmp/device_monitor.pid',
+            '--',
+            device_monitor_script,
+            '--adb-path',
+            self.m.adb.adb_path(),
+            '--denylist-file',
+            self.denylist_file,
+        ],
+        infra_step=True,
+    )
 
   def shutdown_device_monitor(self):
-    script = self.repo_resource('recipes', 'daemonizer.py')
-    args = [
-        '--action',
-        'stop',
-        '--pid-file-path',
-        '/tmp/device_monitor.pid',
-    ]
-    self.m.build.python(
-        'shutdown_device_monitor', script, args, infra_step=True)
+    self.m.step(
+        'shutdown_device_monitor',
+        [
+            'python',
+            self.repo_resource('recipes', 'daemonizer.py'),
+            '--action',
+            'stop',
+            '--pid-file-path',
+            '/tmp/device_monitor.pid',
+        ],
+        infra_step=True,
+    )
 
   def authorize_adb_devices(self):
-    script = self.repo_resource('recipes', 'android',
-                                'authorize_adb_devices.py')
-    args = ['--verbose', '--adb-path', self.m.adb.adb_path()]
     with self.m.context(env=self.m.chromium.get_env()):
-      return self.m.build.python(
-          'authorize_adb_devices', script, args, infra_step=True)
+      return self.m.step(
+          'authorize_adb_devices',
+          [
+              'python',
+              self.repo_resource('recipes', 'android',
+                                 'authorize_adb_devices.py'),
+              '--verbose',
+              '--adb-path',
+              self.m.adb.adb_path(),
+          ],
+          infra_step=True,
+      )
 
   @property
   def denylist_file(self):

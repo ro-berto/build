@@ -29,8 +29,6 @@
     "cwd": "None",
     "env_prefixes": {
       "PYTHONPATH": [
-        "RECIPE_REPO[build]",
-        "RECIPE_REPO[build]/recipes",
         "RECIPE_REPO[build]/scripts"
       ]
     },

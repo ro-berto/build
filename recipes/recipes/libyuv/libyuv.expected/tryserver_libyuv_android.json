@@ -727,13 +727,6 @@
     "env": {
       "PATH": "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
     },
-    "env_prefixes": {
-      "PYTHONPATH": [
-        "RECIPE_REPO[build]",
-        "RECIPE_REPO[build]/recipes",
-        "RECIPE_REPO[build]/scripts"
-      ]
-    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -765,13 +758,6 @@
       "[CACHE]/builder/src/out/bad_devices.json"
     ],
     "cwd": "[CACHE]/builder",
-    "env_prefixes": {
-      "PYTHONPATH": [
-        "RECIPE_REPO[build]",
-        "RECIPE_REPO[build]/recipes",
-        "RECIPE_REPO[build]/scripts"
-      ]
-    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -798,13 +784,6 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "PATH": "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
-    },
-    "env_prefixes": {
-      "PYTHONPATH": [
-        "RECIPE_REPO[build]",
-        "RECIPE_REPO[build]/recipes",
-        "RECIPE_REPO[build]/scripts"
-      ]
     },
     "infra_step": true,
     "luci_context": {
@@ -1051,13 +1030,6 @@
       "/tmp/device_monitor.pid"
     ],
     "cwd": "[CACHE]/builder",
-    "env_prefixes": {
-      "PYTHONPATH": [
-        "RECIPE_REPO[build]",
-        "RECIPE_REPO[build]/recipes",
-        "RECIPE_REPO[build]/scripts"
-      ]
-    },
     "infra_step": true,
     "luci_context": {
       "realm": {
