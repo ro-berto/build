@@ -209,3 +209,25 @@ def GenTests(api):
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
+
+  yield api.test(
+      'omit_python2-experiment',
+      api.chromium_tests_builder_config.ci_build(
+          builder_group='fake-group',
+          builder='fake-builder',
+          builder_db=ctbc.BuilderDatabase.create({
+              'fake-group': {
+                  'fake-builder':
+                      ctbc.BuilderSpec.create(
+                          chromium_config='chromium',
+                          gclient_config='chromium',
+                      ),
+              },
+          }),
+          experiments=('luci.buildbucket.omit_python2',)),
+      api.properties(expected_gclient_vars={
+          'enable_vpython_common_crbug_1329052': 'False',
+      }),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )

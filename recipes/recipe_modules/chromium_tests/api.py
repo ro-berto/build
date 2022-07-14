@@ -168,6 +168,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     for c in builder_config.gclient_apply_config:
       self.m.gclient.apply_config(c)
 
+    # TODO(crbug.com/1329052): remove this after removing .vpython from
+    # chromium/src.
+    if ('luci.buildbucket.omit_python2' in
+        self.m.buildbucket.build.input.experiments):
+      # This disables vpython usage in DEPS hook.
+      self.m.gclient.c.solutions[0].custom_vars[
+          'enable_vpython_common_crbug_1329052'] = 'False'
+
     if (self.m.reclient.instance and
         builder_config.gclient_config != 'enable_reclient' and
         'enable_reclient' not in builder_config.gclient_apply_config):
