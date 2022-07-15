@@ -7,6 +7,7 @@ import json
 from typing import Any, Dict, List, NamedTuple, Optional, Tuple
 
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
+from google.protobuf import duration_pb2
 from recipe_engine import post_process
 
 PYTHON_VERSION_COMPATIBILITY = "PY3"
@@ -235,6 +236,22 @@ def RunSteps(api):
   if _should_skip_linting(api):
     return
 
+  # Limit children to a fraction of our timeout. If our timeout is very
+  # long, 1 hour should be plenty.
+  #
+  # Child timeouts are most often caused by one of two things:
+  #  1. Massive CLs
+  #  2. Children trying very hard to find a header file (that other children
+  #     were able to promptly find).
+  #
+  # In the former case, there's not much we can do to speed things up. In the
+  # latter, our goal should be to post the lints of the children that finished
+  # before the timeout, rather than having the orchestrator itself time out and
+  # drop that information on the floor.
+  my_execution_timeout = api.buildbucket.build.execution_timeout
+  child_execution_timeout_secs = min(my_execution_timeout.ToSeconds() // 2,
+                                     3600)
+
   with api.step.nest('schedule tidy builds'):
     build_requests = [
         api.buildbucket.schedule_request(
@@ -243,11 +260,17 @@ def RunSteps(api):
             tags=api.buildbucket.tags(**{'hide-in-gerrit': 'true'}),
         ) for x in _CHILD_BUILDERS
     ]
+
+    for req in build_requests:
+      req.execution_timeout.FromSeconds(child_execution_timeout_secs)
+
     builds = api.buildbucket.schedule(build_requests, step_name='schedule')
     build_ids = [x.id for x in builds]
     build_dict = api.buildbucket.collect_builds(
         build_ids,
         fields=('output', 'status'),
+        # Multiply by 1.5 here to account for slack in scheduling/etc.
+        timeout=int(child_execution_timeout_secs * 1.5),
     )
 
     num_failures = sum(
