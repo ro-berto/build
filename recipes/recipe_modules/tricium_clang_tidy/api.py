@@ -212,7 +212,7 @@ class TriciumClangTidyApi(RecipeApi):
         '--findings_file=%s' % warnings_file,
         '--clang_tidy_binary=%s' % clang_tidy_location,
         '--base_path=%s' % self.m.context.cwd,
-        '--ninja_jobs=%s' % self.m.goma.recommended_goma_jobs,
+        '--ninja_jobs=%s' % self.m.goma.jobs,
         '--verbose',
     ]
 
