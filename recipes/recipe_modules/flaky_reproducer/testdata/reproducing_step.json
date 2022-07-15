@@ -27,7 +27,7 @@
       "MockUnitTests.CrashTest",
       "MockUnitTests.PassTest"
     ],
-    "repeat": 3,
+    "repeat": 1,
     "parallel_jobs": 5,
     "single_batch": true
   },

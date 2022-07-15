@@ -16,7 +16,8 @@ class ReproducingStep:
       binary could rerun the test multiple times and only need to fail once to
       be counted as reproduced.
     duration (int): Duration in milliseconds of the total running time of the
-      given test binary. It should contains all the retries if applied.
+      given test binary. It should contain all the repeats included in test
+      binary options.
   """
 
   def __init__(self, test_binary, reproducing_rate=0, duration=0, **other):
@@ -24,6 +25,10 @@ class ReproducingStep:
     self.reproducing_rate = reproducing_rate
     self.duration = duration
     self.debug_info = other
+
+  def __bool__(self):
+    """Return true if reproduced."""
+    return self.reproducing_rate > 0.0
 
   def to_jsonish(self):
     ret = dict(

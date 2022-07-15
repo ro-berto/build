@@ -53,6 +53,10 @@ class GTestTestBinary(TestBinaryWithBatchMixin, TestBinaryWithParallelMixin,
     if self.repeat:
       cmd.append("--isolated-script-test-repeat={0}".format(self.repeat))
     if self.single_batch:
+      if self.repeat and self.repeat > 1:
+        raise Exception(
+            "Can't repeat the tests with single batch in GTest. See "
+            "//base/test/launcher/test_launcher.cc")
       cmd.append("--test-launcher-batch-limit=0")
     if self.parallel_jobs:
       cmd.append("--test-launcher-jobs={0}".format(self.parallel_jobs))
@@ -66,9 +70,11 @@ class GTestTestBinary(TestBinaryWithBatchMixin, TestBinaryWithParallelMixin,
     output_json = None
     try:
       if self.tests and len(self.tests) >= 10:
-        fp = tempfile.NamedTemporaryFile(suffix='.filter', delete=False)
+        # pylint: disable=unexpected-keyword-arg
+        fp = tempfile.NamedTemporaryFile(
+            mode='w', suffix='.filter', delete=False, encoding='utf8')
         tmp_files.append(fp.name)
-        fp.writelines(self.tests)
+        fp.write('\n'.join(self.tests))
         fp.close()
         filter_file = fp.name
 

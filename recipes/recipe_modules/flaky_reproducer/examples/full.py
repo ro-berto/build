@@ -45,12 +45,20 @@ from PB.go.chromium.org.luci.resultdb.proto.v1 import (
 
 
 def GenTests(api):
-  success_swarming_result = api.swarming.task_result(
-      id='0',
-      name='flaky reproducer strategy repeat for MockUnitTests.FailTest',
-      state=api.swarming.TaskState.COMPLETED,
-      output='some-output',
-      outputs=('reproducing_step.json',))
+  success_swarming_results = [
+      api.swarming.task_result(
+          id='0',
+          name='flaky reproducer strategy repeat for MockUnitTests.FailTest',
+          state=api.swarming.TaskState.COMPLETED,
+          output='some-output',
+          outputs=('reproducing_step.json',)),
+      api.swarming.task_result(
+          id='1',
+          name='flaky reproducer strategy batch for MockUnitTests.FailTest',
+          state=api.swarming.TaskState.COMPLETED,
+          output='some-output',
+          outputs=()),
+  ]
   resultdb_invocation = api.resultdb.Invocation(
       proto=invocation_pb2.Invocation(
           state=invocation_pb2.Invocation.FINALIZED,
@@ -106,7 +114,7 @@ def GenTests(api):
           )),
   ])
   verify_swarming_result = api.swarming.task_result(
-      id='1',
+      id='2',
       name='flaky reproducer verify on Linux Tests for MockUnitTests.FailTest',
       state=api.swarming.TaskState.COMPLETED,
       output='some-output',
@@ -130,7 +138,7 @@ def GenTests(api):
                   api.flaky_reproducer.get_test_data(
                       'gtest_task_request.json')))),
       api.step_data('collect strategy results',
-                    api.swarming.collect([success_swarming_result])),
+                    api.swarming.collect(success_swarming_results)),
       api.step_data(
           'load ReproducingStep',
           api.file.read_json(

@@ -4,7 +4,9 @@
 
 from .reproducing_step import ReproducingStep
 from .repeat_strategy import RepeatStrategy
+from .batch_strategy import BatchStrategy
 
 strategies = {
     RepeatStrategy.name: RepeatStrategy,
+    BatchStrategy.name: BatchStrategy,
 }

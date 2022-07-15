@@ -16,7 +16,7 @@ from libs.strategies.repeat_strategy import RepeatStrategy
 from testdata import get_test_data
 
 
-class BaseStrategyTest(unittest.TestCase):
+class RepeatStrategyTest(unittest.TestCase):
 
   def setUp(self):
     self.test_binary = create_test_binary_from_jsonish(

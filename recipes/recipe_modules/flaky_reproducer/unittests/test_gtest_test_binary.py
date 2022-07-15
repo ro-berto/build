@@ -107,14 +107,15 @@ class GTestTestBinaryTest(unittest.TestCase):
   def test_run_tests_with_multiple_tests(self, mock_unlink, mock_run_cmd):
     test_binary = self.test_binary.strip_for_bots()
     test_binary.with_tests(['MockUnitTests.CrashTest'] * 10).run()
-    mock_run_cmd.assert_called_once_with([
-        'vpython3', '../../testing/test_env.py', './base_unittests.exe',
-        '--test-launcher-bot-mode', '--asan=0', '--lsan=0', '--msan=0',
-        '--tsan=0', '--cfi-diag=0', '--test-launcher-retry-limit=0',
-        '--test-launcher-filter-file=/mock-tmp/mock-temp-1.filter',
-        '--test-launcher-summary-output=/mock-tmp/mock-temp-2.json'
-    ],
-                                         cwd=test_binary.cwd)
+    mock_run_cmd.assert_called_once_with(
+        [
+            'vpython3', '../../testing/test_env.py', './base_unittests.exe',
+            '--test-launcher-bot-mode', '--asan=0', '--lsan=0', '--msan=0',
+            '--tsan=0', '--cfi-diag=0', '--test-launcher-retry-limit=0',
+            '--test-launcher-filter-file=/mock-tmp/mock-temp-1.filter',
+            '--test-launcher-summary-output=/mock-tmp/mock-temp-2.json'
+        ],  #
+        cwd=test_binary.cwd)
     mock_unlink.assert_called()
 
   def test_readable_command(self):
@@ -172,3 +173,16 @@ EOF
       test_binary\
         .with_tests(['MockUnitTests.CrashTest']*10)\
         .as_command()
+
+  @patch('os.unlink')
+  def test_with_single_batch_with_repeat_raise_error(self, mock_unlink):
+    self.test_binary.with_single_batch().as_command()
+    with self.assertRaisesRegex(
+        Exception, "Can't repeat the tests with single batch in GTest."):
+      self.test_binary.with_single_batch().with_repeat(2).as_command()
+    with self.assertRaisesRegex(
+        Exception, "Can't repeat the tests with single batch in GTest."):
+      self.test_binary.with_single_batch().with_repeat(2).run()
+    with self.assertRaisesRegex(
+        Exception, "Can't repeat the tests with single batch in GTest."):
+      self.test_binary.with_single_batch().with_repeat(2).readable_command()

@@ -18,6 +18,7 @@ class ReproducingStepTest(unittest.TestCase):
     self.assertEqual(step.duration, 123)
     self.assertEqual(step.debug_info['reproduced_cnt'], 1)
     self.assertEqual(step.debug_info['total_retries'], 30)
+    self.assertTrue(step)
     return step
 
   def test_to_jsonish(self):
@@ -36,7 +37,7 @@ class ReproducingStepTest(unittest.TestCase):
          ' --test-launcher-bot-mode --asan=0 --lsan=0 --msan=0 --tsan=0'
          ' --cfi-diag=0 --test-launcher-retry-limit=0 '
          '--isolated-script-test-filter=MockUnitTests.CrashTest'
-         ':MockUnitTests.PassTest --isolated-script-test-repeat=3 '
+         ':MockUnitTests.PassTest --isolated-script-test-repeat=1 '
          '--test-launcher-batch-limit=0 --test-launcher-jobs=5'))
 
   def test_readable_info_not_reproduced(self):
@@ -47,11 +48,14 @@ class ReproducingStepTest(unittest.TestCase):
                      'This failure was NOT reproduced on Windows-11-22000.')
 
   def test_better_than(self):
+    step_0 = ReproducingStep(None, 0)
     step_50 = ReproducingStep(None, 0.5, 123)
     step_60 = ReproducingStep(None, 0.6, 123)
     step_90 = ReproducingStep(None, 0.9, 12)
     step_92 = ReproducingStep(None, 0.92, 123)
     step_95 = ReproducingStep(None, 0.95, 123)
+    self.assertFalse(step_0)
+    self.assertTrue(step_50.better_than(step_0))
     self.assertTrue(step_60.better_than(step_50))
     self.assertTrue(step_90.better_than(step_60))
     self.assertTrue(step_90.better_than(step_92))

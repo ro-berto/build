@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import logging
 import math
 import time
 
@@ -24,6 +25,8 @@ class RepeatStrategy(BaseStrategy):
     reproduced = 0
     running_history = []
     failing_sample = self.result_summary.get_failing_sample(self.test_name)
+    logging.info('Running %s strategy for %s with reason: %s', self.name,
+                 self.test_name, failing_sample.primary_error_message)
     single_round_retries = self._calc_single_round_retries()
     while (reproduced < 3 and len(running_history) < self.MAX_RETRIES and
            time.time() < deadline):
@@ -67,7 +70,7 @@ class RepeatStrategy(BaseStrategy):
                             avg_duration)
     failure_rate = reproduced_cnt * 1.0 / len(running_history)
     suggested_repeat = min(
-        max_retries,
+        self.MAX_RETRIES, max_retries,
         utils.calc_repeat_times_based_on_failing_rate(
             self.TARGET_REPRODUCING_RATE, failure_rate))
     reproducing_rate = 1.0 - (1 - failure_rate)**suggested_repeat
