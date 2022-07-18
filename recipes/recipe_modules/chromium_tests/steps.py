@@ -2873,19 +2873,6 @@ class SkylabTestSpec(TestSpec):
   # Revisit this when we integrate CQ to Skylab.
   retries = attrib(int, default=3)
 
-  @classmethod
-  def create(cls, name, **kwargs):
-    """Create a SkylabTestSpec.
-
-    Arguments:
-      * name - The name of the test.
-      * kwargs - Keyword arguments to initialize the attributes of the
-        SkylabTestSpec.
-    """
-    rdb_kwargs = kwargs.pop('resultdb', {})
-    return super(SkylabTestSpec, cls).create(
-        name, resultdb=ResultDB.create(**rdb_kwargs), **kwargs)
-
   @property
   def test_class(self):
     return SkylabTest
