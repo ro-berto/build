@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import argparse
+import logging
 import json
 import os
 import sys
@@ -48,6 +49,7 @@ def parse_args(args):
 def main(args):
   """Entrypoint for the execution of a strategy on a swarming task."""
   args = parse_args(args)
+  logging.getLogger().setLevel(logging.INFO)
 
   test_binary = create_test_binary_from_jsonish(json.load(args.test_binary))
   result_summary = create_result_summary_from_output_json(

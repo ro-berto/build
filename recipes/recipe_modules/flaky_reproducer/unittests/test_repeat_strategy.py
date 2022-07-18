@@ -8,32 +8,19 @@ from unittest.mock import patch
 
 from libs.test_binary import create_test_binary_from_jsonish
 from libs.test_binary.gtest_test_binary import GTestTestBinary
-from libs.result_summary import (create_result_summary_from_output_json,
-                                 TestStatus)
-from libs.result_summary.gtest_result_summary import (GTestTestResultSummary,
-                                                      GTestTestResult)
+from libs.result_summary import create_result_summary_from_output_json
 from libs.strategies.repeat_strategy import RepeatStrategy
 from testdata import get_test_data
+from . import GenerateResultSummaryMixin
 
 
-class RepeatStrategyTest(unittest.TestCase):
+class RepeatStrategyTest(unittest.TestCase, GenerateResultSummaryMixin):
 
   def setUp(self):
     self.test_binary = create_test_binary_from_jsonish(
         json.loads(get_test_data('gtest_test_binary.json')))
     self.result_summary = create_result_summary_from_output_json(
         json.loads(get_test_data('gtest_good_output.json')))
-
-  def generate_result_summary(self, test_name, seq, **kwargs):
-    result_summary = GTestTestResultSummary()
-    for s in seq:
-      result_summary.add(
-          GTestTestResult(
-              test_name,
-              expected=(s == 'P'),
-              status=(TestStatus.PASS if s == 'P' else TestStatus.FAIL),
-              **kwargs))
-    return result_summary
 
   @patch.object(GTestTestBinary, 'run')
   def test_run_reproduced(self, mock_test_binary_run):

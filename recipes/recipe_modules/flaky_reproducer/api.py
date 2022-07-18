@@ -171,11 +171,10 @@ class FlakyReproducer(recipe_api.RecipeApi):
       A list of Strategy objects that can be applied to the test.
     """
     chosen_strategies = []
-    # TODO(kuanhuang): actually return strategies that can be applied to the
-    # test case.
     for strategy_cls in strategies.values():
-      chosen_strategies.append(
-          strategy_cls(test_binary, result_summary, test_name))
+      strategy = strategy_cls(test_binary, result_summary, test_name)
+      if strategy.valid_for_test():
+        chosen_strategies.append(strategy)
     return chosen_strategies
 
   def collect_strategy_result(self, task_result):
@@ -192,7 +191,7 @@ class FlakyReproducer(recipe_api.RecipeApi):
     """Chooses the best ReproducingStep produced by the strategies."""
     best_step = None
     for step in reproducing_steps:
-      if not best_step or step.better_tan(best_step):
+      if not best_step or step.better_than(best_step):
         best_step = step
     return best_step
 

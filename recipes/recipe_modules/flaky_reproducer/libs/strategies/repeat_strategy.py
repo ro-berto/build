@@ -73,7 +73,7 @@ class RepeatStrategy(BaseStrategy):
         self.MAX_RETRIES, max_retries,
         utils.calc_repeat_times_based_on_failing_rate(
             self.TARGET_REPRODUCING_RATE, failure_rate))
-    reproducing_rate = 1.0 - (1 - failure_rate)**suggested_repeat
+    reproducing_rate = 1.0 - (1.0 - failure_rate)**suggested_repeat
     test_binary = (
         self.test_binary  # go/pyformat-break
         .with_tests([self.test_name])  #

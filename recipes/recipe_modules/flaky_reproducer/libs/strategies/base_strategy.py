@@ -14,6 +14,15 @@ class BaseStrategy:
     self.result_summary = result_summary
     self.test_name = test_name
 
+  def valid_for_test(self):
+    """Verify if the strategy is valid for the given test.
+
+    For example, batch strategy is not valid for a test_binary without batch
+    support, or is running tests in 1 batch.
+    This method is meant to run in recipe side.
+    """
+    return True
+
   def run(self, timeout=45 * 60):
     """Run the strategy logic.
 

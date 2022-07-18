@@ -112,7 +112,7 @@
       "    return func(self, *args, **kwargs)",
       "  File \"RECIPE_REPO[build]/recipes/recipe_modules/flaky_reproducer/api.py\", line 103, in get_test_binary",
       "    test_binary = create_test_binary_from_task_request(task_request)",
-      "  File \"RECIPE_REPO[build]/recipes/recipe_modules/flaky_reproducer/libs/test_binary/__init__.py\", line 15, in create_test_binary_from_task_request",
+      "  File \"RECIPE_REPO[build]/recipes/recipe_modules/flaky_reproducer/libs/test_binary/__init__.py\", line 17, in create_test_binary_from_task_request",
       "    return GTestTestBinary.from_task_request(task_request)",
       "  File \"RECIPE_REPO[build]/recipes/recipe_modules/flaky_reproducer/libs/test_binary/base_test_binary.py\", line 54, in from_task_request",
       "    raise ValueError(\"No TaskSlice found in the TaskRequest.\")",

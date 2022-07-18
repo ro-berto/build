@@ -3,10 +3,13 @@
 # found in the LICENSE file.
 
 from .reproducing_step import ReproducingStep
-from .repeat_strategy import RepeatStrategy
+
 from .batch_strategy import BatchStrategy
+from .parallel_strategy import ParallelStrategy
+from .repeat_strategy import RepeatStrategy
 
 strategies = {
-    RepeatStrategy.name: RepeatStrategy,
     BatchStrategy.name: BatchStrategy,
+    ParallelStrategy.name: ParallelStrategy,
+    RepeatStrategy.name: RepeatStrategy,
 }

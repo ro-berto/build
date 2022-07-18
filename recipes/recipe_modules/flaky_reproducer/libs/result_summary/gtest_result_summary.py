@@ -56,7 +56,7 @@ def parse_timestamp(time_str):
   # Convert to python supported ISO 8601 format.
   if time_str.endswith('Z'):
     time_str = time_str[:-1] + '+00:00'
-  return int(datetime.fromisoformat(time_str).timestamp())
+  return datetime.fromisoformat(time_str).timestamp()
 
 
 class GTestTestResultSummary(BaseResultSummary):

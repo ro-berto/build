@@ -8,6 +8,7 @@ import time
 
 from .base_strategy import BaseStrategy
 from .reproducing_step import ReproducingStep
+from ..test_binary import TestBinaryWithBatchMixin
 
 
 class BatchStrategy(BaseStrategy):
@@ -21,6 +22,18 @@ class BatchStrategy(BaseStrategy):
     self.failing_sample = None
     self.deadline = None
     self.repeat = self.MAX_REPEAT
+
+  def valid_for_test(self):
+    if not isinstance(self.test_binary, TestBinaryWithBatchMixin):
+      return False
+    self.failing_sample = self.result_summary.get_failing_sample(
+        self.test_name, default=None)
+    if not self.failing_sample or self.failing_sample.batch_id is None:
+      return False
+    batch_tests = self._get_batch_tests()
+    if not batch_tests:
+      return False
+    return True
 
   def run(self, timeout=45 * 60):
     self.failing_sample = self.result_summary.get_failing_sample(
@@ -87,7 +100,9 @@ class BatchStrategy(BaseStrategy):
     for test in test_history:
       if self.failing_sample.similar_with(test):
         reproduced += 1
-    logging.info('verify_batch_tests(%r) => reproduced=%d', tests, reproduced)
+    logging.info('verify_batch_tests(%r) => reproduced=%d/%d:%s',
+                 test_binary.tests, reproduced, self.repeat,
+                 ''.join([t.status.name[0] for t in test_history]))
     return reproduced, test_binary, test_history
 
   def _get_batch_tests(self):

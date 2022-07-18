@@ -72,8 +72,8 @@ class TestResult(object):
       immediately fatal failure should be chosen, or otherwise the first
       expectation failure.
 
-    start_time (int|None): The point in time when the test case started to
-      execute.
+    start_time (float|None): The point in time (in seconds) when the test case
+      started to execute.
 
     duration (int|None): Duration in milliseconds of the test case execution.
       MUST be equal to or greater than 0.
