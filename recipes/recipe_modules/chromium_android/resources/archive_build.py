@@ -2,7 +2,6 @@
 # Copyright 2014 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
-
 """A tool to archive an Android build.
 
   This script is used for Debug and Release builds.
@@ -21,9 +20,13 @@ import sys
 from common import chromium_utils
 
 
-def archive_build(target='Debug', name='archive.zip', location='out',
-                  files=None, ignore_subfolder_names=False,
-                  include_filters=None, exclude_filters=None):
+def archive_build(target='Debug',
+                  name='archive.zip',
+                  location='out',
+                  files=None,
+                  ignore_subfolder_names=False,
+                  include_filters=None,
+                  exclude_filters=None):
   out_dir = 'out'
   target_dir = os.path.join(out_dir, target)
   zip_file = os.path.join(location, name)
@@ -57,25 +60,34 @@ def archive_build(target='Debug', name='archive.zip', location='out',
 def main(argv):
   option_parser = optparse.OptionParser()
 
-  option_parser.add_option('--target', default='Debug',
-                           help='build target to archive (Debug or Release)')
-  option_parser.add_option('--name', default='archive.zip',
-                           help='name of archive')
-  option_parser.add_option('--location', default='out',
-                           help='location to store archive in')
-  option_parser.add_option('--files',
-                           help='list of files to include - can be file paths '
-                                'or globs')
-  option_parser.add_option('--include-filter', action='append',
-                           dest='include_filters',
-                           help='glob to include. May be repeated.')
-  option_parser.add_option('--exclude-filter', action='append',
-                           dest='exclude_filters',
-                           help='glob to exclude. May be repeated.')
-  option_parser.add_option('--ignore-subfolder-names',
-                           dest='ignore_subfolder_names',
-                           action='store_true', default=False,
-                           help='archive files without folder structure')
+  option_parser.add_option(
+      '--target',
+      default='Debug',
+      help='build target to archive (Debug or Release)')
+  option_parser.add_option(
+      '--name', default='archive.zip', help='name of archive')
+  option_parser.add_option(
+      '--location', default='out', help='location to store archive in')
+  option_parser.add_option(
+      '--files',
+      help='list of files to include - can be file paths '
+      'or globs')
+  option_parser.add_option(
+      '--include-filter',
+      action='append',
+      dest='include_filters',
+      help='glob to include. May be repeated.')
+  option_parser.add_option(
+      '--exclude-filter',
+      action='append',
+      dest='exclude_filters',
+      help='glob to exclude. May be repeated.')
+  option_parser.add_option(
+      '--ignore-subfolder-names',
+      dest='ignore_subfolder_names',
+      action='store_true',
+      default=False,
+      help='archive files without folder structure')
   options, args = option_parser.parse_args()
   if args:
     raise Exception('Unknown arguments: %s' % args)
@@ -83,11 +95,14 @@ def main(argv):
   if options.files:
     options.files = options.files.split(',')
 
-  return archive_build(target=options.target, name=options.name,
-                       location=options.location, files=options.files,
-                       ignore_subfolder_names=options.ignore_subfolder_names,
-                       include_filters=options.include_filters,
-                       exclude_filters=options.exclude_filters)
+  return archive_build(
+      target=options.target,
+      name=options.name,
+      location=options.location,
+      files=options.files,
+      ignore_subfolder_names=options.ignore_subfolder_names,
+      include_filters=options.include_filters,
+      exclude_filters=options.exclude_filters)
 
 
 if '__main__' == __name__:

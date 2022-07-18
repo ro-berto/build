@@ -12,11 +12,10 @@ import sys
 import zipfile
 
 BASE_DIR = os.path.join(
-    os.path.dirname(os.path.abspath(__file__)), '..', '..', '..'
-)
+    os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '..')
 sys.path.append(os.path.join(BASE_DIR, 'scripts'))
 
-from recipes.android import archive_build
+import archive_build
 from common import archive_utils_unittest
 
 BINARY_FILES = [
@@ -53,9 +52,8 @@ class ArchiveTest(unittest.TestCase):
     # Create test files
     archive_utils_unittest.CreateFileSetInDir(self.src_dir, SOURCE_FILES)
     archive_utils_unittest.CreateFileSetInDir(self.target_dir, BINARY_FILES)
-    archive_utils_unittest.CreateFileSetInDir(
-        self.target_dir, INTERMEDIATE_FILES
-    )
+    archive_utils_unittest.CreateFileSetInDir(self.target_dir,
+                                              INTERMEDIATE_FILES)
     os.chdir(self.src_dir)
 
   def tearDown(self):
@@ -102,8 +100,7 @@ class ArchiveTest(unittest.TestCase):
         self.target,
         name=self.zip_file,
         location='out',
-        ignore_subfolder_names=True
-    )
+        ignore_subfolder_names=True)
     zip_file_path = os.path.join(self.out_dir, self.zip_file)
 
     self.assertTrue(os.path.exists(zip_file_path))
@@ -115,8 +112,7 @@ class ArchiveTest(unittest.TestCase):
   def testArchiveBuildWithFiles(self):
     files = ['*dir1/test3.o', '../../a.cpp']
     archive_build.archive_build(
-        self.target, name=self.zip_file, location='out', files=files
-    )
+        self.target, name=self.zip_file, location='out', files=files)
     zip_file_path = os.path.join(self.out_dir, self.zip_file)
 
     self.assertTrue(os.path.exists(zip_file_path))
@@ -132,8 +128,7 @@ class ArchiveTest(unittest.TestCase):
         self.target,
         name=self.zip_file,
         location='out',
-        include_filters=include_filters
-    )
+        include_filters=include_filters)
     zip_file_path = os.path.join(self.out_dir, self.zip_file)
 
     self.assertTrue(os.path.exists(zip_file_path))
@@ -151,8 +146,7 @@ class ArchiveTest(unittest.TestCase):
         self.target,
         name=self.zip_file,
         location='out',
-        exclude_filters=exclude_filters
-    )
+        exclude_filters=exclude_filters)
     zip_file_path = os.path.join(self.out_dir, self.zip_file)
 
     self.assertTrue(os.path.exists(zip_file_path))

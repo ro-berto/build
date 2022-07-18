@@ -171,7 +171,7 @@
   {
     "cmd": [
       "python",
-      "RECIPE_REPO[build]/recipes/android/archive_build.py",
+      "RECIPE_MODULE[build::chromium_android]/resources/archive_build.py",
       "--target",
       "Release",
       "--name",

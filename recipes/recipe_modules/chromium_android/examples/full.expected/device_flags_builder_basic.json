@@ -959,7 +959,7 @@
   {
     "cmd": [
       "python",
-      "RECIPE_REPO[build]/recipes/android/authorize_adb_devices.py",
+      "RECIPE_MODULE[build::chromium_android]/resources/authorize_adb_devices.py",
       "--verbose",
       "--adb-path",
       "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb"

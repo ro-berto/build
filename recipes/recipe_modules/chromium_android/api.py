@@ -82,7 +82,7 @@ class AndroidApi(recipe_api.RecipeApi):
     """
     cmd = [
         'python',
-        self.repo_resource('recipes', 'android', 'archive_build.py'),
+        self.resource('archive_build.py'),
         '--target',
         self.m.chromium.c.BUILD_CONFIG,
         '--name',
@@ -353,8 +353,7 @@ class AndroidApi(recipe_api.RecipeApi):
           'authorize_adb_devices',
           [
               'python',
-              self.repo_resource('recipes', 'android',
-                                 'authorize_adb_devices.py'),
+              self.resource('authorize_adb_devices.py'),
               '--verbose',
               '--adb-path',
               self.m.adb.adb_path(),
