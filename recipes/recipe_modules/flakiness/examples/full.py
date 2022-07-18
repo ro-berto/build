@@ -11,7 +11,8 @@ from RECIPE_MODULES.build.chromium_tests import steps
 from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 
 from PB.go.chromium.org.luci.buildbucket.proto import build as build_pb2
-from PB.go.chromium.org.luci.buildbucket.proto import builder as builder_pb2
+from PB.go.chromium.org.luci.buildbucket.proto \
+  import builder_common as builder_common_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
 from PB.go.chromium.org.luci.resultdb.proto.v1 \
     import common as resultdb_common
@@ -76,7 +77,7 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  builder = builder_pb2.BuilderID(
+  builder = builder_common_pb2.BuilderID(
       builder='fake-try-builder', project='chromium', bucket='try')
 
   def _generate_variant(**kwargs):

@@ -6,7 +6,8 @@ import attr
 
 from recipe_engine import post_process
 from PB.go.chromium.org.luci.buildbucket.proto import build as build_pb2
-from PB.go.chromium.org.luci.buildbucket.proto import builder as builder_pb2
+from PB.go.chromium.org.luci.buildbucket.proto \
+  import builder_common as builder_common_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
 from PB.go.chromium.org.luci.resultdb.proto.v1 import common as rdb_common_pb2
 from PB.go.chromium.org.luci.resultdb.proto.v1 \
@@ -96,7 +97,7 @@ def RunSteps(api):
 
 def GenTests(api):
   basic_build = build_pb2.Build(
-      builder=builder_pb2.BuilderID(
+      builder=builder_common_pb2.BuilderID(
           builder='Builder', project='chromium', bucket='try'),
       infra=build_pb2.BuildInfra(
           resultdb=build_pb2.BuildInfra.ResultDB(invocation='invocations/100')),

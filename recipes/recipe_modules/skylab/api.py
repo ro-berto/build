@@ -11,7 +11,8 @@ from recipe_engine import recipe_api
 
 from RECIPE_MODULES.build.chromium_tests.resultdb import ResultDB
 
-from PB.go.chromium.org.luci.buildbucket.proto import builder as builder_pb2
+from PB.go.chromium.org.luci.buildbucket.proto \
+  import builder_common as builder_common_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import (builds_service as
                                                        builds_service_pb2)
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
@@ -184,7 +185,7 @@ class SkylabApi(recipe_api.RecipeApi):
       for t, ctp_build_id in ctp_by_tag.items():
         builds = self.m.buildbucket.search(
             builds_service_pb2.BuildPredicate(
-                builder=builder_pb2.BuilderID(
+                builder=builder_common_pb2.BuilderID(
                     project='chromeos',
                     bucket='test_runner',
                     builder='test_runner',

@@ -5,7 +5,7 @@
 from PB.go.chromium.org.luci.buildbucket.proto.builds_service import (
         BuildPredicate)
 from PB.go.chromium.org.luci.buildbucket.proto.build import Build
-from PB.go.chromium.org.luci.buildbucket.proto.builder import BuilderID
+from PB.go.chromium.org.luci.buildbucket.proto.builder_common import BuilderID
 from PB.go.chromium.org.luci.buildbucket.proto.common import (
     FAILURE, INFRA_FAILURE, SCHEDULED, STARTED, SUCCESS,
     GerritChange, StringPair,

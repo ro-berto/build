@@ -13,7 +13,8 @@ from RECIPE_MODULES.build.chromium import BuilderId
 from PB.recipe_modules.build.chromium_tests_builder_config import (properties as
                                                                    properties_pb
                                                                   )
-from PB.go.chromium.org.luci.buildbucket.proto import builder as builder_pb
+from PB.go.chromium.org.luci.buildbucket.proto \
+  import builder_common as builder_common_pb2
 
 PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
@@ -184,7 +185,7 @@ def GenTests(api):
               builder_config=properties_pb.BuilderConfig(
                   builder_db=properties_pb.BuilderDatabase(entries=[
                       properties_pb.BuilderDatabase.Entry(
-                          builder_id=builder_pb.BuilderID(
+                          builder_id=builder_common_pb2.BuilderID(
                               project='fake-project',
                               bucket='ci',
                               builder='fake-builder',
@@ -206,7 +207,7 @@ def GenTests(api):
                           ),
                       ),
                       properties_pb.BuilderDatabase.Entry(
-                          builder_id=builder_pb.BuilderID(
+                          builder_id=builder_common_pb2.BuilderID(
                               project='fake-project',
                               bucket='ci',
                               builder='fake-tester',
@@ -214,7 +215,7 @@ def GenTests(api):
                           builder_spec=properties_pb.BuilderSpec(
                               builder_group='fake-group',
                               execution_mode='TEST',
-                              parent=builder_pb.BuilderID(
+                              parent=builder_common_pb2.BuilderID(
                                   project='fake-project',
                                   bucket='ci',
                                   builder='fake-builder',
@@ -234,14 +235,14 @@ def GenTests(api):
                       ),
                   ]),
                   builder_ids=[
-                      builder_pb.BuilderID(
+                      builder_common_pb2.BuilderID(
                           project='fake-project',
                           bucket='ci',
                           builder='fake-builder',
                       ),
                   ],
                   builder_ids_in_scope_for_testing=[
-                      builder_pb.BuilderID(
+                      builder_common_pb2.BuilderID(
                           project='fake-project',
                           bucket='ci',
                           builder='fake-tester',

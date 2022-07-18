@@ -10,7 +10,8 @@ from recipe_engine import recipe_test_api
 from RECIPE_MODULES.build.attr_utils import attrs, attrib, enum
 from RECIPE_MODULES.build.chromium import BuilderId
 
-from PB.go.chromium.org.luci.buildbucket.proto import builder as builder_pb
+from PB.go.chromium.org.luci.buildbucket.proto \
+  import builder_common as builder_common_pb
 from PB.recipe_modules.build.chromium_tests_builder_config import (properties as
                                                                    properties_pb
                                                                   )
@@ -53,7 +54,7 @@ class BuilderDetails(object):
   # Private fields, controlled by the properties assemblers and cannot be
   # set by the caller
   execution_mode = attrib(enum(_ExecutionMode.values()))
-  parent = attrib(builder_pb.BuilderID, default=None)
+  parent = attrib(builder_common_pb.BuilderID, default=None)
 
 
 class _PropertiesAssembler(object):
@@ -74,7 +75,7 @@ class _PropertiesAssembler(object):
             **kwargs))
 
   def add_builder(self, details):
-    builder_id = builder_pb.BuilderID(
+    builder_id = builder_common_pb.BuilderID(
         project=details.project,
         bucket=details.bucket,
         builder=details.builder,

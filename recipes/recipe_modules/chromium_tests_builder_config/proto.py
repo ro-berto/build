@@ -33,7 +33,8 @@ import collections
 from RECIPE_MODULES.build.chromium import BuilderId
 from RECIPE_MODULES.build import proto_validation
 
-from PB.go.chromium.org.luci.buildbucket.proto import builder as builder_pb
+from PB.go.chromium.org.luci.buildbucket.proto \
+  import builder_common as builder_common_pb
 from PB.recipe_modules.build.chromium_tests_builder_config import (properties as
                                                                    properties_pb
                                                                   )
@@ -48,7 +49,7 @@ def _builder_key(builder_id):
   return (builder_id.project, builder_id.bucket, builder_id.builder)
 
 
-@VALIDATORS.register(builder_pb.BuilderID)
+@VALIDATORS.register(builder_common_pb.BuilderID)
 def _validate_builder_id(obj, ctx):
   ctx.validate_field(obj, 'project')
   ctx.validate_field(obj, 'bucket')

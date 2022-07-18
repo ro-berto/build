@@ -11,7 +11,6 @@ from RECIPE_MODULES.build.chromium_tests_builder_config import try_spec
 from RECIPE_MODULES.depot_tools.tryserver import api as tryserver
 
 from PB.go.chromium.org.luci.buildbucket.proto import build as build_pb2
-from PB.go.chromium.org.luci.buildbucket.proto import builder as builder_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
 from PB.go.chromium.org.luci.resultdb.proto.v1 \
     import common as resultdb_common

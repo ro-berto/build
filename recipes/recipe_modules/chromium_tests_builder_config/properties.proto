@@ -5,7 +5,7 @@ syntax = "proto3";
 
 package recipe_modules.build.chromium_tests_builder_config;
 
-import "go.chromium.org/luci/buildbucket/proto/builder.proto";
+import "go.chromium.org/luci/buildbucket/proto/builder_common.proto";
 
 // The details configuring execution for a single builder
 //

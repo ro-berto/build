@@ -6,7 +6,8 @@ from recipe_engine import post_process
 
 from RECIPE_MODULES.build.chromium_tests_builder_config import proto
 
-from PB.go.chromium.org.luci.buildbucket.proto import builder as builder_pb
+from PB.go.chromium.org.luci.buildbucket.proto \
+  import builder_common as builder_common_pb
 from PB.recipe_modules.build.chromium_tests_builder_config.properties import (
     BuilderSpec, BuilderDatabase, BuilderConfig, InputProperties)
 
@@ -30,14 +31,14 @@ def RunSteps(api):
 
   # BuilderID
   assert_invalid(
-      builder_pb.BuilderID(),
+      builder_common_pb.BuilderID(),
       '$test.project is not set',
       '$test.bucket is not set',
       '$test.builder is not set',
   )
 
   assert_valid(
-      builder_pb.BuilderID(
+      builder_common_pb.BuilderID(
           project='project',
           bucket='bucket',
           builder='builder',
@@ -136,7 +137,7 @@ def RunSteps(api):
 
   assert_invalid(
       BuilderDatabase.Entry(
-          builder_id=builder_pb.BuilderID(),
+          builder_id=builder_common_pb.BuilderID(),
           builder_spec=BuilderSpec(),
       ),
       '$test.builder_id.builder is not set',
@@ -151,10 +152,10 @@ def RunSteps(api):
 
   assert_invalid(
       BuilderDatabase(entries=[
-          BuilderDatabase.Entry(builder_id=builder_pb.BuilderID()),
+          BuilderDatabase.Entry(builder_id=builder_common_pb.BuilderID()),
           BuilderDatabase.Entry(builder_spec=BuilderSpec()),
           BuilderDatabase.Entry(
-              builder_id=builder_pb.BuilderID(
+              builder_id=builder_common_pb.BuilderID(
                   project='project',
                   bucket='bucket',
                   builder='builder',
@@ -162,7 +163,7 @@ def RunSteps(api):
               builder_spec=minimal_valid_build_spec,
           ),
           BuilderDatabase.Entry(
-              builder_id=builder_pb.BuilderID(
+              builder_id=builder_common_pb.BuilderID(
                   project='project',
                   bucket='bucket',
                   builder='builder',
@@ -178,7 +179,7 @@ def RunSteps(api):
   assert_valid(
       BuilderDatabase(entries=[
           BuilderDatabase.Entry(
-              builder_id=builder_pb.BuilderID(
+              builder_id=builder_common_pb.BuilderID(
                   project='project',
                   bucket='bucket',
                   builder='builder',
@@ -186,7 +187,7 @@ def RunSteps(api):
               builder_spec=minimal_valid_build_spec,
           ),
           BuilderDatabase.Entry(
-              builder_id=builder_pb.BuilderID(
+              builder_id=builder_common_pb.BuilderID(
                   project='project2',
                   bucket='bucket',
                   builder='builder',
@@ -194,7 +195,7 @@ def RunSteps(api):
               builder_spec=minimal_valid_build_spec,
           ),
           BuilderDatabase.Entry(
-              builder_id=builder_pb.BuilderID(
+              builder_id=builder_common_pb.BuilderID(
                   project='project',
                   bucket='bucket2',
                   builder='builder',
@@ -202,7 +203,7 @@ def RunSteps(api):
               builder_spec=minimal_valid_build_spec,
           ),
           BuilderDatabase.Entry(
-              builder_id=builder_pb.BuilderID(
+              builder_id=builder_common_pb.BuilderID(
                   project='project',
                   bucket='bucket',
                   builder='builder2',
@@ -245,22 +246,22 @@ def RunSteps(api):
       BuilderConfig(
           builder_db=BuilderDatabase(),
           builder_ids=[
-              builder_pb.BuilderID(
+              builder_common_pb.BuilderID(
                   project='project',
                   bucket='bucket',
               ),
-              builder_pb.BuilderID(
+              builder_common_pb.BuilderID(
                   project='project',
                   bucket='bucket',
                   builder='builder',
               ),
           ],
           builder_ids_in_scope_for_testing=[
-              builder_pb.BuilderID(
+              builder_common_pb.BuilderID(
                   project='project',
                   bucket='bucket',
               ),
-              builder_pb.BuilderID(
+              builder_common_pb.BuilderID(
                   project='project',
                   bucket='bucket',
                   builder='builder',
@@ -285,7 +286,7 @@ def RunSteps(api):
       BuilderConfig(
           builder_db=BuilderDatabase(entries=[
               BuilderDatabase.Entry(
-                  builder_id=builder_pb.BuilderID(
+                  builder_id=builder_common_pb.BuilderID(
                       project='project',
                       bucket='bucket',
                       builder='builder',
@@ -294,7 +295,7 @@ def RunSteps(api):
               )
           ]),
           builder_ids=[
-              builder_pb.BuilderID(
+              builder_common_pb.BuilderID(
                   project='project',
                   bucket='bucket',
                   builder='builder',
