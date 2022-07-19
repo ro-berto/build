@@ -58,7 +58,7 @@ class WeetbixApi(recipe_api.RecipeApi):
             'variantHash': rdb_results.variant_hash,
         })
         test_info_for_zip.append({
-            'testId': failing_test.test_id,
+            'test_name': failing_test.test_name,
             'suite_name': suite.name,
         })
 
@@ -86,6 +86,7 @@ class WeetbixApi(recipe_api.RecipeApi):
         indiv_failure_analysis = IndividualTestFailureRateAnalysis.create(
             failure_analysis=failure_analysis,
             suite_name=suite_name,
+            test_name=test_info_for_zip['test_name'],
         )
 
         if suite_name not in suite_to_per_suite_analysis:
@@ -132,33 +133,43 @@ class FailureRateAnalysisPerSuite(object):
     self.failure_analysis_list.append(failure_analysis)
 
   def get_flaky_tests(self, num_intervals, min_flake_count):
-    """Returns the flaky test_ids over the past X intervals
+    """Returns IndividualTestFailureRateAnalysis instances for flaky tests
 
     Args:
       num_intervals (int): The quantity of past intervals to look at.
       min_flake_count (int): The minimum flake count for an individual test to
         be considered flaky
 
-    Return: List of str test_id
+    Return: Dict of test_name -> IndividualTestFailureRateAnalysis
     """
-    flaky_tests = []
-    for analysis in self.failure_analysis_list:
-      flaky_count = analysis.get_total_flaky_verdict_count(num_intervals)
-      if flaky_count >= min_flake_count:
-        flaky_tests.append(analysis.test_id)
-    return flaky_tests
+    return {
+        analysis.test_name: analysis
+        for analysis in self.failure_analysis_list
+        if
+        analysis.get_total_flaky_verdict_count(num_intervals) >= min_flake_count
+    }
 
 
 @attrs()
 class IndividualTestFailureRateAnalysis(object):
   """Wraps a TestVariantFailureRateAnalysis instance for one individual test"""
+  # Full test ID.
+  # Consists of a suite prefix + the test_name
+  # e.g. ninja://gpu:gpu_unittests/FeatureInfoTest.Basic/Service.0
   test_id = attrib(str)
+  # Name of test
+  # e.g. FeatureInfoTest.Basic/Service.0
+  test_name = attrib(str)
   suite_name = attrib(str)
   # Ordered list (ascending by interval_age) of IntervalStats
   interval_stats = attrib(list)
+  # List of VerdictExample protos
+  # Examples of verdicts which had both expected and unexpected runs.
+  # Limited to at most 10, ordered by recency
+  run_flaky_verdict_examples = attrib(list, default=None)
 
   @classmethod
-  def create(cls, failure_analysis, suite_name):
+  def create(cls, failure_analysis, suite_name, test_name):
     interval_stats = [
         IntervalStats(
             interval_age=i.interval_age,
@@ -167,10 +178,16 @@ class IndividualTestFailureRateAnalysis(object):
             total_run_unexpected_verdicts=i.total_run_unexpected_verdicts,
         ) for i in failure_analysis.interval_stats
     ]
+    run_flaky_verdict_examples = [
+        json_format.MessageToDict(ex)
+        for ex in failure_analysis.run_flaky_verdict_examples
+    ]
     return cls(
         test_id=failure_analysis.test_id,
+        test_name=test_name,
         suite_name=suite_name,
         interval_stats=interval_stats,
+        run_flaky_verdict_examples=run_flaky_verdict_examples,
     )
 
   def get_total_flaky_verdict_count(self, num_intervals):

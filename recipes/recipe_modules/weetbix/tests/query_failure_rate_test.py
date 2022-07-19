@@ -26,7 +26,7 @@ DEPS = [
 
 PROPERTIES = {
     'test_suite_to_results': Property(kind=list),
-    'expected_flaky_test_ids': Property(kind=Dict()),
+    'expected_get_flaky_test_dict': Property(kind=Dict()),
     'num_intervals': Property(kind=int),
     'min_flake_count': Property(kind=int),
     'empty_response': Property(kind=bool, default=False),
@@ -36,7 +36,7 @@ PROPERTIES = {
 def RunSteps(
     api,
     test_suite_to_results,
-    expected_flaky_test_ids,
+    expected_get_flaky_test_dict,
     num_intervals,
     min_flake_count,
     empty_response,
@@ -70,18 +70,20 @@ def RunSteps(
     api.assertions.assertEqual(suite_to_failure_rate_per_suite, {})
     return
 
-  if expected_flaky_test_ids == {}:
+  if expected_get_flaky_test_dict == {}:
     for suite_name, failure_rate_per_suite in (
         suite_to_failure_rate_per_suite.items()):
       api.assertions.assertEqual(
           len(
               failure_rate_per_suite.get_flaky_tests(num_intervals,
                                                      min_flake_count)), 0)
-  for suite_name, expected_flaky_test_ids in expected_flaky_test_ids.items():
+  for suite_name, expected_flaky_dict in expected_get_flaky_test_dict.items():
     api.assertions.assertIn(suite_name, suite_to_failure_rate_per_suite)
     flaky_tests = suite_to_failure_rate_per_suite[suite_name].get_flaky_tests(
         num_intervals, min_flake_count)
-    api.assertions.assertEqual(flaky_tests, expected_flaky_test_ids)
+    for test_name, analysis in flaky_tests.items():
+      api.assertions.assertEqual(analysis.test_id,
+                                 expected_flaky_dict[test_name])
 
 
 def GenTests(api):
@@ -229,8 +231,10 @@ def GenTests(api):
       'basic',
       api.properties(
           test_suite_to_results=test_suite_to_results,
-          expected_flaky_test_ids={
-              'suite_1': ['ninja://gpu:suite_1/test_one',],
+          expected_get_flaky_test_dict={
+              'suite_1': {
+                  'test_one': 'ninja://gpu:suite_1/test_one'
+              },
           },
           num_intervals=2,
           min_flake_count=11,
@@ -267,8 +271,10 @@ def GenTests(api):
       'small_num_interval',
       api.properties(
           test_suite_to_results=test_suite_to_results,
-          expected_flaky_test_ids={
-              'suite_1': ['ninja://gpu:suite_1/test_one',],
+          expected_get_flaky_test_dict={
+              'suite_1': {
+                  'test_one': 'ninja://gpu:suite_1/test_one'
+              },
           },
           num_intervals=1,
           min_flake_count=3,
@@ -288,7 +294,7 @@ def GenTests(api):
       'small_num_interval_no_flakes',
       api.properties(
           test_suite_to_results=test_suite_to_results,
-          expected_flaky_test_ids={},
+          expected_get_flaky_test_dict={},
           num_intervals=1,
           min_flake_count=10,
       ),
@@ -308,7 +314,7 @@ def GenTests(api):
       api.properties(
           test_suite_to_results=test_suite_to_results,
           empty_response=True,
-          expected_flaky_test_ids={},
+          expected_get_flaky_test_dict={},
           num_intervals=None,
           min_flake_count=None,
       ),
