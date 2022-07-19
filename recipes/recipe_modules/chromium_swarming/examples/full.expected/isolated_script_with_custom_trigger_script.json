@@ -1,7 +1,7 @@
 [
   {
     "cmd": [
-      "python",
+      "vpython3",
       "[CACHE]/fake_custom_trigger_script.py",
       "foo",
       "bar",

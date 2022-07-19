@@ -1060,7 +1060,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     script, pre_trigger_args, post_trigger_args = (
         self._generate_trigger_task_shard_args(task, resultdb))
 
-    cmd = ['python', script] + pre_trigger_args
+    cmd = ['vpython3', script] + pre_trigger_args
     if task.shards > 1:
       cmd += ['--shard-index', str(shard_index)]
       cmd += ['--shards', str(task.shards)]

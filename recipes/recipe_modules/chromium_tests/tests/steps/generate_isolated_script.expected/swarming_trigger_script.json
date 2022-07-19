@@ -1,7 +1,7 @@
 [
   {
     "cmd": [
-      "python",
+      "vpython3",
       "[CACHE]/builder/src/path/to/script.py",
       "trigger",
       "--swarming",
