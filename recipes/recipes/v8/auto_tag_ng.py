@@ -189,8 +189,9 @@ def maybe_increment_version(api, ref, latest_version, build_results):
       step_result.presentation.status = 'FAILURE'
       build_results.success = False
     else:
-      new_version = api.v8.increment_version_cl(
-        ref, latest_version, push_account=PUSH_ACCOUNT, bot_commit=True)
+      new_version = latest_version.with_incremented_patch()
+      api.v8.update_version_cl(
+        ref, new_version, push_account=PUSH_ACCOUNT, bot_commit=True)
       build_results.performed_actions.append("Version updated %s" % new_version)
 
 

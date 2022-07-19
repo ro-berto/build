@@ -114,7 +114,7 @@ def update_branch_version(api, latest_version):
         version_at_branch_head = api.v8.read_version_from_ref(
                 "HEAD", branch_ref)
         version_at_branch_head = version_at_branch_head.with_incremented_patch()
-        api.v8.increment_version_cl(branch_ref, version_at_branch_head,
+        api.v8.update_version_cl(branch_ref, version_at_branch_head,
                 push_account=PUSH_ACCOUNT, extra_edits=update_gn)
         issue = get_issue(api)
         parent_step.presentation.links[issue] = issue
@@ -127,7 +127,7 @@ def update_main_version(api):
         version_at_branch_head = api.v8.read_version_from_ref(
                 "HEAD", branch_ref)
         version_at_branch_head = version_at_branch_head.with_incremented_minor()
-        api.v8.increment_version_cl(branch_ref, version_at_branch_head,
+        api.v8.update_version_cl(branch_ref, version_at_branch_head,
                 push_account=PUSH_ACCOUNT)
         issue = get_issue(api)
         parent_step.presentation.links[issue] = issue

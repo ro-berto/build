@@ -453,7 +453,7 @@
       "git",
       "commit",
       "-am",
-      "Version 9.9.3.6"
+      "Version 9.9.3.5"
     ],
     "cwd": "[CACHE]/builder/v8",
     "env_suffixes": {
@@ -732,7 +732,7 @@
       "git",
       "commit",
       "-am",
-      "Version 10.0.3.5"
+      "Version 10.0.0"
     ],
     "cwd": "[CACHE]/builder/v8",
     "env_suffixes": {

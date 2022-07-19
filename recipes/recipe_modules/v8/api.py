@@ -96,7 +96,7 @@ class V8Version(object):
     if new_minor == 10:
       new_minor = 0
       new_major += 1
-    return V8Version(str(new_major), str(new_minor), self.build, self.patch)
+    return V8Version(str(new_major), str(new_minor), 0, 0)
 
 class Trigger(object):
   def __init__(self, api):
@@ -1712,15 +1712,16 @@ class V8Api(recipe_api.RecipeApi):
     step_result.presentation.logs['stdout'] = result.splitlines()
     return result.strip()
 
-  def increment_version_cl(self, ref, latest_version, push_account,
+  def update_version_cl(self, ref, latest_version, push_account,
       bot_commit=False, extra_edits=None):
-    """Increment the version on branch 'ref' to the next patch level.
+    """Update the version on branch 'ref'.
 
       Args:
         api: The recipe api.
         ref: Ref name where to change the version, e.g.
             refs/remotes/branch-heads/1.2.
-        latest_version: The currently latest version to be incremented.
+        latest_version: The currently latest version to be updated in the
+        version file.
         push_account: Account to be used for uploading the CL
         bot_commit: Use True to allow a bot commit. This also force lands
             the CL
@@ -1744,9 +1745,7 @@ class V8Api(recipe_api.RecipeApi):
         name='git config user.email',
     )
 
-    # Increment patch level and update file content.
     latest_version_file = self.read_version_file(ref, 'latest')
-    latest_version = latest_version.with_incremented_patch()
     latest_version_file = latest_version.update_version_file_blob(
         latest_version_file)
 
@@ -1773,7 +1772,6 @@ class V8Api(recipe_api.RecipeApi):
       self.m.git(*upload_cmd)
       if bot_commit:
         self.m.git('cl', 'land', '-f', '--bypass-hooks')
-    return latest_version
 
 
   def version_num2str(self, version_number):
