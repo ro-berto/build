@@ -1,7 +1,7 @@
 [
   {
     "cmd": [
-      "python",
+      "vpython3",
       "[CACHE]/builder/src/perf_device_trigger.py",
       "trigger",
       "--shards",

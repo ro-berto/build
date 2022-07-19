@@ -39,6 +39,9 @@ class TriggerScript(object):
   args = attrib(command_args, default=())
   # TODO(gbeaty) What does this field mean? Add documentation to class docstring
   requires_simultaneous_shard_dispatch = attrib(bool, default=False)
+
+  # TODO(https://crbug.com/1329052): remove this after removing trigger_in_py3
+  # from chromium/src.
   trigger_in_py3 = attrib(bool, default=False)
 
   @classmethod
