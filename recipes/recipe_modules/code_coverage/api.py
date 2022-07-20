@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import json
+import logging
 import os
 import re
 import sys
@@ -283,6 +284,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       patterns = [
           # Following are scripts based tests that don't build any binaries.
           ['blink_python_tests', None],
+          ['blink_wpt_tests', None],
           ['extension_docserver_python_unittests', None],
           ['grit_python_unittests', None],
           ['metrics_python_tests', None],
