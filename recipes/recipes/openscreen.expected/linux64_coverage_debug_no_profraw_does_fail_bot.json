@@ -331,7 +331,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "RECIPE_MODULE[build::code_coverage]/resources/write_paths_to_instrument.py",
       "--write-to",
       "[START_DIR]/openscreen/.code-coverage/files_to_instrument.txt",

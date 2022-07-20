@@ -445,7 +445,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     self.m.step(
         'save paths of affected files',
         [
-            'python',
+            'python3',
             self.resource('write_paths_to_instrument.py'),
             '--write-to',
             self.src_dir.join('.code-coverage', 'files_to_instrument.txt'),
