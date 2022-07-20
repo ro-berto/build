@@ -20,6 +20,7 @@ class ChromiumBootstrapApi(recipe_api.RecipeApi):
     super(ChromiumBootstrapApi, self).__init__(**kwargs)
     self._commits = tuple(input_properties.commits)
     self._skip_analysis_reasons = tuple(input_properties.skip_analysis_reasons)
+    self._exe = input_properties.exe
 
   def initialize(self):
     # TODO(gbeaty) Once we have the ability to have Milo display the
@@ -36,6 +37,14 @@ class ChromiumBootstrapApi(recipe_api.RecipeApi):
   def skip_analysis_reasons(self):
     """Reasons to skip analysis as determined by the bootstrapper."""
     return self._skip_analysis_reasons
+
+  @property
+  def exe(self):
+    """Information about the executable being bootstrapped
+
+    For led builds, the exe contains a CASReference instead of cipd information
+    """
+    return self._exe
 
   def update_trigger_properties(self, props):
     """Update the properties used when triggering another builder.
