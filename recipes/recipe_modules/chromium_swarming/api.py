@@ -1798,7 +1798,6 @@ class SwarmingApi(recipe_api.RecipeApi):
                          project_name,
                          precommit,
                          builder_group=None,
-                         default_priority=None,
                          path_to_merge_scripts=None):
     """Configures default swarming dimensions and tags.
 
@@ -1812,8 +1811,6 @@ class SwarmingApi(recipe_api.RecipeApi):
           the changes are commited.
       builder_group: optional name of the builder group to use to configure the
           default priority of swarming tasks.
-      default_priority: optional default_priority to use. Will override the
-          priority name inherited from builder_group (or the global default).
       path_to_merge_scripts: The path to a local directory mirroring
           https://chromium.googlesource.com/chromium/src/+/main/testing/merge_scripts/.
           This is needed for accessing the scripts used for merging outputs. If
@@ -1850,13 +1847,6 @@ class SwarmingApi(recipe_api.RecipeApi):
       self.default_priority = BUILDER_GROUP_SWARMING_PRIORITIES[builder_group]
       self.add_default_tag('purpose:post-commit')
       self.add_default_tag('purpose:CI')
-
-    if default_priority is not None:
-      # TODO(crbug.com/876570): We should move the Mojo builders to a
-      # different builder group and get rid of this code path; we don't really
-      # want different builders in the same group to have different priorities,
-      # it makes reasoning about builders harder for sheriffs and troopers.
-      self.default_priority = default_priority
 
     if self.m.runtime.is_experimental:
       # The experimental half of LUCI conversions should be lower than

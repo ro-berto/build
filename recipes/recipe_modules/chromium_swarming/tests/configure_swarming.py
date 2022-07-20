@@ -22,7 +22,6 @@ def RunSteps(api):
   api.chromium_swarming.configure_swarming(
       'chromium',
       precommit=api.properties['precommit'],
-      default_priority=api.properties.get('default_priority'),
       # Fake path to make tests pass.
       path_to_merge_scripts=api.path['start_dir'].join('checkout',
                                                        'merge_scripts'))
@@ -55,11 +54,5 @@ def GenTests(api):
       'experimental',
       api.properties(precommit=False),
       api.runtime(is_experimental=True),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'default_priority',
-      api.properties(precommit=False, default_priority=10),
       api.post_process(post_process.DropExpectation),
   )
