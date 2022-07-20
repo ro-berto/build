@@ -40,6 +40,13 @@ DETERMINISTIC_BUILDERS = freeze({
         'platform': 'mac',
         'targets': ['all'],
     },
+    'Mac deterministic (reclient shadow)': {
+        'chromium_config': 'chromium',
+        'gclient_config': 'chromium',
+        'platform': 'mac',
+        'targets': ['all'],
+        'gclient_apply_config': ['enable_reclient'],
+    },
     'Windows deterministic': {
         'chromium_config': 'chromium',
         'gclient_config': 'chromium',
