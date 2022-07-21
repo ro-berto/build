@@ -388,6 +388,11 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * cast_shell_linux_arm64
     # * cast_shell_linux_dbg
     # * gpu-try-linux-nvidia-rel
+    # * gpu-fyi-try-linux-amd-rel
+    # * gpu-fyi-try-linux-intel-exp
+    # * gpu-fyi-try-linux-intel-rel
+    # * gpu-fyi-try-linux-nvidia-exp
+    # * gpu-fyi-try-linux-nvidia-rel
     # * layout_test_leak_detection
     # * linux_chromium_archive_rel_ng
     # * linux_chromium_asan_rel_ng
@@ -506,41 +511,11 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='GPU FYI Lacros x64 Builder',
                 tester='Lacros FYI x64 Release (Intel)',
             ),
-        'gpu-fyi-try-linux-amd-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Linux Builder',
-                tester='Linux FYI Release (AMD RX 5500 XT)',
-            ),
-        'gpu-fyi-try-linux-intel-exp':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Linux Builder',
-                tester='Linux FYI Experimental Release (Intel HD 630)',
-            ),
-        'gpu-fyi-try-linux-intel-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Linux Builder',
-                tester='Linux FYI Release (Intel HD 630)',
-            ),
         'gpu-fyi-try-linux-nvidia-dbg':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.gpu.fyi',
                 buildername='GPU FYI Linux Builder (dbg)',
                 tester='Linux FYI Debug (NVIDIA)',
-            ),
-        'gpu-fyi-try-linux-nvidia-exp':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Linux Builder',
-                tester='Linux FYI Experimental Release (NVIDIA)',
-            ),
-        'gpu-fyi-try-linux-nvidia-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Linux Builder',
-                tester='Linux FYI Release (NVIDIA)',
             ),
         'gpu-fyi-try-linux-nvidia-tsn':
             try_spec.TrySpec.create_for_single_mirror(

@@ -1381,22 +1381,6 @@
       "tryserver.chromium.linux:gpu-fyi-try-lacros-intel-rel"
     ]
   },
-  "chromium.gpu.fyi:GPU FYI Linux Builder": {
-    "builders": [
-      "chromium.gpu.fyi:GPU FYI Linux Builder",
-      "chromium.gpu.fyi:Linux FYI Experimental Release (Intel HD 630)",
-      "chromium.gpu.fyi:Linux FYI Experimental Release (NVIDIA)",
-      "chromium.gpu.fyi:Linux FYI Release (AMD RX 5500 XT)",
-      "chromium.gpu.fyi:Linux FYI Release (Intel HD 630)",
-      "chromium.gpu.fyi:Linux FYI Release (Intel UHD 630)",
-      "chromium.gpu.fyi:Linux FYI Release (NVIDIA)",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-amd-rel",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-intel-exp",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-intel-rel",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-nvidia-exp",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-nvidia-rel"
-    ]
-  },
   "chromium.gpu.fyi:GPU FYI Linux Builder (dbg)": {
     "builders": [
       "chromium.gpu.fyi:GPU FYI Linux Builder (dbg)",
@@ -1533,106 +1517,10 @@
       "tryserver.chromium.linux:gpu-fyi-try-linux-nvidia-dbg"
     ]
   },
-  "chromium.gpu.fyi:Linux FYI Experimental Release (Intel HD 630)": {
-    "builders": [
-      "chromium.gpu.fyi:GPU FYI Linux Builder",
-      "chromium.gpu.fyi:Linux FYI Experimental Release (Intel HD 630)",
-      "chromium.gpu.fyi:Linux FYI Experimental Release (NVIDIA)",
-      "chromium.gpu.fyi:Linux FYI Release (AMD RX 5500 XT)",
-      "chromium.gpu.fyi:Linux FYI Release (Intel HD 630)",
-      "chromium.gpu.fyi:Linux FYI Release (Intel UHD 630)",
-      "chromium.gpu.fyi:Linux FYI Release (NVIDIA)",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-amd-rel",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-intel-exp",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-intel-rel",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-nvidia-exp",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-nvidia-rel"
-    ]
-  },
-  "chromium.gpu.fyi:Linux FYI Experimental Release (NVIDIA)": {
-    "builders": [
-      "chromium.gpu.fyi:GPU FYI Linux Builder",
-      "chromium.gpu.fyi:Linux FYI Experimental Release (Intel HD 630)",
-      "chromium.gpu.fyi:Linux FYI Experimental Release (NVIDIA)",
-      "chromium.gpu.fyi:Linux FYI Release (AMD RX 5500 XT)",
-      "chromium.gpu.fyi:Linux FYI Release (Intel HD 630)",
-      "chromium.gpu.fyi:Linux FYI Release (Intel UHD 630)",
-      "chromium.gpu.fyi:Linux FYI Release (NVIDIA)",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-amd-rel",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-intel-exp",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-intel-rel",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-nvidia-exp",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-nvidia-rel"
-    ]
-  },
   "chromium.gpu.fyi:Linux FYI GPU TSAN Release": {
     "builders": [
       "chromium.gpu.fyi:Linux FYI GPU TSAN Release",
       "tryserver.chromium.linux:gpu-fyi-try-linux-nvidia-tsn"
-    ]
-  },
-  "chromium.gpu.fyi:Linux FYI Release (AMD RX 5500 XT)": {
-    "builders": [
-      "chromium.gpu.fyi:GPU FYI Linux Builder",
-      "chromium.gpu.fyi:Linux FYI Experimental Release (Intel HD 630)",
-      "chromium.gpu.fyi:Linux FYI Experimental Release (NVIDIA)",
-      "chromium.gpu.fyi:Linux FYI Release (AMD RX 5500 XT)",
-      "chromium.gpu.fyi:Linux FYI Release (Intel HD 630)",
-      "chromium.gpu.fyi:Linux FYI Release (Intel UHD 630)",
-      "chromium.gpu.fyi:Linux FYI Release (NVIDIA)",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-amd-rel",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-intel-exp",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-intel-rel",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-nvidia-exp",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-nvidia-rel"
-    ]
-  },
-  "chromium.gpu.fyi:Linux FYI Release (Intel HD 630)": {
-    "builders": [
-      "chromium.gpu.fyi:GPU FYI Linux Builder",
-      "chromium.gpu.fyi:Linux FYI Experimental Release (Intel HD 630)",
-      "chromium.gpu.fyi:Linux FYI Experimental Release (NVIDIA)",
-      "chromium.gpu.fyi:Linux FYI Release (AMD RX 5500 XT)",
-      "chromium.gpu.fyi:Linux FYI Release (Intel HD 630)",
-      "chromium.gpu.fyi:Linux FYI Release (Intel UHD 630)",
-      "chromium.gpu.fyi:Linux FYI Release (NVIDIA)",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-amd-rel",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-intel-exp",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-intel-rel",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-nvidia-exp",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-nvidia-rel"
-    ]
-  },
-  "chromium.gpu.fyi:Linux FYI Release (Intel UHD 630)": {
-    "builders": [
-      "chromium.gpu.fyi:GPU FYI Linux Builder",
-      "chromium.gpu.fyi:Linux FYI Experimental Release (Intel HD 630)",
-      "chromium.gpu.fyi:Linux FYI Experimental Release (NVIDIA)",
-      "chromium.gpu.fyi:Linux FYI Release (AMD RX 5500 XT)",
-      "chromium.gpu.fyi:Linux FYI Release (Intel HD 630)",
-      "chromium.gpu.fyi:Linux FYI Release (Intel UHD 630)",
-      "chromium.gpu.fyi:Linux FYI Release (NVIDIA)",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-amd-rel",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-intel-exp",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-intel-rel",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-nvidia-exp",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-nvidia-rel"
-    ]
-  },
-  "chromium.gpu.fyi:Linux FYI Release (NVIDIA)": {
-    "builders": [
-      "chromium.gpu.fyi:GPU FYI Linux Builder",
-      "chromium.gpu.fyi:Linux FYI Experimental Release (Intel HD 630)",
-      "chromium.gpu.fyi:Linux FYI Experimental Release (NVIDIA)",
-      "chromium.gpu.fyi:Linux FYI Release (AMD RX 5500 XT)",
-      "chromium.gpu.fyi:Linux FYI Release (Intel HD 630)",
-      "chromium.gpu.fyi:Linux FYI Release (Intel UHD 630)",
-      "chromium.gpu.fyi:Linux FYI Release (NVIDIA)",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-amd-rel",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-intel-exp",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-intel-rel",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-nvidia-exp",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-nvidia-rel"
     ]
   },
   "chromium.gpu.fyi:Mac FYI ASAN (Intel)": {
@@ -2837,91 +2725,11 @@
       "tryserver.chromium.linux:gpu-fyi-try-lacros-intel-rel"
     ]
   },
-  "tryserver.chromium.linux:gpu-fyi-try-linux-amd-rel": {
-    "builders": [
-      "chromium.gpu.fyi:GPU FYI Linux Builder",
-      "chromium.gpu.fyi:Linux FYI Experimental Release (Intel HD 630)",
-      "chromium.gpu.fyi:Linux FYI Experimental Release (NVIDIA)",
-      "chromium.gpu.fyi:Linux FYI Release (AMD RX 5500 XT)",
-      "chromium.gpu.fyi:Linux FYI Release (Intel HD 630)",
-      "chromium.gpu.fyi:Linux FYI Release (Intel UHD 630)",
-      "chromium.gpu.fyi:Linux FYI Release (NVIDIA)",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-amd-rel",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-intel-exp",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-intel-rel",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-nvidia-exp",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-nvidia-rel"
-    ]
-  },
-  "tryserver.chromium.linux:gpu-fyi-try-linux-intel-exp": {
-    "builders": [
-      "chromium.gpu.fyi:GPU FYI Linux Builder",
-      "chromium.gpu.fyi:Linux FYI Experimental Release (Intel HD 630)",
-      "chromium.gpu.fyi:Linux FYI Experimental Release (NVIDIA)",
-      "chromium.gpu.fyi:Linux FYI Release (AMD RX 5500 XT)",
-      "chromium.gpu.fyi:Linux FYI Release (Intel HD 630)",
-      "chromium.gpu.fyi:Linux FYI Release (Intel UHD 630)",
-      "chromium.gpu.fyi:Linux FYI Release (NVIDIA)",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-amd-rel",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-intel-exp",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-intel-rel",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-nvidia-exp",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-nvidia-rel"
-    ]
-  },
-  "tryserver.chromium.linux:gpu-fyi-try-linux-intel-rel": {
-    "builders": [
-      "chromium.gpu.fyi:GPU FYI Linux Builder",
-      "chromium.gpu.fyi:Linux FYI Experimental Release (Intel HD 630)",
-      "chromium.gpu.fyi:Linux FYI Experimental Release (NVIDIA)",
-      "chromium.gpu.fyi:Linux FYI Release (AMD RX 5500 XT)",
-      "chromium.gpu.fyi:Linux FYI Release (Intel HD 630)",
-      "chromium.gpu.fyi:Linux FYI Release (Intel UHD 630)",
-      "chromium.gpu.fyi:Linux FYI Release (NVIDIA)",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-amd-rel",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-intel-exp",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-intel-rel",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-nvidia-exp",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-nvidia-rel"
-    ]
-  },
   "tryserver.chromium.linux:gpu-fyi-try-linux-nvidia-dbg": {
     "builders": [
       "chromium.gpu.fyi:GPU FYI Linux Builder (dbg)",
       "chromium.gpu.fyi:Linux FYI Debug (NVIDIA)",
       "tryserver.chromium.linux:gpu-fyi-try-linux-nvidia-dbg"
-    ]
-  },
-  "tryserver.chromium.linux:gpu-fyi-try-linux-nvidia-exp": {
-    "builders": [
-      "chromium.gpu.fyi:GPU FYI Linux Builder",
-      "chromium.gpu.fyi:Linux FYI Experimental Release (Intel HD 630)",
-      "chromium.gpu.fyi:Linux FYI Experimental Release (NVIDIA)",
-      "chromium.gpu.fyi:Linux FYI Release (AMD RX 5500 XT)",
-      "chromium.gpu.fyi:Linux FYI Release (Intel HD 630)",
-      "chromium.gpu.fyi:Linux FYI Release (Intel UHD 630)",
-      "chromium.gpu.fyi:Linux FYI Release (NVIDIA)",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-amd-rel",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-intel-exp",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-intel-rel",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-nvidia-exp",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-nvidia-rel"
-    ]
-  },
-  "tryserver.chromium.linux:gpu-fyi-try-linux-nvidia-rel": {
-    "builders": [
-      "chromium.gpu.fyi:GPU FYI Linux Builder",
-      "chromium.gpu.fyi:Linux FYI Experimental Release (Intel HD 630)",
-      "chromium.gpu.fyi:Linux FYI Experimental Release (NVIDIA)",
-      "chromium.gpu.fyi:Linux FYI Release (AMD RX 5500 XT)",
-      "chromium.gpu.fyi:Linux FYI Release (Intel HD 630)",
-      "chromium.gpu.fyi:Linux FYI Release (Intel UHD 630)",
-      "chromium.gpu.fyi:Linux FYI Release (NVIDIA)",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-amd-rel",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-intel-exp",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-intel-rel",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-nvidia-exp",
-      "tryserver.chromium.linux:gpu-fyi-try-linux-nvidia-rel"
     ]
   },
   "tryserver.chromium.linux:gpu-fyi-try-linux-nvidia-tsn": {
