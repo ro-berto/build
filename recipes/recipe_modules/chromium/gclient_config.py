@@ -372,6 +372,11 @@ def checkout_lacros_sdk(c):
 
 
 @CONFIG_CTX()
+def checkout_bazel(c):
+  c.solutions[0].custom_vars['checkout_bazel'] = 'True'
+
+
+@CONFIG_CTX()
 def use_clang_tidy(c):
   c.solutions[0].custom_vars['checkout_clang_tidy'] = 'True'
 

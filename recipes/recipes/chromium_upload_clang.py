@@ -35,11 +35,18 @@ BUILDERS = freeze({
                         'TARGET_PLATFORM': 'linux',
                         'TARGET_BITS': 64,
                     },
+                    gclient_apply_config=[
+                        # 'android' is required to build the Clang toolchain with
+                        # proper AddressSanitizer prebuilts for Chrome on Android.
+                        'android',
 
-                    # 'android' is required to build the Clang toolchain with
-                    # proper AddressSanitizer prebuilts for Chrome on Android.
-                    # 'fuchsia' is required to build the builtins.a for Fuchsia.
-                    gclient_apply_config=['android', 'fuchsia'],
+                        # 'fuchsia' is required to build the builtins.a for Fuchsia.
+                        'fuchsia',
+
+                        # 'checkout_bazel' is required by tools/rust/build_crubit.py
+                        # (see also https://crbug.com/1329611).
+                        'checkout_bazel'
+                    ],
                 ),
         },
     },
