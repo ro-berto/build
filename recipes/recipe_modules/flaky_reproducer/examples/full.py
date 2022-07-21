@@ -34,6 +34,8 @@ def RunSteps(api, trigger, task_id, test_name):
   return api.flaky_reproducer.run(task_id, test_name)
 
 
+from google.protobuf import timestamp_pb2
+
 from recipe_engine.post_process import (DropExpectation, StatusFailure,
                                         ResultReason)
 from PB.go.chromium.org.luci.resultdb.proto.v1 import (
@@ -70,6 +72,7 @@ def GenTests(api):
               name='test_name_1',
               expected=False,
               status=test_result_pb2.FAIL,
+              start_time=timestamp_pb2.Timestamp(seconds=1658269605),
               variant=common_pb2.Variant(
                   **{
                       'def': {

@@ -4,7 +4,11 @@
 
 import collections
 import re
+
+from google.protobuf import timestamp_pb2
 from recipe_engine import recipe_api
+
+from PB.go.chromium.org.luci.resultdb.proto.v1 import common as common_v1
 from PB.go.chromium.org.luci.resultdb.proto.v1 import predicate as predicate_pb2
 
 from .libs import (create_test_binary_from_task_request,
@@ -52,6 +56,7 @@ class FlakyReproducer(recipe_api.RecipeApi):
       'android-x86-rel',
       'ios-simulator',
       'lacros-amd64-generic-rel',
+      'linux-chromeos-rel',
       'linux-rel',
       'mac-rel',
       'win10_chromium_x64_rel_ng',
@@ -254,19 +259,22 @@ class FlakyReproducer(recipe_api.RecipeApi):
     if not verify_builders:
       return
     # Launch verify swarming tasks
+    builder_results = {}
     swarming_tasks = {}  # { task_id: (builder, task_meta) }
     for builder, builder_task_id in verify_builders.items():
-      test_binary = self.get_test_binary(builder_task_id)
-      test_binary = test_binary.with_options_from_other(
-          reproducing_step.test_binary)
-      task = self.launch_verify_in_swarming(builder, failing_sample.test_name,
-                                            test_binary)
-      swarming_tasks[task.id] = (builder, task)
+      try:
+        test_binary = self.get_test_binary(builder_task_id)
+        test_binary = test_binary.with_options_from_other(
+            reproducing_step.test_binary)
+        task = self.launch_verify_in_swarming(builder, failing_sample.test_name,
+                                              test_binary)
+        swarming_tasks[task.id] = (builder, task)
+      except Exception as err:
+        builder_results[builder] = BuilderVerifyResult(error=str(err))
     # Collect swarming task result
     verify_results = self.m.swarming.collect(
         'collect verify results', [t for _, t in swarming_tasks.values()],
         output_dir=self.m.path.mkdtemp())
-    builder_results = {}
     for result in verify_results:
       builder, _ = swarming_tasks[result.id]
       try:
@@ -376,9 +384,8 @@ class FlakyReproducer(recipe_api.RecipeApi):
     """Search for builders that run the given test."""
     # Query TestResult from invocation.
     inv_id = self._generate_invocation_id_from_task_id(task_id)
-    inv_map = self.m.resultdb.query([inv_id],
-                                    limit=0,
-                                    tr_fields=['testId', 'variant', 'tags'])
+    inv_map = self.m.resultdb.query(
+        [inv_id], limit=0, tr_fields=['testId', 'variant', 'tags', 'startTime'])
     invocation = inv_map.get(inv_id, None)
     if not invocation:
       raise self.m.step.StepFailure(
@@ -407,6 +414,21 @@ class FlakyReproducer(recipe_api.RecipeApi):
               }
           })
     escaped_test_id = re.escape(test_result.test_id)
+    # Searching for tests +- 1 hour.
+    if test_result.start_time and test_result.start_time.seconds:
+      time_range = common_v1.TimeRange(
+          earliest=timestamp_pb2.Timestamp(
+              seconds=test_result.start_time.seconds - 60 * 60),
+          latest=timestamp_pb2.Timestamp(
+              seconds=test_result.start_time.seconds + 60 * 60),
+      )
+    else:
+      time_range = common_v1.TimeRange(
+          earliest=timestamp_pb2.Timestamp(
+              seconds=invocation.proto.create_time.seconds - 60 * 60),
+          latest=timestamp_pb2.Timestamp(
+              seconds=invocation.proto.finalize_time.seconds + 60 * 60),
+      )
     result_history = None
     next_page_token = None
     builders = {}
@@ -414,6 +436,7 @@ class FlakyReproducer(recipe_api.RecipeApi):
       result_history = self.m.resultdb.get_test_result_history(
           realm=invocation.proto.realm,
           test_id_regexp=escaped_test_id,
+          time_range=time_range,
           variant_predicate=variant_predicate,
           page_size=100,
           page_token=next_page_token)

@@ -6,6 +6,7 @@ from __future__ import print_function
 
 import subprocess
 import sys
+import os
 
 
 def strip_command_wrappers(command, strip_wrappers):
@@ -97,6 +98,10 @@ def run_cmd(argv, cwd=None, env=None):
   """
   # FIXME(kuanhuang): This method could be improved to handle the swarming
   # signals. Inheriting and merging the current process' environment.
+  # Replace ISOLATED_OUTDIR in commandline.
+  if 'ISOLATED_OUTDIR' in os.environ:
+    isolated_outdir = os.environ['ISOLATED_OUTDIR']
+    argv = [v.replace(r'${ISOLATED_OUTDIR}', isolated_outdir) for v in argv]
   print(
       'Running {0!r} in {1!r} with {2!r}'.format(argv, cwd, env),
       file=sys.stderr)

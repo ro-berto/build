@@ -855,7 +855,7 @@
       "-n",
       "0",
       "-tr-fields",
-      "testId,variant,tags",
+      "testId,variant,tags,startTime",
       "task-example.swarmingserver.appspot.com-54321fffffabc123"
     ],
     "infra_step": true,
@@ -863,7 +863,7 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@raw_io.output_text@{\"invocation\": {\"realm\": \"chromium:ci\", \"state\": \"FINALIZED\"}, \"invocationId\": \"task-example.swarmingserver.appspot.com-54321fffffabc123\"}@@@",
-      "@@@STEP_LOG_LINE@raw_io.output_text@{\"invocationId\": \"task-example.swarmingserver.appspot.com-54321fffffabc123\", \"testResult\": {\"name\": \"test_name_1\", \"status\": \"FAIL\", \"tags\": [{\"key\": \"test_name\", \"value\": \"MockUnitTests.FailTest\"}], \"testId\": \"ninja://base:base_unittests/MockUnitTests.FailTest\", \"variant\": {\"def\": {\"builder\": \"Linux Tests\", \"test_suite\": \"base_unittests\"}}}}@@@",
+      "@@@STEP_LOG_LINE@raw_io.output_text@{\"invocationId\": \"task-example.swarmingserver.appspot.com-54321fffffabc123\", \"testResult\": {\"name\": \"test_name_1\", \"startTime\": \"2022-07-19T22:26:45Z\", \"status\": \"FAIL\", \"tags\": [{\"key\": \"test_name\", \"value\": \"MockUnitTests.FailTest\"}], \"testId\": \"ninja://base:base_unittests/MockUnitTests.FailTest\", \"variant\": {\"def\": {\"builder\": \"Linux Tests\", \"test_suite\": \"base_unittests\"}}}}@@@",
       "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
   },
@@ -876,7 +876,7 @@
     ],
     "infra_step": true,
     "name": "verify_reproducing_step.get_test_result_history",
-    "stdin": "{\"pageSize\": \"100\", \"realm\": \"chromium:ci\", \"testIdRegexp\": \"ninja://base:base_unittests/MockUnitTests\\\\.FailTest\", \"timeRange\": {\"earliest\": \"2012-05-13T12:53:21Z\", \"latest\": \"2012-05-14T12:53:21Z\"}, \"variantPredicate\": {\"contains\": {\"def\": {\"test_suite\": \"base_unittests\"}}}}",
+    "stdin": "{\"pageSize\": \"100\", \"realm\": \"chromium:ci\", \"testIdRegexp\": \"ninja://base:base_unittests/MockUnitTests\\\\.FailTest\", \"timeRange\": {\"earliest\": \"2022-07-19T21:26:45Z\", \"latest\": \"2022-07-19T23:26:45Z\"}, \"variantPredicate\": {\"contains\": {\"def\": {\"test_suite\": \"base_unittests\"}}}}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -922,8 +922,8 @@
       "@@@STEP_LOG_LINE@json.input@  \"realm\": \"chromium:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@  \"testIdRegexp\": \"ninja://base:base_unittests/MockUnitTests\\\\.FailTest\", @@@",
       "@@@STEP_LOG_LINE@json.input@  \"timeRange\": {@@@",
-      "@@@STEP_LOG_LINE@json.input@    \"earliest\": \"2012-05-13T12:53:21Z\", @@@",
-      "@@@STEP_LOG_LINE@json.input@    \"latest\": \"2012-05-14T12:53:21Z\"@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"earliest\": \"2022-07-19T21:26:45Z\", @@@",
+      "@@@STEP_LOG_LINE@json.input@    \"latest\": \"2022-07-19T23:26:45Z\"@@@",
       "@@@STEP_LOG_LINE@json.input@  }, @@@",
       "@@@STEP_LOG_LINE@json.input@  \"variantPredicate\": {@@@",
       "@@@STEP_LOG_LINE@json.input@    \"contains\": {@@@",

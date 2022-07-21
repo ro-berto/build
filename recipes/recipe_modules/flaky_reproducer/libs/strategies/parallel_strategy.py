@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import collections
 import math
 import logging
 import os
@@ -11,16 +12,38 @@ from . import utils
 from .base_strategy import BaseStrategy
 from .reproducing_step import ReproducingStep
 from ..test_binary import TestBinaryWithParallelMixin
+from ..result_summary import TestResult
+
+
+class ReproduceTestResult:
+  """Data container for ParallelStrategy._verify_parallel_tests results."""
+  __slots__ = ['tests', 'reproduced', 'test_binary', 'test_history']
+
+  def __init__(self, tests, reproduced, test_binary, test_history):
+    self.tests = tests
+    self.reproduced = reproduced
+    self.test_binary = test_binary
+    self.test_history = test_history
 
 
 class ParallelStrategy(BaseStrategy):
   name = 'parallel'
 
-  MAX_REPEAT = 20
+  # Parallel multiples to increase the load.
   PARALLEL_JOBS_MULTIPLES = 1.5
-  GROUP_VERIFY_TIME_LIMIT = 10 * 60
-  SINGLE_TEST_VERIFY_TIME_LIMIT = 5 * 60
-  NOT_REPRODUCE_RETRY = 3  # retry up to 3 times if not reproduced.
+  # Repeats for single iteration.
+  MAX_REPEAT = 20
+  MIN_REPEAT = 5
+  # Max iterations before reproduced 3 times.
+  MAX_ITERATIONS = 10
+  # We are expecting 3 reproduction in iterations.
+  REPRODUCE_CNT = 3
+  # Ignore the groups not reproduced after NOT_REPRODUCE_RETRY.
+  NOT_REPRODUCE_RETRY = 2
+  # Time limits.
+  SINGLE_ITERATION_TIME_LIMIT = 5 * 60
+  GROUP_VERIFY_TIME_LIMIT = 20 * 60
+  SINGLE_TEST_VERIFY_TIME_LIMIT = 10 * 60
 
   def __init__(self, *args, **kwargs):
     super().__init__(*args, **kwargs)
@@ -44,9 +67,7 @@ class ParallelStrategy(BaseStrategy):
     return True
 
   def run(self, timeout=45 * 60):
-    self.deadline = (
-        time.time() + timeout - self.GROUP_VERIFY_TIME_LIMIT -
-        self.SINGLE_TEST_VERIFY_TIME_LIMIT)
+    self.deadline = time.time() + timeout
 
     self.failing_sample = self.result_summary.get_failing_sample(
         self.test_name, default=None)
@@ -77,14 +98,7 @@ class ParallelStrategy(BaseStrategy):
     self.parallel_jobs = math.floor(self.parallel_jobs *
                                     self.PARALLEL_JOBS_MULTIPLES)
 
-    not_reproduce_retries = self.NOT_REPRODUCE_RETRY
-    reproducing_step = None
-    while not_reproduce_retries and time.time() < self.deadline:
-      reproducing_step = self._find_best_parallel_tests(parallel_tests)
-      if reproducing_step:
-        return reproducing_step
-      not_reproduce_retries -= 1
-    return reproducing_step
+    return self._find_best_parallel_tests(parallel_tests)
 
   def _find_best_parallel_tests(self, tests):
     # Ideally, we want to repeat a group of tests running in parallel while
@@ -100,80 +114,86 @@ class ParallelStrategy(BaseStrategy):
         tests[i:i + self.parallel_jobs - 1]
         for i in range(0, len(tests), self.parallel_jobs - 1)
     ]
-    # We will run each group with failing sample.
-    repeat = self._calc_single_round_repeat(
-        tests + [self.failing_sample] * len(groups), self.parallel_jobs,
-        self.GROUP_VERIFY_TIME_LIMIT)
-    # Reproduced results as
-    # [(group, reproduced, test_binary, test_history, duration)]
-    group_test_results = []
-    for i, group in enumerate(groups):
-      start_time = time.time()
-      reproduced, test_binary, test_history = self._verify_parallel_tests(
-          group, repeat)
-      duration = time.time() - start_time
-      logging.info('verify group %d/%d - reproduced=%d/%d', i, len(groups),
-                   reproduced, len(test_history))
-      if not reproduced:
-        continue
-      group_test_results.append(
-          (group, reproduced, test_binary, test_history, duration))
-    if not group_test_results:
+    best_group = self._find_best_parallel_group(groups,
+                                                self.GROUP_VERIFY_TIME_LIMIT)
+    if not best_group:
       return ReproducingStep(self.test_binary, reproducing_rate=0)
-    best_group_result = max(group_test_results, key=lambda g: g[1])
-    best_group = best_group_result[0]
 
     # Step 2: Verify individual test.
-    # We will run each test with failing_sample.
-    repeat = self._calc_single_round_repeat(
-        best_group + [self.failing_sample] * len(best_group), 2,
-        self.SINGLE_TEST_VERIFY_TIME_LIMIT)
-    # Reproduced result as
-    # [(test, reproduced, test_binary, test_history, duration)]
-    single_test_results = []
-    for i, test in enumerate(best_group):
-      start_time = time.time()
-      reproduced, test_binary, test_history = self._verify_parallel_tests(
-          [test], repeat)
-      duration = time.time() - start_time
-      logging.info('verify test %d/%d - reproduced=%d/%d:%s', i,
-                   len(best_group), reproduced, len(test_history),
-                   ''.join([t.status.name[0] for t in test_history]))
-      if not reproduced:
-        continue
-      single_test_results.append(
-          (test, reproduced, test_binary, test_history, duration))
-    if not single_test_results:
-      return self._generate_reproduce_step(*best_group_result[1:])
-    best_single_test_result = max(single_test_results, key=lambda g: g[1])
-    return self._generate_reproduce_step(*best_single_test_result[1:])
+    logging.info('best_group.tests=%r, reproduced=%d, test_history=%d',
+                 [t.test_name for t in best_group.tests], best_group.reproduced,
+                 len(best_group.test_history))
+    best_test = self._find_best_parallel_group(
+        [[t] for t in best_group.tests], self.SINGLE_TEST_VERIFY_TIME_LIMIT)
+    if best_test:
+      return self._generate_reproduce_step(best_test)
+    return self._generate_reproduce_step(best_group)
 
-  def _generate_reproduce_step(self, reproduced, test_binary, test_history,
-                               duration):
-    duration_per_iteration = duration / len(test_history)
-    max_repeat = math.floor(self.TARGET_REPRODUCING_TIME_LIMIT /
-                            duration_per_iteration)
-    failure_rate = reproduced * 1.0 / len(test_history)
+  def _find_best_parallel_group(self, groups, time_limit):
+    """Verify the reproduction of groups and return the best."""
+    deadline = min(self.deadline, time.time() + time_limit)
+    iteration = 0
+    max_reproduced_cnt = 0
+    group_test_results = {}  # {group_index: ReproduceTestResult}
+    # Retry until reproduced REPRODUCE_CNT times or GROUP_VERIFY_TIME_LIMIT.
+    while (iteration < self.MAX_ITERATIONS and
+           max_reproduced_cnt < self.REPRODUCE_CNT and time.time() < deadline):
+      for i, group in enumerate(groups):
+        # Ignore the groups that not reproducible after 2 retries (if we have
+        # reproducible group).
+        if (max_reproduced_cnt and iteration >= self.NOT_REPRODUCE_RETRY and
+            (i not in group_test_results or
+             group_test_results[i].reproduced == 0)):
+          continue
+        ret = self._verify_parallel_tests(group)
+        logging.info('verify group %d/%d: iter=%d, reproduced=%d/%d', i + 1,
+                     len(groups), iteration, ret.reproduced,
+                     len(ret.test_history))
+        if i not in group_test_results:
+          group_test_results[i] = ret
+        else:
+          group_test_results[i].reproduced += ret.reproduced
+          group_test_results[i].test_history += ret.test_history
+      iteration += 1
+      max_reproduced_cnt = max(
+          v.reproduced for v in group_test_results.values())
+    if not group_test_results:
+      return None
+    best_group_result = max(
+        group_test_results.values(),
+        key=lambda g: (g.reproduced, -len(g.test_history)))
+    if not best_group_result.reproduced:
+      return None
+    return best_group_result
+
+  def _generate_reproduce_step(self, group_result):
+    single_round_runtime = self._calc_single_round_runtime(
+        group_result.tests + [self.failing_sample])
+    max_repeat = math.floor(self.TARGET_REPRODUCING_TIME_LIMIT * 1000 /
+                            single_round_runtime)
+    failure_rate = (
+        group_result.reproduced * 1.0 / len(group_result.test_history))
     suggested_repeat = min(
         max_repeat,
         utils.calc_repeat_times_based_on_failing_rate(
             self.TARGET_REPRODUCING_RATE, failure_rate))
     reproducing_rate = 1.0 - (1.0 - failure_rate)**suggested_repeat
+    logging.debug(
+        'generate_reproduce_step: single_round_runtime=%d, '
+        'max_repeat=%d, failure_rate=%d, suggested_repeat=%d',
+        single_round_runtime, max_repeat, failure_rate, suggested_repeat)
     return ReproducingStep(
-        test_binary.with_repeat(suggested_repeat),
+        group_result.test_binary.with_repeat(suggested_repeat),
         reproducing_rate=reproducing_rate,
-        duration=duration_per_iteration * suggested_repeat,
-        reproduced_cnt=reproduced,
-        total_run_cnt=len(test_history))
+        duration=single_round_runtime * suggested_repeat,
+        strategy_name=self.name,
+        reproduced_cnt=group_result.reproduced,
+        total_run_cnt=len(group_result.test_history))
 
   def _verify_parallel_tests(self, tests, repeat=None):
     assert self.failing_sample
     if repeat is None:
-      time_limit = (
-          self.SINGLE_TEST_VERIFY_TIME_LIMIT
-          if len(tests) == 1 else self.GROUP_VERIFY_TIME_LIMIT)
-      repeat = self._calc_single_round_repeat(tests, len(tests) + 1, time_limit)
-    test_history = []
+      repeat = self._calc_single_round_repeat(tests + [self.failing_sample])
     test_binary = (
         self.test_binary  # go/pyformat-break
         .with_tests([t.test_name for t in tests] + [self.test_name])  #
@@ -191,13 +211,23 @@ class ParallelStrategy(BaseStrategy):
       raise KeyError(
           "Target test wasn't executed during reproducing: {0}".format(
               self.test_name))
+    # Ignore the test results after the first failure.
+    # As flaky reproducer, we care about the first reproduction. Tests could
+    # fall into a bad state after first failure that cause false high
+    # reproducing rate.
+    filtered_test_history = []
     reproduced = 0
     for test in test_history:
+      filtered_test_history.append(test)
       if self.failing_sample.similar_with(test):
         reproduced += 1
-    return reproduced, test_binary, test_history
+        break
+    return ReproduceTestResult(tests, reproduced, test_binary,
+                               filtered_test_history)
 
-  def _calc_single_round_repeat(self, tests, parallel_jobs, time_limit):
+  def _calc_single_round_runtime(self, tests, parallel_jobs=None):
+    if parallel_jobs is None:
+      parallel_jobs = len(tests)
     total_duration = 0
     for test in tests:
       if test.test_name not in self.running_time:
@@ -206,10 +236,12 @@ class ParallelStrategy(BaseStrategy):
       total_duration += duration / cnt
     if not total_duration:
       return self.MAX_REPEAT
-    repeat = min(
-        self.MAX_REPEAT,
-        math.floor(time_limit * 1000 / (total_duration / parallel_jobs)))
-    return max(repeat, 1)
+    return total_duration / parallel_jobs
+
+  def _calc_single_round_repeat(self, tests, parallel_jobs=None):
+    repeat = math.floor(self.SINGLE_ITERATION_TIME_LIMIT * 1000 /
+                        self._calc_single_round_runtime(tests, parallel_jobs))
+    return min(self.MAX_REPEAT, max(self.MIN_REPEAT, repeat))
 
   def _get_parallel_tests(self):
     """Find tests ran in parallel with failing sample."""

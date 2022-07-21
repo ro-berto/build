@@ -37,6 +37,8 @@ def RunSteps(api, task_id, failing_sample, reproducing_step_data):
 
 
 import re
+from google.protobuf import timestamp_pb2
+
 from recipe_engine import post_process
 from PB.go.chromium.org.luci.resultdb.proto.v1 import (
     common as common_pb2,  # go/pyformat-break
@@ -51,6 +53,8 @@ def GenTests(api):
       proto=invocation_pb2.Invocation(
           state=invocation_pb2.Invocation.FINALIZED,
           realm='chromium:ci',
+          create_time=timestamp_pb2.Timestamp(seconds=1658269605),
+          finalize_time=timestamp_pb2.Timestamp(seconds=1658269605),
       ),
       test_results=[
           test_result_pb2.TestResult(
@@ -220,6 +224,40 @@ def GenTests(api):
           steps['summarize_results'].step_summary_text,
           re.search(r"not reproduced", steps['summarize_results'].
                     step_summary_text))),
+      api.post_check(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  bad_task_request = api.json.loads(
+      api.flaky_reproducer.get_test_data('gtest_task_request.json'))
+  bad_task_request['task_slices'][0]['properties']['command'] = [
+      'unknown', 'wrapper'
+  ]
+  yield api.test(
+      'unknown_test_binary_wrapper',
+      api.properties(
+          task_id='some-task-id',
+          failing_sample=UnexpectedTestResult('MockUnitTests.FailTest'),
+          reproducing_step_data=api.json.loads(
+              api.flaky_reproducer.get_test_data('reproducing_step.json')),
+      ),
+      api.resultdb.query(
+          {
+              'task-example.swarmingserver.appspot.com-some-task-id':
+                  resultdb_invocation,
+          },
+          step_name='verify_reproducing_step.rdb query'),
+      api.resultdb.get_test_result_history(
+          test_running_history,
+          step_name='verify_reproducing_step.get_test_result_history'),
+      api.step_data('verify_reproducing_step.get_test_binary.show request',
+                    api.json.output_stream(bad_task_request)),
+      api.post_check(lambda check, steps: check(
+          steps['summarize_results'].step_summary_text,
+          re.search(
+              r"Command line contains unknown wrapper: "
+              r"\['unknown', 'wrapper'\]", steps['summarize_results'].
+              step_summary_text))),
       api.post_check(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )

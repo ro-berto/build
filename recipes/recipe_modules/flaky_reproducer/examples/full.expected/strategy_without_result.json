@@ -775,7 +775,7 @@
       "-n",
       "0",
       "-tr-fields",
-      "testId,variant,tags",
+      "testId,variant,tags,startTime",
       "task-example.swarmingserver.appspot.com-54321fffffabc123"
     ],
     "infra_step": true,

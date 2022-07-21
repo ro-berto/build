@@ -132,12 +132,47 @@ class ParallelStrategyTest(unittest.TestCase, GenerateResultSummaryMixin):
 
     strategy = self.get_strategy('MockUnitTests.CrashTest')
     reproducing_step = strategy.run()
-    self.assertEqual(mock_test_binary_run.call_count, 3)
+    # reproduced 3 times in group and 2 * MAX_ITERATIONS in single test
+    self.assertEqual(mock_test_binary_run.call_count, 23)
     self.assertTrue(reproducing_step)
     self.assertListEqual(reproducing_step.test_binary.tests, [
         'MockUnitTests.FailTest', 'MockUnitTests.PassTest',
         'MockUnitTests.CrashTest'
     ])
+
+  @patch.object(GTestTestBinary, 'run', autospec=True)
+  def test_reproduce_group_step_reproduced_once(self, mock_test_binary_run):
+    test_self = self
+
+    def mock_test_binary_run_side_effect(self, *args, **kwargs):
+      if len(self.tests) == 3 and mock_test_binary_run.call_count == 1:
+        return test_self.generate_result_summary(
+            'MockUnitTests.CrashTest',
+            'C' + 'P' * (self.repeat - 1),
+            duration=0,
+        )
+      return test_self.generate_result_summary(
+          'MockUnitTests.CrashTest', 'P' * self.repeat, duration=0)
+
+    mock_test_binary_run.side_effect = mock_test_binary_run_side_effect
+
+    # Strategy should get all test as parallel during the failing test running
+    # period.
+    for test in self.result_summary:
+      test.thread_id = None
+
+    strategy = self.get_strategy('MockUnitTests.CrashTest')
+    reproducing_step = strategy.run()
+    # reproduced 3 times in group and 2 * MAX_ITERATIONS in single test
+    self.assertEqual(mock_test_binary_run.call_count, 30)
+    self.assertTrue(reproducing_step)
+    self.assertListEqual(reproducing_step.test_binary.tests, [
+        'MockUnitTests.FailTest', 'MockUnitTests.PassTest',
+        'MockUnitTests.CrashTest'
+    ])
+    self.assertEqual(reproducing_step.debug_info['reproduced_cnt'], 1)
+    # MAX_REPEAT * (MAX_ITERATIONS - 1) + 1
+    self.assertEqual(reproducing_step.debug_info['total_run_cnt'], 181)
 
   @patch.object(GTestTestBinary, 'run', autospec=True)
   def test_reproduce_single_test_step(self, mock_test_binary_run):
@@ -157,12 +192,14 @@ class ParallelStrategyTest(unittest.TestCase, GenerateResultSummaryMixin):
 
     strategy = self.get_strategy('MockUnitTests.CrashTest')
     reproducing_step = strategy.run()
-    self.assertEqual(mock_test_binary_run.call_count, 3)
+    # REPRODUCE_CNT times in group + REPRODUCE_CNT with FailTest in single test
+    # + NOT_REPRODUCE_RETRY with PassTest in single test
+    self.assertEqual(mock_test_binary_run.call_count, 8)
     self.assertTrue(reproducing_step)
     self.assertListEqual(reproducing_step.test_binary.tests,
                          ['MockUnitTests.FailTest', 'MockUnitTests.CrashTest'])
-    self.assertEqual(reproducing_step.debug_info['reproduced_cnt'], 1)
-    self.assertEqual(reproducing_step.debug_info['total_run_cnt'], 20)
+    self.assertEqual(reproducing_step.debug_info['reproduced_cnt'], 3)
+    self.assertEqual(reproducing_step.debug_info['total_run_cnt'], 3)
 
   @patch.object(GTestTestBinary, 'run', autospec=True)
   def test_not_reproduced(self, mock_test_binary_run):
@@ -171,7 +208,8 @@ class ParallelStrategyTest(unittest.TestCase, GenerateResultSummaryMixin):
     strategy = self.get_strategy('MockUnitTests.CrashTest')
     reproducing_step = strategy.run()
     self.assertFalse(reproducing_step)
-    self.assertEqual(mock_test_binary_run.call_count, 3)
+    # MAX_ITERATIONS
+    self.assertEqual(mock_test_binary_run.call_count, 10)
 
   @patch.object(GTestTestBinary, 'run', autospec=True)
   def test_should_raise_if_target_test_not_run(self, mock_test_binary_run):

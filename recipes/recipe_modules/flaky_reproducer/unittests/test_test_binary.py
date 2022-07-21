@@ -54,6 +54,22 @@ class TestBinaryUtilsTest(unittest.TestCase):
 
   @patch('subprocess.Popen')
   @patch('sys.stderr', new_callable=io.StringIO)
+  @patch('os.environ', new={'ISOLATED_OUTDIR': '/isolated_out_dir'})
+  def test_run_cmd_with_isolated_outdir(self, mock_stdout, mock_popen):
+    mock_popen.return_value.wait.return_value = 0
+    cmd = ['./exec', '--args', r'--output=${ISOLATED_OUTDIR}']
+    utils.run_cmd(cmd, env={}, cwd='out\\Release_x64')
+    self.assertEqual(
+        mock_stdout.getvalue(),
+        "Running ['./exec', '--args', '--output=/isolated_out_dir'] "
+        "in 'out\\\\Release_x64' with {}\n")
+    mock_popen.assert_called_once_with(
+        ['./exec', '--args', '--output=/isolated_out_dir'],
+        env={},
+        cwd='out\\Release_x64')
+
+  @patch('subprocess.Popen')
+  @patch('sys.stderr', new_callable=io.StringIO)
   @patch('os.environ', new={'foo': 'bar'})
   def test_run_cmd_with_failure(self, mock_stdout, mock_popen):
     mock_popen.return_value.wait.return_value = 1

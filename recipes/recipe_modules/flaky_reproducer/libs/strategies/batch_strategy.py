@@ -66,6 +66,7 @@ class BatchStrategy(BaseStrategy):
         test_binary,
         reproducing_rate=reproduced * 1.0 / len(test_history),
         duration=total_time * 1000.0 / self.repeat,
+        strategy_name=self.name,
         reproduced_cnt=reproduced,
         total_run_cnt=len(test_history))
     if not reproduce_step or len(tests) == 1:
