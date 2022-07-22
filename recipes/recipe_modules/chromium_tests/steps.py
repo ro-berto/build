@@ -458,7 +458,14 @@ class Test(object):
     # the according id of the monorail bug filed for the flaky test.
     # The set of flaky tests is supposed to be a subset of the deterministic
     # failures.
+    # Maps test name to monorail issue
+    # Ex: "fast/frames/002.html" -> "1339538"
+    # TODO (crbug/1314194): Remove once we're using weetbix for flake
+    # exoneration
     self._known_flaky_failures_map = {}
+
+    # Set of test names
+    self._known_weetbix_flaky_failures = set()
 
     # A map from suffix [e.g. 'with patch'] to the name of the recipe engine
     # step that was invoked in run(). This makes the assumption that run() only
@@ -613,10 +620,15 @@ class Test(object):
   def update_rdb_results(self, suffix, results):
     self._rdb_results[suffix] = results
 
+  # TODO (crbug/1314194): Remove once we're using weetbix for flake exoneration
   @property
   def known_flaky_failures(self):
     """Return a set of tests that failed but known to be flaky at ToT."""
     return set(self._known_flaky_failures_map)
+
+  @property
+  def known_weetbix_flaky_failures(self):
+    return self._known_weetbix_flaky_failures
 
   def get_summary_of_known_flaky_failures(self):
     """Returns a set of text to use to display in the test results summary."""
@@ -628,6 +640,14 @@ class Test(object):
   def add_known_flaky_failure(self, test_name, monorail_issue):
     """Add a known flaky failure on ToT along with the monorail issue id."""
     self._known_flaky_failures_map[test_name] = monorail_issue
+
+  def add_known_weetbix_flaky_failures(self, test_names):
+    """Add known flaky failures on ToT
+
+    Args:
+      test_names: Iterable of string test names
+    """
+    self._known_weetbix_flaky_failures.update(test_names)
 
   def compile_targets(self):
     """List of compile targets needed by this test."""
@@ -768,14 +788,19 @@ class Test(object):
 
   def deterministic_failures(self, suffix):
     """Return tests that failed on every test run(set of strings)."""
+    return set(self.deterministic_failures_map(suffix).keys())
+
+  def deterministic_failures_map(self, suffix):
+    """Maps test_name to test_id for tests that failed on every test run"""
     failure_msg = (
         'There is no data for the test run suffix ({0}). This should never '
         'happen as all calls to deterministic_failures() should first check '
         'that the data exists.'.format(suffix))
     assert suffix in self._rdb_results, failure_msg
-    return set([
-        t.test_name for t in self._rdb_results[suffix].unexpected_failing_tests
-    ])
+    return {
+        t.test_name: t.test_id
+        for t in self._rdb_results[suffix].unexpected_failing_tests
+    }
 
   def notrun_failures(self, suffix):
     """Returns tests that had status NOTRUN/UNKNOWN.
