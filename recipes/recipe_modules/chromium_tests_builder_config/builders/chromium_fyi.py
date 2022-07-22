@@ -159,6 +159,7 @@ SPEC = {
             },
             simulation_platform='linux',
             test_results_config='staging_server',
+            skylab_gs_bucket="gs://lacros-amd64-generic-rel-skylab-try",
         ),
     'linux-backuprefptr-x64-fyi-rel':
         builder_spec.BuilderSpec.create(
