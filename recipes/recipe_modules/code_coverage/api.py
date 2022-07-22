@@ -286,6 +286,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           ['blink_python_tests', None],
           ['blink_wpt_tests', None],
           ['extension_docserver_python_unittests', None],
+          ['fuchsia_pytype', None],
           ['grit_python_unittests', None],
           ['metrics_python_tests', None],
           ['mojo_python_unittests', None],
