@@ -421,6 +421,79 @@ class TestUtilsApi(recipe_api.RecipeApi):
         pruned_suites.remove(t)
     return pruned_suites
 
+  def _query_weetbix_flaky_failures(self, tests_to_check):
+    """Get flaky tests per suite by querying weetbix for flaky rates
+
+    Flaky exoneration criteria:
+    At least 3 flaky verdicts in the past 5 weekdays AND at least 1 flaky
+    verdict in the past 1 weekday.
+    (Flaky verdict means that in a single try build, the test failed the first
+    run and then passed in the next run (aka the "retry shard (with patch)")
+
+    If a suite has flaky tests, the suite's _known_weetbix_flaky_failures
+    will be updated.
+
+    Args:
+      tests_to_check (List(Test)): List of failing test suites
+
+    """
+    if not tests_to_check:
+      return
+
+    suite_to_per_suite_analysis = None
+    query_failure_rate_step_error_msg = None
+    try:
+      suite_to_per_suite_analysis = self.m.weetbix.query_failure_rate(
+          tests_to_check)
+    except self.m.step.StepFailure as f:
+      # Don't fail the build if something's wrong with weetbix.
+      # We'll just not exonerate any failing tests and log that this happened.
+      query_failure_rate_step_error_msg = f.reason_message()
+
+    # Handles weetbix RPC server errors: 500s or response returned but no data
+    if not suite_to_per_suite_analysis:
+      if not query_failure_rate_step_error_msg:
+        query_failure_rate_step_error_msg = (
+            'Missing failure rates from weetbix')
+      log_step = self.m.step.empty(
+          'error querying weetbix for failure rates',
+          step_text=query_failure_rate_step_error_msg)
+      # Set an output property so this is easily queryable
+      log_step.presentation.properties['weetbix_query_error'] = True
+      return
+
+    flaky_test_suites = {}
+    for suite in tests_to_check:
+      failure_rate_analysis_per_suite = suite_to_per_suite_analysis.get(
+          suite.name)
+
+      # Query over the last 5 weekdays and the last weekday
+      flaky_tests_in_last_week = (
+          failure_rate_analysis_per_suite.get_flaky_tests(5, 3))
+      flaky_tests_in_last_day = (
+          failure_rate_analysis_per_suite.get_flaky_tests(1, 1))
+
+      last_week_test_names = set(flaky_tests_in_last_week)
+      last_day_test_names = set(flaky_tests_in_last_day)
+      # To be exonerated, the failing test needs to be flaky in the last weekday
+      # AND the last 5 weekdays
+      flaky_test_names_to_exonerate = last_week_test_names.intersection(
+          last_day_test_names)
+      if flaky_test_names_to_exonerate:
+        flaky_tests_to_ex = {}
+        for test_name in flaky_test_names_to_exonerate:
+          analysis = flaky_tests_in_last_week[test_name]
+          flaky_tests_to_ex[test_name] = (analysis.run_flaky_verdict_examples)
+
+        flaky_test_suites[suite.name] = flaky_tests_to_ex
+        suite.add_known_weetbix_flaky_failures(set(flaky_tests_to_ex))
+
+    if flaky_test_suites:
+      # Log this so that recent flaky verdicts are visible in build
+      self.m.step.empty(
+          'query weetbix for flaky tests',
+          log_text=self.m.json.dumps(flaky_test_suites, indent=2))
+
   def _query_flaky_failures(self, tests_to_check):
     """Queries FindIt if a given set of tests are known to be flaky.
 
@@ -506,6 +579,11 @@ class TestUtilsApi(recipe_api.RecipeApi):
     This feature is controlled by the should_exonerate_flaky_failures property,
     which allows switch on/off with ease and flexibility.
 
+    If the enable_weetbix_queries experiment is set, this will also query
+    weetbix for test failure/flakiness stats via the
+    _query_weetbix_flaky_failures() function. The flaky test_names will be
+    stored in the test_suite's known_weetbix_flaky_failures property
+
     Args:
       failed_test_suites ([steps.Test]): A list of failed test suites to check.
     """
@@ -513,6 +591,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
       return
 
     tests_to_check = []
+    weetbix_tests_to_check = []
     for test_suite in failed_test_suites:
       tests = []
       for t in set(test_suite.deterministic_failures('with patch')):
@@ -527,14 +606,14 @@ class TestUtilsApi(recipe_api.RecipeApi):
         # 2. Avoid overloading the service.
         continue
 
+      weetbix_tests_to_check.append(test_suite)
       tests_to_check.extend(tests)
 
     experiments = self.m.buildbucket.build.input.experiments
     if 'enable_weetbix_queries' in experiments:
-      self.m.weetbix.query_failure_rate(failed_test_suites)
-
       # TODO (crbug/1314194): Process failure rates for test flakiness and
       # report difference
+      self._query_weetbix_flaky_failures(weetbix_tests_to_check)
 
     known_flakes = self._query_flaky_failures(tests_to_check)
     if not known_flakes:
