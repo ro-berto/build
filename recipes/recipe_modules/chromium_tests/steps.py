@@ -566,10 +566,9 @@ class Test(object):
 
   @property
   def has_inverted(self):
-    """Returns true if the test has an available inverted run available.
+    """Returns False
 
-    In an inverted run, only the tests that would normally be filtered are
-    run.
+    Intended to be overridden by subclasses that can run inverted
     """
     return False
 

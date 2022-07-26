@@ -811,7 +811,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     """Runs inverted tests and returns failures.
 
     Inverted tests are the same isolates used in run_tests_with_patch but run
-    only the tests that would be skipped in the regular test run.
+    only the tests that would be skipped in a regular Quick Run.
 
     Args:
       test_suites - iterable of objects implementing the steps.Test interface.
