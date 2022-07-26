@@ -1214,3 +1214,29 @@ def GenTests(api):
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
   )
+
+  yield api.test(
+      'cancel-during-checkout',
+      api.chromium_tests_builder_config.try_build(
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
+          builder_db=builder_db,
+          try_db=ctbc.TryDatabase.create({
+              'fake-try-group': {
+                  'fake-try-builder':
+                      ctbc.TrySpec.create_for_single_mirror(
+                          builder_group='fake-group',
+                          buildername='fake-builder',
+                      ),
+              },
+          }),
+      ),
+      api.step_data(
+          'gclient runhooks (with patch)',
+          retcode=-15,
+          cancel=True,
+          global_shutdown_event='after',
+      ),
+      api.post_check(post_process.DoesNotRunRE, '.+ \(without patch\)'),
+      api.post_process(post_process.DropExpectation),
+  )

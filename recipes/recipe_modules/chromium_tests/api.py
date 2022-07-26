@@ -200,19 +200,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     for c in builder_config.android_apply_config:
       self.m.chromium_android.apply_config(c)
 
-  def runhooks(self, update_step, suffix=None):
-    if suffix:
-      self.m.chromium.runhooks(name='runhooks ({})'.format(suffix))
-    elif self.m.tryserver.is_tryserver:
-      try:
-        self.m.chromium.runhooks(name='runhooks (with patch)')
-      except self.m.step.StepFailure:
-        # As part of deapplying patch we call runhooks without the patch.
-        self.deapply_patch(update_step)
-        raise
-    else:
-      self.m.chromium.runhooks()
-
   def create_targets_config(self,
                             builder_config,
                             got_revisions,
@@ -316,7 +303,16 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     self.m.chromium.ensure_toolchains(
         checkout_dir=self.m.chromium_checkout.checkout_dir)
 
-    self.runhooks(update_step, suffix=runhooks_suffix)
+    # For some reason, we treat the runhooks step as special and support a
+    # suffix (automatically using 'without patch' for try builders), even though
+    # we don't add a suffix to bot_update. This is legacy behavior and who knows
+    # what queries depend on it.
+    if runhooks_suffix:
+      self.m.chromium.runhooks(name='runhooks ({})'.format(runhooks_suffix))
+    elif self.m.tryserver.is_tryserver:
+      self.m.chromium.runhooks(name='runhooks (with patch)')
+    else:
+      self.m.chromium.runhooks()
 
     targets_config = self.create_targets_config(
         builder_config,

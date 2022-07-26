@@ -509,35 +509,6 @@ def GenTests(api):
     )
 
   yield api.test(
-      'runhooks_failure',
-      api.platform('linux', 64),
-      api.chromium.try_build(
-          builder_group='fake-try-group',
-          builder='fake-try-builder',
-      ),
-      ctbc_api.properties(
-          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
-              builder_group='fake-group',
-              builder='fake-builder',
-          ).assemble()),
-      api.step_data('gclient runhooks (with patch)', retcode=1),
-      api.step_data('gclient runhooks (without patch)', retcode=1),
-  )
-
-  yield api.test(
-      'runhooks_failure_ng',
-      api.platform('linux', 64),
-      api.chromium.try_build(
-          builder_group='fake-try-group', builder='fake-try-builder'),
-      ctbc_api.properties(
-          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
-              builder_group='fake-group',
-              builder='fake-builder',
-          ).assemble()),
-      api.step_data('gclient runhooks (with patch)', retcode=1),
-  )
-
-  yield api.test(
       'compile_failure_ng',
       api.platform('linux', 64),
       api.chromium.try_build(
