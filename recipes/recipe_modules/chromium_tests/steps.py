@@ -465,6 +465,8 @@ class Test(object):
     self._known_flaky_failures_map = {}
 
     # Set of test names
+    # TODO (crbug/1314194): Update name to something else since
+    # this also includes tests failing on ToT
     self._known_weetbix_flaky_failures = set()
 
     # A map from suffix [e.g. 'with patch'] to the name of the recipe engine

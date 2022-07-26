@@ -26,20 +26,18 @@ DEPS = [
 
 PROPERTIES = {
     'test_suite_to_results': Property(kind=list),
-    'expected_get_flaky_test_dict': Property(kind=Dict()),
-    'num_intervals': Property(kind=int),
-    'min_flake_count': Property(kind=int),
+    'num_intervals_list': Property(kind=list),
     'empty_response': Property(kind=bool, default=False),
+    'expected_flake_and_unexpected_dict': Property(kind=Dict(), default=None),
 }
 
 
 def RunSteps(
     api,
     test_suite_to_results,
-    expected_get_flaky_test_dict,
-    num_intervals,
-    min_flake_count,
+    num_intervals_list,
     empty_response,
+    expected_flake_and_unexpected_dict,
 ):
   tests = []
   for suite_to_results in test_suite_to_results:
@@ -70,20 +68,20 @@ def RunSteps(
     api.assertions.assertEqual(suite_to_failure_rate_per_suite, {})
     return
 
-  if expected_get_flaky_test_dict == {}:
-    for suite_name, failure_rate_per_suite in (
-        suite_to_failure_rate_per_suite.items()):
-      api.assertions.assertEqual(
-          len(
-              failure_rate_per_suite.get_flaky_tests(num_intervals,
-                                                     min_flake_count)), 0)
-  for suite_name, expected_flaky_dict in expected_get_flaky_test_dict.items():
+  for suite_name, expected_dict in expected_flake_and_unexpected_dict.items():
     api.assertions.assertIn(suite_name, suite_to_failure_rate_per_suite)
-    flaky_tests = suite_to_failure_rate_per_suite[suite_name].get_flaky_tests(
-        num_intervals, min_flake_count)
-    for test_name, analysis in flaky_tests.items():
-      api.assertions.assertEqual(analysis.test_id,
-                                 expected_flaky_dict[test_name])
+    suite_analysis = suite_to_failure_rate_per_suite[suite_name]
+    for individual_analysis in suite_analysis.failure_analysis_list:
+      flaky_and_unexpected_counts = {
+          'total_flaky':
+              individual_analysis.get_flaky_verdict_counts(num_intervals_list),
+          'total_recent_unexpected':
+              (individual_analysis.get_unexpected_recent_verdict_count()),
+      }
+      api.assertions.assertDictEqual(
+          flaky_and_unexpected_counts,
+          expected_dict[individual_analysis.test_id],
+      )
 
 
 def GenTests(api):
@@ -152,6 +150,21 @@ def GenTests(api):
           }
       },
   ]
+
+  def construct_recent_verdicts(expected_count, unexpected_count):
+    verdicts = []
+    for i in range(expected_count):
+      verdicts.append({
+          'ingested_invocation_id': 'invocation_id_' + str(i),
+          'hasUnexpectedRuns': False,
+      })
+    for i in range(unexpected_count):
+      verdicts.append({
+          'ingested_invocation_id': 'invocation_id_' + str(i * 10),
+          'hasUnexpectedRuns': True,
+      })
+    return verdicts
+
   test_variants_response = [
       {
           'testId':
@@ -162,7 +175,7 @@ def GenTests(api):
               {
                   'intervalAge': 1,
                   'totalRunExpectedVerdicts': 300,
-                  'totalRunUnexpectedVerdicts': 1,
+                  'totalRunUnexpectedVerdicts': 2,
                   'totalRunFlakyVerdicts': 3,
               },
               {
@@ -170,7 +183,17 @@ def GenTests(api):
                   'totalRunExpectedVerdicts': 300,
                   'totalRunFlakyVerdicts': 10,
               },
+              {
+                  'intervalAge': 3,
+                  'totalRunExpectedVerdicts': 300,
+                  'totalRunFlakyVerdicts': 10,
+              },
           ],
+          'recentVerdicts':
+              construct_recent_verdicts(
+                  expected_count=8,
+                  unexpected_count=2,
+              )
       },
       {
           'testId':
@@ -181,14 +204,19 @@ def GenTests(api):
               {
                   'intervalAge': 1,
                   'totalRunExpectedVerdicts': 300,
-                  'totalRunUnexpectedVerdicts': 1,
+                  'totalRunUnexpectedVerdicts': 9,
               },
               {
                   'intervalAge': 2,
                   'totalRunExpectedVerdicts': 300,
-                  'totalRunUnexpectedVerdicts': 3,
+                  'totalRunUnexpectedVerdicts': 0,
               },
           ],
+          'recentVerdicts':
+              construct_recent_verdicts(
+                  expected_count=1,
+                  unexpected_count=9,
+              )
       },
       {
           'testId':
@@ -207,6 +235,11 @@ def GenTests(api):
                   'totalRunUnexpectedVerdicts': 3,
               },
           ],
+          'recentVerdicts':
+              construct_recent_verdicts(
+                  expected_count=9,
+                  unexpected_count=1,
+              )
       },
       {
           'testId':
@@ -225,25 +258,44 @@ def GenTests(api):
                   'totalRunUnexpectedVerdicts': 3,
               },
           ],
+          'recentVerdicts':
+              construct_recent_verdicts(
+                  expected_count=10,
+                  unexpected_count=0,
+              )
       },
   ]
   yield api.test(
       'basic',
       api.properties(
           test_suite_to_results=test_suite_to_results,
-          expected_get_flaky_test_dict={
+          num_intervals_list=[1, 5],
+          expected_flake_and_unexpected_dict={
               'suite_1': {
-                  'test_one': 'ninja://gpu:suite_1/test_one'
+                  'ninja://gpu:suite_1/test_one': {
+                      'total_flaky': {
+                          1: 3,
+                          5: 23
+                      },
+                      'total_recent_unexpected': 2,
+                  }
+              },
+              'suite_2': {
+                  'ninja://gpu:suite_2/test_one': {
+                      'total_flaky': {
+                          1: 0,
+                          5: 0
+                      },
+                      'total_recent_unexpected': 9,
+                  }
               },
           },
-          num_intervals=2,
-          min_flake_count=11,
       ),
       api.step_data(
           'query weetbix for failure rates.rpc call',
           stdout=api.raw_io.output_text(
               api.json.dumps({
-                  'test_variants': test_variants_response,
+                  'testVariants': test_variants_response,
               }),),
       ),
       api.post_process(
@@ -268,55 +320,11 @@ def GenTests(api):
   )
 
   yield api.test(
-      'small_num_interval',
-      api.properties(
-          test_suite_to_results=test_suite_to_results,
-          expected_get_flaky_test_dict={
-              'suite_1': {
-                  'test_one': 'ninja://gpu:suite_1/test_one'
-              },
-          },
-          num_intervals=1,
-          min_flake_count=3,
-      ),
-      api.step_data(
-          'query weetbix for failure rates.rpc call',
-          stdout=api.raw_io.output_text(
-              api.json.dumps({
-                  'test_variants': test_variants_response,
-              }),),
-      ),
-      api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'small_num_interval_no_flakes',
-      api.properties(
-          test_suite_to_results=test_suite_to_results,
-          expected_get_flaky_test_dict={},
-          num_intervals=1,
-          min_flake_count=10,
-      ),
-      api.step_data(
-          'query weetbix for failure rates.rpc call',
-          stdout=api.raw_io.output_text(
-              api.json.dumps({
-                  'test_variants': test_variants_response,
-              }),),
-      ),
-      api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
       'empty_response',
       api.properties(
           test_suite_to_results=test_suite_to_results,
           empty_response=True,
-          expected_get_flaky_test_dict={},
-          num_intervals=None,
-          min_flake_count=None,
+          num_intervals_list=None,
       ),
       api.step_data(
           'query weetbix for failure rates.rpc call',

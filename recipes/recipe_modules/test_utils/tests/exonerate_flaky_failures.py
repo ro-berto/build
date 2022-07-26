@@ -83,12 +83,29 @@ def RunSteps(api, known_flakes_expectations, known_weetbix_flakes_expectations,
 
 def GenTests(api):
 
-  def generate_analysis(test_name, is_flaky):
+  def construct_recent_verdicts(expected_count, unexpected_count):
+    verdicts = []
+    for i in range(expected_count):
+      verdicts.append({
+          'ingested_invocation_id': 'invocation_id_' + str(i),
+          'hasUnexpectedRuns': False,
+      })
+    for i in range(unexpected_count):
+      verdicts.append({
+          'ingested_invocation_id': 'invocation_id_' + str(i * 10),
+          'hasUnexpectedRuns': True,
+      })
+    return verdicts
+
+  def generate_analysis(test_name,
+                        is_flaky,
+                        expected_count=10,
+                        unexpected_count=0):
     return {
         'testId':
             'ninja://failed_test/{}'.format(test_name),
         'variantHash':
-            '8897b2a859b391d5',
+            'fake_variant_hash',
         'intervalStats': [
             {
                 'intervalAge': 1,
@@ -102,6 +119,11 @@ def GenTests(api):
                 'totalRunFlakyVerdicts': 10 if is_flaky else 0,
             },
         ],
+        'recentVerdicts':
+            construct_recent_verdicts(
+                expected_count=expected_count,
+                unexpected_count=unexpected_count,
+            )
     }
 
   yield api.test(
@@ -142,7 +164,7 @@ def GenTests(api):
       }),
       api.step_data(
           'query weetbix for failure rates.rpc call',
-          stdout=api.raw_io.output_text(api.json.dumps({'test_variants': []})),
+          stdout=api.raw_io.output_text(api.json.dumps({'testVariants': []})),
       ),
       api.step_data(
           'query known flaky failures on CQ',
@@ -221,7 +243,7 @@ def GenTests(api):
   )
 
   yield api.test(
-      'no tests are marked as known flaky',
+      'no tests are marked as known flaky or recently failing',
       api.chromium.generic_build(
           builder_group='g',
           builder='b',
@@ -243,9 +265,13 @@ def GenTests(api):
           'query weetbix for failure rates.rpc call',
           stdout=api.raw_io.output_text(
               api.json.dumps({
-                  'test_variants': [
-                      generate_analysis('testA', False),
-                      generate_analysis('testB', False),
+                  'testVariants': [
+                      generate_analysis(
+                          'testA', False, expected_count=10,
+                          unexpected_count=0),
+                      generate_analysis(
+                          'testB', False, expected_count=10,
+                          unexpected_count=0),
                   ]
               })),
       ),
@@ -287,7 +313,7 @@ def GenTests(api):
           'query weetbix for failure rates.rpc call',
           stdout=api.raw_io.output_text(
               api.json.dumps(
-                  {'test_variants': [generate_analysis('testA', True),]})),
+                  {'testVariants': [generate_analysis('testA', True),]})),
       ),
       api.step_data(
           'query known flaky failures on CQ',
@@ -360,7 +386,7 @@ def GenTests(api):
           'query weetbix for failure rates.rpc call',
           stdout=api.raw_io.output_text(
               api.json.dumps({
-                  'test_variants': [
+                  'testVariants': [
                       generate_analysis('testA', True),
                       generate_analysis('testB', True),
                   ]
@@ -379,7 +405,7 @@ def GenTests(api):
   )
 
   yield api.test(
-      'query failure rate with weetbix',
+      'tests are deterministically failing',
       api.chromium.generic_build(
           builder_group='g',
           builder='b',
@@ -418,9 +444,17 @@ def GenTests(api):
       api.step_data(
           'query weetbix for failure rates.rpc call',
           stdout=api.raw_io.output_text(
-              api.json.dumps(
-                  {'test_variants': [generate_analysis('testA', True),]})),
+              api.json.dumps({
+                  'testVariants': [
+                      generate_analysis(
+                          'testA',
+                          is_flaky=False,
+                          expected_count=1,
+                          unexpected_count=9)
+                  ]
+              })),
       ),
+      api.post_process(post_process.PropertiesContain, 'weetbix_info'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -477,7 +511,7 @@ def GenTests(api):
           'query weetbix for failure rates.rpc call',
           stdout=api.raw_io.output_text(
               api.json.dumps({
-                  'test_variants': [
+                  'testVariants': [
                       generate_analysis('testA', True),
                       generate_analysis('testB', True),
                   ]

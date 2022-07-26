@@ -67,7 +67,7 @@ class WeetbixApi(recipe_api.RecipeApi):
           'rpc call', 'weetbix.v1.TestVariants.QueryFailureRate', {
               'project': 'chromium',
               'testVariants': test_variants_to_query,
-          }).get('test_variants')
+          }).get('testVariants')
 
       # Should not happen unless there's a server issue with the RPC
       if not failure_analysis_dicts:
@@ -132,23 +132,6 @@ class FailureRateAnalysisPerSuite(object):
     assert test_id not in self.test_ids, assert_msg.format(test_id)
     self.failure_analysis_list.append(failure_analysis)
 
-  def get_flaky_tests(self, num_intervals, min_flake_count):
-    """Returns IndividualTestFailureRateAnalysis instances for flaky tests
-
-    Args:
-      num_intervals (int): The quantity of past intervals to look at.
-      min_flake_count (int): The minimum flake count for an individual test to
-        be considered flaky
-
-    Return: Dict of test_name -> IndividualTestFailureRateAnalysis
-    """
-    return {
-        analysis.test_name: analysis
-        for analysis in self.failure_analysis_list
-        if
-        analysis.get_total_flaky_verdict_count(num_intervals) >= min_flake_count
-    }
-
 
 @attrs()
 class IndividualTestFailureRateAnalysis(object):
@@ -161,12 +144,16 @@ class IndividualTestFailureRateAnalysis(object):
   # e.g. FeatureInfoTest.Basic/Service.0
   test_name = attrib(str)
   suite_name = attrib(str)
+  variant_hash = attrib(str)
   # Ordered list (ascending by interval_age) of IntervalStats
   interval_stats = attrib(list)
-  # List of VerdictExample protos
+  # List of VerdictExample protos as dicts
   # Examples of verdicts which had both expected and unexpected runs.
   # Limited to at most 10, ordered by recency
   run_flaky_verdict_examples = attrib(list, default=None)
+  # List of RecentVerdict protos
+  # Limited to 10 RecentVerdicts
+  recent_verdicts = attrib(list, default=None)
 
   @classmethod
   def create(cls, failure_analysis, suite_name, test_name):
@@ -186,11 +173,13 @@ class IndividualTestFailureRateAnalysis(object):
         test_id=failure_analysis.test_id,
         test_name=test_name,
         suite_name=suite_name,
+        variant_hash=failure_analysis.variant_hash,
         interval_stats=interval_stats,
         run_flaky_verdict_examples=run_flaky_verdict_examples,
+        recent_verdicts=list(failure_analysis.recent_verdicts),
     )
 
-  def get_total_flaky_verdict_count(self, num_intervals):
+  def _get_flaky_verdict_count(self, num_intervals):
     """Returns the number of flaky verdicts over the past X intervals
 
     Args:
@@ -204,6 +193,32 @@ class IndividualTestFailureRateAnalysis(object):
         break
       count += interval.total_run_flaky_verdicts
     return count
+
+  def get_unexpected_recent_verdict_count(self):
+    """Returns the total number of unexpected verdicts over the past 10 verdicts
+
+    The list of RecentVerdicts returned from Weetbix for a test_id is already
+    limited to at most 10 verdicts.
+
+    Return: int
+    """
+    return sum(
+        [verdict.has_unexpected_runs for verdict in self.recent_verdicts])
+
+  def get_flaky_verdict_counts(self, num_intervals_list):
+    """Returns the number of flaky verdicts for each interval
+
+    Args:
+      num_intervals_list List(int): A list of the past intervals to look at for
+        flaky verdicts. Example: if num_intervals is [1, 5], this will return
+        one value for the number of flakes in the past day and another value for
+        the number of flakes in the past 5 days.
+
+    Return: int
+    """
+    return {
+        num: self._get_flaky_verdict_count(num) for num in num_intervals_list
+    }
 
 
 @attrs()

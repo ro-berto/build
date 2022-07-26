@@ -421,17 +421,19 @@ class TestUtilsApi(recipe_api.RecipeApi):
         pruned_suites.remove(t)
     return pruned_suites
 
-  def _query_weetbix_flaky_failures(self, tests_to_check):
-    """Get flaky tests per suite by querying weetbix for flaky rates
+  def _query_weetbix_failures(self, tests_to_check):
+    """Get flaky or deterministically failing tests by querying weetbix
 
-    Flaky exoneration criteria:
-    At least 3 flaky verdicts in the past 5 weekdays AND at least 1 flaky
+    Exoneration criteria:
+    - At least 3 flaky verdicts in the past 5 weekdays AND at least 1 flaky
     verdict in the past 1 weekday.
+    OR
+    - At least 7 recent unexpected verdicts
     (Flaky verdict means that in a single try build, the test failed the first
     run and then passed in the next run (aka the "retry shard (with patch)")
 
-    If a suite has flaky tests, the suite's _known_weetbix_flaky_failures
-    will be updated.
+    If a suite has tests to be exonerated, the suite's
+    _known_weetbix_flaky_failures will be updated.
 
     Args:
       tests_to_check (List(Test)): List of failing test suites
@@ -462,37 +464,51 @@ class TestUtilsApi(recipe_api.RecipeApi):
       log_step.presentation.properties['weetbix_query_error'] = True
       return
 
-    flaky_test_suites = {}
+    flaky_verdict_example_log = {}
+    weetbix_build_output = []
     for suite in tests_to_check:
       failure_rate_analysis_per_suite = suite_to_per_suite_analysis.get(
           suite.name)
 
-      # Query over the last 5 weekdays and the last weekday
-      flaky_tests_in_last_week = (
-          failure_rate_analysis_per_suite.get_flaky_tests(5, 3))
-      flaky_tests_in_last_day = (
-          failure_rate_analysis_per_suite.get_flaky_tests(1, 1))
+      # Set of test_names
+      tests_to_exonerate = set()
+      for analysis in failure_rate_analysis_per_suite.failure_analysis_list:
+        # Query over the last 5 weekdays and the last weekday
+        stats = {
+            'total_flaky':
+                analysis.get_flaky_verdict_counts([1, 5]),
+            'total_recent_unexpected':
+                analysis.get_unexpected_recent_verdict_count(),
+        }
+        # To be exonerated for being flaky, the failing test needs to be flaky
+        # in the last weekday AND the last 5 weekdays
+        meets_min_flakiness = (
+            stats['total_flaky'][1] >= 1 and stats['total_flaky'][5] >= 3)
+        meets_min_recent_unexpected = stats['total_recent_unexpected'] >= 7
+        exonerated = False
+        if meets_min_flakiness or meets_min_recent_unexpected:
+          tests_to_exonerate.add(analysis.test_name)
+          exonerated = True
 
-      last_week_test_names = set(flaky_tests_in_last_week)
-      last_day_test_names = set(flaky_tests_in_last_day)
-      # To be exonerated, the failing test needs to be flaky in the last weekday
-      # AND the last 5 weekdays
-      flaky_test_names_to_exonerate = last_week_test_names.intersection(
-          last_day_test_names)
-      if flaky_test_names_to_exonerate:
-        flaky_tests_to_ex = {}
-        for test_name in flaky_test_names_to_exonerate:
-          analysis = flaky_tests_in_last_week[test_name]
-          flaky_tests_to_ex[test_name] = (analysis.run_flaky_verdict_examples)
+        # This is to output weetbix information in the build output property
+        # and to add the flaky verdict examples as a log in a step
+        to_log = stats
+        to_log['variant_hash'] = analysis.variant_hash
+        to_log['exonerated'] = exonerated
+        to_log['test_id'] = analysis.test_id
+        weetbix_build_output.append(to_log)
+        flaky_verdict_example_log[analysis.test_id] = (
+            analysis.run_flaky_verdict_examples)
 
-        flaky_test_suites[suite.name] = flaky_tests_to_ex
-        suite.add_known_weetbix_flaky_failures(set(flaky_tests_to_ex))
+      if tests_to_exonerate:
+        suite.add_known_weetbix_flaky_failures(tests_to_exonerate)
 
-    if flaky_test_suites:
-      # Log this so that recent flaky verdicts are visible in build
-      self.m.step.empty(
-          'query weetbix for flaky tests',
-          log_text=self.m.json.dumps(flaky_test_suites, indent=2))
+    # Log this so that recent flaky verdicts are visible in build
+    query_weetbix_step = self.m.step.empty(
+        'query weetbix for flaky tests',
+        log_text=self.m.json.dumps(flaky_verdict_example_log, indent=2))
+    query_weetbix_step.presentation.properties['weetbix_info'] = (
+        weetbix_build_output)
 
   def _query_flaky_failures(self, tests_to_check):
     """Queries FindIt if a given set of tests are known to be flaky.
@@ -581,7 +597,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     If the enable_weetbix_queries experiment is set, this will also query
     weetbix for test failure/flakiness stats via the
-    _query_weetbix_flaky_failures() function. The flaky test_names will be
+    _query_weetbix_failures() function. The flaky test_names will be
     stored in the test_suite's known_weetbix_flaky_failures property
 
     Args:
@@ -613,7 +629,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     if 'enable_weetbix_queries' in experiments:
       # TODO (crbug/1314194): Process failure rates for test flakiness and
       # report difference
-      self._query_weetbix_flaky_failures(weetbix_tests_to_check)
+      self._query_weetbix_failures(weetbix_tests_to_check)
 
     known_flakes = self._query_flaky_failures(tests_to_check)
     if not known_flakes:
