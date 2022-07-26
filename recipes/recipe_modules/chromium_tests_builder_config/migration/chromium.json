@@ -780,11 +780,6 @@
       "chromium.fyi:lacros-amd64-generic-rel-fyi"
     ]
   },
-  "chromium.fyi:lacros-amd64-generic-rel-skylab-fyi": {
-    "builders": [
-      "chromium.fyi:lacros-amd64-generic-rel-skylab-fyi"
-    ]
-  },
   "chromium.fyi:linux-annotator-rel": {
     "builders": [
       "chromium.fyi:linux-annotator-rel",
