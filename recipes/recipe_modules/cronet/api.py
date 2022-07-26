@@ -139,7 +139,7 @@ class CronetApi(recipe_api.RecipeApi):
 
     data_dir = self.m.path.mkdtemp('perf_data')
     self.m.step('performance test', [
-        'python',
+        'vpython3',
         self.m.path['checkout'].join('components', 'cronet', 'android', 'test',
                                      'javaperftests', 'run.py'),
         '--output-format',

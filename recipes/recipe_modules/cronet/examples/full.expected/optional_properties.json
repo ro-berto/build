@@ -1260,7 +1260,7 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython3",
       "[START_DIR]/src/components/cronet/android/test/javaperftests/run.py",
       "--output-format",
       "histograms",
