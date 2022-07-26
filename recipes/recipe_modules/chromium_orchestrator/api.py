@@ -314,6 +314,19 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
     _, local_tests_raw_result = self.process_sub_build(
         build_to_process, is_swarming_phase=False, with_patch=True)
 
+    # The inverted quick run is a temporary experiment. This is not meant
+    # to be a permanent as the inverted shards will only run during submission
+    if 'chromium_rts.inverted_quickrun' in self.m.buildbucket.build.input.experiments:
+      inverted_tests = self.process_swarming_props(comp_output.swarming_props,
+                                                   builder_config,
+                                                   targets_config)
+      # Trigger and wait for the tests
+      with self.m.chromium_tests.wrap_chromium_tests(builder_config,
+                                                     inverted_tests):
+        self.m.test_utils.run_inverted_tests_with_patch(
+            inverted_tests,
+            retry_failed_shards=builder_config.retry_failed_shards)
+
     if not failing_test_suites:
       self.report_stats_and_flakiness(tests)
       # There could be exonerated failed tests from FindIt flakes

@@ -119,6 +119,17 @@ _TEST_TRYBOTS = ctbc.TryDatabase.create({
                 ],
                 regression_test_selection=try_spec.QUICK_RUN_ONLY,
             ),
+        'inverted-rts-rel':
+            ctbc.TrySpec.create(
+                mirrors=[
+                    ctbc.TryMirror.create(
+                        builder_group='chromium.test',
+                        buildername='chromium-rel',
+                        tester='chromium-rel',
+                    ),
+                ],
+                regression_test_selection=try_spec.QUICK_RUN_ONLY,
+            ),
     }
 })
 
@@ -774,6 +785,86 @@ def GenTests(api):
           },
       }),
       api.filter.suppress_analyze(),
+  )
+
+  yield api.test(
+      'quick run inverted rts',
+      api.filter.suppress_analyze(),
+      api.properties(
+          **{
+              "$recipe_engine/cq": {
+                  "active": True,
+                  "dryRun": True,
+                  "runMode": "QUICK_DRY_RUN",
+                  "topLevel": True
+              }
+          }),
+      api.chromium_tests_builder_config.try_build(
+          builder_group='tryserver.chromium.test',
+          builder='rts-exp-rel',
+          builder_db=_TEST_BUILDERS,
+          try_db=_TEST_TRYBOTS,
+          experiments=['chromium_rts.inverted_quickrun'],
+      ),
+      api.step_data(
+          'find command lines (with patch)',
+          api.json.output({
+              'invertable_tests': [
+                  './invertable_tests', '--fake-flag', '--fake-log-file',
+                  '$ISOLATED_OUTDIR/fake.log', '--fake-filter', 'filter.filter'
+              ],
+              'invertable_tests_inverted': [
+                  './invertable_tests_inverted', '--fake-flag',
+                  '--fake-log-file', '$ISOLATED_OUTDIR/fake.log',
+                  '--fake-filter', 'inverted.filter'
+              ],
+              'non_invertable': [
+                  './non_invertable', '--fake-flag', '--fake-log-file',
+                  '$ISOLATED_OUTDIR/fake.log', '--fake-filter', 'filter.filter'
+              ],
+          })),
+      api.chromium_tests.read_source_side_spec(
+          'chromium.test', {
+              'chromium-rel': {
+                  'gtest_tests': [{
+                      'test': 'invertable_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True,
+                      },
+                  }, {
+                      'test': 'non_invertable',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True,
+                      }
+                  }, {
+                      'test': 'invertable_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': False,
+                      }
+                  }],
+                  'isolated_scripts': [{
+                      'isolate_name': 'isolated_script_test',
+                      'name': 'isolated_script_test',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True,
+                      }
+                  },],
+              },
+          }),
+      api.post_process(post_process.MustRun, 'invertable_tests (with patch)'),
+      api.post_process(post_process.MustRun,
+                       'invertable_tests (inverted with patch)'),
+      api.post_process(post_process.MustRun, 'non_invertable (with patch)'),
+      api.post_process(post_process.DoesNotRun,
+                       'non_invertable (inverted with patch)'),
+      api.post_process(post_process.MustRun,
+                       'isolated_script_test (with patch)'),
+      api.post_process(post_process.DoesNotRun,
+                       'isolated_script_test (inverted with patch)'),
+      api.post_process(post_process.MustRun, 'quick run options'),
+      api.post_process(post_process.PropertyEquals, 'rts_setting',
+                       'rts-chromium'),
+      api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(

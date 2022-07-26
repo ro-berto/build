@@ -32,6 +32,9 @@ for path in glob.glob(os.path.join(args.build_dir, '*.isolate')):
     isolate = ast.literal_eval(fp.read())
     if 'command' in isolate.get('variables', {}):
       command_line_map[target_name] = isolate['variables']['command']
+    if 'inverted_command' in isolate.get('variables', {}):
+      command_line_map['{}_inverted'.format(
+          target_name)] = isolate['variables']['inverted_command']
 
 with open(args.output_json, 'w') as fp:
   json.dump(command_line_map, fp)

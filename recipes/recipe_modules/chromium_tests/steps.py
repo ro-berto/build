@@ -565,6 +565,15 @@ class Test(object):
     return bool(self.isolate_target)
 
   @property
+  def has_inverted(self):
+    """Returns true if the test has an available inverted run available.
+
+    In an inverted run, only the tests that would normally be filtered are
+    run.
+    """
+    return False
+
+  @property
   def is_skylabtest(self):
     return False
 
@@ -2015,6 +2024,7 @@ class SwarmingTest(Test):
 
     self._tasks = {}
     self._raw_cmd = []
+    self._inverted_raw_cmd = []
     self._relative_cwd = None
 
   def _dispatches_to_windows(self):
@@ -2061,6 +2071,20 @@ class SwarmingTest(Test):
   @raw_cmd.setter
   def raw_cmd(self, value):
     self._raw_cmd = value
+
+  @property
+  def inverted_raw_cmd(self):
+    """Holds the command for running only the filtered tests for this suite
+    """
+    return self._inverted_raw_cmd
+
+  @inverted_raw_cmd.setter
+  def inverted_raw_cmd(self, value):
+    self._inverted_raw_cmd = value
+
+  @property
+  def has_inverted(self):
+    return bool(self._inverted_raw_cmd)
 
   @property
   def relative_cwd(self):
@@ -2382,8 +2406,9 @@ class SwarmingGTestTest(SwarmingTest, GTestArguments):
     # tombstones are in resultdb.
     if self.api.m.chromium.c.TARGET_PLATFORM != 'android':
       json_override = self.api.m.path.mkstemp()
+    cmd = self.raw_cmd if 'inverted' not in suffix else self.inverted_raw_cmd
     task = self.api.m.chromium_swarming.gtest_task(
-        raw_cmd=self._raw_cmd,
+        raw_cmd=cmd,
         relative_cwd=self.relative_cwd,
         cas_input_root=cas_input_root,
         failure_as_exception=False,
@@ -2641,8 +2666,9 @@ class SwarmingIsolatedScriptTest(SwarmingTest, IsolatedScriptTestArguments):
     self._test_options = value
 
   def create_task(self, suffix, cas_input_root):
+    cmd = self.raw_cmd if 'inverted' not in suffix else self.inverted_raw_cmd
     task = self.api.m.chromium_swarming.isolated_script_task(
-        raw_cmd=self.raw_cmd,
+        raw_cmd=cmd,
         relative_cwd=self.relative_cwd,
         cas_input_root=cas_input_root)
 
@@ -2793,6 +2819,7 @@ class MockTestSpec(TestSpec):
   per_suffix_valid = attrib(mapping[str, bool], default={})
   runs_on_swarming = attrib(bool, default=False)
   invocation_names = attrib(sequence[str], default=[])
+  invertable = attrib(bool, default=False)
 
   @property
   def test_class(self):
@@ -2866,6 +2893,10 @@ class MockTest(Test):
 
   def get_invocation_names(self, _suffix):
     return self.spec.invocation_names
+
+  @property
+  def has_inverted(self):
+    return self.spec.invertable
 
   @property
   def abort_on_failure(self):

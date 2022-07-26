@@ -367,7 +367,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
                   reason=test_result_pb2.ExonerationReason.OCCURS_ON_MAINLINE,
               ))
       # Any failure known by FindIt to be flaky should also be exonerated.
-      elif suffix == 'with patch':
+      elif suffix == 'with patch' or suffix == 'inverted with patch':
         explanation_html = 'FindIt reported this test as being flaky.'
         for known_flake in suite.known_flaky_failures:
           exonerations.append(
@@ -732,7 +732,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     if self.m.tryserver.is_tryserver and self._should_abort_tryjob(rdb_results):
       return invalid_test_suites, invalid_test_suites + failed_test_suites
 
-    if suffix == 'with patch':
+    if suffix == 'with patch' or suffix == 'inverted with patch':
       failed_test_suites = self._clean_failed_suite_list(failed_test_suites)
 
     # If we encounter any unexpected test results that we believe aren't due to
@@ -795,6 +795,41 @@ class TestUtilsApi(recipe_api.RecipeApi):
     invalid_test_suites, all_failing_test_suites = self.run_tests(
         test_suites,
         'with patch',
+        sort_by_shard=True,
+        retry_failed_shards=retry_failed_shards,
+        retry_invalid_shards=retry_failed_shards)
+
+    # Set metadata about invalid test suites.
+    for t in invalid_test_suites:
+      self._invalid_test_results(t)
+
+    return (invalid_test_suites, all_failing_test_suites)
+
+  def run_inverted_tests_with_patch(self,
+                                    test_suites,
+                                    retry_failed_shards=False):
+    """Runs inverted tests and returns failures.
+
+    Inverted tests are the same isolates used in run_tests_with_patch but run
+    only the tests that would be skipped in the regular test run.
+
+    Args:
+      test_suites - iterable of objects implementing the steps.Test interface.
+      retry_failed_shards: If true, attempts to retry failed shards of swarming
+                           tests.
+
+    Returns: A tuple (invalid_test_suites, all_failing_test_suites).
+      invalid_test_suites: Test suites that do not have valid test results.
+      all_failing_test_suites:
+          This includes test suites that ran but have failing tests, test suites
+          that do not have valid test results, and test suites that failed with
+          otherwise unspecified reasons. This is a superset of
+          invalid_test_suites.
+    """
+    invertable_suites = [t for t in test_suites if t.has_inverted]
+    invalid_test_suites, all_failing_test_suites = self.run_tests(
+        invertable_suites,
+        'inverted with patch',
         sort_by_shard=True,
         retry_failed_shards=retry_failed_shards,
         retry_invalid_shards=retry_failed_shards)

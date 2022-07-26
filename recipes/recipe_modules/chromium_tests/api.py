@@ -740,6 +740,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           test.raw_cmd = command_line
           test.relative_cwd = rel_cwd
 
+        inverted_command_line = command_lines.get(
+            '%s_inverted' % test.target_name, [])
+        if inverted_command_line:
+          test.inverted_raw_cmd = inverted_command_line
+
     execution_info = SwarmingExecutionInfo(
         digest_by_isolate_name=self.m.isolate.isolated_tests,
         command_lines=command_lines,
@@ -1342,6 +1347,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           self.m.test_utils.run_tests_with_patch(
               task.test_suites,
               retry_failed_shards=task.should_retry_failures_with_changes))
+
+      # The inverted quick run is a temporary experiment. This is not meant
+      # to be a permanent as the inverted shards will only run during submission
+      if 'chromium_rts.inverted_quickrun' in self.m.buildbucket.build.input.experiments:
+        self.m.test_utils.run_inverted_tests_with_patch(
+            task.test_suites,
+            retry_failed_shards=task.should_retry_failures_with_changes)
 
       if self.m.code_coverage.using_coverage:
         self.m.code_coverage.process_coverage_data(task.test_suites)

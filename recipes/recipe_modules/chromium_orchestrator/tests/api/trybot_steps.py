@@ -71,10 +71,13 @@ def GenTests(api):
             builder='fake-tester',
         ).assemble())
 
-  def get_try_build(remove_src_checkout_experiment):
+  def get_try_build(remove_src_checkout_experiment,
+                    inverted_shard_experiment=False):
     experiments = []
     if remove_src_checkout_experiment:
-      experiments = ['remove_src_checkout_experiment']
+      experiments.append('remove_src_checkout_experiment')
+    if inverted_shard_experiment:
+      experiments.append('chromium_rts.inverted_quickrun')
     return api.chromium.try_build(
         builder_group='fake-try-group',
         builder='fake-orchestrator',
@@ -82,9 +85,10 @@ def GenTests(api):
         revision='d3advegg13',
     )
 
-  def basic(remove_src_checkout_experiment):
+  def basic(remove_src_checkout_experiment, inverted_shard_experiment=False):
     steps = sum([
-        get_try_build(remove_src_checkout_experiment),
+        get_try_build(remove_src_checkout_experiment,
+                      inverted_shard_experiment),
         ctbc_properties(),
         api.properties(
             **{
@@ -155,6 +159,12 @@ def GenTests(api):
   yield api.test(
       'basic_with_remove_src_checkout',
       basic(remove_src_checkout_experiment=True),
+  )
+
+  yield api.test(
+      'basic_with_inverted_shard',
+      basic(
+          remove_src_checkout_experiment=True, inverted_shard_experiment=True),
   )
 
   yield api.test(
