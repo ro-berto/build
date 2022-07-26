@@ -3,7 +3,6 @@
 # found in the LICENSE file.
 
 from google.protobuf.json_format import MessageToDict
-from google.protobuf.json_format import ParseDict
 from recipe_engine import recipe_api
 
 from PB.go.chromium.org.luci.buildbucket.proto import build as build_pb2
@@ -61,11 +60,6 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
 
   def trybot_steps(self):
     raw_result = self.test_patch()
-
-    # The triggered compilator's swarming task is already fully collected during
-    # test_patch()
-    if self.m.led.launched_by_led:
-      return raw_result
 
     # If the orchestrator build is canceled or infra failed, the exception
     # should bubble up during test_patch() and the code below will not be
@@ -185,17 +179,10 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
             'remove_src_checkout_experiment': remove_src_checkout_experiment
         })
 
-    led_job = None
-    if self.m.led.launched_by_led:
-      led_job = self.trigger_compilator_led_build(
-          compilator_properties,
-          remove_src_checkout_experiment,
-          with_patch=True)
-    else:
-      build = self.m.buildbucket.schedule(
-          [request], step_name='trigger compilator (with patch)')[0]
+    build = self.m.buildbucket.schedule(
+        [request], step_name='trigger compilator (with patch)')[0]
 
-      self.current_compilator_buildbucket_id = build.id
+    self.current_compilator_buildbucket_id = build.id
 
     if not remove_src_checkout_experiment:
       bot_update_step, targets_config = self.m.chromium_tests.prepare_checkout(
@@ -206,21 +193,14 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
           root_solution_revision=root_solution_revision,
           refs=[patch_repo_ref])
 
-    if self.m.led.launched_by_led:
-      # Collect the led swarming task instead of using a compilator_watcher,
-      # since raw swarming tasks need to finish completely before outputting
-      # a build.proto json file, which has all of the compilator build props.
-      build_to_process = self.collect_compilator_led_build(
-          led_job, with_patch=True)
-    else:
-      # Now that we've finished the Orchestrator's bot_update and analyze, let's
-      # check on the triggered compilator and display its steps (until it
-      # outputs the swarming trigger props).
-      build_to_process = self.launch_compilator_watcher(
-          build, is_swarming_phase=True, with_patch=True)
+    # Now that we've finished the Orchestrator's bot_update and analyze, let's
+    # check on the triggered compilator and display its steps (until it
+    # outputs the swarming trigger props).
+    sub_build = self.launch_compilator_watcher(
+        build, is_swarming_phase=True, with_patch=True)
 
     comp_output, maybe_raw_result = self.process_sub_build(
-        build_to_process, is_swarming_phase=True, with_patch=True)
+        sub_build, is_swarming_phase=True, with_patch=True)
 
     # Can be either SUCCESS or FAILURE/INFRA_FAILURE result
     # SUCCESS means that there's no swarming tests to trigger
@@ -301,18 +281,14 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
           not comp_output.skipping_coverage):
         self.m.code_coverage.process_coverage_data(tests)
 
-    # Led compilator build has already been collected with the local tests
-    # finished
-    if not self.m.led.launched_by_led:
-      # Let's check back on the compilator to see the results of the local
-      # scripts/tests. The sub_build will only display steps relevant to those
-      # local scripts/tests.
-      local_tests_sub_build = self.launch_compilator_watcher(
-          build, is_swarming_phase=False, with_patch=True)
-      build_to_process = local_tests_sub_build
+    # Let's check back on the compilator to see the results of the local
+    # scripts/tests. The sub_build will only display steps relevant to those
+    # local scripts/tests.
+    local_tests_sub_build = self.launch_compilator_watcher(
+        build, is_swarming_phase=False, with_patch=True)
 
     _, local_tests_raw_result = self.process_sub_build(
-        build_to_process, is_swarming_phase=False, with_patch=True)
+        local_tests_sub_build, is_swarming_phase=False, with_patch=True)
 
     # The inverted quick run is a temporary experiment. This is not meant
     # to be a permanent as the inverted shards will only run during submission
@@ -396,32 +372,20 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
             'remove_src_checkout_experiment': remove_src_checkout_experiment
         })
 
-    led_job = None
-    if self.m.led.launched_by_led:
-      led_job = self.trigger_compilator_led_build(
-          compilator_properties,
-          remove_src_checkout_experiment,
-          with_patch=False)
-    else:
-      wo_build = self.m.buildbucket.schedule(
-          [request], step_name='trigger compilator (without patch)')[0]
+    wo_build = self.m.buildbucket.schedule(
+        [request], step_name='trigger compilator (without patch)')[0]
 
-      self.current_compilator_buildbucket_id = wo_build.id
+    self.current_compilator_buildbucket_id = wo_build.id
 
     if not remove_src_checkout_experiment:
       self.m.chromium_tests.deapply_patch(bot_update_step)
 
-    if self.m.led.launched_by_led:
-      wo_build_to_process = self.collect_compilator_led_build(
-          led_job, with_patch=False)
-    else:
-      # Display steps of triggered (without patch) compilator until it outputs
-      # swarming trigger props for the tests to retrigger without patch
-      wo_build_to_process = self.launch_compilator_watcher(
-          wo_build, is_swarming_phase=True, with_patch=False)
-
+    # Display steps of triggered (without patch) compilator until it outputs
+    # swarming trigger props for the tests to retrigger without patch
+    sub_build = self.launch_compilator_watcher(
+        wo_build, is_swarming_phase=True, with_patch=False)
     comp_output, maybe_raw_result = self.process_sub_build(
-        wo_build_to_process, is_swarming_phase=True, with_patch=False)
+        sub_build, is_swarming_phase=True, with_patch=False)
 
     # FAILURE/INFRA_FAILURE result
     if maybe_raw_result != None:
@@ -482,93 +446,6 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
 
     self.m.chromium.apply_config('trybot_flavor')
     return builder_id, builder_config
-
-  def trigger_compilator_led_build(self, compilator_properties,
-                                   remove_src_checkout_experiment, with_patch):
-    nested_step_name = 'trigger led compilator build'
-    if with_patch:
-      nested_step_name += ' (with patch)'
-    else:
-      nested_step_name += ' (without patch)'
-
-    with self.m.step.nest(nested_step_name):
-      builder_name = 'luci.{project}.{bucket}:{builder}'.format(
-          project=self.m.buildbucket.build.builder.project,
-          bucket=self.m.buildbucket.build.builder.bucket,
-          builder=self.compilator)
-      # By default, the priority of the tasks will be increased by 10, but
-      # since this builder runs as part of CQ for the recipe repos, we want
-      # the builds to run at regular priority
-      led_comp_build = self.m.led('get-builder', '-adjust-priority', '0',
-                                  builder_name)
-
-      gerrit_change = self.m.tryserver.gerrit_change
-      gerrit_cl_url = (
-          'https://{gerrit_host}/c/{project}/+/{change}/{patchset}'.format(
-              gerrit_host=gerrit_change.host,
-              project=gerrit_change.project,
-              change=gerrit_change.change,
-              patchset=gerrit_change.patchset,
-          ))
-
-      led_comp_build = led_comp_build.then('edit-cr-cl', gerrit_cl_url)
-      # We used to set `is_experimental` to true, but the chromium recipe
-      # currently uses that to deprioritize swarming tasks, which results in
-      # very slow runtimes for the led task. Because this recipe blocks the
-      # build.git CQ, we decided the tradeoff to run these edited recipes in
-      # production mode instead would be better.
-      led_comp_build = led_comp_build.then('edit', '-exp', 'false')
-
-      properties_edit_args = []
-      for prop, value in compilator_properties.items():
-        properties_edit_args.extend(
-            ['-p', prop + '=' + self.m.json.dumps(value)])
-      led_comp_build = led_comp_build.then('edit', *properties_edit_args)
-
-      for experiment in self.m.buildbucket.build.input.experiments:
-        led_comp_build = led_comp_build.then('edit', '-experiment',
-                                             '{}=true'.format(experiment))
-
-      led_comp_build = led_comp_build.then(
-          'edit-payload', '-cas-ref', '{digest_hash}/{size_bytes}'.format(
-              digest_hash=self.m.chromium_bootstrap.exe.cas.digest.hash,
-              size_bytes=self.m.chromium_bootstrap.exe.cas.digest.size_bytes,
-          ))
-
-      led_comp_build = led_comp_build.then('launch', '-resultdb', 'on')
-      return led_comp_build.launch_result
-
-  def collect_compilator_led_build(self, led_job, with_patch):
-    """Collect the triggered compilator task
-
-    The swarming.collect function will wait until the triggered compilator led
-    task is finished (including the local tests the compilator runs after
-    isolating tests). No compilator watcher will be launched.
-
-    Args:
-      led_job (LedResult): compilator led job to collect
-
-    Returns:
-      Build proto containing the triggered compilator led output properties
-    """
-
-    def append_suffix(name):
-      if with_patch:
-        return name + ' (with patch)'
-      else:
-        return name + ' (without patch)'
-
-    collected_output_dir = self.m.path.mkdtemp()
-    collect_step_name = append_suffix('collect led compilator build')
-    self.m.swarming.collect(
-        collect_step_name, [led_job.task_id], output_dir=collected_output_dir)
-
-    read_step_name = append_suffix('read build.proto.json')
-    build_json = self.m.file.read_json(
-        read_step_name,
-        collected_output_dir.join(led_job.task_id, 'build.proto.json'),
-    )
-    return ParseDict(build_json, build_pb2.Build(), ignore_unknown_fields=True)
 
   def launch_compilator_watcher(self, build, is_swarming_phase, with_patch):
     """Launches a sub_build displaying a subset of the Compilator's steps
@@ -680,8 +557,6 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
           'Missing swarming_trigger_properties from without patch '
           'compilator')
 
-    # Could be a "No analyze required" success, compilator compile failure,
-    # compilator local tests failure, or some other infra failure
     return None, result_pb2.RawResult(
         status=sub_build.status, summary_markdown=sub_build.summary_markdown)
 
