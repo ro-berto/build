@@ -271,13 +271,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 tester='android-angle-chromium-arm64-nexus5x',
                 retry_failed_shards=False,
             ),
-        'android-angle-try':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.angle',
-                buildername='android-angle-arm64-builder',
-                tester='android-angle-arm64-nexus5x',
-                retry_failed_shards=False,
-            ),
         'fuchsia-angle-try':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.angle',
@@ -304,22 +297,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                         builder_group='chromium.angle',
                         buildername='linux-angle-chromium-builder',
                         tester='linux-angle-chromium-nvidia',
-                    ),
-                ],
-                retry_failed_shards=False,
-            ),
-        'linux-angle-try':
-            try_spec.TrySpec.create(
-                mirrors=[
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.angle',
-                        buildername='linux-angle-builder',
-                        tester='linux-angle-intel',
-                    ),
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.angle',
-                        buildername='linux-angle-builder',
-                        tester='linux-angle-nvidia',
                     ),
                 ],
                 retry_failed_shards=False,
@@ -362,22 +339,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='win-angle-chromium-x86-builder',
                 is_compile_only=True,
                 include_all_triggered_testers=True,
-                retry_failed_shards=False,
-            ),
-        'win-angle-x64-try':
-            try_spec.TrySpec.create(
-                mirrors=[
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.angle',
-                        buildername='win-angle-x64-builder',
-                        tester='win10-angle-x64-intel',
-                    ),
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.angle',
-                        buildername='win-angle-x64-builder',
-                        tester='win10-angle-x64-nvidia',
-                    ),
-                ],
                 retry_failed_shards=False,
             ),
     },
