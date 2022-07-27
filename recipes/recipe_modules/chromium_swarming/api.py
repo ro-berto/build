@@ -449,7 +449,6 @@ class SwarmingApi(recipe_api.RecipeApi):
            extra_args=None,
            failure_as_exception=True,
            idempotent=None,
-           ignore_task_failure=False,
            cas_input_root='',
            merge=None,
            named_caches=None,
@@ -482,8 +481,6 @@ class SwarmingApi(recipe_api.RecipeApi):
       * name: name of the test, used as part of a task ID.
       * cas_input_root: digeste of isolated test on RBE-CAS, the test should
           be already isolated there, see 'isolate' recipe module.
-      * ignore_task_failure: whether to ignore the test failure of swarming
-        tasks. By default, this is set to False.
       * shards: if defined, the number of shards to use for the task. By default
           this value is either 1 or based on the name.
       * shard_indices: Which shards to run. If None, all shards are run.
@@ -595,7 +592,6 @@ class SwarmingApi(recipe_api.RecipeApi):
         builder_info=builder_info,
         collect_step=collect_step,
         extra_args=extra_args,
-        ignore_task_failure=ignore_task_failure,
         named_caches=named_caches,
         optional_dimensions=optional_dimensions,
         shard_indices=shard_indices,
@@ -1414,8 +1410,7 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     exception, has_valid_results = self._handle_summary_json(task, step_result)
 
-    if (step_result.retcode != 0 and failure_as_exception and not
-        task.ignore_task_failure):
+    if step_result.retcode != 0 and failure_as_exception:
       step_result.presentation.status = self.m.step.FAILURE
       raise recipe_api.StepFailure(
           'Swarming collect had non-zero exit code.',
@@ -1865,7 +1860,6 @@ class SwarmingTask(object):
                request,
                collect_step,
                extra_args,
-               ignore_task_failure,
                shards,
                shard_indices,
                spec_name,
@@ -1899,8 +1893,6 @@ class SwarmingTask(object):
           martiniss@ if you are using this feature; it should be deleted in the
           next few months.
       * extra_args: list of command line arguments to pass to isolated tasks.
-      * ignore_task_failure: whether to ignore the test failure of swarming
-          tasks.
       * merge: An optional `chromium_swarming.MergeScript`.
       * named_caches: a dict {name: relpath} requesting a cache named `name`
           to be installed in `relpath` relative to the task root directory..
@@ -1922,7 +1914,6 @@ class SwarmingTask(object):
     self.containment_type = containment_type
     self.extra_args = extra_args or []
     self.failed_shards = []
-    self.ignore_task_failure = ignore_task_failure
     self.merge = merge
     self.named_caches = named_caches or {}
     self.optional_dimensions = optional_dimensions

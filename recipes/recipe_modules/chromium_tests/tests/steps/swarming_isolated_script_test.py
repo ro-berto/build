@@ -59,7 +59,6 @@ def RunSteps(api):
     isolate_coverage_data = api.properties.get('isolate_coverage_data', False)
     test_spec = steps.SwarmingIsolatedScriptTestSpec.create(
         name=test_name,
-        ignore_task_failure=api.properties.get('ignore_task_failure'),
         override_compile_targets=api.properties.get('override_compile_targets'),
         io_timeout=120,
         hard_timeout=360,
@@ -310,24 +309,6 @@ def GenTests(api):
           },
           perf_builder_name_alias='test-perf-id',
           results_url='https://example/url'),
-      filter_out_setup_steps(),
-  )
-
-  yield api.test(
-      'chartjson_ignore_task_failure',
-      arbitrary_tester(),
-      api.properties(
-          swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
-          },
-          perf_builder_name_alias='test-perf-id',
-          results_url='https://example/url',
-          ignore_task_failure=True),
-      api.chromium_tests.gen_swarming_and_rdb_results(
-          'base_unittests',
-          'with patch',
-          extra_suffix='on Intel GPU on Linux',
-          failures=['TestOne']),
       filter_out_setup_steps(),
   )
 

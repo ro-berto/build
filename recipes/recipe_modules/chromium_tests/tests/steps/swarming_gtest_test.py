@@ -92,26 +92,6 @@ def GenTests(api):
   )
 
   yield api.test(
-      'basic_ignore_task_failure',
-      api.chromium.ci_build(
-          builder_group='test_group',
-          builder='test_buildername',
-      ),
-      api.properties(
-          ignore_task_failure=True,
-          swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
-          }),
-      api.override_step_data(
-          'base_unittests',
-          api.chromium_swarming.canned_summary_output(
-              api.test_utils.canned_gtest_output(passing=False),
-              failure=False)),
-      api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
       'android',
       api.chromium.ci_build(
           builder_group='test_group',

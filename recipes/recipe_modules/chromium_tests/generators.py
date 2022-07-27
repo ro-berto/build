@@ -429,8 +429,6 @@ def generate_gtests_from_one_spec(chromium_tests_api, builder_group,
     kwargs['isolate_profile_data'] = (
         raw_test_spec.get('isolate_coverage_data') or
         raw_test_spec.get('isolate_profile_data'))
-    kwargs['ignore_task_failure'] = raw_test_spec.get('ignore_task_failure',
-                                                      False)
 
     kwargs['resultdb'] = attr.evolve(kwargs['resultdb'], result_format='gtest')
     return steps.SwarmingGTestTestSpec.create(**kwargs)
@@ -577,10 +575,6 @@ def generate_isolated_script_tests_from_one_spec(chromium_tests_api,
   def isolated_script_swarming_delegate(raw_test_spec, **kwargs):
     kwargs.update(isolated_script_delegate_common(raw_test_spec, **kwargs))
 
-    swarming_spec = raw_test_spec.get('swarming', {})
-
-    kwargs['ignore_task_failure'] = swarming_spec.get('ignore_task_failure',
-                                                      False)
     kwargs['waterfall_buildername'] = buildername
     kwargs['waterfall_builder_group'] = builder_group
 

@@ -1887,8 +1887,6 @@ class SwarmingTestSpec(TestSpec):
       during task execution.
     * isolate_profile_data - Whether to isolate profile data during task
       execution.
-    * ignore_task_failure - Whether to ignore swarming task failures. If
-      False, the test will be reported as StepFailure on failure.
     * named_caches - Named caches to mount for the test's swarming
       tasks. The keys are the named of the cache and the values are the
       path relative to the swarming task's root directory where the
@@ -1917,7 +1915,6 @@ class SwarmingTestSpec(TestSpec):
   args = attrib(command_args, default=())
   isolate_coverage_data = attrib(bool, False)
   isolate_profile_data = attrib(bool, False)
-  ignore_task_failure = attrib(bool, False)
   named_caches = attrib(mapping[str, str], default={})
   shards = attrib(int, default=1)
   quickrun_shards = attrib(int, default=None)
@@ -2222,7 +2219,6 @@ class SwarmingTest(Test):
 
     task.build_properties = self.api.m.chromium.build_properties
     task.containment_type = self.spec.containment_type
-    task.ignore_task_failure = self.spec.ignore_task_failure
     if merge:
       task.merge = merge
 
