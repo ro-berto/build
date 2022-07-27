@@ -27,7 +27,6 @@ DEPS = [
     'recipe_engine/cipd',
     'recipe_engine/file',
     'recipe_engine/json',
-    'recipe_engine/led',
     'recipe_engine/path',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
