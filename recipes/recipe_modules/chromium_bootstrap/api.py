@@ -42,7 +42,9 @@ class ChromiumBootstrapApi(recipe_api.RecipeApi):
   def exe(self):
     """Information about the executable being bootstrapped
 
-    For led builds, the exe contains a CASReference instead of cipd information
+    For led builds testing recipe changes (like with `led edit-recipe-bundle`
+    or `led edit-payload`), the exe contains a CASReference instead of cipd
+    information.
     """
     return self._exe
 
