@@ -194,6 +194,21 @@ def GenTests(api):
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation))
   yield api.test(
+      'expectations_file_failure_skipped_due_to_footer',
+      api.binary_size.build(
+          override_commit_log=True,
+          extra_footers={
+              constants.SKIP_EXPECTATIONS_FOOTER_KEY: "Reasons to skip"
+          }), override_analyze(),
+      api.override_step_data('bot_update', retcode=1),
+      override_expectation_to_fail(with_patch=True),
+      override_expectation_to_fail(with_patch=False, use_alternative=True),
+      api.post_process(post_process.StepFailure,
+                       constants.EXPECTATIONS_STEP_NAME),
+      api.post_check(has_failed_expectations),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation))
+  yield api.test(
       'clear_expectation_files_ignores_failure',
       api.binary_size.build(override_commit_log=True), override_analyze(),
       api.override_step_data('Clear Expectation Files', retcode=1),

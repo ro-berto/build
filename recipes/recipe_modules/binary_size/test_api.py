@@ -19,6 +19,7 @@ class BinarySizeTestApi(recipe_test_api.RecipeTestApi):
             commit_message='message',
             android_size_footer=False,
             fuchsia_size_footer=False,
+            extra_footers=None,
             recent_upload_cp=constants.TEST_RECENT_UPLOAD_CP,
             patch_parent_cp=constants.TEST_PATCH_PARENT_CP,
             override_commit_log=False,
@@ -37,7 +38,7 @@ class BinarySizeTestApi(recipe_test_api.RecipeTestApi):
             'subject': commit_message.splitlines()[0],
         },
     }
-    footer_json = {}
+    footer_json = extra_footers or {}
     if android_size_footer:
       footer_json['Binary-Size'] = ['Totally worth it.']
     if fuchsia_size_footer:

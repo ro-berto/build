@@ -27,6 +27,11 @@ RESULT_JSON_STEP_NAME = 'Read diff results'
 RESULTS_STEP_NAME = 'Trybot Results'
 PLUGIN_OUTPUT_PROPERTY_NAME = 'binary_size_plugin'
 
+COMMIT_POSITION_FOOTER_KEY = 'Cr-Commit-Position'
+ANDROID_BINARY_SIZE_FOOTER_KEY = 'Binary-Size'
+FUCHSIA_BINARY_SIZE_FOOTER_KEY = 'Fuchsia-Binary-Size'
+SKIP_EXPECTATIONS_FOOTER_KEY = 'Skip-Expectations'
+
 TEST_TIME = 1454371200
 TEST_BUILDER = 'android_binary_size'
 TEST_BUILDNUMBER = 200

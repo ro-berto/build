@@ -12,9 +12,6 @@ from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 from . import constants
 
-# Footer metadata keys for regular and gsubtreed mirrored commit positions.
-COMMIT_POSITION_FOOTER_KEY = 'Cr-Commit-Position'
-
 
 def _normalize_name(v):
   # The real normalization function is in the infra/infra repo in
@@ -47,7 +44,7 @@ class BinarySizeApi(recipe_api.RecipeApi):
     commit_message = self.m.gitiles.commit_log(
         url, revision, step_name='Commit log for {}'.format(suffix))['message']
     cp_footer = self.m.tryserver.get_footer(
-        COMMIT_POSITION_FOOTER_KEY, patch_text=commit_message)
+        constants.COMMIT_POSITION_FOOTER_KEY, patch_text=commit_message)
     # A patch's parent may be another CL that hasn't landed yet, so there's
     # no commit position footer yet
     if not cp_footer:
@@ -128,14 +125,17 @@ class BinarySizeApi(recipe_api.RecipeApi):
       review_subject = revision_info['commit']['subject']
       review_url = self.m.tryserver.gerrit_change_review_url
       is_revert = review_subject.startswith('Revert')
+      commit_footers = self.m.tryserver.get_footers(patch_text=commit_message)
       # get_footer returns a list of footer values.
-      binary_size_footer = 'Binary-Size'
+      binary_size_footer = constants.ANDROID_BINARY_SIZE_FOOTER_KEY
       if is_fuchsia:
-        binary_size_footer = 'Fuchsia-Binary-Size'
-      has_size_footer = bool(
-          self.m.tryserver.get_footer(
-              binary_size_footer, patch_text=commit_message))
-      allow_regressions = is_revert or has_size_footer
+        binary_size_footer = constants.FUCHSIA_BINARY_SIZE_FOOTER_KEY
+      has_size_footer = bool(commit_footers.get(binary_size_footer))
+      allow_size_regressions = is_revert or has_size_footer
+
+      has_expectations_footer = bool(
+          commit_footers.get(constants.SKIP_EXPECTATIONS_FOOTER_KEY))
+      allow_expectations_regressions = is_revert or has_expectations_footer
 
       if not use_gs_analysis:  # pragma: no cover
         bot_update_step = self.m.chromium_checkout.ensure_checkout()
@@ -252,9 +252,10 @@ class BinarySizeApi(recipe_api.RecipeApi):
             use_m87_flow,
             is_fuchsia=is_fuchsia)
         expectation_success = self._maybe_fail_for_expectation_files(
-            expectations_with_patch_json, expectations_without_patch_json)
+            expectations_with_patch_json, expectations_without_patch_json,
+            allow_expectations_regressions)
         binary_size_success = self._check_for_undocumented_increase(
-            size_results_path, staging_dir, allow_regressions)
+            size_results_path, staging_dir, allow_size_regressions)
         if not expectation_success or not binary_size_success:
           raise self.m.step.StepFailure(
               'Failed Checks. See Failing steps for details')
@@ -565,8 +566,10 @@ class BinarySizeApi(recipe_api.RecipeApi):
           step_test_data=TEST_DATA)
       return step_result.json.output
 
-  def _maybe_fail_for_expectation_files(self, expectations_with_patch_json,
-                                        expectations_without_patch_json):
+  def _maybe_fail_for_expectation_files(self,
+                                        expectations_with_patch_json,
+                                        expectations_without_patch_json,
+                                        allow_expectations_regressions=False):
     with self.m.step.nest(constants.EXPECTATIONS_STEP_NAME) as presentation:
       if expectations_with_patch_json['success']:
         presentation.step_text += '<br/>Expectations are up-to-date.'
@@ -587,7 +590,7 @@ class BinarySizeApi(recipe_api.RecipeApi):
                 'account for your change as well as some unrelated changes '
                 '(this is fine / normal).')
           presentation.status = self.m.step.FAILURE
-          return False
+          return allow_expectations_regressions
         else:
           presentation.status = self.m.step.WARNING
           presentation.step_text += (
