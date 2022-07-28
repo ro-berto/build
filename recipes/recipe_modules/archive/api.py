@@ -788,7 +788,7 @@ class ArchiveApi(recipe_api.RecipeApi):
         not archive_config.cipd_archive_datas):
       return upload_results
 
-    with self.m.step.nest('Generic Archiving Steps'):
+    with self.m.step.nest('Generic Archiving Steps', status='last'):
       for archive_data in archive_config.archive_datas:
         if not archive_data.only_upload_on_tests_success:
           gcs_uploads = self.gcs_archive(build_dir, update_properties,

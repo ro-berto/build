@@ -879,6 +879,7 @@ def GenTests(api):
       api.post_process(post_process.StepCommandContains,
                        'Generic Archiving Steps.Write latest file',
                        ['90.1.2.3']),
+      api.post_process(post_process.StepSuccess, 'Generic Archiving Steps'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
