@@ -1050,7 +1050,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
                               are LCOV, LLVM, GO_COV and JACOCO_XML.
     """
     commit = self.m.buildbucket.build.input.gitiles_commit
-    ref = 'refs/heads/main'
+    branch = 'main'
     return {
         # host = chromium, if full host name is chromium.googlesource.com
         'host': commit.host[:commit.host.find('.')],
@@ -1062,7 +1062,10 @@ class CodeCoverageApi(recipe_api.RecipeApi):
         'trace_type': coverage_format,
         'git_project': commit.project,
         'commit_id': commit.id,
-        'ref': ref,
+        'ref': 'HEAD',
         # e.g. source = chromium/src:main
-        'source': '%s:%s' % (commit.project, ref[ref.rfind('/') + 1:])
+        'source': '%s:%s' % (commit.project, branch),
+        'owner': 'chrome-code-coverage@google.com',
+        # buganizer component
+        'bug_component': 992692
     }
