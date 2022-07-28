@@ -879,6 +879,19 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         chrome_version = str(ref[len('refs/tags/'):])
     return chrome_version
 
+  def _get_affected_spec_files(self, affected_files, builder_config):
+    """Returns any files in the CL that affects the builder's testing specs."""
+    absolute_affected_files = set(
+        str(self.m.chromium.c.CHECKOUT_PATH.join(f)).replace(
+            '/', self.m.path.sep) for f in affected_files)
+    absolute_affected_files = set(
+        map(self.m.path.abspath, absolute_affected_files))
+    absolute_spec_files = set(
+        str(self.m.chromium.c.source_side_spec_dir.join(f))
+        for f in six.itervalues(builder_config.source_side_spec_files))
+    absolute_spec_files = set(map(self.m.path.abspath, absolute_spec_files))
+    return absolute_spec_files & absolute_affected_files
+
   def _get_builders_to_trigger(self, builder_id, builder_config):
     """Get the builders to trigger.
 
@@ -1280,14 +1293,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     """
     reasons = []
     logs = {}
-
-    absolute_affected_files = set(
-        str(self.m.chromium.c.CHECKOUT_PATH.join(f)).replace(
-            '/', self.m.path.sep) for f in affected_files)
-    absolute_spec_files = set(
-        str(source_side_spec_dir.join(f))
-        for f in six.itervalues(builder_config.source_side_spec_files))
-    affected_spec_files = absolute_spec_files & absolute_affected_files
+    affected_spec_files = self._get_affected_spec_files(affected_files,
+                                                        builder_config)
     if affected_spec_files:
       reasons.append('test specs that are consumed by the builder '
                      'are also affected by the CL')
@@ -1995,13 +2002,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           self.m.chromium_bootstrap.skip_analysis_reasons)
       skip_analysis_logs = {}
 
-      absolute_affected_files = set(
-          str(self.m.chromium.c.CHECKOUT_PATH.join(f)).replace(
-              '/', self.m.path.sep) for f in affected_files)
-      absolute_spec_files = set(
-          str(self.m.chromium.c.source_side_spec_dir.join(f))
-          for f in six.itervalues(builder_config.source_side_spec_files))
-      affected_spec_files = absolute_spec_files & absolute_affected_files
+      affected_spec_files = self._get_affected_spec_files(
+          affected_files, builder_config)
       # If any of the spec files that we used for determining the targets/tests
       # is affected, skip doing analysis, just build/test all of them
       if affected_spec_files:
