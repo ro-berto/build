@@ -35,28 +35,21 @@ CODESEARCH_REPO = 'https://chromium.googlesource.com/chromiumos/codesearch'
 MANIFEST_REPO = 'https://chromium.googlesource.com/chromiumos/manifest'
 
 
-def latestRefInfo(api, clone_dir, repo, branch=None):
+def latestRefInfo(api, clone_dir, repo, branch):
   """Return the hash and timestamp of the latest commit on a branch."""
   clone_base_dir = api.context.cwd or api.path['cache'].join('builder')
-  if not api.file.glob_paths('Check for existing checkout', clone_base_dir,
-                             clone_dir):
-    with api.context(cwd=clone_base_dir):
-      clone_args = ['--depth=1']
-      if branch:
-        clone_args.extend(['-b', branch])
-      clone_args.extend([
-          repo,
-          clone_dir,
-      ])
-
-      api.git(
-          'clone',
-          *clone_args,
-          name='clone %s of %s' % (branch or 'HEAD', repo))
+  api.file.rmtree('Remove previous clone', clone_base_dir.join(clone_dir))
+  with api.context(cwd=clone_base_dir):
+    api.git(
+        'clone',
+        '--depth=1',
+        '-b',
+        branch,
+        repo,
+        clone_dir,
+        name='clone %s of %s' % (branch, repo))
 
   with api.context(cwd=clone_base_dir.join(clone_dir)):
-    api.git('fetch')
-
     commit_hash = api.git(
         'rev-parse', 'HEAD', name='fetch hash',
         stdout=api.raw_io.output_text()).stdout.strip()
@@ -74,7 +67,7 @@ def latestRefInfo(api, clone_dir, repo, branch=None):
 def RunSteps(api):
   mirror_hash, mirror_unix_timestamp = latestRefInfo(api,
                                                      'chromiumos_codesearch',
-                                                     CODESEARCH_REPO)
+                                                     CODESEARCH_REPO, 'main')
   manifest_hash, _ = latestRefInfo(api, 'chromiumos_manifest', MANIFEST_REPO,
                                    'stable')
 

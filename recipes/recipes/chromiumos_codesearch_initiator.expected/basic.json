@@ -6,36 +6,25 @@
       "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
-      "glob",
-      "[CACHE]/builder",
-      "chromiumos_codesearch"
+      "rmtree",
+      "[CACHE]/builder/chromiumos_codesearch"
     ],
     "infra_step": true,
-    "name": "Check for existing checkout",
-    "~followup_annotations": [
-      "@@@STEP_LOG_END@glob@@@"
-    ]
+    "name": "Remove previous clone"
   },
   {
     "cmd": [
       "git",
       "clone",
       "--depth=1",
+      "-b",
+      "main",
       "https://chromium.googlesource.com/chromiumos/codesearch",
       "chromiumos_codesearch"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
-    "name": "clone HEAD of https://chromium.googlesource.com/chromiumos/codesearch"
-  },
-  {
-    "cmd": [
-      "git",
-      "fetch"
-    ],
-    "cwd": "[CACHE]/builder/chromiumos_codesearch",
-    "infra_step": true,
-    "name": "git fetch"
+    "name": "clone main of https://chromium.googlesource.com/chromiumos/codesearch"
   },
   {
     "cmd": [
@@ -66,15 +55,11 @@
       "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
-      "glob",
-      "[CACHE]/builder",
-      "chromiumos_manifest"
+      "rmtree",
+      "[CACHE]/builder/chromiumos_manifest"
     ],
     "infra_step": true,
-    "name": "Check for existing checkout (2)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_END@glob@@@"
-    ]
+    "name": "Remove previous clone (2)"
   },
   {
     "cmd": [
@@ -89,15 +74,6 @@
     "cwd": "[CACHE]/builder",
     "infra_step": true,
     "name": "clone stable of https://chromium.googlesource.com/chromiumos/manifest"
-  },
-  {
-    "cmd": [
-      "git",
-      "fetch"
-    ],
-    "cwd": "[CACHE]/builder/chromiumos_manifest",
-    "infra_step": true,
-    "name": "git fetch (2)"
   },
   {
     "cmd": [
