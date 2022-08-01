@@ -578,51 +578,6 @@ def _BuildCoverageGtestExclusions(options, args):
   args.append('--gtest_filter=-' + ':'.join(gtest_exclusion_filters))
 
 
-def _UploadProfilingData(options, args):
-  """Archives profiling data to Google Storage."""
-  # args[1] has --gtest-filter argument.
-  if len(args) < 2:
-    return 0
-
-  builder_name = options.build_properties.get('buildername')
-  if ((builder_name != 'XP Perf (dbg) (2)' and
-       builder_name != 'Linux Perf (lowmem)') or
-      options.build_properties.get('builder_group') != 'chromium.perf' or
-      not options.build_properties.get('got_revision')):
-    return 0
-
-  gtest_filter = args[1]
-  if gtest_filter is None:
-    return 0
-  gtest_name = ''
-  if gtest_filter.find('StartupTest.*') > -1:
-    gtest_name = 'StartupTest'
-  else:
-    return 0
-
-  build_dir = os.path.normpath(os.path.abspath(options.build_dir))
-
-  # archive_profiling_data.py is in /b/build/scripts/slave and
-  # build_dir is /b/build/slave/SLAVE_NAME/build/src/build.
-  profiling_archive_tool = os.path.join(
-      build_dir, '..', '..', '..', '..', '..', 'recipes',
-      'archive_profiling_data.py'
-  )
-
-  if sys.platform == 'win32':
-    python = 'python_slave'
-  else:
-    python = 'python'
-
-  revision = options.build_properties.get('got_revision')
-  cmd = [
-      python, profiling_archive_tool, '--revision', revision, '--builder-name',
-      builder_name, '--test-name', gtest_name
-  ]
-
-  return chromium_utils.RunCommand(cmd)
-
-
 def _UploadGtestJsonSummary(json_path, build_properties, test_exe, step_name):
   """Archives GTest results to Google Storage.
 
@@ -1860,8 +1815,6 @@ def main():
     else:
       sys.stderr.write('Unknown sys.platform value %s\n' % repr(sys.platform))
       return 1
-
-    _UploadProfilingData(options, args)
 
     new_temp_files = _GetTempCount()
     if temp_files > new_temp_files:
