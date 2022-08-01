@@ -96,7 +96,7 @@ def RunSteps(api, properties):
   gclient_config = api.gclient.make_config('chromium_no_telemetry_dependencies')
   target_os = 'linux'
   host_os = 'linux'
-  if platform == 'android':
+  if platform == 'android' or platform == 'webview':
     target_os = 'android'
   elif platform == 'chromeos' or platform == 'lacros':
     target_os = 'chromeos'
@@ -272,7 +272,7 @@ def GenTests(api):
         ))
 
   for platform in ('android', 'lacros', 'linux', 'fuchsia', 'chromiumos', 'mac',
-                   'win'):
+                   'win', 'webview'):
     for internal in (True, False):
       buildername = _format_builder_name(platform, internal)
       yield api.test(
