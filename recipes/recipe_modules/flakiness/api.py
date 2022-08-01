@@ -803,7 +803,7 @@ class FlakinessApi(recipe_api.RecipeApi):
           shards = self._shard_runs(total_duration_milliseconds)
           for index, shard_runs in enumerate(shards):
             test_copy = copy.copy(test)
-            options = steps.TestOptions(
+            options = steps.TestOptions.create(
                 test_filter=test_filter, repeat_count=shard_runs, retry_limit=0)
             test_copy.test_options = options
             # we don't use swarming's shard mechanism for endorser runs.
@@ -812,7 +812,7 @@ class FlakinessApi(recipe_api.RecipeApi):
                 test_copy)
         else:
           test_copy = copy.copy(test)
-          options = steps.TestOptions(
+          options = steps.TestOptions.create(
               test_filter=test_filter,
               repeat_count=self._repeat_count,
               retry_limit=0)

@@ -43,7 +43,7 @@ def RunSteps(api):
   ).get_test(api.chromium_tests)
   assert not test.runs_on_swarming
 
-  test_options = steps.TestOptions(
+  test_options = steps.TestOptions.create(
       test_filter=['foo.bar'], retry_limit=3, run_disabled=True)
   test.test_options = test_options
 

@@ -53,7 +53,7 @@ def RunSteps(api):
       isolate_coverage_data=api.properties.get('isolate_coverage_data', False))
   test = test_spec.get_test(api.chromium_tests)
 
-  test_options = steps.TestOptions()
+  test_options = steps.TestOptions.create()
   test.test_options = test_options
 
   try:

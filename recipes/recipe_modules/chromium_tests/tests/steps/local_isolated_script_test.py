@@ -46,7 +46,7 @@ def RunSteps(api):
 
   test_repeat_count = api.properties.get('repeat_count')
   if test_repeat_count:
-    test.test_options = steps.TestOptions(
+    test.test_options = steps.TestOptions.create(
         test_filter=api.properties.get('test_filter'),
         repeat_count=test_repeat_count,
         retry_limit=0,

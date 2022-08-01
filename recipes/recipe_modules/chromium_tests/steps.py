@@ -32,7 +32,6 @@ argument to the __init__ method of the test type or test wrapper type.
 import abc
 import attr
 import contextlib
-import copy
 import hashlib
 import re
 import six
@@ -42,7 +41,6 @@ from six.moves import urllib
 
 from recipe_engine import recipe_api
 from recipe_engine.config_types import Path
-from recipe_engine.engine_types import freeze
 
 from .resultdb import ResultDB
 
@@ -52,8 +50,7 @@ from PB.go.chromium.org.luci.resultdb.proto.v1 import (test_result as
 
 from RECIPE_MODULES.build import chromium_swarming
 from RECIPE_MODULES.build.skylab.structs import SkylabRequest
-from RECIPE_MODULES.build.attr_utils import (attrib, attrs, cached_property,
-                                             callable_, command_args, enum,
+from RECIPE_MODULES.build.attr_utils import (attrib, attrs, command_args, enum,
                                              mapping, sequence)
 
 RESULTS_URL = 'https://chromeperf.appspot.com'
@@ -79,121 +76,6 @@ RDB_INVOCATION_NAME_RE = re.compile(r'rdb-stream: included "(\S+)" in "\S+"')
 INCLUDE_CI_FOOTER = 'Include-Ci-Only-Tests'
 
 
-class TestOptions(object):
-  """Abstracts command line flags to be passed to the test."""
-
-  def __init__(self,
-               repeat_count=None,
-               test_filter=None,
-               run_disabled=False,
-               retry_limit=None):
-    """Construct a TestOptions object with immutable attributes.
-
-    Args:
-      repeat_count - how many times to run each test
-      test_filter - a list of tests, e.g.
-                       ['suite11.test1',
-                        'suite12.test2']
-      run_disabled - whether to run tests that have been disabled.
-      retry_limit - how many times to retry a test until getting a pass.
-     """
-    self._test_filter = freeze(test_filter)
-    self._repeat_count = repeat_count
-    self._run_disabled = run_disabled
-    self._retry_limit = retry_limit
-
-    # When this is true, the test suite should run all tests independently, with
-    # no state leaked between them. This can significantly increase the time it
-    # takes to run the tests.
-    self._force_independent_tests = False
-
-  @property
-  def repeat_count(self):
-    return self._repeat_count
-
-  @property
-  def run_disabled(self):
-    return self._run_disabled
-
-  @property
-  def retry_limit(self):
-    return self._retry_limit
-
-  @property
-  def test_filter(self):
-    return self._test_filter
-
-
-class BaseTestArguments(object):
-  """Base class for supported test arguments.
-
-  The values are used when translating TestOptions into arguments, as different
-  test types use different arguments.
-
-  Arguments:
-    * filter_arg: (str) argument used to specify test filters.
-    * filter_delimiter: (str) the delimiter used when listing tests for the test
-        filter, usually one of ':' or '::'.
-    * repeat_arg: (str) argument used to define how many times to repeat tests.
-    * retry_limit_arg: (str) argument used to define the upper limit of retries.
-        supported only for GTest.
-    * run_disabled_arg: (str) flag used to run disabled tests. supported only
-        by GTest.
-    * batch_limit_arg: (str) gtest specific argument to set how many tests to
-        run in a given shard. TestOptions will use this to run tests in
-        isolation by setting the value to 1.
-  """
-
-  def __init__(self,
-               filter_arg=None,
-               filter_delimiter=None,
-               repeat_arg=None,
-               retry_limit_arg=None,
-               run_disabled_arg=None,
-               batch_limit_arg=None):
-    super(BaseTestArguments, self).__init__()
-    self.filter_arg = filter_arg
-    self.filter_delimiter = filter_delimiter
-    self.repeat_arg = repeat_arg
-    self.retry_limit_arg = retry_limit_arg
-    self.run_disabled_arg = run_disabled_arg
-    self.batch_limit_arg = batch_limit_arg
-
-
-class GTestArguments(BaseTestArguments):
-  """Arguments specific to GTests"""
-
-  def __init__(self):
-    super(GTestArguments, self).__init__(
-        filter_arg='--gtest_filter',
-        filter_delimiter=':',
-        repeat_arg='--gtest_repeat',
-        retry_limit_arg='--test-launcher-retry-limit',
-        run_disabled_arg='--gtest_also_run_disabled_tests',
-        batch_limit_arg='--test-launcher-batch-limit',
-    )
-
-
-class IsolatedScriptTestArguments(BaseTestArguments):
-  """Arguments specific to IsolatedScriptTests"""
-
-  def __init__(self):
-    super(IsolatedScriptTestArguments, self).__init__(
-        filter_arg='--isolated-script-test-filter',
-        filter_delimiter='::',
-        repeat_arg='--isolated-script-test-repeat',
-        retry_limit_arg='--isolated-script-test-launcher-retry-limit')
-
-  def override_into_gtest_args(self):
-    """Overrides IsolatedScriptArguments into GTest arguments"""
-    gtest_args = GTestArguments()
-    self.filter_arg = gtest_args.filter_arg
-    self.filter_delimiter = gtest_args.filter_delimiter
-    self.repeat_arg = gtest_args.repeat_arg
-    self.retry_limit_arg = gtest_args.retry_limit_arg
-    self.run_disabled_arg = gtest_args.run_disabled_arg
-
-
 def _merge_arg(args, flag, value):
   args = [a for a in args if not a.startswith(flag)]
   if value is not None:
@@ -201,78 +83,156 @@ def _merge_arg(args, flag, value):
   else:
     return args + [flag]
 
-def _merge_args_and_test_options(test, args, options):
-  """Adds args from test options.
 
-  Args are derived from TestArguments that test classes inherit.
+@attrs()
+class TestOptionFlags(object):
+  """Flags for supporting TestOptions features.
 
-  Args:
-    test: A test suite. An instance of a subclass of Test.
-    args: The list of args of extend.
-    options: The TestOptions to use to extend args.
-    api: An api object providing access to Chromium configs
-
-  Returns:
-    The extended list of args.
+  For each of the options in TestOptions, the different test types have
+  varying support and will require different arguments to be set. This
+  type abstracts out those details and provides a mechanism for adding
+  the appropriate flags to arguments when supported.
   """
-  args = list(args)
-  if test.filter_arg and test.filter_delimiter and options.test_filter:
-    args = _merge_arg(args, test.filter_arg,
-                      test.filter_delimiter.join(options.test_filter))
-  if test.repeat_arg and options.repeat_count and options.repeat_count > 1:
-    args = _merge_arg(args, test.repeat_arg, options.repeat_count)
-  if test.retry_limit_arg and options.retry_limit is not None:
-    args = _merge_arg(args, test.retry_limit_arg, options.retry_limit)
-  if test.run_disabled_arg and options.run_disabled:
-    args = _merge_arg(args, test.run_disabled_arg, value=None)
-  if test.batch_limit_arg and options._force_independent_tests:
-    args = _merge_arg(args, test.batch_limit_arg, 1)
 
-  return args
+  # Flag argument used to specify test filters
+  filter_flag = attrib(str, default='')
+  # The delimiter to use between values when specifying test filters
+  filter_delimiter = attrib(str, default='')
+  # Flag argument used to define how many times to repeat tests
+  repeat_flag = attrib(str, default='')
+  # Flag argument used to define the upper limit of retries.
+  retry_limit_flag = attrib(str, default='')
+  # Flag argument used to run disabled tests.
+  run_disabled_flag = attrib(str, default='')
+  # Flag argument used to set how many tests run in a given shard
+  batch_limit_flag = attrib(str, default='')
+
+  @classmethod
+  def create(cls, **kwargs):
+    filter_flag = kwargs.get('filter_flag')
+    filter_delimiter = kwargs.get('filter_delimiter')
+    if filter_flag and not filter_delimiter:
+      raise ValueError("'filter_delimiter' must be set if 'filter_flag' is")
+    return cls(**kwargs)
 
 
-def _test_options_for_running(test_options, suffix, tests_to_retry):
-  """Modifes a Test's TestOptions for a given suffix.
+_GTEST_OPTION_FLAGS = TestOptionFlags.create(
+    filter_flag='--gtest_filter',
+    filter_delimiter=':',
+    repeat_flag='--gtest_repeat',
+    retry_limit_flag='--test-launcher-retry-limit',
+    run_disabled_flag='--gtest_also_run_disabled_tests',
+    batch_limit_flag='--test-launcher-batch-limit',
+)
+_ISOLATED_SCRIPT_OPTION_FLAGS = TestOptionFlags.create(
+    filter_flag='--isolated-script-test-filter',
+    filter_delimiter='::',
+    repeat_flag='--isolated-script-test-repeat',
+    retry_limit_flag='--isolated-script-test-launcher-retry-limit',
+)
+# webkit_layout_tests were renamed to blink_web_tests, which only supports
+# gtest style arguments. See crbug/831345 and crrev/c/1006067 for details.
+# batch limit was never supported for webkit_layout_tests, so we'll exclude
+# override of that variable.
+_BLINK_WEB_TESTS_OPTION_FLAGS = TestOptionFlags.create(
+    filter_flag='--gtest_filter',
+    filter_delimiter=':',
+    repeat_flag='--gtest_repeat',
+    retry_limit_flag='--test-launcher-retry-limit',
+    run_disabled_flag='--gtest_also_run_disabled_tests',
+)
 
-  When retrying tests without patch, we want to run the tests a fixed number of
-  times, regardless of whether they succeed, to see if they flakily fail. Some
-  recipes specify an explicit repeat_count -- for those, we don't override their
-  desired behavior.
 
-  Args:
-    test_options: The test's initial TestOptions.
-    suffix: A string suffix.
-    tests_to_retry: A container of tests to retry.
+@attrs()
+class TestOptions(object):
+  """Test-type agnostic configuration of test running options."""
 
-  Returns:
-    A copy of the initial TestOptions, possibly modified to support the suffix.
+  # How many times to run each test
+  repeat_count = attrib(int, default=None)
+  # A list of tests to restrict execution
+  test_filter = attrib(sequence[str], default=())
+  # Whether to run tests that have been disabled.
+  run_disabled = attrib(bool, default=False)
+  # How many times to retry tests until getting a pass
+  retry_limit = attrib(int, default=None)
+  # Whether to run all tests independently, with no state leaked between them.
+  # This can significantly increase the time it takes to run tests.
+  force_independent_tests = attrib(bool, default=False)
 
-  """
-  # We make a copy of test_options since the initial reference is persistent
-  # across different suffixes.
-  test_options_copy = copy.deepcopy(test_options)
+  @classmethod
+  def create(cls, **kwargs):
+    return cls(**kwargs)
 
-  # If there are too many tests, avoid setting a repeat count since that can
-  # cause timeouts. tests_to_retry can be None to indicate that all tests should
-  # be run. It can also rarely be the empty list, which is caused by an infra
-  # failure even though results are valid and all tests passed.
-  # https://crbug.com/910706.
-  if not tests_to_retry or len(tests_to_retry) > 100:
-    return test_options_copy
+  def for_running(self, suffix, tests_to_retry):
+    """Gets options for running for a given suffix and tests to retry.
 
-  if test_options_copy.repeat_count is None and suffix == 'without patch':
-    test_options_copy._repeat_count = REPEAT_COUNT_FOR_FAILING_TESTS
+    When retrying tests without patch, we want to run the tests a fixed
+    number of times, regardless of whether they succeed, to see if they
+    flakily fail. Some recipes specify an explicit repeat_count -- for
+    those, we don't override their desired behavior.
 
-    # If we're repeating the tests 10 times, then we want to set retry_limit=0.
-    # The default retry_limit of 3 means that failing tests will be retried 40
-    # times, which is not our intention.
-    test_options_copy._retry_limit = 0
+    Args:
+      suffix: A string suffix.
+      tests_to_retry: A container of tests to retry. An empty container
+        indicates that it is not a retry and all tests should be run.
+    """
+    # If there are too many tests, avoid setting a repeat count since that can
+    # cause timeouts. tests_to_retry can be None to indicate that all tests
+    # should be run. It can also rarely be the empty list, which is caused by an
+    # infra failure even though results are valid and all tests passed.
+    # https://crbug.com/910706.
+    if not tests_to_retry or len(tests_to_retry) > 100:
+      return self
 
-    # Since we're retrying a small number of tests, force them to be
-    # independent. This increases run time but produces more reliable results.
-    test_options_copy._force_independent_tests = True
+    if self.repeat_count is None and suffix == 'without patch':
+      return attr.evolve(
+          self,
+          repeat_count=REPEAT_COUNT_FOR_FAILING_TESTS,
+          # If we're repeating the tests 10 times, then we want to set
+          # retry_limit=0. The default retry_limit of 3 means that failing tests
+          # will be retried 40 times, which is not our intention.
+          retry_limit=0,
+          # Since we're retrying a small number of tests, force them to be
+          # independent. This increases run time but produces more reliable
+          # results.
+          force_independent_tests=True,
+      )
 
-  return test_options_copy
+    return self
+
+  def add_args(self, args, flags):
+    """Add arguments to the command line corresponding to the options.
+
+    Args:
+      args: A sequence of strings containing the command-line.
+      flags: The TestOptionFlags instance containing the supported flags
+        for the test.
+
+    Returns:
+      args: A list of strings containing the command-line. For any
+      enabled options, if there is a supporting flag, the command-line
+      will be modified to add the flag or replace it if it was already
+      present.
+    """
+    args = list(args)
+
+    if self.test_filter and flags.filter_flag:
+      args = _merge_arg(args, flags.filter_flag,
+                        flags.filter_delimiter.join(self.test_filter))
+
+    if self.repeat_count and self.repeat_count > 1 and flags.repeat_flag:
+      args = _merge_arg(args, flags.repeat_flag, self.repeat_count)
+
+    if self.retry_limit is not None and flags.retry_limit_flag:
+      args = _merge_arg(args, flags.retry_limit_flag, self.retry_limit)
+
+    if self.run_disabled and flags.run_disabled_flag:
+      args = _merge_arg(args, flags.run_disabled_flag, None)
+
+    if self.force_independent_tests and flags.batch_limit_flag:
+      args = _merge_arg(args, flags.batch_limit_flag, 1)
+
+    return args
 
 
 def _add_suffix(step_name, suffix):
@@ -452,7 +412,7 @@ class Test(object):
     self.spec = spec
     self._chromium_tests_api = chromium_tests_api
 
-    self._test_options = TestOptions()
+    self._test_options = TestOptions.create()
 
     # Contains a set of flaky failures that are known to be flaky, along with
     # the according id of the monorail bug filed for the flaky test.
@@ -1674,7 +1634,7 @@ class LocalGTestTestSpec(TestSpec):
     return LocalGTestTest
 
 
-class LocalGTestTest(LocalTest, GTestArguments):
+class LocalGTestTest(LocalTest):
 
   def __init__(self, spec, chromium_tests_api):
     super(LocalGTestTest, self).__init__(spec, chromium_tests_api)
@@ -1691,6 +1651,10 @@ class LocalGTestTest(LocalTest, GTestArguments):
   @property
   def tear_down(self):
     return self.spec.tear_down
+
+  @property
+  def option_flags(self):
+    return _GTEST_OPTION_FLAGS
 
   @property
   def uses_local_devices(self):
@@ -1713,9 +1677,8 @@ class LocalGTestTest(LocalTest, GTestArguments):
   @recipe_api.composite_step
   def run(self, suffix):
     tests_to_retry = self._tests_to_retry(suffix)
-    test_options = _test_options_for_running(self.test_options, suffix,
-                                             tests_to_retry)
-    args = _merge_args_and_test_options(self, self.spec.args, test_options)
+    test_options = self.test_options.for_running(suffix, tests_to_retry)
+    args = test_options.add_args(self.spec.args, self.option_flags)
 
     if tests_to_retry:
       args = _merge_arg(args, '--gtest_filter', ':'.join(tests_to_retry))
@@ -2110,9 +2073,8 @@ class SwarmingTest(Test):
     """Applies shared configuration for swarming tasks.
     """
     tests_to_retry = self._tests_to_retry(suffix)
-    test_options = _test_options_for_running(self.test_options, suffix,
-                                             tests_to_retry)
-    args = _merge_args_and_test_options(self, self.spec.args, test_options)
+    test_options = self.test_options.for_running(suffix, tests_to_retry)
+    args = test_options.add_args(self.spec.args, self.option_flags)
 
     # If we're in quick run set the shard count to any available quickrun shards
     use_quickrun = (
@@ -2384,11 +2346,15 @@ class SwarmingGTestTestSpec(SwarmingTestSpec):
     return SwarmingGTestTest
 
 
-class SwarmingGTestTest(SwarmingTest, GTestArguments):
+class SwarmingGTestTest(SwarmingTest):
 
   def __init__(self, spec, chromium_tests_api):
     super(SwarmingGTestTest, self).__init__(spec, chromium_tests_api)
     self._gtest_results = {}
+
+  @property
+  def option_flags(self):
+    return _GTEST_OPTION_FLAGS
 
   @Test.test_options.setter
   def test_options(self, value):
@@ -2483,18 +2449,12 @@ class LocalIsolatedScriptTestSpec(TestSpec):
     return LocalIsolatedScriptTest
 
 
-class LocalIsolatedScriptTest(LocalTest, IsolatedScriptTestArguments):
+class LocalIsolatedScriptTest(LocalTest):
 
   def __init__(self, spec, chromium_tests_api):
     super(LocalIsolatedScriptTest, self).__init__(spec, chromium_tests_api)
     self._raw_cmd = []
     self._relative_cwd = None
-    # webkit_layout_tests were renamed to blink_web_tests, which only supports
-    # gtest style arguments. See crbug/831345 and crrev/c/1006067 for details.
-    # batch limit was never supported for webkit_layout_tests, so we'll exclude
-    # override of that variable.
-    if 'blink_web_tests' in self.target_name:
-      self.override_into_gtest_args()
 
   @property
   def raw_cmd(self):
@@ -2521,6 +2481,11 @@ class LocalIsolatedScriptTest(LocalTest, IsolatedScriptTestArguments):
     return self.spec.tear_down
 
   @property
+  def option_flags(self):
+    return (_BLINK_WEB_TESTS_OPTION_FLAGS if 'blink_web_tests' in self.name else
+            _ISOLATED_SCRIPT_OPTION_FLAGS)
+
+  @property
   def isolate_target(self):
     return self.target_name
 
@@ -2543,15 +2508,14 @@ class LocalIsolatedScriptTest(LocalTest, IsolatedScriptTestArguments):
   @recipe_api.composite_step
   def run(self, suffix):
     tests_to_retry = self._tests_to_retry(suffix)
-    test_options = _test_options_for_running(self.test_options, suffix,
-                                             tests_to_retry)
+    test_options = self.test_options.for_running(suffix, tests_to_retry)
     pre_args = []
     if self.relative_cwd:
       pre_args += ['--relative-cwd', self.relative_cwd]
 
     cmd = list(self.raw_cmd)
     cmd.extend(self.spec.args)
-    args = _merge_args_and_test_options(self, cmd, test_options)
+    args = test_options.add_args(cmd, self.option_flags)
     # TODO(nednguyen, kbr): define contract with the wrapper script to rerun
     # a subset of the tests. (crbug.com/533481)
 
@@ -2643,20 +2607,19 @@ class SwarmingIsolatedScriptTestSpec(SwarmingTestSpec):
     return SwarmingIsolatedScriptTest
 
 
-class SwarmingIsolatedScriptTest(SwarmingTest, IsolatedScriptTestArguments):
+class SwarmingIsolatedScriptTest(SwarmingTest):
 
   def __init__(self, spec, chromium_tests_api):
     super(SwarmingIsolatedScriptTest, self).__init__(spec, chromium_tests_api)
     self._isolated_script_results = None
-    # webkit_layout_tests were renamed to blink_web_tests, which only supports
-    # gtest style arguments. See crbug/831345 and crrev/c/1006067 for details.
-    # batch limit was never supported for webkit_layout_tests, so we'll exclude
-    # override of that variable.
-    if 'blink_web_tests' in self.target_name:
-      self.override_into_gtest_args()
 
   def compile_targets(self):
     return self.spec.override_compile_targets or [self.target_name]
+
+  @property
+  def option_flags(self):
+    return (_BLINK_WEB_TESTS_OPTION_FLAGS if 'blink_web_tests' in self.name else
+            _ISOLATED_SCRIPT_OPTION_FLAGS)
 
   @Test.test_options.setter
   def test_options(self, value):

@@ -176,7 +176,7 @@ def _run_tests(api, builder_config, test_objects, requested_tests,
     test_filter = tuple(requested_tests[test_obj.canonical_name].names)
     # ScriptTests do not support test_options property
     if not isinstance(test_obj, steps.ScriptTest):
-      test_obj.test_options = steps.TestOptions(
+      test_obj.test_options = steps.TestOptions.create(
           test_filter=test_filter,
           repeat_count=test_repeat_count,
           retry_limit=0 if test_repeat_count else None,
