@@ -1,0 +1,20 @@
+{
+  "cas_input_root": "67951a7296da79ca60164871b38bde19a89085df0a6836955ff6c68a8188dd35/565",
+  "class_name": "BlinkWebTestsBinary",
+  "command": [
+    "bin/run_blink_wpt_tests"
+  ],
+  "cwd": "out/Release",
+  "dimensions": {
+    "cpu": "x86-64",
+    "os": "Mac-12",
+    "pool": "chromium.tests"
+  },
+  "env_vars": {
+    "ISOLATED_OUTDIR": "${ISOLATED_OUTDIR}"
+  },
+  "parallel_jobs": null,
+  "repeat": null,
+  "single_batch": null,
+  "tests": null
+}

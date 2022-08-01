@@ -30,7 +30,7 @@ import json
 
 def GenTests(api):
   yield api.test(
-      'from_test_request',
+      'gtest_from_test_request',
       api.properties(task_id='54321fffffabc123'),
       api.step_data(
           'get_test_binary.get_test_binary.show request',
@@ -38,6 +38,17 @@ def GenTests(api):
               json.loads(
                   api.flaky_reproducer.get_test_data(
                       'gtest_task_request.json')))),
+  )
+
+  yield api.test(
+      'blink_web_tests_from_test_request',
+      api.properties(task_id='54321fffffabc123'),
+      api.step_data(
+          'get_test_binary.get_test_binary.show request',
+          api.json.output_stream(
+              json.loads(
+                  api.flaky_reproducer.get_test_data(
+                      'blink_web_tests_task_request.json')))),
   )
 
   task_request = json.loads(

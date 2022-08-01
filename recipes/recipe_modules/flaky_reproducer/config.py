@@ -11,6 +11,7 @@ def BaseConfig():
       priority=Single(int),
       expiration=Single(int),
       strategy_timeout=Single(int),
+      io_timeout=Single(int),
       verify_timeout=Single(int),
   )
 
@@ -23,6 +24,7 @@ def BASE(c):
   c.priority = 200
   c.expiration = 5 * 60 * 60  # 5 hours
   c.strategy_timeout = 60 * 60  # 1 hour
+  c.io_timeout = 20 * 60  # 20 mins
   c.verify_timeout = 20 * 60  # 20 mins
 
 

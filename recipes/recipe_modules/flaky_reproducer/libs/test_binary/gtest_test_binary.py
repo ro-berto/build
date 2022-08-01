@@ -2,11 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import json
-import os
-import tempfile
-import shlex
-
 from . import utils
 from .base_test_binary import (BaseTestBinary, TestBinaryWithBatchMixin,
                                TestBinaryWithParallelMixin)
@@ -15,6 +10,7 @@ from ..result_summary.gtest_result_summary import GTestTestResultSummary
 
 class GTestTestBinary(TestBinaryWithBatchMixin, TestBinaryWithParallelMixin,
                       BaseTestBinary):
+  RESULT_SUMMARY_CLS = GTestTestResultSummary
 
   def strip_for_bots(self):
     ret = super().strip_for_bots()
@@ -48,7 +44,7 @@ class GTestTestBinary(TestBinaryWithBatchMixin, TestBinaryWithParallelMixin,
     if filter_file:
       cmd.append("--test-launcher-filter-file={0}".format(filter_file))
     elif self.tests:
-      cmd.append("--isolated-script-test-filter={0}".format(':'.join(
+      cmd.append("--isolated-script-test-filter={0}".format('::'.join(
           self.tests)))
     if self.repeat:
       cmd.append("--isolated-script-test-repeat={0}".format(self.repeat))
@@ -63,46 +59,3 @@ class GTestTestBinary(TestBinaryWithBatchMixin, TestBinaryWithParallelMixin,
     if output_json:
       cmd.append("--test-launcher-summary-output={0}".format(output_json))
     return cmd
-
-  def run(self):
-    tmp_files = []
-    filter_file = None
-    output_json = None
-    try:
-      if self.tests and len(self.tests) >= 10:
-        # pylint: disable=unexpected-keyword-arg
-        fp = tempfile.NamedTemporaryFile(
-            mode='w', suffix='.filter', delete=False, encoding='utf8')
-        tmp_files.append(fp.name)
-        fp.write('\n'.join(self.tests))
-        fp.close()
-        filter_file = fp.name
-
-      fp = tempfile.NamedTemporaryFile(suffix='.json', delete=False)
-      tmp_files.append(fp.name)
-      fp.close()
-      output_json = fp.name
-
-      cmd = self._get_command(filter_file, output_json)
-      utils.run_cmd(cmd, cwd=self.cwd)
-
-      return GTestTestResultSummary.from_output_json(
-          json.load(open(output_json)))
-    finally:
-      for f in tmp_files:
-        os.unlink(f)
-
-  def readable_command(self):
-    filter_message = ''
-    filter_file = None
-    if self.tests and len(self.tests) >= 10:
-      filter_file = 'tests.filter'
-      filter_message = "cat <<EOF > {0}\n{1}\nEOF\n".format(
-          filter_file, '\n'.join(self.tests))
-    cmd = self._get_command(filter_file)
-    return filter_message + ' '.join(map(shlex.quote, cmd))
-
-  def as_command(self, output=None):
-    if self.tests and len(self.tests) >= 10:
-      raise Exception('Too many tests, filter file not supported in as_command')
-    return self._get_command(output_json=output)

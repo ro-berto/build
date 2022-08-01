@@ -37,7 +37,7 @@ class ReproducingStepTest(unittest.TestCase):
          ' --test-launcher-bot-mode --asan=0 --lsan=0 --msan=0 --tsan=0'
          ' --cfi-diag=0 --test-launcher-retry-limit=0 '
          '--isolated-script-test-filter=MockUnitTests.CrashTest'
-         ':MockUnitTests.PassTest --isolated-script-test-repeat=1 '
+         '::MockUnitTests.PassTest --isolated-script-test-repeat=1 '
          '--test-launcher-batch-limit=0 --test-launcher-jobs=5'))
 
   def test_readable_info_not_reproduced(self):

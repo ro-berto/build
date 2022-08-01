@@ -5,16 +5,26 @@
 from .base_test_binary import (BaseTestBinary, TestBinaryWithBatchMixin,
                                TestBinaryWithParallelMixin)
 from .gtest_test_binary import GTestTestBinary
+from .blink_web_tests_binary import BlinkWebTestsBinary
 
 TEST_BINARIES = {
     GTestTestBinary.__name__: GTestTestBinary,
+    BlinkWebTestsBinary.__name__: BlinkWebTestsBinary,
 }
 
 
 def create_test_binary_from_task_request(task_request):
   """Factory method for TestBinary(s) that distinguish and create the correct
   TestBinary object."""
-  return GTestTestBinary.from_task_request(task_request)
+  if len(task_request) < 1:
+    raise ValueError("No TaskSlice found in the TaskRequest.")
+  request_slice = task_request[-1]
+  command = ' '.join(request_slice.command)
+  if 'result_adapter gtest' in command:
+    return GTestTestBinary.from_task_request(task_request)
+  elif '--write-run-histories-to=' in command:
+    return BlinkWebTestsBinary.from_task_request(task_request)
+  raise NotImplementedError('Not Supported test binary: %s' % command)
 
 
 def create_test_binary_from_jsonish(json_data):

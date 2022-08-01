@@ -69,7 +69,6 @@ def GenTests(api):
           ),
       ],
   )
-  empty_running_history = resultdb_pb2.GetTestResultHistoryResponse()
   test_running_history = resultdb_pb2.GetTestResultHistoryResponse(entries=[
       resultdb_pb2.GetTestResultHistoryResponse.Entry(
           result=test_result_pb2.TestResult(
@@ -104,7 +103,9 @@ def GenTests(api):
       'cannot_retrieve_invocation',
       api.properties(
           task_id='some-task-id',
-          failing_sample=UnexpectedTestResult('some-test')),
+          failing_sample=UnexpectedTestResult('some-test'),
+          reproducing_step_data=api.json.loads(
+              api.flaky_reproducer.get_test_data('reproducing_step.json'))),
       api.post_check(post_process.StatusFailure),
       api.post_check(post_process.ResultReason,
                      'Cannot retrieve invocation for task some-task-id.'),
@@ -115,7 +116,9 @@ def GenTests(api):
       'cannot_find_test_result_for_test',
       api.properties(
           task_id='some-task-id',
-          failing_sample=UnexpectedTestResult('Not.Exists.Test')),
+          failing_sample=UnexpectedTestResult('Not.Exists.Test'),
+          reproducing_step_data=api.json.loads(
+              api.flaky_reproducer.get_test_data('reproducing_step.json'))),
       api.resultdb.query(
           {
               'task-example.swarmingserver.appspot.com-some-task-id':
@@ -133,15 +136,6 @@ def GenTests(api):
       api.properties(
           task_id='some-task-id',
           failing_sample=UnexpectedTestResult('MockUnitTests.FailTest')),
-      api.resultdb.query(
-          {
-              'task-example.swarmingserver.appspot.com-some-task-id':
-                  resultdb_invocation,
-          },
-          step_name='verify_reproducing_step.rdb query'),
-      api.resultdb.get_test_result_history(
-          empty_running_history,
-          step_name='verify_reproducing_step.get_test_result_history'),
       api.post_check(post_process.StepTextEquals, 'summarize_results',
                      'Not reproducible.'),
       api.post_process(post_process.DropExpectation),
@@ -175,7 +169,13 @@ def GenTests(api):
           api.swarming.collect([
               api.swarming.task_result(
                   '0', 'name', failure=True, output='failed-output'),
+              api.swarming.task_result(
+                  '1', 'name', failure=True, output='failed-output'),
           ])),
+      api.post_check(lambda check, steps: check(
+          steps['summarize_results'].step_summary_text,
+          re.search(r"Failing Sample failed:", steps['summarize_results'].
+                    step_summary_text))),
       api.post_check(lambda check, steps: check(
           steps['summarize_results'].step_summary_text,
           re.search(r"Linux Tests failed:", steps['summarize_results'].
@@ -254,10 +254,8 @@ def GenTests(api):
                     api.json.output_stream(bad_task_request)),
       api.post_check(lambda check, steps: check(
           steps['summarize_results'].step_summary_text,
-          re.search(
-              r"Command line contains unknown wrapper: "
-              r"\['unknown', 'wrapper'\]", steps['summarize_results'].
-              step_summary_text))),
+          re.search(r"Not Supported test binary: unknown wrapper", steps[
+              'summarize_results'].step_summary_text))),
       api.post_check(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )

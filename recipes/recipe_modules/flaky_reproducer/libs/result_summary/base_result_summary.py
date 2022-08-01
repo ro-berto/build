@@ -189,7 +189,7 @@ class BaseResultSummary:
     self._results.append(test_result)
 
   def get_all(self, test_name):
-    """Get all TestResult that matches the given test_name.
+    """Get all TestResult that matches the given test_name in start_time order.
 
     Args:
       test_name (str): The name of the test.
@@ -197,7 +197,10 @@ class BaseResultSummary:
     Returns:
       A list of TestResult of all tests matching the given test_name.
     """
-    return [r for r in self if r.test_name == test_name]
+    # Python sort is stable, if result doesn't have start_time, the sorted
+    # result should keep the same.
+    return sorted([r for r in self if r.test_name == test_name],
+                  key=lambda r: r.start_time or 0)
 
   def get_failing_sample(self, test_name, default=UnexpectedTestResult):
     """Get an unexpected sample for |test_name|, or |default| if not found."""

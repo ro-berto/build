@@ -3,6 +3,10 @@
 # found in the LICENSE file.
 
 import copy
+import json
+import os
+import shlex
+import tempfile
 from . import utils
 
 
@@ -23,6 +27,9 @@ class BaseTestBinary:
     cas_input_root (str): digest of an uploaded directory tree on the default
       cas server.
   """
+  # Result Summary Class for `run`, should be set in sub-classes.
+  RESULT_SUMMARY_CLS = None
+  TEST_FILTER_LIMIT = 20
 
   def __init__(self, command, **kwargs):
     # test binary info
@@ -50,8 +57,6 @@ class BaseTestBinary:
     Returns:
       A new TestBinary instance.
     """
-    if len(task_request) < 1:
-      raise ValueError("No TaskSlice found in the TaskRequest.")
     request_slice = task_request[-1]
 
     ret = cls(
@@ -143,13 +148,51 @@ class BaseTestBinary:
     ret.repeat = repeat
     return ret
 
+  def _get_command(self, filter_file=None, output_json=None):
+    """Generate the list of command args based on with_* options.
+
+    This is the helper function for `run`, `readable_command` and `as_command`
+    method if you want to use the default behavior defined in BaseTestBinary.
+    This method is not required to be implemented if you have them overridden.
+    """
+    raise NotImplementedError('Method should be implemented in sub-classes.')
+
   def run(self):
     """Runs the tests.
 
     Returns:
       TestResultSummary
     """
-    raise NotImplementedError('Method should be implemented in sub-classes.')
+    if not self.RESULT_SUMMARY_CLS:
+      raise NotImplementedError(
+          'RESULT_SUMMARY_CLS should be set in sub-classes')
+
+    tmp_files = []
+    filter_file = None
+    output_json = None
+    try:
+      if self.tests and len(self.tests) >= 10:
+        # pylint: disable=unexpected-keyword-arg
+        fp = tempfile.NamedTemporaryFile(
+            mode='w', suffix='.filter', delete=False, encoding='utf8')
+        tmp_files.append(fp.name)
+        fp.write('\n'.join(self.tests))
+        fp.close()
+        filter_file = fp.name
+
+      fp = tempfile.NamedTemporaryFile(suffix='.json', delete=False)
+      tmp_files.append(fp.name)
+      fp.close()
+      output_json = fp.name
+
+      cmd = self._get_command(filter_file, output_json)
+      utils.run_cmd(cmd, cwd=self.cwd)
+
+      return self.RESULT_SUMMARY_CLS.from_output_json(
+          json.load(open(output_json)))
+    finally:
+      for f in tmp_files:
+        os.unlink(f)
 
   def readable_command(self):
     """Return a human readable command line instruction.
@@ -157,7 +200,14 @@ class BaseTestBinary:
     Returns:
       String of command line for the TestBinary.
     """
-    raise NotImplementedError('Method should be implemented in sub-classes.')
+    filter_message = ''
+    filter_file = None
+    if self.tests and len(self.tests) >= self.TEST_FILTER_LIMIT:
+      filter_file = 'tests.filter'
+      filter_message = "cat <<EOF > {0}\n{1}\nEOF\n".format(
+          filter_file, '\n'.join(self.tests))
+    cmd = self._get_command(filter_file)
+    return filter_message + ' '.join(map(shlex.quote, cmd))
 
   def as_command(self, output=None):
     """Return a executable command line.
@@ -168,7 +218,9 @@ class BaseTestBinary:
     Returns:
       Command line args array for the TestBinary.
     """
-    raise NotImplementedError('Method should be implemented in sub-classes.')
+    if self.tests and len(self.tests) >= self.TEST_FILTER_LIMIT:
+      raise Exception('Too many tests, filter file not supported in as_command')
+    return self._get_command(output_json=output)
 
 
 class TestBinaryWithBatchMixin:

@@ -5,7 +5,7 @@
 import io
 import json
 import unittest
-from unittest.mock import patch
+from unittest.mock import patch, mock_open
 
 from libs.test_binary import utils, create_test_binary_from_jsonish
 from libs.test_binary.base_test_binary import (BaseTestBinary,
@@ -41,37 +41,36 @@ class TestBinaryUtilsTest(unittest.TestCase):
                                      {'foo': 2}), ['3', '4'])
 
   @patch('subprocess.Popen')
-  @patch('sys.stderr', new_callable=io.StringIO)
+  @patch('logging.info')
   @patch('os.environ', new={'foo': 'bar'})
-  def test_run_cmd(self, mock_stdout, mock_popen):
+  def test_run_cmd(self, mock_logging, mock_popen):
     mock_popen.return_value.wait.return_value = 0
     cmd = ['./exec', '--args']
     utils.run_cmd(cmd, env={}, cwd='out\\Release_x64')
-    self.assertEqual(
-        mock_stdout.getvalue(),
-        "Running ['./exec', '--args'] in 'out\\\\Release_x64' with {}\n")
+    mock_logging.assert_called_once_with('Running %r in %r with %r', cmd,
+                                         'out\\Release_x64', {})
     mock_popen.assert_called_once_with(cmd, env={}, cwd='out\\Release_x64')
 
   @patch('subprocess.Popen')
-  @patch('sys.stderr', new_callable=io.StringIO)
+  @patch('logging.info')
   @patch('os.environ', new={'ISOLATED_OUTDIR': '/isolated_out_dir'})
-  def test_run_cmd_with_isolated_outdir(self, mock_stdout, mock_popen):
+  def test_run_cmd_with_isolated_outdir(self, mock_logging, mock_popen):
     mock_popen.return_value.wait.return_value = 0
     cmd = ['./exec', '--args', r'--output=${ISOLATED_OUTDIR}']
     utils.run_cmd(cmd, env={}, cwd='out\\Release_x64')
-    self.assertEqual(
-        mock_stdout.getvalue(),
-        "Running ['./exec', '--args', '--output=/isolated_out_dir'] "
-        "in 'out\\\\Release_x64' with {}\n")
+    mock_logging.assert_called_once_with(
+        'Running %r in %r with %r',
+        ['./exec', '--args', '--output=/isolated_out_dir'], 'out\\Release_x64',
+        {})
     mock_popen.assert_called_once_with(
         ['./exec', '--args', '--output=/isolated_out_dir'],
         env={},
         cwd='out\\Release_x64')
 
   @patch('subprocess.Popen')
-  @patch('sys.stderr', new_callable=io.StringIO)
+  @patch('logging.info')
   @patch('os.environ', new={'foo': 'bar'})
-  def test_run_cmd_with_failure(self, mock_stdout, mock_popen):
+  def test_run_cmd_with_failure(self, mock_logging, mock_popen):
     mock_popen.return_value.wait.return_value = 1
     cmd = ['./exec', '--args']
     ret = utils.run_cmd(cmd, env={}, cwd='out\\Release_x64')
@@ -117,6 +116,12 @@ class TestBinaryFactoryTest(unittest.TestCase):
     to_jsonish = test_binary.to_jsonish()
     self.assertEqual(to_jsonish, jsonish)
 
+  def test_from_jsonish_blink_web_tests(self):
+    jsonish = json.loads(get_test_data('blink_web_tests_binary.json'))
+    test_binary = create_test_binary_from_jsonish(jsonish)
+    to_jsonish = test_binary.to_jsonish()
+    self.assertEqual(to_jsonish, jsonish)
+
   def test_from_jsonish_with_overrides(self):
     jsonish = json.loads(get_test_data('gtest_test_binary_with_overrides.json'))
     test_binary = create_test_binary_from_jsonish(jsonish)
@@ -130,6 +135,25 @@ class BaseTestBinaryTest(unittest.TestCase):
     # Note: BaseTestBinary can not created via create_test_binary_from_jsonish
     jsonish = json.loads(get_test_data('gtest_test_binary.json'))
     self.test_binary = BaseTestBinary.from_jsonish(jsonish)
+
+    # @patch('tempfile.NamedTemporaryFile') for all tests
+    tmp_patcher = patch('tempfile.NamedTemporaryFile')
+    self.addClassCleanup(tmp_patcher.stop)
+    mock_NamedTemporaryFile = tmp_patcher.start()
+
+    def new_NamedTemporaryFile(
+        suffix=None,
+        prefix=None,
+        dir=None,  # pylint: disable=redefined-builtin
+        *args,
+        **kwargs):
+      fp = io.StringIO()
+      fp.name = "/{0}/{1}mock-temp-{2}{3}".format(
+          dir or 'mock-tmp', prefix or '', mock_NamedTemporaryFile.call_count,
+          suffix or '')
+      return fp
+
+    mock_NamedTemporaryFile.side_effect = new_NamedTemporaryFile
 
   def test_strip_for_bots(self):
     test_binary = self.test_binary.strip_for_bots()
@@ -177,13 +201,90 @@ class BaseTestBinaryTest(unittest.TestCase):
     self.assertIsNot(ret, self.test_binary)
     self.assertEqual(ret.repeat, 3)
 
-  def test_should_not_implement_in_base_class(self):
-    with self.assertRaises(NotImplementedError):
+  def test_not_implemented(self):
+    with self.assertRaisesRegex(NotImplementedError,
+                                'Method should be implemented in sub-classes'):
+      self.test_binary._get_command()
+
+    with self.assertRaisesRegex(
+        NotImplementedError, 'RESULT_SUMMARY_CLS should be set in sub-classes'):
       self.test_binary.run()
-    with self.assertRaises(NotImplementedError):
-      self.test_binary.readable_command()
-    with self.assertRaises(NotImplementedError):
-      self.test_binary.as_command()
+
+  @patch.object(utils, 'run_cmd')
+  @patch(
+      'builtins.open',
+      new=mock_open(read_data=get_test_data('gtest_good_output.json')))
+  @patch('os.unlink')
+  @patch.object(BaseTestBinary, '_get_command')
+  @patch.object(BaseTestBinary, 'RESULT_SUMMARY_CLS')
+  def test_run_tests(self, mock_result_cls, mock_get_command, mock_unlink,
+                     mock_run_cmd):
+    mock_get_command.return_value = ['return', 'command']
+    test_binary = self.test_binary.strip_for_bots()
+    test_binary.with_tests(['MockUnitTests.CrashTest'] * 2).run()
+    mock_result_cls.from_output_json.assert_called()
+    mock_get_command.assert_called_once_with(None, '/mock-tmp/mock-temp-1.json')
+    mock_run_cmd.assert_called_once_with(['return', 'command'],
+                                         cwd=test_binary.cwd)
+    mock_unlink.assert_called()
+
+  @patch.object(utils, 'run_cmd')
+  @patch(
+      'builtins.open',
+      new=mock_open(read_data=get_test_data('gtest_good_output.json')))
+  @patch('os.unlink')
+  @patch.object(BaseTestBinary, '_get_command')
+  @patch.object(BaseTestBinary, 'RESULT_SUMMARY_CLS')
+  def test_run_tests_with_multiple_tests(self, mock_result_cls,
+                                         mock_get_command, mock_unlink,
+                                         mock_run_cmd):
+    mock_get_command.return_value = ['return', 'command']
+    test_binary = self.test_binary.strip_for_bots()
+    test_binary.with_tests(['MockUnitTests.CrashTest'] * 20).run()
+    mock_result_cls.from_output_json.assert_called()
+    mock_get_command.assert_called_once_with('/mock-tmp/mock-temp-1.filter',
+                                             '/mock-tmp/mock-temp-2.json')
+    mock_run_cmd.assert_called_once_with(['return', 'command'],
+                                         cwd=test_binary.cwd)
+    mock_unlink.assert_called()
+
+  @patch.object(BaseTestBinary, '_get_command')
+  def test_readable_command(self, mock_get_command):
+    mock_get_command.return_value = ['return', 'command']
+    self.maxDiff = None
+    test_binary = self.test_binary.strip_for_bots()
+    readable_info = test_binary\
+      .with_tests(['MockUnitTests.CrashTest'])\
+      .readable_command()
+    mock_get_command.assert_called_with(None)
+    self.assertEqual(readable_info, 'return command')
+
+    readable_info = test_binary\
+      .with_tests(['MockUnitTests.CrashTest']*20)\
+      .readable_command()
+    mock_get_command.assert_called_with('tests.filter')
+    self.assertEqual(readable_info,
+                     ('cat <<EOF > tests.filter\n' +
+                      ('\n'.join(['MockUnitTests.CrashTest'] * 20)) + '\nEOF\n'
+                      'return command'))
+
+  @patch.object(BaseTestBinary, '_get_command')
+  def test_as_command(self, mock_get_command):
+    mock_get_command.return_value = ['return', 'command']
+    self.maxDiff = None
+    test_binary = self.test_binary.strip_for_bots()
+    command = test_binary\
+      .with_tests(['MockUnitTests.CrashTest'])\
+      .as_command('${ISOLATED_OUTDIR}/output-$N$.json')
+    mock_get_command.assert_called_once_with(
+        output_json='${ISOLATED_OUTDIR}/output-$N$.json')
+    self.assertEqual(command, ['return', 'command'])
+
+    with self.assertRaisesRegex(
+        Exception, 'Too many tests, filter file not supported in as_command'):
+      test_binary\
+        .with_tests(['MockUnitTests.CrashTest']*20)\
+        .as_command()
 
 
 class TestBinaryMixinTest(unittest.TestCase):

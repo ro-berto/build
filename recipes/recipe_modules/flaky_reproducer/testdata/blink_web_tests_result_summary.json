@@ -1,0 +1,587 @@
+{
+  "version": 1,
+  "run_histories": [
+    {
+      "test_name": "passes/text.html",
+      "test_run_time": 1,
+      "has_stderr": false,
+      "reftest_type": [],
+      "pid": null,
+      "has_repaint_overlay": false,
+      "crash_site": null,
+      "retry_attempt": 0,
+      "type": "TIMEOUT",
+      "worker_name": "",
+      "worker_number": -1,
+      "shard_name": "",
+      "start_time": null,
+      "total_run_time": 0,
+      "test_number": null,
+      "expected_results": [
+        "PASS"
+      ],
+      "bugs": "",
+      "failures": [
+        {
+          "message": "test timed out"
+        }
+      ]
+    },
+    {
+      "test_name": "failures/expected/audio.html",
+      "test_run_time": 0.049,
+      "has_stderr": false,
+      "reftest_type": [],
+      "pid": null,
+      "has_repaint_overlay": false,
+      "crash_site": null,
+      "retry_attempt": 0,
+      "type": "CRASH",
+      "worker_name": "",
+      "worker_number": -1,
+      "shard_name": "",
+      "start_time": null,
+      "total_run_time": 0,
+      "test_number": null,
+      "expected_results": [
+        "FAIL"
+      ],
+      "bugs": "",
+      "failures": [
+        {
+          "message": "content_shell crashed"
+        }
+      ]
+    },
+    {
+      "test_name": "failures/expected/timeout.html",
+      "test_run_time": 0.05,
+      "has_stderr": false,
+      "reftest_type": [],
+      "pid": null,
+      "has_repaint_overlay": false,
+      "crash_site": null,
+      "retry_attempt": 0,
+      "type": "FAIL",
+      "worker_name": "",
+      "worker_number": -1,
+      "shard_name": "",
+      "start_time": null,
+      "total_run_time": 0,
+      "test_number": null,
+      "expected_results": [
+        "TIMEOUT"
+      ],
+      "bugs": "",
+      "failures": [
+        {
+          "message": "TestFailure"
+        }
+      ]
+    },
+    {
+      "test_name": "failures/expected/crash.html",
+      "test_run_time": 0,
+      "has_stderr": false,
+      "reftest_type": [],
+      "pid": null,
+      "has_repaint_overlay": false,
+      "crash_site": null,
+      "retry_attempt": 0,
+      "type": "TIMEOUT",
+      "worker_name": "",
+      "worker_number": -1,
+      "shard_name": "",
+      "start_time": null,
+      "total_run_time": 0,
+      "test_number": null,
+      "expected_results": [
+        "CRASH"
+      ],
+      "bugs": "",
+      "failures": [
+        {
+          "message": "test timed out"
+        }
+      ]
+    },
+    {
+      "test_name": "failures/expected/leak.html",
+      "test_run_time": 0,
+      "has_stderr": false,
+      "reftest_type": [],
+      "pid": null,
+      "has_repaint_overlay": false,
+      "crash_site": null,
+      "retry_attempt": 0,
+      "type": "TIMEOUT",
+      "worker_name": "",
+      "worker_number": -1,
+      "shard_name": "",
+      "start_time": null,
+      "total_run_time": 0,
+      "test_number": null,
+      "expected_results": [
+        "FAIL"
+      ],
+      "bugs": "",
+      "failures": [
+        {
+          "message": "test timed out"
+        }
+      ]
+    },
+    {
+      "test_name": "failures/expected/keyboard.html",
+      "test_run_time": 0,
+      "has_stderr": false,
+      "reftest_type": [],
+      "pid": null,
+      "has_repaint_overlay": false,
+      "crash_site": null,
+      "retry_attempt": 0,
+      "type": "PASS",
+      "worker_name": "",
+      "worker_number": -1,
+      "shard_name": "",
+      "start_time": null,
+      "total_run_time": 0,
+      "test_number": null,
+      "expected_results": [
+        "SKIP",
+        "CRASH"
+      ],
+      "bugs": ""
+    },
+    {
+      "test_name": "failures/expected/text.html",
+      "test_run_time": 0,
+      "has_stderr": false,
+      "reftest_type": [],
+      "pid": null,
+      "has_repaint_overlay": false,
+      "crash_site": null,
+      "retry_attempt": 0,
+      "type": "FAIL",
+      "worker_name": "",
+      "worker_number": -1,
+      "shard_name": "",
+      "start_time": null,
+      "total_run_time": 0,
+      "test_number": null,
+      "expected_results": [
+        "FAIL"
+      ],
+      "bugs": "",
+      "failures": [
+        {
+          "message": "image diff"
+        }
+      ]
+    },
+    {
+      "test_name": "passes/text.html",
+      "test_run_time": 0,
+      "has_stderr": false,
+      "reftest_type": [],
+      "pid": null,
+      "has_repaint_overlay": false,
+      "crash_site": null,
+      "retry_attempt": 0,
+      "type": "PASS",
+      "worker_name": "",
+      "worker_number": -1,
+      "shard_name": "",
+      "start_time": null,
+      "total_run_time": 0,
+      "test_number": null,
+      "expected_results": [
+        "PASS"
+      ],
+      "bugs": ""
+    },
+    {
+      "test_name": "failures/expected/audio.html",
+      "test_run_time": 0,
+      "has_stderr": false,
+      "reftest_type": [],
+      "pid": null,
+      "has_repaint_overlay": false,
+      "crash_site": null,
+      "retry_attempt": 0,
+      "type": "FAIL",
+      "worker_name": "",
+      "worker_number": -1,
+      "shard_name": "",
+      "start_time": null,
+      "total_run_time": 0,
+      "test_number": null,
+      "expected_results": [
+        "FAIL"
+      ],
+      "bugs": "",
+      "failures": [
+        {
+          "message": "TestFailure"
+        }
+      ]
+    },
+    {
+      "test_name": "failures/expected/leak.html",
+      "test_run_time": 0,
+      "has_stderr": false,
+      "reftest_type": [],
+      "pid": null,
+      "has_repaint_overlay": false,
+      "crash_site": null,
+      "retry_attempt": 0,
+      "type": "FAIL",
+      "worker_name": "",
+      "worker_number": -1,
+      "shard_name": "",
+      "start_time": null,
+      "total_run_time": 0,
+      "test_number": null,
+      "expected_results": [
+        "FAIL"
+      ],
+      "bugs": "",
+      "failures": [
+        {
+          "message": "TestFailure"
+        }
+      ]
+    },
+    {
+      "test_name": "failures/expected/timeout.html",
+      "test_run_time": 0,
+      "has_stderr": false,
+      "reftest_type": [],
+      "pid": null,
+      "has_repaint_overlay": false,
+      "crash_site": null,
+      "retry_attempt": 0,
+      "type": "FAIL",
+      "worker_name": "",
+      "worker_number": -1,
+      "shard_name": "",
+      "start_time": null,
+      "total_run_time": 0,
+      "test_number": null,
+      "expected_results": [
+        "TIMEOUT"
+      ],
+      "bugs": "",
+      "failures": [
+        {
+          "message": "TestFailure"
+        }
+      ]
+    },
+    {
+      "test_name": "failures/expected/crash.html",
+      "test_run_time": 0,
+      "has_stderr": false,
+      "reftest_type": [],
+      "pid": null,
+      "has_repaint_overlay": false,
+      "crash_site": null,
+      "retry_attempt": 0,
+      "type": "FAIL",
+      "worker_name": "",
+      "worker_number": -1,
+      "shard_name": "",
+      "start_time": null,
+      "total_run_time": 0,
+      "test_number": null,
+      "expected_results": [
+        "CRASH"
+      ],
+      "bugs": "",
+      "failures": [
+        {
+          "message": "TestFailure"
+        }
+      ]
+    },
+    {
+      "test_name": "failures/expected/text.html",
+      "test_run_time": 0,
+      "has_stderr": false,
+      "reftest_type": [],
+      "pid": null,
+      "has_repaint_overlay": false,
+      "crash_site": null,
+      "retry_attempt": 0,
+      "type": "FAIL",
+      "worker_name": "",
+      "worker_number": -1,
+      "shard_name": "",
+      "start_time": null,
+      "total_run_time": 0,
+      "test_number": null,
+      "expected_results": [
+        "FAIL"
+      ],
+      "bugs": "",
+      "failures": [
+        {
+          "message": "TestFailure"
+        }
+      ]
+    },
+    {
+      "test_name": "passes/text.html",
+      "test_run_time": 0,
+      "has_stderr": false,
+      "reftest_type": [],
+      "pid": null,
+      "has_repaint_overlay": false,
+      "crash_site": null,
+      "retry_attempt": 0,
+      "type": "PASS",
+      "worker_name": "",
+      "worker_number": -1,
+      "shard_name": "",
+      "start_time": null,
+      "total_run_time": 0,
+      "test_number": null,
+      "expected_results": [
+        "PASS"
+      ],
+      "bugs": ""
+    },
+    {
+      "test_name": "failures/expected/audio.html",
+      "test_run_time": 0,
+      "has_stderr": false,
+      "reftest_type": [],
+      "pid": null,
+      "has_repaint_overlay": false,
+      "crash_site": null,
+      "retry_attempt": 0,
+      "type": "FAIL",
+      "worker_name": "",
+      "worker_number": -1,
+      "shard_name": "",
+      "start_time": null,
+      "total_run_time": 0,
+      "test_number": null,
+      "expected_results": [
+        "FAIL"
+      ],
+      "bugs": "",
+      "failures": [
+        {
+          "message": "TestFailure"
+        }
+      ]
+    },
+    {
+      "test_name": "failures/expected/leak.html",
+      "test_run_time": 0,
+      "has_stderr": false,
+      "reftest_type": [],
+      "pid": null,
+      "has_repaint_overlay": false,
+      "crash_site": null,
+      "retry_attempt": 0,
+      "type": "FAIL",
+      "worker_name": "",
+      "worker_number": -1,
+      "shard_name": "",
+      "start_time": null,
+      "total_run_time": 0,
+      "test_number": null,
+      "expected_results": [
+        "FAIL"
+      ],
+      "bugs": "",
+      "failures": [
+        {
+          "message": "TestFailure"
+        }
+      ]
+    },
+    {
+      "test_name": "failures/expected/timeout.html",
+      "test_run_time": 0,
+      "has_stderr": false,
+      "reftest_type": [],
+      "pid": null,
+      "has_repaint_overlay": false,
+      "crash_site": null,
+      "retry_attempt": 0,
+      "type": "FAIL",
+      "worker_name": "",
+      "worker_number": -1,
+      "shard_name": "",
+      "start_time": null,
+      "total_run_time": 0,
+      "test_number": null,
+      "expected_results": [
+        "TIMEOUT"
+      ],
+      "bugs": "",
+      "failures": [
+        {
+          "message": "TestFailure"
+        }
+      ]
+    },
+    {
+      "test_name": "failures/expected/crash.html",
+      "test_run_time": 0,
+      "has_stderr": false,
+      "reftest_type": [],
+      "pid": null,
+      "has_repaint_overlay": false,
+      "crash_site": null,
+      "retry_attempt": 0,
+      "type": "CRASH",
+      "worker_name": "",
+      "worker_number": -1,
+      "shard_name": "",
+      "start_time": null,
+      "total_run_time": 0,
+      "test_number": null,
+      "expected_results": [
+        "CRASH"
+      ],
+      "bugs": "",
+      "failures": [
+        {
+          "message": "content_shell crashed"
+        }
+      ]
+    },
+    {
+      "test_name": "passes/text.html",
+      "test_run_time": 0,
+      "has_stderr": false,
+      "reftest_type": [],
+      "pid": null,
+      "has_repaint_overlay": false,
+      "crash_site": null,
+      "retry_attempt": 0,
+      "type": "PASS",
+      "worker_name": "",
+      "worker_number": -1,
+      "shard_name": "",
+      "start_time": null,
+      "total_run_time": 0,
+      "test_number": null,
+      "expected_results": [
+        "PASS"
+      ],
+      "bugs": ""
+    },
+    {
+      "test_name": "failures/expected/audio.html",
+      "test_run_time": 0,
+      "has_stderr": false,
+      "reftest_type": [],
+      "pid": null,
+      "has_repaint_overlay": false,
+      "crash_site": null,
+      "retry_attempt": 0,
+      "type": "FAIL",
+      "worker_name": "",
+      "worker_number": -1,
+      "shard_name": "",
+      "start_time": null,
+      "total_run_time": 0,
+      "test_number": null,
+      "expected_results": [
+        "FAIL"
+      ],
+      "bugs": "",
+      "failures": [
+        {
+          "message": "TestFailure"
+        }
+      ]
+    },
+    {
+      "test_name": "failures/expected/leak.html",
+      "test_run_time": 0,
+      "has_stderr": false,
+      "reftest_type": [],
+      "pid": null,
+      "has_repaint_overlay": false,
+      "crash_site": null,
+      "retry_attempt": 0,
+      "type": "FAIL",
+      "worker_name": "",
+      "worker_number": -1,
+      "shard_name": "",
+      "start_time": null,
+      "total_run_time": 0,
+      "test_number": null,
+      "expected_results": [
+        "FAIL"
+      ],
+      "bugs": "",
+      "failures": [
+        {
+          "message": "TestFailure"
+        }
+      ]
+    },
+    {
+      "test_name": "failures/expected/timeout.html",
+      "test_run_time": 0,
+      "has_stderr": false,
+      "reftest_type": [],
+      "pid": null,
+      "has_repaint_overlay": false,
+      "crash_site": null,
+      "retry_attempt": 0,
+      "type": "FAIL",
+      "worker_name": "",
+      "worker_number": -1,
+      "shard_name": "",
+      "start_time": null,
+      "total_run_time": 0,
+      "test_number": null,
+      "expected_results": [
+        "TIMEOUT"
+      ],
+      "bugs": "",
+      "failures": [
+        {
+          "message": "TestFailure"
+        }
+      ]
+    },
+    {
+      "test_name": "failures/expected/crash.html",
+      "test_run_time": 0,
+      "has_stderr": false,
+      "reftest_type": [],
+      "pid": null,
+      "has_repaint_overlay": false,
+      "crash_site": null,
+      "retry_attempt": 0,
+      "type": "FAIL",
+      "worker_name": "",
+      "worker_number": -1,
+      "shard_name": "",
+      "start_time": null,
+      "total_run_time": 0,
+      "test_number": null,
+      "expected_results": [
+        "CRASH"
+      ],
+      "bugs": "",
+      "failures": [
+        {
+          "message": "TestFailure"
+        }
+      ],
+      "failure_reason": {
+        "primary_error_message": "some primary error message"
+      }
+    }
+  ]
+}

@@ -16,6 +16,7 @@ class GTestTestResultSummaryFactoryTest(unittest.TestCase):
   def test_good_output_json(self):
     json_data = json.loads(get_test_data('gtest_good_output.json'))
     result_summary = GTestTestResultSummary.from_output_json(json_data)
+    self.assertEqual(result_summary.dump_raw_data(), json.dumps(json_data))
 
     self.assertEqual(len(result_summary), 4)
 

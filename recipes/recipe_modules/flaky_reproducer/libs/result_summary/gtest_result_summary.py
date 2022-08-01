@@ -71,9 +71,9 @@ class GTestTestResultSummary(BaseResultSummary):
 
   @classmethod
   def from_output_json(cls, json_data):
-    if not isinstance(json_data, dict) \
-      or 'per_iteration_data' not in json_data \
-      or not isinstance(json_data['per_iteration_data'], list):
+    if (not isinstance(json_data, dict) or
+        'per_iteration_data' not in json_data or
+        not isinstance(json_data['per_iteration_data'], list)):
       raise cls.FORMAT_ERROR
 
     result = cls()

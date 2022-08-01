@@ -11,6 +11,8 @@ from libs.result_summary.base_result_summary import (
     BaseResultSummary, TestResultErrorMessageRegexSimilarityMixin, TestResult,
     TestStatus, UnexpectedTestResult)
 from libs.result_summary.gtest_result_summary import GTestTestResultSummary
+from libs.result_summary.blink_web_tests_result_summary import (
+    BlinkWebTestsResultSummary)
 from testdata import get_test_data
 
 
@@ -19,6 +21,12 @@ class ResultSummaryFactoryTest(unittest.TestCase):
   @patch.object(GTestTestResultSummary, 'from_output_json')
   def test_gtest(self, mock_from_output_json):
     json_data = json.loads(get_test_data('gtest_good_output.json'))
+    create_result_summary_from_output_json(json_data)
+    mock_from_output_json.assert_called_with(json_data)
+
+  @patch.object(BlinkWebTestsResultSummary, 'from_output_json')
+  def test_blink_web_tests(self, mock_from_output_json):
+    json_data = json.loads(get_test_data('blink_web_tests_result_summary.json'))
     create_result_summary_from_output_json(json_data)
     mock_from_output_json.assert_called_with(json_data)
 

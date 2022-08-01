@@ -84,13 +84,12 @@ class FlakyReproducer(recipe_api.RecipeApi):
     cas_output = self.m.cas.download('download swarming outputs',
                                      task_result.cas_outputs.digest,
                                      self.m.raw_io.output_dir())
-    if 'output.json' in cas_output.raw_io.output_dir:
-      test_result = create_result_summary_from_output_json(
-          self.m.json.loads(cas_output.raw_io.output_dir['output.json']))
-    else:
-      raise self.m.step.StepFailure('Not supported task result.')
+    for output_json in ('run_histories.json', 'output.json'):
+      if output_json in cas_output.raw_io.output_dir:
+        return create_result_summary_from_output_json(
+            self.m.json.loads(cas_output.raw_io.output_dir[output_json]))
 
-    return test_result
+    raise self.m.step.StepFailure('Not supported task result.')
 
   @nest_step
   def get_test_binary(self, task_id):
@@ -156,6 +155,7 @@ class FlakyReproducer(recipe_api.RecipeApi):
         .with_env_vars(**strategy.test_binary.env_vars)  #
         .with_dimensions(**strategy.test_binary.dimensions)  #
         .with_execution_timeout_secs(self.c.strategy_timeout)  #
+        .with_io_timeout_secs(self.c.io_timeout)  #
         .with_expiration_secs(self.c.expiration)  #
     )
     request = request.with_slice(0, request_slice)
@@ -230,6 +230,7 @@ class FlakyReproducer(recipe_api.RecipeApi):
         .with_env_vars(**test_binary.env_vars)  #
         .with_dimensions(**test_binary.dimensions)  #
         .with_execution_timeout_secs(self.c.verify_timeout)  #
+        .with_io_timeout_secs(self.c.io_timeout)  #
         .with_expiration_secs(self.c.expiration)  #
     )
     request = request.with_slice(0, request_slice)
@@ -254,13 +255,18 @@ class FlakyReproducer(recipe_api.RecipeApi):
 
   @nest_step
   def verify_reproducing_step(self, task_id, failing_sample, reproducing_step):
-    verify_builders = self._find_related_builders(task_id,
-                                                  failing_sample.test_name)
-    if not verify_builders:
-      return
-    # Launch verify swarming tasks
+    if not reproducing_step:
+      return {}
     builder_results = {}
     swarming_tasks = {}  # { task_id: (builder, task_meta) }
+    # Verify failing builder sample
+    builder = 'Failing Sample'
+    task = self.launch_verify_in_swarming(builder, failing_sample.test_name,
+                                          reproducing_step.test_binary)
+    swarming_tasks[task.id] = (builder, task)
+    # Launch verify swarming tasks
+    verify_builders = self._find_related_builders(task_id,
+                                                  failing_sample.test_name)
     for builder, builder_task_id in verify_builders.items():
       try:
         test_binary = self.get_test_binary(builder_task_id)
@@ -328,9 +334,9 @@ class FlakyReproducer(recipe_api.RecipeApi):
     """Runs the Chrome Flaky Reproducer as a recipe.
 
     This method is expected to run as a standalone recipe that:
-      1. takes a test and the swarming task runs it.
+      1. Takes a test and the swarming task runs it.
       2. Applies to multiple reproducing strategies.
-      3. TODO: Verify the best reproducing step on all variants for the test.
+      3. Verifies the best reproducing step on all variants for the test.
       4. Summarize the results of above.
     """
     # Retrieve failing test info.
@@ -403,6 +409,10 @@ class FlakyReproducer(recipe_api.RecipeApi):
       raise self.m.step.StepFailure(
           'Cannot find TestResult for test {0}.'.format(test_name))
 
+    failing_sample_builder = None
+    if 'builder' in getattr(test_result.variant, 'def'):
+      failing_sample_builder = getattr(test_result.variant,
+                                       'def').get('builder')
     # Query builders with the given test.
     variant_predicate = None
     if 'test_suite' in getattr(test_result.variant, 'def'):
@@ -444,7 +454,7 @@ class FlakyReproducer(recipe_api.RecipeApi):
       for each in result_history.entries:
         builder = getattr(each.result.variant, 'def').get('builder', None)
         if (not builder  # go/pyformat-break
-            or builder in builders or
+            or builder in builders or builder == failing_sample_builder or
             builder not in self.ALLOWED_VERIFY_BUILDERS):
           continue
         task_id = self._extract_task_id_from_invocation_name(each.result.name)

@@ -501,7 +501,7 @@
       "-server",
       "https://example.swarmingserver.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"flaky reproducer strategy batch for MockUnitTests.FailTest\", \"priority\": \"30\", \"service_account\": \"\", \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\", \"size_bytes\": \"0\"}}, \"command\": [\"vpython3\", \"strategy_runner.py\", \"batch\", \"--test-binary=test_binary.json\", \"--result-summary=result_summary.json\", \"--output=${ISOLATED_OUTDIR}/reproducing_step.json\", \"MockUnitTests.FailTest\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Windows-11-22000\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}, {\"key\": \"foo\", \"value\": \"bar\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"60\", \"outputs\": [], \"relative_cwd\": \"flaky_reproducer_runner\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"flaky reproducer strategy batch for MockUnitTests.FailTest\", \"priority\": \"30\", \"service_account\": \"\", \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\", \"size_bytes\": \"0\"}}, \"command\": [\"vpython3\", \"strategy_runner.py\", \"batch\", \"--test-binary=test_binary.json\", \"--result-summary=result_summary.json\", \"--output=${ISOLATED_OUTDIR}/reproducing_step.json\", \"MockUnitTests.FailTest\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Windows-11-22000\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}, {\"key\": \"foo\", \"value\": \"bar\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"flaky_reproducer_runner\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -582,7 +582,7 @@
       "@@@STEP_LOG_LINE@json.input@            \"execution_timeout_secs\": \"3600\", @@@",
       "@@@STEP_LOG_LINE@json.input@            \"grace_period_secs\": \"30\", @@@",
       "@@@STEP_LOG_LINE@json.input@            \"idempotent\": false, @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"io_timeout_secs\": \"60\", @@@",
+      "@@@STEP_LOG_LINE@json.input@            \"io_timeout_secs\": \"1200\", @@@",
       "@@@STEP_LOG_LINE@json.input@            \"outputs\": [], @@@",
       "@@@STEP_LOG_LINE@json.input@            \"relative_cwd\": \"flaky_reproducer_runner\"@@@",
       "@@@STEP_LOG_LINE@json.input@          }, @@@",
@@ -607,7 +607,7 @@
       "-server",
       "https://example.swarmingserver.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"flaky reproducer strategy repeat for MockUnitTests.FailTest\", \"priority\": \"30\", \"service_account\": \"\", \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\", \"size_bytes\": \"0\"}}, \"command\": [\"vpython3\", \"strategy_runner.py\", \"repeat\", \"--test-binary=test_binary.json\", \"--result-summary=result_summary.json\", \"--output=${ISOLATED_OUTDIR}/reproducing_step.json\", \"MockUnitTests.FailTest\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Windows-11-22000\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}, {\"key\": \"foo\", \"value\": \"bar\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"60\", \"outputs\": [], \"relative_cwd\": \"flaky_reproducer_runner\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"flaky reproducer strategy repeat for MockUnitTests.FailTest\", \"priority\": \"30\", \"service_account\": \"\", \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\", \"size_bytes\": \"0\"}}, \"command\": [\"vpython3\", \"strategy_runner.py\", \"repeat\", \"--test-binary=test_binary.json\", \"--result-summary=result_summary.json\", \"--output=${ISOLATED_OUTDIR}/reproducing_step.json\", \"MockUnitTests.FailTest\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Windows-11-22000\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}, {\"key\": \"foo\", \"value\": \"bar\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": false, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"flaky_reproducer_runner\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -688,7 +688,7 @@
       "@@@STEP_LOG_LINE@json.input@            \"execution_timeout_secs\": \"3600\", @@@",
       "@@@STEP_LOG_LINE@json.input@            \"grace_period_secs\": \"30\", @@@",
       "@@@STEP_LOG_LINE@json.input@            \"idempotent\": false, @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"io_timeout_secs\": \"60\", @@@",
+      "@@@STEP_LOG_LINE@json.input@            \"io_timeout_secs\": \"1200\", @@@",
       "@@@STEP_LOG_LINE@json.input@            \"outputs\": [], @@@",
       "@@@STEP_LOG_LINE@json.input@            \"relative_cwd\": \"flaky_reproducer_runner\"@@@",
       "@@@STEP_LOG_LINE@json.input@          }, @@@",
@@ -762,34 +762,16 @@
   },
   {
     "cmd": [],
-    "name": "verify_reproducing_step",
+    "name": "verify_reproducing_step"
+  },
+  {
+    "cmd": [],
+    "name": "summarize_results",
     "~followup_annotations": [
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_TEXT@Not reproducible.@@@"
     ]
   },
   {
-    "cmd": [
-      "rdb",
-      "query",
-      "-json",
-      "-n",
-      "0",
-      "-tr-fields",
-      "testId,variant,tags,startTime",
-      "task-example.swarmingserver.appspot.com-54321fffffabc123"
-    ],
-    "infra_step": true,
-    "name": "verify_reproducing_step.rdb query",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@raw_io.output_text@@@"
-    ]
-  },
-  {
-    "failure": {
-      "failure": {},
-      "humanReason": "Cannot retrieve invocation for task 54321fffffabc123."
-    },
     "name": "$result"
   }
 ]

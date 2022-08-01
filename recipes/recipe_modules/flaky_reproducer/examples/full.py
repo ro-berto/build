@@ -93,9 +93,10 @@ def GenTests(api):
               test_id='ninja://base:base_unittests/MockUnitTests.FailTest',
               name=('invocations/task-example.swarmingserver.appspot.com'
                     '-54321fffffabc001/result-1'),
-              variant=common_pb2.Variant(**{'def': {
-                  'builder': 'Linux Tests',
-              }}),
+              variant=common_pb2.Variant(
+                  **{'def': {
+                      'builder': 'Win10 Tests x64',
+                  }}),
           )),
       resultdb_pb2.GetTestResultHistoryResponse.Entry(
           result=test_result_pb2.TestResult(
@@ -116,8 +117,8 @@ def GenTests(api):
                   }}),
           )),
   ])
-  verify_swarming_result = api.swarming.task_result(
-      id='2',
+  verify_swarming_result = lambda id: api.swarming.task_result(
+      id=id,
       name='flaky reproducer verify on Linux Tests for MockUnitTests.FailTest',
       state=api.swarming.TaskState.COMPLETED,
       output='some-output',
@@ -163,8 +164,11 @@ def GenTests(api):
               api.json.loads(
                   api.flaky_reproducer.get_test_data(
                       'gtest_task_request.json')))),
-      api.step_data('verify_reproducing_step.collect verify results',
-                    api.swarming.collect([verify_swarming_result])),
+      api.step_data(
+          'verify_reproducing_step.collect verify results',
+          api.swarming.collect(
+              [verify_swarming_result('2'),
+               verify_swarming_result('3')])),
       api.step_data(
           'verify_reproducing_step.load verify result',
           api.file.read_json(
