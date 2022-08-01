@@ -48,16 +48,21 @@ class SquashfsApi(recipe_api.RecipeApi):
           'Mksquashfs is not found',
           status=self.m.step.FAILURE,
           step_text='Binary not found at %s.' % binary_path)
-    invoke_args = [
+
+    cmd = [
+        'python',
+        self.resource('squashfs_invoke.py'),
         '--binary-path',
-        self.m.path.abspath(binary_path), '--folder', folder_path,
-        '--output-file', output_file_path
+        self.m.path.abspath(binary_path),
+        '--folder',
+        folder_path,
+        '--output-file',
+        output_file_path,
     ]
     if compression_algorithm:
-      invoke_args.extend(['--compression-algorithm', compression_algorithm])
+      cmd.extend(['--compression-algorithm', compression_algorithm])
     if compression_level:
-      invoke_args.extend(['--compression-level', str(compression_level)])
+      cmd.extend(['--compression-level', str(compression_level)])
     if block_size:
-      invoke_args.extend(['--block-size', block_size])
-    self.m.build.python('mksquashfs', self.resource('squashfs_invoke.py'),
-                        invoke_args)
+      cmd.extend(['--block-size', block_size])
+    self.m.step('mksquashfs', cmd)

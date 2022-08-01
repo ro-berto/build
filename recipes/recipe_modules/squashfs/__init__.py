@@ -5,7 +5,6 @@
 PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
-    'build',
     'recipe_engine/cipd',
     'recipe_engine/path',
     'recipe_engine/platform',
