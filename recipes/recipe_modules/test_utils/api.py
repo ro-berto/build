@@ -896,7 +896,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
     # There can be multiple blink_web_tests or blink_wpt_tests steps. Archive
     # the summaries to different files.
     if test_suite.spec.results_handler_name == 'layout tests':
-      dest_file = '%s_%s.json' % (test_suite.name, suffix.replace(' ', '_'))
+      dest_file = '%s_%s.json' % (test_suite.canonical_name,
+                                  suffix.replace(' ', '_'))
       self._archive_test_results_summary(
           {
               'failures': new_failures,
