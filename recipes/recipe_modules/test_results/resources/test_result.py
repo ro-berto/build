@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from six.moves import range
 
 # See http://www.chromium.org/developers/the-json-test-results-format for
 # output status types. See src/base/test/launcher/test_result.cc for input
@@ -38,7 +39,7 @@ class TestResult(object):
   """
 
   # Test modifier constants.
-  (NONE, FAILS, FLAKY, DISABLED) = range(4)
+  (NONE, FAILS, FLAKY, DISABLED) = list(range(4))
 
   def __init__(self, test, status, elapsed_time=0):
     """Constructor.
