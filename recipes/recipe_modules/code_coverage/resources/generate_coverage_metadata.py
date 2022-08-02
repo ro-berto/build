@@ -607,21 +607,6 @@ def _create_coverage_json(output_dir, data):
 
   Creates a coverage.json file in the output directory
   """
-  # TODO(crbug/1305015): Remove this block once debugging is done.
-  # pick the coverage data of first file in the dataset
-  if 'data' in data and len(
-      data['data']) > 0 and 'files' in data['data'][0] and len(
-          data['data'][0]['files']) > 0:
-    single_file_coverage_data = data['data'][0]['files'][0]
-    reduced_data_for_debugging = {
-        'data': [{
-            'files': [single_file_coverage_data]
-        }],
-        'type': data['type'],
-        'version': data['version']
-    }
-    data = reduced_data_for_debugging
-  #####################################
 
   coverage_json_file = os.path.join(output_dir, 'coverage.json')
   with open(coverage_json_file, 'w') as fp:
