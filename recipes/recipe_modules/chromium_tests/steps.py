@@ -116,6 +116,7 @@ class TestOptionFlags(object):
     return cls(**kwargs)
 
 
+_DEFAULT_OPTION_FLAGS = TestOptionFlags.create()
 _GTEST_OPTION_FLAGS = TestOptionFlags.create(
     filter_flag='--gtest_filter',
     filter_delimiter=':',
@@ -454,6 +455,10 @@ class Test(object):
   @property
   def tear_down(self):
     return None
+
+  @property
+  def option_flags(self):
+    return _DEFAULT_OPTION_FLAGS
 
   @property
   def test_options(self):
@@ -1060,6 +1065,10 @@ class TestWrapper(Test):  # pragma: no cover
   @property
   def tear_down(self):
     return self._test.tear_down
+
+  @property
+  def option_flags(self):
+    return self._test.option_flags
 
   @property
   def test_options(self):
@@ -2780,6 +2789,7 @@ class MockTestSpec(TestSpec):
   runs_on_swarming = attrib(bool, default=False)
   invocation_names = attrib(sequence[str], default=[])
   invertable = attrib(bool, default=False)
+  option_flags = attrib(TestOptionFlags, default=_DEFAULT_OPTION_FLAGS)
 
   @property
   def test_class(self):
@@ -2799,6 +2809,10 @@ class MockTest(Test):
     # We mutate the set of failures depending on the exit code of the test
     # steps, so get a mutable copy
     self._failures = list(spec.failures)
+
+  @property
+  def option_flags(self):
+    return self.spec.option_flags
 
   @property
   def runs_on_swarming(self):  # pragma: no cover

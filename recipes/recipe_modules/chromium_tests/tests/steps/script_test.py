@@ -13,6 +13,7 @@ DEPS = [
     'chromium',
     'chromium_tests',
     'presentation_utils',
+    'recipe_engine/assertions',
     'recipe_engine/buildbucket',
     'recipe_engine/json',
     'recipe_engine/path',
@@ -33,6 +34,7 @@ def RunSteps(api):
       script_args=['some', 'args'],
       override_compile_targets=api.properties.get('override_compile_targets'))
   test = test_spec.get_test(api.chromium_tests)
+  api.assertions.assertEqual(test.option_flags, steps.TestOptionFlags.create())
 
   try:
     test.run('')

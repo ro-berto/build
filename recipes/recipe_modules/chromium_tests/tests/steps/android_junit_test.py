@@ -15,6 +15,7 @@ DEPS = [
     'chromium_checkout',
     'chromium_tests',
     'depot_tools/gclient',
+    'recipe_engine/assertions',
     'recipe_engine/buildbucket',
     'recipe_engine/json',
     'recipe_engine/properties',
@@ -38,6 +39,7 @@ def RunSteps(api):
   )
   test = test_spec.get_test(api.chromium_tests)
 
+  api.assertions.assertEqual(test.option_flags, steps.TestOptionFlags.create())
   api.chromium.compile(targets=test.compile_targets(), name='compile')
 
   try:

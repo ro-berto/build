@@ -43,11 +43,20 @@ def RunSteps(api):
       api.step('failures {}'.format(self.step_name(suffix)), [])
       return super(RecordingTest, self).failures(suffix)
 
+  option_flags = steps.TestOptionFlags.create(
+      filter_flag='--filter-flag',
+      filter_delimiter='|',
+      repeat_flag='--repeat-flag',
+      retry_limit_flag='--retry-limit-flag',
+      run_disabled_flag='--run-disabled-flag',
+      batch_limit_flag='--batch-limit-flag',
+  )
   mock_test_spec = steps.MockTestSpec.create(
       'inner_test',
       abort_on_failure=api.properties.get('abort_on_failure', False),
       has_valid_results=api.properties.get('has_valid_results', True),
-      failures=api.properties.get('failures'))
+      failures=api.properties.get('failures'),
+      option_flags=option_flags)
   recording_test_spec = RecordingTestSpec.create(mock_test_spec)
   experimental_test_spec = steps.ExperimentalTestSpec.create(
       recording_test_spec,
@@ -61,6 +70,8 @@ def RunSteps(api):
     return
 
   experimental_test = experimental_test_spec.get_test(api.chromium_tests)
+
+  api.assertions.assertEqual(experimental_test.option_flags, option_flags)
 
   api.step.empty('Configured experimental test %s' % experimental_test.name)
 
