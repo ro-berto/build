@@ -5,6 +5,7 @@
 PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
+    'recipe_engine/assertions',
     'recipe_engine/json',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
@@ -38,11 +39,23 @@ PROPERTIES = {
     # that has a massive amount of failures to test that a request should NOT be
     # sent to the service to avoid overloading it.
     'has_too_many_failures': Property(default=False),
+
+    # This property indicates how many failed_test suites to create
+    'failed_test_count': Property(default=1),
+
+    # This property is a list of test suite names to expect to be returned
+    # from run_test()
+    # If this is empty, the run_test() return value will not be checked.
+    'expected_failed_test_suites': Property(default=[]),
+
+    # This property indicates whether the failed tests should also fail on retry
+    'fails_retries': Property(default=False),
 }
 
 
 def RunSteps(api, known_flakes_expectations, known_weetbix_flakes_expectations,
-             exclude_failed_test, has_too_many_failures):
+             exclude_failed_test, has_too_many_failures, failed_test_count,
+             expected_failed_test_suites, fails_retries):
   test_specs = [
       steps.MockTestSpec.create(name='succeeded_test'),
       steps.MockTestSpec.create(
@@ -50,13 +63,20 @@ def RunSteps(api, known_flakes_expectations, known_weetbix_flakes_expectations,
   ]
 
   if not exclude_failed_test:
-    test_specs.append(
-        steps.MockTestSpec.create(
-            name='failed_test',
-            runs_on_swarming=True,
-            per_suffix_failures={'with patch': ['testA', 'testB']},
-            invocation_names=['invocations/whatever'],
-        ))
+    test_suite_name = 'failed_test'
+    for i in range(failed_test_count):
+      if i != 0:
+        test_suite_name += '_{}'.format(i)
+      per_suffix_failures = {'with patch': ['testA', 'testB']}
+      if fails_retries:
+        per_suffix_failures['retry shards with patch'] = ['testA', 'testB']
+      test_specs.append(
+          steps.MockTestSpec.create(
+              name=test_suite_name,
+              runs_on_swarming=True,
+              per_suffix_failures=per_suffix_failures,
+              invocation_names=['invocations/whatever'],
+          ))
 
   if has_too_many_failures:
     test_specs.append(
@@ -68,11 +88,16 @@ def RunSteps(api, known_flakes_expectations, known_weetbix_flakes_expectations,
             }))
   tests = [s.get_test(api.chromium_tests) for s in test_specs]
 
-  api.test_utils.run_tests(
-      tests,
-      'with patch',
-      retry_failed_shards=True,
-      retry_invalid_shards=True)
+  invalid_suites, failed_and_invalid_suites = api.test_utils.run_tests(
+      tests, 'with patch', retry_failed_shards=True, retry_invalid_shards=True)
+
+  if expected_failed_test_suites:
+    failed_and_invalid_suite_names = set(
+        [t.name for t in failed_and_invalid_suites])
+    invalid_suite_names = set([t.name for t in invalid_suites])
+    failed_test_names = failed_and_invalid_suite_names - invalid_suite_names
+    api.assertions.assertSetEqual(
+        set(expected_failed_test_suites), failed_test_names)
 
   for t in tests:
     assert t.known_flaky_failures == set(
@@ -99,11 +124,12 @@ def GenTests(api):
 
   def generate_analysis(test_name,
                         is_flaky,
+                        suite_name='failed_test',
                         expected_count=10,
                         unexpected_count=0):
     return {
         'testId':
-            'ninja://failed_test/{}'.format(test_name),
+            'ninja://{}/{}'.format(suite_name, test_name),
         'variantHash':
             'fake_variant_hash',
         'intervalStats': [
@@ -521,5 +547,96 @@ def GenTests(api):
                        'query known flaky failures on CQ', 'input',
                        ['failed_test (with patch)']),
       api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'retry_findit_exonerations',
+      api.chromium.generic_build(
+          builder_group='g',
+          builder='b',
+          experiments=['enable_weetbix_queries', 'retry_findit_exonerations']),
+      api.override_step_data(
+          'failed_test results',
+          stdout=api.raw_io.output_text(
+              api.test_utils.rdb_results(
+                  'failed_test', failing_tests=['testA', 'testB']))),
+      api.override_step_data(
+          'failed_test_1 results',
+          stdout=api.raw_io.output_text(
+              api.test_utils.rdb_results(
+                  'failed_test_1', failing_tests=['testA', 'testB']))),
+      api.override_step_data(
+          'failed_test results (2)',
+          stdout=api.raw_io.output_text(
+              api.test_utils.rdb_results(
+                  'failed_test', failing_tests=['testA', 'testB']))),
+      api.override_step_data(
+          'failed_test_1 results (2)',
+          stdout=api.raw_io.output_text(
+              api.test_utils.rdb_results(
+                  'failed_test_1', failing_tests=['testA', 'testB']))),
+      api.properties(
+          known_flakes_expectations={
+              'failed_test_1': ['testA', 'testB'],
+          },
+          known_weetbix_flakes_expectations={
+              'failed_test_1': ['testA', 'testB'],
+          },
+          failed_test_count=2,
+          expected_failed_test_suites=['failed_test'],
+          fails_retries=True,
+          **{
+              '$build/test_utils': {
+                  'should_exonerate_flaky_failures': True,
+              },
+          }),
+      api.step_data(
+          'query known flaky failures on CQ',
+          api.json.output({
+              'flakes': [
+                  {
+                      'test': {
+                          'step_ui_name': 'failed_test_1 (with patch)',
+                          'test_name': 'testA',
+                      },
+                      'affected_gerrit_changes': ['123', '234'],
+                      'monorail_issue': '999',
+                  },
+                  {
+                      'test': {
+                          'step_ui_name': 'failed_test_1 (with patch)',
+                          'test_name': 'testB',
+                      },
+                      'affected_gerrit_changes': ['123', '234'],
+                      'monorail_issue': '999',
+                  },
+              ]
+          })),
+      api.step_data(
+          'query weetbix for failure rates.rpc call',
+          stdout=api.raw_io.output_text(
+              api.json.dumps({
+                  'testVariants': [
+                      generate_analysis('testA', False),
+                      generate_analysis('testB', False),
+                      generate_analysis(
+                          'testA', True, suite_name='failed_test_1'),
+                      generate_analysis(
+                          'testB', True, suite_name='failed_test_1'),
+                  ]
+              })),
+      ),
+      api.post_process(post_process.MustRun,
+                       'query known flaky failures on CQ'),
+      api.post_process(CheckStepInput, 'exonerate unrelated test failures',
+                       'failed_test_1_hash'),
+      api.post_process(post_process.MustRun,
+                       'failed_test (retry shards with patch)'),
+      api.post_process(post_process.MustRun,
+                       'failed_test_1 (retry shards with patch)'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.PropertiesContain,
+                       'retried_findit_exonerations'),
       api.post_process(post_process.DropExpectation),
   )

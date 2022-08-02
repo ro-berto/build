@@ -398,7 +398,10 @@ class TestUtilsApi(recipe_api.RecipeApi):
       failed_test_suites ([steps.Test]): A list of failed test suites to check.
 
     Returns:
-      [steps.Test]: A list of unexonerated test suites, possibly empty.
+      Tuple([steps.Test]): A tuple containing two lists of unexonerated test
+        suites: 1. for failed test suites with exonerated suites removed and
+        2. any exonerated suites that should be retried anyway for weetbix
+        purposes
     """
     # If *all* the deterministic failures are known flaky tests, a test suite
     # will not be considered failure anymore, and thus will not be retried.
@@ -409,8 +412,13 @@ class TestUtilsApi(recipe_api.RecipeApi):
     # connection could be implemented, but the cost is high and return is not;
     # both for CQ cycle time and for overall resource usage, return is very low.
     if not self._should_exonerate_flaky_failures:
-      return failed_test_suites  #pragma: nocover
+      return failed_test_suites, []  #pragma: nocover
+
+    retry_findit_exonerations = ('retry_findit_exonerations' in
+                                 self.m.buildbucket.build.input.experiments)
+
     pruned_suites = failed_test_suites[:]
+    exonerated_suites_to_retry = []
     self._query_and_mark_flaky_failures(pruned_suites)
     for t in failed_test_suites:
       if not t.known_flaky_failures:
@@ -418,8 +426,37 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
       if set(t.deterministic_failures('with patch')).issubset(
           t.known_flaky_failures):
+
+        # We currently would like to observe the weetbix vs findit exoneration
+        # differences (logging the queried "would have exonerated" weetbix info
+        # is enabled by the enable_weetbix_queries experiment).
+        # Weetbix exoneration relies on there being flaky verdicts, which means
+        # failing on the first test suite run and passing on the retry shard
+        # run. If we don't retry a findit-exonerated flaky test, then we'll be
+        # cannibalizing the flaky verdict examples.
+        # Obviously, retrying all the flaky tests even though we know we should
+        # exonerate defeats the purpose of exoneration (skipping the retry), but
+        # as a short term workaround we'll be retrying flaky tests anyway
+        # just for verifying weetbix vs findit performance. This will only be
+        # done for builders that have the 'retry_findit_exonerations'
+        # experiment enabled.
+        # Long-term, we're thinking of triggering the retry shards and not
+        # having the build collect the results.
+        if retry_findit_exonerations:
+          exonerated_suites_to_retry.append(t)
         pruned_suites.remove(t)
-    return pruned_suites
+
+    if exonerated_suites_to_retry:
+      to_log = [{
+          'suite_name': t.name,
+          'tests_being_retried': t.deterministic_failures('with patch'),
+      } for t in exonerated_suites_to_retry]
+      log_step = self.m.step.empty(
+          'logging retried FindIt exonerations',
+          log_text=self.m.json.dumps(to_log, indent=2))
+      log_step.presentation.properties['retried_findit_exonerations'] = (to_log)
+
+    return pruned_suites, exonerated_suites_to_retry
 
   def _query_weetbix_failures(self, tests_to_check):
     """Get flaky or deterministically failing tests by querying weetbix
@@ -748,8 +785,10 @@ class TestUtilsApi(recipe_api.RecipeApi):
     if self.m.tryserver.is_tryserver and self._should_abort_tryjob(rdb_results):
       return invalid_test_suites, invalid_test_suites + failed_test_suites
 
+    exonerated_suites_to_retry = []
     if suffix == 'with patch' or suffix == 'inverted with patch':
-      failed_test_suites = self._clean_failed_suite_list(failed_test_suites)
+      failed_test_suites, exonerated_suites_to_retry = (
+          self._clean_failed_suite_list(failed_test_suites))
 
     # If we encounter any unexpected test results that we believe aren't due to
     # the CL under test, inform RDB of these tests so it keeps a record.
@@ -771,7 +810,9 @@ class TestUtilsApi(recipe_api.RecipeApi):
     if suffix:
       retry_suffix += ' ' + suffix
     _, new_swarming_invalid_suites, _ = self.run_tests_once(
-        swarming_test_suites, retry_suffix, sort_by_shard=True)
+        swarming_test_suites + exonerated_suites_to_retry,
+        retry_suffix,
+        sort_by_shard=True)
 
     invalid_test_suites = self._still_invalid_suites(
         old_invalid_suites=invalid_test_suites,
@@ -784,6 +825,9 @@ class TestUtilsApi(recipe_api.RecipeApi):
       valid, failures = suite.failures_including_retry(suffix)
       return (not valid) or failures
 
+    # Don't check the exonerated_suites_to_retry since they've already been
+    # exonerated but have just been retried for weetbix's sake (see
+    # _clean_failed_suite_list() for more details).
     failed_and_invalid_suites = [
         t for t in failed_and_invalid_suites if _still_failing(t)
     ]
