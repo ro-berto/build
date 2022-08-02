@@ -338,7 +338,7 @@
       }
     },
     "name": "zip archive",
-    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel/out/linux_amd64/bin/cel_ctl\", \"type\": \"file\"}, {\"path\": \"[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel/out/linux_amd64/bin/resources\", \"type\": \"dir\"}, {\"archive_name\": null, \"path\": \"[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel/out/test.whl\", \"type\": \"file\"}], \"mode\": \"w\", \"output\": \"[START_DIR]/cel.zip\", \"root\": \"[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel/out\"}"
+    "stdin": "{\"comment\": \"\", \"entries\": [{\"archive_name\": null, \"path\": \"[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel/out/linux_amd64/bin/cel_ctl\", \"type\": \"file\"}, {\"path\": \"[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel/out/linux_amd64/bin/resources\", \"type\": \"dir\"}, {\"archive_name\": null, \"path\": \"[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel/out/test.whl\", \"type\": \"file\"}], \"mode\": \"w\", \"output\": \"[START_DIR]/cel.zip\", \"root\": \"[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel/out\"}"
   },
   {
     "cmd": [
@@ -575,7 +575,7 @@
       }
     },
     "name": "zip logs archive",
-    "stdin": "{\"entries\": [{\"path\": \"[START_DIR]/logs\", \"type\": \"dir\"}], \"mode\": \"w\", \"output\": \"[START_DIR]/all_logs.zip\", \"root\": \"[START_DIR]/logs\"}"
+    "stdin": "{\"comment\": \"\", \"entries\": [{\"path\": \"[START_DIR]/logs\", \"type\": \"dir\"}], \"mode\": \"w\", \"output\": \"[START_DIR]/all_logs.zip\", \"root\": \"[START_DIR]/logs\"}"
   },
   {
     "cmd": [
@@ -744,7 +744,7 @@
       }
     },
     "name": "test summary.1st test.zip logs archive",
-    "stdin": "{\"entries\": [{\"path\": \"[START_DIR]/logs/1st test\", \"type\": \"dir\"}], \"mode\": \"w\", \"output\": \"[START_DIR]/1st test.zip\", \"root\": \"[START_DIR]/logs/1st test\"}",
+    "stdin": "{\"comment\": \"\", \"entries\": [{\"path\": \"[START_DIR]/logs/1st test\", \"type\": \"dir\"}], \"mode\": \"w\", \"output\": \"[START_DIR]/1st test.zip\", \"root\": \"[START_DIR]/logs/1st test\"}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
     ]

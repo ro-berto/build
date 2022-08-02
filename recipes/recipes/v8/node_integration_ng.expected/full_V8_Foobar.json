@@ -309,7 +309,7 @@
       }
     },
     "name": "archive.zipping",
-    "stdin": "{\"entries\": [{\"archive_name\": \"bin/node\", \"path\": \"[CACHE]/builder/node-ci/out/Release/node\", \"type\": \"file\"}], \"mode\": \"w\", \"output\": \"[CLEANUP]/node-linux-rel-187054-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.zip\", \"root\": \"[CACHE]/builder/node-ci/out/Release\"}",
+    "stdin": "{\"comment\": \"\", \"entries\": [{\"archive_name\": \"bin/node\", \"path\": \"[CACHE]/builder/node-ci/out/Release/node\", \"type\": \"file\"}], \"mode\": \"w\", \"output\": \"[CLEANUP]/node-linux-rel-187054-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.zip\", \"root\": \"[CACHE]/builder/node-ci/out/Release\"}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]

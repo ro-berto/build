@@ -1866,7 +1866,7 @@
       }
     },
     "name": "Zip generated coverage report files",
-    "stdin": "{\"entries\": [{\"path\": \"[START_DIR]/src/out/Release/coverage/coverage_html\", \"type\": \"dir\"}], \"mode\": \"w\", \"output\": \"[START_DIR]/src/out/Release/coverage/coverage_html.zip\", \"root\": \"[START_DIR]/src/out/Release/coverage/coverage_html\"}"
+    "stdin": "{\"comment\": \"\", \"entries\": [{\"path\": \"[START_DIR]/src/out/Release/coverage/coverage_html\", \"type\": \"dir\"}], \"mode\": \"w\", \"output\": \"[START_DIR]/src/out/Release/coverage/coverage_html.zip\", \"root\": \"[START_DIR]/src/out/Release/coverage/coverage_html\"}"
   },
   {
     "cmd": [

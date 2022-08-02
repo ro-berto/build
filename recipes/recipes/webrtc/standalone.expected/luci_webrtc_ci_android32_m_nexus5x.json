@@ -1344,7 +1344,7 @@
       }
     },
     "name": "AppRTCMobile zip archive",
-    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[CACHE]/builder/src/out/Android32_M_Nexus5X/apks/AppRTCMobile.apk\", \"type\": \"file\"}], \"mode\": \"w\", \"output\": \"[START_DIR]/AppRTCMobile_apk.zip\", \"root\": \"[CACHE]/builder/src/out/Android32_M_Nexus5X/apks\"}"
+    "stdin": "{\"comment\": \"\", \"entries\": [{\"archive_name\": null, \"path\": \"[CACHE]/builder/src/out/Android32_M_Nexus5X/apks/AppRTCMobile.apk\", \"type\": \"file\"}], \"mode\": \"w\", \"output\": \"[START_DIR]/AppRTCMobile_apk.zip\", \"root\": \"[CACHE]/builder/src/out/Android32_M_Nexus5X/apks\"}"
   },
   {
     "cmd": [
