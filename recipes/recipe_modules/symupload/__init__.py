@@ -7,7 +7,6 @@ from PB.recipe_modules.build.symupload import properties
 PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
-    'build',
     'chromium',
     'chromium_checkout',
     'infra/cloudkms',

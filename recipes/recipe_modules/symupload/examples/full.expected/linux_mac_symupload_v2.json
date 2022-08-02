@@ -125,13 +125,6 @@
       "--server-urls",
       "https://some.url.com"
     ],
-    "env_prefixes": {
-      "PYTHONPATH": [
-        "RECIPE_REPO[build]",
-        "RECIPE_REPO[build]/recipes",
-        "RECIPE_REPO[build]/scripts"
-      ]
-    },
     "name": "symupload.symupload_v2",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"

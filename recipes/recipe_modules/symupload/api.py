@@ -102,7 +102,9 @@ class SymuploadApi(recipe_api.RecipeApi):
           'read decrypted api key', output_api_key, test_data='test_key')
       key_presentation.logs['api_key sanity check'] = str(len(api_key))
 
-    cmd_args = [
+    cmd = [
+        'python',
+        self.resource('symupload.py'),
         '--artifacts',
         ','.join(artifacts),
         '--api-key-file',
@@ -119,10 +121,9 @@ class SymuploadApi(recipe_api.RecipeApi):
     ]
 
     if artifact_type:
-      cmd_args.extend(['--artifact_type', artifact_type])
+      cmd.extend(['--artifact_type', artifact_type])
 
-    return self.m.build.python(name or 'symupload_v2',
-                               self.resource('symupload.py'), cmd_args)
+    return self.m.step(name or 'symupload_v2', cmd)
 
   @property
   def symupload_binary(self):
