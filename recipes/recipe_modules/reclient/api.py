@@ -551,13 +551,20 @@ class ReclientApi(recipe_api.RecipeApi):
     files = self.m.file.listdir(
         'list reclient log directory',
         reclient_log_dir,
-        test_data=['reproxy.INFO', 'rewrapper.INFO', 'reproxy.rpl'])
+        test_data=[
+            'reproxy.INFO', 'rewrapper.INFO', 'reproxy.rpl',
+            'reproxy_stderr.log',
+            'reproxy-gomaip.LUCI-CHROMIUM-C.chrome-bot.log.ERROR.20220803-090904.9256'
+        ])
     log_files = []
-    log_suffixes = ['INFO', 'WARNING', 'ERROR', 'FATAL', 'log', 'rpi']
+    log_suffixes = [
+        r'.*\.INFO.*', r'.*\.WARNING.*', r'.*\.ERROR.*', r'.*\.FATAL.*',
+        r'.*log$', r'.*rpi$'
+    ]
     with self.m.step.nest('upload logs'):
       for path in files:
         full_file_name, file_name = str(path), path.pieces[-1]
-        if any(file_name.endswith(x) for x in log_suffixes):
+        if any(re.match(x, file_name) for x in log_suffixes):
           if not file_name.startswith('rewrapper'):
             log_files.append(full_file_name)
       with io.BytesIO() as tar_out:
