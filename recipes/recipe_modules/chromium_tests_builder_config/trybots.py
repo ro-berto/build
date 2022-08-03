@@ -263,6 +263,9 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='Android WebView P FYI (rel)',
             ),
     },
+    # The config for the following builders is now specified src-side in
+    # //infra/config/subprojects/chromium/angle.try.star
+    # * ios-angle-try-intel
     'tryserver.chromium.angle': {
         'android-angle-chromium-try':
             try_spec.TrySpec.create_for_single_mirror(
@@ -277,13 +280,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='fuchsia-angle-builder',
                 is_compile_only=True,
                 include_all_triggered_testers=True,
-            ),
-        'ios-angle-try-intel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.angle',
-                buildername='ios-angle-builder',
-                tester='ios-angle-intel',
-                retry_failed_shards=False,
             ),
         'linux-angle-chromium-try':
             try_spec.TrySpec.create(

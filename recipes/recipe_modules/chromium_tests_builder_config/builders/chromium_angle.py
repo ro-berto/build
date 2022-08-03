@@ -68,53 +68,6 @@ def CreateFuchsiaBuilderConfig(target_bits):
   )
 
 
-def CreateIOSBuilderConfig():
-  return _chromium_angle_spec(
-      gclient_config='ios',
-      gclient_apply_config=[
-          'angle_internal',
-          'angle_top_of_tree',
-      ],
-      chromium_config='chromium',
-      chromium_apply_config=[
-          'mb',
-          'mac_toolchain',
-      ],
-      chromium_config_kwargs={
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-          'TARGET_PLATFORM': 'ios',
-          'HOST_PLATFORM': 'mac',
-      },
-      simulation_platform='mac',
-  )
-
-
-def CreateIOSTesterConfig(parent_builder):
-  return _chromium_angle_spec(
-      gclient_config='ios',
-      gclient_apply_config=[
-          'angle_internal',
-          'angle_top_of_tree',
-      ],
-      chromium_config='chromium',
-      chromium_apply_config=[
-          'mb',
-          'mac_toolchain',
-      ],
-      chromium_config_kwargs={
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-          'TARGET_PLATFORM': 'ios',
-          'HOST_PLATFORM': 'mac',
-      },
-      simulation_platform='mac',
-      execution_mode=builder_spec.TEST,
-      parent_buildername=parent_builder,
-      serialize_tests=True,
-  )
-
-
 def CreateBuilderConfig(platform, target_bits):
   gclient_apply_config = [
       'angle_top_of_tree',
@@ -159,6 +112,10 @@ def CreateTesterConfig(platform, target_bits, parent_builder):
   )
 
 
+# The config for the following builders is now specified src-side in
+# //infra/config/subprojects/chromium/ci/chromium.angle.star
+# * ios-angle-builder
+# * ios-angle-intel
 SPEC = {
     'android-angle-chromium-arm64-builder':
         CreateAndroidBuilderConfig(64),
@@ -166,10 +123,6 @@ SPEC = {
         CreateAndroidTesterConfig(64, 'android-angle-chromium-arm64-builder'),
     'fuchsia-angle-builder':
         CreateFuchsiaBuilderConfig(64),
-    'ios-angle-builder':
-        CreateIOSBuilderConfig(),
-    'ios-angle-intel':
-        CreateIOSTesterConfig('ios-angle-builder'),
     'linux-angle-chromium-builder':
         CreateBuilderConfig('linux', 64),
     'linux-angle-chromium-intel':

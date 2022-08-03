@@ -200,20 +200,6 @@
       "tryserver.chromium.angle:fuchsia-angle-try"
     ]
   },
-  "chromium.angle:ios-angle-builder": {
-    "builders": [
-      "chromium.angle:ios-angle-builder",
-      "chromium.angle:ios-angle-intel",
-      "tryserver.chromium.angle:ios-angle-try-intel"
-    ]
-  },
-  "chromium.angle:ios-angle-intel": {
-    "builders": [
-      "chromium.angle:ios-angle-builder",
-      "chromium.angle:ios-angle-intel",
-      "tryserver.chromium.angle:ios-angle-try-intel"
-    ]
-  },
   "chromium.angle:linux-angle-chromium-builder": {
     "builders": [
       "chromium.angle:linux-angle-chromium-builder",
@@ -2466,13 +2452,6 @@
     "builders": [
       "chromium.angle:fuchsia-angle-builder",
       "tryserver.chromium.angle:fuchsia-angle-try"
-    ]
-  },
-  "tryserver.chromium.angle:ios-angle-try-intel": {
-    "builders": [
-      "chromium.angle:ios-angle-builder",
-      "chromium.angle:ios-angle-intel",
-      "tryserver.chromium.angle:ios-angle-try-intel"
     ]
   },
   "tryserver.chromium.angle:linux-angle-chromium-try": {
