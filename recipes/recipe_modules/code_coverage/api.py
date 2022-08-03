@@ -1067,5 +1067,5 @@ class CodeCoverageApi(recipe_api.RecipeApi):
         'source': '%s:%s' % (commit.project, branch),
         'owner': 'chrome-code-coverage@google.com',
         # buganizer component
-        'bug_component': 992692
+        'bug_component': '992692'
     }
