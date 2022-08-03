@@ -1184,17 +1184,22 @@ class TestUtilsApi(recipe_api.RecipeApi):
   def _archive_test_results_summary(self, test_results_summary, dest_filename):
     """Archives the test results summary as JSON, storing it alongside the
     results from the first run."""
-    script = self.m.chromium.repo_resource(
-        'recipes', 'chromium', 'archive_layout_test_results_summary.py')
-    args = [
+    cmd = [
+        'python',
+        self.resource('archive_layout_test_results_summary.py'),
         '--test-results-summary-json',
-        self.m.json.input(test_results_summary), '--build-number',
-        self.m.buildbucket.build.number, '--builder-name',
-        self.m.buildbucket.builder_name, '--gs-bucket',
-        'gs://chromium-layout-test-archives', '--dest-filename', dest_filename
+        self.m.json.input(test_results_summary),
+        '--build-number',
+        self.m.buildbucket.build.number,
+        '--builder-name',
+        self.m.buildbucket.builder_name,
+        '--gs-bucket',
+        'gs://chromium-layout-test-archives',
+        '--dest-filename',
+        dest_filename,
     ]
-    args += self.m.build.slave_utils_args
-    self.m.build.python('archive_test_results_summary', script, args)
+    cmd += self.m.build.slave_utils_args
+    self.m.step('archive_test_results_summary', cmd)
 
   @recipe_util.returns_placeholder
   def gtest_results(self, add_json_log=True, leak_to=None):

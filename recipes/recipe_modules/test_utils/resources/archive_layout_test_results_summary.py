@@ -2,7 +2,6 @@
 # Copyright 2016 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
-
 """This script is intended to archive test results summary from try bot retries
 of layout tests.
 
@@ -14,10 +13,17 @@ results can be easily fetched from the same location as the results.
 import argparse
 import logging
 import re
+import os
 import socket
 import sys
 
-from recipes import slave_utils
+ROOT_DIR = os.path.normpath(
+    os.path.join(__file__, '..', '..', '..', '..', '..'))
+sys.path.extend([
+    os.path.join(ROOT_DIR, 'scripts'),
+    os.path.join(ROOT_DIR, 'recipes'),
+])
+import slave_utils
 
 
 def ArchiveRetrySummary(args):
@@ -31,8 +37,7 @@ def ArchiveRetrySummary(args):
       args.test_results_summary_json,
       gs_base,
       cache_control='public, max-age=31556926',
-      dest_filename=args.dest_filename
-  )
+      dest_filename=args.dest_filename)
   return 0
 
 
@@ -42,8 +47,7 @@ def _ParseArgs():
       '--test-results-summary-json',
       type=str,
       required=True,
-      help='path to retry summary JSON file'
-  )
+      help='path to retry summary JSON file')
   parser.add_argument('--builder-name', type=str, required=True)
   parser.add_argument('--build-number', type=str, required=True)
   parser.add_argument('--gs-bucket', type=str, required=True)
@@ -60,8 +64,7 @@ def main():
       level=logging.INFO,
       format='%(asctime)s %(filename)s:%(lineno)-3d'
       ' %(levelname)s %(message)s',
-      datefmt='%y%m%d %H:%M:%S'
-  )
+      datefmt='%y%m%d %H:%M:%S')
   return ArchiveRetrySummary(args)
 
 

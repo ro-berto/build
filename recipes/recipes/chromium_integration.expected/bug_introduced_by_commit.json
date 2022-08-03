@@ -4362,7 +4362,7 @@
   {
     "cmd": [
       "python",
-      "RECIPE_REPO[build]/recipes/chromium/archive_layout_test_results_summary.py",
+      "RECIPE_MODULE[build::test_utils]/resources/archive_layout_test_results_summary.py",
       "--test-results-summary-json",
       "{\"failures\": [\"Test.One\"], \"ignored\": []}",
       "--build-number",
@@ -4379,13 +4379,6 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "CHROME_HEADLESS": "1"
-    },
-    "env_prefixes": {
-      "PYTHONPATH": [
-        "RECIPE_REPO[build]",
-        "RECIPE_REPO[build]/recipes",
-        "RECIPE_REPO[build]/scripts"
-      ]
     },
     "luci_context": {
       "realm": {
