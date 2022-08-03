@@ -1428,7 +1428,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         # swarming, we should stop accepting all return codes.
         # https://crbug.com/944179.
         cmd = [
-            'python3',
+            'vpython',
             self.resource('collect_task.py'),
         ]
         cmd += task_args
@@ -1486,7 +1486,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     # TODO(gbeaty) Sorting can be removed when python2 support is removed
     task_sets = sorted(task_sets)
     cmd = [
-        'python3',
+        'python',
         self.resource('wait_for_finished_task_set.py'),
         '--swarming-server',
         self.m.swarming.current_server,

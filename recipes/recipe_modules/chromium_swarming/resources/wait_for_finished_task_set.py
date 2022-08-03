@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # Copyright 2018 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -59,7 +59,7 @@ class TasksToCollect(object):
     tasks = self.unfinished_tasks
     return [
         tasks[idx:idx+TASK_BATCH_SIZE]
-        for idx in range(0, len(tasks), TASK_BATCH_SIZE)
+        for idx in xrange(0, len(tasks), TASK_BATCH_SIZE)
     ]
 
   def swarming_query_url(self, task_batch):
