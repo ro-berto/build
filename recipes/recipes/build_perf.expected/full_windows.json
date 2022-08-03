@@ -1452,7 +1452,7 @@
       "----",
       "cp",
       "[CLEANUP]\\reclient_log_tmp_1\\reproxy.INFO",
-      "gs://chrome-goma-log/2012/05/14/reclient/[CLEANUP]\\reclient_log_tmp_1\\reproxy.INFO"
+      "gs://chrome-goma-log/2012/05/14/reclient/reclient_logs.20120514-125323.00000000-0000-0000-0000-000000001337/[CLEANUP]\\reclient_log_tmp_1\\reproxy.INFO"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
@@ -1475,7 +1475,7 @@
     "name": "postprocess for reclient.upload logs.gsutil upload [CLEANUP]\\reclient_log_tmp_1\\reproxy.INFO",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-goma-log/2012/05/14/reclient/[CLEANUP]\\reclient_log_tmp_1\\reproxy.INFO@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-goma-log/2012/05/14/reclient/reclient_logs.20120514-125323.00000000-0000-0000-0000-000000001337/[CLEANUP]\\reclient_log_tmp_1\\reproxy.INFO@@@"
     ]
   },
   {
@@ -2431,7 +2431,7 @@
       "----",
       "cp",
       "[CLEANUP]\\reclient_log_tmp_2\\reproxy.INFO",
-      "gs://chrome-goma-log/2012/05/14/reclient/[CLEANUP]\\reclient_log_tmp_2\\reproxy.INFO"
+      "gs://chrome-goma-log/2012/05/14/reclient/reclient_logs.20120514-125326.00000000-0000-0000-0000-00000000133a/[CLEANUP]\\reclient_log_tmp_2\\reproxy.INFO"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
@@ -2453,7 +2453,7 @@
     "name": "postprocess for reclient (2).upload logs.gsutil upload [CLEANUP]\\reclient_log_tmp_2\\reproxy.INFO",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-goma-log/2012/05/14/reclient/[CLEANUP]\\reclient_log_tmp_2\\reproxy.INFO@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-goma-log/2012/05/14/reclient/reclient_logs.20120514-125326.00000000-0000-0000-0000-00000000133a/[CLEANUP]\\reclient_log_tmp_2\\reproxy.INFO@@@"
     ]
   },
   {
@@ -3427,7 +3427,7 @@
       "----",
       "cp",
       "[CLEANUP]\\reclient_log_tmp_3\\reproxy.INFO",
-      "gs://chrome-goma-log/2012/05/14/reclient/[CLEANUP]\\reclient_log_tmp_3\\reproxy.INFO"
+      "gs://chrome-goma-log/2012/05/14/reclient/reclient_logs.20120514-125329.00000000-0000-0000-0000-00000000133d/[CLEANUP]\\reclient_log_tmp_3\\reproxy.INFO"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
@@ -3450,7 +3450,7 @@
     "name": "postprocess for reclient (3).upload logs.gsutil upload [CLEANUP]\\reclient_log_tmp_3\\reproxy.INFO",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-goma-log/2012/05/14/reclient/[CLEANUP]\\reclient_log_tmp_3\\reproxy.INFO@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-goma-log/2012/05/14/reclient/reclient_logs.20120514-125329.00000000-0000-0000-0000-00000000133d/[CLEANUP]\\reclient_log_tmp_3\\reproxy.INFO@@@"
     ]
   },
   {
@@ -4408,7 +4408,7 @@
       "----",
       "cp",
       "[CLEANUP]\\reclient_log_tmp_4\\reproxy.INFO",
-      "gs://chrome-goma-log/2012/05/14/reclient/[CLEANUP]\\reclient_log_tmp_4\\reproxy.INFO"
+      "gs://chrome-goma-log/2012/05/14/reclient/reclient_logs.20120514-125332.00000000-0000-0000-0000-000000001340/[CLEANUP]\\reclient_log_tmp_4\\reproxy.INFO"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
@@ -4430,7 +4430,7 @@
     "name": "postprocess for reclient (4).upload logs.gsutil upload [CLEANUP]\\reclient_log_tmp_4\\reproxy.INFO",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-goma-log/2012/05/14/reclient/[CLEANUP]\\reclient_log_tmp_4\\reproxy.INFO@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-goma-log/2012/05/14/reclient/reclient_logs.20120514-125332.00000000-0000-0000-0000-000000001340/[CLEANUP]\\reclient_log_tmp_4\\reproxy.INFO@@@"
     ]
   },
   {

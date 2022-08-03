@@ -50,8 +50,8 @@ class BuildResultReceiver(object):
     self.build_exit_status = -1
 
 
-class GzipFilenameMaker(object):
-  """A helper to make gzip filenames with a fixed (unique) suffix"""
+class FilenameMaker(object):
+  """A helper to make filenames with a fixed (unique) suffix"""
 
   def __init__(self, timestamp, uuid):
     self._timestamp = timestamp
@@ -59,14 +59,21 @@ class GzipFilenameMaker(object):
                                        uuid)
 
   def make(self, prefix):
-    return prefix + self._gzip_suffix + '.gz'
+    return prefix + self._gzip_suffix
+
+  def make_gz(self, prefix):
+    return self.make(prefix) + '.gz'
 
   def make_tgz(self, prefix):
-    return prefix + self._gzip_suffix + '.tar.gz'
+    return self.make(prefix) + '.tar.gz'
 
   @property
   def timestamp(self):
     return self._timestamp
+
+  @property
+  def timestamp_date(self):
+    return self.timestamp.date().strftime('%Y/%m/%d')
 
 
 class ReclientApi(recipe_api.RecipeApi):
@@ -244,13 +251,13 @@ class ReclientApi(recipe_api.RecipeApi):
         self._upload_rbe_metrics(self._reclient_log_dir)
         if self._props.publish_trace:
           self._upload_reclient_traces(self._reclient_log_dir)
-        gzip_name_maker = GzipFilenameMaker(self.m.time.utcnow(),
-                                            self.m.uuid.random())
+        filename_maker = FilenameMaker(self.m.time.utcnow(),
+                                       self.m.uuid.random())
         if ninja_command:
           self._upload_ninja_log(ninja_step_name, ninja_command,
-                                 p.build_exit_status, gzip_name_maker)
-        self._upload_rpl(self._reclient_log_dir, gzip_name_maker)
-        self._upload_logs(self._reclient_log_dir, gzip_name_maker)
+                                 p.build_exit_status, filename_maker)
+        self._upload_rpl(self._reclient_log_dir, filename_maker)
+        self._upload_logs(self._reclient_log_dir, filename_maker)
         self._perform_reclient_health_check()
         self.m.file.rmtree('cleanup reclient log dir', self._reclient_log_dir)
         if self._ensure_verified:
@@ -455,7 +462,7 @@ class ReclientApi(recipe_api.RecipeApi):
     step_result.presentation.links['trace_list'] = trace_list
 
   def _upload_ninja_log(self, name, ninja_command, build_exit_status,
-                        gzip_name_maker):
+                        filename_maker):
     """
     Upload several logs to GCS, including:
     * ninja command line args
@@ -486,10 +493,10 @@ class ReclientApi(recipe_api.RecipeApi):
         'exit': build_exit_status,
         'env': self.m.context.env.copy(),
     }
-    time_now = gzip_name_maker.timestamp
+    time_now = filename_maker.timestamp
     # Must start with 'ninja_log' prefix, see
     # https://source.chromium.org/chromium/infra/infra/+/main:go/src/infra/appengine/chromium_build_stats/app/ninja_log.go;l=311-314;drc=e507df6040ea871ba6ef6b5e7da00d8cb186a1bd
-    gzip_filename = gzip_name_maker.make('ninja_log')
+    gzip_filename = filename_maker.make_gz('ninja_log')
     gzip_path = self._tmp_base_dir.join(gzip_filename)
     # This assumes that ninja_log is small enough to be loaded into RAM. (As of
     # 2021/01, it's around 3MB.)
@@ -514,7 +521,7 @@ class ReclientApi(recipe_api.RecipeApi):
         gzip_data = 'fake gzip data'
       self.m.file.write_raw('create ninja log gzip', gzip_path, gzip_data)
 
-    gs_filename = '%s/reclient/%s' % (time_now.date().strftime('%Y/%m/%d'),
+    gs_filename = '%s/reclient/%s' % (filename_maker.timestamp_date,
                                       gzip_filename)
     step_result = self.m.gsutil.upload(
         gzip_path, _GS_BUCKET, gs_filename, name='upload ninja_log')
@@ -522,8 +529,8 @@ class ReclientApi(recipe_api.RecipeApi):
                   gs_filename)
     step_result.presentation.links['ninja_log'] = viewer_url
 
-  def _upload_rpl(self, reclient_log_dir, gzip_name_maker):
-    gzip_filename = gzip_name_maker.make('reproxy_rpl')
+  def _upload_rpl(self, reclient_log_dir, filename_maker):
+    gzip_filename = filename_maker.make_gz('reproxy_rpl')
     gzip_path = self._tmp_base_dir.join(gzip_filename)
     self.m.step(
         name='gzip reproxy RPL',
@@ -533,13 +540,13 @@ class ReclientApi(recipe_api.RecipeApi):
             reclient_log_dir, '--output-gzip-path', gzip_path
         ],
         infra_step=True)
-    gs_filename = '%s/reclient/%s' % (
-        gzip_name_maker.timestamp.date().strftime('%Y/%m/%d'), gzip_filename)
+    gs_filename = '%s/reclient/%s' % (filename_maker.timestamp_date,
+                                      gzip_filename)
     self.m.gsutil.upload(
         gzip_path, _GS_BUCKET, gs_filename, name='upload reproxy RPL')
 
-  def _upload_logs(self, reclient_log_dir, gzip_name_maker):
-    tar_filename = gzip_name_maker.make_tgz('reclient_logs')
+  def _upload_logs(self, reclient_log_dir, filename_maker):
+    tar_filename = filename_maker.make_tgz('reclient_logs')
     tar_path = self._tmp_base_dir.join(tar_filename)
     files = self.m.file.listdir(
         'list reclient log directory',
@@ -555,13 +562,14 @@ class ReclientApi(recipe_api.RecipeApi):
             log_files.append(full_file_name)
       with io.BytesIO() as tar_out:
         with tarfile.open(fileobj=tar_out, mode='w:gz') as tf:
+          log_foldername = filename_maker.make('reclient_logs')
           for log in log_files:
             # reclient glog files are generally <100KB, safe to load in memory.
             data_txt = self.m.file.read_text(
                 'read %s' % log, log, test_data='fake', include_log=False)
-            filename = '%s/reclient/%s' % (
-                gzip_name_maker.timestamp.date().strftime('%Y/%m/%d'),
-                os.path.basename(log))
+            filename = '%s/reclient/%s/%s' % (filename_maker.timestamp_date,
+                                              log_foldername,
+                                              os.path.basename(log))
             self.m.gsutil.upload(
                 log,
                 _GS_BUCKET,
@@ -576,8 +584,8 @@ class ReclientApi(recipe_api.RecipeApi):
         if self._test_data.enabled:
           tar_data = 'fake tar contents'
         self.m.file.write_raw('create reclient log tar', tar_path, tar_data)
-      gs_filename = '%s/reclient/%s' % (
-          gzip_name_maker.timestamp.date().strftime('%Y/%m/%d'), tar_filename)
+      gs_filename = '%s/reclient/%s' % (filename_maker.timestamp_date,
+                                        tar_filename)
       self.m.gsutil.upload(
           tar_path, _GS_BUCKET, gs_filename, name='upload reclient logs')
 

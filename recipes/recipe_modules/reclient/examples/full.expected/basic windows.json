@@ -429,13 +429,13 @@
       "----",
       "cp",
       "[CLEANUP]\\reclient_log_tmp_1\\reproxy.INFO",
-      "gs://chrome-goma-log/2012/05/14/reclient/[CLEANUP]\\reclient_log_tmp_1\\reproxy.INFO"
+      "gs://chrome-goma-log/2012/05/14/reclient/reclient_logs.20120514-125323.00000000-0000-0000-0000-000000001337/[CLEANUP]\\reclient_log_tmp_1\\reproxy.INFO"
     ],
     "infra_step": true,
     "name": "postprocess for reclient.upload logs.gsutil upload [CLEANUP]\\reclient_log_tmp_1\\reproxy.INFO",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-goma-log/2012/05/14/reclient/[CLEANUP]\\reclient_log_tmp_1\\reproxy.INFO@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-goma-log/2012/05/14/reclient/reclient_logs.20120514-125323.00000000-0000-0000-0000-000000001337/[CLEANUP]\\reclient_log_tmp_1\\reproxy.INFO@@@"
     ]
   },
   {
