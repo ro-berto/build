@@ -242,6 +242,10 @@ class V8Api(recipe_api.RecipeApi):
       return ProdTrigger(self.m)
 
   @property
+  def trigger_prod(self):
+    return ProdTrigger(self.m)
+
+  @property
   def steps_use_python3(self):
     return ("v8.steps.use_python3"
             in self.m.buildbucket.build.input.experiments)

@@ -51,7 +51,7 @@ PROPERTIES = {
 ARCHIVE_LINK = 'https://storage.googleapis.com/chromium-v8/official/%s/%s'
 BRANCH_RE = re.compile(r'^refs/(branch-heads/\d+\.\d+|heads/\d+\.\d+\.\d+)$')
 RELEASE_BRANCH_RE = re.compile(r'^(?:refs/branch-heads/)?(\d+\.\d+)$')
-FIRST_BUILD_IN_MILESTONE_RE = re.compile(r'^\d+\.\d+\.\d+\.1$')
+FIRST_BUILD_IN_MILESTONE_RE = re.compile(r'^\d+\.\d+\.\d+$')
 
 
 def make_archive(api,
@@ -67,6 +67,7 @@ def make_archive(api,
     api.v8.apply_bot_config(bot_config)
     if archive_type == 'ref':
       api.chromium.c.gn_args.append('is_official_build=true')
+      api.chromium.c.gn_args.append('chrome_pgo_phase=0')
     api.chromium.apply_config('clobber')
     api.chromium.apply_config('default_target_v8_archive')
     if api.chromium.c.BUILD_CONFIG == 'Debug':
@@ -150,13 +151,15 @@ def make_archive(api,
           args=['-a', 'public-read'],
           name='update refbuild binaries',
       )
-      api.v8.trigger.buildbucket(
-          [('v8_refbuild_bundler', {
-              'revision': api.v8.revision,
-              'platform': platform,
-          })],
+      # Always trigger the ref-build bundler in prod as led doesn't work there.
+      builder_config = [('v8_refbuild_bundler', {
+          'revision': api.v8.revision,
+          'platform': platform,
+      })]
+      api.v8.trigger_prod.buildbucket(
+          builder_config,
           project='v8-internal',
-          bucket='ci',
+          bucket='ci-ref',
           step_name='trigger refbuild bundler')
       return None, None
 
@@ -423,9 +426,9 @@ def GenTests(api):
           git_ref='refs/branch-heads/3.4',
           revision='a' * 40),
       api.properties(build_config='Release', target_bits=64),
-      api.v8.version_file(1, 'head', prefix='sync.'),
+      api.v8.version_file(0, 'head', prefix='sync.'),
       api.override_step_data('sync.git describe',
-                             api.raw_io.stream_output_text('3.4.3.1')),
+                             api.raw_io.stream_output_text('3.4.3')),
       api.post_process(Filter().include_re('.*ref.*')),
   )
 
@@ -534,9 +537,9 @@ def GenTests(api):
           revision='a' * 40,
       ),
       api.properties(build_config='Release', target_bits=64),
-      api.v8.version_file(1, 'head', prefix='sync.'),
+      api.v8.version_file(0, 'head', prefix='sync.'),
       api.override_step_data('sync.git describe',
-                             api.raw_io.stream_output_text('3.4.3.1')),
+                             api.raw_io.stream_output_text('3.4.3')),
       api.step_data('build (ref).compile', retcode=1),
       api.post_process(StatusFailure),
       api.post_process(DropExpectation),
@@ -559,9 +562,9 @@ def GenTests(api):
           upload_archive=False),
       api.reclient.properties(),
       api.platform('linux', 64),
-      api.v8.version_file(1, 'head', prefix='sync.'),
+      api.v8.version_file(0, 'head', prefix='sync.'),
       api.override_step_data('sync.git describe',
-                             api.raw_io.stream_output_text('3.4.3.1')),
+                             api.raw_io.stream_output_text('3.4.3')),
       api.post_process(MustRun, 'sync.clobber', 'sync.gclient runhooks',
                        'build.gn', 'build.preprocess for reclient',
                        'build.compile', 'make archive.zipping'),
