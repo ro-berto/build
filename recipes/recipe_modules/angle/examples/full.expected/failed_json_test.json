@@ -1281,13 +1281,6 @@
       "--isolated-script-test-output",
       "[CLEANUP]/tmp_tmp_1"
     ],
-    "env_prefixes": {
-      "PYTHONPATH": [
-        "RECIPE_REPO[build]",
-        "RECIPE_REPO[build]/recipes",
-        "RECIPE_REPO[build]/scripts"
-      ]
-    },
     "luci_context": {
       "realm": {
         "name": "angle:ci"

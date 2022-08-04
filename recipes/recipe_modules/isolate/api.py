@@ -177,9 +177,13 @@ class IsolateApi(recipe_api.RecipeApi):
                    isolated_input,
                    args=None,
                    pre_args=None,
+                   resultdb=None,
+                   env=None,
                    **kwargs):
     """Runs an isolated test."""
     cmd = [
+        'python',
+        self._run_isolated_path,
         '--verbose',
         '--cas-instance',
         self.m.cas.instance,
@@ -187,14 +191,15 @@ class IsolateApi(recipe_api.RecipeApi):
         isolated_input,
     ]
 
-    if 'env' in kwargs and isinstance(kwargs['env'], dict):
-      for k, v in sorted(six.iteritems(kwargs.pop('env'))):
-        cmd.extend(['--env', '%s=%s' % (k, v)])
+    for k, v in sorted(six.iteritems(env or {})):
+      cmd.extend(['--env', '%s=%s' % (k, v)])
     cmd.extend(pre_args or [])
     if args:
       cmd.append('--')
       cmd.extend(args)
-    return self.m.build.python(name, self._run_isolated_path, cmd, **kwargs)
+    if resultdb:
+      cmd = resultdb.wrap(self.m, cmd, step_name=name)
+    return self.m.step(name, cmd, **kwargs)
 
   def archive_differences(self, first_dir, second_dir, values):
     """Archive different files of 2 builds."""

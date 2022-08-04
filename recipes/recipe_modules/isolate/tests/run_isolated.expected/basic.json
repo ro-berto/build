@@ -96,60 +96,7 @@
       "some",
       "args"
     ],
-    "env_prefixes": {
-      "PYTHONPATH": [
-        "RECIPE_REPO[build]",
-        "RECIPE_REPO[build]/recipes",
-        "RECIPE_REPO[build]/scripts"
-      ]
-    },
     "name": "run_isolated"
-  },
-  {
-    "cmd": [
-      "python",
-      "[START_DIR]/swarming.client/run_isolated.py",
-      "--verbose",
-      "--cas-instance",
-      "projects/example-cas-server/instances/default_instance",
-      "--cas-digest",
-      "isolate digest/size",
-      "--",
-      "some",
-      "args"
-    ],
-    "env_prefixes": {
-      "PYTHONPATH": [
-        "RECIPE_REPO[build]",
-        "RECIPE_REPO[build]/recipes",
-        "RECIPE_REPO[build]/scripts"
-      ]
-    },
-    "name": "run_isolated (2)"
-  },
-  {
-    "cmd": [
-      "python",
-      "[START_DIR]/swarming.client/run_isolated.py",
-      "--verbose",
-      "--cas-instance",
-      "projects/example-cas-server/instances/default_instance",
-      "--cas-digest",
-      "isolate_hash",
-      "--env",
-      "VAR=value",
-      "--",
-      "some",
-      "args"
-    ],
-    "env_prefixes": {
-      "PYTHONPATH": [
-        "RECIPE_REPO[build]",
-        "RECIPE_REPO[build]/recipes",
-        "RECIPE_REPO[build]/scripts"
-      ]
-    },
-    "name": "run_isolated (3)"
   },
   {
     "name": "$result"

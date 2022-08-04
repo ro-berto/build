@@ -93,13 +93,6 @@
       "--cas-digest",
       "hash1"
     ],
-    "env_prefixes": {
-      "PYTHONPATH": [
-        "RECIPE_REPO[build]",
-        "RECIPE_REPO[build]/recipes",
-        "RECIPE_REPO[build]/scripts"
-      ]
-    },
     "name": "Run isolated test 'hash1'"
   },
   {
@@ -112,13 +105,6 @@
       "--cas-digest",
       "hash2"
     ],
-    "env_prefixes": {
-      "PYTHONPATH": [
-        "RECIPE_REPO[build]",
-        "RECIPE_REPO[build]/recipes",
-        "RECIPE_REPO[build]/scripts"
-      ]
-    },
     "name": "Run isolated test 'hash2'"
   },
   {

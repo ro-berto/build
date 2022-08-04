@@ -5,7 +5,6 @@
 PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
 DEPS = [
-    'build',
     'chromium',
     'depot_tools/depot_tools',
     'depot_tools/git',
@@ -20,6 +19,7 @@ DEPS = [
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
+    'recipe_engine/resultdb',
     'recipe_engine/step',
     'swarming_client',
 ]
