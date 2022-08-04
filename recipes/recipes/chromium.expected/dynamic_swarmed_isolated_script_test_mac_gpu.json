@@ -1656,7 +1656,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "python",
       "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
       "--input-json",
       "{\"version\": 3}",
@@ -1812,7 +1812,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "python",
       "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
       "--input-json",
       "{\"version\": 3}",

@@ -39,7 +39,7 @@ class TestResultsApi(recipe_api.RecipeApi):
     assert builder_group
     try:
       cmd = [
-          'python3',
+          'python',
           self.resource('upload_test_results.py'),
           '--input-json',
           results_file,

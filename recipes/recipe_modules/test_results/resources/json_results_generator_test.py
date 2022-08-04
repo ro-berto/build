@@ -1,4 +1,4 @@
-#!/usr/bin/env vpython3
+#!/usr/bin/env python
 # Copyright (c) 2015 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -8,12 +8,10 @@
     python json_results_generator_unittest.py
 """
 
-from __future__ import absolute_import
 import json
 import os
 import sys
 import unittest
-import six
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
@@ -105,7 +103,7 @@ class JSONGeneratorTest(unittest.TestCase):
     self.assertEqual(expected_failed, failure_summary[JRG.FAIL_LABEL])
 
     test_results = results[JRG.TESTS]
-    for test_name, expected_time in six.iteritems(test_timings):
+    for test_name, expected_time in test_timings.iteritems():
       actual_time = test_results[test_name][JRG.TEST_TIME]
       self.assertEqual(expected_time, actual_time)
 
@@ -126,7 +124,7 @@ class JSONGeneratorTest(unittest.TestCase):
     trie = generate_test_timings_trie(
         individual_test_timings, path_delimiter='/')
 
-    expected_trie = {'foo': {'bar': {'baz.html': 1200,}}, 'bar.html': 0}
+    expected_trie = {'bar.html': 0, 'foo': {'bar': {'baz.html': 1200,}}}
 
     self.assertEqual(json.dumps(trie), json.dumps(expected_trie))
 

@@ -8,14 +8,12 @@ Forked from build/scripts/slave/gtest/json_results_generator.py and original
 will be deleted as all tests are moved to swarming.
 """
 
-from __future__ import absolute_import
 import codecs
 import os
 import time
 
 import json
 from test_result import TestResult
-import six
 
 # A JSON results generator for generic tests.
 
@@ -133,7 +131,7 @@ class JSONResultsGenerator(object):
 
   def generate_times_ms_file(self):
     times = generate_test_timings_trie(
-        list(self._test_results_map.values()), self._path_delimiter)
+        self._test_results_map.values(), self._path_delimiter)
     file_path = os.path.join(self._results_directory, self.TIMES_MS_FILENAME)
     self._write_json(times, file_path)
 
@@ -148,7 +146,7 @@ class JSONResultsGenerator(object):
     results[self.SECONDS_SINCE_EPOCH] = int(time.time())
 
     tests = results.setdefault(self.TESTS, {})
-    for test_name in six.iterkeys(self._test_results_map):
+    for test_name in self._test_results_map.iterkeys():
       tests[test_name] = self._make_test_data(test_name)
 
     self._insert_failure_map(results)
@@ -159,7 +157,7 @@ class JSONResultsGenerator(object):
   def _insert_failure_map(self, results):
     # FAIL, PASS, NOTRUN
     summary = {self.PASS_LABEL: 0, self.FAIL_LABEL: 0, self.SKIP_LABEL: 0}
-    for test_results in six.itervalues(self._test_results_map):
+    for test_results in self._test_results_map.itervalues():
       # Use the result of the first test for aggregate statistics. This may
       # count as failing a test that passed on retry, but it's a more useful
       # statistic and it's consistent with our other test harnesses.
