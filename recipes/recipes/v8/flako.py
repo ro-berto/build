@@ -494,13 +494,11 @@ class Runner(object):
       return task
 
     def collect_task(task):
-      try:
-        step_result, _ = self.api.chromium_swarming.collect_task(
-          task, allow_missing_json=True,
+      step_result, _ = self.api.chromium_swarming.collect_task(
+          task,
+          allow_missing_json=True,
           gen_step_test_data=self._default_task_pass_test_data)
-        return self.num_failures(step_result)
-      except self.api.step.StepFailure as e:
-        return self.num_failures(e.result)
+      return self.num_failures(step_result)
 
     # TODO(sergiyb): Make bisect more robust to infra failures, e.g. we trigger
     # several dozen of tasks during bisect and currently if one expires, the

@@ -447,7 +447,6 @@ class SwarmingApi(recipe_api.RecipeApi):
            env=None,
            env_prefixes=None,
            extra_args=None,
-           failure_as_exception=True,
            idempotent=None,
            cas_input_root='',
            merge=None,
@@ -519,8 +518,6 @@ class SwarmingApi(recipe_api.RecipeApi):
           (potentially partial) retry of another task. When collecting, the
           successful shards from 'task_to_retry' will be merged with the new
           shards in this task.
-      * failure_as_exception: Boolean. Whether test failures should throw a
-        recipe exception during the collect step.
       * relative_cwd: An optional string indicating the working directory
         relative to the task root where `raw_cmd` (or the command specified
         in the isolate, if raw_cmd is empty) will run.
@@ -529,8 +526,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     """
 
     if not collect_step:
-      collect_step = functools.partial(
-        self._default_collect_step, failure_as_exception=failure_as_exception)
+      collect_step = self._default_collect_step
 
     ensure_file = self.m.cipd.EnsureFile()
     if cipd_packages:
@@ -1298,9 +1294,12 @@ class SwarmingApi(recipe_api.RecipeApi):
     task_args.extend(collect_cmd)
     return task_args
 
-  def _default_collect_step(
-      self, task, failure_as_exception, output_placeholder=None, name=None,
-      gen_step_test_data=None, **kwargs):
+  def _default_collect_step(self,
+                            task,
+                            output_placeholder=None,
+                            name=None,
+                            gen_step_test_data=None,
+                            **kwargs):
     """Produces a step that collects the results of a Task object.
 
     A Task object may have triggered multiple swarming tasks.
@@ -1321,9 +1320,6 @@ class SwarmingApi(recipe_api.RecipeApi):
     there was an infra error, or FAILURE if any of the shards timed out or had
     non-zero exit code.
 
-    If failure_as_exception is True, this method will raise a StepFailure
-    exception when the presentation status is EXCEPTION or FAILURE.
-
     Regardless of whether an exception is raised, subsequent recipe logic will
     need to know if there are missing shards. This information is transported
     through a side channel. The merge script will set the global tag
@@ -1331,8 +1327,6 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     Args:
       task: A Task object that must have dispatched tasks
-      failure_as_exception: Whether a non-zero retcode of a dispatched task
-                            should raise a StepFailure exception.
       output_placeholder: A custom placeholder that will transform test
                           results. Defaults to json.output().
       name: Name to use for the collect step.
@@ -1408,16 +1402,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     for k, v in six.iteritems(links):
       step_result.presentation.links[k] = v
 
-    exception, has_valid_results = self._handle_summary_json(task, step_result)
-
-    if step_result.retcode != 0 and failure_as_exception:
-      step_result.presentation.status = self.m.step.FAILURE
-      raise recipe_api.StepFailure(
-          'Swarming collect had non-zero exit code.',
-          result=step_result)
-
-    if exception and failure_as_exception:
-      raise exception
+    has_valid_results = self._handle_summary_json(task, step_result)
     return step_result, has_valid_results
 
   def run_collect_task_script(self, name, task_args, gen_step_test_data,
@@ -1529,8 +1514,7 @@ class SwarmingApi(recipe_api.RecipeApi):
           dispatched_task_placeholder, task.shards, task.shard_indices)
 
     step_result, has_valid_results = self._default_collect_step(
-        task, gen_step_test_data=gen_default_step_test_data,
-        failure_as_exception=False, **kwargs)
+        task, gen_step_test_data=gen_default_step_test_data, **kwargs)
 
     # Regardless of the outcome of the test (pass or fail), we try to parse
     # the results. If any error occurs while parsing results, then we set them
@@ -1579,7 +1563,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     return ''.join((prefix, task.request.name, suffix))
 
   def _handle_summary_json(self, task, step_result):
-    """Updates presentation with results from swarming collect.
+    """Updates presentation of step_result with results from swarming collect.
 
     The presentation is updated with links and details for each of the shards.
     The presentation's status is set to:
@@ -1591,9 +1575,8 @@ class SwarmingApi(recipe_api.RecipeApi):
     Args:
       * task: The Task object with dispatched shards.
       * step_result: The StepData from the collect step.
-    Returns: A StepFailure() exception describing an expected error, and a
-             boolean representing if the results from this swarming task should
-             be considered valid.
+    Returns: A boolean representing if the results from this swarming task
+             should be considered valid.
              Examples of expected errors include: An expired shard, a timed
              out shard, or test failures. If there are no issues, returns None.
              The task will be considered valid as long as it was able to
@@ -1726,7 +1709,6 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     if unexpected_errors:
       template = 'Shard #%s failed: %s'
-
       step_result.presentation.status = self.m.step.EXCEPTION
       raise recipe_api.InfraFailure(
           '\n'.join(template % f for f in unexpected_errors),
@@ -1735,10 +1717,8 @@ class SwarmingApi(recipe_api.RecipeApi):
     if expected_errors:
       step_result.presentation.status = (self.m.step.EXCEPTION if
           expected_error_present_as_exception else self.m.step.FAILURE)
-      return recipe_api.StepFailure(str(expected_errors),
-                                    result=step_result), has_valid_results
 
-    return None, has_valid_results
+    return has_valid_results
 
   def get_collect_cmd_args(self, requests_json):
     """

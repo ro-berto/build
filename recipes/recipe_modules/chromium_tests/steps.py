@@ -2383,7 +2383,6 @@ class SwarmingGTestTest(SwarmingTest):
         raw_cmd=cmd,
         relative_cwd=self.relative_cwd,
         cas_input_root=cas_input_root,
-        failure_as_exception=False,
         collect_json_output_override=json_override)
     self._apply_swarming_task_config(task, suffix, '--gtest_filter', ':')
     return task

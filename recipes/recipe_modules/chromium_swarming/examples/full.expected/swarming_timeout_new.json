@@ -819,10 +819,42 @@
     ]
   },
   {
-    "failure": {
-      "failure": {},
-      "humanReason": "Step(\"['shard #0 timed out, took too much time to complete']\") (retcode: 0)"
+    "cmd": [],
+    "name": "Tests statistics",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>Stats<br/>Total shards: 1<br/>Total runtime: 1m 0s <br/>@@@",
+      "@@@STEP_LOG_LINE@detailed stats@Total shards: 1@@@",
+      "@@@STEP_LOG_LINE@detailed stats@Total runtime: 1m 0s @@@",
+      "@@@STEP_LOG_LINE@detailed stats@Min/mean/max: 1m 0s / 1m 0s / 1m 0s@@@",
+      "@@@STEP_LOG_END@detailed stats@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython3",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
+      "[CLEANUP]/hello_isolated_world_tmp_1"
+    ],
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
+    "name": "remove temp dir"
+  },
+  {
     "name": "$result"
   }
 ]
