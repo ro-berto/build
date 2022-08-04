@@ -3,11 +3,15 @@
     "cmd": [
       "[CACHE]/builder/v8/tools/bazel/bazel",
       "build",
-      "--config=clang",
       "--verbose_failures",
       ":v8ci"
     ],
     "cwd": "[CACHE]/builder/v8",
+    "env": {
+      "BAZEL_COMPILER": "clang",
+      "CC": "[CACHE]/builder/v8/third_party/llvm-build/Release+Asserts/bin/clang",
+      "CXX": "[CACHE]/builder/v8/third_party/llvm-build/Release+Asserts/bin/clang++"
+    },
     "env_prefixes": {
       "PATH": [
         "[CACHE]/builder/v8/third_party/llvm-build/Release+Asserts/bin",
@@ -22,6 +26,11 @@
       "shutdown"
     ],
     "cwd": "[CACHE]/builder/v8",
+    "env": {
+      "BAZEL_COMPILER": "clang",
+      "CC": "[CACHE]/builder/v8/third_party/llvm-build/Release+Asserts/bin/clang",
+      "CXX": "[CACHE]/builder/v8/third_party/llvm-build/Release+Asserts/bin/clang++"
+    },
     "env_prefixes": {
       "PATH": [
         "[CACHE]/builder/v8/third_party/llvm-build/Release+Asserts/bin",

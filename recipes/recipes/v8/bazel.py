@@ -29,13 +29,16 @@ def RunSteps(api):
   bazel = api.path['checkout'].join('tools', 'bazel', 'bazel')
   clang = api.path['checkout'].join(
       'third_party', 'llvm-build', 'Release+Asserts', 'bin')
+  clang_bin = clang.join('clang')
+  clang_xx_bin = clang.join('clang++')
   with api.context(
       cwd=api.path['checkout'],
+      env={'BAZEL_COMPILER': 'clang', 'CC': clang_bin, 'CXX': clang_xx_bin},
       env_prefixes={'PATH': [clang, api.v8.depot_tools_path]}):
     try:
       api.step(
           'Bazel build',
-          [bazel, 'build', '--config=clang', '--verbose_failures', ':v8ci'])
+          [bazel, 'build', '--verbose_failures', ':v8ci'])
     finally:
       api.step('Bazel shutdown', [bazel, 'shutdown'])
 
