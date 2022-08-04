@@ -2952,7 +2952,7 @@
   {
     "cmd": [
       "python",
-      "RECIPE_REPO[build]/recipes/chromium/archive_layout_test_results.py",
+      "RECIPE_MODULE[build::chromium_tests]/resources/archive_layout_test_results.py",
       "--results-dir",
       "[START_DIR]/layout-test-results",
       "--build-dir",
@@ -2975,13 +2975,6 @@
     "cwd": "[CACHE]/builder",
     "env": {
       "CHROME_HEADLESS": "1"
-    },
-    "env_prefixes": {
-      "PYTHONPATH": [
-        "RECIPE_REPO[build]",
-        "RECIPE_REPO[build]/recipes",
-        "RECIPE_REPO[build]/scripts"
-      ]
     },
     "luci_context": {
       "realm": {

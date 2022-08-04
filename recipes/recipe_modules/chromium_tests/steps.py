@@ -1774,10 +1774,9 @@ def _archive_layout_test_results(api, step_name, step_suffix=None):
   buildername = api.buildbucket.builder_name
   buildnumber = api.buildbucket.build.number
 
-  archive_layout_test_results = api.chromium.repo_resource(
-      'recipes', 'chromium', 'archive_layout_test_results.py')
-
-  archive_layout_test_args = [
+  cmd = [
+      'python',
+      api.chromium_tests.resource('archive_layout_test_results.py'),
       '--results-dir',
       results_dir,
       '--build-dir',
@@ -1794,19 +1793,17 @@ def _archive_layout_test_results(api, step_name, step_suffix=None):
       api.chromium.build_properties['got_revision'],
   ]
   if not api.tryserver.is_tryserver:
-    archive_layout_test_args.append('--store-latest')
+    cmd.append('--store-latest')
 
   # TODO: The naming of the archive step is clunky, but the step should
   # really be triggered src-side as part of the post-collect merge and
   # upload, and so this should go away when we make that change.
   step_name = _clean_step_name(step_name, step_suffix)
-  archive_layout_test_args += ['--step-name', step_name]
+  cmd += ['--step-name', step_name]
   archive_step_name = 'archive results for ' + step_name
 
-  archive_layout_test_args += api.build.slave_utils_args
-  archive_result = api.build.python(archive_step_name,
-                                    archive_layout_test_results,
-                                    archive_layout_test_args)
+  cmd += api.build.slave_utils_args
+  archive_result = api.step(archive_step_name, cmd)
 
   # TODO(tansell): Move this to render_results function
   sanitized_buildername = re.sub('[ .()]', '_', buildername)

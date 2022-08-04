@@ -2,7 +2,6 @@
 # Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
-
 """A tool to archive layout test results.
 
 To archive files on Google Storage, pass a GS bucket name via --gs-bucket.
@@ -26,10 +25,16 @@ import socket
 import sys
 import time
 
-from common import archive_utils
+ROOT_DIR = os.path.normpath(
+    os.path.join(__file__, '..', '..', '..', '..', '..'))
+sys.path.extend([
+    os.path.join(ROOT_DIR, 'recipes'),
+    os.path.join(ROOT_DIR, 'scripts'),
+])
+
 from common import chromium_utils
-from recipes import build_directory
-from recipes import slave_utils
+import build_directory
+import slave_utils
 
 
 def _CollectZipArchiveFiles(output_dir):
@@ -57,9 +62,8 @@ def archive_layout(args):
   print "Archiving %d files" % len(file_list)
   print
 
-  zip_file = chromium_utils.MakeZip(
-      staging_dir, results_dir_basename, file_list, args.results_dir
-  )[1]
+  zip_file = chromium_utils.MakeZip(staging_dir, results_dir_basename,
+                                    file_list, args.results_dir)[1]
 
   builder_name = re.sub('[ .()]', '_', args.builder_name)
   build_number = str(args.build_number)
@@ -90,9 +94,8 @@ def archive_layout(args):
   gs_build_results_dir = gs_build_dir + '/' + results_dir_basename
 
   if args.step_name:
-    gs_latest_dir = '/'.join([
-        args.gs_bucket, builder_name, args.step_name, 'results'
-    ])
+    gs_latest_dir = '/'.join(
+        [args.gs_bucket, builder_name, args.step_name, 'results'])
   else:
     gs_latest_dir = '/'.join([args.gs_bucket, builder_name, 'results'])
   gs_latest_results_dir = gs_latest_dir + '/' + results_dir_basename
@@ -108,8 +111,7 @@ def archive_layout(args):
       gs_build_dir,
       gs_acl=gs_acl,
       cache_control=cache_control,
-      add_quiet_flag=True
-  )
+      add_quiet_flag=True)
   print "took %.1f seconds" % (time.time() - start)
   sys.stdout.flush()
   if rc:
@@ -122,8 +124,7 @@ def archive_layout(args):
       gs_build_results_dir,
       gs_acl=gs_acl,
       cache_control=cache_control,
-      add_quiet_flag=True
-  )
+      add_quiet_flag=True)
   print "took %.1f seconds" % (time.time() - start)
   sys.stdout.flush()
   if rc:
@@ -142,8 +143,7 @@ def archive_layout(args):
         gs_latest_dir,
         gs_acl=gs_acl,
         cache_control=cache_control,
-        add_quiet_flag=True
-    )
+        add_quiet_flag=True)
     print "took %.1f seconds" % (time.time() - start)
     sys.stdout.flush()
     if rc:
@@ -156,8 +156,7 @@ def archive_layout(args):
         gs_latest_results_dir,
         gs_acl=gs_acl,
         cache_control=cache_control,
-        add_quiet_flag=True
-    )
+        add_quiet_flag=True)
     print "took %.1f seconds" % (time.time() - start)
     sys.stdout.flush()
     if rc:
@@ -172,53 +171,42 @@ def _ParseArgs():
   # TODO(crbug.com/655798): Make --build-dir not ignored.
   parser.add_argument('--build-dir', help='ignored')
   parser.add_argument(
-      '--results-dir', required=True, help='path to layout test results'
-  )
+      '--results-dir', required=True, help='path to layout test results')
   parser.add_argument(
       '--builder-name',
       required=True,
-      help='The name of the builder running this script.'
-  )
+      help='The name of the builder running this script.')
   parser.add_argument(
       '--build-number',
       type=int,
       required=True,
-      help='Build number of the builder running this script.'
-  )
+      help='Build number of the builder running this script.')
   parser.add_argument(
       '--revision',
       type=str,
       required=True,
-      help=(
-          'Revision checked out. If this is not passed in, it will use the '
-          'head revision from the working dir checkout.'
-      )
-  )
+      help=('Revision checked out. If this is not passed in, it will use the '
+            'head revision from the working dir checkout.'))
   parser.add_argument(
       '--step-name',
       help='The name of the test step that produced '
-      'these results.'
-  )
+      'these results.')
   parser.add_argument(
       '--gs-bucket',
       required=True,
-      help='The Google Storage bucket to upload to.'
-  )
+      help='The Google Storage bucket to upload to.')
   parser.add_argument(
-      '--gs-acl', help='The access policy for Google Storage files.'
-  )
+      '--gs-acl', help='The access policy for Google Storage files.')
   parser.add_argument(
       '--store-latest',
       action='store_true',
       help='If this script should update the latest results in'
-      'cloud storage.'
-  )
+      'cloud storage.')
   parser.add_argument(
       '--staging-dir',
       help='Directory to use for staging the archives. '
       'Default behavior is to automatically detect '
-      'slave\'s build directory.'
-  )
+      'slave\'s build directory.')
   slave_utils_callback = slave_utils.AddArgs(parser)
 
   args = parser.parse_args()
@@ -233,8 +221,7 @@ def main():
       level=logging.INFO,
       format='%(asctime)s %(filename)s:%(lineno)-3d'
       ' %(levelname)s %(message)s',
-      datefmt='%y%m%d %H:%M:%S'
-  )
+      datefmt='%y%m%d %H:%M:%S')
   return archive_layout(args)
 
 
