@@ -1,0 +1,56 @@
+// Copyright 2022 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+syntax = "proto3";
+package recipes.build.chromium_expectation_files.expectation_file_scripts;
+
+message InputProperties {
+  repeated ScriptInvocation scripts = 1;
+}
+
+message ScriptInvocation {
+  // The step name the builder will use for this particular invocation.
+  string step_name = 1;
+
+  // chromium/src-relative path to the script to run.
+  string script = 2;
+
+  // The type of script being run.
+  enum ScriptType {
+    SCRIPT_TYPE_UNSPECIFIED = 0;
+    UNEXPECTED_PASS = 1;
+    FLAKE_FINDER = 2;
+  }
+  ScriptType script_type = 3;
+
+  // How the generated CL should be submitted.
+  enum SubmitType {
+    SUBMIT_TYPE_UNSPECIFIED = 0;
+    MANUAL = 1;  // Requires manual review, chosen human will be reviewer.
+    AUTO = 2;  // Automatically submitted, chosen human will be CCed.
+  }
+  SubmitType submit_type = 4;
+
+  // Necessary since oneof does not support repeated fields.
+  message ReviewerList {
+    repeated string reviewer = 1;
+  }
+  oneof reviewer_selection {
+    // Rotation to pull a reviewer from using chrome-ops-rotation-proxy, e.g.
+    // "chrome-gpu-pixel-wrangler"
+    string reviewer_rotation = 5;
+
+    // List of reviewers to pull from.
+    ReviewerList reviewer_list = 6;
+  }
+
+  // String that will be used for the CL's title/first line in the description.
+  string cl_title = 7;
+
+  // Additional trybots to run the CL on.
+  repeated string additional_trybots = 8;
+
+  // Arguments to pass to the script.
+  repeated string args = 9;
+}
