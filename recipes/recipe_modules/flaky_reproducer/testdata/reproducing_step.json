@@ -1,5 +1,6 @@
 {
   "test_binary": {
+    "builder": null,
     "class_name": "GTestTestBinary",
     "command": [
       "vpython3",
@@ -33,7 +34,7 @@
   },
   "reproducing_rate": 0.9,
   "duration": 123,
-  "strategy_name": "repeat",
+  "strategy": "repeat",
   "reproduced_cnt": 1,
-  "total_retries": 30
+  "total_run_cnt": 30
 }

@@ -36,8 +36,8 @@ class BlinkWebTestsBinary(TestBinaryWithBatchMixin, TestBinaryWithParallelMixin,
     # Should strip all wrappers
     is_local = ret.command[0].startswith('bin/run_')
     if not is_local:
-      raise ValueError('Command line contains unknown wrapper: {0}'.format(
-          ret.command))
+      raise NotImplementedError(
+          'Command line contains unknown wrapper: {0}'.format(ret.command))
 
     shard_env_keys = ('GTEST_SHARD_INDEX', 'GTEST_TOTAL_SHARDS')
     ret.env_vars = utils.strip_env_vars(ret.env_vars, shard_env_keys)

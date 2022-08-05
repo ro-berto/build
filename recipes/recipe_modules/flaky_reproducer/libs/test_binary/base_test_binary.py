@@ -21,6 +21,7 @@ class BaseTestBinary:
     command (list[str]): The base command line for the binary.  Should contains
       the executable with arguments for the test suite.
     cwd (str): Current working directory for the test binary.
+    builder (str): The builder name from task request tags.
     env_vars (dict): Environment variables applied on swarming task, may
       contain swarming magic values, e.g. ${ISOLATED_OUTDIR}.
     dimensions (dict): dimensions on which to filter swarming bots.
@@ -36,6 +37,7 @@ class BaseTestBinary:
     self.command = command[:]
     self.cwd = kwargs.get('cwd', None)
     # test environment info
+    self.builder = kwargs.get('builder', None)
     self.env_vars = kwargs.get('env_vars', {})
     self.dimensions = kwargs.get('dimensions', {})
     self.cas_input_root = kwargs.get('cas_input_root', None)
@@ -58,10 +60,15 @@ class BaseTestBinary:
       A new TestBinary instance.
     """
     request_slice = task_request[-1]
+    builder = None
+    for tag in task_request.tags:
+      if tag.startswith('buildername:'):
+        builder = tag.split(':', 1)[1]
 
     ret = cls(
         request_slice.command,
         cwd=request_slice.relative_cwd,
+        builder=builder,
         env_vars=request_slice.env_vars,
         dimensions=request_slice.dimensions,
         cas_input_root=request_slice.cas_input_root,
@@ -74,6 +81,7 @@ class BaseTestBinary:
         class_name=self.__class__.__name__,
         command=self.command,
         cwd=self.cwd,
+        builder=self.builder,
         env_vars=self.env_vars,
         dimensions=self.dimensions,
         cas_input_root=self.cas_input_root,

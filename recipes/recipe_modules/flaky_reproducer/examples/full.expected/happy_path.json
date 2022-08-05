@@ -202,10 +202,6 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "get_test_binary"
-  },
-  {
     "cmd": [
       "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "request-show",
@@ -214,9 +210,8 @@
       "54321fffffabc123"
     ],
     "infra_step": true,
-    "name": "get_test_binary.show request",
+    "name": "get_test_binary from 54321fffffabc123",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"name\": \"led: base_unittests\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"priority\": \"25\", @@@",
@@ -227,7 +222,8 @@
       "@@@STEP_LOG_LINE@json.output@  \"service_account\": \"none\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    \"authenticated:user:chromium-ci-builder@chops-service-accounts.iam.gserviceaccount.com\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"bucket:ci\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"bucket:ci\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"buildername:Win11 Tests x64\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"task_slices\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
@@ -457,14 +453,14 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "{\"cas_input_root\": \"b7c329e532e221e23809ba23f9af5b309aa17d490d845580207493d381998bd9/24\", \"class_name\": \"GTestTestBinary\", \"command\": [\"vpython3\", \"../../testing/test_env.py\", \"./base_unittests.exe\", \"--test-launcher-bot-mode\", \"--asan=0\", \"--lsan=0\", \"--msan=0\", \"--tsan=0\", \"--cfi-diag=0\"], \"cwd\": \"out\\\\Release_x64\", \"dimensions\": {\"cpu\": \"x86-64\", \"os\": \"Windows-11-22000\", \"pool\": \"chromium.tests\"}, \"env_vars\": {\"ISOLATED_OUTDIR\": \"${ISOLATED_OUTDIR}\", \"foo\": \"bar\"}, \"parallel_jobs\": null, \"repeat\": null, \"single_batch\": null, \"tests\": null}",
+      "{\"builder\": \"Win11 Tests x64\", \"cas_input_root\": \"b7c329e532e221e23809ba23f9af5b309aa17d490d845580207493d381998bd9/24\", \"class_name\": \"GTestTestBinary\", \"command\": [\"vpython3\", \"../../testing/test_env.py\", \"./base_unittests.exe\", \"--test-launcher-bot-mode\", \"--asan=0\", \"--lsan=0\", \"--msan=0\", \"--tsan=0\", \"--cfi-diag=0\"], \"cwd\": \"out\\\\Release_x64\", \"dimensions\": {\"cpu\": \"x86-64\", \"os\": \"Windows-11-22000\", \"pool\": \"chromium.tests\"}, \"env_vars\": {\"ISOLATED_OUTDIR\": \"${ISOLATED_OUTDIR}\", \"foo\": \"bar\"}, \"parallel_jobs\": null, \"repeat\": null, \"single_batch\": null, \"tests\": null}",
       "[CLEANUP]/tmp_tmp_2/flaky_reproducer_runner/test_binary.json"
     ],
     "infra_step": true,
     "name": "repack_test_binary.dump TestBinary",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@test_binary.json@{\"cas_input_root\": \"b7c329e532e221e23809ba23f9af5b309aa17d490d845580207493d381998bd9/24\", \"class_name\": \"GTestTestBinary\", \"command\": [\"vpython3\", \"../../testing/test_env.py\", \"./base_unittests.exe\", \"--test-launcher-bot-mode\", \"--asan=0\", \"--lsan=0\", \"--msan=0\", \"--tsan=0\", \"--cfi-diag=0\"], \"cwd\": \"out\\\\Release_x64\", \"dimensions\": {\"cpu\": \"x86-64\", \"os\": \"Windows-11-22000\", \"pool\": \"chromium.tests\"}, \"env_vars\": {\"ISOLATED_OUTDIR\": \"${ISOLATED_OUTDIR}\", \"foo\": \"bar\"}, \"parallel_jobs\": null, \"repeat\": null, \"single_batch\": null, \"tests\": null}@@@",
+      "@@@STEP_LOG_LINE@test_binary.json@{\"builder\": \"Win11 Tests x64\", \"cas_input_root\": \"b7c329e532e221e23809ba23f9af5b309aa17d490d845580207493d381998bd9/24\", \"class_name\": \"GTestTestBinary\", \"command\": [\"vpython3\", \"../../testing/test_env.py\", \"./base_unittests.exe\", \"--test-launcher-bot-mode\", \"--asan=0\", \"--lsan=0\", \"--msan=0\", \"--tsan=0\", \"--cfi-diag=0\"], \"cwd\": \"out\\\\Release_x64\", \"dimensions\": {\"cpu\": \"x86-64\", \"os\": \"Windows-11-22000\", \"pool\": \"chromium.tests\"}, \"env_vars\": {\"ISOLATED_OUTDIR\": \"${ISOLATED_OUTDIR}\", \"foo\": \"bar\"}, \"parallel_jobs\": null, \"repeat\": null, \"single_batch\": null, \"tests\": null}@@@",
       "@@@STEP_LOG_END@test_binary.json@@@"
     ]
   },
@@ -487,14 +483,6 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "choose_strategies"
-  },
-  {
-    "cmd": [],
-    "name": "launch_strategy_in_swarming"
-  },
-  {
     "cmd": [
       "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
@@ -506,9 +494,8 @@
       "/path/to/tmp/json"
     ],
     "infra_step": true,
-    "name": "launch_strategy_in_swarming.swarming strategy batch",
+    "name": "swarming strategy batch",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
@@ -597,10 +584,6 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "launch_strategy_in_swarming (2)"
-  },
-  {
     "cmd": [
       "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "spawn-tasks",
@@ -612,9 +595,8 @@
       "/path/to/tmp/json"
     ],
     "infra_step": true,
-    "name": "launch_strategy_in_swarming (2).swarming strategy repeat",
+    "name": "swarming strategy repeat",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
@@ -784,6 +766,10 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "collect_strategy_results"
+  },
+  {
     "cmd": [
       "vpython3",
       "-u",
@@ -795,14 +781,16 @@
       "/path/to/tmp/"
     ],
     "infra_step": true,
-    "name": "load ReproducingStep",
+    "name": "collect_strategy_results.load ReproducingStep",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@reproducing_step.json@{@@@",
       "@@@STEP_LOG_LINE@reproducing_step.json@  \"duration\": 123,@@@",
       "@@@STEP_LOG_LINE@reproducing_step.json@  \"reproduced_cnt\": 1,@@@",
       "@@@STEP_LOG_LINE@reproducing_step.json@  \"reproducing_rate\": 0.9,@@@",
-      "@@@STEP_LOG_LINE@reproducing_step.json@  \"strategy_name\": \"repeat\",@@@",
+      "@@@STEP_LOG_LINE@reproducing_step.json@  \"strategy\": \"repeat\",@@@",
       "@@@STEP_LOG_LINE@reproducing_step.json@  \"test_binary\": {@@@",
+      "@@@STEP_LOG_LINE@reproducing_step.json@    \"builder\": null,@@@",
       "@@@STEP_LOG_LINE@reproducing_step.json@    \"cas_input_root\": \"b7c329e532e221e23809ba23f9af5b309aa17d490d845580207493d381998bd9/24\",@@@",
       "@@@STEP_LOG_LINE@reproducing_step.json@    \"class_name\": \"GTestTestBinary\",@@@",
       "@@@STEP_LOG_LINE@reproducing_step.json@    \"command\": [@@@",
@@ -834,14 +822,10 @@
       "@@@STEP_LOG_LINE@reproducing_step.json@      \"MockUnitTests.PassTest\"@@@",
       "@@@STEP_LOG_LINE@reproducing_step.json@    ]@@@",
       "@@@STEP_LOG_LINE@reproducing_step.json@  },@@@",
-      "@@@STEP_LOG_LINE@reproducing_step.json@  \"total_retries\": 30@@@",
+      "@@@STEP_LOG_LINE@reproducing_step.json@  \"total_run_cnt\": 30@@@",
       "@@@STEP_LOG_LINE@reproducing_step.json@}@@@",
       "@@@STEP_LOG_END@reproducing_step.json@@@"
     ]
-  },
-  {
-    "cmd": [],
-    "name": "choose_best_reproducing_step"
   },
   {
     "cmd": [],
@@ -1053,13 +1037,6 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "verify_reproducing_step.get_test_binary",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
     "cmd": [
       "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin/swarming",
       "request-show",
@@ -1068,9 +1045,9 @@
       "54321fffffabc001"
     ],
     "infra_step": true,
-    "name": "verify_reproducing_step.get_test_binary.show request",
+    "name": "verify_reproducing_step.get_test_binary from 54321fffffabc001",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"name\": \"led: base_unittests\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"priority\": \"25\", @@@",
@@ -1081,7 +1058,8 @@
       "@@@STEP_LOG_LINE@json.output@  \"service_account\": \"none\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    \"authenticated:user:chromium-ci-builder@chops-service-accounts.iam.gserviceaccount.com\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"bucket:ci\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"bucket:ci\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"buildername:Win11 Tests x64\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"task_slices\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
@@ -1718,13 +1696,15 @@
     "cmd": [],
     "name": "summarize_results",
     "~followup_annotations": [
-      "@@@STEP_SUMMARY_TEXT@This failure could be reproduced (90.0%) with command on Windows-11-22000 with repeat:\n\nvpython3 ../../testing/test_env.py ./base_unittests.exe --test-launcher-bot-mode --asan=0 --lsan=0 --msan=0 --tsan=0 --cfi-diag=0 --test-launcher-retry-limit=0 --isolated-script-test-filter=MockUnitTests.CrashTest::MockUnitTests.PassTest --isolated-script-test-repeat=1 --test-launcher-batch-limit=0 --test-launcher-jobs=5\n\nThe failure could also be reproduced on following builders:\nbuilder                 reproduced/total_retries\nFailing Sample                   2/2\n\nWin10 Tests x64 failed:\nNot Supported output.json format.\n@@@",
+      "@@@STEP_SUMMARY_TEXT@```\nFor MockUnitTests.FailTest from Win11 Tests x64 https://example.swarmingserver.appspot.com/task?id=54321fffffabc123\nValue of: false\n  Actual: false\nExpected: true\n\n\nThe failure could be reproduced (90.0%) with command with repeat strategy:\n\nvpython3 ../../testing/test_env.py ./base_unittests.exe --test-launcher-bot-mode --asan=0 --lsan=0 --msan=0 --tsan=0 --cfi-diag=0 --test-launcher-retry-limit=0 --isolated-script-test-filter=MockUnitTests.CrashTest::MockUnitTests.PassTest --isolated-script-test-repeat=1 --test-launcher-batch-limit=0 --test-launcher-jobs=5\n\nIt's verified with following strategies:\nrepeat strategy reproduced 1 times (90.0%) https://example.swarmingserver.appspot.com/task?id=0\n\nThe failure could be reproduced on following builders:\nFailing Sample                 reproduced 2/2 https://example.swarmingserver.appspot.com/task?id=2\nWin10 Tests x64                failed:\nNot supported output.json format.\nhttps://example.swarmingserver.appspot.com/task?id=3\n```@@@",
       "@@@STEP_LOG_LINE@reproducing_step.json@{@@@",
       "@@@STEP_LOG_LINE@reproducing_step.json@  \"duration\": 123, @@@",
       "@@@STEP_LOG_LINE@reproducing_step.json@  \"reproduced_cnt\": 1, @@@",
       "@@@STEP_LOG_LINE@reproducing_step.json@  \"reproducing_rate\": 0.9, @@@",
-      "@@@STEP_LOG_LINE@reproducing_step.json@  \"strategy_name\": \"repeat\", @@@",
+      "@@@STEP_LOG_LINE@reproducing_step.json@  \"strategy\": \"repeat\", @@@",
+      "@@@STEP_LOG_LINE@reproducing_step.json@  \"task_ui_link\": \"https://example.swarmingserver.appspot.com/task?id=0\", @@@",
       "@@@STEP_LOG_LINE@reproducing_step.json@  \"test_binary\": {@@@",
+      "@@@STEP_LOG_LINE@reproducing_step.json@    \"builder\": null, @@@",
       "@@@STEP_LOG_LINE@reproducing_step.json@    \"cas_input_root\": \"b7c329e532e221e23809ba23f9af5b309aa17d490d845580207493d381998bd9/24\", @@@",
       "@@@STEP_LOG_LINE@reproducing_step.json@    \"class_name\": \"GTestTestBinary\", @@@",
       "@@@STEP_LOG_LINE@reproducing_step.json@    \"command\": [@@@",
@@ -1756,21 +1736,23 @@
       "@@@STEP_LOG_LINE@reproducing_step.json@      \"MockUnitTests.PassTest\"@@@",
       "@@@STEP_LOG_LINE@reproducing_step.json@    ]@@@",
       "@@@STEP_LOG_LINE@reproducing_step.json@  }, @@@",
-      "@@@STEP_LOG_LINE@reproducing_step.json@  \"total_retries\": 30@@@",
+      "@@@STEP_LOG_LINE@reproducing_step.json@  \"total_run_cnt\": 30@@@",
       "@@@STEP_LOG_LINE@reproducing_step.json@}@@@",
       "@@@STEP_LOG_END@reproducing_step.json@@@",
       "@@@STEP_LOG_LINE@builder_results.json@{@@@",
       "@@@STEP_LOG_LINE@builder_results.json@  \"Failing Sample\": [@@@",
+      "@@@STEP_LOG_LINE@builder_results.json@    \"2\", @@@",
       "@@@STEP_LOG_LINE@builder_results.json@    2, @@@",
       "@@@STEP_LOG_LINE@builder_results.json@    2, @@@",
       "@@@STEP_LOG_LINE@builder_results.json@    62.35, @@@",
       "@@@STEP_LOG_LINE@builder_results.json@    null@@@",
       "@@@STEP_LOG_LINE@builder_results.json@  ], @@@",
       "@@@STEP_LOG_LINE@builder_results.json@  \"Win10 Tests x64\": [@@@",
+      "@@@STEP_LOG_LINE@builder_results.json@    \"3\", @@@",
       "@@@STEP_LOG_LINE@builder_results.json@    0, @@@",
       "@@@STEP_LOG_LINE@builder_results.json@    0, @@@",
       "@@@STEP_LOG_LINE@builder_results.json@    0, @@@",
-      "@@@STEP_LOG_LINE@builder_results.json@    \"Not Supported output.json format.\"@@@",
+      "@@@STEP_LOG_LINE@builder_results.json@    \"Not supported output.json format.\"@@@",
       "@@@STEP_LOG_LINE@builder_results.json@  ]@@@",
       "@@@STEP_LOG_LINE@builder_results.json@}@@@",
       "@@@STEP_LOG_END@builder_results.json@@@"

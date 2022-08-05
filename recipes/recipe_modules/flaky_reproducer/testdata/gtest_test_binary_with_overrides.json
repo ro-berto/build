@@ -1,4 +1,5 @@
 {
+  "builder": "Win11 Tests x64",
   "class_name": "GTestTestBinary",
   "cas_input_root": "b7c329e532e221e23809ba23f9af5b309aa17d490d845580207493d381998bd9/24",
   "command": [

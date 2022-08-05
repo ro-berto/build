@@ -161,7 +161,8 @@
   "name": "led: base_unittests",
   "tags": [
     "authenticated:user:chromium-ci-builder@chops-service-accounts.iam.gserviceaccount.com",
-    "bucket:ci"
+    "bucket:ci",
+    "buildername:Win11 Tests x64"
   ],
   "priority": "25",
   "service_account": "none",

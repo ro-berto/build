@@ -32,7 +32,7 @@ class ParallelStrategy(BaseStrategy):
   # Parallel multiples to increase the load.
   PARALLEL_JOBS_MULTIPLES = 1.5
   # Repeats for single iteration.
-  MAX_REPEAT = 20
+  MAX_REPEAT = 10
   MIN_REPEAT = 5
   # Max iterations before reproduced 3 times.
   MAX_ITERATIONS = 10
@@ -118,6 +118,7 @@ class ParallelStrategy(BaseStrategy):
                                                 self.GROUP_VERIFY_TIME_LIMIT)
     if not best_group:
       return ReproducingStep(self.test_binary, reproducing_rate=0)
+    best_group_step = self._generate_reproduce_step(best_group)
 
     # Step 2: Verify individual test.
     logging.info('best_group.tests=%r, reproduced=%d, test_history=%d',
@@ -125,9 +126,12 @@ class ParallelStrategy(BaseStrategy):
                  len(best_group.test_history))
     best_test = self._find_best_parallel_group(
         [[t] for t in best_group.tests], self.SINGLE_TEST_VERIFY_TIME_LIMIT)
-    if best_test:
-      return self._generate_reproduce_step(best_test)
-    return self._generate_reproduce_step(best_group)
+    if not best_test:
+      return best_group_step
+    best_test_step = self._generate_reproduce_step(best_test)
+    if best_test_step.better_than(best_group_step):
+      return best_test_step
+    return best_group_step
 
   def _find_best_parallel_group(self, groups, time_limit):
     """Verify the reproduction of groups and return the best."""
@@ -186,7 +190,7 @@ class ParallelStrategy(BaseStrategy):
         group_result.test_binary.with_repeat(suggested_repeat),
         reproducing_rate=reproducing_rate,
         duration=single_round_runtime * suggested_repeat,
-        strategy_name=self.name,
+        strategy=self.name,
         reproduced_cnt=group_result.reproduced,
         total_run_cnt=len(group_result.test_history))
 

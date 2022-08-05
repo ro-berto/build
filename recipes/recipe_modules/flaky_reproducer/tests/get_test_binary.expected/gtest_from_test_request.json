@@ -4,6 +4,7 @@
     "name": "get_test_binary",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@test_binary.json@{@@@",
+      "@@@STEP_LOG_LINE@test_binary.json@  \"builder\": \"Win11 Tests x64\", @@@",
       "@@@STEP_LOG_LINE@test_binary.json@  \"cas_input_root\": \"b7c329e532e221e23809ba23f9af5b309aa17d490d845580207493d381998bd9/24\", @@@",
       "@@@STEP_LOG_LINE@test_binary.json@  \"class_name\": \"GTestTestBinary\", @@@",
       "@@@STEP_LOG_LINE@test_binary.json@  \"command\": [@@@",
@@ -37,16 +38,9 @@
   },
   {
     "cmd": [],
-    "name": "get_test_binary.get_test_binary",
+    "name": "get_test_binary.install infra/tools/luci/swarming",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "get_test_binary.get_test_binary.install infra/tools/luci/swarming",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {
@@ -62,9 +56,9 @@
       "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
     ],
     "infra_step": true,
-    "name": "get_test_binary.get_test_binary.install infra/tools/luci/swarming.ensure package directory",
+    "name": "get_test_binary.install infra/tools/luci/swarming.ensure package directory",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@3@@@"
+      "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {
@@ -81,9 +75,9 @@
       "/path/to/tmp/json"
     ],
     "infra_step": true,
-    "name": "get_test_binary.get_test_binary.install infra/tools/luci/swarming.ensure_installed",
+    "name": "get_test_binary.install infra/tools/luci/swarming.ensure_installed",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@3@@@",
+      "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
@@ -106,9 +100,9 @@
       "54321fffffabc123"
     ],
     "infra_step": true,
-    "name": "get_test_binary.get_test_binary.show request",
+    "name": "get_test_binary.get_test_binary from 54321fffffabc123",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"name\": \"led: base_unittests\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"priority\": \"25\", @@@",
@@ -119,7 +113,8 @@
       "@@@STEP_LOG_LINE@json.output@  \"service_account\": \"none\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    \"authenticated:user:chromium-ci-builder@chops-service-accounts.iam.gserviceaccount.com\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"bucket:ci\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"bucket:ci\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"buildername:Win11 Tests x64\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"task_slices\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",

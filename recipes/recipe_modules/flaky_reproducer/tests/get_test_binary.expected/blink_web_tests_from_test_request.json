@@ -4,6 +4,7 @@
     "name": "get_test_binary",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@test_binary.json@{@@@",
+      "@@@STEP_LOG_LINE@test_binary.json@  \"builder\": null, @@@",
       "@@@STEP_LOG_LINE@test_binary.json@  \"cas_input_root\": \"67951a7296da79ca60164871b38bde19a89085df0a6836955ff6c68a8188dd35/565\", @@@",
       "@@@STEP_LOG_LINE@test_binary.json@  \"class_name\": \"BlinkWebTestsBinary\", @@@",
       "@@@STEP_LOG_LINE@test_binary.json@  \"command\": [@@@",
@@ -28,16 +29,9 @@
   },
   {
     "cmd": [],
-    "name": "get_test_binary.get_test_binary",
+    "name": "get_test_binary.install infra/tools/luci/swarming",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "get_test_binary.get_test_binary.install infra/tools/luci/swarming",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {
@@ -53,9 +47,9 @@
       "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
     ],
     "infra_step": true,
-    "name": "get_test_binary.get_test_binary.install infra/tools/luci/swarming.ensure package directory",
+    "name": "get_test_binary.install infra/tools/luci/swarming.ensure package directory",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@3@@@"
+      "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {
@@ -72,9 +66,9 @@
       "/path/to/tmp/json"
     ],
     "infra_step": true,
-    "name": "get_test_binary.get_test_binary.install infra/tools/luci/swarming.ensure_installed",
+    "name": "get_test_binary.install infra/tools/luci/swarming.ensure_installed",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@3@@@",
+      "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
@@ -97,9 +91,9 @@
       "54321fffffabc123"
     ],
     "infra_step": true,
-    "name": "get_test_binary.get_test_binary.show request",
+    "name": "get_test_binary.get_test_binary from 54321fffffabc123",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"authenticated\": \"user:chromium-orchestrator@chops-service-accounts.iam.gserviceaccount.com\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"bot_ping_tolerance_secs\": \"1200\", @@@",

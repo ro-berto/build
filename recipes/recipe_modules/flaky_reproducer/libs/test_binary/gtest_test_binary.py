@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import os
 from . import utils
 from .base_test_binary import (BaseTestBinary, TestBinaryWithBatchMixin,
                                TestBinaryWithParallelMixin)
@@ -26,11 +27,13 @@ class GTestTestBinary(TestBinaryWithBatchMixin, TestBinaryWithParallelMixin,
                                                gtest_strip_switches)
     # Should strip all wrappers
     is_local = len(ret.command) >= 1 and ret.command[0].startswith('.')
-    is_test_env_py = len(ret.command) >= 2 and ret.command[1].strip('./\\') in (
-        'testing/test_env.py', 'testing/xvfb.py')
+    known_wrappers = set(('test_env.py', 'xvfb.py', 'logdog_wrapper.py'))
+    is_test_env_py = (
+        len(ret.command) >= 2 and
+        os.path.basename(ret.command[1]) in known_wrappers)
     if not (is_local or is_test_env_py):
-      raise ValueError('Command line contains unknown wrapper: {0}'.format(
-          ret.command))
+      raise NotImplementedError(
+          'Command line contains unknown wrapper: {0}'.format(ret.command))
 
     gtest_env_keys = ('GTEST_SHARD_INDEX', 'GTEST_TOTAL_SHARDS')
     ret.env_vars = utils.strip_env_vars(ret.env_vars, gtest_env_keys)

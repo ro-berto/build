@@ -136,7 +136,7 @@ def GenTests(api):
                   api.flaky_reproducer.get_test_data('gtest_good_output.json'),
           })),
       api.step_data(
-          'get_test_binary.show request',
+          'get_test_binary from 54321fffffabc123',
           api.json.output_stream(
               api.json.loads(
                   api.flaky_reproducer.get_test_data(
@@ -144,7 +144,7 @@ def GenTests(api):
       api.step_data('collect strategy results',
                     api.swarming.collect(success_swarming_results)),
       api.step_data(
-          'load ReproducingStep',
+          'collect_strategy_results.load ReproducingStep',
           api.file.read_json(
               api.json.loads(
                   api.flaky_reproducer.get_test_data(
@@ -159,7 +159,7 @@ def GenTests(api):
           test_running_history,
           step_name='verify_reproducing_step.get_test_result_history'),
       api.step_data(
-          'verify_reproducing_step.get_test_binary.show request',
+          'verify_reproducing_step.get_test_binary from 54321fffffabc001',
           api.json.output_stream(
               api.json.loads(
                   api.flaky_reproducer.get_test_data(
@@ -225,7 +225,7 @@ def GenTests(api):
                   api.flaky_reproducer.get_test_data('gtest_good_output.json'),
           })),
       api.step_data(
-          'get_test_binary.show request',
+          'get_test_binary from 54321fffffabc123',
           api.json.output_stream(
               api.json.loads(
                   api.flaky_reproducer.get_test_data(
@@ -245,4 +245,11 @@ def GenTests(api):
               'output.json':
                   api.flaky_reproducer.get_test_data('gtest_good_output.json'),
           })),
+  )
+
+  yield api.test(
+      'unknown_result_summary',
+      api.properties(task_id='54321fffffabc123', test_name='NotExists.Test'),
+      api.step_data('get_test_result_summary.download swarming outputs',
+                    api.raw_io.output_dir({'output.json': b'{}'})),
   )

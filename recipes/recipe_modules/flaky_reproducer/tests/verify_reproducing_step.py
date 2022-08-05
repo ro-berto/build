@@ -33,7 +33,14 @@ def RunSteps(api, task_id, failing_sample, reproducing_step_data):
     reproducing_step = None
   builder_results = api.flaky_reproducer.verify_reproducing_step(
       task_id, failing_sample, reproducing_step)
-  api.flaky_reproducer.summarize_results(reproducing_step, builder_results)
+  api.flaky_reproducer.summarize_results(
+      task_id=task_id,
+      failing_sample=failing_sample,
+      test_binary=reproducing_step and reproducing_step.test_binary or None,
+      reproducing_step=reproducing_step,
+      all_reproducing_steps=([] if reproducing_step is None else
+                             [reproducing_step]),
+      builder_results=builder_results)
 
 
 import re
@@ -136,8 +143,10 @@ def GenTests(api):
       api.properties(
           task_id='some-task-id',
           failing_sample=UnexpectedTestResult('MockUnitTests.FailTest')),
-      api.post_check(post_process.StepTextEquals, 'summarize_results',
-                     'Not reproducible.'),
+      api.post_check(lambda check, steps: check(
+          steps['summarize_results'].step_summary_text,
+          re.search(r"could NOT be reproduced.", steps['summarize_results'].
+                    step_summary_text))),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -159,7 +168,7 @@ def GenTests(api):
           test_running_history,
           step_name='verify_reproducing_step.get_test_result_history'),
       api.step_data(
-          'verify_reproducing_step.get_test_binary.show request',
+          'verify_reproducing_step.get_test_binary from 54321fffffabc001',
           api.json.output_stream(
               api.json.loads(
                   api.flaky_reproducer.get_test_data(
@@ -174,11 +183,11 @@ def GenTests(api):
           ])),
       api.post_check(lambda check, steps: check(
           steps['summarize_results'].step_summary_text,
-          re.search(r"Failing Sample failed:", steps['summarize_results'].
+          re.search(r"Failing Sample\s+failed:", steps['summarize_results'].
                     step_summary_text))),
       api.post_check(lambda check, steps: check(
           steps['summarize_results'].step_summary_text,
-          re.search(r"Linux Tests failed:", steps['summarize_results'].
+          re.search(r"Linux Tests\s+failed:", steps['summarize_results'].
                     step_summary_text))),
       api.post_check(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
@@ -211,7 +220,7 @@ def GenTests(api):
           test_running_history,
           step_name='verify_reproducing_step.get_test_result_history'),
       api.step_data(
-          'verify_reproducing_step.get_test_binary.show request',
+          'verify_reproducing_step.get_test_binary from 54321fffffabc001',
           api.json.output_stream(
               api.json.loads(
                   api.flaky_reproducer.get_test_data(
@@ -250,12 +259,31 @@ def GenTests(api):
       api.resultdb.get_test_result_history(
           test_running_history,
           step_name='verify_reproducing_step.get_test_result_history'),
-      api.step_data('verify_reproducing_step.get_test_binary.show request',
-                    api.json.output_stream(bad_task_request)),
+      api.step_data(
+          'verify_reproducing_step.get_test_binary from 54321fffffabc001',
+          api.json.output_stream(bad_task_request)),
       api.post_check(lambda check, steps: check(
           steps['summarize_results'].step_summary_text,
           re.search(r"Not Supported test binary: unknown wrapper", steps[
               'summarize_results'].step_summary_text))),
       api.post_check(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  not_reproduced_step = api.json.loads(
+      api.flaky_reproducer.get_test_data('reproducing_step.json'))
+  not_reproduced_step['reproducing_rate'] = 0
+  not_reproduced_step['reproduced_cnt'] = 0
+  yield api.test(
+      'report_not_reproduced_strategy',
+      api.properties(
+          task_id='some-task-id',
+          failing_sample=UnexpectedTestResult('MockUnitTests.FailTest'),
+          reproducing_step_data=not_reproduced_step),
+      api.post_check(post_process.StatusSuccess),
+      api.post_check(lambda check, steps: check(
+          steps['summarize_results'].step_summary_text,
+          re.search(r"strategy not reproduced", steps['summarize_results'].
+                    step_summary_text))),
       api.post_process(post_process.DropExpectation),
   )

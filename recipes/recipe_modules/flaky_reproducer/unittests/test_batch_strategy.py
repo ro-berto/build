@@ -120,11 +120,14 @@ class BatchStrategyTest(unittest.TestCase, GenerateResultSummaryMixin):
 
     failing_sample = self.result_summary.get_failing_sample(
         'MockUnitTests.CrashTest')
-    # 1 mins, 1/5 of SINGLE_ROUND_SECONDS
+    # 1 mins, 1/5 of SINGLE_ROUND_SECONDS, this will limit the repeat to 5
     failing_sample.duration = 60 * 1000
 
     strategy = self.get_strategy('MockUnitTests.CrashTest')
     reproducing_step = strategy.run()
+    # 5 repeat runs for ['FailTest', 'PassTest', 'CrashTest'] and reproduced
+    # 5 repeat runs for ['PassTest', 'CrashTest'] but not reproduced
+    # 5 repeat runs for ['FailTest', 'CrashTest'] and reproduced
     self.assertEqual(mock_test_binary_run.call_count, 15)
     self.assertEqual(reproducing_step.test_binary.tests,
                      ['MockUnitTests.FailTest', 'MockUnitTests.CrashTest'])
@@ -136,3 +139,26 @@ class BatchStrategyTest(unittest.TestCase, GenerateResultSummaryMixin):
     with self.assertRaisesRegex(
         KeyError, "Target test wasn't executed during reproducing"):
       strategy.run()
+
+  @patch.object(GTestTestBinary, 'run', autospec=True)
+  def test_strategy_should_only_verify_the_second_half(self,
+                                                       mock_test_binary_run):
+    # The strategy should verify CrashTest + PassTest with FailTest
+    test_self = self
+
+    def mock_test_binary_run_side_effect(self, *args, **kwargs):
+      assert 'MockUnitTests.PassTest' in self.tests
+      return test_self.generate_result_summary(
+          'MockUnitTests.CrashTest',
+          'C',
+      )
+
+    mock_test_binary_run.side_effect = mock_test_binary_run_side_effect
+
+    strategy = self.get_strategy('MockUnitTests.CrashTest')
+    reproducing_step = strategy.run()
+    # 10 repeat runs for ['FailTest', 'PassTest', 'CrashTest'] and reproduced
+    # 10 repeat runs for ['PassTest', 'CrashTest'] and reproduced
+    self.assertEqual(mock_test_binary_run.call_count, 20)
+    self.assertEqual(reproducing_step.test_binary.tests,
+                     ['MockUnitTests.PassTest', 'MockUnitTests.CrashTest'])

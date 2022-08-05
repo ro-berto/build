@@ -30,8 +30,9 @@ class RepeatStrategyTest(unittest.TestCase, GenerateResultSummaryMixin):
         'MockUnitTests.AnyTest', 'PPPFP', duration=2)
     reproducing_step = strategy.run()
     self.assertEqual(mock_test_binary_run.call_count, 3)
-    self.assertEqual(reproducing_step.debug_info['reproduced_cnt'], 3)
-    self.assertEqual(reproducing_step.debug_info['total_retries'], 15)
+    self.assertEqual(reproducing_step.reproduced_cnt, 3)
+    # The P after F is ignored.
+    self.assertEqual(reproducing_step.total_run_cnt, 12)
 
   @patch.object(GTestTestBinary, 'run')
   def test_run_raise_error_if_no_test_executed(self, mock_test_binary_run):
@@ -50,9 +51,10 @@ class RepeatStrategyTest(unittest.TestCase, GenerateResultSummaryMixin):
     mock_test_binary_run.return_value = self.generate_result_summary(
         'MockUnitTests.FailTest', 'PPPFP')
     reproducing_step = strategy.run()
-    self.assertEqual(mock_test_binary_run.call_count, 200)
-    self.assertEqual(reproducing_step.debug_info['reproduced_cnt'], 0)
-    self.assertEqual(reproducing_step.debug_info['total_retries'], 1000)
+    # MAX_RETRIES / len('PPPFP')
+    self.assertEqual(mock_test_binary_run.call_count, 40)
+    self.assertEqual(reproducing_step.reproduced_cnt, 0)
+    self.assertEqual(reproducing_step.total_run_cnt, strategy.MAX_RETRIES)
 
   @patch.object(GTestTestBinary, 'run')
   def test_run_reproduced_message_match(self, mock_test_binary_run):
@@ -65,8 +67,9 @@ class RepeatStrategyTest(unittest.TestCase, GenerateResultSummaryMixin):
     )
     reproducing_step = strategy.run()
     self.assertEqual(mock_test_binary_run.call_count, 3)
-    self.assertEqual(reproducing_step.debug_info['reproduced_cnt'], 3)
-    self.assertEqual(reproducing_step.debug_info['total_retries'], 15)
+    self.assertEqual(reproducing_step.reproduced_cnt, 3)
+    # P after F is ignored.
+    self.assertEqual(reproducing_step.total_run_cnt, 12)
 
   @patch('time.time')
   @patch.object(GTestTestBinary, 'run')
@@ -81,8 +84,9 @@ class RepeatStrategyTest(unittest.TestCase, GenerateResultSummaryMixin):
           'MockUnitTests.AnyTest', 'PPPPP', duration=2)
 
     mock_test_binary_run.side_effect = mocked_test_binary_run
-    strategy.run(timeout=50 * 60)
-    self.assertEqual(mock_test_binary_run.call_count, 45)
+    strategy.run(timeout=15 * 60)
+    # (timeout - SINGLE_ROUND_SECONDS) / (mock_time per run = 60)
+    self.assertEqual(mock_test_binary_run.call_count, 10)
 
   def test_generate_reproducing_step(self):
     strategy = RepeatStrategy(self.test_binary, self.result_summary,

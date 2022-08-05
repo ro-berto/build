@@ -42,6 +42,7 @@
     "--cfi-diag=0",
     "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
   ],
+  "builder": "Win11 Tests x64",
   "cwd": "out\\Release_x64",
   "dimensions": {
     "cpu": "x86-64",

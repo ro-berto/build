@@ -16,12 +16,13 @@ class ReproducingStepTest(unittest.TestCase):
     step = ReproducingStep.from_jsonish(json_data)
     self.assertEqual(step.reproducing_rate, 0.9)
     self.assertEqual(step.duration, 123)
-    self.assertEqual(step.debug_info['reproduced_cnt'], 1)
-    self.assertEqual(step.debug_info['total_retries'], 30)
+    self.assertEqual(step.reproduced_cnt, 1)
+    self.assertEqual(step.total_run_cnt, 30)
     self.assertTrue(step)
     return step
 
   def test_to_jsonish(self):
+    self.maxDiff = None
     step = self.test_from_jsonish()
     json_data = json.loads(get_test_data('reproducing_step.json'))
     self.assertDictEqual(step.to_jsonish(), json_data)
@@ -31,8 +32,8 @@ class ReproducingStepTest(unittest.TestCase):
     step = self.test_from_jsonish()
     self.assertEqual(
         step.readable_info(),
-        ('This failure could be reproduced (90.0%) with command on'
-         ' Windows-11-22000 with repeat:\n\n'
+        ('The failure could be reproduced (90.0%) with command'
+         ' with repeat strategy:\n\n'
          'vpython3 ../../testing/test_env.py ./base_unittests.exe'
          ' --test-launcher-bot-mode --asan=0 --lsan=0 --msan=0 --tsan=0'
          ' --cfi-diag=0 --test-launcher-retry-limit=0 '
@@ -44,11 +45,13 @@ class ReproducingStepTest(unittest.TestCase):
     self.maxDiff = None
     step = self.test_from_jsonish()
     step.reproducing_rate = 0
-    self.assertEqual(step.readable_info(),
-                     'This failure was NOT reproduced on Windows-11-22000.')
+    self.assertEqual(step.readable_info(), 'This failure was NOT reproduced.')
 
   def test_better_than(self):
-    step_0 = ReproducingStep(None, 0)
+    step_0 = ReproducingStep(
+        None,
+        0,
+    )
     step_50 = ReproducingStep(None, 0.5, 123)
     step_60 = ReproducingStep(None, 0.6, 123)
     step_90 = ReproducingStep(None, 0.9, 12)
@@ -60,3 +63,11 @@ class ReproducingStepTest(unittest.TestCase):
     self.assertTrue(step_90.better_than(step_60))
     self.assertTrue(step_90.better_than(step_92))
     self.assertTrue(step_95.better_than(step_90))
+
+  def test_better_than_reproducing_cnt(self):
+    step_0 = ReproducingStep(None, 0, 0, 5)
+    step_50 = ReproducingStep(None, 0.5, 123, 7)
+    step_60 = ReproducingStep(None, 0.6, 123, 1)
+    self.assertTrue(step_50.better_than(step_0))
+    self.assertTrue(step_50.better_than(step_60))
+    self.assertTrue(step_60.better_than(step_0))

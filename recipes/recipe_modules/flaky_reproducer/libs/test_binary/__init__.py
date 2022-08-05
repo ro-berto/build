@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import re
+
 from .base_test_binary import (BaseTestBinary, TestBinaryWithBatchMixin,
                                TestBinaryWithParallelMixin)
 from .gtest_test_binary import GTestTestBinary
@@ -20,7 +22,12 @@ def create_test_binary_from_task_request(task_request):
     raise ValueError("No TaskSlice found in the TaskRequest.")
   request_slice = task_request[-1]
   command = ' '.join(request_slice.command)
-  if 'result_adapter gtest' in command:
+  if re.search('result_adapter(.exe)? gtest', command):
+    return GTestTestBinary.from_task_request(task_request)
+  # android device tests (e.g. android-marshmallow-x86-rel) are not using
+  # result_adapter, detecting --test-launcher-summary-output as a workaround
+  # as it doesn't exists in blink_web_tests.
+  elif '--test-launcher-summary-output' in command:
     return GTestTestBinary.from_task_request(task_request)
   elif '--write-run-histories-to=' in command:
     return BlinkWebTestsBinary.from_task_request(task_request)

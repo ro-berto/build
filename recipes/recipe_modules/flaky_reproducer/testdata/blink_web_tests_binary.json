@@ -13,6 +13,7 @@
   "env_vars": {
     "ISOLATED_OUTDIR": "${ISOLATED_OUTDIR}"
   },
+  "builder": null,
   "parallel_jobs": null,
   "repeat": null,
   "single_batch": null,

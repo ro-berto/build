@@ -50,7 +50,7 @@ class GTestTestBinaryTest(unittest.TestCase):
     ])
 
     test_binary = GTestTestBinary(['rdb', '--', 'echo', '123'])
-    with self.assertRaisesRegex(ValueError,
+    with self.assertRaisesRegex(NotImplementedError,
                                 'Command line contains unknown wrapper:'):
       test_binary.strip_for_bots()
 

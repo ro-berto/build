@@ -14,8 +14,8 @@ from .reproducing_step import ReproducingStep
 class RepeatStrategy(BaseStrategy):
   name = 'repeat'
 
-  MAX_RETRIES = 1000
-  SINGLE_ROUND_RETRIES = 100
+  MAX_RETRIES = 200
+  SINGLE_ROUND_RETRIES = 20
   SINGLE_ROUND_SECONDS = 5 * 60
 
   def run(self, timeout=45 * 60):
@@ -28,8 +28,10 @@ class RepeatStrategy(BaseStrategy):
     logging.info('Running %s strategy for %s with reason: %s', self.name,
                  self.test_name, failing_sample.primary_error_message)
     single_round_retries = self._calc_single_round_retries()
+    iteration = 0
     while (reproduced < 3 and len(running_history) < self.MAX_RETRIES and
            time.time() < deadline):
+      iteration += 1
       result = (
           self.test_binary  # go/pyformat-break
           .with_tests([self.test_name])  #
@@ -40,10 +42,17 @@ class RepeatStrategy(BaseStrategy):
         raise KeyError(
             "Target test wasn't executed during reproducing: {0}".format(
                 self.test_name))
+      # Ignore the runs after first failure.
+      # As flaky reproducer, we care about the first reproduction. Tests could
+      # fall into a bad state after first failure that cause false high
+      # reproducing rate.
       for r in test_history:
+        running_history.append(r)
         if failing_sample.similar_with(r):
           reproduced += 1
-      running_history += test_history
+          break
+      logging.info('iteration %d: reproduced=%d/%d', iteration, reproduced,
+                   len(running_history))
       single_round_retries = self._calc_single_round_retries(running_history)
     return self._generate_reproducing_step(reproduced, running_history)
 
@@ -83,6 +92,6 @@ class RepeatStrategy(BaseStrategy):
         test_binary,
         reproducing_rate=reproducing_rate,
         duration=avg_duration * suggested_repeat,
-        strategy_name=self.name,
+        strategy=self.name,
         reproduced_cnt=reproduced_cnt,
-        total_retries=len(running_history))
+        total_run_cnt=len(running_history))

@@ -66,14 +66,19 @@ class BatchStrategy(BaseStrategy):
         test_binary,
         reproducing_rate=reproduced * 1.0 / len(test_history),
         duration=total_time * 1000.0 / self.repeat,
-        strategy_name=self.name,
+        strategy=self.name,
         reproduced_cnt=reproduced,
         total_run_cnt=len(test_history))
     if not reproduce_step or len(tests) == 1:
       return reproduce_step
     # bisect tests to reduce tests needed to reproduce.
-    reproduce_step_low = self._find_best_batch_tests(tests[:len(tests) // 2])
+    # The tests that runs closer to the failing sample have higher possibility
+    # causes the flake.
     reproduce_step_high = self._find_best_batch_tests(tests[len(tests) // 2:])
+    # Skip verify the first half if it has already reproduced.
+    if reproduce_step_high and reproduce_step_high.reproducing_rate == 1.0:
+      return reproduce_step_high
+    reproduce_step_low = self._find_best_batch_tests(tests[:len(tests) // 2])
     if reproduce_step_low or reproduce_step_high:
       return (reproduce_step_low
               if reproduce_step_low.better_than(reproduce_step_high) else

@@ -8,17 +8,9 @@
   },
   {
     "cmd": [],
-    "name": "get_test_binary.get_test_binary",
+    "name": "get_test_binary.install infra/tools/luci/swarming",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_EXCEPTION@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "get_test_binary.get_test_binary.install infra/tools/luci/swarming",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -34,9 +26,9 @@
       "[START_DIR]/cipd_tool/infra/tools/luci/swarming/swarming_module_pin"
     ],
     "infra_step": true,
-    "name": "get_test_binary.get_test_binary.install infra/tools/luci/swarming.ensure package directory",
+    "name": "get_test_binary.install infra/tools/luci/swarming.ensure package directory",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@3@@@"
+      "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {
@@ -53,9 +45,9 @@
       "/path/to/tmp/json"
     ],
     "infra_step": true,
-    "name": "get_test_binary.get_test_binary.install infra/tools/luci/swarming.ensure_installed",
+    "name": "get_test_binary.install infra/tools/luci/swarming.ensure_installed",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@3@@@",
+      "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
@@ -78,9 +70,9 @@
       "54321fffffabc123"
     ],
     "infra_step": true,
-    "name": "get_test_binary.get_test_binary.show request",
+    "name": "get_test_binary.get_test_binary from 54321fffffabc123",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"name\": \"led: base_unittests\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"priority\": \"25\", @@@",
@@ -91,7 +83,8 @@
       "@@@STEP_LOG_LINE@json.output@  \"service_account\": \"none\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tags\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    \"authenticated:user:chromium-ci-builder@chops-service-accounts.iam.gserviceaccount.com\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"bucket:ci\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"bucket:ci\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"buildername:Win11 Tests x64\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"task_slices\": []@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -108,11 +101,9 @@
       "Traceback (most recent call last):",
       "  File \"RECIPE_REPO[build]/recipes/recipe_modules/flaky_reproducer/tests/get_test_binary.py\", line 23, in RunSteps",
       "    test_binary = api.flaky_reproducer.get_test_binary(task_id)",
-      "  File \"RECIPE_REPO[build]/recipes/recipe_modules/flaky_reproducer/api.py\", line 24, in wrapper",
-      "    return func(self, *args, **kwargs)",
       "  File \"RECIPE_REPO[build]/recipes/recipe_modules/flaky_reproducer/api.py\", line 107, in get_test_binary",
       "    test_binary = create_test_binary_from_task_request(task_request)",
-      "  File \"RECIPE_REPO[build]/recipes/recipe_modules/flaky_reproducer/libs/test_binary/__init__.py\", line 20, in create_test_binary_from_task_request",
+      "  File \"RECIPE_REPO[build]/recipes/recipe_modules/flaky_reproducer/libs/test_binary/__init__.py\", line 22, in create_test_binary_from_task_request",
       "    raise ValueError(\"No TaskSlice found in the TaskRequest.\")",
       "ValueError('No TaskSlice found in the TaskRequest.')"
     ]

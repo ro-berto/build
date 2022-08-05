@@ -33,7 +33,7 @@ class BlinkWebTestsBinaryTest(unittest.TestCase):
     self.assertEqual(test_binary.command, ['bin/run_blink_wpt_tests'])
 
     test_binary = BlinkWebTestsBinary(['rdb', '--', 'echo', '123'])
-    with self.assertRaisesRegex(ValueError,
+    with self.assertRaisesRegex(NotImplementedError,
                                 'Command line contains unknown wrapper:'):
       test_binary.strip_for_bots()
 
