@@ -387,7 +387,11 @@ class FlakinessApi(recipe_api.RecipeApi):
     source = self.builder_gs_path(
         builder, experimental=self.m.runtime.is_experimental)
     local_dest = self.m.path.mkstemp()
-    self.m.gsutil.download(self.gs_bucket, source, local_dest)
+    try:
+      self.m.gsutil.download(self.gs_bucket, source, local_dest)
+    except recipe_api.StepFailure:
+      # File may not exist, in which the data has not been precomputed.
+      return self.m.json.loads('{}')
 
     # The output dir must not exist for untar.
     output_dir = self.m.path['cleanup'].join('flake_endorser')
@@ -593,10 +597,21 @@ class FlakinessApi(recipe_api.RecipeApi):
 
       try:
         precomputed_json = self.fetch_precomputed_test_data()
-      except recipe_api.StepFailure:
+      # We return an empty set for errors where we don't want to fail the build
+      # while aborting the current workflow.
+      # Note: InfraFailure is a subclass of StepFailure
+      except recipe_api.InfraFailure:
+        p.status = self.m.step.INFRA_FAILURE
+        p.step_text = ('Failed to parse the precomputed test history. '
+                       'Aborting the flakiness check.')
+        return set()
+
+      if not precomputed_json:
+        p.status = self.m.step.EXCEPTION
         p.step_text = ('The current try builder may not have test data '
                        'precomputed.')
         return set()
+
       historical_tests = self.process_precomputed_test_data(
           precomputed_json, set(excluded_invs))
       p.logs['historical_tests'] = join_tests(historical_tests)
@@ -642,10 +657,17 @@ class FlakinessApi(recipe_api.RecipeApi):
 
       # Cross-referencing the potential new tests with ResultDB to ensure they
       # are not present in existing builds.
-      new_tests = self.verify_new_tests(
-          prelim_tests=preliminary_new_tests,
-          excluded_invs=excluded_invs,
-          builder=builder_name)
+      try:
+        new_tests = self.verify_new_tests(
+            prelim_tests=preliminary_new_tests,
+            excluded_invs=excluded_invs,
+            builder=builder_name)
+      except recipe_api.InfraFailure:
+        p.status = self.m.step.INFRA_FAILURE
+        p.step_text = ('Failed to verify if new tests exist. '
+                       'Aborting flakiness check.')
+        return set()
+
       p.logs['new_tests'] = ('new tests: \n\n{}'.format('\n'.join([
           'test_id: {}, variant_hash: {}, experimental: {},'
           ' duration_milliseconds: {}'.format(t.test_id, t.variant_hash,

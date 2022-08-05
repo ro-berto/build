@@ -33,6 +33,7 @@ DEPS = [
     'recipe_engine/json',
     'recipe_engine/properties',
     'recipe_engine/resultdb',
+    'recipe_engine/step',
     'test_utils',
 ]
 
@@ -188,6 +189,40 @@ def GenTests(api):
   )
 
   yield api.test(
+      'cross reference infra failure',
+      api.buildbucket.build(basic_build),
+      api.flakiness(
+          check_for_flakiness=True,
+          build_count=10,
+          historical_query_count=2,
+          current_query_count=2,
+      ),
+      api.buildbucket.simulated_search_results(
+          builds=[basic_build],
+          step_name=('searching_for_new_tests.fetching associated builds with '
+                     'current gerrit patchset')),
+      api.step_data(
+          'searching_for_new_tests.process precomputed test history',
+          api.file.read_json([{
+              'test_id': 'ninja://sample/test:some_test/TestSuite.Test2',
+              'variant_hash': '2hash',
+              'is_experimental': True,
+              'invocation': ['invocation/3']
+          }, {
+              'test_id': 'ninja://sample/test:some_test/TestSuite.Test0',
+              'variant_hash': '0hash',
+              'tags': '[{"key":"step_name","value":"some test (with patch)"}]',
+              'invocation': ['invocation/1']
+          }])),
+      api.override_step_data(
+          ('searching_for_new_tests.'
+           'cross reference newly identified tests against ResultDB'),
+          retcode=1),
+      # overall build status should remain unaffected by this.
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation))
+
+  yield api.test(
       'no identification',
       api.buildbucket.try_build(
           'chromium',
@@ -225,6 +260,34 @@ def GenTests(api):
           'The current try builder may not have test data precomputed.'),
       api.post_process(post_process.DoesNotRunRE, '.*unpack.*',
                        '.*process precomputed test history.*'),
+      # overall build status should remain unaffected by this.
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'infra_failure_json_parsing',
+      api.buildbucket.try_build(
+          'chromium',
+          'mac',
+          git_repo='https://chromium.googlesource.com/chromium/src',
+          change_number=91827,
+          patch_set=1),
+      api.flakiness(
+          check_for_flakiness=True,
+          build_count=10,
+          historical_query_count=2,
+          current_query_count=2,
+      ),
+      api.override_step_data(
+          'searching_for_new_tests.process precomputed test history',
+          retcode=1),
+      api.post_process(post_process.StepTextEquals, 'searching_for_new_tests',
+                       ('Failed to parse the precomputed test history. '
+                        'Aborting the flakiness check.')),
+      api.post_process(post_process.StepException, 'searching_for_new_tests'),
+      # overall build status should remain unaffected by this.
+      api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
 
