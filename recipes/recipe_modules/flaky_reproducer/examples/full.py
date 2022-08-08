@@ -19,7 +19,11 @@ DEPS = [
 PROPERTIES = {
     'task_id':
         Property(default=None, kind=str),
+    'build_id':
+        Property(default=None, kind=str),
     'test_name':
+        Property(default=None, kind=str),
+    'test_id':
         Property(default=None, kind=str),
     'trigger':
         Property(
@@ -31,7 +35,7 @@ PROPERTIES = {
 
 def RunSteps(api, trigger, task_id, test_name):
   api.flaky_reproducer.set_config(trigger)
-  return api.flaky_reproducer.run(task_id, test_name)
+  return api.flaky_reproducer.run(task_id=task_id, test_name=test_name)
 
 
 from google.protobuf import timestamp_pb2

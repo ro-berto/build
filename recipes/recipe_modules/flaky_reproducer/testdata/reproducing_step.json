@@ -1,6 +1,6 @@
 {
   "test_binary": {
-    "builder": null,
+    "builder": "Linux Tests",
     "class_name": "GTestTestBinary",
     "command": [
       "vpython3",

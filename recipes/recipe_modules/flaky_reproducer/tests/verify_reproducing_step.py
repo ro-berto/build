@@ -183,8 +183,8 @@ def GenTests(api):
           ])),
       api.post_check(lambda check, steps: check(
           steps['summarize_results'].step_summary_text,
-          re.search(r"Failing Sample\s+failed:", steps['summarize_results'].
-                    step_summary_text))),
+          re.search(r"Linux Tests \(failing sample\)\s+failed:", steps[
+              'summarize_results'].step_summary_text))),
       api.post_check(lambda check, steps: check(
           steps['summarize_results'].step_summary_text,
           re.search(r"Linux Tests\s+failed:", steps['summarize_results'].

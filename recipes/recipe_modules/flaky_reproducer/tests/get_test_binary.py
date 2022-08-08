@@ -11,6 +11,7 @@ DEPS = [
     'recipe_engine/step',
     'recipe_engine/json',
     'recipe_engine/properties',
+    'recipe_engine/resultdb',
 ]
 
 PROPERTIES = {

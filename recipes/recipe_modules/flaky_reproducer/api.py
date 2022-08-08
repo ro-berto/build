@@ -271,6 +271,9 @@ class FlakyReproducer(recipe_api.RecipeApi):
     swarming_tasks = {}  # { task_id: (builder, task_meta) }
     # Verify failing builder sample
     builder = 'Failing Sample'
+    if reproducing_step.test_binary.builder:
+      builder = '{0} (failing sample)'.format(
+          reproducing_step.test_binary.builder)
     task = self.launch_verify_in_swarming(builder, failing_sample.test_name,
                                           reproducing_step.test_binary)
     swarming_tasks[task.id] = (builder, task)
@@ -369,7 +372,60 @@ class FlakyReproducer(recipe_api.RecipeApi):
       presentation.logs['builder_results.json'] = self.m.json.dumps(
           builder_results, indent=2)
 
-  def run(self, task_id, test_name):
+  def query_resultdb_for_task_id_and_test_name(self,
+                                               build_id=None,
+                                               task_id=None,
+                                               test_id=None,
+                                               test_name=None):
+    """Query ResultDB for task_id and test_name."""
+    if not (task_id or build_id):
+      raise self.m.step.StepFailure('Must specify task_id or build_id.')
+    if not (test_name or test_id):
+      raise self.m.step.StepFailure('Must specify test_name or test_id.')
+
+    if task_id and test_name:
+      return (task_id, test_name)
+
+    if task_id:
+      inv_id = self._generate_invocation_id_from_task_id(task_id)
+    else:
+      inv_id = self.generate_invocation_id_from_build_id(build_id)
+    inv_map = self.m.resultdb.query([inv_id],
+                                    limit=0,
+                                    tr_fields=['testId', 'tags', 'expected'])
+    invocation = inv_map.get(inv_id, None)
+    if not invocation:
+      raise self.m.step.StepFailure('Cannot retrieve invocation.')
+
+    # Search for first unexpected result or return the last match.
+    def tag_test_name(tags):
+      for tag in tags:
+        if tag.key == 'test_name':
+          return tag.value
+
+    last_test_result = None
+    for test_result in invocation.test_results:
+      if test_id and test_result.test_id == test_id:
+        last_test_result = test_result
+      elif test_name and test_name == tag_test_name(test_result.tags):
+        last_test_result = test_result
+      if last_test_result and not last_test_result.expected:
+        break
+    if not last_test_result:
+      raise self.m.step.StepFailure('Cannot find TestResult.')
+
+    return (self._extract_task_id_from_invocation_name(last_test_result.name),
+            test_name or tag_test_name(last_test_result.tags))
+
+  def run(self, task_id=None, build_id=None, test_name=None, test_id=None):
+    task_id, test_name = self.query_resultdb_for_task_id_and_test_name(
+        task_id=task_id,
+        build_id=build_id,
+        test_name=test_name,
+        test_id=test_id)
+    return self._run(task_id, test_name)
+
+  def _run(self, task_id, test_name):
     """Runs the Chrome Flaky Reproducer as a recipe.
 
     This method is expected to run as a standalone recipe that:
@@ -425,6 +481,9 @@ class FlakyReproducer(recipe_api.RecipeApi):
                  inv_name)
     if m:
       return m.group(1)
+
+  def generate_invocation_id_from_build_id(self, build_id):
+    return 'build-{0}'.format(build_id)
 
   def _generate_invocation_id_from_task_id(self, task_id):
     assert '//' in self.m.swarming.current_server
