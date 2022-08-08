@@ -48,8 +48,8 @@ TRYBOTS = try_spec.TryDatabase.create({
             ),
         'win10.20h2-blink-rel':
             try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
-                buildername='win10.20h2-blink-rel-dummy',
+                builder_group='tryserver.blink',
+                buildername='win10.20h2-blink-rel',
                 retry_failed_shards=False,
             ),
     },

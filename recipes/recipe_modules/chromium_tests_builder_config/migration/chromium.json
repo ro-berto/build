@@ -1042,15 +1042,6 @@
       "chromium.fyi:win10-code-coverage"
     ]
   },
-  "chromium.fyi:win10.20h2-blink-rel-dummy": {
-    "blockers": [
-      "builder 'chromium.fyi:win10.20h2-blink-rel-dummy' does not exist"
-    ],
-    "builders": [
-      "chromium.fyi:win10.20h2-blink-rel-dummy",
-      "tryserver.blink:win10.20h2-blink-rel"
-    ]
-  },
   "chromium.fyi:win32-arm64-rel": {
     "builders": [
       "chromium.fyi:win32-arm64-rel"
@@ -2221,11 +2212,7 @@
     ]
   },
   "tryserver.blink:win10.20h2-blink-rel": {
-    "blockers": [
-      "builder 'chromium.fyi:win10.20h2-blink-rel-dummy' does not exist"
-    ],
     "builders": [
-      "chromium.fyi:win10.20h2-blink-rel-dummy",
       "tryserver.blink:win10.20h2-blink-rel"
     ]
   },
