@@ -6,6 +6,8 @@
 recipe module internally. Should not be used elsewhere.
 """
 
+from __future__ import absolute_import
+from __future__ import print_function
 import json
 import os
 import shutil
@@ -53,7 +55,7 @@ def untar_with_python(tar_file, output):
   """
   with tarfile.open(tar_file, 'r') as tf:
     for name in tf.getnames():
-      print 'Extracting %s' % name
+      print('Extracting %s' % name)
       tf.extract(name, output)
   return 0
 
@@ -73,7 +75,7 @@ def main():
   assert os.path.isabs(output), output
   assert not os.path.exists(output), output
 
-  print 'Untaring %s...' % tar_file
+  print('Untaring %s...' % tar_file)
   exit_code = -1
   try:
     os.makedirs(output)

@@ -6,6 +6,8 @@
 recipe module internally. Should not be used elsewhere.
 """
 
+from __future__ import absolute_import
+from __future__ import print_function
 import json
 import os
 import subprocess
@@ -57,14 +59,14 @@ def tar_with_subprocess(root, output, entries, compression):
   # -cv[z/j]f
   args += [options + 'f', output]
   args += items_to_tar
-  print('Executing command: {}'.format(args))
+  print(('Executing command: {}'.format(args)))
   proc = subprocess.Popen(
       args=args,
       cwd=root)
   proc.communicate()
   if proc.stderr:
-    print('Error: {}'.format(proc.stderr))
-  print('Ret code: {}'.format(proc.returncode))
+    print(('Error: {}'.format(proc.stderr)))
+  print(('Ret code: {}'.format(proc.returncode)))
   return proc.returncode
 
 
@@ -92,7 +94,7 @@ def tar_with_python(root, output, entries, compression):
         return
       if archive_name is None:
         archive_name = path[len(root):]
-      print 'Adding %s' % archive_name
+      print('Adding %s' % archive_name)
       tf.add(path, archive_name)
 
     for entry in entries:
@@ -133,7 +135,7 @@ def main():
   # Output tar path should be an absolute path.
   assert os.path.isabs(output), output
 
-  print 'Taring %s...' % output
+  print('Taring %s...' % output)
   exit_code = -1
   try:
     if use_python_tar(entries):
@@ -152,7 +154,7 @@ def main():
       except:  # pylint: disable=bare-except
         pass
   if not exit_code:
-    print 'Archive size: %.1f KB' % (os.stat(output).st_size / 1024.0,)
+    print('Archive size: %.1f KB' % (os.stat(output).st_size / 1024.0,))
   return exit_code
 
 

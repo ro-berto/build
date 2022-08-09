@@ -76,6 +76,7 @@ PYTHON3_ONLY_FILES = (
         'scripts/tests/migrate_unit_test.py'
     ),
     'recipes/recipe_modules/cronet/resources/clear_landmines.py',
+    'recipes/recipe_modules/tar/resources/tar_test.py',
     (
         'recipes/recipe_modules/tricium_clang_tidy/resources/'
         'tricium_clang_tidy_script.py'
