@@ -152,7 +152,7 @@ def collect_task(
   # The merge script may have its own vpython spec, so we invoke it using
   # 'vpython' over sys.executable in order to prevent re-using this script's
   # vpython spec.
-  merge_cmd = ['vpython', merge_script]
+  merge_cmd = ['vpython3', merge_script]
   if build_properties:
     merge_cmd.extend(('--build-properties', build_properties))
   if os.path.exists(summary_json_file):
