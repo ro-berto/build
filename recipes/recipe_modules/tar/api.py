@@ -63,7 +63,7 @@ class TarApi(recipe_api.RecipeApi):
     }
     self.m.step(
         name=step_name,
-        cmd=['python', self.resource('untar.py')],
+        cmd=['python3', self.resource('untar.py')],
         stdin=self.m.json.input(script_input))
 
 
@@ -122,7 +122,7 @@ class TarPackage(object):
     }
     step_result = self._module.m.step(
         name=step_name,
-        cmd=['python', self._module.resource('tar.py')],
+        cmd=['python3', self._module.resource('tar.py')],
         stdin=self._module.m.json.input(script_input))
     self._module.m.path.mock_add_paths(self._output)
     return step_result

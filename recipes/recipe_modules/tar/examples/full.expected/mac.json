@@ -37,7 +37,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "RECIPE_MODULE[build::tar]/resources/tar.py"
     ],
     "name": "taring",
@@ -45,7 +45,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "RECIPE_MODULE[build::tar]/resources/tar.py"
     ],
     "name": "taring more",
@@ -60,7 +60,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "RECIPE_MODULE[build::tar]/resources/untar.py"
     ],
     "name": "untaring",
