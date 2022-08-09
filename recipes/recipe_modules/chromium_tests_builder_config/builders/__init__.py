@@ -25,7 +25,6 @@ from . import chromium_perf_calibration
 from . import chromium_rust
 from . import chromium_swangle
 from . import chromium_swarm
-from . import chromium_updater
 from . import chromium_webrtc
 from . import chromium_webrtc_fyi
 from . import client_devtools_frontend_integration
@@ -94,8 +93,6 @@ BUILDERS = builder_db.BuilderDatabase.create({
         chromium_swarm.SPEC,
     'chromium.dev':
         chromium_swarm.SPEC,
-    'chromium.updater':
-        chromium_updater.SPEC,
     'chromium.webrtc':
         chromium_webrtc.SPEC,
     'chromium.webrtc.fyi':
