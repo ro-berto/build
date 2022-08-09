@@ -133,7 +133,6 @@ def GenTests(api):
     duration.FromMilliseconds(test_duration)
     tr = test_result_pb2.TestResult(
         test_id=test_id,
-        variant=test_variant,
         variant_hash=vh,
         expected=status == test_result_pb2.PASS,
         status=status,

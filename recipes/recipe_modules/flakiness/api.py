@@ -50,7 +50,6 @@ class TestDefinition():
     * test_id: (str) ResultDB's test_id (go/resultdb-concepts)
     * test_object: (steps.Test or steps.ExperimentalTest) The test object where
                    this test comes from.
-    * variants: (dict) ResultDB's variant (go/resultdb-concepts)
     * variant_hash: (str) ResultDB's variant_hash (go/resultdb-concepts)
   """
 
@@ -61,7 +60,6 @@ class TestDefinition():
                is_experimental=False,
                tags=None,
                test_object=None,
-               variants=None,
                variant_hash=None):
     """
     Args:
@@ -76,23 +74,11 @@ class TestDefinition():
         the given run was experimental.
       * test_object: (steps.Test or steps.ExperimentalTest) The test object
         where this test comes from.
-      * variants: either ResultDB's TestResult (dict) or a JSON string of
-        key value variant definitions. The JSON string is parsed s.t. all key,
-        value entries are flattened.
-        (eg/ [{
-          "key": "os",
-          "value": "Mac-11.0"
-        }]) is flattened to -> {"os": "Mac-11.0"}
       * variant_hash: (str) ResultDB's variant hash
     """
     self.test_id = test_id
     self.test_name = test_name
     self.duration_milliseconds = duration_milliseconds
-    self.variants = variants
-    if variants and isinstance(variants, str):
-      self.variants = self._parse_string_variants(variants)
-    elif hasattr(variants, 'def'):
-      self.variants = getattr(variants, 'def', {})
 
     self.variant_hash = variant_hash
 
@@ -100,13 +86,6 @@ class TestDefinition():
         is_experimental or self._set_experimental_from_tags(tags))
 
     self.test_object = test_object
-
-  def _parse_string_variants(self, variants):
-    fin = {}
-    j = json.loads(variants)
-    for kv in j:
-      fin[kv['key']] = kv['value']
-    return fin
 
   def _set_experimental_from_tags(self, tags):
     if tags:
@@ -428,7 +407,6 @@ class FlakinessApi(recipe_api.RecipeApi):
         - invocation: (list) a list of strings, which are invocations, which
           must start with 'invocations/'. See "Invocation message" at
           go/resultdb-concepts
-        - variant: (str) ResultDB's variants, in JSON string.
         - variant_hash: (str) ResultDB's variant_hash, a hash of the variants.
         - is_experimental: (bool) Flag determining whether the given run was
           experimental, usually determined by the suffix `experimental` found
@@ -451,7 +429,6 @@ class FlakinessApi(recipe_api.RecipeApi):
           TestDefinition(
               test_entry['test_id'],
               is_experimental=test_entry.get('is_experimental', False),
-              variants=test_entry.get('variant', None),
               variant_hash=test_entry.get('variant_hash', None)))
     return tests
 
@@ -500,7 +477,6 @@ class FlakinessApi(recipe_api.RecipeApi):
         test = TestDefinition(
             entry.result.test_id,
             tags=entry.result.tags,
-            variants=entry.result.variant,
             variant_hash=entry.result.variant_hash,
         )
         excluded = entry.result.name.split("/tests")[0] in excluded_invs
@@ -721,11 +697,6 @@ class FlakinessApi(recipe_api.RecipeApi):
        property is not enabled.
     3) If 'Validate-Test-Flakiness:skip' commit footer is set, this logic will
        be skipped.
-
-    For test variants (variant in the definition in testing/buildbot), only the
-    test name is altered. In other words, these device/variant dimensions are
-    not necessarily reflected in ResultDB, so we compare a tests' canonical name
-    with the 'test_suite' key from ResultDB test variant definition.
 
     Args:
       * test_objects = list of step.Test objects
