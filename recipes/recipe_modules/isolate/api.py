@@ -24,6 +24,16 @@ class IsolateApi(recipe_api.RecipeApi):
     # https://crbug.com/944904
     self._isolated_tests = {}
 
+  def __call__(self, args, step_name, **kwargs):
+    # Take revision from https://ci.chromium.org/p/infra-internal/g/infra-packagers/console
+    version = 'git_revision:582e828c5a8aaf5cdd0ad1d5465fb9092b71eab8'
+    if self._test_data.enabled:
+      version = 'git_revision:mock_infra_git_revision'
+    exe = self.m.cipd.ensure_tool('infra/tools/luci/isolate/${platform}',
+                                  version)
+    args = [exe] + args
+    return self.m.step(step_name, args, **kwargs)
+
   def check_swarm_hashes(self, targets):
     """Asserts that all the targets in the passed list are present as keys in
     the 'swarm_hashes' property.
@@ -44,6 +54,34 @@ class IsolateApi(recipe_api.RecipeApi):
       if missing:
         raise self.m.step.InfraFailure(
           'Missing isolated target(s) %s in swarm_hashes' % ', '.join(missing))
+
+  def isolate(self, name, isolate_path):
+    """Archives a single .isolate file.
+
+    Args:
+        name (str): Step name
+        isolate_path (Path): Path to the .isolate file
+
+    Returns:
+        CAS digest
+    """
+    args = [
+        'archive',
+        '--dump-json',
+        self.m.json.output(),
+        '--log-level',
+        'debug',
+        '--cas-instance',
+        self.m.cas.instance,
+        '--isolate',
+        isolate_path,
+    ]
+    isolate_name = self.m.path.splitext(self.m.path.basename(isolate_path))[0]
+    result = self(
+        args,
+        name,
+        step_test_data=lambda: self.test_api.output_json([isolate_name]))
+    return result.json.output[isolate_name]
 
   def isolate_tests(
       self,
@@ -79,17 +117,9 @@ class IsolateApi(recipe_api.RecipeApi):
     if not targets:  # pragma: no cover
       return
 
-    # Take revision from https://ci.chromium.org/p/infra-internal/g/infra-packagers/console
-    version = 'git_revision:582e828c5a8aaf5cdd0ad1d5465fb9092b71eab8'
-    if self._test_data.enabled:
-      version = 'git_revision:mock_infra_git_revision'
-    exe = self.m.cipd.ensure_tool('infra/tools/luci/isolate/${platform}',
-                                  version)
-
     # FIXME: Differentiate between bad *.isolate and upload errors.
     # Raise InfraFailure on upload errors.
     args = [
-        exe,
         'batcharchive',
         '--dump-json',
         self.m.json.output(),
@@ -105,11 +135,10 @@ class IsolateApi(recipe_api.RecipeApi):
         for t in sorted(set(targets))
     ])
 
-    step_result = self.m.step(
-        step_name or ('isolate tests%s' % suffix),
+    step_result = self(
         args,
-        step_test_data=lambda: self.test_api.output_json(
-            targets),
+        step_name or ('isolate tests%s' % suffix),
+        step_test_data=lambda: self.test_api.output_json(targets),
         **kwargs)
 
     swarm_hashes = {}
@@ -285,6 +314,21 @@ class IsolateApi(recipe_api.RecipeApi):
       self.archive_differences(first_dir, second_dir, step_result.json.output)
       raise e
 
+  def write_isolate_file(self, isolate_path, files_to_isolate):
+    """Writes an .isolate file for a list of files to isolate.
+
+    Args:
+      isolate_path (Path): Path of .isolate file to create.
+      files_to_isolate ([Path]): List of files to upload.
+    """
+    self.m.file.write_text(
+        'Write ' + str(isolate_path), isolate_path,
+        pprint.pformat(
+            {'variables': {
+                'command': '',
+                'files': files_to_isolate,
+            }}) + '\n')
+
   def write_isolate_files_for_binary_file_paths(self, file_paths,
                                                 isolate_target_name, build_dir):
     """Writes .isolate and .isolated.gen.json files for binary files.
@@ -305,14 +349,7 @@ class IsolateApi(recipe_api.RecipeApi):
     ]
 
     isolate_path = self.m.path.join(build_dir, isolate_target_name + '.isolate')
-
-    self.m.file.write_text(
-        'Write ' + str(isolate_path), isolate_path,
-        pprint.pformat(
-            {'variables': {
-                'command': '',
-                'files': binaries_to_isolate,
-            }}) + '\n')
+    self.write_isolate_file(isolate_path, binaries_to_isolate)
 
     self.m.file.write_json(
         'Write ' + str(isolate_path) + 'd.gen.json',

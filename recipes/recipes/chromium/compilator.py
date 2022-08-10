@@ -35,6 +35,7 @@ DEPS = [
     'isolate',
     'recipe_engine/buildbucket',
     'recipe_engine/cas',
+    'recipe_engine/context',
     'recipe_engine/file',
     'recipe_engine/json',
     'recipe_engine/path',
@@ -44,6 +45,7 @@ DEPS = [
     'recipe_engine/resultdb',
     'recipe_engine/runtime',
     'recipe_engine/step',
+    'recipe_engine/swarming',
     'test_utils',
 ]
 
@@ -205,8 +207,18 @@ def archive_src_side_deps(api, affected_files):
     # Dedupe in case a file from src_side_dep_paths is also an affected file
     dep_paths = sorted(set(get_src_side_dep_paths(api) + affected_files))
 
-    digest = api.cas.archive('archive src-side deps', str(api.path['checkout']),
-                             *dep_paths)
+    # We need the files relative to the checkout dir so they can get downloaded
+    # correctly on the orchestrator. And the .isolate file inherits the cwd of
+    # the file itself, so create the file using a tmp name that should be
+    # sufficiently unique to this build.
+    isolate_file = api.path.join(
+        api.path['checkout'], '%s_archive_deps.isolate' % api.swarming.task_id)
+    rel_dep_paths = []
+    for p in dep_paths:
+      rel_dep_paths.append(api.path.relpath(p, api.path['checkout']))
+    api.isolate.write_isolate_file(isolate_file, rel_dep_paths)
+    digest = api.isolate.isolate('archive src-side deps', isolate_file)
+    api.file.remove('rm %s' % isolate_file, isolate_file)
 
     relative_test_spec_dir = api.path.relpath(
         api.chromium.c.source_side_spec_dir, api.path['checkout'])
