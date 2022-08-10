@@ -33,8 +33,7 @@ _PINPOINT_MAPPING = {
     'Chromeos Amd64 Generic Lacros Builder Perf':
         ('chromium.perf', 'chromeos-amd64-generic-lacros-builder-perf'),
     'Fuchsia Builder Perf': ('chromium.perf.fyi', 'fuchsia-builder-perf-fyi'),
-    'Fuchsia Builder Perf x64':
-        ('chromium.perf.fyi', 'fuchsia-builder-perf-x64'),
+    'Fuchsia Builder Perf x64': ('chromium.perf', 'fuchsia-builder-perf-x64'),
     'Linux Builder Perf': ('chromium.perf', 'linux-builder-perf'),
     'Linux Builder Perf PGO': ('chromium.perf', 'linux-builder-perf-pgo'),
     'Mac Builder Perf': ('chromium.perf', 'mac-builder-perf'),
