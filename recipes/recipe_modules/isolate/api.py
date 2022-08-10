@@ -321,13 +321,14 @@ class IsolateApi(recipe_api.RecipeApi):
       isolate_path (Path): Path of .isolate file to create.
       files_to_isolate ([Path]): List of files to upload.
     """
-    self.m.file.write_text(
-        'Write ' + str(isolate_path), isolate_path,
-        pprint.pformat(
-            {'variables': {
-                'command': '',
-                'files': files_to_isolate,
-            }}) + '\n')
+    self.m.file.write_json(
+        'Write ' + str(isolate_path),
+        isolate_path,
+        {'variables': {
+            'command': '',
+            'files': files_to_isolate,
+        }},
+        indent=2)
 
   def write_isolate_files_for_binary_file_paths(self, file_paths,
                                                 isolate_target_name, build_dir):
