@@ -449,7 +449,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     if exonerated_suites_to_retry:
       to_log = [{
           'suite_name': t.name,
-          'tests_being_retried': t.deterministic_failures('with patch'),
+          'tests_being_retried': list(t.deterministic_failures('with patch')),
       } for t in exonerated_suites_to_retry]
       log_step = self.m.step.empty(
           'logging retried FindIt exonerations',

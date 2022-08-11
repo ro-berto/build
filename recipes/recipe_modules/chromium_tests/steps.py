@@ -2849,7 +2849,7 @@ class MockTest(Test):
   def failures(self, suffix):
     if suffix in self.spec.per_suffix_failures:  # pragma: no cover
       return self.spec.per_suffix_failures[suffix]
-    return self._failures
+    return set(self._failures)
 
   def deterministic_failures(self, suffix):
     """Use same logic as failures for the Mock test."""
