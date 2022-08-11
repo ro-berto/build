@@ -2149,11 +2149,6 @@
       "tryserver.blink:mac11.0.arm64-blink-rel"
     ]
   },
-  "tryserver.blink:win10.20h2-blink-rel": {
-    "builders": [
-      "tryserver.blink:win10.20h2-blink-rel"
-    ]
-  },
   "tryserver.chromium.android:android-11-x86-fyi-rel": {
     "builders": [
       "chromium.android.fyi:android-11-x86-fyi-rel",
