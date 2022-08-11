@@ -37,6 +37,12 @@ class BlinkWebTestsBinaryTest(unittest.TestCase):
                                 'Command line contains unknown wrapper:'):
       test_binary.strip_for_bots()
 
+  def test_strip_for_bots_for_wrappers(self):
+    # The following commands shouldn't raise NotImplementedError
+    BlinkWebTestsBinary(["bin/run_with_asan"]).strip_for_bots()
+    BlinkWebTestsBinary(["bin/run_interactive_ui_tests"]).strip_for_bots()
+    BlinkWebTestsBinary(["bin\\run_blink_web_tests.bat"]).strip_for_bots()
+
   def test_get_command(self):
     jsonish = json.loads(get_test_data('blink_web_tests_binary.json'))
     test_binary = BlinkWebTestsBinary.from_jsonish(jsonish)

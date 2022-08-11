@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import re
+
 from . import utils
 from .base_test_binary import (BaseTestBinary, TestBinaryWithBatchMixin,
                                TestBinaryWithParallelMixin)
@@ -34,7 +36,7 @@ class BlinkWebTestsBinary(TestBinaryWithBatchMixin, TestBinaryWithParallelMixin,
     strip_switches = {key: 1 for key in strip_switches}
     ret.command = utils.strip_command_switches(ret.command, strip_switches)
     # Should strip all wrappers
-    is_local = ret.command[0].startswith('bin/run_')
+    is_local = ret.command and re.match(r"^bin[\\\/]run_", ret.command[0])
     if not is_local:
       raise NotImplementedError(
           'Command line contains unknown wrapper: {0}'.format(ret.command))

@@ -33,9 +33,10 @@ PROPERTIES = {
 }
 
 
-def RunSteps(api, trigger, task_id, test_name):
+def RunSteps(api, trigger, task_id, build_id, test_name, test_id):
   api.flaky_reproducer.set_config(trigger)
-  return api.flaky_reproducer.run(task_id=task_id, test_name=test_name)
+  return api.flaky_reproducer.run(
+      task_id=task_id, build_id=build_id, test_name=test_name, test_id=test_id)
 
 
 from google.protobuf import timestamp_pb2

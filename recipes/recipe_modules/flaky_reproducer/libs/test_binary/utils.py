@@ -103,5 +103,12 @@ def run_cmd(argv, cwd=None, env=None):
     isolated_outdir = os.environ['ISOLATED_OUTDIR']
     argv = [v.replace(r'${ISOLATED_OUTDIR}', isolated_outdir) for v in argv]
   logging.info('Running %r in %r with %r', argv, cwd, env)
-  process = subprocess.Popen(argv, env=env, cwd=cwd)
-  return process.wait()
+  # NOTE: Windows wouldn't search for the executable in cwd set via Popen.
+  # Using `chdir` before Popen to workaround this issue.
+  old_cwd = os.getcwd()
+  os.chdir(cwd)
+  try:
+    process = subprocess.Popen(argv, env=env)
+    return process.wait()
+  finally:
+    os.chdir(old_cwd)

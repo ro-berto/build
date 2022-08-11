@@ -43,18 +43,22 @@ class TestBinaryUtilsTest(unittest.TestCase):
   @patch('subprocess.Popen')
   @patch('logging.info')
   @patch('os.environ', new={'foo': 'bar'})
-  def test_run_cmd(self, mock_logging, mock_popen):
+  @patch('os.chdir')
+  def test_run_cmd(self, mock_chdir, mock_logging, mock_popen):
     mock_popen.return_value.wait.return_value = 0
     cmd = ['./exec', '--args']
     utils.run_cmd(cmd, env={}, cwd='out\\Release_x64')
     mock_logging.assert_called_once_with('Running %r in %r with %r', cmd,
                                          'out\\Release_x64', {})
-    mock_popen.assert_called_once_with(cmd, env={}, cwd='out\\Release_x64')
+    mock_popen.assert_called_once_with(cmd, env={})
+    self.assertEqual(mock_chdir.call_count, 2)
 
   @patch('subprocess.Popen')
   @patch('logging.info')
   @patch('os.environ', new={'ISOLATED_OUTDIR': '/isolated_out_dir'})
-  def test_run_cmd_with_isolated_outdir(self, mock_logging, mock_popen):
+  @patch('os.chdir')
+  def test_run_cmd_with_isolated_outdir(self, mock_chdir, mock_logging,
+                                        mock_popen):
     mock_popen.return_value.wait.return_value = 0
     cmd = ['./exec', '--args', r'--output=${ISOLATED_OUTDIR}']
     utils.run_cmd(cmd, env={}, cwd='out\\Release_x64')
@@ -63,19 +67,19 @@ class TestBinaryUtilsTest(unittest.TestCase):
         ['./exec', '--args', '--output=/isolated_out_dir'], 'out\\Release_x64',
         {})
     mock_popen.assert_called_once_with(
-        ['./exec', '--args', '--output=/isolated_out_dir'],
-        env={},
-        cwd='out\\Release_x64')
+        ['./exec', '--args', '--output=/isolated_out_dir'], env={})
 
   @patch('subprocess.Popen')
   @patch('logging.info')
   @patch('os.environ', new={'foo': 'bar'})
-  def test_run_cmd_with_failure(self, mock_logging, mock_popen):
+  @patch('os.chdir')
+  def test_run_cmd_with_failure(self, mock_chdir, mock_logging, mock_popen):
     mock_popen.return_value.wait.return_value = 1
     cmd = ['./exec', '--args']
     ret = utils.run_cmd(cmd, env={}, cwd='out\\Release_x64')
-    mock_popen.assert_called_once_with(cmd, env={}, cwd='out\\Release_x64')
+    mock_popen.assert_called_once_with(cmd, env={})
     self.assertEqual(ret, 1)
+    self.assertEqual(mock_chdir.call_count, 2)
 
 
 class TestBinaryFactoryTest(unittest.TestCase):

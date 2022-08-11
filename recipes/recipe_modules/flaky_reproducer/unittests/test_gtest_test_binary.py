@@ -54,6 +54,12 @@ class GTestTestBinaryTest(unittest.TestCase):
                                 'Command line contains unknown wrapper:'):
       test_binary.strip_for_bots()
 
+  def test_strip_for_bots_for_wrappers(self):
+    # The following commands shouldn't raise NotImplementedError
+    GTestTestBinary(["bin/run_with_asan"]).strip_for_bots()
+    GTestTestBinary(["bin/run_interactive_ui_tests"]).strip_for_bots()
+    GTestTestBinary(["bin\\run_blink_web_tests.bat"]).strip_for_bots()
+
   def test_get_command(self):
     test_binary = self.test_binary.strip_for_bots()
     self.assertIsNotNone(test_binary.RESULT_SUMMARY_CLS)

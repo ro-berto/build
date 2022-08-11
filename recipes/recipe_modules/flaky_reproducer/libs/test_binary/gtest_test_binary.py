@@ -3,6 +3,8 @@
 # found in the LICENSE file.
 
 import os
+import re
+
 from . import utils
 from .base_test_binary import (BaseTestBinary, TestBinaryWithBatchMixin,
                                TestBinaryWithParallelMixin)
@@ -26,7 +28,7 @@ class GTestTestBinary(TestBinaryWithBatchMixin, TestBinaryWithParallelMixin,
     ret.command = utils.strip_command_switches(ret.command,
                                                gtest_strip_switches)
     # Should strip all wrappers
-    is_local = len(ret.command) >= 1 and ret.command[0].startswith('.')
+    is_local = ret.command and re.match(r'^(\.|bin[\\\/]run_)', ret.command[0])
     known_wrappers = set(('test_env.py', 'xvfb.py', 'logdog_wrapper.py'))
     is_test_env_py = (
         len(ret.command) >= 2 and
