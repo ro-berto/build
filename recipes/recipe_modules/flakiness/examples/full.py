@@ -989,6 +989,38 @@ def GenTests(api):
   )
 
   yield api.test(
+      'skip identifying when testing/buldbot',
+      api.chromium_tests_builder_config.try_build(
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
+          builder_db=builder_db,
+          try_db=ctbc.TryDatabase.create({
+              'fake-try-group': {
+                  'fake-try-builder':
+                      ctbc.TrySpec.create_for_single_mirror(
+                          builder_group='fake-group',
+                          buildername='fake-builder',
+                      ),
+              },
+          })),
+      api.flakiness(
+          check_for_flakiness=True,
+          build_count=10,
+          historical_query_count=2,
+          current_query_count=2,
+      ),
+      api.filter.suppress_analyze(),
+      api.step_data(
+          'git diff to analyze patch (2)',
+          api.raw_io.stream_output('testing/buildbot/test_suites.pyl\n'
+                                   'testing/buildbot/waterfalls.pyl')),
+      api.post_check(post_process.MustRun,
+                     'no test files were detected with this change.'),
+      api.post_check(post_process.DoesNotRun, 'searching_for_new_tests'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
       'skip identifying when no test file change',
       api.chromium_tests_builder_config.try_build(
           builder_group='fake-try-group',

@@ -27,7 +27,7 @@ from PB.recipe_engine import result as result_pb2
 # might introduce new tests.
 # TODO(crbug.com/1204163): Extend for new tests from DEPS and build file changes
 # with '^(.+(BUILD\.gn|DEPS|\.gni)|src/chromeos/CHROMEOS_LKGM|.+[T|t]est.*)$'.
-_FILE_PATH_ADDING_TESTS_PATTERN = '^.+[T|t]est.*$'
+_FILE_PATH_ADDING_TESTS_PATTERN = '^(?!testing/buildbot).+[T|t]est.*$'
 
 # Internal labels used when we need to trim test sets at different steps.
 _FINAL_TRIM = 'final'
