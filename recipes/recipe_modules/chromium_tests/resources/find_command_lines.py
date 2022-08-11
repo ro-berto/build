@@ -13,7 +13,6 @@ import ast
 import glob
 import json
 import os
-import sys
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -22,6 +21,12 @@ parser.add_argument(
     help='Path to a directory to search for *.isolate files')
 parser.add_argument(
     '--output-json', required=True, help='File to dump JSON results into.')
+parser.add_argument(
+    '--inverted',
+    action='store_true',
+    default=False,
+    required=False,
+    help='Find any inverted command lines instead.')
 args = parser.parse_args()
 
 command_line_map = {}
@@ -30,11 +35,13 @@ for path in glob.glob(os.path.join(args.build_dir, '*.isolate')):
   target_name = os.path.splitext(os.path.basename(path))[0]
   with open(path) as fp:
     isolate = ast.literal_eval(fp.read())
-    if 'command' in isolate.get('variables', {}):
-      command_line_map[target_name] = isolate['variables']['command']
-    if 'inverted_command' in isolate.get('variables', {}):
-      command_line_map['{}_inverted'.format(
-          target_name)] = isolate['variables']['inverted_command']
+    if not args.inverted:
+      if 'command' in isolate.get('variables', {}):
+        command_line_map[target_name] = isolate['variables']['command']
+    else:
+      if 'inverted_command' in isolate.get('variables', {}):
+        command_line_map['{}'.format(
+            target_name)] = isolate['variables']['inverted_command']
 
 with open(args.output_json, 'w') as fp:
   json.dump(command_line_map, fp)

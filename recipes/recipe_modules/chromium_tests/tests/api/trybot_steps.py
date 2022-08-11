@@ -813,14 +813,18 @@ def GenTests(api):
                   './invertable_tests', '--fake-flag', '--fake-log-file',
                   '$ISOLATED_OUTDIR/fake.log', '--fake-filter', 'filter.filter'
               ],
-              'invertable_tests_inverted': [
-                  './invertable_tests_inverted', '--fake-flag',
-                  '--fake-log-file', '$ISOLATED_OUTDIR/fake.log',
-                  '--fake-filter', 'inverted.filter'
-              ],
               'non_invertable': [
                   './non_invertable', '--fake-flag', '--fake-log-file',
                   '$ISOLATED_OUTDIR/fake.log', '--fake-filter', 'filter.filter'
+              ],
+          })),
+      api.step_data(
+          'find inverted command lines (with patch)',
+          api.json.output({
+              'invertable_tests': [
+                  './invertable_tests', '--fake-flag', '--fake-log-file',
+                  '$ISOLATED_OUTDIR/fake.log', '--fake-filter',
+                  'filter_inverted.filter'
               ],
           })),
       api.chromium_tests.read_source_side_spec(

@@ -47,8 +47,15 @@ class SwarmingExecutionInfo(object):
   # Should be renamed to 'command_lines_file_digest'
   command_lines_file_digest = attrib(str, default='')
 
+  # The CAS digest for a file which contains the inverted command lines needed
+  # to execute each test.
+  inverted_rts_command_lines_file_digest = attrib(str, default='')
+
   # The mapping of isolate to command lines.
   command_lines = attrib(mapping[str, sequence], default={})
+
+  # The mapping of isolate to inverted rts command lines.
+  inverted_rts_command_lines = attrib(mapping[str, sequence], default={})
 
   # The working directory to run the isolates in (usually something like
   # out/Release).
@@ -68,7 +75,10 @@ class SwarmingExecutionInfo(object):
     return attr.evolve(
         self,
         command_lines_file_digest=(chromium_tests_api.archive_command_lines(
-            self.command_lines)))
+            self.command_lines)),
+        inverted_rts_command_lines_file_digest=(
+            chromium_tests_api.archive_command_lines(
+                self.inverted_rts_command_lines)))
 
   def as_trigger_prop(self):
     """Gets the set of properties needed to trigger a child build.
@@ -87,8 +97,12 @@ class SwarmingExecutionInfo(object):
     """
     return {
         'swarm_hashes': {k: v for k, v in self.digest_by_isolate_name.items()},
-        'swarming_command_lines_digest': self.command_lines_file_digest,
-        'swarming_command_lines_cwd': self.command_lines_cwd,
+        'swarming_command_lines_digest':
+            self.command_lines_file_digest,
+        'swarming_inverted_rts_command_lines_digest':
+            self.inverted_rts_command_lines_file_digest,
+        'swarming_command_lines_cwd':
+            self.command_lines_cwd,
     }
 
 
@@ -624,16 +638,23 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return raw_result, execution_info
 
-  def find_swarming_command_lines(self, suffix):
+  def find_swarming_command_lines(self, suffix, inverted_rts=False):
     script = self.m.chromium_tests.resource('find_command_lines.py')
     args = [
         '--build-dir', self.m.chromium.output_dir, '--output-json',
         self.m.json.output()
     ]
+
+    step_names = 'find command lines%s' % suffix
+    if inverted_rts:
+      step_names = 'find inverted command lines%s' % suffix
+      args.append('--inverted')
+
     step_result = self.m.step(
-        'find command lines%s' % suffix, ['vpython3', '-u', script] + args,
+        step_names, ['vpython3', '-u', script] + args,
         step_test_data=lambda: self.m.json.test_api.output({}))
     assert isinstance(step_result.json.output, dict)
+
     return step_result.json.output
 
   def isolate_tests(self,
@@ -698,18 +719,23 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         swarm_hashes_property_name=swarm_hashes_property_name,
         verbose=True)
 
+    command_lines = self.find_swarming_command_lines(name_suffix)
+    inverted_rts_command_lines = self.find_swarming_command_lines(
+        name_suffix, inverted_rts=True)
     return self.set_swarming_test_execution_info(
         tests,
-        self.find_swarming_command_lines(name_suffix),
+        command_lines,
         self.m.path.relpath(self.m.chromium.output_dir,
                             self.m.path['checkout']),
-        expose_to_properties=builder_config.expose_trigger_properties)
+        expose_to_properties=builder_config.expose_trigger_properties,
+        inverted_rts_command_lines=inverted_rts_command_lines)
 
   def set_swarming_test_execution_info(self,
                                        tests,
                                        command_lines,
                                        rel_cwd,
-                                       expose_to_properties=False):
+                                       expose_to_properties=False,
+                                       inverted_rts_command_lines=None):
     """Sets the execution information for a list of swarming tests.
 
     Each test gets the command line in 'command_lines' corresponding to
@@ -740,14 +766,16 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           test.raw_cmd = command_line
           test.relative_cwd = rel_cwd
 
-        inverted_command_line = command_lines.get(
-            '%s_inverted' % test.target_name, [])
-        if inverted_command_line:
-          test.inverted_raw_cmd = inverted_command_line
+        if inverted_rts_command_lines:
+          inverted_rts_command_line = inverted_rts_command_lines.get(
+              test.target_name, [])
+          if inverted_rts_command_line:
+            test.inverted_raw_cmd = inverted_rts_command_line
 
     execution_info = SwarmingExecutionInfo(
         digest_by_isolate_name=self.m.isolate.isolated_tests,
         command_lines=command_lines,
+        inverted_rts_command_lines=inverted_rts_command_lines,
         command_lines_cwd=rel_cwd,
     )
 
