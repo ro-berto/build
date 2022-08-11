@@ -264,29 +264,6 @@ _AddBuildSpec('linux-builder-perf-rel', 'linux')
 _AddBuildSpec(
     'chromecast-linux-builder-perf', 'linux', bisect_archive_build=True)
 
-_AddBuildSpec(
-    'fuchsia-builder-perf-arm64',
-    'fuchsia',
-    bisect_archive_build=True,
-    target_bits=64,
-    target_arch='arm',
-    gclient_apply_config=[
-        'fuchsia_arm64',
-        'fuchsia_internal',
-    ])
-
-_AddBuildSpec(
-    'fuchsia-builder-perf-x64',
-    'fuchsia',
-    bisect_archive_build=True,
-    target_bits=64,
-    gclient_apply_config=[
-        'fuchsia_internal',
-    ])
-
-# Android: Clank, Webview, WebLayer
-_AddIsolatedTestSpec(
-    'Android Nexus5 Perf', 'android', 'android-builder-perf', target_bits=32)
 
 _AddIsolatedTestSpec(
     'android-go-perf', 'android', 'android-builder-perf', target_bits=32)
@@ -340,19 +317,6 @@ _AddIsolatedTestSpec(
     target_bits=64,
     target_arch='intel',
     cros_boards='amd64-generic:eve:octopus')
-
-_AddIsolatedTestSpec(
-    'fuchsia-perf-ast',
-    'fuchsia',
-    'fuchsia-builder-perf-arm64',
-    target_bits=64,
-    target_arch='arm')
-_AddIsolatedTestSpec(
-    'fuchsia-perf-shk',
-    'fuchsia',
-    'fuchsia-builder-perf-arm64',
-    target_bits=64,
-    target_arch='arm')
 
 # Perf result processors
 _AddIsolatedTestSpec('linux-processor-perf', 'linux', 'linux-perf')
