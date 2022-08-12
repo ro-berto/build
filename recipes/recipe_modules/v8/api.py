@@ -270,6 +270,11 @@ class V8Api(recipe_api.RecipeApi):
     args = self.m.gn.parse_gn_args(gn_args)
     return args.get('use_remoteexec') == 'true'
 
+  def _use_goma(self, gn_args):
+    args = self.m.gn.parse_gn_args(gn_args)
+    return args.get('use_goma') == 'true'
+
+
   def bot_config_by_buildername(self,
                                 builders=None,
                                 use_goma=True,
@@ -919,6 +924,11 @@ class V8Api(recipe_api.RecipeApi):
         use_reclient = self._use_reclient(gn_args)
         if use_reclient:
           kwargs['use_reclient'] = True
+
+        if self._use_goma(gn_args) != use_goma: # pragma: no cover
+          self.m.step('Witness step: goma requirements differes between infra-config & main', [])
+        else:
+          self.m.step('Witness step: matching goma requirements between infra-config & main', [])
 
         # Create logs surfacing GN arguments. This information is critical to
         # developers for reproducing failures locally.
