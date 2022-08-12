@@ -2,7 +2,23 @@ syntax = "proto3";
 
 package stats;
 
-import "go.chromium.org/foundry-x/re-client/api/proxy/log.proto";
+message Verification {
+  message Mismatch {
+    // The output path.
+    string path = 1;
+
+    // The digest given by remote execution (or cache), if exists.
+    string remote_digest = 2;
+
+    // The digest produced locally, if exists.
+    string local_digest = 3;
+  }
+  // Any SHA mismatches in the action.
+  repeated Mismatch mismatches = 1;
+
+  // The number of overall mismatches.
+  int32 total_mismatches = 2;
+}
 
 // The full aggregated build stats and properties.
 message Stats {
@@ -12,8 +28,11 @@ message Stats {
   // Aggregated build stats.
   repeated Stat stats = 2;
 
+  // Environment variables that are build settings.
+  map<string,string> environment = 3;
+
   // Verification results, if exist.
-  proxy.Verification verification = 4;
+  Verification verification = 4;
 
   // RBE tooling version.
   string tool_version = 5;
@@ -23,11 +42,6 @@ message Stats {
 
   // Information about the build machine.
   MachineInfo machine_info = 7;
-
-  // Information relative to each reproxy invocation.
-  repeated proxy.ProxyInfo proxy_info = 9;
-
-  reserved 3, 8;
 }
 
 // Outlier represents a command with an unusually large value in the stat.
@@ -70,7 +84,4 @@ message MachineInfo {
 
   // Type of operating system of the build machine.
   string os_family = 3;
-
-  // The architecture of the machine's CPU.
-  string arch = 4;
 }

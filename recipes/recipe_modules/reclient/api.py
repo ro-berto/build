@@ -15,7 +15,6 @@ import time
 from recipe_engine import recipe_api
 
 from google.protobuf import json_format
-from google.protobuf import timestamp_pb2
 from PB.recipe_modules.build.reclient import rbe_metrics_bq
 
 
@@ -33,47 +32,9 @@ _DEPS_CACHE_MAX_MB = '256'
 
 def make_test_rbe_stats_pb():
   stats = rbe_metrics_bq.RbeMetricsBq().stats
-
-  p1 = stats.proxy_info.add()
-  p1.flags['foo'] = 'bar'
-  p1.flags['abc'] = 'def'
-  p1.metrics['some'].bool_value = 1
-  p1.metrics['other'].int64_value = 7
-
-  p2 = stats.proxy_info.add()
-  p2.metrics['test'].double_value = 1.1
-  getattr(p2.event_times['foo'],
-          'from').CopyFrom(timestamp_pb2.Timestamp(seconds=1658269605))
-  p2.event_times['foo'].to.CopyFrom(timestamp_pb2.Timestamp(seconds=1658369605))
+  stats.environment['foo'] = 'false'
+  stats.environment['bar'] = '42'
   return stats
-
-
-def proxy_info_to_bq(proxy_info):
-  proxy_info_bq = {}
-  if proxy_info.event_times:
-    proxy_info_bq['event_times'] = [{
-        'key':
-            evt,
-        'value':
-            json_format.MessageToDict(
-                message=proxy_info.event_times[evt],
-                preserving_proto_field_name=True)
-    } for evt in sorted(proxy_info.event_times)]
-  if proxy_info.flags:
-    proxy_info_bq['flags'] = [{
-        'key': flag,
-        'value': proxy_info.flags[flag]
-    } for flag in sorted(proxy_info.flags)]
-  if proxy_info.metrics:
-    proxy_info_bq['metrics'] = [{
-        'key':
-            metric,
-        'value':
-            json_format.MessageToDict(
-                message=proxy_info.metrics[metric],
-                preserving_proto_field_name=True)
-    } for metric in sorted(proxy_info.metrics)]
-  return proxy_info_bq
 
 
 class MalformedREWrapperFlag(Exception):
@@ -429,14 +390,15 @@ class ReclientApi(recipe_api.RecipeApi):
 
     bq_json_dict = json_format.MessageToDict(
         message=bq_pb, preserving_proto_field_name=True)
-    # All fields in ProxyInfo are map fields and get serialized to JSON maps.
+    # "environment" is a map field and gets serialized to a JSON map.
     # Unfortunately, this is incompatible with the corresponding BQ schema,
-    # which is are repeated fields and thus expects a JSON arrays.
-    proxy_info = bq_pb.stats.proxy_info
-    if proxy_info:
-      bq_json_dict['stats']['proxy_info'] = [
-          proxy_info_to_bq(p) for p in proxy_info
-      ]
+    # which is a repeated field and thus expects a JSON array.
+    envs = bq_pb.stats.environment
+    if envs:
+      bq_json_dict['stats']['environment'] = [{
+          'key': k,
+          'value': envs[k]
+      } for k in envs]
 
     bqupload_cipd_path = self.m.cipd.ensure_tool(
         'infra/tools/bqupload/${platform}', 'latest')
