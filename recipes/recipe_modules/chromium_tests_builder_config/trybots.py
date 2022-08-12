@@ -116,13 +116,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.android.fyi',
                 buildername='android-11-x86-fyi-rel',
             ),
-        # TODO(crbug.com/1225851): Remote FYI config after
-        # android-12-x64-rel is  up and running.
-        'android-12-x64-fyi-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android.fyi',
-                buildername='android-12-x64-fyi-rel',
-            ),
         'android-asan':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.memory',

@@ -26,12 +26,6 @@
       "tryserver.chromium.android:android-11-x86-fyi-rel"
     ]
   },
-  "chromium.android.fyi:android-12-x64-fyi-rel": {
-    "builders": [
-      "chromium.android.fyi:android-12-x64-fyi-rel",
-      "tryserver.chromium.android:android-12-x64-fyi-rel"
-    ]
-  },
   "chromium.android.fyi:android-annotator-rel": {
     "builders": [
       "chromium.android.fyi:android-annotator-rel"
@@ -2153,12 +2147,6 @@
     "builders": [
       "chromium.android.fyi:android-11-x86-fyi-rel",
       "tryserver.chromium.android:android-11-x86-fyi-rel"
-    ]
-  },
-  "tryserver.chromium.android:android-12-x64-fyi-rel": {
-    "builders": [
-      "chromium.android.fyi:android-12-x64-fyi-rel",
-      "tryserver.chromium.android:android-12-x64-fyi-rel"
     ]
   },
   "tryserver.chromium.android:android-asan": {
