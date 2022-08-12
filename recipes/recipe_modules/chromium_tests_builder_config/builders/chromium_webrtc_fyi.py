@@ -168,6 +168,7 @@ SPEC = {
             chromium_apply_config=[
                 'dcheck',
                 'mb',
+                'mac_toolchain',
             ],
             chromium_config='chromium',
             chromium_config_kwargs={
@@ -199,6 +200,7 @@ SPEC = {
             chromium_apply_config=[
                 'dcheck',
                 'mb',
+                'mac_toolchain',
             ],
             chromium_config='chromium',
             chromium_config_kwargs={
