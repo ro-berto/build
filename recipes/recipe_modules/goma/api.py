@@ -56,7 +56,6 @@ class GomaApi(recipe_api.RecipeApi):
     self._goma_server_host = properties.get('server_host', False)
     self._goma_rpc_extra_params = properties.get('rpc_extra_params', False)
     self._use_luci_auth = properties.get('use_luci_auth', False)
-    self._goma_canceller = None
 
     self._client_type = 'release'
     self._additional_platforms = []
@@ -347,15 +346,6 @@ class GomaApi(recipe_api.RecipeApi):
     if env is None:
       env = {}
 
-    self._goma_canceller = self.m.futures.spawn(
-        self.m.step,
-        'start goma canceller',
-        ['python3',
-         self.resource('goma_canceller.py'), self.goma_ctl],
-        cost=None,  # always run this background thread.
-        __name='background process',
-    )
-
     with self.m.step.nest('preprocess_for_goma'):
       self._goma_ctl_env['GOMA_DUMP_STATS_FILE'] = (
           self.m.path['tmp_base'].join('goma_stats'))
@@ -489,8 +479,6 @@ class GomaApi(recipe_api.RecipeApi):
                 name='stop_goma',
                 cmd=['python3', self.goma_ctl, 'stop'],
                 **kwargs)
-            self._goma_canceller.cancel()
-
           self._upload_logs(
               ninja_log_outdir=ninja_log_outdir,
               ninja_log_compiler=ninja_log_compiler,
