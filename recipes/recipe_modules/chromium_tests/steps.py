@@ -430,6 +430,10 @@ class Test(object):
     # this also includes tests failing on ToT
     self._known_weetbix_flaky_failures = set()
 
+    # Set of test names that barely meet weetbix flaky criteria. These can
+    # trigger a retry of the shard to avoid data cannibalization
+    self._weak_weetbix_flaky_failures = set()
+
     # A map from suffix [e.g. 'with patch'] to the name of the recipe engine
     # step that was invoked in run(). This makes the assumption that run() only
     # emits a single recipe engine step, and that the recipe engine step is the
@@ -605,6 +609,10 @@ class Test(object):
   def known_weetbix_flaky_failures(self):
     return self._known_weetbix_flaky_failures
 
+  @property
+  def weak_weetbix_flaky_failures(self):
+    return self._weak_weetbix_flaky_failures
+
   def get_summary_of_known_flaky_failures(self):
     """Returns a set of text to use to display in the test results summary."""
     return {
@@ -623,6 +631,14 @@ class Test(object):
       test_names: Iterable of string test names
     """
     self._known_weetbix_flaky_failures.update(test_names)
+
+  def add_weak_weetbix_flaky_failure(self, test_name):
+    """Add known weak flaky failures
+
+    Args:
+      test_names: String of a test name
+    """
+    self._weak_weetbix_flaky_failures.add(test_name)
 
   def compile_targets(self):
     """List of compile targets needed by this test."""

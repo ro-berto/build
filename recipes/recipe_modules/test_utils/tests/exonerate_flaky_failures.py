@@ -10,6 +10,7 @@ DEPS = [
     'recipe_engine/properties',
     'recipe_engine/raw_io',
     'recipe_engine/step',
+    'recipe_engine/time',
     'chromium',
     'chromium_tests',
     'test_utils',
@@ -17,6 +18,8 @@ DEPS = [
 
 from recipe_engine.recipe_api import Property
 from recipe_engine import post_process
+from google.protobuf import json_format
+from google.protobuf import timestamp_pb2
 
 from RECIPE_MODULES.build.chromium_tests import steps
 
@@ -122,11 +125,27 @@ def GenTests(api):
       })
     return verdicts
 
+  def construct_flaky_verdict_examples(example_times):
+    verdict_examples = []
+    if example_times:
+      for example_time in example_times:
+        verdict_examples.append({
+            'partitionTime':
+                timestamp_pb2.Timestamp(seconds=example_time).ToJsonString(),
+        })
+    return verdict_examples
+
   def generate_analysis(test_name,
-                        is_flaky,
                         suite_name='failed_test',
                         expected_count=10,
-                        unexpected_count=0):
+                        unexpected_count=0,
+                        flaky_verdict_count=None,
+                        examples_times=None):
+    flaky_verdicts1 = 0
+    flaky_verdicts2 = 0
+    if flaky_verdict_count != None:
+      flaky_verdicts1 = flaky_verdict_count
+
     return {
         'testId':
             'ninja://{}/{}'.format(suite_name, test_name),
@@ -137,26 +156,28 @@ def GenTests(api):
                 'intervalAge': 1,
                 'totalRunExpectedVerdicts': 300,
                 'totalRunUnexpectedVerdicts': 1,
-                'totalRunFlakyVerdicts': 10 if is_flaky else 0,
+                'totalRunFlakyVerdicts': flaky_verdicts1,
             },
             {
                 'intervalAge': 2,
                 'totalRunExpectedVerdicts': 300,
-                'totalRunFlakyVerdicts': 10 if is_flaky else 0,
+                'totalRunFlakyVerdicts': flaky_verdicts2,
             },
         ],
         'recentVerdicts':
             construct_recent_verdicts(
                 expected_count=expected_count,
                 unexpected_count=unexpected_count,
-            )
+            ),
+        'runFlakyVerdictExamples':
+            construct_flaky_verdict_examples(examples_times)
     }
 
   yield api.test(
       'immune to infra failure of querying flaky failures',
       api.chromium.generic_build(
-          builder_group='g',
-          builder='b',
+          builder_group='fake-group',
+          builder='fake-builder',
           experiments=['enable_weetbix_queries']),
       api.properties(**{
           '$build/test_utils': {
@@ -180,8 +201,8 @@ def GenTests(api):
   yield api.test(
       'immune to ill-formed response',
       api.chromium.generic_build(
-          builder_group='g',
-          builder='b',
+          builder_group='fake-group',
+          builder='fake-builder',
           experiments=['enable_weetbix_queries']),
       api.properties(**{
           '$build/test_utils': {
@@ -206,7 +227,10 @@ def GenTests(api):
 
   yield api.test(
       'immune to another ill-formed response',
-      api.chromium.generic_build(builder_group='g', builder='b'),
+      api.chromium.generic_build(
+          builder_group='fake-group',
+          builder='fake-builder',
+      ),
       api.properties(**{
           '$build/test_utils': {
               'should_exonerate_flaky_failures': True,
@@ -228,8 +252,8 @@ def GenTests(api):
   yield api.test(
       'empty response',
       api.chromium.generic_build(
-          builder_group='g',
-          builder='b',
+          builder_group='fake-group',
+          builder='fake-builder',
           experiments=['enable_weetbix_queries']),
       api.properties(**{
           '$build/test_utils': {
@@ -250,8 +274,8 @@ def GenTests(api):
   yield api.test(
       'no failed tests',
       api.chromium.generic_build(
-          builder_group='g',
-          builder='b',
+          builder_group='fake-group',
+          builder='fake-builder',
           experiments=['enable_weetbix_queries']),
       api.properties(
           exclude_failed_test=True,
@@ -271,8 +295,8 @@ def GenTests(api):
   yield api.test(
       'no tests are marked as known flaky or recently failing',
       api.chromium.generic_build(
-          builder_group='g',
-          builder='b',
+          builder_group='fake-group',
+          builder='fake-builder',
           experiments=['enable_weetbix_queries']),
       api.override_step_data(
           'failed_test results',
@@ -293,11 +317,9 @@ def GenTests(api):
               api.json.dumps({
                   'testVariants': [
                       generate_analysis(
-                          'testA', False, expected_count=10,
-                          unexpected_count=0),
+                          'testA', expected_count=10, unexpected_count=0),
                       generate_analysis(
-                          'testB', False, expected_count=10,
-                          unexpected_count=0),
+                          'testB', expected_count=10, unexpected_count=0),
                   ]
               })),
       ),
@@ -314,8 +336,8 @@ def GenTests(api):
   yield api.test(
       'part of the tests are marked as known flaky',
       api.chromium.generic_build(
-          builder_group='g',
-          builder='b',
+          builder_group='fake-group',
+          builder='fake-builder',
           experiments=['enable_weetbix_queries']),
       api.properties(
           known_flakes_expectations={
@@ -338,8 +360,11 @@ def GenTests(api):
       api.step_data(
           'query weetbix for failure rates.rpc call',
           stdout=api.raw_io.output_text(
-              api.json.dumps(
-                  {'testVariants': [generate_analysis('testA', True),]})),
+              api.json.dumps({
+                  'testVariants': [
+                      generate_analysis('testA', flaky_verdict_count=10),
+                  ]
+              })),
       ),
       api.step_data(
           'query known flaky failures on CQ',
@@ -366,8 +391,8 @@ def GenTests(api):
   yield api.test(
       'all of the tests are marked as known flaky',
       api.chromium.generic_build(
-          builder_group='g',
-          builder='b',
+          builder_group='fake-group',
+          builder='fake-builder',
           experiments=['enable_weetbix_queries']),
       api.override_step_data(
           'failed_test results',
@@ -413,8 +438,8 @@ def GenTests(api):
           stdout=api.raw_io.output_text(
               api.json.dumps({
                   'testVariants': [
-                      generate_analysis('testA', True),
-                      generate_analysis('testB', True),
+                      generate_analysis('testA', flaky_verdict_count=10),
+                      generate_analysis('testB', flaky_verdict_count=10),
                   ]
               })),
       ),
@@ -433,8 +458,8 @@ def GenTests(api):
   yield api.test(
       'tests are deterministically failing',
       api.chromium.generic_build(
-          builder_group='g',
-          builder='b',
+          builder_group='fake-group',
+          builder='fake-builder',
           experiments=['enable_weetbix_queries'],
       ),
       api.override_step_data(
@@ -473,10 +498,7 @@ def GenTests(api):
               api.json.dumps({
                   'testVariants': [
                       generate_analysis(
-                          'testA',
-                          is_flaky=False,
-                          expected_count=1,
-                          unexpected_count=9)
+                          'testA', expected_count=1, unexpected_count=9)
                   ]
               })),
       ),
@@ -488,8 +510,8 @@ def GenTests(api):
   yield api.test(
       'skip querying if there are too many failures',
       api.chromium.generic_build(
-          builder_group='g',
-          builder='b',
+          builder_group='fake-group',
+          builder='fake-builder',
           experiments=['enable_weetbix_queries']),
       api.properties(
           exclude_failed_test=True,
@@ -515,8 +537,8 @@ def GenTests(api):
   yield api.test(
       'keep querying if at least one test suite has limited failures',
       api.chromium.generic_build(
-          builder_group='g',
-          builder='b',
+          builder_group='fake-group',
+          builder='fake-builder',
           experiments=['enable_weetbix_queries']),
       api.override_step_data(
           'failed_test results',
@@ -538,8 +560,8 @@ def GenTests(api):
           stdout=api.raw_io.output_text(
               api.json.dumps({
                   'testVariants': [
-                      generate_analysis('testA', True),
-                      generate_analysis('testB', True),
+                      generate_analysis('testA', flaky_verdict_count=10),
+                      generate_analysis('testB', flaky_verdict_count=10),
                   ]
               })),
       ),
@@ -551,10 +573,195 @@ def GenTests(api):
   )
 
   yield api.test(
+      'retry_weak_weetbix_exonerations does not run strongly exonerated',
+      api.chromium.generic_build(
+          builder_group='fake-group',
+          builder='fake-builder',
+          experiments=[
+              'enable_weetbix_queries', 'weetbix.retry_weak_exonerations'
+          ]),
+      api.properties(
+          known_flakes_expectations={
+              'failed_test': ['testA', 'testB'],
+          },
+          known_weetbix_flakes_expectations={
+              'failed_test': ['testA', 'testB'],
+          },
+          override_failed_test_names=['testA'],
+          **{
+              '$build/test_utils': {
+                  'should_exonerate_flaky_failures': True,
+              },
+          }),
+      api.time.seed(60 * 60 * 12),
+      api.override_step_data(
+          'failed_test results',
+          stdout=api.raw_io.output_text(
+              api.test_utils.rdb_results(
+                  'failed_test', failing_tests=['testA', 'testB']))),
+      api.step_data(
+          'query weetbix for failure rates.rpc call',
+          stdout=api.raw_io.output_text(
+              api.json.dumps({
+                  'testVariants': [
+                      generate_analysis(
+                          'testA',
+                          flaky_verdict_count=10,
+                          examples_times=[60 * 60 * 12]),
+                      generate_analysis(
+                          'testB',
+                          flaky_verdict_count=10,
+                          examples_times=[60 * 60 * 12])
+                  ]
+              })),
+      ),
+      api.step_data(
+          'query known flaky failures on CQ',
+          api.json.output({
+              'flakes': [
+                  {
+                      'test': {
+                          'step_ui_name': 'failed_test (with patch)',
+                          'test_name': 'testA',
+                      },
+                      'affected_gerrit_changes': ['123', '234'],
+                      'monorail_issue': '999',
+                  },
+                  {
+                      'test': {
+                          'step_ui_name': 'failed_test (with patch)',
+                          'test_name': 'testB',
+                      },
+                      'affected_gerrit_changes': ['123', '234'],
+                      'monorail_issue': '999',
+                  },
+              ]
+          })),
+      api.post_process(post_process.MustRun, 'failed_test (with patch)'),
+      api.post_process(post_process.DoesNotRun,
+                       'failed_test (retry shards with patch)'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      # Even if findit exonerates the test, we want to run it if the experiment
+      # is enabled and weetbix is not confident of its verdict
+      'retry_weak_weetbix_exonerations does run weakly exonerated',
+      api.chromium.generic_build(
+          builder_group='fake-group',
+          builder='fake-builder',
+          experiments=[
+              'enable_weetbix_queries', 'weetbix.retry_weak_exonerations'
+          ]),
+      api.properties(
+          known_flakes_expectations={
+              'failed_test': ['testA', 'testB'],
+          },
+          known_weetbix_flakes_expectations={
+              'failed_test': ['testA', 'testB'],
+          },
+          override_failed_test_names=['testA'],
+          **{
+              '$build/test_utils': {
+                  'should_exonerate_flaky_failures': True,
+              },
+          }),
+      api.override_step_data(
+          'failed_test results',
+          stdout=api.raw_io.output_text(
+              api.test_utils.rdb_results(
+                  'failed_test', failing_tests=['testA', 'testB']))),
+      api.step_data(
+          'query weetbix for failure rates.rpc call',
+          stdout=api.raw_io.output_text(
+              api.json.dumps({
+                  'testVariants': [
+                      generate_analysis('testA', flaky_verdict_count=10),
+                      generate_analysis('testB', flaky_verdict_count=10)
+                  ]
+              })),
+      ),
+      api.step_data(
+          'query known flaky failures on CQ',
+          api.json.output({
+              'flakes': [
+                  {
+                      'test': {
+                          'step_ui_name': 'failed_test (with patch)',
+                          'test_name': 'testA',
+                      },
+                      'affected_gerrit_changes': ['123', '234'],
+                      'monorail_issue': '999',
+                  },
+                  {
+                      'test': {
+                          'step_ui_name': 'failed_test (with patch)',
+                          'test_name': 'testB',
+                      },
+                      'affected_gerrit_changes': ['123', '234'],
+                      'monorail_issue': '999',
+                  },
+              ]
+          })),
+      api.post_process(post_process.MustRun, 'failed_test (with patch)'),
+      api.post_process(post_process.MustRun,
+                       'failed_test (retry shards with patch)'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      # Even if findit exonerates the test, we want to run it if the experiment
+      # is enabled and weetbix is not confident of its verdict
+      'retry_weak_weetbix_exonerations still runs with no findit exoneration',
+      api.chromium.generic_build(
+          builder_group='fake-group',
+          builder='fake-builder',
+          experiments=[
+              'enable_weetbix_queries', 'weetbix.retry_weak_exonerations'
+          ]),
+      api.properties(
+          known_flakes_expectations={
+              'failed_test': [],
+          },
+          known_weetbix_flakes_expectations={
+              'failed_test': ['testA', 'testB'],
+          },
+          override_failed_test_names=['testA'],
+          **{
+              '$build/test_utils': {
+                  'should_exonerate_flaky_failures': True,
+              },
+          }),
+      api.override_step_data(
+          'failed_test results',
+          stdout=api.raw_io.output_text(
+              api.test_utils.rdb_results(
+                  'failed_test', failing_tests=['testA', 'testB']))),
+      api.step_data(
+          'query weetbix for failure rates.rpc call',
+          stdout=api.raw_io.output_text(
+              api.json.dumps({
+                  'testVariants': [
+                      generate_analysis('testA', flaky_verdict_count=10),
+                      generate_analysis('testB', flaky_verdict_count=10)
+                  ]
+              })),
+      ),
+      api.step_data('query known flaky failures on CQ',
+                    api.json.output({'flakes': []})),
+      api.post_process(post_process.MustRun, 'failed_test (with patch)'),
+      api.post_process(post_process.MustRun,
+                       'failed_test (retry shards with patch)'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
       'retry_findit_exonerations',
       api.chromium.generic_build(
-          builder_group='g',
-          builder='b',
+          builder_group='fake-group',
+          builder='fake-builder',
           experiments=['enable_weetbix_queries', 'retry_findit_exonerations']),
       api.override_step_data(
           'failed_test results',
@@ -618,12 +825,16 @@ def GenTests(api):
           stdout=api.raw_io.output_text(
               api.json.dumps({
                   'testVariants': [
-                      generate_analysis('testA', False),
-                      generate_analysis('testB', False),
+                      generate_analysis('testA'),
+                      generate_analysis('testB'),
                       generate_analysis(
-                          'testA', True, suite_name='failed_test_1'),
+                          'testA',
+                          flaky_verdict_count=10,
+                          suite_name='failed_test_1'),
                       generate_analysis(
-                          'testB', True, suite_name='failed_test_1'),
+                          'testB',
+                          flaky_verdict_count=10,
+                          suite_name='failed_test_1'),
                   ]
               })),
       ),

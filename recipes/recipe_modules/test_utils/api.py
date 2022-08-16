@@ -10,6 +10,7 @@ from recipe_engine import util as recipe_util
 
 from . import canonical
 from .util import GTestResults, RDBPerSuiteResults, RDBResults
+from google.protobuf import timestamp_pb2
 
 from PB.go.chromium.org.luci.resultdb.proto.v1 import (test_result as
                                                        test_result_pb2)
@@ -416,6 +417,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     retry_findit_exonerations = ('retry_findit_exonerations' in
                                  self.m.buildbucket.build.input.experiments)
+    retry_weak_weetbix_exonerations = ('weetbix.retry_weak_exonerations' in self
+                                       .m.buildbucket.build.input.experiments)
 
     pruned_suites = failed_test_suites[:]
     exonerated_suites_to_retry = []
@@ -442,8 +445,10 @@ class TestUtilsApi(recipe_api.RecipeApi):
         # experiment enabled.
         # Long-term, we're thinking of triggering the retry shards and not
         # having the build collect the results.
-        if retry_findit_exonerations:
+        if retry_findit_exonerations or (retry_weak_weetbix_exonerations and
+                                         t.weak_weetbix_flaky_failures):
           exonerated_suites_to_retry.append(t)
+
         pruned_suites.remove(t)
 
     if exonerated_suites_to_retry:
@@ -510,6 +515,19 @@ class TestUtilsApi(recipe_api.RecipeApi):
       # Set of test_names
       tests_to_exonerate = set()
       for analysis in failure_rate_analysis_per_suite.failure_analysis_list:
+        # Get the failures in the last 12 hours, up to 10
+        twelve_hours_ago = timestamp_pb2.Timestamp(
+            seconds=int(self.m.time.time() - (60 * 60 * 12)))
+
+        failure_in_last_12_hours = False
+        for example in analysis.run_flaky_verdict_examples:
+          partition_time = timestamp_pb2.Timestamp()
+          partition_time.FromJsonString(example['partitionTime'])
+
+          if partition_time.ToSeconds() > twelve_hours_ago.ToSeconds():
+            failure_in_last_12_hours = True
+            break
+
         # Query over the last 5 weekdays and the last weekday
         stats = {
             'total_flaky':
@@ -517,13 +535,31 @@ class TestUtilsApi(recipe_api.RecipeApi):
             'total_recent_unexpected':
                 analysis.get_unexpected_recent_verdict_count(),
         }
+
         # To be exonerated for being flaky, the failing test needs to be flaky
-        # in the last weekday AND the last 5 weekdays
-        meets_min_flakiness = (
-            stats['total_flaky'][1] >= 1 and stats['total_flaky'][5] >= 3)
+        # in the last 12 hours AND the last 5 weekdays. Even if exonerated it
+        # must strongly meet these requirements to avoid a retry
+        strongly_meets_min_flakiness = (
+            failure_in_last_12_hours and stats['total_flaky'][5] >= 4)
+
+        # The "barely" meets criteria will exonerate but still launch a retry
+        # to avoid data cannibalization
+        barely_meets_min_flakiness = (
+            (stats['total_flaky'][5] >= 3 and stats['total_flaky'][1] >= 1) and
+            (stats['total_flaky'][5] == 3 or not failure_in_last_12_hours))
+
         meets_min_recent_unexpected = stats['total_recent_unexpected'] >= 7
         exonerated = False
-        if meets_min_flakiness or meets_min_recent_unexpected:
+        strongly_exonerated = False
+
+        if meets_min_recent_unexpected or strongly_meets_min_flakiness:
+          tests_to_exonerate.add(analysis.test_name)
+          strongly_exonerated = True
+          exonerated = True
+        else:
+          suite.add_weak_weetbix_flaky_failure(analysis.test_name)
+
+        if meets_min_recent_unexpected or barely_meets_min_flakiness:
           tests_to_exonerate.add(analysis.test_name)
           exonerated = True
 
@@ -532,6 +568,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
         to_log = stats
         to_log['variant_hash'] = analysis.variant_hash
         to_log['exonerated'] = exonerated
+        to_log['strongly_exonerated'] = strongly_exonerated
         to_log['test_id'] = analysis.test_id
         weetbix_build_output.append(to_log)
         flaky_verdict_example_log[analysis.test_id] = (
