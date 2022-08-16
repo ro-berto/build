@@ -20,6 +20,7 @@ DEPS = [
 ]
 
 _NINJA_STEP_NAME = 'compile (reclient)'
+_BOOTSTRAP_STEP_NAME = 'preprocess for reclient.start reproxy via bootstrap'
 
 
 def RunSteps(api):
@@ -90,13 +91,29 @@ def GenTests(api):
       api.post_check(env_checker),
   )
 
+  def bootstrap_env_checker(check, steps):
+    env = steps[_BOOTSTRAP_STEP_NAME].env
+    check(env['RBE_FOO'] == 'foo')
+    check(env['RBE_BAR'] == 'bar')
+
+  yield api.test(
+      'proper_bootstrap_flags',
+      api.buildbucket.ci_build(project='chromium', builder='Linux reclient'),
+      api.reclient.properties(bootstrap_env={
+          'RBE_FOO': 'foo',
+          'RBE_BAR': 'bar'
+      }),
+      api.post_check(bootstrap_env_checker),
+      api.post_process(post_process.DropExpectation),
+  )
+
   yield api.test(
       'incorrect_rewrapper_flags',
       api.buildbucket.ci_build(project='chromium', builder='Linux reclient'),
       api.reclient.properties(rewrapper_env={
           'MISSING_RBE_PREFIX': 'foo',
       }),
-      api.expect_exception('MalformedREWrapperFlag'),
+      api.expect_exception('MalformedREClientFlag'),
       api.post_process(post_process.DropExpectation),
   )
 

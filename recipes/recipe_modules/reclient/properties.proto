@@ -20,10 +20,9 @@ message InputProperties {
   int32 jobs = 3;
 
   // Map of flags to be passed to rewrapper calls through environment
-  // variables. The flag names must be prefixed with The "RBE_". It may
-  // include values such as the reproxy address (ie RBE_server_address),
-  // but it can't include usage specific values such as RBE_exec_root
-  // and RBE_platform.
+  // variables. The flag names must be prefixed with "RBE_". It may include
+  // values such as the reproxy address (ie RBE_server_address), but it can't
+  // include usage specific values such as RBE_exec_root and RBE_platform.
   map<string, string> rewrapper_env = 4;
 
   // The GCP project to which reclient should publish metrics.
@@ -55,4 +54,8 @@ message InputProperties {
   // making slow progress without detecting the underlying cause of widespread
   // local fallbacks.
   bool fail_early = 10  [deprecated=true];
+
+  // Map of flags to be passed to bootstrap calls through environment
+  // variables. The flag names must be prefixed with "RBE_".
+  map<string, string> bootstrap_env = 11;
 }

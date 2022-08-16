@@ -11,12 +11,15 @@ class ReclientTestApi(recipe_test_api.RecipeTestApi):
                  instance='test-rbe-project',
                  metrics_project=None,
                  rewrapper_env=None,
+                 bootstrap_env=None,
                  profiler_service=None,
                  publish_trace=None,
                  cache_silo=None,
                  ensure_verified=None):
     if rewrapper_env is None:
       rewrapper_env = {}
+    if bootstrap_env is None:
+      bootstrap_env = {}
 
     return self.m.properties(
         **{
@@ -24,6 +27,7 @@ class ReclientTestApi(recipe_test_api.RecipeTestApi):
                 'instance': instance,
                 'metrics_project': metrics_project,
                 'rewrapper_env': rewrapper_env,
+                'bootstrap_env': bootstrap_env,
                 'profiler_service': profiler_service,
                 'publish_trace': publish_trace,
                 'cache_silo': cache_silo,

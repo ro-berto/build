@@ -47,7 +47,6 @@ def make_test_rbe_stats_pb():
   p2.event_times['foo'].to.CopyFrom(timestamp_pb2.Timestamp(seconds=1658369605))
   return stats
 
-
 def proxy_info_to_bq(proxy_info):
   proxy_info_bq = {}
   if proxy_info.event_times:
@@ -76,11 +75,11 @@ def proxy_info_to_bq(proxy_info):
   return proxy_info_bq
 
 
-class MalformedREWrapperFlag(Exception):
+class MalformedREClientFlag(Exception):
 
   def __init__(self, flag):
     full_message = 'Flag "{}" doesn\'t start with "RBE_"'.format(flag)
-    super(MalformedREWrapperFlag, self).__init__(full_message)
+    super(MalformedREClientFlag, self).__init__(full_message)
 
 
 class BuildResultReceiver(object):
@@ -133,6 +132,7 @@ class ReclientApi(recipe_api.RecipeApi):
     self._reclient_log_dir = None
     self._cache_silo = props.cache_silo or None
     self._mismatch = None
+    self._bootstrap_env = None
 
     if self._test_data.enabled:
       self._hostname = 'fakevm999-m9'
@@ -187,7 +187,7 @@ class ReclientApi(recipe_api.RecipeApi):
     # throwing code -- such as checking validity of props inputs -- outside
     # __init__.
     if self._rewrapper_env is None:
-      self._rewrapper_env = self._verify_rewrapper_flags(
+      self._rewrapper_env = self._verify_reclient_flags(
           self._props.rewrapper_env)
 
     # While it'd make more sense to set this during __init__, deciding the
@@ -199,6 +199,18 @@ class ReclientApi(recipe_api.RecipeApi):
       if self._reclient_log_dir:
         self._rewrapper_env['RBE_log_dir'] = self._reclient_log_dir
     return self._rewrapper_env
+
+  @property
+  def bootstrap_env(self):
+    # While this verification would better be placed at __init__, the test
+    # framework 1) doesn't check for exceptions thrown during object creation,
+    # 2) requires 100% code coverage. Thus we have to move any exception
+    # throwing code -- such as checking validity of props inputs -- outside
+    # __init__.
+    if self._bootstrap_env is None:
+      self._bootstrap_env = self._verify_reclient_flags(
+          self._props.bootstrap_env)
+    return self._bootstrap_env
 
   @property
   def rewrapper_path(self):
@@ -276,7 +288,8 @@ class ReclientApi(recipe_api.RecipeApi):
       self._start_cloudtail(cloudtail_project_id, log_dir,
                             'reproxy-gomaip.INFO')
 
-      self._start_reproxy(self._reclient_log_dir, self.deps_cache_path)
+      self._start_reproxy(self._reclient_log_dir, self.deps_cache_path,
+                          self.bootstrap_env)
 
     p = BuildResultReceiver()
     try:
@@ -284,7 +297,7 @@ class ReclientApi(recipe_api.RecipeApi):
         yield p
     finally:
       with self.m.step.nest('postprocess for reclient'):
-        self._stop_reproxy(self._reclient_log_dir)
+        self._stop_reproxy(self._reclient_log_dir, self.bootstrap_env)
         self._stop_cloudtail(self._get_platform_exe_name('reproxy') + '.INFO')
         self._stop_cloudtail('reproxy-gomaip.INFO')
         self._upload_rbe_metrics(self._reclient_log_dir)
@@ -329,7 +342,7 @@ class ReclientApi(recipe_api.RecipeApi):
     """List contents of the reclient cache directory."""
     self.m.file.listdir('list reclient cache directory', reclient_cache_dir)
 
-  def _start_reproxy(self, reclient_log_dir, reclient_cache_dir):
+  def _start_reproxy(self, reclient_log_dir, reclient_cache_dir, bootstrap_env):
     """Starts the reproxy via bootstramp.
 
     Args:
@@ -339,6 +352,7 @@ class ReclientApi(recipe_api.RecipeApi):
       reclient_cache_dir: Directory from which to load
                           the dependency cache at reproxy startup
                           and update at shutdown
+      bootstrap_env: Environment for bootstrap to start reproxy.
     """
     reproxy_bin_path = self._get_reclient_exe_path('reproxy')
     env = {
@@ -356,6 +370,8 @@ class ReclientApi(recipe_api.RecipeApi):
         'RBE_fail_early_min_action_count': 4000,
         'RBE_fail_early_min_fallback_ratio': 0.5,
     }
+    if bootstrap_env is not None:
+      env.update(bootstrap_env)
     if self._props.profiler_service:
       env['RBE_profiler_service'] = self._props.profiler_service
       env['RBE_profiler_project_id'] = self.rbe_project
@@ -369,11 +385,12 @@ class ReclientApi(recipe_api.RecipeApi):
           [self._bootstrap_bin_path, '-output_dir', reclient_log_dir],
           infra_step=True)
 
-  def _stop_reproxy(self, reclient_log_dir):
+  def _stop_reproxy(self, reclient_log_dir, bootstrap_env):
     """Stops the reproxy via bootstramp.
 
     Args:
       reclient_log_dir: Directory to hold the logs produced by reclient.
+      bootstrap_env: Environment for bootstrap to start reproxy.
     """
     args = [
         self._bootstrap_bin_path,
@@ -412,6 +429,8 @@ class ReclientApi(recipe_api.RecipeApi):
         # glog's logging directory
         'RBE_log_dir': reclient_log_dir,
     }
+    if bootstrap_env is not None:
+      env.update(bootstrap_env)
     with self.m.context(env=env):
       self.m.step('shutdown reproxy via bootstrap', args, infra_step=True)
 
@@ -710,13 +729,13 @@ class ReclientApi(recipe_api.RecipeApi):
         ],
         infra_step=True)
 
-  def _verify_rewrapper_flags(self, rewrapper_env):
-    str_rewrapper_env = {}
+  def _verify_reclient_flags(self, reclient_env):
+    str_reclient_env = {}
 
-    for flag, value in rewrapper_env.items():
+    for flag, value in reclient_env.items():
       if not flag.startswith('RBE_'):
-        raise MalformedREWrapperFlag(flag)
+        raise MalformedREClientFlag(flag)
       else:
-        str_rewrapper_env[str(flag)] = str(value)
+        str_reclient_env[str(flag)] = str(value)
 
-    return str_rewrapper_env
+    return str_reclient_env
