@@ -73,7 +73,11 @@ SPEC = {
         ),
     'WebRTC Chromium Mac Builder':
         _chromium_webrtc_spec(
-            chromium_apply_config=['dcheck', 'mb'],
+            chromium_apply_config=[
+                'dcheck',
+                'mb',
+                'mac_toolchain',
+            ],
             chromium_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -86,7 +90,11 @@ SPEC = {
     'WebRTC Chromium Mac Tester':
         _chromium_webrtc_spec(
             execution_mode=builder_spec.TEST,
-            chromium_apply_config=['dcheck', 'mb'],
+            chromium_apply_config=[
+                'dcheck',
+                'mb',
+                'mac_toolchain',
+            ],
             chromium_config='chromium',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',

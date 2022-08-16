@@ -1416,6 +1416,7 @@ def GenTests(api):
 
   yield api.test(
       'webrtc_chromium_mac_tester',
+      api.properties(xcode_build_version='12345'),
       api.chromium_tests_builder_config.ci_build(
           builder_group='chromium.webrtc',
           builder='WebRTC Chromium Mac Tester',
@@ -1465,6 +1466,7 @@ def GenTests(api):
 
   yield api.test(
       'webrtc_chromium_mac_tester_failure',
+      api.properties(xcode_build_version='12345'),
       api.chromium_tests_builder_config.ci_build(
           builder_group='chromium.webrtc',
           builder='WebRTC Chromium Mac Tester',
