@@ -1,0 +1,25 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[depot_tools]/gn.py",
+      "desc",
+      "None/out/Debug",
+      "*",
+      "--format=json"
+    ],
+    "cwd": "None",
+    "name": "generate gn target list",
+    "~followup_annotations": [
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "failure": {
+      "failure": {},
+      "humanReason": "Step('generate gn target list') (retcode: 1)"
+    },
+    "name": "$result"
+  }
+]

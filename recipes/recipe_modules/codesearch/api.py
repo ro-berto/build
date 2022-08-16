@@ -77,14 +77,40 @@ class CodesearchApi(recipe_api.RecipeApi):
 
     return step_result
 
-  def generate_gn_target_list(self, output_file=None):
+  def generate_gn_compilation_database(self,
+                                       targets,
+                                       builder_group,
+                                       buildername,
+                                       mb_config_path=None):
+    self.m.chromium.mb_gen(
+        chromium.BuilderId.create_for_group(builder_group, buildername),
+        build_dir=self.c.out_path,
+        name='generate build files',
+        mb_config_path=mb_config_path)
+
+    with self.m.context(
+        cwd=self.m.path['checkout'], env=self.m.chromium.get_env()):
+      export_compile_cmd = '--export-compile-commands'
+      if targets:
+        export_compile_cmd += '=' + ','.join(targets)
+      self.m.step(
+          'generate gn compilation database', [
+              'python', '-u', self.m.depot_tools.gn_py_path, 'gen',
+              export_compile_cmd, self.c.out_path
+          ],
+          stdout=self.m.raw_io.output_text()).stdout
+
+  def generate_gn_target_list(self, targets=None, output_file=None):
     output_file = output_file or self.c.gn_targets_json_file
     with self.m.context(
         cwd=self.m.path['checkout'], env=self.m.chromium.get_env()):
+      targets_cmd = '*'
+      if targets:
+        targets_cmd = ' '.join(targets)
       output = self.m.step(
           'generate gn target list', [
               'python', '-u', self.m.depot_tools.gn_py_path, 'desc',
-              self.c.out_path, '*', '--format=json'
+              self.c.out_path, targets_cmd, '--format=json'
           ],
           stdout=self.m.raw_io.output_text()).stdout
     self.m.file.write_raw('write gn target list', output_file, output)

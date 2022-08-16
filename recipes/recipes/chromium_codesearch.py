@@ -50,6 +50,7 @@ TRYBOT_SPEC = freeze({
         'gen-lacros-try': 'codesearch-gen-chromium-lacros',
         'gen-linux-try': 'codesearch-gen-chromium-linux',
         'gen-mac-try': 'codesearch-gen-chromium-mac',
+        'gen-webview-try': 'codesearch-gen-chromium-webview',
         'gen-win-try': 'codesearch-gen-chromium-win',
     }
 })
@@ -75,6 +76,7 @@ def RunSteps(api, properties):
   build_config = bot_config.build_config or ''
   # compile_targets is of type RepeatedScalarFieldContainer.
   targets = list(bot_config.compile_targets or [])
+
   gen_repo_branch = bot_config.gen_repo_branch or 'main'
   gen_repo_out_dir = bot_config.gen_repo_out_dir or 'Debug'
   internal = bot_config.internal or False
@@ -149,9 +151,23 @@ def RunSteps(api, properties):
     # by that step may be deleted (if they've been unchanged for the past week).
     api.codesearch.cleanup_old_generated()
 
-  api.codesearch.generate_compilation_database(
-      targets, builder_group=builder_id.group, buildername=builder_id.builder)
-  api.codesearch.generate_gn_target_list()
+  if platform == 'webview':
+    # Experiment to use gn gen to generate compilation database, it supports
+    # target list.
+    # GN target format is different than ninja's, we might need a dedicated GN
+    # target list.
+    webview_gn_targets = ['//android_webview:system_webview_apk']
+    api.codesearch.generate_gn_compilation_database(
+        webview_gn_targets,
+        builder_group=builder_id.group,
+        buildername=builder_id.builder)
+    api.codesearch.generate_gn_target_list(webview_gn_targets)
+  else:
+    api.codesearch.generate_compilation_database(
+        targets=targets,
+        builder_group=builder_id.group,
+        buildername=builder_id.builder)
+    api.codesearch.generate_gn_target_list()
 
   # Prepare Java Kythe output directory
   kzip_dir = api.codesearch.c.javac_extractor_output_dir
