@@ -1,0 +1,18 @@
+// Copyright 2022 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+syntax = "proto3";
+
+package recipes.build.gofindit.chromium.single_revision;
+
+message InputProperties {
+  // Identifies a builder in terms compatible with chromium_tests.
+  message BuilderId {
+    string group = 1;
+    string builder = 2;
+  }
+
+  // The builder to run the rerun build on.
+  BuilderId target_builder = 1;
+}
