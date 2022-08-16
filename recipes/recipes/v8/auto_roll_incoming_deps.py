@@ -68,6 +68,8 @@ PROPERTIES = {
                 reviewers=List(str),
                 # Add extra log entries to the commit message.
                 show_commit_log=Single(bool),
+                # Bugs included in roll CL description
+                bugs=Single(str),
             )),
 }
 
@@ -170,7 +172,10 @@ def setup_gclient(api, autoroller_config):
   api.gclient.c.target_os.add('win')
 
 
-def setup_v8_repository(api):
+def setup_target_repository(api):
+  # NOTE: Besides the name, this actually does a checkout of the first solution
+  #       defined in gclient (autoroller_config -> target_config ->
+  #       solution_name), and might be something else, e.g. devtools-frontend.  
   api.v8.checkout(ignore_input_commit=True, set_output_commit=False)
 
 
@@ -472,6 +477,8 @@ def update_dependencies(api, updates, autoroller_config, trusted):
     ]
     if trusted:
       upload_args.append('--set-bot-commit')
+    if 'bugs' in autoroller_config:
+      upload_args += ['-b', autoroller_config['bugs']]
     api.git(*upload_args)
 
 
@@ -487,7 +494,7 @@ def RunSteps(api, autoroller_config):
   with api.step.nest('Setup'):
     abandon_active_cls(api, autoroller_config)
     setup_gclient(api, autoroller_config)
-    setup_v8_repository(api)
+    setup_target_repository(api)
 
   with api.step.nest('Find updated deps'):
     discard_local_changes(api)
@@ -537,6 +544,7 @@ src/mock-set-dep-failing: mock/set-dep-failing.git@2"""
           'buildtools-mapped': 'buildtools',
       },
       'show_commit_log': True,
+      'bugs': 'none',
   }
 
   def base_template(testname, additional_v8_deps, additional_cr_deps):

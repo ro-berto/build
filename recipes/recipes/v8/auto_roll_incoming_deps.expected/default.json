@@ -1214,7 +1214,9 @@
       "--use-commit-queue",
       "--bypass-hooks",
       "--send-mail",
-      "--set-bot-commit"
+      "--set-bot-commit",
+      "-b",
+      "none"
     ],
     "cwd": "[CACHE]/builder/v8",
     "env_prefixes": {
@@ -1623,7 +1625,9 @@
       "-f",
       "--use-commit-queue",
       "--bypass-hooks",
-      "--send-mail"
+      "--send-mail",
+      "-b",
+      "none"
     ],
     "cwd": "[CACHE]/builder/v8",
     "env_prefixes": {
