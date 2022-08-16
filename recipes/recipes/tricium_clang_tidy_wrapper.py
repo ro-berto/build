@@ -122,7 +122,6 @@ def RunSteps(api):
 
       api.chromium.ensure_toolchains()
       api.chromium.ensure_goma()
-      api.goma.start()
 
       # `gn gen` can take up to a minute, and the script we call out to
       # already does that for us, so set up a minimal build dir.
@@ -131,9 +130,17 @@ def RunSteps(api):
       api.file.write_text('write args.gn',
                           api.chromium.output_dir.join('args.gn'), gn_args)
 
-      api.tricium_clang_tidy.lint_source_files(api.chromium.output_dir,
-                                               affected,
-                                               api.platform.name == 'win')
+      api.goma.start()
+      exit_status = 0
+      try:
+        api.tricium_clang_tidy.lint_source_files(api.chromium.output_dir,
+                                                 affected,
+                                                 api.platform.name == 'win')
+      except:  # pragma: no cover
+        exit_status = -1
+        raise
+      finally:
+        api.goma.stop(exit_status)
 
 
 def GenTests(api):
