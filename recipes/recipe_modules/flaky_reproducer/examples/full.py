@@ -17,24 +17,17 @@ DEPS = [
 ]
 
 PROPERTIES = {
-    'task_id':
-        Property(default=None, kind=str),
-    'build_id':
-        Property(default=None, kind=str),
-    'test_name':
-        Property(default=None, kind=str),
-    'test_id':
-        Property(default=None, kind=str),
-    'trigger':
-        Property(
-            default='auto',
-            help="The task is (manual|auto)-ly triggerd.",
-            kind=str),
+    'task_id': Property(default=None, kind=str),
+    'build_id': Property(default=None, kind=str),
+    'test_name': Property(default=None, kind=str),
+    'test_id': Property(default=None, kind=str),
+    'config': Property(default=None, kind=str),
 }
 
 
-def RunSteps(api, trigger, task_id, build_id, test_name, test_id):
-  api.flaky_reproducer.set_config(trigger)
+def RunSteps(api, config, task_id, build_id, test_name, test_id):
+  if config:
+    api.flaky_reproducer.set_config(config)
   return api.flaky_reproducer.run(
       task_id=task_id, build_id=build_id, test_name=test_name, test_id=test_id)
 
@@ -133,7 +126,7 @@ def GenTests(api):
       api.properties(
           task_id='54321fffffabc123',
           test_name='MockUnitTests.FailTest',
-          trigger='manual'),
+          config='manual'),
       api.step_data(
           'get_test_result_summary.download swarming outputs',
           api.raw_io.output_dir({
@@ -222,7 +215,7 @@ def GenTests(api):
       api.properties(
           task_id='54321fffffabc123',
           test_name='MockUnitTests.FailTest',
-          trigger='manual'),
+          config='manual'),
       api.step_data(
           'get_test_result_summary.download swarming outputs',
           api.raw_io.output_dir({

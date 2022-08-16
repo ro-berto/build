@@ -1,0 +1,25 @@
+// Copyright 2022 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+syntax = "proto3";
+
+package recipes.build.flakiness.reproducer;
+
+
+message InputProperties {
+  // Swarming task ID of the flaky task sample.
+  string task_id = 1;
+
+  // Buildbucket build ID of the flaky build sample.
+  string build_id = 2;
+
+  // The test name of the flaky test case.
+  string test_name = 3;
+
+  // The test ID of the flaky test case from ResultDB.
+  string test_id = 4;
+
+  // The name of recipe module config item.
+  string config = 5;
+}
