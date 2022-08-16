@@ -142,6 +142,20 @@
     ]
   },
   {
+    "cmd": [
+      "python3",
+      "RECIPE_MODULE[build::goma]/resources/goma_canceller.py",
+      "[CACHE]/goma/client/goma_ctl.py"
+    ],
+    "cost": {
+      "cpu": 0,
+      "disk": 0,
+      "memory": 0,
+      "net": 0
+    },
+    "name": "start goma canceller"
+  },
+  {
     "name": "$result"
   }
 ]
