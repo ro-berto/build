@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env vpython3
 # Copyright (c) 2015 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -7,6 +7,7 @@
 """
 
 
+from __future__ import absolute_import
 import json
 import logging
 import optparse
@@ -16,6 +17,7 @@ import sys
 from json_results_generator import JSONResultsGenerator
 import test_result
 import test_results_uploader
+import six
 
 
 FULL_RESULTS_FILENAME = 'full_results.json'
@@ -33,7 +35,7 @@ def get_results_map_from(contents):
     test_results_map[test_result.canonical_name(test)] = [
         test_result.TestResult(test, status='SKIPPED')]
   for result_sets in contents.get('per_iteration_data', []):
-    for test, results in result_sets.iteritems():
+    for test, results in six.iteritems(result_sets):
       for result in results:
         result = test_result.TestResult(
             test,
@@ -164,7 +166,7 @@ def main(args):
                  '--builder-group is not specified; the results won\'t be '
                  'uploaded to the server.')
 
-  with file(options.input_json) as json_file:
+  with open(options.input_json) as json_file:
     results_json = json_file.read()
 
   content = json.loads(results_json)

@@ -11,13 +11,15 @@ Usage:
                       timeout_secs=120)
 """
 
+from __future__ import absolute_import
 import codecs
 import datetime
 import logging
 import mimetypes
 import socket
 import time
-import urllib2
+import six.moves.urllib.request, six.moves.urllib.error, six.moves.urllib.parse
+import six
 
 
 class TimeoutError(Exception):
@@ -42,7 +44,7 @@ def upload_test_results(host, params, files, timeout_secs):
   """
   file_objs = []
   for filename, path in files:
-    with codecs.open(path, 'rb') as f:
+    with codecs.open(path, 'r') as f:
       file_objs.append(('file', filename, f.read()))
 
   return _retry_exp_backoff(
@@ -55,11 +57,11 @@ def _try_uploading_test_results(host, attrs, file_objs, timeout_secs):
   url = 'https://%s/testfile/upload' % host
   content_type, data = _encode_form_data(attrs, file_objs)
   headers = {'Content-Type': content_type}
-  request = urllib2.Request(url, data, headers)
+  request = six.moves.urllib.request.Request(url, data, headers)
   logging.info('Sending request to %s at %s UTC '
                '(payload size: %d bytes)', url,
                datetime.datetime.utcnow().isoformat(' '), len(data))
-  return urllib2.urlopen(request, timeout=timeout_secs)
+  return six.moves.urllib.request.urlopen(request, timeout=timeout_secs)
 
 
 def _encode_form_data(fields, files):
@@ -83,8 +85,6 @@ def _encode_form_data(fields, files):
     lines.append('--' + BOUNDARY)
     lines.append('Content-Disposition: form-data; name="%s"' % key)
     lines.append('')
-    if isinstance(value, unicode):
-      value = value.encode('utf-8')
     lines.append(value)
 
   for key, filename, value in files:
@@ -93,13 +93,11 @@ def _encode_form_data(fields, files):
                  (key, filename))
     lines.append('Content-Type: application/json; charset=utf-8')
     lines.append('')
-    if isinstance(value, unicode):
-      value = value.encode('utf-8')
     lines.append(value)
 
   lines.append('--' + BOUNDARY + '--')
   lines.append('')
-  body = CRLF.join(lines)
+  body = CRLF.join(lines).encode()
   content_type = 'multipart/form-data; boundary=%s' % BOUNDARY
   return content_type, body
 
@@ -126,7 +124,7 @@ def _retry_exp_backoff(func, timeout_secs):
   while True:
     try:
       return func(timeout_secs - total_sleep)
-    except urllib2.HTTPError as e:
+    except six.moves.urllib.error.HTTPError as e:
       if total_sleep + backoff_secs > timeout_secs:
         raise TimeoutError()
       # Don't retry if we aren't getting a 5xx response.
