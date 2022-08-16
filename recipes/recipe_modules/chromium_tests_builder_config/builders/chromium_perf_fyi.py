@@ -69,6 +69,17 @@ _AddBuildSpec(
     ])
 
 _AddBuildSpec(
+    'fuchsia-builder-perf-arm64',
+    'fuchsia',
+    bisect_archive_build=True,
+    target_bits=64,
+    target_arch='arm',
+    extra_gclient_apply_config=[
+        'fuchsia_arm64',
+        'fuchsia_internal',
+    ])
+
+_AddBuildSpec(
     'fuchsia-builder-perf-x64',
     'fuchsia',
     bisect_archive_build=True,
@@ -98,6 +109,22 @@ _AddIsolatedTestSpec(
     target_bits=64,
     target_arch='arm',
     parent_buildername='fuchsia-builder-perf-fyi',
+    parent_builder_group='chromium.perf.fyi')
+
+_AddIsolatedTestSpec(
+    'fuchsia-perf-ast',
+    'fuchsia',
+    target_bits=64,
+    target_arch='arm',
+    parent_buildername='fuchsia-builder-perf-arm64',
+    parent_builder_group='chromium.perf.fyi')
+
+_AddIsolatedTestSpec(
+    'fuchsia-perf-shk',
+    'fuchsia',
+    target_bits=64,
+    target_arch='arm',
+    parent_buildername='fuchsia-builder-perf-arm64',
     parent_builder_group='chromium.perf.fyi')
 
 _AddIsolatedTestSpec(
