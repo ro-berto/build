@@ -1,10 +1,6 @@
 [
   {
     "cmd": [],
-    "name": "Witness step: empty configuration"
-  },
-  {
-    "cmd": [],
     "name": "initialization",
     "~followup_annotations": [
       "@@@STEP_EXCEPTION@@@"

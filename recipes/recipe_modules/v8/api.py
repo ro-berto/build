@@ -297,14 +297,7 @@ class V8Api(recipe_api.RecipeApi):
         default['gclient_apply_config'] = [
             'enable_reclient',
         ]
-    if not builders: # pragma: no cover
-      self.m.step('Witness step: empty configuration', [])
-      builders = builders or {}
-    elif self.m.buildbucket.builder_name not in builders: # pragma: no cover
-      self.m.step('Witness step: no config for current builder', [])
-    else: # pragma: no cover
-      self.m.step('Witness step: config exists', [])
-    return builders.get(self.m.buildbucket.builder_name, default)
+    return (builders or {}).get(self.m.buildbucket.builder_name, default)
 
   def update_bot_config(self, bot_config, binary_size_tracking,
                         clusterfuzz_archive, coverage, enable_swarming,
