@@ -1054,11 +1054,10 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     return {
         # host = chromium, if full host name is chromium.googlesource.com
         'host': commit.host[:commit.host.find('.')],
-        # This field is used if the code is hosted on internal version of
-        # codesearch. Since this is not true for chromium/src, this is set
-        # to a generic value i.e. codesearch. Actual value would be the name of
-        # repo on codesearch.
-        'project': 'codesearch',
+        # Maps to https://chromium.googlesource.com/codesearch/chromium/src/
+        # which is a view of https://chromium.googlesource.com/chromium/src/
+        # but with git submodules instead of DEPS for codesearch to index
+        'project': 'codesearch/chromium/src',
         'trace_type': coverage_format,
         'git_project': commit.project,
         'commit_id': commit.id,
