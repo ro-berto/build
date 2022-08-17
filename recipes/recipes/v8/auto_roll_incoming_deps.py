@@ -66,6 +66,8 @@ PROPERTIES = {
                 deps_key_mapping=Dict(value_type=str),
                 # List of reviewers of the roll CL
                 reviewers=List(str),
+                # Flag for rolling the binary chromium pin in target project
+                roll_chromium_pin=Single(bool, empty_val=False),
                 # Add extra log entries to the commit message.
                 show_commit_log=Single(bool),
                 # Bugs included in roll CL description
@@ -105,8 +107,17 @@ TRUSTED_ORIGIN_DEPS = {
 
 BASE_URL = 'https://chromium.googlesource.com/'
 CIPD_DEP_URL_PREFIX = 'https://chrome-infra-packages.appspot.com/'
+CHROMIUM_PIN_CL_SUBJECT = 'Update Chromium PINS'
 GERRIT_BASE_URL = 'https://chromium-review.googlesource.com'
 MAX_COMMIT_LOG_ENTRIES = 8
+STORAGE_URL = ('https://commondatastorage.googleapis.com/'
+               'chromium-browser-snapshots/%s/LAST_CHANGE')
+
+CHROMIUM_PINS = {
+  'chromium_linux': STORAGE_URL % 'Linux_x64',
+  'chromium_win': STORAGE_URL % 'Win_x64',
+  'chromium_mac': STORAGE_URL % 'Mac',
+}
 
 
 class DepUpdate:
@@ -146,6 +157,7 @@ def abandon_active_cls(api, autoroller_config):
   commits = [c for c in commits if c['subject'] in {
       trusted_subject,
       reviewed_subject,
+      CHROMIUM_PIN_CL_SUBJECT,
   }]
   for commit in commits:
     api.gerrit.abandon_change(GERRIT_BASE_URL, commit['_number'], 'stale roll')
@@ -414,6 +426,45 @@ def get_updated_deps(api, autoroller_config):
 
   return updates, failed_deps
 
+def upload_cl(api, subject, reviewers, set_bot_commit, commit_lines,
+    bugs_label):
+  # Check for a difference. If no deps changed, the diff is empty.
+  with api.context(cwd=api.path['checkout']):
+    step_result = api.git(
+        'diff',
+        stdout=api.raw_io.output_text(),
+    )
+  diff = step_result.stdout.strip()
+  step_result.presentation.logs['diff'] = diff.splitlines()
+
+  if not diff:
+    return
+
+  # Create a rolling CL
+  args = ['commit', '-a', '-m', subject]
+  for commit_line in commit_lines:
+    args.extend(['-m', commit_line])
+  args.extend(['-m', 'R=%s' % ','.join(reviewers)])
+  kwargs = {'stdout': api.raw_io.output_text()}
+  with api.context(
+      cwd=api.path['checkout'],
+      env_prefixes={'PATH': [api.v8.depot_tools_path]}):
+    api.git(*args, **kwargs)
+    api.git('show')
+    upload_args = [
+        'cl',
+        'upload',
+        '-f',
+        '--use-commit-queue',
+        '--bypass-hooks',
+        '--send-mail',
+    ]
+    if set_bot_commit:
+      upload_args.append('--set-bot-commit')
+    if bugs_label is not None:
+      upload_args += ['-b', bugs_label]
+    api.git(*upload_args)
+
 def update_dependencies(api, updates, autoroller_config, trusted):
   """Create CLs to update the dependencies in the target repository.
 
@@ -444,42 +495,45 @@ def update_dependencies(api, updates, autoroller_config, trusted):
 
     commit_lines.extend(update.commit_lines)
 
-  # Check for a difference. If no deps changed, the diff is empty.
+  upload_cl(
+      api,
+      subject=get_subject(autoroller_config, trusted),
+      reviewers=autoroller_config['reviewers'],
+      set_bot_commit=trusted,
+      commit_lines=commit_lines,
+      bugs_label=autoroller_config.get('bugs', None),
+  )
+
+
+def update_chromium_pin(api, autoroller_config):
+  """Updates the values of gclient variables chromium_(win|mac|linux) with the
+  latest prebuilt versions.
+  """
   with api.context(cwd=api.path['checkout']):
-    step_result = api.git(
-        'diff',
-        stdout=api.raw_io.output_text(),
-    )
-  diff = step_result.stdout.strip()
-  step_result.presentation.logs['diff'] = diff.splitlines()
+    for var_name, url in sorted(CHROMIUM_PINS.items()):
+      step_result = api.gclient(
+          'get %s deps' % var_name,
+          ['getdep', '--var=%s' % var_name],
+          stdout=api.raw_io.output_text())
+      # The first line contains the commit position number. Strip the rest.
+      current_number = int(step_result.stdout.strip().splitlines()[0].strip())
+      new_number = int(api.url.get_text(
+          url,
+          step_name='check latest %s' % var_name,
+          default_test_data='123').output)
+      if new_number > current_number:
+        api.gclient(
+            'set %s deps' % var_name,
+            ['setdep', '--var=%s=%d' % (var_name, new_number)])
 
-  if not diff:
-    return
-
-  # Create a rolling CL
-  args = ['commit', '-a', '-m', get_subject(autoroller_config, trusted)]
-  for commit_line in commit_lines:
-    args.extend(['-m', commit_line])
-  args.extend(['-m', 'R=%s' % ','.join(autoroller_config['reviewers'])])
-  kwargs = {'stdout': api.raw_io.output_text()}
-  with api.context(
-      cwd=api.path['checkout'],
-      env_prefixes={'PATH': [api.v8.depot_tools_path]}):
-    api.git(*args, **kwargs)
-    api.git('show')
-    upload_args = [
-        'cl',
-        'upload',
-        '-f',
-        '--use-commit-queue',
-        '--bypass-hooks',
-        '--send-mail',
-    ]
-    if trusted:
-      upload_args.append('--set-bot-commit')
-    if 'bugs' in autoroller_config:
-      upload_args += ['-b', autoroller_config['bugs']]
-    api.git(*upload_args)
+  upload_cl(
+      api,
+      subject=CHROMIUM_PIN_CL_SUBJECT,
+      reviewers=autoroller_config['reviewers'],
+      set_bot_commit=True,
+      commit_lines=[],
+      bugs_label=autoroller_config.get('bugs', None),
+  )
 
 
 def handle_failed_deps(api, failed_deps):
@@ -508,6 +562,12 @@ def RunSteps(api, autoroller_config):
 
   with api.step.nest('Check failed deps'):
     handle_failed_deps(api, failed)
+
+  if autoroller_config.get('roll_chromium_pin', False):
+    with api.step.nest('Roll chromium pin'):
+      discard_local_changes(api)
+      update_chromium_pin(api, autoroller_config)
+
 
 def GenTests(api):
   v8_deps_info = """v8: https://chromium.googlesource.com/v8/v8.git
@@ -544,6 +604,7 @@ src/mock-set-dep-failing: mock/set-dep-failing.git@2"""
           'buildtools-mapped': 'buildtools',
       },
       'show_commit_log': True,
+      'roll_chromium_pin': True,
       'bugs': 'none',
   }
 
@@ -618,6 +679,18 @@ src/mock-set-dep-failing: mock/set-dep-failing.git@2"""
             api.raw_io.stream_output_text(
                 'deadbeef\trefs/heads/main', stream='stdout'),
         ),
+        api.override_step_data(
+           'Roll chromium pin.gclient get chromium_linux deps',
+           api.raw_io.stream_output_text('122', stream='stdout'),
+        ),
+        api.override_step_data(
+           'Roll chromium pin.gclient get chromium_win deps',
+           api.raw_io.stream_output_text('123', stream='stdout'),
+        ),
+        api.override_step_data(
+           'Roll chromium pin.gclient get chromium_mac deps',
+           api.raw_io.stream_output_text('124', stream='stdout'),
+        ),
     ]
 
   # Happy path
@@ -674,7 +747,21 @@ src/mock-set-dep-failing: mock/set-dep-failing.git@2"""
             stream='stdout',
         ),
     ),
+    api.override_step_data(
+       'Roll chromium pin.gclient get chromium_linux deps',
+       api.raw_io.stream_output_text('123', stream='stdout'),
+    ),
+    api.override_step_data(
+       'Roll chromium pin.gclient get chromium_win deps',
+       api.raw_io.stream_output_text('123', stream='stdout'),
+    ),
+    api.override_step_data(
+       'Roll chromium pin.gclient get chromium_mac deps',
+       api.raw_io.stream_output_text('123', stream='stdout'),
+    ),
     api.post_process(DoesNotRunRE, r'^Update \w* deps\.gclient setdep .*'),
+    api.post_process(
+        DoesNotRun, 'Roll chromium pin.gclient set chromium_linux deps'),
     api.post_process(DropExpectation),
   )
 
