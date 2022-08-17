@@ -17,8 +17,7 @@ from PB.go.chromium.org.luci.resultdb.proto.v1 \
     import common as resultdb_common
 from PB.go.chromium.org.luci.resultdb.proto.v1 \
     import test_result as test_result_pb2
-from PB.go.chromium.org.luci.resultdb.proto.v1 \
-    import resultdb as resultdb_pb2
+from PB.infra.appengine.weetbix.proto.v1 import test_history
 
 PYTHON_VERSION_COMPATIBILITY = "PY3"
 
@@ -47,6 +46,7 @@ DEPS = [
     'recipe_engine/step',
     'recipe_engine/swarming',
     'test_utils',
+    'weetbix',
 ]
 
 PROPERTIES = InputProperties
@@ -1011,7 +1011,8 @@ def GenTests(api):
           ])
   }
 
-  recent_run = resultdb_pb2.GetTestResultHistoryResponse(entries=[])
+  recent_run = test_history.QueryTestHistoryResponse(
+      verdicts=[], next_page_token='dummy_token')
 
   yield api.test(
       'basic_flakiness',
@@ -1039,21 +1040,11 @@ def GenTests(api):
           ('check_static_initializers results'),
       ),
       api.flakiness(check_for_flakiness=True,),
-      api.resultdb.get_test_result_history(
+      api.weetbix.query_test_history(
           recent_run,
-          step_name=(
-              'searching_for_new_tests.'
-              'cross reference newly identified tests against ResultDB')),
-      api.resultdb.get_test_result_history(
-          resultdb_pb2.GetTestResultHistoryResponse(entries=[]),
-          step_name=(
-              'searching_for_new_tests.'
-              'cross reference newly identified tests against ResultDB (2)')),
-      api.resultdb.get_test_result_history(
-          resultdb_pb2.GetTestResultHistoryResponse(entries=[]),
-          step_name=(
-              'searching_for_new_tests.'
-              'cross reference newly identified tests against ResultDB (3)')),
+          'ninja://check_static_initializers/Test:Test1',
+          parent_step_name='searching_for_new_tests',
+      ),
       api.post_process(post_process.MustRun, 'searching_for_new_tests'),
       api.post_process(post_process.MustRun, 'test new tests for flakiness'),
       api.post_process(post_process.MustRun, 'calculate flake rates'),
@@ -1087,21 +1078,11 @@ def GenTests(api):
           ('check_static_initializers results'),
       ),
       api.flakiness(check_for_flakiness=True,),
-      api.resultdb.get_test_result_history(
+      api.weetbix.query_test_history(
           recent_run,
-          step_name=(
-              'searching_for_new_tests.'
-              'cross reference newly identified tests against ResultDB')),
-      api.resultdb.get_test_result_history(
-          resultdb_pb2.GetTestResultHistoryResponse(entries=[]),
-          step_name=(
-              'searching_for_new_tests.'
-              'cross reference newly identified tests against ResultDB (2)')),
-      api.resultdb.get_test_result_history(
-          resultdb_pb2.GetTestResultHistoryResponse(entries=[]),
-          step_name=(
-              'searching_for_new_tests.'
-              'cross reference newly identified tests against ResultDB (3)')),
+          'ninja://check_static_initializers/Test:Test1',
+          parent_step_name='searching_for_new_tests',
+      ),
       api.override_step_data(
           'test new tests for flakiness.check_static_initializers results',
           stdout=api.json.invalid(

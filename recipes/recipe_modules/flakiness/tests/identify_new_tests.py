@@ -12,8 +12,8 @@ from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
 from PB.go.chromium.org.luci.resultdb.proto.v1 import common as rdb_common_pb2
 from PB.go.chromium.org.luci.resultdb.proto.v1 \
     import test_result as test_result_pb2
-from PB.go.chromium.org.luci.resultdb.proto.v1 \
-    import resultdb as resultdb_pb2
+from PB.infra.appengine.weetbix.proto.v1 import test_history
+from PB.infra.appengine.weetbix.proto.v1 import test_verdict
 
 from recipe_engine import recipe_api
 from recipe_engine import recipe_test_api
@@ -35,6 +35,7 @@ DEPS = [
     'recipe_engine/resultdb',
     'recipe_engine/step',
     'test_utils',
+    'weetbix',
 ]
 
 
@@ -112,28 +113,18 @@ def GenTests(api):
               )
           ],))
 
-  res = resultdb_pb2.GetTestResultHistoryResponse(entries=[
-      resultdb_pb2.GetTestResultHistoryResponse.Entry(
-          result=test_result_pb2.TestResult(
+  test1_history_res = test_history.QueryTestHistoryResponse(
+      verdicts=[
+          test_verdict.TestVerdict(
               test_id='ninja://sample/test:some_test/TestSuite.Test1',
               variant_hash='1hash',
-              expected=False,
-              status=test_result_pb2.FAIL,
-          )),
-      resultdb_pb2.GetTestResultHistoryResponse.Entry(
-          result=test_result_pb2.TestResult(
-              test_id='ninja://sample/test:some_unrelated_test/TestSuite.Test1',
-              variant_hash='1hash',
-              expected=False,
-              status=test_result_pb2.FAIL,
-              tags=[
-                  rdb_common_pb2.StringPair(
-                      key='step_name',
-                      value='some_unrelated_suite (experimental)',
-                  )
-              ],
-          ))
-  ])
+              invocation_id='some_other_invocations',
+              status=test_verdict.PASS,
+          ),
+      ],
+      next_page_token='dummy_token')
+  empty_history_res = test_history.QueryTestHistoryResponse(
+      verdicts=[], next_page_token='dummy_token')
 
   yield api.test(
       'basic',
@@ -161,36 +152,40 @@ def GenTests(api):
               'tags': '[{"key":"step_name","value":"some test (with patch)"}]',
               'invocation': ['invocation/1']
           }])),
-      api.resultdb.get_test_result_history(
-          res,
-          step_name=(
-              'searching_for_new_tests.'
-              'cross reference newly identified tests against ResultDB')),
-      api.resultdb.get_test_result_history(
-          resultdb_pb2.GetTestResultHistoryResponse(entries=[]),
-          step_name=(
-              'searching_for_new_tests.'
-              'cross reference newly identified tests against ResultDB (2)')),
-      api.resultdb.get_test_result_history(
-          resultdb_pb2.GetTestResultHistoryResponse(entries=[]),
-          step_name=(
-              'searching_for_new_tests.'
-              'cross reference newly identified tests against ResultDB (3)')),
+      api.weetbix.query_test_history(
+          test1_history_res,
+          'ninja://sample/test:some_test/TestSuite.Test1',
+          parent_step_name='searching_for_new_tests',
+      ),
+      api.weetbix.query_test_history(
+          empty_history_res,
+          'ninja://sample/test:some_test/TestSuite.Test2',
+          parent_step_name='searching_for_new_tests',
+      ),
+      api.weetbix.query_test_history(
+          empty_history_res,
+          'ninja://sample/test:some_test/TestSuite.Test3',
+          parent_step_name='searching_for_new_tests',
+      ),
+      api.weetbix.query_test_history(
+          empty_history_res,
+          'TestSuite.Test4',
+          parent_step_name='searching_for_new_tests',
+      ),
       api.post_process(
           post_process.StepCommandContains,
-          ('searching_for_new_tests.'
-           'cross reference newly identified tests against ResultDB'), [
-               'rdb',
-               'rpc',
-               'luci.resultdb.v1.ResultDB',
-               'GetTestResultHistory',
+          ('searching_for_new_tests.Test history query rpc call for '
+           'TestSuite.Test4'), [
+               'prpc',
+               'call',
+               'chops-weetbix.appspot.com',
+               'weetbix.v1.TestHistory.Query',
            ]),
       api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
-      'cross reference infra failure',
-      api.buildbucket.build(basic_build),
+      'cross reference infra failure', api.buildbucket.build(basic_build),
       api.flakiness(
           check_for_flakiness=True,
           build_count=10,
@@ -206,20 +201,26 @@ def GenTests(api):
           api.file.read_json([{
               'test_id': 'ninja://sample/test:some_test/TestSuite.Test2',
               'variant_hash': '2hash',
-              'is_experimental': True,
               'invocation': ['invocation/3']
           }, {
               'test_id': 'ninja://sample/test:some_test/TestSuite.Test0',
               'variant_hash': '0hash',
               'tags': '[{"key":"step_name","value":"some test (with patch)"}]',
               'invocation': ['invocation/1']
+          }, {
+              'test_id': 'ninja://sample/test:some_test/TestSuite.Test1',
+              'variant_hash': '1hash',
+              'invocation': ['invocation/3']
+          }, {
+              'test_id': 'ninja://sample/test:some_test/TestSuite.Test3',
+              'variant_hash': '3hash',
+              'invocation': ['invocation/1']
           }])),
       api.override_step_data(
-          ('searching_for_new_tests.'
-           'cross reference newly identified tests against ResultDB'),
-          retcode=1),
-      # overall build status should remain unaffected by this.
-      api.post_process(post_process.StatusSuccess),
+          'searching_for_new_tests.Test history query rpc call for '
+          'TestSuite.Test4',
+          retcode=1,
+      ), api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation))
 
   yield api.test(

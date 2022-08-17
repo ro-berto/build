@@ -16,8 +16,7 @@ from PB.go.chromium.org.luci.resultdb.proto.v1 \
     import common as resultdb_common
 from PB.go.chromium.org.luci.resultdb.proto.v1 \
     import test_result as test_result_pb2
-from PB.go.chromium.org.luci.resultdb.proto.v1 \
-    import resultdb as resultdb_pb2
+from PB.infra.appengine.weetbix.proto.v1 import test_history
 
 PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
@@ -43,6 +42,7 @@ DEPS = [
     'recipe_engine/raw_io',
     'recipe_engine/resultdb',
     'test_utils',
+    'weetbix',
 ]
 
 _TEST_BUILDERS = ctbc.BuilderDatabase.create({
@@ -1061,7 +1061,8 @@ def GenTests(api):
               test_results=[_generate_test_result(test_id, correct_variant)])
   }
 
-  recent_run = resultdb_pb2.GetTestResultHistoryResponse(entries=[])
+  recent_run = test_history.QueryTestHistoryResponse(
+      verdicts=[], next_page_token='dummy_token')
 
   yield api.test(
       'basic_flakiness',
@@ -1118,21 +1119,12 @@ def GenTests(api):
               'collect tasks (with patch).'
               'ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 results'),
       ),
-      api.resultdb.get_test_result_history(
+      api.weetbix.query_test_history(
           recent_run,
-          step_name=(
-              'searching_for_new_tests.'
-              'cross reference newly identified tests against ResultDB')),
-      api.resultdb.get_test_result_history(
-          resultdb_pb2.GetTestResultHistoryResponse(entries=[]),
-          step_name=(
-              'searching_for_new_tests.'
-              'cross reference newly identified tests against ResultDB (2)')),
-      api.resultdb.get_test_result_history(
-          resultdb_pb2.GetTestResultHistoryResponse(entries=[]),
-          step_name=(
-              'searching_for_new_tests.'
-              'cross reference newly identified tests against ResultDB (3)')),
+          ('ninja://ios/chrome/test/earl_grey2:'
+           'ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a'),
+          parent_step_name='searching_for_new_tests',
+      ),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -1200,21 +1192,12 @@ def GenTests(api):
               'collect tasks (with patch).'
               'ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 results'),
       ),
-      api.resultdb.get_test_result_history(
+      api.weetbix.query_test_history(
           recent_run,
-          step_name=(
-              'searching_for_new_tests.'
-              'cross reference newly identified tests against ResultDB')),
-      api.resultdb.get_test_result_history(
-          resultdb_pb2.GetTestResultHistoryResponse(entries=[]),
-          step_name=(
-              'searching_for_new_tests.'
-              'cross reference newly identified tests against ResultDB (2)')),
-      api.resultdb.get_test_result_history(
-          resultdb_pb2.GetTestResultHistoryResponse(entries=[]),
-          step_name=(
-              'searching_for_new_tests.'
-              'cross reference newly identified tests against ResultDB (3)')),
+          ('ninja://ios/chrome/test/earl_grey2:'
+           'ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a'),
+          parent_step_name='searching_for_new_tests',
+      ),
       api.override_step_data(
           ('test new tests for flakiness.'
            'ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 '
@@ -1285,21 +1268,12 @@ def GenTests(api):
               'collect tasks (with patch).'
               'ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 results'),
       ),
-      api.resultdb.get_test_result_history(
+      api.weetbix.query_test_history(
           recent_run,
-          step_name=(
-              'searching_for_new_tests.'
-              'cross reference newly identified tests against ResultDB')),
-      api.resultdb.get_test_result_history(
-          resultdb_pb2.GetTestResultHistoryResponse(entries=[]),
-          step_name=(
-              'searching_for_new_tests.'
-              'cross reference newly identified tests against ResultDB (2)')),
-      api.resultdb.get_test_result_history(
-          resultdb_pb2.GetTestResultHistoryResponse(entries=[]),
-          step_name=(
-              'searching_for_new_tests.'
-              'cross reference newly identified tests against ResultDB (3)')),
+          ('ninja://ios/chrome/test/earl_grey2:'
+           'ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a'),
+          parent_step_name='searching_for_new_tests',
+      ),
       api.override_step_data(
           ('test new tests for flakiness.'
            'ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 '

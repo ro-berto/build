@@ -17,10 +17,8 @@ from RECIPE_MODULES.build.chromium_tests import steps
 from PB.go.chromium.org.luci.buildbucket.proto \
     import builds_service as builds_service_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
-from PB.go.chromium.org.luci.resultdb.proto.v1 import common as common_rdb_pb2
-from PB.go.chromium.org.luci.resultdb.proto.v1 import predicate as predicate_pb2
-from PB.go.chromium.org.luci.resultdb.proto.v1 import (test_result as
-                                                       test_result_pb2)
+from PB.infra.appengine.weetbix.proto.v1 import common as common_weetbix_pb2
+from PB.infra.appengine.weetbix.proto.v1 import predicate as predicate_pb2
 from PB.recipe_engine import result as result_pb2
 
 # A regular expression for file paths indicating that change in the matched file
@@ -44,9 +42,6 @@ class TestDefinition():
   Attributes:
     * duration_milliseconds: (int) Test duration in milliseconds.
     * is_experimental: (bool) Whether the test is from an experimental suite.
-    * tags: (list) Tags in the ResultDB test result. If tags are provided, and
-            experimental is not True, the suffix 'experimental' is searched for
-            in the tags to determine whether it was an experimental run.
     * test_id: (str) ResultDB's test_id (go/resultdb-concepts)
     * test_object: (steps.Test or steps.ExperimentalTest) The test object where
                    this test comes from.
@@ -58,7 +53,6 @@ class TestDefinition():
                test_name=None,
                duration_milliseconds=None,
                is_experimental=False,
-               tags=None,
                test_object=None,
                variant_hash=None):
     """
@@ -67,11 +61,7 @@ class TestDefinition():
       * test_name: (str) Test name to input to test suites.
       * duration_milliseconds: (int) Test duration in milliseconds.
       * is_experimental: (bool) Flag indicating whether test run was
-        experimental. If tags are defined, and this is False, step_name is
-        searched for in the tags to determine whether 'experimental)' suffix
-        is present.
-      * tags: (list) tags from ResultDB's TestResult. Used to determine whether
-        the given run was experimental.
+        experimental.
       * test_object: (steps.Test or steps.ExperimentalTest) The test object
         where this test comes from.
       * variant_hash: (str) ResultDB's variant hash
@@ -79,22 +69,11 @@ class TestDefinition():
     self.test_id = test_id
     self.test_name = test_name
     self.duration_milliseconds = duration_milliseconds
-
     self.variant_hash = variant_hash
 
-    self.is_experimental = (
-        is_experimental or self._set_experimental_from_tags(tags))
+    self.is_experimental = is_experimental
 
     self.test_object = test_object
-
-  def _set_experimental_from_tags(self, tags):
-    if tags:
-      for tag in tags:
-        # "experimental" is the last part of step suffix (wrapped in brackets)
-        # which is part of the step name. (https://bit.ly/3I4Enc6)
-        if tag.key and tag.key == 'step_name' and 'experimental)' in tag.value:
-          return True
-    return False
 
   def __eq__(self, t2):
     return (self.test_id, self.variant_hash, self.is_experimental) == t2
@@ -409,8 +388,7 @@ class FlakinessApi(recipe_api.RecipeApi):
           go/resultdb-concepts
         - variant_hash: (str) ResultDB's variant_hash, a hash of the variants.
         - is_experimental: (bool) Flag determining whether the given run was
-          experimental, usually determined by the suffix `experimental` found
-          from ResultDB's tags, where the tag key is step_name.
+          experimental.
       * excluded_invs: (set) of str invocations. used to exclude test entries.
 
     Returns:
@@ -432,11 +410,7 @@ class FlakinessApi(recipe_api.RecipeApi):
               variant_hash=test_entry.get('variant_hash', None)))
     return tests
 
-  def verify_new_tests(self,
-                       prelim_tests,
-                       excluded_invs,
-                       builder,
-                       page_size=10000):
+  def verify_new_tests(self, prelim_tests, excluded_invs, builder):
     """Verify the newly identified tests are new by cross-checking ResultDB.
 
     Queries ResultDB for the instances of the given test_ids on the builder for
@@ -451,62 +425,60 @@ class FlakinessApi(recipe_api.RecipeApi):
       excluded_invs (set of str): the invocation names belonging to builds
         associated with the current build to be excluded from existing tests.
       builder (str): The name of the builder to query test results for.
-      page_size (int): The number of results to return from the ResultDB search.
-        Defaults to 10,000, meaning the search will return a maximum of 10,000
-        test results.
 
     Returns:
       A set of TestDefinition objects.
 
     """
+    # Invocation IDs stored in weetbix test verdict don't have "invocations/"
+    # prefix.
+    excluded_invs = [inv[len('invocations/'):] for inv in excluded_invs]
 
-    def _ensure_new(time_search_range):
-      results = self.m.resultdb.get_test_result_history(
-          realm=self.m.buildbucket.builder_realm,
-          test_id_regexp='|'.join(
-              sorted(set(t.test_id for t in list(prelim_tests)))),
+    def _ensure_new(test_id):
+      now = int(self.m.time.time())
+      two_hours_before = now - 3600 * 2
+      # Time range is set as past 2 hours, to cover the gap of test history JSON
+      # generation (1 hour), plus a 1 hour buffer for generate builder runtime.
+      search_range = common_weetbix_pb2.TimeRange(
+          earliest=timestamp_pb2.Timestamp(seconds=two_hours_before),
+          latest=timestamp_pb2.Timestamp(seconds=now))
+      # The default query size is 1000. This is sufficient for the query so
+      # page token is not used.
+      verdicts, _ = self.m.weetbix.query_test_history(
+          test_id,
+          sub_realm='try',
           variant_predicate=predicate_pb2.VariantPredicate(
               contains={'def': {
                   'builder': builder
               }}),
-          time_range=time_search_range,
-          page_size=page_size,
-          step_name='cross reference newly identified tests against ResultDB')
+          partition_time_range=search_range)
 
-      for entry in results.entries:
+      for test_verdict in verdicts:
         test = TestDefinition(
-            entry.result.test_id,
-            tags=entry.result.tags,
-            variant_hash=entry.result.variant_hash,
+            test_id=test_verdict.test_id,
+            variant_hash=test_verdict.variant_hash,
         )
-        excluded = entry.result.name.split("/tests")[0] in excluded_invs
-        if test in prelim_tests and not excluded:
+        # The query_test_history API doesn't tell us whether a result is from an
+        # experimental suite. We treat a result from query_test_history API as
+        # both an experimental and non-experimental test. This is because the
+        # distinction is tracked in TestDefinition. In this way, flipping an
+        # experimental test to non-experimental is not regarded as adding a new
+        # test.
+        # TODO(crbug.com/1351413): Remove is_experimental in new test
+        # definition.
+        test_experimental = TestDefinition(
+            test_id=test_verdict.test_id,
+            variant_hash=test_verdict.variant_hash,
+            is_experimental=True,
+        )
+        excluded = test_verdict.invocation_id in excluded_invs
+        if ((test in prelim_tests or test_experimental in prelim_tests) and
+            not excluded):
           prelim_tests.remove(test)
 
-    # Time range is set as past 3 hours, to cover the gap of test history JSON
-    # generation (1 hour), plus a 2 hour buffer for generate builder runtime.
-
-    # TODO(crbug/1313712) - Timestamps in ResultDB and the way they're set up
-    # in Spanner are not first class citizens for the GetTestResultHistory RPC
-    # call. Providing a large time range in a single query can result in slow
-    # performance, so we break down the call from a single 3 hour time range
-    # into 3 separate calls, searching for an hour time range. There are some
-    # caches in place from ResultDB's side to quicken this, but for cold hits
-    # calls still may take up to 1 min. This is still much quicker than the 9
-    # min timeouts that were being hit prior.
-    now = int(self.m.time.time())
-    time_offset = 3
-
     futures = []
-    while time_offset > 0:
-      earliest_time = now - 3600 * time_offset
-      next_offset = time_offset - 1
-      latest_time = now - 3600 * next_offset
-      search_range = common_rdb_pb2.TimeRange(
-          earliest=timestamp_pb2.Timestamp(seconds=earliest_time),
-          latest=timestamp_pb2.Timestamp(seconds=latest_time))
-      futures.append(self.m.futures.spawn(_ensure_new, search_range))
-      time_offset = next_offset
+    for test_id in list(set(t.test_id for t in prelim_tests)):
+      futures.append(self.m.futures.spawn(_ensure_new, test_id))
 
     for f in futures:
       f.result()
@@ -638,7 +610,7 @@ class FlakinessApi(recipe_api.RecipeApi):
             prelim_tests=preliminary_new_tests,
             excluded_invs=excluded_invs,
             builder=builder_name)
-      except recipe_api.InfraFailure:
+      except recipe_api.StepFailure:
         p.status = self.m.step.INFRA_FAILURE
         p.step_text = ('Failed to verify if new tests exist. '
                        'Aborting flakiness check.')

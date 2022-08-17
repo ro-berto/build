@@ -29,6 +29,7 @@ DEPS = [
     'recipe_engine/time',
     'test_results',
     'tar',
+    'weetbix',
 ]
 
 PROPERTIES = properties.InputProperties

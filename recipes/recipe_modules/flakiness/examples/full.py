@@ -18,8 +18,8 @@ from PB.go.chromium.org.luci.resultdb.proto.v1 \
     import common as resultdb_common
 from PB.go.chromium.org.luci.resultdb.proto.v1 \
     import test_result as test_result_pb2
-from PB.go.chromium.org.luci.resultdb.proto.v1 \
-    import resultdb as resultdb_pb2
+from PB.infra.appengine.weetbix.proto.v1 import test_history
+from PB.infra.appengine.weetbix.proto.v1 import test_verdict
 
 PYTHON_VERSION_COMPATIBILITY = "PY2+3"
 
@@ -41,6 +41,7 @@ DEPS = [
     'recipe_engine/raw_io',
     'recipe_engine/resultdb',
     'recipe_engine/step',
+    'weetbix',
 ]
 
 
@@ -143,6 +144,24 @@ def GenTests(api):
       all_tags.append(tags)
     return tr
 
+  def _generate_test_verdict(test_id,
+                             test_variant,
+                             invocation_id=None,
+                             status=None):
+    status = status or test_verdict.TestVerdictStatus.EXPECTED
+    vd = getattr(test_variant, 'def')
+    vh_in = '\n'.join(
+        '{}:{}'.format(k, v)
+        for k, v in api.py3_migration.consistent_ordering(vd.items()))
+    vh = base64.b64encode(vh_in.encode('utf-8')).decode('utf-8')
+    tv = test_verdict.TestVerdict(
+        test_id=test_id,
+        variant_hash=vh,
+        invocation_id=invocation_id,
+        status=status,
+    )
+    return tv
+
   build_database = []
   current_patchset_bookmark_suite_invocations = {}
   current_patchset_web_suite_invocations = {}
@@ -185,10 +204,14 @@ def GenTests(api):
 
   # This is what's been most recently run as part of verification, and will be
   # removed as it's a false positive.
-  res = resultdb_pb2.GetTestResultHistoryResponse(entries=[
-      resultdb_pb2.GetTestResultHistoryResponse.Entry(
-          result=_generate_test_result(test_id, all_mismatched)),
-  ])
+  test_a_other_invocation_history_res = test_history.QueryTestHistoryResponse(
+      verdicts=[
+          _generate_test_verdict(
+              test_id, all_mismatched, invocation_id='some_other_invocation'),
+      ],
+      next_page_token='dummy_token')
+  empty_history_res = test_history.QueryTestHistoryResponse(
+      verdicts=[], next_page_token='dummy_token')
 
   excluded_build = _generate_build(
       builder,
@@ -327,24 +350,24 @@ def GenTests(api):
           step_name=(
               'searching_for_new_tests.'
               'fetching associated builds with current gerrit patchset')),
-      # This is what's been recently run, and that isn't in the exclusion list
-      # and so should be removed (false positive).
-      api.resultdb.get_test_result_history(
-          res,
-          step_name=(
-              'searching_for_new_tests.'
-              'cross reference newly identified tests against ResultDB')),
-      # To ensure that multiple return values of the same type are handled.
-      api.resultdb.get_test_result_history(
-          res,
-          step_name=(
-              'searching_for_new_tests.'
-              'cross reference newly identified tests against ResultDB (2)')),
-      api.resultdb.get_test_result_history(
-          resultdb_pb2.GetTestResultHistoryResponse(entries=[]),
-          step_name=(
-              'searching_for_new_tests.'
-              'cross reference newly identified tests against ResultDB (3)')),
+      api.weetbix.query_test_history(
+          test_a_other_invocation_history_res,
+          ('ninja://ios/chrome/test/earl_grey2:'
+           'ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a'),
+          parent_step_name='searching_for_new_tests',
+      ),
+      api.weetbix.query_test_history(
+          empty_history_res,
+          ('ninja://ios/chrome/test/earl_grey2:'
+           'ios_chrome_bookmarks_eg2tests_module/TestSuite.test_b'),
+          parent_step_name='searching_for_new_tests',
+      ),
+      api.weetbix.query_test_history(
+          empty_history_res,
+          ('ninja://ios/chrome/test/earl_grey2:'
+           'ios_chrome_web_eg2tests_module/TestSuite.test_c'),
+          parent_step_name='searching_for_new_tests',
+      ),
       api.override_step_data(
           ('test new tests for flakiness.'
            'ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 '
@@ -439,21 +462,13 @@ def GenTests(api):
       api.step_data(
           'git diff to analyze patch (2)',
           api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
-      api.resultdb.get_test_result_history(
-          resultdb_pb2.GetTestResultHistoryResponse(entries=[]),
-          step_name=(
-              'searching_for_new_tests.'
-              'cross reference newly identified tests against ResultDB')),
-      api.resultdb.get_test_result_history(
-          resultdb_pb2.GetTestResultHistoryResponse(entries=[]),
-          step_name=(
-              'searching_for_new_tests.'
-              'cross reference newly identified tests against ResultDB (2)')),
-      api.resultdb.get_test_result_history(
-          resultdb_pb2.GetTestResultHistoryResponse(entries=[]),
-          step_name=(
-              'searching_for_new_tests.'
-              'cross reference newly identified tests against ResultDB (3)')),
+      api.weetbix.query_test_history(
+          empty_history_res,
+          ('ninja://chrome/android:chrome_junit_tests/'
+           'org.chromium.chrome.browser.safety_check.'
+           'SafetyCheckMediatorTest#testUpdatesCheckUpdated[0]'),
+          parent_step_name='searching_for_new_tests',
+      ),
       api.post_process(
           post_process.StepCommandContains,
           ('test new tests for flakiness.chrome_junit_tests '
@@ -530,21 +545,13 @@ def GenTests(api):
       api.step_data(
           'git diff to analyze patch (2)',
           api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
-      api.resultdb.get_test_result_history(
-          resultdb_pb2.GetTestResultHistoryResponse(entries=[]),
-          step_name=(
-              'searching_for_new_tests.'
-              'cross reference newly identified tests against ResultDB')),
-      api.resultdb.get_test_result_history(
-          resultdb_pb2.GetTestResultHistoryResponse(entries=[]),
-          step_name=(
-              'searching_for_new_tests.'
-              'cross reference newly identified tests against ResultDB (2)')),
-      api.resultdb.get_test_result_history(
-          resultdb_pb2.GetTestResultHistoryResponse(entries=[]),
-          step_name=(
-              'searching_for_new_tests.'
-              'cross reference newly identified tests against ResultDB (3)')),
+      api.weetbix.query_test_history(
+          empty_history_res,
+          ('ninja://chrome/android:chrome_junit_tests/'
+           'org.chromium.chrome.browser.safety_check.'
+           'SafetyCheckMediatorTest#testUpdatesCheckUpdated'),
+          parent_step_name='searching_for_new_tests',
+      ),
       api.post_process(
           post_process.StepCommandContains,
           ('test new tests for flakiness.chrome_junit_tests '
@@ -613,21 +620,11 @@ def GenTests(api):
       api.step_data(
           'git diff to analyze patch (2)',
           api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
-      api.resultdb.get_test_result_history(
-          resultdb_pb2.GetTestResultHistoryResponse(entries=[]),
-          step_name=(
-              'searching_for_new_tests.'
-              'cross reference newly identified tests against ResultDB')),
-      api.resultdb.get_test_result_history(
-          resultdb_pb2.GetTestResultHistoryResponse(entries=[]),
-          step_name=(
-              'searching_for_new_tests.'
-              'cross reference newly identified tests against ResultDB (2)')),
-      api.resultdb.get_test_result_history(
-          resultdb_pb2.GetTestResultHistoryResponse(entries=[]),
-          step_name=(
-              'searching_for_new_tests.'
-              'cross reference newly identified tests against ResultDB (3)')),
+      api.weetbix.query_test_history(
+          empty_history_res,
+          'check_network_annotations',
+          parent_step_name='searching_for_new_tests',
+      ),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -702,21 +699,12 @@ def GenTests(api):
               'fetching associated builds with current gerrit patchset')),
       # This is what's been recently run, and that isn't in the exclusion list
       # and so should be removed (false positive).
-      api.resultdb.get_test_result_history(
-          res,
-          step_name=(
-              'searching_for_new_tests.'
-              'cross reference newly identified tests against ResultDB')),
-      api.resultdb.get_test_result_history(
-          resultdb_pb2.GetTestResultHistoryResponse(entries=[]),
-          step_name=(
-              'searching_for_new_tests.'
-              'cross reference newly identified tests against ResultDB (2)')),
-      api.resultdb.get_test_result_history(
-          resultdb_pb2.GetTestResultHistoryResponse(entries=[]),
-          step_name=(
-              'searching_for_new_tests.'
-              'cross reference newly identified tests against ResultDB (3)')),
+      api.weetbix.query_test_history(
+          empty_history_res,
+          ('ninja://ios/chrome/test/earl_grey2:'
+           'ios_chrome_web_eg2tests_module/TestSuite.test_c'),
+          parent_step_name='searching_for_new_tests',
+      ),
       api.override_step_data(('test new tests for flakiness.'
                               'ios_chrome_web_eg2tests_module_iPad Air 2 14.4 '
                               '(check flakiness shard #0) on Mac-11'),
@@ -819,21 +807,18 @@ def GenTests(api):
           step_name=(
               'searching_for_new_tests.'
               'fetching associated builds with current gerrit patchset')),
-      api.resultdb.get_test_result_history(
-          res,
-          step_name=(
-              'searching_for_new_tests.'
-              'cross reference newly identified tests against ResultDB')),
-      api.resultdb.get_test_result_history(
-          resultdb_pb2.GetTestResultHistoryResponse(entries=[]),
-          step_name=(
-              'searching_for_new_tests.'
-              'cross reference newly identified tests against ResultDB (2)')),
-      api.resultdb.get_test_result_history(
-          resultdb_pb2.GetTestResultHistoryResponse(entries=[]),
-          step_name=(
-              'searching_for_new_tests.'
-              'cross reference newly identified tests against ResultDB (3)')),
+      api.weetbix.query_test_history(
+          test_a_other_invocation_history_res,
+          ('ninja://ios/chrome/test/earl_grey2:'
+           'ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a'),
+          parent_step_name='searching_for_new_tests',
+      ),
+      api.weetbix.query_test_history(
+          empty_history_res,
+          ('ninja://ios/chrome/test/earl_grey2:'
+           'ios_chrome_bookmarks_eg2tests_module/TestSuite.test_b'),
+          parent_step_name='searching_for_new_tests',
+      ),
       api.override_step_data(
           ('test new tests for flakiness.'
            'ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 '
@@ -924,21 +909,18 @@ def GenTests(api):
           step_name=(
               'searching_for_new_tests.'
               'fetching associated builds with current gerrit patchset')),
-      api.resultdb.get_test_result_history(
-          res,
-          step_name=(
-              'searching_for_new_tests.'
-              'cross reference newly identified tests against ResultDB')),
-      api.resultdb.get_test_result_history(
-          resultdb_pb2.GetTestResultHistoryResponse(entries=[]),
-          step_name=(
-              'searching_for_new_tests.'
-              'cross reference newly identified tests against ResultDB (2)')),
-      api.resultdb.get_test_result_history(
-          resultdb_pb2.GetTestResultHistoryResponse(entries=[]),
-          step_name=(
-              'searching_for_new_tests.'
-              'cross reference newly identified tests against ResultDB (3)')),
+      api.weetbix.query_test_history(
+          test_a_other_invocation_history_res,
+          ('ninja://ios/chrome/test/earl_grey2:'
+           'ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a'),
+          parent_step_name='searching_for_new_tests',
+      ),
+      api.weetbix.query_test_history(
+          empty_history_res,
+          ('ninja://ios/chrome/test/earl_grey2:'
+           'ios_chrome_bookmarks_eg2tests_module/TestSuite.test_b'),
+          parent_step_name='searching_for_new_tests',
+      ),
       api.override_step_data(
           ('test new tests for flakiness.'
            'ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 '
