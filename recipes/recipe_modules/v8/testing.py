@@ -5,13 +5,7 @@
 import contextlib
 import itertools
 import json
-import six
-
-# TODO(https://crbug.com/1256445): Remove after migration.
-if six.PY2:
-  from urllib import quote
-else:
-  from urllib.parse import quote
+from urllib.parse import quote
 
 from RECIPE_MODULES.build import chromium_swarming
 from recipe_engine.engine_types import freeze

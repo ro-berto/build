@@ -10,8 +10,6 @@ from recipe_engine.recipe_api import Property
 
 from PB.recipe_modules.recipe_engine.led import properties as led_properties_pb
 
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 DEPS = [
     'archive',
     'chromium',

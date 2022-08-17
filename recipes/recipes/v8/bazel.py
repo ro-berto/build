@@ -8,8 +8,6 @@ Recipe for building V8 with bazel.
 
 from recipe_engine.post_process import Filter
 
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 DEPS = [
   'chromium',
   'depot_tools/gclient',

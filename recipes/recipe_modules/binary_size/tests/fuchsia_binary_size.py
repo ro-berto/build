@@ -8,8 +8,6 @@ from recipe_engine import recipe_api
 from PB.recipe_modules.build.binary_size import properties as properties_pb
 from RECIPE_MODULES.build.binary_size import constants
 
-PYTHON_VERSION_COMPATIBILITY = "PY2+3"
-
 DEPS = [
     'binary_size',
     'recipe_engine/json',

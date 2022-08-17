@@ -7,8 +7,6 @@ from recipe_engine import post_process
 from RECIPE_MODULES.build import chromium
 from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 DEPS = [
     'chromium',
     'chromium_tests',

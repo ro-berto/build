@@ -25,8 +25,6 @@ DEPS = [
     'recipe_engine/tricium',
 ]
 
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 
 def RunSteps(api):
   api.gclient.set_config('chromium_website')

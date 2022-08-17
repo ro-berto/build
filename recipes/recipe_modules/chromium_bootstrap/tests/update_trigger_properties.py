@@ -7,8 +7,6 @@ from recipe_engine.engine_types import thaw
 
 from PB.go.chromium.org.luci.buildbucket.proto import common
 
-PYTHON_VERSION_COMPATIBILITY = "PY2+3"
-
 DEPS = [
     'chromium_bootstrap',
     'recipe_engine/assertions',

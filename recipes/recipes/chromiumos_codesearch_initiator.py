@@ -9,8 +9,6 @@ to initialize chromiumos codesearch builders.
 
 from recipe_engine.post_process import LogContains
 
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 DEPS = [
     'depot_tools/git',
     'recipe_engine/buildbucket',

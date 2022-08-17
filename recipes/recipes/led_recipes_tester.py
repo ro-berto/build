@@ -15,8 +15,6 @@ from PB.go.chromium.org.luci.led.job import job as job_pb2
 from RECIPE_MODULES.build.attr_utils import (attrib, attrs, cached_property,
                                              enum, sequence)
 
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 DEPS = [
     'recipe_engine/buildbucket',
     'recipe_engine/cipd',

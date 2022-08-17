@@ -7,8 +7,6 @@
 from recipe_engine import post_process
 from PB.recipes.build.android import avd_packager
 
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 DEPS = [
     'chromium_checkout',
     'depot_tools/gclient',

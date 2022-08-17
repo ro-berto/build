@@ -10,8 +10,6 @@ from recipe_engine.post_process import (DoesNotRun, DropExpectation, MustRun,
                                         StatusSuccess)
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 DEPS = [
     'chromium',
     'chromium_swarming',

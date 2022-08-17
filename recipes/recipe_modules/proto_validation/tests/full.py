@@ -9,8 +9,6 @@ from RECIPE_MODULES.build.proto_validation import Registry
 
 from PB.recipe_modules.build.proto_validation.tests import test_protos
 
-PYTHON_VERSION_COMPATIBILITY = "PY2+3"
-
 DEPS = [
     'recipe_engine/assertions',
 ]

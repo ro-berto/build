@@ -8,8 +8,6 @@ from PB.recipe_modules.build.chromium_orchestrator.properties import (
     InputProperties)
 from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 DEPS = [
     'chromium',
     'chromium_orchestrator',

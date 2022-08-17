@@ -78,4 +78,4 @@ class Py3MigrationApi(recipe_api.RecipeApi):
     s = repr(e)
     if not self._test_data.enabled or six.PY3 or not s.endswith(',)'):
       return s
-    return s[:-2] + ')'
+    return s[:-2] + ')'  # pragma: no cover

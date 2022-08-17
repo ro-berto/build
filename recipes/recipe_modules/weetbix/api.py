@@ -17,8 +17,6 @@ from PB.infra.appengine.weetbix.proto.v1.test_history import QueryTestHistoryReq
 from PB.infra.appengine.weetbix.proto.v1.test_history import QueryTestHistoryResponse
 from PB.infra.appengine.weetbix.proto.v1.test_variants import TestVariantFailureRateAnalysis
 
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 CLUSTER_STEP_NAME = 'cluster failing test results with weetbix'
 
 

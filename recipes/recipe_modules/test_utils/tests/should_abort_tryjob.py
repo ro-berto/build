@@ -14,8 +14,6 @@ from RECIPE_MODULES.build.test_utils import util
 from RECIPE_MODULES.depot_tools.tryserver import api as tryserver
 
 
-PYTHON_VERSION_COMPATIBILITY = "PY2+3"
-
 DEPS = [
     'chromium',
     'test_utils',

@@ -16,8 +16,6 @@ from PB.recipe_modules.build.chromium_tests_builder_config import (properties as
 from PB.go.chromium.org.luci.buildbucket.proto \
   import builder_common as builder_common_pb2
 
-PYTHON_VERSION_COMPATIBILITY = "PY2+3"
-
 DEPS = [
     'chromium',
     'chromium_tests_builder_config',

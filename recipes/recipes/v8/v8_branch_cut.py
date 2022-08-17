@@ -7,8 +7,6 @@ import re
 import ast
 import astunparse
 
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 PUSH_ACCOUNT = (
     'v8-ci-autoroll-builder@chops-service-accounts.iam.gserviceaccount.com')
 

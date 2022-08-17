@@ -13,8 +13,6 @@ from RECIPE_MODULES.build.attr_utils import attrib, attrs, mapping, sequence
 from RECIPE_MODULES.build.chromium_tests.api import (
     ALL_TEST_BINARIES_ISOLATE_NAME)
 
-PYTHON_VERSION_COMPATIBILITY = "PY2+3"
-
 COMPILATOR_SWARMING_TASK_COLLECT_STEP = (
     'wait for compilator swarming task cleanup overhead')
 

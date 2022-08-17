@@ -11,8 +11,6 @@ pull requests.
 See: //docs/testing/web_platform_tests.md (https://goo.gl/rSRGmZ)
 """
 
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 DEPS = [
     'chromium',
     'depot_tools/bot_update',

@@ -9,8 +9,6 @@ from recipe_engine.config import ConfigGroup, Dict, Single, List
 
 import json
 
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 
 DEPS = [
   'depot_tools/gclient',

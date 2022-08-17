@@ -5,8 +5,6 @@
 from PB.recipe_modules.build.reclient import properties
 from PB.recipe_modules.build.reclient import rbe_metrics_bq
 
-PYTHON_VERSION_COMPATIBILITY = "PY2+3"
-
 DEPS = [
     'depot_tools/gsutil',
     'recipe_engine/buildbucket',

@@ -7,8 +7,6 @@ from recipe_engine import post_process
 from RECIPE_MODULES.build import chromium
 
 
-PYTHON_VERSION_COMPATIBILITY = "PY2+3"
-
 DEPS = [
     'chromium',
     'recipe_engine/properties',

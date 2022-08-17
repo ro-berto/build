@@ -9,8 +9,6 @@ the result to wpt.fyi.
 
 """
 
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 DEPS = [
     'chromium',
     'depot_tools/bot_update',

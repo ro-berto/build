@@ -8,8 +8,6 @@ from recipe_engine.recipe_api import Property
 from recipe_engine.config import ConfigGroup, Dict, Single, List
 from recipe_engine.engine_types import freeze
 
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 DEPS = [
   'depot_tools/bot_update',
   'depot_tools/gclient',

@@ -4,8 +4,6 @@
 
 import six
 
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 DEPS = [
   'recipe_engine/buildbucket',
   'recipe_engine/context',

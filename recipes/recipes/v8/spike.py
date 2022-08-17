@@ -8,8 +8,6 @@ from recipe_engine.post_process import (
     ResultReasonRE, StatusException, StatusFailure, StepException)
 from recipe_engine.recipe_api import Property
 
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 DEPS = [
 ]
 

@@ -12,8 +12,6 @@ from PB.recipes.build.chromium_expectation_files.expectation_file_scripts \
     import InputProperties, ScriptInvocation
 from RECIPE_MODULES.build import proto_validation
 
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 PROPERTIES = InputProperties
 
 DEPS = [

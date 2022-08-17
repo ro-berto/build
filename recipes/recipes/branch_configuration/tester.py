@@ -34,8 +34,6 @@ from PB.recipes.build.branch_configuration import tester as tester_pb
 
 PROPERTIES = tester_pb.InputProperties
 
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 DEPS = [
     'depot_tools/bot_update',
     'depot_tools/gclient',

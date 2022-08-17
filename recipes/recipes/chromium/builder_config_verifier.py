@@ -26,8 +26,6 @@ from PB.recipes.build.chromium import (builder_config_verifier as
 from PB.recipe_modules.build.chromium_tests_builder_config import (properties as
                                                                    properties_pb
                                                                   )
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 PROPERTIES = builder_config_verifier_pb.InputProperties
 
 DEPS = [

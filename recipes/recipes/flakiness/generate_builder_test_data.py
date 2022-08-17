@@ -8,8 +8,6 @@ from recipe_engine import post_process
 from PB.recipe_engine import result as result_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 DEPS = [
     'flakiness',
     'depot_tools/gsutil',

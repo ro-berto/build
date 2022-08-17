@@ -18,8 +18,6 @@ from recipe_engine.post_process import (
     DropExpectation, StatusFailure, StatusSuccess, StepSuccess, StepFailure)
 
 
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 DEPS = [
     'depot_tools/depot_tools',
     'depot_tools/gerrit',

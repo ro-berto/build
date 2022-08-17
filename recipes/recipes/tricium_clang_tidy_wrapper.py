@@ -8,8 +8,6 @@ from RECIPE_MODULES.build.attr_utils import attrs, attrib
 from RECIPE_MODULES.build.tricium_clang_tidy import _clang_tidy_path
 from RECIPE_MODULES.build import chromium
 
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 DEPS = [
     'chromium',
     'chromium_checkout',

@@ -18,8 +18,6 @@ https://source.chromium.org/chromium/infra/infra/+/main:go/src/infra/tools/dirmd
 
 
 
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 DEPS = [
     'build/chromium',
     'depot_tools/bot_update',

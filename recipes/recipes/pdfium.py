@@ -3,8 +3,6 @@
 # found in the LICENSE file.
 
 # Python version used to run the recipe itself.
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 # Separately, python command used to run the steps in the recipe.
 PYTHON_CMD = ['vpython3', '-u']
 

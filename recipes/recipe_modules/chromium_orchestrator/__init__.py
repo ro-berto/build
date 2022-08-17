@@ -4,8 +4,6 @@
 
 from PB.recipe_modules.build.chromium_orchestrator import properties
 
-PYTHON_VERSION_COMPATIBILITY = "PY2+3"
-
 DEPS = [
     'builder_group',
     'chromium',

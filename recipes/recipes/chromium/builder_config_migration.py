@@ -28,8 +28,6 @@ from PB.recipe_engine import result as result_pb
 from PB.recipes.build.chromium import (builder_config_migration as
                                        builder_config_migration_pb)
 
-PYTHON_VERSION_COMPATIBILITY = 'PY3'
-
 PROPERTIES = builder_config_migration_pb.InputProperties
 
 DEPS = [

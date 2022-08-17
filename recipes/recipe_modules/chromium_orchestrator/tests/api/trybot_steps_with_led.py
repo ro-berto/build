@@ -11,8 +11,6 @@ from RECIPE_MODULES.build.chromium_orchestrator.api import (
     COMPILATOR_SWARMING_TASK_COLLECT_STEP)
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 DEPS = [
     'chromium',
     'chromium_bootstrap',

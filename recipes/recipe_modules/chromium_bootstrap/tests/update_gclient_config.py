@@ -8,8 +8,6 @@ from recipe_engine import post_process
 
 from PB.go.chromium.org.luci.buildbucket.proto import common
 
-PYTHON_VERSION_COMPATIBILITY = "PY2+3"
-
 DEPS = [
     'chromium_bootstrap',
     'depot_tools/gclient',

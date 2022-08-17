@@ -6,8 +6,6 @@ from recipe_engine.recipe_api import Property
 from RECIPE_MODULES.build.flaky_reproducer.libs import (ReproducingStep,
                                                         UnexpectedTestResult)
 
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 DEPS = [
     'flaky_reproducer',
     'recipe_engine/file',

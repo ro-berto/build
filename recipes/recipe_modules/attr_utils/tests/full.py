@@ -15,8 +15,6 @@ from RECIPE_MODULES.build.attr_utils import (FieldMapping, attrib, attrs,
                                              command_args, enum, mapping,
                                              sequence)
 
-PYTHON_VERSION_COMPATIBILITY = "PY2+3"
-
 DEPS = [
     'recipe_engine/assertions',
 ]
@@ -263,10 +261,12 @@ def RunSteps(api):
   with api.assertions.assertRaises(KeyError):
     _ = x['x']
   api.assertions.assertEqual(dict(x), {})
+  api.assertions.assertEqual(len(x), 0)
 
   x = FieldMappingTest(x='foo', y='bar')
   api.assertions.assertEqual(x['x'], 'foo')
   api.assertions.assertEqual(dict(x), {'x': 'foo', 'y': 'bar'})
+  api.assertions.assertEqual(len(x), 2)
 
   # cached_property ************************************************************
   calls = []

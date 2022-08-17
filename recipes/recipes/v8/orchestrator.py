@@ -6,8 +6,6 @@
 """
 
 
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 DEPS = [
 ]
 

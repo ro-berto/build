@@ -7,8 +7,6 @@ from recipe_engine.recipe_api import Property
 
 from RECIPE_MODULES.build.chromium_tests import resultdb
 
-PYTHON_VERSION_COMPATIBILITY = "PY2+3"
-
 DEPS = [
     'isolate',
     'recipe_engine/buildbucket',

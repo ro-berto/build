@@ -11,8 +11,6 @@ from PB.go.chromium.org.luci.buildbucket.proto \
 from PB.recipe_modules.build.chromium_tests_builder_config.properties import (
     BuilderSpec, BuilderDatabase, BuilderConfig, InputProperties)
 
-PYTHON_VERSION_COMPATIBILITY = "PY2+3"
-
 DEPS = [
     'recipe_engine/assertions',
 ]

@@ -6,8 +6,6 @@ from recipe_engine import post_process
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 
-PYTHON_VERSION_COMPATIBILITY = "PY2+3"
-
 DEPS = [
   'chromium',
   'recipe_engine/properties',

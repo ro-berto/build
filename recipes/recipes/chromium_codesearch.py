@@ -10,8 +10,6 @@ from PB.recipes.build.chromium_codesearch import (InputProperties,
 
 PROPERTIES = InputProperties
 
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 DEPS = [
   'build',
   'chromium',

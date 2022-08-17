@@ -4,8 +4,6 @@
 
 from RECIPE_MODULES.build.chromium_tests.steps import ResultDB
 
-PYTHON_VERSION_COMPATIBILITY = "PY2+3"
-
 DEPS = [
     'build',
     'recipe_engine/buildbucket',

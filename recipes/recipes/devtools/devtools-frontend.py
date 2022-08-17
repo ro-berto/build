@@ -9,8 +9,6 @@ from recipe_engine.recipe_api import Property
 
 import json
 
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 DEPS = [
     'builder_group',
     'chromium',

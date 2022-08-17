@@ -83,8 +83,6 @@ from recipe_engine.config_types import Path
 from recipe_engine.engine_types import FrozenDict, freeze
 from recipe_engine.util import Placeholder
 
-PYTHON_VERSION_COMPATIBILITY = "PY2+3"
-
 _NOTHING = object()
 
 

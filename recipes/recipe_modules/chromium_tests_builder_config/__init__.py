@@ -4,8 +4,6 @@
 
 from PB.recipe_modules.build.chromium_tests_builder_config import properties
 
-PYTHON_VERSION_COMPATIBILITY = "PY2+3"
-
 DEPS = [
     'chromium',
     'depot_tools/gsutil',

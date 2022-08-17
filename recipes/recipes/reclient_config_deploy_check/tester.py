@@ -10,8 +10,6 @@ from PB.recipes.build.reclient_config_deploy_check import tester as tester_pb
 
 PROPERTIES = tester_pb.InputProperties
 
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 DEPS = [
     'depot_tools/bot_update',
     'depot_tools/gclient',

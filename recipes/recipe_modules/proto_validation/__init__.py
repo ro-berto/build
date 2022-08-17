@@ -31,8 +31,6 @@ import contextlib
 
 from google.protobuf.message import Message
 
-PYTHON_VERSION_COMPATIBILITY = "PY2+3"
-
 
 class Registry(object):
   """A type for registering validators and validating protobuf messages.

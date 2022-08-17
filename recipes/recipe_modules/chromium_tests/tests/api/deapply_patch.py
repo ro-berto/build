@@ -5,8 +5,6 @@
 import collections
 import six
 
-PYTHON_VERSION_COMPATIBILITY = "PY2+3"
-
 DEPS = [
     'chromium',
     'chromium_tests',

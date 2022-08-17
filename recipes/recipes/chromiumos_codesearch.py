@@ -12,8 +12,6 @@ from recipe_engine.post_process import (StepCommandContains, StepCommandRE,
                                         DropExpectation)
 from recipe_engine.recipe_api import Property
 
-PYTHON_VERSION_COMPATIBILITY = 'PY3'
-
 DEPS = [
     'codesearch',
     'depot_tools/bot_update',

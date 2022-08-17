@@ -4,8 +4,6 @@
 
 from six.moves import range  # pylint: disable=redefined-builtin
 
-PYTHON_VERSION_COMPATIBILITY = "PY2+3"
-
 DEPS = [
     'chromium',
     'chromium_checkout',

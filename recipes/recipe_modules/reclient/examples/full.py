@@ -6,8 +6,6 @@ from recipe_engine import post_process
 
 import PB.go.chromium.org.foundry_x.re_client.api.stats.stats as stats_pb
 
-PYTHON_VERSION_COMPATIBILITY = "PY2+3"
-
 DEPS = [
     'recipe_engine/buildbucket',
     'recipe_engine/context',

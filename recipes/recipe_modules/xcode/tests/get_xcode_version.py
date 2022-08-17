@@ -5,8 +5,6 @@
 from PB.recipe_modules.build.xcode\
  import properties as xcode_properties
 
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 DEPS = [
     'xcode',
     'recipe_engine/properties',

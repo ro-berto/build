@@ -8,8 +8,6 @@ from RECIPE_MODULES.build.chromium import BuilderId
 from RECIPE_MODULES.build.chromium_tests_builder_config import (builder_db,
                                                                 builder_spec)
 
-PYTHON_VERSION_COMPATIBILITY = "PY2+3"
-
 DEPS = [
     'recipe_engine/assertions',
 ]
@@ -88,6 +86,7 @@ def RunSteps(api):
           key_3b: frozenset([]),
           key_3c: frozenset([key_3a]),
       })
+  api.assertions.assertEqual(len(graph), 6)
 
   api.assertions.assertEqual(
       graph.get_transitive_closure([key_1a, key_1b]),

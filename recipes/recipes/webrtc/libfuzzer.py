@@ -10,8 +10,6 @@ from RECIPE_MODULES.build.chromium_tests_builder_config import (builder_db,
                                                                 builder_spec)
 from RECIPE_MODULES.build import chromium
 
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 DEPS = [
     'depot_tools/depot_tools',
     'chromium',

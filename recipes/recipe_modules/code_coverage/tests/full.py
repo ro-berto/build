@@ -11,8 +11,6 @@ from RECIPE_MODULES.build.code_coverage.api import MAX_CANDIDATE_FILES
 
 from PB.recipe_modules.recipe_engine.led.properties import InputProperties
 
-PYTHON_VERSION_COMPATIBILITY = "PY2+3"
-
 DEPS = [
     'chromium',
     'chromium_tests',

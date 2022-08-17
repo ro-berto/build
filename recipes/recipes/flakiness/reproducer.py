@@ -8,8 +8,6 @@ from PB.recipes.build.flakiness.reproducer import InputProperties
 
 PROPERTIES = InputProperties
 
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 DEPS = [
     'flaky_reproducer',
     'recipe_engine/step',

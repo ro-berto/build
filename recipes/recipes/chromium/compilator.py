@@ -19,8 +19,6 @@ from PB.go.chromium.org.luci.resultdb.proto.v1 \
     import test_result as test_result_pb2
 from PB.infra.appengine.weetbix.proto.v1 import test_history
 
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 DEPS = [
     'chromium',
     'chromium_checkout',

@@ -21,8 +21,6 @@ from recipe_engine import recipe_test_api
 from RECIPE_MODULES.build.chromium_tests import steps
 from RECIPE_MODULES.build.test_utils import util
 
-PYTHON_VERSION_COMPATIBILITY = "PY2+3"
-
 DEPS = [
     'chromium_tests',
     'flakiness',

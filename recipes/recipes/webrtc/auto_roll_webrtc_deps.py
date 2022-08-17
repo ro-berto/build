@@ -3,8 +3,6 @@
 # found in the LICENSE file.
 
 
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 DEPS = [
     'chromium_checkout',
     'depot_tools/depot_tools',

@@ -4,8 +4,6 @@
 
 import json
 
-PYTHON_VERSION_COMPATIBILITY = "PY2+3"
-
 DEPS = [
   'chromium_swarming',
   'recipe_engine/assertions',

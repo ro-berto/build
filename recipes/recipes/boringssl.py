@@ -5,8 +5,6 @@
 from contextlib import contextmanager
 from recipe_engine.recipe_api import Property
 
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 DEPS = [
     'boringssl',
     'chromium',

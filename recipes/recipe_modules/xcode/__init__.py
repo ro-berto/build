@@ -4,8 +4,6 @@
 
 from PB.recipe_modules.build.xcode import properties
 
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 DEPS = [
     'recipe_engine/file',
     'recipe_engine/path',

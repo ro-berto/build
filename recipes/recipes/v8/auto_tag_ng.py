@@ -24,8 +24,6 @@ from recipe_engine.post_process import (
 from recipe_engine.recipe_api import Property
 from PB.recipe_engine.result import RawResult
 
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 DEPS = [
     'builder_group',
     'depot_tools/gclient',

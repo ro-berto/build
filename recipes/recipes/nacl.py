@@ -4,8 +4,6 @@
 
 from contextlib import contextmanager
 
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 DEPS = [
     'builder_group',
     'depot_tools/bot_update',

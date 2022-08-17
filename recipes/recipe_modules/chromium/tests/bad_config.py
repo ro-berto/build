@@ -7,8 +7,6 @@ from recipe_engine.config import BadConf
 
 from RECIPE_MODULES.build.chromium.config import config_ctx
 
-PYTHON_VERSION_COMPATIBILITY = "PY2+3"
-
 DEPS = [
     'chromium',
     'recipe_engine/assertions',

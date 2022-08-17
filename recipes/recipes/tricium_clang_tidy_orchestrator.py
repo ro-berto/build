@@ -10,8 +10,6 @@ from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
 from google.protobuf import duration_pb2
 from recipe_engine import post_process
 
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 DEPS = [
     'chromium',
     'depot_tools/gerrit',

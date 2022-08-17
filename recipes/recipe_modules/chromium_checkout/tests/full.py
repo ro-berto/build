@@ -7,8 +7,6 @@ from recipe_engine import post_process
 from RECIPE_MODULES.depot_tools.gclient import (api as gclient, CONFIG_CTX as
                                                 GCLIENT_CONFIG_CTX)
 
-PYTHON_VERSION_COMPATIBILITY = "PY2+3"
-
 DEPS = [
     'chromium_checkout',
     'depot_tools/gclient',

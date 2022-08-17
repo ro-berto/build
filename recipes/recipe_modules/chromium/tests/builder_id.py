@@ -6,8 +6,6 @@ from recipe_engine import post_process
 
 from RECIPE_MODULES.build.chromium import BuilderId
 
-PYTHON_VERSION_COMPATIBILITY = 'PY2+3'
-
 DEPS = ['recipe_engine/assertions']
 
 

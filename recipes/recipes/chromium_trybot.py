@@ -9,8 +9,6 @@ from recipe_engine.post_process import (Filter, DoesNotRun, DropExpectation,
 
 from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 DEPS = [
     'build',
     'chromium',

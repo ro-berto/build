@@ -8,8 +8,6 @@ from recipe_engine.recipe_api import Property
 from PB.go.chromium.org.luci.swarming.proto.api import swarming as swarming_pb
 from PB.infra.chromium import chromium_bootstrap
 
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 DEPS = [
     'chromium_bootstrap',
     'recipe_engine/assertions',

@@ -4,8 +4,6 @@
 
 import six
 
-PYTHON_VERSION_COMPATIBILITY = "PY2+3"
-
 DEPS = [
     'py3_migration',
     'recipe_engine/json',

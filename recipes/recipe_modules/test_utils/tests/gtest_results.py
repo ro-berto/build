@@ -6,8 +6,6 @@ import itertools
 
 from recipe_engine import post_process
 
-PYTHON_VERSION_COMPATIBILITY = "PY2+3"
-
 DEPS = [
     'test_utils',
     'recipe_engine/json',

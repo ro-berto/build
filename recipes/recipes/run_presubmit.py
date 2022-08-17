@@ -9,8 +9,6 @@ from recipe_engine import post_process
 import collections
 import textwrap
 
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 DEPS = [
     'depot_tools/bot_update',
     'depot_tools/gclient',

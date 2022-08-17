@@ -6,8 +6,6 @@ from recipe_engine import recipe_api
 from recipe_engine.engine_types import freeze
 from recipe_engine.recipe_api import Property
 
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 DEPS = [
   'chromium',
   'codesearch',

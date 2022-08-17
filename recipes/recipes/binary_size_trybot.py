@@ -4,8 +4,6 @@
 
 from recipe_engine import post_process
 
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 DEPS = [
     'binary_size',
     'recipe_engine/properties',

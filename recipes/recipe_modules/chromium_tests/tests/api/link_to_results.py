@@ -6,8 +6,6 @@ from recipe_engine import post_process
 
 from PB.recipe_modules.recipe_engine.led.properties import InputProperties
 
-PYTHON_VERSION_COMPATIBILITY = "PY2+3"
-
 DEPS = [
     'chromium',
     'chromium_tests',

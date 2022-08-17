@@ -7,8 +7,6 @@ This module sharing the code that runs as part of recipe and on swarming bot.
 That some tests are implemented as unitests to cover 100% of the lines.
 """
 
-PYTHON_VERSION_COMPATIBILITY = "PY3"
-
 DEPS = []
 
 
