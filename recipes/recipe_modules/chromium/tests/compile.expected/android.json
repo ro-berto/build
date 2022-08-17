@@ -273,6 +273,24 @@
   },
   {
     "cmd": [
+      "python3",
+      "RECIPE_MODULE[build::goma]/resources/goma_canceller.py",
+      "[CACHE]/goma/client/goma_ctl.py"
+    ],
+    "cost": {
+      "cpu": 0,
+      "disk": 0,
+      "memory": 0,
+      "net": 0
+    },
+    "cwd": "None",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "start goma canceller"
+  },
+  {
+    "cmd": [
       "vpython3",
       "RECIPE_REPO[build]/recipes/upload_goma_logs.py",
       "--upload-compiler-proxy-info",

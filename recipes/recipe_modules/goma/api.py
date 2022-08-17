@@ -489,7 +489,7 @@ class GomaApi(recipe_api.RecipeApi):
                 name='stop_goma',
                 cmd=['python3', self.goma_ctl, 'stop'],
                 **kwargs)
-            self._goma_canceller.cancel()
+            self.m.futures.wait([self._goma_canceller])
 
           self._upload_logs(
               ninja_log_outdir=ninja_log_outdir,

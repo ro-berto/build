@@ -9,18 +9,15 @@ $ goma_canceller.py /path/to/goma_ctl.py
 
 """
 
-import sys
+import datetime
 import signal
 import subprocess
+import sys
 import time
-
-_IS_EXITED = False
 
 
 def do_exit():
-  global _IS_EXITED
   subprocess.check_call(['python3', sys.argv[1], 'ensure_stop'])
-  _IS_EXITED = True
   print('goma_canceller stopped goma')
 
 
@@ -32,8 +29,18 @@ def main():
           if sys.platform.startswith('win') else signal.SIGTERM),
       lambda _signum, _frame: do_exit())
 
-  while not _IS_EXITED:
+  # Wait goma is started in recipe.
+  time.sleep(10)
+
+  while True:
     time.sleep(1)
+    p = subprocess.run(['python3', sys.argv[1], 'status'],
+                       capture_output=True,
+                       text=True)
+    if p.returncode == 1:
+      print('%s: goma_ctl status shows: %s' %
+            (datetime.datetime.now(), p.stdout))
+      break
 
   print('goma_canceller exiting')
 
