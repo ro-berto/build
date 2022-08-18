@@ -1754,7 +1754,7 @@
       "git",
       "checkout",
       "-f",
-      "215df0bf51d895bb162975d7ac570d2a5b86a319"
+      "a32a1607f6093d338f756c7e7c7b4333b0c50c9c"
     ],
     "cwd": "[START_DIR]/swarming.client",
     "infra_step": true,

@@ -37,7 +37,7 @@ class SwarmingClientApi(recipe_api.RecipeApi):
     # bot is misconfigured, or, if you're testing locally, that you
     # need to pass in some recent legal revision for this property.
     if revision is None:
-      revision = '215df0bf51d895bb162975d7ac570d2a5b86a319'
+      revision = 'a32a1607f6093d338f756c7e7c7b4333b0c50c9c'
     self._client_path = self.m.path['start_dir'].join('swarming.client')
     self.m.git.checkout(
         url='https://chromium.googlesource.com/infra/luci/client-py.git',
