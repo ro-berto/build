@@ -52,6 +52,17 @@ PROPERTIES = {
                     # Template for the commit message used with cipd
                     # dependencies
                     cipd_log_template=Single(str),
+                    # Gerrit URL to be used for rolling CL review
+                    gerrit_base_url=Single(
+                        str,
+                        required=True,
+                        empty_val='https://chromium-review.googlesource.com'),
+                    # Repo base URL together with 'project_name' to locate the
+                    # repo where the rolling CL will be landed
+                    base_url=Single(
+                        str,
+                        required=True,
+                        empty_val='https://chromium.googlesource.com/'),
                 ),
                 # List of (target side) dependencies to be excluded from rolling
                 # with the current config
@@ -103,10 +114,8 @@ TRUSTED_ORIGIN_DEPS = {
 }
 
 
-BASE_URL = 'https://chromium.googlesource.com/'
 CIPD_DEP_URL_PREFIX = 'https://chrome-infra-packages.appspot.com/'
 CHROMIUM_PIN_CL_SUBJECT = 'Update Chromium PINS'
-GERRIT_BASE_URL = 'https://chromium-review.googlesource.com'
 MAX_COMMIT_LOG_ENTRIES = 8
 STORAGE_URL = ('https://commondatastorage.googleapis.com/'
                'chromium-browser-snapshots/%s/LAST_CHANGE')
@@ -137,7 +146,7 @@ def abandon_active_cls(api, autoroller_config):
   target_config = autoroller_config['target_config']
 
   commits = api.gerrit.get_changes(
-      GERRIT_BASE_URL,
+      target_config['gerrit_base_url'],
       query_params=[
           ('project', target_config['project_name']),
           # TODO(sergiyb): Use api.service_account.default().get_email() when
@@ -158,7 +167,8 @@ def abandon_active_cls(api, autoroller_config):
       CHROMIUM_PIN_CL_SUBJECT,
   }]
   for commit in commits:
-    api.gerrit.abandon_change(GERRIT_BASE_URL, commit['_number'], 'stale roll')
+    api.gerrit.abandon_change(
+        target_config['gerrit_base_url'], commit['_number'], 'stale roll')
 
     step_result = api.step('Previous roll failed', cmd=None)
     step_result.presentation.step_text = 'Notify sheriffs!'
@@ -171,7 +181,7 @@ def setup_gclient(api, autoroller_config):
   gclient_config = api.gclient.make_config()
   soln = gclient_config.solutions.add()
   soln.name = target_config['solution_name']
-  soln.url = BASE_URL + target_config['project_name']
+  soln.url = target_config['base_url'] + target_config['project_name']
   soln.revision = 'HEAD'
 
   api.gclient.c = gclient_config
@@ -199,13 +209,13 @@ def discard_local_changes(api):
     api.git('new-branch', 'roll')
 
 
-def get_deps(api, name, project_name):
+def get_deps(api, base_url, name, project_name):
   # Make a fake spec. Gclient is not nice to us when having two solutions
   # side by side. The latter checkout kills the former's gclient file.
   spec = ('solutions=[%s]' % {
     'managed': False,
     'name': name,
-    'url': BASE_URL + project_name,
+    'url': base_url + project_name,
     'deps_file': 'DEPS',
   })
 
@@ -322,11 +332,13 @@ def commit_messages_log_entries(api, repo, from_commit, to_commit):
 def get_updated_deps(api, autoroller_config):
   target_config = autoroller_config['target_config']
 
-  chromium_deps = get_deps(api, 'src', 'chromium/src')
+  chromium_deps = get_deps(
+      api, 'https://chromium.googlesource.com/', 'src', 'chromium/src')
 
   target_name = target_config['solution_name']
   target_project = target_config['project_name']
-  target_deps = get_deps(api, target_name, target_project)
+  target_base_url = target_config['base_url']
+  target_deps = get_deps(api, target_base_url, target_name, target_project)
 
   key_mapper = get_key_mapper(autoroller_config)
   cipd_log_template = target_config['cipd_log_template']
@@ -589,6 +601,8 @@ src/mock-set-dep-failing: mock/set-dep-failing.git@2"""
     'account': 'v8@example.com',
     'log_template': 'Rolling v8/%s: %s/+log/%s..%s',
     'cipd_log_template': 'Rolling v8/%s: %s..%s',
+    'gerrit_base_url': 'https://chromium-review.googlesource.com',
+    'base_url': 'https://chromium.googlesource.com/',
   }
 
   autoroller_config = {
