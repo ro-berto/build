@@ -28,7 +28,6 @@ DEPS = [
     'chromium_tests_builder_config',
     'filter',
     'flakiness',
-    'py3_migration',
     'test_utils',
     'depot_tools/gclient',
     'depot_tools/tryserver',
@@ -124,9 +123,7 @@ def GenTests(api):
                             test_duration=10):
     status = status or test_result_pb2.PASS
     vd = getattr(test_variant, 'def')
-    vh_in = '\n'.join(
-        '{}:{}'.format(k, v)
-        for k, v in api.py3_migration.consistent_ordering(vd.items()))
+    vh_in = '\n'.join('{}:{}'.format(k, v) for k, v in vd.items())
     vh = base64.b64encode(vh_in.encode('utf-8')).decode('utf-8')
     duration = duration_pb2.Duration()
     duration.FromMilliseconds(test_duration)
@@ -148,9 +145,7 @@ def GenTests(api):
                              status=None):
     status = status or test_verdict.TestVerdictStatus.EXPECTED
     vd = getattr(test_variant, 'def')
-    vh_in = '\n'.join(
-        '{}:{}'.format(k, v)
-        for k, v in api.py3_migration.consistent_ordering(vd.items()))
+    vh_in = '\n'.join('{}:{}'.format(k, v) for k, v in vd.items())
     vh = base64.b64encode(vh_in.encode('utf-8')).decode('utf-8')
     tv = test_verdict.TestVerdict(
         test_id=test_id,

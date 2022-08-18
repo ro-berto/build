@@ -902,11 +902,8 @@ class ArchiveApi(recipe_api.RecipeApi):
         common_pieces = f.pieces[len(base_path.pieces):]
         expanded_files.add(os.path.sep.join(common_pieces))
 
-    expanded_files = set(self._validate_paths(
-        'files',
-        archive_data,
-        base_path,
-        self.m.py3_migration.consistent_ordering(expanded_files)))
+    expanded_files = set(
+        self._validate_paths('files', archive_data, base_path, expanded_files))
 
     # Copy all files to a temporary directory. Keeping the structure.
     # This directory will be used for archiving.
@@ -917,7 +914,7 @@ class ArchiveApi(recipe_api.RecipeApi):
           archive_data.root_permission_override,
           str(temp_dir),
       ])
-    for filename in self.m.py3_migration.consistent_ordering(expanded_files):
+    for filename in expanded_files:
       tmp_file_path = self.m.path.join(temp_dir, filename)
       tmp_file_dir = self.m.path.dirname(tmp_file_path)
       if str(tmp_file_dir) != str(temp_dir):
@@ -1067,8 +1064,7 @@ class ArchiveApi(recipe_api.RecipeApi):
     if (archive_data.verifiable_key_path and
         not archive_data.archive_type == ArchiveData.ARCHIVE_TYPE_RECURSIVE):
 
-      for f in self.m.py3_migration.consistent_ordering(
-          uploads.keys(), key=str):
+      for f in uploads.keys():
         # Report artifacts for provenance generation.
         file_hash = self.m.file.file_hash(f, test_data='deadbeef')
         # TODO(akashmukherjee): Add support for custom backend url.
@@ -1077,8 +1073,7 @@ class ArchiveApi(recipe_api.RecipeApi):
           self.m.bcid_reporter.report_gcs(
               file_hash, 'gs://%s/%s' % (gcs_bucket, uploads[f]))
 
-    for file_path in self.m.py3_migration.consistent_ordering(
-        uploads.keys(), key=str):
+    for file_path in uploads.keys():
       self.m.gsutil.upload(
           file_path,
           bucket=gcs_bucket,

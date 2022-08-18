@@ -30,7 +30,6 @@ DEPS = [
     'presentation_utils',
     'profiles',
     'puppet_service_account',
-    'py3_migration',
     'recipe_engine/buildbucket',
     'recipe_engine/cas',
     'recipe_engine/commit_position',
