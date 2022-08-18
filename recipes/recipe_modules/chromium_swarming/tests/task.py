@@ -36,8 +36,6 @@ def RunSteps(api):
     task.containment_type = api.properties['containment_type']
   api.chromium_swarming.trigger_task(task)
   kwargs = {}
-  if api.properties.get('allow_missing_json'):
-    kwargs['allow_missing_json'] = True
   api.chromium_swarming.collect_task(task, **kwargs)
 
 
@@ -104,16 +102,6 @@ def GenTests(api):
       api.post_check(api.swarming.check_triggered_request,
                      '[trigger] optional-dimension task', lambda check, req:
                      check(len(req) == 4)),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'allow_missing_json',
-      api.properties(
-          task_name='missing-json task', allow_missing_json=True),
-      api.post_process(post_process.StepCommandContains,
-                       'missing-json task',
-                       ['--allow-missing-json']),
       api.post_process(post_process.DropExpectation),
   )
 

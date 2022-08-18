@@ -1248,8 +1248,7 @@ class SwarmingApi(recipe_api.RecipeApi):
                             build_properties,
                             requests_json,
                             output_json=None,
-                            task_output_dir=None,
-                            allow_missing_json=False):
+                            task_output_dir=None):
     """Generate the arguments needed to run collect_task.py.
 
     Args:
@@ -1286,8 +1285,6 @@ class SwarmingApi(recipe_api.RecipeApi):
           ['--build-properties',
            self.m.json.dumps(build_properties)])
     task_args.extend(['--summary-json-file', self.summary()])
-    if allow_missing_json:
-      task_args.append('--allow-missing-json')
     collect_cmd = ['swarming']
     collect_cmd.extend(self.get_collect_cmd_args(requests_json))
     task_args.append('--')
@@ -1346,11 +1343,6 @@ class SwarmingApi(recipe_api.RecipeApi):
           for k, v in six.iteritems(self.m.properties.thaw())
           if not k.startswith('$'))
 
-    allow_missing_json = False
-    if kwargs.get('allow_missing_json', False):
-      allow_missing_json = True
-      kwargs.pop('allow_missing_json')
-
     # This script still exists here, since there are many clients which depend
     # on this module which don't necessarily have a chromium checkout (it's hard
     # to verify they do via expectations). Leave this here for now, since this
@@ -1367,8 +1359,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         build_properties=build_properties,
         requests_json=task.collect_cmd_input(),
         output_json=output_placeholder,
-        task_output_dir=task.task_output_dir,
-        allow_missing_json=allow_missing_json)
+        task_output_dir=task.task_output_dir)
 
     # The call to collect_task emits two JSON files and one text file:
     #  1) a task summary JSON emitted by swarming

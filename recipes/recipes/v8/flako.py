@@ -494,7 +494,6 @@ class Runner(object):
     def collect_task(task):
       step_result, _ = self.api.chromium_swarming.collect_task(
           task,
-          allow_missing_json=True,
           gen_step_test_data=self._default_task_pass_test_data)
       return self.num_failures(step_result)
 
