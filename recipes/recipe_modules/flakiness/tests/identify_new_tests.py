@@ -39,10 +39,6 @@ DEPS = [
 
 def RunSteps(api):
   test_objects = []
-  non_experimental_tags = [
-      rdb_common_pb2.StringPair(
-          key='step_name', value='some test (with patch)')
-  ]
   for i in range(6):
     inv_bundle = {}
     suite_name = 'some test %s' % str(i)
@@ -62,7 +58,6 @@ def RunSteps(api):
             variant_hash='{}hash'.format(i),
             expected=False,
             status=test_result_pb2.FAIL,
-            tags=non_experimental_tags,
         ),
     ]
     inv_bundle[inv] = api.resultdb.Invocation(test_results=test_results)
@@ -82,16 +77,13 @@ def RunSteps(api):
     test_objects.append(test_object)
 
   new_tests = {
-      'ninja://sample/test:some_test/TestSuite.Test2_2hash_False',
-      'ninja://sample/test:some_test/TestSuite.Test3_3hash_False',
-      'TestSuite.Test4_4hash_False',
+      'ninja://sample/test:some_test/TestSuite.Test3_3hash',
+      'TestSuite.Test4_4hash',
   }
   found_tests = api.flakiness.identify_new_tests(test_objects)
   if found_tests:
-    found_tests = set([
-        str('_'.join([t.test_id, t.variant_hash,
-                      str(t.is_experimental)])) for t in found_tests
-    ])
+    found_tests = set(
+        [str('_'.join([t.test_id, t.variant_hash])) for t in found_tests])
     api.assertions.assertEqual(new_tests, found_tests)
 
 
@@ -142,22 +134,15 @@ def GenTests(api):
           api.file.read_json([{
               'test_id': 'ninja://sample/test:some_test/TestSuite.Test2',
               'variant_hash': '2hash',
-              'is_experimental': True,
               'invocation': ['invocation/3']
           }, {
               'test_id': 'ninja://sample/test:some_test/TestSuite.Test0',
               'variant_hash': '0hash',
-              'tags': '[{"key":"step_name","value":"some test (with patch)"}]',
               'invocation': ['invocation/1']
           }])),
       api.weetbix.query_test_history(
           test1_history_res,
           'ninja://sample/test:some_test/TestSuite.Test1',
-          parent_step_name='searching_for_new_tests',
-      ),
-      api.weetbix.query_test_history(
-          empty_history_res,
-          'ninja://sample/test:some_test/TestSuite.Test2',
           parent_step_name='searching_for_new_tests',
       ),
       api.weetbix.query_test_history(
@@ -203,7 +188,6 @@ def GenTests(api):
           }, {
               'test_id': 'ninja://sample/test:some_test/TestSuite.Test0',
               'variant_hash': '0hash',
-              'tags': '[{"key":"step_name","value":"some test (with patch)"}]',
               'invocation': ['invocation/1']
           }, {
               'test_id': 'ninja://sample/test:some_test/TestSuite.Test1',
@@ -313,22 +297,18 @@ def GenTests(api):
           }, {
               'test_id': 'ninja://sample/test:some_test/TestSuite.Test1',
               'variant_hash': '1hash',
-              'tags': '[{"key":"step_name","value":"some test (with patch)"}]',
               'invocation': ['invocation/1']
           }, {
               'test_id': 'ninja://sample/test:some_test/TestSuite.Test2',
               'variant_hash': '2hash',
-              'tags': '[{"key":"step_name","value":"some test (with patch)"}]',
               'invocation': ['invocation/1']
           }, {
               'test_id': 'ninja://sample/test:some_test/TestSuite.Test3',
               'variant_hash': '3hash',
-              'tags': '[{"key":"step_name","value":"some test (with patch)"}]',
               'invocation': ['invocation/1']
           }, {
               'test_id': 'TestSuite.Test4',
               'variant_hash': '4hash',
-              'tags': '[{"key":"step_name","value":"some test (with patch)"}]',
               'invocation': ['invocation/1']
           }])),
       api.post_process(post_process.StatusSuccess),

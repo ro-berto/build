@@ -6,7 +6,6 @@ import attr
 import collections
 import copy
 import inspect
-import json
 import random
 import re
 import sys
@@ -41,7 +40,6 @@ class TestDefinition():
 
   Attributes:
     * duration_milliseconds: (int) Test duration in milliseconds.
-    * is_experimental: (bool) Whether the test is from an experimental suite.
     * test_id: (str) ResultDB's test_id (go/resultdb-concepts)
     * test_object: (steps.Test or steps.ExperimentalTest) The test object where
                    this test comes from.
@@ -52,7 +50,6 @@ class TestDefinition():
                test_id,
                test_name=None,
                duration_milliseconds=None,
-               is_experimental=False,
                test_object=None,
                variant_hash=None):
     """
@@ -60,8 +57,6 @@ class TestDefinition():
       * test_id: (str) ResultDB test id
       * test_name: (str) Test name to input to test suites.
       * duration_milliseconds: (int) Test duration in milliseconds.
-      * is_experimental: (bool) Flag indicating whether test run was
-        experimental.
       * test_object: (steps.Test or steps.ExperimentalTest) The test object
         where this test comes from.
       * variant_hash: (str) ResultDB's variant hash
@@ -70,16 +65,13 @@ class TestDefinition():
     self.test_name = test_name
     self.duration_milliseconds = duration_milliseconds
     self.variant_hash = variant_hash
-
-    self.is_experimental = is_experimental
-
     self.test_object = test_object
 
   def __eq__(self, t2):
-    return (self.test_id, self.variant_hash, self.is_experimental) == t2
+    return (self.test_id, self.variant_hash) == t2
 
   def __hash__(self):
-    return hash((self.test_id, self.variant_hash, self.is_experimental))
+    return hash((self.test_id, self.variant_hash))
 
 
 class FlakinessApi(recipe_api.RecipeApi):
@@ -363,12 +355,6 @@ class FlakinessApi(recipe_api.RecipeApi):
             'test_id':
                 ('ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_'
                  'eg2tests_module/TestSuite.test_a'),
-            'is_experimental': False,
-            'variant':
-                ('[{"key":"builder","value":"ios-simulator-full-configs"},'
-                 '{"key":"os","value":"Ubuntu-14.04"},{"key":"test_suite",'
-                 '"value":"ios_chrome_bookmarks_eg2tests_module_iPhone 11 '
-                 '14.4"}]'),
             'variant_hash': 'some_hash',
             'invocation': ['invocation/2', 'invocations/3'],
         }],
@@ -406,7 +392,6 @@ class FlakinessApi(recipe_api.RecipeApi):
       tests.add(
           TestDefinition(
               test_entry['test_id'],
-              is_experimental=test_entry.get('is_experimental', False),
               variant_hash=test_entry.get('variant_hash', None)))
     return tests
 
@@ -458,22 +443,8 @@ class FlakinessApi(recipe_api.RecipeApi):
             test_id=test_verdict.test_id,
             variant_hash=test_verdict.variant_hash,
         )
-        # The query_test_history API doesn't tell us whether a result is from an
-        # experimental suite. We treat a result from query_test_history API as
-        # both an experimental and non-experimental test. This is because the
-        # distinction is tracked in TestDefinition. In this way, flipping an
-        # experimental test to non-experimental is not regarded as adding a new
-        # test.
-        # TODO(crbug.com/1351413): Remove is_experimental in new test
-        # definition.
-        test_experimental = TestDefinition(
-            test_id=test_verdict.test_id,
-            variant_hash=test_verdict.variant_hash,
-            is_experimental=True,
-        )
         excluded = test_verdict.invocation_id in excluded_invs
-        if ((test in prelim_tests or test_experimental in prelim_tests) and
-            not excluded):
+        if test in prelim_tests and not excluded:
           prelim_tests.remove(test)
 
     futures = []
@@ -582,8 +553,6 @@ class FlakinessApi(recipe_api.RecipeApi):
                   individual_test.test_id,
                   test_name=individual_test.test_name,
                   duration_milliseconds=duration_milliseconds,
-                  is_experimental=isinstance(test_object,
-                                             steps.ExperimentalTest),
                   test_object=test_object,
                   variant_hash=rdb_suite_result.variant_hash))
 
@@ -617,10 +586,8 @@ class FlakinessApi(recipe_api.RecipeApi):
         return set()
 
       p.logs['new_tests'] = ('new tests: \n\n{}'.format('\n'.join([
-          'test_id: {}, variant_hash: {}, experimental: {},'
-          ' duration_milliseconds: {}'.format(t.test_id, t.variant_hash,
-                                              t.is_experimental,
-                                              t.duration_milliseconds)
+          'test_id: {}, variant_hash: {}, duration_milliseconds: {}'.format(
+              t.test_id, t.variant_hash, t.duration_milliseconds)
           for t in self.m.py3_migration.consistent_ordering(
               new_tests, key=lambda t: (t.test_id, t.variant_hash))
       ])))
