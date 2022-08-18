@@ -270,7 +270,7 @@
     "name": "initialize code coverage.code coverage executable dependencies missing!",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@<br/>has [START_DIR]/openscreen/third_party/llvm-build/Release+Asserts/bin/llvm-profdata: False<br/>has [START_DIR]/openscreen/third_party/llvm-build/Release+Asserts/bin/llvm-cov: False<br/>has [START_DIR]/openscreen/build/code_coverage: False@@@",
+      "@@@STEP_TEXT@<br/>has [START_DIR]/openscreen/build/code_coverage: False<br/>has [START_DIR]/openscreen/third_party/llvm-build/Release+Asserts/bin/llvm-cov: False<br/>has [START_DIR]/openscreen/third_party/llvm-build/Release+Asserts/bin/llvm-profdata: False@@@",
       "@@@STEP_EXCEPTION@@@"
     ]
   },

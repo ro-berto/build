@@ -9,6 +9,7 @@ DEPS = [
     'chromium',
     'chromium_swarming',
     'flakiness',
+    'py3_migration',
     'traceback',
     'weetbix',
     'depot_tools/tryserver',

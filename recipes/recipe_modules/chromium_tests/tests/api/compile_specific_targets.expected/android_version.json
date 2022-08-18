@@ -74,7 +74,7 @@
       "@@@STEP_LOG_LINE@Version@BUILD=9876@@@",
       "@@@STEP_LOG_LINE@Version@PATCH=2@@@",
       "@@@STEP_LOG_END@Version@@@",
-      "@@@STEP_LOG_LINE@stdout@version:{'MAJOR': '123', 'MINOR': '1', 'BUILD': '9876', 'PATCH': '2'}@@@",
+      "@@@STEP_LOG_LINE@stdout@version:{'BUILD': '9876', 'MAJOR': '123', 'MINOR': '1', 'PATCH': '2'}@@@",
       "@@@STEP_LOG_LINE@stdout@android_version_name:123.1.9876.2@@@",
       "@@@STEP_LOG_LINE@stdout@android_version_code:987600200@@@",
       "@@@STEP_LOG_END@stdout@@@"

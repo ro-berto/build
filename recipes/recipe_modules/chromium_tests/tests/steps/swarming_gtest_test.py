@@ -9,6 +9,7 @@ DEPS = [
     'depot_tools/bot_update',
     'isolate',
     'profiles',
+    'py3_migration',
     'recipe_engine/assertions',
     'recipe_engine/buildbucket',
     'recipe_engine/commit_position',
@@ -64,7 +65,8 @@ def RunSteps(api):
         'compile_targets: %r' % test.compile_targets(),
         'uses_local_devices: %r' % test.uses_local_devices,
         'uses_isolate: %r' % test.uses_isolate,
-        'pass_fail_counts: %s' % test.pass_fail_counts(suffix=''),
+        'pass_fail_counts: %s' %
+        api.py3_migration.consistent_dict_str(test.pass_fail_counts(suffix='')),
     ]
 
     if 'expected_pass_fail_counts' in api.properties:

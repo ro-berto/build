@@ -109,6 +109,8 @@
       "led",
       "edit",
       "-p",
+      "deps_revision_overrides={\"src\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\"}",
+      "-p",
       "parent_builder_group=\"fake-group\"",
       "-p",
       "parent_buildername=\"fake-builder\"",
@@ -145,9 +147,7 @@
       "-p",
       "parent_got_webrtc_revision_cp=\"refs/heads/main@{#120644}\"",
       "-p",
-      "revision=\"2d72510e447ab60a9728aeea2362d8be2cbd7789\"",
-      "-p",
-      "deps_revision_overrides={\"src\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\"}"
+      "revision=\"2d72510e447ab60a9728aeea2362d8be2cbd7789\""
     ],
     "env": {
       "SWARMING_TASK_ID": null

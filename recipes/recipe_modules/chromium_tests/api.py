@@ -477,7 +477,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     android_version_code = '%d%03d%d0' % (int(
         version['BUILD']), int(version['PATCH']), arch_digit)
     if log_details:
-      self.log('version:%s' % version)
+      self.log('version:%s' % self.m.py3_migration.consistent_dict_str(version))
       self.log('android_version_name:%s' % android_version_name)
       self.log('android_version_code:%s' % android_version_code)
     return android_version_name, android_version_code
@@ -951,7 +951,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         trigger.
     """
     property_args = []
-    for k, v in six.iteritems(properties):
+    for k, v in self.m.py3_migration.consistent_ordering(
+        six.iteritems(properties)):
       property_args.append('-p')
       property_args.append('{}={}'.format(k, self.m.json.dumps(v)))
 
@@ -1937,6 +1938,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       failure_limit = size_limit / 100
 
     current_size = 0
+    unrecoverable_test_suites = self.m.py3_migration.consistent_ordering(
+        unrecoverable_test_suites, key=lambda suite: suite.name)
     for index, suite in enumerate(unrecoverable_test_suites):
       test_suite_header = '**%s** failed.' % suite.name
 
@@ -1964,7 +1967,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       test_summary_lines.append(test_suite_header)
 
-      for index, failure in enumerate(sorted(deterministic_failures)):
+      for index, failure in enumerate(
+          self.m.py3_migration.consistent_ordering(deterministic_failures)):
         if index >= failure_limit or current_size >= size_limit:
           failure_size = len(deterministic_failures)
           hint = '- ...%d more failure(s) (%d total)...' % (failure_size -
