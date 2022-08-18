@@ -28,8 +28,6 @@
     "cmd": [
       "rdb",
       "stream",
-      "-var",
-      "builder:builder",
       "-tag",
       "step_name:test_suite-with-rdb",
       "-coerce-negative-duration",

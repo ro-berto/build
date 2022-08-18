@@ -4,8 +4,6 @@
       "rdb",
       "stream",
       "-var",
-      "builder:test_buildername",
-      "-var",
       "test_suite:script_test",
       "-tag",
       "step_name:script_test",

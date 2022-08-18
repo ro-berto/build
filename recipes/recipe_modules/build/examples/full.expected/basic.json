@@ -34,8 +34,6 @@
     "cmd": [
       "rdb",
       "stream",
-      "-var",
-      "builder:builder",
       "-tag",
       "step_name:vpython with resultdb",
       "-coerce-negative-duration",

@@ -180,6 +180,13 @@ def _handle_ci_only(chromium_tests_api, raw_spec, test_spec):
           steps.INCLUDE_CI_FOOTER))
 
 
+def _handle_resultdb(chromium_tests_api, raw_test_spec):
+  kwargs = dict(raw_test_spec.get('resultdb', {}))
+  kwargs.setdefault('test_id_prefix', raw_test_spec.get('test_id_prefix'))
+  kwargs.setdefault('base_variant', {}).update(chromium_tests_api.base_variant)
+  return steps.ResultDB.create(**kwargs)
+
+
 def generator_common(chromium_tests_api, raw_test_spec, swarming_delegate,
                      local_delegate, isolated_tests_only, checkout_path):
   """Common logic for generating tests from JSON specs.
@@ -210,10 +217,7 @@ def generator_common(chromium_tests_api, raw_test_spec, swarming_delegate,
   kwargs['check_flakiness_for_new_tests'] = raw_test_spec.get(
       'check_flakiness_for_new_tests', True)
   kwargs['name'] = name
-
-  rdb_kwargs = dict(raw_test_spec.get('resultdb', {}))
-  rdb_kwargs.setdefault('test_id_prefix', kwargs['test_id_prefix'])
-  kwargs['resultdb'] = steps.ResultDB.create(**rdb_kwargs)
+  kwargs['resultdb'] = _handle_resultdb(chromium_tests_api, raw_test_spec)
 
   processed_set_ups = []
   for s in raw_test_spec.get('setup', []):
@@ -467,9 +471,7 @@ def generate_junit_tests(chromium_tests_api,
   del got_revisions, scripts_compile_targets_fn
 
   for raw_spec in source_side_spec.get(buildername, {}).get('junit_tests', []):
-    rdb_kwargs = dict(raw_spec.get('resultdb', {}))
-    rdb_kwargs.setdefault('test_id_prefix', raw_spec.get('test_id_prefix'))
-    resultdb = steps.ResultDB.create(**rdb_kwargs)
+    resultdb = _handle_resultdb(chromium_tests_api, raw_spec)
 
     test_spec = steps.AndroidJunitTestSpec.create(
         raw_spec.get('name', raw_spec['test']),
@@ -496,9 +498,7 @@ def generate_script_tests(chromium_tests_api,
   del got_revisions
 
   for raw_spec in source_side_spec.get(buildername, {}).get('scripts', []):
-    rdb_kwargs = dict(raw_spec.get('resultdb', {'enable': True}))
-    rdb_kwargs.setdefault('test_id_prefix', raw_spec.get('test_id_prefix'))
-    resultdb = steps.ResultDB.create(**rdb_kwargs)
+    resultdb = _handle_resultdb(chromium_tests_api, raw_spec)
 
     test_spec = steps.ScriptTestSpec.create(
         str(raw_spec['name']),
@@ -624,11 +624,8 @@ def generate_skylab_tests(chromium_tests_api,
     common_skylab_kwargs = {
         k: v for k, v in skylab_test_spec.items() if k in kwargs_to_forward
     }
-    rdb_kwargs = dict(skylab_test_spec.pop('resultdb', {}))
-    rdb_kwargs.setdefault(
-        'base_variant',
-        {'builder': chromium_tests_api.m.buildbucket.builder_name})
-    common_skylab_kwargs['resultdb'] = steps.ResultDB.create(**rdb_kwargs)
+    common_skylab_kwargs['resultdb'] = _handle_resultdb(chromium_tests_api,
+                                                        skylab_test_spec)
     common_skylab_kwargs['test_args'] = get_args_for_test(
         chromium_tests_api, skylab_test_spec, got_revisions)
     common_skylab_kwargs['target_name'] = skylab_test_spec.get('test')

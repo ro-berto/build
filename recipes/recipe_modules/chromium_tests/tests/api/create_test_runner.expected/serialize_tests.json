@@ -8,8 +8,6 @@
       "rdb",
       "stream",
       "-var",
-      "builder:test_buildername",
-      "-var",
       "test_suite:base_unittests",
       "-tag",
       "step_name:base_unittests",

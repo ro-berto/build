@@ -141,8 +141,7 @@ class ResultDB(object):
 
       cmd = result_adapter + ['--'] + list(cmd)
 
-    # add var 'builder' by default
-    var = {'builder': api.buildbucket.builder_name}
+    var = {}
     var.update(self.base_variant or {})
     var.update(base_variant or {})
 

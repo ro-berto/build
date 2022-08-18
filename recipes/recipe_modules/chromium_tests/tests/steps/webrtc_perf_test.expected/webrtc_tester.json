@@ -315,8 +315,6 @@
       "rdb",
       "stream",
       "-var",
-      "builder:WebRTC Chromium Linux Tester",
-      "-var",
       "test_suite:test_name",
       "-tag",
       "step_name:test_name",
