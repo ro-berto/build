@@ -211,7 +211,7 @@ class IsolateApi(recipe_api.RecipeApi):
                    **kwargs):
     """Runs an isolated test."""
     cmd = [
-        'python',
+        'vpython3',
         self._run_isolated_path,
         '--verbose',
         '--cas-instance',
@@ -226,8 +226,10 @@ class IsolateApi(recipe_api.RecipeApi):
     if args:
       cmd.append('--')
       cmd.extend(args)
+
     if resultdb:
       cmd = resultdb.wrap(self.m, cmd, step_name=name)
+
     return self.m.step(name, cmd, **kwargs)
 
   def archive_differences(self, first_dir, second_dir, values):

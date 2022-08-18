@@ -123,10 +123,7 @@ def real_main(tasks, attempts, swarming_py_path, swarming_server):
         url = tasks.swarming_query_url(task_batch)
 
         cmd = [
-            sys.executable,
-            swarming_py_path,
-            'query',
-            '-S', swarming_server,
+            'vpython3', swarming_py_path, 'query', '-S', swarming_server,
             '--json=%s' % tmpfile
         ]
 
