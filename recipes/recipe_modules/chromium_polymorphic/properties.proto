@@ -1,0 +1,19 @@
+// Copyright 2022 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+syntax = "proto3";
+
+package recipe_modules.build.chromium_polymorphic;
+
+import "go.chromium.org/luci/buildbucket/proto/builder_common.proto";
+
+// Module properties
+//
+// Next ID: 3
+message InputProperties {
+  // The ID of the target builder
+  buildbucket.v2.BuilderID target_builder_id = 1;
+  // The builder group of the target builder
+  string target_builder_group = 2;
+}
