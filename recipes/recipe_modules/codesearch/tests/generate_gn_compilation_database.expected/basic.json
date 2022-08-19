@@ -130,7 +130,7 @@
       "-u",
       "RECIPE_REPO[depot_tools]/gn.py",
       "gen",
-      "--export-compile-commands=//android_webview:system_webview_apk",
+      "--export-compile-commands=system_webview_apk",
       "None/out/Debug"
     ],
     "cwd": "None",

@@ -156,9 +156,7 @@ def RunSteps(api, properties):
     # target list.
     webview_gn_targets = ['//android_webview:system_webview_apk']
     api.codesearch.generate_gn_compilation_database(
-        webview_gn_targets,
-        builder_group=builder_id.group,
-        buildername=builder_id.builder)
+        targets, builder_group=builder_id.group, buildername=builder_id.builder)
     api.codesearch.generate_gn_target_list(webview_gn_targets)
   else:
     api.codesearch.generate_compilation_database(

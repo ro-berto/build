@@ -28,8 +28,7 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield api.test(
-      'basic', api.properties(targets=['//android_webview:system_webview_apk']))
+  yield api.test('basic', api.properties(targets=['system_webview_apk']))
 
   yield api.test(
       'generate_gn_compilation_database_failed',

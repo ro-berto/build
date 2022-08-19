@@ -450,7 +450,7 @@
       "-u",
       "RECIPE_REPO[depot_tools]/gn.py",
       "gen",
-      "--export-compile-commands=//android_webview:system_webview_apk",
+      "--export-compile-commands=all",
       "[CACHE]/builder/src/out/webview-Debug"
     ],
     "cwd": "[CACHE]/builder/src",
