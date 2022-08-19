@@ -5,8 +5,6 @@
 # Contains the bulk of the WebRTC builder configurations so they can be reused
 # from multiple recipes.
 
-from __future__ import absolute_import
-
 from RECIPE_MODULES.build.attr_utils import (attrib, attrs)
 from RECIPE_MODULES.build.chromium_tests_builder_config import (builder_db,
                                                                 builder_spec)

@@ -3,8 +3,6 @@
 # found in the LICENSE file.
 
 import itertools
-import pprint
-import six
 
 from recipe_engine import recipe_api
 
@@ -143,7 +141,7 @@ class IsolateApi(recipe_api.RecipeApi):
 
     swarm_hashes = {}
     if step_result.json.output:
-      for k, v in six.iteritems(step_result.json.output):
+      for k, v in step_result.json.output.items():
         # TODO(tansell): Raise an error here when it can't clobber an
         # existing error. This code is currently inside a finally block,
         # meaning it could be executed when an existing error is occurring.
@@ -162,7 +160,7 @@ class IsolateApi(recipe_api.RecipeApi):
       step_result.presentation.properties[
           swarm_hashes_property_name] = swarm_hashes
 
-    missing = sorted(t for t, h in six.iteritems(self._isolated_tests) if not h)
+    missing = sorted(t for t, h in self._isolated_tests.items() if not h)
     if missing:
       step_result.presentation.logs['failed to isolate'] = (
           ['Failed to isolate following targets:'] + missing +
@@ -220,7 +218,7 @@ class IsolateApi(recipe_api.RecipeApi):
         isolated_input,
     ]
 
-    for k, v in sorted(six.iteritems(env or {})):
+    for k, v in sorted((env or {}).items()):
       cmd.extend(['--env', '%s=%s' % (k, v)])
     cmd.extend(pre_args or [])
     if args:
@@ -243,7 +241,7 @@ class IsolateApi(recipe_api.RecipeApi):
     #   'deps_diff': [ ...filenames... ],
     # }
     # Join all three filename lists in the values into a single list.
-    diffs = list(itertools.chain.from_iterable(six.itervalues(values)))
+    diffs = list(itertools.chain.from_iterable(values.values()))
     if not diffs:  # pragma: no cover
       return
 

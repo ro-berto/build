@@ -5,7 +5,6 @@
 import attr
 import inspect
 import itertools
-import six
 import traceback
 
 from .builder_spec import BuilderSpec, COMPILE_AND_TEST, TEST
@@ -51,8 +50,8 @@ class _BuilderSpecProperty(object):
     values = list(set(per_builder_values.values()))
     if len(values) != 1:
       message = ['Inconsistent value for {!r}:'.format(self._attr)]
-      message.extend('{!r}: {!r}'.format(k, v)
-                     for k, v in six.iteritems(per_builder_values))
+      message.extend(
+          '{!r}: {!r}'.format(k, v) for k, v in per_builder_values.items())
       raise ValueError('\n  '.join(message))
     return values[0]
 
@@ -259,7 +258,7 @@ class BuilderConfig(object):
           return False
 
         kwargs['mirroring_try_builders'] = [
-            try_id for try_id, spec in six.iteritems(try_db)
+            try_id for try_id, spec in try_db.items()
             if is_builder_mirrored(spec)
         ]
 

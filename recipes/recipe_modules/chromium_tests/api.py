@@ -6,10 +6,7 @@ import attr
 import collections
 import contextlib
 import itertools
-import re
-import six
-
-from six.moves.urllib.parse import urlencode
+from urllib.parse import urlencode
 
 from recipe_engine import recipe_api, step_data
 
@@ -253,12 +250,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         memo.append(self.get_compile_targets_for_scripts())
       return memo[0]
 
-    source_side_specs = {
-        group: self.read_source_side_spec(
-            spec_file, source_side_spec_dir=source_side_spec_dir)
-        for group, spec_file in sorted(
-            six.iteritems(builder_config.source_side_spec_files))
-    }
+    source_side_specs = {}
+    for group, spec_file in sorted(
+        builder_config.source_side_spec_files.items()):
+      source_side_specs[group] = self.read_source_side_spec(
+          spec_file, source_side_spec_dir=source_side_spec_dir)
     tests = {}
 
     for builder_id in builder_config.builder_ids_in_scope_for_testing:
@@ -923,7 +919,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         map(self.m.path.abspath, absolute_affected_files))
     absolute_spec_files = set(
         str(self.m.chromium.c.source_side_spec_dir.join(f))
-        for f in six.itervalues(builder_config.source_side_spec_files))
+        for f in builder_config.source_side_spec_files.values())
     absolute_spec_files = set(map(self.m.path.abspath, absolute_spec_files))
     return absolute_spec_files & absolute_affected_files
 
@@ -951,7 +947,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         trigger.
     """
     property_args = []
-    for k, v in six.iteritems(properties):
+    for k, v in properties.items():
       property_args.append('-p')
       property_args.append('{}={}'.format(k, self.m.json.dumps(v)))
 
@@ -1082,7 +1078,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         'parent_builder_group': builder_id.group,
         'parent_buildername': builder_id.builder,
     }
-    for name, value in six.iteritems(update_step.presentation.properties):
+    for name, value in update_step.presentation.properties.items():
       if name.startswith('got_'):
         properties['parent_' + name] = value
     # Work around https://crbug.com/785462 in LUCI UI that ignores
@@ -2047,7 +2043,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         step_result = self.m.step('analyze', [])
         text = ['skipping analyze'] + skip_analysis_reasons
         step_result.presentation.step_text = '\n* '.join(text)
-        for log, contents in sorted(six.iteritems(skip_analysis_logs)):
+        for log, contents in sorted(skip_analysis_logs.items()):
           step_result.presentation.logs[log] = contents
         return test_targets, compile_targets
 

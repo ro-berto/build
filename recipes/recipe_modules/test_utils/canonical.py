@@ -28,8 +28,6 @@ The canonical format is a dict of the form:
   }
 """
 
-import six
-
 
 def result_format(
     valid=False, failures=None, total_tests_ran=0,
@@ -69,7 +67,7 @@ def deterministic_failures(canonical_result):
       as would be returned by result_format above.
   """
   failures = []
-  for test_name, result in six.iteritems(canonical_result['pass_fail_counts']):
+  for test_name, result in canonical_result['pass_fail_counts'].items():
     success_count = result['pass_count']
     fail_count = result['fail_count']
     if fail_count > 0 and success_count == 0:

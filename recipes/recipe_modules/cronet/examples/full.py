@@ -2,11 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import six
-
 from recipe_engine.engine_types import freeze
 from recipe_engine import post_process
-from recipe_engine.recipe_api import Property
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 DEPS = [
@@ -66,7 +63,7 @@ def RunSteps(api):
   return cronet.run_perf_tests('sample-perf-id')
 
 def GenTests(api):
-  for builder in six.iterkeys(BUILDERS):
+  for builder in BUILDERS:
     for is_experimental in (False, True):
       test_name = builder
       if is_experimental:

@@ -3,7 +3,6 @@
 # found in the LICENSE file.
 
 import collections
-import six
 
 from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 
@@ -31,9 +30,9 @@ def GenTests(api):
 
     def step_filter(check, steps):
       del check
-      return collections.OrderedDict([(k, v)
-                                      for k, v in six.iteritems(steps)
-                                      if not k.startswith('setup steps')])
+      return collections.OrderedDict([
+          (k, v) for k, v in steps.items() if not k.startswith('setup steps')
+      ])
 
     return api.post_process(step_filter)
 

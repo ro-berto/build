@@ -4,7 +4,6 @@
 
 import attr
 import itertools
-import six
 
 from RECIPE_MODULES.build.attr_utils import (attrib, attrs, enum, mapping,
                                              sequence)
@@ -228,7 +227,7 @@ class BuilderSpec(object):
       with the concatenation of the existing value for the field (or an empty
       iterable if the existing value is None) with the value provided in kwargs.
     """
-    for k, v in six.iteritems(kwargs):
+    for k, v in kwargs.items():
       current = getattr(self, k)
       kwargs[k] = itertools.chain(current, v)
     return self.evolve(**kwargs)

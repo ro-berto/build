@@ -2,8 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import six
-
 from recipe_engine import post_process, recipe_api
 from recipe_engine.config import Dict
 
@@ -64,7 +62,7 @@ def RunSteps(api, expected_attrs, use_static_dbs):
     lookup_kwargs = {'builder_db': BUILDER_DB, 'try_db': TRY_DB}
   _, builder_config = api.chromium_tests_builder_config.lookup_builder(
       **lookup_kwargs)
-  for k, v in six.iteritems(expected_attrs):
+  for k, v in expected_attrs.items():
     value = getattr(builder_config, k)
     api.assertions.assertEqual(
         value, v,

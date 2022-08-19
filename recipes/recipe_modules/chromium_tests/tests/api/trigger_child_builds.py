@@ -3,7 +3,6 @@
 # found in the LICENSE file.
 
 import collections
-import six
 
 from recipe_engine import post_process, recipe_api
 
@@ -49,9 +48,9 @@ def GenTests(api):
 
     def step_filter(check, steps):
       del check
-      return collections.OrderedDict([(k, v)
-                                      for k, v in six.iteritems(steps)
-                                      if not k.startswith('setup steps')])
+      return collections.OrderedDict([
+          (k, v) for k, v in steps.items() if not k.startswith('setup steps')
+      ])
 
     return api.post_process(step_filter)
 

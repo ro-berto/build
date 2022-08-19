@@ -77,7 +77,6 @@ import sys
 
 import attr
 from attr import converters, validators
-import six
 
 from recipe_engine.config_types import Path
 from recipe_engine.engine_types import FrozenDict, freeze
@@ -93,14 +92,9 @@ def _instance_of(type_, name_qualifier=''):
   portions of values (e.g. keys of a dict).
   """
 
-  def _handle_str_type(t):
-    return six.string_types[0] if t == str else t
-
   if isinstance(type_, tuple):
-    type_ = tuple(_handle_str_type(t) for t in type_)
     type_qualifier = 'one of '
   else:
-    type_ = _handle_str_type(type_)
     type_qualifier = ''
 
   def inner(obj, attribute, value):
@@ -290,7 +284,7 @@ sequence = _UnparameterizedSequence.create()
 # The set of allowed types should be kept in sync with the types allowed by
 # _validate_cmd_list in
 # https://source.chromium.org/chromium/infra/infra/+/main:recipes-py/recipe_modules/step/api.py
-command_args = sequence[(int, six.string_types[0], Path, Placeholder)]
+command_args = sequence[(int, str, Path, Placeholder)]
 
 
 @attr.s(frozen=True, slots=True)
@@ -322,7 +316,7 @@ class _Mapping(AttributeConstraint):
 
   def convert(self, value):
     try:
-      itr = six.iteritems(value)
+      itr = value.items()
     except AttributeError:
       # Let the validator provide a more helpful exception message
       return value
@@ -423,7 +417,7 @@ def attrs(slots=True, **kwargs):
           a.validator(None, a, a.default)
         except Exception as e:
           message = 'default for {}'.format(e)
-          six.reraise(type(e), type(e)(message), sys.exc_info()[2])
+          raise type(e)(message).with_traceback(sys.exc_info()[2])
 
     return cls
 
@@ -448,7 +442,7 @@ class FieldMapping(collections.Mapping):
     raise KeyError(key)
 
   def _non_none_attrs(self):
-    for k, v in six.iteritems(attr.asdict(self)):
+    for k, v in attr.asdict(self).items():
       if v is not None:
         yield k
 

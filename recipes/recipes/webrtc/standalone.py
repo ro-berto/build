@@ -4,8 +4,6 @@
 
 # Recipe for building and running tests for WebRTC stand-alone.
 
-from __future__ import absolute_import
-
 import functools
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 

@@ -3,7 +3,6 @@
 # found in the LICENSE file.
 
 import attr
-import six
 
 from recipe_engine import recipe_test_api
 
@@ -132,7 +131,7 @@ class _PropertiesAssembler(object):
     }
 
     return properties_pb.BuilderSpec(
-        **{k: v for k, v in six.iteritems(kwargs) if v is not None})
+        **{k: v for k, v in kwargs.items() if v is not None})
 
   @staticmethod
   def _get_legacy_gclient_config(builder_spec):

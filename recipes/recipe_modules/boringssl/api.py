@@ -2,13 +2,9 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import itertools
-import six
-
 from recipe_engine import recipe_api
 from recipe_engine import util as recipe_util
 
-from RECIPE_MODULES.build.chromium_tests import steps
 from RECIPE_MODULES.recipe_engine.json.api import JsonOutputPlaceholder
 
 
@@ -16,7 +12,7 @@ def convert_trie_to_flat_paths(trie, prefix, sep):
   # Cloned from webkitpy.layout_tests.layout_package.json_results_generator
   # so that this code can stand alone.
   result = {}
-  for name, data in six.iteritems(trie):
+  for name, data in trie.items():
     if prefix:
       name = prefix + sep + name
 
@@ -133,7 +129,7 @@ class TestResults(object):
       local_expected = set(expected_results)
       return actual_result in local_expected
 
-    for (test, result) in six.iteritems(self.tests):
+    for (test, result) in self.tests.items():
       key = 'unexpected_' if result.get('is_unexpected') else ''
       actual_results = result['actual'].split()
       last_result = actual_results[-1]

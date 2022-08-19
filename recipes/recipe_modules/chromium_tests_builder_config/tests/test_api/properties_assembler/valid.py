@@ -3,8 +3,6 @@
 # found in the LICENSE file.
 """Test recipe for valid use of property builders of the test API."""
 
-import six
-
 from recipe_engine import post_process
 
 from RECIPE_MODULES.build import chromium
@@ -34,13 +32,13 @@ def RunSteps(api):
   builder_db = builder_config.builder_db
   expected_specs = api.properties['expected_specs']
   api.assertions.assertCountEqual(builder_db.keys(), expected_specs.keys())
-  for builder_id, expected_spec in six.iteritems(expected_specs):
+  for builder_id, expected_spec in expected_specs.items():
     api.assertions.assertEqual(
         builder_db[builder_id], expected_spec,
         'Spec for {}:\nexpected: {{second}}\nactual: {{first}}'.format(
             builder_id))
 
-  for k, v in six.iteritems(api.properties.get('expected_attrs', {})):
+  for k, v in api.properties.get('expected_attrs', {}).items():
     value = getattr(builder_config, k)
     api.assertions.assertEqual(
         value, v,

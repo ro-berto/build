@@ -2,8 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import six
-
 DEPS = [
   'recipe_engine/buildbucket',
   'recipe_engine/context',
@@ -541,7 +539,7 @@ _CONFIG_DISPATCH_MAP = {
 def RunSteps(api):
   builder_found = False
   buildername = api.buildbucket.builder_name
-  for builder_type, builder_config in six.iteritems(_CONFIG_MAP):
+  for builder_type, builder_config in _CONFIG_MAP.items():
     if buildername in builder_config:
       builder_found = True
       builder_dict = builder_config[buildername]

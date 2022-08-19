@@ -3,12 +3,9 @@
 # found in the LICENSE file.
 
 import itertools
-import six
-
 from recipe_engine import recipe_api
 from recipe_engine import util as recipe_util
 
-from . import canonical
 from .util import GTestResults, RDBPerSuiteResults, RDBResults
 from google.protobuf import timestamp_pb2
 

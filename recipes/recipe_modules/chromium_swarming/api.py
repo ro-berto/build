@@ -9,7 +9,6 @@ import decimal
 import functools
 import hashlib
 import os.path
-import six
 
 from recipe_engine import recipe_api
 from recipe_engine import util as recipe_util
@@ -318,7 +317,7 @@ class SwarmingApi(recipe_api.RecipeApi):
 
   @default_user.setter
   def default_user(self, value):
-    assert value is None or isinstance(value, six.string_types), value
+    assert value is None or isinstance(value, str), value
     self._default_user = value
 
   @property
@@ -337,8 +336,8 @@ class SwarmingApi(recipe_api.RecipeApi):
     return ReadOnlyDict(self._default_dimensions)
 
   def set_default_dimension(self, key, value):
-    assert isinstance(key, six.string_types), key
-    assert isinstance(value, six.string_types) or value is None, value
+    assert isinstance(key, str), key
+    assert isinstance(value, str) or value is None, value
     if value is None:
       self._default_dimensions.pop(key, None)
     else:
@@ -356,8 +355,8 @@ class SwarmingApi(recipe_api.RecipeApi):
     return ReadOnlyDict(self._default_env)
 
   def set_default_env(self, key, value):
-    assert isinstance(key, six.string_types), key
-    assert isinstance(value, six.string_types), value
+    assert isinstance(key, str), key
+    assert isinstance(value, str), value
     self._default_env[key] = value
 
   @property
@@ -737,7 +736,7 @@ class SwarmingApi(recipe_api.RecipeApi):
             self._trigger_task_with_custom_script(task, shard_index, resultdb,
                                                   **kwargs))
 
-        for key, value in six.iteritems(json_output['tasks']):
+        for key, value in json_output['tasks'].items():
           tasks[key] = value
 
       if len(tasks) != len(task.shard_indices):  # pragma: no cover
@@ -915,17 +914,17 @@ class SwarmingApi(recipe_api.RecipeApi):
         str(task_slice.execution_timeout_secs),
     ]
 
-    for name, value in sorted(six.iteritems(task_slice.dimensions)):
-      assert isinstance(value, six.string_types), \
+    for name, value in sorted(task_slice.dimensions.items()):
+      assert isinstance(value, str), \
         'dimension %s is not a string: %s' % (name, value)
       args.extend(['--dimension', name, value])
 
-    for name, value in sorted(six.iteritems(task_slice.env_vars)):
-      assert isinstance(value, six.string_types), \
+    for name, value in sorted(task_slice.env_vars.items()):
+      assert isinstance(value, str), \
         'env var %s is not a string: %s' % (name, value)
       args.extend(['-env', '%s=%s' % (name, value)])
 
-    for name, relpath in sorted(six.iteritems(task_slice.named_caches)):
+    for name, relpath in sorted(task_slice.named_caches.items()):
       args.extend(['-named-cache',
                    "%s=%s" % (name, relpath)])  # pragma: no cover
 
@@ -953,7 +952,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       args.extend(['-enable-resultdb'])  # pragma: no cover
 
     for path, package_list in sorted(
-        six.iteritems(task_slice.cipd_ensure_file.packages)):
+        task_slice.cipd_ensure_file.packages.items()):
       for package_name, package_version in package_list:
         args.extend([
             '-cipd-package',
@@ -1115,7 +1114,7 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     slices = [req_slice]
     if task.optional_dimensions:
-      for exp, dimensions in sorted(six.iteritems(task.optional_dimensions)):
+      for exp, dimensions in sorted(task.optional_dimensions.items()):
         current_slice = slices[0]
         current_slice = current_slice.with_dimensions(**dimensions)
         current_slice = current_slice.with_expiration_secs(exp)
@@ -1338,10 +1337,9 @@ class SwarmingApi(recipe_api.RecipeApi):
     if task.build_properties:
       build_properties = dict(task.build_properties)
       # exclude any recipe-engine-controlling properties (starting with $)
-      build_properties.update(
-          (k, v)
-          for k, v in six.iteritems(self.m.properties.thaw())
-          if not k.startswith('$'))
+      build_properties.update((k, v)
+                              for k, v in self.m.properties.thaw().items()
+                              if not k.startswith('$'))
 
     # This script still exists here, since there are many clients which depend
     # on this module which don't necessarily have a chromium checkout (it's hard
@@ -1390,7 +1388,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     if hasattr(step_result, 'json') and hasattr(
         step_result.json, 'output') and step_result.json.output:
       links = step_result.json.output.get('links', {})
-    for k, v in six.iteritems(links):
+    for k, v in links.items():
       step_result.presentation.links[k] = v
 
     has_valid_results = self._handle_summary_json(task, step_result)
@@ -1675,7 +1673,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       if shard and task.task_to_retry:
         task_id = shard.get('task_id')
         dispatched_task_ids = set()
-        for task_dict in six.itervalues(task._trigger_output['tasks']):
+        for task_dict in task._trigger_output['tasks'].values():
           dispatched_task_ids.add(task_dict['task_id'])
         should_show_shard = task_id in dispatched_task_ids
 
@@ -1786,7 +1784,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     target_platform = self.m.chromium.c.TARGET_PLATFORM
     swarming_dims = PER_TARGET_SWARMING_DIMS[target_platform]
 
-    for k, v in six.iteritems(swarming_dims):
+    for k, v in swarming_dims.items():
       self.set_default_dimension(k, v)
 
     self.set_default_dimension('pool', 'chromium.tests')
@@ -1967,7 +1965,7 @@ class SwarmingTask(object):
     if trigger_output is None:
       trigger_output = self.trigger_output
     if trigger_output and trigger_output.get('tasks'):
-      for shard_dict in six.itervalues(trigger_output['tasks']):
+      for shard_dict in trigger_output['tasks'].values():
         if shard_dict['shard_index'] == index:
           return "%s/task?id=%s" % (self._server, shard_dict['task_id'])
 
@@ -1978,7 +1976,7 @@ class SwarmingTask(object):
     """
     task_ids = []
     if self.trigger_output and self.trigger_output.get('tasks'):
-      for shard_dict in six.itervalues(self.trigger_output['tasks']):
+      for shard_dict in self.trigger_output['tasks'].values():
         task_ids.append(shard_dict['task_id'])
     return task_ids
 
@@ -1989,7 +1987,7 @@ class SwarmingTask(object):
     """
     invocation_names = []
     if self.trigger_output and 'tasks' in self.trigger_output:
-      for shard_dict in six.itervalues(self.trigger_output['tasks']):
+      for shard_dict in self.trigger_output['tasks'].values():
         inv_name = shard_dict.get('invocation')
         if inv_name:
           invocation_names.append(inv_name)

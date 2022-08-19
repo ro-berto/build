@@ -34,10 +34,9 @@ import attr
 import contextlib
 import hashlib
 import re
-import six
 import string
 import struct
-from six.moves import urllib
+import urllib
 
 from recipe_engine import recipe_api
 from recipe_engine.config_types import Path
@@ -617,7 +616,7 @@ class Test(object):
     """Returns a set of text to use to display in the test results summary."""
     return {
         '%s: crbug.com/%s' % (test_name, issue_id)
-        for test_name, issue_id in six.iteritems(self._known_flaky_failures_map)
+        for test_name, issue_id in self._known_flaky_failures_map.items()
     }
 
   def add_known_flaky_failure(self, test_name, monorail_issue):
@@ -947,13 +946,13 @@ class Test(object):
       return (False, None, None)
 
     initial_failing_tests = set()
-    for test_name, result in six.iteritems(self.pass_fail_counts('with patch')):
+    for test_name, result in self.pass_fail_counts('with patch').items():
       if result['fail_count'] > 0:
         initial_failing_tests.add(test_name)
 
     passing_tests = set()
     failing_tests = set()
-    for test_name, result in six.iteritems(self.pass_fail_counts(suffix)):
+    for test_name, result in self.pass_fail_counts(suffix).items():
       if result['fail_count'] > 0:
         failing_tests.add(test_name)
 

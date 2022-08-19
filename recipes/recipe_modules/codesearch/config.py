@@ -2,8 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import six
-
 from recipe_engine.config import config_item_context, ConfigGroup
 from recipe_engine.config import Single, Static
 from recipe_engine.config_types import Path
@@ -48,16 +46,14 @@ def BaseConfig(PROJECT,
       compile_commands_json_file=Single(Path),
       gn_targets_json_file=Single(Path),
       javac_extractor_output_dir=Single(Path),
-      bucket_name=Single(six.string_types, required=False),
-      generated_repo=Single(six.string_types, required=False),
+      bucket_name=Single(str, required=False),
+      generated_repo=Single(str, required=False),
       generated_author_email=Single(
-          six.string_types,
+          str,
           required=False,
           empty_val='git-generated-files-sync@chromium.org'),
       generated_author_name=Single(
-          six.string_types,
-          required=False,
-          empty_val='Automatic Generated Files Sync'),
+          str, required=False, empty_val='Automatic Generated Files Sync'),
   )
 
 config_ctx = config_item_context(BaseConfig)

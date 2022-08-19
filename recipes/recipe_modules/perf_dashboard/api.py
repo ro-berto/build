@@ -2,8 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import six
-from six.moves.urllib.parse import urlencode
+from urllib.parse import urlencode
 
 from recipe_engine import recipe_api
 
@@ -116,7 +115,7 @@ class PerfDashboardApi(recipe_api.RecipeApi):
       change['commits'] += list({
           'repository': repository,
           'git_hash': git_hash
-      } for repository, git_hash in six.iteritems(deps_revision_overrides))
+      } for repository, git_hash in deps_revision_overrides.items())
 
     if self.m.tryserver.is_tryserver:
       change['patch'] = {

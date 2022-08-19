@@ -4,7 +4,6 @@
 
 import attr
 import collections
-import six
 
 from . import canonical
 
@@ -43,7 +42,7 @@ class GTestResults(object):
     self.valid = True
 
     for cur_iteration_data in self.raw.get('per_iteration_data', []):
-      for test_fullname, results in six.iteritems(cur_iteration_data):
+      for test_fullname, results in cur_iteration_data.items():
         # TODO (robertocn): Consider a failure in any iteration a failure of
         # the whole test, but allow for an override that makes a test pass if
         # it passes at least once.
@@ -65,7 +64,7 @@ class GTestResults(object):
               self._compress_list(ascii_log.splitlines()))
 
 
-    for test_fullname, results in six.iteritems(self.raw_results):
+    for test_fullname, results in self.raw_results.items():
       # These strings are defined by base/test/launcher/test_result.cc.
       # https://cs.chromium.org/chromium/src/base/test/launcher/test_result.cc
       unique_results = set(results)
@@ -80,7 +79,7 @@ class GTestResults(object):
   def unique_failures(self):
     """Returns the set of tests that failed at least once."""
     failures = set()
-    for test_name, results_dict in six.iteritems(self.pass_fail_counts):
+    for test_name, results_dict in self.pass_fail_counts.items():
       if results_dict['fail_count'] >= 1:
         failures.add(test_name)
     return failures
@@ -160,7 +159,7 @@ class RDBPerSuiteResults(object):
 
   suite_name = attrib(str)
   variant_hash = attrib(str)
-  total_tests_ran = attrib(six.integer_types)
+  total_tests_ran = attrib(int)
   unexpected_passing_tests = attrib(set)
   unexpected_failing_tests = attrib(set)
   # unexpected_skipped_tests should be a subset of unexpected_failing_tests.

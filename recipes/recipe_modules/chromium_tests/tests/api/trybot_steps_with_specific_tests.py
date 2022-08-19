@@ -4,8 +4,6 @@
 
 import attr
 
-from six.moves import range  # pylint: disable=redefined-builtin
-
 from google.protobuf import json_format
 
 from recipe_engine import post_process

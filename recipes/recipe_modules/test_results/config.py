@@ -2,12 +2,10 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import six
-
 from recipe_engine.config import config_item_context, ConfigGroup, Single
 
 def BaseConfig(**_kwargs):
-  return ConfigGroup(test_results_server=Single(six.string_types))
+  return ConfigGroup(test_results_server=Single(str))
 
 
 config_ctx = config_item_context(BaseConfig)

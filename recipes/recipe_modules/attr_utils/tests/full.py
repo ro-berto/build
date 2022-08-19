@@ -3,7 +3,6 @@
 # found in the LICENSE file.
 
 import attr
-import six
 
 from recipe_engine import post_process
 from recipe_engine.config_types import NamedBasePath, Path
@@ -21,8 +20,6 @@ DEPS = [
 
 
 def RunSteps(api):
-  str_constraint = six.string_types[0]
-
   # attrib *********************************************************************
   with api.assertions.assertRaises(TypeError) as caught:
     attrib(1)
@@ -52,8 +49,7 @@ def RunSteps(api):
   # test validation of attribute type
   with api.assertions.assertRaises(TypeError) as caught:
     AttribTest(required=1)
-  message = "'required' must be {} (got 1 that is a {}).".format(
-      str_constraint, int)
+  message = "'required' must be {} (got 1 that is a {}).".format(str, int)
   api.assertions.assertEqual(str(caught.exception), message)
 
   # test value and defaults
@@ -117,7 +113,7 @@ def RunSteps(api):
   with api.assertions.assertRaises(TypeError) as caught:
     SequenceTest(value=[1, 2, 3], typed=[4, 5, 6])
   message = "members of 'typed' must be {} (got 4 that is a {}).".format(
-      str_constraint, int)
+      str, int)
   api.assertions.assertEqual(str(caught.exception), message)
 
   # test successful validation
@@ -137,8 +133,7 @@ def RunSteps(api):
   api.assertions.assertEqual(
       str(caught.exception),
       ("members of 'args' must be one of ({}, {}, {}, {}) "
-       "(got [] that is a {}).".format(int, str_constraint, Path, Placeholder,
-                                       list)))
+       "(got [] that is a {}).".format(int, str, Path, Placeholder, list)))
 
   # test that all valid argument types can be passed
   args = [
@@ -172,8 +167,7 @@ def RunSteps(api):
   # test validation of types of mapping keys
   with api.assertions.assertRaises(TypeError) as caught:
     MappingTest(typed={1: 1})
-  message = "keys of 'typed' must be {} (got 1 that is a {}).".format(
-      str_constraint, int)
+  message = "keys of 'typed' must be {} (got 1 that is a {}).".format(str, int)
   api.assertions.assertEqual(str(caught.exception), message)
 
   # test validation of types of mapping values
@@ -231,8 +225,7 @@ def RunSteps(api):
     class AttrsTest(object):
       x = attrib(str, default=1)
 
-  message = "default for 'x' must be {} (got 1 that is a {}).".format(
-      str_constraint, int)
+  message = "default for 'x' must be {} (got 1 that is a {}).".format(str, int)
   api.assertions.assertEqual(str(caught.exception), message)
 
   @attrs()

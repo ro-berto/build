@@ -10,8 +10,6 @@ that builder without error.
 Copied from recipe_modules/chromium_tests/tests/builer.py.
 """
 
-import six
-
 from recipe_engine import post_process
 
 from RECIPE_MODULES.build import angle
@@ -75,7 +73,7 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  for builder_id, _ in sorted(six.iteritems(angle.builders.BUILDERS)):
+  for builder_id, _ in sorted(angle.builders.BUILDERS.items()):
     builder_group = builder_id.group
     buildername = builder_id.builder
     yield api.test(

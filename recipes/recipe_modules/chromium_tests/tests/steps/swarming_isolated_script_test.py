@@ -3,7 +3,6 @@
 # found in the LICENSE file.
 
 import collections
-import six
 
 from recipe_engine import post_process
 
@@ -134,7 +133,7 @@ def GenTests(api):
     def step_filter(check, step_odict):
       del check
       return collections.OrderedDict([(k, v)
-                                      for k, v in six.iteritems(step_odict)
+                                      for k, v in step_odict.items()
                                       if not k.startswith('setup steps')])
 
     return api.post_process(step_filter)

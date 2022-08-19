@@ -2,8 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from __future__ import absolute_import
-
 from RECIPE_MODULES.build.chromium_android import CONFIG_CTX
 
 

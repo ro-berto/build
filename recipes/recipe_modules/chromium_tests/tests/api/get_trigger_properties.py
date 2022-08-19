@@ -2,8 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import six
-
 from recipe_engine import engine_types
 from recipe_engine import post_process
 
@@ -35,7 +33,7 @@ def RunSteps(api):
   properties = api.chromium_tests._get_trigger_properties(
       builder_id, update_step)
   expected = engine_types.thaw(api.properties['expected_trigger_properties'])
-  for k, v in six.iteritems(expected):
+  for k, v in expected.items():
     if k not in properties:  # pragma: no cover
       api.assertions.fail('Property {} not present, expected {!r}'.format(k, v))
     else:

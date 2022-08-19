@@ -5,7 +5,6 @@
 
 import os
 import re
-import six
 
 from recipe_engine import recipe_api
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
@@ -464,7 +463,7 @@ class BinarySizeApi(recipe_api.RecipeApi):
     return True
 
   def _linkify_filenames(self, url, filename_map):
-    for filename, archived_url in six.iteritems(filename_map):
+    for filename, archived_url in filename_map.items():
       url = url.replace('{{' + filename + '}}', archived_url)
     return url
 

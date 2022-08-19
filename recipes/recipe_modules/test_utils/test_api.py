@@ -2,8 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import six
-
 from recipe_engine import recipe_test_api
 
 from PB.go.chromium.org.luci.resultdb.proto.v1 import (invocation as
@@ -13,8 +11,6 @@ from PB.go.chromium.org.luci.resultdb.proto.v1 import (failure_reason as
 from PB.go.chromium.org.luci.resultdb.proto.v1 import (test_result as
                                                        rdb_test_result)
 from PB.go.chromium.org.luci.resultdb.proto.v1 import common as rdb_common
-
-from .util import GTestResults
 
 
 class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
@@ -187,7 +183,7 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
       step_test_data += self.m.json.output(per_shard_results[0])
 
       files_dict['summary.json'] = self.m.json.dumps(jsonish_summary)
-      files_dict = {k: v.encode('utf-8') for k, v in six.iteritems(files_dict)}
+      files_dict = {k: v.encode('utf-8') for k, v in files_dict.items()}
       step_test_data += self.m.raw_io.output_dir(files_dict)
 
       return step_test_data
