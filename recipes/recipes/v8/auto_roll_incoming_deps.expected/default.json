@@ -874,6 +874,8 @@
     "cmd": [],
     "name": "Update trusted deps",
     "~followup_annotations": [
+      "@@@STEP_TEXT@3 update(s)@@@",
+      "@@@STEP_LINK@CL@https://chromium-review.googlesource.com/c/chromium/tools/build/+/3840339@@@",
       "@@@STEP_WARNINGS@@@"
     ]
   },
@@ -1244,7 +1246,11 @@
   },
   {
     "cmd": [],
-    "name": "Update reviewed deps"
+    "name": "Update reviewed deps",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@4 update(s)@@@",
+      "@@@STEP_LINK@CL@https://chromium-review.googlesource.com/c/chromium/tools/build/+/3840339@@@"
+    ]
   },
   {
     "cmd": [
@@ -1659,7 +1665,10 @@
   },
   {
     "cmd": [],
-    "name": "Roll chromium pin"
+    "name": "Roll chromium pin",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@1 update(s)@@@"
+    ]
   },
   {
     "cmd": [

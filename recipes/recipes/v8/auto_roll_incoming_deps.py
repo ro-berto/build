@@ -8,6 +8,7 @@ from recipe_engine.recipe_api import Property
 from recipe_engine.config import ConfigGroup, Dict, Single, List
 
 import json
+import re
 
 
 DEPS = [
@@ -436,7 +437,8 @@ def get_updated_deps(api, autoroller_config):
 
   return updates, failed_deps
 
-def upload_cl(api, subject, reviewers, set_bot_commit, commit_lines,
+
+def upload_cl(api, step, subject, reviewers, set_bot_commit, commit_lines,
     bugs_label):
   # Check for a difference. If no deps changed, the diff is empty.
   with api.context(cwd=api.path['checkout']):
@@ -473,9 +475,16 @@ def upload_cl(api, subject, reviewers, set_bot_commit, commit_lines,
       upload_args.append('--set-bot-commit')
     if bugs_label is not None:
       upload_args += ['-b', bugs_label]
-    api.git(*upload_args)
 
-def update_dependencies(api, updates, autoroller_config, trusted):
+    step_result = api.git(*upload_args, stdout=api.raw_io.output_text())
+
+    # Extract the cl link from stdout
+    cl_link = re.search(r'https:\/\/.*\/\+\/\d+', step_result.stdout).group(0)
+
+    step.presentation.links['CL'] = cl_link
+
+
+def update_dependencies(api, step, updates, autoroller_config, trusted):
   """Create CLs to update the dependencies in the target repository.
 
   1. Filter for trusted / reviewed `DepUpdate`s
@@ -484,6 +493,7 @@ def update_dependencies(api, updates, autoroller_config, trusted):
   3. Create the rolling CLs, using bot-commit for trusted dependency updates
   """
   updates = [u for u in updates if trusted == u.is_trusted]
+  step.presentation.step_text = '%s update(s)' % len(updates)
 
   if not updates:
     return
@@ -507,6 +517,7 @@ def update_dependencies(api, updates, autoroller_config, trusted):
 
   upload_cl(
       api,
+      step,
       subject=get_subject(autoroller_config, trusted),
       reviewers=autoroller_config['reviewers'],
       set_bot_commit=trusted,
@@ -515,10 +526,11 @@ def update_dependencies(api, updates, autoroller_config, trusted):
   )
 
 
-def update_chromium_pin(api, autoroller_config):
+def update_chromium_pin(api, step, autoroller_config):
   """Updates the values of gclient variables chromium_(win|mac|linux) with the
   latest prebuilt versions.
   """
+  change_count = 0
   with api.context(cwd=api.path['checkout']):
     for var_name, url in sorted(CHROMIUM_PINS.items()):
       step_result = api.gclient(
@@ -532,12 +544,16 @@ def update_chromium_pin(api, autoroller_config):
           step_name='check latest %s' % var_name,
           default_test_data='123').output)
       if new_number > current_number:
+        change_count += 1
         api.gclient(
             'set %s deps' % var_name,
             ['setdep', '--var=%s=%d' % (var_name, new_number)])
 
+  step.presentation.step_text = '%s update(s)' % change_count
+
   upload_cl(
       api,
+      step,
       subject=CHROMIUM_PIN_CL_SUBJECT,
       reviewers=autoroller_config['reviewers'],
       set_bot_commit=True,
@@ -564,19 +580,19 @@ def RunSteps(api, autoroller_config):
     discard_local_changes(api)
     updates, failed = get_updated_deps(api, autoroller_config)
 
-  with api.step.nest('Update trusted deps'):
-    update_dependencies(api, updates, autoroller_config, trusted=True)
+  with api.step.nest('Update trusted deps') as step:
+    update_dependencies(api, step, updates, autoroller_config, trusted=True)
 
-  with api.step.nest('Update reviewed deps'):
-    update_dependencies(api, updates, autoroller_config, trusted=False)
+  with api.step.nest('Update reviewed deps') as step:
+    update_dependencies(api, step, updates, autoroller_config, trusted=False)
 
   with api.step.nest('Check failed deps'):
     handle_failed_deps(api, failed)
 
   if autoroller_config.get('roll_chromium_pin', False):
-    with api.step.nest('Roll chromium pin'):
+    with api.step.nest('Roll chromium pin') as step:
       discard_local_changes(api)
-      update_chromium_pin(api, autoroller_config)
+      update_chromium_pin(api, step, autoroller_config)
 
 
 def GenTests(api):
@@ -604,6 +620,10 @@ src/mock-set-dep-failing: mock/set-dep-failing.git@2"""
     'gerrit_base_url': 'https://chromium-review.googlesource.com',
     'base_url': 'https://chromium.googlesource.com/',
   }
+
+  git_cl_info = """remote:
+remote:   https://chromium-review.googlesource.com/c/chromium/tools/build/+/3840339 [v8] Remove deprecated roll recipe [WIP]
+remote:"""
 
   autoroller_config = {
       'target_config': target_config_v8,
@@ -647,7 +667,7 @@ src/mock-set-dep-failing: mock/set-dep-failing.git@2"""
       additional_cr_deps='',
       git_diff='some difference',
   ):
-    return base_template(testname, additional_v8_deps, additional_cr_deps) + [
+    result = base_template(testname, additional_v8_deps, additional_cr_deps) + [
         # CIPDs test api has a latest ref by default for each package. We over-
         # ride this behaviour for our mock package `without-latest-ref`.
         api.override_step_data(
@@ -704,6 +724,21 @@ src/mock-set-dep-failing: mock/set-dep-failing.git@2"""
            api.raw_io.stream_output_text('124', stream='stdout'),
         ),
     ]
+
+    if git_diff:
+      result += [
+          api.override_step_data(
+              'Update reviewed deps.git cl',
+              api.raw_io.stream_output_text(git_cl_info, stream='stdout'),
+          ),
+          api.override_step_data(
+              'Update trusted deps.git cl',
+              api.raw_io.stream_output_text(git_cl_info, stream='stdout'),
+          ),
+      ]
+
+    return result
+
 
   # Happy path
   yield api.test(*template('default'))
