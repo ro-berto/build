@@ -15,7 +15,6 @@ DEPS = [
     'depot_tools/tryserver',
     'goma',
     'profiles',
-    'py3_migration',
     'recipe_engine/buildbucket',
     'recipe_engine/context',
     'recipe_engine/file',
@@ -315,9 +314,7 @@ def SetCodeCoverageConstants(api, checkout_path, host_tool_label):
       ]
   }
   if not all(exists.values()):
-    result = ''.join(
-        '\nhas {}: {}'.format(p, e)
-        for (p, e) in api.py3_migration.consistent_ordering(exists.items()))
+    result = ''.join('\nhas {}: {}'.format(p, e) for (p, e) in exists.items())
     api.step.empty(
         'code coverage executable dependencies missing!',
         status=api.step.INFRA_FAILURE,

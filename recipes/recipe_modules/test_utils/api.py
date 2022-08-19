@@ -597,15 +597,10 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     builder = self.m.buildbucket.build.builder
     flakes_input = {
-        'project':
-            builder.project,
-        'bucket':
-            builder.bucket,
-        'builder':
-            builder.builder,
-        'tests':
-            self.m.py3_migration.consistent_ordering(
-                tests_to_check, key=lambda d: sorted(six.iteritems(d))),
+        'project': builder.project,
+        'bucket': builder.bucket,
+        'builder': builder.builder,
+        'tests': tests_to_check,
     }
 
     result = self.m.step(
