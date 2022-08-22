@@ -369,7 +369,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/builder/depot_tools/cros_sdk"
+      "[CACHE]/builder/chromiumos/chromite/bin/cros_sdk"
     ],
     "cwd": "[CACHE]/builder/chromiumos",
     "env": {
@@ -391,7 +391,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/builder/depot_tools/cros_sdk",
+      "[CACHE]/builder/chromiumos/chromite/bin/cros_sdk",
       "--",
       "setup_board",
       "--board=arm-generic"
@@ -416,7 +416,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/builder/depot_tools/cros_sdk",
+      "[CACHE]/builder/chromiumos/chromite/bin/cros_sdk",
       "--",
       "build_packages",
       "--cleanbuild",
@@ -484,7 +484,7 @@
     ],
     "cwd": "[CACHE]/builder/chromiumos/src/scripts",
     "env": {
-      "PATH": "[CACHE]/builder/depot_tools:<PATH>"
+      "PATH": "[CACHE]/builder/chromiumos/chromite:<PATH>"
     },
     "luci_context": {
       "realm": {

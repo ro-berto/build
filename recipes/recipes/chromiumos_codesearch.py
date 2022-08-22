@@ -127,12 +127,11 @@ def RunSteps(api, codesearch_mirror_revision,
   sync_generated_files = bot_config.get('sync_generated_files', False)
   experimental = bot_config.get('experimental', False)
 
-  # Get infra/infra. Checking out infra automatically checks out depot_tools.
+  # Get infra/infra.
   cache_dir = api.path['cache'].join('builder')
   with api.context(cwd=cache_dir):
     api.bot_update.ensure_checkout(
         gclient_config=gclient_config(api), set_output_commit=False)
-  depot_tools_dir = cache_dir.join('depot_tools')
 
   # Set up and build ChromiumOS.
   # TODO(crbug/1284439): Add sentinel file and handle cleaning up chroot.
@@ -147,7 +146,8 @@ def RunSteps(api, codesearch_mirror_revision,
     )
     api.repo.sync(jobs=6)
 
-    cros_sdk = depot_tools_dir.join('cros_sdk')
+    chromite_dir = chromiumos_dir.join('chromite')
+    cros_sdk = chromite_dir.join('bin', 'cros_sdk')
     api.step('cros_sdk', [cros_sdk])
     api.step('setup_board',
              [cros_sdk, '--', 'setup_board',
@@ -170,7 +170,7 @@ def RunSteps(api, codesearch_mirror_revision,
   build_dir = chromiumos_dir.join('src', 'out', board)
   with api.context(
       cwd=chromiumos_scripts_dir,
-      env={'PATH': api.path.pathsep.join([str(depot_tools_dir), '%(PATH)s'])}):
+      env={'PATH': api.path.pathsep.join([str(chromite_dir), '%(PATH)s'])}):
     api.step('run package_index_cros', [
         'python3',
         package_index_cros_dir.join('main.py'),
