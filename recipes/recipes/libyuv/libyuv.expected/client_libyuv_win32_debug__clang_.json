@@ -317,7 +317,6 @@
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_ARBITRARY_TOOLCHAIN_SUPPORT": "true",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\Win32_Debug__Clang_",
-      "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",

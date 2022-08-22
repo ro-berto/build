@@ -691,7 +691,10 @@ class ChromiumApi(recipe_api.RecipeApi):
       goma_env['GOMA_CACHE_DIR'] = self.m.goma.default_cache_path
 
       # Enable goma DepsCache
-      goma_env['GOMA_DEPS_CACHE_FILE'] = "goma_deps_cache"
+      if not self.m.platform.is_win:
+        # deps cache on Windows makes a build much slower.
+        # See https://crbug.com/1350867#c7
+        goma_env['GOMA_DEPS_CACHE_FILE'] = "goma_deps_cache"
 
       if self.c.compile_py.goma_hermetic:
         goma_env['GOMA_HERMETIC'] = self.c.compile_py.goma_hermetic

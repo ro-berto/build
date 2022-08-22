@@ -356,8 +356,6 @@ class ReclientApi(recipe_api.RecipeApi):
     """
     reproxy_bin_path = self._get_reclient_exe_path('reproxy')
     env = {
-        'RBE_deps_cache_dir': reclient_cache_dir,
-        'RBE_deps_cache_max_mb': _DEPS_CACHE_MAX_MB,
         'RBE_instance': self.instance,
         'RBE_log_format': _REPROXY_LOG_FORMAT,
         'RBE_log_dir': reclient_log_dir,
@@ -370,6 +368,15 @@ class ReclientApi(recipe_api.RecipeApi):
         'RBE_fail_early_min_action_count': 4000,
         'RBE_fail_early_min_fallback_ratio': 0.5,
     }
+
+    if not self.m.platform.is_win:
+      # deps cache on Windows makes a build much slower.
+      # See https://crbug.com/1350867#c7
+      env.update({
+          'RBE_deps_cache_dir': reclient_cache_dir,
+          'RBE_deps_cache_max_mb': _DEPS_CACHE_MAX_MB,
+      })
+
     if bootstrap_env is not None:
       env.update(bootstrap_env)
     if self._props.profiler_service:
