@@ -37,6 +37,10 @@ ROTATION_URL = (
 
 RUBBER_STAMPER = 'rubber-stamper@appspot.gserviceaccount.com'
 
+# It's possible for 'main' to already exist, so use a different name from that
+# to be safe.
+MAIN_BRANCH = 'main_expectations'
+
 
 def RunSteps(api, properties):
   errors = VALIDATORS.validate(properties)
@@ -53,7 +57,7 @@ def RunSteps(api, properties):
       'user.name',
       'Expectation File Editor',
       name='set git config user.name')
-  api.git.new_branch('main', name='create main branch')
+  api.git.new_branch(MAIN_BRANCH, name='create main branch')
 
   failures = []
   for script_invocation in properties.scripts:
@@ -67,7 +71,7 @@ def RunSteps(api, properties):
         failures.append(e)
       finally:
         api.git('reset', '--hard', 'HEAD', name='reset to HEAD')
-        api.git('checkout', 'main', name='return to main branch')
+        api.git('checkout', MAIN_BRANCH, name='return to main branch')
 
   if failures:
     exception_type = api.step.InfraFailure if any(
