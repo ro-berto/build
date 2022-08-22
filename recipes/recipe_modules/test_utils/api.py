@@ -483,6 +483,15 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     suite_to_per_suite_analysis = None
     query_failure_rate_step_error_msg = None
+    total_failing_variants = sum([
+        len(tests.get_rdb_results('with patch').unexpected_failing_tests)
+        for tests in tests_to_check
+    ])
+    if total_failing_variants > 100:
+      self.m.step.empty(
+          'Skipping querying weetbix for failure rates',
+          step_text='Too many failed tests: %d' % total_failing_variants)
+      return
     try:
       suite_to_per_suite_analysis = self.m.weetbix.query_failure_rate(
           tests_to_check)

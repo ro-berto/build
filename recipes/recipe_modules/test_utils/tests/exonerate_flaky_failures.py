@@ -849,3 +849,38 @@ def GenTests(api):
                        'retried_findit_exonerations'),
       api.post_process(post_process.DropExpectation),
   )
+
+  yield api.test(
+      'does not exonerate over 100',
+      api.chromium.generic_build(
+          builder_group='fake-group',
+          builder='fake-builder',
+          experiments=[
+              'enable_weetbix_queries', 'weetbix.retry_weak_exonerations'
+          ]),
+      api.properties(
+          known_flakes_expectations={
+              'failed_test': [],
+          },
+          known_weetbix_flakes_expectations={
+              'failed_test': [],
+          },
+          override_failed_test_names=[],
+          **{
+              '$build/test_utils': {
+                  'should_exonerate_flaky_failures': True,
+              },
+          }),
+      api.override_step_data(
+          'failed_test results',
+          stdout=api.raw_io.output_text(
+              api.test_utils.rdb_results(
+                  'failed_test',
+                  failing_tests=['test%d' % t for t in range(101)]))),
+      api.post_process(post_process.DoesNotRun,
+                       'query weetbix for failure rates.rpc call'),
+      api.post_process(post_process.StepTextContains,
+                       'Skipping querying weetbix for failure rates', ['101']),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
