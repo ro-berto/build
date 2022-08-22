@@ -54,16 +54,10 @@ PROPERTIES = {
                     # dependencies
                     cipd_log_template=Single(str),
                     # Gerrit URL to be used for rolling CL review
-                    gerrit_base_url=Single(
-                        str,
-                        required=True,
-                        empty_val='https://chromium-review.googlesource.com'),
+                    gerrit_base_url=Single(str),
                     # Repo base URL together with 'project_name' to locate the
                     # repo where the rolling CL will be landed
-                    base_url=Single(
-                        str,
-                        required=True,
-                        empty_val='https://chromium.googlesource.com/'),
+                    base_url=Single(str),
                 ),
                 # List of (target side) dependencies to be excluded from rolling
                 # with the current config
@@ -77,7 +71,7 @@ PROPERTIES = {
                 # List of reviewers of the roll CL
                 reviewers=List(str),
                 # Flag for rolling the binary chromium pin in target project
-                roll_chromium_pin=Single(bool, empty_val=False),
+                roll_chromium_pin=Single(bool),
                 # Add extra log entries to the commit message.
                 show_commit_log=Single(bool),
                 # Bugs included in roll CL description
@@ -115,8 +109,10 @@ TRUSTED_ORIGIN_DEPS = {
 }
 
 
+BASE_URL = 'https://chromium.googlesource.com/'
 CIPD_DEP_URL_PREFIX = 'https://chrome-infra-packages.appspot.com/'
 CHROMIUM_PIN_CL_SUBJECT = 'Update Chromium PINS'
+GERRIT_BASE_URL = 'https://chromium-review.googlesource.com'
 MAX_COMMIT_LOG_ENTRIES = 8
 STORAGE_URL = ('https://commondatastorage.googleapis.com/'
                'chromium-browser-snapshots/%s/LAST_CHANGE')
@@ -350,7 +346,7 @@ def get_updated_deps(api, autoroller_config):
   # Filter rolled deps based on includes and excludes params
   excludes = autoroller_config.get('excludes')
   includes = autoroller_config.get('includes')
-  assert not excludes or not includes, (
+  assert excludes is None or includes is None, (
       "Either excludes or includes can be declared, not both.")
 
   target_dep_names = [
@@ -570,7 +566,16 @@ def handle_failed_deps(api, failed_deps):
   raise api.step.StepFailure(message)
 
 
+def set_defaults(autoroller_config):
+  autoroller_config.setdefault('roll_chromium_pin', False)
+  target_config = autoroller_config['target_config']
+  target_config.setdefault('gerrit_base_url', GERRIT_BASE_URL)
+  target_config.setdefault('base_url', BASE_URL)
+
+
 def RunSteps(api, autoroller_config):
+  set_defaults(autoroller_config)
+
   with api.step.nest('Setup'):
     abandon_active_cls(api, autoroller_config)
     setup_gclient(api, autoroller_config)
@@ -589,7 +594,7 @@ def RunSteps(api, autoroller_config):
   with api.step.nest('Check failed deps'):
     handle_failed_deps(api, failed)
 
-  if autoroller_config.get('roll_chromium_pin', False):
+  if autoroller_config['roll_chromium_pin']:
     with api.step.nest('Roll chromium pin') as step:
       discard_local_changes(api)
       update_chromium_pin(api, step, autoroller_config)
@@ -617,8 +622,6 @@ src/mock-set-dep-failing: mock/set-dep-failing.git@2"""
     'account': 'v8@example.com',
     'log_template': 'Rolling v8/%s: %s/+log/%s..%s',
     'cipd_log_template': 'Rolling v8/%s: %s..%s',
-    'gerrit_base_url': 'https://chromium-review.googlesource.com',
-    'base_url': 'https://chromium.googlesource.com/',
   }
 
   git_cl_info = """remote:
