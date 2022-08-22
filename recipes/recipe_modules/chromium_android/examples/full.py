@@ -52,9 +52,6 @@ BUILDERS = freeze({
     'no_strict_mode_tester': {
         'strict_mode': 'off',
     },
-    'resource_size_builder': {
-        'resource_size': True,
-    },
     'device_flags_builder': {
         'device_flags': 'device_flags_file',
     },
@@ -163,14 +160,6 @@ def RunSteps(api):
   if not failure:
     api.chromium_android.run_bisect_script(
         extra_src='test.py', path_to_config='test.py')
-
-  if config.get('resource_size'):
-    api.chromium_android.resource_sizes(
-        apk_path=api.chromium_android.apk_path('Example.apk'),
-        chartjson_file=True)
-    api.chromium_android.supersize_archive(
-        apk_path=api.chromium_android.apk_path('Example.apk'),
-        size_path=api.chromium_android.apk_path('Example.apk.size'))
 
   if config.get('run_telemetry_browser_tests'):
     api.chromium_android.run_telemetry_browser_test('PopularUrlsTest')

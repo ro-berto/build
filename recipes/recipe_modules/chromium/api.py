@@ -938,62 +938,6 @@ class ChromiumApi(recipe_api.RecipeApi):
             step_name, runtest_path, args=full_args, **kwargs)
 
   @_with_chromium_layout
-  def sizes(self,
-            results_url=None,
-            perf_builder_name_alias=None,
-            platform=None,
-            **kwargs):
-    """Return a sizes.py invocation.
-    This uses runtests.py to upload the results to the perf dashboard."""
-    sizes_script = self.m.path['checkout'].join('infra', 'scripts', 'sizes.py')
-    # TODO(crbug.com/1097180): Remove this once source side change lands
-    if not self.m.path.exists(sizes_script):
-      sizes_script = self.m.path['checkout'].join('infra', 'scripts', 'legacy',
-                                                  'recipes', 'chromium',
-                                                  'sizes.py')
-    sizes_args = ['--target', self.c.build_config_fs]
-    if platform:
-      sizes_args.extend(['--platform', platform])
-    else:
-      sizes_args.extend(['--platform', self.c.TARGET_PLATFORM])
-
-    run_tests_args = ['--target', self.c.build_config_fs, '--no-xvfb']
-    properties_json = self.m.json.dumps(self.m.properties.legacy())
-    run_tests_args.extend(['--build-properties', properties_json])
-    run_tests_args.extend([
-        '--test-type=sizes',
-        '--builder-name=%s' % self.m.buildbucket.builder_name,
-        '--slave-name=%s' % self.m.properties['bot_id'],
-        '--build-number=%s' % self.m.buildbucket.build.number,
-        '--run-python-script'
-    ])
-
-    if perf_builder_name_alias:
-      assert results_url is not None
-      run_tests_args.extend([
-          '--annotate=graphing',
-          '--results-url=%s' % results_url, '--perf-dashboard-id=sizes',
-          '--perf-builder-name-alias=%s' % perf_builder_name_alias
-      ])
-
-      # If we're on LUCI, we need to upload using the HistogramSet format
-      # because IP whitelisting (what the older ChartJSON format uses for
-      # authentication) does not really work on LUCI.
-      run_tests_args.append('--use-histograms')
-
-      # If we have a clang revision, add that to the perf data point.
-      # TODO(hans): We want this for all perf data, not just sizes.
-      if self._clang_version:
-        clang_rev = re.match(r'([\w-]+)', self._clang_version).group(1)
-        run_tests_args.append("--perf-config={'r_clang_rev': '%s'}" % clang_rev)
-
-    full_args = run_tests_args + [sizes_script] + sizes_args
-
-    return self.m.build.python('sizes',
-                               self.repo_resource('recipes', 'runtest.py'),
-                               full_args, **kwargs)
-
-  @_with_chromium_layout
   def get_clang_version(self, **kwargs):
     with self.m.context(env=self.get_env()):
       args = [

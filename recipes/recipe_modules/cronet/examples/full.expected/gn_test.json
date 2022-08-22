@@ -959,55 +959,6 @@
   },
   {
     "cmd": [
-      "python",
-      "RECIPE_REPO[build]/recipes/runtest.py",
-      "--target",
-      "Debug",
-      "--no-xvfb",
-      "--build-properties",
-      "{\"bot_id\": \"test_bot\", \"builder_group\": \"fake-group\", \"recipe\": \"cronet:examples/full\", \"slavename\": \"test_bot\"}",
-      "--test-type=sizes",
-      "--builder-name=gn_test",
-      "--slave-name=test_bot",
-      "--build-number=571",
-      "--run-python-script",
-      "--annotate=graphing",
-      "--results-url=https://chromeperf.appspot.com",
-      "--perf-dashboard-id=sizes",
-      "--perf-builder-name-alias=sample-perf-id",
-      "--use-histograms",
-      "[START_DIR]/src/infra/scripts/legacy/recipes/chromium/sizes.py",
-      "--target",
-      "Debug",
-      "--platform",
-      "android-cronet"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "env_prefixes": {
-      "PYTHONPATH": [
-        "RECIPE_REPO[build]",
-        "RECIPE_REPO[build]/recipes",
-        "RECIPE_REPO[build]/scripts"
-      ]
-    },
-    "luci_context": {
-      "realm": {
-        "name": "chromium:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "sizes"
-  },
-  {
-    "cmd": [
       "python3",
       "RECIPE_MODULE[build::cronet]/resources/clear_landmines.py",
       "[START_DIR]/src/build/get_landmines.py",

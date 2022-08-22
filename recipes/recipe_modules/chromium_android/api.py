@@ -171,45 +171,6 @@ class AndroidApi(recipe_api.RecipeApi):
         self.m.path['checkout']
     ] + repos)
 
-  def resource_sizes(self,
-                     apk_path,
-                     chartjson_file=False,
-                     perf_builder_name_alias=None,
-                     step_suffix=''):
-    test_name = 'resource_sizes ({})'.format(self.m.path.basename(apk_path))
-    resource_sizes_args = [str(apk_path)]
-    if chartjson_file:
-      resource_sizes_args.append('--chartjson')
-
-    with self.handle_exit_codes():
-      self.m.chromium.runtest(
-          self.c.resource_sizes,
-          resource_sizes_args,
-          name=test_name + step_suffix,
-          perf_dashboard_id=test_name,
-          point_id=None,
-          test_type=test_name,
-          annotate=self.m.chromium.get_annotate_by_test_name(test_name),
-          results_url='https://chromeperf.appspot.com',
-          perf_builder_name_alias=(perf_builder_name_alias or
-                                   self.m.buildbucket.builder_name),
-          chartjson_file=chartjson_file)
-
-  def supersize_archive(self, apk_path, size_path, step_suffix=''):
-    """Creates a .size file for the given .apk or .minimal.apks."""
-    step_name = 'supersize archive ({}){}'.format(
-        self.m.path.basename(apk_path), step_suffix)
-    update_path = self.m.path['checkout'].join('tools', 'clang', 'scripts',
-                                               'update.py')
-    supersize_path = self.m.path['checkout'].join('tools', 'binary_size',
-                                                  'supersize')
-    with self.m.context(env=self.m.chromium.get_env()):
-      self.m.step('download objdump', cmd=['python3', update_path,
-                                           '--package=objdump'])
-      return self.m.step(
-          step_name,
-          [supersize_path, 'archive', size_path, '-f', apk_path, '-v'])
-
   def upload_apks_for_bisect(self, update_properties, bucket, path):
     """Uploads android apks for functional bisects."""
     archive_name = 'build_product.zip'
@@ -615,9 +576,6 @@ class AndroidApi(recipe_api.RecipeApi):
     with self.m.context(env=self.m.chromium.get_env()):
       with self.handle_exit_codes():
         return self.m.step('provision_devices', cmd, infra_step=True, **kwargs)
-
-  def apk_path(self, apk):
-    return self.m.chromium.output_dir.join('apks', apk) if apk else None
 
   def adb_install_apk(self,
                       apk,

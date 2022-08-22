@@ -59,7 +59,6 @@ def RunSteps(api):
     return raw_result
 
   cronet.upload_package(kwargs['BUILD_CONFIG'])
-  cronet.sizes('sample-perf-id')
   return cronet.run_perf_tests('sample-perf-id')
 
 def GenTests(api):
