@@ -19,10 +19,6 @@ FETCH_BUILDER_QUERY = """
     FROM
       `chrome-flakiness.flake_endorser.test_history_7_days`
   """
-# A substring that only appears in step_name tag of experimental tests' results.
-# "experimental" is the last part of step suffix (wrapped in brackets) which is
-# part of the step name. (https://bit.ly/3I4Enc6)
-EXPERIMENTAL_STEP_NAME_SUBSTRING = 'experimental)'
 
 # `chrome-flakiness.flake_endorser.test_history_7_days` already has data for
 # the most recent 500 invocations. This query utilizes this data to determine
@@ -31,8 +27,6 @@ TEST_HISTORY_QUERY = """
     SELECT
       test_id,
       variant_hash,
-      variant,
-      CONTAINS_SUBSTR(tag, \'{}\') AS is_experimental,
       ARRAY_AGG(invocation) as invocation
     FROM
       `chrome-flakiness.flake_endorser.test_history_7_days`
@@ -43,8 +37,6 @@ TEST_HISTORY_QUERY = """
     GROUP BY
       test_id,
       variant_hash,
-      variant,
-      is_experimental
 """
 
 
@@ -72,8 +64,7 @@ def query_test_history(bq, args):
   builder_bucket = args.builder_bucket
   logging.info('Searching test history for %s:%s:%s' %
                (project, builder_bucket, builder))
-  query = TEST_HISTORY_QUERY.format(EXPERIMENTAL_STEP_NAME_SUBSTRING, builder,
-                                    project, builder_bucket)
+  query = TEST_HISTORY_QUERY.format(builder, project, builder_bucket)
   logging.info(query)
   query_job = bq.query(query)
   query_job.result()
