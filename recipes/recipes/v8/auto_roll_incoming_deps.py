@@ -117,6 +117,9 @@ MAX_COMMIT_LOG_ENTRIES = 8
 STORAGE_URL = ('https://commondatastorage.googleapis.com/'
                'chromium-browser-snapshots/%s/LAST_CHANGE')
 
+# Some dependent repositories still use the deprecated term as their main branch
+RETSAM = 'retsam'[::-1]
+
 CHROMIUM_PINS = {
   'chromium_linux': STORAGE_URL % 'Linux_x64',
   'chromium_win': STORAGE_URL % 'Win_x64',
@@ -275,16 +278,20 @@ def get_recent_instance_id(api, package_name):
 
 
 def get_tot_revision(api, name, target_loc):
-  def ls_remote(branch, name_suffix=''):
+  def ls_remote(branch):
     step_result = api.git(
         'ls-remote', target_loc, 'refs/heads/%s' % branch,
-        name='look up %s%s' % (name.replace('/', '_'), name_suffix),
+        name='look up %s (%s)' % (name.replace('/', '_'), branch),
         stdout=api.raw_io.output_text(),
     )
     return step_result.stdout.strip()
 
-  output = ls_remote('main')
-  return output.split('\t')[0]
+  # Fallback to the deprecated naming scheme still used by some deps, if there
+  # is no head for the main branch
+  for branch in ['main', RETSAM]:
+    head = ls_remote(branch).split('\t')[0]
+    if head:
+      return head
 
 
 def commit_messages_log_entries(api, repo, from_commit, to_commit):
@@ -396,6 +403,10 @@ def get_updated_deps(api, autoroller_config):
 
     else:
       next_version = get_tot_revision(api, target_name, target_location)
+
+    if not next_version:
+      api.step.active_result.presentation.status = 'FAILURE'
+      continue
 
     api.step.active_result.presentation.step_text += next_version
 
@@ -605,6 +616,7 @@ def GenTests(api):
 v8/buildtools-mapped: https://chromium.googlesource.com/chromium/buildtools.git@5fd66957f08bb752dca714a591c84587c9d70762
 src/tools/luci-go:infra/tools/luci/isolate/${platform}: https://chrome-infra-packages.appspot.com/infra/tools/luci/isolate/${platform}@git_revision:8b15ba47cbaf07a56f93326e39f0c8e5069c19e9
 v8/mock-tot-rolled: https://chromium.googlesource.com/tot-rolled.git@d3f34f8dfaecc23202a6ef66957e83462d6c826d
+v8/mock-tot-retsam-rolled: https://chromium.googlesource.com/tot-retsam-rolled.git@d3f34f8dfaecc23202a6ef66957e83462d6c826d
 v8/tools/clang: https://example.com/tools/clang.git@d3f34f8dfaecc23202a6ef66957e83462d6c826d
 v8/tools/clang-reviewed: https://example.com/tools/clang-reviewed.git@d3f34f8dfaecc23202a6ef66957e83462d6c826d
 v8/mock-set-dep-failing: mock/set-dep-failing.git@1
@@ -700,17 +712,26 @@ remote:"""
             'Update trusted deps.gclient setdep mock-set-dep-failing',
             retcode=1),
         api.override_step_data(
-            'Find updated deps.look up mock-tot-rolled',
+            'Find updated deps.look up mock-tot-rolled (main)',
             api.raw_io.stream_output_text(
                 'deadbeef\trefs/heads/main', stream='stdout'),
         ),
         api.override_step_data(
-            'Find updated deps.look up tools_clang',
+            'Find updated deps.look up mock-tot-retsam-rolled (main)',
+            api.raw_io.stream_output_text('', stream='stdout'),
+        ),
+        api.override_step_data(
+            'Find updated deps.look up mock-tot-retsam-rolled (%s)' % RETSAM,
+            api.raw_io.stream_output_text(
+                'deadbeef\trefs/heads/' + RETSAM, stream='stdout'),
+        ),
+        api.override_step_data(
+            'Find updated deps.look up tools_clang (main)',
             api.raw_io.stream_output_text(
                 'deadbeef\trefs/heads/main', stream='stdout'),
         ),
         api.override_step_data(
-            'Find updated deps.look up tools_clang-reviewed',
+            'Find updated deps.look up tools_clang-reviewed (main)',
             api.raw_io.stream_output_text(
                 'deadbeef\trefs/heads/main', stream='stdout'),
         ),
