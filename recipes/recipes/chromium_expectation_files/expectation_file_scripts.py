@@ -20,6 +20,7 @@ DEPS = [
     'depot_tools/gclient',
     'depot_tools/git',
     'depot_tools/git_cl',
+    'recipe_engine/context',
     'recipe_engine/file',
     'recipe_engine/path',
     'recipe_engine/properties',
@@ -138,7 +139,8 @@ def _UploadCL(api, script_invocation, message):
   upload_args = ['--force', '--send-mail', '--reviewers', reviewer_list[0]]
   if cc_list:
     upload_args.extend(['--cc', ','.join(cc_list)])
-  api.git_cl.upload(message, upload_args=upload_args, name='upload cl')
+  with api.context(cwd=api.path['checkout']):
+    api.git_cl.upload(message, upload_args=upload_args, name='upload cl')
 
 
 def _GetReviewerList(api, script_invocation):
