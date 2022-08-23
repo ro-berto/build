@@ -5,40 +5,25 @@
 """ Set of basic operations/utilities that are used by the build. """
 from __future__ import print_function
 
-from contextlib import contextmanager
-import ast
-import base64
-import copy
 import errno
 import fnmatch
-import glob
 import io
 import json
 import math
-import multiprocessing
 import os
 import re
 import shutil
-import socket
 import stat
-import string  # pylint: disable=W0402
 import subprocess
 import sys
 import threading
 import time
-import traceback
-import urllib
 import zipfile
-import zlib
 
 from common import env
 
 
-BUILD_DIR = os.path.realpath(os.path.join(
-    os.path.dirname(__file__), os.pardir, os.pardir))
-
-
-WIN_LINK_FUNC = None
+_WIN_LINK_FUNC = None
 try:
   if sys.platform.startswith('win'):
     import ctypes
@@ -66,30 +51,10 @@ try:
       else:
         if not ctypes.windll.kernel32.CreateHardLinkA(str(dst), str(src), 0):
           raise ctypes.WinError()
-    WIN_LINK_FUNC = _WIN_LINK_FUNC
 except ImportError:
-  # If we don't have ctypes or aren't on Windows, leave WIN_LINK_FUNC as None.
+  # If we don't have ctypes or aren't on Windows, leave _WIN_LINK_FUNC as None.
   pass
 
-
-# Wrapper around git that enforces a timeout.
-GIT_BIN = os.path.join(BUILD_DIR, 'scripts', 'tools', 'git-with-timeout')
-
-# Wrapper around svn that enforces a timeout.
-SVN_BIN = os.path.join(BUILD_DIR, 'scripts', 'tools', 'svn-with-timeout')
-
-# The Google Storage metadata key for the full commit position
-GS_COMMIT_POSITION_KEY = 'Cr-Commit-Position'
-# The Google Storage metadata key for the commit position number
-GS_COMMIT_POSITION_NUMBER_KEY = 'Cr-Commit-Position-Number'
-# The Google Storage metadata key for the Git commit hash
-GS_GIT_COMMIT_KEY = 'Cr-Git-Commit'
-
-# Regular expression to identify a Git hash
-GIT_COMMIT_HASH_RE = re.compile(r'[a-fA-F0-9]{40}')
-#
-# Regular expression to parse a commit position
-COMMIT_POSITION_RE = re.compile(r'([^@]+)@{#(\d+)}')
 
 # Local errors.
 class MissingArgument(Exception):
@@ -97,8 +62,6 @@ class MissingArgument(Exception):
 class PathNotFound(Exception):
   pass
 class ExternalError(Exception):
-  pass
-class NoIdentifiedRevision(Exception):
   pass
 
 def IsWindows():
@@ -141,33 +104,6 @@ def PlatformName():
 # of that build. Also used for determining the latest packaged build.
 FULL_BUILD_REVISION_FILENAME = 'FULL_BUILD_REVISION'
 
-def IsGitCommit(value):
-  """Returns: If a value is a Git commit hash.
-
-  This only works on full Git commit hashes. A value qualifies as a Git commit
-  hash if it only contains hexadecimal numbers and is forty characters long.
-  """
-  if value is None:
-    return False
-  return GIT_COMMIT_HASH_RE.match(str(value)) is not None
-
-
-# GetParentClass allows a class instance to find its parent class using Python's
-# inspect module.  This allows a class instantiated from a module to access
-# their parent class's methods even after the containing module has been
-# re-imported and reloaded.
-#
-# Also see:
-#   http://code.google.com/p/chromium/issues/detail?id=34089
-#   http://atlee.ca/blog/2008/11/21/python-reload-danger-here-be-dragons/
-#
-def GetParentClass(obj, n=1):
-  import inspect
-  if inspect.isclass(obj):
-    return inspect.getmro(obj)[n]
-  else:
-    return inspect.getmro(obj.__class__)[n]
-
 
 def MeanAndStandardDeviation(data):
   """Calculates mean and standard deviation for the values in the list.
@@ -184,26 +120,6 @@ def MeanAndStandardDeviation(data):
   mean = float(sum(data)) / n
   variance = sum([(element - mean)**2 for element in data]) / n
   return mean, math.sqrt(variance)
-
-
-def FilteredMeanAndStandardDeviation(data):
-  """Calculates mean and standard deviation for the values in the list
-  ignoring first occurence of max value (unless there was only one sample).
-
-    Args:
-      data: list of numbers
-
-    Returns:
-      Mean and standard deviation for the numbers in the list ignoring
-      first occurence of max value.
-  """
-
-  def _FilterMax(array):
-    new_array = copy.copy(array)  # making sure we are not creating side-effects
-    if len(new_array) != 1:
-      new_array.remove(max(new_array))
-    return new_array
-  return MeanAndStandardDeviation(_FilterMax(data))
 
 def HistogramPercentiles(histogram, percentiles):
   if not 'buckets' in histogram or not 'count' in histogram:
@@ -331,42 +247,6 @@ def _ComputePercentiles(buckets, total, percentiles):
         next_percentile_index += 1
   return result
 
-class InitializePartiallyWithArguments:
-  # pylint: disable=old-style-class
-  """Function currying implementation.
-
-  Works for constructors too. Primary use is to be able to construct a class
-  with some constructor arguments beings set ahead of actual initialization.
-  Copy of an ASPN cookbook (#52549).
-  """
-
-  def __init__(self, clazz, *args, **kwargs):
-    self.clazz = clazz
-    self.pending = args[:]
-    self.kwargs = kwargs.copy()
-
-  def __call__(self, *args, **kwargs):
-    if kwargs and self.kwargs:
-      kw = self.kwargs.copy()
-      kw.update(kwargs)
-    else:
-      kw = kwargs or self.kwargs
-
-    return self.clazz(*(self.pending + args), **kw)
-
-
-def Prepend(filepath, text):
-  """ Prepends text to the file.
-
-  Creates the file if it does not exist.
-  """
-  file_data = text
-  if os.path.exists(filepath):
-    file_data += open(filepath).read()
-  f = open(filepath, 'w')
-  f.write(file_data)
-  f.close()
-
 
 def MakeWorldReadable(path):
   """Change the permissions of the given path to make it world-readable.
@@ -414,16 +294,6 @@ def MaybeMakeDirectory(*path):
       raise
 
 
-def RemovePath(*path):
-  """Removes the file or directory at 'path', if it exists."""
-  file_path = os.path.join(*path)
-  if os.path.exists(file_path):
-    if os.path.isdir(file_path):
-      RemoveDirectory(file_path)
-    else:
-      RemoveFile(file_path)
-
-
 def RemoveFile(*path):
   """Removes the file located at 'path', if it exists."""
   file_path = os.path.join(*path)
@@ -451,38 +321,6 @@ def LocateFiles(pattern, root=os.curdir):
   for path, _, files in os.walk(os.path.abspath(root)):
     for filename in fnmatch.filter(files, pattern):
       yield os.path.join(path, filename)
-
-
-def RemoveFilesWildcards(file_wildcard, root=os.curdir):
-  """Removes files matching 'file_wildcard' in root and its subdirectories, if
-  any exists.
-
-  An exception is thrown if root doesn't exist."""
-  for item in LocateFiles(file_wildcard, root):
-    try:
-      os.remove(item)
-    except OSError as e:
-      if e.errno != errno.ENOENT:
-        raise
-
-
-def RemoveGlobbedPaths(path_wildcard, root=os.curdir):
-  """Removes all paths matching 'path_wildcard' beneath root.
-
-  Returns the list of paths removed.
-
-  An exception is thrown if root doesn't exist."""
-  if not os.path.exists(root):
-    raise OSError(2, 'No such file or directory', root)
-
-  full_path_wildcard = os.path.join(path_wildcard, root)
-  paths = glob.glob(full_path_wildcard)
-  for path in paths:
-    # When glob returns directories they end in "/."
-    if path.endswith(os.sep + '.'):
-      path = path[:-2]
-    RemovePath(path)
-  return paths
 
 
 def RemoveDirectory(*path):
@@ -572,7 +410,7 @@ def RemoveDirectory(*path):
   remove_with_retry(os.rmdir, file_path)
 
 
-def CopyFileToDir(src_path, dest_dir, dest_fn=None, link_ok=False):
+def _CopyFileToDir(src_path, dest_dir, dest_fn=None, link_ok=False):
   """Copies the file found at src_path to the dest_dir directory, with metadata.
 
   If dest_fn is specified, the src_path is copied to that name in dest_dir,
@@ -590,8 +428,8 @@ def CopyFileToDir(src_path, dest_dir, dest_fn=None, link_ok=False):
   if dest_fn:
     # If we have ctypes and the caller doesn't mind links, use that to
     # try to make the copy faster on Windows. http://crbug.com/418702.
-    if link_ok and WIN_LINK_FUNC:
-      WIN_LINK_FUNC(src_path, os.path.join(dest_dir, dest_fn))
+    if link_ok and _WIN_LINK_FUNC:
+      _WIN_LINK_FUNC(src_path, os.path.join(dest_dir, dest_fn))
     else:
       shutil.copy2(src_path, os.path.join(dest_dir, dest_fn))
   else:
@@ -679,12 +517,12 @@ def MakeZip(output_dir, archive_name, file_list, file_relative_dir,
         os.symlink(os.readlink(src_path), dst_path)
       else:
         if os.path.isdir(src_path):
-          if WIN_LINK_FUNC:
-            WIN_LINK_FUNC(src_path, dst_path)
+          if _WIN_LINK_FUNC:
+            _WIN_LINK_FUNC(src_path, dst_path)
           else:
             shutil.copytree(src_path, dst_path, symlinks=True)
         else:
-          CopyFileToDir(src_path, dest_dir, basename, link_ok=True)
+          _CopyFileToDir(src_path, dest_dir, basename, link_ok=True)
           if not IsWindows() and basename in strip_files:
             cmd = ['strip', dst_path]
             RunCommand(cmd)
@@ -803,20 +641,7 @@ def ExtractZip(filename, output_dir, verbose=True):
         )
 
 
-def WindowsPath(path):
-  """Returns a Windows mixed-style absolute path, given a Cygwin absolute path.
-
-  The version of Python in the Chromium tree uses posixpath for os.path even
-  on Windows, so we convert to a mixed Windows path (that is, a Windows path
-  that uses forward slashes instead of backslashes) manually.
-  """
-  # TODO(pamg): make this work for other drives too.
-  if path.startswith('/cygdrive/c/'):
-    return path.replace('/cygdrive/c/', 'C:/')
-  return path
-
-
-def FindUpwardParent(start_dir, *desired_list):
+def _FindUpwardParent(start_dir, *desired_list):
   """Finds the desired object's parent, searching upward from the start_dir.
 
   Searches within start_dir and within all its parents looking for the desired
@@ -852,7 +677,7 @@ def FindUpward(start_dir, *desired_list):
   the full path to the desired object, or raises PathNotFound if it wasn't
   found.
   """
-  parent = FindUpwardParent(start_dir, *desired_list)
+  parent = _FindUpwardParent(start_dir, *desired_list)
   return os.path.join(parent, *desired_list)
 
 
@@ -1209,312 +1034,9 @@ def GetCommandOutput(command):
   return output
 
 
-def GetGClientCommand(platform=None):
-  """Returns the executable command name, depending on the platform.
-  """
-  if not platform:
-    platform = sys.platform
-  if platform.startswith('win'):
-    # Windows doesn't want to depend on bash.
-    return 'gclient.bat'
-  else:
-    return 'gclient'
-
-
-# Linux scripts use ssh to to move files to the archive host.
-def SshMakeDirectory(host, dest_path):
-  """Creates the entire dest_path on the remote ssh host.
-  """
-  command = ['ssh', host, 'mkdir', '-p', dest_path]
-  result = RunCommand(command)
-  if result:
-    raise ExternalError('Failed to ssh mkdir "%s" on "%s" (%s)' %
-                        (dest_path, host, result))
-
-
-def SshMoveFile(host, src_path, dest_path):
-  """Moves src_path (if it exists) to dest_path on the remote host.
-  """
-  command = ['ssh', host, 'test', '-e', src_path]
-  result = RunCommand(command)
-  if result:
-    # Nothing to do if src_path doesn't exist.
-    return result
-
-  command = ['ssh', host, 'mv', src_path, dest_path]
-  result = RunCommand(command)
-  if result:
-    raise ExternalError('Failed to ssh mv "%s" -> "%s" on "%s" (%s)' %
-                        (src_path, dest_path, host, result))
-
-
-def SshCopyFiles(srcs, host, dst):
-  """Copies the srcs file(s) to dst on the remote ssh host.
-  dst is expected to exist.
-  """
-  command = ['scp', srcs, host + ':' + dst]
-  result = RunCommand(command)
-  if result:
-    raise ExternalError('Failed to scp "%s" to "%s" (%s)' %
-                        (srcs, host + ':' + dst, result))
-
-
-def SshExtractZip(host, zipname, dst):
-  """extract the remote zip file to dst on the remote ssh host.
-  """
-  command = ['ssh', host, 'unzip', '-o', '-d', dst, zipname]
-  result = RunCommand(command)
-  if result:
-    raise ExternalError('Failed to ssh unzip -o -d "%s" "%s" on "%s" (%s)' %
-                        (dst, zipname, host, result))
-
-  # unzip will create directories with access 700, which is not often what we
-  # need. Fix the permissions for the whole archive.
-  command = ['ssh', host, 'chmod', '-R', '755', dst]
-  result = RunCommand(command)
-  if result:
-    raise ExternalError('Failed to ssh chmod -R 755 "%s" on "%s" (%s)' %
-                        (dst, host, result))
-
-
-def SshCopyTree(srctree, host, dst):
-  """Recursively copies the srctree to dst on the remote ssh host.
-  For consistency with shutil, dst is expected to not exist.
-  """
-  command = ['ssh', host, '[ -d "%s" ]' % dst]
-  result = RunCommand(command)
-  if result:
-    raise ExternalError('SshCopyTree destination directory "%s" already exists.'
-                        % host + ':' + dst)
-
-  SshMakeDirectory(host, os.path.dirname(dst))
-  command = ['scp', '-r', '-p', srctree, host + ':' + dst]
-  result = RunCommand(command)
-  if result:
-    raise ExternalError('Failed to scp "%s" to "%s" (%s)' %
-                        (srctree, host + ':' + dst, result))
-
-
-def convert_json(option, _, value, parser):
+def _convert_json(option, _, value, parser):
   """Provide an OptionParser callback to unmarshal a JSON string."""
   setattr(parser.values, option.dest, json.loads(value))
-
-
-def b64_gz_json_encode(obj):
-  """Serialize a python object into base64."""
-  # The |separators| argument is to densify the command line.
-  return base64.b64encode(zlib.compress(
-      json.dumps(obj or {}, sort_keys=True, separators=(',', ':')), 9))
-
-
-def convert_gz_json(option, _, value, parser):
-  """Provide an OptionParser callback to unmarshal a b64 gz JSON string."""
-  setattr(
-      parser.values, option.dest,
-      json.loads(zlib.decompress(base64.b64decode(value))))
-
-
-def convert_gz_json_type(value):
-  """Provide an ArgumentParser type function to unmarshal a b64 gz JSON string.
-  """
-  return json.loads(zlib.decompress(base64.b64decode(value)))
-
-
-def SafeTranslate(inputstr):
-  """Convert a free form string to one that can be used in a path.
-
-  This is similar to the safeTranslate function in buildbot.
-  """
-
-  badchars_map = string.maketrans('\t !#$%&\'()*+,./:;<=>?@[\\]^{|}~',
-                                  '______________________________')
-  if isinstance(inputstr, unicode):
-    inputstr = inputstr.encode('utf8')
-  return inputstr.translate(badchars_map)
-
-
-def GetPrimaryProject(options):
-  """Returns: (str) the key of the primary project, or 'None' if none exists.
-  """
-  # The preferred way is to reference the 'primary_project' parameter.
-  result = options.build_properties.get('primary_project')
-  if result:
-    return result
-
-  # TODO(dnj): The 'primary_repo' parameter is used by some scripts to indictate
-  #     the primary project name. This is not consistently used and will be
-  #     deprecated in favor of 'primary_project' once that is rolled out.
-  result = options.build_properties.get('primary_repo')
-  if not result:
-    # The 'primary_repo' property currently contains a trailing underscore.
-    # However, this isn't an obvious thing given its name, so we'll strip it
-    # here and remove that expectation.
-    return result.strip('_')
-  return None
-
-
-def GetBuildSortKey(options, project=None):
-  """Reads a variety of sources to determine the current build revision.
-
-  NOTE: Currently, the return value does not qualify branch name. This can
-  present a problem with git numbering scheme, where numbers are only unique
-  in the context of their respective branches. When this happens, this
-  function will return a branch name as part of the sort key and its callers
-  will need to adapt their naming/querying schemes to accommodate this. Until
-  then, we will return 'None' as the branch name.
-  (e.g., refs/foo/bar@{#12345} => ("refs/foo/bar", 12345)
-
-  Args:
-    options: Command-line options structure
-    project: (str/None) If not None, the project to get the build sort key
-        for. Otherwise, the build-wide sort key will be used.
-  Returns: (branch, value) The qualified sortkey value
-    branch: (str/None) The name of the branch, or 'None' if there is no branch
-        context. Currently this always returns 'None'.
-    value: (int) The iteration value within the specified branch
-  Raises: (NoIdentifiedRevision) if no revision could be identified from the
-      supplied options.
-  """
-  # Is there a commit position for this build key?
-  try:
-    return GetCommitPosition(options, project=project)
-  except NoIdentifiedRevision:
-    pass
-
-  # Nope; derive the sort key from the 'got_[*_]revision' build properties. Note
-  # that this could be a Git commit (post flag day).
-  if project:
-    revision_key = 'got_%s_revision' % (project,)
-  else:
-    revision_key = 'got_revision'
-  revision = options.build_properties.get(revision_key)
-  if revision and not IsGitCommit(revision):
-    return None, int(revision)
-  raise NoIdentifiedRevision("Unable to identify revision for revision key "
-                             "[%s]" % (revision_key,))
-
-
-def GetGitCommit(options, project=None):
-  """Returns the 'git' commit hash for the specified repository
-
-  This function uses environmental options to identify the 'git' commit hash
-  for the specified repository.
-
-  Args:
-    options: Command-line options structure
-    project: (str/None) The project key to use. If None, use the topmost
-        repository identification properties.
-  Raises: (NoIdentifiedRevision) if no git commit could be identified from the
-      supplied options.
-  """
-  if project:
-    git_commit_key = 'got_%s_revision_git' % (project,)
-  else:
-    git_commit_key = 'got_revision_git'
-  commit = options.build_properties.get(git_commit_key)
-  if commit:
-    return commit
-
-  # Is 'got_[_*]revision' itself is the Git commit?
-  if project:
-    commit_key = 'got_%s_revision' % (project,)
-  else:
-    commit_key = 'got_revision'
-  commit = options.build_properties.get(commit_key)
-  if commit and IsGitCommit(commit):
-    return commit
-  raise NoIdentifiedRevision("Unable to identify commit for commit key: %s" % (
-                           (git_commit_key, commit_key),))
-
-
-def GetSortableUploadPathForSortKey(branch, value, delimiter=None):
-  """Returns: (str) the canonical sort key path constructed from a sort key.
-
-  Returns a canonical sort key path for a sort key. The result will be one of
-  the following forms:
-  - (Without Branch or With Branch=='refs/heads/main'): <value> (e.g., 12345)
-  - (With non-Master Branch): <branch-path>-<value> (e.g.,
-        "refs_my-branch-12345")
-
-  When a 'branch' is supplied, it is converted to a path-suitable form. This
-  conversion replaces undesirable characters ('/') with underscores.
-
-  Note that when parsing the upload path, 'rsplit' should be used to isolate the
-  commit position value, as the branch path may have instances of the delimiter
-  in it.
-
-  See 'GetBuildSortKey' for more information about sort keys.
-
-  Args:
-    branch: (str/None) The sort key branch, or 'None' if there is no associated
-        branch.
-    value: (int) The sort key value.
-    delimiter: (str) The delimiter to insert in between <branch-path> and
-        <value> when constructing the branch-inclusive form. If omitted
-        (default), a hyphen ('-') will be used.
-  """
-  if branch and branch != 'refs/heads/master' and branch != 'refs/heads/main':
-    delimiter = delimiter or '-'
-    branch = branch.replace('/', '_')
-    return '%s%s%s' % (branch, delimiter, value)
-  return str(value)
-
-
-def ParseCommitPosition(value):
-  """Returns: The (branch, value) parsed from a commit position string.
-
-  Args:
-    value: (str) The value to parse.
-  Raises:
-    ValueError: If a commit position could not be parsed from 'value'.
-  """
-  match = COMMIT_POSITION_RE.match(value)
-  if not match:
-    raise ValueError("Failed to parse commit position from '%s'" % (value,))
-  return match.group(1), int(match.group(2))
-
-
-def BuildCommitPosition(branch, value):
-  """Returns: A constructed commit position.
-
-  An example commit position for branch 'refs/heads/main' value '12345' is:
-  refs/heads/main@{#12345}
-
-  This value can be parsed via 'ParseCommitPosition'.
-
-  Args:
-    branch: (str) The name of the commit position branch
-    value: (int): The commit position number.
-  """
-  return '%s@{#%s}' % (branch, value)
-
-
-def GetCommitPosition(options, project=None):
-  """Returns: (branch, value) The parsed commit position from build options.
-
-  Returns the parsed commit position from the build options. This is identified
-  by examining the 'got_revision_cp' (or 'got_REPO_revision_cp', if 'project' is
-  specified) keys.
-
-  Args:
-    options: Command-line options structure
-    project: (str/None) If not None, the project to get the build sort key
-        for. Otherwise, the build-wide sort key will be used.
-  Returns: (branch, value) The qualified commit position value
-  Raises:
-    NoIdentifiedRevision: if no revision could be identified from the
-        supplied options.
-    ValueError: If the supplied commit position failed to parse successfully.
-  """
-  if project:
-    key = 'got_%s_revision_cp' % (project,)
-  else:
-    key = 'got_revision_cp'
-  cp = options.build_properties.get(key)
-  if not cp:
-    raise NoIdentifiedRevision("Unable to identify the commit position; the "
-                               "build property is missing: %s" % (key,))
-  return ParseCommitPosition(cp)
 
 
 def AddPropertiesOptions(option_parser):
@@ -1529,138 +1051,15 @@ def AddPropertiesOptions(option_parser):
     option_parser: An optparse.OptionParser to register command line options
                    for build properties.
   """
-  option_parser.add_option('--build-properties', action='callback',
-                           callback=convert_json, type='string',
-                           nargs=1, default={},
-                           help='build properties in JSON format')
-
-
-def AddThirdPartyLibToPath(lib, override=False):
-  """Adds the specified dir in build/third_party to sys.path.
-
-  Setting 'override' to true will place the directory in the beginning of
-  sys.path, useful for overriding previously set packages.
-
-  NOTE: We would like to deprecate this method, as it allows (encourages?)
-      scripts to define their own one-off Python path sequences, creating a
-      difficult-to-manage state where different scripts and libraries have
-      different path expectations. Please don't use this method if possible;
-      it preferred to augment 'common.env' instead.
-  """
-  libpath = os.path.abspath(os.path.join(BUILD_DIR, 'third_party', lib))
-  if override:
-    sys.path.insert(0, libpath)
-  else:
-    sys.path.append(libpath)
-
-
-def GetLKGR():
-  """Connect to chromium LKGR server and get LKGR revision.
-
-  On success, returns the LKGR and 'ok'. On error, returns None and the text of
-  the error message.
-  """
-
-  try:
-    conn = urllib.urlopen('https://chromium-status.appspot.com/lkgr')
-  except IOError:
-    return (None, 'Error connecting to LKGR server! Is your internet '
-            'connection working properly?')
-  try:
-    rev = int('\n'.join(conn.readlines()))
-  except IOError:
-    return (None, 'Error connecting to LKGR server! Is your internet '
-            'connection working properly?')
-  except ValueError:
-    return None, 'LKGR server returned malformed data! Aborting...'
-  finally:
-    conn.close()
-
-  return rev, 'ok'
-
-
-def AbsoluteCanonicalPath(*path):
-  """Return the most canonical path Python can provide."""
-
-  file_path = os.path.join(*path)
-  return os.path.realpath(os.path.abspath(os.path.expanduser(file_path)))
-
-
-def IsolatedImportFromPath(path, extra_paths=None):
-  dir_path, module_file = os.path.split(path)
-  module_file = os.path.splitext(module_file)[0]
-
-  saved = sys.path
-  sys.path = [dir_path] + (extra_paths or [])
-  try:
-    return __import__(module_file)
-  except ImportError:
-    pass
-  finally:
-    sys.path = saved
-
-
-@contextmanager
-def MultiPool(processes):
-  """Manages a multiprocessing.Pool making sure to close the pool when done.
-
-  This will also call pool.terminate() when an exception is raised (and
-  re-raised the exception to the calling procedure can handle it).
-  """
-  try:
-    pool = multiprocessing.Pool(processes=processes)
-    yield pool
-    pool.close()
-  except:
-    pool.terminate()
-    raise
-  finally:
-    pool.join()
-
-
-def ReadJsonAsUtf8(filename=None, text=None):
-  """Read a json file or string and output a dict.
-
-  This function is different from json.load and json.loads in that it
-  returns utf8-encoded string for keys and values instead of unicode.
-
-  Args:
-  filename: path of a file to parse
-  text: json string to parse
-
-  If both 'filename' and 'text' are provided, 'filename' is used.
-  """
-  def _decode_list(data):
-    rv = []
-    for item in data:
-      if isinstance(item, unicode):
-        item = item.encode('utf-8')
-      elif isinstance(item, list):
-        item = _decode_list(item)
-      elif isinstance(item, dict):
-        item = _decode_dict(item)
-      rv.append(item)
-    return rv
-
-  def _decode_dict(data):
-    rv = {}
-    for key, value in data.iteritems():
-      if isinstance(key, unicode):
-        key = key.encode('utf-8')
-      if isinstance(value, unicode):
-        value = value.encode('utf-8')
-      elif isinstance(value, list):
-        value = _decode_list(value)
-      elif isinstance(value, dict):
-        value = _decode_dict(value)
-      rv[key] = value
-    return rv
-
-  if filename:
-    with open(filename, 'rb') as f:
-      return json.load(f, object_hook=_decode_dict)
-  if text:
-    return json.loads(text, object_hook=_decode_dict)
+  option_parser.add_option(
+      '--build-properties',
+      action='callback',
+      callback=_convert_json,
+      type='string',
+      nargs=1,
+      default={},
+      help='build properties in JSON format'
+  )
 
 
 def FileExclusions():
@@ -1705,77 +1104,3 @@ def FileExclusions():
     ]
 
   return all_platforms
-
-
-def IsClangWinBuild(build_dir, target):
-  """Check if a ninja build has been build with Clang on Windows."""
-  if not IsWindows():
-    return False
-
-  gn_file = os.path.join(build_dir, target, 'args.gn')
-  if not os.path.isfile(gn_file):
-    print('WARNING:  Unable to find the args.gn file.')
-    return False
-  # Matches e.g. "gn_arg = value"
-  gn_arg_re = re.compile(r'^(?P<flag>[^= ]+)\s*=\s*(?P<value>[^ \n]+)$')
-  for line in open(gn_file):
-    m = gn_arg_re.match(line)
-    if m and m.group('flag') == 'is_clang':
-      return m.group('value') == 'true'
-  return False
-
-# Everything below this point has been copied from the Python-3.3 sources with
-# the following modifications:
-#
-# The variable, "dir", was renamed to "pathcomp", since "dir" is a Python
-# reserved word.
-def Which(cmd, mode=os.F_OK | os.X_OK, path=None):
-  """Given a command, mode, and a PATH string, return the path which
-  conforms to the given mode on the PATH, or None if there is no such
-  file.
-  `mode` defaults to os.F_OK | os.X_OK. `path` defaults to the result
-  of os.environ.get("PATH"), or can be overridden with a custom search
-  path.
-  """
-  # Check that a given file can be accessed with the correct mode.
-  # Additionally check that `file` is not a directory, as on Windows
-  # directories pass the os.access check.
-  def _access_check(fn, mode):
-    return (os.path.exists(fn) and os.access(fn, mode)
-            and not os.path.isdir(fn))
-
-  # Short circuit. If we're given a full path which matches the mode
-  # and it exists, we're done here.
-  if _access_check(cmd, mode):
-    return cmd
-
-  path = (path or os.environ.get("PATH", os.defpath)).split(os.pathsep)
-
-  if sys.platform == "win32":
-    # The current directory takes precedence on Windows.
-    if not os.curdir in path:
-      path.insert(0, os.curdir)
-
-    # PATHEXT is necessary to check on Windows.
-    pathext = os.environ.get("PATHEXT", "").split(os.pathsep)
-    # See if the given file matches any of the expected path extensions.
-    # This will allow us to short circuit when given "python.exe".
-    matches = [cmd for ext in pathext if cmd.lower().endswith(ext.lower())]
-    # If it does match, only test that one, otherwise we have to try
-    # others.
-    files = [cmd] if matches else [cmd + ext.lower() for ext in pathext]
-  else:
-    # On other platforms you don't have things like PATHEXT to tell you
-    # what file suffixes are executable, so just pass on cmd as-is.
-    files = [cmd]
-
-  seen = set()
-  for pathcomp in path:
-    pathcomp = os.path.normcase(pathcomp)
-    if not pathcomp in seen:
-      seen.add(pathcomp)
-      for thefile in files:
-        name = os.path.join(pathcomp, thefile)
-        if _access_check(name, mode):
-          return name
-  return None
