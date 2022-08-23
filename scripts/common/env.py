@@ -42,7 +42,6 @@ import traceback
 # This script is called from non-vpython, so cannot use six.
 if sys.version_info.major == 3:
   basestring = str  # pylint: disable=redefined-builtin
-  import collections.abc as collections
 
 # Export for bootstrapping.
 __all__ = [
