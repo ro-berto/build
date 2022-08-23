@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -51,16 +51,16 @@ def archive_layout(args):
   chrome_dir = os.path.abspath(args.build_dir)
   results_dir_basename = os.path.basename(args.results_dir)
   args.results_dir = os.path.abspath(args.results_dir)
-  print 'Archiving results from %s' % args.results_dir
+  print('Archiving results from %s' % args.results_dir)
   staging_dir = args.staging_dir or slave_utils.GetStagingDir(chrome_dir)
-  print 'Staging in %s' % staging_dir
+  print('Staging in %s' % staging_dir)
   if not os.path.exists(staging_dir):
     os.makedirs(staging_dir)
 
   file_list = _CollectZipArchiveFiles(args.results_dir)
-  print
-  print "Archiving %d files" % len(file_list)
-  print
+  print()
+  print("Archiving %d files" % len(file_list))
+  print()
 
   zip_file = chromium_utils.MakeZip(staging_dir, results_dir_basename,
                                     file_list, args.results_dir)[1]
@@ -69,10 +69,10 @@ def archive_layout(args):
   build_number = str(args.build_number)
   last_change = args.revision
 
-  print 'last change: %s' % last_change
-  print 'build name: %s' % builder_name
-  print 'build number: %s' % build_number
-  print 'host name: %s' % socket.gethostname()
+  print('last change: %s' % last_change)
+  print('build name: %s' % builder_name)
+  print('build number: %s' % build_number)
+  print('host name: %s' % socket.gethostname())
 
   # Create a file containing last_change revision. This file will be uploaded
   # after all layout test results are uploaded so the client can check this
@@ -112,10 +112,10 @@ def archive_layout(args):
       gs_acl=gs_acl,
       cache_control=cache_control,
       add_quiet_flag=True)
-  print "took %.1f seconds" % (time.time() - start)
+  print("took %.1f seconds" % (time.time() - start))
   sys.stdout.flush()
   if rc:
-    print "cp failed: %d" % rc
+    print("cp failed: %d" % rc)
     return rc
 
   start = time.time()
@@ -125,10 +125,10 @@ def archive_layout(args):
       gs_acl=gs_acl,
       cache_control=cache_control,
       add_quiet_flag=True)
-  print "took %.1f seconds" % (time.time() - start)
+  print("took %.1f seconds" % (time.time() - start))
   sys.stdout.flush()
   if rc:
-    print "cp failed: %d" % rc
+    print("cp failed: %d" % rc)
     return rc
 
   if args.store_latest:
@@ -144,10 +144,10 @@ def archive_layout(args):
         gs_acl=gs_acl,
         cache_control=cache_control,
         add_quiet_flag=True)
-    print "took %.1f seconds" % (time.time() - start)
+    print("took %.1f seconds" % (time.time() - start))
     sys.stdout.flush()
     if rc:
-      print "cp failed: %d" % rc
+      print("cp failed: %d" % rc)
       return rc
 
     start = time.time()
@@ -157,10 +157,10 @@ def archive_layout(args):
         gs_acl=gs_acl,
         cache_control=cache_control,
         add_quiet_flag=True)
-    print "took %.1f seconds" % (time.time() - start)
+    print("took %.1f seconds" % (time.time() - start))
     sys.stdout.flush()
     if rc:
-      print "cp failed: %d" % rc
+      print("cp failed: %d" % rc)
       return rc
 
   return 0

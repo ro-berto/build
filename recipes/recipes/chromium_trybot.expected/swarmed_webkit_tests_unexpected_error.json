@@ -3013,7 +3013,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "RECIPE_MODULE[build::chromium_tests]/resources/archive_layout_test_results.py",
       "--results-dir",
       "[START_DIR]/layout-test-results",

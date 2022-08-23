@@ -1790,7 +1790,7 @@ def _archive_layout_test_results(api, step_name, step_suffix=None):
   buildnumber = api.buildbucket.build.number
 
   cmd = [
-      'python',
+      'python3',
       api.chromium_tests.resource('archive_layout_test_results.py'),
       '--results-dir',
       results_dir,
