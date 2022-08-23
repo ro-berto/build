@@ -36,7 +36,7 @@ TEST_HISTORY_QUERY = """
       bucket = \'{}\'
     GROUP BY
       test_id,
-      variant_hash,
+      variant_hash
 """
 
 
