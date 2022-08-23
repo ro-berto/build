@@ -13,11 +13,9 @@ import glob
 import optparse
 import os
 import re
-import shutil
 import subprocess
 import sys
 import tempfile
-import time
 
 from common import chromium_utils
 
@@ -27,49 +25,47 @@ WARNING_EXIT_CODE = 88
 
 
 # Regex matching git comment lines containing svn revision info.
-GIT_SVN_ID_RE = re.compile(r'^git-svn-id: .*@([0-9]+) .*$')
+_GIT_SVN_ID_RE = re.compile(r'^git-svn-id: .*@([0-9]+) .*$')
 # Regex for the default branch commit position.
-GIT_CR_POS_RE = re.compile(
-  r'^Cr-Commit-Position: refs/heads/(?:master|main)@{#(\d+)}$')
+_GIT_CR_POS_RE = re.compile(
+    r'^Cr-Commit-Position: refs/heads/(?:master|main)@{#(\d+)}$'
+)
 
 # Global variables set by command-line arguments (AddArgs, AddOpts).
 _ARGS_GSUTIL_PY_PATH = os.environ.get('BUILD_SLAVE_UTILS_GSUTIL_PY_PATH')
 
 
-# Local errors.
-class PageHeapError(Exception):
-  pass
-
-
-# Cache the path to gflags.exe.
-_gflags_exe = None
-
-
-def GitExe():
+def _GitExe():
   return 'git.bat' if chromium_utils.IsWindows() else 'git'
 
 
-class NotGitWorkingCopy(Exception): pass
-class NotAnyWorkingCopy(Exception): pass
+class _NotGitWorkingCopy(Exception):
+  pass
 
 
-def GitHash(wc_dir):
+class _NotAnyWorkingCopy(Exception):
+  pass
+
+
+def _GitHash(wc_dir):
   """Finds the current commit hash of the wc_dir."""
   retval, text = chromium_utils.GetStatusOutput(
-      [GitExe(), 'rev-parse', 'HEAD'], cwd=wc_dir)
+      [_GitExe(), 'rev-parse', 'HEAD'],
+      cwd=wc_dir,
+  )
   if retval or 'fatal: Not a git repository' in text:
-    raise NotGitWorkingCopy(wc_dir)
+    raise _NotGitWorkingCopy(wc_dir)
   return text.strip()
 
 
-def GetHashOrRevision(wc_dir):
+def _GetHashOrRevision(wc_dir):
   """Gets the git hash of wc_dir as a string. Throws NotAnyWorkingCopy if the
   wc_dir isn't a git checkout."""
   try:
-    return GitHash(wc_dir)
-  except NotGitWorkingCopy:
+    return _GitHash(wc_dir)
+  except _NotGitWorkingCopy:
     pass
-  raise NotAnyWorkingCopy(wc_dir)
+  raise _NotAnyWorkingCopy(wc_dir)
 
 
 def GetBuildRevisions(src_dir, revision_dir=None):
@@ -87,9 +83,9 @@ def GetBuildRevisions(src_dir, revision_dir=None):
   abs_src_dir = os.path.abspath(src_dir)
   if revision_dir:
     revision_dir = os.path.join(abs_src_dir, revision_dir)
-    build_revision = GetHashOrRevision(revision_dir)
+    build_revision = _GetHashOrRevision(revision_dir)
   else:
-    build_revision = GetHashOrRevision(src_dir)
+    build_revision = _GetHashOrRevision(src_dir)
   return build_revision
 
 
@@ -159,87 +155,7 @@ def GetStagingDir(start_dir):
   return staging_dir
 
 
-def SetPageHeap(chrome_dir, exe, enable):
-  """Enables or disables page-heap checking in the given executable, depending
-  on the 'enable' parameter.  gflags_exe should be the full path to gflags.exe.
-  """
-  global _gflags_exe
-  if _gflags_exe is None:
-    _gflags_exe = chromium_utils.FindUpward(chrome_dir,
-                                            'tools', 'memory', 'gflags.exe')
-  command = [_gflags_exe]
-  if enable:
-    command.extend(['/p', '/enable', exe, '/full'])
-  else:
-    command.extend(['/p', '/disable', exe])
-  result = chromium_utils.RunCommand(command)
-  if result:
-    description = {True: 'enable', False: 'disable'}
-    raise PageHeapError('Unable to %s page heap for %s.' %
-                        (description[enable], exe))
-
-
-def LongSleep(secs):
-  """A sleep utility for long durations that avoids appearing hung.
-
-  Sleeps for the specified duration.  Prints output periodically so as not to
-  look hung in order to avoid being timed out.  Since this function is meant
-  for long durations, it assumes that the caller does not care about losing a
-  small amount of precision.
-
-  Args:
-    secs: The time to sleep, in seconds.
-  """
-  secs_per_iteration = 60
-  time_slept = 0
-
-  # Make sure we are dealing with an integral duration, since this function is
-  # meant for long-lived sleeps we don't mind losing floating point precision.
-  secs = int(round(secs))
-
-  remainder = secs % secs_per_iteration
-  if remainder > 0:
-    time.sleep(remainder)
-    time_slept += remainder
-    sys.stdout.write('.')
-    sys.stdout.flush()
-
-  while time_slept < secs:
-    time.sleep(secs_per_iteration)
-    time_slept += secs_per_iteration
-    sys.stdout.write('.')
-    sys.stdout.flush()
-
-  sys.stdout.write('\n')
-
-
-def RunPythonCommandInBuildDir(build_dir, target, command_line_args,
-                               server_dir=None, filter_obj=None):
-  if sys.platform == 'win32':
-    python_exe = 'python.exe'
-  else:
-    os.environ['PYTHONPATH'] = (chromium_utils.FindUpward(build_dir, 'tools',
-                                                          'python')
-                                + ':' +os.environ.get('PYTHONPATH', ''))
-    python_exe = 'python'
-
-  command = [python_exe] + command_line_args
-  return chromium_utils.RunCommand(command, filter_obj=filter_obj)
-
-
-class RunCommandCaptureFilter(object):
-  lines = []
-
-  def FilterLine(self, in_line):
-    self.lines.append(in_line)
-    return None
-
-  def FilterDone(self, last_bits):
-    self.lines.append(last_bits)
-    return None
-
-
-def GSUtilSetup():
+def _GSUtilSetup():
   # Get the path to the gsutil script.
   if _ARGS_GSUTIL_PY_PATH:
     # The `gsutil.py` path was supplied on the command-line. Run this through
@@ -326,7 +242,7 @@ def GSUtilCopy(
   if not dest.startswith('gs://') and not dest.startswith('file://'):
     dest = 'file://' + dest
   # The setup also sets up some env variables - for now always run that.
-  gsutil = GSUtilSetup()
+  gsutil = _GSUtilSetup()
   # Run the gsutil command. gsutil internally calls command_wrapper, which
   # will try to run the command 10 times if it fails.
   command = list(override_gsutil or gsutil)
@@ -396,92 +312,7 @@ def GSUtilCopyFile(filename, gs_base, subdir=None, mimetype=None, gs_acl=None,
                     add_quiet_flag=add_quiet_flag)
 
 
-def GSUtilCopyDir(src_dir, gs_base, dest_dir=None, gs_acl=None,
-                  cache_control=None, add_quiet_flag=False):
-  """Uploads the directory and its contents to Google Storage."""
-
-  if os.path.isfile(src_dir):
-    assert os.path.isdir(src_dir), '%s must be a directory' % src_dir
-
-  command = GSUtilSetup()
-  command += ['-m']
-  if add_quiet_flag:
-    command.append('-q')
-  if cache_control:
-    command.extend(['-h', 'Cache-Control:%s' % cache_control])
-  command.extend(['cp', '-R'])
-  if gs_acl:
-    command.extend(['-a', gs_acl])
-  if dest_dir:
-    command.extend([src_dir, gs_base + '/' + dest_dir])
-  else:
-    command.extend([src_dir, gs_base])
-  return chromium_utils.RunCommand(command)
-
-def GSUtilDownloadFile(src, dst):
-  """Copy a file from Google Storage."""
-  # Run the gsutil command. gsutil internally calls command_wrapper, which
-  # will try to run the command 10 times if it fails.
-  command = GSUtilSetup()
-  command.extend(['cp', src, dst])
-  return chromium_utils.RunCommand(command)
-
-
-def GSUtilMoveFile(source, dest, gs_acl=None):
-  """Move a file on Google Storage."""
-
-  gsutil = GSUtilSetup()
-
-  # Run the gsutil command. gsutil internally calls command_wrapper, which
-  # will try to run the command 10 times if it fails.
-  command = gsutil + ['mv', source, dest]
-  status = chromium_utils.RunCommand(command)
-
-  if status:
-    return status
-
-  if gs_acl:
-    command = gsutil + ['setacl', gs_acl, dest]
-    status = chromium_utils.RunCommand(command)
-
-  return status
-
-
-def GSUtilDeleteFile(filename):
-  """Delete a file on Google Storage."""
-
-  # Run the gsutil command. gsutil internally calls command_wrapper, which
-  # will try to run the command 10 times if it fails.
-  command = GSUtilSetup()
-  command.extend(['rm', filename])
-  return chromium_utils.RunCommand(command)
-
-
-# Python doesn't support the type of variable scope in nested methods needed
-# to avoid the global output variable.  This variable should only ever be used
-# by GSUtilListBucket.
-command_output = ''
-
-
-def GSUtilListBucket(gs_base, args):
-  """List the contents of a Google Storage bucket."""
-
-  gsutil = GSUtilSetup()
-
-  # Run the gsutil command. gsutil internally calls command_wrapper, which
-  # will try to run the command 10 times if it fails.
-  global command_output
-  command_output = ''
-
-  def GatherOutput(line):
-    global command_output
-    command_output += line + '\n'
-  command = gsutil + ['ls'] + args + [gs_base]
-  status = chromium_utils.RunCommand(command, parser_func=GatherOutput)
-  return (status, command_output)
-
-
-def LogAndRemoveFiles(temp_dir, regex_pattern):
+def _LogAndRemoveFiles(temp_dir, regex_pattern):
   """Removes files in |temp_dir| that match |regex_pattern|.
   This function prints out the name of each directory or filename before
   it deletes the file from disk."""
@@ -504,7 +335,7 @@ def LogAndRemoveFiles(temp_dir, regex_pattern):
         # Don't fail.
 
 
-def RemoveOldSnapshots(desktop):
+def _RemoveOldSnapshots(desktop):
   """Removes ChromiumSnapshot files more than one day old. Such snapshots are
   created when certain tests timeout (e.g., Chrome Frame integration tests)."""
   # Compute the file prefix of a snapshot created one day ago.
@@ -524,17 +355,17 @@ def RemoveOldSnapshots(desktop):
       print(e, file=sys.stderr)
 
 
-def RemoveChromeDesktopFiles():
+def _RemoveChromeDesktopFiles():
   """Removes Chrome files (i.e. shortcuts) from the desktop of the current user.
   This does nothing if called on a non-Windows platform."""
   if chromium_utils.IsWindows():
     desktop_path = os.environ['USERPROFILE']
     desktop_path = os.path.join(desktop_path, 'Desktop')
-    LogAndRemoveFiles(desktop_path, r'^(Chromium|chrome) \(.+\)?\.lnk$')
-    RemoveOldSnapshots(desktop_path)
+    _LogAndRemoveFiles(desktop_path, r'^(Chromium|chrome) \(.+\)?\.lnk$')
+    _RemoveOldSnapshots(desktop_path)
 
 
-def RemoveJumpListFiles():
+def _RemoveJumpListFiles():
   """Removes the files storing jump list history.
   This does nothing if called on a non-Windows platform."""
   if chromium_utils.IsWindows():
@@ -545,7 +376,7 @@ def RemoveJumpListFiles():
                                            'Windows',
                                            'Recent',
                                            'CustomDestinations')
-    LogAndRemoveFiles(custom_destination_path, '.+')
+    _LogAndRemoveFiles(custom_destination_path, '.+')
 
 
 def RemoveChromeTemporaryFiles():
@@ -557,64 +388,25 @@ def RemoveChromeTemporaryFiles():
   # At some point a leading dot got added, support with and without it.
   kLogRegex = r'^\.?(com\.google\.Chrome|org\.chromium)\.'
   if chromium_utils.IsWindows():
-    RemoveChromeDesktopFiles()
-    RemoveJumpListFiles()
+    _RemoveChromeDesktopFiles()
+    _RemoveJumpListFiles()
   elif chromium_utils.IsLinux():
-    LogAndRemoveFiles(tempfile.gettempdir(), kLogRegex)
-    LogAndRemoveFiles('/dev/shm', kLogRegex)
+    _LogAndRemoveFiles(tempfile.gettempdir(), kLogRegex)
+    _LogAndRemoveFiles('/dev/shm', kLogRegex)
   elif chromium_utils.IsMac():
     nstempdir_path = '/usr/local/libexec/nstempdir'
     if os.path.exists(nstempdir_path):
       ns_temp_dir = chromium_utils.GetCommandOutput([nstempdir_path]).strip()
       if ns_temp_dir:
-        LogAndRemoveFiles(ns_temp_dir, kLogRegex)
+        _LogAndRemoveFiles(ns_temp_dir, kLogRegex)
     for i in ('Chromium', 'Google Chrome'):
       # Remove dumps.
       crash_path = '%s/Library/Application Support/%s/Crash Reports' % (
           os.environ['HOME'], i)
-      LogAndRemoveFiles(crash_path, r'^.+\.dmp$')
+      _LogAndRemoveFiles(crash_path, r'^.+\.dmp$')
   else:
     raise NotImplementedError(
         'Platform "%s" is not currently supported.' % sys.platform)
-
-
-def WriteLogLines(logname, lines, perf=None):
-  logname = logname.rstrip()
-  lines = [line.rstrip() for line in lines]
-  for line in lines:
-    print('@@@STEP_LOG_LINE@%s@%s@@@' % (logname, line))
-  if perf:
-    perf = perf.rstrip()
-    print('@@@STEP_LOG_END_PERF@%s@%s@@@' % (logname, perf))
-  else:
-    print('@@@STEP_LOG_END@%s@@@' % logname)
-
-
-def ZipAndUpload(bucket, archive, *targets):
-  """Uploads a zipped archive to the specified Google Storage bucket.
-
-  Args:
-    bucket: Google Storage bucket to upload to.
-    archive: Name of the .zip archive.
-    *targets: List of targets that should be included in the archive.
-
-  Returns:
-    Path to the uploaded archive on Google Storage.
-  """
-  local_archive = os.path.join(tempfile.mkdtemp(archive), archive)
-  zip_cmd = [
-    'zip',
-    '-9',
-    '--filesync',
-    '--recurse-paths',
-    '--symlinks',
-    local_archive,
-  ]
-  zip_cmd.extend(targets)
-
-  chromium_utils.RunCommand(zip_cmd)
-  GSUtilCopy(local_archive, 'gs://%s/%s' % (bucket, archive))
-  return 'https://storage.cloud.google.com/%s/%s' % (bucket, archive)
 
 
 def GetPerfDashboardRevisions(
@@ -715,7 +507,7 @@ def _GetGitCommitPositionFromLog(log):
   """Returns either the commit position or svn rev from a git log."""
   # Parse from the bottom up, in case the commit message embeds the message
   # from a different commit (e.g., for a revert).
-  for r in [GIT_CR_POS_RE, GIT_SVN_ID_RE]:
+  for r in [_GIT_CR_POS_RE, _GIT_SVN_ID_RE]:
     for line in reversed(log.splitlines()):
       m = r.match(line.strip())
       if m:
@@ -814,18 +606,3 @@ def _AddArgsCallback(opts):
   """
   global _ARGS_GSUTIL_PY_PATH
   _ARGS_GSUTIL_PY_PATH = opts.slave_utils_gsutil_py_path
-
-
-def GetPassthroughArgs(opts):
-  """Returns (list): A list of slave_utils arguments that can be forwarded to
-      other slave_utils-args-aware scrpts.
-
-  Args:
-      opts: Either the parsed argparse results or the optparse options
-          component. The respective parser must have had args/opts added via
-          AddArgs/AddOpts.
-  """
-  args = []
-  if opts.slave_utils_gsutil_py_path:
-    args += ['--slave-utils-gsutil-py-path', opts.slave_utils_gsutil_py_path]
-  return args

@@ -108,8 +108,10 @@ class TestGetBuildRevisions(unittest.TestCase):
     self.assertTrue(build_revision > 0)
 
 
-@mock.patch('__main__.slave_utils.GSUtilSetup',
-      mock.MagicMock(side_effect=lambda: ['/mock/gsutil']))
+@mock.patch(
+    '__main__.slave_utils._GSUtilSetup',
+    mock.MagicMock(side_effect=lambda: ['/mock/gsutil'])
+)
 @mock.patch('__main__.chromium_utils.RunCommand')
 class TestGSUtil(unittest.TestCase):
 
@@ -123,17 +125,6 @@ class TestGSUtil(unittest.TestCase):
       'cp',
       'file://foo',
       'file://bar/foo',
-    ])
-    slave_utils.GSUtilCopyDir('foo', 'bar', cache_control='mock_cache')
-    run_command_mock.assert_called_with([
-      '/mock/gsutil',
-      '-m',
-      '-h',
-      'Cache-Control:mock_cache',
-      'cp',
-      '-R',
-      'foo',
-      'bar',
     ])
 
   def testGSUtilCopyFileWithDestFilename(self, # pylint: disable=no-self-use
@@ -157,19 +148,6 @@ class TestGSUtil(unittest.TestCase):
       'cp',
       'file://foo',
       'file://bar/foo',
-    ])
-
-  def testGSUtilCopyDirWithQuietFlag(self, #  pylint: disable=no-self-use
-                                     run_command_mock):
-    slave_utils.GSUtilCopyDir('foo', 'bar', add_quiet_flag=True)
-    run_command_mock.assert_called_with([
-      '/mock/gsutil',
-      '-m',
-      '-q',
-      'cp',
-      '-R',
-      'foo',
-      'bar',
     ])
 
 
