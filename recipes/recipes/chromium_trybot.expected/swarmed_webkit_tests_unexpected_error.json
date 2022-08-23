@@ -2135,7 +2135,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "RECIPE_MODULE[build::chromium_swarming]/resources/wait_for_finished_task_set.py",
       "--swarming-server",
       "https://example.swarmingserver.appspot.com",
@@ -2256,7 +2256,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python3",
       "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
       "--verbose",
       "-o",
@@ -2744,7 +2744,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "RECIPE_MODULE[build::chromium_swarming]/resources/wait_for_finished_task_set.py",
       "--swarming-server",
       "https://example.swarmingserver.appspot.com",
@@ -2863,7 +2863,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python3",
       "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
       "--verbose",
       "-o",
