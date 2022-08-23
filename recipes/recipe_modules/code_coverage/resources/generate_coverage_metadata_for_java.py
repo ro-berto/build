@@ -4,8 +4,14 @@
 # found in the LICENSE file.
 """Script to generate Java coverage metadata file.
 
-The code coverage data format is defined at:
-https://chromium.googlesource.com/infra/infra/+/refs/heads/main/appengine/findit/model/proto/code_coverage.proto
+This script coverts raw coverage data to jacoco_xml format
+(defined at https://github.com/SonarSource/sonar-jacoco/blob/master/its/src/test/resources/simple-project-jacoco/jacoco.xml)
+and later to code coverage data format (defined at:
+https://chromium.googlesource.com/infra/infra/+/refs/heads/main/appengine/findit/model/proto/code_coverage.proto)
+
+Coverage recipe module then uploads both jacoco_xml format and code coverage
+data format to GCS, where they get consumed by zoss and coverage service
+respectively.
 """
 
 import argparse
@@ -487,7 +493,8 @@ def main():
         f.write(zlib.compress(json.dumps(data)))
 
     _export_as_json(temp_overall_xml, 'all.json.gz')
-
+    shutil.move(temp_overall_xml, os.path.join(params.output_dir,
+                                               'coverage.xml'))
   finally:
     shutil.rmtree(temp_dir)
 

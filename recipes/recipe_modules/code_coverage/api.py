@@ -654,6 +654,31 @@ class CodeCoverageApi(recipe_api.RecipeApi):
         cmd.extend(constants.INCLUDED_THIRD_PARTY_SUBDIRS)
         self.m.step('Generate Java coverage metadata', cmd, **kwargs)
 
+        # Upload data to zoss to show it on code search
+        if self._export_coverage_to_zoss:
+          self.m.gsutil.upload(
+              source=coverage_dir.join('coverage.xml'),
+              bucket=constants.ZOSS_BUCKET_NAME,
+              dest='%s/coverage.xml' % self._compose_gs_path_for_zoss_upload(
+                  builder=self._compose_current_mimic_builder_name(),
+                  build_id=self.build_id),
+              link_name=None,
+              multithreaded=True,
+              name='export coverage data to zoss')
+          self.m.file.write_json(
+              name='create zoss metadata json',
+              dest=coverage_dir.join('zoss_metadata.json'),
+              data=self._get_zoss_metadata(coverage_format='JACOCO_XML'))
+          self.m.gsutil.upload(
+              source=coverage_dir.join('zoss_metadata.json'),
+              bucket=constants.ZOSS_BUCKET_NAME,
+              dest='%s/metadata.json' % self._compose_gs_path_for_zoss_upload(
+                  builder=self._compose_current_mimic_builder_name(),
+                  build_id=self.build_id),
+              link_name=None,
+              multithreaded=True,
+              name='export metadata to zoss')
+
         metadata_path = coverage_dir.join('all.json.gz')
         if not self.m.path.exists(metadata_path):
           self.m.step.empty(

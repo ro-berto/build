@@ -177,7 +177,7 @@ def GenTests(api):
   )
 
   yield api.test(
-      'zoss_upload',
+      'zoss_upload_llvm',
       api.chromium.generic_build(
           builder_group='chromium.fyi', builder='linux-code-coverage'),
       api.code_coverage(use_clang_coverage=True, export_coverage_to_zoss=True),
@@ -196,6 +196,31 @@ def GenTests(api):
           post_process.MustRun,
           ('process clang code coverage data for overall test coverage.gsutil '
            'export metadata to zoss')),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'zoss_upload_jacoco',
+      api.chromium.generic_build(
+          builder_group='chromium.fyi', builder='android-code-coverage'),
+      api.code_coverage(use_java_coverage=True, export_coverage_to_zoss=True),
+      api.post_process(
+          post_process.MustRun,
+          'process java coverage (overall).Generate Java coverage metadata'),
+      api.post_process(
+          post_process.MustRun,
+          'process java coverage (overall).create zoss metadata json'),
+      api.post_process(
+          post_process.MustRun,
+          'process java coverage (overall).gsutil Upload JSON metadata'),
+      api.post_process(
+          post_process.MustRun,
+          'process java coverage (overall).gsutil export coverage data to zoss'
+      ),
+      api.post_process(
+          post_process.MustRun,
+          'process java coverage (overall).gsutil export metadata to zoss'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
