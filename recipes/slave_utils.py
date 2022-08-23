@@ -247,7 +247,7 @@ def GSUtilSetup():
     #
     # Note: you should not use sys.executable because this function
     # could be used under vpython, which does not work well (crbug.com/793325).
-    gsutil = ['python', _ARGS_GSUTIL_PY_PATH, '--']
+    gsutil = ['python3', _ARGS_GSUTIL_PY_PATH, '--']
   else:
     # Fall back to local repository 'gsutil' invocation. NOTE that this requires
     # the standard infra checkout layout, namely that 'depot_tools' is checked
