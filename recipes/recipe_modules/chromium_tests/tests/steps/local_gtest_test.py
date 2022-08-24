@@ -67,9 +67,6 @@ def GenTests(api):
           builder_group='test_group',
           builder='test_buildername',
       ),
-      api.properties(single_spec={
-          'test': 'gtest_test',
-      },),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -80,9 +77,6 @@ def GenTests(api):
           builder_group='test_group',
           builder='test_buildername',
       ),
-      api.properties(single_spec={
-          'test': 'gtest_test',
-      },),
       api.override_step_data(
           'base_unittests results',
           stdout=api.raw_io.output_text(
@@ -100,7 +94,6 @@ def GenTests(api):
       ),
       api.platform.name('win'),
       api.properties(
-          single_spec={'test': 'gtest_test'},
           target_platform='win',
       ),
       api.post_process(post_process.StatusSuccess),
