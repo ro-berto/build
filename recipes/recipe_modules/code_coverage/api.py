@@ -1086,7 +1086,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
         'trace_type': coverage_format,
         'git_project': commit.project,
         'commit_id': commit.id,
-        'ref': 'HEAD',
+        'ref': 'refs/heads/main',
         # e.g. source = chromium/src:main
         'source': '%s:%s' % (commit.project, branch),
         'owner': 'chrome-code-coverage@google.com',
