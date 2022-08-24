@@ -1274,7 +1274,8 @@ class SwarmingApi(recipe_api.RecipeApi):
         '--merge-script',
         merge_script,
         '--merge-script-stdout-file',
-        self.m.raw_io.output('merge_script_log'),
+        self.m.raw_io.output(
+            'merge_script_log', add_output_log=True, name='Merge script log'),
         '--merge-additional-args',
         self.m.json.dumps(merge_arguments),
     ]
@@ -1381,9 +1382,6 @@ class SwarmingApi(recipe_api.RecipeApi):
         **kwargs)
     step_result.presentation.step_text = text_for_task(task)
 
-    step_result.presentation.logs['Merge script log'] = [
-        step_result.raw_io.output]
-
     links = {}
     if hasattr(step_result, 'json') and hasattr(
         step_result.json, 'output') and step_result.json.output:
@@ -1398,9 +1396,6 @@ class SwarmingApi(recipe_api.RecipeApi):
                               **kwargs):
     with self.m.swarming.on_path():
       with self.m.context(cwd=self.m.path['start_dir']):
-        # TODO(erikchen): Once we switch over to the go implementation of
-        # swarming, we should stop accepting all return codes.
-        # https://crbug.com/944179.
         cmd = [
             'vpython',
             self.resource('collect_task.py'),
@@ -1409,7 +1404,6 @@ class SwarmingApi(recipe_api.RecipeApi):
         step_result = self.m.step(
             name,
             cmd,
-            ok_ret='any',
             step_test_data=gen_step_test_data,
             **kwargs)
     return step_result
