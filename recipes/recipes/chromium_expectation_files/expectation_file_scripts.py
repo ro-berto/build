@@ -53,6 +53,7 @@ def RunSteps(api, properties):
 
   api.gclient.set_config('chromium')
   api.bot_update.ensure_checkout(refs=['refs/heads/main'])
+  api.gclient.runhooks()
   api.git(
       'config',
       'user.name',
