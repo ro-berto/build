@@ -18,7 +18,7 @@
       "-include",
       "-exonerate-unexpected-pass",
       "--",
-      "vpython3",
+      "python",
       "[START_DIR]/swarming.client/run_isolated.py",
       "--verbose",
       "--cas-instance",

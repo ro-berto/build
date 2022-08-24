@@ -18,15 +18,3 @@ wheel: <
   name: "infra/python/wheels/six-py2_py3"
   version: "version:1.15.0"
 >
-
-# This is for swarming.py used in chromium_swarming recipe module.
-wheel: <
- name: "infra/python/wheels/pyobjc/${vpython_platform}"
- version: "version:7.3.chromium.1"
- match_tag: <
-   platform: "macosx_10_10_intel"
- >
- match_tag: <
-   platform: "macosx_11_0_arm64"
- >
->
