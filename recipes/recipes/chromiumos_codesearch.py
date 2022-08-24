@@ -8,27 +8,25 @@ package_index, and generates then uploads a KZIP to GS.
 """
 
 from recipe_engine.engine_types import freeze
-from recipe_engine.post_process import (StepCommandContains, StepCommandRE,
-                                        DropExpectation)
+from recipe_engine.post_process import (PropertyEquals, DropExpectation)
 from recipe_engine.recipe_api import Property
+
+from PB.go.chromium.org.luci.buildbucket.proto.common import GitilesCommit
+
+PYTHON_VERSION_COMPATIBILITY = 'PY3'
 
 DEPS = [
     'codesearch',
+    'chromeos/build_menu',
+    'chromeos/cros_source',
     'depot_tools/bot_update',
     'depot_tools/gclient',
-    'depot_tools/git',
-    'depot_tools/gsutil',
-    'depot_tools/tryserver',
     'recipe_engine/buildbucket',
-    'recipe_engine/cipd',
     'recipe_engine/context',
-    'recipe_engine/file',
     'recipe_engine/path',
     'recipe_engine/properties',
     'recipe_engine/step',
     'recipe_engine/time',
-    'recipe_engine/raw_io',
-    'chromeos/repo',
 ]
 
 # TODO(crbug/1284439): Add build_config.
@@ -41,7 +39,7 @@ SPEC = freeze({
     # - sync_generated_files: Whether to sync generated files into a git repo.
     # - experimental: Whether to mark Kythe uploads as experimental.
     'builders': {
-        'codesearch-gen-chromiumos-amd64-generic': {
+        'amd64-generic-codesearch': {
             'board': 'amd64-generic',
             'corpus': 'chromium.googlesource.com/chromiumos/codesearch//main',
             'packages': [
@@ -54,20 +52,7 @@ SPEC = freeze({
             'sync_generated_files': True,
             'experimental': False,
         },
-        'codesearch-gen-chromiumos-arm-generic': {
-            'board': 'arm-generic',
-            'corpus': 'chromium.googlesource.com/chromiumos/codesearch//main',
-            'packages': [
-                'virtual/target-chromium-os',
-                'virtual/target-chromium-os-dev',
-                'virtual/target-chromium-os-factory',
-                'virtual/target-chromium-os-factory-shim',
-                'virtual/target-chromium-os-test',
-            ],
-            'sync_generated_files': True,
-            'experimental': False,
-        },
-        'codesearch-gen-chromiumos-arm64-generic': {
+        'arm64-generic-codesearch': {
             'board': 'arm64-generic',
             'corpus': 'chromium.googlesource.com/chromiumos/codesearch//main',
             'packages': [
@@ -133,111 +118,109 @@ def RunSteps(api, codesearch_mirror_revision,
     api.bot_update.ensure_checkout(
         gclient_config=gclient_config(api), set_output_commit=False)
 
+  commit = GitilesCommit(
+      host='chromium.googlesource.com',
+      id=manifest_hash,
+      ref='refs/heads/snapshot',
+      project='chromiumos/manifest')
+
   # Set up and build ChromiumOS.
-  # TODO(crbug/1284439): Add sentinel file and handle cleaning up chroot.
-  # TODO(crbug/1284439): Investigate cros_sdk ImportError failures.
-  chromiumos_dir = cache_dir.join('chromiumos')
-  api.file.ensure_directory('ensure chromiumos dir', chromiumos_dir)
-  with api.context(cwd=chromiumos_dir, env={'DEPOT_TOOLS_UPDATE': 0}):
-    api.repo.init(
-        manifest_url=(
-            'https://chromium.googlesource.com/chromiumos/manifest.git'),
-        manifest_branch=manifest_hash,
-    )
-    api.repo.sync(jobs=6)
+  # TODO(gavinmak): Fix tests and remove "no cover".
+  with api.build_menu.configure_builder(commit=commit) as config, \
+      api.build_menu.setup_workspace_and_chroot():  # pragma: no cover
+    env_info = api.build_menu.setup_sysroot_and_determine_relevance()
+    api.build_menu.bootstrap_sysroot(config)
+    api.build_menu.install_packages(config, env_info.packages)
 
-    chromite_dir = chromiumos_dir.join('chromite')
-    cros_sdk = chromite_dir.join('bin', 'cros_sdk')
-    api.step('cros_sdk', [cros_sdk])
-    api.step('setup_board',
-             [cros_sdk, '--', 'setup_board',
-              '--board=%s' % board])
-    api.step('build_packages', [
-        cros_sdk, '--', 'build_packages', '--cleanbuild',
-        '--board=%s' % board
-    ])
-
-  # package_index_cros requires chromite/ in a parent directory.
-  chromiumos_scripts_dir = chromiumos_dir.join('src', 'scripts')
-  package_index_cros_dir = chromiumos_scripts_dir.join('package_index_cros')
-  api.step('copy package_index_cros to chromiumos/src/scripts', [
-      'cp', '-r',
-      cache_dir.join('infra', 'go', 'src', 'infra', 'cmd',
-                     'package_index_cros'), chromiumos_scripts_dir
-  ])
-
-  # Run package_index_cros and other preprocessing steps before generating KZIP.
-  build_dir = chromiumos_dir.join('src', 'out', board)
-  with api.context(
-      cwd=chromiumos_scripts_dir,
-      env={'PATH': api.path.pathsep.join([str(chromite_dir), '%(PATH)s'])}):
-    api.step('run package_index_cros', [
-        'python3',
-        package_index_cros_dir.join('main.py'),
-        '--with-build',
-        '--with-tests',
-        '--keep-going',
-        '--board',
-        board,
-        '--build-dir',
-        build_dir,
-        '--gn-targets',
-        build_dir.join('gn_targets.json'),
-        '--compile-commands',
-        build_dir.join('compile_commands.json'),
-    ] + list(packages))
-
-  # The codesearch recipe module relies on checkout path to be set.
-  chromiumos_src_dir = chromiumos_dir.join('src')
-  api.path['checkout'] = chromiumos_src_dir
-  api.codesearch.set_config(
-      'chromiumos',
-      PROJECT='chromiumos',
-      CHECKOUT_PATH=chromiumos_src_dir,
-      PLATFORM=board,
-      EXPERIMENTAL=experimental,
-      SYNC_GENERATED_FILES=sync_generated_files,
-      CORPUS=corpus,
-  )
-
-  # Download chromium clang tools.
-  clang_dir = api.codesearch.clone_clang_tools(cache_dir)
-
-  # Run the translation_unit tool in chromiumos/src dirs.
-  api.codesearch.run_clang_tool(
-      clang_dir=clang_dir,
-      run_dirs=[
-          chromiumos_src_dir.join('platform2'),
-          chromiumos_src_dir.join('aosp', 'external', 'libchrome'),
-          chromiumos_src_dir.join('aosp', 'system', 'update_engine'),
+    # Once ChromiumOS has been set up, start the process of creating a kzip.
+    workspace = api.cros_source.workspace_path
+    with api.context(cwd=workspace):
+      # package_index_cros requires chromite/ in a parent directory.
+      chromiumos_scripts_dir = workspace.join('src', 'scripts')
+      package_index_cros_dir = chromiumos_scripts_dir.join('package_index_cros')
+      api.step('copy package_index_cros to chromiumos/src/scripts', [
+          'cp', '-r',
+          cache_dir.join('infra', 'go', 'src', 'infra', 'cmd',
+                         'package_index_cros'), chromiumos_scripts_dir
       ])
 
-  # Create the kythe index pack and upload it to google storage.
-  kzip_path = api.codesearch.create_and_upload_kythe_index_pack(
-      commit_hash=codesearch_mirror_revision,
-      commit_timestamp=int(codesearch_mirror_revision_timestamp or
-                           api.time.time()))
+      # Generate KZIP.
+      build_dir = workspace.join('src', 'out', board)
+      with api.context(
+          cwd=chromiumos_scripts_dir,
+          env={
+              'PATH':
+                  api.path.pathsep.join(
+                      [str(workspace.join('chromite', 'bin')), '%(PATH)s'])
+          }):
+        api.step('run package_index_cros', [
+            'python3',
+            package_index_cros_dir.join('main.py'),
+            '--with-build',
+            '--with-tests',
+            '--keep-going',
+            '--board',
+            board,
+            '--chroot',
+            api.build_menu.chroot.path,
+            '--build-dir',
+            build_dir,
+            '--gn-targets',
+            build_dir.join('gn_targets.json'),
+            '--compile-commands',
+            build_dir.join('compile_commands.json'),
+        ] + list(packages))
 
-  # Check out the generated files repo and sync the generated files
-  # into this checkout.
-  copy_config = {
-      # ~/chromiumos/src/out/${board};src/out/${board}
-      build_dir: api.path.join('src', 'out', board),
+      # The codesearch recipe module relies on checkout path to be set.
+      chromiumos_src_dir = workspace.join('src')
+      api.path['checkout'] = chromiumos_src_dir
+      api.codesearch.set_config(
+          'chromiumos',
+          PROJECT='chromiumos',
+          CHECKOUT_PATH=chromiumos_src_dir,
+          PLATFORM=board,
+          EXPERIMENTAL=experimental,
+          SYNC_GENERATED_FILES=sync_generated_files,
+          CORPUS=corpus,
+      )
 
-      # ~/chromiumos/chroot;chroot
-      chromiumos_dir.join('chroot'): 'chroot'
-  }
-  api.codesearch.checkout_generated_files_repo_and_sync(
-      copy_config, kzip_path, codesearch_mirror_revision)
+      # Download chromium clang tools.
+      clang_dir = api.codesearch.clone_clang_tools(cache_dir)
+
+      # Run the translation_unit tool in chromiumos/src dirs.
+      api.codesearch.run_clang_tool(
+          clang_dir=clang_dir,
+          run_dirs=[
+              chromiumos_src_dir.join('platform2'),
+              chromiumos_src_dir.join('aosp', 'external', 'libchrome'),
+              chromiumos_src_dir.join('aosp', 'system', 'update_engine'),
+          ])
+
+      # Create the kythe index pack and upload it to google storage.
+      kzip_path = api.codesearch.create_and_upload_kythe_index_pack(
+          commit_hash=codesearch_mirror_revision,
+          commit_timestamp=int(codesearch_mirror_revision_timestamp or
+                               api.time.time()))
+
+      # Check out the generated files repo and sync the generated files
+      # into this checkout.
+      copy_config = {
+          # ~/chromiumos/src/out/${board};src/out/${board}
+          build_dir: api.path.join('src', 'out', board),
+
+          # ~/cros_chroot/chroot;chroot
+          api.build_menu.chroot.path: 'chroot'
+      }
+      api.codesearch.checkout_generated_files_repo_and_sync(
+          copy_config, kzip_path, codesearch_mirror_revision)
 
 
 # TODO(crbug/1284439): Add more tests.
 def GenTests(api):
-  for b in ('amd64', 'arm', 'arm64'):
+  for b in ('amd64', 'arm64'):
     yield api.test(
         'basic_%s' % b,
-        api.buildbucket.generic_build(
-            builder='codesearch-gen-chromiumos-%s-generic' % b),
+        api.buildbucket.generic_build(builder='%s-generic-codesearch' % b),
         api.properties(
             codesearch_mirror_revision='a' * 40,
             codesearch_mirror_revision_timestamp='1531887759',
@@ -245,29 +228,12 @@ def GenTests(api):
 
   yield api.test(
       'repo sync to manifest_hash',
-      api.buildbucket.generic_build(
-          builder='codesearch-gen-chromiumos-amd64-generic'),
+      api.buildbucket.generic_build(builder='amd64-generic-codesearch'),
       api.properties(
           codesearch_mirror_revision='a' * 40,
           codesearch_mirror_revision_timestamp='1531887759',
           manifest_hash='d3adb33f'),
-      api.post_process(StepCommandContains, 'repo init', [
-          'RECIPE_REPO[depot_tools]/repo',
-          'init',
-          '--manifest-url',
-          'https://chromium.googlesource.com/chromiumos/manifest.git',
-          '--groups',
-          'all',
-          '--manifest-branch',
-          'd3adb33f',
-          '--repo-rev=stable',
-          '--verbose',
-      ]),
-      api.post_process(StepCommandContains, 'repo sync', [
-          'RECIPE_REPO[depot_tools]/repo',
-          '--event-log=[CLEANUP]/event_log__tmp_1',
-          'sync',
-          '--jobs',
-          '6',
-          '--verbose',
-      ]), api.post_process(DropExpectation))
+      api.post_process(
+          PropertyEquals, 'commit',
+          '{"host":"chromium.googlesource.com","id":"d3adb33f","project":"chromiumos/manifest","ref":"refs/heads/snapshot"}'
+      ), api.post_process(DropExpectation))

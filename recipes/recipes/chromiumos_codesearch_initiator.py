@@ -24,9 +24,8 @@ DEPS = [
 ]
 
 BUILDERS = [
-    'codesearch-gen-chromiumos-amd64-generic',
-    'codesearch-gen-chromiumos-arm-generic',
-    'codesearch-gen-chromiumos-arm64-generic',
+    'amd64-generic-codesearch',
+    'arm64-generic-codesearch',
 ]
 
 CODESEARCH_REPO = 'https://chromium.googlesource.com/chromiumos/codesearch'
@@ -78,7 +77,7 @@ def RunSteps(api):
 
   api.scheduler.emit_trigger(
       api.scheduler.BuildbucketTrigger(properties=properties),
-      project='infra',
+      project='chromeos',
       jobs=BUILDERS)
 
 
