@@ -136,3 +136,33 @@ def GenTests(api):
       api.properties(apply_gclient_config='use_rust'),
       api.post_process(post_process.DropExpectation),
   )
+  yield api.test(
+      'fuchsia_arm64',
+      api.properties(apply_gclient_config='fuchsia_arm64'),
+      api.post_process(post_process.DropExpectation),
+  )
+  yield api.test(
+      'fuchsia_x64',
+      api.properties(apply_gclient_config='fuchsia_x64'),
+      api.post_process(post_process.DropExpectation),
+  )
+  yield api.test(
+      'fuchsia_arm64_host',
+      api.properties(apply_gclient_config='fuchsia_arm64_host'),
+      api.post_process(post_process.DropExpectation),
+  )
+  yield api.test(
+      'fuchsia_internal',
+      api.properties(apply_gclient_config='fuchsia_internal'),
+      api.post_process(post_process.DropExpectation),
+  )
+  yield api.test(
+      'fuchsia_workstation',
+      api.properties(apply_gclient_config='fuchsia_workstation'),
+      api.post_process(post_process.DropExpectation),
+  )
+  yield api.test(
+      'fuchsia_atlas',
+      api.properties(apply_gclient_config='fuchsia_atlas'),
+      api.post_process(post_process.DropExpectation),
+  )

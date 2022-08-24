@@ -135,34 +135,41 @@ def fuchsia(c):
   c.target_os.add('fuchsia')
 
 @CONFIG_CTX(includes=['fuchsia'])
-def fuchsia_arm64(c):  # pragma: no cover
+def fuchsia_arm64(c):
   """Downloads terminal boot images for running ARM64 binaries on QEMU."""
 
   c.solutions[0].custom_vars['checkout_fuchsia_boot_images'] = 'qemu.arm64'
 
 @CONFIG_CTX(includes=['fuchsia'])
-def fuchsia_x64(c):  # pragma: no cover
+def fuchsia_x64(c):
   """Downloads terminal boot images for running x64 binaries on QEMU."""
 
   c.solutions[0].custom_vars['checkout_fuchsia_boot_images'] = 'qemu.x64'
 
 @CONFIG_CTX(includes=['fuchsia'])
-def fuchsia_arm64_host(c):  #pragma: no cover
+def fuchsia_arm64_host(c):
   """Downloads tools for running fuchsia emu on linux-arm64 host"""
 
   c.solutions[0].custom_vars['checkout_fuchsia_for_arm64_host'] = 'True'
 
+
+#TODO(zijiehe): Remove.
 @CONFIG_CTX(includes=['fuchsia'])
-def fuchsia_internal(c):  #pragma: no cover
+def fuchsia_internal(c):
   c.solutions[0].custom_vars['checkout_fuchsia_internal'] = 'True'
 
-
 @CONFIG_CTX(includes=['fuchsia_x64'])
-def fuchsia_workstation(c):  #pragma: no cover
+def fuchsia_workstation(c):
   """Downloads workstation boot images for running x64 binaries on QEMU."""
 
   c.solutions[0].custom_vars[
-      'checkout_fuchsia_boot_images'] = 'qemu.x64,workstation.qemu-x64-release'
+      'checkout_fuchsia_boot_images'] = 'workstation.qemu-x64-release'
+
+
+@CONFIG_CTX(includes=['fuchsia'])
+def fuchsia_atlas(c):
+  c.solutions[0].custom_vars['checkout_fuchsia_boot_images'] = (
+      'workstation_eng.chromebook-x64-release')
 
 
 @CONFIG_CTX()
