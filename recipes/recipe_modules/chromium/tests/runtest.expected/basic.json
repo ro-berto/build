@@ -2,29 +2,17 @@
   {
     "cmd": [
       "python",
-      "RECIPE_REPO[build]/recipes/tee.py",
-      "[TMP_BASE]/stdout.log",
-      "--",
-      "python",
       "RECIPE_REPO[build]/recipes/runtest.py",
       "--target",
       "Release",
       "--no-xvfb",
       "--build-properties",
       "{\"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"recipe\": \"chromium:tests/runtest\", \"slavename\": \"test_bot_id\"}",
-      "--results-url=https://example/url",
-      "--perf-dashboard-id=test_perf_dashboard_id",
-      "--perf-builder-name-alias=builder_name_alias",
-      "--perf-config",
-      "{\"a_default_rev\": \"some_sha\"}",
       "--test-type=base_unittests",
       "--step-name=base_unittests",
-      "--chartjson-file",
-      "/path/to/tmp/json",
       "--builder-name=test_buildername",
       "--slave-name=test_bot_id",
       "--build-number=123",
-      "--point-id=123456",
       "--revision=some_sha",
       "base_unittests"
     ],
@@ -40,11 +28,7 @@
         "RECIPE_REPO[build]/scripts"
       ]
     },
-    "name": "base_unittests",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
+    "name": "base_unittests"
   },
   {
     "name": "$result"

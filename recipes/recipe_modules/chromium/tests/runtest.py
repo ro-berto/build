@@ -29,26 +29,12 @@ def RunSteps(api):
         'args': [api.chromium.test_launcher_filter('AtExit*')],
         'test_launcher_summary_output': api.json.output(),
     })
-  elif api.properties.get('use_histograms', False):
-    kwargs.update({
-        'use_histograms': True,
-    })
-  else:
-    kwargs.update({
-        'chartjson_file': True,
-    })
 
   api.chromium.runtest(
       'base_unittests',
       python_mode=api.properties.get('python_mode', False),
-      point_id=123456,
       revision='some_sha',
       test_type='base_unittests',
-      results_url='https://example/url',
-      perf_dashboard_id='test_perf_dashboard_id',
-      perf_builder_name_alias='builder_name_alias',
-      perf_config={'a_default_rev': 'some_sha'},
-      tee_stdout_file=api.path['tmp_base'].join('stdout.log'),
       **kwargs)
 
 
@@ -58,15 +44,6 @@ def GenTests(api):
       api.properties(
           buildername='test_buildername', buildnumber=123,
           bot_id='test_bot_id'),
-  )
-
-  yield api.test(
-      'histograms',
-      api.properties(
-          buildername='test_buildername',
-          buildnumber=123,
-          bot_id='test_bot_id',
-          use_histograms=True),
   )
 
   # In order to get coverage of the LUCI-specific code in runtest.

@@ -823,19 +823,11 @@ class ChromiumApi(recipe_api.RecipeApi):
               xvfb=False,
               name=None,
               annotate=None,
-              results_url=None,
-              perf_dashboard_id=None,
               test_type=None,
               python_mode=False,
-              point_id=None,
               revision=None,
               webkit_revision=None,
               test_launcher_summary_output=None,
-              perf_builder_name_alias=None,
-              perf_config=None,
-              chartjson_file=False,
-              use_histograms=False,
-              tee_stdout_file=None,
               **kwargs):
     """Return a runtest.py invocation."""
     args = args or []
@@ -857,25 +849,10 @@ class ChromiumApi(recipe_api.RecipeApi):
     if annotate:
       full_args.append('--annotate=%s' % annotate)
 
-    if results_url:
-      full_args.append('--results-url=%s' % results_url)
-    if perf_dashboard_id:
-      full_args.append('--perf-dashboard-id=%s' % perf_dashboard_id)
-    if perf_builder_name_alias:
-      full_args.append('--perf-builder-name-alias=%s' % perf_builder_name_alias)
-    if perf_config:
-      full_args.extend(['--perf-config', self.m.json.dumps(perf_config)])
     if test_type:
       full_args.append('--test-type=%s' % test_type)
     step_name = name or t_name
     full_args.append('--step-name=%s' % step_name)
-    if chartjson_file:
-      full_args.append('--chartjson-file')
-      full_args.append(self.m.json.output())
-      if 'step_test_data' not in kwargs:
-        kwargs['step_test_data'] = lambda: self.m.json.test_api.output([])
-    if use_histograms:
-      full_args.append('--use-histograms')
     if test_launcher_summary_output:
       full_args.extend(
           ['--test-launcher-summary-output', test_launcher_summary_output])
@@ -890,8 +867,6 @@ class ChromiumApi(recipe_api.RecipeApi):
       full_args.append('--build-number=%s' % self.m.buildbucket.build.number)
     if ext == '.py' or python_mode:
       full_args.append('--run-python-script')
-    if point_id:
-      full_args.append('--point-id=%d' % point_id)
     if revision:
       full_args.append('--revision=%s' % revision)
     if webkit_revision:
@@ -925,9 +900,6 @@ class ChromiumApi(recipe_api.RecipeApi):
     full_args.extend(args)
 
     runtest_path = self.repo_resource('recipes', 'runtest.py')
-    if tee_stdout_file:
-      full_args = [tee_stdout_file, '--', 'python', runtest_path] + full_args
-      runtest_path = self.repo_resource('recipes', 'tee.py')
     with self.m.build.gsutil_py_env():
       # We need this, as otherwise runtest.py fails due to expecting the cwd to
       # be the checkout, when instead it's kitchen-workdir. We also can't use
