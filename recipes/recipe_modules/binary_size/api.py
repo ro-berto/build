@@ -253,11 +253,25 @@ class BinarySizeApi(recipe_api.RecipeApi):
         expectation_success = self._maybe_fail_for_expectation_files(
             expectations_with_patch_json, expectations_without_patch_json,
             allow_expectations_regressions)
-        binary_size_success = self._check_for_undocumented_increase(
-            size_results_path, staging_dir, allow_size_regressions)
-        if not expectation_success or not binary_size_success:
-          raise self.m.step.StepFailure(
-              'Failed Checks. See Failing steps for details')
+        binary_size_result = self._check_for_undocumented_increase(
+            size_results_path,
+            staging_dir,
+            allow_size_regressions,
+            is_fuchsia=is_fuchsia)
+
+        if not expectation_success:
+          raise self.m.step.StepFailure(constants.FAILED_CHECK_MESSAGE)
+
+        if is_fuchsia:
+          if binary_size_result.presentation.status == self.m.step.FAILURE:
+            raise self.m.step.StepFailure(
+                binary_size_result.presentation.step_text)
+          elif binary_size_result.presentation.status == self.m.step.WARNING:
+            raise self.m.step.StepWarning(
+                binary_size_result.presentation.step_text)
+
+        if binary_size_result.presentation.status != self.m.step.SUCCESS:
+          raise self.m.step.StepFailure(constants.FAILED_CHECK_MESSAGE)
 
   def _get_android_size_analysis_command(self, staging_dir, use_m87_flow=False):
     generator_script = self.m.path['checkout'].join(
@@ -379,8 +393,11 @@ class BinarySizeApi(recipe_api.RecipeApi):
 
     return results_dir, None
 
-  def _check_for_undocumented_increase(self, results_path, staging_dir,
-                                       allow_regressions):
+  def _check_for_undocumented_increase(self,
+                                       results_path,
+                                       staging_dir,
+                                       allow_regressions,
+                                       is_fuchsia=False):
     step_result = self.m.json.read(
         constants.RESULT_JSON_STEP_NAME, results_path,
         step_test_data=lambda: self.m.json.test_api.output({
@@ -458,9 +475,14 @@ class BinarySizeApi(recipe_api.RecipeApi):
           constants.PLUGIN_OUTPUT_PROPERTY_NAME] = gerrit_plugin_details
 
     if not allow_regressions and result_json['status_code'] != 0:
-      step_result.presentation.status = self.m.step.FAILURE
-      return False
-    return True
+      # Fuchsia ignores roller failures, but these should be indicated anyway.
+      # See crbug.com/1355914
+      if (is_fuchsia and
+          result_json['status_code'] == constants.FUCHSIA_ROLLER_WARNING):
+        step_result.presentation.status = self.m.step.WARNING
+      else:
+        step_result.presentation.status = self.m.step.FAILURE
+    return step_result
 
   def _linkify_filenames(self, url, filename_map):
     for filename, archived_url in filename_map.items():
@@ -489,7 +511,8 @@ class BinarySizeApi(recipe_api.RecipeApi):
                     use_m87_flow,
                     is_fuchsia=False):
     if is_fuchsia:
-      return self._create_diffs_fuchsia(before_dir, after_dir, results_path)
+      return self._create_diffs_fuchsia(author, before_dir, after_dir,
+                                        results_path)
     else:
       return self._create_diffs_android(author, review_subject, review_url,
                                         before_dir, after_dir, results_path,
@@ -519,13 +542,14 @@ class BinarySizeApi(recipe_api.RecipeApi):
       cmd += ['--staging-dir', staging_dir]
       self.m.step(name='Generate diffs', cmd=cmd)
 
-  def _create_diffs_fuchsia(self, before_dir, after_dir, results_path):
+  def _create_diffs_fuchsia(self, author, before_dir, after_dir, results_path):
     checker_script = self.m.path['checkout'].join(
         'build', 'fuchsia', 'binary_size_differ.py')
     with self.m.context(env={'PYTHONUNBUFFERED': '1'}):
       cmd = [checker_script]
       cmd += ['--before-dir', before_dir]
       cmd += ['--after-dir', after_dir]
+      cmd += ['--author', author]
       cmd += ['--results-path', results_path]
       self.m.step(name='Generate diffs', cmd=cmd)
 

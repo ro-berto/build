@@ -2661,6 +2661,8 @@
       "[CLEANUP]/binary-size-trybot_tmp_1/without_patch",
       "--after-dir",
       "[CLEANUP]/binary-size-trybot_tmp_1/with_patch",
+      "--author",
+      "foo@bar.com",
       "--results-path",
       "[CLEANUP]/binary-size-trybot_tmp_1/size_results.json"
     ],
