@@ -441,12 +441,6 @@ def generate_gtests_from_one_spec(chromium_tests_api, builder_group,
       return
     kwargs.update(gtest_delegate_common(raw_test_spec, **kwargs))
     kwargs['use_xvfb'] = raw_test_spec.get('use_xvfb', True)
-
-    kwargs['annotate'] = raw_test_spec.get('annotate', 'gtest')
-    kwargs['perf_config'] = raw_test_spec.get('perf_config')
-    kwargs['perf_builder_name_alias'] = raw_test_spec.get(
-        'perf_builder_name_alias')
-
     kwargs['resultdb'] = attr.evolve(kwargs['resultdb'], result_format='gtest')
     return steps.LocalGTestTestSpec.create(**kwargs)
 

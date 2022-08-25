@@ -1656,10 +1656,6 @@ class LocalGTestTestSpec(TestSpec):
       builders.
     * set_up - Scripts to run before running the test.
     * tear_down - Scripts to run after running the test.
-    * annotate - Specify which type of test to parse.
-    * perf_config - Source side configuration for perf test.
-    * perf_builder_name_alias - Previously perf-id, another ID to use
-                                when uploading perf results.
   """
 
   args = attrib(command_args, default=())
@@ -1671,9 +1667,6 @@ class LocalGTestTestSpec(TestSpec):
   use_xvfb = attrib(bool, default=True)
   set_up = attrib(sequence[SetUpScript], default=())
   tear_down = attrib(sequence[TearDownScript], default=())
-  annotate = attrib(str, default='gtest')
-  perf_config = attrib(mapping[str, ...], default={})
-  perf_builder_name_alias = attrib(str, default=None)
 
   @property
   def test_class(self):
@@ -1710,17 +1703,6 @@ class LocalGTestTest(LocalTest):
   def compile_targets(self):
     return self.spec.override_compile_targets or [self.spec.target_name]
 
-  def _get_revision(self, conf):
-    substitutions = {
-        'webrtc_got_rev':
-            self.api.m.bot_update.last_returned_properties.get(
-                'got_webrtc_revision')
-    }
-    return {
-        k: string.Template(v).safe_substitute(substitutions)
-        for k, v in conf.items()
-    }
-
   @recipe_api.composite_step
   def run(self, suffix):
     tests_to_retry = self._tests_to_retry(suffix)
@@ -1745,17 +1727,11 @@ class LocalGTestTest(LocalTest):
         'args': args,
         'step_test_data': step_test_data,
         'resultdb': resultdb,
+        'annotate': 'gtest',
     }
     kwargs['xvfb'] = self.spec.use_xvfb
     kwargs['test_type'] = self.name
-    kwargs['annotate'] = self.spec.annotate
     kwargs['test_launcher_summary_output'] = gtest_results_file
-
-    if self.spec.perf_config:
-      kwargs['perf_config'] = self._get_revision(self.spec.perf_config)
-      kwargs['results_url'] = RESULTS_URL
-      kwargs['perf_dashboard_id'] = self.spec.name
-      kwargs['perf_builder_name_alias'] = self.spec.perf_builder_name_alias
 
     step_result = self.api.m.chromium.runtest(
         self.target_name,
