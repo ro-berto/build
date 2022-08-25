@@ -72,6 +72,7 @@ def run_with_retry(api, step_name, step_fun):
 
 
 def RunSteps(api, is_debug, triggers, v8_tot, use_remoteexec):
+  use_remoteexec = use_remoteexec or api.v8.use_remoteexec
   use_goma = not use_remoteexec
   with api.step.nest('initialization'):
     if is_debug:
