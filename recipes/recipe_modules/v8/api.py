@@ -267,21 +267,11 @@ class V8Api(recipe_api.RecipeApi):
   def vpython(self, name, script, args=None, **kwargs):
     return self._python(name, 'vpython', script, args, **kwargs)
 
-  # TODO(b:238274944): Replace with self.use_remoteexec after updating
-  # infra/config.
-  def _use_reclient(self, gn_args):
-    args = self.m.gn.parse_gn_args(gn_args)
-    return args.get('use_remoteexec') == 'true'
-
   def bot_config_by_buildername(self,
                                 builders=None,
-                                use_goma=True,
-                                use_remoteexec=False):
+                                use_goma=True):
     default = {}
-    # TODO(b:238274944): Replace use_remoteexec with self.use_remoteexec.
-    use_remoteexec = use_remoteexec or self.use_remoteexec
-    # use_goma and use_remoteexec cannot be set at the same time.
-    assert not use_goma or not use_remoteexec
+    assert not use_goma or not self.use_remoteexec
     if not self.m.properties.get('parent_buildername'):
       # Builders and builder_testers both build and need the following set of
       # default chromium configs:
@@ -293,7 +283,7 @@ class V8Api(recipe_api.RecipeApi):
         default['chromium_apply_config'] = [
             'default_compiler', 'mb', 'mb_no_luci_auth'
         ]
-      if use_remoteexec:
+      if self.use_remoteexec:
         default['gclient_apply_config'] = [
             'enable_reclient',
         ]
@@ -913,7 +903,6 @@ class V8Api(recipe_api.RecipeApi):
     with self.ensure_osx_sdk_if_needed():
       use_goma = (self.m.chromium.c.compile_py.compiler and
                   'goma' in self.m.chromium.c.compile_py.compiler)
-      use_reclient = kwargs.get('use_reclient', False)
 
       # Calculate targets to isolate from V8-side test specification. The
       # test_spec contains extra TestStepConfig objects for the current builder
@@ -953,20 +942,18 @@ class V8Api(recipe_api.RecipeApi):
         # for easier build reproduction.
         self.gn_args = self._filtered_gn_args(gn_args)
 
-        use_reclient = self._use_reclient(gn_args)
-        if use_reclient:
-          kwargs['use_reclient'] = True
-
         # Create logs surfacing GN arguments. This information is critical to
         # developers for reproducing failures locally.
         self.m.step.active_result.presentation.logs['gn_args'] = self.gn_args
       elif self.m.chromium.c.project_generator.tool == 'gn':
         self.m.chromium.run_gn(
-            use_goma=use_goma, build_dir=build_dir, use_reclient=use_reclient)
+            use_goma=use_goma, build_dir=build_dir,
+            use_reclient=self.use_remoteexec)
 
-      if use_goma and not use_reclient:
+      if use_goma and not self.use_remoteexec:
         kwargs['use_goma_module'] = True
-      raw_result = self.m.chromium.compile(out_dir=out_dir, **kwargs)
+      raw_result = self.m.chromium.compile(
+          out_dir=out_dir, use_reclient=self.use_remoteexec, **kwargs)
       if raw_result.status != common_pb.SUCCESS:
         return raw_result
 

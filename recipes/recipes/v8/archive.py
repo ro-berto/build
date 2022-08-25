@@ -59,7 +59,6 @@ def make_archive(api,
                  archive_type,
                  step_suffix='',
                  archive_suffix='',
-                 use_remoteexec=False,
                  upload_archive=True):
   with api.step.nest('sync' + step_suffix):
     api.v8.apply_bot_config(bot_config)
@@ -97,7 +96,7 @@ def make_archive(api,
 
   build_dir = api.chromium.c.build_dir.join(api.chromium.c.build_config_fs)
   with api.step.nest('build' + step_suffix):
-    compile_failure = api.v8.compile(use_reclient=use_remoteexec)
+    compile_failure = api.v8.compile()
     if compile_failure:
       return None, compile_failure
 
@@ -195,7 +194,7 @@ def make_archive(api,
 
 
 def RunSteps(api, build_config, target_arch, target_bits, target_platform,
-             use_remoteexec, upload_archive):
+             upload_archive):
   target_bits = int(target_bits)
 
   with api.step.nest('initialization'):
@@ -210,7 +209,7 @@ def RunSteps(api, build_config, target_arch, target_bits, target_platform,
         'chromium_apply_config': ['default_compiler', 'gn'],
         'v8_config_kwargs': {},
     }
-    if use_remoteexec or api.v8.use_remoteexec:
+    if api.v8.use_remoteexec:
       bot_config['gclient_apply_config'] = ['enable_reclient']
     else:
       bot_config['chromium_apply_config'].append('goma')
@@ -231,7 +230,6 @@ def RunSteps(api, build_config, target_arch, target_bits, target_platform,
         ref,
         None,
         'all',
-        use_remoteexec=use_remoteexec,
         upload_archive=upload_archive)
     if compile_failure:
       return compile_failure
@@ -242,7 +240,6 @@ def RunSteps(api, build_config, target_arch, target_bits, target_platform,
         ref,
         None,
         'exe',
-        use_remoteexec=use_remoteexec,
         upload_archive=upload_archive)
     if compile_failure:
       return compile_failure
@@ -256,7 +253,6 @@ def RunSteps(api, build_config, target_arch, target_bits, target_platform,
         'lib',
         ' (libs)',
         '-libs',
-        use_remoteexec=use_remoteexec,
         upload_archive=upload_archive)
     if compile_failure:
       return compile_failure
@@ -272,7 +268,6 @@ def RunSteps(api, build_config, target_arch, target_bits, target_platform,
           version,
           'ref',
           ' (ref)',
-          use_remoteexec=use_remoteexec,
           upload_archive=upload_archive)
       if compile_failure:
         return compile_failure
@@ -556,8 +551,8 @@ def GenTests(api):
       api.properties(
           build_config='Release',
           target_bits=64,
-          use_remoteexec=True,
-          upload_archive=False),
+          upload_archive=False,
+          **{'$build/v8': {'use_remoteexec': True}}),
       api.reclient.properties(),
       api.platform('linux', 64),
       api.v8.version_file(0, 'head', prefix='sync.'),

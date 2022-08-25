@@ -74,8 +74,6 @@ PROPERTIES = {
     'triggers_proxy': Property(default=False, kind=bool),
     # Weather to use goma for compilation.
     'use_goma': Property(default=True, kind=bool),
-    # Weather to use reclient for compilation.
-    'use_remoteexec': Property(default=False, kind=bool),
 }
 
 
@@ -83,13 +81,12 @@ def RunSteps(api, binary_size_tracking, build_config, clobber, clobber_all,
              clusterfuzz_archive, coverage, custom_deps, default_targets,
              enable_swarming, gclient_vars, mb_config_path, target_arch,
              target_platform, track_build_dependencies, triggers,
-             triggers_proxy, use_goma, use_remoteexec):
+             triggers_proxy, use_goma):
   link_to_parent(api)
   v8 = api.v8
   v8.load_static_test_configs()
   bot_config = v8.update_bot_config(
-      v8.bot_config_by_buildername(
-          use_goma=use_goma, use_remoteexec=use_remoteexec),
+      v8.bot_config_by_buildername(use_goma=use_goma),
       binary_size_tracking,
       clusterfuzz_archive,
       coverage,
@@ -1039,13 +1036,6 @@ def GenTests(api):
       'use_goma = true\n'
       '""" to _path_/args.gn.\n'
   )
-  fake_gn_args_x64_reclient = ('\n'
-                               'Writing """\\\n'
-                               'goma_dir = "/b/build/slave/cache/goma_client"\n'
-                               'target_cpu = "x64"\n'
-                               'use_goma = false\n'
-                               'use_remoteexec = true\n'
-                               '""" to _path_/args.gn.\n')
 
   # Cover running gcov coverage.
   yield (
@@ -1120,17 +1110,6 @@ def GenTests(api):
     ) +
     api.post_process(DropExpectation)
   )
-  yield (
-      api.v8.test(
-          'client.v8',
-          'V8 Foobar',
-          'rbe',
-          use_goma=False,
-          use_remoteexec=True,
-      ) + api.reclient.properties() +
-      api.step_data('build.lookup GN args',
-                    api.raw_io.stream_output_text(fake_gn_args_x64_reclient)) +
-      api.post_process(DropExpectation))
   yield (
       api.v8.test(
           'client.v8',
