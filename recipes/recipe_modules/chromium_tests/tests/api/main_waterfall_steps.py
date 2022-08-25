@@ -891,6 +891,7 @@ def GenTests(api):
           config='Release',
           swarm_hashes={fake_test: 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee/size'},
           swarming_command_lines_digest='deadbeef/20',
+          swarming_inverted_rts_command_lines_digest='livebeef/20',
       ),
       api.platform('linux', 64),
       api.chromium_tests_builder_config.ci_build(

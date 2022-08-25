@@ -6,6 +6,9 @@ from recipe_engine import post_process
 from PB.recipe_modules.build.chromium_orchestrator.properties import (
     InputProperties)
 
+from google.protobuf import timestamp_pb2
+
+from PB.go.chromium.org.luci.buildbucket.proto import build as build_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 from RECIPE_MODULES.depot_tools.tryserver import api as tryserver
@@ -34,6 +37,7 @@ DEPS = [
     'filter',
     'flakiness',
     'profiles',
+    'recipe_engine/buildbucket',
     'recipe_engine/file',
     'recipe_engine/json',
     'recipe_engine/path',
@@ -75,7 +79,7 @@ def GenTests(api):
     if remove_src_checkout_experiment:
       experiments.append('remove_src_checkout_experiment')
     if inverted_shard_experiment:
-      experiments.append('chromium_rts.inverted_quickrun')
+      experiments.append('chromium_rts.inverted_rts')
     return api.chromium.try_build(
         builder_group='fake-try-group',
         builder='fake-orchestrator',
@@ -157,12 +161,6 @@ def GenTests(api):
   yield api.test(
       'basic_with_remove_src_checkout',
       basic(remove_src_checkout_experiment=True),
-  )
-
-  yield api.test(
-      'basic_with_inverted_shard',
-      basic(
-          remove_src_checkout_experiment=True, inverted_shard_experiment=True),
   )
 
   yield api.test(
@@ -1560,6 +1558,105 @@ def GenTests(api):
           '--fake-log-file', '$ISOLATED_OUTDIR/fake.log'
       ]
   }
+  fake_inverted_rts_command_lines = {
+      'browser_tests': [
+          './%s' % 'browser_tests', '--fake-without-patch-flag',
+          '--fake-log-file', '$ISOLATED_OUTDIR/fake.log',
+          '-filter=inverted.filter'
+      ]
+  }
+
+  yield api.test(
+      'basic_with_inverted_shard_with_no_qr',
+      get_try_build(True, True),
+      ctbc_properties(),
+      api.properties(
+          **{
+              '$build/chromium_orchestrator':
+                  InputProperties(
+                      compilator='fake-compilator',
+                      compilator_watcher_git_revision='e841fc',
+                  ),
+          }),
+      api.properties(**{
+          '$recipe_engine/cq': {
+              "active": True,
+              "runMode": "FULL_RUN",
+          },
+      }),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  reuseable_qr = build_pb2.Build(
+      id=1234,
+      status='SUCCESS',
+      create_time=timestamp_pb2.Timestamp(seconds=1598338800),
+      output=build_pb2.Build.Output())
+  reuseable_qr.output.properties['rts_was_used'] = True
+  yield api.test(
+      'basic_with_inverted_shard_with_qr_no_compilator',
+      get_try_build(True, True),
+      ctbc_properties(),
+      api.properties(
+          **{
+              '$build/chromium_orchestrator':
+                  InputProperties(
+                      compilator='fake-compilator',
+                      compilator_watcher_git_revision='e841fc',
+                  ),
+          }),
+      api.properties(**{
+          '$recipe_engine/cq': {
+              "active": True,
+              "runMode": "FULL_RUN",
+          },
+      }),
+      api.m.buildbucket.simulated_search_results(
+          [reuseable_qr], step_name='find successful Quick Runs'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'basic_with_inverted_shard_with_successful_qr',
+      get_try_build(True, True),
+      ctbc_properties(),
+      api.properties(
+          **{
+              '$build/chromium_orchestrator':
+                  InputProperties(
+                      compilator='fake-compilator',
+                      compilator_watcher_git_revision='e841fc',
+                  ),
+          }),
+      api.properties(**{
+          '$recipe_engine/cq': {
+              "active": True,
+              "runMode": "FULL_RUN",
+          },
+      }),
+      api.m.buildbucket.simulated_search_results(
+          [reuseable_qr], step_name='find successful Quick Runs'),
+      api.chromium_orchestrator.override_test_spec(
+          builder_group='fake-group',
+          builder='fake-builder',
+          tester='fake-tester',
+          tests=['browser_tests', 'content_unittests']),
+      api.chromium_orchestrator.override_reused_compilator_steps(
+          tests=['browser_tests', 'content_unittests']),
+      api.step_data('read command lines (2)',
+                    api.file.read_json(fake_inverted_rts_command_lines)),
+      api.post_process(post_process.MustRun, 'browser_tests (with patch)'),
+      api.post_process(
+          api.swarming.check_triggered_request,
+          'test_pre_run (with patch).[trigger] '
+          'browser_tests (with patch)', lambda check, req: check(
+              is_subsequence(req[0].command, fake_inverted_rts_command_lines[
+                  'browser_tests']))),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
 
   def is_subsequence(containing, contained):
     containing_str = ' '.join(containing)
@@ -1592,8 +1689,10 @@ def GenTests(api):
       api.chromium_orchestrator.override_compilator_steps(
           with_patch=True, is_swarming_phase=False),
       api.chromium_orchestrator.override_compilator_steps(with_patch=False),
-      api.step_data('read command lines (2)',
+      api.step_data('read command lines',
                     api.file.read_json(fake_command_lines)),
+      api.step_data('read command lines (2)',
+                    api.file.read_json(fake_inverted_rts_command_lines)),
       api.chromium_tests.gen_swarming_and_rdb_results(
           'content_unittests', 'with patch', failures=['Test.One']),
       api.chromium_tests.gen_swarming_and_rdb_results(

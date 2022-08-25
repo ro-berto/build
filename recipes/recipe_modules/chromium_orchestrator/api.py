@@ -4,9 +4,12 @@
 
 from google.protobuf.json_format import MessageToDict
 from google.protobuf.json_format import ParseDict
+from google.protobuf import timestamp_pb2
 from recipe_engine import recipe_api
 
 from PB.go.chromium.org.luci.buildbucket.proto import build as build_pb2
+from PB.go.chromium.org.luci.buildbucket.proto \
+  import builds_service as builds_service_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 from PB.recipe_engine import result as result_pb2
 from RECIPE_MODULES.build.attr_utils import attrib, attrs, mapping, sequence
@@ -107,6 +110,22 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
     experiments = self.m.buildbucket.build.input.experiments
     remove_src_checkout_experiment = (
         'remove_src_checkout_experiment' in experiments)
+    inverted_rts_experiment = ('chromium_rts.inverted_rts' in
+                               self.m.buildbucket.build.input.experiments)
+
+    # The chromium_rts.inverted_rts attempts to run only the tests that were
+    # skipped as part of a previous compatible Quick Run build
+    is_full_run = self.m.cq.active and self.m.cq.run_mode == self.m.cq.FULL_RUN
+    if inverted_rts_experiment and is_full_run:
+      quick_run_build = self.find_compatible_quick_run_build()
+
+      if quick_run_build:
+        compilator_build = self.get_compilator_from_build(quick_run_build)
+        if compilator_build:
+          return self.run_inverted_shards(compilator_build, builder_config)
+      # After the experiment we'll want to continue but for now don't waste the
+      # resource and just return
+      return None
 
     # Trigger compilator to compile and build targets with patch
     # Scheduled build inherits current build's project and bucket
@@ -311,19 +330,6 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
 
     _, local_tests_raw_result = self.process_sub_build(
         build_to_process, is_swarming_phase=False, with_patch=True)
-
-    # The inverted quick run is a temporary experiment. This is not meant
-    # to be a permanent as the inverted shards will only run during submission
-    if 'chromium_rts.inverted_quickrun' in self.m.buildbucket.build.input.experiments:
-      inverted_tests = self.process_swarming_props(comp_output.swarming_props,
-                                                   builder_config,
-                                                   targets_config)
-      # Trigger and wait for the tests
-      with self.m.chromium_tests.wrap_chromium_tests(builder_config,
-                                                     inverted_tests):
-        self.m.test_utils.run_inverted_tests_with_patch(
-            inverted_tests,
-            retry_failed_shards=builder_config.retry_failed_shards)
 
     if not failing_test_suites:
       self.report_stats_and_flakiness(tests)
@@ -689,7 +695,8 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
                              swarming_props,
                              builder_config,
                              targets_config,
-                             tests=None):
+                             tests=None,
+                             include_inverted_rts=False):
     """Read isolate hashes swarming_props content and download command lines
 
     Args:
@@ -700,10 +707,15 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
       targets_config (TargetsConfig): configuration for the tests' targets
       tests (list(Test)): Test objects to update with swarming info. If None,
         new Test objects will be created.
+      include_inverted_rts (bool): attempts to retrieve the inverted rts
+        command lines with the non-inverted commands
     Returns:
       List of Test objects with swarming info
     """
     swarming_digest = swarming_props['swarming_command_lines_digest']
+    swarming_inverted_rts_command_digest = swarming_props.get(
+        'swarming_inverted_rts_command_lines_digest'
+    ) if include_inverted_rts else None
     swarming_cwd = swarming_props['swarming_command_lines_cwd']
 
     swarm_hashes = dict(swarming_props['swarm_hashes'])
@@ -722,6 +734,7 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
         tests,
         builder_config,
         swarming_command_lines_digest=swarming_digest,
+        swarming_inverted_rts_command_digest=swarming_inverted_rts_command_digest,
         swarming_command_lines_cwd=swarming_cwd)
     return tests
 
@@ -745,3 +758,127 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
       if t.uses_isolate and not t.runs_on_swarming:
         raise self.m.step.StepFailure(
             '{} is an isolated test but is not swarmed.'.format(t.target_name))
+
+  def find_compatible_quick_run_build(self):
+    """Finds a Quick Run build that can be reused for the current build
+
+    Returns:
+      A single build who's compilator should be reuseable
+    """
+    # TODO(sshrimp): Compatible Quick Run builds should be expanded to any
+    # "equivelant" patchset (and eventually provided by CV), not exact patchset.
+    # cq_equivalent_cl_group_key doesn't seem to work for this. The start time
+    # is currently 10 days will also need to be reduced to 1 day after builds
+    # have been verified to work as expected
+    predicate = builds_service_pb2.BuildPredicate(
+        builder=self.m.buildbucket.build.builder,
+        gerrit_changes=self.m.buildbucket.build.input.gerrit_changes,
+        create_time=common_pb.TimeRange(
+            start_time=timestamp_pb2.Timestamp(
+                # Look back 10 days
+                seconds=self.m.buildbucket.build.create_time.ToSeconds() -
+                60 * 60 * 24 * 10)),
+        status=common_pb.SUCCESS,
+    )
+    predicate.builder.builder = (
+        self.m.buildbucket.build.builder.builder.strip('-inverse-fyi'))
+    builds = self.m.buildbucket.search(
+        predicate, step_name='find successful Quick Runs')
+
+    builds = [
+        build for build in builds
+        if 'rts_was_used' in build.output.properties and
+        build.output.properties['rts_was_used']
+    ]
+
+    return builds[0] if builds else None
+
+  def get_compilator_from_build(self, quick_run_build):
+    """Finds the compilator build from a given Quick Run build
+
+    Args:
+      quick_run_build (Build): The compatible Quick Run build to get the
+        compilator build from
+
+    Returns:
+      The compilator build to be reused
+    """
+    predicate = builds_service_pb2.BuildPredicate(
+        child_of=quick_run_build.id,
+        status=common_pb.SUCCESS,
+        builder=self.m.buildbucket.build.builder,
+    )
+    predicate.builder.builder = self.compilator
+
+    builds = self.m.buildbucket.search(
+        predicate, step_name='get compilator build')
+
+    if not builds:
+      return None
+
+    # If more than one compilator is found the earliest would be '(with patch)'
+    compilator_build = min(builds, key=lambda b: b.start_time)
+    return compilator_build
+
+  def run_inverted_shards(self, compilator_build, builder_config):
+    """Runs the the Inverted Quick Run tests
+
+    Reuses artifacts collected from the compilator launching them with the
+    inverted rts command instead of the original command to run only the
+    tests that were previously skipped
+
+    Args:
+      compilator_build (Build): The compilator that built the tests with
+        inverted rts commands
+      builder_config (BuilderConfig): config for the current builder
+
+    Returns:
+      RawResult object
+    """
+    comp_output, _ = self.process_sub_build(
+        compilator_build, is_swarming_phase=True, with_patch=True)
+
+    self.m.chromium_checkout.checkout_dir = self.m.path['cleanup']
+
+    self.m.cas.download(
+        'download src-side deps',
+        comp_output.src_side_deps_digest,
+        self.m.chromium_checkout.src_dir,
+    )
+
+    targets_config = self.m.chromium_tests.create_targets_config(
+        builder_config,
+        comp_output.got_revisions,
+        self.m.chromium_checkout.src_dir,
+        source_side_spec_dir=self.m.chromium_checkout.src_dir.join(
+            comp_output.src_side_test_spec_dir),
+        isolated_tests_only=True)
+    self.check_for_non_swarmed_isolated_tests(targets_config.all_tests)
+    # This is used to set build properties on swarming tasks
+    self.m.chromium.set_build_properties(comp_output.got_revisions)
+
+    tests = self.process_swarming_props(
+        comp_output.swarming_props,
+        builder_config,
+        targets_config,
+        include_inverted_rts=True)
+
+    builder_id, builder_config = self.configure_build()
+    self.m.chromium_tests.configure_swarming(
+        self.m.tryserver.is_tryserver, builder_group=builder_id.group)
+
+    # Trigger and wait for the tests
+    with self.m.chromium_tests.wrap_chromium_tests(builder_config, tests):
+      invertable_tests = [t for t in tests if t.has_inverted]
+
+      for test in invertable_tests:
+        test.is_inverted_rts = True
+
+      invalid_test_suites, all_failing_test_suites = (
+          self.m.test_utils.run_tests_with_patch(
+              invertable_tests,
+              retry_failed_shards=builder_config.retry_failed_shards))
+
+    test_failures = bool(invalid_test_suites) or bool(all_failing_test_suites)
+    return result_pb2.RawResult(
+        status=common_pb.SUCCESS if not test_failures else common_pb.FAILURE)

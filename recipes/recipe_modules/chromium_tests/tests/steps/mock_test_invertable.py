@@ -14,9 +14,7 @@ from RECIPE_MODULES.build.chromium_tests import steps
 def RunSteps(api):
   test_spec = steps.MockTestSpec.create(
       name=api.properties.get('test_name', 'MockTest'))
-  test = test_spec.get_test(api.chromium_tests)
-
-  test.has_inverted
+  test_spec.get_test(api.chromium_tests)
 
 
 def GenTests(api):

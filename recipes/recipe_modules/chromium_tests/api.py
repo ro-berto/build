@@ -1385,13 +1385,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
               task.test_suites,
               retry_failed_shards=task.should_retry_failures_with_changes))
 
-      # The inverted quick run is a temporary experiment. This is not meant
-      # to be a permanent as the inverted shards will only run during submission
-      if 'chromium_rts.inverted_quickrun' in self.m.buildbucket.build.input.experiments:
-        self.m.test_utils.run_inverted_tests_with_patch(
-            task.test_suites,
-            retry_failed_shards=task.should_retry_failures_with_changes)
-
       if self.m.code_coverage.using_coverage:
         self.m.code_coverage.process_coverage_data(task.test_suites)
 
@@ -1704,11 +1697,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     return self.download_command_lines_for_tests(tests_using_isolates,
                                                  builder_config)
 
-  def download_command_lines_for_tests(self,
-                                       tests,
-                                       builder_config,
-                                       swarming_command_lines_digest=None,
-                                       swarming_command_lines_cwd=None):
+  def download_command_lines_for_tests(
+      self,
+      tests,
+      builder_config,
+      swarming_command_lines_digest=None,
+      swarming_inverted_rts_command_digest=None,
+      swarming_command_lines_cwd=None):
     """Download and set command lines for tests.
 
     This method checks the 'swarming_command_lines_digest' and
@@ -1719,20 +1714,31 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       tests: The tests to download command line arguments for.
       builder_config: The currently configured builder.
       swarming_command_lines_digest: If set, the digest we should download.
+      swarming_inverted_rts_command_digest: If set, the digest for the inverted
+      command lines should be downloaded.
       swarming_command_lines_cwd: If set, the cwd for command lines.
     """
     digest = (
         swarming_command_lines_digest or
         self.m.properties.get('swarming_command_lines_digest'))
+    inverted_rts_digest = (
+        swarming_inverted_rts_command_digest or
+        self.m.properties.get('swarming_inverted_rts_command_digest'))
     rel_cwd = (
         swarming_command_lines_cwd or
         self.m.properties.get('swarming_command_lines_cwd'))
     if digest:
+      command_lines = self._download_command_lines(digest)
+      inverted_rts_command_lines = {}
+      if inverted_rts_digest:
+        inverted_rts_command_lines = self._download_command_lines(
+            inverted_rts_digest)
       self.set_swarming_test_execution_info(
           tests,
-          self._download_command_lines(digest),
+          command_lines,
           rel_cwd,
-          expose_to_properties=builder_config.expose_trigger_properties)
+          expose_to_properties=builder_config.expose_trigger_properties,
+          inverted_rts_command_lines=inverted_rts_command_lines)
 
   def _explain_package_transfer(self, builder_config, non_isolated_tests):
     package_transfer_reasons = [

@@ -56,7 +56,13 @@ def RunSteps(api, retry_failed_shards, test_kwargs_list):
 
   tests = [s.get_test(api.chromium_tests) for s in test_specs]
 
-  invalid, failing = api.test_utils.run_inverted_tests_with_patch(
+  # Trigger and wait for the tests
+  tests = [t for t in tests if t.has_inverted]
+
+  for test in tests:
+    test.is_inverted_rts = True
+
+  invalid, failing = api.test_utils.run_tests_with_patch(
       tests, **run_tests_kwargs)
 
   if invalid:
@@ -76,9 +82,10 @@ def GenTests(api):
   yield api.test(
       'success',
       api.chromium.try_build(builder_group='g', builder='linux-rel'),
-      api.post_process(post_process.MustRun, 'test (inverted with patch)'),
-      api.post_process(post_process.MustRun, 'test2 (inverted with patch)'),
-      api.post_process(post_process.DoesNotRun, 'test3 (inverted with patch)'),
+      api.post_process(post_process.MustRun, 'test (with patch)'),
+      api.post_process(post_process.MustRun, 'test2 (with patch)'),
+      api.post_process(post_process.DoesNotRun, 'test3 (with patch)'),
+      api.post_process(post_process.DoesNotRun, 'test3 (with patch)'),
       api.post_process(post_process.MustRun, 'NONE invalid'),
       api.post_process(post_process.MustRun, 'NONE failing'),
       api.post_process(post_process.DropExpectation),
@@ -92,9 +99,10 @@ def GenTests(api):
               'has_valid_results': False
           },
       ]),
-      api.post_process(post_process.MustRun, 'test (inverted with patch)'),
-      api.post_process(post_process.MustRun, 'test2 (inverted with patch)'),
-      api.post_process(post_process.DoesNotRun, 'test3 (inverted with patch)'),
+      api.post_process(post_process.MustRun, 'test (with patch)'),
+      api.post_process(post_process.MustRun, 'test2 (with patch)'),
+      api.post_process(post_process.DoesNotRun, 'test3 (with patch)'),
+      api.post_process(post_process.DoesNotRun, 'test3 (with patch)'),
       api.post_process(post_process.MustRun, 'test invalid'),
       api.post_process(post_process.MustRun, 'test failing'),
       api.post_process(post_process.DropExpectation),
@@ -108,14 +116,14 @@ def GenTests(api):
           test_kwargs_list=[{
               'runs_on_swarming': True,
               'per_suffix_failures': {
-                  'inverted with patch': ['testA']
+                  'with patch': ['testA']
               },
           }]),
-      api.post_process(post_process.MustRun, 'test (inverted with patch)'),
-      api.post_process(post_process.MustRun, 'test2 (inverted with patch)'),
-      api.post_process(post_process.DoesNotRun, 'test3 (inverted with patch)'),
-      api.post_process(post_process.MustRun,
-                       'test (retry shards inverted with patch)'),
+      api.post_process(post_process.MustRun, 'test (with patch)'),
+      api.post_process(post_process.MustRun, 'test2 (with patch)'),
+      api.post_process(post_process.DoesNotRun, 'test3 (with patch)'),
+      api.post_process(post_process.DoesNotRun, 'test3 (with patch)'),
+      api.post_process(post_process.MustRun, 'test (retry shards with patch)'),
       api.post_process(post_process.MustRun, 'NONE invalid'),
       api.post_process(post_process.MustRun, 'NONE failing'),
       api.post_process(post_process.DropExpectation),
@@ -129,41 +137,18 @@ def GenTests(api):
           test_kwargs_list=[{
               'runs_on_swarming': True,
               'per_suffix_failures': {
-                  'inverted with patch': ['testA', 'testB'],
+                  'with patch': ['testA', 'testB'],
               },
               'per_suffix_valid': {
-                  'inverted with patch': False,
-                  'retry shards inverted with patch': True,
+                  'with patch': False,
+                  'retry shards with patch': True,
               }
           }]),
-      api.post_process(post_process.MustRun, 'test (inverted with patch)'),
-      api.post_process(post_process.MustRun, 'test2 (inverted with patch)'),
-      api.post_process(post_process.DoesNotRun, 'test3 (inverted with patch)'),
+      api.post_process(post_process.MustRun, 'test (with patch)'),
+      api.post_process(post_process.MustRun, 'test2 (with patch)'),
+      api.post_process(post_process.DoesNotRun, 'test3 (with patch)'),
+      api.post_process(post_process.DoesNotRun, 'test3 (with patch)'),
       api.post_process(post_process.MustRun, 'NONE invalid'),
       api.post_process(post_process.MustRun, 'NONE failing'),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  # This test tests that if a non-swarming test suite has invalid test results,
-  # it will still be correctly classified as invalid after retrying failed
-  # shards.
-  yield api.test(
-      'non_swarming_invalid_results',
-      api.chromium.try_build(builder_group='g', builder='linux-rel'),
-      api.properties(
-          retry_failed_shards=True,
-          test_kwargs_list=[{
-              'runs_on_swarming': True,
-          }, {
-              'per_suffix_valid': {
-                  'inverted with patch': False,
-              }
-          }]),
-      api.post_process(post_process.MustRun, 'test (inverted with patch)'),
-      api.post_process(post_process.DoesNotRun,
-                       'test2 (retry shards inverted with patch)'),
-      api.post_process(post_process.MustRun, 'test2 invalid'),
-      api.post_process(post_process.MustRun, 'test2 failing'),
-      api.post_process(post_process.DoesNotRun, 'test3 (inverted with patch)'),
       api.post_process(post_process.DropExpectation),
   )

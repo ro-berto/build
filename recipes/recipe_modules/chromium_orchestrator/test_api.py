@@ -11,6 +11,7 @@ from PB.go.chromium.org.luci.led.job import job
 
 from google.protobuf import struct_pb2
 from google.protobuf import json_format
+from google.protobuf import timestamp_pb2
 
 from RECIPE_MODULES.build.chromium_tests.api import (
     ALL_TEST_BINARIES_ISOLATE_NAME)
@@ -69,6 +70,8 @@ class ChromiumOrchestratorApi(recipe_test_api.RecipeTestApi):
     return {
         'swarming_command_lines_digest':
             'e3b0c44298fc1c149afbfc8996fb92427ae41e4649b934ca495991b7852b855/0',
+        'swarming_inverted_rts_command_lines_digest':
+            '111111111111111111111111111111111111111111111111111111111111111/0',
         'swarming_command_lines_cwd':
             'out/Release',
         'swarm_hashes':
@@ -157,6 +160,32 @@ class ChromiumOrchestratorApi(recipe_test_api.RecipeTestApi):
         name,
         self.m.step.sub_build(sub_build),
     )
+
+  def override_reused_compilator_steps(self,
+                                       comp_build_id=1234,
+                                       sub_build_status=common_pb.SUCCESS,
+                                       sub_build_summary='',
+                                       empty_props=False,
+                                       tests=None,
+                                       affected_files=None,
+                                       skipping_coverage=None):
+    output_json_obj = self.get_compilator_output_props(
+        comp_build_id=comp_build_id,
+        empty_props=empty_props,
+        tests=tests,
+        affected_files=affected_files,
+        skipping_coverage=skipping_coverage)
+
+    sub_build = build_pb2.Build(
+        id=54321,
+        status=sub_build_status,
+        summary_markdown=sub_build_summary,
+        start_time=timestamp_pb2.Timestamp(seconds=1562475245),
+        output=dict(
+            properties=json_format.Parse(
+                self.m.json.dumps(output_json_obj), struct_pb2.Struct())))
+    return self.m.buildbucket.simulated_search_results(
+        [sub_build], step_name='get compilator build')
 
   def fake_head_revision(self, ref='refs/heads/main'):
     result = {'log': [{'commit': 'deadbeef'},]}

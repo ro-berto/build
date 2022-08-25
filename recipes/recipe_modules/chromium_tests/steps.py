@@ -451,6 +451,10 @@ class Test(object):
     # inspecting JSON.
     self._failure_on_exit_suffix_map = {}
 
+    # Marks the test as being inverted RTS. When enabled this suite will only
+    # run the tests skipped in RTS
+    self._is_inverted_rts = False
+
   @property
   def set_up(self):
     return None
@@ -533,6 +537,22 @@ class Test(object):
     report that it uses isolate.
     """
     return bool(self.isolate_target)
+
+  @property
+  def is_inverted_rts(self):
+    """Returns False
+
+    Intended to be overridden by subclasses that can run inverted
+    """
+    return self._is_inverted_rts
+
+  @is_inverted_rts.setter
+  def is_inverted_rts(self, value):
+    """Returns False
+
+    Intended to be overridden by subclasses that can run inverted
+    """
+    self._is_inverted_rts = value
 
   @property
   def has_inverted(self):
@@ -837,7 +857,10 @@ class Test(object):
     builds, since there could be post-processing on the step_name by other
     apis, like swarming (see api.chromium_swarming.get_step_name()).
     """
-    return _add_suffix(self.name, suffix)
+    step_name = _add_suffix(self.name, suffix)
+    # TODO(sshrimp): After findit has been turned down we should modify the
+    # test names for Quick Run and Inverted Quick Run
+    return step_name
 
   def step_metadata(self, suffix=None):
     data = {
@@ -2390,7 +2413,7 @@ class SwarmingGTestTest(SwarmingTest):
     # tombstones are in resultdb.
     if self.api.m.chromium.c.TARGET_PLATFORM != 'android':
       json_override = self.api.m.path.mkstemp()
-    cmd = self.raw_cmd if 'inverted' not in suffix else self.inverted_raw_cmd
+    cmd = self.raw_cmd if not self.is_inverted_rts else self.inverted_raw_cmd
     task = self.api.m.chromium_swarming.gtest_task(
         raw_cmd=cmd,
         relative_cwd=self.relative_cwd,
@@ -2646,7 +2669,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     self._test_options = value
 
   def create_task(self, suffix, cas_input_root):
-    cmd = self.raw_cmd if 'inverted' not in suffix else self.inverted_raw_cmd
+    cmd = self.raw_cmd if not self.is_inverted_rts else self.inverted_raw_cmd
     task = self.api.m.chromium_swarming.isolated_script_task(
         raw_cmd=cmd,
         relative_cwd=self.relative_cwd,
