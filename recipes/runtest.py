@@ -12,7 +12,6 @@ For a list of command-line options, call this script with '--help'.
 """
 
 import ast
-import copy
 import datetime
 import exceptions
 import gzip
@@ -22,7 +21,6 @@ import logging
 import optparse
 import os
 import re
-import stat
 import subprocess
 import sys
 import tempfile
@@ -53,7 +51,6 @@ import annotation_utils
 import build_directory
 import crash_utils
 import histogram_results_parser
-import performance_log_processor
 import results_dashboard
 import slave_utils
 import telemetry_utils
@@ -76,7 +73,6 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 LOG_PROCESSOR_CLASSES = {
     'gtest': gtest_utils.GTestLogParser,
-    'graphing': performance_log_processor.GraphingLogProcessor,
 }
 
 INFRA_ERROR = 87

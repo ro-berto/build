@@ -7,15 +7,43 @@
 """Log parsing for telemetry tests.
 
 The TelemetryResultsProcessor loads and contains results that were output in
-JSON format from Telemetry. It can be used as a replacement for the classes in
-the performance_log_processor module.
+JSON format from Telemetry.
 """
 
 import json
 import logging
 import os
 
-from performance_log_processor import _FormatHumanReadable
+
+def _FormatHumanReadable(number):
+  """Formats a float into three significant figures, using metric suffixes.
+
+  Only m, k, and M prefixes (for 1/1000, 1000, and 1,000,000) are used.
+  Examples:
+    0.0387    => 38.7m
+    1.1234    => 1.12
+    10866     => 10.8k
+    682851200 => 683M
+  """
+  metric_prefixes = {-3: 'm', 0: '', 3: 'k', 6: 'M'}
+  scientific = '%.2e' % float(number)  # 6.83e+005
+  e_idx = scientific.find('e')  # 4, or 5 if negative
+  digits = float(scientific[:e_idx])  # 6.83
+  exponent = int(scientific[e_idx + 1:])  # int('+005') = 5
+  while exponent % 3:
+    digits *= 10
+    exponent -= 1
+  while exponent > 6:
+    digits *= 10
+    exponent -= 1
+  while exponent < -3:
+    digits /= 10
+    exponent += 1
+  if digits >= 100:
+    # Don't append a meaningless '.0' to an integer number.
+    digits = int(digits)
+  # Exponent is now divisible by 3, between -3 and 6 inclusive: (-3, 0, 3, 6).
+  return '%s%s' % (digits, metric_prefixes[exponent])
 
 
 class TelemetryResultsProcessor(object):

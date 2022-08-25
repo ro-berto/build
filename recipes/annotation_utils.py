@@ -117,13 +117,3 @@ def annotate(test_name, result, log_processor, perf_dashboard_id=None):
 
   for desc in getText(get_text_result, log_processor, test_name):
     print '@@@STEP_TEXT@%s@@@' % desc
-
-  if hasattr(log_processor, 'PerformanceLogs'):
-    if not perf_dashboard_id:
-      raise Exception(
-          'runtest.py error: perf step specified but'
-          'no test_id in build_properties!'
-      )
-    for logname, log in log_processor.PerformanceLogs().iteritems():
-      lines = [str(l).rstrip() for l in log]
-      slave_utils.WriteLogLines(logname, lines, perf=perf_dashboard_id)
