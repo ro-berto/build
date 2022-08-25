@@ -221,7 +221,7 @@ class V8Api(recipe_api.RecipeApi):
   EMPTY_TEST_SPEC = v8_builders.EmptyTestSpec
   TEST_SPEC = v8_builders.TestSpec
 
-  def __init__(self, *args, **kwargs):
+  def __init__(self, properties, *args, **kwargs):
     super(V8Api, self).__init__(*args, **kwargs)
     self.test_configs = {}
     self.bot_config = None
@@ -233,6 +233,7 @@ class V8Api(recipe_api.RecipeApi):
     self.revision = None
     self.revision_cp = None
     self.revision_number = None
+    self.use_remoteexec = properties.get('use_remoteexec', False)
 
   @property
   def trigger(self):
@@ -266,6 +267,8 @@ class V8Api(recipe_api.RecipeApi):
   def vpython(self, name, script, args=None, **kwargs):
     return self._python(name, 'vpython', script, args, **kwargs)
 
+  # TODO(b:238274944): Replace with self.use_remoteexec after updating
+  # infra/config.
   def _use_reclient(self, gn_args):
     args = self.m.gn.parse_gn_args(gn_args)
     return args.get('use_remoteexec') == 'true'
@@ -275,6 +278,8 @@ class V8Api(recipe_api.RecipeApi):
                                 use_goma=True,
                                 use_remoteexec=False):
     default = {}
+    # TODO(b:238274944): Replace use_remoteexec with self.use_remoteexec.
+    use_remoteexec = use_remoteexec or self.use_remoteexec
     # use_goma and use_remoteexec cannot be set at the same time.
     assert not use_goma or not use_remoteexec
     if not self.m.properties.get('parent_buildername'):
@@ -849,6 +854,41 @@ class V8Api(recipe_api.RecipeApi):
     buildername = self.convert_exp_builder(triggered=False)
     return chromium.BuilderId.create_for_group(builder_group, buildername)
 
+  # TODO(b:238274944): Remove this method after all builders have switched
+  # to reclient and the corresponding mb_config.pyl change has reached
+  # extended stable. Estimated after M110.
+  def reclient_mb_override(self, mb_config_path):
+    """Temporary override of mb_config.pyl until reclient migration is
+    complete.
+
+    This replaces goma=true gn args in mb_config.pyl for the current run
+    and overrides with reclient settings. This allows to switch MB-based
+    settings for goma/reclient via a module property in $build/v8 called
+    "use_remoteexec".
+
+    This can be removed once the main mb_conig.pyl file was updated and the
+    changes made it to all active release branches.
+    """
+    if not self.use_remoteexec:
+      return mb_config_path
+
+    mb_config_data = self.m.file.read_text(
+        'read MB config',
+        mb_config_path,
+        test_data=self.test_api.example_goma_mb_config(),
+    )
+
+    mb_config_data = mb_config_data.replace(
+        'use_goma=true', 'use_goma=false use_remoteexec=true')
+
+    new_mb_config_path = self.m.path['tmp_base'].join('mb_config.pyl')
+    self.m.file.write_text(
+        'tweak MB config',
+        new_mb_config_path,
+        mb_config_data,
+    )
+    return new_mb_config_path
+
   def compile(
       self, test_spec=v8_builders.EmptyTestSpec, mb_config_path=None,
       out_dir=None, **kwargs):
@@ -895,12 +935,16 @@ class V8Api(recipe_api.RecipeApi):
       if self.m.chromium.c.project_generator.tool == 'mb':
         mb_config_rel_path = self.m.properties.get(
             'mb_config_path', 'infra/mb/mb_config.pyl')
+
+        mb_config_path = (
+            mb_config_path or
+            self.m.path['checkout'].join(*mb_config_rel_path.split('/')))
+        mb_config_path = self.reclient_mb_override(mb_config_path)
+
         gn_args = self.m.chromium.mb_gen(
             self.get_builder_id(),
             use_goma=use_goma,
-            mb_config_path=(
-                mb_config_path or
-                self.m.path['checkout'].join(*mb_config_rel_path.split('/'))),
+            mb_config_path=mb_config_path,
             isolated_targets=isolate_targets,
             build_dir=build_dir,
             gn_args_location=self.m.gn.LOGS)

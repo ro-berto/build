@@ -1131,6 +1131,22 @@ def GenTests(api):
       api.step_data('build.lookup GN args',
                     api.raw_io.stream_output_text(fake_gn_args_x64_reclient)) +
       api.post_process(DropExpectation))
+  yield (
+      api.v8.test(
+          'client.v8',
+          'V8 Foobar',
+          'rbe_atomic',
+          use_goma=False,
+          use_remoteexec=True,
+          **{'$build/v8': {'use_remoteexec': True}}
+      ) + api.reclient.properties() +
+      api.post_process(Filter(
+          'build.read MB config',
+          'build.tweak MB config',
+          'build.generate_build_files',
+      ))
+  )
+
 
   def check_gs_url_equals(check, steps, expected):
     check('gsutil upload' in steps)

@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+
+from recipe_engine.recipe_api import Property
 from recipe_engine.config import ConfigGroup, Single
 
 DEPS = [
@@ -40,6 +42,18 @@ DEPS = [
     'recipe_engine/url',
     'test_utils',
 ]
+
+PROPERTIES = {
+  '$build/v8': Property(
+    help='Properties for the v8 module',
+    param_name='properties',
+    kind=ConfigGroup(
+      # Whether to use reclient for compilation with the V8 module.
+      use_remoteexec=Single(bool),
+    ),
+    default={},
+  ),
+}
 
 # TODO(phajdan.jr): provide coverage (http://crbug.com/693058).
 DISABLE_STRICT_COVERAGE = True

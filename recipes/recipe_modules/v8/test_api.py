@@ -25,6 +25,16 @@ VERSION_FILE_TMPL = """
 #define V8_PATCH_LEVEL %d
 """
 
+MB_CONFIG_GOMA_EXAMPLE = """
+{
+  'mixins': {
+    'goma': {
+      'gn_args': 'use_goma=true',
+    },
+  },
+}
+"""
+
 
 def _sanitize_nonalpha(text):
   return ''.join(c if c.isalnum() else '_' for c in text)
@@ -363,6 +373,9 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       'num_files': 3615,
       'top100_avg_deps': 1.3,
     })
+
+  def example_goma_mb_config(self):
+    return MB_CONFIG_GOMA_EXAMPLE
 
   def example_test_roots(self, *roots):
     """Simulates dynamically optained test-root directories."""
