@@ -174,7 +174,7 @@ class WebRTCApi(recipe_api.RecipeApi):
       self.m.chromium.c.build_config_fs = _sanitize_file_name(
           builder_id.builder)
 
-    self.m.chromium.mb_gen(
+    return self.m.chromium.mb_gen(
         builder_id,
         phase=phase,
         mb_path=self.m.path['checkout'].join('tools_webrtc', 'mb'),

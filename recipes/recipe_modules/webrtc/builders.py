@@ -276,6 +276,15 @@ _CLIENT_WEBRTC_SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             }),
+    'Linux64 Release (reclient)':
+        WebRTCBuilderSpec.create(
+            chromium_config='webrtc_default',
+            gclient_config='webrtc',
+            gclient_apply_config=['enable_reclient'],
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            }),
     'Linux64 Release (ARM)':
         WebRTCBuilderSpec.create(
             chromium_config='webrtc_default',

@@ -74,6 +74,12 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
       test += self.m.properties(
           swarming_command_lines={test_target: ['./dummy_cmd']})
 
+    if 'reclient' in builder_name:
+      test += self.m.reclient.properties()
+      test += self.step_data(
+          'lookup GN args',
+          self.m.raw_io.stream_output_text("use_remoteexec=true\n"))
+
     if fail_compile:
       test += self.step_data('compile', retcode=1)
       test += self.post_process(post_process.StatusFailure)

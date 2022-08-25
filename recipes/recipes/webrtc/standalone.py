@@ -17,6 +17,7 @@ DEPS = [
     'chromium_tests_builder_config',
     'chromium_swarming',
     'depot_tools/tryserver',
+    'gn',
     'recipe_engine/path',
     'recipe_engine/step',
     'webrtc',
@@ -55,8 +56,14 @@ def RunSteps(api):
     tests_to_compile = [
         t for t in targets_config.all_tests if t.canonical_name in test_targets
     ]
-    api.webrtc.run_mb(builder_id, phase, tests_to_compile)
-    raw_result = api.chromium.compile(compile_targets, use_goma_module=True)
+    gn_args = api.webrtc.run_mb(builder_id, phase, tests_to_compile)
+
+    use_reclient = api.gn.parse_gn_args(gn_args).get('use_remoteexec') == 'true'
+    use_goma_module = use_reclient == False
+    raw_result = api.chromium.compile(
+        compile_targets,
+        use_goma_module=use_goma_module,
+        use_reclient=use_reclient)
     if raw_result.status != common_pb.SUCCESS:
       return raw_result
     api.webrtc.isolate(builder_id, builder_config, tests_to_compile)
