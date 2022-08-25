@@ -51,7 +51,7 @@ def RunSteps(api, properties):
     return result_pb.RawResult(
         status=common_pb.INFRA_FAILURE, summary_markdown='\n'.join(summary))
 
-  api.gclient.set_config('chromium')
+  api.gclient.set_config('chromium_skip_wpr_archives_download')
   api.bot_update.ensure_checkout(refs=['refs/heads/main'])
   api.gclient.runhooks()
   api.git(
