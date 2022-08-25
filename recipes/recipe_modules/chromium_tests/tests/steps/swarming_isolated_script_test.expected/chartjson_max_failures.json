@@ -613,9 +613,9 @@
     },
     "name": "base_unittests on Intel GPU on Linux (with patch)",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br>Max pending time: 1m 11s (shard #0)<br>Max shard runtime (32s) + overhead (29s): 1m 0s (shard #0)<br>Min shard runtime (32s) + overhead (29s): 1m 0s (shard #0)<br>Total shard runtime (1m 3s) + overhead(57s): 2m 0s@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_END@raw_io.output[Merge script log]@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
@@ -671,7 +671,54 @@
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
       "@@@STEP_LOG_END@chromium_swarming.summary@@@",
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_LOG_LINE@Merge script log@@@@",
+      "@@@STEP_LOG_END@Merge script log@@@",
+      "@@@STEP_LOG_LINE@outdir_json@{}@@@",
+      "@@@STEP_LOG_END@outdir_json@@@",
+      "@@@STEP_LOG_LINE@step_metadata@{@@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"base_unittests\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"dimensions\": {@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"cpu\": \"x86-64\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"gpu\": \"8086\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-16.04\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"foo\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"base_unittests on Intel GPU on Linux (with patch)\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"base_unittests\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"patched\": true, @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"0\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_builder_group\": null, @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null@@@",
+      "@@@STEP_LOG_LINE@step_metadata@}@@@",
+      "@@@STEP_LOG_END@step_metadata@@@",
+      "@@@STEP_LINK@shard #0 test results@https://luci-milo.appspot.com/ui/inv/some-inv-name/test-results@@@",
+      "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=0@@@",
+      "@@@STEP_LINK@shard #1 test results@https://luci-milo.appspot.com/ui/inv/some-inv-name/test-results@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "$debug - all results (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@serialized results@{@@@",
+      "@@@STEP_LOG_LINE@serialized results@  \"all_suites\": [@@@",
+      "@@@STEP_LOG_LINE@serialized results@    {@@@",
+      "@@@STEP_LOG_LINE@serialized results@      \"all_tests\": [], @@@",
+      "@@@STEP_LOG_LINE@serialized results@      \"invalid\": \"False\", @@@",
+      "@@@STEP_LOG_LINE@serialized results@      \"suite_name\": \"base_unittests\", @@@",
+      "@@@STEP_LOG_LINE@serialized results@      \"test_id_prefix\": \"\", @@@",
+      "@@@STEP_LOG_LINE@serialized results@      \"total_tests_ran\": 0, @@@",
+      "@@@STEP_LOG_LINE@serialized results@      \"unexpected_failing_tests\": [], @@@",
+      "@@@STEP_LOG_LINE@serialized results@      \"unexpected_passing_tests\": [], @@@",
+      "@@@STEP_LOG_LINE@serialized results@      \"unexpected_skipped_tests\": [], @@@",
+      "@@@STEP_LOG_LINE@serialized results@      \"variant_hash\": \"\"@@@",
+      "@@@STEP_LOG_LINE@serialized results@    }@@@",
+      "@@@STEP_LOG_LINE@serialized results@  ], @@@",
+      "@@@STEP_LOG_LINE@serialized results@  \"unexpected_failing_suites\": []@@@",
+      "@@@STEP_LOG_LINE@serialized results@}@@@",
+      "@@@STEP_LOG_END@serialized results@@@"
     ]
   },
   {
@@ -685,10 +732,6 @@
     ]
   },
   {
-    "failure": {
-      "failure": {},
-      "humanReason": "Step('base_unittests on Intel GPU on Linux (with patch)') (retcode: 102)"
-    },
     "name": "$result"
   }
 ]

@@ -1523,7 +1523,6 @@
     "name": "base_unittests on NVIDIA GPU on Linux",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Linux'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
-      "@@@STEP_LOG_END@raw_io.output[Merge script log]@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
@@ -1554,6 +1553,8 @@
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
       "@@@STEP_LOG_END@chromium_swarming.summary@@@",
+      "@@@STEP_LOG_LINE@Merge script log@@@@",
+      "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LOG_LINE@step_metadata@{@@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"base_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"dimensions\": {@@@",
@@ -1669,7 +1670,6 @@
     "name": "browser_tests on NVIDIA GPU on Linux",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Linux'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
-      "@@@STEP_LOG_END@raw_io.output[Merge script log]@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
@@ -1700,6 +1700,8 @@
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
       "@@@STEP_LOG_END@chromium_swarming.summary@@@",
+      "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
+      "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LOG_LINE@step_metadata@{@@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"browser_tests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"dimensions\": {@@@",
