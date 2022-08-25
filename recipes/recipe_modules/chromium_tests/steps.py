@@ -2899,6 +2899,7 @@ class SkylabTestSpec(TestSpec):
   cros_img = attrib(str)
   secondary_cros_board = attrib(str, default='')
   secondary_cros_img = attrib(str, default='')
+  bucket = attrib(str, default='')
   dut_pool = attrib(str, default='')
   tast_expr = attrib(str, default='')
   test_args = attrib(command_args, default=())
@@ -2955,6 +2956,7 @@ class SkylabTest(Test):
         cros_img=self.spec.cros_img,
         secondary_board=self.spec.secondary_cros_board,
         secondary_cros_img=self.spec.secondary_cros_img,
+        bucket=self.spec.bucket,
         dut_pool=self.spec.dut_pool,
         lacros_gcs_path=self.lacros_gcs_path,
         exe_rel_path=self.exe_rel_path,

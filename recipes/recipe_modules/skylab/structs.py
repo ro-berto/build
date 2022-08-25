@@ -31,6 +31,7 @@ class SkylabRequest(object):
     * secondary_board: The CrOS build target name for secondary DUT.
     * secondary_cros_img: The GS path presenting CrOS image to provision the
           secondary DUT, e.g. atlas-release/R88-13545.0.0
+    * bucket: The optional GS bucket to use
     * dut_pool: The skylab device pool to run the test. By default the
           quota pool, shared by all CrOS tests.
     * lacros_gcs_path: The GCS full path pointing to a Lacros artifact.
@@ -66,6 +67,7 @@ class SkylabRequest(object):
   cros_img = attrib(str)
   secondary_board = attrib(str, default='')
   secondary_cros_img = attrib(str, default='')
+  bucket = attrib(str, default='')
   dut_pool = attrib(str, default='')
   lacros_gcs_path = attrib(str, default='')
   exe_rel_path = attrib(str, default='')

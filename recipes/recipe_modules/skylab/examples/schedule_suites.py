@@ -29,6 +29,7 @@ def gen_skylab_req(tag,
                    dut_pool='',
                    secondary_board='',
                    secondary_cros_img='',
+                   bucket='',
                    autotest_name='',
                    tast_expr_file=''):
   return SkylabRequest.create(
@@ -45,6 +46,7 @@ def gen_skylab_req(tag,
       retries=retries,
       secondary_board=secondary_board,
       secondary_cros_img=secondary_cros_img,
+      bucket=bucket,
       autotest_name=autotest_name,
       resultdb=ResultDB.create(**RESULTDB_CONFIG))
 
@@ -53,7 +55,10 @@ REQUESTS = [
     gen_skylab_req(
         'm88_tast_with_retry', tast_expr=LACROS_TAST_EXPR, retries=3),
     gen_skylab_req(
-        'm88_gtest_test_args', tast_expr=None, test_args=LACROS_GTEST_ARGS),
+        'm88_gtest_test_args',
+        tast_expr=None,
+        test_args=LACROS_GTEST_ARGS,
+        bucket='a_different_gs_bucket'),
     gen_skylab_req(
         'm88_nearby_dut_pool',
         tast_expr=LACROS_TAST_EXPR,

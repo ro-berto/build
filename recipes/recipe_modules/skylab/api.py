@@ -73,6 +73,9 @@ class SkylabApi(recipe_api.RecipeApi):
             cmd.extend(['-secondary-boards', s.secondary_board])
             cmd.extend(['-secondary-images', s.secondary_cros_img])
 
+          if s.bucket:
+            cmd.extend(['-bucket', s.bucket])
+
           cmd.extend(['-pool', s.dut_pool if s.dut_pool else 'DUT_POOL_QUOTA'])
 
           cmd.extend(['-image', s.cros_img])
