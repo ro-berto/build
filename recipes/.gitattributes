@@ -9,7 +9,6 @@
 /goma_bq_utils.py                 recipes
 /goma_utils.py                    recipes
 /gtest/**                         recipes
-/histogram_results_parser.py      recipes
 /kill_processes.py                recipes
 /process_dumps.py                 recipes
 /results_dashboard.py             recipes
@@ -17,7 +16,6 @@
 /runtest.py                       recipes
 /slave_utils.py                   recipes
 /tee.py                           recipes
-/telemetry_utils.py               recipes
 /upload_perf_dashboard_results.py recipes
 /upload_goma_logs.py*             recipes
 /xvfb.py                          recipes

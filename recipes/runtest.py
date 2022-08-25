@@ -11,9 +11,7 @@ build directory, e.g. chrome-release/build/.
 For a list of command-line options, call this script with '--help'.
 """
 
-import ast
 import datetime
-import exceptions
 import gzip
 import hashlib
 import json
@@ -50,23 +48,12 @@ from common import gtest_utils
 import annotation_utils
 import build_directory
 import crash_utils
-import histogram_results_parser
-import results_dashboard
 import slave_utils
-import telemetry_utils
 import xvfb
 
 USAGE = '%s [options] test.exe [test args]' % os.path.basename(sys.argv[0])
 
 CHROME_SANDBOX_PATH = '/opt/chromium/chrome_sandbox'
-
-# Directory to write JSON for test results into.
-DEST_DIR = 'gtest_results'
-
-# Names of httpd configuration file under different platforms.
-HTTPD_CONF = {
-    'linux': 'httpd2_linux.conf', 'mac': 'httpd2_mac.conf', 'win': 'httpd.conf'
-}
 
 # The directory that this script is in.
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -74,8 +61,6 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 LOG_PROCESSOR_CLASSES = {
     'gtest': gtest_utils.GTestLogParser,
 }
-
-INFRA_ERROR = 87
 
 
 def _GetTempCount():
@@ -171,26 +156,11 @@ def _RunGTestCommand(
   # TODO(phajdan.jr): Clean this up when internal waterfalls are fixed.
   env.update({'CHROMIUM_TEST_LAUNCHER_BOT_MODE': '1'})
 
-  log_processors = {}
-  if log_processor:
-    log_processors[log_processor.__class__.__name__] = log_processor
-
-  if (not 'GTestLogParser' in log_processors and
-      options.log_processor_output_file):
-    log_processors['GTestLogParser'] = gtest_utils.GTestLogParser()
-
-  def _ProcessLine(line):
-    for current_log_processor in log_processors.values():
-      current_log_processor.ProcessLine(line)
+  parser_func = log_processor.ProcessLine if log_processor else None
 
   result = chromium_utils.RunCommand(
-      command, pipes=pipes, parser_func=_ProcessLine, env=env
+      command, pipes=pipes, parser_func=parser_func, env=env
   )
-
-  if options.log_processor_output_file:
-    _WriteLogProcessorResultsToOutput(
-        log_processors['GTestLogParser'], options.log_processor_output_file
-    )
 
   return result
 
@@ -212,12 +182,6 @@ def _BuildTestBinaryCommand(_build_dir, test_exe_path, options):
 
   if options.annotate == 'gtest':
     command.append('--test-launcher-bot-mode')
-
-    if options.total_shards and options.shard_index:
-      command.extend([
-          '--test-launcher-total-shards=%d' % options.total_shards,
-          '--test-launcher-shard-index=%d' % (options.shard_index - 1)
-      ])
 
   return command
 
@@ -249,24 +213,17 @@ def _ListLogProcessors(selection):
   return shouldlist
 
 
-def _SelectLogProcessor(options, is_telemetry):
+def _SelectLogProcessor(options):
   """Returns a log processor class based on the command line options.
 
   Args:
     options: Command-line options (from OptionParser).
-    is_telemetry: bool for whether to create a telemetry log processor.
 
   Returns:
     A log processor class, or None.
   """
   if _UsingGtestJson(options):
     return gtest_utils.GTestJSONParser
-
-  if options.use_histograms:
-    return histogram_results_parser.HistogramResultsParser
-
-  if is_telemetry:
-    return telemetry_utils.TelemetryResultsProcessor
 
   if options.annotate:
     if options.annotate in LOG_PROCESSOR_CLASSES:
@@ -283,19 +240,12 @@ def _GetMainRevision(options):
   )
 
 
-def _GetPerfDashboardRevisions(options):
-  return slave_utils.GetPerfDashboardRevisions(
-      options.build_properties, _GetMainRevision(options), options.point_id
-  )
-
-
-def _CreateLogProcessor(log_processor_class, options, telemetry_info):
+def _CreateLogProcessor(log_processor_class, options):
   """Creates a log processor instance.
 
   Args:
     log_processor_class: A subclass of PerformanceLogProcessor or similar class.
     options: Command-line options (from OptionParser).
-    telemetry_info: dict of info for run_benchmark runs.
 
   Returns:
     An instance of a log processor class, or None.
@@ -303,13 +253,7 @@ def _CreateLogProcessor(log_processor_class, options, telemetry_info):
   if not log_processor_class:
     return None
 
-  if (log_processor_class.__name__ == 'TelemetryResultsProcessor' or
-      log_processor_class.__name__ == 'HistogramResultsParser'):
-    tracker_obj = log_processor_class(
-        telemetry_info['filename'], telemetry_info['is_ref'],
-        telemetry_info['cleanup_dir']
-    )
-  elif log_processor_class.__name__ == 'GTestLogParser':
+  if log_processor_class.__name__ == 'GTestLogParser':
     tracker_obj = log_processor_class()
   elif log_processor_class.__name__ == 'GTestJSONParser':
     tracker_obj = log_processor_class(
@@ -324,218 +268,6 @@ def _CreateLogProcessor(log_processor_class, options, telemetry_info):
     )
 
   return tracker_obj
-
-
-def _GetSupplementalColumns(build_dir, supplemental_colummns_file_name):
-  """Reads supplemental columns data from a file.
-
-  Args:
-    build_dir: Build dir name.
-    supplemental_columns_file_name: Name of a file which contains the
-        supplemental columns data (in JSON format).
-
-  Returns:
-    A dict of supplemental data to send to the dashboard.
-  """
-  supplemental_columns = {}
-  supplemental_columns_file = os.path.join(
-      build_dir, results_dashboard.CACHE_DIR, supplemental_colummns_file_name
-  )
-  if os.path.exists(supplemental_columns_file):
-    with file(supplemental_columns_file, 'r') as f:
-      supplemental_columns = json.loads(f.read())
-  return supplemental_columns
-
-
-def _ResultsDashboardDict(options):
-  """Generates a dict of info needed by the results dashboard.
-
-  Args:
-    options: Program arguments.
-
-  Returns:
-    dict containing data the dashboard needs.
-  """
-  build_dir = os.path.abspath(options.build_dir)
-  supplemental_columns = _GetSupplementalColumns(
-      build_dir, options.supplemental_columns_file
-  )
-  extra_columns = options.perf_config
-  if extra_columns:
-    supplemental_columns.update(extra_columns)
-
-  perf_dashboard_machine_group = options.build_properties.get(
-      'perf_dashboard_machine_group'
-  )
-  assert perf_dashboard_machine_group, (
-      'This field must be set for uploading to perf dashboard'
-  )
-
-  fields = {
-      'system': _GetSystemName(options),
-      'test': options.test_type,
-      'url': options.results_url,
-      'perf_dashboard_machine_group': perf_dashboard_machine_group,
-      # TODO(gbeaty) The perf dashboard should be updated to use a different key
-      'mastername': options.build_properties.get('builder_group'),
-      'buildername': options.build_properties.get('buildername'),
-      'buildnumber': options.build_properties.get('buildnumber'),
-      'build_dir': build_dir,
-      'supplemental_columns': supplemental_columns,
-      'revisions': _GetPerfDashboardRevisions(options),
-  }
-  return fields
-
-
-def _GenerateDashboardJson(log_processor, args):
-  """Generates chartjson to send to the dashboard.
-
-  Args:
-    log_processor: An instance of a log processor class, which has been used to
-        process the test output, so it contains the test results.
-    args: Dict of additional args to send to results_dashboard.
-  """
-  assert log_processor.IsChartJson()
-
-  chart_json = log_processor.ChartJson()
-  if chart_json:
-    return results_dashboard.MakeDashboardJsonV1(
-        chart_json, args['revisions'], args['test'], args['system'],
-        args['buildername'], args['buildnumber'], args['supplemental_columns'],
-        log_processor.IsReferenceBuild(), args['perf_dashboard_machine_group']
-    )
-  return None
-
-
-def _WriteLogProcessorResultsToOutput(log_processor, log_output_file):
-  """Writes the log processor's results to a file.
-
-  Args:
-  chartjson_file: Path to the file to write the results.
-    log_processor: An instance of a log processor class, which has been used to
-        process the test output, so it contains the test results.
-  """
-  with open(log_output_file, 'w') as f:
-    results = {
-        'passed': log_processor.PassedTests(),
-        'failed': log_processor.FailedTests(),
-        'flakes': log_processor.FlakyTests(),
-    }
-    json.dump(results, f)
-
-
-def _WriteChartJsonToOutput(chartjson_file, log_processor, args):
-  """Writes the dashboard chartjson to a file for display in the waterfall.
-
-  Args:
-  chartjson_file: Path to the file to write the chartjson.
-    log_processor: An instance of a log processor class, which has been used to
-        process the test output, so it contains the test results.
-    args: Dict of additional args to send to results_dashboard.
-  """
-  assert log_processor.IsChartJson()
-
-  chartjson_data = _GenerateDashboardJson(log_processor, args)
-  if chartjson_data:
-    with open(chartjson_file, 'w') as f:
-      json.dump(chartjson_data, f)
-
-
-def _SendResultsToDashboard(log_processor, args):
-  """Sends results from a log processor instance to the dashboard.
-
-  Args:
-    log_processor: An instance of a log processor class, which has been used to
-        process the test output, so it contains the test results.
-    args: Dict of additional args to send to results_dashboard.
-
-  Returns:
-    True if no errors occurred.
-  """
-  results = None
-  as_histograms = False
-  if log_processor.IsChartJson():
-    results = _GenerateDashboardJson(log_processor, args)
-    if not results:
-      print 'Error: No json output from telemetry.'
-      print '@@@STEP_FAILURE@@@'
-    log_processor.Cleanup()
-    if results and not results['chart_data'].get('enabled', True):
-      return True  # A successful run, but the benchmark was disabled.
-  elif log_processor.IsHistogramSet():
-    histograms_file = log_processor.HistogramFilename()
-    chromium_checkout = os.getcwd()
-    testname = args['test']
-    bot = args['buildername']
-    buildername = args['buildername']
-    buildnumber = args['buildnumber']
-    revisions_dict = {'--chromium_commit_positions': args['revisions']['rev']}
-    is_reference_build = log_processor.IsReferenceBuild()
-    perf_dashboard_machine_group = args['perf_dashboard_machine_group']
-
-    results = results_dashboard.MakeHistogramSetWithDiagnostics(
-        histograms_file=histograms_file,
-        chromium_checkout_path=chromium_checkout,
-        test_name=testname,
-        bot=bot,
-        buildername=buildername,
-        buildnumber=buildnumber,
-        revisions_dict=revisions_dict,
-        is_reference_build=is_reference_build,
-        perf_dashboard_machine_group=perf_dashboard_machine_group
-    )
-    as_histograms = True
-    log_processor.Cleanup()
-  else:
-    charts = _GetDataFromLogProcessor(log_processor)
-    results = results_dashboard.MakeListOfPoints(
-        charts, args['system'], args['test'], args['buildername'],
-        args['buildnumber'], args['supplemental_columns'],
-        args['perf_dashboard_machine_group']
-    )
-  if not results:
-    return False
-
-  logging.debug(json.dumps(results, indent=2))
-  return results_dashboard.SendResults(
-      results, args['url'], args['build_dir'], send_as_histograms=as_histograms
-  )
-
-
-def _GetDataFromLogProcessor(log_processor):
-  """Returns a mapping of chart names to chart data.
-
-  Args:
-    log_processor: A log processor (aka results tracker) object.
-
-  Returns:
-    A dictionary mapping chart name to lists of chart data.
-    put together in log_processor. Each chart data dictionary contains:
-      "traces": A dictionary mapping trace names to value, stddev pairs.
-      "units": Units for the chart.
-      "rev": A revision number or git hash.
-      Plus other revision keys, e.g. ver, v8_rev.
-  """
-  charts = {}
-  for log_file_name, line_list in log_processor.PerformanceLogs().iteritems():
-    if not log_file_name.endswith('-summary.dat'):
-      # The log processor data also contains "graphs list" file contents,
-      # which we can ignore.
-      continue
-    chart_name = log_file_name.replace('-summary.dat', '')
-
-    # It's assumed that the log lines list has length one, because for each
-    # graph name only one line is added in log_processor in the method
-    # GraphingLogProcessor._CreateSummaryOutput.
-    if len(line_list) != 1:
-      print 'Error: Unexpected log processor line list: %s' % str(line_list)
-      continue
-    line = line_list[0].rstrip()
-    try:
-      charts[chart_name] = json.loads(line)
-    except ValueError:
-      print 'Error: Could not parse JSON: %s' % line
-  return charts
 
 
 def _BuildCoverageGtestExclusions(options, args):
@@ -742,14 +474,6 @@ def _GenerateRunIsolatedCommand(build_dir, test_exe_path, options, command):
   return isolate_command
 
 
-def _GetSystemName(options):
-  if options.perf_builder_name_alias:
-    result = options.perf_builder_name_alias
-  else:
-    result = options.build_properties.get('buildername')
-  return result
-
-
 def _GetSanitizerSymbolizeCommand(strip_path_prefix=None, json_file_name=None):
   script_path = os.path.abspath(
       os.path.join('src', 'tools', 'valgrind', 'asan', 'asan_symbolize.py')
@@ -780,57 +504,11 @@ def _SymbolizeSnippetsInJSON(options, json_file_name):
     print stderr
 
 
-def _MainParse(options, _args):
-  """Run input through annotated test parser.
-
-  This doesn't execute a test, but reads test input from a file and runs it
-  through the specified annotation parser (aka log processor).
-  """
-  if not options.annotate:
-    raise chromium_utils.MissingArgument(
-        '--parse-input doesn\'t make sense '
-        'without --annotate.'
-    )
-
-  # If --annotate=list was passed, list the log processor classes and exit.
-  if _ListLogProcessors(options.annotate):
-    return 0
-
-  log_processor_class = _SelectLogProcessor(options, False)
-  log_processor = _CreateLogProcessor(log_processor_class, options, None)
-
-  if options.parse_input == '-':
-    f = sys.stdin
-  else:
-    try:
-      f = open(options.parse_input, 'rb')
-    except IOError as e:
-      print 'Error %d opening \'%s\': %s' % (
-          e.errno, options.parse_input, e.strerror
-      )
-      return 1
-
-  with f:
-    for line in f:
-      log_processor.ProcessLine(line)
-
-  if options.annotate:
-    annotation_utils.annotate(
-        options.test_type,
-        options.parse_result,
-        log_processor,
-        perf_dashboard_id=options.perf_dashboard_id
-    )
-
-  return options.parse_result
-
-
 def _MainMac(options, args, extra_env):
   """Runs the test on mac."""
   if len(args) < 1:
     raise chromium_utils.MissingArgument('Usage: %s' % USAGE)
 
-  telemetry_info = _UpdateRunBenchmarkArgs(args, options)
   test_exe = args[0]
   if options.run_python_script:
     build_dir = os.path.normpath(os.path.abspath(options.build_dir))
@@ -854,10 +532,8 @@ def _MainMac(options, args, extra_env):
   # If --annotate=list was passed, list the log processor classes and exit.
   if _ListLogProcessors(options.annotate):
     return 0
-  log_processor_class = _SelectLogProcessor(options, bool(telemetry_info))
-  log_processor = _CreateLogProcessor(
-      log_processor_class, options, telemetry_info
-  )
+  log_processor_class = _SelectLogProcessor(options)
+  log_processor = _CreateLogProcessor(log_processor_class, options)
 
   try:
     if _UsingGtestJson(options):
@@ -893,18 +569,8 @@ def _MainMac(options, args, extra_env):
         options.test_type,
         result,
         log_processor,
-        perf_dashboard_id=options.perf_dashboard_id
+        perf_dashboard_id=options.build_properties.get('test_name')
     )
-
-  if options.chartjson_file and telemetry_info:
-    _WriteChartJsonToOutput(
-        options.chartjson_file, log_processor, _ResultsDashboardDict(options)
-    )
-
-  if options.results_url:
-    if not _SendResultsToDashboard(log_processor,
-                                   _ResultsDashboardDict(options)):
-      return result or INFRA_ERROR
 
   return result
 
@@ -1036,7 +702,6 @@ def _MainLinux(options, args, extra_env):
   if options.build_properties.get('chromeos'):
     special_xvfb_dir = xvfb_path
 
-  telemetry_info = _UpdateRunBenchmarkArgs(args, options)
   test_exe = args[0]
   if options.run_python_script:
     test_exe_path = test_exe
@@ -1088,10 +753,8 @@ def _MainLinux(options, args, extra_env):
   # If --annotate=list was passed, list the log processor classes and exit.
   if _ListLogProcessors(options.annotate):
     return 0
-  log_processor_class = _SelectLogProcessor(options, bool(telemetry_info))
-  log_processor = _CreateLogProcessor(
-      log_processor_class, options, telemetry_info
-  )
+  log_processor_class = _SelectLogProcessor(options)
+  log_processor = _CreateLogProcessor(log_processor_class, options)
 
   try:
     start_xvfb = False
@@ -1158,18 +821,8 @@ def _MainLinux(options, args, extra_env):
         options.test_type,
         result,
         log_processor,
-        perf_dashboard_id=options.perf_dashboard_id
+        perf_dashboard_id=options.build_properties.get('test_name')
     )
-
-  if options.chartjson_file and telemetry_info:
-    _WriteChartJsonToOutput(
-        options.chartjson_file, log_processor, _ResultsDashboardDict(options)
-    )
-
-  if options.results_url:
-    if not _SendResultsToDashboard(log_processor,
-                                   _ResultsDashboardDict(options)):
-      return result or INFRA_ERROR
 
   return result
 
@@ -1194,11 +847,8 @@ def _MainWin(options, args, extra_env):
 
   # Nuke anything that appears to be stale chrome items in the temporary
   # directory from previous test runs (i.e.- from crashes or unittest leaks).
-  # This needs to be before _UpdateRunBenchmarkArgs, otherwise we can end up
-  # nuking the temporary directory we create there.
   slave_utils.RemoveChromeTemporaryFiles()
 
-  telemetry_info = _UpdateRunBenchmarkArgs(args, options)
   test_exe = args[0]
   build_dir = os.path.abspath(options.build_dir)
   if options.run_python_script:
@@ -1224,10 +874,8 @@ def _MainWin(options, args, extra_env):
   # If --annotate=list was passed, list the log processor classes and exit.
   if _ListLogProcessors(options.annotate):
     return 0
-  log_processor_class = _SelectLogProcessor(options, bool(telemetry_info))
-  log_processor = _CreateLogProcessor(
-      log_processor_class, options, telemetry_info
-  )
+  log_processor_class = _SelectLogProcessor(options)
+  log_processor = _CreateLogProcessor(log_processor_class, options)
 
   try:
     if _UsingGtestJson(options):
@@ -1257,18 +905,8 @@ def _MainWin(options, args, extra_env):
         options.test_type,
         result,
         log_processor,
-        perf_dashboard_id=options.perf_dashboard_id
+        perf_dashboard_id=options.build_properties.get('test_name')
     )
-
-  if options.chartjson_file and telemetry_info:
-    _WriteChartJsonToOutput(
-        options.chartjson_file, log_processor, _ResultsDashboardDict(options)
-    )
-
-  if options.results_url:
-    if not _SendResultsToDashboard(log_processor,
-                                   _ResultsDashboardDict(options)):
-      return result or INFRA_ERROR
 
   return result
 
@@ -1299,52 +937,6 @@ def _MainAndroid(options, args, extra_env):
       'runtest.py without --run-python-script not supported for '
       'Android'
   )
-
-
-def _UpdateRunBenchmarkArgs(args, options):
-  """Updates the arguments for commands producing chartjson.
-
-  Creates a temporary file/directory, and ensures that the required extra
-  arguments are given.
-
-  Arguments:
-    args: list of command line arguments, starts with name of script runner.
-
-  Returns:
-    None if not a telemetry test, otherwise a
-    dict containing the output filename and whether it is a reference build.
-  """
-  if not (options.chartjson_file or options.use_histograms):
-    return {}
-
-  script = args[0]
-  if options.use_histograms and script.endswith('run_benchmark'):
-    raise Exception(
-        'Histogram format is not supported for Telemetry via the '
-        'build-side scripts. Use the src-side '
-        'process_perf_results.py merge script instead.'
-    )
-
-  if script.endswith('run_benchmark') or script.endswith('sizes.py'):
-    output_dir = tempfile.mkdtemp()
-    args.extend(['--output-dir=%s' % output_dir])
-    temp_filename = (
-        os.path.join(output_dir, 'perf_results.json') if options.use_histograms
-        else os.path.join(output_dir, 'results-chart.json')
-    )
-    return {
-        'filename': temp_filename, 'is_ref': '--browser=reference' in args,
-        'cleanup_dir': True
-    }
-  elif script.endswith('test_runner.py'):
-    _, temp_json_filename = tempfile.mkstemp()
-    args.extend(['--output-chartjson-data=%s' % temp_json_filename])
-    return {
-        'filename': temp_json_filename,
-        'is_ref': options.step_name.endswith('.reference'), 'cleanup_dir': False
-    }
-
-  return None
 
 
 def _ConfigureSanitizerTools(options, args, extra_env):
@@ -1462,21 +1054,6 @@ def main():
       '--test-platform', help='Platform to test on, e.g. ios-simulator'
   )
   option_parser.add_option(
-      '--total-shards',
-      dest='total_shards',
-      default=None,
-      type='int',
-      help='Number of shards to split this test into.'
-  )
-  option_parser.add_option(
-      '--shard-index',
-      dest='shard_index',
-      default=None,
-      type='int',
-      help='Shard to run. Must be between 1 and '
-      'total-shards.'
-  )
-  option_parser.add_option(
       '--run-shell-script',
       action='store_true',
       default=False,
@@ -1504,27 +1081,6 @@ def main():
       help='Do not start virtual X server on Linux.'
   )
   option_parser.add_option(
-      '-o',
-      '--results-directory',
-      default='',
-      help='output results directory for JSON file.'
-  )
-  option_parser.add_option(
-      '--chartjson-file', default='', help='File to dump chartjson results.'
-  )
-  option_parser.add_option(
-      '--use-histograms',
-      action='store_true',
-      default=False,
-      help='Attempt to upload perf results using the '
-      'HistogramSet format instead of CharJSON.'
-  )
-  option_parser.add_option(
-      '--log-processor-output-file',
-      default='',
-      help='File to dump gtest log processor results.'
-  )
-  option_parser.add_option(
       '--builder-name',
       default=None,
       help='The name of the builder running this script.'
@@ -1533,19 +1089,6 @@ def main():
       '--slave-name',
       default=None,
       help='The name of the slave running this script.'
-  )
-  option_parser.add_option(
-      '--master-class-name',
-      default=None,
-      help='The class name of the buildbot master running '
-      'this script: examples include "Chromium", '
-      '"ChromiumWebkit", and "ChromiumGPU". The '
-      'flakiness dashboard uses this value to '
-      'categorize results. See buildershandler.py '
-      'in the flakiness dashboard code '
-      '(use codesearch) for the known values. '
-      'Defaults to fetching it from '
-      'slaves.cfg/builders.pyl.'
   )
   option_parser.add_option(
       '--build-number',
@@ -1565,73 +1108,11 @@ def main():
       'e.g. \'unit-tests\''
   )
   option_parser.add_option(
-      '--test-results-server',
-      default='',
-      help='The test results server to upload the '
-      'results.'
-  )
-  option_parser.add_option(
       '--annotate',
       default='',
       help='Annotate output when run as a buildstep. '
       'Specify which type of test to parse, available'
       ' types listed with --annotate=list.'
-  )
-  option_parser.add_option(
-      '--parse-input',
-      default='',
-      help='When combined with --annotate, reads test '
-      'from a file instead of executing a test '
-      'binary. Use - for stdin.'
-  )
-  option_parser.add_option(
-      '--parse-result',
-      default=0,
-      help='Sets the return value of the simulated '
-      'executable under test. Only has meaning when '
-      '--parse-input is used.'
-  )
-  option_parser.add_option(
-      '--results-url',
-      default='',
-      help='The URI of the perf dashboard to upload '
-      'results to.'
-  )
-  option_parser.add_option(
-      '--perf-dashboard-id',
-      default='',
-      help='The ID on the perf dashboard to add results '
-      'to.'
-  )
-  option_parser.add_option(
-      '--perf-builder-name-alias',
-      default='',
-      help='Another name to present metrics in perf dashboard, previouslly '
-      'perf-id.'
-  )
-  option_parser.add_option(
-      '--perf-config',
-      default='',
-      help='Perf configuration dictionary (as a string). '
-      'This allows to specify custom revisions to be '
-      'the main revision at the Perf dashboard. '
-      'Example: --perf-config="{\'a_default_rev\': '
-      '\'r_webrtc_rev\'}"'
-  )
-  option_parser.add_option(
-      '--supplemental-columns-file',
-      default='supplemental_columns',
-      help='A file containing a JSON blob with a dict '
-      'that will be uploaded to the results '
-      'dashboard as supplemental columns.'
-  )
-  option_parser.add_option(
-      '--point-id',
-      type='int',
-      default=None,
-      help='Number used as primary key by the dashboard. '
-      'If ommited the value of --revision is used '
-      'instead.'
   )
   option_parser.add_option(
       '--revision',
@@ -1679,25 +1160,12 @@ def main():
       help='Path to test results file with all the info '
       'from the test launcher'
   )
-  option_parser.add_option(
-      '--flakiness-dashboard-server',
-      help='The flakiness dashboard server to which the '
-      'results should be uploaded.'
-  )
-  option_parser.add_option(
-      '--verbose',
-      action='store_true',
-      default=False,
-      help='Prints more information.'
-  )
 
   chromium_utils.AddPropertiesOptions(option_parser)
   options, args = option_parser.parse_args()
 
   # Initialize logging.
   log_level = logging.INFO
-  if options.verbose:
-    log_level = logging.DEBUG
   logging.basicConfig(
       level=log_level,
       format='%(asctime)s %(filename)s:%(lineno)-3d'
@@ -1707,9 +1175,6 @@ def main():
   logging.basicConfig(level=logging.DEBUG)
   logging.getLogger().addHandler(logging.StreamHandler(stream=sys.stdout))
 
-  if not options.perf_dashboard_id:
-    options.perf_dashboard_id = options.build_properties.get('test_name')
-
   options.test_type = options.test_type or options.build_properties.get(
       'step_name', ''
   )
@@ -1717,13 +1182,6 @@ def main():
   if options.run_shell_script and options.run_python_script:
     sys.stderr.write(
         'Use either --run-shell-script OR --run-python-script, '
-        'not both.'
-    )
-    return 1
-
-  if options.chartjson_file and options.use_histograms:
-    sys.stderr.write(
-        'Use either --chartjson-file OR --use_histograms, '
         'not both.'
     )
     return 1
@@ -1750,49 +1208,11 @@ def main():
     # Set up extra environment and args for sanitizer tools.
     _ConfigureSanitizerTools(options, args, extra_env)
 
-    # Set the number of shards environment variables.
-    # NOTE: Chromium's test launcher will ignore these in favor of the command
-    # line flags passed in _BuildTestBinaryCommand.
-    if options.total_shards and options.shard_index:
-      extra_env['GTEST_TOTAL_SHARDS'] = str(options.total_shards)
-      extra_env['GTEST_SHARD_INDEX'] = str(options.shard_index - 1)
-
-    # If perf config is passed via command line, parse the string into a dict.
-    if options.perf_config:
-      try:
-        options.perf_config = ast.literal_eval(options.perf_config)
-        assert isinstance(
-            options.perf_config, dict
-        ), ('Value of --perf-config couldn\'t be evaluated into a dict.')
-      except (exceptions.SyntaxError, ValueError):
-        option_parser.error(
-            'Failed to parse --perf-config value into a dict: '
-            '%s' % options.perf_config
-        )
-        return 1
-
-    # Allow build property 'perf_config' as well during a transition period.
-    options.perf_config = (
-        options.perf_config or options.build_properties.get('perf_config')
-    )
-
-    if options.results_directory:
-      options.test_output_xml = os.path.normpath(
-          os.path.abspath(
-              os.path.join(
-                  options.results_directory, '%s.xml' % options.test_type
-              )
-          )
-      )
-      args.append('--gtest_output=xml:' + options.test_output_xml)
-
     if options.build_properties.get('coverage_gtest_exclusions', False):
       _BuildCoverageGtestExclusions(options, args)
 
     temp_files = _GetTempCount()
-    if options.parse_input:
-      result = _MainParse(options, args)
-    elif sys.platform.startswith('darwin'):
+    if sys.platform.startswith('darwin'):
       test_platform = options.build_properties.get(
           'test_platform', options.test_platform
       )
