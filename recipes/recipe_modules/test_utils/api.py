@@ -424,7 +424,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
       if set(t.deterministic_failures('with patch')).issubset(
           t.known_flaky_failures):
-
         # If a test is barely considered flaky, we want to run  it again to
         # keep it from thrashing between being classified as flaky and non-flaky
         # effectively "cannibalizing" our data
@@ -441,7 +440,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
           'tests_being_retried': list(t.deterministic_failures('with patch')),
       } for t in exonerated_suites_to_retry]
       log_step = self.m.step.empty(
-          'logging retried weak Weetbix exonerations',
+          'logging weak Weetbix exonerations',
           log_text=self.m.json.dumps(to_log, indent=2))
       log_step.presentation.properties['weetbix.retry_weak_exonerations'] = (
           to_log)
@@ -763,8 +762,9 @@ class TestUtilsApi(recipe_api.RecipeApi):
     return should_abort
 
   def _extract_retriable_suites(self, failed_suites, invalid_suites,
-                                retry_failed_shards, retry_invalid_shards):
-    target_suites = set()
+                                exonerated_suites_to_retry, retry_failed_shards,
+                                retry_invalid_shards):
+    target_suites = set(exonerated_suites_to_retry)
     if retry_failed_shards:
       target_suites.update(failed_suites)
     if retry_invalid_shards:
@@ -827,8 +827,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
       return invalid_test_suites, failed_and_invalid_suites
 
     swarming_test_suites = self._extract_retriable_suites(
-        failed_test_suites, invalid_test_suites, retry_failed_shards,
-        retry_invalid_shards)
+        failed_test_suites, invalid_test_suites, exonerated_suites_to_retry,
+        retry_failed_shards, retry_invalid_shards)
     if not swarming_test_suites:
       return invalid_test_suites, failed_and_invalid_suites
 
@@ -836,9 +836,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     if suffix:
       retry_suffix += ' ' + suffix
     _, new_swarming_invalid_suites, _ = self.run_tests_once(
-        swarming_test_suites + exonerated_suites_to_retry,
-        retry_suffix,
-        sort_by_shard=True)
+        swarming_test_suites, retry_suffix, sort_by_shard=True)
 
     invalid_test_suites = self._still_invalid_suites(
         old_invalid_suites=invalid_test_suites,

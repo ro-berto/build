@@ -44,17 +44,19 @@ PROPERTIES = {
     # This property indicates how many failed_test suites to create
     'failed_test_count': Property(default=1),
 
-    # This property indicates whether the failed tests should also fail on retry
-    'fails_retries': Property(default=False),
+    # This property indicates whether all the mock tests will be valid
+    'all_valid': Property(default=False),
 }
 
 
 def RunSteps(api, known_flakes_expectations, known_weetbix_flakes_expectations,
-             exclude_failed_test, has_too_many_failures, fails_retries):
+             exclude_failed_test, has_too_many_failures, all_valid):
   test_specs = [
       steps.MockTestSpec.create(name='succeeded_test'),
       steps.MockTestSpec.create(
-          name='invalid_test', runs_on_swarming=True, has_valid_results=False),
+          name='invalid_test',
+          runs_on_swarming=True,
+          has_valid_results=all_valid),
   ]
 
   if not exclude_failed_test:
@@ -640,6 +642,8 @@ def GenTests(api):
           known_weetbix_flakes_expectations={
               'failed_test': ['testA', 'testB'],
           },
+          # Need to make sure the retry step isn't because of an invalid test
+          all_valid=True,
           override_failed_test_names=['testA'],
           **{
               '$build/test_utils': {
