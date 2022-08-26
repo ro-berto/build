@@ -230,20 +230,6 @@ def GenTests(api):
           })),
       api.post_process(post_process.StepSuccess, constants.RESULTS_STEP_NAME),
       api.post_process(post_process.DropExpectation))
-  yield api.test(
-      'warn_because_of_roller',
-      api.binary_size.build(commit_message='Some roller change'),
-      override_analyze(),
-      api.override_step_data(
-          constants.RESULT_JSON_STEP_NAME,
-          api.json.output({
-              'status_code': constants.FUCHSIA_ROLLER_WARNING,
-              'summary': '\n!summary!',
-              'archive_filenames': [],
-              'links': [],
-          })),
-      api.post_process(post_process.StepWarning, constants.RESULTS_STEP_NAME),
-      api.post_process(post_process.DropExpectation))
 
   yield api.test(
       'nondefault_results_bucket',
