@@ -162,11 +162,6 @@ def export_lite_tarball(api, version):
                 '!',
                 '-iname',
                 '*.grd*',
-                # This file is required for Linux afdo builds.
-                # This can be removed once M87 becomes stable.
-                '!',
-                '-path',
-                api.path.join(dest_dir, 'chrome/android/profiles/afdo.prof'),
                 '-delete'
             ])
       except api.step.StepFailure:  # pragma: no cover
@@ -233,24 +228,6 @@ def fetch_pgo_profiles(api):
       '--gs-url-base=chromium-optimization-profiles/pgo_profiles',
   ]
   api.step('fetch Linux PGO profiles', cmd)
-
-
-@recipe_api.composite_step
-def fetch_afdo_profile(api):
-  android_profile_path = api.path['checkout'].join('chrome', 'android',
-                                                   'profiles')
-  cmd = [
-      'python',
-      api.path['checkout'].join('tools', 'download_optimization_profile.py'),
-      '--newest_state',
-      android_profile_path.join('newest.txt'),
-      '--local_state',
-      android_profile_path.join('local.txt'),
-      '--output_name',
-      android_profile_path.join('afdo.prof'),
-      '--gs_url_base=chromeos-prebuilt/afdo-job/llvm',
-  ]
-  api.step('fetch android AFDO profile', cmd)
 
 
 def trigger_publish_tarball_jobs(api):
@@ -337,10 +314,7 @@ def publish_tarball(api):
                                            update_script)
   ] + update_args)
 
-  if [int(x) for x in version.split('.')] >= [87, 0, 4273, 0]:
-    fetch_pgo_profiles(api)
-  else:
-    fetch_afdo_profile(api)
+  fetch_pgo_profiles(api)
 
   node_modules_sha_path = api.path['checkout'].join('third_party', 'node',
                                                     'node_modules.tar.gz.sha1')
@@ -469,17 +443,6 @@ def GenTests(api):
           'get gn version', stdout=api.raw_io.output_text('1496 (0790d304)')) +
       api.path.exists(api.path['checkout'].join('third_party', 'node',
                                                 'node_modules.tar.gz.sha1')))
-
-  # This can be removed once M87 becomes stable.
-  yield (api.test('afdo-old-script') + api.buildbucket.generic_build() +
-         api.properties(version='85.0.4125.0') + api.platform('linux', 64) +
-         api.step_data('gsutil ls', stdout=api.raw_io.output_text('')) +
-         api.step_data(
-             'get gn version', stdout=api.raw_io.output_text('1496 (0790d304)'))
-         + api.path.exists(api.path['checkout'].join(
-             'third_party', 'node', 'node_modules.tar.gz.sha1')) +
-         api.path.exists(api.path['checkout'].join(
-             'tools', 'download_cros_provided_profile.py')))
 
   yield (api.test('trigger') + api.buildbucket.generic_build() +
          api.platform('linux', 64) +

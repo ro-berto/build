@@ -363,14 +363,10 @@
   {
     "cmd": [
       "python",
-      "[START_DIR]/src/tools/download_optimization_profile.py",
-      "--newest_state",
-      "[START_DIR]/src/chrome/android/profiles/newest.txt",
-      "--local_state",
-      "[START_DIR]/src/chrome/android/profiles/local.txt",
-      "--output_name",
-      "[START_DIR]/src/chrome/android/profiles/afdo.prof",
-      "--gs_url_base=chromeos-prebuilt/afdo-job/llvm"
+      "[START_DIR]/src/tools/update_pgo_profiles.py",
+      "--target=linux",
+      "update",
+      "--gs-url-base=chromium-optimization-profiles/pgo_profiles"
     ],
     "luci_context": {
       "realm": {
@@ -384,7 +380,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "fetch android AFDO profile"
+    "name": "fetch Linux PGO profiles"
   },
   {
     "cmd": [
@@ -999,9 +995,6 @@
       "!",
       "-iname",
       "*.grd*",
-      "!",
-      "-path",
-      "[CLEANUP]/tmp_tmp_1/src/chrome/android/profiles/afdo.prof",
       "-delete"
     ],
     "luci_context": {
@@ -1036,9 +1029,6 @@
       "!",
       "-iname",
       "*.grd*",
-      "!",
-      "-path",
-      "[CLEANUP]/tmp_tmp_1/src/chrome/android/profiles/afdo.prof",
       "-delete"
     ],
     "luci_context": {
@@ -1073,9 +1063,6 @@
       "!",
       "-iname",
       "*.grd*",
-      "!",
-      "-path",
-      "[CLEANUP]/tmp_tmp_1/src/chrome/android/profiles/afdo.prof",
       "-delete"
     ],
     "luci_context": {
@@ -1110,9 +1097,6 @@
       "!",
       "-iname",
       "*.grd*",
-      "!",
-      "-path",
-      "[CLEANUP]/tmp_tmp_1/src/chrome/android/profiles/afdo.prof",
       "-delete"
     ],
     "luci_context": {
@@ -1147,9 +1131,6 @@
       "!",
       "-iname",
       "*.grd*",
-      "!",
-      "-path",
-      "[CLEANUP]/tmp_tmp_1/src/chrome/android/profiles/afdo.prof",
       "-delete"
     ],
     "luci_context": {
@@ -1184,9 +1165,6 @@
       "!",
       "-iname",
       "*.grd*",
-      "!",
-      "-path",
-      "[CLEANUP]/tmp_tmp_1/src/chrome/android/profiles/afdo.prof",
       "-delete"
     ],
     "luci_context": {
@@ -1221,9 +1199,6 @@
       "!",
       "-iname",
       "*.grd*",
-      "!",
-      "-path",
-      "[CLEANUP]/tmp_tmp_1/src/chrome/android/profiles/afdo.prof",
       "-delete"
     ],
     "luci_context": {
@@ -1258,9 +1233,6 @@
       "!",
       "-iname",
       "*.grd*",
-      "!",
-      "-path",
-      "[CLEANUP]/tmp_tmp_1/src/chrome/android/profiles/afdo.prof",
       "-delete"
     ],
     "luci_context": {
@@ -1295,9 +1267,6 @@
       "!",
       "-iname",
       "*.grd*",
-      "!",
-      "-path",
-      "[CLEANUP]/tmp_tmp_1/src/chrome/android/profiles/afdo.prof",
       "-delete"
     ],
     "luci_context": {
@@ -1332,9 +1301,6 @@
       "!",
       "-iname",
       "*.grd*",
-      "!",
-      "-path",
-      "[CLEANUP]/tmp_tmp_1/src/chrome/android/profiles/afdo.prof",
       "-delete"
     ],
     "luci_context": {
@@ -1369,9 +1335,6 @@
       "!",
       "-iname",
       "*.grd*",
-      "!",
-      "-path",
-      "[CLEANUP]/tmp_tmp_1/src/chrome/android/profiles/afdo.prof",
       "-delete"
     ],
     "luci_context": {
@@ -1406,9 +1369,6 @@
       "!",
       "-iname",
       "*.grd*",
-      "!",
-      "-path",
-      "[CLEANUP]/tmp_tmp_1/src/chrome/android/profiles/afdo.prof",
       "-delete"
     ],
     "luci_context": {
@@ -1443,9 +1403,6 @@
       "!",
       "-iname",
       "*.grd*",
-      "!",
-      "-path",
-      "[CLEANUP]/tmp_tmp_1/src/chrome/android/profiles/afdo.prof",
       "-delete"
     ],
     "luci_context": {
@@ -1480,9 +1437,6 @@
       "!",
       "-iname",
       "*.grd*",
-      "!",
-      "-path",
-      "[CLEANUP]/tmp_tmp_1/src/chrome/android/profiles/afdo.prof",
       "-delete"
     ],
     "luci_context": {
@@ -1517,9 +1471,6 @@
       "!",
       "-iname",
       "*.grd*",
-      "!",
-      "-path",
-      "[CLEANUP]/tmp_tmp_1/src/chrome/android/profiles/afdo.prof",
       "-delete"
     ],
     "luci_context": {
@@ -1554,9 +1505,6 @@
       "!",
       "-iname",
       "*.grd*",
-      "!",
-      "-path",
-      "[CLEANUP]/tmp_tmp_1/src/chrome/android/profiles/afdo.prof",
       "-delete"
     ],
     "luci_context": {
