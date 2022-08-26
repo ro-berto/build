@@ -172,17 +172,15 @@ def main(argv):
                        cwd=options.src_dir) != 0:
       print 'Could not run build/util/lastchange.py to update DAWN_VERSION.'
       return 1
-  # The --revision-id-only option was introduced in M64; so we need to skip
-  # this call when building earlier milestones.
-  if version >= [64, 0, 0, 0]:
-    if subprocess.call(['python', 'build/util/lastchange.py',
-                        '-m', 'GPU_LISTS_VERSION',
-                        '--revision-id-only',
-                        '--header', 'gpu/config/gpu_lists_version.h'],
-                       cwd=options.src_dir) != 0:
-      print('Could not run build/util/lastchange.py to update '
-            'gpu_lists_version.h.')
-      return 1
+  if subprocess.call([
+      'python', 'build/util/lastchange.py', '-m', 'GPU_LISTS_VERSION',
+      '--revision-id-only', '--header', 'gpu/config/gpu_lists_version.h'
+  ],
+                     cwd=options.src_dir) != 0:
+    print(
+        'Could not run build/util/lastchange.py to update '
+        'gpu_lists_version.h.')
+    return 1
 
   output_fullname = args[0] + '.tar'
   output_basename = options.basename or os.path.basename(args[0])
