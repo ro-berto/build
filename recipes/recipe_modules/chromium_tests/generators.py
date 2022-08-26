@@ -218,6 +218,9 @@ def generator_common(chromium_tests_api, raw_test_spec, swarming_delegate,
   kwargs['name'] = name
   kwargs['resultdb'] = _handle_resultdb(chromium_tests_api, raw_test_spec)
 
+  if raw_test_spec.get('description'):
+    kwargs['info_messages'] = [raw_test_spec.get('description')]
+
   processed_set_ups = []
   for s in raw_test_spec.get('setup', []):
     script = s.get('script')
@@ -466,13 +469,16 @@ def generate_junit_tests(chromium_tests_api,
   for raw_spec in source_side_spec.get(buildername, {}).get('junit_tests', []):
     resultdb = _handle_resultdb(chromium_tests_api, raw_spec)
 
+    kwargs = {}
+    kwargs['target_name'] = raw_spec['test']
+    kwargs['additional_args'] = raw_spec.get('args')
+    kwargs['waterfall_builder_group'] = builder_group
+    kwargs['waterfall_buildername'] = buildername
+    kwargs['resultdb'] = resultdb
+    if raw_spec.get('description'):
+      kwargs['info_messages'] = [raw_spec.get('description')]
     test_spec = steps.AndroidJunitTestSpec.create(
-        raw_spec.get('name', raw_spec['test']),
-        target_name=raw_spec['test'],
-        additional_args=raw_spec.get('args'),
-        waterfall_builder_group=builder_group,
-        waterfall_buildername=buildername,
-        resultdb=resultdb)
+        raw_spec.get('name', raw_spec['test']), **kwargs)
     yield _handle_ci_only(chromium_tests_api, raw_spec, test_spec)
 
 
@@ -492,16 +498,18 @@ def generate_script_tests(chromium_tests_api,
 
   for raw_spec in source_side_spec.get(buildername, {}).get('scripts', []):
     resultdb = _handle_resultdb(chromium_tests_api, raw_spec)
-
-    test_spec = steps.ScriptTestSpec.create(
-        str(raw_spec['name']),
-        script=raw_spec['script'],
-        all_compile_targets=scripts_compile_targets_fn(),
-        script_args=raw_spec.get('args', []),
-        override_compile_targets=raw_spec.get('override_compile_targets', []),
-        waterfall_builder_group=builder_group,
-        waterfall_buildername=buildername,
-        resultdb=resultdb)
+    kwargs = {}
+    kwargs['script'] = raw_spec['script']
+    kwargs['all_compile_targets'] = scripts_compile_targets_fn()
+    kwargs['script_args'] = raw_spec.get('args', [])
+    kwargs['override_compile_targets'] = raw_spec.get(
+        'override_compile_targets', [])
+    kwargs['waterfall_builder_group'] = builder_group
+    kwargs['waterfall_buildername'] = buildername
+    kwargs['resultdb'] = resultdb
+    if raw_spec.get('description'):
+      kwargs['info_messages'] = [raw_spec.get('description')]
+    test_spec = steps.ScriptTestSpec.create(str(raw_spec['name']), **kwargs)
     yield _handle_ci_only(chromium_tests_api, raw_spec, test_spec)
 
 
@@ -581,7 +589,6 @@ def generate_isolated_script_tests_from_one_spec(chromium_tests_api,
     if not rdb_kwargs:
       resultdb = attr.evolve(resultdb, result_format='json')
     kwargs['resultdb'] = resultdb
-
     return steps.SwarmingIsolatedScriptTestSpec.create(**kwargs)
 
   def isolated_script_local_delegate(raw_test_spec, isolated_tests_only,
@@ -624,6 +631,10 @@ def generate_skylab_tests(chromium_tests_api,
     common_skylab_kwargs['target_name'] = skylab_test_spec.get('test')
     common_skylab_kwargs['waterfall_builder_group'] = builder_group
     common_skylab_kwargs['waterfall_buildername'] = buildername
+    if skylab_test_spec.get('description'):
+      common_skylab_kwargs['info_messages'] = [
+          skylab_test_spec.get('description')
+      ]
     return steps.SkylabTestSpec.create(
         skylab_test_spec.get('name'), **common_skylab_kwargs)
 

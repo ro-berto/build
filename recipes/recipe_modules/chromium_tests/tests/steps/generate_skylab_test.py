@@ -133,6 +133,8 @@ def GenTests(api):
                         'resultdb': {
                             'enable': True,
                         },
+                        'description':
+                            'This is a description.',
                         'timeout_sec':
                             7200
                     }],
@@ -356,6 +358,16 @@ def GenTests(api):
           'prepare skylab tests.collect runtime deps for %s' % TAST_TARGET),
       api.post_process(post_process.ResultReason,
                        'No dependencies attached to target %s.' % TAST_TARGET),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'test_suite_with_decription_on_ci_builder',
+      boilerplate(
+          'chrome-test-builds', tast_expr='("group:mainline" && "dep:lacros")'),
+      api.skylab.wait_on_suites('find test runner build', 1),
+      api.post_process(post_process.StepTextContains, 'basic_EVE_TOT',
+                       ['This is a description.']),
       api.post_process(post_process.DropExpectation),
   )
 

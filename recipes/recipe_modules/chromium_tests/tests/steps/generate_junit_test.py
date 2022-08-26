@@ -170,6 +170,30 @@ def GenTests(api):
   )
 
   yield api.test(
+      'test_suite_with_decription_on_tryserver',
+      try_build(test_spec={
+          'test': 'gtest_test',
+          'description': 'This is a description.'
+      }),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.StepTextContains, 'gtest_test (with patch)',
+                       ['This is a description.']),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'test_suite_with_decription_on_ci_builder',
+      ci_build(test_spec={
+          'test': 'gtest_test',
+          'description': 'This is a description.'
+      }),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.StepTextContains, 'gtest_test',
+                       ['This is a description.']),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
       'ci_only_test_on_tryserver',
       try_build(test_spec={
           'ci_only': True,
