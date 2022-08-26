@@ -1995,7 +1995,7 @@
       "git",
       "checkout",
       "-f",
-      "d93070f07ca4f0333aa291aa921e901349181d91"
+      "a32a1607f6093d338f756c7e7c7b4333b0c50c9c"
     ],
     "cwd": "[START_DIR]/swarming.client",
     "env": {
