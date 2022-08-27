@@ -31,23 +31,28 @@ def RunSteps(api, properties):
       'tools', 'android', 'avd', 'avd.py')
 
   with api.context(cwd=chromium_src):
-    for avd_config in properties.avd_configs:
-      avd_config_path = chromium_src.join(avd_config)
-      avd_commands = [
-          avd_script_path, 'create', '-v', '--avd-config', avd_config_path,
-          '--snapshot', '--cipd-json-output',
-          api.json.output()
-      ]
-      create_result = api.step('avd create %s' % avd_config,
-                               ['vpython3', '-u'] + avd_commands)
-      if create_result.json.output:
-        cipd_result = create_result.json.output.get('result', {})
-        if 'package' in cipd_result and 'instance_id' in cipd_result:
-          # TODO(crbug.com/922145): Switch this to api.cipd.add_instance_link
-          # if crrev.com/c/1546431 lands.
-          create_result.presentation.links[cipd_result['instance_id']] = (
-              'https://chrome-infra-packages.appspot.com' +
-              '/p/%(package)s/+/%(instance_id)s' % cipd_result)
+    with api.step.defer_results():
+      for avd_config in properties.avd_configs:
+        avd_config_path = chromium_src.join(avd_config)
+        avd_commands = [
+            avd_script_path, 'create', '-v', '--avd-config', avd_config_path,
+            '--snapshot', '--cipd-json-output',
+            api.json.output()
+        ]
+        create_result = api.step('avd create %s' % avd_config,
+                                 ['vpython3', '-u'] + avd_commands)
+        if not create_result.is_ok:
+          continue
+
+        create_result = create_result.get_result()
+        if create_result.json.output:
+          cipd_result = create_result.json.output.get('result', {})
+          if 'package' in cipd_result and 'instance_id' in cipd_result:
+            # TODO(crbug.com/922145): Switch this to api.cipd.add_instance_link
+            # if crrev.com/c/1546431 lands.
+            create_result.presentation.links[cipd_result['instance_id']] = (
+                'https://chrome-infra-packages.appspot.com' +
+                '/p/%(package)s/+/%(instance_id)s' % cipd_result)
 
 
 def GenTests(api):
@@ -58,26 +63,17 @@ def GenTests(api):
 
   yield api.test(
       'basic',
-      api.properties(
-          avd_configs=[
-              'tools/android/avd/proto/generic_android23.textpb',
-              'tools/android/avd/proto/generic_android28.textpb',
-          ]),
+      api.properties(avd_configs=[
+          'tools/android/avd/proto/generic_android23.textpb',
+          'tools/android/avd/proto/generic_android28.textpb',
+      ]),
       api.post_process(
           post_process.MustRun,
           'avd create tools/android/avd/proto/generic_android23.textpb'),
       api.override_step_data(
           'avd create tools/android/avd/proto/generic_android23.textpb',
-          api.json.output({
-              'result': {
-                  'instance_id': 'instance-id-generic-android-23',
-                  'package': 'sample/avd/package/name',
-              }
-          })),
-      api.post_process(
-          links_include,
-          'avd create tools/android/avd/proto/generic_android23.textpb',
-          'instance-id-generic-android-23'),
+          retcode=1,
+      ),
       api.post_process(
           post_process.MustRun,
           'avd create tools/android/avd/proto/generic_android28.textpb'),
@@ -93,6 +89,5 @@ def GenTests(api):
           links_include,
           'avd create tools/android/avd/proto/generic_android28.textpb',
           'instance-id-generic-android-28'),
-      api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation)
-  )
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation))
