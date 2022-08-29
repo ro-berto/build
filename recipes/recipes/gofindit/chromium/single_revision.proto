@@ -15,4 +15,7 @@ message InputProperties {
 
   // The builder to run the rerun build on.
   BuilderId target_builder = 1;
+
+  // List of targets to compile.
+  repeated string compile_targets = 2;
 }

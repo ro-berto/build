@@ -38,13 +38,18 @@ def RunSteps(api, properties):
   # Since these builders run on different platforms, and require different Goma
   # settings depending on the platform, set the Goma ATS flag based on the OS.
   api.goma.configure_enable_ats()
+
+  compile_targets = tuple(properties.compile_targets)
+  if not compile_targets:
+    # If compile_targets is not there, compile all targets
+    compile_targets = build_config.compile_targets
+
   compile_result, _ = api.chromium_tests.compile_specific_targets(
       builder_id,
       builder_config,
       bot_update_step,
       build_config,
-      # TODO: Only compile failed target instead of all targets
-      build_config.compile_targets,
+      compile_targets,
       override_execution_mode=ctbc.COMPILE_AND_TEST,
       tests=[],
   )
