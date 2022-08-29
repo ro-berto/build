@@ -115,13 +115,21 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
 
     # The chromium_rts.inverted_rts attempts to run only the tests that were
     # skipped as part of a previous compatible Quick Run build
-    is_full_run = self.m.cq.active and self.m.cq.run_mode == self.m.cq.FULL_RUN
-    if inverted_rts_experiment and is_full_run:
+    if inverted_rts_experiment:
+      if self.m.cq.active and self.m.cq.run_mode == self.m.cq.QUICK_DRY_RUN:
+        return
       quick_run_build = self.find_compatible_quick_run_build()
 
       if quick_run_build:
         compilator_build = self.get_compilator_from_build(quick_run_build)
         if compilator_build:
+
+          log_step = self.m.step.empty('log reused builds')
+          log_step.presentation.properties[
+              'reused_quick_run_build'] = quick_run_build.id
+          log_step.presentation.properties[
+              'reused_compilator_build'] = compilator_build.id
+
           return self.run_inverted_shards(compilator_build, builder_config)
       # After the experiment we'll want to continue but for now don't waste the
       # resource and just return
@@ -734,7 +742,8 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
         tests,
         builder_config,
         swarming_command_lines_digest=swarming_digest,
-        swarming_inverted_rts_command_digest=swarming_inverted_rts_command_digest,
+        swarming_inverted_rts_command_digest=(
+            swarming_inverted_rts_command_digest),
         swarming_command_lines_cwd=swarming_cwd)
     return tests
 

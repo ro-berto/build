@@ -1619,6 +1619,29 @@ def GenTests(api):
   )
 
   yield api.test(
+      'basic_with_inverted_shard_in_quick_run',
+      get_try_build(True, True),
+      ctbc_properties(),
+      api.properties(
+          **{
+              '$build/chromium_orchestrator':
+                  InputProperties(
+                      compilator='fake-compilator',
+                      compilator_watcher_git_revision='e841fc',
+                  ),
+          }),
+      api.properties(**{
+          '$recipe_engine/cq': {
+              "active": True,
+              "runMode": "QUICK_DRY_RUN",
+          },
+      }),
+      api.post_process(post_process.DoesNotRun, 'find successful Quick Runs'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
       'basic_with_inverted_shard_with_successful_qr',
       get_try_build(True, True),
       ctbc_properties(),
