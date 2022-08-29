@@ -68,6 +68,8 @@ _AddBuildSpec(
         'fuchsia_internal',
     ])
 
+# TODO(zijiehe): Consider to use fuchsia_astro and fuchsia_sherlock instead
+# of fuchsia_internal to eliminate the impact of unrelated images.
 _AddBuildSpec(
     'fuchsia-builder-perf-arm64',
     'fuchsia',
@@ -85,7 +87,7 @@ _AddBuildSpec(
     bisect_archive_build=True,
     target_bits=64,
     extra_gclient_apply_config=[
-        'fuchsia_internal',
+        'fuchsia_atlas',
     ])
 
 _AddIsolatedTestSpec(
