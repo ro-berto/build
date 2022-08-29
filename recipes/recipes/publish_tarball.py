@@ -72,8 +72,9 @@ def export_tarball(api, args, source, destination, step_name_suffix):
   try:
     temp_dir = api.path.mkdtemp('export_tarball')
     with api.context(cwd=temp_dir):
-      api.step('export_tarball for %s' % step_name_suffix,
-               ['python', api.chromium.resource('export_tarball.py')] + args)
+      api.step(
+          'export_tarball for %s' % step_name_suffix,
+          ['python3', api.chromium.resource('export_tarball.py')] + args)
     gsutil_upload(
         api,
         api.path.join(temp_dir, source),
@@ -84,7 +85,7 @@ def export_tarball(api, args, source, destination, step_name_suffix):
     hashes_result = api.step(
         'generate_hashes for %s' % step_name_suffix,
         [
-            'python',
+            'python3',
             api.chromium.resource('generate_hashes.py'),
             api.path.join(temp_dir, source),
             api.raw_io.output(),
@@ -195,7 +196,7 @@ def export_nacl_tarball(api, version):
     # Based on instructions from https://sites.google.com/a/chromium.org/dev/
     # nativeclient/pnacl/building-pnacl-components-for-distribution-packagers
     api.step('download pnacl toolchain dependencies', [
-        'python',
+        'python3',
         api.path.join(dest_dir, 'native_client', 'toolchain_build',
                       'toolchain_build_pnacl.py'),
         '--verbose',
@@ -221,7 +222,7 @@ def export_nacl_tarball(api, version):
 @recipe_api.composite_step
 def fetch_pgo_profiles(api):
   cmd = [
-      'python',
+      'python3',
       api.path['checkout'].join('tools', 'update_pgo_profiles.py'),
       '--target=linux',
       'update',
@@ -291,7 +292,7 @@ def publish_tarball(api):
   ])
 
   api.step('Generate LASTCHANGE', [
-      'python',
+      'python3',
       api.path['checkout'].join('build', 'util', 'lastchange.py'),
       '-o',
       api.path['checkout'].join('build', 'util', 'LASTCHANGE'),
@@ -320,7 +321,7 @@ def publish_tarball(api):
                                                     'node_modules.tar.gz.sha1')
   if api.path.exists(node_modules_sha_path):
     api.step('webui_node_modules', [
-        'python',
+        'python3',
         api.depot_tools.download_from_google_storage_path,
         '--no_resume',
         '--extract',
@@ -348,7 +349,7 @@ def publish_tarball(api):
 
     tools_gn = api.path['checkout'].join('tools', 'gn')
     api.step('generate last_commit_position.h',
-             ['python', git_root.join('build', 'gen.py')])
+             ['python3', git_root.join('build', 'gen.py')])
     api.file.remove('rm README.md', tools_gn.join('README.md'))
     for f in api.file.listdir(
         'listdir gn', git_root, test_data=['build', '.git']):

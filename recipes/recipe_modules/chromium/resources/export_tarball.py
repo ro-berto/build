@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -79,11 +79,11 @@ class MyTarFile(tarfile.TarFile):
 
   def __report_skipped(self, name):
     if self.__verbose:
-      print 'D\t%s' % name
+      print('D\t%s' % name)
 
   def __report_added(self, name):
     if self.__verbose:
-      print 'A\t%s' % name
+      print('A\t%s' % name)
 
   def add(self, name, arcname=None, recursive=True, exclude=None, filter=None):
     # pylint: disable=redefined-builtin
@@ -136,8 +136,8 @@ def main(argv):
   options, args = parser.parse_args(argv)
 
   if len(args) != 1:
-    print 'You must provide only one argument: output file name'
-    print '(without .tar.xz extension).'
+    print('You must provide only one argument: output file name')
+    print('(without .tar.xz extension).')
     return 1
 
   if not options.version:
@@ -145,7 +145,7 @@ def main(argv):
     return 1
 
   if not os.path.exists(options.src_dir):
-    print 'Cannot find the src directory ' + options.src_dir
+    print('Cannot find the src directory ' + options.src_dir)
     return 1
 
   version = [int(field) for field in options.version.split('.')]
@@ -153,14 +153,15 @@ def main(argv):
   # These commands are from src/DEPS; please keep them in sync.
   if subprocess.call(['python', 'build/util/lastchange.py', '-o',
                       'build/util/LASTCHANGE'], cwd=options.src_dir) != 0:
-    print 'Could not run build/util/lastchange.py to update LASTCHANGE.'
+    print('Could not run build/util/lastchange.py to update LASTCHANGE.')
     return 1
   if subprocess.call(['python', 'build/util/lastchange.py',
                       '-s', 'third_party/skia',
                       '-m', 'SKIA_COMMIT_HASH',
                       '--header', 'skia/ext/skia_commit_hash.h'],
                      cwd=options.src_dir) != 0:
-    print 'Could not run build/util/lastchange.py to update skia_commit_hash.h.'
+    print(
+        'Could not run build/util/lastchange.py to update skia_commit_hash.h.')
     return 1
   # The --revision options was introduced starting with 105.0.5148.2, so we
   # need to skip this call when building before that.
@@ -170,7 +171,7 @@ def main(argv):
         '--revision', 'gpu/webgpu/DAWN_VERSION'
     ],
                        cwd=options.src_dir) != 0:
-      print 'Could not run build/util/lastchange.py to update DAWN_VERSION.'
+      print('Could not run build/util/lastchange.py to update DAWN_VERSION.')
       return 1
   if subprocess.call([
       'python', 'build/util/lastchange.py', '-m', 'GPU_LISTS_VERSION',
@@ -196,7 +197,7 @@ def main(argv):
         if not os.path.isdir(test_dir):
           # A directory may not exist depending on the milestone we're building
           # a tarball for.
-          print '"%s" not present; skipping.' % test_dir
+          print('"%s" not present; skipping.' % test_dir)
           continue
         archive.add(test_dir,
                     arcname=os.path.join(output_basename, directory))
@@ -220,7 +221,7 @@ def main(argv):
     rc = subprocess.call(['xz', '-T', '0', '-9', output_fullname])
 
   if rc != 0:
-    print 'xz -9 failed!'
+    print('xz -9 failed!')
     return 1
 
   return 0
