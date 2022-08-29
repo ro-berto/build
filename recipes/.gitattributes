@@ -16,7 +16,6 @@
 /runtest.py                       recipes
 /slave_utils.py                   recipes
 /tee.py                           recipes
-/upload_perf_dashboard_results.py recipes
 /upload_goma_logs.py*             recipes
 /xvfb.py                          recipes
 /zip_build.py                     recipes

@@ -1707,7 +1707,7 @@
   {
     "cmd": [
       "python",
-      "RECIPE_REPO[build]/recipes/upload_perf_dashboard_results.py",
+      "RECIPE_MODULE[build::cronet]/resources/upload_perf_dashboard_results.py",
       "--results-file",
       "[CLEANUP]/perf_data_tmp_1/histograms.json",
       "--oauth-token-file",
@@ -1730,13 +1730,6 @@
       "[START_DIR]/src/out",
       "--send-as-histograms"
     ],
-    "env_prefixes": {
-      "PYTHONPATH": [
-        "RECIPE_REPO[build]",
-        "RECIPE_REPO[build]/recipes",
-        "RECIPE_REPO[build]/scripts"
-      ]
-    },
     "luci_context": {
       "realm": {
         "name": "chromium:ci"

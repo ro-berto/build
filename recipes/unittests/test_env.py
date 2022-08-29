@@ -11,7 +11,6 @@ directories.
 import os
 import subprocess
 import sys
-import textwrap
 
 # If we're not running in a VirtualEnv, bootstrap ourselves through "vpython".
 #

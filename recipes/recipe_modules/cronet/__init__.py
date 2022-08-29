@@ -1,5 +1,4 @@
 DEPS = [
-    'build',
     'chromium',
     'chromium_android',
     'depot_tools/gclient',

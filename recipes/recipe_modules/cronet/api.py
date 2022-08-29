@@ -134,7 +134,9 @@ class CronetApi(recipe_api.RecipeApi):
 
     oauth_token = self.m.puppet_service_account.get_access_token('cronet-perf')
 
-    args = [
+    cmd = [
+        'python',
+        self.resource('upload_perf_dashboard_results.py'),
         '--results-file',
         data_dir.join('histograms.json'),
         # We are passing this in solely to have the output show up as a link
@@ -161,15 +163,13 @@ class CronetApi(recipe_api.RecipeApi):
     ]
 
     if 'got_revision_cp' in self.m.properties:
-      args.extend(['--got-revision-cp', self.m.properties['got_revision_cp']])
+      cmd.extend(['--got-revision-cp', self.m.properties['got_revision_cp']])
     if 'git_revision' in self.m.properties:
-      args.extend(['--git-revision', self.m.properties['git_revision']])
+      cmd.extend(['--git-revision', self.m.properties['git_revision']])
 
-    self.m.build.python(
+    self.m.step(
         'Perf Dashboard Upload',
-        self.m.chromium.repo_resource('recipes',
-                                      'upload_perf_dashboard_results.py'),
-        args,
+        cmd,
         step_test_data=(lambda: self.m.json.test_api.output(
             'chromeperf.appspot.com', name='dashboard_url') + self.m.json.
                         test_api.output({})))
