@@ -427,7 +427,8 @@ def get_updated_deps(api, autoroller_config):
         cipd_log_template % (path, target_version, next_version)
       )
     else:
-      repo = target_location.rstrip('.git')
+      # Remove trailing .git for brevity in log messages
+      repo = re.sub(r'\.git$', '', target_location)
       params = (target_name, repo, target_version[:7], next_version[:7])
       commit_lines.append(git_log_template % params)
       if autoroller_config['show_commit_log']:
