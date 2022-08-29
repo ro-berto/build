@@ -23,6 +23,7 @@ DEPS = [
     'depot_tools/gclient',
     'recipe_engine/buildbucket',
     'recipe_engine/context',
+    'recipe_engine/file',
     'recipe_engine/path',
     'recipe_engine/properties',
     'recipe_engine/step',
@@ -165,8 +166,6 @@ def RunSteps(api, codesearch_mirror_revision,
             api.build_menu.chroot.path,
             '--build-dir',
             build_dir,
-            '--gn-targets',
-            build_dir.join('gn_targets.json'),
             '--compile-commands',
             build_dir.join('compile_commands.json'),
         ] + list(packages))
@@ -192,11 +191,16 @@ def RunSteps(api, codesearch_mirror_revision,
           clang_dir=clang_dir,
           run_dirs=[
               chromiumos_src_dir.join('platform2'),
-              chromiumos_src_dir.join('aosp', 'external', 'libchrome'),
               chromiumos_src_dir.join('aosp', 'system', 'update_engine'),
           ])
 
       # Create the kythe index pack and upload it to google storage.
+
+      # package_index needs a gn_targets.json file. Since we don't use one for
+      # chromiumos codesearch, write an empty json file.
+      # TODO(gavinmak): Make gn_targets optional in package_index.
+      api.file.write_json('write empty gn_targets.json file',
+                          build_dir.join('gn_targets.json'), {})
       kzip_path = api.codesearch.create_and_upload_kythe_index_pack(
           commit_hash=codesearch_mirror_revision,
           commit_timestamp=int(codesearch_mirror_revision_timestamp or
