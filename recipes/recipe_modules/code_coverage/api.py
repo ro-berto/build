@@ -1077,12 +1077,11 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     commit = self.m.buildbucket.build.input.gitiles_commit
     branch = 'main'
     return {
-        # host = chromium, if full host name is chromium.googlesource.com
-        'host': commit.host[:commit.host.find('.')],
-        # Maps to https://chromium.googlesource.com/codesearch/chromium/src/
+        # Maps to https://source.corp.google.com/h/chrome-internal/codesearch/chrome/src
         # which is a view of https://chromium.googlesource.com/chromium/src/
         # but with git submodules instead of DEPS for codesearch to index
-        'project': 'codesearch/chromium/src',
+        'host': 'chrome-internal',
+        'project': 'codesearch/chrome/src',
         'trace_type': coverage_format,
         'git_project': commit.project,
         'commit_id': commit.id,
