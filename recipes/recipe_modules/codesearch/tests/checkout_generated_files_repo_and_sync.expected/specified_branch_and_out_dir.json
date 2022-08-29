@@ -285,13 +285,6 @@
       "--kzip-prune",
       "/path/to/kzip"
     ],
-    "env_prefixes": {
-      "PYTHONPATH": [
-        "RECIPE_REPO[build]",
-        "RECIPE_REPO[build]/recipes",
-        "RECIPE_REPO[build]/scripts"
-      ]
-    },
     "name": "sync generated files"
   },
   {

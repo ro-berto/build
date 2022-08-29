@@ -1152,13 +1152,6 @@
       "chromium.googlesource.com/chromium/src",
       "[CACHE]/builder/src/out/lacros-Debug"
     ],
-    "env_prefixes": {
-      "PYTHONPATH": [
-        "RECIPE_REPO[build]",
-        "RECIPE_REPO[build]/recipes",
-        "RECIPE_REPO[build]/scripts"
-      ]
-    },
     "luci_context": {
       "realm": {
         "name": "chromium:ci"
@@ -1544,13 +1537,6 @@
       "main",
       "[CACHE]/generated"
     ],
-    "env_prefixes": {
-      "PYTHONPATH": [
-        "RECIPE_REPO[build]",
-        "RECIPE_REPO[build]/recipes",
-        "RECIPE_REPO[build]/scripts"
-      ]
-    },
     "luci_context": {
       "realm": {
         "name": "chromium:ci"

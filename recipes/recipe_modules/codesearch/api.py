@@ -122,10 +122,13 @@ class CodesearchApi(recipe_api.RecipeApi):
     in the Mojom file which generated it. This is made possible by annotations
     added to the generated file by the Mojo compiler.
     """
-
-    args = ['--corpus', self.c.CORPUS, self.c.out_path]
-    self.m.build.python('add kythe metadata',
-                        self.resource('add_kythe_metadata.py'), args)
+    self.m.step('add kythe metadata', [
+        'python',
+        self.resource('add_kythe_metadata.py'),
+        '--corpus',
+        self.c.CORPUS,
+        self.c.out_path,
+    ])
 
   def clone_clang_tools(self, clone_dir):
     """Clone chromium/src clang tools."""
@@ -394,10 +397,10 @@ class CodesearchApi(recipe_api.RecipeApi):
       self.m.git('config', 'user.name', self.c.generated_author_name)
 
     # Sync the generated files into this checkout.
-    args = []
+    cmd = ['vpython', self.resource('sync_generated_files.py')]
     for src, dest in copy.items():
-      args.extend(['--copy', '%s;%s' % (src, dest)])
-    args.extend([
+      cmd.extend(['--copy', '%s;%s' % (src, dest)])
+    cmd.extend([
         '--message',
         'Generated files from "%s" build %d, revision %s' %
         (self.m.buildbucket.builder_name, self.m.buildbucket.build.number,
@@ -407,11 +410,8 @@ class CodesearchApi(recipe_api.RecipeApi):
         generated_repo_dir,
     ])
     if self.m.runtime.is_experimental:
-      args.append('--dry-run')
+      cmd.append('--dry-run')
     if kzip_path:
-      args.extend(['--kzip-prune', kzip_path])
+      cmd.extend(['--kzip-prune', kzip_path])
 
-    self.m.build.python('sync generated files',
-                        self.resource('sync_generated_files.py'),
-                        args,
-                        venv=True)
+    self.m.step('sync generated files', cmd)
