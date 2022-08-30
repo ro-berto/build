@@ -389,6 +389,23 @@ def _parse_args(args):
   return params
 
 
+def _read_and_prune_xml(xml_file):
+  """Reads xml_file and returns root for sanitized xml tree.
+
+  Reads data in xml_file and deletes elements from the xml tree which are not
+  needed by downstream logic e.g. class and counter tags under package tag."""
+  # Command tends to exit with status 0 when it actually failed.
+  if not os.path.isfile(xml_file):
+    raise Exception("File %s doesn't exist" % xml_file)
+  root = ElementTree.parse(xml_file).getroot()
+  for package in root.findall('package'):
+    for claxx in package.findall('class'):
+      package.remove(claxx)
+    for counter in package.findall('counter'):
+      package.remove(counter)
+  return root
+
+
 def main():
   params = _parse_args(sys.argv[1:])
 
@@ -477,22 +494,18 @@ def main():
     temp_overall_xml = os.path.join(temp_dir, 'temp_overall.xml')
     combine_jacoco_reports.combine_xml_files(temp_overall_xml, temp_device_xml,
                                              temp_host_xml)
+    xml_root = _read_and_prune_xml(temp_overall_xml)
 
-    def _export_as_json(xml, exported_filename):
-      # Command tends to exit with status 0 when it actually failed.
-      if not os.path.isfile(xml):
-        raise Exception("File %s doesn't exist" % xml)
-      root = ElementTree.parse(xml).getroot()
-      data = generate_json_coverage_metadata(
-          params.src_path, root, source_dirs, component_mapping, diff_mapping,
-          params.source_files, params.exclusion_pattern,
-          params.third_party_inclusion_subdirs)
-      logging.info('Writing fulfilled Java coverage metadata to %s',
-                   params.output_dir)
-      with open(os.path.join(params.output_dir, exported_filename), 'w') as f:
-        f.write(zlib.compress(json.dumps(data)))
+    data = generate_json_coverage_metadata(params.src_path, xml_root,
+                                           source_dirs, component_mapping,
+                                           diff_mapping, params.source_files,
+                                           params.exclusion_pattern,
+                                           params.third_party_inclusion_subdirs)
+    logging.info('Writing fulfilled Java coverage metadata to %s',
+                 params.output_dir)
+    with open(os.path.join(params.output_dir, 'all.json.gz'), 'w') as f:
+      f.write(zlib.compress(json.dumps(data)))
 
-    _export_as_json(temp_overall_xml, 'all.json.gz')
     shutil.move(temp_overall_xml, os.path.join(params.output_dir,
                                                'coverage.xml'))
   finally:
