@@ -16,6 +16,7 @@ PROPERTIES = InputProperties
 
 DEPS = [
     'chromium',
+    'chromium_bootstrap',
     'depot_tools/bot_update',
     'depot_tools/gclient',
     'depot_tools/git',
@@ -52,6 +53,7 @@ def RunSteps(api, properties):
         status=common_pb.INFRA_FAILURE, summary_markdown='\n'.join(summary))
 
   api.gclient.set_config('chromium_skip_wpr_archives_download')
+  api.chromium_bootstrap.update_gclient_config()
   api.bot_update.ensure_checkout(refs=['refs/heads/main'])
   api.gclient.runhooks()
   api.git(
