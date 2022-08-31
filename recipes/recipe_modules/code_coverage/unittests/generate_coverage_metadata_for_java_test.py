@@ -53,64 +53,112 @@ class GenerateCoverageMetadataForJavaTest(unittest.TestCase):
       }
   }
 
-  XML_COUNTER_INPUT = """
-  <report name="JaCoCo Coverage Report">
-    <counter type="INSTRUCTION" missed="1" covered="1"/>
-    <counter type="BRANCH" missed="1" covered="1"/>
-    <counter type="LINE" missed="1" covered="1"/>
-    <counter type="COMPLEXITY" missed="1" covered="1"/>
-    <counter type="METHOD" missed="1" covered="1"/>
-    <counter type="CLASS" missed="1" covered="1"/>
-  </report>
+  SOURCEFILE_WITH_COUNTER_INPUT = """
+    <sourcefile name="OnDeviceInstrumentationBroker.java">
+      <counter type="INSTRUCTION" missed="1" covered="1"/>
+      <counter type="BRANCH" missed="1" covered="1"/>
+      <counter type="LINE" missed="1" covered="1"/>
+      <counter type="COMPLEXITY" missed="1" covered="1"/>
+      <counter type="METHOD" missed="1" covered="1"/>
+      <counter type="CLASS" missed="1" covered="1"/>
+    </sourcefile>
   """
 
-  XML_COUNTER_INPUT_MISSING_BRANCH = """
-  <report name="JaCoCo Coverage Report">
-    <counter type="INSTRUCTION" missed="1" covered="1"/>
-    <counter type="LINE" missed="1" covered="1"/>
-    <counter type="COMPLEXITY" missed="1" covered="1"/>
-    <counter type="METHOD" missed="1" covered="1"/>
-    <counter type="CLASS" missed="1" covered="1"/>
-  </report>
+  SOURCEFILE_WITH_COUNTER_INPUT_MISSING_BRANCH = """
+    <sourcefile name="OnDeviceInstrumentationBroker.java">
+      <counter type="INSTRUCTION" missed="1" covered="1"/>
+      <counter type="LINE" missed="1" covered="1"/>
+      <counter type="COMPLEXITY" missed="1" covered="1"/>
+      <counter type="METHOD" missed="1" covered="1"/>
+      <counter type="CLASS" missed="1" covered="1"/>
+    </sourcefile>
   """
 
-  XML_JACOCO_INPUT = """
-  <report name="JaCoCo Coverage Report">
-    <package name="dir">
-      <sourcefile name="file.java">
-        <line nr="1" mi="0" ci="1" mb="0" cb="0"/>
-        <counter type="INSTRUCTION" missed="0" covered="1"/>
-        <counter type="LINE" missed="0" covered="1"/>
-        <counter type="COMPLEXITY" missed="0" covered="1"/>
-        <counter type="METHOD" missed="0" covered="1"/>
-        <counter type="CLASS" missed="0" covered="1"/>
-      </sourcefile>
-    </package>
-    <counter type="INSTRUCTION" missed="0" covered="1"/>
-    <counter type="LINE" missed="0" covered="1"/>
-    <counter type="COMPLEXITY" missed="0" covered="1"/>
-    <counter type="METHOD" missed="0" covered="1"/>
-    <counter type="CLASS" missed="0" covered="1"/>
-  </report>
+  JACOCO_REPORT = """
+    <report name="JaCoCo Coverage Report">
+      <package name="dir">
+        <sourcefile name="file.java">
+          <line nr="1" mi="0" ci="1" mb="0" cb="0"/>
+          <counter type="INSTRUCTION" missed="0" covered="1"/>
+          <counter type="LINE" missed="0" covered="1"/>
+          <counter type="COMPLEXITY" missed="0" covered="1"/>
+          <counter type="METHOD" missed="0" covered="1"/>
+          <counter type="CLASS" missed="0" covered="1"/>
+        </sourcefile>
+      </package>
+      <counter type="INSTRUCTION" missed="0" covered="1"/>
+      <counter type="LINE" missed="0" covered="1"/>
+      <counter type="COMPLEXITY" missed="0" covered="1"/>
+      <counter type="METHOD" missed="0" covered="1"/>
+      <counter type="CLASS" missed="0" covered="1"/>
+    </report>
   """
 
-  XML_JACOCO_INPUT_NO_LINE_INSTRUMENTED = """
-  <report name="JaCoCo Coverage Report">
-    <package name="dir">
-      <sourcefile name="file.java">
-        <counter type="INSTRUCTION" missed="0" covered="0"/>
-        <counter type="LINE" missed="0" covered="0"/>
-        <counter type="COMPLEXITY" missed="0" covered="0"/>
-        <counter type="METHOD" missed="0" covered="0"/>
-        <counter type="CLASS" missed="0" covered="0"/>
-      </sourcefile>
-    </package>
-    <counter type="INSTRUCTION" missed="0" covered="0"/>
-    <counter type="LINE" missed="0" covered="0"/>
-    <counter type="COMPLEXITY" missed="0" covered="0"/>
-    <counter type="METHOD" missed="0" covered="0"/>
-    <counter type="CLASS" missed="0" covered="0"/>
-  </report>
+  JACOCO_REPORT_NO_LINE_INSTRUMENTED = """
+    <report name="JaCoCo Coverage Report">
+      <package name="dir">
+        <sourcefile name="file.java">
+          <counter type="INSTRUCTION" missed="0" covered="0"/>
+          <counter type="LINE" missed="0" covered="0"/>
+          <counter type="COMPLEXITY" missed="0" covered="0"/>
+          <counter type="METHOD" missed="0" covered="0"/>
+          <counter type="CLASS" missed="0" covered="0"/>
+        </sourcefile>
+      </package>
+      <counter type="INSTRUCTION" missed="0" covered="0"/>
+      <counter type="LINE" missed="0" covered="0"/>
+      <counter type="COMPLEXITY" missed="0" covered="0"/>
+      <counter type="METHOD" missed="0" covered="0"/>
+      <counter type="CLASS" missed="0" covered="0"/>
+    </report>
+  """
+
+  JACOCO_REPORT_WITH_DEFAULT_PACKAGE_NAMES = """
+    <report name="Test Report">
+      <package name="com/example/package">
+        <sourcefile name="Foo.java">
+          <line nr="10" ci="1" mi="0" cb="0" mb="0"/>
+          <line nr="11" ci="2" mi="0" cb="0" mb="0"/>
+          <line nr="12" ci="1" mi="2" cb="2" mb="3"/>
+          <line nr="13" ci="0" mi="3" cb="0" mb="0"/>
+          <line nr="21" ci="0" mi="4" cb="0" mb="2"/>
+          <line nr="22" ci="1" mi="3" cb="0" mb="0"/>
+          <counter covered="5" missed="12" type="INSTRUCTION"/>
+          <counter covered="2" missed="5" type="BRANCH"/>
+          <counter covered="4" missed="2" type="LINE"/>
+        </sourcefile>
+        <sourcefile name="Bar.java">
+          <line nr="1" ci="2" mi="0" cb="0" mb="0"/>
+          <line nr="2" ci="1" mi="2" cb="2" mb="3"/>
+          <line nr="3" ci="0" mi="3" cb="0" mb="0"/>
+        </sourcefile>
+      </package>
+    </report>
+  """
+
+  JACOCO_REPORT_WITH_CORRECT_PACKAGE_NAMES = """
+    <report name="Test Report">
+      <package name="base/android/com/example/package">
+        <sourcefile name="Foo.java">
+          <line nr="10" ci="1" mi="0" cb="0" mb="0"/>
+          <line nr="11" ci="2" mi="0" cb="0" mb="0"/>
+          <line nr="12" ci="1" mi="2" cb="2" mb="3"/>
+          <line nr="13" ci="0" mi="3" cb="0" mb="0"/>
+          <line nr="21" ci="0" mi="4" cb="0" mb="2"/>
+          <line nr="22" ci="1" mi="3" cb="0" mb="0"/>
+          <counter covered="5" missed="12" type="INSTRUCTION"/>
+          <counter covered="2" missed="5" type="BRANCH"/>
+          <counter covered="4" missed="2" type="LINE"/>
+        </sourcefile>
+      </package>
+      <package name = "build/android/com/example/package">  
+        <sourcefile name="Bar.java">
+          <line nr="1" ci="2" mi="0" cb="0" mb="0"/>
+          <line nr="2" ci="1" mi="2" cb="2" mb="3"/>
+          <line nr="3" ci="0" mi="3" cb="0" mb="0"/>
+        </sourcefile>
+      </package>
+    </report>
   """
 
   @mock.patch.object(os, 'walk')
@@ -146,7 +194,7 @@ class GenerateCoverageMetadataForJavaTest(unittest.TestCase):
     self.assertListEqual([], actual_output)
 
   def test_get_coverage_metric_summaries(self):
-    root = ElementTree.fromstring(self.XML_COUNTER_INPUT)
+    root = ElementTree.fromstring(self.SOURCEFILE_WITH_COUNTER_INPUT)
     expected_result = [
         {
             'name': 'instruction',
@@ -184,7 +232,8 @@ class GenerateCoverageMetadataForJavaTest(unittest.TestCase):
     self.assertListEqual(actual_result, expected_result)
 
   def test_get_coverage_metric_summaries_missing_metric(self):
-    root = ElementTree.fromstring(self.XML_COUNTER_INPUT_MISSING_BRANCH)
+    root = ElementTree.fromstring(
+        self.SOURCEFILE_WITH_COUNTER_INPUT_MISSING_BRANCH)
     expected_result = [
         {
             'name': 'instruction',
@@ -227,7 +276,7 @@ class GenerateCoverageMetadataForJavaTest(unittest.TestCase):
                                            mock_os_path_isfile):
     mock_get_file_revisions.return_value = self.FILE_REVISIONS
     mock_os_path_isfile = True
-    root = ElementTree.fromstring(self.XML_JACOCO_INPUT)
+    root = ElementTree.fromstring(self.JACOCO_REPORT)
 
     expected_output = {
         'files': [{
@@ -479,7 +528,7 @@ class GenerateCoverageMetadataForJavaTest(unittest.TestCase):
     }
 
     actual_output = generator.generate_json_coverage_metadata(
-        '', root, ['dir'], self.COMPONENT_MAPPING, None, None)
+        '', root, self.COMPONENT_MAPPING, None, None)
     self.assertDictEqual(expected_output, actual_output)
 
   @mock.patch.object(os.path, 'isfile')
@@ -488,29 +537,19 @@ class GenerateCoverageMetadataForJavaTest(unittest.TestCase):
       self, mock_get_file_revisions, mock_os_path_isfile):
     mock_get_file_revisions.return_value = self.FILE_REVISIONS
     mock_os_path_isfile = True
-    root = ElementTree.fromstring(self.XML_JACOCO_INPUT_NO_LINE_INSTRUMENTED)
+    root = ElementTree.fromstring(self.JACOCO_REPORT_NO_LINE_INSTRUMENTED)
 
     expected_output = {'files': []}
 
     actual_output = generator.generate_json_coverage_metadata(
-        '', root, ['dir'], self.COMPONENT_MAPPING, None, None)
+        '', root, self.COMPONENT_MAPPING, None, None)
     self.assertDictEqual(expected_output, actual_output)
-
-  @mock.patch.object(repository_util, '_GetFileRevisions')
-  def test_generate_json_coverage_metadata_skip_auto_generated_files(
-      self, mock_get_file_revisions):
-    mock_get_file_revisions.return_value = self.FILE_REVISIONS
-    root = ElementTree.fromstring(self.XML_JACOCO_INPUT)
-
-    actual_output = generator.generate_json_coverage_metadata(
-        '', root, [], self.COMPONENT_MAPPING, None, None)
-    self.assertEqual([], actual_output['files'])
 
   @mock.patch.object(os.path, 'isfile')
   def test_generate_json_coverage_metadata_for_per_cl(self,
                                                       mock_os_path_isfile):
     mock_os_path_isfile = True
-    root = ElementTree.fromstring(self.XML_JACOCO_INPUT)
+    root = ElementTree.fromstring(self.JACOCO_REPORT)
 
     expected_output = {
         'files': [{
@@ -551,21 +590,58 @@ class GenerateCoverageMetadataForJavaTest(unittest.TestCase):
     }
 
     actual_output = generator.generate_json_coverage_metadata(
-        '', root, ['dir'], None, self.DIFF_MAPPING, ['dir/file.java'])
+        '', root, None, self.DIFF_MAPPING, ['dir/file.java'])
     self.assertDictEqual(expected_output, actual_output)
 
   @mock.patch.object(os.path, 'isfile')
   def test_generate_json_coverage_metadata_for_per_cl_line_removed(
       self, mock_os_path_isfile):
     mock_os_path_isfile = True
-    root = ElementTree.fromstring(self.XML_JACOCO_INPUT)
+    root = ElementTree.fromstring(self.JACOCO_REPORT)
     diff_mapping_line_removed = {'dir/file.java': {}}
 
     expected_output = {'files': []}
 
     actual_output = generator.generate_json_coverage_metadata(
-        '', root, ['dir'], None, diff_mapping_line_removed, ['dir/file.java'])
+        '', root, None, diff_mapping_line_removed, ['dir/file.java'])
     self.assertDictEqual(expected_output, actual_output)
+
+  @mock.patch.object(os.path, 'isfile')
+  def test_fix_package_paths(self, mock_os_path_isfile):
+
+    def _xml_equal(e1, e2):
+      if e1.tag != e2.tag:
+        return False
+      if e1.attrib != e2.attrib:
+        return False
+      if len(e1) != len(e2):
+        return False
+      child_pairs = []
+      for child1 in e1:
+        for child2 in e2:
+          if child1.tag == child2.tag and child1.attrib == child2.attrib:
+            child_pairs.append((child1, child2))
+      if len(child_pairs) != len(e1):
+        return False
+      return all(_xml_equal(c1, c2) for c1, c2 in child_pairs)
+
+    isfile_response = {
+        'base/android/com/example/package/Foo.java': True,
+        'base/android/com/example/package/Bar.java': False,
+        'build/android/com/example/package/Foo.java': False,
+        'build/android/com/example/package/Bar.java': True,
+    }
+    mock_os_path_isfile.side_effect = lambda path: isfile_response[path]
+    actual_output = generator.fix_package_paths(
+        ElementTree.fromstring(self.JACOCO_REPORT_WITH_DEFAULT_PACKAGE_NAMES),
+        '', [
+            'base/android/com/example/package',
+            'build/android/com/example/package'
+        ])
+    self.assertTrue(
+        _xml_equal(
+            ElementTree.fromstring(
+                self.JACOCO_REPORT_WITH_CORRECT_PACKAGE_NAMES), actual_output))
 
 
 if __name__ == '__main__':

@@ -15,6 +15,7 @@ respectively.
 """
 
 import argparse
+from collections import defaultdict
 import fnmatch
 import json
 import logging
@@ -175,7 +176,6 @@ def _get_file_coverage_data(file_path, source_file, diff_mapping):
 
 def _get_files_coverage_data(src_path,
                              root,
-                             source_dirs,
                              diff_mapping,
                              source_files,
                              exclusion_pattern=None,
@@ -185,7 +185,6 @@ def _get_files_coverage_data(src_path,
   Args:
     src_path: Absolute path to the code checkout.
     root: The root element for the JaCoCo XML report ElementTree.
-    source_dirs: A list of source directories of Java source files.
     diff_mapping: A json object that stores the diff mapping. Only meaningful to
       per-cl coverage.
     source_files: List of source files to generate coverage data for,
@@ -204,36 +203,9 @@ def _get_files_coverage_data(src_path,
   files_coverage_data = []
   for package in root.findall('package'):
     package_path = package.attrib['name']
-    logging.info('Processing package %s', package_path)
-
-    # Find package directory according to src root.
-    package_source_dirs = []
-    for source_dir in source_dirs:
-      # Filter out 'out/...' source directories.
-      if source_dir.startswith('out/'):
-        continue
-      # Find all matched source_dirs with package_path.
-      if source_dir.endswith(package_path):
-        package_source_dirs.append(source_dir)
-    # TODO(crbug/966918): Skip auto-generated Java files/packages for now.
-    if not package_source_dirs:
-      logging.info('Cannot find package %s directory according to src root',
-                   package_path)
-      continue
-
     for source_file in package.findall('sourcefile'):
       source_file_name = source_file.attrib['name']
-      package_source_dir = ''
-      # Find the correct source_dir by the source_file_name.
-      for candidate in package_source_dirs:
-        if os.path.isfile(os.path.join(src_path, candidate, source_file_name)):
-          package_source_dir = candidate
-          break
-      if not package_source_dir:
-        logging.warning('Cannot find source file %s in code checkout',
-                        source_file_name)
-        continue
-      file_path = os.path.join(package_source_dir, source_file_name)
+      file_path = os.path.join(package_path, source_file_name)
       # Only process affected files for per-cl coverage.
       if diff_mapping and file_path not in files_set:
         continue
@@ -264,7 +236,6 @@ def _get_files_coverage_data(src_path,
 
 def generate_json_coverage_metadata(src_path,
                                     root,
-                                    source_dirs,
                                     component_mapping,
                                     diff_mapping,
                                     source_files,
@@ -278,7 +249,6 @@ def generate_json_coverage_metadata(src_path,
   Args:
     src_path: Absolute path to the code checkout.
     root: The root element for the JaCoCo XML report ElementTree.
-    source_dirs: A list of source directories of Java source files.
     component_mapping: A JSON object that stores the mapping from dirs to
       monorail components. Only meaningful to full-repo coverage.
     diff_mapping: A json object that stores the diff mapping. Only meaningful to
@@ -293,9 +263,8 @@ def generate_json_coverage_metadata(src_path,
     JSON format coverage metadata.
   """
   data = {}
-  data['files'] = _get_files_coverage_data(src_path, root, source_dirs,
-                                           diff_mapping, source_files,
-                                           exclusion_pattern,
+  data['files'] = _get_files_coverage_data(src_path, root, diff_mapping,
+                                           source_files, exclusion_pattern,
                                            third_party_inclusion_subdirs)
 
   # Add per directory and component coverage data.
@@ -406,6 +375,73 @@ def _read_and_prune_xml(xml_file):
   return root
 
 
+def fix_package_paths(xml_root, src_path, source_dirs):
+  """Replaces package names in xml with source relative path.
+
+  By default jacoco xml looks something like below
+
+  <report name="JaCoCo Coverage Report">
+    <package name="org/chromium/test/broker">
+      <sourcefile name="OnDeviceInstrumentationBroker.java">
+        <line cb="0" ci="0" mb="0" mi="3" nr="17"/>
+        <line cb="0" ci="0" mb="0" mi="3" nr="34"/>
+        <line cb="0" ci="0" mb="0" mi="4" nr="35"/>
+      </sourcefile>
+    </package>
+  </report>
+
+  In above <package> names are just java package names in which a <sourcefile>
+  is present (only difference being dot is replaced by slash), as jacoco assumes
+  that package name would be similar to directory structure. This is not true
+  for Chrome world e.g. base/android/... and build/android/... have similar java
+  packages. This function returns a new xml tree where <package> names
+  represent (source relative) directory path in which a <sourcefile> of interest
+  is present.
+  """
+  new_package_inner_xml = defaultdict(lambda: [])
+  for package in xml_root.findall('package'):
+    package_path = package.attrib['name']
+    logging.info('Processing package %s', package_path)
+
+    # Find package directory according to src root.
+    package_source_dirs = []
+    for source_dir in source_dirs:
+      # Filter out 'out/...' source directories.
+      if source_dir.startswith('out/'):
+        continue
+      # Find all matched source_dirs with package_path.
+      if source_dir.endswith(package_path):
+        package_source_dirs.append(source_dir)
+    # TODO(crbug/966918): Skip auto-generated Java files/packages for now.
+    if not package_source_dirs:
+      logging.info('Cannot find package %s directory according to src root',
+                   package_path)
+      continue
+
+    # Find the directory in which a source file exists
+    for source_file in package.findall('sourcefile'):
+      source_file_name = source_file.attrib['name']
+      source_dir_found = False
+      # Find the correct source_dir by the source_file_name.
+      for candidate in package_source_dirs:
+        if os.path.isfile(os.path.join(src_path, candidate, source_file_name)):
+          source_dir_found = True
+          new_package_inner_xml[candidate].append(source_file)
+          break
+      if not source_dir_found:
+        logging.warning('Cannot find source file %s in code checkout',
+                        source_file_name)
+
+  # Create new 'fixed' xml tree
+  new_root = ElementTree.Element(xml_root.tag, attrib=xml_root.attrib)
+  for package_name, source_files in new_package_inner_xml.items():
+    new_package = ElementTree.Element('package', attrib={'name': package_name})
+    new_package.extend(source_files)
+    new_root.append(new_package)
+
+  return new_root
+
+
 def main():
   params = _parse_args(sys.argv[1:])
 
@@ -494,11 +530,12 @@ def main():
     temp_overall_xml = os.path.join(temp_dir, 'temp_overall.xml')
     combine_jacoco_reports.combine_xml_files(temp_overall_xml, temp_device_xml,
                                              temp_host_xml)
-    xml_root = _read_and_prune_xml(temp_overall_xml)
+    xml_root = fix_package_paths(
+        _read_and_prune_xml(temp_overall_xml), params.src_path, source_dirs)
 
     data = generate_json_coverage_metadata(params.src_path, xml_root,
-                                           source_dirs, component_mapping,
-                                           diff_mapping, params.source_files,
+                                           component_mapping, diff_mapping,
+                                           params.source_files,
                                            params.exclusion_pattern,
                                            params.third_party_inclusion_subdirs)
     logging.info('Writing fulfilled Java coverage metadata to %s',
@@ -506,8 +543,10 @@ def main():
     with open(os.path.join(params.output_dir, 'all.json.gz'), 'w') as f:
       f.write(zlib.compress(json.dumps(data)))
 
-    shutil.move(temp_overall_xml, os.path.join(params.output_dir,
-                                               'coverage.xml'))
+    # Write xml tree to disk so that it can be exported to zoss
+    ElementTree.ElementTree(xml_root).write(
+        os.path.join(params.output_dir, 'coverage.xml'))
+
   finally:
     shutil.rmtree(temp_dir)
 
