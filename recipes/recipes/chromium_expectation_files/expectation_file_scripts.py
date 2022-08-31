@@ -100,6 +100,8 @@ def _RunScript(api, script_invocation):
     cmd.append('--bypass-up-to-date-check')
 
   invocation_step = api.step(name='run script', cmd=cmd)
+  invocation_step.presentation.logs['HTML results'] = (
+      invocation_step.raw_io.output_texts['script_results'])
   cl_cmdline = ['//' + script_invocation.script] + list(script_invocation.args)
   bug_file_contents = ''
   if has_bug_file:
