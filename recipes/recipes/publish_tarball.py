@@ -304,7 +304,7 @@ def publish_tarball(api):
       lastchange_path,
       '-m',
       'GPU_LISTS_VERSION',
-      '--revision-id-only'
+      '--revision-id-only',
       '--header',
       api.path['checkout'].join('gpu', 'config', 'gpu_lists_version.h'),
   ])
