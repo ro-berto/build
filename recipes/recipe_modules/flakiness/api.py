@@ -538,7 +538,10 @@ class FlakinessApi(recipe_api.RecipeApi):
       # For logging purpose only.
       skipped_test_suites = set([])
 
-      current_tests = set()
+      preliminary_new_tests = set([])
+
+      # For logging purpose only.
+      current_tests_log = []
       for test_object in test_objects:
         if not test_object.check_flakiness_for_new_tests:
           skipped_test_suites.add(test_object.canonical_name)
@@ -547,25 +550,27 @@ class FlakinessApi(recipe_api.RecipeApi):
           rdb_suite_result = test_object.get_rdb_results(suffix)
           if not rdb_suite_result:
             continue
+          variant_hash = rdb_suite_result.variant_hash
           for individual_test in rdb_suite_result.all_tests:
             # Use 0 as duration if the info doesn't exist.
             duration_milliseconds = individual_test.duration_milliseconds or 0
 
-            current_tests.add(
-                TestDefinition(
-                    individual_test.test_id,
-                    test_name=individual_test.test_name,
-                    duration_milliseconds=duration_milliseconds,
-                    test_object=test_object,
-                    variant_hash=rdb_suite_result.variant_hash))
+            test_id = individual_test.test_id
+            test_definition = TestDefinition(
+                test_id,
+                test_name=individual_test.test_name,
+                duration_milliseconds=duration_milliseconds,
+                test_object=test_object,
+                variant_hash=variant_hash)
+            current_tests_log.append('%s_%s' % (test_id, variant_hash))
 
-      p.logs['current_build_tests'] = join_tests(current_tests)
+            if not test_definition in historical_tests:
+              preliminary_new_tests.add(test_definition)
+
+      p.logs['current_build_tests'] = current_tests_log
       if skipped_test_suites:
         p.logs['skipped_test_suites'] = '\n'.join(sorted(skipped_test_suites))
 
-      # Comparing the current build test list to the ResultDB query test list to
-      # get a preliminary set of potential new tests.
-      preliminary_new_tests = current_tests.difference(historical_tests)
       p.logs['preliminary_tests'] = join_tests(preliminary_new_tests)
 
       if not preliminary_new_tests:
