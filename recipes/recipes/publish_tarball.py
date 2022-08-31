@@ -291,12 +291,44 @@ def publish_tarball(api):
                                          'i18n_process_css_test.html')
   ])
 
+  # These files are generated in the order specified in Chromium's DEPS file.
+  lastchange_path = api.path['checkout'].join('build', 'util', 'lastchange.py')
   api.step('Generate LASTCHANGE', [
       'python3',
-      api.path['checkout'].join('build', 'util', 'lastchange.py'),
+      lastchange_path,
       '-o',
       api.path['checkout'].join('build', 'util', 'LASTCHANGE'),
   ])
+  api.step('Generate gpu/config/gpu_lists_version.h', [
+      'python3',
+      lastchange_path,
+      '-m',
+      'GPU_LISTS_VERSION',
+      '--revision-id-only'
+      '--header',
+      api.path['checkout'].join('gpu', 'config', 'gpu_lists_version.h'),
+  ])
+  api.step('Generate skia/ext/skia_commit_hash.h', [
+      'python3',
+      lastchange_path,
+      '-s',
+      api.path['checkout'].join('third_party', 'skia'),
+      '-m',
+      'SKIA_COMMIT_HASH',
+      '--header',
+      api.path['checkout'].join('skia', 'ext', 'skia_commit_hash.h'),
+  ])
+  # The --revision option was introduced in 105.0.5148.2, so we need to skip
+  # this call when building earlier versions.
+  if [int(x) for x in version.split('.')] >= [105, 0, 5148, 2]:
+    api.step('Generate gpu/webgpu/DAWN_VERSION', [
+        'python3',
+        lastchange_path,
+        '-s',
+        api.path['checkout'].join('third_party', 'dawn'),
+        '--revision',
+        api.path['checkout'].join('gpu', 'webgpu', 'DAWN_VERSION'),
+    ])
 
   api.file.copy(
       'copy clang-format', api.chromium.resource('clang-format'),
@@ -417,6 +449,15 @@ def RunSteps(api):
 def GenTests(api):
   yield (
       api.test('basic') + api.buildbucket.generic_build() +
+      api.properties(version='105.0.5148.2') + api.platform('linux', 64) +
+      api.step_data('gsutil ls', stdout=api.raw_io.output_text('')) +
+      api.step_data(
+          'get gn version', stdout=api.raw_io.output_text('1496 (0790d304)')) +
+      api.path.exists(api.path['checkout'].join('third_party', 'node',
+                                                'node_modules.tar.gz.sha1')))
+
+  yield (
+      api.test('basic-no-dawn-version') + api.buildbucket.generic_build() +
       api.properties(version='87.0.4273.0') + api.platform('linux', 64) +
       api.step_data('gsutil ls', stdout=api.raw_io.output_text('')) +
       api.step_data(

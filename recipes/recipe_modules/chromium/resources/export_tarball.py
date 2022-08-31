@@ -148,41 +148,6 @@ def main(argv):
     print('Cannot find the src directory ' + options.src_dir)
     return 1
 
-  version = [int(field) for field in options.version.split('.')]
-
-  # These commands are from src/DEPS; please keep them in sync.
-  if subprocess.call(['python', 'build/util/lastchange.py', '-o',
-                      'build/util/LASTCHANGE'], cwd=options.src_dir) != 0:
-    print('Could not run build/util/lastchange.py to update LASTCHANGE.')
-    return 1
-  if subprocess.call(['python', 'build/util/lastchange.py',
-                      '-s', 'third_party/skia',
-                      '-m', 'SKIA_COMMIT_HASH',
-                      '--header', 'skia/ext/skia_commit_hash.h'],
-                     cwd=options.src_dir) != 0:
-    print(
-        'Could not run build/util/lastchange.py to update skia_commit_hash.h.')
-    return 1
-  # The --revision options was introduced starting with 105.0.5148.2, so we
-  # need to skip this call when building before that.
-  if version >= [105, 0, 5148, 2]:
-    if subprocess.call([
-        'python', 'build/util/lastchange.py', '-s', 'third_party/dawn',
-        '--revision', 'gpu/webgpu/DAWN_VERSION'
-    ],
-                       cwd=options.src_dir) != 0:
-      print('Could not run build/util/lastchange.py to update DAWN_VERSION.')
-      return 1
-  if subprocess.call([
-      'python', 'build/util/lastchange.py', '-m', 'GPU_LISTS_VERSION',
-      '--revision-id-only', '--header', 'gpu/config/gpu_lists_version.h'
-  ],
-                     cwd=options.src_dir) != 0:
-    print(
-        'Could not run build/util/lastchange.py to update '
-        'gpu_lists_version.h.')
-    return 1
-
   output_fullname = args[0] + '.tar'
   output_basename = options.basename or os.path.basename(args[0])
 
