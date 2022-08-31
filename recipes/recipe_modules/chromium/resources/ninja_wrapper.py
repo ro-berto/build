@@ -569,7 +569,6 @@ def main(argv):
         fw.write(message)
 
     return_code = 124
-    popen.kill()
 
     # Debugging info for help diagnosing the timeout
     if sys.platform != 'win32':
@@ -579,6 +578,8 @@ def main(argv):
       else:
         subprocess.call(['ps', 'auxwwf'])
       print('End of ps auxwwf')
+
+    popen.kill()
   else:
     return_code = popen.wait()
 
