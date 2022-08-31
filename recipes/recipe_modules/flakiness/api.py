@@ -543,18 +543,21 @@ class FlakinessApi(recipe_api.RecipeApi):
         if not test_object.check_flakiness_for_new_tests:
           skipped_test_suites.add(test_object.canonical_name)
           continue
-        rdb_suite_result = test_object.get_rdb_results('with patch')
-        for individual_test in rdb_suite_result.all_tests:
-          # Use 0 as duration if the info doesn't exist.
-          duration_milliseconds = individual_test.duration_milliseconds or 0
+        for suffix in ['with patch', 'retry shards with patch']:
+          rdb_suite_result = test_object.get_rdb_results(suffix)
+          if not rdb_suite_result:
+            continue
+          for individual_test in rdb_suite_result.all_tests:
+            # Use 0 as duration if the info doesn't exist.
+            duration_milliseconds = individual_test.duration_milliseconds or 0
 
-          current_tests.add(
-              TestDefinition(
-                  individual_test.test_id,
-                  test_name=individual_test.test_name,
-                  duration_milliseconds=duration_milliseconds,
-                  test_object=test_object,
-                  variant_hash=rdb_suite_result.variant_hash))
+            current_tests.add(
+                TestDefinition(
+                    individual_test.test_id,
+                    test_name=individual_test.test_name,
+                    duration_milliseconds=duration_milliseconds,
+                    test_object=test_object,
+                    variant_hash=rdb_suite_result.variant_hash))
 
       p.logs['current_build_tests'] = join_tests(current_tests)
       if skipped_test_suites:
