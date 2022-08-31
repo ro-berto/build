@@ -774,14 +774,14 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
     Returns:
       A single build who's compilator should be reuseable
     """
-    # TODO(sshrimp): Compatible Quick Run builds should be expanded to any
-    # "equivelant" patchset (and eventually provided by CV), not exact patchset.
-    # cq_equivalent_cl_group_key doesn't seem to work for this. The start time
-    # is currently 10 days will also need to be reduced to 1 day after builds
-    # have been verified to work as expected
+    # TODO(sshrimp): The start time is currently 10 days before the current time
+    # to facilitate more builds to compare, this will need to be reduced to 1
+    # day after builds have been verified to work as expected
+    equivalent_key = self.m.cq.equivalent_cl_group_key
     predicate = builds_service_pb2.BuildPredicate(
         builder=self.m.buildbucket.build.builder,
-        gerrit_changes=self.m.buildbucket.build.input.gerrit_changes,
+        tags=self.m.buildbucket.tags(
+            cq_equivalent_cl_group_key=str(equivalent_key)),
         create_time=common_pb.TimeRange(
             start_time=timestamp_pb2.Timestamp(
                 # Look back 10 days

@@ -85,6 +85,7 @@ def GenTests(api):
         builder='fake-orchestrator',
         experiments=experiments,
         revision='d3advegg13',
+        tags=api.buildbucket.tags(cq_equivalent_cl_group_key='12345'),
     )
 
   def basic(remove_src_checkout_experiment, inverted_shard_experiment=False):
