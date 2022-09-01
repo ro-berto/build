@@ -1127,6 +1127,15 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
+    "cwd": "[CACHE]/builder/src",
+    "env_suffixes": {
+      "DEPOT_TOOLS_UPDATE": [
+        "0"
+      ],
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -1169,6 +1178,15 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
+    "cwd": "[CACHE]/builder/src",
+    "env_suffixes": {
+      "DEPOT_TOOLS_UPDATE": [
+        "0"
+      ],
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -1214,6 +1232,15 @@
       "0777",
       "[CACHE]/goma/data/android_arm_rel"
     ],
+    "cwd": "[CACHE]/builder/src",
+    "env_suffixes": {
+      "DEPOT_TOOLS_UPDATE": [
+        "0"
+      ],
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -1238,6 +1265,7 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "restart"
     ],
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/android_arm_rel",
@@ -1246,6 +1274,14 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "env_suffixes": {
+      "DEPOT_TOOLS_UPDATE": [
+        "0"
+      ],
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
     },
     "infra_step": true,
     "luci_context": {
@@ -1283,6 +1319,15 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "cwd": "[CACHE]/builder/src",
+    "env_suffixes": {
+      "DEPOT_TOOLS_UPDATE": [
+        "0"
+      ],
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -1306,11 +1351,11 @@
       "vpython3",
       "-u",
       "[CACHE]/builder/src/tools_webrtc/android/build_aar.py",
-      "--use-goma",
       "--verbose",
+      "--build-dir=out/android-archive",
+      "--use-goma",
       "--extra-gn-args",
-      "goma_dir=\"[CACHE]/goma/client\"",
-      "--build-dir=out/android-archive"
+      "goma_dir=\"[CACHE]/goma/client\""
     ],
     "cwd": "[CACHE]/builder/src",
     "env_suffixes": {
@@ -1346,6 +1391,7 @@
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/android_arm_rel",
@@ -1354,6 +1400,14 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "env_suffixes": {
+      "DEPOT_TOOLS_UPDATE": [
+        "0"
+      ],
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
     },
     "luci_context": {
       "realm": {
@@ -1389,6 +1443,7 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "stat"
     ],
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/android_arm_rel",
@@ -1397,6 +1452,14 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "env_suffixes": {
+      "DEPOT_TOOLS_UPDATE": [
+        "0"
+      ],
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
     },
     "luci_context": {
       "realm": {
@@ -1421,6 +1484,7 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "stop"
     ],
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/android_arm_rel",
@@ -1429,6 +1493,14 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "env_suffixes": {
+      "DEPOT_TOOLS_UPDATE": [
+        "0"
+      ],
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
     },
     "luci_context": {
       "realm": {
@@ -1458,6 +1530,15 @@
       "disk": 0,
       "memory": 0,
       "net": 0
+    },
+    "cwd": "[CACHE]/builder/src",
+    "env_suffixes": {
+      "DEPOT_TOOLS_UPDATE": [
+        "0"
+      ],
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
     },
     "luci_context": {
       "realm": {
@@ -1503,6 +1584,15 @@
       "--buildbot-buildername",
       "android_arm_rel"
     ],
+    "cwd": "[CACHE]/builder/src",
+    "env_suffixes": {
+      "DEPOT_TOOLS_UPDATE": [
+        "0"
+      ],
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "luci_context": {
       "realm": {
         "name": "webrtc:try"
@@ -1534,6 +1624,15 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "cwd": "[CACHE]/builder/src",
+    "env_suffixes": {
+      "DEPOT_TOOLS_UPDATE": [
+        "0"
+      ],
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "luci_context": {
       "realm": {

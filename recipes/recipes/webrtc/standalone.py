@@ -72,7 +72,7 @@ def RunSteps(api):
     if builder_spec.binary_size_files:
       api.webrtc.get_binary_sizes(builder_spec.binary_size_files)
     if builder_spec.build_android_archive:
-      api.webrtc.build_android_archive()
+      api.webrtc.build_android_archive(use_reclient)
     if builder_spec.archive_apprtc:
       api.webrtc.package_apprtcmobile(builder_id)
 

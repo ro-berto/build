@@ -269,29 +269,26 @@ class WebRTCApi(recipe_api.RecipeApi):
         step_test_data=self.test_api.example_binary_sizes)
     result.presentation.properties['binary_sizes'] = result.json.output
 
-  def build_android_archive(self):
-    # Build the Android .aar archive and upload it to Google storage (except for
-    # trybots). This should only be run on a single bot or the archive will be
-    # overwritten (and it's a multi-arch build so one is enough).
+  def _build_with_reclient(self, step_name, cmd):
+    build_dir = self.m.path.join(self.m.path['checkout'], 'andriod-archive')
+    cmd += ['--use-remoteexec', '--build-dir', build_dir]
+
+    # TODO(b/243628179): get ninja command generated in build_aar.py
+    ninja_command = ""
+    with self.m.reclient.process(step_name, ninja_command) as p:
+      step_result = self.m.step(step_name, cmd)
+      p.build_exit_status = step_result.retcode
+    self.m.file.rmtree('Remove android archive dir', build_dir)
+
+  def _build_with_goma(self, step_name, cmd):
     goma_dir = self.m.goma.ensure_goma()
     self.m.goma.start()
+
+    cmd += ['--use-goma', '--extra-gn-args', 'goma_dir=\"%s\"' % goma_dir]
+
     build_exit_status = 1
     try:
-      build_script = self.m.path['checkout'].join('tools_webrtc', 'android',
-                                                  'build_aar.py')
-      args = [
-          '--use-goma', '--verbose', '--extra-gn-args',
-          'goma_dir=\"%s\"' % goma_dir
-      ]
-      if self.m.tryserver.is_tryserver:
-        # To benefit from incremental builds for speed.
-        args.append('--build-dir=out/android-archive')
-
-      cmd = ['vpython3', '-u', build_script] + args
-
-      with self.m.context(cwd=self.m.path['checkout']):
-        with self.m.depot_tools.on_path():
-          step_result = self.m.step('build android archive', cmd)
+      step_result = self.m.step(step_name, cmd)
       build_exit_status = step_result.retcode
     except self.m.step.StepFailure as e:
       build_exit_status = e.retcode
@@ -299,6 +296,27 @@ class WebRTCApi(recipe_api.RecipeApi):
     finally:
       self.m.goma.stop(
           ninja_log_compiler='goma', build_exit_status=build_exit_status)
+
+  def build_android_archive(self, use_reclient):
+    # Build the Android .aar archive and upload it to Google storage (except for
+    # trybots). This should only be run on a single bot or the archive will be
+    # overwritten (and it's a multi-arch build so one is enough).
+    build_script = self.m.path['checkout'].join('tools_webrtc', 'android',
+                                                'build_aar.py')
+    args = ['--verbose']
+    if self.m.tryserver.is_tryserver:
+      # To benefit from incremental builds for speed.
+      args.append('--build-dir=out/android-archive')
+
+    cmd = ['vpython3', '-u', build_script] + args
+
+    with self.m.context(cwd=self.m.path['checkout']):
+      with self.m.depot_tools.on_path():
+        build_step_name = 'build android archive'
+        if use_reclient:
+          self._build_with_reclient(build_step_name, cmd)
+        else:
+          self._build_with_goma(build_step_name, cmd)
 
     if not self.m.tryserver.is_tryserver and not self.m.runtime.is_experimental:
       self.m.gsutil.upload(
