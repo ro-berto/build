@@ -9,11 +9,12 @@ from RECIPE_MODULES.build.chromium_tests_builder_config import (builder_db,
 from RECIPE_MODULES.build import chromium
 
 DEPS = [
-    'depot_tools/depot_tools',
     'chromium',
     'chromium_checkout',
     'chromium_tests',
     'chromium_tests_builder_config',
+    'depot_tools/depot_tools',
+    'gn',
     'recipe_engine/context',
     'recipe_engine/path',
     'recipe_engine/platform',
@@ -55,7 +56,9 @@ def RunSteps(api):
   api.chromium.ensure_goma()
   api.chromium.runhooks()
 
-  api.webrtc.run_mb(builder_id)
+  gn_args = api.webrtc.run_mb(builder_id)
+  use_reclient = api.gn.parse_gn_args(gn_args).get('use_remoteexec') == 'true'
+  use_goma = use_reclient == False
 
   with api.context(cwd=api.path['checkout']):
     args = [
@@ -74,7 +77,8 @@ def RunSteps(api):
 
   targets = step_result.stdout.split()
   api.step.active_result.presentation.logs['targets'] = targets
-  return api.chromium.compile(targets=targets, use_goma_module=True)
+  return api.chromium.compile(
+      targets=targets, use_goma_module=use_goma, use_reclient=use_reclient)
 
 
 def GenTests(api):
@@ -90,3 +94,5 @@ def GenTests(api):
       'client.webrtc', 'Linux64 Release (Libfuzzer)')
   yield generate_builder(
       builder_id, suffix='_compile_failure', fail_compile=True)
+
+  yield generate_builder(builder_id, suffix='_reclient', use_reclient=True)

@@ -41,7 +41,8 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
                        fail_android_archive=False,
                        is_experimental=False,
                        gn_analyze_output=None,
-                       tags=None):
+                       tags=None,
+                       use_reclient=False):
     builder_config = builders_db[builder_id]
     builder_name = _sanitize_builder_name(builder_id.builder)
     project = 'webrtc-internal' if 'internal' in builder_id.group else 'webrtc'
@@ -74,7 +75,7 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
       test += self.m.properties(
           swarming_command_lines={test_target: ['./dummy_cmd']})
 
-    if 'reclient' in builder_name:
+    if 'reclient' in builder_name or use_reclient:
       test += self.m.reclient.properties()
       test += self.step_data(
           'lookup GN args',
