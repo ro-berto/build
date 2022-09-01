@@ -93,11 +93,8 @@ SPEC = {
         ),
     'ToTiOS':
         _chromium_clang_spec(
-            chromium_config='chromium_no_goma',
-            chromium_apply_config=[
-                'mb',
-                'mac_toolchain',
-            ],
+            chromium_config='clang_tot_mac',
+            chromium_apply_config=['mb'],
             gclient_config='ios',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
@@ -109,11 +106,8 @@ SPEC = {
         ),
     'ToTiOSDevice':
         _chromium_clang_spec(
-            chromium_config='chromium_no_goma',
-            chromium_apply_config=[
-                'mb',
-                'mac_toolchain',
-            ],
+            chromium_config='clang_tot_mac',
+            chromium_apply_config=['mb'],
             gclient_config='ios',
             gclient_apply_config=['clang_tot'],
             chromium_config_kwargs={
