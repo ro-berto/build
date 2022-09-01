@@ -407,7 +407,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python3",
       "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
       "--verbose",
       "-o",
@@ -483,7 +483,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python3",
       "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
       "--verbose",
       "-o",
@@ -1029,7 +1029,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python3",
       "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
       "--verbose",
       "-o",
@@ -1106,7 +1106,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python3",
       "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
       "--verbose",
       "-o",
@@ -1183,7 +1183,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python3",
       "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
       "--verbose",
       "-o",
@@ -1794,7 +1794,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python3",
       "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
       "--verbose",
       "-o",
@@ -1871,7 +1871,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python3",
       "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
       "--verbose",
       "-o",
@@ -1947,7 +1947,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python3",
       "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
       "--verbose",
       "-o",
@@ -2023,7 +2023,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python3",
       "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
       "--verbose",
       "-o",
@@ -2673,7 +2673,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python3",
       "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
       "--verbose",
       "-o",
@@ -2749,7 +2749,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python3",
       "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
       "--verbose",
       "-o",
@@ -2825,7 +2825,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python3",
       "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
       "--verbose",
       "-o",
@@ -2901,7 +2901,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python3",
       "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
       "--verbose",
       "-o",
@@ -3489,7 +3489,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python3",
       "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
       "--verbose",
       "-o",
@@ -3566,7 +3566,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python3",
       "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
       "--verbose",
       "-o",
@@ -3642,7 +3642,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python3",
       "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
       "--verbose",
       "-o",
@@ -3718,7 +3718,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "python3",
       "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
       "--verbose",
       "-o",
