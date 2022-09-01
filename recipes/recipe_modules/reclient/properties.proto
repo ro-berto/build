@@ -5,7 +5,7 @@ syntax = "proto3";
 
 package recipe_modules.build.reclient;
 
-// NEXT ID TO USE: 11
+// NEXT ID TO USE: 12
 message InputProperties {
   // This is to specify the RBE instance
   // This needs to be a GCP project ID to use default instance, or full
@@ -58,4 +58,9 @@ message InputProperties {
   // Map of flags to be passed to bootstrap calls through environment
   // variables. The flag names must be prefixed with "RBE_".
   map<string, string> bootstrap_env = 11;
+
+  // Temporal config to enable deps cache on Windows.
+  // TODO(crbug.com/1350867): remove this after fix rollout and performance
+  // check in staging builder.
+  bool enable_deps_cache_on_win = 12;
 }

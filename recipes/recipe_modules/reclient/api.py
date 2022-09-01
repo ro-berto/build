@@ -369,7 +369,7 @@ class ReclientApi(recipe_api.RecipeApi):
         'RBE_fail_early_min_fallback_ratio': 0.5,
     }
 
-    if not self.m.platform.is_win:
+    if not self.m.platform.is_win or self._props.enable_deps_cache_on_win:
       # deps cache on Windows makes a build much slower.
       # See https://crbug.com/1350867#c7
       env.update({
