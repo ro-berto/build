@@ -354,8 +354,10 @@ class RDBPerIndividualTestResults(object):
     ]
     for tr in test_results:
       test_id = tr.test_id
-      # Use duration of the last passed expected result with duration.
-      if tr.expected and tr.status == test_result_pb2.PASS and tr.duration:
+      # Durations of expected runs or unexpected passed (exonerated) runs are
+      # considered valid. Use duration of the last passed or expected result
+      # with duration.
+      if (tr.expected or tr.status == test_result_pb2.PASS) and tr.duration:
         duration_milliseconds = int(tr.duration.seconds * 1000 +
                                     int(tr.duration.nanos / 1000000.0))
       # Use test name tag of the last result with the tag.
