@@ -3,10 +3,55 @@
 # found in the LICENSE file.
 
 from recipe_engine import recipe_api
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 
-class FinditApi(recipe_api.RecipeApi):
+class LuciBisectionApi(recipe_api.RecipeApi):
 
-  def send_result_to_gofindit(self):
-    # TODO (nqmtuan): Implement this step
-    self.m.step('send_result_to_gofindit', ['echo', 'send_result_to_gofindit'])
+  def send_result_to_luci_bisection(self, step_name, analysis_id, result, host):
+    bbid = str(self.m.buildbucket.build.id)
+    # Leave the test data here for the purpose of led testing, because led build has no bbid
+    # bbid = "8804856879691073905"
+    # analysis_id = "5655880053817344"
+
+    method = "gofindit.GoFinditBotService.UpdateAnalysisProgress"
+    request_input = {
+        "analysisId": analysis_id,
+        "bbid": bbid,
+        "gitilesCommit": {
+            "host": self.m.buildbucket.gitiles_commit.host,
+            "project": self.m.buildbucket.gitiles_commit.project,
+            "id": self.m.buildbucket.gitiles_commit.id,
+            "ref": self.m.buildbucket.gitiles_commit.ref,
+        },
+        "rerunResult": {
+            "rerunStatus": self._rerun_result(result)
+        },
+    }
+    self._call_prpc(step_name, host, method, request_input)
+
+  def _call_prpc(self, step_name, host, method, request_input):
+    args = [
+        'prpc',
+        'call',
+        host,
+        method,
+    ]
+    result = self.m.step(
+        step_name,
+        args,
+        stdin=self.m.json.input(request_input),
+        stdout=self.m.json.output(add_json_log=True),
+    )
+    result.presentation.logs['input'] = self.m.json.dumps(
+        request_input, indent=2)
+    return result.stdout
+
+  def _rerun_result(self, result):
+    if result == common_pb.SUCCESS:
+      return "PASSED"
+    if result == common_pb.FAILURE:
+      return "FAILED"
+    if result == common_pb.INFRA_FAILURE:
+      return "INFRA_FAILED"
+    return "RERUN_STATUS_UNSPECIFIED"

@@ -54,9 +54,14 @@ def RunSteps(api, properties):
       tests=[],
   )
 
-  # TODO: Communicate with GoFindit about the result
-  api.gofindit.send_result_to_gofindit()
-  return compile_result
+  analysis_id = properties.analysis_id
+
+  # TODO (nqmtuan): Turn this to luci-bisection.appspot.com when it is ready
+  # TODO (nqmtuan): Send back the result to dev or prod depending on who triggered the build.
+  host = "chops-gofindit-dev.appspot.com"
+  api.gofindit.send_result_to_luci_bisection("send_result_to_luci_bisection",
+                                             analysis_id, compile_result.status,
+                                             host)
 
 
 def _configure_builder(api, target_builder):
@@ -120,7 +125,7 @@ def GenTests(api):
       setup(api),
       api.post_process(MustRun, 'bot_update'),
       api.post_process(MustRun, 'compile'),
-      api.post_process(MustRun, 'send_result_to_gofindit'),
+      api.post_process(MustRun, 'send_result_to_luci_bisection'),
       api.post_process(StatusSuccess),
       api.post_process(DropExpectation),
   )

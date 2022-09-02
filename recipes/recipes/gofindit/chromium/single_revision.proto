@@ -18,4 +18,7 @@ message InputProperties {
 
   // List of targets to compile.
   repeated string compile_targets = 2;
+
+  // The analysis ID for LUCI Bisection
+  int64 analysis_id = 3;
 }
