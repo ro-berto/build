@@ -65,6 +65,14 @@ PROPERTIES = {
                 # List of (target side) dependencies to be included when rolling
                 # with the current config
                 includes=Single(list, empty_val=None),
+                # Specify the source to determine the next version, must be
+                # `chromium`, `cipd`, `tip_of_tree`, or `auto` (default). E.g.
+                #     ...
+                #     "dependency_version_sources": {
+                #         "devtools-frontend": "tip-of-tree"
+                #     },
+                #     ...
+                dependency_version_sources=Dict(value_type=str),
                 # Mapping between the dependency name in the target project and
                 # the name in the source project
                 deps_key_mapping=Dict(value_type=str),
@@ -82,30 +90,19 @@ PROPERTIES = {
 # The following dependencies are trusted - if new deps are added, their projects
 # need to be BCID L3 (http://go/bcid-ladder#level-3) compliant.
 TRUSTED_ORIGIN_DEPS = {
-    # https://chrome-infra-packages.appspot.com/p/fuchsia/third_party/aemu/linux-amd64/+/
-    "third_party/aemu-linux-x64",
-    # https://chrome-infra-packages.appspot.com/p/fuchsia/qemu/linux-amd64/+/
-    "third_party/qemu-linux-x64",
-    # https://chromium.googlesource.com/chromium/src/base/trace_event/common.git
-    "base/trace_event/common",
-    # https://chromium.googlesource.com/chromium/src/build.git
-    "build",
-    # https://chromium.googlesource.com/chromium/src/buildtools.git
-    "buildtools",
-    # https://chromium.googlesource.com/chromium/src/third_party/android_platform.git
-    "third_party/android_platform",
-    # https://chromium.googlesource.com/chromium/src/third_party/instrumented_libraries.git
-    "third_party/instrumented_libraries",
-    # https://chromium.googlesource.com/chromium/src/third_party/jinja2.git
-    "third_party/jinja2",
-    # https://chromium.googlesource.com/chromium/src/third_party/markupsafe.git
-    "third_party/markupsafe",
-    # https://chromium.googlesource.com/chromium/src/third_party/zlib.git
-    "third_party/zlib",
-    # https://chromium.googlesource.com/infra/luci/luci-py/client/libs/logdog
-    "third_party/logdog/logdog",
-    # https://chromium.googlesource.com/chromium/src/tools/clang
-    "tools/clang",
+    "https://chrome-infra-packages.appspot.com/fuchsia/third_party/aemu/linux-amd64",
+    "https://chrome-infra-packages.appspot.com/p/fuchsia/qemu/linux-amd64",
+    "https://chromium.googlesource.com/chromium/src/base/trace_event/common",
+    "https://chromium.googlesource.com/chromium/src/build",
+    "https://chromium.googlesource.com/chromium/src/buildtools",
+    "https://chromium.googlesource.com/devtools/devtools-frontend",
+    "https://chromium.googlesource.com/chromium/src/third_party/android_platform",
+    "https://chromium.googlesource.com/chromium/src/third_party/instrumented_libraries",
+    "https://chromium.googlesource.com/chromium/src/third_party/jinja2",
+    "https://chromium.googlesource.com/chromium/src/third_party/markupsafe",
+    "https://chromium.googlesource.com/chromium/src/third_party/zlib",
+    "https://chromium.googlesource.com/infra/luci/luci-py/client/libs/logdog",
+    "https://chromium.googlesource.com/chromium/src/tools/clang",
 }
 
 
@@ -333,7 +330,27 @@ def commit_messages_log_entries(api, repo, from_commit, to_commit):
   return [commit_log(c) for c in commits[:MAX_COMMIT_LOG_ENTRIES]] + ellipse
 
 
-def get_updated_deps(api, autoroller_config):
+def get_dependency_version_source(
+    autoroller_config, dependency_name, is_chromium_dep, is_cipd_dep):
+  sources = autoroller_config.get('dependency_version_sources', {})
+  source = sources.get(dependency_name, 'auto')
+
+  # If a specific version source is defined, the specific source should be used
+  if source != 'auto':
+    return source
+
+  # Otherwise, the roller tries to update the dependency from the following
+  # sources: 1. chromium/src, 2. cipd, 3. tip of tree
+  if is_chromium_dep:
+    return 'chromium'
+
+  if is_cipd_dep:
+    return 'cipd'
+
+  return 'tip_of_tree'
+
+
+def get_dep_updates(api, autoroller_config):
   target_config = autoroller_config['target_config']
 
   chromium_deps = get_deps(
@@ -368,6 +385,7 @@ def get_updated_deps(api, autoroller_config):
 
     target_value = target_deps[target_name]
     target_location, target_version = target_value.split('@')
+    clean_target_location = re.sub(r'\.git$', '', target_location)
 
     is_cipd_dep = target_location.startswith(CIPD_DEP_URL_PREFIX)
 
@@ -375,8 +393,11 @@ def get_updated_deps(api, autoroller_config):
 
     # Determine the recent version and if it can be trusted
     next_version = None
-    is_trusted = target_name in TRUSTED_ORIGIN_DEPS
-    if chromium_value:
+    is_trusted = clean_target_location in TRUSTED_ORIGIN_DEPS
+    version_source = get_dependency_version_source(
+        autoroller_config, target_name, bool(chromium_value), is_cipd_dep)
+    
+    if version_source == 'chromium':
       chromium_location, chromium_version = chromium_value.split('@')
 
       # Do not roll the dependency if the location has changed: The gclient tool
@@ -397,11 +418,11 @@ def get_updated_deps(api, autoroller_config):
       # chromium to be trusted.
       is_trusted = True
 
-    elif is_cipd_dep:
+    if version_source == 'cipd':
       cipd_name = target_location[len(CIPD_DEP_URL_PREFIX):]
       next_version = get_recent_instance_id(api, cipd_name)
 
-    else:
+    if version_source == 'tip_of_tree':
       next_version = get_tot_revision(api, target_name, target_location)
 
     if not next_version:
@@ -427,13 +448,13 @@ def get_updated_deps(api, autoroller_config):
         cipd_log_template % (path, target_version, next_version)
       )
     else:
-      # Remove trailing .git for brevity in log messages
-      repo = re.sub(r'\.git$', '', target_location)
-      params = (target_name, repo, target_version[:7], next_version[:7])
+      params = (
+          target_name, clean_target_location, target_version[:7],
+          next_version[:7])
       commit_lines.append(git_log_template % params)
       if autoroller_config['show_commit_log']:
         commit_lines.extend(commit_messages_log_entries(
-            api, repo, target_version, next_version))
+            api, clean_target_location, target_version, next_version))
 
     updates.append(DepUpdate(
         name=target_name,
@@ -595,7 +616,7 @@ def RunSteps(api, autoroller_config):
 
   with api.step.nest('Find updated deps'):
     discard_local_changes(api)
-    updates, failed = get_updated_deps(api, autoroller_config)
+    updates, failed = get_dep_updates(api, autoroller_config)
 
   with api.step.nest('Update trusted deps') as step:
     update_dependencies(api, step, updates, autoroller_config, trusted=True)
@@ -616,9 +637,10 @@ def GenTests(api):
   v8_deps_info = """v8: https://chromium.googlesource.com/v8/v8.git
 v8/buildtools-mapped: https://chromium.googlesource.com/chromium/buildtools.git@5fd66957f08bb752dca714a591c84587c9d70762
 src/tools/luci-go:infra/tools/luci/isolate/${platform}: https://chrome-infra-packages.appspot.com/infra/tools/luci/isolate/${platform}@git_revision:8b15ba47cbaf07a56f93326e39f0c8e5069c19e9
+src/mock-skip-chromium-roll: mock/skip-chromium-roll.git@1
 v8/mock-tot-rolled: https://chromium.googlesource.com/tot-rolled.git@d3f34f8dfaecc23202a6ef66957e83462d6c826d
 v8/mock-tot-retsam-rolled: https://chromium.googlesource.com/tot-retsam-rolled.git@d3f34f8dfaecc23202a6ef66957e83462d6c826d
-v8/tools/clang: https://example.com/tools/clang.git@d3f34f8dfaecc23202a6ef66957e83462d6c826d
+v8/tools/clang: https://chromium.googlesource.com/chromium/src/tools/clang@d3f34f8dfaecc23202a6ef66957e83462d6c826d
 v8/tools/clang-reviewed: https://example.com/tools/clang-reviewed.git@d3f34f8dfaecc23202a6ef66957e83462d6c826d
 v8/mock-set-dep-failing: mock/set-dep-failing.git@1
 v8/mock-package-without-latest-ref:mock/package-without-latest-ref: https://chrome-infra-packages.appspot.com/mock/package-without-latest-ref@7fd66957f08bb752dca714a591c84587c9d70764
@@ -627,7 +649,8 @@ v8/mock-package-latest:mock/package-latest: https://chrome-infra-packages.appspo
   cr_deps_info = """src: https://chromium.googlesource.com/chromium/src.git
 src/buildtools: https://chromium.googlesource.com/chromium/buildtools.git@5fd66957f08bb752dca714a591c84587c9d70762
 src/tools/luci-go:infra/tools/luci/isolate/${platform}: https://chrome-infra-packages.appspot.com/infra/tools/luci/isolate/${platform}@git_revision:3d8f881462b1a93c7525499381fafc8a08691be7
-src/mock-set-dep-failing: mock/set-dep-failing.git@2"""
+src/mock-set-dep-failing: mock/set-dep-failing.git@2
+src/mock-skip-chromium-roll: mock/skip-chromium-roll.git@2"""
 
   target_config_v8 = {
     'solution_name': 'v8',
@@ -650,6 +673,9 @@ remote:"""
       ],
       'deps_key_mapping': {
           'buildtools-mapped': 'buildtools',
+      },
+      'dependency_version_sources': {
+        'mock-skip-chromium-roll': 'tip_of_tree',
       },
       'show_commit_log': True,
       'roll_chromium_pin': True,
@@ -716,6 +742,11 @@ remote:"""
             'Find updated deps.look up mock-tot-rolled (main)',
             api.raw_io.stream_output_text(
                 'deadbeef\trefs/heads/main', stream='stdout'),
+        ),
+        api.override_step_data(
+            'Find updated deps.look up mock-skip-chromium-roll (main)',
+            api.raw_io.stream_output_text(
+                '3\trefs/heads/main', stream='stdout'),
         ),
         api.override_step_data(
             'Find updated deps.look up mock-tot-retsam-rolled (main)',
