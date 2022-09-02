@@ -25,6 +25,7 @@ DEPS = [
 
 BUILDERS = [
     'amd64-generic-codesearch',
+    'arm-generic-codesearch',
     'arm64-generic-codesearch',
 ]
 
@@ -66,7 +67,7 @@ def RunSteps(api):
                                                      'chromiumos_codesearch',
                                                      CODESEARCH_REPO, 'main')
   manifest_hash, _ = latestRefInfo(api, 'chromiumos_manifest', MANIFEST_REPO,
-                                   'stable')
+                                   'snapshot')
 
   # Trigger the chromiumos_codesearch builders.
   properties = {
