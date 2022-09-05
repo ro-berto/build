@@ -71,6 +71,8 @@ def make_archive(api,
       api.chromium.apply_config('slow_dchecks')
     elif archive_type in ['all', 'lib']:
       api.chromium.apply_config('v8_static_library')
+    if api.chromium.c.BUILD_CONFIG == 'Release':
+      api.chromium.c.gn_args.append('dcheck_always_on=false')
     if api.chromium.c.TARGET_PLATFORM == 'android':
       api.chromium.apply_config('v8_android')
     elif api.chromium.c.TARGET_ARCH == 'arm':

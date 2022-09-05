@@ -95,7 +95,7 @@
       "--root=[CACHE]/builder/v8",
       "gen",
       "//out/build",
-      "--args=is_debug=false target_cpu=\"x64\" use_remoteexec=true"
+      "--args=dcheck_always_on=false is_debug=false target_cpu=\"x64\" use_remoteexec=true"
     ],
     "cwd": "[CACHE]/builder/v8",
     "env": {
@@ -173,7 +173,7 @@
       "--root=[CACHE]/builder/v8",
       "gen",
       "//out/build",
-      "--args=v8_static_library=true is_debug=false target_cpu=\"x64\" use_remoteexec=true"
+      "--args=v8_static_library=true dcheck_always_on=false is_debug=false target_cpu=\"x64\" use_remoteexec=true"
     ],
     "cwd": "[CACHE]/builder/v8",
     "env": {

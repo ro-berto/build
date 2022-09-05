@@ -47,6 +47,8 @@ def default_target_v8_archive(c):
 def v8_android(c):
   c.gn_args.append('symbol_level=1')
   c.gn_args.append('v8_android_log_stdout=true')
+  c.gn_args.append('android_unstripped_runtime_outputs=false')
+  c.gn_args.append('default_min_sdk_version=19')
 
 
 @CONFIG_CTX(includes=['v8'])

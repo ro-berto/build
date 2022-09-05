@@ -6,7 +6,7 @@
       "--root=[CACHE]\\builder\\v8",
       "gen",
       "//out/build",
-      "--args=symbol_level=2 is_debug=false target_cpu=\"x64\" use_goma=true goma_dir=\"[CACHE]\\goma\\client\""
+      "--args=symbol_level=2 dcheck_always_on=false is_debug=false target_cpu=\"x64\" use_goma=true goma_dir=\"[CACHE]\\goma\\client\""
     ],
     "cwd": "[CACHE]\\builder\\v8",
     "env": {

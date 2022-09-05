@@ -6,7 +6,7 @@
       "--root=[CACHE]/builder/v8",
       "gen",
       "//out/build",
-      "--args=arm_float_abi=\"hard\" is_debug=false target_cpu=\"arm\" use_goma=true goma_dir=\"[CACHE]/goma/client\""
+      "--args=dcheck_always_on=false arm_float_abi=\"hard\" is_debug=false target_cpu=\"arm\" use_goma=true goma_dir=\"[CACHE]/goma/client\""
     ],
     "cwd": "[CACHE]/builder/v8",
     "env": {
@@ -182,7 +182,7 @@
       "--root=[CACHE]/builder/v8",
       "gen",
       "//out/build",
-      "--args=v8_static_library=true arm_float_abi=\"hard\" is_debug=false target_cpu=\"arm\" use_goma=true goma_dir=\"[CACHE]/goma/client\""
+      "--args=v8_static_library=true dcheck_always_on=false arm_float_abi=\"hard\" is_debug=false target_cpu=\"arm\" use_goma=true goma_dir=\"[CACHE]/goma/client\""
     ],
     "cwd": "[CACHE]/builder/v8",
     "env": {
