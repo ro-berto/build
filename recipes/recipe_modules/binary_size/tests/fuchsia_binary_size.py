@@ -125,6 +125,17 @@ def GenTests(api):
       api.post_process(post_process.StepSuccess, constants.RESULTS_STEP_NAME),
       api.post_process(post_process.StatusSuccess))
 
+  # TODO(zijiehe): Make this test work. Currently, there isn't a way to specify
+  # the version of chromium in the test case.
+  yield api.test(
+      'normal_build_with_author_m107',
+      api.binary_size.build('normal_build_with_author_m107'),
+      override_analyze(), api.post_check(has_expected_supersize_link),
+      api.post_check(has_expected_binary_size_url),
+      api.post_check(final_step_is_not_nested),
+      api.post_process(post_process.StepSuccess, constants.RESULTS_STEP_NAME),
+      api.post_process(post_process.StatusSuccess))
+
   yield api.test(
       'normal_nondefault_targets',
       api.binary_size.build('nondefault_targets'),
@@ -229,6 +240,20 @@ def GenTests(api):
               'links': [],
           })),
       api.post_process(post_process.StepSuccess, constants.RESULTS_STEP_NAME),
+      api.post_process(post_process.DropExpectation))
+  yield api.test(
+      'warn_because_of_roller',
+      api.binary_size.build(commit_message='Some roller change'),
+      override_analyze(),
+      api.override_step_data(
+          constants.RESULT_JSON_STEP_NAME,
+          api.json.output({
+              'status_code': constants.FUCHSIA_ROLLER_WARNING,
+              'summary': '\n!summary!',
+              'archive_filenames': [],
+              'links': [],
+          })),
+      api.post_process(post_process.StepWarning, constants.RESULTS_STEP_NAME),
       api.post_process(post_process.DropExpectation))
 
   yield api.test(

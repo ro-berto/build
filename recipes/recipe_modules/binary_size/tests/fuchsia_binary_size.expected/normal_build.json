@@ -2633,6 +2633,44 @@
   },
   {
     "cmd": [
+      "vpython3",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/src/chrome/VERSION",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "PYTHONUNBUFFERED": "1"
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "get version",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@VERSION@MAJOR=51@@@",
+      "@@@STEP_LOG_LINE@VERSION@MINOR=0@@@",
+      "@@@STEP_LOG_LINE@VERSION@BUILD=2704@@@",
+      "@@@STEP_LOG_LINE@VERSION@PATCH=0@@@",
+      "@@@STEP_LOG_END@VERSION@@@"
+    ]
+  },
+  {
+    "cmd": [
       "[CACHE]/builder/src/build/fuchsia/binary_size_differ.py",
       "--before-dir",
       "[CLEANUP]/binary-size-trybot_tmp_1/without_patch",
