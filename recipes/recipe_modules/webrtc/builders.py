@@ -40,7 +40,7 @@ _CLIENT_WEBRTC_SPEC = {
             chromium_config='webrtc_android',
             android_config='webrtc',
             gclient_config='webrtc',
-            gclient_apply_config=['android', 'enable_reclient'],
+            gclient_apply_config=['android'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_PLATFORM': 'android',
@@ -294,7 +294,6 @@ _CLIENT_WEBRTC_SPEC = {
         WebRTCBuilderSpec.create(
             chromium_config='webrtc_default',
             gclient_config='webrtc',
-            gclient_apply_config=['enable_reclient'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -360,7 +359,6 @@ _CLIENT_WEBRTC_SPEC = {
         WebRTCBuilderSpec.create(
             chromium_config='webrtc_default',
             gclient_config='webrtc',
-            gclient_apply_config=['enable_reclient'],
             simulation_platform='mac',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -445,7 +443,6 @@ _CLIENT_WEBRTC_SPEC = {
         WebRTCBuilderSpec.create(
             chromium_config='webrtc_clang',
             gclient_config='webrtc',
-            gclient_apply_config=['enable_reclient'],
             simulation_platform='win',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -480,7 +477,6 @@ _CLIENT_WEBRTC_SPEC = {
             chromium_config='webrtc_default',
             gclient_config='webrtc_ios',
             chromium_apply_config=['mac_toolchain'],
-            gclient_apply_config=['enable_reclient'],
             simulation_platform='mac',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',

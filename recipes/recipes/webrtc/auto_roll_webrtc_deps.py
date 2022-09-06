@@ -30,7 +30,6 @@ def RunSteps(api):
   # Make sure the checkout contains all deps for all platforms.
   for os in ['linux', 'android', 'mac', 'ios', 'win', 'unix', 'fuchsia']:
     api.gclient.c.target_os.add(os)
-    api.gclient.c.solutions[0].custom_vars['checkout_reclient'] = True
 
   output = api.url.get_text(
       'https://webrtc-roll-cr-rev-status.appspot.com/status',

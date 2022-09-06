@@ -46,4 +46,5 @@ def _webrtc(c):
   s.name = 'src'
   s.url = WebRTCGitURL(c, 'src')
   s.deps_file = 'DEPS'
+  s.custom_vars['checkout_reclient'] = 'True'
   c.got_revision_mapping['src'] = 'got_revision'
