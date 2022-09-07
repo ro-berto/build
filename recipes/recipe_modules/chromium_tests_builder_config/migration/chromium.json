@@ -947,15 +947,6 @@
       "tryserver.blink:mac11.0-blink-rel"
     ]
   },
-  "chromium.fyi:mac11.0.arm64-blink-rel-dummy": {
-    "blockers": [
-      "builder 'chromium.fyi:mac11.0.arm64-blink-rel-dummy' does not exist"
-    ],
-    "builders": [
-      "chromium.fyi:mac11.0.arm64-blink-rel-dummy",
-      "tryserver.blink:mac11.0.arm64-blink-rel"
-    ]
-  },
   "chromium.fyi:win-annotator-rel": {
     "builders": [
       "chromium.fyi:win-annotator-rel",
@@ -2081,11 +2072,7 @@
     ]
   },
   "tryserver.blink:mac11.0.arm64-blink-rel": {
-    "blockers": [
-      "builder 'chromium.fyi:mac11.0.arm64-blink-rel-dummy' does not exist"
-    ],
     "builders": [
-      "chromium.fyi:mac11.0.arm64-blink-rel-dummy",
       "tryserver.blink:mac11.0.arm64-blink-rel"
     ]
   },

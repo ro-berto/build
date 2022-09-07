@@ -43,8 +43,8 @@ TRYBOTS = try_spec.TryDatabase.create({
             ),
         'mac11.0.arm64-blink-rel':
             try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
-                buildername='mac11.0.arm64-blink-rel-dummy',
+                builder_group='tryserver.blink',
+                buildername='mac11.0.arm64-blink-rel',
                 retry_failed_shards=False,
             ),
     },
