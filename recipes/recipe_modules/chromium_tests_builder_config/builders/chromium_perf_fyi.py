@@ -65,11 +65,10 @@ _AddBuildSpec(
     target_arch='arm',
     extra_gclient_apply_config=[
         'fuchsia_arm64',
-        'fuchsia_internal',
+        'fuchsia_astro_image',
+        'fuchsia_sherlock_image',
     ])
 
-# TODO(zijiehe): Consider to use fuchsia_astro and fuchsia_sherlock instead
-# of fuchsia_internal to eliminate the impact of unrelated images.
 _AddBuildSpec(
     'fuchsia-builder-perf-arm64',
     'fuchsia',
@@ -78,7 +77,8 @@ _AddBuildSpec(
     target_arch='arm',
     extra_gclient_apply_config=[
         'fuchsia_arm64',
-        'fuchsia_internal',
+        'fuchsia_astro_image',
+        'fuchsia_sherlock_image',
     ])
 
 _AddBuildSpec(

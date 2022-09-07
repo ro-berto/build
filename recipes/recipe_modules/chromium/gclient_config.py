@@ -152,11 +152,22 @@ def fuchsia_arm64_host(c):
 
   c.solutions[0].custom_vars['checkout_fuchsia_for_arm64_host'] = 'True'
 
-
-#TODO(zijiehe): Remove.
 @CONFIG_CTX(includes=['fuchsia'])
 def fuchsia_internal(c):
   c.solutions[0].custom_vars['checkout_fuchsia_internal'] = 'True'
+
+
+@CONFIG_CTX(includes=['fuchsia_internal'])
+def fuchsia_astro_image(c):
+  c.solutions[0].custom_vars['checkout_fuchsia_internal_images'] = (
+      'smart_display_eng_arrested.astro-release')
+
+
+@CONFIG_CTX(includes=['fuchsia_internal'])
+def fuchsia_sherlock_image(c):
+  c.solutions[0].custom_vars['checkout_fuchsia_internal_images'] = (
+      'smart_display_max_eng_arrested.sherlock-release')
+
 
 @CONFIG_CTX(includes=['fuchsia_x64'])
 def fuchsia_workstation(c):
