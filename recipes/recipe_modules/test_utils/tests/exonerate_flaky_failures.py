@@ -374,7 +374,9 @@ def GenTests(api):
       api.chromium.generic_build(
           builder_group='fake-group',
           builder='fake-builder',
-          experiments=['enable_weetbix_queries']),
+          experiments=[
+              'enable_weetbix_queries', 'weetbix.enable_weetbix_exonerations'
+          ]),
       api.override_step_data(
           'failed_test results',
           stdout=api.raw_io.output_text(
@@ -432,6 +434,9 @@ def GenTests(api):
                        'testA'),
       api.post_process(CheckStepInput, 'exonerate unrelated test failures',
                        'testB'),
+      # Ensure Weetbix is in the explaination
+      api.post_process(CheckStepInput, 'exonerate unrelated test failures',
+                       'Weetbix'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )

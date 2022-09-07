@@ -366,8 +366,18 @@ class TestUtilsApi(recipe_api.RecipeApi):
               ))
       # Any failure known by FindIt to be flaky should also be exonerated.
       elif suffix == 'with patch' or suffix == 'inverted with patch':
-        explanation_html = 'FindIt reported this test as being flaky.'
-        for known_flake in suite.known_flaky_failures:
+
+        weetbix_exoneration = ('weetbix.enable_weetbix_exonerations' in
+                               self.m.buildbucket.build.input.experiments)
+
+        if weetbix_exoneration:
+          explanation_html = 'Weetbix reported this test as being flaky.'
+          flakes = suite.known_weetbix_flaky_failures
+        else:
+          explanation_html = 'FindIt reported this test as being flaky.'
+          flakes = suite.known_flaky_failures
+
+        for known_flake in flakes:
           exonerations.append(
               test_result_pb2.TestExoneration(
                   test_id=(results.individual_unexpected_test_by_test_name[
