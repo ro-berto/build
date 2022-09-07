@@ -75,10 +75,11 @@ def RunSteps(api):
         tests,
         serialize_tests=builder_config.serialize_tests,
         enable_infra_failure=True)
-    test_result = test_runner()
-    if (test_result and
-        test_result.status not in (common_pb.SUCCESS, common_pb.FAILURE)):
-      return test_result
+    with api.chromium_tests.wrap_chromium_tests(builder_config, tests=tests):
+      test_result = test_runner()
+      if (test_result and
+          test_result.status not in (common_pb.SUCCESS, common_pb.FAILURE)):
+        return test_result
 
 
 def GenTests(api):
