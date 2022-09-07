@@ -777,9 +777,8 @@ def GenTests(api):
     step_name = 'check %s at #%d' % (test_name, offset)
     return api.step_data(
         '%s%s.%s - shard %d' % (step_prefix, step_name, step_name, shard),
-        api.chromium_swarming.summary(dispatched_task_step_test_data=None,
-                                            data=test_data, retcode=1)
-    )
+        api.chromium_swarming.summary(
+            dispatched_task_step_test_data=None, data=test_data))
 
   def verify_suspects(from_offset, to_offset):
     """Verify that the correct reporting step for from_offset..to_offset is

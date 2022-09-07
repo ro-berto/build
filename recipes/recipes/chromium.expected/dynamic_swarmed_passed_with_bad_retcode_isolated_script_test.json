@@ -1267,11 +1267,10 @@
       "@@@STEP_LOG_END@json.output (invalid)@@@",
       "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
       "@@@STEP_LOG_END@json.output (exception)@@@",
+      "@@@STEP_LOG_END@raw_io.output[Merge script log]@@@",
       "@@@STEP_LOG_END@chromium_swarming.summary (invalid)@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary (exception)@No JSON object could be decoded@@@",
       "@@@STEP_LOG_END@chromium_swarming.summary (exception)@@@",
-      "@@@STEP_LOG_LINE@Merge script log@@@@",
-      "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_EXCEPTION@@@"
     ]
   },

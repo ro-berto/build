@@ -205,6 +205,7 @@
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_END@raw_io.output[Merge script log]@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
@@ -235,8 +236,6 @@
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
       "@@@STEP_LOG_END@chromium_swarming.summary@@@",
-      "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
-      "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 test results@https://luci-milo.appspot.com/ui/inv/some-inv-name/test-results@@@",
       "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=0@@@"
     ]
@@ -292,6 +291,7 @@
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_END@raw_io.output[Merge script log]@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
@@ -322,8 +322,6 @@
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
       "@@@STEP_LOG_END@chromium_swarming.summary@@@",
-      "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
-      "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 test results@https://luci-milo.appspot.com/ui/inv/some-inv-name/test-results@@@",
       "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=1@@@"
     ]
@@ -379,6 +377,7 @@
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_END@raw_io.output[Merge script log]@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
@@ -409,8 +408,6 @@
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
       "@@@STEP_LOG_END@chromium_swarming.summary@@@",
-      "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
-      "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 test results@https://luci-milo.appspot.com/ui/inv/some-inv-name/test-results@@@",
       "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=2@@@"
     ]
@@ -466,6 +463,7 @@
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-16.04'<br>Pending time: 1m 11s<br>Shard runtime (32s) + overhead (29s): 1m 0s@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_END@raw_io.output[Merge script log]@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@    {@@@",
@@ -496,8 +494,6 @@
       "@@@STEP_LOG_LINE@chromium_swarming.summary@  ]@@@",
       "@@@STEP_LOG_LINE@chromium_swarming.summary@}@@@",
       "@@@STEP_LOG_END@chromium_swarming.summary@@@",
-      "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
-      "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 test results@https://luci-milo.appspot.com/ui/inv/some-inv-name/test-results@@@",
       "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=3@@@"
     ]

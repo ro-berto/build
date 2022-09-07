@@ -836,3 +836,17 @@ def GenTests(api):
       api.properties(platforms=('linux',), gtest_task=True),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation))
+
+  yield api.test(
+      'expose_collect_failures_experiment',
+      api.chromium.ci_build(
+          builder_group='test_group',
+          builder='test_buildername',
+          experiments=['chromium_swarming.expose_merge_script_failures'],
+      ), api.properties(platforms=('linux',)),
+      api.step_data(
+          'archive for linux',
+          stdout=api.raw_io.output_text(
+              'hash_for_linux/size hello_world.isolated')),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation))
