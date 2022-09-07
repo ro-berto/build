@@ -26,39 +26,43 @@ PROPERTIES = InputProperties
 
 
 def RunSteps(api, properties):
-  # Configure the builder
-  builder_id, builder_config = _configure_builder(api,
-                                                  properties.target_builder)
+  try:
+    # If any error happens, send INFRA_FAILURE back to LUCI Bisection
+    compile_status = common_pb.INFRA_FAILURE
 
-  # Check out the code.
-  bot_update_step, build_config = api.chromium_tests.prepare_checkout(
-      builder_config, set_output_commit=False)
-  api.chromium_swarming.configure_swarming('chromium', precommit=False)
+    # Configure the builder
+    builder_id, builder_config = _configure_builder(api,
+                                                    properties.target_builder)
 
-  # Since these builders run on different platforms, and require different Goma
-  # settings depending on the platform, set the Goma ATS flag based on the OS.
-  api.goma.configure_enable_ats()
+    # Check out the code.
+    bot_update_step, build_config = api.chromium_tests.prepare_checkout(
+        builder_config, set_output_commit=False)
+    api.chromium_swarming.configure_swarming('chromium', precommit=False)
 
-  compile_targets = tuple(properties.compile_targets)
-  if not compile_targets:
-    # If compile_targets is not there, compile all targets
-    compile_targets = build_config.compile_targets
+    # Since these builders run on different platforms, and require different Goma
+    # settings depending on the platform, set the Goma ATS flag based on the OS.
+    api.goma.configure_enable_ats()
 
-  compile_result, _ = api.chromium_tests.compile_specific_targets(
-      builder_id,
-      builder_config,
-      bot_update_step,
-      build_config,
-      compile_targets,
-      override_execution_mode=ctbc.COMPILE_AND_TEST,
-      tests=[],
-  )
+    compile_targets = tuple(properties.compile_targets)
+    if not compile_targets:
+      # If compile_targets is not there, compile all targets
+      compile_targets = build_config.compile_targets
 
-  analysis_id = properties.analysis_id
-
-  api.gofindit.send_result_to_luci_bisection("send_result_to_luci_bisection",
-                                             analysis_id, compile_result.status,
-                                             properties.bisection_host)
+    compile_result, _ = api.chromium_tests.compile_specific_targets(
+        builder_id,
+        builder_config,
+        bot_update_step,
+        build_config,
+        compile_targets,
+        override_execution_mode=ctbc.COMPILE_AND_TEST,
+        tests=[],
+    )
+    compile_status = compile_result.status
+  finally:
+    api.gofindit.send_result_to_luci_bisection("send_result_to_luci_bisection",
+                                               properties.analysis_id,
+                                               compile_status,
+                                               properties.bisection_host)
 
 
 def _configure_builder(api, target_builder):
