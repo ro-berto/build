@@ -16,6 +16,7 @@ DEPS = [
     'recipe_engine/context',
     'recipe_engine/json',
     'recipe_engine/raw_io',
+    'reclient',
 ]
 
 BUILDERS = freeze({
@@ -59,12 +60,18 @@ def RunSteps(api):
 
     api.chromium_checkout.ensure_checkout(bot_config)
     checkout_dir = api.chromium_checkout.src_dir
+    use_goma_module = True  # by default
+    use_reclient = False
     with api.context(cwd=checkout_dir):
       outdir = api.chromium.output_dir
 
       api.chromium.runhooks()
       api.chromium.ensure_goma()
-      api.chromium.mb_gen(builder_id, use_goma=True)
+      gn_args_str = api.chromium.mb_gen(builder_id)
+
+      gn_args = api.gn.parse_gn_args(gn_args_str)
+      use_reclient = gn_args.get('use_remoteexec') == 'true'
+      use_goma_module = not use_reclient and gn_args.get('use_goma') == 'true'
 
       # Calculate the GN labels of all fuzz targets.
       all_fuzz_labels = api.gn.refs(
@@ -86,13 +93,18 @@ def RunSteps(api):
       # Run MB one more time since filter calls above wipes out the specified
       # goma dir.
       api.chromium.mb_gen(
-          builder_id, use_goma=True, gn_args_location=api.gn.LOGS)
+          builder_id,
+          use_goma=use_goma_module,
+          use_reclient=use_reclient,
+          gn_args_location=api.gn.LOGS)
 
       # Convert the GN labels to ninja targets and pass them into compile.
       affected_fuzz_targets = list(
           api.gn.ls(outdir, affected_fuzz_labels, output_format='output'))
       return api.chromium.compile(
-          targets=affected_fuzz_targets, use_goma_module=True)
+          targets=affected_fuzz_targets,
+          use_goma_module=use_goma_module,
+          use_reclient=use_reclient)
 
 
 def GenTests(api):
@@ -109,6 +121,11 @@ def GenTests(api):
           'calculate no_fuzzers',
           stdout=api.raw_io.output_text('//foo/bar:target1')),
   )
+  gn_args_reclient = '\n'.join((
+      'goma_dir = "/b/build/slave/cache/goma_client"',
+      'target_cpu = "x86"',
+      'use_remoteexec = true',
+  ))
 
   yield api.test(
       'basic_linux_tryjob_with_compile',
@@ -120,6 +137,33 @@ def GenTests(api):
           stdout=api.raw_io.output_text('\n'.join(
               ['//foo/bar:target1', '//foo/bar:target2',
                '//foo/bar:target3']))),
+      api.step_data(
+          'calculate no_fuzzers',
+          stdout=api.raw_io.output_text('//foo/bar:target1')),
+      api.override_step_data(
+          'analyze',
+          api.json.output({
+              'status': 'Found dependency',
+              'compile_targets': ['//foo/bar:target2'],
+              'test_targets': []
+          })),
+      api.step_data(
+          'list gn targets', stdout=api.raw_io.output_text('target2')),
+  )
+
+  yield api.test(
+      'basic_linux_tryjob_with_compile_using_reclient',
+      api.chromium.try_build(
+          builder_group='tryserver.chromium.linux',
+          builder='linux-libfuzzer-asan-rel'),
+      api.step_data(
+          'calculate all_fuzzers',
+          stdout=api.raw_io.output_text('\n'.join(
+              ['//foo/bar:target1', '//foo/bar:target2',
+               '//foo/bar:target3']))),
+      api.reclient.properties(instance='rbe-chromium-untrusted'),
+      api.step_data(
+          'lookup GN args', stdout=api.raw_io.output_text(gn_args_reclient)),
       api.step_data(
           'calculate no_fuzzers',
           stdout=api.raw_io.output_text('//foo/bar:target1')),
