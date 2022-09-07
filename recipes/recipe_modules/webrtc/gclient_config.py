@@ -16,8 +16,6 @@ def webrtc(_):
 
 @CONFIG_CTX(includes=['webrtc'])
 def webrtc_fuchsia(c):
-  # WebRTC for iOS depends on the src/third_party/openmax_dl in Chromium, which
-  # is set to None for iOS. Because of this, sync Mac as well to get it.
   c.target_os.add('fuchsia')
 
 
