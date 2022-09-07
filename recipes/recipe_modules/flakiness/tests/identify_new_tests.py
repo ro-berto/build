@@ -9,11 +9,10 @@ from PB.go.chromium.org.luci.buildbucket.proto import build as build_pb2
 from PB.go.chromium.org.luci.buildbucket.proto \
   import builder_common as builder_common_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
-from PB.go.chromium.org.luci.resultdb.proto.v1 import common as rdb_common_pb2
 from PB.go.chromium.org.luci.resultdb.proto.v1 \
     import test_result as test_result_pb2
-from PB.infra.appengine.weetbix.proto.v1 import test_history
-from PB.infra.appengine.weetbix.proto.v1 import test_verdict
+from PB.go.chromium.org.luci.analysis.proto.v1 import test_history
+from PB.go.chromium.org.luci.analysis.proto.v1 import test_verdict
 
 from recipe_engine import recipe_api
 from recipe_engine import recipe_test_api
@@ -161,8 +160,8 @@ def GenTests(api):
            'TestSuite.Test4'), [
                'prpc',
                'call',
-               'chops-weetbix.appspot.com',
-               'weetbix.v1.TestHistory.Query',
+               'luci-analysis.appspot.com',
+               'luci.analysis.v1.TestHistory.Query',
            ]),
       api.post_process(post_process.DropExpectation),
   )

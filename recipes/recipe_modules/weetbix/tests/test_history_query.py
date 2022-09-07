@@ -5,10 +5,10 @@
 from recipe_engine import post_process
 
 from google.protobuf import timestamp_pb2
-from PB.infra.appengine.weetbix.proto.v1 import common as common_weetbix_pb2
-from PB.infra.appengine.weetbix.proto.v1 import predicate as predicate_pb2
-from PB.infra.appengine.weetbix.proto.v1 import test_history
-from PB.infra.appengine.weetbix.proto.v1 import test_verdict
+from PB.go.chromium.org.luci.analysis.proto.v1 import common as common_pb2
+from PB.go.chromium.org.luci.analysis.proto.v1 import predicate as predicate_pb2
+from PB.go.chromium.org.luci.analysis.proto.v1 import test_history
+from PB.go.chromium.org.luci.analysis.proto.v1 import test_verdict
 
 PYTHON_VERSION_COMPATIBILITY = "PY3"
 
@@ -30,10 +30,10 @@ def RunSteps(api):
             contains={'def': {
                 'builder': 'some-builder'
             }}),
-        partition_time_range=common_weetbix_pb2.TimeRange(
+        partition_time_range=common_pb2.TimeRange(
             earliest=timestamp_pb2.Timestamp(seconds=1000),
             latest=timestamp_pb2.Timestamp(seconds=2000)),
-        submitted_filter=common_weetbix_pb2.ONLY_SUBMITTED,
+        submitted_filter=common_pb2.ONLY_SUBMITTED,
         page_size=1000,
         page_token='Some token',
     )

@@ -16,8 +16,8 @@ from RECIPE_MODULES.build.chromium_tests import steps
 from PB.go.chromium.org.luci.buildbucket.proto \
     import builds_service as builds_service_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
-from PB.infra.appengine.weetbix.proto.v1 import common as common_weetbix_pb2
-from PB.infra.appengine.weetbix.proto.v1 import predicate as predicate_pb2
+from PB.go.chromium.org.luci.analysis.proto.v1 import common as common_weetbix_pb2
+from PB.go.chromium.org.luci.analysis.proto.v1 import predicate as predicate_pb2
 from PB.recipe_engine import result as result_pb2
 
 # A regular expression for file paths indicating that change in the matched file

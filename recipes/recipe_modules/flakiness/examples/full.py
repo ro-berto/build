@@ -18,8 +18,8 @@ from PB.go.chromium.org.luci.resultdb.proto.v1 \
     import common as resultdb_common
 from PB.go.chromium.org.luci.resultdb.proto.v1 \
     import test_result as test_result_pb2
-from PB.infra.appengine.weetbix.proto.v1 import test_history
-from PB.infra.appengine.weetbix.proto.v1 import test_verdict
+from PB.go.chromium.org.luci.analysis.proto.v1 import test_history
+from PB.go.chromium.org.luci.analysis.proto.v1 import test_verdict
 
 DEPS = [
     'chromium',
