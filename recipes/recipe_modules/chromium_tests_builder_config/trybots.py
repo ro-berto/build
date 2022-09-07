@@ -776,6 +776,9 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * dawn-win10-x64-deps-rel
     # * dawn-win10-x86-deps-rel
     # * linux-dawn-rel
+    # * win-dawn-rel
+    # * dawn-try-win10-x86-rel
+    # * dawn-try-win10-x64-asan-rel
     'tryserver.chromium.dawn': {
         'dawn-try-mac-amd-exp':
             try_spec.TrySpec.create([
@@ -806,39 +809,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                     tester='Dawn Mac x64 Release (Intel)',
                 ),
             ]),
-        'win-dawn-rel':
-            try_spec.TrySpec.create([
-                try_spec.TryMirror.create(
-                    builder_group='chromium.dawn',
-                    buildername='Dawn Win10 x64 Builder',
-                    tester='Dawn Win10 x64 Release (Intel HD 630)',
-                ),
-                try_spec.TryMirror.create(
-                    builder_group='chromium.dawn',
-                    buildername='Dawn Win10 x64 Builder',
-                    tester='Dawn Win10 x64 Release (NVIDIA)',
-                ),
-            ]),
-
-        # Manually triggered Dawn trybots.
-        'dawn-try-win10-x86-rel':
-            try_spec.TrySpec.create([
-                try_spec.TryMirror.create(
-                    builder_group='chromium.dawn',
-                    buildername='Dawn Win10 x86 Builder',
-                    tester='Dawn Win10 x86 Release (Intel HD 630)',
-                ),
-                try_spec.TryMirror.create(
-                    builder_group='chromium.dawn',
-                    buildername='Dawn Win10 x86 Builder',
-                    tester='Dawn Win10 x86 Release (NVIDIA)',
-                ),
-            ]),
-        'dawn-try-win10-x64-asan-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.dawn',
-                buildername='Dawn Win10 x64 ASAN Release',
-            ),
     },
     # Rust language bots
     'tryserver.chromium.rust': {

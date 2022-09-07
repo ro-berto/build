@@ -353,60 +353,6 @@
       "tryserver.chromium.dawn:mac-dawn-rel"
     ]
   },
-  "chromium.dawn:Dawn Win10 x64 ASAN Release": {
-    "builders": [
-      "chromium.dawn:Dawn Win10 x64 ASAN Release",
-      "tryserver.chromium.dawn:dawn-try-win10-x64-asan-rel"
-    ]
-  },
-  "chromium.dawn:Dawn Win10 x64 Builder": {
-    "builders": [
-      "chromium.dawn:Dawn Win10 x64 Builder",
-      "chromium.dawn:Dawn Win10 x64 Release (Intel HD 630)",
-      "chromium.dawn:Dawn Win10 x64 Release (NVIDIA)",
-      "tryserver.chromium.dawn:win-dawn-rel"
-    ]
-  },
-  "chromium.dawn:Dawn Win10 x64 Release (Intel HD 630)": {
-    "builders": [
-      "chromium.dawn:Dawn Win10 x64 Builder",
-      "chromium.dawn:Dawn Win10 x64 Release (Intel HD 630)",
-      "chromium.dawn:Dawn Win10 x64 Release (NVIDIA)",
-      "tryserver.chromium.dawn:win-dawn-rel"
-    ]
-  },
-  "chromium.dawn:Dawn Win10 x64 Release (NVIDIA)": {
-    "builders": [
-      "chromium.dawn:Dawn Win10 x64 Builder",
-      "chromium.dawn:Dawn Win10 x64 Release (Intel HD 630)",
-      "chromium.dawn:Dawn Win10 x64 Release (NVIDIA)",
-      "tryserver.chromium.dawn:win-dawn-rel"
-    ]
-  },
-  "chromium.dawn:Dawn Win10 x86 Builder": {
-    "builders": [
-      "chromium.dawn:Dawn Win10 x86 Builder",
-      "chromium.dawn:Dawn Win10 x86 Release (Intel HD 630)",
-      "chromium.dawn:Dawn Win10 x86 Release (NVIDIA)",
-      "tryserver.chromium.dawn:dawn-try-win10-x86-rel"
-    ]
-  },
-  "chromium.dawn:Dawn Win10 x86 Release (Intel HD 630)": {
-    "builders": [
-      "chromium.dawn:Dawn Win10 x86 Builder",
-      "chromium.dawn:Dawn Win10 x86 Release (Intel HD 630)",
-      "chromium.dawn:Dawn Win10 x86 Release (NVIDIA)",
-      "tryserver.chromium.dawn:dawn-try-win10-x86-rel"
-    ]
-  },
-  "chromium.dawn:Dawn Win10 x86 Release (NVIDIA)": {
-    "builders": [
-      "chromium.dawn:Dawn Win10 x86 Builder",
-      "chromium.dawn:Dawn Win10 x86 Release (Intel HD 630)",
-      "chromium.dawn:Dawn Win10 x86 Release (NVIDIA)",
-      "tryserver.chromium.dawn:dawn-try-win10-x86-rel"
-    ]
-  },
   "chromium.dev:android-lollipop-arm-rel-swarming": {
     "builders": [
       "chromium.dev:android-lollipop-arm-rel-swarming"
@@ -2446,20 +2392,6 @@
       "tryserver.chromium.dawn:mac-dawn-rel"
     ]
   },
-  "tryserver.chromium.dawn:dawn-try-win10-x64-asan-rel": {
-    "builders": [
-      "chromium.dawn:Dawn Win10 x64 ASAN Release",
-      "tryserver.chromium.dawn:dawn-try-win10-x64-asan-rel"
-    ]
-  },
-  "tryserver.chromium.dawn:dawn-try-win10-x86-rel": {
-    "builders": [
-      "chromium.dawn:Dawn Win10 x86 Builder",
-      "chromium.dawn:Dawn Win10 x86 Release (Intel HD 630)",
-      "chromium.dawn:Dawn Win10 x86 Release (NVIDIA)",
-      "tryserver.chromium.dawn:dawn-try-win10-x86-rel"
-    ]
-  },
   "tryserver.chromium.dawn:mac-dawn-rel": {
     "builders": [
       "chromium.dawn:Dawn Mac x64 Builder",
@@ -2470,14 +2402,6 @@
       "tryserver.chromium.dawn:dawn-try-mac-amd-exp",
       "tryserver.chromium.dawn:dawn-try-mac-intel-exp",
       "tryserver.chromium.dawn:mac-dawn-rel"
-    ]
-  },
-  "tryserver.chromium.dawn:win-dawn-rel": {
-    "builders": [
-      "chromium.dawn:Dawn Win10 x64 Builder",
-      "chromium.dawn:Dawn Win10 x64 Release (Intel HD 630)",
-      "chromium.dawn:Dawn Win10 x64 Release (NVIDIA)",
-      "tryserver.chromium.dawn:win-dawn-rel"
     ]
   },
   "tryserver.chromium.linux:fuchsia-fyi-arm64-femu": {

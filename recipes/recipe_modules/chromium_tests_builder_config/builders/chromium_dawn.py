@@ -58,6 +58,13 @@ def CreateTesterConfig(os, bits, builder):
 # * Dawn Linux x64 Builder
 # * Dawn Linux x64 Release (Intel HD 630)
 # * Dawn Linux x64 Release (NVIDIA)
+# * Dawn Win10 x64 Builder
+# * Dawn Win10 x64 Release (Intel HD 630)
+# * Dawn Win10 x64 Release (NVIDIA)
+# * Dawn Win10 x86 Builder
+# * Dawn Win10 x86 Release (Intel HD 630)
+# * Dawn Win10 x86 Release (NVIDIA)
+# * Dawn Win10 x64 ASAN Release
 
 SPEC = {
     'Dawn Mac x64 Builder':
@@ -71,18 +78,4 @@ SPEC = {
         CreateTesterConfig('mac', 64, 'Dawn Mac x64 Builder'),
     'Dawn Mac x64 Release (Intel)':
         CreateTesterConfig('mac', 64, 'Dawn Mac x64 Builder'),
-    'Dawn Win10 x86 Builder':
-        CreateBuilderConfig('win', 32, top_of_tree=True),
-    'Dawn Win10 x64 Builder':
-        CreateBuilderConfig('win', 64, top_of_tree=True),
-    'Dawn Win10 x86 Release (Intel HD 630)':
-        CreateTesterConfig('win', 32, 'Dawn Win10 x86 Builder'),
-    'Dawn Win10 x64 Release (Intel HD 630)':
-        CreateTesterConfig('win', 64, 'Dawn Win10 x64 Builder'),
-    'Dawn Win10 x86 Release (NVIDIA)':
-        CreateTesterConfig('win', 32, 'Dawn Win10 x86 Builder'),
-    'Dawn Win10 x64 Release (NVIDIA)':
-        CreateTesterConfig('win', 64, 'Dawn Win10 x64 Builder'),
-    'Dawn Win10 x64 ASAN Release':
-        CreateBuilderConfig('win', 64, top_of_tree=True),
 }
