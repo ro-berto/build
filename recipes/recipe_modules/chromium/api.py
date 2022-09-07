@@ -1352,7 +1352,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     if use_goma:
       lookup_test_data += 'use_goma = true\n'
     elif use_reclient:
-      lookup_test_data += 'use_reclient = true\n'
+      lookup_test_data += 'use_remoteexec = true\n'
     result = self.run_mb_cmd(
         name,
         'lookup',
