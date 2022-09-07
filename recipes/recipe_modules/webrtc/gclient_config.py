@@ -13,6 +13,14 @@ def WebRTCGitURL(_c, *pieces):
 def webrtc(_):
   pass
 
+
+@CONFIG_CTX(includes=['webrtc'])
+def webrtc_fuchsia(c):
+  # WebRTC for iOS depends on the src/third_party/openmax_dl in Chromium, which
+  # is set to None for iOS. Because of this, sync Mac as well to get it.
+  c.target_os.add('fuchsia')
+
+
 @CONFIG_CTX(includes=['webrtc'])
 def webrtc_ios(c):
   # WebRTC for iOS depends on the src/third_party/openmax_dl in Chromium, which
@@ -20,13 +28,11 @@ def webrtc_ios(c):
   c.target_os.add('mac')
   c.target_os.add('ios')
 
-
 @CONFIG_CTX(includes=['webrtc'])
 def webrtc_linux_mac_crosscompile_arm64(c):
   # Compiling webrtc on Linux for mac requires fetching mac dependencies.
   c.target_os.add('mac')
   c.target_cpu.add('arm64')
-
 
 @CONFIG_CTX(includes=['webrtc'])
 def webrtc_valgrind(c):
