@@ -56,12 +56,9 @@ def RunSteps(api, properties):
 
   analysis_id = properties.analysis_id
 
-  # TODO (nqmtuan): Turn this to luci-bisection.appspot.com when it is ready
-  # TODO (nqmtuan): Send back the result to dev or prod depending on who triggered the build.
-  host = "chops-gofindit-dev.appspot.com"
   api.gofindit.send_result_to_luci_bisection("send_result_to_luci_bisection",
                                              analysis_id, compile_result.status,
-                                             host)
+                                             properties.bisection_host)
 
 
 def _configure_builder(api, target_builder):

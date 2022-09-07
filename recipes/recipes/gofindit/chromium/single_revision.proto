@@ -21,4 +21,7 @@ message InputProperties {
 
   // The analysis ID for LUCI Bisection
   int64 analysis_id = 3;
+
+  // The host to send the result to
+  string bisection_host = 4;
 }
