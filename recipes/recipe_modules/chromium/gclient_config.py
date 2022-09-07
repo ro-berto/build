@@ -164,6 +164,13 @@ def fuchsia_astro_image(c):
 
 
 @CONFIG_CTX(includes=['fuchsia_internal'])
+def fuchsia_sd_images(c):
+  c.solutions[0].custom_vars['checkout_fuchsia_internal_images'] = (
+      'smart_display_eng_arrested.astro-release,'
+      'smart_display_max_eng_arrested.sherlock-release')
+
+
+@CONFIG_CTX(includes=['fuchsia_internal'])
 def fuchsia_sherlock_image(c):
   c.solutions[0].custom_vars['checkout_fuchsia_internal_images'] = (
       'smart_display_max_eng_arrested.sherlock-release')

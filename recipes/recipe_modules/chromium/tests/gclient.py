@@ -167,6 +167,11 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
   yield api.test(
+      'fuchsia_sd_images',
+      api.properties(apply_gclient_config='fuchsia_sd_images'),
+      api.post_process(post_process.DropExpectation),
+  )
+  yield api.test(
       'fuchsia_workstation',
       api.properties(apply_gclient_config='fuchsia_workstation'),
       api.post_process(post_process.DropExpectation),

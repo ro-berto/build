@@ -65,8 +65,7 @@ _AddBuildSpec(
     target_arch='arm',
     extra_gclient_apply_config=[
         'fuchsia_arm64',
-        'fuchsia_astro_image',
-        'fuchsia_sherlock_image',
+        'fuchsia_sd_images',
     ])
 
 _AddBuildSpec(
@@ -77,8 +76,7 @@ _AddBuildSpec(
     target_arch='arm',
     extra_gclient_apply_config=[
         'fuchsia_arm64',
-        'fuchsia_astro_image',
-        'fuchsia_sherlock_image',
+        'fuchsia_sd_images',
     ])
 
 _AddBuildSpec(
