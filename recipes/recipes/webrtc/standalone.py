@@ -29,7 +29,7 @@ def should_use_reclient(api, builder_id):
   # TODO(b/239908030): add logic to enable reclient by platform and/or target.
   if not builder_id.group == 'client.webrtc':
     return False
-  if not builder_id.builder in ('Linux64 Release', 'Android32 (M Nexus5X)'):
+  if not api.platform.is_linux:
     return False
   return True
 
@@ -108,8 +108,13 @@ def GenTests(api):
   generate_builder = functools.partial(api.webrtc.generate_builder, builders_db)
 
   for builder_id in builders_db:
-    use_reclient = builder_id.builder in ('Linux64 Release',
-                                          'Android32 (M Nexus5X)')
+    builder_group = builder_id.group
+    builder_name = builder_id.builder.lower()
+    use_reclient = False
+    if builder_group == 'client.webrtc' and 'linux' in builder_name:
+      use_reclient = True
+    elif builder_group == 'client.webrtc' and 'android' in builder_name:
+      use_reclient = True
     yield generate_builder(builder_id, use_reclient=use_reclient)
 
   builder_id = chromium.BuilderId.create_for_group('client.webrtc',
