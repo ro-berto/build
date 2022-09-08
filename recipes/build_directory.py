@@ -99,7 +99,7 @@ def RmtreeExceptNinjaOrGomaFiles(build_output_dir):
     # Delete the directory if empty; this works because the walk is bottom-up.
     try:
       os.rmdir(root)
-    except OSError, e:
+    except OSError as e:
       if e.errno in (39, 41, 66):
         # If the directory isn't empty, ignore it.
         # On Windows, os.rmdir will raise WindowsError with winerror 145,
