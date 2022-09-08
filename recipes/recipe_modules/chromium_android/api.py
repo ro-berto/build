@@ -99,8 +99,7 @@ class AndroidApi(recipe_api.RecipeApi):
     if not preserve_paths:  # pragma: no cover
       cmd.append('--ignore-subfolder-names')
 
-    with self.m.build.scripts_pythonpath():
-      self.m.step(step_name, cmd, infra_step=True, **kwargs)
+    self.m.step(step_name, cmd, infra_step=True, **kwargs)
 
 
   def init_and_sync(self,

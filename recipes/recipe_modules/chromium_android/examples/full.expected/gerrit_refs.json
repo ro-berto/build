@@ -904,11 +904,6 @@
       "--exclude-filter",
       "*.a"
     ],
-    "env_prefixes": {
-      "PYTHONPATH": [
-        "RECIPE_REPO[build]/scripts"
-      ]
-    },
     "infra_step": true,
     "luci_context": {
       "realm": {

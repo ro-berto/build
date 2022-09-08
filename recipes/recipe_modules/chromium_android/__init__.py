@@ -5,7 +5,6 @@
 DEPS = [
     'adb',
     'archive',
-    'build',
     'builder_group',
     'chromium',
     'chromium_checkout',
