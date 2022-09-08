@@ -19,9 +19,19 @@ DEPS = [
     'depot_tools/tryserver',
     'gn',
     'recipe_engine/path',
+    'recipe_engine/platform',
     'recipe_engine/step',
     'webrtc',
 ]
+
+
+def should_use_reclient(api, builder_id):
+  # TODO(b/239908030): add logic to enable reclient by platform and/or target.
+  if not builder_id.group == 'client.webrtc':
+    return False
+  if not builder_id.builder in ('Linux64 Release', 'Android32 (M Nexus5X)'):
+    return False
+  return True
 
 
 def RunSteps(api):
@@ -45,6 +55,10 @@ def RunSteps(api):
   api.chromium.ensure_toolchains()
   api.chromium.runhooks()
 
+  mb_config_path = None
+  if should_use_reclient(api, builder_id):
+    mb_config_path = api.webrtc.override_relient_mb_config()
+
   for phase in builders.BUILDERS_DB[builder_id].phases:
     test_targets, compile_targets = api.webrtc.determine_compilation_targets(
         builder_id, targets_config, phase)
@@ -56,7 +70,9 @@ def RunSteps(api):
     tests_to_compile = [
         t for t in targets_config.all_tests if t.canonical_name in test_targets
     ]
-    gn_args = api.webrtc.run_mb(builder_id, phase, tests_to_compile)
+
+    gn_args = api.webrtc.run_mb(
+        builder_id, phase, tests_to_compile, mb_config_path=mb_config_path)
 
     use_reclient = api.gn.parse_gn_args(gn_args).get('use_remoteexec') == 'true'
     use_goma_module = use_reclient == False
@@ -92,7 +108,9 @@ def GenTests(api):
   generate_builder = functools.partial(api.webrtc.generate_builder, builders_db)
 
   for builder_id in builders_db:
-    yield generate_builder(builder_id)
+    use_reclient = builder_id.builder in ('Linux64 Release',
+                                          'Android32 (M Nexus5X)')
+    yield generate_builder(builder_id, use_reclient=use_reclient)
 
   builder_id = chromium.BuilderId.create_for_group('client.webrtc',
                                                    'Linux64 Debug')

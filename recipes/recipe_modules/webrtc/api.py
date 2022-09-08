@@ -159,7 +159,23 @@ class WebRTCApi(recipe_api.RecipeApi):
       cmd_golang = ['vpython3', '-u', script_golang] + args_golang
       self.m.step('download golang', cmd_golang)
 
-  def run_mb(self, builder_id, phase=None, tests=None):
+  def override_relient_mb_config(self):
+    """Override mb_config.pyl to use reclient."""
+
+    mb_config_path = self.m.path['checkout'].join('tools_webrtc', 'mb',
+                                                  'mb_config.pyl')
+    mb_config = self.m.file.read_text('Read %s' % mb_config_path,
+                                      mb_config_path)
+    mb_config = mb_config.replace('use_goma=true', 'use_remoteexec=true')
+    new_mb_config_path = self.m.path['tmp_base'].join('mb_config.pyl')
+    self.m.file.write_text(
+        'Override MB config to use reclient',
+        new_mb_config_path,
+        mb_config,
+    )
+    return new_mb_config_path
+
+  def run_mb(self, builder_id, phase=None, tests=None, mb_config_path=None):
     if phase:
       # Set the out folder to be the same as the phase name, so caches of
       # consecutive builds don't interfere with each other.
@@ -178,6 +194,7 @@ class WebRTCApi(recipe_api.RecipeApi):
         builder_id,
         phase=phase,
         mb_path=self.m.path['checkout'].join('tools_webrtc', 'mb'),
+        mb_config_path=mb_config_path,
         isolated_targets=_get_isolated_targets(tests or []))
 
   def isolate(self, builder_id, builder_config, tests):
