@@ -1129,15 +1129,6 @@
       "tryserver.chromium.android:gpu-fyi-try-android-r-pixel-4-32"
     ]
   },
-  "chromium.gpu.fyi:Android FYI Release (Nexus 5X)": {
-    "builders": [
-      "chromium.gpu.fyi:Android FYI Release (Nexus 5X)",
-      "chromium.gpu.fyi:Android FYI Release (Pixel 6)",
-      "chromium.gpu.fyi:GPU FYI Android arm64 Builder",
-      "tryserver.chromium.android:gpu-fyi-try-android-m-nexus-5x-64",
-      "tryserver.chromium.android:gpu-fyi-try-android-pixel-6-64"
-    ]
-  },
   "chromium.gpu.fyi:Android FYI Release (Pixel 2)": {
     "builders": [
       "chromium.gpu.fyi:Android FYI Release (NVIDIA Shield TV)",
@@ -1162,15 +1153,6 @@
       "tryserver.chromium.android:gpu-fyi-try-android-nvidia-shield-tv",
       "tryserver.chromium.android:gpu-fyi-try-android-p-pixel-2-32",
       "tryserver.chromium.android:gpu-fyi-try-android-r-pixel-4-32"
-    ]
-  },
-  "chromium.gpu.fyi:Android FYI Release (Pixel 6)": {
-    "builders": [
-      "chromium.gpu.fyi:Android FYI Release (Nexus 5X)",
-      "chromium.gpu.fyi:Android FYI Release (Pixel 6)",
-      "chromium.gpu.fyi:GPU FYI Android arm64 Builder",
-      "tryserver.chromium.android:gpu-fyi-try-android-m-nexus-5x-64",
-      "tryserver.chromium.android:gpu-fyi-try-android-pixel-6-64"
     ]
   },
   "chromium.gpu.fyi:ChromeOS FYI Release (amd64-generic)": {
@@ -1202,15 +1184,6 @@
       "tryserver.chromium.android:gpu-fyi-try-android-nvidia-shield-tv",
       "tryserver.chromium.android:gpu-fyi-try-android-p-pixel-2-32",
       "tryserver.chromium.android:gpu-fyi-try-android-r-pixel-4-32"
-    ]
-  },
-  "chromium.gpu.fyi:GPU FYI Android arm64 Builder": {
-    "builders": [
-      "chromium.gpu.fyi:Android FYI Release (Nexus 5X)",
-      "chromium.gpu.fyi:Android FYI Release (Pixel 6)",
-      "chromium.gpu.fyi:GPU FYI Android arm64 Builder",
-      "tryserver.chromium.android:gpu-fyi-try-android-m-nexus-5x-64",
-      "tryserver.chromium.android:gpu-fyi-try-android-pixel-6-64"
     ]
   },
   "chromium.gpu.fyi:GPU FYI Lacros x64 Builder": {
@@ -2225,15 +2198,6 @@
       "tryserver.chromium.android:gpu-fyi-try-android-r-pixel-4-32"
     ]
   },
-  "tryserver.chromium.android:gpu-fyi-try-android-m-nexus-5x-64": {
-    "builders": [
-      "chromium.gpu.fyi:Android FYI Release (Nexus 5X)",
-      "chromium.gpu.fyi:Android FYI Release (Pixel 6)",
-      "chromium.gpu.fyi:GPU FYI Android arm64 Builder",
-      "tryserver.chromium.android:gpu-fyi-try-android-m-nexus-5x-64",
-      "tryserver.chromium.android:gpu-fyi-try-android-pixel-6-64"
-    ]
-  },
   "tryserver.chromium.android:gpu-fyi-try-android-nvidia-shield-tv": {
     "builders": [
       "chromium.gpu.fyi:Android FYI Release (NVIDIA Shield TV)",
@@ -2258,15 +2222,6 @@
       "tryserver.chromium.android:gpu-fyi-try-android-nvidia-shield-tv",
       "tryserver.chromium.android:gpu-fyi-try-android-p-pixel-2-32",
       "tryserver.chromium.android:gpu-fyi-try-android-r-pixel-4-32"
-    ]
-  },
-  "tryserver.chromium.android:gpu-fyi-try-android-pixel-6-64": {
-    "builders": [
-      "chromium.gpu.fyi:Android FYI Release (Nexus 5X)",
-      "chromium.gpu.fyi:Android FYI Release (Pixel 6)",
-      "chromium.gpu.fyi:GPU FYI Android arm64 Builder",
-      "tryserver.chromium.android:gpu-fyi-try-android-m-nexus-5x-64",
-      "tryserver.chromium.android:gpu-fyi-try-android-pixel-6-64"
     ]
   },
   "tryserver.chromium.android:gpu-fyi-try-android-r-pixel-4-32": {
