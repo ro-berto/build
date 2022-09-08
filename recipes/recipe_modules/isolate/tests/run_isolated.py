@@ -49,7 +49,7 @@ def GenTests(api):
       # TODO(gbeaty) Replace Ellipsis with ... once we have python3 syntax
       # available
       api.post_check(lambda check, steps: \
-        check(['rdb', 'stream', Ellipsis, '--', 'vpython3']
+        check(['rdb', 'stream', Ellipsis, '--', 'python']
               in steps['run_isolated'].cmd)),
       api.post_process(post_process.DropExpectation),
   )
