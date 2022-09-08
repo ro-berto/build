@@ -2044,11 +2044,6 @@
       "tryserver.blink:mac11.0-blink-rel"
     ]
   },
-  "tryserver.blink:mac11.0.arm64-blink-rel": {
-    "builders": [
-      "tryserver.blink:mac11.0.arm64-blink-rel"
-    ]
-  },
   "tryserver.chromium.android:android-11-x86-fyi-rel": {
     "builders": [
       "chromium.android.fyi:android-11-x86-fyi-rel",
