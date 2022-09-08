@@ -367,15 +367,9 @@ class ReclientApi(recipe_api.RecipeApi):
         'RBE_use_gce_credentials': 'true',
         'RBE_fail_early_min_action_count': 4000,
         'RBE_fail_early_min_fallback_ratio': 0.5,
+        'RBE_deps_cache_dir': reclient_cache_dir,
+        'RBE_deps_cache_max_mb': _DEPS_CACHE_MAX_MB,
     }
-
-    if not self.m.platform.is_win or self._props.enable_deps_cache_on_win:
-      # deps cache on Windows makes a build much slower.
-      # See https://crbug.com/1350867#c7
-      env.update({
-          'RBE_deps_cache_dir': reclient_cache_dir,
-          'RBE_deps_cache_max_mb': _DEPS_CACHE_MAX_MB,
-      })
 
     if bootstrap_env is not None:
       env.update(bootstrap_env)
