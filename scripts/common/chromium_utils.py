@@ -45,12 +45,18 @@ try:
     def _WIN_LINK_FUNC(src, dst):
       print('linking %s -> %s' % (src, dst))
       if os.path.isdir(src):
-        if not ctypes.windll.kernel32.CreateSymbolicLinkA(
-            str(dst), str(os.path.abspath(src)), 1):
-          raise ctypes.WinError()
+        if sys.version_info.major == 2:
+          if not ctypes.windll.kernel32.CreateSymbolicLinkA(str(dst), str(
+              os.path.abspath(src)), 1):
+            raise ctypes.WinError()
+        else:
+          os.symlink(os.path.abspath(src), dst, target_is_directory=True)
       else:
-        if not ctypes.windll.kernel32.CreateHardLinkA(str(dst), str(src), 0):
-          raise ctypes.WinError()
+        if sys.version_info.major == 2:
+          if not ctypes.windll.kernel32.CreateHardLinkA(str(dst), str(src), 0):
+            raise ctypes.WinError()
+        else:
+          os.link(src, dst)
 except ImportError:
   # If we don't have ctypes or aren't on Windows, leave _WIN_LINK_FUNC as None.
   pass
@@ -346,7 +352,7 @@ def RemoveDirectory(*path):
   if sys.platform == 'win32':
     # Give up and use cmd.exe's rd command.
     file_path = os.path.normcase(file_path)
-    for _ in xrange(3):
+    for _ in range(3):
       print(
           'RemoveDirectory running %s' %
           (' '.join(['cmd.exe', '/c', 'rd', '/q', '/s', file_path]))
