@@ -20,20 +20,20 @@ TRYBOTS = try_spec.TryDatabase.create({
             ),
         'mac10.13-blink-rel':
             try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
-                buildername='mac10.13-blink-rel-dummy',
+                builder_group='tryserver.blink',
+                buildername='mac10.13-blink-rel',
                 retry_failed_shards=False,
             ),
         'mac10.14-blink-rel':
             try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
-                buildername='mac10.14-blink-rel-dummy',
+                builder_group='tryserver.blink',
+                buildername='mac10.14-blink-rel',
                 retry_failed_shards=False,
             ),
         'mac10.15-blink-rel':
             try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
-                buildername='mac10.15-blink-rel-dummy',
+                builder_group='tryserver.blink',
+                buildername='mac10.15-blink-rel',
                 retry_failed_shards=False,
             ),
         'mac11.0-blink-rel':
