@@ -103,8 +103,12 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * android-webview-oreo-arm64-dbg
     # * android-webview-pie-arm64-dbg
     # * cast_shell_android
+    # * gpu-fyi-try-android-l-nexus-5-32
     # * gpu-fyi-try-android-m-nexus-5x-64
+    # * gpu-fyi-try-android-nvidia-shield-tv
+    # * gpu-fyi-try-android-p-pixel-2-32
     # * gpu-fyi-try-android-pixel-6-64
+    # * gpu-fyi-try-android-r-pixel-4-32
     # * gpu-try-android-m-nexus-5x-64
     # * try-nougat-phone-tester
     'tryserver.chromium.android': {
@@ -199,31 +203,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android.fyi',
                 buildername='android-webview-pie-x86-wpt-fyi-rel',
-            ),
-        # Manually triggered GPU trybots.
-        'gpu-fyi-try-android-l-nexus-5-32':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Android arm Builder',
-                tester='Android FYI Release (Nexus 5)',
-            ),
-        'gpu-fyi-try-android-nvidia-shield-tv':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Android arm Builder',
-                tester='Android FYI Release (NVIDIA Shield TV)',
-            ),
-        'gpu-fyi-try-android-p-pixel-2-32':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Android arm Builder',
-                tester='Android FYI Release (Pixel 2)',
-            ),
-        'gpu-fyi-try-android-r-pixel-4-32':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Android arm Builder',
-                tester='Android FYI Release (Pixel 4)',
             ),
         'android-pie-arm64-fyi-rel':
             try_spec.TrySpec.create_for_single_mirror(

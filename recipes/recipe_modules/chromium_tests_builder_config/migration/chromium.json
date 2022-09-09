@@ -1103,58 +1103,6 @@
       "chromium.goma:Chromium iOS Goma RBE ToT"
     ]
   },
-  "chromium.gpu.fyi:Android FYI Release (NVIDIA Shield TV)": {
-    "builders": [
-      "chromium.gpu.fyi:Android FYI Release (NVIDIA Shield TV)",
-      "chromium.gpu.fyi:Android FYI Release (Nexus 5)",
-      "chromium.gpu.fyi:Android FYI Release (Pixel 2)",
-      "chromium.gpu.fyi:Android FYI Release (Pixel 4)",
-      "chromium.gpu.fyi:GPU FYI Android arm Builder",
-      "tryserver.chromium.android:gpu-fyi-try-android-l-nexus-5-32",
-      "tryserver.chromium.android:gpu-fyi-try-android-nvidia-shield-tv",
-      "tryserver.chromium.android:gpu-fyi-try-android-p-pixel-2-32",
-      "tryserver.chromium.android:gpu-fyi-try-android-r-pixel-4-32"
-    ]
-  },
-  "chromium.gpu.fyi:Android FYI Release (Nexus 5)": {
-    "builders": [
-      "chromium.gpu.fyi:Android FYI Release (NVIDIA Shield TV)",
-      "chromium.gpu.fyi:Android FYI Release (Nexus 5)",
-      "chromium.gpu.fyi:Android FYI Release (Pixel 2)",
-      "chromium.gpu.fyi:Android FYI Release (Pixel 4)",
-      "chromium.gpu.fyi:GPU FYI Android arm Builder",
-      "tryserver.chromium.android:gpu-fyi-try-android-l-nexus-5-32",
-      "tryserver.chromium.android:gpu-fyi-try-android-nvidia-shield-tv",
-      "tryserver.chromium.android:gpu-fyi-try-android-p-pixel-2-32",
-      "tryserver.chromium.android:gpu-fyi-try-android-r-pixel-4-32"
-    ]
-  },
-  "chromium.gpu.fyi:Android FYI Release (Pixel 2)": {
-    "builders": [
-      "chromium.gpu.fyi:Android FYI Release (NVIDIA Shield TV)",
-      "chromium.gpu.fyi:Android FYI Release (Nexus 5)",
-      "chromium.gpu.fyi:Android FYI Release (Pixel 2)",
-      "chromium.gpu.fyi:Android FYI Release (Pixel 4)",
-      "chromium.gpu.fyi:GPU FYI Android arm Builder",
-      "tryserver.chromium.android:gpu-fyi-try-android-l-nexus-5-32",
-      "tryserver.chromium.android:gpu-fyi-try-android-nvidia-shield-tv",
-      "tryserver.chromium.android:gpu-fyi-try-android-p-pixel-2-32",
-      "tryserver.chromium.android:gpu-fyi-try-android-r-pixel-4-32"
-    ]
-  },
-  "chromium.gpu.fyi:Android FYI Release (Pixel 4)": {
-    "builders": [
-      "chromium.gpu.fyi:Android FYI Release (NVIDIA Shield TV)",
-      "chromium.gpu.fyi:Android FYI Release (Nexus 5)",
-      "chromium.gpu.fyi:Android FYI Release (Pixel 2)",
-      "chromium.gpu.fyi:Android FYI Release (Pixel 4)",
-      "chromium.gpu.fyi:GPU FYI Android arm Builder",
-      "tryserver.chromium.android:gpu-fyi-try-android-l-nexus-5-32",
-      "tryserver.chromium.android:gpu-fyi-try-android-nvidia-shield-tv",
-      "tryserver.chromium.android:gpu-fyi-try-android-p-pixel-2-32",
-      "tryserver.chromium.android:gpu-fyi-try-android-r-pixel-4-32"
-    ]
-  },
   "chromium.gpu.fyi:ChromeOS FYI Release (amd64-generic)": {
     "builders": [
       "chromium.gpu.fyi:ChromeOS FYI Release (amd64-generic)",
@@ -1171,19 +1119,6 @@
     "builders": [
       "chromium.gpu.fyi:Fake Linux Release (NVIDIA)",
       "chromium.gpu.fyi:GPU Fake Linux Builder"
-    ]
-  },
-  "chromium.gpu.fyi:GPU FYI Android arm Builder": {
-    "builders": [
-      "chromium.gpu.fyi:Android FYI Release (NVIDIA Shield TV)",
-      "chromium.gpu.fyi:Android FYI Release (Nexus 5)",
-      "chromium.gpu.fyi:Android FYI Release (Pixel 2)",
-      "chromium.gpu.fyi:Android FYI Release (Pixel 4)",
-      "chromium.gpu.fyi:GPU FYI Android arm Builder",
-      "tryserver.chromium.android:gpu-fyi-try-android-l-nexus-5-32",
-      "tryserver.chromium.android:gpu-fyi-try-android-nvidia-shield-tv",
-      "tryserver.chromium.android:gpu-fyi-try-android-p-pixel-2-32",
-      "tryserver.chromium.android:gpu-fyi-try-android-r-pixel-4-32"
     ]
   },
   "chromium.gpu.fyi:GPU FYI Lacros x64 Builder": {
@@ -2178,58 +2113,6 @@
   "tryserver.chromium.android:android_blink_rel": {
     "builders": [
       "tryserver.chromium.android:android_blink_rel"
-    ]
-  },
-  "tryserver.chromium.android:gpu-fyi-try-android-l-nexus-5-32": {
-    "builders": [
-      "chromium.gpu.fyi:Android FYI Release (NVIDIA Shield TV)",
-      "chromium.gpu.fyi:Android FYI Release (Nexus 5)",
-      "chromium.gpu.fyi:Android FYI Release (Pixel 2)",
-      "chromium.gpu.fyi:Android FYI Release (Pixel 4)",
-      "chromium.gpu.fyi:GPU FYI Android arm Builder",
-      "tryserver.chromium.android:gpu-fyi-try-android-l-nexus-5-32",
-      "tryserver.chromium.android:gpu-fyi-try-android-nvidia-shield-tv",
-      "tryserver.chromium.android:gpu-fyi-try-android-p-pixel-2-32",
-      "tryserver.chromium.android:gpu-fyi-try-android-r-pixel-4-32"
-    ]
-  },
-  "tryserver.chromium.android:gpu-fyi-try-android-nvidia-shield-tv": {
-    "builders": [
-      "chromium.gpu.fyi:Android FYI Release (NVIDIA Shield TV)",
-      "chromium.gpu.fyi:Android FYI Release (Nexus 5)",
-      "chromium.gpu.fyi:Android FYI Release (Pixel 2)",
-      "chromium.gpu.fyi:Android FYI Release (Pixel 4)",
-      "chromium.gpu.fyi:GPU FYI Android arm Builder",
-      "tryserver.chromium.android:gpu-fyi-try-android-l-nexus-5-32",
-      "tryserver.chromium.android:gpu-fyi-try-android-nvidia-shield-tv",
-      "tryserver.chromium.android:gpu-fyi-try-android-p-pixel-2-32",
-      "tryserver.chromium.android:gpu-fyi-try-android-r-pixel-4-32"
-    ]
-  },
-  "tryserver.chromium.android:gpu-fyi-try-android-p-pixel-2-32": {
-    "builders": [
-      "chromium.gpu.fyi:Android FYI Release (NVIDIA Shield TV)",
-      "chromium.gpu.fyi:Android FYI Release (Nexus 5)",
-      "chromium.gpu.fyi:Android FYI Release (Pixel 2)",
-      "chromium.gpu.fyi:Android FYI Release (Pixel 4)",
-      "chromium.gpu.fyi:GPU FYI Android arm Builder",
-      "tryserver.chromium.android:gpu-fyi-try-android-l-nexus-5-32",
-      "tryserver.chromium.android:gpu-fyi-try-android-nvidia-shield-tv",
-      "tryserver.chromium.android:gpu-fyi-try-android-p-pixel-2-32",
-      "tryserver.chromium.android:gpu-fyi-try-android-r-pixel-4-32"
-    ]
-  },
-  "tryserver.chromium.android:gpu-fyi-try-android-r-pixel-4-32": {
-    "builders": [
-      "chromium.gpu.fyi:Android FYI Release (NVIDIA Shield TV)",
-      "chromium.gpu.fyi:Android FYI Release (Nexus 5)",
-      "chromium.gpu.fyi:Android FYI Release (Pixel 2)",
-      "chromium.gpu.fyi:Android FYI Release (Pixel 4)",
-      "chromium.gpu.fyi:GPU FYI Android arm Builder",
-      "tryserver.chromium.android:gpu-fyi-try-android-l-nexus-5-32",
-      "tryserver.chromium.android:gpu-fyi-try-android-nvidia-shield-tv",
-      "tryserver.chromium.android:gpu-fyi-try-android-p-pixel-2-32",
-      "tryserver.chromium.android:gpu-fyi-try-android-r-pixel-4-32"
     ]
   },
   "tryserver.chromium.angle:android-angle-chromium-try": {

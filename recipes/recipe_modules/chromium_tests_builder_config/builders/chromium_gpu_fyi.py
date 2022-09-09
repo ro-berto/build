@@ -11,6 +11,14 @@ def _chromium_gpu_fyi_spec(build_gs_bucket='chromium-gpu-fyi-archive',
 
 # The config for the following virtual builders were removed since their trybot
 # mirrors were migrated src-side:
+# * Android FYI Release (Nexus 5)
+# * Android FYI Release (Nexus 5X)
+# * Android FYI Release (NVIDIA Shield TV)
+# * Android FYI Release (Pixel 2)
+# * Android FYI Release (Pixel 4)
+# * Android FYI Release (Pixel 6)
+# * GPU FYI Android arm Builder
+# * GPU FYI Android arm64 Builder
 # * GPU FYI Linux Builder
 # * GPU FYI Linux Builder DEPS ANGLE
 # * Linux FYI Experimental Release (Intel HD 630)
@@ -374,20 +382,6 @@ SPEC = {
             simulation_platform='linux',
             serialize_tests=True,
         ),
-    'GPU FYI Android arm Builder':
-        _chromium_gpu_fyi_spec(
-            chromium_config='android',
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'android',
-                'enable_reclient',
-            ],
-            chromium_config_kwargs={
-                'TARGET_PLATFORM': 'android',
-            },
-            android_config='main_builder_rel_mb',
-            simulation_platform='linux',
-        ),
     'GPU FYI Mac Builder':
         _chromium_gpu_fyi_spec(
             chromium_config='chromium',
@@ -649,71 +643,6 @@ SPEC = {
             parent_buildername='GPU FYI Mac Builder',
             simulation_platform='linux',
             serialize_tests=True,
-        ),
-    'Android FYI Release (Nexus 5)':
-        _chromium_gpu_fyi_spec(
-            chromium_config='android',
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'android',
-                'enable_reclient',
-            ],
-            chromium_config_kwargs={
-                'TARGET_PLATFORM': 'android',
-            },
-            android_config='main_builder_rel_mb',
-            execution_mode=builder_spec.TEST,
-            parent_buildername='GPU FYI Android arm Builder',
-            simulation_platform='linux',
-        ),
-    'Android FYI Release (NVIDIA Shield TV)':
-        _chromium_gpu_fyi_spec(
-            chromium_config='android',
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'android',
-                'enable_reclient',
-            ],
-            chromium_config_kwargs={
-                'TARGET_PLATFORM': 'android',
-            },
-            android_config='main_builder_rel_mb',
-            execution_mode=builder_spec.TEST,
-            parent_buildername='GPU FYI Android arm Builder',
-            simulation_platform='linux',
-            serialize_tests=True,
-        ),
-    'Android FYI Release (Pixel 2)':
-        _chromium_gpu_fyi_spec(
-            chromium_config='android',
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'android',
-                'enable_reclient',
-            ],
-            chromium_config_kwargs={
-                'TARGET_PLATFORM': 'android',
-            },
-            android_config='main_builder_rel_mb',
-            execution_mode=builder_spec.TEST,
-            parent_buildername='GPU FYI Android arm Builder',
-            simulation_platform='linux',
-        ),
-    'Android FYI Release (Pixel 4)':
-        _chromium_gpu_fyi_spec(
-            chromium_config='android',
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'android',
-                'enable_reclient',
-            ],
-            chromium_config_kwargs={
-                'TARGET_PLATFORM': 'android',
-            },
-            android_config='main_builder_rel_mb',
-            execution_mode=builder_spec.TEST,
-            parent_buildername='GPU FYI Android arm Builder',
-            simulation_platform='linux',
         ),
     'ChromeOS FYI Release (amd64-generic)':
         _chromium_gpu_fyi_spec(
