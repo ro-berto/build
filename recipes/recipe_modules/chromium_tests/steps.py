@@ -1677,10 +1677,6 @@ class LocalGTestTestSpec(TestSpec):
 
 class LocalGTestTest(LocalTest):
 
-  def __init__(self, spec, chromium_tests_api):
-    super(LocalGTestTest, self).__init__(spec, chromium_tests_api)
-    self._gtest_results = {}
-
   @Test.test_options.setter
   def test_options(self, value):
     self._test_options = value
@@ -2368,10 +2364,6 @@ class SwarmingGTestTestSpec(SwarmingTestSpec):
 
 
 class SwarmingGTestTest(SwarmingTest):
-
-  def __init__(self, spec, chromium_tests_api):
-    super(SwarmingGTestTest, self).__init__(spec, chromium_tests_api)
-    self._gtest_results = {}
 
   @property
   def option_flags(self):
