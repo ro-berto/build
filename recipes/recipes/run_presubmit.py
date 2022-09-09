@@ -240,8 +240,7 @@ def _RunStepsInternal(api):
     # minutes.
     timeout = 900 if repo_name == 'luci_py' else 480
     # ok_ret='any' causes all exceptions to be ignored in this step
-    step_json = api.presubmit(
-        *presubmit_args, venv=True, timeout=timeout, ok_ret='any')
+    step_json = api.presubmit(*presubmit_args, timeout=timeout, ok_ret='any')
     # Set recipe result values
     if step_json:
       raw_result.summary_markdown = _createSummaryMarkdown(step_json)
