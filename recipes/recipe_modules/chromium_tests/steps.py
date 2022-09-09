@@ -420,18 +420,18 @@ class Test(object):
     # failures.
     # Maps test name to monorail issue
     # Ex: "fast/frames/002.html" -> "1339538"
-    # TODO (crbug/1314194): Remove once we're using weetbix for flake
+    # TODO (crbug/1314194): Remove once we're using luci analysis for flake
     # exoneration
     self._known_flaky_failures_map = {}
 
     # Set of test names
     # TODO (crbug/1314194): Update name to something else since
     # this also includes tests failing on ToT
-    self._known_weetbix_flaky_failures = set()
+    self._known_luci_analysis_flaky_failures = set()
 
-    # Set of test names that barely meet weetbix flaky criteria. These can
+    # Set of test names that barely meet luci analysis flaky criteria. These can
     # trigger a retry of the shard to avoid data cannibalization
-    self._weak_weetbix_flaky_failures = set()
+    self._weak_luci_analysis_flaky_failures = set()
 
     # A map from suffix [e.g. 'with patch'] to the name of the recipe engine
     # step that was invoked in run(). This makes the assumption that run() only
@@ -618,19 +618,20 @@ class Test(object):
   def update_rdb_results(self, suffix, results):
     self._rdb_results[suffix] = results
 
-  # TODO (crbug/1314194): Remove once we're using weetbix for flake exoneration
+  # TODO (crbug/1314194): Remove once we're using luci analysis for flake
+  # exoneration
   @property
   def known_flaky_failures(self):
     """Return a set of tests that failed but known to be flaky at ToT."""
     return set(self._known_flaky_failures_map)
 
   @property
-  def known_weetbix_flaky_failures(self):
-    return self._known_weetbix_flaky_failures
+  def known_luci_analysis_flaky_failures(self):
+    return self._known_luci_analysis_flaky_failures
 
   @property
-  def weak_weetbix_flaky_failures(self):
-    return self._weak_weetbix_flaky_failures
+  def weak_luci_analysis_flaky_failures(self):
+    return self._weak_luci_analysis_flaky_failures
 
   def get_summary_of_known_flaky_failures(self):
     """Returns a set of text to use to display in the test results summary."""
@@ -643,21 +644,21 @@ class Test(object):
     """Add a known flaky failure on ToT along with the monorail issue id."""
     self._known_flaky_failures_map[test_name] = monorail_issue
 
-  def add_known_weetbix_flaky_failures(self, test_names):
+  def add_known_luci_analysis_flaky_failures(self, test_names):
     """Add known flaky failures on ToT
 
     Args:
       test_names: Iterable of string test names
     """
-    self._known_weetbix_flaky_failures.update(test_names)
+    self._known_luci_analysis_flaky_failures.update(test_names)
 
-  def add_weak_weetbix_flaky_failure(self, test_name):
+  def add_weak_luci_analysis_flaky_failure(self, test_name):
     """Add known weak flaky failures
 
     Args:
       test_names: String of a test name
     """
-    self._weak_weetbix_flaky_failures.add(test_name)
+    self._weak_luci_analysis_flaky_failures.add(test_name)
 
   def compile_targets(self):
     """List of compile targets needed by this test."""

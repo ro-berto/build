@@ -364,15 +364,17 @@ class TestUtilsApi(recipe_api.RecipeApi):
                   explanation_html=explanation_html,
                   reason=test_result_pb2.ExonerationReason.OCCURS_ON_MAINLINE,
               ))
-      # Any failure known by FindIt to be flaky should also be exonerated.
-      elif suffix == 'with patch' or suffix == 'inverted with patch':
+      # Any failure known to be flaky should also be exonerated.
+      elif suffix == 'with patch':
 
-        weetbix_exoneration = ('weetbix.enable_weetbix_exonerations' in
-                               self.m.buildbucket.build.input.experiments)
+        luci_analysis_exoneration = ('weetbix.enable_weetbix_exonerations' in
+                                     self.m.buildbucket.build.input.experiments)
 
-        if weetbix_exoneration:
-          explanation_html = 'Weetbix reported this test as being flaky.'
-          flakes = suite.known_weetbix_flaky_failures
+        if luci_analysis_exoneration:
+          step_name = 'exonerate unrelated test failures (luci.analysis)'
+          explanation_html = (
+              'LUCI Analysis reported this test as being flaky or failing.')
+          flakes = suite.known_luci_analysis_flaky_failures
         else:
           explanation_html = 'FindIt reported this test as being flaky.'
           flakes = suite.known_flaky_failures
@@ -408,7 +410,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     Returns:
       Tuple([steps.Test]): A tuple containing two lists of unexonerated test
         suites: 1. for failed test suites with exonerated suites removed and
-        2. any exonerated suites that should be retried anyway for weetbix
+        2. any exonerated suites that should be retried anyway for LUCI Analysis
         purposes
     """
     # If *all* the deterministic failures are known flaky tests, a test suite
@@ -422,8 +424,9 @@ class TestUtilsApi(recipe_api.RecipeApi):
     if not self._should_exonerate_flaky_failures:
       return failed_test_suites, []  #pragma: nocover
 
-    retry_weak_weetbix_exonerations = ('weetbix.retry_weak_exonerations' in self
-                                       .m.buildbucket.build.input.experiments)
+    retry_weak_luci_analysis_exonerations = (
+        'weetbix.retry_weak_exonerations' in
+        self.m.buildbucket.build.input.experiments)
 
     pruned_suites = failed_test_suites[:]
     exonerated_suites_to_retry = []
@@ -439,7 +442,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
         # effectively "cannibalizing" our data
         # Long-term, we're thinking of triggering the retry shards and not
         # having the build collect the results.
-        if retry_weak_weetbix_exonerations and t.weak_weetbix_flaky_failures:
+        if (retry_weak_luci_analysis_exonerations and
+            t.weak_luci_analysis_flaky_failures):
           exonerated_suites_to_retry.append(t)
 
         pruned_suites.remove(t)
@@ -450,15 +454,15 @@ class TestUtilsApi(recipe_api.RecipeApi):
           'tests_being_retried': list(t.deterministic_failures('with patch')),
       } for t in exonerated_suites_to_retry]
       log_step = self.m.step.empty(
-          'logging weak Weetbix exonerations',
+          'logging weak LUCI Analysis exonerations',
           log_text=self.m.json.dumps(to_log, indent=2))
       log_step.presentation.properties['weetbix.retry_weak_exonerations'] = (
           to_log)
 
     return pruned_suites, exonerated_suites_to_retry
 
-  def _query_weetbix_failures(self, tests_to_check):
-    """Get flaky or deterministically failing tests by querying weetbix
+  def _query_luci_analysis_failures(self, tests_to_check):
+    """Get flaky or deterministically failing tests by querying LUCI Analysis
 
     Exoneration criteria:
     - At least 3 flaky verdicts in the past 5 weekdays AND at least 1 flaky
@@ -469,7 +473,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     run and then passed in the next run (aka the "retry shard (with patch)")
 
     If a suite has tests to be exonerated, the suite's
-    _known_weetbix_flaky_failures will be updated.
+    _known_luci_analysis_flaky_failures will be updated.
 
     Args:
       tests_to_check (List(Test)): List of failing test suites
@@ -486,31 +490,32 @@ class TestUtilsApi(recipe_api.RecipeApi):
     ])
     if total_failing_variants > 100:
       self.m.step.empty(
-          'Skipping querying weetbix for failure rates',
+          'Skipping querying LUCI Analysis for failure rates',
           step_text='Too many failed tests: %d' % total_failing_variants)
       return
     try:
       suite_to_per_suite_analysis = self.m.weetbix.query_failure_rate(
           tests_to_check)
     except self.m.step.StepFailure as f:
-      # Don't fail the build if something's wrong with weetbix.
+      # Don't fail the build if something's wrong with LUCI Analysis.
       # We'll just not exonerate any failing tests and log that this happened.
       query_failure_rate_step_error_msg = f.reason_message()
 
-    # Handles weetbix RPC server errors: 500s or response returned but no data
+    # Handles LUCI Analysis RPC server errors: 500s or response returned but no
+    # data
     if not suite_to_per_suite_analysis:
       if not query_failure_rate_step_error_msg:
         query_failure_rate_step_error_msg = (
-            'Missing failure rates from weetbix')
+            'Missing failure rates from LUCI Analysis')
       log_step = self.m.step.empty(
-          'error querying weetbix for failure rates',
+          'error querying LUCI Analysis for failure rates',
           step_text=query_failure_rate_step_error_msg)
       # Set an output property so this is easily queryable
-      log_step.presentation.properties['weetbix_query_error'] = True
+      log_step.presentation.properties['luci_analysis_query_error'] = True
       return
 
     flaky_verdict_example_log = {}
-    weetbix_build_output = []
+    luci_analysis_build_output = []
     for suite in tests_to_check:
       failure_rate_analysis_per_suite = suite_to_per_suite_analysis.get(
           suite.name)
@@ -560,32 +565,32 @@ class TestUtilsApi(recipe_api.RecipeApi):
           strongly_exonerated = True
           exonerated = True
         else:
-          suite.add_weak_weetbix_flaky_failure(analysis.test_name)
+          suite.add_weak_luci_analysis_flaky_failure(analysis.test_name)
 
         if meets_min_recent_unexpected or barely_meets_min_flakiness:
           tests_to_exonerate.add(analysis.test_name)
           exonerated = True
 
-        # This is to output weetbix information in the build output property
-        # and to add the flaky verdict examples as a log in a step
+        # This is to output LUCI Analysis information in the build output
+        # property and to add the flaky verdict examples as a log in a step
         to_log = stats
         to_log['variant_hash'] = analysis.variant_hash
         to_log['exonerated'] = exonerated
         to_log['strongly_exonerated'] = strongly_exonerated
         to_log['test_id'] = analysis.test_id
-        weetbix_build_output.append(to_log)
+        luci_analysis_build_output.append(to_log)
         flaky_verdict_example_log[analysis.test_id] = (
             analysis.run_flaky_verdict_examples)
 
       if tests_to_exonerate:
-        suite.add_known_weetbix_flaky_failures(tests_to_exonerate)
+        suite.add_known_luci_analysis_flaky_failures(tests_to_exonerate)
 
     # Log this so that recent flaky verdicts are visible in build
-    query_weetbix_step = self.m.step.empty(
-        'query weetbix for flaky tests',
+    query_luci_analysis_step = self.m.step.empty(
+        'query LUCI Analysis for flaky tests',
         log_text=self.m.json.dumps(flaky_verdict_example_log, indent=2))
-    query_weetbix_step.presentation.properties['weetbix_info'] = (
-        weetbix_build_output)
+    query_luci_analysis_step.presentation.properties['luci_analysis_info'] = (
+        luci_analysis_build_output)
 
   def _query_flaky_failures(self, tests_to_check):
     """Queries FindIt if a given set of tests are known to be flaky.
@@ -668,9 +673,9 @@ class TestUtilsApi(recipe_api.RecipeApi):
     which allows switch on/off with ease and flexibility.
 
     If the enable_weetbix_queries experiment is set, this will also query
-    weetbix for test failure/flakiness stats via the
-    _query_weetbix_failures() function. The flaky test_names will be
-    stored in the test_suite's known_weetbix_flaky_failures property
+    LUCI Analysis for test failure/flakiness stats via the
+    _query_luci_analysis_failures() function. The flaky test_names will be
+    stored in the test_suite's known_luci_analysis_flaky_failures property
 
     Args:
       failed_test_suites ([steps.Test]): A list of failed test suites to check.
@@ -679,7 +684,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
       return
 
     tests_to_check = []
-    weetbix_tests_to_check = []
+    luci_analysis_tests_to_check = []
     for test_suite in failed_test_suites:
       tests = []
       for t in set(test_suite.deterministic_failures('with patch')):
@@ -694,14 +699,14 @@ class TestUtilsApi(recipe_api.RecipeApi):
         # 2. Avoid overloading the service.
         continue
 
-      weetbix_tests_to_check.append(test_suite)
+      luci_analysis_tests_to_check.append(test_suite)
       tests_to_check.extend(tests)
 
     experiments = self.m.buildbucket.build.input.experiments
     if 'enable_weetbix_queries' in experiments:
       # TODO (crbug/1314194): Process failure rates for test flakiness and
       # report difference
-      self._query_weetbix_failures(weetbix_tests_to_check)
+      self._query_luci_analysis_failures(luci_analysis_tests_to_check)
 
     known_flakes = self._query_flaky_failures(tests_to_check)
     if not known_flakes:
@@ -860,7 +865,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
       return (not valid) or failures
 
     # Don't check the exonerated_suites_to_retry since they've already been
-    # exonerated but have just been retried for weetbix's sake (see
+    # exonerated but have just been retried for luci analysis's sake (see
     # _clean_failed_suite_list() for more details).
     failed_and_invalid_suites = [
         t for t in failed_and_invalid_suites if _still_failing(t)

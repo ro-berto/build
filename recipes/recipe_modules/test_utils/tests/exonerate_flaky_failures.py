@@ -29,7 +29,7 @@ PROPERTIES = {
     # This property is a dictionary that specifies the expectations of the
     # labeled known flakes of the mocked tests, and the format is from a test
     # name to a list of tests.
-    'known_weetbix_flakes_expectations': Property(default={}),
+    'known_luci_analysis_flakes_expectations': Property(default={}),
 
     # This property is a boolean that indicates whether to create a mocked test
     # that has failed tests to test that if there are no test failures, a
@@ -49,8 +49,9 @@ PROPERTIES = {
 }
 
 
-def RunSteps(api, known_flakes_expectations, known_weetbix_flakes_expectations,
-             exclude_failed_test, has_too_many_failures, all_valid):
+def RunSteps(api, known_flakes_expectations,
+             known_luci_analysis_flakes_expectations, exclude_failed_test,
+             has_too_many_failures, all_valid):
   test_specs = [
       steps.MockTestSpec.create(name='succeeded_test'),
       steps.MockTestSpec.create(
@@ -86,8 +87,8 @@ def RunSteps(api, known_flakes_expectations, known_weetbix_flakes_expectations,
   for t in tests:
     assert t.known_flaky_failures == set(
         known_flakes_expectations.get(t.name, []))
-    assert t.known_weetbix_flaky_failures == set(
-        known_weetbix_flakes_expectations.get(t.name, []))
+    assert t.known_luci_analysis_flaky_failures == set(
+        known_luci_analysis_flakes_expectations.get(t.name, []))
 
 
 def GenTests(api):
@@ -167,9 +168,9 @@ def GenTests(api):
       }),
       api.step_data('query known flaky failures on CQ', retcode=1),
       api.override_step_data(
-          'query weetbix for failure rates.rpc call', retcode=1),
+          'query LUCI Analysis for failure rates.rpc call', retcode=1),
       api.post_process(post_process.MustRun,
-                       'error querying weetbix for failure rates'),
+                       'error querying LUCI Analysis for failure rates'),
       api.post_process(post_process.MustRun,
                        'query known flaky failures on CQ'),
       api.post_process(post_process.StepTextContains,
@@ -191,7 +192,7 @@ def GenTests(api):
           },
       }),
       api.step_data(
-          'query weetbix for failure rates.rpc call',
+          'query LUCI Analysis for failure rates.rpc call',
           stdout=api.raw_io.output_text(api.json.dumps({'testVariants': []})),
       ),
       api.step_data(
@@ -201,7 +202,7 @@ def GenTests(api):
                        'query known flaky failures on CQ',
                        ['Response is ill-formed']),
       api.post_process(post_process.MustRun,
-                       'error querying weetbix for failure rates'),
+                       'error querying LUCI Analysis for failure rates'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -242,11 +243,11 @@ def GenTests(api):
           },
       }),
       api.step_data(
-          'query weetbix for failure rates.rpc call',
+          'query LUCI Analysis for failure rates.rpc call',
           stdout=api.raw_io.output_text(api.json.dumps({})),
       ),
       api.post_process(post_process.MustRun,
-                       'error querying weetbix for failure rates'),
+                       'error querying LUCI Analysis for failure rates'),
       api.step_data('query known flaky failures on CQ', api.json.output({})),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
@@ -268,7 +269,7 @@ def GenTests(api):
       api.post_process(post_process.DoesNotRun,
                        'query known flaky failures on CQ'),
       api.post_process(post_process.DoesNotRun,
-                       'query weetbix for failure rates'),
+                       'query LUCI Analysis for failure rates'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -293,7 +294,7 @@ def GenTests(api):
           }),
       api.step_data('query known flaky failures on CQ', api.json.output([])),
       api.step_data(
-          'query weetbix for failure rates.rpc call',
+          'query LUCI Analysis for failure rates.rpc call',
           stdout=api.raw_io.output_text(
               api.json.dumps({
                   'testVariants': [
@@ -324,7 +325,7 @@ def GenTests(api):
           known_flakes_expectations={
               'failed_test': ['testA'],
           },
-          known_weetbix_flakes_expectations={
+          known_luci_analysis_flakes_expectations={
               'failed_test': ['testA'],
           },
           override_failed_test_names=['testA'],
@@ -339,7 +340,7 @@ def GenTests(api):
               api.test_utils.rdb_results(
                   'failed_test', failing_tests=['testA']))),
       api.step_data(
-          'query weetbix for failure rates.rpc call',
+          'query LUCI Analysis for failure rates.rpc call',
           stdout=api.raw_io.output_text(
               api.json.dumps({
                   'testVariants': [
@@ -386,7 +387,7 @@ def GenTests(api):
           known_flakes_expectations={
               'failed_test': ['testA', 'testB'],
           },
-          known_weetbix_flakes_expectations={
+          known_luci_analysis_flakes_expectations={
               'failed_test': ['testA', 'testB'],
           },
           **{
@@ -417,7 +418,7 @@ def GenTests(api):
               ]
           })),
       api.step_data(
-          'query weetbix for failure rates.rpc call',
+          'query LUCI Analysis for failure rates.rpc call',
           stdout=api.raw_io.output_text(
               api.json.dumps({
                   'testVariants': [
@@ -429,14 +430,17 @@ def GenTests(api):
       api.post_process(post_process.MustRun,
                        'query known flaky failures on CQ'),
       api.post_process(post_process.MustRun,
-                       'exonerate unrelated test failures'),
-      api.post_process(CheckStepInput, 'exonerate unrelated test failures',
+                       'exonerate unrelated test failures (luci.analysis)'),
+      api.post_process(CheckStepInput,
+                       'exonerate unrelated test failures (luci.analysis)',
                        'testA'),
-      api.post_process(CheckStepInput, 'exonerate unrelated test failures',
+      api.post_process(CheckStepInput,
+                       'exonerate unrelated test failures (luci.analysis)',
                        'testB'),
-      # Ensure Weetbix is in the explaination
-      api.post_process(CheckStepInput, 'exonerate unrelated test failures',
-                       'Weetbix'),
+      # Ensure LUCI Analysis is in the explaination
+      api.post_process(CheckStepInput,
+                       'exonerate unrelated test failures (luci.analysis)',
+                       'LUCI Analysis'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -457,7 +461,7 @@ def GenTests(api):
           known_flakes_expectations={
               'failed_test': ['testA'],
           },
-          known_weetbix_flakes_expectations={
+          known_luci_analysis_flakes_expectations={
               'failed_test': ['testA'],
           },
           override_failed_test_names=['testA'],
@@ -479,7 +483,7 @@ def GenTests(api):
               }],
           })),
       api.step_data(
-          'query weetbix for failure rates.rpc call',
+          'query LUCI Analysis for failure rates.rpc call',
           stdout=api.raw_io.output_text(
               api.json.dumps({
                   'testVariants': [
@@ -488,7 +492,7 @@ def GenTests(api):
                   ]
               })),
       ),
-      api.post_process(post_process.PropertiesContain, 'weetbix_info'),
+      api.post_process(post_process.PropertiesContain, 'luci_analysis_info'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -508,7 +512,7 @@ def GenTests(api):
               },
           }),
       api.post_process(post_process.DoesNotRun,
-                       'query weetbix for failure rates'),
+                       'query LUCI Analysis for failure rates'),
       api.post_process(post_process.DoesNotRun,
                        'query known flaky failures on CQ'),
       api.post_process(post_process.StatusSuccess),
@@ -533,7 +537,7 @@ def GenTests(api):
                   'failed_test', failing_tests=['testA', 'testB']))),
       api.properties(
           has_too_many_failures=True,
-          known_weetbix_flakes_expectations={
+          known_luci_analysis_flakes_expectations={
               'failed_test': ['testA', 'testB'],
           },
           **{
@@ -542,7 +546,7 @@ def GenTests(api):
               },
           }),
       api.step_data(
-          'query weetbix for failure rates.rpc call',
+          'query LUCI Analysis for failure rates.rpc call',
           stdout=api.raw_io.output_text(
               api.json.dumps({
                   'testVariants': [
@@ -570,7 +574,7 @@ def GenTests(api):
           known_flakes_expectations={
               'failed_test': ['testA', 'testB'],
           },
-          known_weetbix_flakes_expectations={
+          known_luci_analysis_flakes_expectations={
               'failed_test': ['testA', 'testB'],
           },
           override_failed_test_names=['testA'],
@@ -586,7 +590,7 @@ def GenTests(api):
               api.test_utils.rdb_results(
                   'failed_test', failing_tests=['testA', 'testB']))),
       api.step_data(
-          'query weetbix for failure rates.rpc call',
+          'query LUCI Analysis for failure rates.rpc call',
           stdout=api.raw_io.output_text(
               api.json.dumps({
                   'testVariants': [
@@ -644,7 +648,7 @@ def GenTests(api):
           known_flakes_expectations={
               'failed_test': ['testA', 'testB'],
           },
-          known_weetbix_flakes_expectations={
+          known_luci_analysis_flakes_expectations={
               'failed_test': ['testA', 'testB'],
           },
           # Need to make sure the retry step isn't because of an invalid test
@@ -661,7 +665,7 @@ def GenTests(api):
               api.test_utils.rdb_results(
                   'failed_test', failing_tests=['testA', 'testB']))),
       api.step_data(
-          'query weetbix for failure rates.rpc call',
+          'query LUCI Analysis for failure rates.rpc call',
           stdout=api.raw_io.output_text(
               api.json.dumps({
                   'testVariants': [
@@ -712,7 +716,7 @@ def GenTests(api):
           known_flakes_expectations={
               'failed_test': [],
           },
-          known_weetbix_flakes_expectations={
+          known_luci_analysis_flakes_expectations={
               'failed_test': ['testA', 'testB'],
           },
           override_failed_test_names=['testA'],
@@ -727,7 +731,7 @@ def GenTests(api):
               api.test_utils.rdb_results(
                   'failed_test', failing_tests=['testA', 'testB']))),
       api.step_data(
-          'query weetbix for failure rates.rpc call',
+          'query LUCI Analysis for failure rates.rpc call',
           stdout=api.raw_io.output_text(
               api.json.dumps({
                   'testVariants': [
@@ -757,7 +761,7 @@ def GenTests(api):
           known_flakes_expectations={
               'failed_test': [],
           },
-          known_weetbix_flakes_expectations={
+          known_luci_analysis_flakes_expectations={
               'failed_test': [],
           },
           override_failed_test_names=[],
@@ -773,9 +777,10 @@ def GenTests(api):
                   'failed_test',
                   failing_tests=['test%d' % t for t in range(101)]))),
       api.post_process(post_process.DoesNotRun,
-                       'query weetbix for failure rates.rpc call'),
+                       'query LUCI Analysis for failure rates.rpc call'),
       api.post_process(post_process.StepTextContains,
-                       'Skipping querying weetbix for failure rates', ['101']),
+                       'Skipping querying LUCI Analysis for failure rates',
+                       ['101']),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )

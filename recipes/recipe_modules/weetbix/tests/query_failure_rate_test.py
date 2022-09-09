@@ -290,7 +290,7 @@ def GenTests(api):
           },
       ),
       api.step_data(
-          'query weetbix for failure rates.rpc call',
+          'query LUCI Analysis for failure rates.rpc call',
           stdout=api.raw_io.output_text(
               api.json.dumps({
                   'testVariants': test_variants_response,
@@ -298,7 +298,7 @@ def GenTests(api):
       ),
       api.post_process(
           post_process.LogContains,
-          'query weetbix for failure rates.rpc call',
+          'query LUCI Analysis for failure rates.rpc call',
           'input',
           [
               'ninja://gpu:suite_1/test_one',
@@ -307,7 +307,7 @@ def GenTests(api):
       ),
       api.post_process(
           post_process.LogDoesNotContain,
-          'query weetbix for failure rates.rpc call',
+          'query LUCI Analysis for failure rates.rpc call',
           'input',
           [
               'ninja://gpu:suite_3/test_one',
@@ -325,7 +325,7 @@ def GenTests(api):
           num_intervals_list=None,
       ),
       api.step_data(
-          'query weetbix for failure rates.rpc call',
+          'query LUCI Analysis for failure rates.rpc call',
           stdout=api.raw_io.output_text(api.json.dumps({})),
       ),
       api.post_process(post_process.StatusSuccess),
