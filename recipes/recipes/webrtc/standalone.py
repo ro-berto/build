@@ -27,7 +27,7 @@ DEPS = [
 
 def should_use_reclient(api, builder_id):
   # TODO(b/239908030): add logic to enable reclient by platform and/or target.
-  if not builder_id.group == 'client.webrtc':
+  if not 'client.webrtc' in builder_id.group:
     return False
   if not api.platform.is_linux:
     return False
