@@ -427,26 +427,38 @@ class TestUtilsApi(recipe_api.RecipeApi):
     retry_weak_luci_analysis_exonerations = (
         'weetbix.retry_weak_exonerations' in
         self.m.buildbucket.build.input.experiments)
+    luci_analysis_exoneration = ('weetbix.enable_weetbix_exonerations' in
+                                 self.m.buildbucket.build.input.experiments)
 
     pruned_suites = failed_test_suites[:]
     exonerated_suites_to_retry = []
     self._query_and_mark_flaky_failures(pruned_suites)
-    for t in failed_test_suites:
-      if not t.known_flaky_failures:
-        continue
+    if luci_analysis_exoneration:
+      for t in failed_test_suites:
+        if not t.known_luci_analysis_flaky_failures:
+          continue
 
-      if set(t.deterministic_failures('with patch')).issubset(
-          t.known_flaky_failures):
+        if set(t.deterministic_failures('with patch')).issubset(
+            t.known_luci_analysis_flaky_failures):
+          pruned_suites.remove(t)
+    else:
+      for t in failed_test_suites:
+        if not t.known_flaky_failures:
+          continue
+
+        if set(t.deterministic_failures('with patch')).issubset(
+            t.known_flaky_failures):
+          pruned_suites.remove(t)
+
+    if retry_weak_luci_analysis_exonerations:
+      for t in failed_test_suites:
         # If a test is barely considered flaky, we want to run  it again to
         # keep it from thrashing between being classified as flaky and non-flaky
         # effectively "cannibalizing" our data
         # Long-term, we're thinking of triggering the retry shards and not
         # having the build collect the results.
-        if (retry_weak_luci_analysis_exonerations and
-            t.weak_luci_analysis_flaky_failures):
+        if (t.weak_luci_analysis_flaky_failures):
           exonerated_suites_to_retry.append(t)
-
-        pruned_suites.remove(t)
 
     if exonerated_suites_to_retry:
       to_log = [{
@@ -564,12 +576,12 @@ class TestUtilsApi(recipe_api.RecipeApi):
           tests_to_exonerate.add(analysis.test_name)
           strongly_exonerated = True
           exonerated = True
-        else:
-          suite.add_weak_luci_analysis_flaky_failure(analysis.test_name)
-
-        if meets_min_recent_unexpected or barely_meets_min_flakiness:
+        elif barely_meets_min_flakiness:
           tests_to_exonerate.add(analysis.test_name)
           exonerated = True
+
+        if not meets_min_recent_unexpected and barely_meets_min_flakiness:
+          suite.add_weak_luci_analysis_flaky_failure(analysis.test_name)
 
         # This is to output LUCI Analysis information in the build output
         # property and to add the flaky verdict examples as a log in a step

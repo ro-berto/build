@@ -30,6 +30,7 @@ PROPERTIES = {
     # labeled known flakes of the mocked tests, and the format is from a test
     # name to a list of tests.
     'known_luci_analysis_flakes_expectations': Property(default={}),
+    'weak_flaky_failures': Property(default={}),
 
     # This property is a boolean that indicates whether to create a mocked test
     # that has failed tests to test that if there are no test failures, a
@@ -50,8 +51,8 @@ PROPERTIES = {
 
 
 def RunSteps(api, known_flakes_expectations,
-             known_luci_analysis_flakes_expectations, exclude_failed_test,
-             has_too_many_failures, all_valid):
+             known_luci_analysis_flakes_expectations, weak_flaky_failures,
+             exclude_failed_test, has_too_many_failures, all_valid):
   test_specs = [
       steps.MockTestSpec.create(name='succeeded_test'),
       steps.MockTestSpec.create(
@@ -89,6 +90,8 @@ def RunSteps(api, known_flakes_expectations,
         known_flakes_expectations.get(t.name, []))
     assert t.known_luci_analysis_flaky_failures == set(
         known_luci_analysis_flakes_expectations.get(t.name, []))
+    assert t.weak_luci_analysis_flaky_failures == set(
+        weak_flaky_failures.get(t.name, []))
 
 
 def GenTests(api):
@@ -279,7 +282,9 @@ def GenTests(api):
       api.chromium.generic_build(
           builder_group='fake-group',
           builder='fake-builder',
-          experiments=['enable_weetbix_queries']),
+          experiments=[
+              'enable_weetbix_queries', 'weetbix.enable_weetbix_exonerations'
+          ]),
       api.override_step_data(
           'failed_test results',
           stdout=api.raw_io.output_text(
@@ -326,6 +331,9 @@ def GenTests(api):
               'failed_test': ['testA'],
           },
           known_luci_analysis_flakes_expectations={
+              'failed_test': ['testA'],
+          },
+          weak_flaky_failures={
               'failed_test': ['testA'],
           },
           override_failed_test_names=['testA'],
@@ -417,13 +425,20 @@ def GenTests(api):
                   },
               ]
           })),
+      api.time.seed(60 * 60 * 12),
       api.step_data(
           'query LUCI Analysis for failure rates.rpc call',
           stdout=api.raw_io.output_text(
               api.json.dumps({
                   'testVariants': [
-                      generate_analysis('testA', flaky_verdict_count=10),
-                      generate_analysis('testB', flaky_verdict_count=10),
+                      generate_analysis(
+                          'testA',
+                          flaky_verdict_count=10,
+                          examples_times=[60 * 60 * 12]),
+                      generate_analysis(
+                          'testB',
+                          flaky_verdict_count=10,
+                          examples_times=[60 * 60 * 12]),
                   ]
               })),
       ),
@@ -550,8 +565,8 @@ def GenTests(api):
           stdout=api.raw_io.output_text(
               api.json.dumps({
                   'testVariants': [
-                      generate_analysis('testA', flaky_verdict_count=10),
-                      generate_analysis('testB', flaky_verdict_count=10),
+                      generate_analysis('testA', unexpected_count=10),
+                      generate_analysis('testB', unexpected_count=10),
                   ]
               })),
       ),
@@ -651,6 +666,9 @@ def GenTests(api):
           known_luci_analysis_flakes_expectations={
               'failed_test': ['testA', 'testB'],
           },
+          weak_flaky_failures={
+              'failed_test': ['testA', 'testB'],
+          },
           # Need to make sure the retry step isn't because of an invalid test
           all_valid=True,
           override_failed_test_names=['testA'],
@@ -717,6 +735,9 @@ def GenTests(api):
               'failed_test': [],
           },
           known_luci_analysis_flakes_expectations={
+              'failed_test': ['testA', 'testB'],
+          },
+          weak_flaky_failures={
               'failed_test': ['testA', 'testB'],
           },
           override_failed_test_names=['testA'],
