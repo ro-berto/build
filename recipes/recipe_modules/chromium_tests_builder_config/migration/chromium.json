@@ -1916,21 +1916,6 @@
       "tryserver.blink:linux-blink-optional-highdpi-rel"
     ]
   },
-  "tryserver.blink:mac10.13-blink-rel": {
-    "builders": [
-      "tryserver.blink:mac10.13-blink-rel"
-    ]
-  },
-  "tryserver.blink:mac10.14-blink-rel": {
-    "builders": [
-      "tryserver.blink:mac10.14-blink-rel"
-    ]
-  },
-  "tryserver.blink:mac10.15-blink-rel": {
-    "builders": [
-      "tryserver.blink:mac10.15-blink-rel"
-    ]
-  },
   "tryserver.blink:mac11.0-blink-rel": {
     "blockers": [
       "builder 'chromium.fyi:mac11.0-blink-rel-dummy' does not exist"
