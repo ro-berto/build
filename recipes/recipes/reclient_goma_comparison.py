@@ -89,6 +89,22 @@ COMPARISON_BUILDERS = freeze({
         'simulation_platform': 'mac',
         'targets': ['all'],
     },
+    'Comparison Mac arm64 on arm64 (reclient)': {
+        'chromium_config': 'chromium',
+        'gclient_config': 'chromium',
+        'chromium_apply_config': [
+            'mb', 'goma_enable_cache_silo', 'goma_large_cache_file'
+        ],
+        'gclient_apply_config': ['enable_reclient', 'reclient_test'],
+        'platform': 'mac',
+        'chromium_config_kwargs': {
+            'TARGET_ARCH': 'arm',
+            'TARGET_BITS': 64,
+            'TARGET_PLATFORM': 'mac',
+        },
+        'simulation_platform': 'mac',
+        'targets': ['all'],
+    },
     'Comparison Windows (reclient)': {
         'chromium_config': 'chromium',
         'gclient_config': 'chromium',
