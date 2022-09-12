@@ -41,6 +41,10 @@ BUILDERS = freeze({
                         # 'fuchsia' is required to build the builtins.a for Fuchsia.
                         'fuchsia',
 
+                        # Required to fetch Rust toolchain deps, including the
+                        # Rust sources themselves.
+                        'checkout_rust_toolchain_deps',
+
                         # 'checkout_bazel' is required by tools/rust/build_crubit.py
                         # (see also https://crbug.com/1329611).
                         'checkout_bazel'

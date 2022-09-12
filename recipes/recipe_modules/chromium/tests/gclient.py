@@ -137,6 +137,11 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
   yield api.test(
+      'checkout_rust_toolchain_deps',
+      api.properties(apply_gclient_config='checkout_rust_toolchain_deps'),
+      api.post_process(post_process.DropExpectation),
+  )
+  yield api.test(
       'fuchsia_arm64',
       api.properties(apply_gclient_config='fuchsia_arm64'),
       api.post_process(post_process.DropExpectation),

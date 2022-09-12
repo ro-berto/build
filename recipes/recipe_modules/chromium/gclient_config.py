@@ -464,3 +464,8 @@ def reclient_clang_scan_deps(c):
 @CONFIG_CTX()
 def use_rust(c):
   c.solutions[0].custom_vars['use_rust'] = 'True'
+
+
+@CONFIG_CTX()
+def checkout_rust_toolchain_deps(c):
+  c.solutions[0].custom_vars['checkout_rust_toolchain_deps'] = 'True'
