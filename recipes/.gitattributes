@@ -1,5 +1,4 @@
 /__init__.py                      recipes
-/annotation_utils.py              recipes
 /build_directory.py               recipes
 /clang_revision.py                recipes
 /cloudtail_utils.py               recipes

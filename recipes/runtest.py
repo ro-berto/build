@@ -45,7 +45,6 @@ sys.path.insert(
 from common import chromium_utils
 from common import gtest_utils
 
-import annotation_utils
 import build_directory
 import crash_utils
 import slave_utils
@@ -504,6 +503,59 @@ def _SymbolizeSnippetsInJSON(options, json_file_name):
     print stderr
 
 
+def _report_outcome(test_name, exit_code, log_processor):
+  """Output information about the outcome of the test."""
+
+  # Always print raw exit code of the subprocess. This is very helpful
+  # for debugging, especially when one gets the "crashed or hung" message
+  # with no output (exit code can have some clues, especially on Windows).
+  if exit_code < -100:
+    # Windows error codes such as 0xC0000005 and 0xC0000409 are much easier to
+    # recognize and differentiate in hex. In order to print them as unsigned
+    # hex we need to add 4 Gig to them.
+    print 'exit code (as seen by runtest.py): 0x%08X' % (exit_code + (1 << 32))
+  else:
+    print 'exit code (as seen by runtest.py): %d' % exit_code
+
+  if log_processor.ParsingErrors():
+    print 'runtest.py encountered the following errors'
+    for e in log_processor.ParsingErrors():
+      print '  ', e
+
+  print
+  print test_name
+  print '%s disabled' % log_processor.DisabledTests()
+  print '%s flaky' % log_processor.FlakyTests()
+
+  SUCCESS, WARNINGS, FAILURE = range(3)
+  status = SUCCESS
+
+  if exit_code == SUCCESS:
+    if (log_processor.ParsingErrors() or log_processor.FailedTests() or
+        log_processor.MemoryToolReportHashes()):
+      status = WARNINGS
+  elif exit_code == slave_utils.WARNING_EXIT_CODE:
+    status = WARNINGS
+  else:
+    status = FAILURE
+
+  failed_test_count = len(log_processor.FailedTests())
+  if failed_test_count == 0:
+    if status == SUCCESS:
+      return
+    if status == WARNINGS:
+      print 'warnings'
+      return
+
+  if log_processor.RunningTests():
+    print 'did not complete'
+
+  if failed_test_count:
+    print 'failed %d' % failed_test_count
+  else:
+    print 'crashed or hung'
+
+
 def _MainMac(options, args, extra_env):
   """Runs the test on mac."""
   if len(args) < 1:
@@ -565,12 +617,7 @@ def _MainMac(options, args, extra_env):
       log_processor.ProcessJSONFile(options.build_dir)
 
   if options.annotate:
-    annotation_utils.annotate(
-        options.test_type,
-        result,
-        log_processor,
-        perf_dashboard_id=options.build_properties.get('test_name')
-    )
+    _report_outcome(options.test_type, result, log_processor)
 
   return result
 
@@ -817,12 +864,7 @@ def _MainLinux(options, args, extra_env):
       log_processor.ProcessJSONFile(options.build_dir)
 
   if options.annotate:
-    annotation_utils.annotate(
-        options.test_type,
-        result,
-        log_processor,
-        perf_dashboard_id=options.build_properties.get('test_name')
-    )
+    _report_outcome(options.test_type, result, log_processor)
 
   return result
 
@@ -901,12 +943,7 @@ def _MainWin(options, args, extra_env):
       log_processor.ProcessJSONFile(options.build_dir)
 
   if options.annotate:
-    annotation_utils.annotate(
-        options.test_type,
-        result,
-        log_processor,
-        perf_dashboard_id=options.build_properties.get('test_name')
-    )
+    _report_outcome(options.test_type, result, log_processor)
 
   return result
 
