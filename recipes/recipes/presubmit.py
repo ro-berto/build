@@ -58,18 +58,20 @@ def RunSteps(api):
 
   skip_owners = False
   # TODO(crbug.com/1046950): Make this check stricter.
-  if (api.tryserver.gerrit_change.host == 'chromium-review.googlesource.com' and
+
+  if (not api.tryserver.gerrit_change or (
+      api.tryserver.gerrit_change.host == 'chromium-review.googlesource.com' and
       api.tryserver.gerrit_change.project == 'chromium/src' and
-      api.tryserver.gerrit_change_target_ref.startswith('refs/branch-heads/')):
+      api.tryserver.gerrit_change_target_ref.startswith('refs/branch-heads/'))):
     skip_owners = True
 
   dry_run_modes = (api.cq.DRY_RUN, api.cq.QUICK_DRY_RUN)
   if api.cq.active and api.cq.run_mode in dry_run_modes:
     api.cq.allow_reuse_for(*dry_run_modes)
-
   with api.context(cwd=cwd):
     bot_update_step = api.presubmit.prepare()
-    return api.presubmit.execute(bot_update_step, skip_owners)
+    return api.presubmit.execute(
+        bot_update_step, skip_owners, run_all=not api.tryserver.gerrit_change)
 
 
 def GenTests(api):
@@ -82,6 +84,21 @@ def GenTests(api):
           git_repo='https://chromium.googlesource.com/chromium/src'),
       api.step_data('presubmit', api.json.output({})),
       api.step_data('presubmit py3', api.json.output({})),
+  )
+
+  yield api.test(
+      'ci',
+      api.buildbucket.ci_build(
+          project='chromium',
+          bucket='ci',
+          builder='chromium_presubmit',
+          git_repo='https://chromium.googlesource.com/chromium/src'),
+      api.properties(
+          repository_url='https://chromium.googlesource.com/chromium/src.git',),
+      api.step_data('presubmit', api.json.output({})),
+      api.step_data('presubmit py3', api.json.output({})),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
