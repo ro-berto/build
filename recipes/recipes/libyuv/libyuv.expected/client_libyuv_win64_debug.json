@@ -254,7 +254,6 @@
       "Debug_x64",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Debug\", \"bot_id\": \"bot_id\", \"builder_group\": \"client.libyuv\", \"buildername\": \"Win64 Debug\", \"buildnumber\": 1337, \"recipe\": \"libyuv/libyuv\", \"slavename\": \"bot_id\"}",
-      "--step-name=libyuv_unittest",
       "--builder-name=Win64 Debug",
       "--slave-name=bot_id",
       "--build-number=1337",

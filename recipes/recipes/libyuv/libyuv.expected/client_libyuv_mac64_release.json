@@ -735,7 +735,6 @@
       "Release",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"bot_id\": \"bot_id\", \"builder_group\": \"client.libyuv\", \"buildername\": \"Mac64 Release\", \"buildnumber\": 1337, \"recipe\": \"libyuv/libyuv\", \"slavename\": \"bot_id\"}",
-      "--step-name=libyuv_unittest",
       "--builder-name=Mac64 Release",
       "--slave-name=bot_id",
       "--build-number=1337",

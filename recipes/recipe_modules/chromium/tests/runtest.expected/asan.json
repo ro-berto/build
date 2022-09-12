@@ -9,7 +9,6 @@
       "--build-properties",
       "{\"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"chromium_apply_config\": [\"chromium_win_asan\"], \"recipe\": \"chromium:tests/runtest\", \"slavename\": \"test_bot_id\"}",
       "--test-type=base_unittests",
-      "--step-name=base_unittests",
       "--builder-name=test_buildername",
       "--slave-name=test_bot_id",
       "--build-number=123",

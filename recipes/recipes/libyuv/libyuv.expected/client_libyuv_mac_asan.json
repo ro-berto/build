@@ -735,7 +735,6 @@
       "Release",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"bot_id\": \"bot_id\", \"builder_group\": \"client.libyuv\", \"buildername\": \"Mac Asan\", \"buildnumber\": 1337, \"recipe\": \"libyuv/libyuv\", \"slavename\": \"bot_id\"}",
-      "--step-name=libyuv_unittest",
       "--builder-name=Mac Asan",
       "--slave-name=bot_id",
       "--build-number=1337",

@@ -747,7 +747,6 @@
       "--no-xvfb",
       "--build-properties",
       "{\"BUILD_CONFIG\": \"Release\", \"bot_id\": \"bot_id\", \"builder_group\": \"tryserver.libyuv\", \"buildername\": \"linux_ubsan_vptr\", \"buildnumber\": 1337, \"recipe\": \"libyuv/libyuv\", \"slavename\": \"bot_id\"}",
-      "--step-name=libyuv_unittest",
       "--builder-name=linux_ubsan_vptr",
       "--slave-name=bot_id",
       "--build-number=1337",

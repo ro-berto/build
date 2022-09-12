@@ -1434,7 +1434,6 @@
       "{\"bot_id\": \"test_bot\", \"builder_group\": \"fake-try-group\", \"recipe\": \"chromium_tests:tests/api/trybot_steps\", \"root_solution_revision\": \"refs/branch-heads/4472\", \"slavename\": \"test_bot\"}",
       "--annotate=gtest",
       "--test-type=base_unittests",
-      "--step-name=base_unittests (with patch)",
       "--test-launcher-summary-output",
       "[CLEANUP]/tmp_tmp_2",
       "--builder-name=fake-try-builder",

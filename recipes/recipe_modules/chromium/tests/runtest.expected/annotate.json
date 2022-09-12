@@ -10,7 +10,6 @@
       "{\"annotate\": \"gtest\", \"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"recipe\": \"chromium:tests/runtest\", \"slavename\": \"test_bot_id\"}",
       "--annotate=gtest",
       "--test-type=base_unittests",
-      "--step-name=base_unittests",
       "--test-launcher-summary-output",
       "/path/to/tmp/json",
       "--builder-name=test_buildername",

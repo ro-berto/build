@@ -32,7 +32,6 @@
       "{\"bot_id\": \"test_bot\", \"builder_group\": \"test-group\", \"recipe\": \"chromium_tests:tests/steps/generate_gtest\", \"slavename\": \"test_bot\"}",
       "--annotate=gtest",
       "--test-type=base_unittests",
-      "--step-name=base_unittests",
       "--test-launcher-summary-output",
       "[CLEANUP]/tmp_tmp_1",
       "--builder-name=test-builder",

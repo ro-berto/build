@@ -849,7 +849,6 @@ class ChromiumApi(recipe_api.RecipeApi):
     if test_type:
       full_args.append('--test-type=%s' % test_type)
     step_name = name or t_name
-    full_args.append('--step-name=%s' % step_name)
     if test_launcher_summary_output:
       full_args.extend(
           ['--test-launcher-summary-output', test_launcher_summary_output])
