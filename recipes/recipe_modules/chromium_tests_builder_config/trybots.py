@@ -17,14 +17,14 @@ TRYBOTS = try_spec.TryDatabase.create({
     'tryserver.blink': {
         'linux-blink-optional-highdpi-rel':
             try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
-                buildername='linux-blink-optional-highdpi-rel-dummy',
+                builder_group='tryserver.blink',
+                buildername='linux-blink-optional-highdpi-rel',
                 retry_failed_shards=False,
             ),
         'mac11.0-blink-rel':
             try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
-                buildername='mac11.0-blink-rel-dummy',
+                builder_group='tryserver.blink',
+                buildername='mac11.0-blink-rel',
                 retry_failed_shards=False,
             ),
     },

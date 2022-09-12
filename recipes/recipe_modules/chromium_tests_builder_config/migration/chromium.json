@@ -738,15 +738,6 @@
       "tryserver.chromium.linux:linux-blink-heap-verification-try"
     ]
   },
-  "chromium.fyi:linux-blink-optional-highdpi-rel-dummy": {
-    "blockers": [
-      "builder 'chromium.fyi:linux-blink-optional-highdpi-rel-dummy' does not exist"
-    ],
-    "builders": [
-      "chromium.fyi:linux-blink-optional-highdpi-rel-dummy",
-      "tryserver.blink:linux-blink-optional-highdpi-rel"
-    ]
-  },
   "chromium.fyi:linux-blink-v8-sandbox-future-dbg": {
     "builders": [
       "chromium.fyi:linux-blink-v8-sandbox-future-dbg"
@@ -909,15 +900,6 @@
   "chromium.fyi:mac-upload-perfetto": {
     "builders": [
       "chromium.fyi:mac-upload-perfetto"
-    ]
-  },
-  "chromium.fyi:mac11.0-blink-rel-dummy": {
-    "blockers": [
-      "builder 'chromium.fyi:mac11.0-blink-rel-dummy' does not exist"
-    ],
-    "builders": [
-      "chromium.fyi:mac11.0-blink-rel-dummy",
-      "tryserver.blink:mac11.0-blink-rel"
     ]
   },
   "chromium.fyi:win-annotator-rel": {
@@ -1908,20 +1890,12 @@
     ]
   },
   "tryserver.blink:linux-blink-optional-highdpi-rel": {
-    "blockers": [
-      "builder 'chromium.fyi:linux-blink-optional-highdpi-rel-dummy' does not exist"
-    ],
     "builders": [
-      "chromium.fyi:linux-blink-optional-highdpi-rel-dummy",
       "tryserver.blink:linux-blink-optional-highdpi-rel"
     ]
   },
   "tryserver.blink:mac11.0-blink-rel": {
-    "blockers": [
-      "builder 'chromium.fyi:mac11.0-blink-rel-dummy' does not exist"
-    ],
     "builders": [
-      "chromium.fyi:mac11.0-blink-rel-dummy",
       "tryserver.blink:mac11.0-blink-rel"
     ]
   },

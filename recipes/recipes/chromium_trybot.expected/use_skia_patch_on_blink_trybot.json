@@ -150,8 +150,8 @@
     "cmd": [],
     "name": "report builders",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>running builder 'mac11.0-blink-rel-dummy' on group 'chromium.fyi'@@@",
-      "@@@STEP_LINK@mac11.0-blink-rel-dummy@https://ci.chromium.org/p/chromium/builders/ci/mac11.0-blink-rel-dummy@@@"
+      "@@@STEP_TEXT@<br/>running builder 'mac11.0-blink-rel' on group 'tryserver.blink'@@@",
+      "@@@STEP_LINK@mac11.0-blink-rel@https://ci.chromium.org/p/chromium/builders/ci/mac11.0-blink-rel@@@"
     ]
   },
   {
@@ -690,7 +690,7 @@
       "python3",
       "-u",
       "RECIPE_MODULE[recipe_engine::json]/resources/read.py",
-      "[CACHE]/builder/src/testing/buildbot/chromium.fyi.json",
+      "[CACHE]/builder/src/testing/buildbot/tryserver.blink.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -709,9 +709,9 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "read test spec (chromium.fyi.json)",
+    "name": "read test spec (tryserver.blink.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/chromium.fyi.json@@@",
+      "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/tryserver.blink.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]

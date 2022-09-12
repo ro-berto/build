@@ -1024,8 +1024,6 @@ SPEC = {
 }
 
 SPEC.update([
-    stock_config('linux-blink-optional-highdpi-rel-dummy', staging=False),
-    stock_config('mac11.0-blink-rel-dummy', staging=False),
     stock_config('Linux Viz', gclient_apply_config=['enable_reclient']),
     stock_config(
         'linux-annotator-rel', gclient_apply_config=['enable_reclient']),
