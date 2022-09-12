@@ -44,9 +44,6 @@ ESSENTIAL_FILES = (
     'chrome/test/data/webui/web_ui_test.mojom',
 
     # Allows the orchestrator_all target to work with gn gen
-    'third_party/blink/tools/BUILD.gn',
-    'third_party/blink/tools/blinkpy/web_tests/merge_results.pydeps',
-    'third_party/blink/tools/merge_web_test_results.pydeps',
     'v8/test/torque/test-torque.tq',
 )
 
@@ -101,12 +98,14 @@ class MyTarFile(tarfile.TarFile):
 
       # Preserve GYP/GN files, and other potentially critical files, so that
       # build/gyp_chromium / gn gen can work.
+      #
+      # Preserve `*.pydeps` files too. `gn gen` reads them to generate build
+      # targets, even if those targets themselves are not built
+      # (crbug.com/1362021).
       rel_name = os.path.relpath(name, self.__src_dir)
-      keep_file = ('.gyp' in file_name or
-                   '.gn' in file_name or
-                   '.isolate' in file_name or
-                   '.grd' in file_name or
-                   rel_name in ESSENTIAL_FILES)
+      keep_file = ('.gyp' in file_name or '.gn' in file_name or
+                   '.isolate' in file_name or '.grd' in file_name or
+                   file_name.endswith('.pydeps') or rel_name in ESSENTIAL_FILES)
 
       # Remove contents of non-essential directories.
       if not keep_file:
