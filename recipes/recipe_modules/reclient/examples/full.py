@@ -4,6 +4,8 @@
 
 from recipe_engine import post_process
 
+from PB.recipe_modules.recipe_engine.led.properties import InputProperties
+
 import PB.go.chromium.org.foundry_x.re_client.api.stats.stats as stats_pb
 
 DEPS = [
@@ -66,6 +68,24 @@ def GenTests(api):
       'override_metrics_project',
       api.buildbucket.ci_build(project='chromium', builder='Linux reclient'),
       api.reclient.properties(metrics_project='goma'),
+  )
+
+  def metrics_labels_checker(check, steps):
+    cmd = steps["postprocess for reclient.shutdown reproxy via bootstrap"].cmd
+    check("-metrics_labels" in cmd)
+    i = cmd.index("-metrics_labels")
+    check(cmd[i + 1] ==
+          "project=chromium,bucket=ci,builder=Linux reclient,source=led,")
+
+  yield api.test(
+      'override_metrics_project_led',
+      api.buildbucket.ci_build(project='chromium', builder='Linux reclient'),
+      api.reclient.properties(metrics_project='goma'),
+      api.properties(**{
+          '$recipe_engine/led': InputProperties(led_run_id='some-led-run'),
+      }),
+      api.post_check(metrics_labels_checker),
+      api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
