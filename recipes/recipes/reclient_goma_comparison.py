@@ -184,10 +184,19 @@ def ConfigureChromiumBuilder(api, recipe_config):
   api.chromium_checkout.ensure_checkout()
 
 
+def GetConfig(buildername):
+  # Match builders by prefix so that multiple builders 
+  # (CI,CQ,experimental) can share the same configs.
+  for prefix, recipe_config in sorted(COMPARISON_BUILDERS.items()):
+    if buildername.startswith(prefix):
+      return recipe_config
+  raise NotImplementedError('Unexpected builder %s' %
+                            buildername)  #pragma: nocover
+
+
 def RunSteps(api):
-  # Use the same recipe_config for CQ and CI comparison builders
-  buildername = api.buildbucket.builder_name.replace("(CQ)", "")
-  recipe_config = COMPARISON_BUILDERS[buildername]
+  buildername = api.buildbucket.builder_name
+  recipe_config = GetConfig(buildername)
 
   # Set up a named cache so runhooks doesn't redownload everything on each run.
   solution_path = api.path['cache'].join('builder')
