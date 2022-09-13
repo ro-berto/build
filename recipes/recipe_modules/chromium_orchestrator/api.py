@@ -284,6 +284,18 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
     self.m.chromium_tests.configure_swarming(
         self.m.tryserver.is_tryserver, builder_group=builder_id.group)
 
+    # crbug/1346781
+    # src/third_party/llvm-build/Release+Asserts/bin/llvm-profdata is needed
+    # when running code_coverage merge scripts
+    if self.m.code_coverage.use_clang_coverage:
+      clang_update_script = self.m.chromium_checkout.src_dir.join(
+          'tools', 'clang', 'scripts', 'update.py')
+      args = ['python3', clang_update_script, '--package', 'coverage_tools']
+      self.m.step(
+          'run tools/clang/scripts/update.py',
+          args,
+      )
+
     if (self.m.code_coverage.using_coverage and
         not comp_output.skipping_coverage):
       self.m.code_coverage.set_is_per_cl_coverage(True)
@@ -305,15 +317,6 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
           self.m.isolate.isolated_tests[ALL_TEST_BINARIES_ISOLATE_NAME],
           output_dir,
       )
-
-      if self.m.code_coverage.use_clang_coverage:
-        clang_update_script = self.m.chromium_checkout.src_dir.join(
-            'tools', 'clang', 'scripts', 'update.py')
-        args = ['python3', clang_update_script, '--package', 'coverage_tools']
-        self.m.step(
-            'run tools/clang/scripts/update.py',
-            args,
-        )
 
     # Trigger and wait for the tests (and process coverage data, if enabled)!
     with self.m.chromium_tests.wrap_chromium_tests(builder_config, tests):
