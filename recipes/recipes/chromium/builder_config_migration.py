@@ -196,17 +196,6 @@ def _migration_operation(api, migration_operation):
 _NON_EXISTENT_BUILDERS = tuple(
     chromium.BuilderId.create_for_group(group, builder)
     for (group, builder) in (
-        ('chromium.fyi', 'linux-blink-rel-dummy'),
-        ('chromium.gpu.fyi', 'Optional Android Release (Nexus 5X)'),
-        ('chromium.gpu.fyi', 'Optional Android Release (Pixel 4)'),
-        ('chromium.gpu.fyi', 'Optional Linux Release (Intel HD 630)'),
-        ('chromium.gpu.fyi', 'Optional Linux Release (NVIDIA)'),
-        ('chromium.gpu.fyi', 'Optional Mac Release (Intel)'),
-        ('chromium.gpu.fyi', 'Optional Mac Retina Release (AMD)'),
-        ('chromium.gpu.fyi', 'Optional Mac Retina Release (NVIDIA)'),
-        ('chromium.gpu.fyi', 'Optional Win10 x64 Release (Intel HD 630)'),
-        ('chromium.gpu.fyi', 'Optional Win10 x64 Release (NVIDIA)'),
-
         # Test value
         ('non.existent', 'non-existent-builder'),
     ))
