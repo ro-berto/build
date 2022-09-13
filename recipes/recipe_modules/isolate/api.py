@@ -260,7 +260,7 @@ class IsolateApi(recipe_api.RecipeApi):
     t = self.m.path.mkdtemp('deterministic_build')
     output = self.m.path.join(t, TARBALL_NAME)
     self.m.step('create tarball', [
-        'python',
+        'python3',
         self.m.path.join(self.m.path['checkout'], 'tools', 'determinism',
                          'create_diffs_tarball.py'),
         '--first-build-dir',
@@ -280,7 +280,7 @@ class IsolateApi(recipe_api.RecipeApi):
   def compare_build_artifacts(self, first_dir, second_dir):
     """Compare the artifacts from 2 builds."""
     cmd = [
-        'python',
+        'python3',
         self.m.path.join(self.m.path['checkout'], 'tools', 'determinism',
                          'compare_build_artifacts.py'),
         '--first-build-dir',

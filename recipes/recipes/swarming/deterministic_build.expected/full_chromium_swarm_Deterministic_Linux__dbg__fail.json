@@ -1164,7 +1164,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "[CACHE]/builder/src/tools/determinism/compare_build_artifacts.py",
       "--first-build-dir",
       "[CACHE]/builder/src/out/Debug",
@@ -1207,7 +1207,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "[CACHE]/builder/src/tools/determinism/create_diffs_tarball.py",
       "--first-build-dir",
       "[CACHE]/builder/src/out/Debug",
