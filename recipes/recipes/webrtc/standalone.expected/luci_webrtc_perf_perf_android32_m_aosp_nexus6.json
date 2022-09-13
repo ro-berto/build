@@ -1678,7 +1678,6 @@
       "@@@STEP_LOG_LINE@serialized results@{@@@",
       "@@@STEP_LOG_LINE@serialized results@  \"all_suites\": [@@@",
       "@@@STEP_LOG_LINE@serialized results@    {@@@",
-      "@@@STEP_LOG_LINE@serialized results@      \"all_tests\": [], @@@",
       "@@@STEP_LOG_LINE@serialized results@      \"invalid\": \"False\", @@@",
       "@@@STEP_LOG_LINE@serialized results@      \"suite_name\": \"dummy_test\", @@@",
       "@@@STEP_LOG_LINE@serialized results@      \"test_id_prefix\": \"\", @@@",

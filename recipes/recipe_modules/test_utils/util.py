@@ -303,8 +303,6 @@ class RDBPerSuiteResults(object):
             _names_of_tests(self.unexpected_failing_tests),
         'unexpected_skipped_tests':
             _names_of_tests(self.unexpected_skipped_tests),
-        'all_tests':
-            _names_of_tests(self.all_tests),
     }
     return jsonish_repr
 

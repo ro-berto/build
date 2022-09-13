@@ -679,7 +679,6 @@
       "@@@STEP_LOG_LINE@serialized results@{@@@",
       "@@@STEP_LOG_LINE@serialized results@  \"all_suites\": [@@@",
       "@@@STEP_LOG_LINE@serialized results@    {@@@",
-      "@@@STEP_LOG_LINE@serialized results@      \"all_tests\": [], @@@",
       "@@@STEP_LOG_LINE@serialized results@      \"invalid\": \"True\", @@@",
       "@@@STEP_LOG_LINE@serialized results@      \"suite_name\": \"base_unittests\", @@@",
       "@@@STEP_LOG_LINE@serialized results@      \"test_id_prefix\": \"\", @@@",
