@@ -12,7 +12,10 @@ import unittest
 
 import mock
 
-import test_env  # pylint: disable=relative-import
+ROOT_DIR = os.path.normpath(os.path.join(__file__, '..', '..', '..'))
+sys.path.extend([
+    os.path.join(ROOT_DIR, 'recipes'),
+])
 
 import goma_utils
 

@@ -7,10 +7,10 @@
 
 import os
 import sys
-import tempfile
 import unittest
 
-import test_env
+_SCRIPT_DIR = os.path.dirname(__file__)
+sys.path.insert(0, os.path.abspath(os.path.join(_SCRIPT_DIR, os.pardir)))
 
 from common import chromium_utils
 

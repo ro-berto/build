@@ -20,8 +20,6 @@ import threading
 import time
 import zipfile
 
-from common import env
-
 
 _WIN_LINK_FUNC = None
 try:

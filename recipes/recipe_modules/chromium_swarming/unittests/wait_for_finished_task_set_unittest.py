@@ -3,10 +3,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import itertools
 import json
 import os
-import shutil
 import sys
 import tempfile
 import unittest
@@ -14,10 +12,6 @@ import unittest
 import mock
 
 THIS_DIR = os.path.dirname(__file__)
-
-sys.path.insert(
-    0, os.path.abspath(os.path.join(THIS_DIR, '..', '..', '..', 'unittests')))
-import test_env
 
 sys.path.insert(
     0, os.path.abspath(os.path.join(THIS_DIR, '..', 'resources')))

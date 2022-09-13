@@ -7,14 +7,17 @@
 
 import json
 import os
+import sys
 import tempfile
 import unittest
 
 import mock
 
-import test_env
+ROOT_DIR = os.path.normpath(os.path.join(__file__, '..', '..', '..', '..'))
+sys.path.extend([
+    os.path.join(ROOT_DIR, 'scripts'),
+])
 
-from common import chromium_utils
 from common import gtest_utils
 
 FAILURES = ['NavigationControllerTest.Reload',

@@ -1,5 +1,4 @@
 /__init__.py recipes
-/env.py recipes
 
 /archive_utils.py    recipes
 /chromium_utils.py   recipes

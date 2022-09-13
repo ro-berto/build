@@ -7,11 +7,12 @@ import os
 import unittest
 import sys
 
-import test_env  # pylint: disable=relative-import
 
-# build/recipes/unittests
-_SCRIPT_DIR = os.path.dirname(__file__)
-sys.path.insert(0, os.path.abspath(os.path.join(_SCRIPT_DIR, os.pardir)))
+ROOT_DIR = os.path.normpath(os.path.join(__file__, '..', '..', '..'))
+sys.path.extend([
+    os.path.join(ROOT_DIR, 'recipes'),
+    os.path.join(ROOT_DIR, 'scripts'),
+])
 
 import extract_build
 import slave_utils

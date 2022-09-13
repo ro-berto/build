@@ -114,10 +114,6 @@ def join(input_api, *args):
 
 
 def CheckPylintOnCommit(input_api, output_api):
-  vpython = 'vpython.bat' if input_api.is_windows else 'vpython'
-  infra_path = input_api.subprocess.check_output([
-      vpython, 'scripts/common/env.py', 'print'
-  ]).split()
   disabled_warnings = [
       'C0321',  # More than one statement on a single line
       'W0613',  # Unused argument
@@ -162,12 +158,13 @@ def CheckPylintOnCommit(input_api, output_api):
       'W1113',  # keyword-arg-before-vararg
       'W1404',  # implicit-str-concat
   ]
-  extra_paths_list = infra_path + [
+  extra_paths_list = [
+      join(input_api, 'recipes'),
+      join(input_api, 'scripts'),
       # Initially, a separate run was done for unit tests but now that
       # pylint is fetched in memory with setuptools, it seems it caches
       # sys.path so modifications to sys.path aren't kept.
       join(input_api, 'recipes', 'unittests'),
-      join(input_api, 'tests'),
   ]
   lints = input_api.canned_checks.RunPylint(
       input_api,

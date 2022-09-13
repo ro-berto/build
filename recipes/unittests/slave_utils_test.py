@@ -9,20 +9,17 @@ import unittest
 
 import mock
 
-import test_env  # pylint: disable=relative-import
 
-# build/recipes/unittests
-_SCRIPT_DIR = os.path.dirname(__file__)
-sys.path.insert(0, os.path.abspath(os.path.join(_SCRIPT_DIR, os.pardir)))
+ROOT_DIR = os.path.normpath(os.path.join(__file__, '..', '..', '..'))
+sys.path.extend([
+    os.path.join(ROOT_DIR, 'scripts'),
+    os.path.join(ROOT_DIR, 'recipes'),
+])
 
 import slave_utils
 from common import chromium_utils
 
-# build/scripts/slave/unittests
-_SCRIPT_DIR = os.path.dirname(__file__)
-_BUILD_DIR = os.path.abspath(os.path.join(
-    _SCRIPT_DIR, os.pardir, os.pardir))
-
+_BUILD_DIR = ROOT_DIR
 
 # Note: The git-svn id / cr pos is intentionally modified.
 # Also commit messages modified to be < 80 char.

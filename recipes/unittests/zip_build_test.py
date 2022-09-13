@@ -10,10 +10,11 @@ import sys
 import tempfile
 import unittest
 
-import test_env  # pylint: disable=relative-import
-
-_SCRIPT_DIR = os.path.dirname(__file__)
-sys.path.insert(0, os.path.abspath(os.path.join(_SCRIPT_DIR, os.pardir)))
+ROOT_DIR = os.path.normpath(os.path.join(__file__, '..', '..', '..'))
+sys.path.extend([
+    os.path.join(ROOT_DIR, 'scripts'),
+    os.path.join(ROOT_DIR, 'recipes'),
+])
 
 import zip_build
 from common import chromium_utils

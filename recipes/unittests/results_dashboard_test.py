@@ -5,29 +5,23 @@
 
 """Test cases for results_dashboard."""
 
-import datetime
 import httplib2
 import json
 import os
 import shutil
-import subprocess
 import sys
 import tempfile
 import time
 import unittest
 import urllib
-import urllib2
 import zlib
 
 import mock
-
-import test_env  # pylint: disable=relative-import
 
 _SCRIPT_DIR = os.path.dirname(__file__)
 sys.path.insert(0, os.path.abspath(os.path.join(_SCRIPT_DIR, os.pardir)))
 
 import results_dashboard
-from common import chromium_utils
 
 
 class FakeDateTime(object):
