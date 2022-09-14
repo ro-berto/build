@@ -905,25 +905,6 @@ def GenTests(api):
           'blink_web_tests', 'retry shards with patch', failures=['Test.One']),
   )
 
-  yield api.test(
-      'use_skia_patch_on_blink_trybot',
-      api.chromium_tests_builder_config.try_build(
-          builder_group='tryserver.blink',
-          builder='mac11.0-blink-rel',
-          git_repo='https://skia.googlesource.com/skia',
-      ),
-  )
-
-  yield api.test(
-      'use_v8_patch_on_blink_trybot',
-      api.chromium_tests_builder_config.try_build(
-          builder_group='tryserver.blink',
-          builder='mac11.0-blink-rel',
-          git_repo='https://chromium.googlesource.com/v8/v8',
-      ),
-  )
-
-
   def check_ordering(check, step_odict):
     test_steps = [
         'test_pre_run (with patch).[trigger] 10_gtest (with patch)',

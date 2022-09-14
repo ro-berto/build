@@ -4,30 +4,10 @@
 
 from . import try_spec
 
+# The config for all the builders in builder group tryserver.blink
+# is now specified src-side in
+# //infra/config/subprojects/chromium/try/tryserver.blink.star
 TRYBOTS = try_spec.TryDatabase.create({
-    # The config for the following builders is now specified src-side in
-    # //infra/config/subprojects/chromium/try/tryserver.blink.star
-    # * linux-blink-rel
-    # * win11-blink-rel
-    # * win10.20h2-blink-rel
-    # * mac11.0.arm64-blink-rel
-    # * mac10.13-blink-rel
-    # * mac10.14-blink-rel
-    # * mac10.15-blink-rel
-    'tryserver.blink': {
-        'linux-blink-optional-highdpi-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='tryserver.blink',
-                buildername='linux-blink-optional-highdpi-rel',
-                retry_failed_shards=False,
-            ),
-        'mac11.0-blink-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='tryserver.blink',
-                buildername='mac11.0-blink-rel',
-                retry_failed_shards=False,
-            ),
-    },
     # The config for the following builders is now specified src-side in
     # //infra/config/subprojects/chromium/try/tryserver.chromium.star
     # * mac-official
