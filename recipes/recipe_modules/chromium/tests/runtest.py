@@ -21,15 +21,19 @@ def RunSteps(api):
     api.chromium.apply_config(config)
 
   kwargs = {}
-  if api.properties.get('parse_gtest_output'):
+  if api.properties.get('annotate'):
     kwargs.update({
-        'parse_gtest_output': True,
+        'annotate': api.properties.get(
+            'annotate',
+            api.chromium.get_annotate_by_test_name('base_unittests')),
+        'args': [api.chromium.test_launcher_filter('AtExit*')],
         'test_launcher_summary_output': api.json.output(),
     })
 
   api.chromium.runtest(
       'base_unittests',
       python_mode=api.properties.get('python_mode', False),
+      revision='some_sha',
       test_type='base_unittests',
       **kwargs)
 
@@ -63,12 +67,12 @@ def GenTests(api):
   )
 
   yield api.test(
-      'parse_gtest_output',
+      'annotate',
       api.properties(
           buildername='test_buildername',
           buildnumber=123,
           bot_id='test_bot_id',
-          parse_gtest_output=True),
+          annotate='gtest'),
   )
 
   yield api.test(

@@ -30,7 +30,7 @@
       "--xvfb",
       "--build-properties",
       "{\"bot_id\": \"test_bot\", \"builder_group\": \"test-group\", \"recipe\": \"chromium_tests:tests/steps/generate_gtest\", \"slavename\": \"test_bot\"}",
-      "--parse-gtest-output",
+      "--annotate=gtest",
       "--test-type=base_unittests",
       "--test-launcher-summary-output",
       "[CLEANUP]/tmp_tmp_1",

@@ -1468,7 +1468,7 @@
       "--xvfb",
       "--build-properties",
       "{\"bot_id\": \"test_bot\", \"builder_group\": \"fake-try-group\", \"recipe\": \"chromium_trybot\", \"slavename\": \"test_bot\"}",
-      "--parse-gtest-output",
+      "--annotate=gtest",
       "--test-type=base_unittests",
       "--test-launcher-summary-output",
       "[CLEANUP]/tmp_tmp_1",

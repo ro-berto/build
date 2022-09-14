@@ -5,9 +5,12 @@
 import collections
 import contextlib
 import functools
+import re
 import textwrap
+import json
 
 from recipe_engine import recipe_api
+from recipe_engine import util as recipe_util
 
 from . import types as chromium
 from .config import validate_config
@@ -23,6 +26,22 @@ _CR_COMPILE_GUARD_CONTENTS = textwrap.dedent("""\
 
     See https://crbug.com/959436 for more context.
     """)
+
+
+class TestLauncherFilterFileInputPlaceholder(recipe_util.InputPlaceholder):
+
+  def __init__(self, api, tests):
+    self.raw = api.m.raw_io.input_text('\n'.join(tests))
+    super(TestLauncherFilterFileInputPlaceholder, self).__init__()
+
+  def render(self, test):
+    result = self.raw.render(test)
+    if not test.enabled:  # pragma: no cover
+      result[0] = '--test-launcher-filter-file=%s' % result[0]
+    return result
+
+  def cleanup(self, test_enabled):
+    self.raw.cleanup(test_enabled)
 
 
 class ChromiumApi(recipe_api.RecipeApi):
@@ -790,15 +809,21 @@ class ChromiumApi(recipe_api.RecipeApi):
     return result_pb2.RawResult(
         status=common_pb.FAILURE, summary_markdown=failure_summary)
 
+  @recipe_util.returns_placeholder
+  def test_launcher_filter(self, tests):
+    return TestLauncherFilterFileInputPlaceholder(self, tests)
+
   @_with_chromium_layout
   def runtest(self,
               test,
               args=None,
               xvfb=False,
               name=None,
-              parse_gtest_output=False,
+              annotate=None,
               test_type=None,
               python_mode=False,
+              revision=None,
+              webkit_revision=None,
               test_launcher_summary_output=None,
               **kwargs):
     """Return a runtest.py invocation."""
@@ -818,8 +843,8 @@ class ChromiumApi(recipe_api.RecipeApi):
     properties_json = self.m.json.dumps(self.m.properties.legacy())
     full_args.extend(['--build-properties', properties_json])
 
-    if parse_gtest_output:
-      full_args.append('--parse-gtest-output')
+    if annotate:
+      full_args.append('--annotate=%s' % annotate)
 
     if test_type:
       full_args.append('--test-type=%s' % test_type)
@@ -838,6 +863,13 @@ class ChromiumApi(recipe_api.RecipeApi):
       full_args.append('--build-number=%s' % self.m.buildbucket.build.number)
     if ext == '.py' or python_mode:
       full_args.append('--run-python-script')
+    if revision:
+      full_args.append('--revision=%s' % revision)
+    if webkit_revision:
+      # TODO(kbr): figure out how to cover this line of code with
+      # tests after the removal of the GPU recipe. crbug.com/584469
+      full_args.append('--webkit-revision=%s' %
+                       webkit_revision)  # pragma: no cover
 
     if (self.c.runtests.enable_asan or self.c.runtests.run_asan_test):
       full_args.append('--enable-asan')
@@ -1491,6 +1523,9 @@ class ChromiumApi(recipe_api.RecipeApi):
         ['python3',
          self.repo_resource('recipes', 'kill_processes.py')],
         infra_step=True)
+
+  def get_annotate_by_test_name(self, _):
+    return 'graphing'
 
   def get_build_target_arch(self):
     return {

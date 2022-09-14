@@ -7,15 +7,17 @@
       "Release",
       "--no-xvfb",
       "--build-properties",
-      "{\"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"parse_gtest_output\": true, \"recipe\": \"chromium:tests/runtest\", \"slavename\": \"test_bot_id\"}",
-      "--parse-gtest-output",
+      "{\"annotate\": \"gtest\", \"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"recipe\": \"chromium:tests/runtest\", \"slavename\": \"test_bot_id\"}",
+      "--annotate=gtest",
       "--test-type=base_unittests",
       "--test-launcher-summary-output",
       "/path/to/tmp/json",
       "--builder-name=test_buildername",
       "--slave-name=test_bot_id",
       "--build-number=123",
-      "base_unittests"
+      "--revision=some_sha",
+      "base_unittests",
+      "A\nt\nE\nx\ni\nt\n*"
     ],
     "cwd": "[CACHE]/builder",
     "env": {

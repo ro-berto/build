@@ -659,7 +659,7 @@
       "--xvfb",
       "--build-properties",
       "{\"bot_id\": \"test_bot\", \"builder_group\": \"fake-group\", \"parent_builder_group\": \"fake-group\", \"parent_buildername\": \"fake-builder\", \"recipe\": \"chromium_tests:tests/api/main_waterfall_steps\", \"slavename\": \"test_bot\"}",
-      "--parse-gtest-output",
+      "--annotate=gtest",
       "--test-type=base_unittests",
       "--test-launcher-summary-output",
       "[CLEANUP]/tmp_tmp_2",

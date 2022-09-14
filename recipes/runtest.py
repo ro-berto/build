@@ -53,6 +53,10 @@ CHROME_SANDBOX_PATH = '/opt/chromium/chrome_sandbox'
 # The directory that this script is in.
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+LOG_PROCESSOR_CLASSES = {
+    'gtest': gtest_utils.GTestLogParser,
+}
+
 
 def _GetTempCount():
   """Returns the number of files and directories inside the temporary dir."""
@@ -171,7 +175,7 @@ def _BuildTestBinaryCommand(_build_dir, test_exe_path, options):
       test_exe_path,
   ]
 
-  if options.parse_gtest_output:
+  if options.annotate == 'gtest':
     command.append('--test-launcher-bot-mode')
 
   return command
@@ -180,29 +184,85 @@ def _BuildTestBinaryCommand(_build_dir, test_exe_path, options):
 def _UsingGtestJson(options):
   """Returns True if we're using GTest JSON summary."""
   return (
-      options.parse_gtest_output and not options.run_python_script and
+      options.annotate == 'gtest' and not options.run_python_script and
       not options.run_shell_script
   )
 
 
-def _CreateLogProcessor(options):
-  """Creates a log processor instance.
+def _ListLogProcessors(selection):
+  """Prints a list of available log processor classes iff the input is 'list'.
+
+  Args:
+    selection: A log processor name, or the string "list".
+
+  Returns:
+    True if a list was printed, False otherwise.
+  """
+  shouldlist = selection and selection == 'list'
+  if shouldlist:
+    print
+    print 'Available log processors:'
+    for p in LOG_PROCESSOR_CLASSES:
+      print ' ', p, LOG_PROCESSOR_CLASSES[p].__name__
+
+  return shouldlist
+
+
+def _SelectLogProcessor(options):
+  """Returns a log processor class based on the command line options.
 
   Args:
     options: Command-line options (from OptionParser).
 
   Returns:
-    An instance of a log processor class, or None.
+    A log processor class, or None.
   """
   if _UsingGtestJson(options):
-    return gtest_utils.GTestJSONParser(
-        options.build_properties.get('builder_group', '')
-    )
+    return gtest_utils.GTestJSONParser
 
-  if options.parse_gtest_output:
-    return gtest_utils.GTestLogParser()
+  if options.annotate:
+    if options.annotate in LOG_PROCESSOR_CLASSES:
+      return LOG_PROCESSOR_CLASSES[options.annotate]
+    else:
+      raise KeyError('"%s" is not a valid GTest parser!' % options.annotate)
 
   return None
+
+
+def _GetMainRevision(options):
+  return slave_utils.GetMainRevision(
+      options.build_properties, options.build_dir, options.revision
+  )
+
+
+def _CreateLogProcessor(log_processor_class, options):
+  """Creates a log processor instance.
+
+  Args:
+    log_processor_class: A subclass of PerformanceLogProcessor or similar class.
+    options: Command-line options (from OptionParser).
+
+  Returns:
+    An instance of a log processor class, or None.
+  """
+  if not log_processor_class:
+    return None
+
+  if log_processor_class.__name__ == 'GTestLogParser':
+    tracker_obj = log_processor_class()
+  elif log_processor_class.__name__ == 'GTestJSONParser':
+    tracker_obj = log_processor_class(
+        options.build_properties.get('builder_group', '')
+    )
+  else:
+    revision = _GetMainRevision(options) or 'undefined'
+
+    tracker_obj = log_processor_class(
+        revision=revision,
+        build_properties=options.build_properties,
+    )
+
+  return tracker_obj
 
 
 def _BuildCoverageGtestExclusions(options, args):
@@ -355,7 +415,11 @@ def _MainMac(options, args, extra_env):
     command = _BuildTestBinaryCommand(build_dir, test_exe_path, options)
   command.extend(args[1:])
 
-  log_processor = _CreateLogProcessor(options)
+  # If --annotate=list was passed, list the log processor classes and exit.
+  if _ListLogProcessors(options.annotate):
+    return 0
+  log_processor_class = _SelectLogProcessor(options)
+  log_processor = _CreateLogProcessor(log_processor_class, options)
 
   try:
     if _UsingGtestJson(options):
@@ -445,7 +509,12 @@ def _MainIOS(options, args, extra_env):
   ]
   command.extend(args[1:])
 
-  log_processor = gtest_utils.GTestLogParser()
+  # If --annotate=list was passed, list the log processor classes and exit.
+  if _ListLogProcessors(options.annotate):
+    return 0
+  log_processor = _CreateLogProcessor(
+      LOG_PROCESSOR_CLASSES['gtest'], options, None
+  )
 
   # Make sure the simulator isn't running.
   kill_simulator()
@@ -559,7 +628,11 @@ def _MainLinux(options, args, extra_env):
     command = _BuildTestBinaryCommand(build_dir, test_exe_path, options)
   command.extend(args[1:])
 
-  log_processor = _CreateLogProcessor(options)
+  # If --annotate=list was passed, list the log processor classes and exit.
+  if _ListLogProcessors(options.annotate):
+    return 0
+  log_processor_class = _SelectLogProcessor(options)
+  log_processor = _CreateLogProcessor(log_processor_class, options)
 
   try:
     start_xvfb = False
@@ -664,7 +737,11 @@ def _MainWin(options, args, extra_env):
 
   command.extend(args[1:])
 
-  log_processor = _CreateLogProcessor(options)
+  # If --annotate=list was passed, list the log processor classes and exit.
+  if _ListLogProcessors(options.annotate):
+    return 0
+  log_processor_class = _SelectLogProcessor(options)
+  log_processor = _CreateLogProcessor(log_processor_class, options)
 
   try:
     if _UsingGtestJson(options):
@@ -884,11 +961,19 @@ def main():
       'e.g. \'unit-tests\''
   )
   option_parser.add_option(
-      '--parse-gtest-output',
-      default=False,
-      action='store_true',
-      help='Parse the gtest JSON output.'
+      '--annotate',
+      default='',
+      help='Annotate output when run as a buildstep. '
+      'Specify which type of test to parse, available'
+      ' types listed with --annotate=list.'
   )
+  option_parser.add_option(
+      '--revision',
+      help='The revision number of the system tested. If '
+      'omitted it is automatically extracted from '
+      'the checkout.'
+  )
+  option_parser.add_option('--webkit-revision', help='See --revision.')
   option_parser.add_option(
       '--enable-asan',
       action='store_true',
