@@ -1814,7 +1814,7 @@ def GenTests(api):
                                stdout=api.json.invalid(
                                    api.test_utils.rdb_results(
                                        'browser_tests',
-                                       flaky_tests=['Test.One'],
+                                       flaky_failing_tests=['Test.One'],
                                    ))),
         api.post_process(post_process.MustRun, 'calculate flake rates'),
         api.post_process(post_process.ResultReasonRE, '.*browser_tests.*'),
@@ -1887,7 +1887,7 @@ def GenTests(api):
                                stdout=api.json.invalid(
                                    api.test_utils.rdb_results(
                                        'browser_tests',
-                                       flaky_tests=['Test.One'],
+                                       flaky_failing_tests=['Test.One'],
                                    ))),
         api.post_process(post_process.MustRun, 'calculate flake rates'),
         api.post_process(post_process.ResultReasonRE, '.*browser_tests.*'),

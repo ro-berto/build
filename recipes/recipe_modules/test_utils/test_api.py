@@ -195,7 +195,8 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
                   failing_tests=None,
                   expected_failing_tests=None,
                   skipped_tests=None,
-                  flaky_tests=None):
+                  flaky_failing_tests=None,
+                  flaky_passing_tests=None):
     """Returns a JSON blob used to override data for 'query test results'.
 
     Args:
@@ -205,8 +206,10 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
       expected_failing_tests: Like failing_tests above, but resultdb will report
           these tests as expected to fail.
       skipped_tests: Same as failing_tests above, but with rdb_test_result.SKIP.
-      flaky_tests: List of test cases which has two invocations,
-          rdb_test_result.PASS and rdb_test_result.FAIL.
+      flaky_failing_tests: List of test cases that fail with statuses
+          (PASS, FAIL)
+      flaky_passing_tests: List of test cases that pass with statuses
+          (FAIL, PASS)
     """
 
     def _generate_invocation(test, status, expected):
@@ -239,9 +242,12 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
       invocations.append(_generate_invocation(t, rdb_test_result.FAIL, True))
     for t in skipped_tests or []:
       invocations.append(_generate_invocation(t, rdb_test_result.SKIP, False))
-    for t in flaky_tests or []:
+    for t in flaky_failing_tests or []:
       invocations.append(_generate_invocation(t, rdb_test_result.PASS, True))
       invocations.append(_generate_invocation(t, rdb_test_result.FAIL, False))
+    for t in flaky_passing_tests or []:
+      invocations.append(_generate_invocation(t, rdb_test_result.FAIL, False))
+      invocations.append(_generate_invocation(t, rdb_test_result.PASS, True))
 
     invocations_by_inv_id = {}
     for i, inv in enumerate(invocations):

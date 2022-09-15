@@ -246,7 +246,7 @@ class RDBPerSuiteResults(object):
     # If there were no unexpected failing results, but the harness exited
     # non-zero, assume something went wrong in the test setup/init (eg: failure
     # in underlying hardware) and that the results are invalid.
-    invalid = failure_on_exit and not exists_unexpected_failing_result
+    invalid = failure_on_exit and not unexpected_failing_tests
 
     return cls(
         suite_name=suite_name,
@@ -279,7 +279,7 @@ class RDBPerSuiteResults(object):
     """
     return attr.evolve(
         self,
-        invalid=(failure_on_exit and not self.exists_unexpected_failing_result))
+        invalid=(failure_on_exit and not self.unexpected_failing_tests))
 
   def to_jsonish(self):
 

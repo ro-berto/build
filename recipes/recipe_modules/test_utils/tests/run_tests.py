@@ -436,6 +436,34 @@ def GenTests(api):
   )
 
   yield api.test(
+      # A build with a failed swarming task but only flakily passing test
+      # results (eg: an individual test case with results [FAIL, PASS]) should
+      # still fail.
+      'swarming_failure_but_only_flaky_passing_tests',
+      api.chromium.try_build(builder='test_builder'),
+      api.properties(
+          test_name='base_unittests',
+          test_swarming=True,
+          swarm_hashes={
+              'base_unittests': '[dummy hash for base_unittests/size]',
+              'base_unittests_2': '[dummy hash for base_unittests_2/size]',
+          }),
+      api.override_step_data(
+          'base_unittests',
+          api.chromium_swarming.canned_summary_output(
+              api.json.output({}),
+              failure=True,
+          )),
+      api.override_step_data(
+          'collect tasks.base_unittests results',
+          stdout=api.raw_io.output_text(
+              api.test_utils.rdb_results(
+                  'base_unittests', flaky_passing_tests=['Test.One']))),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
       'limit_many_failures',
       api.chromium.try_build(builder='test_builder'),
       api.properties(

@@ -211,7 +211,7 @@ def GenTests(api):
               api.test_utils.rdb_results(
                   'basic_EVE_TOT',
                   failing_tests=['Test.Two'],
-                  flaky_tests=['Test.One']))),
+                  flaky_failing_tests=['Test.One']))),
       api.post_process(post_process.StepFailure, 'basic_EVE_TOT.attempt: #1'),
       api.post_process(post_process.StepException, 'basic_EVE_TOT.attempt: #2'),
       api.post_process(post_process.StepSuccess, 'basic_EVE_TOT.attempt: #3'),

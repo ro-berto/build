@@ -1086,7 +1086,7 @@ def GenTests(api):
           stdout=api.json.invalid(
               api.test_utils.rdb_results(
                   'check_static_initializers',
-                  flaky_tests=['Test.One'],
+                  flaky_failing_tests=['Test.One'],
               ))),
       api.post_process(post_process.ResultReasonRE,
                        '.*check_static_initializers.*'),
