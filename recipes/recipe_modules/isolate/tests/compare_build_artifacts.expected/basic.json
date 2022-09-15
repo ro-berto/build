@@ -1,7 +1,7 @@
 [
   {
     "cmd": [
-      "python",
+      "python3",
       "None/tools/determinism/compare_build_artifacts.py",
       "--first-build-dir",
       "first_dir",
@@ -30,7 +30,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "None/tools/determinism/create_diffs_tarball.py",
       "--first-build-dir",
       "first_dir",
