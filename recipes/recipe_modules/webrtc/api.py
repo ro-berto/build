@@ -286,18 +286,15 @@ class WebRTCApi(recipe_api.RecipeApi):
         step_test_data=self.test_api.example_binary_sizes)
     result.presentation.properties['binary_sizes'] = result.json.output
 
-  def _build_with_reclient(self, step_name, cmd):
-    build_dir = self.m.path.join(self.m.path['checkout'], 'andriod-archive')
-    cmd += ['--use-remoteexec', '--build-dir', build_dir]
-
+  def build_with_reclient(self, step_name, cmd):
+    cmd += ['--use-remoteexec']
     # TODO(b/243628179): get ninja command generated in build_aar.py
     ninja_command = ""
     with self.m.reclient.process(step_name, ninja_command) as p:
       step_result = self.m.step(step_name, cmd)
       p.build_exit_status = step_result.retcode
-    self.m.file.rmtree('Remove android archive dir', build_dir)
 
-  def _build_with_goma(self, step_name, cmd):
+  def build_with_goma(self, step_name, cmd):
     goma_dir = self.m.goma.ensure_goma()
     self.m.goma.start()
 
@@ -331,9 +328,13 @@ class WebRTCApi(recipe_api.RecipeApi):
       with self.m.depot_tools.on_path():
         build_step_name = 'build android archive'
         if use_reclient:
-          self._build_with_reclient(build_step_name, cmd)
+          build_dir = self.m.path.join(self.m.path['checkout'],
+                                       'andriod-archive')
+          cmd += ['--build-dir', build_dir]
+          self.build_with_reclient(build_step_name, cmd)
+          self.m.file.rmtree('Remove android archive dir', build_dir)
         else:
-          self._build_with_goma(build_step_name, cmd)
+          self.build_with_goma(build_step_name, cmd)
 
     if not self.m.tryserver.is_tryserver and not self.m.runtime.is_experimental:
       self.m.gsutil.upload(

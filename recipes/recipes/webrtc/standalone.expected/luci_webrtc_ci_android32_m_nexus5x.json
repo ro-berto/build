@@ -1930,9 +1930,9 @@
       "-u",
       "[CACHE]/builder/src/tools_webrtc/android/build_aar.py",
       "--verbose",
-      "--use-remoteexec",
       "--build-dir",
-      "[CACHE]/builder/src/andriod-archive"
+      "[CACHE]/builder/src/andriod-archive",
+      "--use-remoteexec"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
