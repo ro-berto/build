@@ -149,20 +149,6 @@ def GenTests(api):
       },
   ]
 
-  def construct_recent_verdicts(expected_count, unexpected_count):
-    verdicts = []
-    for i in range(expected_count):
-      verdicts.append({
-          'ingested_invocation_id': 'invocation_id_' + str(i),
-          'hasUnexpectedRuns': False,
-      })
-    for i in range(unexpected_count):
-      verdicts.append({
-          'ingested_invocation_id': 'invocation_id_' + str(i * 10),
-          'hasUnexpectedRuns': True,
-      })
-    return verdicts
-
   test_variants_response = [
       {
           'testId':
@@ -188,7 +174,7 @@ def GenTests(api):
               },
           ],
           'recentVerdicts':
-              construct_recent_verdicts(
+              api.weetbix.construct_recent_verdicts(
                   expected_count=8,
                   unexpected_count=2,
               )
@@ -211,7 +197,7 @@ def GenTests(api):
               },
           ],
           'recentVerdicts':
-              construct_recent_verdicts(
+              api.weetbix.construct_recent_verdicts(
                   expected_count=1,
                   unexpected_count=9,
               )
@@ -234,7 +220,7 @@ def GenTests(api):
               },
           ],
           'recentVerdicts':
-              construct_recent_verdicts(
+              api.weetbix.construct_recent_verdicts(
                   expected_count=9,
                   unexpected_count=1,
               )
@@ -257,7 +243,7 @@ def GenTests(api):
               },
           ],
           'recentVerdicts':
-              construct_recent_verdicts(
+              api.weetbix.construct_recent_verdicts(
                   expected_count=10,
                   unexpected_count=0,
               )

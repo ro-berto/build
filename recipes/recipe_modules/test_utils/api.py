@@ -927,6 +927,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
     # for analysis.
     self.m.step.empty(test.name, step_text=self.INVALID_RESULTS_MAGIC)
 
+  # TODO(crbug/1314194): Refactor ignored_failures and ignored_flakes to take
+  # into account for ignored ToT failures exonerated by luci analysis.
   def _summarize_new_and_ignored_failures(self, test_suite, new_failures,
                                           ignored_failures, ignored_flakes,
                                           new_failures_text,
@@ -987,9 +989,19 @@ class TestUtilsApi(recipe_api.RecipeApi):
           'failures ignored as they also fail without patch'] = (
               self.m.json.dumps(ignored_failures, indent=2).split('\n'))
     if ignored_flakes:
-      result.presentation.logs[
-          'failures ignored as they are known to be flaky'] = self.m.json.dumps(
-              ignored_flakes, indent=2).split('\n')
+      # TODO(crbug/1314194): Refactor ignored_failures and ignored_flakes to
+      # take into account for ignored ToT failures exonerated by luci analysis.
+      if ('weetbix.enable_weetbix_exonerations' in
+          self.m.buildbucket.build.input.experiments):
+        ignored_flakes_key = (
+            'failures ignored as they are known to be flaky or '
+            'deterministically failing')
+      # TODO(crbug/1314194): Remove once we're migrated to luci analysis
+      else:
+        ignored_flakes_key = 'failures ignored as they are known to be flaky'
+
+      result.presentation.logs[ignored_flakes_key] = self.m.json.dumps(
+          ignored_flakes, indent=2).split('\n')
 
     if new_failures:
       result.presentation.status = self.m.step.FAILURE
@@ -1136,14 +1148,20 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     TODO(crbug.com/1243174): Remove this step when FindIt no longer needs it
     for bug-filing.
+    TODO(sshrimp): Rename when findit is removed
     """
     step_layer_flakiness = {}
     step_layer_skipped_known_flakiness = {}
+
+    luci_analysis_exoneration = ('weetbix.enable_weetbix_exonerations' in
+                                 self.m.buildbucket.build.input.experiments)
     for test_suite in test_suites:
       potential_test_flakes = self._findit_potential_test_flakes(test_suite)
 
-      known_flaky_failures = (
-          potential_test_flakes & test_suite.known_flaky_failures)
+      suite_known_failures = (
+          test_suite.known_flaky_failures if not luci_analysis_exoneration else
+          test_suite.known_luci_analysis_flaky_failures)
+      known_flaky_failures = (potential_test_flakes & suite_known_failures)
       if known_flaky_failures:
         step_name = test_suite.name_of_step_for_suffix('with patch')
         step_layer_skipped_known_flakiness[step_name] = sorted(
@@ -1160,7 +1178,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
       flaky_tests = (
           potential_test_flakes
-          & retry_shards_successes - test_suite.known_flaky_failures)
+          & retry_shards_successes - suite_known_failures)
       if flaky_tests:
         step_name = test_suite.name_of_step_for_suffix('with patch')
         step_layer_flakiness[step_name] = sorted(flaky_tests)
@@ -1174,8 +1192,10 @@ class TestUtilsApi(recipe_api.RecipeApi):
       if valid_retry_shards_results:
         potential_test_flakes = (potential_test_flakes - retry_shards_successes)
 
-      potential_test_flakes = (
-          potential_test_flakes - test_suite.known_flaky_failures)
+      suite_known_failures = (
+          test_suite.known_flaky_failures if not luci_analysis_exoneration else
+          test_suite.known_luci_analysis_flaky_failures)
+      potential_test_flakes = (potential_test_flakes - suite_known_failures)
       if potential_test_flakes:
         step_name = test_suite.name_of_step_for_suffix('with patch')
         potential_build_flakiness[step_name] = sorted(potential_test_flakes)

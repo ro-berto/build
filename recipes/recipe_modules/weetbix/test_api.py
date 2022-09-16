@@ -3,11 +3,75 @@
 # found in the LICENSE file.
 
 from google.protobuf import json_format
+from google.protobuf import timestamp_pb2
 
 from recipe_engine import recipe_test_api
 
 
 class WeetbixTestApi(recipe_test_api.RecipeTestApi):
+
+  def construct_recent_verdicts(self, expected_count, unexpected_count):
+    verdicts = []
+    for i in range(expected_count):
+      verdicts.append({
+          'ingested_invocation_id': 'invocation_id_' + str(i),
+          'hasUnexpectedRuns': False,
+      })
+    for i in range(unexpected_count):
+      verdicts.append({
+          'ingested_invocation_id': 'invocation_id_' + str(i * 10),
+          'hasUnexpectedRuns': True,
+      })
+    return verdicts
+
+  def construct_flaky_verdict_examples(self, example_times):
+    verdict_examples = []
+    if example_times:
+      for example_time in example_times:
+        verdict_examples.append({
+            'partitionTime':
+                timestamp_pb2.Timestamp(seconds=example_time).ToJsonString(),
+        })
+    return verdict_examples
+
+  def generate_analysis(self,
+                        test_name,
+                        suite_name='failed_test',
+                        expected_count=10,
+                        unexpected_count=0,
+                        flaky_verdict_count=None,
+                        examples_times=None):
+    flaky_verdicts1 = 0
+    flaky_verdicts2 = 0
+    if flaky_verdict_count != None:
+      flaky_verdicts1 = flaky_verdict_count
+
+    return {
+        'testId':
+            'ninja://{}/{}'.format(suite_name, test_name),
+        'variantHash':
+            'fake_variant_hash',
+        'intervalStats': [
+            {
+                'intervalAge': 1,
+                'totalRunExpectedVerdicts': 300,
+                'totalRunUnexpectedVerdicts': 1,
+                'totalRunFlakyVerdicts': flaky_verdicts1,
+            },
+            {
+                'intervalAge': 2,
+                'totalRunExpectedVerdicts': 300,
+                'totalRunFlakyVerdicts': flaky_verdicts2,
+            },
+        ],
+        'recentVerdicts':
+            self.construct_recent_verdicts(
+                expected_count=expected_count,
+                unexpected_count=unexpected_count,
+            ),
+        'runFlakyVerdictExamples':
+            self.construct_flaky_verdict_examples(examples_times)
+    }
 
   def query_test_history(self, response, test_id, parent_step_name=None):
     """Emulates query_test_history() return value.

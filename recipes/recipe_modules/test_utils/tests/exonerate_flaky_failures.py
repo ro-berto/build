@@ -12,6 +12,7 @@ DEPS = [
     'chromium',
     'chromium_tests',
     'test_utils',
+    'weetbix',
 ]
 
 from recipe_engine.recipe_api import Property
@@ -95,68 +96,6 @@ def RunSteps(api, known_flakes_expectations,
 
 
 def GenTests(api):
-
-  def construct_recent_verdicts(expected_count, unexpected_count):
-    verdicts = []
-    for i in range(expected_count):
-      verdicts.append({
-          'ingested_invocation_id': 'invocation_id_' + str(i),
-          'hasUnexpectedRuns': False,
-      })
-    for i in range(unexpected_count):
-      verdicts.append({
-          'ingested_invocation_id': 'invocation_id_' + str(i * 10),
-          'hasUnexpectedRuns': True,
-      })
-    return verdicts
-
-  def construct_flaky_verdict_examples(example_times):
-    verdict_examples = []
-    if example_times:
-      for example_time in example_times:
-        verdict_examples.append({
-            'partitionTime':
-                timestamp_pb2.Timestamp(seconds=example_time).ToJsonString(),
-        })
-    return verdict_examples
-
-  def generate_analysis(test_name,
-                        suite_name='failed_test',
-                        expected_count=10,
-                        unexpected_count=0,
-                        flaky_verdict_count=None,
-                        examples_times=None):
-    flaky_verdicts1 = 0
-    flaky_verdicts2 = 0
-    if flaky_verdict_count != None:
-      flaky_verdicts1 = flaky_verdict_count
-
-    return {
-        'testId':
-            'ninja://{}/{}'.format(suite_name, test_name),
-        'variantHash':
-            'fake_variant_hash',
-        'intervalStats': [
-            {
-                'intervalAge': 1,
-                'totalRunExpectedVerdicts': 300,
-                'totalRunUnexpectedVerdicts': 1,
-                'totalRunFlakyVerdicts': flaky_verdicts1,
-            },
-            {
-                'intervalAge': 2,
-                'totalRunExpectedVerdicts': 300,
-                'totalRunFlakyVerdicts': flaky_verdicts2,
-            },
-        ],
-        'recentVerdicts':
-            construct_recent_verdicts(
-                expected_count=expected_count,
-                unexpected_count=unexpected_count,
-            ),
-        'runFlakyVerdictExamples':
-            construct_flaky_verdict_examples(examples_times)
-    }
 
   yield api.test(
       'immune to infra failure of querying flaky failures',
@@ -303,9 +242,9 @@ def GenTests(api):
           stdout=api.raw_io.output_text(
               api.json.dumps({
                   'testVariants': [
-                      generate_analysis(
+                      api.weetbix.generate_analysis(
                           'testA', expected_count=10, unexpected_count=0),
-                      generate_analysis(
+                      api.weetbix.generate_analysis(
                           'testB', expected_count=10, unexpected_count=0),
                   ]
               })),
@@ -352,7 +291,8 @@ def GenTests(api):
           stdout=api.raw_io.output_text(
               api.json.dumps({
                   'testVariants': [
-                      generate_analysis('testA', flaky_verdict_count=10),
+                      api.weetbix.generate_analysis(
+                          'testA', flaky_verdict_count=10),
                   ]
               })),
       ),
@@ -431,11 +371,11 @@ def GenTests(api):
           stdout=api.raw_io.output_text(
               api.json.dumps({
                   'testVariants': [
-                      generate_analysis(
+                      api.weetbix.generate_analysis(
                           'testA',
                           flaky_verdict_count=10,
                           examples_times=[60 * 60 * 12]),
-                      generate_analysis(
+                      api.weetbix.generate_analysis(
                           'testB',
                           flaky_verdict_count=10,
                           examples_times=[60 * 60 * 12]),
@@ -502,7 +442,7 @@ def GenTests(api):
           stdout=api.raw_io.output_text(
               api.json.dumps({
                   'testVariants': [
-                      generate_analysis(
+                      api.weetbix.generate_analysis(
                           'testA', expected_count=1, unexpected_count=9)
                   ]
               })),
@@ -565,8 +505,10 @@ def GenTests(api):
           stdout=api.raw_io.output_text(
               api.json.dumps({
                   'testVariants': [
-                      generate_analysis('testA', unexpected_count=10),
-                      generate_analysis('testB', unexpected_count=10),
+                      api.weetbix.generate_analysis(
+                          'testA', unexpected_count=10),
+                      api.weetbix.generate_analysis(
+                          'testB', unexpected_count=10),
                   ]
               })),
       ),
@@ -609,11 +551,11 @@ def GenTests(api):
           stdout=api.raw_io.output_text(
               api.json.dumps({
                   'testVariants': [
-                      generate_analysis(
+                      api.weetbix.generate_analysis(
                           'testA',
                           flaky_verdict_count=10,
                           examples_times=[60 * 60 * 12]),
-                      generate_analysis(
+                      api.weetbix.generate_analysis(
                           'testB',
                           flaky_verdict_count=10,
                           examples_times=[60 * 60 * 12])
@@ -687,8 +629,10 @@ def GenTests(api):
           stdout=api.raw_io.output_text(
               api.json.dumps({
                   'testVariants': [
-                      generate_analysis('testA', flaky_verdict_count=10),
-                      generate_analysis('testB', flaky_verdict_count=10)
+                      api.weetbix.generate_analysis(
+                          'testA', flaky_verdict_count=10),
+                      api.weetbix.generate_analysis(
+                          'testB', flaky_verdict_count=10)
                   ]
               })),
       ),
@@ -756,8 +700,10 @@ def GenTests(api):
           stdout=api.raw_io.output_text(
               api.json.dumps({
                   'testVariants': [
-                      generate_analysis('testA', flaky_verdict_count=10),
-                      generate_analysis('testB', flaky_verdict_count=10)
+                      api.weetbix.generate_analysis(
+                          'testA', flaky_verdict_count=10),
+                      api.weetbix.generate_analysis(
+                          'testB', flaky_verdict_count=10)
                   ]
               })),
       ),

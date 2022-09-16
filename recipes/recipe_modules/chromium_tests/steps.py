@@ -635,6 +635,10 @@ class Test(object):
 
   def get_summary_of_known_flaky_failures(self):
     """Returns a set of text to use to display in the test results summary."""
+    luci_analysis_exoneration = ('weetbix.enable_weetbix_exonerations' in
+                                 self.api.m.buildbucket.build.input.experiments)
+    if luci_analysis_exoneration:
+      return self.known_luci_analysis_flaky_failures
     return {
         '%s: crbug.com/%s' % (test_name, issue_id)
         for test_name, issue_id in self._known_flaky_failures_map.items()
@@ -903,19 +907,24 @@ class Test(object):
     if retry_shards_valid:
       retry_shards_failures = self.deterministic_failures(retry_suffix)
 
+    luci_analysis_exoneration = ('weetbix.enable_weetbix_exonerations' in
+                                 self.api.m.buildbucket.build.input.experiments)
+    known_flaky_failures = (
+        self.known_flaky_failures if not luci_analysis_exoneration else
+        self.known_luci_analysis_flaky_failures)
     if original_run_valid and retry_shards_valid:
       # TODO(martiniss): Maybe change this behavior? This allows for failures
       # in 'retry shards with patch' which might not be reported to devs, which
       # may confuse them.
       return True, (
           set(failures).intersection(retry_shards_failures) -
-          self.known_flaky_failures)
+          known_flaky_failures)
 
     if original_run_valid:
-      return True, set(failures) - self.known_flaky_failures
+      return True, set(failures) - known_flaky_failures
 
     if retry_shards_valid:
-      return True, set(retry_shards_failures) - self.known_flaky_failures
+      return True, set(retry_shards_failures) - known_flaky_failures
 
     return False, None
 
@@ -927,7 +936,12 @@ class Test(object):
   # failed "with patch", but passed in "retry shards with patch".
   def has_failures_to_summarize(self):
     _, failures = self.failures_including_retry('with patch')
-    return bool(failures or self.known_flaky_failures)
+    luci_analysis_exoneration = ('weetbix.enable_weetbix_exonerations' in
+                                 self.api.m.buildbucket.build.input.experiments)
+    known_flaky_failures = (
+        self.known_flaky_failures if not luci_analysis_exoneration else
+        self.known_luci_analysis_flaky_failures)
+    return bool(failures or known_flaky_failures)
 
   def without_patch_failures_to_ignore(self):
     """Returns test failures that should be ignored.
@@ -1009,10 +1023,14 @@ class Test(object):
     # When a patch is adding a new test (and it fails), the test runner is
     # required to just ignore the unknown test.
     if suffix == 'without patch':
+      luci_analysis_exoneration = ('weetbix.enable_weetbix_exonerations' in self
+                                   .api.m.buildbucket.build.input.experiments)
+      known_flaky_failures = (
+          self.known_flaky_failures if not luci_analysis_exoneration else
+          self.known_luci_analysis_flaky_failures)
       # Invalid results should be treated as if every test failed.
       valid_results, failures = self.with_patch_failures_including_retry()
-      return sorted(failures -
-                    self.known_flaky_failures) if valid_results else None
+      return sorted(failures - known_flaky_failures) if valid_results else None
 
     # If we don't recognize the step, then return None. This makes it easy for
     # bugs to slip through, but this matches the previous behavior. Importantly,

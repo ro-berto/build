@@ -31,6 +31,7 @@ DEPS = [
     'recipe_engine/step',
     'recipe_engine/swarming',
     'test_utils',
+    'weetbix',
 ]
 
 PROPERTIES = {
@@ -1079,6 +1080,65 @@ def GenTests(api):
       api.post_process(post_process.LogEquals, 'FindIt Flakiness',
                        'step_metadata',
                        api.json.dumps(expected_findit_metadata, indent=2)),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'known_flaky_failure_using_luci_analysis_does_not_run_again',
+      api.platform('linux', 64),
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
+          experiments=[
+              'enable_weetbix_queries', 'weetbix.enable_weetbix_exonerations'
+          ],
+      ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
+      api.properties(
+          retry_failed_shards=True,
+          swarm_hashes={
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
+          },
+          **{
+              '$build/test_utils': {
+                  'should_exonerate_flaky_failures': True,
+              },
+          }),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'base_unittests', 'with patch', failures=['Test.One', 'Test.Two']),
+      api.step_data(
+          'query known flaky failures on CQ',
+          api.json.output({
+              'flakes': [{
+                  'test': {
+                      'step_ui_name': 'base_unittests (with patch)',
+                      'test_name': 'Test.Two',
+                  },
+                  'affected_gerrit_changes': ['123', '234'],
+                  'monorail_issue': '999',
+              }]
+          })),
+      api.step_data(
+          'query LUCI Analysis for failure rates.rpc call',
+          stdout=api.raw_io.output_text(
+              api.json.dumps({
+                  'testVariants': [
+                      api.weetbix.generate_analysis(
+                          'testA', expected_count=0, unexpected_count=10),
+                      api.weetbix.generate_analysis(
+                          'testB', expected_count=0, unexpected_count=10),
+                  ]
+              })),
+      ),
+      api.post_process(post_process.MustRun, 'base_unittests (with patch)'),
+      api.post_process(post_process.DoesNotRun,
+                       'base_unittests (retry shards with patch)'),
+      api.post_process(post_process.DoesNotRun,
+                       'base_unittests (without patch)'),
       api.post_process(post_process.DropExpectation),
   )
 
