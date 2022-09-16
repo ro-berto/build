@@ -86,7 +86,7 @@ _SPEC = {
             analyze_names=['angle'],
             retry_failed_shards=False,
         ),
-    'linux-intel-hd630-perf':
+    'linux-intel-uhd630-perf':
         try_spec.TrySpec.create(
             mirrors=[
                 try_spec.TryMirror.create(
@@ -98,7 +98,7 @@ _SPEC = {
             analyze_names=['angle'],
             retry_failed_shards=False,
         ),
-    'linux-nvidia-p400-perf':
+    'linux-nvidia-gtx1660-perf':
         try_spec.TrySpec.create(
             mirrors=[
                 try_spec.TryMirror.create(
@@ -252,7 +252,7 @@ _SPEC = {
             analyze_names=['angle'],
             retry_failed_shards=False,
         ),
-    'win10-intel-hd630-perf':
+    'win10-intel-uhd630-perf':
         try_spec.TrySpec.create(
             mirrors=[
                 try_spec.TryMirror.create(
@@ -264,7 +264,7 @@ _SPEC = {
             analyze_names=['angle'],
             retry_failed_shards=False,
         ),
-    'win10-nvidia-p400-perf':
+    'win10-nvidia-gtx1660-perf':
         try_spec.TrySpec.create(
             mirrors=[
                 try_spec.TryMirror.create(
