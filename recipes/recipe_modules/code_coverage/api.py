@@ -668,7 +668,9 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           self.m.file.write_json(
               name='create zoss metadata json',
               dest=coverage_dir.join('zoss_metadata.json'),
-              data=self._get_zoss_metadata(coverage_format='JACOCO_XML'))
+              data=self._get_zoss_metadata(
+                  coverage_format='JACOCO_XML',
+                  coverage_type=self._current_processing_test_type))
           self.m.gsutil.upload(
               source=coverage_dir.join('zoss_metadata.json'),
               bucket=constants.ZOSS_BUCKET_NAME,
@@ -1032,7 +1034,9 @@ class CodeCoverageApi(recipe_api.RecipeApi):
         self.m.file.write_json(
             name='create zoss metadata json',
             dest=self.metadata_dir.join('zoss_metadata.json'),
-            data=self._get_zoss_metadata(coverage_format='LLVM'))
+            data=self._get_zoss_metadata(
+                coverage_format='LLVM',
+                coverage_type=self._current_processing_test_type))
         self.m.gsutil.upload(
             source=self.metadata_dir.join('zoss_metadata.json'),
             bucket=constants.ZOSS_BUCKET_NAME,
@@ -1067,7 +1071,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     return "ng3-chrome-coverage/absolute/%s/%s/%s/%s/%s" % (
         commit.host, commit.project, commit.id, builder, build_id)
 
-  def _get_zoss_metadata(self, coverage_format):
+  def _get_zoss_metadata(self, coverage_format, coverage_type):
     """Returns a dict which has to be uploaded along with coverage data to zoss.
 
     Args:
@@ -1076,6 +1080,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     """
     commit = self.m.buildbucket.build.input.gitiles_commit
     branch = 'main'
+    category = 'DEFAULT' if coverage_type == 'overall' else 'CHROME_UNIT'
     return {
         # Maps to https://source.corp.google.com/h/chrome-internal/codesearch/chrome/src
         # which is a view of https://chromium.googlesource.com/chromium/src/
@@ -1085,6 +1090,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
         'trace_type': coverage_format,
         'git_project': commit.project,
         'commit_id': commit.id,
+        'category': category,
         'ref': 'refs/heads/main',
         # e.g. source = chromium/src:main
         'source': '%s:%s' % (commit.project, branch),
