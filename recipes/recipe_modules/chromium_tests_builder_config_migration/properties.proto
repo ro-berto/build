@@ -4,7 +4,7 @@
 
 syntax = "proto3";
 
-package recipes.build.chromium.builder_config_migration;
+package recipe_modules.build.chromium_tests_builder_config_migration;
 
 // An operation to compute builder groupings for a project
 //
