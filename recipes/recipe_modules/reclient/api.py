@@ -309,7 +309,17 @@ class ReclientApi(recipe_api.RecipeApi):
           self._upload_ninja_log(ninja_step_name, ninja_command,
                                  p.build_exit_status, filename_maker)
         self._upload_rpl(self._reclient_log_dir, filename_maker)
-        self._upload_logs(self._reclient_log_dir, filename_maker)
+        log_dir_files = self.m.file.listdir(
+            'list reclient log directory',
+            self._reclient_log_dir,
+            test_data=[
+                'reproxy.INFO', 'rewrapper.INFO', 'reproxy.rpl',
+                'reproxy_stderr.log',
+                'reproxy-gomaip.LUCI-CHROMIUM-C.chrome-bot.log.ERROR.20220803-090904.9256'
+            ])
+        self._upload_logs(log_dir_files, filename_maker)
+        self._upload_crash_dumps(self._reclient_log_dir, log_dir_files,
+                                 filename_maker)
         self._perform_reclient_health_check()
         self.m.file.rmtree('cleanup reclient log dir', self._reclient_log_dir)
         if self._ensure_verified:
@@ -605,24 +615,34 @@ class ReclientApi(recipe_api.RecipeApi):
     self.m.gsutil.upload(
         gzip_path, _GS_BUCKET, gs_filename, name='upload reproxy RPL')
 
-  def _upload_logs(self, reclient_log_dir, filename_maker):
+  def _upload_crash_dumps(self, reclient_log_dir, reclient_log_dir_files,
+                          filename_maker):
+    gzip_filename = filename_maker.make_tgz('reproxy_crash_dumps')
+    gzip_path = self._tmp_base_dir.join(gzip_filename)
+    dmp_files = [
+        file for file in reclient_log_dir_files
+        if file.pieces[-1].endswith('.dmp')
+    ]
+    if len(dmp_files) > 0:
+      pkg = self.m.archive.package(reclient_log_dir)
+      for file in dmp_files:
+        pkg.with_file(file)
+      pkg.archive('gzip reproxy crash dumps', gzip_path)
+      gs_filename = '%s/reclient/%s' % (filename_maker.timestamp_date,
+                                        gzip_filename)
+      self.m.gsutil.upload(
+          gzip_path, _GS_BUCKET, gs_filename, name='upload reproxy crash dumps')
+
+  def _upload_logs(self, reclient_log_dir_files, filename_maker):
     tar_filename = filename_maker.make_tgz('reclient_logs')
     tar_path = self._tmp_base_dir.join(tar_filename)
-    files = self.m.file.listdir(
-        'list reclient log directory',
-        reclient_log_dir,
-        test_data=[
-            'reproxy.INFO', 'rewrapper.INFO', 'reproxy.rpl',
-            'reproxy_stderr.log',
-            'reproxy-gomaip.LUCI-CHROMIUM-C.chrome-bot.log.ERROR.20220803-090904.9256'
-        ])
     log_files = []
     log_suffixes = [
         r'.*\.INFO.*', r'.*\.WARNING.*', r'.*\.ERROR.*', r'.*\.FATAL.*',
         r'.*log$', r'.*rpi$'
     ]
     with self.m.step.nest('upload logs'):
-      for path in files:
+      for path in reclient_log_dir_files:
         full_file_name, file_name = str(path), path.pieces[-1]
         if any(re.match(x, file_name) for x in log_suffixes):
           if not file_name.startswith('rewrapper'):

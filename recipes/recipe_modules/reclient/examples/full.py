@@ -145,6 +145,16 @@ def GenTests(api):
   )
 
   yield api.test(
+      'crash dump upload',
+      api.reclient.properties(),
+      api.override_step_data(
+          'postprocess for reclient.list reclient log directory',
+          api.file.listdir(['abcd.dmp'])),
+      api.post_process(
+          post_process.Filter().include_re(r'.*reproxy crash dumps.*')),
+  )
+
+  yield api.test(
       'trace',
       api.buildbucket.ci_build(project='chromium', builder='Linux reclient'),
       api.reclient.properties(publish_trace=True),

@@ -1,0 +1,33 @@
+[
+  {
+    "cmd": [
+      "vpython3",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::archive]/resources/archive.py"
+    ],
+    "name": "postprocess for reclient.gzip reproxy crash dumps",
+    "stdin": "{\"archive_type\": \"tgz\", \"entries\": [{\"path\": \"[CLEANUP]/reclient_log_tmp_1/abcd.dmp\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/reproxy_crash_dumps.20120514-125323.00000000-0000-0000-0000-000000001337.tar.gz\", \"root\": \"[CLEANUP]/reclient_log_tmp_1\"}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python3",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[TMP_BASE]/reproxy_crash_dumps.20120514-125323.00000000-0000-0000-0000-000000001337.tar.gz",
+      "gs://chrome-goma-log/2012/05/14/reclient/reproxy_crash_dumps.20120514-125323.00000000-0000-0000-0000-000000001337.tar.gz"
+    ],
+    "infra_step": true,
+    "name": "postprocess for reclient.gsutil upload reproxy crash dumps",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-goma-log/2012/05/14/reclient/reproxy_crash_dumps.20120514-125323.00000000-0000-0000-0000-000000001337.tar.gz@@@"
+    ]
+  }
+]

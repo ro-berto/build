@@ -7,6 +7,7 @@ from PB.recipe_modules.build.reclient import rbe_metrics_bq
 
 DEPS = [
     'depot_tools/gsutil',
+    'recipe_engine/archive',
     'recipe_engine/buildbucket',
     'recipe_engine/file',
     'recipe_engine/cipd',
