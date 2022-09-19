@@ -8,12 +8,13 @@ from RECIPE_MODULES.build.chromium_tests.resultdb import ResultDB
 
 SKYLAB_TAST_TEST = 'tast_test'
 SKYLAB_GTEST = 'gtest'
+SKYLAB_TELEMETRY = 'telemetry'
 
 # This file defines an interface for browser recipes to call Skylab.
-# As of 2021Q3, Skylab tests are invoked via a prpc call to cros_test_platform
-# builder, aka CTP. Each CTP build represents a test suite, either tast or
-# gtest. Chromium tests depend on ResultDB to get the result, so this interface
-# does not parse the CTP's response.
+# Skylab tests are invoked via a call to the crosfleet cli. Each CTP build
+# represents a test suite, either tast, gtest, or telemetry. Chromium tests
+# depend on ResultDB to get the result, so this interface does not parse the
+# CTP's response.
 
 
 @attrs()
@@ -62,6 +63,7 @@ class SkylabRequest(object):
     * resultdb: The ResultDB integration configuration, defined in
           chromium_tests/resultdb.py.
   """
+  # TODO(sshrimp): Refactor this to have a class responsible for each test type
   request_tag = attrib(str)
   board = attrib(str)
   cros_img = attrib(str)
@@ -73,7 +75,8 @@ class SkylabRequest(object):
   exe_rel_path = attrib(str, default='')
   timeout_sec = attrib(int, default=3600)
   test_type = attrib(
-      enum([SKYLAB_TAST_TEST, SKYLAB_GTEST]), default=SKYLAB_GTEST)
+      enum([SKYLAB_TAST_TEST, SKYLAB_GTEST, SKYLAB_TELEMETRY]),
+      default=SKYLAB_GTEST)
   tast_expr = attrib(str, default='')
   tast_expr_file = attrib(str, default='')
   tast_expr_key = attrib(str, default='')
@@ -82,8 +85,18 @@ class SkylabRequest(object):
   retries = attrib(enum([0, 1, 2, 3, 4, 5]), default=0)
   resultdb = attrib(ResultDB, default=None)
 
+  benchmark = attrib(str, default='')
+  story_filter = attrib(str, default='')
+  test_shard_map_filename = attrib(str, default='')
+  telemetry_shard_index = attrib(int, default=None)
+  results_label = attrib(str, default='')
+
   @classmethod
   def create(cls, **kwargs):
-    test_type = SKYLAB_TAST_TEST if kwargs.get('tast_expr') or kwargs.get(
-        'tast_expr_file') else SKYLAB_GTEST
+    if kwargs.get('tast_expr') or kwargs.get('tast_expr_file'):
+      test_type = SKYLAB_TAST_TEST
+    elif kwargs.get('benchmark'):
+      test_type = SKYLAB_TELEMETRY
+    else:
+      test_type = SKYLAB_GTEST
     return cls(test_type=test_type, **kwargs)

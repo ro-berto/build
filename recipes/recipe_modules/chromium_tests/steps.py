@@ -2918,6 +2918,11 @@ class SkylabTestSpec(TestSpec):
   timeout_sec = attrib(int, default=3600)
   tast_expr_file = attrib(str, default='')
   tast_expr_key = attrib(str, default='default')
+
+  benchmark = attrib(str, default='')
+  story_filter = attrib(str, default='')
+  test_shard_map_filename = attrib(str, default='')
+  results_label = attrib(str, default='')
   # Enable retry for all Skylab tests by default. We see around 10% of tests
   # failed due to lab issues. Set retry into test requests, so that failed
   # tests could get rerun from OS infra side. We only bridged our CI builders
@@ -2947,6 +2952,7 @@ class SkylabTest(Test):
     self.lacros_gcs_path = None
     self.exe_rel_path = None
     self.tast_expr_file = None
+    self.telemetry_shard_index = None
 
   @property
   def is_skylabtest(self):
@@ -2976,6 +2982,11 @@ class SkylabTest(Test):
         timeout_sec=self.spec.timeout_sec,
         retries=self.spec.retries,
         resultdb=self.prep_skylab_rdb(),
+        benchmark=self.spec.benchmark,
+        story_filter=self.spec.story_filter,
+        test_shard_map_filename=self.spec.test_shard_map_filename,
+        telemetry_shard_index=self.telemetry_shard_index,
+        results_label=self.spec.results_label,
     ) if self.lacros_gcs_path else None
 
   def _raise_failed_step(self, suffix, step, status, failure_msg):

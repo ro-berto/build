@@ -22,16 +22,23 @@ RESULTDB_CONFIG = {
 }
 
 
-def gen_skylab_req(tag,
-                   tast_expr=None,
-                   test_args=None,
-                   retries=0,
-                   dut_pool='',
-                   secondary_board='',
-                   secondary_cros_img='',
-                   bucket='',
-                   autotest_name='',
-                   tast_expr_file=''):
+def gen_skylab_req(
+    tag,
+    tast_expr=None,
+    test_args=None,
+    retries=0,
+    dut_pool='',
+    secondary_board='',
+    secondary_cros_img='',
+    bucket='',
+    autotest_name='',
+    tast_expr_file='',
+    benchmark='',
+    results_label='',
+    story_filter='',
+    test_shard_map_filename='',
+    telemetry_shard_index=None,
+):
   return SkylabRequest.create(
       request_tag=tag,
       board='eve',
@@ -48,7 +55,12 @@ def gen_skylab_req(tag,
       secondary_cros_img=secondary_cros_img,
       bucket=bucket,
       autotest_name=autotest_name,
-      resultdb=ResultDB.create(**RESULTDB_CONFIG))
+      resultdb=ResultDB.create(**RESULTDB_CONFIG),
+      benchmark=benchmark,
+      results_label=results_label,
+      story_filter=story_filter,
+      test_shard_map_filename=test_shard_map_filename,
+      telemetry_shard_index=telemetry_shard_index)
 
 
 REQUESTS = [
@@ -69,7 +81,15 @@ REQUESTS = [
         secondary_board='eve',
         secondary_cros_img='eve-release/R88-13545.0.0',
         tast_expr=LACROS_TAST_EXPR,
-        autotest_name='tast.nearby-share')
+        autotest_name='tast.nearby-share'),
+    gen_skylab_req(
+        'telemetry_test_args',
+        tast_expr=None,
+        benchmark='speedometer2',
+        story_filter='Speedometer2',
+        results_label='12345',
+        test_shard_map_filename='per_map.json',
+        telemetry_shard_index=0),
 ]
 
 

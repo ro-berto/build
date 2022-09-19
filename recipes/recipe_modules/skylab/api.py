@@ -29,6 +29,7 @@ QS_ACCOUNT_FYI = 'lacros_fyi'
 CTP_BUILDER = 'cros_test_platform'
 CTP_BUILDER_DEV = 'cros_test_platform-dev'
 AUTOTEST_NAME_TAST = 'tast.lacros'
+AUTOTEST_NAME_TELEMETRY = 'chromium_Telemetry'
 AUTOTEST_NAME_CHROMIUM = 'chromium'
 CROS_BUCKET = 'gs://chromeos-image-archive/'
 
@@ -123,6 +124,22 @@ class SkylabApi(recipe_api.RecipeApi):
             if s.tast_expr_key:
               test_args.append('tast_expr_key=%s' % s.tast_expr_key)
 
+          if s.benchmark:
+            test_args.append('benchmark=%s' % s.benchmark)
+
+          if s.results_label:
+            test_args.append('results_label=%s' % s.results_label)
+
+          if s.story_filter:
+            test_args.append('story_filter=%s' % s.story_filter)
+
+          if s.test_shard_map_filename:
+            test_args.append('test_shard_map_filename=%s' %
+                             s.test_shard_map_filename)
+
+          if s.telemetry_shard_index is not None:
+            test_args.append('test_shard_index=%s' % s.telemetry_shard_index)
+
           cmd.extend(['-test-args', ' '.join(test_args)])
 
           if s.lacros_gcs_path:
@@ -135,6 +152,8 @@ class SkylabApi(recipe_api.RecipeApi):
             autotest_name = s.autotest_name
           elif s.test_type == structs.SKYLAB_TAST_TEST:
             autotest_name = AUTOTEST_NAME_TAST
+          elif s.test_type == structs.SKYLAB_TELEMETRY:
+            autotest_name = AUTOTEST_NAME_TELEMETRY
           else:
             autotest_name = AUTOTEST_NAME_CHROMIUM
           cmd.append(autotest_name)
