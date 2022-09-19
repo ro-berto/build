@@ -3,11 +3,9 @@
 # found in the LICENSE file.
 
 from recipe_engine import recipe_test_api
-from recipe_engine.post_process import (Filter, DoesNotRun, DoesNotRunRE,
-                                        DropExpectation, MustRun,
-                                        ResultReasonRE, StatusException,
-                                        StatusFailure, StepException,
-                                        StepFailure)
+from recipe_engine.post_process import (
+    Filter, DoesNotRun, DoesNotRunRE, DropExpectation, MustRun,
+    ResultReasonRE, StatusException, StatusFailure, StepException)
 from recipe_engine.recipe_api import Property
 
 from PB.recipe_modules.recipe_engine.led import properties as led_properties_pb
@@ -163,7 +161,7 @@ def RunSteps(api, binary_size_tracking, build_config, clobber, clobber_all,
 
     v8.maybe_create_clusterfuzz_archive(update_step)
 
-  if v8.should_test and tests:
+  if v8.should_test:
     test_results = v8.runtests(tests)
     v8.maybe_bisect(test_results, test_spec)
 
@@ -724,22 +722,6 @@ def GenTests(api):
     api.override_step_data(
         'Check', api.v8.output_json(unmarked_slow_test=True))
   )
-
-  # Raise exception when zero tests are run on all steps.
-  yield (api.v8.test(
-      'tryserver.v8',
-      'v8_foobar_rel_ng_triggered',
-      'empty_run',
-      testfilter=['intl/foo'],
-      parent_buildername='v8_foobar_rel_ng',
-      parent_bot_config=linux_bot_config,
-      parent_test_spec=test_spec,
-      requester='commit-bot@chromium.org',
-      blamelist=['dude@chromium.org'],
-  ) + api.override_step_data('Check', api.v8.output_json(empty_run=True)) +
-         api.post_process(StatusFailure) +
-         api.post_process(ResultReasonRE, 'No tests were run') +
-         api.post_process(DropExpectation))
 
   # Test tryjob with named cache.
   yield (

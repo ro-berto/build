@@ -355,8 +355,7 @@ class V8Test(BaseTest):
     if self.has_only_stress_opt_failures(json_output):
       self.upload_stress_opt_data(flake_only=flakes and not failures)
 
-    return TestResults(failures, flakes, infra_failures,
-                       json_output['test_total'])
+    return TestResults(failures, flakes, infra_failures)
 
   def _add_bug_links(self, failures, presentation):
     """Adds links to search/file bugs for up to MAX_BUG_LINKS tests."""
@@ -599,7 +598,7 @@ class V8GenericSwarmingTest(BaseTest):
     assert self.task
     step_result, _ = self.api.chromium_swarming.collect_task(self.task)
     self.api.step.raise_on_failure(step_result)
-    return TestResults.not_empty()
+    return TestResults.empty()
 
 
 class V8CompositeSwarmingTest(BaseTest):
@@ -627,7 +626,7 @@ class V8CompositeSwarmingTest(BaseTest):
   def run(self, **kwargs):
     for c in self.composites:
       c.run(**kwargs)
-    return TestResults.not_empty()
+    return TestResults.empty()
 
 
 class V8CheckInitializers(V8GenericSwarmingTest):
@@ -701,7 +700,7 @@ class V8Fuzzer(V8GenericSwarmingTest):
           self.api.path.join('fuzzer-archives', self.archive),
       )
       raise e
-    return TestResults.not_empty()
+    return TestResults.empty()
 
 
 class V8GCMole(V8CompositeSwarmingTest):
@@ -947,24 +946,18 @@ class Failure(object):
 
 
 class TestResults(object):
-
-  def __init__(self, failures, flakes, infra_failures, num_tests):
+  def __init__(self, failures, flakes, infra_failures):
     self.failures = failures
     self.flakes = flakes
     self.infra_failures = infra_failures
-    self.num_tests = num_tests
 
   @staticmethod
   def empty():
-    return TestResults([], [], [], 0)
-
-  @staticmethod
-  def not_empty():
-    return TestResults([], [], [], 1)
+    return TestResults([], [], [])
 
   @staticmethod
   def infra_failure(exception):
-    return TestResults([], [], [exception], 1)
+    return TestResults([], [], [exception])
 
   @property
   def is_negative(self):
@@ -979,7 +972,6 @@ class TestResults(object):
         self.failures + other.failures,
         self.flakes + other.flakes,
         self.infra_failures + other.infra_failures,
-        self.num_tests + other.num_tests,
     )
 
 
@@ -1011,10 +1003,6 @@ class TestGroup(object):
     if self.failed_tests:
       raise self.api.step.StepFailure(
           '%d tests failed: %r' % (len(self.failed_tests), self.failed_tests))
-
-  def raise_on_empty(self):
-    if self.test_results.num_tests == 0:
-      raise self.api.step.StepFailure('No tests were run')
 
 
 class LocalGroup(TestGroup):
