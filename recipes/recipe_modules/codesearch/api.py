@@ -403,7 +403,7 @@ class CodesearchApi(recipe_api.RecipeApi):
     cmd.extend([
         '--message',
         'Generated files from "%s" build %d, revision %s' %
-        (self.m.buildbucket.builder_name, self.m.buildbucket.build.number,
+        (self.m.buildbucket.builder_name, self.m.buildbucket.build.id,
          revision or self._get_revision()),
         '--dest-branch',
         self.c.GEN_REPO_BRANCH,

@@ -1521,7 +1521,7 @@
       "--copy",
       "[CACHE]/builder/src/out/lacros-Debug/gen;lacros-Debug/gen",
       "--message",
-      "Generated files from \"codesearch-gen-chromium-lacros-internal\" build 571, revision f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "Generated files from \"codesearch-gen-chromium-lacros-internal\" build 8945511751514863184, revision f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--dest-branch",
       "main",
       "[CACHE]/generated"

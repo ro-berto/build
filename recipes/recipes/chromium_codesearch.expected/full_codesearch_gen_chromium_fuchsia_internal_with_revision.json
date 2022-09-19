@@ -1521,7 +1521,7 @@
       "--copy",
       "[CACHE]/builder/src/out/fuchsia-Debug/gen;fuchsia-Debug/gen",
       "--message",
-      "Generated files from \"codesearch-gen-chromium-fuchsia-internal\" build 571, revision aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "Generated files from \"codesearch-gen-chromium-fuchsia-internal\" build 8945511751514863184, revision aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "--dest-branch",
       "main",
       "[CACHE]/generated"

@@ -1417,7 +1417,7 @@
       "--copy",
       "foo;bar",
       "--message",
-      "Generated files from \"codesearch-gen-chromium-win\" build 571, revision f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "Generated files from \"codesearch-gen-chromium-win\" build 8945511751514863184, revision f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--dest-branch",
       "win",
       "[CACHE]/generated",
