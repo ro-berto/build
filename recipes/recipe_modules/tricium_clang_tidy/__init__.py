@@ -11,6 +11,7 @@ DEPS = [
     'recipe_engine/file',
     'recipe_engine/step',
     'recipe_engine/tricium',
+    'reclient',
 ]
 
 _clang_tidy_path = ('third_party', 'llvm-build', 'Release+Asserts', 'bin',

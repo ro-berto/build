@@ -11,6 +11,7 @@ from RECIPE_MODULES.build import chromium
 DEPS = [
     'chromium',
     'chromium_checkout',
+    'gn',
     'goma',
     'depot_tools/depot_tools',
     'depot_tools/gclient',
@@ -26,6 +27,7 @@ DEPS = [
     'recipe_engine/step',
     'recipe_engine/tricium',
     'tricium_clang_tidy',
+    'reclient',
 ]
 
 
@@ -59,7 +61,7 @@ BUILDERS = freeze({
                     },
                 ),
             'linux-clang-tidy-rel':
-                ClangTidySpec(),
+                ClangTidySpec(gclient_apply_config=['enable_reclient'],),
             'linux-lacros-clang-tidy-rel':
                 ClangTidySpec(
                     gclient_apply_config=['chromeos', 'checkout_lacros_sdk'],
@@ -119,26 +121,21 @@ def RunSteps(api):
       ]
 
       api.chromium.ensure_toolchains()
-      api.chromium.ensure_goma()
 
       # `gn gen` can take up to a minute, and the script we call out to
       # already does that for us, so set up a minimal build dir.
-      gn_args = api.chromium.mb_lookup(me)
+      gn_args_str = api.chromium.mb_lookup(me)
+      gn_args = api.gn.parse_gn_args(gn_args_str)
+      use_reclient = gn_args.get('use_remoteexec') == 'true'
+
       api.file.ensure_directory('ensure out dir', api.chromium.output_dir)
       api.file.write_text('write args.gn',
-                          api.chromium.output_dir.join('args.gn'), gn_args)
+                          api.chromium.output_dir.join('args.gn'), gn_args_str)
 
-      api.goma.start()
-      exit_status = 0
-      try:
-        api.tricium_clang_tidy.lint_source_files(api.chromium.output_dir,
-                                                 affected,
-                                                 api.platform.name == 'win')
-      except:  # pragma: no cover
-        exit_status = -1
-        raise
-      finally:
-        api.goma.stop(exit_status)
+      api.tricium_clang_tidy.lint_source_files(api.chromium.output_dir,
+                                               affected,
+                                               api.platform.name == 'win',
+                                               use_reclient)
 
 
 def GenTests(api):

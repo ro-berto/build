@@ -16,6 +16,7 @@ DEPS = [
     'recipe_engine/step',
     'recipe_engine/tricium',
     'tricium_clang_tidy',
+    'reclient',
 ]
 
 def RunSteps(api):
@@ -25,7 +26,8 @@ def RunSteps(api):
     api.tricium_clang_tidy.lint_source_files(
         output_dir=cache_dir.join('out'),
         file_paths=[cache_dir.join('src', 'path/to/some/cc/file.cpp')],
-        is_windows=api.properties['is_windows'])
+        is_windows=api.properties['is_windows'],
+        use_reclient=api.properties['use_reclient'])
 
 
 def _get_tricium_comments(steps):
@@ -67,7 +69,8 @@ def GenTests(api):
                       affected_files,
                       auto_exist_files=True,
                       clang_tidy_exists=True,
-                      is_windows=False):
+                      is_windows=False,
+                      use_reclient=False):
     test = api.test(name)
 
     existing_files = []
@@ -81,7 +84,7 @@ def GenTests(api):
 
     if existing_files:
       test += api.path.exists(*existing_files)
-    test += api.properties(is_windows=is_windows)
+    test += api.properties(is_windows=is_windows, use_reclient=use_reclient)
     return test
 
   yield (test_with_patch('no_files', affected_files=[]) +
@@ -173,6 +176,27 @@ def GenTests(api):
       'analyze_cpp_windows',
       affected_files=['path/to/some/cc/file.cpp'],
       is_windows=True) + api.step_data(
+          'clang-tidy.generate-warnings.read tidy output',
+          api.file.read_json({
+              'diagnostics': [{
+                  'file_path': 'path\\to\\some\\cc/file.cpp',
+                  'line_number': 2,
+                  'diag_name': 'super-cool-diag',
+                  'message': 'hello, world 1',
+                  'replacements': [],
+                  'expansion_locs': [],
+              },]
+          })) + api.post_process(post_process.StepSuccess,
+                                 'clang-tidy.generate-warnings') +
+         api.post_process(post_process.StatusSuccess) + api.post_process(
+             _tricium_has_message, 'hello, world 1 (https://clang.llvm.org/'
+             'extra/clang-tidy/checks/super/cool-diag.html)') +
+         api.post_process(post_process.DropExpectation))
+
+  yield (test_with_patch(
+      'analyze_cpp_reclient',
+      affected_files=['path/to/some/cc/file.cpp'],
+      use_reclient=True) + api.reclient.properties() + api.step_data(
           'clang-tidy.generate-warnings.read tidy output',
           api.file.read_json({
               'diagnostics': [{

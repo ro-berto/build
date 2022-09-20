@@ -1595,6 +1595,33 @@ class Tests(unittest.TestCase):
     )
     self.assertEqual(rdeps, [])
 
+  def test_trim_rewrapper_command(self):
+    commands = [
+        ['/path/to/clang++', 'foo', '-o', 'foo.o'],
+        [
+            '/path/to/gomacc', '/some/clang', '/path/to/pnacl-helpers.c', 'foo',
+            '-o', 'foo-3.o'
+        ],
+        [
+            '/path/to/rewrapper', '-cfg=../../path/to/file.cfg',
+            '-other_rewrapper_flag', '-exec_root=/a/b/c', '/path/to/clang++',
+            'foo', '-o', 'foo.o'
+        ],
+    ]
+
+    trimmed_commands = [
+        tidy._trim_rewrapper_command(command) for command in commands
+    ]
+
+    self.assertEqual(trimmed_commands, [
+        ['/path/to/clang++', 'foo', '-o', 'foo.o'],
+        [
+            '/path/to/gomacc', '/some/clang', '/path/to/pnacl-helpers.c', 'foo',
+            '-o', 'foo-3.o'
+        ],
+        ['/path/to/clang++', 'foo', '-o', 'foo.o'],
+    ])
+
 
 if __name__ == '__main__':
   # Init logging here so users can remove `self._silence_logs()` from any of
