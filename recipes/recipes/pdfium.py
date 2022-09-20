@@ -469,6 +469,11 @@ def RunSteps(api, memory_tool, skia, skia_paths, xfa, v8, target_cpu, clang,
                                msvc, rel, component)
 
   with api.osx_sdk('mac'):
+    # buildbot sets 'clobber' to the empty string which evaluates to false if
+    # checked directly. Instead, check using the 'in' keyword.
+    if 'clobber' in api.properties:
+      api.file.rmtree('clobber', api.path['checkout'].join('out', out_dir))
+
     build_config = _gn_gen_builds(api, memory_tool, skia, skia_paths, xfa, v8,
                                   target_cpu, clang, msvc, rel, component,
                                   target_os, out_dir)
@@ -780,6 +785,35 @@ def GenTests(api):
       api.builder_group.for_current('client.pdfium'),
       api.properties(bot_id='test_bot', target_os='android', skip_test=True),
       _gen_ci_build(api, 'android'),
+  )
+
+  yield api.test(
+      'clobber-linux_skia',
+      api.platform('linux', 64),
+      api.builder_group.for_current('client.pdfium'),
+      api.properties(
+          skia=True,
+          xfa=True,
+          selected_tests_only=True,
+          bot_id='test_bot',
+          clobber=''),
+      _gen_ci_build(api, 'linux_skia'),
+  )
+
+  yield api.test(
+      'clobber-mac_xfa_rel',
+      api.platform('mac', 64),
+      api.builder_group.for_current('client.pdfium'),
+      api.properties(xfa=True, rel=True, bot_id='test_bot', clobber=''),
+      _gen_ci_build(api, 'mac_xfa_rel'),
+  )
+
+  yield api.test(
+      'clobber-win_xfa',
+      api.platform('win', 64),
+      api.builder_group.for_current('client.pdfium'),
+      api.properties(xfa=True, bot_id='test_bot', clobber=''),
+      _gen_ci_build(api, 'windows_xfa'),
   )
 
   yield api.test(
