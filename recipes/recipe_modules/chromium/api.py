@@ -575,11 +575,12 @@ class ChromiumApi(recipe_api.RecipeApi):
           compile_exit_status, '--ninja-log-compiler',
           self.c.compile_py.compiler or 'unknown'
       ]
-      self.m.build.python(
+      self.m.step(
           name='upload_ninja_log',
-          script=self.repo_resource('recipes', 'upload_goma_logs.py'),
-          args=upload_ninja_log_args,
-          venv=True)
+          cmd=[
+              'vpython3',
+              self.repo_resource('recipes', 'upload_goma_logs.py')
+          ] + upload_ninja_log_args)
 
   @contextlib.contextmanager
   def guard_compile(self, suffix=''):

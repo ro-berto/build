@@ -446,7 +446,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "vpython3",
       "RECIPE_REPO[build]/recipes/upload_goma_logs.py",
       "--gsutil-py-path",
       "RECIPE_REPO[depot_tools]/gsutil.py",
@@ -463,13 +463,6 @@
     "cwd": "[START_DIR]/src",
     "env": {
       "CHROME_HEADLESS": "1"
-    },
-    "env_prefixes": {
-      "PYTHONPATH": [
-        "RECIPE_REPO[build]",
-        "RECIPE_REPO[build]/recipes",
-        "RECIPE_REPO[build]/scripts"
-      ]
     },
     "luci_context": {
       "realm": {
