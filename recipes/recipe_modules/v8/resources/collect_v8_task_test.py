@@ -54,16 +54,23 @@ class AggregatedResultsTestCase(unittest.TestCase):
     aggregated_results = collect_v8_task.AggregatedResults(10)
     self.assertEqual(aggregated_results.slowest_tests, [])
     self.assertEqual(aggregated_results.results, [])
+    self.assertEqual(aggregated_results.test_total, 0)
     self.assertEqual(aggregated_results.slow_tests_cutoff, 10)
 
   def test_append_json_data(self):
     aggregated_results = collect_v8_task.AggregatedResults(10)
     self.assertEqual(aggregated_results.slowest_tests, [])
     self.assertEqual(aggregated_results.results, [])
+    self.assertEqual(aggregated_results.test_total, 0)
     self.assertEqual(aggregated_results.slow_tests_cutoff, 10)
-    aggregated_results.append({'slowest_tests': 'x', 'results': 'y'})
+    aggregated_results.append({
+        'slowest_tests': 'x',
+        'results': 'y',
+        'test_total': 1
+    })
     self.assertEqual(aggregated_results.slowest_tests, ['x'])
     self.assertEqual(aggregated_results.results, ['y'])
+    self.assertEqual(aggregated_results.test_total, 1)
     self.assertEqual(aggregated_results.slow_tests_cutoff, 10)
 
   def test_return_aggregated_tests_as_json(self):
@@ -83,7 +90,8 @@ class AggregatedResultsTestCase(unittest.TestCase):
                 'duration': 20
             },
         ],
-        'results': 'y'
+        'results': 'y',
+        'test_total': 3
     })
     self.assertEqual(
         aggregated_results.as_json(['tag 1', 'tag 3', 'tag 2']), {
@@ -98,6 +106,7 @@ class AggregatedResultsTestCase(unittest.TestCase):
                 'name': 'a'
             }],
             'results': ['y'],
+            'test_total': 3,
             'tags': ['tag 1', 'tag 2', 'tag 3']
         })
 

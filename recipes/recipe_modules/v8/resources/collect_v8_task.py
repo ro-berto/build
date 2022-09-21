@@ -52,12 +52,14 @@ class AggregatedResults:
   def __init__(self, slow_tests_cutoff):
     self.slowest_tests = []
     self.results = []
+    self.test_total = 0
     self.slow_tests_cutoff = slow_tests_cutoff
 
   def append(self, json_data):
     assert isinstance(json_data, dict)
     self.slowest_tests.extend(json_data['slowest_tests'])
     self.results.extend(json_data['results'])
+    self.test_total += json_data['test_total']
 
   def as_json(self, tags):
     sorted_tests = sorted(
@@ -66,6 +68,7 @@ class AggregatedResults:
         'slowest_tests': sorted_tests[:self.slow_tests_cutoff],
         'results': self.results,
         'tags': sorted(tags),
+        'test_total': self.test_total,
     }
 
 

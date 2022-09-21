@@ -1219,6 +1219,8 @@ class V8Api(recipe_api.RecipeApi):
 
     test_group.raise_on_failure()
 
+    test_group.raise_on_empty()
+
     self.test_duration_sec = self.m.time.time() - start_time_sec
     return test_group.test_results
 
