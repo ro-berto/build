@@ -2007,7 +2007,15 @@ class SwarmingTestSpec(TestSpec):
 
 class SwarmingTest(Test):
   # Some suffixes should have marginally higher priority. See crbug.com/937151.
-  SUFFIXES_TO_INCREASE_PRIORITY = ['without patch', 'retry shards with patch']
+  SUFFIXES_TO_INCREASE_PRIORITY = set(
+      ['without patch', 'retry shards with patch'])
+  # The flake endorser triggers test "shards" as different test suffixes.
+  # For example, there could be an android_browsertests (check flakiness
+  # shard #0) and android_browsertests (check flakiness shard #1). Since the
+  # shard # can vary, we need to check if 'check flakiness' is in the test
+  # suffix being triggered.
+  # Why these shards need higher priority: crbug.com/1366122
+  CHECK_FLAKINESS_SUFFIX = 'check flakiness'
 
   def __init__(self, spec, chromium_tests_api):
     super(SwarmingTest, self).__init__(spec, chromium_tests_api)
@@ -2223,7 +2231,8 @@ class SwarmingTest(Test):
 
     task.named_caches.update(self.spec.named_caches)
 
-    if suffix in self.SUFFIXES_TO_INCREASE_PRIORITY:
+    if (suffix in self.SUFFIXES_TO_INCREASE_PRIORITY or
+        self.CHECK_FLAKINESS_SUFFIX in suffix):
       task_request = task_request.with_priority(task_request.priority - 1)
 
     if self.spec.expiration:

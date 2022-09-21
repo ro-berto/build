@@ -393,6 +393,14 @@ def GenTests(api):
           step_name=('test new tests for flakiness.'
                      'collect tasks (check flakiness shard #0).'
                      'ios_chrome_web_eg2tests_module_iPad Air 2 14.4 results')),
+      api.post_process(
+          post_process.LogContains,
+          ('test new tests for flakiness.test_pre_run (check flakiness shard '
+           '#0).[trigger] ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 '
+           '(check flakiness shard #0) on Mac-11'),
+          'json.input',
+          ['\"priority\": \"29\"'],
+      ),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
