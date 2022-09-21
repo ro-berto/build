@@ -53,8 +53,9 @@ def RunSteps(api, properties):
         status=common_pb.INFRA_FAILURE, summary_markdown='\n'.join(summary))
 
   api.gclient.set_config('chromium_skip_wpr_archives_download')
-  api.chromium_bootstrap.update_gclient_config()
-  api.bot_update.ensure_checkout(refs=['refs/heads/main'])
+  with api.chromium_bootstrap.update_gclient_config() as callback:
+    update_step = api.bot_update.ensure_checkout(refs=['refs/heads/main'])
+    callback(update_step.json.output['manifest'])
   api.gclient.runhooks()
   api.git(
       'config',

@@ -103,19 +103,23 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
     timeout = int(self.timeout) if self.timeout else timeout
 
     gclient_config = self.m.gclient.c
-    self.m.chromium_bootstrap.update_gclient_config(gclient_config)
-    self._report_gclient_config(gclient_config)
+    with self.m.chromium_bootstrap.update_gclient_config(
+        gclient_config) as callback:
+      self._report_gclient_config(gclient_config)
 
-    with self.m.context(cwd=self.checkout_dir):
-      update_step = self.m.bot_update.ensure_checkout(
-          gclient_config=gclient_config,
-          clobber=bot_config.clobber,
-          timeout=timeout,
-          **kwargs)
+      with self.m.context(cwd=self.checkout_dir):
+        update_step = self.m.bot_update.ensure_checkout(
+            gclient_config=gclient_config,
+            clobber=bot_config.clobber,
+            timeout=timeout,
+            **kwargs)
 
-    assert update_step.json.output['did_run']
-    # HACK(dnj): Remove after 'crbug.com/398105' has landed
-    self.m.chromium.set_build_properties(update_step.json.output['properties'])
+      assert update_step.json.output['did_run']
+      # HACK(dnj): Remove after 'crbug.com/398105' has landed
+      self.m.chromium.set_build_properties(
+          update_step.json.output['properties'])
+
+      callback(update_step.json.output['manifest'])
 
     return update_step
 

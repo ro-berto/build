@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import contextlib
+
 from google.protobuf import json_format
 from recipe_engine import recipe_api
 
@@ -67,20 +69,60 @@ class ChromiumBootstrapApi(recipe_api.RecipeApi):
           },
       })
 
+  @contextlib.contextmanager
   def update_gclient_config(self, gclient_config=None):
     """Update the gclient config to be consistent with the bootstrapper.
 
-    This will update the revisions checked out by the gclient config so
-    that for any files read by the bootstrapper, the same version should
-    be checked out.
+    Upon entering the context controlled by this context manager, the
+    gclient config's revision map will be updated so that for any repos
+    that were accessed by the bootstrapper, the same version should be
+    checked out.
+
+    The context manager MUST be bound to a target in the with statement,
+    with the bound value being a callback that MUST be called with the
+    bot_update manifest before exiting the context normally (the
+    callback need not be called in the event of an exception). The
+    callback will raise an InfraFailure if one of the repos that was
+    checked out by the bootstrapper was also checked out by bot_update
+    and there was no entry for the repo in repo_path_map. In such a
+    case, there will not have been a way to update the gclient config to
+    check out the appropriate revision of the repo.
     """
     gclient_config = gclient_config or self.m.gclient.c
+    missing_repos = []
     for commit in self._commits:
       repo = 'https://{}/{}'.format(commit.host, commit.project)
       if repo not in gclient_config.repo_path_map:
-        raise recipe_api.InfraFailure(
-            'The bootstrapper checked out {repo}/+/{revision}, '
-            'but the repo_path_map does not contain an entry for {repo}'.format(
-                repo=repo, revision=commit.id))
+        missing_repos.append(repo)
+        continue
       path, _ = gclient_config.repo_path_map[repo]
       gclient_config.revisions[path] = commit.id
+
+    not_called = object()
+    manifest_holder = [not_called]
+
+    def callback(manifest):
+      manifest_holder[0] = manifest
+
+    yield callback
+
+    manifest = manifest_holder[0]
+    if manifest is not_called:
+      raise recipe_api.InfraFailure(
+          'The callback from update_gclient_config'
+          ' must be called with the manifest from bot_update')
+
+    if missing_repos:
+      checked_out_repos = set()
+      for revision in manifest.values():
+        repo = revision['repository']
+        if repo.endswith('.git'):
+          repo = repo[:-len('.git')]
+        checked_out_repos.add(repo)
+
+      for repo in missing_repos:
+        if repo in checked_out_repos:
+          raise recipe_api.InfraFailure(
+              f'The bootstrapper and bot_update both checked out {repo},'
+              f' but {repo}'
+              " does not appear in the gclient config's repo_path_map")

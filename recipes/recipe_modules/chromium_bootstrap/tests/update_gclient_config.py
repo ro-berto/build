@@ -19,29 +19,46 @@ DEFAULT_HASH = 'default-hash'
 
 def RunSteps(api):
   gclient_config = api.gclient.make_config()
-  gclient_config.repo_path_map.update(api.properties.get('repo_path_map', {}))
+  for repo, path in api.properties.get('paths_by_repo', {}).items():
+    s = gclient_config.solutions.add()
+    s.name = path
+    s.url = repo
+    gclient_config.repo_path_map[repo] = (path, 'HEAD')
+
   assert not gclient_config.revisions
-  api.chromium_bootstrap.update_gclient_config(gclient_config)
-  api.assertions.assertEqual(gclient_config.revisions,
-                             api.properties['expected_revisions'])
+
+  with api.chromium_bootstrap.update_gclient_config(gclient_config) as callback:
+    api.assertions.assertEqual(gclient_config.revisions,
+                               api.properties['expected_revisions'])
+
+    if not api.properties.get('skip_callback', False):
+      manifest = api.properties['manifest']
+      callback(manifest)
 
 
 def GenTests(api):
 
-  def repo_path_map(paths_by_repo):
-    return api.properties(
-        repo_path_map={k: (v, 'HEAD') for k, v in paths_by_repo.items()})
+  def paths_by_repo(paths_by_repo):
+    return api.properties(paths_by_repo=paths_by_repo)
 
-  def expect_revisions(revisions):
-    return sum([
-        api.properties(expected_revisions=revisions),
-        api.post_check(post_process.StatusSuccess),
-        api.post_process(post_process.DropExpectation),
-    ], api.empty_test_data())
+  def manifest(repo_and_revision_by_path):
+    manifest = {
+        path: {
+            'repository': f'{repo}.git',
+            'revision': revision,
+        } for path, (repo, revision) in repo_and_revision_by_path.items()
+    }
+    return api.properties(manifest=manifest)
+
+  def expect_gclient_config_revisions(revisions):
+    return api.properties(expected_revisions=revisions)
 
   yield api.test(
       'not-bootstrapped',
-      expect_revisions({}),
+      manifest({}),
+      expect_gclient_config_revisions({}),
+      api.post_check(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
   )
 
   commits = [
@@ -62,28 +79,68 @@ def GenTests(api):
   yield api.test(
       'bootstrapped',
       api.chromium_bootstrap.properties(commits=commits),
-      repo_path_map({
+      paths_by_repo({
           'https://chromium.googlesource.com/chromium/src':
               'src',
           'https://chrome-internal.googlesource.com/chrome/src-internal':
               'src-internal',
       }),
-      expect_revisions({
+      manifest({
+          'src': ('https://chromium.googlesource.com/chromium/src', 'src-hash'),
+          'src-internal':
+              ('https://chrome-internal.googlesource.com/chrome/src-internal',
+               'src-internal-hash'),
+      }),
+      expect_gclient_config_revisions({
           'src': 'src-hash',
           'src-internal': 'src-internal-hash',
       }),
+      api.post_check(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
-      'bootstrapped-with-missing-repo-path-map-entry',
+      'bootstrapped-does-not-checkout-repo-with-missing-repo-path-map-entry',
       api.chromium_bootstrap.properties(commits=commits),
-      repo_path_map({
+      paths_by_repo({
           'https://chromium.googlesource.com/chromium/src': 'src',
       }),
+      manifest({
+          'src': ('https://chromium.googlesource.com/chromium/src', 'src-hash'),
+      }),
+      expect_gclient_config_revisions({'src': 'src-hash'}),
+      api.post_check(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'bootstrapped-checks-out-repo-with-missing-repo-path-map-entry',
+      api.chromium_bootstrap.properties(commits=commits),
+      paths_by_repo({
+          'https://chromium.googlesource.com/chromium/src': 'src',
+      }),
+      manifest({
+          'src': ('https://chromium.googlesource.com/chromium/src', 'src-hash'),
+          'src-internal':
+              ('https://chrome-internal.googlesource.com/chrome/src-internal',
+               'src-internal-hash'),
+      }),
+      expect_gclient_config_revisions({'src': 'src-hash'}),
       api.post_check(post_process.StatusException),
       api.post_check(
           post_process.ResultReasonRE,
-          ('repo_path_map does not contain an entry for '
-           r'https://chrome-internal\.googlesource\.com/chrome/src-internal')),
+          (r'https://chrome-internal\.googlesource\.com/chrome/src-internal'
+           " does not appear in the gclient config's repo_path_map")),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'skip-callback',
+      expect_gclient_config_revisions({}),
+      api.properties(skip_callback=True),
+      api.post_check(post_process.StatusException),
+      api.post_check(post_process.ResultReasonRE,
+                     ('The callback from update_gclient_config'
+                      ' must be called with the manifest from bot_update')),
       api.post_process(post_process.DropExpectation),
   )
