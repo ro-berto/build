@@ -31,7 +31,7 @@ def should_use_reclient(api, builder_id):
   #   client.webrtc.perf = Perf builders
   #   internal.client.webrtc = Internal CI builders
   #   tryserver.webrtc = CQ builders
-  if not builder_id.group.startswith('client.webrtc'):
+  if builder_id.group == 'tryserver.webrtc':
     return False
   return True
 
