@@ -1361,7 +1361,7 @@
       "--xvfb",
       "--build-properties",
       "{\"bot_id\": \"test_bot\", \"builder_group\": \"chromium.swangle\", \"recipe\": \"angle_chromium\", \"slavename\": \"test_bot\"}",
-      "--annotate=gtest",
+      "--parse-gtest-output",
       "--test-type=angle_end2end_tests",
       "--test-launcher-summary-output",
       "[CLEANUP]/tmp_tmp_1",

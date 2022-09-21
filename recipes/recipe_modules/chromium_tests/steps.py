@@ -1664,8 +1664,6 @@ class LocalGTestTestSpec(TestSpec):
     * override_compile_targets - An optional list of compile targets to
       be built to run the test. If not provided the `target_name`
       attribute of the spec will be the only compile target.
-    * revision - Revision of the chrome checkout.
-    * webkit_revision - Revision of the webkit checkout.
     * android_shard_timeout - For tests on Android, the timeout to be
       applied to the shards.
     * commit_position_property - The name of the property containing
@@ -1679,8 +1677,6 @@ class LocalGTestTestSpec(TestSpec):
 
   args = attrib(command_args, default=())
   override_compile_targets = attrib(sequence[str], default=())
-  revision = attrib(str, default=None)
-  webkit_revision = attrib(str, default=None)
   android_shard_timeout = attrib(int, default=None)
   commit_position_property = attrib(str, default='got_revision_cp')
   use_xvfb = attrib(bool, default=True)
@@ -1742,7 +1738,7 @@ class LocalGTestTest(LocalTest):
         'args': args,
         'step_test_data': step_test_data,
         'resultdb': resultdb,
-        'annotate': 'gtest',
+        'parse_gtest_output': True,
     }
     kwargs['xvfb'] = self.spec.use_xvfb
     kwargs['test_type'] = self.name
@@ -1750,8 +1746,6 @@ class LocalGTestTest(LocalTest):
 
     step_result = self.api.m.chromium.runtest(
         self.target_name,
-        revision=self.spec.revision,
-        webkit_revision=self.spec.webkit_revision,
         stderr=self.api.m.raw_io.output_text(
             add_output_log=True, name='stderr'),
         raise_on_failure=False,

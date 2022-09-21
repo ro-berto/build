@@ -12,7 +12,6 @@
       "--builder-name=test_buildername",
       "--slave-name=test_bot_id",
       "--build-number=123",
-      "--revision=some_sha",
       "base_unittests"
     ],
     "cwd": "[CACHE]/builder",

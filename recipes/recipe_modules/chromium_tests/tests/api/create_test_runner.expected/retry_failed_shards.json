@@ -27,7 +27,7 @@
       "--xvfb",
       "--build-properties",
       "{\"bot_id\": \"test_bot_id\", \"builder_group\": \"test_group\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"recipe\": \"chromium_tests:tests/api/create_test_runner\", \"retry_failed_shards\": true, \"slavename\": \"test_bot_id\"}",
-      "--annotate=gtest",
+      "--parse-gtest-output",
       "--test-type=base_unittests",
       "--test-launcher-summary-output",
       "[CLEANUP]/tmp_tmp_1",
