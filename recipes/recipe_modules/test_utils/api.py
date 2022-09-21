@@ -274,18 +274,14 @@ class TestUtilsApi(recipe_api.RecipeApi):
     return rdb_results, bad_results_dict['invalid'], bad_results_dict['failed']
 
   def run_tests_for_flake_endorser(self, test_objects_by_suffix):
-    """Runs tests and return results for flake endorser test reruns.
+    """Runs tests flake endorser test reruns.
 
-    RDB results and failed test_suites isn't returned because flake rates will
-    be analyzed with rdb results stored in test objects.
+    RDB results and failed/invalid test_suites isn't returned because flake
+    rates will be analyzed with rdb results stored in test objects.
 
     Args:
       test_objects_by_suffix: A mapping from test suffixes to lists of
         steps.Test objects.
-
-    Returns:
-      A dict mapping from suffixes to lists of test_suites which were malformed
-        or otherwise aborted.
     """
     suffixes = sorted(test_objects_by_suffix.keys())
     groups_by_suffix = {}
@@ -303,14 +299,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
       for group in groups:
         group.run(self.m, suffix)
 
-    invalid_suites_by_suffix = {}
-    for suffix in suffixes:
-      test_suites = test_objects_by_suffix[suffix]
-      invalid, _ = self._retrieve_bad_results(test_suites, suffix)
-      if invalid:
-        invalid_suites_by_suffix[suffix] = invalid
-
-    return invalid_suites_by_suffix
 
   def _exonerate_unrelated_failures(self, test_suites, suffix):
     """Notifies RDB of any unexpected test failure that doesn't fail the build.
@@ -1347,6 +1335,8 @@ class TestGroup(object):
           (flakiness_api.check_for_flakiness and test_stats.total_test_results
            <= flakiness_api.PER_TEST_OBJECT_RESULT_LIMIT)):
         variants_with_unexpected_results = False
+      # TODO(crbug.com/1366463): Add default test data for "check flakiness"
+      # steps.
       unexpected_result_invocations = self.resultdb_api.query(
           inv_ids=self.resultdb_api.invocation_ids(invocation_names),
           variants_with_unexpected_results=variants_with_unexpected_results,

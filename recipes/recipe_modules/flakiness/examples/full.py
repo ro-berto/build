@@ -382,6 +382,17 @@ def GenTests(api):
                                      swarming=True,
                                  ),
                                  failure=False)),
+      api.resultdb.query(
+          inv_bundle=current_patchset_bookmark_suite_invocations,
+          step_name=(
+              'test new tests for flakiness.'
+              'collect tasks (check flakiness shard #0).'
+              'ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 results')),
+      api.resultdb.query(
+          inv_bundle=current_patchset_web_suite_invocations,
+          step_name=('test new tests for flakiness.'
+                     'collect tasks (check flakiness shard #0).'
+                     'ios_chrome_web_eg2tests_module_iPad Air 2 14.4 results')),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -468,6 +479,10 @@ def GenTests(api):
            '(check flakiness shard #0)'),
           ('--gtest_filter=org.chromium.chrome.browser.safety_check.'
            'SafetyCheckMediatorTest#testUpdatesCheckUpdated\\[0\\]')),
+      api.resultdb.query(
+          inv_bundle=junit_invocations,
+          step_name=('test new tests for flakiness.'
+                     'chrome_junit_tests results')),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -551,6 +566,10 @@ def GenTests(api):
            '(check flakiness shard #0)'),
           ('--gtest_filter=org.chromium.chrome.browser.safety_check.'
            'SafetyCheckMediatorTest#testUpdatesCheckUpdated')),
+      api.resultdb.query(
+          inv_bundle=junit_nonparameterized_invocation,
+          step_name=('test new tests for flakiness.'
+                     'chrome_junit_tests results')),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -618,6 +637,10 @@ def GenTests(api):
           'check_network_annotations',
           parent_step_name='searching_for_new_tests',
       ),
+      api.resultdb.query(
+          inv_bundle=script_invocation,
+          step_name=('test new tests for flakiness.'
+                     'check_network_annotations results')),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -718,6 +741,16 @@ def GenTests(api):
                                      swarming=True,
                                  ),
                                  failure=False)),
+      api.resultdb.query(
+          inv_bundle=current_patchset_web_suite_invocations,
+          step_name=('test new tests for flakiness.'
+                     'collect tasks (check flakiness shard #0).'
+                     'ios_chrome_web_eg2tests_module_iPad Air 2 14.4 results')),
+      api.resultdb.query(
+          inv_bundle=current_patchset_web_suite_invocations,
+          step_name=('test new tests for flakiness.'
+                     'collect tasks (check flakiness shard #1).'
+                     'ios_chrome_web_eg2tests_module_iPad Air 2 14.4 results')),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -731,8 +764,116 @@ def GenTests(api):
           ])
   }
 
+  test_id_base_unittests_test_d = 'ninja://base:base_unittests/TestSuite.test_d'
+  base_unittests_pass_invocations = {}
+  base_unittests_pass_invocations['invocations/pass'] = (
+      api.resultdb.Invocation(test_results=[
+          _generate_test_result(test_id_base_unittests_test_d, correct_variant),
+      ]))
+  base_unittests_flaky_invocations = {}
+  base_unittests_flaky_invocations['invocations/flaky'] = (
+      api.resultdb.Invocation(test_results=[
+          _generate_test_result(
+              test_id_base_unittests_test_d,
+              correct_variant,
+              status=test_result_pb2.FAIL),
+          _generate_test_result(test_id_base_unittests_test_d, correct_variant),
+      ]))
+
   yield api.test(
-      'basic_ios_test_failure',
+      # GTest has non zero exit code at swarming task at "check flakiness" runs
+      # if there are flakiness within. This will be determined as "invalid"
+      # test step by recipe logic. This test ensures we still present flakiness
+      # statistics for these.
+      'basic_gtest_failure',
+      api.chromium_tests_builder_config.try_build(
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
+          builder_db=builder_db,
+          try_db=ctbc.TryDatabase.create({
+              'fake-try-group': {
+                  'fake-try-builder':
+                      ctbc.TrySpec.create_for_single_mirror(
+                          builder_group='fake-group',
+                          buildername='fake-builder',
+                      ),
+              },
+          })),
+      api.properties(assert_tests=True),
+      api.chromium_tests.read_source_side_spec(
+          'fake-group', {
+              'fake-builder': {
+                  'isolated_scripts': [{
+                      "isolate_name": "base_unittests",
+                      "name": "base_unittests",
+                      "swarming": {
+                          "can_use_on_swarming_builders": True,
+                          "dimension_sets": [{
+                              "os": "Mac-11"
+                          }],
+                      },
+                      "test_id_prefix": "ninja://base:base_unittests/",
+                  },],
+              },
+          }),
+      api.filter.suppress_analyze(),
+      api.flakiness(
+          check_for_flakiness=True,
+          build_count=10,
+          historical_query_count=2,
+          current_query_count=2,
+      ),
+      api.override_step_data(('base_unittests '
+                              '(with patch) on Mac-11'),
+                             api.chromium_swarming.canned_summary_output(
+                                 api.test_utils.canned_isolated_script_output(
+                                     passing=True,
+                                     is_win=False,
+                                     swarming=True,
+                                 ),
+                                 failure=False)),
+      api.resultdb.query(
+          base_unittests_pass_invocations,
+          ('collect tasks (with patch).'
+           'base_unittests results'),
+      ),
+      # This overrides the file check to ensure that we have test files
+      # in the given patch.
+      api.step_data(
+          'git diff to analyze patch (2)',
+          api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
+      # This is the related build that'll be excluded, which includes itself.
+      api.buildbucket.simulated_search_results(
+          builds=[excluded_build],
+          step_name=(
+              'searching_for_new_tests.'
+              'fetching associated builds with current gerrit patchset')),
+      api.weetbix.query_test_history(
+          empty_history_res,
+          ('ninja://base:base_unittests/TestSuite.test_d'),
+          parent_step_name='searching_for_new_tests',
+      ),
+      api.override_step_data(('test new tests for flakiness.'
+                              'base_unittests '
+                              '(check flakiness shard #0) on Mac-11'),
+                             api.chromium_swarming.canned_summary_output(
+                                 api.test_utils.canned_isolated_script_output(
+                                     passing=False,
+                                     swarming=True,
+                                 ),
+                                 failure=True)),
+      api.resultdb.query(
+          inv_bundle=base_unittests_flaky_invocations,
+          step_name=('test new tests for flakiness.'
+                     'collect tasks (check flakiness shard #0).'
+                     'base_unittests results')),
+      api.post_check(post_process.MustRun, 'calculate flake rates'),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'basic_ios_test_flaky',
       api.chromium_tests_builder_config.try_build(
           builder_group='fake-try-group',
           builder='fake-try-builder',
@@ -828,6 +969,109 @@ def GenTests(api):
               'test new tests for flakiness.'
               'collect tasks (check flakiness shard #0).'
               'ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 results')),
+      api.post_check(post_process.MustRun, 'calculate flake rates'),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'basic_ios_test_invalid',
+      api.chromium_tests_builder_config.try_build(
+          builder_group='fake-try-group',
+          builder='fake-try-builder',
+          builder_db=builder_db,
+          try_db=ctbc.TryDatabase.create({
+              'fake-try-group': {
+                  'fake-try-builder':
+                      ctbc.TrySpec.create_for_single_mirror(
+                          builder_group='fake-group',
+                          buildername='fake-builder',
+                      ),
+              },
+          })),
+      api.properties(assert_tests=True),
+      api.chromium_tests.read_source_side_spec(
+          'fake-group', {
+              'fake-builder': {
+                  'isolated_scripts': [{
+                      "isolate_name":
+                          "ios_chrome_bookmarks_eg2tests_module",
+                      "name": ("ios_chrome_bookmarks_eg2tests_module_iPad "
+                               "Air 2 14.4"),
+                      "swarming": {
+                          "can_use_on_swarming_builders": True,
+                          "dimension_sets": [{
+                              "os": "Mac-11"
+                          }],
+                      },
+                      "test_id_prefix":
+                          ("ninja://ios/chrome/test/earl_grey2:"
+                           "ios_chrome_bookmarks_eg2tests_module/")
+                  },],
+              },
+          }),
+      api.filter.suppress_analyze(),
+      api.flakiness(
+          check_for_flakiness=True,
+          build_count=10,
+          historical_query_count=2,
+          current_query_count=2,
+      ),
+      api.override_step_data(
+          ('ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 '
+           '(with patch) on Mac-11'),
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_isolated_script_output(
+                  passing=True,
+                  is_win=False,
+                  swarming=True,
+              ),
+              failure=False)),
+      api.resultdb.query(
+          current_patchset_bookmark_suite_invocations,
+          ('collect tasks (with patch).'
+           'ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 results'),
+      ),
+      # This overrides the file check to ensure that we have test files
+      # in the given patch.
+      api.step_data(
+          'git diff to analyze patch (2)',
+          api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
+      # This is the related build that'll be excluded, which includes itself.
+      api.buildbucket.simulated_search_results(
+          builds=[excluded_build],
+          step_name=(
+              'searching_for_new_tests.'
+              'fetching associated builds with current gerrit patchset')),
+      api.weetbix.query_test_history(
+          test_a_other_invocation_history_res,
+          ('ninja://ios/chrome/test/earl_grey2:'
+           'ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a'),
+          parent_step_name='searching_for_new_tests',
+      ),
+      api.weetbix.query_test_history(
+          empty_history_res,
+          ('ninja://ios/chrome/test/earl_grey2:'
+           'ios_chrome_bookmarks_eg2tests_module/TestSuite.test_b'),
+          parent_step_name='searching_for_new_tests',
+      ),
+      api.override_step_data(
+          ('test new tests for flakiness.'
+           'ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 '
+           '(check flakiness shard #0) on Mac-11'),
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_isolated_script_output(
+                  passing=True,
+                  swarming=True,
+              ),
+              failure=True)),
+      # Result from "check flakiness" step is empty.
+      api.post_check(post_process.MustRun, 'calculate flake rates'),
+      api.post_check(
+          post_process.ResultReason,
+          'ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 '
+          '(check flakiness shard #0) steps in '
+          "test new tests for flakiness didn't produce test results."),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
   )

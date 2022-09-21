@@ -1954,6 +1954,11 @@ def GenTests(api):
             'ninja://browser_tests/Test:Test1',
             parent_step_name='searching_for_new_tests',
         ),
+        api.resultdb.query(
+            current_patchset_invocations,
+            ('test new tests for flakiness.'
+             'collect tasks (check flakiness shard #0).browser_tests results'),
+        ),
         api.post_process(post_process.StatusSuccess),
         api.post_process(post_process.DropExpectation),
     ], api.empty_test_data())

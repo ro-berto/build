@@ -1039,6 +1039,13 @@ def GenTests(api):
            'ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a'),
           parent_step_name='searching_for_new_tests',
       ),
+      api.resultdb.query(
+          inv_bundle=current_patchset_invocations,
+          step_name=(
+              'test new tests for flakiness.'
+              'collect tasks (check flakiness shard #0).'
+              'ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 results'),
+      ),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )

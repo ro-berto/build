@@ -1043,6 +1043,11 @@ def GenTests(api):
           'ninja://check_static_initializers/Test:Test1',
           parent_step_name='searching_for_new_tests',
       ),
+      api.resultdb.query(
+          inv_bundle=current_patchset_invocations,
+          step_name=('test new tests for flakiness.'
+                     'check_static_initializers results'),
+      ),
       api.post_process(post_process.MustRun, 'searching_for_new_tests'),
       api.post_process(post_process.MustRun, 'test new tests for flakiness'),
       api.post_process(post_process.MustRun, 'calculate flake rates'),

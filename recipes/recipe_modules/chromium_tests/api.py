@@ -2006,19 +2006,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       # local tests are under this key.
       with self.wrap_chromium_tests(builder_config,
                                     test_objects_by_suffix[general_suffix]):
-        invalid_suites_by_suffix = (
-            self.m.test_utils.run_tests_for_flake_endorser(
-                test_objects_by_suffix))
-
-        if invalid_suites_by_suffix:
-          summary = ('The following steps in %s didn\'t have valid results:\n' %
-                     flakiness_run_step_name)
-          for suffix, suites in invalid_suites_by_suffix.items():
-            for suite in suites:
-              summary += '- %s (%s)\n' % (suite.name, suffix)
-
-          return result_pb2.RawResult(
-              summary_markdown=summary, status=common_pb.FAILURE)
+        self.m.test_utils.run_tests_for_flake_endorser(test_objects_by_suffix)
 
     return self.m.flakiness.check_run_results(test_objects_by_suffix)
 

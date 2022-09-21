@@ -427,6 +427,8 @@ class FlakinessApi(recipe_api.RecipeApi):
       search_range = common_weetbix_pb2.TimeRange(
           earliest=timestamp_pb2.Timestamp(seconds=two_hours_before),
           latest=timestamp_pb2.Timestamp(seconds=now))
+      # TODO(crbug.com/1366463): Add default test data to make creating
+      # integration tests easier.
       # The default query size is 1000. This is sufficient for the query so
       # page token is not used.
       verdicts, _ = self.m.weetbix.query_test_history(
@@ -822,6 +824,8 @@ class FlakinessApi(recipe_api.RecipeApi):
     # fatal, otherwise they are fatal and will fail the build.
     flaky_non_experimental_test_stats = {}
     flaky_experimental_test_stats = {}
+    # A list of test step names without results (invalid).
+    empty_result_steps = []
     with self.m.step.nest(self.CALCULATE_FLAKE_RATE_STEP_NAME) as p:
       p.step_text = (
           'Tests that have exceeded the tolerated flake rate most likely '
@@ -835,6 +839,9 @@ class FlakinessApi(recipe_api.RecipeApi):
               flaky_non_experimental_test_stats)
           rdb_results = t.get_rdb_results(suffix)
           step_name = '%s (%s)' % (t.name, suffix)
+          if not rdb_results.all_tests:
+            empty_result_steps.append(step_name)
+            continue
           for test in rdb_results.all_tests:
             test_name = test.test_name
             # Key is a tuple of (test_id, variant_hash)
@@ -849,6 +856,16 @@ class FlakinessApi(recipe_api.RecipeApi):
             flaky_test_stats[key] = (test_name, info[1],
                                      info[2] + unexpected_unpassed,
                                      info[3] + total)
+
+      if empty_result_steps:
+        p.status = self.m.step.FAILURE
+        summary_lines = [
+            ('%s steps in %s didn\'t produce test results.' %
+             (', '.join(empty_result_steps), self.RUN_TEST_STEP_NAME))
+        ]
+        return result_pb2.RawResult(
+            summary_markdown='\n\n'.join(summary_lines),
+            status=common_pb2.FAILURE)
 
       # Keep only test variants with unexpected results.
       test_stats_filter = lambda item: item[1][2] > 0
