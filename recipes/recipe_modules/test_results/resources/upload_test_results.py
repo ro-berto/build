@@ -37,10 +37,11 @@ def get_results_map_from(contents):
   for result_sets in contents.get('per_iteration_data', []):
     for test, results in six.iteritems(result_sets):
       for result in results:
+        # Results have had None stored in them.
+        elapsed_time_ms = 0 if result.get(
+            'elapsed_time_ms', 0) is None else result.get('elapsed_time_ms', 0)
         result = test_result.TestResult(
-            test,
-            status=result['status'],
-            elapsed_time=result.get('elapsed_time_ms', 0) / 1000.)
+            test, status=result['status'], elapsed_time=elapsed_time_ms / 1000.)
         test_results_map.setdefault(test, []).append(result)
   return test_results_map
 
