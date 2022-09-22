@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -14,14 +13,15 @@ from common import chromium_utils
 def print_new_crash_files(new_crash_files):
   """Prints all the new crash files."""
   if new_crash_files:
-    print '\nFound %d new crash file(s), dumping them:' % (
-        len(new_crash_files))
+    print(
+        '\nFound %d new crash file(s), dumping them:' % (len(new_crash_files))
+    )
     for crash_file in new_crash_files:
-      print 'File: ' + crash_file
-      print '=' * (6 + len(crash_file))
+      print('File: ' + crash_file)
+      print('=' * (6 + len(crash_file)))
       for crash_line in open(crash_file):
-        print '  ' + crash_line.rstrip()
-        print ''
+        print('  ' + crash_line.rstrip())
+        print('')
 
 
 def list_crash_logs():

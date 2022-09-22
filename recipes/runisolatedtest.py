@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -64,7 +64,7 @@ def should_run_as_isolated(builder_name, test_name):
 
 def run_command(command):
   """Inspired from chromium_utils.py's RunCommand()."""
-  print '\n' + subprocess.list2cmdline(command)
+  print('\n' + subprocess.list2cmdline(command))
   sys.stdout.flush()
   sys.stderr.flush()
   return subprocess.call(command)
