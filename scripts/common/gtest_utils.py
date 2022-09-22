@@ -1,14 +1,15 @@
-#!/usr/bin/env python
 # Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from common import chromium_utils
+from __future__ import division
+
 import json
 import os
 import re
 import tempfile
 
+from common import chromium_utils
 
 # These labels should match the ones output by gtest's JSON.
 TEST_UNKNOWN_LABEL = 'UNKNOWN'
@@ -30,7 +31,7 @@ def CompressList(lines, max_length, middle_replacement):
   """
   if len(lines) <= max_length:
     return lines
-  remove_from_start = max_length / 2
+  remove_from_start = max_length // 2
   return (lines[:remove_from_start] +
           [middle_replacement] +
           lines[len(lines) - (max_length - remove_from_start):])
@@ -215,7 +216,7 @@ class GTestLogParser(object):
 
   def MemoryToolReportHashes(self):
     """Returns list of report hashes found in the log."""
-    return self._memory_tool_reports.keys()
+    return list(self._memory_tool_reports.keys())
 
   def MemoryToolReport(self, report_hash):
     """Returns a list containing the report for a given hash.
@@ -652,7 +653,7 @@ class GTestJSONParser(object):
         build_dir, json_data['global_tags'])
 
     for iteration_data in json_data['per_iteration_data']:
-      for test_name, test_runs in iteration_data.iteritems():
+      for test_name, test_runs in iteration_data.items():
         if test_runs[-1]['status'] in ('SUCCESS', 'SKIPPED'):
           self.passed_tests.add(test_name)
         else:
@@ -672,8 +673,9 @@ class GTestJSONParser(object):
           # Make sure the annotations are ASCII to avoid character set related
           # errors. They are mostly informational anyway, and more detailed
           # info can be obtained from the original JSON output.
-          ascii_lines = run_data['output_snippet'].encode('ascii',
-                                                          errors='replace')
+          ascii_lines = run_data['output_snippet'].encode(
+              'ascii', errors='replace'
+          ).decode()
           decoded_lines = CompressList(
               ascii_lines.split('\n'),
               self.OUTPUT_SNIPPET_LINES_LIMIT,
