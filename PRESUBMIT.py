@@ -10,6 +10,8 @@ details on the presubmit API built into git cl.
 
 PRESUBMIT_VERSION = '2.0.0'
 
+USE_PYTHON3 = True
+
 _IGNORE_FREEZE_FOOTER = 'Ignore-Freeze'
 
 # The time module's handling of timezones is abysmal, so the boundaries are

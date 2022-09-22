@@ -12,6 +12,8 @@ import re
 
 PRESUBMIT_VERSION = '2.0.0'
 
+USE_PYTHON3 = True
+
 _DEPRECATED_PROPERTY_REGEX = re.compile(
     r'\.properties\.(generic|(git_)?scheduled|tryserver)'
 )
