@@ -1849,7 +1849,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "RECIPE_MODULE[infra::zip]/resources/zip.py"
     ],
     "luci_context": {

@@ -322,7 +322,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "RECIPE_MODULE[infra::zip]/resources/zip.py"
     ],
     "luci_context": {
@@ -553,7 +553,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "RECIPE_MODULE[infra::zip]/resources/zip.py"
     ],
     "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel/test",
