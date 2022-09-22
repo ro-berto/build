@@ -1,7 +1,7 @@
 [
   {
     "cmd": [
-      "python",
+      "python3",
       "RECIPE_REPO[build]/recipes/runtest.py",
       "--target",
       "Release",
@@ -25,13 +25,6 @@
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
-    },
-    "env_prefixes": {
-      "PYTHONPATH": [
-        "RECIPE_REPO[build]",
-        "RECIPE_REPO[build]/recipes",
-        "RECIPE_REPO[build]/scripts"
-      ]
     },
     "name": "base_unittests"
   },

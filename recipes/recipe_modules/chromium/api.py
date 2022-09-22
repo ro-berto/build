@@ -871,8 +871,15 @@ class ChromiumApi(recipe_api.RecipeApi):
       # self.m.path['checkout'] since that has an extra '/src' added onto it
       # compared to what runtest.py expects.
       with self.m.context(cwd=self.m.path['cache'].join('builder')):
-        return self.m.build.python(
-            step_name, runtest_path, args=full_args, **kwargs)
+        resultdb = kwargs.pop('resultdb', None)
+        cmd = ['python3', runtest_path] + full_args
+        if resultdb:
+          cmd = resultdb.wrap(self.m, cmd, step_name=name)
+        return self.m.step(
+            step_name,
+            cmd,
+            **kwargs,
+        )
 
   @_with_chromium_layout
   def get_clang_version(self, **kwargs):
