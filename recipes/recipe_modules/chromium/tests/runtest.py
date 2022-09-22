@@ -2,8 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from RECIPE_MODULES.build.chromium_tests.steps import ResultDB
-
 DEPS = [
   'chromium',
   'recipe_engine/json',
@@ -29,9 +27,6 @@ def RunSteps(api):
         'test_launcher_summary_output': api.json.output(),
     })
 
-  if api.properties.get('resultdb'):
-    kwargs['resultdb'] = ResultDB.create(enable=True)
-
   api.chromium.runtest(
       'base_unittests',
       python_mode=api.properties.get('python_mode', False),
@@ -45,19 +40,6 @@ def GenTests(api):
       api.properties(
           buildername='test_buildername', buildnumber=123,
           bot_id='test_bot_id'),
-  )
-
-  yield api.test(
-      'resultdb',
-      api.properties(
-          buildername='test_buildername',
-          buildnumber=123,
-          bot_id='test_bot_id',
-          resultdb=True),
-      api.chromium.ci_build(
-          builder_group='chromium.linux',
-          builder='Linux Tests',
-      ),
   )
 
   # In order to get coverage of the LUCI-specific code in runtest.

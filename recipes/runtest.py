@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -36,10 +36,6 @@ sys.path.insert(0, os.path.abspath('src/tools/python'))
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(
     0, os.path.abspath(os.path.join(THIS_DIR, os.pardir, 'scripts'))
-)
-sys.path.insert(
-    0,
-    THIS_DIR,
 )
 
 from common import chromium_utils
@@ -82,18 +78,16 @@ def _LaunchDBus():
   if (platform.uname()[0].lower() == 'linux' and
       'DBUS_SESSION_BUS_ADDRESS' not in os.environ):
     try:
-      print('DBUS_SESSION_BUS_ADDRESS env var not found, starting dbus-launch')
-      dbus_output = subprocess.check_output(['dbus-launch'],
-                                            universal_newlines=True
-                                           ).split('\n')
+      print 'DBUS_SESSION_BUS_ADDRESS env var not found, starting dbus-launch'
+      dbus_output = subprocess.check_output(['dbus-launch']).split('\n')
       for line in dbus_output:
         m = re.match(r'([^=]+)\=(.+)', line)
         if m:
           os.environ[m.group(1)] = m.group(2)
-          print(' setting %s to %s' % (m.group(1), m.group(2)))
+          print ' setting %s to %s' % (m.group(1), m.group(2))
       return True
     except (subprocess.CalledProcessError, OSError) as e:
-      print('Exception while running dbus_launch: %s' % e)
+      print 'Exception while running dbus_launch: %s' % e
   return False
 
 
@@ -113,15 +107,15 @@ def _ShutdownDBus():
     dbus_pid = os.environ['DBUS_SESSION_BUS_PID']
     try:
       os.kill(int(dbus_pid), signal.SIGTERM)
-      print(' killed dbus-daemon with PID %s' % dbus_pid)
+      print ' killed dbus-daemon with PID %s' % dbus_pid
     except OSError as e:
-      print(' error killing dbus-daemon with PID %s: %s' % (dbus_pid, e))
+      print ' error killing dbus-daemon with PID %s: %s' % (dbus_pid, e)
   # Try to clean up any stray DBUS_SESSION_BUS_ADDRESS environment
   # variable too. Some of the bots seem to re-invoke runtest.py in a
   # way that this variable sticks around from run to run.
   if 'DBUS_SESSION_BUS_ADDRESS' in os.environ:
     del os.environ['DBUS_SESSION_BUS_ADDRESS']
-    print(' cleared DBUS_SESSION_BUS_ADDRESS environment variable')
+    print ' cleared DBUS_SESSION_BUS_ADDRESS environment variable'
 
 
 def _RunGTestCommand(
@@ -141,9 +135,9 @@ def _RunGTestCommand(
   """
   env = os.environ.copy()
   if extra_env:
-    print('Additional test environment:')
+    print 'Additional test environment:'
     for k, v in sorted(extra_env.items()):
-      print('  %s=%s' % (k, v))
+      print '  %s=%s' % (k, v)
   env.update(extra_env or {})
 
   # Trigger bot mode (test retries, redirection of stdio, possibly faster,
@@ -238,7 +232,6 @@ def _BuildCoverageGtestExclusions(options, args):
       },
       'darwin2': {},
       'linux2': {},
-      'linux': {},
   }
   gtest_exclusion_filters = []
   if sys.platform in gtest_exclusions:
@@ -294,21 +287,21 @@ def _report_outcome(test_name, exit_code, log_processor):
     # Windows error codes such as 0xC0000005 and 0xC0000409 are much easier to
     # recognize and differentiate in hex. In order to print them as unsigned
     # hex we need to add 4 Gig to them.
-    print('exit code (as seen by runtest.py): 0x%08X' % (exit_code + (1 << 32)))
+    print 'exit code (as seen by runtest.py): 0x%08X' % (exit_code + (1 << 32))
   else:
-    print('exit code (as seen by runtest.py): %d' % exit_code)
+    print 'exit code (as seen by runtest.py): %d' % exit_code
 
   if log_processor.ParsingErrors():
-    print('runtest.py encountered the following errors')
+    print 'runtest.py encountered the following errors'
     for e in log_processor.ParsingErrors():
-      print('  ', e)
+      print '  ', e
 
-  print()
-  print(test_name)
-  print('%s disabled' % log_processor.DisabledTests())
-  print('%s flaky' % log_processor.FlakyTests())
+  print
+  print test_name
+  print '%s disabled' % log_processor.DisabledTests()
+  print '%s flaky' % log_processor.FlakyTests()
 
-  SUCCESS, WARNINGS, FAILURE = list(range(3))
+  SUCCESS, WARNINGS, FAILURE = range(3)
   status = SUCCESS
 
   if exit_code == SUCCESS:
@@ -325,16 +318,16 @@ def _report_outcome(test_name, exit_code, log_processor):
     if status == SUCCESS:
       return
     if status == WARNINGS:
-      print('warnings')
+      print 'warnings'
       return
 
   if log_processor.RunningTests():
-    print('did not complete')
+    print 'did not complete'
 
   if failed_test_count:
-    print('failed %d' % failed_test_count)
+    print 'failed %d' % failed_test_count
   else:
-    print('crashed or hung')
+    print 'crashed or hung'
 
 
 def _MainMac(options, args, extra_env):
@@ -489,7 +482,7 @@ def _MainIOS(options, args, extra_env):
     try:
       chromium_utils.RemoveDirectory(a_dir)
     except OSError as e:
-      print(e, file=sys.stderr)
+      print >> sys.stderr, e
       # Don't fail.
 
   return result
@@ -525,8 +518,8 @@ def _MainLinux(options, args, extra_env):
     test_exe_path = os.path.join(bin_dir, test_exe)
   if not os.path.exists(test_exe_path):
     if options.build_properties.get('succeed_on_missing_exe', False):
-      print(
-          '%s missing but succeed_on_missing_exe used, exiting' % test_exe_path
+      print '%s missing but succeed_on_missing_exe used, exiting' % (
+          test_exe_path
       )
       return 0
     msg = 'Unable to find %s' % test_exe_path
@@ -536,10 +529,10 @@ def _MainLinux(options, args, extra_env):
   # causes some tests to hang.  See http://crbug.com/139638 for more info.
   if 'http_proxy' in os.environ:
     del os.environ['http_proxy']
-    print('Deleted http_proxy environment variable.')
+    print 'Deleted http_proxy environment variable.'
   if 'HTTPS_PROXY' in os.environ:
     del os.environ['HTTPS_PROXY']
-    print('Deleted HTTPS_PROXY environment variable.')
+    print 'Deleted HTTPS_PROXY environment variable.'
 
   # Path to SUID sandbox binary. This must be installed on all bots.
   extra_env['CHROME_DEVEL_SANDBOX'] = CHROME_SANDBOX_PATH
@@ -658,8 +651,8 @@ def _MainWin(options, args, extra_env):
 
   if not os.path.exists(test_exe_path):
     if options.build_properties.get('succeed_on_missing_exe', False):
-      print(
-          '%s missing but succeed_on_missing_exe used, exiting' % test_exe_path
+      print '%s missing but succeed_on_missing_exe used, exiting' % (
+          test_exe_path
       )
       return 0
     raise chromium_utils.PathNotFound('Unable to find %s' % test_exe_path)
@@ -961,7 +954,7 @@ def main():
     )
     return 1
 
-  print('[Running on builder: "%s"]' % options.builder_name)
+  print '[Running on builder: "%s"]' % options.builder_name
 
   did_launch_dbus = _LaunchDBus()
 
@@ -997,7 +990,7 @@ def main():
         result = _MainMac(options, args, extra_env)
     elif sys.platform == 'win32':
       result = _MainWin(options, args, extra_env)
-    elif sys.platform.startswith('linux'):
+    elif sys.platform == 'linux2':
       if options.build_properties.get('test_platform',
                                       options.test_platform) == 'android':
         result = _MainAndroid(options, args, extra_env)
@@ -1009,17 +1002,13 @@ def main():
 
     new_temp_files = _GetTempCount()
     if temp_files > new_temp_files:
-      print(
-          'Confused: %d files were deleted from %s during the test run' %
-          (temp_files - new_temp_files, tempfile.gettempdir()),
-          file=sys.stderr
-      )
+      print >> sys.stderr, (
+          'Confused: %d files were deleted from %s during the test run'
+      ) % ((temp_files - new_temp_files), tempfile.gettempdir())
     elif temp_files < new_temp_files:
-      print(
+      print >> sys.stderr, (
           '%d new files were left in %s: Fix the tests to clean up themselves.'
-          % (new_temp_files - temp_files, tempfile.gettempdir()),
-          file=sys.stderr
-      )
+      ) % ((new_temp_files - temp_files), tempfile.gettempdir())
       # TODO(maruel): Make it an error soon. Not yet since I want to iron
       # out all the remaining cases before.
       #result = 1
