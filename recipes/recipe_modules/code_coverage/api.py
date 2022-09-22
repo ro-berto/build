@@ -1080,7 +1080,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     """
     commit = self.m.buildbucket.build.input.gitiles_commit
     branch = 'main'
-    category = 'DEFAULT' if coverage_type == 'overall' else 'CHROME_UNIT'
+    category = 'DEFAULT' if coverage_type == 'overall' else 'CHROME_UNIT_TEST'
     return {
         # Maps to https://source.corp.google.com/h/chrome-internal/codesearch/chrome/src
         # which is a view of https://chromium.googlesource.com/chromium/src/
