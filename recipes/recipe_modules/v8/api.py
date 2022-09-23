@@ -69,7 +69,7 @@ class V8Version(object):
 
   def __str__(self):
     patch_str = '.%s' % self.patch if self.patch and self.patch != '0' else ''
-    return '%s.%s.%s%s' % (self.major, self.minor, self.build, patch_str)
+    return f'{self.major}.{self.minor}.{self.build}{patch_str}'
 
   def with_incremented_patch(self):
     return V8Version(
@@ -172,7 +172,7 @@ class ProdTrigger(Trigger):
         job = builder
       else:
         bucket = self.api.buildbucket.build.builder.bucket
-        job = "%s-%s" % (bucket, builder)
+        job = f'{bucket}-{builder}'
       result.append((builder, job))
     return result
 
@@ -386,13 +386,13 @@ class V8Api(recipe_api.RecipeApi):
     try:
       # Eval python literal file.
       test_configs = ast.literal_eval(self.m.file.read_text(
-          'read test config (%s)' % self.m.path.basename(root),
+          f'read test config ({self.m.path.basename(root)})',
           test_config_path,
           test_data='{}',
       ))
     except SyntaxError as e:  # pragma: no cover
       raise self.m.step.InfraFailure(
-          'Failed to parse test config "%s": %s' % (test_config_path, e))
+          f'Failed to parse test config "{test_config_path}": {e}')
 
     for test_config in test_configs.values():
       # This configures the test runner to set the test root to the
@@ -516,7 +516,7 @@ class V8Api(recipe_api.RecipeApi):
     solution = self.m.gclient.c.solutions[0]
     branch = self.m.buildbucket.gitiles_commit.ref
     if RELEASE_BRANCH_RE.match(branch):
-      revision = '%s:%s' % (branch, revision)
+      revision = f'{branch}:{revision}'
     solution.revision = revision
 
     self.checkout_root = self.m.path['cache'].join('builder')
@@ -575,7 +575,7 @@ class V8Api(recipe_api.RecipeApi):
       assert len(changes) <= 1
       if changes and changes[0].project:
         self.m.chromium_swarming.add_default_tag(
-            'patch_project:%s' % changes[0].project)
+            f'patch_project:{changes[0].project}')
     else:
       if self.m.builder_group.for_current in [
           'client.v8', 'client.v8.branches', 'client.v8.ports'
@@ -676,13 +676,13 @@ class V8Api(recipe_api.RecipeApi):
     try:
       # Eval python literal file.
       full_test_spec = ast.literal_eval(self.m.file.read_text(
-          'read test spec (%s)' % self.m.path.basename(root),
+          f'read test spec ({self.m.path.basename(root)})',
           test_spec_file,
           test_data='{}',
       ))
     except SyntaxError as e:  # pragma: no cover
       raise self.m.step.InfraFailure(
-          'Failed to parse test specification "%s": %s' % (test_spec_file, e))
+          f'Failed to parse test specification "{test_spec_file}": {e}')
 
     # Transform into object.
     test_spec = TestSpec.from_python_literal(full_test_spec, self.builderset)
@@ -909,7 +909,7 @@ class V8Api(recipe_api.RecipeApi):
 
       build_dir = None
       if out_dir:  # pragma: no cover
-        build_dir = '//%s/%s' % (out_dir, self.m.chromium.c.build_config_fs)
+        build_dir = f'//{out_dir}/{self.m.chromium.c.build_config_fs}'
       if self.m.chromium.c.project_generator.tool == 'mb':
         mb_config_rel_path = self.m.properties.get(
             'mb_config_path', 'infra/mb/mb_config.pyl')
@@ -1009,7 +1009,7 @@ class V8Api(recipe_api.RecipeApi):
     self.m.gsutil.upload(
         self.m.json.input(self.isolated_tests),
         self.isolated_archive_path,
-        '%s.json' % self.revision,
+        f'{self.revision}.json',
         args=['-a', 'public-read'],
     )
 
@@ -1043,7 +1043,7 @@ class V8Api(recipe_api.RecipeApi):
       )
 
   def download_isolated_json(self, revision):
-    archive = 'gs://' + self.isolated_archive_path + '/%s.json' % revision
+    archive = 'gs://' + self.isolated_archive_path + f'/{revision}.json'
     self.m.gsutil.download_url(
         archive,
         self.m.json.output(),
@@ -1149,12 +1149,12 @@ class V8Api(recipe_api.RecipeApi):
     result = self.m.gsutil(
         [
           '-m', 'cp', '-a', 'public-read', '-R', report_dir,
-          'gs://chromium-v8/%s' % dest,
+          f'gs://chromium-v8/{dest}',
         ],
         'coverage report',
     )
     result.presentation.links['report'] = (
-      'https://storage.googleapis.com/chromium-v8/%s/index.html' % dest)
+      f'https://storage.googleapis.com/chromium-v8/{dest}/index.html')
 
   def create_test(self, test):
     """Wrapper that allows to shortcut common tests with their names.
@@ -1265,7 +1265,7 @@ class V8Api(recipe_api.RecipeApi):
             raise self.m.step.InfraFailure('Swarming required for bisect.')
         else:  # pragma: no cover
           raise self.m.step.InfraFailure(
-              'Bot type %s not supported.' % self.bot_type)
+              f'Bot type {self.bot_type} not supported.')
         result = test_func(revision)
         if result.infra_failures:  # pragma: no cover
           raise self.m.step.InfraFailure(
@@ -1400,7 +1400,7 @@ class V8Api(recipe_api.RecipeApi):
 
     if failures:
       # Number of failures.
-      presentation.step_text += 'failures: %d<br/>' % len(failures)
+      presentation.step_text += f'failures: {len(failures)}<br/>'
 
   @property
   def extra_flags(self):
@@ -1461,7 +1461,7 @@ class V8Api(recipe_api.RecipeApi):
     # On reruns, there's a fixed random seed set in the test configuration.
     if ('--random-seed' not in test.get('test_args', []) and
         test.get('use_random_seed', True)):
-      full_args.append('--random-seed=%s' % str(self.testing_random_seed()))
+      full_args.append(f'--random-seed={self.testing_random_seed()}')
 
     # Either run tests as specified by the filter (trybots only) or as
     # specified by the test configuration.
@@ -1489,7 +1489,7 @@ class V8Api(recipe_api.RecipeApi):
     full_args = self._with_extra_flags(full_args)
 
     full_args += [
-      '--rerun-failures-count=%d' % self.rerun_failures_count,
+      f'--rerun-failures-count={self.rerun_failures_count}',
     ]
 
     return full_args, env
@@ -1528,7 +1528,7 @@ class V8Api(recipe_api.RecipeApi):
         # On tryservers, set revision to the same as on the current bot, as it
         # is used to generate buildset tag in buildbucket_trigger below.
         revision=self.m.buildbucket.gitiles_commit.id or 'HEAD',
-        patch_gerrit_url='https://%s' % self.m.tryserver.gerrit_change.host,
+        patch_gerrit_url=f'https://{self.m.tryserver.gerrit_change.host}',
         patch_issue=self.m.tryserver.gerrit_change.change,
         patch_project=self.m.tryserver.gerrit_change.project,
         patch_set=self.m.tryserver.gerrit_change.patchset,
@@ -1609,7 +1609,7 @@ class V8Api(recipe_api.RecipeApi):
     # Commits is a list of gitiles commit dicts in reverse chronological order.
     commits, _ = self.m.gitiles.log(
         url=V8_URL,
-        ref='%s~2..%s' % (oldest_change, newest_change),
+        ref=f'{oldest_change}~2..{newest_change}',
         limit=100,
         step_name='Get change range',
         step_test_data=self.test_api.example_bisection_range
@@ -1629,7 +1629,7 @@ class V8Api(recipe_api.RecipeApi):
 
   def get_available_range(self, bisect_range):
     assert self.bot_type == 'tester'
-    archive_url_pattern = 'gs://' + self.isolated_archive_path + '/%s.json'
+    archive_url_pattern = f'gs://{self.isolated_archive_path}/%s.json'
     # TODO(machenbach): Maybe parallelize this in a wrapper script.
     args = ['ls']
     available_range = []
@@ -1637,7 +1637,7 @@ class V8Api(recipe_api.RecipeApi):
     for r in bisect_range[:-1]:
       step_result = self.m.gsutil(
           args + [archive_url_pattern % r],
-          name='check build %s' % r[:8],
+          name=f'check build {r[:8]}',
           # Allow failures, as the tool will formally fail for any absent file.
           ok_ret='any',
           stdout=self.m.raw_io.output_text(),
@@ -1683,7 +1683,7 @@ class V8Api(recipe_api.RecipeApi):
     if len(culprit_range) > 1:
       text = 'Suspecting multiple commits'
     else:
-      text = 'Suspecting %s' % culprit_range[0][:8]
+      text = f'Suspecting {culprit_range[0][:8]}'
 
     step_result = self.m.step(text, cmd=None)
     for culprit in culprit_range:
@@ -1693,8 +1693,8 @@ class V8Api(recipe_api.RecipeApi):
     """Read and return the version-file content at a paricular ref."""
     with self.m.context(cwd=self.m.path['checkout']):
       return self.m.git(
-          'show', '%s:%s' % (ref, self.VERSION_FILE),
-          name='Check %s version file' % step_name_desc,
+          'show', f'{ref}:{self.VERSION_FILE}',
+          name=f'Check {step_name_desc} version file',
           stdout=self.m.raw_io.output_text(),
       ).stdout
 
@@ -1786,7 +1786,7 @@ class V8Api(recipe_api.RecipeApi):
       extra_edits(self.m)
 
     # Commit and push changes.
-    self.m.git('commit', '-am', 'Version %s' % latest_version)
+    self.m.git('commit', '-am', f'Version {latest_version}')
 
     if self.m.properties.get('dry_run') or self.m.runtime.is_experimental:
       self.m.step('Dry-run commit', cmd=None)
