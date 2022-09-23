@@ -96,7 +96,7 @@ class ChromiumBootstrapApi(recipe_api.RecipeApi):
         missing_repos.append(repo)
         continue
       path, _ = gclient_config.repo_path_map[repo]
-      gclient_config.revisions[path] = commit.id
+      gclient_config.revisions[path] = commit.id or commit.ref
 
     not_called = object()
     manifest_holder = [not_called]

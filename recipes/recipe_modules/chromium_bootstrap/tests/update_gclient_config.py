@@ -144,3 +144,40 @@ def GenTests(api):
                       ' must be called with the manifest from bot_update')),
       api.post_process(post_process.DropExpectation),
   )
+
+  commits = [
+      common.GitilesCommit(
+          host='chromium.googlesource.com',
+          project='chromium/src',
+          ref='refs/heads/main',
+      ),
+      common.GitilesCommit(
+          host='chrome-internal.googlesource.com',
+          project='chrome/src-internal',
+          ref='refs/heads/main',
+          id='src-internal-hash',
+      ),
+  ]
+
+  yield api.test(
+      'bootstrapped-commit-without-id',
+      api.chromium_bootstrap.properties(commits=commits),
+      paths_by_repo({
+          'https://chromium.googlesource.com/chromium/src':
+              'src',
+          'https://chrome-internal.googlesource.com/chrome/src-internal':
+              'src-internal',
+      }),
+      manifest({
+          'src': ('https://chromium.googlesource.com/chromium/src', 'src-hash'),
+          'src-internal':
+              ('https://chrome-internal.googlesource.com/chrome/src-internal',
+               'src-internal-hash'),
+      }),
+      expect_gclient_config_revisions({
+          'src': 'refs/heads/main',
+          'src-internal': 'src-internal-hash',
+      }),
+      api.post_check(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
