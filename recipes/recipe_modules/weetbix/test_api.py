@@ -91,3 +91,22 @@ class WeetbixTestApi(recipe_test_api.RecipeTestApi):
     return self.step_data(
         step_name,
         self.m.json.output_stream(json_format.MessageToDict(response)))
+
+  def query_variants(self, response, test_id, parent_step_name=None):
+    """Emulates query_variants() return value.
+    Args:
+      response (luci.analysis.v1.test_history.QueryVariantsResponse): the
+        response to simulate.
+      test_id (str): Test ID to query.
+      parent_step_name (str): The parent step name under which step is nested
+        in, if any.
+    """
+    parent_step_prefix = ''
+    if parent_step_name:
+      parent_step_prefix = ('%s.' % parent_step_name)
+    step_name = ('%sTest history query_variants rpc call for %s' %
+                 (parent_step_prefix, test_id))
+
+    return self.step_data(
+        step_name,
+        self.m.json.output_stream(json_format.MessageToDict(response)))

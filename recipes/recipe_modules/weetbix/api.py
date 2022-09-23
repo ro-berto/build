@@ -13,8 +13,8 @@ from recipe_engine import recipe_api
 
 from RECIPE_MODULES.build.attr_utils import attrib, attrs, mapping, sequence
 from PB.go.chromium.org.luci.analysis.proto.v1.predicate import TestVerdictPredicate
-from PB.go.chromium.org.luci.analysis.proto.v1.test_history import QueryTestHistoryRequest
-from PB.go.chromium.org.luci.analysis.proto.v1.test_history import QueryTestHistoryResponse
+from PB.go.chromium.org.luci.analysis.proto.v1.test_history import (
+    QueryTestHistoryRequest, QueryTestHistoryResponse, QueryVariantsRequest)
 from PB.go.chromium.org.luci.analysis.proto.v1.test_variants import TestVariantFailureRateAnalysis
 
 CLUSTER_STEP_NAME = 'cluster failing test results with weetbix'
@@ -114,8 +114,9 @@ class WeetbixApi(recipe_api.RecipeApi):
       test_id (str): test ID to query.
       sub_realm (str): Optional. The realm without the "<project>:" prefix.
         E.g. "try". Default all test verdicts will be returned.
-      variant_predicate (luci.analysis.v1.TestVerdict): Optional. The subset of
-        test variants to request history for. Default all will be returned.
+      variant_predicate (luci.analysis.v1.VariantPredicate): Optional. The
+        subset of test variants to request history for. Default all will be
+        returned.
       partition_time_range (luci.analysis.v1.common.TimeRange): Optional. A
         range of timestamps to query the test history from. Default all will be
         returned. (At most recent 90 days as TTL).
@@ -156,6 +157,53 @@ class WeetbixApi(recipe_api.RecipeApi):
                               json_format.MessageToDict(request))
     response = json_format.ParseDict(response_json, QueryTestHistoryResponse())
     return response.verdicts, response.next_page_token
+
+  def query_variants(self,
+                     test_id,
+                     project='chromium',
+                     sub_realm=None,
+                     variant_predicate=None,
+                     page_size=1000,
+                     page_token=None):
+    """A wrapper method to use `luci.analysis.v1.TestHistory` `QueryVariants`
+    API.
+
+    Args:
+
+      test_id (str): test ID to query.
+      project (str): Optional. The LUCI project to query the variants from.
+      sub_realm (str): Optional. The realm without the "<project>:" prefix.
+        E.g. "try". Default all test verdicts will be returned.
+      variant_predicate (luci.analysis.v1.VariantPredicate): Optional. The
+        subset of test variants to request history for. Default all will be
+        returned.
+      page_size (int): Optional. The number of results per page in the response.
+        If the number of results satisfying the given configuration exceeds this
+        number, only the page_size results will be available in the response.
+        Defaults to 1000.
+      page_token (str): Optional. For instances in which the results span
+        multiple pages, each response will contain a page token for the next
+        page, which can be passed in to the next request. Defaults to None,
+        which returns the first page.
+
+    Returns:
+      (list of VariantInfo { variant_hash: str, variant: { def: dict } },
+       next page token)
+    """
+    request = QueryVariantsRequest(
+        project=project,
+        test_id=test_id,
+        sub_realm=sub_realm,
+        variant_predicate=variant_predicate,
+        page_size=page_size,
+        page_token=page_token,
+    )
+
+    response_json = self._run(
+        'Test history query_variants rpc call for %s' % test_id,
+        'luci.analysis.v1.TestHistory.QueryVariants',
+        json_format.MessageToDict(request))
+    return response_json.get('variants'), response_json.get('next_page_token')
 
 
 @attrs()
