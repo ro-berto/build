@@ -246,26 +246,15 @@ class V8Api(recipe_api.RecipeApi):
   def trigger_prod(self):
     return ProdTrigger(self.m)
 
-  @property
-  def steps_use_python3(self):
-    return ("v8.steps.use_python3"
-            in self.m.buildbucket.build.input.experiments)
-
-  @property
-  def scripts_use_python3(self):
-    return ("v8.scripts.use_python3"
-            in self.m.buildbucket.build.input.experiments)
-
   def _python(self, name, exe, script, args, **kwargs):
-    suffix = '3' if self.steps_use_python3 else ''
-    cmd = [exe + suffix, '-u', script] + list(args or [])
+    cmd = [exe, '-u', script] + list(args or [])
     return self.m.step(name, cmd, **kwargs)
 
   def python(self, name, script, args=None, **kwargs):
-    return self._python(name, 'python', script, args, **kwargs)
+    return self._python(name, 'python3', script, args, **kwargs)
 
   def vpython(self, name, script, args=None, **kwargs):
-    return self._python(name, 'vpython', script, args, **kwargs)
+    return self._python(name, 'vpython3', script, args, **kwargs)
 
   def bot_config_by_buildername(self,
                                 builders=None,

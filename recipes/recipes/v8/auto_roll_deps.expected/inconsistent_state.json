@@ -48,7 +48,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "RECIPE_MODULE[build::v8]/resources/sleep_20_seconds.py"
     ],

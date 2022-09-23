@@ -80,7 +80,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "[CACHE]/builder/v8/tools/release/filter_build_files.py",
       "--dir",
@@ -256,7 +256,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "[CACHE]/builder/v8/tools/release/filter_build_files.py",
       "--dir",

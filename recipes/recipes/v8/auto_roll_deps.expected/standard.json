@@ -48,7 +48,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "RECIPE_MODULE[build::v8]/resources/sleep_20_seconds.py"
     ],
@@ -357,7 +357,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "[CACHE]/builder/v8/tools/release/auto_roll.py",
       "--chromium",

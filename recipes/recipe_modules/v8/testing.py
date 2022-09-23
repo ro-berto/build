@@ -237,8 +237,7 @@ class BaseTest(object):
     assert '/' in cas_digest
 
     if raw_cmd[0].endswith('.py'):
-      exe = 'vpython3' if self.api.v8.scripts_use_python3 else 'vpython'
-      raw_cmd = [exe, '-u'] + raw_cmd
+      raw_cmd = ['vpython3', '-u'] + raw_cmd
 
     return self.api.chromium_swarming.task(
         cas_input_root=cas_digest, raw_cmd=raw_cmd, **kwargs)

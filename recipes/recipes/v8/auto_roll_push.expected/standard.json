@@ -107,7 +107,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "[CACHE]/builder/v8/tools/release/auto_push.py",
       "--push",

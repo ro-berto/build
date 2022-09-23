@@ -490,7 +490,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "tools/test.py",
       "-p",
@@ -522,7 +522,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "tools/test.py",
       "-p",
@@ -552,7 +552,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "tools/test.py",
       "-p",
@@ -584,7 +584,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "tools/test.py",
       "-p",
