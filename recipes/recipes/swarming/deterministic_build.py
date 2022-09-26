@@ -35,6 +35,7 @@ DETERMINISTIC_BUILDERS = freeze({
     'Mac deterministic': {
         'chromium_config': 'chromium',
         'gclient_config': 'chromium',
+        'gclient_apply_config': ['enable_reclient'],
         'platform': 'mac',
         'targets': ['all'],
     },
@@ -57,6 +58,7 @@ DETERMINISTIC_BUILDERS = freeze({
     'Mac deterministic (dbg)': {
         'chromium_config': 'chromium',
         'gclient_config': 'chromium',
+        'gclient_apply_config': ['enable_reclient'],
         'platform': 'mac',
         'targets': ['all'],
     },
