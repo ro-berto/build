@@ -480,6 +480,7 @@ class BinarySizeApi(recipe_api.RecipeApi):
       if (is_fuchsia and
           result_json['status_code'] == constants.FUCHSIA_ROLLER_WARNING):
         step_result.presentation.status = self.m.step.WARNING
+        step_result.presentation.step_text += '<br/>Ignore roller errors for Fuchsia.<br/>'
       else:
         step_result.presentation.status = self.m.step.FAILURE
     return step_result
