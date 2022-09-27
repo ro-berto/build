@@ -655,7 +655,9 @@ class CodeCoverageApi(recipe_api.RecipeApi):
         self.m.step('Generate Java coverage metadata', cmd, **kwargs)
 
         # Upload data to zoss to show it on code search
-        if self._export_coverage_to_zoss:
+        # TODO(b/244612755): Remove test type check once bug is fixed.
+        if (self._export_coverage_to_zoss and
+            self._current_processing_test_type == 'overall'):
           self.m.gsutil.upload(
               source=coverage_dir.join('coverage.xml'),
               bucket=constants.ZOSS_BUCKET_NAME,
@@ -1021,7 +1023,9 @@ class CodeCoverageApi(recipe_api.RecipeApi):
            len(self.m.profiles.profile_subdirs)), cmd)
     finally:
       # Upload data to zoss to show it on code search
-      if self._export_coverage_to_zoss:
+      # TODO(b/244612755): Remove test type check once bug is fixed.
+      if (self._export_coverage_to_zoss and
+          self._current_processing_test_type == 'overall'):
         self.m.gsutil.upload(
             source=self.metadata_dir.join('coverage.json'),
             bucket=constants.ZOSS_BUCKET_NAME,
