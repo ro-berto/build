@@ -6,8 +6,6 @@
       "--target",
       "Release",
       "--no-xvfb",
-      "--build-properties",
-      "{\"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"python_mode\": true, \"recipe\": \"chromium:tests/runtest\", \"slavename\": \"test_bot_id\"}",
       "--test-type=base_unittests",
       "--builder-name=test_buildername",
       "--slave-name=test_bot_id",

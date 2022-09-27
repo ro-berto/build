@@ -11,11 +11,10 @@
       "--target",
       "Release",
       "--no-xvfb",
-      "--build-properties",
-      "{\"bot_id\": \"test_bot\", \"builder_group\": \"chromium.linux\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"recipe\": \"chromium:tests/runtest\", \"resultdb\": true, \"slavename\": \"test_bot\"}",
       "--test-type=base_unittests",
       "--builder-name=Linux Tests",
       "--slave-name=test_bot",
+      "--builder-group=chromium.linux",
       "--build-number=571",
       "base_unittests"
     ],

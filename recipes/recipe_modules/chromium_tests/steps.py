@@ -1746,6 +1746,7 @@ class LocalGTestTest(LocalTest):
 
     step_result = self.api.m.chromium.runtest(
         self.target_name,
+        builder_group=self.spec.waterfall_builder_group,
         stderr=self.api.m.raw_io.output_text(
             add_output_log=True, name='stderr'),
         raise_on_failure=False,

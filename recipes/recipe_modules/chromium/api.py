@@ -797,6 +797,7 @@ class ChromiumApi(recipe_api.RecipeApi):
               args=None,
               xvfb=False,
               name=None,
+              builder_group=None,
               parse_gtest_output=False,
               test_type=None,
               python_mode=False,
@@ -816,9 +817,6 @@ class ChromiumApi(recipe_api.RecipeApi):
     if self.m.platform.is_linux:
       full_args.append('--xvfb' if xvfb else '--no-xvfb')
 
-    properties_json = self.m.json.dumps(self.m.properties.legacy())
-    full_args.extend(['--build-properties', properties_json])
-
     if parse_gtest_output:
       full_args.append('--parse-gtest-output')
 
@@ -833,6 +831,8 @@ class ChromiumApi(recipe_api.RecipeApi):
     # unconditionally.
     full_args.append('--builder-name=%s' % self.m.buildbucket.builder_name)
     full_args.append('--slave-name=%s' % self.m.properties['bot_id'])
+    if builder_group is not None:
+      full_args.append('--builder-group=%s' % builder_group)
     # A couple of the recipes contain tests which don't specify a buildnumber,
     # so make this optional.
     if self.m.buildbucket.build.number is not None:

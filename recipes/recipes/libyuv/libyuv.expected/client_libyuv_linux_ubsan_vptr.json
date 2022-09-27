@@ -686,8 +686,6 @@
       "--target",
       "Release",
       "--no-xvfb",
-      "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"bot_id\": \"bot_id\", \"builder_group\": \"client.libyuv\", \"buildername\": \"Linux UBSan vptr\", \"buildnumber\": 1337, \"recipe\": \"libyuv/libyuv\", \"slavename\": \"bot_id\"}",
       "--builder-name=Linux UBSan vptr",
       "--slave-name=bot_id",
       "--build-number=1337",

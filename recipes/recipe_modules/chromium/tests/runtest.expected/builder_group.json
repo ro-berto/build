@@ -9,8 +9,8 @@
       "--test-type=base_unittests",
       "--builder-name=test_buildername",
       "--slave-name=test_bot_id",
+      "--builder-group=fake-builder-group",
       "--build-number=123",
-      "--enable-asan",
       "base_unittests"
     ],
     "cwd": "[CACHE]/builder",

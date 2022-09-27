@@ -711,8 +711,6 @@
       "--target",
       "Debug",
       "--no-xvfb",
-      "--build-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"bot_id\": \"bot_id\", \"builder_group\": \"tryserver.libyuv\", \"buildername\": \"linux\", \"buildnumber\": 1337, \"recipe\": \"libyuv/libyuv\", \"slavename\": \"bot_id\"}",
       "--builder-name=linux",
       "--slave-name=bot_id",
       "--build-number=1337",

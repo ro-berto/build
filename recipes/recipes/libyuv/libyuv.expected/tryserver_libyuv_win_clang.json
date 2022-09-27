@@ -748,8 +748,6 @@
       "RECIPE_REPO[build]\\recipes\\runtest.py",
       "--target",
       "Debug",
-      "--build-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"bot_id\": \"bot_id\", \"builder_group\": \"tryserver.libyuv\", \"buildername\": \"win_clang\", \"buildnumber\": 1337, \"recipe\": \"libyuv/libyuv\", \"slavename\": \"bot_id\"}",
       "--builder-name=win_clang",
       "--slave-name=bot_id",
       "--build-number=1337",

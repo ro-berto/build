@@ -201,51 +201,12 @@ def _CreateLogProcessor(options):
     An instance of a log processor class, or None.
   """
   if _UsingGtestJson(options):
-    return gtest_utils.GTestJSONParser(
-        options.build_properties.get('builder_group', '')
-    )
+    return gtest_utils.GTestJSONParser(options.builder_group or '')
 
   if options.parse_gtest_output:
     return gtest_utils.GTestLogParser()
 
   return None
-
-
-def _BuildCoverageGtestExclusions(options, args):
-  """Appends a list of GTest exclusion filters to the args list."""
-  gtest_exclusions = {
-      'win32': {
-          'browser_tests': (
-              'ChromeNotifierDelegateBrowserTest.ClickTest',
-              'ChromeNotifierDelegateBrowserTest.ButtonClickTest',
-              'SyncFileSystemApiTest.GetFileStatuses',
-              'SyncFileSystemApiTest.WriteFileThenGetUsage',
-              'NaClExtensionTest.HostedApp',
-              (
-                  'MediaGalleriesPlatformAppBrowserTest.'
-                  'MediaGalleriesCopyToNoAccess'
-              ),
-              'PlatformAppBrowserTest.ComponentAppBackgroundPage',
-              'BookmarksTest.CommandAgainGoesBackToBookmarksTab',
-              'NotificationBitmapFetcherBrowserTest.OnURLFetchFailureTest',
-              'PreservedWindowPlacementIsMigrated.Test',
-              'ShowAppListBrowserTest.ShowAppListFlag',
-              '*AvatarMenuButtonTest.*',
-              'NotificationBitmapFetcherBrowserTest.HandleImageFailedTest',
-              'NotificationBitmapFetcherBrowserTest.OnImageDecodedTest',
-              'NotificationBitmapFetcherBrowserTest.StartTest',
-          )
-      },
-      'darwin2': {},
-      'linux2': {},
-      'linux': {},
-  }
-  gtest_exclusion_filters = []
-  if sys.platform in gtest_exclusions:
-    excldict = gtest_exclusions.get(sys.platform)
-    if options.test_type in excldict:
-      gtest_exclusion_filters = excldict[options.test_type]
-  args.append('--gtest_filter=-' + ':'.join(gtest_exclusion_filters))
 
 
 def _GenerateRunIsolatedCommand(build_dir, test_exe_path, options, command):
@@ -261,12 +222,10 @@ def _GenerateRunIsolatedCommand(build_dir, test_exe_path, options, command):
       '--test_name',
       options.test_type,
       '--builder_name',
-      options.build_properties.get('buildername', ''),
+      options.builder_name,
       '--checkout_dir',
       os.path.dirname(os.path.dirname(build_dir)),
   ]
-  if options.build_properties.get('force_isolated'):
-    isolate_command += ['--force-isolated']
   isolate_command += [test_exe_path, '--'] + command
 
   return isolate_command
@@ -497,12 +456,6 @@ def _MainIOS(options, args, extra_env):
 
 def _MainLinux(options, args, extra_env):
   """Runs the test on Linux."""
-  import platform
-  xvfb_path = os.path.join(
-      os.path.dirname(sys.argv[0]), '..', '..', 'third_party', 'xvfb',
-      platform.architecture()[0]
-  )
-
   if len(args) < 1:
     raise chromium_utils.MissingArgument('Usage: %s' % USAGE)
 
@@ -513,22 +466,12 @@ def _MainLinux(options, args, extra_env):
     slave_name = slave_utils.SlaveBuildName(build_dir)
   bin_dir = os.path.join(build_dir, options.target)
 
-  # Figure out what we want for a special frame buffer directory.
-  special_xvfb_dir = None
-  if options.build_properties.get('chromeos'):
-    special_xvfb_dir = xvfb_path
-
   test_exe = args[0]
   if options.run_python_script:
     test_exe_path = test_exe
   else:
     test_exe_path = os.path.join(bin_dir, test_exe)
   if not os.path.exists(test_exe_path):
-    if options.build_properties.get('succeed_on_missing_exe', False):
-      print(
-          '%s missing but succeed_on_missing_exe used, exiting' % test_exe_path
-      )
-      return 0
     msg = 'Unable to find %s' % test_exe_path
     raise chromium_utils.PathNotFound(msg)
 
@@ -581,14 +524,7 @@ def _MainLinux(options, args, extra_env):
         'devtools_perf_test_wrapper' in test_exe
     )
     if start_xvfb:
-      xvfb.StartVirtualX(
-          slave_name,
-          bin_dir,
-          with_wm=(
-              options.build_properties.get('window_manager', 'True') == 'True'
-          ),
-          server_dir=special_xvfb_dir
-      )
+      xvfb.StartVirtualX(slave_name, bin_dir)
 
     if _UsingGtestJson(options):
       json_file_name = log_processor.PrepareJSONFile(
@@ -657,11 +593,6 @@ def _MainWin(options, args, extra_env):
     test_exe_path = os.path.join(build_dir, options.target, test_exe)
 
   if not os.path.exists(test_exe_path):
-    if options.build_properties.get('succeed_on_missing_exe', False):
-      print(
-          '%s missing but succeed_on_missing_exe used, exiting' % test_exe_path
-      )
-      return 0
     raise chromium_utils.PathNotFound('Unable to find %s' % test_exe_path)
 
   if options.run_python_script:
@@ -869,6 +800,11 @@ def main():
       help='Do not start virtual X server on Linux.'
   )
   option_parser.add_option(
+      '--builder-group',
+      default=None,
+      help='The group of the builder running this script.'
+  )
+  option_parser.add_option(
       '--builder-name',
       default=None,
       help='The name of the builder running this script.'
@@ -936,7 +872,6 @@ def main():
       'from the test launcher'
   )
 
-  chromium_utils.AddPropertiesOptions(option_parser)
   options, args = option_parser.parse_args()
 
   # Initialize logging.
@@ -949,10 +884,6 @@ def main():
   )
   logging.basicConfig(level=logging.DEBUG)
   logging.getLogger().addHandler(logging.StreamHandler(stream=sys.stdout))
-
-  options.test_type = options.test_type or options.build_properties.get(
-      'step_name', ''
-  )
 
   if options.run_shell_script and options.run_python_script:
     sys.stderr.write(
@@ -983,14 +914,9 @@ def main():
     # Set up extra environment and args for sanitizer tools.
     _ConfigureSanitizerTools(options, args, extra_env)
 
-    if options.build_properties.get('coverage_gtest_exclusions', False):
-      _BuildCoverageGtestExclusions(options, args)
-
     temp_files = _GetTempCount()
     if sys.platform.startswith('darwin'):
-      test_platform = options.build_properties.get(
-          'test_platform', options.test_platform
-      )
+      test_platform = options.test_platform
       if test_platform in ('ios-simulator',):
         result = _MainIOS(options, args, extra_env)
       else:
@@ -998,8 +924,7 @@ def main():
     elif sys.platform == 'win32':
       result = _MainWin(options, args, extra_env)
     elif sys.platform.startswith('linux'):
-      if options.build_properties.get('test_platform',
-                                      options.test_platform) == 'android':
+      if options.test_platform == 'android':
         result = _MainAndroid(options, args, extra_env)
       else:
         result = _MainLinux(options, args, extra_env)

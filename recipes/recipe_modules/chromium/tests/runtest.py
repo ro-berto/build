@@ -34,6 +34,7 @@ def RunSteps(api):
 
   api.chromium.runtest(
       'base_unittests',
+      builder_group=api.properties.get('builder_group'),
       python_mode=api.properties.get('python_mode', False),
       test_type='base_unittests',
       **kwargs)
@@ -78,6 +79,15 @@ def GenTests(api):
           buildnumber=123,
           bot_id='test_bot_id',
           target_platform='win'),
+  )
+
+  yield api.test(
+      'builder_group',
+      api.properties(
+          buildername='test_buildername',
+          buildnumber=123,
+          bot_id='test_bot_id',
+          builder_group='fake-builder-group'),
   )
 
   yield api.test(

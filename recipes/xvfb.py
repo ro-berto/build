@@ -22,7 +22,7 @@ def _XvfbPidFilename(slave_build_name):
                       'xvfb-' + _XvfbDisplayIndex(slave_build_name)  + '.pid')
 
 
-def StartVirtualX(slave_build_name, build_dir, with_wm=True, server_dir=None):
+def StartVirtualX(slave_build_name, build_dir):
   """Start a virtual X server and set the DISPLAY environment variable so sub
   processes will use the virtual X server.  Also start openbox. This only works
   on Linux and assumes that xvfb and openbox are installed.
@@ -33,8 +33,6 @@ def StartVirtualX(slave_build_name, build_dir, with_wm=True, server_dir=None):
     build_dir: The directory where binaries are produced.  If this is non-empty,
         we try running xdisplaycheck from |build_dir| to verify our X
         connection.
-    with_wm: Whether we add a window manager to the display too.
-    server_dir: Directory to search for the server executable.
   """
   # We use a pid file to make sure we don't have any xvfb processes running
   # from a previous test run.
@@ -81,13 +79,6 @@ def StartVirtualX(slave_build_name, build_dir, with_wm=True, server_dir=None):
 
   # Figure out which X server to try.
   cmd = 'Xvfb'
-  if server_dir and os.path.exists(server_dir):
-    cmd = os.path.join(server_dir, 'Xvfb.' + platform.architecture()[0])
-    if not os.path.exists(cmd):
-      cmd = os.path.join(server_dir, 'Xvfb')
-    if not os.path.exists(cmd):
-      print('No Xvfb found in designated server path:', server_dir)
-      raise Exception('No virtual server')
 
   # Start a virtual X server that we run the tests in.  This makes it so we can
   # run the tests even if we didn't start the tests from an X session.
@@ -131,13 +122,9 @@ def StartVirtualX(slave_build_name, build_dir, with_wm=True, server_dir=None):
         print('> %s' % l)
     print('...OK')
 
-  if with_wm:
-    # Some ChromeOS tests need a window manager.
-    subprocess.Popen('openbox', stdout=subprocess.PIPE,
-                     stderr=subprocess.STDOUT)
-    print('Window manager (openbox) started.')
-  else:
-    print('No window manager required.')
+  # Some ChromeOS tests need a window manager.
+  subprocess.Popen('openbox', stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+  print('Window manager (openbox) started.')
 
 
 
