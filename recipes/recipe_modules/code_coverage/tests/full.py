@@ -227,9 +227,15 @@ def GenTests(api):
 
   yield api.test(
       'javascript: full repo',
-      api.chromium.generic_build(
-          builder_group='chromium.fyi',
-          builder='linux-chromeos-js-code-coverage'),
+      api.chromium.ci_build(builder_group='fake-group', builder='fake-builder'),
+      api.chromium_tests_builder_config.properties(
+          api.chromium_tests_builder_config.properties_assembler_for_ci_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+          ).with_parent(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.code_coverage(use_javascript_coverage=True),
       api.post_process(post_process.MustRun, 'process javascript coverage'),
       api.post_process(
@@ -247,9 +253,15 @@ def GenTests(api):
 
   yield api.test(
       'javascript: full repo with no coverage files',
-      api.chromium.generic_build(
-          builder_group='chromium.fyi',
-          builder='linux-chromeos-js-code-coverage'),
+      api.chromium.ci_build(builder_group='fake-group', builder='fake-builder'),
+      api.chromium_tests_builder_config.properties(
+          api.chromium_tests_builder_config.properties_assembler_for_ci_tester(
+              builder_group='fake-group',
+              builder='fake-tester',
+          ).with_parent(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.code_coverage(use_javascript_coverage=True),
       api.step_data(
           'process javascript coverage.'

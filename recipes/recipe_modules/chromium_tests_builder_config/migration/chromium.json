@@ -753,11 +753,6 @@
       "chromium.fyi:linux-chromeos-code-coverage"
     ]
   },
-  "chromium.fyi:linux-chromeos-js-code-coverage": {
-    "builders": [
-      "chromium.fyi:linux-chromeos-js-code-coverage"
-    ]
-  },
   "chromium.fyi:linux-code-coverage": {
     "builders": [
       "chromium.fyi:linux-code-coverage"

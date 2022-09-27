@@ -37,6 +37,7 @@ def stock_config(name, config='Release', target_bits=64, staging=True,
 # * VR Linux
 # * Win11 Tests x64
 # * ios-simulator-cronet
+# * linux-chromeos-js-code-coverage
 # * mac-osxbeta-rel
 
 SPEC = {
@@ -405,21 +406,6 @@ SPEC = {
             },
             gclient_apply_config=['enable_reclient'],
             execution_mode=builder_spec.COMPILE_AND_TEST,
-            simulation_platform='linux',
-        ),
-    'linux-chromeos-js-code-coverage':
-        builder_spec.BuilderSpec.create(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=['chromeos'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_ARCH': 'intel',
-                'TARGET_BITS': 64,
-            },
             simulation_platform='linux',
         ),
     'ios-webkit-tot':
