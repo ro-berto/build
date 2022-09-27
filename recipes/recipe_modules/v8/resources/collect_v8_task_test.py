@@ -184,11 +184,13 @@ class TaskCollectorTestCase(fake_filesystem_unittest.TestCase):
     task_collector = collect_v8_task.TaskCollector()
     merged_shard_result = task_collector.merge_shard_results(
         output_dir='/', shards=example_shards, options=example_options)
-    self.assertEqual(merged_shard_result, {
-        'slowest_tests': [],
-        'results': [],
-        'tags': ['UNRELIABLE_RESULTS']
-    })
+    self.assertEqual(
+        merged_shard_result, {
+            'slowest_tests': [],
+            'results': [],
+            'tags': ['UNRELIABLE_RESULTS'],
+            'test_total': 0
+        })
 
   def test_merge_test_results(self):
     example_shards = [{
@@ -201,7 +203,8 @@ class TaskCollectorTestCase(fake_filesystem_unittest.TestCase):
     example_merged_test_output = {
         'slowest_tests': [],
         'results': [],
-        'tags': ['UNRELIABLE_RESULTS']
+        'tags': ['UNRELIABLE_RESULTS'],
+        'test_total': 0
     }
 
     self.setUpPyfakefs(allow_root_user=True)
@@ -223,7 +226,8 @@ class TaskCollectorTestCase(fake_filesystem_unittest.TestCase):
           json.load(f), {
               'slowest_tests': [],
               'results': [],
-              'tags': ['UNRELIABLE_RESULTS']
+              'tags': ['UNRELIABLE_RESULTS'],
+              'test_total': 0
           })
 
 

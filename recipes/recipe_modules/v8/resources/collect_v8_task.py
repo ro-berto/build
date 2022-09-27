@@ -138,7 +138,12 @@ class TaskCollector(object):
     # all fields that a calling recipe expects to avoid recipe-level
     # exceptions.
     if bad_shards.missing_count() == len(shards):
-      return {'slowest_tests': [], 'results': [], 'tags': sorted(tags)}
+      return {
+          'slowest_tests': [],
+          'results': [],
+          'tags': sorted(tags),
+          'test_total': 0
+      }
 
     return aggregated_results.as_json(tags)
 
