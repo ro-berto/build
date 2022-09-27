@@ -266,12 +266,9 @@ class BinarySizeApi(recipe_api.RecipeApi):
           if binary_size_result.presentation.status == self.m.step.FAILURE:
             raise self.m.step.StepFailure(
                 binary_size_result.presentation.step_text)
-          elif binary_size_result.presentation.status == self.m.step.WARNING:
-            raise self.m.step.StepWarning(
-                binary_size_result.presentation.step_text)
-
-        if binary_size_result.presentation.status != self.m.step.SUCCESS:
-          raise self.m.step.StepFailure(constants.FAILED_CHECK_MESSAGE)
+        else:
+          if binary_size_result.presentation.status != self.m.step.SUCCESS:
+            raise self.m.step.StepFailure(constants.FAILED_CHECK_MESSAGE)
 
   def _get_android_size_analysis_command(self, staging_dir, use_m87_flow=False):
     generator_script = self.m.path['checkout'].join(
@@ -551,7 +548,8 @@ class BinarySizeApi(recipe_api.RecipeApi):
       cmd += ['--before-dir', before_dir]
       cmd += ['--after-dir', after_dir]
       milestone = int(self.m.chromium.get_version()['MAJOR'])
-      if milestone >= constants.FUCHSIA_AUTHOR_FLOW_MILESTONE:  # pragma: no cover
+      if (milestone >=
+          constants.FUCHSIA_AUTHOR_FLOW_MILESTONE):  # pragma: no cover
         cmd += ['--author', author]
       cmd += ['--results-path', results_path]
       self.m.step(name='Generate diffs', cmd=cmd)
