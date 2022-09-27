@@ -73,7 +73,11 @@ class WeetbixTestApi(recipe_test_api.RecipeTestApi):
             self.construct_flaky_verdict_examples(examples_times)
     }
 
-  def query_test_history(self, response, test_id, parent_step_name=None):
+  def query_test_history(self,
+                         response,
+                         test_id,
+                         parent_step_name=None,
+                         step_iteration=1):
     """Emulates query_test_history() return value.
     Args:
       response: (luci.analysis.v1.test_history.QueryTestHistoryResponse) the
@@ -81,18 +85,27 @@ class WeetbixTestApi(recipe_test_api.RecipeTestApi):
       test_id: (str) Test ID to query.
       parent_step_name: (str) The parent step name under which
         query_test_history is nested in, if any.
+      step_iteration: (int) Used when the API is called multiple times for a
+        same test_id.
     """
     parent_step_prefix = ''
     if parent_step_name:
       parent_step_prefix = ('%s.' % parent_step_name)
-    step_name = ('%sTest history query rpc call for %s' %
-                 (parent_step_prefix, test_id))
+    step_suffix = ''
+    if step_iteration > 1:
+      step_suffix = ' (%d)' % step_iteration
+    step_name = ('%sTest history query rpc call for %s%s' %
+                 (parent_step_prefix, test_id, step_suffix))
 
     return self.step_data(
         step_name,
         self.m.json.output_stream(json_format.MessageToDict(response)))
 
-  def query_variants(self, response, test_id, parent_step_name=None):
+  def query_variants(self,
+                     response,
+                     test_id,
+                     parent_step_name=None,
+                     step_iteration=1):
     """Emulates query_variants() return value.
     Args:
       response (luci.analysis.v1.test_history.QueryVariantsResponse): the
@@ -104,8 +117,11 @@ class WeetbixTestApi(recipe_test_api.RecipeTestApi):
     parent_step_prefix = ''
     if parent_step_name:
       parent_step_prefix = ('%s.' % parent_step_name)
-    step_name = ('%sTest history query_variants rpc call for %s' %
-                 (parent_step_prefix, test_id))
+    step_suffix = ''
+    if step_iteration > 1:
+      step_suffix = ' (%d)' % step_iteration
+    step_name = ('%sTest history query_variants rpc call for %s%s' %
+                 (parent_step_prefix, test_id, step_suffix))
 
     return self.step_data(
         step_name,

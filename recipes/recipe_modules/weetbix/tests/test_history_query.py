@@ -23,20 +23,24 @@ DEPS = [
 def RunSteps(api):
   with api.step.nest('nest_parent'):
     test_id = 'ninja://gpu:suite_1/test_one'
-    api.weetbix.query_test_history(
-        test_id,
-        sub_realm='try',
-        variant_predicate=predicate_pb2.VariantPredicate(
-            contains={'def': {
-                'builder': 'some-builder'
-            }}),
-        partition_time_range=common_pb2.TimeRange(
-            earliest=timestamp_pb2.Timestamp(seconds=1000),
-            latest=timestamp_pb2.Timestamp(seconds=2000)),
-        submitted_filter=common_pb2.ONLY_SUBMITTED,
-        page_size=1000,
-        page_token='Some token',
-    )
+    next_page_token = None
+    while True:
+      _, next_page_token = api.weetbix.query_test_history(
+          test_id,
+          sub_realm='try',
+          variant_predicate=predicate_pb2.VariantPredicate(
+              contains={'def': {
+                  'builder': 'some-builder'
+              }}),
+          partition_time_range=common_pb2.TimeRange(
+              earliest=timestamp_pb2.Timestamp(seconds=1000),
+              latest=timestamp_pb2.Timestamp(seconds=2000)),
+          submitted_filter=common_pb2.ONLY_SUBMITTED,
+          page_size=1000,
+          page_token=next_page_token,
+      )
+      if not next_page_token:
+        break
 
 
 def GenTests(api):
@@ -50,9 +54,12 @@ def GenTests(api):
           ),
       ],
       next_page_token='dummy_token')
+  res2 = test_history.QueryTestHistoryResponse()
   test_id = 'ninja://gpu:suite_1/test_one'
   yield api.test(
       'basic',
       api.weetbix.query_test_history(
           res, test_id, parent_step_name='nest_parent'),
+      api.weetbix.query_test_history(
+          res2, test_id, parent_step_name='nest_parent', step_iteration=2),
       api.post_process(post_process.DropExpectation))

@@ -14,7 +14,8 @@ from recipe_engine import recipe_api
 from RECIPE_MODULES.build.attr_utils import attrib, attrs, mapping, sequence
 from PB.go.chromium.org.luci.analysis.proto.v1.predicate import TestVerdictPredicate
 from PB.go.chromium.org.luci.analysis.proto.v1.test_history import (
-    QueryTestHistoryRequest, QueryTestHistoryResponse, QueryVariantsRequest)
+    QueryTestHistoryRequest, QueryTestHistoryResponse, QueryVariantsRequest,
+    QueryVariantsResponse)
 from PB.go.chromium.org.luci.analysis.proto.v1.test_variants import TestVariantFailureRateAnalysis
 
 CLUSTER_STEP_NAME = 'cluster failing test results with weetbix'
@@ -203,7 +204,8 @@ class WeetbixApi(recipe_api.RecipeApi):
         'Test history query_variants rpc call for %s' % test_id,
         'luci.analysis.v1.TestHistory.QueryVariants',
         json_format.MessageToDict(request))
-    return response_json.get('variants'), response_json.get('next_page_token')
+    response = json_format.ParseDict(response_json, QueryVariantsResponse())
+    return response.variants, response.next_page_token
 
 
 @attrs()
