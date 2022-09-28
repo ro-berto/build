@@ -173,7 +173,7 @@ def GenTests(api):
       'basic for tast',
       boilerplate(
           'chrome-test-builds', tast_expr='("group:mainline" && "dep:lacros")'),
-      api.skylab.wait_on_suites(
+      api.skylab.mock_wait_on_suites(
           'find test runner build',
           1,
           runner_builds=[(901, common_pb2.FAILURE),
@@ -212,12 +212,18 @@ def GenTests(api):
                   'basic_EVE_TOT',
                   failing_tests=['Test.Two'],
                   flaky_failing_tests=['Test.One']))),
-      api.post_process(post_process.StepFailure, 'basic_EVE_TOT.attempt: #1'),
-      api.post_process(post_process.StepException, 'basic_EVE_TOT.attempt: #2'),
-      api.post_process(post_process.StepSuccess, 'basic_EVE_TOT.attempt: #3'),
-      api.post_process(post_process.StepSuccess, 'basic_EVE_TOT'),
+      api.post_process(post_process.StepFailure,
+                       'basic_EVE_TOT.shard: #0.attempt: #1'),
+      api.post_process(post_process.StepException,
+                       'basic_EVE_TOT.shard: #0.attempt: #2'),
+      api.post_process(post_process.StepSuccess,
+                       'basic_EVE_TOT.shard: #0.attempt: #3'),
+      # The attempts within a shard are determined by the build status
+      api.post_process(post_process.StepSuccess, 'basic_EVE_TOT.shard: #0'),
+      # The overal test suite status is based on the test results (or failed shard)
+      api.post_process(post_process.StepFailure, 'basic_EVE_TOT'),
       api.post_process(
-          post_process.StepTextEquals, 'basic_EVE_TOT',
+          post_process.StepTextEquals, 'basic_EVE_TOT.shard: #0',
           'Test had failed runs. Check "Test Results" tab for '
           'the deterministic results.'),
       # Only Test.Two should appear in the build summary, because Test.One
@@ -236,7 +242,7 @@ def GenTests(api):
           'chrome-test-builds',
           test_args='--test-launcher-filter-file=../../testing/buildbot/filter',
           target_name=GTEST_TARGET),
-      api.skylab.wait_on_suites(
+      api.skylab.mock_wait_on_suites(
           'find test runner build',
           1,
           runner_builds=[(902, common_pb2.SUCCESS)]),
@@ -291,7 +297,7 @@ def GenTests(api):
       'RDB returned empty test_results',
       boilerplate(
           'chrome-test-builds', tast_expr='("group:mainline" && "dep:lacros")'),
-      api.skylab.wait_on_suites('find test runner build', 1),
+      api.skylab.mock_wait_on_suites('find test runner build', 1),
       api.post_process(post_process.StepCommandContains, 'compile', ['chrome']),
       api.post_process(post_process.StepException, 'basic_EVE_TOT'),
       api.post_process(post_process.StepTextContains, 'basic_EVE_TOT',
@@ -365,7 +371,7 @@ def GenTests(api):
       'test_suite_with_decription_on_ci_builder',
       boilerplate(
           'chrome-test-builds', tast_expr='("group:mainline" && "dep:lacros")'),
-      api.skylab.wait_on_suites('find test runner build', 1),
+      api.skylab.mock_wait_on_suites('find test runner build', 1),
       api.post_process(post_process.StepTextContains, 'basic_EVE_TOT',
                        ['This is a description.']),
       api.post_process(post_process.DropExpectation),
@@ -375,7 +381,7 @@ def GenTests(api):
       'ci_only_test_on_ci_builder',
       boilerplate(
           'chrome-test-builds', tast_expr='("group:mainline" && "dep:lacros")'),
-      api.skylab.wait_on_suites('find test runner build', 1),
+      api.skylab.mock_wait_on_suites('find test runner build', 1),
       api.post_process(post_process.StepTextContains, 'basic_EVE_TOT', [
           'This test will not be run on try builders',
       ]),

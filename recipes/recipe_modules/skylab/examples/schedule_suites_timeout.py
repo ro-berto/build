@@ -10,7 +10,7 @@ DEPS = [
 
 
 def RunSteps(api):
-  api.skylab.wait_on_suites({'foo': 1234}, timeout_seconds=10)
+  api.skylab.wait_on_suites({'foo': [1234]}, timeout_seconds=10)
 
 
 def GenTests(api):

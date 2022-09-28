@@ -20,6 +20,7 @@ RESULTDB_CONFIG = {
     'result_file': 'output.json',
     'result_format': 'gtest',
 }
+SHARD_COUNT = 2
 
 
 def gen_skylab_req(
@@ -38,6 +39,7 @@ def gen_skylab_req(
     story_filter='',
     test_shard_map_filename='',
     telemetry_shard_index=None,
+    shards=1,
 ):
   return SkylabRequest.create(
       request_tag=tag,
@@ -60,7 +62,9 @@ def gen_skylab_req(
       results_label=results_label,
       story_filter=story_filter,
       test_shard_map_filename=test_shard_map_filename,
-      telemetry_shard_index=telemetry_shard_index)
+      telemetry_shard_index=telemetry_shard_index,
+      shards=shards,
+  )
 
 
 REQUESTS = [
@@ -90,6 +94,12 @@ REQUESTS = [
         results_label='12345',
         test_shard_map_filename='per_map.json',
         telemetry_shard_index=0),
+    gen_skylab_req(
+        'sharded_tast_req',
+        tast_expr=LACROS_TAST_EXPR,
+        dut_pool='cross_device_multi_cb',
+        tast_expr_file='tast_expr_file.filter',
+        shards=SHARD_COUNT),
 ]
 
 
@@ -98,6 +108,20 @@ def RunSteps(api):
   api.skylab.wait_on_suites(build_ids, timeout_seconds=3600)
 
 def GenTests(api):
+
+  def test_args_for_shard(shard):
+    return 'resultdb_settings=eyJhcnRpZmFjdF9kaXJlY3RvcnkiOiAiJHtJU09MQVRFRF9P'\
+        'VVRESVJ9IiwgImNvZXJjZV9uZWdhdGl2ZV9kdXJhdGlvbiI6IHRydWUsICJlbmFibGUiO'\
+        'iB0cnVlLCAiZXhvbmVyYXRlX3VuZXhwZWN0ZWRfcGFzcyI6IHRydWUsICJoYXNfbmF0aX'\
+        'ZlX3Jlc3VsdGRiX2ludGVncmF0aW9uIjogZmFsc2UsICJpbmNsdWRlIjogZmFsc2UsICJ'\
+        'yZXN1bHRfYWRhcHRlcl9wYXRoIjogInJlc3VsdF9hZGFwdGVyIiwgInJlc3VsdF9maWxl'\
+        'IjogIm91dHB1dC5qc29uIiwgInJlc3VsdF9mb3JtYXQiOiAiZ3Rlc3QiLCAidGVzdF9pZ'\
+        'F9hc190ZXN0X2xvY2F0aW9uIjogZmFsc2V9 tast_expr_b64=KCJncm91cDptYWlubGl'\
+        'uZSIgJiYgImRlcDpsYWNyb3MiICYmICIhaW5mb3JtYXRpb25hbCIp '\
+        'exe_rel_path=out/Release/bin/run_foo_unittest '\
+        'tast_expr_file=tast_expr_file.filter '\
+        'tast_expr_key=default shard_index={} '\
+        'total_shards={}'.format(shard, SHARD_COUNT)
 
   yield api.test(
       'basic',
@@ -109,7 +133,7 @@ def GenTests(api):
               '-timeout-mins', '60', '-qs-account', 'lacros', '-max-retries',
               '3'
           ]),
-      api.skylab.wait_on_suites('find test runner build', len(REQUESTS)),
+      api.skylab.mock_wait_on_suites('find test runner build', len(REQUESTS)),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -126,5 +150,28 @@ def GenTests(api):
               'cross_device_multi_cb', '-image', 'eve-release/R88-13545.0.0',
               '-timeout-mins', '60', '-qs-account', 'lacros'
           ]),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'multiple_shards_trigger',
+      api.step_data(
+          'schedule skylab tests.' + REQUESTS[0].request_tag + '.schedule',
+          retcode=1),
+      api.post_process(post_process.StepFailure, 'schedule skylab tests'),
+      api.post_process(
+          post_process.MustRun,
+          'schedule skylab tests.{0}.schedule'.format(REQUESTS[5].request_tag)),
+      api.post_process(
+          post_process.MustRun, 'schedule skylab tests.{0}.schedule (1)'.format(
+              REQUESTS[5].request_tag)),
+      api.post_process(
+          post_process.StepCommandContains,
+          'schedule skylab tests.' + REQUESTS[5].request_tag + '.schedule',
+          [test_args_for_shard(0)]),
+      api.post_process(
+          post_process.StepCommandContains,
+          'schedule skylab tests.' + REQUESTS[5].request_tag + '.schedule (1)',
+          [test_args_for_shard(1)]),
       api.post_process(post_process.DropExpectation),
   )

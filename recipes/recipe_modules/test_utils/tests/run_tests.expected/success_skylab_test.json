@@ -119,6 +119,8 @@
       "resultdb_settings=eyJiYXNlX3ZhcmlhbnQiOiB7ImNyb3NfaW1nIjogImV2ZS1yZWxlYXNlL1I4OS0xMzYzMS4wLjAiLCAiZGV2aWNlX3R5cGUiOiAiZXZlIiwgIm9zIjogIkNocm9tZU9TIiwgInRlc3Rfc3VpdGUiOiAiYmFzaWNfRVZFX1RPVCJ9LCAiY29lcmNlX25lZ2F0aXZlX2R1cmF0aW9uIjogdHJ1ZSwgImVuYWJsZSI6IHRydWUsICJleG9uZXJhdGVfdW5leHBlY3RlZF9wYXNzIjogdHJ1ZSwgImhhc19uYXRpdmVfcmVzdWx0ZGJfaW50ZWdyYXRpb24iOiBmYWxzZSwgImluY2x1ZGUiOiBmYWxzZSwgInJlc3VsdF9hZGFwdGVyX3BhdGgiOiAicmVzdWx0X2FkYXB0ZXIiLCAicmVzdWx0X2Zvcm1hdCI6ICJ0YXN0IiwgInRlc3RfaWRfYXNfdGVzdF9sb2NhdGlvbiI6IGZhbHNlfQ== tast_expr_b64=bGFjcm9zLkJhc2lj exe_rel_path=out/Lacros/chrome",
       "-lacros-path",
       "gs://dummy/lacros.zip",
+      "-test-args",
+      "resultdb_settings=eyJiYXNlX3ZhcmlhbnQiOiB7ImNyb3NfaW1nIjogImV2ZS1yZWxlYXNlL1I4OS0xMzYzMS4wLjAiLCAiZGV2aWNlX3R5cGUiOiAiZXZlIiwgIm9zIjogIkNocm9tZU9TIiwgInRlc3Rfc3VpdGUiOiAiYmFzaWNfRVZFX1RPVCJ9LCAiY29lcmNlX25lZ2F0aXZlX2R1cmF0aW9uIjogdHJ1ZSwgImVuYWJsZSI6IHRydWUsICJleG9uZXJhdGVfdW5leHBlY3RlZF9wYXNzIjogdHJ1ZSwgImhhc19uYXRpdmVfcmVzdWx0ZGJfaW50ZWdyYXRpb24iOiBmYWxzZSwgImluY2x1ZGUiOiBmYWxzZSwgInJlc3VsdF9hZGFwdGVyX3BhdGgiOiAicmVzdWx0X2FkYXB0ZXIiLCAicmVzdWx0X2Zvcm1hdCI6ICJ0YXN0IiwgInRlc3RfaWRfYXNfdGVzdF9sb2NhdGlvbiI6IGZhbHNlfQ== tast_expr_b64=bGFjcm9zLkJhc2lj exe_rel_path=out/Lacros/chrome shard_index=0 total_shards=1",
       "tast.lacros"
     ],
     "luci_context": {
@@ -344,7 +346,7 @@
     "name": "basic_EVE_TOT",
     "~followup_annotations": [
       "@@@STEP_TEXT@Test did not run or failed to report to ResultDB.Check the CTP build for details.@@@",
-      "@@@STEP_LINK@CTP Build@https://ci.chromium.org/b/800@@@",
+      "@@@STEP_LINK@Shard #0 CTP Build@https://ci.chromium.org/b/800@@@",
       "@@@STEP_EXCEPTION@@@"
     ]
   },

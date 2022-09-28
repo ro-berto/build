@@ -84,6 +84,7 @@ class SkylabRequest(object):
   autotest_name = attrib(str, default='')
   retries = attrib(enum([0, 1, 2, 3, 4, 5]), default=0)
   resultdb = attrib(ResultDB, default=None)
+  shards = attrib(int, default=1)
 
   benchmark = attrib(str, default='')
   story_filter = attrib(str, default='')

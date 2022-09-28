@@ -15,10 +15,10 @@ from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
 class SkylabTestApi(recipe_test_api.RecipeTestApi):
   """Test examples for Skylab api."""
 
-  def wait_on_suites(self,
-                     step_name,
-                     req_num,
-                     runner_builds=frozenset([(900, common_pb2.SUCCESS)])):
+  def mock_wait_on_suites(self,
+                          step_name,
+                          req_num,
+                          runner_builds=frozenset([(900, common_pb2.SUCCESS)])):
     """Emulates the step of wait_on_suites().
 
     Args:

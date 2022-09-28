@@ -2916,6 +2916,7 @@ class SkylabTestSpec(TestSpec):
   secondary_cros_img = attrib(str, default='')
   bucket = attrib(str, default='')
   dut_pool = attrib(str, default='')
+  shards = attrib(int, default=1)
   tast_expr = attrib(str, default='')
   test_args = attrib(command_args, default=())
   autotest_name = attrib(str, default='')
@@ -2947,12 +2948,12 @@ class SkylabTest(Test):
     # tests, which kicks off test_runner builds for our test suite.
     # Each test suite has a CTP build ID, as long as the buildbucket call is
     # successful.
-    self.ctp_build_id = 0
-    # test_runner build represents the test execution in Skylab. Tests can be
-    # retried, so multiple runs are possible.
-    # If CTP failed to schedule test runners, this list could be empty. Use
-    # ctp_build_id to troubleshoot.
-    self.test_runner_builds = []
+    self.ctp_build_ids = []
+    # test_runner build represents the test execution in Skylab. It is a dict of
+    # ctp builds (1 for each sahrd) to lists of builders (1 for each attempt)
+    # If CTP failed to schedule test runners, these lists could be empty. Use
+    # the dict keys to troubleshoot.
+    self.test_runner_builds = {}
     self.lacros_gcs_path = None
     self.exe_rel_path = None
     self.tast_expr_file = None
@@ -2991,6 +2992,7 @@ class SkylabTest(Test):
         test_shard_map_filename=self.spec.test_shard_map_filename,
         telemetry_shard_index=self.telemetry_shard_index,
         results_label=self.spec.results_label,
+        shards=self.spec.shards,
     ) if self.lacros_gcs_path else None
 
   def _raise_failed_step(self, suffix, step, status, failure_msg):
@@ -3028,10 +3030,12 @@ class SkylabTest(Test):
   def get_invocation_names(self, suffix):
     # TODO(crbug.com/1248693): Use the invocation included by the parent builds.
     del suffix
-    inv_names = []
-    for b in self.test_runner_builds:
-      inv_names.append('invocations/build-%d' % b.id)
-    return inv_names
+    invocation_names = []
+    for shard_runner_builds in self.test_runner_builds.values():
+      for attempt_runner_build in shard_runner_builds:
+        invocation_names.append('invocations/build-%d' %
+                                attempt_runner_build.id)
+    return invocation_names
 
   @recipe_api.composite_step
   def run(self, suffix):
@@ -3051,8 +3055,10 @@ class SkylabTest(Test):
         # its lifecycle as expected.
         self.update_failure_on_exit(suffix, False)
       else:
-        if self.ctp_build_id:
-          step.links['CTP Build'] = bb_url % self.ctp_build_id
+        if self.ctp_build_ids:
+          for i, ctp_build in enumerate(self.ctp_build_ids):
+            step.links['Shard #%d CTP Build' % i] = bb_url % ctp_build
+
         self._raise_failed_step(
             suffix, step, self.api.m.step.EXCEPTION,
             'Test did not run or failed to report to ResultDB.'
@@ -3062,26 +3068,37 @@ class SkylabTest(Test):
         step.presentation.status = self.api.m.step.FAILURE
       self.present_rdb_results(step, rdb_results)
 
-      if len(self.test_runner_builds) == 1:
-        step.links['Test Run'] = bb_url % self.test_runner_builds[0].id
-      else:
-        self.test_runner_builds.sort(key=lambda b: b.create_time.seconds)
-        for i, b in enumerate(self.test_runner_builds):
-          with self.api.m.step.nest('attempt: #' + str(i + 1)) as attempt_step:
-            attempt_step.links['Test Run'] = bb_url % b.id
-            if b.status == common_pb2.INFRA_FAILURE:
-              attempt_step.presentation.status = (self.api.m.step.EXCEPTION)
-            elif b.status == common_pb2.FAILURE:
-              attempt_step.presentation.status = (self.api.m.step.FAILURE)
-        # If the status of any test run is success, the parent step should be
-        # success too. The "Test Results" tab could expose the detailed flaky
-        # information.
-        if any(
-            [b.status == common_pb2.SUCCESS for b in self.test_runner_builds]):
-          step.presentation.status = self.api.m.step.SUCCESS
-          step.presentation.step_text = (
-              'Test had failed runs. '
-              'Check "Test Results" tab for the deterministic results.')
+      shard_runners = list(self.test_runner_builds.values())
+      shard_runners.sort(key=lambda b: b[0].create_time.seconds)
+
+      for shard_index, shard_attempt_runners in enumerate(shard_runners):
+        with self.api.m.step.nest(
+            'shard: #%d' % shard_index, status='last') as shard_step:
+          if len(shard_attempt_runners) == 1:
+            shard_step.links['shard #%d Test Run' %
+                             shard_index] = bb_url % shard_attempt_runners[0].id
+          else:
+            shard_attempt_runners.sort(key=lambda b: b.create_time.seconds)
+            for i, shard_attempt_runner_build in enumerate(
+                shard_attempt_runners):
+              with self.api.m.step.nest('attempt: #' +
+                                        str(i + 1)) as attempt_step:
+                attempt_step.links[
+                    'Test Run'] = bb_url % shard_attempt_runner_build.id
+                if shard_attempt_runner_build.status == common_pb2.INFRA_FAILURE:
+                  attempt_step.presentation.status = (self.api.m.step.EXCEPTION)
+                elif shard_attempt_runner_build.status == common_pb2.FAILURE:
+                  attempt_step.presentation.status = (self.api.m.step.FAILURE)
+            # If the status of any test run is success, the parent step should be
+            # success too. The "Test Results" tab could expose the detailed flaky
+            # information.
+            if any([
+                b.status == common_pb2.SUCCESS for b in shard_attempt_runners
+            ]):
+              shard_step.presentation.status = self.api.m.step.SUCCESS
+              shard_step.presentation.step_text = (
+                  'Test had failed runs. '
+                  'Check "Test Results" tab for the deterministic results.')
 
     return step
 

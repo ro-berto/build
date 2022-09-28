@@ -6,6 +6,7 @@ import attr
 import base64
 
 from google.protobuf import json_format
+from collections import defaultdict
 
 from recipe_engine import recipe_api
 
@@ -56,15 +57,15 @@ class SkylabApi(recipe_api.RecipeApi):
     * step_name (str): a name of scheduling buildbucket build.
 
     Returns:
-      A dict of CTP build ID keyed by request_tag(see SkylabRequest).
+      A dict of CTP build IDs keyed by request_tag(see SkylabRequest).
     """
     # Ensure the crosfleet cipd package is installed
     crosfleet_tool = self.m.cipd.ensure_tool(
         'chromiumos/infra/crosfleet/${platform}', 'prod')
 
-    build_id_by_tags = {}
+    build_ids_by_tags = defaultdict(lambda: [])
     with self.m.step.nest(step_name) as presentation:
-      for i, s in enumerate(requests):
+      for s in requests:
         with self.m.step.nest(s.request_tag):
           cmd = [crosfleet_tool, 'run', 'test', '-json']
 
@@ -156,67 +157,93 @@ class SkylabApi(recipe_api.RecipeApi):
             autotest_name = AUTOTEST_NAME_TELEMETRY
           else:
             autotest_name = AUTOTEST_NAME_CHROMIUM
-          cmd.append(autotest_name)
 
-          step_result = self.m.step(
-              'schedule',
-              cmd,
-              raise_on_failure=False,
-              stdout=self.m.json.output(),
-              step_test_data=lambda: self.m.json.test_api.output_stream(
-                  {"Launches": [{
-                      "Build": {
-                          "id": str(800 + i),
-                      },
-                  }]}))
+          assert s.shards == 1 or s.test_type == structs.SKYLAB_TAST_TEST, (
+              'Only sharding for tast tests are currently supported in Skylab')
+          for shard in range(s.shards):
+            # Create a request for each shard
+            shard_cmd = list(cmd)
+            shard_test_args = list(test_args)
 
-          if step_result.retcode == 0:
-            build_id_by_tags[s.request_tag] = int(
-                step_result.stdout["Launches"][0]["Build"]["id"])
-            presentation.links[(
-                s.request_tag
-            )] = 'https://ci.chromium.org/b/%s' % build_id_by_tags[
-                s.request_tag]
-    return build_id_by_tags
+            if s.test_type == structs.SKYLAB_TAST_TEST:
+              shard_test_args.append('shard_index={}'.format(shard))
+              shard_test_args.append('total_shards={}'.format(s.shards))
 
-  def wait_on_suites(self, ctp_by_tag, timeout_seconds):
+            shard_cmd.extend(['-test-args', ' '.join(shard_test_args)])
+            shard_cmd.append(autotest_name)
+
+            shard_link_name = (
+                s.request_tag if shard == 0 else '{0} ({1})'.format(
+                    s.request_tag, shard))
+            step_result = self.m.step(
+                'schedule' if shard == 0 else 'schedule ({})'.format(shard),
+                shard_cmd,
+                raise_on_failure=False,
+                stdout=self.m.json.output(),
+                step_test_data=lambda: self.m.json.test_api.output_stream(
+                    {"Launches": [{
+                        "Build": {
+                            "id": str(800),
+                        },
+                    }]}))
+
+            if step_result.retcode == 0:
+              shard_build_id = int(
+                  step_result.stdout["Launches"][0]["Build"]["id"])
+              presentation.links[
+                  shard_link_name] = 'https://ci.chromium.org/b/%s' % shard_build_id
+
+              build_ids_by_tags[s.request_tag].append(shard_build_id)
+
+    return build_ids_by_tags
+
+  def wait_on_suites(self, ctp_builds_by_tag, timeout_seconds):
     """Wait for the CTP builds to complete and return their test runner builds.
 
     Args:
-      ctp_by_tag: A dict of CTP build ID, keyed by request tag.
+      ctp_builds_by_tag: A dict of CTP build IDs (a list), keyed by request tag.
       timeout_seconds: How long to wait for results before
         giving up.
 
     Returns:
-      A dict of test runner builds with the key of request tag.
+      A dict of request tag to dict of CTP build (the shard request) to list of
+        test_runner attempts
     """
     with self.m.step.nest('collect skylab results'):
       # collect_builds() may hit timeout, but it does not mean
       # all tests are aborted. Some tests may still have exported
       # results to RDB. So an exception or failure here should not
       # block following steps.
+      all_build_ids = []
+      for ids in ctp_builds_by_tag.values():
+        all_build_ids += ids
       try:
         self.m.buildbucket.collect_builds(
-            list(ctp_by_tag.values()), timeout=timeout_seconds)
+            all_build_ids, timeout=timeout_seconds)
       except self.m.step.StepFailure:
         pass
     # TODO(crbug.com/1245438): Remove below once the test runner's invocation
     # is included into its parent build's invocation.
     with self.m.step.nest('find test runner build'):
       test_runners_by_tag = {}
-      for t, ctp_build_id in ctp_by_tag.items():
-        builds = self.m.buildbucket.search(
-            builds_service_pb2.BuildPredicate(
-                builder=builder_common_pb2.BuilderID(
-                    project='chromeos',
-                    bucket='test_runner',
-                    builder='test_runner',
-                ),
-                tags=[
-                    common_pb2.StringPair(
-                        key='parent_buildbucket_id', value=str(ctp_build_id))
-                ],
-                include_experimental=self.m.runtime.is_experimental))
-        test_runners_by_tag[t] = builds
+      for test_suite, shard_ctp_build_ids in ctp_builds_by_tag.items():
+        # For each shard's CTP build, get any attempts (runner builds)
+        for shard_ctp_build_id in shard_ctp_build_ids:
+          builds = self.m.buildbucket.search(
+              builds_service_pb2.BuildPredicate(
+                  builder=builder_common_pb2.BuilderID(
+                      project='chromeos',
+                      bucket='test_runner',
+                      builder='test_runner',
+                  ),
+                  tags=[
+                      common_pb2.StringPair(
+                          key='parent_buildbucket_id',
+                          value=str(shard_ctp_build_id))
+                  ],
+                  include_experimental=self.m.runtime.is_experimental))
+          if test_suite not in test_runners_by_tag:
+            test_runners_by_tag[test_suite] = {}
+          test_runners_by_tag[test_suite][shard_ctp_build_id] = builds
 
     return test_runners_by_tag

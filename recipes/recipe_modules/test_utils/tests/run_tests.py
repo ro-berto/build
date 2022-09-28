@@ -233,7 +233,7 @@ def GenTests(api):
           }],
           test_skylab=True,
       ),
-      api.skylab.wait_on_suites('find test runner build', 1),
+      api.skylab.mock_wait_on_suites('find test runner build', 1),
   )
 
   yield api.test(

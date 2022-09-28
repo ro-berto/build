@@ -1441,7 +1441,7 @@ class SkylabGroup(TestGroup):
 
   def __init__(self, test_suites, result_db):
     super(SkylabGroup, self).__init__(test_suites, result_db)
-    self.ctp_build_by_tag = {}
+    self.ctp_builds_by_tag = {}
     self.ctp_build_timeout_sec = 3600
 
   def pre_run(self, api, suffix):
@@ -1452,17 +1452,17 @@ class SkylabGroup(TestGroup):
       build_timeout = max([r.timeout_sec for r in reqs])
       if build_timeout > self.ctp_build_timeout_sec:
         self.ctp_build_timeout_sec = build_timeout
-      self.ctp_build_by_tag = api.skylab.schedule_suites(reqs)
+      self.ctp_builds_by_tag = api.skylab.schedule_suites(reqs)
 
   def run(self, api, suffix):
     """Fetch the responses for each test request."""
     tag_resp = {}
-    if self.ctp_build_by_tag:
+    if self.ctp_builds_by_tag:
       tag_resp = api.skylab.wait_on_suites(
-          self.ctp_build_by_tag, timeout_seconds=self.ctp_build_timeout_sec)
+          self.ctp_builds_by_tag, timeout_seconds=self.ctp_build_timeout_sec)
     for t in self._test_suites:
-      t.ctp_build_id = self.ctp_build_by_tag.get(t.name)
-      t.test_runner_builds = tag_resp.get(t.name, [])
+      t.ctp_build_ids = self.ctp_builds_by_tag.get(t.name)
+      t.test_runner_builds = tag_resp.get(t.name, {})
       # Skylab tests are executed by CrOS builders, which may retry upon
       # failures within their builds. So the same suffix may have multiple test
       # runs. We need to fetch all the results for a suffix, or the recipe
