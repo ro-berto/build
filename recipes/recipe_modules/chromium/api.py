@@ -1100,7 +1100,7 @@ class ChromiumApi(recipe_api.RecipeApi):
         '--args=%s' % ' '.join(gn_args),
     ]
     if str(gn_path).endswith('.py'):
-      cmd = ['python'] + cmd
+      cmd = ['python3'] + cmd
     with self.m.context(
         cwd=kwargs.get('cwd', self.m.path['checkout']), env=gn_env):
       self.m.step(name='gn', cmd=cmd, **kwargs)
