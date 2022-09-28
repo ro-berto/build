@@ -45,7 +45,7 @@ def RunSteps(api, properties):
 
     # (crbug/1273173) Only the mirrored builder and not the mirrored tester
     # will be reported
-    api.chromium_tests.report_builders(builder_id, builder_config)
+    api.chromium_tests.report_builders(builder_config)
 
     api.chromium_tests.configure_build(builder_config)
     bot_update_step, targets_config = api.chromium_tests.prepare_checkout(

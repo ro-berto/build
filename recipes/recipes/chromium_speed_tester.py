@@ -23,7 +23,7 @@ def RunSteps(api, properties):
   with api.chromium.chromium_layout():
     builder_id, builder_config = (
         api.chromium_tests_builder_config.lookup_builder())
-    api.chromium_tests.report_builders(builder_id, builder_config)
+    api.chromium_tests.report_builders(builder_config)
     execution_mode = builder_config.execution_mode
     if execution_mode != ctbc.TEST:
       api.step.empty(

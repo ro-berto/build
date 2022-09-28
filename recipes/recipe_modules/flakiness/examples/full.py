@@ -52,7 +52,7 @@ def RunSteps(api):
   builder_id, builder_config = (
       api.chromium_tests_builder_config.lookup_builder())
   with api.chromium.chromium_layout():
-    api.chromium_tests.report_builders(builder_id, builder_config)
+    api.chromium_tests.report_builders(builder_config)
     _, task = api.chromium_tests.build_affected_targets(builder_id,
                                                         builder_config)
 

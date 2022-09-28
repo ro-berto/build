@@ -1526,8 +1526,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         and a failure message if a failure occurred.
       - None if no failures
     """
-    self.report_builders(
-        builder_id, builder_config, report_mirroring_builders=True)
+    self.report_builders(builder_config, report_mirroring_builders=True)
     self.print_link_to_results()
     self.configure_build(builder_config)
     update_step, targets_config = self.prepare_checkout(
@@ -1867,7 +1866,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     """
     self.raise_failure_if_cq_depends_footer_exists()
 
-    self.report_builders(builder_id, builder_config)
+    self.report_builders(builder_config)
     self.print_link_to_results()
     raw_result, task = self.build_affected_targets(
         builder_id,
@@ -2220,10 +2219,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return None
 
-  def report_builders(self,
-                      builder_id,
-                      builder_config,
-                      report_mirroring_builders=False):
+  def report_builders(self, builder_config, report_mirroring_builders=False):
     """Reports the builders being executed by the bot."""
 
     # Tester - returns (parent ID, builder ID)
@@ -2274,15 +2270,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # of group, we can have an authoritative value for the bucket to use
     # in these links, for now rely on convention:
     # try -> ci
-    for builder_ids_for_mirror in builder_details:
-      for b in builder_ids_for_mirror:
-        project = self.m.buildbucket.build.builder.project
-        bucket = self.m.buildbucket.build.builder.bucket
-        if b != builder_id:
-          bucket = bucket.replace('try', 'ci')
-        result.presentation.links[b.builder] = (
-            f'https://ci.chromium.org/p/{project}/builders/{bucket}/{b.builder}'
-        )
+    for d in builder_details:
+      for builder_id in d:
+        result.presentation.links[builder_id.builder] = (
+            'https://ci.chromium.org/p/{}/builders/{}/{}'.format(
+                self.m.buildbucket.build.builder.project,
+                self.m.buildbucket.build.builder.bucket.replace('try', 'ci'),
+                builder_id.builder,
+            ))
 
   def print_link_to_results(self):
     """Prints a step with a link to the 'test results' tab in Milo.
