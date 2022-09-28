@@ -1807,6 +1807,8 @@
       "-m",
       "Update V8 deps (reviewed)",
       "-m",
+      "This roll requires a manual review. See http://go/reviewed-rolls for guidance.",
+      "-m",
       "Rolling v8/mock-package-latest: 6fd66957f08bb752dca714a591c84587c9d70763..resolved-instance_id-of-instance_id_1---",
       "-m",
       "Rolling v8/mock-package-without-latest-ref: 7fd66957f08bb752dca714a591c84587c9d70764..resolved-instance_id-of-no-latest-------",

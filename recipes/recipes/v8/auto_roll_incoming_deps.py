@@ -484,6 +484,11 @@ def upload_cl(api, step, subject, reviewers, set_bot_commit, commit_lines,
   # Create a rolling CL
   args = ['commit', '-a', '-m', subject]
 
+  if not set_bot_commit:
+    args.extend(['-m', (
+      'This roll requires a manual review. See http://go/reviewed-rolls for '
+      'guidance.')])
+
   for commit_line in commit_lines:
     args.extend(['-m', commit_line])
 
