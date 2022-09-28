@@ -762,6 +762,31 @@ class FlakinessApi(recipe_api.RecipeApi):
 
     return test_objects_by_suffix
 
+  def _add_test_to_stats(self, test, step_name, variant_hash, stats):
+    """Adds a test info to stats.
+
+    Args:
+      test: (RDBPerIndividualTestResults defined in test_utils module) test info
+        to add.
+      step_name: (str) Step name for the test.
+      variant_hash: (str) Variant hash for the test,
+      stats: (dict) A dictionary with (test_id, variant_hash) as keys and
+        (test name, list of suites with failures,
+        count of unexpected unpassed runs, count of all runs) as values.
+    """
+    test_name = test.test_name
+    # Key is a tuple of (test_id, variant_hash)
+    key = (test.test_id, variant_hash)
+    total = test.total_test_count()
+    unexpected_unpassed = test.unexpected_unpassed_count()
+    # Value fields are: (test name, list of suites with failures,
+    # count of unexpected unpassed runs, count of all runs)
+    info = stats.get(key, ('', [], 0, 0))
+    if unexpected_unpassed > 0:
+      info[1].append(step_name)
+    stats[key] = (test_name, info[1], info[2] + unexpected_unpassed,
+                  info[3] + total)
+
   def _flakiness_summary_markdown(self, test_stats):
     """Creates a summary markdown using flakiness run results.
 
@@ -809,63 +834,29 @@ class FlakinessApi(recipe_api.RecipeApi):
       lines.extend(['- %s' % step for step in infra_steps])
     return lines
 
-  def check_run_results(self, suffix_suites):
-    """Calculates and presents flakiness info using test results from input.
+  def _calculate_flakiness_and_summary(self, flaky_non_experimental_test_stats,
+                                       flaky_experimental_test_stats):
+    """Calculates and returns summary if non experimental tests have flakiness.
 
     Args:
-      suffix_suites: A mapping from test suffixes to lists of steps.Test
-        objects with valid results for the suffix.
+      flaky_non_experimental_test_stats: A dictionary mapping from
+        (test id, variant hash) tuple to a tuple of (test name, list of
+        test step names with failed runs, count of unexpected runs,
+        count of total runs), for tests in non experiental suites.
+      flaky_experimental_test_stats: A dictionary mapping from
+        (test id, variant hash) tuple to a tuple of (test name, list of
+        test step names with failed runs, count of unexpected runs,
+        count of total runs), for tests in experiental suites.
 
     Returns:
-      A RawResult object with the status of the build and failure message if
-      there are flakiness. None if no flakiness.
+      A summary markdown str as failure message if there are flakiness.
+      None if no flakiness.
     """
-    # In this step, flaky tests in experimental suites (test objects) are non
-    # fatal, otherwise they are fatal and will fail the build.
-    flaky_non_experimental_test_stats = {}
-    flaky_experimental_test_stats = {}
-    # A list of test step names without results (invalid).
-    empty_result_steps = []
     with self.m.step.nest(self.CALCULATE_FLAKE_RATE_STEP_NAME) as p:
       p.step_text = (
           'Tests that have exceeded the tolerated flake rate most likely '
           'indicate flakiness. See logs for details of the flaky test '
-          'and the flake rate.')
-      for suffix, test_objects in suffix_suites.items():
-        for t in test_objects:
-          flaky_test_stats = (
-              flaky_experimental_test_stats if isinstance(
-                  t, steps.ExperimentalTest) else
-              flaky_non_experimental_test_stats)
-          rdb_results = t.get_rdb_results(suffix)
-          step_name = '%s (%s)' % (t.name, suffix)
-          if not rdb_results.all_tests:
-            empty_result_steps.append(step_name)
-            continue
-          for test in rdb_results.all_tests:
-            test_name = test.test_name
-            # Key is a tuple of (test_id, variant_hash)
-            key = (test.test_id, rdb_results.variant_hash)
-            total = test.total_test_count()
-            unexpected_unpassed = test.unexpected_unpassed_count()
-            # Value fields are: (test name, list of suites with failures,
-            # count of unexpected unpassed runs, count of all runs)
-            info = flaky_test_stats.get(key, ('', [], 0, 0))
-            if unexpected_unpassed > 0:
-              info[1].append(step_name)
-            flaky_test_stats[key] = (test_name, info[1],
-                                     info[2] + unexpected_unpassed,
-                                     info[3] + total)
-
-      if empty_result_steps:
-        p.status = self.m.step.FAILURE
-        summary_lines = [
-            ('%s steps in %s didn\'t produce test results.' %
-             (', '.join(empty_result_steps), self.RUN_TEST_STEP_NAME))
-        ]
-        return result_pb2.RawResult(
-            summary_markdown='\n\n'.join(summary_lines),
-            status=common_pb2.FAILURE)
+          'and the flake rate.\n')
 
       # Keep only test variants with unexpected results.
       test_stats_filter = lambda item: item[1][2] > 0
@@ -897,20 +888,68 @@ class FlakinessApi(recipe_api.RecipeApi):
           summary_lines = [
               'Some new test(s) added from your CL appear '
               'to be flaky. Please check "%s" step for test identification and '
-              '"%s" step for test rerun details.' %
-              (self.IDENTIFY_STEP_NAME, self.RUN_TEST_STEP_NAME)
+              'test steps for test run details.' % self.IDENTIFY_STEP_NAME
           ]
           summary_lines.extend(non_experimental_summary_lines)
           summary_markdown = '\n\n'.join(summary_lines)[:3500]
           summary_markdown += (
               '\n\nSee full logs in "flaky tests" under %s step.' %
               self.CALCULATE_FLAKE_RATE_STEP_NAME)
-          return result_pb2.RawResult(
-              summary_markdown=summary_markdown, status=common_pb2.FAILURE)
+          return summary_markdown
 
         # When there is non fatal flakiness, let users know why the build
         # doesn't fail.
-        p.step_text += ('\nFlaky tests in logs are non fatal because they come '
-                        'from experimental suites.')
+        p.step_text += ('\nFlaky new tests in logs are non fatal because they '
+                        'come from experimental suites.')
+
+    return None
+
+  def check_run_results(self, suffix_suites):
+    """Calculates and presents flakiness info using test results from input.
+
+    Args:
+      suffix_suites: A mapping from test suffixes to lists of steps.Test
+        objects with valid results for the suffix.
+
+    Returns:
+      A RawResult object with the status of the build and failure message if
+      there are flakiness. None if no flakiness.
+    """
+    # In this step, flaky tests in experimental suites (test objects) are non
+    # fatal, otherwise they are fatal and will fail the build.
+    flaky_non_experimental_test_stats = {}
+    flaky_experimental_test_stats = {}
+    # A list of test step names without results (invalid).
+    empty_result_steps = []
+    for suffix, test_objects in suffix_suites.items():
+      for t in test_objects:
+        flaky_test_stats = (
+            flaky_experimental_test_stats
+            if isinstance(t, steps.ExperimentalTest) else
+            flaky_non_experimental_test_stats)
+        rdb_results = t.get_rdb_results(suffix)
+        step_name = '%s (%s)' % (t.name, suffix)
+        if not rdb_results.all_tests:
+          empty_result_steps.append(step_name)
+          continue
+        for test in rdb_results.all_tests:
+          self._add_test_to_stats(test, step_name, rdb_results.variant_hash,
+                                  flaky_test_stats)
+
+    if empty_result_steps:
+      summary_lines = [
+          ('%s steps in %s didn\'t produce test results.' %
+           (', '.join(empty_result_steps), self.RUN_TEST_STEP_NAME))
+      ]
+
+      return result_pb2.RawResult(
+          summary_markdown='\n\n'.join(summary_lines),
+          status=common_pb2.FAILURE)
+
+    summary_markdown = self._calculate_flakiness_and_summary(
+        flaky_non_experimental_test_stats, flaky_experimental_test_stats)
+    if summary_markdown:
+      return result_pb2.RawResult(
+          summary_markdown=summary_markdown, status=common_pb2.FAILURE)
 
     return None

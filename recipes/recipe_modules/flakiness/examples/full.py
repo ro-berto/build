@@ -1074,7 +1074,6 @@ def GenTests(api):
               ),
               failure=True)),
       # Result from "check flakiness" step is empty.
-      api.post_check(post_process.MustRun, 'calculate flake rates'),
       api.post_check(
           post_process.ResultReason,
           'ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 '
