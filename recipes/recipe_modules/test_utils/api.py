@@ -614,7 +614,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     result = self.m.step(
         'query known flaky failures on CQ',
         [
-            'python',
+            'python3',
             self.resource('query_cq_flakes.py'),
             '--input-path',
             self.m.json.input(flakes_input),
@@ -1209,7 +1209,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     """Archives the test results summary as JSON, storing it alongside the
     results from the first run."""
     cmd = [
-        'python',
+        'python3',
         self.resource('archive_layout_test_results_summary.py'),
         '--test-results-summary-json',
         self.m.json.input(test_results_summary),

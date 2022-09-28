@@ -2483,7 +2483,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "RECIPE_MODULE[build::test_utils]/resources/query_cq_flakes.py",
       "--input-path",
       "{\"bucket\": \"try\", \"builder\": \"fake-try-builder\", \"project\": \"chromium\", \"tests\": [{\"step_ui_name\": \"blink_web_tests (with patch)\", \"test_name\": \"Test.One\"}]}",
@@ -4517,7 +4517,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "RECIPE_MODULE[build::test_utils]/resources/archive_layout_test_results_summary.py",
       "--test-results-summary-json",
       "{\"failures\": [\"Test.One\"], \"ignored\": []}",

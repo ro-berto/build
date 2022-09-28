@@ -87,6 +87,7 @@ PYTHON3_ONLY_FILES = (
         'recipes/recipe_modules/tricium_clang_tidy/resources/'
         'tricium_clang_tidy_test.py'
     ),
+    'recipes/recipe_modules/test_utils/unittests/query_cq_flakes_test.py',
 )
 
 

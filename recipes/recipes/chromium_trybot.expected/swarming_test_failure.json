@@ -2519,7 +2519,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "RECIPE_MODULE[build::test_utils]/resources/query_cq_flakes.py",
       "--input-path",
       "{\"bucket\": \"try\", \"builder\": \"fake-try-builder\", \"project\": \"chromium\", \"tests\": [{\"step_ui_name\": \"gl_tests (with patch)\", \"test_name\": \"Test.One\"}]}",

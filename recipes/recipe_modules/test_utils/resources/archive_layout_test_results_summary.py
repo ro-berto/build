@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # Copyright 2016 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -28,9 +28,9 @@ import slave_utils
 
 def ArchiveRetrySummary(args):
   args.builder_name = re.sub('[ .()]', '_', args.builder_name)
-  print 'Builder name: %s' % args.builder_name
-  print 'Build number: %s' % args.build_number
-  print 'Host name: %s' % socket.gethostname()
+  print('Builder name: %s' % args.builder_name)
+  print('Build number: %s' % args.build_number)
+  print('Host name: %s' % socket.gethostname())
 
   gs_base = '/'.join([args.gs_bucket, args.builder_name, args.build_number])
   slave_utils.GSUtilCopyFile(

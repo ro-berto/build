@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # Copyright 2019 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -6,8 +6,7 @@ import argparse
 import json
 import os
 import sys
-import urllib
-import urllib2
+import urllib.request
 
 # Endpoint to get flaky tests. The request and response formats are defined as
 # _CQFlakesRequest and _CQFlakeResponse in:
@@ -28,9 +27,10 @@ def query_and_write_flakes(input_path, output_path):
   with open(input_path, 'r') as f:
     input_json = json.load(f)
 
-  response = urllib2.urlopen(
-      urllib2.Request(url=_FLAKE_SERVICE_ENDPOINT, data=json.dumps(input_json)))
-  with open(output_path, 'w') as f:
+  response = urllib.request.urlopen(
+      urllib.request.Request(
+          url=_FLAKE_SERVICE_ENDPOINT, data=json.dumps(input_json).encode()))
+  with open(output_path, 'wb') as f:
     f.write(response.read())
 
 
