@@ -36,7 +36,8 @@ class ANGLEApi(recipe_api.RecipeApi):
     self._builder_id, self._builder_config = (
         self.m.chromium_tests_builder_config.lookup_builder(
             builder_db=self._builders, try_db=self._trybots, use_try_db=True))
-    self.m.chromium_tests.report_builders(self._builder_config)
+    self.m.chromium_tests.report_builders(self._builder_id,
+                                          self._builder_config)
     self.m.chromium_tests.configure_build(self._builder_config)
 
   def _get_angle_commit_pos(self):

@@ -77,11 +77,11 @@ def compilator_steps(api, properties):
     orch_builder_id = chromium.BuilderId.create_for_group(
         builder_group, orchestrator)
 
-    _, orch_builder_config = (
+    orch_builder_id, orch_builder_config = (
         api.chromium_tests_builder_config.lookup_builder(
             builder_id=orch_builder_id))
 
-    api.chromium_tests.report_builders(orch_builder_config)
+    api.chromium_tests.report_builders(orch_builder_id, orch_builder_config)
 
     # Implies that this compilator build must be compiled without a patch
     # so that the orchestrator can retry these swarming tests without patch
