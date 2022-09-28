@@ -39,7 +39,7 @@ BUILDERS = freeze({
                         'android',
 
                         # 'fuchsia' is required to build the builtins.a for Fuchsia.
-                        'fuchsia',
+                        'fuchsia_no_hooks',
 
                         # Required to fetch Rust toolchain deps, including the
                         # Rust sources themselves.

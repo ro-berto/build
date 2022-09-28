@@ -147,6 +147,13 @@ def fuchsia_x64(c):
   c.solutions[0].custom_vars['checkout_fuchsia_boot_images'] = 'qemu.x64'
 
 @CONFIG_CTX(includes=['fuchsia'])
+def fuchsia_no_hooks(c):
+  """Downloads Fuchsia SDK without running hooks."""
+
+  c.solutions[0].custom_vars['checkout_fuchsia_no_hooks'] = 'True'
+
+
+@CONFIG_CTX(includes=['fuchsia'])
 def fuchsia_arm64_host(c):
   """Downloads tools for running fuchsia emu on linux-arm64 host"""
 
