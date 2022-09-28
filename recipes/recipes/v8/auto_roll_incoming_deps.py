@@ -76,7 +76,7 @@ PROPERTIES = {
                 # Mapping between the dependency name in the target project and
                 # the name in the source project
                 deps_key_mapping=Dict(value_type=str),
-                # List of reviewers of the roll CL
+                # List of reviewers of rolling CLs requiring a manual review
                 reviewers=List(str),
                 # Flag for rolling the binary chromium pin in target project
                 roll_chromium_pin=Single(bool),
@@ -483,9 +483,13 @@ def upload_cl(api, step, subject, reviewers, set_bot_commit, commit_lines,
 
   # Create a rolling CL
   args = ['commit', '-a', '-m', subject]
+
   for commit_line in commit_lines:
     args.extend(['-m', commit_line])
-  args.extend(['-m', 'R=%s' % ','.join(reviewers)])
+
+  if not set_bot_commit:
+    args.extend(['-m', 'R=%s' % ','.join(reviewers)])
+
   kwargs = {'stdout': api.raw_io.output_text()}
   with api.context(
       cwd=api.path['checkout'],
@@ -500,8 +504,10 @@ def upload_cl(api, step, subject, reviewers, set_bot_commit, commit_lines,
         '--bypass-hooks',
         '--send-mail',
     ]
+
     if set_bot_commit:
       upload_args.append('--set-bot-commit')
+
     if bugs_label is not None:
       upload_args += ['-b', bugs_label]
 
