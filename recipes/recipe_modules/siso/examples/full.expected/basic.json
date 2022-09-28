@@ -53,7 +53,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/siso/bin/siso",
+      "[START_DIR]/cipd_tool/infra_internal/experimental/siso/latest/siso",
       "ninja",
       "--project",
       "test-rbe-project",

@@ -15,7 +15,7 @@ class SisoApi(recipe_api.RecipeApi):
     super().__init__(**kwargs)
     self._props = props
     # Initialization is delayed until ensure_siso.
-    self._cipd_dir = None
+    self._siso_path = None
 
   @property
   def enabled(self):
@@ -26,7 +26,7 @@ class SisoApi(recipe_api.RecipeApi):
     """ensure siso is installed."""
 
     assert self.enabled, 'siso is not configured'
-    self._cipd_dir = self.m.cipd.ensure_tool(
+    self._siso_path = self.m.cipd.ensure_tool(
         'infra_internal/experimental/siso/${platform}',
         self._props.siso_version)
 
@@ -114,15 +114,7 @@ class SisoApi(recipe_api.RecipeApi):
     assert cmdname == 'ninja', 'wrong command name'
 
   @property
-  def _default_cache_path_per_bot(self):
-    return self.m.path['cache'].join('siso')
-
-  @property
-  def _default_bin_path(self):
-    return self._default_cache_path_per_bot.join('bin')
-
-  @property
   def siso_path(self):
     # TODO(ukai): decide path used in product tree.
     self._ensure_siso()
-    return self._default_bin_path.join('siso')
+    return self._siso_path
