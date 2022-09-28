@@ -895,7 +895,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "[START_DIR]/openscreen/build/code_coverage/merge_steps.py",
       "--input-dir",
       "[CLEANUP]/tmp_tmp_1",

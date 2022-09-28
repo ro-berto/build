@@ -124,7 +124,7 @@ class ProfilesApi(recipe_api.RecipeApi):
         Defaults to False.
     """
     cmd = [
-        'python',
+        'python3',
         self.merge_steps_script,
         '--input-dir',
         self.profile_dir(),
@@ -176,7 +176,7 @@ class ProfilesApi(recipe_api.RecipeApi):
     """Search for any profiles that failed to merge"""
     step_result = self.m.step(
         'Finding profile merge errors', [
-            'python',
+            'python3',
             self.resource('load_merge_errors.py'),
             '--root-dir',
             self.profile_dir(),
