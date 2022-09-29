@@ -56,7 +56,7 @@ def RunSteps(api):
             test_id=test_id,
             variant_hash='{}hash'.format(i),
             expected=False,
-            status=test_result_pb2.FAIL,
+            status=test_result_pb2.PASS,
         ),
     ]
     inv_bundle[inv] = api.resultdb.Invocation(test_results=test_results)
@@ -79,6 +79,7 @@ def RunSteps(api):
       'ninja://sample/test:some_test/TestSuite.Test3_3hash',
       'TestSuite.Test4_4hash',
   }
+
   found_tests = api.flakiness.identify_new_tests(test_objects)
   if found_tests:
     found_tests = set(

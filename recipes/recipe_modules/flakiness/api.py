@@ -490,8 +490,8 @@ class FlakinessApi(recipe_api.RecipeApi):
     from the current CL.
 
     Args:
-        test_objects (list): List of step.Test objects with RDB results for
-          current build.
+      test_objects (list): List of step.Test objects with RDB results for
+        current build.
 
     Returns:
         A set of TestDefinition objects.
@@ -541,6 +541,10 @@ class FlakinessApi(recipe_api.RecipeApi):
       skipped_test_suites = set([])
 
       preliminary_new_tests = set([])
+      # Stores stats of new tests. This is for early failing if any new test
+      # is aready flaky before we trigger new test reruns.
+      non_experimental_new_test_stats = {}
+      experimental_new_test_stats = {}
 
       # For logging purpose only.
       current_tests_log = []
@@ -553,6 +557,7 @@ class FlakinessApi(recipe_api.RecipeApi):
           if not rdb_suite_result:
             continue
           variant_hash = rdb_suite_result.variant_hash
+          step_name = '%s (%s)' % (test_object.name, suffix)
           for individual_test in rdb_suite_result.all_tests:
             # Use 0 as duration if the info doesn't exist.
             duration_milliseconds = individual_test.duration_milliseconds or 0
@@ -568,6 +573,12 @@ class FlakinessApi(recipe_api.RecipeApi):
 
             if not test_definition in historical_tests:
               preliminary_new_tests.add(test_definition)
+              test_stats = (
+                  experimental_new_test_stats if isinstance(
+                      test_object, steps.ExperimentalTest) else
+                  non_experimental_new_test_stats)
+              self._add_test_to_stats(individual_test, step_name, variant_hash,
+                                      test_stats)
 
       p.logs['current_build_tests'] = current_tests_log
       if skipped_test_suites:
@@ -600,6 +611,30 @@ class FlakinessApi(recipe_api.RecipeApi):
               t.test_id, t.variant_hash, t.duration_milliseconds)
           for t in new_tests
       ])))
+
+    # At this time, test stats contains info in the initial
+    # |preliminary_new_tests|. Filter to keep only new tests after trimming and
+    # verification.
+    new_test_filter = lambda item: item[0] in new_tests
+    non_experimental_new_test_stats = dict(
+        filter(new_test_filter, non_experimental_new_test_stats.items()))
+    experimental_new_test_stats = dict(
+        filter(new_test_filter, experimental_new_test_stats.items()))
+
+    if self._calculate_flakiness_and_summary(
+        non_experimental_new_test_stats,
+        experimental_new_test_stats,
+        present_summary_in_step=True):
+      # Fail the build if there are already flaky new tests in "with patch" or
+      # "retry shards with patch" steps, so we don't need to trigger new "check
+      # flakiness" steps.
+      self.m.step.empty(
+          'New tests are found flaky in with patch test runs.',
+          status=self.m.step.FAILURE,
+          step_text=('New test are flaky in "with patch" or'
+                     '"retry shards with patch" test steps.'
+                     'See %s step for details.' %
+                     self.CALCULATE_FLAKE_RATE_STEP_NAME))
 
     return new_tests
 
@@ -671,6 +706,7 @@ class FlakinessApi(recipe_api.RecipeApi):
       return []
 
     new_tests = self.identify_new_tests(test_objects)
+
     new_tests = self.maybe_trim_new_tests(new_tests, _FINAL_TRIM)
 
     test_objects_by_suffix = collections.defaultdict(list)
@@ -834,8 +870,10 @@ class FlakinessApi(recipe_api.RecipeApi):
       lines.extend(['- %s' % step for step in infra_steps])
     return lines
 
-  def _calculate_flakiness_and_summary(self, flaky_non_experimental_test_stats,
-                                       flaky_experimental_test_stats):
+  def _calculate_flakiness_and_summary(self,
+                                       flaky_non_experimental_test_stats,
+                                       flaky_experimental_test_stats,
+                                       present_summary_in_step=False):
     """Calculates and returns summary if non experimental tests have flakiness.
 
     Args:
@@ -895,8 +933,10 @@ class FlakinessApi(recipe_api.RecipeApi):
           summary_markdown += (
               '\n\nSee full logs in "flaky tests" under %s step.' %
               self.CALCULATE_FLAKE_RATE_STEP_NAME)
-          return summary_markdown
 
+          if present_summary_in_step:
+            p.step_text += summary_markdown
+          return summary_markdown
         # When there is non fatal flakiness, let users know why the build
         # doesn't fail.
         p.step_text += ('\nFlaky new tests in logs are non fatal because they '
@@ -941,7 +981,6 @@ class FlakinessApi(recipe_api.RecipeApi):
           ('%s steps in %s didn\'t produce test results.' %
            (', '.join(empty_result_steps), self.RUN_TEST_STEP_NAME))
       ]
-
       return result_pb2.RawResult(
           summary_markdown='\n\n'.join(summary_lines),
           status=common_pb2.FAILURE)
