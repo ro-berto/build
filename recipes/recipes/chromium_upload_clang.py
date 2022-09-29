@@ -38,7 +38,7 @@ BUILDERS = freeze({
                         # proper AddressSanitizer prebuilts for Chrome on Android.
                         'android',
 
-                        # 'fuchsia' is required to build the builtins.a for Fuchsia.
+                        # Required to build the builtins.a for Fuchsia.
                         'fuchsia_no_hooks',
 
                         # Required to fetch Rust toolchain deps, including the
@@ -61,7 +61,10 @@ BUILDERS = freeze({
                         'TARGET_PLATFORM': 'mac',
                         'TARGET_BITS': 64,
                     },
-                    gclient_apply_config=['fuchsia'],
+                    gclient_apply_config=[
+                        # Required to build the builtins.a for Fuchsia.
+                        'fuchsia_no_hooks',
+                    ],
                 ),
             'mac_upload_clang_arm':
                 chromium.BuilderSpec.create(
@@ -70,7 +73,10 @@ BUILDERS = freeze({
                         'TARGET_PLATFORM': 'mac',
                         'TARGET_BITS': 64,
                     },
-                    gclient_apply_config=['fuchsia'],
+                    gclient_apply_config=[
+                        # Required to build the builtins.a for Fuchsia.
+                        'fuchsia_no_hooks',
+                    ],
                 ),
         },
     },
