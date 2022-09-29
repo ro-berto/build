@@ -188,7 +188,7 @@ def fuchsia_workstation(c):
   """Downloads workstation boot images for running x64 binaries on QEMU."""
 
   c.solutions[0].custom_vars[
-      'checkout_fuchsia_boot_images'] = 'workstation.qemu-x64-release'
+      'checkout_fuchsia_boot_images'] = 'workstation_eng.qemu-x64-release'
 
 
 @CONFIG_CTX(includes=['fuchsia'])
