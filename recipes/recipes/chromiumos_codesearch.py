@@ -141,7 +141,7 @@ def RunSteps(api, codesearch_mirror_revision,
   # Set up and build ChromiumOS.
   # TODO(gavinmak): Fix tests and remove "no cover".
   with api.build_menu.configure_builder(commit=commit) as config, \
-      api.build_menu.setup_workspace_and_chroot():  # pragma: no cover
+      api.build_menu.setup_workspace_and_chroot(replace=True):  # pragma: no cover
     env_info = api.build_menu.setup_sysroot_and_determine_relevance()
     api.build_menu.bootstrap_sysroot(config)
     api.build_menu.install_packages(config, env_info.packages)
