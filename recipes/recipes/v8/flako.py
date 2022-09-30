@@ -747,7 +747,7 @@ def GenTests(api):
                     revisions[i],
                 'message': ('> Cr-Commit-Position: refs/heads/main@{#%d}\n' +
                             'Cr-Commit-Position: refs/heads/main@{#%d}') %
-                           (i + 9999, i + 10000)
+                           (42, 99 - i - offset)
             } for i in range(len(revisions))]
         }),
     )

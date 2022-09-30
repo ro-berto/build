@@ -54,15 +54,15 @@
       "@@@STEP_LOG_LINE@json.output@  \"log\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"commit\": \"a1\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"message\": \"> Cr-Commit-Position: refs/heads/main@{#9999}\\nCr-Commit-Position: refs/heads/main@{#10000}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"message\": \"> Cr-Commit-Position: refs/heads/main@{#42}\\nCr-Commit-Position: refs/heads/main@{#98}\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"commit\": \"a2\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"message\": \"> Cr-Commit-Position: refs/heads/main@{#10000}\\nCr-Commit-Position: refs/heads/main@{#10001}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"message\": \"> Cr-Commit-Position: refs/heads/main@{#42}\\nCr-Commit-Position: refs/heads/main@{#97}\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"commit\": \"a3\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"message\": \"> Cr-Commit-Position: refs/heads/main@{#10001}\\nCr-Commit-Position: refs/heads/main@{#10002}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"message\": \"> Cr-Commit-Position: refs/heads/main@{#42}\\nCr-Commit-Position: refs/heads/main@{#96}\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -1301,7 +1301,7 @@
   },
   {
     "cmd": [],
-    "name": "Checking #2 (commit position: 9999)",
+    "name": "Checking #2 (commit position: 97)",
     "~followup_annotations": [
       "@@@STEP_LINK@a2@https://chromium.googlesource.com/v8/v8/+/a2@@@"
     ]
@@ -2109,15 +2109,15 @@
       "@@@STEP_LOG_LINE@json.output@  \"log\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"commit\": \"a4\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"message\": \"> Cr-Commit-Position: refs/heads/main@{#9999}\\nCr-Commit-Position: refs/heads/main@{#10000}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"message\": \"> Cr-Commit-Position: refs/heads/main@{#42}\\nCr-Commit-Position: refs/heads/main@{#95}\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"commit\": \"a5\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"message\": \"> Cr-Commit-Position: refs/heads/main@{#10000}\\nCr-Commit-Position: refs/heads/main@{#10001}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"message\": \"> Cr-Commit-Position: refs/heads/main@{#42}\\nCr-Commit-Position: refs/heads/main@{#94}\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"commit\": \"a6\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"message\": \"> Cr-Commit-Position: refs/heads/main@{#10001}\\nCr-Commit-Position: refs/heads/main@{#10002}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"message\": \"> Cr-Commit-Position: refs/heads/main@{#42}\\nCr-Commit-Position: refs/heads/main@{#93}\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -2177,7 +2177,7 @@
   },
   {
     "cmd": [],
-    "name": "Checking #5 (commit position: 9999)",
+    "name": "Checking #5 (commit position: 94)",
     "~followup_annotations": [
       "@@@STEP_LINK@a5@https://chromium.googlesource.com/v8/v8/+/a5@@@"
     ]
@@ -2988,7 +2988,7 @@
   },
   {
     "cmd": [],
-    "name": "Checking #3 (commit position: 10001)",
+    "name": "Checking #3 (commit position: 96)",
     "~followup_annotations": [
       "@@@STEP_LINK@a3@https://chromium.googlesource.com/v8/v8/+/a3@@@"
     ]
