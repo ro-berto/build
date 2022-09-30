@@ -656,11 +656,11 @@ def RunSteps(api, bisect_builder_group, bisect_buildername, extra_args,
       api, depot, command, num_shards, repro_only, max_calibration_attempts,
       failure_regexp)
 
-  to_offset = depot.find_closest_build(0)
+  known_bad_offset = depot.find_closest_build(0)
 
   # Get confidence that the given revision is flaky and optionally calibrate the
   # repetitions.
-  could_reproduce = runner.calibrate(to_offset)
+  could_reproduce = runner.calibrate(known_bad_offset)
 
   if repro_only:
     if could_reproduce:
@@ -696,7 +696,7 @@ def RunSteps(api, bisect_builder_group, bisect_buildername, extra_args,
 
   # Run bisection.
   bisector = Bisector(api, depot, runner.check_num_flakes)
-  from_offset, to_offset = bisector.bisect_back(to_offset)
+  from_offset, to_offset = bisector.bisect_back(known_bad_offset)
   from_offset, to_offset = bisector.bisect_into(from_offset, to_offset)
   bisector.report_range('Result: Suspecting %s', from_offset, to_offset)
 
@@ -738,30 +738,30 @@ def GenTests(api):
     ]
     return sum(lookups, api.empty_test_data())
 
-  def get_revisions(offset, *revisions):
+  def get_revisions(offset, count):
     return api.step_data(
         'get revision #%d' % offset,
         api.json.output({
             'log': [{
                 'commit':
-                    revisions[i],
+                    f'a{offset + i}',
                 'message': ('> Cr-Commit-Position: refs/heads/main@{#%d}\n' +
                             'Cr-Commit-Position: refs/heads/main@{#%d}') %
                            (42, 99 - i - offset)
-            } for i in range(len(revisions))]
+            } for i in range(count)]
         }),
     )
 
-  def get_revisions_with_incorrect_cp(offset, *revisions):
+  def get_revisions_with_incorrect_cp(offset, count):
     return api.step_data(
         'get revision #%d' % offset,
         api.json.output({
             'log': [{
                 'commit':
-                    revisions[i],
+                    f'a{offset + i}',
                 'message':
                     'Cr-Commit-Position-Incorrect: refs/heads/main@{#%d}' % i
-            } for i in range(len(revisions))]
+            } for i in range(count)]
         }),
     )
 
@@ -806,8 +806,8 @@ def GenTests(api):
       api.properties(total_timeout_sec=0) +
       # Data for resolving offsets to git hashes. Simulate gitiles page size of
       # 3 commits per call.
-      get_revisions(1, 'a1', 'a2', 'a3') +
-      get_revisions(4, 'a4', 'a5', 'a6') +
+      get_revisions(1, 3) +
+      get_revisions(4, 3) +
       # CAS digest data simulation for all existing revisions.
       successful_lookups(1, 2, 3, 5) +
       # Calibration. We check for flakes until enough are found. First only one
@@ -835,7 +835,7 @@ def GenTests(api):
       test('full_bisect_upper') +
       # Data for resolving offsets to git hashes. Simulate gitiles page size of
       # 8, fetching all data in the first call.
-      get_revisions(1, 'a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8') +
+      get_revisions(1, 8) +
       # CAS digest data simulation for all revisions.
       successful_lookups(0, 1, 3, 4, 5, 7) +
       # Calibration.
@@ -852,7 +852,7 @@ def GenTests(api):
   # Test bisecting through a large range of missing builds.
   yield (
       test('large_gap') +
-      get_revisions(1, 'a1', 'a2', 'a3', 'a4') +
+      get_revisions(1, 4) +
       # Simulate a large gap between #0 and #4..
       successful_lookups(0, 4) +
       # Bad build #0 wile #4 is a good build using default test data.
@@ -872,7 +872,7 @@ def GenTests(api):
   # Simulate not finding any cas_digests.
   no_cas_digests_test_data = test('no_cas_digests')
   for i in range(1, MAX_CAS_OFFSET):
-    no_cas_digests_test_data += get_revisions(i, 'a%d' % i)
+    no_cas_digests_test_data += get_revisions(i, 1)
   yield (
       no_cas_digests_test_data +
       api.post_process(ResultReasonRE, 'Couldn\'t find cas_digests.') +
@@ -904,7 +904,7 @@ def GenTests(api):
   yield (
       test('repro_only_fallback', 'V8 Foobar - debug builder') +
       api.properties(repro_only=True) +
-      get_revisions(1, 'a1', 'a2') +
+      get_revisions(1, 2) +
       successful_lookups(1, fallback=True) +
       api.post_process(MustRun, 'gsutil lookup cas_digests for #0') +
       api.post_process(MustRun, 'gsutil lookup cas_digests for #0 (fallback)') +
@@ -942,13 +942,18 @@ def GenTests(api):
     if check(step in steps):
       check(all(arg != 'cpu' for arg in steps[step].cmd))
 
-  yield (test('android_dimensions') + api.properties(
-      repro_only=True,
-      swarming_dimensions=[
-          'os:Android', 'cpu:x86-64', 'device_os:MMB29Q',
-          'device_type:bullhead', 'pool:chromium.tests'
-      ]) + successful_lookups(0) + api.post_process(check_dimensions) +
-         api.post_process(DropExpectation))
+  yield (
+      test('android_dimensions') +
+      api.properties(
+          repro_only=True,
+          swarming_dimensions=[
+              'os:Android', 'cpu:x86-64', 'device_os:MMB29Q',
+              'device_type:bullhead', 'pool:chromium.tests'
+          ]) +
+      successful_lookups(0) +
+      api.post_process(check_dimensions) +
+      api.post_process(DropExpectation)
+  )
 
   # Simulate not finding enough flakes during calibration.
   # Also test cutting off overly long test names in step names.
@@ -986,5 +991,5 @@ def GenTests(api):
   )
 
   yield (test('bisect_attempt_with_wrong_commit_position') +
-         get_revisions_with_incorrect_cp(1, 'a1', 'a2', 'a3') +
+         get_revisions_with_incorrect_cp(1, 3) +
          api.expect_exception('ValueError') + api.post_process(DropExpectation))
