@@ -4,11 +4,21 @@
 
 """Recipe to bisect flaky tests in V8.
 
-Bisection will start at a known bad to_revision and:
+The recipe offers a regression, a progression and a repro-only mode.
+
+Regression bisection will start at a known bad to_revision and:
 1. Calibrate the number of repetitions until enough confidence is reached.
 2. Bisect backwards exponentially, doubling the offset in each step.
 3. After finding a good from_revision, bisect into the range
    from_revision..to_revision and report the suspect.
+
+Progression bisection will start at a known bad to_revision and:
+1. Calibrate the number of repetitions until enough confidence is reached.
+2. Check if ToT is still flaky.
+3. Bisect into the range to_revision..ToT and report the commit suspected
+   to fix the problem.
+
+Repro-only mode runs aborts if the flake still reproduces at to_revision.
 
 Tests are only run on existing isolated files, looked up on Google Storage.
 
@@ -58,6 +68,8 @@ PROPERTIES = {
     'num_shards': Property(default=2, kind=Single((int, float))),
     # Optional build directory for backwards-compatibility, e.g. 'out/Release'.
     'outdir': Property(default=None, kind=str),
+    # Progression instead of regression testing. Find out what fixed the flake.
+    'progression': Property(default=False, kind=bool),
     # Initial number of test repetitions (passed to --random-seed-stress-count
     # option).
     'repetitions': Property(default=5000, kind=Single((int, float))),
@@ -95,6 +107,9 @@ MAX_BISECT_STEPS = 16
 # A build with cas_digests must be within a distance of maximum 32 revisions for
 # any revision that should be tested. We don't look further as a safeguard.
 MAX_CAS_OFFSET = 32
+
+# Maximum number of revisions between known_bad and refs/heads/main.
+MAX_HEAD_OFFSET = 2000
 
 # Maximum number of test name characters printed in UI in step names.
 MAX_LABEL_SIZE = 32
@@ -215,11 +230,14 @@ class Depot(object):
     # Cache for offsets that exist at fallback build location.
     self.fallback_offsets = set()
     # Cache for mapping offsets to real revisions.
+    # Positive (negative) offsets refer to revisions in the past (future).
     self.revisions = {0: known_bad_revision}
     # Cache for cas digests.
     self.cas_digests = {}
     # Offset cache for closest builds with cas digests.
     self.closest_builds = {}
+    # Cache for the offset of refs/heads/main.
+    self.head_offset = None
 
   def gs_url(self, offset):
     """Chooses the gs_url that points to either the original or a fallback
@@ -249,24 +267,108 @@ class Depot(object):
                        (value, RE_COMMIT_POSITION.pattern))
     return int(matches[len(matches) - 1]['revision'])
 
+  def _update_caches(self, commits, offset):
+    """Updates the revision cache and commit-position offset.
+
+    This updates self.revisions mapping all fetched revisions relative to
+    the offset of the first revision in the list. All offsets are relative
+    to the known bad revision at offset 0.
+
+    This also caches the commit-position offset self.commit_position_zero.
+    All other commit positions are relative to the cached one.
+    """
+    for i, commit in enumerate(commits):
+      self.revisions[offset + i] = commit['commit']
+
+    if self.commit_position_zero is None:
+      commit_position = self.parse_commit_position(commits[0]['message'])
+      # Note, negative offsets refer to commits in the future. Example:
+      # known bad at offset: 0 and cp: 100, commits[0] at offset -10, cp: 110
+      # results in commit_position_zero = 110 + (-10) = 100.
+      self.commit_position_zero = commit_position + offset
+
+  def _fetch_commits(self, step_name, git_ref, offset):
+    """Fetches commits via gitiles REST api.
+
+    Commits are fetched using a backwards counter.
+
+    Args:
+      step_name: Name of the step, also for referencing it in test data.
+      git_ref: Ref or git hash that is a descendant of the commits we want
+          to fetch.
+      offset: Counter at how many parent commits behind git_ref we want to
+          start fetching commits.
+    """
+    commits, _ = self.api.gitiles.log(
+        REPO, f'{git_ref}~{offset}',
+        limit=1,
+        step_name=f'{step_name} #{offset}',
+    )
+    assert commits
+    return commits
+
   def get_commit_position(self, offset):
     return self.commit_position_zero - offset
+
+  def _guard_large_offset(self, fetch_offset):
+    if fetch_offset >= MAX_HEAD_OFFSET:
+      raise self.api.step.StepFailure(
+          f'Could not connect the known bad revision to refs/heads/main. '
+          f'Looked in over {MAX_HEAD_OFFSET} commits.')
+
+  def get_head_offset(self):
+    """Returns the offset from the known bad revision to the revision at
+    refs/heads/main, which is set to a fixed revision when retrieved the
+    first time.
+
+    Initially, we fetch commits starting at main and iterate until we find
+    the known bad revision. Once found, we store the offset and all fetched
+    commits.
+
+    Example iteration with head revision A and known bad revision F:
+    - fetch A, B, C at fetch_offset 0
+    - fetch D, E, F at fetch_offset 3
+    - relative index of F is 2
+    - head_offset is -2 - 3 = -5
+    """
+    all_commits = []
+    head_revision = None
+    while self.head_offset is None:
+      fetch_offset = len(all_commits)
+      self._guard_large_offset(fetch_offset)
+      fetched_commits = self._fetch_commits(
+          'init head',
+          head_revision or 'refs/heads/main',
+          fetch_offset,
+      )
+      all_commits.extend(fetched_commits)
+
+      # Cache the git hash of refs/heads/main and use it further on to keep
+      # bisection stable - refs are volatile.
+      head_revision = head_revision or all_commits[0]['commit']
+
+      # Check if we find the known bad revision in the list of head
+      # revisions. If we do, the index is the negated offset.
+      for i, c in enumerate(fetched_commits):
+        if self.known_bad_revision == c['commit']:
+          self.head_offset = -i - fetch_offset
+          break
+
+    # Cache what was fetched relative to the known bad revision at 0.
+    self._update_caches(all_commits, self.head_offset)
+
+    return self.head_offset
 
   def get_revision(self, offset):
     """Returns the git revision at the given offset (cached)."""
     revision = self.revisions.get(offset)
     if not revision:
-      commits, _ = self.api.gitiles.log(
-          REPO, '%s~%d' % (self.known_bad_revision, offset), limit=1,
-          step_name='get revision #%d' % offset)
-      assert commits
-      for i, commit in enumerate(commits):
-        # Gitiles returns several commits. Fill our cache to avoid subsequent
-        # calls.
-        self.revisions[offset + i] = commit['commit']
-
-      commit_position = self.parse_commit_position(commits[0]['message'])
-      self.commit_position_zero = commit_position + offset
+      # We assume positive offsets as all negative offsets are already fetched
+      # when initializing known_bad_revision..refs/heads/main.
+      assert offset >= 0
+      commits = self._fetch_commits(
+          'get revision', self.known_bad_revision, offset)
+      self._update_caches(commits, offset)
 
     return self.revisions[offset]
 
@@ -602,6 +704,28 @@ class Bisector(object):
         known_good = build_offset
 
 
+class RegressionBisector(Bisector):
+  def bisect(self, known_bad_offset):
+    from_offset, to_offset = self.bisect_back(known_bad_offset)
+    from_offset, to_offset = self.bisect_into(from_offset, to_offset)
+    self.report_range('Result: Suspecting %s', from_offset, to_offset)
+
+
+class ProgressionBisector(Bisector):
+  def __init__(self, api, depot, is_bad_func):
+    # For progression testing we invert the meaning of "is_bad".
+    super().__init__(api, depot, lambda *args: not is_bad_func(*args))
+
+  def bisect(self, known_bad_offset):
+    head_offset = self.depot.find_closest_build(self.depot.get_head_offset())
+
+    if not self.is_bad_func(head_offset):
+      raise self.api.step.StepFailure('Flake still reproduces.')
+
+    from_offset, to_offset = self.bisect_into(known_bad_offset, head_offset)
+    self.report_range('Result: Fixed in %s', from_offset, to_offset)
+
+
 def setup_swarming(
     api, swarming_dimensions, swarming_priority, swarming_expiration):
   api.chromium_swarming.default_expiration = swarming_expiration
@@ -631,9 +755,9 @@ def create_flakes_pyl_entry_step(api, config):
 
 def RunSteps(api, bisect_builder_group, bisect_buildername, extra_args,
              failure_regexp, max_calibration_attempts, isolated_name,
-             num_shards, outdir, repetitions, repro_only, swarming_dimensions,
-             swarming_priority, swarming_expiration, test_name, timeout_sec,
-             total_timeout_sec, to_revision, variant):
+             num_shards, outdir, progression, repetitions, repro_only,
+             swarming_dimensions, swarming_priority, swarming_expiration,
+             test_name, timeout_sec, total_timeout_sec, to_revision, variant):
   # Convert floats to ints.
   max_calibration_attempts = max(min(int(max_calibration_attempts), 5), 1)
   num_shards = int(num_shards)
@@ -655,6 +779,8 @@ def RunSteps(api, bisect_builder_group, bisect_buildername, extra_args,
   runner = Runner(
       api, depot, command, num_shards, repro_only, max_calibration_attempts,
       failure_regexp)
+  bisector_cls = ProgressionBisector if progression else RegressionBisector
+  bisector = bisector_cls(api, depot, runner.check_num_flakes)
 
   known_bad_offset = depot.find_closest_build(0)
 
@@ -694,11 +820,7 @@ def RunSteps(api, bisect_builder_group, bisect_buildername, extra_args,
   else:
     raise api.step.StepFailure('Could not reach enough confidence.')
 
-  # Run bisection.
-  bisector = Bisector(api, depot, runner.check_num_flakes)
-  from_offset, to_offset = bisector.bisect_back(known_bad_offset)
-  from_offset, to_offset = bisector.bisect_into(from_offset, to_offset)
-  bisector.report_range('Result: Suspecting %s', from_offset, to_offset)
+  bisector.bisect(known_bad_offset)
 
 
 def GenTests(api):
@@ -738,9 +860,9 @@ def GenTests(api):
     ]
     return sum(lookups, api.empty_test_data())
 
-  def get_revisions(offset, count):
+  def _gitiles_lookup(step_name, offset, count):
     return api.step_data(
-        'get revision #%d' % offset,
+        step_name,
         api.json.output({
             'log': [{
                 'commit':
@@ -751,6 +873,12 @@ def GenTests(api):
             } for i in range(count)]
         }),
     )
+
+  def init_head(offset, count, head_offset=0):
+    return _gitiles_lookup(f'init head #{head_offset}', offset, count)
+
+  def get_revisions(offset, count):
+    return _gitiles_lookup(f'get revision #{offset}', offset, count)
 
   def get_revisions_with_incorrect_cp(offset, count):
     return api.step_data(
@@ -780,16 +908,21 @@ def GenTests(api):
         api.chromium_swarming.summary(
             dispatched_task_step_test_data=None, data=test_data))
 
-  def verify_suspects(from_offset, to_offset):
+  def _verify_result(message, from_offset, to_offset):
     """Verify that the correct reporting step for from_offset..to_offset is
     emitted.
     """
-    git_range = 'a%d..a%d' % (from_offset, to_offset)
-    step_name = 'Result: Suspecting #%d..#%d' % (from_offset, to_offset)
+    git_range = f'a{from_offset}..a{to_offset}'
+    step_name = f'Result: {message} #{from_offset}..#{to_offset}'
     def suspects_internal(check, steps):
-      check(steps[step_name].links[git_range] ==
-            '%s/+log/%s' % (REPO, git_range))
+      check(steps[step_name].links[git_range] == f'{REPO}/+log/{git_range}')
     return api.post_process(suspects_internal)
+
+  def verify_suspects(from_offset, to_offset):
+    return _verify_result('Suspecting', from_offset, to_offset)
+
+  def verify_fixed(from_offset, to_offset):
+    return _verify_result('Fixed in', from_offset, to_offset)
 
   # Full bisect run with some corner cases. Overview of all revisions ordered
   # new -> old.
@@ -866,6 +999,83 @@ def GenTests(api):
       api.post_process(MustRun, 'gsutil lookup cas_digests for #2') +
       api.post_process(DoesNotRun, 'gsutil lookup cas_digests for #2 (2)') +
       verify_suspects(4, 0) +
+      api.post_process(DropExpectation)
+  )
+
+  # Progression testing with the revisions from ToT not overlapping with
+  # the known bad revision. The flake is fixed at ToT.
+  yield (
+      test('progression') +
+      api.properties(progression=True) +
+      # Progression testing fetches ToT at a-9. No initial overlap with a0.
+      # Iterate until a0 is reached.
+      init_head(-9, 4, head_offset=0) +
+      init_head(-5, 4, head_offset=4) +
+      init_head(-1, 4, head_offset=8) +
+      # Simulate existing builds.
+      successful_lookups(-9, -8, -7, -5, 0) +
+      # Calibration with successful repro at offset 0.
+      is_flaky(0, 0, 5, calibration_attempt=1) +
+      # The flake still reproduces until -7.
+      is_flaky(-5, 0, 2) +
+      is_flaky(-7, 0, 2) +
+      verify_fixed(-7, -8)
+  )
+
+  # Progression testing with the revisions from ToT overlapping with
+  # the known bad revision.
+  yield (
+      test('progression_overlap') +
+      api.properties(progression=True) +
+      # Revision at offset 1 is looked up because there is no CAS digest at 0
+      # in this test. The call will fetch some more revisions that we won't
+      # need.
+      get_revisions(1, 3) +
+      # Progression testing fetches ToT at a-6. Here we simulate the fetched
+      # range to overlap with what we already fetched above.
+      init_head(-6, 8) +
+      # CAS digest data simulation for all revisions. We simulate missing a
+      # couple of builds, e.g. at 0.
+      successful_lookups(-5, -4, -2, 1) +
+      # Calibration with successful repro at offset 1.
+      is_flaky(1, 0, 5, calibration_attempt=1) +
+      # The flake still reproduces at -2. For -3 there's no build, resulting
+      # in a fixed range of -2..-4.
+      is_flaky(-2, 0, 3) +
+      verify_fixed(-2, -4) +
+      api.post_process(DropExpectation)
+  )
+
+  # Progression testing where flake still reproduces.
+  yield (
+      test('progression_still_reproduces') +
+      api.properties(progression=True) +
+      # Initial fetch covers all required revisions.
+      init_head(-3, 4) +
+      # Simulate existing builds.
+      successful_lookups(-3, 0) +
+      # Calibration with successful repro at offset 0.
+      is_flaky(0, 0, 5, calibration_attempt=1) +
+      # The flake still reproduces.
+      is_flaky(-3, 0, 2) +
+      api.post_process(ResultReasonRE, 'Flake still reproduces.') +
+      api.post_process(DropExpectation)
+  )
+
+  # Progression testing with a too large gap between known bad revision
+  # and ToT.
+  yield (
+      test('progression_large_gap') +
+      api.properties(progression=True) +
+      # Progression testing fetches ToT at a commit with an offset to
+      # a0 larger than MAX_HEAD_OFFSET.
+      init_head(-MAX_HEAD_OFFSET - 1, MAX_HEAD_OFFSET, head_offset=0) +
+      successful_lookups(0) +
+      is_flaky(0, 0, 5, calibration_attempt=1) +
+      api.post_process(
+          ResultReasonRE,
+          f'Could not connect the known bad revision to refs/heads/main. '
+          f'Looked in over {MAX_HEAD_OFFSET} commits.') +
       api.post_process(DropExpectation)
   )
 
