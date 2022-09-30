@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python
 # Copyright 2018 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -78,7 +78,7 @@ def rebase_line_number(host, project, change, patchset, src_path, sources):
     # On Windows, the file returned by NamedTemporaryFile cannot be opened a
     # second time by its name until it has been closed. Therefore we must ensure
     # it is closed before passing its name to the subprocess.
-    with tempfile.NamedTemporaryFile(delete=False, mode='w') as gerrit_file:
+    with tempfile.NamedTemporaryFile(delete=False) as gerrit_file:
       gerrit_file.write(content)
       gerrit_file_path = gerrit_file.name
     try:
@@ -90,7 +90,7 @@ def rebase_line_number(host, project, change, patchset, src_path, sources):
                    local_file_path, gerrit_file_path)
       # 'diff' command returns 0 if two files are the same, 1 if differences are
       # found, >1 if an error occurred.
-      diff_output = subprocess.check_output(diff_cmd, text=True)
+      diff_output = subprocess.check_output(diff_cmd)
     except subprocess.CalledProcessError as e:
       if e.returncode != 1:
         raise

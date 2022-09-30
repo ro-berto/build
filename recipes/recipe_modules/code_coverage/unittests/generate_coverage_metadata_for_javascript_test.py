@@ -1,4 +1,4 @@
-#!/usr/bin/env vpython3
+#!/usr/bin/env vpython
 # Copyright 2020 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -546,81 +546,76 @@ exports.test = test;'
                 'line': 8
             }]
         }],
-        'dirs': [
-            {
-                'dirs': [],
-                'path':
-                    '//path/to/file/',
-                'summaries': [{
-                    'covered': 10,
-                    'total': 11,
-                    'name': 'line'
-                }],
-                'files': [{
-                    'path': '//path/to/file/a.js',
-                    'name': 'a.js',
-                    'summaries': [{
-                        'covered': 10,
-                        'total': 11,
-                        'name': 'line'
-                    }]
-                }]
-            },
-            {
-                'dirs': [{
-                    'path': '//path/to/file/',
-                    'name': 'file/',
-                    'summaries': [{
-                        'covered': 10,
-                        'total': 11,
-                        'name': 'line'
-                    }]
-                }],
-                'path': '//path/to/',
-                'summaries': [{
-                    'covered': 10,
-                    'total': 11,
-                    'name': 'line'
-                }],
-                'files': []
-            },
-            {
-                'dirs': [{
-                    'path': '//path/to/',
-                    'name': 'to/',
-                    'summaries': [{
-                        'covered': 10,
-                        'total': 11,
-                        'name': 'line'
-                    }]
-                }],
+        'dirs': [{
+            'dirs': [{
                 'path': '//path/',
+                'name': 'path/',
                 'summaries': [{
                     'covered': 10,
                     'total': 11,
                     'name': 'line'
-                }],
-                'files': []
-            },
-            {
-                'dirs': [{
-                    'path': '//path/',
-                    'name': 'path/',
-                    'summaries': [{
-                        'covered': 10,
-                        'total': 11,
-                        'name': 'line'
-                    }]
-                }],
-                'path': '//',
+                }]
+            }],
+            'path': '//',
+            'summaries': [{
+                'covered': 10,
+                'total': 11,
+                'name': 'line'
+            }],
+            'files': []
+        }, {
+            'dirs': [],
+            'path':
+                '//path/to/file/',
+            'summaries': [{
+                'covered': 10,
+                'total': 11,
+                'name': 'line'
+            }],
+            'files': [{
+                'path': '//path/to/file/a.js',
+                'name': 'a.js',
                 'summaries': [{
                     'covered': 10,
                     'total': 11,
                     'name': 'line'
-                }],
-                'files': []
-            },
-        ],
+                }]
+            }]
+        }, {
+            'dirs': [{
+                'path': '//path/to/',
+                'name': 'to/',
+                'summaries': [{
+                    'covered': 10,
+                    'total': 11,
+                    'name': 'line'
+                }]
+            }],
+            'path': '//path/',
+            'summaries': [{
+                'covered': 10,
+                'total': 11,
+                'name': 'line'
+            }],
+            'files': []
+        }, {
+            'dirs': [{
+                'path': '//path/to/file/',
+                'name': 'file/',
+                'summaries': [{
+                    'covered': 10,
+                    'total': 11,
+                    'name': 'line'
+                }]
+            }],
+            'path': '//path/to/',
+            'summaries': [{
+                'covered': 10,
+                'total': 11,
+                'name': 'line'
+            }],
+            'files': []
+        }],
         'summaries': [{
             'covered': 10,
             'total': 11,
@@ -660,6 +655,7 @@ exports.test = test;'
             self.MOCK_LINE_COLUMN_FORMAT_OUTPUT
         actual_output = generator.generate_json_coverage_metadata(
             '/b/some/coverage', '/b/some/src', self.COMPONENT_MAPPING)
+
         self.assertDictEqual(expected_output, actual_output)
 
 

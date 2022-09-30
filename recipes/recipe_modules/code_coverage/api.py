@@ -166,7 +166,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       self.m.step(
           'generate line number mapping from bot to Gerrit',
           [
-              'python3',
+              'python',
               self.resource('rebase_line_number_from_bot_to_gerrit.py'),
               '--host',
               gerrit_change.host,
@@ -221,7 +221,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
 
     if self.platform == 'android':
       step_result = self.m.step('Get jacoco and jar files for java coverage', [
-          'python3',
+          'python',
           self.resource('get_jacoco_and_jar_files_for_java.py'),
           '--sources-json-dir',
           self.build_dir,
@@ -254,7 +254,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     # exe.unstripped/.
     if self.platform in ('android', 'fuchsia'):
       step_result = self.m.step('Get all unstripped artifacts paths', [
-          'python3',
+          'python',
           self.resource('get_unstripped_paths.py'),
           '--chromium-output-dir',
           self.build_dir,
@@ -502,7 +502,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           self.process_java_coverage_data()
       finally:
         self.m.step('Clean up Java coverage files', [
-            'python3',
+            'python',
             self.resource('clean_up_java_coverage_files.py'),
             '--sources-json-dir',
             self.build_dir,
@@ -622,7 +622,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       try:
         coverage_dir = self.build_dir.join('coverage')
         cmd = [
-            'python3',
+            'python',
             self.resource('generate_coverage_metadata_for_java.py'),
             '--src-path',
             self.src_dir,
@@ -703,7 +703,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       try:
         coverage_dir = self.build_dir.join('devtools_code_coverage')
         cmd = [
-            'python3',
+            'python',
             self.resource('generate_coverage_metadata_for_javascript.py'),
             '--src-path',
             self.src_dir,
@@ -808,7 +808,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       return binaries
 
     cmd = [
-        'python3',
+        'python',
         self.resource('get_binaries_with_valid_coverage_data.py'),
         '--profdata-path',
         profdata_path,
@@ -843,7 +843,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       return
 
     cmd = [
-        'python3',
+        'python',
         self.resource('make_report.py'),
         '--report-directory',
         self.report_dir,
@@ -987,7 +987,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
   def _generate_and_upload_metadata(self, binaries, profdata_path):
     """Generates the coverage info in metadata format."""
     cmd = [
-        'vpython3',
+        'vpython',
         self.resource('generate_coverage_metadata.py'),
         '--build-dir',
         self.build_dir,

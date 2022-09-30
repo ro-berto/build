@@ -1,0 +1,11 @@
+#
+# "vpython" specification file for code coverage python scripts.
+#
+
+python_version: "2.7"
+
+# Used by: generate_coverage_metadata.py
+wheel: <
+  name: "infra/python/wheels/psutil/${vpython_platform}"
+  version: "version:5.2.2"
+>

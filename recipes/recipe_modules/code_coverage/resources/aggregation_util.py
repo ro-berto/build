@@ -169,7 +169,7 @@ def _extract_component_to_dirs_mapping(dir_to_component):
 
   # Paths in dir to component mapping is relative path that always uses '/' as
   # path separator and does NOT end with '/', for example, 'media/cast'.
-  for dir_path, component in sorted(dir_to_component.items()):
+  for dir_path, component in sorted(dir_to_component.iteritems()):
 
     # Check if we already added the parent directory of this directory. If
     # yes, skip this sub-directory to avoid double-counting.

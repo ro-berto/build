@@ -1,4 +1,4 @@
-#!/usr/bin/env vpython3
+#!/usr/bin/env vpython
 # Copyright 2019 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -151,7 +151,7 @@ class GenerateCoverageMetadataForJavaTest(unittest.TestCase):
           <counter covered="4" missed="2" type="LINE"/>
         </sourcefile>
       </package>
-      <package name = "build/android/com/example/package">
+      <package name = "build/android/com/example/package">  
         <sourcefile name="Bar.java">
           <line nr="1" ci="2" mi="0" cb="0" mb="0"/>
           <line nr="2" ci="1" mi="2" cb="2" mb="3"/>
@@ -281,13 +281,15 @@ class GenerateCoverageMetadataForJavaTest(unittest.TestCase):
     expected_output = {
         'files': [{
             'branches': [],
-            'timestamp': 1234,
+            'timestamp':
+                1234,
             'lines': [{
                 'count': 1,
                 'last': 1,
                 'first': 1
             }],
-            'path': '//dir/file.java',
+            'path':
+                '//dir/file.java',
             'summaries': [{
                 'covered': 1,
                 'total': 1,
@@ -313,13 +315,15 @@ class GenerateCoverageMetadataForJavaTest(unittest.TestCase):
                 'total': 1,
                 'name': 'class'
             }],
-            'revision': 'hash1'
+            'revision':
+                'hash1'
         }],
-        'dirs': [
-            {
-                'dirs': [],
+        'dirs': [{
+            'dirs': [{
                 'path':
                     '//dir/',
+                'name':
+                    'dir/',
                 'summaries': [{
                     'covered': 1,
                     'total': 1,
@@ -344,100 +348,98 @@ class GenerateCoverageMetadataForJavaTest(unittest.TestCase):
                     'covered': 1,
                     'total': 1,
                     'name': 'class'
-                }],
-                'files': [{
-                    'path':
-                        '//dir/file.java',
-                    'name':
-                        'file.java',
-                    'summaries': [{
-                        'covered': 1,
-                        'total': 1,
-                        'name': 'instruction'
-                    }, {
-                        'covered': 0,
-                        'total': 0,
-                        'name': 'branch'
-                    }, {
-                        'covered': 1,
-                        'total': 1,
-                        'name': 'line'
-                    }, {
-                        'covered': 1,
-                        'total': 1,
-                        'name': 'complexity'
-                    }, {
-                        'covered': 1,
-                        'total': 1,
-                        'name': 'method'
-                    }, {
-                        'covered': 1,
-                        'total': 1,
-                        'name': 'class'
-                    }]
                 }]
-            },
-            {
-                'dirs': [{
-                    'path':
-                        '//dir/',
-                    'name':
-                        'dir/',
-                    'summaries': [{
-                        'covered': 1,
-                        'total': 1,
-                        'name': 'instruction'
-                    }, {
-                        'covered': 0,
-                        'total': 0,
-                        'name': 'branch'
-                    }, {
-                        'covered': 1,
-                        'total': 1,
-                        'name': 'line'
-                    }, {
-                        'covered': 1,
-                        'total': 1,
-                        'name': 'complexity'
-                    }, {
-                        'covered': 1,
-                        'total': 1,
-                        'name': 'method'
-                    }, {
-                        'covered': 1,
-                        'total': 1,
-                        'name': 'class'
-                    }]
-                }],
-                'path': '//',
-                'summaries': [{
-                    'covered': 1,
-                    'total': 1,
-                    'name': 'instruction'
-                }, {
-                    'covered': 0,
-                    'total': 0,
-                    'name': 'branch'
-                }, {
-                    'covered': 1,
-                    'total': 1,
-                    'name': 'line'
-                }, {
-                    'covered': 1,
-                    'total': 1,
-                    'name': 'complexity'
-                }, {
-                    'covered': 1,
-                    'total': 1,
-                    'name': 'method'
-                }, {
-                    'covered': 1,
-                    'total': 1,
-                    'name': 'class'
-                }],
-                'files': []
-            },
-        ],
+            }],
+            'path':
+                '//',
+            'summaries': [{
+                'covered': 1,
+                'total': 1,
+                'name': 'instruction'
+            }, {
+                'covered': 0,
+                'total': 0,
+                'name': 'branch'
+            }, {
+                'covered': 1,
+                'total': 1,
+                'name': 'line'
+            }, {
+                'covered': 1,
+                'total': 1,
+                'name': 'complexity'
+            }, {
+                'covered': 1,
+                'total': 1,
+                'name': 'method'
+            }, {
+                'covered': 1,
+                'total': 1,
+                'name': 'class'
+            }],
+            'files': []
+        },
+                 {
+                     'dirs': [],
+                     'path':
+                         '//dir/',
+                     'summaries': [{
+                         'covered': 1,
+                         'total': 1,
+                         'name': 'instruction'
+                     }, {
+                         'covered': 0,
+                         'total': 0,
+                         'name': 'branch'
+                     }, {
+                         'covered': 1,
+                         'total': 1,
+                         'name': 'line'
+                     }, {
+                         'covered': 1,
+                         'total': 1,
+                         'name': 'complexity'
+                     }, {
+                         'covered': 1,
+                         'total': 1,
+                         'name': 'method'
+                     }, {
+                         'covered': 1,
+                         'total': 1,
+                         'name': 'class'
+                     }],
+                     'files': [{
+                         'path':
+                             '//dir/file.java',
+                         'name':
+                             'file.java',
+                         'summaries': [{
+                             'covered': 1,
+                             'total': 1,
+                             'name': 'instruction'
+                         }, {
+                             'covered': 0,
+                             'total': 0,
+                             'name': 'branch'
+                         }, {
+                             'covered': 1,
+                             'total': 1,
+                             'name': 'line'
+                         }, {
+                             'covered': 1,
+                             'total': 1,
+                             'name': 'complexity'
+                         }, {
+                             'covered': 1,
+                             'total': 1,
+                             'name': 'method'
+                         }, {
+                             'covered': 1,
+                             'total': 1,
+                             'name': 'class'
+                         }]
+                     }]
+                 }],
         'summaries': [{
             'covered': 1,
             'total': 1,

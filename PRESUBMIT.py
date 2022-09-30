@@ -88,37 +88,6 @@ PYTHON3_ONLY_FILES = (
         'tricium_clang_tidy_test.py'
     ),
     'recipes/recipe_modules/test_utils/unittests/query_cq_flakes_test.py',
-    'recipes/recipe_modules/code_coverage/unittests/aggregation_util_test.py',
-    (
-        'recipes/recipe_modules/code_coverage/unittests/'
-        'combine_jacoco_reports_test.py'
-    ),
-    'recipes/recipe_modules/code_coverage/unittests/constants_test.py',
-    'recipes/recipe_modules/code_coverage/unittests/diff_util_test.py',
-    (
-        'recipes/recipe_modules/code_coverage/unittests/'
-        'generate_coverage_metadata_for_javascript_test.py'
-    ),
-    (
-        'recipes/recipe_modules/code_coverage/unittests/'
-        'generate_coverage_metadata_for_java_test.py'
-    ),
-    (
-        'recipes/recipe_modules/code_coverage/unittests/'
-        'generate_coverage_metadata_test.py'
-    ),
-    'recipes/recipe_modules/code_coverage/unittests/gerrit_util_test.py',
-    (
-        'recipes/recipe_modules/code_coverage/unittests/'
-        'get_unstripped_paths_test.py'
-    ),
-    'recipes/recipe_modules/code_coverage/unittests/make_report_test.py',
-    (
-        'recipes/recipe_modules/code_coverage/unittests/'
-        'rebase_line_number_from_bot_to_gerrit_test.py'
-    ),
-    'recipes/recipe_modules/code_coverage/unittests/repository_util_test.py',
-    'recipes/recipe_modules/code_coverage/unittests/write_paths_test.py',
 )
 
 

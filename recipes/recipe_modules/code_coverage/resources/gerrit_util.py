@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python
 # Copyright 2019 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -14,9 +14,7 @@ import json
 import logging
 import os
 import time
-import urllib.error
-import urllib.parse
-import urllib.request
+import urllib2
 
 # A fixed prefix in the http response.
 _RESPONSE_PREFIX = ')]}\n'
@@ -40,7 +38,7 @@ def fetch_files_content(host, project, change, patchset, file_paths):
   """
   # Uses the Get Change API to get and parse the revision of the patchset.
   # https://gerrit-review.googlesource.com/Documentation/rest-api-changes.html#get-change.
-  project_quoted = urllib.parse.quote(project, safe='')
+  project_quoted = urllib2.quote(project, safe='')
   change_id = '%s~%d' % (project_quoted, change)
 
   url = 'https://%s/changes/%s?o=ALL_REVISIONS&o=SKIP_MERGEABLE' % (host,
@@ -49,7 +47,7 @@ def fetch_files_content(host, project, change, patchset, file_paths):
   change_details = json.loads(response.read()[len(_RESPONSE_PREFIX):])
   patchset_revision = None
 
-  for revision, value in change_details['revisions'].items():
+  for revision, value in change_details['revisions'].iteritems():
     if patchset == value['_number']:
       patchset_revision = revision
       break
@@ -82,16 +80,16 @@ def _fetch_file_content(host, change_id, revision, file_path):
   # Uses the Get Content API to get the file content from Gerrit.
   # https://gerrit-review.googlesource.com/Documentation/rest-api-changes.html#get-content
   file_path = file_path.replace(os.sep, '/')
-  quoted_file_path = urllib.parse.quote(file_path, safe='')
+  quoted_file_path = urllib2.quote(file_path, safe='')
   url = 'https://%s/changes/%s/revisions/%s/files/%s/content' % (
       host, change_id, revision, quoted_file_path)
   response = _retry_url_open(url)
   content = base64.b64decode(response.read())
-  return content.decode()
+  return content
 
 
 def _retry_url_open(url):
-  """Retry version of urllib.request.urlopen.
+  """Retry version of urllib2.urlopen.
 
   Args:
     url (str): The URL.
@@ -104,8 +102,8 @@ def _retry_url_open(url):
   delay_seconds = 1
   while True:
     try:
-      return urllib.request.urlopen(url)
-    except urllib.error.URLError:
+      return urllib2.urlopen(url)
+    except urllib2.URLError:
       if tries == 0:
         logging.error('Failed to open URL: %s', url)
         raise

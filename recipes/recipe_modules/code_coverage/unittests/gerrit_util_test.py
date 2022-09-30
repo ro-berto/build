@@ -1,4 +1,4 @@
-#!/usr/bin/env vpython3
+#!/usr/bin/env vpython
 # Copyright 2018 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -20,7 +20,7 @@ import gerrit_util
 
 class GerritUtilTest(unittest.TestCase):
 
-  @mock.patch('gerrit_util.urllib.request.urlopen')
+  @mock.patch('gerrit_util.urllib2.urlopen')
   def test_fetch_file_content_from_gerrit(self, mock_urlopen):
     revisions = {
         'revisions': {
@@ -33,8 +33,8 @@ class GerritUtilTest(unittest.TestCase):
 
     mock_urlopen().getcode.side_effect = [404, 200, 404, 200]
     mock_urlopen().read.side_effect = [
-        (')]}\n' + json.dumps(revisions)).encode(),
-        base64.b64encode(file_content.encode())
+        ')]}\n' + json.dumps(revisions),
+        base64.b64encode(file_content)
     ]
 
     result = gerrit_util.fetch_files_content('chromium-review.googlesource.com',

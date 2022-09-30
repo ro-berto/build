@@ -1,4 +1,4 @@
-#!/usr/bin/env vpython3
+#!/usr/bin/env vpython
 # Copyright 2018 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -33,9 +33,9 @@ class RebaseLineNumberFromBotToGerritTest(unittest.TestCase):
     mocked_fetch_files_content.return_value = [file_on_gerrit_content]
 
     file_on_bot = tempfile.NamedTemporaryFile()
-    file_on_bot.write(b'line 0, added by someone else\n'
-                      b'line 1, changed by someone else\n'
-                      b'line 2, changed by me\n')
+    file_on_bot.write('line 0, added by someone else\n'
+                      'line 1, changed by someone else\n'
+                      'line 2, changed by me\n')
     file_on_bot.flush()
 
     file_on_bot_path = file_on_bot.name
@@ -59,7 +59,7 @@ class RebaseLineNumberFromBotToGerritTest(unittest.TestCase):
                                                 mocked_fetch_files_content):
     mocked_fetch_files_content.return_value = ['test line\n']
     file_on_bot = tempfile.NamedTemporaryFile()
-    file_on_bot.write(b'test line\n')
+    file_on_bot.write('test line\n')
     file_on_bot.flush()
 
     file_on_bot_path = file_on_bot.name

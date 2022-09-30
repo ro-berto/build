@@ -1,4 +1,4 @@
-#!/usr/bin/env vpython3
+#!/usr/bin/env vpython
 # Copyright 2018 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -593,24 +593,6 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
 
     expected_compressed_dirs = [
         {
-            'dirs': [],
-            'files': [{
-                'name': 'file1.cc',
-                'path': '//dir1/file1.cc',
-                'summaries': [{
-                    'covered': 4,
-                    'total': 7,
-                    'name': 'line',
-                }]
-            }],
-            'summaries': [{
-                'covered': 4,
-                'total': 7,
-                'name': 'line',
-            }],
-            'path': '//dir1/'
-        },
-        {
             'dirs': [{
                 'path': '//dir1/',
                 'name': 'dir1/',
@@ -627,6 +609,24 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
                 'name': 'line'
             }],
             'path': '//'
+        },
+        {
+            'dirs': [],
+            'files': [{
+                'name': 'file1.cc',
+                'path': '//dir1/file1.cc',
+                'summaries': [{
+                    'covered': 4,
+                    'total': 7,
+                    'name': 'line',
+                }]
+            }],
+            'summaries': [{
+                'covered': 4,
+                'total': 7,
+                'name': 'line',
+            }],
+            'path': '//dir1/'
         },
     ]
 
@@ -716,8 +716,7 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
         '/path/to/llvm-cov', 'export', '-skip-expansions', '-skip-functions',
         '-num-threads', '95', '-compilation-dir', '/path/to/build_dir',
         '-summary-only', '-instr-profile', '/foo/bar/baz.profdata', 'binary1'
-    ],
-                            text=True)
+    ])
     self.assertIn('binary1', summaries)
     self.assertEqual(summaries['binary1'], summary_data['data'][0]['totals'])
 

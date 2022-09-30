@@ -1,4 +1,4 @@
-#!/usr/bin/env vpython3
+#!/usr/bin/env vpython
 # Copyright 2019 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -40,7 +40,7 @@ class RepositoryUtilTest(unittest.TestCase):
 
     mock_is_dir.side_effect = is_dir_side_effect
 
-    def mock_subprocess_side_effect(commands, cwd, text=None):
+    def mock_subprocess_side_effect(commands, cwd):
       cwd = os.path.normpath(cwd)
       if commands[:2] == ['git', 'ls-files']:
         if cwd == '/src':
@@ -102,7 +102,7 @@ class RepositoryUtilTest(unittest.TestCase):
     head_content = '\n'.join(['line 0', 'line 1', 'line 3 modified', 'line 4'])
     reference_commit_content = '\n'.join(['line 1', 'line 2', 'line 3'])
 
-    def mock_subprocess_side_effect(commands, cwd, text=None):
+    def mock_subprocess_side_effect(commands, cwd):
       assert cwd == src_path
       if commands[:2] == ['git', 'diff']:
         assert commands[2:] == ['HEAD', reference_commit, '--', file_path]

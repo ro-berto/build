@@ -1,4 +1,4 @@
-#!/usr/bin/env vpython3
+#!/usr/bin/env vpython
 # Copyright 2018 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -99,15 +99,16 @@ class MakeReportTest(unittest.TestCase):
           with mock.patch('os.path.exists') as mock_exists:
             with mock.patch('os.access') as mock_access:
               # Report dir does not exist.
-              with self.assertRaisesRegex(RuntimeError, '.*Output directory.*'):
+              with self.assertRaisesRegexp(RuntimeError,
+                                           '.*Output directory.*'):
                 mock_exists.side_effect = lambda x: 'out-dir' not in x
                 make_report.main()
               # Profdata does not exist
-              with self.assertRaisesRegex(RuntimeError, '.*profdata.*'):
+              with self.assertRaisesRegexp(RuntimeError, '.*profdata.*'):
                 mock_exists.side_effect = lambda x: 'profdata' not in x
                 make_report.main()
               # llvm-cov is not executable.
-              with self.assertRaisesRegex(RuntimeError, '.*executable.*'):
+              with self.assertRaisesRegexp(RuntimeError, '.*executable.*'):
                 mock_exists.side_effect = lambda x: True
                 mock_access.return_value = False
                 make_report.main()
@@ -145,8 +146,7 @@ class MakeReportTest(unittest.TestCase):
               '-Xdemangler', 'c++filt', '-Xdemangler', '-n',
               '-instr-profile=merge.profdata', 'binary1', '-object', 'binary2',
               'base/file1.cc', 'base/file2.cc'
-          ],
-                    text=True), mock_run.call_args)
+          ]), mock_run.call_args)
 
       with mock.patch('platform.system', return_value='Windows'):
         reporter.generate_report(llvm_cov, profdata_file, out_dir,
@@ -158,8 +158,7 @@ class MakeReportTest(unittest.TestCase):
               '-Xdemangler', 'llvm-undname.exe',
               '-instr-profile=merge.profdata', 'binary1', '-object', 'binary2',
               'base/file1.cc', 'base/file2.cc'
-          ],
-                    text=True), mock_run.call_args)
+          ]), mock_run.call_args)
 
   def test_arch(self):
     with mock.patch.object(subprocess, 'check_output') as mock_run:
@@ -182,8 +181,7 @@ class MakeReportTest(unittest.TestCase):
               '-arch=x86_64', '-arch=x86_64', '-num-threads=1', '-Xdemangler',
               'c++filt', '-Xdemangler', '-n', '-instr-profile=merge.profdata',
               'binary1', '-object', 'binary2', 'base/file1.cc', 'base/file2.cc'
-          ],
-                    text=True), mock_run.call_args)
+          ]), mock_run.call_args)
 
 
 if __name__ == '__main__':
