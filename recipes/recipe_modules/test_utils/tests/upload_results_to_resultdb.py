@@ -256,6 +256,89 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
 
+  inv_bundle_with_skips = {
+      'invid':
+          api.resultdb.Invocation(
+              proto=invocation_pb2.Invocation(
+                  state=invocation_pb2.Invocation.FINALIZED),
+              test_results=[
+                  test_result_pb2.TestResult(
+                      test_id='ninja://chromium/tests:browser_tests/t1',
+                      expected=True,
+                      status=test_result_pb2.PASS,
+                      variant={'def': {
+                          'key1': 'value1',
+                      }}),
+                  test_result_pb2.TestResult(
+                      test_id='ninja://chromium/tests:browser_tests/t2',
+                      expected=False,
+                      status=test_result_pb2.SKIP,
+                      variant={'def': {
+                          'key2': 'value2',
+                      }}),
+                  test_result_pb2.TestResult(
+                      test_id='ninja://chromium/tests:browser_tests/t2',
+                      expected=False,
+                      status=test_result_pb2.SKIP,
+                      variant={'def': {
+                          'key2': 'value2',
+                      }}),
+                  test_result_pb2.TestResult(
+                      test_id='ninja://chromium/tests:browser_tests/t3',
+                      expected=False,
+                      status=test_result_pb2.SKIP,
+                      variant={'def': {
+                          'key1': 'value1',
+                      }}),
+              ],
+          ),
+  }
+
+  yield api.test(
+      'dont_exonerate_without_patch_skips',
+      api.chromium.try_build(builder_group='g', builder='linux-rel'),
+      api.properties(
+          swarm_hashes={
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
+          },
+          is_swarming_test=True,
+      ),
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(passing=False),
+              shards=2,
+              failure=True)),
+      api.override_step_data(
+          'base_unittests (retry shards with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(passing=True),
+              shards=2,
+              failure=True)),
+      api.override_step_data(
+          'base_unittests (without patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.canned_gtest_output(passing=True),
+              shards=2,
+              failure=True)),
+      api.resultdb.query(
+          inv_bundle_with_failures,
+          step_name='collect tasks (with patch).base_unittests results',
+      ),
+      api.resultdb.query(
+          inv_bundle_with_failures,
+          step_name=(
+              'collect tasks (retry shards with patch).base_unittests results'),
+      ),
+      api.resultdb.query(
+          inv_bundle_with_skips,
+          step_name='collect tasks (without patch).base_unittests results',
+      ),
+      api.post_process(post_process.DoesNotRun,
+                       'exonerate unrelated test failures'),
+      api.post_process(post_process.DropExpectation),
+  )
+
   yield api.test(
       'resultdb_disabled',
       api.builder_group.for_current('g'),

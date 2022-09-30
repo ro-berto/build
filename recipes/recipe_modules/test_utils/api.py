@@ -330,8 +330,9 @@ class TestUtilsApi(recipe_api.RecipeApi):
                   reason=test_result_pb2.ExonerationReason.NOT_CRITICAL,
               ))
       elif suffix == 'without patch':
-        # Any unexpected failure in the "without patch" phase should be
-        # exonerated. Unexpected passes should be already exonerated in tasks.
+        # Most unexpected failures in the "without patch" phase should be
+        # exonerated. Tests that are skipped should _not_ be exonerated.
+        # Unexpected passes should be already exonerated in tasks.
         # Keep this logic in-sync with
         # https://source.chromium.org/chromium/chromium/tools/build/+/main:recipes/recipe_modules/chromium_tests/steps.py;drc=137053ea;l=907
         # until that can be removed in favor of RDB.
@@ -342,7 +343,12 @@ class TestUtilsApi(recipe_api.RecipeApi):
             '(https://source.chromium.org/chromium/chromium/tools/build/+/main:recipes/recipe_modules/chromium_tests/steps.py;drc=137053ea;l=907)'
             # pylint: enable=line-too-long
         )
-        for t in results.unexpected_failing_tests:
+
+        # results.unexpected_failing_tests contains tests that resulted in
+        # any unexpected non-PASS status (so FAIL, SKIP, CRASH). If the status
+        # is SKIP, don't record it as an exoneration.
+        for t in (results.unexpected_failing_tests -
+                  results.unexpected_skipped_tests):
           exonerations.append(
               test_result_pb2.TestExoneration(
                   test_id=t.test_id,
