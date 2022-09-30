@@ -48,8 +48,6 @@ PROPERTIES = {
     'extra_args': Property(default=None, kind=list),
     # Regular expression that must match in the output of failing tests.
     'failure_regexp': Property(default=None, kind=str),
-    # Number of commits, backwards bisection will initially leap over.
-    'initial_commit_offset': Property(default=1, kind=Single((int, float))),
     # The maximum number of calibration attempts (safeguard to prevent infinite
     # loops). Repetitions are doubled on each attempt until there's enough
     # confidence.
@@ -193,20 +191,20 @@ def fallback_buildername(buildername):
 class Depot(object):
   """Helper class for interacting with remote storage (GS bucket and git)."""
 
-  def __init__(self, api, builder_group, buildername, isolated_name, revision):
+  def __init__(self, api, builder_group, buildername, isolated_name,
+               known_bad_revision):
     """
     Args:
       builder_group: Group name of the builder that produced the builds for
           bisection.
       buildername: Name of the builder that produced the builds for bisection.
       isolated_name: Name of the isolated file (e.g. bot_default, mjsunit).
-      revision: Start revision of bisection (known bad revision). All other
-          revisions during bisection will be represented as offsets to this
-          revision.
+      known_bad_revision: Start revision of bisection. All other revisions
+          during bisection will be represented as offsets to this revision.
     """
     self.api = api
     self.isolated_name = isolated_name
-    self.revision = revision
+    self.known_bad_revision = known_bad_revision
     self.commit_position_zero = None
     # Two templates for looking up the builder before and after a potential
     # split into builder/tester.
@@ -217,7 +215,7 @@ class Depot(object):
     # Cache for offsets that exist at fallback build location.
     self.fallback_offsets = set()
     # Cache for mapping offsets to real revisions.
-    self.revisions = {0: revision}
+    self.revisions = {0: known_bad_revision}
     # Cache for cas digests.
     self.cas_digests = {}
     # Offset cache for closest builds with cas digests.
@@ -259,7 +257,7 @@ class Depot(object):
     revision = self.revisions.get(offset)
     if not revision:
       commits, _ = self.api.gitiles.log(
-          REPO, '%s~%d' % (self.revision, offset), limit=1,
+          REPO, '%s~%d' % (self.known_bad_revision, offset), limit=1,
           step_name='get revision #%d' % offset)
       assert commits
       for i, commit in enumerate(commits):
@@ -324,7 +322,7 @@ class Depot(object):
     """Looks backwards for the closest offset with an existing digest (cached).
 
     Args:
-      offset: The offset to the base revision where the lookup is started.
+      offset: The offset to the known_bad_revision where the lookup is started.
       max_offset: Lookup stops at this offset if reached.
     Returns:
       The closest offset for which a cas digest exists.
@@ -522,90 +520,87 @@ class Runner(object):
       return num_failures
 
 
-def bisect(api, depot, initial_commit_offset, is_bad_func, offset):
-  """Exercises the bisection control flow.
+class Bisector(object):
+  def __init__(self, api, depot, is_bad_func):
+    """Collection of bisection helpers.
 
-  Args:
-    api: Recipe api.
-    depot: Helper for accessing storage and git.
-    initial_commit_offset: Number of commits, backwards bisection will
-        initially leap over.
-    is_bad_func: Function (revision->bool) determining if a given revision is
-        bad.
-    offset: Offset at which to start bisection.
-  """
-  def report_range(text, from_offset, to_offset):
-    from_revision = depot.get_revision(from_offset)
-    to_revision = depot.get_revision(to_offset)
+    Args:
+      api: Recipe api.
+      depot: Helper for accessing storage and git.
+      is_bad_func: Function (revision->bool) determining if a revision is bad.
+    """
+    self.api = api
+    self.depot = depot
+    self.is_bad_func = is_bad_func
+
+  def report_range(self, text, from_offset, to_offset):
+    from_revision = self.depot.get_revision(from_offset)
+    to_revision = self.depot.get_revision(to_offset)
     offset_range = '#%d..#%d' % (from_offset, to_offset)
     git_range = '%s..%s' % (from_revision[:8], to_revision[:8])
-    step_result = api.step(text % offset_range, cmd=None)
+    step_result = self.api.step(text % offset_range, cmd=None)
     step_result.presentation.links[git_range] = '%s/+log/%s' % (REPO, git_range)
 
-  def report_revision(text, offset):
-    rev = depot.get_revision(offset)
-    rev_cp = depot.get_commit_position(offset)
-    step_result = api.step(
+  def report_revision(self, text, offset):
+    rev = self.depot.get_revision(offset)
+    rev_cp = self.depot.get_commit_position(offset)
+    step_result = self.api.step(
         text % ('#%d (commit position: %d)' % (offset, rev_cp)), cmd=None)
     step_result.presentation.links[rev[:8]] = '%s/+/%s' % (REPO, rev)
 
-  def bisect_back(to_offset):
-    """Bisects backwards from to_offset, doubling the delta in each
-    iteration.
+  def bisect_back(self, to_offset):
+    """Bisects backwards from to_offset, doubling the delta in each iteration.
 
     Returns:
         A tuple of (from_offset, to_offset), where from_offset..to_offset
         represents the range of good..bad revision found.
     """
-    commit_offset = initial_commit_offset
+    commit_offset = 1
     for _ in range(MAX_BISECT_STEPS):
       from_offset = to_offset + commit_offset
 
-      # Check if from_offset is bad and iterate backwards if so.
-      from_offset = depot.find_closest_build(from_offset)
-      report_revision('Checking %s', from_offset)
-      if is_bad_func(from_offset):
-        to_offset = from_offset
-        commit_offset *= 2
-        continue
+      # Check if from_offset is a good revision, otherwise iterate backwards.
+      from_offset = self.depot.find_closest_build(from_offset)
+      self.report_revision('Checking %s', from_offset)
+      if not self.is_bad_func(from_offset):
+        return from_offset, to_offset
 
-      return from_offset, to_offset
+      to_offset = from_offset
+      commit_offset *= 2
+
     raise api.step.StepFailure(
-        'Could not not find a good revision.')  # pragma: no cover
+        'Could not find a good revision.')  # pragma: no cover
 
-  def bisect_into(from_offset, to_offset):
+  def bisect_into(self, from_offset, to_offset):
     """Bisects into a given range from_offset..to_offset and determins a
     suspect commit range.
     """
     assert from_offset >= to_offset
     known_good = from_offset
     known_bad = to_offset
-    report_range('Bisecting %s', from_offset, to_offset)
+    self.report_range('Bisecting %s', from_offset, to_offset)
     for _ in range(MAX_BISECT_STEPS):
       # End of bisection. Note that possibly known_good..known_bad is a larger
       # range than 1 commit due to missing cas_digests.
       if from_offset - to_offset <= 1:
         return known_good, known_bad
       middle_offset = to_offset + (from_offset - to_offset) // 2
-      build_offset = depot.find_closest_build(middle_offset, from_offset)
+      build_offset = self.depot.find_closest_build(middle_offset, from_offset)
 
       if build_offset >= from_offset:
-        report_range('No builds in %s', from_offset, middle_offset)
+        self.report_range('No builds in %s', from_offset, middle_offset)
         # There are no cas_digests in lower half. Skip it and continue.
         from_offset = middle_offset
         continue
 
-      report_revision('Checking %s', build_offset)
-      if is_bad_func(build_offset):
+      self.report_revision('Checking %s', build_offset)
+      if self.is_bad_func(build_offset):
         to_offset = build_offset
         known_bad = build_offset
       else:
         from_offset = build_offset
         known_good = build_offset
 
-  from_offset, to_offset = bisect_back(offset)
-  from_offset, to_offset = bisect_into(from_offset, to_offset)
-  report_range('Result: Suspecting %s', from_offset, to_offset)
 
 def setup_swarming(
     api, swarming_dimensions, swarming_priority, swarming_expiration):
@@ -624,13 +619,22 @@ def setup_swarming(
     api.chromium_swarming.set_default_dimension(k, v)
 
 
+def create_flakes_pyl_entry_step(api, config):
+  """Generate config for flakes.pyl."""
+  json_config = api.json.dumps(
+      [config], indent=2, separators=(',', ': '), sort_keys=True)
+  log = re.sub(
+      r'([^,])(?=\n\s*[\}\]])', r'\1,', json_config,  # add trailing commas
+      flags=re.MULTILINE).splitlines()                # split by line
+  api.step('flakes.pyl entry', cmd=None).presentation.logs['config'] = log
+
+
 def RunSteps(api, bisect_builder_group, bisect_buildername, extra_args,
-             failure_regexp, initial_commit_offset, max_calibration_attempts,
-             isolated_name, num_shards, outdir, repetitions, repro_only,
-             swarming_dimensions, swarming_priority, swarming_expiration,
-             test_name, timeout_sec, total_timeout_sec, to_revision, variant):
+             failure_regexp, max_calibration_attempts, isolated_name,
+             num_shards, outdir, repetitions, repro_only, swarming_dimensions,
+             swarming_priority, swarming_expiration, test_name, timeout_sec,
+             total_timeout_sec, to_revision, variant):
   # Convert floats to ints.
-  initial_commit_offset = int(initial_commit_offset)
   max_calibration_attempts = max(min(int(max_calibration_attempts), 5), 1)
   num_shards = int(num_shards)
   repetitions = int(repetitions)
@@ -667,41 +671,34 @@ def RunSteps(api, bisect_builder_group, bisect_buildername, extra_args,
       raise api.step.StepFailure('Could not reproduce flake.')
 
   if could_reproduce:
-    # Generate config for flakes.pyl.
-    config = api.json.dumps(
-        [{
-            'bisect_builder_group': bisect_builder_group,
-            'bisect_buildername': bisect_buildername,
-            'isolated_name': isolated_name,
-            'test_name': test_name,
-            'variant': variant,
-            'extra_args': extra_args,
-            'swarming_dimensions': swarming_dimensions,
-            'timeout_sec': timeout_sec,
-            'num_shards': runner.num_shards,
-            # TODO(sergiyb): Drop total_timeout_sec here and just rely on
-            # repetitions, which is more reliable on Windows. Right now,
-            # however, we can't use it as it's not correctly calibrated when
-            # total_timeout_sec is used. We should only implement this
-            # suggestion once we can extract the actual number of repetitions
-            # used from the test launcher after the calibration is done.
-            'total_timeout_sec': total_timeout_sec * runner.multiplier,
-            'repetitions': repetitions * runner.multiplier,
-            'bug_url': '<bug-url>',
-        }],
-        indent=2,
-        separators=(',', ': '),
-        sort_keys=True)
-    log = re.sub(
-        r'([^,])(?=\n\s*[\}\]])', r'\1,', config,  # add trailing commas
-        flags=re.MULTILINE).splitlines()           # split by line
-    api.step('flakes.pyl entry', cmd=None).presentation.logs['config'] = log
-
-  if not could_reproduce:
+    create_flakes_pyl_entry_step(api, {
+      'bisect_builder_group': bisect_builder_group,
+      'bisect_buildername': bisect_buildername,
+      'isolated_name': isolated_name,
+      'test_name': test_name,
+      'variant': variant,
+      'extra_args': extra_args,
+      'swarming_dimensions': swarming_dimensions,
+      'timeout_sec': timeout_sec,
+      'num_shards': runner.num_shards,
+      # TODO(sergiyb): Drop total_timeout_sec here and just rely on
+      # repetitions, which is more reliable on Windows. Right now,
+      # however, we can't use it as it's not correctly calibrated when
+      # total_timeout_sec is used. We should only implement this
+      # suggestion once we can extract the actual number of repetitions
+      # used from the test launcher after the calibration is done.
+      'total_timeout_sec': total_timeout_sec * runner.multiplier,
+      'repetitions': repetitions * runner.multiplier,
+      'bug_url': '<bug-url>',
+    })
+  else:
     raise api.step.StepFailure('Could not reach enough confidence.')
 
   # Run bisection.
-  bisect(api, depot, initial_commit_offset, runner.check_num_flakes, to_offset)
+  bisector = Bisector(api, depot, runner.check_num_flakes)
+  from_offset, to_offset = bisector.bisect_back(to_offset)
+  from_offset, to_offset = bisector.bisect_into(from_offset, to_offset)
+  bisector.report_range('Result: Suspecting %s', from_offset, to_offset)
 
 
 def GenTests(api):
@@ -730,13 +727,16 @@ def GenTests(api):
         ),
     )
 
-  def successful_lookup(offset, fallback=False):
+  def successful_lookups(*offsets, fallback=False):
     suffix = ' (fallback)' if fallback else ''
-    return api.override_step_data(
-        'gsutil lookup cas_digests for #%d%s' % (offset, suffix),
-        api.raw_io.stream_output('', stream='stderr'),
-        retcode=0,
-    )
+    lookups = [
+      api.override_step_data(
+          'gsutil lookup cas_digests for #%d%s' % (offset, suffix),
+          api.raw_io.stream_output('', stream='stderr'),
+          retcode=0,
+      ) for offset in offsets
+    ]
+    return sum(lookups, api.empty_test_data())
 
   def get_revisions(offset, *revisions):
     return api.step_data(
@@ -809,10 +809,7 @@ def GenTests(api):
       get_revisions(1, 'a1', 'a2', 'a3') +
       get_revisions(4, 'a4', 'a5', 'a6') +
       # CAS digest data simulation for all existing revisions.
-      successful_lookup(1) +
-      successful_lookup(2) +
-      successful_lookup(3) +
-      successful_lookup(5) +
+      successful_lookups(1, 2, 3, 5) +
       # Calibration. We check for flakes until enough are found. First only one
       # shard reports 2 failures.
       is_flaky(1, 1, 2, calibration_attempt=1) +
@@ -840,12 +837,7 @@ def GenTests(api):
       # 8, fetching all data in the first call.
       get_revisions(1, 'a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8') +
       # CAS digest data simulation for all revisions.
-      successful_lookup(0) +
-      successful_lookup(1) +
-      successful_lookup(3) +
-      successful_lookup(4) +
-      successful_lookup(5) +
-      successful_lookup(7) +
+      successful_lookups(0, 1, 3, 4, 5, 7) +
       # Calibration.
       is_flaky(0, 0, 5, calibration_attempt=1) +
       # Bisect backwards from a0 until good revision a7 is found.
@@ -862,8 +854,7 @@ def GenTests(api):
       test('large_gap') +
       get_revisions(1, 'a1', 'a2', 'a3', 'a4') +
       # Simulate a large gap between #0 and #4..
-      successful_lookup(0) +
-      successful_lookup(4) +
+      successful_lookups(0, 4) +
       # Bad build #0 wile #4 is a good build using default test data.
       is_flaky(0, 0, 5, calibration_attempt=1) +
       # Check that bisect continues properly after not finding a build in one
@@ -892,7 +883,7 @@ def GenTests(api):
   yield (
       test('repro_only') +
       api.properties(repro_only=True) +
-      successful_lookup(0) +
+      successful_lookups(0) +
       is_flaky(0, 0, 1, calibration_attempt=1) +
       api.post_process(MustRun, 'Flake still reproduces.') +
       api.post_process(Filter(
@@ -904,7 +895,7 @@ def GenTests(api):
   yield (
       test('repro_only_failed') +
       api.properties(repro_only=True) +
-      successful_lookup(0) +
+      successful_lookups(0) +
       api.post_process(ResultReasonRE, 'Could not reproduce flake.') +
       api.post_process(DropExpectation)
   )
@@ -914,7 +905,7 @@ def GenTests(api):
       test('repro_only_fallback', 'V8 Foobar - debug builder') +
       api.properties(repro_only=True) +
       get_revisions(1, 'a1', 'a2') +
-      successful_lookup(1, fallback=True) +
+      successful_lookups(1, fallback=True) +
       api.post_process(MustRun, 'gsutil lookup cas_digests for #0') +
       api.post_process(MustRun, 'gsutil lookup cas_digests for #0 (fallback)') +
       api.post_process(MustRun, 'gsutil lookup cas_digests for #1') +
@@ -927,7 +918,7 @@ def GenTests(api):
   yield (
       test('repro_regexp_match') +
       api.properties(repro_only=True, failure_regexp='foo.*bar') +
-      successful_lookup(0) +
+      successful_lookups(0) +
       is_flaky(0, 0, 1, calibration_attempt=1,
                output_prefix='has foo and bar in the output...\n') +
       api.post_process(MustRun, 'Flake still reproduces.') +
@@ -938,7 +929,7 @@ def GenTests(api):
   yield (
       test('repro_regexp_no_match') +
       api.properties(repro_only=True, failure_regexp='foo.*bar') +
-      successful_lookup(0) +
+      successful_lookups(0) +
       is_flaky(0, 0, 1, calibration_attempt=1) +
       api.post_process(ResultReasonRE, 'Could not reproduce flake.') +
       api.post_process(DropExpectation)
@@ -956,7 +947,7 @@ def GenTests(api):
       swarming_dimensions=[
           'os:Android', 'cpu:x86-64', 'device_os:MMB29Q',
           'device_type:bullhead', 'pool:chromium.tests'
-      ]) + successful_lookup(0) + api.post_process(check_dimensions) +
+      ]) + successful_lookups(0) + api.post_process(check_dimensions) +
          api.post_process(DropExpectation))
 
   # Simulate not finding enough flakes during calibration.
@@ -966,7 +957,7 @@ def GenTests(api):
   yield (
       test('no_confidence') +
       api.properties(test_name=long_test_name, num_shards=8) +
-      successful_lookup(0) +
+      successful_lookups(0) +
       is_flaky(0, 0, 0, calibration_attempt=1, test_name=shortened_test_name) +
       is_flaky(0, 1, 2, calibration_attempt=2, test_name=shortened_test_name) +
       is_flaky(0, 2, 1, calibration_attempt=3, test_name=shortened_test_name) +
@@ -983,7 +974,7 @@ def GenTests(api):
         repro_only=True, swarming_priority=40, num_shards=2,
         swarming_expiration=7200, total_timeout_sec=240,
         max_calibration_attempts=1) +
-      successful_lookup(0) +
+      successful_lookups(0) +
       is_flaky(0, 0, 0, calibration_attempt=1) +
       is_flaky(0, 1, 1, calibration_attempt=1) +
       api.post_process(MustRun, 'Flake still reproduces.') +
