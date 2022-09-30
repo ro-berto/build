@@ -1,4 +1,4 @@
-#!/usr/bin/env vpython
+#!/usr/bin/env vpython3
 # Copyright 2020 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -24,7 +24,7 @@ class ConstantsTest(unittest.TestCase):
         'a/b/c/gTest.java', 'a/b/c/gTests.java', 'a/test/path.cc',
         'a/tests/path.cc', 'a/b/testing/path.cc'
     ]
-    filtered_files = filter(lambda s: re.match(pattern, s), files)
+    filtered_files = list(filter(lambda s: re.match(pattern, s), files))
     self.assertEqual(len(files), len(filtered_files))
 
   def test_excluded_sources_regex_does_not_match(self):
@@ -36,7 +36,7 @@ class ConstantsTest(unittest.TestCase):
         '/b/s/w/ir/cache/builder/src/base/mac/scoped_sending_event.mm',
         '/b/s/w/ir/cache/builder/src/contest_related/file.cc',
     ]
-    filtered_files = filter(lambda s: re.match(ios_pattern, s), files)
+    filtered_files = list(filter(lambda s: re.match(ios_pattern, s), files))
     self.assertEqual(0, len(filtered_files))
 
   def test_ios_unit_tests_pattern(self):
@@ -66,8 +66,9 @@ class ConstantsTest(unittest.TestCase):
         'skia_unittests',
         'ui_base_unittests',
     ]
-    filtered_unit_tests = filter(
-        lambda s: re.match(ios_unit_test_target_pattern, s), unit_test_targets)
+    filtered_unit_tests = list(
+        filter(lambda s: re.match(ios_unit_test_target_pattern, s),
+               unit_test_targets))
     self.assertEqual(len(unit_test_targets), len(filtered_unit_tests))
 
     non_unit_test_targets = [
@@ -83,9 +84,9 @@ class ConstantsTest(unittest.TestCase):
         'ios_showcase_eg2tests_module',
         'ios_web_shell_eg2tests_module',
     ]
-    filtered_non_unit_tests = filter(
-        lambda s: re.match(ios_unit_test_target_pattern, s),
-        non_unit_test_targets)
+    filtered_non_unit_tests = list(
+        filter(lambda s: re.match(ios_unit_test_target_pattern, s),
+               non_unit_test_targets))
     self.assertEqual(0, len(filtered_non_unit_tests))
 
   def test_linux_unit_tests_pattern(self):
@@ -100,9 +101,9 @@ class ConstantsTest(unittest.TestCase):
         'boringssl_crypto_tests', 'boringssl_ssl_tests', 'compositor_unittests',
         'content_shell_crash_test', 'gpu_unittests', 'unit_tests'
     ]
-    filtered_unit_tests = filter(
-        lambda s: re.match(linux_unit_test_target_pattern, s),
-        unit_test_targets)
+    filtered_unit_tests = list(
+        filter(lambda s: re.match(linux_unit_test_target_pattern, s),
+               unit_test_targets))
     self.assertEqual(len(unit_test_targets), len(filtered_unit_tests))
 
     non_unit_test_targets = [
@@ -112,9 +113,9 @@ class ConstantsTest(unittest.TestCase):
         'sync_integration_tests',
         'webdriver_wpt_tests',
     ]
-    filtered_non_unit_tests = filter(
-        lambda s: re.match(linux_unit_test_target_pattern, s),
-        non_unit_test_targets)
+    filtered_non_unit_tests = list(
+        filter(lambda s: re.match(linux_unit_test_target_pattern, s),
+               non_unit_test_targets))
     self.assertEqual(0, len(filtered_non_unit_tests))
 
   def test_mac_unit_tests_pattern(self):
@@ -129,8 +130,9 @@ class ConstantsTest(unittest.TestCase):
         'crashpad_tests', 'cronet_tests', 'ipc_tests', 'crypto_unittests',
         'perfetto_unittests', 'unit_tests'
     ]
-    filtered_unit_tests = filter(
-        lambda s: re.match(mac_unit_test_target_pattern, s), unit_test_targets)
+    filtered_unit_tests = list(
+        filter(lambda s: re.match(mac_unit_test_target_pattern, s),
+               unit_test_targets))
     self.assertEqual(len(unit_test_targets), len(filtered_unit_tests))
 
     non_unit_test_targets = [
@@ -140,9 +142,9 @@ class ConstantsTest(unittest.TestCase):
         'headless_browsertests',
         'sync_integration_tests',
     ]
-    filtered_non_unit_tests = filter(
-        lambda s: re.match(mac_unit_test_target_pattern, s),
-        non_unit_test_targets)
+    filtered_non_unit_tests = list(
+        filter(lambda s: re.match(mac_unit_test_target_pattern, s),
+               non_unit_test_targets))
     self.assertEqual(0, len(filtered_non_unit_tests))
 
   def test_win_unit_tests_pattern(self):
@@ -157,8 +159,9 @@ class ConstantsTest(unittest.TestCase):
         'crashpad_tests', 'cronet_tests', 'ipc_tests', 'vr_pixeltests',
         'perfetto_unittests', 'unit_tests'
     ]
-    filtered_unit_tests = filter(
-        lambda s: re.match(win_unit_test_target_pattern, s), unit_test_targets)
+    filtered_unit_tests = list(
+        filter(lambda s: re.match(win_unit_test_target_pattern, s),
+               unit_test_targets))
     self.assertEqual(len(unit_test_targets), len(filtered_unit_tests))
 
     non_unit_test_targets = [
@@ -168,9 +171,9 @@ class ConstantsTest(unittest.TestCase):
         'headless_browsertests',
         'sync_integration_tests',
     ]
-    filtered_non_unit_tests = filter(
-        lambda s: re.match(win_unit_test_target_pattern, s),
-        non_unit_test_targets)
+    filtered_non_unit_tests = list(
+        filter(lambda s: re.match(win_unit_test_target_pattern, s),
+               non_unit_test_targets))
     self.assertEqual(0, len(filtered_non_unit_tests))
 
 
@@ -182,8 +185,9 @@ class ConstantsTest(unittest.TestCase):
         constants.PLATFORM_TO_TARGET_NAME_PATTERN_MAP['chromeos']['unit'])
 
     unit_test_targets = ['crashpad_tests', 'ipc_tests', 'unit_tests']
-    filtered_unit_tests = filter(
-        lambda s: re.match(win_unit_test_target_pattern, s), unit_test_targets)
+    filtered_unit_tests = list(
+        filter(lambda s: re.match(win_unit_test_target_pattern, s),
+               unit_test_targets))
     self.assertEqual(len(unit_test_targets), len(filtered_unit_tests))
 
     non_unit_test_targets = [
@@ -193,9 +197,9 @@ class ConstantsTest(unittest.TestCase):
         'headless_browsertests',
         'sync_integration_tests',
     ]
-    filtered_non_unit_tests = filter(
-        lambda s: re.match(win_unit_test_target_pattern, s),
-        non_unit_test_targets)
+    filtered_non_unit_tests = list(
+        filter(lambda s: re.match(win_unit_test_target_pattern, s),
+               non_unit_test_targets))
     self.assertEqual(0, len(filtered_non_unit_tests))
 
 

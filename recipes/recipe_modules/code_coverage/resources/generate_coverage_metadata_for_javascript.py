@@ -372,7 +372,7 @@ def get_line_coverage_metric_summary(lines):
   Args:
     lines: A list of LineRange's which are sourced from the
       |convert_coverage_to_line_column_format| method.
-  
+
   Returns:
     A dictionary containing the summary of line coverage
     which is defined as:
@@ -494,9 +494,9 @@ def generate_json_coverage_metadata(coverage_dir, src_path, component_mapping):
   data['components'] = None
   data['dirs'] = None
   if per_component_coverage_data:
-    data['components'] = per_component_coverage_data.values()
+    data['components'] = list(per_component_coverage_data.values())
   if per_directory_coverage_data:
-    data['dirs'] = per_directory_coverage_data.values()
+    data['dirs'] = list(per_directory_coverage_data.values())
     data['summaries'] = per_directory_coverage_data['//']['summaries']
 
   return data
@@ -562,7 +562,7 @@ def main():
     with open(params.dir_metadata_path) as f:
       component_mapping = {
           d: md['monorail']['component']
-          for d, md in json.load(f)['dirs'].iteritems()
+          for d, md in json.load(f)['dirs'].items()
           if 'monorail' in md and 'component' in md['monorail']
       }
 

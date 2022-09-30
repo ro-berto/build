@@ -81,10 +81,10 @@ def _GetOrderedCheckoutDirOfDependenciesFromDEPS(deps_content):
       'hooks': [],
       'Str': str,
   }
-  exec deps_content in global_scope, local_scope
+  exec(deps_content, global_scope, local_scope)
 
-  checkout_dirs = local_scope['deps'].keys()
-  for _, deps_os_checkout_dirs in local_scope['deps_os'].iteritems():
+  checkout_dirs = list(local_scope['deps'].keys())
+  for _, deps_os_checkout_dirs in local_scope['deps_os'].items():
     checkout_dirs.extend(deps_os_checkout_dirs)
 
   src_checkout_paths = ['//']
@@ -130,7 +130,8 @@ def _RetrieveRevisionFromGit(args):
   try:
     git_output = subprocess.check_output(
         [GIT, 'log', '-n', '1', '--pretty=format:%H:%ct', path_in_dep_repo],
-        cwd=cwd)
+        cwd=cwd,
+        text=True)
 
     lines = git_output.splitlines()
     assert len(lines) == 1, 'More than one line output.'
@@ -140,7 +141,7 @@ def _RetrieveRevisionFromGit(args):
 
     return path, parts[0], int(parts[1])
   except (subprocess.CalledProcessError, AssertionError):
-    print 'Failed to retrieve revision for %s: %r' % (checkout_dir, path)
+    print('Failed to retrieve revision for %s: %r' % (checkout_dir, path))
     return None
 
 
@@ -161,7 +162,9 @@ def _GetCommitedFilesForEachCheckout(root_dir, checkouts):
     checkout_dir = os.path.join(root_dir, checkout[2:])
     if not os.path.isdir(checkout_dir):
       continue
-    git_output = subprocess.check_output([GIT, 'ls-files'], cwd=checkout_dir)
+    git_output = subprocess.check_output([GIT, 'ls-files'],
+                                         cwd=checkout_dir,
+                                         text=True)
     for path in git_output.splitlines():
       all_files[checkout].add(os.path.join(checkout, path))
   return all_files
@@ -270,7 +273,7 @@ def GetUnmodifiedLinesSinceCommit(src_path, file_path, reference_commit):
   try:
     show_arg = '%s:%s' % (reference_commit, file_path)
     show_cmd = [GIT, 'show', show_arg]
-    show_output = subprocess.check_output(show_cmd, cwd=src_path)
+    show_output = subprocess.check_output(show_cmd, cwd=src_path, text=True)
   except subprocess.CalledProcessError:
     logging.info('Unable to fetch file content at reference_commit.'
                  '%s may have been added later or moved.' % file_path)
@@ -280,7 +283,7 @@ def GetUnmodifiedLinesSinceCommit(src_path, file_path, reference_commit):
 
   try:
     diff_cmd = [GIT, 'diff', 'HEAD', reference_commit, '--', file_path]
-    diff_output = subprocess.check_output(diff_cmd, cwd=src_path)
+    diff_output = subprocess.check_output(diff_cmd, cwd=src_path, text=True)
   except subprocess.CalledProcessError:
     logging.error('Unable to calculate diff with reference commit')
     raise
@@ -289,13 +292,13 @@ def GetUnmodifiedLinesSinceCommit(src_path, file_path, reference_commit):
   try:
     show_arg = 'HEAD:%s' % (file_path)
     show_cmd = [GIT, 'show', show_arg]
-    show_output = subprocess.check_output(show_cmd, cwd=src_path)
+    show_output = subprocess.check_output(show_cmd, cwd=src_path, text=True)
   except subprocess.CalledProcessError:
     logging.warn('Unable to fetch file content at HEAD' % file_path)
     raise
   local_lines = show_output.splitlines()
 
-  unchanged_lines = (
+  unchanged_lines = list(
       diff_util.generate_line_number_mapping(diff_lines, local_lines,
                                              reference_commit_lines).keys())
   return unchanged_lines

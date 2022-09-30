@@ -18,3 +18,9 @@ wheel: <
   name: "infra/python/wheels/six-py2_py3"
   version: "version:1.15.0"
 >
+
+# Used by: generate_coverage_metadata.py
+wheel: <
+  name: "infra/python/wheels/psutil/${vpython_platform}"
+  version: "version:5.8.0.chromium.3"
+>
