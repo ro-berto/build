@@ -621,7 +621,8 @@
   },
   {
     "cmd": [
-      "[CACHE]\\builder\\pdfium\\out\\debug_skia_xfa_v8\\pdfium_embeddertests.exe"
+      "[CACHE]\\builder\\pdfium\\out\\debug_skia_xfa_v8\\pdfium_embeddertests.exe",
+      "--use-renderer=agg"
     ],
     "cwd": "[CACHE]\\builder\\pdfium",
     "luci_context": {
@@ -636,7 +637,27 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "embeddertests"
+    "name": "embeddertests (agg)"
+  },
+  {
+    "cmd": [
+      "[CACHE]\\builder\\pdfium\\out\\debug_skia_xfa_v8\\pdfium_embeddertests.exe",
+      "--use-renderer=skia"
+    ],
+    "cwd": "[CACHE]\\builder\\pdfium",
+    "luci_context": {
+      "realm": {
+        "name": "pdfium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "embeddertests (skia)"
   },
   {
     "cmd": [

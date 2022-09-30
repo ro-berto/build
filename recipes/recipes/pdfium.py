@@ -192,7 +192,7 @@ def _build_steps(api, clang, msvc, out_dir):
 # all tests except for corpus tests for the bots. Remove this parameter once
 # corpus tests can pass with Skia/SkiaPaths enabled.
 # _run_tests() runs the tests and uploads the results to Gold.
-def _run_tests(api, memory_tool, v8, xfa, out_dir, build_config, revision,
+def _run_tests(api, memory_tool, v8, xfa, skia, out_dir, build_config, revision,
                selected_tests_only):
   env = {}
   COMMON_SANITIZER_OPTIONS = ['allocator_may_return_null=1']
@@ -242,7 +242,14 @@ def _run_tests(api, memory_tool, v8, xfa, out_dir, build_config, revision,
     embeddertests_path += '.exe'
   with api.context(cwd=api.path['checkout'], env=env):
     try:
-      api.step('embeddertests', [embeddertests_path])
+      if skia:
+        # Use argument to do runtime renderer selection.
+        embeddertests_cmd = [embeddertests_path, '--use-renderer=agg']
+        api.step('embeddertests (agg)', embeddertests_cmd)
+        embeddertests_cmd = [embeddertests_path, '--use-renderer=skia']
+        api.step('embeddertests (skia)', embeddertests_cmd)
+      else:
+        api.step('embeddertests', [embeddertests_path])
     except api.step.StepFailure as e:
       test_exception = e
 
@@ -482,7 +489,7 @@ def RunSteps(api, memory_tool, skia, skia_paths, xfa, v8, target_cpu, clang,
     if skip_test:
       return
 
-    _run_tests(api, memory_tool, v8, xfa, out_dir, build_config, revision,
+    _run_tests(api, memory_tool, v8, xfa, skia, out_dir, build_config, revision,
                selected_tests_only)
 
 
