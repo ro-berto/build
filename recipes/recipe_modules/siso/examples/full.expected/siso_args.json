@@ -1,0 +1,74 @@
+[
+  {
+    "cmd": [],
+    "name": "install infra_internal/experimental/siso"
+  },
+  {
+    "cmd": [
+      "vpython3",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[START_DIR]/cipd_tool/infra_internal/experimental/siso/latest"
+    ],
+    "infra_step": true,
+    "name": "install infra_internal/experimental/siso.ensure package directory",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[START_DIR]/cipd_tool/infra_internal/experimental/siso/latest",
+      "-ensure-file",
+      "infra_internal/experimental/siso/${platform} latest",
+      "-max-threads",
+      "0",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "infra_step": true,
+    "name": "install infra_internal/experimental/siso.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-latest----------\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra_internal/experimental/siso/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[START_DIR]/cipd_tool/infra_internal/experimental/siso/latest/siso",
+      "ninja",
+      "--project",
+      "test-rbe-project",
+      "--reapi_instance",
+      "default_instance",
+      "--deps_log_bucket",
+      "siso-deps-log-experiments",
+      "--enable_cloud_logging",
+      "-foo",
+      "-C",
+      "out/Release"
+    ],
+    "name": "compile"
+  },
+  {
+    "name": "$result"
+  }
+]

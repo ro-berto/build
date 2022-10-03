@@ -19,6 +19,7 @@ def RunSteps(api):
         ninja_command=api.properties.get('build_command'),
         ninja_env=env,
         name=api.properties.get('name'),
+        siso_args=api.properties.get('siso_args'),
     )
 
 
@@ -26,6 +27,12 @@ def GenTests(api):
   yield api.test(
       'basic',
       api.properties(build_command=['ninja', '-C', 'out/Release'],),
+      api.siso.properties(),
+  )
+  yield api.test(
+      'siso_args',
+      api.properties(
+          build_command=['ninja', '-C', 'out/Release'], siso_args=['-foo']),
       api.siso.properties(),
   )
   yield api.test(

@@ -7,6 +7,9 @@ import collections
 
 from recipe_engine import recipe_api
 
+from PB.recipe_engine import result as result_pb2
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
+
 
 class SisoApi(recipe_api.RecipeApi):
   """A module for interacting with siso."""
@@ -30,7 +33,12 @@ class SisoApi(recipe_api.RecipeApi):
         'infra_internal/experimental/siso/${platform}',
         self._props.siso_version)
 
-  def run_ninja(self, ninja_command, ninja_env, name, **kwargs):
+  def run_ninja(self,
+                ninja_command,
+                ninja_env=None,
+                name=None,
+                siso_args=None,
+                **kwargs):
     """Run the ninja command with siso.
 
         Args:
@@ -38,6 +46,7 @@ class SisoApi(recipe_api.RecipeApi):
                      e.g. ['ninja', '-C', 'out/Release'],
           ninja_env: Environment for ninja.
           name: Name of compile step.
+          siso_args: siso arguments.
 
         Returns:
           A named tuple with the fields
@@ -49,9 +58,6 @@ class SisoApi(recipe_api.RecipeApi):
     """
     assert self.enabled, 'siso is not configured'
     self._assert_ninja_command(ninja_command)
-    CompileResult = collections.namedtuple('CompileResult',
-                                           'failure_summary retcode')
-
     cmd = [
         self.siso_path,
         'ninja',
@@ -82,6 +88,8 @@ class SisoApi(recipe_api.RecipeApi):
           '--action_salt',
           self._props.action_salt,
       ])
+    if siso_args:
+      cmd.extend(siso_args)
     cmd.extend(ninja_command[1:])
     env = ninja_env or {}
     if len(self._props.experiments) > 0:
@@ -97,12 +105,14 @@ class SisoApi(recipe_api.RecipeApi):
       failure_summary = ('(retcode=%d) No failure summary provided.' %
                          ninja_step_result.retcode)
       # TODO(ukai): set better failure summary output as chromium does.
-      return CompileResult(
-          failure_summary=failure_summary, retcode=ninja_step_result.retcode)
+      return result_pb2.RawResult(
+          status=common_pb.FAILURE, summary_markdown=failure_summary)
     finally:
       # TODO(ukai): clang crash report?
       # TODO(ukai): upload siso_metrics.json, siso_trace.json?
       pass
+
+    return result_pb2.RawResult(status=common_pb.SUCCESS)
 
   def _assert_ninja_command(self, ninja_command):
     """Check ninja_command runs ninja
