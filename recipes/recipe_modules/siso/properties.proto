@@ -5,29 +5,30 @@ syntax = "proto3";
 
 package recipe_modules.build.siso;
 
-// NEXT ID TO USE: 9
+// NEXT ID TO USE: 10
 message InputProperties {
   // cipd tag for infra_internal/experimental/siso/${platform}
   // TODO(ukai): If empty, it will use siso binary installed in production
   // tree by DEPS.
   string siso_version = 1;
 
-  // backend config
+  // Backend config
 
   // Cloud project ID to use (for RBE, cloud logging, etc).
   string project = 2;
 
   // The remote execution service to dial gRPC.
-  // default is "remotebuildexecution.googleapis.com:443" in siso binary.
+  // Default is "remotebuildexecution.googleapis.com:443" in siso binary.
   string reapi_address = 3;
 
-  // RBE instance name. e.g. "default_instance".
+  // RBE instance name (example: "default_instance").
   string reapi_instance = 4;
 
-  // GCS bucket for deps log. e.g. "siso-deps-log".
+  // GCS bucket for deps log (example: "siso-deps-log").
   string deps_log_bucket = 5;
 
-  // features
+  // Features
+  
   // Enable cloud trace.
   bool enable_cloud_trace = 6;
 
@@ -36,10 +37,10 @@ message InputProperties {
 
   // Specify a cache silo key.
   // This allows remote build caches to be segregated.
-  // This is useful in cases such as performance testing.
+  // It is useful in cases such as performance testing.
   string action_salt = 8;
 
-  // siso experiments ids.
+  // Siso experiments ids.
   // https://chrome-internal.googlesource.com/infra/infra_internal/+/e0f85c8938a8b31c43a843e70cecb154252bf0e5/go/src/infra_internal/experimental/siso/build/experiments.go#13
   repeated string experiments = 9;
 }
