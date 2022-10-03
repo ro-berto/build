@@ -1,4 +1,4 @@
-#!/usr/bin/env vpython
+#!/usr/bin/env vpython3
 # Copyright 2019 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -278,9 +278,9 @@ def generate_json_coverage_metadata(src_path,
     data['components'] = None
     data['dirs'] = None
     if per_component_coverage_data:
-      data['components'] = per_component_coverage_data.values()
+      data['components'] = list(per_component_coverage_data.values())
     if per_directory_coverage_data:
-      data['dirs'] = per_directory_coverage_data.values()
+      data['dirs'] = list(per_directory_coverage_data.values())
       data['summaries'] = per_directory_coverage_data['//']['summaries']
 
   return data
@@ -450,7 +450,7 @@ def main():
     with open(params.dir_metadata_path) as f:
       component_mapping = {
           d: md['monorail']['component']
-          for d, md in json.load(f)['dirs'].iteritems()
+          for d, md in json.load(f)['dirs'].items()
           if 'monorail' in md and 'component' in md['monorail']
       }
 
@@ -522,9 +522,9 @@ def main():
     device_cmd += ['--xml', temp_device_xml]
     host_cmd += ['--xml', temp_host_xml]
 
-    cmd_output = subprocess.check_output(device_cmd)
+    cmd_output = subprocess.check_output(device_cmd, text=True)
     logging.info('JaCoCo device XML report generated: %r', cmd_output)
-    cmd_output = subprocess.check_output(host_cmd)
+    cmd_output = subprocess.check_output(host_cmd, text=True)
     logging.info('JaCoCo host XML report generated: %r', cmd_output)
 
     temp_overall_xml = os.path.join(temp_dir, 'temp_overall.xml')

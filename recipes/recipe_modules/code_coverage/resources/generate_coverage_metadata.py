@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 # Copyright 2018 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -141,11 +141,11 @@ def _extract_coverage_info(segments):
 
 def _to_compressed_format(line_data, block_data):
   """Turns output of `_extract_coverage_info` to a compressed format."""
-  line_data = sorted(line_data.items(), key=lambda x: x[0])
+  line_data = sorted(list(line_data.items()), key=lambda x: x[0])
   lines = []
   # Aggregate contiguous blocks of lines with the exact same hit count.
   last_index = 0
-  for i in xrange(1, len(line_data) + 1):
+  for i in range(1, len(line_data) + 1):
     is_continous_line = (
         i < len(line_data) and line_data[i][0] == line_data[i - 1][0] + 1)
     has_same_count = (
@@ -186,7 +186,7 @@ def _rebase_line_and_block_data(line_data, block_data, line_mapping):
 
   Args:
     line_data (dict): A mapping from line number to corresponding
-                      execution count. 
+                      execution count.
     block_data (dict): A mapping from line number to a list of sub-line blocks
                       where the code is not covered. A block is represented by
                       two integers [start_column, end_column].
@@ -197,7 +197,7 @@ def _rebase_line_and_block_data(line_data, block_data, line_mapping):
     A tuple of line_data and block with line numbers being rebased.
   """
   rebased_line_data = {}
-  for line_num, count in line_data.iteritems():
+  for line_num, count in line_data.items():
 
     if str(line_num) not in line_mapping:
       continue
@@ -206,7 +206,7 @@ def _rebase_line_and_block_data(line_data, block_data, line_mapping):
     rebased_line_data[rebased_line_num] = count
 
   rebased_block_data = {}
-  for line_num, subline_blocks in block_data.iteritems():
+  for line_num, subline_blocks in block_data.items():
     if str(line_num) not in line_mapping:
       continue
 
@@ -444,7 +444,7 @@ def _get_raw_coverage_data(profdata_path, llvm_cov_path, build_dir, binaries,
         logging.error('Subprocess returned error %d', p.returncode)
         with open(error_out_file) as error_f:
           logging.error('--------dumping stderr from %s -----', error_out_file)
-          print error_f.read()
+          print(error_f.read())
         sys.exit(p.returncode)
 
   logging.info('---------------------Processing metadata--------------------')
@@ -461,7 +461,7 @@ def _split_metadata_in_shards_if_necessary(output_dir, files_dir,
 
   Args:
     output_dir: Absolute path output directory for the generated artifacts.
-    files_dir: Subdirectory of output directory containing the generated 
+    files_dir: Subdirectory of output directory containing the generated
               artifacts.
     compressed_files: A list of json object that stores coverage info for files
                       in compressed format. Used by both per-cl coverage and
@@ -476,9 +476,9 @@ def _split_metadata_in_shards_if_necessary(output_dir, files_dir,
   # coverage.
   compressed_data = {
       'dirs':
-          directory_summaries.values() if directory_summaries else None,
+          list(directory_summaries.values()) if directory_summaries else None,
       'components':
-          component_summaries.values() if component_summaries else None,
+          list(component_summaries.values()) if component_summaries else None,
       'summaries':
           directory_summaries['//']['summaries']
           if directory_summaries else None,
@@ -488,7 +488,7 @@ def _split_metadata_in_shards_if_necessary(output_dir, files_dir,
   # 1000 files and at most 2000 files.
   # This is to have smaller data chunk to avoid Out-Of-Memory errors when the
   # data is processed on Google App Engine.
-  files_in_a_shard = max(min(len(compressed_files) / 30, 2000), 1000)
+  files_in_a_shard = max(min(len(compressed_files) // 30, 2000), 1000)
 
   if len(compressed_files) <= files_in_a_shard:
     compressed_data['files'] = compressed_files
@@ -508,7 +508,7 @@ def _split_metadata_in_shards_if_necessary(output_dir, files_dir,
     for i, files in enumerate(files_slice):
       file_name = 'files%d.json.gz' % (i + 1)
       with open(os.path.join(output_dir, files_dir, file_name), 'wb') as f:
-        f.write(zlib.compress(json.dumps({'files': files})))
+        f.write(zlib.compress(json.dumps({'files': files}).encode()))
       path = os.path.normpath(os.path.join(files_dir, file_name))
       file_shard_paths.append(_posix_path(path))
     compressed_data['file_shards'] = file_shard_paths
@@ -528,7 +528,7 @@ def _get_per_target_coverage_summary(profdata_path, llvm_cov_path, build_dir,
         summary_only=True,
         arch=arch)
     try:
-      output = subprocess.check_output(args)
+      output = subprocess.check_output(args, text=True)
       summaries[binary] = json.loads(output)['data'][0]['totals']
     except subprocess.CalledProcessError as e:
       logging.warn('Summary for binary %s failed with return code %d', binary,
@@ -707,7 +707,7 @@ def _get_clang_summary_metrics(clang_summary):
   """Converts Clang summary format to metadata format.
 
   Args:
-    clang_summary (dict): A dict whose keys are ('lines', 'branches', ...), 
+    clang_summary (dict): A dict whose keys are ('lines', 'branches', ...),
                     and corresponding values are other dicts with format:
                      {'covered': int, 'count': int}.turns:
     A list that conforms to the Metric proto at
@@ -847,7 +847,7 @@ def main():
     with open(params.dir_metadata_path) as f:
       component_mapping = {
           d: md['monorail']['component']
-          for d, md in json.load(f)['dirs'].iteritems()
+          for d, md in json.load(f)['dirs'].items()
           if 'monorail' in md and 'component' in md['monorail']
       }
 
@@ -870,9 +870,9 @@ def main():
       params.third_party_inclusion_subdirs, params.arch)
 
   with open(os.path.join(params.output_dir, 'all.json.gz'), 'wb') as f:
-    f.write(zlib.compress(json.dumps(data)))
+    f.write(zlib.compress(json.dumps(data).encode()))
   with open(os.path.join(params.output_dir, 'per_target_summaries.json'),
-            'wb') as f:
+            'w') as f:
     json.dump(summaries, f)
   _create_index_html(params.output_dir)
 

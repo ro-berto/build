@@ -66,7 +66,7 @@ def _call_cov_tool(cov_tool_path, profile_input_file_path,
     if sources:
       subprocess_cmd.extend(sources)
 
-    output = subprocess.check_output(subprocess_cmd)
+    output = subprocess.check_output(subprocess_cmd, text=True)
     logging.debug('Report generation output: %s', output)
   except subprocess.CalledProcessError as error:
     logging.error('Failed to generate report.')
@@ -88,7 +88,7 @@ def generate_report(llvm_cov,
     llvm_cov (str): The path to the llvm-cov executable.
     profdata_path (str): The path to the merged input profile.
     report_directory (str): Where to write the report.
-    compilation_directory (str): the directory used as a base for relative 
+    compilation_directory (str): the directory used as a base for relative
         coverage mapping paths.
     binaries (list of str): The binaries to write a report for.
     sources (list of str): list of paths to the source files to include in the
