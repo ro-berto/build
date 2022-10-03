@@ -1046,7 +1046,7 @@
       "luci.analysis.v1.TestHistory.Query"
     ],
     "name": "verify_reproducing_step.find_related_builders.Test history query rpc call for ninja://base:base_unittests/MockUnitTests.FailTest",
-    "stdin": "{\"pageSize\": 10, \"predicate\": {\"partitionTimeRange\": {\"earliest\": \"1970-01-01T00:00:00Z\", \"latest\": \"1970-01-02T00:00:00Z\"}, \"subRealm\": \"ci\", \"submittedFilter\": \"ONLY_SUBMITTED\", \"variantPredicate\": {\"hashEquals\": \"dummy_hash_1\"}}, \"project\": \"chromium\", \"testId\": \"ninja://base:base_unittests/MockUnitTests.FailTest\"}",
+    "stdin": "{\"pageSize\": 10, \"predicate\": {\"partitionTimeRange\": {\"earliest\": \"1970-01-01T00:00:00Z\", \"latest\": \"1970-01-02T00:00:00Z\"}, \"subRealm\": \"ci\", \"variantPredicate\": {\"hashEquals\": \"dummy_hash_1\"}}, \"project\": \"chromium\", \"testId\": \"ninja://base:base_unittests/MockUnitTests.FailTest\"}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1074,7 +1074,6 @@
       "@@@STEP_LOG_LINE@input@      \"latest\": \"1970-01-02T00:00:00Z\"@@@",
       "@@@STEP_LOG_LINE@input@    }, @@@",
       "@@@STEP_LOG_LINE@input@    \"subRealm\": \"ci\", @@@",
-      "@@@STEP_LOG_LINE@input@    \"submittedFilter\": \"ONLY_SUBMITTED\", @@@",
       "@@@STEP_LOG_LINE@input@    \"variantPredicate\": {@@@",
       "@@@STEP_LOG_LINE@input@      \"hashEquals\": \"dummy_hash_1\"@@@",
       "@@@STEP_LOG_LINE@input@    }@@@",
@@ -1140,7 +1139,7 @@
       "luci.analysis.v1.TestHistory.Query"
     ],
     "name": "verify_reproducing_step.find_related_builders.Test history query rpc call for ninja://base:base_unittests/MockUnitTests.FailTest (2)",
-    "stdin": "{\"pageSize\": 10, \"predicate\": {\"partitionTimeRange\": {\"earliest\": \"1970-01-01T00:00:00Z\", \"latest\": \"1970-01-02T00:00:00Z\"}, \"subRealm\": \"ci\", \"submittedFilter\": \"ONLY_SUBMITTED\", \"variantPredicate\": {\"hashEquals\": \"dummy_hash_2\"}}, \"project\": \"chromium\", \"testId\": \"ninja://base:base_unittests/MockUnitTests.FailTest\"}",
+    "stdin": "{\"pageSize\": 10, \"predicate\": {\"partitionTimeRange\": {\"earliest\": \"1970-01-01T00:00:00Z\", \"latest\": \"1970-01-02T00:00:00Z\"}, \"subRealm\": \"ci\", \"variantPredicate\": {\"hashEquals\": \"dummy_hash_2\"}}, \"project\": \"chromium\", \"testId\": \"ninja://base:base_unittests/MockUnitTests.FailTest\"}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1168,7 +1167,6 @@
       "@@@STEP_LOG_LINE@input@      \"latest\": \"1970-01-02T00:00:00Z\"@@@",
       "@@@STEP_LOG_LINE@input@    }, @@@",
       "@@@STEP_LOG_LINE@input@    \"subRealm\": \"ci\", @@@",
-      "@@@STEP_LOG_LINE@input@    \"submittedFilter\": \"ONLY_SUBMITTED\", @@@",
       "@@@STEP_LOG_LINE@input@    \"variantPredicate\": {@@@",
       "@@@STEP_LOG_LINE@input@      \"hashEquals\": \"dummy_hash_2\"@@@",
       "@@@STEP_LOG_LINE@input@    }@@@",
@@ -1232,7 +1230,7 @@
       "luci.analysis.v1.TestHistory.Query"
     ],
     "name": "verify_reproducing_step.find_related_builders.Test history query rpc call for ninja://base:base_unittests/MockUnitTests.FailTest (3)",
-    "stdin": "{\"pageSize\": 10, \"predicate\": {\"partitionTimeRange\": {\"earliest\": \"1970-01-01T00:00:00Z\", \"latest\": \"1970-01-02T00:00:00Z\"}, \"subRealm\": \"ci\", \"submittedFilter\": \"ONLY_SUBMITTED\", \"variantPredicate\": {\"hashEquals\": \"dummy_hash_4\"}}, \"project\": \"chromium\", \"testId\": \"ninja://base:base_unittests/MockUnitTests.FailTest\"}",
+    "stdin": "{\"pageSize\": 10, \"predicate\": {\"partitionTimeRange\": {\"earliest\": \"1970-01-01T00:00:00Z\", \"latest\": \"1970-01-02T00:00:00Z\"}, \"subRealm\": \"ci\", \"variantPredicate\": {\"hashEquals\": \"dummy_hash_4\"}}, \"project\": \"chromium\", \"testId\": \"ninja://base:base_unittests/MockUnitTests.FailTest\"}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -1245,7 +1243,6 @@
       "@@@STEP_LOG_LINE@input@      \"latest\": \"1970-01-02T00:00:00Z\"@@@",
       "@@@STEP_LOG_LINE@input@    }, @@@",
       "@@@STEP_LOG_LINE@input@    \"subRealm\": \"ci\", @@@",
-      "@@@STEP_LOG_LINE@input@    \"submittedFilter\": \"ONLY_SUBMITTED\", @@@",
       "@@@STEP_LOG_LINE@input@    \"variantPredicate\": {@@@",
       "@@@STEP_LOG_LINE@input@      \"hashEquals\": \"dummy_hash_4\"@@@",
       "@@@STEP_LOG_LINE@input@    }@@@",

@@ -550,7 +550,6 @@ class FlakyReproducer(recipe_api.RecipeApi):
           variant_predicate=predicate_pb2.VariantPredicate(
               hash_equals=variant_info.variant_hash),
           partition_time_range=time_range,
-          submitted_filter=True,
           page_size=10,
       )
       if not verdicts:
@@ -584,6 +583,8 @@ class FlakyReproducer(recipe_api.RecipeApi):
 
     # Query task_id for selected verdicts.
     builders = {}
+    if not selected_invocations:
+      return builders
     res = None
     while True:
       res = self.m.resultdb.query_test_results(

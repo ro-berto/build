@@ -352,3 +352,26 @@ def GenTests(api):
                     step_summary_text))),
       api.post_process(post_process.DropExpectation),
   )
+
+  yield api.test(
+      'no_invocations_found_for_related_builders',
+      api.properties(
+          task_id='some-task-id',
+          failing_sample=UnexpectedTestResult('MockUnitTests.FailTest'),
+          reproducing_step_data=api.json.loads(
+              api.flaky_reproducer.get_test_data('reproducing_step.json')),
+      ),
+      api.resultdb.query(
+          {
+              'task-example.swarmingserver.appspot.com-some-task-id':
+                  resultdb_invocation,
+          },
+          step_name='verify_reproducing_step.find_related_builders.rdb query'),
+      api.weetbix.query_variants(
+          test_history.QueryVariantsResponse(variants=[]),
+          test_id='ninja://base:base_unittests/MockUnitTests.FailTest',
+          parent_step_name='verify_reproducing_step.find_related_builders',
+      ),
+      api.post_check(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
