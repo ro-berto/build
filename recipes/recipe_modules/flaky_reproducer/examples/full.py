@@ -6,12 +6,14 @@ from recipe_engine.recipe_api import Property
 
 DEPS = [
     'flaky_reproducer',
+    'recipe_engine/buildbucket',
     'recipe_engine/file',
     'recipe_engine/json',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
     'recipe_engine/resultdb',
     'recipe_engine/swarming',
+    'weetbix',
 ]
 
 PROPERTIES = {
@@ -30,7 +32,7 @@ def RunSteps(api, config, task_id, build_id, test_name, test_id):
       task_id=task_id, build_id=build_id, test_name=test_name, test_id=test_id)
 
 
-from google.protobuf import timestamp_pb2
+from google.protobuf import timestamp_pb2, struct_pb2
 
 from recipe_engine.post_process import (DropExpectation, StatusFailure,
                                         ResultReason)
@@ -39,6 +41,11 @@ from PB.go.chromium.org.luci.resultdb.proto.v1 import (
     invocation as invocation_pb2,  #
     resultdb as resultdb_pb2,  #
     test_result as test_result_pb2,  #
+)
+from PB.go.chromium.org.luci.analysis.proto.v1 import (
+    common as analysis_common_pb2,  # go/pyformat-break
+    test_history,  #
+    test_verdict,  #
 )
 
 
@@ -83,36 +90,60 @@ def GenTests(api):
           ),
       ],
   )
-  test_running_history = resultdb_pb2.GetTestResultHistoryResponse(entries=[
-      resultdb_pb2.GetTestResultHistoryResponse.Entry(
-          result=test_result_pb2.TestResult(
-              test_id='ninja://base:base_unittests/MockUnitTests.FailTest',
-              name=('invocations/task-example.swarmingserver.appspot.com'
-                    '-54321fffffabc001/result-1'),
-              variant=common_pb2.Variant(
-                  **{'def': {
-                      'builder': 'Win10 Tests x64',
-                  }}),
-          )),
-      resultdb_pb2.GetTestResultHistoryResponse.Entry(
-          result=test_result_pb2.TestResult(
-              test_id='ninja://base:base_unittests/MockUnitTests.FailTest',
-              name='unknown-name-format',
-              variant=common_pb2.Variant(**{'def': {
-                  'builder': 'Mac11 Tests',
+  query_variants_res = test_history.QueryVariantsResponse(variants=[
+      test_history.QueryVariantsResponse.VariantInfo(
+          variant_hash='dummy_hash_1',
+          variant=analysis_common_pb2.Variant(
+              **{"def": {
+                  'builder': 'Win10 Tests x64'
               }}),
-          )),
-      resultdb_pb2.GetTestResultHistoryResponse.Entry(
-          result=test_result_pb2.TestResult(
-              test_id='ninja://base:base_unittests/MockUnitTests.FailTest',
-              name=('invocations/task-example.swarmingserver.appspot.com'
-                    '-54321fffffabc001/result-1'),
-              variant=common_pb2.Variant(
-                  **{'def': {
-                      'builder': 'Not Supported Builder',
-                  }}),
-          )),
+      ),
+      test_history.QueryVariantsResponse.VariantInfo(
+          variant_hash='dummy_hash_2',
+          variant=analysis_common_pb2.Variant(
+              **{"def": {
+                  'builder': 'Mac11 Tests'
+              }}),
+      ),
+      test_history.QueryVariantsResponse.VariantInfo(
+          variant_hash='dummy_hash_3',
+          variant=analysis_common_pb2.Variant(
+              **{"def": {
+                  'builder': 'Linux Tests'
+              }}),
+      ),
+      test_history.QueryVariantsResponse.VariantInfo(
+          variant_hash='dummy_hash_4',
+          variant=analysis_common_pb2.Variant(
+              **{"def": {
+                  'builder': 'Not Supported Builder'
+              }}),
+      ),
   ])
+  query_test_history_res = test_history.QueryTestHistoryResponse(verdicts=[
+      test_verdict.TestVerdict(
+          test_id='ninja://base:base_unittests/MockUnitTests.FailTest',
+          variant_hash='dummy_hash_1',
+          invocation_id='build-1234',
+          status=test_verdict.TestVerdictStatus.UNEXPECTED,
+      ),
+      test_verdict.TestVerdict(
+          test_id='ninja://base:base_unittests/MockUnitTests.FailTest',
+          variant_hash='dummy_hash_2',
+          invocation_id='build-1233',
+          status=test_verdict.TestVerdictStatus.EXPECTED,
+      ),
+  ])
+  generate_bb_get_multi_result = lambda prop: {
+      'id': 1234,
+      'input': {
+          'properties': {
+              'fields': {
+                  k: struct_pb2.Value(string_value=v) for k, v in prop.items()
+              }
+          }
+      }
+  }
   verify_swarming_result = lambda id: api.swarming.task_result(
       id=id,
       name='flaky reproducer verify on Linux Tests for MockUnitTests.FailTest',
@@ -150,21 +181,63 @@ def GenTests(api):
               'task-example.swarmingserver.appspot.com-54321fffffabc123':
                   resultdb_invocation,
           },
-          step_name='verify_reproducing_step.rdb query'),
-      api.resultdb.get_test_result_history(
-          test_running_history,
-          step_name='verify_reproducing_step.get_test_result_history'),
-      api.step_data(
-          'verify_reproducing_step.get_test_binary from 54321fffffabc001',
-          api.json.output_stream(
-              api.json.loads(
-                  api.flaky_reproducer.get_test_data(
-                      'gtest_task_request.json')))),
-      api.step_data(
-          'verify_reproducing_step.collect verify results',
-          api.swarming.collect(
-              [verify_swarming_result('2'),
-               verify_swarming_result('3')])),
+          step_name='verify_reproducing_step.find_related_builders.rdb query'),
+      api.weetbix.query_variants(
+          query_variants_res,
+          test_id='ninja://base:base_unittests/MockUnitTests.FailTest',
+          parent_step_name='verify_reproducing_step.find_related_builders',
+      ),
+      api.weetbix.query_test_history(
+          query_test_history_res,
+          test_id='ninja://base:base_unittests/MockUnitTests.FailTest',
+          parent_step_name='verify_reproducing_step.find_related_builders',
+      ),
+      api.buildbucket.simulated_get_multi(
+          builds=[
+              generate_bb_get_multi_result({'sheriff_rotations': 'chromium'})
+          ],
+          step_name='verify_reproducing_step.find_related_builders.buildbucket.get_multi',
+      ),
+      api.weetbix.query_test_history(
+          query_test_history_res,
+          test_id='ninja://base:base_unittests/MockUnitTests.FailTest',
+          parent_step_name='verify_reproducing_step.find_related_builders',
+          step_iteration=2,
+      ),
+      api.buildbucket.simulated_get_multi(
+          builds=[generate_bb_get_multi_result({})],
+          step_name='verify_reproducing_step.find_related_builders.buildbucket.get_multi (2)',
+      ),
+      api.weetbix.query_test_history(
+          test_history.QueryTestHistoryResponse(),
+          test_id='ninja://base:base_unittests/MockUnitTests.FailTest',
+          parent_step_name='verify_reproducing_step.find_related_builders',
+          step_iteration=3,
+      ),
+      api.resultdb.query_test_results(
+          resultdb_pb2.QueryTestResultsResponse(test_results=[
+              dict(
+                  test_id='ninja://base:base_unittests/MockUnitTests.FailTest',
+                  name=('invalid_result_name'),
+                  variant=common_pb2.Variant(
+                      **{'def': {
+                          'builder': 'Win10 Tests x64',
+                      }}),
+              ),
+              dict(
+                  test_id='ninja://base:base_unittests/MockUnitTests.FailTest',
+                  name=('invocations/task-example.swarmingserver.appspot.com'
+                        '-54321fffffabc001/result-1'),
+                  variant=common_pb2.Variant(
+                      **{'def': {
+                          'builder': 'Win10 Tests x64',
+                      }}),
+              )
+          ]),
+          step_name='verify_reproducing_step.find_related_builders.query_test_results',
+      ),
+      api.step_data('verify_reproducing_step.collect verify results',
+                    api.swarming.collect([verify_swarming_result('2')])),
       api.step_data(
           'verify_reproducing_step.load verify result',
           api.file.read_json(

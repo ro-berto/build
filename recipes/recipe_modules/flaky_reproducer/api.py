@@ -8,8 +8,9 @@ import re
 from google.protobuf import timestamp_pb2
 from recipe_engine import recipe_api
 
-from PB.go.chromium.org.luci.resultdb.proto.v1 import common as common_v1
-from PB.go.chromium.org.luci.resultdb.proto.v1 import predicate as predicate_pb2
+from PB.go.chromium.org.luci.analysis.proto.v1 import common as common_v1
+from PB.go.chromium.org.luci.analysis.proto.v1 import predicate as predicate_pb2
+from PB.go.chromium.org.luci.analysis.proto.v1 import test_verdict as test_verdict_pb2
 
 from .libs import (create_test_binary_from_task_request,
                    create_result_summary_from_output_json, strategies,
@@ -45,22 +46,6 @@ class FlakyReproducer(recipe_api.RecipeApi):
   RESULT_SUMMARY_FILENAME = 'result_summary.json'
   REPRODUCING_STEP_FILENAME = 'reproducing_step.json'
   VERIFY_RESULT_SUMMARY_FILENAME = 'result_summary_$N$.json'
-
-  # TODO(kuanhuang): Use sheriffed and CQ builders.
-  ALLOWED_VERIFY_BUILDERS = set([
-      'Fuchsia x64',
-      'Linux Tests',
-      'Mac11 Tests',
-      'Win10 Tests x64',
-      'android-marshmallow-x86-rel',
-      'android-x86-rel',
-      'ios-simulator',
-      'lacros-amd64-generic-rel',
-      'linux-chromeos-rel',
-      'linux-rel',
-      'mac-rel',
-      'win10_chromium_x64_rel_ng',
-  ])
 
   def __init__(self, *args, **kwargs):
     super(FlakyReproducer, self).__init__(*args, **kwargs)
@@ -493,6 +478,7 @@ class FlakyReproducer(recipe_api.RecipeApi):
   def _swarming_task_url(self, task_id):
     return '{0}/task?id={1}'.format(self.m.swarming.current_server, task_id)
 
+  @nest_step
   def _find_related_builders(self, task_id, test_name):
     """Search for builders that run the given test."""
     # Query TestResult from invocation.
@@ -516,11 +502,11 @@ class FlakyReproducer(recipe_api.RecipeApi):
       raise self.m.step.StepFailure(
           'Cannot find TestResult for test {0}.'.format(test_name))
 
-    failing_sample_builder = None
+    # Query all variants with the given test.
+    project, bucket = invocation.proto.realm.split(':')
+    sample_builder = None
     if 'builder' in getattr(test_result.variant, 'def'):
-      failing_sample_builder = getattr(test_result.variant,
-                                       'def').get('builder')
-    # Query builders with the given test.
+      sample_builder = getattr(test_result.variant, 'def').get('builder')
     variant_predicate = None
     if 'test_suite' in getattr(test_result.variant, 'def'):
       variant_predicate = predicate_pb2.VariantPredicate(
@@ -530,43 +516,93 @@ class FlakyReproducer(recipe_api.RecipeApi):
                       getattr(test_result.variant, 'def').get('test_suite')
               }
           })
-    escaped_test_id = re.escape(test_result.test_id)
-    # Searching for tests +- 1 hour.
-    if test_result.start_time and test_result.start_time.seconds:
-      time_range = common_v1.TimeRange(
-          earliest=timestamp_pb2.Timestamp(
-              seconds=test_result.start_time.seconds - 60 * 60),
-          latest=timestamp_pb2.Timestamp(
-              seconds=test_result.start_time.seconds + 60 * 60),
-      )
-    else:
-      time_range = common_v1.TimeRange(
-          earliest=timestamp_pb2.Timestamp(
-              seconds=invocation.proto.create_time.seconds - 60 * 60),
-          latest=timestamp_pb2.Timestamp(
-              seconds=invocation.proto.finalize_time.seconds + 60 * 60),
-      )
-    result_history = None
+    all_variants = []
     next_page_token = None
-    builders = {}
-    while result_history is None or next_page_token:
-      result_history = self.m.resultdb.get_test_result_history(
-          realm=invocation.proto.realm,
-          test_id_regexp=escaped_test_id,
-          time_range=time_range,
+    while True:
+      variants, next_page_token = self.m.weetbix.query_variants(
+          test_id=test_result.test_id,
+          project=project,
+          sub_realm=bucket,
           variant_predicate=variant_predicate,
-          page_size=100,
-          page_token=next_page_token)
-      next_page_token = result_history.next_page_token
-      for each in result_history.entries:
-        builder = getattr(each.result.variant, 'def').get('builder', None)
-        if (not builder  # go/pyformat-break
-            or builder in builders or builder == failing_sample_builder or
-            builder not in self.ALLOWED_VERIFY_BUILDERS):
+          page_token=next_page_token,
+      )
+      for variant_info in variants:
+        builder_name = getattr(variant_info.variant, 'def').get('builder')
+        if not builder_name or builder_name == sample_builder:
           continue
-        task_id = self._extract_task_id_from_invocation_name(each.result.name)
+        all_variants.append(variant_info)
+      if not next_page_token:
+        break
+
+    # Query test histories for test variants.
+    time_range = common_v1.TimeRange(
+        earliest=timestamp_pb2.Timestamp(
+            seconds=invocation.proto.create_time.seconds),
+        latest=timestamp_pb2.Timestamp(
+            seconds=invocation.proto.finalize_time.seconds + 24 * 60 * 60),
+    )
+    selected_invocations = []
+    for variant_info in all_variants:
+      verdicts, _ = self.m.weetbix.query_test_history(
+          test_id=test_result.test_id,
+          # project=project  # This API hardcoded project as chromium.
+          sub_realm=bucket,
+          variant_predicate=predicate_pb2.VariantPredicate(
+              hash_equals=variant_info.variant_hash),
+          partition_time_range=time_range,
+          submitted_filter=True,
+          page_size=10,
+      )
+      if not verdicts:
+        continue
+
+      # Query build-bucket input for verdicts
+      assert all(re.match('^build-\d+$', v.invocation_id) for v in verdicts)
+      builds = self.m.buildbucket.get_multi(
+          [int(v.invocation_id[len('build-'):]) for v in verdicts])
+
+      selected_verdict = None
+      for v in verdicts:
+        build = builds.get(int(v.invocation_id[len('build-'):]))
+        # Select CQ or sheriff builders.
+        if not build or not (
+            '$recipe_engine/cq' in build.input.properties.fields or
+            'sheriff_rotations' in build.input.properties.fields):
+          continue
+        # Select first EXPECTED or FLAKY sample over UNEXPECTED or EXONERATED
+        # samples.
+        if v.status in (test_verdict_pb2.TestVerdictStatus.FLAKY,
+                        test_verdict_pb2.TestVerdictStatus.EXPECTED):
+          selected_verdict = v
+          break
+        elif (v.status in (test_verdict_pb2.TestVerdictStatus.UNEXPECTED,
+                           test_verdict_pb2.TestVerdictStatus.EXONERATED) and
+              not selected_verdict):
+          selected_verdict = v
+      if selected_verdict:
+        selected_invocations.append(selected_verdict.invocation_id)
+
+    # Query task_id for selected verdicts.
+    builders = {}
+    res = None
+    while True:
+      res = self.m.resultdb.query_test_results(
+          invocations=['invocations/%s' % inv for inv in selected_invocations],
+          test_id_regexp=re.escape(test_result.test_id),
+          field_mask_paths=['name', 'variant'],
+          page_token=res and res.next_page_token,
+      )
+      for each in res.test_results:
+        builder = getattr(each.variant, 'def').get('builder', None)
+        if not builder or builder in builders:
+          continue
+        task_id = self._extract_task_id_from_invocation_name(each.name)
         if not task_id:
           continue
         builders[builder] = task_id
+      if not res.next_page_token:
+        break
 
+    presentation = self.m.step.active_result.presentation
+    presentation.logs['builders.json'] = self.m.json.dumps(builders, indent=2)
     return builders

@@ -8,12 +8,14 @@ from RECIPE_MODULES.build.flaky_reproducer.libs import (ReproducingStep,
 
 DEPS = [
     'flaky_reproducer',
+    'recipe_engine/buildbucket',
     'recipe_engine/file',
     'recipe_engine/json',
     'recipe_engine/properties',
     'recipe_engine/resultdb',
     'recipe_engine/step',
     'recipe_engine/swarming',
+    'weetbix',
 ]
 
 PROPERTIES = {
@@ -42,7 +44,7 @@ def RunSteps(api, task_id, failing_sample, reproducing_step_data):
 
 
 import re
-from google.protobuf import timestamp_pb2
+from google.protobuf import timestamp_pb2, struct_pb2
 
 from recipe_engine import post_process
 from PB.go.chromium.org.luci.resultdb.proto.v1 import (
@@ -50,6 +52,11 @@ from PB.go.chromium.org.luci.resultdb.proto.v1 import (
     invocation as invocation_pb2,  #
     resultdb as resultdb_pb2,  #
     test_result as test_result_pb2,  #
+)
+from PB.go.chromium.org.luci.analysis.proto.v1 import (
+    common as analysis_common_pb2,  # go/pyformat-break
+    test_history,  #
+    test_verdict,  #
 )
 
 
@@ -74,35 +81,50 @@ def GenTests(api):
           ),
       ],
   )
-  test_running_history = resultdb_pb2.GetTestResultHistoryResponse(entries=[
-      resultdb_pb2.GetTestResultHistoryResponse.Entry(
-          result=test_result_pb2.TestResult(
-              test_id='ninja://base:base_unittests/MockUnitTests.FailTest',
-              name=('invocations/task-example.swarmingserver.appspot.com'
-                    '-54321fffffabc001/result-1'),
-              variant=common_pb2.Variant(**{'def': {
-                  'builder': 'Linux Tests',
-              }}),
-          )),
-      resultdb_pb2.GetTestResultHistoryResponse.Entry(
-          result=test_result_pb2.TestResult(
-              test_id='ninja://base:base_unittests/MockUnitTests.FailTest',
-              name='unknown-name-format',
-              variant=common_pb2.Variant(**{'def': {
-                  'builder': 'Linux Tests',
-              }}),
-          )),
-      resultdb_pb2.GetTestResultHistoryResponse.Entry(
-          result=test_result_pb2.TestResult(
-              test_id='ninja://base:base_unittests/MockUnitTests.FailTest',
-              name=('invocations/task-example.swarmingserver.appspot.com'
-                    '-54321fffffabc001/result-1'),
-              variant=common_pb2.Variant(
-                  **{'def': {
-                      'builder': 'Not Supported Builder',
-                  }}),
-          )),
+  test_running_history = resultdb_pb2.QueryTestResultsResponse(test_results=[
+      test_result_pb2.TestResult(
+          test_id='ninja://base:base_unittests/MockUnitTests.FailTest',
+          name=('invocations/task-example.swarmingserver.appspot.com'
+                '-54321fffffabc001/result-1'),
+          variant=common_pb2.Variant(**{'def': {
+              'builder': 'Linux Tests',
+          }}),
+      ),
+      test_result_pb2.TestResult(
+          test_id='ninja://base:base_unittests/MockUnitTests.FailTest',
+          name='unknown-name-format',
+          variant=common_pb2.Variant(**{'def': {
+              'builder': 'Linux Tests',
+          }}),
+      ),
   ])
+  query_variants_res = test_history.QueryVariantsResponse(variants=[
+      test_history.QueryVariantsResponse.VariantInfo(
+          variant_hash='dummy_hash_1',
+          variant=analysis_common_pb2.Variant(
+              **{"def": {
+                  'builder': 'Win10 Tests x64'
+              }}),
+      ),
+  ])
+  query_test_history_res = test_history.QueryTestHistoryResponse(verdicts=[
+      test_verdict.TestVerdict(
+          test_id='ninja://base:base_unittests/MockUnitTests.FailTest',
+          variant_hash='dummy_hash_1',
+          invocation_id='build-1234',
+          status=test_verdict.TestVerdictStatus.EXPECTED,
+      ),
+  ])
+  generate_bb_get_multi_result = lambda prop: {
+      'id': 1234,
+      'input': {
+          'properties': {
+              'fields': {
+                  k: struct_pb2.Value(string_value=v) for k, v in prop.items()
+              }
+          }
+      }
+  }
 
   yield api.test(
       'cannot_retrieve_invocation',
@@ -129,7 +151,7 @@ def GenTests(api):
               'task-example.swarmingserver.appspot.com-some-task-id':
                   resultdb_invocation,
           },
-          step_name='verify_reproducing_step.rdb query'),
+          step_name='verify_reproducing_step.find_related_builders.rdb query'),
       api.post_check(post_process.StatusFailure),
       api.post_check(post_process.ResultReason,
                      'Cannot find TestResult for test Not.Exists.Test.'),
@@ -161,10 +183,25 @@ def GenTests(api):
               'task-example.swarmingserver.appspot.com-some-task-id':
                   resultdb_invocation,
           },
-          step_name='verify_reproducing_step.rdb query'),
-      api.resultdb.get_test_result_history(
+          step_name='verify_reproducing_step.find_related_builders.rdb query'),
+      api.weetbix.query_variants(
+          query_variants_res,
+          test_id='ninja://base:base_unittests/MockUnitTests.FailTest',
+          parent_step_name='verify_reproducing_step.find_related_builders',
+      ),
+      api.weetbix.query_test_history(
+          query_test_history_res,
+          test_id='ninja://base:base_unittests/MockUnitTests.FailTest',
+          parent_step_name='verify_reproducing_step.find_related_builders',
+      ),
+      api.buildbucket.simulated_get_multi(
+          builds=[generate_bb_get_multi_result({'$recipe_engine/cq': ''})],
+          step_name='verify_reproducing_step.find_related_builders.buildbucket.get_multi',
+      ),
+      api.resultdb.query_test_results(
           test_running_history,
-          step_name='verify_reproducing_step.get_test_result_history'),
+          step_name='verify_reproducing_step.find_related_builders.query_test_results',
+      ),
       api.step_data(
           'verify_reproducing_step.get_test_binary from 54321fffffabc001',
           api.json.output_stream(
@@ -213,10 +250,25 @@ def GenTests(api):
               'task-example.swarmingserver.appspot.com-some-task-id':
                   resultdb_invocation,
           },
-          step_name='verify_reproducing_step.rdb query'),
-      api.resultdb.get_test_result_history(
+          step_name='verify_reproducing_step.find_related_builders.rdb query'),
+      api.weetbix.query_variants(
+          query_variants_res,
+          test_id='ninja://base:base_unittests/MockUnitTests.FailTest',
+          parent_step_name='verify_reproducing_step.find_related_builders',
+      ),
+      api.weetbix.query_test_history(
+          query_test_history_res,
+          test_id='ninja://base:base_unittests/MockUnitTests.FailTest',
+          parent_step_name='verify_reproducing_step.find_related_builders',
+      ),
+      api.buildbucket.simulated_get_multi(
+          builds=[generate_bb_get_multi_result({'$recipe_engine/cq': ''})],
+          step_name='verify_reproducing_step.find_related_builders.buildbucket.get_multi',
+      ),
+      api.resultdb.query_test_results(
           test_running_history,
-          step_name='verify_reproducing_step.get_test_result_history'),
+          step_name='verify_reproducing_step.find_related_builders.query_test_results',
+      ),
       api.step_data(
           'verify_reproducing_step.get_test_binary from 54321fffffabc001',
           api.json.output_stream(
@@ -253,10 +305,25 @@ def GenTests(api):
               'task-example.swarmingserver.appspot.com-some-task-id':
                   resultdb_invocation,
           },
-          step_name='verify_reproducing_step.rdb query'),
-      api.resultdb.get_test_result_history(
+          step_name='verify_reproducing_step.find_related_builders.rdb query'),
+      api.weetbix.query_variants(
+          query_variants_res,
+          test_id='ninja://base:base_unittests/MockUnitTests.FailTest',
+          parent_step_name='verify_reproducing_step.find_related_builders',
+      ),
+      api.weetbix.query_test_history(
+          query_test_history_res,
+          test_id='ninja://base:base_unittests/MockUnitTests.FailTest',
+          parent_step_name='verify_reproducing_step.find_related_builders',
+      ),
+      api.buildbucket.simulated_get_multi(
+          builds=[generate_bb_get_multi_result({'$recipe_engine/cq': ''})],
+          step_name='verify_reproducing_step.find_related_builders.buildbucket.get_multi',
+      ),
+      api.resultdb.query_test_results(
           test_running_history,
-          step_name='verify_reproducing_step.get_test_result_history'),
+          step_name='verify_reproducing_step.find_related_builders.query_test_results',
+      ),
       api.step_data(
           'verify_reproducing_step.get_test_binary from 54321fffffabc001',
           api.json.output_stream(bad_task_request)),

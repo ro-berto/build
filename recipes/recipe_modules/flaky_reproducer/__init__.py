@@ -4,6 +4,7 @@
 
 DEPS = [
     'recipe_engine/cas',
+    'recipe_engine/buildbucket',
     'recipe_engine/cipd',
     'recipe_engine/file',
     'recipe_engine/futures',
@@ -13,4 +14,5 @@ DEPS = [
     'recipe_engine/resultdb',
     'recipe_engine/step',
     'recipe_engine/swarming',
+    'weetbix',
 ]
