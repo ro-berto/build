@@ -61,9 +61,7 @@
       "default_instance",
       "--deps_log_bucket",
       "siso-deps-log-experiments",
-      "--enable_cloud_logging",
-      "-C",
-      "out/Release"
+      "--enable_cloud_logging"
     ],
     "name": "compile"
   },
@@ -146,9 +144,9 @@
       "-dump-digest",
       "/path/to/tmp/",
       "-paths",
-      "out/Release:siso_trace.json",
+      ".:siso_trace.json",
       "-paths",
-      "out/Release:siso_metrics.json"
+      ".:siso_metrics.json"
     ],
     "infra_step": true,
     "name": "upload reports",

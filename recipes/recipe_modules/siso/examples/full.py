@@ -90,3 +90,8 @@ def GenTests(api):
       api.post_process(post_process.StepFailure, 'compile'),
       api.post_process(post_process.DropExpectation),
   )
+  yield api.test(
+      'ninja_no_C',
+      api.properties(build_command=['ninja']),
+      api.siso.properties(),
+  )

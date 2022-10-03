@@ -58,6 +58,7 @@ class SisoApi(recipe_api.RecipeApi):
     """
     assert self.enabled, 'siso is not configured'
     self._assert_ninja_command(ninja_command)
+    ninja_dir = self._ninja_dir(ninja_command)
     cmd = [
         self.siso_path,
         'ninja',
@@ -108,8 +109,11 @@ class SisoApi(recipe_api.RecipeApi):
       return result_pb2.RawResult(
           status=common_pb.FAILURE, summary_markdown=failure_summary)
     finally:
+      self.m.cas.archive(
+          'upload reports', self.m.path.abspath(ninja_dir),
+          self.m.path.abspath(self.m.path.join(ninja_dir, 'siso_trace.json')),
+          self.m.path.abspath(self.m.path.join(ninja_dir, 'siso_metrics.json')))
       # TODO(ukai): clang crash report?
-      # TODO(ukai): upload siso_metrics.json, siso_trace.json?
       pass
 
     return result_pb2.RawResult(status=common_pb.SUCCESS)
@@ -126,6 +130,21 @@ class SisoApi(recipe_api.RecipeApi):
     assert len(ninja_command) > 0, 'ninja_command is empty'
     cmdname = self.m.path.splitext(self.m.path.basename(ninja_command[0]))[0]
     assert cmdname == 'ninja', 'wrong command name'
+
+  def _ninja_dir(self, ninja_command):
+    """Retrieve ninja dir
+
+      Args:
+        ninja_command: a list of command line.
+                e.g. ['ninja', '-C', 'out/Release']
+
+      Returns:
+        value for '-C'.
+      """
+    for i, arg in enumerate(ninja_command):
+      if arg == '-C':
+        return ninja_command[i + 1]
+    return "."
 
   @property
   def siso_path(self):
