@@ -38,4 +38,8 @@ message InputProperties {
   // This allows remote build caches to be segregated.
   // This is useful in cases such as performance testing.
   string action_salt = 8;
+
+  // siso experiments ids.
+  // https://chrome-internal.googlesource.com/infra/infra_internal/+/e0f85c8938a8b31c43a843e70cecb154252bf0e5/go/src/infra_internal/experimental/siso/build/experiments.go#13
+  repeated string experiments = 9;
 }

@@ -51,6 +51,7 @@ class SisoApi(recipe_api.RecipeApi):
     self._assert_ninja_command(ninja_command)
     CompileResult = collections.namedtuple('CompileResult',
                                            'failure_summary retcode')
+
     cmd = [
         self.siso_path,
         'ninja',
@@ -82,8 +83,11 @@ class SisoApi(recipe_api.RecipeApi):
           self._props.action_salt,
       ])
     cmd.extend(ninja_command[1:])
+    env = ninja_env or {}
+    if len(self._props.experiments) > 0:
+      env['SISOEXPERIMENTS'] = ','.join(self._props.experiments)
     try:
-      with self.m.context(env=ninja_env):
+      with self.m.context(env=env):
         ninja_step_result = self.m.step(name or 'compile', cmd, **kwargs)
     except self.m.step.StepFailure as ex:
       ninja_step_result = ex.result

@@ -63,6 +63,11 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
   yield api.test(
+      'sisoexperiments',
+      api.properties(build_command=['ninja', '-C', 'out/Release'],),
+      api.siso.properties(experiments=['no-file-access-trace']),
+  )
+  yield api.test(
       'compile_failure',
       api.properties(build_command=['ninja', '-C', 'out/Release'],),
       api.siso.properties(action_salt='xxx'),
