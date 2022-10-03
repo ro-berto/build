@@ -518,7 +518,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "RECIPE_REPO[depot_tools]/gn.py",
       "desc",
@@ -1162,7 +1162,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "[CACHE]/builder/src/tools/clang/scripts/run_tool.py",
       "--tool",
@@ -1189,7 +1189,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "RECIPE_MODULE[build::codesearch]/resources/add_kythe_metadata.py",
       "--corpus",
       "chromium.googlesource.com/chromium/src",
@@ -1570,7 +1570,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "vpython3",
       "RECIPE_MODULE[build::codesearch]/resources/sync_generated_files.py",
       "--copy",
       "[CACHE]/builder/src/out/mac-Debug/gen;mac-Debug/gen",

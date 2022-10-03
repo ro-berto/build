@@ -35,7 +35,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "None/tools/clang/scripts/run_tool.py",
       "--tool",

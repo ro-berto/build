@@ -431,7 +431,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "RECIPE_REPO[depot_tools]/gn.py",
       "desc",
@@ -982,7 +982,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "-u",
       "[START_DIR]/src/tools/clang/scripts/run_tool.py",
       "--tool",
@@ -1009,7 +1009,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "RECIPE_MODULE[build::codesearch]/resources/add_kythe_metadata.py",
       "--corpus",
       "chromium-win",
@@ -1413,7 +1413,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "vpython3",
       "RECIPE_MODULE[build::codesearch]/resources/sync_generated_files.py",
       "--copy",
       "foo;bar",

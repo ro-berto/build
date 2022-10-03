@@ -1,4 +1,4 @@
-python_version: "3.8"
+python_version: "2.7"
 
 wheel: <
   name: "infra/python/wheels/six-py2_py3"

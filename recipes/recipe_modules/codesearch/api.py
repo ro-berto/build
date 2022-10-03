@@ -95,7 +95,7 @@ class CodesearchApi(recipe_api.RecipeApi):
         export_compile_cmd += '=' + ','.join(targets)
       self.m.step(
           'generate gn compilation database', [
-              'python', '-u', self.m.depot_tools.gn_py_path, 'gen',
+              'python3', '-u', self.m.depot_tools.gn_py_path, 'gen',
               export_compile_cmd, self.c.out_path
           ],
           stdout=self.m.raw_io.output_text()).stdout
@@ -109,7 +109,7 @@ class CodesearchApi(recipe_api.RecipeApi):
         targets_cmd = ' '.join(targets)
       output = self.m.step(
           'generate gn target list', [
-              'python', '-u', self.m.depot_tools.gn_py_path, 'desc',
+              'python3', '-u', self.m.depot_tools.gn_py_path, 'desc',
               self.c.out_path, targets_cmd, '--format=json'
           ],
           stdout=self.m.raw_io.output_text()).stdout
@@ -123,7 +123,7 @@ class CodesearchApi(recipe_api.RecipeApi):
     added to the generated file by the Mojo compiler.
     """
     self.m.step('add kythe metadata', [
-        'python',
+        'python3',
         self.resource('add_kythe_metadata.py'),
         '--corpus',
         self.c.CORPUS,
@@ -164,10 +164,9 @@ class CodesearchApi(recipe_api.RecipeApi):
     for run_dir in run_dirs:
       try:
         with self.m.context(cwd=run_dir):
-          # run_tool currently only supports py2.
           self.m.step(
               'run translation_unit clang tool',
-              ['python', '-u',
+              ['python3', '-u',
                clang_dir.join('scripts', 'run_tool.py')] + args)
 
       except self.m.step.StepFailure as f:  # pragma: nocover
@@ -397,7 +396,7 @@ class CodesearchApi(recipe_api.RecipeApi):
       self.m.git('config', 'user.name', self.c.generated_author_name)
 
     # Sync the generated files into this checkout.
-    cmd = ['vpython', self.resource('sync_generated_files.py')]
+    cmd = ['vpython3', self.resource('sync_generated_files.py')]
     for src, dest in copy.items():
       cmd.extend(['--copy', '%s;%s' % (src, dest)])
     cmd.extend([
