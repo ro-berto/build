@@ -253,7 +253,7 @@ SPEC = {
             test_results_config='staging_server',
             simulation_platform='linux',
         ),
-    'ToTFuchsiaOfficial':
+    'ToTFuchsiaOfficial arm64':
         _chromium_clang_spec(
             chromium_config='clang_tot_fuchsia',
             chromium_apply_config=['mb'],
