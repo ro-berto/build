@@ -100,7 +100,7 @@ def RunSteps(api):
   api.chromium_checkout.ensure_checkout(bot_config)
 
   api.step('update win toolchain', [
-      'python', api.path['checkout'].join('build', 'vs_toolchain.py'), 'update'
+      'python3', api.path['checkout'].join('build', 'vs_toolchain.py'), 'update'
   ])
 
   with api.osx_sdk('ios'):

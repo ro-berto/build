@@ -376,7 +376,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "[CACHE]\\builder\\src\\build\\vs_toolchain.py",
       "update"
     ],
