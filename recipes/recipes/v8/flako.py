@@ -924,6 +924,10 @@ def GenTests(api):
   def verify_fixed(from_offset, to_offset):
     return _verify_result('Fixed in', from_offset, to_offset)
 
+  def drop_test_step_expectations():
+    return api.post_process(
+        Filter().include_re(r'(?!^check mjsunit/foobar)'))
+
   # Full bisect run with some corner cases. Overview of all revisions ordered
   # new -> old.
   # a0: no cas digest
@@ -958,7 +962,8 @@ def GenTests(api):
       # TODO(machenbach): This simulates a new build that has switched to CAS
       # while older builds have not yet. Remove this as soon as we switch CAS
       # on by default.
-      switched_to_cas(1)
+      switched_to_cas(1) +
+      drop_test_step_expectations()
   )
 
   # Similar to above but fewer corner cases. This is for simulating bisection
@@ -1019,7 +1024,8 @@ def GenTests(api):
       # The flake still reproduces until -7.
       is_flaky(-5, 0, 2) +
       is_flaky(-7, 0, 2) +
-      verify_fixed(-7, -8)
+      verify_fixed(-7, -8) +
+      drop_test_step_expectations()
   )
 
   # Progression testing with the revisions from ToT overlapping with
