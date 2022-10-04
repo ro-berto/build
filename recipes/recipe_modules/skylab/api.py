@@ -141,8 +141,6 @@ class SkylabApi(recipe_api.RecipeApi):
           if s.telemetry_shard_index is not None:
             test_args.append('test_shard_index=%s' % s.telemetry_shard_index)
 
-          cmd.extend(['-test-args', ' '.join(test_args)])
-
           if s.lacros_gcs_path:
             cmd.extend(['-lacros-path', s.lacros_gcs_path])
 
