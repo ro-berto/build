@@ -238,7 +238,11 @@ SPEC = {
             chromium_config='clang_tot_fuchsia',
             chromium_apply_config=['mb'],
             gclient_config='chromium',
-            gclient_apply_config=['clang_tot', 'fuchsia_x64'],
+            gclient_apply_config=[
+                'clang_tot',
+                'fuchsia_x64',
+                'fuchsia_no_hooks',
+            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -255,7 +259,10 @@ SPEC = {
             chromium_apply_config=['mb'],
             gclient_config='chromium',
             gclient_apply_config=[
-                'clang_tot', 'fuchsia_arm64', 'fuchsia_arm64_host'
+                'clang_tot',
+                'fuchsia_arm64',
+                'fuchsia_arm64_host',
+                'fuchsia_no_hooks',
             ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
