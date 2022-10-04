@@ -29,7 +29,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "RECIPE_MODULE[build::squashfs]/resources/squashfs_invoke.py",
       "--binary-path",
       "[START_DIR]/squashfs/squashfs-tools/mksquashfs",

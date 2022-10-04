@@ -50,7 +50,7 @@ class SquashfsApi(recipe_api.RecipeApi):
           step_text='Binary not found at %s.' % binary_path)
 
     cmd = [
-        'python',
+        'python3',
         self.resource('squashfs_invoke.py'),
         '--binary-path',
         self.m.path.abspath(binary_path),
