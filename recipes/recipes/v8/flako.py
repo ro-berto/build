@@ -847,7 +847,7 @@ def RunSteps(api, bisect_builder_group, bisect_buildername, extra_args,
 
 
 def GenTests(api):
-  def test(name, bisect_buildername='V8 Foobar'):
+  def test(name, bisect_buildername='V8 Foobar', **properties):
     return api.test(
         name,
         api.properties(
@@ -861,6 +861,7 @@ def GenTests(api):
             timeout_sec=20,
             to_revision='a0',
             variant='stress_foo',
+            **properties
         ),
     )
 
@@ -954,9 +955,8 @@ def GenTests(api):
   # a5: not flaky
   # -> Should result in suspecting range a5..a3.
   yield (
-      test('full_bisect', 'V8 Foobar - builder') +
       # Test path where total timeout isn't used.
-      api.properties(total_timeout_sec=0) +
+      test('full_bisect', 'V8 Foobar - builder', total_timeout_sec=0) +
       # Data for resolving offsets to git hashes. Simulate gitiles page size of
       # 3 commits per call.
       get_revisions(1, 3) +
@@ -1026,8 +1026,7 @@ def GenTests(api):
   # Progression testing with the revisions from ToT not overlapping with
   # the known bad revision. The flake is fixed at ToT.
   yield (
-      test('progression') +
-      api.properties(mode='progression') +
+      test('progression', mode='progression') +
       # Progression testing fetches ToT at a-9. No initial overlap with a0.
       # Iterate until a0 is reached.
       init_head(-9, 4, head_offset=0) +
@@ -1047,8 +1046,7 @@ def GenTests(api):
   # Progression testing with the revisions from ToT overlapping with
   # the known bad revision.
   yield (
-      test('progression_overlap') +
-      api.properties(mode='progression') +
+      test('progression_overlap', mode='progression') +
       # Revision at offset 1 is looked up because there is no CAS digest at 0
       # in this test. The call will fetch some more revisions that we won't
       # need.
@@ -1070,8 +1068,7 @@ def GenTests(api):
 
   # Progression testing where flake still reproduces.
   yield (
-      test('progression_still_reproduces') +
-      api.properties(mode='progression') +
+      test('progression_still_reproduces', mode='progression') +
       # Initial fetch covers all required revisions.
       init_head(-3, 4) +
       # Simulate existing builds.
@@ -1087,8 +1084,7 @@ def GenTests(api):
   # Progression testing with a too large gap between known bad revision
   # and ToT.
   yield (
-      test('progression_large_gap') +
-      api.properties(mode='progression') +
+      test('progression_large_gap', mode='progression') +
       # Progression testing fetches ToT at a commit with an offset to
       # a0 larger than MAX_HEAD_OFFSET.
       init_head(-MAX_HEAD_OFFSET - 1, MAX_HEAD_OFFSET, head_offset=0) +
@@ -1102,19 +1098,17 @@ def GenTests(api):
   )
 
   # Simulate not finding any cas_digests.
-  no_cas_digests_test_data = test('no_cas_digests')
-  for i in range(1, MAX_CAS_OFFSET):
-    no_cas_digests_test_data += get_revisions(i, 1)
   yield (
-      no_cas_digests_test_data +
+      test('no_cas_digests') +
+      sum((get_revisions(i, 1) for i in range(1, MAX_CAS_OFFSET)),
+           api.empty_test_data()) +
       api.post_process(ResultReasonRE, 'Couldn\'t find cas_digests.') +
       api.post_process(DropExpectation)
   )
 
   # Simulate repro-only mode reproducing a flake.
   yield (
-      test('repro_only') +
-      api.properties(mode='repro') +
+      test('repro_only', mode='repro') +
       successful_lookups(0) +
       is_flaky(0, 0, 1, calibration_attempt=1) +
       api.post_process(MustRun, 'Flake still reproduces.') +
@@ -1125,8 +1119,7 @@ def GenTests(api):
 
   # Simulate repro-only mode not reproducing a flake.
   yield (
-      test('repro_only_failed') +
-      api.properties(mode='repro') +
+      test('repro_only_failed', mode='repro') +
       successful_lookups(0) +
       api.post_process(ResultReasonRE, 'Could not reproduce flake.') +
       api.post_process(DropExpectation)
@@ -1134,8 +1127,7 @@ def GenTests(api):
 
   # Simulate repro-only mode using a fallback debug builder.
   yield (
-      test('repro_only_fallback', 'V8 Foobar - debug builder') +
-      api.properties(mode='repro') +
+      test('repro_only_fallback', 'V8 Foobar - debug builder', mode='repro') +
       get_revisions(1, 2) +
       successful_lookups(1, fallback=True) +
       api.post_process(MustRun, 'gsutil lookup cas_digests for #0') +
@@ -1148,8 +1140,7 @@ def GenTests(api):
 
   # Simulate repro-only mode reproducing a flake by regexp.
   yield (
-      test('repro_regexp_match') +
-      api.properties(mode='repro', failure_regexp='foo.*bar') +
+      test('repro_regexp_match', mode='repro', failure_regexp='foo.*bar') +
       successful_lookups(0) +
       is_flaky(0, 0, 1, calibration_attempt=1,
                output_prefix='has foo and bar in the output...\n') +
@@ -1159,8 +1150,7 @@ def GenTests(api):
 
   # Simulate repro-only mode not reproducing a flake by regexp.
   yield (
-      test('repro_regexp_no_match') +
-      api.properties(mode='repro', failure_regexp='foo.*bar') +
+      test('repro_regexp_no_match', mode='repro', failure_regexp='foo.*bar') +
       successful_lookups(0) +
       is_flaky(0, 0, 1, calibration_attempt=1) +
       api.post_process(ResultReasonRE, 'Could not reproduce flake.') +
@@ -1174,14 +1164,16 @@ def GenTests(api):
     if check(step in steps):
       check(all(arg != 'cpu' for arg in steps[step].cmd))
 
+  swarming_dimensions = [
+    'os:Android',
+    'cpu:x86-64',
+    'device_os:MMB29Q',
+    'device_type:bullhead',
+    'pool:chromium.tests',
+  ]
   yield (
-      test('android_dimensions') +
-      api.properties(
-          mode='repro',
-          swarming_dimensions=[
-              'os:Android', 'cpu:x86-64', 'device_os:MMB29Q',
-              'device_type:bullhead', 'pool:chromium.tests'
-          ]) +
+      test('android_dimensions', mode='repro') +
+      api.properties(swarming_dimensions=swarming_dimensions) +
       successful_lookups(0) +
       api.post_process(check_dimensions) +
       api.post_process(DropExpectation)
@@ -1192,8 +1184,8 @@ def GenTests(api):
   long_test_name = (29 * '*') + 'too_long'
   shortened_test_name = (29 * '*') + '...'
   yield (
-      test('no_confidence') +
-      api.properties(test_name=long_test_name, num_shards=8) +
+      test('no_confidence', num_shards=8) +
+      api.properties(test_name=long_test_name) +
       successful_lookups(0) +
       is_flaky(0, 0, 0, calibration_attempt=1, test_name=shortened_test_name) +
       is_flaky(0, 1, 2, calibration_attempt=2, test_name=shortened_test_name) +
@@ -1206,11 +1198,9 @@ def GenTests(api):
 
   # Simulate triggering of the recipe by the flake verification bot.
   yield (
-      test('verify_flake') +
-      api.properties(
-          mode='repro', swarming_priority=40, num_shards=2,
-          swarming_expiration=7200, total_timeout_sec=240,
-          max_calibration_attempts=1) +
+      test('verify_flake', mode='repro', swarming_priority=40, num_shards=2,
+           swarming_expiration=7200, total_timeout_sec=240,
+           max_calibration_attempts=1) +
       successful_lookups(0) +
       is_flaky(0, 0, 0, calibration_attempt=1) +
       is_flaky(0, 1, 1, calibration_attempt=1) +
