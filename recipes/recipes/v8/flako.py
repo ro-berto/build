@@ -72,7 +72,7 @@ PROPERTIES = {
     # Initial number of swarming shards.
     'num_shards': Property(default=2, kind=Single((int, float))),
     # Optional build directory for backwards-compatibility, e.g. 'out/Release'.
-    'outdir': Property(default=None, kind=str),
+    'outdir': Property(default='out/build', kind=str),
     # Initial number of test repetitions (passed to --random-seed-stress-count
     # option).
     'repetitions': Property(default=5000, kind=Single((int, float))),
@@ -143,8 +143,8 @@ TEST_FAILED_TEMPLATE = """
 
 class Command(object):
   """Helper class representing a command line to V8's run-tests.py."""
-  def __init__(self, test_name, variant, repetitions, repro_only,
-               total_timeout_sec, timeout=60, extra_args=None, outdir=None):
+  def __init__(self, outdir, test_name, variant, repetitions, repro_only,
+               total_timeout_sec, timeout=60, extra_args=None):
     self.repetitions = repetitions
     self.test_name = test_name
     self.total_timeout_sec = total_timeout_sec
@@ -152,11 +152,11 @@ class Command(object):
     self.base_cmd = [
         'tools/run-tests.py',
         '--progress=verbose',
-        '--outdir=%s' % (outdir or 'out/build'),
-        '--timeout=%d' % timeout,
+        f'--outdir={outdir}',
+        f'--timeout={timeout}',
         '--swarming',
-        '--variants=%s' % variant,
-        '--exit-after-n-failures=%d' % self.min_failures,
+        f'--variants={variant}',
+        f'--exit-after-n-failures={self.min_failures}',
     ]
     if repro_only:
       # In repro-only mode we keep running skipped tests.
@@ -175,17 +175,14 @@ class Command(object):
     cmd = list(self.base_cmd)
     if self.total_timeout_sec:
       cmd.append('--random-seed-stress-count=1000000')
-      cmd.append(
-          '--total-timeout-sec=%d' % (self.total_timeout_sec * multiplier))
+      cmd.append(f'--total-timeout-sec={self.total_timeout_sec * multiplier}')
     else:
-      cmd.append(
-          '--random-seed-stress-count=%d' % (self.repetitions * multiplier))
+      cmd.append(f'--random-seed-stress-count={self.repetitions * multiplier}')
     return ['python3', '-u'] + cmd
 
 
 def raw_gs_url_template(builder_group, buildername):
-  return ('gs://chromium-v8/isolated/%s/%s/%%s.json' %
-          (builder_group, buildername))
+  return f'gs://chromium-v8/isolated/{builder_group}/{buildername}/%s.json'
 
 def fallback_buildername(buildername):
   """V8-side logic for deducing the name of a builder from its compiling
@@ -228,8 +225,8 @@ class Depot(object):
         match.groupdict() for match in RE_COMMIT_POSITION.finditer(value)
     ]
     if not matches:
-      raise ValueError('Commit position "%s" does not match r"%s"' %
-                       (value, RE_COMMIT_POSITION.pattern))
+      raise ValueError(f'Commit position "{value}" does not match '
+                       f'r"{RE_COMMIT_POSITION.pattern}"')
     return int(matches[len(matches) - 1]['revision'])
 
   def _update_caches(self, commits, offset):
@@ -394,11 +391,11 @@ class Builds(object):
 
   def _lookup_build(self, gs_url_template, name_suffix, offset):
     rev = self.depot.get_revision(offset)
-    link = '%s/+/%s' % (REPO, rev)
+    link = f'{REPO}/+/{rev}'
     try:
       self.api.gsutil.list(
           gs_url_template % rev,
-          name='lookup cas_digests for #%d%s' % (offset, name_suffix),
+          name=f'lookup cas_digests for #{offset}{name_suffix}',
           stderr=self.api.raw_io.output_text(),
           step_test_data=self._lookup_build_test_data,
       )
@@ -459,7 +456,7 @@ class Builds(object):
     self.api.gsutil.download_url(
         self._gs_url(offset),
         self.api.json.output(),
-        name='get cas_digests for #%s' % offset,
+        name=f'get cas_digests for #{offset}',
         step_test_data=lambda: self.api.json.test_api.output(
             {'foo_isolated': '[dummy hash for foo_isolated/123]'}),
     )
@@ -497,7 +494,7 @@ class Runner(object):
     """
     for i in range(self.max_calibration_attempts):
       # Nest to disambiguate step names during calibration.
-      with self.api.step.nest('calibration attempt %d' % (i + 1)) as parent:
+      with self.api.step.nest(f'calibration attempt {i + 1}') as parent:
         num_failures = self.check_num_flakes(offset)
         if (self.repro_only and num_failures or
             num_failures >= MIN_FLAKE_THRESHOLD):
@@ -568,7 +565,7 @@ class Runner(object):
     # so that it is availabe in each revision when bisecting backwards.
 
     cas_digest = self.builds.get_cas_digest(offset)
-    step_prefix = 'check %s at #%d' % (self.command.label, offset)
+    step_prefix = f'check {self.command.label} at #{offset}'
 
     def trigger_task(path, shard):
       # TODO(machenbach): Would be nice to just use 'shard X' as step names for
@@ -577,8 +574,8 @@ class Runner(object):
       # cancel the task, such that they are not in the list of pending tasks or
       # override the step names.
       task = self.api.chromium_swarming.task(
-          name='%s - shard %d' % (step_prefix, shard),
-          task_output_dir=path.join('task_output_dir_%d' % shard),
+          name=f'{step_prefix} - shard {shard}',
+          task_output_dir=path.join(f'task_output_dir_{shard}'),
           raw_cmd=self.command.raw_cmd(self.multiplier, offset),
           cas_input_root=cas_digest,
       )
@@ -628,7 +625,7 @@ class Runner(object):
           # shards? E.g. when doubling from 4 to 8, maybe 5 was enough and
           # should be used throughout.
           break
-      parent.presentation.step_text = '%d failures' % num_failures
+      parent.presentation.step_text = f'{num_failures} failures' 
       return num_failures
 
 
@@ -649,17 +646,17 @@ class Bisector(object):
   def report_range(self, text, from_offset, to_offset):
     from_revision = self.depot.get_revision(from_offset)
     to_revision = self.depot.get_revision(to_offset)
-    offset_range = '#%d..#%d' % (from_offset, to_offset)
-    git_range = '%s..%s' % (from_revision[:8], to_revision[:8])
+    offset_range = f'#{from_offset}..#{to_offset}'
+    git_range = f'{from_revision[:8]}..{to_revision[:8]}'
     step_result = self.api.step(text % offset_range, cmd=None)
-    step_result.presentation.links[git_range] = '%s/+log/%s' % (REPO, git_range)
+    step_result.presentation.links[git_range] = f'{REPO}/+log/{git_range}'
 
   def report_revision(self, text, offset):
     rev = self.depot.get_revision(offset)
     rev_cp = self.depot.get_commit_position(offset)
     step_result = self.api.step(
-        text % ('#%d (commit position: %d)' % (offset, rev_cp)), cmd=None)
-    step_result.presentation.links[rev[:8]] = '%s/+/%s' % (REPO, rev)
+        text % f'#{offset} (commit position: {rev_cp})', cmd=None)
+    step_result.presentation.links[rev[:8]] = f'{REPO}/+/{rev}'
 
   def bisect_back(self, to_offset):
     """Bisects backwards from to_offset, doubling the delta in each iteration.
@@ -811,8 +808,8 @@ def RunSteps(api, bisect_builder_group, bisect_buildername, extra_args,
   builds = Builds(
       api, depot, bisect_builder_group, bisect_buildername, isolated_name)
   command = Command(
-      test_name, variant, repetitions, repro_only, total_timeout_sec,
-      timeout_sec, extra_args, outdir)
+      outdir, test_name, variant, repetitions, repro_only, total_timeout_sec,
+      timeout_sec, extra_args)
   runner = Runner(
       api, builds, command, num_shards, repro_only, max_calibration_attempts,
       failure_regexp)
@@ -869,7 +866,7 @@ def GenTests(api):
 
   def switched_to_cas(offset):
     return api.step_data(
-        'calibration attempt 1.gsutil get cas_digests for #%d' % offset,
+        f'calibration attempt 1.gsutil get cas_digests for #{offset}',
         api.json.output(
             {'foo_isolated': '[dummy hash for foo_isolated]/123'}
         ),
@@ -879,7 +876,7 @@ def GenTests(api):
     suffix = ' (fallback)' if fallback else ''
     lookups = [
       api.override_step_data(
-          'gsutil lookup cas_digests for #%d%s' % (offset, suffix),
+          f'gsutil lookup cas_digests for #{offset}{suffix}',
           api.raw_io.stream_output('', stream='stderr'),
           retcode=0,
       ) for offset in offsets
@@ -920,10 +917,10 @@ def GenTests(api):
     test_data['shards'][0]['exit_code'] = 1
     step_prefix = ''
     if calibration_attempt:
-      step_prefix = 'calibration attempt %d.' % calibration_attempt
-    step_name = 'check %s at #%d' % (test_name, offset)
+      step_prefix = f'calibration attempt {calibration_attempt}.'
+    step_name = f'check {test_name} at #{offset}'
     return api.step_data(
-        '%s%s.%s - shard %d' % (step_prefix, step_name, step_name, shard),
+        f'{step_prefix}{step_name}.{step_name} - shard {shard}',
         api.chromium_swarming.summary(
             dispatched_task_step_test_data=None, data=test_data))
 
