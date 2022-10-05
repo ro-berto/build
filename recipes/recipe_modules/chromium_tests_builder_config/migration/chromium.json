@@ -37,12 +37,6 @@
       "tryserver.chromium.android:android-chrome-pie-x86-wpt-fyi-rel"
     ]
   },
-  "chromium.android.fyi:android-marshmallow-x86-fyi-rel-reviver": {
-    "builders": [
-      "chromium.android.fyi:android-marshmallow-x86-fyi-rel-reviver",
-      "tryserver.chromium.android:android-marshmallow-x86-fyi-rel-reviver"
-    ]
-  },
   "chromium.android.fyi:android-pie-arm64-fyi-rel": {
     "builders": [
       "chromium.android.fyi:android-pie-arm64-fyi-rel",
@@ -1940,12 +1934,6 @@
     "builders": [
       "chromium.android:android-lollipop-arm-rel",
       "tryserver.chromium.android:android-lollipop-arm-rel"
-    ]
-  },
-  "tryserver.chromium.android:android-marshmallow-x86-fyi-rel-reviver": {
-    "builders": [
-      "chromium.android.fyi:android-marshmallow-x86-fyi-rel-reviver",
-      "tryserver.chromium.android:android-marshmallow-x86-fyi-rel-reviver"
     ]
   },
   "tryserver.chromium.android:android-nougat-arm64-rel": {

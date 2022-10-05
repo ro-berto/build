@@ -126,23 +126,6 @@ SPEC = {
             android_config='x86_builder',
             simulation_platform='linux',
         ),
-    'android-marshmallow-x86-fyi-rel-reviver':
-        _chromium_android_fyi_spec(
-            chromium_config='android',
-            chromium_apply_config=['mb'],
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'android', 'enable_wpr_tests', 'enable_reclient'
-            ],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 32,
-                'TARGET_PLATFORM': 'android',
-            },
-            android_config='x86_builder',
-            execution_mode=builder_spec.COMPILE_AND_TEST,
-            simulation_platform='linux',
-        ),
     'android-pie-arm64-fyi-rel':
         _chromium_android_fyi_spec(
             chromium_config='android',
