@@ -64,17 +64,18 @@ PROPERTIES = {
     'max_calibration_attempts': Property(default=5, kind=Single((int, float))),
     # Name of the isolated file (e.g. bot_default, mjsunit).
     'isolated_name': Property(kind=str),
+    # Bisection mode: one of {regression|progression|repro}.
+    # Mode regression bisects backwards to determine what introduced a flake.
+    # Mode progression bisects forwards to determine what fixed a flake.
+    # Mode repro only checks if a flake reproduces with the given revision.
+    'mode': Property(default='regression', kind=str),
     # Initial number of swarming shards.
     'num_shards': Property(default=2, kind=Single((int, float))),
     # Optional build directory for backwards-compatibility, e.g. 'out/Release'.
     'outdir': Property(default=None, kind=str),
-    # Progression instead of regression testing. Find out what fixed the flake.
-    'progression': Property(default=False, kind=bool),
     # Initial number of test repetitions (passed to --random-seed-stress-count
     # option).
     'repetitions': Property(default=5000, kind=Single((int, float))),
-    # Switch to only attempt to reproduce with given revision. Skips bisection.
-    'repro_only': Property(default=False, kind=bool),
     # Swarming dimensions classifying the type of bot the tests should run on.
     # Passed as list of strings, each in the format name:value.
     'swarming_dimensions': Property(default=None, kind=list),
@@ -703,6 +704,10 @@ class Bisector(object):
         from_offset = build_offset
         known_good = build_offset
 
+  def validate(self, known_bad_reproduces):
+    if not known_bad_reproduces:
+      raise self.api.step.StepFailure('Could not reach enough confidence.')
+
 
 class RegressionBisector(Bisector):
   def bisect(self, known_bad_offset):
@@ -724,6 +729,25 @@ class ProgressionBisector(Bisector):
 
     from_offset, to_offset = self.bisect_into(known_bad_offset, head_offset)
     self.report_range('Result: Fixed in %s', from_offset, to_offset)
+
+
+class ReproBisector(Bisector):
+  def validate(self, known_bad_reproduces):
+    if known_bad_reproduces:
+      self.api.step('Flake still reproduces.', cmd=None)
+    else:
+      # We treat it as an error if a flake believed to repro, doesn't repro.
+      raise self.api.step.StepFailure('Could not reproduce flake.')
+
+  def bisect(self, known_bad_offset):
+    pass
+
+
+BISECTORS = {
+  'regression': RegressionBisector,
+  'progression':ProgressionBisector,
+  'repro':ReproBisector,
+}
 
 
 def setup_swarming(
@@ -755,10 +779,12 @@ def create_flakes_pyl_entry_step(api, config):
 
 def RunSteps(api, bisect_builder_group, bisect_buildername, extra_args,
              failure_regexp, max_calibration_attempts, isolated_name,
-             num_shards, outdir, progression, repetitions, repro_only,
-             swarming_dimensions, swarming_priority, swarming_expiration,
-             test_name, timeout_sec, total_timeout_sec, to_revision, variant):
+             mode, num_shards, outdir, repetitions, swarming_dimensions,
+             swarming_priority, swarming_expiration, test_name, timeout_sec,
+             total_timeout_sec, to_revision, variant):
   # Convert floats to ints.
+  assert mode in ('regression', 'progression', 'repro')
+  repro_only = mode == 'repro'
   max_calibration_attempts = max(min(int(max_calibration_attempts), 5), 1)
   num_shards = int(num_shards)
   repetitions = int(repetitions)
@@ -779,46 +805,35 @@ def RunSteps(api, bisect_builder_group, bisect_buildername, extra_args,
   runner = Runner(
       api, depot, command, num_shards, repro_only, max_calibration_attempts,
       failure_regexp)
-  bisector_cls = ProgressionBisector if progression else RegressionBisector
-  bisector = bisector_cls(api, depot, runner.check_num_flakes)
+  bisector = BISECTORS[mode](api, depot, runner.check_num_flakes)
 
   known_bad_offset = depot.find_closest_build(0)
 
   # Get confidence that the given revision is flaky and optionally calibrate the
   # repetitions.
   could_reproduce = runner.calibrate(known_bad_offset)
+  bisector.validate(could_reproduce)
 
-  if repro_only:
-    if could_reproduce:
-      api.step('Flake still reproduces.', cmd=None)
-      return
-    else:
-      # We treat it as an error if a flake belived to repro, doesn't repro.
-      raise api.step.StepFailure('Could not reproduce flake.')
-
-  if could_reproduce:
-    create_flakes_pyl_entry_step(api, {
-      'bisect_builder_group': bisect_builder_group,
-      'bisect_buildername': bisect_buildername,
-      'isolated_name': isolated_name,
-      'test_name': test_name,
-      'variant': variant,
-      'extra_args': extra_args,
-      'swarming_dimensions': swarming_dimensions,
-      'timeout_sec': timeout_sec,
-      'num_shards': runner.num_shards,
-      # TODO(sergiyb): Drop total_timeout_sec here and just rely on
-      # repetitions, which is more reliable on Windows. Right now,
-      # however, we can't use it as it's not correctly calibrated when
-      # total_timeout_sec is used. We should only implement this
-      # suggestion once we can extract the actual number of repetitions
-      # used from the test launcher after the calibration is done.
-      'total_timeout_sec': total_timeout_sec * runner.multiplier,
-      'repetitions': repetitions * runner.multiplier,
-      'bug_url': '<bug-url>',
-    })
-  else:
-    raise api.step.StepFailure('Could not reach enough confidence.')
+  create_flakes_pyl_entry_step(api, {
+    'bisect_builder_group': bisect_builder_group,
+    'bisect_buildername': bisect_buildername,
+    'isolated_name': isolated_name,
+    'test_name': test_name,
+    'variant': variant,
+    'extra_args': extra_args,
+    'swarming_dimensions': swarming_dimensions,
+    'timeout_sec': timeout_sec,
+    'num_shards': runner.num_shards,
+    # TODO(sergiyb): Drop total_timeout_sec here and just rely on
+    # repetitions, which is more reliable on Windows. Right now,
+    # however, we can't use it as it's not correctly calibrated when
+    # total_timeout_sec is used. We should only implement this
+    # suggestion once we can extract the actual number of repetitions
+    # used from the test launcher after the calibration is done.
+    'total_timeout_sec': total_timeout_sec * runner.multiplier,
+    'repetitions': repetitions * runner.multiplier,
+    'bug_url': '<bug-url>',
+  })
 
   bisector.bisect(known_bad_offset)
 
@@ -1004,7 +1019,7 @@ def GenTests(api):
   # the known bad revision. The flake is fixed at ToT.
   yield (
       test('progression') +
-      api.properties(progression=True) +
+      api.properties(mode='progression') +
       # Progression testing fetches ToT at a-9. No initial overlap with a0.
       # Iterate until a0 is reached.
       init_head(-9, 4, head_offset=0) +
@@ -1025,7 +1040,7 @@ def GenTests(api):
   # the known bad revision.
   yield (
       test('progression_overlap') +
-      api.properties(progression=True) +
+      api.properties(mode='progression') +
       # Revision at offset 1 is looked up because there is no CAS digest at 0
       # in this test. The call will fetch some more revisions that we won't
       # need.
@@ -1048,7 +1063,7 @@ def GenTests(api):
   # Progression testing where flake still reproduces.
   yield (
       test('progression_still_reproduces') +
-      api.properties(progression=True) +
+      api.properties(mode='progression') +
       # Initial fetch covers all required revisions.
       init_head(-3, 4) +
       # Simulate existing builds.
@@ -1065,7 +1080,7 @@ def GenTests(api):
   # and ToT.
   yield (
       test('progression_large_gap') +
-      api.properties(progression=True) +
+      api.properties(mode='progression') +
       # Progression testing fetches ToT at a commit with an offset to
       # a0 larger than MAX_HEAD_OFFSET.
       init_head(-MAX_HEAD_OFFSET - 1, MAX_HEAD_OFFSET, head_offset=0) +
@@ -1091,7 +1106,7 @@ def GenTests(api):
   # Simulate repro-only mode reproducing a flake.
   yield (
       test('repro_only') +
-      api.properties(repro_only=True) +
+      api.properties(mode='repro') +
       successful_lookups(0) +
       is_flaky(0, 0, 1, calibration_attempt=1) +
       api.post_process(MustRun, 'Flake still reproduces.') +
@@ -1103,7 +1118,7 @@ def GenTests(api):
   # Simulate repro-only mode not reproducing a flake.
   yield (
       test('repro_only_failed') +
-      api.properties(repro_only=True) +
+      api.properties(mode='repro') +
       successful_lookups(0) +
       api.post_process(ResultReasonRE, 'Could not reproduce flake.') +
       api.post_process(DropExpectation)
@@ -1112,7 +1127,7 @@ def GenTests(api):
   # Simulate repro-only mode using a fallback debug builder.
   yield (
       test('repro_only_fallback', 'V8 Foobar - debug builder') +
-      api.properties(repro_only=True) +
+      api.properties(mode='repro') +
       get_revisions(1, 2) +
       successful_lookups(1, fallback=True) +
       api.post_process(MustRun, 'gsutil lookup cas_digests for #0') +
@@ -1126,7 +1141,7 @@ def GenTests(api):
   # Simulate repro-only mode reproducing a flake by regexp.
   yield (
       test('repro_regexp_match') +
-      api.properties(repro_only=True, failure_regexp='foo.*bar') +
+      api.properties(mode='repro', failure_regexp='foo.*bar') +
       successful_lookups(0) +
       is_flaky(0, 0, 1, calibration_attempt=1,
                output_prefix='has foo and bar in the output...\n') +
@@ -1137,7 +1152,7 @@ def GenTests(api):
   # Simulate repro-only mode not reproducing a flake by regexp.
   yield (
       test('repro_regexp_no_match') +
-      api.properties(repro_only=True, failure_regexp='foo.*bar') +
+      api.properties(mode='repro', failure_regexp='foo.*bar') +
       successful_lookups(0) +
       is_flaky(0, 0, 1, calibration_attempt=1) +
       api.post_process(ResultReasonRE, 'Could not reproduce flake.') +
@@ -1154,7 +1169,7 @@ def GenTests(api):
   yield (
       test('android_dimensions') +
       api.properties(
-          repro_only=True,
+          mode='repro',
           swarming_dimensions=[
               'os:Android', 'cpu:x86-64', 'device_os:MMB29Q',
               'device_type:bullhead', 'pool:chromium.tests'
@@ -1185,9 +1200,9 @@ def GenTests(api):
   yield (
       test('verify_flake') +
       api.properties(
-        repro_only=True, swarming_priority=40, num_shards=2,
-        swarming_expiration=7200, total_timeout_sec=240,
-        max_calibration_attempts=1) +
+          mode='repro', swarming_priority=40, num_shards=2,
+          swarming_expiration=7200, total_timeout_sec=240,
+          max_calibration_attempts=1) +
       successful_lookups(0) +
       is_flaky(0, 0, 0, calibration_attempt=1) +
       is_flaky(0, 1, 1, calibration_attempt=1) +

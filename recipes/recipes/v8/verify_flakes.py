@@ -107,7 +107,7 @@ def RunSteps(api):
       'v8_flako',
       dict(
         flako_properties,
-        repro_only=True,
+        mode='repro',
         swarming_priority=40,
         to_revision=v8_tot,
         max_calibration_attempts=1,
