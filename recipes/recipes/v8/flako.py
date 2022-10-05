@@ -205,58 +205,22 @@ def fallback_buildername(buildername):
   return buildername
 
 class Depot(object):
-  """Helper class for interacting with remote storage (GS bucket and git)."""
+  """Helper class for mapping offsets to git revisions."""
 
-  def __init__(self, api, builder_group, buildername, isolated_name,
-               known_bad_revision):
+  def __init__(self, api, known_bad_revision):
     """
     Args:
-      builder_group: Group name of the builder that produced the builds for
-          bisection.
-      buildername: Name of the builder that produced the builds for bisection.
-      isolated_name: Name of the isolated file (e.g. bot_default, mjsunit).
       known_bad_revision: Start revision of bisection. All other revisions
           during bisection will be represented as offsets to this revision.
     """
     self.api = api
-    self.isolated_name = isolated_name
     self.known_bad_revision = known_bad_revision
     self.commit_position_zero = None
-    # Two templates for looking up the builder before and after a potential
-    # split into builder/tester.
-    self.gs_url_template_first = raw_gs_url_template(
-        builder_group, buildername)
-    self.gs_url_template_second = raw_gs_url_template(
-        builder_group, fallback_buildername(buildername))
-    # Cache for offsets that exist at fallback build location.
-    self.fallback_offsets = set()
-    # Cache for mapping offsets to real revisions.
-    # Positive (negative) offsets refer to revisions in the past (future).
     self.revisions = {0: known_bad_revision}
-    # Cache for cas digests.
-    self.cas_digests = {}
-    # Offset cache for closest builds with cas digests.
-    self.closest_builds = {}
     # Cache for the offset of refs/heads/main.
     self.head_offset = None
 
-  def gs_url(self, offset):
-    """Chooses the gs_url that points to either the original or a fallback
-    builder in case of a builder split.
-    """
-    rev = self.get_revision(offset)
-    if offset not in self.fallback_offsets:
-      return self.gs_url_template_first % rev
-    return self.gs_url_template_second % rev
-
-  @property
-  def fallback_available(self):
-    """A fallback builder is available if the url templates differ. Otherwise
-    they point to the same builder.
-    """
-    return self.gs_url_template_first != self.gs_url_template_second
-
-  def parse_commit_position(self, value):
+  def _parse_commit_position(self, value):
     """Returns (ref, revision_number) tuple."""
     RE_COMMIT_POSITION = re.compile(
         r'Cr-Commit-Position: (?P<ref>refs/[^@]+)@{#(?P<revision>\d+)}')
@@ -282,7 +246,7 @@ class Depot(object):
       self.revisions[offset + i] = commit['commit']
 
     if self.commit_position_zero is None:
-      commit_position = self.parse_commit_position(commits[0]['message'])
+      commit_position = self._parse_commit_position(commits[0]['message'])
       # Note, negative offsets refer to commits in the future. Example:
       # known bad at offset: 0 and cp: 100, commits[0] at offset -10, cp: 110
       # results in commit_position_zero = 110 + (-10) = 100.
@@ -373,6 +337,51 @@ class Depot(object):
 
     return self.revisions[offset]
 
+
+class Builds(object):
+  """Helper class for locating builds in content-addressed storage (CAS)."""
+
+  def __init__(self, api, depot, builder_group, buildername, isolated_name):
+    """
+    Args:
+      depot: Helper that maps offsets to revisions.
+      builder_group: Group name of the builder that produced the builds for
+          bisection.
+      buildername: Name of the builder that produced the builds for bisection.
+      isolated_name: Name of the isolated file (e.g. bot_default, mjsunit).
+    """
+    self.api = api
+    self.depot = depot
+    self.isolated_name = isolated_name
+    # Two templates for looking up the builder before and after a potential
+    # split into builder/tester.
+    self.gs_url_template_first = raw_gs_url_template(
+        builder_group, buildername)
+    self.gs_url_template_second = raw_gs_url_template(
+        builder_group, fallback_buildername(buildername))
+    # Cache for offsets that exist at fallback build location.
+    self.fallback_offsets = set()
+    # Cache for cas digests.
+    self.cas_digests = {}
+    # Offset cache for closest builds with cas digests.
+    self.closest_builds = {}
+
+  def _gs_url(self, offset):
+    """Chooses the gs_url that points to either the original or a fallback
+    builder in case of a builder split.
+    """
+    rev = self.depot.get_revision(offset)
+    if offset not in self.fallback_offsets:
+      return self.gs_url_template_first % rev
+    return self.gs_url_template_second % rev
+
+  @property
+  def fallback_available(self):
+    """A fallback builder is available if the url templates differ. Otherwise
+    they point to the same builder.
+    """
+    return self.gs_url_template_first != self.gs_url_template_second
+
   def _lookup_build_test_data(self):
     """By default all lookups fail (i.e. no builds available). Override
     testdata in specific test cases to make lookups pass.
@@ -384,7 +393,7 @@ class Depot(object):
     )
 
   def _lookup_build(self, gs_url_template, name_suffix, offset):
-    rev = self.get_revision(offset)
+    rev = self.depot.get_revision(offset)
     link = '%s/+/%s' % (REPO, rev)
     try:
       self.api.gsutil.list(
@@ -448,7 +457,7 @@ class Depot(object):
       return self.cas_digests[offset]
 
     self.api.gsutil.download_url(
-        self.gs_url(offset),
+        self._gs_url(offset),
         self.api.json.output(),
         name='get cas_digests for #%s' % offset,
         step_test_data=lambda: self.api.json.test_api.output(
@@ -462,10 +471,10 @@ class Depot(object):
 
 class Runner(object):
   """Helper class for executing the V8 test runner to check for flakes."""
-  def __init__(self, api, depot, command, num_shards, repro_only,
+  def __init__(self, api, builds, command, num_shards, repro_only,
                max_calibration_attempts, failure_regexp):
     self.api = api
-    self.depot = depot
+    self.builds = builds
     self.command = command
     self.num_shards = min(num_shards, MAX_SWARMING_SHARDS)
     self.repro_only = repro_only
@@ -558,7 +567,7 @@ class Runner(object):
     # This V8-side commit needs to age enough before using it on infra-side,
     # so that it is availabe in each revision when bisecting backwards.
 
-    cas_digest = self.depot.get_cas_digest(offset)
+    cas_digest = self.builds.get_cas_digest(offset)
     step_prefix = 'check %s at #%d' % (self.command.label, offset)
 
     def trigger_task(path, shard):
@@ -624,7 +633,7 @@ class Runner(object):
 
 
 class Bisector(object):
-  def __init__(self, api, depot, is_bad_func):
+  def __init__(self, api, depot, builds, is_bad_func):
     """Collection of bisection helpers.
 
     Args:
@@ -634,6 +643,7 @@ class Bisector(object):
     """
     self.api = api
     self.depot = depot
+    self.builds = builds
     self.is_bad_func = is_bad_func
 
   def report_range(self, text, from_offset, to_offset):
@@ -663,7 +673,7 @@ class Bisector(object):
       from_offset = to_offset + commit_offset
 
       # Check if from_offset is a good revision, otherwise iterate backwards.
-      from_offset = self.depot.find_closest_build(from_offset)
+      from_offset = self.builds.find_closest_build(from_offset)
       self.report_revision('Checking %s', from_offset)
       if not self.is_bad_func(from_offset):
         return from_offset, to_offset
@@ -688,7 +698,7 @@ class Bisector(object):
       if from_offset - to_offset <= 1:
         return known_good, known_bad
       middle_offset = to_offset + (from_offset - to_offset) // 2
-      build_offset = self.depot.find_closest_build(middle_offset, from_offset)
+      build_offset = self.builds.find_closest_build(middle_offset, from_offset)
 
       if build_offset >= from_offset:
         self.report_range('No builds in %s', from_offset, middle_offset)
@@ -717,12 +727,12 @@ class RegressionBisector(Bisector):
 
 
 class ProgressionBisector(Bisector):
-  def __init__(self, api, depot, is_bad_func):
+  def __init__(self, api, depot, builds, is_bad_func):
     # For progression testing we invert the meaning of "is_bad".
-    super().__init__(api, depot, lambda *args: not is_bad_func(*args))
+    super().__init__(api, depot, builds, lambda *args: not is_bad_func(*args))
 
   def bisect(self, known_bad_offset):
-    head_offset = self.depot.find_closest_build(self.depot.get_head_offset())
+    head_offset = self.builds.find_closest_build(self.depot.get_head_offset())
 
     if not self.is_bad_func(head_offset):
       raise self.api.step.StepFailure('Flake still reproduces.')
@@ -797,17 +807,18 @@ def RunSteps(api, bisect_builder_group, bisect_buildername, extra_args,
       api, swarming_dimensions, swarming_priority, swarming_expiration)
 
   # Set up bisection helpers.
-  depot = Depot(api, bisect_builder_group, bisect_buildername, isolated_name,
-                to_revision)
+  depot = Depot(api, to_revision)
+  builds = Builds(
+      api, depot, bisect_builder_group, bisect_buildername, isolated_name)
   command = Command(
       test_name, variant, repetitions, repro_only, total_timeout_sec,
       timeout_sec, extra_args, outdir)
   runner = Runner(
-      api, depot, command, num_shards, repro_only, max_calibration_attempts,
+      api, builds, command, num_shards, repro_only, max_calibration_attempts,
       failure_regexp)
-  bisector = BISECTORS[mode](api, depot, runner.check_num_flakes)
+  bisector = BISECTORS[mode](api, depot, builds, runner.check_num_flakes)
 
-  known_bad_offset = depot.find_closest_build(0)
+  known_bad_offset = builds.find_closest_build(0)
 
   # Get confidence that the given revision is flaky and optionally calibrate the
   # repetitions.
