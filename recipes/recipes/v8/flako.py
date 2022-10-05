@@ -860,18 +860,24 @@ def GenTests(api):
     ]
     return sum(lookups, api.empty_test_data())
 
+  def _gitiles_log(*commit_message_pairs):
+    return api.json.output({
+      'log': [
+        {'commit': commit, 'message': message}
+        for commit, message in commit_message_pairs
+      ],
+    })
+
   def _gitiles_lookup(step_name, offset, count):
     return api.step_data(
         step_name,
-        api.json.output({
-            'log': [{
-                'commit':
-                    f'a{offset + i}',
-                'message': ('> Cr-Commit-Position: refs/heads/main@{#%d}\n' +
-                            'Cr-Commit-Position: refs/heads/main@{#%d}') %
-                           (42, 99 - i - offset)
-            } for i in range(count)]
-        }),
+        _gitiles_log(
+           *((
+              f'a{offset + i}',
+              f'Cr-Commit-Position: refs/heads/main@{{#{99 - i - offset}}}',
+            )
+            for i in range(count))
+        )
     )
 
   def init_head(offset, count, head_offset=0):
@@ -879,19 +885,6 @@ def GenTests(api):
 
   def get_revisions(offset, count):
     return _gitiles_lookup(f'get revision #{offset}', offset, count)
-
-  def get_revisions_with_incorrect_cp(offset, count):
-    return api.step_data(
-        'get revision #%d' % offset,
-        api.json.output({
-            'log': [{
-                'commit':
-                    f'a{offset + i}',
-                'message':
-                    'Cr-Commit-Position-Incorrect: refs/heads/main@{#%d}' % i
-            } for i in range(count)]
-        }),
-    )
 
   def is_flaky(offset, shard, flakes, calibration_attempt=0,
                test_name='mjsunit/foobar', output_prefix=''):
@@ -1206,6 +1199,27 @@ def GenTests(api):
           'check mjsunit/foobar at #0 - shard 1'))
   )
 
-  yield (test('bisect_attempt_with_wrong_commit_position') +
-         get_revisions_with_incorrect_cp(1, 3) +
-         api.expect_exception('ValueError') + api.post_process(DropExpectation))
+  yield (
+      test('bisect_attempt_with_wrong_commit_position') +
+      api.step_data(
+          'get revision #1',
+          _gitiles_log(
+              ('a1', 'Cr-Commit-Position-Incorrect: refs/heads/main@{#42}')),
+      ) +
+      api.expect_exception('ValueError') +
+      api.post_process(DropExpectation)
+  )
+
+  yield (
+      test('bisect_attempt_with_revert_commit_position') +
+      api.step_data(
+          'get revision #1',
+          _gitiles_log(('a1', '> Cr-Commit-Position: refs/heads/main@{#42}\n'
+                              'Cr-Commit-Position: refs/heads/main@{#100}')),
+      ) +
+      successful_lookups(0, 1) +
+      is_flaky(0, 0, 5, calibration_attempt=1) +
+      api.post_process(MustRun, 'Checking #1 (commit position: 100)') +
+      api.post_process(DoesNotRun, 'Checking #1 (commit position: 42)') +
+      api.post_process(DropExpectation)
+  )
