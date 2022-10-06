@@ -76,6 +76,8 @@ PROPERTIES = {
     # Initial number of test repetitions (passed to --random-seed-stress-count
     # option).
     'repetitions': Property(default=5000, kind=Single((int, float))),
+    # Revision known to be bad, where bisection will start. ToT by default.
+    'revision': Property(default=None, kind=str),
     # Swarming dimensions classifying the type of bot the tests should run on.
     # Passed as list of strings, each in the format name:value.
     'swarming_dimensions': Property(default=None, kind=list),
@@ -95,8 +97,8 @@ PROPERTIES = {
     # time might be increased for more confidence. Set to 0 to disable and
     # specify the 'repetitions' property instead.
     'total_timeout_sec': Property(default=120, kind=Single((int, float))),
-    # Revision known to be bad, where backwards bisection will start.
-    'to_revision': Property(kind=str),
+    # TODO(machenbach): Deprecated. Use "revision". Remove after 2022/10/15.
+    'to_revision': Property(default=None, kind=str),
     # Name of the testing variant passed to run-tests.py.
     'variant': Property(kind=str),
 }
@@ -211,11 +213,21 @@ class Depot(object):
           during bisection will be represented as offsets to this revision.
     """
     self.api = api
-    self.known_bad_revision = known_bad_revision
     self.commit_position_zero = None
-    self.revisions = {0: known_bad_revision}
-    # Cache for the offset of refs/heads/main.
-    self.head_offset = None
+    self.revisions = {}
+
+    if known_bad_revision:
+      # Cache for the offset of refs/heads/main.
+      self.head_offset = None
+      self.known_bad_revision = known_bad_revision
+      self.revisions[0] = known_bad_revision
+    else:
+     # If the script was started without a revision, initialize it to ToT.
+      self.head_offset = 0
+      commits = self._fetch_commits(
+          'init head', 'refs/heads/main', 0)
+      self._update_caches(commits, 0)
+      self.known_bad_revision = self.revisions[0]
 
   def _parse_commit_position(self, value):
     """Returns (ref, revision_number) tuple."""
@@ -786,9 +798,9 @@ def create_flakes_pyl_entry_step(api, config):
 
 def RunSteps(api, bisect_builder_group, bisect_buildername, extra_args,
              failure_regexp, max_calibration_attempts, isolated_name,
-             mode, num_shards, outdir, repetitions, swarming_dimensions,
-             swarming_priority, swarming_expiration, test_name, timeout_sec,
-             total_timeout_sec, to_revision, variant):
+             mode, num_shards, outdir, repetitions, revision,
+             swarming_dimensions, swarming_priority, swarming_expiration,
+             test_name, timeout_sec, total_timeout_sec, to_revision, variant):
   # Convert floats to ints.
   assert mode in ('regression', 'progression', 'repro')
   repro_only = mode == 'repro'
@@ -804,7 +816,7 @@ def RunSteps(api, bisect_builder_group, bisect_buildername, extra_args,
       api, swarming_dimensions, swarming_priority, swarming_expiration)
 
   # Set up bisection helpers.
-  depot = Depot(api, to_revision)
+  depot = Depot(api, revision or to_revision)
   builds = Builds(
       api, depot, bisect_builder_group, bisect_buildername, isolated_name)
   command = Command(
@@ -859,7 +871,7 @@ def GenTests(api):
             swarming_dimensions=['os:Ubuntu-16.04', 'cpu:x86-64'],
             test_name='mjsunit/foobar',
             timeout_sec=20,
-            to_revision='a0',
+            revision='a0',
             variant='stress_foo',
             **properties
         ),
@@ -1110,6 +1122,18 @@ def GenTests(api):
       test('repro_only_failed', mode='repro') +
       successful_lookups(0) +
       api.post_process(ResultReasonRE, 'Could not reproduce flake.') +
+      api.post_process(DropExpectation)
+  )
+
+  # Simulate repro-only mode with no revision property given.
+  yield (
+      test('repro_only_tot', mode='repro') +
+      api.properties(revision=None) +
+      init_head(0, 4, head_offset=0) +
+      successful_lookups(0) +
+      is_flaky(0, 0, 1, calibration_attempt=1) +
+      api.post_process(MustRun, 'init head #0') +
+      api.post_process(MustRun, 'Flake still reproduces.') +
       api.post_process(DropExpectation)
   )
 

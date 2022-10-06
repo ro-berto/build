@@ -109,7 +109,7 @@ def RunSteps(api):
         flako_properties,
         mode='repro',
         swarming_priority=40,
-        to_revision=v8_tot,
+        revision=v8_tot,
         max_calibration_attempts=1,
         swarming_expiration=7200,  # 2 hours
       )
