@@ -42,9 +42,6 @@ def _chromium_android_spec(**kwargs):
 # * android-cronet-x86-dbg-marshmallow-tests
 # * android-cronet-x86-dbg-oreo-tests
 # * android-cronet-x86-dbg-pie-tests
-# * android-marshmallow-arm64-rel
-# * android-marshmallow-x86-rel
-# * android-marshmallow-x86-rel-non-cq
 # * android-pie-arm64-dbg
 # * android-pie-arm64-rel
 # * android-weblayer-10-x86-rel-tests

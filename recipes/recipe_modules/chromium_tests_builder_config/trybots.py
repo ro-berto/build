@@ -53,9 +53,6 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * android-cronet-x86-dbg-oreo-tests
     # * android-cronet-x86-dbg-pie-tests
     # * android-inverse-fieldtrials-pie-x86-fyi-rel
-    # * android-marshmallow-arm64-rel
-    # * android-marshmallow-x86-rel
-    # * android-marshmallow-x86-rel-non-cq
     # * android-oreo-arm64-dbg
     # * android-pie-arm64-rel
     # * android-pie-x86-rel

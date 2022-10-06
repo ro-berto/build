@@ -59,7 +59,7 @@ def GenTests(api):
                       "command": [
                           "rdb", "stream", "-test-id-prefix",
                           "ninja://chrome/test:unit_tests/", "-var",
-                          "builder:android-marshmallow-x86-rel", "-var",
+                          "builder:android-12-x64-rel", "-var",
                           "os:Ubuntu-18.04", "-var", "test_suite:unit_tests",
                           "-tag", "step_name:unit_tests", "on", "Ubuntu-18.04",
                           "-tag", "target_platform:android",
@@ -76,7 +76,7 @@ def GenTests(api):
                           "--gs-results-bucket=chromium-result-details",
                           "--recover-devices",
                           ("--avd-config=../../tools/android/avd/proto/"
-                           "generic_android23.textpb")
+                           "generic_android31.textpb")
                       ]
                   }
               }]

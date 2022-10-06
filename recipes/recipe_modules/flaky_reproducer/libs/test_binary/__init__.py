@@ -24,7 +24,7 @@ def create_test_binary_from_task_request(task_request):
   command = ' '.join(request_slice.command)
   if re.search('result_adapter(.exe)? gtest', command):
     return GTestTestBinary.from_task_request(task_request)
-  # android device tests (e.g. android-marshmallow-x86-rel) are not using
+  # android device tests (e.g. android-12-x64-rel) are not using
   # result_adapter, detecting --test-launcher-summary-output as a workaround
   # as it doesn't exists in blink_web_tests.
   elif '--test-launcher-summary-output' in command:

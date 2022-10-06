@@ -75,7 +75,7 @@ def GenTests(api):
       'android',
       api.chromium.try_build(
           builder_group='tryserver.chromium.android',
-          builder='android-marshmallow-x86-rel'),
+          builder='android-12-x64-rel'),
       api.code_coverage(use_java_coverage=True),
       api.properties(
           expected_paths=[
