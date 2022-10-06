@@ -100,6 +100,25 @@ def kzip_input_paths(kzip_path):
   return required_inputs
 
 
+def has_secrets(filepath):
+  with open(filepath, 'r') as f:
+    text = f.read()
+    patterns = (
+        # Patterns adapted from
+        # https://www.ndss-symposium.org/wp-content/uploads/2019/02/ndss2019_04B-3_Meli_paper.pdf
+
+        # OAuth
+        r'\b4/[0-9A-Za-z-_]+\b',  # Auth Code
+        r'\b1/[0-9A-Za-z-_]{43}\b|\b1/[0-9A-Za-z-_]{64}\b',  # Refresh Token
+        r'\bya29\.[0-9A-Za-z-_]+\b',  # Access Token
+        r'\bAIza[0-9A-Za-z-_]{35}\b',  # API Key
+
+        # Private Key
+        r'\bPRIVATE KEY( BLOCK)?-----',
+    )
+    return re.search(re.compile('|'.join(patterns)), text) is not None
+
+
 def copy_generated_files(source_dir, dest_dir, kzip_input_suffixes=None):
   try:
     os.makedirs(dest_dir)
@@ -122,18 +141,30 @@ def copy_generated_files(source_dir, dest_dir, kzip_input_suffixes=None):
   # First, delete everything in dest that:
   #   * isn't in source or
   #   * doesn't match the allowed extensions or
+  #   * may contain secrets or
   #   * (if kzip is provided,) isn't referenced in the kzip
   for dirpath, _, filenames in os.walk(dest_dir):
     for filename in filenames:
       dest_file = os.path.join(dirpath, filename)
       source_file = translate_root(dest_dir, source_dir, dest_file)
 
-      if not os.path.exists(source_file) or \
-          not has_allowed_extension(source_file):
-        print('Deleting file:', dest_file)
-        os.remove(dest_file)
+      delete = False
+      if not os.path.exists(source_file):
+        reason = 'source_file %s does not exist.' % source_file
+        delete = True
+      elif not has_allowed_extension(source_file):
+        reason = \
+            'source_file %s does not have an allowed extension.' % source_file
+        delete = True
+      elif has_secrets(dest_file):
+        reason = 'dest_file %s may contain secrets.' % dest_file
+        delete = True
       elif kzip_input_suffixes and not is_referenced(dest_file):
-        print('Deleting file not referenced by kzip:', dest_file)
+        reason = 'dest_file %s not referenced by kzip.' % dest_file
+        delete = True
+
+      if delete:
+        print('Deleting dest_file %s: %s' % (dest_file, reason))
         os.remove(dest_file)
 
   # Second, copy everything that matches the allowlist from source to dest. If
@@ -152,11 +183,10 @@ def copy_generated_files(source_dir, dest_dir, kzip_input_suffixes=None):
       if 'tmp' in file_parts:
         continue
 
-      if not has_allowed_extension(filename) \
+      source_file = os.path.join(dirpath, filename)
+      if not has_allowed_extension(filename) or has_secrets(source_file) \
           or kzip_input_suffixes and not is_referenced(filename):
         continue
-
-      source_file = os.path.join(dirpath, filename)
 
       # arm-generic builder runs into an issue where source_file disappears by
       # the time it's copied. Check source_file so the builder doesn't fail.

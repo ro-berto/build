@@ -147,6 +147,37 @@ class SyncGeneratedFilesCodesearchTest(unittest.TestCase):
         os.path.exists(
             os.path.join(self.dest_root, 'the_dir', 'the_file.woah')))
 
+  def testCopyFilesWithSecrets(self):
+    with open(os.path.join(self.src_root, 'foo.json'), 'w') as f:
+      f.write('foo contents')
+    with open(os.path.join(self.src_root, 'creds1.json'), 'w') as f:
+      f.write('"accessToken": "ya29.c.dontuploadme"')
+    with open(os.path.join(self.src_root, 'creds2.json'), 'w') as f:
+      f.write('"code": "4/topsecret"')
+
+    with open(os.path.join(self.dest_root, 'creds2.json'), 'w') as f:
+      f.write('"code": "4/topsecret"')
+
+    sync.copy_generated_files(self.src_root, self.dest_root)
+
+    try:
+      with open(os.path.join(self.dest_root, 'foo.json'), 'r') as f:
+        self.assertEqual(f.read(), 'foo contents')
+    except IOError as e:
+      self.fail(e)
+
+    try:
+      with open(os.path.join(self.dest_root, 'creds1.json'), 'r') as f:
+        self.fail('creds1.json should not be synced')
+    except IOError as e:
+      pass
+
+    try:
+      with open(os.path.join(self.dest_root, 'creds2.json'), 'r') as f:
+        self.fail('creds2.json should have been deleted')
+    except IOError as e:
+      pass
+
   def testCopyFilesKzipSuffixSet(self):
     with open(os.path.join(self.src_root, 'foo.cc'), 'w') as f:
       f.write('foo contents')
