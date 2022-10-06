@@ -151,6 +151,8 @@ class SkylabApi(recipe_api.RecipeApi):
             autotest_name = s.autotest_name
           elif s.test_type == structs.SKYLAB_TAST_TEST:
             autotest_name = AUTOTEST_NAME_TAST
+            if s.bucket and 'chromium' in s.bucket:
+              test_args.append('run_private_tests=false')
           elif s.test_type == structs.SKYLAB_TELEMETRY:
             autotest_name = AUTOTEST_NAME_TELEMETRY
           else:
