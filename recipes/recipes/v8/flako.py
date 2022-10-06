@@ -458,7 +458,7 @@ class Builds(object):
         self.api.json.output(),
         name=f'get cas_digests for #{offset}',
         step_test_data=lambda: self.api.json.test_api.output(
-            {'foo_isolated': '[dummy hash for foo_isolated/123]'}),
+            {'foo_isolated': '[dummy hash for foo_isolated]/123'}),
     )
     step_result = self.api.step.active_result
     self.cas_digests[offset] = step_result.json.output[self.isolated_name]
@@ -865,14 +865,6 @@ def GenTests(api):
         ),
     )
 
-  def switched_to_cas(offset):
-    return api.step_data(
-        f'calibration attempt 1.gsutil get cas_digests for #{offset}',
-        api.json.output(
-            {'foo_isolated': '[dummy hash for foo_isolated]/123'}
-        ),
-    )
-
   def successful_lookups(*offsets, fallback=False):
     suffix = ' (fallback)' if fallback else ''
     lookups = [
@@ -975,10 +967,6 @@ def GenTests(api):
       # Bisect into a5..a2.
       is_flaky(3, 0, 3) +
       verify_suspects(5, 3) +
-      # TODO(machenbach): This simulates a new build that has switched to CAS
-      # while older builds have not yet. Remove this as soon as we switch CAS
-      # on by default.
-      switched_to_cas(1) +
       drop_test_step_expectations()
   )
 

@@ -1322,7 +1322,7 @@
     "name": "gsutil get cas_digests for #2",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"foo_isolated\": \"[dummy hash for foo_isolated/123]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"foo_isolated\": \"[dummy hash for foo_isolated]/123\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -1437,7 +1437,7 @@
     "name": "gsutil get cas_digests for #5",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"foo_isolated\": \"[dummy hash for foo_isolated/123]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"foo_isolated\": \"[dummy hash for foo_isolated]/123\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -1489,7 +1489,7 @@
     "name": "gsutil get cas_digests for #3",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"foo_isolated\": \"[dummy hash for foo_isolated/123]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"foo_isolated\": \"[dummy hash for foo_isolated]/123\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
