@@ -459,13 +459,23 @@ def _gold_build_config(args):
   return build_config
 
 
-def _gen_ci_build(api, builder):
-  return api.buildbucket.ci_build(
+def _disable_resultdb(build_message):
+  build_message.infra.resultdb.invocation = ''
+  return build_message
+
+
+def _gen_ci_build_message(api, builder):
+  return api.buildbucket.ci_build_message(
       project='pdfium',
       builder=builder,
       build_number=1234,
       git_repo='https://pdfium.googlesource.com/pdfium',
   )
+
+
+def _gen_ci_build(api, builder):
+  return api.buildbucket.build(
+      _disable_resultdb(_gen_ci_build_message(api, builder)))
 
 
 def RunSteps(api, memory_tool, skia, skia_paths, xfa, v8, target_cpu, clang,
@@ -767,8 +777,12 @@ def GenTests(api):
 
   yield api.test(
       'try-linux-gerrit_xfa_asan_lsan',
-      api.buildbucket.try_build(
-          project='pdfium', builder='linux_xfa_asan_lsan', build_number=1234),
+      api.buildbucket.build(
+          _disable_resultdb(
+              api.buildbucket.try_build_message(
+                  project='pdfium',
+                  builder='linux_xfa_asan_lsan',
+                  build_number=1234))),
       api.platform('linux', 64),
       api.builder_group.for_current('tryserver.client.pdfium'),
       api.properties(xfa=True, memory_tool='asan'),
@@ -956,4 +970,12 @@ def GenTests(api):
       api.properties(xfa=True, bot_id='test_bot'),
       _gen_ci_build(api, 'linux'),
       api.step_data('corpus tests (xfa disabled)', retcode=1),
+  )
+
+  yield api.test(
+      'with-resultdb',
+      api.platform('linux', 64),
+      api.builder_group.for_current('client.pdfium'),
+      api.properties(bot_id='test_bot'),
+      api.buildbucket.build(_gen_ci_build_message(api, 'linux')),
   )

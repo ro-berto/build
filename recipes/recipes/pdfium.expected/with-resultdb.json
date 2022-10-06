@@ -18,6 +18,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -47,7 +48,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "env": {
-      "DEPOT_TOOLS_REPORT_BUILD": "pdfium/ci/mac_skia_paths/8945511751514863184",
+      "DEPOT_TOOLS_REPORT_BUILD": "pdfium/ci/linux/8945511751514863184",
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "1800"
     },
@@ -66,6 +67,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -119,7 +121,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "env": {
-      "DEPOT_TOOLS_REPORT_BUILD": "pdfium/ci/mac_skia_paths/8945511751514863184"
+      "DEPOT_TOOLS_REPORT_BUILD": "pdfium/ci/linux/8945511751514863184"
     },
     "env_suffixes": {
       "PATH": [
@@ -132,98 +134,13 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
       }
     },
     "name": "gclient runhooks"
-  },
-  {
-    "cmd": [
-      "cipd",
-      "ensure",
-      "-root",
-      "[CACHE]/osx_sdk",
-      "-ensure-file",
-      "infra/tools/mac_toolchain/${platform} git_revision:248bbfc433c8e2fc4e3536d8f58477724ce7110d",
-      "-max-threads",
-      "0",
-      "-json-output",
-      "/path/to/tmp/json"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "pdfium:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "ensure_installed",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:248\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/mac_toolchain/resolved-platform\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/osx_sdk/mac_toolchain",
-      "install",
-      "-kind",
-      "mac",
-      "-xcode-version",
-      "9f2000",
-      "-output-dir",
-      "[CACHE]/osx_sdk/XCode.app"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "pdfium:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "install xcode"
-  },
-  {
-    "cmd": [
-      "sudo",
-      "xcode-select",
-      "--switch",
-      "[CACHE]/osx_sdk/XCode.app"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "pdfium:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "select XCode"
   },
   {
     "cmd": [],
@@ -249,6 +166,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -290,6 +208,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -319,8 +238,8 @@
       "--check",
       "--root=[CACHE]/builder/pdfium",
       "gen",
-      "//out/debug_skiapaths_xfa_v8",
-      "--args=is_debug=true is_component_build=false pdf_enable_v8=true pdf_enable_xfa=true pdf_use_skia=false pdf_use_skia_paths=true pdf_is_standalone=true use_goma=true goma_dir=\"[CACHE]/goma/client\""
+      "//out/debug_v8",
+      "--args=is_debug=true is_component_build=false pdf_enable_v8=true pdf_enable_xfa=false pdf_use_skia=false pdf_use_skia_paths=false pdf_is_standalone=true use_goma=true goma_dir=\"[CACHE]/goma/client\""
     ],
     "cwd": "[CACHE]/builder/pdfium",
     "luci_context": {
@@ -329,6 +248,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -350,7 +270,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/mac_skia_paths"
+      "[CACHE]/goma/data/linux"
     ],
     "infra_step": true,
     "luci_context": {
@@ -359,6 +279,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -377,7 +298,7 @@
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/mac_skia_paths",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -390,6 +311,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -418,6 +340,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -432,7 +355,7 @@
     "cmd": [
       "RECIPE_REPO[depot_tools]/ninja",
       "-C",
-      "[CACHE]/builder/pdfium/out/debug_skiapaths_xfa_v8",
+      "[CACHE]/builder/pdfium/out/debug_v8",
       "-j",
       "80",
       "pdfium_all"
@@ -443,6 +366,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -463,7 +387,7 @@
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/mac_skia_paths",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -475,6 +399,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -504,7 +429,7 @@
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/mac_skia_paths",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -516,6 +441,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -534,7 +460,7 @@
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/mac_skia_paths",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -546,6 +472,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -574,6 +501,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -595,9 +523,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[CACHE]/builder/pdfium/out/debug_skiapaths_xfa_v8",
+      "[CACHE]/builder/pdfium/out/debug_v8",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-C\", \"[CACHE]/builder/pdfium/out/debug_skiapaths_xfa_v8\", \"-j\", 80, \"pdfium_all\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-C\", \"[CACHE]/builder/pdfium/out/debug_v8\", \"-j\", 80, \"pdfium_all\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -613,9 +541,9 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"ci\", \"builder\": \"mac_skia_paths\", \"project\": \"pdfium\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"linux\", \"project\": \"pdfium\"}",
       "--buildbot-buildername",
-      "mac_skia_paths"
+      "linux"
     ],
     "luci_context": {
       "realm": {
@@ -623,6 +551,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -656,6 +585,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -668,7 +598,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/builder/pdfium/out/debug_skiapaths_xfa_v8/pdfium_unittests"
+      "[CACHE]/builder/pdfium/out/debug_v8/pdfium_unittests"
     ],
     "cwd": "[CACHE]/builder/pdfium",
     "luci_context": {
@@ -677,6 +607,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -686,7 +617,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/builder/pdfium/out/debug_skiapaths_xfa_v8/pdfium_embeddertests"
+      "[CACHE]/builder/pdfium/out/debug_v8/pdfium_embeddertests"
     ],
     "cwd": "[CACHE]/builder/pdfium",
     "luci_context": {
@@ -695,6 +626,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -708,16 +640,16 @@
       "-u",
       "[CACHE]/builder/pdfium/testing/tools/run_javascript_tests.py",
       "--build-dir",
-      "out/debug_skiapaths_xfa_v8",
+      "out/debug_v8",
       "--gold_output_dir",
-      "[CACHE]/builder/pdfium/out/debug_skiapaths_xfa_v8/gold_output",
+      "[CACHE]/builder/pdfium/out/debug_v8/gold_output",
       "--run-skia-gold",
       "--git-revision",
       "2d72510e447ab60a9728aeea2362d8be2cbd7789",
       "--buildbucket-id",
       "8945511751514863184",
       "--gold_key",
-      "debug true is_standalone true javascript_runtime enabled os mac skia false skia_paths true v8 true xfa true xfa_runtime enabled"
+      "debug true is_standalone true javascript_runtime enabled os linux skia false skia_paths false v8 true xfa false xfa_runtime disabled"
     ],
     "cwd": "[CACHE]/builder/pdfium",
     "luci_context": {
@@ -726,6 +658,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -739,16 +672,16 @@
       "-u",
       "[CACHE]/builder/pdfium/testing/tools/run_javascript_tests.py",
       "--build-dir",
-      "out/debug_skiapaths_xfa_v8",
+      "out/debug_v8",
       "--gold_output_dir",
-      "[CACHE]/builder/pdfium/out/debug_skiapaths_xfa_v8/gold_output",
+      "[CACHE]/builder/pdfium/out/debug_v8/gold_output",
       "--run-skia-gold",
       "--git-revision",
       "2d72510e447ab60a9728aeea2362d8be2cbd7789",
       "--buildbucket-id",
       "8945511751514863184",
       "--gold_key",
-      "debug true is_standalone true javascript_runtime disabled os mac skia false skia_paths true v8 true xfa true xfa_runtime disabled",
+      "debug true is_standalone true javascript_runtime disabled os linux skia false skia_paths false v8 true xfa false xfa_runtime disabled",
       "--disable-javascript"
     ],
     "cwd": "[CACHE]/builder/pdfium",
@@ -758,6 +691,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -769,50 +703,18 @@
     "cmd": [
       "vpython3",
       "-u",
-      "[CACHE]/builder/pdfium/testing/tools/run_javascript_tests.py",
-      "--build-dir",
-      "out/debug_skiapaths_xfa_v8",
-      "--gold_output_dir",
-      "[CACHE]/builder/pdfium/out/debug_skiapaths_xfa_v8/gold_output",
-      "--run-skia-gold",
-      "--git-revision",
-      "2d72510e447ab60a9728aeea2362d8be2cbd7789",
-      "--buildbucket-id",
-      "8945511751514863184",
-      "--gold_key",
-      "debug true is_standalone true javascript_runtime enabled os mac skia false skia_paths true v8 true xfa true xfa_runtime disabled",
-      "--disable-xfa"
-    ],
-    "cwd": "[CACHE]/builder/pdfium",
-    "luci_context": {
-      "realm": {
-        "name": "pdfium:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "javascript tests (xfa disabled)"
-  },
-  {
-    "cmd": [
-      "vpython3",
-      "-u",
       "[CACHE]/builder/pdfium/testing/tools/run_pixel_tests.py",
       "--build-dir",
-      "out/debug_skiapaths_xfa_v8",
+      "out/debug_v8",
       "--gold_output_dir",
-      "[CACHE]/builder/pdfium/out/debug_skiapaths_xfa_v8/gold_output",
+      "[CACHE]/builder/pdfium/out/debug_v8/gold_output",
       "--run-skia-gold",
       "--git-revision",
       "2d72510e447ab60a9728aeea2362d8be2cbd7789",
       "--buildbucket-id",
       "8945511751514863184",
       "--gold_key",
-      "debug true is_standalone true javascript_runtime enabled os mac skia false skia_paths true v8 true xfa true xfa_runtime enabled"
+      "debug true is_standalone true javascript_runtime enabled os linux skia false skia_paths false v8 true xfa false xfa_runtime disabled"
     ],
     "cwd": "[CACHE]/builder/pdfium",
     "luci_context": {
@@ -821,6 +723,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -834,16 +737,16 @@
       "-u",
       "[CACHE]/builder/pdfium/testing/tools/run_pixel_tests.py",
       "--build-dir",
-      "out/debug_skiapaths_xfa_v8",
+      "out/debug_v8",
       "--gold_output_dir",
-      "[CACHE]/builder/pdfium/out/debug_skiapaths_xfa_v8/gold_output",
+      "[CACHE]/builder/pdfium/out/debug_v8/gold_output",
       "--run-skia-gold",
       "--git-revision",
       "2d72510e447ab60a9728aeea2362d8be2cbd7789",
       "--buildbucket-id",
       "8945511751514863184",
       "--gold_key",
-      "debug true is_standalone true javascript_runtime enabled os mac skia false skia_paths true v8 true xfa true xfa_runtime enabled",
+      "debug true is_standalone true javascript_runtime enabled os linux skia false skia_paths false v8 true xfa false xfa_runtime disabled",
       "--render-oneshot"
     ],
     "cwd": "[CACHE]/builder/pdfium",
@@ -853,6 +756,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -866,16 +770,16 @@
       "-u",
       "[CACHE]/builder/pdfium/testing/tools/run_pixel_tests.py",
       "--build-dir",
-      "out/debug_skiapaths_xfa_v8",
+      "out/debug_v8",
       "--gold_output_dir",
-      "[CACHE]/builder/pdfium/out/debug_skiapaths_xfa_v8/gold_output",
+      "[CACHE]/builder/pdfium/out/debug_v8/gold_output",
       "--run-skia-gold",
       "--git-revision",
       "2d72510e447ab60a9728aeea2362d8be2cbd7789",
       "--buildbucket-id",
       "8945511751514863184",
       "--gold_key",
-      "debug true is_standalone true javascript_runtime disabled os mac skia false skia_paths true v8 true xfa true xfa_runtime disabled",
+      "debug true is_standalone true javascript_runtime disabled os linux skia false skia_paths false v8 true xfa false xfa_runtime disabled",
       "--disable-javascript"
     ],
     "cwd": "[CACHE]/builder/pdfium",
@@ -885,6 +789,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -896,19 +801,18 @@
     "cmd": [
       "vpython3",
       "-u",
-      "[CACHE]/builder/pdfium/testing/tools/run_pixel_tests.py",
+      "[CACHE]/builder/pdfium/testing/tools/run_corpus_tests.py",
       "--build-dir",
-      "out/debug_skiapaths_xfa_v8",
+      "out/debug_v8",
       "--gold_output_dir",
-      "[CACHE]/builder/pdfium/out/debug_skiapaths_xfa_v8/gold_output",
+      "[CACHE]/builder/pdfium/out/debug_v8/gold_output",
       "--run-skia-gold",
       "--git-revision",
       "2d72510e447ab60a9728aeea2362d8be2cbd7789",
       "--buildbucket-id",
       "8945511751514863184",
       "--gold_key",
-      "debug true is_standalone true javascript_runtime enabled os mac skia false skia_paths true v8 true xfa true xfa_runtime disabled",
-      "--disable-xfa"
+      "debug true is_standalone true javascript_runtime enabled os linux skia false skia_paths false v8 true xfa false xfa_runtime disabled"
     ],
     "cwd": "[CACHE]/builder/pdfium",
     "luci_context": {
@@ -917,32 +821,79 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
       }
     },
-    "name": "pixel tests (xfa disabled)"
+    "name": "corpus tests"
   },
   {
     "cmd": [
-      "sudo",
-      "xcode-select",
-      "--reset"
+      "vpython3",
+      "-u",
+      "[CACHE]/builder/pdfium/testing/tools/run_corpus_tests.py",
+      "--build-dir",
+      "out/debug_v8",
+      "--gold_output_dir",
+      "[CACHE]/builder/pdfium/out/debug_v8/gold_output",
+      "--run-skia-gold",
+      "--git-revision",
+      "2d72510e447ab60a9728aeea2362d8be2cbd7789",
+      "--buildbucket-id",
+      "8945511751514863184",
+      "--gold_key",
+      "debug true is_standalone true javascript_runtime enabled os linux skia false skia_paths false v8 true xfa false xfa_runtime disabled",
+      "--render-oneshot"
     ],
-    "infra_step": true,
+    "cwd": "[CACHE]/builder/pdfium",
     "luci_context": {
       "realm": {
         "name": "pdfium:ci"
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
       }
     },
-    "name": "reset XCode"
+    "name": "corpus tests (oneshot rendering enabled)"
+  },
+  {
+    "cmd": [
+      "vpython3",
+      "-u",
+      "[CACHE]/builder/pdfium/testing/tools/run_corpus_tests.py",
+      "--build-dir",
+      "out/debug_v8",
+      "--gold_output_dir",
+      "[CACHE]/builder/pdfium/out/debug_v8/gold_output",
+      "--run-skia-gold",
+      "--git-revision",
+      "2d72510e447ab60a9728aeea2362d8be2cbd7789",
+      "--buildbucket-id",
+      "8945511751514863184",
+      "--gold_key",
+      "debug true is_standalone true javascript_runtime disabled os linux skia false skia_paths false v8 true xfa false xfa_runtime disabled",
+      "--disable-javascript"
+    ],
+    "cwd": "[CACHE]/builder/pdfium",
+    "luci_context": {
+      "realm": {
+        "name": "pdfium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "corpus tests (javascript disabled)"
   },
   {
     "name": "$result"
