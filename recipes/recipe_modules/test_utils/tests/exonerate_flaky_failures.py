@@ -87,12 +87,13 @@ def RunSteps(api, known_flakes_expectations,
       tests, 'with patch', retry_failed_shards=True, retry_invalid_shards=True)
 
   for t in tests:
-    assert t.known_flaky_failures == set(
-        known_flakes_expectations.get(t.name, []))
-    assert t.known_luci_analysis_flaky_failures == set(
-        known_luci_analysis_flakes_expectations.get(t.name, []))
-    assert t.weak_luci_analysis_flaky_failures == set(
-        weak_flaky_failures.get(t.name, []))
+    api.assertions.assertEqual(t.known_flaky_failures,
+                               set(known_flakes_expectations.get(t.name, [])))
+    api.assertions.assertEqual(
+        t.known_luci_analysis_flaky_failures,
+        set(known_luci_analysis_flakes_expectations.get(t.name, [])))
+    api.assertions.assertEqual(t.weak_luci_analysis_flaky_failures,
+                               set(weak_flaky_failures.get(t.name, [])))
 
 
 def GenTests(api):
@@ -190,7 +191,6 @@ def GenTests(api):
       ),
       api.post_process(post_process.MustRun,
                        'error querying LUCI Analysis for failure rates'),
-      api.step_data('query known flaky failures on CQ', api.json.output({})),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -236,7 +236,6 @@ def GenTests(api):
                   'should_exonerate_flaky_failures': True,
               },
           }),
-      api.step_data('query known flaky failures on CQ', api.json.output([])),
       api.step_data(
           'query LUCI Analysis for failure rates.rpc call',
           stdout=api.raw_io.output_text(
@@ -314,6 +313,48 @@ def GenTests(api):
                        'exonerate unrelated test failures'),
       api.post_process(CheckStepInput, 'exonerate unrelated test failures',
                        'testA'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'all tests were skipped',
+      api.chromium.generic_build(
+          builder_group='fake-group',
+          builder='fake-builder',
+          experiments=[
+              'enable_weetbix_queries', 'weetbix.enable_weetbix_exonerations'
+          ]),
+      api.properties(
+          known_flakes_expectations={},
+          known_luci_analysis_flakes_expectations={},
+          weak_flaky_failures={},
+          **{
+              '$build/test_utils': {
+                  'should_exonerate_flaky_failures': True,
+              },
+          }),
+      api.override_step_data(
+          'failed_test results',
+          stdout=api.raw_io.output_text(
+              api.test_utils.rdb_results(
+                  'failed_test', skipped_tests=['testA']))),
+      api.step_data(
+          'query LUCI Analysis for failure rates.rpc call',
+          stdout=api.raw_io.output_text(
+              api.json.dumps({
+                  'testVariants': [
+                      api.weetbix.generate_analysis(
+                          'testA', flaky_verdict_count=10),
+                  ]
+              })),
+      ),
+      api.post_process(post_process.MustRun,
+                       'query known flaky failures on CQ'),
+      api.post_process(post_process.DoesNotRun,
+                       'exonerate unrelated test failures (luci.analysis)'),
+      api.post_process(post_process.MustRun,
+                       'failed_test (retry shards with patch)'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )

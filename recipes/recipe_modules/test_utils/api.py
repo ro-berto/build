@@ -481,6 +481,9 @@ class TestUtilsApi(recipe_api.RecipeApi):
     If a suite has tests to be exonerated, the suite's
     _known_luci_analysis_flaky_failures will be updated.
 
+    If a test is skipped, it will not be exonerated and therefore not included
+    in the suite's _known_luci_analysis_flaky_failures.
+
     Args:
       tests_to_check (List(Test)): List of failing test suites
 
@@ -528,7 +531,14 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
       # Set of test_names
       tests_to_exonerate = set()
+      rdb_results = suite.get_rdb_results('with patch')
+      test_name_to_result = rdb_results.individual_unexpected_test_by_test_name
       for analysis in failure_rate_analysis_per_suite.failure_analysis_list:
+        # Don't exonerate skipped tests
+        if (test_name_to_result[analysis.test_name] in
+            rdb_results.unexpected_skipped_tests):
+          continue
+
         # Get the failures in the last 12 hours, up to 10
         twelve_hours_ago = timestamp_pb2.Timestamp(
             seconds=int(self.m.time.time() - (60 * 60 * 12)))
