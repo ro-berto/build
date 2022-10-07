@@ -195,6 +195,12 @@ def _build_steps(api, clang, msvc, out_dir):
 # _run_tests() runs the tests and uploads the results to Gold.
 def _run_tests(api, memory_tool, v8, xfa, skia, out_dir, build_config, revision,
                selected_tests_only):
+  resultdb = _ResultDb(
+      api, base_variant={
+          'builder': api.buildbucket.builder_name,
+      })
+  test_runner = _TestRunner(api, resultdb, out_dir)
+
   env = {}
   COMMON_SANITIZER_OPTIONS = ['allocator_may_return_null=1']
   COMMON_UNIX_SANITIZER_OPTIONS = [
@@ -227,30 +233,29 @@ def _run_tests(api, memory_tool, v8, xfa, skia, out_dir, build_config, revision,
   # will still show up as failed, but processing will continue.
   test_exception = None
 
-  unittests_path = str(api.path['checkout'].join('out', out_dir,
-                                                 'pdfium_unittests'))
-  if api.platform.is_win:
-    unittests_path += '.exe'
   with api.context(cwd=api.path['checkout'], env=env):
     try:
-      api.step('unittests', _wrap_gtest_for_resultdb(api, [unittests_path]))
+      test_runner.run_gtest('unittests', target=('', 'pdfium_unittests'))
     except api.step.StepFailure as e:
       test_exception = e
 
-  embeddertests_path = str(api.path['checkout'].join('out', out_dir,
-                                                     'pdfium_embeddertests'))
-  if api.platform.is_win:
-    embeddertests_path += '.exe'
   with api.context(cwd=api.path['checkout'], env=env):
     try:
+      embeddertests_target = ('', 'pdfium_embeddertests')
       if skia:
         # Use argument to do runtime renderer selection.
-        embeddertests_cmd = [embeddertests_path, '--use-renderer=agg']
-        api.step('embeddertests (agg)', embeddertests_cmd)
-        embeddertests_cmd = [embeddertests_path, '--use-renderer=skia']
-        api.step('embeddertests (skia)', embeddertests_cmd)
+        test_runner.run_gtest(
+            'embeddertests (agg)',
+            target=embeddertests_target,
+            args=['--use-renderer=agg'],
+            test_suite=embeddertests_target[1] + '_agg')
+        test_runner.run_gtest(
+            'embeddertests (skia)',
+            target=embeddertests_target,
+            args=['--use-renderer=skia'],
+            test_suite=embeddertests_target[1] + '_skia')
       else:
-        api.step('embeddertests', [embeddertests_path])
+        test_runner.run_gtest('embeddertests', target=embeddertests_target)
     except api.step.StepFailure as e:
       test_exception = e
 
@@ -373,29 +378,89 @@ def _run_tests(api, memory_tool, v8, xfa, skia, out_dir, build_config, revision,
     raise test_exception  # pylint: disable=E0702
 
 
-def _wrap_gtest_for_resultdb(api, gtest_command):
-  """Wraps an invocation of a GoogleTest test runner."""
-  if not api.resultdb.enabled:
-    return gtest_command
+class _ResultDb:
 
-  result_file_path = api.path.mkstemp()
-  artifact_directory_path = api.path.dirname(result_file_path)
+  def __init__(self, api, *, base_variant):
+    self.api = api
+    self.base_variant = base_variant
 
-  result_adapter_path = str(api.path['checkout'].join('tools', 'resultdb',
-                                                      'result_adapter'))
-  if api.platform.is_win:
-    result_adapter_path += '.exe'
+    self.result_adapter_path = str(self.api.path['checkout'].join(
+        'tools', 'resultdb', 'result_adapter'))
+    if self.api.platform.is_win:
+      self.result_adapter_path += '.exe'
 
-  return api.resultdb.wrap([
-      result_adapter_path,
-      'gtest_json',
-      '-artifact-directory',
-      artifact_directory_path,
-      '-result-file',
-      result_file_path,
-  ] + gtest_command + [
-      f'--gtest_output=json:{result_file_path}',
-  ])
+  def wrap(self,
+           command,
+           *,
+           test_id_prefix='',
+           base_variant=None,
+           base_tags=None):
+    """Wraps an invocation with native ResultSink support."""
+    # TODO(crbug.com/pdfium/1910): Move once ResultDB is mandatory.
+    self.api.resultdb.assert_enabled()
+
+    variant = dict(self.base_variant)
+    variant.update(base_variant or {})
+
+    tags = set(base_tags or [])
+
+    return self.api.resultdb.wrap(
+        command,
+        test_id_prefix=test_id_prefix,
+        base_variant=variant,
+        base_tags=list(tags),
+    )
+
+  def wrap_gtest(self, gtest_command, **kwargs):
+    """Wraps an invocation of a GoogleTest test runner."""
+    if not self.api.resultdb.enabled:
+      return gtest_command
+
+    result_file_path = self.api.path.mkstemp()
+    artifact_directory_path = self.api.path.dirname(result_file_path)
+    return self.wrap([
+        self.result_adapter_path,
+        'gtest_json',
+        '-artifact-directory',
+        artifact_directory_path,
+        '-result-file',
+        result_file_path,
+        '--',
+    ] + gtest_command + [
+        f'--gtest_output=json:{result_file_path}',
+    ], **kwargs)
+
+
+class _TestRunner:
+
+  def __init__(self, api, resultdb, out_dir):
+    self.api = api
+    self.resultdb = resultdb
+    self.out_dir = out_dir
+
+  def run_gtest(self, step_name, *, target, args=None, test_suite=None):
+    target_path, target_name = target
+
+    test_path = str(self.api.path['checkout'].join('out', self.out_dir,
+                                                   target_name))
+    if self.api.platform.is_win:
+      test_path += '.exe'
+
+    variant = {
+        'test_suite': (test_suite or target_name),
+    }
+
+    tags = [
+        ('step_name', step_name),
+    ]
+
+    self.api.step(
+        step_name,
+        self.resultdb.wrap_gtest(
+            [test_path] + (args or []),
+            test_id_prefix=f'ninja://{target_path}:{target_name}/',
+            base_variant=variant,
+            base_tags=tags))
 
 
 def _add_gold_args(api, revision, script_args):
@@ -1012,4 +1077,13 @@ def GenTests(api):
       api.builder_group.for_current('client.pdfium'),
       api.properties(bot_id='test_bot'),
       api.buildbucket.build(_gen_ci_build_message(api, 'windows')),
+  )
+
+  yield api.test(
+      'with-resultdb-mac_skia',
+      api.platform('mac', 64),
+      api.builder_group.for_current('client.pdfium'),
+      api.properties(
+          skia=True, xfa=True, selected_tests_only=True, bot_id='test_bot'),
+      api.buildbucket.build(_gen_ci_build_message(api, 'mac_skia')),
   )
