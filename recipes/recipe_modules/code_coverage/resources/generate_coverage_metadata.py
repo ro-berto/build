@@ -588,11 +588,12 @@ def _cleanup_coverage_data(src_path, llvm_raw_data):
   }
 
 
-def _create_coverage_json(output_dir, data):
-  """Writes coverage data in json format to disk.
+def _write_coverage_to_disk(output_dir, output_file_name, data):
+  """Writes coverage data to disk.
 
   Args:
     output_dir(string): Directory where coverage data would be materialized.
+    output_file_name(string): Name of the file being materialized.
     data(dict): Coverage data of following format
       {
         'data': [{
@@ -604,13 +605,30 @@ def _create_coverage_json(output_dir, data):
     where file_data is a list of file coverage data. See
     _to_compressed_file_record() to understand how file coverage data looks
     like.
-
-  Creates a coverage.json file in the output directory
   """
-
-  coverage_json_file = os.path.join(output_dir, 'coverage.json')
-  with open(coverage_json_file, 'w') as fp:
+  coverage_file = os.path.join(output_dir, output_file_name)
+  with open(coverage_file, 'w') as fp:
     json.dump(data, fp)
+
+
+def _split_llvm_data_in_shards(data, shard_size=500):
+  """Splits llvm coverage data into smaller shards."""
+  shards = []
+  for datum in data['data']:
+    files_data = datum['files']
+    count = 0
+    while count < len(files_data):
+      files_in_shard = files_data[count:count + shard_size]
+      shard = {
+          'data': [{
+              'files': files_in_shard
+          }],
+          'type': data['type'],
+          'version': data['version']
+      }
+      shards.append(shard)
+      count += shard_size
+  return shards
 
 
 def _generate_metadata(src_path,
@@ -658,7 +676,13 @@ def _generate_metadata(src_path,
                                     binaries, sources, output_dir, exclusions,
                                     arch)
   data = _cleanup_coverage_data(src_path, raw_data)
-  _create_coverage_json(output_dir, data)
+  _write_coverage_to_disk(output_dir, 'coverage.json', data)
+
+  data_shards = _split_llvm_data_in_shards(data)
+  for i in range(len(data_shards)):
+    file_name = 'coverage%d.json' % i
+    _write_coverage_to_disk(output_dir, file_name, data_shards[i])
+
   minutes = (time.time() - start_time) / 60
   logging.info(
       'Generating & loading coverage metadata with "llvm-cov export" '

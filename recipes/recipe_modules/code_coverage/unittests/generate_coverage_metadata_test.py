@@ -351,6 +351,69 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
     self.maxDiff = None
     self.assertDictEqual(expected_cleaned_data, cleaned_data)
 
+  def test_split_llvm_data_in_shards(self):
+    data = {
+        'data': [{
+            'files': [{
+                'segments': [[1, 12, 1, True, True],],
+                'summary': {
+                    'lines': {
+                        'covered': 1,
+                        'count': 1,
+                    }
+                },
+                'filename': '/path/to/chromium/src/base/base1.cc',
+            }, {
+                'segments': [[1, 12, 1, True, True],],
+                'summary': {
+                    'lines': {
+                        'covered': 1,
+                        'count': 1,
+                    }
+                },
+                'filename': '/path/to/chromium/src/base/base2.cc',
+            }]
+        }],
+        'type': 'llvm.coverage.json.export',
+        'version': '2.0.1'
+    }
+    expected_sharded_data = [{
+        'data': [{
+            'files': [{
+                'segments': [[1, 12, 1, True, True],],
+                'summary': {
+                    'lines': {
+                        'covered': 1,
+                        'count': 1,
+                    }
+                },
+                'filename': '/path/to/chromium/src/base/base1.cc',
+            }]
+        }],
+        'type': 'llvm.coverage.json.export',
+        'version': '2.0.1'
+    }, {
+        'data': [{
+            'files': [{
+                'segments': [[1, 12, 1, True, True],],
+                'summary': {
+                    'lines': {
+                        'covered': 1,
+                        'count': 1,
+                    }
+                },
+                'filename': '/path/to/chromium/src/base/base2.cc',
+            }]
+        }],
+        'type': 'llvm.coverage.json.export',
+        'version': '2.0.1'
+    }]
+    actual_sharded_data = generator._split_llvm_data_in_shards(
+        data, shard_size=1)
+
+    self.assertEqual(expected_sharded_data, actual_sharded_data)
+
+
   # This test uses the following code:
   # 1|      1|int main() {
   # 2|      1|  if ((2 > 1) || (3 > 2)) {
@@ -418,7 +481,7 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
   #
   # Where the first column is the line number and the second column is the
   # expected number of times the line is executed.
-  @mock.patch.object(generator, '_create_coverage_json')
+  @mock.patch.object(generator, '_write_coverage_to_disk')
   @mock.patch.object(generator, '_get_per_target_coverage_summary')
   @mock.patch.object(generator, '_get_raw_coverage_data')
   def test_generate_metadata_for_per_cl_coverage(
@@ -508,7 +571,7 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
   # Where the first column is the line number and the second column is the
   # expected number of times the line is executed.
 
-  @mock.patch.object(generator, '_create_coverage_json')
+  @mock.patch.object(generator, '_write_coverage_to_disk')
   @mock.patch.object(generator, '_get_per_target_coverage_summary')
   @mock.patch.object(generator.repository_util, '_GetFileRevisions')
   @mock.patch.object(generator, '_get_raw_coverage_data')
