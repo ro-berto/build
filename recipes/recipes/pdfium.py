@@ -22,6 +22,7 @@ DEPS = [
     'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/properties',
+    'recipe_engine/resultdb',
     'recipe_engine/step',
     'recipe_engine/time',
 ]
@@ -232,7 +233,7 @@ def _run_tests(api, memory_tool, v8, xfa, skia, out_dir, build_config, revision,
     unittests_path += '.exe'
   with api.context(cwd=api.path['checkout'], env=env):
     try:
-      api.step('unittests', [unittests_path])
+      api.step('unittests', _wrap_gtest_for_resultdb(api, [unittests_path]))
     except api.step.StepFailure as e:
       test_exception = e
 
@@ -370,6 +371,31 @@ def _run_tests(api, memory_tool, v8, xfa, skia, out_dir, build_config, revision,
 
   if test_exception:
     raise test_exception  # pylint: disable=E0702
+
+
+def _wrap_gtest_for_resultdb(api, gtest_command):
+  """Wraps an invocation of a GoogleTest test runner."""
+  if not api.resultdb.enabled:
+    return gtest_command
+
+  result_file_path = api.path.mkstemp()
+  artifact_directory_path = api.path.dirname(result_file_path)
+
+  result_adapter_path = str(api.path['checkout'].join('tools', 'resultdb',
+                                                      'result_adapter'))
+  if api.platform.is_win:
+    result_adapter_path += '.exe'
+
+  return api.resultdb.wrap([
+      result_adapter_path,
+      'gtest_json',
+      '-artifact-directory',
+      artifact_directory_path,
+      '-result-file',
+      result_file_path,
+  ] + gtest_command + [
+      f'--gtest_output=json:{result_file_path}',
+  ])
 
 
 def _add_gold_args(api, revision, script_args):
@@ -978,4 +1004,12 @@ def GenTests(api):
       api.builder_group.for_current('client.pdfium'),
       api.properties(bot_id='test_bot'),
       api.buildbucket.build(_gen_ci_build_message(api, 'linux')),
+  )
+
+  yield api.test(
+      'with-resultdb-win',
+      api.platform('win', 64),
+      api.builder_group.for_current('client.pdfium'),
+      api.properties(bot_id='test_bot'),
+      api.buildbucket.build(_gen_ci_build_message(api, 'windows')),
   )
