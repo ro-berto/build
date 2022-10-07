@@ -18,6 +18,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -54,6 +55,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -124,6 +126,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -190,6 +193,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -221,6 +225,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -262,6 +267,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -301,6 +307,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -331,6 +338,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -362,6 +370,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -390,6 +399,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -415,6 +425,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -447,6 +458,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -488,6 +500,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -518,6 +531,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -546,6 +560,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -595,6 +610,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -628,6 +644,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -640,7 +657,26 @@
   },
   {
     "cmd": [
-      "[CACHE]/builder/pdfium/out/debug_xfa_v8_asan/pdfium_unittests"
+      "rdb",
+      "stream",
+      "-test-id-prefix",
+      "ninja://:pdfium_unittests/",
+      "-var",
+      "builder:linux_xfa_asan_lsan",
+      "-var",
+      "test_suite:pdfium_unittests",
+      "-tag",
+      "step_name:unittests",
+      "--",
+      "[CACHE]/builder/pdfium/tools/resultdb/result_adapter",
+      "gtest_json",
+      "-artifact-directory",
+      "[CLEANUP]",
+      "-result-file",
+      "[CLEANUP]/tmp_tmp_1",
+      "--",
+      "[CACHE]/builder/pdfium/out/debug_xfa_v8_asan/pdfium_unittests",
+      "--gtest_output=json:[CLEANUP]/tmp_tmp_1"
     ],
     "cwd": "[CACHE]/builder/pdfium",
     "env": {
@@ -652,6 +688,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -661,7 +698,26 @@
   },
   {
     "cmd": [
-      "[CACHE]/builder/pdfium/out/debug_xfa_v8_asan/pdfium_embeddertests"
+      "rdb",
+      "stream",
+      "-test-id-prefix",
+      "ninja://:pdfium_embeddertests/",
+      "-var",
+      "builder:linux_xfa_asan_lsan",
+      "-var",
+      "test_suite:pdfium_embeddertests",
+      "-tag",
+      "step_name:embeddertests",
+      "--",
+      "[CACHE]/builder/pdfium/tools/resultdb/result_adapter",
+      "gtest_json",
+      "-artifact-directory",
+      "[CLEANUP]",
+      "-result-file",
+      "[CLEANUP]/tmp_tmp_2",
+      "--",
+      "[CACHE]/builder/pdfium/out/debug_xfa_v8_asan/pdfium_embeddertests",
+      "--gtest_output=json:[CLEANUP]/tmp_tmp_2"
     ],
     "cwd": "[CACHE]/builder/pdfium",
     "env": {
@@ -673,6 +729,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -711,6 +768,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -750,6 +808,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -789,6 +848,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -827,6 +887,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -866,6 +927,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -905,6 +967,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -944,6 +1007,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -982,6 +1046,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -1021,6 +1086,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -1060,6 +1126,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"
@@ -1099,6 +1166,7 @@
       },
       "resultdb": {
         "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
           "update_token": "token"
         },
         "hostname": "rdbhost"

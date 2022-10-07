@@ -384,6 +384,8 @@ class _ResultDb:
     self.api = api
     self.base_variant = base_variant
 
+    self.api.resultdb.assert_enabled()
+
     self.result_adapter_path = str(self.api.path['checkout'].join(
         'tools', 'resultdb', 'result_adapter'))
     if self.api.platform.is_win:
@@ -396,9 +398,6 @@ class _ResultDb:
            base_variant=None,
            base_tags=None):
     """Wraps an invocation with native ResultSink support."""
-    # TODO(crbug.com/pdfium/1910): Move once ResultDB is mandatory.
-    self.api.resultdb.assert_enabled()
-
     variant = dict(self.base_variant)
     variant.update(base_variant or {})
 
@@ -413,9 +412,6 @@ class _ResultDb:
 
   def wrap_gtest(self, gtest_command, **kwargs):
     """Wraps an invocation of a GoogleTest test runner."""
-    if not self.api.resultdb.enabled:
-      return gtest_command
-
     result_file_path = self.api.path.mkstemp()
     artifact_directory_path = self.api.path.dirname(result_file_path)
     return self.wrap([
@@ -550,23 +546,13 @@ def _gold_build_config(args):
   return build_config
 
 
-def _disable_resultdb(build_message):
-  build_message.infra.resultdb.invocation = ''
-  return build_message
-
-
-def _gen_ci_build_message(api, builder):
-  return api.buildbucket.ci_build_message(
+def _gen_ci_build(api, builder):
+  return api.buildbucket.ci_build(
       project='pdfium',
       builder=builder,
       build_number=1234,
       git_repo='https://pdfium.googlesource.com/pdfium',
   )
-
-
-def _gen_ci_build(api, builder):
-  return api.buildbucket.build(
-      _disable_resultdb(_gen_ci_build_message(api, builder)))
 
 
 def RunSteps(api, memory_tool, skia, skia_paths, xfa, v8, target_cpu, clang,
@@ -868,12 +854,8 @@ def GenTests(api):
 
   yield api.test(
       'try-linux-gerrit_xfa_asan_lsan',
-      api.buildbucket.build(
-          _disable_resultdb(
-              api.buildbucket.try_build_message(
-                  project='pdfium',
-                  builder='linux_xfa_asan_lsan',
-                  build_number=1234))),
+      api.buildbucket.try_build(
+          project='pdfium', builder='linux_xfa_asan_lsan', build_number=1234),
       api.platform('linux', 64),
       api.builder_group.for_current('tryserver.client.pdfium'),
       api.properties(xfa=True, memory_tool='asan'),
@@ -1061,29 +1043,4 @@ def GenTests(api):
       api.properties(xfa=True, bot_id='test_bot'),
       _gen_ci_build(api, 'linux'),
       api.step_data('corpus tests (xfa disabled)', retcode=1),
-  )
-
-  yield api.test(
-      'with-resultdb',
-      api.platform('linux', 64),
-      api.builder_group.for_current('client.pdfium'),
-      api.properties(bot_id='test_bot'),
-      api.buildbucket.build(_gen_ci_build_message(api, 'linux')),
-  )
-
-  yield api.test(
-      'with-resultdb-win',
-      api.platform('win', 64),
-      api.builder_group.for_current('client.pdfium'),
-      api.properties(bot_id='test_bot'),
-      api.buildbucket.build(_gen_ci_build_message(api, 'windows')),
-  )
-
-  yield api.test(
-      'with-resultdb-mac_skia',
-      api.platform('mac', 64),
-      api.builder_group.for_current('client.pdfium'),
-      api.properties(
-          skia=True, xfa=True, selected_tests_only=True, bot_id='test_bot'),
-      api.buildbucket.build(_gen_ci_build_message(api, 'mac_skia')),
   )
