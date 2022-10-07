@@ -45,15 +45,16 @@ def _compile_with_siso(api, target, with_remote_cache):
 
   step_name = 'Build %s' % target
   ninja_command = ['ninja', '-C', api.chromium.output_dir, target]
-  siso_args = []
+  siso_args = ['-config=local_link']
   if with_remote_cache:
     step_name += ' with remote cache (siso)'
   else:
     step_name += ' without remote cache (siso)'
-    siso_args += ['-re_cache_enable_read', 'false']
+    siso_args += ['-re_cache_enable_read=false']
   try:
-    return api.siso.run_ninja(
-        ninja_command=ninja_command, name=step_name, siso_args=siso_args)
+    with api.context(cwd=api.path['checkout']):
+      return api.siso.run_ninja(
+          ninja_command=ninja_command, name=step_name, siso_args=siso_args)
   finally:
     _rm_build_dir(api)
 

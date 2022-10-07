@@ -647,6 +647,7 @@
       "0777",
       "[START_DIR]\\cipd_tool\\infra_internal\\experimental\\siso\\latest"
     ],
+    "cwd": "[CACHE]\\builder\\src",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -678,6 +679,7 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
+    "cwd": "[CACHE]\\builder\\src",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -718,12 +720,13 @@
       "--deps_log_bucket",
       "siso-deps-log-experiments",
       "--enable_cloud_logging",
-      "-re_cache_enable_read",
-      "false",
+      "-config=local_link",
+      "-re_cache_enable_read=false",
       "-C",
       "[CACHE]\\builder\\src\\out\\Release",
       "all"
     ],
+    "cwd": "[CACHE]\\builder\\src",
     "luci_context": {
       "realm": {
         "name": "chromium:ci"
@@ -749,6 +752,7 @@
       "RECIPE_MODULE[recipe_engine::cas]\\resources\\infra.sha1",
       "/path/to/tmp/"
     ],
+    "cwd": "[CACHE]\\builder\\src",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -784,6 +788,7 @@
       "0777",
       "[START_DIR]\\cipd_tool\\infra\\tools\\luci\\cas\\git_revision%3Amock_infra_git_revision"
     ],
+    "cwd": "[CACHE]\\builder\\src",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -815,6 +820,7 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
+    "cwd": "[CACHE]\\builder\\src",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -857,6 +863,7 @@
       "-paths",
       "[CACHE]\\builder\\src\\out\\Release:siso_metrics.json"
     ],
+    "cwd": "[CACHE]\\builder\\src",
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -994,10 +1001,12 @@
       "--deps_log_bucket",
       "siso-deps-log-experiments",
       "--enable_cloud_logging",
+      "-config=local_link",
       "-C",
       "[CACHE]\\builder\\src\\out\\Release",
       "all"
     ],
+    "cwd": "[CACHE]\\builder\\src",
     "luci_context": {
       "realm": {
         "name": "chromium:ci"
@@ -1025,6 +1034,7 @@
       "-paths",
       "[CACHE]\\builder\\src\\out\\Release:siso_metrics.json"
     ],
+    "cwd": "[CACHE]\\builder\\src",
     "infra_step": true,
     "luci_context": {
       "realm": {
