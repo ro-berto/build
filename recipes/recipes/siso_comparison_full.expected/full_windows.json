@@ -859,6 +859,8 @@
       "-dump-digest",
       "/path/to/tmp/",
       "-paths",
+      "[CACHE]\\builder\\src\\out\\Release:siso_build.pprof",
+      "-paths",
       "[CACHE]\\builder\\src\\out\\Release:siso_trace.json",
       "-paths",
       "[CACHE]\\builder\\src\\out\\Release:siso_metrics.json"
@@ -1029,6 +1031,8 @@
       "projects/example-cas-server/instances/default_instance",
       "-dump-digest",
       "/path/to/tmp/",
+      "-paths",
+      "[CACHE]\\builder\\src\\out\\Release:siso_build.pprof",
       "-paths",
       "[CACHE]\\builder\\src\\out\\Release:siso_trace.json",
       "-paths",

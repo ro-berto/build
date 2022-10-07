@@ -149,6 +149,8 @@
       "-dump-digest",
       "/path/to/tmp/",
       "-paths",
+      "out/Release:siso_build.pprof",
+      "-paths",
       "out/Release:siso_trace.json",
       "-paths",
       "out/Release:siso_metrics.json"
