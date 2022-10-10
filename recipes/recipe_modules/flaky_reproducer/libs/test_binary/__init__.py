@@ -14,12 +14,23 @@ TEST_BINARIES = {
     BlinkWebTestsBinary.__name__: BlinkWebTestsBinary,
 }
 
+NOT_SUPPORTED_TEST_SUITES = ('chrome_all_tast_tests',)
+
 
 def create_test_binary_from_task_request(task_request):
   """Factory method for TestBinary(s) that distinguish and create the correct
   TestBinary object."""
   if len(task_request) < 1:
     raise ValueError("No TaskSlice found in the TaskRequest.")
+
+  # Raise NotImplementedError for known test suites that not actually a GTest.
+  test_suite = None
+  for tag in task_request.tags:
+    if tag.startswith('test_suite:'):
+      test_suite = tag[len('test_suite:'):]
+  if test_suite in NOT_SUPPORTED_TEST_SUITES:
+    raise NotImplementedError('Not Supported test suite: %s' % test_suite)
+
   request_slice = task_request[-1]
   command = ' '.join(request_slice.command)
   if re.search('result_adapter(.exe)? gtest', command):

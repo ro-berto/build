@@ -49,6 +49,18 @@ def GenTests(api):
                       'blink_web_tests_task_request.json')))),
   )
 
+  chrome_all_tast_tests_task_request = json.loads(
+      api.flaky_reproducer.get_test_data('gtest_task_request.json'))
+  chrome_all_tast_tests_task_request['tags'].append(
+      'test_suite:chrome_all_tast_tests')
+  yield api.test(
+      'chrome_all_tast_tests',
+      api.step_data('get_test_binary.get_test_binary from 54321fffffabc123',
+                    api.json.output_stream(chrome_all_tast_tests_task_request)),
+      api.expect_exception(NotImplementedError.__name__),
+      api.post_process(post_process.DropExpectation),
+  )
+
   yield api.test(
       'gtest_for_android',
       api.step_data(

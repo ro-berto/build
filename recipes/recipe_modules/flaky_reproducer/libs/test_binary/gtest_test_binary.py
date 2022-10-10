@@ -19,11 +19,24 @@ class GTestTestBinary(TestBinaryWithBatchMixin, TestBinaryWithParallelMixin,
     ret = super().strip_for_bots()
 
     gtest_strip_switches = {
-        key: 1
-        for key in ('test-launcher-summary-output', 'test-launcher-retry-limit',
-                    'isolated-script-test-repeat', 'test-launcher-batch-limit',
-                    'test-launcher-jobs', 'test-launcher-filter-file',
-                    'isolated-script-test-filter', 'gtest_filter')
+        key: 1 for key in (
+            'test-launcher-summary-output',
+            'test-launcher-retry-limit',
+            'isolated-script-test-repeat',
+            'test-launcher-batch-limit',
+            'test-launcher-jobs',
+            'test-launcher-filter-file',
+            'isolated-script-test-filter',
+            'gtest_filter',
+            # removed for chromeos/test_runner.py
+            # The wrapper requires --test-launcher-summary-output and --logs-dir
+            # point to the same directory
+            'logs-dir',
+            # removed for weblayer_instrumentation_test_versions.py
+            # The wrapper will append --test-filter to the test launcher, which
+            # conflict with --isolated-script-test-filter.
+            'test-expectations',
+        )
     }
     ret.command = utils.strip_command_switches(ret.command,
                                                gtest_strip_switches)
