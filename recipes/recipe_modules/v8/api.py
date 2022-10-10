@@ -363,7 +363,7 @@ class V8Api(recipe_api.RecipeApi):
     self.test_configs.update(test_configs)
 
   def load_static_test_configs(self):
-    """Set predifined test configs from build repository."""
+    """Set predefined test configs from build repository."""
     self.update_test_configs(testing.TEST_CONFIGS)
 
   def load_dynamic_test_configs(self, root):

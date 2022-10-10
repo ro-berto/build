@@ -104,9 +104,6 @@ def RunSteps(api, binary_size_tracking, build_config, clobber, clobber_all,
   v8.set_gclient_custom_deps(custom_deps)
   v8.set_chromium_configs(clobber, default_targets)
 
-  # Opt out of using gyp environment variables.
-  api.chromium.c.use_gyp_env = False
-
   additional_trigger_properties = {}
   test_spec = v8.TEST_SPEC()
 
@@ -130,11 +127,6 @@ def RunSteps(api, binary_size_tracking, build_config, clobber, clobber_all,
       v8.set_up_swarming()
   else:
     with api.step.nest('initialization'):
-      # Make sure we don't run a non-pure swarming tester on a subdir slave.
-      # Subdir slaves have the name pattern 'slaveN-c3#M'.
-      assert '#' not in api.properties.get('bot_id', ''), (
-          'Can only use pure swarming testers on subdir slaves.')
-
       if api.platform.is_win:
         api.chromium.taskkill()
 

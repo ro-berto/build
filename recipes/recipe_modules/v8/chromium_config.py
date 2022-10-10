@@ -22,6 +22,8 @@ def v8(c):
   if c.TARGET_PLATFORM == 'mac':
     c.env.FORCE_MAC_TOOLCHAIN = 1
 
+  # Opt out of using gyp environment variables.
+  c.use_gyp_env = False
 
 @CONFIG_CTX(includes=['v8'])
 def arm_hard_float(c):
