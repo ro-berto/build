@@ -7,7 +7,6 @@ import math
 import time
 
 from .base_strategy import BaseStrategy
-from .reproducing_step import ReproducingStep
 from ..test_binary import TestBinaryWithBatchMixin
 
 
@@ -57,16 +56,15 @@ class BatchStrategy(BaseStrategy):
 
   def _find_best_batch_tests(self, tests):
     if not tests or time.time() > self.deadline:
-      return ReproducingStep(self.test_binary, reproducing_rate=0)
+      return self._reproducing_step(self.test_binary, reproducing_rate=0)
     # verify if the current tests reproduce the failure.
     start_time = time.time()
     reproduced, test_binary, test_history = self._verify_batch_tests(tests)
     total_time = time.time() - start_time
-    reproduce_step = ReproducingStep(
+    reproduce_step = self._reproducing_step(
         test_binary,
         reproducing_rate=reproduced * 1.0 / len(test_history),
         duration=total_time * 1000.0 / self.repeat,
-        strategy=self.name,
         reproduced_cnt=reproduced,
         total_run_cnt=len(test_history))
     if not reproduce_step or len(tests) == 1:

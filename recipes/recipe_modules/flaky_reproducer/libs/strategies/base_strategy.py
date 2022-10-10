@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from .reproducing_step import ReproducingStep
+
 
 class BaseStrategy:
   name = 'base'
@@ -30,3 +32,8 @@ class BaseStrategy:
     The strategy should finish in [timeout] seconds.
     """
     raise NotImplementedError()
+
+  def _reproducing_step(self, *args, **kwargs):
+    """Helper function to embed strategy name in ReproducingStep"""
+    kwargs['strategy'] = self.name
+    return ReproducingStep(*args, **kwargs)

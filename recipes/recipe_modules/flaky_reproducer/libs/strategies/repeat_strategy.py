@@ -8,7 +8,6 @@ import time
 
 from . import utils
 from .base_strategy import BaseStrategy
-from .reproducing_step import ReproducingStep
 
 
 class RepeatStrategy(BaseStrategy):
@@ -88,10 +87,9 @@ class RepeatStrategy(BaseStrategy):
         .with_tests([self.test_name])  #
         .with_repeat(suggested_repeat)  #
     )
-    return ReproducingStep(
+    return self._reproducing_step(
         test_binary,
         reproducing_rate=reproducing_rate,
         duration=avg_duration * suggested_repeat,
-        strategy=self.name,
         reproduced_cnt=reproduced_cnt,
         total_run_cnt=len(running_history))

@@ -11,6 +11,7 @@ class ReproducingStep:
   Attributes:
     test_binary (TestBinary): The test binary with preset settings using with_*
       methods.
+    strategy (str): The strategy name that generating the step.
     reproducing_rate (float): Reproducing rate by running the given test binary.
       This is different from failure rate, as failed runs / total runs. A test
       binary could rerun the test multiple times and only need to fail once to
@@ -18,8 +19,6 @@ class ReproducingStep:
     duration (int): Duration in milliseconds of the total running time of the
       given test binary. It should contain all the repeats included in test
       binary options.
-
-    strategy (str): The strategy name that generating the step.
     reproduced_cnt (int): Number of times the failure reproduced during
       verification.
     total_run_cnt (int): Number of run times during verification.
@@ -27,11 +26,11 @@ class ReproducingStep:
 
   def __init__(self,
                test_binary,
+               strategy,
                reproducing_rate=0,
                duration=0,
                reproduced_cnt=0,
                total_run_cnt=0,
-               strategy=None,
                **other):
     self.test_binary = test_binary
     self.reproducing_rate = reproducing_rate

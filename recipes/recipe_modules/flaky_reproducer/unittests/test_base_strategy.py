@@ -24,3 +24,8 @@ class BaseStrategyTest(unittest.TestCase):
   def test_run(self):
     with self.assertRaises(NotImplementedError):
       self.strategy.run()
+
+  def test_reproducing_step(self):
+    reproducing_step = self.strategy._reproducing_step(
+        self.strategy.test_binary)
+    self.assertEqual(reproducing_step.strategy, self.strategy.name)

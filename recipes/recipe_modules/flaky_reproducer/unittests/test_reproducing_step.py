@@ -50,13 +50,14 @@ class ReproducingStepTest(unittest.TestCase):
   def test_better_than(self):
     step_0 = ReproducingStep(
         None,
+        'test',
         0,
     )
-    step_50 = ReproducingStep(None, 0.5, 123)
-    step_60 = ReproducingStep(None, 0.6, 123)
-    step_90 = ReproducingStep(None, 0.9, 12)
-    step_92 = ReproducingStep(None, 0.92, 123)
-    step_95 = ReproducingStep(None, 0.95, 123)
+    step_50 = ReproducingStep(None, 'test', 0.5, 123)
+    step_60 = ReproducingStep(None, 'test', 0.6, 123)
+    step_90 = ReproducingStep(None, 'test', 0.9, 12)
+    step_92 = ReproducingStep(None, 'test', 0.92, 123)
+    step_95 = ReproducingStep(None, 'test', 0.95, 123)
     self.assertFalse(step_0)
     self.assertTrue(step_50.better_than(step_0))
     self.assertTrue(step_60.better_than(step_50))
@@ -65,9 +66,9 @@ class ReproducingStepTest(unittest.TestCase):
     self.assertTrue(step_95.better_than(step_90))
 
   def test_better_than_reproducing_cnt(self):
-    step_0 = ReproducingStep(None, 0, 0, 5)
-    step_50 = ReproducingStep(None, 0.5, 123, 7)
-    step_60 = ReproducingStep(None, 0.6, 123, 1)
+    step_0 = ReproducingStep(None, 'test', 0, 0, 5)
+    step_50 = ReproducingStep(None, 'test', 0.5, 123, 7)
+    step_60 = ReproducingStep(None, 'test', 0.6, 123, 1)
     self.assertTrue(step_50.better_than(step_0))
     self.assertTrue(step_50.better_than(step_60))
     self.assertTrue(step_60.better_than(step_0))

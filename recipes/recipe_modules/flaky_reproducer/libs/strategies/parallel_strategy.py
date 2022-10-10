@@ -10,9 +10,7 @@ import time
 
 from . import utils
 from .base_strategy import BaseStrategy
-from .reproducing_step import ReproducingStep
 from ..test_binary import TestBinaryWithParallelMixin
-from ..result_summary import TestResult
 
 
 class ReproduceTestResult:
@@ -24,7 +22,6 @@ class ReproduceTestResult:
     self.reproduced = reproduced
     self.test_binary = test_binary
     self.test_history = test_history
-
 
 class ParallelStrategy(BaseStrategy):
   name = 'parallel'
@@ -81,7 +78,7 @@ class ParallelStrategy(BaseStrategy):
 
     parallel_tests = self._get_parallel_tests()
     if not parallel_tests:
-      return ReproducingStep(self.test_binary, reproducing_rate=0)
+      return self._reproducing_step(self.test_binary, reproducing_rate=0)
     for test in parallel_tests:
       self.running_time[test.test_name] = [test.duration, 1]
     self.running_time[self.test_name] = [self.failing_sample.duration, 1]
@@ -117,7 +114,7 @@ class ParallelStrategy(BaseStrategy):
     best_group = self._find_best_parallel_group(groups,
                                                 self.GROUP_VERIFY_TIME_LIMIT)
     if not best_group:
-      return ReproducingStep(self.test_binary, reproducing_rate=0)
+      return self._reproducing_step(self.test_binary, reproducing_rate=0)
     best_group_step = self._generate_reproduce_step(best_group)
 
     # Step 2: Verify individual test.
@@ -186,11 +183,10 @@ class ParallelStrategy(BaseStrategy):
         'generate_reproduce_step: single_round_runtime=%d, '
         'max_repeat=%d, failure_rate=%d, suggested_repeat=%d',
         single_round_runtime, max_repeat, failure_rate, suggested_repeat)
-    return ReproducingStep(
+    return self._reproducing_step(
         group_result.test_binary.with_repeat(suggested_repeat),
         reproducing_rate=reproducing_rate,
         duration=single_round_runtime * suggested_repeat,
-        strategy=self.name,
         reproduced_cnt=group_result.reproduced,
         total_run_cnt=len(group_result.test_history))
 
