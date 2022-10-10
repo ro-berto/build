@@ -254,24 +254,31 @@ def _run_tests(api, memory_tool, v8, xfa, skia, out_dir, build_config, revision,
       test_exception = e
 
   with api.context(cwd=api.path['checkout'], env=env):
-    try:
-      embeddertests_target = ('', 'pdfium_embeddertests')
-      if skia:
+    embeddertests_target = ('', 'pdfium_embeddertests')
+    if skia:
+      try:
         # Use argument to do runtime renderer selection.
         test_runner.run_gtest(
             'embeddertests (agg)',
             target=embeddertests_target,
             args=['--use-renderer=agg'],
             test_suite_suffix=_AGG_SUFFIX)
+      except api.step.StepFailure as e:
+        test_exception = e
+
+      try:
         test_runner.run_gtest(
             'embeddertests (skia)',
             target=embeddertests_target,
             args=['--use-renderer=skia'],
             test_suite_suffix=_SKIA_SUFFIX)
-      else:
+      except api.step.StepFailure as e:
+        test_exception = e
+    else:
+      try:
         test_runner.run_gtest('embeddertests', target=embeddertests_target)
-    except api.step.StepFailure as e:
-      test_exception = e
+      except api.step.StepFailure as e:
+        test_exception = e
 
   if v8:
     with api.context(cwd=api.path['checkout'], env=env):
@@ -997,6 +1004,26 @@ def GenTests(api):
       api.properties(bot_id='test_bot', selected_tests_only=True),
       _gen_ci_build(api, 'linux'),
       api.step_data('embeddertests', retcode=1),
+  )
+
+  yield api.test(
+      'fail-embeddertests-skia-agg',
+      api.platform('linux', 64),
+      api.builder_group.for_current('client.pdfium'),
+      api.properties(
+          skia=True, xfa=True, selected_tests_only=True, bot_id='test_bot'),
+      _gen_ci_build(api, 'linux'),
+      api.step_data('embeddertests (agg)', retcode=1),
+  )
+
+  yield api.test(
+      'fail-embeddertests-skia-skia',
+      api.platform('linux', 64),
+      api.builder_group.for_current('client.pdfium'),
+      api.properties(
+          skia=True, xfa=True, selected_tests_only=True, bot_id='test_bot'),
+      _gen_ci_build(api, 'linux'),
+      api.step_data('embeddertests (skia)', retcode=1),
   )
 
   yield api.test(
