@@ -375,32 +375,49 @@ class FlakyReproducer(recipe_api.RecipeApi):
       inv_id = self._generate_invocation_id_from_task_id(task_id)
     else:
       inv_id = self.generate_invocation_id_from_build_id(build_id)
-    inv_map = self.m.resultdb.query([inv_id],
-                                    limit=0,
-                                    tr_fields=['testId', 'tags', 'expected'])
-    invocation = inv_map.get(inv_id, None)
-    if not invocation:
-      raise self.m.step.StepFailure('Cannot retrieve invocation.')
 
-    # Search for first unexpected result or return the last match.
+    if test_id:
+      test_id_regexp = re.escape(test_id)
+    else:
+      # test_id contains test_name but might have a different format. It's using
+      # the longest word in test_name for filtering to reduce the data
+      # retrieved.
+      longest_word = max(re.split('\W+', test_name), key=len)
+      test_id_regexp = r'.*%s.*' % longest_word
+
     def tag_test_name(tags):
       for tag in tags:
         if tag.key == 'test_name':
           return tag.value
 
+    # Search for first unexpected result or return the last match.
     last_test_result = None
-    for test_result in invocation.test_results:
-      if test_id and test_result.test_id == test_id:
-        last_test_result = test_result
-      elif test_name and test_name == tag_test_name(test_result.tags):
-        last_test_result = test_result
+    res = None
+    while True:
+      res = self.m.resultdb.query_test_results(
+          invocations=['invocations/' + inv_id],
+          test_id_regexp=test_id_regexp,
+          field_mask_paths=['name', 'test_id', 'tags', 'expected'],
+          page_token=res and res.next_page_token,
+      )
+      for test_result in res.test_results:
+        if test_id and test_result.test_id == test_id:
+          last_test_result = test_result
+        elif test_name and test_name == tag_test_name(test_result.tags):
+          last_test_result = test_result
+        if last_test_result and not last_test_result.expected:
+          break
       if last_test_result and not last_test_result.expected:
+        break
+      if not res.next_page_token:
         break
     if not last_test_result:
       raise self.m.step.StepFailure('Cannot find TestResult.')
 
-    return (self._extract_task_id_from_invocation_name(last_test_result.name),
-            test_name or tag_test_name(last_test_result.tags))
+    return (
+        self._extract_task_id_from_invocation_name(last_test_result.name),
+        test_name or tag_test_name(last_test_result.tags),
+    )
 
   def run(self, task_id=None, build_id=None, test_name=None, test_id=None):
     task_id, test_name = self.query_resultdb_for_task_id_and_test_name(

@@ -32,17 +32,13 @@ from google.protobuf import timestamp_pb2
 from recipe_engine import post_process
 from PB.go.chromium.org.luci.resultdb.proto.v1 import (
     common as common_pb2,  # go/pyformat-break
-    invocation as invocation_pb2,  #
+    resultdb as resultdb_pb2,  #
     test_result as test_result_pb2,  #
 )
 
 
 def GenTests(api):
-  resultdb_invocation = api.resultdb.Invocation(
-      proto=invocation_pb2.Invocation(
-          state=invocation_pb2.Invocation.FINALIZED,
-          realm='chromium:ci',
-      ),
+  query_test_results = resultdb_pb2.QueryTestResultsResponse(
       test_results=[
           test_result_pb2.TestResult(
               test_id='ninja://base:base_unittests/MockUnitTests.FailTest',
@@ -64,8 +60,7 @@ def GenTests(api):
                       key="test_name", value="MockUnitTests.FailTest"),
               ],
           ),
-      ],
-  )
+      ],)
 
   yield api.test(
       'task_id_test_name',
@@ -84,10 +79,7 @@ def GenTests(api):
           task_id="some-task-id",
           test_id="ninja://base:base_unittests/MockUnitTests.FailTest",
       ),
-      api.resultdb.query({
-          'task-example.swarmingserver.appspot.com-some-task-id':
-              resultdb_invocation,
-      }),
+      api.resultdb.query_test_results(query_test_results),
       api.post_check(post_process.StepTextEquals, 'result',
                      'task_id=task1 test_name=MockUnitTests.FailTest'),
       api.post_process(post_process.DropExpectation),
@@ -99,22 +91,9 @@ def GenTests(api):
           build_id="build-id",
           test_name="MockUnitTests.FailTest",
       ),
-      api.resultdb.query({
-          'build-build-id': resultdb_invocation,
-      }),
+      api.resultdb.query_test_results(query_test_results),
       api.post_check(post_process.StepTextEquals, 'result',
                      'task_id=task1 test_name=MockUnitTests.FailTest'),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'cannot_retrieve_invocation',
-      api.properties(
-          build_id="build-id",
-          test_name="MockUnitTests.FailTest",
-      ),
-      api.resultdb.query({}),
-      api.post_check(post_process.ResultReason, 'Cannot retrieve invocation.'),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -124,9 +103,7 @@ def GenTests(api):
           build_id="build-id",
           test_id="not-exists",
       ),
-      api.resultdb.query({
-          'build-build-id': resultdb_invocation,
-      }),
+      api.resultdb.query_test_results(query_test_results),
       api.post_check(post_process.ResultReason, 'Cannot find TestResult.'),
       api.post_process(post_process.DropExpectation),
   )

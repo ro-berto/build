@@ -5,6 +5,7 @@
 from recipe_engine import post_process
 
 from PB.recipes.build.flakiness.reproducer import InputProperties
+from PB.go.chromium.org.luci.resultdb.proto.v1 import resultdb as resultdb_pb2
 
 PROPERTIES = InputProperties
 
@@ -19,8 +20,7 @@ DEPS = [
 
 
 def RunSteps(api, properties):
-  if properties.config:
-    api.flaky_reproducer.set_config(properties.config)
+  api.flaky_reproducer.set_config(properties.config or 'auto')
   return api.flaky_reproducer.run(
       task_id=properties.task_id,
       build_id=properties.build_id,
@@ -36,8 +36,8 @@ def GenTests(api):
           test_name="MockUnitTests.FailTest",
           config="manual",
       ),
-      api.resultdb.query({}),
-      api.post_check(post_process.ResultReason, 'Cannot retrieve invocation.'),
+      api.resultdb.query_test_results(resultdb_pb2.QueryTestResultsResponse()),
+      api.post_check(post_process.ResultReason, 'Cannot find TestResult.'),
       api.post_process(post_process.DropExpectation),
   )
 
