@@ -1396,7 +1396,8 @@
       "main",
       "[CACHE]/generated",
       "--kzip-prune",
-      "/path/to/kzip"
+      "/path/to/kzip",
+      "--nokeycheck"
     ],
     "luci_context": {
       "realm": {

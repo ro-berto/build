@@ -1398,7 +1398,8 @@
       "[CACHE]/generated",
       "--dry-run",
       "--kzip-prune",
-      "/path/to/kzip"
+      "/path/to/kzip",
+      "--nokeycheck"
     ],
     "luci_context": {
       "realm": {

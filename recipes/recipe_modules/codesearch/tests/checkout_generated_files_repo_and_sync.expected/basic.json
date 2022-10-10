@@ -283,7 +283,8 @@
       "main",
       "[CACHE]/generated",
       "--kzip-prune",
-      "/path/to/kzip"
+      "/path/to/kzip",
+      "--nokeycheck"
     ],
     "name": "sync generated files"
   },

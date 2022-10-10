@@ -12,6 +12,8 @@ from RECIPE_MODULES.build import chromium
 GIT_COMMIT_HASH_RE = re.compile(r'[a-zA-Z0-9]{40}')
 
 class CodesearchApi(recipe_api.RecipeApi):
+  _PROJECT_BROWSER, _PROJECT_OS, _PROJECT_UNSUPPORTED = range(3)
+
   def get_config_defaults(self):
     return {
       'CHECKOUT_PATH': self.m.path['checkout'],
@@ -178,6 +180,15 @@ class CodesearchApi(recipe_api.RecipeApi):
         self.m.step.active_result.presentation.step_text = f.reason_message()
         self.m.step.active_result.presentation.status = self.m.step.WARNING
 
+  def _get_project_type(self):
+    """Returns the type of the project.
+    """
+    if self.c.PROJECT in ('chromium', 'chrome'):
+      return self._PROJECT_BROWSER
+    elif self.c.PROJECT == 'chromiumos':
+      return self._PROJECT_OS
+    return self._PROJECT_UNSUPPORTED  # pragma: nocover
+
   def _get_commit_position(self):
     """Returns the commit position of the project.
     """
@@ -218,12 +229,13 @@ class CodesearchApi(recipe_api.RecipeApi):
     index_pack_kythe_base = '%s_%s' % (self.c.PROJECT, self.c.PLATFORM)
     index_pack_kythe_name_with_id = ''
     commit_position = ''
-    if self.c.PROJECT in ('chromium', 'chrome'):
+    project_type = self._get_project_type()
+    if project_type == self._PROJECT_BROWSER:
       commit_position = self._get_commit_position()
       index_pack_kythe_name_with_id = '%s_%s_%s+%d%s.kzip' % (
           index_pack_kythe_base, commit_position, commit_hash, commit_timestamp,
           experimental_suffix)
-    elif self.c.PROJECT == 'chromiumos':
+    elif project_type == self._PROJECT_OS:
       index_pack_kythe_name_with_id = '%s_%s+%d%s.kzip' % (
           index_pack_kythe_base, commit_hash, commit_timestamp,
           experimental_suffix)
@@ -412,5 +424,7 @@ class CodesearchApi(recipe_api.RecipeApi):
       cmd.append('--dry-run')
     if kzip_path:
       cmd.extend(['--kzip-prune', kzip_path])
+    if self._get_project_type() == self._PROJECT_BROWSER:
+      cmd.append('--nokeycheck')
 
     self.m.step('sync generated files', cmd)

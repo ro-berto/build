@@ -1564,7 +1564,8 @@
       "Generated files from \"codesearch-gen-chromium-mac\" build 8945511751514863184, revision aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "--dest-branch",
       "main",
-      "[CACHE]/generated"
+      "[CACHE]/generated",
+      "--nokeycheck"
     ],
     "luci_context": {
       "realm": {

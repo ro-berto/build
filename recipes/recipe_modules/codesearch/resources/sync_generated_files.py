@@ -247,6 +247,10 @@ def main():
       help='kzip to reference when selecting which source files to copy',
       default='')
   parser.add_argument(
+      '--nokeycheck',
+      action='store_true',
+      help=('if set, skips keycheck on git push.'))
+  parser.add_argument(
       '--dry-run',
       action='store_true',
       help='if set, does a dry run of push to remote repo.')
@@ -285,18 +289,14 @@ def main():
     return 0
 
   check_call(['git', 'commit', '-m', opts.message], cwd=opts.dest_repo)
+
+  cmd = ['git', 'push']
+  if opts.nokeycheck:
+    cmd.extend(['-o', 'nokeycheck'])
   if opts.dry_run:
-    check_call([
-        'git', 'push', '-o', 'nokeycheck', '--dry-run', 'origin',
-        'HEAD:%s' % opts.dest_branch
-    ],
-               cwd=opts.dest_repo)
-  else:
-    check_call([
-        'git', 'push', '-o', 'nokeycheck', 'origin',
-        'HEAD:%s' % opts.dest_branch
-    ],
-               cwd=opts.dest_repo)
+    cmd.append('--dry-run')
+  cmd.extend(['origin', 'HEAD:%s' % opts.dest_branch])
+  check_call(cmd, cwd=opts.dest_repo)
 
 
 def check_call(cmd, cwd=None):

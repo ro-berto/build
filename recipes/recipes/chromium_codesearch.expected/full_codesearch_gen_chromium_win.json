@@ -1536,7 +1536,8 @@
       "Generated files from \"codesearch-gen-chromium-win\" build 8945511751514863184, revision f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--dest-branch",
       "main",
-      "[CACHE]/generated"
+      "[CACHE]/generated",
+      "--nokeycheck"
     ],
     "luci_context": {
       "realm": {
