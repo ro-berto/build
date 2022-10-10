@@ -45,6 +45,20 @@ PROPERTIES = {
     'xfa': Property(default=False, kind=bool),
 }
 
+# test_runner.py test types.
+_CORPUS_TEST_TYPE = 'corpus'
+_JAVASCRIPT_TEST_TYPE = 'javascript'
+_PIXEL_TEST_TYPE = 'pixel'
+
+# Renderer test suite suffixes.
+_AGG_SUFFIX = 'agg'
+_SKIA_SUFFIX = 'skia'
+
+# test_runner.py test suite suffixes.
+_JAVASCRIPT_DISABLED_SUFFIX = 'javascript_disabled'
+_ONESHOT_SUFFIX = 'oneshot'
+_XFA_DISABLED_SUFFIX = 'xfa_disabled'
+
 
 def _is_goma_enabled(msvc):
   return not msvc
@@ -199,7 +213,7 @@ def _run_tests(api, memory_tool, v8, xfa, skia, out_dir, build_config, revision,
       api, base_variant={
           'builder': api.buildbucket.builder_name,
       })
-  test_runner = _TestRunner(api, resultdb, out_dir)
+  test_runner = _TestRunner(api, resultdb, out_dir, revision)
 
   env = {}
   COMMON_SANITIZER_OPTIONS = ['allocator_may_return_null=1']
@@ -248,43 +262,36 @@ def _run_tests(api, memory_tool, v8, xfa, skia, out_dir, build_config, revision,
             'embeddertests (agg)',
             target=embeddertests_target,
             args=['--use-renderer=agg'],
-            test_suite=embeddertests_target[1] + '_agg')
+            test_suite_suffix=_AGG_SUFFIX)
         test_runner.run_gtest(
             'embeddertests (skia)',
             target=embeddertests_target,
             args=['--use-renderer=skia'],
-            test_suite=embeddertests_target[1] + '_skia')
+            test_suite_suffix=_SKIA_SUFFIX)
       else:
         test_runner.run_gtest('embeddertests', target=embeddertests_target)
     except api.step.StepFailure as e:
       test_exception = e
 
-  script_args = ['--build-dir', api.path.join('out', out_dir)]
-
-  # Add the arguments needed to upload the resulting images to Skia Gold.
-  gold_output_dir = api.path['checkout'].join('out', out_dir, 'gold_output')
-  script_args.extend([
-      '--gold_output_dir',
-      gold_output_dir,
-  ])
-  _add_gold_args(api, revision, script_args)
-
   if v8:
-    javascript_path = str(api.path['checkout'].join('testing', 'tools',
-                                                    'run_javascript_tests.py'))
-    javascript_tests_cmd = PYTHON_CMD + [javascript_path] + script_args
     with api.context(cwd=api.path['checkout'], env=env):
       additional_args = _get_modifiable_script_args(api, build_config)
       try:
-        api.step('javascript tests', javascript_tests_cmd + additional_args)
+        test_runner.run_test_runner_py(
+            'javascript tests',
+            test_type=_JAVASCRIPT_TEST_TYPE,
+            args=additional_args)
       except api.step.StepFailure as e:
         test_exception = e
 
       additional_args = _get_modifiable_script_args(
           api, build_config, javascript_disabled=True)
       try:
-        api.step('javascript tests (javascript disabled)',
-                 javascript_tests_cmd + additional_args)
+        test_runner.run_test_runner_py(
+            'javascript tests (javascript disabled)',
+            test_type=_JAVASCRIPT_TEST_TYPE,
+            args=additional_args,
+            test_suite_suffix=_JAVASCRIPT_DISABLED_SUFFIX)
       except api.step.StepFailure as e:
         test_exception = e
 
@@ -292,26 +299,30 @@ def _run_tests(api, memory_tool, v8, xfa, skia, out_dir, build_config, revision,
         additional_args = _get_modifiable_script_args(
             api, build_config, xfa_disabled=True)
         try:
-          api.step('javascript tests (xfa disabled)',
-                   javascript_tests_cmd + additional_args)
+          test_runner.run_test_runner_py(
+              'javascript tests (xfa disabled)',
+              test_type=_JAVASCRIPT_TEST_TYPE,
+              args=additional_args,
+              test_suite_suffix=_XFA_DISABLED_SUFFIX)
         except api.step.StepFailure as e:
           test_exception = e
 
-  pixel_tests_path = str(api.path['checkout'].join('testing', 'tools',
-                                                   'run_pixel_tests.py'))
-  pixel_tests_cmd = PYTHON_CMD + [pixel_tests_path] + script_args
   with api.context(cwd=api.path['checkout'], env=env):
     additional_args = _get_modifiable_script_args(api, build_config)
     try:
-      api.step('pixel tests', pixel_tests_cmd + additional_args)
+      test_runner.run_test_runner_py(
+          'pixel tests', test_type=_PIXEL_TEST_TYPE, args=additional_args)
     except api.step.StepFailure as e:
       test_exception = e
 
     additional_args = _get_modifiable_script_args(
         api, build_config) + ['--render-oneshot']
     try:
-      api.step('pixel tests (oneshot rendering enabled)',
-               pixel_tests_cmd + additional_args)
+      test_runner.run_test_runner_py(
+          'pixel tests (oneshot rendering enabled)',
+          test_type=_PIXEL_TEST_TYPE,
+          args=additional_args,
+          test_suite_suffix=_ONESHOT_SUFFIX)
     except api.step.StepFailure as e:
       test_exception = e
 
@@ -319,8 +330,11 @@ def _run_tests(api, memory_tool, v8, xfa, skia, out_dir, build_config, revision,
       additional_args = _get_modifiable_script_args(
           api, build_config, javascript_disabled=True)
       try:
-        api.step('pixel tests (javascript disabled)',
-                 pixel_tests_cmd + additional_args)
+        test_runner.run_test_runner_py(
+            'pixel tests (javascript disabled)',
+            test_type=_PIXEL_TEST_TYPE,
+            args=additional_args,
+            test_suite_suffix=_JAVASCRIPT_DISABLED_SUFFIX)
       except api.step.StepFailure as e:
         test_exception = e
 
@@ -328,8 +342,11 @@ def _run_tests(api, memory_tool, v8, xfa, skia, out_dir, build_config, revision,
         additional_args = _get_modifiable_script_args(
             api, build_config, xfa_disabled=True)
         try:
-          api.step('pixel tests (xfa disabled)',
-                   pixel_tests_cmd + additional_args)
+          test_runner.run_test_runner_py(
+              'pixel tests (xfa disabled)',
+              test_type=_PIXEL_TEST_TYPE,
+              args=additional_args,
+              test_suite_suffix=_XFA_DISABLED_SUFFIX)
         except api.step.StepFailure as e:
           test_exception = e
 
@@ -338,21 +355,22 @@ def _run_tests(api, memory_tool, v8, xfa, skia, out_dir, build_config, revision,
       raise test_exception  # pylint: disable=E0702
     return
 
-  corpus_tests_path = str(api.path['checkout'].join('testing', 'tools',
-                                                    'run_corpus_tests.py'))
-  corpus_tests_cmd = PYTHON_CMD + [corpus_tests_path] + script_args
   with api.context(cwd=api.path['checkout'], env=env):
     additional_args = _get_modifiable_script_args(api, build_config)
     try:
-      api.step('corpus tests', corpus_tests_cmd + additional_args)
+      test_runner.run_test_runner_py(
+          'corpus tests', test_type=_CORPUS_TEST_TYPE, args=additional_args)
     except api.step.StepFailure as e:
       test_exception = e
 
     additional_args = _get_modifiable_script_args(
         api, build_config) + ['--render-oneshot']
     try:
-      api.step('corpus tests (oneshot rendering enabled)',
-               corpus_tests_cmd + additional_args)
+      test_runner.run_test_runner_py(
+          'corpus tests (oneshot rendering enabled)',
+          test_type=_CORPUS_TEST_TYPE,
+          args=additional_args,
+          test_suite_suffix=_ONESHOT_SUFFIX)
     except api.step.StepFailure as e:
       test_exception = e
 
@@ -360,8 +378,11 @@ def _run_tests(api, memory_tool, v8, xfa, skia, out_dir, build_config, revision,
       additional_args = _get_modifiable_script_args(
           api, build_config, javascript_disabled=True)
       try:
-        api.step('corpus tests (javascript disabled)',
-                 corpus_tests_cmd + additional_args)
+        test_runner.run_test_runner_py(
+            'corpus tests (javascript disabled)',
+            test_type=_CORPUS_TEST_TYPE,
+            args=additional_args,
+            test_suite_suffix=_JAVASCRIPT_DISABLED_SUFFIX)
       except api.step.StepFailure as e:
         test_exception = e
 
@@ -369,8 +390,11 @@ def _run_tests(api, memory_tool, v8, xfa, skia, out_dir, build_config, revision,
         additional_args = _get_modifiable_script_args(
             api, build_config, xfa_disabled=True)
         try:
-          api.step('corpus tests (xfa disabled)',
-                   corpus_tests_cmd + additional_args)
+          test_runner.run_test_runner_py(
+              'corpus tests (xfa disabled)',
+              test_type=_CORPUS_TEST_TYPE,
+              args=additional_args,
+              test_suite_suffix=_XFA_DISABLED_SUFFIX)
         except api.step.StepFailure as e:
           test_exception = e
 
@@ -429,21 +453,41 @@ class _ResultDb:
 
 class _TestRunner:
 
-  def __init__(self, api, resultdb, out_dir):
+  def __init__(self, api, resultdb, out_dir, revision):
     self.api = api
     self.resultdb = resultdb
-    self.out_dir = out_dir
+    self.out_dir = self.api.path['checkout'].join('out', out_dir)
 
-  def run_gtest(self, step_name, *, target, args=None, test_suite=None):
+    self.test_runner_py_args = [
+        '--build-dir',
+        self.api.path.join('out', out_dir),
+        '--gold_output_dir',
+        self.out_dir.join('gold_output'),
+        '--run-skia-gold',
+        '--git-revision',
+        revision,
+        '--buildbucket-id',
+        str(self.api.buildbucket.build.id),
+    ]
+
+    # Add the trybot information if this is a trybot run.
+    if self.api.tryserver.gerrit_change:
+      self.test_runner_py_args.extend([
+          '--gerrit-issue',
+          str(self.api.tryserver.gerrit_change.change),
+          '--gerrit-patchset',
+          str(self.api.tryserver.gerrit_change.patchset),
+      ])
+
+  def run_gtest(self, step_name, *, target, args=None, test_suite_suffix=None):
     target_path, target_name = target
 
-    test_path = str(self.api.path['checkout'].join('out', self.out_dir,
-                                                   target_name))
+    test_path = str(self.out_dir.join(target_name))
     if self.api.platform.is_win:
       test_path += '.exe'
 
     variant = {
-        'test_suite': (test_suite or target_name),
+        'test_suite': _get_test_suite(target_name, test_suite_suffix),
     }
 
     tags = [
@@ -458,25 +502,34 @@ class _TestRunner:
             base_variant=variant,
             base_tags=tags))
 
+  def run_test_runner_py(self,
+                         step_name,
+                         *,
+                         test_type,
+                         args,
+                         test_suite_suffix=None):
+    test_path = self.api.path['checkout'].join('testing', 'tools',
+                                               f'run_{test_type}_tests.py')
 
-def _add_gold_args(api, revision, script_args):
-  """These arguments will be passed into goldctl."""
-  script_args.extend([
-      '--run-skia-gold',
-      '--git-revision',
-      revision,
-      '--buildbucket-id',
-      str(api.buildbucket.build.id),
-  ])
+    variant = {
+        'test_suite': _get_test_suite(test_type, test_suite_suffix),
+    }
 
-  # Add the trybot information if this is a trybot run.
-  if api.m.tryserver.gerrit_change:
-    script_args.extend([
-        '--gerrit-issue',
-        str(api.m.tryserver.gerrit_change.change),
-        '--gerrit-patchset',
-        str(api.m.tryserver.gerrit_change.patchset),
-    ])
+    tags = [
+        ('step_name', step_name),
+    ]
+
+    self.api.step(
+        step_name,
+        self.resultdb.wrap(
+            PYTHON_CMD + [test_path] + self.test_runner_py_args + args,
+            test_id_prefix=f'ninja://testing/tools:run_{test_type}_tests/',
+            base_variant=variant,
+            base_tags=tags))
+
+
+def _get_test_suite(base_name, suffix=None):
+  return f'{base_name}_{suffix}' if suffix else base_name
 
 
 def _get_modifiable_script_args(api,
