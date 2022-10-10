@@ -198,6 +198,41 @@ class SyncGeneratedFilesCodesearchTest(unittest.TestCase):
     self.assertFalse(os.path.exists(os.path.join(self.dest_root, 'bar.cc')))
     self.assertFalse(os.path.exists(os.path.join(self.dest_root, 'baz.cc')))
 
+  def testCopyFilesIgnore(self):
+    with open(os.path.join(self.src_root, 'relevant.cc'), 'w') as f:
+      f.write('relevant contents')
+    with open(os.path.join(self.src_root, 'ignorefile.cc'), 'w') as f:
+      f.write('ignorefile contents')
+    os.makedirs(os.path.join(self.src_root, 'ignoredir'))
+    with open(os.path.join(self.src_root, 'ignoredir', 'foo.cc'), 'w') as f:
+      f.write('foo contents')
+
+    with open(os.path.join(self.dest_root, 'ignorefile.cc'), 'w') as f:
+      f.write('ignorefile contents')
+    os.makedirs(os.path.join(self.dest_root, 'ignoredir'))
+    with open(os.path.join(self.dest_root, 'ignoredir', 'foo.cc'), 'w') as f:
+      f.write('foo contents')
+    with open(os.path.join(self.dest_root, 'ignoredir', 'bar.cc'), 'w') as f:
+      f.write('bar contents')
+
+    ignore = set((
+        os.path.join(self.src_root, 'ignoredir'),
+        os.path.join(self.src_root, 'ignorefile.cc'),
+    ))
+
+    # Files not mentioned in kzip should not be copied.
+    sync.copy_generated_files(
+        self.src_root, self.dest_root, kzip_input_suffixes=None, ignore=ignore)
+
+    self.assertTrue(os.path.exists(os.path.join(self.dest_root, 'relevant.cc')))
+    self.assertFalse(
+        os.path.exists(os.path.join(self.dest_root, 'ignoredir', 'foo.cc')))
+    self.assertFalse(
+        os.path.exists(os.path.join(self.dest_root, 'ignoredir', 'bar.cc')))
+    self.assertFalse(os.path.exists(os.path.join(self.dest_root, 'ignoredir')))
+    self.assertFalse(
+        os.path.exists(os.path.join(self.dest_root, 'ignorefile.cc')))
+
 
 if __name__ == '__main__':
   unittest.main()

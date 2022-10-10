@@ -119,7 +119,10 @@ def has_secrets(filepath):
     return re.search(re.compile('|'.join(patterns)), text) is not None
 
 
-def copy_generated_files(source_dir, dest_dir, kzip_input_suffixes=None):
+def copy_generated_files(source_dir,
+                         dest_dir,
+                         kzip_input_suffixes=None,
+                         ignore=None):
   try:
     os.makedirs(dest_dir)
   except OSError as e:
@@ -138,8 +141,16 @@ def copy_generated_files(source_dir, dest_dir, kzip_input_suffixes=None):
         return True
     return False
 
+  def is_ignored(path):
+    parts = os.path.normpath(path).split(os.sep)
+    for i in range(len(parts)):
+      if os.sep.join(parts[:i + 1]) in ignore:
+        return True
+    return False
+
   # First, delete everything in dest that:
   #   * isn't in source or
+  #   * is ignored in the source directory or
   #   * doesn't match the allowed extensions or
   #   * may contain secrets or
   #   * (if kzip is provided,) isn't referenced in the kzip
@@ -151,6 +162,9 @@ def copy_generated_files(source_dir, dest_dir, kzip_input_suffixes=None):
       delete = False
       if not os.path.exists(source_file):
         reason = 'source_file %s does not exist.' % source_file
+        delete = True
+      elif ignore and is_ignored(source_file):
+        reason = 'source_file %s is ignored.' % source_file
         delete = True
       elif not has_allowed_extension(source_file):
         reason = \
@@ -168,7 +182,8 @@ def copy_generated_files(source_dir, dest_dir, kzip_input_suffixes=None):
         os.remove(dest_file)
 
   # Second, copy everything that matches the allowlist from source to dest. If
-  # kzip is provided, don't copy files that aren't referenced.
+  # kzip is provided, don't copy files that aren't referenced. Don't sync
+  # ignored paths.
   for dirpath, _, filenames in os.walk(source_dir):
     if dirpath != source_dir:
       try:
@@ -185,6 +200,7 @@ def copy_generated_files(source_dir, dest_dir, kzip_input_suffixes=None):
 
       source_file = os.path.join(dirpath, filename)
       if not has_allowed_extension(filename) or has_secrets(source_file) \
+          or ignore and is_ignored(source_file) \
           or kzip_input_suffixes and not is_referenced(filename):
         continue
 
@@ -235,6 +251,8 @@ def main():
       action='store_true',
       help='if set, does a dry run of push to remote repo.')
   parser.add_argument(
+      '--ignore', action='append', help='source paths to ignore when copying')
+  parser.add_argument(
       '--copy',
       action='append',
       help=('a copy configuration that maps a source dir to a target dir in '
@@ -247,10 +265,14 @@ def main():
   if opts.kzip_prune:
     kzip_input_suffixes = kzip_input_paths(opts.kzip_prune)
 
+  ignore_paths = None
+  if opts.ignore:
+    ignore_paths = set([os.path.normpath(i) for i in opts.ignore])
+
   for c in opts.copy:
     source, dest = c.split(';')
     copy_generated_files(source, os.path.join(opts.dest_repo, dest),
-                         kzip_input_suffixes)
+                         kzip_input_suffixes, ignore_paths)
 
   # Add the files to the git index, exit if there were no changes.
   check_call(['git', 'add', '--', '.'], cwd=opts.dest_repo)
