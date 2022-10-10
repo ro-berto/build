@@ -47,6 +47,14 @@ class FlakyReproducer(recipe_api.RecipeApi):
   REPRODUCING_STEP_FILENAME = 'reproducing_step.json'
   VERIFY_RESULT_SUMMARY_FILENAME = 'result_summary_$N$.json'
 
+  # Chromite includes a symlink which points to a file it expects to exist in a
+  # chroot. We aren't using chromite in a chroot, so this is an invalid symlink.
+  # This causes `cas archive` commands which have this directory to fail, so for
+  # now we're removing this directory if we see it in any isolate we modify.
+  # See https://crbug.com/1298283 for more detail.
+  CHROMITE_BAD_SYMLINK_DIR = ('third_party', 'chromite', 'sdk', 'etc',
+                              'bash_completion.d')
+
   def __init__(self, *args, **kwargs):
     super(FlakyReproducer, self).__init__(*args, **kwargs)
 
@@ -103,6 +111,11 @@ class FlakyReproducer(recipe_api.RecipeApi):
         'copy flaky_reproducer source',
         self.repo_resource('recipes', 'recipe_modules', 'flaky_reproducer'),
         runner_dir)
+
+    # Delete bad symlink that causing CAS upload failure.
+    bad_symlink_dir = tmp_dir.join(*self.CHROMITE_BAD_SYMLINK_DIR)
+    self.m.file.rmtree('remove bad symlink directory', bad_symlink_dir)
+
     self.m.file.write_text('dump ResultSummary',
                            runner_dir.join(self.RESULT_SUMMARY_FILENAME),
                            result_summary.dump_raw_data())
