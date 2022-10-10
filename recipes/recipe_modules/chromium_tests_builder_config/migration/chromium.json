@@ -674,11 +674,6 @@
       "tryserver.chromium.mac:ios15-beta-simulator"
     ]
   },
-  "chromium.fyi:ios15-sdk-device": {
-    "builders": [
-      "chromium.fyi:ios15-sdk-device"
-    ]
-  },
   "chromium.fyi:ios15-sdk-simulator": {
     "builders": [
       "chromium.fyi:ios15-sdk-simulator",
