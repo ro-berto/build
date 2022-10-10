@@ -99,9 +99,7 @@ def setup_host_x86(api,
           build_top_dir,
       'PATH':
           str(build_top_dir.join('out', 'host', 'linux-x86', 'bin')) +
-          api.path.pathsep + str(
-              build_top_dir.join('prebuilts', 'jdk', 'jdk9', 'linux-x86',
-                                 'bin')) + api.path.pathsep + '%(PATH)s',
+          api.path.pathsep + '%(PATH)s',
       'ART_TEST_RUN_TEST_2ND_ARCH':
           'false',
       'ART_TEST_KEEP_GOING':
@@ -223,23 +221,33 @@ def setup_target(api,
   # dependencies are installed, in case of chroot-based testing.
   chroot_dir='/data/local/art-test-chroot'
 
-  env = {'TARGET_BUILD_VARIANT': 'eng',
-         'TARGET_BUILD_TYPE': 'release',
-         'LANG': 'en_US.UTF-8',
-         'SOONG_ALLOW_MISSING_DEPENDENCIES': 'true',
-         'TARGET_BUILD_UNBUNDLED': 'true',
-         'ANDROID_BUILD_TOP': build_top_dir,
-         'ADB': str(build_top_dir.join('prebuilts', 'runtime', 'adb')),
-         'PATH': str(build_top_dir.join(
-             'prebuilts', 'jdk', 'jdk9', 'linux-x86', 'bin')) +
-                 api.path.pathsep +
-                 # Add adb in the path.
-                 str(build_top_dir.join('prebuilts', 'runtime')) +
-                 api.path.pathsep + '%(PATH)s',
-         'ART_TEST_RUN_TEST_2ND_ARCH': 'false',
-         'USE_DEX2OAT_DEBUG': 'false',
-         'ART_BUILD_HOST_DEBUG': 'false',
-         'ART_TEST_KEEP_GOING': 'true'}
+  env = {
+      'TARGET_BUILD_VARIANT':
+          'eng',
+      'TARGET_BUILD_TYPE':
+          'release',
+      'LANG':
+          'en_US.UTF-8',
+      'SOONG_ALLOW_MISSING_DEPENDENCIES':
+          'true',
+      'TARGET_BUILD_UNBUNDLED':
+          'true',
+      'ANDROID_BUILD_TOP':
+          build_top_dir,
+      'ADB':
+          str(build_top_dir.join('prebuilts', 'runtime', 'adb')),
+      'PATH':  # Add adb in the path.
+          str(build_top_dir.join('prebuilts', 'runtime')) + api.path.pathsep +
+          '%(PATH)s',
+      'ART_TEST_RUN_TEST_2ND_ARCH':
+          'false',
+      'USE_DEX2OAT_DEBUG':
+          'false',
+      'ART_BUILD_HOST_DEBUG':
+          'false',
+      'ART_TEST_KEEP_GOING':
+          'true'
+  }
 
   if concurrent_collector:
     env.update({ 'ART_USE_READ_BARRIER' : 'true' })
@@ -277,9 +285,6 @@ def setup_target(api,
   test_env = gtest_env.copy()
   test_env.update(
       { 'PATH': str(build_top_dir.join('out', 'host', 'linux-x86', 'bin')) +
-                api.path.pathsep +
-                str(build_top_dir.join(
-                    'prebuilts', 'jdk', 'jdk9', 'linux-x86', 'bin')) +
                 api.path.pathsep +
                 # Add adb in the path.
                 str(build_top_dir.join('prebuilts', 'runtime')) +
