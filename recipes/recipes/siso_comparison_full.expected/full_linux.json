@@ -700,7 +700,6 @@
       "--deps_log_bucket",
       "siso-deps-log-experiments",
       "--enable_cloud_logging",
-      "-config=local_link",
       "-re_cache_enable_read=false",
       "-C",
       "[CACHE]/builder/src/out/Release",
@@ -983,7 +982,6 @@
       "--deps_log_bucket",
       "siso-deps-log-experiments",
       "--enable_cloud_logging",
-      "-config=local_link",
       "-C",
       "[CACHE]/builder/src/out/Release",
       "all"

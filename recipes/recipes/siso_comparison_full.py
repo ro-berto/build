@@ -45,7 +45,7 @@ def _compile_with_siso(api, target, with_remote_cache):
 
   step_name = 'Build %s' % target
   ninja_command = ['ninja', '-C', api.chromium.output_dir, target]
-  siso_args = ['-config=local_link']
+  siso_args = []
   if with_remote_cache:
     step_name += ' with remote cache (siso)'
   else:
