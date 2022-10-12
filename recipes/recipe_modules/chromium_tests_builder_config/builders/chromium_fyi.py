@@ -105,22 +105,6 @@ SPEC = {
             test_results_config='staging_server',
             simulation_platform='linux',
         ),
-    'fuchsia-fyi-x64-wst':
-        builder_spec.BuilderSpec.create(
-            chromium_config='chromium',
-            chromium_apply_config=['mb'],
-            gclient_config='chromium',
-            gclient_apply_config=['fuchsia_workstation'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'fuchsia',
-            },
-            # Serialize the tests to limit capacity usage.
-            serialize_tests=True,
-            test_results_config='staging_server',
-            simulation_platform='linux',
-        ),
     'lacros-amd64-generic-rel-fyi':
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',

@@ -624,12 +624,6 @@
       "tryserver.chromium.linux:fuchsia-fyi-x64-rel"
     ]
   },
-  "chromium.fyi:fuchsia-fyi-x64-wst": {
-    "builders": [
-      "chromium.fyi:fuchsia-fyi-x64-wst",
-      "tryserver.chromium.linux:fuchsia-fyi-x64-wst"
-    ]
-  },
   "chromium.fyi:ios-reclient": {
     "builders": [
       "chromium.fyi:ios-reclient"
@@ -2105,12 +2099,6 @@
     "builders": [
       "chromium.fyi:fuchsia-fyi-x64-rel",
       "tryserver.chromium.linux:fuchsia-fyi-x64-rel"
-    ]
-  },
-  "tryserver.chromium.linux:fuchsia-fyi-x64-wst": {
-    "builders": [
-      "chromium.fyi:fuchsia-fyi-x64-wst",
-      "tryserver.chromium.linux:fuchsia-fyi-x64-wst"
     ]
   },
   "tryserver.chromium.linux:gpu-fyi-try-lacros-amd-rel": {
