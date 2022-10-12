@@ -595,11 +595,29 @@ class V8Api(recipe_api.RecipeApi):
       self.m.chromium.ensure_goma()
     self.m.chromium.runhooks(**kwargs)
 
-  def convert_exp_builder(self, triggered):
+  # TODO(https://crbug.com/890222): Deprecate this mapping after migration to
+  # orchestrator + 4 milestones (2023/Q3).
+  def normalized_builder_name(self, triggered):
+    """Map given builder names from infra/config to names used for look-ups
+    in source configurations.
+
+    This maps a generated experimental trybot to the corresponding parent/child
+    names.
+
+    This maps compilator builder names to legacy names to ease the roll-out and
+    for backwards-compatibility on release branches.
+    """
     builder_name = self.m.buildbucket.builder_name
     triggered_suffix = '_triggered' if triggered else ''
     if builder_name.endswith('_exp'):
       builder_name = builder_name.replace('_exp', '_ng' + triggered_suffix)
+    if self.m.properties['recipe'] == 'v8/compilator':
+      if builder_name.endswith('_compile_rel'):
+        builder_name = builder_name.replace(
+            '_compile_rel', '_rel_ng' + triggered_suffix)
+      if builder_name.endswith('_compile_dbg'):
+        builder_name = builder_name.replace(
+            '_compile_dbg', '_dbg_ng' + triggered_suffix)
     return builder_name
 
   @property
@@ -618,7 +636,7 @@ class V8Api(recipe_api.RecipeApi):
     convention.
     """
     return (
-        [self.convert_exp_builder(triggered=True)] +
+        [self.normalized_builder_name(triggered=True)] +
         list(self.bot_config.get('triggers', []))
     )
 
@@ -650,7 +668,8 @@ class V8Api(recipe_api.RecipeApi):
     """
     return [
       testing.create_test(test, self.m)
-      for test in test_spec.get_tests(self.convert_exp_builder(triggered=True))
+      for test in test_spec.get_tests(
+          self.normalized_builder_name(triggered=True))
     ]
 
   def dedupe_tests(self, high_prec_tests, low_prec_tests):
@@ -830,7 +849,7 @@ class V8Api(recipe_api.RecipeApi):
 
   def get_builder_id(self):
     builder_group = self.m.builder_group.for_current
-    buildername = self.convert_exp_builder(triggered=False)
+    buildername = self.normalized_builder_name(triggered=False)
     return chromium.BuilderId.create_for_group(builder_group, buildername)
 
   # TODO(b:238274944): Remove this method after all builders have switched
