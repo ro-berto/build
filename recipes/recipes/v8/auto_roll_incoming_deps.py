@@ -124,6 +124,15 @@ CHROMIUM_PINS = {
 }
 
 
+# Custom vars by project. They are added to the gclient solution when
+# determining current deps versions.
+GCLIENT_CUSTOM_VARS = {
+  'https://chromium.googlesource.com/chromium/src': {
+    'checkout_fuchsia_no_hooks': True,
+  },
+}
+
+
 class DepUpdate:
   def __init__(self, name, is_trusted, next_version, commit_lines):
     self.name = name
@@ -209,12 +218,15 @@ def discard_local_changes(api):
 def get_deps(api, base_url, name, project_name):
   # Make a fake spec. Gclient is not nice to us when having two solutions
   # side by side. The latter checkout kills the former's gclient file.
-  spec = ('solutions=[%s]' % {
+  repo_url = base_url + project_name
+  custom_vars = GCLIENT_CUSTOM_VARS.get(repo_url, {})
+  spec = 'solutions=[%s]' % {
     'managed': False,
     'name': name,
-    'url': base_url + project_name,
+    'url': repo_url,
+    'custom_vars': custom_vars,
     'deps_file': 'DEPS',
-  })
+  }
 
   # Read local deps information. Each deps has one line in the format:
   # path/to/deps: repo@revision
