@@ -71,7 +71,8 @@ def RunSteps(api, properties):
       # any overlap.
       api.git.new_branch(str(api.time.time()), name='create script branch')
       try:
-        _RunScript(api, script_invocation)
+        with api.context(cwd=api.path['checkout']):
+          _RunScript(api, script_invocation)
       except api.step.StepFailure as e:
         failures.append(e)
       finally:
@@ -151,33 +152,32 @@ def _UploadCL(api, script_invocation, bugs, cmdline):
   upload_args = ['--force', '--send-mail', '--reviewers', reviewer_list[0]]
   if cc_list:
     upload_args.extend(['--cc', ','.join(cc_list)])
-  with api.context(cwd=api.path['checkout']):
-    result = api.git_cl.upload(
-        message,
-        upload_args=upload_args,
-        name='upload cl',
-        stdout=api.raw_io.output_text(),
-        raise_on_failure=False)
-    # Upload succeeded, we're done.
-    if not result.retcode:
-      return
-    # If expectation conflicts were found, upload the CL and let the reviewer
-    # know that they will need to resolve them. If we were going to submit
-    # automatically, switch to manual submission since automatic will not
-    # pass the CQ with the conflicts in.
-    if 'Found conflicts for pattern' in result.stdout:
-      upload_args = [
-          '--force', '--send-mail', '--reviewers', original_reviewer_list[0],
-          '--bypass-hooks'
-      ]
-      message = _GenerateCLMessage(
-          script_invocation, bugs, cmdline,
-          'Found conflicts in expectations, these will need to be manually '
-          'resolved before submitting.')
-      api.git_cl.upload(
-          message, upload_args=upload_args, name='upload cl (has conflicts)')
-    else:
-      api.step.raise_on_failure(result)
+  result = api.git_cl.upload(
+      message,
+      upload_args=upload_args,
+      name='upload cl',
+      stdout=api.raw_io.output_text(),
+      raise_on_failure=False)
+  # Upload succeeded, we're done.
+  if not result.retcode:
+    return
+  # If expectation conflicts were found, upload the CL and let the reviewer
+  # know that they will need to resolve them. If we were going to submit
+  # automatically, switch to manual submission since automatic will not
+  # pass the CQ with the conflicts in.
+  if 'Found conflicts for pattern' in result.stdout:
+    upload_args = [
+        '--force', '--send-mail', '--reviewers', original_reviewer_list[0],
+        '--bypass-hooks'
+    ]
+    message = _GenerateCLMessage(
+        script_invocation, bugs, cmdline,
+        'Found conflicts in expectations, these will need to be manually '
+        'resolved before submitting.')
+    api.git_cl.upload(
+        message, upload_args=upload_args, name='upload cl (has conflicts)')
+  else:
+    api.step.raise_on_failure(result)
 
 
 def _GetReviewerList(api, script_invocation):
