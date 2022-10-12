@@ -125,6 +125,22 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
 
+  def glog_env_checker(check, steps):
+    env = steps[_NINJA_STEP_NAME].env
+    check(env['GLOG_vmodule'] == 'abc*=2')
+    check(env['GLOG_v'] == '10')
+
+  yield api.test(
+      'proper_glog_flags',
+      api.buildbucket.ci_build(project='chromium', builder='Linux reclient'),
+      api.reclient.properties(rewrapper_env={
+          'GLOG_vmodule': 'abc*=2',
+          'GLOG_v': '10',
+      }),
+      api.post_check(glog_env_checker),
+      api.post_process(post_process.DropExpectation),
+  )
+
   yield api.test(
       'incorrect_rewrapper_flags',
       api.buildbucket.ci_build(project='chromium', builder='Linux reclient'),

@@ -756,7 +756,7 @@ class ReclientApi(recipe_api.RecipeApi):
     str_reclient_env = {}
 
     for flag, value in reclient_env.items():
-      if not flag.startswith('RBE_'):
+      if not (flag.startswith('RBE_') or flag.startswith('GLOG_')):
         raise MalformedREClientFlag(flag)
       else:
         str_reclient_env[str(flag)] = str(value)

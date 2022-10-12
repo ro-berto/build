@@ -56,6 +56,6 @@ message InputProperties {
   bool fail_early = 10  [deprecated=true];
 
   // Map of flags to be passed to bootstrap calls through environment
-  // variables. The flag names must be prefixed with "RBE_".
+  // variables. The flag names must be prefixed with "RBE_" or "GLOG_".
   map<string, string> bootstrap_env = 11;
 }
