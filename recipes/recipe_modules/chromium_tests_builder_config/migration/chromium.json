@@ -271,11 +271,6 @@
       "chromium.chromiumos:linux-ash-chromium-generator-rel"
     ]
   },
-  "chromium.chromiumos:linux-chromeos-annotator-rel": {
-    "builders": [
-      "chromium.chromiumos:linux-chromeos-annotator-rel"
-    ]
-  },
   "chromium.chromiumos:linux-chromeos-js-code-coverage": {
     "builders": [
       "chromium.chromiumos:linux-chromeos-js-code-coverage",

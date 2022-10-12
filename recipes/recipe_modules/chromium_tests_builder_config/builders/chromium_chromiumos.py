@@ -50,6 +50,7 @@ def _config(name,
 # * lacros-amd64-generic-rel
 # * lacros-arm-generic-rel
 # * linux-cfm-rel
+# * linux-chromeos-annotator-rel
 # * linux-chromeos-dbg
 # * linux-chromeos-rel
 # * linux-lacros-builder-rel
@@ -61,6 +62,5 @@ SPEC = dict([
     _config(
         'linux-chromeos-js-code-coverage',
         gclient_apply_config=['use_clang_coverage']),
-    _config('linux-chromeos-annotator-rel'),
     _config('linux-lacros-rel'),
 ])
