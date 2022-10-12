@@ -1850,24 +1850,6 @@
       "chromium.webrtc:WebRTC Chromium Win10 Tester"
     ]
   },
-  "chromium:android-official": {
-    "builders": [
-      "chromium:android-official",
-      "tryserver.chromium:android-official"
-    ]
-  },
-  "chromium:fuchsia-official": {
-    "builders": [
-      "chromium:fuchsia-official",
-      "tryserver.chromium:fuchsia-official"
-    ]
-  },
-  "chromium:linux-official": {
-    "builders": [
-      "chromium:linux-official",
-      "tryserver.chromium:linux-official"
-    ]
-  },
   "chromium:win-archive-dbg": {
     "builders": [
       "chromium:win-archive-dbg"
@@ -2707,24 +2689,6 @@
     "builders": [
       "chromium.fyi:win-annotator-rel",
       "tryserver.chromium.win:win-annotator-rel"
-    ]
-  },
-  "tryserver.chromium:android-official": {
-    "builders": [
-      "chromium:android-official",
-      "tryserver.chromium:android-official"
-    ]
-  },
-  "tryserver.chromium:fuchsia-official": {
-    "builders": [
-      "chromium:fuchsia-official",
-      "tryserver.chromium:fuchsia-official"
-    ]
-  },
-  "tryserver.chromium:linux-official": {
-    "builders": [
-      "chromium:linux-official",
-      "tryserver.chromium:linux-official"
     ]
   }
 }

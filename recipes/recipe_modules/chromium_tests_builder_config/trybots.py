@@ -4,32 +4,12 @@
 
 from . import try_spec
 
-# The config for all the builders in builder group tryserver.blink
-# is now specified src-side in
-# //infra/config/subprojects/chromium/try/tryserver.blink.star
+# The config for the following builder groups are now specified src-side:
+# * tryserver.blink
+#   //infra/config/subprojects/chromium/try/tryserver.blink.star
+# * tryserver.chromium
+#   //infra/config/subprojects/chromium/try/tryserver.chromium.star
 TRYBOTS = try_spec.TryDatabase.create({
-    # The config for the following builders is now specified src-side in
-    # //infra/config/subprojects/chromium/try/tryserver.chromium.star
-    # * mac-official
-    # * win-official
-    # * win32-official
-    'tryserver.chromium': {
-        'android-official':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium',
-                buildername='android-official',
-            ),
-        'fuchsia-official':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium',
-                buildername='fuchsia-official',
-            ),
-        'linux-official':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium',
-                buildername='linux-official',
-            ),
-    },
     # The config for the following builders is now specified src-side in
     # //infra/config/subprojects/chromium/try/tryserver.chromium.android.star
     # * android_archive_rel_ng

@@ -8,8 +8,11 @@ from .. import builder_spec
 # //infra/config/subprojects/chromium/ci/chromium.star
 # * android-archive-dbg
 # * android-archive-rel
+# * android-official
+# * fuchsia-official
 # * linux-archive-dbg
 # * linux-archive-rel
+# * linux-official
 # * mac-archive-rel
 # * mac-arm64-archive-dbg
 # * mac-arm64-archive-rel
@@ -34,47 +37,5 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             simulation_platform='win',
-        ),
-    'fuchsia-official':
-        builder_spec.BuilderSpec.create(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=['fuchsia_x64'],
-            chromium_config_kwargs={
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'fuchsia',
-            },
-            simulation_platform='linux',
-        ),
-    'linux-official':
-        builder_spec.BuilderSpec.create(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=['checkout_pgo_profiles', 'enable_reclient'],
-            chromium_config_kwargs={
-                'TARGET_BITS': 64,
-            },
-            simulation_platform='linux',
-        ),
-    'android-official':
-        builder_spec.BuilderSpec.create(
-            chromium_config='android',
-            chromium_apply_config=[
-                'mb',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=['android', 'enable_reclient'],
-            chromium_config_kwargs={
-                'TARGET_PLATFORM': 'android',
-                'TARGET_ARCH': 'arm',
-            },
-            android_config='main_builder',
-            simulation_platform='linux',
         ),
 }
