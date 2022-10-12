@@ -39,7 +39,7 @@ def RunSteps(api):
       'node:10',
     ]
     with api.context(cwd=fuzzer_dir):
-      api.docker.login(use_python3=True)
+      api.docker.login()
       api.docker(
           *(docker_cmd + ['npm', 'install']),
           step_name='npm install'

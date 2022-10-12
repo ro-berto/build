@@ -1065,13 +1065,12 @@ class V8Api(recipe_api.RecipeApi):
 
   def init_gcov_coverage(self):
     """Delete all gcov counter files."""
-    self.m.docker.login(use_python3=True)
+    self.m.docker.login()
     self.m.docker.run(
         LCOV_IMAGE,
         'lcov zero counters',
         ['lcov', '--directory', self.build_output_dir, '--zerocounters'],
         dir_mapping=[(self.build_output_dir, self.build_output_dir)],
-        use_python3=True,
     )
 
   def upload_gcov_coverage_report(self):
@@ -1101,7 +1100,6 @@ class V8Api(recipe_api.RecipeApi):
           '--output-file', output_file,
         ],
         dir_mapping,
-        use_python3=True,
     )
 
     # Remove unwanted data.
@@ -1119,7 +1117,6 @@ class V8Api(recipe_api.RecipeApi):
           '--output-file', output_file,
         ],
         dir_mapping,
-        use_python3=True,
     )
 
     # Generate html report into a temp folder.
@@ -1132,7 +1129,6 @@ class V8Api(recipe_api.RecipeApi):
           output_file,
         ],
         dir_mapping,
-        use_python3=True,
     )
 
     # Upload report to google storage.

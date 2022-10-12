@@ -1,8 +1,7 @@
 [
   {
     "cmd": [
-      "python3",
-      "-u",
+      "python",
       "RECIPE_MODULE[infra::docker]/resources/docker_login.py",
       "--server",
       "gcr.io",
@@ -30,8 +29,7 @@
   },
   {
     "cmd": [
-      "python3",
-      "-u",
+      "python",
       "RECIPE_MODULE[infra::docker]/resources/docker_run.py",
       "--config-file",
       "[CLEANUP]/.docker",
@@ -65,8 +63,7 @@
   },
   {
     "cmd": [
-      "python3",
-      "-u",
+      "python",
       "RECIPE_MODULE[infra::docker]/resources/docker_run.py",
       "--config-file",
       "[CLEANUP]/.docker",
@@ -105,8 +102,7 @@
   },
   {
     "cmd": [
-      "python3",
-      "-u",
+      "python",
       "RECIPE_MODULE[infra::docker]/resources/docker_run.py",
       "--config-file",
       "[CLEANUP]/.docker",
@@ -150,8 +146,7 @@
   },
   {
     "cmd": [
-      "python3",
-      "-u",
+      "python",
       "RECIPE_MODULE[infra::docker]/resources/docker_run.py",
       "--config-file",
       "[CLEANUP]/.docker",
