@@ -396,7 +396,7 @@ def get_dep_updates(api, autoroller_config):
     source_name = key_mapper(target_name)
 
     target_value = target_deps[target_name]
-    target_location, target_version = target_value.split('@')
+    target_location, target_version = target_value.split('@', 1)
     clean_target_location = re.sub(r'\.git$', '', target_location)
 
     is_cipd_dep = target_location.startswith(CIPD_DEP_URL_PREFIX)
@@ -408,9 +408,9 @@ def get_dep_updates(api, autoroller_config):
     is_trusted = clean_target_location in TRUSTED_ORIGIN_DEPS
     version_source = get_dependency_version_source(
         autoroller_config, target_name, bool(chromium_value), is_cipd_dep)
-    
+
     if version_source == 'chromium':
-      chromium_location, chromium_version = chromium_value.split('@')
+      chromium_location, chromium_version = chromium_value.split('@', 1)
 
       # Do not roll the dependency if the location has changed: The gclient tool
       # does not have commands that allow overriding the repo, hence we'll need
@@ -660,6 +660,7 @@ def GenTests(api):
   v8_deps_info = """v8: https://chromium.googlesource.com/v8/v8.git
 v8/buildtools-mapped: https://chromium.googlesource.com/chromium/buildtools.git@5fd66957f08bb752dca714a591c84587c9d70762
 src/tools/luci-go:infra/tools/luci/isolate/${platform}: https://chrome-infra-packages.appspot.com/infra/tools/luci/isolate/${platform}@git_revision:8b15ba47cbaf07a56f93326e39f0c8e5069c19e9
+src/ninja:infra/3pp/tools/ninja/${platform}: https://chrome-infra-packages.appspot.com/infra/3pp/tools/ninja/${platform}@version:2@1.8.2.chromium.3
 src/mock-skip-chromium-roll: mock/skip-chromium-roll.git@1
 v8/mock-tot-rolled: https://chromium.googlesource.com/tot-rolled.git@d3f34f8dfaecc23202a6ef66957e83462d6c826d
 v8/mock-tot-retsam-rolled: https://chromium.googlesource.com/tot-retsam-rolled.git@d3f34f8dfaecc23202a6ef66957e83462d6c826d
@@ -672,6 +673,7 @@ v8/mock-package-latest:mock/package-latest: https://chrome-infra-packages.appspo
   cr_deps_info = """src: https://chromium.googlesource.com/chromium/src.git
 src/buildtools: https://chromium.googlesource.com/chromium/buildtools.git@5fd66957f08bb752dca714a591c84587c9d70762
 src/tools/luci-go:infra/tools/luci/isolate/${platform}: https://chrome-infra-packages.appspot.com/infra/tools/luci/isolate/${platform}@git_revision:3d8f881462b1a93c7525499381fafc8a08691be7
+src/ninja:infra/3pp/tools/ninja/${platform}: https://chrome-infra-packages.appspot.com/infra/3pp/tools/ninja/${platform}@version:2@1.8.2.chromium.4
 src/mock-set-dep-failing: mock/set-dep-failing.git@2
 src/mock-skip-chromium-roll: mock/skip-chromium-roll.git@2"""
 

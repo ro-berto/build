@@ -433,6 +433,7 @@
       "@@@STEP_LOG_LINE@deps@  \"buildtools\": \"https://chromium.googlesource.com/chromium/buildtools.git@5fd66957f08bb752dca714a591c84587c9d70762\", @@@",
       "@@@STEP_LOG_LINE@deps@  \"mock-set-dep-failing\": \"mock/set-dep-failing.git@2\", @@@",
       "@@@STEP_LOG_LINE@deps@  \"mock-skip-chromium-roll\": \"mock/skip-chromium-roll.git@2\", @@@",
+      "@@@STEP_LOG_LINE@deps@  \"ninja:infra/3pp/tools/ninja/${platform}\": \"https://chrome-infra-packages.appspot.com/infra/3pp/tools/ninja/${platform}@version:2@1.8.2.chromium.4\", @@@",
       "@@@STEP_LOG_LINE@deps@  \"tools/luci-go:infra/tools/luci/isolate/${platform}\": \"https://chrome-infra-packages.appspot.com/infra/tools/luci/isolate/${platform}@git_revision:3d8f881462b1a93c7525499381fafc8a08691be7\"@@@",
       "@@@STEP_LOG_LINE@deps@}@@@",
       "@@@STEP_LOG_END@deps@@@"
@@ -483,6 +484,7 @@
       "@@@STEP_LOG_LINE@deps@  \"mock-skip-chromium-roll\": \"mock/skip-chromium-roll.git@1\", @@@",
       "@@@STEP_LOG_LINE@deps@  \"mock-tot-retsam-rolled\": \"https://chromium.googlesource.com/tot-retsam-rolled.git@d3f34f8dfaecc23202a6ef66957e83462d6c826d\", @@@",
       "@@@STEP_LOG_LINE@deps@  \"mock-tot-rolled\": \"https://chromium.googlesource.com/tot-rolled.git@d3f34f8dfaecc23202a6ef66957e83462d6c826d\", @@@",
+      "@@@STEP_LOG_LINE@deps@  \"ninja:infra/3pp/tools/ninja/${platform}\": \"https://chrome-infra-packages.appspot.com/infra/3pp/tools/ninja/${platform}@version:2@1.8.2.chromium.3\", @@@",
       "@@@STEP_LOG_LINE@deps@  \"tools/clang\": \"https://chromium.googlesource.com/chromium/src/tools/clang@d3f34f8dfaecc23202a6ef66957e83462d6c826d\", @@@",
       "@@@STEP_LOG_LINE@deps@  \"tools/clang-reviewed\": \"https://example.com/tools/clang-reviewed.git@d3f34f8dfaecc23202a6ef66957e83462d6c826d\", @@@",
       "@@@STEP_LOG_LINE@deps@  \"tools/luci-go:infra/tools/luci/isolate/${platform}\": \"https://chrome-infra-packages.appspot.com/infra/tools/luci/isolate/${platform}@git_revision:8b15ba47cbaf07a56f93326e39f0c8e5069c19e9\"@@@",
@@ -877,7 +879,7 @@
     "name": "Find updated deps.gitiles log: d3f34f8dfaecc23202a6ef66957e83462d6c826d..deadbeef (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@<br />2 commits fetched@@@",
+      "@@@STEP_TEXT@<br />2 commits fetchedversion:2@1.8.2.chromium.4@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"log\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
@@ -1059,7 +1061,7 @@
     "cmd": [],
     "name": "Update trusted deps",
     "~followup_annotations": [
-      "@@@STEP_TEXT@3 update(s)@@@",
+      "@@@STEP_TEXT@4 update(s)@@@",
       "@@@STEP_LINK@CL@https://chromium-review.googlesource.com/c/chromium/tools/build/+/3840339@@@",
       "@@@STEP_WARNINGS@@@"
     ]
@@ -1230,6 +1232,42 @@
       "RECIPE_REPO[depot_tools]/gclient.py",
       "setdep",
       "-r",
+      "ninja:infra/3pp/tools/ninja/${platform}@version:2@1.8.2.chromium.4"
+    ],
+    "cwd": "[CACHE]/builder/v8",
+    "env": {
+      "DEPOT_TOOLS_REPORT_BUILD": "v8/ci/default/8945511751514863184"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "Update trusted deps.gclient setdep ninja:infra_3pp_tools_ninja_${platform}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython3",
+      "-u",
+      "RECIPE_REPO[depot_tools]/gclient.py",
+      "setdep",
+      "-r",
       "tools/clang@deadbeef"
     ],
     "cwd": "[CACHE]/builder/v8",
@@ -1328,6 +1366,8 @@
       "-a",
       "-m",
       "Update V8 deps (trusted)",
+      "-m",
+      "Rolling v8/ninja: version:2@1.8.2.chromium.3..version:2@1.8.2.chromium.4",
       "-m",
       "Rolling v8/tools/clang: https://chromium.googlesource.com/chromium/src/tools/clang/+log/d3f34f8..deadbee",
       "-m",
