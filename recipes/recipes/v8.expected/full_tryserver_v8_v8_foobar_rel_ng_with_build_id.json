@@ -1,9 +1,5 @@
 [
   {
-    "cmd": [],
-    "name": "initialization"
-  },
-  {
     "cmd": [
       "vpython3",
       "RECIPE_REPO[depot_tools]/gerrit_client.py",
@@ -21,7 +17,6 @@
       "-o",
       "DOWNLOAD_COMMANDS"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
     },
@@ -38,10 +33,9 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "initialization.gerrit fetch current CL info",
+    "name": "gerrit fetch current CL info",
     "timeout": 60,
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@[@@@",
       "@@@STEP_LOG_LINE@json.output@  {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"branch\": \"main\", @@@",
@@ -58,6 +52,98 @@
       "@@@STEP_LOG_LINE@json.output@]@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
+  },
+  {
+    "cmd": [
+      "vpython3",
+      "RECIPE_REPO[depot_tools]/gerrit_client.py",
+      "changes",
+      "--host",
+      "https://chromium-review.googlesource.com",
+      "--json_file",
+      "/path/to/tmp/json",
+      "--limit",
+      "1",
+      "-p",
+      "change=456789",
+      "-o",
+      "ALL_REVISIONS",
+      "-o",
+      "ALL_COMMITS"
+    ],
+    "env": {
+      "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "v8:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "gerrit changes",
+    "timeout": 60,
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"_number\": \"456789\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"branch\": \"main\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"change_id\": \"Ideadbeef\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"created\": \"2017-01-30 13:11:20.000000000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"has_review_started\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"id\": \"fully~qualified~changeid\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"project\": \"chromium/src\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"revisions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"184ebe53805e102605d11f6b143486d15c23a09c\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"_number\": \"12\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"commit\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"message\": \"Change commit message\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        }@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"status\": \"NEW\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"subject\": \"Change title\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python3",
+      "RECIPE_REPO[depot_tools]/git_footers.py",
+      "--json",
+      "/path/to/tmp/json"
+    ],
+    "luci_context": {
+      "realm": {
+        "name": "v8:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "parse description",
+    "stdin": "Change commit message",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output (exception)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "initialization"
   },
   {
     "cmd": [
@@ -465,7 +551,7 @@
       }
     },
     "name": "trigger",
-    "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"bucket\": \"try.triggered\", \"builder\": \"v8_foobar_rel_ng_triggered\", \"project\": \"v8\"}, \"experimental\": \"NO\", \"experiments\": {\"luci.buildbucket.parent_tracking\": false}, \"fields\": \"builder,createTime,createdBy,critical,endTime,id,infra,input,number,output,startTime,status,updateTime\", \"gerritChanges\": [{\"change\": \"456789\", \"host\": \"chromium-review.googlesource.com\", \"patchset\": \"12\", \"project\": \"v8/v8\"}], \"gitilesCommit\": {\"host\": \"chromium.googlesource.com\", \"id\": \"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\", \"project\": \"v8/v8\", \"ref\": \"refs/heads/main\"}, \"priority\": 30, \"properties\": {\"category\": \"cq\", \"disable_auto_bisect\": true, \"newest_gitiles_revision\": \"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\", \"oldest_gitiles_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"parent_build\": \"https://cr-buildbucket.appspot.com/build/8945511751514863184\", \"parent_buildername\": \"v8_foobar_rel_ng\", \"parent_gn_args\": [\"target_cpu = \\\"x86\\\"\", \"use_goma = true\"], \"parent_got_revision\": \"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\", \"parent_got_revision_cp\": \"refs/heads/main@{#50110}\", \"patch_gerrit_url\": \"https://chromium-review.googlesource.com\", \"patch_issue\": 456789.0, \"patch_project\": \"v8/v8\", \"patch_set\": 12.0, \"patch_storage\": \"gerrit\", \"reason\": \"CQ\", \"revision\": \"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\"}, \"requestId\": \"8945511751514863184-00000000-0000-0000-0000-000000001337\", \"tags\": [{\"key\": \"buildset\", \"value\": \"patch/gerrit/chromium-review.googlesource.com/456789/12\"}, {\"key\": \"cq_experimental\", \"value\": \"false\"}, {\"key\": \"parent_buildbucket_id\", \"value\": \"8945511751514863184\"}, {\"key\": \"user_agent\", \"value\": \"cq\"}, {\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
+    "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"bucket\": \"try.triggered\", \"builder\": \"v8_foobar_rel_ng_triggered\", \"project\": \"v8\"}, \"experimental\": \"NO\", \"experiments\": {\"luci.buildbucket.parent_tracking\": false}, \"fields\": \"builder,createTime,createdBy,critical,endTime,id,infra,input,number,output,startTime,status,updateTime\", \"gerritChanges\": [{\"change\": \"456789\", \"host\": \"chromium-review.googlesource.com\", \"patchset\": \"12\", \"project\": \"v8/v8\"}], \"gitilesCommit\": {\"host\": \"chromium.googlesource.com\", \"id\": \"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\", \"project\": \"v8/v8\", \"ref\": \"refs/heads/main\"}, \"priority\": 30, \"properties\": {\"V8-Recipe-Flags\": [], \"category\": \"cq\", \"disable_auto_bisect\": true, \"newest_gitiles_revision\": \"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\", \"oldest_gitiles_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"parent_build\": \"https://cr-buildbucket.appspot.com/build/8945511751514863184\", \"parent_buildername\": \"v8_foobar_rel_ng\", \"parent_gn_args\": [\"target_cpu = \\\"x86\\\"\", \"use_goma = true\"], \"parent_got_revision\": \"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\", \"parent_got_revision_cp\": \"refs/heads/main@{#50110}\", \"patch_gerrit_url\": \"https://chromium-review.googlesource.com\", \"patch_issue\": 456789.0, \"patch_project\": \"v8/v8\", \"patch_set\": 12.0, \"patch_storage\": \"gerrit\", \"reason\": \"CQ\", \"revision\": \"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\"}, \"requestId\": \"8945511751514863184-00000000-0000-0000-0000-000000001337\", \"tags\": [{\"key\": \"buildset\", \"value\": \"patch/gerrit/chromium-review.googlesource.com/456789/12\"}, {\"key\": \"cq_experimental\", \"value\": \"false\"}, {\"key\": \"parent_buildbucket_id\", \"value\": \"8945511751514863184\"}, {\"key\": \"user_agent\", \"value\": \"cq\"}, {\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"responses\": [@@@",
@@ -512,6 +598,7 @@
       "@@@STEP_LOG_LINE@request@        }, @@@",
       "@@@STEP_LOG_LINE@request@        \"priority\": 30, @@@",
       "@@@STEP_LOG_LINE@request@        \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@request@          \"V8-Recipe-Flags\": [], @@@",
       "@@@STEP_LOG_LINE@request@          \"category\": \"cq\", @@@",
       "@@@STEP_LOG_LINE@request@          \"disable_auto_bisect\": true, @@@",
       "@@@STEP_LOG_LINE@request@          \"newest_gitiles_revision\": \"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\", @@@",

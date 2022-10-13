@@ -239,6 +239,9 @@ class BaseTest(object):
     if raw_cmd[0].endswith('.py'):
       raw_cmd = ['vpython3', '-u'] + raw_cmd
 
+    if self.api.v8.resultdb:
+      raw_cmd = self.api.v8.resultdb.wrap(self.api, raw_cmd)
+
     return self.api.chromium_swarming.task(
         cas_input_root=cas_digest, raw_cmd=raw_cmd, **kwargs)
 
@@ -416,6 +419,8 @@ def _trigger_swarming_task(api, task, test_step_config):
     test_step_config: Configuration object used to configure this task. Contains
         e.g. dimension and task-attribute overrides.
   """
+  if api.v8.resultdb:
+    task.request = task.request.with_resultdb()
   task_slice = task.request[0]
   task_dimensions = task_slice.dimensions
   # Add custom dimensions.
@@ -442,6 +447,10 @@ def _trigger_swarming_task(api, task, test_step_config):
     task.request = task.request.with_priority(attrs['priority'])
 
   api.chromium_swarming.trigger_task(task)
+
+  # Remove 'invocations/' because it is added again in include_invocations.
+  api.resultdb.include_invocations(
+      [i[len('invocations/'):] for i in task.get_invocation_names()])
 
 
 class V8SwarmingTest(V8Test):
