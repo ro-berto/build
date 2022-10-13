@@ -14,7 +14,6 @@ import random
 import re
 
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
-from RECIPE_MODULES.build.chromium_tests.resultdb import ResultDB
 
 from .builders import TestSpec
 from recipe_engine import recipe_api
@@ -57,8 +56,6 @@ V8_BUILD = 'V8_BUILD_NUMBER'
 V8_PATCH = 'V8_PATCH_LEVEL'
 
 LCOV_IMAGE = 'lcov:2018-01-18_17-03'
-
-V8_RECIPE_FLAGS = 'V8-Recipe-Flags'
 
 
 class V8Version(object):
@@ -237,8 +234,6 @@ class V8Api(recipe_api.RecipeApi):
     self.revision_cp = None
     self.revision_number = None
     self.use_remoteexec = properties.get('use_remoteexec', False)
-    self.v8_recipe_flags = []
-    self._resultdb = None
 
   @property
   def trigger(self):
@@ -250,24 +245,6 @@ class V8Api(recipe_api.RecipeApi):
   @property
   def trigger_prod(self):
     return ProdTrigger(self.m)
-
-  def read_cl_footer_flags(self):
-    # TODO(liviurau): find out why the triggered build was not able to pick up
-    # the gerrit properties.
-    self.v8_recipe_flags = self.m.properties.get(V8_RECIPE_FLAGS, [])
-    if self.m.tryserver.is_gerrit_issue:
-      footers = self.m.tryserver.get_footers() or {}
-      flags = footers.get(V8_RECIPE_FLAGS, [])
-      self.v8_recipe_flags.extend(flags)
-
-  def is_flag_set(self, flag_name):
-    return flag_name in self.v8_recipe_flags
-
-  @property
-  def resultdb(self):
-    if not self._resultdb and self.is_flag_set('resultdb'):
-      self._resultdb = ResultDB.create()
-    return self._resultdb
 
   def _python(self, name, exe, script, args, **kwargs):
     cmd = [exe, '-u', script] + list(args or [])
@@ -1599,13 +1576,11 @@ class V8Api(recipe_api.RecipeApi):
         trigger_props = {}
         self._copy_property(self.m.properties, trigger_props, 'revision')
         trigger_props.update(properties)
-        trigger_props.update({V8_RECIPE_FLAGS: self.v8_recipe_flags})
         self.m.cq.record_triggered_builds(*self.trigger.buildbucket(
-            [(builder_name,
-              dict(
-                  trigger_props,
-                  **test_spec.as_properties_dict(builder_name),
-              )) for builder_name in triggers],
+            [(builder_name, dict(
+              trigger_props,
+              **test_spec.as_properties_dict(builder_name)
+            )) for builder_name in triggers],
             bucket='try.triggered',
         ))
       else:

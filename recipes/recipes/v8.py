@@ -86,7 +86,6 @@ def RunSteps(api, binary_size_tracking, build_config, clobber, clobber_all,
              triggers_proxy, use_goma):
   link_to_parent(api)
   v8 = api.v8
-  v8.read_cl_footer_flags()
   v8.load_static_test_configs()
   bot_config = v8.update_bot_config(
       v8.bot_config_by_buildername(use_goma=use_goma),
@@ -300,17 +299,6 @@ def GenTests(api):
     api.override_step_data(
         'Check', api.v8.output_json(has_failures=True))
   )
-
-  yield (api.v8.test(
-      'tryserver.v8',
-      'v8_foobar_rel_ng_triggered',
-      'cl_with_footer_resultdb',
-      parent_buildername='v8_foobar_rel_ng',
-      parent_bot_config=linux_bot_config,
-      parent_test_spec=test_spec,
-      disable_auto_bisect=True,
-  ) + api.step_data('parse description',
-                    api.json.output({'V8-Recipe-Flags': ['resultdb']})))
 
   yield (
     api.v8.test(
