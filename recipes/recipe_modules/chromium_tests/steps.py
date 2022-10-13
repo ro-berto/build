@@ -2813,7 +2813,7 @@ class MockTestSpec(TestSpec):
   per_suffix_valid = attrib(mapping[str, bool], default={})
   runs_on_swarming = attrib(bool, default=False)
   invocation_names = attrib(sequence[str], default=[])
-  invertable = attrib(bool, default=False)
+  invertible = attrib(bool, default=False)
   option_flags = attrib(TestOptionFlags, default=_DEFAULT_OPTION_FLAGS)
 
   @property
@@ -2895,7 +2895,7 @@ class MockTest(Test):
 
   @property
   def has_inverted(self):
-    return self.spec.invertable
+    return self.spec.invertible
 
   @property
   def abort_on_failure(self):

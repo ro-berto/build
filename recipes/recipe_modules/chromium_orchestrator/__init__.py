@@ -15,6 +15,7 @@ DEPS = [
     'code_coverage',
     'depot_tools/gclient',
     'depot_tools/gitiles',
+    'depot_tools/gsutil',
     'depot_tools/tryserver',
     'flakiness',
     'isolate',

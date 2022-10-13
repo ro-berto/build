@@ -15,6 +15,7 @@ from PB.recipe_engine import result as result_pb2
 from RECIPE_MODULES.build.attr_utils import attrib, attrs, mapping, sequence
 from RECIPE_MODULES.build.chromium_tests.api import (
     ALL_TEST_BINARIES_ISOLATE_NAME)
+from RECIPE_MODULES.build.code_coverage import constants
 
 COMPILATOR_SWARMING_TASK_COLLECT_STEP = (
     'wait for compilator swarming task cleanup overhead')
@@ -112,27 +113,31 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
         'remove_src_checkout_experiment' in experiments)
     inverted_rts_experiment = ('chromium_rts.inverted_rts' in
                                self.m.buildbucket.build.input.experiments)
+    inverted_rts_bail_early_experiment = (
+        'chromium_rts.inverted_rts_bail_early' in
+        self.m.buildbucket.build.input.experiments)
 
     # The chromium_rts.inverted_rts attempts to run only the tests that were
     # skipped as part of a previous compatible Quick Run build
+    reuseable_quick_run_build = None
+    reuseable_compilator_build = None
     if inverted_rts_experiment:
-      if self.m.cq.active and self.m.cq.run_mode == self.m.cq.QUICK_DRY_RUN:
+      if (inverted_rts_bail_early_experiment and self.m.cq.active and
+          self.m.cq.run_mode == self.m.cq.QUICK_DRY_RUN):
         return
-      quick_run_build = self.find_compatible_quick_run_build()
+      reuseable_quick_run_build = self.find_compatible_quick_run_build()
 
-      if quick_run_build:
-        compilator_build = self.get_compilator_from_build(quick_run_build)
-        if compilator_build:
-
+      if reuseable_quick_run_build:
+        reuseable_compilator_build = self.get_compilator_from_build(
+            reuseable_quick_run_build)
+        if reuseable_compilator_build:
           log_step = self.m.step.empty('log reused builds')
           log_step.presentation.properties[
-              'reused_quick_run_build'] = quick_run_build.id
+              'reused_quick_run_build'] = reuseable_quick_run_build.id
           log_step.presentation.properties[
-              'reused_compilator_build'] = compilator_build.id
+              'reused_compilator_build'] = reuseable_compilator_build.id
 
-          return self.run_inverted_shards(compilator_build, builder_config)
-      # After the experiment we'll want to continue but for now don't waste the
-      # resource and just return
+    if inverted_rts_bail_early_experiment and not reuseable_compilator_build:
       return None
 
     # Trigger compilator to compile and build targets with patch
@@ -148,101 +153,107 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
     root_solution_revision = None
     patch_repo_head_revision = None
 
-    if not remove_src_checkout_experiment:
-      patch_repo_ref = self.m.tryserver.gerrit_change_target_ref
-      gerrit_change_project = self.m.tryserver.gerrit_change.project
+    if reuseable_compilator_build:
+      build_to_process = reuseable_compilator_build
+    else:
+      if not remove_src_checkout_experiment:
+        patch_repo_ref = self.m.tryserver.gerrit_change_target_ref
+        gerrit_change_project = self.m.tryserver.gerrit_change.project
 
-      if gerrit_change_project == 'chromium/src':
-        # Usually refs/heads/main for ToT CLs, but can be branch heads for
-        # branch CLs
-        src_ref = patch_repo_ref
-      else:
-        # This assumes that non chromium/src projects only runs builds on
-        # the main branch of src.
-        src_ref = 'refs/heads/main'
+        if gerrit_change_project == 'chromium/src':
+          # Usually refs/heads/main for ToT CLs, but can be branch heads for
+          # branch CLs
+          src_ref = patch_repo_ref
+        else:
+          # This assumes that non chromium/src projects only runs builds on
+          # the main branch of src.
+          src_ref = 'refs/heads/main'
 
-      src_head_revision, _ = self.m.gitiles.log(
-          'https://chromium.googlesource.com/chromium/src',
-          src_ref,
-          limit=1,
-          step_name='read src HEAD revision at {}'.format(src_ref))
-      src_head_revision = src_head_revision[0]['commit']
-
-      gclient_soln_name = self.m.gclient.get_repo_path(
-          self.m.tryserver.gerrit_change_repo_url)
-
-      if gerrit_change_project == 'chromium/src':
-        patch_repo_head_revision = src_head_revision
-        gitiles_commit = common_pb.GitilesCommit(
-            host=self.m.tryserver.gerrit_change_repo_host,
-            project=self.m.tryserver.gerrit_change.project,
-            ref=src_ref,
-            id=src_head_revision)
-      else:
-        patch_repo_head_revision, _ = self.m.gitiles.log(
-            self.m.tryserver.gerrit_change_repo_url,
-            patch_repo_ref,
+        src_head_revision, _ = self.m.gitiles.log(
+            'https://chromium.googlesource.com/chromium/src',
+            src_ref,
             limit=1,
-            step_name='read {} HEAD revision at {}'.format(
-                gerrit_change_project, patch_repo_ref))
-        patch_repo_head_revision = patch_repo_head_revision[0]['commit']
-        root_solution_revision = src_head_revision
+            step_name='read src HEAD revision at {}'.format(src_ref))
+        src_head_revision = src_head_revision[0]['commit']
 
-        compilator_properties['root_solution_revision'] = root_solution_revision
-        compilator_properties['deps_revision_overrides'] = {
-            gclient_soln_name: patch_repo_head_revision
-        }
+        gclient_soln_name = self.m.gclient.get_repo_path(
+            self.m.tryserver.gerrit_change_repo_url)
 
-      self.m.gclient.c.revisions[gclient_soln_name] = patch_repo_head_revision
+        if gerrit_change_project == 'chromium/src':
+          patch_repo_head_revision = src_head_revision
+          gitiles_commit = common_pb.GitilesCommit(
+              host=self.m.tryserver.gerrit_change_repo_host,
+              project=self.m.tryserver.gerrit_change.project,
+              ref=src_ref,
+              id=src_head_revision)
+        else:
+          patch_repo_head_revision, _ = self.m.gitiles.log(
+              self.m.tryserver.gerrit_change_repo_url,
+              patch_repo_ref,
+              limit=1,
+              step_name='read {} HEAD revision at {}'.format(
+                  gerrit_change_project, patch_repo_ref))
+          patch_repo_head_revision = patch_repo_head_revision[0]['commit']
+          root_solution_revision = src_head_revision
 
-    # Pass in any RTS mode input props
-    compilator_properties.update(self.m.cq.props_for_child_build)
-    if remove_src_checkout_experiment:
-      self.m.chromium_bootstrap.update_trigger_properties(compilator_properties)
+          compilator_properties[
+              'root_solution_revision'] = root_solution_revision
+          compilator_properties['deps_revision_overrides'] = {
+              gclient_soln_name: patch_repo_head_revision
+          }
 
-    request = self.m.buildbucket.schedule_request(
-        builder=self.compilator,
-        swarming_parent_run_id=self.m.swarming.task_id,
-        properties=compilator_properties,
-        gitiles_commit=gitiles_commit,
-        tags=self.m.buildbucket.tags(**{'hide-in-gerrit': 'pointless'}),
-        experiments={
-            'remove_src_checkout_experiment': remove_src_checkout_experiment
-        })
+        self.m.gclient.c.revisions[gclient_soln_name] = patch_repo_head_revision
 
-    led_job = None
-    if self.m.led.launched_by_led:
-      led_job = self.trigger_compilator_led_build(
-          compilator_properties,
-          remove_src_checkout_experiment,
-          with_patch=True)
-    else:
-      build = self.m.buildbucket.schedule(
-          [request], step_name='trigger compilator (with patch)')[0]
+      # Pass in any RTS mode input props
+      compilator_properties.update(self.m.cq.props_for_child_build)
+      if remove_src_checkout_experiment:
+        self.m.chromium_bootstrap.update_trigger_properties(
+            compilator_properties)
 
-      self.current_compilator_buildbucket_id = build.id
+      request = self.m.buildbucket.schedule_request(
+          builder=self.compilator,
+          swarming_parent_run_id=self.m.swarming.task_id,
+          properties=compilator_properties,
+          gitiles_commit=gitiles_commit,
+          tags=self.m.buildbucket.tags(**{'hide-in-gerrit': 'pointless'}),
+          experiments={
+              'remove_src_checkout_experiment': remove_src_checkout_experiment
+          })
 
-    if not remove_src_checkout_experiment:
-      bot_update_step, targets_config = self.m.chromium_tests.prepare_checkout(
-          builder_config,
-          timeout=3600,
-          enforce_fetch=True,
-          no_fetch_tags=True,
-          root_solution_revision=root_solution_revision,
-          refs=[patch_repo_ref])
+      led_job = None
+      if self.m.led.launched_by_led:
+        led_job = self.trigger_compilator_led_build(
+            compilator_properties,
+            remove_src_checkout_experiment,
+            with_patch=True)
+      else:
+        build = self.m.buildbucket.schedule(
+            [request], step_name='trigger compilator (with patch)')[0]
 
-    if self.m.led.launched_by_led:
-      # Collect the led swarming task instead of using a compilator_watcher,
-      # since raw swarming tasks need to finish completely before outputting
-      # a build.proto json file, which has all of the compilator build props.
-      build_to_process = self.collect_compilator_led_build(
-          led_job, with_patch=True)
-    else:
-      # Now that we've finished the Orchestrator's bot_update and analyze, let's
-      # check on the triggered compilator and display its steps (until it
-      # outputs the swarming trigger props).
-      build_to_process = self.launch_compilator_watcher(
-          build, is_swarming_phase=True, with_patch=True)
+        self.current_compilator_buildbucket_id = build.id
+
+      if not remove_src_checkout_experiment:
+        bot_update_step, targets_config = (
+            self.m.chromium_tests.prepare_checkout(
+                builder_config,
+                timeout=3600,
+                enforce_fetch=True,
+                no_fetch_tags=True,
+                root_solution_revision=root_solution_revision,
+                refs=[patch_repo_ref]))
+
+      if self.m.led.launched_by_led:
+        # Collect the led swarming task instead of using a compilator_watcher,
+        # since raw swarming tasks need to finish completely before outputting
+        # a build.proto json file, which has all of the compilator build props.
+        build_to_process = self.collect_compilator_led_build(
+            led_job, with_patch=True)
+      else:
+        # Now that we've finished the Orchestrator's bot_update and analyze,
+        # let's check on the triggered compilator and display its steps (until
+        # it outputs the swarming trigger props).
+        build_to_process = self.launch_compilator_watcher(
+            build, is_swarming_phase=True, with_patch=True)
 
     comp_output, maybe_raw_result = self.process_sub_build(
         build_to_process, is_swarming_phase=True, with_patch=True)
@@ -278,8 +289,20 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
 
     # Now let's get all the tests ready with the swarming trigger info
     # outputed by the compilator
-    tests = self.process_swarming_props(comp_output.swarming_props,
-                                        builder_config, targets_config)
+    tests = self.process_swarming_props(
+        comp_output.swarming_props,
+        builder_config,
+        targets_config,
+        include_inverted_rts=bool(reuseable_compilator_build))
+
+    # If we only need to run the tests that were skipped in the last build
+    if reuseable_compilator_build:
+      tests = [t for t in tests if t.has_inverted]
+      if not tests:
+        # No invertible tests were found and we have a successful build
+        return result_pb2.RawResult(status=common_pb.SUCCESS)
+      for test in tests:
+        test.is_inverted_rts = True
 
     self.m.chromium_tests.configure_swarming(
         self.m.tryserver.is_tryserver, builder_group=builder_id.group)
@@ -327,11 +350,14 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
 
       if (self.m.code_coverage.using_coverage and
           not comp_output.skipping_coverage):
+        # Grab the coverage from the reused build
+        if reuseable_compilator_build:
+          self.download_previous_code_coverage(reuseable_quick_run_build)
         self.m.code_coverage.process_coverage_data(tests)
 
     # Led compilator build has already been collected with the local tests
     # finished
-    if not self.m.led.launched_by_led:
+    if not self.m.led.launched_by_led and not reuseable_compilator_build:
       # Let's check back on the compilator to see the results of the local
       # scripts/tests. The sub_build will only display steps relevant to those
       # local scripts/tests.
@@ -792,8 +818,9 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
                 60 * 60 * 24 * 10)),
         status=common_pb.SUCCESS,
     )
-    predicate.builder.builder = (
-        self.m.buildbucket.build.builder.builder.strip('-inverse-fyi'))
+    if predicate.builder.builder.endswith('-inverse-fyi'):
+      predicate.builder.builder = predicate.builder.builder[:-len('-inverse-fyi'
+                                                                 )]
     builds = self.m.buildbucket.search(
         predicate, step_name='find successful Quick Runs')
 
@@ -832,65 +859,19 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
     compilator_build = min(builds, key=lambda b: b.start_time)
     return compilator_build
 
-  def run_inverted_shards(self, compilator_build, builder_config):
-    """Runs the the Inverted Quick Run tests
-
-    Reuses artifacts collected from the compilator launching them with the
-    inverted rts command instead of the original command to run only the
-    tests that were previously skipped
-
-    Args:
-      compilator_build (Build): The compilator that built the tests with
-        inverted rts commands
-      builder_config (BuilderConfig): config for the current builder
-
-    Returns:
-      RawResult object
-    """
-    comp_output, _ = self.process_sub_build(
-        compilator_build, is_swarming_phase=True, with_patch=True)
-
-    self.m.chromium_checkout.checkout_dir = self.m.path['cleanup']
-
-    self.m.cas.download(
-        'download src-side deps',
-        comp_output.src_side_deps_digest,
-        self.m.chromium_checkout.src_dir,
-    )
-
-    targets_config = self.m.chromium_tests.create_targets_config(
-        builder_config,
-        comp_output.got_revisions,
-        self.m.chromium_checkout.src_dir,
-        source_side_spec_dir=self.m.chromium_checkout.src_dir.join(
-            comp_output.src_side_test_spec_dir),
-        isolated_tests_only=True)
-    self.check_for_non_swarmed_isolated_tests(targets_config.all_tests)
-    # This is used to set build properties on swarming tasks
-    self.m.chromium.set_build_properties(comp_output.got_revisions)
-
-    tests = self.process_swarming_props(
-        comp_output.swarming_props,
-        builder_config,
-        targets_config,
-        include_inverted_rts=True)
-
-    builder_id, builder_config = self.configure_build()
-    self.m.chromium_tests.configure_swarming(
-        self.m.tryserver.is_tryserver, builder_group=builder_id.group)
-
-    # Trigger and wait for the tests
-    with self.m.chromium_tests.wrap_chromium_tests(builder_config, tests):
-      invertable_tests = [t for t in tests if t.has_inverted]
-
-      for test in invertable_tests:
-        test.is_inverted_rts = True
-
-      invalid_test_suites, all_failing_test_suites = (
-          self.m.test_utils.run_tests_with_patch(
-              invertable_tests,
-              retry_failed_shards=builder_config.retry_failed_shards))
-
-    test_failures = bool(invalid_test_suites) or bool(all_failing_test_suites)
-    return result_pb2.RawResult(
-        status=common_pb.SUCCESS if not test_failures else common_pb.FAILURE)
+  def download_previous_code_coverage(self, quick_run_build):
+    if ('coverage_gs_bucket' not in quick_run_build.output.properties or
+        'merged_profdata_gs_paths' not in quick_run_build.output.properties):
+      return
+    bucket = quick_run_build.output.properties['coverage_gs_bucket']
+    for path in quick_run_build.output.properties['merged_profdata_gs_paths']:
+      # Make the _unit coverage data match the unit regex used in code coverage
+      if '/%s_unit/' % self.m.buildbucket.builder_name in path:
+        dest = self.m.profiles.profile_dir().join(
+            constants.QUICK_RUN_UNIT_PROFDATA)
+        step_name = 'download Quick Run unit coverage from GS'
+      else:
+        dest = self.m.profiles.profile_dir().join(
+            constants.QUICK_RUN_OVERALL_PROFDATA)
+        step_name = 'download Quick Run overall coverage from GS'
+      self.m.gsutil.download(bucket, path, dest, name=step_name)

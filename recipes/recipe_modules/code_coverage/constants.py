@@ -16,6 +16,10 @@ DIR_METADATA_FILE_NAME = 'dir_metadata.json'
 BOT_TO_GERRIT_LINE_NUM_MAPPING_FILE_NAME = (
     'bot_to_gerrit_line_num_mapping.json')
 
+# Names of the files to store reused Quick Run coverage data as
+QUICK_RUN_UNIT_PROFDATA = 'quick_run_merged_unittest.profdata'
+QUICK_RUN_OVERALL_PROFDATA = 'quick_run_merged.profdata'
+
 # Valid extensions of source files that supported per coverage tool.
 TOOLS_TO_EXTENSIONS_MAP = {
     'clang': [
@@ -54,7 +58,9 @@ SUPPORTED_TEST_TYPES = ['overall', 'unit']
 
 # Keys in the dict are platforms that support multiple test types. If a platform
 # isn't in the keys, the default test type will be "overall" and the test
-# pattern will be '.+' i.e. all tests would run
+# pattern will be '.+' i.e. all tests would run. All unit regex's must match
+# QUICK_RUN_UNIT_PROFDATA to allow merging of previous Quick Runs with their
+# inverted run
 PLATFORM_TO_TARGET_NAME_PATTERN_MAP = {
     'ios': {
         'unit': '(boringssl_crypto_|boringssl_ssl_'

@@ -47,11 +47,11 @@ def RunSteps(api, retry_failed_shards, test_kwargs_list):
 
   test_specs = [
       steps.MockTestSpec.create(
-          name='test', invertable=True, **_get_test_kwargs_by_index(0)),
+          name='test', invertible=True, **_get_test_kwargs_by_index(0)),
       steps.MockTestSpec.create(
-          name='test2', invertable=True, **_get_test_kwargs_by_index(1)),
+          name='test2', invertible=True, **_get_test_kwargs_by_index(1)),
       steps.MockTestSpec.create(
-          name='test3', invertable=False, **_get_test_kwargs_by_index(2)),
+          name='test3', invertible=False, **_get_test_kwargs_by_index(2)),
   ]
 
   tests = [s.get_test(api.chromium_tests) for s in test_specs]
