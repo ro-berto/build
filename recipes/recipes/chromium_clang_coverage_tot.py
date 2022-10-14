@@ -92,7 +92,7 @@ def _RunStepsInBuilderCacheDir(api, builder_id, bot_config):
   output_dir_path = api.path['checkout'].join('out', output_dir_name)
   build_dir = api.chromium.output_dir
 
-  cmd = ['python', coverage_script_path]
+  cmd = ['python3', coverage_script_path]
   cmd.extend(SAMPLE_TARGETS)
 
   for target in SAMPLE_TARGETS:
