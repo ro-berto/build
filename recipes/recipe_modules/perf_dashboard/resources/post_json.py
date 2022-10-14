@@ -1,3 +1,4 @@
+#!/usr/bin/env vpython3
 # Copyright 2014 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -8,12 +9,6 @@ import argparse
 import json
 import os
 import sys
-
-# Add requests to path
-RESOURCE_DIR = os.path.dirname(os.path.abspath(__file__))
-BASE_DIR = os.path.abspath(os.path.join(
-  RESOURCE_DIR, '..', '..', '..', '..', '..'))
-sys.path.insert(0, os.path.join(BASE_DIR, 'third_party', 'requests_1_2_3'))
 
 import requests
 from requests import utils

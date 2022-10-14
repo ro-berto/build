@@ -141,7 +141,7 @@ class PerfDashboardApi(recipe_api.RecipeApi):
     """
     token = self.m.service_account.default().get_access_token()
     cmd = [
-        'python',
+        'vpython3',
         self.resource('post_json.py'),
         url,
         '-i',
