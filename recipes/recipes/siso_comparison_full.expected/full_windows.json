@@ -711,6 +711,25 @@
   },
   {
     "cmd": [
+      "[START_DIR]\\cipd_tool\\infra_internal\\experimental\\siso\\latest\\siso-toolchain-chromium-browser-clang"
+    ],
+    "cwd": "[CACHE]\\builder\\src",
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "setup toolchain for siso"
+  },
+  {
+    "cmd": [
       "[START_DIR]\\cipd_tool\\infra_internal\\experimental\\siso\\latest\\siso",
       "ninja",
       "--project",
@@ -990,6 +1009,25 @@
       "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
       "@@@STEP_LOG_END@json.output[failure_summary]@@@"
     ]
+  },
+  {
+    "cmd": [
+      "[START_DIR]\\cipd_tool\\infra_internal\\experimental\\siso\\latest\\siso-toolchain-chromium-browser-clang"
+    ],
+    "cwd": "[CACHE]\\builder\\src",
+    "luci_context": {
+      "realm": {
+        "name": "chromium:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "setup toolchain for siso (2)"
   },
   {
     "cmd": [

@@ -57,6 +57,12 @@ class SisoApi(recipe_api.RecipeApi):
           - InfraFailure when an unexpected failure occured.
     """
     assert self.enabled, 'siso is not configured'
+
+    # setup for toolchain
+    # TODO(b/253142009): run this in gclient runhooks?
+    self.m.step('setup toolchain for siso',
+                [self._siso_toolchain_chromium_browser_clang], **kwargs)
+
     self._assert_ninja_command(ninja_command)
     ninja_dir = self._ninja_dir(ninja_command)
     cmd = [
@@ -152,3 +158,10 @@ class SisoApi(recipe_api.RecipeApi):
     # TODO(ukai): decide path used in product tree.
     self._ensure_siso()
     return self._siso_path
+
+  @property
+  def _siso_toolchain_chromium_browser_clang(self):
+    self._ensure_siso()
+    return self.m.path.join(
+        self.m.path.dirname(self._siso_path),
+        'siso-toolchain-chromium-browser-clang')

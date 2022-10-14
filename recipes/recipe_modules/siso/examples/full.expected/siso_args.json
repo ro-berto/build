@@ -53,6 +53,12 @@
   },
   {
     "cmd": [
+      "[START_DIR]/cipd_tool/infra_internal/experimental/siso/latest/siso-toolchain-chromium-browser-clang"
+    ],
+    "name": "setup toolchain for siso"
+  },
+  {
+    "cmd": [
       "[START_DIR]/cipd_tool/infra_internal/experimental/siso/latest/siso",
       "ninja",
       "--project",
