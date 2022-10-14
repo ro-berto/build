@@ -26,8 +26,7 @@ PROPERTIES = {
 
 
 def RunSteps(api, config, task_id, build_id, test_name, test_id):
-  if config:
-    api.flaky_reproducer.set_config(config)
+  api.flaky_reproducer.set_config(config)
   return api.flaky_reproducer.run(
       task_id=task_id, build_id=build_id, test_name=test_name, test_id=test_id)
 

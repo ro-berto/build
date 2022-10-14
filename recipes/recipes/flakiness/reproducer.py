@@ -25,7 +25,8 @@ def RunSteps(api, properties):
       task_id=properties.task_id,
       build_id=properties.build_id,
       test_name=properties.test_name,
-      test_id=properties.test_id)
+      test_id=properties.test_id,
+      verify_on_builders=properties.verify_on_builders)
 
 
 def GenTests(api):

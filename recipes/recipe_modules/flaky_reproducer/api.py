@@ -262,22 +262,29 @@ class FlakyReproducer(recipe_api.RecipeApi):
                                task_result.duration_secs)
 
   @nest_step
-  def verify_reproducing_step(self, task_id, failing_sample, reproducing_step):
+  def verify_reproducing_step(self,
+                              task_id,
+                              failing_sample,
+                              reproducing_step,
+                              verify_on_builders=None):
     if not reproducing_step:
       return {}
     builder_results = {}
     swarming_tasks = {}  # { task_id: (builder, task_meta) }
     # Verify failing builder sample
     builder = 'Failing Sample'
-    if reproducing_step.test_binary.builder:
-      builder = '{0} (failing sample)'.format(
-          reproducing_step.test_binary.builder)
-    task = self.launch_verify_in_swarming(builder, failing_sample.test_name,
-                                          reproducing_step.test_binary)
-    swarming_tasks[task.id] = (builder, task)
+    if (not verify_on_builders or builder in verify_on_builders or
+        reproducing_step.test_binary.builder in verify_on_builders):
+      if reproducing_step.test_binary.builder:
+        builder = '{0} (failing sample)'.format(
+            reproducing_step.test_binary.builder)
+      task = self.launch_verify_in_swarming(builder, failing_sample.test_name,
+                                            reproducing_step.test_binary)
+      swarming_tasks[task.id] = (builder, task)
     # Launch verify swarming tasks
     verify_builders = self._find_related_builders(task_id,
-                                                  failing_sample.test_name)
+                                                  failing_sample.test_name,
+                                                  verify_on_builders)
     for builder, builder_task_id in verify_builders.items():
       try:
         test_binary = self.get_test_binary(builder_task_id)
@@ -288,6 +295,8 @@ class FlakyReproducer(recipe_api.RecipeApi):
         swarming_tasks[task.id] = (builder, task)
       except Exception as err:
         builder_results[builder] = BuilderVerifyResult(error=str(err))
+    if not swarming_tasks:
+      return builder_results
     # Collect swarming task result
     verify_results = self.m.swarming.collect(
         'collect verify results', [t for _, t in swarming_tasks.values()],
@@ -432,15 +441,12 @@ class FlakyReproducer(recipe_api.RecipeApi):
         test_name or tag_test_name(last_test_result.tags),
     )
 
-  def run(self, task_id=None, build_id=None, test_name=None, test_id=None):
-    task_id, test_name = self.query_resultdb_for_task_id_and_test_name(
-        task_id=task_id,
-        build_id=build_id,
-        test_name=test_name,
-        test_id=test_id)
-    return self._run(task_id, test_name)
-
-  def _run(self, task_id, test_name):
+  def run(self,
+          task_id=None,
+          build_id=None,
+          test_name=None,
+          test_id=None,
+          verify_on_builders=None):
     """Runs the Chrome Flaky Reproducer as a recipe.
 
     This method is expected to run as a standalone recipe that:
@@ -448,7 +454,24 @@ class FlakyReproducer(recipe_api.RecipeApi):
       2. Applies to multiple reproducing strategies.
       3. Verifies the best reproducing step on all variants for the test.
       4. Summarize the results of above.
+
+    Args:
+      task_id (str): Swarming task ID of the flaky task sample.
+      build_id (str): Buildbucket build ID of the flaky build sample.
+      test_name (str): The test name of the flaky test case.
+      test_id (str): The test ID of the flaky test case from ResultDB.
+
+      verify_on_builders (list of str): Verify the reproducing step on specified
+        builders. Default to all CQ and sheriff builders.
     """
+    task_id, test_name = self.query_resultdb_for_task_id_and_test_name(
+        task_id=task_id,
+        build_id=build_id,
+        test_name=test_name,
+        test_id=test_id)
+    return self._run(task_id, test_name, verify_on_builders)
+
+  def _run(self, task_id, test_name, verify_on_builders):
     # Retrieve failing test info.
     try:
       result_summary = self.get_test_result_summary(task_id)
@@ -478,7 +501,8 @@ class FlakyReproducer(recipe_api.RecipeApi):
     reproducing_steps = self.collect_strategy_results(strategy_results)
     reproducing_step = self.choose_best_reproducing_step(reproducing_steps)
     builder_results = self.verify_reproducing_step(task_id, failing_sample,
-                                                   reproducing_step)
+                                                   reproducing_step,
+                                                   verify_on_builders)
 
     # output
     return self.summarize_results(
@@ -509,7 +533,7 @@ class FlakyReproducer(recipe_api.RecipeApi):
     return '{0}/task?id={1}'.format(self.m.swarming.current_server, task_id)
 
   @nest_step
-  def _find_related_builders(self, task_id, test_name):
+  def _find_related_builders(self, task_id, test_name, verify_on_builders):
     """Search for builders that run the given test."""
     # Query TestResult from invocation.
     inv_id = self._generate_invocation_id_from_task_id(task_id)
@@ -558,6 +582,8 @@ class FlakyReproducer(recipe_api.RecipeApi):
       )
       for variant_info in variants:
         builder_name = getattr(variant_info.variant, 'def').get('builder')
+        if verify_on_builders and builder_name not in verify_on_builders:
+          continue
         if not builder_name or builder_name == sample_builder:
           continue
         all_variants.append(variant_info)
@@ -593,8 +619,11 @@ class FlakyReproducer(recipe_api.RecipeApi):
       selected_verdict = None
       for v in verdicts:
         build = builds.get(int(v.invocation_id[len('build-'):]))
+        # Skip CQ builder check if builders are manually selected.
+        if verify_on_builders:
+          pass
         # Select CQ or sheriff builders.
-        if not build or not (
+        elif not build or not (
             '$recipe_engine/cq' in build.input.properties.fields or
             'sheriff_rotations' in build.input.properties.fields):
           continue

@@ -22,4 +22,8 @@ message InputProperties {
 
   // The name of recipe module config item.
   string config = 5;
+
+  // Verify the reproducing step on specified builders.
+  // Default to all CQ and sheriffed builders.
+  repeated string verify_on_builders = 6;
 }

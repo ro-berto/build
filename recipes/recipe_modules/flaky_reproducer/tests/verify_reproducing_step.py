@@ -22,17 +22,19 @@ PROPERTIES = {
     'task_id': Property(default=None, kind=str),
     'failing_sample': Property(default=None),
     'reproducing_step_data': Property(default=None),
+    'verify_on_builders': Property(default=None, kind=list),
 }
 
 
-def RunSteps(api, task_id, failing_sample, reproducing_step_data):
+def RunSteps(api, task_id, failing_sample, reproducing_step_data,
+             verify_on_builders):
   api.flaky_reproducer.set_config('auto')
   if reproducing_step_data:
     reproducing_step = ReproducingStep.from_jsonish(reproducing_step_data)
   else:
     reproducing_step = None
   builder_results = api.flaky_reproducer.verify_reproducing_step(
-      task_id, failing_sample, reproducing_step)
+      task_id, failing_sample, reproducing_step, verify_on_builders)
   api.flaky_reproducer.summarize_results(
       task_id=task_id,
       failing_sample=failing_sample,
@@ -244,6 +246,7 @@ def GenTests(api):
           failing_sample=UnexpectedTestResult('MockUnitTests.FailTest'),
           reproducing_step_data=api.json.loads(
               api.flaky_reproducer.get_test_data('reproducing_step.json')),
+          verify_on_builders=['Win10 Tests x64'],
       ),
       api.resultdb.query(
           {
@@ -373,5 +376,31 @@ def GenTests(api):
           parent_step_name='verify_reproducing_step.find_related_builders',
       ),
       api.post_check(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'verify nothing if no verify_on_builders matches',
+      api.properties(
+          task_id='some-task-id',
+          failing_sample=UnexpectedTestResult('MockUnitTests.FailTest'),
+          reproducing_step_data=api.json.loads(
+              api.flaky_reproducer.get_test_data('reproducing_step.json')),
+          verify_on_builders=['not_exists_builder'],
+      ),
+      api.resultdb.query(
+          {
+              'task-example.swarmingserver.appspot.com-some-task-id':
+                  resultdb_invocation,
+          },
+          step_name='verify_reproducing_step.find_related_builders.rdb query'),
+      api.weetbix.query_variants(
+          query_variants_res,
+          test_id='ninja://base:base_unittests/MockUnitTests.FailTest',
+          parent_step_name='verify_reproducing_step.find_related_builders',
+      ),
+      api.post_check(post_process.StatusSuccess),
+      api.post_check(lambda check, steps: check(
+          'builder_results.json' not in steps['summarize_results'].logs)),
       api.post_process(post_process.DropExpectation),
   )
