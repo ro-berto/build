@@ -739,6 +739,7 @@
       "--deps_log_bucket",
       "siso-deps-log-experiments",
       "--enable_cloud_logging",
+      "-upload_build_pprof=false",
       "-re_cache_enable_read=false",
       "-C",
       "[CACHE]\\builder\\src\\out\\Release",
@@ -1040,6 +1041,7 @@
       "--deps_log_bucket",
       "siso-deps-log-experiments",
       "--enable_cloud_logging",
+      "-upload_build_pprof=false",
       "-C",
       "[CACHE]\\builder\\src\\out\\Release",
       "all"
