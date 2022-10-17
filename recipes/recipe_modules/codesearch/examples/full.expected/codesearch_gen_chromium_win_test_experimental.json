@@ -1424,7 +1424,11 @@
       "[CACHE]/generated",
       "--dry-run",
       "--kzip-prune",
-      "/path/to/kzip",
+      "/path/to/foo.kzip",
+      "--ignore",
+      "/path/to/ignore/1/",
+      "--ignore",
+      "/path/to/ignore/2/",
       "--nokeycheck"
     ],
     "luci_context": {

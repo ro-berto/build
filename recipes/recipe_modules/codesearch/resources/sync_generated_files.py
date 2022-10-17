@@ -192,22 +192,22 @@ def copy_generated_files(source_dir,
         if e.errno != errno.EEXIST:
           raise
 
-    for filename in filenames:
-      # Don't sync any temporary files. These aren't actually referenced.
-      file_parts = filename.split(os.sep)
-      if 'tmp' in file_parts:
-        continue
+    # Don't sync any temporary files. These aren't actually referenced.
+    if 'tmp' in dirpath.split(os.sep):
+      continue
 
+    for filename in filenames:
       source_file = os.path.join(dirpath, filename)
-      if not has_allowed_extension(filename) or has_secrets(source_file) \
-          or ignore and is_ignored(source_file) \
-          or kzip_input_suffixes and not is_referenced(filename):
-        continue
 
       # arm-generic builder runs into an issue where source_file disappears by
       # the time it's copied. Check source_file so the builder doesn't fail.
       if not os.path.exists(source_file):
         print('File does not exist:', source_file)
+        continue
+
+      if not has_allowed_extension(filename) or has_secrets(source_file) \
+          or ignore and is_ignored(source_file) \
+          or kzip_input_suffixes and not is_referenced(filename):
         continue
 
       dest_file = translate_root(source_dir, dest_dir, source_file)

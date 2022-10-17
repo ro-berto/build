@@ -214,10 +214,30 @@ def RunSteps(api, codesearch_mirror_revision,
       # TODO(gavinmak): Make gn_targets optional in package_index.
       api.file.write_json('write empty gn_targets.json file',
                           build_dir.join('gn_targets.json'), {})
-      api.codesearch.create_and_upload_kythe_index_pack(
+      kzip_path = api.codesearch.create_and_upload_kythe_index_pack(
           commit_hash=codesearch_mirror_revision,
           commit_timestamp=int(codesearch_mirror_revision_timestamp or
                                api.time.time()))
+
+      # Check out the generated files repo and sync the generated files
+      # into this checkout.
+      copy_config = {
+          # ~/chromiumos/src/out/${board};src/out/${board}
+          build_dir: api.path.join('src', 'out', board),
+
+          # ~/cros_chroot/chroot;chroot
+          api.build_menu.chroot.path: 'chroot',
+      }
+
+      # Don't sync chroot/home/. The directory doesn't contain any relevant
+      # files for cross-references.
+      ignore = (api.path.join(api.build_menu.chroot.path, 'home'),)
+
+      api.codesearch.checkout_generated_files_repo_and_sync(
+          copy_config,
+          kzip_path=kzip_path,
+          ignore=ignore,
+          revision=codesearch_mirror_revision)
 
 
 # TODO(crbug/1284439): Add more tests.

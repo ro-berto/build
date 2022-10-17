@@ -114,8 +114,10 @@ def RunSteps(api):
 
   # Check out the generated files repo and sync the generated files
   # into this checkout.
-  api.codesearch.checkout_generated_files_repo_and_sync({'foo': 'bar'},
-                                                        '/path/to/kzip')
+  api.codesearch.checkout_generated_files_repo_and_sync(
+      {'foo': 'bar'},
+      kzip_path='/path/to/foo.kzip',
+      ignore=('/path/to/ignore/1/', '/path/to/ignore/2/'))
 
 
 def GenTests(api):

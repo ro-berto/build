@@ -341,6 +341,7 @@ class CodesearchApi(recipe_api.RecipeApi):
   def checkout_generated_files_repo_and_sync(self,
                                              copy,
                                              kzip_path=None,
+                                             ignore=None,
                                              revision=None):
     """Check out the generated files repo and sync the generated files
        into this checkout.
@@ -361,7 +362,8 @@ class CodesearchApi(recipe_api.RecipeApi):
           repo/foo/
           repo/baz/bar/
 
-      kzip_path: Path to kzip that will be used to prune uploded files.
+      kzip_path: Path to kzip that will be used to prune uploaded files.
+      ignore: List of paths that shouldn't be synced.
       revision: A commit hash to be used in the commit message.
     """
     if not self.c.SYNC_GENERATED_FILES:
@@ -420,10 +422,15 @@ class CodesearchApi(recipe_api.RecipeApi):
         self.c.GEN_REPO_BRANCH,
         generated_repo_dir,
     ])
+
     if self.m.runtime.is_experimental:
       cmd.append('--dry-run')
     if kzip_path:
       cmd.extend(['--kzip-prune', kzip_path])
+    if ignore:
+      for i in ignore:
+        cmd.extend(['--ignore', i])
+
     if self._get_project_type() == self._PROJECT_BROWSER:
       cmd.append('--nokeycheck')
 
