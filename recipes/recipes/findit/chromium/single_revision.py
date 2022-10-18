@@ -43,11 +43,9 @@ def RunSteps(api, properties):
                                target.hash, args)
     return
 
-  # TODO(https://crbug.com/109276) Don't use master
   # 0. Validate properties.
   assert (
-      properties.target_builder and
-      (properties.target_builder.master or properties.target_builder.group) and
+      properties.target_builder and properties.target_builder.group and
       properties.target_builder.builder), 'Target builder property is required'
 
   # 1. Configure the builder.
@@ -90,9 +88,8 @@ def RunSteps(api, properties):
 
 
 def _configure_builder(api, target_tester):
-  # TODO(https://crbug.com/109276) Don't use master
   target_builder_id = chromium.BuilderId.create_for_group(
-      target_tester.master or target_tester.group, target_tester.builder)
+      target_tester.group, target_tester.builder)
   builder_config = api.findit.get_builder_config(target_builder_id)
   api.chromium_tests.configure_build(builder_config)
 
@@ -253,8 +250,6 @@ def GenTests(api):
     props_proto.skip_analyze = skip_analyze
     props_proto.test_repeat_count = test_repeat_count
     props_proto.target_builder.group = target_builder_group
-    # TODO(https://crbug.com/109276) Don't set master
-    props_proto.target_builder.master = target_builder_group
     props_proto.target_builder.builder = target_builder
     for t in compile_targets:
       props_proto.compile_targets.append(t)
