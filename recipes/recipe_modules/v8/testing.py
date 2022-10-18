@@ -11,7 +11,7 @@ from RECIPE_MODULES.build import chromium_swarming
 from recipe_engine.engine_types import freeze
 
 MONORAIL_SEARCH_BUGS_TEMPLATE = (
-    'https://bugs.chromium.org/p/v8/issues/list?q=label:%(label)s+"%(name)s"'
+    'https://bugs.chromium.org/p/v8/issues/list?q=label:"%(name)s"+%(label)s'
     ' -status:Fixed -status:Verified&can=1')
 
 MONORAIL_FILE_BUG_TEMPLATE = (
@@ -896,6 +896,10 @@ class Failure(object):
         '-p \'%s=%s\'' % (k, json.dumps(v, sort_keys=True))
         for k, v in self._flako_properties().items())
 
+  def _flako_progression_cmd_line(self):
+    """Returns the command line for progression on this failure with flako."""
+    return self._flako_cmd_line() + ' -p "mode=progression"'
+
   def log_lines(self):
     """Return a list of lines for logging all runs of this failure."""
     lines = []
@@ -918,8 +922,9 @@ class Failure(object):
     # Print the command line for flake bisect.
     if (isinstance(self.test, V8SwarmingTest) and
         not self.api.tryserver.is_tryserver):
-      lines.append('Trigger flake bisect on command line:')
+      lines.append('Flake regression and progression commands respectively:')
       lines.append(self._flako_cmd_line())
+      lines.append(self._flako_progression_cmd_line())
       lines.append('')
 
       lines.append('Local flake reproduction on command line:')
