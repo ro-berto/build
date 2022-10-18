@@ -35,6 +35,7 @@ PROPERTIES = {
     'memory_tool': Property(default=None, kind=str),
     'msvc': Property(default=False, kind=bool),
     'rel': Property(default=False, kind=bool),
+    'run_skia_gold': Property(default=True, kind=bool),
     'selected_tests_only': Property(default=False, kind=bool),
     'skia_paths': Property(default=False, kind=bool),
     'skia': Property(default=False, kind=bool),
@@ -208,12 +209,12 @@ def _build_steps(api, clang, msvc, out_dir):
 # corpus tests can pass with Skia/SkiaPaths enabled.
 # _run_tests() runs the tests and uploads the results to Gold.
 def _run_tests(api, memory_tool, v8, xfa, skia, out_dir, build_config, revision,
-               selected_tests_only):
+               run_skia_gold, selected_tests_only):
   resultdb = _ResultDb(
       api, base_variant={
           'builder': api.buildbucket.builder_name,
       })
-  test_runner = _TestRunner(api, resultdb, out_dir, revision)
+  test_runner = _TestRunner(api, resultdb, out_dir, revision, run_skia_gold)
 
   env = {}
   COMMON_SANITIZER_OPTIONS = ['allocator_may_return_null=1']
@@ -460,7 +461,7 @@ class _ResultDb:
 
 class _TestRunner:
 
-  def __init__(self, api, resultdb, out_dir, revision):
+  def __init__(self, api, resultdb, out_dir, revision, run_skia_gold):
     self.api = api
     self.resultdb = resultdb
     self.out_dir = self.api.path['checkout'].join('out', out_dir)
@@ -468,23 +469,28 @@ class _TestRunner:
     self.test_runner_py_args = [
         '--build-dir',
         self.api.path.join('out', out_dir),
-        '--gold_output_dir',
-        self.out_dir.join('gold_output'),
-        '--run-skia-gold',
-        '--git-revision',
-        revision,
-        '--buildbucket-id',
-        str(self.api.buildbucket.build.id),
     ]
 
-    # Add the trybot information if this is a trybot run.
-    if self.api.tryserver.gerrit_change:
+    # Add Skia Gold flags if the "run_skia_gold" property is true.
+    if run_skia_gold:
       self.test_runner_py_args.extend([
-          '--gerrit-issue',
-          str(self.api.tryserver.gerrit_change.change),
-          '--gerrit-patchset',
-          str(self.api.tryserver.gerrit_change.patchset),
+          '--gold_output_dir',
+          self.out_dir.join('gold_output'),
+          '--run-skia-gold',
+          '--git-revision',
+          revision,
+          '--buildbucket-id',
+          str(self.api.buildbucket.build.id),
       ])
+
+      # Add the trybot information if this is a trybot run.
+      if self.api.tryserver.gerrit_change:
+        self.test_runner_py_args.extend([
+            '--gerrit-issue',
+            str(self.api.tryserver.gerrit_change.change),
+            '--gerrit-patchset',
+            str(self.api.tryserver.gerrit_change.patchset),
+        ])
 
   def run_gtest(self, step_name, *, target, args=None, test_suite_suffix=None):
     target_path, target_name = target
@@ -549,18 +555,21 @@ def _get_modifiable_script_args(api,
   Returns a list that can be concatenated with the other script
   arguments.
   """
+  additional_args = []
 
-  # Add the os from the builder name to the set of unique identifers.
-  keys = build_config.copy()
-  builder_name = api.m.buildbucket.builder_name.strip()
-  keys['os'] = builder_name.split('_')[0]
-  keys['javascript_runtime'] = 'disabled' if (
-      build_config['v8'] == 'false' or javascript_disabled) else 'enabled'
-  keys['xfa_runtime'] = 'disabled' if (build_config['xfa'] == 'false' or
-                                       javascript_disabled or
-                                       xfa_disabled) else 'enabled'
+  # Add Skia Gold keys if `build_config` is non-empty.
+  if build_config:
+    # Add the os from the builder name to the set of unique identifers.
+    keys = build_config.copy()
+    builder_name = api.m.buildbucket.builder_name.strip()
+    keys['os'] = builder_name.split('_')[0]
+    keys['javascript_runtime'] = 'disabled' if (
+        build_config['v8'] == 'false' or javascript_disabled) else 'enabled'
+    keys['xfa_runtime'] = 'disabled' if (build_config['xfa'] == 'false' or
+                                         javascript_disabled or
+                                         xfa_disabled) else 'enabled'
+    additional_args.extend(['--gold_key', _dict_to_str(keys)])
 
-  additional_args = ['--gold_key', _dict_to_str(keys)]
   if javascript_disabled:
     additional_args.append('--disable-javascript')
   if xfa_disabled:
@@ -616,7 +625,8 @@ def _gen_ci_build(api, builder):
 
 
 def RunSteps(api, memory_tool, skia, skia_paths, xfa, v8, target_cpu, clang,
-             msvc, rel, component, skip_test, target_os, selected_tests_only):
+             msvc, rel, run_skia_gold, component, skip_test, target_os,
+             selected_tests_only):
   revision = _checkout_step(api, target_os)
 
   out_dir = _generate_out_path(memory_tool, skia, skia_paths, xfa, v8, clang,
@@ -631,13 +641,15 @@ def RunSteps(api, memory_tool, skia, skia_paths, xfa, v8, target_cpu, clang,
     build_config = _gn_gen_builds(api, memory_tool, skia, skia_paths, xfa, v8,
                                   target_cpu, clang, msvc, rel, component,
                                   target_os, out_dir)
+    if not run_skia_gold:
+      build_config = {}
     _build_steps(api, clang, msvc, out_dir)
 
     if skip_test:
       return
 
     _run_tests(api, memory_tool, v8, xfa, skia, out_dir, build_config, revision,
-               selected_tests_only)
+               run_skia_gold, selected_tests_only)
 
 
 def GenTests(api):
@@ -1123,4 +1135,12 @@ def GenTests(api):
       api.properties(xfa=True, bot_id='test_bot'),
       _gen_ci_build(api, 'linux'),
       api.step_data('corpus tests (xfa disabled)', retcode=1),
+  )
+
+  yield api.test(
+      'disable-skia-gold-linux',
+      api.platform('linux', 64),
+      api.builder_group.for_current('client.pdfium'),
+      api.properties(bot_id='test_bot', run_skia_gold=False),
+      _gen_ci_build(api, 'linux'),
   )
