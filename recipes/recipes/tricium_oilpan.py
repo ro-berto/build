@@ -9,16 +9,13 @@ DEPS = [
     'chromium_checkout',
     'depot_tools/gclient',
     'depot_tools/gerrit',
-    'depot_tools/git',
     'depot_tools/tryserver',
     'recipe_engine/buildbucket',
-    'recipe_engine/cipd',
     'recipe_engine/context',
     'recipe_engine/file',
     'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/platform',
-    'recipe_engine/properties',
     'recipe_engine/raw_io',
     'recipe_engine/step',
     'recipe_engine/tricium',
@@ -141,12 +138,11 @@ def GenTests(api):
                       is_revert=False):
     subject = 'Revert foo' if is_revert else 'foo'
     subject += '\nTriciumTest'
-    test = (api.test(name) + api.properties.tryserver(
-        build_config='Release',
-        mastername='tryserver.chromium.linux',
-        buildername='linux_chromium_compile_rel_ng',
-        buildnumber='1234',
-        patch_set=1) + api.platform('linux', 64)) + api.override_step_data(
+    test = api.test(
+        name,
+        api.chromium.try_build(),
+        api.platform('linux', 64),
+        api.override_step_data(
             'gerrit changes',
             api.json.output([{
                 'subject': subject,
@@ -158,7 +154,8 @@ def GenTests(api):
                     }],
                     'CC': cc
                 }
-            }]))
+            }])),
+    )
 
     if affected_files:
       test += api.path.exists(*[
