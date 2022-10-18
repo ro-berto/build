@@ -70,6 +70,14 @@ def RunSteps(api):
     api.cq.allow_reuse_for(*dry_run_modes)
   with api.context(cwd=cwd):
     bot_update_step = api.presubmit.prepare()
+    if not api.tryserver.gerrit_change:
+      # The value True does not matter, we just check that PRESUBMIT_SKIP_NETWORK
+      # exists. It is just added to suffice the dict type
+      with api.context(env={'PRESUBMIT_SKIP_NETWORK': True}):
+        return api.presubmit.execute(
+            bot_update_step,
+            skip_owners,
+            run_all=not api.tryserver.gerrit_change)
     return api.presubmit.execute(
         bot_update_step, skip_owners, run_all=not api.tryserver.gerrit_change)
 
