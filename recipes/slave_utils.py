@@ -32,7 +32,7 @@ _GIT_CR_POS_RE = re.compile(
 )
 
 # Global variables set by command-line arguments (AddArgs, AddOpts).
-_ARGS_GSUTIL_PY_PATH = os.environ.get('BUILD_SLAVE_UTILS_GSUTIL_PY_PATH')
+_ARGS_GSUTIL_PY_PATH = None
 
 
 def _GitExe():

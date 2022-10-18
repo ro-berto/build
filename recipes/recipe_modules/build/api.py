@@ -26,15 +26,6 @@ class ToolsBuildApi(recipe_api.RecipeApi):
     ]
 
   @contextlib.contextmanager
-  def gsutil_py_env(self):
-    """Augments environment with `slave_utils.py` parameters.
-    """
-    with self.m.context(env={
-        'BUILD_SLAVE_UTILS_GSUTIL_PY_PATH':
-        self.m.depot_tools.gsutil_py_path}):
-      yield
-
-  @contextlib.contextmanager
   def scripts_pythonpath(self):
     """Context manager to add the //scripts directory to PYTHONPATH."""
     with self.m.context(env_prefixes={

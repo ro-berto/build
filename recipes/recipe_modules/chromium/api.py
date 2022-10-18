@@ -865,21 +865,20 @@ class ChromiumApi(recipe_api.RecipeApi):
     full_args.extend(args)
 
     runtest_path = self.repo_resource('recipes', 'runtest.py')
-    with self.m.build.gsutil_py_env():
-      # We need this, as otherwise runtest.py fails due to expecting the cwd to
-      # be the checkout, when instead it's kitchen-workdir. We also can't use
-      # self.m.path['checkout'] since that has an extra '/src' added onto it
-      # compared to what runtest.py expects.
-      with self.m.context(cwd=self.m.path['cache'].join('builder')):
-        resultdb = kwargs.pop('resultdb', None)
-        cmd = ['python3', runtest_path] + full_args
-        if resultdb:
-          cmd = resultdb.wrap(self.m, cmd, step_name=name)
-        return self.m.step(
-            step_name,
-            cmd,
-            **kwargs,
-        )
+    # We need this, as otherwise runtest.py fails due to expecting the cwd to
+    # be the checkout, when instead it's kitchen-workdir. We also can't use
+    # self.m.path['checkout'] since that has an extra '/src' added onto it
+    # compared to what runtest.py expects.
+    with self.m.context(cwd=self.m.path['cache'].join('builder')):
+      resultdb = kwargs.pop('resultdb', None)
+      cmd = ['python3', runtest_path] + full_args
+      if resultdb:
+        cmd = resultdb.wrap(self.m, cmd, step_name=name)
+      return self.m.step(
+          step_name,
+          cmd,
+          **kwargs,
+      )
 
   @_with_chromium_layout
   def get_clang_version(self, **kwargs):

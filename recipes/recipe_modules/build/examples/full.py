@@ -15,12 +15,10 @@ DEPS = [
 def RunSteps(api):
   assert api.build.slave_utils_args
 
-  with api.build.gsutil_py_env():
-    api.build.python('runtest', 'foo.py', args=['--foo', '--bar'])
-
   api.build.python(
       'vpython with resultdb',
       'foo.py',
+      args=['--foo', '--bar'],
       venv=api.path['cache'].join('path', 'to', 'venv'),
       resultdb=ResultDB.create(enable=True),
   )
