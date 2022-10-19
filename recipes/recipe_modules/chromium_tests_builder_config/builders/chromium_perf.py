@@ -388,6 +388,10 @@ _AddPinpointTestSpec('android-new-pixel-perf-pgo', 'android',
                      'android_arm64-builder-perf-pgo')
 _AddPinpointTestSpec('android-new-pixel-pro-perf-pgo', 'android',
                      'android_arm64-builder-perf-pgo')
+_AddPinpointTestSpec('android-samsung-foldable-perf', 'android',
+                     'android_arm64-builder-perf')
+_AddPinpointTestSpec('android-samsung-foldable-perf-pgo', 'android',
+                     'android_arm64-builder-perf-pgo')
 # linux
 _AddPinpointTestSpec('linux-perf-pgo', 'linux', 'linux-builder-perf-pgo')
 # mac
