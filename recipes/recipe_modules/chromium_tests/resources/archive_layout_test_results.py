@@ -33,8 +33,8 @@ sys.path.extend([
 ])
 
 from common import chromium_utils
+import bot_utils
 import build_directory
-import slave_utils
 
 
 def _CollectZipArchiveFiles(output_dir):
@@ -52,7 +52,7 @@ def archive_layout(args):
   results_dir_basename = os.path.basename(args.results_dir)
   args.results_dir = os.path.abspath(args.results_dir)
   print('Archiving results from %s' % args.results_dir)
-  staging_dir = args.staging_dir or slave_utils.GetStagingDir(chrome_dir)
+  staging_dir = args.staging_dir or bot_utils.GetStagingDir(chrome_dir)
   print('Staging in %s' % staging_dir)
   if not os.path.exists(staging_dir):
     os.makedirs(staging_dir)
@@ -106,7 +106,7 @@ def archive_layout(args):
   cache_control = "public, max-age=31556926"
 
   start = time.time()
-  rc = slave_utils.GSUtilCopyFile(
+  rc = bot_utils.GSUtilCopyFile(
       zip_file,
       gs_build_dir,
       gs_acl=gs_acl,
@@ -119,7 +119,7 @@ def archive_layout(args):
     return rc
 
   start = time.time()
-  rc = slave_utils.GSUtilCopyFile(
+  rc = bot_utils.GSUtilCopyFile(
       last_change_file,
       gs_build_results_dir,
       gs_acl=gs_acl,
@@ -138,7 +138,7 @@ def archive_layout(args):
     cache_control = 'no-cache'
 
     start = time.time()
-    rc = slave_utils.GSUtilCopyFile(
+    rc = bot_utils.GSUtilCopyFile(
         zip_file,
         gs_latest_dir,
         gs_acl=gs_acl,
@@ -151,7 +151,7 @@ def archive_layout(args):
       return rc
 
     start = time.time()
-    rc = slave_utils.GSUtilCopyFile(
+    rc = bot_utils.GSUtilCopyFile(
         last_change_file,
         gs_latest_results_dir,
         gs_acl=gs_acl,
@@ -207,11 +207,11 @@ def _ParseArgs():
       help='Directory to use for staging the archives. '
       'Default behavior is to automatically detect '
       'slave\'s build directory.')
-  slave_utils_callback = slave_utils.AddArgs(parser)
+  bot_utils_callback = bot_utils.AddArgs(parser)
 
   args = parser.parse_args()
   args.build_dir = build_directory.GetBuildOutputDirectory()
-  slave_utils_callback(args)
+  bot_utils_callback(args)
   return args
 
 

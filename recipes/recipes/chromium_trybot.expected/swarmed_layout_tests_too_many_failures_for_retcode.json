@@ -4367,7 +4367,7 @@
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--step-name",
       "blink_web_tests (without patch)",
-      "--slave-utils-gsutil-py-path",
+      "--bot-utils-gsutil-py-path",
       "RECIPE_REPO[depot_tools]/gsutil.py"
     ],
     "cwd": "[CACHE]/builder",
@@ -4529,7 +4529,7 @@
       "gs://chromium-layout-test-archives",
       "--dest-filename",
       "blink_web_tests_test_results_summary.json",
-      "--slave-utils-gsutil-py-path",
+      "--bot-utils-gsutil-py-path",
       "RECIPE_REPO[depot_tools]/gsutil.py"
     ],
     "cwd": "[CACHE]/builder",

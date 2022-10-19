@@ -4520,7 +4520,7 @@
       "gs://chromium-layout-test-archives",
       "--dest-filename",
       "blink_web_tests_test_results_summary.json",
-      "--slave-utils-gsutil-py-path",
+      "--bot-utils-gsutil-py-path",
       "RECIPE_REPO[depot_tools]/gsutil.py"
     ],
     "cwd": "[CACHE]/builder",

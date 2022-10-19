@@ -32,7 +32,7 @@ sys.path.insert(
 )
 
 from common import chromium_utils
-import slave_utils
+import bot_utils
 
 # The Google Cloud Storage bucket to store logs related to goma.
 GOMA_LOG_GS_BUCKET = 'chrome-goma-log'
@@ -180,7 +180,7 @@ def UploadToGomaLogGS(
           shutil.copyfileobj(f_in, gzipf_out)
         if text_to_append:
           gzipf_out.write(text_to_append.encode('utf-8'))
-    slave_utils.GSUtilCopy(
+    bot_utils.GSUtilCopy(
         temp.name, gs_path, metadata=metadata, override_gsutil=override_gsutil
     )
     print("Copied log file to %s" % gs_path)

@@ -21,8 +21,8 @@ sys.path.extend([
     os.path.join(ROOT_DIR, 'scripts'),
 ])
 
+import bot_utils
 import results_dashboard
-import slave_utils
 
 
 def _GetMainRevision(commit_pos, build_dir, revision=None):
@@ -38,12 +38,12 @@ def _GetMainRevision(commit_pos, build_dir, revision=None):
   # TODO(sullivan,qyearsley): Don't fall back to _GetRevision if it returns
   # a git commit, since this should be a numerical revision. Instead, abort
   # and fail.
-  return slave_utils.GetRevision(os.path.dirname(os.path.abspath(build_dir)))
+  return bot_utils.GetRevision(os.path.dirname(os.path.abspath(build_dir)))
 
 
 def _GetDashboardJson(options):
   main_revision = _GetMainRevision(options.got_revision_cp, options.build_dir)
-  revisions = slave_utils.GetPerfDashboardRevisionsWithProperties(
+  revisions = bot_utils.GetPerfDashboardRevisionsWithProperties(
       options.got_webrtc_revision, options.got_v8_revision, options.version,
       options.git_revision, main_revision)
   reference_build = 'reference' in options.name

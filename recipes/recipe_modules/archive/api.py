@@ -66,7 +66,7 @@ class ArchiveApi(recipe_api.RecipeApi):
         '--src-dir',
         src_dir,
     ]
-    args += self.m.build.slave_utils_args
+    args += self.m.build.bot_utils_args
     if 'build_archive_url' in self.m.properties:
       args.extend([
           '--use-build-url-name', '--build-url',
@@ -385,7 +385,7 @@ class ArchiveApi(recipe_api.RecipeApi):
         '--src-dir',
         src_dir,
     ]
-    args += self.m.build.slave_utils_args
+    args += self.m.build.bot_utils_args
     if build_archive_url:
       args.extend(['--build-archive-url', build_archive_url])
     else:
@@ -435,7 +435,7 @@ class ArchiveApi(recipe_api.RecipeApi):
 
     The reason this is named 'legacy' is that there are a large number
     of dependencies on the exact form of this URL. The combination of
-    zip_build.py, extract_build.py, slave_utils.py, and runtest.py
+    zip_build.py, extract_build.py, bot_utils.py, and runtest.py
     require that:
 
     * The platform name be exactly one of 'win32', 'mac', or 'linux'

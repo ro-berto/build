@@ -13,7 +13,7 @@ DEPS = [
 
 
 def RunSteps(api):
-  assert api.build.slave_utils_args
+  assert api.build.bot_utils_args
 
   api.build.python(
       'vpython with resultdb',

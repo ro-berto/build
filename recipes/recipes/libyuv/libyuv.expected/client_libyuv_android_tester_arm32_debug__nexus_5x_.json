@@ -152,7 +152,7 @@
       "Debug",
       "--src-dir",
       "[CACHE]/builder/src",
-      "--slave-utils-gsutil-py-path",
+      "--bot-utils-gsutil-py-path",
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "--build-url",
       "gs://chromium-libyuv/client.libyuv/Android Debug/full-build-linux.zip",

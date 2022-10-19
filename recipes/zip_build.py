@@ -20,8 +20,8 @@ import sys
 import tempfile
 
 from common import chromium_utils
+import bot_utils
 import build_directory
-import slave_utils
 
 # Mojo JS bindings path relative to the build directory.
 MOJO_BINDINGS_PATH = 'gen/mojo/public/js/mojo_bindings.js'
@@ -274,8 +274,8 @@ def UploadToGoogleStorage(
   if gsutil_py_path:
     override_gsutil = [sys.executable, gsutil_py_path]
 
-  if slave_utils.GSUtilCopyFile(versioned_file, build_url, gs_acl=gs_acl,
-                                override_gsutil=override_gsutil):
+  if bot_utils.GSUtilCopyFile(versioned_file, build_url, gs_acl=gs_acl,
+                              override_gsutil=override_gsutil):
     raise chromium_utils.ExternalError(
         'gsutil returned non-zero status when uploading %s to %s!' %
         (versioned_file, build_url)
@@ -286,8 +286,8 @@ def UploadToGoogleStorage(
   # locally since that filename is used in the GS bucket as well.
   last_change_file = os.path.join(os.path.dirname(revision_file), 'LAST_CHANGE')
   shutil.copy(revision_file, last_change_file)
-  if slave_utils.GSUtilCopyFile(last_change_file, build_url, gs_acl=gs_acl,
-                                override_gsutil=override_gsutil):
+  if bot_utils.GSUtilCopyFile(last_change_file, build_url, gs_acl=gs_acl,
+                              override_gsutil=override_gsutil):
     raise chromium_utils.ExternalError(
         'gsutil returned non-zero status when uploading %s to %s!' %
         (last_change_file, build_url)
@@ -365,19 +365,19 @@ def Archive(options):
   build_dir = os.path.abspath(os.path.join(build_dir, options.target))
 
   staging_dir = (
-      options.staging_dir or slave_utils.GetStagingDir(options.src_dir)
+      options.staging_dir or bot_utils.GetStagingDir(options.src_dir)
   )
   if not os.path.exists(staging_dir):
     os.makedirs(staging_dir)
   chromium_utils.MakeParentDirectoriesWorldReadable(staging_dir)
   if not options.build_revision:
-    build_revision = slave_utils.GetBuildRevisions(
+    build_revision = bot_utils.GetBuildRevisions(
         options.src_dir, options.revision_dir
     )
   else:
     build_revision = options.build_revision
 
-  unversioned_base_name, version_suffix = slave_utils.GetZipFileNames(
+  unversioned_base_name, version_suffix = bot_utils.GetZipFileNames(
       options.builder_group,
       options.build_number,
       options.parent_build_number,
@@ -599,10 +599,10 @@ def main(argv):
   option_parser = optparse.OptionParser()
   AddOptions(option_parser)
   chromium_utils.AddPropertiesOptions(option_parser)
-  slave_utils_callback = slave_utils.AddOpts(option_parser)
+  bot_utils_callback = bot_utils.AddOpts(option_parser)
 
   options, args = option_parser.parse_args(argv)
-  slave_utils_callback(options)
+  bot_utils_callback(options)
 
   if not options.builder_group:
     options.builder_group = options.build_properties.get('builder_group', '')

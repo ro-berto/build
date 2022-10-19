@@ -1826,7 +1826,7 @@ def _archive_layout_test_results(api, step_name, step_suffix=None):
   cmd += ['--step-name', step_name]
   archive_step_name = 'archive results for ' + step_name
 
-  cmd += api.build.slave_utils_args
+  cmd += api.build.bot_utils_args
   archive_result = api.step(archive_step_name, cmd)
 
   # TODO(tansell): Move this to render_results function

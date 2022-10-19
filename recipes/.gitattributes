@@ -1,4 +1,5 @@
 /__init__.py                      recipes
+/bot_utils.py                     recipes
 /build_directory.py               recipes
 /clang_revision.py                recipes
 /cloudtail_utils.py               recipes
@@ -12,7 +13,6 @@
 /results_dashboard.py             recipes
 /runisolatedtest.py               recipes
 /runtest.py                       recipes
-/slave_utils.py                   recipes
 /tee.py                           recipes
 /upload_goma_logs.py*             recipes
 /xvfb.py                          recipes

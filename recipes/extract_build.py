@@ -14,8 +14,8 @@ import traceback
 import urllib
 
 from common import chromium_utils
+import bot_utils
 import build_directory
-import slave_utils
 
 
 class ExtractHandler(object):
@@ -35,7 +35,7 @@ class GSHandler(ExtractHandler):
     override_gsutil = None
     if self.gsutil_py_path:
       override_gsutil = [sys.executable, self.gsutil_py_path]
-    status = slave_utils.GSUtilCopy(
+    status = bot_utils.GSUtilCopy(
         self.url, '.', override_gsutil=override_gsutil
     )
     if 0 != status:
@@ -77,7 +77,7 @@ def GetBuildUrl(options, build_revision):
   if options.build_archive_url:
     return options.build_archive_url, None
 
-  base_filename, version_suffix = slave_utils.GetZipFileNames(
+  base_filename, version_suffix = bot_utils.GetZipFileNames(
       options.builder_group,
       options.build_number,
       options.parent_build_number,
@@ -128,7 +128,7 @@ def real_main(options):
 
   src_dir = os.path.dirname(abs_build_dir)
   if not options.build_revision and not options.build_archive_url:
-    build_revision = slave_utils.GetBuildRevisions(
+    build_revision = bot_utils.GetBuildRevisions(
         src_dir, revision_dir=options.revision_dir
     )
   else:
@@ -158,7 +158,7 @@ def real_main(options):
     # If the url is valid, we download the file.
     if not failure:
       if not handler.download():
-        return slave_utils.ERROR_EXIT_CODE
+        return bot_utils.ERROR_EXIT_CODE
 
     # If the versioned url failed, we try to get the latest build.
     if failure:
@@ -204,11 +204,11 @@ def real_main(options):
 
     if failure:
       # We successfully extracted the archive, but it was the generic one.
-      return slave_utils.WARNING_EXIT_CODE
+      return bot_utils.WARNING_EXIT_CODE
     return 0
 
   # If we get here, that means that it failed 3 times. We return a failure.
-  return slave_utils.ERROR_EXIT_CODE
+  return bot_utils.ERROR_EXIT_CODE
 
 
 def main():
@@ -267,14 +267,14 @@ def main():
       '--gsutil-py-path', help='Specify path to gsutil.py script.'
   )
   chromium_utils.AddPropertiesOptions(option_parser)
-  slave_utils_callback = slave_utils.AddOpts(option_parser)
+  bot_utils_callback = bot_utils.AddOpts(option_parser)
 
   options, args = option_parser.parse_args()
   if args:
     print 'Unknown options: %s' % args
     return 1
 
-  slave_utils_callback(options)
+  bot_utils_callback(options)
 
   if not options.builder_group:
     options.builder_group = options.build_properties.get('builder_group', '')

@@ -84,7 +84,7 @@ class GomaUtilTest(unittest.TestCase):
     with open(file_path, 'w') as f:
       f.write('test')
 
-    with mock.patch('slave_utils.GSUtilCopy') as mocked_GSUtilCopy:
+    with mock.patch('bot_utils.GSUtilCopy') as mocked_GSUtilCopy:
       goma_utils.UploadToGomaLogGS(file_path, 'gs_filename')
       mocked_GSUtilCopy.assert_called_once()
 

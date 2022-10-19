@@ -15,7 +15,7 @@ sys.path.extend([
 ])
 
 import extract_build
-import slave_utils
+import bot_utils
 
 
 class MockOptions(object):
@@ -37,7 +37,7 @@ class ExtractBuildTest(unittest.TestCase):
   def testGetBuildUrl(self):
     options = MockOptions()
 
-    base_filename, version_suffix = slave_utils.GetZipFileNames(
+    base_filename, version_suffix = bot_utils.GetZipFileNames(
         '', None, None, build_revision=self._build_revision, extract=True
     )
 

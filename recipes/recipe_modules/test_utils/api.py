@@ -1238,7 +1238,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
         '--dest-filename',
         dest_filename,
     ]
-    cmd += self.m.build.slave_utils_args
+    cmd += self.m.build.bot_utils_args
     self.m.step('archive_test_results_summary', cmd)
 
   @recipe_util.returns_placeholder

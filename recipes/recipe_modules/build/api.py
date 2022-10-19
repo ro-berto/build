@@ -12,17 +12,18 @@ from RECIPE_MODULES.build.chromium_tests.steps import ResultDB
 class ToolsBuildApi(recipe_api.RecipeApi):
 
   @property
-  def slave_utils_args(self):
-    """Returns (list): A list of arguments to supply to configure slave_utils
-        parameters. See `slave_utils.py`'s AddArgs method.
+  def bot_utils_args(self):
+    """Returns (list): A list of arguments to supply to configure bot_utils
+        parameters. See `bot_utils.py`'s AddArgs method.
 
     TODO(dnj): This function and its invocations should be deprecated in favor
-    of using environment variables via "add_slave_utils_kwargs". The script
+    of using environment variables via "add_bot_utils_kwargs". The script
     invocation path for some of these is just too intertwined to confidently
     apply this via explicit args everywhere.
     """
     return [
-        '--slave-utils-gsutil-py-path', self.m.depot_tools.gsutil_py_path,
+        '--bot-utils-gsutil-py-path',
+        self.m.depot_tools.gsutil_py_path,
     ]
 
   @contextlib.contextmanager

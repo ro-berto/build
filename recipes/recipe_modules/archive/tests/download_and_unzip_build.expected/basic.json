@@ -9,7 +9,7 @@
       "None/Release/out",
       "--src-dir",
       "None",
-      "--slave-utils-gsutil-py-path",
+      "--bot-utils-gsutil-py-path",
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "--build-url",
       "gs://bucket_name/example_buildername/full-build-linux.zip",

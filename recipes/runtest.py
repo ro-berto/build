@@ -45,9 +45,9 @@ sys.path.insert(
 from common import chromium_utils
 from common import gtest_utils
 
+import bot_utils
 import build_directory
 import crash_utils
-import slave_utils
 import xvfb
 
 USAGE = '%s [options] test.exe [test args]' % os.path.basename(sys.argv[0])
@@ -274,7 +274,7 @@ def _report_outcome(test_name, exit_code, log_processor):
     if (log_processor.ParsingErrors() or log_processor.FailedTests() or
         log_processor.MemoryToolReportHashes()):
       status = WARNINGS
-  elif exit_code == slave_utils.WARNING_EXIT_CODE:
+  elif exit_code == bot_utils.WARNING_EXIT_CODE:
     status = WARNINGS
   else:
     status = FAILURE
@@ -311,7 +311,7 @@ def _MainMac(options, args, extra_env):
 
   # Nuke anything that appears to be stale chrome items in the temporary
   # directory from previous test runs (i.e.- from crashes or unittest leaks).
-  slave_utils.RemoveChromeTemporaryFiles()
+  bot_utils.RemoveChromeTemporaryFiles()
 
   if options.run_shell_script:
     command = ['bash', test_exe_path]
@@ -418,7 +418,7 @@ def _MainIOS(options, args, extra_env):
 
   # Nuke anything that appears to be stale chrome items in the temporary
   # directory from previous test runs (i.e.- from crashes or unittest leaks).
-  slave_utils.RemoveChromeTemporaryFiles()
+  bot_utils.RemoveChromeTemporaryFiles()
 
   dirs_to_cleanup = [tmpdir]
   crash_files_before = set([])
@@ -463,7 +463,7 @@ def _MainLinux(options, args, extra_env):
   if options.slave_name:
     slave_name = options.slave_name
   else:
-    slave_name = slave_utils.SlaveBuildName(build_dir)
+    slave_name = bot_utils.SlaveBuildName(build_dir)
   bin_dir = os.path.join(build_dir, options.target)
 
   test_exe = args[0]
@@ -489,7 +489,7 @@ def _MainLinux(options, args, extra_env):
 
   # Nuke anything that appears to be stale chrome items in the temporary
   # directory from previous test runs (i.e.- from crashes or unittest leaks).
-  slave_utils.RemoveChromeTemporaryFiles()
+  bot_utils.RemoveChromeTemporaryFiles()
 
   extra_env['LD_LIBRARY_PATH'] = ''
 
@@ -583,7 +583,7 @@ def _MainWin(options, args, extra_env):
 
   # Nuke anything that appears to be stale chrome items in the temporary
   # directory from previous test runs (i.e.- from crashes or unittest leaks).
-  slave_utils.RemoveChromeTemporaryFiles()
+  bot_utils.RemoveChromeTemporaryFiles()
 
   test_exe = args[0]
   build_dir = os.path.abspath(options.build_dir)

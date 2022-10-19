@@ -1,8 +1,8 @@
-# Copyright (c) 2012 The Chromium Authors. All rights reserved.
+# Copyright 2022 The Chromium Authors
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-"""Functions specific to build slaves, shared by several buildbot scripts.
+"""Functions specific to bots, shared by several scripts.
 """
 
 from __future__ import absolute_import
@@ -22,7 +22,6 @@ from common import chromium_utils
 # These codes used to distinguish true errors from script warnings.
 ERROR_EXIT_CODE = 1
 WARNING_EXIT_CODE = 88
-
 
 # Regex matching git comment lines containing svn revision info.
 _GIT_SVN_ID_RE = re.compile(r'^git-svn-id: .*@([0-9]+) .*$')
@@ -140,8 +139,9 @@ def SlaveBaseDir(chrome_dir):
     prev_dir = curr_dir
     curr_dir = parent
   if not result:
-    raise chromium_utils.PathNotFound('Unable to find slave base dir above %s' %
-                                      chrome_dir)
+    raise chromium_utils.PathNotFound(
+        'Unable to find slave base dir above %s' % chrome_dir
+    )
   return result
 
 
@@ -213,7 +213,7 @@ def GSUtilCopy(
     metadata=None,
     override_gsutil=None,
     add_quiet_flag=False,
-    compress=False
+    compress=False,
 ):
   """Copy a file to Google Storage.
 
@@ -268,9 +268,18 @@ def GSUtilCopy(
   return chromium_utils.RunCommand(command)
 
 
-def GSUtilCopyFile(filename, gs_base, subdir=None, mimetype=None, gs_acl=None,
-                   cache_control=None, metadata=None, override_gsutil=None,
-                   dest_filename=None, add_quiet_flag=False):
+def GSUtilCopyFile(
+    filename,
+    gs_base,
+    subdir=None,
+    mimetype=None,
+    gs_acl=None,
+    cache_control=None,
+    metadata=None,
+    override_gsutil=None,
+    dest_filename=None,
+    add_quiet_flag=False,
+):
   """Copies a file to Google Storage.
 
   Runs the following command:
@@ -307,9 +316,16 @@ def GSUtilCopyFile(filename, gs_base, subdir=None, mimetype=None, gs_acl=None,
   if dest_filename is None:
     dest_filename = os.path.basename(filename)
   dest = '/'.join([dest, dest_filename])
-  return GSUtilCopy(source, dest, mimetype, gs_acl, cache_control,
-                    metadata=metadata, override_gsutil=override_gsutil,
-                    add_quiet_flag=add_quiet_flag)
+  return GSUtilCopy(
+      source,
+      dest,
+      mimetype,
+      gs_acl,
+      cache_control,
+      metadata=metadata,
+      override_gsutil=override_gsutil,
+      add_quiet_flag=add_quiet_flag,
+  )
 
 
 def _LogAndRemoveFiles(temp_dir, regex_pattern):
@@ -369,13 +385,15 @@ def _RemoveJumpListFiles():
   """Removes the files storing jump list history.
   This does nothing if called on a non-Windows platform."""
   if chromium_utils.IsWindows():
-    custom_destination_path = os.path.join(os.environ['USERPROFILE'],
-                                           'AppData',
-                                           'Roaming',
-                                           'Microsoft',
-                                           'Windows',
-                                           'Recent',
-                                           'CustomDestinations')
+    custom_destination_path = os.path.join(
+        os.environ['USERPROFILE'],
+        'AppData',
+        'Roaming',
+        'Microsoft',
+        'Windows',
+        'Recent',
+        'CustomDestinations',
+    )
     _LogAndRemoveFiles(custom_destination_path, '.+')
 
 
@@ -402,27 +420,35 @@ def RemoveChromeTemporaryFiles():
     for i in ('Chromium', 'Google Chrome'):
       # Remove dumps.
       crash_path = '%s/Library/Application Support/%s/Crash Reports' % (
-          os.environ['HOME'], i)
+          os.environ['HOME'], i
+      )
       _LogAndRemoveFiles(crash_path, r'^.+\.dmp$')
   else:
     raise NotImplementedError(
-        'Platform "%s" is not currently supported.' % sys.platform)
+        'Platform "%s" is not currently supported.' % sys.platform
+    )
 
 
-def GetPerfDashboardRevisions(
-    build_properties, main_revision, point_id=None):
+def GetPerfDashboardRevisions(build_properties, main_revision, point_id=None):
   """Fills in the same revisions fields that process_log_utils does."""
   return GetPerfDashboardRevisionsWithProperties(
-    build_properties.get('got_webrtc_revision'),
-    build_properties.get('got_v8_revision'),
-    build_properties.get('version'),
-    build_properties.get('git_revision'),
-    main_revision, point_id)
+      build_properties.get('got_webrtc_revision'),
+      build_properties.get('got_v8_revision'),
+      build_properties.get('version'),
+      build_properties.get('git_revision'),
+      main_revision,
+      point_id,
+  )
 
 
 def GetPerfDashboardRevisionsWithProperties(
-    got_webrtc_revision, got_v8_revision, version, git_revision, main_revision,
-    point_id=None):
+    got_webrtc_revision,
+    got_v8_revision,
+    version,
+    git_revision,
+    main_revision,
+    point_id=None,
+):
   """Fills in the same revisions fields that process_log_utils does."""
 
   versions = {}
@@ -520,7 +546,10 @@ def _GetGitCommitPosition(dir_path):
   git_exe = 'git.bat' if sys.platform.startswith('win') else 'git'
   p = subprocess.Popen(
       [git_exe, 'log', '-n', '1', '--pretty=format:%B', 'HEAD'],
-      cwd=dir_path, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+      cwd=dir_path,
+      stdout=subprocess.PIPE,
+      stderr=subprocess.STDOUT,
+  )
   (log, _) = p.communicate()
   if p.returncode != 0:
     return None
@@ -537,9 +566,10 @@ def _GetGitRevision(in_directory):
     The git SHA1 hash string.
   """
   git_exe = 'git.bat' if sys.platform.startswith('win') else 'git'
-  p = subprocess.Popen(
-      [git_exe, 'rev-parse', 'HEAD'],
-      cwd=in_directory, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+  p = subprocess.Popen([git_exe, 'rev-parse', 'HEAD'],
+                       cwd=in_directory,
+                       stdout=subprocess.PIPE,
+                       stderr=subprocess.STDOUT)
   (stdout, _) = p.communicate()
   return stdout.strip()
 
@@ -556,12 +586,14 @@ def _IsGitDirectory(dir_path):
   git_exe = 'git.bat' if sys.platform.startswith('win') else 'git'
   with open(os.devnull, 'w') as devnull:
     p = subprocess.Popen([git_exe, 'rev-parse', '--git-dir'],
-                         cwd=dir_path, stdout=devnull, stderr=devnull)
+                         cwd=dir_path,
+                         stdout=devnull,
+                         stderr=devnull)
     return p.wait() == 0
 
 
 def AddArgs(parser):
-  """Adds slave_utils common arguments to the supplied argparse parser.
+  """Adds bot_utils common arguments to the supplied argparse parser.
 
   Args:
       parser (argparse.ArgumentParser): The argument parser to augment.
@@ -569,18 +601,21 @@ def AddArgs(parser):
   Returns: callable(args)
       A callback function that should be invoked with the parsed args. This
       completes the processing and loads the result of the parsing into
-      slave_utils.
+      bot_utils.
   """
-  group = parser.add_argument_group(title='Common `slave_utils.py` Options')
-  group.add_argument('--slave-utils-gsutil-py-path', metavar='PATH',
+  group = parser.add_argument_group(title='Common `bot_utils.py` Options')
+  group.add_argument(
+      '--bot-utils-gsutil-py-path',
+      metavar='PATH',
       help='The path to the `gsutil.py` command to use for Google Storage '
-           'operations. This file lives in the <depot_tools> repository.')
+      'operations. This file lives in the <depot_tools> repository.'
+  )
 
   return _AddArgsCallback
 
 
 def AddOpts(parser):
-  """Adds slave_utils common arguments to the supplied optparse parser.
+  """Adds bot_utils common arguments to the supplied optparse parser.
 
   Args:
       parser (optparse.OptionParser): The argument parser to augment.
@@ -588,12 +623,17 @@ def AddOpts(parser):
   Returns: callable(opts)
       A callback function that should be invoked with the parsed opts. This
       completes the processing and loads the result of the parsing into
-      slave_utils.
+      bot_utils.
   """
-  group = optparse.OptionGroup(parser, 'Common `slave_utils.py` Options')
-  group.add_option('--slave-utils-gsutil-py-path', metavar='PATH',
-      help='The path to the `gsutil` command to use for Google Storage '
-           'operations. This file lives in the <depot_tools> repository.')
+  group = optparse.OptionGroup(parser, 'Common `bot_utils.py` Options')
+  group.add_option(
+      '--bot-utils-gsutil-py-path',
+      metavar='PATH',
+      help=(
+          'The path to the `gsutil` command to use for Google Storage '
+          'operations. This file lives in the <depot_tools> repository.'
+      ),
+  )
   parser.add_option_group(group)
 
   return _AddArgsCallback
@@ -605,4 +645,4 @@ def _AddArgsCallback(opts):
   both argparse and optparse results.
   """
   global _ARGS_GSUTIL_PY_PATH
-  _ARGS_GSUTIL_PY_PATH = opts.slave_utils_gsutil_py_path
+  _ARGS_GSUTIL_PY_PATH = opts.bot_utils_gsutil_py_path

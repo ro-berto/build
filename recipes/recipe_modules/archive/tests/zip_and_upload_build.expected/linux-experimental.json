@@ -11,7 +11,7 @@
       "[CACHE]/chrome_staging",
       "--src-dir",
       "[START_DIR]/src",
-      "--slave-utils-gsutil-py-path",
+      "--bot-utils-gsutil-py-path",
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "--build-url",
       "gs://example_bucket/experimental/extra_component/example_buildername",
