@@ -8,15 +8,9 @@ import os.path
 import shutil
 import tempfile
 import unittest
-import sys
 import zipfile
 
-BASE_DIR = os.path.join(
-    os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '..')
-sys.path.append(os.path.join(BASE_DIR, 'scripts'))
-
 import archive_build
-from common import archive_utils_unittest
 
 BINARY_FILES = [
     'test1.apk', 'test2.apk', 'lib1.so', 'lib2.so',
@@ -33,11 +27,23 @@ INTERMEDIATE_FILES = [
 SOURCE_FILES = ['a.cpp']
 
 
+def CreateFileSetInDir(out_dir, file_list):
+  for f in file_list:
+    dir_part = os.path.dirname(f)
+    if dir_part:
+      dir_path = os.path.join(out_dir, dir_part)
+      if not os.path.exists(dir_path):
+        os.makedirs(dir_path)
+
+    temp_file = open(os.path.join(out_dir, f), 'w')
+    temp_file.write('contents')
+    temp_file.close()
+
+
 class ArchiveTest(unittest.TestCase):
 
   def setUp(self):
     self.temp_dir = tempfile.mkdtemp()
-    archive_utils_unittest.BuildTestFilesTree(self.temp_dir)
     self.zip_file = 'archive.zip'
     self.target = 'Debug'
     self.build_dir = os.path.join(self.temp_dir, 'build')
@@ -50,10 +56,9 @@ class ArchiveTest(unittest.TestCase):
     os.makedirs(self.target_dir)
 
     # Create test files
-    archive_utils_unittest.CreateFileSetInDir(self.src_dir, SOURCE_FILES)
-    archive_utils_unittest.CreateFileSetInDir(self.target_dir, BINARY_FILES)
-    archive_utils_unittest.CreateFileSetInDir(self.target_dir,
-                                              INTERMEDIATE_FILES)
+    CreateFileSetInDir(self.src_dir, SOURCE_FILES)
+    CreateFileSetInDir(self.target_dir, BINARY_FILES)
+    CreateFileSetInDir(self.target_dir, INTERMEDIATE_FILES)
     os.chdir(self.src_dir)
 
   def tearDown(self):
