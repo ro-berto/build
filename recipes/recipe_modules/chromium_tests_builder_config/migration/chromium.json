@@ -619,11 +619,6 @@
       "tryserver.chromium.linux:fuchsia-fyi-x64-rel"
     ]
   },
-  "chromium.fyi:ios-reclient": {
-    "builders": [
-      "chromium.fyi:ios-reclient"
-    ]
-  },
   "chromium.fyi:ios-simulator-code-coverage": {
     "builders": [
       "chromium.fyi:ios-simulator-code-coverage"

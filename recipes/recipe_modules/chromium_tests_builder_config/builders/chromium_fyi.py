@@ -492,27 +492,6 @@ SPEC = {
             },
             simulation_platform='mac',
         ),
-    # TODO(crbug.com/1254986): remove after the migration.
-    'ios-reclient':
-        builder_spec.BuilderSpec.create(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-                'mac_toolchain',
-            ],
-            gclient_config='ios',
-            gclient_apply_config=[
-                'enable_reclient',
-                'reclient_test',
-            ],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'ios',
-                'HOST_PLATFORM': 'mac',
-            },
-            simulation_platform='mac',
-        ),
     'ios-simulator-multi-window':
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
