@@ -2114,12 +2114,13 @@ class SwarmingTest(Test):
     test_options = self.test_options.for_running(suffix, tests_to_retry)
     args = test_options.add_args(self.spec.args, self.option_flags)
 
-    # If we're in quick run set the shard count to any available quickrun shards
-    use_quickrun = (
+    # If we're in quick run or inverse quick run set the shard count to any
+    # available quickrun shards
+    use_quickrun_shards = self.is_inverted_rts or (
         self.api.m.cq.active and
         (self.api.m.cq.run_mode == self.api.m.cq.QUICK_DRY_RUN))
     shards = self.spec.quickrun_shards if (
-        use_quickrun and self.spec.quickrun_shards) else self.spec.shards
+        use_quickrun_shards and self.spec.quickrun_shards) else self.spec.shards
 
     if tests_to_retry:
       # The filter list is eventually passed to the binary over the command
