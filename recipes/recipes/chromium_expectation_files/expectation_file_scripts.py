@@ -3,9 +3,10 @@
 # found in the LICENSE file.
 
 from recipe_engine.post_process import (DoesNotRun, DropExpectation,
-                                        ResultReason, StatusException,
-                                        StatusFailure, StatusSuccess,
-                                        StepCommandRE, StepFailure, StepSuccess)
+                                        LogContains, ResultReason,
+                                        StatusException, StatusFailure,
+                                        StatusSuccess, StepCommandRE,
+                                        StepFailure, StepSuccess)
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 from PB.recipe_engine import result as result_pb
 from PB.recipes.build.chromium_expectation_files.expectation_file_scripts \
@@ -53,6 +54,8 @@ def RunSteps(api, properties):
         status=common_pb.INFRA_FAILURE, summary_markdown='\n'.join(summary))
 
   api.gclient.set_config('chromium_skip_wpr_archives_download')
+  if properties.checkout_src_internal:
+    api.gclient.apply_config('chrome_internal')
   with api.chromium_bootstrap.update_gclient_config() as callback:
     update_step = api.bot_update.ensure_checkout(refs=['refs/heads/main'])
     callback(update_step.json.output['manifest'])
@@ -755,5 +758,27 @@ def GenTests(api):
       api.post_process(StepSuccess, 'step_name_success'),
       api.post_process(StatusFailure),
       api.post_process(ResultReason, '1 script invocation(s) failed'),
+      api.post_process(DropExpectation),
+  )
+
+  yield api.test(
+      'checkout_src_internal',
+      api.properties(
+          InputProperties(
+              scripts=[
+                  ScriptInvocation(
+                      step_name='step_name',
+                      script='some/script.py',
+                      script_type=ScriptInvocation.ScriptType.UNEXPECTED_PASS,
+                      submit_type=ScriptInvocation.SubmitType.MANUAL,
+                      reviewer_list=ScriptInvocation.ReviewerList(
+                          reviewer=['r']),
+                      cl_title='cl_title',
+                      args=['--some-arg'],
+                  )
+              ],
+              checkout_src_internal=True)),
+      api.post_process(LogContains, 'bot_update', 'json.output',
+                       ['src-internal']),
       api.post_process(DropExpectation),
   )
