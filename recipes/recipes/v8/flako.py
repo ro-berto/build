@@ -222,7 +222,7 @@ class Depot(object):
       self.known_bad_revision = known_bad_revision
       self.revisions[0] = known_bad_revision
     else:
-     # If the script was started without a revision, initialize it to ToT.
+      # If the script was started without a revision, initialize it to ToT.
       self.head_offset = 0
       commits = self._fetch_commits(
           'init head', 'refs/heads/main', 0)
@@ -637,7 +637,7 @@ class Runner(object):
           # shards? E.g. when doubling from 4 to 8, maybe 5 was enough and
           # should be used throughout.
           break
-      parent.presentation.step_text = f'{num_failures} failures' 
+      parent.presentation.step_text = f'{num_failures} failures'
       return num_failures
 
 
@@ -659,9 +659,10 @@ class Bisector(object):
     from_revision = self.depot.get_revision(from_offset)
     to_revision = self.depot.get_revision(to_offset)
     offset_range = f'#{from_offset}..#{to_offset}'
+    full_git_range = f'{from_revision}..{to_revision}'
     git_range = f'{from_revision[:8]}..{to_revision[:8]}'
     step_result = self.api.step(text % offset_range, cmd=None)
-    step_result.presentation.links[git_range] = f'{REPO}/+log/{git_range}'
+    step_result.presentation.links[git_range] = f'{REPO}/+log/{full_git_range}'
 
   def report_revision(self, text, offset):
     rev = self.depot.get_revision(offset)
@@ -763,9 +764,9 @@ class ReproBisector(Bisector):
 
 
 BISECTORS = {
-  'regression': RegressionBisector,
-  'progression':ProgressionBisector,
-  'repro':ReproBisector,
+    'regression': RegressionBisector,
+    'progression': ProgressionBisector,
+    'repro': ReproBisector,
 }
 
 
