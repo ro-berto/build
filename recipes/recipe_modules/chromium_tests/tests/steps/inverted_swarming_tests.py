@@ -13,7 +13,8 @@ from RECIPE_MODULES.build.chromium_tests import steps
 
 def RunSteps(api):
   tests = [
-      steps.MockTestSpec.create('MockTest').get_test(api.chromium_tests),
+      steps.MockTestSpec.create('MockTest',
+                                invertible=True).get_test(api.chromium_tests),
       steps.SwarmingGTestTestSpec.create('SwarmingGTestTestSpec').get_test(
           api.chromium_tests),
       steps.LocalGTestTestSpec.create('LocalGTestTestSpec').get_test(
@@ -24,6 +25,9 @@ def RunSteps(api):
     test.inverted_raw_cmd = ['run', 'inverted.filter']
     if test.has_inverted:
       test.is_inverted_rts = True
+      if test.name == 'MockTest':
+        test.pre_run('without patch')
+        test.run('without patch')
       assert ('inverted.filter' in test.inverted_raw_cmd)
 
 

@@ -242,7 +242,13 @@ def _add_suffix(step_name, suffix):
 
 
 def _present_info_messages(presentation, test):
-  messages = list(test.spec.info_messages)
+  messages = []
+  if test.is_inverted_rts:
+    messages.append(
+        'Ran tests previously skipped by RTS. See '
+        'https://crsrc.org/c/docs/testing/regression-test-selection.md'
+        ' for more information\n')
+  messages.extend(test.spec.info_messages)
   messages.append(presentation.step_text)
   presentation.step_text = '\n'.join(messages)
 
@@ -2868,6 +2874,8 @@ class MockTest(Test):
       finally:
         result = self.api.m.step.active_result
         self._suffix_step_name_map[suffix] = '.'.join(result.name_tokens)
+
+    _present_info_messages(step_result.presentation, self)
 
     return step_result
 
