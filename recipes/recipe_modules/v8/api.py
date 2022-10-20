@@ -263,7 +263,7 @@ class V8Api(recipe_api.RecipeApi):
   @property
   def resultdb(self):
     if not self._resultdb and self.is_flag_set('resultdb'):
-      self._resultdb = ResultDB.create()
+      self._resultdb = ResultDB.create(include=True)
     return self._resultdb
 
   def _python(self, name, exe, script, args, **kwargs):
