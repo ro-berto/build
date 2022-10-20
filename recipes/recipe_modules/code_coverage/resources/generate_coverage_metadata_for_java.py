@@ -540,8 +540,8 @@ def main():
                                            params.third_party_inclusion_subdirs)
     logging.info('Writing fulfilled Java coverage metadata to %s',
                  params.output_dir)
-    with open(os.path.join(params.output_dir, 'all.json.gz'), 'w') as f:
-      f.write(zlib.compress(json.dumps(data)))
+    with open(os.path.join(params.output_dir, 'all.json.gz'), 'wb') as f:
+      f.write(zlib.compress(json.dumps(data).encode('utf-8')))
 
     # Write xml tree to disk so that it can be exported to zoss
     ElementTree.ElementTree(xml_root).write(
