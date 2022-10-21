@@ -126,16 +126,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='android-weblayer-with-aosp-webview-x86-fyi-rel',
                 tester='android-weblayer-11-x86-rel-tests',
             ),
-        'android-weblayer-pie-x86-wpt-fyi-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android.fyi',
-                buildername='android-weblayer-pie-x86-wpt-fyi-rel',
-            ),
-        'android-weblayer-pie-x86-wpt-smoketest':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android.fyi',
-                buildername='android-weblayer-pie-x86-wpt-smoketest',
-            ),
         'android-webview-pie-x86-wpt-fyi-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android.fyi',

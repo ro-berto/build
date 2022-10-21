@@ -140,34 +140,6 @@ SPEC = {
             android_config='main_builder',
             simulation_platform='linux',
         ),
-    'android-weblayer-pie-x86-wpt-fyi-rel':
-        _chromium_android_fyi_spec(
-            chromium_config='android',
-            chromium_apply_config=['mb'],
-            gclient_config='chromium',
-            gclient_apply_config=['android', 'enable_reclient'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 32,
-                'TARGET_PLATFORM': 'android',
-            },
-            android_config='x86_builder',
-            simulation_platform='linux',
-        ),
-    'android-weblayer-pie-x86-wpt-smoketest':
-        _chromium_android_fyi_spec(
-            chromium_config='android',
-            chromium_apply_config=['mb'],
-            gclient_config='chromium',
-            gclient_apply_config=['android', 'enable_reclient'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 32,
-                'TARGET_PLATFORM': 'android',
-            },
-            android_config='x86_builder',
-            simulation_platform='linux',
-        ),
     'android-webview-pie-x86-wpt-fyi-rel':
         _chromium_android_fyi_spec(
             chromium_config='android',
