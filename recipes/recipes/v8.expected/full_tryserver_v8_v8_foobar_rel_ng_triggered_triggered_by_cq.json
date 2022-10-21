@@ -274,7 +274,7 @@
     "cmd": [
       "python3",
       "-u",
-      "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
+      "RECIPE_MODULE[build::v8_tests]/resources/collect_v8_task.py",
       "--temp-root-dir",
       "[TMP_BASE]",
       "--merged-test-output",
@@ -332,7 +332,7 @@
     "cmd": [
       "python3",
       "-u",
-      "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
+      "RECIPE_MODULE[build::v8_tests]/resources/collect_v8_task.py",
       "--temp-root-dir",
       "[TMP_BASE]",
       "--merged-test-output",

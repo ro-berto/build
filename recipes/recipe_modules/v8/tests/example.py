@@ -10,15 +10,16 @@ DEPS = [
     'recipe_engine/properties',
     'recipe_engine/runtime',
     'v8',
+    'v8_tests',
 ]
 
 def RunSteps(api):
   api.v8.apply_bot_config(
       {'triggers': ['v8_triggered_bot'], 'triggers_proxy': True})
   api.v8.checkout()
-  api.v8.load_static_test_configs()
+  api.v8_tests.load_static_test_configs()
   compile_failure = api.v8.compile(
-      test_spec=api.v8.TEST_SPEC.from_python_literal(
+      test_spec=api.v8_tests.TEST_SPEC.from_python_literal(
           {'TestBuilder': {'tests': [{'name': 'v8testing'}]}},
           ['TestBuilder'],
       ),

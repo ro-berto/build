@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import json
+
 from recipe_engine import recipe_test_api
 from recipe_engine.post_process import (Filter, DoesNotRun, DoesNotRunRE,
                                         DropExpectation, MustRun,
@@ -33,6 +35,7 @@ DEPS = [
     'test_utils',
     'depot_tools/tryserver',
     'v8',
+    'v8_tests',
 ]
 
 PROPERTIES = {
@@ -86,8 +89,8 @@ def RunSteps(api, binary_size_tracking, build_config, clobber, clobber_all,
              triggers_proxy, use_goma):
   link_to_parent(api)
   v8 = api.v8
-  v8.read_cl_footer_flags()
-  v8.load_static_test_configs()
+  api.v8_tests.read_cl_footer_flags()
+  api.v8_tests.load_static_test_configs()
   bot_config = v8.update_bot_config(
       v8.bot_config_by_buildername(use_goma=use_goma),
       binary_size_tracking,
@@ -106,10 +109,10 @@ def RunSteps(api, binary_size_tracking, build_config, clobber, clobber_all,
   v8.set_chromium_configs(clobber, default_targets)
 
   additional_trigger_properties = {}
-  test_spec = v8.TEST_SPEC()
+  test_spec = api.v8_tests.TEST_SPEC()
 
   # Read tests from V8-side test specs.
-  tests = v8.extra_tests_from_properties()
+  tests = api.v8_tests.extra_tests_from_properties()
 
   if v8.is_pure_swarming_tester:
     with api.step.nest('initialization'):
@@ -125,7 +128,7 @@ def RunSteps(api, binary_size_tracking, build_config, clobber, clobber_all,
       info_step.presentation.properties['got_revision_cp'] = (
           api.properties.get('parent_got_revision_cp'))
 
-      v8.set_up_swarming()
+      api.v8_tests.set_up_swarming()
   else:
     with api.step.nest('initialization'):
       if api.platform.is_win:
@@ -133,7 +136,7 @@ def RunSteps(api, binary_size_tracking, build_config, clobber, clobber_all,
 
       update_step = v8.checkout(clobber=clobber_all)
 
-      v8.set_up_swarming()
+      api.v8_tests.set_up_swarming()
       v8.runhooks()
 
       if v8.generate_gcov_coverage:
@@ -143,7 +146,7 @@ def RunSteps(api, binary_size_tracking, build_config, clobber, clobber_all,
       # roots.
       test_roots = v8.get_test_roots()
       for test_root in test_roots:
-        v8.update_test_configs(v8.load_dynamic_test_configs(test_root))
+        api.v8_tests.update_test_configs(v8.load_dynamic_test_configs(test_root))
         test_spec.update(v8.read_test_spec(test_root))
         # Tests from dynamic test roots have precedence.
         tests = v8.dedupe_tests(v8.extra_tests_from_test_spec(test_spec), tests)
@@ -157,7 +160,7 @@ def RunSteps(api, binary_size_tracking, build_config, clobber, clobber_all,
     v8.maybe_create_clusterfuzz_archive(update_step)
 
   if v8.should_test and tests:
-    test_results = v8.runtests(tests)
+    test_results = api.v8_tests.runtests(tests)
     v8.maybe_bisect(test_results, test_spec)
 
     if not api.tryserver.is_tryserver and test_results.is_negative:
@@ -205,14 +208,12 @@ def GenTests(api):
   }
 
   # Minimal v8-side test spec for simulating most recipe features.
-  test_spec = """
-    {
-      "tests": [
-        {"name": "v8testing"},
-        {"name": "test262_variants", "test_args": ["--extra-flags=--flag"]},
-      ],
-    }
-  """.strip()
+  test_spec = json.dumps({
+    "tests": [
+      {"name": "v8testing"},
+      {"name": "test262_variants", "test_args": ["--extra-flags=--flag"]},
+    ],
+  }, indent=2)
 
   # Simulate a tryjob for setting up different swarming default tags.
   yield (
@@ -298,7 +299,7 @@ def GenTests(api):
         disable_auto_bisect=True,
     ) +
     api.override_step_data(
-        'Check', api.v8.output_json(has_failures=True))
+        'Check', api.v8_tests.output_json(has_failures=True))
   )
 
   yield (api.v8.test(
@@ -322,7 +323,7 @@ def GenTests(api):
         parent_test_spec=test_spec,
     ) +
     api.override_step_data(
-        'Check', api.v8.output_json(has_failures=True, flakes=True))
+        'Check', api.v8_tests.output_json(has_failures=True, flakes=True))
   )
 
   def TestFailures(flakes):
@@ -335,7 +336,7 @@ def GenTests(api):
       ) +
       api.v8.test_spec_in_checkout('V8 Foobar', test_spec) +
       api.override_step_data(
-          'Check', api.v8.output_json(has_failures=True, flakes=flakes)) +
+          'Check', api.v8_tests.output_json(has_failures=True, flakes=flakes)) +
       api.post_process(Filter().include_re(r'.*Check.*'))
     )
 
@@ -361,7 +362,7 @@ def GenTests(api):
     ) +
     api.v8.test_spec_in_checkout('V8 Foobar', test_spec) +
     api.override_step_data(
-        'Check', api.v8.output_json(has_failures=True, flakes=False)) +
+        'Check', api.v8_tests.output_json(has_failures=True, flakes=False)) +
     api.step_data('Bisect a2.compile', retcode=1) +
     api.post_process(StatusFailure) +
     api.post_process(DropExpectation)
@@ -402,7 +403,7 @@ def GenTests(api):
         'one_failure',
     ) +
     api.v8.test_spec_in_checkout('V8 Foobar', test_spec) +
-    api.override_step_data('Check', api.v8.one_failure())
+    api.override_step_data('Check', api.v8_tests.one_failure())
   )
 
   yield (
@@ -414,7 +415,7 @@ def GenTests(api):
         parent_bot_config=linux_bot_config,
         parent_test_spec=test_spec,
     ) +
-    api.override_step_data('Check', api.v8.one_failure()) +
+    api.override_step_data('Check', api.v8_tests.one_failure()) +
     api.properties(parent_gn_args=None)
   )
 
@@ -425,7 +426,7 @@ def GenTests(api):
         'infra_failure',
     ) +
     api.v8.test_spec_in_checkout('V8 Foobar', test_spec) +
-    api.override_step_data('Check', api.v8.infra_failure()) +
+    api.override_step_data('Check', api.v8_tests.infra_failure()) +
     api.post_process(StepException, 'Check') +
     api.post_process(ResultReasonRE, 'Failures or flakes in build.') +
     api.post_process(DropExpectation)
@@ -457,7 +458,7 @@ def GenTests(api):
           parent_bot_config=win_bot_config,
           parent_test_spec=flake_test_spec,
       ) +
-      api.override_step_data('Test262', api.v8.one_flake()) +
+      api.override_step_data('Test262', api.v8_tests.one_flake()) +
       api.post_process(Filter('Test262 (flakes)'))
   )
 
@@ -471,7 +472,7 @@ def GenTests(api):
           parent_bot_config=win_bot_config,
           parent_test_spec=flake_test_spec,
       ) +
-      api.override_step_data('Test262', api.v8.one_flake(num_fuzz=True)) +
+      api.override_step_data('Test262', api.v8_tests.one_flake(num_fuzz=True)) +
       api.post_process(Filter('Test262 (flakes)'))
   )
 
@@ -575,8 +576,8 @@ def GenTests(api):
         enable_swarming=False,
     ) +
     api.v8.test_spec_in_checkout('V8 Foobar', test_spec) +
-    api.v8.fail('Check') +
-    api.v8.fail('Bisect a2.Retry') +
+    api.v8_tests.fail('Check') +
+    api.v8_tests.fail('Bisect a2.Retry') +
     api.time.step(120)
   )
 
@@ -590,8 +591,8 @@ def GenTests(api):
     ) +
     api.v8.test_spec_in_checkout('V8 Foobar', test_spec) +
     api.properties(override_triggers=['a1', 'a2', 'a3']) +
-    api.v8.fail('Check') +
-    api.v8.fail('Bisect a2.Retry') +
+    api.v8_tests.fail('Check') +
+    api.v8_tests.fail('Bisect a2.Retry') +
     api.time.step(120)
   )
 
@@ -605,7 +606,7 @@ def GenTests(api):
         enable_swarming=False,
     ) +
     api.v8.test_spec_in_checkout('V8 Foobar', test_spec) +
-    api.v8.fail('Check') +
+    api.v8_tests.fail('Check') +
     api.time.step(7)
   )
 
@@ -618,8 +619,8 @@ def GenTests(api):
         'bisect_swarming',
     ) +
     api.v8.test_spec_in_checkout('V8 Foobar', test_spec) +
-    api.v8.fail('Check') +
-    api.v8.fail('Bisect a2.Retry') +
+    api.v8_tests.fail('Check') +
+    api.v8_tests.fail('Bisect a2.Retry') +
     api.time.step(120) +
     api.post_process(MustRun, 'Bisect a0.isolate tests')
   )
@@ -638,7 +639,7 @@ def GenTests(api):
         parent_bot_config=linux_bot_config,
         parent_test_spec=test_spec,
     ) +
-    api.v8.fail('Check') +
+    api.v8_tests.fail('Check') +
     api.time.step(120)
   )
 
@@ -652,8 +653,8 @@ def GenTests(api):
         enable_swarming=False,
     ) +
     api.v8.test_spec_in_checkout('V8 Foobar', test_spec) +
-    api.v8.fail('Check') +
-    api.v8.fail('Bisect a0.Retry') +
+    api.v8_tests.fail('Check') +
+    api.v8_tests.fail('Bisect a0.Retry') +
     api.time.step(120)
   )
 
@@ -666,7 +667,7 @@ def GenTests(api):
         enable_swarming=False,
     ) +
     api.v8.test_spec_in_checkout('V8 Foobar', test_spec) +
-    api.v8.fail('Check') +
+    api.v8_tests.fail('Check') +
     api.scheduler(triggers=[api.v8.example_scheduler_buildbucket_trigger()]) +
     api.override_step_data(
         'Bisect.Get change range',
@@ -682,7 +683,7 @@ def GenTests(api):
         'stress_only_failures',
     ) +
     api.v8.test_spec_in_checkout('V8 Foobar', test_spec) +
-    api.v8.fail('Check', variant1='stress', variant2='stress') +
+    api.v8_tests.fail('Check', variant1='stress', variant2='stress') +
     api.post_process(Filter('gsutil stress-opt'))
   )
 
@@ -693,7 +694,7 @@ def GenTests(api):
         'mixed_failures',
     ) +
     api.v8.test_spec_in_checkout('V8 Foobar', test_spec) +
-    api.v8.fail('Check', variant1='stress', variant2='default') +
+    api.v8_tests.fail('Check', variant1='stress', variant2='default') +
     api.post_process(DoesNotRun, 'gsutil stress-opt') +
     api.post_process(DropExpectation)
   )
@@ -711,7 +712,7 @@ def GenTests(api):
         blamelist=['dude@chromium.org'],
     ) +
     api.override_step_data(
-        'Check', api.v8.output_json(unmarked_slow_test=True))
+        'Check', api.v8_tests.output_json(unmarked_slow_test=True))
   )
 
   # Raise exception when zero tests are run on all steps.
@@ -725,7 +726,7 @@ def GenTests(api):
       parent_test_spec=test_spec,
       requester='commit-bot@chromium.org',
       blamelist=['dude@chromium.org'],
-  ) + api.override_step_data('Check', api.v8.output_json(empty_run=True)) +
+  ) + api.override_step_data('Check', api.v8_tests.output_json(empty_run=True)) +
          api.post_process(StatusFailure) +
          api.post_process(ResultReasonRE, 'No tests were run') +
          api.post_process(DropExpectation))

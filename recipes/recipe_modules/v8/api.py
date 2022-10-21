@@ -2,26 +2,14 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import argparse
 import ast
-import base64
-from collections import defaultdict
 import contextlib
-import datetime
-import difflib
-import functools
-import random
 import re
 
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
-from RECIPE_MODULES.build.chromium_tests.resultdb import ResultDB
 
-from .builders import TestSpec
 from recipe_engine import recipe_api
-from recipe_engine.engine_types import freeze
 from . import bisection
-from . import builders as v8_builders
-from . import testing
 
 from RECIPE_MODULES.build import chromium
 
@@ -36,18 +24,9 @@ RELEASE_BRANCH_RE = re.compile(r'^refs/branch-heads/\d+\.\d+$')
 # Regular expressions for getting target bits from gn args.
 TARGET_CPU_RE = re.compile(r'.*target_cpu\s+=\s+"([^"]*)".*')
 
-# With too many letters, labels are to big and stretch the UI.
-MAX_LABEL_SIZE = 35
-
-# Make sure that a step is not flooded with log lines.
-MAX_FAILURE_LOGS = 10
-
 # Factor by which the considered failure for bisection must be faster than the
 # ongoing build's total.
 BISECT_DURATION_FACTOR = 5
-
-TEST_RUNNER_PARSER = argparse.ArgumentParser()
-TEST_RUNNER_PARSER.add_argument('--extra-flags')
 
 VERSION_LINE_RE = r'^#define %s\s+(\d*)$'
 VERSION_LINE_REPLACEMENT = '#define %s %s'
@@ -57,8 +36,6 @@ V8_BUILD = 'V8_BUILD_NUMBER'
 V8_PATCH = 'V8_PATCH_LEVEL'
 
 LCOV_IMAGE = 'lcov:2018-01-18_17-03'
-
-V8_RECIPE_FLAGS = 'V8-Recipe-Flags'
 
 
 class V8Version(object):
@@ -221,24 +198,32 @@ class LedTrigger(Trigger):
 
 class V8Api(recipe_api.RecipeApi):
   VERSION_FILE = 'include/v8-version.h'
-  EMPTY_TEST_SPEC = v8_builders.EmptyTestSpec
-  TEST_SPEC = v8_builders.TestSpec
 
   def __init__(self, properties, *args, **kwargs):
     super(V8Api, self).__init__(*args, **kwargs)
-    self.test_configs = {}
     self.bot_config = None
-    self.rerun_failures_count = None
-    self.test_duration_sec = None
-    self.isolated_tests = None
-    self.gn_args = None
     self.checkout_root = None
     self.revision = None
     self.revision_cp = None
     self.revision_number = None
     self.use_remoteexec = properties.get('use_remoteexec', False)
-    self.v8_recipe_flags = []
-    self._resultdb = None
+
+  # TODO(machenbach): Temporary convenience method to update recipe
+  # dependencies.
+  def update_test_configs(self, *args, **kwargs):  # pragma: no cover
+    return self.m.v8_tests.update_test_configs(*args, **kwargs)
+
+  # TODO(machenbach): Temporary convenience method to update recipe
+  # dependencies.
+  @property
+  def TEST_SPEC(self):  # pragma: no cover
+    return self.m.v8_tests.TEST_SPEC
+
+  # TODO(machenbach): Temporary convenience method to update recipe
+  # dependencies.
+  @property
+  def isolated_tests(self):  # pragma: no cover
+    return self.m.v8_tests.isolated_tests
 
   @property
   def trigger(self):
@@ -250,21 +235,6 @@ class V8Api(recipe_api.RecipeApi):
   @property
   def trigger_prod(self):
     return ProdTrigger(self.m)
-
-  def read_cl_footer_flags(self):
-    if self.m.tryserver.is_gerrit_issue:
-      footers = self.m.tryserver.get_footers() or {}
-      flags = footers.get(V8_RECIPE_FLAGS, [])
-      self.v8_recipe_flags = flags
-
-  def is_flag_set(self, flag_name):
-    return flag_name in self.v8_recipe_flags
-
-  @property
-  def resultdb(self):
-    if not self._resultdb and self.is_flag_set('resultdb'):
-      self._resultdb = ResultDB.create(include=True)
-    return self._resultdb
 
   def _python(self, name, exe, script, args, **kwargs):
     cmd = [exe, '-u', script] + list(args or [])
@@ -377,15 +347,6 @@ class V8Api(recipe_api.RecipeApi):
         result.append(path)
     return result
 
-  def update_test_configs(self, test_configs):
-    """Update test configs without mutating previous copy."""
-    self.test_configs = dict(self.test_configs)
-    self.test_configs.update(test_configs)
-
-  def load_static_test_configs(self):
-    """Set predefined test configs from build repository."""
-    self.update_test_configs(testing.TEST_CONFIGS)
-
   def load_dynamic_test_configs(self, root):
     """Add test configs from configured location.
 
@@ -441,6 +402,7 @@ class V8Api(recipe_api.RecipeApi):
     kwargs.update(self.bot_config.get('v8_config_kwargs', {}))
 
     self.set_config('v8', optional=True, **kwargs)
+    self.m.v8_tests.set_config('v8')
     self.m.chromium.set_config('v8', **kwargs)
     self.m.gclient.set_config('v8', **kwargs)
 
@@ -471,28 +433,8 @@ class V8Api(recipe_api.RecipeApi):
     if self.bot_config.get('coverage') == 'gcov':
       self.bot_config['disable_auto_bisect'] = True
 
-    # FIXME(machenbach): Use a context object that stores the state for each
-    # test process. Otherwise it's easy to introduce bugs with multiple test
-    # processes and stale context data. E.g. during bisection these values
-    # change for tests on rerun.
-
-    # Default failure retry.
-    self.rerun_failures_count = 2
-
-    # If tests are run, this value will be set to their total duration.
-    self.test_duration_sec = 0
-
-    # Contains list of isolated tests, which can be either a list of tests from
-    # one or more steps uploading to isolate server, isolate hashes from the
-    # build part of the bisect step or a list of values from the swarm_hashes
-    # property (parsed by self.m.isolate.isolated_tests property getter invoked
-    # here, which returns a new dict each time, thus no need to copy it here).
-    self.isolated_tests = self.m.isolate.isolated_tests
-
-    # This is inferred from the run_mb step or from the parent bot. If mb is
-    # run multiple times, it is overwritten.
-    self.gn_args = self.m.properties.get(
-        'parent_gn_args', [])
+    self.m.v8_tests.enable_swarming = self.bot_config.get(
+        'enable_swarming', True)
 
   def set_gclient_custom_vars(self, gclient_vars):
     """Sets additional gclient custom variables."""
@@ -509,26 +451,6 @@ class V8Api(recipe_api.RecipeApi):
       self.m.chromium.c.clobber_before_runhooks = clobber
     if default_targets:
       self.m.chromium.c.compile_py.default_targets = default_targets
-
-  def testing_random_seed(self):
-    """Return a random seed suitable for v8 testing.
-
-    If there are isolate hashes, build a random seed based on the hashes.
-    Otherwise use the system's PRNG. This uses a deterministic seed for
-    recipe simulation.
-    """
-    r = random.Random()
-    if self.isolated_tests:
-      r.seed("".join(self.isolated_tests))
-    elif self._test_data.enabled:
-      r.seed(12345)
-
-    seed = 0
-    while not seed:
-      # Avoid 0 because v8 switches off usage of random seeds when
-      # passing 0 and creates a new one.
-      seed = r.randint(-2147483648, 2147483647)
-    return seed
 
   def checkout(self, revision=None, **kwargs):
     # Set revision for bot_update.
@@ -574,38 +496,6 @@ class V8Api(recipe_api.RecipeApi):
     if self.revision_cp:
       _, self.revision_number = self.m.commit_position.parse(self.revision_cp)
       self.revision_number = str(self.revision_number)
-
-  def set_up_swarming(self):
-    self.m.chromium_swarming.set_default_dimension('pool', 'chromium.tests')
-    self.m.chromium_swarming.set_default_dimension('os', 'Ubuntu-16.04')
-    # TODO(machenbach): Investigate if this is causing a priority inversion
-    # with tasks not specifying cores=8. See http://crbug.com/735388
-    # self.m.chromium_swarming.set_default_dimension('cores', '8')
-    self.m.chromium_swarming.add_default_tag('project:v8')
-    self.m.chromium_swarming.default_hard_timeout = 45 * 60
-
-    self.m.chromium_swarming.default_idempotent = True
-    self.m.chromium_swarming.task_output_stdout = 'all'
-
-    if self.m.builder_group.for_current == 'tryserver.v8':
-      self.m.chromium_swarming.add_default_tag('purpose:pre-commit')
-      self.m.chromium_swarming.default_priority = 30
-
-      changes = self.m.buildbucket.build.input.gerrit_changes
-      assert len(changes) <= 1
-      if changes and changes[0].project:
-        self.m.chromium_swarming.add_default_tag(
-            f'patch_project:{changes[0].project}')
-    else:
-      if self.m.builder_group.for_current in [
-          'client.v8', 'client.v8.branches', 'client.v8.ports'
-      ]:
-        self.m.chromium_swarming.default_priority = 25
-      else:
-        # This should be lower than the CQ.
-        self.m.chromium_swarming.default_priority = 35
-      self.m.chromium_swarming.add_default_tag('purpose:post-commit')
-      self.m.chromium_swarming.add_default_tag('purpose:CI')
 
   def runhooks(self, **kwargs):
     if (self.m.chromium.c.compile_py.compiler and
@@ -668,26 +558,13 @@ class V8Api(recipe_api.RecipeApi):
   def should_test(self):
     return self.bot_type in ['tester', 'builder_tester']
 
-  @property
-  def relative_path_to_d8(self):
-    return self.m.path.join('out', self.m.chromium.c.build_config_fs, 'd8')
-
-  def extra_tests_from_properties(self):
-    """Returns runnable testing.BaseTest objects for each extra test specified
-    by parent_test_spec property.
-    """
-    return [
-      testing.create_test(test, self.m)
-      for test in v8_builders.TestSpec.from_properties_dict(self.m.properties)
-    ]
-
   def extra_tests_from_test_spec(self, test_spec):
     """Returns runnable testing.BaseTest objects for each extra test specified
     in the test spec of the current builder. Note that it converts experimental
     builders name in order to fit the naming convention.
     """
     return [
-      testing.create_test(test, self.m)
+      self.m.v8_tests.create_test(test)
       for test in test_spec.get_tests(
           self.normalized_builder_name(triggered=True))
     ]
@@ -710,7 +587,7 @@ class V8Api(recipe_api.RecipeApi):
 
     # Fallback for branch builders.
     if not self.m.path.exists(test_spec_file):
-      return v8_builders.EmptyTestSpec
+      return self.m.v8_tests.EMPTY_TEST_SPEC
 
     try:
       # Eval python literal file.
@@ -724,33 +601,14 @@ class V8Api(recipe_api.RecipeApi):
           f'Failed to parse test specification "{test_spec_file}": {e}')
 
     # Transform into object.
-    test_spec = TestSpec.from_python_literal(full_test_spec, self.builderset)
+    test_spec = self.m.v8_tests.TEST_SPEC.from_python_literal(
+        full_test_spec, self.builderset)
 
     # Log test spec for debuggability.
     self.m.step.active_result.presentation.logs['test_spec'] = (
         test_spec.log_lines())
 
     return test_spec
-
-  def isolate_targets_from_tests(self, tests):
-    """Returns the isolated targets associated with a list of tests.
-
-    Args:
-      tests: A list of test names used as keys in the V8 API's test config.
-    """
-    if not self.bot_config.get('enable_swarming', True):
-      return []
-    targets = []
-    for test in tests:
-      config = self.test_configs.get(test) or {}
-
-      # Tests either define an explicit isolate target or use the test
-      # names for convenience.
-      if config.get('isolated_target'):
-        targets.append(config['isolated_target'])
-      elif config.get('tests'):
-        targets.extend(config['tests'])
-    return targets
 
   def isolate_tests(self, isolate_targets, out_dir=None):
     """Upload isolated tests to isolate server.
@@ -777,7 +635,7 @@ class V8Api(recipe_api.RecipeApi):
           swarm_hashes_property_name=None,
           step_name='isolate tests (perf)',
       )
-      self.isolated_tests.update(self.m.isolate.isolated_tests)
+      self.m.v8_tests.isolated_tests.update(self.m.isolate.isolated_tests)
     elif isolate_targets:
       self.m.isolate.isolate_tests(
           output_dir,
@@ -785,9 +643,9 @@ class V8Api(recipe_api.RecipeApi):
           verbose=True,
           swarm_hashes_property_name=None,
       )
-      self.isolated_tests.update(self.m.isolate.isolated_tests)
+      self.m.v8_tests.isolated_tests.update(self.m.isolate.isolated_tests)
 
-      if self.isolated_tests:
+      if self.m.v8_tests.isolated_tests:
         self.upload_isolated_json()
 
   def _filtered_gn_args(self, gn_args):
@@ -799,7 +657,7 @@ class V8Api(recipe_api.RecipeApi):
   @property
   def target_bits(self):
     """Returns target bits (as int) inferred from gn arguments from MB."""
-    for arg in self.gn_args:
+    for arg in self.m.v8_tests.gn_args:
       match = TARGET_CPU_RE.match(arg)
       if match:
         return 64 if '64' in match.group(1) else 32
@@ -908,7 +766,7 @@ class V8Api(recipe_api.RecipeApi):
     return new_mb_config_path
 
   def compile(
-      self, test_spec=v8_builders.EmptyTestSpec, mb_config_path=None,
+      self, test_spec=None, mb_config_path=None,
       out_dir=None, **kwargs):
     """Compile all desired targets and isolate tests.
 
@@ -935,8 +793,7 @@ class V8Api(recipe_api.RecipeApi):
       # Calculate targets to isolate from V8-side test specification. The
       # test_spec contains extra TestStepConfig objects for the current builder
       # and all its triggered builders.
-      isolate_targets = self.isolate_targets_from_tests(
-          test_spec.get_all_test_names())
+      isolate_targets = self.m.v8_tests.isolate_targets_from_tests(test_spec)
 
       # Add the performance-tests isolate everywhere, where the perf-bot proxy
       # is triggered.
@@ -968,11 +825,12 @@ class V8Api(recipe_api.RecipeApi):
 
         # Update the gn args, which are printed to the user on test failures
         # for easier build reproduction.
-        self.gn_args = self._filtered_gn_args(gn_args)
+        self.m.v8_tests.gn_args = self._filtered_gn_args(gn_args)
 
         # Create logs surfacing GN arguments. This information is critical to
         # developers for reproducing failures locally.
-        self.m.step.active_result.presentation.logs['gn_args'] = self.gn_args
+        presentation = self.m.step.active_result.presentation
+        presentation.logs['gn_args'] = self.m.v8_tests.gn_args
       elif self.m.chromium.c.project_generator.tool == 'gn':
         self.m.chromium.run_gn(
             use_goma=use_goma, build_dir=build_dir,
@@ -1046,7 +904,7 @@ class V8Api(recipe_api.RecipeApi):
 
   def upload_isolated_json(self):
     self.m.gsutil.upload(
-        self.m.json.input(self.isolated_tests),
+        self.m.json.input(self.m.v8_tests.isolated_tests),
         self.isolated_archive_path,
         f'{self.revision}.json',
         args=['-a', 'public-read'],
@@ -1091,7 +949,7 @@ class V8Api(recipe_api.RecipeApi):
             {'bot_default': '[dummy hash for bisection]/123'}),
     )
     step_result = self.m.step.active_result
-    self.isolated_tests = step_result.json.output
+    self.m.v8_tests.isolated_tests = step_result.json.output
 
   @property
   def build_output_dir(self):
@@ -1199,62 +1057,10 @@ class V8Api(recipe_api.RecipeApi):
     result.presentation.links['report'] = (
       f'https://storage.googleapis.com/chromium-v8/{dest}/index.html')
 
-  def create_test(self, test):
-    """Wrapper that allows to shortcut common tests with their names.
-
-    Returns: A runnable test instance.
-    """
-    return testing.create_test(test, self.m)
-
   @property
   def is_pure_swarming_tester(self):
     return (self.bot_type == 'tester' and
             self.bot_config.get('enable_swarming', True))
-
-  @contextlib.contextmanager
-  def maybe_nest(self, condition, parent_step_name):
-    if not condition:
-      yield
-    else:
-      with self.m.step.nest(parent_step_name):
-        yield
-
-  def runtests(self, tests):
-    if self.extra_flags:
-      result = self.m.step('Customized run with extra flags', cmd=None)
-      result.presentation.step_text += ' '.join(self.extra_flags)
-      assert all(re.match(r'[\w\-]*', x) for x in self.extra_flags), (
-          'no special characters allowed in extra flags')
-
-    start_time_sec = self.m.time.time()
-
-    # Apply test filter.
-    # TODO(machenbach): Track also the number of tests that ran and throw an
-    # error if the overall number of tests from all steps was zero.
-    tests = [t for t in tests if t.apply_filter()]
-
-    swarming_tests = [t for t in tests if t.uses_swarming]
-    local_tests = [t for t in tests if not t.uses_swarming]
-
-    # There are no mixed tests in V8.
-    assert not local_tests or not swarming_tests
-
-    if swarming_tests:
-      test_group = testing.SwarmingGroup(self.m, swarming_tests)
-    else:
-      test_group = testing.LocalGroup(self.m, local_tests)
-
-    with self.maybe_nest(swarming_tests, 'trigger tests'):
-      test_group.pre_run()
-
-    test_group.run()
-
-    test_group.raise_on_failure()
-
-    test_group.raise_on_empty()
-
-    self.test_duration_sec = self.m.time.time() - start_time_sec
-    return test_group.test_results
 
   def maybe_bisect(self, test_results, test_spec):
     """Build-local bisection for one failure."""
@@ -1272,18 +1078,19 @@ class V8Api(recipe_api.RecipeApi):
     # ongoing build's total.
     duration_factor = self.m.properties.get(
         'bisect_duration_factor', BISECT_DURATION_FACTOR)
-    if (failure.duration * duration_factor > self.test_duration_sec):
+    if (failure.duration * duration_factor >
+        self.m.v8_tests.test_duration_sec):
       step_result = self.m.step(
           'Bisection disabled - test too slow', cmd=None)
       return
 
     # Don't retry failures during bisection.
-    self.rerun_failures_count = 0
+    self.m.v8_tests.rerun_failures_count = 0
 
     # Suppress using shards to be able to rerun single tests.
-    self.c.testing.may_shard = False
+    self.m.v8_tests.c.testing.may_shard = False
 
-    test = self.create_test(failure.test_step_config)
+    test = self.m.v8_tests.create_test(failure.test_step_config)
     def test_func(_):
       return test.rerun(failure_dict=failure.failure_dict)
 
@@ -1354,196 +1161,12 @@ class V8Api(recipe_api.RecipeApi):
     self.report_culprits(culprit_range)
 
   @staticmethod
-  def format_duration(duration_in_seconds):
-    duration = datetime.timedelta(seconds=duration_in_seconds)
-    time = (datetime.datetime.min + duration).time()
-    return time.strftime('%M:%S:') + '%03i' % int(time.microsecond / 1000)
-
-  def _duration_results_text(self, test):
-    return [
-      'Test: %s' % test['name'],
-      'Flags: %s' % ' '.join(test['flags']),
-      'Command: %s' % test['command'],
-      'Duration: %s' % V8Api.format_duration(test['duration']),
-    ]
-
-  def _update_durations(self, output, presentation):
-    # Slowest tests duration summary.
-    lines = []
-    for test in output['slowest_tests']:
-      suffix = ''
-      if test.get('marked_slow') is False:
-        suffix = ' *'
-      lines.append(
-          '%s %s%s' % (V8Api.format_duration(test['duration']),
-                       test['name'], suffix))
-
-    # Slowest tests duration details.
-    lines.extend(['', 'Details:', ''])
-    for test in output['slowest_tests']:
-      lines.extend(self._duration_results_text(test))
-    presentation.logs['durations'] = lines
-
-  def ui_test_label(self, full_test_name):
-    # Use test base name as UI label (without suite and directory names).
-    label = full_test_name.split('/')[-1]
-    # Truncate the label if it is still too long.
-    if len(label) > MAX_LABEL_SIZE:
-      label = label[:MAX_LABEL_SIZE - 3] + '...'
-    return label
-
-  def _get_failure_logs(self, output, failure_factory):
-    if not output['results']:
-      return {}, [], {}, []
-
-    unique_results = defaultdict(list)
-    for result in output['results']:
-      label = self.ui_test_label(result['name'])
-      # Group tests with the same label (usually the same test that ran under
-      # different configurations).
-      unique_results[label].append(result)
-
-    failure_log = {}
-    flake_log = {}
-    failures = []
-    flakes = []
-    for label in sorted(unique_results)[:MAX_FAILURE_LOGS]:
-      failure_lines = []
-      flake_lines = []
-
-      # Group results by command. The same command might have run multiple
-      # times to detect flakes.
-      results_per_command = defaultdict(list)
-      for result in unique_results[label]:
-        results_per_command[result['command']].append(result)
-
-      for command in results_per_command.keys():
-        results = results_per_command[command]
-        # Determine flakiness.
-        failure = failure_factory(results)
-        if failure.is_flaky:
-          # This is a flake.
-          flakes.append(failure)
-          flake_lines += failure.log_lines()
-        else:
-          # This is a failure.
-          failures.append(failure)
-          failure_lines += failure.log_lines()
-
-      if failure_lines:
-        failure_log[label] = failure_lines
-      if flake_lines:
-        flake_log[label] = flake_lines
-
-    return failure_log, failures, flake_log, flakes
-
-  def _update_failure_presentation(self, log, failures, presentation):
-    for label in sorted(log):
-      presentation.logs[label] = log[label]
-
-    if failures:
-      # Number of failures.
-      presentation.step_text += f'failures: {len(failures)}<br/>'
-
-  @property
-  def extra_flags(self):
-    extra_flags = self.m.properties.get('extra_flags', '')
-    if isinstance(extra_flags, str):
-      extra_flags = extra_flags.split()
-    assert isinstance(extra_flags, list) or isinstance(extra_flags, tuple)
-    return list(extra_flags)
-
-  def _with_extra_flags(self, args):
-    """Returns: the arguments with additional extra flags inserted.
-
-    Extends a possibly existing extra flags option.
-    """
-    if not self.extra_flags:
-      return args
-
-    options, args = TEST_RUNNER_PARSER.parse_known_args(args)
-
-    if options.extra_flags:
-      new_flags = [options.extra_flags] + self.extra_flags
-    else:
-      new_flags = self.extra_flags
-
-    args.extend(['--extra-flags', ' '.join(new_flags)])
-    return args
-
-  @property
-  def test_filter(self):
-    return [f for f in self.m.properties.get('testfilter', [])
-            if f != 'defaulttests']
-
-  def _applied_test_filter(self, test):
-    """Returns: the list of test filters that match a test configuration."""
-    # V8 test filters always include the full suite name, followed
-    # by more specific paths and possibly ending with a glob, e.g.:
-    # 'mjsunit/regression/prefix*'.
-    return [f for f in self.test_filter
-              for t in test.get('suite_mapping', test['tests'])
-              if f.startswith(t)]
-
-  def _setup_test_runner(self, test, applied_test_filter, test_step_config):
-    env = {}
-    full_args = [
-      '--progress=verbose',
-      '--outdir', self.m.path.join('out', self.m.chromium.c.build_config_fs),
-    ]
-
-    # TODO(machenbach): Remove exception for branches once tested on main
-    # waterfall.
-    if self.m.builder_group.for_current == 'client.v8.branches':
-      full_args.append('--timeout=200')  # pragma: no cover
-
-    # Add optional non-standard root directory for test suites.
-    if test.get('test_root'):
-      full_args += ['--test-root', test['test_root']]
-
-    # On reruns, there's a fixed random seed set in the test configuration.
-    if ('--random-seed' not in test.get('test_args', []) and
-        test.get('use_random_seed', True)):
-      full_args.append(f'--random-seed={self.testing_random_seed()}')
-
-    # Either run tests as specified by the filter (trybots only) or as
-    # specified by the test configuration.
-    if applied_test_filter:
-      full_args += applied_test_filter
-    else:
-      full_args += list(test.get('tests', []))
-
-    # Add test-specific test arguments.
-    full_args += test.get('test_args', [])
-
-    # Add builder-specific test arguments.
-    full_args += self.c.testing.test_args
-
-    # Add builder-, test- and step-specific variants.
-    full_args += testing.test_args_from_variants(
-        self.bot_config.get('variants'),
-        test.get('variants'),
-        test_step_config.variants,
-    )
-
-    # Add step-specific test arguments.
-    full_args += test_step_config.test_args
-
-    full_args = self._with_extra_flags(full_args)
-
-    full_args += [
-      f'--rerun-failures-count={self.rerun_failures_count}',
-    ]
-
-    return full_args, env
-
-  @staticmethod
   def _copy_property(src, dest, key):
     if key in src:
       dest[key] = src[key]
 
-  def maybe_trigger(self, test_spec=v8_builders.EmptyTestSpec,
-                    **additional_properties):
+  def maybe_trigger(self, test_spec=None, **additional_properties):
+    test_spec = test_spec or self.m.v8_tests.EMPTY_TEST_SPEC
     triggers = self.bot_config.get('triggers', [])
     triggers_proxy = self.bot_config.get('triggers_proxy', False)
     if not triggers and not triggers_proxy:
@@ -1553,7 +1176,7 @@ class V8Api(recipe_api.RecipeApi):
       'parent_got_revision': self.revision,
       'parent_buildername': self.m.buildbucket.builder_name,
       'parent_build': self.m.buildbucket.build_url(),
-      'parent_gn_args': self.gn_args,
+      'parent_gn_args': self.m.v8_tests.gn_args,
     }
     if self.m.scheduler.triggers:
       sched_trs = self.m.scheduler.triggers
@@ -1586,7 +1209,7 @@ class V8Api(recipe_api.RecipeApi):
       properties.update(testfilter=list(self.m.properties['testfilter']))
     self._copy_property(self.m.properties, properties, 'extra_flags')
 
-    swarm_hashes = self.isolated_tests
+    swarm_hashes = self.m.v8_tests.isolated_tests
     if swarm_hashes:
       properties['swarm_hashes'] = swarm_hashes
     properties.update(**additional_properties)

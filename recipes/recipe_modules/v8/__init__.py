@@ -11,7 +11,6 @@ DEPS = [
     'build',
     'builder_group',
     'chromium',
-    'chromium_swarming',
     'depot_tools/bot_update',
     'depot_tools/gclient',
     'depot_tools/git',
@@ -34,14 +33,12 @@ DEPS = [
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
-    'recipe_engine/resultdb',
     'recipe_engine/runtime',
     'recipe_engine/scheduler',
     'recipe_engine/step',
-    'recipe_engine/swarming',
-    'recipe_engine/time',
     'recipe_engine/url',
     'test_utils',
+    'v8_tests',
 ]
 
 PROPERTIES = {

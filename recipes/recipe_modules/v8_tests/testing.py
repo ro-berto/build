@@ -1,4 +1,4 @@
-# Copyright 2015 The Chromium Authors. All rights reserved.
+# Copyright 2022 The Chromium Authors
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -232,7 +232,7 @@ class BaseTest(object):
       assert len(test['tests']) == 1
       isolated_target = test['tests'][0]
 
-    cas_digest = self.api.v8.isolated_tests.get(isolated_target)
+    cas_digest = self.api.v8_tests.isolated_tests.get(isolated_target)
     assert cas_digest
     assert '/' in cas_digest
 
@@ -242,10 +242,10 @@ class BaseTest(object):
     task = self.api.chromium_swarming.task(
         cas_input_root=cas_digest, raw_cmd=raw_cmd, **kwargs)
 
-    if self.api.v8.resultdb:
+    if self.api.v8_tests.resultdb:
       request = task.request.with_resultdb()
       request_slice = request[0].with_command(
-          self.api.v8.resultdb.wrap(self.api, raw_cmd))
+          self.api.v8_tests.resultdb.wrap(self.api, raw_cmd))
       task.request = request.with_slice(0, request_slice)
 
     return task
@@ -275,28 +275,29 @@ class V8Test(BaseTest):
     self.applied_test_filter = ''
 
   def apply_filter(self):
-    test_config = self.api.v8.test_configs[self.name]
-    self.applied_test_filter = self.api.v8._applied_test_filter(test_config)
-    if self.api.v8.test_filter and not self.applied_test_filter:
+    test_config = self.api.v8_tests.test_configs[self.name]
+    self.applied_test_filter = self.api.v8_tests._applied_test_filter(
+        test_config)
+    if self.api.v8_tests.test_filter and not self.applied_test_filter:
       self.api.step(test_config['name'] + ' - skipped', cmd=None)
       return False
     return True
 
   def run(self, test=None, **kwargs):
-    test = test or self.api.v8.test_configs[self.name]
+    test = test or self.api.v8_tests.test_configs[self.name]
 
-    full_args, env = self.api.v8._setup_test_runner(
+    full_args, env = self.api.v8_tests._setup_test_runner(
         test, self.applied_test_filter, self.test_step_config)
     full_args += [
       '--json-test-results',
       self.api.json.output(add_json_log=False),
     ]
+    script = self.api.path['checkout'].join('tools', 'run-tests.py')
     with self.api.context(cwd=self.api.path['checkout'], env=env):
-      self.api.v8.python(
+      self.api.step(
         test['name'] + self.test_step_config.step_name_suffix,
-        self.api.path['checkout'].join('tools', 'run-tests.py'),
-        full_args,
-        step_test_data=self.api.v8.test_api.output_json,
+        ['python3', '-u', script] + full_args,
+        step_test_data=self.api.v8_tests.test_api.output_json,
         **kwargs
       )
     return self.post_run(test)
@@ -329,11 +330,11 @@ class V8Test(BaseTest):
       step_result.presentation.logs['test filter'] = self.applied_test_filter
 
     assert isinstance(json_output, dict)
-    self.api.v8._update_durations(json_output, step_result.presentation)
+    self.api.v8_tests._update_durations(json_output, step_result.presentation)
     failure_factory = Failure.factory_func(self)
     failure_log, failures, flake_log, flakes = (
-        self.api.v8._get_failure_logs(json_output, failure_factory))
-    self.api.v8._update_failure_presentation(
+        self.api.v8_tests._get_failure_logs(json_output, failure_factory))
+    self.api.v8_tests._update_failure_presentation(
         failure_log, failures, step_result.presentation)
     self._add_bug_links(failures, step_result.presentation)
 
@@ -355,7 +356,7 @@ class V8Test(BaseTest):
           cmd=None)
       # TODO(sergiyb): Use WARNING result type after crbug.com/854099 is fixed.
       step_result.presentation.status = self.api.step.FAILURE
-      self.api.v8._update_failure_presentation(
+      self.api.v8_tests._update_failure_presentation(
             flake_log, flakes, step_result.presentation)
       self._add_bug_links(flakes, step_result.presentation)
 
@@ -368,7 +369,7 @@ class V8Test(BaseTest):
   def _add_bug_links(self, failures, presentation):
     """Adds links to search/file bugs for up to MAX_BUG_LINKS tests."""
     for failure in failures[:MAX_BUG_LINKS]:
-      ui_label = self.api.v8.ui_test_label(failure.name)
+      ui_label = self.api.v8_tests.ui_test_label(failure.name)
       link_params = failure.get_monorail_params(
           quote(self.api.buildbucket.build_url()))
 
@@ -387,7 +388,7 @@ class V8Test(BaseTest):
     assert failure_dict.get('variant')
     assert failure_dict.get('random_seed')
 
-    orig_config = self.api.v8.test_configs[self.name]
+    orig_config = self.api.v8_tests.test_configs[self.name]
 
     # If not specified, the isolated target is the same as the first test of
     # the original list. We need to set it explicitly now, as the tests
@@ -426,8 +427,6 @@ def _trigger_swarming_task(api, task, test_step_config):
   """
   task_slice = task.request[0]
   task_dimensions = task_slice.dimensions
-  # Add custom dimensions.
-  task_dimensions.update(api.v8.bot_config.get('swarming_dimensions', {}))
 
   # Override with per-test dimensions.
   task_dimensions.update(test_step_config.swarming_dimensions or {})
@@ -486,10 +485,10 @@ class V8SwarmingTest(V8Test):
 
     with self.api.swarming.on_path():
       with self.api.context(infra_steps=True):
-        return self.api.v8.python(
-            name=self.test['name'] + self.test_step_config.step_name_suffix,
-            script=self.api.v8.resource('collect_v8_task.py'),
-            args=args,
+        script = self.api.v8_tests.resource('collect_v8_task.py')
+        return self.api.step(
+            self.test['name'] + self.test_step_config.step_name_suffix,
+            ['python3', '-u', script] + args,
             step_test_data=kwargs.pop('step_test_data', None),
             **kwargs)
 
@@ -501,8 +500,8 @@ class V8SwarmingTest(V8Test):
 
   def pre_run(self, test=None, **kwargs):
     # Set up arguments for test runner.
-    self.test = test or self.api.v8.test_configs[self.name]
-    extra_args, _ = self.api.v8._setup_test_runner(
+    self.test = test or self.api.v8_tests.test_configs[self.name]
+    extra_args, _ = self.api.v8_tests._setup_test_runner(
         self.test, self.applied_test_filter, self.test_step_config)
 
     # Let json results be stored in swarming's output folder. The collect
@@ -515,7 +514,7 @@ class V8SwarmingTest(V8Test):
 
     # Initialize number of shards, either per test or per builder.
     shards = 1
-    if self.api.v8.c.testing.may_shard:
+    if self.api.v8_tests.c.testing.may_shard:
       shards = self.test_step_config.shards
 
     command = ['tools/%s.py' % self.test.get('tool', 'run-tests')]
@@ -545,7 +544,7 @@ class V8SwarmingTest(V8Test):
       # swarming collect step like for local testing.
       self.api.chromium_swarming.collect_task(
         self.task,
-        step_test_data=self.api.v8.test_api.output_json,
+        step_test_data=self.api.v8_tests.test_api.output_json,
       )
     except self.api.step.InfraFailure as e:
       result += TestResults.infra_failure(e)
@@ -567,7 +566,7 @@ class V8GenericSwarmingTest(BaseTest):
     self._command = command or []
     self._title = (
         title or
-        self.api.v8.test_configs[self.name].get('name', 'Generic test'))
+        self.api.v8_tests.test_configs[self.name].get('name', 'Generic test'))
     self.test = None
     self.task = None
 
@@ -590,7 +589,7 @@ class V8GenericSwarmingTest(BaseTest):
     return True
 
   def pre_run(self, test=None, **kwargs):
-    self.test = test or self.api.v8.test_configs[self.name]
+    self.test = test or self.api.v8_tests.test_configs[self.name]
     self.task = self.create_task(
         self.test,
         name=self.title,
@@ -645,7 +644,7 @@ class V8CheckInitializers(V8GenericSwarmingTest):
   def command(self):
     return [
       'tools/check-static-initializers.sh',
-      self.api.v8.relative_path_to_d8,
+      self.api.v8_tests.relative_path_to_d8,
     ]
 
 class V8FuchsiaUnittests(V8GenericSwarmingTest):
@@ -657,8 +656,7 @@ class V8FuchsiaUnittests(V8GenericSwarmingTest):
   def command(self):
     return [
       self.api.path.join(
-          'out', self.api.chromium.c.build_config_fs,
-          'bin', 'run_v8_unittests'),
+          'out', 'build', 'bin', 'run_v8_unittests'),
     ]
 
 class V8CheckBytecodeBaseline(V8GenericSwarmingTest):
@@ -670,8 +668,7 @@ class V8CheckBytecodeBaseline(V8GenericSwarmingTest):
   def command(self):
     return [
       self.api.path.join(
-          'out', self.api.chromium.c.build_config_fs,
-          'generate-bytecode-expectations'),
+          'out', 'build', 'generate-bytecode-expectations'),
       '--check-baseline',
     ]
 
@@ -687,7 +684,7 @@ class V8Fuzzer(V8GenericSwarmingTest):
         title='Fuzz',
         command=[
           'tools/jsfunfuzz/fuzz-harness.sh',
-          api.v8.relative_path_to_d8,
+          api.v8_tests.relative_path_to_d8,
           '${ISOLATED_OUTDIR}/%s' % self.archive,
         ],
     )
@@ -816,7 +813,7 @@ class Failure(object):
     return ['%s:%s' % (k, v) for k, v in dims.items()]
 
   def _flako_properties(self):
-    test_config = self.api.v8.test_configs[self.test.name]
+    test_config = self.api.v8_tests.test_configs[self.test.name]
 
     # In order to use the test runner to also repro cases from the number
     # fuzzer, we have to ignore the arguments passed to the fuzzer and instead
@@ -830,7 +827,7 @@ class Failure(object):
     else:  # Standard test runner.
       # TODO(machenbach): The api should hide the details how to get the args.
       extra_args = (list(test_config.get('test_args', [])) +
-                    list(self.api.v8.c.testing.test_args) +
+                    list(self.api.v8_tests.c.testing.test_args) +
                     list(self.test_step_config.test_args))
       variant = self.failure_dict['variant']
 
@@ -906,11 +903,11 @@ class Failure(object):
     lines.append('Variant: %s' % self.failure_dict['variant'])
     lines.append('')
     lines.append('GN arguments:')
-    if self.api.v8.gn_args is None:
+    if self.api.v8_tests.gn_args is None:
       lines.append(
           'Not available. Please look up the builder\'s configuration.')
     else:
-      lines.extend(self.api.v8.gn_args)
+      lines.extend(self.api.v8_tests.gn_args)
     lines.append('')
 
     # Print the command line for flake bisect.
@@ -933,7 +930,7 @@ class Failure(object):
       if result.get('expected'):
         lines.append('Expected outcomes: %s' % ", ".join(result['expected']))
       lines.append(
-          'Duration: %s' % self.api.v8.format_duration(result['duration']))
+          'Duration: %s' % self.api.v8_tests.format_duration(result['duration']))
       lines.append('')
       if result['stdout']:
         lines.append('Stdout:')
@@ -1049,12 +1046,13 @@ class SwarmingGroup(TestGroup):
 
 
 def create_test(test_step_config, api):
-  if api.v8.bot_config.get('enable_swarming', True):
+  if api.v8_tests.enable_swarming:
     tools_mapping = TOOL_TO_TEST_SWARMING
   else:
     tools_mapping = TOOL_TO_TEST
 
   # The tool the test is going to use. Default: V8 test runner (run-tests).
-  tool = api.v8.test_configs[test_step_config.name].get('tool', 'run-tests')
+  tool = api.v8_tests.test_configs[test_step_config.name].get(
+      'tool', 'run-tests')
   test_cls = tools_mapping[tool]
   return test_cls(test_step_config, api)

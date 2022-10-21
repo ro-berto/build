@@ -26,6 +26,7 @@ DEPS = [
   'recipe_engine/platform',
   'recipe_engine/step',
   'v8',
+  'v8_tests',
 ]
 
 PROPERTIES = {
@@ -51,7 +52,7 @@ PROPERTIES = {
 def RunSteps(api, custom_deps, default_targets, gclient_vars, target_arch,
              target_platform, use_goma):
   v8 = api.v8
-  v8.load_static_test_configs()
+  api.v8_tests.load_static_test_configs()
   bot_config = v8.update_bot_config(
       v8.bot_config_by_buildername(use_goma=use_goma),
       binary_size_tracking=None,
@@ -69,7 +70,7 @@ def RunSteps(api, custom_deps, default_targets, gclient_vars, target_arch,
   v8.set_gclient_custom_deps(custom_deps)
   v8.set_chromium_configs(clobber=False, default_targets=default_targets)
 
-  test_spec = v8.TEST_SPEC()
+  test_spec = api.v8_tests.TEST_SPEC()
   tests = []
 
   with api.step.nest('initialization'):
@@ -77,7 +78,7 @@ def RunSteps(api, custom_deps, default_targets, gclient_vars, target_arch,
       api.chromium.taskkill()
 
     v8.checkout()
-    v8.set_up_swarming()
+    api.v8_tests.set_up_swarming()
     v8.runhooks()
 
     # Dynamically load test specifications from all discovered test roots.
@@ -93,7 +94,7 @@ def RunSteps(api, custom_deps, default_targets, gclient_vars, target_arch,
 
   properties = dict(test_spec.as_properties_dict(
       v8.normalized_builder_name(triggered=True)))
-  properties['swarm_hashes'] = v8.isolated_tests
+  properties['swarm_hashes'] = api.v8_tests.isolated_tests
 
   properties_step = api.step('compilator properties', [])
   properties_step.presentation.properties['compilator_properties'] = properties

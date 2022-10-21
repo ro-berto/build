@@ -27,6 +27,7 @@ DEPS = [
     'recipe_engine/json',
     'recipe_engine/step',
     'v8',
+    'v8_tests',
 ]
 
 MAX_CONFIGS = 16
@@ -120,14 +121,14 @@ def RunSteps(api):
   build_results = []
   with api.step.nest('collect builds'):
     for index, build in enumerate(builds):
-      label = api.v8.ui_test_label(configs[index]['test_name'])
+      label = api.v8_tests.ui_test_label(configs[index]['test_name'])
       build_results.append(api.buildbucket.collect_build(
           int(build.id), step_name=label, mirror_status=True, timeout=4*3600))
 
   # Emit summary steps for each build.
   non_flaky_tests = []
   for index, build in enumerate(build_results):
-    label = api.v8.ui_test_label(configs[index]['test_name'])
+    label = api.v8_tests.ui_test_label(configs[index]['test_name'])
     step_result = api.step(label, cmd=None)
     update_step_presentation(
         api, step_result.presentation, build, configs[index])
