@@ -525,23 +525,6 @@ SPEC = {
             simulation_platform='linux',
             serialize_tests=True,
         ),
-    'Mac FYI Retina Debug (NVIDIA)':
-        _chromium_gpu_fyi_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'mac',
-            },
-            execution_mode=builder_spec.TEST,
-            parent_buildername='GPU FYI Mac Builder (dbg)',
-            simulation_platform='linux',
-            serialize_tests=True,
-        ),
     'Mac FYI Retina ASAN (AMD)':
         _chromium_gpu_fyi_spec(
             chromium_config='chromium',

@@ -547,12 +547,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='GPU FYI Mac Builder',
                 tester='Mac FYI Release (Intel)',
             ),
-        'gpu-fyi-try-mac-nvidia-retina-dbg':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Mac Builder (dbg)',
-                tester='Mac FYI Retina Debug (NVIDIA)',
-            ),
         'gpu-fyi-try-mac-nvidia-retina-exp':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.gpu.fyi',
