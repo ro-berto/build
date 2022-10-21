@@ -1641,6 +1641,45 @@ def GenTests(api):
   )
 
   yield api.test(
+      'inverted_disabled_in_dry_run',
+      basic(
+          remove_src_checkout_experiment=False, inverted_shard_experiment=True),
+      api.properties(**{
+          '$recipe_engine/cq': {
+              "active": True,
+              "runMode": "DRY_RUN",
+          },
+      }),
+      api.post_process(post_process.DoesNotRun, 'find successful Quick Runs'),
+  )
+
+  yield api.test(
+      'inverted_bail_early_enabled_in_dry_run',
+      get_try_build(
+          remove_src_checkout_experiment=True,
+          inverted_shard_experiment=True,
+          bail_early_experiment=True),
+      ctbc_properties(),
+      api.properties(
+          **{
+              '$build/chromium_orchestrator':
+                  InputProperties(
+                      compilator='fake-compilator',
+                      compilator_watcher_git_revision='e841fc',
+                  ),
+          }),
+      api.properties(**{
+          '$recipe_engine/cq': {
+              "active": True,
+              "runMode": "DRY_RUN",
+          },
+      }),
+      api.post_process(post_process.MustRun, 'find successful Quick Runs'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
       'basic_with_inverted_shard_with_qr_no_compilator_full_runs',
       get_try_build(
           remove_src_checkout_experiment=True,

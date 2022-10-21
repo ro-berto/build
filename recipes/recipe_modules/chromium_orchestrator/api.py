@@ -121,10 +121,16 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
     # skipped as part of a previous compatible Quick Run build
     reuseable_quick_run_build = None
     reuseable_compilator_build = None
-    if inverted_rts_experiment:
-      if (inverted_rts_bail_early_experiment and self.m.cq.active and
-          self.m.cq.run_mode == self.m.cq.QUICK_DRY_RUN):
-        return
+    if (inverted_rts_bail_early_experiment and self.m.cq.active and
+        self.m.cq.run_mode == self.m.cq.QUICK_DRY_RUN):
+      return
+
+    # Allow the bail early experiment to run inverted since this is only used
+    # on experimental builders. Otherwise we only want FULL_RUN to run the
+    # inverted
+    if inverted_rts_bail_early_experiment or (
+        inverted_rts_experiment and self.m.cq.active and
+        self.m.cq.run_mode == self.m.cq.FULL_RUN):
       reuseable_quick_run_build = self.find_compatible_quick_run_build()
 
       if reuseable_quick_run_build:
