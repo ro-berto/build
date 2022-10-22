@@ -1654,6 +1654,21 @@ def GenTests(api):
   )
 
   yield api.test(
+      'inverted_shard_disabled_by_footer',
+      basic(
+          remove_src_checkout_experiment=False, inverted_shard_experiment=True),
+      api.properties(**{
+          '$recipe_engine/cq': {
+              "active": True,
+              "runMode": "FULL_RUN",
+          },
+      }),
+      api.step_data('parse description',
+                    api.json.output({'Disable-Rts': ['true']})),
+      api.post_process(post_process.DoesNotRun, 'find successful Quick Runs'),
+  )
+
+  yield api.test(
       'inverted_bail_early_enabled_in_dry_run',
       get_try_build(
           remove_src_checkout_experiment=True,

@@ -130,7 +130,8 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
     # inverted
     if inverted_rts_bail_early_experiment or (
         inverted_rts_experiment and self.m.cq.active and
-        self.m.cq.run_mode == self.m.cq.FULL_RUN):
+        self.m.cq.run_mode == self.m.cq.FULL_RUN
+    ) and not self.m.chromium_tests.is_rts_footer_disabled():
       reuseable_quick_run_build = self.find_compatible_quick_run_build()
 
       if reuseable_quick_run_build:

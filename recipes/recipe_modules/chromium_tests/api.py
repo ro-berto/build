@@ -31,6 +31,8 @@ AUTOROLLER_ACCOUNT_IDS = (1302611, 1274527)
 
 ALL_TEST_BINARIES_ISOLATE_NAME = 'all_test_binaries'
 
+DISABLE_RTS_FOOTER = 'Disable-Rts'
+
 
 @attrs()
 class SwarmingExecutionInfo(object):
@@ -2061,9 +2063,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def get_quickrun_options(self, builder_config):
     rts_setting = None
     use_rts = (
-        self.m.cq.active and self.m.cq.run_mode == self.m.cq.QUICK_DRY_RUN and
-        builder_config.regression_test_selection == try_spec.QUICK_RUN_ONLY
-    ) or builder_config.regression_test_selection == try_spec.ALWAYS
+        (self.m.cq.active and self.m.cq.run_mode == self.m.cq.QUICK_DRY_RUN and
+         builder_config.regression_test_selection == try_spec.QUICK_RUN_ONLY and
+         not self.is_rts_footer_disabled()) or
+        (builder_config.regression_test_selection == try_spec.ALWAYS and
+         not self.is_rts_footer_disabled()))
 
     if use_rts:
       rts_setting = 'rts-chromium'
@@ -2087,6 +2091,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       step_result.presentation.properties['rts_setting'] = rts_setting
 
     return rts_setting
+
+  def is_rts_footer_disabled(self):
+    disabled = False
+    if self.m.tryserver.is_tryserver:
+      footer_vals = self.m.tryserver.get_footer(DISABLE_RTS_FOOTER)
+      if footer_vals:
+        disabled = footer_vals[-1].lower() == 'true'
+    return disabled
 
   def build_affected_targets(self,
                              builder_id,
