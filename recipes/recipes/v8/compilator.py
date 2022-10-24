@@ -16,7 +16,6 @@ The compilator is only used in a trybot setting.
 
 from recipe_engine.post_process import DropExpectation, StatusFailure
 from recipe_engine.recipe_api import Property
-from recipe_engine import recipe_test_api
 
 DEPS = [
   'builder_group',

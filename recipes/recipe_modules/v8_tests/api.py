@@ -153,13 +153,14 @@ class V8TestsApi(recipe_api.RecipeApi):
   def relative_path_to_d8(self):
     return self.m.path.join('out', 'build', 'd8')
 
-  def extra_tests_from_properties(self):
+  def extra_tests_from_properties(self, properties=None):
     """Returns runnable testing.BaseTest objects for each extra test specified
     by parent_test_spec property.
     """
+    properties = properties or self.m.properties
     return [
       self.create_test(test)
-      for test in self.TEST_SPEC.from_properties_dict(self.m.properties)
+      for test in self.TEST_SPEC.from_properties_dict(properties)
     ]
 
   def create_test(self, test):
