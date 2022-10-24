@@ -85,7 +85,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "env": {
-      "DEPOT_TOOLS_REPORT_BUILD": "v8/try/v8_foobar_compile_rel/8945511751514863184",
+      "DEPOT_TOOLS_REPORT_BUILD": "v8/try/v8_foobar_compile_ng_rel/8945511751514863184",
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "1800"
     },
@@ -160,7 +160,7 @@
     "cwd": "[CACHE]/builder/v8",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_REPORT_BUILD": "v8/try/v8_foobar_compile_rel/8945511751514863184"
+      "DEPOT_TOOLS_REPORT_BUILD": "v8/try/v8_foobar_compile_ng_rel/8945511751514863184"
     },
     "env_suffixes": {
       "PATH": [
@@ -450,10 +450,14 @@
     "name": "compilator properties",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@compilator_properties@{@@@",
+      "@@@STEP_LOG_LINE@compilator_properties@  \"gn_args\": [@@@",
+      "@@@STEP_LOG_LINE@compilator_properties@    \"target_cpu = \\\"x86\\\"\", @@@",
+      "@@@STEP_LOG_LINE@compilator_properties@    \"use_goma = true\"@@@",
+      "@@@STEP_LOG_LINE@compilator_properties@  ], @@@",
       "@@@STEP_LOG_LINE@compilator_properties@  \"swarm_hashes\": {}@@@",
       "@@@STEP_LOG_LINE@compilator_properties@}@@@",
       "@@@STEP_LOG_END@compilator_properties@@@",
-      "@@@SET_BUILD_PROPERTY@compilator_properties@{\"swarm_hashes\": {}}@@@"
+      "@@@SET_BUILD_PROPERTY@compilator_properties@{\"gn_args\": [\"target_cpu = \\\"x86\\\"\", \"use_goma = true\"], \"swarm_hashes\": {}}@@@"
     ]
   },
   {

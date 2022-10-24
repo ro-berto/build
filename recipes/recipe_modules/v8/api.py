@@ -522,12 +522,12 @@ class V8Api(recipe_api.RecipeApi):
     if builder_name.endswith('_exp'):
       builder_name = builder_name.replace('_exp', '_ng' + triggered_suffix)
     if self.m.properties['recipe'] == 'v8/compilator':
-      if builder_name.endswith('_compile_rel'):
+      if builder_name.endswith('_compile_ng_rel'):
         builder_name = builder_name.replace(
-            '_compile_rel', '_rel_ng' + triggered_suffix)
-      if builder_name.endswith('_compile_dbg'):
+            '_compile_ng_rel', '_rel_ng' + triggered_suffix)
+      if builder_name.endswith('_compile_ng_dbg'):
         builder_name = builder_name.replace(
-            '_compile_dbg', '_dbg_ng' + triggered_suffix)
+            '_compile_ng_dbg', '_dbg_ng' + triggered_suffix)
     return builder_name
 
   @property
