@@ -195,6 +195,8 @@
       "@@@STEP_LOG_LINE@test-name@@@@",
       "@@@STEP_LOG_LINE@test-name@Trigger flake bisect on command line:@@@",
       "@@@STEP_LOG_LINE@test-name@bb add v8/try.triggered/v8_flako -p 'bisect_builder_group=\"client.v8\"' -p 'bisect_buildername=\"V8 Foobar - builder\"' -p 'revision=\"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\"' -p 'swarming_dimensions=[\"cpu:x86-64\", \"pool:chromium.tests\", \"os:Ubuntu-16.04\"]' -p 'isolated_name=\"bot_default\"' -p 'test_name=\"suite-name/dir/test-name\"' -p 'timeout_sec=60' -p 'total_timeout_sec=120' -p 'variant=\"default\"' -p 'extra_args=[]'@@@",
+      "@@@STEP_LOG_LINE@test-name@Trigger progression testing on command line:@@@",
+      "@@@STEP_LOG_LINE@test-name@bb add v8/try.triggered/v8_flako -p 'bisect_builder_group=\"client.v8\"' -p 'bisect_buildername=\"V8 Foobar - builder\"' -p 'revision=\"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\"' -p 'swarming_dimensions=[\"cpu:x86-64\", \"pool:chromium.tests\", \"os:Ubuntu-16.04\"]' -p 'isolated_name=\"bot_default\"' -p 'test_name=\"suite-name/dir/test-name\"' -p 'timeout_sec=60' -p 'total_timeout_sec=120' -p 'variant=\"default\"' -p 'extra_args=[]' -p 'mode=\"progression\"'@@@",
       "@@@STEP_LOG_LINE@test-name@@@@",
       "@@@STEP_LOG_LINE@test-name@Local flake reproduction on command line:@@@",
       "@@@STEP_LOG_LINE@test-name@tools/run-tests.py --outdir=SET_OUTDIR_HERE --variants=default --random-seed-stress-count=1000000 --total-timeout-sec=120 --exit-after-n-failures=1 suite-name/dir/test-name@@@",
@@ -212,7 +214,7 @@
       "@@@STEP_LOG_LINE@test-name@Some errput.@@@",
       "@@@STEP_LOG_LINE@test-name@@@@",
       "@@@STEP_LOG_END@test-name@@@",
-      "@@@STEP_LINK@test-name (bugs)@https://bugs.chromium.org/p/v8/issues/list?q=label:Hotlist-Failure+\"suite-name/dir/test-name\"%20-status:Fixed%20-status:Verified&can=1@@@",
+      "@@@STEP_LINK@test-name (bugs)@https://bugs.chromium.org/p/v8/issues/list?q=\"suite-name/dir/test-name\"+label:Hotlist-Failure%20-status:Fixed%20-status:Verified&can=1@@@",
       "@@@STEP_LINK@test-name (new)@https://bugs.chromium.org/p/v8/issues/entry?template=Report+failing+test&summary=suite-name/dir/test-name+starts+failing&description=Failing+test:+suite-name/dir/test-name%0AFailure+link:+https%3A//cr-buildbucket.appspot.com/build/8945511751514863184%0A@@@",
       "@@@STEP_FAILURE@@@"
     ]
