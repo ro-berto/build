@@ -89,11 +89,6 @@
       "chromium.android:Marshmallow Phone Tester (rel)"
     ]
   },
-  "chromium.android:android-11-x86-rel": {
-    "builders": [
-      "chromium.android:android-11-x86-rel"
-    ]
-  },
   "chromium.android:android-cronet-arm64-dbg": {
     "builders": [
       "chromium.android:android-cronet-arm64-dbg",

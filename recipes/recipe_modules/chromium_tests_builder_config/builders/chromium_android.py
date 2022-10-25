@@ -129,7 +129,6 @@ SPEC.update([
     stock_config(
         'android-pie-arm64-wpt-rel-non-cq',
         chromium_config_kwargs={'TARGET_BITS': 64}),
-    stock_config('android-11-x86-rel', android_config='x86_builder'),
     stock_cronet_config('android-cronet-arm64-dbg', config='Debug'),
     stock_cronet_config('android-cronet-arm64-rel'),
     stock_cronet_config('android-cronet-asan-arm-rel'),
