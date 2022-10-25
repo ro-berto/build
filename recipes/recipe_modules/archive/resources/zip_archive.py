@@ -28,7 +28,8 @@ def main(argv):
 
   # Report the size of the zip file to help catch when it gets too big.
   zip_size = os.stat(zip_file)[stat.ST_SIZE]
-  print 'Zip file is %ld bytes' % zip_size
+  print('Zip file is %ld bytes' % zip_size)
+
 
 if __name__ == '__main__':
   sys.exit(main(sys.argv))

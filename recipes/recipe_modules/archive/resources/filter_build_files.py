@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 #
 # Copyright 2017 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
@@ -136,7 +136,7 @@ INCLUDED_FILES_IN_SUBDIR_PATTERN = {
 def filter_files_in_subdir(relative_root, filename):
   relative_root_components = relative_root.split(os.sep)
 
-  for subdir, patterns in EXCLUDED_FILES_IN_SUBDIR_PATTERN.iteritems():
+  for subdir, patterns in EXCLUDED_FILES_IN_SUBDIR_PATTERN.items():
     if subdir not in relative_root_components:
       continue
 
@@ -144,7 +144,7 @@ def filter_files_in_subdir(relative_root, filename):
       if pattern.match(filename):
         return True
 
-  for subdir, patterns in INCLUDED_FILES_IN_SUBDIR_PATTERN.iteritems():
+  for subdir, patterns in INCLUDED_FILES_IN_SUBDIR_PATTERN.items():
     if subdir not in relative_root_components:
       continue
 
