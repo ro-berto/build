@@ -80,7 +80,7 @@ def stock_config(name,
       'chromium_config': 'android',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['android', 'enable_reclient'],
+      'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
           'BUILD_CONFIG': config,
           'TARGET_BITS': 32,
@@ -105,7 +105,7 @@ def stock_cronet_config(name, config='Release', **kwargs):
       name,
       config=config,
       chromium_apply_config=['cronet_builder'],
-      gclient_apply_config=['android', 'enable_reclient'],
+      gclient_apply_config=['android'],
       **kwargs)
 
 
@@ -122,7 +122,8 @@ SPEC.update([
     stock_config(
         'android-pie-arm64-coverage-experimental-rel',
         gclient_apply_config=[
-            'android', 'use_clang_coverage', 'enable_reclient'
+            'android',
+            'use_clang_coverage',
         ],
         chromium_config_kwargs={'TARGET_BITS': 64}),
     stock_config(

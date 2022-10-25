@@ -6,7 +6,7 @@ from .. import builder_spec
 
 
 def CreateBuilderConfig(os, bits, angle_tot, swiftshader_tot):
-  configs = ['enable_reclient']
+  configs = []
   if angle_tot:
     configs.append('angle_top_of_tree')
   if swiftshader_tot:

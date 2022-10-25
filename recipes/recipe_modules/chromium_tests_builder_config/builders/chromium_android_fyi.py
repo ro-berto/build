@@ -26,7 +26,6 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'android',
-                'enable_reclient',
             ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
@@ -45,7 +44,6 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'android',
-                'enable_reclient',
             ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
@@ -62,7 +60,6 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'android',
-                'enable_reclient',
             ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -77,7 +74,7 @@ SPEC = {
             chromium_config='android',
             chromium_apply_config=['mb'],
             gclient_config='chromium',
-            gclient_apply_config=['android', 'enable_reclient'],
+            gclient_apply_config=['android'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 32,
@@ -103,7 +100,7 @@ SPEC = {
         _chromium_android_fyi_spec(
             chromium_config='android',
             gclient_config='chromium',
-            gclient_apply_config=['android', 'enable_reclient'],
+            gclient_apply_config=['android'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 32,
@@ -117,7 +114,7 @@ SPEC = {
             chromium_config='android',
             chromium_apply_config=['mb'],
             gclient_config='chromium',
-            gclient_apply_config=['android', 'enable_reclient'],
+            gclient_apply_config=['android'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 32,
@@ -145,7 +142,7 @@ SPEC = {
             chromium_config='android',
             chromium_apply_config=['mb'],
             gclient_config='chromium',
-            gclient_apply_config=['android', 'enable_reclient'],
+            gclient_apply_config=['android'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 32,
@@ -159,7 +156,7 @@ SPEC = {
             chromium_config='android',
             chromium_apply_config=['mb'],
             gclient_config='chromium',
-            gclient_apply_config=['android', 'enable_reclient'],
+            gclient_apply_config=['android'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -219,7 +216,7 @@ SPEC = {
             chromium_config='android',
             chromium_apply_config=['mb'],
             gclient_config='chromium',
-            gclient_apply_config=['android', 'enable_reclient'],
+            gclient_apply_config=['android'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,

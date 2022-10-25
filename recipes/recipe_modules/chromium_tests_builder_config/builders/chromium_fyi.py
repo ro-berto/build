@@ -134,7 +134,6 @@ SPEC = {
                 'TARGET_BITS': 64,
                 'TARGET_PLATFORM': 'linux',
             },
-            gclient_apply_config=['enable_reclient'],
             simulation_platform='linux',
             test_results_config='staging_server',
         ),
@@ -169,7 +168,7 @@ SPEC = {
             chromium_config='android',
             chromium_apply_config=['mb'],
             gclient_config='chromium',
-            gclient_apply_config=['android', 'enable_reclient'],
+            gclient_apply_config=['android'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -184,7 +183,7 @@ SPEC = {
             chromium_config='android',
             chromium_apply_config=['mb'],
             gclient_config='chromium',
-            gclient_apply_config=['android', 'enable_reclient'],
+            gclient_apply_config=['android'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 32,
@@ -252,7 +251,6 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'android',
-                'enable_reclient',
             ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -388,7 +386,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            gclient_apply_config=['enable_reclient'],
             execution_mode=builder_spec.COMPILE_AND_TEST,
             simulation_platform='linux',
         ),
@@ -531,7 +528,7 @@ SPEC = {
             chromium_config='android',
             chromium_apply_config=['download_vr_test_apks', 'mb'],
             gclient_config='chromium',
-            gclient_apply_config=['android', 'enable_reclient'],
+            gclient_apply_config=['android'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -546,7 +543,8 @@ SPEC = {
             chromium_apply_config=['download_vr_test_apks', 'mb'],
             gclient_config='chromium',
             gclient_apply_config=[
-                'android', 'use_clang_coverage', 'enable_reclient'
+                'android',
+                'use_clang_coverage',
             ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -579,7 +577,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            gclient_apply_config=['enable_reclient'],
             simulation_platform='linux',
         ),
     'mac-upload-perfetto':
@@ -609,9 +606,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium_asan',
             gclient_config='chromium',
-            gclient_apply_config=[
-                'enable_reclient',
-            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -628,9 +622,6 @@ SPEC = {
             chromium_config='chromium',
             chromium_apply_config=['mb'],
             gclient_config='chromium',
-            gclient_apply_config=[
-                'enable_reclient',
-            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -643,9 +634,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium_msan',
             gclient_config='chromium',
-            gclient_apply_config=[
-                'enable_reclient',
-            ],
             chromium_apply_config=['mb'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -660,9 +648,6 @@ SPEC = {
             chromium_config='chromium',
             chromium_apply_config=['mb'],
             gclient_config='chromium',
-            gclient_apply_config=[
-                'enable_reclient',
-            ],
             # Not a ToT bot so no clang_tot gclient_apply_config.
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -678,9 +663,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium_clang',
             gclient_config='chromium',
-            gclient_apply_config=[
-                'enable_reclient',
-            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -694,9 +676,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium_clang',
             gclient_config='chromium',
-            gclient_apply_config=[
-                'enable_reclient',
-            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -710,9 +689,6 @@ SPEC = {
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
             gclient_config='chromium',
-            gclient_apply_config=[
-                'enable_reclient',
-            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -727,9 +703,6 @@ SPEC = {
             chromium_config='chromium',
             chromium_apply_config=['mb'],
             gclient_config='chromium',
-            gclient_apply_config=[
-                'enable_reclient',
-            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -744,7 +717,6 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'use_clang_coverage',
-                'enable_reclient',
             ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
@@ -759,7 +731,6 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'use_clang_coverage',
-                'enable_reclient',
                 'reclient_test',
             ],
             chromium_config_kwargs={
@@ -775,7 +746,6 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'use_clang_coverage',
-                'enable_reclient',
                 'reclient_test',
             ],
             chromium_config_kwargs={
@@ -789,7 +759,7 @@ SPEC = {
             chromium_config='chromium',
             chromium_apply_config=['mb'],
             gclient_config='chromium',
-            gclient_apply_config=['chromeos', 'enable_reclient'],
+            gclient_apply_config=['chromeos'],
             chromium_config_kwargs={
                 'TARGET_BITS':
                     64,
@@ -806,7 +776,7 @@ SPEC = {
             chromium_config='chromium',
             chromium_apply_config=['mb'],
             gclient_config='chromium',
-            gclient_apply_config=['chromeos', 'enable_reclient'],
+            gclient_apply_config=['chromeos'],
             chromium_config_kwargs={
                 'TARGET_BITS':
                     64,
@@ -838,9 +808,7 @@ SPEC = {
             chromium_config='chromium',
             chromium_apply_config=['mb'],
             gclient_config='chromium',
-            gclient_apply_config=[
-                'chromeos', 'enable_reclient', 'checkout_lacros_sdk'
-            ],
+            gclient_apply_config=['chromeos', 'checkout_lacros_sdk'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_ARCH': 'intel',
@@ -870,7 +838,7 @@ SPEC = {
             chromium_config='chromium',
             chromium_apply_config=['mb'],
             gclient_config='chromium',
-            gclient_apply_config=['chromeos', 'enable_reclient'],
+            gclient_apply_config=['chromeos'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_ARCH': 'intel',
@@ -899,7 +867,6 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'use_clang_coverage',
-                'enable_reclient',
                 'reclient_test',
             ],
             chromium_config_kwargs={
@@ -915,7 +882,6 @@ SPEC = {
             gclient_config='chromium',
             gclient_apply_config=[
                 'use_clang_coverage',
-                'enable_reclient',
                 'reclient_test',
             ],
             chromium_config_kwargs={
@@ -931,7 +897,6 @@ SPEC = {
             chromium_apply_config=['mb'],
             gclient_config='chromium',
             gclient_apply_config=[
-                'enable_reclient',
                 'reclient_test',
             ],
             chromium_config_kwargs={
@@ -950,29 +915,22 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            gclient_apply_config=['enable_reclient'],
             execution_mode=builder_spec.COMPILE_AND_TEST,
             simulation_platform='linux',
         ),
 }
 
 SPEC.update([
-    stock_config('Linux Viz', gclient_apply_config=['enable_reclient']),
-    stock_config(
-        'linux-annotator-rel', gclient_apply_config=['enable_reclient']),
+    stock_config('Linux Viz'),
+    stock_config('linux-annotator-rel'),
     stock_config(
         'linux-chromeos-annotator-rel', gclient_apply_config=['chromeos']),
     stock_config(
         'linux-ash-chromium-builder-fyi-rel',
-        gclient_apply_config=['chromeos', 'enable_reclient']),
+        gclient_apply_config=['chromeos']),
     stock_config('linux-blink-animation-use-time-delta', config='Debug'),
-    stock_config(
-        'linux-blink-heap-verification',
-        gclient_apply_config=['enable_reclient']),
-    stock_config(
-        'linux-blink-v8-sandbox-future-dbg',
-        config='Debug',
-        gclient_apply_config=['enable_reclient']),
+    stock_config('linux-blink-heap-verification'),
+    stock_config('linux-blink-v8-sandbox-future-dbg', config='Debug'),
     stock_config('linux-fieldtrial-rel'),
     stock_config(
         'linux-lacros-builder-fyi-rel', gclient_apply_config=['chromeos']),
@@ -985,20 +943,13 @@ SPEC.update([
         'linux-lacros-tester-fyi-rel',
         execution_mode=builder_spec.TEST,
         parent_buildername='linux-lacros-builder-fyi-rel'),
-    stock_config(
-        'linux-perfetto-rel', gclient_apply_config=['enable_reclient']),
+    stock_config('linux-perfetto-rel'),
     stock_config('linux-tcmalloc-rel'),
-    stock_config('linux-wpt-fyi-rel', gclient_apply_config=['enable_reclient']),
+    stock_config('linux-wpt-fyi-rel'),
     # Despite the FYI name, these are the "MVP bots" used by teams:
     # https://source.chromium.org/chromium/chromium/src/+/main:docs/testing/web_platform_tests_wptrunner.md;l=64;drc=5ce5d37c5ebfbd3b658f1f68173be7573a95d0ea
-    stock_config(
-        'linux-wpt-identity-fyi-rel',
-        staging=False,
-        gclient_apply_config=['enable_reclient']),
-    stock_config(
-        'linux-wpt-input-fyi-rel',
-        staging=False,
-        gclient_apply_config=['enable_reclient']),
+    stock_config('linux-wpt-identity-fyi-rel', staging=False),
+    stock_config('linux-wpt-input-fyi-rel', staging=False),
     stock_config('mac-hermetic-upgrade-rel'),
     stock_config('win-annotator-rel'),
 ])

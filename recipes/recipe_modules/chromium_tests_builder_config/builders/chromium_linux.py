@@ -48,7 +48,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            gclient_apply_config=['enable_reclient'],
             test_results_config='staging_server',
             simulation_platform='linux',
         ),

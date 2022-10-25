@@ -57,7 +57,7 @@ SPEC = {
                 'TARGET_PLATFORM': 'android',
             },
             gclient_config='chromium',
-            gclient_apply_config=['android', 'enable_reclient'],
+            gclient_apply_config=['android'],
             simulation_platform='linux',
         ),
 }

@@ -78,7 +78,6 @@ SPEC = {
             chromium_config='chromium_asan',
             chromium_apply_config=['mb', 'clobber'],
             gclient_config='chromium',
-            gclient_apply_config=['enable_reclient'],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -94,9 +93,6 @@ SPEC = {
             chromium_config='chromium_asan',
             chromium_apply_config=['mb', 'clobber'],
             gclient_config='chromium',
-            gclient_apply_config=[
-                'enable_reclient',
-            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -114,9 +110,6 @@ SPEC = {
             chromium_config='chromium_asan',
             chromium_apply_config=['mb', 'clobber'],
             gclient_config='chromium',
-            gclient_apply_config=[
-                'enable_reclient',
-            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
@@ -159,7 +152,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 32,
             },
-            gclient_apply_config=['enable_reclient'],
             cf_archive_build=True,
             cf_gs_bucket='chromium-browser-asan',
             cf_gs_acl='public-read',
@@ -176,7 +168,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 32,
             },
-            gclient_apply_config=['enable_reclient'],
             cf_archive_build=True,
             cf_gs_bucket='chromium-browser-asan',
             cf_gs_acl='public-read',
@@ -193,7 +184,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 32,
             },
-            gclient_apply_config=['enable_reclient'],
             cf_archive_build=True,
             cf_gs_bucket='chrome-test-builds/media',
             cf_gs_acl='public-read',
@@ -208,9 +198,6 @@ SPEC = {
             chromium_config='chromium_clang',
             chromium_apply_config=['mb', 'tsan2', 'clobber'],
             gclient_config='chromium',
-            gclient_apply_config=[
-                'enable_reclient',
-            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -226,9 +213,6 @@ SPEC = {
             chromium_config='chromium_clang',
             chromium_apply_config=['mb', 'tsan2', 'clobber'],
             gclient_config='chromium',
-            gclient_apply_config=[
-                'enable_reclient',
-            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
@@ -246,9 +230,6 @@ SPEC = {
             chromium_config='chromium_clang',
             chromium_apply_config=['mb', 'msan', 'clobber'],
             gclient_config='chromium',
-            gclient_apply_config=[
-                'enable_reclient',
-            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -264,9 +245,6 @@ SPEC = {
             chromium_config='chromium_clang',
             chromium_apply_config=['mb', 'msan', 'clobber'],
             gclient_config='chromium',
-            gclient_apply_config=[
-                'enable_reclient',
-            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -282,9 +260,6 @@ SPEC = {
             chromium_config='chromium_linux_ubsan',
             chromium_apply_config=['mb'],
             gclient_config='chromium',
-            gclient_apply_config=[
-                'enable_reclient',
-            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
@@ -302,9 +277,6 @@ SPEC = {
             chromium_config='chromium_linux_ubsan_vptr',
             chromium_apply_config=['mb'],
             gclient_config='chromium',
-            gclient_apply_config=[
-                'enable_reclient',
-            ],
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,

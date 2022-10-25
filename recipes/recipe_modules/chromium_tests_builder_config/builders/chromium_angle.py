@@ -15,7 +15,6 @@ def CreateAndroidBuilderConfig(target_bits):
   gclient_apply_config = [
       'android',
       'angle_top_of_tree',
-      'enable_reclient',
   ]
   return _chromium_angle_spec(
       gclient_apply_config=gclient_apply_config,
@@ -72,8 +71,6 @@ def CreateBuilderConfig(platform, target_bits):
   gclient_apply_config = [
       'angle_top_of_tree',
   ]
-  if platform == 'linux':
-    gclient_apply_config += ['enable_reclient']
   return _chromium_angle_spec(
       gclient_apply_config=gclient_apply_config,
       chromium_config='chromium',

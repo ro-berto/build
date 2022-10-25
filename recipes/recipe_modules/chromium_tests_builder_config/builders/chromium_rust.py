@@ -24,7 +24,7 @@ def CreateRustBuilder(platform, is_dbg):
       chromium_config='android' if platform == 'android' else 'chromium',
       chromium_apply_config=['android' if platform == 'android' else 'mb'],
       gclient_config='chromium',
-      gclient_apply_config=['enable_reclient', 'use_rust'] +
+      gclient_apply_config=['use_rust'] +
       (['android'] if platform == 'android' else []),
       chromium_config_kwargs=chromium_config,
       android_config='base_config' if platform == 'android' else None,
