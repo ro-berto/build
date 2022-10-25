@@ -107,10 +107,16 @@ def _summarize_outdir(output_dir):
 def text_for_task(task):
   lines = []
 
-  if task.request[0].dimensions.get('id'):
-    lines.append('Bot id: %r' % task.request[0].dimensions['id'])
-  if task.request[0].dimensions.get('os'):
-    lines.append('Run on OS: %r' % task.request[0].dimensions['os'])
+  dimensions = task.request[0].dimensions
+  if dimensions.get('id'):
+    lines.append('Bot id: %r' % dimensions['id'])
+
+  # Platforms like Android mainly use "device_os" rather than "os" to
+  # select the test device.
+  if dimensions.get('device_os'):
+    lines.append('Run on Device OS: %r' % dimensions['device_os'])
+  elif dimensions.get('os'):
+    lines.append('Run on OS: %r' % dimensions['os'])
 
   return '<br/>'.join(lines)
 
