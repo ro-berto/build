@@ -150,9 +150,9 @@ def _UploadCL(api, script_invocation, bugs, cmdline):
     cc_list = reviewer_list
     reviewer_list = [RUBBER_STAMPER]
 
-  # TODO(crbug.com/1340614): Add in --enable-auto-submit once we're ready to
-  # start actually using this recipe on bots regularly.
   upload_args = ['--force', '--send-mail', '--reviewers', reviewer_list[0]]
+  if script_invocation.submit_type == ScriptInvocation.SubmitType.AUTO:
+    upload_args.append('--enable-auto-submit')
   if cc_list:
     upload_args.extend(['--cc', ','.join(cc_list)])
   result = api.git_cl.upload(
@@ -502,6 +502,7 @@ def GenTests(api):
           '--send-mail',
           '--reviewers',
           'rubber-stamper@appspot.gserviceaccount.com',
+          '--enable-auto-submit',
           '--cc',
           'r',
           '--message-file',
