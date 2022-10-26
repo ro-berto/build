@@ -108,9 +108,6 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
 
     builder_id, builder_config = self.configure_build()
 
-    experiments = self.m.buildbucket.build.input.experiments
-    remove_src_checkout_experiment = (
-        'remove_src_checkout_experiment' in experiments)
     inverted_rts_experiment = ('chromium_rts.inverted_rts' in
                                self.m.buildbucket.build.input.experiments)
     inverted_rts_bail_early_experiment = (
@@ -157,65 +154,13 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
     }
 
     gitiles_commit = None
-    root_solution_revision = None
-    patch_repo_head_revision = None
 
     if reuseable_compilator_build:
       build_to_process = reuseable_compilator_build
     else:
-      if not remove_src_checkout_experiment:
-        patch_repo_ref = self.m.tryserver.gerrit_change_target_ref
-        gerrit_change_project = self.m.tryserver.gerrit_change.project
-
-        if gerrit_change_project == 'chromium/src':
-          # Usually refs/heads/main for ToT CLs, but can be branch heads for
-          # branch CLs
-          src_ref = patch_repo_ref
-        else:
-          # This assumes that non chromium/src projects only runs builds on
-          # the main branch of src.
-          src_ref = 'refs/heads/main'
-
-        src_head_revision, _ = self.m.gitiles.log(
-            'https://chromium.googlesource.com/chromium/src',
-            src_ref,
-            limit=1,
-            step_name='read src HEAD revision at {}'.format(src_ref))
-        src_head_revision = src_head_revision[0]['commit']
-
-        gclient_soln_name = self.m.gclient.get_repo_path(
-            self.m.tryserver.gerrit_change_repo_url)
-
-        if gerrit_change_project == 'chromium/src':
-          patch_repo_head_revision = src_head_revision
-          gitiles_commit = common_pb.GitilesCommit(
-              host=self.m.tryserver.gerrit_change_repo_host,
-              project=self.m.tryserver.gerrit_change.project,
-              ref=src_ref,
-              id=src_head_revision)
-        else:
-          patch_repo_head_revision, _ = self.m.gitiles.log(
-              self.m.tryserver.gerrit_change_repo_url,
-              patch_repo_ref,
-              limit=1,
-              step_name='read {} HEAD revision at {}'.format(
-                  gerrit_change_project, patch_repo_ref))
-          patch_repo_head_revision = patch_repo_head_revision[0]['commit']
-          root_solution_revision = src_head_revision
-
-          compilator_properties[
-              'root_solution_revision'] = root_solution_revision
-          compilator_properties['deps_revision_overrides'] = {
-              gclient_soln_name: patch_repo_head_revision
-          }
-
-        self.m.gclient.c.revisions[gclient_soln_name] = patch_repo_head_revision
-
       # Pass in any RTS mode input props
       compilator_properties.update(self.m.cq.props_for_child_build)
-      if remove_src_checkout_experiment:
-        self.m.chromium_bootstrap.update_trigger_properties(
-            compilator_properties)
+      self.m.chromium_bootstrap.update_trigger_properties(compilator_properties)
 
       request = self.m.buildbucket.schedule_request(
           builder=self.compilator,
@@ -223,31 +168,18 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
           properties=compilator_properties,
           gitiles_commit=gitiles_commit,
           tags=self.m.buildbucket.tags(**{'hide-in-gerrit': 'pointless'}),
-          experiments={
-              'remove_src_checkout_experiment': remove_src_checkout_experiment
-          })
+      )
 
       led_job = None
       if self.m.led.launched_by_led:
         led_job = self.trigger_compilator_led_build(
             compilator_properties,
-            remove_src_checkout_experiment,
             with_patch=True)
       else:
         build = self.m.buildbucket.schedule(
             [request], step_name='trigger compilator (with patch)')[0]
 
         self.current_compilator_buildbucket_id = build.id
-
-      if not remove_src_checkout_experiment:
-        bot_update_step, targets_config = (
-            self.m.chromium_tests.prepare_checkout(
-                builder_config,
-                timeout=3600,
-                enforce_fetch=True,
-                no_fetch_tags=True,
-                root_solution_revision=root_solution_revision,
-                refs=[patch_repo_ref]))
 
       if self.m.led.launched_by_led:
         # Collect the led swarming task instead of using a compilator_watcher,
@@ -270,29 +202,25 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
     if maybe_raw_result != None:
       return maybe_raw_result
 
-    if remove_src_checkout_experiment:
-      self.m.chromium_checkout.checkout_dir = self.m.path['cleanup']
+    self.m.chromium_checkout.checkout_dir = self.m.path['cleanup']
 
-      self.m.cas.download(
-          'download src-side deps',
-          comp_output.src_side_deps_digest,
-          self.m.chromium_checkout.src_dir,
-      )
+    self.m.cas.download(
+        'download src-side deps',
+        comp_output.src_side_deps_digest,
+        self.m.chromium_checkout.src_dir,
+    )
 
-      affected_files = comp_output.affected_files
-      targets_config = self.m.chromium_tests.create_targets_config(
-          builder_config,
-          comp_output.got_revisions,
-          self.m.chromium_checkout.src_dir,
-          source_side_spec_dir=self.m.chromium_checkout.src_dir.join(
-              comp_output.src_side_test_spec_dir),
-          isolated_tests_only=True)
-      self.check_for_non_swarmed_isolated_tests(targets_config.all_tests)
-      # This is used to set build properties on swarming tasks
-      self.m.chromium.set_build_properties(comp_output.got_revisions)
-    else:
-      affected_files = self.m.chromium_checkout.get_files_affected_by_patch(
-          report_via_property=True)
+    affected_files = comp_output.affected_files
+    targets_config = self.m.chromium_tests.create_targets_config(
+        builder_config,
+        comp_output.got_revisions,
+        self.m.chromium_checkout.src_dir,
+        source_side_spec_dir=self.m.chromium_checkout.src_dir.join(
+            comp_output.src_side_test_spec_dir),
+        isolated_tests_only=True)
+    self.check_for_non_swarmed_isolated_tests(targets_config.all_tests)
+    # This is used to set build properties on swarming tasks
+    self.m.chromium.set_build_properties(comp_output.got_revisions)
 
     # Now let's get all the tests ready with the swarming trigger info
     # outputed by the compilator
@@ -334,12 +262,6 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
       output_dir = self.m.chromium_checkout.src_dir.join(
           'out', self.m.chromium.c.build_config_fs)
       self.m.code_coverage.build_dir = output_dir
-
-      # TODO(crbug/1287228): Remove once all orchestrators have
-      # remove_src_checkout_experiment enabled
-      # cas download raises "file exists" errors for android's json files
-      if not remove_src_checkout_experiment:
-        self.m.file.rmcontents('clear out output directory', output_dir)
 
       self.m.file.ensure_directory('ensure output directory', output_dir)
       self.m.cas.download(
@@ -440,24 +362,18 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
         properties=compilator_properties,
         gitiles_commit=gitiles_commit,
         tags=self.m.buildbucket.tags(**{'hide-in-gerrit': 'pointless'}),
-        experiments={
-            'remove_src_checkout_experiment': remove_src_checkout_experiment
-        })
+    )
 
     led_job = None
     if self.m.led.launched_by_led:
       led_job = self.trigger_compilator_led_build(
           compilator_properties,
-          remove_src_checkout_experiment,
           with_patch=False)
     else:
       wo_build = self.m.buildbucket.schedule(
           [request], step_name='trigger compilator (without patch)')[0]
 
       self.current_compilator_buildbucket_id = wo_build.id
-
-    if not remove_src_checkout_experiment:
-      self.m.chromium_tests.deapply_patch(bot_update_step)
 
     if self.m.led.launched_by_led:
       wo_build_to_process = self.collect_compilator_led_build(
@@ -531,8 +447,7 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
     self.m.chromium.apply_config('trybot_flavor')
     return builder_id, builder_config
 
-  def trigger_compilator_led_build(self, compilator_properties,
-                                   remove_src_checkout_experiment, with_patch):
+  def trigger_compilator_led_build(self, compilator_properties, with_patch):
     nested_step_name = 'trigger led compilator build'
     if with_patch:
       nested_step_name += ' (with patch)'
@@ -572,11 +487,6 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
         properties_edit_args.extend(
             ['-p', prop + '=' + self.m.json.dumps(value)])
       led_comp_build = led_comp_build.then('edit', *properties_edit_args)
-
-      if remove_src_checkout_experiment:
-        led_comp_build = (
-            led_comp_build.then('edit', '-experiment',
-                                'remove_src_checkout_experiment=true'))
 
       if self.m.chromium_bootstrap.exe.HasField('cas'):
         led_comp_build = led_comp_build.then(

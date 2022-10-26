@@ -58,19 +58,6 @@ def compilator_steps(api, properties):
 
   report_parent_orchestrator_build(api, properties)
 
-  remove_src_checkout_experiment = False
-  if ('remove_src_checkout_experiment' in
-      api.buildbucket.build.input.experiments):
-    remove_src_checkout_experiment = True
-
-  if (not remove_src_checkout_experiment and
-      not api.buildbucket.gitiles_commit.id and
-      not (properties.deps_revision_overrides and
-           properties.root_solution_revision)):
-    raise api.step.InfraFailure(
-        'Compilator requires gitiles_commit or deps_revision_overrides to know'
-        ' which revision to check out')
-
   with api.chromium.chromium_layout():
     orchestrator = properties.orchestrator.builder_name
     builder_group = properties.orchestrator.builder_group
@@ -86,10 +73,6 @@ def compilator_steps(api, properties):
     # Implies that this compilator build must be compiled without a patch
     # so that the orchestrator can retry these swarming tests without patch
     rts_setting = api.chromium_tests.get_quickrun_options(orch_builder_config)
-
-    additional_compile_targets = None
-    if remove_src_checkout_experiment:
-      additional_compile_targets = [ORCHESTRATOR_ALL_TARGET_NAME]
 
     if properties.swarming_targets:
       api.chromium_tests.configure_build(
@@ -128,13 +111,13 @@ def compilator_steps(api, properties):
               test_suites,
               bot_update_step,
               'without patch',
-              additional_compile_targets=additional_compile_targets))
+              additional_compile_targets=[ORCHESTRATOR_ALL_TARGET_NAME]))
     else:
       raw_result, task = api.chromium_tests.build_affected_targets(
           orch_builder_id,
           orch_builder_config,
           isolate_output_files_for_coverage=True,
-          additional_compile_targets=additional_compile_targets)
+          additional_compile_targets=[ORCHESTRATOR_ALL_TARGET_NAME])
       execution_info = task.swarming_execution_info
       test_suites = task.test_suites
 
@@ -142,22 +125,21 @@ def compilator_steps(api, properties):
       return raw_result
 
     if any(t.uses_isolate for t in test_suites):
-      if remove_src_checkout_experiment:
-        affected_files_to_archive = []
-        # If properties.swarming_targets exist, it means this build is doing a
-        # "without patch" so there's no affected files to archive
-        if (not properties.swarming_targets and
-            not api.code_coverage.skipping_coverage):
-          deleted_files = get_deleted_files(api, task.affected_files)
-          affected_files_to_archive = [
-              # In case this is a windows compilator
-              str(api.path['checkout'].join(f)).replace('/', api.path.sep)
-              for f in task.affected_files
-              # If the affected file is deleted, don't attempt to archive it or
-              # else you'll get a file not found error
-              if f not in deleted_files
-          ]
-        archive_src_side_deps(api, affected_files_to_archive)
+      affected_files_to_archive = []
+      # If properties.swarming_targets exist, it means this build is doing a
+      # "without patch" so there's no affected files to archive
+      if (not properties.swarming_targets and
+          not api.code_coverage.skipping_coverage):
+        deleted_files = get_deleted_files(api, task.affected_files)
+        affected_files_to_archive = [
+            # In case this is a windows compilator
+            str(api.path['checkout'].join(f)).replace('/', api.path.sep)
+            for f in task.affected_files
+            # If the affected file is deleted, don't attempt to archive it or
+            # else you'll get a file not found error
+            if f not in deleted_files
+        ]
+      archive_src_side_deps(api, affected_files_to_archive)
 
       # Isolate the tests first so the Orchestrator can trigger them asap
       trigger_properties = execution_info.ensure_command_lines_archived(
@@ -401,103 +383,10 @@ def GenTests(api):
                        ['--patch_ref']),
       api.post_process(post_process.MustRun, 'compile (with patch)'),
       api.post_process(
-          post_process.StepCommandDoesNotContain,
+          post_process.StepCommandContains,
           'compile (with patch)',
           [ORCHESTRATOR_ALL_TARGET_NAME],
       ),
-      api.post_process(post_process.MustRun, 'isolate tests (with patch)'),
-      api.post_process(post_process.MustRun, 'swarming trigger properties'),
-      api.post_process(post_process.MustRun,
-                       'check_static_initializers (with patch)'),
-      api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'missing_gitiles_commit_and_deps_revision_overrides',
-      api.chromium.try_build(
-          builder_group='fake-try-group',
-          builder='fake-compilator',
-      ),
-      api.platform.name('linux'),
-      api.properties(
-          InputProperties(
-              orchestrator=InputProperties.Orchestrator(
-                  builder_name='fake-orchestrator',
-                  builder_group='fake-try-group'))),
-      api.post_process(post_process.StatusException),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'missing_gitiles_commit_and_deps_revision_overrides_with_experiment',
-      api.chromium.try_build(
-          builder_group='fake-try-group',
-          builder='fake-compilator',
-          experiments=['remove_src_checkout_experiment']),
-      api.platform.name('linux'),
-      ctbc_properties(),
-      api.properties(
-          InputProperties(
-              orchestrator=InputProperties.Orchestrator(
-                  builder_name='fake-orchestrator',
-                  builder_group='fake-try-group'))),
-      api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'missing_root_solution_revision',
-      api.chromium.try_build(
-          builder_group='fake-try-group',
-          builder='fake-compilator',
-      ),
-      api.platform.name('linux'),
-      api.properties(
-          InputProperties(
-              orchestrator=InputProperties.Orchestrator(
-                  builder_name='fake-orchestrator',
-                  builder_group='fake-try-group'),
-              deps_revision_overrides={'src/v8': 'v8deadbeef'})),
-      api.post_process(post_process.StatusException),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'deps_revision_overrides_and_root_solution_revision',
-      api.chromium.try_build(
-          builder_group='fake-try-group',
-          builder='fake-compilator',
-          git_repo='https://chromium.googlesource.com/v8/v8',
-      ),
-      api.platform.name('linux'),
-      api.path.exists(api.path['checkout'].join('out/Release/browser_tests')),
-      ctbc_properties(),
-      api.properties(
-          InputProperties(
-              orchestrator=InputProperties.Orchestrator(
-                  builder_name='fake-orchestrator',
-                  builder_group='fake-try-group'),
-              deps_revision_overrides={'src/v8': 'v8deadbeef'},
-              root_solution_revision='srcdeadbeef')),
-      api.override_step_data(
-          'read filter exclusion spec',
-          api.json.output({
-              'base': {
-                  'exclusions': ['v8/f.*'],
-              },
-              'chromium': {
-                  'exclusions': [],
-              },
-          })),
-      override_test_spec(),
-      api.post_process(post_process.StepCommandContains, 'bot_update',
-                       ['--patch_ref']),
-      api.post_process(post_process.StepCommandContains, 'bot_update',
-                       ['--revision', 'src@srcdeadbeef']),
-      api.post_process(post_process.StepCommandContains, 'bot_update',
-                       ['--revision', 'src/v8@v8deadbeef']),
-      api.post_process(post_process.MustRun, 'compile (with patch)'),
       api.post_process(post_process.MustRun, 'isolate tests (with patch)'),
       api.post_process(post_process.MustRun, 'swarming trigger properties'),
       api.post_process(post_process.MustRun,
@@ -512,7 +401,7 @@ def GenTests(api):
           builder_group='fake-try-group',
           builder='fake-compilator',
           revision='deadbeef',
-          experiments=['remove_src_checkout_experiment']),
+      ),
       api.platform.name('linux'),
       api.path.exists(api.path['checkout'].join('out/Release/browser_tests')),
       ctbc_properties(),
@@ -580,7 +469,7 @@ def GenTests(api):
           builder_group='fake-try-group',
           builder='fake-compilator',
           revision='deadbeef',
-          experiments=['remove_src_checkout_experiment']),
+      ),
       api.platform.name('linux'),
       api.path.exists(api.path['checkout'].join('out/Release/browser_tests')),
       api.code_coverage(use_clang_coverage=True),
@@ -634,8 +523,7 @@ def GenTests(api):
       api.chromium.try_build(
           builder_group='fake-try-group',
           builder='fake-compilator',
-          revision='deadbeef',
-          experiments=['remove_src_checkout_experiment']),
+          revision='deadbeef'),
       api.platform.name('win'),
       api.path.exists(api.path['checkout'].join('out\\Release\\browser_tests')),
       api.code_coverage(use_clang_coverage=True),
@@ -672,7 +560,7 @@ def GenTests(api):
           builder_group='fake-try-group',
           builder='fake-compilator',
           revision='deadbeef',
-          experiments=['remove_src_checkout_experiment']),
+      ),
       api.platform.name('linux'),
       api.path.exists(api.path['checkout'].join('out/Release/browser_tests')),
       ctbc_properties(),
@@ -714,7 +602,6 @@ def GenTests(api):
           builder_group='fake-try-group',
           builder='fake-compilator',
           revision='deadbeef',
-          experiments=['remove_src_checkout_experiment'],
       ),
       api.platform.name('win'),
       api.path.exists(api.path['checkout'].join('out\\Release\\browser_tests')),

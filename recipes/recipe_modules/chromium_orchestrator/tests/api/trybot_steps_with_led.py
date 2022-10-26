@@ -85,9 +85,7 @@ def GenTests(api):
         api.chromium.try_build(
             builder_group='fake-try-group',
             builder='fake-orchestrator',
-            experiments=[
-                'remove_src_checkout_experiment', 'other_experiment_name'
-            ],
+            experiments=['other_experiment_name'],
         ),
         ctbc_properties(),
         api.chromium_bootstrap.properties(exe=exe),
@@ -133,11 +131,6 @@ def GenTests(api):
           'trigger led compilator build (with patch).led edit-payload',
           'proto.output',
           ['other_experiment_name'],
-      ),
-      api.post_process(
-          post_process.StepCommandContains,
-          'trigger led compilator build (with patch).led edit (3)',
-          ['remove_src_checkout_experiment=true'],
       ),
       api.post_process(post_process.MustRun,
                        'collect led compilator build (with patch)'),

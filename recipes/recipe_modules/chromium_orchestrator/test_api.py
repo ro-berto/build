@@ -187,11 +187,6 @@ class ChromiumOrchestratorApi(recipe_test_api.RecipeTestApi):
     return self.m.buildbucket.simulated_search_results(
         [sub_build], step_name='get compilator build')
 
-  def fake_head_revision(self, ref='refs/heads/main'):
-    result = {'log': [{'commit': 'deadbeef'},]}
-    return self.step_data('read src HEAD revision at {}'.format(ref),
-                          self.m.json.output(result))
-
   def override_schedule_compilator_build(
       self, step_name='trigger compilator (with patch)', build_id=12345):
     return self.m.buildbucket.simulated_schedule_output(

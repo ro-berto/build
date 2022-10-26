@@ -58,11 +58,6 @@ def GenTests(api):
       api.chromium_orchestrator.override_compilator_steps(),
       api.chromium_orchestrator.override_compilator_steps(
           is_swarming_phase=False),
-      api.chromium_orchestrator.fake_head_revision(),
-      api.post_process(post_process.StepCommandContains, 'bot_update',
-                       ['--refs', 'refs/heads/main']),
-      api.post_process(post_process.StepCommandContains, 'bot_update',
-                       ['--patch_ref']),
       api.chromium_orchestrator.override_test_spec(
           builder_group='fake-group',
           builder='fake-builder',
@@ -112,11 +107,6 @@ def GenTests(api):
       api.chromium_orchestrator.override_compilator_steps(),
       api.chromium_orchestrator.override_compilator_steps(
           is_swarming_phase=False),
-      api.chromium_orchestrator.fake_head_revision(),
-      api.post_process(post_process.StepCommandContains, 'bot_update',
-                       ['--refs', 'refs/heads/main']),
-      api.post_process(post_process.StepCommandContains, 'bot_update',
-                       ['--patch_ref']),
       api.chromium_orchestrator.override_test_spec(
           builder_group='fake-group',
           builder='fake-builder',

@@ -62,7 +62,6 @@ def GenTests(api):
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
-      api.chromium_orchestrator.fake_head_revision(),
       api.chromium_orchestrator.override_test_spec(
           builder_group='fake-group',
           builder='fake-builder',
@@ -95,7 +94,6 @@ def GenTests(api):
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
-      api.chromium_orchestrator.fake_head_revision(),
       api.chromium_orchestrator.override_test_spec(
           builder_group='fake-group',
           builder='fake-builder',
@@ -126,7 +124,6 @@ def GenTests(api):
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
-      api.chromium_orchestrator.fake_head_revision(),
       api.chromium_orchestrator.override_test_spec(
           builder_group='fake-group',
           builder='fake-builder',
@@ -134,36 +131,11 @@ def GenTests(api):
       api.chromium_orchestrator.override_compilator_steps(),
       api.chromium_orchestrator.override_compilator_steps(
           is_swarming_phase=False),
-      api.override_step_data(
-          'git diff to analyze patch',
-          api.raw_io.stream_output('testing/buildbot/fake-group.json')),
       api.chromium_tests.gen_swarming_and_rdb_results(
           'browser_tests', 'with patch', failures=['test_case1']),
       api.chromium_tests.gen_swarming_and_rdb_results(
           'browser_tests', 'retry shards with patch', failures=['test_case1']),
       api.post_process(post_process.DoesNotRun, '.*without patch.*'),
-      api.post_process(post_process.PropertiesDoNotContain, 'do_not_retry'),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      'bot_update_failure_does_not_prevent_cq_retry',
-      api.chromium.try_build(
-          builder_group='fake-try-group',
-          builder='fake-orchestrator',
-      ),
-      ctbc_properties(),
-      api.properties(
-          **{
-              '$build/chromium_orchestrator':
-                  InputProperties(
-                      compilator='fake-compilator',
-                      compilator_watcher_git_revision='e841fc',
-                  ),
-          }),
-      api.chromium_orchestrator.fake_head_revision(),
-      # Initial tests & retry shards with patch produce invalid results.
-      api.override_step_data('bot_update', retcode=1),
       api.post_process(post_process.PropertiesDoNotContain, 'do_not_retry'),
       api.post_process(post_process.DropExpectation),
   )
@@ -186,7 +158,6 @@ def GenTests(api):
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
-      api.chromium_orchestrator.fake_head_revision(),
       api.chromium_orchestrator.override_test_spec(
           builder_group='fake-group',
           builder='fake-builder',
@@ -223,7 +194,6 @@ def GenTests(api):
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
-      api.chromium_orchestrator.fake_head_revision(),
       api.chromium_orchestrator.override_test_spec(
           builder_group='fake-group',
           builder='fake-builder',
@@ -316,7 +286,6 @@ def GenTests(api):
                   compilator_watcher_git_revision='e841fc',
               ),
             }),
-        api.chromium_orchestrator.fake_head_revision(),
         api.chromium_orchestrator.override_test_spec(
             builder_group='fake-group',
             builder='fake-builder',
@@ -399,7 +368,6 @@ def GenTests(api):
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
-      api.chromium_orchestrator.fake_head_revision(),
       api.chromium_orchestrator.override_test_spec(
           builder_group='fake-group',
           builder='fake-builder',
@@ -469,7 +437,6 @@ def GenTests(api):
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
-      api.chromium_orchestrator.fake_head_revision(),
       api.chromium_orchestrator.override_test_spec(
           builder_group='fake-group',
           builder='fake-builder',
@@ -537,7 +504,6 @@ def GenTests(api):
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
-      api.chromium_orchestrator.fake_head_revision(),
       api.chromium_orchestrator.override_test_spec(
           builder_group='fake-group',
           builder='fake-builder',
@@ -614,7 +580,6 @@ def GenTests(api):
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
-      api.chromium_orchestrator.fake_head_revision(),
       api.chromium_orchestrator.override_test_spec(
           builder_group='fake-group',
           builder='fake-builder',
@@ -696,7 +661,6 @@ def GenTests(api):
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
-      api.chromium_orchestrator.fake_head_revision(),
       api.chromium_orchestrator.override_test_spec(
           builder_group='fake-group',
           builder='fake-builder',
