@@ -139,10 +139,10 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
             reuseable_quick_run_build)
         if reuseable_compilator_build:
           log_step = self.m.step.empty('log reused builds')
-          log_step.presentation.properties[
-              'reused_quick_run_build'] = reuseable_quick_run_build.id
-          log_step.presentation.properties[
-              'reused_compilator_build'] = reuseable_compilator_build.id
+          log_step.presentation.properties['reused_quick_run_build'] = str(
+              reuseable_quick_run_build.id)
+          log_step.presentation.properties['reused_compilator_build'] = str(
+              reuseable_compilator_build.id)
 
     if inverted_rts_bail_early_experiment and not reuseable_compilator_build:
       return None
