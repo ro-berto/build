@@ -1482,12 +1482,6 @@
       "tryserver.chromium.mac:gpu-try-mac-intel-dbg"
     ]
   },
-  "chromium.gpu:GPU Win x64 Builder (dbg)": {
-    "builders": [
-      "chromium.gpu:GPU Win x64 Builder (dbg)",
-      "chromium.gpu:Win10 x64 Debug (NVIDIA)"
-    ]
-  },
   "chromium.gpu:Linux Debug (NVIDIA)": {
     "builders": [
       "chromium.gpu:GPU Linux Builder (dbg)",
@@ -1511,12 +1505,6 @@
       "chromium.gpu:Mac Retina Debug (AMD)",
       "tryserver.chromium.mac:gpu-try-mac-amd-retina-dbg",
       "tryserver.chromium.mac:gpu-try-mac-intel-dbg"
-    ]
-  },
-  "chromium.gpu:Win10 x64 Debug (NVIDIA)": {
-    "builders": [
-      "chromium.gpu:GPU Win x64 Builder (dbg)",
-      "chromium.gpu:Win10 x64 Debug (NVIDIA)"
     ]
   },
   "chromium.linux:Leak Detection Linux": {
