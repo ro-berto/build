@@ -37,7 +37,7 @@ COMPARISON_BUILDERS = freeze({
             'mb', 'goma_enable_cache_silo', 'goma_large_cache_file',
             'download_vr_test_apks'
         ],
-        'gclient_apply_config': ['android', 'enable_reclient', 'reclient_test'],
+        'gclient_apply_config': ['android', 'reclient_test'],
         'chromium_config_kwargs': {
             'BUILD_CONFIG': 'Debug',
             'TARGET_BITS': 32,
@@ -54,7 +54,7 @@ COMPARISON_BUILDERS = freeze({
         'chromium_apply_config': [
             'mb', 'goma_enable_cache_silo', 'goma_large_cache_file'
         ],
-        'gclient_apply_config': ['enable_reclient', 'reclient_test'],
+        'gclient_apply_config': ['reclient_test'],
         'platform': 'linux',
         'targets': ['all'],
     },
@@ -64,7 +64,7 @@ COMPARISON_BUILDERS = freeze({
         'chromium_apply_config': [
             'mb', 'goma_enable_cache_silo', 'goma_large_cache_file'
         ],
-        'gclient_apply_config': ['enable_reclient', 'reclient_test'],
+        'gclient_apply_config': ['reclient_test'],
         'platform': 'mac',
         'chromium_config_kwargs': {
             'TARGET_BITS': 64,
@@ -79,7 +79,7 @@ COMPARISON_BUILDERS = freeze({
         'chromium_apply_config': [
             'mb', 'goma_enable_cache_silo', 'goma_large_cache_file'
         ],
-        'gclient_apply_config': ['enable_reclient', 'reclient_test'],
+        'gclient_apply_config': ['reclient_test'],
         'platform': 'mac',
         'chromium_config_kwargs': {
             'TARGET_ARCH': 'arm',
@@ -95,7 +95,7 @@ COMPARISON_BUILDERS = freeze({
         'chromium_apply_config': [
             'mb', 'goma_enable_cache_silo', 'goma_large_cache_file'
         ],
-        'gclient_apply_config': ['enable_reclient', 'reclient_test'],
+        'gclient_apply_config': ['reclient_test'],
         'platform': 'mac',
         'chromium_config_kwargs': {
             'TARGET_ARCH': 'arm',
@@ -111,7 +111,7 @@ COMPARISON_BUILDERS = freeze({
         'chromium_apply_config': [
             'mb', 'goma_enable_cache_silo', 'goma_large_cache_file'
         ],
-        'gclient_apply_config': ['enable_reclient', 'reclient_test'],
+        'gclient_apply_config': ['reclient_test'],
         'platform': 'win',
         'targets': ['all'],
     },
@@ -121,7 +121,7 @@ COMPARISON_BUILDERS = freeze({
         'chromium_apply_config': [
             'mb', 'goma_enable_cache_silo', 'goma_large_cache_file'
         ],
-        'gclient_apply_config': ['enable_reclient', 'reclient_test'],
+        'gclient_apply_config': ['reclient_test'],
         'platform': 'win',
         'targets': ['all'],
     },
@@ -131,9 +131,7 @@ COMPARISON_BUILDERS = freeze({
         'chromium_apply_config': [
             'mb', 'goma_enable_cache_silo', 'goma_large_cache_file'
         ],
-        'gclient_apply_config': [
-            'chromeos', 'enable_reclient', 'reclient_test'
-        ],
+        'gclient_apply_config': ['chromeos', 'reclient_test'],
         'platform': 'linux',
         'chromium_config_kwargs': {
             'TARGET_BITS': 64,
@@ -150,7 +148,7 @@ COMPARISON_BUILDERS = freeze({
             'mb', 'mac_toolchain', 'goma_enable_cache_silo',
             'goma_large_cache_file'
         ],
-        'gclient_apply_config': ['enable_reclient', 'reclient_test'],
+        'gclient_apply_config': ['reclient_test'],
         'platform': 'mac',
         'chromium_config_kwargs': {
             'TARGET_BITS': 64,

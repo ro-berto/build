@@ -37,7 +37,6 @@ def RunSteps(api):
   with api.chromium.chromium_layout():
     api.gclient.set_config('chromium')
     api.gclient.apply_config('android')
-    api.gclient.apply_config('enable_reclient')
     api.chromium.set_config('chromium')
     api.chromium.apply_config('mb')
     api.chromium_android.set_config('base_config')
