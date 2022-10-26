@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -100,7 +100,7 @@ def GetRecentBuildsByModificationTime(zip_list, prune_limit):
     mtimes_to_files.setdefault(mtime, [])
     mtimes_to_files[mtime].append(zip_file)
   # Order all files in our list by modification time.
-  mtimes_to_files_keys = mtimes_to_files.keys()
+  mtimes_to_files_keys = list(mtimes_to_files.keys())
   mtimes_to_files_keys.sort()
   ordered_asc_by_mtime_list = []
   for key in mtimes_to_files_keys:
@@ -205,7 +205,7 @@ def WriteRevisionFile(dirname, build_revision):
     shutil.move(tmp_revision_file.name, dest_path)
     return dest_path
   except IOError:
-    print 'Writing to revision file in %s failed.' % dirname
+    print('Writing to revision file in %s failed.' % dirname)
 
 
 def MakeUnversionedArchive(
@@ -232,7 +232,7 @@ def MakeUnversionedArchive(
   # Report the size of the zip file to help catch when it gets too big and
   # can cause bot failures from timeouts during downloads to testers.
   zip_size = os.stat(zip_file)[stat.ST_SIZE]
-  print 'Zip file is %ld bytes' % zip_size
+  print('Zip file is %ld bytes' % zip_size)
 
   return zip_file
 
@@ -263,7 +263,7 @@ def MakeVersionedArchive(zip_file, file_suffix, options):
   else:
     os.link(zip_file, versioned_file)
   chromium_utils.MakeWorldReadable(versioned_file)
-  print 'Created versioned archive', versioned_file
+  print('Created versioned archive', versioned_file)
   return (zip_base, zip_ext, versioned_file)
 
 
@@ -280,7 +280,7 @@ def UploadToGoogleStorage(
         'gsutil returned non-zero status when uploading %s to %s!' %
         (versioned_file, build_url)
     )
-  print 'Successfully uploaded %s to %s' % (versioned_file, build_url)
+  print('Successfully uploaded %s to %s' % (versioned_file, build_url))
 
   # The file showing the latest uploaded revision must be named LAST_CHANGE
   # locally since that filename is used in the GS bucket as well.
@@ -292,7 +292,7 @@ def UploadToGoogleStorage(
         'gsutil returned non-zero status when uploading %s to %s!' %
         (last_change_file, build_url)
     )
-  print 'Successfully uploaded %s to %s' % (last_change_file, build_url)
+  print('Successfully uploaded %s to %s' % (last_change_file, build_url))
   os.remove(last_change_file)
   return '/'.join([build_url, os.path.basename(versioned_file)])
 
@@ -308,7 +308,7 @@ def PruneOldArchives(staging_dir, zip_base, zip_ext, prune_limit):
   # Prune zip files not matched by the whitelists above.
   for zip_file in zip_list:
     if zip_file not in saved_zip_list and zip_file not in saved_mtime_list:
-      print 'Pruning zip %s.' % zip_file
+      print('Pruning zip %s.' % zip_file)
       chromium_utils.RemoveFile(staging_dir, zip_file)
 
 
@@ -318,7 +318,7 @@ class PathMatcher(object):
   def __init__(self, options):
 
     def CommaStrParser(val):
-      return [f.strip() for f in csv.reader([val]).next()]
+      return [f.strip() for f in next(csv.reader([val]))]
 
     self.inclusions = CommaStrParser(options.include_files)
     self.exclusions = (
@@ -391,12 +391,12 @@ def Archive(options):
     if os.path.exists(deps_sha):
       sha = open(deps_sha).read()
       version_suffix = '%s_%s' % (version_suffix, sha.strip())
-      print 'Appending sha of the patch: %s' % sha
+      print('Appending sha of the patch: %s' % sha)
     else:
-      print 'DEPS.sha file not found, not appending sha.'
+      print('DEPS.sha file not found, not appending sha.')
 
-  print 'Full Staging in %s' % staging_dir
-  print 'Build Directory %s' % build_dir
+  print('Full Staging in %s' % staging_dir)
+  print('Build Directory %s' % build_dir)
 
   # Include the revision file in tarballs
   WriteRevisionFile(build_dir, build_revision)
@@ -406,7 +406,7 @@ def Archive(options):
     CopyDebugCRT(build_dir)
 
   path_filter = PathMatcher(options)
-  print path_filter
+  print(path_filter)
 
   # Build the list of files to archive.
   zip_file_list = []
@@ -430,17 +430,17 @@ def Archive(options):
 
   # Include mojo public JS library.
   if (os.path.exists(os.path.join(build_dir, MOJO_BINDINGS_PATH))):
-    print 'Include mojo public JS library: %s' % MOJO_BINDINGS_PATH
+    print('Include mojo public JS library: %s' % MOJO_BINDINGS_PATH)
     zip_file_list.append(MOJO_BINDINGS_PATH)
 
   # TODO(yzshen): Switch layout tests to use files from 'gen/layout_test_data'
   # and remove this.
   mojom_files = _MojomFiles(build_dir, ['.mojom.js', '_mojom.py'])
-  print 'Include mojom files: %s' % mojom_files
+  print('Include mojom files: %s' % mojom_files)
   zip_file_list.extend(mojom_files)
 
   layout_test_data_files = _LayoutTestFiles(build_dir)
-  print 'Include layout test data: %s' % layout_test_data_files
+  print('Include layout test data: %s' % layout_test_data_files)
   zip_file_list.extend(layout_test_data_files)
 
   zip_file = MakeUnversionedArchive(
@@ -630,7 +630,7 @@ def main(argv):
   # first unknown arg.  So throw a warning if we have two or more unknown
   # arguments.
   if args[1:]:
-    print 'Warning -- unknown arguments' % args[1:]
+    print('Warning -- unknown arguments' % args[1:])
 
   urls = Archive(options)
   if options.json_urls:  # we need to dump json

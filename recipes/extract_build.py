@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -54,9 +54,9 @@ class WebHandler(ExtractHandler):
   def download(self):
     try:
       rc = urllib.urlretrieve(self.url, self.archive_name)
-      print '\nDownload complete'
+      print('\nDownload complete')
     except IOError:
-      print '\nFailed to download build'
+      print('\nFailed to download build')
       return False
     return rc
 
@@ -151,7 +151,7 @@ def real_main(options):
 
   # We try to download and extract 3 times.
   for tries in range(1, 4):
-    print 'Try %d: Fetching build from %s...' % (tries, url)
+    print('Try %d: Fetching build from %s...' % (tries, url))
 
     failure = False
 
@@ -164,13 +164,12 @@ def real_main(options):
     if failure:
       if url.startswith('gs://') or not base_url:
         continue
-      else:
-        print 'Fetching latest build at %s' % base_url
-        base_handler = handler.__class__(base_url, handler.archive_name)
-        if not base_handler.download():
-          continue
+      print('Fetching latest build at %s' % base_url)
+      base_handler = handler.__class__(base_url, handler.archive_name)
+      if not base_handler.download():
+        continue
 
-    print 'Extracting build %s to %s...' % (archive_name, abs_build_dir)
+    print('Extracting build %s to %s...' % (archive_name, abs_build_dir))
     try:
       chromium_utils.RemoveDirectory(target_build_output_dir)
       chromium_utils.ExtractZip(archive_name, abs_build_dir)
@@ -180,10 +179,12 @@ def real_main(options):
         if os.path.exists(chrome_dir):
           output_dir = chrome_dir
 
-      print 'Moving build from %s to %s' % (output_dir, target_build_output_dir)
+      print(
+          'Moving build from %s to %s' % (output_dir, target_build_output_dir)
+      )
       shutil.move(output_dir, target_build_output_dir)
     except (OSError, IOError, chromium_utils.ExternalError):
-      print 'Failed to extract the build.'
+      print('Failed to extract the build.')
       # Print out the traceback in a nice format
       traceback.print_exc()
       # Try again...
@@ -191,16 +192,16 @@ def real_main(options):
 
     # If we got the latest build, then figure out its revision number.
     if failure:
-      print "Trying to determine the latest build's revision number..."
+      print("Trying to determine the latest build's revision number...")
       try:
         build_revision_file_name = os.path.join(
             target_build_output_dir, chromium_utils.FULL_BUILD_REVISION_FILENAME
         )
         build_revision_file = open(build_revision_file_name, 'r')
-        print 'Latest build is revision: %s' % build_revision_file.read()
+        print('Latest build is revision: %s' % build_revision_file.read())
         build_revision_file.close()
       except IOError:
-        print "Could not determine the latest build's revision number"
+        print("Could not determine the latest build's revision number")
 
     if failure:
       # We successfully extracted the archive, but it was the generic one.
@@ -271,7 +272,7 @@ def main():
 
   options, args = option_parser.parse_args()
   if args:
-    print 'Unknown options: %s' % args
+    print('Unknown options: %s' % args)
     return 1
 
   bot_utils_callback(options)

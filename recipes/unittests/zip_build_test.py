@@ -1,4 +1,4 @@
-#!/usr/bin/env vpython
+#!/usr/bin/env vpython3
 # Copyright 2013 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -63,10 +63,12 @@ class TestWriteRevisionFile(unittest.TestCase):
     try:
       revision_filename = zip_build.WriteRevisionFile(tempdir, revision)
 
-      self.assertEquals(revision, open(revision_filename).read().strip())
+      self.assertEqual(revision, open(revision_filename).read().strip())
       self.assertTrue(os.path.exists(revision_filename))
-      self.assertEquals(revision_filename,
-          os.path.join(tempdir, chromium_utils.FULL_BUILD_REVISION_FILENAME))
+      self.assertEqual(
+          revision_filename,
+          os.path.join(tempdir, chromium_utils.FULL_BUILD_REVISION_FILENAME)
+      )
     finally:
       shutil.rmtree(tempdir)
 
@@ -76,7 +78,7 @@ class TestWriteRevisionFile(unittest.TestCase):
     try:
       # Create archive.
       urls = zip_build.Archive(options)
-      self.assertTrue(urls.has_key('zip_url'))
+      self.assertTrue('zip_url' in urls)
       zip_filename = urls['zip_url'].rsplit('/', 1)[1]
       zip_filepath = os.path.join(options.staging_dir, zip_filename)
       self.assertTrue(os.path.exists(zip_filepath))
@@ -84,7 +86,7 @@ class TestWriteRevisionFile(unittest.TestCase):
       unzip_dir = os.path.join(tempdir, 'unzip')
       chromium_utils.ExtractZip(zip_filepath, unzip_dir)
       unzip_entries = os.listdir(unzip_dir)
-      self.assertEquals(1, len(unzip_entries))
+      self.assertEqual(1, len(unzip_entries))
       package_dir = os.path.join(unzip_dir, unzip_entries[0])
       # Verify that each file in build directory is present in the archive.
       build_dir = _build_dir(options)

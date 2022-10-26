@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # Copyright 2014 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -72,18 +72,12 @@ class ArchiveTest(unittest.TestCase):
     if hasattr(zip_file, 'extractall'):
       zip_file.extractall(extract_dir)  # pylint: disable=E1101
 
-      def FindFiles(arg, dirname, names):
-        subdir = dirname[len(arg):].strip(os.path.sep)
-        extracted_files.extend([
-            os.path.join(subdir, name)
-            for name in names
-            if os.path.isfile(os.path.join(dirname, name))
-        ])
-
+      # List of extract_dir-relative files.
       extracted_files = []
-      os.path.walk(extract_dir, FindFiles, extract_dir)
-      extracted_files.sort()
-      self.assertEquals(sorted(expected_files), extracted_files)
+      for dirpath, _, filenames in os.walk(extract_dir):
+        subdir = dirpath[len(extract_dir):].strip(os.path.sep)
+        extracted_files.extend([os.path.join(subdir, f) for f in filenames])
+      self.assertCountEqual(expected_files, extracted_files)
     else:
       test_result = zip_file.testzip()
       self.assertTrue(not test_result)

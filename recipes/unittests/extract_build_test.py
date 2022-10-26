@@ -1,4 +1,4 @@
-#!/usr/bin/env vpython
+#!/usr/bin/env vpython3
 # Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -74,7 +74,7 @@ class ExtractBuildTest(unittest.TestCase):
     url, _archive_name = extract_build.GetBuildUrl(
         options, build_revision=self._build_revision
     )
-    self.assertEquals(url, expected_url)
+    self.assertEqual(url, expected_url)
 
 
 if __name__ == '__main__':

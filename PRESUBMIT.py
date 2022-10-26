@@ -45,13 +45,22 @@ def CheckFreeze(input_api, output_api):
 # expectation is that these will become the defaults over time.
 PYTHON3_ONLY_FILES = (
     'PRESUBMIT_test.py',
+    'recipes/zip_build.py',
+    'recipes/extract_build.py',
     'recipes/recipes/flakiness/generate_builder_test_data.resources/query.py',
     (
         'recipes/recipes/flakiness/generate_builder_test_data.resources/'
         'query_test.py'
     ),
+    'recipes/recipe_modules/archive/resources/filter_build_files.py',
+    'recipes/recipe_modules/archive/resources/zip_archive.py',
     'recipes/recipe_modules/chromium/resources/ninja_wrapper.py',
     'recipes/recipe_modules/chromium/resources/ninja_wrapper_test.py',
+    'recipes/recipe_modules/chromium_android/resources/archive_build.py',
+    (
+        'recipes/recipe_modules/chromium_android/resources/'
+        'archive_build_unittest.py'
+    ),
     'recipes/recipe_modules/chromium_tests_builder_config/PRESUBMIT.py',
     (
         'recipes/recipe_modules/chromium_tests_builder_config/migration/'
@@ -119,6 +128,8 @@ PYTHON3_ONLY_FILES = (
     ),
     'recipes/recipe_modules/code_coverage/unittests/repository_util_test.py',
     'recipes/recipe_modules/code_coverage/unittests/write_paths_test.py',
+    'recipes/unittests/extract_build_unittest.py',
+    'recipes/unittests/zip_build_unittest.py',
 )
 
 
