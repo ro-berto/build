@@ -63,15 +63,22 @@ def RunSteps(api):
     return result_pb2.RawResult(
         status=sub_build.status, summary_markdown=sub_build.summary_markdown)
 
-  # Initialize properties constructed by the compilator build. GN args
-  # used for compilation, CAS digests of isolated build artifacts and
-  # test specs from checkout.
+  # Initialize the test specs the compilator retrieved from the checkout.
   comp_props = sub_build.output.properties['compilator_properties']
-  v8.gn_args = list(comp_props['gn_args'])
-  v8.isolated_tests = dict(comp_props['swarm_hashes'])
   tests = v8.extra_tests_from_properties(
       {'parent_test_spec': dict(comp_props['parent_test_spec'])})
 
+  if not tests:
+    # Running a testing trybot that doesn't specify tests might point to
+    # a configuration error.
+    return result_pb2.RawResult(
+        status=common_pb.FAILURE, summary_markdown='No tests specified')
+
+  # Run tests and initialize other configs needed for testing. GN args
+  # from compilation to show on test failures and CAS digests of isolated
+  # build artifacts to set up swarming tasks.
+  v8.gn_args = list(comp_props['gn_args'])
+  v8.isolated_tests = dict(comp_props['swarm_hashes'])
   test_results = v8.runtests(tests)
 
   if test_results.has_failures:
@@ -108,7 +115,7 @@ def launch_compilator_watcher(api, build):
 
   build_url = api.buildbucket.build_url(build_id=build.id)
   build_link = f'compilator build: {build.id}'
-  
+
   try:
     ret = api.step.sub_build('compilator steps', cmd, sub_build)
     ret.presentation.links[build_link] = build_url
@@ -199,5 +206,16 @@ def GenTests(api):
       api.buildbucket.try_build(builder='v8_foobar_dbg'),
       api.post_process(ResultReason, 'sub_build missing from step'),
       api.post_process(StatusException),
+      api.post_process(DropExpectation),
+  )
+
+  yield api.test(
+      'no_tests',
+      api.buildbucket.try_build(builder='v8_foobar_rel'),
+      subbuild_data({'compilator_properties': {'parent_test_spec': {}}}),
+      api.post_process(DoesNotRun, 'Check'),
+      api.post_process(DoesNotRun, 'Test262'),
+      api.post_process(ResultReason, 'No tests specified'),
+      api.post_process(StatusFailure),
       api.post_process(DropExpectation),
   )
