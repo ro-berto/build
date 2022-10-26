@@ -1466,13 +1466,6 @@
       "tryserver.chromium.chromiumos:gpu-fyi-try-chromeos-octopus-exp"
     ]
   },
-  "chromium.gpu:GPU Linux Builder (dbg)": {
-    "builders": [
-      "chromium.gpu:GPU Linux Builder (dbg)",
-      "chromium.gpu:Linux Debug (NVIDIA)",
-      "tryserver.chromium.linux:gpu-try-linux-nvidia-dbg"
-    ]
-  },
   "chromium.gpu:GPU Mac Builder (dbg)": {
     "builders": [
       "chromium.gpu:GPU Mac Builder (dbg)",
@@ -1480,13 +1473,6 @@
       "chromium.gpu:Mac Retina Debug (AMD)",
       "tryserver.chromium.mac:gpu-try-mac-amd-retina-dbg",
       "tryserver.chromium.mac:gpu-try-mac-intel-dbg"
-    ]
-  },
-  "chromium.gpu:Linux Debug (NVIDIA)": {
-    "builders": [
-      "chromium.gpu:GPU Linux Builder (dbg)",
-      "chromium.gpu:Linux Debug (NVIDIA)",
-      "tryserver.chromium.linux:gpu-try-linux-nvidia-dbg"
     ]
   },
   "chromium.gpu:Mac Debug (Intel)": {
@@ -2062,13 +2048,6 @@
     "builders": [
       "chromium.gpu.fyi:Linux FYI GPU TSAN Release",
       "tryserver.chromium.linux:gpu-fyi-try-linux-nvidia-tsn"
-    ]
-  },
-  "tryserver.chromium.linux:gpu-try-linux-nvidia-dbg": {
-    "builders": [
-      "chromium.gpu:GPU Linux Builder (dbg)",
-      "chromium.gpu:Linux Debug (NVIDIA)",
-      "tryserver.chromium.linux:gpu-try-linux-nvidia-dbg"
     ]
   },
   "tryserver.chromium.linux:leak_detection_linux": {

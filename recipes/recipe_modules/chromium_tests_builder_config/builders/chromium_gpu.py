@@ -13,9 +13,11 @@ def _chromium_gpu_spec(**kwargs):
 # //infra/config/subprojects/chromium/ci/chromium.gpu.star
 # * Android Release (Nexus 5X)
 # * GPU Linux Builder
+# * GPU Linux Builder (dbg)
 # * GPU Mac Builder
 # * GPU Win x64 Builder
 # * GPU Win x64 Builder (dbg)
+# * Linux Debug (NVIDIA)
 # * Linux Release (NVIDIA)
 # * Mac Release (Intel)
 # * Mac Retina Release (AMD)
@@ -23,34 +25,6 @@ def _chromium_gpu_spec(**kwargs):
 # * Win10 x64 Release (NVIDIA)
 
 SPEC = {
-    'GPU Linux Builder (dbg)':
-        _chromium_gpu_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 64,
-            },
-            simulation_platform='linux',
-        ),
-    'Linux Debug (NVIDIA)':
-        _chromium_gpu_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 64,
-            },
-            execution_mode=builder_spec.TEST,
-            parent_buildername='GPU Linux Builder (dbg)',
-            simulation_platform='linux',
-        ),
     'GPU Mac Builder (dbg)':
         _chromium_gpu_spec(
             chromium_config='chromium',

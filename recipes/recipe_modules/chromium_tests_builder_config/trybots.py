@@ -223,6 +223,7 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * cast_shell_linux
     # * cast_shell_linux_arm64
     # * cast_shell_linux_dbg
+    # * gpu-try-linux-nvidia-dbg
     # * gpu-try-linux-nvidia-rel
     # * gpu-fyi-try-linux-amd-rel
     # * gpu-fyi-try-linux-intel-exp
@@ -352,12 +353,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.gpu.fyi',
                 buildername='Linux FYI GPU TSAN Release',
-            ),
-        'gpu-try-linux-nvidia-dbg':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu',
-                buildername='GPU Linux Builder (dbg)',
-                tester='Linux Debug (NVIDIA)',
             ),
         'linux-lacros-fyi-rel':
             try_spec.TrySpec.create_for_single_mirror(
