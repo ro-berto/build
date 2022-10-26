@@ -38,7 +38,7 @@ BUILDERS = ctbc.BuilderDatabase.create({
             ctbc.BuilderSpec.create(
                 chromium_config='android',
                 chromium_apply_config=['cronet_builder'],
-                gclient_apply_config=['android'],
+                gclient_apply_config=['android', 'enable_reclient'],
                 gclient_config='chromium',
                 chromium_config_kwargs={
                     'BUILD_CONFIG': 'Release',

@@ -40,6 +40,7 @@ BUILDERS = freeze({
                         'TARGET_PLATFORM': 'linux',
                         'TARGET_BITS': 64,
                     },
+                    gclient_apply_config=['enable_reclient'],
                     upload_bucket='chromium-browser-afl',
                     upload_directory='asan',
                 ),

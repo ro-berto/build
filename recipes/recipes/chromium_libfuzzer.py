@@ -47,7 +47,7 @@ BUILDERS = freeze({
                         'TARGET_PLATFORM': 'chromeos',
                         'TARGET_BITS': 64,
                     },
-                    gclient_apply_config=['chromeos'],
+                    gclient_apply_config=['chromeos', 'enable_reclient'],
                     archive_prefix='libfuzzer-chromeos',
                     upload_bucket='chromium-browser-libfuzzer',
                     upload_directory='chromeos-asan',
@@ -59,7 +59,7 @@ BUILDERS = freeze({
                         'clobber',
                         'mac_toolchain',
                     ],
-                    gclient_apply_config=['ios'],
+                    gclient_apply_config=['ios', 'enable_reclient'],
                     chromium_config_kwargs={
                         'BUILD_CONFIG': 'Debug',
                         'TARGET_BITS': 64,
@@ -80,6 +80,7 @@ BUILDERS = freeze({
                         'TARGET_PLATFORM': 'linux',
                         'TARGET_BITS': 32,
                     },
+                    gclient_apply_config=['enable_reclient'],
                     upload_bucket='chromium-browser-libfuzzer',
                     upload_directory='asan',
                 ),
@@ -92,6 +93,7 @@ BUILDERS = freeze({
                         'TARGET_PLATFORM': 'linux',
                         'TARGET_BITS': 32,
                     },
+                    gclient_apply_config=['enable_reclient'],
                     upload_bucket='chromium-browser-libfuzzer',
                     upload_directory='asan',
                 ),
@@ -104,6 +106,7 @@ BUILDERS = freeze({
                         'TARGET_PLATFORM': 'linux',
                         'TARGET_BITS': 32,
                     },
+                    gclient_apply_config=['enable_reclient'],
                     archive_prefix='libfuzzer-v8-arm',
                     upload_bucket='chromium-browser-libfuzzer',
                     upload_directory='asan-arm-sim',
@@ -118,6 +121,7 @@ BUILDERS = freeze({
                         'TARGET_PLATFORM': 'linux',
                         'TARGET_BITS': 32,
                     },
+                    gclient_apply_config=['enable_reclient'],
                     archive_prefix='libfuzzer-v8-arm',
                     upload_bucket='chromium-browser-libfuzzer',
                     upload_directory='asan-arm-sim',
@@ -132,6 +136,7 @@ BUILDERS = freeze({
                         'TARGET_PLATFORM': 'linux',
                         'TARGET_BITS': 64,
                     },
+                    gclient_apply_config=['enable_reclient'],
                     upload_bucket='chromium-browser-libfuzzer',
                     upload_directory='asan',
                 ),
@@ -144,6 +149,7 @@ BUILDERS = freeze({
                         'TARGET_PLATFORM': 'linux',
                         'TARGET_BITS': 64,
                     },
+                    gclient_apply_config=['enable_reclient'],
                     upload_bucket='chromium-browser-libfuzzer',
                     upload_directory='asan',
                 ),
@@ -156,6 +162,7 @@ BUILDERS = freeze({
                         'TARGET_PLATFORM': 'linux',
                         'TARGET_BITS': 64,
                     },
+                    gclient_apply_config=['enable_reclient'],
                     archive_prefix='libfuzzer-v8-arm64',
                     upload_bucket='chromium-browser-libfuzzer',
                     upload_directory='asan-arm64-sim',
@@ -170,6 +177,7 @@ BUILDERS = freeze({
                         'TARGET_PLATFORM': 'linux',
                         'TARGET_BITS': 64,
                     },
+                    gclient_apply_config=['enable_reclient'],
                     archive_prefix='libfuzzer-v8-arm64',
                     upload_bucket='chromium-browser-libfuzzer',
                     upload_directory='asan-arm64-sim',
@@ -184,6 +192,7 @@ BUILDERS = freeze({
                         'TARGET_PLATFORM': 'linux',
                         'TARGET_BITS': 64,
                     },
+                    gclient_apply_config=['enable_reclient'],
                     upload_bucket='chromium-browser-libfuzzer',
                     upload_directory='msan',
                 ),
@@ -196,6 +205,7 @@ BUILDERS = freeze({
                         'TARGET_PLATFORM': 'linux',
                         'TARGET_BITS': 64,
                     },
+                    gclient_apply_config=['enable_reclient'],
                     upload_bucket='chromium-browser-libfuzzer',
                     upload_directory='ubsan',
                 ),
@@ -208,6 +218,7 @@ BUILDERS = freeze({
                         'TARGET_PLATFORM': 'mac',
                         'TARGET_BITS': 64,
                     },
+                    gclient_apply_config=['enable_reclient'],
                     upload_bucket='chromium-browser-libfuzzer',
                     upload_directory='asan',
                 ),
@@ -220,6 +231,7 @@ BUILDERS = freeze({
                         'TARGET_PLATFORM': 'win',
                         'TARGET_BITS': 64,
                     },
+                    gclient_apply_config=['enable_reclient'],
                     upload_bucket='chromium-browser-libfuzzer',
                     upload_directory='asan',
                 ),
@@ -233,9 +245,17 @@ def RunSteps(api):
 
   checkout_results = api.chromium_checkout.ensure_checkout(bot_config)
 
+  # Unlike other recipes, adding 'enable_reclient' to the gclient_apply_config
+  # list will turn on reclient usage.  This recipe assumes that if it is not
+  # using goma then it will be using reclient instead.  There is no local-only
+  # case.
+  use_reclient = 'enable_reclient' in bot_config.gclient_apply_config
+
+  api.chromium.ensure_goma()
   api.chromium.ensure_toolchains()
   api.chromium.runhooks()
-  api.chromium.mb_gen(builder_id, use_goma=False, use_reclient=True)
+  api.chromium.mb_gen(
+      builder_id, use_goma=not use_reclient, use_reclient=use_reclient)
 
   with api.context(cwd=api.path['checkout'], env=api.chromium.get_env()):
     all_fuzzers = api.gn.refs(
@@ -286,7 +306,9 @@ def RunSteps(api):
       sorted(no_clusterfuzz))
   api.step.active_result.presentation.logs['targets'] = targets
   raw_result = api.chromium.compile(
-      targets=targets, use_goma_module=False, use_reclient=True)
+      targets=targets,
+      use_goma_module=not use_reclient,
+      use_reclient=use_reclient)
   if raw_result.status != common_pb.SUCCESS:
     return raw_result
 
