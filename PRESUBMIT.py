@@ -289,6 +289,7 @@ def CheckTestsOnCommit(input_api, output_api):
        'migration', 'scripts', 'tests'),
       ('recipes', 'recipes', '*.resources'),
       ('recipes', 'recipes', '*', '*.resources'),
+      ('scripts', 'common', 'unittests'),
   ):
     glob = dir_glob + ('*_test.py',)
     test_files.extend(
