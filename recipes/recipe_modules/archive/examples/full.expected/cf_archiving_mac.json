@@ -58,7 +58,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "RECIPE_MODULE[build::archive]/resources/filter_build_files.py",
       "--dir",
       "[START_DIR]/src/out/Release",
@@ -80,20 +80,13 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "RECIPE_MODULE[build::archive]/resources/zip_archive.py",
       "[CLEANUP]/chrome_staging",
       "chrome-asan-mac-release-refs_heads_B1-123456",
       "[\"chrome\", \"icu.dat\", \"pdfsqueeze\"]",
       "[START_DIR]/src/out/Release"
     ],
-    "env_prefixes": {
-      "PYTHONPATH": [
-        "RECIPE_REPO[build]",
-        "RECIPE_REPO[build]/recipes",
-        "RECIPE_REPO[build]/scripts"
-      ]
-    },
     "infra_step": true,
     "name": "zipping"
   },

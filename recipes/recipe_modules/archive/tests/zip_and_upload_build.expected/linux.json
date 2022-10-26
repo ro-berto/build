@@ -170,7 +170,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "RECIPE_REPO[build]/recipes/zip_build.py",
       "--target",
       "[START_DIR]/src/Release/out",
@@ -203,13 +203,6 @@
       "--json-urls",
       "/path/to/tmp/json"
     ],
-    "env_prefixes": {
-      "PYTHONPATH": [
-        "RECIPE_REPO[build]",
-        "RECIPE_REPO[build]/recipes",
-        "RECIPE_REPO[build]/scripts"
-      ]
-    },
     "infra_step": true,
     "name": "zip build",
     "~followup_annotations": [

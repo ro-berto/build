@@ -1796,7 +1796,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "RECIPE_MODULE[build::archive]/resources/filter_build_files.py",
       "--dir",
       "[CACHE]/builder/src/out/Release",
@@ -1829,20 +1829,13 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "RECIPE_MODULE[build::archive]/resources/zip_archive.py",
       "[CLEANUP]/chrome_staging",
       "libfuzzer-chromeos-linux-release-170242",
       "[\"file1\", \"file2\"]",
       "[CACHE]/builder/src/out/Release"
     ],
-    "env_prefixes": {
-      "PYTHONPATH": [
-        "RECIPE_REPO[build]",
-        "RECIPE_REPO[build]/recipes",
-        "RECIPE_REPO[build]/scripts"
-      ]
-    },
     "infra_step": true,
     "luci_context": {
       "realm": {

@@ -116,12 +116,11 @@ class ArchiveApi(recipe_api.RecipeApi):
         'zip_url':
             'https://storage.cloud.google.com/zip_build.example.com/output.zip',
     })
-    result = self.m.build.python(
-        step_name,
+    cmd = [
+        'python3',
         self.repo_resource('recipes', 'zip_build.py'),
-        args,
-        infra_step=True,
-        **kwargs)
+    ] + args
+    result = self.m.step(step_name, cmd, infra_step=True, **kwargs)
     urls = result.json.output
     if 'storage_url' in urls:
       result.presentation.links['download'] = urls['storage_url']
@@ -289,7 +288,7 @@ class ArchiveApi(recipe_api.RecipeApi):
 
     # Build the list of files to archive.
     cmd = [
-        'python',
+        'python3',
         self.resource('filter_build_files.py'),
         '--dir',
         build_dir,
@@ -336,16 +335,15 @@ class ArchiveApi(recipe_api.RecipeApi):
       zip_file_base_name += ('-experimental')
     zip_file_name = '%s.zip' % zip_file_base_name
 
-    self.m.build.python(
-        'zipping',
-        self.resource('zip_archive.py'), [
-            staging_dir,
-            zip_file_base_name,
-            self.m.json.input(zip_file_list),
-            build_dir,
-        ],
-        infra_step=True,
-        **kwargs)
+    cmd = [
+        'python3',
+        self.resource('zip_archive.py'),
+        staging_dir,
+        zip_file_base_name,
+        self.m.json.input(zip_file_list),
+        build_dir,
+    ]
+    self.m.step('zipping', cmd, infra_step=True, **kwargs)
 
     zip_file = staging_dir.join(zip_file_name)
 
@@ -414,12 +412,11 @@ class ArchiveApi(recipe_api.RecipeApi):
       ])
     args.extend(['--build-number', self.m.buildbucket.build.number])
 
-    self.m.build.python(
-        step_name,
+    cmd = [
+        'python3',
         self.repo_resource('recipes', 'extract_build.py'),
-        args,
-        infra_step=True,
-        **kwargs)
+    ] + args
+    self.m.step(step_name, cmd, infra_step=True, **kwargs)
 
   # FIXME(machenbach): This is currently used by win64 builders as well, which
   # have win32 in their archive names, which is confusing.

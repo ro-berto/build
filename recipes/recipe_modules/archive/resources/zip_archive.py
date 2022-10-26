@@ -12,6 +12,11 @@ import os
 import stat
 import sys
 
+# Add build/recipes, and build/scripts.
+THIS_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.abspath(os.path.join(THIS_DIR, '..', 'recipes')))
+sys.path.insert(0, os.path.abspath(os.path.join(THIS_DIR, '..', 'scripts')))
+
 from common import chromium_utils
 
 def main(argv):
