@@ -20,7 +20,6 @@ DEPS = [
 
 def RunSteps(api):
   api.gclient.set_config('webrtc_ios')
-  api.gclient.apply_config('enable_reclient')
   api.chromium_checkout.ensure_checkout()
   api.gclient.runhooks()
 
