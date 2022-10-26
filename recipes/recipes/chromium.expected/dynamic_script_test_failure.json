@@ -628,7 +628,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "python",
       "RECIPE_REPO[build]/recipes/extract_build.py",
       "--gsutil-py-path",
       "RECIPE_REPO[depot_tools]/gsutil.py",
@@ -649,6 +649,13 @@
     ],
     "env": {
       "CHROME_HEADLESS": "1"
+    },
+    "env_prefixes": {
+      "PYTHONPATH": [
+        "RECIPE_REPO[build]",
+        "RECIPE_REPO[build]/recipes",
+        "RECIPE_REPO[build]/scripts"
+      ]
     },
     "infra_step": true,
     "luci_context": {

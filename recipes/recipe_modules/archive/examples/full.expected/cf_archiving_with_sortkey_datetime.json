@@ -58,7 +58,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "python",
       "RECIPE_MODULE[build::archive]/resources/filter_build_files.py",
       "--dir",
       "[START_DIR]/src/out/Release",
@@ -79,13 +79,20 @@
   },
   {
     "cmd": [
-      "python3",
+      "python",
       "RECIPE_MODULE[build::archive]/resources/zip_archive.py",
       "[CLEANUP]/chrome_staging",
       "chrome-asan-linux-release-197001010001",
       "[\"chrome\", \"resources\"]",
       "[START_DIR]/src/out/Release"
     ],
+    "env_prefixes": {
+      "PYTHONPATH": [
+        "RECIPE_REPO[build]",
+        "RECIPE_REPO[build]/recipes",
+        "RECIPE_REPO[build]/scripts"
+      ]
+    },
     "infra_step": true,
     "name": "zipping"
   },
