@@ -65,6 +65,12 @@ def RunSteps(api):
       api.tryserver.gerrit_change_target_ref.startswith('refs/branch-heads/'))):
     skip_owners = True
 
+  # We are checking android on CI first and will change this check when we add other OS
+  if not api.tryserver.gerrit_change:
+    # Ensures that pydeps checks android and linux checkouts as well
+    api.gclient.c.target_os.add('android')
+    api.gclient.c.target_os.add('linux')
+
   dry_run_modes = (api.cq.DRY_RUN, api.cq.QUICK_DRY_RUN)
   if api.cq.active and api.cq.run_mode in dry_run_modes:
     api.cq.allow_reuse_for(*dry_run_modes)
@@ -106,7 +112,6 @@ def GenTests(api):
       api.step_data('presubmit', api.json.output({})),
       api.step_data('presubmit py3', api.json.output({})),
       api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
