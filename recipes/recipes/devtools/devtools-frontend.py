@@ -82,10 +82,9 @@ def RunSteps(api, builder_config, is_official_build, devtools_skip_typecheck,
     api.gclient.runhooks()
 
   with _depot_on_path(api):
-    api.chromium.ensure_goma()
     clean_out_dir(api, builder_config, clobber)
-    api.chromium.run_gn(use_goma=True)
-    compilation_result = api.chromium.compile(use_goma_module=True)
+    api.chromium.run_gn()
+    compilation_result = api.chromium.compile()
     if compilation_result.status != common_pb.SUCCESS:
       return compilation_result
 
@@ -141,7 +140,6 @@ def _configure_build(api, builder_config, is_official_build,
                      devtools_skip_typecheck):
   build_cfg = api.chromium.make_config(BUILD_CONFIG=builder_config)
   build_cfg.build_config_fs = builder_config
-  build_cfg.compile_py.compiler = 'goma'
   build_cfg.gn_args.append('devtools_dcheck_always_on=true')
   if is_official_build:
     build_cfg.gn_args.append('is_official_build=true')
