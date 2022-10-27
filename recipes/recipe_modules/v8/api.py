@@ -262,10 +262,6 @@ class V8Api(recipe_api.RecipeApi):
         default['chromium_apply_config'] = [
             'default_compiler', 'mb', 'mb_no_luci_auth'
         ]
-      if self.use_remoteexec:
-        default['gclient_apply_config'] = [
-            'enable_reclient',
-        ]
     return (builders or {}).get(self.m.buildbucket.builder_name, default)
 
   def update_bot_config(self, bot_config, binary_size_tracking,
@@ -411,9 +407,6 @@ class V8Api(recipe_api.RecipeApi):
 
     if self.m.chromium.c.TARGET_PLATFORM == 'ios':
       self.m.gclient.apply_config('v8_ios')
-
-    for c in self.bot_config.get('gclient_apply_config', []):
-      self.m.gclient.apply_config(c)
 
     for c in self.bot_config.get('chromium_apply_config', []):
       self.m.chromium.apply_config(c)

@@ -211,9 +211,7 @@ def RunSteps(api, build_config, target_arch, target_bits, target_platform,
         'chromium_apply_config': ['default_compiler', 'gn'],
         'v8_config_kwargs': {},
     }
-    if api.v8.use_remoteexec:
-      bot_config['gclient_apply_config'] = ['enable_reclient']
-    else:
+    if not api.v8.use_remoteexec:
       bot_config['chromium_apply_config'].append('goma')
     for key, value in (
         ('BUILD_CONFIG', build_config),
