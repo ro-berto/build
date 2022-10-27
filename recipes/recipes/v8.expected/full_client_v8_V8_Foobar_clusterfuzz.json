@@ -69,7 +69,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "RECIPE_MODULE[build::archive]/resources/filter_build_files.py",
       "--dir",
       "[CACHE]/builder/v8/out/build",
@@ -102,20 +102,13 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "RECIPE_MODULE[build::archive]/resources/zip_archive.py",
       "[CLEANUP]/chrome_staging",
       "d8_bar-linux64-release-v8-component-50110",
       "[\"file1\", \"file2\"]",
       "[CACHE]/builder/v8/out/build"
     ],
-    "env_prefixes": {
-      "PYTHONPATH": [
-        "RECIPE_REPO[build]",
-        "RECIPE_REPO[build]/recipes",
-        "RECIPE_REPO[build]/scripts"
-      ]
-    },
     "infra_step": true,
     "luci_context": {
       "realm": {

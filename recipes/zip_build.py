@@ -19,6 +19,11 @@ import stat
 import sys
 import tempfile
 
+# Add build/recipes and build/scripts.
+THIS_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.abspath(os.path.join(THIS_DIR, '..', 'recipes')))
+sys.path.insert(0, os.path.abspath(os.path.join(THIS_DIR, '..', 'scripts')))
+
 from common import chromium_utils
 import bot_utils
 import build_directory
