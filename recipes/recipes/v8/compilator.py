@@ -103,7 +103,7 @@ def RunSteps(api, custom_deps, default_targets, gclient_vars, target_arch,
 
 
 def GenTests(api):
-  def test(name, builder_name='v8_foobar_compile_ng_rel'):
+  def test(name, builder_name='v8_foobar_compile_rel'):
     return (
         api.test(name) +
         api.builder_group.for_current('tryserver.v8') +
@@ -127,8 +127,20 @@ def GenTests(api):
   yield test('basic')
 
   yield (
-      test('windows', 'v8_foobar_compile_ng_dbg') +
+      test('windows', 'v8_foobar_compile_dbg') +
       api.platform('win', 64) +
+      api.post_process(DropExpectation)
+  )
+
+  # TODO(https://crbug.com/890222): Two tests just for legacy compilator names.
+  # Remove after the rename.
+  yield (
+      test('legacy_dbg', 'v8_foobar_compile_ng_dbg') +
+      api.post_process(DropExpectation)
+  )
+
+  yield (
+      test('legacy_rel', 'v8_foobar_compile_ng_rel') +
       api.post_process(DropExpectation)
   )
 

@@ -19,6 +19,7 @@ from PB.recipe_engine import result as result_pb2
 from recipe_engine.post_process import (
     DoesNotRun, DropExpectation, MustRun, ResultReason, StatusException,
     StatusFailure)
+from recipe_engine.recipe_api import Property
 
 from google.protobuf import json_format
 from google.protobuf import struct_pb2
@@ -36,15 +37,20 @@ DEPS = [
   'v8_tests',
 ]
 
+PROPERTIES = {
+    # Name of the compilator trybot to use.
+    'compilator_name': Property(kind=str),
+}
+
 
 # TODO(https://crbug.com/890222): Implement cancellation logic.
-def RunSteps(api):
+def RunSteps(api, compilator_name):
   v8 = api.v8_tests
 
   with api.step.nest('initialization'):
     # Start compilator build.
     request = api.buildbucket.schedule_request(
-        builder=get_compilator_name(api),
+        builder=compilator_name,
         swarming_parent_run_id=api.swarming.task_id,
         tags=api.buildbucket.tags(**{'hide-in-gerrit': 'pointless'}))
     build = api.buildbucket.schedule(
@@ -84,18 +90,6 @@ def RunSteps(api):
   if test_results.has_failures:
     # Let tryjobs fail for failures only.
     raise api.step.StepFailure('Failures in tryjob.')
-
-
-def get_compilator_name(api):
-  """Contruct the compilator name from the given orchestrator name following
-  V8 conventions.
-
-  Compilator name for <name>_{rel|dbg} builder is: <name>_compile_ng_{rel|dbg}
-  """
-  builder_name = api.buildbucket.builder_name
-  assert builder_name.endswith(('_rel', '_dbg'))
-  name, suffix = builder_name.rsplit('_', 1)
-  return f'{name}_compile_ng_{suffix}'
 
 
 def launch_compilator_watcher(api, build):
@@ -169,9 +163,13 @@ def GenTests(api):
     },
   }
 
-  yield api.test(
+  def test(name, *args):
+    return api.test(
+        name, api.buildbucket.try_build(builder='v8_foobar_rel'),
+        api.properties(compilator_name='v8_foobar_compile_rel'), *args)
+
+  yield test(
       'basic',
-      api.buildbucket.try_build(builder='v8_foobar_rel'),
       subbuild_data(output_properties),
       api.step_data('Check', api.v8_tests.one_failure()),
       api.post_process(MustRun, 'Check'),
@@ -179,9 +177,8 @@ def GenTests(api):
 
   )
 
-  yield api.test(
+  yield test(
       'missing_properties',
-      api.buildbucket.try_build(builder='v8_foobar_rel'),
       subbuild_data({}, 'Compile failed', common_pb.FAILURE),
       api.post_process(DoesNotRun, 'Check'),
       api.post_process(DoesNotRun, 'Test262'),
@@ -190,9 +187,8 @@ def GenTests(api):
       api.post_process(DropExpectation),
   )
 
-  yield api.test(
+  yield test(
       'infra_failure',
-      api.buildbucket.try_build(builder='v8_foobar_rel'),
       subbuild_data({}, 'Timeout', common_pb.INFRA_FAILURE),
       api.post_process(DoesNotRun, 'Check'),
       api.post_process(DoesNotRun, 'Test262'),
@@ -201,17 +197,15 @@ def GenTests(api):
       api.post_process(DropExpectation),
   )
 
-  yield api.test(
+  yield test(
       'no_subbuild',
-      api.buildbucket.try_build(builder='v8_foobar_dbg'),
       api.post_process(ResultReason, 'sub_build missing from step'),
       api.post_process(StatusException),
       api.post_process(DropExpectation),
   )
 
-  yield api.test(
+  yield test(
       'no_tests',
-      api.buildbucket.try_build(builder='v8_foobar_rel'),
       subbuild_data({'compilator_properties': {'parent_test_spec': {}}}),
       api.post_process(DoesNotRun, 'Check'),
       api.post_process(DoesNotRun, 'Test262'),
