@@ -27,3 +27,8 @@ def angle(c):
 @CONFIG_CTX(includes=['angle'])
 def angle_android(c):
   c.target_os.add('android')
+
+
+@CONFIG_CTX(includes=['angle'])
+def angle_mesa(c):
+  c.solutions[0].custom_vars['checkout_angle_mesa'] = True

@@ -15,10 +15,11 @@ def _create_builder_config(platform,
                            config,
                            target_bits,
                            is_clang=True,
-                           perf_isolate_upload=False):
+                           perf_isolate_upload=False,
+                           gclient_config='angle'):
   return _angle_spec(
       chromium_config='angle_clang' if is_clang else 'angle_non_clang',
-      gclient_config='angle',
+      gclient_config=gclient_config,
       simulation_platform=platform,
       chromium_config_kwargs={
           'BUILD_CONFIG': config,
@@ -129,7 +130,8 @@ _SPEC = {
     'linux-swiftshader-ubsan':
         _create_tester_config('linux', 64, 'linux-ubsan-test'),
     'linux-test':
-        _create_builder_config('linux', 'Release', 64),
+        _create_builder_config(
+            'linux', 'Release', 64, gclient_config='angle_mesa'),
     'linux-trace':
         _create_builder_config('linux', 'Release', 64),
     'linux-tsan-test':
