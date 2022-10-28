@@ -32,10 +32,12 @@ import re
 
 from recipe_engine.config import Single
 from recipe_engine.post_process import (
-    DoesNotRun, DropExpectation, Filter, MustRun)
+    DoesNotRun, DropExpectation, Filter, MustRun, StatusSuccess)
 from recipe_engine.post_process import ResultReasonRE
 from recipe_engine.recipe_api import Property
 
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
+from PB.recipe_engine.result import RawResult
 
 
 DEPS = [
@@ -64,11 +66,12 @@ PROPERTIES = {
     'max_calibration_attempts': Property(default=5, kind=Single((int, float))),
     # Name of the isolated file (e.g. bot_default, mjsunit).
     'isolated_name': Property(kind=str),
-    # Bisection mode: one of {regression|progression|repro}.
+    # Bisection mode: one of {regression|progression|combined|repro}.
     # Mode regression bisects backwards to determine what introduced a flake.
     # Mode progression bisects forwards to determine what fixed a flake.
+    # Mode combined runs progression and regression bisection.
     # Mode repro only checks if a flake reproduces with the given revision.
-    'mode': Property(default='regression', kind=str),
+    'mode': Property(default='combined', kind=str),
     # Initial number of swarming shards.
     'num_shards': Property(default=2, kind=Single((int, float))),
     # Optional build directory for backwards-compatibility, e.g. 'out/Release'.
@@ -641,7 +644,16 @@ class Runner(object):
       return num_failures
 
 
-class Bisector(object):
+class Validator(object):
+  def __init__(self, api):
+    self.api = api
+
+  def validate(self, known_bad_reproduces):
+    if not known_bad_reproduces:
+      raise self.api.step.StepFailure('Could not reach enough confidence.')
+
+
+class Bisector(Validator):
   def __init__(self, api, depot, builds, is_bad_func):
     """Collection of bisection helpers.
 
@@ -650,7 +662,7 @@ class Bisector(object):
       depot: Helper for accessing storage and git.
       is_bad_func: Function (revision->bool) determining if a revision is bad.
     """
-    self.api = api
+    super().__init__(api)
     self.depot = depot
     self.builds = builds
     self.is_bad_func = is_bad_func
@@ -661,8 +673,10 @@ class Bisector(object):
     offset_range = f'#{from_offset}..#{to_offset}'
     full_git_range = f'{from_revision}..{to_revision}'
     git_range = f'{from_revision[:8]}..{to_revision[:8]}'
-    step_result = self.api.step(text % offset_range, cmd=None)
+    result_text = text % offset_range
+    step_result = self.api.step(result_text, cmd=None)
     step_result.presentation.links[git_range] = f'{REPO}/+log/{full_git_range}'
+    return result_text
 
   def report_revision(self, text, offset):
     rev = self.depot.get_revision(offset)
@@ -724,16 +738,13 @@ class Bisector(object):
         from_offset = build_offset
         known_good = build_offset
 
-  def validate(self, known_bad_reproduces):
-    if not known_bad_reproduces:
-      raise self.api.step.StepFailure('Could not reach enough confidence.')
-
 
 class RegressionBisector(Bisector):
   def bisect(self, known_bad_offset):
     from_offset, to_offset = self.bisect_back(known_bad_offset)
     from_offset, to_offset = self.bisect_into(from_offset, to_offset)
-    self.report_range('Result: Suspecting %s', from_offset, to_offset)
+    result = self.report_range('Suspecting %s', from_offset, to_offset)
+    return RawResult(status=common_pb.SUCCESS, summary_markdown=result)
 
 
 class ProgressionBisector(Bisector):
@@ -745,10 +756,38 @@ class ProgressionBisector(Bisector):
     head_offset = self.builds.find_closest_build(self.depot.get_head_offset())
 
     if not self.is_bad_func(head_offset):
-      raise self.api.step.StepFailure('Flake still reproduces.')
+      return RawResult(
+          status=common_pb.FAILURE, summary_markdown='Flake still reproduces.')
 
     from_offset, to_offset = self.bisect_into(known_bad_offset, head_offset)
-    self.report_range('Result: Fixed in %s', from_offset, to_offset)
+    result = self.report_range('Fixed in %s', from_offset, to_offset)
+    return RawResult(status=common_pb.SUCCESS, summary_markdown=result)
+
+
+class CombinedBisector(Validator):
+  """Combines the regression and progression bisector steps."""
+
+  def __init__(self, api, depot, builds, is_bad_func):
+    super().__init__(api)
+    self.progression = ProgressionBisector(api, depot, builds, is_bad_func)
+    self.regression = RegressionBisector(api, depot, builds, is_bad_func)
+
+  def bisect(self, known_bad_offset):
+    # First try progression testing to quickly know if the problem is still
+    # there.
+    progression_result = self.progression.bisect(known_bad_offset)
+    if progression_result.status == common_pb.SUCCESS:
+      # A problem that's fixed doesn't need regression testing - we know
+      # what fixed it.
+      return progression_result
+
+    # Problem still repros on ToT. Determine culprit and return a combined
+    # report.
+    regression_result = self.regression.bisect(known_bad_offset)
+    return RawResult(
+        status=regression_result.status,
+        summary_markdown=f'{progression_result.summary_markdown}\n'
+                         f'{regression_result.summary_markdown}')
 
 
 class ReproBisector(Bisector):
@@ -760,10 +799,12 @@ class ReproBisector(Bisector):
       raise self.api.step.StepFailure('Could not reproduce flake.')
 
   def bisect(self, known_bad_offset):
-    pass
+    return RawResult(
+        status=common_pb.SUCCESS, summary_markdown='Flake still reproduces.')
 
 
 BISECTORS = {
+    'combined': CombinedBisector,
     'regression': RegressionBisector,
     'progression': ProgressionBisector,
     'repro': ReproBisector,
@@ -856,11 +897,12 @@ def RunSteps(api, bisect_builder_group, bisect_buildername, extra_args,
     'bug_url': '<bug-url>',
   })
 
-  bisector.bisect(known_bad_offset)
+  return bisector.bisect(known_bad_offset)
 
 
 def GenTests(api):
-  def test(name, bisect_buildername='V8 Foobar', **properties):
+  def test(name, bisect_buildername='V8 Foobar', mode='regression',
+           **properties):
     return api.test(
         name,
         api.properties(
@@ -868,6 +910,7 @@ def GenTests(api):
             bisect_buildername=bisect_buildername,
             extra_args=['--foo-flag', '--bar-flag'],
             isolated_name='foo_isolated',
+            mode=mode,
             repetitions=64,
             swarming_dimensions=['os:Ubuntu-16.04', 'cpu:x86-64'],
             test_name='mjsunit/foobar',
@@ -935,7 +978,7 @@ def GenTests(api):
     emitted.
     """
     git_range = f'a{from_offset}..a{to_offset}'
-    step_name = f'Result: {message} #{from_offset}..#{to_offset}'
+    step_name = f'{message} #{from_offset}..#{to_offset}'
     def suspects_internal(check, steps):
       check(steps[step_name].links[git_range] == f'{REPO}/+log/{git_range}')
     return api.post_process(suspects_internal)
@@ -1095,6 +1138,41 @@ def GenTests(api):
           ResultReasonRE,
           f'Could not connect the known bad revision to refs/heads/main. '
           f'Looked in over {MAX_HEAD_OFFSET} commits.') +
+      api.post_process(DropExpectation)
+  )
+
+  # Combine progression and regression testing.
+  yield (
+      test('combined', mode='combined') +
+      # Initial fetch covers all required revisions.
+      init_head(-3, 4) +
+      # Simulate existing builds.
+      successful_lookups(-3, 0, 1, 2, 3) +
+      # Calibration with successful repro at offset 0.
+      is_flaky(0, 0, 5, calibration_attempt=1) +
+      # The flake still reproduces.
+      is_flaky(-3, 0, 2) +
+      # Data for regression testing.
+      get_revisions(1, 3) +
+      is_flaky(1, 0, 3) +
+      is_flaky(2, 0, 3) +
+      verify_suspects(3, 2) +
+      api.post_process(StatusSuccess) +
+      api.post_process(DropExpectation)
+  )
+
+  # Combine progression and regression testing but flake is already fixed.
+  yield (
+      test('combined_fixed', mode='combined') +
+      # Progression testing fetches ToT at a-3.
+      init_head(-3, 4) +
+      # Simulate existing builds.
+      successful_lookups(-3, -2, -1, 0) +
+      # Calibration with successful repro at offset 0.
+      is_flaky(0, 0, 5, calibration_attempt=1) +
+      is_flaky(-1, 0, 2) +
+      verify_fixed(-1, -2) +
+      api.post_process(StatusSuccess) +
       api.post_process(DropExpectation)
   )
 

@@ -745,7 +745,7 @@
   },
   {
     "cmd": [],
-    "name": "Result: Fixed in #-7..#-8",
+    "name": "Fixed in #-7..#-8",
     "~followup_annotations": [
       "@@@STEP_LINK@a-7..a-8@https://chromium.googlesource.com/v8/v8/+log/a-7..a-8@@@"
     ]
