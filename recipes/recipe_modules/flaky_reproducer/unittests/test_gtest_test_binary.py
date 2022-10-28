@@ -77,9 +77,8 @@ class GTestTestBinaryTest(unittest.TestCase):
         '--tsan=0',
         '--cfi-diag=0',
         '--test-launcher-retry-limit=0',
-        ('--isolated-script-test-filter='
-         'MockUnitTests.CrashTest::MockUnitTests.CrashTest'),
-        '--isolated-script-test-repeat=1',
+        '--gtest_filter=MockUnitTests.CrashTest:MockUnitTests.CrashTest',
+        '--gtest_repeat=1',
         '--test-launcher-batch-limit=0',
         '--test-launcher-jobs=1',
     ])

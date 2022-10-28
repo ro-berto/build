@@ -28,6 +28,7 @@ class GTestTestBinary(TestBinaryWithBatchMixin, TestBinaryWithParallelMixin,
             'test-launcher-filter-file',
             'isolated-script-test-filter',
             'gtest_filter',
+            'gtest-filter',
             # removed for chromeos/test_runner.py
             # The wrapper requires --test-launcher-summary-output and --logs-dir
             # point to the same directory
@@ -62,10 +63,9 @@ class GTestTestBinary(TestBinaryWithBatchMixin, TestBinaryWithParallelMixin,
     if filter_file:
       cmd.append("--test-launcher-filter-file={0}".format(filter_file))
     elif self.tests:
-      cmd.append("--isolated-script-test-filter={0}".format('::'.join(
-          self.tests)))
+      cmd.append("--gtest_filter={0}".format(':'.join(self.tests)))
     if self.repeat:
-      cmd.append("--isolated-script-test-repeat={0}".format(self.repeat))
+      cmd.append("--gtest_repeat={0}".format(self.repeat))
     if self.single_batch:
       if self.repeat and self.repeat > 1:
         raise Exception(
