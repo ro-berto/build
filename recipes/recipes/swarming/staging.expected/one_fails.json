@@ -2164,6 +2164,10 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "No-op step to test duration of (Tests statistics) above"
+  },
+  {
     "failure": {
       "failure": {},
       "humanReason": "1 Test Suite(s) failed.\n\n**browser_tests** failed because of:\n\n- Test.Two"

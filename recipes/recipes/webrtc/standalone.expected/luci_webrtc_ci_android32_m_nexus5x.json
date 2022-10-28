@@ -3593,6 +3593,10 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "No-op step to test duration of (Tests statistics) above"
+  },
+  {
     "name": "$result"
   }
 ]

@@ -1539,6 +1539,10 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "No-op step to test duration of (Tests statistics) above"
+  },
+  {
     "failure": {
       "failure": {},
       "humanReason": "1 Test Suite(s) failed.\n\n**telemetry_gpu_unittests** failed because of:\n\n- Test.One"

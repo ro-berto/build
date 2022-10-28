@@ -1568,6 +1568,10 @@
   },
   {
     "cmd": [],
+    "name": "No-op step to test duration of (Tests statistics) above"
+  },
+  {
+    "cmd": [],
     "name": "FindIt Flakiness",
     "~followup_annotations": [
       "@@@STEP_TEXT@Metadata for FindIt post processing.@@@",

@@ -1178,6 +1178,13 @@ class SwarmingApi(recipe_api.RecipeApi):
     result = self.m.step.empty('Tests statistics', step_text=step_text)
     result.presentation.logs['detailed stats'] = detailed_stats
 
+    # The 'Tests statistics' step above has been seen to have 10+ min times on
+    # some builds, which is very surprising. This places a dummy step right
+    # after it to see if whatever's causing the inflated step time will shift
+    # to this new step.
+    # TODO(crbug.com/1379170): Remove this after testing.
+    self.m.step.empty('No-op step to test duration of (Tests statistics) above')
+
   @staticmethod
   def _display_time_stats(shards, step_presentation):
     """Shows max pending time in seconds across all shards if it exceeds 10s,
