@@ -278,6 +278,8 @@ def generator_common(chromium_tests_api, raw_test_spec, swarming_delegate,
     kwargs['io_timeout'] = swarming_spec.get('io_timeout')
     kwargs['shards'] = swarming_spec.get('shards', 1)
     kwargs['quickrun_shards'] = swarming_spec.get('quickrun_shards')
+    kwargs['inverse_quickrun_shards'] = swarming_spec.get(
+        'inverse_quickrun_shards')
     # If idempotent wasn't explicitly set, let chromium_swarming/api.py apply
     # its default_idempotent val.
     if 'idempotent' in swarming_spec:

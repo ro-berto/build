@@ -1916,7 +1916,8 @@ class SwarmingTestSpec(TestSpec):
   isolate_profile_data = attrib(bool, False)
   named_caches = attrib(mapping[str, str], default={})
   shards = attrib(int, default=1)
-  quickrun_shards = attrib(int, default=None)
+  _quickrun_shards = attrib(int, default=None)
+  _inverse_quickrun_shards = attrib(int, default=None)
   service_account = attrib(str, default=None)
   idempotent = attrib(bool, default=None)
 
@@ -1948,6 +1949,14 @@ class SwarmingTestSpec(TestSpec):
       return '%s %s' % (self._name, self.extra_suffix)
     else:
       return self._name
+
+  @property
+  def quickrun_shards(self):
+    return self._quickrun_shards or self.shards
+
+  @property
+  def inverse_quickrun_shards(self):
+    return self._inverse_quickrun_shards or self.quickrun_shards
 
   def with_shards(self, shards):
     return attr.evolve(self, shards=int(shards))
@@ -2122,11 +2131,13 @@ class SwarmingTest(Test):
 
     # If we're in quick run or inverse quick run set the shard count to any
     # available quickrun shards
-    use_quickrun_shards = self.is_inverted_rts or (
-        self.api.m.cq.active and
-        (self.api.m.cq.run_mode == self.api.m.cq.QUICK_DRY_RUN))
-    shards = self.spec.quickrun_shards if (
-        use_quickrun_shards and self.spec.quickrun_shards) else self.spec.shards
+    if (self.api.m.cq.active and
+        self.api.m.cq.run_mode == self.api.m.cq.QUICK_DRY_RUN):
+      shards = self.spec.quickrun_shards
+    elif self.is_inverted_rts:
+      shards = self.spec.inverse_quickrun_shards
+    else:
+      shards = self.spec.shards
 
     if tests_to_retry:
       # The filter list is eventually passed to the binary over the command
