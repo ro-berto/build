@@ -1466,33 +1466,6 @@
       "tryserver.chromium.chromiumos:gpu-fyi-try-chromeos-octopus-exp"
     ]
   },
-  "chromium.gpu:GPU Mac Builder (dbg)": {
-    "builders": [
-      "chromium.gpu:GPU Mac Builder (dbg)",
-      "chromium.gpu:Mac Debug (Intel)",
-      "chromium.gpu:Mac Retina Debug (AMD)",
-      "tryserver.chromium.mac:gpu-try-mac-amd-retina-dbg",
-      "tryserver.chromium.mac:gpu-try-mac-intel-dbg"
-    ]
-  },
-  "chromium.gpu:Mac Debug (Intel)": {
-    "builders": [
-      "chromium.gpu:GPU Mac Builder (dbg)",
-      "chromium.gpu:Mac Debug (Intel)",
-      "chromium.gpu:Mac Retina Debug (AMD)",
-      "tryserver.chromium.mac:gpu-try-mac-amd-retina-dbg",
-      "tryserver.chromium.mac:gpu-try-mac-intel-dbg"
-    ]
-  },
-  "chromium.gpu:Mac Retina Debug (AMD)": {
-    "builders": [
-      "chromium.gpu:GPU Mac Builder (dbg)",
-      "chromium.gpu:Mac Debug (Intel)",
-      "chromium.gpu:Mac Retina Debug (AMD)",
-      "tryserver.chromium.mac:gpu-try-mac-amd-retina-dbg",
-      "tryserver.chromium.mac:gpu-try-mac-intel-dbg"
-    ]
-  },
   "chromium.linux:Leak Detection Linux": {
     "builders": [
       "chromium.linux:Leak Detection Linux",
@@ -2324,24 +2297,6 @@
       "tryserver.chromium.mac:gpu-fyi-try-mac-intel-rel",
       "tryserver.chromium.mac:gpu-fyi-try-mac-nvidia-retina-exp",
       "tryserver.chromium.mac:gpu-fyi-try-mac-nvidia-retina-rel"
-    ]
-  },
-  "tryserver.chromium.mac:gpu-try-mac-amd-retina-dbg": {
-    "builders": [
-      "chromium.gpu:GPU Mac Builder (dbg)",
-      "chromium.gpu:Mac Debug (Intel)",
-      "chromium.gpu:Mac Retina Debug (AMD)",
-      "tryserver.chromium.mac:gpu-try-mac-amd-retina-dbg",
-      "tryserver.chromium.mac:gpu-try-mac-intel-dbg"
-    ]
-  },
-  "tryserver.chromium.mac:gpu-try-mac-intel-dbg": {
-    "builders": [
-      "chromium.gpu:GPU Mac Builder (dbg)",
-      "chromium.gpu:Mac Debug (Intel)",
-      "chromium.gpu:Mac Retina Debug (AMD)",
-      "tryserver.chromium.mac:gpu-try-mac-amd-retina-dbg",
-      "tryserver.chromium.mac:gpu-try-mac-intel-dbg"
     ]
   },
   "tryserver.chromium.mac:ios-simulator-multi-window": {

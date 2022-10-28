@@ -431,6 +431,8 @@ TRYBOTS = try_spec.TryDatabase.create({
     # The config for the following builders is now specified src-side in
     # //infra/config/subprojects/chromium/try/tryserver.chromium.mac.star
     # * gpu-fyi-try-mac-arm64-apple-m1-rel
+    # * gpu-try-mac-amd-retina-dbg
+    # * gpu-try-mac-intel-dbg
     # * ios-asan
     # * ios-catalyst
     # * ios-device
@@ -553,18 +555,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.gpu.fyi',
                 buildername='GPU FYI Mac Builder',
                 tester='Mac FYI Retina Release (NVIDIA)',
-            ),
-        'gpu-try-mac-amd-retina-dbg':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu',
-                buildername='GPU Mac Builder (dbg)',
-                tester='Mac Retina Debug (AMD)',
-            ),
-        'gpu-try-mac-intel-dbg':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu',
-                buildername='GPU Mac Builder (dbg)',
-                tester='Mac Debug (Intel)',
             ),
     },
     # The config for the following builders is now specified src-side in
