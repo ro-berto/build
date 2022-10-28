@@ -132,18 +132,6 @@ def GenTests(api):
       api.post_process(DropExpectation)
   )
 
-  # TODO(https://crbug.com/890222): Two tests just for legacy compilator names.
-  # Remove after the rename.
-  yield (
-      test('legacy_dbg', 'v8_foobar_compile_ng_dbg') +
-      api.post_process(DropExpectation)
-  )
-
-  yield (
-      test('legacy_rel', 'v8_foobar_compile_ng_rel') +
-      api.post_process(DropExpectation)
-  )
-
   yield (
       test('compile_failure') +
       api.step_data('build.compile', retcode=1) +

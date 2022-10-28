@@ -521,14 +521,6 @@ class V8Api(recipe_api.RecipeApi):
       if builder_name.endswith('_compile_dbg'):
         builder_name = builder_name.replace(
             '_compile_dbg', '_dbg_ng' + triggered_suffix)
-      # TODO(https://crbug.com/890222): Remove this code after a small
-      # transition period.
-      if builder_name.endswith('_compile_ng_rel'):
-        builder_name = builder_name.replace(
-            '_compile_ng_rel', '_rel_ng' + triggered_suffix)
-      if builder_name.endswith('_compile_ng_dbg'):
-        builder_name = builder_name.replace(
-            '_compile_ng_dbg', '_dbg_ng' + triggered_suffix)
     return builder_name
 
   @property
