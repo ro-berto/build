@@ -266,11 +266,14 @@ class FlakyReproducer(recipe_api.RecipeApi):
                               task_id,
                               failing_sample,
                               reproducing_step,
-                              verify_on_builders=None):
+                              verify_on_builders=None,
+                              retries=3):
     if not reproducing_step:
       return {}
-    builder_results = {}
-    swarming_tasks = {}  # { task_id: (builder, task_meta) }
+    # Launch verify swarming tasks
+    verify_builders = self.find_related_builders(task_id,
+                                                 failing_sample.test_name,
+                                                 verify_on_builders)
     # Verify failing builder sample
     builder = 'Failing Sample'
     if (not verify_on_builders or builder in verify_on_builders or
@@ -278,20 +281,26 @@ class FlakyReproducer(recipe_api.RecipeApi):
       if reproducing_step.test_binary.builder:
         builder = '{0} (failing sample)'.format(
             reproducing_step.test_binary.builder)
-      task = self.launch_verify_in_swarming(builder, failing_sample.test_name,
-                                            reproducing_step.test_binary)
-      swarming_tasks[task.id] = (builder, task)
-    # Launch verify swarming tasks
-    verify_builders = self._find_related_builders(task_id,
-                                                  failing_sample.test_name,
-                                                  verify_on_builders)
+      verify_builders[builder] = task_id
+
+    return self.verify_reproducing_step_on_builders(verify_builders,
+                                                    failing_sample,
+                                                    reproducing_step, retries)
+
+  def verify_reproducing_step_on_builders(self,
+                                          verify_builders,
+                                          failing_sample,
+                                          reproducing_step,
+                                          retries=3):
+    builder_results = {}
+    swarming_tasks = {}  # { task_id: (builder, task_meta) }
     for builder, builder_task_id in verify_builders.items():
       try:
         test_binary = self.get_test_binary(builder_task_id)
         test_binary = test_binary.with_options_from_other(
             reproducing_step.test_binary)
-        task = self.launch_verify_in_swarming(builder, failing_sample.test_name,
-                                              test_binary)
+        task = self.launch_verify_in_swarming(
+            builder, failing_sample.test_name, test_binary, retries=retries)
         swarming_tasks[task.id] = (builder, task)
       except Exception as err:
         builder_results[builder] = BuilderVerifyResult(error=str(err))
@@ -299,7 +308,8 @@ class FlakyReproducer(recipe_api.RecipeApi):
       return builder_results
     # Collect swarming task result
     verify_results = self.m.swarming.collect(
-        'collect verify results', [t for _, t in swarming_tasks.values()],
+        'collect verify results',
+        list(swarming_tasks.keys()),
         output_dir=self.m.path.mkdtemp())
     for result in verify_results:
       builder, _ = swarming_tasks[result.id]
@@ -533,7 +543,7 @@ class FlakyReproducer(recipe_api.RecipeApi):
     return '{0}/task?id={1}'.format(self.m.swarming.current_server, task_id)
 
   @nest_step
-  def _find_related_builders(self, task_id, test_name, verify_on_builders):
+  def find_related_builders(self, task_id, test_name, verify_on_builders):
     """Search for builders that run the given test."""
     # Query TestResult from invocation.
     inv_id = self._generate_invocation_id_from_task_id(task_id)
@@ -576,7 +586,7 @@ class FlakyReproducer(recipe_api.RecipeApi):
       variants, next_page_token = self.m.weetbix.query_variants(
           test_id=test_result.test_id,
           project=project,
-          sub_realm=bucket,
+          sub_realm=None if self.c.verify_on_all_buckets else bucket,
           variant_predicate=variant_predicate,
           page_token=next_page_token,
       )
@@ -619,13 +629,14 @@ class FlakyReproducer(recipe_api.RecipeApi):
       selected_verdict = None
       for v in verdicts:
         build = builds.get(int(v.invocation_id[len('build-'):]))
+        cq_sheriff_build = build and (
+            '$recipe_engine/cq' in build.input.properties.fields or
+            'sheriff_rotations' in build.input.properties.fields)
         # Skip CQ builder check if builders are manually selected.
         if verify_on_builders:
           pass
         # Select CQ or sheriff builders.
-        elif not build or not (
-            '$recipe_engine/cq' in build.input.properties.fields or
-            'sheriff_rotations' in build.input.properties.fields):
+        elif self.c.verify_only_cq_sheriff_builders and not cq_sheriff_build:
           continue
         # Select first EXPECTED or FLAKY sample over UNEXPECTED or EXONERATED
         # samples.

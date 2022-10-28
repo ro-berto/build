@@ -13,6 +13,8 @@ def BaseConfig():
       strategy_timeout=Single(int),
       io_timeout=Single(int),
       verify_timeout=Single(int),
+      verify_on_all_buckets=Single(bool),
+      verify_only_cq_sheriff_builders=Single(bool),
   )
 
 
@@ -22,10 +24,12 @@ config_ctx = config_item_context(BaseConfig)
 @config_ctx(is_root=True)
 def BASE(c):
   c.priority = 200
-  c.expiration = 5 * 60 * 60  # 5 hours
+  c.expiration = 1 * 60 * 60  # 1 hours
   c.strategy_timeout = 60 * 60  # 1 hour
   c.io_timeout = 20 * 60  # 20 mins
   c.verify_timeout = 20 * 60  # 20 mins
+  c.verify_on_all_buckets = False
+  c.verify_only_cq_sheriff_builders = True
 
 
 @config_ctx(group='trigger_mode')
@@ -36,4 +40,12 @@ def auto(c):
 @config_ctx(group='trigger_mode')
 def manual(c):
   c.priority = 30
-  c.expiration = 60 * 60  # 1 hours
+  c.expiration = 20 * 60  # 20 minutes
+
+
+@config_ctx()
+def verify_on_every_builders(c):
+  '''Verify ReproducingStep on every builders that ran the test.
+  This config is mainly used for builder_verifier.'''
+  c.verify_on_all_buckets = True
+  c.verify_only_cq_sheriff_builders = False

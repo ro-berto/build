@@ -211,6 +211,12 @@ def GenTests(api):
                   api.flaky_reproducer.get_test_data(
                       'gtest_task_request.json')))),
       api.step_data(
+          'verify_reproducing_step.get_test_binary from some-task-id',
+          api.json.output_stream(
+              api.json.loads(
+                  api.flaky_reproducer.get_test_data(
+                      'gtest_task_request.json')))),
+      api.step_data(
           'verify_reproducing_step.collect verify results',
           api.swarming.collect([
               api.swarming.task_result(

@@ -235,6 +235,12 @@ def GenTests(api):
           ]),
           step_name='verify_reproducing_step.find_related_builders.query_test_results',
       ),
+      api.step_data(
+          'verify_reproducing_step.get_test_binary from 54321fffffabc123',
+          api.json.output_stream(
+              api.json.loads(
+                  api.flaky_reproducer.get_test_data(
+                      'gtest_task_request.json')))),
       api.step_data('verify_reproducing_step.collect verify results',
                     api.swarming.collect([verify_swarming_result('2')])),
       api.step_data(
