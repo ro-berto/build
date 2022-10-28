@@ -885,15 +885,11 @@ class Failure(object):
 
     return ' '.join(base_cmd)
 
-  def _flako_cmd_line(self, mode=None):
+  def _flako_cmd_line(self):
     """Returns the command line for bisecting this failure with flako."""
-    mode_properties = {'mode': mode} if mode else {}
-    flako_properties = {**self._flako_properties(), **mode_properties}
-
-    cmd_line = 'bb add v8/try.triggered/v8_flako %s' % ' '.join(
+    return 'bb add v8/try.triggered/v8_flako %s' % ' '.join(
         '-p \'%s=%s\'' % (k, json.dumps(v, sort_keys=True))
-        for k, v in flako_properties.items())
-    return cmd_line
+        for k, v in self._flako_properties().items())
 
   def log_lines(self):
     """Return a list of lines for logging all runs of this failure."""
@@ -919,8 +915,6 @@ class Failure(object):
         not self.api.tryserver.is_tryserver):
       lines.append('Trigger flake bisect on command line:')
       lines.append(self._flako_cmd_line())
-      lines.append('Trigger progression testing on command line:')
-      lines.append(self._flako_cmd_line('progression'))
       lines.append('')
 
       lines.append('Local flake reproduction on command line:')
