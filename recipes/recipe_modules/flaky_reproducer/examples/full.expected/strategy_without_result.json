@@ -760,13 +760,20 @@
   },
   {
     "cmd": [],
+    "name": "collect_strategy_results.flaky reproducer strategy batch for MockUnitTests.FailTest",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
     "name": "verify_reproducing_step"
   },
   {
     "cmd": [],
     "name": "summarize_results",
     "~followup_annotations": [
-      "@@@STEP_SUMMARY_TEXT@```\nFor MockUnitTests.FailTest from Win11 Tests x64 https://example.swarmingserver.appspot.com/task?id=54321fffffabc123\nValue of: false\n  Actual: false\nExpected: true\n\n\nThe failure could NOT be reproduced.\n```@@@"
+      "@@@STEP_SUMMARY_TEXT@```\nFor MockUnitTests.FailTest in [Win11 Tests x64](https://example.swarmingserver.appspot.com/task?id=54321fffffabc123)\nValue of: false\n  Actual: false\nExpected: true\n\n\nThe failure could NOT be reproduced.\n```@@@"
     ]
   },
   {

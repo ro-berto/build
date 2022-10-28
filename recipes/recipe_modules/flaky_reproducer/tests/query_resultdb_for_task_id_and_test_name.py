@@ -8,6 +8,7 @@ DEPS = [
     'flaky_reproducer',
     'recipe_engine/step',
     'recipe_engine/json',
+    'recipe_engine/raw_io',
     'recipe_engine/properties',
     'recipe_engine/resultdb',
 ]
@@ -129,5 +130,33 @@ def GenTests(api):
       ),
       api.post_check(post_process.ResultReason,
                      'Must specify test_name or test_id.'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'not_supported_realm',
+      api.properties(
+          build_id="build-id",
+          test_name="MockUnitTests.FailTest",
+      ),
+      api.step_data(
+          'query_test_results',
+          retcode=123,
+      ),
+      api.post_check(post_process.ResultReason, 'Not support realm.'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'should_raise_error_for_other_failures',
+      api.properties(
+          build_id="build-id",
+          test_name="MockUnitTests.FailTest",
+      ),
+      api.step_data(
+          'query_test_results',
+          retcode=1,
+      ),
+      api.post_check(post_process.StatusException),
       api.post_process(post_process.DropExpectation),
   )

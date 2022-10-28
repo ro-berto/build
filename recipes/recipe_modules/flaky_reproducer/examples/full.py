@@ -63,6 +63,21 @@ def GenTests(api):
           output='some-output',
           outputs=()),
   ]
+  failed_swarming_results = [
+      api.swarming.task_result(
+          id='0',
+          name='flaky reproducer strategy repeat for MockUnitTests.FailTest',
+          state=api.swarming.TaskState.TIMED_OUT,
+          output='some-output',
+          outputs=('reproducing_step.json',)),
+      api.swarming.task_result(
+          id='1',
+          name='flaky reproducer strategy batch for MockUnitTests.FailTest',
+          state=api.swarming.TaskState.COMPLETED,
+          failure=True,
+          output='some-output',
+          outputs=()),
+  ]
   resultdb_invocation = api.resultdb.Invocation(
       proto=invocation_pb2.Invocation(
           state=invocation_pb2.Invocation.FINALIZED,
@@ -170,7 +185,9 @@ def GenTests(api):
       api.step_data('collect strategy results',
                     api.swarming.collect(success_swarming_results)),
       api.step_data(
-          'collect_strategy_results.load ReproducingStep',
+          ('collect_strategy_results'
+           '.flaky reproducer strategy repeat for MockUnitTests.FailTest'
+           '.load ReproducingStep'),
           api.file.read_json(
               api.json.loads(
                   api.flaky_reproducer.get_test_data(
@@ -326,4 +343,32 @@ def GenTests(api):
       api.properties(task_id='54321fffffabc123', test_name='NotExists.Test'),
       api.step_data('get_test_result_summary.download swarming outputs',
                     api.raw_io.output_dir({'output.json': b'{}'})),
+  )
+
+  yield api.test(
+      'strategy_failure',
+      api.properties(
+          task_id='54321fffffabc123',
+          test_name='MockUnitTests.FailTest',
+          config='manual'),
+      api.step_data(
+          'get_test_result_summary.download swarming outputs',
+          api.raw_io.output_dir({
+              'output.json':
+                  api.flaky_reproducer.get_test_data('gtest_good_output.json'),
+          })),
+      api.step_data(
+          'get_test_binary from 54321fffffabc123',
+          api.json.output_stream(
+              api.json.loads(
+                  api.flaky_reproducer.get_test_data(
+                      'gtest_task_request.json')))),
+      api.step_data('collect strategy results',
+                    api.swarming.collect(failed_swarming_results)),
+      api.post_process(StatusFailure),
+      api.post_process(
+          ResultReason, '''Error while running:
+* flaky reproducer strategy batch for MockUnitTests.FailTest
+* flaky reproducer strategy repeat for MockUnitTests.FailTest'''),
+      api.post_process(DropExpectation),
   )

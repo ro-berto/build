@@ -181,13 +181,21 @@ class FlakyReproducer(recipe_api.RecipeApi):
   @nest_step
   def collect_strategy_results(self, strategy_results):
     reproducing_steps = []
+    has_error = []
     for task_result in strategy_results:
-      task_result.analyze()
-      step = self.collect_strategy_result(task_result)
-      if step is not None:
-        step.debug_info['task_ui_link'] = self._swarming_task_url(
-            task_result.id)
-        reproducing_steps.append(step)
+      try:
+        with self.m.step.nest(task_result.name):
+          task_result.analyze()
+          step = self.collect_strategy_result(task_result)
+          if step is not None:
+            step.debug_info['task_ui_link'] = self._swarming_task_url(
+                task_result.id)
+            reproducing_steps.append(step)
+      except Exception:
+        has_error.append(task_result.name)
+    if has_error:
+      raise self.m.step.StepFailure('Error while running:\n* {0}'.format(
+          '\n* '.join(has_error)))
     return reproducing_steps
 
   def collect_strategy_result(self, task_result):
@@ -329,10 +337,10 @@ class FlakyReproducer(recipe_api.RecipeApi):
     summary = []
 
     # sample failure info
-    message = 'For {0}'.format(failing_sample.test_name)
-    if test_binary and test_binary.builder:
-      message += ' from {0}'.format(test_binary.builder)
-    message += ' {0}'.format(self._swarming_task_url(task_id))
+    message = 'For {0} in [{1}]({2})'.format(
+        failing_sample.test_name,
+        (test_binary and test_binary.builder or 'task_ui'),
+        self._swarming_task_url(task_id))
     summary.append(message)
     if failing_sample.primary_error_message:
       summary.append(failing_sample.primary_error_message)
@@ -340,7 +348,7 @@ class FlakyReproducer(recipe_api.RecipeApi):
     # reproduce info
     summary.append('\n')
     if reproducing_step:
-      summary.append(reproducing_step.readable_info())
+      summary.append('```\n{0}\n```'.format(reproducing_step.readable_info()))
     else:
       summary.append("The failure could NOT be reproduced.")
 
@@ -354,7 +362,7 @@ class FlakyReproducer(recipe_api.RecipeApi):
         else:
           message = "{0} strategy not reproduced".format(step.strategy)
         if step.debug_info.get('task_ui_link'):
-          message += " {0}".format(step.debug_info['task_ui_link'])
+          message += " [task_ui]({0})".format(step.debug_info['task_ui_link'])
         summary.append(message)
 
     # Group builder results in reproduced, not reproduced, error.
@@ -368,15 +376,16 @@ class FlakyReproducer(recipe_api.RecipeApi):
                                       reverse=True)
       for builder, result in sorted_builder_results:
         if result.error:
-          builder_summary.append('{0:<30s} failed:\n{1}\n{2}'.format(
-              builder, result.error, (self._swarming_task_url(result.task_id)
-                                      if result.task_id else '')))
+          builder_summary.append('{0:<30s} [failed]({1}):\n{2}'.format(
+              builder, (self._swarming_task_url(result.task_id)
+                        if result.task_id else ''), result.error))
         elif result.reproduced_runs:
-          builder_summary.append('{0:<30s} reproduced {1:d}/{2:d} {3}'.format(
-              builder, result.reproduced_runs, result.total_runs,
-              self._swarming_task_url(result.task_id)))
+          builder_summary.append(
+              '{0:<30s} [reproduced]({1}) {2:d}/{3:d}'.format(
+                  builder, self._swarming_task_url(result.task_id),
+                  result.reproduced_runs, result.total_runs))
         else:
-          builder_summary.append('{0:<30s} not reproduced {1}'.format(
+          builder_summary.append('{0:<30s} [not reproduced]({1})'.format(
               builder, self._swarming_task_url(result.task_id)))
       summary.append('\n'.join(builder_summary))
 
@@ -426,12 +435,18 @@ class FlakyReproducer(recipe_api.RecipeApi):
     last_test_result = None
     res = None
     while True:
-      res = self.m.resultdb.query_test_results(
-          invocations=['invocations/' + inv_id],
-          test_id_regexp=test_id_regexp,
-          field_mask_paths=['name', 'test_id', 'tags', 'expected'],
-          page_token=res and res.next_page_token,
-      )
+      try:
+        res = self.m.resultdb.query_test_results(
+            invocations=['invocations/' + inv_id],
+            test_id_regexp=test_id_regexp,
+            field_mask_paths=['name', 'test_id', 'tags', 'expected'],
+            page_token=res and res.next_page_token,
+        )
+      except self.m.step.InfraFailure as err:
+        if err.retcode == 123:
+          raise self.m.step.StepFailure('Not support realm.')
+        else:
+          raise err
       for test_result in res.test_results:
         if test_id and test_result.test_id == test_id:
           last_test_result = test_result
