@@ -607,7 +607,6 @@ def GenTests(api):
       api.post_process(post_process.MustRun,
                        'browser_tests (retry shards with patch)'),
       api.post_process(post_process.MustRun, 'Tests statistics'),
-      api.post_process(post_process.MustRun, 'FindIt Flakiness'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -652,7 +651,6 @@ def GenTests(api):
       api.post_process(post_process.DoesNotRun,
                        'content_unittests (without patch)'),
       api.post_process(post_process.MustRun, 'Tests statistics'),
-      api.post_process(post_process.MustRun, 'FindIt Flakiness'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -691,7 +689,6 @@ def GenTests(api):
           'browser_tests', 'retry shards with patch', failures=['Test.One']),
       api.post_process(post_process.MustRun, 'browser_tests (without patch)'),
       api.post_process(post_process.MustRun, 'Tests statistics'),
-      api.post_process(post_process.MustRun, 'FindIt Flakiness'),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
   )
@@ -769,7 +766,6 @@ def GenTests(api):
                        'browser_tests (retry shards with patch)'),
       api.post_process(post_process.MustRun, 'browser_tests (without patch)'),
       api.post_process(post_process.MustRun, 'Tests statistics'),
-      api.post_process(post_process.MustRun, 'FindIt Flakiness'),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
   )
@@ -858,7 +854,6 @@ def GenTests(api):
       api.post_process(post_process.DoesNotRun,
                        'browser_tests (without patch)'),
       api.post_process(post_process.MustRun, 'Tests statistics'),
-      api.post_process(post_process.MustRun, 'FindIt Flakiness'),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
   )
@@ -904,7 +899,6 @@ def GenTests(api):
       api.post_process(post_process.ResultReasonRE,
                        '.*headless_python_unittests.*'),
       api.post_process(post_process.MustRun, 'Tests statistics'),
-      api.post_process(post_process.MustRun, 'FindIt Flakiness'),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
   )
@@ -1108,7 +1102,6 @@ def GenTests(api):
                        'trigger compilator (without patch)'),
       api.post_process(post_process.MustRun, 'browser_tests (without patch)'),
       api.post_process(post_process.MustRun, 'Tests statistics'),
-      api.post_process(post_process.MustRun, 'FindIt Flakiness'),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
   )
@@ -1226,7 +1219,6 @@ def GenTests(api):
       api.post_process(post_process.MustRun,
                        COMPILATOR_SWARMING_TASK_COLLECT_STEP),
       api.post_process(post_process.MustRun, 'Tests statistics'),
-      api.post_process(post_process.MustRun, 'FindIt Flakiness'),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
   )
@@ -1316,7 +1308,6 @@ def GenTests(api):
       api.chromium_tests.gen_swarming_and_rdb_results(
           'browser_tests', 'with patch', failures=['Test.One']),
       api.post_process(post_process.MustRun, 'Tests statistics'),
-      api.post_process(post_process.MustRun, 'FindIt Flakiness'),
       api.post_process(post_process.MustRun,
                        COMPILATOR_SWARMING_TASK_COLLECT_STEP),
       api.post_process(post_process.StatusFailure),
@@ -1763,7 +1754,6 @@ def GenTests(api):
               is_subsequence(req[0].command, fake_command_lines['browser_tests']
                             ))),
       api.post_process(post_process.MustRun, 'Tests statistics'),
-      api.post_process(post_process.MustRun, 'FindIt Flakiness'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )

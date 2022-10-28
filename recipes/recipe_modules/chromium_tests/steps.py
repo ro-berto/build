@@ -974,41 +974,6 @@ class Test(object):
 
     return (True, ignored_failures)
 
-  def shard_retry_with_patch_results(self):
-    """Returns passing and failing tests ran for 'retry shards with patch'.
-
-    Only considers tests to be failures if every test run fails. Flaky tests are
-    considered successes as they don't fail a step.
-
-    Returns: A tuple (valid_results, passing_tests).
-      valid_results: A Boolean indicating whether results are present and valid.
-      passing_tests: A set of strings. Only valid if valid_results is True.
-      failing_tests: A set of strings. Only valid if valid_results is True.
-    """
-    suffix = 'retry shards with patch'
-    if not self.has_valid_results(suffix):
-      return (False, None, None)
-
-    initial_failing_tests = set()
-    for test_name, result in self.pass_fail_counts('with patch').items():
-      if result['fail_count'] > 0:
-        initial_failing_tests.add(test_name)
-
-    passing_tests = set()
-    failing_tests = set()
-    for test_name, result in self.pass_fail_counts(suffix).items():
-      if result['fail_count'] > 0:
-        failing_tests.add(test_name)
-
-    # If a test failed in 'with patch' but didn't fail in 'retry shards with
-    # patch', assume it passed. This is needed when fetching results from RDB
-    # since we only fetch tests with unexpected results.
-    for t in initial_failing_tests:
-      if not self.pass_fail_counts(suffix).get(t, {}):
-        passing_tests.add(t)
-
-    return (True, passing_tests, failing_tests)
-
   def _tests_to_retry(self, suffix):
     """Computes the tests to run on an invocation of the test suite.
 

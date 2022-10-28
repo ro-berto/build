@@ -346,13 +346,6 @@ def GenTests(api):
         api.post_process(post_process.DropExpectation),
     )
 
-  expected_findit_metadata = {
-      'Failing With Patch Tests That Caused Build Failure': {},
-      'Step Layer Flakiness': {},
-      'Step Layer Skipped Known Flakiness': {
-          'base_unittests (with patch)': ['Test.Two'],
-      },
-  }
   yield api.test(
       'succeeded_to_exonerate_flaky_failures',
       api.chromium.try_build(
@@ -407,20 +400,9 @@ def GenTests(api):
               'Tests failed with patch, but ignored as they are known to be '
               'flaky:<br/>Test.Two: crbug.com/999<br/>'
           ]),
-      api.post_process(post_process.LogEquals, 'FindIt Flakiness',
-                       'step_metadata',
-                       api.json.dumps(expected_findit_metadata, indent=2)),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
-
-  expected_findit_metadata = {
-      'Failing With Patch Tests That Caused Build Failure': {
-          'base_unittests (with patch)': ['Test.Two'],
-      },
-      'Step Layer Flakiness': {},
-      'Step Layer Skipped Known Flakiness': {},
-  }
 
   yield api.test(
       'failed_to_exonerate_flaky_failures',
@@ -468,22 +450,10 @@ def GenTests(api):
               'Tests failed with patch, and caused build to fail:<br/>'
               'Test.Two<br/>'
           ]),
-      api.post_process(post_process.LogEquals, 'FindIt Flakiness',
-                       'step_metadata',
-                       api.json.dumps(expected_findit_metadata, indent=2)),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
   )
 
-  expected_findit_metadata = {
-      'Failing With Patch Tests That Caused Build Failure': {},
-      'Step Layer Flakiness': {
-          'base_unittests (with patch)': ['Test.One'],
-      },
-      'Step Layer Skipped Known Flakiness': {
-          'base_unittests (with patch)': ['Test.Two'],
-      },
-  }
   # This test tests the scenario that if a known flaky failure fails again while
   # retrying, it doesn't fail a test suite as long as there are no other
   # non-flaky failures. For example: t1 and t2 failed "with patch", and t2 is
@@ -545,21 +515,8 @@ def GenTests(api):
               'Tests failed with patch, but ignored as they are known to be '
               'flaky:<br/>Test.Two: crbug.com/999<br/>'
           ]),
-      api.post_process(post_process.LogEquals, 'FindIt Flakiness',
-                       'step_metadata',
-                       api.json.dumps(expected_findit_metadata, indent=2)),
       api.post_process(post_process.DropExpectation),
   )
-
-  expected_findit_metadata = {
-      'Failing With Patch Tests That Caused Build Failure': {
-          'base_unittests (with patch)': ['Test.One'],
-      },
-      'Step Layer Flakiness': {},
-      'Step Layer Skipped Known Flakiness': {
-          'base_unittests (with patch)': ['Test.Two'],
-      },
-  }
 
   # This test tests the scenario that a known flaky failure shouldn't be retried
   # "without patch". For example: t1 and t2 failed "with patch", and t2 is
@@ -631,9 +588,6 @@ def GenTests(api):
               'Tests failed with patch, but ignored as they are known to be '
               'flaky:<br/>Test.Two: crbug.com/999<br/>'
           ]),
-      api.post_process(post_process.LogEquals, 'FindIt Flakiness',
-                       'step_metadata',
-                       api.json.dumps(expected_findit_metadata, indent=2)),
       api.post_process(post_process.DropExpectation),
   )
 

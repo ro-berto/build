@@ -298,7 +298,7 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
         build_to_process, is_swarming_phase=False, with_patch=True)
 
     if not failing_test_suites:
-      self.report_stats_and_flakiness(tests)
+      self.m.chromium_swarming.report_stats()
       # There could be exonerated failed tests from FindIt flakes
       self.m.chromium_tests.summarize_test_failures(tests)
 
@@ -408,7 +408,7 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
     unrecoverable_test_suites = self.m.chromium_tests.summarize_test_failures(
         tests, retried_without_patch_suites=failing_test_suites)
 
-    self.report_stats_and_flakiness(tests)
+    self.m.chromium_swarming.report_stats()
 
     summary_markdown = ''
     final_status = common_pb.SUCCESS
@@ -693,10 +693,6 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
         swarming_command_lines_cwd=swarming_cwd)
     return tests
 
-  def report_stats_and_flakiness(self, tests):
-    self.m.chromium_swarming.report_stats()
-    self.m.test_utils.summarize_findit_flakiness(tests)
-
   def handle_failed_with_patch_tests(self, tests, failing_test_suites):
     """Summarizes test stats, flakiness, and test failures
 
@@ -704,7 +700,7 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
       tests: Test objects of completed tests
       failing_test_suites: Test objects of failed tests. Subset of 'tests' arg
     """
-    self.report_stats_and_flakiness(tests)
+    self.m.chromium_swarming.report_stats()
     self.m.chromium_tests.summarize_test_failures(tests)
     self.m.chromium_tests.handle_invalid_test_suites(failing_test_suites)
 

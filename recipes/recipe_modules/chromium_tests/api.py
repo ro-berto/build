@@ -1878,8 +1878,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       self.m.chromium_swarming.report_stats()
 
-      self.m.test_utils.summarize_findit_flakiness(task.test_suites)
-
       if unrecoverable_test_suites:
         self.handle_invalid_test_suites(unrecoverable_test_suites)
         return result_pb2.RawResult(
