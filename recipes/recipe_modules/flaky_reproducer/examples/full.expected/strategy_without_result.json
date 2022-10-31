@@ -773,7 +773,7 @@
     "cmd": [],
     "name": "summarize_results",
     "~followup_annotations": [
-      "@@@STEP_SUMMARY_TEXT@```\nFor MockUnitTests.FailTest in [Win11 Tests x64](https://example.swarmingserver.appspot.com/task?id=54321fffffabc123)\nValue of: false\n  Actual: false\nExpected: true\n\n\nThe failure could NOT be reproduced.\n```@@@"
+      "@@@STEP_SUMMARY_TEXT@# Reproducing Summary\n\nFor MockUnitTests.FailTest in [Win11 Tests x64](https://example.swarmingserver.appspot.com/task?id=54321fffffabc123)\nValue of: false\n  Actual: false\nExpected: true\n\n\nThe failure could NOT be reproduced.@@@"
     ]
   },
   {

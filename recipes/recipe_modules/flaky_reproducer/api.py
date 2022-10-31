@@ -336,6 +336,9 @@ class FlakyReproducer(recipe_api.RecipeApi):
                         builder_results):
     summary = []
 
+    # header
+    summary.append('# Reproducing Summary\n')
+
     # sample failure info
     message = 'For {0} in [{1}]({2})'.format(
         failing_sample.test_name,
@@ -348,7 +351,7 @@ class FlakyReproducer(recipe_api.RecipeApi):
     # reproduce info
     summary.append('\n')
     if reproducing_step:
-      summary.append('```\n{0}\n```'.format(reproducing_step.readable_info()))
+      summary.append(reproducing_step.readable_info())
     else:
       summary.append("The failure could NOT be reproduced.")
 
@@ -390,7 +393,7 @@ class FlakyReproducer(recipe_api.RecipeApi):
       summary.append('\n'.join(builder_summary))
 
     presentation = self.m.step.active_result.presentation
-    presentation.step_summary_text = "```\n" + '\n'.join(summary) + "\n```"
+    presentation.step_summary_text = '\n'.join(summary)
     if reproducing_step:
       presentation.logs['reproducing_step.json'] = self.m.json.dumps(
           reproducing_step.to_jsonish(), indent=2)
