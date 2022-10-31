@@ -2058,19 +2058,23 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if task_output_stdout:
       self.m.chromium_swarming.task_output_stdout = task_output_stdout
 
-  def get_quickrun_options(self, builder_config):
+  def get_quickrun_options(self, builder_config, inverted_rts=False):
     rts_setting = None
     use_rts = (
         (self.m.cq.active and self.m.cq.run_mode == self.m.cq.QUICK_DRY_RUN and
-         builder_config.regression_test_selection == try_spec.QUICK_RUN_ONLY and
-         not self.is_rts_footer_disabled()) or
-        (builder_config.regression_test_selection == try_spec.ALWAYS and
-         not self.is_rts_footer_disabled()))
+         builder_config.regression_test_selection == try_spec.QUICK_RUN_ONLY) or
+        builder_config.regression_test_selection == try_spec.ALWAYS)
 
-    if use_rts:
-      rts_setting = 'rts-chromium'
+    if (use_rts or inverted_rts) and not self.is_rts_footer_disabled():
+      if ('chromium_rts.experimental_model' in
+          self.m.buildbucket.build.input.experiments):
+        rts_setting = 'rts-ml-chromium'
+      else:
+        rts_setting = 'rts-chromium'
+
       step_result = self.m.step('quick run options', [])
 
+      step_result.presentation.properties['rts_setting'] = rts_setting
       step_result.presentation.properties['rts_was_used'] = use_rts
       step_result.presentation.links[
           'use_rts: true'] = 'https://bit.ly/chromium-rts'
@@ -2082,11 +2086,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       # because they are slightly less safe than normal builds
       if builder_config.regression_test_selection == try_spec.QUICK_RUN_ONLY:
         self.m.cq.allow_reuse_for(self.m.cq.QUICK_DRY_RUN)
-
-      if 'chromium_rts.experimental_model' in self.m.buildbucket.build.input.experiments:
-        rts_setting = 'rts-ml-chromium'
-
-      step_result.presentation.properties['rts_setting'] = rts_setting
 
     return rts_setting
 
