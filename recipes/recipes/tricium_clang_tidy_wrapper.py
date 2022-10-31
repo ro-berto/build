@@ -61,7 +61,7 @@ BUILDERS = freeze({
                     },
                 ),
             'linux-clang-tidy-rel':
-                ClangTidySpec(gclient_apply_config=['enable_reclient'],),
+                ClangTidySpec(),
             'linux-lacros-clang-tidy-rel':
                 ClangTidySpec(
                     gclient_apply_config=['chromeos', 'checkout_lacros_sdk'],
