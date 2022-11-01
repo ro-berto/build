@@ -135,6 +135,32 @@ def _GenerateCLMessage(script_invocation,
 
 
 def _UploadCL(api, script_invocation, bugs, cmdline):
+  # Check to see if we actually have any changes to upload. `git status
+  # --porcelain` returns " M path/to/file" for a changed file, so look for that.
+  def status_step_test_data():
+    return api.raw_io.test_api.stream_output_text(
+        ' M path/to/file\n\n', stream='stdout')
+
+  status = api.git(
+      'status',
+      '--porcelain',
+      stdout=api.raw_io.output_text(),
+      step_test_data=status_step_test_data)
+  found_modification = False
+  for line in status.stdout.splitlines():
+    line = line.strip()
+    # We only expect "M" lines and maybe blank lines, so indicate a failure if
+    # we get anything else, e.g. an addition.
+    if not line:
+      continue
+    if line.split()[0] == 'M':
+      found_modification = True
+      continue
+    api.step.empty('Script added/removed a file: %s' % line, status='FAILURE')
+  if not found_modification:
+    api.step.empty('Script did not make any changes, not uploading CL.')
+    return
+
   message = _GenerateCLMessage(script_invocation, bugs, cmdline)
   api.git('add', '-u')
   api.git('commit', '-m', 'commit expectation file changes')
@@ -781,5 +807,52 @@ def GenTests(api):
               checkout_src_internal=True)),
       api.post_process(LogContains, 'bot_update', 'json.output',
                        ['src-internal']),
+      api.post_process(DropExpectation),
+  )
+
+  yield api.test(
+      'no_changes',
+      api.properties(
+          InputProperties(scripts=[
+              ScriptInvocation(
+                  step_name='step_name',
+                  script='some/script.py',
+                  script_type=ScriptInvocation.ScriptType.FLAKE_FINDER,
+                  submit_type=ScriptInvocation.SubmitType.MANUAL,
+                  reviewer_list=ScriptInvocation.ReviewerList(reviewer=['r']),
+                  cl_title='cl_title',
+                  args=['--some-arg'],
+              )
+          ])),
+      api.step_data('step_name.git status',
+                    api.raw_io.stream_output_text('\n', stream='stdout')),
+      api.post_process(
+          StepSuccess,
+          'step_name.Script did not make any changes, not uploading CL.'),
+      api.post_process(StatusSuccess),
+      api.post_process(DropExpectation),
+  )
+
+  yield api.test(
+      'non_modification_change',
+      api.properties(
+          InputProperties(scripts=[
+              ScriptInvocation(
+                  step_name='step_name',
+                  script='some/script.py',
+                  script_type=ScriptInvocation.ScriptType.FLAKE_FINDER,
+                  submit_type=ScriptInvocation.SubmitType.MANUAL,
+                  reviewer_list=ScriptInvocation.ReviewerList(reviewer=['r']),
+                  cl_title='cl_title',
+                  args=['--some-arg'],
+              )
+          ])),
+      api.step_data(
+          'step_name.git status',
+          api.raw_io.stream_output_text(
+              ' M some/path\n A path/to/file\n', stream='stdout')),
+      api.post_process(StepFailure,
+                       'step_name.Script added/removed a file: A path/to/file'),
+      api.post_process(StatusFailure),
       api.post_process(DropExpectation),
   )
