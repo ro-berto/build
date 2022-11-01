@@ -2,11 +2,14 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from recipe_engine import post_process
+
 DEPS = [
-  'chromium',
-  'recipe_engine/platform',
-  'recipe_engine/properties',
-  'recipe_engine/runtime',
+    'chromium',
+    'recipe_engine/path',
+    'recipe_engine/platform',
+    'recipe_engine/properties',
+    'recipe_engine/runtime',
 ]
 
 
@@ -32,6 +35,15 @@ def GenTests(api):
   yield api.test(
       'clobber',
       api.properties(clobber='1'),
+  )
+
+  # TODO(b/256012263): Remove this when the fix has rolled in.
+  yield api.test(
+      'clobber_cros_cache_bug',
+      api.properties(clobber='1'),
+      api.path.exists(api.path['checkout'].join('build', 'cros_cache')),
+      api.post_check(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
