@@ -293,7 +293,6 @@ def CheckTestsOnCommit(input_api, output_api):
   test_files = []
   for dir_glob in (
       ('recipes', 'unittests'),
-      ('scripts', 'common', 'unittests'),
       ('recipes', 'recipe_modules', '*', 'unittests'),
       ('recipes', 'recipe_modules', '*', 'resources'),
       ('recipes', 'recipe_modules', 'chromium_tests_builder_config',
