@@ -971,8 +971,8 @@ class ArchiveApi(recipe_api.RecipeApi):
         if fn.startswith(rename_dir.from_dir + self.m.path.sep):
           moved_files[fn] = fn.replace(rename_dir.from_dir, rename_dir.to_dir,
                                        1)
-      expanded_files = expanded_files.difference(list(moved_files.keys()))
-      expanded_files = expanded_files.union(list(moved_files.values()))
+      expanded_files = expanded_files.difference(moved_files.keys())
+      expanded_files = expanded_files.union(moved_files.values())
 
       self.m.file.move(
           "Move dir: '%s'->'%s'" % (rename_dir.from_dir, new_dirname),
@@ -1063,7 +1063,7 @@ class ArchiveApi(recipe_api.RecipeApi):
     if (archive_data.verifiable_key_path and
         not archive_data.archive_type == ArchiveData.ARCHIVE_TYPE_RECURSIVE):
 
-      for f in list(uploads.keys()):
+      for f in uploads.keys():
         # Report artifacts for provenance generation.
         file_hash = self.m.file.file_hash(f, test_data='deadbeef')
         # TODO(akashmukherjee): Add support for custom backend url.
@@ -1072,7 +1072,7 @@ class ArchiveApi(recipe_api.RecipeApi):
           self.m.bcid_reporter.report_gcs(
               file_hash, 'gs://%s/%s' % (gcs_bucket, uploads[f]))
 
-    for file_path in list(uploads.keys()):
+    for file_path in uploads.keys():
       self.m.gsutil.upload(
           file_path,
           bucket=gcs_bucket,
@@ -1138,7 +1138,7 @@ class ArchiveApi(recipe_api.RecipeApi):
       pattern = re.compile('^got_.*revision(_cp)?$')
       cp_pattern = re.compile('{#(\d*)}')
       content = {}
-      for key, val in list(update_properties.items()):
+      for key, val in update_properties.items():
         if re.search(pattern, key):
           if key == 'got_v8_revision':
             content['v8_revision_git'] = val
