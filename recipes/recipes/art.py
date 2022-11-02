@@ -421,128 +421,138 @@ def setup_target(api,
 
 
 _CONFIG_MAP = {
-  'x86': {
-    'host-x86-ndebug': {
-      'debug': False,
-      'bitness': 32,
+    'x86': {
+        'host-x86-ndebug': {
+            'debug': False,
+            'bitness': 32,
+        },
+        'host-x86-debug': {
+            'debug': True,
+            'bitness': 32,
+        },
+        'host-x86_64-ndebug': {
+            'debug': False,
+            'bitness': 64,
+        },
+        'host-x86_64-debug': {
+            'debug': True,
+            'bitness': 64,
+        },
+        # `userfaultfd`-based GC configuration.
+        # TODO: Rename this configuration to reflect its properties.
+        'host-x86-cms': {
+            'debug': True,
+            'bitness': 32,
+            'concurrent_collector': False,
+            'generational_cc': False,
+        },
+        # `userfaultfd`-based GC configuration.
+        # TODO: Rename this configuration to reflect its properties.
+        'host-x86_64-cms': {
+            'debug': True,
+            'bitness': 64,
+            'concurrent_collector': False,
+            'generational_cc': False,
+        },
+        'host-x86-poison-debug': {
+            'debug': True,
+            'bitness': 32,
+            'heap_poisoning': True,
+        },
+        'host-x86_64-poison-debug': {
+            'debug': True,
+            'bitness': 64,
+            'heap_poisoning': True,
+        },
+        'host-x86-gcstress-debug': {
+            'bitness': 32,
+            'debug': True,
+            'gcstress': True,
+        },
+        'host-x86_64-non-gen-cc': {
+            'bitness': 64,
+            'debug': True,
+            'generational_cc': False,
+        },
+        'host-x86_64-cdex-fast': {
+            'debug': True,
+            'bitness': 64,
+            'cdex_level': 'fast',
+        },
     },
-    'host-x86-debug': {
-      'debug': True,
-      'bitness': 32,
+    # TODO: Remove device names.
+    'target': {
+        'angler-armv7-ndebug': {
+            'device': 'angler-armv7',
+            'debug': False,
+        },
+        'angler-armv7-debug': {
+            'device': 'angler-armv7',
+            'debug': True,
+        },
+        'walleye-armv7-poison-debug': {
+            'device': 'walleye-armv7',
+            'debug': True,
+            'heap_poisoning': True,
+        },
+        'walleye-armv8-poison-ndebug': {
+            'device': 'walleye-armv8',
+            'debug': False,
+            'heap_poisoning': True,
+        },
+        'walleye-armv8-poison-debug': {
+            'device': 'walleye-armv8',
+            'debug': True,
+            'heap_poisoning': True
+        },
+        'fugu-ndebug': {
+            'device': 'fugu',
+            'debug': False,
+        },
+        'fugu-debug': {
+            'device': 'fugu',
+            'debug': True,
+        },
+        # `userfaultfd`-based GC configuration.
+        # TODO: Rename this configuration to reflect its properties.
+        'angler-armv7-non-gen-cc': {
+            'device': 'angler-armv7',
+            'debug': True,
+            'concurrent_collector': False,
+            'generational_cc': False,
+        },
+        'angler-armv8-ndebug': {
+            'device': 'angler-armv8',
+            'debug': False,
+        },
+        'angler-armv8-debug': {
+            'device': 'angler-armv8',
+            'debug': True,
+        },
+        # `userfaultfd`-based GC configuration.
+        # TODO: Rename this configuration to reflect its properties.
+        'angler-armv8-non-gen-cc': {
+            'device': 'angler-armv8',
+            'debug': True,
+            'concurrent_collector': False,
+            'generational_cc': False,
+        },
+        'bullhead-armv8-gcstress-ndebug': {
+            'device': 'bullhead-armv8',
+            'debug': False,
+            'gcstress': True,
+        },
+        'bullhead-armv8-gcstress-debug': {
+            'device': 'bullhead-armv8',
+            'debug': True,
+            'gcstress': True,
+        },
+        'bullhead-armv7-gcstress-ndebug': {
+            'device': 'bullhead-armv7',
+            'debug': False,
+            'gcstress': True,
+        },
     },
-    'host-x86_64-ndebug': {
-      'debug': False,
-      'bitness': 64,
-    },
-    'host-x86_64-debug': {
-      'debug': True,
-      'bitness': 64,
-    },
-    'host-x86-cms': {
-      'debug': True,
-      'bitness': 32,
-      'concurrent_collector': False,
-      'generational_cc': False,
-    },
-    'host-x86_64-cms': {
-      'debug': True,
-      'bitness': 64,
-      'concurrent_collector': False,
-      'generational_cc': False,
-    },
-    'host-x86-poison-debug': {
-      'debug': True,
-      'bitness': 32,
-      'heap_poisoning': True,
-    },
-    'host-x86_64-poison-debug': {
-      'debug': True,
-      'bitness': 64,
-      'heap_poisoning': True,
-    },
-    'host-x86-gcstress-debug': {
-      'bitness': 32,
-      'debug': True,
-      'gcstress': True,
-    },
-    'host-x86_64-non-gen-cc': {
-      'bitness': 64,
-      'debug': True,
-      'generational_cc': False,
-    },
-    'host-x86_64-cdex-fast': {
-      'debug': True,
-      'bitness': 64,
-      'cdex_level': 'fast',
-    },
-  },
-  # TODO: Remove device names.
-  'target': {
-    'angler-armv7-ndebug': {
-      'device': 'angler-armv7',
-      'debug': False,
-    },
-    'angler-armv7-debug': {
-      'device': 'angler-armv7',
-      'debug': True,
-    },
-    'walleye-armv7-poison-debug': {
-      'device': 'walleye-armv7',
-      'debug': True,
-      'heap_poisoning': True,
-    },
-    'walleye-armv8-poison-ndebug': {
-      'device': 'walleye-armv8',
-      'debug': False,
-      'heap_poisoning': True,
-    },
-    'walleye-armv8-poison-debug': {
-      'device': 'walleye-armv8',
-      'debug': True,
-      'heap_poisoning': True
-    },
-    'fugu-ndebug': {
-      'device': 'fugu',
-      'debug': False,
-    },
-    'fugu-debug': {
-      'device': 'fugu',
-      'debug': True,
-    },
-    'angler-armv7-non-gen-cc': {
-      'device': 'angler-armv7',
-      'debug': True,
-      'generational_cc': False,
-    },
-    'angler-armv8-ndebug': {
-      'device': 'angler-armv8',
-      'debug': False,
-    },
-    'angler-armv8-debug': {
-      'device': 'angler-armv8',
-      'debug': True,
-    },
-    'angler-armv8-non-gen-cc': {
-      'device': 'angler-armv8',
-      'debug': True,
-      'generational_cc': False,
-    },
-    'bullhead-armv8-gcstress-ndebug': {
-      'device': 'bullhead-armv8',
-      'debug': False,
-      'gcstress': True,
-    },
-    'bullhead-armv8-gcstress-debug': {
-      'device': 'bullhead-armv8',
-      'debug': True,
-      'gcstress': True,
-    },
-    'bullhead-armv7-gcstress-ndebug': {
-      'device': 'bullhead-armv7',
-      'debug': False,
-      'gcstress': True,
-    },
-  },
 }
 
 _CONFIG_DISPATCH_MAP = {
