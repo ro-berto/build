@@ -297,24 +297,6 @@ class V8Test(BaseTest):
       )
     return self.post_run(test)
 
-  @staticmethod
-  def has_only_stress_opt_failures(output):
-    result_variants = set(
-        '--stress-opt' in result['command']
-        for result in output.get('results', [])
-    )
-    return result_variants == set([True])
-
-  def upload_stress_opt_data(self, flake_only=False):
-    prefix = "flakes/" if flake_only else ""
-    self.api.gsutil.upload(
-        self.api.raw_io.input_text(self.api.buildbucket.build_url()),
-        'chromium-v8',
-        'stress-opt/%s%s' % (prefix, self.api.buildbucket.build.id),
-        name='stress-opt',
-        args=['-a', 'public-read'],
-    )
-
   def post_run(self, test):
     # The active step was either a local test run or the swarming collect step.
     step_result = self.api.step.active_result
@@ -354,9 +336,6 @@ class V8Test(BaseTest):
       self.api.v8_tests._update_failure_presentation(
             flake_log, flakes, step_result.presentation)
       self._add_bug_links(flakes, step_result.presentation)
-
-    if self.has_only_stress_opt_failures(json_output):
-      self.upload_stress_opt_data(flake_only=flakes and not failures)
 
     return TestResults(failures, flakes, infra_failures,
                        json_output['test_total'])
