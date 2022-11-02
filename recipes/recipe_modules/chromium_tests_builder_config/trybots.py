@@ -179,11 +179,12 @@ TRYBOTS = try_spec.TryDatabase.create({
         'mac-angle-chromium-try':
             try_spec.TrySpec.create(
                 mirrors=[
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.angle',
-                        buildername='mac-angle-chromium-builder',
-                        tester='mac-angle-chromium-amd',
-                    ),
+                    # Not enough capacity on Mac AMD https://crbug.com/1380184.
+                    # try_spec.TryMirror.create(
+                    #     builder_group='chromium.angle',
+                    #     buildername='mac-angle-chromium-builder',
+                    #     tester='mac-angle-chromium-amd',
+                    # ),
                     try_spec.TryMirror.create(
                         builder_group='chromium.angle',
                         buildername='mac-angle-chromium-builder',
@@ -663,11 +664,12 @@ TRYBOTS = try_spec.TryDatabase.create({
             ]),
         'mac-dawn-rel':
             try_spec.TrySpec.create([
-                try_spec.TryMirror.create(
-                    builder_group='chromium.dawn',
-                    buildername='Dawn Mac x64 Builder',
-                    tester='Dawn Mac x64 Release (AMD)',
-                ),
+                # Not enough capacity on Mac AMD https://crbug.com/1380184.
+                # try_spec.TryMirror.create(
+                #     builder_group='chromium.dawn',
+                #     buildername='Dawn Mac x64 Builder',
+                #     tester='Dawn Mac x64 Release (AMD)',
+                # ),
                 try_spec.TryMirror.create(
                     builder_group='chromium.dawn',
                     buildername='Dawn Mac x64 Builder',
