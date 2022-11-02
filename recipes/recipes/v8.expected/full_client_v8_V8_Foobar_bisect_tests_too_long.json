@@ -216,7 +216,7 @@
       "@@@STEP_LOG_LINE@builders.pyl@      \"name\": \"v8testing\"@@@",
       "@@@STEP_LOG_LINE@builders.pyl@    },@@@",
       "@@@STEP_LOG_LINE@builders.pyl@    {@@@",
-      "@@@STEP_LOG_LINE@builders.pyl@      \"name\": \"test262_variants\",@@@",
+      "@@@STEP_LOG_LINE@builders.pyl@      \"name\": \"test262\",@@@",
       "@@@STEP_LOG_LINE@builders.pyl@      \"test_args\": [@@@",
       "@@@STEP_LOG_LINE@builders.pyl@        \"--extra-flags=--flag\"@@@",
       "@@@STEP_LOG_LINE@builders.pyl@      ]@@@",
@@ -226,7 +226,7 @@
       "@@@STEP_LOG_END@builders.pyl@@@",
       "@@@STEP_LOG_LINE@test_spec@V8 Foobar@@@",
       "@@@STEP_LOG_LINE@test_spec@  v8testing(1) None@@@",
-      "@@@STEP_LOG_LINE@test_spec@  test262_variants(1) None@@@",
+      "@@@STEP_LOG_LINE@test_spec@  test262(1) None@@@",
       "@@@STEP_LOG_END@test_spec@@@"
     ]
   },

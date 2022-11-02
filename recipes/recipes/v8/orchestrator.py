@@ -140,7 +140,7 @@ def GenTests(api):
   test_spec = json.dumps({
     "tests": [
       {"name": "v8testing"},
-      {"name": "test262_variants", "test_args": ["--extra-flags=--flag"]},
+      {"name": "test262", "test_args": ["--extra-flags=--flag"]},
     ],
   }, indent=2)
   parent_test_spec = api.v8_tests.example_parent_test_spec_properties(

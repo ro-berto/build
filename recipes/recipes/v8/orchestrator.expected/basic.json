@@ -305,7 +305,7 @@
       "@@@STEP_LOG_LINE@step.sub_build@              {}@@@",
       "@@@STEP_LOG_LINE@step.sub_build@            ],@@@",
       "@@@STEP_LOG_LINE@step.sub_build@            [@@@",
-      "@@@STEP_LOG_LINE@step.sub_build@              \"test262_variants\",@@@",
+      "@@@STEP_LOG_LINE@step.sub_build@              \"test262\",@@@",
       "@@@STEP_LOG_LINE@step.sub_build@              1.0,@@@",
       "@@@STEP_LOG_LINE@step.sub_build@              null,@@@",
       "@@@STEP_LOG_LINE@step.sub_build@              \"\",@@@",

@@ -172,11 +172,6 @@ TEST_CONFIGS = freeze({
     'name': 'Test262',
     'tests': ['test262'],
   },
-  # TODO(machenbach): Remove this once not referenced from V8.
-  'test262_variants': {
-    'name': 'Test262',
-    'tests': ['test262'],
-  },
   'unittests': {
     'name': 'Unittests',
     'tests': ['unittests'],
