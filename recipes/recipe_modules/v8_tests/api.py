@@ -98,9 +98,6 @@ class V8TestsApi(recipe_api.RecipeApi):
   def set_up_swarming(self):
     self.m.chromium_swarming.set_default_dimension('pool', 'chromium.tests')
     self.m.chromium_swarming.set_default_dimension('os', 'Ubuntu-16.04')
-    # TODO(machenbach): Investigate if this is causing a priority inversion
-    # with tasks not specifying cores=8. See http://crbug.com/735388
-    # self.m.chromium_swarming.set_default_dimension('cores', '8')
     self.m.chromium_swarming.add_default_tag('project:v8')
     self.m.chromium_swarming.default_hard_timeout = 45 * 60
 
@@ -188,8 +185,6 @@ class V8TestsApi(recipe_api.RecipeApi):
     start_time_sec = self.m.time.time()
 
     # Apply test filter.
-    # TODO(machenbach): Track also the number of tests that ran and throw an
-    # error if the overall number of tests from all steps was zero.
     tests = [t for t in tests if t.apply_filter()]
 
     swarming_tests = [t for t in tests if t.uses_swarming]
@@ -353,11 +348,6 @@ class V8TestsApi(recipe_api.RecipeApi):
       '--progress=verbose',
       '--outdir', self.m.path.join('out', 'build'),
     ]
-
-    # TODO(machenbach): Remove exception for branches once tested on main
-    # waterfall.
-    if self.m.builder_group.for_current == 'client.v8.branches':
-      full_args.append('--timeout=200')  # pragma: no cover
 
     # Add optional non-standard root directory for test suites.
     if test.get('test_root'):

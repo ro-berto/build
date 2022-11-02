@@ -530,8 +530,6 @@ class V8SwarmingTest(V8Test):
     _trigger_swarming_task(self.api, self.task, self.test_step_config)
 
   def run(self, **kwargs):
-    # TODO(machenbach): Soften this when softening 'assert isolated_hash'
-    # above.
     assert self.task
     result = TestResults.empty()
     try:
