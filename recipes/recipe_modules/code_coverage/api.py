@@ -44,7 +44,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     # The list of mimic builder names to be uploaded.
     self._mimic_builder_names = []
     # The bucket to which code coverage data should be uploaded.
-    self._gs_bucket = properties.gs_bucket or constants.DEFAULT_BUCKET_NAME
+    self._gs_bucket = properties.coverage_gs_bucket or constants.DEFAULT_BUCKET_NAME
     # List of test types to run in a builder. By default, it runs overall
     # coverage. This is only used in Clang coverage at present.
     self._test_types = properties.coverage_test_types or ['overall']

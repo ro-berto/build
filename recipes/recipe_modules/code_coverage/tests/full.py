@@ -558,6 +558,20 @@ def GenTests(api):
   )
 
   yield api.test(
+      'upload to custom gs bucket',
+      api.chromium.generic_build(
+          builder_group='chromium.fyi', builder='linux-code-coverage'),
+      api.code_coverage(
+          use_clang_coverage=True, coverage_gs_bucket="code-coverage"),
+      api.post_process(
+          post_process.MustRun,
+          'process clang code coverage data for overall test coverage.gsutil '
+          'upload artifact to GS'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
       'process java coverage for full-codebase',
       api.chromium.generic_build(
           builder_group='chromium.fyi', builder='android-code-coverage'),

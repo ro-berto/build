@@ -10,7 +10,7 @@ from PB.recipe_modules.build.code_coverage import properties
 class CodeCoverageTestApi(recipe_test_api.RecipeTestApi):
 
   def __call__(self,
-               gs_bucket=None,
+               coverage_gs_bucket=None,
                use_clang_coverage=False,
                use_java_coverage=False,
                use_javascript_coverage=False,
@@ -22,7 +22,7 @@ class CodeCoverageTestApi(recipe_test_api.RecipeTestApi):
         **{
             '$build/code_coverage':
                 properties.InputProperties(
-                    gs_bucket=gs_bucket,
+                    coverage_gs_bucket=coverage_gs_bucket,
                     use_clang_coverage=use_clang_coverage,
                     use_java_coverage=use_java_coverage,
                     use_javascript_coverage=use_javascript_coverage,
