@@ -1085,13 +1085,6 @@
       "chromium.gpu.fyi:GPU FYI Mac Builder DEPS ANGLE"
     ]
   },
-  "chromium.gpu.fyi:GPU FYI Win Builder": {
-    "builders": [
-      "chromium.gpu.fyi:GPU FYI Win Builder",
-      "chromium.gpu.fyi:Win10 FYI x86 Release (NVIDIA)",
-      "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-rel-32"
-    ]
-  },
   "chromium.gpu.fyi:GPU FYI Win x64 Builder": {
     "builders": [
       "chromium.gpu.fyi:GPU FYI Win x64 Builder",
@@ -1445,13 +1438,6 @@
     "builders": [
       "chromium.gpu.fyi:GPU FYI XR Win x64 Builder",
       "chromium.gpu.fyi:Win10 FYI x64 Release XR Perf (NVIDIA)"
-    ]
-  },
-  "chromium.gpu.fyi:Win10 FYI x86 Release (NVIDIA)": {
-    "builders": [
-      "chromium.gpu.fyi:GPU FYI Win Builder",
-      "chromium.gpu.fyi:Win10 FYI x86 Release (NVIDIA)",
-      "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-rel-32"
     ]
   },
   "chromium.gpu.fyi:gpu-fyi-chromeos-jacuzzi-exp": {
@@ -2500,13 +2486,6 @@
       "tryserver.chromium.win:gpu-fyi-try-win10-intel-rel-64",
       "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-exp-64",
       "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-rel-64"
-    ]
-  },
-  "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-rel-32": {
-    "builders": [
-      "chromium.gpu.fyi:GPU FYI Win Builder",
-      "chromium.gpu.fyi:Win10 FYI x86 Release (NVIDIA)",
-      "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-rel-32"
     ]
   },
   "tryserver.chromium.win:gpu-fyi-try-win10-nvidia-rel-64": {

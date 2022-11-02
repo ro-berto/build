@@ -572,6 +572,10 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * win10_chromium_x64_rel_ng
     # * win11-x64-fyi-rel
     # * win7-rel
+    #
+    # The config for the following builders is now specified src-side in
+    # //infra/config/subprojects/chromium/gpu.try.star
+    # * gpu-fyi-try-win10-nvidia-rel-32
     'tryserver.chromium.win': {
         'win-annotator-rel':
             try_spec.TrySpec.create_for_single_mirror(
@@ -620,12 +624,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.gpu.fyi',
                 buildername='GPU FYI Win x64 Builder',
                 tester='Win10 FYI x64 Exp Release (NVIDIA)',
-            ),
-        'gpu-fyi-try-win10-nvidia-rel-32':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Win Builder',
-                tester='Win10 FYI x86 Release (NVIDIA)',
             ),
         'gpu-fyi-try-win10-nvidia-rel-64':
             try_spec.TrySpec.create_for_single_mirror(

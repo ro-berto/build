@@ -21,6 +21,7 @@ def _chromium_gpu_fyi_spec(build_gs_bucket='chromium-gpu-fyi-archive',
 # * GPU FYI Android arm64 Builder
 # * GPU FYI Linux Builder
 # * GPU FYI Linux Builder DEPS ANGLE
+# * GPU FYI Win Builder
 # * Linux FYI Experimental Release (Intel HD 630)
 # * Linux FYI Experimental Release (NVIDIA)
 # * Linux FYI Release (AMD RX 5500 XT)
@@ -29,21 +30,9 @@ def _chromium_gpu_fyi_spec(build_gs_bucket='chromium-gpu-fyi-archive',
 # * Linux FYI Release (NVIDIA)
 # * Optional Linux Release (Intel HD 630)
 # * Optional Linux Release (NVIDIA)
+# * Win10 FYI x86 Release (NVIDIA)
 
 SPEC = {
-    'GPU FYI Win Builder':
-        _chromium_gpu_fyi_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 32,
-            },
-            simulation_platform='win',
-        ),
     'GPU FYI Win x64 Builder':
         _chromium_gpu_fyi_spec(
             chromium_config='chromium',
@@ -221,22 +210,6 @@ SPEC = {
             },
             execution_mode=builder_spec.TEST,
             parent_buildername='GPU FYI Win x64 Builder',
-            simulation_platform='win',
-            serialize_tests=True,
-        ),
-    'Win10 FYI x86 Release (NVIDIA)':
-        _chromium_gpu_fyi_spec(
-            chromium_config='chromium',
-            chromium_apply_config=[
-                'mb',
-            ],
-            gclient_config='chromium',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 32,
-            },
-            execution_mode=builder_spec.TEST,
-            parent_buildername='GPU FYI Win Builder',
             simulation_platform='win',
             serialize_tests=True,
         ),
