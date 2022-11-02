@@ -504,16 +504,11 @@ class V8Api(recipe_api.RecipeApi):
     """Map given builder names from infra/config to names used for look-ups
     in source configurations.
 
-    This maps a generated experimental trybot to the corresponding parent/child
-    names.
-
     This maps compilator builder names to legacy names to ease the roll-out and
     for backwards-compatibility on release branches.
     """
     builder_name = self.m.buildbucket.builder_name
     triggered_suffix = '_triggered' if triggered else ''
-    if builder_name.endswith('_exp'):
-      builder_name = builder_name.replace('_exp', '_ng' + triggered_suffix)
     if self.m.properties['recipe'] == 'v8/compilator':
       if builder_name.endswith('_compile_rel'):
         builder_name = builder_name.replace(
