@@ -130,6 +130,7 @@ PYTHON3_ONLY_FILES = (
     'recipes/recipe_modules/code_coverage/unittests/write_paths_test.py',
     'recipes/unittests/extract_build_unittest.py',
     'recipes/unittests/zip_build_unittest.py',
+    'scripts/common/unittests/chromium_utils_test.py',
 )
 
 
