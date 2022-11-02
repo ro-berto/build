@@ -118,6 +118,7 @@ message ArchiveData {
   //   ]
   repeated ArchiveDirRename rename_dirs = 13;
   // The name of the google cloud storage bucket to upload to.
+  // This supports the same string substitutions as |ArchiveData.gcs_path|.
   string gcs_bucket = 3;
   // The destination path in the bucket to upload to. The following string
   // substitutions are built-in:

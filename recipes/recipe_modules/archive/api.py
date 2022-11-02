@@ -879,7 +879,9 @@ class ArchiveApi(recipe_api.RecipeApi):
     gcs_path = self._replace_placeholders(update_properties, custom_vars,
                                           archive_data.gcs_path)
 
-    gcs_bucket = archive_data.gcs_bucket
+    gcs_bucket = self._replace_placeholders(update_properties, custom_vars,
+                                            archive_data.gcs_bucket)
+
     experimental = self.m.runtime.is_experimental
     if experimental:
       gcs_bucket += "/experimental"
