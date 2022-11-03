@@ -648,7 +648,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       args.append('--inverted')
 
     step_result = self.m.step(
-        step_names, ['vpython3', '-u', script] + args,
+        step_names, ['python3', '-u', script] + args,
         step_test_data=lambda: self.m.json.test_api.output({}))
     assert isinstance(step_result.json.output, dict)
 

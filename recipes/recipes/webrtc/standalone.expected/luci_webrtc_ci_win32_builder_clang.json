@@ -995,7 +995,7 @@
   },
   {
     "cmd": [
-      "vpython3",
+      "python3",
       "-u",
       "RECIPE_MODULE[build::chromium_tests]\\resources\\find_command_lines.py",
       "--build-dir",
