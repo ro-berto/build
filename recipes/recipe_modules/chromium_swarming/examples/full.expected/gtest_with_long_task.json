@@ -915,10 +915,6 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "No-op step to test duration of (Tests statistics) above"
-  },
-  {
     "cmd": [
       "vpython3",
       "-u",

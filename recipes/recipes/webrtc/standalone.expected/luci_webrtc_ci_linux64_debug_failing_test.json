@@ -1721,10 +1721,6 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "No-op step to test duration of (Tests statistics) above"
-  },
-  {
     "failure": {
       "failure": {},
       "humanReason": "1 Test Suite(s) failed.\n\n**dummy_test** failed because of:\n\n- dummy_test"
