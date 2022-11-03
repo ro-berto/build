@@ -128,6 +128,8 @@ class _PropertiesAssembler(object):
             self._get_skylab_upload_location(builder_spec),
         'clusterfuzz_archive':
             self._get_clusterfuzz_archive(builder_spec),
+        'perf_isolate_upload':
+            builder_spec.perf_isolate_upload,
     }
 
     return properties_pb.BuilderSpec(

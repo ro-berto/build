@@ -208,10 +208,11 @@ def GenTests(api):
           bucket='bucket',
           builder='matching-config',
           builder_group='fake-group',
-          builder_spec=example_spec,
+          builder_spec=attr.evolve(example_spec, perf_isolate_upload=True),
       ).with_tester(
           builder='matching-config-tester',
           builder_group='fake-group',
+          builder_spec=example_spec,
       ).assemble())
 
   yield api.test(
@@ -238,6 +239,7 @@ def GenTests(api):
                           example_spec,
                           simulation_platform='linux',
                           chromium_config_kwargs={'HOST_PLATFORM': 'linux'},
+                          perf_isolate_upload=True,
                       ),
                   'matching-config-tester':
                       attr.evolve(

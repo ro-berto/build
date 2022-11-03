@@ -155,6 +155,7 @@ def _convert_builder_spec(obj, builder_id_by_builder_key):
       clobber=obj.clobber,
       build_gs_bucket=obj.build_gs_bucket or None,
       serialize_tests=obj.run_tests_serially,
+      perf_isolate_upload=obj.perf_isolate_upload,
       expose_trigger_properties=obj.expose_trigger_properties,
       skylab_gs_bucket=obj.skylab_upload_location.gs_bucket or None,
       skylab_gs_extra=obj.skylab_upload_location.gs_extra or None,
