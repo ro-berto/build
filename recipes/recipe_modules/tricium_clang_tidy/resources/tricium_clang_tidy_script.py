@@ -77,6 +77,7 @@ def _generate_compile_commands(out_dir: str, gn: str) -> str:
       args=[
           gn,
           'gen',
+          out_dir,
           '--export-compile-commands',
           '--args=' + args_gn,
           '.',
