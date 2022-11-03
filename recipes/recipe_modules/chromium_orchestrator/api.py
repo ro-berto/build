@@ -118,6 +118,8 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
     reuseable_compilator_build = None
     if (inverted_rts_bail_early_experiment and self.m.cq.active and
         self.m.cq.run_mode == self.m.cq.QUICK_DRY_RUN):
+      # Prevent this build from getting reused for a later DRY_RUN or FULL_RUN
+      self.m.cq.allow_reuse_for(self.m.cq.QUICK_DRY_RUN)
       return
 
     # Allow the bail early experiment to run inverted since this is only used
@@ -140,6 +142,8 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
               reuseable_compilator_build.id)
 
     if inverted_rts_bail_early_experiment and not reuseable_compilator_build:
+      # Prevent this build from getting reused for a later DRY_RUN or FULL_RUN
+      self.m.cq.allow_reuse_for(self.m.cq.QUICK_DRY_RUN)
       return None
 
     builder_id, builder_config = self.configure_build(
