@@ -13,11 +13,8 @@ DEPS = [
     'chromium',
     'depot_tools/bot_update',
     'depot_tools/gclient',
-    'depot_tools/git',
     'infra/cloudkms',
     'recipe_engine/path',
-    'recipe_engine/properties',
-    'recipe_engine/runtime',
     'recipe_engine/step',
 ]
 
@@ -47,7 +44,4 @@ def RunSteps(api):
 
 # Run `./recipes.py test train` to update wpt-upload.json file.
 def GenTests(api):
-  yield (api.test('wpt-upload') + api.properties(
-      mastername='chromium.infra.cron',
-      buildername='wpt-upload',
-      slavename='fake-slave') + api.step_data('Upload WPT Result'))
+  yield api.test('wpt-upload')

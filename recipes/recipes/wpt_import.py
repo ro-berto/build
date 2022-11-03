@@ -23,8 +23,6 @@ DEPS = [
     'recipe_engine/context',
     'recipe_engine/json',
     'recipe_engine/path',
-    'recipe_engine/properties',
-    'recipe_engine/runtime',
     'recipe_engine/step',
 ]
 
@@ -104,21 +102,24 @@ def git_cl_issue_link(api):
 
 # Run `./recipes.py test train` to update wpt-import.json file.
 def GenTests(api):
-  yield (api.test('wpt-import-with-issue') + api.properties(
-      mastername='luci.infra.cron',
-      buildername='wpt-importer',
-      slavename='fake-slave') + api.step_data(
+  yield api.test(
+      'wpt-import-with-issue',
+      api.step_data(
           'git cl issue',
           api.json.output({
               'issue': 123456789,
               'issue_url': 'https://codereview.chromium.org/123456789'
-          })))
+          }),
+      ),
+  )
 
-  yield (api.test('wpt-import-without-issue') + api.properties(
-      mastername='luci.infra.cron',
-      buildername='wpt-importer',
-      slavename='fake-slave') + api.step_data(
-          'git cl issue', api.json.output({
+  yield api.test(
+      'wpt-import-without-issue',
+      api.step_data(
+          'git cl issue',
+          api.json.output({
               'issue': None,
               'issue_url': None
-          })))
+          }),
+      ),
+  )
