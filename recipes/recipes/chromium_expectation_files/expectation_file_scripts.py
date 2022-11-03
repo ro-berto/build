@@ -176,7 +176,10 @@ def _UploadCL(api, script_invocation, bugs, cmdline):
     cc_list = reviewer_list
     reviewer_list = [RUBBER_STAMPER]
 
-  upload_args = ['--force', '--send-mail', '--reviewers', reviewer_list[0]]
+  upload_args = [
+      '--force', '--send-mail', '--no-python2-post-upload-hooks', '--reviewers',
+      reviewer_list[0]
+  ]
   if script_invocation.submit_type == ScriptInvocation.SubmitType.AUTO:
     upload_args.append('--enable-auto-submit')
   if cc_list:
@@ -196,8 +199,8 @@ def _UploadCL(api, script_invocation, bugs, cmdline):
   # pass the CQ with the conflicts in.
   if 'Found conflicts for pattern' in result.stdout:
     upload_args = [
-        '--force', '--send-mail', '--reviewers', original_reviewer_list[0],
-        '--bypass-hooks'
+        '--force', '--send-mail', '--no-python2-post-upload-hooks',
+        '--reviewers', original_reviewer_list[0], '--bypass-hooks'
     ]
     message = _GenerateCLMessage(
         script_invocation, bugs, cmdline,
@@ -274,6 +277,7 @@ def GenTests(api):
           'upload',
           '--force',
           '--send-mail',
+          '--no-python2-post-upload-hooks',
           '--reviewers',
           'r',
           '--message-file',
@@ -310,6 +314,7 @@ def GenTests(api):
           'upload',
           '--force',
           '--send-mail',
+          '--no-python2-post-upload-hooks',
           '--reviewers',
           'r',
           '--bypass-hooks',
@@ -395,6 +400,7 @@ def GenTests(api):
           'upload',
           '--force',
           '--send-mail',
+          '--no-python2-post-upload-hooks',
           '--reviewers',
           'r',
           '--bypass-hooks',
@@ -437,6 +443,7 @@ def GenTests(api):
           'upload',
           '--force',
           '--send-mail',
+          '--no-python2-post-upload-hooks',
           '--reviewers',
           'r',
           '--message-file',
@@ -467,6 +474,7 @@ def GenTests(api):
           'upload',
           '--force',
           '--send-mail',
+          '--no-python2-post-upload-hooks',
           '--reviewers',
           'r',
           '--message-file',
@@ -498,6 +506,7 @@ def GenTests(api):
           'upload',
           '--force',
           '--send-mail',
+          '--no-python2-post-upload-hooks',
           '--reviewers',
           'r2',
           '--message-file',
@@ -526,6 +535,7 @@ def GenTests(api):
           'upload',
           '--force',
           '--send-mail',
+          '--no-python2-post-upload-hooks',
           '--reviewers',
           'rubber-stamper@appspot.gserviceaccount.com',
           '--enable-auto-submit',
@@ -576,6 +586,7 @@ def GenTests(api):
           'upload',
           '--force',
           '--send-mail',
+          '--no-python2-post-upload-hooks',
           '--reviewers',
           'r@google.com',
           '--message-file',
