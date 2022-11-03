@@ -10,6 +10,7 @@ class LuciBisectionApi(recipe_api.RecipeApi):
 
   def send_result_to_luci_bisection(self, step_name, analysis_id, result, host):
     bbid = str(self.m.buildbucket.build.id)
+    bot_id = self.m.swarming.bot_id
     # Leave the test data here for the purpose of led testing, because led build has no bbid
     # bbid = "8804856879691073905"
     # analysis_id = "5655880053817344"
@@ -18,6 +19,7 @@ class LuciBisectionApi(recipe_api.RecipeApi):
     request_input = {
         "analysisId": analysis_id,
         "bbid": bbid,
+        "botId": bot_id,
         "gitilesCommit": {
             "host": self.m.buildbucket.gitiles_commit.host,
             "project": self.m.buildbucket.gitiles_commit.project,
