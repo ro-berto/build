@@ -373,13 +373,12 @@ class FilterApi(recipe_api.RecipeApi):
 
     # Emit more detailed output useful for debugging.
     analyze_details = {
-        'test_targets': test_targets,
-        'additional_compile_targets': additional_compile_targets,
-        'self.m.filter.compile_targets': analyze_compile_targets,
-        'self.m.filter.test_targets': analyze_test_targets,
-        'compile_targets': analyze_compile_targets,
+        'test targets': test_targets,
+        'additional compile targets': additional_compile_targets,
+        'affected test targets': analyze_test_targets,
+        'affected compile targets': analyze_compile_targets,
     }
-    details_json = self.m.json.dumps(analyze_details, indent=2, sort_keys=True)
+    details_json = self.m.json.dumps(analyze_details, indent=2, sort_keys=False)
     step_result = self.m.step.active_result
     step_result.presentation.logs['analyze_details'] = details_json.splitlines()
 
