@@ -51,7 +51,7 @@ message SquashfsParams {
   string block_size = 2;
 }
 
-// Next id: 18
+// Next id: 19
 message ArchiveData {
   // A list of relative paths to files that should be archived. All files are
   // relative to the build directory, which is passed alongside this proto to
@@ -195,17 +195,19 @@ message ArchiveData {
   //   }
   RevisionsFile revisions_file = 14;
 
-  // A string path to the key used to verify bits. Setting this parameter will
-  // generate chain-of-custody provenance for the artifacts listed in this
-  // ArchiveData definition and upload them to the GCS path in this config.
-  // This path is NOT relative to the out dir. Please visit
-  // https://chromium.googlesource.com/infra/infra/+/refs/heads/master/recipes/
-  // recipe_modules/cloudkms/api.py#48 for details on the underlying call.
+  // DEPRECATED. Use requires_provenance instead.
+  // TODO(morawand): Mark this field as reserved once all archive configs are
+  // using requires_provenance.
+  string verifiable_key_path = 8;
+
+  // If set to true, generate chain-of-custody provenance for the artifacts
+  // listed in this ArchiveData definition and upload them to the GCS path in
+  // this config.
   // NOTE: This does not support files archived with ARCHIVE_TYPE_RECURSIVE.
   // Please use one of the other archive types to explicitly list files that
   // need chain-of-custody, or create a zip/tar archive of the dirs, and add the
   // provenance to that.
-  string verifiable_key_path = 8;
+  bool requires_provenance = 18;
 
   // A string key to override the default base directory (build dir)
   // for the given file(s), dir(s) for this ArchiveData definition.

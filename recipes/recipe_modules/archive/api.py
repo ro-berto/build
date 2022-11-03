@@ -1062,7 +1062,7 @@ class ArchiveApi(recipe_api.RecipeApi):
       uploads = {archive_file: gcs_path}
 
     # Report artifacts that require provenance.
-    if (archive_data.verifiable_key_path and
+    if (archive_data.requires_provenance and
         not archive_data.archive_type == ArchiveData.ARCHIVE_TYPE_RECURSIVE):
 
       for f in uploads.keys():

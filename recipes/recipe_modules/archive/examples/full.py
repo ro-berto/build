@@ -803,7 +803,7 @@ def GenTests(api):
               'gcs_bucket': 'any-bucket',
               'gcs_path': 'dest_dir/',
               'archive_type': properties.ArchiveData.ARCHIVE_TYPE_FILES,
-              'verifiable_key_path': '/path/to/some/key',
+              'requires_provenance': True,
               'base_dir': 'src-internal',
           },
           {
@@ -811,7 +811,7 @@ def GenTests(api):
               'gcs_bucket': 'any-bucket',
               'gcs_path': 'dest_dir/files.zip',
               'archive_type': properties.ArchiveData.ARCHIVE_TYPE_ZIP,
-              'verifiable_key_path': '/path/to/some/key',
+              'requires_provenance': True,
               'base_dir': 'src-internal',
           },
       ],)
