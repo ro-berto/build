@@ -101,8 +101,8 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
   yield api.test(
-      'enable_soda',
-      api.properties(apply_gclient_config='enable_soda'),
+      'enable_soda_integration_tests',
+      api.properties(apply_gclient_config='enable_soda_integration_tests'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )

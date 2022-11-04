@@ -432,7 +432,7 @@ def no_kaleidoscope(c):
 
 
 @CONFIG_CTX()
-def enable_soda(c):
+def enable_soda_integration_tests(c):
   c.solutions[0].custom_vars['checkout_soda'] = 'True'
 
 
