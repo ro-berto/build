@@ -1687,6 +1687,7 @@
     "cmd": [],
     "name": "$debug - all results",
     "~followup_annotations": [
+      "@@@STEP_TEXT@1.76 KB@@@",
       "@@@STEP_LOG_LINE@serialized results@{@@@",
       "@@@STEP_LOG_LINE@serialized results@  \"all_suites\": [@@@",
       "@@@STEP_LOG_LINE@serialized results@    {@@@",
@@ -1706,7 +1707,13 @@
       "@@@STEP_LOG_LINE@serialized results@    \"dummy_test\"@@@",
       "@@@STEP_LOG_LINE@serialized results@  ]@@@",
       "@@@STEP_LOG_LINE@serialized results@}@@@",
-      "@@@STEP_LOG_END@serialized results@@@"
+      "@@@STEP_LOG_END@serialized results@@@",
+      "@@@STEP_LOG_LINE@memory usage@Size of this RDBResults: 1.76 KB@@@",
+      "@@@STEP_LOG_LINE@memory usage@@@@",
+      "@@@STEP_LOG_LINE@memory usage@\tSize of RDBPerSuiteResults for dummy_test: 1.48 KB@@@",
+      "@@@STEP_LOG_LINE@memory usage@\t\tNumber of RDBPerIndividualTestResults entries: 1@@@",
+      "@@@STEP_LOG_LINE@memory usage@\t\tSize of all RDBPerIndividualTestResults entries: 453.00 B@@@",
+      "@@@STEP_LOG_END@memory usage@@@"
     ]
   },
   {

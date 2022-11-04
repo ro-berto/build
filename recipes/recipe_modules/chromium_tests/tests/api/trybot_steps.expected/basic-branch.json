@@ -1600,6 +1600,7 @@
     "cmd": [],
     "name": "$debug - all results (with patch)",
     "~followup_annotations": [
+      "@@@STEP_TEXT@1.25 KB@@@",
       "@@@STEP_LOG_LINE@serialized results@{@@@",
       "@@@STEP_LOG_LINE@serialized results@  \"all_suites\": [@@@",
       "@@@STEP_LOG_LINE@serialized results@    {@@@",
@@ -1615,7 +1616,13 @@
       "@@@STEP_LOG_LINE@serialized results@  ], @@@",
       "@@@STEP_LOG_LINE@serialized results@  \"unexpected_failing_suites\": []@@@",
       "@@@STEP_LOG_LINE@serialized results@}@@@",
-      "@@@STEP_LOG_END@serialized results@@@"
+      "@@@STEP_LOG_END@serialized results@@@",
+      "@@@STEP_LOG_LINE@memory usage@Size of this RDBResults: 1.25 KB@@@",
+      "@@@STEP_LOG_LINE@memory usage@@@@",
+      "@@@STEP_LOG_LINE@memory usage@\tSize of RDBPerSuiteResults for base_unittests: 1.00 KB@@@",
+      "@@@STEP_LOG_LINE@memory usage@\t\tNumber of RDBPerIndividualTestResults entries: 0@@@",
+      "@@@STEP_LOG_LINE@memory usage@\t\tSize of all RDBPerIndividualTestResults entries: 0.00 B@@@",
+      "@@@STEP_LOG_END@memory usage@@@"
     ]
   },
   {

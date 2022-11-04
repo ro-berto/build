@@ -265,6 +265,9 @@ class TestUtilsApi(recipe_api.RecipeApi):
         cmd=None)
     step_result.presentation.logs['serialized results'] = (
         self.m.json.dumps(rdb_results.to_jsonish(), indent=2).splitlines())
+    total_size, mem_usage_lines = rdb_results.get_size_details()
+    step_result.presentation.step_text = total_size
+    step_result.presentation.logs['memory usage'] = mem_usage_lines
 
     bad_results_dict = {}
     (bad_results_dict['invalid'],
