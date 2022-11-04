@@ -23,6 +23,7 @@ DEPS = [
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/step',
+    'reclient',
 ]
 
 
@@ -32,14 +33,17 @@ def RunSteps(api):
 
   libyuv.checkout()
   should_use_goma = libyuv.should_use_goma
+  should_use_reclient = libyuv.should_use_reclient
   if libyuv.should_build and should_use_goma:
     api.chromium.ensure_goma()
   api.chromium.runhooks()
 
   if libyuv.should_build:
     with libyuv.ensure_sdk():
-      api.chromium.run_gn(use_goma=should_use_goma)
-      raw_result = api.chromium.compile(use_goma_module=should_use_goma)
+      api.chromium.run_gn(
+          use_goma=should_use_goma, use_reclient=should_use_reclient)
+      raw_result = api.chromium.compile(
+          use_goma_module=should_use_goma, use_reclient=should_use_reclient)
       if raw_result.status != common_pb.SUCCESS:
         return raw_result
     if libyuv.should_upload_build:
@@ -85,6 +89,7 @@ def GenTests(api):
           build_number=1337,
           git_repo='https://chromium.googlesource.com/libyuv/libyuv',
           revision=revision)
+      test += api.reclient.properties()
 
     test += api.builder_group.for_current(builder_group)
     test += api.properties(

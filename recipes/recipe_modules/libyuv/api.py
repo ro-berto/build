@@ -8,6 +8,20 @@ from recipe_engine import recipe_api
 from . import builders as libyuv_builders
 
 
+# Builders that don't use remote compile service.
+_LOCAL_COMPILE_BUILDERS = [
+    'Linux GCC',
+    'Win32 Debug',
+    'Win32 Release',
+    'Win64 Debug',
+    'Win64 Release',
+    'linux_gcc',
+    'win',
+    'win_rel',
+    'win_x64_rel',
+]
+
+
 class LibyuvApi(recipe_api.RecipeApi):
   BUILDERS = libyuv_builders.BUILDERS
   RECIPE_CONFIGS = libyuv_builders.RECIPE_CONFIGS
@@ -70,18 +84,15 @@ class LibyuvApi(recipe_api.RecipeApi):
 
   @property
   def should_use_goma(self):
-    non_goma_builders = [
-        'Linux GCC',
-        'Win32 Debug',
-        'Win32 Release',
-        'Win64 Debug',
-        'Win64 Release',
-        'linux_gcc',
-        'win',
-        'win_rel',
-        'win_x64_rel',
-    ]
-    return self.buildername not in non_goma_builders
+    if self.m.builder_group.for_current != 'tryserver.libyuv':
+      return False
+    return self.buildername not in _LOCAL_COMPILE_BUILDERS
+
+  @property
+  def should_use_reclient(self):
+    if self.m.builder_group.for_current == 'tryserver.libyuv':
+      return False
+    return self.buildername not in _LOCAL_COMPILE_BUILDERS
 
   @property
   def should_test(self):
