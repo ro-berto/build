@@ -29,6 +29,7 @@ from xml.etree import ElementTree
 import zlib
 
 import aggregation_util
+import blame_util
 import combine_jacoco_reports
 import repository_util
 
@@ -240,7 +241,8 @@ def generate_json_coverage_metadata(src_path,
                                     diff_mapping,
                                     source_files,
                                     exclusion_pattern=None,
-                                    third_party_inclusion_subdirs=None):
+                                    third_party_inclusion_subdirs=None,
+                                    generate_blame_list=False):
   """Generates a JSON representation based on Jacoco XML report.
 
   JSON format conforms to the proto:
@@ -266,6 +268,10 @@ def generate_json_coverage_metadata(src_path,
   data['files'] = _get_files_coverage_data(src_path, root, diff_mapping,
                                            source_files, exclusion_pattern,
                                            third_party_inclusion_subdirs)
+  filenames = [x['path'][2:] for x in data['files']]
+  blame_list = {}
+  if generate_blame_list:
+    blame_list = blame_util.generate_blame_list(src_path, filenames)
 
   # Add per directory and component coverage data.
   if data['files'] and component_mapping:
@@ -283,7 +289,7 @@ def generate_json_coverage_metadata(src_path,
       data['dirs'] = list(per_directory_coverage_data.values())
       data['summaries'] = per_directory_coverage_data['//']['summaries']
 
-  return data
+  return data, blame_list
 
 
 def _parse_args(args):
@@ -347,6 +353,10 @@ def _parse_args(args):
       nargs='*',
       type=str,
       help='third_party sub directories to include in aggregation')
+  parser.add_argument(
+      '--generate-blame-list',
+      action='store_true',
+      help='generate blame list data for files whose coverage is known')
   params = parser.parse_args(args=args)
 
   if params.dir_metadata_path and not os.path.isfile(params.dir_metadata_path):
@@ -533,15 +543,19 @@ def main():
     xml_root = fix_package_paths(
         _read_and_prune_xml(temp_overall_xml), params.src_path, source_dirs)
 
-    data = generate_json_coverage_metadata(params.src_path, xml_root,
-                                           component_mapping, diff_mapping,
-                                           params.source_files,
-                                           params.exclusion_pattern,
-                                           params.third_party_inclusion_subdirs)
+    data, blame_list = generate_json_coverage_metadata(
+        params.src_path, xml_root, component_mapping, diff_mapping,
+        params.source_files, params.exclusion_pattern,
+        params.third_party_inclusion_subdirs, params.generate_blame_list)
     logging.info('Writing fulfilled Java coverage metadata to %s',
                  params.output_dir)
     with open(os.path.join(params.output_dir, 'all.json.gz'), 'wb') as f:
       f.write(zlib.compress(json.dumps(data).encode('utf-8')))
+
+    if params.generate_blame_list:
+      blame_list_file = os.path.join(params.output_dir, 'blame.json')
+      with open(blame_list_file, 'w') as fp:
+        json.dump(blame_list, fp)
 
     # Write xml tree to disk so that it can be exported to zoss
     ElementTree.ElementTree(xml_root).write(

@@ -24,4 +24,6 @@ message InputProperties {
   string coverage_reference_commit = 7;
   // Determines if coverage data is to be exported to zoss.
   bool export_coverage_to_zoss = 8;
+  // Determines if blame list data should be generated for files or not
+  bool generate_blame_list = 9;
 }

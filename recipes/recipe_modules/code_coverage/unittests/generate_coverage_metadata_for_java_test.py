@@ -525,7 +525,7 @@ class GenerateCoverageMetadataForJavaTest(unittest.TestCase):
         }]
     }
 
-    actual_output = generator.generate_json_coverage_metadata(
+    actual_output, _ = generator.generate_json_coverage_metadata(
         '', root, self.COMPONENT_MAPPING, None, None)
     self.assertDictEqual(expected_output, actual_output)
 
@@ -539,7 +539,7 @@ class GenerateCoverageMetadataForJavaTest(unittest.TestCase):
 
     expected_output = {'files': []}
 
-    actual_output = generator.generate_json_coverage_metadata(
+    actual_output, _ = generator.generate_json_coverage_metadata(
         '', root, self.COMPONENT_MAPPING, None, None)
     self.assertDictEqual(expected_output, actual_output)
 
@@ -587,7 +587,7 @@ class GenerateCoverageMetadataForJavaTest(unittest.TestCase):
         }]
     }
 
-    actual_output = generator.generate_json_coverage_metadata(
+    actual_output, _ = generator.generate_json_coverage_metadata(
         '', root, None, self.DIFF_MAPPING, ['dir/file.java'])
     self.assertDictEqual(expected_output, actual_output)
 
@@ -600,7 +600,7 @@ class GenerateCoverageMetadataForJavaTest(unittest.TestCase):
 
     expected_output = {'files': []}
 
-    actual_output = generator.generate_json_coverage_metadata(
+    actual_output, _ = generator.generate_json_coverage_metadata(
         '', root, None, diff_mapping_line_removed, ['dir/file.java'])
     self.assertDictEqual(expected_output, actual_output)
 

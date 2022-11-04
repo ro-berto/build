@@ -213,7 +213,7 @@ def GenTests(api):
           'process java coverage (overall).create zoss metadata json'),
       api.post_process(
           post_process.MustRun,
-          'process java coverage (overall).gsutil Upload JSON metadata'),
+          'process java coverage (overall).gsutil Upload coverage artifacts'),
       api.post_process(
           post_process.MustRun,
           'process java coverage (overall).gsutil export coverage data to zoss'
@@ -246,7 +246,7 @@ def GenTests(api):
           'Generate JavaScript coverage metadata'),
       api.post_process(
           post_process.MustRun, 'process javascript coverage.'
-          'gsutil Upload JSON metadata'),
+          'gsutil Upload coverage artifacts'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -298,7 +298,7 @@ def GenTests(api):
           'Generate JavaScript coverage metadata'),
       api.post_process(
           post_process.MustRun, 'process javascript coverage.'
-          'gsutil Upload JSON metadata'),
+          'gsutil Upload coverage artifacts'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -575,7 +575,7 @@ def GenTests(api):
       'process java coverage for full-codebase',
       api.chromium.generic_build(
           builder_group='chromium.fyi', builder='android-code-coverage'),
-      api.code_coverage(use_java_coverage=True),
+      api.code_coverage(use_java_coverage=True, generate_blame_list=True),
       api.post_process(
           post_process.MustRun, 'process java coverage (overall).'
           'Extract directory metadata'),
@@ -584,7 +584,7 @@ def GenTests(api):
           'Generate Java coverage metadata'),
       api.post_process(
           post_process.MustRun, 'process java coverage (overall).'
-          'gsutil Upload JSON metadata'),
+          'gsutil Upload coverage artifacts'),
       api.post_process(post_process.MustRun, 'Clean up Java coverage files'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
@@ -647,7 +647,7 @@ def GenTests(api):
           'Generate Java coverage metadata'),
       api.post_process(
           post_process.MustRun, 'process java coverage (overall).'
-          'gsutil Upload JSON metadata'),
+          'gsutil Upload coverage artifacts'),
       api.post_process(post_process.MustRun, 'Clean up Java coverage files'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),

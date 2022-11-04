@@ -17,7 +17,8 @@ class CodeCoverageTestApi(recipe_test_api.RecipeTestApi):
                coverage_test_types=None,
                coverage_exclude_sources=None,
                coverage_reference_commit=None,
-               export_coverage_to_zoss=False):
+               export_coverage_to_zoss=False,
+               generate_blame_list=False):
     return self.m.properties(
         **{
             '$build/code_coverage':
@@ -29,5 +30,6 @@ class CodeCoverageTestApi(recipe_test_api.RecipeTestApi):
                     coverage_test_types=coverage_test_types,
                     coverage_exclude_sources=coverage_exclude_sources,
                     coverage_reference_commit=coverage_reference_commit,
-                    export_coverage_to_zoss=export_coverage_to_zoss),
+                    export_coverage_to_zoss=export_coverage_to_zoss,
+                    generate_blame_list=generate_blame_list),
         })

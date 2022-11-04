@@ -69,6 +69,8 @@ class CodeCoverageApi(recipe_api.RecipeApi):
     self._bot_to_gerrit_mapping_file = None
     # Determines if the coverage data be exported to zoss or not
     self._export_coverage_to_zoss = properties.export_coverage_to_zoss or False
+    # Determines if blame list data should be generated for files or not
+    self._generate_blame_list = properties.generate_blame_list or False
     # Whether to skip coverage
     self._skipping_coverage = False
 
@@ -582,28 +584,28 @@ class CodeCoverageApi(recipe_api.RecipeApi):
         else:
           raise
 
-  def _persist_coverage_data_as_json(self, source, data_type, **kwargs):
-    """Upload coverage data to GCS bucket.
+  def _persist_coverage_artifacts(self, source_dir, **kwargs):
+    """Uploads coverage artifacts to GCS bucket.
 
-    Uploads all.json.gz file to google cloud storage based on the
-    |data_type| that is supplied.
-    Also adds the gs_path and mimic_builder_name corresponding to the
-    uploaded file to self._coverage_metadata_gs_paths and
-    self._mimic_builder_names, which are later to be exposed as step properties.
+    Uploads coverage artifacts to google cloud storage. Also adds the gs_path
+    and mimic_builder_name corresponding to the uploaded file to
+    self._coverage_metadata_gs_paths and self._mimic_builder_names,
+    which are later to be exposed as step properties.
 
     Args:
-      source: Absolute location to all.json.gz
-      data_type: Type of metadata supplied e.g. javascript_metadata
+      source_dir: Absolute location to dir containing coverage artifacts
     """
     mimic_builder_name = self._compose_current_mimic_builder_name()
     gs_path = self._compose_gs_path_for_coverage_data(
-        data_type=data_type, mimic_builder_name=mimic_builder_name)
+        data_type='metadata', mimic_builder_name=mimic_builder_name)
     self.m.gsutil.upload(
-        source=source,
+        source=source_dir,
         bucket=self._gs_bucket,
-        dest='%s/all.json.gz' % gs_path,
-        name='Upload JSON metadata',
-        link_name='Coverage metadata',
+        dest=gs_path,
+        name='Upload coverage artifacts',
+        link_name='Coverage Artifacts',
+        args=['-r'],
+        multithreaded=True,
         **kwargs)
     self._coverage_metadata_gs_paths.append(gs_path)
     self._mimic_builder_names.append(mimic_builder_name)
@@ -652,6 +654,8 @@ class CodeCoverageApi(recipe_api.RecipeApi):
         cmd.extend(['--exclusion-pattern', constants.EXCLUDED_FILE_REGEX])
         cmd.append('--third-party-inclusion-subdirs')
         cmd.extend(constants.INCLUDED_THIRD_PARTY_SUBDIRS)
+        if self._generate_blame_list:
+          cmd.append('--generate-blame-list')
         self.m.step('Generate Java coverage metadata', cmd, **kwargs)
 
         # Upload data to zoss to show it on code search
@@ -687,8 +691,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
               'skip processing because %s tests metadata was missing' %
               self._current_processing_test_type)
           return
-        self._persist_coverage_data_as_json(
-            source=metadata_path, data_type='java_metadata', **kwargs)
+        self._persist_coverage_artifacts(source_dir=coverage_dir, **kwargs)
       except self.m.step.StepFailure:
         self.m.step.active_result.presentation.properties[
             'process_coverage_data_failure'] = True
@@ -724,9 +727,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
 
         self.m.step('Generate JavaScript coverage metadata', cmd)
 
-        metadata_path = coverage_dir.join('all.json.gz')
-        self._persist_coverage_data_as_json(
-            source=metadata_path, data_type='javascript_metadata')
+        self._persist_coverage_artifacts(source_dir=coverage_dir)
       except self.m.step.StepFailure:
         self.m.step.active_result.presentation.properties[
             'process_coverage_data_failure'] = True
