@@ -498,26 +498,6 @@ class V8Api(recipe_api.RecipeApi):
       self.m.chromium.ensure_goma()
     self.m.chromium.runhooks(**kwargs)
 
-  # TODO(https://crbug.com/890222): Deprecate this mapping after migration to
-  # orchestrator + 4 milestones (2023/Q3).
-  def normalized_builder_name(self, triggered):
-    """Map given builder names from infra/config to names used for look-ups
-    in source configurations.
-
-    This maps compilator builder names to legacy names to ease the roll-out and
-    for backwards-compatibility on release branches.
-    """
-    builder_name = self.m.buildbucket.builder_name
-    triggered_suffix = '_triggered' if triggered else ''
-    if self.m.properties['recipe'] == 'v8/compilator':
-      if builder_name.endswith('_compile_rel'):
-        builder_name = builder_name.replace(
-            '_compile_rel', '_rel_ng' + triggered_suffix)
-      if builder_name.endswith('_compile_dbg'):
-        builder_name = builder_name.replace(
-            '_compile_dbg', '_dbg_ng' + triggered_suffix)
-    return builder_name
-
   @property
   def bot_type(self):
     if self.bot_config.get('triggers') or self.bot_config.get('triggers_proxy'):
@@ -713,11 +693,6 @@ class V8Api(recipe_api.RecipeApi):
     point.update(point_defaults)
     self.m.perf_dashboard.add_point([point], halt_on_failure=True)
 
-  def get_builder_id(self):
-    builder_group = self.m.builder_group.for_current
-    buildername = self.normalized_builder_name(triggered=False)
-    return chromium.BuilderId.create_for_group(builder_group, buildername)
-
   # TODO(b:238274944): Remove this method after all builders have switched
   # to reclient and the corresponding mb_config.pyl change has reached
   # extended stable. Estimated after M110.
@@ -804,7 +779,7 @@ class V8Api(recipe_api.RecipeApi):
         mb_config_path = self.reclient_mb_override(mb_config_path)
 
         gn_args = self.m.chromium.mb_gen(
-            self.get_builder_id(),
+            self.m.chromium.get_builder_id(),
             use_goma=use_goma,
             mb_config_path=mb_config_path,
             isolated_targets=isolate_targets,
