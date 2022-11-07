@@ -15,7 +15,6 @@ from . import chromium_fuzz
 from . import chromium_fyi
 from . import chromium_goma
 from . import chromium_goma_fyi
-from . import chromium_gpu_fyi
 from . import chromium_linux
 from . import chromium_memory
 from . import chromium_perf
@@ -47,6 +46,7 @@ from . import migration_testing
 # The configs for the following builder groups are now specified src-side
 # in //infra/config/subprojects/chromium/ci/<builder_group>.star
 # * chromium.gpu
+# * chromium.gpu.fyi
 
 BUILDERS = builder_db.BuilderDatabase.create({
     'chromium':
@@ -73,8 +73,6 @@ BUILDERS = builder_db.BuilderDatabase.create({
         chromium_goma_fyi.SPEC,
     'chromium.goma':
         chromium_goma.SPEC,
-    'chromium.gpu.fyi':
-        chromium_gpu_fyi.SPEC,
     'chromium.linux':
         chromium_linux.SPEC,
     'chromium.memory':

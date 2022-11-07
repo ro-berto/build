@@ -226,11 +226,15 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * cast_shell_linux_dbg
     # * gpu-try-linux-nvidia-dbg
     # * gpu-try-linux-nvidia-rel
+    # * gpu-fyi-try-lacros-amd-rel
+    # * gpu-fyi-try-lacros-intel-rel
     # * gpu-fyi-try-linux-amd-rel
     # * gpu-fyi-try-linux-intel-exp
     # * gpu-fyi-try-linux-intel-rel
+    # * gpu-fyi-try-linux-nvidia-dbg
     # * gpu-fyi-try-linux-nvidia-exp
     # * gpu-fyi-try-linux-nvidia-rel
+    # * gpu-fyi-try-linux-nvidia-tsn
     # * layout_test_leak_detection
     # * linux_chromium_archive_rel_ng
     # * linux_chromium_asan_rel_ng
@@ -331,30 +335,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.linux',
                 buildername='Leak Detection Linux',
             ),
-        # Manually triggered GPU trybots.
-        'gpu-fyi-try-lacros-amd-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Lacros x64 Builder',
-                tester='Lacros FYI x64 Release (AMD)',
-            ),
-        'gpu-fyi-try-lacros-intel-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Lacros x64 Builder',
-                tester='Lacros FYI x64 Release (Intel)',
-            ),
-        'gpu-fyi-try-linux-nvidia-dbg':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Linux Builder (dbg)',
-                tester='Linux FYI Debug (NVIDIA)',
-            ),
-        'gpu-fyi-try-linux-nvidia-tsn':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='Linux FYI GPU TSAN Release',
-            ),
         'linux-lacros-fyi-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
@@ -391,6 +371,10 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * chromeos-arm-generic-rel
     # * chromeos-kevin-compile-rel
     # * chromeos-kevin-rel
+    # * gpu-fyi-try-chromeos-amd64-generic
+    # * gpu-fyi-try-chromeos-jacuzzi-exp
+    # * gpu-fyi-try-chromeos-kevin
+    # * gpu-fyi-try-chromeos-octopus-exp
     # * lacros-amd64-generic-rel
     # * lacros-arm-generic-rel
     # * linux-cfm-rel
@@ -406,27 +390,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.chromiumos',
                 buildername='linux-chromeos-js-code-coverage',
-            ),
-        # Manually triggered GPU trybots.
-        'gpu-fyi-try-chromeos-amd64-generic':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='ChromeOS FYI Release (amd64-generic)',
-            ),
-        'gpu-fyi-try-chromeos-jacuzzi-exp':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='gpu-fyi-chromeos-jacuzzi-exp',
-            ),
-        'gpu-fyi-try-chromeos-kevin':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='ChromeOS FYI Release (kevin)',
-            ),
-        'gpu-fyi-try-chromeos-octopus-exp':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='gpu-fyi-chromeos-octopus-exp',
             ),
     },
     # The config for the following builders is now specified src-side in
@@ -459,6 +422,20 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * mac-rel
     # * mac11-arm64-rel
     # * mac_optional_gpu_tests_rel
+    #
+    # The config for the following builders is now specified src-side in
+    # //infra/config/subprojects/chromium/gpu.try.star
+    # * gpu-fyi-try-mac-amd-pro-rel
+    # * gpu-fyi-try-mac-amd-retina-asan
+    # * gpu-fyi-try-mac-amd-retina-dbg
+    # * gpu-fyi-try-mac-amd-retina-exp
+    # * gpu-fyi-try-mac-amd-retina-rel
+    # * gpu-fyi-try-mac-intel-asan
+    # * gpu-fyi-try-mac-intel-dbg
+    # * gpu-fyi-try-mac-intel-exp
+    # * gpu-fyi-try-mac-intel-rel
+    # * gpu-fyi-try-mac-nvidia-retina-exp
+    # * gpu-fyi-try-mac-nvidia-retina-rel
     'tryserver.chromium.mac': {
         'ios-simulator-multi-window':
             try_spec.TrySpec.create_for_single_mirror(
@@ -490,73 +467,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.fyi',
                 buildername='Mac Builder Next',
             ),
-        # Manually triggered GPU trybots.
-        'gpu-fyi-try-mac-amd-pro-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Mac Builder',
-                tester='Mac Pro FYI Release (AMD)',
-            ),
-        'gpu-fyi-try-mac-amd-retina-asan':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Mac Builder (asan)',
-                tester='Mac FYI Retina ASAN (AMD)',
-            ),
-        'gpu-fyi-try-mac-amd-retina-dbg':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Mac Builder (dbg)',
-                tester='Mac FYI Retina Debug (AMD)',
-            ),
-        'gpu-fyi-try-mac-amd-retina-exp':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Mac Builder',
-                tester='Mac FYI Experimental Retina Release (AMD)',
-            ),
-        'gpu-fyi-try-mac-amd-retina-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Mac Builder',
-                tester='Mac FYI Retina Release (AMD)',
-            ),
-        'gpu-fyi-try-mac-intel-asan':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Mac Builder (asan)',
-                tester='Mac FYI ASAN (Intel)',
-            ),
-        'gpu-fyi-try-mac-intel-dbg':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Mac Builder (dbg)',
-                tester='Mac FYI Debug (Intel)',
-            ),
-        'gpu-fyi-try-mac-intel-exp':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Mac Builder',
-                tester='Mac FYI Experimental Release (Intel)',
-            ),
-        'gpu-fyi-try-mac-intel-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Mac Builder',
-                tester='Mac FYI Release (Intel)',
-            ),
-        'gpu-fyi-try-mac-nvidia-retina-exp':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Mac Builder',
-                tester='Mac FYI Experimental Retina Release (NVIDIA)',
-            ),
-        'gpu-fyi-try-mac-nvidia-retina-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Mac Builder',
-                tester='Mac FYI Retina Release (NVIDIA)',
-            ),
     },
     # The config for the following builders is now specified src-side in
     # //infra/config/subprojects/chromium/try/tryserver.chromium.win.star
@@ -575,61 +485,20 @@ TRYBOTS = try_spec.TryDatabase.create({
     #
     # The config for the following builders is now specified src-side in
     # //infra/config/subprojects/chromium/gpu.try.star
+    # * gpu-fyi-try-win10-amd-rel-64
+    # * gpu-fyi-try-win10-intel-exp-64
+    # * gpu-fyi-try-win10-intel-rel-64
+    # * gpu-fyi-try-win10-nvidia-dbg-64
+    # * gpu-fyi-try-win10-nvidia-dx12vk-dbg-64
+    # * gpu-fyi-try-win10-nvidia-dx12vk-rel-64
+    # * gpu-fyi-try-win10-nvidia-exp-64
     # * gpu-fyi-try-win10-nvidia-rel-32
+    # * gpu-fyi-try-win10-nvidia-rel-64
     'tryserver.chromium.win': {
         'win-annotator-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
                 buildername='win-annotator-rel',
-            ),
-        # Manually triggered GPU trybots.
-        'gpu-fyi-try-win10-amd-rel-64':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Win x64 Builder',
-                tester='Win10 FYI x64 Release (AMD RX 5500 XT)',
-            ),
-        'gpu-fyi-try-win10-intel-exp-64':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Win x64 Builder',
-                tester='Win10 FYI x64 Exp Release (Intel HD 630)',
-            ),
-        'gpu-fyi-try-win10-intel-rel-64':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Win x64 Builder',
-                tester='Win10 FYI x64 Release (Intel HD 630)',
-            ),
-        'gpu-fyi-try-win10-nvidia-dbg-64':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Win x64 Builder (dbg)',
-                tester='Win10 FYI x64 Debug (NVIDIA)',
-            ),
-        'gpu-fyi-try-win10-nvidia-dx12vk-dbg-64':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Win x64 DX12 Vulkan Builder (dbg)',
-                tester='Win10 FYI x64 DX12 Vulkan Debug (NVIDIA)',
-            ),
-        'gpu-fyi-try-win10-nvidia-dx12vk-rel-64':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Win x64 DX12 Vulkan Builder',
-                tester='Win10 FYI x64 DX12 Vulkan Release (NVIDIA)',
-            ),
-        'gpu-fyi-try-win10-nvidia-exp-64':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Win x64 Builder',
-                tester='Win10 FYI x64 Exp Release (NVIDIA)',
-            ),
-        'gpu-fyi-try-win10-nvidia-rel-64':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.gpu.fyi',
-                buildername='GPU FYI Win x64 Builder',
-                tester='Win10 FYI x64 Release (NVIDIA)',
             ),
     },
     # Dawn GPU bots
