@@ -72,7 +72,6 @@ def RunSteps(api, custom_deps, default_targets, gclient_vars, target_arch,
   v8.set_chromium_configs(clobber=False, default_targets=default_targets)
 
   test_spec = api.v8_tests.TEST_SPEC()
-  tests = []
 
   with api.step.nest('initialization'):
     if api.platform.is_win:
@@ -84,17 +83,15 @@ def RunSteps(api, custom_deps, default_targets, gclient_vars, target_arch,
 
     # Dynamically load test specifications from all discovered test roots.
     for test_root in v8.get_test_roots():
-      test_spec.update(v8.read_test_spec(test_root))
-      # Tests from dynamic test roots have precedence.
-      tests = v8.dedupe_tests(v8.extra_tests_from_test_spec(test_spec), tests)
+      test_spec.update(v8.read_test_spec(
+          test_root, [v8.normalized_builder_name(triggered=True)]))
 
   with api.step.nest('build'):
     compile_failure = v8.compile(test_spec)
     if compile_failure:
       return compile_failure
 
-  properties = dict(test_spec.as_properties_dict(
-      v8.normalized_builder_name(triggered=True)))
+  properties = dict(test_spec.as_properties_dict_single())
   properties['swarm_hashes'] = api.v8_tests.isolated_tests
   properties['gn_args'] = api.v8_tests.gn_args
 

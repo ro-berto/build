@@ -534,7 +534,7 @@ class V8Api(recipe_api.RecipeApi):
     convention.
     """
     return (
-        [self.normalized_builder_name(triggered=True)] +
+        [self.m.buildbucket.builder_name] +
         list(self.bot_config.get('triggers', []))
     )
 
@@ -553,8 +553,7 @@ class V8Api(recipe_api.RecipeApi):
     """
     return [
       self.m.v8_tests.create_test(test)
-      for test in test_spec.get_tests(
-          self.normalized_builder_name(triggered=True))
+      for test in test_spec.get_tests(self.m.buildbucket.builder_name)
     ]
 
   def dedupe_tests(self, high_prec_tests, low_prec_tests):
@@ -563,13 +562,14 @@ class V8Api(recipe_api.RecipeApi):
     return high_prec_tests + [
       test for test in low_prec_tests if test.id not in high_prec_ids]
 
-  def read_test_spec(self, root):
+  def read_test_spec(self, root, builders):
     """Reads a test specification file under <root>/infra/testing/builders.pyl.
 
     Args:
       root: Path to checkout root with configurations.
-    Returns: v8_builders.TestSpec object, filtered by interesting builders
-      (current builder and all its triggered testers).
+      builders: List of strings. Strip down the test-spec to this list of
+          builders.
+    Returns: v8_builders.TestSpec object, filtered by the passed builders.
     """
     test_spec_file = root.join('infra', 'testing', 'builders.pyl')
 
@@ -590,7 +590,7 @@ class V8Api(recipe_api.RecipeApi):
 
     # Transform into object.
     test_spec = self.m.v8_tests.TEST_SPEC.from_python_literal(
-        full_test_spec, self.builderset)
+        full_test_spec, builders)
 
     # Log test spec for debuggability.
     self.m.step.active_result.presentation.logs['test_spec'] = (

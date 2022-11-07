@@ -114,6 +114,14 @@ class TestSpec(object):
   def update(self, other_test_spec):
     self._test_spec.update(other_test_spec._test_spec)
 
+  def as_properties_dict_single(self):
+    """Convenience method - like above, but assuming exactly one test-spec
+    entry.
+    """
+    assert len(self._test_spec) >= 1, 'No tests specified'
+    assert len(self._test_spec) <= 1, 'Ambiguous tester names in spec'
+    return self.as_properties_dict(iter(self._test_spec.keys()).__next__())
+
   def as_properties_dict(self, buildername):
     """Packs a test spec and returns it as a properties dict to be passed to
     another builder.

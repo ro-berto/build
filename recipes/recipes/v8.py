@@ -147,7 +147,7 @@ def RunSteps(api, binary_size_tracking, build_config, clobber, clobber_all,
       test_roots = v8.get_test_roots()
       for test_root in test_roots:
         api.v8_tests.update_test_configs(v8.load_dynamic_test_configs(test_root))
-        test_spec.update(v8.read_test_spec(test_root))
+        test_spec.update(v8.read_test_spec(test_root, v8.builderset))
         # Tests from dynamic test roots have precedence.
         tests = v8.dedupe_tests(v8.extra_tests_from_test_spec(test_spec), tests)
 
