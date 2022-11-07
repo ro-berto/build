@@ -14,6 +14,8 @@ build: CAS digests and test configurations.
 The compilator is only used in a trybot setting.
 """
 
+import json
+
 from recipe_engine.post_process import DropExpectation, StatusFailure
 from recipe_engine.recipe_api import Property
 
@@ -124,10 +126,18 @@ def GenTests(api):
         api.v8.hide_infra_steps()
     )
 
-  yield test('basic')
+  test_spec = json.dumps({'tests': [{'name': 'v8testing'}]}, indent=2)
+
+  yield (
+      test('basic') +
+      api.v8.test_spec_in_checkout(
+          'v8_foobar_rel_ng', test_spec, 'v8_foobar_rel_ng_triggered')
+  )
 
   yield (
       test('windows', 'v8_foobar_compile_dbg') +
+      api.v8.test_spec_in_checkout(
+          'v8_foobar_dbg_ng', test_spec, 'v8_foobar_dbg_ng_triggered') +
       api.platform('win', 64) +
       api.post_process(DropExpectation)
   )
