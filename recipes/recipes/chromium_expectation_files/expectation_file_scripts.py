@@ -216,7 +216,9 @@ def _GetReviewerList(api, script_invocation):
   if script_invocation.reviewer_rotation:
     # Pull reviewers from a rotation.
     rotation = script_invocation.reviewer_rotation
-    url = api.url.join(ROTATION_URL, rotation)
+    # Don't join as a normal URL since we don't want to insert a / between the
+    # base URL ending in : and the actual rotation.
+    url = ROTATION_URL + rotation
     rotation_json = api.url.get_json(
         url, step_name='get %s rotation JSON' % rotation).output
     return rotation_json['emails']
@@ -573,7 +575,7 @@ def GenTests(api):
               '.*',
               '--url',
               ('https://chrome-ops-rotation-proxy.appspot.com/'
-               'current/oncallator:/reviewer_rotation'),
+               'current/oncallator:reviewer_rotation'),
               '.*',
               '.*',
               '.*',
