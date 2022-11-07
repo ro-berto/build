@@ -237,7 +237,7 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
 
     # If we only need to run the tests that were skipped in the last build
     if reuseable_compilator_build:
-      tests = [t for t in tests if t.has_inverted]
+      tests = [t for t in tests if t.supports_inverted_rts]
       if not tests:
         # No invertible tests were found and we have a successful build
         return result_pb2.RawResult(status=common_pb.SUCCESS)

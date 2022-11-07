@@ -243,7 +243,12 @@ def _add_suffix(step_name, suffix):
 
 def _present_info_messages(presentation, test):
   messages = []
-  if test.is_inverted_rts:
+  if test.is_rts:
+    messages.append(
+        'Ran tests selected by RTS. See '
+        'https://crsrc.org/c/docs/testing/regression-test-selection.md'
+        ' for more information\n')
+  elif test.is_inverted_rts:
     messages.append(
         'Ran tests previously skipped by RTS. See '
         'https://crsrc.org/c/docs/testing/regression-test-selection.md'
@@ -457,8 +462,12 @@ class Test(object):
     # inspecting JSON.
     self._failure_on_exit_suffix_map = {}
 
+    # Marks the test as using RTS. When enabled this suite will only run the
+    # tests chosen by RTS.
+    self._is_rts = False
+
     # Marks the test as being inverted RTS. When enabled this suite will only
-    # run the tests skipped in RTS
+    # run the tests skipped in RTS.
     self._is_inverted_rts = False
 
   @property
@@ -545,28 +554,65 @@ class Test(object):
     return bool(self.isolate_target)
 
   @property
-  def is_inverted_rts(self):
-    """Returns False
+  def supports_rts(self):
+    """Determine whether the test supports RTS.
 
-    Intended to be overridden by subclasses that can run inverted
+    Regression Test Selection (RTS) is a mode of operation where a subset of the
+    tests are run. This should be checked before trying to set is_rts to enable
+    RTS.
+    """
+    return False
+
+  @property
+  def is_rts(self):
+    """Determine whether the test is currently running with RTS.
+
+    Regression Test Selection (RTS) is a mode of operation where a subset of the
+    tests are run. This property determines whether this mode is enabled or not.
+    """
+    return self._is_rts
+
+  @is_rts.setter
+  def is_rts(self, value):
+    """Set whether the test is currently running with RTS.
+
+    Regression Test Selection (RTS) is a mode of operation where a subset of the
+    tests are run. This property will enable running only the tests selected by
+    RTS.
+    """
+    assert self.supports_rts and not self.is_inverted_rts
+    self._is_rts = value
+
+  @property
+  def supports_inverted_rts(self):
+    """Determine whether the test supports inverted RTS.
+
+    Inverse Regression Test Selection (RTS) is a mode of operation where the
+    subset of the tests skipped in a previous RTS build are run. This should be
+    checked before trying to set is_inverted_rts to enable RTS.
+    """
+    return False
+
+  @property
+  def is_inverted_rts(self):
+    """Determine whether the test is currently running with inverted RTS.
+
+    Inverse Regression Test Selection (RTS) is a mode of operation where the
+    subset of the tests skipped in a previous RTS build are run. This property
+    determines whether this mode is enabled or not.
     """
     return self._is_inverted_rts
 
   @is_inverted_rts.setter
   def is_inverted_rts(self, value):
-    """Returns False
+    """Set whether the test is currently running with inverted RTS.
 
-    Intended to be overridden by subclasses that can run inverted
+    Inverse Regression Test Selection (RTS) is a mode of operation where the
+    subset of the tests skipped in a previous RTS build are run. This property
+    will enable running only the tests that would have been skipped by RTS.
     """
+    assert self.supports_inverted_rts and not self.is_rts
     self._is_inverted_rts = value
-
-  @property
-  def has_inverted(self):
-    """Returns False
-
-    Intended to be overridden by subclasses that can run inverted
-    """
-    return False
 
   @property
   def is_skylabtest(self):
@@ -2002,9 +2048,10 @@ class SwarmingTest(Test):
     super(SwarmingTest, self).__init__(spec, chromium_tests_api)
 
     self._tasks = {}
-    self._raw_cmd = []
-    self._inverted_raw_cmd = []
-    self._relative_cwd = None
+    self.raw_cmd = []
+    self.rts_raw_cmd = []
+    self.inverted_raw_cmd = []
+    self.relative_cwd = None
 
   def _dispatches_to_windows(self):
     if self.spec.dimensions:
@@ -2044,34 +2091,12 @@ class SwarmingTest(Test):
     return self.spec.shards
 
   @property
-  def raw_cmd(self):
-    return self._raw_cmd
-
-  @raw_cmd.setter
-  def raw_cmd(self, value):
-    self._raw_cmd = value
+  def supports_rts(self):
+    return bool(self.rts_raw_cmd)
 
   @property
-  def inverted_raw_cmd(self):
-    """Holds the command for running only the filtered tests for this suite
-    """
-    return self._inverted_raw_cmd
-
-  @inverted_raw_cmd.setter
-  def inverted_raw_cmd(self, value):
-    self._inverted_raw_cmd = value
-
-  @property
-  def has_inverted(self):
-    return bool(self._inverted_raw_cmd)
-
-  @property
-  def relative_cwd(self):
-    return self._relative_cwd
-
-  @relative_cwd.setter
-  def relative_cwd(self, value):
-    self._relative_cwd = value
+  def supports_inverted_rts(self):
+    return bool(self.inverted_raw_cmd)
 
   def create_task(self, suffix, task_input):
     """Creates a swarming task. Must be overridden in subclasses.
@@ -2387,7 +2412,14 @@ class SwarmingGTestTest(SwarmingTest):
     # tombstones are in resultdb.
     if self.api.m.chromium.c.TARGET_PLATFORM != 'android':
       json_override = self.api.m.path.mkstemp()
-    cmd = self.raw_cmd if not self.is_inverted_rts else self.inverted_raw_cmd
+
+    if self.is_inverted_rts:
+      cmd = self.inverted_raw_cmd
+    elif self.is_rts:
+      cmd = self.rts_raw_cmd
+    else:
+      cmd = self.raw_cmd
+
     task = self.api.m.chromium_swarming.gtest_task(
         raw_cmd=cmd,
         relative_cwd=self.relative_cwd,
@@ -2470,24 +2502,8 @@ class LocalIsolatedScriptTest(LocalTest):
 
   def __init__(self, spec, chromium_tests_api):
     super(LocalIsolatedScriptTest, self).__init__(spec, chromium_tests_api)
-    self._raw_cmd = []
-    self._relative_cwd = None
-
-  @property
-  def raw_cmd(self):
-    return self._raw_cmd
-
-  @raw_cmd.setter
-  def raw_cmd(self, value):
-    self._raw_cmd = value
-
-  @property
-  def relative_cwd(self):
-    return self._relative_cwd
-
-  @relative_cwd.setter
-  def relative_cwd(self, value):
-    self._relative_cwd = value
+    self.raw_cmd = []
+    self.relative_cwd = None
 
   @property
   def set_up(self):
@@ -2643,7 +2659,14 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     self._test_options = value
 
   def create_task(self, suffix, cas_input_root):
-    cmd = self.raw_cmd if not self.is_inverted_rts else self.inverted_raw_cmd
+
+    if self.is_inverted_rts:
+      cmd = self.inverted_raw_cmd
+    elif self.is_rts:
+      cmd = self.rts_raw_cmd
+    else:
+      cmd = self.raw_cmd
+
     task = self.api.m.chromium_swarming.isolated_script_task(
         raw_cmd=cmd,
         relative_cwd=self.relative_cwd,
@@ -2796,7 +2819,7 @@ class MockTestSpec(TestSpec):
   per_suffix_valid = attrib(mapping[str, bool], default={})
   runs_on_swarming = attrib(bool, default=False)
   invocation_names = attrib(sequence[str], default=[])
-  invertible = attrib(bool, default=False)
+  supports_rts = attrib(bool, default=False)
   option_flags = attrib(TestOptionFlags, default=_DEFAULT_OPTION_FLAGS)
 
   @property
@@ -2879,8 +2902,12 @@ class MockTest(Test):
     return self.spec.invocation_names
 
   @property
-  def has_inverted(self):
-    return self.spec.invertible
+  def supports_rts(self):
+    return self.spec.supports_rts
+
+  @property
+  def supports_inverted_rts(self):
+    return self.spec.supports_rts
 
   @property
   def abort_on_failure(self):

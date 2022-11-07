@@ -47,17 +47,17 @@ def RunSteps(api, retry_failed_shards, test_kwargs_list):
 
   test_specs = [
       steps.MockTestSpec.create(
-          name='test', invertible=True, **_get_test_kwargs_by_index(0)),
+          name='test', supports_rts=True, **_get_test_kwargs_by_index(0)),
       steps.MockTestSpec.create(
-          name='test2', invertible=True, **_get_test_kwargs_by_index(1)),
+          name='test2', supports_rts=True, **_get_test_kwargs_by_index(1)),
       steps.MockTestSpec.create(
-          name='test3', invertible=False, **_get_test_kwargs_by_index(2)),
+          name='test3', supports_rts=False, **_get_test_kwargs_by_index(2)),
   ]
 
   tests = [s.get_test(api.chromium_tests) for s in test_specs]
 
   # Trigger and wait for the tests
-  tests = [t for t in tests if t.has_inverted]
+  tests = [t for t in tests if t.supports_inverted_rts]
 
   for test in tests:
     test.is_inverted_rts = True
