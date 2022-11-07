@@ -595,6 +595,22 @@ _CLIENT_WEBRTC_PERF_SPECS = {
                 'TARGET_ARCH': 'arm',
                 'TARGET_BITS': 64,
             }),
+    'Perf Android64 (R Pixel5)':
+        WebRTCBuilderSpec.create(
+            perf_id='webrtc-android-tests-pixel5-android-11',
+            chromium_config='webrtc_default',
+            android_config='webrtc',
+            gclient_config='webrtc',
+            gclient_apply_config=['android'],
+            execution_mode=builder_spec.TEST,
+            parent_builder_group='client.webrtc',
+            parent_buildername='Android64 Builder arm64',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_PLATFORM': 'android',
+                'TARGET_ARCH': 'arm',
+                'TARGET_BITS': 64,
+            }),
     'Perf Linux Bionic':
         WebRTCBuilderSpec.create(
             perf_id='webrtc-linux-tests-bionic',
