@@ -80,7 +80,6 @@ def _generate_compile_commands(out_dir: str, gn: str) -> str:
           out_dir,
           '--export-compile-commands',
           '--args=' + args_gn,
-          '.',
       ])
 
   assert os.path.isfile(compile_commands)
