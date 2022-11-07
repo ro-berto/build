@@ -15,10 +15,11 @@ import json
 from PB.go.chromium.org.luci.buildbucket.proto import build as build_pb2
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 from PB.recipe_engine import result as result_pb2
+from PB.recipe_modules.recipe_engine.led import properties as led_properties_pb
 
 from recipe_engine.post_process import (
     DoesNotRun, DropExpectation, MustRun, ResultReason, StatusException,
-    StatusFailure)
+    StatusFailure, StatusSuccess)
 from recipe_engine.recipe_api import Property
 
 from google.protobuf import json_format
@@ -30,7 +31,10 @@ DEPS = [
   'isolate',
   'recipe_engine/buildbucket',
   'recipe_engine/cipd',
+  'recipe_engine/file',
   'recipe_engine/json',
+  'recipe_engine/led',
+  'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/step',
   'recipe_engine/swarming',
@@ -46,15 +50,11 @@ PROPERTIES = {
 # TODO(https://crbug.com/890222): Implement cancellation logic.
 def RunSteps(api, compilator_name):
   v8 = api.v8_tests
+  compilator_handler = create_compilator_handler(api, compilator_name)
 
   with api.step.nest('initialization'):
     # Start compilator build.
-    request = api.buildbucket.schedule_request(
-        builder=compilator_name,
-        swarming_parent_run_id=api.swarming.task_id,
-        tags=api.buildbucket.tags(**{'hide-in-gerrit': 'pointless'}))
-    build = api.buildbucket.schedule(
-        [request], step_name='trigger compilator')[0]
+    build = compilator_handler.trigger_compilator()
 
     # Initialize V8 testing.
     v8.set_config('v8')
@@ -64,7 +64,7 @@ def RunSteps(api, compilator_name):
     v8.set_up_swarming()
 
   # Wait for compilator build to complete and stream steps.
-  sub_build = launch_compilator_watcher(api, build)
+  sub_build = compilator_handler.launch_compilator_watcher(build)
   if 'compilator_properties' not in sub_build.output.properties:
     return result_pb2.RawResult(
         status=sub_build.status, summary_markdown=sub_build.summary_markdown)
@@ -92,35 +92,96 @@ def RunSteps(api, compilator_name):
     raise api.step.StepFailure('Failures in tryjob.')
 
 
-def launch_compilator_watcher(api, build):
-  """Follow the ongoing compilator build and stream the steps into this build."""
-  cipd_pkg = 'infra/chromium/compilator_watcher/${platform}'
-  compilator_watcher = api.cipd.ensure_tool(cipd_pkg, 'latest')
+def create_compilator_handler(api, compilator_name):
+  if api.led.launched_by_led:
+    return LedCompilatorHandler(api, compilator_name)
+  else:
+    return ProdCompilatorHandler(api, compilator_name)
 
-  sub_build = build_pb2.Build()
-  sub_build.CopyFrom(build)
-  cmd = [
-      compilator_watcher,
-      '--',
-      '-compilator-id',
-      build.id,
-      '-get-swarming-trigger-props'
-  ]
 
-  build_url = api.buildbucket.build_url(build_id=build.id)
-  build_link = f'compilator build: {build.id}'
+class CompilatorHandler(object):
+  def __init__(self, api, compilator_name):
+    self.api = api
+    self.compilator_name = compilator_name
 
-  try:
-    ret = api.step.sub_build('compilator steps', cmd, sub_build)
-    ret.presentation.links[build_link] = build_url
-    return ret.step.sub_build
-  except api.step.StepFailure:
-    ret = api.step.active_result
-    ret.presentation.links[build_link] = build_url
-    sub_build = ret.step.sub_build
-    if not sub_build:
-      raise api.step.InfraFailure('sub_build missing from step')
-    return sub_build
+
+class ProdCompilatorHandler(CompilatorHandler):
+  def trigger_compilator(self):
+    """Trigger a compilator build via buildbucket."""
+    request = self.api.buildbucket.schedule_request(
+        builder=self.compilator_name,
+        swarming_parent_run_id=self.api.swarming.task_id,
+        tags=self.api.buildbucket.tags(**{'hide-in-gerrit': 'pointless'}))
+    return self.api.buildbucket.schedule(
+        [request], step_name='trigger compilator')[0]
+
+  def launch_compilator_watcher(self, build_handle):
+    """Follow the ongoing compilator build and stream the steps into this
+    build.
+    """
+    cipd_pkg = 'infra/chromium/compilator_watcher/${platform}'
+    compilator_watcher = self.api.cipd.ensure_tool(cipd_pkg, 'latest')
+
+    sub_build = build_pb2.Build()
+    sub_build.CopyFrom(build_handle)
+    cmd = [
+        compilator_watcher,
+        '--',
+        '-compilator-id',
+        build_handle.id,
+        '-get-swarming-trigger-props'
+    ]
+
+    build_url = self.api.buildbucket.build_url(build_id=build_handle.id)
+    build_link = f'compilator build: {build_handle.id}'
+
+    try:
+      ret = self.api.step.sub_build('compilator steps', cmd, sub_build)
+      ret.presentation.links[build_link] = build_url
+      return ret.step.sub_build
+    except self.api.step.StepFailure:
+      ret = self.api.step.active_result
+      ret.presentation.links[build_link] = build_url
+      sub_build = ret.step.sub_build
+      if not sub_build:
+        raise self.api.step.InfraFailure('sub_build missing from step')
+      return sub_build
+
+
+class LedCompilatorHandler(CompilatorHandler):
+  def trigger_compilator(self):
+    """Trigger a compilator build via led."""
+    project=self.api.buildbucket.build.builder.project
+    bucket=self.api.buildbucket.build.builder.bucket
+    led_builder_id = f'luci.{project}.{bucket}:{self.compilator_name}'
+    with self.api.step.nest('trigger compilator'):
+      led_job = self.api.led('get-builder', led_builder_id)
+      led_job = self.api.led.inject_input_recipes(led_job)
+
+      gerrit_change = self.api.tryserver.gerrit_change
+      gerrit_cl_url = (
+          f'https://{gerrit_change.host}/c/{gerrit_change.project}/+/'
+          f'{gerrit_change.change}/{gerrit_change.patchset}')
+      led_job = led_job.then('edit-cr-cl', gerrit_cl_url)
+
+      return led_job.then('launch').launch_result
+
+  def launch_compilator_watcher(self, build_handle):
+    """Collect the compilator led build from swarming. Streaming steps as in
+    production is not available.
+    """
+    output_dir = self.api.path.mkdtemp()
+    self.api.swarming.collect(
+        'collect led compilator build',
+        [build_handle.task_id],
+        output_dir=output_dir)
+
+    build_json = self.api.file.read_json(
+        'read build.proto.json',
+        output_dir.join(build_handle.task_id, 'build.proto.json'),
+    )
+    return json_format.ParseDict(
+        build_json, build_pb2.Build(), ignore_unknown_fields=True)
 
 
 def GenTests(api):
@@ -174,7 +235,6 @@ def GenTests(api):
       api.step_data('Check', api.v8_tests.one_failure()),
       api.post_process(MustRun, 'Check'),
       api.post_process(MustRun, 'Test262'),
-
   )
 
   yield test(
@@ -211,5 +271,37 @@ def GenTests(api):
       api.post_process(DoesNotRun, 'Test262'),
       api.post_process(ResultReason, 'No tests specified'),
       api.post_process(StatusFailure),
+      api.post_process(DropExpectation),
+  )
+
+  led_properties = {
+      '$recipe_engine/led':
+          led_properties_pb.InputProperties(
+              led_run_id='fake-run-id',
+          ),
+  }
+
+  build_proto_json = {
+    'status': common_pb.SUCCESS,
+    'summary': '',
+    'output': {
+      'properties': output_properties,
+    },
+  }
+
+  yield test(
+      'run_with_led',
+      api.properties(**led_properties),
+      api.step_data(
+          'read build.proto.json',
+          api.file.read_json(json_content=build_proto_json)),
+      api.post_process(MustRun, 'initialization.trigger compilator.led get-builder'),
+      api.post_process(MustRun, 'initialization.trigger compilator.led edit-cr-cl'),
+      api.post_process(MustRun, 'initialization.trigger compilator.led launch'),
+      api.post_process(MustRun, 'collect led compilator build'),
+      api.post_process(MustRun, 'read build.proto.json'),
+      api.post_process(MustRun, 'Check'),
+      api.post_process(MustRun, 'Test262'),
+      api.post_process(StatusSuccess),
       api.post_process(DropExpectation),
   )
