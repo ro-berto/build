@@ -111,13 +111,11 @@ def GenTests(api):
                   chromium_apply_config=['clobber'],
               ),
           ).assemble()),
-      api.override_step_data(
-          'analyze',
-          api.json.output({
-              'status': 'Found dependency',
-              'test_targets': [],
-              'compile_targets': ['base_unittests', 'net_unittests']
-          })),
+      api.filter.analyze_output(
+          status='Found dependency',
+          test_targets=[],
+          compile_targets=['base_unittests', 'net_unittests'],
+      ),
   )
 
   yield api.test(
@@ -135,7 +133,6 @@ def GenTests(api):
               'gtest_tests': ['base_unittests'],
           },
       }),
-      api.filter.suppress_analyze(),
       api.override_step_data(
           'base_unittests results',
           stdout=api.raw_io.output_text(
@@ -189,7 +186,6 @@ def GenTests(api):
                   },],
               },
           }),
-      api.filter.suppress_analyze(),
   )
 
   yield api.test(
@@ -217,7 +213,6 @@ def GenTests(api):
                   },],
               },
           }),
-      api.filter.suppress_analyze(),
       api.post_process(StepCommandContains,
                        'telemetry_gpu_unittests (with patch)',
                        ['-task-output-stdout', 'none']),
@@ -248,7 +243,6 @@ def GenTests(api):
                   },],
               },
           }),
-      api.filter.suppress_analyze(),
       api.chromium_tests.gen_swarming_and_rdb_results(
           'telemetry_gpu_unittests', 'with patch', failures=['Test.One']),
       api.chromium_tests.gen_swarming_and_rdb_results(
@@ -290,7 +284,6 @@ def GenTests(api):
                   },],
               },
           }),
-      api.filter.suppress_analyze(),
   )
 
   yield api.test(
@@ -316,7 +309,6 @@ def GenTests(api):
                   },],
               },
           }),
-      api.filter.suppress_analyze(),
       api.override_step_data(
           'telemetry_gpu_unittests (with patch)',
           api.chromium_swarming.canned_summary_output(
@@ -347,7 +339,6 @@ def GenTests(api):
                   },],
               },
           }),
-      api.filter.suppress_analyze(),
   )
 
   yield api.test(
@@ -375,7 +366,6 @@ def GenTests(api):
                   },],
               },
           }),
-      api.filter.suppress_analyze(),
   )
 
   yield api.test(
@@ -400,7 +390,6 @@ def GenTests(api):
                   },],
               },
           }),
-      api.filter.suppress_analyze(),
       api.chromium_tests.gen_swarming_and_rdb_results(
           'gl_tests', 'with patch', failures=['Test.One']),
   )
@@ -427,7 +416,6 @@ def GenTests(api):
                   },],
               },
           }),
-      api.filter.suppress_analyze(),
       api.chromium_tests.gen_swarming_and_rdb_results(
           'gl_tests', 'with patch', failures=['Test.One']),
       api.chromium_tests.gen_swarming_and_rdb_results(
@@ -454,7 +442,6 @@ def GenTests(api):
               'gtest_tests': ['base_unittests'],
           },
       }),
-      api.filter.suppress_analyze(),
       api.override_step_data(
           'base_unittests results',
           stdout=api.raw_io.output_text(
@@ -479,7 +466,6 @@ def GenTests(api):
               'gtest_tests': ['base_unittests'],
           },
       }),
-      api.filter.suppress_analyze(),
       api.override_step_data('compile (with patch)', retcode=1),
       api.step_data(
           'postprocess_for_goma.goma_jsonstatus',
@@ -516,7 +502,6 @@ def GenTests(api):
               builder_group='fake-group',
               builder='fake-builder',
           ).assemble()),
-      api.filter.suppress_analyze(),
       api.chromium_tests.read_source_side_spec('fake-group', {
           'fake-builder': {
               'gtest_tests': ['base_unittests'],
@@ -540,7 +525,6 @@ def GenTests(api):
               'additional_compile_targets': ['base_unittests'],
           },
       }),
-      api.filter.suppress_analyze(),
       api.step_data('compile (with patch)', retcode=1),
   )
 
@@ -554,7 +538,6 @@ def GenTests(api):
               builder_group='fake-group',
               builder='fake-builder',
           ).assemble()),
-      api.filter.suppress_analyze(),
       api.chromium_tests.read_source_side_spec('fake-group', {
           'fake-builder': {
               'gtest_tests': ['base_unittests'],
@@ -576,7 +559,6 @@ def GenTests(api):
               builder='fake-builder',
           ).assemble()),
       swarm_hashes(extra_swarmed_tests=['base_unittests', 'browser_tests']),
-      api.filter.suppress_analyze(),
   )
 
   # Successfully compiling, isolating and running two targets on swarming for a
@@ -592,7 +574,6 @@ def GenTests(api):
               builder='fake-builder',
           ).assemble()),
       swarm_hashes(extra_swarmed_tests=['base_unittests', 'browser_tests']),
-      api.filter.suppress_analyze(),
   )
 
   # One target (browser_tests) failed to produce *.isolated file.
@@ -607,7 +588,6 @@ def GenTests(api):
               builder='fake-builder',
           ).assemble()),
       swarm_hashes(extra_swarmed_tests=['base_unittests']),
-      api.filter.suppress_analyze(),
   )
 
   # Does not result in a compile
@@ -621,7 +601,12 @@ def GenTests(api):
               builder_group='fake-group',
               builder='fake-builder',
           ).assemble()),
-      api.chromium_tests.read_source_side_spec('fake-group', {}),
+      api.chromium_tests.read_source_side_spec('fake-group', {
+          'fake-builder': {
+              'gtest_tests': ['base_unittests'],
+          },
+      }),
+      api.filter.no_dependency(),
       api.post_process(DoesNotRun, 'compile (with patch)'),
       api.post_process(Filter('analyze')),
   )
@@ -638,7 +623,7 @@ def GenTests(api):
               builder='fake-builder',
           ).assemble()),
       api.chromium_tests.read_source_side_spec('fake-group', {}),
-      api.filter.suppress_analyze(),
+      api.filter.exclude_everything(),
       api.chromium_tests.read_source_side_spec('fake-group', {
           'fake-builder': {
               'gtest_tests': ['base_unittests'],
@@ -661,13 +646,11 @@ def GenTests(api):
               builder='fake-builder',
           ).assemble()),
       api.chromium_tests.read_source_side_spec('fake-group', {}),
-      api.override_step_data(
-          'analyze',
-          api.json.output({
-              'status': 'Found dependency',
-              'compile_targets': ['browser_tests'],
-              'test_targets': []
-          })),
+      api.filter.analyze_output(
+          status='Found dependency',
+          compile_targets=['browser_tests'],
+          test_targets=[],
+      ),
       api.post_process(Filter('analyze', 'compile (with patch)')),
   )
 
@@ -682,13 +665,11 @@ def GenTests(api):
               builder_group='fake-group',
               builder='fake-builder',
           ).assemble()),
-      api.override_step_data(
-          'analyze',
-          api.json.output({
-              'status': 'Found dependency',
-              'compile_targets': ['browser_tests', 'base_unittests'],
-              'test_targets': ['browser_tests', 'base_unittests']
-          })),
+      api.filter.analyze_output(
+          status='Found dependency',
+          test_targets=['browser_tests', 'base_unittests'],
+          compile_targets=['browser_tests', 'base_unittests'],
+      ),
       api.post_process(Filter('analyze', 'compile (with patch)')),
   )
 
@@ -703,13 +684,11 @@ def GenTests(api):
               builder_group='fake-group',
               builder='fake-builder',
           ).assemble()),
-      api.override_step_data(
-          'analyze',
-          api.json.output({
-              'status': 'Found dependency',
-              'test_targets': ['browser_tests', 'base_unittests'],
-              'compile_targets': ['chrome', 'browser_tests', 'base_unittests']
-          })),
+      api.filter.analyze_output(
+          status='Found dependency',
+          test_targets=['browser_tests', 'base_unittests'],
+          compile_targets=['chrome', 'browser_tests', 'base_unittests'],
+      ),
       api.post_process(Filter('analyze', 'compile (with patch)')),
   )
 
@@ -730,13 +709,11 @@ def GenTests(api):
               'gtest_tests': ['base_unittests'],
           },
       }),
-      api.override_step_data(
-          'analyze',
-          api.json.output({
-              'status': 'Found dependency',
-              'test_targets': ['browser_tests', 'base_unittests'],
-              'compile_targets': ['base_unittests']
-          })),
+      api.filter.analyze_output(
+          status='Found dependency',
+          test_targets=['browser_tests', 'base_unittests'],
+          compile_targets=['base_unittests'],
+      ),
       api.post_process(Filter('analyze', 'compile (with patch)')),
   )
 
@@ -790,7 +767,6 @@ def GenTests(api):
               builder_group='fake-group',
               builder='fake-builder',
           ).assemble()),
-      api.filter.suppress_analyze(),
       api.chromium_tests.read_source_side_spec('fake-group', {
           'fake-builder': {
               'gtest_tests': ['base_unittests'],
@@ -832,7 +808,6 @@ def GenTests(api):
               'gtest_tests': ['base_unittests'],
           },
       }),
-      api.filter.suppress_analyze(),
       api.step_data('compile (with patch)', retcode=1),
   )
 
@@ -877,7 +852,6 @@ def GenTests(api):
                     },],
                 },
             }),
-        api.filter.suppress_analyze(),
     ], api.empty_test_data())
 
   # This tests what happens if something goes horribly wrong in
@@ -992,7 +966,6 @@ def GenTests(api):
                   ],
               },
           }),
-      api.filter.suppress_analyze(),
       api.post_process(check_ordering),
       api.post_process(DropExpectation),
   )

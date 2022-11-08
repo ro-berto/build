@@ -40,8 +40,10 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"compile_targets\": [], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"status\": \"No dependency\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"test_targets\": []@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"status\": \"Found dependency\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_targets\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"base_unittests\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",

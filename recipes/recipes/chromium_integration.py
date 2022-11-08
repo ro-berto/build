@@ -46,7 +46,6 @@ def GenTests(api):
                                 builder_group='fake-group',
                                 builder='fake-builder',
                             ).assemble()),
-        api.filter.suppress_analyze(),
     ], api.empty_test_data())
 
   def blink_test_setup():

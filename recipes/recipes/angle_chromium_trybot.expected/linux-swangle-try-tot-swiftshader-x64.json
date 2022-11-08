@@ -914,12 +914,6 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"exclusions\": []@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"chromium\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": []@@@",
-      "@@@STEP_LOG_LINE@json.output@  }, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"ios\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": []@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -964,11 +958,12 @@
     },
     "name": "analyze",
     "~followup_annotations": [
-      "@@@STEP_TEXT@No compile necessary@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"compile_targets\": [], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"status\": \"No dependency\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"test_targets\": []@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"status\": \"Found dependency\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_targets\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"angle_end2end_tests\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
@@ -978,15 +973,984 @@
       "@@@STEP_LOG_LINE@analyze_details@    \"angle_end2end_tests\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"additional compile targets\": [], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"affected test targets\": [], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"affected compile targets\": []@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"affected test targets\": [@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"angle_end2end_tests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"affected compile targets\": [@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"angle_end2end_tests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  ]@@@",
       "@@@STEP_LOG_LINE@analyze_details@}@@@",
       "@@@STEP_LOG_END@analyze_details@@@"
     ]
   },
   {
+    "cmd": [
+      "vpython3",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]/builder/src/out/Release"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "ensure output directory (with patch)"
+  },
+  {
+    "cmd": [
+      "vpython3",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "This file exists while a build compiles and is removed at the end of\ncompilation. If the next build finds that the file exists prior to\ncompilation, it will wipe the output directory.\n\nSee https://crbug.com/959436 for more context.\n",
+      "[CACHE]/builder/src/out/Release/CR_COMPILE_GUARD.txt"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "create compile guard (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@CR_COMPILE_GUARD.txt@This file exists while a build compiles and is removed at the end of@@@",
+      "@@@STEP_LOG_LINE@CR_COMPILE_GUARD.txt@compilation. If the next build finds that the file exists prior to@@@",
+      "@@@STEP_LOG_LINE@CR_COMPILE_GUARD.txt@compilation, it will wipe the output directory.@@@",
+      "@@@STEP_LOG_LINE@CR_COMPILE_GUARD.txt@@@@",
+      "@@@STEP_LOG_LINE@CR_COMPILE_GUARD.txt@See https://crbug.com/959436 for more context.@@@",
+      "@@@STEP_LOG_END@CR_COMPILE_GUARD.txt@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python3",
+      "-u",
+      "[CACHE]/builder/src/tools/mb/mb.py",
+      "lookup",
+      "-m",
+      "tryserver.chromium.swangle",
+      "-b",
+      "linux-swangle-try-tot-swiftshader-x64",
+      "--config-file",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[CACHE]/goma/client",
+      "--recursive"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "chromium:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "lookup GN args",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python3",
+      "-u",
+      "[CACHE]/builder/src/tools/mb/mb.py",
+      "gen",
+      "-m",
+      "tryserver.chromium.swangle",
+      "-b",
+      "linux-swangle-try-tot-swiftshader-x64",
+      "--config-file",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[CACHE]/goma/client",
+      "--json-output",
+      "/path/to/tmp/json",
+      "//out/Release"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "chromium:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "generate_build_files (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython3",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/src/out/Release/gn_logs.txt",
+      "/path/to/tmp/"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "read gn_logs.txt",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@gn_logs.txt@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "preprocess_for_goma"
+  },
+  {
+    "cmd": [
+      "vpython3",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]/goma/data/linux_swangle_try_tot_swiftshader_x64"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "preprocess_for_goma.goma cache directory",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python3",
+      "[CACHE]/goma/client/goma_ctl.py",
+      "restart"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux_swangle_try_tot_swiftshader_x64",
+      "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
+      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
+      "GOMA_ENABLE_COUNTERZ": "true",
+      "GOMA_FAIL_FAST": "true",
+      "GOMA_HERMETIC": "error"
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "preprocess_for_goma.start_goma",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python3",
+      "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
+      "start",
+      "--cloudtail-path",
+      "cloudtail",
+      "--pid-file",
+      "[TMP_BASE]/cloudtail.pid"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "preprocess_for_goma.start cloudtail",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython3",
+      "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
+      "--ninja_info_output",
+      "/path/to/tmp/json",
+      "--failure_output",
+      "/path/to/tmp/",
+      "--no_prune_venv",
+      "--",
+      "RECIPE_REPO[depot_tools]/ninja",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[CACHE]/builder/src/out/Release",
+      "-j",
+      "80",
+      "angle_end2end_tests"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "chromium:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "compile (with patch)"
+  },
+  {
+    "cmd": [
+      "RECIPE_REPO[depot_tools]/ninja",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[CACHE]/builder/src/out/Release",
+      "-j",
+      "80",
+      "angle_end2end_tests",
+      "-d",
+      "explain",
+      "-n"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "chromium:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "compile (with patch) confirm no-op"
+  },
+  {
+    "cmd": [],
+    "name": "postprocess_for_goma"
+  },
+  {
+    "cmd": [
+      "python3",
+      "[CACHE]/goma/client/goma_ctl.py",
+      "jsonstatus",
+      "[TMP_BASE]/goma_jsonstatus.json"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
+      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
+      "GOMA_ENABLE_COUNTERZ": "true",
+      "GOMA_HERMETIC": "error"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "chromium:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "postprocess_for_goma.goma_jsonstatus",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"notice\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"infra_status\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"num_user_error\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"ping_status_code\": 200@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python3",
+      "[CACHE]/goma/client/goma_ctl.py",
+      "stat"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
+      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
+      "GOMA_ENABLE_COUNTERZ": "true",
+      "GOMA_HERMETIC": "error"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "chromium:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "postprocess_for_goma.goma_stat",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python3",
+      "[CACHE]/goma/client/goma_ctl.py",
+      "stop"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
+      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
+      "GOMA_ENABLE_COUNTERZ": "true",
+      "GOMA_HERMETIC": "error"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "chromium:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "postprocess_for_goma.stop_goma",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python3",
+      "RECIPE_MODULE[build::goma]/resources/goma_canceller.py",
+      "[CACHE]/goma/client/goma_ctl.py"
+    ],
+    "cost": {
+      "cpu": 0,
+      "disk": 0,
+      "memory": 0,
+      "net": 0
+    },
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "chromium:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "start goma canceller"
+  },
+  {
+    "cmd": [
+      "vpython3",
+      "RECIPE_REPO[build]/recipes/upload_goma_logs.py",
+      "--upload-compiler-proxy-info",
+      "--log-url-json-file",
+      "/path/to/tmp/json",
+      "--gsutil-py-path",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "--bqupload-path",
+      "[CACHE]/goma/bqupload/bqupload",
+      "--json-status",
+      "[TMP_BASE]/goma_jsonstatus.json",
+      "--ninja-log-outdir",
+      "[CACHE]/builder/src/out/Release",
+      "--ninja-log-command-file",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Release\", \"-j\", 80, \"angle_end2end_tests\"]",
+      "--build-exit-status",
+      "0",
+      "--build-step-name",
+      "compile (with patch)",
+      "--ninja-log-compiler",
+      "goma",
+      "--goma-stats-file",
+      "[TMP_BASE]/goma_stats",
+      "--goma-counterz-file",
+      "[TMP_BASE]/goma_counterz",
+      "--goma-crash-report-id-file",
+      "[TMP_BASE]/crash_report_id",
+      "--build-id",
+      "8945511751514863184",
+      "--builder-id-json",
+      "{\"bucket\": \"try\", \"builder\": \"linux-swangle-try-tot-swiftshader-x64\", \"project\": \"chromium\"}",
+      "--buildbot-buildername",
+      "linux-swangle-try-tot-swiftshader-x64"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "chromium:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "postprocess_for_goma.upload_log",
+    "timeout": 300,
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"compiler_proxy_log\": \"https://chromium-build-stats.appspot.com/compiler_proxy_log/2017/03/30/build11-m1/compiler_proxy.exe.BUILD11-M1.chrome-bot.log.INFO.20170329-222936.4420.gz\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"ninja_log\": \"https://chromium-build-stats.appspot.com/ninja_log/2017/03/30/build11-m1/ninja_log.build11-m1.chrome-bot.20170329-224321.9976.gz\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@compiler_proxy_log@https://chromium-build-stats.appspot.com/compiler_proxy_log/2017/03/30/build11-m1/compiler_proxy.exe.BUILD11-M1.chrome-bot.log.INFO.20170329-222936.4420.gz@@@",
+      "@@@STEP_LINK@ninja_log@https://chromium-build-stats.appspot.com/ninja_log/2017/03/30/build11-m1/ninja_log.build11-m1.chrome-bot.20170329-224321.9976.gz@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python3",
+      "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
+      "stop",
+      "--killed-pid-file",
+      "[TMP_BASE]/cloudtail.pid"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "postprocess_for_goma.stop cloudtail",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython3",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "remove",
+      "[CACHE]/builder/src/out/Release/CR_COMPILE_GUARD.txt"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "remove compile guard (with patch)"
+  },
+  {
     "cmd": [],
     "name": "mark: before_tests"
+  },
+  {
+    "cmd": [],
+    "name": "test_pre_run (with patch)"
+  },
+  {
+    "cmd": [
+      "rdb",
+      "stream",
+      "-var",
+      "builder:linux-swangle-try-tot-swiftshader-x64",
+      "-var",
+      "test_suite:angle_end2end_tests",
+      "-tag",
+      "step_name:angle_end2end_tests (with patch)",
+      "-tag",
+      "target_platform:linux",
+      "-coerce-negative-duration",
+      "-new",
+      "-realm",
+      "chromium:try",
+      "-include",
+      "-exonerate-unexpected-pass",
+      "--",
+      "[CACHE]/builder/src/tools/resultdb/result_adapter",
+      "gtest",
+      "-result-file",
+      "[CLEANUP]/tmp_tmp_1",
+      "--",
+      "python3",
+      "RECIPE_REPO[build]/recipes/runtest.py",
+      "--target",
+      "Release",
+      "--xvfb",
+      "--parse-gtest-output",
+      "--test-type=angle_end2end_tests",
+      "--test-launcher-summary-output",
+      "[CLEANUP]/tmp_tmp_1",
+      "--builder-name=linux-swangle-try-tot-swiftshader-x64",
+      "--slave-name=test_bot",
+      "--builder-group=chromium.swangle",
+      "--build-number=571",
+      "angle_end2end_tests"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "chromium:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "angle_end2end_tests (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@raw_io.output_text[stderr]@rdb-stream: included \"invocations/some-inv-name\" in \"invocations/parent-inv-name\"@@@",
+      "@@@STEP_LOG_END@raw_io.output_text[stderr]@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython3",
+      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
+      "--input-json",
+      "[CLEANUP]/tmp_tmp_1",
+      "--builder-group",
+      "tryserver.chromium.swangle",
+      "--builder-name",
+      "linux-swangle-try-tot-swiftshader-x64",
+      "--build-number",
+      "571",
+      "--test-type",
+      "angle_end2end_tests",
+      "--chrome-revision",
+      "refs/heads/main@{#170242}",
+      "--build-id",
+      "8945511751514863184",
+      "--test-results-server",
+      "test-results.appspot.com"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "chromium:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "Upload to test-results [angle_end2end_tests]"
+  },
+  {
+    "cmd": [
+      "rdb",
+      "rpc",
+      "luci.resultdb.v1.ResultDB",
+      "QueryTestResultStatistics"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "angle_end2end_tests stats",
+    "stdin": "{\"invocations\": [\"invocations/some-inv-name\"]}",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@json.input@{@@@",
+      "@@@STEP_LOG_LINE@json.input@  \"invocations\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/some-inv-name\"@@@",
+      "@@@STEP_LOG_LINE@json.input@  ]@@@",
+      "@@@STEP_LOG_LINE@json.input@}@@@",
+      "@@@STEP_LOG_END@json.input@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "rdb",
+      "query",
+      "-json",
+      "-n",
+      "0",
+      "-u",
+      "-tr-fields",
+      "testId,variant,variantHash,status,tags,expected,duration,failureReason",
+      "some-inv-name"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "angle_end2end_tests results",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "rdb",
+      "rpc",
+      "luci.resultdb.v1.Recorder",
+      "UpdateIncludedInvocations",
+      "-include-update-token"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "include local test invocations",
+    "stdin": "{\"addInvocations\": [\"invocations/some-inv-name\"], \"includingInvocation\": \"invocations/build:8945511751514863184\"}",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@json.input@{@@@",
+      "@@@STEP_LOG_LINE@json.input@  \"addInvocations\": [@@@",
+      "@@@STEP_LOG_LINE@json.input@    \"invocations/some-inv-name\"@@@",
+      "@@@STEP_LOG_LINE@json.input@  ], @@@",
+      "@@@STEP_LOG_LINE@json.input@  \"includingInvocation\": \"invocations/build:8945511751514863184\"@@@",
+      "@@@STEP_LOG_LINE@json.input@}@@@",
+      "@@@STEP_LOG_END@json.input@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "$debug - all results (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@1.25 KB@@@",
+      "@@@STEP_LOG_LINE@serialized results@{@@@",
+      "@@@STEP_LOG_LINE@serialized results@  \"all_suites\": [@@@",
+      "@@@STEP_LOG_LINE@serialized results@    {@@@",
+      "@@@STEP_LOG_LINE@serialized results@      \"invalid\": \"False\", @@@",
+      "@@@STEP_LOG_LINE@serialized results@      \"suite_name\": \"angle_end2end_tests\", @@@",
+      "@@@STEP_LOG_LINE@serialized results@      \"test_id_prefix\": \"\", @@@",
+      "@@@STEP_LOG_LINE@serialized results@      \"total_tests_ran\": 0, @@@",
+      "@@@STEP_LOG_LINE@serialized results@      \"unexpected_failing_tests\": [], @@@",
+      "@@@STEP_LOG_LINE@serialized results@      \"unexpected_passing_tests\": [], @@@",
+      "@@@STEP_LOG_LINE@serialized results@      \"unexpected_skipped_tests\": [], @@@",
+      "@@@STEP_LOG_LINE@serialized results@      \"variant_hash\": \"\"@@@",
+      "@@@STEP_LOG_LINE@serialized results@    }@@@",
+      "@@@STEP_LOG_LINE@serialized results@  ], @@@",
+      "@@@STEP_LOG_LINE@serialized results@  \"unexpected_failing_suites\": []@@@",
+      "@@@STEP_LOG_LINE@serialized results@}@@@",
+      "@@@STEP_LOG_END@serialized results@@@",
+      "@@@STEP_LOG_LINE@memory usage@Size of this RDBResults: 1.25 KB@@@",
+      "@@@STEP_LOG_LINE@memory usage@@@@",
+      "@@@STEP_LOG_LINE@memory usage@\tSize of RDBPerSuiteResults for angle_end2end_tests: 1.00 KB@@@",
+      "@@@STEP_LOG_LINE@memory usage@\t\tNumber of RDBPerIndividualTestResults entries: 0@@@",
+      "@@@STEP_LOG_LINE@memory usage@\t\tSize of all RDBPerIndividualTestResults entries: 0.00 B@@@",
+      "@@@STEP_LOG_END@memory usage@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython3",
+      "RECIPE_REPO[depot_tools]/gerrit_client.py",
+      "changes",
+      "--host",
+      "https://swiftshader-review.googlesource.com",
+      "--json_file",
+      "/path/to/tmp/json",
+      "--limit",
+      "1",
+      "-p",
+      "change=456789",
+      "-o",
+      "ALL_REVISIONS",
+      "-o",
+      "ALL_COMMITS"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "chromium:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "gerrit changes (2)",
+    "timeout": 60,
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"_number\": \"456789\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"branch\": \"main\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"change_id\": \"Ideadbeef\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"created\": \"2017-01-30 13:11:20.000000000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"has_review_started\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"id\": \"fully~qualified~changeid\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"project\": \"chromium/src\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"revisions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"184ebe53805e102605d11f6b143486d15c23a09c\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"_number\": \"12\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"commit\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"message\": \"Change commit message\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        }@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"status\": \"NEW\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"subject\": \"Change title\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python3",
+      "RECIPE_REPO[depot_tools]/git_footers.py",
+      "--json",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "chromium:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "parse description (2)",
+    "stdin": "Change commit message",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output (exception)@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "proceed with retry",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>fewer than 5 failures, continue with retries@@@"
+    ]
   },
   {
     "name": "$result"

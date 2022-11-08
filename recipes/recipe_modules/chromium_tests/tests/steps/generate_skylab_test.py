@@ -106,7 +106,6 @@ def GenTests(api):
           builder_db=builder_db,
           try_db=None,
       )
-      build_gen += api.filter.suppress_analyze()
 
     steps = sum([
         build_gen,

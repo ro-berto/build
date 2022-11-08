@@ -337,13 +337,11 @@ def GenTests(api):
               ],
               'base_unittests': [],
           }),
-      api.override_step_data(
-          'analyze',
-          api.json.output({
-              'status': 'Found dependency',
-              'compile_targets': ['base_unittests'],
-              'test_targets': ['base_unittests'],
-          })),
+      api.filter.analyze_output(
+          status='Found dependency',
+          test_targets=['base_unittests'],
+          compile_targets=['base_unittests'],
+      ),
       api.post_process(MustRun, 'compile'),
       api.post_process(DoesNotRun, 'test_pre_run.[trigger] blink_web_tests'),
       api.post_process(MustRun, 'test_pre_run.[trigger] base_unittests'),

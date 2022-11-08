@@ -165,7 +165,6 @@ def GenTests(api):
               'gtest_tests': ['base_unittests'],
           },
       }),
-      api.filter.suppress_analyze(),
   )
 
   yield api.test(
@@ -186,7 +185,6 @@ def GenTests(api):
           },
       }),
       api.properties(root_solution_revision='refs/branch-heads/4472'),
-      api.filter.suppress_analyze(),
   )
 
   yield api.test(
@@ -250,7 +248,6 @@ def GenTests(api):
                   'gtest_tests': ['bogus_unittests'],
               },
           }),
-      api.filter.suppress_analyze(),
       api.post_process(post_process.MustRun, 'bogus_unittests (with patch)'),
       api.post_process(post_process.DropExpectation),
   )
@@ -287,7 +284,6 @@ def GenTests(api):
           'base_unittests (with patch)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.canned_gtest_output(False), failure=True)),
-      api.filter.suppress_analyze(),
       api.post_process(post_process.MustRun,
                        'base_unittests (retry shards with patch)'),
       api.post_process(post_process.DoesNotRun,
@@ -316,7 +312,6 @@ def GenTests(api):
           'base_unittests', 'retry shards with patch', failures=['Test.One']),
       api.chromium_tests.gen_swarming_and_rdb_results(
           'base_unittests', 'without patch', failures=['Test.One']),
-      api.filter.suppress_analyze(),
       api.post_process(post_process.MustRun,
                        'base_unittests (retry shards with patch)'),
       api.post_process(post_process.MustRun, 'base_unittests (without patch)'),
@@ -344,7 +339,6 @@ def GenTests(api):
           'base_unittests', 'retry shards with patch', failures=['Test.One']),
       api.chromium_tests.gen_swarming_and_rdb_results(
           'base_unittests', 'without patch', skips=['Test.One']),
-      api.filter.suppress_analyze(),
       api.post_process(post_process.MustRun,
                        'base_unittests (retry shards with patch)'),
       api.post_process(post_process.MustRun, 'base_unittests (without patch)'),
@@ -381,7 +375,6 @@ def GenTests(api):
           api.chromium_swarming.canned_summary_output(
               api.test_utils.gtest_results('invalid_results', 1),
               failure=True)),
-      api.filter.suppress_analyze(),
       api.post_process(post_process.MustRun,
                        'base_unittests (retry shards with patch)'),
       api.post_process(post_process.DoesNotRun,
@@ -416,7 +409,6 @@ def GenTests(api):
           'base_unittests', 'with patch', failures=['Test.One']),
       api.chromium_tests.gen_swarming_and_rdb_results(
           'base_unittests', 'retry shards with patch', failures=['Test.One']),
-      api.filter.suppress_analyze(),
       api.post_process(post_process.MustRun, 'base_unittests (with patch)'),
       api.post_process(post_process.MustRun,
                        'base_unittests (retry shards with patch)'),
@@ -457,7 +449,6 @@ def GenTests(api):
           api.chromium_swarming.canned_summary_output(
               api.test_utils.gtest_results('invalid results', 1),
               failure=True)),
-      api.filter.suppress_analyze(),
       api.post_process(post_process.MustRun, 'base_unittests (with patch)'),
       api.post_process(post_process.MustRun,
                        'base_unittests (retry shards with patch)'),
@@ -493,7 +484,6 @@ def GenTests(api):
           'base_unittests', 'with patch', failures=['Test.One']),
       api.chromium_tests.gen_swarming_and_rdb_results(
           'base_unittests', 'retry shards with patch', failures=['Test.One']),
-      api.filter.suppress_analyze(),
       api.post_process(post_process.MustRun,
                        'base_unittests (retry shards with patch)'),
       api.post_process(post_process.DoesNotRun,
@@ -535,7 +525,6 @@ def GenTests(api):
                   }],
               },
           }),
-      api.filter.suppress_analyze(),
       api.post_process(post_process.MustRun, 'base_unittests (with patch)'),
       api.post_process(post_process.DoesNotRun,
                        'base_unittests (retry shards with patch)'),
@@ -583,7 +572,6 @@ def GenTests(api):
                   }],
               },
           }),
-      api.filter.suppress_analyze(),
       api.override_step_data(
           'base_unittests (with patch)',
           api.chromium_swarming.canned_summary_output(
@@ -636,7 +624,6 @@ def GenTests(api):
                   }],
               },
           }),
-      api.filter.suppress_analyze(),
       api.chromium_tests.gen_swarming_and_rdb_results(
           'base_unittests', 'with patch', failures=['Test.One']),
       api.chromium_tests.gen_swarming_and_rdb_results(
@@ -705,7 +692,6 @@ def GenTests(api):
                   }],
               },
           }),
-      api.filter.suppress_analyze(),
       api.override_step_data(
           'validate benchmark results and profile data.searching for '
           'profdata files',
@@ -741,7 +727,6 @@ def GenTests(api):
                       ['base_unittests1', 'base_unittests2', 'base_unittests3'],
               },
           }),
-      api.filter.suppress_analyze(),
       api.chromium_tests.change_size_limit(2),
       api.override_step_data(
           'base_unittests1 results',
@@ -782,7 +767,6 @@ def GenTests(api):
               'gtest_tests': ['base_unittests'],
           },
       }),
-      api.filter.suppress_analyze(),
   )
 
   yield api.test(
@@ -812,7 +796,6 @@ def GenTests(api):
       api.post_process(post_process.PropertyEquals, 'rts_setting',
                        'rts-ml-chromium'),
       api.post_process(post_process.DropExpectation),
-      api.filter.suppress_analyze(),
   )
 
   yield api.test(
@@ -858,7 +841,6 @@ def GenTests(api):
                        'rts-chromium'),
       api.post_process(post_process.PropertyEquals, 'rts_was_used', True),
       api.post_process(post_process.DropExpectation),
-      api.filter.suppress_analyze(),
   )
 
   yield api.test(
@@ -895,7 +877,6 @@ def GenTests(api):
                        'rts-chromium'),
       api.post_process(post_process.PropertiesDoNotContain, 'rts_was_used'),
       api.post_process(post_process.DropExpectation),
-      api.filter.suppress_analyze(),
   )
 
   yield api.test(
@@ -924,7 +905,6 @@ def GenTests(api):
                     api.json.output({'Disable-Rts': ['true']})),
       api.post_process(post_process.DoesNotRun, 'quick run options'),
       api.post_process(post_process.DropExpectation),
-      api.filter.suppress_analyze(),
   )
 
   yield api.test(
@@ -1109,7 +1089,6 @@ def GenTests(api):
       api.step_data(
           'git diff to analyze patch (2)',
           api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
-      api.filter.suppress_analyze(),
       api.resultdb.query(
           inv_bundle=current_patchset_invocations,
           step_name=(
@@ -1189,7 +1168,6 @@ def GenTests(api):
       api.step_data(
           'git diff to analyze patch (2)',
           api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
-      api.filter.suppress_analyze(),
       api.resultdb.query(
           inv_bundle=current_patchset_invocations,
           step_name=(
@@ -1265,7 +1243,6 @@ def GenTests(api):
       api.step_data(
           'git diff to analyze patch (2)',
           api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
-      api.filter.suppress_analyze(),
       api.resultdb.query(
           inv_bundle=current_patchset_invocations,
           step_name=(

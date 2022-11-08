@@ -373,7 +373,6 @@ def GenTests(api):
               orchestrator=InputProperties.Orchestrator(
                   builder_name='fake-orchestrator',
                   builder_group='fake-try-group'))),
-      api.filter.suppress_analyze(),
       override_test_spec(),
       api.post_process(post_process.StepTextContains, 'report builders', [
           "running tester 'fake-tester' on group 'fake-group' against "
@@ -410,7 +409,6 @@ def GenTests(api):
               orchestrator=InputProperties.Orchestrator(
                   builder_name='fake-orchestrator',
                   builder_group='fake-try-group'))),
-      api.filter.suppress_analyze(),
       override_test_spec(),
       api.step_data(
           'archive src-side dep paths.read orchestrator_all.runtime_deps',
@@ -479,7 +477,6 @@ def GenTests(api):
               orchestrator=InputProperties.Orchestrator(
                   builder_name='fake-orchestrator',
                   builder_group='fake-try-group'))),
-      api.filter.suppress_analyze(),
       override_test_spec(),
       api.step_data(
           'git diff to analyze patch',
@@ -533,7 +530,6 @@ def GenTests(api):
               orchestrator=InputProperties.Orchestrator(
                   builder_name='fake-orchestrator',
                   builder_group='fake-try-group'))),
-      api.filter.suppress_analyze(),
       override_test_spec(),
       api.tryserver.get_files_affected_by_patch(['foo.cc', 'bar/baz.cc']),
       api.path.exists(api.path['checkout'].join('foo.cc')),
@@ -569,7 +565,6 @@ def GenTests(api):
               orchestrator=InputProperties.Orchestrator(
                   builder_name='fake-orchestrator',
                   builder_group='fake-try-group'))),
-      api.filter.suppress_analyze(),
       override_test_spec(),
       api.step_data(
           'archive src-side dep paths.read orchestrator_all.runtime_deps',
@@ -611,7 +606,6 @@ def GenTests(api):
               orchestrator=InputProperties.Orchestrator(
                   builder_name='fake-orchestrator',
                   builder_group='fake-try-group'))),
-      api.filter.suppress_analyze(),
       override_test_spec(),
       api.post_process(
           post_process.PropertyEquals,
@@ -654,7 +648,6 @@ def GenTests(api):
       api.post_process(post_process.PropertyEquals, 'rts_setting',
                        'rts-chromium'),
       api.post_process(post_process.DropExpectation),
-      api.filter.suppress_analyze(),
   )
 
   yield api.test(
@@ -690,7 +683,6 @@ def GenTests(api):
       api.post_process(post_process.PropertyEquals, 'rts_setting',
                        'rts-ml-chromium'),
       api.post_process(post_process.DropExpectation),
-      api.filter.suppress_analyze(),
   )
 
   yield api.test(
@@ -742,7 +734,6 @@ def GenTests(api):
                   builder_name='fake-orchestrator',
                   builder_group='fake-try-group'))),
       override_test_spec(),
-      api.filter.suppress_analyze(),
       api.runtime.global_shutdown_on_step('isolate tests (with patch)'),
       api.post_process(post_process.ResultReasonRE,
                        '.*causing this build to be canceled.*'),
@@ -799,6 +790,7 @@ def GenTests(api):
                   builder_name='fake-orchestrator',
                   builder_group='fake-try-group'))),
       override_test_spec(),
+      api.filter.no_dependency(),
       api.post_process(post_process.StepTextContains, 'report builders', [
           'tester \'fake-tester\' on group \'fake-group\'',
           'builder \'fake-builder\' on group \'fake-group\''
@@ -825,7 +817,6 @@ def GenTests(api):
                   builder_name='fake-orchestrator',
                   builder_group='fake-try-group'))),
       override_test_spec(),
-      api.filter.suppress_analyze(),
       api.override_step_data('compile (with patch)', retcode=1),
       api.post_process(post_process.StepTextContains, 'report builders', [
           'tester \'fake-tester\' on group \'fake-group\'',
@@ -851,7 +842,6 @@ def GenTests(api):
                   builder_name='fake-orchestrator',
                   builder_group='fake-try-group'))),
       override_test_spec(),
-      api.filter.suppress_analyze(),
       api.override_step_data('check_static_initializers (with patch)',
                              api.test_utils.canned_gtest_output(False)),
       api.post_process(post_process.StepTextContains, 'report builders', [

@@ -296,7 +296,6 @@ def GenTests(api):
                   ],
               },
           }),
-      api.filter.suppress_analyze(),
       api.flakiness(
           check_for_flakiness=True,
           build_count=10,
@@ -460,7 +459,6 @@ def GenTests(api):
                   }],
               },
           }),
-      api.filter.suppress_analyze(),
       api.flakiness(
           check_for_flakiness=True,
           build_count=10,
@@ -547,7 +545,6 @@ def GenTests(api):
                   }],
               },
           }),
-      api.filter.suppress_analyze(),
       api.flakiness(
           check_for_flakiness=True,
           build_count=10,
@@ -626,7 +623,6 @@ def GenTests(api):
                   }],
               },
           }),
-      api.filter.suppress_analyze(),
       api.flakiness(
           check_for_flakiness=True,
           build_count=10,
@@ -689,7 +685,6 @@ def GenTests(api):
                   },],
               },
           }),
-      api.filter.suppress_analyze(),
       api.flakiness(
           check_for_flakiness=True,
           build_count=10,
@@ -824,7 +819,6 @@ def GenTests(api):
                   },],
               },
           }),
-      api.filter.suppress_analyze(),
       api.flakiness(
           check_for_flakiness=True,
           build_count=10,
@@ -916,7 +910,6 @@ def GenTests(api):
                   },],
               },
           }),
-      api.filter.suppress_analyze(),
       api.flakiness(
           check_for_flakiness=True,
           build_count=10,
@@ -1018,7 +1011,6 @@ def GenTests(api):
                   },],
               },
           }),
-      api.filter.suppress_analyze(),
       api.flakiness(
           check_for_flakiness=True,
           build_count=10,
@@ -1121,7 +1113,6 @@ def GenTests(api):
                   },],
               },
           }),
-      api.filter.suppress_analyze(),
       api.flakiness(
           check_for_flakiness=True,
           build_count=10,
@@ -1205,7 +1196,6 @@ def GenTests(api):
           historical_query_count=2,
           current_query_count=2,
       ),
-      api.filter.suppress_analyze(),
       api.step_data('git diff to analyze patch (2)',
                     api.raw_io.stream_output('chrome/file1.cc\nsrc/DEPS')),
       api.post_check(post_process.MustRun,
@@ -1235,7 +1225,6 @@ def GenTests(api):
           historical_query_count=2,
           current_query_count=2,
       ),
-      api.filter.suppress_analyze(),
       api.step_data(
           'git diff to analyze patch (2)',
           api.raw_io.stream_output('testing/buildbot/test_suites.pyl\n'
@@ -1267,7 +1256,6 @@ def GenTests(api):
           historical_query_count=2,
           current_query_count=2,
       ),
-      api.filter.suppress_analyze(),
       api.step_data(
           'git diff to analyze patch (2)',
           api.raw_io.stream_output('chrome/file1.cc\ncomponents/file2.cc')),
@@ -1298,7 +1286,6 @@ def GenTests(api):
           historical_query_count=2,
           current_query_count=2,
       ),
-      api.filter.suppress_analyze(),
       api.step_data('parse description',
                     api.json.output({'Validate-Test-Flakiness': ['Skip']})),
       api.post_check(

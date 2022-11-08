@@ -3,13 +3,12 @@
 # found in the LICENSE file.
 
 from recipe_engine import post_process
-from recipe_engine import recipe_api
 
-from PB.recipe_modules.build.binary_size import properties as properties_pb
 from RECIPE_MODULES.build.binary_size import constants
 
 DEPS = [
     'binary_size',
+    'filter',
     'recipe_engine/json',
     'recipe_engine/platform',
     'recipe_engine/properties',
@@ -26,19 +25,6 @@ def RunSteps(api):
 
 
 def GenTests(api):
-
-  def override_analyze(no_changes=False):
-    """Overrides analyze step data so that targets get compiled."""
-    return api.override_step_data(
-        'analyze',
-        api.json.output({
-            'status':
-                'Found dependency',
-            'compile_targets':
-                constants.DEFAULT_ANALYZE_TARGETS,
-            'test_targets': []
-                            if no_changes else constants.DEFAULT_COMPILE_TARGETS
-        }))
 
   def override_expectation_to_fail(with_patch=True, use_alternative=False):
     suffix = ' (with patch)' if with_patch else ' (without patch)'
@@ -58,6 +44,7 @@ def GenTests(api):
   yield api.test(
       'noop_because_of_analyze',
       api.binary_size.build(override_commit_log=True),
+      api.filter.no_dependency(),
       api.post_check(has_binary_size_property),
       api.post_process(post_process.MustRun, 'analyze'),
       api.post_process(post_process.DoesNotRunRE, r'.*compile'),
@@ -67,7 +54,6 @@ def GenTests(api):
   yield api.test(
       'compile_failure',
       api.binary_size.build(override_commit_log=True),
-      override_analyze(),
       api.override_step_data('compile (with patch)', retcode=1),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
@@ -76,7 +62,6 @@ def GenTests(api):
   yield api.test(
       'patch_fixes_build',
       api.binary_size.build(),
-      override_analyze(),
       api.override_step_data('compile (without patch)', retcode=1),
       api.time.seed(constants.TEST_TIME + 7230),
       api.post_process(post_process.MustRun,
@@ -128,7 +113,6 @@ def GenTests(api):
   yield api.test(
       'normal_build',
       api.binary_size.build('normal_build', override_commit_log=True),
-      override_analyze(),
       api.post_check(has_expected_supersize_link),
       api.post_check(has_expected_binary_size_url),
       api.post_check(final_step_is_not_nested),
@@ -147,7 +131,6 @@ def GenTests(api):
 
   yield api.test(
       'normal_significant_binary_package_restructure',
-      override_analyze(),
       api.binary_size.build('normal build + significant package restructure'),
       api.binary_size.on_significant_binary_package_restructure(),
       api.post_process(post_process.StatusSuccess),
@@ -156,7 +139,6 @@ def GenTests(api):
   yield api.test(
       'unexpected_increase',
       api.binary_size.build(override_commit_log=True),
-      override_analyze(),
       api.override_step_data(
           constants.RESULT_JSON_STEP_NAME,
           api.json.output({
@@ -176,7 +158,6 @@ def GenTests(api):
   yield api.test(
       'expectations_file_warning',
       api.binary_size.build(override_commit_log=True),
-      override_analyze(),
       api.override_step_data('bot_update', retcode=1),
       override_expectation_to_fail(with_patch=True),
       override_expectation_to_fail(with_patch=False),
@@ -190,7 +171,6 @@ def GenTests(api):
   yield api.test(
       'expectations_file_failure',
       api.binary_size.build(override_commit_log=True),
-      override_analyze(),
       override_expectation_to_fail(with_patch=True),
       api.post_process(post_process.StepFailure,
                        constants.EXPECTATIONS_STEP_NAME),
@@ -202,7 +182,6 @@ def GenTests(api):
   yield api.test(
       'expectations_file_failure_with_note',
       api.binary_size.build(override_commit_log=True),
-      override_analyze(),
       api.override_step_data('bot_update', retcode=1),
       override_expectation_to_fail(with_patch=True),
       override_expectation_to_fail(with_patch=False, use_alternative=True),
@@ -220,7 +199,6 @@ def GenTests(api):
           extra_footers={
               constants.SKIP_EXPECTATIONS_FOOTER_KEY: "Reasons to skip"
           }),
-      override_analyze(),
       api.override_step_data('bot_update', retcode=1),
       override_expectation_to_fail(with_patch=True),
       override_expectation_to_fail(with_patch=False, use_alternative=True),
@@ -234,7 +212,6 @@ def GenTests(api):
   yield api.test(
       'clear_expectation_files_ignores_failure',
       api.binary_size.build(override_commit_log=True),
-      override_analyze(),
       api.override_step_data('Clear Expectation Files', retcode=1),
       api.post_process(post_process.StepSuccess, 'Clear Expectation Files'),
       api.post_process(post_process.StatusSuccess),
@@ -244,7 +221,6 @@ def GenTests(api):
   yield api.test(
       'pass_because_of_size_footer',
       api.binary_size.build(android_size_footer=True, override_commit_log=True),
-      override_analyze(),
       api.override_step_data(
           constants.RESULT_JSON_STEP_NAME,
           api.json.output({
@@ -260,7 +236,6 @@ def GenTests(api):
   yield api.test(
       'fail_because_of_wrong_size_footer',
       api.binary_size.build(fuchsia_size_footer=True, override_commit_log=True),
-      override_analyze(),
       api.override_step_data(
           constants.RESULT_JSON_STEP_NAME,
           api.json.output({
@@ -277,7 +252,6 @@ def GenTests(api):
       'pass_because_of_revert',
       api.binary_size.build(
           commit_message='Revert some change', override_commit_log=True),
-      override_analyze(),
       api.override_step_data(
           constants.RESULT_JSON_STEP_NAME,
           api.json.output({
@@ -294,7 +268,6 @@ def GenTests(api):
       'nondefault_results_bucket',
       api.binary_size.build(override_commit_log=True),
       api.binary_size.properties(results_bucket='fake-results-bucket'),
-      override_analyze(),
       api.post_check(has_expected_supersize_link, bucket='fake-results-bucket'),
       api.post_check(
           has_expected_binary_size_url, bucket='fake-results-bucket'),
@@ -305,7 +278,6 @@ def GenTests(api):
   yield api.test(
       'valid_latest_file',
       api.binary_size.build(override_commit_log=True),
-      override_analyze(),
       api.post_process(post_process.MustRun, 'gsutil Downloading zip'),
       api.post_process(post_process.DoesNotRun, 'compile (without patch)'),
       api.post_process(post_process.StatusSuccess),
@@ -315,7 +287,6 @@ def GenTests(api):
   yield api.test(
       'valid_latest_file_merge_conflict',
       api.binary_size.build(override_commit_log=True),
-      override_analyze(),
       api.override_step_data('bot_update', retcode=1),
       api.post_process(post_process.MustRun, 'bot_update (2)'),
       api.post_process(post_process.DoesNotRun, 'gsutil Downloading zip'),
@@ -327,7 +298,6 @@ def GenTests(api):
   yield api.test(
       'invalid_latest_file',
       api.binary_size.build(),
-      override_analyze(),
       api.time.seed(constants.TEST_TIME + 7230),
       api.post_process(post_process.DoesNotRun, 'gsutil Downloading zip'),
       api.post_process(post_process.MustRun, 'compile (without patch)'),
@@ -341,7 +311,6 @@ def GenTests(api):
           recent_upload_cp=12345,
           patch_parent_cp=12350,
           override_commit_log=True),
-      override_analyze(),
       api.post_process(post_process.DoesNotRun, 'gsutil Downloading zip'),
       api.post_process(post_process.MustRun, 'compile (without patch)'),
       api.post_check(has_expected_supersize_link),
@@ -358,7 +327,6 @@ def GenTests(api):
           recent_upload_cp=12345,
           patch_parent_cp=None,
           override_commit_log=True),
-      override_analyze(),
       api.post_process(post_process.DoesNotRun, 'gsutil Downloading zip'),
       api.post_process(post_process.MustRun, 'compile (without patch)'),
       api.post_check(has_expected_supersize_link),

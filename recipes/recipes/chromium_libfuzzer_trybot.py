@@ -110,7 +110,7 @@ def RunSteps(api):
 
 def GenTests(api):
   yield api.test(
-      'basic_linux_tryjob',
+      'basic_linux_tryjob_no_compile',
       api.chromium.try_build(
           builder_group='tryserver.chromium.linux',
           builder='linux-libfuzzer-asan-rel'),
@@ -121,6 +121,7 @@ def GenTests(api):
       api.step_data(
           'calculate no_fuzzers',
           stdout=api.raw_io.output_text('//foo/bar:target1')),
+      api.filter.no_dependency(),
   )
   gn_args_reclient = '\n'.join((
       'goma_dir = "/b/build/slave/cache/goma_client"',
@@ -141,13 +142,11 @@ def GenTests(api):
       api.step_data(
           'calculate no_fuzzers',
           stdout=api.raw_io.output_text('//foo/bar:target1')),
-      api.override_step_data(
-          'analyze',
-          api.json.output({
-              'status': 'Found dependency',
-              'compile_targets': ['//foo/bar:target2'],
-              'test_targets': []
-          })),
+      api.filter.analyze_output(
+          status='Found dependency',
+          test_targets=[],
+          compile_targets=['//foo/bar:target2'],
+      ),
       api.step_data(
           'list gn targets', stdout=api.raw_io.output_text('target2')),
   )
@@ -168,13 +167,11 @@ def GenTests(api):
       api.step_data(
           'calculate no_fuzzers',
           stdout=api.raw_io.output_text('//foo/bar:target1')),
-      api.override_step_data(
-          'analyze',
-          api.json.output({
-              'status': 'Found dependency',
-              'compile_targets': ['//foo/bar:target2'],
-              'test_targets': []
-          })),
+      api.filter.analyze_output(
+          status='Found dependency',
+          test_targets=[],
+          compile_targets=['//foo/bar:target2'],
+      ),
       api.step_data(
           'list gn targets', stdout=api.raw_io.output_text('target2')),
   )
@@ -192,13 +189,11 @@ def GenTests(api):
       api.step_data(
           'calculate no_fuzzers',
           stdout=api.raw_io.output_text('//foo/bar:target1')),
-      api.override_step_data(
-          'analyze',
-          api.json.output({
-              'status': 'Found dependency',
-              'compile_targets': ['//foo/bar:target2'],
-              'test_targets': []
-          })),
+      api.filter.analyze_output(
+          status='Found dependency',
+          test_targets=[],
+          compile_targets=['//foo/bar:target2'],
+      ),
       api.step_data('compile', retcode=1),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),

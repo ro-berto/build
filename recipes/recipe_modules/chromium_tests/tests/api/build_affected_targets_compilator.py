@@ -91,7 +91,6 @@ def GenTests(api):
                   builder_name='fake-orchestrator',
                   builder_group='fake-try-group'))),
       api.path.exists(api.path['checkout'].join('out/Release/browser_tests')),
-      api.filter.suppress_analyze(),
       api.post_process(
           post_process.StepCommandContains,
           'compile (with patch)',
@@ -131,6 +130,7 @@ def GenTests(api):
                   }],
               },
           }),
+      api.filter.no_dependency(),
       api.properties(
           InputProperties(
               orchestrator=InputProperties.Orchestrator(

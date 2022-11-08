@@ -6,7 +6,7 @@ import functools
 import posixpath
 import re
 
-from typing import Callable, Collection, Dict, Optional, Tuple, Union
+from typing import Any, Callable, Collection, Dict, Optional, Tuple
 
 from recipe_engine import config_types
 from recipe_engine import recipe_api
@@ -15,7 +15,9 @@ from recipe_engine import step_data
 from RECIPE_MODULES.build import chromium
 
 _AnalyzeInput = Dict[str, Collection[str]]
-_Analyzer = Callable[[_AnalyzeInput], step_data.StepData]
+_AnalyzeOutput = Dict[str, Any]
+# _AnalyzeOutput is the test data value
+_Analyzer = Callable[[_AnalyzeInput, _AnalyzeOutput], step_data.StepData]
 
 
 class FilterApi(recipe_api.RecipeApi):
@@ -73,12 +75,6 @@ class FilterApi(recipe_api.RecipeApi):
       config_path,
       step_test_data=lambda: self.m.json.test_api.output({
           'base': {
-            'exclusions': [],
-          },
-          'chromium': {
-            'exclusions': [],
-          },
-          'ios': {
             'exclusions': [],
           },
         })
@@ -149,6 +145,7 @@ class FilterApi(recipe_api.RecipeApi):
   def _run_mb_analyze(
       self,
       analyze_input: _AnalyzeInput,
+      test_analyze_output: _AnalyzeOutput,
       builder_id: Optional[chromium.BuilderId],
       mb_path: Optional[config_types.Path],
       mb_config_path: Optional[config_types.Path],
@@ -169,18 +166,14 @@ class FilterApi(recipe_api.RecipeApi):
           mb_path=mb_path,
           mb_config_path=mb_config_path,
           build_dir=build_output_dir,
-          phase=phase)
+          phase=phase,
+          test_analyze_output=test_analyze_output)
 
   def _run_chromium_gyp_analyze(
       self,
       analyze_input: _AnalyzeInput,
+      test_analyze_output: _AnalyzeOutput,
   ) -> step_data.StepData:
-    test_output = {
-        'status': 'No dependency',
-        'compile_targets': [],
-        'test_targets': [],
-    }
-
     # If building for CrOS, execute through the "chrome_sdk" wrapper. This
     # will override GYP environment variables, so we'll refrain from defining
     # them to avoid confusing output.
@@ -193,7 +186,8 @@ class FilterApi(recipe_api.RecipeApi):
               self.m.json.input(analyze_input),
               self.m.json.output(),
           ],
-          step_test_data=lambda: self.m.json.test_api.output(test_output))
+          step_test_data=lambda: self.m.json.test_api.output(test_analyze_output
+                                                            ))
 
   def _determine_affected_targets(
       self,
@@ -209,11 +203,17 @@ class FilterApi(recipe_api.RecipeApi):
           'analyze', step_text='No compile necessary (all files ignored)')
       return [], []
 
-    step_result = analyzer({
+    analyze_input = {
         'files': paths,
         'test_targets': test_targets,
         'additional_compile_targets': additional_compile_targets,
-    })
+    }
+    test_analyze_output = {
+        'status': 'Found dependency',
+        'test_targets': test_targets,
+        'compile_targets': additional_compile_targets,
+    }
+    step_result = analyzer(analyze_input, test_analyze_output)
 
     if 'error' in step_result.json.output:
       step_result.presentation.step_text = (

@@ -1239,6 +1239,7 @@ class ChromiumApi(recipe_api.RecipeApi):
                  chromium_config=None,
                  build_dir=None,
                  phase=None,
+                 test_analyze_output=None,
                  **kwargs):
     """Determine which targets need to be built and tested.
 
@@ -1264,11 +1265,13 @@ class ChromiumApi(recipe_api.RecipeApi):
         ['--json-output',
          self.m.json.output(name="failure_summary")])
 
-    step_test_data = (lambda: self.m.json.test_api.output({
+    test_analyze_output = test_analyze_output or {
         'status': 'No dependency',
         'compile_targets': [],
         'test_targets': [],
-    }) + self.m.json.test_api.output({}, name='failure_summary'))
+    }
+    step_test_data = (lambda: self.m.json.test_api.output(test_analyze_output) +
+                      self.m.json.test_api.output({}, name='failure_summary'))
     with self.mb_failure_handler(name):
       return self.run_mb_cmd(
           name,

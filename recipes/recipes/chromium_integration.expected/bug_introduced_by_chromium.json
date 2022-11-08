@@ -734,9 +734,7 @@
       "@@@STEP_TEXT@path: Path([CHECKOUT], 'testing', 'buildbot', 'trybot_analyze_config.json')@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"base\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      \".+\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"exclusions\": []@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -783,21 +781,14 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"compile_targets\": [], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"status\": \"No dependency\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"test_targets\": []@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"status\": \"Found dependency\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test_targets\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"blink_web_tests\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
-      "@@@STEP_LOG_END@json.output[failure_summary]@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "analyze_matched_exclusion",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Analyze disabled: matched exclusion@@@",
-      "@@@STEP_LOG_LINE@excluded_files@v8/foo.cc (regex = '.+')@@@",
-      "@@@STEP_LOG_END@excluded_files@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@",
       "@@@STEP_LOG_LINE@analyze_details@{@@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"test targets\": [@@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"blink_web_tests\"@@@",

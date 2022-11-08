@@ -2,13 +2,48 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from typing import Collection
+
 from recipe_engine import recipe_test_api
 
 
 class FilterTestApi(recipe_test_api.RecipeTestApi):
 
-  def suppress_analyze(self):
-    """Overrides analyze step data so that all targets get compiled."""
+  def analyze_output(
+      self,
+      *,
+      status: str,
+      compile_targets: Collection[str],
+      test_targets: Collection[str],
+  ) -> recipe_test_api.StepTestData:
+    """Overrides the analyze step for normal execution.
+
+    This does not support an error or invalid targets outcome.
+    """
+    assert status in ('Found dependency', 'Found dependency (all)',
+                      'No dependency')
+    return self.override_step_data(
+        'analyze',
+        self.m.json.output({
+            'status': status,
+            'compile_targets': list(compile_targets),
+            'test_targets': list(test_targets),
+        }),
+    )
+
+  def no_dependency(self) -> recipe_test_api.StepTestData:
+    return self.analyze_output(
+        status='No dependency',
+        compile_targets=[],
+        test_targets=[],
+    )
+
+  def exclude_everything(self) -> recipe_test_api.StepTestData:
+    """Overrides analyze step data so that all targets get compiled.
+
+    This is generally not needed: by default, analyze will return all
+    input targets as affected.
+    """
     return self.override_step_data(
         'read filter exclusion spec',
         self.m.json.output({

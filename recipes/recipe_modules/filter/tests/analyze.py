@@ -92,15 +92,23 @@ def GenTests(api):
   )
 
   yield api.test(
+      'no-dependency',
+      api.filter.no_dependency(),
+      api.properties(
+          expected_affected_test_targets=[],
+          expected_affected_compile_targets=[],
+      ),
+      api.post_check(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
       'found-dependency',
       api.platform('linux', 64),
-      api.override_step_data(
-          'analyze',
-          api.json.output({
-              'status': 'Found dependency',
-              'test_targets': ['test1'],
-              'compile_targets': ['compile2']
-          }),
+      api.filter.analyze_output(
+          status='Found dependency',
+          test_targets=['test1'],
+          compile_targets=['compile2'],
       ),
       api.properties(
           affected_files=['foo.cc', 'bar.cc'],
@@ -109,6 +117,23 @@ def GenTests(api):
           expected_affected_test_targets=['test1'],
           expected_affected_compile_targets=['test1', 'compile2'],
       ),
+      api.post_check(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'exclusion',
+      api.platform('linux', 64),
+      api.filter.exclude_everything(),
+      api.properties(
+          test_targets=['test1', 'test2'],
+          compile_targets=['compile1', 'compile2'],
+          expected_affected_test_targets=['test1', 'test2'],
+          expected_affected_compile_targets=[
+              'test1', 'test2', 'compile1', 'compile2'
+          ],
+      ),
+      api.post_check(post_process.MustRun, 'analyze_matched_exclusion'),
       api.post_check(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )

@@ -92,7 +92,6 @@ def GenTests(api):
         builder_db=builder_db,
         try_db=try_db,
         **kwargs)
-    t += api.filter.suppress_analyze()
     t += common_test_data(test_spec)
     return t
 
