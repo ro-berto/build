@@ -55,26 +55,35 @@ def GenTests(api):
   def has_binary_size_property(check, steps):
     check(steps['analyze'].output_properties['binary_size_plugin'] is not None)
 
-  yield api.test('noop_because_of_analyze',
-                 api.binary_size.build(),
-                 api.post_check(has_binary_size_property),
-                 api.post_process(post_process.MustRun, 'analyze'),
-                 api.post_process(post_process.DoesNotRunRE, r'.*compile'),
-                 api.post_process(post_process.DropExpectation))
-  yield api.test('compile_failure',
-                 api.binary_size.build(),
-                 override_analyze(),
-                 api.override_step_data('compile (with patch)', retcode=1),
-                 api.post_process(post_process.StatusFailure),
-                 api.post_process(post_process.DropExpectation))
   yield api.test(
-      'patch_fixes_build', api.binary_size.build(), override_analyze(),
+      'noop_because_of_analyze',
+      api.binary_size.build(),
+      api.post_check(has_binary_size_property),
+      api.post_process(post_process.MustRun, 'analyze'),
+      api.post_process(post_process.DoesNotRunRE, r'.*compile'),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'compile_failure',
+      api.binary_size.build(),
+      override_analyze(),
+      api.override_step_data('compile (with patch)', retcode=1),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'patch_fixes_build',
+      api.binary_size.build(),
+      override_analyze(),
       api.override_step_data('compile (without patch)', retcode=1),
       api.time.seed(constants.TEST_TIME + 7230),
       api.post_process(post_process.MustRun,
                        constants.PATCH_FIXED_BUILD_STEP_NAME),
       api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation))
+      api.post_process(post_process.DropExpectation),
+  )
 
   def has_expected_supersize_link(check,
                                   steps,
@@ -119,22 +128,26 @@ def GenTests(api):
   yield api.test(
       'normal_build',
       api.binary_size.build('normal_build'),
-      override_analyze(), api.post_check(has_expected_supersize_link),
+      override_analyze(),
+      api.post_check(has_expected_supersize_link),
       api.post_check(has_expected_binary_size_url),
       api.post_check(final_step_is_not_nested),
       api.post_process(post_process.StepSuccess, constants.RESULTS_STEP_NAME),
-      api.post_process(post_process.StatusSuccess))
+      api.post_process(post_process.StatusSuccess),
+  )
 
   # TODO(zijiehe): Make this test work. Currently, there isn't a way to specify
   # the version of chromium in the test case.
   yield api.test(
       'normal_build_with_author_m107',
       api.binary_size.build('normal_build_with_author_m107'),
-      override_analyze(), api.post_check(has_expected_supersize_link),
+      override_analyze(),
+      api.post_check(has_expected_supersize_link),
       api.post_check(has_expected_binary_size_url),
       api.post_check(final_step_is_not_nested),
       api.post_process(post_process.StepSuccess, constants.RESULTS_STEP_NAME),
-      api.post_process(post_process.StatusSuccess))
+      api.post_process(post_process.StatusSuccess),
+  )
 
   yield api.test(
       'normal_nondefault_targets',
@@ -146,7 +159,8 @@ def GenTests(api):
   )
 
   yield api.test(
-      'unexpected_increase', api.binary_size.build(),
+      'unexpected_increase',
+      api.binary_size.build(),
       override_analyze(),
       api.override_step_data(
           constants.RESULT_JSON_STEP_NAME,
@@ -157,7 +171,8 @@ def GenTests(api):
               'links': [],
           })),
       api.post_process(post_process.StepFailure, constants.RESULTS_STEP_NAME),
-      api.post_process(post_process.StatusFailure))
+      api.post_process(post_process.StatusFailure),
+  )
 
   def has_failed_expectations(check, steps):
     check(steps[constants.EXPECTATIONS_STEP_NAME].logs['failed expectations'] is
@@ -165,71 +180,55 @@ def GenTests(api):
 
   yield api.test(
       'expectations_file_warning',
-      api.binary_size.build(), override_analyze(),
+      api.binary_size.build(),
+      override_analyze(),
       override_expectation_to_fail(with_patch=True),
       override_expectation_to_fail(with_patch=False),
       api.post_process(post_process.StepWarning,
                        constants.EXPECTATIONS_STEP_NAME),
       api.post_check(has_failed_expectations),
       api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation))
+      api.post_process(post_process.DropExpectation),
+  )
 
   yield api.test(
       'expectations_file_failure',
-      api.binary_size.build(), override_analyze(),
+      api.binary_size.build(),
+      override_analyze(),
       override_expectation_to_fail(with_patch=True),
       api.post_process(post_process.StepFailure,
                        constants.EXPECTATIONS_STEP_NAME),
       api.post_check(has_failed_expectations),
       api.post_process(post_process.StatusFailure),
-      api.post_process(post_process.DropExpectation))
+      api.post_process(post_process.DropExpectation),
+  )
+
   yield api.test(
       'expectations_file_failure_with_note',
-      api.binary_size.build(), override_analyze(),
+      api.binary_size.build(),
+      override_analyze(),
       override_expectation_to_fail(with_patch=True),
       override_expectation_to_fail(with_patch=False, use_alternative=True),
       api.post_process(post_process.StepFailure,
                        constants.EXPECTATIONS_STEP_NAME),
       api.post_check(has_failed_expectations),
       api.post_process(post_process.StatusFailure),
-      api.post_process(post_process.DropExpectation))
+      api.post_process(post_process.DropExpectation),
+  )
+
   yield api.test(
       'clear_expectation_files_ignores_failure',
-      api.binary_size.build(), override_analyze(),
+      api.binary_size.build(),
+      override_analyze(),
       api.override_step_data('Clear Expectation Files', retcode=1),
       api.post_process(post_process.StepSuccess, 'Clear Expectation Files'),
       api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation))
+      api.post_process(post_process.DropExpectation),
+  )
+
   yield api.test(
       'pass_because_of_size_footer',
-      api.binary_size.build(fuchsia_size_footer=True), override_analyze(),
-      api.override_step_data(
-          constants.RESULT_JSON_STEP_NAME,
-          api.json.output({
-              'status_code': 1,
-              'summary': '\n!summary!',
-              'archive_filenames': [],
-              'links': [],
-          })),
-      api.post_process(post_process.StepSuccess, constants.RESULTS_STEP_NAME),
-      api.post_process(post_process.DropExpectation))
-  yield api.test(
-      'fail_because_of_wrong_size_footer',
-      api.binary_size.build(android_size_footer=True), override_analyze(),
-      api.override_step_data(
-          constants.RESULT_JSON_STEP_NAME,
-          api.json.output({
-              'status_code': 1,
-              'summary': '\n!summary!',
-              'archive_filenames': [],
-              'links': [],
-          })),
-      api.post_process(post_process.StepFailure, constants.RESULTS_STEP_NAME),
-      api.post_process(post_process.DropExpectation))
-  yield api.test(
-      'pass_because_of_revert',
-      api.binary_size.build(
-          commit_message='Revert some change'),
+      api.binary_size.build(fuchsia_size_footer=True),
       override_analyze(),
       api.override_step_data(
           constants.RESULT_JSON_STEP_NAME,
@@ -240,7 +239,41 @@ def GenTests(api):
               'links': [],
           })),
       api.post_process(post_process.StepSuccess, constants.RESULTS_STEP_NAME),
-      api.post_process(post_process.DropExpectation))
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'fail_because_of_wrong_size_footer',
+      api.binary_size.build(android_size_footer=True),
+      override_analyze(),
+      api.override_step_data(
+          constants.RESULT_JSON_STEP_NAME,
+          api.json.output({
+              'status_code': 1,
+              'summary': '\n!summary!',
+              'archive_filenames': [],
+              'links': [],
+          })),
+      api.post_process(post_process.StepFailure, constants.RESULTS_STEP_NAME),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'pass_because_of_revert',
+      api.binary_size.build(commit_message='Revert some change'),
+      override_analyze(),
+      api.override_step_data(
+          constants.RESULT_JSON_STEP_NAME,
+          api.json.output({
+              'status_code': 1,
+              'summary': '\n!summary!',
+              'archive_filenames': [],
+              'links': [],
+          })),
+      api.post_process(post_process.StepSuccess, constants.RESULTS_STEP_NAME),
+      api.post_process(post_process.DropExpectation),
+  )
+
   yield api.test(
       'warn_because_of_roller',
       api.binary_size.build(commit_message='Some roller change'),
@@ -254,7 +287,8 @@ def GenTests(api):
               'links': [],
           })),
       api.post_process(post_process.StepWarning, constants.RESULTS_STEP_NAME),
-      api.post_process(post_process.DropExpectation))
+      api.post_process(post_process.DropExpectation),
+  )
 
   yield api.test(
       'nondefault_results_bucket',
@@ -265,26 +299,26 @@ def GenTests(api):
       api.post_check(
           has_expected_binary_size_url, bucket='fake-results-bucket'),
       api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation))
+      api.post_process(post_process.DropExpectation),
+  )
 
   yield api.test(
       'patch_parent_rev_too_new',
-      api.binary_size.build(
-          recent_upload_cp=12345,
-          patch_parent_cp=12350), override_analyze(),
+      api.binary_size.build(recent_upload_cp=12345, patch_parent_cp=12350),
+      override_analyze(),
       api.post_process(post_process.MustRun, 'compile (without patch)'),
       api.post_check(has_expected_supersize_link),
       api.post_check(has_expected_binary_size_url),
       api.post_check(final_step_is_not_nested),
       api.post_process(post_process.StepSuccess, constants.RESULTS_STEP_NAME),
       api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation))
+      api.post_process(post_process.DropExpectation),
+  )
 
   yield api.test(
       'patch_parent_no_cp',
-      api.binary_size.build(
-          recent_upload_cp=12345,
-          patch_parent_cp=None), override_analyze(),
+      api.binary_size.build(recent_upload_cp=12345, patch_parent_cp=None),
+      override_analyze(),
       api.post_process(post_process.DoesNotRun, 'gsutil Downloading zip'),
       api.post_process(post_process.MustRun, 'compile (without patch)'),
       api.post_check(has_expected_supersize_link),
@@ -292,4 +326,5 @@ def GenTests(api):
       api.post_check(final_step_is_not_nested),
       api.post_process(post_process.StepSuccess, constants.RESULTS_STEP_NAME),
       api.post_process(post_process.StatusSuccess),
-      api.post_process(post_process.DropExpectation))
+      api.post_process(post_process.DropExpectation),
+  )
