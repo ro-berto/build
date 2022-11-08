@@ -16,7 +16,11 @@ The compilator is only used in a trybot setting.
 
 import json
 
-from recipe_engine.post_process import DropExpectation, StatusFailure
+from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
+from PB.recipe_engine import result as result_pb2
+
+from recipe_engine.post_process import (
+    DropExpectation, ResultReason, StatusException, StatusFailure)
 from recipe_engine.recipe_api import Property
 
 DEPS = [
@@ -27,6 +31,7 @@ DEPS = [
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/platform',
+  'recipe_engine/runtime',
   'recipe_engine/step',
   'v8',
   'v8_tests',
@@ -48,6 +53,9 @@ PROPERTIES = {
     # Weather to use goma for compilation.
     'use_goma': Property(default=True, kind=bool),
 }
+
+CANCELLATION_MESSAGE = (
+    'Parent orchestrator build ended, causing this build to be canceled.')
 
 
 # TODO(https://crbug.com/890222): Deprecate this mapping after migration to
@@ -134,10 +142,8 @@ def emit_compilator_properties(api, test_spec):
       properties, indent=2)
 
 
-# TODO(https://crbug.com/890222): Wrap and ensure we return state cancelled
-# on cancellation.
-def RunSteps(api, custom_deps, default_targets, gclient_vars, target_arch,
-             target_platform, use_goma):
+def compilator_steps(api, custom_deps, default_targets, gclient_vars,
+                     target_arch, target_platform, use_goma):
   v8 = api.v8
   api.v8_tests.load_static_test_configs()
   bot_config = v8.update_bot_config(
@@ -173,6 +179,21 @@ def RunSteps(api, custom_deps, default_targets, gclient_vars, target_arch,
       return compile_failure
 
   emit_compilator_properties(api, test_spec)
+
+
+def RunSteps(api, custom_deps, default_targets, gclient_vars, target_arch,
+             target_platform, use_goma):
+  try:
+    return compilator_steps(
+        api, custom_deps, default_targets, gclient_vars, target_arch,
+        target_platform, use_goma)
+  finally:
+    if api.runtime.in_global_shutdown:
+      # pylint: disable=lost-exception
+      # Cancellation can cause all sorts of spurious exceptions.
+      return result_pb2.RawResult(
+          status=common_pb.CANCELED,
+          summary_markdown=CANCELLATION_MESSAGE)
 
 
 def GenTests(api):
@@ -217,5 +238,13 @@ def GenTests(api):
       test('compile_failure') +
       api.step_data('build.compile', retcode=1) +
       api.post_process(StatusFailure) +
+      api.post_process(DropExpectation)
+  )
+
+  yield (
+      test('cancellation') +
+      api.runtime.global_shutdown_on_step('build.compile') +
+      api.post_process(ResultReason, CANCELLATION_MESSAGE) +
+      api.post_process(StatusException) +
       api.post_process(DropExpectation)
   )

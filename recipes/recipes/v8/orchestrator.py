@@ -36,6 +36,7 @@ DEPS = [
   'recipe_engine/led',
   'recipe_engine/path',
   'recipe_engine/properties',
+  'recipe_engine/runtime',
   'recipe_engine/step',
   'recipe_engine/swarming',
   'v8_tests',
@@ -46,6 +47,9 @@ PROPERTIES = {
     'compilator_name': Property(kind=str),
 }
 
+BUILD_CANCELED_SUMMARY = 'Build was canceled.'
+BUILD_WRONGLY_CANCELED_SUMMARY = (
+    'Compilator was canceled before the parent orchestrator was canceled.')
 
 # TODO(https://crbug.com/890222): Implement cancellation logic.
 def RunSteps(api, compilator_name):
@@ -65,6 +69,15 @@ def RunSteps(api, compilator_name):
 
   # Wait for compilator build to complete and stream steps.
   sub_build = compilator_handler.launch_compilator_watcher(build)
+
+  # This condition should be rare as swarming only propagates
+  # cancelations from parent -> child.
+  if sub_build.status == common_pb.CANCELED:
+    if api.runtime.in_global_shutdown:
+      return result_pb2.RawResult(
+          status=common_pb.CANCELED, summary_markdown=BUILD_CANCELED_SUMMARY)
+    raise api.step.InfraFailure(BUILD_WRONGLY_CANCELED_SUMMARY)
+
   if 'compilator_properties' not in sub_build.output.properties:
     return result_pb2.RawResult(
         status=sub_build.status, summary_markdown=sub_build.summary_markdown)
@@ -260,6 +273,23 @@ def GenTests(api):
   yield test(
       'no_subbuild',
       api.post_process(ResultReason, 'sub_build missing from step'),
+      api.post_process(StatusException),
+      api.post_process(DropExpectation),
+  )
+
+  yield test(
+      'subbuild_canceled',
+      api.runtime.global_shutdown_on_step('compilator steps'),
+      subbuild_data({}, '', common_pb.CANCELED),
+      api.post_process(ResultReason, BUILD_CANCELED_SUMMARY),
+      api.post_process(StatusException),
+      api.post_process(DropExpectation),
+  )
+
+  yield test(
+      'subbuild_canceled_before_parent',
+      subbuild_data({}, '', common_pb.CANCELED),
+      api.post_process(ResultReason, BUILD_WRONGLY_CANCELED_SUMMARY),
       api.post_process(StatusException),
       api.post_process(DropExpectation),
   )
