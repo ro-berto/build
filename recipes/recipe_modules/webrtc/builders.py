@@ -563,6 +563,38 @@ _CLIENT_WEBRTC_PERF_SPECS = {
                 'TARGET_ARCH': 'arm',
                 'TARGET_BITS': 32,
             }),
+    'Perf Android32 (O Pixel2)':
+        WebRTCBuilderSpec.create(
+            perf_id='android32-pixel2-oreo',
+            chromium_config='webrtc_default',
+            android_config='webrtc',
+            gclient_config='webrtc',
+            gclient_apply_config=['android'],
+            execution_mode=builder_spec.TEST,
+            parent_builder_group='client.webrtc',
+            parent_buildername='Android32 Builder arm',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_PLATFORM': 'android',
+                'TARGET_ARCH': 'arm',
+                'TARGET_BITS': 32,
+            }),
+    'Perf Android32 (R Pixel5)':
+        WebRTCBuilderSpec.create(
+            perf_id='android32-pixel5-android11',
+            chromium_config='webrtc_default',
+            android_config='webrtc',
+            gclient_config='webrtc',
+            gclient_apply_config=['android'],
+            execution_mode=builder_spec.TEST,
+            parent_builder_group='client.webrtc',
+            parent_buildername='Android32 Builder arm',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_PLATFORM': 'android',
+                'TARGET_ARCH': 'arm',
+                'TARGET_BITS': 32,
+            }),
     'Perf Android64 (M Nexus5X)':
         WebRTCBuilderSpec.create(
             perf_id='webrtc-android-tests-nexus5x-marshmallow',
@@ -597,7 +629,7 @@ _CLIENT_WEBRTC_PERF_SPECS = {
             }),
     'Perf Android64 (R Pixel5)':
         WebRTCBuilderSpec.create(
-            perf_id='webrtc-android-tests-pixel5-android-11',
+            perf_id='android-pixel5-android11',
             chromium_config='webrtc_default',
             android_config='webrtc',
             gclient_config='webrtc',

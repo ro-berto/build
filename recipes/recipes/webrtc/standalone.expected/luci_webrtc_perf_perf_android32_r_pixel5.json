@@ -65,7 +65,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "env": {
-      "DEPOT_TOOLS_REPORT_BUILD": "webrtc/perf/Perf Android64 (R Pixel5)/8945511751514863184",
+      "DEPOT_TOOLS_REPORT_BUILD": "webrtc/perf/Perf Android32 (R Pixel5)/8945511751514863184",
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "1800"
     },
@@ -154,7 +154,7 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [CACHE]/builder/src/infra/specs/client.webrtc.perf.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Perf Android64 (R Pixel5)\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Perf Android32 (R Pixel5)\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
@@ -386,7 +386,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_REPORT_BUILD": "webrtc/perf/Perf Android64 (R Pixel5)/8945511751514863184"
+      "DEPOT_TOOLS_REPORT_BUILD": "webrtc/perf/Perf Android32 (R Pixel5)/8945511751514863184"
     },
     "env_suffixes": {
       "PATH": [
@@ -474,7 +474,7 @@
       "-m",
       "client.webrtc.perf",
       "-b",
-      "Perf Android64 (R Pixel5)",
+      "Perf Android32 (R Pixel5)",
       "--config-file",
       "[TMP_BASE]/mb_config.pyl",
       "--goma-dir",
@@ -512,7 +512,7 @@
       "-m",
       "client.webrtc.perf",
       "-b",
-      "Perf Android64 (R Pixel5)",
+      "Perf Android32 (R Pixel5)",
       "--config-file",
       "[TMP_BASE]/mb_config.pyl",
       "--goma-dir",
@@ -521,7 +521,7 @@
       "/path/to/tmp/json",
       "--swarming-targets-file",
       "dummy_test\n",
-      "//out/Perf_Android64_R_Pixel5"
+      "//out/Perf_Android32_R_Pixel5"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -562,7 +562,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/Perf_Android64__R_Pixel5_"
+      "[CACHE]/goma/data/Perf_Android32__R_Pixel5_"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -597,7 +597,7 @@
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/Perf_Android64__R_Pixel5_",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/Perf_Android32__R_Pixel5_",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -669,7 +669,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/Perf_Android64_R_Pixel5",
+      "[CACHE]/builder/src/out/Perf_Android32_R_Pixel5",
       "-j",
       "80",
       "webrtc_dashboard_upload"
@@ -699,7 +699,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/Perf_Android64_R_Pixel5",
+      "[CACHE]/builder/src/out/Perf_Android32_R_Pixel5",
       "-j",
       "80",
       "webrtc_dashboard_upload",
@@ -882,9 +882,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[CACHE]/builder/src/out/Perf_Android64_R_Pixel5",
+      "[CACHE]/builder/src/out/Perf_Android32_R_Pixel5",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Perf_Android64_R_Pixel5\", \"-j\", 80, \"webrtc_dashboard_upload\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Perf_Android32_R_Pixel5\", \"-j\", 80, \"webrtc_dashboard_upload\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -900,9 +900,9 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"perf\", \"builder\": \"Perf Android64 (R Pixel5)\", \"project\": \"webrtc\"}",
+      "{\"bucket\": \"perf\", \"builder\": \"Perf Android32 (R Pixel5)\", \"project\": \"webrtc\"}",
       "--buildbot-buildername",
-      "Perf Android64 (R Pixel5)"
+      "Perf Android32 (R Pixel5)"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -1057,7 +1057,7 @@
       "-server",
       "https://example.swarmingserver.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"dummy_test/Android/[dummy has/Perf Android64 (R Pixel5)/-1\", \"priority\": \"25\", \"realm\": \"webrtc:perf\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:perf\", \"build_is_experimental:false\", \"builder_group:client.webrtc.perf\", \"buildername:Perf Android64 (R Pixel5)\", \"data:[dummy hash for dummy_test/1]\", \"name:dummy_test\", \"ninja_target:\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.perf:Perf Android64 (R Pixel5)\", \"stepname:dummy_test on Android\", \"test_id_prefix:\", \"test_suite:dummy_test\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for dummy_test\", \"size_bytes\": \"1]\"}}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:Perf Android64 (R Pixel5)\", \"-var\", \"os:Android\", \"-var\", \"test_suite:dummy_test\", \"-tag\", \"step_name:dummy_test on Android\", \"-tag\", \"target_platform:android\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"gtest\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"./dummy_cmd\", \"--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"out/Android64_Builder_arm64\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"dummy_test/Android/[dummy has/Perf Android32 (R Pixel5)/-1\", \"priority\": \"25\", \"realm\": \"webrtc:perf\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:perf\", \"build_is_experimental:false\", \"builder_group:client.webrtc.perf\", \"buildername:Perf Android32 (R Pixel5)\", \"data:[dummy hash for dummy_test/1]\", \"name:dummy_test\", \"ninja_target:\", \"project:webrtc\", \"purpose:CI\", \"purpose:post-commit\", \"slavename:fake-bot-id\", \"spec_name:webrtc.perf:Perf Android32 (R Pixel5)\", \"stepname:dummy_test on Android\", \"test_id_prefix:\", \"test_suite:dummy_test\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for dummy_test\", \"size_bytes\": \"1]\"}}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:Perf Android32 (R Pixel5)\", \"-var\", \"os:Android\", \"-var\", \"test_suite:dummy_test\", \"-tag\", \"step_name:dummy_test on Android\", \"-tag\", \"target_platform:android\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter\", \"gtest\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"./dummy_cmd\", \"--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"os\", \"value\": \"Android\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"out/Android32_Builder_arm\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -1081,7 +1081,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"name\": \"dummy_test/Android/[dummy has/Perf Android64 (R Pixel5)/-1\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"name\": \"dummy_test/Android/[dummy has/Perf Android32 (R Pixel5)/-1\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"0\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_result\": {@@@",
@@ -1096,7 +1096,7 @@
       "@@@STEP_LOG_LINE@json.input@{@@@",
       "@@@STEP_LOG_LINE@json.input@  \"requests\": [@@@",
       "@@@STEP_LOG_LINE@json.input@    {@@@",
-      "@@@STEP_LOG_LINE@json.input@      \"name\": \"dummy_test/Android/[dummy has/Perf Android64 (R Pixel5)/-1\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"name\": \"dummy_test/Android/[dummy has/Perf Android32 (R Pixel5)/-1\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"25\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"realm\": \"webrtc:perf\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"resultdb\": {@@@",
@@ -1107,7 +1107,7 @@
       "@@@STEP_LOG_LINE@json.input@        \"bucket:perf\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"build_is_experimental:false\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"builder_group:client.webrtc.perf\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"buildername:Perf Android64 (R Pixel5)\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"buildername:Perf Android32 (R Pixel5)\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"data:[dummy hash for dummy_test/1]\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"name:dummy_test\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"ninja_target:\", @@@",
@@ -1115,7 +1115,7 @@
       "@@@STEP_LOG_LINE@json.input@        \"purpose:CI\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"purpose:post-commit\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"slavename:fake-bot-id\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"spec_name:webrtc.perf:Perf Android64 (R Pixel5)\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"spec_name:webrtc.perf:Perf Android32 (R Pixel5)\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"stepname:dummy_test on Android\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"test_id_prefix:\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"test_suite:dummy_test\"@@@",
@@ -1135,7 +1135,7 @@
       "@@@STEP_LOG_LINE@json.input@              \"rdb\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"stream\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"builder:Perf Android64 (R Pixel5)\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"builder:Perf Android32 (R Pixel5)\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"os:Android\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
@@ -1184,7 +1184,7 @@
       "@@@STEP_LOG_LINE@json.input@            \"idempotent\": true, @@@",
       "@@@STEP_LOG_LINE@json.input@            \"io_timeout_secs\": \"1200\", @@@",
       "@@@STEP_LOG_LINE@json.input@            \"outputs\": [], @@@",
-      "@@@STEP_LOG_LINE@json.input@            \"relative_cwd\": \"out/Android64_Builder_arm64\"@@@",
+      "@@@STEP_LOG_LINE@json.input@            \"relative_cwd\": \"out/Android32_Builder_arm\"@@@",
       "@@@STEP_LOG_LINE@json.input@          }, @@@",
       "@@@STEP_LOG_LINE@json.input@          \"wait_for_capacity\": false@@@",
       "@@@STEP_LOG_LINE@json.input@        }@@@",
@@ -1193,7 +1193,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: dummy_test/Android/[dummy has/Perf Android64 (R Pixel5)/-1@https://example.swarmingserver.appspot.com/task?id=0@@@"
+      "@@@STEP_LINK@task UI: dummy_test/Android/[dummy has/Perf Android32 (R Pixel5)/-1@https://example.swarmingserver.appspot.com/task?id=0@@@"
     ]
   },
   {
@@ -1546,7 +1546,7 @@
       "--merge-additional-args",
       "[]",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"bot\": \"android-pixel5-android11\", \"bot_id\": \"bot_id\", \"build_page_url\": \"https://ci.chromium.org/p/webrtc/builders/luci.webrtc.perf/Perf%20Android64%20%28R%20Pixel5%29/0\", \"builder_group\": \"client.webrtc.perf\", \"buildername\": \"Perf Android64 (R Pixel5)\", \"buildnumber\": 1337, \"commit_position\": 170242, \"dashboard_url\": \"https://chromeperf.appspot.com\", \"got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"got_revision_cp\": \"refs/heads/main@{#1337}\", \"outdir\": \"[CACHE]/builder/src/out/Perf_Android64_R_Pixel5\", \"parent_buildername\": \"Android64 Builder arm64\", \"parent_got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"perf_dashboard_machine_group\": \"WebRTCPerf\", \"recipe\": \"webrtc/standalone\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"swarming_command_lines\": {\"dummy_test\": [\"./dummy_cmd\"]}, \"webrtc_git_hash\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"}",
+      "{\"BUILD_CONFIG\": \"Release\", \"bot\": \"android32-pixel5-android11\", \"bot_id\": \"bot_id\", \"build_page_url\": \"https://ci.chromium.org/p/webrtc/builders/luci.webrtc.perf/Perf%20Android32%20%28R%20Pixel5%29/0\", \"builder_group\": \"client.webrtc.perf\", \"buildername\": \"Perf Android32 (R Pixel5)\", \"buildnumber\": 1337, \"commit_position\": 170242, \"dashboard_url\": \"https://chromeperf.appspot.com\", \"got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"got_revision_cp\": \"refs/heads/main@{#1337}\", \"outdir\": \"[CACHE]/builder/src/out/Perf_Android32_R_Pixel5\", \"parent_buildername\": \"Android32 Builder arm\", \"parent_got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"perf_dashboard_machine_group\": \"WebRTCPerf\", \"recipe\": \"webrtc/standalone\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"swarming_command_lines\": {\"dummy_test\": [\"./dummy_cmd\"]}, \"webrtc_git_hash\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"}",
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
@@ -1627,7 +1627,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"0\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_builder_group\": \"client.webrtc.perf\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": \"Perf Android64 (R Pixel5)\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": \"Perf Android32 (R Pixel5)\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 test results@https://luci-milo.appspot.com/ui/inv/some-inv-name/test-results@@@",
@@ -1643,7 +1643,7 @@
       "--builder-group",
       "client.webrtc.perf",
       "--builder-name",
-      "Perf Android64 (R Pixel5)",
+      "Perf Android32 (R Pixel5)",
       "--build-number",
       "0",
       "--test-type",
