@@ -134,7 +134,7 @@ class GnApi(recipe_api.RecipeApi):
       gn_path = self.m.depot_tools.gn_py_path
     return self.m.step(
         name,
-        cmd=['python', gn_path] + list(cmd),
+        cmd=['python3', gn_path] + list(cmd),
         stdout=self.m.raw_io.output_text(name=log_name, add_output_log=True),
         **kwargs)
 
