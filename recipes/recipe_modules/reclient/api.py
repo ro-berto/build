@@ -30,6 +30,8 @@ _REPROXY_LOG_FORMAT = 'reducedtext'
 # be large enough.
 _DEPS_CACHE_MAX_MB = '256'
 
+_VALID_ENV_PREFIX_LIST = ['RBE_', 'GLOG_', 'GOMA_']
+
 
 def make_test_rbe_stats_pb():
   stats = rbe_metrics_bq.RbeMetricsBq().stats
@@ -756,9 +758,9 @@ class ReclientApi(recipe_api.RecipeApi):
     str_reclient_env = {}
 
     for flag, value in reclient_env.items():
-      if not (flag.startswith('RBE_') or flag.startswith('GLOG_')):
-        raise MalformedREClientFlag(flag)
-      else:
+      if any(flag.startswith(prefix) for prefix in _VALID_ENV_PREFIX_LIST):
         str_reclient_env[str(flag)] = str(value)
+      else:
+        raise MalformedREClientFlag(flag)
 
     return str_reclient_env

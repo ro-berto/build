@@ -141,6 +141,20 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
 
+  def goma_env_checker(check, steps):
+    env = steps[_NINJA_STEP_NAME].env
+    check(env['GOMA_COMPILER_PROXY_ENABLE_CRASH_DUMP'] == 'true')
+
+  yield api.test(
+      'proper_goma_flags',
+      api.buildbucket.ci_build(project='chromium', builder='Linux reclient'),
+      api.reclient.properties(rewrapper_env={
+          'GOMA_COMPILER_PROXY_ENABLE_CRASH_DUMP': 'true',
+      }),
+      api.post_check(goma_env_checker),
+      api.post_process(post_process.DropExpectation),
+  )
+
   yield api.test(
       'incorrect_rewrapper_flags',
       api.buildbucket.ci_build(project='chromium', builder='Linux reclient'),
