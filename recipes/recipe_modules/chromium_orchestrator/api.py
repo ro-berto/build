@@ -146,7 +146,7 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
       self.m.cq.allow_reuse_for(self.m.cq.QUICK_DRY_RUN)
       return None
 
-    builder_id, builder_config = self.configure_build(
+    builder_id, builder_config, rts_setting = self.configure_build(
         inverted_rts=bool(reuseable_compilator_build))
 
     # Trigger compilator to compile and build targets with patch
@@ -235,14 +235,12 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
         targets_config,
         include_inverted_rts=bool(reuseable_compilator_build))
 
-    # If we only need to run the tests that were skipped in the last build
-    if reuseable_compilator_build:
-      tests = [t for t in tests if t.supports_inverted_rts]
-      if not tests:
-        # No invertible tests were found and we have a successful build
-        return result_pb2.RawResult(status=common_pb.SUCCESS)
-      for test in tests:
-        test.is_inverted_rts = True
+    tests = self.m.chromium_tests.setup_quickrun_tests(
+        tests, rts_setting, bool(reuseable_compilator_build))
+
+    if reuseable_compilator_build and not tests:
+      # No invertible tests were found and we have a successful build
+      return result_pb2.RawResult(status=common_pb.SUCCESS)
 
     self.m.chromium_tests.configure_swarming(
         self.m.tryserver.is_tryserver, builder_group=builder_id.group)
@@ -451,7 +449,7 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
     self.m.chromium_tests.print_link_to_results()
 
     self.m.chromium.apply_config('trybot_flavor')
-    return builder_id, builder_config
+    return builder_id, builder_config, rts_setting
 
   def trigger_compilator_led_build(self, compilator_properties, with_patch):
     nested_step_name = 'trigger led compilator build'
@@ -673,6 +671,8 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
       List of Test objects with swarming info
     """
     swarming_digest = swarming_props['swarming_command_lines_digest']
+    swarming_rts_command_digest = swarming_props.get(
+        'swarming_rts_command_lines_digest')
     swarming_inverted_rts_command_digest = swarming_props.get(
         'swarming_inverted_rts_command_lines_digest'
     ) if include_inverted_rts else None
@@ -694,6 +694,7 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
         tests,
         builder_config,
         swarming_command_lines_digest=swarming_digest,
+        swarming_rts_command_digest=swarming_rts_command_digest,
         swarming_inverted_rts_command_digest=(
             swarming_inverted_rts_command_digest),
         swarming_command_lines_cwd=swarming_cwd)

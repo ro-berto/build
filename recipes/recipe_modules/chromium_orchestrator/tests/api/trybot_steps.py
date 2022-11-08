@@ -437,23 +437,27 @@ def GenTests(api):
       api.post_process(post_process.StatusException),
       api.post_process(post_process.DropExpectation),
   )
+
+  fake_rts_command_lines = {
+      'browser_tests': [
+          './%s' % 'browser_tests', '--fake-without-patch-flag',
+          '--fake-log-file', '$ISOLATED_OUTDIR/fake.log',
+          '-filter=browser_tests.filter'
+      ]
+  }
+
   yield api.test(
       'quick run rts',
-      api.properties(
-          **{
-              "$recipe_engine/cq": {
-                  "active": True,
-                  "dryRun": True,
-                  "runMode": "QUICK_DRY_RUN",
-                  "topLevel": True
-              }
-          }),
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-orchestrator',
+      ),
       api.chromium_tests_builder_config.try_build(
-          builder_group='tryserver.chromium.test',
-          builder='rts-rel',
+          builder_group='fake-group',
+          builder='fake-tester',
           builder_db=ctbc.BuilderDatabase.create({
-              'chromium.test': {
-                  'chromium-rel':
+              'fake-group': {
+                  'fake-tester':
                       ctbc.BuilderSpec.create(
                           chromium_config='chromium',
                           gclient_config='chromium',
@@ -461,14 +465,14 @@ def GenTests(api):
               }
           }),
           try_db=ctbc.TryDatabase.create({
-              'tryserver.chromium.test': {
-                  'rts-rel':
+              'fake-group': {
+                  'fake-tester':
                       ctbc.TrySpec.create(
                           mirrors=[
                               ctbc.TryMirror.create(
-                                  builder_group='chromium.test',
-                                  buildername='chromium-rel',
-                                  tester='chromium-rel',
+                                  builder_group='fake-group',
+                                  buildername='fake-tester',
+                                  tester='fake-tester',
                               ),
                           ],
                           regression_test_selection=try_spec.QUICK_RUN_ONLY,
@@ -483,7 +487,31 @@ def GenTests(api):
                       compilator='fake-compilator',
                       compilator_watcher_git_revision='e841fc',
                   ),
+              "$recipe_engine/cq": {
+                  "active": True,
+                  "dryRun": True,
+                  "runMode": "QUICK_DRY_RUN",
+                  "topLevel": True
+              }
           }),
+      api.chromium_orchestrator.override_test_spec(
+          builder_group='fake-group',
+          builder='fake-builder',
+          tester='fake-tester',
+          tests=['browser_tests', 'content_unittests']),
+      api.chromium_orchestrator.override_compilator_steps(
+          tests=['browser_tests', 'content_unittests']),
+      api.step_data('read command lines (2)',
+                    api.file.read_json(fake_rts_command_lines)),
+      api.properties(
+          **{
+              '$build/chromium_orchestrator':
+                  InputProperties(
+                      compilator='fake-compilator',
+                      compilator_watcher_git_revision='e841fc',
+                  ),
+          }),
+      api.post_process(post_process.MustRun, 'RTS was used'),
       api.post_process(post_process.MustRun, 'quick run options'),
       api.post_process(
           post_process.LogContains,
@@ -491,6 +519,82 @@ def GenTests(api):
           'request',
           ['$recipe_engine/cq', 'QUICK_DRY_RUN'],
       ),
+      api.post_process(post_process.PropertyEquals, 'rts_was_used', True),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'quick run enabled but not used',
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-orchestrator',
+      ),
+      api.chromium_tests_builder_config.try_build(
+          builder_group='fake-group',
+          builder='fake-tester',
+          builder_db=ctbc.BuilderDatabase.create({
+              'fake-group': {
+                  'fake-tester':
+                      ctbc.BuilderSpec.create(
+                          chromium_config='chromium',
+                          gclient_config='chromium',
+                      ),
+              }
+          }),
+          try_db=ctbc.TryDatabase.create({
+              'fake-group': {
+                  'fake-tester':
+                      ctbc.TrySpec.create(
+                          mirrors=[
+                              ctbc.TryMirror.create(
+                                  builder_group='fake-group',
+                                  buildername='fake-tester',
+                                  tester='fake-tester',
+                              ),
+                          ],
+                          regression_test_selection=try_spec.QUICK_RUN_ONLY,
+                      ),
+              }
+          }),
+      ),
+      api.properties(
+          **{
+              '$build/chromium_orchestrator':
+                  InputProperties(
+                      compilator='fake-compilator',
+                      compilator_watcher_git_revision='e841fc',
+                  ),
+              "$recipe_engine/cq": {
+                  "active": True,
+                  "dryRun": True,
+                  "runMode": "QUICK_DRY_RUN",
+                  "topLevel": True
+              }
+          }),
+      api.chromium_orchestrator.override_test_spec(
+          builder_group='fake-group',
+          builder='fake-builder',
+          tester='fake-tester',
+          tests=['browser_tests', 'content_unittests']),
+      api.chromium_orchestrator.override_compilator_steps(
+          tests=['browser_tests', 'content_unittests']),
+      api.properties(
+          **{
+              '$build/chromium_orchestrator':
+                  InputProperties(
+                      compilator='fake-compilator',
+                      compilator_watcher_git_revision='e841fc',
+                  ),
+          }),
+      api.post_process(post_process.DoesNotRun, 'RTS was used'),
+      api.post_process(post_process.MustRun, 'quick run options'),
+      api.post_process(
+          post_process.LogContains,
+          'trigger compilator (with patch)',
+          'request',
+          ['$recipe_engine/cq', 'QUICK_DRY_RUN'],
+      ),
+      api.post_process(post_process.PropertiesDoNotContain, 'rts_was_used'),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -1059,6 +1163,7 @@ def GenTests(api):
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
   )
+
   yield api.test(
       'retry_without_patch_fails_tests_and_local_tests',
       api.chromium.try_build(
@@ -1368,6 +1473,7 @@ def GenTests(api):
       api.post_process(post_process.StatusException),
       api.post_process(post_process.DropExpectation),
   )
+
   fake_command_lines = {
       'browser_tests': [
           './%s' % 'browser_tests', '--fake-without-patch-flag',

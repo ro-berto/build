@@ -832,14 +832,68 @@ def GenTests(api):
           builder_db=_TEST_BUILDERS,
           try_db=_TEST_TRYBOTS,
       ),
-      api.chromium_tests.read_source_side_spec('chromium.test', {
-          'chromium-rel': {
-              'gtest_tests': ['base_unittests'],
-          },
-      }),
+      api.chromium_tests.read_source_side_spec(
+          'chromium.test', {
+              'chromium-rel': {
+                  'gtest_tests': [{
+                      'test': 'base_unittests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True,
+                      }
+                  }],
+              },
+          }),
+      api.step_data(
+          'find rts command lines (with patch)',
+          api.json.output({
+              'base_unittests': [
+                  './%s' % 'base_unittests', '--fake-without-patch-flag',
+                  '--fake-log-file', '$ISOLATED_OUTDIR/fake.log',
+                  '-filter=base_unittests.filter'
+              ]
+          })),
+      api.post_process(post_process.MustRun, 'quick run options'),
+      api.post_process(post_process.MustRun, 'RTS was used'),
+      api.post_process(post_process.PropertyEquals, 'rts_setting',
+                       'rts-chromium'),
+      api.post_process(post_process.PropertyEquals, 'rts_was_used', True),
+      api.post_process(post_process.DropExpectation),
+      api.filter.suppress_analyze(),
+  )
+
+  yield api.test(
+      'quick run enabled but not used',
+      api.properties(
+          **{
+              "$recipe_engine/cq": {
+                  "active": True,
+                  "dryRun": True,
+                  "runMode": "QUICK_DRY_RUN",
+                  "topLevel": True
+              }
+          }),
+      api.chromium_tests_builder_config.try_build(
+          builder_group='tryserver.chromium.test',
+          builder='rts-rel',
+          builder_db=_TEST_BUILDERS,
+          try_db=_TEST_TRYBOTS,
+      ),
+      api.chromium_tests.read_source_side_spec(
+          'chromium.test', {
+              'chromium-rel': {
+                  'gtest_tests': [{
+                      'test': 'base_unittests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True,
+                      }
+                  }],
+              },
+          }),
+      api.post_process(post_process.DoesNotRun, 'RTS was used'),
       api.post_process(post_process.MustRun, 'quick run options'),
       api.post_process(post_process.PropertyEquals, 'rts_setting',
                        'rts-chromium'),
+      api.post_process(post_process.PropertiesDoNotContain, 'rts_was_used'),
       api.post_process(post_process.DropExpectation),
       api.filter.suppress_analyze(),
   )
