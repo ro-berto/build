@@ -46,12 +46,19 @@ class SwarmingExecutionInfo(object):
   # Should be renamed to 'command_lines_file_digest'
   command_lines_file_digest = attrib(str, default='')
 
+  # The CAS digest for a file which contains the command lines needed to execute
+  # tests selected by RTS.
+  rts_command_lines_file_digest = attrib(str, default='')
+
   # The CAS digest for a file which contains the inverted command lines needed
   # to execute each test.
   inverted_rts_command_lines_file_digest = attrib(str, default='')
 
   # The mapping of isolate to command lines.
   command_lines = attrib(mapping[str, sequence], default={})
+
+  # The mapping of isolate to rts command lines.
+  rts_command_lines = attrib(mapping[str, sequence], default={})
 
   # The mapping of isolate to inverted rts command lines.
   inverted_rts_command_lines = attrib(mapping[str, sequence], default={})
@@ -75,6 +82,8 @@ class SwarmingExecutionInfo(object):
         self,
         command_lines_file_digest=(chromium_tests_api.archive_command_lines(
             self.command_lines)),
+        rts_command_lines_file_digest=chromium_tests_api.archive_command_lines(
+            self.rts_command_lines),
         inverted_rts_command_lines_file_digest=(
             chromium_tests_api.archive_command_lines(
                 self.inverted_rts_command_lines)))
@@ -98,6 +107,8 @@ class SwarmingExecutionInfo(object):
         'swarm_hashes': {k: v for k, v in self.digest_by_isolate_name.items()},
         'swarming_command_lines_digest':
             self.command_lines_file_digest,
+        'swarming_rts_command_lines_digest':
+            self.rts_command_lines_file_digest,
         'swarming_inverted_rts_command_lines_digest':
             self.inverted_rts_command_lines_file_digest,
         'swarming_command_lines_cwd':
@@ -635,20 +646,25 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return raw_result, execution_info
 
-  def find_swarming_command_lines(self, suffix, inverted_rts=False):
+  def find_swarming_command_lines(self, suffix, rts=False, inverted_rts=False):
+    assert not (inverted_rts and rts)
+
     script = self.m.chromium_tests.resource('find_command_lines.py')
     args = [
         '--build-dir', self.m.chromium.output_dir, '--output-json',
         self.m.json.output()
     ]
 
-    step_names = 'find command lines%s' % suffix
-    if inverted_rts:
-      step_names = 'find inverted command lines%s' % suffix
+    step_name = 'find command lines%s' % suffix
+    if rts:
+      step_name = 'find rts command lines%s' % suffix
+      args.append('--rts')
+    elif inverted_rts:
+      step_name = 'find inverted rts command lines%s' % suffix
       args.append('--inverted')
 
     step_result = self.m.step(
-        step_names, ['python3', '-u', script] + args,
+        step_name, ['python3', '-u', script] + args,
         step_test_data=lambda: self.m.json.test_api.output({}))
     assert isinstance(step_result.json.output, dict)
 
@@ -717,6 +733,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         verbose=True)
 
     command_lines = self.find_swarming_command_lines(name_suffix)
+    rts_command_lines = self.find_swarming_command_lines(name_suffix, rts=True)
     inverted_rts_command_lines = self.find_swarming_command_lines(
         name_suffix, inverted_rts=True)
     return self.set_swarming_test_execution_info(
@@ -725,6 +742,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         self.m.path.relpath(self.m.chromium.output_dir,
                             self.m.path['checkout']),
         expose_to_properties=builder_config.expose_trigger_properties,
+        rts_command_lines=rts_command_lines,
         inverted_rts_command_lines=inverted_rts_command_lines)
 
   def set_swarming_test_execution_info(self,
@@ -732,6 +750,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                                        command_lines,
                                        rel_cwd,
                                        expose_to_properties=False,
+                                       rts_command_lines=None,
                                        inverted_rts_command_lines=None):
     """Sets the execution information for a list of swarming tests.
 
@@ -763,6 +782,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           test.raw_cmd = command_line
           test.relative_cwd = rel_cwd
 
+        if rts_command_lines:
+          rts_command_line = rts_command_lines.get(test.target_name, [])
+          if rts_command_line:
+            test.rts_raw_cmd = rts_command_line
+
         if inverted_rts_command_lines:
           inverted_rts_command_line = inverted_rts_command_lines.get(
               test.target_name, [])
@@ -772,6 +796,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     execution_info = SwarmingExecutionInfo(
         digest_by_isolate_name=self.m.isolate.isolated_tests,
         command_lines=command_lines,
+        rts_command_lines=rts_command_lines,
         inverted_rts_command_lines=inverted_rts_command_lines,
         command_lines_cwd=rel_cwd,
     )
@@ -1696,6 +1721,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       tests,
       builder_config,
       swarming_command_lines_digest=None,
+      swarming_rts_command_digest=None,
       swarming_inverted_rts_command_digest=None,
       swarming_command_lines_cwd=None):
     """Download and set command lines for tests.
@@ -1715,6 +1741,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     digest = (
         swarming_command_lines_digest or
         self.m.properties.get('swarming_command_lines_digest'))
+    rts_digest = (
+        swarming_rts_command_digest or
+        self.m.properties.get('swarming_rts_command_digest'))
     inverted_rts_digest = (
         swarming_inverted_rts_command_digest or
         self.m.properties.get('swarming_inverted_rts_command_digest'))
@@ -1727,11 +1756,15 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       if inverted_rts_digest:
         inverted_rts_command_lines = self._download_command_lines(
             inverted_rts_digest)
+      rts_command_lines = {}
+      if rts_digest:
+        rts_command_lines = self._download_command_lines(rts_digest)
       self.set_swarming_test_execution_info(
           tests,
           command_lines,
           rel_cwd,
           expose_to_properties=builder_config.expose_trigger_properties,
+          rts_command_lines=rts_command_lines,
           inverted_rts_command_lines=inverted_rts_command_lines)
 
   def _explain_package_transfer(self, builder_config, non_isolated_tests):
@@ -2058,6 +2091,27 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if task_output_stdout:
       self.m.chromium_swarming.task_output_stdout = task_output_stdout
 
+  def setup_quickrun_tests(self, tests, rts_setting, inverted_rts):
+    # If we only need to run the tests that were skipped in the last build
+    if inverted_rts:
+      tests = [t for t in tests if t.supports_inverted_rts]
+      for test in tests:
+        test.is_rts = False
+        test.is_inverted_rts = True
+    elif rts_setting:
+      for test in tests:
+        test.is_inverted_rts = False
+        if test.supports_rts:
+          test.is_rts = True
+
+    if any(test.is_rts for test in tests):
+      # RTS-enabled Quick Run builds can't be reused for non-quick runs
+      # because they are slightly less safe than normal builds
+      log_step = self.m.step.empty('RTS was used')
+      log_step.presentation.properties['rts_was_used'] = True
+      self.m.cq.allow_reuse_for(self.m.cq.QUICK_DRY_RUN)
+    return tests
+
   def get_quickrun_options(self, builder_config, inverted_rts=False):
     rts_setting = None
     use_rts = (
@@ -2075,17 +2129,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       step_result = self.m.step('quick run options', [])
 
       step_result.presentation.properties['rts_setting'] = rts_setting
-      step_result.presentation.properties['rts_was_used'] = use_rts
       step_result.presentation.links[
           'use_rts: true'] = 'https://bit.ly/chromium-rts'
       step_result.presentation.links['file a bug'] = (
           'https://bugs.chromium.org/p/chromium/issues/entry?'
           'template=Quick%20Run%20Issue')
-
-      # RTS-enabled Quick Run builds can't be reused for non-quick runs
-      # because they are slightly less safe than normal builds
-      if builder_config.regression_test_selection == try_spec.QUICK_RUN_ONLY:
-        self.m.cq.allow_reuse_for(self.m.cq.QUICK_DRY_RUN)
 
     return rts_setting
 
@@ -2199,6 +2247,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         tests = [t for t in tests if not t.compile_targets()]
       else:
         tests = []
+
+    tests = self.setup_quickrun_tests(tests, rts_setting, False)
 
     return raw_result, Task(builder_config, tests, bot_update_step,
                             affected_files, execution_info)

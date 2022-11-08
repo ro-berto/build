@@ -1597,6 +1597,38 @@
       "[CACHE]/builder/src/out/Release",
       "--output-json",
       "/path/to/tmp/json",
+      "--rts"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "project:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "find rts command lines (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python3",
+      "-u",
+      "RECIPE_MODULE[build::chromium_tests]/resources/find_command_lines.py",
+      "--build-dir",
+      "[CACHE]/builder/src/out/Release",
+      "--output-json",
+      "/path/to/tmp/json",
       "--inverted"
     ],
     "env": {
@@ -1614,7 +1646,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "find inverted command lines (with patch)",
+    "name": "find inverted rts command lines (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -3918,6 +3950,39 @@
       "[CACHE]/builder/src/out/Release",
       "--output-json",
       "/path/to/tmp/json",
+      "--rts"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "project:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "find rts command lines (without patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python3",
+      "-u",
+      "RECIPE_MODULE[build::chromium_tests]/resources/find_command_lines.py",
+      "--build-dir",
+      "[CACHE]/builder/src/out/Release",
+      "--output-json",
+      "/path/to/tmp/json",
       "--inverted"
     ],
     "cwd": "[CACHE]/builder",
@@ -3936,7 +4001,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "find inverted command lines (without patch)",
+    "name": "find inverted rts command lines (without patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"

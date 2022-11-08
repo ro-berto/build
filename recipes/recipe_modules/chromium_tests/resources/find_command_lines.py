@@ -26,7 +26,13 @@ parser.add_argument(
     action='store_true',
     default=False,
     required=False,
-    help='Find any inverted command lines instead.')
+    help='Find any inverted rts command lines instead.')
+parser.add_argument(
+    '--rts',
+    action='store_true',
+    default=False,
+    required=False,
+    help='Find any rts command lines instead.')
 args = parser.parse_args()
 
 command_line_map = {}
@@ -35,13 +41,15 @@ for path in glob.glob(os.path.join(args.build_dir, '*.isolate')):
   target_name = os.path.splitext(os.path.basename(path))[0]
   with open(path) as fp:
     isolate = ast.literal_eval(fp.read())
-    if not args.inverted:
-      if 'command' in isolate.get('variables', {}):
-        command_line_map[target_name] = isolate['variables']['command']
+    if args.rts:
+      key = 'rts_command'
+    elif args.inverted:
+      key = 'inverted_command'
     else:
-      if 'inverted_command' in isolate.get('variables', {}):
-        command_line_map['{}'.format(
-            target_name)] = isolate['variables']['inverted_command']
+      key = 'command'
+    cmd = isolate.get('variables', {}).get(key)
+    if cmd is not None:
+      command_line_map[target_name] = cmd
 
 with open(args.output_json, 'w') as fp:
   json.dump(command_line_map, fp)

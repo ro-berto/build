@@ -580,7 +580,8 @@ class Test(object):
     tests are run. This property will enable running only the tests selected by
     RTS.
     """
-    assert self.supports_rts and not self.is_inverted_rts
+    if value:
+      assert self.supports_rts and not self.is_inverted_rts
     self._is_rts = value
 
   @property
@@ -611,7 +612,8 @@ class Test(object):
     subset of the tests skipped in a previous RTS build are run. This property
     will enable running only the tests that would have been skipped by RTS.
     """
-    assert self.supports_inverted_rts and not self.is_rts
+    if value:
+      assert self.supports_inverted_rts and not self.is_rts
     self._is_inverted_rts = value
 
   @property

@@ -1240,6 +1240,35 @@
       "[CACHE]\\builder\\src\\out\\Release",
       "--output-json",
       "/path/to/tmp/json",
+      "--rts"
+    ],
+    "luci_context": {
+      "realm": {
+        "name": "chromium:dev"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "find rts command lines",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python3",
+      "-u",
+      "RECIPE_MODULE[build::chromium_tests]\\resources\\find_command_lines.py",
+      "--build-dir",
+      "[CACHE]\\builder\\src\\out\\Release",
+      "--output-json",
+      "/path/to/tmp/json",
       "--inverted"
     ],
     "luci_context": {
@@ -1254,7 +1283,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "find inverted command lines",
+    "name": "find inverted rts command lines",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
