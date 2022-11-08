@@ -200,7 +200,7 @@ class ArchiveApi(recipe_api.RecipeApi):
 
     Example: cool-project-mac-debug-x10-component-234.zip
     The archive name is "cool-project" and the component's name is "x10". The
-    component is checked out in branch master with commit position number 234.
+    component is checked out in branch main with commit position number 234.
 
     Args:
       build_dir: The absolute path to the build output directory, e.g.

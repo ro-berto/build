@@ -47,7 +47,7 @@ def RunSteps(api, platforms, custom_trigger_script,
              merge, trigger_script, named_caches, service_account,
              wait_for_tasks, realm, resultdb_spec):
   # Checkout swarming client.
-  api.swarming_client.checkout('master')
+  api.swarming_client.checkout('main')
 
   api.gclient.set_config('chromium')
   api.chromium_checkout.ensure_checkout()

@@ -73,7 +73,7 @@ MOCK_PROR_JSON_STRING = """
                           "perf_dashboard_machine_group":
                             "ChromiumPerfFyi",
                           "got_revision_cp":
-                            "refs/heads/master@{#758236}",
+                            "refs/heads/main@{#758236}",
                           "got_v8_revision":
                             "0bb2b3008e7530eb4ac3f4c68d328649ff662e30",
                           "got_webrtc_revision":

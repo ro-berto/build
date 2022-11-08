@@ -253,10 +253,9 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     )
     if parent_buildername:
       test += self.m.properties(
-          parent_got_revision='deafbeef'*5,
-          parent_got_revision_cp='refs/heads/master@{#20123}',
-          parent_gn_args=[
-            'use_goma = true', 'also_interesting = "absolutely"'],
+          parent_got_revision='deafbeef' * 5,
+          parent_got_revision_cp='refs/heads/main@{#20123}',
+          parent_gn_args=['use_goma = true', 'also_interesting = "absolutely"'],
           parent_build='https://someinfrasite.com/build/123',
       )
       test += self.m.scheduler(triggers=[

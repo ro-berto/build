@@ -479,7 +479,7 @@ class V8Api(recipe_api.RecipeApi):
     Args:
       got_revision: Full git hash of the commit.
       got_revision_cp: Value of the Cr-Commit-Position commit footer, e.g.
-          "refs/heads/master@{#12345}".
+          "refs/heads/main@{#12345}".
     """
     self.revision = got_revision
     self.revision_cp = got_revision_cp

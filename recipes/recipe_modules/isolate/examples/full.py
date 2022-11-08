@@ -16,7 +16,7 @@ DEPS = [
 
 def RunSteps(api):
   # 'isolate_tests' step needs swarming checkout.
-  api.swarming_client.checkout('master')
+  api.swarming_client.checkout('main')
 
   # That would read a list of files to search for, generated in GenTests.
   step_result = api.step('read test spec', ['cat'], stdout=api.json.output())

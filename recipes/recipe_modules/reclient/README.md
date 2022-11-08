@@ -32,4 +32,4 @@ bqschemaupdater -table $TABLE_NAME -message recipe_modules.build.reclient.RbeMet
 
 ## (Optional) Update the stats proto mirrored from re-client
 
-It is good to keep `stats.proto` up-to-date, although you do not need to do this frequently. The procedure is documented in https://chromium.googlesource.com/chromium/tools/build/+/refs/heads/master/recipes/recipe_proto/go.chromium.org/foundry-x/re-client.
+It is good to keep `stats.proto` up-to-date, although you do not need to do this frequently. The procedure is documented in https://chromium.googlesource.com/chromium/tools/build/+/refs/heads/main/recipes/recipe_proto/go.chromium.org/foundry-x/re-client.

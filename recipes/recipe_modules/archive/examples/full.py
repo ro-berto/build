@@ -30,7 +30,7 @@ TEST_HASH_MAIN='5e3250aadda2b170692f8e762d43b7e8deadbeef'
 TEST_COMMIT_POSITON_MAIN='refs/heads/B1@{#123456}'
 
 TEST_HASH_COMPONENT='deadbeefdda2b170692f8e762d43b7e8e7a96686'
-TEST_COMMIT_POSITON_COMPONENT='refs/heads/master@{#234}'
+TEST_COMMIT_POSITON_COMPONENT = 'refs/heads/main@{#234}'
 
 
 def RunSteps(api):

@@ -3,8 +3,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-# Copied from ('https://chromium.googlesource.com/infra/infra.git/+/master/'
-# 'bootstrap/remove_orphaned_pycs.py')
+# Copied from
+# https://chromium.googlesource.com/infra/infra.git/+/main/bootstrap/remove_orphaned_pycs.py
 
 import logging
 import os

@@ -36,7 +36,7 @@ BUG=405646
 
 Review URL: https://codereview.chromium.org/468103003
 
-Cr-Commit-Position: refs/heads/master@{#291141}
+Cr-Commit-Position: refs/heads/main@{#291141}
 git-svn-id: svn://svn.chromium.org/chrome/trunk/src@291140 0039d316-1c4b-4281
 """
 
@@ -179,9 +179,8 @@ class GetGitRevisionTest(unittest.TestCase):
     """Tests related to getting a commit position from build properties."""
     # pylint: disable=W0212
     self.assertEqual(
-        bot_utils._GetCommitPos({
-            'got_revision_cp': 'refs/heads/master@{#12345}'
-        }),
+        bot_utils._GetCommitPos({'got_revision_cp': 'refs/heads/main@{#12345}'}
+                               ),
         12345,
     )
     # pylint: disable=W0212

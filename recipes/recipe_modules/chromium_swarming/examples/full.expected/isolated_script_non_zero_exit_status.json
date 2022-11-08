@@ -28,7 +28,7 @@
       "git",
       "fetch",
       "origin",
-      "master",
+      "main",
       "--progress"
     ],
     "cwd": "[START_DIR]/swarming.client",
