@@ -24,7 +24,9 @@ def RunSteps(api):
       })
 
   api.symupload(
-      api.path['tmp_base'], experimental=api.properties.get('experimental'))
+      api.path['tmp_base'],
+      experimental=api.properties.get('experimental'),
+      custom_vars=api.properties.get('custom_vars'))
 
 
 def GenTests(api):
@@ -238,5 +240,70 @@ def GenTests(api):
                            '[CLEANUP]/symupload-api-key.txt',
                        ]),
       api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  input_properties_v2 = properties.InputProperties()
+  symupload_data = input_properties_v2.symupload_datas.add()
+  symupload_data.artifacts.append('some_artifact.txt')
+  symupload_data.url = '{%url%}'
+  symupload_data.file_globs.append('glob*.txt')
+  symupload_data.base64_api_key = base64.b64encode(b'foo_key')
+  symupload_data.kms_key_path = '{%kms_key_path%}/{%kms_key_basename%}'
+
+  yield api.test(
+      'symupload_with_custom_vars',
+      api.properties(
+          target_platform='win',
+          host_platform='win',
+          custom_vars={
+              'url': 'https://foo.com',
+              'base64_api_key': encoded_api_key,
+              'kms_key_path': 'some/path',
+              'kms_key_basename': 'bar'
+          }),
+      api.path.exists(api.path['tmp_base'].join('symupload.exe')),
+      api.symupload(input_properties_v2),
+      api.post_process(post_process.StepCommandContains,
+                       'symupload.write encrypted api key', [
+                           "copy",
+                           "encrypted_api_key",
+                       ]),
+      api.post_process(post_process.StepCommandContains,
+                       'symupload.Prepare API key.decrypt', [
+                           "some/path/bar",
+                       ]),
+      api.post_process(post_process.StepCommandContains,
+                       'symupload.symupload_v2', [
+                           "--server-urls",
+                           "https://foo.com",
+                       ]),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  input_properties_v2 = properties.InputProperties()
+  symupload_data = input_properties_v2.symupload_datas.add()
+  symupload_data.artifacts.append('some_artifact.txt')
+  symupload_data.url = '{%url%}'
+  symupload_data.file_globs.append('glob*.txt')
+  symupload_data.base64_api_key = base64.b64encode(b'foo_key')
+  symupload_data.kms_key_path = '{%bad_placeholder%}'
+
+  yield api.test(
+      'symupload_with_unresolved_placeholder',
+      api.properties(
+          target_platform='win',
+          host_platform='win',
+          custom_vars={
+              'url': 'https://foo.com',
+              'base64_api_key': encoded_api_key,
+              'kms_key_path': 'some/path',
+          }),
+      api.path.exists(api.path['tmp_base'].join('symupload.exe')),
+      api.symupload(input_properties_v2),
+      api.post_process(post_process.MustRun,
+                       'symupload.Unresolved placeholder'),
+      api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
   )

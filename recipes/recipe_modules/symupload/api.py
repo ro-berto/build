@@ -5,6 +5,7 @@
 import base64
 import datetime
 import logging
+import re
 from recipe_engine import recipe_api, util
 
 from PB.recipe_modules.build.symupload import properties as symupload_properties
@@ -125,6 +126,18 @@ class SymuploadApi(recipe_api.RecipeApi):
 
     return self.m.step(name or 'symupload_v2', cmd)
 
+  def _replace_placeholders(self, custom_vars, input_str):
+    for placeholder, key in re.findall('({%(.*?)%})', input_str):
+      if key in custom_vars:
+        input_str = input_str.replace(placeholder, custom_vars[key])
+      else:
+        self.m.step.empty(
+            'Unresolved placeholder',
+            status=self.m.step.FAILURE,
+            step_text=placeholder + ' can not be resolved')
+
+    return input_str
+
   @property
   def symupload_binary(self):
     binary_name = 'symupload'
@@ -137,7 +150,8 @@ class SymuploadApi(recipe_api.RecipeApi):
                build_dir,
                config_file_path=None,
                experimental=False,
-               symupload_binary=None):
+               symupload_binary=None,
+               custom_vars=None):
     """
     Args:
       build_dir: The absolute path to the build output directory, e.g.
@@ -149,6 +163,9 @@ class SymuploadApi(recipe_api.RecipeApi):
                         for moree details.
       experimental: (bool) flag for experimental, meaning it will skip
                     symuploads.
+      custom_vars: Dict of custom string substitution.
+                   E.g. custom_vars={'url':'https://foo.com'}, then
+                   url='{%url%}' will be replaced to 'https://foo.com'.
     """
     if not (self._properties.symupload_datas or
             self._properties.source_side_spec_path or config_file_path):
@@ -219,10 +236,17 @@ class SymuploadApi(recipe_api.RecipeApi):
               raise self.m.step.StepFailure('api_key exists but kms_key_path '
                                             'is missing')
 
+            custom_vars = custom_vars or {}
+            url = self._replace_placeholders(custom_vars, symupload_data.url)
+            kms_key_path = self._replace_placeholders(
+                custom_vars, symupload_data.kms_key_path)
+            base64_api_key = custom_vars.get('base64_api_key',
+                                             symupload_data.base64_api_key)
+
             # Write out decoded api key
             input_api_key = self.m.path['cleanup'].join(
                 'symupload-api-key.encrypted')
-            api_key_data = base64.b64decode(symupload_data.base64_api_key)
+            api_key_data = base64.b64decode(base64_api_key)
             self.m.file.write_raw('write encrypted api key', input_api_key,
                                   api_key_data)
 
@@ -236,8 +260,8 @@ class SymuploadApi(recipe_api.RecipeApi):
                   artifacts=uploads,
                   artifact_type=symupload_data.artifact_type,
                   encrypted_key_path=input_api_key,
-                  kms_key_path=symupload_data.kms_key_path,
-                  server_url=symupload_data.url,
+                  kms_key_path=kms_key_path,
+                  server_url=url,
                   symupload_binary=symupload_binary)
               presentation.status = self.m.step.SUCCESS
 

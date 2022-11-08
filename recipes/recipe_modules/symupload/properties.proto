@@ -24,12 +24,24 @@ message SymuploadData {
   repeated string file_globs = 3;
 
   // The full url to pass to symupload.
+  // Custom string substitutions are supported through the 'custom_vars'
+  // parameter in symupload(). In order to use the keys in custom_vars, you
+  // must include this format in the field: {%name_of_custom_key%}.
+  // e.g. custom_vars = {'custom_url': 'http://foo.com'}
+  // Within the url field, include {%custom_url%} to use the placeholder, which
+  // will resolve to 'http://foo.com'.
+  // NOTE: If 'base64_api_key' is defined within custom_vars, it'll replace the
+  // base64_api_key field.
   string url = 2;
 
   // Symbol Server API key.
+  // If 'base64_api_key' is defined in the custom_vars parameter of
+  // symupload(), it will replace this field.
   string base64_api_key = 5;
 
   // kms_key_path used to decrypt the api_key.
+  // Custom string substitutions are supported through the 'custom_vars'
+  // parameter in symupload(). This functions the same as |SymuploadData.url|.
   string kms_key_path = 6;
 
   // The type of artifact being passed to symupload. One of ['macho', 'dsym'].
