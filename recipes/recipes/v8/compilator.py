@@ -115,6 +115,25 @@ def mb_override(api):
   return new_mb_config_path
 
 
+def read_test_spec(api):
+  """Dynamically load test specifications from all discovered test roots."""
+  test_spec = api.v8_tests.TEST_SPEC()
+  for test_root in api.v8.get_test_roots():
+    test_spec.update(api.v8.read_test_spec(test_root, orchestrator_names(api)))
+  return test_spec
+
+
+def emit_compilator_properties(api, test_spec):
+  properties = dict(test_spec.as_properties_dict_single())
+  properties['swarm_hashes'] = api.v8_tests.isolated_tests
+  properties['gn_args'] = api.v8_tests.gn_args
+
+  properties_step = api.step('compilator properties', [])
+  properties_step.presentation.properties['compilator_properties'] = properties
+  properties_step.presentation.logs['compilator_properties'] = api.json.dumps(
+      properties, indent=2)
+
+
 # TODO(https://crbug.com/890222): Wrap and ensure we return state cancelled
 # on cancellation.
 def RunSteps(api, custom_deps, default_targets, gclient_vars, target_arch,
@@ -138,8 +157,6 @@ def RunSteps(api, custom_deps, default_targets, gclient_vars, target_arch,
   v8.set_gclient_custom_deps(custom_deps)
   v8.set_chromium_configs(clobber=False, default_targets=default_targets)
 
-  test_spec = api.v8_tests.TEST_SPEC()
-
   with api.step.nest('initialization'):
     if api.platform.is_win:
       api.chromium.taskkill()
@@ -148,23 +165,14 @@ def RunSteps(api, custom_deps, default_targets, gclient_vars, target_arch,
     api.v8_tests.set_up_swarming()
     v8.runhooks()
 
-    # Dynamically load test specifications from all discovered test roots.
-    for test_root in v8.get_test_roots():
-      test_spec.update(v8.read_test_spec(test_root, orchestrator_names(api)))
+    test_spec = read_test_spec(api)
 
   with api.step.nest('build'):
     compile_failure = v8.compile(test_spec, mb_override(api))
     if compile_failure:
       return compile_failure
 
-  properties = dict(test_spec.as_properties_dict_single())
-  properties['swarm_hashes'] = api.v8_tests.isolated_tests
-  properties['gn_args'] = api.v8_tests.gn_args
-
-  properties_step = api.step('compilator properties', [])
-  properties_step.presentation.properties['compilator_properties'] = properties
-  properties_step.presentation.logs['compilator_properties'] = api.json.dumps(
-      properties, indent=2)
+  emit_compilator_properties(api, test_spec)
 
 
 def GenTests(api):
