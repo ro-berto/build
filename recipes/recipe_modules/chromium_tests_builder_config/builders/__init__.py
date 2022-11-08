@@ -9,7 +9,6 @@ from . import chromium_android_fyi
 from . import chromium_angle
 from . import chromium_chromiumos
 from . import chromium_clang
-from . import chromium_dawn
 from . import chromium_devtools_frontend
 from . import chromium_fuzz
 from . import chromium_fyi
@@ -45,6 +44,7 @@ from . import migration_testing
 
 # The configs for the following builder groups are now specified src-side
 # in //infra/config/subprojects/chromium/ci/<builder_group>.star
+# * chromium.dawn
 # * chromium.gpu
 # * chromium.gpu.fyi
 
@@ -61,8 +61,6 @@ BUILDERS = builder_db.BuilderDatabase.create({
         chromium_chromiumos.SPEC,
     'chromium.clang':
         chromium_clang.SPEC,
-    'chromium.dawn':
-        chromium_dawn.SPEC,
     'chromium.devtools-frontend':
         chromium_devtools_frontend.SPEC,
     'chromium.fuzz':

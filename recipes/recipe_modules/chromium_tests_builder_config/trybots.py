@@ -9,6 +9,8 @@ from . import try_spec
 #   //infra/config/subprojects/chromium/try/tryserver.blink.star
 # * tryserver.chromium
 #   //infra/config/subprojects/chromium/try/tryserver.chromium.star
+# * tryserver.chromium.dawn
+#   //infra/config/subprojects/chromium/try/tryserver.chromium.dawn.star
 TRYBOTS = try_spec.TryDatabase.create({
     # The config for the following builders is now specified src-side in
     # //infra/config/subprojects/chromium/try/tryserver.chromium.android.star
@@ -500,49 +502,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.fyi',
                 buildername='win-annotator-rel',
             ),
-    },
-    # Dawn GPU bots
-    # The config for the following builders is now specified src-side in
-    # //infra/config/subprojects/chromium/try/tryserver.chromium.dawn.star
-    # * dawn-linux-x64-deps-rel
-    # * dawn-mac-x64-deps-rel
-    # * dawn-win10-x64-deps-rel
-    # * dawn-win10-x86-deps-rel
-    # * linux-dawn-rel
-    # * win-dawn-rel
-    # * dawn-try-win10-x86-rel
-    # * dawn-try-win10-x64-asan-rel
-    'tryserver.chromium.dawn': {
-        'dawn-try-mac-amd-exp':
-            try_spec.TrySpec.create([
-                try_spec.TryMirror.create(
-                    builder_group='chromium.dawn',
-                    buildername='Dawn Mac x64 Builder',
-                    tester='Dawn Mac x64 Experimental Release (AMD)',
-                ),
-            ]),
-        'dawn-try-mac-intel-exp':
-            try_spec.TrySpec.create([
-                try_spec.TryMirror.create(
-                    builder_group='chromium.dawn',
-                    buildername='Dawn Mac x64 Builder',
-                    tester='Dawn Mac x64 Experimental Release (Intel)',
-                ),
-            ]),
-        'mac-dawn-rel':
-            try_spec.TrySpec.create([
-                # Not enough capacity on Mac AMD https://crbug.com/1380184.
-                # try_spec.TryMirror.create(
-                #     builder_group='chromium.dawn',
-                #     buildername='Dawn Mac x64 Builder',
-                #     tester='Dawn Mac x64 Release (AMD)',
-                # ),
-                try_spec.TryMirror.create(
-                    builder_group='chromium.dawn',
-                    buildername='Dawn Mac x64 Builder',
-                    tester='Dawn Mac x64 Release (Intel)',
-                ),
-            ]),
     },
     # Rust language bots
     'tryserver.chromium.rust': {

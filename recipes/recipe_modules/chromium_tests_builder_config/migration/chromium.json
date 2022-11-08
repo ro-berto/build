@@ -265,66 +265,6 @@
       "chromium.chromiumos:linux-lacros-rel"
     ]
   },
-  "chromium.dawn:Dawn Mac x64 Builder": {
-    "builders": [
-      "chromium.dawn:Dawn Mac x64 Builder",
-      "chromium.dawn:Dawn Mac x64 Experimental Release (AMD)",
-      "chromium.dawn:Dawn Mac x64 Experimental Release (Intel)",
-      "chromium.dawn:Dawn Mac x64 Release (AMD)",
-      "chromium.dawn:Dawn Mac x64 Release (Intel)",
-      "tryserver.chromium.dawn:dawn-try-mac-amd-exp",
-      "tryserver.chromium.dawn:dawn-try-mac-intel-exp",
-      "tryserver.chromium.dawn:mac-dawn-rel"
-    ]
-  },
-  "chromium.dawn:Dawn Mac x64 Experimental Release (AMD)": {
-    "builders": [
-      "chromium.dawn:Dawn Mac x64 Builder",
-      "chromium.dawn:Dawn Mac x64 Experimental Release (AMD)",
-      "chromium.dawn:Dawn Mac x64 Experimental Release (Intel)",
-      "chromium.dawn:Dawn Mac x64 Release (AMD)",
-      "chromium.dawn:Dawn Mac x64 Release (Intel)",
-      "tryserver.chromium.dawn:dawn-try-mac-amd-exp",
-      "tryserver.chromium.dawn:dawn-try-mac-intel-exp",
-      "tryserver.chromium.dawn:mac-dawn-rel"
-    ]
-  },
-  "chromium.dawn:Dawn Mac x64 Experimental Release (Intel)": {
-    "builders": [
-      "chromium.dawn:Dawn Mac x64 Builder",
-      "chromium.dawn:Dawn Mac x64 Experimental Release (AMD)",
-      "chromium.dawn:Dawn Mac x64 Experimental Release (Intel)",
-      "chromium.dawn:Dawn Mac x64 Release (AMD)",
-      "chromium.dawn:Dawn Mac x64 Release (Intel)",
-      "tryserver.chromium.dawn:dawn-try-mac-amd-exp",
-      "tryserver.chromium.dawn:dawn-try-mac-intel-exp",
-      "tryserver.chromium.dawn:mac-dawn-rel"
-    ]
-  },
-  "chromium.dawn:Dawn Mac x64 Release (AMD)": {
-    "builders": [
-      "chromium.dawn:Dawn Mac x64 Builder",
-      "chromium.dawn:Dawn Mac x64 Experimental Release (AMD)",
-      "chromium.dawn:Dawn Mac x64 Experimental Release (Intel)",
-      "chromium.dawn:Dawn Mac x64 Release (AMD)",
-      "chromium.dawn:Dawn Mac x64 Release (Intel)",
-      "tryserver.chromium.dawn:dawn-try-mac-amd-exp",
-      "tryserver.chromium.dawn:dawn-try-mac-intel-exp",
-      "tryserver.chromium.dawn:mac-dawn-rel"
-    ]
-  },
-  "chromium.dawn:Dawn Mac x64 Release (Intel)": {
-    "builders": [
-      "chromium.dawn:Dawn Mac x64 Builder",
-      "chromium.dawn:Dawn Mac x64 Experimental Release (AMD)",
-      "chromium.dawn:Dawn Mac x64 Experimental Release (Intel)",
-      "chromium.dawn:Dawn Mac x64 Release (AMD)",
-      "chromium.dawn:Dawn Mac x64 Release (Intel)",
-      "tryserver.chromium.dawn:dawn-try-mac-amd-exp",
-      "tryserver.chromium.dawn:dawn-try-mac-intel-exp",
-      "tryserver.chromium.dawn:mac-dawn-rel"
-    ]
-  },
   "chromium.dev:android-lollipop-arm-rel-swarming": {
     "builders": [
       "chromium.dev:android-lollipop-arm-rel-swarming"
@@ -1455,42 +1395,6 @@
     "builders": [
       "chromium.chromiumos:linux-chromeos-js-code-coverage",
       "tryserver.chromium.chromiumos:linux-chromeos-js-code-coverage"
-    ]
-  },
-  "tryserver.chromium.dawn:dawn-try-mac-amd-exp": {
-    "builders": [
-      "chromium.dawn:Dawn Mac x64 Builder",
-      "chromium.dawn:Dawn Mac x64 Experimental Release (AMD)",
-      "chromium.dawn:Dawn Mac x64 Experimental Release (Intel)",
-      "chromium.dawn:Dawn Mac x64 Release (AMD)",
-      "chromium.dawn:Dawn Mac x64 Release (Intel)",
-      "tryserver.chromium.dawn:dawn-try-mac-amd-exp",
-      "tryserver.chromium.dawn:dawn-try-mac-intel-exp",
-      "tryserver.chromium.dawn:mac-dawn-rel"
-    ]
-  },
-  "tryserver.chromium.dawn:dawn-try-mac-intel-exp": {
-    "builders": [
-      "chromium.dawn:Dawn Mac x64 Builder",
-      "chromium.dawn:Dawn Mac x64 Experimental Release (AMD)",
-      "chromium.dawn:Dawn Mac x64 Experimental Release (Intel)",
-      "chromium.dawn:Dawn Mac x64 Release (AMD)",
-      "chromium.dawn:Dawn Mac x64 Release (Intel)",
-      "tryserver.chromium.dawn:dawn-try-mac-amd-exp",
-      "tryserver.chromium.dawn:dawn-try-mac-intel-exp",
-      "tryserver.chromium.dawn:mac-dawn-rel"
-    ]
-  },
-  "tryserver.chromium.dawn:mac-dawn-rel": {
-    "builders": [
-      "chromium.dawn:Dawn Mac x64 Builder",
-      "chromium.dawn:Dawn Mac x64 Experimental Release (AMD)",
-      "chromium.dawn:Dawn Mac x64 Experimental Release (Intel)",
-      "chromium.dawn:Dawn Mac x64 Release (AMD)",
-      "chromium.dawn:Dawn Mac x64 Release (Intel)",
-      "tryserver.chromium.dawn:dawn-try-mac-amd-exp",
-      "tryserver.chromium.dawn:dawn-try-mac-intel-exp",
-      "tryserver.chromium.dawn:mac-dawn-rel"
     ]
   },
   "tryserver.chromium.linux:fuchsia-fyi-arm64-femu": {
