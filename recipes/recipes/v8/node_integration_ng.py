@@ -83,8 +83,6 @@ def RunSteps(api, is_debug, triggers, v8_tot):
     # Set up dependent modules.
     api.chromium.set_config(chromium_config, BUILD_CONFIG=build_config)
     api.gclient.set_config('node_ci')
-    if use_remoteexec:
-      api.gclient.apply_config('enable_reclient')
     revision = api.buildbucket.gitiles_commit.id or 'HEAD'
     if v8_tot:
       api.gclient.c.revisions['node-ci'] = 'HEAD'
