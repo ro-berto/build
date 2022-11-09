@@ -51,8 +51,8 @@ BUILD_CANCELED_SUMMARY = 'Build was canceled.'
 BUILD_WRONGLY_CANCELED_SUMMARY = (
     'Compilator was canceled before the parent orchestrator was canceled.')
 
-# TODO(https://crbug.com/890222): Implement cancellation logic.
-def RunSteps(api, compilator_name):
+
+def orchestrator_steps(api, compilator_name):
   v8 = api.v8_tests
   compilator_handler = create_compilator_handler(api, compilator_name)
 
@@ -103,6 +103,18 @@ def RunSteps(api, compilator_name):
   if test_results.has_failures:
     # Let tryjobs fail for failures only.
     raise api.step.StepFailure('Failures in tryjob.')
+
+
+def RunSteps(api, compilator_name):
+  try:
+    return orchestrator_steps(api, compilator_name)
+  finally:
+    if api.runtime.in_global_shutdown:
+      # pylint: disable=lost-exception
+      # Cancellation can cause all sorts of spurious exceptions.
+      return result_pb2.RawResult(
+          status=common_pb.CANCELED,
+          summary_markdown=BUILD_CANCELED_SUMMARY)
 
 
 def create_compilator_handler(api, compilator_name):
@@ -273,6 +285,15 @@ def GenTests(api):
   yield test(
       'no_subbuild',
       api.post_process(ResultReason, 'sub_build missing from step'),
+      api.post_process(StatusException),
+      api.post_process(DropExpectation),
+  )
+
+  yield test(
+      'testing_canceled',
+      subbuild_data(output_properties),
+      api.runtime.global_shutdown_on_step('Check'),
+      api.post_process(ResultReason, BUILD_CANCELED_SUMMARY),
       api.post_process(StatusException),
       api.post_process(DropExpectation),
   )
