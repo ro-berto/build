@@ -111,9 +111,6 @@ def GenTests(api):
   yield api.test(
       'reclient',
       api.properties(
-          expected_gclient_vars={
-              'checkout_reclient': 'True',
-          },
           **{
               '$build/reclient': {
                   'instance': 'fake-reclient-instance',
