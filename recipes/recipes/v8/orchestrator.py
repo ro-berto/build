@@ -62,6 +62,7 @@ def orchestrator_steps(api, compilator_name):
 
     # Initialize V8 testing.
     v8.set_config('v8')
+    v8.read_cl_footer_flags()
     v8.load_static_test_configs()
 
     api.swarming.ensure_client()

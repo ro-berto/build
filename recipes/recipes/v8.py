@@ -288,17 +288,6 @@ def GenTests(api):
         'Check', api.v8_tests.output_json(has_failures=True))
   )
 
-  yield (api.v8.test(
-      'tryserver.v8',
-      'v8_foobar_rel_ng_triggered',
-      'cl_with_footer_resultdb',
-      parent_buildername='v8_foobar_rel_ng',
-      parent_bot_config=linux_bot_config,
-      parent_test_spec=test_spec,
-      disable_auto_bisect=True,
-  ) + api.step_data('parse description',
-                    api.json.output({'V8-Recipe-Flags': ['resultdb']})))
-
   yield (
     api.v8.test(
         'tryserver.v8',

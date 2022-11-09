@@ -4,7 +4,7 @@
 
 import json
 
-from recipe_engine import post_process
+from recipe_engine.post_process import Filter
 
 DEPS = [
     'recipe_engine/buildbucket',
@@ -36,8 +36,19 @@ def GenTests(api):
   buider_spec = parent_test_spec.get('parent_test_spec', {})
   swarm_hashes = api.v8_tests._make_dummy_swarm_hashes(
       test[0] for test in buider_spec.get('tests', []))
+
   yield (
       api.test('basic') +
       api.buildbucket.try_build() +
       api.properties(swarm_hashes=swarm_hashes, **parent_test_spec)
+  )
+
+  yield (
+      api.test('cl_with_resultdb_footer') +
+      api.buildbucket.try_build() +
+      api.properties(swarm_hashes=swarm_hashes, **parent_test_spec) +
+      api.step_data('parse description',
+                    api.json.output({'V8-Recipe-Flags': ['resultdb']})) +
+      api.post_process(Filter(
+          'parse description', 'trigger tests.[trigger] Check', 'Check'))
   )
