@@ -32,14 +32,12 @@ class ExtractHandler(object):
 
 class GSHandler(ExtractHandler):
 
-  def __init__(self, url, archive_name, gsutil_py_path=None):
+  def __init__(self, url, archive_name, gsutil_py_path):
     super(GSHandler, self).__init__(url, archive_name)
     self.gsutil_py_path = gsutil_py_path
 
   def download(self):
-    override_gsutil = None
-    if self.gsutil_py_path:
-      override_gsutil = [sys.executable, self.gsutil_py_path]
+    override_gsutil = [sys.executable, self.gsutil_py_path]
     status = bot_utils.GSUtilCopy(
         self.url, '.', override_gsutil=override_gsutil
     )
@@ -273,14 +271,14 @@ def main():
       '--gsutil-py-path', help='Specify path to gsutil.py script.'
   )
   chromium_utils.AddPropertiesOptions(option_parser)
-  bot_utils_callback = bot_utils.AddOpts(option_parser)
 
   options, args = option_parser.parse_args()
   if args:
     print('Unknown options: %s' % args)
     return 1
-
-  bot_utils_callback(options)
+  if not options.gsutil_py_path:
+    print('--gs-util-py-path must be specified')
+    return 1
 
   if not options.builder_group:
     options.builder_group = options.build_properties.get('builder_group', '')
