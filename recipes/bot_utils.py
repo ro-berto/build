@@ -30,7 +30,7 @@ _GIT_CR_POS_RE = re.compile(
     r'^Cr-Commit-Position: refs/heads/(?:master|main)@{#(\d+)}$'
 )
 
-# Global variables set by command-line arguments (AddArgs).
+# Global variables set by command-line arguments (AddArgs, AddOpts).
 _ARGS_GSUTIL_PY_PATH = None
 
 
@@ -614,9 +614,34 @@ def AddArgs(parser):
   return _AddArgsCallback
 
 
+def AddOpts(parser):
+  """Adds bot_utils common arguments to the supplied optparse parser.
+
+  Args:
+      parser (optparse.OptionParser): The argument parser to augment.
+
+  Returns: callable(opts)
+      A callback function that should be invoked with the parsed opts. This
+      completes the processing and loads the result of the parsing into
+      bot_utils.
+  """
+  group = optparse.OptionGroup(parser, 'Common `bot_utils.py` Options')
+  group.add_option(
+      '--bot-utils-gsutil-py-path',
+      metavar='PATH',
+      help=(
+          'The path to the `gsutil` command to use for Google Storage '
+          'operations. This file lives in the <depot_tools> repository.'
+      ),
+  )
+  parser.add_option_group(group)
+
+  return _AddArgsCallback
+
+
 def _AddArgsCallback(opts):
   """
-  Internal callback supplied by AddArgs. Designed to work with
+  Internal callback supplied by AddArgs and AddOpts. Designed to work with
   both argparse and optparse results.
   """
   global _ARGS_GSUTIL_PY_PATH
