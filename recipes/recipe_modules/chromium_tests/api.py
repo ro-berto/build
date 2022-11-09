@@ -199,6 +199,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     for c in builder_config.gclient_apply_config:
       self.m.gclient.apply_config(c)
 
+    if (self.m.reclient.instance and
+        builder_config.gclient_config != 'enable_reclient' and
+        'enable_reclient' not in builder_config.gclient_apply_config):
+      self.m.gclient.apply_config('enable_reclient')
+
     if rts_setting == 'rts-chromium':
       self.m.gclient.c.solutions[0].custom_vars['checkout_rts_model'] = 'True'
     elif rts_setting == 'rts-ml-chromium':
