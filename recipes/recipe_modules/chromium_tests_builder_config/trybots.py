@@ -9,6 +9,8 @@ from . import try_spec
 #   //infra/config/subprojects/chromium/try/tryserver.blink.star
 # * tryserver.chromium
 #   //infra/config/subprojects/chromium/try/tryserver.chromium.star
+# * tryserver.chromium.angle
+#   //infra/config/subprojects/chromium/try/tryserver.chromium.angle.star
 # * tryserver.chromium.dawn
 #   //infra/config/subprojects/chromium/try/tryserver.chromium.dawn.star
 TRYBOTS = try_spec.TryDatabase.create({
@@ -142,82 +144,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android.fyi',
                 buildername='Android WebView P FYI (rel)',
-            ),
-    },
-    # The config for the following builders is now specified src-side in
-    # //infra/config/subprojects/chromium/angle.try.star
-    # * ios-angle-try-intel
-    'tryserver.chromium.angle': {
-        'android-angle-chromium-try':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.angle',
-                buildername='android-angle-chromium-arm64-builder',
-                tester='android-angle-chromium-arm64-nexus5x',
-                retry_failed_shards=False,
-            ),
-        'fuchsia-angle-try':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.angle',
-                buildername='fuchsia-angle-builder',
-                is_compile_only=True,
-                include_all_triggered_testers=True,
-            ),
-        'linux-angle-chromium-try':
-            try_spec.TrySpec.create(
-                mirrors=[
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.angle',
-                        buildername='linux-angle-chromium-builder',
-                        tester='linux-angle-chromium-intel',
-                    ),
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.angle',
-                        buildername='linux-angle-chromium-builder',
-                        tester='linux-angle-chromium-nvidia',
-                    ),
-                ],
-                retry_failed_shards=False,
-            ),
-        'mac-angle-chromium-try':
-            try_spec.TrySpec.create(
-                mirrors=[
-                    # Not enough capacity on Mac AMD https://crbug.com/1380184.
-                    # try_spec.TryMirror.create(
-                    #     builder_group='chromium.angle',
-                    #     buildername='mac-angle-chromium-builder',
-                    #     tester='mac-angle-chromium-amd',
-                    # ),
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.angle',
-                        buildername='mac-angle-chromium-builder',
-                        tester='mac-angle-chromium-intel',
-                    ),
-                ],
-                retry_failed_shards=False,
-            ),
-        'win-angle-chromium-x64-try':
-            try_spec.TrySpec.create(
-                mirrors=[
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.angle',
-                        buildername='win-angle-chromium-x64-builder',
-                        tester='win10-angle-chromium-x64-intel',
-                    ),
-                    try_spec.TryMirror.create(
-                        builder_group='chromium.angle',
-                        buildername='win-angle-chromium-x64-builder',
-                        tester='win10-angle-chromium-x64-nvidia',
-                    ),
-                ],
-                retry_failed_shards=False,
-            ),
-        'win-angle-chromium-x86-try':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.angle',
-                buildername='win-angle-chromium-x86-builder',
-                is_compile_only=True,
-                include_all_triggered_testers=True,
-                retry_failed_shards=False,
             ),
     },
     # The config for the following builders is now specified src-side in
