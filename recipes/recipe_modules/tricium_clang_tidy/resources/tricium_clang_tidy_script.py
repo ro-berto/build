@@ -582,7 +582,8 @@ def _parse_compile_commands(stream: io.TextIOWrapper, clang_cl: bool
             pnacl in os.path.basename(pieces[1])):
           continue
 
-    is_clang_cl_command = clang_cl and 'cl.exe ' in command
+    is_clang_cl_command = clang_cl and ('cl ' in command or
+                                        'cl.exe ' in command)
     if is_clang_cl_command:
       m = clang_cl_obj_re.search(command)
     else:
