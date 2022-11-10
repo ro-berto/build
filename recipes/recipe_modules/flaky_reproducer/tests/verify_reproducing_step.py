@@ -23,11 +23,12 @@ PROPERTIES = {
     'failing_sample': Property(default=None),
     'reproducing_step_data': Property(default=None),
     'verify_on_builders': Property(default=None, kind=list),
+    'monorail_issue': Property(default=None, kind=str),
 }
 
 
 def RunSteps(api, task_id, failing_sample, reproducing_step_data,
-             verify_on_builders):
+             verify_on_builders, monorail_issue):
   api.flaky_reproducer.set_config('auto')
   if reproducing_step_data:
     reproducing_step = ReproducingStep.from_jsonish(reproducing_step_data)
@@ -42,7 +43,8 @@ def RunSteps(api, task_id, failing_sample, reproducing_step_data,
       reproducing_step=reproducing_step,
       all_reproducing_steps=([] if reproducing_step is None else
                              [reproducing_step]),
-      builder_results=builder_results)
+      builder_results=builder_results,
+      monorail_issue=monorail_issue)
 
 
 import re
@@ -226,11 +228,11 @@ def GenTests(api):
           ])),
       api.post_check(lambda check, steps: check(
           steps['summarize_results'].step_summary_text,
-          re.search(r"Linux Tests \(failing sample\)\s+\[failed\]", steps[
+          re.search(r"Linux Tests \(failing sample\).+with failure", steps[
               'summarize_results'].step_summary_text))),
       api.post_check(lambda check, steps: check(
           steps['summarize_results'].step_summary_text,
-          re.search(r"Linux Tests\s+\[failed\]", steps['summarize_results'].
+          re.search(r"Linux Tests.+with failure:", steps['summarize_results'].
                     step_summary_text))),
       api.post_check(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
@@ -408,5 +410,68 @@ def GenTests(api):
       api.post_check(post_process.StatusSuccess),
       api.post_check(lambda check, steps: check(
           'builder_results.json' not in steps['summarize_results'].logs)),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'monorail issue posted',
+      api.properties(
+          task_id='some-task-id',
+          failing_sample=UnexpectedTestResult('MockUnitTests.FailTest'),
+          reproducing_step_data=api.json.loads(
+              api.flaky_reproducer.get_test_data('reproducing_step.json')),
+          verify_on_builders=['Win10 Tests x64'],
+          monorail_issue='123',
+      ),
+      api.resultdb.query(
+          {
+              'task-example.swarmingserver.appspot.com-some-task-id':
+                  resultdb_invocation,
+          },
+          step_name='verify_reproducing_step.find_related_builders.rdb query'),
+      api.weetbix.query_variants(
+          query_variants_res,
+          test_id='ninja://base:base_unittests/MockUnitTests.FailTest',
+          parent_step_name='verify_reproducing_step.find_related_builders',
+      ),
+      api.weetbix.query_test_history(
+          query_test_history_res,
+          test_id='ninja://base:base_unittests/MockUnitTests.FailTest',
+          parent_step_name='verify_reproducing_step.find_related_builders',
+      ),
+      api.buildbucket.simulated_get_multi(
+          builds=[generate_bb_get_multi_result({'$recipe_engine/cq': ''})],
+          step_name='verify_reproducing_step.find_related_builders.buildbucket.get_multi',
+      ),
+      api.resultdb.query_test_results(
+          test_running_history,
+          step_name='verify_reproducing_step.find_related_builders.query_test_results',
+      ),
+      api.step_data(
+          'verify_reproducing_step.get_test_binary from 54321fffffabc001',
+          api.json.output_stream(
+              api.json.loads(
+                  api.flaky_reproducer.get_test_data(
+                      'gtest_task_request.json')))),
+      api.step_data('verify_reproducing_step.collect verify results',
+                    api.swarming.collect([verify_swarming_result])),
+      api.step_data(
+          'verify_reproducing_step.load verify result',
+          api.file.read_json(
+              api.json.loads(
+                  api.flaky_reproducer.get_test_data(
+                      'gtest_good_output.json')))),
+      api.step_data(
+          'summarize_results.post_summary_to_monorail'
+          '.GetIssue projects/chromium/issues/123',
+          api.json.output_stream({'labels': [{
+              'label': 'flaky-reproduced'
+          }]}),
+      ),
+      api.post_check(lambda check, steps: check(
+          steps['summarize_results'].step_summary_text,
+          re.search(r"reproduced.+1/1", steps['summarize_results'].
+                    step_summary_text))),
+      api.post_check(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )

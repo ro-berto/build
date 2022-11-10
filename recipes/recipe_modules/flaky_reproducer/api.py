@@ -15,6 +15,7 @@ from PB.go.chromium.org.luci.analysis.proto.v1 import test_verdict as test_verdi
 from .libs import (create_test_binary_from_task_request,
                    create_result_summary_from_output_json, strategies,
                    ReproducingStep)
+from .monorail_api import MonorailApi
 
 
 def nest_step(func):
@@ -46,6 +47,7 @@ class FlakyReproducer(recipe_api.RecipeApi):
   RESULT_SUMMARY_FILENAME = 'result_summary.json'
   REPRODUCING_STEP_FILENAME = 'reproducing_step.json'
   VERIFY_RESULT_SUMMARY_FILENAME = 'result_summary_$N$.json'
+  MONORAIL_LABEL = 'Flaky-Reproduced'
 
   # Chromite includes a symlink which points to a file it expects to exist in a
   # chroot. We aren't using chromite in a chroot, so this is an invalid symlink.
@@ -283,7 +285,7 @@ class FlakyReproducer(recipe_api.RecipeApi):
                                                  failing_sample.test_name,
                                                  verify_on_builders)
     # Verify failing builder sample
-    builder = 'Failing Sample'
+    builder = 'failing sample'
     if (not verify_on_builders or builder in verify_on_builders or
         reproducing_step.test_binary.builder in verify_on_builders):
       if reproducing_step.test_binary.builder:
@@ -322,25 +324,28 @@ class FlakyReproducer(recipe_api.RecipeApi):
     for result in verify_results:
       builder, _ = swarming_tasks[result.id]
       try:
-        result.analyze()
         builder_results[builder] = self.collect_verify_test_results(
             result, failing_sample)
+        result.analyze()
       except Exception as err:
-        builder_results[builder] = BuilderVerifyResult(
-            task_id=result.id, error=str(err))
+        builder_results[builder] = builder_results.get(
+            builder, BuilderVerifyResult())._replace(
+                task_id=result.id, error=str(err))
     return builder_results
 
   @nest_step
-  def summarize_results(self, task_id, failing_sample, test_binary,
-                        reproducing_step, all_reproducing_steps,
-                        builder_results):
+  def summarize_results(self,
+                        task_id,
+                        failing_sample,
+                        test_binary,
+                        reproducing_step,
+                        all_reproducing_steps,
+                        builder_results,
+                        monorail_issue=None):
     summary = []
 
-    # header
-    summary.append('# Reproducing Summary\n')
-
     # sample failure info
-    message = 'For {0} in [{1}]({2})'.format(
+    message = 'For {0} in {1}\n{2}\n'.format(
         failing_sample.test_name,
         (test_binary and test_binary.builder or 'task_ui'),
         self._swarming_task_url(task_id))
@@ -357,18 +362,24 @@ class FlakyReproducer(recipe_api.RecipeApi):
 
     # strategies info
     if all_reproducing_steps:
-      summary.append("\nIt's verified with following strategies:")
+      # Adding tailing '  ' to force line break for markdown.
+      summary.append("\nIt's verified with following strategies:  ")
       for step in all_reproducing_steps:
-        if step.reproduced_cnt:
-          message = "{0} strategy reproduced {1} times ({2:.1f}%)".format(
-              step.strategy, step.reproduced_cnt, step.reproducing_rate * 100)
-        else:
-          message = "{0} strategy not reproduced".format(step.strategy)
         if step.debug_info.get('task_ui_link'):
-          message += " [task_ui]({0})".format(step.debug_info['task_ui_link'])
-        summary.append(message)
+          message = "[{0} strategy]({1})".format(
+              step.strategy, step.debug_info['task_ui_link'])
+        else:
+          message = "{0} strategy".format(step.strategy)
+        if step.reproduced_cnt:
+          message += " reproduced {0} times ({1:.1f}%)".format(
+              step.reproduced_cnt, step.reproducing_rate * 100)
+        else:
+          message += " not reproduced"
+        # Adding tailing '  ' to force line break for markdown.
+        summary.append(message + '  ')
 
     # Group builder results in reproduced, not reproduced, error.
+    reproduced = False
     if builder_results:
       builder_summary = []
       builder_summary.append(
@@ -378,18 +389,23 @@ class FlakyReproducer(recipe_api.RecipeApi):
                                           1].reproduced_runs, kv[1].duration),
                                       reverse=True)
       for builder, result in sorted_builder_results:
-        if result.error:
-          builder_summary.append('{0:<30s} [failed]({1}):\n{2}'.format(
-              builder, (self._swarming_task_url(result.task_id)
-                        if result.task_id else ''), result.error))
-        elif result.reproduced_runs:
-          builder_summary.append(
-              '{0:<30s} [reproduced]({1}) {2:d}/{3:d}'.format(
-                  builder, self._swarming_task_url(result.task_id),
-                  result.reproduced_runs, result.total_runs))
+        if (not result.error and result.total_runs and
+            result.reproduced_runs / result.total_runs > 0.6):
+          reproduced = True
+        builder_message = ''
+        if result.reproduced_runs:
+          builder_message += '{0:<30s} [reproduced]({1}) {2:d}/{3:d}'.format(
+              builder, self._swarming_task_url(result.task_id),
+              result.reproduced_runs, result.total_runs)
         else:
-          builder_summary.append('{0:<30s} [not reproduced]({1})'.format(
-              builder, self._swarming_task_url(result.task_id)))
+          builder_message += '{0:<30s} [not reproduced]({1})'.format(
+              builder, self._swarming_task_url(result.task_id))
+        if result.error:
+          # Add first line of the error message for a better presentation.
+          builder_message += ', with failure: {0}'.format(
+              result.error.split('\n')[0])
+        # Adding tailing '  ' to force line break for markdown.
+        builder_summary.append(builder_message + '  ')
       summary.append('\n'.join(builder_summary))
 
     presentation = self.m.step.active_result.presentation
@@ -400,6 +416,30 @@ class FlakyReproducer(recipe_api.RecipeApi):
     if builder_results:
       presentation.logs['builder_results.json'] = self.m.json.dumps(
           builder_results, indent=2)
+
+    if monorail_issue and reproduced:
+      # Remove markdown links when posting to monorail, as it's not supported
+      monorail_summary = re.sub(r'\[(.+?)\]\(.+?\)', r'\1', '\n'.join(summary))
+      # Instead, add the link to this build for more details.
+      monorail_summary += ('\n\nFor more detailed information: ' +
+                           self.m.buildbucket.build_url())
+      try:
+        self.post_summary_to_monorail(monorail_issue, monorail_summary)
+      except self.m.step.StepWarning:
+        # Ignore if comment posted to monorail.
+        pass
+
+  @nest_step
+  def post_summary_to_monorail(self, monorail_issue, comment_message):
+    monorail_api = MonorailApi(self.m)
+    issue_name = monorail_api.chromium_issue_name(monorail_issue)
+    issue = monorail_api.get_issue(issue_name)
+    for label in issue.get('labels', []):
+      if label.get('label').lower() == self.MONORAIL_LABEL.lower():
+        raise self.m.step.StepWarning(
+            'Reproducing step already posted to monorail issue.')
+    monorail_api.modify_issues(
+        issue_name, comment_message, labels=[self.MONORAIL_LABEL])
 
   def query_resultdb_for_task_id_and_test_name(self,
                                                build_id=None,
@@ -474,7 +514,8 @@ class FlakyReproducer(recipe_api.RecipeApi):
           build_id=None,
           test_name=None,
           test_id=None,
-          verify_on_builders=None):
+          verify_on_builders=None,
+          monorail_issue=None):
     """Runs the Chrome Flaky Reproducer as a recipe.
 
     This method is expected to run as a standalone recipe that:
@@ -491,15 +532,17 @@ class FlakyReproducer(recipe_api.RecipeApi):
 
       verify_on_builders (list of str): Verify the reproducing step on specified
         builders. Default to all CQ and sheriff builders.
+      monorail_issue (str): Add a comment to the monorail_issue id if reproduced
+        and the step verified.
     """
     task_id, test_name = self.query_resultdb_for_task_id_and_test_name(
         task_id=task_id,
         build_id=build_id,
         test_name=test_name,
         test_id=test_id)
-    return self._run(task_id, test_name, verify_on_builders)
+    return self._run(task_id, test_name, verify_on_builders, monorail_issue)
 
-  def _run(self, task_id, test_name, verify_on_builders):
+  def _run(self, task_id, test_name, verify_on_builders, monorail_issue):
     # Retrieve failing test info.
     try:
       result_summary = self.get_test_result_summary(task_id)
@@ -539,7 +582,8 @@ class FlakyReproducer(recipe_api.RecipeApi):
         test_binary=test_binary,
         reproducing_step=reproducing_step,
         all_reproducing_steps=reproducing_steps,
-        builder_results=builder_results)
+        builder_results=builder_results,
+        monorail_issue=monorail_issue)
 
   def _extract_task_id_from_invocation_name(self, inv_name):
     assert '//' in self.m.swarming.current_server

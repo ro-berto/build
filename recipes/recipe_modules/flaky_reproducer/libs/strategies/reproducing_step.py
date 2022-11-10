@@ -70,7 +70,7 @@ class ReproducingStep:
         'The failure could be reproduced ({0:.1f}%) with command'.format(
             self.reproducing_rate * 100))
     if self.strategy:
-      message.append(' with {0} strategy'.format(self.strategy))
+      message.append(' by {0} strategy'.format(self.strategy))
     message.append(':')
     message.append('\n\n')
     message.append(self.test_binary.readable_command())

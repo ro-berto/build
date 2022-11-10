@@ -22,13 +22,19 @@ PROPERTIES = {
     'test_name': Property(default=None, kind=str),
     'test_id': Property(default=None, kind=str),
     'config': Property(default=None, kind=str),
+    'monorail_issue': Property(default=None, kind=str),
 }
 
 
-def RunSteps(api, config, task_id, build_id, test_name, test_id):
+def RunSteps(api, config, task_id, build_id, test_name, test_id,
+             monorail_issue):
   api.flaky_reproducer.set_config(config)
   return api.flaky_reproducer.run(
-      task_id=task_id, build_id=build_id, test_name=test_name, test_id=test_id)
+      task_id=task_id,
+      build_id=build_id,
+      test_name=test_name,
+      test_id=test_id,
+      monorail_issue=monorail_issue)
 
 
 from google.protobuf import timestamp_pb2, struct_pb2
@@ -164,12 +170,24 @@ def GenTests(api):
       state=api.swarming.TaskState.COMPLETED,
       output='some-output',
       outputs=('result_summary_0.json', 'result_summary_1.json'))
+  issue_result = {
+      "name":
+          "projects/chromium/issues/123",
+      "labels": [{
+          "derivation": "EXPLICIT",
+          "label": "Restrict-View-Google"
+      }, {
+          "derivation": "EXPLICIT",
+          "label": "CV-M1"
+      }],
+  }
   yield api.test(
       'happy_path',
       api.properties(
           task_id='54321fffffabc123',
           test_name='MockUnitTests.FailTest',
-          config='manual'),
+          config='manual',
+          monorail_issue='123'),
       api.step_data(
           'get_test_result_summary.download swarming outputs',
           api.raw_io.output_dir({
@@ -272,6 +290,16 @@ def GenTests(api):
               api.json.loads(
                   api.flaky_reproducer.get_test_data(
                       'gtest_good_output.json')))),
+      api.step_data(
+          'summarize_results.post_summary_to_monorail'
+          '.GetIssue projects/chromium/issues/123',
+          api.json.output_stream(issue_result),
+      ),
+      api.step_data(
+          'summarize_results.post_summary_to_monorail'
+          '.ModifyIssues projects/chromium/issues/123',
+          api.json.output_stream(issue_result),
+      ),
   )
 
   yield api.test(

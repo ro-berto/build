@@ -33,7 +33,7 @@ class ReproducingStepTest(unittest.TestCase):
     self.assertEqual(
         step.readable_info(),
         ('The failure could be reproduced (90.0%) with command'
-         ' with repeat strategy:\n\n'
+         ' by repeat strategy:\n\n'
          'vpython3 ../../testing/test_env.py ./base_unittests.exe'
          ' --test-launcher-bot-mode --asan=0 --lsan=0 --msan=0 --tsan=0'
          ' --cfi-diag=0 --test-launcher-retry-limit=0 '

@@ -26,7 +26,8 @@ def RunSteps(api, properties):
       build_id=properties.build_id,
       test_name=properties.test_name,
       test_id=properties.test_id,
-      verify_on_builders=properties.verify_on_builders)
+      verify_on_builders=properties.verify_on_builders,
+      monorail_issue=properties.monorail_issue)
 
 
 def GenTests(api):

@@ -26,4 +26,7 @@ message InputProperties {
   // Verify the reproducing step on specified builders.
   // Default to all CQ and sheriffed builders.
   repeated string verify_on_builders = 6;
+
+  // The chromium monorail issue id the reproducing step posted to.
+  string monorail_issue = 7;
 }
