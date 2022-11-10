@@ -19,7 +19,6 @@ from . import chromium_perf
 from . import chromium_perf_fyi
 from . import chromium_perf_calibration
 from . import chromium_rust
-from . import chromium_swangle
 from . import chromium_swarm
 from . import chromium_webrtc
 from . import chromium_webrtc_fyi
@@ -47,6 +46,7 @@ from . import migration_testing
 # * chromium.dawn
 # * chromium.gpu
 # * chromium.gpu.fyi
+# * chromium.swangle
 
 BUILDERS = builder_db.BuilderDatabase.create({
     'chromium':
@@ -81,8 +81,6 @@ BUILDERS = builder_db.BuilderDatabase.create({
         chromium_perf_calibration.SPEC,
     'chromium.rust':
         chromium_rust.SPEC,
-    'chromium.swangle':
-        chromium_swangle.SPEC,
     'chromium.staging':
         chromium_swarm.SPEC,
     'chromium.dev':

@@ -13,6 +13,8 @@ from . import try_spec
 #   //infra/config/subprojects/chromium/try/tryserver.chromium.angle.star
 # * tryserver.chromium.dawn
 #   //infra/config/subprojects/chromium/try/tryserver.chromium.dawn.star
+# * tryserver.chromium.swangle
+#   //infra/config/subprojects/chromium/swangle.try.star
 TRYBOTS = try_spec.TryDatabase.create({
     # The config for the following builders is now specified src-side in
     # //infra/config/subprojects/chromium/try/tryserver.chromium.android.star
@@ -455,63 +457,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.rust',
                 buildername='linux-rust-x64-rel',
-            ),
-    },
-    # SWANGLE bots
-    'tryserver.chromium.swangle': {
-        'linux-swangle-chromium-try-x64':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.swangle',
-                buildername='linux-swangle-chromium-x64',
-                retry_failed_shards=False,
-            ),
-        'linux-swangle-try-tot-swiftshader-x64':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.swangle',
-                buildername='linux-swangle-tot-swiftshader-x64',
-                retry_failed_shards=False,
-            ),
-        'linux-swangle-try-x64':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.swangle',
-                buildername='linux-swangle-x64',
-                retry_failed_shards=False,
-            ),
-        'mac-swangle-chromium-try-x64':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.swangle',
-                buildername='mac-swangle-chromium-x64',
-                retry_failed_shards=False,
-            ),
-        'win-swangle-chromium-try-x86':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.swangle',
-                buildername='win-swangle-chromium-x86',
-                retry_failed_shards=False,
-            ),
-        'win-swangle-try-tot-swiftshader-x64':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.swangle',
-                buildername='win-swangle-tot-swiftshader-x64',
-                retry_failed_shards=False,
-            ),
-        'win-swangle-try-tot-swiftshader-x86':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.swangle',
-                buildername='win-swangle-tot-swiftshader-x86',
-                retry_failed_shards=False,
-            ),
-        'win-swangle-try-x64':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.swangle',
-                buildername='win-swangle-x64',
-                retry_failed_shards=False,
-            ),
-        'win-swangle-try-x86':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.swangle',
-                buildername='win-swangle-x86',
-                retry_failed_shards=False,
             ),
     },
     # The config for the following builders is now specified src-side in

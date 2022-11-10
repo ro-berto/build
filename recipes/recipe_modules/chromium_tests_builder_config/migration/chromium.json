@@ -940,60 +940,6 @@
       "chromium.staging:win11-rel-swarming"
     ]
   },
-  "chromium.swangle:linux-swangle-chromium-x64": {
-    "builders": [
-      "chromium.swangle:linux-swangle-chromium-x64",
-      "tryserver.chromium.swangle:linux-swangle-chromium-try-x64"
-    ]
-  },
-  "chromium.swangle:linux-swangle-tot-swiftshader-x64": {
-    "builders": [
-      "chromium.swangle:linux-swangle-tot-swiftshader-x64",
-      "tryserver.chromium.swangle:linux-swangle-try-tot-swiftshader-x64"
-    ]
-  },
-  "chromium.swangle:linux-swangle-x64": {
-    "builders": [
-      "chromium.swangle:linux-swangle-x64",
-      "tryserver.chromium.swangle:linux-swangle-try-x64"
-    ]
-  },
-  "chromium.swangle:mac-swangle-chromium-x64": {
-    "builders": [
-      "chromium.swangle:mac-swangle-chromium-x64",
-      "tryserver.chromium.swangle:mac-swangle-chromium-try-x64"
-    ]
-  },
-  "chromium.swangle:win-swangle-chromium-x86": {
-    "builders": [
-      "chromium.swangle:win-swangle-chromium-x86",
-      "tryserver.chromium.swangle:win-swangle-chromium-try-x86"
-    ]
-  },
-  "chromium.swangle:win-swangle-tot-swiftshader-x64": {
-    "builders": [
-      "chromium.swangle:win-swangle-tot-swiftshader-x64",
-      "tryserver.chromium.swangle:win-swangle-try-tot-swiftshader-x64"
-    ]
-  },
-  "chromium.swangle:win-swangle-tot-swiftshader-x86": {
-    "builders": [
-      "chromium.swangle:win-swangle-tot-swiftshader-x86",
-      "tryserver.chromium.swangle:win-swangle-try-tot-swiftshader-x86"
-    ]
-  },
-  "chromium.swangle:win-swangle-x64": {
-    "builders": [
-      "chromium.swangle:win-swangle-x64",
-      "tryserver.chromium.swangle:win-swangle-try-x64"
-    ]
-  },
-  "chromium.swangle:win-swangle-x86": {
-    "builders": [
-      "chromium.swangle:win-swangle-x86",
-      "tryserver.chromium.swangle:win-swangle-try-x86"
-    ]
-  },
   "chromium.webrtc.fyi:WebRTC Chromium FYI Android Builder": {
     "builders": [
       "chromium.webrtc.fyi:WebRTC Chromium FYI Android Builder"
@@ -1447,60 +1393,6 @@
       "chromium.rust:linux-rust-x64-rel",
       "tryserver.chromium.rust:linux-rust-x64-rel",
       "tryserver.chromium.rust:linux-rust-x64-rel-android-toolchain"
-    ]
-  },
-  "tryserver.chromium.swangle:linux-swangle-chromium-try-x64": {
-    "builders": [
-      "chromium.swangle:linux-swangle-chromium-x64",
-      "tryserver.chromium.swangle:linux-swangle-chromium-try-x64"
-    ]
-  },
-  "tryserver.chromium.swangle:linux-swangle-try-tot-swiftshader-x64": {
-    "builders": [
-      "chromium.swangle:linux-swangle-tot-swiftshader-x64",
-      "tryserver.chromium.swangle:linux-swangle-try-tot-swiftshader-x64"
-    ]
-  },
-  "tryserver.chromium.swangle:linux-swangle-try-x64": {
-    "builders": [
-      "chromium.swangle:linux-swangle-x64",
-      "tryserver.chromium.swangle:linux-swangle-try-x64"
-    ]
-  },
-  "tryserver.chromium.swangle:mac-swangle-chromium-try-x64": {
-    "builders": [
-      "chromium.swangle:mac-swangle-chromium-x64",
-      "tryserver.chromium.swangle:mac-swangle-chromium-try-x64"
-    ]
-  },
-  "tryserver.chromium.swangle:win-swangle-chromium-try-x86": {
-    "builders": [
-      "chromium.swangle:win-swangle-chromium-x86",
-      "tryserver.chromium.swangle:win-swangle-chromium-try-x86"
-    ]
-  },
-  "tryserver.chromium.swangle:win-swangle-try-tot-swiftshader-x64": {
-    "builders": [
-      "chromium.swangle:win-swangle-tot-swiftshader-x64",
-      "tryserver.chromium.swangle:win-swangle-try-tot-swiftshader-x64"
-    ]
-  },
-  "tryserver.chromium.swangle:win-swangle-try-tot-swiftshader-x86": {
-    "builders": [
-      "chromium.swangle:win-swangle-tot-swiftshader-x86",
-      "tryserver.chromium.swangle:win-swangle-try-tot-swiftshader-x86"
-    ]
-  },
-  "tryserver.chromium.swangle:win-swangle-try-x64": {
-    "builders": [
-      "chromium.swangle:win-swangle-x64",
-      "tryserver.chromium.swangle:win-swangle-try-x64"
-    ]
-  },
-  "tryserver.chromium.swangle:win-swangle-try-x86": {
-    "builders": [
-      "chromium.swangle:win-swangle-x86",
-      "tryserver.chromium.swangle:win-swangle-try-x86"
     ]
   },
   "tryserver.chromium.win:win-annotator-rel": {
