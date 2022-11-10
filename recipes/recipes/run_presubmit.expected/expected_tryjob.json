@@ -202,7 +202,7 @@
       "rdb",
       "stream",
       "--",
-      "vpython3",
+      "vpython",
       "RECIPE_REPO[depot_tools]/presubmit_support.py",
       "--issue",
       "123456",
