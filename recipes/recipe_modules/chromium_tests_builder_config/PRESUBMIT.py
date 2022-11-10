@@ -13,7 +13,7 @@ def _path(input_api, path):
 # TODO(gbeaty) Once all builder configs are migrated src-side, this can be
 # removed
 def CheckGroupings(input_api, output_api):
-  projects_to_migrate = ['chromium']
+  projects_to_migrate = ['chromium', 'chrome']
 
   # First check that the groupings files are up-to-date
   script = _path(input_api, 'migration/scripts/generate_groupings.py')
