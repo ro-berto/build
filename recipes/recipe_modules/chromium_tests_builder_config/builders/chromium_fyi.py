@@ -117,11 +117,10 @@ SPEC = {
             gclient_apply_config=['chromeos', 'checkout_lacros_sdk'],
             chromium_config_kwargs={
                 'TARGET_BITS': 64,
-                'TARGET_CROS_BOARDS': 'eve:zork',
+                'TARGET_CROS_BOARDS': 'eve',
                 'CROS_BOARDS_WITH_QEMU_IMAGES': 'amd64-generic',
                 'TARGET_PLATFORM': 'chromeos',
             },
-            skylab_gs_bucket='lacros-amd64-generic-rel-skylab-try',
             simulation_platform='linux',
             test_results_config='staging_server',
         ),
