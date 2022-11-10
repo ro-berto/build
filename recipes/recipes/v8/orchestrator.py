@@ -225,6 +225,11 @@ def GenTests(api):
 
   # Minimal v8-side test spec for simulating most recipe features.
   test_spec = json.dumps({
+    'swarming_task_attrs': {
+      'priority': 25,
+      'expiration': 1200,
+      'hard_timeout': 3600,
+    },
     "tests": [
       {"name": "v8testing"},
       {"name": "test262", "test_args": ["--extra-flags=--flag"]},
