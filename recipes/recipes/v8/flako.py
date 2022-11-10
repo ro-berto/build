@@ -34,6 +34,7 @@ from recipe_engine.config import Single
 from recipe_engine.post_process import (
     DoesNotRun, DropExpectation, Filter, MustRun, StatusSuccess)
 from recipe_engine.post_process import ResultReasonRE
+from recipe_engine.post_process import ResultReason
 from recipe_engine.recipe_api import Property
 
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
@@ -693,14 +694,21 @@ class Bisector(Validator):
         represents the range of good..bad revision found.
     """
     commit_offset = 1
-    for _ in range(MAX_BISECT_STEPS):
+    for bisect_step_num in range(MAX_BISECT_STEPS):
       from_offset = to_offset + commit_offset
 
       # Check if from_offset is a good revision, otherwise iterate backwards.
       from_offset = self.builds.find_closest_build(from_offset)
       self.report_revision('Checking %s', from_offset)
-      if not self.is_bad_func(from_offset):
-        return from_offset, to_offset
+      try:
+        if not self.is_bad_func(from_offset):
+          return from_offset, to_offset
+      except self.api.step.InfraFailure as e:
+        if bisect_step_num >= MAX_BISECT_STEPS / 2:
+          raise self.api.step.StepFailure(
+              'Unable to retrieve from CAS, probably went out of retention')
+        else:
+          raise e
 
       to_offset = from_offset
       commit_offset *= 2
@@ -958,12 +966,20 @@ def GenTests(api):
   def get_revisions(offset, count):
     return _gitiles_lookup(f'get revision #{offset}', offset, count)
 
-  def is_flaky(offset, shard, flakes, calibration_attempt=0,
-               test_name='mjsunit/foobar', output_prefix=''):
+  def is_flaky(offset,
+               shard,
+               flakes,
+               calibration_attempt=0,
+               test_name='mjsunit/foobar',
+               output_prefix='',
+               no_output=False):
     test_data = api.chromium_swarming.canned_summary_output_raw()
-    test_data['shards'][0]['output'] = (
-        output_prefix + TEST_FAILED_TEMPLATE % flakes)
-    test_data['shards'][0]['exit_code'] = 1
+    if no_output:
+      test_data['shards'] = [None]
+    else:
+      test_data['shards'][0]['output'] = (
+          output_prefix + TEST_FAILED_TEMPLATE % flakes)
+      test_data['shards'][0]['exit_code'] = 1
     step_prefix = ''
     if calibration_attempt:
       step_prefix = f'calibration attempt {calibration_attempt}.'
@@ -992,6 +1008,11 @@ def GenTests(api):
   def drop_test_step_expectations():
     return api.post_process(
         Filter().include_re(r'(?!^check mjsunit/foobar)'))
+
+  def one_bisect_iteration(index):
+    exp_index = 2**index - 1
+    return (get_revisions(exp_index, 1) + successful_lookups(exp_index) +
+            is_flaky(exp_index, 0, 1))
 
   # Full bisect run with some corner cases. Overview of all revisions ordered
   # new -> old.
@@ -1182,6 +1203,35 @@ def GenTests(api):
       sum((get_revisions(i, 1) for i in range(1, MAX_CAS_OFFSET)),
            api.empty_test_data()) +
       api.post_process(ResultReasonRE, 'Couldn\'t find cas_digests.') +
+      api.post_process(DropExpectation)
+  )
+
+  # Simulate not returning a JSON output after many iterations.
+  yield (
+      test('long_bisection_with_no_json_output') +
+      successful_lookups(0) +
+      is_flaky(0, 0, 5, calibration_attempt=1) +
+      sum((one_bisect_iteration(i)
+          for i in range(1, 10)), api.empty_test_data()) +
+      is_flaky(511, 0, 1, no_output=True) +
+      api.post_process(
+          ResultReason,
+          'Unable to retrieve from CAS, probably went out of retention') +
+      api.post_process(DropExpectation)
+  )
+
+  # Simulate not returning a JSON output after a few iterations.
+  yield (
+      test('short_bisection_with_no_json_output') +
+      successful_lookups(0) +
+      is_flaky(0, 0, 5, calibration_attempt=1) +
+      sum((one_bisect_iteration(i)
+          for i in range(1, 5)), api.empty_test_data()) +
+      is_flaky(15, 0, 1, no_output=True) +
+      api.post_process(
+          ResultReason,
+          'Infra Failure: Step(\'Shard #0 failed: Details unknown (missing shard results)\') (retcode: 0)'
+      ) +
       api.post_process(DropExpectation)
   )
 
