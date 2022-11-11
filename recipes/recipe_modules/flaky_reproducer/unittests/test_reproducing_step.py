@@ -48,16 +48,19 @@ class ReproducingStepTest(unittest.TestCase):
     self.assertEqual(step.readable_info(), 'This failure was NOT reproduced.')
 
   def test_better_than(self):
+    step = self.test_from_jsonish()
+    test_binary = step.test_binary
+
     step_0 = ReproducingStep(
-        None,
+        test_binary,
         'test',
         0,
     )
-    step_50 = ReproducingStep(None, 'test', 0.5, 123)
-    step_60 = ReproducingStep(None, 'test', 0.6, 123)
-    step_90 = ReproducingStep(None, 'test', 0.9, 12)
-    step_92 = ReproducingStep(None, 'test', 0.92, 123)
-    step_95 = ReproducingStep(None, 'test', 0.95, 123)
+    step_50 = ReproducingStep(test_binary, 'test', 0.5, 123)
+    step_60 = ReproducingStep(test_binary, 'test', 0.6, 123)
+    step_90 = ReproducingStep(test_binary.with_tests(['a']), 'test', 0.9, 12)
+    step_92 = ReproducingStep(test_binary, 'test', 0.92, 123)
+    step_95 = ReproducingStep(test_binary, 'test', 0.95, 123)
     self.assertFalse(step_0)
     self.assertTrue(step_50.better_than(step_0))
     self.assertTrue(step_60.better_than(step_50))

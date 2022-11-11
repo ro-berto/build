@@ -39,8 +39,8 @@ def RunSteps(api, config, task_id, build_id, test_name, test_id,
 
 from google.protobuf import timestamp_pb2, struct_pb2
 
-from recipe_engine.post_process import (DropExpectation, StatusFailure,
-                                        ResultReason)
+from recipe_engine.post_process import (DropExpectation, StatusSuccess,
+                                        StatusFailure, ResultReason)
 from PB.go.chromium.org.luci.resultdb.proto.v1 import (
     common as common_pb2,  # go/pyformat-break
     invocation as invocation_pb2,  #
@@ -189,6 +189,11 @@ def GenTests(api):
           config='manual',
           monorail_issue='123'),
       api.step_data(
+          'check_monorail_comment_posted'
+          '.GetIssue projects/chromium/issues/123',
+          api.json.output_stream(issue_result),
+      ),
+      api.step_data(
           'get_test_result_summary.download swarming outputs',
           api.raw_io.output_dir({
               'output.json':
@@ -292,11 +297,6 @@ def GenTests(api):
                       'gtest_good_output.json')))),
       api.step_data(
           'summarize_results.post_summary_to_monorail'
-          '.GetIssue projects/chromium/issues/123',
-          api.json.output_stream(issue_result),
-      ),
-      api.step_data(
-          'summarize_results.post_summary_to_monorail'
           '.ModifyIssues projects/chromium/issues/123',
           api.json.output_stream(issue_result),
       ),
@@ -398,5 +398,23 @@ def GenTests(api):
           ResultReason, '''Error while running:
 * flaky reproducer strategy batch for MockUnitTests.FailTest
 * flaky reproducer strategy repeat for MockUnitTests.FailTest'''),
+      api.post_process(DropExpectation),
+  )
+
+  yield api.test(
+      'monorail issue posted',
+      api.properties(
+          task_id='54321fffffabc123',
+          test_name='MockUnitTests.FailTest',
+          config='manual',
+          monorail_issue='123'),
+      api.step_data(
+          'check_monorail_comment_posted'
+          '.GetIssue projects/chromium/issues/123',
+          api.json.output_stream({'labels': [{
+              'label': 'flaky-reproduced'
+          }]}),
+      ),
+      api.post_check(StatusSuccess),
       api.post_process(DropExpectation),
   )

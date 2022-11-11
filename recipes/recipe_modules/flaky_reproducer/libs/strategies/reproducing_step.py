@@ -87,8 +87,10 @@ class ReproducingStep:
         (self.reproduced_cnt < 3 or other.reproduced_cnt < 3)):
       return self.reproduced_cnt > other.reproduced_cnt
     # If the two reproducing step have similar reproducing_rate (>= 0.9), the
-    # shorter running duration is better.
+    # lesser tests is better. (It's not using the duration here because parallel
+    # strategy would run a lot of tests in parallel which could have a shorter
+    # duration than running the same number of repeats.)
     if self.reproducing_rate >= 0.9 and other.reproducing_rate >= 0.9 and abs(
         self.reproducing_rate - other.reproducing_rate) < 0.03:
-      return self.duration < other.duration
+      return len(self.test_binary.tests) < len(other.test_binary.tests)
     return self.reproducing_rate > other.reproducing_rate

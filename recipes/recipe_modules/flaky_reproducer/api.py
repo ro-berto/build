@@ -423,14 +423,10 @@ class FlakyReproducer(recipe_api.RecipeApi):
       # Instead, add the link to this build for more details.
       monorail_summary += ('\n\nFor more detailed information: ' +
                            self.m.buildbucket.build_url())
-      try:
-        self.post_summary_to_monorail(monorail_issue, monorail_summary)
-      except self.m.step.StepWarning:
-        # Ignore if comment posted to monorail.
-        pass
+      self.post_summary_to_monorail(monorail_issue, monorail_summary)
 
   @nest_step
-  def post_summary_to_monorail(self, monorail_issue, comment_message):
+  def check_monorail_comment_posted(self, monorail_issue):
     monorail_api = MonorailApi(self.m)
     issue_name = monorail_api.chromium_issue_name(monorail_issue)
     issue = monorail_api.get_issue(issue_name)
@@ -438,6 +434,11 @@ class FlakyReproducer(recipe_api.RecipeApi):
       if label.get('label').lower() == self.MONORAIL_LABEL.lower():
         raise self.m.step.StepWarning(
             'Reproducing step already posted to monorail issue.')
+
+  @nest_step
+  def post_summary_to_monorail(self, monorail_issue, comment_message):
+    monorail_api = MonorailApi(self.m)
+    issue_name = monorail_api.chromium_issue_name(monorail_issue)
     monorail_api.modify_issues(
         issue_name, comment_message, labels=[self.MONORAIL_LABEL])
 
@@ -535,6 +536,13 @@ class FlakyReproducer(recipe_api.RecipeApi):
       monorail_issue (str): Add a comment to the monorail_issue id if reproduced
         and the step verified.
     """
+    if monorail_issue:
+      try:
+        self.check_monorail_comment_posted(monorail_issue)
+      except self.m.step.StepWarning:
+        # Ignore the task if comment posted to monorail.
+        return
+
     task_id, test_name = self.query_resultdb_for_task_id_and_test_name(
         task_id=task_id,
         build_id=build_id,
