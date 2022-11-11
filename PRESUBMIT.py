@@ -64,11 +64,19 @@ PYTHON3_ONLY_FILES = (
     'recipes/recipe_modules/chromium_tests_builder_config/PRESUBMIT.py',
     (
         'recipes/recipe_modules/chromium_tests_builder_config/migration/'
+        'scripts/buildozer_wrapper.py'
+    ),
+    (
+        'recipes/recipe_modules/chromium_tests_builder_config/migration/'
         'scripts/generate_groupings.py'
     ),
     (
         'recipes/recipe_modules/chromium_tests_builder_config/migration/'
         'scripts/migrate.py'
+    ),
+    (
+        'recipes/recipe_modules/chromium_tests_builder_config/migration/'
+        'scripts/tests/buildozer_wrapper_unit_test.py'
     ),
     (
         'recipes/recipe_modules/chromium_tests_builder_config/migration/'
