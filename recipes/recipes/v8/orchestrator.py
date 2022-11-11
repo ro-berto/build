@@ -236,7 +236,7 @@ def GenTests(api):
     ],
   }, indent=2)
   parent_test_spec = api.v8_tests.example_parent_test_spec_properties(
-      'v8_foobar_rel_ng_triggered', test_spec)
+      'v8_foobar_rel', test_spec)
 
   # Dummy CAS digest hashes.
   buider_spec = parent_test_spec.get('parent_test_spec', {})

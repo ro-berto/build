@@ -271,7 +271,7 @@
     "name": "initialization.read test spec (v8)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@builders.pyl@{\"v8_foobar_rel_ng_triggered\": {@@@",
+      "@@@STEP_LOG_LINE@builders.pyl@{\"v8_foobar_rel\": {@@@",
       "@@@STEP_LOG_LINE@builders.pyl@  \"tests\": [@@@",
       "@@@STEP_LOG_LINE@builders.pyl@    {@@@",
       "@@@STEP_LOG_LINE@builders.pyl@      \"name\": \"v8testing\"@@@",
@@ -279,7 +279,7 @@
       "@@@STEP_LOG_LINE@builders.pyl@  ]@@@",
       "@@@STEP_LOG_LINE@builders.pyl@}}@@@",
       "@@@STEP_LOG_END@builders.pyl@@@",
-      "@@@STEP_LOG_LINE@test_spec@v8_foobar_rel_ng_triggered@@@",
+      "@@@STEP_LOG_LINE@test_spec@v8_foobar_rel@@@",
       "@@@STEP_LOG_LINE@test_spec@  v8testing(1) None@@@",
       "@@@STEP_LOG_END@test_spec@@@"
     ]
@@ -287,82 +287,6 @@
   {
     "cmd": [],
     "name": "build"
-  },
-  {
-    "cmd": [
-      "vpython3",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[CACHE]/builder/v8/infra/mb/mb_config.pyl",
-      "/path/to/tmp/"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "v8:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "build.read MB config (compilator)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@mb_config.pyl@@@@",
-      "@@@STEP_LOG_LINE@mb_config.pyl@{@@@",
-      "@@@STEP_LOG_LINE@mb_config.pyl@  'builder_groups': {@@@",
-      "@@@STEP_LOG_LINE@mb_config.pyl@      'tryserver.v8': {@@@",
-      "@@@STEP_LOG_LINE@mb_config.pyl@        'v8_foobar_rel_ng': 'release_x64',@@@",
-      "@@@STEP_LOG_LINE@mb_config.pyl@      },@@@",
-      "@@@STEP_LOG_LINE@mb_config.pyl@  },@@@",
-      "@@@STEP_LOG_LINE@mb_config.pyl@}@@@",
-      "@@@STEP_LOG_END@mb_config.pyl@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "vpython3",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "\n{\n  'builder_groups': {\n      'tryserver.v8': {\n        'v8_foobar_compile_rel': 'release_x64',\n      },\n  },\n}\n",
-      "[TMP_BASE]/mb_config.pyl"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "v8:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "build.tweak MB config (compilator)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@mb_config.pyl@@@@",
-      "@@@STEP_LOG_LINE@mb_config.pyl@{@@@",
-      "@@@STEP_LOG_LINE@mb_config.pyl@  'builder_groups': {@@@",
-      "@@@STEP_LOG_LINE@mb_config.pyl@      'tryserver.v8': {@@@",
-      "@@@STEP_LOG_LINE@mb_config.pyl@        'v8_foobar_compile_rel': 'release_x64',@@@",
-      "@@@STEP_LOG_LINE@mb_config.pyl@      },@@@",
-      "@@@STEP_LOG_LINE@mb_config.pyl@  },@@@",
-      "@@@STEP_LOG_LINE@mb_config.pyl@}@@@",
-      "@@@STEP_LOG_END@mb_config.pyl@@@"
-    ]
   },
   {
     "cmd": [
@@ -375,7 +299,7 @@
       "-b",
       "v8_foobar_compile_rel",
       "--config-file",
-      "[TMP_BASE]/mb_config.pyl",
+      "[CACHE]/builder/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
       "--quiet"
@@ -417,7 +341,7 @@
       "-b",
       "v8_foobar_compile_rel",
       "--config-file",
-      "[TMP_BASE]/mb_config.pyl",
+      "[CACHE]/builder/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
       "--json-output",

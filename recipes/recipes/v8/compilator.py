@@ -58,76 +58,26 @@ CANCELLATION_MESSAGE = (
     'Parent orchestrator build ended, causing this build to be canceled.')
 
 
-# TODO(https://crbug.com/890222): Deprecate this mapping after migration to
-# orchestrator + 4 milestones (2023/Q3).
-def legacy_builder_name(api, triggered):
-  """Map given builder names from infra/config to names used for look-ups
-  in source configurations.
+def orchestrator_name(api):
+  """Contruct orchestrator name by compilator name.
 
-  This maps compilator builder names to legacy names to ease the roll-out and
-  for backwards-compatibility on release branches.
+  Returns the orchestrator name by naming convention. Same as compilator
+      name with the "_compile" infix removed.
   """
   builder_name = api.buildbucket.builder_name
-  triggered_suffix = '_triggered' if triggered else ''
-  if builder_name.endswith('_compile_rel'):
-    builder_name = builder_name.replace(
-        '_compile_rel', '_rel_ng' + triggered_suffix)
-  if builder_name.endswith('_compile_dbg'):
-    builder_name = builder_name.replace(
-        '_compile_dbg', '_dbg_ng' + triggered_suffix)
-  return builder_name
-
-
-# TODO(https://crbug.com/890222): Remove this after M111.
-def orchestrator_names(api):
-  """Temporary mapping of legacy trybot names to look up V8-side test configs.
-
-  Remove after V8-side mapping changes have reached extended stable.
-  This changes builder-name config keys, e.g.
-  v8_linux_rel into legacy name v8_linux_rel_ng_triggered.
-  """
-  builder_name = api.buildbucket.builder_name
-  if builder_name.endswith('_compile_rel'):
-    builder_name = builder_name.replace('_compile_rel', '_rel')
-  if builder_name.endswith('_compile_dbg'):
-    builder_name = builder_name.replace('_compile_dbg', '_dbg')
-  return [
-    legacy_builder_name(api, triggered=True),
-    builder_name,
-  ]
-
-
-# TODO(https://crbug.com/890222): Remove after M111.
-def mb_override(api):
-  """Temporary override of mb_config.pyl until V8-side builder name changes
-  have reached extended stable."""
-
-  mb_config_data = api.file.read_text(
-      'read MB config (compilator)',
-      api.path['checkout'].join('infra', 'mb', 'mb_config.pyl'),
-      test_data=api.v8.test_api.example_compilator_mb_config(),
-  )
-
-  # Replace legacy name in config with new/current name.
-  # E.g. linux_rel_ng with linux_compile_rel.
-  mb_config_data = mb_config_data.replace(
-      legacy_builder_name(api, triggered=False),
-      api.buildbucket.builder_name)
-
-  new_mb_config_path = api.path['tmp_base'].join('mb_config.pyl')
-  api.file.write_text(
-      'tweak MB config (compilator)',
-      new_mb_config_path,
-      mb_config_data,
-  )
-  return new_mb_config_path
+  assert builder_name.endswith(('_compile_rel', '_compile_dbg')), (
+    f'Compilator name doesn\'t follow the naming convention. Must end '
+    f'in _compile_rel or _compile_dbg, but was {builder_name}.')
+  prefix, _, suffix = builder_name.rsplit('_', 2)
+  return f'{prefix}_{suffix}'
 
 
 def read_test_spec(api):
   """Dynamically load test specifications from all discovered test roots."""
   test_spec = api.v8_tests.TEST_SPEC()
   for test_root in api.v8.get_test_roots():
-    test_spec.update(api.v8.read_test_spec(test_root, orchestrator_names(api)))
+    test_spec.update(
+        api.v8.read_test_spec(test_root, [orchestrator_name(api)]))
   return test_spec
 
 
@@ -174,7 +124,7 @@ def compilator_steps(api, custom_deps, default_targets, gclient_vars,
     test_spec = read_test_spec(api)
 
   with api.step.nest('build'):
-    compile_failure = v8.compile(test_spec, mb_override(api))
+    compile_failure = v8.compile(test_spec)
     if compile_failure:
       return compile_failure
 
@@ -222,14 +172,12 @@ def GenTests(api):
 
   yield (
       test('basic') +
-      api.v8.test_spec_in_checkout(
-          'v8_foobar_rel_ng', test_spec, 'v8_foobar_rel_ng_triggered')
+      api.v8.test_spec_in_checkout('v8_foobar_rel', test_spec)
   )
 
   yield (
       test('windows', 'v8_foobar_compile_dbg') +
-      api.v8.test_spec_in_checkout(
-          'v8_foobar_dbg_ng', test_spec, 'v8_foobar_dbg_ng_triggered') +
+      api.v8.test_spec_in_checkout('v8_foobar_dbg', test_spec) +
       api.platform('win', 64) +
       api.post_process(DropExpectation)
   )

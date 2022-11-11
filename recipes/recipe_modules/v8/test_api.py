@@ -22,16 +22,6 @@ VERSION_FILE_TMPL = """
 #define V8_PATCH_LEVEL %d
 """
 
-MB_CONFIG_COMPILATOR_EXAMPLE = """
-{
-  'builder_groups': {
-      'tryserver.v8': {
-        'v8_foobar_rel_ng': 'release_x64',
-      },
-  },
-}
-"""
-
 MB_CONFIG_GOMA_EXAMPLE = """
 {
   'mixins': {
@@ -110,9 +100,6 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       'num_files': 3615,
       'top100_avg_deps': 1.3,
     })
-
-  def example_compilator_mb_config(self):
-    return MB_CONFIG_COMPILATOR_EXAMPLE
 
   def example_goma_mb_config(self):
     return MB_CONFIG_GOMA_EXAMPLE
