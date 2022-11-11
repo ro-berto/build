@@ -52,8 +52,7 @@ class BuilderToTrigger(object):
 DEFAULT_BUILDERS = (
     BuilderToTrigger('luci.chromium.try:chromium_presubmit', cl_key='fast'),
     BuilderToTrigger('luci.chromium.try:linux-rel'),
-    BuilderToTrigger(
-        'luci.chromium.try:win10_chromium_x64_rel_ng', cl_key='fast'),
+    BuilderToTrigger('luci.chromium.try:win-rel', cl_key='fast'),
 )
 
 
