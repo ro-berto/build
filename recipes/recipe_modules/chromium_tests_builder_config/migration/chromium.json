@@ -4,12 +4,6 @@
       "chromium.android.fyi:Android ASAN (dbg) (reclient)"
     ]
   },
-  "chromium.android.fyi:Android WebView P FYI (rel)": {
-    "builders": [
-      "chromium.android.fyi:Android WebView P FYI (rel)",
-      "tryserver.chromium.android:android-webview-pie-arm64-fyi-rel"
-    ]
-  },
   "chromium.android.fyi:Android arm64 Builder (dbg) (reclient)": {
     "builders": [
       "chromium.android.fyi:Android arm64 Builder (dbg) (reclient)"
@@ -1177,12 +1171,6 @@
       "chromium.android.fyi:android-weblayer-11-x86-rel-tests",
       "chromium.android.fyi:android-weblayer-with-aosp-webview-x86-fyi-rel",
       "tryserver.chromium.android:android-weblayer-11-x86-rel-tests"
-    ]
-  },
-  "tryserver.chromium.android:android-webview-pie-arm64-fyi-rel": {
-    "builders": [
-      "chromium.android.fyi:Android WebView P FYI (rel)",
-      "tryserver.chromium.android:android-webview-pie-arm64-fyi-rel"
     ]
   },
   "tryserver.chromium.android:android-webview-pie-x86-wpt-fyi-rel": {

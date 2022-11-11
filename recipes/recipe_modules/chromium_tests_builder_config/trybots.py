@@ -142,11 +142,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.android.fyi',
                 buildername='android-pie-arm64-fyi-rel',
             ),
-        'android-webview-pie-arm64-fyi-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android.fyi',
-                buildername='Android WebView P FYI (rel)',
-            ),
     },
     # The config for the following builders is now specified src-side in
     # //infra/config/subprojects/chromium/try/tryserver.chromium.linux.star

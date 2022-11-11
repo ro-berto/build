@@ -53,22 +53,6 @@ SPEC = {
             android_config='clang_builder_mb',
             simulation_platform='linux',
         ),
-    'Android WebView P FYI (rel)':
-        _chromium_android_fyi_spec(
-            chromium_config='android',
-            chromium_apply_config=['mb'],
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'android',
-            ],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'android',
-            },
-            android_config='main_builder',
-            simulation_platform='linux',
-        ),
     'android-weblayer-with-aosp-webview-x86-fyi-rel':
         _chromium_android_fyi_spec(
             chromium_config='android',
