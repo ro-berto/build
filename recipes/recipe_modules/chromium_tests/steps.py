@@ -2312,45 +2312,16 @@ class SwarmingTest(Test):
     self.api.m.chromium_swarming.trigger_task(
         self._tasks[suffix], resultdb=resultdb)
 
-  def validate_task_results(self, step_result):
-    """Interprets output of a task (provided as StepResult object).
-
-    Called for successful and failed tasks.
-
-    Args:
-      api: Caller's API.
-      step_result: StepResult object to examine.
-
-    Returns:
-      A dictionary with the keys: (valid, failures, total_tests_ran,
-      pass_fail_counts), where:
-        * valid is True if valid results are available
-        * failures is a list of names of failed tests (ignored if valid is
-            False).
-        * total_tests_ran counts the number of tests executed.
-        * pass_fail_counts is a dictionary that includes the number of passes
-            and fails for each test.
-        * findit_notrun is a set of tests for which every test result was NOTRUN
-          or UNKNOWN. This is a temporary placeholder to simplify FindIt logic.
-    """
-    raise NotImplementedError()  # pragma: no cover
-
   @recipe_api.composite_step
   def run(self, suffix):
     """Waits for launched test to finish and collects the results."""
-    step_result, has_valid_results = (
+    step_result, _ = (
         self.api.m.chromium_swarming.collect_task(self._tasks[suffix]))
     self._suffix_step_name_map[suffix] = '.'.join(step_result.name_tokens)
 
     metadata = self.step_metadata(suffix)
     step_result.presentation.logs['step_metadata'] = (self.api.m.json.dumps(
         metadata, indent=2, sort_keys=True)).splitlines()
-
-    # TODO(martiniss): Consider moving this into some sort of base
-    # validate_task_results implementation.
-    results = self.validate_task_results(step_result)
-    if not has_valid_results:
-      results['valid'] = False
 
     self.update_failure_on_exit(suffix, bool(self._tasks[suffix].failed_shards))
 
@@ -2421,9 +2392,6 @@ class SwarmingGTestTest(SwarmingTest):
         collect_json_output_override=json_override)
     self._apply_swarming_task_config(task, suffix, '--gtest_filter', ':')
     return task
-
-  def validate_task_results(self, step_result):
-    return {}
 
   def pass_fail_counts(self, suffix):
     return super(SwarmingGTestTest, self).pass_fail_counts(suffix)
@@ -2654,16 +2622,10 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
                                      '--isolated-script-test-filter', '::')
     return task
 
-  def validate_task_results(self, step_result):
-    # Store the JSON results so we can later send them to the legacy
-    # test-results service, but don't inspect/verify them at all.
-    self._isolated_script_results = step_result.json.output
-    return {}
-
   @recipe_api.composite_step
   def run(self, suffix):
     step_result = super(SwarmingIsolatedScriptTest, self).run(suffix)
-    results = self._isolated_script_results
+    results = step_result.json.output
 
     if results and self.spec.results_handler_name == 'layout tests':
       upload_step_name = '.'.join(step_result.name_tokens)
