@@ -39,106 +39,64 @@ def CheckFreeze(input_api, output_api):
 
   return []
 
-
-# A list of files that are _only_ compatible with python3. Tests for these are
-# only run under vpython3, and lints are performed with pylint 2.7. The
-# expectation is that these will become the defaults over time.
-PYTHON3_ONLY_FILES = (
-    'PRESUBMIT_test.py',
-    'recipes/zip_build.py',
-    'recipes/extract_build.py',
-    'recipes/recipes/flakiness/generate_builder_test_data.resources/query.py',
+# A list of file that are executed using python2. Tests for these are
+# run using vpython2 and lints are performed with pylint 1.5. We should
+# work to eliminate this list by migrating scripts to python3 (updating
+# it so that they are invoked using python3 or vpython3).
+PYTHON2_FILES = (
+    'recipes/bot_utils.py',
+    'recipes/build_directory.py',
+    'recipes/crash_utils.py',
+    'recipes/daemonizer.py',
+    'recipes/recipe_modules/adb/resources/list_devices.py',
     (
-        'recipes/recipes/flakiness/generate_builder_test_data.resources/'
-        'query_test.py'
+        'recipes/recipe_modules/binary_size/resources/'
+        'trybot_failed_expectations_checker.py'
     ),
-    'recipes/recipe_modules/archive/resources/filter_build_files.py',
-    'recipes/recipe_modules/archive/resources/zip_archive.py',
-    'recipes/recipe_modules/chromium/resources/ninja_wrapper.py',
-    'recipes/recipe_modules/chromium/resources/ninja_wrapper_test.py',
     'recipes/recipe_modules/chromium_android/resources/archive_build.py',
     (
         'recipes/recipe_modules/chromium_android/resources/'
-        'archive_build_unittest.py'
+        'authorize_adb_devices.py'
     ),
-    'recipes/recipe_modules/chromium_tests_builder_config/PRESUBMIT.py',
+    'recipes/recipe_modules/chromium_swarming/resources/merge_api.py',
+    'recipes/recipe_modules/chromium_swarming/resources/noop_merge.py',
     (
-        'recipes/recipe_modules/chromium_tests_builder_config/migration/'
-        'scripts/buildozer_wrapper.py'
+        'recipes/recipe_modules/chromium_swarming/unittests/'
+        'common_merge_script_tests.py'
     ),
+    'recipes/recipe_modules/chromium_swarming/unittests/noop_merge_test.py',
     (
-        'recipes/recipe_modules/chromium_tests_builder_config/migration/'
-        'scripts/generate_groupings.py'
+        'recipes/recipe_modules/cronet/resources/'
+        'upload_perf_dashboard_results_test.py'
     ),
+    'recipes/recipe_modules/cronet/resources/upload_perf_dashboard_results.py',
+    'recipes/recipe_modules/disk/resources/statvfs.py',
+    'recipes/recipe_modules/findit/resources/check_target_existence.py',
+    'recipes/recipe_modules/symupload/resources/symupload.py',
+    'recipes/recipe_modules/symupload/unittests/symupload_test.py',
+    'recipes/recipe_modules/v8/resources/build-dep-stats.py',
     (
-        'recipes/recipe_modules/chromium_tests_builder_config/migration/'
-        'scripts/migrate.py'
+        'recipes/recipes/android/sdk_packager.resources/'
+        'parse_sdkmanager_list_test.py'
     ),
-    (
-        'recipes/recipe_modules/chromium_tests_builder_config/migration/'
-        'scripts/tests/buildozer_wrapper_unit_test.py'
-    ),
-    (
-        'recipes/recipe_modules/chromium_tests_builder_config/migration/'
-        'scripts/tests/generate_groupings_integration_test.py'
-    ),
-    (
-        'recipes/recipe_modules/chromium_tests_builder_config/migration/'
-        'scripts/tests/generate_groupings_unit_test.py'
-    ),
-    (
-        'recipes/recipe_modules/chromium_tests_builder_config/migration/'
-        'scripts/tests/migrate_integration_test.py'
-    ),
-    (
-        'recipes/recipe_modules/chromium_tests_builder_config/migration/'
-        'scripts/tests/migrate_unit_test.py'
-    ),
-    'recipes/recipe_modules/cronet/resources/clear_landmines.py',
-    'recipes/recipe_modules/tar/resources/tar_test.py',
-    (
-        'recipes/recipe_modules/tricium_clang_tidy/resources/'
-        'tricium_clang_tidy_script.py'
-    ),
-    (
-        'recipes/recipe_modules/tricium_clang_tidy/resources/'
-        'tricium_clang_tidy_test.py'
-    ),
-    'recipes/recipe_modules/test_utils/unittests/query_cq_flakes_test.py',
-    'recipes/recipe_modules/code_coverage/unittests/aggregation_util_test.py',
-    (
-        'recipes/recipe_modules/code_coverage/unittests/'
-        'combine_jacoco_reports_test.py'
-    ),
-    'recipes/recipe_modules/code_coverage/unittests/constants_test.py',
-    'recipes/recipe_modules/code_coverage/unittests/diff_util_test.py',
-    (
-        'recipes/recipe_modules/code_coverage/unittests/'
-        'generate_coverage_metadata_for_javascript_test.py'
-    ),
-    (
-        'recipes/recipe_modules/code_coverage/unittests/'
-        'generate_coverage_metadata_for_java_test.py'
-    ),
-    (
-        'recipes/recipe_modules/code_coverage/unittests/'
-        'generate_coverage_metadata_test.py'
-    ),
-    'recipes/recipe_modules/code_coverage/unittests/gerrit_util_test.py',
-    (
-        'recipes/recipe_modules/code_coverage/unittests/'
-        'get_unstripped_paths_test.py'
-    ),
-    'recipes/recipe_modules/code_coverage/unittests/make_report_test.py',
-    (
-        'recipes/recipe_modules/code_coverage/unittests/'
-        'rebase_line_number_from_bot_to_gerrit_test.py'
-    ),
-    'recipes/recipe_modules/code_coverage/unittests/repository_util_test.py',
-    'recipes/recipe_modules/code_coverage/unittests/write_paths_test.py',
-    'recipes/unittests/extract_build_unittest.py',
-    'recipes/unittests/zip_build_unittest.py',
-    'scripts/common/unittests/chromium_utils_test.py',
+    'recipes/recipes/android/sdk_packager.resources/parse_sdkmanager_list.py',
+    'recipes/recipes/chromium_rts/create_model.resources/integration_tests.py',
+    'recipes/recipes/dawn.resources/hash_testcases.py',
+    'recipes/recipes/swarming/deterministic_build.resources/move.py',
+    'recipes/results_dashboard.py',
+    'recipes/runisolatedtest.py',
+    'recipes/runtest.py',
+    'recipes/tee.py',
+    'recipes/unittests/__init__.py',
+    'recipes/unittests/bot_utils_test.py',
+    'recipes/unittests/recipe_test.py',
+    'recipes/unittests/results_dashboard_test.py',
+    'recipes/unittests/runisolatedtest_test.py',
+    'recipes/xvfb.py',
+    'scripts/common/__init__.py',
+    'scripts/common/chromium_utils.py',
+    'scripts/common/gtest_utils.py',
+    'scripts/common/unittests/gtest_utils_test.py',
 )
 
 
@@ -223,49 +181,52 @@ def CheckPylintOnCommit(input_api, output_api):
   lints = input_api.canned_checks.RunPylint(
       input_api,
       output_api,
-      files_to_skip=GetFilesToSkip(input_api) + list(PYTHON3_ONLY_FILES),
+      files_to_skip=GetFilesToSkip(input_api) + list(PYTHON2_FILES),
       disabled_warnings=disabled_warnings,
       extra_paths_list=extra_paths_list,
   )
-  if PYTHON3_ONLY_FILES:
+  if PYTHON2_FILES:
     lints.extend(
         input_api.canned_checks.RunPylint(
             input_api,
             output_api,
-            files_to_check=PYTHON3_ONLY_FILES,
+            files_to_check=PYTHON2_FILES,
             disabled_warnings=disabled_warnings,
             extra_paths_list=extra_paths_list,
-            version='2.7',
+            version='1.5',
         )
     )
   return lints
 
 
 def _GetTests(input_api, output_api, test_files):
-  python3_only_files = set(join(input_api, f) for f in PYTHON3_ONLY_FILES)
-  non_python3_test_files = []
-  python3_test_files = []
+  python2_files = set(join(input_api, f) for f in PYTHON2_FILES)
+  non_python2_test_files = []
+  python2_test_files = []
   for t in sorted(test_files):
-    if t in python3_only_files:
-      python3_test_files.append(t)
+    if t in python2_files:
+      python2_test_files.append(t)
     else:
-      non_python3_test_files.append(t)
+      non_python2_test_files.append(t)
 
   tests = []
   tests.extend(
       input_api.canned_checks.GetUnitTests(
           input_api,
           output_api,
-          non_python3_test_files,
+          non_python2_test_files,
+          run_on_python3=True,
+          run_on_python2=False,
+          skip_shebang_check=True,
       )
   )
   tests.extend(
       input_api.canned_checks.GetUnitTests(
           input_api,
           output_api,
-          python3_test_files,
-          run_on_python2=False,
-          run_on_python3=True,
+          python2_test_files,
+          run_on_python2=True,
+          run_on_python3=False,
           skip_shebang_check=True,
       )
   )
