@@ -268,7 +268,7 @@ def generate_json_coverage_metadata(src_path,
   data['files'] = _get_files_coverage_data(src_path, root, diff_mapping,
                                            source_files, exclusion_pattern,
                                            third_party_inclusion_subdirs)
-  filenames = [x for x in data['files']]
+  filenames = [x['path'] for x in data['files']]
   blame_list = {}
   if generate_blame_list:
     blame_list = blame_util.generate_blame_list(src_path, filenames)
