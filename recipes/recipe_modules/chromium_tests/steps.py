@@ -1783,14 +1783,6 @@ class LocalGTestTest(LocalTest):
 
     _present_info_messages(step_result.presentation, self)
 
-    results_to_upload = gtest_results_file
-    if results_to_upload:
-      self.api.m.test_results.upload(
-          results_to_upload,
-          test_type=self.name,
-          chrome_revision=self.api.m.bot_update.last_returned_properties.get(
-              self.spec.commit_position_property, 'refs/x@{#0}'))
-
     return self.api.m.step.raise_on_failure(step_result, status)
 
 
@@ -2443,22 +2435,6 @@ class SwarmingGTestTest(SwarmingTest):
     step_name = '.'.join(step_result.name_tokens)
     self._suffix_step_name_map[suffix] = step_name
 
-    # TODO(crbug.com/1255217): Remove this android exception when logcats and
-    # tombstones are in resultdb.
-    if self.api.m.chromium.c.TARGET_PLATFORM == 'android':
-      raw_json_data = self.api.m.json.input(step_result.json.output)
-    else:
-      raw_json_data = self._tasks[suffix].collect_json_output_override
-
-
-    if raw_json_data:
-      chrome_revision_cp = self.api.m.chromium.build_properties.get(
-          'got_revision_cp', 'refs/x@{#0}')
-      _, chrome_revision = self.api.m.commit_position.parse(chrome_revision_cp)
-      chrome_revision = str(chrome_revision)
-      self.api.m.test_results.upload(
-          raw_json_data, chrome_revision=chrome_revision, test_type=step_name)
-
     return step_result
 
 
@@ -2689,20 +2665,10 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     step_result = super(SwarmingIsolatedScriptTest, self).run(suffix)
     results = self._isolated_script_results
 
-    if results:
-      # Only version 3 of results is supported by the upload server.
+    if results and self.spec.results_handler_name == 'layout tests':
       upload_step_name = '.'.join(step_result.name_tokens)
-      if results and results.get('version', None) == 3:
-        chrome_rev_cp = self.api.m.chromium.build_properties.get(
-            'got_revision_cp', 'refs/x@{#0}')
-        _, chrome_rev = self.api.m.commit_position.parse(str(chrome_rev_cp))
-        self.api.m.test_results.upload(
-            self.api.m.json.input(results),
-            chrome_revision=str(chrome_rev),
-            test_type=upload_step_name)
-      if self.spec.results_handler_name == 'layout tests':
-        _archive_layout_test_results(
-            self.api.m, upload_step_name, step_suffix=suffix)
+      _archive_layout_test_results(
+          self.api.m, upload_step_name, step_suffix=suffix)
     return step_result
 
 
@@ -2780,16 +2746,8 @@ class AndroidJunitTest(LocalTest):
       _present_info_messages(step_result.presentation, self)
 
       presentation_step = self.api.m.step.empty('Report %s results' % self.name)
-      gtest_results = (
-          self.api.m.test_utils.present_gtest_failures(
-              step_result, presentation=presentation_step.presentation))
-      if gtest_results:
-        self.api.m.test_results.upload(
-            self.api.m.json.input(gtest_results.raw),
-            test_type='.'.join(step_result.name_tokens),
-            chrome_revision=self.api.m.bot_update.last_returned_properties.get(
-                'got_revision_cp', 'refs/x@{#0}'))
-
+      self.api.m.test_utils.present_gtest_failures(
+          step_result, presentation=presentation_step.presentation)
 
     return step_result
 

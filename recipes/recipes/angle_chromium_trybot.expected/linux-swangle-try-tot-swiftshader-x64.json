@@ -1675,45 +1675,6 @@
   },
   {
     "cmd": [
-      "vpython3",
-      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
-      "--input-json",
-      "[CLEANUP]/tmp_tmp_1",
-      "--builder-group",
-      "tryserver.chromium.swangle",
-      "--builder-name",
-      "linux-swangle-try-tot-swiftshader-x64",
-      "--build-number",
-      "571",
-      "--test-type",
-      "angle_end2end_tests",
-      "--chrome-revision",
-      "refs/heads/main@{#170242}",
-      "--build-id",
-      "8945511751514863184",
-      "--test-results-server",
-      "test-results.appspot.com"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "luci_context": {
-      "realm": {
-        "name": "chromium:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "Upload to test-results [angle_end2end_tests]"
-  },
-  {
-    "cmd": [
       "rdb",
       "rpc",
       "luci.resultdb.v1.ResultDB",

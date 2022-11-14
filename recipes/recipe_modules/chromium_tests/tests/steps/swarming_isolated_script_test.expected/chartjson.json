@@ -674,41 +674,6 @@
     ]
   },
   {
-    "cmd": [
-      "vpython3",
-      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
-      "--input-json",
-      "{\"version\": 3}",
-      "--builder-group",
-      "fake-group",
-      "--builder-name",
-      "fake-tester",
-      "--build-number",
-      "571",
-      "--test-type",
-      "base_unittests on Intel GPU on Linux (with patch)",
-      "--chrome-revision",
-      "170242",
-      "--build-id",
-      "8945511751514863184",
-      "--test-results-server",
-      "test-results.appspot.com"
-    ],
-    "luci_context": {
-      "realm": {
-        "name": "chromium:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "Upload to test-results [base_unittests on Intel GPU on Linux (with patch)]"
-  },
-  {
     "cmd": [],
     "name": "$debug - all results (with patch)",
     "~followup_annotations": [

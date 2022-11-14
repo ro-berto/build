@@ -1578,45 +1578,6 @@
   },
   {
     "cmd": [
-      "vpython3",
-      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
-      "--input-json",
-      "[CLEANUP]/tmp_tmp_1",
-      "--builder-group",
-      "fake-group",
-      "--builder-name",
-      "fake-tester",
-      "--build-number",
-      "571",
-      "--test-type",
-      "base_unittests on NVIDIA GPU on Linux",
-      "--chrome-revision",
-      "170242",
-      "--build-id",
-      "8945511751514863184",
-      "--test-results-server",
-      "test-results.appspot.com"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "luci_context": {
-      "realm": {
-        "name": "chromium:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "Upload to test-results [base_unittests on NVIDIA GPU on Linux]"
-  },
-  {
-    "cmd": [
       "python3",
       "RECIPE_MODULE[build::chromium_swarming]/resources/collect_task.py",
       "--verbose",
@@ -1721,45 +1682,6 @@
       "@@@STEP_LINK@shard #0 test results@https://luci-milo.appspot.com/ui/inv/some-inv-name/test-results@@@",
       "@@@STEP_LINK@shard #0 (runtime (32s) + overhead (29s): 1m 0s)@https://example.swarmingserver.appspot.com/task?id=1@@@"
     ]
-  },
-  {
-    "cmd": [
-      "vpython3",
-      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
-      "--input-json",
-      "[CLEANUP]/tmp_tmp_2",
-      "--builder-group",
-      "fake-group",
-      "--builder-name",
-      "fake-tester",
-      "--build-number",
-      "571",
-      "--test-type",
-      "browser_tests on NVIDIA GPU on Linux",
-      "--chrome-revision",
-      "170242",
-      "--build-id",
-      "8945511751514863184",
-      "--test-results-server",
-      "test-results.appspot.com"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "luci_context": {
-      "realm": {
-        "name": "chromium:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "Upload to test-results [browser_tests on NVIDIA GPU on Linux]"
   },
   {
     "cmd": [],

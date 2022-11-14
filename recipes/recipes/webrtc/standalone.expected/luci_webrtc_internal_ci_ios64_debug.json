@@ -1903,41 +1903,6 @@
     ]
   },
   {
-    "cmd": [
-      "vpython3",
-      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
-      "--input-json",
-      "[CLEANUP]/tmp_tmp_1",
-      "--builder-group",
-      "internal.client.webrtc",
-      "--builder-name",
-      "iOS64 Debug",
-      "--build-number",
-      "0",
-      "--test-type",
-      "dummy_test",
-      "--chrome-revision",
-      "170242",
-      "--build-id",
-      "8945511751514863184",
-      "--test-results-server",
-      "test-results.appspot.com"
-    ],
-    "luci_context": {
-      "realm": {
-        "name": "webrtc-internal:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "Upload to test-results [dummy_test]"
-  },
-  {
     "cmd": [],
     "name": "$debug - all results",
     "~followup_annotations": [

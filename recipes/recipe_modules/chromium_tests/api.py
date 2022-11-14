@@ -183,11 +183,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     self.m.gclient.set_config(builder_config.gclient_config)
 
-    default_test_results_config = (
-        'staging_server' if self.m.runtime.is_experimental else 'public_server')
-    self.m.test_results.set_config(builder_config.test_results_config or
-                                   default_test_results_config)
-
     if builder_config.android_config:
       self.m.chromium_android.configure_from_properties(
           builder_config.android_config,

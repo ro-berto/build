@@ -406,24 +406,6 @@ def GenTests(api):
   )
 
   yield api.test(
-      'dimensions_mac_intel_stable',
-      arbitrary_tester(),
-      api.properties(
-          swarm_hashes={
-              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/size',
-          },
-          dimensions={
-              'gpu': '8086',
-              'os': 'mac-intel-stable',
-          }),
-      api.post_process(
-          post_process.StepSuccess,
-          'Upload to test-results [base_unittests on Intel GPU on Mac '
-          '(with patch) on mac-intel-stable]'),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
       'dimensions_android',
       arbitrary_tester(),
       api.properties(
@@ -453,25 +435,6 @@ def GenTests(api):
           'blink_web_tests on Intel GPU on Linux (with patch)',
           api.chromium_swarming.canned_summary_output(
               api.test_utils.m.json.output(None, 255), shards=2)),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  # Uploading to legacy test-results service is gated on the 'version: 3' field
-  # in the json.
-  yield api.test(
-      'upload_to_legacy_results_dashboard',
-      arbitrary_tester(),
-      api.properties(swarm_hashes={
-          'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff/111',
-      }),
-      api.override_step_data(
-          'base_unittests on Intel GPU on Linux (with patch)',
-          api.chromium_swarming.canned_summary_output(
-              api.json.output({'version': 3}))),
-      api.post_process(
-          post_process.MustRun,
-          'Upload to test-results [base_unittests on Intel GPU on Linux '
-          '(with patch)]'),
       api.post_process(post_process.DropExpectation),
   )
 

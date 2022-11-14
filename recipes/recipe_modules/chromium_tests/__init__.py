@@ -51,7 +51,6 @@ DEPS = [
     'reclient',
     'skylab',
     'symupload',
-    'test_results',
     'test_utils',
     'traceback',
 ]

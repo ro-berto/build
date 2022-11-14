@@ -59,41 +59,6 @@
   },
   {
     "cmd": [
-      "vpython3",
-      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
-      "--input-json",
-      "[CLEANUP]/tmp_tmp_1",
-      "--builder-group",
-      "test_group",
-      "--builder-name",
-      "test_buildername",
-      "--build-number",
-      "571",
-      "--test-type",
-      "base_unittests",
-      "--chrome-revision",
-      "refs/x@{#0}",
-      "--build-id",
-      "8945511751514863184",
-      "--test-results-server",
-      "test-results.appspot.com"
-    ],
-    "luci_context": {
-      "realm": {
-        "name": "chromium:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "Upload to test-results [base_unittests]"
-  },
-  {
-    "cmd": [
       "rdb",
       "rpc",
       "luci.resultdb.v1.ResultDB",

@@ -2423,41 +2423,6 @@
     ]
   },
   {
-    "cmd": [
-      "vpython3",
-      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
-      "--input-json",
-      "{}",
-      "--builder-group",
-      "client.webrtc",
-      "--builder-name",
-      "Android32 (M Nexus5X)(dbg)",
-      "--build-number",
-      "0",
-      "--test-type",
-      "dummy_test on Android",
-      "--chrome-revision",
-      "170242",
-      "--build-id",
-      "8945511751514863184",
-      "--test-results-server",
-      "test-results.appspot.com"
-    ],
-    "luci_context": {
-      "realm": {
-        "name": "webrtc:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "Upload to test-results [dummy_test on Android]"
-  },
-  {
     "cmd": [],
     "name": "$debug - all results",
     "~followup_annotations": [
