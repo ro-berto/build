@@ -44,12 +44,6 @@ def _chromium_android_spec(**kwargs):
 # * android-cronet-x86-dbg-pie-tests
 # * android-pie-arm64-dbg
 # * android-pie-arm64-rel
-# * android-weblayer-10-x86-rel-tests
-# * android-weblayer-marshmallow-x86-rel-tests
-# * android-weblayer-oreo-x86-rel-tests
-# * android-weblayer-pie-x86-rel-tests
-# * android-weblayer-with-aosp-webview-x86-rel
-# * android-weblayer-x86-rel
 
 SPEC = {
     'Marshmallow Phone Tester (rel)':

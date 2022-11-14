@@ -48,30 +48,6 @@
       "chromium.android.fyi:android-pie-x86-fyi-rel"
     ]
   },
-  "chromium.android.fyi:android-weblayer-10-x86-rel-tests": {
-    "builders": [
-      "chromium.android.fyi:android-weblayer-10-x86-rel-tests",
-      "chromium.android.fyi:android-weblayer-11-x86-rel-tests",
-      "chromium.android.fyi:android-weblayer-with-aosp-webview-x86-fyi-rel",
-      "tryserver.chromium.android:android-weblayer-11-x86-rel-tests"
-    ]
-  },
-  "chromium.android.fyi:android-weblayer-11-x86-rel-tests": {
-    "builders": [
-      "chromium.android.fyi:android-weblayer-10-x86-rel-tests",
-      "chromium.android.fyi:android-weblayer-11-x86-rel-tests",
-      "chromium.android.fyi:android-weblayer-with-aosp-webview-x86-fyi-rel",
-      "tryserver.chromium.android:android-weblayer-11-x86-rel-tests"
-    ]
-  },
-  "chromium.android.fyi:android-weblayer-with-aosp-webview-x86-fyi-rel": {
-    "builders": [
-      "chromium.android.fyi:android-weblayer-10-x86-rel-tests",
-      "chromium.android.fyi:android-weblayer-11-x86-rel-tests",
-      "chromium.android.fyi:android-weblayer-with-aosp-webview-x86-fyi-rel",
-      "tryserver.chromium.android:android-weblayer-11-x86-rel-tests"
-    ]
-  },
   "chromium.android.fyi:android-webview-pie-x86-wpt-fyi-rel": {
     "builders": [
       "chromium.android.fyi:android-webview-pie-x86-wpt-fyi-rel",
@@ -1163,14 +1139,6 @@
     "builders": [
       "chromium.android.fyi:android-pie-arm64-wpt-rel-non-cq",
       "tryserver.chromium.android:android-pie-arm64-wpt-rel-non-cq"
-    ]
-  },
-  "tryserver.chromium.android:android-weblayer-11-x86-rel-tests": {
-    "builders": [
-      "chromium.android.fyi:android-weblayer-10-x86-rel-tests",
-      "chromium.android.fyi:android-weblayer-11-x86-rel-tests",
-      "chromium.android.fyi:android-weblayer-with-aosp-webview-x86-fyi-rel",
-      "tryserver.chromium.android:android-weblayer-11-x86-rel-tests"
     ]
   },
   "tryserver.chromium.android:android-webview-pie-x86-wpt-fyi-rel": {
