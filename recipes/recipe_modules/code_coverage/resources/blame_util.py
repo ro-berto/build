@@ -15,10 +15,19 @@ BLAME_LIST_HEADER_REGEX = re.compile(r'<(.+)>\s(.+)\s(.+)\s(.+)\s+(.+)')
 def generate_blame_list(src_path, files, num_weeks=4):
   """Generates blame list data for given set of files.
 
+  Args:
+    src_path(str): Absolute path to chromium/src checkout dir
+    files(list): Files for whose blame list data is to be
+          generated. Each file path should be relative to
+          chromium/src checkout dir and must start with
+          a double-slash(//)
+    num_weeks(int): Time period to consider for blame list
+          generation.
+
   Returns a dict which looks like following
   {
-    'abc/myfile1.cc': {...},
-    'abc/myfile2.cc': {...}
+    '//abc/myfile1.cc': {...},
+    '//abc/myfile2.cc': {...}
   }
 
   The keys in the dict are file names, values is another dict,
@@ -27,7 +36,9 @@ def generate_blame_list(src_path, files, num_weeks=4):
   """
   response = {}
   for file_name in files:
-    cmd = ['git', 'blame', '-e', '--since=%d.weeks' % num_weeks, file_name]
+    assert file_name.startswith('//')
+    # remove leading double-slash(//) from file name while invoking command
+    cmd = ['git', 'blame', '-e', '--since=%d.weeks' % num_weeks, file_name[2:]]
     try:
       blame_output = subprocess.check_output(cmd, cwd=src_path, text=True)
       blame_lines = blame_output.splitlines()

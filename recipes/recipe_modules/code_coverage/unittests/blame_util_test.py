@@ -35,8 +35,10 @@ class BlameUtilTest(unittest.TestCase):
 
     mock_subprocess.side_effect = ['\n'.join(blame_lines)]
     response = blame_util.generate_blame_list(
-        'path/to/src', ['README.md'], num_weeks=4)
-    self.assertDictEqual({'README.md': {'jane@chromium.org': [2, 3]}}, response)
+        'path/to/src', ['//README.md'], num_weeks=4)
+    self.assertDictEqual({'//README.md': {
+        'jane@chromium.org': [2, 3]
+    }}, response)
 
 
 if __name__ == '__main__':
