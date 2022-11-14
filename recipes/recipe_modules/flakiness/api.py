@@ -421,11 +421,12 @@ class FlakinessApi(recipe_api.RecipeApi):
 
     def _ensure_new(test_id):
       now = int(self.m.time.time())
-      two_hours_before = now - 3600 * 2
-      # Time range is set as past 2 hours, to cover the gap of test history JSON
-      # generation (1 hour), plus a 1 hour buffer for generate builder runtime.
+      twelve_hours_before = now - 3600 * 12
+      # The searched time is the start time of presubmit CV run including the
+      # searched test. Considering JSON generation frequency (3 hours) and reasonable
+      # gap between CV start and CL submission, time range is set as past 12 hours.
       search_range = common_weetbix_pb2.TimeRange(
-          earliest=timestamp_pb2.Timestamp(seconds=two_hours_before),
+          earliest=timestamp_pb2.Timestamp(seconds=twelve_hours_before),
           latest=timestamp_pb2.Timestamp(seconds=now))
       # TODO(crbug.com/1366463): Add default test data to make creating
       # integration tests easier.
