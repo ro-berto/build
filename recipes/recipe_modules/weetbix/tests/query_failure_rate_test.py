@@ -83,6 +83,7 @@ def RunSteps(
 
 
 def GenTests(api):
+  inv_id = 'task-chromium-swarm.appspot.com-{}'
   test_suite_to_results = [
       {
           'suite_1': {
@@ -91,6 +92,7 @@ def GenTests(api):
                       RDBPerIndividualTestResults(
                           test_name='test_one',
                           test_id='ninja://gpu:suite_1/test_one',
+                          invocation_id=inv_id.format('5e052f4430ead411'),
                           statuses=[test_result_pb2.FAIL, test_result_pb2.FAIL],
                           expectednesses=[False, False],
                           failure_reasons=['failure reason', ''],
@@ -107,6 +109,7 @@ def GenTests(api):
                       RDBPerIndividualTestResults(
                           test_name='test_one',
                           test_id='ninja://gpu:suite_2/test_one',
+                          invocation_id=inv_id.format('5e052f4430eafe11'),
                           statuses=[test_result_pb2.FAIL, test_result_pb2.FAIL],
                           expectednesses=[False, False],
                           failure_reasons=['failure reason', ''],
@@ -123,6 +126,7 @@ def GenTests(api):
                       RDBPerIndividualTestResults(
                           test_name='test_two',
                           test_id='ninja://gpu:suite_3/test_two',
+                          invocation_id=inv_id.format('5e052f4430es3d11'),
                           statuses=[test_result_pb2.FAIL, test_result_pb2.FAIL],
                           expectednesses=[False, False],
                           failure_reasons=['failure reason', ''],
@@ -130,6 +134,7 @@ def GenTests(api):
                       RDBPerIndividualTestResults(
                           test_name='test_three',
                           test_id='ninja://gpu:suite_3/test_three',
+                          invocation_id=inv_id.format('5e052f4430es3d11'),
                           statuses=[test_result_pb2.FAIL, test_result_pb2.FAIL],
                           expectednesses=[False, False],
                           failure_reasons=['failure reason', ''],
@@ -140,6 +145,7 @@ def GenTests(api):
                       RDBPerIndividualTestResults(
                           test_name='test_one',
                           test_id='ninja://gpu:suite_3/test_one',
+                          invocation_id=inv_id.format('5e052f4430es3d11'),
                           statuses=[test_result_pb2.PASS],
                           expectednesses=[True],
                           failure_reasons=[],

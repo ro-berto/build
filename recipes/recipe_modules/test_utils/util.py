@@ -244,11 +244,12 @@ class RDBPerSuiteResults(object):
     """
     exists_unexpected_failing_result = False
     results_by_test_id = collections.defaultdict(list)
+    test_id_to_invocation_id = {}
     variant_hash = ''
     total_results = 0
     test_id_prefix = test_id_prefix or ''
 
-    for inv in invocations.values():
+    for inv_id, inv in invocations.items():
       total_results += len(inv.test_results)
       for tr in inv.test_results:
         variant_def = getattr(tr.variant, 'def')
@@ -260,6 +261,7 @@ class RDBPerSuiteResults(object):
               inv_name, suite_name)
         variant_hash = tr.variant_hash
         results_by_test_id[tr.test_id].append(tr)
+        test_id_to_invocation_id[tr.test_id] = inv_id
         # Use empty test_id_prefix if there is conflict.
         if not tr.test_id.startswith(test_id_prefix):
           test_id_prefix = ''
@@ -272,7 +274,10 @@ class RDBPerSuiteResults(object):
     all_tests = []
     for test_id, test_results in results_by_test_id.items():
       individual_test = RDBPerIndividualTestResults.create(
-          test_id, test_results, test_id_prefix)
+          test_id=test_id,
+          test_results=test_results,
+          test_id_prefix=test_id_prefix,
+          invocation_id=test_id_to_invocation_id[test_id])
       if individual_test.unexpected_unpassed_count() > 0:
         exists_unexpected_failing_result = True
       all_tests.append(individual_test)
@@ -397,6 +402,9 @@ class RDBPerIndividualTestResults(object):
   # Full test ID.
   # e.g. ninja://gpu:gpu_unittests/FeatureInfoTest.Basic/Service.0
   test_id = attrib(str)
+  # Full invocation ID that includes the swarming task ID
+  # e.g. task-chromium-swarm.appspot.com-5e052f4430ead411
+  invocation_id = attrib(str)
   # A duration of any passed run.
   duration_milliseconds = attrib(int, default=None)
   # |statuses| and |expectednesses| are outcomes of single results.
@@ -408,13 +416,14 @@ class RDBPerIndividualTestResults(object):
   failure_reasons = attrib(sequence[str])
 
   @classmethod
-  def create(cls, test_id, test_results, test_id_prefix):
+  def create(cls, test_id, test_results, test_id_prefix, invocation_id):
     """
     Args:
       test_id: The test ID of results.
       test_results: All results of the test id.
       test_id_prefix: The test ID prefix of the |RDBPerSuiteResults| where this
         result is grouped into.
+      invocation_id: Invocation ID of the test.
     """
     duration_milliseconds = None
     test_name = None
@@ -442,8 +451,14 @@ class RDBPerIndividualTestResults(object):
     if not test_name:
       test_name = test_id[len(test_id_prefix):]
 
-    return cls(test_name, test_id, duration_milliseconds, statuses,
-               expectednesses, failure_reasons)
+    return cls(
+        test_name=test_name,
+        test_id=test_id,
+        invocation_id=invocation_id,
+        duration_milliseconds=duration_milliseconds,
+        statuses=statuses,
+        expectednesses=expectednesses,
+        failure_reasons=failure_reasons)
 
   def total_test_count(self):
     return len(self.statuses)

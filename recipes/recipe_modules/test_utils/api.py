@@ -302,6 +302,17 @@ class TestUtilsApi(recipe_api.RecipeApi):
       for group in groups:
         group.run(self.m, suffix)
 
+  def luci_milo_test_results_url(self, invocation_id):
+    """Returns a url to the 'test results' tab in Milo.
+
+    invocation_id (str): Full invocation ID that includes the swarming server
+      and swarming task ID. e.g. task-chromium-swarm.appspot.com-5e052f430ead411
+
+    Returns:
+      str
+    """
+    return 'https://ci.chromium.org/ui/inv/{}/test-results'.format(
+        invocation_id)
 
   def _exonerate_unrelated_failures(self, test_suites, suffix):
     """Notifies RDB of any unexpected test failure that doesn't fail the build.
@@ -342,9 +353,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
         explanation_html = (
             'The test failed in both (with patch) and (without patch) steps, '
             'so the CL is exonerated for the test failures.'
-            # pylint: disable=line-too-long
-            '(https://source.chromium.org/chromium/chromium/tools/build/+/main:recipes/recipe_modules/chromium_tests/steps.py;drc=137053ea;l=907)'
-            # pylint: enable=line-too-long
         )
 
         # results.unexpected_failing_tests contains tests that resulted in
@@ -352,13 +360,15 @@ class TestUtilsApi(recipe_api.RecipeApi):
         # is SKIP, don't record it as an exoneration.
         for t in (results.unexpected_failing_tests -
                   results.unexpected_skipped_tests):
+          test_results_link = self.luci_milo_test_results_url(t.invocation_id)
+          updated_html = explanation_html + (
+              '<br><a href="{}" target="_blank">Test results without patch</a>'
+          ).format(test_results_link)
           exonerations.append(
               test_result_pb2.TestExoneration(
                   test_id=t.test_id,
                   variant_hash=results.variant_hash,
-                  # TODO(crbug.com/1076096): add deep link to the Milo UI to
-                  #  display the exonerated test results.
-                  explanation_html=explanation_html,
+                  explanation_html=updated_html,
                   reason=test_result_pb2.ExonerationReason.OCCURS_ON_MAINLINE,
               ))
       # Any failure known to be flaky should also be exonerated.

@@ -57,13 +57,17 @@ def RunSteps(api):
     all_tests = []
     for test_name in api.properties.get('benchmark_failures', []):
       individual_test = RDBPerIndividualTestResults.create(
-          test_name, [
+          test_id=test_name,
+          test_results=[
               test_result_pb2.TestResult(
                   test_id='ninja://chromium/tests:browser_tests/t1',
                   expected=False,
                   status=test_result_pb2.FAIL,
               )
-          ], '')
+          ],
+          test_id_prefix='',
+          invocation_id=('task-chromium-swarm.appspot.com-5e052f4430ead411'),
+      )
       unexpected_failing_tests.add(individual_test)
       all_tests.append(individual_test)
     # Preprocessing for test

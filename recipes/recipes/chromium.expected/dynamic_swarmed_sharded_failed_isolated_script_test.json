@@ -1505,7 +1505,7 @@
     "cmd": [],
     "name": "$debug - all results",
     "~followup_annotations": [
-      "@@@STEP_TEXT@1.78 KB@@@",
+      "@@@STEP_TEXT@1.79 KB@@@",
       "@@@STEP_LOG_LINE@serialized results@{@@@",
       "@@@STEP_LOG_LINE@serialized results@  \"all_suites\": [@@@",
       "@@@STEP_LOG_LINE@serialized results@    {@@@",
@@ -1526,11 +1526,11 @@
       "@@@STEP_LOG_LINE@serialized results@  ]@@@",
       "@@@STEP_LOG_LINE@serialized results@}@@@",
       "@@@STEP_LOG_END@serialized results@@@",
-      "@@@STEP_LOG_LINE@memory usage@Size of this RDBResults: 1.78 KB@@@",
+      "@@@STEP_LOG_LINE@memory usage@Size of this RDBResults: 1.79 KB@@@",
       "@@@STEP_LOG_LINE@memory usage@@@@",
-      "@@@STEP_LOG_LINE@memory usage@\tSize of RDBPerSuiteResults for telemetry_gpu_unittests: 1.50 KB@@@",
+      "@@@STEP_LOG_LINE@memory usage@\tSize of RDBPerSuiteResults for telemetry_gpu_unittests: 1.51 KB@@@",
       "@@@STEP_LOG_LINE@memory usage@\t\tNumber of RDBPerIndividualTestResults entries: 1@@@",
-      "@@@STEP_LOG_LINE@memory usage@\t\tSize of all RDBPerIndividualTestResults entries: 449.00 B@@@",
+      "@@@STEP_LOG_LINE@memory usage@\t\tSize of all RDBPerIndividualTestResults entries: 457.00 B@@@",
       "@@@STEP_LOG_END@memory usage@@@"
     ]
   },

@@ -2383,7 +2383,7 @@
     "cmd": [],
     "name": "$debug - all results (with patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@1.76 KB@@@",
+      "@@@STEP_TEXT@1.77 KB@@@",
       "@@@STEP_LOG_LINE@serialized results@{@@@",
       "@@@STEP_LOG_LINE@serialized results@  \"all_suites\": [@@@",
       "@@@STEP_LOG_LINE@serialized results@    {@@@",
@@ -2404,11 +2404,11 @@
       "@@@STEP_LOG_LINE@serialized results@  ]@@@",
       "@@@STEP_LOG_LINE@serialized results@}@@@",
       "@@@STEP_LOG_END@serialized results@@@",
-      "@@@STEP_LOG_LINE@memory usage@Size of this RDBResults: 1.76 KB@@@",
+      "@@@STEP_LOG_LINE@memory usage@Size of this RDBResults: 1.77 KB@@@",
       "@@@STEP_LOG_LINE@memory usage@@@@",
-      "@@@STEP_LOG_LINE@memory usage@\tSize of RDBPerSuiteResults for blink_web_tests: 1.48 KB@@@",
+      "@@@STEP_LOG_LINE@memory usage@\tSize of RDBPerSuiteResults for blink_web_tests: 1.49 KB@@@",
       "@@@STEP_LOG_LINE@memory usage@\t\tNumber of RDBPerIndividualTestResults entries: 1@@@",
-      "@@@STEP_LOG_LINE@memory usage@\t\tSize of all RDBPerIndividualTestResults entries: 449.00 B@@@",
+      "@@@STEP_LOG_LINE@memory usage@\t\tSize of all RDBPerIndividualTestResults entries: 457.00 B@@@",
       "@@@STEP_LOG_END@memory usage@@@"
     ]
   },
@@ -3000,7 +3000,7 @@
     "cmd": [],
     "name": "$debug - all results (retry shards with patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@1.76 KB@@@",
+      "@@@STEP_TEXT@1.77 KB@@@",
       "@@@STEP_LOG_LINE@serialized results@{@@@",
       "@@@STEP_LOG_LINE@serialized results@  \"all_suites\": [@@@",
       "@@@STEP_LOG_LINE@serialized results@    {@@@",
@@ -3021,11 +3021,11 @@
       "@@@STEP_LOG_LINE@serialized results@  ]@@@",
       "@@@STEP_LOG_LINE@serialized results@}@@@",
       "@@@STEP_LOG_END@serialized results@@@",
-      "@@@STEP_LOG_LINE@memory usage@Size of this RDBResults: 1.76 KB@@@",
+      "@@@STEP_LOG_LINE@memory usage@Size of this RDBResults: 1.77 KB@@@",
       "@@@STEP_LOG_LINE@memory usage@@@@",
-      "@@@STEP_LOG_LINE@memory usage@\tSize of RDBPerSuiteResults for blink_web_tests: 1.48 KB@@@",
+      "@@@STEP_LOG_LINE@memory usage@\tSize of RDBPerSuiteResults for blink_web_tests: 1.49 KB@@@",
       "@@@STEP_LOG_LINE@memory usage@\t\tNumber of RDBPerIndividualTestResults entries: 1@@@",
-      "@@@STEP_LOG_LINE@memory usage@\t\tSize of all RDBPerIndividualTestResults entries: 449.00 B@@@",
+      "@@@STEP_LOG_LINE@memory usage@\t\tSize of all RDBPerIndividualTestResults entries: 457.00 B@@@",
       "@@@STEP_LOG_END@memory usage@@@"
     ]
   },
@@ -4403,7 +4403,7 @@
     "cmd": [],
     "name": "$debug - all results (without patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@1.76 KB@@@",
+      "@@@STEP_TEXT@1.77 KB@@@",
       "@@@STEP_LOG_LINE@serialized results@{@@@",
       "@@@STEP_LOG_LINE@serialized results@  \"all_suites\": [@@@",
       "@@@STEP_LOG_LINE@serialized results@    {@@@",
@@ -4424,11 +4424,11 @@
       "@@@STEP_LOG_LINE@serialized results@  ]@@@",
       "@@@STEP_LOG_LINE@serialized results@}@@@",
       "@@@STEP_LOG_END@serialized results@@@",
-      "@@@STEP_LOG_LINE@memory usage@Size of this RDBResults: 1.76 KB@@@",
+      "@@@STEP_LOG_LINE@memory usage@Size of this RDBResults: 1.77 KB@@@",
       "@@@STEP_LOG_LINE@memory usage@@@@",
-      "@@@STEP_LOG_LINE@memory usage@\tSize of RDBPerSuiteResults for blink_web_tests: 1.48 KB@@@",
+      "@@@STEP_LOG_LINE@memory usage@\tSize of RDBPerSuiteResults for blink_web_tests: 1.49 KB@@@",
       "@@@STEP_LOG_LINE@memory usage@\t\tNumber of RDBPerIndividualTestResults entries: 1@@@",
-      "@@@STEP_LOG_LINE@memory usage@\t\tSize of all RDBPerIndividualTestResults entries: 449.00 B@@@",
+      "@@@STEP_LOG_LINE@memory usage@\t\tSize of all RDBPerIndividualTestResults entries: 457.00 B@@@",
       "@@@STEP_LOG_END@memory usage@@@"
     ]
   },
@@ -4559,7 +4559,7 @@
       }
     },
     "name": "exonerate unrelated test failures",
-    "stdin": "{\"invocation\": \"invocations/build:8945511751514863184\", \"requestId\": \"00000000-0000-0000-0000-000000001337\", \"requests\": [{\"testExoneration\": {\"explanationHtml\": \"The test failed in both (with patch) and (without patch) steps, so the CL is exonerated for the test failures.(https://source.chromium.org/chromium/chromium/tools/build/+/main:recipes/recipe_modules/chromium_tests/steps.py;drc=137053ea;l=907)\", \"reason\": \"OCCURS_ON_MAINLINE\", \"testId\": \"Test.One\", \"variantHash\": \"blink_web_tests_hash\"}}]}",
+    "stdin": "{\"invocation\": \"invocations/build:8945511751514863184\", \"requestId\": \"00000000-0000-0000-0000-000000001337\", \"requests\": [{\"testExoneration\": {\"explanationHtml\": \"The test failed in both (with patch) and (without patch) steps, so the CL is exonerated for the test failures.<br><a href=\\\"https://ci.chromium.org/ui/inv/inv0/test-results\\\" target=\\\"_blank\\\">Test results without patch</a>\", \"reason\": \"OCCURS_ON_MAINLINE\", \"testId\": \"Test.One\", \"variantHash\": \"blink_web_tests_hash\"}}]}",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
@@ -4569,7 +4569,7 @@
       "@@@STEP_LOG_LINE@json.input@  \"requests\": [@@@",
       "@@@STEP_LOG_LINE@json.input@    {@@@",
       "@@@STEP_LOG_LINE@json.input@      \"testExoneration\": {@@@",
-      "@@@STEP_LOG_LINE@json.input@        \"explanationHtml\": \"The test failed in both (with patch) and (without patch) steps, so the CL is exonerated for the test failures.(https://source.chromium.org/chromium/chromium/tools/build/+/main:recipes/recipe_modules/chromium_tests/steps.py;drc=137053ea;l=907)\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"explanationHtml\": \"The test failed in both (with patch) and (without patch) steps, so the CL is exonerated for the test failures.<br><a href=\\\"https://ci.chromium.org/ui/inv/inv0/test-results\\\" target=\\\"_blank\\\">Test results without patch</a>\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"reason\": \"OCCURS_ON_MAINLINE\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"testId\": \"Test.One\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"variantHash\": \"blink_web_tests_hash\"@@@",

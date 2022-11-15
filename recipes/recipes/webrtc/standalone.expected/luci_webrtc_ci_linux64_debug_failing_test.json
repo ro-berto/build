@@ -1677,7 +1677,7 @@
       "@@@STEP_LOG_LINE@memory usage@@@@",
       "@@@STEP_LOG_LINE@memory usage@\tSize of RDBPerSuiteResults for dummy_test: 1.48 KB@@@",
       "@@@STEP_LOG_LINE@memory usage@\t\tNumber of RDBPerIndividualTestResults entries: 1@@@",
-      "@@@STEP_LOG_LINE@memory usage@\t\tSize of all RDBPerIndividualTestResults entries: 453.00 B@@@",
+      "@@@STEP_LOG_LINE@memory usage@\t\tSize of all RDBPerIndividualTestResults entries: 461.00 B@@@",
       "@@@STEP_LOG_END@memory usage@@@"
     ]
   },

@@ -2333,10 +2333,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     server = self.m.swarming.current_server
     server = server.replace('http://', '')
     server = server.replace('https://', '')
-    url = 'https://luci-milo.appspot.com/ui/inv/task-{}-{}/test-results'.format(
-        server, self.m.swarming.task_id)
+    invocation_id = 'task-{server}-{task_id}'.format(
+        server=server, task_id=self.m.swarming.task_id)
     result = self.m.step('test results link', cmd=None)
-    result.presentation.links['results UI'] = url
+    result.presentation.links['results UI'] = (
+        self.m.test_utils.luci_milo_test_results_url(invocation_id))
 
   def _all_compile_targets(self, tests):
     """Returns the compile_targets for all the Tests in |tests|."""
