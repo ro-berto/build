@@ -41,7 +41,6 @@ SPEC = {
             gclient_apply_config=['android'],
             gclient_config='chromium_webrtc',
             parent_buildername='WebRTC Chromium Android Builder',
-            test_results_config='public_server',
             simulation_platform='linux',
         ),
     'WebRTC Chromium Linux Builder':
@@ -68,7 +67,6 @@ SPEC = {
             gclient_apply_config=[],
             gclient_config='chromium_webrtc',
             parent_buildername='WebRTC Chromium Linux Builder',
-            test_results_config='public_server',
             simulation_platform='linux',
         ),
     'WebRTC Chromium Mac Builder':
@@ -103,7 +101,6 @@ SPEC = {
             gclient_apply_config=[],
             gclient_config='chromium_webrtc',
             parent_buildername='WebRTC Chromium Mac Builder',
-            test_results_config='public_server',
             simulation_platform='mac',
         ),
     'WebRTC Chromium Win Builder':
@@ -130,7 +127,6 @@ SPEC = {
             gclient_apply_config=[],
             gclient_config='chromium_webrtc',
             parent_buildername='WebRTC Chromium Win Builder',
-            test_results_config='public_server',
             simulation_platform='win',
         ),
 }

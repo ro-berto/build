@@ -71,7 +71,6 @@ SPEC = {
             gclient_apply_config=['android'],
             gclient_config='chromium_webrtc_tot',
             parent_buildername='WebRTC Chromium FYI Android Builder ARM64 (dbg)',
-            test_results_config='public_server',
             simulation_platform='linux',
         ),
     'WebRTC Chromium FYI Android Tests (dbg) (N Nexus5X)':
@@ -89,7 +88,6 @@ SPEC = {
             gclient_apply_config=['android'],
             gclient_config='chromium_webrtc_tot',
             parent_buildername='WebRTC Chromium FYI Android Builder (dbg)',
-            test_results_config='public_server',
             simulation_platform='linux',
         ),
     'WebRTC Chromium FYI ios-device':
@@ -160,7 +158,6 @@ SPEC = {
             gclient_apply_config=[],
             gclient_config='chromium_webrtc_tot',
             parent_buildername='WebRTC Chromium FYI Linux Builder',
-            test_results_config='public_server',
             simulation_platform='linux',
         ),
     'WebRTC Chromium FYI Mac Builder':
@@ -210,7 +207,6 @@ SPEC = {
             gclient_apply_config=[],
             gclient_config='chromium_webrtc_tot',
             parent_buildername='WebRTC Chromium FYI Mac Builder',
-            test_results_config='public_server',
             simulation_platform='mac',
         ),
     'WebRTC Chromium FYI Win Builder':
@@ -249,7 +245,6 @@ SPEC = {
             gclient_apply_config=[],
             gclient_config='chromium_webrtc_tot',
             parent_buildername='WebRTC Chromium FYI Win Builder',
-            test_results_config='public_server',
             simulation_platform='win',
         ),
 }

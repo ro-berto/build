@@ -19,7 +19,6 @@ DEPS = [
     'recipe_engine/properties',
     'recipe_engine/raw_io',
     'recipe_engine/step',
-    'test_results',
     'test_utils',
 ]
 

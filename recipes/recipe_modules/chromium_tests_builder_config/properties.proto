@@ -93,18 +93,8 @@ message BuilderSpec {
   }
   LegacyAndroidRecipeModuleConfig legacy_android_config = 6;
 
-  // Details for configuring the test_results recipe module using the recipe
-  // engine's config item facility
-  //
-  // Next ID: 2
-  //
-  // TODO(gbeaty) Replace this with a message that describes the actual chromium
-  // config instead of named config items
-  message LegacyTestResultsRecipeModuleConfig {
-    // Required, the name of the recipe module config item to use
-    string config = 1;
-  }
-  LegacyTestResultsRecipeModuleConfig legacy_test_results_config = 7;
+  reserved 7;
+  reserved "legacy_test_results_config";
 
   reserved 8;
   reserved "swarming_server";

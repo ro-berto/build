@@ -24,7 +24,6 @@ DEPS = [
     'recipe_engine/runtime',
     'recipe_engine/step',
     'recipe_engine/swarming',
-    'test_results',
     'test_utils',
 ]
 

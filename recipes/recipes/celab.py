@@ -15,7 +15,6 @@ DEPS = [
     'chromium',
     'chromium_checkout',
     'chromium_tests',
-    'test_results',
     'depot_tools/bot_update',
     'depot_tools/gclient',
     'depot_tools/gsutil',
@@ -34,8 +33,6 @@ DEPS = [
 
 CELAB_REPO = "https://chromium.googlesource.com/enterprise/cel"
 CHROMIUM_REPO = "https://chromium.googlesource.com/chromium/src"
-
-TEST_RESULTS_CONFIG = 'public_server'
 
 
 def _get_bin_directory(api, bin_root):
@@ -342,12 +339,7 @@ def _RunTests(api, test_root, test_scripts_root, host_file_template, tests,
       #       It's already automatically deleted after 1 day.
 
       # Parse the test summary file and organize results in a readable way.
-      tests_summary = _ParseTestSummary(api, storage_logs, logs_dir)
-
-      # Upload chromium & chrome results to test-results.
-      project = api.buildbucket.build.builder.project
-      if tests_summary and (project == 'chromium' or project == 'chrome'):
-        _UploadTestResults(api, tests_summary)
+      _ParseTestSummary(api, storage_logs, logs_dir)
 
 
 # Zips the content of a directory and uploads the zip file to a given bucket.
@@ -417,20 +409,6 @@ def _ParseTestSummary(api, storage_logs, logs_dir):
         summary_presentation.logs["exception %s" % test] = repr(e).splitlines()
 
     return tests_summary
-
-
-def _UploadTestResults(api, tests_summary):
-  api.test_results.set_config(TEST_RESULTS_CONFIG)
-
-  test_results = {}
-  for test in tests_summary:
-    status = 'SUCCESS' if tests_summary[test]['success'] else 'FAILURE'
-    test_results[test] = [{'status': status, 'elapsed_time_ms': 0}]
-
-  api.test_results.upload(
-      api.json.input({'per_iteration_data': [test_results]}),
-      chrome_revision=0,
-      test_type='celab_tests')
 
 
 def GenTests(api):

@@ -31,7 +31,6 @@ BUILDERS = ctbc.BuilderDatabase.create({
                 android_config='main_builder_mb',
                 chromium_config='chromium',
                 gclient_config='chromium',
-                test_results_config='public_server',
                 android_version='chrome/Version',
             ),
         'Cronet':

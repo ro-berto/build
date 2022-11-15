@@ -115,8 +115,6 @@ class BuilderSpec(object):
   android_config = attrib(str, default=None)
   # The names of additional configs to apply for the android recipe module
   android_apply_config = attrib(sequence[str], default=())
-  # The name of the config to use for the test_results recipe module
-  test_results_config = attrib(str, default=None)
 
   # A path relative to the checkout to a file containing the Chrome version
   # information for Android

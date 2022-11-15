@@ -30,7 +30,6 @@ def config(name,
           'TARGET_BITS': target_bits,
       },
       'execution_mode': builder_spec.COMPILE_AND_TEST,
-      'test_results_config': 'staging_server',
       'simulation_platform': 'linux',
   }
 
@@ -57,7 +56,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            test_results_config='staging_server',
             simulation_platform='linux',
         ),
     'CFI Linux CF':
@@ -74,7 +72,6 @@ SPEC = {
             cf_gs_bucket='chromium-browser-cfi',
             cf_gs_acl='public-read',
             cf_archive_name='cfi',
-            test_results_config='staging_server',
             simulation_platform='linux',
         ),
     'linux-win_cross-rel':
@@ -88,7 +85,6 @@ SPEC = {
                 'TARGET_BITS': 64,
                 'TARGET_PLATFORM': 'win',
             },
-            test_results_config='staging_server',
             simulation_platform='win',
         ),
     'ToTiOS':
@@ -133,7 +129,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 32,
             },
-            test_results_config='staging_server',
             simulation_platform='win',
         ),
     'ToTWinCFI64':
@@ -146,7 +141,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            test_results_config='staging_server',
             simulation_platform='win',
         ),
     'ToTWinOfficial':
@@ -161,7 +155,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 32,
             },
-            test_results_config='staging_server',
             simulation_platform='win',
         ),
     'ToTWinOfficial64':
@@ -176,7 +169,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            test_results_config='staging_server',
             simulation_platform='win',
         ),
     'CrWinAsan':
@@ -189,7 +181,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 32,
             },
-            test_results_config='staging_server',
             simulation_platform='win',
         ),
     'CrWinAsan(dll)':
@@ -202,7 +193,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 32,
             },
-            test_results_config='staging_server',
             simulation_platform='win',
         ),
     'ToTChromeOS':
@@ -216,7 +206,6 @@ SPEC = {
                 'TARGET_BITS': 64,
                 'TARGET_PLATFORM': 'chromeos',
             },
-            test_results_config='staging_server',
             simulation_platform='linux',
         ),
     'ToTChromeOS (dbg)':
@@ -230,7 +219,6 @@ SPEC = {
                 'TARGET_BITS': 64,
                 'TARGET_PLATFORM': 'chromeos',
             },
-            test_results_config='staging_server',
             simulation_platform='linux',
         ),
     'ToTFuchsia x64':
@@ -250,7 +238,6 @@ SPEC = {
             },
             # Serialize the tests to limit capacity usage.
             serialize_tests=True,
-            test_results_config='staging_server',
             simulation_platform='linux',
         ),
     'ToTFuchsiaOfficial arm64':
@@ -271,7 +258,6 @@ SPEC = {
             },
             # Serialize the tests to limit capacity usage.
             serialize_tests=True,
-            test_results_config='staging_server',
             simulation_platform='linux',
         ),
     'ToTMac':
@@ -284,7 +270,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            test_results_config='staging_server',
             simulation_platform='mac',
         ),
     'ToTMacOfficial':
@@ -299,7 +284,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            test_results_config='staging_server',
             simulation_platform='mac',
         ),
     'ToTMac (dbg)':
@@ -312,7 +296,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
             },
-            test_results_config='staging_server',
             simulation_platform='mac',
         ),
     'ToTMacASan':
@@ -325,7 +308,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            test_results_config='staging_server',
             simulation_platform='mac',
         ),
     'ToTWin':
@@ -338,7 +320,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 32,
             },
-            test_results_config='staging_server',
             simulation_platform='win',
         ),
     'ToTWin(dbg)':
@@ -351,7 +332,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 32,
             },
-            test_results_config='staging_server',
             simulation_platform='win',
         ),
     'ToTWin(dll)':
@@ -364,7 +344,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 32,
             },
-            test_results_config='staging_server',
             simulation_platform='win',
         ),
     'ToTWin64':
@@ -377,7 +356,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            test_results_config='staging_server',
             simulation_platform='win',
         ),
     'ToTWinASanLibfuzzer':
@@ -390,7 +368,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            test_results_config='staging_server',
             simulation_platform='win',
         ),
     'ToTWin64(dbg)':
@@ -403,7 +380,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
             },
-            test_results_config='staging_server',
             simulation_platform='win',
         ),
     'ToTWin64(dll)':
@@ -416,7 +392,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            test_results_config='staging_server',
             simulation_platform='win',
         ),
     'ToTWin64PGO':
@@ -429,7 +404,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            test_results_config='staging_server',
             simulation_platform='win',
         ),
 }

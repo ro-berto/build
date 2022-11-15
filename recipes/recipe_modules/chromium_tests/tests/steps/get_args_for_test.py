@@ -9,7 +9,6 @@ DEPS = [
     'depot_tools/gclient',
     'recipe_engine/assertions',
     'recipe_engine/properties',
-    'test_results',
 ]
 
 from recipe_engine import post_process
@@ -20,7 +19,6 @@ from RECIPE_MODULES.build.chromium_tests import generators
 def RunSteps(api):
   api.gclient.set_config('chromium')
   api.chromium.set_config('chromium')
-  api.test_results.set_config('public_server')
 
   update_step = api.bot_update.ensure_checkout()
 

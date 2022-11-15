@@ -66,14 +66,6 @@ def RunSteps(api):
 
   assert_valid(BuilderSpec.LegacyAndroidRecipeModuleConfig(config='config'))
 
-  # LegacyTestResultsRecipeModuleConfig
-  assert_invalid(
-      BuilderSpec.LegacyTestResultsRecipeModuleConfig(),
-      '$test.config is not set',
-  )
-
-  assert_valid(BuilderSpec.LegacyTestResultsRecipeModuleConfig(config='config'))
-
   # SkylabUploadLocation
   assert_invalid(
       BuilderSpec.SkylabUploadLocation(),
@@ -107,14 +99,11 @@ def RunSteps(api):
           legacy_gclient_config=BuilderSpec.LegacyGclientRecipeModuleConfig(),
           legacy_chromium_config=BuilderSpec.LegacyChromiumRecipeModuleConfig(),
           legacy_android_config=BuilderSpec.LegacyAndroidRecipeModuleConfig(),
-          legacy_test_results_config=(
-              BuilderSpec.LegacyTestResultsRecipeModuleConfig()),
           skylab_upload_location=BuilderSpec.SkylabUploadLocation(),
       ),
       '$test.legacy_gclient_config.config is not set',
       '$test.legacy_chromium_config.config is not set',
       '$test.legacy_android_config.config is not set',
-      '$test.legacy_test_results_config.config is not set',
       '$test.skylab_upload_location.gs_bucket is not set',
   )
 

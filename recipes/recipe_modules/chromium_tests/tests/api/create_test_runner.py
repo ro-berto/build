@@ -13,13 +13,11 @@ DEPS = [
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
-    'test_results',
 ]
 
 
 def RunSteps(api):
   api.chromium.set_config('chromium')
-  api.test_results.set_config('public_server')
   api.chromium.set_build_properties({
       'got_webrtc_revision': 'webrtc_sha',
       'got_v8_revision': 'v8_sha',

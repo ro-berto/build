@@ -18,7 +18,6 @@ DEPS = [
     'recipe_engine/step',
     'recipe_engine/swarming',
     'skylab',
-    'test_results',
     'test_utils',
 ]
 
@@ -50,7 +49,6 @@ PROPERTIES = {
 def RunSteps(api, test_swarming, test_skylab, test_name, test_experimental,
              abort_on_failure, retry_failed_shards, retry_invalid_shards):
   api.chromium.set_config('chromium')
-  api.test_results.set_config('public_server')
   api.chromium.set_build_properties({
       'got_webrtc_revision': 'webrtc_sha',
       'got_v8_revision': 'v8_sha',

@@ -44,7 +44,6 @@ DEPS = [
     'recipe_engine/service_account',
     'recipe_engine/step',
     'reclient',
-    'test_results',
     'test_utils',
 ]
 

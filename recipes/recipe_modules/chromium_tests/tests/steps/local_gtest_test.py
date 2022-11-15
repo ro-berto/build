@@ -17,7 +17,6 @@ DEPS = [
     'recipe_engine/raw_io',
     'recipe_engine/resultdb',
     'recipe_engine/step',
-    'test_results',
     'test_utils',
 ]
 
@@ -32,7 +31,6 @@ def RunSteps(api):
       'chromium',
       TARGET_PLATFORM=api.properties.get('target_platform', 'linux'))
   api.chromium_android.set_config('main_builder')
-  api.test_results.set_config('public_server')
   api.bot_update.ensure_checkout()
 
   test = steps.LocalGTestTestSpec.create(

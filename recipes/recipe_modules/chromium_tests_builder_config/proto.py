@@ -71,12 +71,6 @@ def _validate_legacy_android_recipe_module_config(obj, ctx):
   ctx.validate_field(obj, 'config')
 
 
-@VALIDATORS.register(
-    properties_pb.BuilderSpec.LegacyTestResultsRecipeModuleConfig)
-def _validate_legacy_test_results_recipe_module_config(obj, ctx):
-  ctx.validate_field(obj, 'config')
-
-
 @VALIDATORS.register(properties_pb.BuilderSpec.SkylabUploadLocation)
 def _validate_skylab_upload_location(obj, ctx):
   ctx.validate_field(obj, 'gs_bucket')
@@ -95,7 +89,6 @@ def _validate_builder_spec(obj, ctx):
   ctx.validate_field(obj, 'legacy_gclient_config')
   ctx.validate_field(obj, 'legacy_chromium_config')
   ctx.validate_field(obj, 'legacy_android_config', optional=True)
-  ctx.validate_field(obj, 'legacy_test_results_config', optional=True)
   ctx.validate_field(obj, 'skylab_upload_location', optional=True)
   ctx.validate_field(obj, 'clusterfuzz_archive', optional=True)
 
@@ -150,7 +143,6 @@ def _convert_builder_spec(obj, builder_id_by_builder_key):
       chromium_config_kwargs=chromium_config_kwargs,
       android_config=obj.legacy_android_config.config or None,
       android_apply_config=obj.legacy_android_config.apply_configs,
-      test_results_config=obj.legacy_test_results_config.config or None,
       android_version=obj.android_version_file or None,
       clobber=obj.clobber,
       build_gs_bucket=obj.build_gs_bucket or None,

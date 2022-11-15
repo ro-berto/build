@@ -63,7 +63,6 @@ SPEC = {
                 'TARGET_PLATFORM': 'android',
             },
             android_config='main_builder',
-            test_results_config='staging_server',
             simulation_platform='linux',
         ),
 }

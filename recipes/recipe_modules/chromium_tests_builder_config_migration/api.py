@@ -185,13 +185,6 @@ def _migrate_builder_spec(builder_spec):
             for c in builder_spec.android_apply_config:
               output.add_line('"{}",'.format(c))
 
-    if builder_spec.test_results_config:
-      output.add_line(
-          'test_results_config = builder_config.test_results_config(')
-      with output.increase_indent('),'):
-        output.add_line('config = "{}",'.format(
-            builder_spec.test_results_config))
-
     if builder_spec.android_version:
       output.add_line('android_version_file = "{}",'.format(
           builder_spec.android_version))

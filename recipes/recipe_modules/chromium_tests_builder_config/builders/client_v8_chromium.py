@@ -46,7 +46,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            test_results_config='staging_server',
             simulation_platform='linux',
         ),
 }

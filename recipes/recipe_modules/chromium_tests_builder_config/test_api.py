@@ -112,8 +112,6 @@ class _PropertiesAssembler(object):
             self._get_legacy_chromium_config(builder_spec),
         'legacy_android_config':
             self._get_legacy_android_config(builder_spec),
-        'legacy_test_results_config':
-            self._get_legacy_test_results_config(builder_spec),
         'android_version_file':
             builder_spec.android_version,
         'clobber':
@@ -173,16 +171,6 @@ class _PropertiesAssembler(object):
       kwargs['apply_configs'] = builder_spec.android_apply_config
     if kwargs:
       return properties_pb.BuilderSpec.LegacyAndroidRecipeModuleConfig(**kwargs)
-    return None
-
-  @staticmethod
-  def _get_legacy_test_results_config(builder_spec):
-    kwargs = {}
-    if builder_spec.test_results_config is not None:
-      kwargs['config'] = builder_spec.test_results_config
-    if kwargs:
-      return properties_pb.BuilderSpec.LegacyTestResultsRecipeModuleConfig(
-          **kwargs)
     return None
 
   @staticmethod

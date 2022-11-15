@@ -85,9 +85,6 @@ def GenTests(api):
                       "android-config3",
                   ],
               ),
-              test_results_config = builder_config.test_results_config(
-                  config = "test-results-config",
-              ),
               android_version_file = "//android/version/file",
               clobber = True,
               build_gs_bucket = "build-gs-bucket",
@@ -185,7 +182,6 @@ def GenTests(api):
                               'android-config2',
                               'android-config3',
                           ],
-                          test_results_config='test-results-config',
                           android_version='//android/version/file',
                           clobber=True,
                           build_gs_bucket='build-gs-bucket',

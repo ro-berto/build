@@ -28,8 +28,6 @@ def stock_config(name, config='Release', target_bits=64, staging=True,
       'simulation_platform': platform,
   }
   bot_config.update(**kwargs)
-  if staging:
-    bot_config['test_results_config'] = 'staging_server'
   return name, builder_spec.BuilderSpec.create(**bot_config)
 
 # The config for the following builders is now specified src-side in
@@ -70,7 +68,6 @@ SPEC = {
             },
             # Serialize the tests to limit capacity usage.
             serialize_tests=True,
-            test_results_config='staging_server',
             simulation_platform='linux',
         ),
     'fuchsia-fyi-arm64-rel':
@@ -87,7 +84,6 @@ SPEC = {
             },
             # Serialize the tests to limit capacity usage.
             serialize_tests=True,
-            test_results_config='staging_server',
             simulation_platform='linux',
         ),
     'fuchsia-fyi-x64-rel':
@@ -103,7 +99,6 @@ SPEC = {
             },
             # Serialize the tests to limit capacity usage.
             serialize_tests=True,
-            test_results_config='staging_server',
             simulation_platform='linux',
         ),
     'lacros-amd64-generic-rel-fyi':
@@ -123,7 +118,6 @@ SPEC = {
                 'TARGET_PLATFORM': 'chromeos',
             },
             simulation_platform='linux',
-            test_results_config='staging_server',
         ),
     'linux-backuprefptr-x64-fyi-rel':
         builder_spec.BuilderSpec.create(
@@ -136,7 +130,6 @@ SPEC = {
                 'TARGET_PLATFORM': 'linux',
             },
             simulation_platform='linux',
-            test_results_config='staging_server',
         ),
     'win-backuprefptr-x64-fyi-rel':
         builder_spec.BuilderSpec.create(
@@ -149,7 +142,6 @@ SPEC = {
                 'TARGET_PLATFORM': 'win',
             },
             simulation_platform='win',
-            test_results_config='staging_server',
         ),
     'win-backuprefptr-x86-fyi-rel':
         builder_spec.BuilderSpec.create(
@@ -162,7 +154,6 @@ SPEC = {
                 'TARGET_PLATFORM': 'win',
             },
             simulation_platform='win',
-            test_results_config='staging_server',
         ),
     'android-backuprefptr-arm64-fyi-rel':
         builder_spec.BuilderSpec.create(
@@ -177,7 +168,6 @@ SPEC = {
             },
             android_config='main_builder',
             simulation_platform='linux',
-            test_results_config='staging_server',
         ),
     'android-backuprefptr-arm-fyi-rel':
         builder_spec.BuilderSpec.create(
@@ -192,7 +182,6 @@ SPEC = {
             },
             android_config='main_builder',
             simulation_platform='linux',
-            test_results_config='staging_server',
         ),
     'linux-paeverywhere-x64-fyi-dbg':
         builder_spec.BuilderSpec.create(
@@ -205,7 +194,6 @@ SPEC = {
                 'TARGET_PLATFORM': 'linux',
             },
             simulation_platform='linux',
-            test_results_config='staging_server',
         ),
     'linux-paeverywhere-x64-fyi-rel':
         builder_spec.BuilderSpec.create(
@@ -218,7 +206,6 @@ SPEC = {
                 'TARGET_PLATFORM': 'linux',
             },
             simulation_platform='linux',
-            test_results_config='staging_server',
         ),
     'mac-paeverywhere-x64-fyi-dbg':
         builder_spec.BuilderSpec.create(
@@ -231,7 +218,6 @@ SPEC = {
                 'TARGET_PLATFORM': 'mac',
             },
             simulation_platform='mac',
-            test_results_config='staging_server',
         ),
     'mac-paeverywhere-x64-fyi-rel':
         builder_spec.BuilderSpec.create(
@@ -244,7 +230,6 @@ SPEC = {
                 'TARGET_PLATFORM': 'mac',
             },
             simulation_platform='mac',
-            test_results_config='staging_server',
         ),
     'Site Isolation Android':
         builder_spec.BuilderSpec.create(
@@ -259,7 +244,6 @@ SPEC = {
                 'TARGET_PLATFORM': 'android',
             },
             android_config='arm64_builder_mb',
-            test_results_config='staging_server',
             simulation_platform='linux',
         ),
     # For building targets instrumented for code coverage.
@@ -323,7 +307,6 @@ SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             },
-            test_results_config='staging_server',
             simulation_platform='win',
         ),
     'linux-autofill-captured-sites-rel':
@@ -336,7 +319,6 @@ SPEC = {
                 'TARGET_BITS': 64,
                 'TARGET_PLATFORM': 'linux',
             },
-            test_results_config='staging_server',
             simulation_platform='linux',
         ),
     'linux-chromeos-code-coverage':
@@ -655,7 +637,6 @@ SPEC = {
                 'TARGET_BITS': 64,
             },
             cf_archive_build=False,
-            test_results_config='staging_server',
             simulation_platform='linux',
             # From chromium_clang.py, _chromium_clang_spec
             build_gs_bucket='chromium-clang-archive',

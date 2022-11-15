@@ -12,7 +12,6 @@ COMMON_BOT_CONFIG = builder_spec.BuilderSpec.create(
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
     },
-    test_results_config='public_server',
     simulation_platform='linux',
 )
 
