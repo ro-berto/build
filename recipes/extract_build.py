@@ -11,7 +11,6 @@ import os
 import shutil
 import sys
 import traceback
-import urllib
 
 # Add build/recipes and build/scripts.
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -25,15 +24,9 @@ import build_directory
 
 class ExtractHandler(object):
 
-  def __init__(self, url, archive_name):
+  def __init__(self, url, archive_name, gsutil_py_path):
     self.url = url
     self.archive_name = archive_name
-
-
-class GSHandler(ExtractHandler):
-
-  def __init__(self, url, archive_name, gsutil_py_path=None):
-    super(GSHandler, self).__init__(url, archive_name)
     self.gsutil_py_path = gsutil_py_path
 
   def download(self):
@@ -51,19 +44,6 @@ class GSHandler(ExtractHandler):
       os.remove(self.archive_name)
       shutil.move(os.path.basename(self.url), self.archive_name)
     return True
-
-
-class WebHandler(ExtractHandler):
-
-  @chromium_utils.RunAndPrintDots
-  def download(self):
-    try:
-      rc = urllib.urlretrieve(self.url, self.archive_name)
-      print('\nDownload complete')
-    except IOError:
-      print('\nFailed to download build')
-      return False
-    return rc
 
 
 def GetBuildUrl(options, build_revision):
@@ -101,11 +81,6 @@ def GetBuildUrl(options, build_revision):
   if not replace_dict.get('parent_builddir') and replace_dict.get('parentname'):
     replace_dict['parent_builddir'] = replace_dict.get('parentname', '')
   url = options.build_url
-  if not url:
-    url = (
-        'http://%(parentslavename)s/b/build/slave/%(parent_builddir)s/'
-        'chrome_staging'
-    )
   if url[-4:] != '.zip':  # assume filename not specified
     # Append the filename to the base URL. First strip any trailing slashes.
     url = url.rstrip('/')
@@ -141,38 +116,27 @@ def real_main(options):
   url, archive_name = GetBuildUrl(options, build_revision)
   if archive_name is None:
     archive_name = 'build.zip'
-    base_url = None
-  else:
-    base_url = '/'.join(url.split('/')[:-1] + [archive_name])
 
-  if url.startswith('gs://'):
-    handler = GSHandler(
-        url=url,
-        archive_name=archive_name,
-        gsutil_py_path=options.gsutil_py_path
+  if not url.startswith('gs://'):
+    print(
+        f'cannot extract build from {url},'
+        ' only Google Storage URLs are supported'
     )
-  else:
-    handler = WebHandler(url=url, archive_name=archive_name)
+    return bot_utils.ERROR_EXIT_CODE
+
+  handler = ExtractHandler(
+      url=url,
+      archive_name=archive_name,
+      gsutil_py_path=options.gsutil_py_path,
+  )
 
   # We try to download and extract 3 times.
   for tries in range(1, 4):
     print('Try %d: Fetching build from %s...' % (tries, url))
 
-    failure = False
-
     # If the url is valid, we download the file.
-    if not failure:
-      if not handler.download():
-        return bot_utils.ERROR_EXIT_CODE
-
-    # If the versioned url failed, we try to get the latest build.
-    if failure:
-      if url.startswith('gs://') or not base_url:
-        continue
-      print('Fetching latest build at %s' % base_url)
-      base_handler = handler.__class__(base_url, handler.archive_name)
-      if not base_handler.download():
-        continue
+    if not handler.download():
+      return bot_utils.ERROR_EXIT_CODE
 
     print('Extracting build %s to %s...' % (archive_name, abs_build_dir))
     try:
@@ -195,22 +159,6 @@ def real_main(options):
       # Try again...
       continue
 
-    # If we got the latest build, then figure out its revision number.
-    if failure:
-      print("Trying to determine the latest build's revision number...")
-      try:
-        build_revision_file_name = os.path.join(
-            target_build_output_dir, chromium_utils.FULL_BUILD_REVISION_FILENAME
-        )
-        build_revision_file = open(build_revision_file_name, 'r')
-        print('Latest build is revision: %s' % build_revision_file.read())
-        build_revision_file.close()
-      except IOError:
-        print("Could not determine the latest build's revision number")
-
-    if failure:
-      # We successfully extracted the archive, but it was the generic one.
-      return bot_utils.WARNING_EXIT_CODE
     return 0
 
   # If we get here, that means that it failed 3 times. We return a failure.
@@ -305,6 +253,10 @@ def main():
   options.src_dir = (
       options.build_properties.get('extract_build_src_dir') or options.src_dir
   )
+
+  if not options.build_archive_url and not options.build_url:
+    print('At least one of --build-archive-url or --build-url must be passed')
+    return 1
 
   return real_main(options)
 

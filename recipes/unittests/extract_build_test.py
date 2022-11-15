@@ -44,27 +44,18 @@ class ExtractBuildTest(unittest.TestCase):
     gs_url_without_slash = 'gs://foo/Win'
     gs_url_with_slash = 'gs://foo/Win/'
     gs_url_with_filename = 'gs://foo/Win/%s.zip' % base_filename
-    http_url_without_slash = 'http://foo/Win'
-    http_url_with_slash = 'http://foo/Win/'
-    http_url_with_filename = 'http://foo/Win/%s.zip' % base_filename
     expected_gs_url = (
         gs_url_with_slash + base_filename + version_suffix + '.zip'
-    )
-    expected_http_url = (
-        http_url_with_slash + base_filename + version_suffix + '.zip'
     )
 
     # Verify that only one slash is added: URL without ending slash.
     self._VerifyBuildUrl(options, gs_url_without_slash, expected_gs_url)
-    self._VerifyBuildUrl(options, http_url_without_slash, expected_http_url)
 
     # URL with ending slash.
     self._VerifyBuildUrl(options, gs_url_with_slash, expected_gs_url)
-    self._VerifyBuildUrl(options, http_url_with_slash, expected_http_url)
 
     # URL with filename.
     self._VerifyBuildUrl(options, gs_url_with_filename, expected_gs_url)
-    self._VerifyBuildUrl(options, http_url_with_filename, expected_http_url)
 
   def _VerifyBuildUrl(self, options, url_template, expected_url):
     options.build_url = url_template
