@@ -9,7 +9,6 @@ DEPS = [
     'chromium',
     'chromium_swarming',
     'flakiness',
-    'traceback',
     'weetbix',
     'depot_tools/tryserver',
     'presentation_utils',

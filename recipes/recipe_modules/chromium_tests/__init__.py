@@ -52,7 +52,6 @@ DEPS = [
     'skylab',
     'symupload',
     'test_utils',
-    'traceback',
 ]
 
 # Avoid adding a dependency on the chromium_tests_builder_config module, the

@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import traceback
+
 from recipe_engine import recipe_api
 
 
@@ -66,7 +68,8 @@ class DiskApi(recipe_api.RecipeApi):
       # Do not fail entire build because of a disk space step failure.
       if step:
         step.presentation.logs['exception'] = [
-            str(ex), '\n', self.m.traceback.format_exc()]
+            str(ex), '\n', traceback.format_exc()
+        ]
         step.presentation.status = self.m.step.WARNING
       if can_fail_build:
         raise recipe_api.StepFailure('Could not get disk info: %s' % ex)

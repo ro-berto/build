@@ -3,6 +3,8 @@
 # found in the LICENSE file.
 
 import itertools
+import traceback
+
 from recipe_engine import recipe_api
 from recipe_engine import util as recipe_util
 
@@ -776,8 +778,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     except self.m.step.StepFailure:
       result = self.m.step('failure getting footers', [])
       result.presentation.status = self.m.step.WARNING
-      result.presentation.logs['exception'] = (
-          self.m.traceback.format_exc().splitlines())
+      result.presentation.logs['exception'] = traceback.format_exc()
     else:
       if skip_retry_footer:
         result = self.m.step('retries disabled', [])

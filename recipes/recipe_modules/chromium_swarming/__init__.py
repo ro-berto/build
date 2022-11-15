@@ -23,7 +23,6 @@ DEPS = [
     'recipe_engine/step',
     'recipe_engine/swarming',
     'swarming_client',
-    'traceback',
 ]
 
 # TODO(phajdan.jr): provide coverage (http://crbug.com/693058).
