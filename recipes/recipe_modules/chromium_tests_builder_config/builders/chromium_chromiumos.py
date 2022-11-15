@@ -50,7 +50,6 @@ def _config(name,
 # * lacros-amd64-generic-rel
 # * lacros-arm-generic-rel
 # * linux-cfm-rel
-# * linux-chromeos-annotator-rel
 # * linux-chromeos-dbg
 # * linux-chromeos-rel
 # * linux-lacros-builder-rel

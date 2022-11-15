@@ -37,6 +37,7 @@ def stock_config(name, config='Release', target_bits=64, staging=True,
 # * VR Linux
 # * Win11 Tests x64
 # * ios-simulator-cronet
+# * linux-chromeos-annotator-rel
 # * linux-chromeos-js-code-coverage
 # * mac-osxbeta-rel
 
@@ -923,8 +924,6 @@ SPEC = {
 SPEC.update([
     stock_config('Linux Viz'),
     stock_config('linux-annotator-rel'),
-    stock_config(
-        'linux-chromeos-annotator-rel', gclient_apply_config=['chromeos']),
     stock_config(
         'linux-ash-chromium-builder-fyi-rel',
         gclient_apply_config=['chromeos']),

@@ -511,11 +511,6 @@
       "chromium.fyi:linux-blink-v8-sandbox-future-dbg"
     ]
   },
-  "chromium.fyi:linux-chromeos-annotator-rel": {
-    "builders": [
-      "chromium.fyi:linux-chromeos-annotator-rel"
-    ]
-  },
   "chromium.fyi:linux-chromeos-code-coverage": {
     "builders": [
       "chromium.fyi:linux-chromeos-code-coverage"
