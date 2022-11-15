@@ -2,9 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import itertools
-import json
-
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
 
 from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
@@ -74,6 +71,7 @@ def GenTests(api):
                   builder='lacros-amd64-generic-rel',
                   tast_expr='',
                   test_args='',
+                  benchmark='',
                   isolate_content=GOOD_ISOLATE_TEXT,
                   isolate_file_exists=True,
                   is_ci_build=True,
@@ -125,6 +123,8 @@ def GenTests(api):
                             'basic_EVE_TOT',
                         'tast_expr':
                             tast_expr,
+                        'benchmark':
+                            benchmark,
                         'args': [test_args],
                         'swarming': {},
                         'test':
@@ -417,5 +417,27 @@ def GenTests(api):
                        'basic_EVE_TOT (with patch)',
                        [('This test is being run due to the'
                          ' Include-Ci-Only-Tests gerrit footer')]),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'basic for telemetry test',
+      boilerplate(
+          'chrome-test-builds', benchmark='speedometer2', target_name='chrome'),
+      api.skylab.mock_wait_on_suites(
+          'find test runner build',
+          1,
+          runner_builds=[(902, common_pb2.SUCCESS)]),
+      api.override_step_data(
+          'basic_EVE_TOT results',
+          stdout=api.raw_io.output_text(
+              api.test_utils.rdb_results(
+                  'basic_EVE_TOT',
+                  failing_tests=['Test.One'],
+                  skipped_tests=['Test.One']))),
+      api.post_process(
+          post_process.StepCommandContains,
+          'test_pre_run.schedule skylab tests.basic_EVE_TOT.schedule',
+          ['chromium_Telemetry']),
       api.post_process(post_process.DropExpectation),
   )

@@ -8,85 +8,92 @@ DEPS = [
     'skylab',
 ]
 
+import base64
+import copy
+import json
+
 from RECIPE_MODULES.build.chromium_tests.resultdb import ResultDB
-from RECIPE_MODULES.build.skylab.structs import SkylabRequest
+from RECIPE_MODULES.build.chromium_tests.steps import SkylabTestSpec, SkylabTest
 
 from recipe_engine import post_process
 
 LACROS_TAST_EXPR = '("group:mainline" && "dep:lacros" && "!informational")'
 LACROS_GTEST_ARGS = '--gtest_filter="VaapiTest.*"'
 LACROS_GCS_PATH = 'gs://fake_bucket/lacros.squashfs'
-RESULTDB_CONFIG = {
-    'result_file': 'output.json',
-    'result_format': 'gtest',
-}
 SHARD_COUNT = 2
 
 
-def gen_skylab_req(
-    tag,
+def gen_skylab_rdb(suite):
+  return {
+      'base_variant': {
+          'cros_img': 'eve-release/R88-13545.0.0',
+          'device_type': 'eve',
+          'os': 'ChromeOS',
+          'test_suite': suite,
+      },
+      'coerce_negative_duration': True,
+      'enable': True,
+      'exonerate_unexpected_pass': True,
+      'has_native_resultdb_integration': False,
+      'include': False,
+      'result_adapter_path': 'result_adapter',
+      'result_format': 'tast',
+      'test_id_as_test_location': False,
+  }
+
+
+SKYLAB_TEST_SPEC_TEMPLATE = dict(
+    autotest_name='lacros.tast',
+    cros_board='eve',
     tast_expr=None,
+    tast_expr_key='default',
     test_args=None,
+    cros_img='eve-release/R88-13545.0.0',
     retries=0,
-    dut_pool='',
-    secondary_board='',
-    secondary_cros_img='',
-    bucket='',
-    autotest_name='',
-    tast_expr_file='',
-    benchmark='',
-    results_label='',
-    story_filter='',
-    test_shard_map_filename='',
-    telemetry_shard_index=None,
     shards=1,
-):
-  return SkylabRequest.create(
-      request_tag=tag,
-      board='eve',
-      tast_expr=tast_expr,
-      tast_expr_file=tast_expr_file,
-      tast_expr_key='default',
-      test_args=test_args,
-      lacros_gcs_path=LACROS_GCS_PATH,
-      exe_rel_path='out/Release/bin/run_foo_unittest',
-      cros_img='eve-release/R88-13545.0.0',
-      dut_pool=dut_pool,
-      retries=retries,
-      secondary_board=secondary_board,
-      secondary_cros_img=secondary_cros_img,
-      bucket=bucket,
-      autotest_name=autotest_name,
-      resultdb=ResultDB.create(**RESULTDB_CONFIG),
-      benchmark=benchmark,
-      results_label=results_label,
-      story_filter=story_filter,
-      test_shard_map_filename=test_shard_map_filename,
-      telemetry_shard_index=telemetry_shard_index,
-      shards=shards,
-  )
+)
+
+
+def gen_skylab_test(name, **kwargs):
+  tast_expr_file = kwargs.pop('tast_expr_file', None)
+  telemetry_shard_index = kwargs.pop('telemetry_shard_index', None)
+  k = copy.deepcopy(SKYLAB_TEST_SPEC_TEMPLATE)
+  k.update(**kwargs)
+  k['resultdb'] = ResultDB.create(**gen_skylab_rdb(name))
+  t = SkylabTestSpec.create(name, **k).get_test(SkylabTest)
+  t.lacros_gcs_path = LACROS_GCS_PATH
+
+  if t.is_tast_test:
+    t.exe_rel_path = 'out/Release/chrome'
+  else:
+    t.exe_rel_path = 'out/Release/bin/run_foo_unittest'
+  if tast_expr_file:
+    t.tast_expr_file = tast_expr_file
+  if telemetry_shard_index is not None:
+    t.telemetry_shard_index = telemetry_shard_index
+  return t
 
 
 REQUESTS = [
-    gen_skylab_req(
+    gen_skylab_test(
         'm88_tast_with_retry',
         tast_expr=LACROS_TAST_EXPR,
         retries=3,
         bucket='a_different_chromium_bucket'),
-    gen_skylab_req(
+    gen_skylab_test(
         'm88_gtest_test_args', tast_expr=None, test_args=LACROS_GTEST_ARGS),
-    gen_skylab_req(
+    gen_skylab_test(
         'm88_nearby_dut_pool',
         tast_expr=LACROS_TAST_EXPR,
         dut_pool='cross_device_multi_cb',
         tast_expr_file='tast_expr_file.filter'),
-    gen_skylab_req(
+    gen_skylab_test(
         'm88_nearby_multi_dut',
-        secondary_board='eve',
+        secondary_cros_board='eve',
         secondary_cros_img='eve-release/R88-13545.0.0',
         tast_expr=LACROS_TAST_EXPR,
         autotest_name='tast.nearby-share'),
-    gen_skylab_req(
+    gen_skylab_test(
         'telemetry_test_args',
         tast_expr=None,
         benchmark='speedometer2',
@@ -94,7 +101,7 @@ REQUESTS = [
         results_label='12345',
         test_shard_map_filename='per_map.json',
         telemetry_shard_index=0),
-    gen_skylab_req(
+    gen_skylab_test(
         'sharded_tast_req',
         tast_expr=LACROS_TAST_EXPR,
         dut_pool='cross_device_multi_cb',
@@ -109,25 +116,24 @@ def RunSteps(api):
 
 def GenTests(api):
 
-  def test_args_for_shard(shard):
-    return 'resultdb_settings=eyJhcnRpZmFjdF9kaXJlY3RvcnkiOiAiJHtJU09MQVRFRF9P'\
-        'VVRESVJ9IiwgImNvZXJjZV9uZWdhdGl2ZV9kdXJhdGlvbiI6IHRydWUsICJlbmFibGUiO'\
-        'iB0cnVlLCAiZXhvbmVyYXRlX3VuZXhwZWN0ZWRfcGFzcyI6IHRydWUsICJoYXNfbmF0aX'\
-        'ZlX3Jlc3VsdGRiX2ludGVncmF0aW9uIjogZmFsc2UsICJpbmNsdWRlIjogZmFsc2UsICJ'\
-        'yZXN1bHRfYWRhcHRlcl9wYXRoIjogInJlc3VsdF9hZGFwdGVyIiwgInJlc3VsdF9maWxl'\
-        'IjogIm91dHB1dC5qc29uIiwgInJlc3VsdF9mb3JtYXQiOiAiZ3Rlc3QiLCAidGVzdF9pZ'\
-        'F9hc190ZXN0X2xvY2F0aW9uIjogZmFsc2V9 tast_expr_b64=KCJncm91cDptYWlubGl'\
-        'uZSIgJiYgImRlcDpsYWNyb3MiICYmICIhaW5mb3JtYXRpb25hbCIp '\
-        'exe_rel_path=out/Release/bin/run_foo_unittest '\
+  def b64_encode(s):
+    return base64.b64encode(s.encode('utf-8')).decode('ascii')
+
+  def test_args_for_shard(name, shard):
+    return 'resultdb_settings={} '\
+        'tast_expr_b64={} '\
+        'exe_rel_path=out/Release/chrome '\
         'tast_expr_file=tast_expr_file.filter '\
         'tast_expr_key=default shard_index={} '\
-        'total_shards={}'.format(shard, SHARD_COUNT)
+        'total_shards={}'.format(
+            b64_encode(json.dumps(gen_skylab_rdb(name))),
+            b64_encode(LACROS_TAST_EXPR), shard, SHARD_COUNT)
 
   yield api.test(
       'basic',
       api.post_process(
           post_process.StepCommandContains,
-          'schedule skylab tests.' + REQUESTS[0].request_tag + '.schedule', [
+          'schedule skylab tests.' + REQUESTS[0].name + '.schedule', [
               'run', 'test', '-json', '-board', 'eve', '-bucket',
               'a_different_chromium_bucket', '-pool', 'DUT_POOL_QUOTA',
               '-image', 'eve-release/R88-13545.0.0', '-timeout-mins', '60',
@@ -140,12 +146,11 @@ def GenTests(api):
   yield api.test(
       'fail_request_continues',
       api.step_data(
-          'schedule skylab tests.' + REQUESTS[0].request_tag + '.schedule',
-          retcode=1),
+          'schedule skylab tests.' + REQUESTS[0].name + '.schedule', retcode=1),
       api.post_process(post_process.StepFailure, 'schedule skylab tests'),
       api.post_process(
           post_process.StepCommandContains,
-          'schedule skylab tests.' + REQUESTS[2].request_tag + '.schedule', [
+          'schedule skylab tests.' + REQUESTS[2].name + '.schedule', [
               'run', 'test', '-json', '-board', 'eve', '-pool',
               'cross_device_multi_cb', '-image', 'eve-release/R88-13545.0.0',
               '-timeout-mins', '60', '-qs-account', 'lacros'
@@ -156,22 +161,21 @@ def GenTests(api):
   yield api.test(
       'multiple_shards_trigger',
       api.step_data(
-          'schedule skylab tests.' + REQUESTS[0].request_tag + '.schedule',
-          retcode=1),
+          'schedule skylab tests.' + REQUESTS[0].name + '.schedule', retcode=1),
       api.post_process(post_process.StepFailure, 'schedule skylab tests'),
       api.post_process(
           post_process.MustRun,
-          'schedule skylab tests.{0}.schedule'.format(REQUESTS[5].request_tag)),
+          'schedule skylab tests.{0}.schedule'.format(REQUESTS[5].name)),
       api.post_process(
-          post_process.MustRun, 'schedule skylab tests.{0}.schedule (1)'.format(
-              REQUESTS[5].request_tag)),
-      api.post_process(
-          post_process.StepCommandContains,
-          'schedule skylab tests.' + REQUESTS[5].request_tag + '.schedule',
-          [test_args_for_shard(0)]),
+          post_process.MustRun,
+          'schedule skylab tests.{0}.schedule (1)'.format(REQUESTS[5].name)),
       api.post_process(
           post_process.StepCommandContains,
-          'schedule skylab tests.' + REQUESTS[5].request_tag + '.schedule (1)',
-          [test_args_for_shard(1)]),
+          'schedule skylab tests.' + REQUESTS[5].name + '.schedule',
+          [test_args_for_shard(REQUESTS[5].name, 0)]),
+      api.post_process(
+          post_process.StepCommandContains,
+          'schedule skylab tests.' + REQUESTS[5].name + '.schedule (1)',
+          [test_args_for_shard(REQUESTS[5].name, 1)]),
       api.post_process(post_process.DropExpectation),
   )

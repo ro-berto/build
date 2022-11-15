@@ -637,6 +637,14 @@ def generate_skylab_tests(chromium_tests_api,
       common_skylab_kwargs['info_messages'] = [
           skylab_test_spec.get('description')
       ]
+    if not common_skylab_kwargs.get('autotest_name'):
+      if common_skylab_kwargs.get('tast_expr'):
+        common_skylab_kwargs['autotest_name'] = 'tast.lacros'
+      elif common_skylab_kwargs.get('benchmark'):
+        common_skylab_kwargs['autotest_name'] = 'chromium_Telemetry'
+      else:
+        common_skylab_kwargs['autotest_name'] = 'chromium'
+
     return steps.SkylabTestSpec.create(
         skylab_test_spec.get('name'), **common_skylab_kwargs)
 

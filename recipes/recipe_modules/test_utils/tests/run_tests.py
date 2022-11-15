@@ -102,7 +102,7 @@ def RunSteps(api, test_swarming, test_skylab, test_name, test_experimental,
       common_skylab_kwargs = {
           k: v
           for k, v in spec.items()
-          if k in ['cros_board', 'cros_img', 'tast_expr', 'timeout_sec']
+          if k not in ['test', 'swarming', 'name']
       }
       common_skylab_kwargs['target_name'] = spec.get('test')
       test_specs.append(
@@ -223,13 +223,14 @@ def GenTests(api):
           builder_group='test_group', builder='test_builder'),
       api.properties(
           src_spec=[{
-              "cros_board": "eve",
-              "cros_img": "eve-release/R89-13631.0.0",
-              "name": "basic_EVE_TOT",
-              "tast_expr": "lacros.Basic",
-              "swarming": {},
-              "test": "basic",
-              "timeout": 3600
+              'cros_board': 'eve',
+              'cros_img': 'eve-release/R89-13631.0.0',
+              'name': 'basic_EVE_TOT',
+              'tast_expr': 'lacros.Basic',
+              'swarming': {},
+              'test': 'basic',
+              'timeout_sec': 3600,
+              'autotest_name': 'tast.lacros',
           }],
           test_skylab=True,
       ),

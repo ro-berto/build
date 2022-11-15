@@ -1335,13 +1335,13 @@ class SkylabGroup(TestGroup):
 
   def pre_run(self, api, suffix):
     """Schedule each Skylab test request to a CTP build."""
-    reqs = [t.skylab_req for t in self._test_suites if t.skylab_req]
-    if reqs:
+    tests = [t for t in self._test_suites if t.is_skylabtest]
+    if tests:
       # Respect timeout of each test run by this CTP build.
-      build_timeout = max([r.timeout_sec for r in reqs])
+      build_timeout = max([t.spec.timeout_sec for t in tests])
       if build_timeout > self.ctp_build_timeout_sec:
         self.ctp_build_timeout_sec = build_timeout
-      self.ctp_builds_by_tag = api.skylab.schedule_suites(reqs)
+      self.ctp_builds_by_tag = api.skylab.schedule_suites(tests)
 
   def run(self, api, suffix):
     """Fetch the responses for each test request."""

@@ -48,7 +48,6 @@ from PB.go.chromium.org.luci.resultdb.proto.v1 import (test_result as
                                                        test_result_pb2)
 
 from RECIPE_MODULES.build import chromium_swarming
-from RECIPE_MODULES.build.skylab.structs import SkylabRequest
 from RECIPE_MODULES.build.attr_utils import (attrib, attrs, command_args, enum,
                                              mapping, sequence)
 
@@ -2838,36 +2837,53 @@ class MockTest(Test):
 
 @attrs()
 class SkylabTestSpec(TestSpec):
-  """
-  Spec for a suite that runs on CrOS Skylab.
-
-  See SkylabRequest in //recipes/recipe_modules/skylab/structs.py for
-  documentation on this class's attributes
-  """
+  """Spec for a suite that runs on CrOS Skylab."""
+  # The CrOS build target name, e.g. eve, kevin.
   cros_board = attrib(str)
+  # The GS path presenting CrOS image to provision the DUT,
+  # e.g. atlas-release/R88-13545.0.0
   cros_img = attrib(str)
-  secondary_cros_board = attrib(str, default='')
-  secondary_cros_img = attrib(str, default='')
+  # The optional GS bucket of CrOS image.
   bucket = attrib(str, default='')
+  # The skylab device pool to run the test. By default the
+  # quota pool, shared by all CrOS tests.
   dut_pool = attrib(str, default='')
+  # The number of shards used to run the test.
   shards = attrib(int, default=1)
-  tast_expr = attrib(str, default='')
-  test_args = attrib(command_args, default=())
-  autotest_name = attrib(str, default='')
-  timeout_sec = attrib(int, default=3600)
-  tast_expr_file = attrib(str, default='')
-  tast_expr_key = attrib(str, default='default')
-
-  benchmark = attrib(str, default='')
-  story_filter = attrib(str, default='')
-  test_shard_map_filename = attrib(str, default='')
-  results_label = attrib(str, default='')
   # Enable retry for all Skylab tests by default. We see around 10% of tests
   # failed due to lab issues. Set retry into test requests, so that failed
   # tests could get rerun from OS infra side. We only bridged our CI builders
   # to Skylab now, so we do not expect a lot of failures from our artifact.
   # Revisit this when we integrate CQ to Skylab.
   retries = attrib(int, default=3)
+  # The timeout for the test in second. Default is one hour.
+  timeout_sec = attrib(int, default=3600)
+
+  # Generic arguments to pass to the test command run in skylab.
+  test_args = attrib(command_args, default=())
+
+  # The name of the autotest to be executed in Skylab.
+  # This is tied to an autotest control file that contains setup
+  # informations and runs the actual test. For tast test, an
+  # autotest wrapper is required. e.g. tast.lacros
+  autotest_name = attrib(str, default='')
+
+  # Spec for tast tests.
+  # The tast expression defines what tast test we run on the
+  # Skylab DUT, e.g. lacros.Basic.
+  tast_expr = attrib(str, default='')
+  # The key to extract the tast expression from the tast_expr_file.
+  tast_expr_key = attrib(str, default='default')
+
+  # Spec for the nearby sharing tests.
+  secondary_cros_board = attrib(str, default='')
+  secondary_cros_img = attrib(str, default='')
+
+  # Spec for telemetry tests.
+  benchmark = attrib(str, default='')
+  story_filter = attrib(str, default='')
+  results_label = attrib(str, default='')
+  test_shard_map_filename = attrib(str, default='')
 
   @property
   def test_class(self):
@@ -2888,8 +2904,13 @@ class SkylabTest(Test):
     # If CTP failed to schedule test runners, these lists could be empty. Use
     # the dict keys to troubleshoot.
     self.test_runner_builds = {}
+
+    # These fields represent the variables generated at the runtime.
     self.lacros_gcs_path = None
     self.exe_rel_path = None
+    # The relative path of the filter file for tast tests. The
+    # filter stores tast expression in a dict. Users need to provide the
+    # tast_expr_key to extract them.
     self.tast_expr_file = None
     self.telemetry_shard_index = None
 
@@ -2900,34 +2921,6 @@ class SkylabTest(Test):
   @property
   def is_tast_test(self):
     return bool(self.spec.tast_expr)
-
-  @property
-  def skylab_req(self):
-    return SkylabRequest.create(
-        request_tag=self.name,
-        tast_expr=self.spec.tast_expr,
-        test_args=' '.join(self.spec.test_args),
-        autotest_name=self.spec.autotest_name,
-        board=self.spec.cros_board,
-        cros_img=self.spec.cros_img,
-        secondary_board=self.spec.secondary_cros_board,
-        secondary_cros_img=self.spec.secondary_cros_img,
-        bucket=self.spec.bucket,
-        dut_pool=self.spec.dut_pool,
-        lacros_gcs_path=self.lacros_gcs_path,
-        exe_rel_path=self.exe_rel_path,
-        tast_expr_file=self.tast_expr_file,
-        tast_expr_key=self.spec.tast_expr_key,
-        timeout_sec=self.spec.timeout_sec,
-        retries=self.spec.retries,
-        resultdb=self.prep_skylab_rdb(),
-        benchmark=self.spec.benchmark,
-        story_filter=self.spec.story_filter,
-        test_shard_map_filename=self.spec.test_shard_map_filename,
-        telemetry_shard_index=self.telemetry_shard_index,
-        results_label=self.spec.results_label,
-        shards=self.spec.shards,
-    ) if self.lacros_gcs_path else None
 
   def _raise_failed_step(self, suffix, step, status, failure_msg):
     step.presentation.status = status
