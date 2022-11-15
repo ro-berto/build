@@ -905,9 +905,6 @@ SPEC = {
 SPEC.update([
     stock_config('Linux Viz'),
     stock_config('linux-annotator-rel'),
-    stock_config(
-        'linux-ash-chromium-builder-fyi-rel',
-        gclient_apply_config=['chromeos']),
     stock_config('linux-blink-animation-use-time-delta', config='Debug'),
     stock_config('linux-blink-heap-verification'),
     stock_config('linux-blink-v8-sandbox-future-dbg', config='Debug'),

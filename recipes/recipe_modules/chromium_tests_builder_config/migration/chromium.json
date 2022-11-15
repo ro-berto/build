@@ -480,11 +480,6 @@
       "tryserver.chromium.linux:linux-annotator-rel"
     ]
   },
-  "chromium.fyi:linux-ash-chromium-builder-fyi-rel": {
-    "builders": [
-      "chromium.fyi:linux-ash-chromium-builder-fyi-rel"
-    ]
-  },
   "chromium.fyi:linux-autofill-captured-sites-rel": {
     "builders": [
       "chromium.fyi:linux-autofill-captured-sites-rel"
