@@ -11,7 +11,7 @@
       "--limit",
       "1",
       "-p",
-      "change=456789",
+      "change=123456",
       "-o",
       "ALL_REVISIONS",
       "-o",
@@ -21,6 +21,18 @@
       "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
     },
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "gerrit fetch current CL info",
     "timeout": 60,
     "~followup_annotations": [
@@ -32,8 +44,8 @@
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"revisions\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"184ebe53805e102605d11f6b143486d15c23a09c\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"_number\": \"12\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"ref\": \"refs/changes/89/456789/12\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"_number\": \"7\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"ref\": \"refs/changes/56/123456/7\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
@@ -51,9 +63,21 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/builder/chromium_presubmit"
+      "[CACHE]/builder/builder"
     ],
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "ensure builder cache dir"
   },
   {
@@ -74,15 +98,15 @@
       "--output_json",
       "/path/to/tmp/json",
       "--patch_ref",
-      "https://chromium.googlesource.com/chromium/src@refs/heads/main:refs/changes/89/456789/12",
+      "https://chromium.googlesource.com/project@refs/heads/main:refs/changes/56/123456/7",
       "--revision",
       "src@refs/heads/main",
       "--refs",
       "refs/heads/main"
     ],
-    "cwd": "[CACHE]/builder/chromium_presubmit",
+    "cwd": "[CACHE]/builder/builder",
     "env": {
-      "DEPOT_TOOLS_COLLECT_METRICS": "0",
+      "DEPOT_TOOLS_REPORT_BUILD": "project/try/builder/8945511751514863184",
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "1800"
     },
@@ -95,6 +119,18 @@
       ]
     },
     "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "project:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "bot_update",
     "~followup_annotations": [
       "@@@STEP_TEXT@Some step text@@@",
@@ -244,27 +280,42 @@
       "-m",
       "Committed patch"
     ],
-    "cwd": "[CACHE]/builder/chromium_presubmit/src",
+    "cwd": "[CACHE]/builder/builder/src",
+    "luci_context": {
+      "realm": {
+        "name": "project:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
     "name": "commit-git-patch"
   },
   {
     "cmd": [
+      "rdb",
+      "stream",
+      "--",
       "vpython",
       "RECIPE_REPO[depot_tools]/presubmit_support.py",
       "--issue",
-      "456789",
+      "123456",
       "--patchset",
-      "12",
+      "7",
       "--gerrit_url",
       "https://chromium-review.googlesource.com",
       "--gerrit_project",
-      "chromium/src",
+      "project",
       "--gerrit_branch",
       "refs/heads/main",
       "--gerrit_fetch",
       "--dry_run",
       "--root",
-      "[CACHE]/builder/chromium_presubmit/src",
+      "[CACHE]/builder/builder/src",
       "--commit",
       "--verbose",
       "--verbose",
@@ -275,7 +326,7 @@
       "--json_output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]/builder/chromium_presubmit",
+    "cwd": "[CACHE]/builder/builder",
     "env_suffixes": {
       "DEPOT_TOOLS_UPDATE": [
         "0"
@@ -283,6 +334,18 @@
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
+    },
+    "luci_context": {
+      "realm": {
+        "name": "project:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "presubmit",
     "timeout": 480,
@@ -297,22 +360,25 @@
   },
   {
     "cmd": [
+      "rdb",
+      "stream",
+      "--",
       "vpython3",
       "RECIPE_REPO[depot_tools]/presubmit_support.py",
       "--issue",
-      "456789",
+      "123456",
       "--patchset",
-      "12",
+      "7",
       "--gerrit_url",
       "https://chromium-review.googlesource.com",
       "--gerrit_project",
-      "chromium/src",
+      "project",
       "--gerrit_branch",
       "refs/heads/main",
       "--gerrit_fetch",
       "--dry_run",
       "--root",
-      "[CACHE]/builder/chromium_presubmit/src",
+      "[CACHE]/builder/builder/src",
       "--commit",
       "--verbose",
       "--verbose",
@@ -323,7 +389,7 @@
       "--json_output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]/builder/chromium_presubmit",
+    "cwd": "[CACHE]/builder/builder",
     "env_suffixes": {
       "DEPOT_TOOLS_UPDATE": [
         "0"
@@ -331,6 +397,18 @@
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
+    },
+    "luci_context": {
+      "realm": {
+        "name": "project:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
     },
     "name": "presubmit py3",
     "timeout": 480,

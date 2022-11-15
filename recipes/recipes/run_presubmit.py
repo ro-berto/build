@@ -399,6 +399,7 @@ def GenTests(api):
   yield api.test(
       'chromium_dry_run',
       api.cq(run_mode=api.cq.DRY_RUN),
+      api.buildbucket.try_build(),
       api.properties.tryserver(
           buildername='chromium_presubmit',
           repo_name='chromium',
