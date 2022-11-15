@@ -2885,6 +2885,9 @@ class SkylabTestSpec(TestSpec):
   results_label = attrib(str, default='')
   test_shard_map_filename = attrib(str, default='')
 
+  # For GPU specific args.
+  extra_browser_args = attrib(str, default='')
+
   @property
   def test_class(self):
     return SkylabTest
@@ -2922,6 +2925,10 @@ class SkylabTest(Test):
   def is_tast_test(self):
     return bool(self.spec.tast_expr)
 
+  @property
+  def is_GPU_test(self):
+    return self.spec.autotest_name == 'chromium_GPU'
+
   def _raise_failed_step(self, suffix, step, status, failure_msg):
     step.presentation.status = status
     step.presentation.step_text += failure_msg
@@ -2952,7 +2959,8 @@ class SkylabTest(Test):
         # know the runtime path of the artifact on the host server in Skylab.
         # For gtest, we have to explicitly set the relative path of artifacts
         # to the adapter.
-        artifact_directory='' if self.is_tast_test else 'chromium/debug')
+        artifact_directory=''
+        if self.is_tast_test else '{}/debug'.format(self.spec.autotest_name))
 
   def get_invocation_names(self, suffix):
     # TODO(crbug.com/1248693): Use the invocation included by the parent builds.

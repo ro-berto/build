@@ -19,6 +19,9 @@ from recipe_engine import post_process
 
 LACROS_TAST_EXPR = '("group:mainline" && "dep:lacros" && "!informational")'
 LACROS_GTEST_ARGS = '--gtest_filter="VaapiTest.*"'
+GPU_GTEST_ARGS = ['--show-stdout', '--browser=cros-chrome', '--passthrough']
+GPU_EXTRA_BROWSWER_ARGS = ('--log-level=0 --js-flags=--expose-gc '
+                           '--force_high_performance_gpu')
 LACROS_GCS_PATH = 'gs://fake_bucket/lacros.squashfs'
 SHARD_COUNT = 2
 
@@ -107,6 +110,13 @@ REQUESTS = [
         dut_pool='cross_device_multi_cb',
         tast_expr_file='tast_expr_file.filter',
         shards=SHARD_COUNT),
+    gen_skylab_test(
+        'm109_gpu_tests',
+        test_args=GPU_GTEST_ARGS,
+        autotest_name='chromium_GPU',
+        bucket='chromiumos-image-archive',
+        extra_browser_args=GPU_EXTRA_BROWSWER_ARGS,
+    ),
 ]
 
 
@@ -177,5 +187,14 @@ def GenTests(api):
           post_process.StepCommandContains,
           'schedule skylab tests.' + REQUESTS[5].name + '.schedule (1)',
           [test_args_for_shard(REQUESTS[5].name, 1)]),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'chromium_GPU_test',
+      api.post_process(
+          post_process.StepCommandContains,
+          'schedule skylab tests.' + REQUESTS[6].name + '.schedule',
+          'chromium_GPU'),
       api.post_process(post_process.DropExpectation),
   )

@@ -122,6 +122,10 @@ class SkylabApi(recipe_api.RecipeApi):
             if t.spec.tast_expr_key:
               test_args.append('tast_expr_key=%s' % t.spec.tast_expr_key)
 
+          if t.spec.extra_browser_args:
+            test_args.append('extra_browser_args_b64=%s' %
+                             _base64_encode_str(t.spec.extra_browser_args))
+
           if t.spec.benchmark:
             test_args.append('benchmark=%s' % t.spec.benchmark)
 
