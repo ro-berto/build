@@ -9,4 +9,10 @@ message InputProperties {
   // src-relative paths to files containing Avd messages.
   // See http://bit.ly/2kku0uG for the Avd message definition in chromium/src.
   repeated string avd_configs = 1;
+
+  // The config to set for "gclient" recipe module.
+  string gclient_config = 2;
+
+  // A list of config to apply for "gclient" recipe module.
+  repeated string gclient_apply_config = 3;
 }

@@ -22,8 +22,9 @@ PROPERTIES = avd_packager.InputProperties
 
 
 def RunSteps(api, properties):
-  api.gclient.set_config('chromium')
-  api.gclient.apply_config('android')
+  api.gclient.set_config(properties.gclient_config)
+  for c in properties.gclient_apply_config:
+    api.gclient.apply_config(c)
   api.chromium_checkout.ensure_checkout()
 
   chromium_src = api.path['checkout']
@@ -63,10 +64,14 @@ def GenTests(api):
 
   yield api.test(
       'basic',
-      api.properties(avd_configs=[
-          'tools/android/avd/proto/generic_android23.textpb',
-          'tools/android/avd/proto/generic_android28.textpb',
-      ]),
+      api.properties(
+          avd_configs=[
+              'tools/android/avd/proto/generic_android23.textpb',
+              'tools/android/avd/proto/generic_android28.textpb',
+          ],
+          gclient_config="chromium",
+          gclient_apply_config=["android"],
+      ),
       api.post_process(
           post_process.MustRun,
           'avd create tools/android/avd/proto/generic_android23.textpb'),
