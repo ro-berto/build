@@ -10,7 +10,7 @@ from RECIPE_MODULES.build.attr_utils import (attrib, attrs, enum, mapping,
 
 
 @attrs()
-class ResultDB(object):
+class ResultDB:
   """Configuration for ResultDB-integration for a test.
 
   Attributes:

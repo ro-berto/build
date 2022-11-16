@@ -9,7 +9,7 @@ from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 
 
 @attrs()
-class TargetsConfig(object):
+class TargetsConfig:
   """Configuration about the targets to build and test for a builder.
 
   TargetsConfig provides access to information obtained from src-side files; for

@@ -35,7 +35,7 @@ DISABLE_RTS_FOOTER = 'Disable-Rts'
 
 
 @attrs()
-class SwarmingExecutionInfo(object):
+class SwarmingExecutionInfo:
   """Information about how to execute a set of swarming tests."""
   # Maps isolate names to the digest for that isolate.
   # Should be renamed to 'digest_by_isolate_name'.
@@ -104,7 +104,8 @@ class SwarmingExecutionInfo(object):
     it's tricky to rename them.
     """
     return {
-        'swarm_hashes': {k: v for k, v in self.digest_by_isolate_name.items()},
+        'swarm_hashes':
+            dict(self.digest_by_isolate_name),
         'swarming_command_lines_digest':
             self.command_lines_file_digest,
         'swarming_rts_command_lines_digest':
@@ -117,7 +118,7 @@ class SwarmingExecutionInfo(object):
 
 
 @attrs()
-class Task(object):
+class Task:
   """Represents the configuration for build/test tasks."""
 
   # BuilderConfig of the task runner bot.
@@ -147,7 +148,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   Task = Task
 
   def __init__(self, input_properties, **kwargs):
-    super(ChromiumTestsApi, self).__init__(**kwargs)
+    super().__init__(**kwargs)
 
     self.filter_files_dir = None
     # Will get updated in initialize, which gets run by the recipe engine after
@@ -704,14 +705,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           # builders and systems do this, and we don't want to break anything
           # which depends on that in the property name.
           suffix.replace(' ', '_') if suffix else 'without_patch')
-    targets = list(set([t.isolate_target for t in tests]))
+    targets = list({t.isolate_target for t in tests})
     if additional_isolate_targets:
       targets.extend(additional_isolate_targets)
 
     # These functions append suffix to step names, but expect it to be wrapped
     # in parentheses, if it exists. Suffix currently is something like 'with
     # patch', with no parentheses, or ''. Wrap it in parens if needed.
-    name_suffix = ' (%s)' % suffix if suffix else '',
+    name_suffix = ' (%s)' % suffix if suffix else ''
     # This has the side effect of setting self.m.isolate.isolated_tests,
     # which we use elsewhere. We should probably instead return that and pass it
     # around.
@@ -1217,7 +1218,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       # to run tests. If platform is Android and tests is None, run device
       # steps.
       require_device_steps = (
-          tests is None or any([t.uses_local_devices for t in tests]))
+          tests is None or any(t.uses_local_devices for t in tests))
 
       if (self.m.chromium.c.TARGET_PLATFORM == 'android' and
           require_device_steps):
@@ -1450,10 +1451,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if builder_group.startswith('chromium.perf'):
       return self.m.archive.legacy_upload_url(
           builder_spec.build_gs_bucket, extra_url_components=None)
-    else:
-      return self.m.archive.legacy_upload_url(
-          builder_spec.build_gs_bucket,
-          extra_url_components=self.m.builder_group.for_current)
+
+    return self.m.archive.legacy_upload_url(
+        builder_spec.build_gs_bucket,
+        extra_url_components=self.m.builder_group.for_current)
 
   def get_common_args_for_scripts(self):
     args = []
@@ -1981,11 +1982,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       test_summary_lines.append(test_suite_header)
 
-      for index, failure in enumerate(sorted(deterministic_failures)):
-        if index >= failure_limit or current_size >= size_limit:
+      for idx, failure in enumerate(sorted(deterministic_failures)):
+        if idx >= failure_limit or current_size >= size_limit:
           failure_size = len(deterministic_failures)
-          hint = '- ...%d more failure(s) (%d total)...' % (failure_size -
-                                                            index, failure_size)
+          hint = '- ...%d more failure(s) (%d total)...' % (failure_size - idx,
+                                                            failure_size)
           test_summary_lines.append(hint)
           current_size += len(hint)
           break
@@ -2287,12 +2288,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         builder_id = details[0]
         return "running builder '{}' on group '{}'".format(
             builder_id.builder, builder_id.group)
-      else:
-        parent_builder_id, builder_id = details
-        return ("running tester '{}' on group '{}'"
-                " against builder '{}' on group '{}'").format(
-                    builder_id.builder, builder_id.group,
-                    parent_builder_id.builder, parent_builder_id.group)
+
+      parent_builder_id, builder_id = details
+      return ("running tester '{}' on group '{}'"
+              " against builder '{}' on group '{}'").format(
+                  builder_id.builder, builder_id.group,
+                  parent_builder_id.builder, parent_builder_id.group)
 
     lines = [''] + [present(d) for d in sorted(builder_details)]
 
@@ -2420,10 +2421,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       content = self.m.file.read_text('read isolate file', abs_runtime_deps)
       try:
         isolate_dict = eval(content.strip())
-      except:
+      except Exception as e:
         failure_msg = 'Failed to parse the %s.isolate' % target
         step.presentation.status = self.m.step.FAILURE
-        raise self.m.step.StepFailure(failure_msg)
+        raise self.m.step.StepFailure(failure_msg) from e
 
       if len(isolate_dict.get('variables', {}).get('files', [])) == 0:
         failure_msg = 'No dependencies attached to target %s.' % target
@@ -2523,8 +2524,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                                                gcs_path, t, r)
           for t, r in runtime_dict_by_target.items()
       }
-      for target, tests in tests_by_target.items():
-        for t in tests:
+      for target, tests_for_target in tests_by_target.items():
+        for t in tests_for_target:
           exe = 'bin/run_%s' % t.target_name
           if t.is_tast_test or t.is_GPU_test:
             exe = './chrome'

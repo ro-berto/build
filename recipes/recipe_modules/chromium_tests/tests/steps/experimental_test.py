@@ -35,11 +35,11 @@ def RunSteps(api):
 
     def has_valid_results(self, suffix):
       api.step('has_valid_results {}'.format(self.step_name(suffix)), [])
-      return super(RecordingTest, self).has_valid_results(suffix)
+      return super().has_valid_results(suffix)
 
     def failures(self, suffix):
       api.step('failures {}'.format(self.step_name(suffix)), [])
-      return super(RecordingTest, self).failures(suffix)
+      return super().failures(suffix)
 
   option_flags = steps.TestOptionFlags.create(
       filter_flag='--filter-flag',

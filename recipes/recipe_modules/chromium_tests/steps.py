@@ -78,12 +78,11 @@ def _merge_arg(args, flag, value):
   args = [a for a in args if not a.startswith(flag)]
   if value is not None:
     return args + ['%s=%s' % (flag, str(value))]
-  else:
-    return args + [flag]
+  return args + [flag]
 
 
 @attrs()
-class TestOptionFlags(object):
+class TestOptionFlags:
   """Flags for supporting TestOptions features.
 
   For each of the options in TestOptions, the different test types have
@@ -143,7 +142,7 @@ _BLINK_WEB_TESTS_OPTION_FLAGS = TestOptionFlags.create(
 
 
 @attrs()
-class TestOptions(object):
+class TestOptions:
   """Test-type agnostic configuration of test running options."""
 
   # How many times to run each test
@@ -257,7 +256,7 @@ def _present_info_messages(presentation, test):
   presentation.step_text = '\n'.join(messages)
 
 
-class DisabledReason(object):
+class DisabledReason:
   """Abstract base class for identifying why a test is disabled."""
 
   __metaclass__ = abc.ABCMeta
@@ -284,7 +283,7 @@ class _CiOnly(DisabledReason):
 CI_ONLY = _CiOnly()
 
 
-class TestSpecBase(object):
+class TestSpecBase:
   """Abstract base class for specs for tests and wrapped tests."""
 
   __metaclass__ = abc.ABCMeta
@@ -392,7 +391,7 @@ class TestSpec(TestSpecBase):
     return attr.evolve(self, info_messages=self.info_messages + (message,))
 
 
-class Test(object):
+class Test:
   """
   Base class for a test suite that can be run locally or remotely.
 
@@ -417,7 +416,7 @@ class Test(object):
   """
 
   def __init__(self, spec, chromium_tests_api):
-    super(Test, self).__init__()
+    super().__init__()
 
     self.spec = spec
     self._chromium_tests_api = chromium_tests_api
@@ -850,9 +849,8 @@ class Test(object):
         'happen as all calls to failures() should first check that the data '
         'exists.'.format(suffix))
     assert suffix in self._rdb_results, failure_msg
-    return set([
-        t.test_name for t in self._rdb_results[suffix].unexpected_failing_tests
-    ])
+    return set(
+        t.test_name for t in self._rdb_results[suffix].unexpected_failing_tests)
 
   def deterministic_failures(self, suffix):
     """Return tests that failed on every test run(set of strings)."""
@@ -883,9 +881,8 @@ class Test(object):
     assert self.has_valid_results(suffix), (
         'notrun_failures must only be called when the test run is known to '
         'have valid results.')
-    return set([
-        t.test_name for t in self._rdb_results[suffix].unexpected_skipped_tests
-    ])
+    return set(
+        t.test_name for t in self._rdb_results[suffix].unexpected_skipped_tests)
 
   def name_of_step_for_suffix(self, suffix):
     """Returns the name of the step most relevant to the given suffix run.
@@ -1129,7 +1126,7 @@ class TestWrapper(Test):  # pragma: no cover
   """
 
   def __init__(self, spec, test):
-    super(TestWrapper, self).__init__(test.name, test.api)
+    super().__init__(test.name, test.api)
     self.spec = spec
     self._test = test
 
@@ -1298,7 +1295,7 @@ class ExperimentalTestSpec(TestWrapperSpec):
                                                        api)
     if not is_in_experiment:
       test_spec = test_spec.disable(_NOT_IN_EXPERIMENT)
-    return super(ExperimentalTestSpec, cls).create(test_spec)
+    return super().create(test_spec)
 
   @property
   def test_wrapper_class(self):
@@ -1363,8 +1360,7 @@ class ExperimentalTest(TestWrapper):
     contract, so this method indicates if calling the superclass version
     should be safe.
     """
-    return super(ExperimentalTest,
-                 self).has_valid_results(self._experimental_suffix(suffix))
+    return super().has_valid_results(self._experimental_suffix(suffix))
 
   @property
   def abort_on_failure(self):
@@ -1373,23 +1369,20 @@ class ExperimentalTest(TestWrapper):
   #override
   def pre_run(self, suffix):
     try:
-      return super(ExperimentalTest,
-                   self).pre_run(self._experimental_suffix(suffix))
+      return super().pre_run(self._experimental_suffix(suffix))
     except self.api.m.step.StepFailure:
       pass
 
   #override
   def name_of_step_for_suffix(self, suffix):
     experimental_suffix = self._experimental_suffix(suffix)
-    return super(ExperimentalTest,
-                 self).name_of_step_for_suffix(experimental_suffix)
+    return super().name_of_step_for_suffix(experimental_suffix)
 
   #override
   @recipe_api.composite_step
   def run(self, suffix):
     try:
-      return super(ExperimentalTest,
-                   self).run(self._experimental_suffix(suffix))
+      return super().run(self._experimental_suffix(suffix))
     except self.api.m.step.StepFailure:
       pass
 
@@ -1397,16 +1390,14 @@ class ExperimentalTest(TestWrapper):
   def has_valid_results(self, suffix):
     # Call the wrapped test's implementation in case it has side effects, but
     # ignore the result.
-    super(ExperimentalTest,
-          self).has_valid_results(self._experimental_suffix(suffix))
+    super().has_valid_results(self._experimental_suffix(suffix))
     return True
 
   #override
   def failure_on_exit(self, suffix):
     # Call the wrapped test's implementation in case it has side effects, but
     # ignore the result.
-    super(ExperimentalTest,
-          self).failure_on_exit(self._experimental_suffix(suffix))
+    super().failure_on_exit(self._experimental_suffix(suffix))
     return False
 
   #override
@@ -1414,7 +1405,7 @@ class ExperimentalTest(TestWrapper):
     if self._actually_has_valid_results(suffix):
       # Call the wrapped test's implementation in case it has side effects,
       # but ignore the result.
-      super(ExperimentalTest, self).failures(self._experimental_suffix(suffix))
+      super().failures(self._experimental_suffix(suffix))
     return []
 
   #override
@@ -1422,8 +1413,7 @@ class ExperimentalTest(TestWrapper):
     if self._actually_has_valid_results(suffix):
       # Call the wrapped test's implementation in case it has side effects,
       # but ignore the result.
-      super(ExperimentalTest,
-            self).deterministic_failures(self._experimental_suffix(suffix))
+      super().deterministic_failures(self._experimental_suffix(suffix))
     return []
 
   #override
@@ -1431,28 +1421,24 @@ class ExperimentalTest(TestWrapper):
     if self._actually_has_valid_results(suffix):
       # Call the wrapped test's implementation in case it has side effects,
       # but ignore the result.
-      super(ExperimentalTest,
-            self).notrun_failures(self._experimental_suffix(suffix))
+      super().notrun_failures(self._experimental_suffix(suffix))
     return set()
 
   def pass_fail_counts(self, suffix):
     if self._actually_has_valid_results(suffix):
       # Call the wrapped test's implementation in case it has side effects,
       # but ignore the result.
-      super(ExperimentalTest,
-            self).pass_fail_counts(self._experimental_suffix(suffix))
+      super().pass_fail_counts(self._experimental_suffix(suffix))
     return {}
 
   def get_invocation_names(self, suffix):
-    return super(ExperimentalTest,
-                 self).get_invocation_names(self._experimental_suffix(suffix))
+    return super().get_invocation_names(self._experimental_suffix(suffix))
 
   def get_rdb_results(self, suffix):
-    return super(ExperimentalTest,
-                 self).get_rdb_results(self._experimental_suffix(suffix))
+    return super().get_rdb_results(self._experimental_suffix(suffix))
 
   def update_rdb_results(self, suffix, results):
-    return super(ExperimentalTest, self).update_rdb_results(
+    return super().update_rdb_results(
         self._experimental_suffix(suffix), results)
 
 
@@ -1466,7 +1452,7 @@ class LocalTest(Test):
   # pylint: disable=abstract-method
 
   def __init__(self, spec, chromium_tests_api):
-    super(LocalTest, self).__init__(spec, chromium_tests_api)
+    super().__init__(spec, chromium_tests_api)
     self._suffix_to_invocation_names = {}
 
   def get_invocation_names(self, suffix):
@@ -1532,9 +1518,6 @@ class ScriptTest(LocalTest):  # pylint: disable=W0232
 
   All new tests are strongly encouraged to use this infrastructure.
   """
-
-  def __init__(self, spec, chromium_tests_api):
-    super(ScriptTest, self).__init__(spec, chromium_tests_api)
 
   def compile_targets(self):
     if self.spec.override_compile_targets:
@@ -1633,7 +1616,7 @@ class ScriptTest(LocalTest):  # pylint: disable=W0232
 
 
 @attrs()
-class SetUpScript(object):
+class SetUpScript:
   """Configuration of a script to run before test execution.
 
   Attributes:
@@ -1653,7 +1636,7 @@ class SetUpScript(object):
 
 
 @attrs()
-class TearDownScript(object):
+class TearDownScript:
   """Configuration of a script to run after test execution.
 
   Attributes:
@@ -1735,7 +1718,9 @@ class LocalGTestTest(LocalTest):
   @recipe_api.composite_step
   def run(self, suffix):
     tests_to_retry = self._tests_to_retry(suffix)
-    test_options = self.test_options.for_running(suffix, tests_to_retry)
+    # pylint apparently gets confused by a property in a base class where the
+    # setter is overridden
+    test_options = self.test_options.for_running(suffix, tests_to_retry)  # pylint: disable=no-member
     args = test_options.add_args(self.spec.args, self.option_flags)
 
     if tests_to_retry:
@@ -1944,15 +1929,13 @@ class SwarmingTestSpec(TestSpec):
         extra_suffix = cls._get_gpu_suffix(dimensions)
       elif dimensions.get('os') == 'Android' and dimensions.get('device_type'):
         extra_suffix = cls._get_android_suffix(dimensions)
-    return super(SwarmingTestSpec, cls).create(
-        name, extra_suffix=extra_suffix, **kwargs)
+    return super().create(name, extra_suffix=extra_suffix, **kwargs)
 
   @property
   def name(self):
     if self.extra_suffix:
       return '%s %s' % (self._name, self.extra_suffix)
-    else:
-      return self._name
+    return self._name
 
   @property
   def quickrun_shards(self):
@@ -2038,7 +2021,7 @@ class SwarmingTest(Test):
   CHECK_FLAKINESS_SUFFIX = 'check flakiness'
 
   def __init__(self, spec, chromium_tests_api):
-    super(SwarmingTest, self).__init__(spec, chromium_tests_api)
+    super().__init__(spec, chromium_tests_api)
 
     self._tasks = {}
     self.raw_cmd = []
@@ -2091,13 +2074,13 @@ class SwarmingTest(Test):
   def supports_inverted_rts(self):
     return bool(self.inverted_raw_cmd)
 
-  def create_task(self, suffix, task_input):
+  def create_task(self, suffix, cas_input_root):
     """Creates a swarming task. Must be overridden in subclasses.
 
     Args:
       api: Caller's API.
       suffix: Suffix added to the test name.
-      task_input: Hash or digest of the isolated test to be run.
+      cas_input_root: Hash or digest of the isolated test to be run.
 
     Returns:
       A SwarmingTask object.
@@ -2331,7 +2314,7 @@ class SwarmingTest(Test):
     return step_result
 
   def step_metadata(self, suffix=None):
-    data = super(SwarmingTest, self).step_metadata(suffix)
+    data = super().step_metadata(suffix)
     if suffix is not None:
       data['full_step_name'] = self._suffix_step_name_map[suffix]
       data['patched'] = suffix in ('with patch', 'retry shards with patch')
@@ -2392,13 +2375,10 @@ class SwarmingGTestTest(SwarmingTest):
     self._apply_swarming_task_config(task, suffix, '--gtest_filter', ':')
     return task
 
-  def pass_fail_counts(self, suffix):
-    return super(SwarmingGTestTest, self).pass_fail_counts(suffix)
-
   @recipe_api.composite_step
   def run(self, suffix):
     """Waits for launched test to finish and collects the results."""
-    step_result = super(SwarmingGTestTest, self).run(suffix)
+    step_result = super().run(suffix)
     step_name = '.'.join(step_result.name_tokens)
     self._suffix_step_name_map[suffix] = step_name
 
@@ -2446,7 +2426,7 @@ class LocalIsolatedScriptTestSpec(TestSpec):
 class LocalIsolatedScriptTest(LocalTest):
 
   def __init__(self, spec, chromium_tests_api):
-    super(LocalIsolatedScriptTest, self).__init__(spec, chromium_tests_api)
+    super().__init__(spec, chromium_tests_api)
     self.raw_cmd = []
     self.relative_cwd = None
 
@@ -2486,7 +2466,9 @@ class LocalIsolatedScriptTest(LocalTest):
   @recipe_api.composite_step
   def run(self, suffix):
     tests_to_retry = self._tests_to_retry(suffix)
-    test_options = self.test_options.for_running(suffix, tests_to_retry)
+    # pylint apparently gets confused by a property in a base class where the
+    # setter is overridden
+    test_options = self.test_options.for_running(suffix, tests_to_retry)  # pylint: disable=no-member
     pre_args = []
     if self.relative_cwd:
       pre_args += ['--relative-cwd', self.relative_cwd]
@@ -2588,7 +2570,7 @@ class SwarmingIsolatedScriptTestSpec(SwarmingTestSpec):
 class SwarmingIsolatedScriptTest(SwarmingTest):
 
   def __init__(self, spec, chromium_tests_api):
-    super(SwarmingIsolatedScriptTest, self).__init__(spec, chromium_tests_api)
+    super().__init__(spec, chromium_tests_api)
     self._isolated_script_results = None
 
   def compile_targets(self):
@@ -2623,7 +2605,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
 
   @recipe_api.composite_step
   def run(self, suffix):
-    step_result = super(SwarmingIsolatedScriptTest, self).run(suffix)
+    step_result = super().run(suffix)
     results = step_result.json.output
 
     if results and self.spec.results_handler_name == 'layout tests':
@@ -2655,7 +2637,7 @@ class AndroidJunitTestSpec(TestSpec):
         target name, so it cannot be specified.
     """
     target_name = kwargs.pop('target_name', None) or name
-    return super(AndroidJunitTestSpec, cls).create(
+    return super().create(
         name, target_name=target_name, compile_targets=[target_name], **kwargs)
 
   @property
@@ -2752,12 +2734,12 @@ class MockTestSpec(TestSpec):
 class MockTest(Test):
   """A Test solely intended to be used in recipe tests."""
 
-  class ExitCodes(object):
+  class ExitCodes:
     FAILURE = 1
     INFRA_FAILURE = 2
 
   def __init__(self, spec, chromium_tests_api):
-    super(MockTest, self).__init__(spec, chromium_tests_api)
+    super().__init__(spec, chromium_tests_api)
     # We mutate the set of failures depending on the exit code of the test
     # steps, so get a mutable copy
     self._failures = list(spec.failures)
@@ -2778,7 +2760,7 @@ class MockTest(Test):
       if f.result.retcode == self.ExitCodes.INFRA_FAILURE:
         i = self.api.m.step.InfraFailure(f.name, result=f.result)
         i.result.presentation.status = self.api.m.step.EXCEPTION
-        raise i
+        raise i from f
       self._failures.append('test_failure')
       raise
 
@@ -2896,7 +2878,7 @@ class SkylabTestSpec(TestSpec):
 class SkylabTest(Test):
 
   def __init__(self, spec, chromium_tests_api):
-    super(SkylabTest, self).__init__(spec, chromium_tests_api)
+    super().__init__(spec, chromium_tests_api)
     # cros_test_platform build, aka CTP is the entrance for the CrOS hardware
     # tests, which kicks off test_runner builds for our test suite.
     # Each test suite has a CTP build ID, as long as the buildbucket call is
@@ -3027,9 +3009,8 @@ class SkylabTest(Test):
             # If the status of any test run is success, the parent step should be
             # success too. The "Test Results" tab could expose the detailed flaky
             # information.
-            if any([
-                b.status == common_pb2.SUCCESS for b in shard_attempt_runners
-            ]):
+            if any(
+                b.status == common_pb2.SUCCESS for b in shard_attempt_runners):
               shard_step.presentation.status = self.api.m.step.SUCCESS
               shard_step.presentation.step_text = (
                   'Test had failed runs. '
