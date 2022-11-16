@@ -436,11 +436,6 @@ def enable_soda_integration_tests(c):
   c.solutions[0].custom_vars['checkout_soda'] = 'True'
 
 
-@CONFIG_CTX()
-def enable_reclient(c):
-  c.solutions[0].custom_vars['checkout_reclient'] = 'True'
-
-
 # This configuration overrides the default reclient version
 # with the staging version.  This is used for testing new
 # reclient releases.
