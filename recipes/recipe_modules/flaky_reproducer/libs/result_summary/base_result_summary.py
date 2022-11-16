@@ -43,7 +43,7 @@ class TestStatus(Enum):
   SKIP = 5
 
 
-class TestResult(object):
+class TestResult:
   """
   A result of a test case.
   Often a single test case is executed multiple times and has multiple results.
@@ -147,7 +147,7 @@ class TestResultErrorMessageRegexSimilarityMixin:
       return False
     if self.primary_error_message == other.primary_error_message:
       return True
-    elif self.primary_error_message and other.primary_error_message:
+    if self.primary_error_message and other.primary_error_message:
       remove_number = re.compile(r'([0-9]+|[0-9a-fx]{8,})', re.IGNORECASE)
       a_message = remove_number.sub('0', self.primary_error_message)
       b_message = remove_number.sub('0', other.primary_error_message)
@@ -209,8 +209,7 @@ class BaseResultSummary:
         return r
     if default is UnexpectedTestResult:
       return UnexpectedTestResult(test_name)
-    else:
-      return default
+    return default
 
   def dump_raw_data(self):
     """Return the raw data of the result summary as string"""

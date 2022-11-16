@@ -38,9 +38,9 @@ def create_test_binary_from_task_request(task_request):
   # android device tests (e.g. android-12-x64-rel) are not using
   # result_adapter, detecting --test-launcher-summary-output as a workaround
   # as it doesn't exists in blink_web_tests.
-  elif '--test-launcher-summary-output' in command:
+  if '--test-launcher-summary-output' in command:
     return GTestTestBinary.from_task_request(task_request)
-  elif '--write-run-histories-to=' in command:
+  if '--write-run-histories-to=' in command:
     return BlinkWebTestsBinary.from_task_request(task_request)
   raise NotImplementedError('Not Supported test binary: %s' % command)
 

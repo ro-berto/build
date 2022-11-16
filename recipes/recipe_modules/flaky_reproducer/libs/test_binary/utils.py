@@ -29,9 +29,9 @@ def strip_command_wrappers(command, strip_wrappers):
     if cmd_0 in strip_wrappers:
       try:
         dash_index = cmd.index('--')
-      except ValueError:
+      except ValueError as e:
         raise ValueError('Unsupported command wrapper: {0} in {1}'.format(
-            cmd_0, command))
+            cmd_0, command)) from e
       cmd = cmd[dash_index + 1:]
       stripped = True
   if not cmd:

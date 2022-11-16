@@ -134,10 +134,10 @@ def RunSteps(api, config, task_id, test_name, verify_on_builders):
             'contents': _result_json_to_html(results),
         }
     })
-    for artifact in artifacts_ret.artifacts:
+    for a in artifacts_ret.artifacts:
       presentation.step_summary_text = (
           '[results.html](https://luci-milo.appspot.com/ui/artifact/raw/{0})'
-          .format(artifact.name))
+          .format(a.name))
 
 
 def _result_json_to_html(results):

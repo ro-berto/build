@@ -57,9 +57,6 @@ class FlakyReproducer(recipe_api.RecipeApi):
   CHROMITE_BAD_SYMLINK_DIR = ('third_party', 'chromite', 'sdk', 'etc',
                               'bash_completion.d')
 
-  def __init__(self, *args, **kwargs):
-    super(FlakyReproducer, self).__init__(*args, **kwargs)
-
   @nest_step
   def get_test_result_summary(self, task_id):
     """Gets TestResultSummary from the output of a swarming task result.
@@ -384,7 +381,7 @@ class FlakyReproducer(recipe_api.RecipeApi):
       builder_summary = []
       builder_summary.append(
           '\nThe failure could be reproduced on following builders:')
-      sorted_builder_results = sorted([x for x in builder_results.items()],
+      sorted_builder_results = sorted((x for x in builder_results.items()),
                                       key=lambda kv: (not bool(kv[1].error), kv[
                                           1].reproduced_runs, kv[1].duration),
                                       reverse=True)
@@ -489,8 +486,7 @@ class FlakyReproducer(recipe_api.RecipeApi):
       except self.m.step.InfraFailure as err:
         if err.retcode == 123:
           raise self.m.step.StepFailure('Not support realm.')
-        else:
-          raise err
+        raise err
       for test_result in res.test_results:
         if test_id and test_result.test_id == test_id:
           last_test_result = test_result
@@ -714,9 +710,9 @@ class FlakyReproducer(recipe_api.RecipeApi):
                         test_verdict_pb2.TestVerdictStatus.EXPECTED):
           selected_verdict = v
           break
-        elif (v.status in (test_verdict_pb2.TestVerdictStatus.UNEXPECTED,
-                           test_verdict_pb2.TestVerdictStatus.EXONERATED) and
-              not selected_verdict):
+        if (v.status in (test_verdict_pb2.TestVerdictStatus.UNEXPECTED,
+                         test_verdict_pb2.TestVerdictStatus.EXONERATED) and
+            not selected_verdict):
           selected_verdict = v
       if selected_verdict:
         selected_invocations.append(selected_verdict.invocation_id)

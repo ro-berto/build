@@ -10,9 +10,6 @@ THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 
 class FlakyReproducerTestApi(recipe_test_api.RecipeTestApi):
 
-  def __init__(self, *args, **kwargs):
-    super(FlakyReproducerTestApi, self).__init__(*args, **kwargs)
-
   @staticmethod
   def get_test_data(filename):
     """Return test data as str"""

@@ -146,11 +146,17 @@ class BaseTestBinaryTest(unittest.TestCase):
     mock_NamedTemporaryFile = tmp_patcher.start()
 
     def new_NamedTemporaryFile(
+        mode='w+b',
+        buffering=-1,
+        encoding=None,
+        newline=None,
         suffix=None,
         prefix=None,
         dir=None,  # pylint: disable=redefined-builtin
-        *args,
-        **kwargs):
+        delete=True,
+        *,
+        errors=None,
+    ):
       fp = io.StringIO()
       fp.name = "/{0}/{1}mock-temp-{2}{3}".format(
           dir or 'mock-tmp', prefix or '', mock_NamedTemporaryFile.call_count,

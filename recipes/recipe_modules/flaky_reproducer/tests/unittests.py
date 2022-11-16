@@ -11,6 +11,8 @@ DEPS = []
 
 
 def RunSteps(api):
+  # If these modules are imported at top level, the recipes lint check fails
+  # pylint: disable=import-outside-toplevel
   import os
   import unittest
 
