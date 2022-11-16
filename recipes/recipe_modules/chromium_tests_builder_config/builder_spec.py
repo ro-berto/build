@@ -13,7 +13,7 @@ TEST = 'test'
 
 
 @attrs()
-class BuilderSpec(object):
+class BuilderSpec:
   """An immutable specification for a bot.
 
   This type provides a means of specifying all of the input values for

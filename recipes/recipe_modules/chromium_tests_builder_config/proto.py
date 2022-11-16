@@ -239,7 +239,9 @@ def convert_builder_config(obj):
       for entry in obj.builder_db.entries
   }
 
-  rts_condition = obj.rts_config and obj.rts_config.condition or None
+  rts_condition = obj.rts_config and obj.rts_config.condition
+  # coerce an unspecified condition to None
+  rts_condition = rts_condition or None
   regression_test_selection = (
       _RTS_CONDITION_MAP[rts_condition] if rts_condition is not None else None)
 

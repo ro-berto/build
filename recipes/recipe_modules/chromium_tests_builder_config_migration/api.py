@@ -55,7 +55,7 @@ def _validate_builder_group_and_name(message, ctx):
   ctx.validate_field(message, 'builder')
 
 
-class _OutputCollector(object):
+class _OutputCollector:
 
   def __init__(self):
     self.lines = []
@@ -78,7 +78,7 @@ class _OutputCollector(object):
       self.add_line(l)
 
 
-class _Grouping(object):
+class _Grouping:
 
   def __init__(self):
     self.builder_ids = set()

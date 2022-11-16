@@ -17,7 +17,7 @@ QUICK_RUN_ONLY = 'quick_run_only'
 
 
 @attrs()
-class TryMirror(object):
+class TryMirror:
   """An immutable specification for a trybot-mirroring relationship."""
 
   # The mirrored builder
@@ -76,7 +76,7 @@ class TryMirror(object):
 
 
 @attrs()
-class TrySpec(object):
+class TrySpec:
   """Immutable specification for the operation of a try builder."""
 
   # The specifications of the builders being mirrored by the try builder

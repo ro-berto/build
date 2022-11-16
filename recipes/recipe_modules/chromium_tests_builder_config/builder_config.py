@@ -18,10 +18,9 @@ from RECIPE_MODULES.build.attr_utils import (attrib, attrs, cached_property,
 
 class BuilderConfigException(Exception):
   """Exception indicating an attempt to create an invalid BuilderConfig."""
-  pass
 
 
-class _BuilderSpecProperty(object):
+class _BuilderSpecProperty:
   """A non-data descriptor that delegates attributes to BuilderSpecs.
 
   This descriptor must be attached to the BuilderConfig class. The value
@@ -86,7 +85,7 @@ def delegate_to_builder_spec(builder_spec_class):
 
 @delegate_to_builder_spec(BuilderSpec)
 @attrs()
-class BuilderConfig(object):
+class BuilderConfig:
   """"Static" configuration for a builder.
 
   BuilderConfig provides access to information defined entirely in
@@ -271,9 +270,10 @@ class BuilderConfig(object):
       try_spec_kwargs = attr.asdict(try_spec, recurse=False)
       mirrors = try_spec_kwargs.pop('mirrors')
       kwargs.update(try_spec_kwargs)
-      kwargs['builder_ids'] = set([m.builder_id for m in mirrors])
-      kwargs['builder_ids_in_scope_for_testing'] = set(
-          [m.tester_id for m in mirrors if m.tester_id])
+      kwargs['builder_ids'] = {m.builder_id for m in mirrors}
+      kwargs['builder_ids_in_scope_for_testing'] = {
+          m.tester_id for m in mirrors if m.tester_id
+      }
 
     # Create the builder config first to ensure all of the necessary builders
     # exist

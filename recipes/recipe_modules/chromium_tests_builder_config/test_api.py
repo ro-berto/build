@@ -27,7 +27,7 @@ _ExecutionMode = properties_pb.BuilderSpec.ExecutionMode
 
 
 @attrs()
-class BuilderDetails(object):
+class BuilderDetails:
   """Details for specifying builders in properties.
 
   The following fields can be set by the caller when using the
@@ -56,7 +56,7 @@ class BuilderDetails(object):
   parent = attrib(builder_common_pb.BuilderID, default=None)
 
 
-class _PropertiesAssembler(object):
+class _PropertiesAssembler:
 
   def __init__(self):
     self._builder_entries = []
@@ -204,7 +204,7 @@ class _PropertiesAssembler(object):
     return properties_pb.BuilderSpec.ClusterfuzzArchive(**kwargs)
 
 
-class _CiBuilderPropertiesAssembler(object):
+class _CiBuilderPropertiesAssembler:
 
   def __init__(self, props_assembler, builder_id, builder_spec):
     self._props_assembler = props_assembler
@@ -234,7 +234,7 @@ class _CiBuilderPropertiesAssembler(object):
     return self._props_assembler.assemble()
 
 
-class _CiTesterPropertiesAssembler(object):
+class _CiTesterPropertiesAssembler:
 
   def __init__(self, props_assembler, tester_details):
     self._props_assembler = props_assembler
@@ -282,7 +282,7 @@ _RTS_CONDITION_MAP = {
 }
 
 
-class _TryBuilderPropertiesAssembler(object):
+class _TryBuilderPropertiesAssembler:
 
   def __init__(self, props_assembler, builder_config_kwargs):
     self._props_assembler = props_assembler
@@ -457,12 +457,17 @@ class ChromiumTestsBuilderConfigApi(recipe_test_api.RecipeTestApi):
     builder_config = BuilderConfig.lookup(builder_id, builder_db,
                                           try_db if use_try_db else None)
 
-    test_data = sum([
-        self.databases(builder_db, try_db),
-        self.m.platform(
-            builder_config.simulation_platform or 'linux',
-            builder_config.chromium_config_kwargs.get('TARGET_BITS', 64)),
-    ], self.empty_test_data())
+    test_data = sum(
+        [
+            self.databases(builder_db, try_db),
+            self.m.platform(
+                # For some reason, pylint doesn't think BuilderConfig has these
+                # attributes
+                # pylint: disable=no-member
+                builder_config.simulation_platform or 'linux',
+                builder_config.chromium_config_kwargs.get('TARGET_BITS', 64)),
+        ],
+        self.empty_test_data())
 
     return test_data, kwargs
 

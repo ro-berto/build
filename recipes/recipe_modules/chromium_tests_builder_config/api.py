@@ -10,7 +10,7 @@ from . import (builders, proto, trybots, BuilderConfig)
 class ChromiumTestsBuilderConfigApi(recipe_api.RecipeApi):
 
   def __init__(self, properties, **kwargs):
-    super(ChromiumTestsBuilderConfigApi, self).__init__(**kwargs)
+    super().__init__(**kwargs)
     self._properties = properties
     self._builder_db = builders.BUILDERS
     self._try_db = trybots.TRYBOTS
