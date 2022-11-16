@@ -17,19 +17,17 @@ FETCH_BUILDER_QUERY = """
       builder_project,
       bucket,
     FROM
-      `chrome-flakiness.flake_endorser.test_history_7_days`
+      `chrome-flakiness.flake_endorser.test_history_submitted_tests`
   """
 
-# `chrome-flakiness.flake_endorser.test_history_7_days` already has data for
-# the most recent 500 invocations. This query utilizes this data to determine
-# the test history per cq try builder.
+# This query utilizes this data to determine the test history per cq try builder.
 TEST_HISTORY_QUERY = """
     SELECT
       test_id,
       variant_hash,
       ARRAY_AGG(invocation) as invocation
     FROM
-      `chrome-flakiness.flake_endorser.test_history_7_days`
+      `chrome-flakiness.flake_endorser.test_history_submitted_tests`
     WHERE
       builder_name = \'{}\' AND
       builder_project = \'{}\' AND
