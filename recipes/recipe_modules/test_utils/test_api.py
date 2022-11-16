@@ -149,46 +149,45 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
     per_shard_results = self.generate_simplified_json_results(
         shard_indices, isolated_script_passing, valid)
 
-    if swarming:
-      jsonish_shards = []
-      files_dict = {}
-      for index, i in enumerate(shard_indices):
-        exit_code = '1' if not passing or swarming_internal_failure else '0'
-        jsonish_shards.append({
+    if not swarming:
+      return self.m.json.output(per_shard_results[0])
+
+    jsonish_shards = []
+    files_dict = {}
+    for index, i in enumerate(shard_indices):
+      exit_code = '1' if not passing or swarming_internal_failure else '0'
+      jsonish_shards.append({
           'failure': not passing,
           'internal_failure': swarming_internal_failure,
           'exit_code': exit_code,
-        })
-        swarming_path = str(i)
-        swarming_path += '\\output.json' if is_win else '/output.json'
+      })
+      swarming_path = str(i)
+      swarming_path += '\\output.json' if is_win else '/output.json'
 
-        chartjson_swarming_path = str(i)
-        chartjson_swarming_path += \
-          '\\perftest-output.json' \
-            if is_win else '/perftest-output.json'
+      chartjson_swarming_path = str(i)
+      chartjson_swarming_path += \
+        '\\perftest-output.json' \
+          if is_win else '/perftest-output.json'
 
-        # Determine what output we are writing and if it is empty or not
-        output_missing = i in missing_shards and not output_chartjson
+      # Determine what output we are writing and if it is empty or not
+      output_missing = i in missing_shards and not output_chartjson
 
-        if not output_missing:
-          files_dict[swarming_path] = self.m.json.dumps(
-              per_shard_results[index])
+      if not output_missing:
+        files_dict[swarming_path] = self.m.json.dumps(per_shard_results[index])
 
-      jsonish_summary = {'shards': jsonish_shards}
-      step_test_data = recipe_test_api.StepTestData()
-      key = ('chromium_swarming', 'summary', None)
-      placeholder = recipe_test_api.PlaceholderTestData(
-          self.m.json.dumps(jsonish_summary))
-      step_test_data.placeholder_data[key] = placeholder
-      step_test_data += self.m.json.output(per_shard_results[0])
+    jsonish_summary = {'shards': jsonish_shards}
+    step_test_data = recipe_test_api.StepTestData()
+    key = ('chromium_swarming', 'summary', None)
+    placeholder = recipe_test_api.PlaceholderTestData(
+        self.m.json.dumps(jsonish_summary))
+    step_test_data.placeholder_data[key] = placeholder
+    step_test_data += self.m.json.output(per_shard_results[0])
 
-      files_dict['summary.json'] = self.m.json.dumps(jsonish_summary)
-      files_dict = {k: v.encode('utf-8') for k, v in files_dict.items()}
-      step_test_data += self.m.raw_io.output_dir(files_dict)
+    files_dict['summary.json'] = self.m.json.dumps(jsonish_summary)
+    files_dict = {k: v.encode('utf-8') for k, v in files_dict.items()}
+    step_test_data += self.m.raw_io.output_dir(files_dict)
 
-      return step_test_data
-    else:
-      return self.m.json.output(per_shard_results[0])
+    return step_test_data
 
   def rdb_results(self,
                   suite_name,

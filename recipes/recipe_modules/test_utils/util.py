@@ -14,7 +14,7 @@ from PB.go.chromium.org.luci.resultdb.proto.v1 import (test_result as
 from RECIPE_MODULES.build.attr_utils import attrib, attrs, mapping, sequence
 
 
-class GTestResults(object):
+class GTestResults:
 
   MAX_LOG_LINES = 5000
 
@@ -111,7 +111,7 @@ class GTestResults(object):
 
 
 @attrs()
-class RDBResults(object):
+class RDBResults:
   """Like TestResults above, but used to handle results as returned by RDB.
 
   Wraps a collection of RDBPerSuiteResults instances.
@@ -190,7 +190,7 @@ class RDBResults(object):
 
 
 @attrs()
-class RDBPerSuiteResults(object):
+class RDBPerSuiteResults:
   """Contains results of a single test suite as returned by RDB."""
 
   NEEDED_FIELDS = [
@@ -384,7 +384,7 @@ class RDBPerSuiteResults(object):
 
 
 @attrs()
-class RDBPerIndividualTestResults(object):
+class RDBPerIndividualTestResults:
   """Contains result info of an individual test as returned by RDB.
 
   "individual test" is uniquely identified by test id. For each individual test

@@ -77,12 +77,12 @@ def RunSteps(api, test_swarming, test_skylab, test_name, test_experimental,
       if self.name.endswith('failed_results') or self.name.endswith(
           'invalid_results'):
         return [self]
-      return super(MockSwarmingTest, self).deterministic_failures(suffix)
+      return super().deterministic_failures(suffix)
 
     def has_valid_results(self, suffix):
       if self.name.endswith('invalid_results'):
         return False
-      return super(MockSwarmingTest, self).has_valid_results(suffix)
+      return super().has_valid_results(suffix)
 
   if test_swarming:
     test_specs = [

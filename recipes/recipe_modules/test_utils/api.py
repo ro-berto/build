@@ -21,7 +21,7 @@ from RECIPE_MODULES.recipe_engine.json.api import JsonOutputPlaceholder
 class GTestResultsOutputPlaceholder(JsonOutputPlaceholder):
 
   def result(self, presentation, test):
-    ret = super(GTestResultsOutputPlaceholder, self).result(presentation, test)
+    ret = super().result(presentation, test)
     return GTestResults(ret)
 
 
@@ -58,7 +58,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
       'Tests failed with patch, but ignored as they are known to be flaky:')
 
   def __init__(self, properties, *args, **kwargs):
-    super(TestUtilsApi, self).__init__(*args, **kwargs)
+    super().__init__(*args, **kwargs)
     self._max_reported_failures = properties.max_reported_failures or 30
 
     # This flag provides a escape-hatch to disable the feature of exonerating
@@ -151,10 +151,10 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
       deterministic_failures_set = set(r.deterministic_failures)
       flaky_failures_set = set(r.unique_failures) - deterministic_failures_set
-      non_notrun_failures_set = set([
+      non_notrun_failures_set = {
           f for f in deterministic_failures_set
           if set(r.raw_results[f]) != {'NOTRUN'}
-      ])
+      }
 
       # If the deterministic_failures_set has other state of failures other
       # than NOTRUN, only report those failures and skip reporting the NOTRUN
@@ -1142,7 +1142,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     return GTestResultsOutputPlaceholder(self, add_json_log, leak_to=leak_to)
 
 
-class TestGroup(object):
+class TestGroup:
   """Abstract class defines the shared interface for tests.
 
   Attributes:
@@ -1256,7 +1256,7 @@ class TestGroup(object):
 class LocalGroup(TestGroup):
 
   def __init__(self, test_suites, resultdb):
-    super(LocalGroup, self).__init__(test_suites, resultdb)
+    super().__init__(test_suites, resultdb)
 
   def pre_run(self, api, suffix):
     """Executes the |pre_run| method of each test."""
@@ -1276,7 +1276,7 @@ class LocalGroup(TestGroup):
 class SwarmingGroup(TestGroup):
 
   def __init__(self, test_suites, resultdb):
-    super(SwarmingGroup, self).__init__(test_suites, resultdb)
+    super().__init__(test_suites, resultdb)
     self._task_ids_to_test = {}
 
   def pre_run(self, api, suffix):
@@ -1340,7 +1340,7 @@ class SwarmingGroup(TestGroup):
 class SkylabGroup(TestGroup):
 
   def __init__(self, test_suites, result_db):
-    super(SkylabGroup, self).__init__(test_suites, result_db)
+    super().__init__(test_suites, result_db)
     self.ctp_builds_by_tag = {}
     self.ctp_build_timeout_sec = 3600
 
