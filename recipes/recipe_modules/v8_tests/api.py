@@ -62,9 +62,13 @@ class V8TestsApi(recipe_api.RecipeApi):
 
   @property
   def resultdb(self):
-    if not self._resultdb and self.is_flag_set('resultdb'):
+    if not self._resultdb and self._resultdb_enabled():
       self._resultdb = ResultDB.create(include=True)
     return self._resultdb
+
+  def _resultdb_enabled(self):
+    return self.is_flag_set('resultdb') or (
+        "v8.resultdb" in self.m.buildbucket.build.input.experiments)
 
   def update_test_configs(self, test_configs):
     """Update test configs without mutating previous copy."""
