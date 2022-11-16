@@ -1502,7 +1502,7 @@
   },
   {
     "cmd": [
-      "vpython3",
+      "vpython",
       "RECIPE_MODULE[build::codesearch]/resources/sync_generated_files.py",
       "--copy",
       "[CACHE]/builder/src/out/linux-Debug/gen;linux-Debug/gen",
@@ -1720,7 +1720,7 @@
   },
   {
     "cmd": [
-      "vpython3",
+      "vpython",
       "RECIPE_MODULE[build::codesearch]/resources/sync_generated_files.py",
       "--copy",
       "[CACHE]/builder/src/out/linux-Debug/gen;linux-Debug/gen",

@@ -1516,7 +1516,7 @@
   },
   {
     "cmd": [
-      "vpython3",
+      "vpython",
       "RECIPE_MODULE[build::codesearch]/resources/sync_generated_files.py",
       "--copy",
       "[CACHE]/builder/src/out/lacros-Debug/gen;lacros-Debug/gen",

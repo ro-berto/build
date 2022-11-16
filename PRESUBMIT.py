@@ -65,6 +65,8 @@ PYTHON2_FILES = (
         'common_merge_script_tests.py'
     ),
     'recipes/recipe_modules/chromium_swarming/unittests/noop_merge_test.py',
+    'recipes/recipe_modules/codesearch/resources/sync_generated_files.py',
+    'recipes/recipe_modules/codesearch/resources/sync_generated_files_test.py',
     (
         'recipes/recipe_modules/cronet/resources/'
         'upload_perf_dashboard_results_test.py'
