@@ -92,8 +92,8 @@ def GenTests(api):
               perf_isolate_upload = True,
               expose_trigger_properties = True,
               skylab_upload_location = builder_config.skylab_upload_location(
-                  gs_bucket = "skylab-gs-bucket"
-                  gs_extra = "skylab-gs-extra"
+                  gs_bucket = "skylab-gs-bucket",
+                  gs_extra = "skylab-gs-extra",
               ),
               clusterfuzz_archive = builder_config.clusterfuzz_archive(
                   gs_bucket = "clusterfuzz-gs-bucket",

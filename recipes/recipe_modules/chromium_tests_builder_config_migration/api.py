@@ -2,9 +2,12 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import abc
 import collections
 import contextlib
 import re
+
+from typing import ContextManager, Iterable
 
 import attr
 
@@ -55,27 +58,187 @@ def _validate_builder_group_and_name(message, ctx):
   ctx.validate_field(message, 'builder')
 
 
-class _OutputCollector:
+class _OutputArgumentsFactory(abc.ABC):
+  """Factory for outputting kwargs of a function call."""
 
-  def __init__(self):
-    self.lines = []
-    self._indent = ''
+  @abc.abstractmethod
+  def set_raw_arg(self, name: str, value: str) -> None:
+    """Set an argument to a raw value.
+
+    x.set_raw_arg('foo', 'bar')
+    results in
+    foo = bar,
+    """
+    raise NotImplementedError()  # pragma: no cover
+
+  def set_string_arg(self, name: str, value: str) -> None:
+    """Set an argument to a string.
+
+    x.set_string_arg('foo', 'bar')
+    results in
+    foo = "bar",
+    """
+    self.set_raw_arg(name, f'"{value}"')
+
+  @abc.abstractmethod
+  def set_raw_list_arg(self, name: str, args: Iterable[str]) -> None:
+    """Set an argument to a list of raw values.
+
+    x.set_raw_list_arg('foo', ['bar', 'baz'])
+    results in
+    foo = [
+        bar,
+        baz,
+    ],
+    """
+    raise NotImplementedError()  # pragma: no cover
+
+  def set_string_list_arg(self, name: str, values: Iterable[str]) -> None:
+    """Set an argument to a list of strings.
+
+    x.set_raw_list_arg('foo', ['bar', 'baz'])
+    results in
+    foo = [
+        "bar",
+        "baz",
+    ],
+    """
+    self.set_raw_list_arg(name, (f'"{v}"' for v in values))
+
+  @abc.abstractmethod
+  def start_call_arg(
+      self,
+      name: str,
+      expression: str,
+  ) -> 'ContextManager[_OutputArgumentsFactory]':
+    """Set an argument to a function call.
+
+    The returned context manager takes care of opening and closing the
+    function call. The context object associated with the context
+    manager can be used to set the arguments of the function call.
+
+    with x.create_struct('foo', 'bar') as y:
+      y.set_raw_arg('baz', 1)
+    results in
+    foo = bar(
+        baz = 1,
+    ),
+    """
+    raise NotImplementedError()  # pragma: no cover
+
+
+class _OutputFactory(abc.ABC):
+  """Factory for creating the migration output."""
+
+  @abc.abstractmethod
+  def edit_builder(
+      self,
+      builder_id: chromium.BuilderId,
+  ) -> ContextManager[_OutputArgumentsFactory]:
+    """Set arguments for a builder.
+
+    The returned context manager takes care of associating arguments
+    with the corresponding builder. The context object associated with
+    the context manager can be used to set arguments in the builder
+    definition.
+
+    with x.edit_builder('foo', 'bar') as y:
+      y.set_raw_arg('baz', 1)
+    results in
+    foo = bar(
+        baz = 1,
+    ),
+    """
+    raise NotImplementedError()  # pragma: no cover
+
+  @abc.abstractmethod
+  def write_output(self, file_api, step_name: str, output_path: str) -> None:
+    """Write the final output to a file.
+
+    Args:
+      file_api: The file api.
+      step_name: The name of the step for writing out the file.
+      output_path: The path of the file to write the output to.
+    """
+    raise NotImplementedError()  # pragma: no cover
+
+
+class _TextArgumentsFactory(_OutputArgumentsFactory):
+  """An output arguments factory for text output."""
+
+  INDENT = ' ' * 4
+
+  def __init__(self, indent):
+    self._lines = []
+    self._indent = indent
+
+  def set_raw_arg(self, name: str, value: str) -> None:
+    self._lines.append(f'{self._indent}{name} = {value},')
+
+  def set_raw_list_arg(self, name: str, args: Iterable[str]) -> None:
+    self._lines.append(f'{self._indent}{name} = [')
+    indent = self._indent + self.INDENT
+    for a in args:
+      self._lines.append(f'{indent}{a},')
+    self._lines.append(f'{self._indent}],')
 
   @contextlib.contextmanager
-  def increase_indent(self, closing_line=None):
-    saved = self._indent
-    self._indent += ' ' * 4
-    yield
-    self._indent = saved
-    if closing_line is not None:
-      self.add_line(closing_line)
+  def start_call_arg(
+      self,
+      name: str,
+      expression: str,
+  ) -> ContextManager[_OutputArgumentsFactory]:
+    args_factory = _TextArgumentsFactory(self._indent + self.INDENT)
+    yield args_factory
 
-  def add_line(self, line):
-    self.lines.append(self._indent + line)
+    self._lines.append(f'{self._indent}{name} = {expression}(')
+    self._lines.extend(args_factory._lines)
+    self._lines.append(f'{self._indent}),')
 
-  def add_lines(self, lines):
-    for l in lines:
-      self.add_line(l)
+
+class _TextFactory(_OutputFactory):
+  """An output factory for text output.
+
+  The resulting file will have text output for each builder to be
+  migrated. The format of the output will be a line identifying the
+  builder with builder_group:builder then indented lines containing the
+  starlark snippets to be added to the builder's definition and then a
+  blank line.
+
+  For example:
+  foo:foo-builder
+      builder_spec = builder_config.builder_spec(
+          gclient_config = builder_config.gclient_config(
+              config = "chromium",
+          ),
+          chromium_config = builder_config.chromium_config(
+              config = "chromium",
+          ),
+      ),
+
+  tryserver.foo:foo-builder
+      mirrors = [
+          "ci/foo-builder",
+      ],
+  """
+
+  def __init__(self):
+    self._lines = []
+
+  @contextlib.contextmanager
+  def edit_builder(
+      self,
+      builder_id: chromium.BuilderId,
+  ) -> ContextManager[_OutputArgumentsFactory]:
+    args_factory = _TextArgumentsFactory(_TextArgumentsFactory.INDENT)
+    yield args_factory
+
+    self._lines.append(str(builder_id))
+    self._lines.extend(args_factory._lines)
+    self._lines.append('')
+
+  def write_output(self, file_api, step_name: str, output_path: str) -> None:
+    file_api.write_text(step_name, output_path, '\n'.join(self._lines))
 
 
 class _Grouping:
@@ -130,105 +293,96 @@ def _builder_spec_migration_blocker(builder_id, builder_spec):
   return None
 
 
-def _migrate_builder_spec(builder_spec):
-  output = _OutputCollector()
-
-  output.add_line('builder_spec = builder_config.builder_spec(')
-  with output.increase_indent('),'):
+def _migrate_builder_spec(
+    builder_spec: ctbc.BuilderSpec,
+    builder_factory: _OutputArgumentsFactory,
+) -> None:
+  with builder_factory.start_call_arg(
+      'builder_spec',
+      'builder_config.builder_spec',
+  ) as spec_fact:
     if builder_spec.execution_mode == ctbc.TEST:
-      output.add_line('execution_mode = builder_config.execution_mode.TEST,')
+      spec_fact.set_raw_arg('execution_mode',
+                            'builder_config.execution_mode.TEST')
 
-    output.add_line('gclient_config = builder_config.gclient_config(')
-    with output.increase_indent('),'):
-      output.add_line('config = "{}",'.format(builder_spec.gclient_config))
-      if builder_spec.gclient_apply_config:
-        output.add_line('apply_configs = [')
-        with output.increase_indent('],'):
-          for c in builder_spec.gclient_apply_config:
-            output.add_line('"{}",'.format(c))
+    with spec_fact.start_call_arg(
+        'gclient_config',
+        'builder_config.gclient_config',
+    ) as gc_fact:
+      gc_fact.set_string_arg('config', builder_spec.gclient_config)
+      if configs := builder_spec.gclient_apply_config:
+        gc_fact.set_string_list_arg('apply_configs', configs)
 
-    output.add_line('chromium_config = builder_config.chromium_config(')
-    with output.increase_indent('),'):
-      output.add_line('config = "{}",'.format(builder_spec.chromium_config))
-      if builder_spec.chromium_apply_config:
-        output.add_line('apply_configs = [')
-        with output.increase_indent('],'):
-          for c in builder_spec.chromium_apply_config:
-            output.add_line('"{}",'.format(c))
+    with spec_fact.start_call_arg(
+        'chromium_config',
+        'builder_config.chromium_config',
+    ) as cc_fact:
+      cc_fact.set_string_arg('config', builder_spec.chromium_config)
+      if configs := builder_spec.chromium_apply_config:
+        cc_fact.set_string_list_arg('apply_configs', configs)
       for k, v in builder_spec.chromium_config_kwargs.items():
         if k == 'BUILD_CONFIG':
-          output.add_line(
-              'build_config = builder_config.build_config.{},'.format(
-                  v.upper()))
+          cc_fact.set_raw_arg('build_config',
+                              f'builder_config.build_config.{v.upper()}')
         elif k == 'TARGET_ARCH':
-          output.add_line('target_arch = builder_config.target_arch.{},'.format(
-              v.upper()))
+          cc_fact.set_raw_arg('target_arch',
+                              f'builder_config.target_arch.{v.upper()}')
         elif k == 'TARGET_BITS':
-          output.add_line('target_bits = {},'.format(v))
+          cc_fact.set_raw_arg('target_bits', str(v))
         elif k == 'TARGET_PLATFORM':
-          output.add_line(
-              'target_platform = builder_config.target_platform.{},'.format(
-                  v.upper()))
+          cc_fact.set_raw_arg('target_platform',
+                              f'builder_config.target_platform.{v.upper()}')
         elif k in ('TARGET_CROS_BOARDS', 'CROS_BOARDS_WITH_QEMU_IMAGES'):
-          output.add_line('{} = ['.format(k.lower()))
-          with output.increase_indent('],'):
-            for e in v.split(':'):
-              output.add_line('"{}",'.format(e))
+          cc_fact.set_string_list_arg(k.lower(), v.split(':'))
 
-    if builder_spec.android_config:
-      output.add_line('android_config = builder_config.android_config(')
-      with output.increase_indent('),'):
-        output.add_line('config = "{}",'.format(builder_spec.android_config))
-        if builder_spec.android_apply_config:
-          output.add_line('apply_configs = [')
-          with output.increase_indent('],'):
-            for c in builder_spec.android_apply_config:
-              output.add_line('"{}",'.format(c))
+    if config := builder_spec.android_config:
+      with spec_fact.start_call_arg(
+          'android_config',
+          'builder_config.android_config',
+      ) as ac_fact:
+        ac_fact.set_string_arg('config', config)
+        if configs := builder_spec.android_apply_config:
+          ac_fact.set_string_list_arg('apply_configs', configs)
 
-    if builder_spec.android_version:
-      output.add_line('android_version_file = "{}",'.format(
-          builder_spec.android_version))
+    if android_version_file := builder_spec.android_version:
+      spec_fact.set_string_arg('android_version_file', android_version_file)
 
     if builder_spec.clobber:
-      output.add_line('clobber = True,')
+      spec_fact.set_raw_arg('clobber', 'True')
 
-    if builder_spec.build_gs_bucket:
-      output.add_line('build_gs_bucket = "{}",'.format(
-          builder_spec.build_gs_bucket))
+    if build_gs_bucket := builder_spec.build_gs_bucket:
+      spec_fact.set_string_arg('build_gs_bucket', build_gs_bucket)
 
     if builder_spec.serialize_tests:
-      output.add_line('run_tests_serially = True,')
+      spec_fact.set_raw_arg('run_tests_serially', 'True')
 
     if builder_spec.perf_isolate_upload:
-      output.add_line('perf_isolate_upload = True,')
+      spec_fact.set_raw_arg('perf_isolate_upload', 'True')
 
     if builder_spec.expose_trigger_properties:
-      output.add_line('expose_trigger_properties = True,')
+      spec_fact.set_raw_arg('expose_trigger_properties', 'True')
 
-    if builder_spec.skylab_gs_bucket:
-      output.add_line('skylab_upload_location = '
-                      'builder_config.skylab_upload_location(')
-      with output.increase_indent('),'):
-        output.add_line('gs_bucket = "{}"'.format(
-            builder_spec.skylab_gs_bucket))
-        if builder_spec.skylab_gs_extra:
-          output.add_line('gs_extra = "{}"'.format(
-              builder_spec.skylab_gs_extra))
+    if skylab_gs_bucket := builder_spec.skylab_gs_bucket:
+      with spec_fact.start_call_arg(
+          'skylab_upload_location',
+          'builder_config.skylab_upload_location',
+      ) as sul_fact:
+        sul_fact.set_string_arg('gs_bucket', skylab_gs_bucket)
+        if skylab_gs_extra := builder_spec.skylab_gs_extra:
+          sul_fact.set_string_arg('gs_extra', skylab_gs_extra)
 
     if builder_spec.cf_archive_build:
-      output.add_line('clusterfuzz_archive = '
-                      'builder_config.clusterfuzz_archive(')
-      with output.increase_indent('),'):
-        output.add_line('gs_bucket = "{}",'.format(builder_spec.cf_gs_bucket))
-        if builder_spec.cf_gs_acl:
-          output.add_line('gs_acl = "{}",'.format(builder_spec.cf_gs_acl))
-        output.add_line('archive_name_prefix = "{}",'.format(
-            builder_spec.cf_archive_name))
-        if builder_spec.cf_archive_subdir_suffix:
-          output.add_line('archive_subdir = "{}",'.format(
-              builder_spec.cf_archive_subdir_suffix))
-
-  return output.lines
+      with spec_fact.start_call_arg(
+          'clusterfuzz_archive',
+          'builder_config.clusterfuzz_archive',
+      ) as ca_fact:
+        ca_fact.set_string_arg('gs_bucket', builder_spec.cf_gs_bucket)
+        if gs_acl := builder_spec.cf_gs_acl:
+          ca_fact.set_string_arg('gs_acl', gs_acl)
+        ca_fact.set_string_arg('archive_name_prefix',
+                               builder_spec.cf_archive_name)
+        if archive_subdir := builder_spec.cf_archive_subdir_suffix:
+          ca_fact.set_string_arg('archive_subdir', archive_subdir)
 
 
 _DEFAULT_TRY_SPEC = ctbc.TrySpec.create_for_single_mirror(
@@ -243,9 +397,11 @@ _SETTINGS_ATTRS = tuple(
     if a.name not in ('mirrors', 'regression_test_selection_recall'))
 
 
-def _migrate_try_spec(builder_id, try_spec):
-  output = _OutputCollector()
-
+def _migrate_try_spec(
+    builder_id: chromium.BuilderId,
+    try_spec: ctbc.TrySpec,
+    builder_factory: _OutputArgumentsFactory,
+) -> None:
   mirrors = []
   for m in try_spec.mirrors:
     if m.builder_id != builder_id and m.builder_id not in mirrors:
@@ -254,45 +410,42 @@ def _migrate_try_spec(builder_id, try_spec):
       mirrors.append(m.tester_id)
 
   if mirrors:
-    output.add_line('mirrors = [')
-    with output.increase_indent('],'):
-      for m in mirrors:
-        output.add_line('"ci/{}",'.format(m.builder))
+    builder_factory.set_string_list_arg('mirrors',
+                                        (f'ci/{m.builder}' for m in mirrors))
 
   if any(
       getattr(try_spec, a) != getattr(_DEFAULT_TRY_SPEC, a)
       for a in _SETTINGS_ATTRS):
-    output.add_line('try_settings = builder_config.try_settings(')
-    with output.increase_indent('),'):
+    with builder_factory.start_call_arg(
+        'try_settings',
+        'builder_config.try_settings',
+    ) as ts_fact:
       if try_spec.include_all_triggered_testers:
-        output.add_line('include_all_triggered_testers = True,')
+        ts_fact.set_raw_arg('include_all_triggered_testers', 'True')
 
       if try_spec.is_compile_only:
-        output.add_line('is_compile_only = True,')
+        ts_fact.set_raw_arg('is_compile_only', 'True')
 
-      if try_spec.analyze_names:
-        output.add_line('analyze_names = [')
-        with output.increase_indent('],'):
-          for n in try_spec.analyze_names:
-            output.add_line('"{}",'.format(n))
+      if analyze_names := try_spec.analyze_names:
+        ts_fact.set_string_list_arg('analyze_names', analyze_names)
 
       if not try_spec.retry_failed_shards:
-        output.add_line('retry_failed_shards = False,')
+        ts_fact.set_raw_arg('retry_failed_shards', 'False')
 
       if not try_spec.retry_without_patch:
-        output.add_line('retry_without_patch = False,')
+        ts_fact.set_raw_arg('retry_without_patch', 'False')
 
-      if try_spec.regression_test_selection != ctbc.NEVER:
-        output.add_line('rts_config = builder_config.rts_config(')
-        with output.increase_indent('),'):
-          output.add_line('condition = builder_config.rts_condition.{},'.format(
-              try_spec.regression_test_selection.upper()))
-          if (try_spec.regression_test_selection_recall !=
+      if (rts_condition := try_spec.regression_test_selection) != ctbc.NEVER:
+        with ts_fact.start_call_arg(
+            'rts_config',
+            'builder_config.rts_config',
+        ) as rc_fact:
+          rc_fact.set_raw_arg(
+              'condition',
+              f'builder_config.rts_condition.{rts_condition.upper()}')
+          if ((recall := try_spec.regression_test_selection_recall) !=
               _DEFAULT_TRY_SPEC.regression_test_selection_recall):
-            output.add_line('recall = {},'.format(
-                try_spec.regression_test_selection_recall))
-
-  return output.lines
+            rc_fact.set_raw_arg('recall', recall)
 
 
 class ChromiumTestsBuilderConfigMigrationApi(recipe_api.RecipeApi):
@@ -368,22 +521,20 @@ class ChromiumTestsBuilderConfigMigrationApi(recipe_api.RecipeApi):
                 "".join("\n  {}".format(b) for b in sorted(grouping.blockers))))
       to_migrate.update(grouping.builder_ids)
 
-    output = _OutputCollector()
+    output_factory = _TextFactory()
 
     for builder_id in sorted(to_migrate):
-      output.add_line(str(builder_id))
-      with output.increase_indent(''):
+      with output_factory.edit_builder(builder_id) as builder_factory:
         builder_spec = builder_db.get(builder_id)
         if builder_spec is not None:
-          output.add_lines(_migrate_builder_spec(builder_spec))
+          _migrate_builder_spec(builder_spec, builder_factory)
 
         try_spec = try_db.get(builder_id)
         if try_spec is not None:
-          output.add_lines(_migrate_try_spec(builder_id, try_spec))
+          _migrate_try_spec(builder_id, try_spec, builder_factory)
 
     output_path = self.m.path.abspath(migration_operation.output_path)
-    self.m.file.write_text('src-side snippets', output_path,
-                           '\n'.join(output.lines))
+    output_factory.write_output(self.m.file, 'src-side snippets', output_path)
 
   def _compute_groupings(self, builder_db, try_db, builder_filter=None):
     builder_filter = builder_filter or (lambda _: True)
