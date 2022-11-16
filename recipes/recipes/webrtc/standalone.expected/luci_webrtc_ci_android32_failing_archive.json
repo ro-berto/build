@@ -65,7 +65,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "env": {
-      "DEPOT_TOOLS_REPORT_BUILD": "webrtc/ci/Android32 (M Nexus5X)/8945511751514863184",
+      "DEPOT_TOOLS_REPORT_BUILD": "webrtc/ci/Android32/8945511751514863184",
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "1800"
     },
@@ -154,7 +154,7 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [CACHE]/builder/src/infra/specs/client.webrtc.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"Android32 (M Nexus5X)\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Android32\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
@@ -266,7 +266,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_REPORT_BUILD": "webrtc/ci/Android32 (M Nexus5X)/8945511751514863184",
+      "DEPOT_TOOLS_REPORT_BUILD": "webrtc/ci/Android32/8945511751514863184",
       "PATH": "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
     },
     "env_suffixes": {
@@ -355,7 +355,7 @@
       "-m",
       "client.webrtc",
       "-b",
-      "Android32 (M Nexus5X)",
+      "Android32",
       "--config-file",
       "[TMP_BASE]/mb_config.pyl",
       "--goma-dir",
@@ -394,7 +394,7 @@
       "-m",
       "client.webrtc",
       "-b",
-      "Android32 (M Nexus5X)",
+      "Android32",
       "--config-file",
       "[TMP_BASE]/mb_config.pyl",
       "--goma-dir",
@@ -403,7 +403,7 @@
       "/path/to/tmp/json",
       "--swarming-targets-file",
       "dummy_test\n",
-      "//out/Android32_M_Nexus5X"
+      "//out/Android32"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -445,7 +445,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/Android32__M_Nexus5X_"
+      "[CACHE]/goma/data/Android32"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -480,7 +480,7 @@
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/Android32__M_Nexus5X_",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/Android32",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -553,7 +553,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/Android32_M_Nexus5X",
+      "[CACHE]/builder/src/out/Android32",
       "-j",
       "80"
     ],
@@ -583,7 +583,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/Android32_M_Nexus5X",
+      "[CACHE]/builder/src/out/Android32",
       "-j",
       "80",
       "-d",
@@ -766,9 +766,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[CACHE]/builder/src/out/Android32_M_Nexus5X",
+      "[CACHE]/builder/src/out/Android32",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Android32_M_Nexus5X\", \"-j\", 80]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Android32\", \"-j\", 80]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -784,9 +784,9 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"ci\", \"builder\": \"Android32 (M Nexus5X)\", \"project\": \"webrtc\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"Android32\", \"project\": \"webrtc\"}",
       "--buildbot-buildername",
-      "Android32 (M Nexus5X)"
+      "Android32"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -933,7 +933,7 @@
       "projects/example-cas-server/instances/default_instance",
       "-log-level",
       "debug",
-      "[CACHE]/builder/src/out/Android32_M_Nexus5X/dummy_test.isolated.gen.json"
+      "[CACHE]/builder/src/out/Android32/dummy_test.isolated.gen.json"
     ],
     "luci_context": {
       "realm": {
@@ -1076,7 +1076,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/Android32__M_Nexus5X_"
+      "[CACHE]/goma/data/Android32"
     ],
     "cwd": "[CACHE]/builder/src",
     "env_suffixes": {
@@ -1114,7 +1114,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/Android32__M_Nexus5X_",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/Android32",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -1234,7 +1234,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/Android32__M_Nexus5X_",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/Android32",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -1285,7 +1285,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/Android32__M_Nexus5X_",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/Android32",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -1325,7 +1325,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/Android32__M_Nexus5X_",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/Android32",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -1417,9 +1417,9 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"ci\", \"builder\": \"Android32 (M Nexus5X)\", \"project\": \"webrtc\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"Android32\", \"project\": \"webrtc\"}",
       "--buildbot-buildername",
-      "Android32 (M Nexus5X)"
+      "Android32"
     ],
     "cwd": "[CACHE]/builder/src",
     "env_suffixes": {

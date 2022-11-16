@@ -131,8 +131,7 @@ def GenTests(api):
       suffix='_pinpoint')
   yield generate_builder(builder_id, suffix='_fail_compile', fail_compile=True)
 
-  builder_id = chromium.BuilderId.create_for_group('client.webrtc',
-                                                   'Android32 (M Nexus5X)')
+  builder_id = chromium.BuilderId.create_for_group('client.webrtc', 'Android32')
   yield generate_builder(
       builder_id,
       fail_android_archive=True,
