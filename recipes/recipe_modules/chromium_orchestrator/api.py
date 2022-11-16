@@ -162,6 +162,16 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
 
     if reuseable_compilator_build:
       build_to_process = reuseable_compilator_build
+      if build_to_process.output.HasField('gitiles_commit'):
+        self.m.buildbucket.set_output_gitiles_commit(
+            build_to_process.output.gitiles_commit)
+      else:
+        # If the compilator didn't have a commit position we want to know about
+        # it but not fail the build
+        self.m.step.empty(
+            'compilator gitiles_commit missing',
+            status='FAILURE',
+            raise_on_failure=False)
     else:
       # Pass in any RTS mode input props
       compilator_properties.update(self.m.cq.props_for_child_build)

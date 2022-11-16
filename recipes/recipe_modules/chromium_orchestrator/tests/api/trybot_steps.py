@@ -38,6 +38,7 @@ DEPS = [
     'flakiness',
     'profiles',
     'recipe_engine/buildbucket',
+    'recipe_engine/cq',
     'recipe_engine/file',
     'recipe_engine/json',
     'recipe_engine/path',
@@ -487,13 +488,8 @@ def GenTests(api):
                       compilator='fake-compilator',
                       compilator_watcher_git_revision='e841fc',
                   ),
-              "$recipe_engine/cq": {
-                  "active": True,
-                  "dryRun": True,
-                  "runMode": "QUICK_DRY_RUN",
-                  "topLevel": True
-              }
           }),
+      api.cq(run_mode='QUICK_DRY_RUN', top_level=True),
       api.chromium_orchestrator.override_test_spec(
           builder_group='fake-group',
           builder='fake-builder',
@@ -564,13 +560,8 @@ def GenTests(api):
                       compilator='fake-compilator',
                       compilator_watcher_git_revision='e841fc',
                   ),
-              "$recipe_engine/cq": {
-                  "active": True,
-                  "dryRun": True,
-                  "runMode": "QUICK_DRY_RUN",
-                  "topLevel": True
-              }
           }),
+      api.cq(run_mode='QUICK_DRY_RUN', top_level=True),
       api.chromium_orchestrator.override_test_spec(
           builder_group='fake-group',
           builder='fake-builder',
@@ -1490,9 +1481,7 @@ def GenTests(api):
 
   yield api.test(
       'basic_with_inverted_shard_with_no_qr_bails_early',
-      get_try_build(
-          inverted_shard_experiment=True,
-          bail_early_experiment=True),
+      get_try_build(inverted_shard_experiment=True, bail_early_experiment=True),
       ctbc_properties(),
       api.properties(
           **{
@@ -1502,12 +1491,7 @@ def GenTests(api):
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
-      api.properties(**{
-          '$recipe_engine/cq': {
-              "active": True,
-              "runMode": "FULL_RUN",
-          },
-      }),
+      api.cq(run_mode='FULL_RUN'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -1543,13 +1527,8 @@ def GenTests(api):
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
-      api.properties(**{
-          '$recipe_engine/cq': {
-              "active": True,
-              "runMode": "FULL_RUN",
-          },
-      }),
-      api.m.buildbucket.simulated_search_results(
+      api.cq(run_mode='FULL_RUN', top_level=True),
+      api.buildbucket.simulated_search_results(
           [_create_quick_run_build()], step_name='find successful Quick Runs'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
@@ -1561,16 +1540,13 @@ def GenTests(api):
       ctbc_properties(),
       api.properties(
           **{
-              '$recipe_engine/cq': {
-                  "active": True,
-                  "runMode": "DRY_RUN",
-              },
               '$build/chromium_orchestrator':
                   InputProperties(
                       compilator='fake-compilator',
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
+      api.cq(run_mode='DRY_RUN'),
       api.post_process(post_process.DoesNotRun, 'find successful Quick Runs'),
       api.post_process(post_process.DropExpectation),
   )
@@ -1581,16 +1557,13 @@ def GenTests(api):
       ctbc_properties(),
       api.properties(
           **{
-              '$recipe_engine/cq': {
-                  "active": True,
-                  "runMode": "FULL_RUN",
-              },
               '$build/chromium_orchestrator':
                   InputProperties(
                       compilator='fake-compilator',
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
+      api.cq(run_mode='FULL_RUN'),
       api.step_data('parse description',
                     api.json.output({'Disable-Rts': ['true']})),
       api.post_process(post_process.DoesNotRun, 'find successful Quick Runs'),
@@ -1599,9 +1572,7 @@ def GenTests(api):
 
   yield api.test(
       'inverted_bail_early_enabled_in_dry_run',
-      get_try_build(
-          inverted_shard_experiment=True,
-          bail_early_experiment=True),
+      get_try_build(inverted_shard_experiment=True, bail_early_experiment=True),
       ctbc_properties(),
       api.properties(
           **{
@@ -1611,12 +1582,7 @@ def GenTests(api):
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
-      api.properties(**{
-          '$recipe_engine/cq': {
-              "active": True,
-              "runMode": "DRY_RUN",
-          },
-      }),
+      api.cq(run_mode='DRY_RUN'),
       api.post_process(post_process.MustRun, 'find successful Quick Runs'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
@@ -1624,9 +1590,7 @@ def GenTests(api):
 
   yield api.test(
       'basic_with_inverted_shard_with_qr_no_compilator_full_runs',
-      get_try_build(
-          inverted_shard_experiment=True,
-          bail_early_experiment=True),
+      get_try_build(inverted_shard_experiment=True, bail_early_experiment=True),
       ctbc_properties(),
       api.properties(
           **{
@@ -1636,13 +1600,8 @@ def GenTests(api):
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
-      api.properties(**{
-          '$recipe_engine/cq': {
-              "active": True,
-              "runMode": "FULL_RUN",
-          },
-      }),
-      api.m.buildbucket.simulated_search_results(
+      api.cq(run_mode='FULL_RUN'),
+      api.buildbucket.simulated_search_results(
           [_create_quick_run_build()], step_name='find successful Quick Runs'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
@@ -1650,9 +1609,7 @@ def GenTests(api):
 
   yield api.test(
       'basic_with_inverted_shard_in_quick_run',
-      get_try_build(
-          inverted_shard_experiment=True,
-          bail_early_experiment=True),
+      get_try_build(inverted_shard_experiment=True, bail_early_experiment=True),
       ctbc_properties(),
       api.properties(
           **{
@@ -1662,22 +1619,15 @@ def GenTests(api):
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
-      api.properties(**{
-          '$recipe_engine/cq': {
-              "active": True,
-              "runMode": "QUICK_DRY_RUN",
-          },
-      }),
+      api.cq(run_mode='QUICK_DRY_RUN'),
       api.post_process(post_process.DoesNotRun, 'find successful Quick Runs'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(
-      'with_inverted_shard_with_successful_qr_none_invertable',
-      get_try_build(
-          inverted_shard_experiment=True,
-          bail_early_experiment=True),
+      'inverted_rts_without_gitiles_commit_in_compilator',
+      get_try_build(inverted_shard_experiment=True, bail_early_experiment=True),
       ctbc_properties(),
       api.properties(
           **{
@@ -1687,12 +1637,37 @@ def GenTests(api):
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
-      api.properties(**{
-          '$recipe_engine/cq': {
-              "active": True,
-              "runMode": "FULL_RUN",
-          },
-      }),
+      api.cq(run_mode='FULL_RUN'),
+      api.code_coverage(use_clang_coverage=True),
+      api.m.buildbucket.simulated_search_results(
+          [_create_quick_run_build()], step_name='find successful Quick Runs'),
+      api.chromium_orchestrator.override_test_spec(
+          builder_group='fake-group',
+          builder='fake-builder',
+          tester='fake-tester',
+          tests=['browser_tests', 'content_unittests']),
+      api.chromium_orchestrator.override_reused_compilator_steps(
+          tests=['browser_tests', 'content_unittests'],
+          empty_gitiles_commit=True),
+      api.post_process(post_process.MustRun,
+                       'compilator gitiles_commit missing'),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'with_inverted_shard_with_successful_qr_none_invertable',
+      get_try_build(inverted_shard_experiment=True, bail_early_experiment=True),
+      ctbc_properties(),
+      api.properties(
+          **{
+              '$build/chromium_orchestrator':
+                  InputProperties(
+                      compilator='fake-compilator',
+                      compilator_watcher_git_revision='e841fc',
+                  ),
+          }),
+      api.cq(run_mode='FULL_RUN'),
       api.code_coverage(use_clang_coverage=True),
       api.m.buildbucket.simulated_search_results(
           [_create_quick_run_build()], step_name='find successful Quick Runs'),
@@ -1709,9 +1684,7 @@ def GenTests(api):
 
   yield api.test(
       'with_inverted_shard_with_successful_qr',
-      get_try_build(
-          inverted_shard_experiment=True,
-          bail_early_experiment=True),
+      get_try_build(inverted_shard_experiment=True, bail_early_experiment=True),
       ctbc_properties(),
       api.properties(
           **{
@@ -1721,12 +1694,7 @@ def GenTests(api):
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
-      api.properties(**{
-          '$recipe_engine/cq': {
-              "active": True,
-              "runMode": "FULL_RUN",
-          },
-      }),
+      api.cq(run_mode='FULL_RUN'),
       api.code_coverage(use_clang_coverage=True),
       api.m.buildbucket.simulated_search_results(
           [_create_quick_run_build()], step_name='find successful Quick Runs'),
@@ -1764,9 +1732,7 @@ def GenTests(api):
 
   yield api.test(
       'with_inverted_shard_with_successful_qr_no_prev_artifacts',
-      get_try_build(
-          inverted_shard_experiment=True,
-          bail_early_experiment=True),
+      get_try_build(inverted_shard_experiment=True, bail_early_experiment=True),
       ctbc_properties(),
       api.properties(
           **{
@@ -1776,12 +1742,7 @@ def GenTests(api):
                       compilator_watcher_git_revision='e841fc',
                   ),
           }),
-      api.properties(**{
-          '$recipe_engine/cq': {
-              "active": True,
-              "runMode": "FULL_RUN",
-          },
-      }),
+      api.cq(run_mode='FULL_RUN'),
       api.code_coverage(use_clang_coverage=True),
       api.m.buildbucket.simulated_search_results(
           [_create_quick_run_build(False)],

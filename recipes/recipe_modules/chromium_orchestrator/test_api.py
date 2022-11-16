@@ -170,7 +170,8 @@ class ChromiumOrchestratorApi(recipe_test_api.RecipeTestApi):
                                        empty_props=False,
                                        tests=None,
                                        affected_files=None,
-                                       skipping_coverage=None):
+                                       skipping_coverage=None,
+                                       empty_gitiles_commit=False):
     output_json_obj = self.get_compilator_output_props(
         comp_build_id=comp_build_id,
         empty_props=empty_props,
@@ -184,6 +185,13 @@ class ChromiumOrchestratorApi(recipe_test_api.RecipeTestApi):
         summary_markdown=sub_build_summary,
         start_time=timestamp_pb2.Timestamp(seconds=1562475245),
         output=dict(
+            gitiles_commit=dict(
+                host="chromium.googlesource.com",
+                project="chromium/src",
+                id="cd7164f91fe44b4ec2304df88aa01da1ec930dd2",
+                ref="refs/heads/main",
+                position=1069217,
+            ) if not empty_gitiles_commit else None,
             properties=json_format.Parse(
                 self.m.json.dumps(output_json_obj), struct_pb2.Struct())))
     return self.m.buildbucket.simulated_search_results(
