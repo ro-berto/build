@@ -90,6 +90,40 @@ SPEC = {
             parent_buildername='WebRTC Chromium FYI Android Builder (dbg)',
             simulation_platform='linux',
         ),
+    'WebRTC Chromium FYI Android Tests (dbg)':
+        _chromium_webrtc_fyi_spec(
+            android_config='base_config',
+            execution_mode=builder_spec.TEST,
+            chromium_apply_config=['dcheck', 'mb', 'android'],
+            chromium_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_ARCH': 'arm',
+                'TARGET_BITS': 32,
+                'TARGET_PLATFORM': 'android'
+            },
+            gclient_apply_config=['android'],
+            gclient_config='chromium_webrtc_tot',
+            parent_buildername='WebRTC Chromium FYI Android Builder (dbg)',
+            simulation_platform='linux',
+        ),
+    'WebRTC Chromium FYI Android Tests ARM64 (dbg)':
+        _chromium_webrtc_fyi_spec(
+            android_config='base_config',
+            execution_mode=builder_spec.TEST,
+            chromium_apply_config=['dcheck', 'mb', 'android'],
+            chromium_config='chromium',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_ARCH': 'arm',
+                'TARGET_BITS': 64,
+                'TARGET_PLATFORM': 'android'
+            },
+            gclient_apply_config=['android'],
+            gclient_config='chromium_webrtc_tot',
+            parent_buildername='WebRTC Chromium FYI Android Builder ARM64 (dbg)',
+            simulation_platform='linux',
+        ),
     'WebRTC Chromium FYI ios-device':
         _chromium_webrtc_fyi_spec(
             chromium_config='chromium',

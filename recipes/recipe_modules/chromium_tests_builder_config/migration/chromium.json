@@ -908,25 +908,43 @@
   "chromium.webrtc.fyi:WebRTC Chromium FYI Android Builder (dbg)": {
     "builders": [
       "chromium.webrtc.fyi:WebRTC Chromium FYI Android Builder (dbg)",
+      "chromium.webrtc.fyi:WebRTC Chromium FYI Android Tests (dbg)",
       "chromium.webrtc.fyi:WebRTC Chromium FYI Android Tests (dbg) (N Nexus5X)"
     ]
   },
   "chromium.webrtc.fyi:WebRTC Chromium FYI Android Builder ARM64 (dbg)": {
     "builders": [
       "chromium.webrtc.fyi:WebRTC Chromium FYI Android Builder ARM64 (dbg)",
-      "chromium.webrtc.fyi:WebRTC Chromium FYI Android Tests (dbg) (M Nexus5X)"
+      "chromium.webrtc.fyi:WebRTC Chromium FYI Android Tests (dbg) (M Nexus5X)",
+      "chromium.webrtc.fyi:WebRTC Chromium FYI Android Tests ARM64 (dbg)"
+    ]
+  },
+  "chromium.webrtc.fyi:WebRTC Chromium FYI Android Tests (dbg)": {
+    "builders": [
+      "chromium.webrtc.fyi:WebRTC Chromium FYI Android Builder (dbg)",
+      "chromium.webrtc.fyi:WebRTC Chromium FYI Android Tests (dbg)",
+      "chromium.webrtc.fyi:WebRTC Chromium FYI Android Tests (dbg) (N Nexus5X)"
     ]
   },
   "chromium.webrtc.fyi:WebRTC Chromium FYI Android Tests (dbg) (M Nexus5X)": {
     "builders": [
       "chromium.webrtc.fyi:WebRTC Chromium FYI Android Builder ARM64 (dbg)",
-      "chromium.webrtc.fyi:WebRTC Chromium FYI Android Tests (dbg) (M Nexus5X)"
+      "chromium.webrtc.fyi:WebRTC Chromium FYI Android Tests (dbg) (M Nexus5X)",
+      "chromium.webrtc.fyi:WebRTC Chromium FYI Android Tests ARM64 (dbg)"
     ]
   },
   "chromium.webrtc.fyi:WebRTC Chromium FYI Android Tests (dbg) (N Nexus5X)": {
     "builders": [
       "chromium.webrtc.fyi:WebRTC Chromium FYI Android Builder (dbg)",
+      "chromium.webrtc.fyi:WebRTC Chromium FYI Android Tests (dbg)",
       "chromium.webrtc.fyi:WebRTC Chromium FYI Android Tests (dbg) (N Nexus5X)"
+    ]
+  },
+  "chromium.webrtc.fyi:WebRTC Chromium FYI Android Tests ARM64 (dbg)": {
+    "builders": [
+      "chromium.webrtc.fyi:WebRTC Chromium FYI Android Builder ARM64 (dbg)",
+      "chromium.webrtc.fyi:WebRTC Chromium FYI Android Tests (dbg) (M Nexus5X)",
+      "chromium.webrtc.fyi:WebRTC Chromium FYI Android Tests ARM64 (dbg)"
     ]
   },
   "chromium.webrtc.fyi:WebRTC Chromium FYI Linux Builder": {
