@@ -356,39 +356,25 @@ class FlakinessApi(recipe_api.RecipeApi):
                 ('ninja://ios/chrome/test/earl_grey2:ios_chrome_bookmarks_'
                  'eg2tests_module/TestSuite.test_a'),
             'variant_hash': 'some_hash',
-            'invocation': ['invocation/2', 'invocations/3'],
         }],
         # We turn off logging for the JSON as some of the files are pretty
         # large, and logging significantly affects the runtime in these cases.
         include_log=False)
 
-  def process_precomputed_test_data(self, test_data, excluded_invs):
+  def process_precomputed_test_data(self, test_data):
     """Process the precomputed test data into TestDefinition objects.
 
     Args:
       * test_data: (dict) JSON of the test data. Supported keys in the test
         data JSON include:
         - test_id: (str, required) ResultDB's test_id.
-        - invocation: (list) a list of strings, which are invocations, which
-          must start with 'invocations/'. See "Invocation message" at
-          go/resultdb-concepts
         - variant_hash: (str) ResultDB's variant_hash, a hash of the variants.
-        - is_experimental: (bool) Flag determining whether the given run was
-          experimental.
-      * excluded_invs: (set) of str invocations. used to exclude test entries.
 
     Returns:
       set of TestDefinition objects
     """
     tests = set()
     for test_entry in test_data:
-      test_invs = set(test_entry.get('invocation', []))
-      # A test purely from excluded_invs is not regarded as part of history
-      # tests, because it only appeared in related try job runs
-      # (excluded_invs) from the same CL or chained CL
-      if excluded_invs.issuperset(test_invs):
-        continue
-
       tests.add(
           TestDefinition(
               test_entry['test_id'],
@@ -536,8 +522,7 @@ class FlakinessApi(recipe_api.RecipeApi):
                        'precomputed.')
         return set()
 
-      historical_tests = self.process_precomputed_test_data(
-          precomputed_json, set(excluded_invs))
+      historical_tests = self.process_precomputed_test_data(precomputed_json)
       p.logs['historical_tests'] = join_tests(historical_tests)
 
       # For logging purpose only.
