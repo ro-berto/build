@@ -81,6 +81,13 @@ message MigrationOperation {
 
   // Required, the path to write the output to
   string output_path = 2;
+
+  // Whether the output should be in json format
+  //
+  // If true, instead of outputting text showing the field definitions to add to
+  // the builder definitions, a json file will be output that can be used as the
+  // input to buildozer_wrapper.py to automatically update the starlark.
+  bool json_output = 3;
 }
 
 // Next ID: 3

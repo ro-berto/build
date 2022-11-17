@@ -241,7 +241,113 @@ class _TextFactory(_OutputFactory):
     file_api.write_text(step_name, output_path, '\n'.join(self._lines))
 
 
-class _Grouping:
+class _JsonArgumentsFactory(_OutputArgumentsFactory):
+  """An output arguments factory for json output."""
+
+  def __init__(self):
+    self._pieces = []
+
+  def set_raw_arg(self, name: str, value: str) -> None:
+    self._pieces.append(f'{name}={value},')
+
+  def set_raw_list_arg(self, name: str, args: Iterable[str]) -> None:
+    contents = ','.join(args)
+    self.set_raw_arg(name, f'[{contents}]')
+
+  @contextlib.contextmanager
+  def start_call_arg(
+      self,
+      name: str,
+      expression: str,
+  ) -> 'ContextManager[_OutputArgumentsFactory]':
+    args_factory = _JsonArgumentsFactory()
+    yield args_factory
+
+    self._pieces.append(f'{name}={expression}(')
+    self._pieces.extend(args_factory._pieces)
+    self._pieces.append('),')
+
+
+class _JsonBuilderFactory(_OutputArgumentsFactory):
+  """An output arguments factory for builder args for json output.
+
+  Builder arguments are handled specially for json output since
+  buildozer will take the name of the argument as one of the parameters
+  to its commands rather than it being part of the value to be set, as
+  is the case for arguments to any further-nested function calls.
+  """
+
+  def __init__(self):
+    self._edits = {}
+
+  def set_raw_arg(self, name: str, value: str) -> None:
+    self._edits[name] = value
+
+  def set_raw_list_arg(self, name: str, args: Iterable[str]) -> None:
+    self.set_raw_arg(name, f'[{",".join(args)}]')
+
+  @contextlib.contextmanager
+  def start_call_arg(
+      self,
+      name: str,
+      expression: str,
+  ) -> ContextManager[_OutputArgumentsFactory]:
+    args_factory = _JsonArgumentsFactory()
+    yield args_factory
+
+    args = ''.join(args_factory._pieces)
+    self.set_raw_arg(name, f'{expression}({args})')
+
+
+class _JsonFactory(_OutputFactory):
+  """An output factory for json output.
+
+  The resulting file will be json with a list of dictionaries. Each
+  dictionary will have builder_group and builder keys with corresponding
+  string values that identify the builder and an edit key with a dict
+  value that has the arguments to be set for the builder.
+
+  For example:
+  [
+    {
+      "builder_group": "foo",
+      "builder": "foo-builder",
+      "edits": {
+        "builder_spec": "builder_config.builder_spec(gclient_config=builder_config.gclient_config(config=\"chromium\",),chromium_config=builder_config.chromium_config(config=\"chromium\",),)",
+      }
+    },
+    {
+      "builder_group": "tryserver.foo",
+      "builder": "foo-builder",
+      "edits": {
+        "mirrors": "[\"ci/foo-builder\",]"
+      }
+    }
+  ]
+  """
+
+  def __init__(self):
+    self._builders = []
+
+  @contextlib.contextmanager
+  def edit_builder(
+      self,
+      builder_id: chromium.BuilderId,
+  ) -> ContextManager[_OutputArgumentsFactory]:
+    builder_factory = _JsonBuilderFactory()
+    yield builder_factory
+
+    self._builders.append({
+        "builder_group": builder_id.group,
+        "builder": builder_id.builder,
+        "edits": builder_factory._edits,
+    })
+
+  def write_output(self, file_api, step_name: str, output_path: str) -> None:
+    file_api.write_json(step_name, output_path, self._builders, indent=2)
+
+
+class _Grouping(object):
 
   def __init__(self):
     self.builder_ids = set()
@@ -521,7 +627,8 @@ class ChromiumTestsBuilderConfigMigrationApi(recipe_api.RecipeApi):
                 "".join("\n  {}".format(b) for b in sorted(grouping.blockers))))
       to_migrate.update(grouping.builder_ids)
 
-    output_factory = _TextFactory()
+    output_factory = (
+        _JsonFactory() if migration_operation.json_output else _TextFactory())
 
     for builder_id in sorted(to_migrate):
       with output_factory.edit_builder(builder_id) as builder_factory:

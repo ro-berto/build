@@ -14,6 +14,7 @@ from PB.recipe_modules.build.chromium_tests_builder_config_migration import (
 DEPS = [
     'chromium_tests_builder_config',
     'chromium_tests_builder_config_migration',
+    'recipe_engine/json',
     'recipe_engine/properties',
 ]
 
@@ -303,6 +304,89 @@ def GenTests(api):
       api.post_check(post_process.StatusSuccess),
       api.post_check(lambda check, steps: \
           check(expected_standalone_snippet in steps['src-side snippets'].cmd)),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  expected_json = api.json.dumps(
+      [
+          {
+              'builder': 'fake-builder',
+              'builder_group': 'fake-group',
+              'edits': {
+                  'builder_spec':
+                      '''
+                      builder_config.builder_spec(
+                          gclient_config = builder_config.gclient_config(
+                              config = "gclient-config",
+                          ),
+                          chromium_config = builder_config.chromium_config(
+                              config = "chromium-config1",
+                              apply_configs = [
+                                  "chromium-config2",
+                                  "chromium-config3"
+                              ],
+                          ),
+                      )
+                      '''.replace('\n', '').replace(' ', ''),
+              },
+          },
+          {
+              'builder': 'fake-try-builder',
+              'builder_group': 'fake-try-group',
+              'edits': {
+                  'mirrors':
+                      '[\"ci/fake-builder\"]',
+                  'try_settings':
+                      '''
+                      builder_config.try_settings(
+                          retry_failed_shards = False,
+                      )
+                      '''.replace('\n', '').replace(' ', ''),
+              },
+          },
+      ],
+      indent=2,
+  )
+
+  yield api.test(
+      'json-output',
+      api.properties(
+          migration_operation={
+              'builders_to_migrate': [{
+                  'builder_group': 'fake-try-group',
+                  'builder': 'fake-try-builder',
+              }],
+              'output_path': '/fake/output/path',
+              'json_output': True,
+          }),
+      api.chromium_tests_builder_config.databases(
+          ctbc.BuilderDatabase.create({
+              'fake-group': {
+                  'fake-builder':
+                      ctbc.BuilderSpec.create(
+                          gclient_config='gclient-config',
+                          chromium_config='chromium-config1',
+                          chromium_apply_config = [
+                              'chromium-config2',
+                              'chromium-config3',
+                          ]
+                      ),
+              },
+          }),
+          ctbc.TryDatabase.create({
+              'fake-try-group': {
+                  'fake-try-builder':
+                      ctbc.TrySpec.create_for_single_mirror(
+                          builder_group='fake-group',
+                          buildername='fake-builder',
+                          retry_failed_shards=False,
+                      ),
+              },
+          }),
+      ),
+      api.post_check(post_process.StatusSuccess),
+      api.post_check(lambda check, steps: \
+          check(expected_json in steps['src-side snippets'].cmd)),
       api.post_process(post_process.DropExpectation),
   )
 
