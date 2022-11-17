@@ -34,6 +34,15 @@ def parse_args(args=None):
                    'for a group of related builders src-side'))
 
   parser.add_argument(
+      '--infra-config-dir',
+      help=('Path to the infra/config directory to update.'
+            ' If not set, code snippets will be output to stdout instead.'))
+  parser.add_argument(
+      '--buildozer-binary',
+      help=('The buildozer binary to use.'
+            ' The path can be an absolute or relative path,'
+            ' or a simply the name of the command if it is on PATH.'))
+  parser.add_argument(
       'builders',
       nargs='+',
       help='The builders to migrate, in the form <builder group>:<builder name>'
@@ -85,22 +94,23 @@ def get_builders_to_migrate(args):
 
 
 _RECIPES_PY = os.path.normpath(f'{__file__}/../../../../../recipes.py')
+_BUILDOZER_WRAPPER_PY = os.path.normpath(f'{__file__}/../buildozer_wrapper.py')
 
 
-def _run_builder_config_migration_recipe(builders_to_migrate):
+def _run_builder_config_migration_recipe(builders_to_migrate, output_path,
+                                         json_output):
+  properties = {
+      'migration_operation': {
+          'builders_to_migrate': [{
+              'builder_group': group,
+              'builder': name
+          } for (group, name) in builders_to_migrate],
+          'output_path': output_path,
+          'json_output': json_output,
+      },
+  }
+
   with tempfile.TemporaryDirectory() as d:
-    output_path = os.path.join(d, "migration.txt")
-
-    properties = {
-        'migration_operation': {
-            'builders_to_migrate': [{
-                'builder_group': group,
-                'builder': name
-            } for (group, name) in builders_to_migrate],
-            'output_path': output_path,
-        },
-    }
-
     result_json_path = os.path.join(d, 'result.json')
 
     cmd = [
@@ -127,20 +137,50 @@ def _run_builder_config_migration_recipe(builders_to_migrate):
         result = json.load(f)
       raise MigrationError(result["failure"]["humanReason"]) from e
 
-    with open(output_path) as f:
-      migration = f.read()
-    print(migration)
+
+def _run_buildozer(input_json_path, infra_config_dir, buildozer_binary):
+  cmd = [
+      sys.executable,
+      _BUILDOZER_WRAPPER_PY,
+      '--infra-config-dir',
+      infra_config_dir,
+      input_json_path,
+  ]
+  if buildozer_binary is not None:
+    cmd.extend(['--buildozer-binary', buildozer_binary])
+  try:
+    subprocess.run(cmd, check=True, text=True)
+  except subprocess.CalledProcessError as e:
+    raise MigrationError("could not update starlark files") from e
 
 
 def main():
   args = parse_args()
   try:
     builders_to_migrate = get_builders_to_migrate(args)
+
+    with tempfile.TemporaryDirectory() as d:
+      if args.infra_config_dir:
+        json_output = True
+        output_path = os.path.join(d, 'migration.json')
+      else:
+        json_output = False
+        output_path = os.path.join(d, 'migration.txt')
+
+      _run_builder_config_migration_recipe(builders_to_migrate, output_path,
+                                           json_output)
+
+      if args.infra_config_dir:
+        _run_buildozer(output_path, args.infra_config_dir,
+                       args.buildozer_binary)
+      else:
+        with open(output_path) as f:
+          migration = f.read()
+        print(migration)
+
   except (InvalidBuilderError, MigrationError) as e:
     print(str(e), file=sys.stderr)
     sys.exit(1)
-
-  _run_builder_config_migration_recipe(builders_to_migrate)
 
 
 if __name__ == '__main__':
