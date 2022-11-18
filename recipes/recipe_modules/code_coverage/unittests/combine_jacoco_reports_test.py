@@ -253,7 +253,7 @@ class GenerateJacocoReportTest(unittest.TestCase):
   """
 
   def setUp(self):
-    super(GenerateJacocoReportTest, self).setUp()
+    super().setUp()
     # Need to reparse every test as some functions modify the tree inplace.
     self.dev_tree = minidom.parseString(DEVICE_XML)
     self.host_tree = minidom.parseString(HOST_XML)

@@ -21,7 +21,7 @@ IS_WIN = platform.system() == 'Windows'
 GIT = 'git' if not IS_WIN else 'git.bat'
 
 
-class _VarImpl(object):
+class _VarImpl:
 
   def __init__(self, local_scope):
     self._local_scope = local_scope
@@ -32,7 +32,7 @@ class _VarImpl(object):
     return self._local_scope['vars'][var_name]
 
 
-class _Timer(object):
+class _Timer:
 
   def __init__(self):
     self._time = None

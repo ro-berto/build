@@ -291,27 +291,13 @@ def convert_coverage_to_line_column_format(absolute_source_file_path,
         Boolean: True if coverage block is within the bounds of the supplied
           line offsets, false otherwise.
       """
-      # Encapsulating.
-      if line_start_offset >= coverage_start_offset and \
-          line_end_offset < coverage_end_offset:
-        return True
+      if coverage_start_offset >= line_end_offset:
+        return False
 
-      # Overlaps line start.
-      if (line_start_offset >= coverage_start_offset and line_start_offset <
-          coverage_end_offset) and line_end_offset >= coverage_end_offset:
-        return True
+      if coverage_end_offset <= line_start_offset:
+        return False
 
-      # Overlaps line end.
-      if (coverage_start_offset >= line_start_offset and coverage_start_offset <
-          line_end_offset) and coverage_end_offset >= line_end_offset:
-        return True
-
-      # Nested
-      if coverage_start_offset >= line_start_offset and \
-          coverage_end_offset < line_end_offset:
-        return True
-
-      return False
+      return True
 
     for line in f:
       line_num += 1

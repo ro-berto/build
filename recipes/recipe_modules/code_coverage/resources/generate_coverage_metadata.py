@@ -93,7 +93,7 @@ def _extract_coverage_info(segments):
       return _has_count(segment) and _is_region_entry(segment)
 
     line_starts_new_region = any(
-        [_is_start_of_region(segment) for segment in current_line_segments])
+        _is_start_of_region(segment) for segment in current_line_segments)
     is_start_of_skipped_region = (
         current_line_segments and not _has_count(current_line_segments[0]) and
         _is_region_entry(current_line_segments[0]))
@@ -259,7 +259,7 @@ def _to_compressed_file_record(file_coverage_data,
   coverage_path = file_coverage_data['filename']
   # exclude third_party/ code
   if ('third_party/' in coverage_path and third_party_inclusion_subdirs and
-      not any([x in coverage_path for x in third_party_inclusion_subdirs])):
+      not any(x in coverage_path for x in third_party_inclusion_subdirs)):
     return None
 
   line_data, block_data = _extract_coverage_info(file_coverage_data['segments'])
@@ -341,8 +341,7 @@ def _show_system_resource_usage(proc):
   def bytes_to_gb(num):
     if num is None:
       return 'N/A'
-    else:
-      return '%.2fG' % (num / 1024.0 / 1024 / 1024)
+    return '%.2fG' % (num / 1024.0 / 1024 / 1024)
 
   # Dump the memory, cpu, and disk io usage of the process.
   try:
@@ -851,7 +850,7 @@ def main():
 
   if not os.path.isfile(params.llvm_cov):
     raise RuntimeError('%s must exist' % params.llvm_cov)
-  elif not os.access(params.llvm_cov, os.X_OK):
+  if not os.access(params.llvm_cov, os.X_OK):
     logging.info('Setting executable bit of %s', params.llvm_cov)
     os.chmod(params.llvm_cov, stat.S_IRUSR | stat.S_IXUSR | stat.S_IWUSR)
     assert os.access(params.llvm_cov, os.X_OK), 'Failed to set executable bit'

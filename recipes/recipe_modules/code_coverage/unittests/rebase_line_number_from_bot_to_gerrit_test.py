@@ -21,7 +21,7 @@ import rebase_line_number_from_bot_to_gerrit
 class RebaseLineNumberFromBotToGerritTest(unittest.TestCase):
 
   def setUp(self):
-    super(RebaseLineNumberFromBotToGerritTest, self).setUp()
+    super().setUp()
     self.host = 'chromium-review.googlesource.com'
     self.project = 'chromium/src'
     self.change = 123456
@@ -29,7 +29,7 @@ class RebaseLineNumberFromBotToGerritTest(unittest.TestCase):
 
   @mock.patch.object(gerrit_util, 'fetch_files_content')
   def test_rebase_line_number(self, mocked_fetch_files_content):
-    file_on_gerrit_content = ('line 1\n' 'line 2, changed by me\n' 'line 3\n')
+    file_on_gerrit_content = 'line 1\nline 2, changed by me\nline 3\n'
     mocked_fetch_files_content.return_value = [file_on_gerrit_content]
 
     file_on_bot = tempfile.NamedTemporaryFile()

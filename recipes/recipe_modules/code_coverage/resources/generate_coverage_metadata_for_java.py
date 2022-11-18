@@ -216,7 +216,7 @@ def _get_files_coverage_data(src_path,
 
       # exclude third_party/ code
       if ('third_party/' in file_path and third_party_inclusion_subdirs and
-          not any([x in file_path for x in third_party_inclusion_subdirs])):
+          not any(x in file_path for x in third_party_inclusion_subdirs)):
         continue
 
       logging.info('Processing file %s', '//' + file_path)

@@ -36,7 +36,7 @@ class RepositoryUtilTest(unittest.TestCase):
 
     def is_dir_side_effect(path):
       path = os.path.normpath(path)
-      return path == '/src' or path == '/src/third_party/repo'
+      return path in ('/src', '/src/third_party/repo')
 
     mock_is_dir.side_effect = is_dir_side_effect
 
@@ -45,12 +45,13 @@ class RepositoryUtilTest(unittest.TestCase):
       if commands[:2] == ['git', 'ls-files']:
         if cwd == '/src':
           return 'file1.cc'
-        elif cwd == '/src/third_party/repo':
+        if cwd == '/src/third_party/repo':
           return 'file2.cc'
-      elif commands[:-1] == ['git', 'log', '-n', '1', '--pretty=format:%H:%ct']:
+
+      if commands[:-1] == ['git', 'log', '-n', '1', '--pretty=format:%H:%ct']:
         if commands[-1] == 'file1.cc' and cwd == '/src':
           return 'file1hash:12345'
-        elif commands[-1] == 'file2.cc' and cwd == '/src/third_party/repo':
+        if commands[-1] == 'file2.cc' and cwd == '/src/third_party/repo':
           return 'file2hash:12345'
 
       assert False, 'Unexpected subprocess call'
@@ -107,13 +108,14 @@ class RepositoryUtilTest(unittest.TestCase):
       if commands[:2] == ['git', 'diff']:
         assert commands[2:] == ['HEAD', reference_commit, '--', file_path]
         return diff_output
-      elif commands[:2] == ['git', 'show']:
+
+      if commands[:2] == ['git', 'show']:
         show_arg = commands[2].split(':')
         assert len(show_arg) == 2
         assert show_arg[1] == file_path
         if show_arg[0] == 'HEAD':
           return head_content
-        elif show_arg[0] == reference_commit:
+        if show_arg[0] == reference_commit:
           return reference_commit_content
         assert False, 'Unexpected git show call'
 

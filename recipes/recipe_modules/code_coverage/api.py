@@ -21,7 +21,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
   """This module contains apis to generate code coverage data."""
 
   def __init__(self, properties, *args, **kwargs):
-    super(CodeCoverageApi, self).__init__(*args, **kwargs)
+    super().__init__(*args, **kwargs)
     # A single temporary directory to contain the profile data for all targets
     # in the build.
     self._base_profdata_dir = None
@@ -368,7 +368,7 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       """
       source_files = []
       for file_path in file_paths:
-        if any([file_path.endswith(extension) for extension in extensions]):
+        if any(file_path.endswith(extension) for extension in extensions):
           source_files.append(file_path)
 
       return source_files
@@ -960,18 +960,18 @@ class CodeCoverageApi(recipe_api.RecipeApi):
           self.build_id,
           data_type,
       )
-    else:
-      commit = build.input.gitiles_commit
-      assert commit is not None, 'No gitiles commit'
-      return 'postsubmit/%s/%s/%s/%s/%s/%s/%s' % (
-          commit.host,
-          commit.project,
-          commit.id,  # A commit HEX SHA1 is unique in a Gitiles project.
-          build.builder.bucket,
-          mimic_builder_name,
-          self.build_id,
-          data_type,
-      )
+
+    commit = build.input.gitiles_commit
+    assert commit is not None, 'No gitiles commit'
+    return 'postsubmit/%s/%s/%s/%s/%s/%s/%s' % (
+        commit.host,
+        commit.project,
+        commit.id,  # A commit HEX SHA1 is unique in a Gitiles project.
+        build.builder.bucket,
+        mimic_builder_name,
+        self.build_id,
+        data_type,
+    )
 
   def _generate_dir_metadata(self):
     """Extracts directory metadata, e.g. mapping to monorail component."""
