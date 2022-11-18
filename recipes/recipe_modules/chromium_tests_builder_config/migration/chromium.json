@@ -1137,11 +1137,6 @@
       "tryserver.chromium.android:android-webview-pie-x86-wpt-fyi-rel"
     ]
   },
-  "tryserver.chromium.android:android_blink_rel": {
-    "builders": [
-      "tryserver.chromium.android:android_blink_rel"
-    ]
-  },
   "tryserver.chromium.chromiumos:linux-chromeos-js-code-coverage": {
     "builders": [
       "chromium.chromiumos:linux-chromeos-js-code-coverage",
