@@ -13,7 +13,6 @@ DEPS = [
     'depot_tools/gsutil',
     'depot_tools/osx_sdk',
     'depot_tools/tryserver',
-    'goma',
     'profiles',
     'recipe_engine/buildbucket',
     'recipe_engine/context',
@@ -450,11 +449,6 @@ def RunSteps(api):
   api.bot_update.ensure_checkout()
   api.gclient.runhooks()
 
-  is_gcc = api.properties.get('is_gcc', False)
-  should_use_goma = not is_gcc
-  if should_use_goma:
-    api.goma.ensure_goma()
-
   paths = RepositoryPaths(api)
   GenerateCoverageTestConstants(api, paths)
 
@@ -516,17 +510,9 @@ def RunSteps(api):
     # if this is being run on a non-Mac platform.
     with api.osx_sdk('mac'):
       ninja_cmd = [api.depot_tools.ninja_path, '-C', paths.output_path]
-      if should_use_goma:
-        ninja_cmd.extend(['-j', api.goma.recommended_goma_jobs])
       ninja_cmd.extend(BUILD_TARGETS)
 
-      if should_use_goma:
-        api.goma.build_with_goma(
-            name='compile',
-            ninja_command=ninja_cmd,
-            ninja_log_outdir=paths.output_path)
-      else:
-        api.step('compile with ninja', ninja_cmd)
+      api.step('compile with ninja', ninja_cmd)
 
     # ARM64 tests cannot be run on the building bot, since they must be
     # cross-compiled from x86-64.
