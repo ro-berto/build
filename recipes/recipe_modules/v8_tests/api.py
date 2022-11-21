@@ -63,7 +63,7 @@ class V8TestsApi(recipe_api.RecipeApi):
   @property
   def resultdb(self):
     if not self._resultdb and self._resultdb_enabled():
-      self._resultdb = ResultDB.create(include=True)
+      self._resultdb = ResultDB.create()
     return self._resultdb
 
   def _resultdb_enabled(self):
