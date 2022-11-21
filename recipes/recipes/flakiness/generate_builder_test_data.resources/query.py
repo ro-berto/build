@@ -22,19 +22,15 @@ FETCH_BUILDER_QUERY = """
 
 # This query utilizes this data to determine the test history per cq try builder.
 TEST_HISTORY_QUERY = """
-    SELECT
+    SELECT DISTINCT
       test_id,
-      variant_hash,
-      ARRAY_AGG(invocation) as invocation
+      variant_hash
     FROM
       `chrome-flakiness.flake_endorser.test_history_submitted_tests`
     WHERE
       builder_name = \'{}\' AND
       builder_project = \'{}\' AND
       bucket = \'{}\'
-    GROUP BY
-      test_id,
-      variant_hash
 """
 
 
