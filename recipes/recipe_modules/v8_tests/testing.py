@@ -425,6 +425,11 @@ def _trigger_swarming_task(api, task, test_step_config):
 
   api.chromium_swarming.trigger_task(task)
 
+  # Remove 'invocations/' because it is added again in include_invocations.
+  api.resultdb.include_invocations(
+      [i[len('invocations/'):] for i in task.get_invocation_names()])
+
+
 class V8SwarmingTest(V8Test):
   def __init__(self, *args, **kwargs):
     super(V8SwarmingTest, self).__init__(*args, **kwargs)
