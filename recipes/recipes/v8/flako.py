@@ -674,10 +674,11 @@ class Bisector(Validator):
     offset_range = f'#{from_offset}..#{to_offset}'
     full_git_range = f'{from_revision}..{to_revision}'
     git_range = f'{from_revision[:8]}..{to_revision[:8]}'
-    result_text = text % offset_range
-    step_result = self.api.step(result_text, cmd=None)
-    step_result.presentation.links[git_range] = f'{REPO}/+log/{full_git_range}'
-    return result_text
+    step_text = text % offset_range
+    range_link = f'{REPO}/+log/{full_git_range}'
+    step_result = self.api.step(step_text, cmd=None)
+    step_result.presentation.links[git_range] = range_link
+    return text % f'[{offset_range}]({range_link})'
 
   def report_revision(self, text, offset):
     rev = self.depot.get_revision(offset)
