@@ -48,6 +48,11 @@ class FlakyReproducer(recipe_api.RecipeApi):
   REPRODUCING_STEP_FILENAME = 'reproducing_step.json'
   VERIFY_RESULT_SUMMARY_FILENAME = 'result_summary_$N$.json'
   MONORAIL_LABEL = 'Flaky-Reproduced'
+  PREFERRED_BUILDERS_RE = re.compile(
+      r'(Linux Tests|Mac[\d\.]+ Tests|Win10 Tests x64)')
+  SUPPRESS_BUILDER_RE = re.compile(
+      r'.*(android|ios|fieldtrial|reviver|backuprefptr|code-coverage).*',
+      re.IGNORECASE)
 
   # Chromite includes a symlink which points to a file it expects to exist in a
   # chroot. We aren't using chromite in a chroot, so this is an invalid symlink.
@@ -439,6 +444,70 @@ class FlakyReproducer(recipe_api.RecipeApi):
     monorail_api.modify_issues(
         issue_name, comment_message, labels=[self.MONORAIL_LABEL])
 
+  @nest_step
+  def query_sample_failure_from_luci_analysis(self,
+                                              monorail_issue,
+                                              test_id=None):
+    """Query sample failure from LUCI Analysis cluster failures."""
+    rules = self.m.weetbix.lookup_bug('chromium/' + monorail_issue)
+    if not rules:
+      raise self.m.step.StepFailure('No cluster associated with bug.')
+    cluster = self.m.weetbix.rule_name_to_cluster_name(rules[0])
+    failures = self.m.weetbix.query_cluster_failures(cluster)
+    if not failures:
+      raise self.m.step.StepFailure(
+          'No failure found in the LUCI Analysis cluster.')
+
+    # Count failures by test variant
+    # (presubmit, frozenset(variant), test_id): [count, first_build_id]
+    test_variants = {}
+    for f in sorted(
+        failures, key=lambda f: f.partition_time.ToDatetime(), reverse=True):
+      key = (
+          f.HasField('presubmit_run'),
+          frozenset(getattr(f.variant, 'def').items()),
+          f.test_id,
+      )
+      if key not in test_variants:
+        test_variants[key] = [
+            f.count,
+            f.ingested_invocation_id.strip('build-'),
+        ]
+      else:
+        test_variants[key][0] += f.count
+
+    # Choose best test sample
+    top_presubmit_variant_count = {}
+    best_score = None
+    best_test_id = None
+    best_build_id = None
+    for ((presubmit, variant_set, variant_test_id),
+         (count, first_build_id)) in sorted(
+             test_variants.items(), key=lambda kv: kv[1][0], reverse=True):
+      # Choose from the test_id or build_id specified
+      if test_id and variant_test_id != test_id:
+        continue
+      # The test variant should fail >50% of most failing variant.
+      top_count = top_presubmit_variant_count.setdefault(presubmit, count)
+      if count < top_count * 0.5:
+        continue
+      # Prefer CI desktop builders, suppress known not supported platforms
+      variant = dict(variant_set)
+      builder = variant.get('builder', '')
+      builder_score = 0
+      if not presubmit:
+        builder_score += 1
+      if self.PREFERRED_BUILDERS_RE.match(builder):
+        builder_score += 1
+      elif self.SUPPRESS_BUILDER_RE.match(builder):
+        builder_score -= 1
+      if best_score is None or builder_score > best_score:
+        best_score = builder_score
+        best_test_id = variant_test_id
+        best_build_id = first_build_id
+
+    return (best_build_id, best_test_id)
+
   def query_resultdb_for_task_id_and_test_name(self,
                                                build_id=None,
                                                task_id=None,
@@ -538,6 +607,11 @@ class FlakyReproducer(recipe_api.RecipeApi):
       except self.m.step.StepWarning:
         # Ignore the task if comment posted to monorail.
         return
+
+      # Try to find failing sample from LUCI Analysis cluster.
+      if not (task_id or build_id) or not (test_name or test_id):
+        build_id, test_id = self.query_sample_failure_from_luci_analysis(
+            monorail_issue, test_id)
 
     task_id, test_name = self.query_resultdb_for_task_id_and_test_name(
         task_id=task_id,

@@ -235,7 +235,8 @@ def GenTests(api):
           builds=[
               generate_bb_get_multi_result({'sheriff_rotations': 'chromium'})
           ],
-          step_name='verify_reproducing_step.find_related_builders.buildbucket.get_multi',
+          step_name=('verify_reproducing_step.find_related_builders'
+                     '.buildbucket.get_multi'),
       ),
       api.weetbix.query_test_history(
           query_test_history_res,
@@ -245,7 +246,8 @@ def GenTests(api):
       ),
       api.buildbucket.simulated_get_multi(
           builds=[generate_bb_get_multi_result({})],
-          step_name='verify_reproducing_step.find_related_builders.buildbucket.get_multi (2)',
+          step_name=('verify_reproducing_step.find_related_builders'
+                     '.buildbucket.get_multi (2)'),
       ),
       api.weetbix.query_test_history(
           test_history.QueryTestHistoryResponse(),
@@ -273,7 +275,8 @@ def GenTests(api):
                       }}),
               )
           ]),
-          step_name='verify_reproducing_step.find_related_builders.query_test_results',
+          step_name=('verify_reproducing_step.find_related_builders'
+                     '.query_test_results'),
       ),
       api.step_data(
           'verify_reproducing_step.get_test_binary from 54321fffffabc123',
@@ -416,5 +419,21 @@ def GenTests(api):
           }]}),
       ),
       api.post_check(StatusSuccess),
+      api.post_process(DropExpectation),
+  )
+
+  yield api.test(
+      'query_sample_failure_from_luci_analysis',
+      api.properties(monorail_issue='123'),
+      api.step_data(
+          'check_monorail_comment_posted'
+          '.GetIssue projects/chromium/issues/123',
+          api.json.output_stream(issue_result),
+      ),
+      api.weetbix.lookup_bug(
+          [],
+          'chromium/123',
+          parent_step_name='query_sample_failure_from_luci_analysis'),
+      api.post_check(ResultReason, 'No cluster associated with bug.'),
       api.post_process(DropExpectation),
   )
