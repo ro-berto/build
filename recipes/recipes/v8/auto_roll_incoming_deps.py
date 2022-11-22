@@ -118,9 +118,10 @@ STORAGE_URL = ('https://commondatastorage.googleapis.com/'
 RETSAM = 'retsam'[::-1]
 
 CHROMIUM_PINS = {
-  'chromium_linux': STORAGE_URL % 'Linux_x64',
-  'chromium_win': STORAGE_URL % 'Win_x64',
-  'chromium_mac': STORAGE_URL % 'Mac',
+    'chromium_linux': STORAGE_URL % 'Linux_x64',
+    'chromium_win': STORAGE_URL % 'Win_x64',
+    'chromium_mac': STORAGE_URL % 'Mac',
+    'chromium_mac_arm': STORAGE_URL % 'Mac_Arm',
 }
 
 
@@ -201,7 +202,7 @@ def setup_gclient(api, autoroller_config):
 def setup_target_repository(api):
   # NOTE: Besides the name, this actually does a checkout of the first solution
   #       defined in gclient (autoroller_config -> target_config ->
-  #       solution_name), and might be something else, e.g. devtools-frontend.  
+  #       solution_name), and might be something else, e.g. devtools-frontend.
   api.v8.checkout(ignore_input_commit=True, set_output_commit=False)
 
 
@@ -579,7 +580,7 @@ def update_dependencies(api, step, updates, autoroller_config, trusted):
 
 
 def update_chromium_pin(api, step, autoroller_config):
-  """Updates the values of gclient variables chromium_(win|mac|linux) with the
+  """Updates the values of gclient variables chromium_(win|mac|mac_arm|linux) with the
   latest prebuilt versions.
   """
   change_count = 0
@@ -738,20 +739,20 @@ remote:"""
         # CIPDs test api has a latest ref by default for each package. We over-
         # ride this behaviour for our mock package `without-latest-ref`.
         api.override_step_data(
-          'Find updated deps.cipd instances mock/package-without-latest-ref',
-          api.cipd._resultify({
-              'instances': [{
-                  'pin': {
-                      'package':
-                          'mock/package-without-latest-ref',
-                      'instance_id':
-                          api.cipd.make_resolved_version('no-latest'),
-                  },
-                  'registered_by': 'user:doe@developer.gserviceaccount.com',
-                  'registered_ts': 1987654321,
-                  'refs': None,
-              }]
-          })),
+            'Find updated deps.cipd instances mock/package-without-latest-ref',
+            api.cipd._resultify({
+                'instances': [{
+                    'pin': {
+                        'package':
+                            'mock/package-without-latest-ref',
+                        'instance_id':
+                            api.cipd.make_resolved_version('no-latest'),
+                    },
+                    'registered_by': 'user:doe@developer.gserviceaccount.com',
+                    'registered_ts': 1987654321,
+                    'refs': None,
+                }]
+            })),
         api.override_step_data(
             'Update trusted deps.git diff',
             api.raw_io.stream_output_text(git_diff, stream='stdout'),
@@ -793,16 +794,20 @@ remote:"""
                 'deadbeef\trefs/heads/main', stream='stdout'),
         ),
         api.override_step_data(
-           'Roll chromium pin.gclient get chromium_linux deps',
-           api.raw_io.stream_output_text('122', stream='stdout'),
+            'Roll chromium pin.gclient get chromium_linux deps',
+            api.raw_io.stream_output_text('122', stream='stdout'),
         ),
         api.override_step_data(
-           'Roll chromium pin.gclient get chromium_win deps',
-           api.raw_io.stream_output_text('123', stream='stdout'),
+            'Roll chromium pin.gclient get chromium_win deps',
+            api.raw_io.stream_output_text('123', stream='stdout'),
         ),
         api.override_step_data(
-           'Roll chromium pin.gclient get chromium_mac deps',
-           api.raw_io.stream_output_text('124', stream='stdout'),
+            'Roll chromium pin.gclient get chromium_mac deps',
+            api.raw_io.stream_output_text('124', stream='stdout'),
+        ),
+        api.override_step_data(
+            'Roll chromium pin.gclient get chromium_mac_arm deps',
+            api.raw_io.stream_output_text('125', stream='stdout'),
         ),
     ]
 
@@ -852,45 +857,49 @@ remote:"""
   # No version difference: There is no new dependency version, and we do not try
   # to update any dep (via `gclient setdep`).
   yield api.test(
-    'no-version-difference',
-    api.properties(autoroller_config=autoroller_config),
-    api.buildbucket.ci_build(
-        project='v8',
-        git_repo='https://chromium.googlesource.com/v8/v8',
-        builder='no-version-difference',
-    ),
-    api.override_step_data(
-        'Find updated deps.gclient get src deps',
-        api.raw_io.stream_output_text(
-            'src: https://chromium.googlesource.com/chromium/src.git\n'
-            'src/tools: https://example.com/chromium/tools.git@42',
-            stream='stdout',
-        ),
-    ),
-    api.override_step_data(
-        'Find updated deps.gclient get v8 deps',
-        api.raw_io.stream_output_text(
-            'v8: https://chromium.googlesource.com/chromium/v8.git\n'
-            'v8/tools: https://example.com/chromium/tools.git@42',
-            stream='stdout',
-        ),
-    ),
-    api.override_step_data(
-       'Roll chromium pin.gclient get chromium_linux deps',
-       api.raw_io.stream_output_text('123', stream='stdout'),
-    ),
-    api.override_step_data(
-       'Roll chromium pin.gclient get chromium_win deps',
-       api.raw_io.stream_output_text('123', stream='stdout'),
-    ),
-    api.override_step_data(
-       'Roll chromium pin.gclient get chromium_mac deps',
-       api.raw_io.stream_output_text('123', stream='stdout'),
-    ),
-    api.post_process(DoesNotRunRE, r'^Update \w* deps\.gclient setdep .*'),
-    api.post_process(
-        DoesNotRun, 'Roll chromium pin.gclient set chromium_linux deps'),
-    api.post_process(DropExpectation),
+      'no-version-difference',
+      api.properties(autoroller_config=autoroller_config),
+      api.buildbucket.ci_build(
+          project='v8',
+          git_repo='https://chromium.googlesource.com/v8/v8',
+          builder='no-version-difference',
+      ),
+      api.override_step_data(
+          'Find updated deps.gclient get src deps',
+          api.raw_io.stream_output_text(
+              'src: https://chromium.googlesource.com/chromium/src.git\n'
+              'src/tools: https://example.com/chromium/tools.git@42',
+              stream='stdout',
+          ),
+      ),
+      api.override_step_data(
+          'Find updated deps.gclient get v8 deps',
+          api.raw_io.stream_output_text(
+              'v8: https://chromium.googlesource.com/chromium/v8.git\n'
+              'v8/tools: https://example.com/chromium/tools.git@42',
+              stream='stdout',
+          ),
+      ),
+      api.override_step_data(
+          'Roll chromium pin.gclient get chromium_linux deps',
+          api.raw_io.stream_output_text('123', stream='stdout'),
+      ),
+      api.override_step_data(
+          'Roll chromium pin.gclient get chromium_win deps',
+          api.raw_io.stream_output_text('123', stream='stdout'),
+      ),
+      api.override_step_data(
+          'Roll chromium pin.gclient get chromium_mac deps',
+          api.raw_io.stream_output_text('123', stream='stdout'),
+      ),
+      api.override_step_data(
+          'Roll chromium pin.gclient get chromium_mac_arm deps',
+          api.raw_io.stream_output_text('123', stream='stdout'),
+      ),
+      api.post_process(DoesNotRunRE, r'^Update \w* deps\.gclient setdep .*'),
+      api.post_process(DoesNotRun,
+                       'Roll chromium pin.gclient set chromium_linux deps'),
+      api.post_process(DropExpectation),
   )
 
   # No update succeeded: If there is no dependency update, we don't create CLs
