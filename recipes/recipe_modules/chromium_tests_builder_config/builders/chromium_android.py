@@ -24,8 +24,6 @@ def _chromium_android_spec(**kwargs):
 # * Android WebView O (dbg)
 # * Android WebView P (dbg)
 # * Cast Android (dbg)
-# * Marshmallow Tablet Tester
-# * Marshmallow 64 bit Tester
 # * Nougat Phone Tester
 # * Oreo Phone Tester
 # * android-10-arm64-rel
