@@ -5,7 +5,6 @@
 import attr
 import base64
 
-from google.protobuf import json_format
 from collections import defaultdict
 
 from recipe_engine import recipe_api
@@ -90,7 +89,7 @@ class SkylabApi(recipe_api.RecipeApi):
           if t.spec.retries:
             cmd.extend(['-max-retries', str(int(t.spec.retries))])
 
-          resultdb = t.prep_skylab_rdb()
+          resultdb = self.gen_rdb_config(t)
           assert resultdb and resultdb.enable, ('Skylab tests should '
                                                 'have resultdb enabled.')
           rdb_str = self.m.json.dumps({
@@ -240,3 +239,41 @@ class SkylabApi(recipe_api.RecipeApi):
           test_runners_by_tag[test_suite][shard_ctp_build_id] = builds
 
     return test_runners_by_tag
+
+  def gen_rdb_config(self, test):
+    """Generate the resultDB config for SkylabTest.
+
+    Args:
+      test: A step.SkylabTest object.
+
+    Returns:
+      A new config of ResultDB. See chromium_tests.ResultDB.
+    """
+    var = dict(
+        test.spec.resultdb.base_variant or {}, test_suite=test.canonical_name)
+    var.update({
+        'device_type': test.spec.cros_board,
+        'os': 'ChromeOS',
+        'cros_img': test.spec.cros_img,
+    })
+    result_format = 'gtest'
+    if test.is_tast_test:
+      result_format = 'tast'
+    elif test.is_GPU_test:
+      result_format = 'json'
+    return attr.evolve(
+        test.spec.resultdb,
+        test_id_prefix=test.spec.test_id_prefix,
+        base_variant=var,
+        result_format=result_format,
+        # Skylab's result_file is hard-coded by the autotest wrapper in OS
+        # repo, and not required by callers. It suppose to be None, but then
+        # ResultDB will pass the default value ${ISOLATED_OUTDIR}/output.json
+        # which is confusing for Skylab test runner. So explicitly set it an
+        # empty string, as well as artifact_directory.
+        result_file='',
+        # All Tast tests share the same autotest name and the result path.
+        # No need to pass from here. For other types of tests, we have to
+        # explicitly set the relative path to artifacts for the adapter.
+        artifact_directory=''
+        if test.is_tast_test else '{}/debug'.format(test.spec.autotest_name))

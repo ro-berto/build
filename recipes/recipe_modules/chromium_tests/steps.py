@@ -2917,33 +2917,6 @@ class SkylabTest(Test):
     self.update_failure_on_exit(suffix, True)
     raise self.api.m.step.StepFailure(status)
 
-  def prep_skylab_rdb(self):
-    var = dict(
-        self.spec.resultdb.base_variant or {}, test_suite=self.canonical_name)
-    var.update({
-        'device_type': self.spec.cros_board,
-        'os': 'ChromeOS',
-        'cros_img': self.spec.cros_img,
-    })
-    return attr.evolve(
-        self.spec.resultdb,
-        test_id_prefix=self.spec.test_id_prefix,
-        base_variant=var,
-        result_format='tast' if self.is_tast_test else 'gtest',
-        # Skylab's result_file is hard-coded by the autotest wrapper in OS
-        # repo, and not required by callers. It suppose to be None, but then
-        # ResultDB will pass the default value ${ISOLATED_OUTDIR}/output.json
-        # which is confusing for Skylab test runner. So explicitly set it an
-        # empty string, as well as artifact_directory.
-        result_file='',
-        # Tast adapter is designed mostly for Skylab, so it collects the
-        # artifact for us. No need to configure any path, plus we do not
-        # know the runtime path of the artifact on the host server in Skylab.
-        # For gtest, we have to explicitly set the relative path of artifacts
-        # to the adapter.
-        artifact_directory=''
-        if self.is_tast_test else '{}/debug'.format(self.spec.autotest_name))
-
   def get_invocation_names(self, suffix):
     # TODO(crbug.com/1248693): Use the invocation included by the parent builds.
     del suffix
