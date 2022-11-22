@@ -3,6 +3,6 @@
 # found in the LICENSE file.
 """Reclient-related constants."""
 
-STAGING_VERSION = 're_client_version:0.86.0.25feac0-gomaip'
-TEST_VERSION = 're_client_version:0.86.0.25feac0-gomaip'
+STAGING_VERSION = 're_client_version:0.87.0.b6908b3-gomaip'
+TEST_VERSION = 're_client_version:0.87.0.b6908b3-gomaip'
 CLANG_SCAN_DEPS_VERSION = 're_client_version:0.41.4.3f0d8bb'
