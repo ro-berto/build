@@ -2104,9 +2104,17 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     return tests
 
   def get_quickrun_options(self, builder_config, inverted_rts=False):
+    # TODO(sshrimp): cq.active/cq.run_mode no longer works from the compilator
+    # this should go back to using that module when gerrit no longer skips
+    # copying tags on reruns and cq.active no longer checks created_by
+    run_mode = None
+    props = self.m.properties.get('$recipe_engine/cq', None)
+    if props:
+      run_mode = props.get('run_mode', props.get('runMode'))
+
     rts_setting = None
     use_rts = (
-        (self.m.cq.active and self.m.cq.run_mode == self.m.cq.QUICK_DRY_RUN and
+        (run_mode == self.m.cq.QUICK_DRY_RUN and
          builder_config.regression_test_selection == try_spec.QUICK_RUN_ONLY) or
         builder_config.regression_test_selection == try_spec.ALWAYS)
 
