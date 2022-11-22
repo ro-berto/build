@@ -38,6 +38,36 @@ COMPARISON_BUILDERS = freeze({
         'platform': 'linux',
         'targets': ['all'],
     },
+    'Comparison Linux (reclient vs reclient remote links)(small)': {
+        'chromium_config': 'chromium',
+        'gclient_config': 'chromium',
+        'chromium_apply_config': [
+            'mb', 'goma_enable_cache_silo', 'goma_large_cache_file'
+        ],
+        'gclient_apply_config': ['reclient_test'],
+        'platform': 'linux',
+        'targets': ['all'],
+    },
+    'Comparison Linux (reclient vs reclient remote links)(medium)': {
+        'chromium_config': 'chromium',
+        'gclient_config': 'chromium',
+        'chromium_apply_config': [
+            'mb', 'goma_enable_cache_silo', 'goma_large_cache_file'
+        ],
+        'gclient_apply_config': ['reclient_test'],
+        'platform': 'linux',
+        'targets': ['all'],
+    },
+    'Comparison Linux (reclient vs reclient remote links)(large)': {
+        'chromium_config': 'chromium',
+        'gclient_config': 'chromium',
+        'chromium_apply_config': [
+            'mb', 'goma_enable_cache_silo', 'goma_large_cache_file'
+        ],
+        'gclient_apply_config': ['reclient_test'],
+        'platform': 'linux',
+        'targets': ['all'],
+    },
 })
 
 
