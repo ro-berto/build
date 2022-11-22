@@ -8,22 +8,25 @@ test results. Weetbix is the previous name of LUCI Analysis.
 See go/luci-analysis for more info.
 """
 
+import re
+
 from google.protobuf import json_format
 from recipe_engine import recipe_api
 
-from RECIPE_MODULES.build.attr_utils import attrib, attrs, mapping, sequence
+from RECIPE_MODULES.build.attr_utils import attrib, attrs
 from PB.go.chromium.org.luci.analysis.proto.v1.predicate import TestVerdictPredicate
 from PB.go.chromium.org.luci.analysis.proto.v1.test_history import (
     QueryTestHistoryRequest, QueryTestHistoryResponse, QueryVariantsRequest,
     QueryVariantsResponse)
 from PB.go.chromium.org.luci.analysis.proto.v1.test_variants import TestVariantFailureRateAnalysis
+from PB.go.chromium.org.luci.analysis.proto.v1.clusters import QueryClusterFailuresResponse
 
 CLUSTER_STEP_NAME = 'cluster failing test results with weetbix'
 
 
 class WeetbixApi(recipe_api.RecipeApi):
 
-  def _run(self, step_name, rpc_endpoint, request_input):
+  def _run(self, step_name, rpc_endpoint, request_input, step_test_data=None):
     args = [
         'prpc',
         'call',
@@ -35,6 +38,7 @@ class WeetbixApi(recipe_api.RecipeApi):
         args,
         stdin=self.m.json.input(request_input),
         stdout=self.m.json.output(add_json_log=True),
+        step_test_data=step_test_data,
     )
     result.presentation.logs['input'] = self.m.json.dumps(
         request_input, indent=2)
@@ -206,6 +210,70 @@ class WeetbixApi(recipe_api.RecipeApi):
         json_format.MessageToDict(request))
     response = json_format.ParseDict(response_json, QueryVariantsResponse())
     return response.variants, response.next_page_token
+
+  def lookup_bug(self, bug_id, system='monorail'):
+    """Looks up the rule associated with a given bug.
+
+    This is a wrapper of `luci.analysis.v1.Rules` `LookupBug` API.
+
+    Args:
+      bug_id (str): Bug Id is the bug tracking system-specific identity of the
+        bug. For monorail, the scheme is {project}/{numeric_id}, for buganizer
+        the scheme is {numeric_id}.
+      system (str): System is the bug tracking system of the bug. This is either
+        "monorail" or "buganizer". Defaults to monorail.
+
+    Returns:
+      list of rules (str), Format: projects/{project}/rules/{rule_id}
+    """
+    response_json = self._run(
+        'Lookup Bug %s:%s' % (system, bug_id),
+        'luci.analysis.v1.Rules.LookupBug', {
+            'system': system,
+            'id': bug_id,
+        },
+        step_test_data=lambda: self.m.json.test_api.output_stream({}))
+    return response_json.get('rules', [])
+
+  def rule_name_to_cluster_name(self, rule):
+    """Convert the resource name for a rule to its corresponding cluster.
+    Args:
+      rule (str): Format: projects/{project}/rules/{rule_id}
+    Returns:
+      cluster (str): Format:
+        projects/{project}/clusters/{cluster_algorithm}/{cluster_id}.
+    """
+    return re.sub(r'projects/(\w+)/rules/(\w+)',
+                  'projects/\\1/clusters/rules/\\2', rule)
+
+  def query_cluster_failures(self, cluster_name):
+    """Queries examples of failures in the given cluster.
+
+    This is a wrapper of `luci.analysis.v1.Clusters` `QueryClusterFailures` API.
+
+    Args:
+      cluster_name (str): The resource name of the cluster to retrieve.
+        Format: projects/{project}/clusters/{cluster_algorithm}/{cluster_id}
+
+    Returns:
+      list of DistinctClusterFailure
+
+      For value format, see [`DistinctClusterFailure` message]
+      (https://bit.ly/DistinctClusterFailure)
+    """
+    assert not cluster_name.endswith('/failures'), cluster_name
+    cluster_failure_name = cluster_name + '/failures'
+
+    response_json = self._run(
+        'Query Cluster Failure %s' % cluster_name,
+        'luci.analysis.v1.Clusters.QueryClusterFailures', {
+            'parent': cluster_failure_name,
+        },
+        step_test_data=(
+            lambda: self.m.json.test_api.output_stream({'failures': []})))
+    response = json_format.ParseDict(response_json,
+                                     QueryClusterFailuresResponse())
+    return response.failures
 
 
 @attrs()
