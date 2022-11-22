@@ -37,7 +37,8 @@ def RunSteps(api):
   upload_results = api.archive.generic_archive(
       build_dir=build_dir,
       update_properties=update_properties,
-      custom_vars=custom_vars)
+      custom_vars=custom_vars,
+      report_artifacts=True)
   api.archive.generic_archive_after_tests(
       build_dir=build_dir, upload_results=upload_results, test_success=True)
 

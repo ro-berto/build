@@ -795,7 +795,7 @@ class ArchiveApi(recipe_api.RecipeApi):
       for cipd_archive_data in archive_config.cipd_archive_datas:
         upload_results['cipd'].update(
             self.cipd_archive(build_dir, update_properties, custom_vars,
-                              cipd_archive_data))
+                              cipd_archive_data, report_artifacts))
     return upload_results
 
   def generic_archive_after_tests(self,
@@ -1167,7 +1167,7 @@ class ArchiveApi(recipe_api.RecipeApi):
     return uploads
 
   def cipd_archive(self, build_dir, update_properties, custom_vars,
-                   cipd_archive_data):
+                   cipd_archive_data, report_artifacts=False):
     """Archives packages to CIPD.
 
     Args:
@@ -1216,6 +1216,12 @@ class ArchiveApi(recipe_api.RecipeApi):
           pkg_vars=pkg_vars,
           compression_level=compression_level,
           verification_timeout=verification_timeout)
+      # Report artifact if provenance is desired.
+      if report_artifacts:
+        # CIPD instance id is encoded hash of the artifact, hash will be
+        # extracted by the server if not reported.
+        self.m.bcid_reporter.report_cipd(
+            "", create_results[0], create_results[1])
       if cipd_archive_data.only_set_refs_on_tests_success:
         # Store info needed for setting refs through calling
         # generic_archive_after_tests.
