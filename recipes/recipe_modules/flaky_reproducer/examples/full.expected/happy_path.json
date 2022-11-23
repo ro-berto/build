@@ -821,7 +821,10 @@
   },
   {
     "cmd": [],
-    "name": "collect_strategy_results"
+    "name": "collect_strategy_results",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@1 strategies reproduced<br/><br/>* [The failure could be reproduced (90.0%) with command by repeat strategy:](https://example.swarmingserver.appspot.com/task?id=0)@@@"
+    ]
   },
   {
     "cmd": [],
@@ -1888,7 +1891,7 @@
     "cmd": [],
     "name": "summarize_results",
     "~followup_annotations": [
-      "@@@STEP_SUMMARY_TEXT@For MockUnitTests.FailTest in Win11 Tests x64\nhttps://example.swarmingserver.appspot.com/task?id=54321fffffabc123\n\nValue of: false\n  Actual: false\nExpected: true\n\n\nThe failure could be reproduced (90.0%) with command by repeat strategy:\n\nvpython3 ../../testing/test_env.py ./base_unittests.exe --test-launcher-bot-mode --asan=0 --lsan=0 --msan=0 --tsan=0 --cfi-diag=0 --test-launcher-retry-limit=0 --gtest_filter=MockUnitTests.CrashTest:MockUnitTests.PassTest --gtest_repeat=1 --test-launcher-batch-limit=0 --test-launcher-jobs=5\n\nIt's verified with following strategies:  \n[repeat strategy](https://example.swarmingserver.appspot.com/task?id=0) reproduced 1 times (90.0%)  \n\nThe failure could be reproduced on following builders:\nLinux Tests (failing sample)   [reproduced](https://example.swarmingserver.appspot.com/task?id=2) 2/2  \nWin10 Tests x64                [not reproduced](https://example.swarmingserver.appspot.com/task?id=None), with failure: 'NoneType' object has no attribute 'get'  @@@",
+      "@@@STEP_SUMMARY_TEXT@The failure could be reproduced (90.0%) with command by repeat strategy:  \nFor MockUnitTests.FailTest in Win11 Tests x64\nhttps://example.swarmingserver.appspot.com/task?id=54321fffffabc123\n\nValue of: false\n  Actual: false\nExpected: true\n\n\nThe failure could be reproduced (90.0%) with command by repeat strategy:\n\nvpython3 ../../testing/test_env.py ./base_unittests.exe --test-launcher-bot-mode --asan=0 --lsan=0 --msan=0 --tsan=0 --cfi-diag=0 --test-launcher-retry-limit=0 --gtest_filter=MockUnitTests.CrashTest:MockUnitTests.PassTest --gtest_repeat=1 --test-launcher-batch-limit=0 --test-launcher-jobs=5\n\nIt's verified with following strategies:  \n[repeat strategy](https://example.swarmingserver.appspot.com/task?id=0) reproduced 1 times (90.0%)  \n\nThe failure could be reproduced on following builders:\nLinux Tests (failing sample)   [reproduced](https://example.swarmingserver.appspot.com/task?id=2) 2/2  \nWin10 Tests x64                [not reproduced](https://example.swarmingserver.appspot.com/task?id=None), with failure: 'NoneType' object has no attribute 'get'  @@@",
       "@@@STEP_LOG_LINE@reproducing_step.json@{@@@",
       "@@@STEP_LOG_LINE@reproducing_step.json@  \"duration\": 123, @@@",
       "@@@STEP_LOG_LINE@reproducing_step.json@  \"reproduced_cnt\": 1, @@@",

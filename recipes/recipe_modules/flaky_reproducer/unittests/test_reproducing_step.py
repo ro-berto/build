@@ -45,7 +45,8 @@ class ReproducingStepTest(unittest.TestCase):
     self.maxDiff = None
     step = self.test_from_jsonish()
     step.reproducing_rate = 0
-    self.assertEqual(step.readable_info(), 'This failure was NOT reproduced.')
+    self.assertEqual(step.readable_info(),
+                     'This failure was NOT reproduced by repeat strategy.')
 
   def test_better_than(self):
     step = self.test_from_jsonish()

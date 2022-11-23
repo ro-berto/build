@@ -14,5 +14,6 @@ DEPS = [
     'recipe_engine/resultdb',
     'recipe_engine/step',
     'recipe_engine/swarming',
+    'recipe_engine/url',
     'weetbix',
 ]

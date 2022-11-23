@@ -15,7 +15,7 @@ DEPS = [
 
 PROPERTIES = {
     'task_id': Property(default=None, kind=str),
-    'build_id': Property(default=None, kind=str),
+    'build_id': Property(default=None, kind=int),
     'test_name': Property(default=None, kind=str),
     'test_id': Property(default=None, kind=str),
 }
@@ -89,7 +89,7 @@ def GenTests(api):
   yield api.test(
       'build_id_test_name',
       api.properties(
-          build_id="build-id",
+          build_id=9999999999999999999,
           test_name="MockUnitTests.FailTest",
       ),
       api.resultdb.query_test_results(query_test_results),
@@ -101,7 +101,7 @@ def GenTests(api):
   yield api.test(
       'cannot_find_test_result',
       api.properties(
-          build_id="build-id",
+          build_id=9999999999999999999,
           test_id="not-exists",
       ),
       api.resultdb.query_test_results(query_test_results),
@@ -136,7 +136,7 @@ def GenTests(api):
   yield api.test(
       'not_supported_realm',
       api.properties(
-          build_id="build-id",
+          build_id=9999999999999999999,
           test_name="MockUnitTests.FailTest",
       ),
       api.step_data(
@@ -150,7 +150,7 @@ def GenTests(api):
   yield api.test(
       'should_raise_error_for_other_failures',
       api.properties(
-          build_id="build-id",
+          build_id=9999999999999999999,
           test_name="MockUnitTests.FailTest",
       ),
       api.step_data(

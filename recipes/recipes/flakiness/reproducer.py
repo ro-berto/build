@@ -34,7 +34,7 @@ def GenTests(api):
   yield api.test(
       'cannot_retrieve_invocation',
       api.properties(
-          build_id="build-id",
+          build_id=2**63 - 1,
           test_name="MockUnitTests.FailTest",
           config="manual",
       ),

@@ -20,6 +20,7 @@
     "stdin": "{\"name\": \"projects/chromium/issues/123\"}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@Reproducing step already posted to monorail issue.@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"labels\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",

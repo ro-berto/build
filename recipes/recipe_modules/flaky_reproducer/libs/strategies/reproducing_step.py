@@ -64,15 +64,13 @@ class ReproducingStep:
   def readable_info(self):
     """Returns Human readable instruction of the reproducing steps."""
     if not self.reproducing_rate:
-      return 'This failure was NOT reproduced.'
+      return 'This failure was NOT reproduced by {0} strategy.'.format(
+          self.strategy)
     message = []
     message.append(
         'The failure could be reproduced ({0:.1f}%) with command'.format(
             self.reproducing_rate * 100))
-    if self.strategy:
-      message.append(' by {0} strategy'.format(self.strategy))
-    message.append(':')
-    message.append('\n\n')
+    message.append(' by {0} strategy:\n\n'.format(self.strategy))
     message.append(self.test_binary.readable_command())
     return ''.join(message)
 

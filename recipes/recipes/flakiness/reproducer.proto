@@ -12,7 +12,7 @@ message InputProperties {
   string task_id = 1;
 
   // Buildbucket build ID of the flaky build sample.
-  string build_id = 2;
+  int64 build_id = 2;
 
   // The test name of the flaky test case.
   string test_name = 3;

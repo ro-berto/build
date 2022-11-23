@@ -186,6 +186,7 @@ class FlakyReproducer(recipe_api.RecipeApi):
   def collect_strategy_results(self, strategy_results):
     reproducing_steps = []
     has_error = []
+    step_summary = []
     for task_result in strategy_results:
       try:
         with self.m.step.nest(task_result.name):
@@ -194,12 +195,19 @@ class FlakyReproducer(recipe_api.RecipeApi):
           if step is not None:
             step.debug_info['task_ui_link'] = self._swarming_task_url(
                 task_result.id)
+            step_summary.append("* [{0}]({1})".format(
+                step.readable_info().strip().split('\n')[0],
+                step.debug_info['task_ui_link']))
             reproducing_steps.append(step)
       except Exception:
         has_error.append(task_result.name)
     if has_error:
       raise self.m.step.StepFailure('Error while running:\n* {0}'.format(
           '\n* '.join(has_error)))
+
+    presentation = self.m.step.active_result.presentation
+    presentation.step_text = (('{0} strategies reproduced\n\n'.format(
+        len([x for x in reproducing_steps if x]))) + '\n'.join(step_summary))
     return reproducing_steps
 
   def collect_strategy_result(self, task_result):
@@ -356,11 +364,15 @@ class FlakyReproducer(recipe_api.RecipeApi):
       summary.append(failing_sample.primary_error_message)
 
     # reproduce info
+    summary_header = ''
     summary.append('\n')
     if reproducing_step:
-      summary.append(reproducing_step.readable_info())
+      readable_info = reproducing_step.readable_info()
+      summary_header = readable_info.strip().split('\n')[0]
+      summary.append(readable_info)
     else:
-      summary.append("The failure could NOT be reproduced.")
+      summary_header = 'The failure could NOT be reproduced.'
+      summary.append(summary_header)
 
     # strategies info
     if all_reproducing_steps:
@@ -411,7 +423,9 @@ class FlakyReproducer(recipe_api.RecipeApi):
       summary.append('\n'.join(builder_summary))
 
     presentation = self.m.step.active_result.presentation
-    presentation.step_summary_text = '\n'.join(summary)
+    # Milo build UI will pick the first line as step description.
+    presentation.step_summary_text = (
+        summary_header + '  \n' + '\n'.join(summary))
     if reproducing_step:
       presentation.logs['reproducing_step.json'] = self.m.json.dumps(
           reproducing_step.to_jsonish(), indent=2)
@@ -434,8 +448,10 @@ class FlakyReproducer(recipe_api.RecipeApi):
     issue = monorail_api.get_issue(issue_name)
     for label in issue.get('labels', []):
       if label.get('label').lower() == self.MONORAIL_LABEL.lower():
-        raise self.m.step.StepWarning(
+        presentation = self.m.step.active_result.presentation
+        presentation.step_text = (
             'Reproducing step already posted to monorail issue.')
+        raise self.m.step.StepWarning(presentation.step_text)
 
   @nest_step
   def post_summary_to_monorail(self, monorail_issue, comment_message):
@@ -506,6 +522,9 @@ class FlakyReproducer(recipe_api.RecipeApi):
         best_test_id = variant_test_id
         best_build_id = first_build_id
 
+    presentation = self.m.step.active_result.presentation
+    presentation.step_text = "http://go/bbid/{0}/test-results?q={1}".format(
+        best_build_id, self.m.url.quote(best_test_id))
     return (best_build_id, best_test_id)
 
   def query_resultdb_for_task_id_and_test_name(self,
@@ -592,7 +611,7 @@ class FlakyReproducer(recipe_api.RecipeApi):
 
     Args:
       task_id (str): Swarming task ID of the flaky task sample.
-      build_id (str): Buildbucket build ID of the flaky build sample.
+      build_id (int): Buildbucket build ID of the flaky build sample.
       test_name (str): The test name of the flaky test case.
       test_id (str): The test ID of the flaky test case from ResultDB.
 
@@ -601,6 +620,16 @@ class FlakyReproducer(recipe_api.RecipeApi):
       monorail_issue (str): Add a comment to the monorail_issue id if reproduced
         and the step verified.
     """
+    if task_id and task_id.endswith('0'):
+      # The task_id endswith '0' is the summary instead of the actual runs. And
+      # the invocation we rely on is depends on TaskResult.run_id which ending
+      # '1', '2' or more.
+      # Also because swarming doesn't support internal retry anymore so task id
+      # with '0' suffix always points to the run id with '1' now. That it's safe
+      # for us to just covert the task_id to '1'.
+      # Also see https://source.chromium.org/chromium/infra/infra/+/main:luci/appengine/swarming/proto/api/swarming.proto;l=844;drc=19f5f7481f1099270ed649691d5912c890f0b312
+      task_id = task_id[:-1] + '1'
+
     if monorail_issue:
       try:
         self.check_monorail_comment_posted(monorail_issue)

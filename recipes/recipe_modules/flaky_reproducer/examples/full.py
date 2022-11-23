@@ -18,7 +18,7 @@ DEPS = [
 
 PROPERTIES = {
     'task_id': Property(default=None, kind=str),
-    'build_id': Property(default=None, kind=str),
+    'build_id': Property(default=None, kind=int),
     'test_name': Property(default=None, kind=str),
     'test_id': Property(default=None, kind=str),
     'config': Property(default=None, kind=str),
@@ -379,7 +379,7 @@ def GenTests(api):
   yield api.test(
       'strategy_failure',
       api.properties(
-          task_id='54321fffffabc123',
+          task_id='54321fffffabc120',
           test_name='MockUnitTests.FailTest',
           config='manual'),
       api.step_data(
@@ -389,7 +389,7 @@ def GenTests(api):
                   api.flaky_reproducer.get_test_data('gtest_good_output.json'),
           })),
       api.step_data(
-          'get_test_binary from 54321fffffabc123',
+          'get_test_binary from 54321fffffabc121',
           api.json.output_stream(
               api.json.loads(
                   api.flaky_reproducer.get_test_data(
