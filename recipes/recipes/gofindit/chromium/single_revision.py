@@ -9,6 +9,7 @@ from recipe_engine.post_process import (DoesNotRun, DropExpectation, MustRun,
                                         StepCommandContains, StatusFailure,
                                         StatusSuccess)
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
+from PB.recipe_engine import result as result_pb
 
 DEPS = [
     'chromium',
@@ -58,6 +59,10 @@ def RunSteps(api, properties):
         tests=[],
     )
     compile_status = compile_result.status
+    markdown = "LUCI Bisection's compile result from the input commit was {0}.".format(
+        api.gofindit.rerun_result(compile_status))
+    return result_pb.RawResult(
+        status=compile_result.status, summary_markdown=(markdown))
   finally:
     api.gofindit.send_result_to_luci_bisection("send_result_to_luci_bisection",
                                                properties.analysis_id,

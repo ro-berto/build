@@ -27,7 +27,7 @@ class LuciBisectionApi(recipe_api.RecipeApi):
             "ref": self.m.buildbucket.gitiles_commit.ref,
         },
         "rerunResult": {
-            "rerunStatus": self._rerun_result(result)
+            "rerunStatus": self.rerun_result(result)
         },
     }
     self._call_prpc(step_name, host, method, request_input)
@@ -49,7 +49,7 @@ class LuciBisectionApi(recipe_api.RecipeApi):
         request_input, indent=2)
     return result.stdout
 
-  def _rerun_result(self, result):
+  def rerun_result(self, result):
     if result == common_pb.SUCCESS:
       return "PASSED"
     if result == common_pb.FAILURE:
