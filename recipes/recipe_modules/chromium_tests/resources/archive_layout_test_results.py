@@ -106,6 +106,40 @@ def archive_layout(args):
   cache_control = "public, max-age=31556926"
 
   start = time.time()
+  file_to_archive = 'results.html'
+  print(f"Archive {file_to_archive}...")
+  rc = bot_utils.GSUtilCopy(
+      os.path.join(args.results_dir, file_to_archive),
+      '/'.join([args.gs_bucket, file_to_archive]),
+      mimetype='text/html',
+      gs_acl=gs_acl,
+      cache_control=cache_control,
+      add_quiet_flag=True,
+      compress=False)
+  print("took %.1f seconds" % (time.time() - start))
+  sys.stdout.flush()
+  if rc:
+    print("cp failed: %d" % rc)
+    return rc
+
+  start = time.time()
+  file_to_archive = 'full_results_jsonp.js'
+  print(f"Archive {file_to_archive}...")
+  rc = bot_utils.GSUtilCopy(
+      os.path.join(args.results_dir, file_to_archive),
+      '/'.join([gs_build_dir, file_to_archive]),
+      mimetype='text/javascript',
+      gs_acl=gs_acl,
+      cache_control=cache_control,
+      add_quiet_flag=True,
+      compress=True)
+  print("took %.1f seconds" % (time.time() - start))
+  sys.stdout.flush()
+  if rc:
+    print("cp failed: %d" % rc)
+    return rc
+
+  start = time.time()
   rc = bot_utils.GSUtilCopyFile(
       zip_file,
       gs_build_dir,
