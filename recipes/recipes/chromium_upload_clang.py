@@ -41,8 +41,7 @@ BUILDERS = freeze({
                         # Required to build the builtins.a for Fuchsia.
                         'fuchsia_no_hooks',
 
-                        # Required to fetch Rust toolchain deps, including the
-                        # Rust sources themselves.
+                        # Fetch Rust compiler sources to build rustc.
                         'checkout_rust_toolchain_deps',
 
                         # 'checkout_bazel' is required by tools/rust/build_crubit.py
@@ -88,7 +87,16 @@ BUILDERS = freeze({
                         'BUILD_CONFIG': 'Release',
                         'TARGET_PLATFORM': 'win',
                         'TARGET_BITS': 32,
-                    },),
+                    },
+                    gclient_apply_config=[
+                        # Fetch Rust compiler sources to build rustc.
+                        'checkout_rust_toolchain_deps',
+
+                        # 'checkout_bazel' is required by tools/rust/build_crubit.py
+                        # (see also https://crbug.com/1329611).
+                        'checkout_bazel'
+                    ],
+                ),
         },
     },
 })
