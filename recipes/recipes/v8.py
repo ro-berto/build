@@ -483,7 +483,9 @@ def GenTests(api):
         'gcmole',
         parent_buildername='V8 Foobar - builder',
         parent_bot_config=linux_bot_config,
-        parent_test_spec='{"tests": [{"name": "gcmole"}]}',
+        parent_test_spec=json.dumps({'tests': [
+            {'name': 'gcmole'},
+            {'name': 'gcmole_v2', 'variant': 'arm64'}]}, indent=2),
     )
   )
 
