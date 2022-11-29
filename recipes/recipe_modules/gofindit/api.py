@@ -51,9 +51,9 @@ class LuciBisectionApi(recipe_api.RecipeApi):
 
   def rerun_result(self, result):
     if result == common_pb.SUCCESS:
-      return "PASSED"
+      return "RERUN_STATUS_PASSED"
     if result == common_pb.FAILURE:
-      return "FAILED"
+      return "RERUN_STATUS_FAILED"
     if result == common_pb.INFRA_FAILURE:
-      return "INFRA_FAILED"
+      return "RERUN_STATUS_INFRA_FAILED"
     return "RERUN_STATUS_UNSPECIFIED"
