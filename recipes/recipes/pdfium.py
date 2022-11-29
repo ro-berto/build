@@ -37,7 +37,6 @@ PROPERTIES = {
     'rel': Property(default=False, kind=bool),
     'run_skia_gold': Property(default=True, kind=bool),
     'selected_tests_only': Property(default=False, kind=bool),
-    'skia_paths': Property(default=False, kind=bool),
     'skia': Property(default=False, kind=bool),
     'skip_test': Property(default=False, kind=bool),
     'target_cpu': Property(default=None, kind=str),
@@ -81,14 +80,11 @@ def _checkout_step(api, target_os):
     return update_step.presentation.properties['got_revision']
 
 
-def _generate_out_path(memory_tool, skia, skia_paths, xfa, v8, clang, msvc, rel,
-                       component):
+def _generate_out_path(memory_tool, skia, xfa, v8, clang, msvc, rel, component):
   out_dir = 'release' if rel else 'debug'
 
   if skia:
     out_dir += '_skia'
-  if skia_paths:
-    out_dir += '_skiapaths'
   if xfa:
     out_dir += '_xfa'
   if v8:
@@ -114,8 +110,8 @@ def _generate_out_path(memory_tool, skia, skia_paths, xfa, v8, clang, msvc, rel,
 
 # _gn_gen_builds() calls 'gn gen' and returns a dictionary of
 # the used build configuration to be used by Gold.
-def _gn_gen_builds(api, memory_tool, skia, skia_paths, xfa, v8, target_cpu,
-                   clang, msvc, rel, component, target_os, out_dir):
+def _gn_gen_builds(api, memory_tool, skia, xfa, v8, target_cpu, clang, msvc,
+                   rel, component, target_os, out_dir):
   enable_goma = _is_goma_enabled(msvc)
   if enable_goma:
     api.goma.ensure_goma()
@@ -131,7 +127,6 @@ def _gn_gen_builds(api, memory_tool, skia, skia_paths, xfa, v8, target_cpu,
       'pdf_enable_v8=%s' % gn_bool[v8],
       'pdf_enable_xfa=%s' % gn_bool[xfa],
       'pdf_use_skia=%s' % gn_bool[skia],
-      'pdf_use_skia_paths=%s' % gn_bool[skia_paths],
       'pdf_is_standalone=true',
   ]
   if enable_goma:
@@ -625,13 +620,13 @@ def _gen_ci_build(api, builder):
   )
 
 
-def RunSteps(api, memory_tool, skia, skia_paths, xfa, v8, target_cpu, clang,
-             msvc, rel, run_skia_gold, component, skip_test, target_os,
+def RunSteps(api, memory_tool, skia, xfa, v8, target_cpu, clang, msvc, rel,
+             run_skia_gold, component, skip_test, target_os,
              selected_tests_only):
   revision = _checkout_step(api, target_os)
 
-  out_dir = _generate_out_path(memory_tool, skia, skia_paths, xfa, v8, clang,
-                               msvc, rel, component)
+  out_dir = _generate_out_path(memory_tool, skia, xfa, v8, clang, msvc, rel,
+                               component)
 
   with api.osx_sdk('mac'):
     # buildbot sets 'clobber' to the empty string which evaluates to false if
@@ -639,9 +634,9 @@ def RunSteps(api, memory_tool, skia, skia_paths, xfa, v8, target_cpu, clang,
     if 'clobber' in api.properties:
       api.file.rmtree('clobber', api.path['checkout'].join('out', out_dir))
 
-    build_config = _gn_gen_builds(api, memory_tool, skia, skia_paths, xfa, v8,
-                                  target_cpu, clang, msvc, rel, component,
-                                  target_os, out_dir)
+    build_config = _gn_gen_builds(api, memory_tool, skia, xfa, v8, target_cpu,
+                                  clang, msvc, rel, component, target_os,
+                                  out_dir)
     if not run_skia_gold:
       build_config = {}
     _build_steps(api, clang, msvc, out_dir)
@@ -716,18 +711,6 @@ def GenTests(api):
   )
 
   yield api.test(
-      'win_skia_paths',
-      api.platform('win', 64),
-      api.builder_group.for_current('client.pdfium'),
-      api.properties(
-          skia_paths=True,
-          xfa=True,
-          selected_tests_only=True,
-          bot_id='test_bot'),
-      _gen_ci_build(api, 'windows_skia_paths'),
-  )
-
-  yield api.test(
       'win_xfa_32',
       api.platform('win', 64),
       api.builder_group.for_current('client.pdfium'),
@@ -785,18 +768,6 @@ def GenTests(api):
   )
 
   yield api.test(
-      'linux_skia_paths',
-      api.platform('linux', 64),
-      api.builder_group.for_current('client.pdfium'),
-      api.properties(
-          skia_paths=True,
-          xfa=True,
-          selected_tests_only=True,
-          bot_id='test_bot'),
-      _gen_ci_build(api, 'linux_skia_paths'),
-  )
-
-  yield api.test(
       'linux_xfa',
       api.platform('linux', 64),
       api.builder_group.for_current('client.pdfium'),
@@ -827,18 +798,6 @@ def GenTests(api):
       api.properties(
           skia=True, xfa=True, selected_tests_only=True, bot_id='test_bot'),
       _gen_ci_build(api, 'mac_skia'),
-  )
-
-  yield api.test(
-      'mac_skia_paths',
-      api.platform('mac', 64),
-      api.builder_group.for_current('client.pdfium'),
-      api.properties(
-          skia_paths=True,
-          xfa=True,
-          selected_tests_only=True,
-          bot_id='test_bot'),
-      _gen_ci_build(api, 'mac_skia_paths'),
   )
 
   yield api.test(

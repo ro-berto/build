@@ -239,7 +239,7 @@
       "--root=[CACHE]/builder/pdfium",
       "gen",
       "//out/release_v8_ubsan",
-      "--args=is_debug=false is_component_build=false pdf_enable_v8=true pdf_enable_xfa=false pdf_use_skia=false pdf_use_skia_paths=false pdf_is_standalone=true use_goma=true goma_dir=\"[CACHE]/goma/client\" is_ubsan_security=true is_ubsan_no_recover=true"
+      "--args=is_debug=false is_component_build=false pdf_enable_v8=true pdf_enable_xfa=false pdf_use_skia=false pdf_is_standalone=true use_goma=true goma_dir=\"[CACHE]/goma/client\" is_ubsan_security=true is_ubsan_no_recover=true"
     ],
     "cwd": "[CACHE]/builder/pdfium",
     "luci_context": {
@@ -704,7 +704,7 @@
       "--buildbucket-id",
       "8945511751514863184",
       "--gold_key",
-      "debug false is_standalone true javascript_runtime enabled os linux skia false skia_paths false ubsan_no_recover true ubsan_security true v8 true xfa false xfa_runtime disabled"
+      "debug false is_standalone true javascript_runtime enabled os linux skia false ubsan_no_recover true ubsan_security true v8 true xfa false xfa_runtime disabled"
     ],
     "cwd": "[CACHE]/builder/pdfium",
     "env": {
@@ -750,7 +750,7 @@
       "--buildbucket-id",
       "8945511751514863184",
       "--gold_key",
-      "debug false is_standalone true javascript_runtime disabled os linux skia false skia_paths false ubsan_no_recover true ubsan_security true v8 true xfa false xfa_runtime disabled",
+      "debug false is_standalone true javascript_runtime disabled os linux skia false ubsan_no_recover true ubsan_security true v8 true xfa false xfa_runtime disabled",
       "--disable-javascript"
     ],
     "cwd": "[CACHE]/builder/pdfium",
@@ -797,7 +797,7 @@
       "--buildbucket-id",
       "8945511751514863184",
       "--gold_key",
-      "debug false is_standalone true javascript_runtime enabled os linux skia false skia_paths false ubsan_no_recover true ubsan_security true v8 true xfa false xfa_runtime disabled"
+      "debug false is_standalone true javascript_runtime enabled os linux skia false ubsan_no_recover true ubsan_security true v8 true xfa false xfa_runtime disabled"
     ],
     "cwd": "[CACHE]/builder/pdfium",
     "env": {
@@ -843,7 +843,7 @@
       "--buildbucket-id",
       "8945511751514863184",
       "--gold_key",
-      "debug false is_standalone true javascript_runtime enabled os linux skia false skia_paths false ubsan_no_recover true ubsan_security true v8 true xfa false xfa_runtime disabled",
+      "debug false is_standalone true javascript_runtime enabled os linux skia false ubsan_no_recover true ubsan_security true v8 true xfa false xfa_runtime disabled",
       "--render-oneshot"
     ],
     "cwd": "[CACHE]/builder/pdfium",
@@ -890,7 +890,7 @@
       "--buildbucket-id",
       "8945511751514863184",
       "--gold_key",
-      "debug false is_standalone true javascript_runtime disabled os linux skia false skia_paths false ubsan_no_recover true ubsan_security true v8 true xfa false xfa_runtime disabled",
+      "debug false is_standalone true javascript_runtime disabled os linux skia false ubsan_no_recover true ubsan_security true v8 true xfa false xfa_runtime disabled",
       "--disable-javascript"
     ],
     "cwd": "[CACHE]/builder/pdfium",
@@ -937,7 +937,7 @@
       "--buildbucket-id",
       "8945511751514863184",
       "--gold_key",
-      "debug false is_standalone true javascript_runtime enabled os linux skia false skia_paths false ubsan_no_recover true ubsan_security true v8 true xfa false xfa_runtime disabled"
+      "debug false is_standalone true javascript_runtime enabled os linux skia false ubsan_no_recover true ubsan_security true v8 true xfa false xfa_runtime disabled"
     ],
     "cwd": "[CACHE]/builder/pdfium",
     "env": {
@@ -983,7 +983,7 @@
       "--buildbucket-id",
       "8945511751514863184",
       "--gold_key",
-      "debug false is_standalone true javascript_runtime enabled os linux skia false skia_paths false ubsan_no_recover true ubsan_security true v8 true xfa false xfa_runtime disabled",
+      "debug false is_standalone true javascript_runtime enabled os linux skia false ubsan_no_recover true ubsan_security true v8 true xfa false xfa_runtime disabled",
       "--render-oneshot"
     ],
     "cwd": "[CACHE]/builder/pdfium",
@@ -1030,7 +1030,7 @@
       "--buildbucket-id",
       "8945511751514863184",
       "--gold_key",
-      "debug false is_standalone true javascript_runtime disabled os linux skia false skia_paths false ubsan_no_recover true ubsan_security true v8 true xfa false xfa_runtime disabled",
+      "debug false is_standalone true javascript_runtime disabled os linux skia false ubsan_no_recover true ubsan_security true v8 true xfa false xfa_runtime disabled",
       "--disable-javascript"
     ],
     "cwd": "[CACHE]/builder/pdfium",
