@@ -164,6 +164,14 @@ _CLIENT_WEBRTC_SPEC = {
                 'TARGET_ARCH': 'intel',
                 'TARGET_BITS': 64,
             }),
+    'Fuchsia Builder':
+        WebRTCBuilderSpec.create(
+            chromium_config='webrtc_default',
+            gclient_config='webrtc_fuchsia',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            }),
     'Fuchsia Release':
         WebRTCBuilderSpec.create(
             chromium_config='webrtc_default',
@@ -641,6 +649,18 @@ _CLIENT_WEBRTC_PERF_SPECS = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_PLATFORM': 'android',
                 'TARGET_ARCH': 'arm',
+                'TARGET_BITS': 64,
+            }),
+    'Perf Fuchsia':
+        WebRTCBuilderSpec.create(
+            perf_id='fuchsia',
+            chromium_config='webrtc_default',
+            gclient_config='webrtc_fuchsia',
+            execution_mode=builder_spec.TEST,
+            parent_builder_group='client.webrtc',
+            parent_buildername='Fuchsia Builder',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             }),
     'Perf Linux Bionic':
