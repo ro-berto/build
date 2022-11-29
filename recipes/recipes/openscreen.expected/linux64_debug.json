@@ -199,7 +199,7 @@
   },
   {
     "cmd": [
-      "RECIPE_REPO[depot_tools]/ninja",
+      "[START_DIR]/openscreen/third_party/ninja",
       "-C",
       "[START_DIR]/openscreen/out/Default",
       "gn_all",
