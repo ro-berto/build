@@ -61,7 +61,8 @@ def RunSteps(api, target_cpu):
         ])
 
     # 2-2. ninja
-    api.step('build', [api.depot_tools.ninja_path, '-C', build_dir])
+    ninja_path = api.path['checkout'].join('third_party', 'ninja', 'ninja')
+    api.step('build', [ninja_path, '-C', build_dir])
 
     # 3. Run test
     # Not on arm because we're cross-building and the intel builder can't run
