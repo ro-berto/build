@@ -170,7 +170,7 @@
   },
   {
     "cmd": [
-      "RECIPE_REPO[depot_tools]\\ninja.exe",
+      "[CACHE]\\builder\\pdfium\\third_party\\ninja\\ninja",
       "-C",
       "[CACHE]\\builder\\pdfium\\out\\debug_xfa_v8_msvc",
       "pdfium_all"

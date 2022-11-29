@@ -354,7 +354,7 @@
   },
   {
     "cmd": [
-      "RECIPE_REPO[depot_tools]\\ninja.exe",
+      "[CACHE]\\builder\\pdfium\\third_party\\ninja\\ninja",
       "-C",
       "[CACHE]\\builder\\pdfium\\out\\debug",
       "-j",
@@ -529,7 +529,7 @@
       "--ninja-log-outdir",
       "[CACHE]\\builder\\pdfium\\out\\debug",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]\\\\ninja.exe\", \"-C\", \"[CACHE]\\\\builder\\\\pdfium\\\\out\\\\debug\", \"-j\", 80, \"pdfium_all\"]",
+      "[\"[CACHE]\\\\builder\\\\pdfium\\\\third_party\\\\ninja\\\\ninja\", \"-C\", \"[CACHE]\\\\builder\\\\pdfium\\\\out\\\\debug\", \"-j\", 80, \"pdfium_all\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",

@@ -189,7 +189,8 @@ def _gn_gen_builds(api, memory_tool, skia, skia_paths, xfa, v8, target_cpu,
 def _build_steps(api, clang, msvc, out_dir):
   enable_goma = _is_goma_enabled(msvc)
   debug_path = api.path['checkout'].join('out', out_dir)
-  ninja_cmd = [api.depot_tools.ninja_path, '-C', debug_path]
+  ninja_path = api.path['checkout'].join('third_party', 'ninja', 'ninja')
+  ninja_cmd = [ninja_path, '-C', debug_path]
   if enable_goma:
     ninja_cmd.extend(['-j', api.goma.recommended_goma_jobs])
   ninja_cmd.append('pdfium_all')

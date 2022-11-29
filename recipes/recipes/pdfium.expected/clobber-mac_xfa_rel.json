@@ -467,7 +467,7 @@
   },
   {
     "cmd": [
-      "RECIPE_REPO[depot_tools]/ninja",
+      "[CACHE]/builder/pdfium/third_party/ninja/ninja",
       "-C",
       "[CACHE]/builder/pdfium/out/release_xfa_v8",
       "-j",
@@ -639,7 +639,7 @@
       "--ninja-log-outdir",
       "[CACHE]/builder/pdfium/out/release_xfa_v8",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-C\", \"[CACHE]/builder/pdfium/out/release_xfa_v8\", \"-j\", 80, \"pdfium_all\"]",
+      "[\"[CACHE]/builder/pdfium/third_party/ninja/ninja\", \"-C\", \"[CACHE]/builder/pdfium/out/release_xfa_v8\", \"-j\", 80, \"pdfium_all\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
