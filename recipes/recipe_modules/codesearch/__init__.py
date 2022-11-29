@@ -4,7 +4,6 @@ DEPS = [
   'depot_tools/git',
   'depot_tools/gsutil',
   'depot_tools/tryserver',
-  'goma',
   'recipe_engine/buildbucket',
   'recipe_engine/commit_position',
   'recipe_engine/cipd',

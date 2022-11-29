@@ -19,7 +19,6 @@ DEPS = [
   'depot_tools/git',
   'depot_tools/gsutil',
   'depot_tools/tryserver',
-  'goma',
   'recipe_engine/buildbucket',
   'recipe_engine/context',
   'recipe_engine/file',
