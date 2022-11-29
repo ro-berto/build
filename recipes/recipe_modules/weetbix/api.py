@@ -80,7 +80,8 @@ class WeetbixApi(recipe_api.RecipeApi):
         return {}
 
       failure_analysis_protos = [
-          json_format.ParseDict(d, TestVariantFailureRateAnalysis())
+          json_format.ParseDict(
+              d, TestVariantFailureRateAnalysis(), ignore_unknown_fields=True)
           for d in failure_analysis_dicts
       ]
 
@@ -160,7 +161,8 @@ class WeetbixApi(recipe_api.RecipeApi):
     response_json = self._run('Test history query rpc call for %s' % test_id,
                               'luci.analysis.v1.TestHistory.Query',
                               json_format.MessageToDict(request))
-    response = json_format.ParseDict(response_json, QueryTestHistoryResponse())
+    response = json_format.ParseDict(
+        response_json, QueryTestHistoryResponse(), ignore_unknown_fields=True)
     return response.verdicts, response.next_page_token
 
   def query_variants(self,
@@ -208,7 +210,8 @@ class WeetbixApi(recipe_api.RecipeApi):
         'Test history query_variants rpc call for %s' % test_id,
         'luci.analysis.v1.TestHistory.QueryVariants',
         json_format.MessageToDict(request))
-    response = json_format.ParseDict(response_json, QueryVariantsResponse())
+    response = json_format.ParseDict(
+        response_json, QueryVariantsResponse(), ignore_unknown_fields=True)
     return response.variants, response.next_page_token
 
   def lookup_bug(self, bug_id, system='monorail'):
@@ -271,8 +274,10 @@ class WeetbixApi(recipe_api.RecipeApi):
         },
         step_test_data=(
             lambda: self.m.json.test_api.output_stream({'failures': []})))
-    response = json_format.ParseDict(response_json,
-                                     QueryClusterFailuresResponse())
+    response = json_format.ParseDict(
+        response_json,
+        QueryClusterFailuresResponse(),
+        ignore_unknown_fields=True)
     return response.failures
 
 
