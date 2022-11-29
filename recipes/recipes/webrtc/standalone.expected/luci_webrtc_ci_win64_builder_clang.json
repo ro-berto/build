@@ -83,7 +83,7 @@
     ],
     "cwd": "[CACHE]\\builder",
     "env": {
-      "DEPOT_TOOLS_REPORT_BUILD": "webrtc/ci/Win32 Builder (Clang)/8945511751514863184",
+      "DEPOT_TOOLS_REPORT_BUILD": "webrtc/ci/Win64 Builder (Clang)/8945511751514863184",
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "1800"
     },
@@ -330,7 +330,7 @@
     "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_REPORT_BUILD": "webrtc/ci/Win32 Builder (Clang)/8945511751514863184",
+      "DEPOT_TOOLS_REPORT_BUILD": "webrtc/ci/Win64 Builder (Clang)/8945511751514863184",
       "GYP_DEFINES": "clang=1"
     },
     "env_suffixes": {
@@ -419,7 +419,7 @@
       "-m",
       "client.webrtc",
       "-b",
-      "Win32 Builder (Clang)",
+      "Win64 Builder (Clang)",
       "--config-file",
       "[TMP_BASE]\\mb_config.pyl",
       "--goma-dir",
@@ -457,14 +457,14 @@
       "-m",
       "client.webrtc",
       "-b",
-      "Win32 Builder (Clang)",
+      "Win64 Builder (Clang)",
       "--config-file",
       "[TMP_BASE]\\mb_config.pyl",
       "--goma-dir",
       "[CACHE]\\goma\\client",
       "--json-output",
       "/path/to/tmp/json",
-      "//out/Win32_Builder_Clang"
+      "//out/Win64_Builder_Clang"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
@@ -536,7 +536,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]\\goma\\data\\Win32_Builder__Clang_"
+      "[CACHE]\\goma\\data\\Win64_Builder__Clang_"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
@@ -572,7 +572,7 @@
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_ARBITRARY_TOOLCHAIN_SUPPORT": "true",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\Win32_Builder__Clang_",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\Win64_Builder__Clang_",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
@@ -644,7 +644,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]\\builder\\src\\out\\Win32_Builder_Clang",
+      "[CACHE]\\builder\\src\\out\\Win64_Builder_Clang",
       "-j",
       "80"
     ],
@@ -673,7 +673,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]\\builder\\src\\out\\Win32_Builder_Clang",
+      "[CACHE]\\builder\\src\\out\\Win64_Builder_Clang",
       "-j",
       "80",
       "-d",
@@ -858,9 +858,9 @@
       "--json-status",
       "[TMP_BASE]\\goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[CACHE]\\builder\\src\\out\\Win32_Builder_Clang",
+      "[CACHE]\\builder\\src\\out\\Win64_Builder_Clang",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]\\\\builder\\\\src\\\\out\\\\Win32_Builder_Clang\", \"-j\", 80]",
+      "[\"RECIPE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]\\\\builder\\\\src\\\\out\\\\Win64_Builder_Clang\", \"-j\", 80]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -876,9 +876,9 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"ci\", \"builder\": \"Win32 Builder (Clang)\", \"project\": \"webrtc\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"Win64 Builder (Clang)\", \"project\": \"webrtc\"}",
       "--buildbot-buildername",
-      "Win32 Builder (Clang)"
+      "Win64 Builder (Clang)"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
@@ -967,7 +967,7 @@
       "RECIPE_MODULE[build::perf_dashboard]\\resources\\post_json.py",
       "https://pinpoint-dot-chromeperf.appspot.com/api/isolate",
       "-i",
-      "{\"builder_name\": \"Win32 Builder (Clang)\", \"change\": \"{\\\"commits\\\": [{\\\"git_hash\\\": \\\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\\\", \\\"repository\\\": \\\"webrtc\\\"}]}\", \"isolate_map\": \"{}\", \"isolate_server\": \"projects/example-cas-server/instances/default_instance\"}",
+      "{\"builder_name\": \"Win64 Builder (Clang)\", \"change\": \"{\\\"commits\\\": [{\\\"git_hash\\\": \\\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\\\", \\\"repository\\\": \\\"webrtc\\\"}]}\", \"isolate_map\": \"{}\", \"isolate_server\": \"projects/example-cas-server/instances/default_instance\"}",
       "-o",
       "/path/to/tmp/json",
       "-t",
@@ -999,7 +999,7 @@
       "-u",
       "RECIPE_MODULE[build::chromium_tests]\\resources\\find_command_lines.py",
       "--build-dir",
-      "[CACHE]\\builder\\src\\out\\Win32_Builder_Clang",
+      "[CACHE]\\builder\\src\\out\\Win64_Builder_Clang",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -1043,14 +1043,14 @@
       }
     },
     "name": "trigger",
-    "stdin": "{\"batches\": [{\"jobs\": [{\"job\": \"Perf Win7\", \"project\": \"webrtc\"}], \"trigger\": {\"gitiles\": {\"properties\": {\"deps_revision_overrides\": {\"src\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"}, \"parent_builder_group\": \"client.webrtc\", \"parent_buildername\": \"Win32 Builder (Clang)\", \"parent_got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"parent_got_revision_cp\": \"refs/heads/main@{#170242}\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"swarm_hashes\": {}, \"swarming_command_lines\": {}}, \"ref\": \"refs/heads/main\", \"repo\": \"https://webrtc.googlesource.com/src\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"tags\": [\"parent_buildername:Win32 Builder (Clang)\", \"user_agent:recipe\"]}, \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", \"title\": \"Win32 Builder (Clang)/0\"}}], \"timestamp\": 1337000001500000}",
+    "stdin": "{\"batches\": [{\"jobs\": [{\"job\": \"Perf Win 10\", \"project\": \"webrtc\"}], \"trigger\": {\"gitiles\": {\"properties\": {\"deps_revision_overrides\": {\"src\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"}, \"parent_builder_group\": \"client.webrtc\", \"parent_buildername\": \"Win64 Builder (Clang)\", \"parent_got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"parent_got_revision_cp\": \"refs/heads/main@{#170242}\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"swarm_hashes\": {}, \"swarming_command_lines\": {}}, \"ref\": \"refs/heads/main\", \"repo\": \"https://webrtc.googlesource.com/src\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"tags\": [\"parent_buildername:Win64 Builder (Clang)\", \"user_agent:recipe\"]}, \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", \"title\": \"Win64 Builder (Clang)/0\"}}], \"timestamp\": 1337000001500000}",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@input@{@@@",
       "@@@STEP_LOG_LINE@input@    \"batches\": [@@@",
       "@@@STEP_LOG_LINE@input@        {@@@",
       "@@@STEP_LOG_LINE@input@            \"jobs\": [@@@",
       "@@@STEP_LOG_LINE@input@                {@@@",
-      "@@@STEP_LOG_LINE@input@                    \"job\": \"Perf Win7\", @@@",
+      "@@@STEP_LOG_LINE@input@                    \"job\": \"Perf Win 10\", @@@",
       "@@@STEP_LOG_LINE@input@                    \"project\": \"webrtc\"@@@",
       "@@@STEP_LOG_LINE@input@                }@@@",
       "@@@STEP_LOG_LINE@input@            ], @@@",
@@ -1061,7 +1061,7 @@
       "@@@STEP_LOG_LINE@input@                            \"src\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"@@@",
       "@@@STEP_LOG_LINE@input@                        }, @@@",
       "@@@STEP_LOG_LINE@input@                        \"parent_builder_group\": \"client.webrtc\", @@@",
-      "@@@STEP_LOG_LINE@input@                        \"parent_buildername\": \"Win32 Builder (Clang)\", @@@",
+      "@@@STEP_LOG_LINE@input@                        \"parent_buildername\": \"Win64 Builder (Clang)\", @@@",
       "@@@STEP_LOG_LINE@input@                        \"parent_got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", @@@",
       "@@@STEP_LOG_LINE@input@                        \"parent_got_revision_cp\": \"refs/heads/main@{#170242}\", @@@",
       "@@@STEP_LOG_LINE@input@                        \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", @@@",
@@ -1072,12 +1072,12 @@
       "@@@STEP_LOG_LINE@input@                    \"repo\": \"https://webrtc.googlesource.com/src\", @@@",
       "@@@STEP_LOG_LINE@input@                    \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", @@@",
       "@@@STEP_LOG_LINE@input@                    \"tags\": [@@@",
-      "@@@STEP_LOG_LINE@input@                        \"parent_buildername:Win32 Builder (Clang)\", @@@",
+      "@@@STEP_LOG_LINE@input@                        \"parent_buildername:Win64 Builder (Clang)\", @@@",
       "@@@STEP_LOG_LINE@input@                        \"user_agent:recipe\"@@@",
       "@@@STEP_LOG_LINE@input@                    ]@@@",
       "@@@STEP_LOG_LINE@input@                }, @@@",
       "@@@STEP_LOG_LINE@input@                \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", @@@",
-      "@@@STEP_LOG_LINE@input@                \"title\": \"Win32 Builder (Clang)/0\"@@@",
+      "@@@STEP_LOG_LINE@input@                \"title\": \"Win64 Builder (Clang)/0\"@@@",
       "@@@STEP_LOG_LINE@input@            }@@@",
       "@@@STEP_LOG_LINE@input@        }@@@",
       "@@@STEP_LOG_LINE@input@    ], @@@",

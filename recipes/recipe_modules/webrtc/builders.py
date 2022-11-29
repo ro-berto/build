@@ -400,14 +400,14 @@ _CLIENT_WEBRTC_SPEC = {
                 'BUILD_CONFIG': 'Debug',
                 'TARGET_BITS': 64,
             }),
-    'Win32 Builder (Clang)':
+    'Win64 Builder (Clang)':
         WebRTCBuilderSpec.create(
             chromium_config='webrtc_clang',
             gclient_config='webrtc',
             simulation_platform='win',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 32,
+                'TARGET_BITS': 64,
             }),
     'Win32 Debug (Clang)':
         WebRTCBuilderSpec.create(
@@ -702,18 +702,18 @@ _CLIENT_WEBRTC_PERF_SPECS = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             }),
-    'Perf Win7':
+    'Perf Win 10':
         WebRTCBuilderSpec.create(
             perf_id='webrtc-win-large-tests',
             chromium_config='webrtc_default',
             gclient_config='webrtc',
             execution_mode=builder_spec.TEST,
             parent_builder_group='client.webrtc',
-            parent_buildername='Win32 Builder (Clang)',
+            parent_buildername='Win64 Builder (Clang)',
             simulation_platform='win',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 32,
+                'TARGET_BITS': 64,
             }),
 }
 
