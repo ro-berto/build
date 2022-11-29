@@ -22,6 +22,15 @@ COMPILATOR_SWARMING_TASK_COLLECT_STEP = (
 
 BUILD_CANCELED_SUMMARY = 'Build was canceled.'
 
+RTS_SUMMARY = '''
+
+Tests were run with RTS. If failures are suspected to be caused by RTS skipped
+tests this can be disabled by adding this footer to your CL message:
+
+    Disable-Rts: True
+
+'''
+
 
 @attrs()
 class CompilatorOutputProps(object):
@@ -357,6 +366,9 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
           local_tests_raw_result.status != common_pb.SUCCESS):
         summary_markdown += '\n\n From compilator:\n{}'.format(
             local_tests_raw_result.summary_markdown)
+      if any(
+          test.is_rts or test.is_inverted_rts for test in invalid_test_suites):
+        summary_markdown += RTS_SUMMARY
 
       return result_pb2.RawResult(
           summary_markdown=summary_markdown, status=common_pb.FAILURE)
@@ -439,6 +451,10 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
           local_tests_raw_result.summary_markdown)
       if final_status == common_pb.SUCCESS:
         final_status = local_tests_raw_result.status
+
+    if unrecoverable_test_suites and any(test.is_rts or test.is_inverted_rts
+                                         for test in unrecoverable_test_suites):
+      summary_markdown += RTS_SUMMARY
 
     return result_pb2.RawResult(
         summary_markdown=summary_markdown, status=final_status)

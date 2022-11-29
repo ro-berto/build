@@ -1513,6 +1513,90 @@ def GenTests(api):
     return reuseable_qr
 
   yield api.test(
+      'retry_shards_all_invalid_results_iqr',
+      get_try_build(inverted_shard_experiment=True, bail_early_experiment=True),
+      ctbc_properties(),
+      api.properties(
+          **{
+              '$build/chromium_orchestrator':
+                  InputProperties(
+                      compilator='fake-compilator',
+                      compilator_watcher_git_revision='e841fc',
+                  ),
+          }),
+      api.cq(run_mode='FULL_RUN'),
+      api.m.buildbucket.simulated_search_results(
+          [_create_quick_run_build()], step_name='find successful Quick Runs'),
+      api.chromium_orchestrator.override_test_spec(
+          builder_group='fake-group',
+          builder='fake-builder',
+          tester='fake-tester',
+          tests=['browser_tests', 'content_unittests']),
+      api.chromium_orchestrator.override_reused_compilator_steps(
+          tests=['browser_tests', 'content_unittests']),
+      api.override_step_data(
+          'browser_tests (with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.gtest_results('invalid', retcode=1),
+              failure=True)),
+      api.step_data('read command lines (2)',
+                    api.file.read_json(fake_inverted_rts_command_lines)),
+      api.override_step_data(
+          'browser_tests (retry shards with patch)',
+          api.chromium_swarming.canned_summary_output(
+              api.test_utils.gtest_results('invalid', retcode=1),
+              failure=True)),
+      api.post_process(post_process.MustRun,
+                       'browser_tests (retry shards with patch)'),
+      api.post_process(post_process.DoesNotRun,
+                       'browser_tests (without patch)'),
+      api.post_process(post_process.MustRun, 'Tests statistics'),
+      api.post_process(post_process.ResultReasonRE,
+                       '.*caused by RTS skipped.*'),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'retry_shards_invalid_retry_iqr',
+      get_try_build(inverted_shard_experiment=True, bail_early_experiment=True),
+      ctbc_properties(),
+      api.properties(
+          **{
+              '$build/chromium_orchestrator':
+                  InputProperties(
+                      compilator='fake-compilator',
+                      compilator_watcher_git_revision='e841fc',
+                  ),
+          }),
+      api.cq(run_mode='FULL_RUN'),
+      api.m.buildbucket.simulated_search_results(
+          [_create_quick_run_build()], step_name='find successful Quick Runs'),
+      api.chromium_orchestrator.override_test_spec(
+          builder_group='fake-group',
+          builder='fake-builder',
+          tester='fake-tester',
+          tests=['browser_tests', 'content_unittests']),
+      api.chromium_orchestrator.override_reused_compilator_steps(
+          tests=['browser_tests', 'content_unittests']),
+      api.step_data('read command lines (2)',
+                    api.file.read_json(fake_inverted_rts_command_lines)),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'browser_tests', 'with patch', failures=['Test.One']),
+      api.chromium_tests.gen_swarming_and_rdb_results(
+          'browser_tests', 'retry shards with patch', failures=['Test.One']),
+      api.chromium_orchestrator.override_compilator_steps(with_patch=False),
+      api.post_process(post_process.MustRun,
+                       'browser_tests (retry shards with patch)'),
+      api.post_process(post_process.MustRun, 'browser_tests (without patch)'),
+      api.post_process(post_process.MustRun, 'Tests statistics'),
+      api.post_process(post_process.ResultReasonRE,
+                       '.*caused by RTS skipped.*'),
+      api.post_process(post_process.StatusFailure),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
       'basic_with_inverted_shard_with_qr_no_compilator_bails_early',
       get_try_build(
           inverted_shard_experiment=True,
