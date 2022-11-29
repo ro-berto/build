@@ -272,12 +272,14 @@ class _CiOnly(DisabledReason):
 
   def report_tests(self, chromium_tests_api, tests):
     result = chromium_tests_api.m.step('ci_only tests', [])
-    message = [('The following tests are not being run on this try builder'
-                ' because they are marked \'ci_only\', adding "{}: true"'
-                ' to the gerrit footers will cause them to run'
-               ).format(INCLUDE_CI_FOOTER)]
-    message.extend(sorted(tests))
-    result.presentation.step_text = '\n * '.join(message)
+    # Milo treats the first line of step_text differently and can cut it off
+    # if it's too long.
+    message = ('The following tests are not being run on this try builder '
+               'because they are marked "ci_only".\n')
+    message += ('Adding "{}: true" to the gerrit footers will cause them to '
+                'run.\n * '.format(INCLUDE_CI_FOOTER))
+    message += '\n * '.join(sorted(tests))
+    result.presentation.step_text = message
 
 
 CI_ONLY = _CiOnly()
