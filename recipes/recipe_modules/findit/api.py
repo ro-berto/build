@@ -65,7 +65,7 @@ class FinditApi(recipe_api.RecipeApi):
         '--target-build-dir',
         self.m.chromium.output_dir,
         '--ninja-path',
-        self.m.depot_tools.ninja_path,
+        self.m.path['checkout'].join('third_party', 'ninja', 'ninja'),
     ]
     for target in targets:
       cmd.extend(['--target', target])
