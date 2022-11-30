@@ -55,7 +55,7 @@ def gn_refs(api, step_name, args):
   step_result = api.step(
       step_name,
       [
-          'python',
+          'python3',
           api.depot_tools.gn_py_path,
           '--root=%s' % str(api.path['checkout']),
           'refs',
