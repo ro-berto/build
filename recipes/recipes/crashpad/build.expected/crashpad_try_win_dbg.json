@@ -490,7 +490,7 @@
   },
   {
     "cmd": [
-      "RECIPE_REPO[depot_tools]/ninja",
+      "[START_DIR]/crashpad/third_party/ninja/ninja",
       "-C",
       "[START_DIR]/crashpad/out/Debug_x86"
     ],
@@ -628,7 +628,7 @@
   },
   {
     "cmd": [
-      "RECIPE_REPO[depot_tools]/ninja",
+      "[START_DIR]/crashpad/third_party/ninja/ninja",
       "-C",
       "[START_DIR]/crashpad/out/Debug_x64"
     ],

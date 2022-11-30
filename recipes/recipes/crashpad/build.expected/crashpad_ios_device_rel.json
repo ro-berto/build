@@ -138,7 +138,7 @@
   },
   {
     "cmd": [
-      "RECIPE_REPO[depot_tools]/ninja",
+      "[CACHE]/builder/crashpad/third_party/ninja/ninja",
       "-C",
       "[CACHE]/builder/crashpad/out/Release-iphoneos"
     ],

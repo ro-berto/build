@@ -197,7 +197,7 @@ def RunSteps(api, config, target_os, target_cpu):
           ],
           timeout=timeout_in_minutes * 60)
 
-  ninja = api.depot_tools.ninja_path
+  ninja = api.path['checkout'].join('third_party', 'ninja', 'ninja')
   if is_win:
     with sdk(target_os, 'x86'):
       api.step('compile with ninja x86', [ninja, '-C', x86_path])
