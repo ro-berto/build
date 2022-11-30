@@ -176,7 +176,7 @@
   },
   {
     "cmd": [
-      "RECIPE_REPO[depot_tools]\\ninja.exe",
+      "[CACHE]\\builder\\dawn\\third_party\\ninja\\ninja",
       "-C",
       "[CACHE]\\builder\\dawn\\out\\release_x86_static"
     ],
@@ -312,7 +312,7 @@
   },
   {
     "cmd": [
-      "RECIPE_REPO[depot_tools]\\ninja.exe",
+      "[CACHE]\\builder\\dawn\\third_party\\ninja\\ninja",
       "-C",
       "[CACHE]\\builder\\dawn\\out\\release_x86_component",
       "dawn_end2end_tests"

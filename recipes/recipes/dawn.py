@@ -114,7 +114,8 @@ def _gn_gen_builds(api, target_cpu, debug, clang, use_goma, out_dir, static,
 
 def _build_steps(api, out_dir, clang, use_goma, *targets):
   debug_path = api.path['checkout'].join('out', out_dir)
-  ninja_cmd = [api.depot_tools.ninja_path, '-C', debug_path]
+  ninja_path = api.path['checkout'].join('third_party', 'ninja', 'ninja')
+  ninja_cmd = [ninja_path, '-C', debug_path]
   if use_goma:
     ninja_cmd.extend(['-j', api.goma.recommended_goma_jobs])
   ninja_cmd.extend(targets)

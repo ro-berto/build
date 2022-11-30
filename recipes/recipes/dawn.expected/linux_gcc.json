@@ -168,7 +168,7 @@
   },
   {
     "cmd": [
-      "RECIPE_REPO[depot_tools]/ninja",
+      "[CACHE]/builder/dawn/third_party/ninja/ninja",
       "-C",
       "[CACHE]/builder/dawn/out/release_static"
     ],
@@ -286,7 +286,7 @@
   },
   {
     "cmd": [
-      "RECIPE_REPO[depot_tools]/ninja",
+      "[CACHE]/builder/dawn/third_party/ninja/ninja",
       "-C",
       "[CACHE]/builder/dawn/out/release_component",
       "dawn_end2end_tests"

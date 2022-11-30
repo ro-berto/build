@@ -351,7 +351,7 @@
   },
   {
     "cmd": [
-      "RECIPE_REPO[depot_tools]/ninja",
+      "[CACHE]/builder/dawn/third_party/ninja/ninja",
       "-C",
       "[CACHE]/builder/dawn/out/release_static",
       "-j",
@@ -522,7 +522,7 @@
       "--ninja-log-outdir",
       "[CACHE]/builder/dawn/out/release_static",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-C\", \"[CACHE]/builder/dawn/out/release_static\", \"-j\", 80]",
+      "[\"[CACHE]/builder/dawn/third_party/ninja/ninja\", \"-C\", \"[CACHE]/builder/dawn/out/release_static\", \"-j\", 80]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -876,7 +876,7 @@
   },
   {
     "cmd": [
-      "RECIPE_REPO[depot_tools]/ninja",
+      "[CACHE]/builder/dawn/third_party/ninja/ninja",
       "-C",
       "[CACHE]/builder/dawn/out/release_component",
       "-j",
@@ -1048,7 +1048,7 @@
       "--ninja-log-outdir",
       "[CACHE]/builder/dawn/out/release_component",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-C\", \"[CACHE]/builder/dawn/out/release_component\", \"-j\", 80, \"dawn_end2end_tests\"]",
+      "[\"[CACHE]/builder/dawn/third_party/ninja/ninja\", \"-C\", \"[CACHE]/builder/dawn/out/release_component\", \"-j\", 80, \"dawn_end2end_tests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
