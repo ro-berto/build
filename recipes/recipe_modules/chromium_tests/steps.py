@@ -276,8 +276,8 @@ class _CiOnly(DisabledReason):
     # if it's too long.
     message = ('The following tests are not being run on this try builder '
                'because they are marked "ci_only".\n')
-    message += ('Adding "{}: true" to the gerrit footers will cause them to '
-                'run.\n * '.format(INCLUDE_CI_FOOTER))
+    message += ('Adding `{}: true` to the gerrit footers will cause them to '
+                'run.\n\n * '.format(INCLUDE_CI_FOOTER))
     message += '\n * '.join(sorted(tests))
     result.presentation.step_text = message
 
