@@ -78,7 +78,7 @@ def collect_task(collect_cmd, merge_script, merge_script_stdout_file,
   """
   logging.debug('Using task_output_dir: %r', task_output_dir)
   if os.path.exists(task_output_dir):
-    logging.warn('task_output_dir %r already exists!', task_output_dir)
+    logging.warning('task_output_dir %r already exists!', task_output_dir)
     existing_contents = []
     try:
       for p in os.listdir(task_output_dir):
@@ -86,7 +86,7 @@ def collect_task(collect_cmd, merge_script, merge_script_stdout_file,
     except (OSError, IOError) as e:
       logging.error('Error while examining existing task_output_dir: %s', e)
 
-    logging.warn('task_output_dir existing content: %r', existing_contents)
+    logging.warning('task_output_dir existing content: %r', existing_contents)
 
   collect_cmd.extend([
     '-output-dir', task_output_dir,
@@ -96,7 +96,7 @@ def collect_task(collect_cmd, merge_script, merge_script_stdout_file,
   logging.info('collect_cmd: %s', ' '.join(collect_cmd))
   collect_result = subprocess.call(collect_cmd)
   if collect_result != 0:
-    logging.warn('collect_cmd had non-zero return code: %s', collect_result)
+    logging.warning('collect_cmd had non-zero return code: %s', collect_result)
 
   task_output_dir_contents = []
   try:
@@ -108,9 +108,7 @@ def collect_task(collect_cmd, merge_script, merge_script_stdout_file,
 
   logging.debug('Contents of task_output_dir: %r', task_output_dir_contents)
   if not task_output_dir_contents:
-    logging.warn(
-        'No files found in task_output_dir: %r',
-        task_output_dir)
+    logging.warning('No files found in task_output_dir: %r', task_output_dir)
 
   task_output_subdirs = (
       p for p in task_output_dir_contents
@@ -140,7 +138,7 @@ def collect_task(collect_cmd, merge_script, merge_script_stdout_file,
         f for f in extant_shard_json_files if f not in empty_shard_json_files]
 
   if not extant_shard_json_files:
-    logging.warn(
+    logging.warning(
         'No shard json files found in task_output_dir: %r\nFound %r',
         task_output_dir, task_output_dir_contents)
 
@@ -155,7 +153,7 @@ def collect_task(collect_cmd, merge_script, merge_script_stdout_file,
   if os.path.exists(summary_json_file):
     merge_cmd.extend(('--summary-json', summary_json_file))
   else:
-    logging.warn('Summary json file missing: %r', summary_json_file)
+    logging.warning('Summary json file missing: %r', summary_json_file)
   merge_cmd.extend(('--task-output-dir', task_output_dir))
   if merge_arguments:
     merge_cmd.extend(json.loads(merge_arguments))
@@ -167,11 +165,11 @@ def collect_task(collect_cmd, merge_script, merge_script_stdout_file,
   merge_result = run_command_with_output(
       argv=merge_cmd, stdoutfile=merge_script_stdout_file)
   if merge_result != 0:
-    logging.warn('merge_cmd had non-zero return code: %s', merge_result)
+    logging.warning('merge_cmd had non-zero return code: %s', merge_result)
 
   if not os.path.exists(output_json):
-    logging.warn(
-        'merge_cmd did not create output_json file: %r', output_json)
+    logging.warning('merge_cmd did not create output_json file: %r',
+                    output_json)
 
   return collect_result or merge_result
 

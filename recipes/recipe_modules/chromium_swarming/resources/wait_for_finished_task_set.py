@@ -132,8 +132,8 @@ def real_main(tasks, attempts, swarming_py_path, swarming_server):
         logging.info('get_states cmd: %s', ' '.join(cmd))
         get_states_result = subprocess.call(cmd)
         if get_states_result != 0:
-          logging.warn(
-              'get_states cmd had non-zero return code: %s', get_states_result)
+          logging.warning('get_states cmd had non-zero return code: %s',
+                          get_states_result)
           return 1, None
 
         with open(tmpfile) as f:
