@@ -214,6 +214,18 @@ _SPEC = {
         ),
     'win-dbg-compile':
         _create_compile_spec('win-dbg-compile'),
+    'win-exp-test':
+        try_spec.TrySpec.create(
+            mirrors=[
+                try_spec.TryMirror.create(
+                    builder_group='angle',
+                    buildername='win-exp-test',
+                    tester='win10-x64-exp-intel',
+                ),
+            ],
+            analyze_names=['angle'],
+            retry_failed_shards=False,
+        ),
     'win-msvc-compile':
         _create_compile_spec('win-msvc-compile'),
     'win-msvc-dbg-compile':
