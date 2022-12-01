@@ -5,10 +5,10 @@
 DEPS = [
     'chromium',
     'goma',
-    'depot_tools/depot_tools',
     'recipe_engine/context',
-    'recipe_engine/path',
     'recipe_engine/file',
+    'recipe_engine/path',
+    'recipe_engine/platform',
     'recipe_engine/step',
     'recipe_engine/tricium',
     'reclient',

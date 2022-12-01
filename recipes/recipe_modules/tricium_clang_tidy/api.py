@@ -222,12 +222,17 @@ class TriciumClangTidyApi(RecipeApi):
         '--verbose',
     ]
 
+    # Speficy the path to gn under buldtools explicitly.
+    gn_subdir = {
+        'linux': 'linux64',
+        'mac': 'mac',
+        'win': 'win',
+    }[self.m.platform.name]
+    gn_path = self.m.context.cwd.join('buildtools', gn_subdir, 'gn')
+    tricium_clang_tidy_command.append('--gn=' + str(gn_path))
+
     if is_windows:
-      # We need to call gn.exe on these builders.
-      tricium_clang_tidy_command += (
-          '--gn=' + str(self.m.context.cwd.join('buildtools', 'win', 'gn.exe')),
-          '--windows',
-      )
+      tricium_clang_tidy_command.append('--windows')
 
     tricium_clang_tidy_command.append('--')
     tricium_clang_tidy_command += file_paths
@@ -237,7 +242,8 @@ class TriciumClangTidyApi(RecipeApi):
     else:
       fix_file_path = lambda x: x
 
-    ninja_path = {'PATH': [self.m.path.dirname(self.m.depot_tools.ninja_path)]}
+    ninja_dir = self.m.path['checkout'].join('third_party', 'ninja')
+    ninja_path = {'PATH': [ninja_dir]}
     with self.m.context(env_suffixes=ninja_path):
       if use_reclient:
         self._build_with_reclient('tricium_clang_tidy_script.py',
