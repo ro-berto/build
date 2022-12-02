@@ -208,8 +208,6 @@ def setup_host_x86(api,
         api.step(
             'test libjdwp interpreter', libjdwp_common_command + ['--no-jit'])
 
-      api.step('test dx', ['./dalvik/dx/tests/run-all-tests'])
-
 def setup_target(api,
                  device,
                  debug,
