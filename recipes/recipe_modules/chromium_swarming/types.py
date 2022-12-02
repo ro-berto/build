@@ -8,7 +8,7 @@ from RECIPE_MODULES.build.attr_utils import attrib, attrs, command_args
 
 
 @attrs()
-class TriggerScript(object):
+class TriggerScript:
   """A type describing a custom script for triggering swarming tasks.
 
   Attributes:
@@ -48,7 +48,7 @@ class TriggerScript(object):
 
 
 @attrs()
-class MergeScript(object):
+class MergeScript:
   """A type describing a custom script for merging swarming task output.
 
   Attributes:
@@ -79,7 +79,7 @@ class MergeScript(object):
 
 
 @attrs()
-class CipdPackage(object):
+class CipdPackage:
   """A type describing a CIPD package to be required by a swarming task.
 
   Attributes:

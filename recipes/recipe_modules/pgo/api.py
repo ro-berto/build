@@ -13,7 +13,7 @@ class PgoApi(recipe_api.RecipeApi):
   TEMP_PROFDATA_FILENAME = 'pgo_final_aggregate.profdata'
 
   def __init__(self, properties, *args, **kwargs):
-    super(PgoApi, self).__init__(*args, **kwargs)
+    super().__init__(*args, **kwargs)
     self._use_pgo = properties.use_pgo
     self._skip_profile_upload = properties.skip_profile_upload
 

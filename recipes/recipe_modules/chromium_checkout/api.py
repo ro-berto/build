@@ -13,7 +13,7 @@ from RECIPE_MODULES.depot_tools.gclient import api as gclient
 class ChromiumCheckoutApi(recipe_api.RecipeApi):
 
   def __init__(self, input_properties, *args, **kwargs):
-    super(ChromiumCheckoutApi, self).__init__(*args, **kwargs)
+    super().__init__(*args, **kwargs)
     self._checkout_dir = None
     self._timeout = input_properties.timeout
 

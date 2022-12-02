@@ -9,7 +9,7 @@ from recipe_engine import recipe_api
 class AvdPackagerApi(recipe_api.RecipeApi):
 
   def __init__(self, properties, **kwargs):
-    super(AvdPackagerApi, self).__init__(**kwargs)
+    super().__init__(**kwargs)
 
     self._gclient_config = properties.gclient_config
     self._gclient_apply_config = properties.gclient_apply_config

@@ -34,7 +34,7 @@ class ArchiveApi(recipe_api.RecipeApi):
   """
 
   def __init__(self, props, **kwargs):
-    super(ArchiveApi, self).__init__(**kwargs)
+    super().__init__(**kwargs)
 
     # This input property is populated by the global property $build/archive.
     self._default_config = props
@@ -573,18 +573,17 @@ class ArchiveApi(recipe_api.RecipeApi):
     # determine the channel.
     if milestone == canary_milestone:
       return 'canary'
-    elif milestone + 1 == canary_milestone:
+    if milestone + 1 == canary_milestone:
       return 'beta'
-    elif milestone + 2 == canary_milestone:
+    if milestone + 2 == canary_milestone:
       return 'stable'
-    elif milestone + 10 >= canary_milestone:
+    if milestone + 10 >= canary_milestone:
       # Channel name for old milestones set to legacy.
       return 'legacy%s' % milestone
-    else:  # pragma: no cover
-      self.m.step.empty(
-          'Unknown channel',
-          status=self.m.step.FAILURE,
-          step_text='Can not find channel for milestone: %s' % milestone)
+    self.m.step.empty(  # pragma: no cover
+        'Unknown channel',
+        status=self.m.step.FAILURE,
+        step_text='Can not find channel for milestone: %s' % milestone)
 
   def _replace_placeholders(self, update_properties, custom_vars, input_str):
     position_placeholder = '{%position%}'
@@ -1122,7 +1121,7 @@ class ArchiveApi(recipe_api.RecipeApi):
           if last > new:
             content = last_version
             break
-          elif new > last:
+          if new > last:
             break
 
       content_ascii = content.encode('ascii', 'ignore')

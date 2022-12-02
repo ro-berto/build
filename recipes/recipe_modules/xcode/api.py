@@ -8,7 +8,7 @@ from recipe_engine import recipe_api
 class XcodeApi(recipe_api.RecipeApi):
 
   def __init__(self, input_properties, *args, **kwargs):
-    super(XcodeApi, self).__init__(*args, **kwargs)
+    super().__init__(*args, **kwargs)
     self.xcode_config_path = input_properties.xcode_config_path
 
   # get the xcode version from json file

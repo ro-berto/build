@@ -49,12 +49,12 @@ def RunSteps(api):
         assert cq_commits[0]['_number'] == commits[0]['_number']
         api.step.active_result.presentation.step_text = 'Active CL found.'
         return
-      else:
-        with api.context(env={'SKIP_GCE_AUTH_FOR_GIT': '1'}):
-          with api.depot_tools.on_path():
-            api.git('cl', 'set-close', '-i', commits[0]['_number'])
-          api.step.active_result.presentation.step_text = (
-              'Stale CL found. Abandoned.')
+
+      with api.context(env={'SKIP_GCE_AUTH_FOR_GIT': '1'}):
+        with api.depot_tools.on_path():
+          api.git('cl', 'set-close', '-i', commits[0]['_number'])
+        api.step.active_result.presentation.step_text = (
+            'Stale CL found. Abandoned.')
 
     # Enforce a clean state, and discard any local commits from previous runs.
     api.git('checkout', '-f', 'main')

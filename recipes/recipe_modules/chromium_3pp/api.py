@@ -9,7 +9,7 @@ from recipe_engine import recipe_api
 class Chromium3ppApi(recipe_api.RecipeApi):
 
   def __init__(self, properties, **kwargs):
-    super(Chromium3ppApi, self).__init__(**kwargs)
+    super().__init__(**kwargs)
 
     self._package_prefix = properties.package_prefix
     self._package_paths_to_build = properties.package_paths_to_build

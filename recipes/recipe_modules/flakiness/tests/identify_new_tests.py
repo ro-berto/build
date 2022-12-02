@@ -82,8 +82,9 @@ def RunSteps(api):
 
   found_tests = api.flakiness.identify_new_tests(test_objects)
   if found_tests:
-    found_tests = set(
-        [str('_'.join([t.test_id, t.variant_hash])) for t in found_tests])
+    found_tests = {
+        str('_'.join([t.test_id, t.variant_hash])) for t in found_tests
+    }
     api.assertions.assertEqual(new_tests, found_tests)
 
 

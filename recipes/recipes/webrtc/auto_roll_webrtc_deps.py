@@ -40,8 +40,8 @@ def RunSteps(api):
   if output.strip() != '1':
     api.step.active_result.presentation.step_text = 'Rolling deactivated'
     return
-  else:
-    api.step.active_result.presentation.step_text = 'Rolling activated'
+
+  api.step.active_result.presentation.step_text = 'Rolling activated'
 
   api.chromium_checkout.ensure_checkout()
 
@@ -73,12 +73,12 @@ def RunSteps(api):
         assert cq_commits[0]['_number'] == commits[0]['_number']
         api.step.active_result.presentation.step_text = 'Active rolls found.'
         return
-      else:
-        with api.context(env={'SKIP_GCE_AUTH_FOR_GIT': '1'}):
-          with api.depot_tools.on_path():
-            api.git('cl', 'set-close', '-i', commits[0]['_number'])
-          api.step.active_result.presentation.step_text = (
-              'Stale roll found. Abandoned.')
+
+      with api.context(env={'SKIP_GCE_AUTH_FOR_GIT': '1'}):
+        with api.depot_tools.on_path():
+          api.git('cl', 'set-close', '-i', commits[0]['_number'])
+        api.step.active_result.presentation.step_text = (
+            'Stale roll found. Abandoned.')
 
     # Enforce a clean state, and discard any local commits from previous runs.
     api.git('checkout', '-f', 'main')

@@ -18,7 +18,7 @@ import extract_build
 import bot_utils
 
 
-class MockOptions(object):
+class MockOptions:
   build_properties = {}
   build_archive_url = None
   builder_group = 'chromium.fyi'

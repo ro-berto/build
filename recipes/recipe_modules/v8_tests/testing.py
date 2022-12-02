@@ -266,11 +266,9 @@ class BaseTest:
 
   def pre_run(self, test=None, **kwargs):
     """Callback preparing test runs."""
-    pass  # pragma: no cover
 
   def mid_run(self):
     """Callback for things happening after pre_run and before run."""
-    pass  # pragma: no cover
 
   def run(self, test=None, **kwargs):
     """Callback for showing test runs.
@@ -712,7 +710,7 @@ class V82PhaseGenericSwarmingTest(BaseTest):
 
       _trigger_swarming_task(self.api, self.task, self.test_step_config)
 
-  def run(self, **kwargs):
+  def run(self, test=None, **kwargs):
     """Collect tasks of phase 2."""
     assert self.task
     step_result, _ = self.api.chromium_swarming.collect_task(self.task)

@@ -17,7 +17,7 @@ class SwarmingClientApi(recipe_api.RecipeApi):
   """
 
   def __init__(self, **kwargs):
-    super(SwarmingClientApi, self).__init__(**kwargs)
+    super().__init__(**kwargs)
     self._client_path = None
     self._script_version = {}
 

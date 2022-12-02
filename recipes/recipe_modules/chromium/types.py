@@ -7,7 +7,7 @@ from RECIPE_MODULES.build.attr_utils import (FieldMapping, attrib, attrs,
 
 
 @attrs()
-class BuilderId(object):
+class BuilderId:
   """ID type identifying a builder.
 
   Currently, the ID identifies a builder by the pair of group and

@@ -92,6 +92,7 @@ def wait_termination_win(pid):
            WAIT_TIMEOUT or WAIT_OBJECT_0 (i.e. termination succeeded).
     NotDiedError: if cloudtail kept on running 10 seconds after it signaled.
   """
+  # pylint: disable=import-outside-toplevel
   import win32api
   import win32con
   import win32event
@@ -103,7 +104,7 @@ def wait_termination_win(pid):
         win32con.PROCESS_QUERY_INFORMATION | win32con.SYNCHRONIZE, False, pid
     )
     try:
-      os.kill(pid, signal.CTRL_C_EVENT)
+      os.kill(pid, signal.CTRL_C_EVENT)  # pylint: disable=no-member
       print(
           'CTRL_C_EVENT has been sent to process %d. '
           'Going to wait for the process finishes.' % pid
@@ -117,7 +118,7 @@ def wait_termination_win(pid):
     if ret == win32event.WAIT_TIMEOUT:
       print('process %d running more than 10 seconds' % pid)
       raise NotDiedError()
-    elif ret == win32event.WAIT_OBJECT_0:
+    if ret == win32event.WAIT_OBJECT_0:
       return
     raise Error('Unexpected return code %d for pid %d.' % (ret, pid))
   except pywintypes.error as e:

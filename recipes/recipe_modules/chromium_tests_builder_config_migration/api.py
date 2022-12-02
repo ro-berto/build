@@ -347,7 +347,7 @@ class _JsonFactory(_OutputFactory):
     file_api.write_json(step_name, output_path, self._builders, indent=2)
 
 
-class _Grouping(object):
+class _Grouping:
 
   def __init__(self):
     self.builder_ids = set()

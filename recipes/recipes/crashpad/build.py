@@ -59,7 +59,7 @@ def RunSteps(api, config, target_os, target_cpu):
 
   @contextlib.contextmanager
   def sdk(os, arch='x64'):
-    if os == 'ios' or os == 'mac':
+    if os in ('ios', 'mac'):
       with api.osx_sdk(os):
         yield
     elif os == 'win':

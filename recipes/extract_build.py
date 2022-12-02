@@ -22,7 +22,7 @@ import bot_utils
 import build_directory
 
 
-class ExtractHandler(object):
+class ExtractHandler:
 
   def __init__(self, url, archive_name, gsutil_py_path):
     self.url = url

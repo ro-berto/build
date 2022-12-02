@@ -136,7 +136,7 @@ def _attrib(default, constraint):
   return attr.ib(default=default, validator=validator, converter=converter)
 
 
-class AttributeConstraint(object):
+class AttributeConstraint:
   """A constraint to be applied to the values of an attrib.
 
   This allows for defining a common validation and conversion operation
@@ -151,7 +151,6 @@ class AttributeConstraint(object):
       * attribute - The attr.ib defining the field.
       * value - The provided value.
     """
-    pass
 
   def convert(self, value):
     """Convert a provided value to an immutable value to store."""
@@ -371,7 +370,7 @@ def cached_property(getter):
 
   cache = {}
 
-  class CachedProperty(object):
+  class CachedProperty:
 
     def __get__(self, obj, objtype=None):
       """Descriptor for computing cached properties.

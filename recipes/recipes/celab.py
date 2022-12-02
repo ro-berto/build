@@ -61,7 +61,7 @@ def RunSteps(api):
 
   if project == 'celab':
     _RunStepsCelab(api)
-  elif project == 'chromium' or project == 'chrome':
+  elif project in ('chromium', 'chrome'):
     compile_failure = _RunStepsChromium(api)
     if compile_failure:
       return compile_failure

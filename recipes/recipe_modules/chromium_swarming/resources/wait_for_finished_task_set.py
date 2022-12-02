@@ -19,7 +19,9 @@ import time
 # be safe.
 TASK_BATCH_SIZE = 300
 
-class TasksToCollect(object):
+
+class TasksToCollect:
+
   @classmethod
   def read_from_file(cls, filename):
     with open(filename) as f:

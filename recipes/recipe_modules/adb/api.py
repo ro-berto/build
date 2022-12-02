@@ -6,7 +6,7 @@ from recipe_engine import recipe_api
 
 class AdbApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):
-    super(AdbApi, self).__init__(**kwargs)
+    super().__init__(**kwargs)
     self._custom_adb_path = None
     self._devices = None
 

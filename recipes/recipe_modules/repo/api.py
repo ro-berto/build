@@ -18,7 +18,7 @@ class RepoApi(recipe_api.RecipeApi):
   # https://code.google.com/p/git-repo/issues/detail?id=46
 
   def __init__(self, **kwargs):
-    super(RepoApi, self).__init__(**kwargs)
+    super().__init__(**kwargs)
     self._repo_path = None
 
   @property

@@ -27,11 +27,11 @@ def convert_trie_to_flat_paths(trie, prefix, sep):
 class TestResultsOutputPlaceholder(JsonOutputPlaceholder):
 
   def result(self, presentation, test):
-    ret = super(TestResultsOutputPlaceholder, self).result(presentation, test)
+    ret = super().result(presentation, test)
     return TestResults(ret)
 
 
-class TestResults(object):
+class TestResults:
 
   def __init__(self, jsonish):
     self.raw = jsonish

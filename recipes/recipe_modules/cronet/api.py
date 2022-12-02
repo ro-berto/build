@@ -14,7 +14,7 @@ from RECIPE_MODULES.build import chromium
 class CronetApi(recipe_api.RecipeApi):
 
   def __init__(self, **kwargs):
-    super(CronetApi, self).__init__(**kwargs)
+    super().__init__(**kwargs)
     self._repo_path = None
 
   DASHBOARD_UPLOAD_URL = 'https://chromeperf.appspot.com'

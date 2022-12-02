@@ -37,9 +37,6 @@ def _base64_encode_str(s):
 class SkylabApi(recipe_api.RecipeApi):
   """Module for issuing commands to Skylab"""
 
-  def __init__(self, **kwargs):
-    super(SkylabApi, self).__init__(**kwargs)
-
   def schedule_suites(self, tests, step_name='schedule skylab tests'):
     """Schedule CrOS autotest suites by invoking the cros_test_platform recipe.
 

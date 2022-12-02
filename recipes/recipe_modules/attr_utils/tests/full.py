@@ -33,7 +33,7 @@ def RunSteps(api):
   api.assertions.assertEqual(str(caught.exception), message)
 
   @attr.s(frozen=True)
-  class AttribTest(object):
+  class AttribTest:
     required = attrib(str)
     optional = attrib(str, default=None)
     default = attrib(str, default='default')
@@ -68,7 +68,7 @@ def RunSteps(api):
 
   # required after optional handling *******************************************
   @attr.s(frozen=True)
-  class RequiredTest(object):
+  class RequiredTest:
     optional = attrib(str, default=None)
     required = attrib(str)
 
@@ -84,7 +84,7 @@ def RunSteps(api):
 
   # enum ***********************************************************************
   @attr.s(frozen=True)
-  class EnumTest(object):
+  class EnumTest:
     value = attrib(enum([1, 2, 3]))
 
   # test validation of attribute value
@@ -99,7 +99,7 @@ def RunSteps(api):
 
   # sequence *******************************************************************
   @attr.s(frozen=True)
-  class SequenceTest(object):
+  class SequenceTest:
     value = attrib(sequence)
     typed = attrib(sequence[str], default=None)
 
@@ -123,7 +123,7 @@ def RunSteps(api):
 
   # command_args ***************************************************************
   @attr.s(frozen=True)
-  class CommandArgsTest(object):
+  class CommandArgsTest:
     args = attrib(command_args)
 
   # test validation of element types
@@ -152,7 +152,7 @@ def RunSteps(api):
   api.assertions.assertEqual(str(caught.exception), message)
 
   @attr.s(frozen=True)
-  class MappingTest(object):
+  class MappingTest:
     typed = attrib(mapping[str, int], default={})
     key_typed = attrib(mapping[str, ...], default={})
     value_typed = attrib(mapping[..., int], default={})
@@ -205,7 +205,7 @@ def RunSteps(api):
     pass  # pragma: no cover
 
   @attr.s(frozen=True)
-  class CallableTest(object):
+  class CallableTest:
     callback = attrib(callable_)
 
   # test validation of attribute value
@@ -222,14 +222,14 @@ def RunSteps(api):
   with api.assertions.assertRaises(TypeError) as caught:
 
     @attrs()
-    class AttrsTest(object):
+    class AttrsTest:
       x = attrib(str, default=1)
 
   message = "default for 'x' must be {} (got 1 that is a {}).".format(str, int)
   api.assertions.assertEqual(str(caught.exception), message)
 
   @attrs()
-  class AttrsTest(object):
+  class AttrsTest:
     x = attrib(str, default='bar')
 
   x = AttrsTest()
@@ -237,7 +237,7 @@ def RunSteps(api):
 
   # string handling ************************************************************
   @attrs()
-  class StrTest(object):
+  class StrTest:
     x = attrib(str)
 
   # make sure a unicode can be asigned
@@ -265,7 +265,7 @@ def RunSteps(api):
   calls = []
 
   @attrs()
-  class CachedPropertyTest(object):
+  class CachedPropertyTest:
     x = attrib(str)
 
     @cached_property

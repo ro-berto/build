@@ -132,14 +132,14 @@ class WeetbixTestApi(recipe_test_api.RecipeTestApi):
 
   def lookup_bug(self,
                  rules,
-                 id,
+                 bug_id,
                  system='monorail',
                  parent_step_name=None,
                  step_iteration=1):
     """Emulates lookup_bug() return value.
     Args:
       rules (list of rules): Format: projects/{project}/rules/{rule_id}
-      id (str): Id is the bug tracking system-specific identity of the bug.
+      bug_id (str): Id is the bug tracking system-specific identity of the bug.
         For monorail, the scheme is {project}/{numeric_id}, for buganizer the
         scheme is {numeric_id}.
       system (str): System is the bug tracking system of the bug. This is either
@@ -152,7 +152,7 @@ class WeetbixTestApi(recipe_test_api.RecipeTestApi):
     parent_step_prefix = ('%s.' % parent_step_name) if parent_step_name else ''
     step_suffix = (' (%d)' % step_iteration) if step_iteration > 1 else ''
     step_name = ('%sLookup Bug %s:%s%s' %
-                 (parent_step_prefix, system, id, step_suffix))
+                 (parent_step_prefix, system, bug_id, step_suffix))
 
     return self.step_data(step_name,
                           self.m.json.output_stream({'rules': rules}))

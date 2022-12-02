@@ -22,7 +22,7 @@ DEPS = [
 ]
 
 
-class _ChangeDetails(object):
+class _ChangeDetails:
 
   def __init__(self, api):
     changes = api.gerrit.get_changes(

@@ -82,8 +82,8 @@ class MyTarFile(tarfile.TarFile):
     if self.__verbose:
       print('A\t%s' % name)
 
-  def add(self, name, arcname=None, recursive=True, exclude=None, filter=None):
-    # pylint: disable=redefined-builtin
+  # pylint: disable=redefined-builtin
+  def add(self, name, arcname=None, recursive=True, *, filter=None):
     _, file_name = os.path.split(name)
     if file_name in ('.git', '.svn', 'out'):
       self.__report_skipped(name)

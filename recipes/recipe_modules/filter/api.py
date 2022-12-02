@@ -244,8 +244,8 @@ class FilterApi(recipe_api.RecipeApi):
       all_targets = set(test_targets) | set(additional_compile_targets)
       return sorted(test_targets), sorted(all_targets)
 
-    elif (step_result.json.output['status'] in ('Found dependency',
-                                                'Found dependency (all)')):
+    if (step_result.json.output['status'] in ('Found dependency',
+                                              'Found dependency (all)')):
       test_targets = step_result.json.output['test_targets']
       compile_targets = step_result.json.output['compile_targets']
 
@@ -259,9 +259,8 @@ class FilterApi(recipe_api.RecipeApi):
 
       return test_targets, compile_targets
 
-    else:
-      step_result.presentation.step_text = 'No compile necessary'
-      return [], []
+    step_result.presentation.step_text = 'No compile necessary'
+    return [], []
 
   def analyze(
       self,

@@ -87,6 +87,7 @@ def RunSteps(api):
 
 
 def GenTests(api):
+  # pylint: disable=import-outside-toplevel
   from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb2
 
   # Data used in tests.

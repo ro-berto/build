@@ -33,7 +33,7 @@ tests this can be disabled by adding this footer to your CL message:
 
 
 @attrs()
-class CompilatorOutputProps(object):
+class CompilatorOutputProps:
   """Contains output properties from the triggered Compilator build
 
   Attributes:
@@ -58,7 +58,7 @@ class CompilatorOutputProps(object):
 class ChromiumOrchestratorApi(recipe_api.RecipeApi):
 
   def __init__(self, properties, **kwargs):
-    super(ChromiumOrchestratorApi, self).__init__(**kwargs)
+    super().__init__(**kwargs)
     self.compilator = properties.compilator
     self.compilator_watcher_git_revision = (
         properties.compilator_watcher_git_revision)
@@ -545,8 +545,7 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
     def append_suffix(name):
       if with_patch:
         return name + ' (with patch)'
-      else:
-        return name + ' (without patch)'
+      return name + ' (without patch)'
 
     collected_output_dir = self.m.path.mkdtemp()
     collect_step_name = append_suffix('collect led compilator build')
@@ -604,12 +603,12 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
       ret = self.m.step.sub_build(name, cmd, sub_build)
       ret.presentation.links['compilator build: ' + str(build.id)] = build_url
       return ret.step.sub_build
-    except self.m.step.StepFailure:
+    except self.m.step.StepFailure as e:
       ret = self.m.step.active_result
       ret.presentation.links['compilator build: ' + str(build.id)] = build_url
       sub_build = ret.step.sub_build
       if not sub_build:
-        raise self.m.step.InfraFailure('sub_build missing from step')
+        raise self.m.step.InfraFailure('sub_build missing from step') from e
       return sub_build
 
   def process_sub_build(self, sub_build, is_swarming_phase, with_patch):

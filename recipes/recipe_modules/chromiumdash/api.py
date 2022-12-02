@@ -16,9 +16,6 @@ class ChromiumDashApi(recipe_api.RecipeApi):
   RELEASE_CHANNELS = ('Beta', 'Stable', 'Dev', 'Canary')
   VALID_PLATFORMS = ('Android', 'Mac', 'Linux', 'Windows', 'iOS')
 
-  def __init__(self, **kwargs):
-    super(ChromiumDashApi, self).__init__(**kwargs)
-
   def _get_json(self, endpoint, url_args, step_name=None,
                 default_test_data=None):
     """Helper method to fetch json data from chromiumdash.

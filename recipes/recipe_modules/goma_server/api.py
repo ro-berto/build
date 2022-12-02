@@ -10,9 +10,6 @@ class GomaServerApi(recipe_api.RecipeApi):
   GomaServerApi contains helper functions for building goma server.
   """
 
-  def __init__(self, **kwargs):
-    super(GomaServerApi, self).__init__(**kwargs)
-
   def BuildAndTest(self, repository, package_base, allow_diff=True):
     """Build goma server and run test.
 

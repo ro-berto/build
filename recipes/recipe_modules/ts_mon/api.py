@@ -9,7 +9,7 @@ from recipe_engine import recipe_api
 
 class TSMonApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):
-    super(TSMonApi, self).__init__(**kwargs)
+    super().__init__(**kwargs)
     self._send_ts_mon_pkg_path = None
 
   def _ensure_send_ts_mon_values(self):

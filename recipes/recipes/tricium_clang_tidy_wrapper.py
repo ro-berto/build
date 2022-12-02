@@ -37,7 +37,7 @@ class ClangTidySpec(chromium.BuilderSpec):
   def __init__(self, **kwargs):
     gclient_configs = kwargs.setdefault('gclient_apply_config', [])
     gclient_configs.append('use_clang_tidy')
-    super(ClangTidySpec, self).__init__(**kwargs)
+    super().__init__(**kwargs)
 
 
 BUILDERS = freeze({

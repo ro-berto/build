@@ -78,7 +78,7 @@ class FlakinessApi(recipe_api.RecipeApi):
   """A module for new test identification on try builds."""
 
   def __init__(self, properties, *args, **kwargs):
-    super(FlakinessApi, self).__init__(*args, **kwargs)
+    super().__init__(*args, **kwargs)
     self._check_for_flakiness = properties.check_for_flakiness
     # Input to cross reference step in "verify_new_tests" might be too large
     # and cause step failure, when there are too many new tests to verify

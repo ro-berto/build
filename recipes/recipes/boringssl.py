@@ -103,7 +103,7 @@ def _AppendFlags(args, key, flags):
     args[key] = flags
 
 
-class _Config(object):
+class _Config:
 
   def __init__(self, buildername, clang, cmake_args, gclient_vars, msvc_target,
                runner_args, run_ssl_tests, run_unit_tests):

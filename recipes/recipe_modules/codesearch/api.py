@@ -100,7 +100,7 @@ class CodesearchApi(recipe_api.RecipeApi):
               'python3', '-u', self.m.depot_tools.gn_py_path, 'gen',
               export_compile_cmd, self.c.out_path
           ],
-          stdout=self.m.raw_io.output_text()).stdout
+          stdout=self.m.raw_io.output_text())
 
   def generate_gn_target_list(self, targets=None, output_file=None):
     output_file = output_file or self.c.gn_targets_json_file
@@ -185,7 +185,7 @@ class CodesearchApi(recipe_api.RecipeApi):
     """
     if self.c.PROJECT in ('chromium', 'chrome'):
       return self._PROJECT_BROWSER
-    elif self.c.PROJECT == 'chromiumos':
+    if self.c.PROJECT == 'chromiumos':
       return self._PROJECT_OS
     return self._PROJECT_UNSUPPORTED  # pragma: nocover
 

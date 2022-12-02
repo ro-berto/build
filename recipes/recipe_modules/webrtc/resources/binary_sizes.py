@@ -56,10 +56,9 @@ def get_directory_size(path):
 def get_size(path):
   if os.path.isdir(path):
     return get_directory_size(path)
-  elif path.endswith('.so'):
+  if path.endswith('.so'):
     return get_elf_file_size(path)
-  else:
-    return os.path.getsize(path)
+  return os.path.getsize(path)
 
 
 def main(argv):

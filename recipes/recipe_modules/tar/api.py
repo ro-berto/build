@@ -67,7 +67,7 @@ class TarApi(recipe_api.RecipeApi):
         stdin=self.m.json.input(script_input))
 
 
-class TarPackage(object):
+class TarPackage:
   """Used to gather a list of files to tar."""
 
   def __init__(self, module, root, output, compression):

@@ -92,7 +92,7 @@ def GetHostToolLabel(platform):
   """
   if platform.is_linux and platform.bits == 64:
     return 'linux64'
-  elif platform.is_mac:
+  if platform.is_mac:
     return 'mac'
   raise ValueError('unknown or unsupported platform')  # pragma: no cover
 

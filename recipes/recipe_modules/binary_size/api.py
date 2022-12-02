@@ -23,7 +23,7 @@ def _normalize_name(v):
 class BinarySizeApi(recipe_api.RecipeApi):
 
   def __init__(self, properties, **kwargs):
-    super(BinarySizeApi, self).__init__(**kwargs)
+    super().__init__(**kwargs)
     self._analyze_targets = list(properties.analyze_targets or
                                  constants.DEFAULT_ANALYZE_TARGETS)
     self.compile_targets = list(properties.compile_targets or
@@ -315,9 +315,8 @@ class BinarySizeApi(recipe_api.RecipeApi):
     """
     if is_fuchsia:
       return self._get_fuchsia_size_analysis_command(staging_dir)
-    else:
-      return self._get_android_size_analysis_command(staging_dir,
-                                                     use_m87_flow=use_m87_flow)
+    return self._get_android_size_analysis_command(
+        staging_dir, use_m87_flow=use_m87_flow)
 
   def _parse_gs_zip_path(self, gs_zip_path):
     # Returns (timestamp, revision sha)
@@ -511,10 +510,9 @@ class BinarySizeApi(recipe_api.RecipeApi):
     if is_fuchsia:
       return self._create_diffs_fuchsia(author, before_dir, after_dir,
                                         results_path)
-    else:
-      return self._create_diffs_android(author, review_subject, review_url,
-                                        before_dir, after_dir, results_path,
-                                        staging_dir, use_m87_flow)
+    return self._create_diffs_android(author, review_subject, review_url,
+                                      before_dir, after_dir, results_path,
+                                      staging_dir, use_m87_flow)
 
   def _create_diffs_android(self, author, review_subject, review_url,
                             before_dir, after_dir, results_path, staging_dir,
@@ -615,10 +613,10 @@ class BinarySizeApi(recipe_api.RecipeApi):
                 '(this is fine / normal).')
           presentation.status = self.m.step.FAILURE
           return allow_expectations_regressions
-        else:
-          presentation.status = self.m.step.WARNING
-          presentation.step_text += (
-              '<br/>Expectations did not match without patch either.')
+
+        presentation.status = self.m.step.WARNING
+        presentation.step_text += (
+            '<br/>Expectations did not match without patch either.')
     return True
 
   def _clear_failed_expectation_files(self):

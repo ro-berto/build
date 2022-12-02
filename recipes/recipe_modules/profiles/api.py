@@ -10,7 +10,7 @@ from recipe_engine import recipe_api
 class ProfilesApi(recipe_api.RecipeApi):
 
   def __init__(self, *args, **kwargs):
-    super(ProfilesApi, self).__init__(*args, **kwargs)
+    super().__init__(*args, **kwargs)
     # Directory storing the merge scripts for profile generation
     self._merge_scripts_dir = None
     # Single temporary directory to contain all profile data for all targets

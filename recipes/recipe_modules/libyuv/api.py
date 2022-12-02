@@ -27,7 +27,7 @@ class LibyuvApi(recipe_api.RecipeApi):
   RECIPE_CONFIGS = libyuv_builders.RECIPE_CONFIGS
 
   def __init__(self, **kwargs):
-    super(LibyuvApi, self).__init__(**kwargs)
+    super().__init__(**kwargs)
     self.group_config = None
     self.bot_config = None
     self.bot_type = None

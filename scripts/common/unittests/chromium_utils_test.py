@@ -17,7 +17,7 @@ sys.path.extend([
 from common import chromium_utils
 
 
-class FakeParser(object):
+class FakeParser:
 
   def __init__(self):
     self.lines = []
@@ -26,7 +26,7 @@ class FakeParser(object):
     self.lines.append(line)
 
 
-class FakeFilterObj(object):
+class FakeFilterObj:
 
   def __init__(self):
     self.lines = []

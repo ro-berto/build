@@ -22,7 +22,7 @@ import collect_task
 class CollectTaskTest(unittest.TestCase):
 
   def setUp(self):
-    super(CollectTaskTest, self).setUp()
+    super().setUp()
 
     self.subprocess_calls = []
     def mocked_subprocess_call(args, **_):
@@ -32,7 +32,8 @@ class CollectTaskTest(unittest.TestCase):
     def mocked_subprocess_popen(args, **_):
       self.subprocess_calls.append(args)
 
-      class FakeProcess(object):
+      class FakeProcess:
+
         def __init__(self):
           self.returncode = 0
         def poll(self):
@@ -52,7 +53,7 @@ class CollectTaskTest(unittest.TestCase):
 
   def tearDown(self):
     shutil.rmtree(self.temp_dir)
-    super(CollectTaskTest, self).tearDown()
+    super().tearDown()
 
   def test_basic(self):
     collect_cmd = [

@@ -183,7 +183,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     return None  # pragma: no cover
 
   def __init__(self, **kwargs):
-    super(SwarmingApi, self).__init__(**kwargs)
+    super().__init__(**kwargs)
     # All tests default to a x86-64 bot running with no GPU. This simplifies
     # management so that new tests are not executed on exotic bots by accidents
     # even if misconfigured.
@@ -1826,7 +1826,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       self.path_to_merge_scripts = path_to_merge_scripts
 
 
-class SwarmingTask(object):
+class SwarmingTask:
   """Definition of a task to run on swarming."""
 
   def __init__(self,

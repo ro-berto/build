@@ -14,7 +14,7 @@ _RESULT_DETAILS_LINK = 'result_details (logcats, flakiness links)'
 class AndroidApi(recipe_api.RecipeApi):
 
   def __init__(self, **kwargs):
-    super(AndroidApi, self).__init__(**kwargs)
+    super().__init__(**kwargs)
     self._devices = None
     self._file_changes_path = None
 
@@ -1109,12 +1109,12 @@ class AndroidApi(recipe_api.RecipeApi):
       if (f.result.retcode == EXIT_CODES['infra']):
         i = self.m.step.InfraFailure(f.name or f.reason, result=f.result)
         i.result.presentation.status = self.m.step.EXCEPTION
-        raise i
-      elif (f.result.retcode == EXIT_CODES['warning']):
+        raise i from f
+      if (f.result.retcode == EXIT_CODES['warning']):
         w = self.m.step.StepWarning(f.name or f.reason, result=f.result)
         w.result.presentation.status = self.m.step.WARNING
-        raise w
-      elif (f.result.retcode == EXIT_CODES['error']):
+        raise w from f
+      if (f.result.retcode == EXIT_CODES['error']):
         f.result.presentation.status = self.m.step.FAILURE
       raise
 

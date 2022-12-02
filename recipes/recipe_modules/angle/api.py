@@ -14,7 +14,7 @@ from . import trybots as trybots_module
 class ANGLEApi(recipe_api.RecipeApi):
 
   def __init__(self, properties, **kwargs):
-    super(ANGLEApi, self).__init__(**kwargs)
+    super().__init__(**kwargs)
     self._trybots = None
     self._builders = None
     self._builder_id = None

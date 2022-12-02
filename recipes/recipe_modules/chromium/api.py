@@ -28,7 +28,7 @@ _CR_COMPILE_GUARD_CONTENTS = textwrap.dedent("""\
 class ChromiumApi(recipe_api.RecipeApi):
 
   def __init__(self, input_properties, *args, **kwargs):
-    super(ChromiumApi, self).__init__(*args, **kwargs)
+    super().__init__(*args, **kwargs)
     self._build_properties = None
     self._version = None
     self._clang_version = None
@@ -42,15 +42,13 @@ class ChromiumApi(recipe_api.RecipeApi):
     return self._xcode_build_version
 
   def make_config_params(self, *args, **kwargs):
-    config_object, params = super(ChromiumApi,
-                                  self).make_config_params(*args, **kwargs)
+    config_object, params = super().make_config_params(*args, **kwargs)
     if config_object is not None:
       validate_config(config_object)
     return config_object, params
 
-  def apply_config(self, config_name, config_object=None, *args, **kwargs):
-    super(ChromiumApi, self).apply_config(config_name, config_object, *args,
-                                          **kwargs)
+  def apply_config(self, config_name, config_object=None, optional=False):
+    super().apply_config(config_name, config_object, optional)
     validate_config(config_object or self.c)
 
   @contextlib.contextmanager

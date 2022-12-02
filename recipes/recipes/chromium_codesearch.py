@@ -95,9 +95,9 @@ def RunSteps(api, properties):
   gclient_config = api.gclient.make_config('chromium_no_telemetry_dependencies')
   target_os = 'linux'
   host_os = 'linux'
-  if platform == 'android' or platform == 'webview':
+  if platform in ('android', 'webview'):
     target_os = 'android'
-  elif platform == 'chromeos' or platform == 'lacros':
+  elif platform in ('chromeos', 'lacros'):
     target_os = 'chromeos'
   elif platform == 'fuchsia':
     target_os = 'fuchsia'
@@ -230,9 +230,9 @@ def _RunStepWithRetry(api, step_function, max_tries=3):
       failures += 1
       if failures == max_tries:
         raise # pragma: no cover
-      else:
-        api.step.active_result.presentation.step_text = f.reason_message()
-        api.step.active_result.presentation.status = api.step.WARNING
+
+      api.step.active_result.presentation.step_text = f.reason_message()
+      api.step.active_result.presentation.status = api.step.WARNING
 
 
 def _sanitize_nonalpha(text):

@@ -137,8 +137,7 @@ def FileRegexBlacklist(options):
     # the memory tools).
     if options.package_dsym_files:
       return r'^.+\.(a)$'
-    else:
-      return r'^.+\.(a|dSYM)$'
+    return r'^.+\.(a|dSYM)$'
   if chromium_utils.IsLinux():
     # object files, archives, and gcc (make build) dependency info.
     return r'^.+\.(o|a|d)$'
@@ -317,7 +316,7 @@ def PruneOldArchives(staging_dir, zip_base, zip_ext, prune_limit):
       chromium_utils.RemoveFile(staging_dir, zip_file)
 
 
-class PathMatcher(object):
+class PathMatcher:
   """Generates a matcher which can be used to filter file paths."""
 
   def __init__(self, options):

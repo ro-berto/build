@@ -319,7 +319,7 @@ def UploadNinjaLog(
 
   # info['cmdline'] should be list of string for
   # go struct on chromium-build-stats.
-  if isinstance(command, str) or isinstance(command, unicode):
+  if isinstance(command, str):
     command = [command]
 
   info = {

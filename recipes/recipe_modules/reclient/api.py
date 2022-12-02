@@ -81,16 +81,16 @@ class MalformedREClientFlag(Exception):
 
   def __init__(self, flag):
     full_message = 'Flag "{}" doesn\'t start with "RBE_"'.format(flag)
-    super(MalformedREClientFlag, self).__init__(full_message)
+    super().__init__(full_message)
 
 
-class BuildResultReceiver(object):
+class BuildResultReceiver:
 
   def __init__(self):
     self.build_exit_status = -1
 
 
-class FilenameMaker(object):
+class FilenameMaker:
   """A helper to make filenames with a fixed (unique) suffix"""
 
   def __init__(self, timestamp, uuid):
@@ -120,7 +120,7 @@ class ReclientApi(recipe_api.RecipeApi):
   """A module for interacting with re-client."""
 
   def __init__(self, props, **kwargs):
-    super(ReclientApi, self).__init__(**kwargs)
+    super().__init__(**kwargs)
 
     self._props = props
     self._instance = None

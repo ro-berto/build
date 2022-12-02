@@ -19,7 +19,7 @@ class ChromiumBootstrapApi(recipe_api.RecipeApi):
   """
 
   def __init__(self, input_properties, **kwargs):
-    super(ChromiumBootstrapApi, self).__init__(**kwargs)
+    super().__init__(**kwargs)
     self._commits = tuple(input_properties.commits)
     self._skip_analysis_reasons = tuple(input_properties.skip_analysis_reasons)
     self._exe = input_properties.exe
@@ -114,7 +114,7 @@ class ChromiumBootstrapApi(recipe_api.RecipeApi):
 
     if missing_repos:
       checked_out_repos = set()
-      for revision in manifest.values():
+      for revision in manifest.values():  # pylint: disable=no-member
         repo = revision['repository']
         if repo.endswith('.git'):
           repo = repo[:-len('.git')]

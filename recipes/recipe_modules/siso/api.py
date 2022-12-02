@@ -121,7 +121,6 @@ class SisoApi(recipe_api.RecipeApi):
           self.m.path.abspath(self.m.path.join(ninja_dir, 'siso_trace.json')),
           self.m.path.abspath(self.m.path.join(ninja_dir, 'siso_metrics.json')))
       # TODO(ukai): clang crash report?
-      pass
 
     return result_pb2.RawResult(status=common_pb.SUCCESS)
 

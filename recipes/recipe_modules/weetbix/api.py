@@ -282,7 +282,7 @@ class WeetbixApi(recipe_api.RecipeApi):
 
 
 @attrs()
-class FailureRateAnalysisPerSuite(object):
+class FailureRateAnalysisPerSuite:
   """Wraps a list of TestVariantFailureRateAnalysis instances per test suite"""
   suite_name = attrib(str)
   # List of IndividualTestFailureRateAnalysis
@@ -315,7 +315,7 @@ class FailureRateAnalysisPerSuite(object):
 
 
 @attrs()
-class IndividualTestFailureRateAnalysis(object):
+class IndividualTestFailureRateAnalysis:
   """Wraps a TestVariantFailureRateAnalysis instance for one individual test"""
   # Full test ID.
   # Consists of a suite prefix + the test_name
@@ -403,7 +403,7 @@ class IndividualTestFailureRateAnalysis(object):
 
 
 @attrs()
-class IntervalStats(object):
+class IntervalStats:
   """Wraps IntervalStats instance
 
   # Each interval currently represents 24 weekday hours, including weekend

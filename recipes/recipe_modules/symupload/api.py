@@ -15,7 +15,7 @@ class SymuploadApi(recipe_api.RecipeApi):
   """Chromium specific module for symuploads."""
 
   def __init__(self, properties, **kwargs):
-    super(SymuploadApi, self).__init__(**kwargs)
+    super().__init__(**kwargs)
     self._properties = properties
 
   @property

@@ -22,7 +22,7 @@ _TidyDiagnosticID = collections.namedtuple(
     '_TidyDiagnosticID', ['message', 'line_number', 'check_name'])
 
 
-class _SourceFileComments(object):
+class _SourceFileComments:
 
   def __init__(self):
     self._source_comments = []

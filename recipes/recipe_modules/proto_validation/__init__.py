@@ -32,7 +32,7 @@ import contextlib
 from google.protobuf.message import Message
 
 
-class Registry(object):
+class Registry:
   """A type for registering validators and validating protobuf messages.
   """
 
@@ -98,7 +98,7 @@ class Registry(object):
     return ctx._errors
 
 
-class Context(object):
+class Context:
   """A type for reporting errors and validating fields.
 
   Validator functions and callbacks will receive a Context

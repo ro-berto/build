@@ -42,7 +42,7 @@ BUILDER_FOOTER = 'Led-Recipes-Tester-Builder'
 
 
 @attrs()
-class BuilderToTrigger(object):
+class BuilderToTrigger:
   # The buildbucket v1 style name of the builder
   name = attrib(str)
   # The key of the CL to use when triggering the builder
@@ -57,7 +57,7 @@ DEFAULT_BUILDERS = (
 
 
 @attrs()
-class FilesToIgnore(object):
+class FilesToIgnore:
   # A list of strings containing regex patterns of files to ignore. The patterns
   # will be matched against the repo-root-relative paths of the affected files
   # (e.g. recipes/recipe_modules/chromium_tests_builder_config/trybots.py). The
@@ -157,7 +157,8 @@ def _get_recipe(led_builder):
   except ValueError as ex:  # pragma: no cover
     # If you see this in simulations, it's possible that you are missing a
     # led_get_builder clause.
-    raise ValueError("build has no recipe set (%s): %r" % (ex, build_proto))
+    message = "build has no recipe set (%s): %r" % (ex, build_proto)
+    raise ValueError(message) from ex
 
 
 def _process_footer_builders(api, builders):
