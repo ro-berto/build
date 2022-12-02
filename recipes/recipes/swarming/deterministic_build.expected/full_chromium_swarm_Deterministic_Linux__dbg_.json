@@ -1168,7 +1168,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "--ninja-path",
-      "RECIPE_REPO[depot_tools]/ninja",
+      "[CACHE]/builder/src/third_party/ninja/ninja",
       "--use-isolate-files"
     ],
     "luci_context": {

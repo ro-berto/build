@@ -292,7 +292,7 @@ class IsolateApi(recipe_api.RecipeApi):
         '--json-output',
         self.m.json.output(),
         '--ninja-path',
-        self.m.depot_tools.ninja_path,
+        self.m.path['checkout'].join('third_party', 'ninja', 'ninja'),
         '--use-isolate-files',
     ]
     try:

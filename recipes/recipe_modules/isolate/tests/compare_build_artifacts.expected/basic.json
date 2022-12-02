@@ -12,7 +12,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "--ninja-path",
-      "RECIPE_REPO[depot_tools]/ninja",
+      "None/third_party/ninja/ninja",
       "--use-isolate-files"
     ],
     "name": "compare_build_artifacts",
