@@ -133,6 +133,10 @@ TEST_CONFIGS = freeze({
     'tool': 'run-gcmole-v2',
     'isolated_target': 'run-gcmole',
   },
+  'gcmole_v3': {
+    'tool': 'run-gcmole-v3',
+    'isolated_target': 'run-gcmole',
+  },
   'mjsunit': {
     'name': 'Mjsunit',
     'tests': ['mjsunit'],
@@ -261,9 +265,18 @@ class BaseTest:
     return True
 
   def pre_run(self, test=None, **kwargs):
+    """Callback preparing test runs."""
+    pass  # pragma: no cover
+
+  def mid_run(self):
+    """Callback for things happening after pre_run and before run."""
     pass  # pragma: no cover
 
   def run(self, test=None, **kwargs):
+    """Callback for showing test runs.
+
+    Each step in this callback will be shown on top-level.
+    """
     raise NotImplementedError()  # pragma: no cover
 
   def rerun(self, failure_dict, **kwargs):  # pragma: no cover
@@ -591,6 +604,122 @@ class V8GenericSwarmingTest(BaseTest):
     return TestResults.not_empty()
 
 
+class V82PhaseGenericSwarmingTest(BaseTest):
+  """Framework for dependent tasks on swarming, executed in two phases.
+
+  - Trigger/collect tasks of phase 1.
+  - Perform local calculations (e.g. reduce results).
+  - Trigger/collect tasks of phase 2.
+  """
+
+  def __init__(self, *args, **kwargs):
+    super().__init__(*args, **kwargs)
+    # State stored between callbacks.
+    self.test = None
+    self.task = None
+    self.output_dir = None
+
+  @property
+  def uses_swarming(self):
+    return True
+
+  @property
+  def title(self):
+    """Step name prefix used across all phases."""
+    raise NotImplementedError()  # pragma: no cover
+
+  @property
+  def command_phase1(self):
+    """Command passed to the swarming tasks of phase 1."""
+    raise NotImplementedError()  # pragma: no cover
+
+  @property
+  def command_phase2(self):
+    """Command passed to the swarming tasks of phase 2."""
+    raise NotImplementedError()  # pragma: no cover
+
+  @property
+  def shards(self):
+    """Number of shards used in both phase 1 and 2."""
+    raise NotImplementedError()  # pragma: no cover
+
+  @property
+  def idempotent(self):
+    """Wheather tasks are idempotent in both phase 1 and 2."""
+    raise NotImplementedError()  # pragma: no cover
+
+  def prepare_local(self, workspace):
+    """Callback executed while waiting for tasks of phase 1."""
+    raise NotImplementedError()  # pragma: no cover
+
+  def run_local(self, workspace):
+    """Callback executed after collecting tasks of phase 1.
+
+    Results are collected to self.output_dir.
+    """
+    raise NotImplementedError()  # pragma: no cover
+
+  def pre_run(self, test=None, **kwargs):
+    """Trigger tasks of phase 1."""
+    self.test = test or self.api.v8_tests.test_configs[self.name]
+    self.output_dir = self.api.path.mkdtemp('swarming_output')
+
+    self.task = self.create_task(
+        self.test,
+        name=f'{self.title} - prepare',
+        idempotent=self.idempotent,
+        shards=self.shards,
+        task_output_dir=self.output_dir,
+        raw_cmd=self.command_phase1,
+        **kwargs
+    )
+
+    _trigger_swarming_task(self.api, self.task, self.test_step_config)
+
+  def mid_run(self):
+    """Transition between phase 1 and 2.
+
+    - Prepare local workspace in a temporary directory while waiting.
+    - Collect tasks of phase 1.
+    - Perform any local calculations via callback.
+    - Trigger tasks of phase 2.
+
+    Note, if multiple 2-phase tests are run on the same builder, the parts
+    "prepare workspace" and "collect phase 1" are executed sequencially for
+    each 2-phase test. If workspace preparation becomes a bottleneck, we
+    could split this method into two, doing all workspace preparations in
+    sequence first, before waiting for the first phase-1 task.
+    """
+    with self.api.step.nest(f'{self.title} - local',):
+      workspace = self.api.path.mkdtemp('workspace')
+
+      with self.api.context(cwd=workspace):
+        self.prepare_local(workspace)
+
+        assert self.task
+        step_result, _ = self.api.chromium_swarming.collect_task(self.task)
+        self.api.step.raise_on_failure(step_result)
+
+        self.run_local(workspace)
+
+      self.task = self.create_task(
+          self.test,
+          name=self.title,
+          idempotent=self.idempotent,
+          shards=self.shards,
+          raw_cmd=self.command_phase2,
+      )
+
+      _trigger_swarming_task(self.api, self.task, self.test_step_config)
+
+  def run(self, **kwargs):
+    """Collect tasks of phase 2."""
+    assert self.task
+    step_result, _ = self.api.chromium_swarming.collect_task(self.task)
+    self.api.step.raise_on_failure(step_result)
+    return TestResults.not_empty()
+
+
 class V8CompositeSwarmingTest(BaseTest):
   # FIXME: BaseTest.rerun is an abstract method which isn't implemented in this
   # class.  Should it be abstract?
@@ -705,6 +834,7 @@ class V8GCMole(V8CompositeSwarmingTest):
     ]
 
 
+# TODO(https://crbug.com/v8/9287): Remove after M112/M113.
 class V8GCMoleV2(V8GenericSwarmingTest):
   @property
   def title(self):
@@ -713,6 +843,66 @@ class V8GCMoleV2(V8GenericSwarmingTest):
   @property
   def command(self):
     return ['tools/gcmole/run-gcmole.py', str(self.test_step_config.variants)]
+
+
+class V8GCMoleV3(V82PhaseGenericSwarmingTest):
+  @property
+  def title(self):
+    return f'GCMole{self.test_step_config.step_name_suffix}'
+
+  @property
+  def command_phase1(self):
+    return [
+      'tools/gcmole/run-gcmole.py',
+      'collect',
+      str(self.test_step_config.variants),
+      '--output', '${ISOLATED_OUTDIR}/callgraph.bin',
+    ]
+
+  @property
+  def command_phase2(self):
+    return [
+      'tools/gcmole/run-gcmole.py',
+      'check',
+      str(self.test_step_config.variants),
+    ]
+
+  @property
+  def shards(self):
+    return self.test_step_config.shards
+
+  @property
+  def idempotent(self):
+    return True
+
+  def prepare_local(self, workspace):
+    """Get the isolated gcmole archive to prepare running locally.
+
+    This is performed while waiting for other tasks, so its runtime cost is
+    irrelevant, since it's much smaller.
+    """
+    target = self.test.get('isolated_target')
+    cas_digest = self.api.v8_tests.isolated_tests.get(target)
+    self.api.cas.download('download', cas_digest, workspace)
+
+  def run_local(self, workspace):
+    """Locally merge partial gcmole callgraphs returned from phase-1 tasks and
+    upload results to CAS.
+    """
+    command = [
+      'python3', '-u',
+      workspace.join('tools', 'gcmole', 'run-gcmole.py'),
+      'merge',
+      str(self.test_step_config.variants),
+    ]
+    for taskdir in self.task.get_task_shard_output_dirs():
+      command += ['--input', self.output_dir.join(taskdir, 'callgraph.bin')]
+
+    self.api.step('Merge callgraphs', command)
+
+    target = self.test.get('isolated_target')
+    digest = self.api.cas.archive('Archive workspace', workspace)
+    self.api.v8_tests.isolated_tests[target] = digest
 
 
 class V8RunPerf(V8CompositeSwarmingTest):
@@ -746,6 +936,7 @@ TOOL_TO_TEST_SWARMING = freeze({
   'jsfunfuzz': V8Fuzzer,
   'run-gcmole': V8GCMole,
   'run-gcmole-v2': V8GCMoleV2,
+  'run-gcmole-v3': V8GCMoleV3,
   'run-num-fuzzer': V8SwarmingTest,
   'run-perf': V8RunPerf,
   'run-tests': V8SwarmingTest,
@@ -991,13 +1182,23 @@ class TestGroup:
     self.failed_tests = []
     self.test_results = TestResults.empty()
 
-  def pre_run(self):  # pragma: no cover
+  def pre_run(self):
     """Executes the |pre_run| method of each test."""
-    raise NotImplementedError()
+    for test in self.tests:
+      with self.run_checked(test):
+        test.pre_run()
 
-  def run(self):  # pragma: no cover
+  def mid_run(self):
+    """Executes the |mid_run| method of each test."""
+    for test in self.tests:
+      with self.run_checked(test):
+        test.mid_run()
+
+  def run(self):
     """Executes the |run| method of each test."""
-    raise NotImplementedError()
+    for test in self.tests:
+      with self.run_checked(test):
+        self.test_results += test.run()
 
   @contextlib.contextmanager
   def run_checked(self, test):
@@ -1016,31 +1217,6 @@ class TestGroup:
   def raise_on_empty(self):
     if self.test_results.num_tests == 0:
       raise self.api.step.StepFailure('No tests were run')
-
-
-class LocalGroup(TestGroup):
-  def pre_run(self):
-    for test in self.tests:
-      with self.run_checked(test):
-        test.pre_run()
-
-  def run(self):
-    for test in self.tests:
-      with self.run_checked(test):
-        self.test_results += test.run()
-
-
-# TODO(machenbach): Implement waiting for tasks.
-class SwarmingGroup(TestGroup):
-  def pre_run(self):
-    for test in self.tests:
-      with self.run_checked(test):
-        test.pre_run()
-
-  def run(self):
-    for test in self.tests:
-      with self.run_checked(test):
-        self.test_results += test.run()
 
 
 def create_test(test_step_config, api):

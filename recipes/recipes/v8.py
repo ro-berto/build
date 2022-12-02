@@ -485,7 +485,8 @@ def GenTests(api):
         parent_bot_config=linux_bot_config,
         parent_test_spec=json.dumps({'tests': [
             {'name': 'gcmole'},
-            {'name': 'gcmole_v2', 'variant': 'arm64'}]}, indent=2),
+            {'name': 'gcmole_v2', 'variant': 'arm64'},
+            {'name': 'gcmole_v3', 'variant': 'x64', 'shards': 2}]}, indent=2),
     )
   )
 

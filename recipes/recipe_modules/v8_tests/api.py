@@ -197,13 +197,13 @@ class V8TestsApi(recipe_api.RecipeApi):
     # There are no mixed tests in V8.
     assert not local_tests or not swarming_tests
 
-    if swarming_tests:
-      test_group = testing.SwarmingGroup(self.m, swarming_tests)
-    else:
-      test_group = testing.LocalGroup(self.m, local_tests)
+    test_group = testing.TestGroup(
+        self.m, swarming_tests if swarming_tests else local_tests)
 
     with self.maybe_nest(swarming_tests, 'trigger tests'):
       test_group.pre_run()
+
+    test_group.mid_run()
 
     test_group.run()
 
