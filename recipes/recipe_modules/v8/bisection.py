@@ -15,7 +15,8 @@ def keyed_bisect(git_range, is_bad):
             whether it's good or bad.
   """
 
-  class LazyMap(object):
+  class LazyMap:
+
     def __getitem__(self, i):
       # The function is assumed to return False for good keys and True for bad
       # ones. By initializing bisect with True below, bisection handles the two

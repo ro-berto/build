@@ -136,8 +136,7 @@ def make_archive(api,
     if not upload_archive:
       if archive_type == 'ref':
         return None, None
-      else:
-        return version, None
+      return version, None
 
     # Upload refbuild and trigger refbuild bundler.
     if archive_type == 'ref':

@@ -121,11 +121,11 @@ def RunSteps(api, compilator_name):
 def create_compilator_handler(api, compilator_name):
   if api.led.launched_by_led:
     return LedCompilatorHandler(api, compilator_name)
-  else:
-    return ProdCompilatorHandler(api, compilator_name)
+  return ProdCompilatorHandler(api, compilator_name)
 
 
-class CompilatorHandler(object):
+class CompilatorHandler:
+
   def __init__(self, api, compilator_name):
     self.api = api
     self.compilator_name = compilator_name
@@ -165,12 +165,12 @@ class ProdCompilatorHandler(CompilatorHandler):
       ret = self.api.step.sub_build('compilator steps', cmd, sub_build)
       ret.presentation.links[build_link] = build_url
       return ret.step.sub_build
-    except self.api.step.StepFailure:
+    except self.api.step.StepFailure as e:
       ret = self.api.step.active_result
       ret.presentation.links[build_link] = build_url
       sub_build = ret.step.sub_build
       if not sub_build:
-        raise self.api.step.InfraFailure('sub_build missing from step')
+        raise self.api.step.InfraFailure('sub_build missing from step') from e
       return sub_build
 
 

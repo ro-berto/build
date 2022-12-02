@@ -48,7 +48,8 @@ REPRO_TOTAL_TIMEOUT_DEFAULT = 120
 
 # pylint: disable=abstract-method
 
-class V8Variant(object):
+
+class V8Variant:
   """Immutable class representing testing variants passed to v8."""
   def __init__(self, *variants):
     self.variants = variants
@@ -212,7 +213,8 @@ TEST_CONFIGS = freeze({
 })
 
 
-class BaseTest(object):
+class BaseTest:
+
   def __init__(self, test_step_config, api):
     self.test_step_config = test_step_config
     self.name = test_step_config.name
@@ -270,7 +272,7 @@ class BaseTest(object):
 
 class V8Test(BaseTest):
   def __init__(self, *args, **kwargs):
-    super(V8Test, self).__init__(*args, **kwargs)
+    super().__init__(*args, **kwargs)
     self.applied_test_filter = ''
 
   def apply_filter(self):
@@ -436,7 +438,7 @@ def _trigger_swarming_task(api, task, test_step_config):
 
 class V8SwarmingTest(V8Test):
   def __init__(self, *args, **kwargs):
-    super(V8SwarmingTest, self).__init__(*args, **kwargs)
+    super().__init__(*args, **kwargs)
     self.task = None
     self.test = None
 
@@ -518,7 +520,7 @@ class V8SwarmingTest(V8Test):
 
     _trigger_swarming_task(self.api, self.task, self.test_step_config)
 
-  def run(self, **kwargs):
+  def run(self, test=None, **kwargs):
     assert self.task
     result = TestResults.empty()
     try:
@@ -544,7 +546,7 @@ class V8GenericSwarmingTest(BaseTest):
   # FIXME: BaseTest.rerun is an abstract method which isn't implemented in this
   # class.  Should it be abstract?
   def __init__(self, test_step_config, api, title=None, command=None):
-    super(V8GenericSwarmingTest, self).__init__(test_step_config, api)
+    super().__init__(test_step_config, api)
     self._command = command or []
     self._title = (
         title or
@@ -582,7 +584,7 @@ class V8GenericSwarmingTest(BaseTest):
 
     _trigger_swarming_task(self.api, self.task, self.test_step_config)
 
-  def run(self, **kwargs):
+  def run(self, test=None, **kwargs):
     assert self.task
     step_result, _ = self.api.chromium_swarming.collect_task(self.task)
     self.api.step.raise_on_failure(step_result)
@@ -593,7 +595,7 @@ class V8CompositeSwarmingTest(BaseTest):
   # FIXME: BaseTest.rerun is an abstract method which isn't implemented in this
   # class.  Should it be abstract?
   def __init__(self, *args, **kwargs):
-    super(V8CompositeSwarmingTest, self).__init__(*args, **kwargs)
+    super().__init__(*args, **kwargs)
     self.composites = []
 
   @property
@@ -611,9 +613,9 @@ class V8CompositeSwarmingTest(BaseTest):
     for c in self.composites:
       c.pre_run(test, **kwargs)
 
-  def run(self, **kwargs):
+  def run(self, test=None, **kwargs):
     for c in self.composites:
-      c.run(**kwargs)
+      c.run(test, **kwargs)
     return TestResults.not_empty()
 
 
@@ -661,13 +663,14 @@ class V8Fuzzer(V8GenericSwarmingTest):
     self.output_dir = api.path.mkdtemp('swarming_output')
     self.archive = 'fuzz-results-%s.tar.bz2' % (
         api.properties['parent_got_revision'])
-    super(V8Fuzzer, self).__init__(
-        test_step_config, api,
+    super().__init__(
+        test_step_config,
+        api,
         title='Fuzz',
         command=[
-          'tools/jsfunfuzz/fuzz-harness.sh',
-          api.v8_tests.relative_path_to_d8,
-          '${ISOLATED_OUTDIR}/%s' % self.archive,
+            'tools/jsfunfuzz/fuzz-harness.sh',
+            api.v8_tests.relative_path_to_d8,
+            '${ISOLATED_OUTDIR}/%s' % self.archive,
         ],
     )
 
@@ -675,9 +678,9 @@ class V8Fuzzer(V8GenericSwarmingTest):
   def task_output_dir(self):
     return self.output_dir
 
-  def run(self, **kwargs):
+  def run(self, test=None, **kwargs):
     try:
-      super(V8Fuzzer, self).run(**kwargs)
+      super().run(test, **kwargs)
     except self.api.step.StepFailure as e:
       self.api.gsutil.upload(
           self.output_dir.join(self.task.get_task_shard_output_dirs()[0],
@@ -750,7 +753,7 @@ TOOL_TO_TEST_SWARMING = freeze({
 })
 
 
-class Failure(object):
+class Failure:
   """Represents a test run leading to a failure (possibly re-run several times).
   """
   def __init__(self, test, results):
@@ -943,7 +946,7 @@ class Failure(object):
     return create
 
 
-class TestResults(object):
+class TestResults:
 
   def __init__(self, failures, flakes, infra_failures, num_tests):
     self.failures = failures
@@ -980,7 +983,8 @@ class TestResults(object):
     )
 
 
-class TestGroup(object):
+class TestGroup:
+
   def __init__(self, api, tests):
     self.api = api
     self.tests = tests

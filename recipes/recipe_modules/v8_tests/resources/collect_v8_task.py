@@ -72,7 +72,7 @@ class AggregatedResults:
     }
 
 
-class TaskCollector(object):
+class TaskCollector:
 
   def __init__(self):
     self.warnings = []

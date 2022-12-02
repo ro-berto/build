@@ -93,8 +93,8 @@ def RunSteps(api):
       api.step.active_result.presentation.step_text = 'Rolling deactivated'
       monitoring_state = 'deactivated'
       return
-    else:
-      api.step.active_result.presentation.step_text = 'Rolling activated'
+
+    api.step.active_result.presentation.step_text = 'Rolling activated'
 
     # Check for an open auto-roller CL. There should be at most one CL in the
     # chromium project, which is the last roll.

@@ -30,8 +30,8 @@ def RunSteps(api):
   if output.strip() != '1':
     api.step.active_result.presentation.step_text = "Pushing deactivated"
     return
-  else:
-    api.step.active_result.presentation.step_text = "Pushing activated"
+
+  api.step.active_result.presentation.step_text = "Pushing activated"
 
   with api.context(cwd=api.path['checkout']):
     safe_buildername = ''.join(

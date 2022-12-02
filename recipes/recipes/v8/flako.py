@@ -147,7 +147,7 @@ TEST_FAILED_TEMPLATE = """
 """.strip()
 
 
-class Command(object):
+class Command:
   """Helper class representing a command line to V8's run-tests.py."""
   def __init__(self, outdir, test_name, variant, repetitions, repro_only,
                total_timeout_sec, timeout=60, extra_args=None):
@@ -207,7 +207,8 @@ def fallback_buildername(buildername):
     return buildername[:-len(' builder')]
   return buildername
 
-class Depot(object):
+
+class Depot:
   """Helper class for mapping offsets to git revisions."""
 
   def __init__(self, api, known_bad_revision):
@@ -351,7 +352,7 @@ class Depot(object):
     return self.revisions[offset]
 
 
-class Builds(object):
+class Builds:
   """Helper class for locating builds in content-addressed storage (CAS)."""
 
   def __init__(self, api, depot, builder_group, buildername, isolated_name):
@@ -482,7 +483,7 @@ class Builds(object):
     return self.cas_digests[offset]
 
 
-class Runner(object):
+class Runner:
   """Helper class for executing the V8 test runner to check for flakes."""
   def __init__(self, api, builds, command, num_shards, repro_only,
                max_calibration_attempts, failure_regexp):
@@ -645,7 +646,8 @@ class Runner(object):
       return num_failures
 
 
-class Validator(object):
+class Validator:
+
   def __init__(self, api):
     self.api = api
 
@@ -708,8 +710,7 @@ class Bisector(Validator):
         if bisect_step_num >= MAX_BISECT_STEPS / 2:
           raise self.api.step.StepFailure(
               'Unable to retrieve from CAS, probably went out of retention')
-        else:
-          raise e
+        raise e
 
       to_offset = from_offset
       commit_offset *= 2

@@ -38,7 +38,7 @@ V8_PATCH = 'V8_PATCH_LEVEL'
 LCOV_IMAGE = 'lcov:2018-01-18_17-03'
 
 
-class V8Version(object):
+class V8Version:
   """A v8 version as used for tagging (with patch level), e.g. '3.4.5.1'."""
 
   def __init__(self, major, minor, build, patch):
@@ -78,7 +78,9 @@ class V8Version(object):
       new_major += 1
     return V8Version(str(new_major), str(new_minor), 0, 0)
 
-class Trigger(object):
+
+class Trigger:
+
   def __init__(self, api):
     self.api = api
 
@@ -200,7 +202,7 @@ class V8Api(recipe_api.RecipeApi):
   VERSION_FILE = 'include/v8-version.h'
 
   def __init__(self, properties, *args, **kwargs):
-    super(V8Api, self).__init__(*args, **kwargs)
+    super().__init__(*args, **kwargs)
     self.bot_config = None
     self.checkout_root = None
     self.revision = None
@@ -229,8 +231,7 @@ class V8Api(recipe_api.RecipeApi):
   def trigger(self):
     if self.m.led.launched_by_led:
       return LedTrigger(self.m)
-    else:
-      return ProdTrigger(self.m)
+    return ProdTrigger(self.m)
 
   @property
   def trigger_prod(self):
@@ -538,7 +539,7 @@ class V8Api(recipe_api.RecipeApi):
 
   def dedupe_tests(self, high_prec_tests, low_prec_tests):
     """Dedupe tests with lower precedence."""
-    high_prec_ids = set([test.id for test in high_prec_tests])
+    high_prec_ids = {test.id for test in high_prec_tests}
     return high_prec_tests + [
       test for test in low_prec_tests if test.id not in high_prec_ids]
 

@@ -139,8 +139,8 @@ def RunSteps(api):
   if non_flaky_tests:
     raise api.step.StepFailure(
         'Some flakes failed to reproduce: %s' % ', '.join(non_flaky_tests))
-  else:
-    api.step('No flakes that fail to reproduce', cmd=None)
+
+  api.step('No flakes that fail to reproduce', cmd=None)
 
 
 def GenTests(api):

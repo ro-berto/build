@@ -35,7 +35,7 @@ class V8TestsApi(recipe_api.RecipeApi):
   TEST_SPEC = v8_builders.TestSpec
 
   def __init__(self, *args, **kwargs):
-    super(V8TestsApi, self).__init__(*args, **kwargs)
+    super().__init__(*args, **kwargs)
     self.gn_args = None
     self.isolated_tests = None
     self.test_configs = {}
@@ -311,7 +311,7 @@ class V8TestsApi(recipe_api.RecipeApi):
     extra_flags = self.m.properties.get('extra_flags', '')
     if isinstance(extra_flags, str):
       extra_flags = extra_flags.split()
-    assert isinstance(extra_flags, list) or isinstance(extra_flags, tuple)
+    assert isinstance(extra_flags, (list, tuple))
     return list(extra_flags)
 
   def _with_extra_flags(self, args):

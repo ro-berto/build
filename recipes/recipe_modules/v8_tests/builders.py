@@ -12,7 +12,7 @@ from recipe_engine.engine_types import freeze
 from .testing import V8Variant
 
 
-class TestStepConfig(object):
+class TestStepConfig:
   """Per-step test configuration."""
   def __init__(self, name, shards=1, suffix='', test_args=None, variants=None,
                swarming_dimensions=None, swarming_task_attrs=None):
@@ -101,7 +101,7 @@ class TestStepConfig(object):
     )
 
 
-class TestSpec(object):
+class TestSpec:
   """Represents a V8-side test specification with extra tests to run on a
   set of builders.
 
