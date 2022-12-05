@@ -408,7 +408,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "RECIPE[build::chromium_rts/create_model].resources/integration_tests.py",
       "--rts-exec",
       "[CLEANUP]/rts-chromium/linux-amd64/rts-chromium",

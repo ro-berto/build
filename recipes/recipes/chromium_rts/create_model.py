@@ -295,7 +295,7 @@ def compose_build_summary(api, model_dir):
 
 def run_integration_tests(api, exec_path, model_dir, checkout_dir):
   api.step('integration_tests', [
-      'python',
+      'python3',
       api.resource('integration_tests.py'),
       '--rts-exec',
       exec_path,

@@ -77,7 +77,6 @@ PYTHON2_FILES = (
     'recipes/recipe_modules/symupload/resources/symupload.py',
     'recipes/recipe_modules/symupload/unittests/symupload_test.py',
     'recipes/recipe_modules/v8/resources/build-dep-stats.py',
-    'recipes/recipes/chromium_rts/create_model.resources/integration_tests.py',
     'recipes/recipes/dawn.resources/hash_testcases.py',
     'recipes/recipes/swarming/deterministic_build.resources/move.py',
     'recipes/results_dashboard.py',
