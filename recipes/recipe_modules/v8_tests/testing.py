@@ -840,7 +840,10 @@ class V8GCMoleV2(V8GenericSwarmingTest):
 
   @property
   def command(self):
-    return ['tools/gcmole/run-gcmole.py', str(self.test_step_config.variants)]
+    return [
+        'tools/gcmole/run-gcmole.py',
+        str(self.test_step_config.variants),
+    ] + self.test_step_config.test_args
 
 
 class V8GCMoleV3(V82PhaseGenericSwarmingTest):
@@ -855,7 +858,7 @@ class V8GCMoleV3(V82PhaseGenericSwarmingTest):
       'collect',
       str(self.test_step_config.variants),
       '--output', '${ISOLATED_OUTDIR}/callgraph.bin',
-    ]
+    ] + self.test_step_config.test_args
 
   @property
   def command_phase2(self):
@@ -863,7 +866,7 @@ class V8GCMoleV3(V82PhaseGenericSwarmingTest):
       'tools/gcmole/run-gcmole.py',
       'check',
       str(self.test_step_config.variants),
-    ]
+    ] + self.test_step_config.test_args
 
   @property
   def shards(self):
@@ -892,7 +895,7 @@ class V8GCMoleV3(V82PhaseGenericSwarmingTest):
       workspace.join('tools', 'gcmole', 'run-gcmole.py'),
       'merge',
       str(self.test_step_config.variants),
-    ]
+    ] + self.test_step_config.test_args
     for taskdir in self.task.get_task_shard_output_dirs():
       command += ['--input', self.output_dir.join(taskdir, 'callgraph.bin')]
 

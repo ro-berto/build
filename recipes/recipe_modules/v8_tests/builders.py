@@ -30,7 +30,7 @@ class TestStepConfig:
     self.name = name
     self.shards = shards
     self._suffix = suffix
-    self.test_args = test_args or []
+    self.test_args = list(test_args or [])
     self.variants = variants
     self.swarming_dimensions = swarming_dimensions or {}
     self.swarming_task_attrs = swarming_task_attrs or {}
