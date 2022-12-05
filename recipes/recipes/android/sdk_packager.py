@@ -53,7 +53,7 @@ def RunSteps(api, properties):
         'list', list_cmd, stdout=api.raw_io.output_text()).stdout
 
     parse_result = api.step('parse', [
-        'python',
+        'python3',
         api.resource('parse_sdkmanager_list.py'),
         '--raw-input',
         api.raw_io.input_text(list_output),

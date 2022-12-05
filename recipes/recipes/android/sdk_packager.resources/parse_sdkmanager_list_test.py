@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # Copyright 2019 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -21,15 +21,15 @@ class PackageInfoReTest(unittest.TestCase):
     description_line = '      Description: A sample package description'
     m = parse_sdkmanager_list.PACKAGE_INFO_RE.match(description_line)
     self.assertTrue(m)
-    self.assertEquals('Description', m.group(1))
-    self.assertEquals('A sample package description', m.group(2))
+    self.assertEqual('Description', m.group(1))
+    self.assertEqual('A sample package description', m.group(2))
 
   def testValidWithTabs(self):
     version_line = '\tVersion:\t1.2.3'
     m = parse_sdkmanager_list.PACKAGE_INFO_RE.match(version_line)
     self.assertTrue(m)
-    self.assertEquals('Version', m.group(1))
-    self.assertEquals('1.2.3', m.group(2))
+    self.assertEqual('Version', m.group(1))
+    self.assertEqual('1.2.3', m.group(2))
 
 
 class PackageNameReTest(unittest.TestCase):
@@ -38,13 +38,13 @@ class PackageNameReTest(unittest.TestCase):
     name_line = 'emulator'
     m = parse_sdkmanager_list.PACKAGE_NAME_RE.match(name_line)
     self.assertTrue(m)
-    self.assertEquals('emulator', m.group(0))
+    self.assertEqual('emulator', m.group(0))
 
   def testNameWithSemicolons(self):
     name_line = 'system-images;android-28;google_apis;x86'
     m = parse_sdkmanager_list.PACKAGE_NAME_RE.match(name_line)
     self.assertTrue(m)
-    self.assertEquals('system-images;android-28;google_apis;x86', m.group(0))
+    self.assertEqual('system-images;android-28;google_apis;x86', m.group(0))
 
   def testLeadingWhitespace(self):
     name_line = '  emulator'
@@ -75,7 +75,7 @@ class ParseSdkManagerListTest(unittest.TestCase):
         ],
         'installed': [],
     }
-    self.assertEquals(expected, result)
+    self.assertEqual(expected, result)
 
   def testMultipleAvailablePackages(self):
     raw = textwrap.dedent(
@@ -108,7 +108,7 @@ class ParseSdkManagerListTest(unittest.TestCase):
         ],
         'installed': [],
     }
-    self.assertEquals(expected, result)
+    self.assertEqual(expected, result)
 
   def testSingleInstalledPackage(self):
     raw = textwrap.dedent(
@@ -132,7 +132,7 @@ class ParseSdkManagerListTest(unittest.TestCase):
             },
         ],
     }
-    self.assertEquals(expected, result)
+    self.assertEqual(expected, result)
 
   def testMultipleInstalledPackages(self):
     raw = textwrap.dedent(
@@ -168,7 +168,7 @@ class ParseSdkManagerListTest(unittest.TestCase):
             },
         ],
     }
-    self.assertEquals(expected, result)
+    self.assertEqual(expected, result)
 
   def testAvailableAndInstalledPackages(self):
     raw = textwrap.dedent(
@@ -206,7 +206,7 @@ class ParseSdkManagerListTest(unittest.TestCase):
             },
         ],
     }
-    self.assertEquals(expected, result)
+    self.assertEqual(expected, result)
 
   def testUpdatesAvailable(self):
     # Ensures that the parser silently ignores any update information.
@@ -250,7 +250,7 @@ class ParseSdkManagerListTest(unittest.TestCase):
             },
         ],
     }
-    self.assertEquals(expected, result)
+    self.assertEqual(expected, result)
 
   def testOnlyInfo(self):
     raw = textwrap.dedent(
@@ -264,7 +264,7 @@ class ParseSdkManagerListTest(unittest.TestCase):
         'available': [],
         'installed': [],
     }
-    self.assertEquals(expected, result)
+    self.assertEqual(expected, result)
 
 
 if __name__ == '__main__':

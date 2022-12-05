@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # Copyright 2019 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -30,8 +31,6 @@ The emitted JSON takes the following form:
 If the provided input cannot be parsed, no JSON will be emitted.
 """
 
-from __future__ import print_function
-
 import argparse
 import json
 import re
@@ -56,14 +55,14 @@ def ParseSdkManagerList(raw):
   available_packages = []
   installed_packages = []
 
-  current_package = None
+  current_package = {}
   current_section = None
 
   for line in raw.splitlines():
     if not line:
       if current_section is not None and current_package:
         current_section.append(current_package)
-        current_package = None
+        current_package = {}
       continue
 
     m = SEPARATOR_RE.match(line)
@@ -75,10 +74,10 @@ def ParseSdkManagerList(raw):
       info_type = m.group(1).lower()
       info = m.group(2)
       if info_type in _KNOWN_PACKAGE_INFO_TYPES:
-        if current_package is None:
-          print('Orphaned package description: "%s"' % line)
-        else:
+        if current_package:
           current_package[info_type] = info
+        else:
+          print('Orphaned package description: "%s"' % line)
       continue
 
     m = PACKAGE_NAME_RE.match(line)
