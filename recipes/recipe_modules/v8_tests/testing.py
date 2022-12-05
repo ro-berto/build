@@ -158,6 +158,7 @@ TEST_CONFIGS = freeze({
     'idempotent': False,
     'use_random_seed': False,
     'variants': V8Variant('default'),
+    'test_id_prefix' : 'numfuzz',
   },
   'optimize_for_size': {
     'name': 'OptimizeForSize',
@@ -246,11 +247,14 @@ class BaseTest:
 
     task = self.api.chromium_swarming.task(
         cas_input_root=cas_digest, raw_cmd=raw_cmd, **kwargs)
-
     if self.api.v8_tests.resultdb:
       request = task.request.with_resultdb()
-      request_slice = request[0].with_command(
-          self.api.v8_tests.resultdb.wrap(self.api, raw_cmd))
+      wrapperd_cmd = self.api.v8_tests.resultdb.wrap(
+          self.api,
+          raw_cmd,
+          test_id_prefix=test.get('test_id_prefix', None))
+
+      request_slice = request[0].with_command(wrapperd_cmd)
       task.request = request.with_slice(0, request_slice)
 
     return task
