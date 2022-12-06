@@ -211,7 +211,7 @@
       "-GNinja",
       "-DCMAKE_CXX_FLAGS=-DOPENSSL_SMALL=1",
       "-DCMAKE_C_FLAGS=-DOPENSSL_SMALL=1",
-      "-DCMAKE_MAKE_PROGRAM=RECIPE_REPO[depot_tools]/ninja",
+      "-DCMAKE_MAKE_PROGRAM=[START_DIR]/boringssl/utils/bot/ninja/ninja",
       "[START_DIR]/boringssl"
     ],
     "cwd": "[START_DIR]/boringssl/build",
@@ -242,7 +242,7 @@
   },
   {
     "cmd": [
-      "RECIPE_REPO[depot_tools]/ninja",
+      "[START_DIR]/boringssl/utils/bot/ninja/ninja",
       "-C",
       "[START_DIR]/boringssl/build"
     ],
