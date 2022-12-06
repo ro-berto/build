@@ -47,7 +47,8 @@ class ResultDB:
   enable = attrib(bool, default=True)
   has_native_resultdb_integration = attrib(bool, default=False)
   result_format = attrib(
-      enum(['gtest', 'json', 'single', 'tast', 'gtest_json']), default=None)
+      enum(['gtest', 'json', 'single', 'tast', 'gtest_json', 'native']),
+      default=None)
   test_id_as_test_location = attrib(bool, default=False)
   test_location_base = attrib(str, default=None)
   base_tags = attrib(sequence[tuple], default=None)

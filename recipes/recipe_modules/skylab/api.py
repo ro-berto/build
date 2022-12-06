@@ -257,7 +257,7 @@ class SkylabApi(recipe_api.RecipeApi):
     if test.is_tast_test:
       result_format = 'tast'
     elif test.is_GPU_test:
-      result_format = 'json'
+      result_format = 'native'
     return attr.evolve(
         test.spec.resultdb,
         test_id_prefix=test.spec.test_id_prefix,
