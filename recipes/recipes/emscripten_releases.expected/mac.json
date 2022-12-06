@@ -526,14 +526,6 @@
       "BUILDBOT_REVISION": "2d72510e447ab60a9728aeea2362d8be2cbd7789",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "luci_context": {
       "realm": {
         "name": "emscripten-releases:ci"
@@ -572,14 +564,6 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error"
-    },
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
     },
     "luci_context": {
       "realm": {
@@ -629,14 +613,6 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error"
     },
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "luci_context": {
       "realm": {
         "name": "emscripten-releases:ci"
@@ -673,14 +649,6 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error"
-    },
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
     },
     "luci_context": {
       "realm": {
@@ -761,14 +729,6 @@
       "BUILDBOT_REVISION": "2d72510e447ab60a9728aeea2362d8be2cbd7789",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "luci_context": {
       "realm": {
         "name": "emscripten-releases:ci"
@@ -807,14 +767,6 @@
       "BUILDBOT_MASTERNAME": "emscripten-releases",
       "BUILDBOT_REVISION": "2d72510e447ab60a9728aeea2362d8be2cbd7789",
       "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
     },
     "infra_step": true,
     "luci_context": {
@@ -855,14 +807,6 @@
       "BUILDBOT_REVISION": "2d72510e447ab60a9728aeea2362d8be2cbd7789",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "luci_context": {
       "realm": {
         "name": "emscripten-releases:ci"
@@ -897,14 +841,6 @@
       "BUILDBOT_MASTERNAME": "emscripten-releases",
       "BUILDBOT_REVISION": "2d72510e447ab60a9728aeea2362d8be2cbd7789",
       "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
     },
     "luci_context": {
       "realm": {

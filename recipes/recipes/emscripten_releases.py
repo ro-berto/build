@@ -90,8 +90,7 @@ def RunSteps(api):
     builder = api.buildbucket.builder_name
     assert builder in ('linux', 'mac', 'win', 'linux-test-suites')
 
-    # Depot tools on path is for ninja
-    with api.depot_tools.on_path(), api.context(env=env):
+    with api.context(env=env):
       try:
         for step in bot_steps[builder]['build_steps']:
           script = sync_dir.join(step['command'][0])

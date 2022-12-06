@@ -35,14 +35,6 @@
       "BUILDBOT_REVISION": "2d72510e447ab60a9728aeea2362d8be2cbd7789",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "luci_context": {
       "realm": {
         "name": "emscripten-releases:ci"
