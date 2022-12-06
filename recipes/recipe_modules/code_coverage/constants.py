@@ -46,7 +46,8 @@ INCLUDED_THIRD_PARTY_SUBDIRS = [
 # Only generate coverage data for CLs in these gerrit projects.
 # This is a list of (host, project) pairs
 SUPPORTED_PATCH_PROJECTS = [('chromium-review.googlesource.com',
-                             'chromium/src')]
+                             'chromium/src'),
+                            ('webrtc-review.googlesource.com', 'src')]
 
 # A list of test types supported by code coverage api. The test types are
 # defined as str literals and used across multiple places.
