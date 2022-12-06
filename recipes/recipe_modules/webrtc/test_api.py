@@ -102,19 +102,11 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
     nb_phase = 3 if 'more_configs' in builder_name else 1
     if 'try' in builder_id.group:
       if 'fuzzer' not in builder_name:
-        # The "all" and "default" rules for gn are different:
-        # https://gn.googlesource.com/gn/+/main/docs/reference.md#the-all-and-default-rules
-        # To work around issues with //base dependencies on Android,
-        # use "default" on Android and "all" otherwise.
-        if 'android' in builder_name:
-          compile_targets = ['default']
-        else:
-          compile_targets = ['all']
         for i in range(nb_phase):
           run_tests = _run_tests(builder_id) and (nb_phase == 1 or i == 2)
           json_output = self.m.json.output(
               gn_analyze_output or {
-                  'compile_targets': compile_targets,
+                  'compile_targets': ['all'],
                   'status': 'Found dependency',
                   'test_targets': [test_target] if run_tests else [],
               })

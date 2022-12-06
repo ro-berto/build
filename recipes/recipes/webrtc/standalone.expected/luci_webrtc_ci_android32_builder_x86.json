@@ -645,8 +645,7 @@
       "-C",
       "[CACHE]/builder/src/out/Android32_Builder_x86",
       "-j",
-      "80",
-      "default"
+      "80"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -678,7 +677,6 @@
       "[CACHE]/builder/src/out/Android32_Builder_x86",
       "-j",
       "80",
-      "default",
       "-d",
       "explain",
       "-n"
