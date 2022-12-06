@@ -1106,14 +1106,6 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder/src",
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -1157,14 +1149,6 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[CACHE]/builder/src",
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -1211,14 +1195,6 @@
       "[CACHE]/goma/data/android_arm_rel"
     ],
     "cwd": "[CACHE]/builder/src",
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -1252,14 +1228,6 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error"
     },
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -1290,14 +1258,6 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[CACHE]/builder/src",
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -1328,14 +1288,6 @@
       "goma_dir=\"[CACHE]/goma/client\""
     ],
     "cwd": "[CACHE]/builder/src",
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "luci_context": {
       "realm": {
         "name": "webrtc:try"
@@ -1369,14 +1321,6 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error"
-    },
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
     },
     "luci_context": {
       "realm": {
@@ -1421,14 +1365,6 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error"
     },
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "luci_context": {
       "realm": {
         "name": "webrtc:try"
@@ -1461,14 +1397,6 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error"
     },
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "luci_context": {
       "realm": {
         "name": "webrtc:try"
@@ -1499,14 +1427,6 @@
       "net": 0
     },
     "cwd": "[CACHE]/builder/src",
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "luci_context": {
       "realm": {
         "name": "webrtc:try"
@@ -1552,14 +1472,6 @@
       "android_arm_rel"
     ],
     "cwd": "[CACHE]/builder/src",
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "luci_context": {
       "realm": {
         "name": "webrtc:try"
@@ -1592,14 +1504,6 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[CACHE]/builder/src",
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "infra_step": true,
     "luci_context": {
       "realm": {

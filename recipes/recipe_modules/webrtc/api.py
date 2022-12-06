@@ -325,16 +325,14 @@ class WebRTCApi(recipe_api.RecipeApi):
     cmd = ['vpython3', '-u', build_script] + args
 
     with self.m.context(cwd=self.m.path['checkout']):
-      with self.m.depot_tools.on_path():
-        build_step_name = 'build android archive'
-        if use_reclient:
-          build_dir = self.m.path.join(self.m.path['checkout'],
-                                       'andriod-archive')
-          cmd += ['--build-dir', build_dir]
-          self.build_with_reclient(build_step_name, cmd)
-          self.m.file.rmtree('Remove android archive dir', build_dir)
-        else:
-          self.build_with_goma(build_step_name, cmd)
+      build_step_name = 'build android archive'
+      if use_reclient:
+        build_dir = self.m.path.join(self.m.path['checkout'], 'andriod-archive')
+        cmd += ['--build-dir', build_dir]
+        self.build_with_reclient(build_step_name, cmd)
+        self.m.file.rmtree('Remove android archive dir', build_dir)
+      else:
+        self.build_with_goma(build_step_name, cmd)
 
     if not self.m.tryserver.is_tryserver and not self.m.runtime.is_experimental:
       self.m.gsutil.upload(

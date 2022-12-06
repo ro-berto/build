@@ -1687,14 +1687,6 @@
     "env": {
       "RBE_instance": "projects/test-rbe-project/instances/default_instance"
     },
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -1726,14 +1718,6 @@
       "[CACHE]/builder/reclient/deps/Android32"
     ],
     "cwd": "[CACHE]/builder/src",
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -1763,14 +1747,6 @@
       "[CACHE]/builder/reclient/deps/Android32"
     ],
     "cwd": "[CACHE]/builder/src",
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -1805,14 +1781,6 @@
       "[TMP_BASE]/cloudtail_reproxy.INFO.pid"
     ],
     "cwd": "[CACHE]/builder/src",
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -1847,14 +1815,6 @@
       "[TMP_BASE]/cloudtail_reproxy-gomaip.INFO.pid"
     ],
     "cwd": "[CACHE]/builder/src",
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -1896,14 +1856,6 @@
       "RBE_use_application_default_credentials": "false",
       "RBE_use_gce_credentials": "true"
     },
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -1936,14 +1888,6 @@
     "env": {
       "RBE_log_dir": "[CLEANUP]/reclient_log_tmp_1",
       "RBE_server_address": "unix:///[TMP_BASE]/reproxy.sock"
-    },
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
     },
     "luci_context": {
       "realm": {
@@ -1980,14 +1924,6 @@
     "env": {
       "RBE_log_dir": "[CLEANUP]/reclient_log_tmp_2"
     },
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -2015,14 +1951,6 @@
       "[TMP_BASE]/cloudtail_reproxy.INFO.pid"
     ],
     "cwd": "[CACHE]/builder/src",
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -2050,14 +1978,6 @@
       "[TMP_BASE]/cloudtail_reproxy-gomaip.INFO.pid"
     ],
     "cwd": "[CACHE]/builder/src",
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -2088,14 +2008,6 @@
       "/path/to/tmp/"
     ],
     "cwd": "[CACHE]/builder/src",
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -2120,14 +2032,6 @@
       "goma-logs.rbe_metrics.builds"
     ],
     "cwd": "[CACHE]/builder/src",
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -2211,14 +2115,6 @@
       "[TMP_BASE]/reproxy_rpl.20120514-125326.00000000-0000-0000-0000-00000000133a.gz"
     ],
     "cwd": "[CACHE]/builder/src",
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -2250,14 +2146,6 @@
       "gs://chrome-goma-log/2012/05/14/reclient/reproxy_rpl.20120514-125326.00000000-0000-0000-0000-00000000133a.gz"
     ],
     "cwd": "[CACHE]/builder/src",
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -2288,14 +2176,6 @@
       "[CLEANUP]/reclient_log_tmp_2"
     ],
     "cwd": "[CACHE]/builder/src",
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -2339,14 +2219,6 @@
       "/path/to/tmp/"
     ],
     "cwd": "[CACHE]/builder/src",
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -2378,14 +2250,6 @@
       "gs://chrome-goma-log/2012/05/14/reclient/reclient_logs.20120514-125326.00000000-0000-0000-0000-00000000133a/reproxy-gomaip.LUCI-CHROMIUM-C.chrome-bot.log.ERROR.20220803-090904.9256"
     ],
     "cwd": "[CACHE]/builder/src",
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -2417,14 +2281,6 @@
       "/path/to/tmp/"
     ],
     "cwd": "[CACHE]/builder/src",
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -2456,14 +2312,6 @@
       "gs://chrome-goma-log/2012/05/14/reclient/reclient_logs.20120514-125326.00000000-0000-0000-0000-00000000133a/reproxy.INFO"
     ],
     "cwd": "[CACHE]/builder/src",
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -2495,14 +2343,6 @@
       "/path/to/tmp/"
     ],
     "cwd": "[CACHE]/builder/src",
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -2534,14 +2374,6 @@
       "gs://chrome-goma-log/2012/05/14/reclient/reclient_logs.20120514-125326.00000000-0000-0000-0000-00000000133a/reproxy_stderr.log"
     ],
     "cwd": "[CACHE]/builder/src",
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -2573,14 +2405,6 @@
       "[TMP_BASE]/reclient_logs.20120514-125326.00000000-0000-0000-0000-00000000133a.tar.gz"
     ],
     "cwd": "[CACHE]/builder/src",
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -2612,14 +2436,6 @@
       "gs://chrome-goma-log/2012/05/14/reclient/reclient_logs.20120514-125326.00000000-0000-0000-0000-00000000133a.tar.gz"
     ],
     "cwd": "[CACHE]/builder/src",
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -2647,14 +2463,6 @@
       "[CLEANUP]/reclient_log_tmp_2"
     ],
     "cwd": "[CACHE]/builder/src",
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -2684,14 +2492,6 @@
       "[CLEANUP]/reclient_log_tmp_2"
     ],
     "cwd": "[CACHE]/builder/src",
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "infra_step": true,
     "luci_context": {
       "realm": {
@@ -2721,14 +2521,6 @@
       "[CACHE]/builder/src/andriod-archive"
     ],
     "cwd": "[CACHE]/builder/src",
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
     "infra_step": true,
     "luci_context": {
       "realm": {
