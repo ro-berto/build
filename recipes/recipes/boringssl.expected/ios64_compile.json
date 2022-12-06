@@ -312,7 +312,7 @@
     "cmd": [
       "[START_DIR]/boringssl/util/bot/cmake-mac/bin/cmake",
       "-GNinja",
-      "-DCMAKE_MAKE_PROGRAM=[START_DIR]/boringssl/utils/bot/ninja/ninja",
+      "-DCMAKE_MAKE_PROGRAM=RECIPE_REPO[depot_tools]/ninja",
       "-DCMAKE_OSX_ARCHITECTURES=arm64",
       "-DCMAKE_OSX_SYSROOT=iphoneos",
       "[START_DIR]/boringssl"
@@ -345,7 +345,7 @@
   },
   {
     "cmd": [
-      "[START_DIR]/boringssl/utils/bot/ninja/ninja",
+      "RECIPE_REPO[depot_tools]/ninja",
       "-C",
       "[START_DIR]/boringssl/build"
     ],

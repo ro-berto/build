@@ -9,6 +9,7 @@ DEPS = [
     'boringssl',
     'chromium',
     'depot_tools/bot_update',
+    'depot_tools/depot_tools',
     'depot_tools/gclient',
     'depot_tools/osx_sdk',
     'presentation_utils',
@@ -322,7 +323,6 @@ def RunSteps(api, clang, cmake_args, gclient_vars, msvc_target, runner_args,
                             'sde' + _GetHostExeSuffix(api.platform))
   build_dir = api.path['checkout'].join('build')
   runner_dir = api.path['checkout'].join('ssl', 'test', 'runner')
-  ninja_path = api.path['checkout'].join('utils', 'bot', 'ninja', 'ninja')
 
   env = {}
   env_prefixes = {}
@@ -354,13 +354,15 @@ def RunSteps(api, clang, cmake_args, gclient_vars, msvc_target, runner_args,
                            'cmake' + _GetHostExeSuffix(api.platform))
     cmake_args = _GetHostCMakeArgs(api.platform, bot_utils)
     cmake_args.update(
-        config.get_target_cmake_args(api.path, ninja_path, api.platform))
+        config.get_target_cmake_args(api.path, api.depot_tools.ninja_path,
+                                     api.platform))
     with api.context(cwd=build_dir):
       api.step(
           'cmake', msvc_prefix + [cmake, '-GNinja'] +
           ['-D%s=%s' % (k, v) for (k, v) in sorted(cmake_args.items())] +
           [api.path['checkout']])
-    api.step('ninja', msvc_prefix + [ninja_path, '-C', build_dir])
+    api.step('ninja',
+             msvc_prefix + [api.depot_tools.ninja_path, '-C', build_dir])
 
     with api.step.defer_results():
       # The default Linux build may not depend on the C++ runtime. This is easy

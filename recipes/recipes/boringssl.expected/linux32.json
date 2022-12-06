@@ -212,7 +212,7 @@
       "-DCMAKE_ASM_FLAGS=-m32 -msse2",
       "-DCMAKE_CXX_FLAGS=-m32 -msse2",
       "-DCMAKE_C_FLAGS=-m32 -msse2",
-      "-DCMAKE_MAKE_PROGRAM=[START_DIR]/boringssl/utils/bot/ninja/ninja",
+      "-DCMAKE_MAKE_PROGRAM=RECIPE_REPO[depot_tools]/ninja",
       "-DCMAKE_SYSTEM_NAME=Linux",
       "-DCMAKE_SYSTEM_PROCESSOR=x86",
       "[START_DIR]/boringssl"
@@ -245,7 +245,7 @@
   },
   {
     "cmd": [
-      "[START_DIR]/boringssl/utils/bot/ninja/ninja",
+      "RECIPE_REPO[depot_tools]/ninja",
       "-C",
       "[START_DIR]/boringssl/build"
     ],

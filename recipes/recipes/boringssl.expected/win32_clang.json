@@ -198,7 +198,7 @@
       "-DCMAKE_CXX_FLAGS=-m32 -msse2",
       "-DCMAKE_C_COMPILER=[START_DIR]/boringssl/util/bot/llvm-build/bin/clang-cl.exe",
       "-DCMAKE_C_FLAGS=-m32 -msse2",
-      "-DCMAKE_MAKE_PROGRAM=[START_DIR]\\boringssl\\utils\\bot\\ninja\\ninja",
+      "-DCMAKE_MAKE_PROGRAM=RECIPE_REPO[depot_tools]\\ninja.exe",
       "-DCMAKE_SYSTEM_NAME=Windows",
       "-DCMAKE_SYSTEM_PROCESSOR=x86",
       "-DPERL_EXECUTABLE=[START_DIR]\\boringssl\\util\\bot\\perl-win32\\perl\\bin\\perl.exe",
@@ -235,7 +235,7 @@
       "python3",
       "[START_DIR]\\boringssl\\util\\bot\\vs_env.py",
       "x86",
-      "[START_DIR]\\boringssl\\utils\\bot\\ninja\\ninja",
+      "RECIPE_REPO[depot_tools]\\ninja.exe",
       "-C",
       "[START_DIR]\\boringssl\\build"
     ],
