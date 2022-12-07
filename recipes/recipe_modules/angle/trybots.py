@@ -149,18 +149,6 @@ _SPEC = {
             analyze_names=['angle'],
             retry_failed_shards=False,
         ),
-    'linux-ubsan-test':
-        try_spec.TrySpec.create(
-            mirrors=[
-                try_spec.TryMirror.create(
-                    builder_group='angle',
-                    buildername='linux-ubsan-test',
-                    tester='linux-swiftshader-ubsan',
-                ),
-            ],
-            analyze_names=['angle'],
-            retry_failed_shards=False,
-        ),
     'linux-trace':
         _create_compile_spec('linux-trace'),
     'mac-dbg-compile':
