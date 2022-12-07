@@ -24,4 +24,7 @@ message InputProperties {
 
   // The host to send the result to
   string bisection_host = 4;
+
+  // Whether we should remove all builder cache for the rerun
+  bool should_clobber = 5;
 }

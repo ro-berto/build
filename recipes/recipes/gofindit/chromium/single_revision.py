@@ -33,7 +33,8 @@ def RunSteps(api, properties):
 
     # Configure the builder
     builder_id, builder_config = _configure_builder(api,
-                                                    properties.target_builder)
+                                                    properties.target_builder,
+                                                    properties.should_clobber)
 
     # Check out the code.
     bot_update_step, build_config = api.chromium_tests.prepare_checkout(
@@ -70,7 +71,7 @@ def RunSteps(api, properties):
                                                properties.bisection_host)
 
 
-def _configure_builder(api, target_builder):
+def _configure_builder(api, target_builder, should_clobber):
   target_builder_id = chromium.BuilderId.create_for_group(
       target_builder.group, target_builder.builder)
   # TODO: replace this with the polymorphic API when it is ready (go/test-reviver-builders-dd)
@@ -84,6 +85,8 @@ def _configure_builder(api, target_builder):
   # Better to fail the analysis and let the sheriffs try to find a culprit
   # manually.
   api.chromium.apply_config('goma_failfast')
+  if should_clobber:
+    api.chromium.apply_config('clobber')
 
   return builder_config.builder_ids[0], builder_config
 
@@ -92,7 +95,8 @@ def GenTests(api):
 
   def setup(api,
             target_builder_group='fake-group',
-            target_builder='fake-builder'):
+            target_builder='fake-builder',
+            should_clobber=False):
     """Create test properties and other data for tests."""
     _default_spec = 'fake-group', {'fake-builder': {}}
     _default_builders = ctbc.BuilderDatabase.create({
@@ -114,6 +118,7 @@ def GenTests(api):
     props_proto = InputProperties()
     props_proto.target_builder.group = target_builder_group
     props_proto.target_builder.builder = target_builder
+    props_proto.should_clobber = should_clobber
 
     t = sum([
         api.chromium.ci_build(
@@ -130,6 +135,17 @@ def GenTests(api):
       'compile',
       setup(api),
       api.post_process(MustRun, 'bot_update'),
+      api.post_process(MustRun, 'compile'),
+      api.post_process(MustRun, 'send_result_to_luci_bisection'),
+      api.post_process(StatusSuccess),
+      api.post_process(DropExpectation),
+  )
+
+  yield api.test(
+      'compile with clobber',
+      setup(api, should_clobber=True),
+      api.post_process(MustRun, 'bot_update'),
+      api.post_process(MustRun, 'clobber'),
       api.post_process(MustRun, 'compile'),
       api.post_process(MustRun, 'send_result_to_luci_bisection'),
       api.post_process(StatusSuccess),
