@@ -412,7 +412,7 @@
       "[CACHE]/goma/client",
       "-v",
       "//out/Debug",
-      "{\"additional_compile_targets\": [\"all\"], \"files\": [\"foo.cc\"], \"test_targets\": []}",
+      "{\"additional_compile_targets\": [\"default\"], \"files\": [\"foo.cc\"], \"test_targets\": []}",
       "/path/to/tmp/json",
       "--json-output",
       "/path/to/tmp/json"
@@ -438,7 +438,7 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"all\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"default\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"status\": \"Found dependency\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"test_targets\": []@@@",
@@ -450,11 +450,11 @@
       "@@@STEP_LOG_LINE@analyze_details@{@@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"test targets\": [], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"additional compile targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"all\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"default\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"affected test targets\": [], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"affected compile targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"all\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"default\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ]@@@",
       "@@@STEP_LOG_LINE@analyze_details@}@@@",
       "@@@STEP_LOG_END@analyze_details@@@"
@@ -665,7 +665,8 @@
       "-C",
       "[CACHE]/builder/src/out/android_compile_x86_dbg",
       "-j",
-      "80"
+      "80",
+      "default"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -696,6 +697,7 @@
       "[CACHE]/builder/src/out/android_compile_x86_dbg",
       "-j",
       "80",
+      "default",
       "-d",
       "explain",
       "-n"
@@ -878,7 +880,7 @@
       "--ninja-log-outdir",
       "[CACHE]/builder/src/out/android_compile_x86_dbg",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/android_compile_x86_dbg\", \"-j\", 80]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/android_compile_x86_dbg\", \"-j\", 80, \"default\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",

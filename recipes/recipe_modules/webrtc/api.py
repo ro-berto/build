@@ -84,18 +84,27 @@ class WebRTCApi(recipe_api.RecipeApi):
     affected_files = self.m.chromium_checkout.get_files_affected_by_patch(
         relative_to=patch_root, cwd=self.m.path['checkout'])
 
+    # The "all" and "default" rules for gn are different:
+    # https://gn.googlesource.com/gn/+/main/docs/reference.md#the-all-and-default-rules
+    # To work around issues with //base dependencies on Android,
+    # use "default" on Android and "all" otherwise.
+    if 'android' in builder_id.builder.lower():
+      additional_targets = ['default']
+    else:
+      additional_targets = ['all']
+
     # CI bots can rebuild everything; they're less time sensitive than trybots.
     if not self.m.tryserver.is_tryserver:
       # Perf testers are a special case; they only need the catapult protos.
       spec = builders.BUILDERS_DB[builder_id]
       if spec.execution_mode == builder_spec.TEST and spec.perf_id:
         return test_targets, ['webrtc_dashboard_upload']
-      return test_targets, ['all']
+      return test_targets, additional_targets
 
     test_targets, compile_targets = self.m.filter.analyze(
         affected_files,
         test_targets,
-        additional_compile_targets=['all'],
+        additional_compile_targets=additional_targets,
         mb_path=self.m.path['checkout'].join('tools_webrtc', 'mb'),
         phase=phase)
 
