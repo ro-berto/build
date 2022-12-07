@@ -213,7 +213,7 @@
       "-DANDROID_ARM_MODE=arm",
       "-DANDROID_NATIVE_API_LEVEL=16",
       "-DCMAKE_BUILD_TYPE=Release",
-      "-DCMAKE_MAKE_PROGRAM=RECIPE_REPO[depot_tools]/ninja",
+      "-DCMAKE_MAKE_PROGRAM=[START_DIR]/boringssl/util/bot/ninja/ninja",
       "-DCMAKE_TOOLCHAIN_FILE=[START_DIR]/boringssl/util/bot/android_ndk/build/cmake/android.toolchain.cmake",
       "[START_DIR]/boringssl"
     ],
@@ -245,7 +245,7 @@
   },
   {
     "cmd": [
-      "RECIPE_REPO[depot_tools]/ninja",
+      "[START_DIR]/boringssl/util/bot/ninja/ninja",
       "-C",
       "[START_DIR]/boringssl/build"
     ],
