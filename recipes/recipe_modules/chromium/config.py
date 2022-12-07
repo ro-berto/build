@@ -512,6 +512,11 @@ def clang_tot_mac(c):
   c.env.FORCE_MAC_TOOLCHAIN = 1
 
 
+@config_ctx(includes=['ninja', 'clang', 'clang_tot'])  # No goma.
+def clang_tot_ios(c):
+  fastbuild(c, final=False)  # final=False so clang_tot_mac_asan can override.
+
+
 @config_ctx(includes=['clang_tot_linux', 'asan'])
 def clang_tot_linux_asan(_):
   pass

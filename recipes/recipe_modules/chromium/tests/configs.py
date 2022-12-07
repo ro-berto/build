@@ -76,6 +76,8 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
 
+  yield from_config('clang_tot_ios')
+
   yield from_config('clang_tot_linux_asan')
 
   yield from_config('chromium_linux_ubsan')
