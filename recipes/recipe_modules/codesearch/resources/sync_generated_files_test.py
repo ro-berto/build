@@ -1,4 +1,4 @@
-#!/usr/bin/env vpython
+#!/usr/bin/env vpython3
 # coding=utf-8
 # Copyright 2018 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
@@ -15,12 +15,12 @@ import sync_generated_files as sync
 
 class SyncGeneratedFilesCodesearchTest(unittest.TestCase):
   def setUp(self):
-    super(SyncGeneratedFilesCodesearchTest, self).setUp()
+    super().setUp()
     self.src_root = tempfile.mkdtemp(suffix='_%s_src' % self._testMethodName)
     self.dest_root = tempfile.mkdtemp(suffix='_%s_dest' % self._testMethodName)
 
   def tearDown(self):
-    super(SyncGeneratedFilesCodesearchTest, self).tearDown()
+    super().tearDown()
     shutil.rmtree(self.src_root)
     shutil.rmtree(self.dest_root)
 
@@ -154,9 +154,19 @@ class SyncGeneratedFilesCodesearchTest(unittest.TestCase):
       f.write('"accessToken": "ya29.c.dontuploadme"')
     with open(os.path.join(self.src_root, 'creds2.json'), 'w') as f:
       f.write('"code": "4/topsecret"')
+    shutil.copy(
+        os.path.join(self.src_root, 'creds2.json'),
+        os.path.join(self.dest_root, 'creds2.json'))
+    with open(os.path.join(self.src_root, 'creds3.json'), 'wb') as f:
+      f.write(bytes([0xfa]))  # invalid utf8
+      f.write(b'"code": "4/topsecret"')
+    shutil.copy(
+        os.path.join(self.src_root, 'creds3.json'),
+        os.path.join(self.dest_root, 'creds3.json'))
 
-    with open(os.path.join(self.dest_root, 'creds2.json'), 'w') as f:
-      f.write('"code": "4/topsecret"')
+    with open(os.path.join(self.dest_root, 'creds3.json'), 'wb') as f:
+      f.write(bytes([0xfa]))  # invalid utf8
+      f.write(b'"code": "4/topsecret"')
 
     sync.copy_generated_files(self.src_root, self.dest_root)
 
@@ -175,6 +185,12 @@ class SyncGeneratedFilesCodesearchTest(unittest.TestCase):
     try:
       with open(os.path.join(self.dest_root, 'creds2.json'), 'r') as f:
         self.fail('creds2.json should have been deleted')
+    except IOError as e:
+      pass
+
+    try:
+      with open(os.path.join(self.dest_root, 'creds3.json'), 'r') as f:
+        self.fail('creds3.json should have been deleted')
     except IOError as e:
       pass
 

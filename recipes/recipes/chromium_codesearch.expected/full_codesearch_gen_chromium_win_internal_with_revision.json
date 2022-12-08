@@ -1542,7 +1542,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "vpython3",
       "RECIPE_MODULE[build::codesearch]/resources/sync_generated_files.py",
       "--copy",
       "[CACHE]/builder/src/out/win-Debug/gen;win-Debug/gen",

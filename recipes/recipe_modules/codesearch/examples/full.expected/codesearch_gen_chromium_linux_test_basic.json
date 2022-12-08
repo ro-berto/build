@@ -1386,7 +1386,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "vpython3",
       "RECIPE_MODULE[build::codesearch]/resources/sync_generated_files.py",
       "--copy",
       "foo;bar",

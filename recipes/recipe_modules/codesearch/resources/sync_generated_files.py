@@ -1,4 +1,4 @@
-#!/usr/bin/env vpython
+#!/usr/bin/env vpython3
 # Copyright 2016 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -101,22 +101,23 @@ def kzip_input_paths(kzip_path):
 
 
 def has_secrets(filepath):
-  with open(filepath, 'r') as f:
+  patterns = (
+      # Patterns adapted from
+      # https://www.ndss-symposium.org/wp-content/uploads/2019/02/ndss2019_04B-3_Meli_paper.pdf
+
+      # OAuth
+      rb'\b4/[0-9A-Za-z-_]+\b',  # Auth Code
+      rb'\b1/[0-9A-Za-z-_]{43}\b|\b1/[0-9A-Za-z-_]{64}\b',  # Refresh Token
+      rb'\bya29\.[0-9A-Za-z-_]+\b',  # Access Token
+      rb'\bAIza[0-9A-Za-z-_]{35}\b',  # API Key
+
+      # Private Key
+      rb'\bPRIVATE KEY( BLOCK)?-----',
+  )
+  r = re.compile(b'|'.join(patterns))
+  with open(filepath, 'rb') as f:
     text = f.read()
-    patterns = (
-        # Patterns adapted from
-        # https://www.ndss-symposium.org/wp-content/uploads/2019/02/ndss2019_04B-3_Meli_paper.pdf
-
-        # OAuth
-        r'\b4/[0-9A-Za-z-_]+\b',  # Auth Code
-        r'\b1/[0-9A-Za-z-_]{43}\b|\b1/[0-9A-Za-z-_]{64}\b',  # Refresh Token
-        r'\bya29\.[0-9A-Za-z-_]+\b',  # Access Token
-        r'\bAIza[0-9A-Za-z-_]{35}\b',  # API Key
-
-        # Private Key
-        r'\bPRIVATE KEY( BLOCK)?-----',
-    )
-    return re.search(re.compile('|'.join(patterns)), text) is not None
+    return re.search(r, text) is not None
 
 
 def copy_generated_files(source_dir,
@@ -274,7 +275,7 @@ def main():
 
   ignore_paths = None
   if opts.ignore:
-    ignore_paths = set([os.path.normpath(i) for i in opts.ignore])
+    ignore_paths = {os.path.normpath(i) for i in opts.ignore}
 
   for c in opts.copy:
     source, dest = c.split(';')
@@ -300,6 +301,7 @@ def main():
     cmd.append('--dry-run')
   cmd.extend(['origin', 'HEAD:%s' % opts.dest_branch])
   check_call(cmd, cwd=opts.dest_repo)
+  return 0
 
 
 def check_call(cmd, cwd=None):

@@ -410,7 +410,7 @@ class CodesearchApi(recipe_api.RecipeApi):
       self.m.git('config', 'user.name', self.c.generated_author_name)
 
     # Sync the generated files into this checkout.
-    cmd = ['vpython', self.resource('sync_generated_files.py')]
+    cmd = ['vpython3', self.resource('sync_generated_files.py')]
     for src, dest in copy.items():
       cmd.extend(['--copy', '%s;%s' % (src, dest)])
     cmd.extend([
