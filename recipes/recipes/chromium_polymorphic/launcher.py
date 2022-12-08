@@ -15,6 +15,8 @@ from recipe_engine import post_process
 from PB.go.chromium.org.luci.buildbucket.proto \
     import builder_common as builder_common_pb
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
+from PB.recipe_modules.build.chromium_polymorphic.properties \
+    import BuilderGroupAndName, TesterFilter
 from PB.recipes.build.chromium_polymorphic.launcher import InputProperties
 
 PYTHON_VERSION_COMPATIBILITY = 'PY3'
@@ -25,6 +27,7 @@ DEPS = [
     'chromium_polymorphic',
     'recipe_engine/buildbucket',
     'recipe_engine/futures',
+    'recipe_engine/json',
     'recipe_engine/properties',
     'recipe_engine/step',
 ]
@@ -45,7 +48,11 @@ def RunSteps(api, properties):
 def _trigger_runner(api, target_builder, runner_builder_id):
   b = target_builder.builder_id
   with api.step.nest(f'{b.project}/{b.bucket}/{b.builder}'):
-    properties = api.chromium_polymorphic.get_target_properties(b)
+    tester_filter = (
+        target_builder.tester_filter
+        if target_builder.HasField('tester_filter') else None)
+    properties = api.chromium_polymorphic.get_target_properties(
+        b, tester_filter=tester_filter)
     dimensions = [
         common_pb.RequestedDimension(key=k, value=v)
         for k, v in target_builder.dimensions.items()
@@ -68,6 +75,14 @@ def GenTests(api):
     return api.chromium_polymorphic.properties_on_target_build(
         properties,
         step_name=f'{project}/{bucket}/{builder}.buildbucket.search')
+
+  def check_scheduled(check, steps, step_name, properties):
+    if not check(step_name in steps, f'step {step_name} was run'):
+      return  # pragma: no cover
+
+    req = api.json.loads(steps[step_name].logs['request'])
+    schedule_props = req["requests"][0]["scheduleBuild"]["properties"]
+    check(schedule_props == properties)
 
   yield api.test(
       'basic',
@@ -123,12 +138,94 @@ def GenTests(api):
               'bar-prop-2': 'bar-prop-value-2',
           },
       ),
-      api.post_check(post_process.MustRun,
-                     ('fake-project/fake-target-bucket/fake-target-builder-bar'
-                      '.buildbucket.schedule')),
-      api.post_check(post_process.MustRun,
-                     ('fake-project/fake-target-bucket/fake-target-builder-foo'
-                      '.buildbucket.schedule')),
+      api.post_check(
+          check_scheduled,
+          ('fake-project/fake-target-bucket/fake-target-builder-foo'
+           '.buildbucket.schedule'),
+          {
+              '$build/chromium_polymorphic': {
+                  'target_builder_group': 'fake-foo-group',
+                  'target_builder_id': {
+                      'bucket': 'fake-target-bucket',
+                      'builder': 'fake-target-builder-foo',
+                      'project': 'fake-project',
+                  },
+              },
+          },
+      ),
+      api.post_check(
+          check_scheduled,
+          ('fake-project/fake-target-bucket/fake-target-builder-bar'
+           '.buildbucket.schedule'),
+          {
+              '$build/chromium_polymorphic': {
+                  'target_builder_group': 'fake-bar-group',
+                  'target_builder_id': {
+                      'bucket': 'fake-target-bucket',
+                      'builder': 'fake-target-builder-bar',
+                      'project': 'fake-project',
+                  },
+              },
+          },
+      ),
+      api.post_check(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'tester-filter',
+      api.properties(
+          InputProperties(
+              runner_builder=builder_common_pb.BuilderID(
+                  project='fake-project',
+                  bucket='fake-bucket',
+                  builder='fake-runner-builder',
+              ),
+              target_builders=[
+                  InputProperties.TargetBuilder(
+                      builder_id=builder_common_pb.BuilderID(
+                          project='fake-project',
+                          bucket='fake-target-bucket',
+                          builder='fake-target-builder',
+                      ),
+                      tester_filter=TesterFilter(testers=[
+                          BuilderGroupAndName(
+                              group='fake-group',
+                              builder='fake-target-tester',
+                          ),
+                      ]),
+                  ),
+              ],
+          )),
+      properties_on_target_build(
+          project='fake-project',
+          bucket='fake-target-bucket',
+          builder='fake-target-builder',
+          properties={
+              'builder_group': 'fake-group',
+          },
+      ),
+      api.post_check(
+          check_scheduled,
+          ('fake-project/fake-target-bucket/fake-target-builder'
+           '.buildbucket.schedule'),
+          {
+              '$build/chromium_polymorphic': {
+                  'target_builder_group': 'fake-group',
+                  'target_builder_id': {
+                      'bucket': 'fake-target-bucket',
+                      'builder': 'fake-target-builder',
+                      'project': 'fake-project',
+                  },
+                  'tester_filter': {
+                      'testers': [{
+                          'group': 'fake-group',
+                          'builder': 'fake-target-tester',
+                      }],
+                  }
+              },
+          },
+      ),
       api.post_check(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )

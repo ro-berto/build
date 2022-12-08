@@ -7,7 +7,9 @@ syntax = "proto3";
 package recipes.build.chromium_polymorphic.launcher;
 
 import "go.chromium.org/luci/buildbucket/proto/builder_common.proto";
+import "recipe_modules/build/chromium_polymorphic/properties.proto";
 
+// Next ID: 3
 message InputProperties {
 
   // The polymorphic runner builder to trigger
@@ -18,9 +20,18 @@ message InputProperties {
   // For each target builder, the runner builder will be triggered with
   // properties set so that the properties and builder config of the target
   // builder will be used.
+  //
+  // Next ID: 4
   message TargetBuilder {
     // The Buildbucket ID of the target builder
     buildbucket.v2.BuilderID builder_id = 1;
+
+    // Testers that the operation should be limited to
+    //
+    // If not specified, the operation will include all testers triggered by the
+    // target builder. Any testers that are specified must be testers that are
+    // triggered by the target builder.
+    recipe_modules.build.chromium_polymorphic.TesterFilter tester_filter = 3;
 
     // The dimensions to apply to the target builder
     //

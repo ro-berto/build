@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from typing import Dict, Optional
+from typing import Collection, Dict, Optional
 
 from recipe_engine import recipe_test_api
 
@@ -37,8 +37,9 @@ class ChromiumPolymorphicTestApi(recipe_test_api.RecipeTestApi):
       builder: str,
       project: str = 'chromium',
       bucket: str = 'ci',
+      testers: Optional[Collection[properties_pb.BuilderGroupAndName]] = None,
   ) -> recipe_test_api.TestData:
-    """Set properties that would be set for a polymoprhic builder.
+    """Set properties that would be set for a polymorphic builder.
 
     This is used for a test case that is emulating a triggered
     polymorphic builder. In order to look up the builder config, the
@@ -53,6 +54,8 @@ class ChromiumPolymorphicTestApi(recipe_test_api.RecipeTestApi):
     target_builder_id.bucket = bucket
     target_builder_id.builder = builder
     properties.target_builder_group = builder_group
+    if testers is not None:
+      properties.tester_filter.testers.extend(testers)
 
     return self.m.properties(**{
         '$build/chromium_polymorphic': properties,

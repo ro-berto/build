@@ -8,12 +8,36 @@ package recipe_modules.build.chromium_polymorphic;
 
 import "go.chromium.org/luci/buildbucket/proto/builder_common.proto";
 
-// Module properties
+// Information that identifies a builder in contexts where we don't have the
+// buildbucket builder ID
+//
+// Most chromium recipe code uses the chromium BuilderId, which is based on the
+// builder group and name due to the code having been written to be
+// backwards-compatible with buildbot.
 //
 // Next ID: 3
+message BuilderGroupAndName {
+  // Required, the group of the builder
+  string group = 1;
+  // Required, the name of the builder
+  string builder = 2;
+}
+
+// Testers to limit a polymorphic operation to
+//
+// Next ID: 2
+message TesterFilter {
+  repeated BuilderGroupAndName testers = 1;
+}
+
+// Module properties
+//
+// Next ID: 4
 message InputProperties {
   // The ID of the target builder
   buildbucket.v2.BuilderID target_builder_id = 1;
   // The builder group of the target builder
   string target_builder_group = 2;
+  // Testers to limit a polymorphic operation to
+  TesterFilter tester_filter = 3;
 }

@@ -34,6 +34,12 @@ from PB.go.chromium.org.luci.buildbucket.proto \
     import builder_common as builder_common_pb
 from PB.go.chromium.org.luci.buildbucket.proto \
     import builds_service as builds_service_pb
+from PB.recipe_modules.build.chromium_polymorphic.properties \
+    import TesterFilter
+
+
+class TesterForbidden(Exception):
+  pass
 
 
 class ChromiumPolymorphicApi(recipe_api.RecipeApi):
@@ -42,13 +48,20 @@ class ChromiumPolymorphicApi(recipe_api.RecipeApi):
     super().__init__(*args, **kwargs)
     self._target_builder_id = None
     self._target_builder_group = None
+    self._testers = None
     if properties.HasField('target_builder_id'):
       self._target_builder_id = properties.target_builder_id
       self._target_builder_group = properties.target_builder_group
+    if properties.HasField('tester_filter'):
+      self._testers = [
+          chromium.BuilderId.create_for_group(t.group, t.builder)
+          for t in properties.tester_filter.testers
+      ]
 
   def get_target_properties(
       self,
       target_builder_id: builder_common_pb.BuilderID,
+      tester_filter: Optional[TesterFilter] = None,
       search_step_name: Optional[str] = None,
   ) -> Dict[str, object]:
     """Get properties for triggering a polymorphic builder.
@@ -56,6 +69,8 @@ class ChromiumPolymorphicApi(recipe_api.RecipeApi):
     Args:
       target_builder_id - The Buildbucket ID of the target builder to
         trigger the polymorphic builder for.
+      tester_filter - An optional filter to apply to the testers for the
+        polymorphic operation.
       search_step_name - An optional step name to be used when searching
         for the most recent build of the target builder. The default
         step name of buildbucket.search will be used by default.
@@ -85,6 +100,8 @@ class ChromiumPolymorphicApi(recipe_api.RecipeApi):
     # migrated src-side
     if 'builder_group' in build_props:
       module_props['target_builder_group'] = build_props['builder_group']
+    if tester_filter:
+      module_props['tester_filter'] = json_format.MessageToDict(tester_filter)
 
     target_props = {
         '$build/chromium_polymorphic': module_props,
@@ -99,7 +116,7 @@ class ChromiumPolymorphicApi(recipe_api.RecipeApi):
 
   @property
   def target_builder_id(self) -> builder_common_pb.BuilderID:
-    """The builder ID of the target builder (in a polymoprhic builder).
+    """The builder ID of the target builder (in a polymorphic builder).
     """
     assert self._target_builder_id, (
         'This property should only be accessed by polymorphic builders, '
@@ -107,8 +124,10 @@ class ChromiumPolymorphicApi(recipe_api.RecipeApi):
         'get_target_properties(...)')
     return self._target_builder_id
 
-  def lookup_builder_config(self
-                           ) -> Tuple[chromium.BuilderId, ctbc.BuilderConfig]:
+  def lookup_builder_config(
+      self,
+      allow_tester=False,
+  ) -> Tuple[chromium.BuilderId, ctbc.BuilderConfig]:
     """Look up the target builder's config.
 
     This is called by a polymorphic builder to get the builder config
@@ -119,18 +138,23 @@ class ChromiumPolymorphicApi(recipe_api.RecipeApi):
     recipe-side static maps is included as part of the trigger. This
     looks up the builder using the key provided in the trigger.
 
-    This also manages tester vs builder configuration: polymorphic
-    builders will often need to replicate some of the behavior of
-    builders and a tester, so the configuration returned when targeting
-    a tester will actually be one for its parent with the target tester
-    being in scope for testing. The polymorphic builder will need to
-    avoid triggering the tester since that will fail or produce
-    unexpected results.
+    Args:
+      allow_tester - If True, will return a builder config for a tester.
+        This should only be set if the parent builder's configuration is
+        not required, which usually means that compilation won't be
+        performed. If False, an exception will be raised if the target
+        builder is a tester.
 
     Returns:
       * The chromium BuilderId identifying the builder in source side
         specs and MB configs.
-      * The builder config for the target builder.
+      * The builder config for the target builder. If a tester filter
+        was specified, only the testers in the filter will be in scope
+        for testing.
+
+    Raises:
+      * TesterForbidden if allow_tester is not true and the target
+        builder is a tester.
     """
     target_builder_bb_id = self.target_builder_id
     target_builder_id = chromium.BuilderId.create_for_group(
@@ -139,19 +163,16 @@ class ChromiumPolymorphicApi(recipe_api.RecipeApi):
         self.m.chromium_tests_builder_config.lookup_builder(target_builder_id))
     # If the target builder is not a tester, return the builder config as-is
     target_builder_spec = builder_config.builder_db[target_builder_id]
-    if target_builder_spec.parent_buildername is None:
+    if target_builder_spec.parent_buildername is not None and not allow_tester:
+      raise TesterForbidden(
+          f'config for {target_builder_id} indicates it is a tester')
+    if self._testers is None:
       return target_builder_id, builder_config
 
-    # If the target builder is a tester, return a config where the target builder
-    # is in scope for testing but the parent's builder spec is used for
-    # configuration
-    builder_id = chromium.BuilderId.create_for_group(
-        target_builder_spec.parent_builder_group or target_builder_id.group,
-        target_builder_spec.parent_buildername)
-    return builder_id, ctbc.BuilderConfig.create(
+    return target_builder_id, ctbc.BuilderConfig.create(
         builder_config.builder_db,
-        builder_ids=[builder_id],
-        builder_ids_in_scope_for_testing=[target_builder_id],
+        builder_ids=[target_builder_id],
+        builder_ids_in_scope_for_testing=self._testers,
         include_all_triggered_testers=False,
         step_api=self.m.step,
     )
