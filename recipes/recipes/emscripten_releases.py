@@ -90,7 +90,7 @@ def RunSteps(api):
     builder = api.buildbucket.builder_name
     assert builder in ('linux', 'mac', 'win', 'linux-test-suites')
 
-    # Depot tools on path is for ninja
+    # Depot tools on path is for gsutil.py.
     with api.depot_tools.on_path(), api.context(env=env):
       try:
         for step in bot_steps[builder]['build_steps']:
