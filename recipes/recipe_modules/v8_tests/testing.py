@@ -254,7 +254,7 @@ class BaseTest:
           raw_cmd,
           base_variant=self.base_variant(),
           exonerate_unexpected_pass=False,
-          test_id_prefix=test.get('test_id_prefix', None))
+          test_id_prefix=test.get('test_id_prefix', '//'))
 
       request_slice = request[0].with_command(wrapperd_cmd)
       task.request = request.with_slice(0, request_slice)
