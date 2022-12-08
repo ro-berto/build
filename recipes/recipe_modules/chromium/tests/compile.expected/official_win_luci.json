@@ -131,7 +131,7 @@
       "GOMA_ENABLE_GLOBAL_FILE_STAT_CACHE": "true",
       "GOMA_HERMETIC": "fallback",
       "GOMA_MAX_ACTIVE_FAIL_FALLBACK_TASKS": "1",
-      "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
+      "PATH": "<PATH>:None/third_party/ninja"
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start_goma",
@@ -170,7 +170,7 @@
       "/path/to/tmp/",
       "--no_prune_venv",
       "--",
-      "RECIPE_REPO[depot_tools]/ninja",
+      "None/third_party/ninja/ninja",
       "-w",
       "dupbuild=err",
       "-C",
@@ -184,13 +184,13 @@
       "CHROME_HEADLESS": "1",
       "CHROMIUM_BUILD": "_google_chrome",
       "GOMA_USE_LOCAL": "false",
-      "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
+      "PATH": "<PATH>:None/third_party/ninja"
     },
     "name": "compile"
   },
   {
     "cmd": [
-      "RECIPE_REPO[depot_tools]/ninja",
+      "None/third_party/ninja/ninja",
       "-w",
       "dupbuild=err",
       "-C",
@@ -207,7 +207,7 @@
       "CHROME_HEADLESS": "1",
       "CHROMIUM_BUILD": "_google_chrome",
       "GOMA_USE_LOCAL": "false",
-      "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
+      "PATH": "<PATH>:None/third_party/ninja"
     },
     "name": "compile confirm no-op"
   },
@@ -321,7 +321,7 @@
       "--ninja-log-outdir",
       "None/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"None/out/Release\", \"-j\", 80]",
+      "[\"None/third_party/ninja/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"None/out/Release\", \"-j\", 80]",
       "--build-exit-status",
       "0",
       "--build-step-name",

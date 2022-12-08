@@ -79,7 +79,7 @@
       "/path/to/tmp/",
       "--no_prune_venv",
       "--",
-      "RECIPE_REPO[depot_tools]/ninja",
+      "[CACHE]/builder/src/third_party/ninja/ninja",
       "-w",
       "dupbuild=err",
       "-C",

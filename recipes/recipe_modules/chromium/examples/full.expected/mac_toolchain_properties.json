@@ -858,7 +858,7 @@
       "--failure_output",
       "/path/to/tmp/",
       "--",
-      "RECIPE_REPO[depot_tools]/ninja",
+      "[CACHE]/builder/src/third_party/ninja/ninja",
       "-w",
       "dupbuild=err",
       "-C",
@@ -885,7 +885,7 @@
   },
   {
     "cmd": [
-      "RECIPE_REPO[depot_tools]/ninja",
+      "[CACHE]/builder/src/third_party/ninja/ninja",
       "-w",
       "dupbuild=err",
       "-C",
@@ -923,7 +923,7 @@
       "--ninja-log-outdir",
       "/tmp/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"/tmp/Release\", \"All\"]",
+      "[\"[CACHE]/builder/src/third_party/ninja/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"/tmp/Release\", \"All\"]",
       "--build-exit-status",
       "0",
       "--ninja-log-compiler",

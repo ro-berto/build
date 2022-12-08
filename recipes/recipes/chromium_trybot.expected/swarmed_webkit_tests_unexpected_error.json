@@ -1105,7 +1105,7 @@
       "/path/to/tmp/",
       "--no_prune_venv",
       "--",
-      "RECIPE_REPO[depot_tools]/ninja",
+      "[CACHE]/builder/src/third_party/ninja/ninja",
       "-w",
       "dupbuild=err",
       "-C",
@@ -1135,7 +1135,7 @@
   },
   {
     "cmd": [
-      "RECIPE_REPO[depot_tools]/ninja",
+      "[CACHE]/builder/src/third_party/ninja/ninja",
       "-w",
       "dupbuild=err",
       "-C",
@@ -1324,7 +1324,7 @@
       "--ninja-log-outdir",
       "[CACHE]/builder/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Release\", \"-j\", 80, \"blink_web_tests\"]",
+      "[\"[CACHE]/builder/src/third_party/ninja/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Release\", \"-j\", 80, \"blink_web_tests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",

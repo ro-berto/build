@@ -659,7 +659,7 @@
       "/path/to/tmp/",
       "--no_prune_venv",
       "--",
-      "RECIPE_REPO[depot_tools]/ninja",
+      "[CACHE]/builder/src/third_party/ninja/ninja",
       "-w",
       "dupbuild=err",
       "-C",
@@ -690,7 +690,7 @@
   },
   {
     "cmd": [
-      "RECIPE_REPO[depot_tools]/ninja",
+      "[CACHE]/builder/src/third_party/ninja/ninja",
       "-w",
       "dupbuild=err",
       "-C",
@@ -880,7 +880,7 @@
       "--ninja-log-outdir",
       "[CACHE]/builder/src/out/android_compile_x86_dbg",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/android_compile_x86_dbg\", \"-j\", 80, \"default\"]",
+      "[\"[CACHE]/builder/src/third_party/ninja/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/android_compile_x86_dbg\", \"-j\", 80, \"default\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",

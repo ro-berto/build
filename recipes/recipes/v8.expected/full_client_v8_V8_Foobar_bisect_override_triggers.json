@@ -333,7 +333,7 @@
       "/path/to/tmp/",
       "--no_prune_venv",
       "--",
-      "RECIPE_REPO[depot_tools]/ninja",
+      "[CACHE]/builder/v8/third_party/ninja/ninja",
       "-w",
       "dupbuild=err",
       "-C",
@@ -365,7 +365,7 @@
   },
   {
     "cmd": [
-      "RECIPE_REPO[depot_tools]/ninja",
+      "[CACHE]/builder/v8/third_party/ninja/ninja",
       "-w",
       "dupbuild=err",
       "-C",
@@ -866,7 +866,7 @@
       "/path/to/tmp/",
       "--no_prune_venv",
       "--",
-      "RECIPE_REPO[depot_tools]/ninja",
+      "[CACHE]/builder/v8/third_party/ninja/ninja",
       "-w",
       "dupbuild=err",
       "-C",
@@ -898,7 +898,7 @@
   },
   {
     "cmd": [
-      "RECIPE_REPO[depot_tools]/ninja",
+      "[CACHE]/builder/v8/third_party/ninja/ninja",
       "-w",
       "dupbuild=err",
       "-C",
@@ -1246,7 +1246,7 @@
       "/path/to/tmp/",
       "--no_prune_venv",
       "--",
-      "RECIPE_REPO[depot_tools]/ninja",
+      "[CACHE]/builder/v8/third_party/ninja/ninja",
       "-w",
       "dupbuild=err",
       "-C",
@@ -1278,7 +1278,7 @@
   },
   {
     "cmd": [
-      "RECIPE_REPO[depot_tools]/ninja",
+      "[CACHE]/builder/v8/third_party/ninja/ninja",
       "-w",
       "dupbuild=err",
       "-C",
@@ -1664,7 +1664,7 @@
       "/path/to/tmp/",
       "--no_prune_venv",
       "--",
-      "RECIPE_REPO[depot_tools]/ninja",
+      "[CACHE]/builder/v8/third_party/ninja/ninja",
       "-w",
       "dupbuild=err",
       "-C",
@@ -1696,7 +1696,7 @@
   },
   {
     "cmd": [
-      "RECIPE_REPO[depot_tools]/ninja",
+      "[CACHE]/builder/v8/third_party/ninja/ninja",
       "-w",
       "dupbuild=err",
       "-C",

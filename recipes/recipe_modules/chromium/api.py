@@ -130,6 +130,10 @@ class ChromiumApi(recipe_api.RecipeApi):
     """Return the path to the built executable directory."""
     return self.c.build_dir.join(self.c.build_config_fs)
 
+  @property
+  def ninja_path(self):
+    return self.m.path['checkout'].join('third_party', 'ninja', 'ninja')
+
   def get_version(self):
     """Returns a dictionary describing the version.
 
@@ -648,7 +652,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       if self.c.TARGET_PLATFORM == 'win':
         ninja_env['PATH'] = self.m.path.pathsep.join(
             ('%(PATH)s',
-             str(self.m.path.dirname(self.m.depot_tools.ninja_path))))
+             str(self.m.path.dirname(self.ninja_path))))
 
     if out_dir is None:
       out_dir = 'out'
@@ -657,8 +661,7 @@ class ChromiumApi(recipe_api.RecipeApi):
                                          target or self.c.build_config_fs)
     target_output_dir = self.m.path.abspath(target_output_dir)
 
-    ninja_path = self.m.depot_tools.ninja_path
-    command = [str(ninja_path), '-w', 'dupbuild=err', '-C', target_output_dir]
+    command = [str(self.ninja_path), '-w', 'dupbuild=err', '-C', target_output_dir]
 
     if self.c.compile_py.show_ninja_stats:
       command.extend(['-d', 'stats'])
