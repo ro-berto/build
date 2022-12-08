@@ -14,8 +14,8 @@ import sys
 def main(argv):
   logging.basicConfig(level=logging.DEBUG)
   if len(argv) == 0:
-    bootstrap_dir = os.path.dirname(os.path.abspath(__file__))
-    build_dir = os.path.dirname(os.path.dirname(bootstrap_dir))
+    hook_scripts_dir = os.path.dirname(os.path.abspath(__file__))
+    build_dir = os.path.dirname(hook_scripts_dir)
     argv = [build_dir]
 
   for root in argv:
