@@ -992,9 +992,9 @@ def GenTests(api):
     ) +
     api.v8.test_spec_in_checkout(
         'V8 Foobar',
-        '{"tests": [{"name": "numfuzz"}]}') +
+        '{"tests": [{"name": "numfuzz", "suffix": "sfx"}]}') +
     api.post_process(
-      Filter('build.isolate tests', 'trigger tests.[trigger] Num Fuzz'))
+      Filter('build.isolate tests', 'trigger tests.[trigger] Num Fuzz - sfx'))
   )
 
   # Same template as in chromium recipe, but with 64 bits target cpu.

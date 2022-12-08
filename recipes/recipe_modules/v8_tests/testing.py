@@ -158,7 +158,7 @@ TEST_CONFIGS = freeze({
     'idempotent': False,
     'use_random_seed': False,
     'variants': V8Variant('default'),
-    'test_id_prefix' : 'numfuzz',
+    'test_id_prefix' : 'numfuzz//',
   },
   'optimize_for_size': {
     'name': 'OptimizeForSize',
@@ -252,12 +252,23 @@ class BaseTest:
       wrapperd_cmd = self.api.v8_tests.resultdb.wrap(
           self.api,
           raw_cmd,
+          base_variant=self.base_variant(),
+          exonerate_unexpected_pass=False,
           test_id_prefix=test.get('test_id_prefix', None))
 
       request_slice = request[0].with_command(wrapperd_cmd)
       task.request = request.with_slice(0, request_slice)
 
     return task
+
+  def base_variant(self):
+    vatiant_tags = {
+        'bucket': self.api.buildbucket.build.builder.bucket,
+        'builder': self.api.buildbucket.builder_name,
+    }
+    if self.test_step_config.suffix:
+      vatiant_tags['test_config'] = self.test_step_config.suffix
+    return vatiant_tags
 
   @property
   def uses_swarming(self):

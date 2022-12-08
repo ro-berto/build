@@ -29,7 +29,7 @@ class TestStepConfig:
     """
     self.name = name
     self.shards = shards
-    self._suffix = suffix
+    self.suffix = suffix
     self.test_args = list(test_args or [])
     self.variants = variants
     self.swarming_dimensions = swarming_dimensions or {}
@@ -37,14 +37,14 @@ class TestStepConfig:
     if not suffix and variants:
       # Disambiguate step names if a particular variant is specified and no
       # default suffix is provided.
-      self._suffix = str(variants)
+      self.suffix = str(variants)
 
   def __str__(self):
     return '%s(%d) %s' % (self.name, self.shards, self.variants)
 
   @property
   def step_name_suffix(self):
-    return ' - %s' % self._suffix if self._suffix else ''
+    return ' - %s' % self.suffix if self.suffix else ''
 
   def pack(self):
     """Returns a serializable version of this object.
@@ -55,7 +55,7 @@ class TestStepConfig:
       self.name,
       self.shards,
       self.variants.pack() if self.variants else None,
-      self._suffix,
+      self.suffix,
       self.test_args,
       self.swarming_dimensions,
       self.swarming_task_attrs,
