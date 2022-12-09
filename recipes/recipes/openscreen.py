@@ -64,7 +64,7 @@ class RepositoryPaths:
     self.unit_test_binary_path = self.output_path.join(UNIT_TEST_BINARY_NAME)
     self.e2e_test_binary_path = self.output_path.join(E2E_TEST_BINARY_NAME)
     self.test_data_path = self.checkout_path.join('test', 'data')
-    self.ninja_path = self.checkout_path.join('third_party', 'ninja')
+    self.ninja_path = self.checkout_path.join('third_party', 'ninja', 'ninja')
 
 
 def GetSwarmingDimensions(is_ci):

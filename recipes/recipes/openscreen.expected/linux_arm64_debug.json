@@ -196,7 +196,7 @@
   },
   {
     "cmd": [
-      "[START_DIR]/openscreen/third_party/ninja",
+      "[START_DIR]/openscreen/third_party/ninja/ninja",
       "-C",
       "[START_DIR]/openscreen/out/Default",
       "gn_all",
