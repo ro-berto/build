@@ -297,14 +297,10 @@ _AddIsolatedTestSpec('android-pixel2-perf', 'android',
                      'android_arm64-builder-perf')
 _AddIsolatedTestSpec('android-pixel2_webview-perf', 'android',
                      'android_arm64-builder-perf')
-_AddIsolatedTestSpec('android-pixel2_weblayer-perf', 'android',
-                     'android_arm64-builder-perf')
 
 _AddIsolatedTestSpec('android-pixel4-perf', 'android',
                      'android_arm64-builder-perf')
 _AddIsolatedTestSpec('android-pixel4_webview-perf', 'android',
-                     'android_arm64-builder-perf')
-_AddIsolatedTestSpec('android-pixel4_weblayer-perf', 'android',
                      'android_arm64-builder-perf')
 
 _AddIsolatedTestSpec('android-pixel4a_power-perf', 'android',
@@ -381,8 +377,6 @@ _AddPinpointTestSpec('android-pixel2-perf-pgo', 'android',
 _AddPinpointTestSpec('android-pixel2_webview-perf-pgo', 'android',
                      'android_arm64-builder-perf-pgo')
 _AddPinpointTestSpec('android-pixel4-perf-pgo', 'android',
-                     'android_arm64-builder-perf-pgo')
-_AddPinpointTestSpec('android-pixel4_weblayer-perf-pgo', 'android',
                      'android_arm64-builder-perf-pgo')
 _AddPinpointTestSpec('android-pixel4a_power-perf-pgo', 'android',
                      'android_arm64-builder-perf-pgo')
