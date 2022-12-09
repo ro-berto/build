@@ -16,6 +16,7 @@ from RECIPE_MODULES.build.attr_utils import attrib, attrs, mapping, sequence
 from RECIPE_MODULES.build.chromium_tests.api import (
     ALL_TEST_BINARIES_ISOLATE_NAME)
 from RECIPE_MODULES.build.code_coverage import constants
+from RECIPE_MODULES.build.chromium_tests_builder_config import try_spec
 
 COMPILATOR_SWARMING_TASK_COLLECT_STEP = (
     'wait for compilator swarming task cleanup overhead')
@@ -30,6 +31,8 @@ tests this can be disabled by adding this footer to your CL message:
     Disable-Rts: True
 
 '''
+
+QR_RUN_THRESHOLD = 5
 
 
 @attrs()
@@ -71,6 +74,7 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
     self.current_compilator_buildbucket_id = None
 
   def trybot_steps(self):
+    self.trigger_qr_experiment()
     raw_result = self.test_patch()
 
     # The triggered compilator's swarming task is already fully collected during
@@ -817,3 +821,29 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
             constants.QUICK_RUN_OVERALL_PROFDATA)
         step_name = 'download Quick Run overall coverage from GS'
       self.m.gsutil.download(bucket, path, dest, name=step_name)
+
+  def trigger_qr_experiment(self):
+    """Triggers an Quick Run build based on the change and patchset
+    """
+    exp_id = 0
+    for change in self.m.buildbucket.build.input.gerrit_changes:
+      exp_id += change.change
+      exp_id += change.patchset
+
+    _, builder_config = (self.m.chromium_tests_builder_config.lookup_builder())
+    if (builder_config.regression_test_selection and
+        builder_config.regression_test_selection != try_spec.NEVER and
+        exp_id % 100 < QR_RUN_THRESHOLD and self.m.cq.active and
+        self.m.cq.run_mode == self.m.cq.DRY_RUN):
+      properties = self.m.cq.props_for_child_build
+      properties['$recipe_engine/cq']['run_mode'] = self.m.cq.QUICK_DRY_RUN
+      request = self.m.buildbucket.schedule_request(
+          builder=self.m.buildbucket.build.builder.builder,
+          properties=properties,
+          tags=self.m.buildbucket.tags(**{'hide-in-gerrit': 'pointless'}),
+          can_outlive_parent=True,
+      )
+
+      self.m.buildbucket.schedule([request],
+                                  step_name='trigger Quick Run experiment',
+                                  include_sub_invs=False)

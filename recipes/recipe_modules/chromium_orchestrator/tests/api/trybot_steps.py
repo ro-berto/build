@@ -309,6 +309,7 @@ def GenTests(api):
           builder_group='fake-try-group',
           builder='fake-orchestrator',
       ),
+      ctbc_properties(),
       api.properties(
           **{
               '$build/chromium_orchestrator':
@@ -359,6 +360,22 @@ def GenTests(api):
       api.post_process(post_process.MustRun,
                        'downloading cas digest all_test_binaries'),
       api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'missing_compilator',
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-orchestrator',
+      ),
+      ctbc_properties(),
+      api.properties(
+          **{
+              '$build/chromium_orchestrator':
+                  InputProperties(compilator_watcher_git_revision='e841fc'),
+          }),
+      api.post_process(post_process.StatusException),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -446,6 +463,70 @@ def GenTests(api):
           '-filter=browser_tests.filter'
       ]
   }
+
+  yield api.test(
+      'quick run experirment triggers',
+      api.chromium.try_build(
+          builder_group='fake-try-group',
+          builder='fake-orchestrator',
+      ),
+      api.chromium_tests_builder_config.try_build(
+          builder_group='fake-group',
+          builder='fake-tester',
+          builder_db=ctbc.BuilderDatabase.create({
+              'fake-group': {
+                  'fake-tester':
+                      ctbc.BuilderSpec.create(
+                          chromium_config='chromium',
+                          gclient_config='chromium',
+                      ),
+              }
+          }),
+          try_db=ctbc.TryDatabase.create({
+              'fake-group': {
+                  'fake-tester':
+                      ctbc.TrySpec.create(
+                          mirrors=[
+                              ctbc.TryMirror.create(
+                                  builder_group='fake-group',
+                                  buildername='fake-tester',
+                                  tester='fake-tester',
+                              ),
+                          ],
+                          regression_test_selection=try_spec.QUICK_RUN_ONLY,
+                      ),
+              }
+          }),
+      ),
+      api.properties(
+          **{
+              '$build/chromium_orchestrator':
+                  InputProperties(
+                      compilator='fake-compilator',
+                      compilator_watcher_git_revision='e841fc',
+                  ),
+          }),
+      api.cq(run_mode='DRY_RUN', top_level=True),
+      api.chromium_orchestrator.override_test_spec(
+          builder_group='fake-group',
+          builder='fake-builder',
+          tester='fake-tester',
+          tests=['browser_tests', 'content_unittests']),
+      api.chromium_orchestrator.override_compilator_steps(
+          tests=['browser_tests', 'content_unittests']),
+      api.step_data('read command lines (2)',
+                    api.file.read_json(fake_rts_command_lines)),
+      api.properties(
+          **{
+              '$build/chromium_orchestrator':
+                  InputProperties(
+                      compilator='fake-compilator',
+                      compilator_watcher_git_revision='e841fc',
+                  ),
+          }),
+      api.post_process(post_process.MustRun, 'trigger Quick Run experiment'),
+      api.post_process(post_process.DropExpectation),
+  )
 
   yield api.test(
       'quick run rts',
