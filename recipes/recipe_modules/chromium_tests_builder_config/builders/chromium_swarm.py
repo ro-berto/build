@@ -19,20 +19,6 @@ SPEC = {
             android_config='main_builder_mb',
             simulation_platform='linux',
         ),
-    'android-marshmallow-arm64-rel-swarming':
-        builder_spec.BuilderSpec.create(
-            chromium_config='android',
-            gclient_config='chromium',
-            gclient_apply_config=['android'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'android',
-                'TARGET_ARCH': 'arm',
-            },
-            android_config='main_builder_mb',
-            simulation_platform='linux',
-        ),
     'linux-rel-swarming':
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',
@@ -94,4 +80,3 @@ SPEC = {
             simulation_platform='win',
         ),
 }
-

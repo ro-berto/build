@@ -142,11 +142,6 @@
       "chromium.dev:android-lollipop-arm-rel-swarming"
     ]
   },
-  "chromium.dev:android-marshmallow-arm64-rel-swarming": {
-    "builders": [
-      "chromium.dev:android-marshmallow-arm64-rel-swarming"
-    ]
-  },
   "chromium.dev:linux-rel-swarming": {
     "builders": [
       "chromium.dev:linux-rel-swarming"
@@ -863,11 +858,6 @@
   "chromium.staging:android-lollipop-arm-rel-swarming": {
     "builders": [
       "chromium.staging:android-lollipop-arm-rel-swarming"
-    ]
-  },
-  "chromium.staging:android-marshmallow-arm64-rel-swarming": {
-    "builders": [
-      "chromium.staging:android-marshmallow-arm64-rel-swarming"
     ]
   },
   "chromium.staging:linux-rel-swarming": {
