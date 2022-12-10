@@ -106,6 +106,15 @@ class _OneshotOption(_DefaultOption):
   additional_arg: str = '--render-oneshot'
 
 
+@dataclass
+class _ReverseByteOrderOption(_DefaultOption):
+  """A test_runner.py test option to enable reverse byte order rendering."""
+
+  name: str = 'reverse byte order'
+  test_suite_suffix: str = 'reverse_byte_order'
+  additional_arg: str = '--reverse-byte-order'
+
+
 def _is_goma_enabled(msvc):
   return not msvc
 
@@ -288,7 +297,7 @@ def _run_all_javascript_tests(test_runner, xfa):
   return test_exception
 
 
-def _run_all_pixel_tests(test_runner, v8, xfa):
+def _run_all_pixel_tests(test_runner, skia, v8, xfa):
   test_exception = None
   try:
     test_runner.run_pixel_tests(_DefaultOption)
@@ -299,6 +308,15 @@ def _run_all_pixel_tests(test_runner, v8, xfa):
     test_runner.run_pixel_tests(_OneshotOption)
   except test_runner.api.step.StepFailure as e:
     test_exception = e
+
+  # TODO(crbug.com/pdfium/994): Enable for Mac.
+  # TODO(crbug.com/pdfium/1955): Enable for Skia.
+  if (test_runner.api.platform.is_linux or
+      test_runner.api.platform.is_win) and not skia:
+    try:
+      test_runner.run_pixel_tests(_ReverseByteOrderOption)
+    except test_runner.api.step.StepFailure as e:
+      test_exception = e
 
   if v8:
     try:
@@ -315,7 +333,7 @@ def _run_all_pixel_tests(test_runner, v8, xfa):
   return test_exception
 
 
-def _run_all_corpus_tests(test_runner, v8, xfa):
+def _run_all_corpus_tests(test_runner, skia, v8, xfa):
   test_exception = None
   try:
     test_runner.run_corpus_tests(_DefaultOption)
@@ -326,6 +344,15 @@ def _run_all_corpus_tests(test_runner, v8, xfa):
     test_runner.run_corpus_tests(_OneshotOption)
   except test_runner.api.step.StepFailure as e:
     test_exception = e
+
+  # TODO(crbug.com/pdfium/994): Enable for Mac.
+  # TODO(crbug.com/pdfium/1955): Enable for Skia.
+  if (test_runner.api.platform.is_linux or
+      test_runner.api.platform.is_win) and not skia:
+    try:
+      test_runner.run_corpus_tests(_ReverseByteOrderOption)
+    except test_runner.api.step.StepFailure as e:
+      test_exception = e
 
   if v8:
     try:
@@ -377,13 +404,13 @@ def _run_tests(api, memory_tool, v8, xfa, skia, out_dir, build_config, revision,
       test_exception = javascript_test_exception
 
   # run_pixel_tests.py:
-  pixel_test_exception = _run_all_pixel_tests(test_runner, v8, xfa)
+  pixel_test_exception = _run_all_pixel_tests(test_runner, skia, v8, xfa)
   if pixel_test_exception:
     test_exception = pixel_test_exception
 
   if not selected_tests_only:
     # run_corpus_tests.py:
-    corpus_test_exception = _run_all_corpus_tests(test_runner, v8, xfa)
+    corpus_test_exception = _run_all_corpus_tests(test_runner, skia, v8, xfa)
     if corpus_test_exception:
       test_exception = corpus_test_exception
 
@@ -1093,6 +1120,15 @@ def GenTests(api):
   )
 
   yield api.test(
+      'fail-pixel-tests-reverse-byte-order',
+      api.platform('linux', 64),
+      api.builder_group.for_current('client.pdfium'),
+      api.properties(bot_id='test_bot'),
+      _gen_ci_build(api, 'linux'),
+      api.step_data('pixel tests (reverse byte order)', retcode=1),
+  )
+
+  yield api.test(
       'fail-pixel-tests-javascript-disabled',
       api.platform('linux', 64),
       api.builder_group.for_current('client.pdfium'),
@@ -1126,6 +1162,15 @@ def GenTests(api):
       api.properties(bot_id='test_bot'),
       _gen_ci_build(api, 'linux'),
       api.step_data('corpus tests (oneshot rendering enabled)', retcode=1),
+  )
+
+  yield api.test(
+      'fail-corpus-tests-reverse-byte-order',
+      api.platform('linux', 64),
+      api.builder_group.for_current('client.pdfium'),
+      api.properties(bot_id='test_bot'),
+      _gen_ci_build(api, 'linux'),
+      api.step_data('corpus tests (reverse byte order)', retcode=1),
   )
 
   yield api.test(
