@@ -246,6 +246,102 @@ def _build_steps(api, clang, msvc, out_dir):
     api.step('compile with ninja', ninja_cmd)
 
 
+def _run_all_embedder_tests(test_runner, skia):
+  test_exception = None
+  if skia:
+    try:
+      test_runner.run_embedder_tests(_AGG_RENDERER)
+    except test_runner.api.step.StepFailure as e:
+      test_exception = e
+
+    try:
+      test_runner.run_embedder_tests(_SKIA_RENDERER)
+    except test_runner.api.step.StepFailure as e:
+      test_exception = e
+  else:
+    try:
+      test_runner.run_embedder_tests()
+    except test_runner.api.step.StepFailure as e:
+      test_exception = e
+
+  return test_exception
+
+
+def _run_all_javascript_tests(test_runner, xfa):
+  test_exception = None
+  try:
+    test_runner.run_javascript_tests(_DefaultOption)
+  except test_runner.api.step.StepFailure as e:
+    test_exception = e
+
+  try:
+    test_runner.run_javascript_tests(_JavascriptDisabledOption)
+  except test_runner.api.step.StepFailure as e:
+    test_exception = e
+
+  if xfa:
+    try:
+      test_runner.run_javascript_tests(_XfaDisabledOption)
+    except test_runner.api.step.StepFailure as e:
+      test_exception = e
+
+  return test_exception
+
+
+def _run_all_pixel_tests(test_runner, v8, xfa):
+  test_exception = None
+  try:
+    test_runner.run_pixel_tests(_DefaultOption)
+  except test_runner.api.step.StepFailure as e:
+    test_exception = e
+
+  try:
+    test_runner.run_pixel_tests(_OneshotOption)
+  except test_runner.api.step.StepFailure as e:
+    test_exception = e
+
+  if v8:
+    try:
+      test_runner.run_pixel_tests(_JavascriptDisabledOption)
+    except test_runner.api.step.StepFailure as e:
+      test_exception = e
+
+    if xfa:
+      try:
+        test_runner.run_pixel_tests(_XfaDisabledOption)
+      except test_runner.api.step.StepFailure as e:
+        test_exception = e
+
+  return test_exception
+
+
+def _run_all_corpus_tests(test_runner, v8, xfa):
+  test_exception = None
+  try:
+    test_runner.run_corpus_tests(_DefaultOption)
+  except test_runner.api.step.StepFailure as e:
+    test_exception = e
+
+  try:
+    test_runner.run_corpus_tests(_OneshotOption)
+  except test_runner.api.step.StepFailure as e:
+    test_exception = e
+
+  if v8:
+    try:
+      test_runner.run_corpus_tests(_JavascriptDisabledOption)
+    except test_runner.api.step.StepFailure as e:
+      test_exception = e
+
+    if xfa:
+      try:
+        test_runner.run_corpus_tests(_XfaDisabledOption)
+      except test_runner.api.step.StepFailure as e:
+        test_exception = e
+
+  return test_exception
+
+
 # TODO(https://crbug.com/pdfium/11): `selected_tests_only` currently enables
 # all tests except for corpus tests for the bots. Remove this parameter once
 # corpus tests can pass with Skia enabled.
@@ -270,90 +366,26 @@ def _run_tests(api, memory_tool, v8, xfa, skia, out_dir, build_config, revision,
     test_exception = e
 
   # pdfium_embeddertests:
-  if skia:
-    try:
-      test_runner.run_embedder_tests(_AGG_RENDERER)
-    except api.step.StepFailure as e:
-      test_exception = e
-
-    try:
-      test_runner.run_embedder_tests(_SKIA_RENDERER)
-    except api.step.StepFailure as e:
-      test_exception = e
-  else:
-    try:
-      test_runner.run_embedder_tests()
-    except api.step.StepFailure as e:
-      test_exception = e
+  embedder_test_exception = _run_all_embedder_tests(test_runner, skia)
+  if embedder_test_exception:
+    test_exception = embedder_test_exception
 
   # run_javascript_tests.py:
   if v8:
-    try:
-      test_runner.run_javascript_tests(_DefaultOption)
-    except api.step.StepFailure as e:
-      test_exception = e
-
-    try:
-      test_runner.run_javascript_tests(_JavascriptDisabledOption)
-    except api.step.StepFailure as e:
-      test_exception = e
-
-    if xfa:
-      try:
-        test_runner.run_javascript_tests(_XfaDisabledOption)
-      except api.step.StepFailure as e:
-        test_exception = e
+    javascript_test_exception = _run_all_javascript_tests(test_runner, xfa)
+    if javascript_test_exception:
+      test_exception = javascript_test_exception
 
   # run_pixel_tests.py:
-  try:
-    test_runner.run_pixel_tests(_DefaultOption)
-  except api.step.StepFailure as e:
-    test_exception = e
+  pixel_test_exception = _run_all_pixel_tests(test_runner, v8, xfa)
+  if pixel_test_exception:
+    test_exception = pixel_test_exception
 
-  try:
-    test_runner.run_pixel_tests(_OneshotOption)
-  except api.step.StepFailure as e:
-    test_exception = e
-
-  if v8:
-    try:
-      test_runner.run_pixel_tests(_JavascriptDisabledOption)
-    except api.step.StepFailure as e:
-      test_exception = e
-
-    if xfa:
-      try:
-        test_runner.run_pixel_tests(_XfaDisabledOption)
-      except api.step.StepFailure as e:
-        test_exception = e
-
-  if selected_tests_only:
-    if test_exception:
-      raise test_exception  # pylint: disable=E0702
-    return
-
-  # run_corpus_tests.py:
-  try:
-    test_runner.run_corpus_tests(_DefaultOption)
-  except api.step.StepFailure as e:
-    test_exception = e
-
-  try:
-    test_runner.run_corpus_tests(_OneshotOption)
-  except api.step.StepFailure as e:
-    test_exception = e
-
-  if v8:
-    try:
-      test_runner.run_corpus_tests(_JavascriptDisabledOption)
-    except api.step.StepFailure as e:
-      test_exception = e
-
-    if xfa:
-      try:
-        test_runner.run_corpus_tests(_XfaDisabledOption)
-      except api.step.StepFailure as e:
-        test_exception = e
+  if not selected_tests_only:
+    # run_corpus_tests.py:
+    corpus_test_exception = _run_all_corpus_tests(test_runner, v8, xfa)
+    if corpus_test_exception:
+      test_exception = corpus_test_exception
 
   if test_exception:
     raise test_exception  # pylint: disable=E0702
