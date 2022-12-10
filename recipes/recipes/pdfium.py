@@ -27,6 +27,8 @@ DEPS = [
     'recipe_engine/time',
 ]
 
+from dataclasses import dataclass
+
 from recipe_engine.recipe_api import Property
 
 PROPERTIES = {
@@ -50,14 +52,58 @@ _CORPUS_TEST_TYPE = 'corpus'
 _JAVASCRIPT_TEST_TYPE = 'javascript'
 _PIXEL_TEST_TYPE = 'pixel'
 
-# Renderer test suite suffixes.
-_AGG_SUFFIX = 'agg'
-_SKIA_SUFFIX = 'skia'
+# Renderer types.
+_AGG_RENDERER = 'agg'
+_SKIA_RENDERER = 'skia'
 
-# test_runner.py test suite suffixes.
-_JAVASCRIPT_DISABLED_SUFFIX = 'javascript_disabled'
-_ONESHOT_SUFFIX = 'oneshot'
-_XFA_DISABLED_SUFFIX = 'xfa_disabled'
+
+@dataclass
+class _DefaultOption:
+  """Base class for test_runner.py test options. Returns default options."""
+
+  # The name of the option, as displayed in the test step.
+  name: str = ''
+
+  # The suffix used in test suite names, with underscores, not spaces.
+  test_suite_suffix: str = ''
+
+  # Additional command line argument to run tests with.
+  additional_arg: str = ''
+
+  # Whether this option disables JavaScript or not.
+  disable_javascript: bool = False
+
+  # Whether this option disables XFA or not.
+  disable_xfa: bool = False
+
+
+@dataclass
+class _JavascriptDisabledOption(_DefaultOption):
+  """A test_runner.py test option to disable JavaScript."""
+
+  name: str = 'javascript disabled'
+  test_suite_suffix: str = 'javascript_disabled'
+  additional_arg: str = '--disable-javascript'
+  disable_javascript: bool = True
+
+
+@dataclass
+class _XfaDisabledOption(_DefaultOption):
+  """A test_runner.py test option to disable XFA."""
+
+  name: str = 'xfa disabled'
+  test_suite_suffix: str = 'xfa_disabled'
+  additional_arg: str = '--disable-xfa'
+  disable_xfa: bool = True
+
+
+@dataclass
+class _OneshotOption(_DefaultOption):
+  """A test_runner.py test option to enable one-shot rendering."""
+
+  name: str = 'oneshot rendering enabled'
+  test_suite_suffix: str = 'oneshot'
+  additional_arg: str = '--render-oneshot'
 
 
 def _is_goma_enabled(msvc):
@@ -202,205 +248,112 @@ def _build_steps(api, clang, msvc, out_dir):
 
 # TODO(https://crbug.com/pdfium/11): `selected_tests_only` currently enables
 # all tests except for corpus tests for the bots. Remove this parameter once
-# corpus tests can pass with Skia/SkiaPaths enabled.
-# _run_tests() runs the tests and uploads the results to Gold.
+# corpus tests can pass with Skia enabled.
 def _run_tests(api, memory_tool, v8, xfa, skia, out_dir, build_config, revision,
                run_skia_gold, selected_tests_only):
+  """Runs the tests and uploads the results to Gold."""
   resultdb = _ResultDb(
       api, base_variant={
           'builder': api.buildbucket.builder_name,
       })
-  test_runner = _TestRunner(api, resultdb, out_dir, revision, run_skia_gold)
-
-  env = {}
-  COMMON_SANITIZER_OPTIONS = ['allocator_may_return_null=1']
-  COMMON_UNIX_SANITIZER_OPTIONS = [
-      'detect_leaks=1',
-      'symbolize=1',
-      # Note: deliberate lack of comma.
-      'external_symbolizer_path='
-      'third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer',
-  ]
-  if memory_tool == 'asan':
-    options = []
-    options.extend(COMMON_SANITIZER_OPTIONS)
-    if not api.platform.is_win:
-      options.extend(COMMON_UNIX_SANITIZER_OPTIONS)
-    env.update({'ASAN_OPTIONS': ' '.join(options)})
-  elif memory_tool == 'msan':
-    assert not api.platform.is_win
-    options = []
-    options.extend(COMMON_SANITIZER_OPTIONS)
-    options.extend(COMMON_UNIX_SANITIZER_OPTIONS)
-    env.update({'MSAN_OPTIONS': ' '.join(options)})
-  elif memory_tool == 'ubsan':
-    assert not api.platform.is_win
-    options = []
-    options.extend(COMMON_SANITIZER_OPTIONS)
-    options.extend(COMMON_UNIX_SANITIZER_OPTIONS)
-    env.update({'UBSAN_OPTIONS': ' '.join(options)})
+  test_runner = _TestRunner(api, memory_tool, resultdb, out_dir, build_config,
+                            revision, run_skia_gold)
 
   # This variable swallows the exception raised by a failed step. The step
   # will still show up as failed, but processing will continue.
   test_exception = None
 
-  with api.context(cwd=api.path['checkout'], env=env):
+  # pdfium_unittests:
+  try:
+    test_runner.run_unit_tests()
+  except api.step.StepFailure as e:
+    test_exception = e
+
+  # pdfium_embeddertests:
+  if skia:
     try:
-      test_runner.run_gtest('unittests', target=('', 'pdfium_unittests'))
+      test_runner.run_embedder_tests(_AGG_RENDERER)
     except api.step.StepFailure as e:
       test_exception = e
 
-  with api.context(cwd=api.path['checkout'], env=env):
-    embeddertests_target = ('', 'pdfium_embeddertests')
-    if skia:
+    try:
+      test_runner.run_embedder_tests(_SKIA_RENDERER)
+    except api.step.StepFailure as e:
+      test_exception = e
+  else:
+    try:
+      test_runner.run_embedder_tests()
+    except api.step.StepFailure as e:
+      test_exception = e
+
+  # run_javascript_tests.py:
+  if v8:
+    try:
+      test_runner.run_javascript_tests(_DefaultOption)
+    except api.step.StepFailure as e:
+      test_exception = e
+
+    try:
+      test_runner.run_javascript_tests(_JavascriptDisabledOption)
+    except api.step.StepFailure as e:
+      test_exception = e
+
+    if xfa:
       try:
-        # Use argument to do runtime renderer selection.
-        test_runner.run_gtest(
-            'embeddertests (agg)',
-            target=embeddertests_target,
-            args=['--use-renderer=agg'],
-            test_suite_suffix=_AGG_SUFFIX)
+        test_runner.run_javascript_tests(_XfaDisabledOption)
       except api.step.StepFailure as e:
         test_exception = e
 
-      try:
-        test_runner.run_gtest(
-            'embeddertests (skia)',
-            target=embeddertests_target,
-            args=['--use-renderer=skia'],
-            test_suite_suffix=_SKIA_SUFFIX)
-      except api.step.StepFailure as e:
-        test_exception = e
-    else:
-      try:
-        test_runner.run_gtest('embeddertests', target=embeddertests_target)
-      except api.step.StepFailure as e:
-        test_exception = e
+  # run_pixel_tests.py:
+  try:
+    test_runner.run_pixel_tests(_DefaultOption)
+  except api.step.StepFailure as e:
+    test_exception = e
+
+  try:
+    test_runner.run_pixel_tests(_OneshotOption)
+  except api.step.StepFailure as e:
+    test_exception = e
 
   if v8:
-    with api.context(cwd=api.path['checkout'], env=env):
-      additional_args = _get_modifiable_script_args(api, build_config)
-      try:
-        test_runner.run_test_runner_py(
-            'javascript tests',
-            test_type=_JAVASCRIPT_TEST_TYPE,
-            args=additional_args)
-      except api.step.StepFailure as e:
-        test_exception = e
-
-      additional_args = _get_modifiable_script_args(
-          api, build_config, javascript_disabled=True)
-      try:
-        test_runner.run_test_runner_py(
-            'javascript tests (javascript disabled)',
-            test_type=_JAVASCRIPT_TEST_TYPE,
-            args=additional_args,
-            test_suite_suffix=_JAVASCRIPT_DISABLED_SUFFIX)
-      except api.step.StepFailure as e:
-        test_exception = e
-
-      if xfa:
-        additional_args = _get_modifiable_script_args(
-            api, build_config, xfa_disabled=True)
-        try:
-          test_runner.run_test_runner_py(
-              'javascript tests (xfa disabled)',
-              test_type=_JAVASCRIPT_TEST_TYPE,
-              args=additional_args,
-              test_suite_suffix=_XFA_DISABLED_SUFFIX)
-        except api.step.StepFailure as e:
-          test_exception = e
-
-  with api.context(cwd=api.path['checkout'], env=env):
-    additional_args = _get_modifiable_script_args(api, build_config)
     try:
-      test_runner.run_test_runner_py(
-          'pixel tests', test_type=_PIXEL_TEST_TYPE, args=additional_args)
+      test_runner.run_pixel_tests(_JavascriptDisabledOption)
     except api.step.StepFailure as e:
       test_exception = e
 
-    additional_args = _get_modifiable_script_args(
-        api, build_config) + ['--render-oneshot']
-    try:
-      test_runner.run_test_runner_py(
-          'pixel tests (oneshot rendering enabled)',
-          test_type=_PIXEL_TEST_TYPE,
-          args=additional_args,
-          test_suite_suffix=_ONESHOT_SUFFIX)
-    except api.step.StepFailure as e:
-      test_exception = e
-
-    if v8:
-      additional_args = _get_modifiable_script_args(
-          api, build_config, javascript_disabled=True)
+    if xfa:
       try:
-        test_runner.run_test_runner_py(
-            'pixel tests (javascript disabled)',
-            test_type=_PIXEL_TEST_TYPE,
-            args=additional_args,
-            test_suite_suffix=_JAVASCRIPT_DISABLED_SUFFIX)
+        test_runner.run_pixel_tests(_XfaDisabledOption)
       except api.step.StepFailure as e:
         test_exception = e
-
-      if xfa:
-        additional_args = _get_modifiable_script_args(
-            api, build_config, xfa_disabled=True)
-        try:
-          test_runner.run_test_runner_py(
-              'pixel tests (xfa disabled)',
-              test_type=_PIXEL_TEST_TYPE,
-              args=additional_args,
-              test_suite_suffix=_XFA_DISABLED_SUFFIX)
-        except api.step.StepFailure as e:
-          test_exception = e
 
   if selected_tests_only:
     if test_exception:
       raise test_exception  # pylint: disable=E0702
     return
 
-  with api.context(cwd=api.path['checkout'], env=env):
-    additional_args = _get_modifiable_script_args(api, build_config)
+  # run_corpus_tests.py:
+  try:
+    test_runner.run_corpus_tests(_DefaultOption)
+  except api.step.StepFailure as e:
+    test_exception = e
+
+  try:
+    test_runner.run_corpus_tests(_OneshotOption)
+  except api.step.StepFailure as e:
+    test_exception = e
+
+  if v8:
     try:
-      test_runner.run_test_runner_py(
-          'corpus tests', test_type=_CORPUS_TEST_TYPE, args=additional_args)
+      test_runner.run_corpus_tests(_JavascriptDisabledOption)
     except api.step.StepFailure as e:
       test_exception = e
 
-    additional_args = _get_modifiable_script_args(
-        api, build_config) + ['--render-oneshot']
-    try:
-      test_runner.run_test_runner_py(
-          'corpus tests (oneshot rendering enabled)',
-          test_type=_CORPUS_TEST_TYPE,
-          args=additional_args,
-          test_suite_suffix=_ONESHOT_SUFFIX)
-    except api.step.StepFailure as e:
-      test_exception = e
-
-    if v8:
-      additional_args = _get_modifiable_script_args(
-          api, build_config, javascript_disabled=True)
+    if xfa:
       try:
-        test_runner.run_test_runner_py(
-            'corpus tests (javascript disabled)',
-            test_type=_CORPUS_TEST_TYPE,
-            args=additional_args,
-            test_suite_suffix=_JAVASCRIPT_DISABLED_SUFFIX)
+        test_runner.run_corpus_tests(_XfaDisabledOption)
       except api.step.StepFailure as e:
         test_exception = e
-
-      if xfa:
-        additional_args = _get_modifiable_script_args(
-            api, build_config, xfa_disabled=True)
-        try:
-          test_runner.run_test_runner_py(
-              'corpus tests (xfa disabled)',
-              test_type=_CORPUS_TEST_TYPE,
-              args=additional_args,
-              test_suite_suffix=_XFA_DISABLED_SUFFIX)
-        except api.step.StepFailure as e:
-          test_exception = e
 
   if test_exception:
     raise test_exception  # pylint: disable=E0702
@@ -457,10 +410,13 @@ class _ResultDb:
 
 class _TestRunner:
 
-  def __init__(self, api, resultdb, out_dir, revision, run_skia_gold):
+  def __init__(self, api, memory_tool, resultdb, out_dir, build_config,
+               revision, run_skia_gold):
     self.api = api
     self.resultdb = resultdb
     self.out_dir = self.api.path['checkout'].join('out', out_dir)
+    self.build_config = build_config
+    self.env = self._create_sanitizer_envionment(memory_tool)
 
     self.test_runner_py_args = [
         '--build-dir',
@@ -488,7 +444,78 @@ class _TestRunner:
             str(self.api.tryserver.gerrit_change.patchset),
         ])
 
-  def run_gtest(self, step_name, *, target, args=None, test_suite_suffix=None):
+  def _create_sanitizer_envionment(self, memory_tool):
+    """Sets environment variables required by sanitizer tools."""
+    env = {}
+    COMMON_SANITIZER_OPTIONS = ['allocator_may_return_null=1']
+    COMMON_UNIX_SANITIZER_OPTIONS = [
+        'detect_leaks=1',
+        'symbolize=1',
+        # Note: deliberate lack of comma.
+        'external_symbolizer_path='
+        'third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer',
+    ]
+    if memory_tool == 'asan':
+      options = []
+      options.extend(COMMON_SANITIZER_OPTIONS)
+      if not self.api.platform.is_win:
+        options.extend(COMMON_UNIX_SANITIZER_OPTIONS)
+      env.update({'ASAN_OPTIONS': ' '.join(options)})
+    elif memory_tool == 'msan':
+      assert not self.api.platform.is_win
+      options = []
+      options.extend(COMMON_SANITIZER_OPTIONS)
+      options.extend(COMMON_UNIX_SANITIZER_OPTIONS)
+      env.update({'MSAN_OPTIONS': ' '.join(options)})
+    elif memory_tool == 'ubsan':
+      assert not self.api.platform.is_win
+      options = []
+      options.extend(COMMON_SANITIZER_OPTIONS)
+      options.extend(COMMON_UNIX_SANITIZER_OPTIONS)
+      env.update({'UBSAN_OPTIONS': ' '.join(options)})
+
+    return env
+
+  def run_unit_tests(self):
+    with self.api.context(cwd=self.api.path['checkout'], env=self.env):
+      self._run_gtest('unittests', target=('', 'pdfium_unittests'))
+
+  def run_embedder_tests(self, renderer=None):
+    test_name = 'embeddertests'
+    args = []
+    if renderer:
+      test_name = f'{test_name} ({renderer})'
+      args.append(f'--use-renderer={renderer}')
+
+    with self.api.context(cwd=self.api.path['checkout'], env=self.env):
+      self._run_gtest(
+          test_name,
+          target=('', 'pdfium_embeddertests'),
+          args=args,
+          test_suite_suffix=renderer)
+
+  def run_javascript_tests(self, option):
+    self._run_python_tests(_JAVASCRIPT_TEST_TYPE, option)
+
+  def run_pixel_tests(self, option):
+    self._run_python_tests(_PIXEL_TEST_TYPE, option)
+
+  def run_corpus_tests(self, option):
+    self._run_python_tests(_CORPUS_TEST_TYPE, option)
+
+  def _run_python_tests(self, test_type, option):
+    test_name = f'{test_type} tests'
+    if option.name:
+      test_name = f'{test_name} ({option.name})'
+
+    with self.api.context(cwd=self.api.path['checkout'], env=self.env):
+      self._run_test_runner_py(
+          test_name,
+          test_type=test_type,
+          args=_get_modifiable_script_args(self.api, self.build_config, option),
+          test_suite_suffix=option.test_suite_suffix)
+
+  def _run_gtest(self, step_name, *, target, args=None, test_suite_suffix=None):
     target_path, target_name = target
 
     test_path = str(self.out_dir.join(target_name))
@@ -511,12 +538,8 @@ class _TestRunner:
             base_variant=variant,
             base_tags=tags))
 
-  def run_test_runner_py(self,
-                         step_name,
-                         *,
-                         test_type,
-                         args,
-                         test_suite_suffix=None):
+  def _run_test_runner_py(self, step_name, *, test_type, args,
+                          test_suite_suffix):
     test_path = self.api.path['checkout'].join('testing', 'tools',
                                                f'run_{test_type}_tests.py')
 
@@ -541,15 +564,10 @@ def _get_test_suite(base_name, suffix=None):
   return f'{base_name}_{suffix}' if suffix else base_name
 
 
-def _get_modifiable_script_args(api,
-                                build_config,
-                                javascript_disabled=False,
-                                xfa_disabled=False):
-  """Construct and get the additional arguments for
-  run_corpus_tests.py that can be modified based on whether
-  javascript is disabled.
-  Returns a list that can be concatenated with the other script
-  arguments.
+def _get_modifiable_script_args(api, build_config, option):
+  """Get the list of additional arguments for Python-based tests that can be
+  further modified based on test options.
+  Returns a list that can be concatenated with the other script arguments.
   """
   additional_args = []
 
@@ -560,16 +578,15 @@ def _get_modifiable_script_args(api,
     builder_name = api.m.buildbucket.builder_name.strip()
     keys['os'] = builder_name.split('_')[0]
     keys['javascript_runtime'] = 'disabled' if (
-        build_config['v8'] == 'false' or javascript_disabled) else 'enabled'
+        build_config['v8'] == 'false' or
+        option.disable_javascript) else 'enabled'
     keys['xfa_runtime'] = 'disabled' if (build_config['xfa'] == 'false' or
-                                         javascript_disabled or
-                                         xfa_disabled) else 'enabled'
+                                         option.disable_javascript or
+                                         option.disable_xfa) else 'enabled'
     additional_args.extend(['--gold_key', _dict_to_str(keys)])
 
-  if javascript_disabled:
-    additional_args.append('--disable-javascript')
-  if xfa_disabled:
-    additional_args.append('--disable-xfa')
+  if option.additional_arg:
+    additional_args.append(option.additional_arg)
 
   return additional_args
 
