@@ -5,20 +5,6 @@
 from .. import builder_spec
 
 SPEC = {
-    'android-lollipop-arm-rel-swarming':
-        builder_spec.BuilderSpec.create(
-            chromium_config='android',
-            gclient_config='chromium',
-            gclient_apply_config=['android'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 32,
-                'TARGET_PLATFORM': 'android',
-                'TARGET_ARCH': 'arm',
-            },
-            android_config='main_builder_mb',
-            simulation_platform='linux',
-        ),
     'linux-rel-swarming':
         builder_spec.BuilderSpec.create(
             chromium_config='chromium',

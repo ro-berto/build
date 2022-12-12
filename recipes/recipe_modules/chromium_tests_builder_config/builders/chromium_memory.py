@@ -33,19 +33,6 @@ def _chromium_memory_spec(**kwargs):
 # * win-asan
 
 SPEC = {
-    # TODO(crbug.com/1200904): Remove after migration
-    'Linux TSan (bionic)':
-        _chromium_memory_spec(
-            chromium_config='chromium_tsan2',
-            gclient_config='chromium',
-            chromium_apply_config=['mb'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            },
-            execution_mode=builder_spec.COMPILE_AND_TEST,
-            simulation_platform='linux',
-        ),
     'android-asan':
         _chromium_memory_spec(
             android_config='main_builder',

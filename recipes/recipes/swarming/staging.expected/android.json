@@ -102,9 +102,7 @@
       "@@@STEP_LOG_LINE@config@  \"src_root\": null, @@@",
       "@@@STEP_LOG_LINE@config@  \"target_cpu\": [], @@@",
       "@@@STEP_LOG_LINE@config@  \"target_cpu_only\": false, @@@",
-      "@@@STEP_LOG_LINE@config@  \"target_os\": [@@@",
-      "@@@STEP_LOG_LINE@config@    \"android\"@@@",
-      "@@@STEP_LOG_LINE@config@  ], @@@",
+      "@@@STEP_LOG_LINE@config@  \"target_os\": [], @@@",
       "@@@STEP_LOG_LINE@config@  \"target_os_only\": false, @@@",
       "@@@STEP_LOG_LINE@config@  \"with_branch_heads\": false, @@@",
       "@@@STEP_LOG_LINE@config@  \"with_tags\": false@@@",
@@ -118,7 +116,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]\ntarget_os = ['android']",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
       "--revision_mapping_file",
       "{\"got_angle_revision\": \"src/third_party/angle\", \"got_buildtools_revision\": \"src/buildtools\", \"got_dawn_revision\": \"src/third_party/dawn\", \"got_nacl_revision\": \"src/native_client\", \"got_revision\": \"src\", \"got_swiftshader_revision\": \"src/third_party/swiftshader\", \"got_v8_revision\": \"src/v8\", \"got_webrtc_revision\": \"src/third_party/webrtc\"}",
       "--git-cache-dir",
@@ -449,8 +447,8 @@
     "cmd": [
       "python3",
       "RECIPE_MODULE[build::chromium_android]/resources/clean_local_files.py",
-      "[CACHE]/builder/src/out/Release/debug_info_dumps",
-      "[CACHE]/builder/src/out/Release/test_logs",
+      "[CACHE]/builder/src/out/Debug/debug_info_dumps",
+      "[CACHE]/builder/src/out/Debug/test_logs",
       "[CACHE]/builder/src/out/build_product.zip",
       "[CACHE]/builder/src"
     ],
@@ -499,7 +497,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/builder/src/out/Release"
+      "[CACHE]/builder/src/out/Debug"
     ],
     "infra_step": true,
     "luci_context": {
@@ -525,7 +523,7 @@
       "/path/to/tmp/json",
       "copy",
       "This file exists while a build compiles and is removed at the end of\ncompilation. If the next build finds that the file exists prior to\ncompilation, it will wipe the output directory.\n\nSee https://crbug.com/959436 for more context.\n",
-      "[CACHE]/builder/src/out/Release/CR_COMPILE_GUARD.txt"
+      "[CACHE]/builder/src/out/Debug/CR_COMPILE_GUARD.txt"
     ],
     "infra_step": true,
     "luci_context": {
@@ -607,7 +605,7 @@
       "--luci-auth",
       "--json-output",
       "/path/to/tmp/json",
-      "//out/Release"
+      "//out/Debug"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -641,7 +639,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[CACHE]/builder/src/out/Release/gn_logs.txt",
+      "[CACHE]/builder/src/out/Debug/gn_logs.txt",
       "/path/to/tmp/"
     ],
     "infra_step": true,
@@ -784,7 +782,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/Release",
+      "[CACHE]/builder/src/out/Debug",
       "-j",
       "80"
     ],
@@ -814,7 +812,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/Release",
+      "[CACHE]/builder/src/out/Debug",
       "-j",
       "80",
       "-d",
@@ -997,9 +995,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[CACHE]/builder/src/out/Release",
+      "[CACHE]/builder/src/out/Debug",
       "--ninja-log-command-file",
-      "[\"[CACHE]/builder/src/third_party/ninja/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Release\", \"-j\", 80]",
+      "[\"[CACHE]/builder/src/third_party/ninja/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Debug\", \"-j\", 80]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -1086,7 +1084,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "remove",
-      "[CACHE]/builder/src/out/Release/CR_COMPILE_GUARD.txt"
+      "[CACHE]/builder/src/out/Debug/CR_COMPILE_GUARD.txt"
     ],
     "infra_step": true,
     "luci_context": {

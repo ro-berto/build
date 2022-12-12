@@ -17,24 +17,6 @@ def _chromium_android_fyi_spec(**kwargs):
 # * android-webview-12-x64-dbg-tests
 
 SPEC = {
-    'Android arm64 Builder (dbg) (reclient)':
-        _chromium_android_fyi_spec(
-            chromium_config='android',
-            chromium_apply_config=[
-                'download_vr_test_apks',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=[
-                'android',
-            ],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'android',
-            },
-            android_config='main_builder_mb',
-            simulation_platform='linux',
-        ),
     'Android ASAN (dbg) (reclient)':
         _chromium_android_fyi_spec(
             chromium_config='android_clang',
@@ -51,19 +33,6 @@ SPEC = {
                 'TARGET_PLATFORM': 'android',
             },
             android_config='clang_builder_mb',
-            simulation_platform='linux',
-        ),
-    'Memory Infra Tester':
-        _chromium_android_fyi_spec(
-            chromium_config='android',
-            gclient_config='chromium',
-            gclient_apply_config=['android'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 32,
-                'TARGET_PLATFORM': 'android',
-            },
-            android_config='main_builder_mb',
             simulation_platform='linux',
         ),
     'android-11-x86-fyi-rel':
@@ -91,20 +60,6 @@ SPEC = {
                 'TARGET_PLATFORM': 'android',
             },
             android_config='x86_builder',
-            simulation_platform='linux',
-        ),
-    'android-pie-arm64-fyi-rel':
-        _chromium_android_fyi_spec(
-            chromium_config='android',
-            chromium_apply_config=['mb'],
-            gclient_config='chromium',
-            gclient_apply_config=['android'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'android',
-            },
-            android_config='main_builder',
             simulation_platform='linux',
         ),
     'android-webview-pie-x86-wpt-fyi-rel':

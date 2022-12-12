@@ -44,22 +44,6 @@ def _chromium_android_spec(**kwargs):
 # * android-pie-arm64-rel
 
 SPEC = {
-    'Marshmallow Phone Tester (rel)':
-        _chromium_android_spec(
-            chromium_config='android',
-            chromium_apply_config=[
-                'download_vr_test_apks',
-            ],
-            gclient_config='chromium',
-            gclient_apply_config=['android'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-                'TARGET_PLATFORM': 'android',
-            },
-            android_config='main_builder_mb',
-            simulation_platform='linux',
-        ),
 }
 
 
@@ -102,24 +86,12 @@ def stock_cronet_config(name, config='Release', **kwargs):
 
 
 SPEC.update([
-    stock_config('android-incremental-dbg', config='Debug'),
-    stock_config(
-        'android-lollipop-arm-rel',
-        chromium_apply_config=['download_vr_test_apks'],
-        chromium_config_kwargs={'TARGET_BITS': 32}),
-    stock_config(
-        'android-nougat-arm64-rel',
-        chromium_apply_config=['download_vr_test_apks'],
-        chromium_config_kwargs={'TARGET_BITS': 64}),
     stock_config(
         'android-pie-arm64-coverage-experimental-rel',
         gclient_apply_config=[
             'android',
             'use_clang_coverage',
         ],
-        chromium_config_kwargs={'TARGET_BITS': 64}),
-    stock_config(
-        'android-pie-arm64-wpt-rel-non-cq',
         chromium_config_kwargs={'TARGET_BITS': 64}),
     stock_cronet_config('android-cronet-arm64-dbg', config='Debug'),
     stock_cronet_config('android-cronet-arm64-rel'),

@@ -2,8 +2,11 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from PB.recipe_modules.build.archive import properties
 from recipe_engine import post_process
+
+from PB.recipe_modules.build.archive import properties
+
+from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
 
 DEPS = [
     'archive',
@@ -44,6 +47,8 @@ def RunSteps(api):
 
 
 def GenTests(api):
+  ctbc_api = api.chromium_tests_builder_config
+
   input_properties = properties.InputProperties()
   cipd_archive_data = properties.CIPDArchiveData()
   cipd_archive_data.yaml_files.extend(['foo'])
@@ -56,7 +61,21 @@ def GenTests(api):
   yield api.test(
       'fuchsia_cipd_archive_arm64',
       api.chromium.generic_build(
-          builder_group='chromium.fyi', builder='fuchsia-fyi-arm64-rel'),
+          builder_group='fake-group', builder='fake-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+              builder_spec=ctbc.BuilderSpec.create(
+                  gclient_config='chromium',
+                  chromium_config='chromium',
+                  chromium_config_kwargs={
+                      'TARGET_ARCH': 'arm',
+                      'TARGET_BITS': 64,
+                      'TARGET_PLATFORM': 'fuchsia',
+                  },
+              ),
+          ).assemble()),
       api.properties(
           cipd_archive=True,
           update_properties={},
@@ -82,7 +101,20 @@ def GenTests(api):
   yield api.test(
       'fuchsia_cipd_archive_x64',
       api.chromium.generic_build(
-          builder_group='chromium.fyi', builder='fuchsia-fyi-x64-rel'),
+          builder_group='fake-group', builder='fake-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+              builder_spec=ctbc.BuilderSpec.create(
+                  gclient_config='chromium',
+                  chromium_config='chromium',
+                  chromium_config_kwargs={
+                      'TARGET_BITS': 64,
+                      'TARGET_PLATFORM': 'fuchsia',
+                  },
+              ),
+          ).assemble()),
       api.properties(
           cipd_archive=True,
           update_properties={},
@@ -110,7 +142,20 @@ def GenTests(api):
   yield api.test(
       'source_side_cipd_archive_data',
       api.chromium.generic_build(
-          builder_group='chromium.fyi', builder='fuchsia-fyi-x64-rel'),
+          builder_group='fake-group', builder='fake-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+              builder_spec=ctbc.BuilderSpec.create(
+                  gclient_config='chromium',
+                  chromium_config='chromium',
+                  chromium_config_kwargs={
+                      'TARGET_BITS': 64,
+                      'TARGET_PLATFORM': 'fuchsia',
+                  },
+              ),
+          ).assemble()),
       api.properties(
           cipd_archive=True,
           update_properties={},
@@ -144,7 +189,20 @@ def GenTests(api):
   yield api.test(
       'source_side_archive_data',
       api.chromium.generic_build(
-          builder_group='chromium.fyi', builder='fuchsia-fyi-x64-rel'),
+          builder_group='fake-group', builder='fake-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+              builder_spec=ctbc.BuilderSpec.create(
+                  gclient_config='chromium',
+                  chromium_config='chromium',
+                  chromium_config_kwargs={
+                      'TARGET_BITS': 64,
+                      'TARGET_PLATFORM': 'fuchsia',
+                  },
+              ),
+          ).assemble()),
       api.properties(
           gcs_archive=True,
           update_properties={},

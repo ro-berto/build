@@ -4,20 +4,9 @@
       "chromium.android.fyi:Android ASAN (dbg) (reclient)"
     ]
   },
-  "chromium.android.fyi:Android arm64 Builder (dbg) (reclient)": {
-    "builders": [
-      "chromium.android.fyi:Android arm64 Builder (dbg) (reclient)"
-    ]
-  },
-  "chromium.android.fyi:Memory Infra Tester": {
-    "builders": [
-      "chromium.android.fyi:Memory Infra Tester"
-    ]
-  },
   "chromium.android.fyi:android-11-x86-fyi-rel": {
     "builders": [
-      "chromium.android.fyi:android-11-x86-fyi-rel",
-      "tryserver.chromium.android:android-11-x86-fyi-rel"
+      "chromium.android.fyi:android-11-x86-fyi-rel"
     ]
   },
   "chromium.android.fyi:android-annotator-rel": {
@@ -29,12 +18,6 @@
     "builders": [
       "chromium.android.fyi:android-chrome-pie-x86-wpt-fyi-rel",
       "tryserver.chromium.android:android-chrome-pie-x86-wpt-fyi-rel"
-    ]
-  },
-  "chromium.android.fyi:android-pie-arm64-fyi-rel": {
-    "builders": [
-      "chromium.android.fyi:android-pie-arm64-fyi-rel",
-      "tryserver.chromium.android:android-pie-arm64-fyi-rel"
     ]
   },
   "chromium.android.fyi:android-pie-arm64-wpt-rel-non-cq": {
@@ -52,11 +35,6 @@
     "builders": [
       "chromium.android.fyi:android-webview-pie-x86-wpt-fyi-rel",
       "tryserver.chromium.android:android-webview-pie-x86-wpt-fyi-rel"
-    ]
-  },
-  "chromium.android:Marshmallow Phone Tester (rel)": {
-    "builders": [
-      "chromium.android:Marshmallow Phone Tester (rel)"
     ]
   },
   "chromium.android:android-cronet-arm64-dbg": {
@@ -93,53 +71,15 @@
       "tryserver.chromium.android:android-cronet-x86-rel-kitkat-tests"
     ]
   },
-  "chromium.android:android-incremental-dbg": {
-    "builders": [
-      "chromium.android:android-incremental-dbg"
-    ]
-  },
-  "chromium.android:android-lollipop-arm-rel": {
-    "builders": [
-      "chromium.android:android-lollipop-arm-rel",
-      "tryserver.chromium.android:android-lollipop-arm-rel"
-    ]
-  },
-  "chromium.android:android-nougat-arm64-rel": {
-    "builders": [
-      "chromium.android:android-nougat-arm64-rel",
-      "tryserver.chromium.android:android-nougat-arm64-rel"
-    ]
-  },
   "chromium.android:android-pie-arm64-coverage-experimental-rel": {
     "builders": [
       "chromium.android:android-pie-arm64-coverage-experimental-rel",
       "tryserver.chromium.android:android-pie-arm64-coverage-experimental-rel"
     ]
   },
-  "chromium.android:android-pie-arm64-wpt-rel-non-cq": {
-    "builders": [
-      "chromium.android:android-pie-arm64-wpt-rel-non-cq"
-    ]
-  },
   "chromium.chromiumos:linux-ash-chromium-generator-rel": {
     "builders": [
       "chromium.chromiumos:linux-ash-chromium-generator-rel"
-    ]
-  },
-  "chromium.chromiumos:linux-chromeos-js-code-coverage": {
-    "builders": [
-      "chromium.chromiumos:linux-chromeos-js-code-coverage",
-      "tryserver.chromium.chromiumos:linux-chromeos-js-code-coverage"
-    ]
-  },
-  "chromium.chromiumos:linux-lacros-rel": {
-    "builders": [
-      "chromium.chromiumos:linux-lacros-rel"
-    ]
-  },
-  "chromium.dev:android-lollipop-arm-rel-swarming": {
-    "builders": [
-      "chromium.dev:android-lollipop-arm-rel-swarming"
     ]
   },
   "chromium.dev:linux-rel-swarming": {
@@ -262,16 +202,6 @@
       "chromium.fuzz:Win ASan Release Media"
     ]
   },
-  "chromium.fyi:CFI Linux CF (reclient shadow)": {
-    "builders": [
-      "chromium.fyi:CFI Linux CF (reclient shadow)"
-    ]
-  },
-  "chromium.fyi:Linux ASan LSan Builder (reclient shadow)": {
-    "builders": [
-      "chromium.fyi:Linux ASan LSan Builder (reclient shadow)"
-    ]
-  },
   "chromium.fyi:Linux Builder (j-500) (reclient)": {
     "builders": [
       "chromium.fyi:Linux Builder (j-500) (reclient)",
@@ -281,11 +211,6 @@
   "chromium.fyi:Linux CFI (reclient shadow)": {
     "builders": [
       "chromium.fyi:Linux CFI (reclient shadow)"
-    ]
-  },
-  "chromium.fyi:Linux MSan Builder (reclient shadow)": {
-    "builders": [
-      "chromium.fyi:Linux MSan Builder (reclient shadow)"
     ]
   },
   "chromium.fyi:Linux Viz": {
@@ -310,29 +235,9 @@
       "tryserver.chromium.mac:mac-builder-next-rel"
     ]
   },
-  "chromium.fyi:Mojo Linux (reclient shadow)": {
-    "builders": [
-      "chromium.fyi:Mojo Linux (reclient shadow)"
-    ]
-  },
   "chromium.fyi:Site Isolation Android": {
     "builders": [
       "chromium.fyi:Site Isolation Android"
-    ]
-  },
-  "chromium.fyi:WebKit Linux ASAN (reclient shadow)": {
-    "builders": [
-      "chromium.fyi:WebKit Linux ASAN (reclient shadow)"
-    ]
-  },
-  "chromium.fyi:WebKit Linux Leak (reclient shadow)": {
-    "builders": [
-      "chromium.fyi:WebKit Linux Leak (reclient shadow)"
-    ]
-  },
-  "chromium.fyi:WebKit Linux MSAN (reclient shadow)": {
-    "builders": [
-      "chromium.fyi:WebKit Linux MSAN (reclient shadow)"
     ]
   },
   "chromium.fyi:Win 10 Fast Ring": {
@@ -371,11 +276,6 @@
       "tryserver.chromium.android:android-pie-arm64-coverage-rel"
     ]
   },
-  "chromium.fyi:chromeos-amd64-generic-rel (goma cache silo)": {
-    "builders": [
-      "chromium.fyi:chromeos-amd64-generic-rel (goma cache silo)"
-    ]
-  },
   "chromium.fyi:chromeos-amd64-generic-rel (reclient compare)": {
     "builders": [
       "chromium.fyi:chromeos-amd64-generic-rel (reclient compare)"
@@ -389,24 +289,6 @@
   "chromium.fyi:fuchsia-code-coverage": {
     "builders": [
       "chromium.fyi:fuchsia-code-coverage"
-    ]
-  },
-  "chromium.fyi:fuchsia-fyi-arm64-femu": {
-    "builders": [
-      "chromium.fyi:fuchsia-fyi-arm64-femu",
-      "tryserver.chromium.linux:fuchsia-fyi-arm64-femu"
-    ]
-  },
-  "chromium.fyi:fuchsia-fyi-arm64-rel": {
-    "builders": [
-      "chromium.fyi:fuchsia-fyi-arm64-rel",
-      "tryserver.chromium.linux:fuchsia-fyi-arm64-rel"
-    ]
-  },
-  "chromium.fyi:fuchsia-fyi-x64-rel": {
-    "builders": [
-      "chromium.fyi:fuchsia-fyi-x64-rel",
-      "tryserver.chromium.linux:fuchsia-fyi-x64-rel"
     ]
   },
   "chromium.fyi:ios-simulator-code-coverage": {
@@ -425,23 +307,6 @@
       "chromium.fyi:ios-webkit-tot"
     ]
   },
-  "chromium.fyi:ios13-beta-simulator": {
-    "builders": [
-      "chromium.fyi:ios13-beta-simulator",
-      "tryserver.chromium.mac:ios13-beta-simulator"
-    ]
-  },
-  "chromium.fyi:ios13-sdk-device": {
-    "builders": [
-      "chromium.fyi:ios13-sdk-device"
-    ]
-  },
-  "chromium.fyi:ios13-sdk-simulator": {
-    "builders": [
-      "chromium.fyi:ios13-sdk-simulator",
-      "tryserver.chromium.mac:ios13-sdk-simulator"
-    ]
-  },
   "chromium.fyi:ios15-beta-simulator": {
     "builders": [
       "chromium.fyi:ios15-beta-simulator",
@@ -452,11 +317,6 @@
     "builders": [
       "chromium.fyi:ios15-sdk-simulator",
       "tryserver.chromium.mac:ios15-sdk-simulator"
-    ]
-  },
-  "chromium.fyi:lacros-amd64-generic-rel (goma cache silo)": {
-    "builders": [
-      "chromium.fyi:lacros-amd64-generic-rel (goma cache silo)"
     ]
   },
   "chromium.fyi:lacros-amd64-generic-rel (reclient)": {
@@ -475,11 +335,6 @@
       "tryserver.chromium.linux:linux-annotator-rel"
     ]
   },
-  "chromium.fyi:linux-autofill-captured-sites-rel": {
-    "builders": [
-      "chromium.fyi:linux-autofill-captured-sites-rel"
-    ]
-  },
   "chromium.fyi:linux-backuprefptr-x64-fyi-rel": {
     "builders": [
       "chromium.fyi:linux-backuprefptr-x64-fyi-rel"
@@ -496,11 +351,6 @@
       "tryserver.chromium.linux:linux-blink-heap-verification-try"
     ]
   },
-  "chromium.fyi:linux-blink-v8-sandbox-future-dbg": {
-    "builders": [
-      "chromium.fyi:linux-blink-v8-sandbox-future-dbg"
-    ]
-  },
   "chromium.fyi:linux-chromeos-code-coverage": {
     "builders": [
       "chromium.fyi:linux-chromeos-code-coverage"
@@ -509,12 +359,6 @@
   "chromium.fyi:linux-code-coverage": {
     "builders": [
       "chromium.fyi:linux-code-coverage"
-    ]
-  },
-  "chromium.fyi:linux-example-builder": {
-    "builders": [
-      "chromium.fyi:linux-example-builder",
-      "tryserver.chromium.linux:linux-example-builder"
     ]
   },
   "chromium.fyi:linux-fieldtrial-rel": {
@@ -534,11 +378,6 @@
       "chromium.fyi:linux-lacros-builder-fyi-rel",
       "chromium.fyi:linux-lacros-tester-fyi-rel",
       "tryserver.chromium.linux:linux-lacros-fyi-rel"
-    ]
-  },
-  "chromium.fyi:linux-lacros-builder-rel (goma cache silo)": {
-    "builders": [
-      "chromium.fyi:linux-lacros-builder-rel (goma cache silo)"
     ]
   },
   "chromium.fyi:linux-lacros-builder-rel (reclient)": {
@@ -576,25 +415,10 @@
       "tryserver.chromium.linux:linux-lacros-version-skew-fyi"
     ]
   },
-  "chromium.fyi:linux-paeverywhere-x64-fyi-dbg": {
-    "builders": [
-      "chromium.fyi:linux-paeverywhere-x64-fyi-dbg"
-    ]
-  },
-  "chromium.fyi:linux-paeverywhere-x64-fyi-rel": {
-    "builders": [
-      "chromium.fyi:linux-paeverywhere-x64-fyi-rel"
-    ]
-  },
   "chromium.fyi:linux-perfetto-rel": {
     "builders": [
       "chromium.fyi:linux-perfetto-rel",
       "tryserver.chromium.linux:linux-perfetto-rel"
-    ]
-  },
-  "chromium.fyi:linux-tcmalloc-rel": {
-    "builders": [
-      "chromium.fyi:linux-tcmalloc-rel"
     ]
   },
   "chromium.fyi:linux-upload-perfetto": {
@@ -633,16 +457,6 @@
   "chromium.fyi:mac-hermetic-upgrade-rel": {
     "builders": [
       "chromium.fyi:mac-hermetic-upgrade-rel"
-    ]
-  },
-  "chromium.fyi:mac-paeverywhere-x64-fyi-dbg": {
-    "builders": [
-      "chromium.fyi:mac-paeverywhere-x64-fyi-dbg"
-    ]
-  },
-  "chromium.fyi:mac-paeverywhere-x64-fyi-rel": {
-    "builders": [
-      "chromium.fyi:mac-paeverywhere-x64-fyi-rel"
     ]
   },
   "chromium.fyi:mac-upload-perfetto": {
@@ -812,18 +626,6 @@
       "tryserver.chromium.linux:leak_detection_linux"
     ]
   },
-  "chromium.linux:linux-no-base-tracing-rel": {
-    "builders": [
-      "chromium.linux:linux-no-base-tracing-rel",
-      "tryserver.chromium.linux:linux-no-base-tracing-rel"
-    ]
-  },
-  "chromium.memory:Linux TSan (bionic)": {
-    "builders": [
-      "chromium.memory:Linux TSan (bionic)",
-      "tryserver.chromium.linux:linux_chromium_tsan_rel_ng_bionic"
-    ]
-  },
   "chromium.memory:android-asan": {
     "builders": [
       "chromium.memory:android-asan",
@@ -853,11 +655,6 @@
       "chromium.rust:linux-rust-x64-rel",
       "tryserver.chromium.rust:linux-rust-x64-rel",
       "tryserver.chromium.rust:linux-rust-x64-rel-android-toolchain"
-    ]
-  },
-  "chromium.staging:android-lollipop-arm-rel-swarming": {
-    "builders": [
-      "chromium.staging:android-lollipop-arm-rel-swarming"
     ]
   },
   "chromium.staging:linux-rel-swarming": {
@@ -1033,12 +830,6 @@
       "chromium:win-archive-dbg"
     ]
   },
-  "tryserver.chromium.android:android-11-x86-fyi-rel": {
-    "builders": [
-      "chromium.android.fyi:android-11-x86-fyi-rel",
-      "tryserver.chromium.android:android-11-x86-fyi-rel"
-    ]
-  },
   "tryserver.chromium.android:android-asan": {
     "builders": [
       "chromium.memory:android-asan",
@@ -1085,18 +876,6 @@
       "tryserver.chromium.android:android-cronet-x86-rel-kitkat-tests"
     ]
   },
-  "tryserver.chromium.android:android-lollipop-arm-rel": {
-    "builders": [
-      "chromium.android:android-lollipop-arm-rel",
-      "tryserver.chromium.android:android-lollipop-arm-rel"
-    ]
-  },
-  "tryserver.chromium.android:android-nougat-arm64-rel": {
-    "builders": [
-      "chromium.android:android-nougat-arm64-rel",
-      "tryserver.chromium.android:android-nougat-arm64-rel"
-    ]
-  },
   "tryserver.chromium.android:android-pie-arm64-coverage-experimental-rel": {
     "builders": [
       "chromium.android:android-pie-arm64-coverage-experimental-rel",
@@ -1107,12 +886,6 @@
     "builders": [
       "chromium.fyi:android-code-coverage-native",
       "tryserver.chromium.android:android-pie-arm64-coverage-rel"
-    ]
-  },
-  "tryserver.chromium.android:android-pie-arm64-fyi-rel": {
-    "builders": [
-      "chromium.android.fyi:android-pie-arm64-fyi-rel",
-      "tryserver.chromium.android:android-pie-arm64-fyi-rel"
     ]
   },
   "tryserver.chromium.android:android-pie-arm64-wpt-rel-non-cq": {
@@ -1127,30 +900,6 @@
       "tryserver.chromium.android:android-webview-pie-x86-wpt-fyi-rel"
     ]
   },
-  "tryserver.chromium.chromiumos:linux-chromeos-js-code-coverage": {
-    "builders": [
-      "chromium.chromiumos:linux-chromeos-js-code-coverage",
-      "tryserver.chromium.chromiumos:linux-chromeos-js-code-coverage"
-    ]
-  },
-  "tryserver.chromium.linux:fuchsia-fyi-arm64-femu": {
-    "builders": [
-      "chromium.fyi:fuchsia-fyi-arm64-femu",
-      "tryserver.chromium.linux:fuchsia-fyi-arm64-femu"
-    ]
-  },
-  "tryserver.chromium.linux:fuchsia-fyi-arm64-rel": {
-    "builders": [
-      "chromium.fyi:fuchsia-fyi-arm64-rel",
-      "tryserver.chromium.linux:fuchsia-fyi-arm64-rel"
-    ]
-  },
-  "tryserver.chromium.linux:fuchsia-fyi-x64-rel": {
-    "builders": [
-      "chromium.fyi:fuchsia-fyi-x64-rel",
-      "tryserver.chromium.linux:fuchsia-fyi-x64-rel"
-    ]
-  },
   "tryserver.chromium.linux:leak_detection_linux": {
     "builders": [
       "chromium.linux:Leak Detection Linux",
@@ -1163,21 +912,10 @@
       "tryserver.chromium.linux:linux-annotator-rel"
     ]
   },
-  "tryserver.chromium.linux:linux-autofill-assistant": {
-    "builders": [
-      "tryserver.chromium.linux:linux-autofill-assistant"
-    ]
-  },
   "tryserver.chromium.linux:linux-blink-heap-verification-try": {
     "builders": [
       "chromium.fyi:linux-blink-heap-verification",
       "tryserver.chromium.linux:linux-blink-heap-verification-try"
-    ]
-  },
-  "tryserver.chromium.linux:linux-example-builder": {
-    "builders": [
-      "chromium.fyi:linux-example-builder",
-      "tryserver.chromium.linux:linux-example-builder"
     ]
   },
   "tryserver.chromium.linux:linux-fieldtrial-fyi-rel": {
@@ -1208,12 +946,6 @@
   "tryserver.chromium.linux:linux-layout-tests-edit-ng": {
     "builders": [
       "tryserver.chromium.linux:linux-layout-tests-edit-ng"
-    ]
-  },
-  "tryserver.chromium.linux:linux-no-base-tracing-rel": {
-    "builders": [
-      "chromium.linux:linux-no-base-tracing-rel",
-      "tryserver.chromium.linux:linux-no-base-tracing-rel"
     ]
   },
   "tryserver.chromium.linux:linux-perfetto-rel": {
@@ -1252,28 +984,10 @@
       "tryserver.chromium.linux:linux-wpt-input-fyi-rel"
     ]
   },
-  "tryserver.chromium.linux:linux_chromium_tsan_rel_ng_bionic": {
-    "builders": [
-      "chromium.memory:Linux TSan (bionic)",
-      "tryserver.chromium.linux:linux_chromium_tsan_rel_ng_bionic"
-    ]
-  },
   "tryserver.chromium.mac:ios-simulator-multi-window": {
     "builders": [
       "chromium.fyi:ios-simulator-multi-window",
       "tryserver.chromium.mac:ios-simulator-multi-window"
-    ]
-  },
-  "tryserver.chromium.mac:ios13-beta-simulator": {
-    "builders": [
-      "chromium.fyi:ios13-beta-simulator",
-      "tryserver.chromium.mac:ios13-beta-simulator"
-    ]
-  },
-  "tryserver.chromium.mac:ios13-sdk-simulator": {
-    "builders": [
-      "chromium.fyi:ios13-sdk-simulator",
-      "tryserver.chromium.mac:ios13-sdk-simulator"
     ]
   },
   "tryserver.chromium.mac:ios15-beta-simulator": {

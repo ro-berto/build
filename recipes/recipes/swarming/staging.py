@@ -12,10 +12,12 @@ https://luci-milo-dev.appspot.com/p/chromium/g/chromium.dev/console
 """
 
 from recipe_engine import post_process
+
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
+from RECIPE_MODULES.build import chromium_tests_builder_config as ctbc
+
 DEPS = [
-    'builder_group',
     'chromium',
     'chromium_checkout',
     'chromium_swarming',
@@ -96,16 +98,18 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  def builder_with_config(buildername, config=None):
-    build = api.buildbucket.ci_build_message(
+  ctbc_api = api.chromium_tests_builder_config
+
+  def ci_build(builder):
+    return api.chromium.ci_build(
         project='chromium',
         bucket='dev',
-        builder=buildername,
-        build_number=123,
-        git_repo='https://chromium.googlesource.com/chromium/src',
+        builder=builder,
+        builder_group='chromium.dev',
     )
-    ret = api.buildbucket.build(build)
-    ret += api.builder_group.for_current('chromium.dev')
+
+  def builder_with_config(buildername, config=None):
+    ret = ci_build(builder=buildername)
     if config:
       ret += api.chromium_tests.read_source_side_spec(
           'chromium.dev', {buildername: config})
@@ -113,6 +117,20 @@ def GenTests(api):
 
   yield api.test(
       'android',
+      ci_build('fake-android-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='chromium.dev',
+              builder='fake-android-builder',
+              builder_spec=ctbc.BuilderSpec.create(
+                  gclient_config='chromium',
+                  chromium_config='chromium',
+                  chromium_config_kwargs={
+                      'TARGET_PLATFORM': 'android',
+                  },
+                  android_config='main_builder_mb',
+              ),
+          ).assemble()),
       builder_with_config('android-lollipop-arm-rel-swarming'),
   )
 

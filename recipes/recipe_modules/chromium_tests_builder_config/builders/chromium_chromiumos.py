@@ -58,8 +58,4 @@ def _config(name,
 
 SPEC = dict([
     _config('linux-ash-chromium-generator-rel'),
-    _config(
-        'linux-chromeos-js-code-coverage',
-        gclient_apply_config=['use_clang_coverage']),
-    _config('linux-lacros-rel'),
 ])

@@ -276,8 +276,13 @@ def GenTests(api):
   yield api.test(
       'process javascript coverage for per-cl',
       api.chromium.try_build(
-          builder_group='tryserver.chromium.chromiumos',
-          builder='linux-chromeos-js-code-coverage'),
+          builder_group='fake-try-group', builder='fake-builder'),
+      api.chromium_tests_builder_config.properties(
+          api.chromium_tests_builder_config
+          .properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.code_coverage(use_javascript_coverage=True),
       api.properties(files_to_instrument=[
           'some/path/to/file.js',
@@ -304,8 +309,13 @@ def GenTests(api):
   yield api.test(
       'javascript coverage skipped per-cl when no js files',
       api.chromium.try_build(
-          builder_group='tryserver.chromium.chromiumos',
-          builder='linux-chromeos-js-code-coverage'),
+          builder_group='fake-try-group', builder='fake-builder'),
+      api.chromium_tests_builder_config.properties(
+          api.chromium_tests_builder_config
+          .properties_assembler_for_try_builder().with_mirrored_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.code_coverage(use_javascript_coverage=True),
       api.properties(files_to_instrument=[
           'some/path/to/file.cc',

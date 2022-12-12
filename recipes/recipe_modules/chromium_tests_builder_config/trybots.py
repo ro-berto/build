@@ -11,6 +11,8 @@ from . import try_spec
 #   //infra/config/subprojects/chromium/try/tryserver.chromium.star
 # * tryserver.chromium.angle
 #   //infra/config/subprojects/chromium/try/tryserver.chromium.angle.star
+# * trserver.chromium.chromiumos
+#   //infra/config/subprojects/chromium/try/tryserver.chromium.chromiumos.star
 # * tryserver.chromium.dawn
 #   //infra/config/subprojects/chromium/try/tryserver.chromium.dawn.star
 # * tryserver.chromium.swangle
@@ -57,11 +59,6 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * gpu-try-android-m-nexus-5x-64
     # * try-nougat-phone-tester
     'tryserver.chromium.android': {
-        'android-11-x86-fyi-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android.fyi',
-                buildername='android-11-x86-fyi-rel',
-            ),
         'android-asan':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.memory',
@@ -93,16 +90,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 buildername='android-cronet-x86-rel',
                 tester='android-cronet-x86-rel-kitkat-tests',
             ),
-        'android-lollipop-arm-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android',
-                buildername='android-lollipop-arm-rel',
-            ),
-        'android-nougat-arm64-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android',
-                buildername='android-nougat-arm64-rel',
-            ),
         'android-pie-arm64-coverage-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
@@ -127,11 +114,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.android.fyi',
                 buildername='android-webview-pie-x86-wpt-fyi-rel',
-            ),
-        'android-pie-arm64-fyi-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android.fyi',
-                buildername='android-pie-arm64-fyi-rel',
             ),
     },
     # The config for the following builders is now specified src-side in
@@ -180,21 +162,6 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * linux-webkit-msan-rel
     # * network_service_linux
     'tryserver.chromium.linux': {
-        'fuchsia-fyi-arm64-femu':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
-                buildername='fuchsia-fyi-arm64-femu',
-            ),
-        'fuchsia-fyi-arm64-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
-                buildername='fuchsia-fyi-arm64-rel',
-            ),
-        'fuchsia-fyi-x64-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
-                buildername='fuchsia-fyi-x64-rel',
-            ),
         'linux-annotator-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
@@ -205,11 +172,6 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.fyi',
                 buildername='linux-blink-heap-verification',
             ),
-        'linux-example-builder':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
-                buildername='linux-example-builder',
-            ),
         'linux-headless-shell-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
@@ -219,17 +181,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
                 buildername='linux-fieldtrial-rel',
-            ),
-        'linux-no-base-tracing-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.linux',
-                buildername='linux-no-base-tracing-rel',
-            ),
-        # TODO(crbug.com/1200904): Remove after migration
-        'linux_chromium_tsan_rel_ng_bionic':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.memory',
-                buildername='Linux TSan (bionic)',
             ),
         'linux-perfetto-rel':
             try_spec.TrySpec.create_for_single_mirror(
@@ -276,36 +227,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
                 buildername='linux-wpt-input-fyi-rel',
-            ),
-    },
-    # The config for the following builders is now specified src-side in
-    # //infra/config/subprojects/chromium/try/tryserver.chromium.chromiumos.star
-    # * chromeos-amd64-generic-cfi-thin-lto-rel
-    # * chromeos-amd64-generic-dbg
-    # * chromeos-amd64-generic-rel
-    # * chromeos-arm-generic-dbg
-    # * chromeos-arm-generic-rel
-    # * chromeos-kevin-compile-rel
-    # * chromeos-kevin-rel
-    # * gpu-fyi-try-chromeos-amd64-generic
-    # * gpu-fyi-try-chromeos-jacuzzi-exp
-    # * gpu-fyi-try-chromeos-kevin
-    # * gpu-fyi-try-chromeos-octopus-exp
-    # * lacros-amd64-generic-rel
-    # * lacros-arm-generic-rel
-    # * linux-cfm-rel
-    # * linux-chromeos-compile-dbg
-    # * linux-chromeos-dbg
-    # * linux-chromeos-inverse-fieldtrials-fyi-rel
-    # * linux-chromeos-rel
-    # * linux-chromeos-rel-rts
-    # * linux-lacros-dbg
-    # * linux-lacros-rel
-    'tryserver.chromium.chromiumos': {
-        'linux-chromeos-js-code-coverage':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.chromiumos',
-                buildername='linux-chromeos-js-code-coverage',
             ),
     },
     # The config for the following builders is now specified src-side in
@@ -357,16 +278,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
                 buildername='ios-simulator-multi-window',
-            ),
-        'ios13-beta-simulator':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
-                buildername='ios13-beta-simulator',
-            ),
-        'ios13-sdk-simulator':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
-                buildername='ios13-sdk-simulator',
             ),
         'ios15-beta-simulator':
             try_spec.TrySpec.create_for_single_mirror(
