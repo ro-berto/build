@@ -5,6 +5,7 @@
 # Recipe for building and running tests for WebRTC stand-alone.
 
 import functools
+
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 
 from RECIPE_MODULES.build import chromium
@@ -16,6 +17,7 @@ DEPS = [
     'chromium_tests',
     'chromium_tests_builder_config',
     'chromium_swarming',
+    'code_coverage',
     'depot_tools/tryserver',
     'gn',
     'recipe_engine/path',
@@ -23,7 +25,6 @@ DEPS = [
     'recipe_engine/step',
     'webrtc',
 ]
-
 
 def should_use_reclient(api, builder_id):
   # Builder groups:
@@ -53,13 +54,17 @@ def RunSteps(api):
   if api.webrtc.should_download_video_quality_tools(builder_id, builder_config):
     api.webrtc.download_video_quality_tools()
 
+  if api.webrtc.should_generate_code_coverage(builder_id, builder_config):
+    api.webrtc.download_code_coverage_tools()
+    api.webrtc.setup_code_coverage_module()
+
   api.chromium.ensure_goma()
   api.chromium.ensure_toolchains()
   api.chromium.runhooks()
 
   mb_config_path = None
   if should_use_reclient(api, builder_id):
-    mb_config_path = api.webrtc.override_relient_mb_config()
+    mb_config_path = api.webrtc.override_reclient_mb_config()
 
   for phase in builders.BUILDERS_DB[builder_id].phases:
     test_targets, compile_targets = api.webrtc.determine_compilation_targets(
@@ -98,7 +103,12 @@ def RunSteps(api):
         t for t in targets_config.tests_on(builder_id)
         if t.canonical_name in test_targets
     ]
+
     test_failure_summary = api.webrtc.run_tests(builder_id, tests_to_run)
+
+    if api.code_coverage.using_coverage:
+      api.code_coverage.process_coverage_data(tests_to_run)
+
     if test_failure_summary:
       return test_failure_summary
 

@@ -168,7 +168,42 @@ class WebRTCApi(recipe_api.RecipeApi):
       cmd_golang = ['vpython3', '-u', script_golang] + args_golang
       self.m.step('download golang', cmd_golang)
 
-  def override_relient_mb_config(self):
+  def should_generate_code_coverage(self, builder_id, builder_config):
+    return builder_id.builder.lower() == 'linux_coverage'
+
+  def download_code_coverage_tools(self):
+    with self.m.depot_tools.on_path():
+      clang_update_script = self.m.path['checkout'].join(
+          'tools', 'clang', 'scripts', 'update.py')
+      args = ['python3', clang_update_script, '--package', 'coverage_tools']
+      self.m.step(
+          'download llvm-cov and llvm-profdata',
+          args,
+      )
+
+  def setup_code_coverage_module(self):
+    """Configure internal constants of the code_coverage module."""
+    # TODO(terelius): Investigate which of these can be omitted.
+    checkout_path = self.m.path['checkout']
+    llvm_dir = checkout_path.join('third_party', 'llvm-build',
+                                  'Release+Asserts', 'bin')
+    self.m.profiles.src_dir = checkout_path
+    self.m.profiles._llvm_base_path = llvm_dir
+    # TODO(terelius): Add support for other platforms.
+    self.m.code_coverage._platform = 'linux'
+    self.m.code_coverage._use_clang_coverage = True
+    self.m.code_coverage._include_component_mapping = False
+    self.m.code_coverage.src_dir = checkout_path
+
+    # For presubmit, only instrument changed files.
+    if self.m.tryserver.is_tryserver:
+      affected_files = self.m.chromium_checkout.get_files_affected_by_patch(
+          report_via_property=True)
+      is_deps_only_change = affected_files == ["DEPS"]
+      self.m.code_coverage.instrument(
+          affected_files, is_deps_only_change=is_deps_only_change)
+
+  def override_reclient_mb_config(self):
     """Override mb_config.pyl to use reclient."""
 
     mb_config_path = self.m.path['checkout'].join('tools_webrtc', 'mb',

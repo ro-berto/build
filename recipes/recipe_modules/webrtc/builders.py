@@ -1079,6 +1079,14 @@ _TRYSERVER_WEBRTC_SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             }),
+    'linux_coverage':
+        WebRTCBuilderSpec.create(
+            chromium_config='webrtc_default',
+            gclient_config='webrtc',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Release',
+                'TARGET_BITS': 64,
+            }),
     'linux_dbg':
         WebRTCBuilderSpec.create(
             chromium_config='webrtc_default',
