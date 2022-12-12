@@ -827,8 +827,7 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
     """
     exp_id = 0
     for change in self.m.buildbucket.build.input.gerrit_changes:
-      exp_id += change.change
-      exp_id += change.patchset
+      exp_id += change.change * change.patchset * 57
 
     _, builder_config = (self.m.chromium_tests_builder_config.lookup_builder())
     if (builder_config.regression_test_selection and

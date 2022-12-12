@@ -465,7 +465,7 @@ def GenTests(api):
   }
 
   yield api.test(
-      'quick run experirment triggers',
+      'quick run experiment triggers',
       api.chromium.try_build(
           builder_group='fake-try-group',
           builder='fake-orchestrator',
@@ -497,6 +497,8 @@ def GenTests(api):
                       ),
               }
           }),
+          change_number=100,
+          patch_set=1,
       ),
       api.properties(
           **{
