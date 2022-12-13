@@ -27,6 +27,11 @@ DEPS = [
 # some properties are redundant with calls to _Config.has_token() below. That
 # logic will be removed as the builder definitions pass in the same values.
 PROPERTIES = {
+    'check_stack':
+        Property(
+            default=False,
+            kind=bool,
+            help='whether to run the check_stack script'),
     'clang':
         Property(
             default=None,
@@ -288,8 +293,8 @@ def _CleanupMSVC(api):
           ok_ret='any')
 
 
-def RunSteps(api, clang, cmake_args, gclient_vars, msvc_target, runner_args,
-             run_ssl_tests, run_unit_tests):
+def RunSteps(api, check_stack, clang, cmake_args, gclient_vars, msvc_target,
+             runner_args, run_ssl_tests, run_unit_tests):
   # Use keyword arguments to avoid accidentally mixing them.
   config = _Config(
       buildername=api.buildbucket.builder_name,
@@ -371,6 +376,12 @@ def RunSteps(api, clang, cmake_args, gclient_vars, msvc_target, runner_args,
                 'util', 'check_imported_libraries.go'),
             build_dir.join('crypto', 'libcrypto.so'),
             build_dir.join('ssl', 'libssl.so')
+        ])
+
+      if check_stack:
+        api.step('check stack', [
+            'go', 'run', api.path['checkout'].join('util', 'check_stack.go'),
+            build_dir.join('tool', 'bssl')
         ])
 
       with api.context(cwd=api.path['checkout']):
@@ -599,6 +610,29 @@ def GenTests(api):
       'gerrit_cl',
       api.platform('linux', 64),
       _TryBuild(api, 'linux'),
+  )
+
+  yield api.test(
+      'check_stack',
+      api.platform('linux', 64),
+      _CIBuild(api, 'linux'),
+      api.properties(check_stack=True),
+      api.override_step_data('unit tests',
+                             api.boringssl.canned_test_output(True)),
+      api.override_step_data('ssl tests',
+                             api.boringssl.canned_test_output(True)),
+  )
+
+  yield api.test(
+      'check_stack_failed',
+      api.platform('linux', 64),
+      _CIBuild(api, 'linux'),
+      api.properties(check_stack=True),
+      api.override_step_data('check stack', retcode=1),
+      api.override_step_data('unit tests',
+                             api.boringssl.canned_test_output(True)),
+      api.override_step_data('ssl tests',
+                             api.boringssl.canned_test_output(True)),
   )
 
   # Test the new properties-based configuration. These builder names
