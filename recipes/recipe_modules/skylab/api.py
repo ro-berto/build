@@ -269,8 +269,9 @@ class SkylabApi(recipe_api.RecipeApi):
         # which is confusing for Skylab test runner. So explicitly set it an
         # empty string, as well as artifact_directory.
         result_file='',
-        # All Tast tests share the same autotest name and the result path.
-        # No need to pass from here. For other types of tests, we have to
-        # explicitly set the relative path to artifacts for the adapter.
-        artifact_directory=''
-        if test.is_tast_test else '{}/debug'.format(test.spec.autotest_name))
+        # Same with result_file, the abs path of artifact directory is
+        # determined at runtime on Skylab Drone server. We leave it empty here.
+        # CrOS recipe will feed that path to result adapter when uploading
+        # results.
+        artifact_directory='',
+    )
