@@ -204,8 +204,7 @@
   },
   "chromium.fyi:Linux Builder (j-500) (reclient)": {
     "builders": [
-      "chromium.fyi:Linux Builder (j-500) (reclient)",
-      "tryserver.chromium.linux:linux-rel-reclient"
+      "chromium.fyi:Linux Builder (j-500) (reclient)"
     ]
   },
   "chromium.fyi:Linux CFI (reclient shadow)": {
@@ -364,7 +363,7 @@
   "chromium.fyi:linux-fieldtrial-rel": {
     "builders": [
       "chromium.fyi:linux-fieldtrial-rel",
-      "tryserver.chromium.linux:linux-fieldtrial-fyi-rel"
+      "tryserver.chromium.linux:linux-fieldtrial-rel"
     ]
   },
   "chromium.fyi:linux-headless-shell-rel": {
@@ -918,10 +917,10 @@
       "tryserver.chromium.linux:linux-blink-heap-verification-try"
     ]
   },
-  "tryserver.chromium.linux:linux-fieldtrial-fyi-rel": {
+  "tryserver.chromium.linux:linux-fieldtrial-rel": {
     "builders": [
       "chromium.fyi:linux-fieldtrial-rel",
-      "tryserver.chromium.linux:linux-fieldtrial-fyi-rel"
+      "tryserver.chromium.linux:linux-fieldtrial-rel"
     ]
   },
   "tryserver.chromium.linux:linux-headless-shell-rel": {
@@ -952,12 +951,6 @@
     "builders": [
       "chromium.fyi:linux-perfetto-rel",
       "tryserver.chromium.linux:linux-perfetto-rel"
-    ]
-  },
-  "tryserver.chromium.linux:linux-rel-reclient": {
-    "builders": [
-      "chromium.fyi:Linux Builder (j-500) (reclient)",
-      "tryserver.chromium.linux:linux-rel-reclient"
     ]
   },
   "tryserver.chromium.linux:linux-viz-rel": {
