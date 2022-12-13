@@ -290,11 +290,16 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
       self.m.code_coverage.build_dir = output_dir
 
       self.m.file.ensure_directory('ensure output directory', output_dir)
-      self.m.cas.download(
-          'downloading cas digest {}'.format(ALL_TEST_BINARIES_ISOLATE_NAME),
-          self.m.isolate.isolated_tests[ALL_TEST_BINARIES_ISOLATE_NAME],
-          output_dir,
-      )
+
+      # Downloading these binaries can take up to 2 minutes, so start this
+      # download in the background.
+      all_test_binaries_future = self.m.futures.spawn_immediate(
+          lambda: self.m.cas.download(
+              'downloading cas digest {}'.format(ALL_TEST_BINARIES_ISOLATE_NAME
+                                                ),
+              self.m.isolate.isolated_tests[ALL_TEST_BINARIES_ISOLATE_NAME],
+              output_dir,
+          ))
 
     # Trigger and wait for the tests (and process coverage data, if enabled)!
     with self.m.chromium_tests.wrap_chromium_tests(builder_config, tests):
@@ -308,6 +313,8 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
         # Grab the coverage from the reused build
         if reuseable_compilator_build:
           self.download_previous_code_coverage(reuseable_quick_run_build)
+
+        all_test_binaries_future.result()
         self.m.code_coverage.process_coverage_data(tests)
 
     # Led compilator build has already been collected with the local tests
