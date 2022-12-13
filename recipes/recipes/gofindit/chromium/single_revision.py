@@ -86,7 +86,7 @@ def _configure_builder(api, target_builder, should_clobber):
   # manually.
   api.chromium.apply_config('goma_failfast')
   if should_clobber:
-    api.chromium.apply_config('clobber')
+    api.chromium.c.clobber_before_runhooks = True
 
   return builder_config.builder_ids[0], builder_config
 
