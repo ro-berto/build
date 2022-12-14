@@ -58,4 +58,8 @@ message InputProperties {
   // Map of flags to be passed to bootstrap calls through environment
   // variables. The flag names must be prefixed with "RBE_", "GLOG_" or "GOMA_".
   map<string, string> bootstrap_env = 11;
+
+  // Indicates whether reproxy should start a separate scandeps_server
+  // process for dependency scanning
+  bool scandeps_server = 12;
 }

@@ -14,6 +14,7 @@ class ReclientTestApi(recipe_test_api.RecipeTestApi):
                  bootstrap_env=None,
                  profiler_service=None,
                  publish_trace=None,
+                 scandeps_server=False,
                  cache_silo=None,
                  ensure_verified=None):
     if rewrapper_env is None:
@@ -30,6 +31,7 @@ class ReclientTestApi(recipe_test_api.RecipeTestApi):
                 'bootstrap_env': bootstrap_env,
                 'profiler_service': profiler_service,
                 'publish_trace': publish_trace,
+                'scandeps_server': scandeps_server,
                 'cache_silo': cache_silo,
                 'ensure_verified': ensure_verified,
             },

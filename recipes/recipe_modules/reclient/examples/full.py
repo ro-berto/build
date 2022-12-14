@@ -94,6 +94,12 @@ def GenTests(api):
       api.reclient.properties(cache_silo='goma'),
   )
 
+  yield api.test(
+      'override_scandeps_server',
+      api.buildbucket.ci_build(project='chromium', builder='Linux reclient'),
+      api.reclient.properties(scandeps_server=True),
+  )
+
   def env_checker(check, steps):
     env = steps[_NINJA_STEP_NAME].env
     check(env['RBE_FOO'] == 'foo')

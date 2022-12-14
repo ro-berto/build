@@ -135,6 +135,7 @@ class ReclientApi(recipe_api.RecipeApi):
     self._cache_silo = props.cache_silo or None
     self._mismatch = None
     self._bootstrap_env = None
+    self._scandeps_server = props.scandeps_server
 
     if self._test_data.enabled:
       self._hostname = 'fakevm999-m9'
@@ -225,6 +226,10 @@ class ReclientApi(recipe_api.RecipeApi):
   @property
   def _rpl2cloudtrace_bin_path(self):
     return self._get_reclient_exe_path('rpl2cloudtrace')
+
+  @property
+  def _scandeps_server_bin_path(self):
+    return self._get_reclient_exe_path('scandeps_server')
 
   @property
   def _ensure_verified(self):
@@ -391,6 +396,9 @@ class ReclientApi(recipe_api.RecipeApi):
 
     if self.cache_silo:
       env['RBE_cache_silo'] = self.cache_silo
+
+    if self._scandeps_server:
+      env['RBE_depsscanner_address'] = "exec://" + self._scandeps_server_bin_path
 
     with self.m.context(env=env):
       self.m.step(
