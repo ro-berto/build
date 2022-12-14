@@ -824,11 +824,6 @@
       "chromium.webrtc:WebRTC Chromium Win10 Tester"
     ]
   },
-  "chromium:win-archive-dbg": {
-    "builders": [
-      "chromium:win-archive-dbg"
-    ]
-  },
   "tryserver.chromium.android:android-asan": {
     "builders": [
       "chromium.memory:android-asan",

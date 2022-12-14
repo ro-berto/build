@@ -2,8 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from .. import builder_db, builder_spec
-from . import chromium
+from .. import builder_db
 from . import chromium_android
 from . import chromium_android_fyi
 from . import chromium_chromiumos
@@ -32,24 +31,21 @@ from . import tryserver_v8
 from . import tryserver_webrtc
 from . import migration_testing
 
-# Builders for the chromium.mac builder group are all defined src-side in
-# infra/config/subprojects/chromium/ci/chromium.mac.star
 # Builders for the chromium.reclient.fyi builder group are all defined
 # src-side in infra/config/subprojects/reclient/reclient.star
-# Builders for the chromium.win builder group are all defined src-side in
-# infra/config/subprojects/chromium/ci/chromium.win.star
 
 # The configs for the following builder groups are now specified src-side
 # in //infra/config/subprojects/chromium/ci/<builder_group>.star
+# * chromium
 # * chromium.angle
 # * chromium.dawn
 # * chromium.gpu
 # * chromium.gpu.fyi
+# * chromium.mac
 # * chromium.swangle
+# * chromium.win
 
 BUILDERS = builder_db.BuilderDatabase.create({
-    'chromium':
-        chromium.SPEC,
     'chromium.android':
         chromium_android.SPEC,
     'chromium.android.fyi':
