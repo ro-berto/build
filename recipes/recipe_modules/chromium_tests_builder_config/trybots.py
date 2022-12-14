@@ -34,14 +34,20 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * android-12-x64-rel
     # * android-bfcache-rel
     # * android_cronet
+    # * android-cronet-asan-arm-rel
     # * android-cronet-arm-dbg
+    # * android-cronet-arm64-dbg
+    # * android-cronet-arm64-rel
     # * android-cronet-x86-dbg
     # * android-cronet-x86-dbg-10-tests
     # * android-cronet-x86-dbg-11-tests
     # * android-cronet-x86-dbg-oreo-tests
     # * android-cronet-x86-dbg-pie-tests
+    # * android-cronet-x86-rel
+    # * android-cronet-x86-rel-kitkat-tests'
     # * android-inverse-fieldtrials-pie-x86-fyi-rel
     # * android-oreo-arm64-dbg
+    # * android-pie-arm64-coverage-experimental-rel
     # * android-pie-arm64-rel
     # * android-pie-x86-rel
     # * android-webview-12-x64-dbg
@@ -64,41 +70,10 @@ TRYBOTS = try_spec.TryDatabase.create({
                 builder_group='chromium.memory',
                 buildername='android-asan',
             ),
-        'android-cronet-arm64-dbg':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android',
-                buildername='android-cronet-arm64-dbg',
-            ),
-        'android-cronet-arm64-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android',
-                buildername='android-cronet-arm64-rel',
-            ),
-        'android-cronet-asan-arm-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android',
-                buildername='android-cronet-asan-arm-rel',
-            ),
-        'android-cronet-x86-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android',
-                buildername='android-cronet-x86-rel',
-            ),
-        'android-cronet-x86-rel-kitkat-tests':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android',
-                buildername='android-cronet-x86-rel',
-                tester='android-cronet-x86-rel-kitkat-tests',
-            ),
         'android-pie-arm64-coverage-rel':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
                 buildername='android-code-coverage-native',
-            ),
-        'android-pie-arm64-coverage-experimental-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android',
-                buildername='android-pie-arm64-coverage-experimental-rel',
             ),
         'android-pie-arm64-wpt-rel-non-cq':
             try_spec.TrySpec.create_for_single_mirror(

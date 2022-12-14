@@ -3,7 +3,6 @@
 # found in the LICENSE file.
 
 from .. import builder_db
-from . import chromium_android
 from . import chromium_android_fyi
 from . import chromium_chromiumos
 from . import chromium_clang
@@ -37,6 +36,7 @@ from . import migration_testing
 # The configs for the following builder groups are now specified src-side
 # in //infra/config/subprojects/chromium/ci/<builder_group>.star
 # * chromium
+# * chromium.android
 # * chromium.angle
 # * chromium.dawn
 # * chromium.gpu
@@ -46,8 +46,6 @@ from . import migration_testing
 # * chromium.win
 
 BUILDERS = builder_db.BuilderDatabase.create({
-    'chromium.android':
-        chromium_android.SPEC,
     'chromium.android.fyi':
         chromium_android_fyi.SPEC,
     'chromium.chromiumos':

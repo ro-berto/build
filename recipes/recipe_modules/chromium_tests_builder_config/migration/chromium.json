@@ -37,46 +37,6 @@
       "tryserver.chromium.android:android-webview-pie-x86-wpt-fyi-rel"
     ]
   },
-  "chromium.android:android-cronet-arm64-dbg": {
-    "builders": [
-      "chromium.android:android-cronet-arm64-dbg",
-      "tryserver.chromium.android:android-cronet-arm64-dbg"
-    ]
-  },
-  "chromium.android:android-cronet-arm64-rel": {
-    "builders": [
-      "chromium.android:android-cronet-arm64-rel",
-      "tryserver.chromium.android:android-cronet-arm64-rel"
-    ]
-  },
-  "chromium.android:android-cronet-asan-arm-rel": {
-    "builders": [
-      "chromium.android:android-cronet-asan-arm-rel",
-      "tryserver.chromium.android:android-cronet-asan-arm-rel"
-    ]
-  },
-  "chromium.android:android-cronet-x86-rel": {
-    "builders": [
-      "chromium.android:android-cronet-x86-rel",
-      "chromium.android:android-cronet-x86-rel-kitkat-tests",
-      "tryserver.chromium.android:android-cronet-x86-rel",
-      "tryserver.chromium.android:android-cronet-x86-rel-kitkat-tests"
-    ]
-  },
-  "chromium.android:android-cronet-x86-rel-kitkat-tests": {
-    "builders": [
-      "chromium.android:android-cronet-x86-rel",
-      "chromium.android:android-cronet-x86-rel-kitkat-tests",
-      "tryserver.chromium.android:android-cronet-x86-rel",
-      "tryserver.chromium.android:android-cronet-x86-rel-kitkat-tests"
-    ]
-  },
-  "chromium.android:android-pie-arm64-coverage-experimental-rel": {
-    "builders": [
-      "chromium.android:android-pie-arm64-coverage-experimental-rel",
-      "tryserver.chromium.android:android-pie-arm64-coverage-experimental-rel"
-    ]
-  },
   "chromium.chromiumos:linux-ash-chromium-generator-rel": {
     "builders": [
       "chromium.chromiumos:linux-ash-chromium-generator-rel"
@@ -834,46 +794,6 @@
     "builders": [
       "chromium.android.fyi:android-chrome-pie-x86-wpt-fyi-rel",
       "tryserver.chromium.android:android-chrome-pie-x86-wpt-fyi-rel"
-    ]
-  },
-  "tryserver.chromium.android:android-cronet-arm64-dbg": {
-    "builders": [
-      "chromium.android:android-cronet-arm64-dbg",
-      "tryserver.chromium.android:android-cronet-arm64-dbg"
-    ]
-  },
-  "tryserver.chromium.android:android-cronet-arm64-rel": {
-    "builders": [
-      "chromium.android:android-cronet-arm64-rel",
-      "tryserver.chromium.android:android-cronet-arm64-rel"
-    ]
-  },
-  "tryserver.chromium.android:android-cronet-asan-arm-rel": {
-    "builders": [
-      "chromium.android:android-cronet-asan-arm-rel",
-      "tryserver.chromium.android:android-cronet-asan-arm-rel"
-    ]
-  },
-  "tryserver.chromium.android:android-cronet-x86-rel": {
-    "builders": [
-      "chromium.android:android-cronet-x86-rel",
-      "chromium.android:android-cronet-x86-rel-kitkat-tests",
-      "tryserver.chromium.android:android-cronet-x86-rel",
-      "tryserver.chromium.android:android-cronet-x86-rel-kitkat-tests"
-    ]
-  },
-  "tryserver.chromium.android:android-cronet-x86-rel-kitkat-tests": {
-    "builders": [
-      "chromium.android:android-cronet-x86-rel",
-      "chromium.android:android-cronet-x86-rel-kitkat-tests",
-      "tryserver.chromium.android:android-cronet-x86-rel",
-      "tryserver.chromium.android:android-cronet-x86-rel-kitkat-tests"
-    ]
-  },
-  "tryserver.chromium.android:android-pie-arm64-coverage-experimental-rel": {
-    "builders": [
-      "chromium.android:android-pie-arm64-coverage-experimental-rel",
-      "tryserver.chromium.android:android-pie-arm64-coverage-experimental-rel"
     ]
   },
   "tryserver.chromium.android:android-pie-arm64-coverage-rel": {
