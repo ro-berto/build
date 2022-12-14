@@ -256,117 +256,53 @@ def _build_steps(api, clang, msvc, out_dir):
 
 
 def _run_all_embedder_tests(test_runner, skia):
-  test_exception = None
   if skia:
-    try:
-      test_runner.run_embedder_tests(_AGG_RENDERER)
-    except test_runner.api.step.StepFailure as e:
-      test_exception = e
-
-    try:
-      test_runner.run_embedder_tests(_SKIA_RENDERER)
-    except test_runner.api.step.StepFailure as e:
-      test_exception = e
+    test_runner.run_embedder_tests(_AGG_RENDERER)
+    test_runner.run_embedder_tests(_SKIA_RENDERER)
   else:
-    try:
-      test_runner.run_embedder_tests()
-    except test_runner.api.step.StepFailure as e:
-      test_exception = e
-
-  return test_exception
+    test_runner.run_embedder_tests()
 
 
 def _run_all_javascript_tests(test_runner, xfa):
-  test_exception = None
-  try:
-    test_runner.run_javascript_tests(_DefaultOption)
-  except test_runner.api.step.StepFailure as e:
-    test_exception = e
-
-  try:
-    test_runner.run_javascript_tests(_JavascriptDisabledOption)
-  except test_runner.api.step.StepFailure as e:
-    test_exception = e
+  test_runner.run_javascript_tests(_DefaultOption)
+  test_runner.run_javascript_tests(_JavascriptDisabledOption)
 
   if xfa:
-    try:
-      test_runner.run_javascript_tests(_XfaDisabledOption)
-    except test_runner.api.step.StepFailure as e:
-      test_exception = e
-
-  return test_exception
+    test_runner.run_javascript_tests(_XfaDisabledOption)
 
 
 def _run_all_pixel_tests(test_runner, skia, v8, xfa):
-  test_exception = None
-  try:
-    test_runner.run_pixel_tests(_DefaultOption)
-  except test_runner.api.step.StepFailure as e:
-    test_exception = e
-
-  try:
-    test_runner.run_pixel_tests(_OneshotOption)
-  except test_runner.api.step.StepFailure as e:
-    test_exception = e
+  test_runner.run_pixel_tests(_DefaultOption)
+  test_runner.run_pixel_tests(_OneshotOption)
 
   # TODO(crbug.com/pdfium/994): Enable for Mac.
   # TODO(crbug.com/pdfium/1955): Enable for Skia.
   if (test_runner.api.platform.is_linux or
       test_runner.api.platform.is_win) and not skia:
-    try:
-      test_runner.run_pixel_tests(_ReverseByteOrderOption)
-    except test_runner.api.step.StepFailure as e:
-      test_exception = e
+    test_runner.run_pixel_tests(_ReverseByteOrderOption)
 
   if v8:
-    try:
-      test_runner.run_pixel_tests(_JavascriptDisabledOption)
-    except test_runner.api.step.StepFailure as e:
-      test_exception = e
+    test_runner.run_pixel_tests(_JavascriptDisabledOption)
 
     if xfa:
-      try:
-        test_runner.run_pixel_tests(_XfaDisabledOption)
-      except test_runner.api.step.StepFailure as e:
-        test_exception = e
-
-  return test_exception
+      test_runner.run_pixel_tests(_XfaDisabledOption)
 
 
 def _run_all_corpus_tests(test_runner, skia, v8, xfa):
-  test_exception = None
-  try:
-    test_runner.run_corpus_tests(_DefaultOption)
-  except test_runner.api.step.StepFailure as e:
-    test_exception = e
-
-  try:
-    test_runner.run_corpus_tests(_OneshotOption)
-  except test_runner.api.step.StepFailure as e:
-    test_exception = e
+  test_runner.run_corpus_tests(_DefaultOption)
+  test_runner.run_corpus_tests(_OneshotOption)
 
   # TODO(crbug.com/pdfium/994): Enable for Mac.
   # TODO(crbug.com/pdfium/1955): Enable for Skia.
   if (test_runner.api.platform.is_linux or
       test_runner.api.platform.is_win) and not skia:
-    try:
-      test_runner.run_corpus_tests(_ReverseByteOrderOption)
-    except test_runner.api.step.StepFailure as e:
-      test_exception = e
+    test_runner.run_corpus_tests(_ReverseByteOrderOption)
 
   if v8:
-    try:
-      test_runner.run_corpus_tests(_JavascriptDisabledOption)
-    except test_runner.api.step.StepFailure as e:
-      test_exception = e
+    test_runner.run_corpus_tests(_JavascriptDisabledOption)
 
     if xfa:
-      try:
-        test_runner.run_corpus_tests(_XfaDisabledOption)
-      except test_runner.api.step.StepFailure as e:
-        test_exception = e
-
-  return test_exception
+      test_runner.run_corpus_tests(_XfaDisabledOption)
 
 
 # TODO(https://crbug.com/pdfium/11): `selected_tests_only` currently enables
@@ -382,40 +318,24 @@ def _run_tests(api, memory_tool, v8, xfa, skia, out_dir, build_config, revision,
   test_runner = _TestRunner(api, memory_tool, resultdb, out_dir, build_config,
                             revision, run_skia_gold)
 
-  # This variable swallows the exception raised by a failed step. The step
-  # will still show up as failed, but processing will continue.
-  test_exception = None
-
-  # pdfium_unittests:
-  try:
+  # defer_results() will defer individual failures until the end of this block.
+  with api.step.defer_results():
+    # pdfium_unittests:
     test_runner.run_unit_tests()
-  except api.step.StepFailure as e:
-    test_exception = e
 
-  # pdfium_embeddertests:
-  embedder_test_exception = _run_all_embedder_tests(test_runner, skia)
-  if embedder_test_exception:
-    test_exception = embedder_test_exception
+    # pdfium_embeddertests:
+    _run_all_embedder_tests(test_runner, skia)
 
-  # run_javascript_tests.py:
-  if v8:
-    javascript_test_exception = _run_all_javascript_tests(test_runner, xfa)
-    if javascript_test_exception:
-      test_exception = javascript_test_exception
+    # run_javascript_tests.py:
+    if v8:
+      _run_all_javascript_tests(test_runner, xfa)
 
-  # run_pixel_tests.py:
-  pixel_test_exception = _run_all_pixel_tests(test_runner, skia, v8, xfa)
-  if pixel_test_exception:
-    test_exception = pixel_test_exception
+    # run_pixel_tests.py:
+    _run_all_pixel_tests(test_runner, skia, v8, xfa)
 
-  if not selected_tests_only:
-    # run_corpus_tests.py:
-    corpus_test_exception = _run_all_corpus_tests(test_runner, skia, v8, xfa)
-    if corpus_test_exception:
-      test_exception = corpus_test_exception
-
-  if test_exception:
-    raise test_exception  # pylint: disable=E0702
+    if not selected_tests_only:
+      # run_corpus_tests.py:
+      _run_all_corpus_tests(test_runner, skia, v8, xfa)
 
 
 class _ResultDb:

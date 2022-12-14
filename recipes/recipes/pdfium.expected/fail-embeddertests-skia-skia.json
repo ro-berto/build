@@ -1024,7 +1024,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "Step('embeddertests (skia)') (retcode: 1)"
+      "humanReason": "1 out of 10 aggregated steps failed: Step('embeddertests (skia)') (retcode: 1)"
     },
     "name": "$result"
   }

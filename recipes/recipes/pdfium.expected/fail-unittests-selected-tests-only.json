@@ -940,7 +940,7 @@
   {
     "failure": {
       "failure": {},
-      "humanReason": "Step('unittests') (retcode: 1)"
+      "humanReason": "1 out of 8 aggregated steps failed: Step('unittests') (retcode: 1)"
     },
     "name": "$result"
   }
