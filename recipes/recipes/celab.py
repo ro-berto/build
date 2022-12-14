@@ -31,8 +31,8 @@ DEPS = [
     'recipe_engine/time',
 ]
 
-CELAB_REPO = "https://chromium.googlesource.com/enterprise/cel"
-CHROMIUM_REPO = "https://chromium.googlesource.com/chromium/src"
+CELAB_REPO = 'https://chromium.googlesource.com/enterprise/cel'
+CHROMIUM_REPO = 'https://chromium.googlesource.com/chromium/src'
 
 
 def _get_bin_directory(api, bin_root):
@@ -46,7 +46,7 @@ def _get_bin_directory(api, bin_root):
 
 def _get_ctl_binary_name(api):
   suffix = '.exe' if api.platform.is_win else ''
-  return "cel_ctl" + suffix
+  return 'cel_ctl' + suffix
 
 
 def _get_python_packages(api, checkout):
@@ -95,7 +95,7 @@ def _RunStepsCelab(api):
 
 
 def _GetCelabVersionFromVPython(api, path):
-  output = api.file.read_text("read vpython file", path)
+  output = api.file.read_text('read vpython file', path)
 
   anything_except_closing = '[^>]*'
   pattern = '<'
@@ -125,13 +125,16 @@ def _RunStepsChromium(api):
   if raw_result.status != common_pb.SUCCESS:
     return raw_result
 
-  version = _GetCelabVersionFromVPython(api, test_root.join(".vpython3"))
+  version = _GetCelabVersionFromVPython(api, test_root.join('.vpython3'))
   celab_bin_dir = _GetCelabFromCipd(api, version)
 
   # Run tests for all chromium bots.
   cel_ctl = celab_bin_dir.join(_get_ctl_binary_name(api))
-  installer = chromium_bin_dir.join("mini_installer.exe")
-  chromedriver = chromium_bin_dir.join("chromedriver.exe")
+  installer = chromium_bin_dir.join('mini_installer.exe')
+  if api.buildbucket.build.builder.project == 'chrome':
+    # Use Chrome Enterprise standalone installer on Chrome
+    installer = chromium_bin_dir.join('GoogleChromeStandaloneEnterprise.msi')
+  chromedriver = chromium_bin_dir.join('chromedriver.exe')
   test_py_args = '--cel_ctl=%s' % cel_ctl
   test_py_args += ' --test_arg=--chrome_installer=%s' % installer
   test_py_args += ' --test_arg=--chromedriver=%s' % chromedriver
@@ -155,7 +158,7 @@ def _GetCelabFromCipd(api, version):
 def _CheckoutCelabRepo(api):
   # Checkout the CELab repo
   go_root = api.path['start_dir'].join('go')
-  src_root = go_root.join('src', "chromium.googlesource.com", "enterprise")
+  src_root = go_root.join('src', 'chromium.googlesource.com', 'enterprise')
   api.file.ensure_directory('init src_root if not exists', src_root)
 
   with api.context(cwd=src_root):
@@ -185,7 +188,7 @@ def _BuildCelabFromSource(api, checkout):
 
   # Build CELab
   cert_file = packages_root.join('cacert.pem')
-  goenv = {"GOPATH": go_root, "GIT_SSL_CAINFO": cert_file}
+  goenv = {'GOPATH': go_root, 'GIT_SSL_CAINFO': cert_file}
   with api.context(cwd=checkout, env=goenv, env_suffixes={'PATH': add_paths}):
     api.step('install deps',
              ['python3', 'build.py', 'deps', '--install', '--verbose'])
@@ -260,8 +263,12 @@ def _UploadCelabBinariesToStorage(api, checkout, bin_dir):
     link_name='CELab binaries')
 
 
-def _RunTests(api, test_root, test_scripts_root, host_file_template, tests,
-              test_py_args = ""):
+def _RunTests(api,
+              test_root,
+              test_scripts_root,
+              host_file_template,
+              tests,
+              test_py_args=''):
   pool_name = api.properties.get('pool_name')
   pool_size = api.properties.get('pool_size')
 
@@ -290,7 +297,7 @@ def _RunTests(api, test_root, test_scripts_root, host_file_template, tests,
       api.step('generate host files', [
           'python3', 'generate_host_files.py', '--template', host_file_template,
           '--projects', ';'.join([
-              "%s-%03d" % (pool_name, i) for i in range(1, pool_size + 1)
+              '%s-%03d' % (pool_name, i) for i in range(1, pool_size + 1)
           ]), '--storage_bucket',
           '%s-assets' % pool_name, '--storage_prefix', storage_prefix,
           '--destination_dir', host_dir
@@ -301,7 +308,7 @@ def _RunTests(api, test_root, test_scripts_root, host_file_template, tests,
   with api.context(cwd=test_root, env_suffixes={'PATH': add_paths}):
     extra_args = []
 
-    test_py_args += " --no_external_access=True"
+    test_py_args += ' --no_external_access=True'
     extra_args += ['--test_py_args=%s' % test_py_args.strip()]
 
     include_tests = api.properties.get('include')
@@ -366,7 +373,7 @@ def _ZipAndUploadDirectory(api, bucket, directory, zip_filename, display_name):
 # Parses the summary.json file created by run_tests.py, organizes the steps
 # presentation of tests and creates separate zips for each test logs.
 def _ParseTestSummary(api, storage_logs, logs_dir):
-  summary_path = logs_dir.join("summary.json")
+  summary_path = logs_dir.join('summary.json')
 
   with api.step.nest('test summary') as summary_step:
     summary_presentation = summary_step.presentation
@@ -389,7 +396,7 @@ def _ParseTestSummary(api, storage_logs, logs_dir):
 
             if 'output' in result:
               logs = api.file.read_text('read logs', result['output'])
-              test_presentation.logs["test.py output"] = logs.splitlines()
+              test_presentation.logs['test.py output'] = logs.splitlines()
 
             # Upload logs if they exist (test fails after Deployment starts)
             compute_logs_dir = logs_dir.join(test)
@@ -406,7 +413,7 @@ def _ParseTestSummary(api, storage_logs, logs_dir):
               for link in upload_presentation.links:
                 test_presentation.links[link] = upload_presentation.links[link]
       except Exception as e:
-        summary_presentation.logs["exception %s" % test] = repr(e).splitlines()
+        summary_presentation.logs['exception %s' % test] = repr(e).splitlines()
 
     return tests_summary
 
@@ -512,7 +519,7 @@ def GenTests(api):
           api.file.read_text('''wheel: <
               name: "infra/celab/celab/windows-amd64"
               version: "celab_package_version"
-            >''')),
+                             >''')),
       api.step_data(
           'test summary.parse summary',
           api.json.output({'1st test': {
@@ -547,7 +554,7 @@ def GenTests(api):
           api.file.read_text('''wheel: <
               name: "infra/other/package"
               version: "package_version"
-            >''')),
+                             >''')),
       api.expect_exception('ValueError'),
   )
   yield api.test(
@@ -592,7 +599,7 @@ def GenTests(api):
           api.file.read_text('''wheel: <
               name: "infra/celab/celab/windows-amd64"
               version: "celab_package_version"
-            >''')),
+                             >''')),
       api.step_data(
           'test summary.parse summary',
           api.json.output({'1st test': {

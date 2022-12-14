@@ -1162,7 +1162,7 @@
       "@@@STEP_LOG_LINE@.vpython3@wheel: <@@@",
       "@@@STEP_LOG_LINE@.vpython3@              name: \"infra/celab/celab/windows-amd64\"@@@",
       "@@@STEP_LOG_LINE@.vpython3@              version: \"celab_package_version\"@@@",
-      "@@@STEP_LOG_LINE@.vpython3@            >@@@",
+      "@@@STEP_LOG_LINE@.vpython3@                             >@@@",
       "@@@STEP_LOG_END@.vpython3@@@"
     ]
   },

@@ -1162,7 +1162,7 @@
       "@@@STEP_LOG_LINE@.vpython3@wheel: <@@@",
       "@@@STEP_LOG_LINE@.vpython3@              name: \"infra/other/package\"@@@",
       "@@@STEP_LOG_LINE@.vpython3@              version: \"package_version\"@@@",
-      "@@@STEP_LOG_LINE@.vpython3@            >@@@",
+      "@@@STEP_LOG_LINE@.vpython3@                             >@@@",
       "@@@STEP_LOG_END@.vpython3@@@"
     ]
   },
@@ -1177,7 +1177,7 @@
       "  File \"RECIPE_REPO[build]/recipes/recipes/celab.py\", line 65, in RunSteps",
       "    compile_failure = _RunStepsChromium(api)",
       "  File \"RECIPE_REPO[build]/recipes/recipes/celab.py\", line 128, in _RunStepsChromium",
-      "    version = _GetCelabVersionFromVPython(api, test_root.join(\".vpython3\"))",
+      "    version = _GetCelabVersionFromVPython(api, test_root.join('.vpython3'))",
       "  File \"RECIPE_REPO[build]/recipes/recipes/celab.py\", line 113, in _GetCelabVersionFromVPython",
       "    raise ValueError('Couldn\\'t find CELab version in vpython file: %s' % path)",
       "ValueError('Couldn't find CELab version in vpython file: [CACHE]\\builder\\src\\chrome\\test\\enterprise\\e2e\\.vpython3')"
