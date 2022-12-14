@@ -1731,7 +1731,9 @@
       "python3",
       "RECIPE_MODULE[build::reclient]\\resources\\perform_health_check.py",
       "--reclient-log-dir",
-      "[CLEANUP]\\reclient_log_tmp_1"
+      "[CLEANUP]\\reclient_log_tmp_1",
+      "--build-exit-status",
+      "0"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
@@ -2882,7 +2884,9 @@
       "python3",
       "RECIPE_MODULE[build::reclient]\\resources\\perform_health_check.py",
       "--reclient-log-dir",
-      "[CLEANUP]\\reclient_log_tmp_2"
+      "[CLEANUP]\\reclient_log_tmp_2",
+      "--build-exit-status",
+      "0"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
@@ -4060,7 +4064,9 @@
       "python3",
       "RECIPE_MODULE[build::reclient]\\resources\\perform_health_check.py",
       "--reclient-log-dir",
-      "[CLEANUP]\\reclient_log_tmp_3"
+      "[CLEANUP]\\reclient_log_tmp_3",
+      "--build-exit-status",
+      "0"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
@@ -5213,7 +5219,9 @@
       "python3",
       "RECIPE_MODULE[build::reclient]\\resources\\perform_health_check.py",
       "--reclient-log-dir",
-      "[CLEANUP]\\reclient_log_tmp_4"
+      "[CLEANUP]\\reclient_log_tmp_4",
+      "--build-exit-status",
+      "0"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {

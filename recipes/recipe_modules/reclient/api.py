@@ -322,7 +322,7 @@ class ReclientApi(recipe_api.RecipeApi):
         self._upload_logs(log_dir_files, filename_maker)
         self._upload_crash_dumps(self._reclient_log_dir, log_dir_files,
                                  filename_maker)
-        self._perform_reclient_health_check()
+        self._perform_reclient_health_check(p.build_exit_status)
         self.m.file.rmtree('cleanup reclient log dir', self._reclient_log_dir)
         if self._ensure_verified:
           status = self.m.step.SUCCESS
@@ -741,7 +741,7 @@ class ReclientApi(recipe_api.RecipeApi):
         ],
         infra_step=True)
 
-  def _perform_reclient_health_check(self):
+  def _perform_reclient_health_check(self, build_exit_status):
     """Perform reclient health check by verifing existence of FATAL logs
 
     Raises:
@@ -749,8 +749,12 @@ class ReclientApi(recipe_api.RecipeApi):
     """
     self.m.step(
         'perform reclient health check', [
-            'python3', self._health_check_path, '--reclient-log-dir',
-            self._reclient_log_dir
+            'python3',
+            self._health_check_path,
+            '--reclient-log-dir',
+            self._reclient_log_dir,
+            '--build-exit-status',
+            build_exit_status,
         ],
         infra_step=True)
 

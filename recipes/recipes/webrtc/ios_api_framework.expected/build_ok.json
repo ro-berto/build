@@ -1197,7 +1197,9 @@
       "python3",
       "RECIPE_MODULE[build::reclient]/resources/perform_health_check.py",
       "--reclient-log-dir",
-      "[CLEANUP]/reclient_log_tmp_1"
+      "[CLEANUP]/reclient_log_tmp_1",
+      "--build-exit-status",
+      "0"
     ],
     "infra_step": true,
     "luci_context": {
