@@ -1136,6 +1136,14 @@ class Failure:
       lines.append(
           'Duration: %s' % self.api.v8_tests.format_duration(result['duration']))
       lines.append('')
+      if result.get('crash_type'):
+        lines.append('Crash Type:')
+        lines.extend(result['crash_type'].splitlines())
+        lines.append('')
+      if result.get('crash_state'):
+        lines.append('Crash State:')
+        lines.extend(result['crash_state'].splitlines())
+        lines.append('')
       if result['stdout']:
         lines.append('Stdout:')
         lines.extend(result['stdout'].splitlines())
