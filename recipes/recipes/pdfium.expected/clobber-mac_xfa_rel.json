@@ -855,7 +855,7 @@
       "--buildbucket-id",
       "8945511751514863184",
       "--gold_key",
-      "debug false is_standalone true javascript_runtime disabled os mac skia false v8 true xfa true xfa_runtime disabled",
+      "debug false is_standalone true javascript_runtime disabled os mac skia false suite javascript_disabled v8 true xfa true xfa_runtime disabled",
       "--disable-javascript"
     ],
     "cwd": "[CACHE]/builder/pdfium",
@@ -899,7 +899,7 @@
       "--buildbucket-id",
       "8945511751514863184",
       "--gold_key",
-      "debug false is_standalone true javascript_runtime enabled os mac skia false v8 true xfa true xfa_runtime disabled",
+      "debug false is_standalone true javascript_runtime enabled os mac skia false suite xfa_disabled v8 true xfa true xfa_runtime disabled",
       "--disable-xfa"
     ],
     "cwd": "[CACHE]/builder/pdfium",
@@ -986,7 +986,7 @@
       "--buildbucket-id",
       "8945511751514863184",
       "--gold_key",
-      "debug false is_standalone true javascript_runtime enabled os mac skia false v8 true xfa true xfa_runtime enabled",
+      "debug false is_standalone true javascript_runtime enabled os mac skia false suite oneshot v8 true xfa true xfa_runtime enabled",
       "--render-oneshot"
     ],
     "cwd": "[CACHE]/builder/pdfium",
@@ -1030,7 +1030,7 @@
       "--buildbucket-id",
       "8945511751514863184",
       "--gold_key",
-      "debug false is_standalone true javascript_runtime disabled os mac skia false v8 true xfa true xfa_runtime disabled",
+      "debug false is_standalone true javascript_runtime disabled os mac skia false suite javascript_disabled v8 true xfa true xfa_runtime disabled",
       "--disable-javascript"
     ],
     "cwd": "[CACHE]/builder/pdfium",
@@ -1074,7 +1074,7 @@
       "--buildbucket-id",
       "8945511751514863184",
       "--gold_key",
-      "debug false is_standalone true javascript_runtime enabled os mac skia false v8 true xfa true xfa_runtime disabled",
+      "debug false is_standalone true javascript_runtime enabled os mac skia false suite xfa_disabled v8 true xfa true xfa_runtime disabled",
       "--disable-xfa"
     ],
     "cwd": "[CACHE]/builder/pdfium",
@@ -1161,7 +1161,7 @@
       "--buildbucket-id",
       "8945511751514863184",
       "--gold_key",
-      "debug false is_standalone true javascript_runtime enabled os mac skia false v8 true xfa true xfa_runtime enabled",
+      "debug false is_standalone true javascript_runtime enabled os mac skia false suite oneshot v8 true xfa true xfa_runtime enabled",
       "--render-oneshot"
     ],
     "cwd": "[CACHE]/builder/pdfium",
@@ -1205,7 +1205,7 @@
       "--buildbucket-id",
       "8945511751514863184",
       "--gold_key",
-      "debug false is_standalone true javascript_runtime disabled os mac skia false v8 true xfa true xfa_runtime disabled",
+      "debug false is_standalone true javascript_runtime disabled os mac skia false suite javascript_disabled v8 true xfa true xfa_runtime disabled",
       "--disable-javascript"
     ],
     "cwd": "[CACHE]/builder/pdfium",
@@ -1249,7 +1249,7 @@
       "--buildbucket-id",
       "8945511751514863184",
       "--gold_key",
-      "debug false is_standalone true javascript_runtime enabled os mac skia false v8 true xfa true xfa_runtime disabled",
+      "debug false is_standalone true javascript_runtime enabled os mac skia false suite xfa_disabled v8 true xfa true xfa_runtime disabled",
       "--disable-xfa"
     ],
     "cwd": "[CACHE]/builder/pdfium",

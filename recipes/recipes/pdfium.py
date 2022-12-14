@@ -632,10 +632,17 @@ def _get_modifiable_script_args(api, build_config, option):
 
   # Add Skia Gold keys if `build_config` is non-empty.
   if build_config:
-    # Add the os from the builder name to the set of unique identifers.
     keys = build_config.copy()
+
+    # Add the test suite suffix. Note that the test suite base name already is
+    # encoded in the Gold source type.
+    if option.test_suite_suffix:
+      keys['suite'] = option.test_suite_suffix
+
+    # Add the OS from the builder name.
     builder_name = api.m.buildbucket.builder_name.strip()
     keys['os'] = builder_name.split('_')[0]
+
     keys['javascript_runtime'] = 'disabled' if (
         build_config['v8'] == 'false' or
         option.disable_javascript) else 'enabled'
@@ -651,12 +658,15 @@ def _get_modifiable_script_args(api, build_config, option):
 
 
 def _dict_to_str(props):
-  """Returns the given dictionary as a string of space
-     separated key/value pairs sorted by keys.
+  """Returns the given dictionary as a string of space-separated key/value
+  pairs sorted by keys. Fails if the key or value is empty, or contains spaces.
   """
   ret = []
   for k in sorted(props.keys()):
-    ret += [k, props[k]]
+    v = props[k]
+    assert k and ' ' not in k, f'Invalid key "{k}"'
+    assert v and ' ' not in v, f'Invalid value "{v}"'
+    ret += (k, v)
   return ' '.join(ret)
 
 
