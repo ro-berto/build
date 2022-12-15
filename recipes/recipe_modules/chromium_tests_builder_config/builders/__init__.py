@@ -8,7 +8,6 @@ from . import chromium_devtools_frontend
 from . import chromium_perf
 from . import chromium_perf_fyi
 from . import chromium_perf_calibration
-from . import chromium_webrtc
 from . import client_devtools_frontend_integration
 from . import client_openscreen_chromium
 from . import client_v8_chromium
@@ -25,8 +24,10 @@ from . import migration_testing
 # src-side in infra/config/subprojects/goma/goma.star
 # Builders for the chromium.reclient.fyi builder group are all defined
 # src-side in infra/config/subprojects/reclient/reclient.star
-# Builders for the chromium.webrtc.fyi builder group are all defined
+# Builders for the chromium.webrtc builder group are all defined
 # src-side in infra/config/subprojects/webrtc/webrtc.fyi.star
+# Builders for the chromium.webrtc.fyi builder group are all defined
+# src-side in infra/config/subprojects/webrtc/webrtc.star
 
 # The configs for the following builder groups are now specified src-side
 # in //infra/config/subprojects/chromium/ci/<builder_group>.star
@@ -59,8 +60,6 @@ BUILDERS = builder_db.BuilderDatabase.create({
         chromium_perf_fyi.SPEC,
     'chromium.perf.calibration':
         chromium_perf_calibration.SPEC,
-    'chromium.webrtc':
-        chromium_webrtc.SPEC,
     'client.devtools-frontend.integration':
         client_devtools_frontend_integration.SPEC,
     'client.openscreen.chromium':

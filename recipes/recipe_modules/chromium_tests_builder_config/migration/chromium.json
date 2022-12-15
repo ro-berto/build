@@ -4,54 +4,6 @@
       "chromium.devtools-frontend:DevTools Linux (chromium)"
     ]
   },
-  "chromium.webrtc:WebRTC Chromium Android Builder": {
-    "builders": [
-      "chromium.webrtc:WebRTC Chromium Android Builder",
-      "chromium.webrtc:WebRTC Chromium Android Tester"
-    ]
-  },
-  "chromium.webrtc:WebRTC Chromium Android Tester": {
-    "builders": [
-      "chromium.webrtc:WebRTC Chromium Android Builder",
-      "chromium.webrtc:WebRTC Chromium Android Tester"
-    ]
-  },
-  "chromium.webrtc:WebRTC Chromium Linux Builder": {
-    "builders": [
-      "chromium.webrtc:WebRTC Chromium Linux Builder",
-      "chromium.webrtc:WebRTC Chromium Linux Tester"
-    ]
-  },
-  "chromium.webrtc:WebRTC Chromium Linux Tester": {
-    "builders": [
-      "chromium.webrtc:WebRTC Chromium Linux Builder",
-      "chromium.webrtc:WebRTC Chromium Linux Tester"
-    ]
-  },
-  "chromium.webrtc:WebRTC Chromium Mac Builder": {
-    "builders": [
-      "chromium.webrtc:WebRTC Chromium Mac Builder",
-      "chromium.webrtc:WebRTC Chromium Mac Tester"
-    ]
-  },
-  "chromium.webrtc:WebRTC Chromium Mac Tester": {
-    "builders": [
-      "chromium.webrtc:WebRTC Chromium Mac Builder",
-      "chromium.webrtc:WebRTC Chromium Mac Tester"
-    ]
-  },
-  "chromium.webrtc:WebRTC Chromium Win Builder": {
-    "builders": [
-      "chromium.webrtc:WebRTC Chromium Win Builder",
-      "chromium.webrtc:WebRTC Chromium Win10 Tester"
-    ]
-  },
-  "chromium.webrtc:WebRTC Chromium Win10 Tester": {
-    "builders": [
-      "chromium.webrtc:WebRTC Chromium Win Builder",
-      "chromium.webrtc:WebRTC Chromium Win10 Tester"
-    ]
-  },
   "tryserver.chromium.linux:linux-layout-tests-edit-ng": {
     "builders": [
       "tryserver.chromium.linux:linux-layout-tests-edit-ng"
