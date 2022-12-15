@@ -1,9 +1,4 @@
 {
-  "chromium.chromiumos:linux-ash-chromium-generator-rel": {
-    "builders": [
-      "chromium.chromiumos:linux-ash-chromium-generator-rel"
-    ]
-  },
   "chromium.dev:linux-rel-swarming": {
     "builders": [
       "chromium.dev:linux-rel-swarming"

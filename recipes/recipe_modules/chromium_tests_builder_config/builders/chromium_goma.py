@@ -3,7 +3,6 @@
 # found in the LICENSE file.
 
 from .. import builder_spec
-from . import chromium_chromiumos
 
 
 def CreateStandardConfig(platform, apply_configs=None):
