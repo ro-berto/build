@@ -3,10 +3,5 @@
     "builders": [
       "chromium.devtools-frontend:DevTools Linux (chromium)"
     ]
-  },
-  "tryserver.chromium.linux:linux-layout-tests-edit-ng": {
-    "builders": [
-      "tryserver.chromium.linux:linux-layout-tests-edit-ng"
-    ]
   }
 }
