@@ -10,7 +10,6 @@ from . import chromium_goma_fyi
 from . import chromium_perf
 from . import chromium_perf_fyi
 from . import chromium_perf_calibration
-from . import chromium_rust
 from . import chromium_swarm
 from . import chromium_webrtc
 from . import chromium_webrtc_fyi
@@ -42,6 +41,7 @@ from . import migration_testing
 # * chromium.linux
 # * chromium.mac
 # * chromium.memory
+# * chromium.rust
 # * chromium.swangle
 # * chromium.win
 
@@ -60,8 +60,6 @@ BUILDERS = builder_db.BuilderDatabase.create({
         chromium_perf_fyi.SPEC,
     'chromium.perf.calibration':
         chromium_perf_calibration.SPEC,
-    'chromium.rust':
-        chromium_rust.SPEC,
     'chromium.staging':
         chromium_swarm.SPEC,
     'chromium.dev':

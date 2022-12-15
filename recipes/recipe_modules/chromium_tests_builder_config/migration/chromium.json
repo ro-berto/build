@@ -159,31 +159,6 @@
       "chromium.goma:Chromium iOS Goma RBE ToT"
     ]
   },
-  "chromium.rust:android-rust-arm-dbg": {
-    "builders": [
-      "chromium.rust:android-rust-arm-dbg",
-      "tryserver.chromium.rust:android-rust-arm-dbg"
-    ]
-  },
-  "chromium.rust:android-rust-arm-rel": {
-    "builders": [
-      "chromium.rust:android-rust-arm-rel",
-      "tryserver.chromium.rust:android-rust-arm-rel"
-    ]
-  },
-  "chromium.rust:linux-rust-x64-dbg": {
-    "builders": [
-      "chromium.rust:linux-rust-x64-dbg",
-      "tryserver.chromium.rust:linux-rust-x64-dbg"
-    ]
-  },
-  "chromium.rust:linux-rust-x64-rel": {
-    "builders": [
-      "chromium.rust:linux-rust-x64-rel",
-      "tryserver.chromium.rust:linux-rust-x64-rel",
-      "tryserver.chromium.rust:linux-rust-x64-rel-android-toolchain"
-    ]
-  },
   "chromium.staging:linux-rel-swarming": {
     "builders": [
       "chromium.staging:linux-rel-swarming"
@@ -355,38 +330,6 @@
   "tryserver.chromium.linux:linux-layout-tests-edit-ng": {
     "builders": [
       "tryserver.chromium.linux:linux-layout-tests-edit-ng"
-    ]
-  },
-  "tryserver.chromium.rust:android-rust-arm-dbg": {
-    "builders": [
-      "chromium.rust:android-rust-arm-dbg",
-      "tryserver.chromium.rust:android-rust-arm-dbg"
-    ]
-  },
-  "tryserver.chromium.rust:android-rust-arm-rel": {
-    "builders": [
-      "chromium.rust:android-rust-arm-rel",
-      "tryserver.chromium.rust:android-rust-arm-rel"
-    ]
-  },
-  "tryserver.chromium.rust:linux-rust-x64-dbg": {
-    "builders": [
-      "chromium.rust:linux-rust-x64-dbg",
-      "tryserver.chromium.rust:linux-rust-x64-dbg"
-    ]
-  },
-  "tryserver.chromium.rust:linux-rust-x64-rel": {
-    "builders": [
-      "chromium.rust:linux-rust-x64-rel",
-      "tryserver.chromium.rust:linux-rust-x64-rel",
-      "tryserver.chromium.rust:linux-rust-x64-rel-android-toolchain"
-    ]
-  },
-  "tryserver.chromium.rust:linux-rust-x64-rel-android-toolchain": {
-    "builders": [
-      "chromium.rust:linux-rust-x64-rel",
-      "tryserver.chromium.rust:linux-rust-x64-rel",
-      "tryserver.chromium.rust:linux-rust-x64-rel-android-toolchain"
     ]
   }
 }

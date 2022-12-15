@@ -21,39 +21,13 @@ from . import try_spec
 #   //infra/config/subprojects/chromium/try/tryserver.chromium.linux.star
 # * tryserver.chromium.mac
 #   //infra/config/subprojects/chromium/try/tryserver.chromium.mac.star
+# * tryserver.chromium.rust
+#   //infra/config/subprojects/chromium/try/tryserver.chromium.rust.star
 # * tryserver.chromium.swangle
 #   //infra/config/subprojects/chromium/swangle.try.star
 # * tryserver.chromium.win
 #   //infra/config/subprojects/chromium/try/tryserver.chromium.win.star
 TRYBOTS = try_spec.TryDatabase.create({
-    # Rust language bots
-    'tryserver.chromium.rust': {
-        'android-rust-arm-dbg':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.rust',
-                buildername='android-rust-arm-dbg',
-            ),
-        'android-rust-arm-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.rust',
-                buildername='android-rust-arm-rel',
-            ),
-        'linux-rust-x64-dbg':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.rust',
-                buildername='linux-rust-x64-dbg',
-            ),
-        'linux-rust-x64-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.rust',
-                buildername='linux-rust-x64-rel',
-            ),
-        'linux-rust-x64-rel-android-toolchain':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.rust',
-                buildername='linux-rust-x64-rel',
-            ),
-    },
     # The config for the following builders is now specified src-side in
     # //infra/config/subprojects/chromium/try/tryserver.chromium.updater.star
     # * mac-updater-try-builder-dbg
