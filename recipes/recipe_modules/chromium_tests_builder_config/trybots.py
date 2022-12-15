@@ -15,6 +15,8 @@ from . import try_spec
 #   //infra/config/subprojects/chromium/try/tryserver.chromium.chromiumos.star
 # * tryserver.chromium.dawn
 #   //infra/config/subprojects/chromium/try/tryserver.chromium.dawn.star
+# * tryserver.chromium.linux
+#   //infra/config/subprojects/chromium/try/tryserver.chromium.linux.star
 # * tryserver.chromium.mac
 #   //infra/config/subprojects/chromium/try/tryserver.chromium.mac.star
 # * tryserver.chromium.swangle
@@ -77,69 +79,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.memory',
                 buildername='android-asan',
-            ),
-    },
-    # The config for the following builders is now specified src-side in
-    # //infra/config/subprojects/chromium/try/tryserver.chromium.linux.star
-    # * cast_shell_audio_linux
-    # * cast_shell_linux
-    # * cast_shell_linux_arm64
-    # * cast_shell_linux_dbg
-    # * gpu-try-linux-nvidia-dbg
-    # * gpu-try-linux-nvidia-rel
-    # * gpu-fyi-try-lacros-amd-rel
-    # * gpu-fyi-try-lacros-intel-rel
-    # * gpu-fyi-try-linux-amd-rel
-    # * gpu-fyi-try-linux-intel-exp
-    # * gpu-fyi-try-linux-intel-rel
-    # * gpu-fyi-try-linux-nvidia-dbg
-    # * gpu-fyi-try-linux-nvidia-exp
-    # * gpu-fyi-try-linux-nvidia-rel
-    # * gpu-fyi-try-linux-nvidia-tsn
-    # * layout_test_leak_detection
-    # * linux_chromium_archive_rel_ng
-    # * linux_chromium_asan_rel_ng
-    # * linux_chromium_cfi_rel_ng
-    # * linux_chromium_chromeos_asan_rel_ng
-    # * linux_chromium_chromeos_msan_rel_ng
-    # * linux_chromium_clobber_rel_ng
-    # * linux_chromium_compile_dbg_ng
-    # * linux_chromium_compile_rel_ng
-    # * linux_chromium_dbg_ng
-    # * linux_chromium_msan_rel_ng
-    # * linux_chromium_tsan_rel_ng
-    # * linux_chromium_ubsan_rel_ng
-    # * linux_optional_gpu_tests_rel
-    # * linux_vr
-    # * linux-1mbu-compile-fyi-rel
-    # * linux-annotator-rel
-    # * linux-bfcache-rel
-    # * linux-blink-heap-verification-try
-    # * linux-dcheck-off-rel
-    # * linux-extended-tracing-rel
-    # * linux-fieldtrial-rel
-    # * linux-gcc-rel
-    # * linux-headless-shell-rel
-    # * linux-inverse-fieldtrials-fyi-rel
-    # * linux-lacros-fyi-rel
-    # * linux-lacros-version-skew-fyi
-    # * linux-mbi-mode-per-render-process-host-rel
-    # * linux-mbi-mode-per-site-instance-host-rel
-    # * linux-perfetto-rel
-    # * linux-rel
-    # * linux-rel-warmed
-    # * linux-viz-rel
-    # * linux-wayland-rel
-    # * linux-webkit-msan-rel
-    # * linux-wpt-fyi-rel
-    # * linux-wpt-identity-fyi-rel
-    # * linux-wpt-input-fyi-rel
-    # * network_service_linux
-    'tryserver.chromium.linux': {
-        'leak_detection_linux':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.linux',
-                buildername='Leak Detection Linux',
             ),
     },
     # Rust language bots

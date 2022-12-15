@@ -159,12 +159,6 @@
       "chromium.goma:Chromium iOS Goma RBE ToT"
     ]
   },
-  "chromium.linux:Leak Detection Linux": {
-    "builders": [
-      "chromium.linux:Leak Detection Linux",
-      "tryserver.chromium.linux:leak_detection_linux"
-    ]
-  },
   "chromium.memory:android-asan": {
     "builders": [
       "chromium.memory:android-asan",
@@ -368,12 +362,6 @@
     "builders": [
       "chromium.memory:android-asan",
       "tryserver.chromium.android:android-asan"
-    ]
-  },
-  "tryserver.chromium.linux:leak_detection_linux": {
-    "builders": [
-      "chromium.linux:Leak Detection Linux",
-      "tryserver.chromium.linux:leak_detection_linux"
     ]
   },
   "tryserver.chromium.linux:linux-layout-tests-edit-ng": {
