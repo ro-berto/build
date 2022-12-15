@@ -1,42 +1,4 @@
 {
-  "chromium.android.fyi:Android ASAN (dbg) (reclient)": {
-    "builders": [
-      "chromium.android.fyi:Android ASAN (dbg) (reclient)"
-    ]
-  },
-  "chromium.android.fyi:android-11-x86-fyi-rel": {
-    "builders": [
-      "chromium.android.fyi:android-11-x86-fyi-rel"
-    ]
-  },
-  "chromium.android.fyi:android-annotator-rel": {
-    "builders": [
-      "chromium.android.fyi:android-annotator-rel"
-    ]
-  },
-  "chromium.android.fyi:android-chrome-pie-x86-wpt-fyi-rel": {
-    "builders": [
-      "chromium.android.fyi:android-chrome-pie-x86-wpt-fyi-rel",
-      "tryserver.chromium.android:android-chrome-pie-x86-wpt-fyi-rel"
-    ]
-  },
-  "chromium.android.fyi:android-pie-arm64-wpt-rel-non-cq": {
-    "builders": [
-      "chromium.android.fyi:android-pie-arm64-wpt-rel-non-cq",
-      "tryserver.chromium.android:android-pie-arm64-wpt-rel-non-cq"
-    ]
-  },
-  "chromium.android.fyi:android-pie-x86-fyi-rel": {
-    "builders": [
-      "chromium.android.fyi:android-pie-x86-fyi-rel"
-    ]
-  },
-  "chromium.android.fyi:android-webview-pie-x86-wpt-fyi-rel": {
-    "builders": [
-      "chromium.android.fyi:android-webview-pie-x86-wpt-fyi-rel",
-      "tryserver.chromium.android:android-webview-pie-x86-wpt-fyi-rel"
-    ]
-  },
   "chromium.chromiumos:linux-ash-chromium-generator-rel": {
     "builders": [
       "chromium.chromiumos:linux-ash-chromium-generator-rel"
@@ -790,28 +752,10 @@
       "tryserver.chromium.android:android-asan"
     ]
   },
-  "tryserver.chromium.android:android-chrome-pie-x86-wpt-fyi-rel": {
-    "builders": [
-      "chromium.android.fyi:android-chrome-pie-x86-wpt-fyi-rel",
-      "tryserver.chromium.android:android-chrome-pie-x86-wpt-fyi-rel"
-    ]
-  },
   "tryserver.chromium.android:android-pie-arm64-coverage-rel": {
     "builders": [
       "chromium.fyi:android-code-coverage-native",
       "tryserver.chromium.android:android-pie-arm64-coverage-rel"
-    ]
-  },
-  "tryserver.chromium.android:android-pie-arm64-wpt-rel-non-cq": {
-    "builders": [
-      "chromium.android.fyi:android-pie-arm64-wpt-rel-non-cq",
-      "tryserver.chromium.android:android-pie-arm64-wpt-rel-non-cq"
-    ]
-  },
-  "tryserver.chromium.android:android-webview-pie-x86-wpt-fyi-rel": {
-    "builders": [
-      "chromium.android.fyi:android-webview-pie-x86-wpt-fyi-rel",
-      "tryserver.chromium.android:android-webview-pie-x86-wpt-fyi-rel"
     ]
   },
   "tryserver.chromium.linux:leak_detection_linux": {

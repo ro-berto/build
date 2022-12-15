@@ -33,6 +33,7 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * android-12-x64-dbg
     # * android-12-x64-rel
     # * android-bfcache-rel
+    # * android-chrome-pie-x86-wpt-fyi-rel
     # * android_cronet
     # * android-cronet-asan-arm-rel
     # * android-cronet-arm-dbg
@@ -49,12 +50,14 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * android-oreo-arm64-dbg
     # * android-pie-arm64-coverage-experimental-rel
     # * android-pie-arm64-rel
+    # * android-pie-arm64-wpt-rel-non-cq
     # * android-pie-x86-rel
     # * android-webview-12-x64-dbg
     # * android-webview-marshmallow-arm64-dbg
     # * android-webview-nougat-arm64-dbg
     # * android-webview-oreo-arm64-dbg
     # * android-webview-pie-arm64-dbg
+    # * android-webview-pie-x86-wpt-fyi-rel
     # * cast_shell_android
     # * gpu-fyi-try-android-l-nexus-5-32
     # * gpu-fyi-try-android-m-nexus-5x-64
@@ -74,21 +77,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.fyi',
                 buildername='android-code-coverage-native',
-            ),
-        'android-pie-arm64-wpt-rel-non-cq':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android.fyi',
-                buildername='android-pie-arm64-wpt-rel-non-cq',
-            ),
-        'android-chrome-pie-x86-wpt-fyi-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android.fyi',
-                buildername='android-chrome-pie-x86-wpt-fyi-rel',
-            ),
-        'android-webview-pie-x86-wpt-fyi-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.android.fyi',
-                buildername='android-webview-pie-x86-wpt-fyi-rel',
             ),
     },
     # The config for the following builders is now specified src-side in
