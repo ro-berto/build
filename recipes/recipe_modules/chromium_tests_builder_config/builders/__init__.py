@@ -7,7 +7,6 @@ from . import chromium_clang
 from . import chromium_devtools_frontend
 from . import chromium_goma
 from . import chromium_goma_fyi
-from . import chromium_memory
 from . import chromium_perf
 from . import chromium_perf_fyi
 from . import chromium_perf_calibration
@@ -42,6 +41,7 @@ from . import migration_testing
 # * chromium.gpu.fyi
 # * chromium.linux
 # * chromium.mac
+# * chromium.memory
 # * chromium.swangle
 # * chromium.win
 
@@ -54,8 +54,6 @@ BUILDERS = builder_db.BuilderDatabase.create({
         chromium_goma_fyi.SPEC,
     'chromium.goma':
         chromium_goma.SPEC,
-    'chromium.memory':
-        chromium_memory.SPEC,
     'chromium.perf':
         chromium_perf.SPEC,
     'chromium.perf.fyi':

@@ -159,12 +159,6 @@
       "chromium.goma:Chromium iOS Goma RBE ToT"
     ]
   },
-  "chromium.memory:android-asan": {
-    "builders": [
-      "chromium.memory:android-asan",
-      "tryserver.chromium.android:android-asan"
-    ]
-  },
   "chromium.rust:android-rust-arm-dbg": {
     "builders": [
       "chromium.rust:android-rust-arm-dbg",
@@ -356,12 +350,6 @@
     "builders": [
       "chromium.webrtc:WebRTC Chromium Win Builder",
       "chromium.webrtc:WebRTC Chromium Win10 Tester"
-    ]
-  },
-  "tryserver.chromium.android:android-asan": {
-    "builders": [
-      "chromium.memory:android-asan",
-      "tryserver.chromium.android:android-asan"
     ]
   },
   "tryserver.chromium.linux:linux-layout-tests-edit-ng": {

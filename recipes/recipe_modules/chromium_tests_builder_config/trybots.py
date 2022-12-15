@@ -9,6 +9,8 @@ from . import try_spec
 #   //infra/config/subprojects/chromium/try/tryserver.blink.star
 # * tryserver.chromium
 #   //infra/config/subprojects/chromium/try/tryserver.chromium.star
+# * tryserver.chromium.android
+#   //infra/config/subprojects/chromium/try/tryserver.chromium.android.star
 # * tryserver.chromium.angle
 #   //infra/config/subprojects/chromium/try/tryserver.chromium.angle.star
 # * trserver.chromium.chromiumos
@@ -24,63 +26,6 @@ from . import try_spec
 # * tryserver.chromium.win
 #   //infra/config/subprojects/chromium/try/tryserver.chromium.win.star
 TRYBOTS = try_spec.TryDatabase.create({
-    # The config for the following builders is now specified src-side in
-    # //infra/config/subprojects/chromium/try/tryserver.chromium.android.star
-    # * android_archive_rel_ng
-    # * android_arm64_dbg_recipe
-    # * android_compile_dbg
-    # * android_compile_x64_dbg
-    # * android_compile_x86_dbg
-    # * android_n5x_swarming_dbg
-    # * android_optional_gpu_tests_rel
-    # * android_unswarmed_pixel_aosp
-    # * android-10-arm64-rel
-    # * android-11-x86-rel
-    # * android-12-x64-dbg
-    # * android-12-x64-rel
-    # * android-bfcache-rel
-    # * android-chrome-pie-x86-wpt-fyi-rel
-    # * android_cronet
-    # * android-cronet-asan-arm-rel
-    # * android-cronet-arm-dbg
-    # * android-cronet-arm64-dbg
-    # * android-cronet-arm64-rel
-    # * android-cronet-x86-dbg
-    # * android-cronet-x86-dbg-10-tests
-    # * android-cronet-x86-dbg-11-tests
-    # * android-cronet-x86-dbg-oreo-tests
-    # * android-cronet-x86-dbg-pie-tests
-    # * android-cronet-x86-rel
-    # * android-cronet-x86-rel-kitkat-tests'
-    # * android-inverse-fieldtrials-pie-x86-fyi-rel
-    # * android-oreo-arm64-dbg
-    # * android-pie-arm64-coverage-experimental-rel
-    # * android-pie-arm64-coverage-rel
-    # * android-pie-arm64-rel
-    # * android-pie-arm64-wpt-rel-non-cq
-    # * android-pie-x86-rel
-    # * android-webview-12-x64-dbg
-    # * android-webview-marshmallow-arm64-dbg
-    # * android-webview-nougat-arm64-dbg
-    # * android-webview-oreo-arm64-dbg
-    # * android-webview-pie-arm64-dbg
-    # * android-webview-pie-x86-wpt-fyi-rel
-    # * cast_shell_android
-    # * gpu-fyi-try-android-l-nexus-5-32
-    # * gpu-fyi-try-android-m-nexus-5x-64
-    # * gpu-fyi-try-android-nvidia-shield-tv
-    # * gpu-fyi-try-android-p-pixel-2-32
-    # * gpu-fyi-try-android-pixel-6-64
-    # * gpu-fyi-try-android-r-pixel-4-32
-    # * gpu-try-android-m-nexus-5x-64
-    # * try-nougat-phone-tester
-    'tryserver.chromium.android': {
-        'android-asan':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.memory',
-                buildername='android-asan',
-            ),
-    },
     # Rust language bots
     'tryserver.chromium.rust': {
         'android-rust-arm-dbg':
