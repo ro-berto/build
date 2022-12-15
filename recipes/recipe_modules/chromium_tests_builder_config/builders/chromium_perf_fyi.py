@@ -109,6 +109,14 @@ _AddIsolatedTestSpec(
     parent_builder_group='chromium.perf.fyi')
 
 _AddIsolatedTestSpec(
+    'fuchsia-perf-nsn',
+    'fuchsia',
+    target_bits=64,
+    target_arch='arm',
+    parent_buildername='fuchsia-builder-perf-arm64',
+    parent_builder_group='chromium.perf.fyi')
+
+_AddIsolatedTestSpec(
     'fuchsia-perf-shk',
     'fuchsia',
     target_bits=64,
