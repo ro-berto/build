@@ -4,31 +4,6 @@
       "chromium.devtools-frontend:DevTools Linux (chromium)"
     ]
   },
-  "chromium.goma.fyi:Android Builder (dbg)": {
-    "builders": [
-      "chromium.goma.fyi:Android Builder (dbg)"
-    ]
-  },
-  "chromium.goma.fyi:android-archive-dbg-goma-rbe-ats-canary": {
-    "builders": [
-      "chromium.goma.fyi:android-archive-dbg-goma-rbe-ats-canary"
-    ]
-  },
-  "chromium.goma.fyi:android-archive-dbg-goma-rbe-ats-latest": {
-    "builders": [
-      "chromium.goma.fyi:android-archive-dbg-goma-rbe-ats-latest"
-    ]
-  },
-  "chromium.goma.fyi:android-archive-dbg-goma-rbe-canary": {
-    "builders": [
-      "chromium.goma.fyi:android-archive-dbg-goma-rbe-canary"
-    ]
-  },
-  "chromium.goma.fyi:android-archive-dbg-goma-rbe-latest": {
-    "builders": [
-      "chromium.goma.fyi:android-archive-dbg-goma-rbe-latest"
-    ]
-  },
   "chromium.goma:Chromium Android ARM 32-bit Goma RBE Staging": {
     "builders": [
       "chromium.goma:Chromium Android ARM 32-bit Goma RBE Staging"

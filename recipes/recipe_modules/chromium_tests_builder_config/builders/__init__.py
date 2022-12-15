@@ -6,7 +6,6 @@ from .. import builder_db
 from . import chromium_clang
 from . import chromium_devtools_frontend
 from . import chromium_goma
-from . import chromium_goma_fyi
 from . import chromium_perf
 from . import chromium_perf_fyi
 from . import chromium_perf_calibration
@@ -22,6 +21,8 @@ from . import tryserver_v8
 from . import tryserver_webrtc
 from . import migration_testing
 
+# Builders for the chromium.goma.fyi builder group are all defined
+# src-side in infra/config/subprojects/goma/goma.star
 # Builders for the chromium.reclient.fyi builder group are all defined
 # src-side in infra/config/subprojects/reclient/reclient.star
 
@@ -50,8 +51,6 @@ BUILDERS = builder_db.BuilderDatabase.create({
         chromium_clang.SPEC,
     'chromium.devtools-frontend':
         chromium_devtools_frontend.SPEC,
-    'chromium.goma.fyi':
-        chromium_goma_fyi.SPEC,
     'chromium.goma':
         chromium_goma.SPEC,
     'chromium.perf':
