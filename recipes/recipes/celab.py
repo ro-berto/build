@@ -131,9 +131,6 @@ def _RunStepsChromium(api):
   # Run tests for all chromium bots.
   cel_ctl = celab_bin_dir.join(_get_ctl_binary_name(api))
   installer = chromium_bin_dir.join('mini_installer.exe')
-  if api.buildbucket.build.builder.project == 'chrome':
-    # Use Chrome Enterprise standalone installer on Chrome
-    installer = chromium_bin_dir.join('GoogleChromeStandaloneEnterprise.msi')
   chromedriver = chromium_bin_dir.join('chromedriver.exe')
   test_py_args = '--cel_ctl=%s' % cel_ctl
   test_py_args += ' --test_arg=--chrome_installer=%s' % installer
