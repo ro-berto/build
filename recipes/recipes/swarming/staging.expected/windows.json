@@ -7,7 +7,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -153,7 +153,7 @@
     ],
     "cwd": "[CACHE]\\builder",
     "env": {
-      "DEPOT_TOOLS_REPORT_BUILD": "chromium/dev/win-rel-swarming/8945511751514863184",
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/ci/fake-builder/8945511751514863184",
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "1800"
     },
@@ -168,7 +168,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -320,13 +320,13 @@
       "python3",
       "-u",
       "RECIPE_MODULE[recipe_engine::json]\\resources\\read.py",
-      "[CACHE]\\builder\\src\\testing\\buildbot\\chromium.dev.json",
+      "[CACHE]\\builder\\src\\testing\\buildbot\\fake-group.json",
       "/path/to/tmp/json"
     ],
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -336,11 +336,11 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "read test spec (chromium.dev.json)",
+    "name": "read test spec (fake-group.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [CACHE]\\builder\\src\\testing\\buildbot\\chromium.dev.json@@@",
+      "@@@STEP_TEXT@path: [CACHE]\\builder\\src\\testing\\buildbot\\fake-group.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"win-rel-swarming\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"fake-builder\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
@@ -375,7 +375,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -417,7 +417,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -453,7 +453,7 @@
     "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_REPORT_BUILD": "chromium/dev/win-rel-swarming/8945511751514863184"
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/ci/fake-builder/8945511751514863184"
     },
     "env_suffixes": {
       "PATH": [
@@ -462,7 +462,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -489,7 +489,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -515,7 +515,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -542,14 +542,13 @@
       "[CACHE]\\builder\\src\\tools\\mb\\mb.py",
       "lookup",
       "-m",
-      "chromium.dev",
+      "fake-group",
       "-b",
-      "win-rel-swarming",
+      "fake-builder",
       "--config-file",
       "[CACHE]\\builder\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
       "[CACHE]\\goma\\client",
-      "--luci-auth",
       "--recursive"
     ],
     "cwd": "[CACHE]\\builder\\src",
@@ -559,7 +558,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -581,14 +580,13 @@
       "[CACHE]\\builder\\src\\tools\\mb\\mb.py",
       "gen",
       "-m",
-      "chromium.dev",
+      "fake-group",
       "-b",
-      "win-rel-swarming",
+      "fake-builder",
       "--config-file",
       "[CACHE]\\builder\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
       "[CACHE]\\goma\\client",
-      "--luci-auth",
       "--json-output",
       "/path/to/tmp/json",
       "--swarming-targets-file",
@@ -602,7 +600,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -634,7 +632,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -663,7 +661,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]\\goma\\data\\win_rel_swarming"
+      "[CACHE]\\goma\\data\\fake_builder"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
@@ -672,7 +670,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -699,7 +697,7 @@
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_ARBITRARY_TOOLCHAIN_SUPPORT": "true",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\win_rel_swarming",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\fake_builder",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
@@ -709,7 +707,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -742,7 +740,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -783,7 +781,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -816,7 +814,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -851,7 +849,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -895,7 +893,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -928,7 +926,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -961,7 +959,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -1005,9 +1003,9 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"dev\", \"builder\": \"win-rel-swarming\", \"project\": \"chromium\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"fake-builder\", \"project\": \"chromium\"}",
       "--buildbot-buildername",
-      "win-rel-swarming"
+      "fake-builder"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
@@ -1015,7 +1013,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -1053,7 +1051,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -1081,7 +1079,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -1112,7 +1110,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -1143,7 +1141,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -1184,7 +1182,7 @@
     ],
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -1215,7 +1213,7 @@
     ],
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -1244,7 +1242,7 @@
     ],
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -1273,7 +1271,7 @@
     ],
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -1316,7 +1314,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -1348,7 +1346,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -1381,7 +1379,7 @@
       "-server",
       "https://example.swarmingserver.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"browser_tests/Windows-10/[dummy has/win-rel-swarming/571:0:2\", \"priority\": \"20\", \"realm\": \"chromium:dev\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:dev\", \"build_is_experimental:false\", \"builder_group:chromium.dev\", \"buildername:win-rel-swarming\", \"buildnumber:571\", \"data:[dummy hash for browser_tests/dummy size]\", \"name:browser_tests\", \"ninja_target:\", \"project:chromium\", \"purpose:staging\", \"slavename:fake-bot-id\", \"spec_name:chromium.dev:win-rel-swarming\", \"stepname:browser_tests on Windows-10\", \"test_id_prefix:\", \"test_suite:browser_tests\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for browser_tests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:win-rel-swarming\", \"-var\", \"os:Windows-10\", \"-var\", \"test_suite:browser_tests\", \"-tag\", \"step_name:browser_tests on Windows-10\", \"-tag\", \"target_platform:win\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter.exe\", \"gtest\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Windows-10\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"0\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"2\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"browser_tests/Windows-10/[dummy has/fake-builder/571:0:2\", \"priority\": \"20\", \"realm\": \"chromium:ci\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:fake-group\", \"buildername:fake-builder\", \"buildnumber:571\", \"data:[dummy hash for browser_tests/dummy size]\", \"name:browser_tests\", \"ninja_target:\", \"project:chromium\", \"purpose:staging\", \"slavename:fake-bot-id\", \"spec_name:chromium.ci:fake-builder\", \"stepname:browser_tests on Windows-10\", \"test_id_prefix:\", \"test_suite:browser_tests\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for browser_tests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:fake-builder\", \"-var\", \"os:Windows-10\", \"-var\", \"test_suite:browser_tests\", \"-tag\", \"step_name:browser_tests on Windows-10\", \"-tag\", \"target_platform:win\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter.exe\", \"gtest\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Windows-10\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"0\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"2\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json",
       "-verbose"
@@ -1390,7 +1388,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -1407,7 +1405,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"name\": \"browser_tests/Windows-10/[dummy has/win-rel-swarming/571:0:2\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"name\": \"browser_tests/Windows-10/[dummy has/fake-builder/571:0:2\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"0\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_result\": {@@@",
@@ -1422,18 +1420,18 @@
       "@@@STEP_LOG_LINE@json.input@{@@@",
       "@@@STEP_LOG_LINE@json.input@  \"requests\": [@@@",
       "@@@STEP_LOG_LINE@json.input@    {@@@",
-      "@@@STEP_LOG_LINE@json.input@      \"name\": \"browser_tests/Windows-10/[dummy has/win-rel-swarming/571:0:2\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"name\": \"browser_tests/Windows-10/[dummy has/fake-builder/571:0:2\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"20\", @@@",
-      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"chromium:dev\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"chromium:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"resultdb\": {@@@",
       "@@@STEP_LOG_LINE@json.input@        \"enable\": true@@@",
       "@@@STEP_LOG_LINE@json.input@      }, @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@        \"bucket:dev\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"build_is_experimental:false\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"builder_group:chromium.dev\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"buildername:win-rel-swarming\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"builder_group:fake-group\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"buildername:fake-builder\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"buildnumber:571\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"data:[dummy hash for browser_tests/dummy size]\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"name:browser_tests\", @@@",
@@ -1441,7 +1439,7 @@
       "@@@STEP_LOG_LINE@json.input@        \"project:chromium\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"purpose:staging\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"slavename:fake-bot-id\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"spec_name:chromium.dev:win-rel-swarming\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"spec_name:chromium.ci:fake-builder\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"stepname:browser_tests on Windows-10\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"test_id_prefix:\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"test_suite:browser_tests\"@@@",
@@ -1461,7 +1459,7 @@
       "@@@STEP_LOG_LINE@json.input@              \"rdb\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"stream\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"builder:win-rel-swarming\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"builder:fake-builder\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"os:Windows-10\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
@@ -1530,7 +1528,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: browser_tests/Windows-10/[dummy has/win-rel-swarming/571:0:2@https://example.swarmingserver.appspot.com/task?id=0@@@"
+      "@@@STEP_LINK@task UI: browser_tests/Windows-10/[dummy has/fake-builder/571:0:2@https://example.swarmingserver.appspot.com/task?id=0@@@"
     ]
   },
   {
@@ -1540,7 +1538,7 @@
       "-server",
       "https://example.swarmingserver.appspot.com",
       "-json-input",
-      "{\"requests\": [{\"name\": \"browser_tests/Windows-10/[dummy has/win-rel-swarming/571:1:2\", \"priority\": \"20\", \"realm\": \"chromium:dev\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:dev\", \"build_is_experimental:false\", \"builder_group:chromium.dev\", \"buildername:win-rel-swarming\", \"buildnumber:571\", \"data:[dummy hash for browser_tests/dummy size]\", \"name:browser_tests\", \"ninja_target:\", \"project:chromium\", \"purpose:staging\", \"slavename:fake-bot-id\", \"spec_name:chromium.dev:win-rel-swarming\", \"stepname:browser_tests on Windows-10\", \"test_id_prefix:\", \"test_suite:browser_tests\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for browser_tests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:win-rel-swarming\", \"-var\", \"os:Windows-10\", \"-var\", \"test_suite:browser_tests\", \"-tag\", \"step_name:browser_tests on Windows-10\", \"-tag\", \"target_platform:win\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter.exe\", \"gtest\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Windows-10\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"1\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"2\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
+      "{\"requests\": [{\"name\": \"browser_tests/Windows-10/[dummy has/fake-builder/571:1:2\", \"priority\": \"20\", \"realm\": \"chromium:ci\", \"resultdb\": {\"enable\": true}, \"service_account\": \"\", \"tags\": [\"bucket:ci\", \"build_is_experimental:false\", \"builder_group:fake-group\", \"buildername:fake-builder\", \"buildnumber:571\", \"data:[dummy hash for browser_tests/dummy size]\", \"name:browser_tests\", \"ninja_target:\", \"project:chromium\", \"purpose:staging\", \"slavename:fake-bot-id\", \"spec_name:chromium.ci:fake-builder\", \"stepname:browser_tests on Windows-10\", \"test_id_prefix:\", \"test_suite:browser_tests\"], \"task_slices\": [{\"expiration_secs\": \"3600\", \"properties\": {\"cas_input_root\": {\"cas_instance\": \"projects/example-cas-server/instances/default_instance\", \"digest\": {\"hash\": \"[dummy hash for browser_tests\", \"size_bytes\": \"dummy size]\"}}, \"command\": [\"rdb\", \"stream\", \"-var\", \"builder:fake-builder\", \"-var\", \"os:Windows-10\", \"-var\", \"test_suite:browser_tests\", \"-tag\", \"step_name:browser_tests on Windows-10\", \"-tag\", \"target_platform:win\", \"-coerce-negative-duration\", \"-location-tags-file\", \"../../testing/location_tags.json\", \"-exonerate-unexpected-pass\", \"--\", \"result_adapter.exe\", \"gtest\", \"-result-file\", \"${ISOLATED_OUTDIR}/output.json\", \"-artifact-directory\", \"${ISOLATED_OUTDIR}\", \"--\", \"--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json\"], \"containment\": {\"containment_type\": \"NONE\"}, \"dimensions\": [{\"key\": \"cpu\", \"value\": \"x86-64\"}, {\"key\": \"os\", \"value\": \"Windows-10\"}, {\"key\": \"pool\", \"value\": \"chromium.tests\"}], \"env\": [{\"key\": \"GTEST_SHARD_INDEX\", \"value\": \"1\"}, {\"key\": \"GTEST_TOTAL_SHARDS\", \"value\": \"2\"}, {\"key\": \"ISOLATED_OUTDIR\", \"value\": \"${ISOLATED_OUTDIR}\"}], \"env_prefixes\": [], \"execution_timeout_secs\": \"3600\", \"grace_period_secs\": \"30\", \"idempotent\": true, \"io_timeout_secs\": \"1200\", \"outputs\": [], \"relative_cwd\": \"\"}, \"wait_for_capacity\": false}]}]}",
       "-json-output",
       "/path/to/tmp/json",
       "-verbose"
@@ -1549,7 +1547,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -1566,7 +1564,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"request\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"name\": \"browser_tests/Windows-10/[dummy has/win-rel-swarming/571:1:2\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"name\": \"browser_tests/Windows-10/[dummy has/fake-builder/571:1:2\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_result\": {@@@",
@@ -1581,18 +1579,18 @@
       "@@@STEP_LOG_LINE@json.input@{@@@",
       "@@@STEP_LOG_LINE@json.input@  \"requests\": [@@@",
       "@@@STEP_LOG_LINE@json.input@    {@@@",
-      "@@@STEP_LOG_LINE@json.input@      \"name\": \"browser_tests/Windows-10/[dummy has/win-rel-swarming/571:1:2\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"name\": \"browser_tests/Windows-10/[dummy has/fake-builder/571:1:2\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"priority\": \"20\", @@@",
-      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"chromium:dev\", @@@",
+      "@@@STEP_LOG_LINE@json.input@      \"realm\": \"chromium:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"resultdb\": {@@@",
       "@@@STEP_LOG_LINE@json.input@        \"enable\": true@@@",
       "@@@STEP_LOG_LINE@json.input@      }, @@@",
       "@@@STEP_LOG_LINE@json.input@      \"service_account\": \"\", @@@",
       "@@@STEP_LOG_LINE@json.input@      \"tags\": [@@@",
-      "@@@STEP_LOG_LINE@json.input@        \"bucket:dev\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"bucket:ci\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"build_is_experimental:false\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"builder_group:chromium.dev\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"buildername:win-rel-swarming\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"builder_group:fake-group\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"buildername:fake-builder\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"buildnumber:571\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"data:[dummy hash for browser_tests/dummy size]\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"name:browser_tests\", @@@",
@@ -1600,7 +1598,7 @@
       "@@@STEP_LOG_LINE@json.input@        \"project:chromium\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"purpose:staging\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"slavename:fake-bot-id\", @@@",
-      "@@@STEP_LOG_LINE@json.input@        \"spec_name:chromium.dev:win-rel-swarming\", @@@",
+      "@@@STEP_LOG_LINE@json.input@        \"spec_name:chromium.ci:fake-builder\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"stepname:browser_tests on Windows-10\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"test_id_prefix:\", @@@",
       "@@@STEP_LOG_LINE@json.input@        \"test_suite:browser_tests\"@@@",
@@ -1620,7 +1618,7 @@
       "@@@STEP_LOG_LINE@json.input@              \"rdb\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"stream\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
-      "@@@STEP_LOG_LINE@json.input@              \"builder:win-rel-swarming\", @@@",
+      "@@@STEP_LOG_LINE@json.input@              \"builder:fake-builder\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"os:Windows-10\", @@@",
       "@@@STEP_LOG_LINE@json.input@              \"-var\", @@@",
@@ -1689,7 +1687,7 @@
       "@@@STEP_LOG_LINE@json.input@  ]@@@",
       "@@@STEP_LOG_LINE@json.input@}@@@",
       "@@@STEP_LOG_END@json.input@@@",
-      "@@@STEP_LINK@task UI: browser_tests/Windows-10/[dummy has/win-rel-swarming/571:1:2@https://example.swarmingserver.appspot.com/task?id=1@@@"
+      "@@@STEP_LINK@task UI: browser_tests/Windows-10/[dummy has/fake-builder/571:1:2@https://example.swarmingserver.appspot.com/task?id=1@@@"
     ]
   },
   {
@@ -1704,7 +1702,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -1747,7 +1745,7 @@
     "cwd": "[CACHE]\\builder",
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -1776,7 +1774,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -1802,7 +1800,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -1827,7 +1825,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -1855,7 +1853,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -1880,7 +1878,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -1907,7 +1905,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -1941,7 +1939,7 @@
     "cwd": "[CACHE]\\builder",
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -1977,7 +1975,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -2019,7 +2017,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -2051,7 +2049,7 @@
       "--merge-additional-args",
       "[]",
       "--build-properties",
-      "{\"bot_id\": \"test_bot\", \"builder_group\": \"chromium.dev\", \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"got_angle_revision_cp\": \"refs/heads/main@{#297276}\", \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \"got_buildtools_revision_cp\": \"refs/heads/main@{#182578}\", \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", \"got_dawn_revision_cp\": \"refs/heads/main@{#51819}\", \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/main@{#274981}\", \"got_revision\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\", \"got_revision_cp\": \"refs/heads/main@{#170242}\", \"got_swiftshader_revision\": \"44a40deda357aff750ab1cbfd94ec79dbc8bb754\", \"got_swiftshader_revision_cp\": \"refs/heads/main@{#202157}\", \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", \"got_v8_revision_cp\": \"refs/heads/main@{#43426}\", \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"got_webrtc_revision_cp\": \"refs/heads/main@{#120644}\", \"recipe\": \"swarming/staging\"}",
+      "{\"bot_id\": \"test_bot\", \"builder_group\": \"fake-group\", \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"got_angle_revision_cp\": \"refs/heads/main@{#297276}\", \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \"got_buildtools_revision_cp\": \"refs/heads/main@{#182578}\", \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", \"got_dawn_revision_cp\": \"refs/heads/main@{#51819}\", \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/main@{#274981}\", \"got_revision\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\", \"got_revision_cp\": \"refs/heads/main@{#170242}\", \"got_swiftshader_revision\": \"44a40deda357aff750ab1cbfd94ec79dbc8bb754\", \"got_swiftshader_revision_cp\": \"refs/heads/main@{#202157}\", \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", \"got_v8_revision_cp\": \"refs/heads/main@{#43426}\", \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"got_webrtc_revision_cp\": \"refs/heads/main@{#120644}\", \"recipe\": \"swarming/staging\"}",
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
@@ -2073,7 +2071,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -2156,8 +2154,8 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"0\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"1\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_builder_group\": \"chromium.dev\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": \"win-rel-swarming\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_builder_group\": \"fake-group\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": \"fake-builder\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 test results@https://luci-milo.appspot.com/ui/inv/some-inv-name/test-results@@@",

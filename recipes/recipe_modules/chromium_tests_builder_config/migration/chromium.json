@@ -1,34 +1,4 @@
 {
-  "chromium.dev:linux-rel-swarming": {
-    "builders": [
-      "chromium.dev:linux-rel-swarming"
-    ]
-  },
-  "chromium.dev:linux-ssd-rel-swarming": {
-    "builders": [
-      "chromium.dev:linux-ssd-rel-swarming"
-    ]
-  },
-  "chromium.dev:mac-arm-rel-swarming": {
-    "builders": [
-      "chromium.dev:mac-arm-rel-swarming"
-    ]
-  },
-  "chromium.dev:mac-rel-swarming": {
-    "builders": [
-      "chromium.dev:mac-rel-swarming"
-    ]
-  },
-  "chromium.dev:win-rel-swarming": {
-    "builders": [
-      "chromium.dev:win-rel-swarming"
-    ]
-  },
-  "chromium.dev:win11-rel-swarming": {
-    "builders": [
-      "chromium.dev:win11-rel-swarming"
-    ]
-  },
   "chromium.devtools-frontend:DevTools Linux (chromium)": {
     "builders": [
       "chromium.devtools-frontend:DevTools Linux (chromium)"
@@ -157,36 +127,6 @@
   "chromium.goma:Chromium iOS Goma RBE ToT": {
     "builders": [
       "chromium.goma:Chromium iOS Goma RBE ToT"
-    ]
-  },
-  "chromium.staging:linux-rel-swarming": {
-    "builders": [
-      "chromium.staging:linux-rel-swarming"
-    ]
-  },
-  "chromium.staging:linux-ssd-rel-swarming": {
-    "builders": [
-      "chromium.staging:linux-ssd-rel-swarming"
-    ]
-  },
-  "chromium.staging:mac-arm-rel-swarming": {
-    "builders": [
-      "chromium.staging:mac-arm-rel-swarming"
-    ]
-  },
-  "chromium.staging:mac-rel-swarming": {
-    "builders": [
-      "chromium.staging:mac-rel-swarming"
-    ]
-  },
-  "chromium.staging:win-rel-swarming": {
-    "builders": [
-      "chromium.staging:win-rel-swarming"
-    ]
-  },
-  "chromium.staging:win11-rel-swarming": {
-    "builders": [
-      "chromium.staging:win11-rel-swarming"
     ]
   },
   "chromium.webrtc.fyi:WebRTC Chromium FYI Android Builder": {

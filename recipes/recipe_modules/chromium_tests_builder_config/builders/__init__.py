@@ -10,7 +10,6 @@ from . import chromium_goma_fyi
 from . import chromium_perf
 from . import chromium_perf_fyi
 from . import chromium_perf_calibration
-from . import chromium_swarm
 from . import chromium_webrtc
 from . import chromium_webrtc_fyi
 from . import client_devtools_frontend_integration
@@ -34,6 +33,7 @@ from . import migration_testing
 # * chromium.angle
 # * chromium.chromiumos
 # * chromium.dawn
+# * chromium.dev
 # * chromium.fuzz
 # * chromium.fyi
 # * chromium.gpu
@@ -60,10 +60,6 @@ BUILDERS = builder_db.BuilderDatabase.create({
         chromium_perf_fyi.SPEC,
     'chromium.perf.calibration':
         chromium_perf_calibration.SPEC,
-    'chromium.staging':
-        chromium_swarm.SPEC,
-    'chromium.dev':
-        chromium_swarm.SPEC,
     'chromium.webrtc':
         chromium_webrtc.SPEC,
     'chromium.webrtc.fyi':

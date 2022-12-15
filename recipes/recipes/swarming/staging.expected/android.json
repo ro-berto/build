@@ -133,7 +133,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "env": {
-      "DEPOT_TOOLS_REPORT_BUILD": "chromium/dev/android-lollipop-arm-rel-swarming/8945511751514863184",
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/ci/fake-android-builder/8945511751514863184",
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "1800"
     },
@@ -148,7 +148,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -300,13 +300,13 @@
       "python3",
       "-u",
       "RECIPE_MODULE[recipe_engine::json]/resources/read.py",
-      "[CACHE]/builder/src/testing/buildbot/chromium.dev.json",
+      "[CACHE]/builder/src/testing/buildbot/fake-group.json",
       "/path/to/tmp/json"
     ],
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -316,9 +316,9 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "read test spec (chromium.dev.json)",
+    "name": "read test spec (fake-group.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/chromium.dev.json@@@",
+      "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/fake-group.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -343,7 +343,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -385,7 +385,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -421,7 +421,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_REPORT_BUILD": "chromium/dev/android-lollipop-arm-rel-swarming/8945511751514863184",
+      "DEPOT_TOOLS_REPORT_BUILD": "chromium/ci/fake-android-builder/8945511751514863184",
       "PATH": "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
     },
     "env_suffixes": {
@@ -431,7 +431,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -455,7 +455,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -475,7 +475,7 @@
     ],
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -502,7 +502,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -528,7 +528,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -555,9 +555,9 @@
       "[CACHE]/builder/src/tools/mb/mb.py",
       "lookup",
       "-m",
-      "chromium.dev",
+      "fake-group",
       "-b",
-      "android-lollipop-arm-rel-swarming",
+      "fake-android-builder",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -573,7 +573,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -595,9 +595,9 @@
       "[CACHE]/builder/src/tools/mb/mb.py",
       "gen",
       "-m",
-      "chromium.dev",
+      "fake-group",
       "-b",
-      "android-lollipop-arm-rel-swarming",
+      "fake-android-builder",
       "--config-file",
       "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -615,7 +615,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -645,7 +645,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -674,7 +674,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/android_lollipop_arm_rel_swarming"
+      "[CACHE]/goma/data/fake_android_builder"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -683,7 +683,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -709,7 +709,7 @@
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/android_lollipop_arm_rel_swarming",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/fake_android_builder",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -720,7 +720,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -753,7 +753,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -794,7 +794,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -827,7 +827,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -861,7 +861,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -904,7 +904,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -936,7 +936,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -969,7 +969,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -1013,9 +1013,9 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"dev\", \"builder\": \"android-lollipop-arm-rel-swarming\", \"project\": \"chromium\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"fake-android-builder\", \"project\": \"chromium\"}",
       "--buildbot-buildername",
-      "android-lollipop-arm-rel-swarming"
+      "fake-android-builder"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -1023,7 +1023,7 @@
     },
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -1061,7 +1061,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {
@@ -1089,7 +1089,7 @@
     "infra_step": true,
     "luci_context": {
       "realm": {
-        "name": "chromium:dev"
+        "name": "chromium:ci"
       },
       "resultdb": {
         "current_invocation": {

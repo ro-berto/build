@@ -100,27 +100,15 @@ def RunSteps(api):
 def GenTests(api):
   ctbc_api = api.chromium_tests_builder_config
 
-  def ci_build(builder):
-    return api.chromium.ci_build(
-        project='chromium',
-        bucket='dev',
-        builder=builder,
-        builder_group='chromium.dev',
-    )
-
-  def builder_with_config(buildername, config=None):
-    ret = ci_build(builder=buildername)
-    if config:
-      ret += api.chromium_tests.read_source_side_spec(
-          'chromium.dev', {buildername: config})
-    return ret
-
   yield api.test(
       'android',
-      ci_build('fake-android-builder'),
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-android-builder',
+      ),
       ctbc_api.properties(
           ctbc_api.properties_assembler_for_ci_builder(
-              builder_group='chromium.dev',
+              builder_group='fake-group',
               builder='fake-android-builder',
               builder_spec=ctbc.BuilderSpec.create(
                   gclient_config='chromium',
@@ -131,58 +119,107 @@ def GenTests(api):
                   android_config='main_builder_mb',
               ),
           ).assemble()),
-      builder_with_config('android-lollipop-arm-rel-swarming'),
   )
 
   # One 'collect' fails due to a missing shard and failing test, should not
   # prevent the second 'collect' from running.
   yield api.test(
       'one_fails',
-      builder_with_config('linux-rel-swarming', {
-        'gtest_tests': [{
-          'test': 'browser_tests',
-          'swarming': {
-            'can_use_on_swarming_builders': True,
-            'shards': 2,
-          }
-        },],
-      }),
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-builder',
+      ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
+      api.chromium_tests.read_source_side_spec(
+          'fake-group',
+          {
+              'fake-builder': {
+                  'gtest_tests': [{
+                      'test': 'browser_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True,
+                          'shards': 2,
+                      },
+                  }],
+              },
+          },
+      ),
       api.chromium_tests.gen_swarming_and_rdb_results(
           'browser_tests', '', custom_os='Ubuntu', failures=['Test.Two']),
   )
 
   yield api.test(
       'windows',
-      builder_with_config('win-rel-swarming', {
-        'gtest_tests': [{
-          'test': 'browser_tests',
-          'swarming': {
-            'can_use_on_swarming_builders': True,
-            'shards': 2,
-          }
-        },],
-      }),
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-builder',
+      ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
+      api.chromium_tests.read_source_side_spec(
+          'fake-group',
+          {
+              'fake-builder': {
+                  'gtest_tests': [{
+                      'test': 'browser_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True,
+                          'shards': 2,
+                      },
+                  }],
+              },
+          },
+      ),
       api.platform('win', 64),
   )
 
   yield api.test(
       'mac-arm',
-      builder_with_config('mac-arm-rel-swarming'),
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-builder',
+      ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.platform('mac', 64),
       api.platform.arch('arm'),
   )
 
   yield api.test(
       'compile_failure',
-      builder_with_config('linux-rel-swarming', {
-        'gtest_tests': [{
-          'test': 'browser_tests',
-          'swarming': {
-            'can_use_on_swarming_builders': True,
-            'shards': 2,
-          }
-        },],
-      }),
+      api.chromium.ci_build(
+          builder_group='fake-group',
+          builder='fake-builder',
+      ),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
+      api.chromium_tests.read_source_side_spec(
+          'fake-group',
+          {
+              'fake-builder': {
+                  'gtest_tests': [{
+                      'test': 'browser_tests',
+                      'swarming': {
+                          'can_use_on_swarming_builders': True,
+                          'shards': 2,
+                      },
+                  }],
+              },
+          },
+      ),
       api.step_data('compile', retcode=1),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
