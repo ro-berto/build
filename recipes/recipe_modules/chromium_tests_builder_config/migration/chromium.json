@@ -1,7 +1,1 @@
-{
-  "chromium.devtools-frontend:DevTools Linux (chromium)": {
-    "builders": [
-      "chromium.devtools-frontend:DevTools Linux (chromium)"
-    ]
-  }
-}
+{}

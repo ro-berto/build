@@ -17,7 +17,7 @@
   },
   {
     "_comment": "devtools-frontend builders are in the devtools-frontend project",
-    "builder_group_regex": "(tryserver\\.)?chromium\\.devtools(\\..+)?",
+    "builder_group_regex": "(tryserver\\.)?chromium\\.devtools(.+)?",
     "exclude": true
   }
 ]
