@@ -110,8 +110,12 @@ def GenTests(api):
 
   yield api.test(
       'use_clang_coverage',
-      api.chromium.ci_build(
-          builder_group='chromium.fyi', builder='linux-code-coverage'),
+      api.chromium.ci_build(builder_group='fake-group', builder='fake-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )

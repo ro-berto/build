@@ -5,7 +5,6 @@
 from .. import builder_db
 from . import chromium_clang
 from . import chromium_devtools_frontend
-from . import chromium_fyi
 from . import chromium_goma
 from . import chromium_goma_fyi
 from . import chromium_linux
@@ -39,6 +38,7 @@ from . import migration_testing
 # * chromium.chromiumos
 # * chromium.dawn
 # * chromium.fuzz
+# * chromium.fyi
 # * chromium.gpu
 # * chromium.gpu.fyi
 # * chromium.mac
@@ -50,8 +50,6 @@ BUILDERS = builder_db.BuilderDatabase.create({
         chromium_clang.SPEC,
     'chromium.devtools-frontend':
         chromium_devtools_frontend.SPEC,
-    'chromium.fyi':
-        chromium_fyi.SPEC,
     'chromium.goma.fyi':
         chromium_goma_fyi.SPEC,
     'chromium.goma':

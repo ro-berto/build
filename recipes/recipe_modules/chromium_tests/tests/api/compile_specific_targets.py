@@ -111,9 +111,12 @@ def GenTests(api):
 
   yield api.test(
       'linux_tests_reclient',
-      api.chromium.ci_build(
-          builder_group='chromium.fyi',
-          builder='Linux Builder (j-500) (reclient)'),
+      api.chromium.ci_build(builder_group='fake-group', builder='fake-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.reclient.properties(),
       api.properties(swarming_gtest=True),
       api.step_data('lookup GN args',

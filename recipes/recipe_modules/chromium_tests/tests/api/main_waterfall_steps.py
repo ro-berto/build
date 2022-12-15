@@ -373,15 +373,20 @@ def GenTests(api):
 
   yield api.test(
       'code_coverage_ci_bots',
-      api.chromium.ci_build(
-          builder_group='chromium.fyi', builder='linux-chromeos-code-coverage'),
+      api.chromium.generic_build(
+          builder_group='fake-group', builder='fake-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(swarm_hashes={
           'base_unittests': '[dummy hash for base_unittests/size]'
       }),
       api.code_coverage(use_clang_coverage=True),
       api.chromium_tests.read_source_side_spec(
-          'chromium.fyi', {
-              'linux-chromeos-code-coverage': {
+          'fake-group', {
+              'fake-builder': {
                   'gtest_tests': [{
                       'isolate_coverage_data': True,
                       'test': 'base_unittests',
@@ -410,8 +415,13 @@ def GenTests(api):
 
   yield api.test(
       'pgo_ci_bots',
-      api.chromium.ci_build(
-          builder_group='chromium.fyi', builder='mac-code-coverage'),
+      api.chromium.generic_build(
+          builder_group='fake-group', builder='fake-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(
           swarm_hashes={
               'performance_test_suite':
@@ -422,8 +432,8 @@ def GenTests(api):
       api.pgo(use_pgo=True),
       api.platform('mac', 64),
       api.chromium_tests.read_source_side_spec(
-          'chromium.fyi', {
-              'mac-code-coverage': {
+          'fake-group', {
+              'fake-builder': {
                   'isolated_scripts': [{
                       'name': 'performance_test_suite',
                       'isolate_coverage_data': True,
@@ -449,16 +459,29 @@ def GenTests(api):
 
   yield api.test(
       'java_code_coverage_ci_bots',
-      api.chromium.ci_build(
-          builder_group='chromium.fyi', builder='android-code-coverage'),
+      api.chromium.generic_build(
+          builder_group='fake-group', builder='fake-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+              builder_spec=ctbc.BuilderSpec.create(
+                  gclient_config='chromium',
+                  chromium_config='chromium',
+                  chromium_config_kwargs={
+                      'TARGET_PLATFORM': 'android',
+                  },
+                  android_config='main_builder_mb',
+              ),
+          ).assemble()),
       api.properties(swarm_hashes={
           'chrome_public_test_apk':
               '[dummy hash for chrome_public_test_apk/size]'
       }),
       api.code_coverage(use_java_coverage=True),
       api.chromium_tests.read_source_side_spec(
-          'chromium.fyi', {
-              'android-code-coverage': {
+          'fake-group', {
+              'fake-builder': {
                   'gtest_tests': [{
                       'isolate_coverage_data': True,
                       'test': 'chrome_public_test_apk',

@@ -15,8 +15,12 @@ from . import try_spec
 #   //infra/config/subprojects/chromium/try/tryserver.chromium.chromiumos.star
 # * tryserver.chromium.dawn
 #   //infra/config/subprojects/chromium/try/tryserver.chromium.dawn.star
+# * tryserver.chromium.mac
+#   //infra/config/subprojects/chromium/try/tryserver.chromium.mac.star
 # * tryserver.chromium.swangle
 #   //infra/config/subprojects/chromium/swangle.try.star
+# * tryserver.chromium.win
+#   //infra/config/subprojects/chromium/try/tryserver.chromium.win.star
 TRYBOTS = try_spec.TryDatabase.create({
     # The config for the following builders is now specified src-side in
     # //infra/config/subprojects/chromium/try/tryserver.chromium.android.star
@@ -49,6 +53,7 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * android-inverse-fieldtrials-pie-x86-fyi-rel
     # * android-oreo-arm64-dbg
     # * android-pie-arm64-coverage-experimental-rel
+    # * android-pie-arm64-coverage-rel
     # * android-pie-arm64-rel
     # * android-pie-arm64-wpt-rel-non-cq
     # * android-pie-x86-rel
@@ -72,11 +77,6 @@ TRYBOTS = try_spec.TryDatabase.create({
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.memory',
                 buildername='android-asan',
-            ),
-        'android-pie-arm64-coverage-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
-                buildername='android-code-coverage-native',
             ),
     },
     # The config for the following builders is now specified src-side in
@@ -112,178 +112,34 @@ TRYBOTS = try_spec.TryDatabase.create({
     # * linux_optional_gpu_tests_rel
     # * linux_vr
     # * linux-1mbu-compile-fyi-rel
+    # * linux-annotator-rel
     # * linux-bfcache-rel
+    # * linux-blink-heap-verification-try
     # * linux-dcheck-off-rel
     # * linux-extended-tracing-rel
+    # * linux-fieldtrial-rel
     # * linux-gcc-rel
+    # * linux-headless-shell-rel
     # * linux-inverse-fieldtrials-fyi-rel
+    # * linux-lacros-fyi-rel
+    # * linux-lacros-version-skew-fyi
     # * linux-mbi-mode-per-render-process-host-rel
     # * linux-mbi-mode-per-site-instance-host-rel
+    # * linux-perfetto-rel
     # * linux-rel
     # * linux-rel-warmed
+    # * linux-viz-rel
     # * linux-wayland-rel
     # * linux-webkit-msan-rel
+    # * linux-wpt-fyi-rel
+    # * linux-wpt-identity-fyi-rel
+    # * linux-wpt-input-fyi-rel
     # * network_service_linux
     'tryserver.chromium.linux': {
-        'linux-annotator-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
-                buildername='linux-annotator-rel',
-            ),
-        'linux-blink-heap-verification-try':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
-                buildername='linux-blink-heap-verification',
-            ),
-        'linux-headless-shell-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
-                buildername='linux-headless-shell-rel',
-            ),
-        'linux-fieldtrial-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
-                buildername='linux-fieldtrial-rel',
-            ),
-        'linux-perfetto-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
-                buildername='linux-perfetto-rel',
-            ),
-        'linux-viz-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
-                buildername='Linux Viz',
-            ),
         'leak_detection_linux':
             try_spec.TrySpec.create_for_single_mirror(
                 builder_group='chromium.linux',
                 buildername='Leak Detection Linux',
-            ),
-        'linux-lacros-fyi-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
-                buildername='linux-lacros-builder-fyi-rel',
-                tester='linux-lacros-tester-fyi-rel',
-            ),
-        'linux-lacros-version-skew-fyi':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
-                buildername='linux-lacros-version-skew-fyi',
-            ),
-        'linux-wpt-fyi-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
-                buildername='linux-wpt-fyi-rel',
-            ),
-        'linux-wpt-identity-fyi-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
-                buildername='linux-wpt-identity-fyi-rel',
-            ),
-        'linux-wpt-input-fyi-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
-                buildername='linux-wpt-input-fyi-rel',
-            ),
-    },
-    # The config for the following builders is now specified src-side in
-    # //infra/config/subprojects/chromium/try/tryserver.chromium.mac.star
-    # * gpu-fyi-try-mac-arm64-apple-m1-rel
-    # * gpu-try-mac-amd-retina-dbg
-    # * gpu-try-mac-intel-dbg
-    # * ios-asan
-    # * ios-catalyst
-    # * ios-device
-    # * ios-simulator
-    # * ios-simulator-cronet
-    # * ios-simulator-full-configs
-    # * ios-simulator-inverse-fieldtrials-fyi
-    # * ios-simulator-noncq
-    # * ios-simulator-rts
-    # * mac_chromium_10.11_rel_ng
-    # * mac_chromium_10.12_rel_ng
-    # * mac_chromium_10.13_rel_ng
-    # * mac_chromium_10.14_rel_ng
-    # * mac_chromium_10.15_rel_ng
-    # * mac_chromium_11.0_rel_ng
-    # * mac_chromium_archive_rel_ng
-    # * mac_chromium_asan_rel_ng
-    # * mac_chromium_compile_dbg_ng
-    # * mac_chromium_dbg_ng
-    # * mac-arm64-on-arm64-rel
-    # * mac-inverse-fieldtrials-fyi-rel
-    # * mac-osxbeta-rel
-    # * mac-rel
-    # * mac11-arm64-rel
-    # * mac_optional_gpu_tests_rel
-    #
-    # The config for the following builders is now specified src-side in
-    # //infra/config/subprojects/chromium/gpu.try.star
-    # * gpu-fyi-try-mac-amd-pro-rel
-    # * gpu-fyi-try-mac-amd-retina-asan
-    # * gpu-fyi-try-mac-amd-retina-dbg
-    # * gpu-fyi-try-mac-amd-retina-exp
-    # * gpu-fyi-try-mac-amd-retina-rel
-    # * gpu-fyi-try-mac-intel-asan
-    # * gpu-fyi-try-mac-intel-dbg
-    # * gpu-fyi-try-mac-intel-exp
-    # * gpu-fyi-try-mac-intel-rel
-    # * gpu-fyi-try-mac-nvidia-retina-exp
-    # * gpu-fyi-try-mac-nvidia-retina-rel
-    'tryserver.chromium.mac': {
-        'ios-simulator-multi-window':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
-                buildername='ios-simulator-multi-window',
-            ),
-        'ios15-beta-simulator':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
-                buildername='ios15-beta-simulator',
-            ),
-        'ios15-sdk-simulator':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
-                buildername='ios15-sdk-simulator',
-            ),
-        'mac-builder-next-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
-                buildername='Mac Builder Next',
-            ),
-    },
-    # The config for the following builders is now specified src-side in
-    # //infra/config/subprojects/chromium/try/tryserver.chromium.win.star
-    # * win_archive
-    # * win_chromium_compile_dbg_ng
-    # * win_chromium_compile_rel_ng
-    # * win_chromium_x64_rel_ng
-    # * win_optional_gpu_tests_rel
-    # * win_x64_archive
-    # * win-asan
-    # * win10_chromium_inverse_fieldtrials_x64_fyi_rel_ng
-    # * win10_chromium_x64_dbg_ng
-    # * win10_chromium_x64_rel_ng
-    # * win11-x64-fyi-rel
-    # * win7-rel
-    #
-    # The config for the following builders is now specified src-side in
-    # //infra/config/subprojects/chromium/gpu.try.star
-    # * gpu-fyi-try-win10-amd-rel-64
-    # * gpu-fyi-try-win10-intel-exp-64
-    # * gpu-fyi-try-win10-intel-rel-64
-    # * gpu-fyi-try-win10-nvidia-dbg-64
-    # * gpu-fyi-try-win10-nvidia-dx12vk-dbg-64
-    # * gpu-fyi-try-win10-nvidia-dx12vk-rel-64
-    # * gpu-fyi-try-win10-nvidia-exp-64
-    # * gpu-fyi-try-win10-nvidia-rel-32
-    # * gpu-fyi-try-win10-nvidia-rel-64
-    'tryserver.chromium.win': {
-        'win-annotator-rel':
-            try_spec.TrySpec.create_for_single_mirror(
-                builder_group='chromium.fyi',
-                buildername='win-annotator-rel',
             ),
     },
     # Rust language bots

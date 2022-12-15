@@ -106,7 +106,12 @@ def GenTests(api):
   yield api.test(
       'basic',
       api.chromium.generic_build(
-          builder_group='chromium.fyi', builder='linux-chromeos-code-coverage'),
+          builder_group='fake-group', builder='fake-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.code_coverage(use_clang_coverage=True),
       api.post_process(post_process.MustRunRE, 'ensure profile dir for .*',
                        _NUM_TESTS, _NUM_TESTS),
@@ -156,7 +161,12 @@ def GenTests(api):
   yield api.test(
       'with_exclusions_module_property',
       api.chromium.generic_build(
-          builder_group='chromium.fyi', builder='linux-chromeos-code-coverage'),
+          builder_group='fake-group', builder='fake-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.code_coverage(
           use_clang_coverage=True,
           coverage_exclude_sources='ios_test_files_and_test_utils'),
@@ -167,7 +177,12 @@ def GenTests(api):
   yield api.test(
       'with_exclusions',
       api.chromium.generic_build(
-          builder_group='chromium.fyi', builder='linux-chromeos-code-coverage'),
+          builder_group='fake-group', builder='fake-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.code_coverage(
           use_clang_coverage=True, coverage_exclude_sources='all_test_files'),
       api.post_process(post_process.StatusSuccess),
@@ -177,7 +192,12 @@ def GenTests(api):
   yield api.test(
       'zoss_upload_llvm',
       api.chromium.generic_build(
-          builder_group='chromium.fyi', builder='linux-code-coverage'),
+          builder_group='fake-group', builder='fake-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.code_coverage(use_clang_coverage=True, export_coverage_to_zoss=True),
       api.post_process(post_process.MustRun, (
           'process clang code coverage data for overall test coverage.generate '
@@ -201,7 +221,12 @@ def GenTests(api):
   yield api.test(
       'zoss_upload_jacoco',
       api.chromium.generic_build(
-          builder_group='chromium.fyi', builder='android-code-coverage'),
+          builder_group='fake-group', builder='fake-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.code_coverage(use_java_coverage=True, export_coverage_to_zoss=True),
       api.post_process(
           post_process.MustRun,
@@ -444,7 +469,12 @@ def GenTests(api):
   yield api.test(
       'merge errors',
       api.chromium.generic_build(
-          builder_group='chromium.fyi', builder='linux-code-coverage'),
+          builder_group='fake-group', builder='fake-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.code_coverage(use_clang_coverage=True),
       api.override_step_data(
           'process clang code coverage data for overall test coverage.Finding '
@@ -509,7 +539,12 @@ def GenTests(api):
   yield api.test(
       'raise failure for full-codebase coverage',
       api.chromium.generic_build(
-          builder_group='chromium.fyi', builder='linux-code-coverage'),
+          builder_group='fake-group', builder='fake-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.code_coverage(use_clang_coverage=True),
       api.step_data((
           'process clang code coverage data for overall test coverage.generate '
@@ -554,7 +589,12 @@ def GenTests(api):
   yield api.test(
       'merged profdata does not exist',
       api.chromium.generic_build(
-          builder_group='chromium.fyi', builder='linux-code-coverage'),
+          builder_group='fake-group', builder='fake-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.code_coverage(use_clang_coverage=True),
       api.properties(mock_merged_profdata=False),
       api.post_process(
@@ -568,7 +608,12 @@ def GenTests(api):
   yield api.test(
       'upload to custom gs bucket',
       api.chromium.generic_build(
-          builder_group='chromium.fyi', builder='linux-code-coverage'),
+          builder_group='fake-group', builder='fake-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.code_coverage(
           use_clang_coverage=True, coverage_gs_bucket="code-coverage"),
       api.post_process(
@@ -582,7 +627,12 @@ def GenTests(api):
   yield api.test(
       'process java coverage for full-codebase',
       api.chromium.generic_build(
-          builder_group='chromium.fyi', builder='android-code-coverage'),
+          builder_group='fake-group', builder='fake-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.code_coverage(use_java_coverage=True, generate_blame_list=True),
       api.post_process(
           post_process.MustRun, 'process java coverage (overall).'
@@ -601,7 +651,12 @@ def GenTests(api):
   yield api.test(
       'process java coverage for full-codebase dual coverage',
       api.chromium.generic_build(
-          builder_group='chromium.fyi', builder='android-code-coverage'),
+          builder_group='fake-group', builder='fake-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.code_coverage(
           use_java_coverage=True, coverage_test_types=['unit', 'overall']),
       api.post_process(
@@ -692,7 +747,12 @@ def GenTests(api):
   yield api.test(
       'raise failure for java full-codebase coverage',
       api.chromium.generic_build(
-          builder_group='chromium.fyi', builder='android-code-coverage'),
+          builder_group='fake-group', builder='fake-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.code_coverage(use_java_coverage=True),
       api.step_data(
           'process java coverage (overall).Generate Java coverage metadata',
@@ -731,7 +791,20 @@ def GenTests(api):
   yield api.test(
       'android native code coverage CI',
       api.chromium.generic_build(
-          builder_group='chromium.fyi', builder='android-code-coverage-native'),
+          builder_group='fake-group', builder='fake-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+              builder_spec=ctbc.BuilderSpec.create(
+                  gclient_config='chromium',
+                  chromium_config='chromium',
+                  chromium_config_kwargs={
+                      'TARGET_PLATFORM': 'android',
+                  },
+                  android_config='main_builder_mb',
+              ),
+          ).assemble()),
       api.code_coverage(use_clang_coverage=True),
       api.step_data(
           'process clang code coverage data for overall test coverage.'
@@ -783,7 +856,19 @@ def GenTests(api):
   yield api.test(
       'Fuchsia code coverage CI',
       api.chromium.generic_build(
-          builder_group='chromium.fyi', builder='fuchsia-code-coverage'),
+          builder_group='fake-group', builder='fake-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+              builder_spec=ctbc.BuilderSpec.create(
+                  gclient_config='chromium',
+                  chromium_config='chromium',
+                  chromium_config_kwargs={
+                      'TARGET_PLATFORM': 'fuchsia',
+                  },
+              ),
+          ).assemble()),
       api.code_coverage(use_clang_coverage=True),
       api.step_data(
           'process clang code coverage data for overall test coverage.'
@@ -834,7 +919,24 @@ def GenTests(api):
   yield api.test(
       'iOS code coverage CI',
       api.chromium.generic_build(
-          builder_group='chromium.fyi', builder='ios-simulator-code-coverage'),
+          builder_group='fake-group', builder='fake-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+              builder_spec=ctbc.BuilderSpec.create(
+                  gclient_config='ios',
+                  gclient_apply_config=['use_clang_coverage'],
+                  chromium_config='chromium',
+                  chromium_apply_config=['mb', 'mac_toolchain'],
+                  chromium_config_kwargs={
+                      'BUILD_CONFIG': 'Debug',
+                      'TARGET_BITS': 64,
+                      'TARGET_PLATFORM': 'ios',
+                  },
+              ),
+          ).assemble()),
+      api.platform.name('mac'),
       api.code_coverage(use_clang_coverage=True),
       api.post_process(post_process.MustRunRE, 'ensure profile dir for .*',
                        _NUM_TESTS, _NUM_TESTS),
@@ -960,7 +1062,12 @@ def GenTests(api):
   yield api.test(
       'raise failure for unsupported test type',
       api.chromium.generic_build(
-          builder_group='chromium.fyi', builder='linux-code-coverage'),
+          builder_group='fake-group', builder='fake-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.code_coverage(
           use_clang_coverage=True,
           coverage_test_types=['unsupportedtest', 'overall']),
@@ -1084,7 +1191,12 @@ def GenTests(api):
   yield api.test(
       'basic_led',
       api.chromium.generic_build(
-          builder_group='chromium.fyi', builder='linux-chromeos-code-coverage'),
+          builder_group='fake-group', builder='fake-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.properties(**{
           '$recipe_engine/led': InputProperties(led_run_id='some-led-run'),
       }),
@@ -1092,8 +1204,7 @@ def GenTests(api):
       api.code_coverage(use_clang_coverage=True),
       api.post_check(lambda check, steps: check('some-task-id' in steps[
           'process clang code coverage data for overall test coverage.gsutil '
-          'upload coverage metadata'
-      ].cmd[-1])),
+          'upload coverage metadata'].cmd[-1])),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -1101,7 +1212,12 @@ def GenTests(api):
   yield api.test(
       'custom build dir',
       api.chromium.generic_build(
-          builder_group='chromium.fyi', builder='linux-code-coverage'),
+          builder_group='fake-group', builder='fake-builder'),
+      ctbc_api.properties(
+          ctbc_api.properties_assembler_for_ci_builder(
+              builder_group='fake-group',
+              builder='fake-builder',
+          ).assemble()),
       api.code_coverage(use_clang_coverage=True),
       api.properties(build_dir='my/custom/build/dir'),
       api.post_process(
