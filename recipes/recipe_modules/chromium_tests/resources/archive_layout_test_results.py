@@ -124,6 +124,11 @@ def archive_layout(args):
 
   start = time.time()
   file_to_archive = 'full_results_jsonp.js'
+  if args.task_ids:
+    task_ids = args.task_ids.split(',')
+    data = "\nSET_TASK_IDS(['" + "','".join(task_ids) + "']);"
+    with open(os.path.join(args.results_dir, file_to_archive), "a") as f:
+      f.write(data)
   print(f"Archive {file_to_archive}...")
   rc = bot_utils.GSUtilCopy(
       os.path.join(args.results_dir, file_to_archive),
@@ -241,6 +246,7 @@ def _ParseArgs():
       help='Directory to use for staging the archives. '
       'Default behavior is to automatically detect '
       'slave\'s build directory.')
+  parser.add_argument('--task-ids', help='Task ids used in this test step.')
   bot_utils_callback = bot_utils.AddArgs(parser)
 
   args = parser.parse_args()

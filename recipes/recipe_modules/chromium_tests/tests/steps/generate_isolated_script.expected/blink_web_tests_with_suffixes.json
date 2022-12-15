@@ -353,6 +353,8 @@
       "--revision",
       "2d72510e447ab60a9728aeea2362d8be2cbd7789",
       "--store-latest",
+      "--task-ids",
+      "0",
       "--step-name",
       "blink_web_tests",
       "--bot-utils-gsutil-py-path",
@@ -373,8 +375,9 @@
     },
     "name": "archive results for blink_web_tests",
     "~followup_annotations": [
-      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/test-builder/571/blink_web_tests/layout-test-results/results.html@@@",
-      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/test-builder/571/blink_web_tests/layout-test-results.zip@@@"
+      "@@@STEP_LINK@web_test_results@https://chromium-layout-test-archives.storage.googleapis.com/results.html?json=test-builder/571/blink_web_tests/full_results_jsonp.js@@@",
+      "@@@STEP_LINK@layout_test_results (to be deprecated)@https://test-results.appspot.com/data/layout_results/test-builder/571/blink_web_tests/layout-test-results/results.html@@@",
+      "@@@STEP_LINK@(zip) (to be deprecated)@https://test-results.appspot.com/data/layout_results/test-builder/571/blink_web_tests/layout-test-results.zip@@@"
     ]
   },
   {

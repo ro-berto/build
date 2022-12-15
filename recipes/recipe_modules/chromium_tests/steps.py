@@ -1788,13 +1788,17 @@ def _clean_step_name(step_name, suffix):
   return _add_suffix(step_name, suffix)
 
 
-def _archive_layout_test_results(api, step_name, step_suffix=None):
+def _archive_layout_test_results(api,
+                                 step_name,
+                                 step_suffix=None,
+                                 swarm_task_ids=None):
   # LayoutTest's special archive and upload results
   results_dir = api.path['start_dir'].join('layout-test-results')
 
   buildername = api.buildbucket.builder_name
   buildnumber = api.buildbucket.build.number
 
+  gcs_bucket = 'chromium-layout-test-archives'
   cmd = [
       'python3',
       api.chromium_tests.resource('archive_layout_test_results.py'),
@@ -1807,7 +1811,7 @@ def _archive_layout_test_results(api, step_name, step_suffix=None):
       '--builder-name',
       buildername,
       '--gs-bucket',
-      'gs://chromium-layout-test-archives',
+      f'gs://{gcs_bucket}',
       '--staging-dir',
       api.path['cache'].join('chrome_staging'),
       '--revision',
@@ -1815,6 +1819,8 @@ def _archive_layout_test_results(api, step_name, step_suffix=None):
   ]
   if not api.tryserver.is_tryserver:
     cmd.append('--store-latest')
+  if swarm_task_ids:
+    cmd.extend(['--task-ids', ','.join(swarm_task_ids)])
 
   # TODO: The naming of the archive step is clunky, but the step should
   # really be triggered src-side as part of the post-collect merge and
@@ -1828,14 +1834,26 @@ def _archive_layout_test_results(api, step_name, step_suffix=None):
 
   # TODO(tansell): Move this to render_results function
   sanitized_buildername = re.sub('[ .()]', '_', buildername)
+
+  # Also link the new version of results.html which would fetch test results
+  # from result DB. It will have parameters in following format:
+  # ?json=<full_results_jsonp.js>
+  base = f"https://{gcs_bucket}.storage.googleapis.com/results.html"
+  path_full_results_jsonp = "%s/%s/%s/full_results_jsonp.js" % (
+      sanitized_buildername, buildnumber, urllib.parse.quote(step_name))
+  web_test_results = f"{base}?json={path_full_results_jsonp}"
+  archive_result.presentation.links['web_test_results'] = web_test_results
+
   base = ("https://test-results.appspot.com/data/layout_results/%s/%s" %
           (sanitized_buildername, buildnumber))
   base += '/' + urllib.parse.quote(step_name)
 
-  archive_result.presentation.links['layout_test_results'] = (
-      base + '/layout-test-results/results.html')
-  archive_result.presentation.links['(zip)'] = (
+  archive_result.presentation.links[
+      'layout_test_results (to be deprecated)'] = (
+          base + '/layout-test-results/results.html')
+  archive_result.presentation.links['(zip) (to be deprecated)'] = (
       base + '/layout-test-results.zip')
+
   return base + '/layout-test-results/results.html'
 
 
@@ -2612,8 +2630,12 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
 
     if results and self.spec.results_handler_name == 'layout tests':
       upload_step_name = '.'.join(step_result.name_tokens)
+      swarm_task_ids = self._tasks[suffix].get_task_ids()
       _archive_layout_test_results(
-          self.api.m, upload_step_name, step_suffix=suffix)
+          self.api.m,
+          upload_step_name,
+          step_suffix=suffix,
+          swarm_task_ids=swarm_task_ids)
     return step_result
 
 
