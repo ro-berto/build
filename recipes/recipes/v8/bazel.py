@@ -12,6 +12,7 @@ DEPS = [
   'chromium',
   'depot_tools/gclient',
   'recipe_engine/context',
+  'recipe_engine/file',
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/step',
@@ -33,6 +34,12 @@ def RunSteps(api):
       cwd=api.path['checkout'],
       env={'BAZEL_COMPILER': 'clang', 'CC': clang_bin, 'CXX': clang_xx_bin},
       env_prefixes={'PATH': [clang, api.v8.depot_tools_path]}):
+
+    # TODO(https://crbug.com/v8/13515): Temporarily clobber the output
+    # directory to avoid incremental build problems.
+    api.file.rmtree('Clobber bin dir', api.path['checkout'].join('bazel-bin'))
+    api.file.rmtree('Clobber out dir', api.path['checkout'].join('bazel-out'))
+
     try:
       api.step(
           'Bazel build',
