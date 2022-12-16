@@ -773,7 +773,8 @@
       "cannot migrate builder 'chromium.perf:mac-arm-builder-perf-pgo' with the following unsupported attrs:\n* bisect_archive_build\n* bisect_gs_bucket\n* bisect_gs_extra"
     ],
     "builders": [
-      "chromium.perf:mac-arm-builder-perf-pgo"
+      "chromium.perf:mac-arm-builder-perf-pgo",
+      "chromium.perf:mac-m1_mini_2020-perf-pgo"
     ]
   },
   "chromium.perf:mac-builder-perf": {
@@ -851,6 +852,15 @@
     "builders": [
       "chromium.perf:mac-arm-builder-perf",
       "chromium.perf:mac-m1_mini_2020-perf"
+    ]
+  },
+  "chromium.perf:mac-m1_mini_2020-perf-pgo": {
+    "blockers": [
+      "cannot migrate builder 'chromium.perf:mac-arm-builder-perf-pgo' with the following unsupported attrs:\n* bisect_archive_build\n* bisect_gs_bucket\n* bisect_gs_extra"
+    ],
+    "builders": [
+      "chromium.perf:mac-arm-builder-perf-pgo",
+      "chromium.perf:mac-m1_mini_2020-perf-pgo"
     ]
   },
   "chromium.perf:win-10-perf": {
