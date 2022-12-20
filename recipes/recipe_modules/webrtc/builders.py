@@ -539,38 +539,6 @@ _CLIENT_WEBRTC_SPEC = {
 }
 
 _CLIENT_WEBRTC_PERF_SPECS = {
-    'Perf Android32 (M AOSP Nexus6)':
-        WebRTCBuilderSpec.create(
-            perf_id='webrtc-android-tests-nexus6-mob30k',
-            chromium_config='webrtc_default',
-            android_config='webrtc',
-            gclient_config='webrtc',
-            gclient_apply_config=['android'],
-            execution_mode=builder_spec.TEST,
-            parent_builder_group='client.webrtc',
-            parent_buildername='Android32 Builder arm',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_PLATFORM': 'android',
-                'TARGET_ARCH': 'arm',
-                'TARGET_BITS': 32,
-            }),
-    'Perf Android32 (M Nexus5)':
-        WebRTCBuilderSpec.create(
-            perf_id='webrtc-android-tests-nexus5-marshmallow',
-            chromium_config='webrtc_default',
-            android_config='webrtc',
-            gclient_config='webrtc',
-            gclient_apply_config=['android'],
-            execution_mode=builder_spec.TEST,
-            parent_builder_group='client.webrtc',
-            parent_buildername='Android32 Builder arm',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_PLATFORM': 'android',
-                'TARGET_ARCH': 'arm',
-                'TARGET_BITS': 32,
-            }),
     'Perf Android32 (O Pixel2)':
         WebRTCBuilderSpec.create(
             perf_id='android32-pixel2-oreo',
@@ -602,22 +570,6 @@ _CLIENT_WEBRTC_PERF_SPECS = {
                 'TARGET_PLATFORM': 'android',
                 'TARGET_ARCH': 'arm',
                 'TARGET_BITS': 32,
-            }),
-    'Perf Android64 (M Nexus5X)':
-        WebRTCBuilderSpec.create(
-            perf_id='webrtc-android-tests-nexus5x-marshmallow',
-            chromium_config='webrtc_default',
-            android_config='webrtc',
-            gclient_config='webrtc',
-            gclient_apply_config=['android'],
-            execution_mode=builder_spec.TEST,
-            parent_builder_group='client.webrtc',
-            parent_buildername='Android64 Builder arm64',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_PLATFORM': 'android',
-                'TARGET_ARCH': 'arm',
-                'TARGET_BITS': 64,
             }),
     'Perf Android64 (O Pixel2)':
         WebRTCBuilderSpec.create(
