@@ -5,19 +5,44 @@
 import contextlib
 import itertools
 import json
+from hashlib import md5
 from urllib.parse import quote
 
 from RECIPE_MODULES.build import chromium_swarming
 from recipe_engine.engine_types import freeze
 
 MONORAIL_SEARCH_BUGS_TEMPLATE = (
-    'https://bugs.chromium.org/p/v8/issues/list?q="%(name)s"+label:%(label)s'
+    'https://bugs.chromium.org/p/v8/issues/list?q=("%(name)s"'
+    ' OR "%(crash_analysis_hash)s")+label:%(label)s'
     ' -status:Fixed -status:Verified&can=1')
+
+MONORAIL_FILE_BUG_DESCRIPTION = '''
+Failing test: %(name)s
+Failure link: %(build_link)s
+%(footer)s
+Suspected commit: <insert>
+
+Crash type:
+```
+%(crash_type)s
+```
+
+Crash state:
+```
+%(crash_state)s
+```
+
+Error summary:
+```
+%(stderr)s
+```
+
+Crash analysis hash: %(crash_analysis_hash)s'''.replace('\n', '%%0A').replace(
+    ' ', '+')
 
 MONORAIL_FILE_BUG_TEMPLATE = (
     'https://bugs.chromium.org/p/v8/issues/entry?template=%(template)s&'
-    'summary=%(name)s+%(title)s&description=Failing+test:+%(name)s%%0A'
-    'Failure+link:+%(build_link)s%%0A%(footer)s')
+    'summary=%(name)s+%(title)s&description=' + MONORAIL_FILE_BUG_DESCRIPTION)
 
 FLAKO_LINK_TEMPLATE = 'Link+to+Flako+run:+%3Cinsert%3E'
 
@@ -987,7 +1012,15 @@ class Failure:
       link_params = FLAKE_BUG_DEFAULTS
     else:
       link_params = FAILURE_BUG_DEFAULTS
-    return dict(link_params, name=self.name, build_link=build_link)
+    return dict(
+        link_params,
+        name=self.name,
+        build_link=build_link,
+        crash_type=self.crash_type,
+        crash_state=self.crash_state,
+        stderr=self.stderr,
+        crash_analysis_hash=md5((self.crash_type + self.crash_state +
+                                 '1').encode('utf-8')).hexdigest())
 
   @property
   def failure_dict(self):
@@ -1004,6 +1037,18 @@ class Failure:
   @property
   def name(self):
     return self.failure_dict['name']
+
+  @property
+  def stderr(self):
+    return self.failure_dict.get('stderr')
+
+  @property
+  def crash_type(self):
+    return self.failure_dict.get('crash_type')
+
+  @property
+  def crash_state(self):
+    return self.failure_dict.get('crash_state')
 
   @property
   def test_step_config(self):
