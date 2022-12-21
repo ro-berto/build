@@ -988,7 +988,6 @@ def GenTests(api):
         'client.v8',
         'V8 Foobar',
         'specific_isolated_file',
-        experiments=['v8.resultdb'],
     ) +
     api.v8.test_spec_in_checkout(
         'V8 Foobar',
