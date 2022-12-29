@@ -5,41 +5,55 @@
 import contextlib
 import itertools
 import json
-from urllib.parse import quote
+from hashlib import md5
+from requests.models import PreparedRequest
 
 from RECIPE_MODULES.build import chromium_swarming
 from recipe_engine.engine_types import freeze
 
-MONORAIL_SEARCH_BUGS_TEMPLATE = (
-    'https://bugs.chromium.org/p/v8/issues/list?q="%(name)s"+label:%(label)s'
-    ' -status:Fixed -status:Verified&can=1')
+MONORAIL_SEARCH_BUGS_TEMPLATE = 'https://bugs.chromium.org/p/v8/issues/list'
 
-MONORAIL_FILE_BUG_TEMPLATE = (
-    'https://bugs.chromium.org/p/v8/issues/entry?template=%(template)s&'
-    'summary=%(name)s+%(title)s&description=Failing+test:+%(name)s%%0A'
-    'Failure+link:+%(build_link)s%%0A%(footer)s')
+MONORAIL_FILE_BUG_DESCRIPTION = '''
+Failing test: {name}
+Failure link: {build_link}
+{footer}
+Suspected commit: <insert>
+'''
 
-FLAKO_LINK_TEMPLATE = 'Link+to+Flako+run:+%3Cinsert%3E'
+MONORAIL_CRASH_DESCRIPTION = '''
+Crash type: {crash_type}
+
+Crash state:
+{crash_state}
+
+Error summary:
+{stderr}
+
+Crash analysis hash: {crash_analysis_hash}'''
+
+MONORAIL_FILE_BUG_TEMPLATE = 'https://bugs.chromium.org/p/v8/issues/entry'
+
+FLAKO_LINK_TEMPLATE = 'Link to Flako run: <insert>'
 
 FAILURE_BUG_DEFAULTS = {
-  'template': 'Report+failing+test',
-  'title': 'starts+failing',
-  'footer': '',
-  'label':  'Hotlist-Failure',
+    'template': 'Report failing test',
+    'title': 'starts failing',
+    'footer': '',
+    'label': 'Hotlist-Failure',
 }
 
 FLAKE_BUG_DEFAULTS = {
-  'template': 'Report+flaky+test',
-  'title': 'starts+flaking',
-  'footer': FLAKO_LINK_TEMPLATE,
-  'label':  'Hotlist-Flake',
+    'template': 'Report flaky test',
+    'title': 'starts flaking',
+    'footer': FLAKO_LINK_TEMPLATE,
+    'label': 'Hotlist-Flake',
 }
 
 FLAGFUZZ_BUG_DEFAULTS = {
-  'template': 'Report+flag-fuzzer+failure',
-  'title': 'starts+failing+%28flag+fuzzer%29',
-  'footer': FLAKO_LINK_TEMPLATE,
-  'label':  'Hotlist-FlagFuzz',
+    'template': 'Report flag-fuzzer failure',
+    'title': 'starts failing (flag fuzzer)',
+    'footer': FLAKO_LINK_TEMPLATE,
+    'label': 'Hotlist-FlagFuzz',
 }
 
 MAX_BUG_LINKS = 5
@@ -375,14 +389,34 @@ class V8Test(BaseTest):
   def _add_bug_links(self, failures, presentation):
     """Adds links to search/file bugs for up to MAX_BUG_LINKS tests."""
     for failure in failures[:MAX_BUG_LINKS]:
+      link = PreparedRequest()
       ui_label = self.api.v8_tests.ui_test_label(failure.name)
       link_params = failure.get_monorail_params(
-          quote(self.api.buildbucket.build_url()))
+          self.api.buildbucket.build_url())
 
-      presentation.links['%s (bugs)' % ui_label] = (
-          MONORAIL_SEARCH_BUGS_TEMPLATE % link_params)
-      presentation.links['%s (new)' % ui_label] = (
-          MONORAIL_FILE_BUG_TEMPLATE % link_params)
+      search_query = ' label:{label} -status:Fixed -status:Verified'
+      bug_description = MONORAIL_FILE_BUG_DESCRIPTION
+      if link_params['crash_state']:
+        search_query = '("{name}" OR {crash_analysis_hash})' + search_query
+        bug_description += MONORAIL_CRASH_DESCRIPTION
+      else:
+        search_query = '"{name}"' + search_query
+
+      bug_search_link_params = {
+          'q': search_query.format(**link_params),
+          'can': '1'
+      }
+
+      bug_file_link_params = {
+          'template': link_params["template"],
+          'summary': f'{link_params["name"]} {link_params["title"]}',
+          'description': bug_description.format(**link_params),
+      }
+
+      link.prepare_url(MONORAIL_SEARCH_BUGS_TEMPLATE, bug_search_link_params)
+      presentation.links['%s (bugs)' % ui_label] = link.url
+      link.prepare_url(MONORAIL_FILE_BUG_TEMPLATE, bug_file_link_params)
+      presentation.links['%s (new)' % ui_label] = link.url
     if len(failures) > MAX_BUG_LINKS:
       presentation.step_text += (
           'too many failures, only showing some links below<br/>')
@@ -987,7 +1021,15 @@ class Failure:
       link_params = FLAKE_BUG_DEFAULTS
     else:
       link_params = FAILURE_BUG_DEFAULTS
-    return dict(link_params, name=self.name, build_link=build_link)
+    return dict(
+        link_params,
+        name=self.name,
+        build_link=build_link,
+        crash_type=self.crash_type,
+        crash_state=self.crash_state,
+        stderr=self.stderr,
+        crash_analysis_hash=md5((self.crash_type + self.crash_state +
+                                 '1').encode('utf-8')).hexdigest())
 
   @property
   def failure_dict(self):
@@ -1004,6 +1046,18 @@ class Failure:
   @property
   def name(self):
     return self.failure_dict['name']
+
+  @property
+  def stderr(self):
+    return self.failure_dict.get('stderr')
+
+  @property
+  def crash_type(self):
+    return self.failure_dict.get('crash_type')
+
+  @property
+  def crash_state(self):
+    return self.failure_dict.get('crash_state')
 
   @property
   def test_step_config(self):
