@@ -743,6 +743,37 @@ def GenTests(api):
   archive_data = properties.ArchiveData()
   archive_data.dirs.extend(['anydir'])
   archive_data.gcs_bucket = 'any-bucket'
+  archive_data.gcs_path = 'x86/{%position%}/chrome'
+  archive_data.archive_type = properties.ArchiveData.ARCHIVE_TYPE_ZIP
+  archive_data.latest_upload.gcs_path = "x86/latest/latest.txt"
+  archive_data.latest_upload.gcs_file_content = \
+      '{%chromium_version%}'
+  archive_data.latest_upload.gcs_bucket = '{%latest_gcs_bucket%}'
+  input_properties.archive_datas.extend([archive_data])
+
+  yield api.test(
+      'generic_archive_with_custom_var_latest_gcs_bucket',
+      api.properties(
+          gcs_archive=True,
+          update_properties={
+              'got_revision': TEST_HASH_MAIN,
+              'got_revision_cp': TEST_COMMIT_POSITON_MAIN,
+          },
+          custom_vars={
+              'latest_gcs_bucket': 'foo-latest',
+          },
+          **{'$build/archive': input_properties}),
+      api.post_process(
+          post_process.StepCommandContains,
+          'Generic Archiving Steps.gsutil upload foo-latest/x86/latest/latest.txt',
+          ['gs://foo-latest/x86/latest/latest.txt']),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  input_properties = properties.InputProperties()
+  archive_data = properties.ArchiveData()
+  archive_data.dirs.extend(['anydir'])
+  archive_data.gcs_bucket = 'any-bucket'
   archive_data.gcs_path = 'dest_dir/'
   archive_data.archive_type = properties.ArchiveData.ARCHIVE_TYPE_RECURSIVE
   input_properties.archive_datas.extend([archive_data])

@@ -1098,7 +1098,9 @@ class ArchiveApi(recipe_api.RecipeApi):
           archive_data.latest_upload.gcs_file_content)
 
       if archive_data.latest_upload.gcs_bucket:
-        latest_gcs_bucket = archive_data.latest_upload.gcs_bucket
+        latest_gcs_bucket = self._replace_placeholders(
+            update_properties, custom_vars,
+            archive_data.latest_upload.gcs_bucket)
       else:
         latest_gcs_bucket = gcs_bucket
 

@@ -16,6 +16,7 @@ message LatestFile {
   // |ArchiveData.gcs_bucket|.
   // If set, latest file will be uploaded to a separate bucket that other
   // archives.
+  // This supports the same string substitutions as |ArchiveData.gcs_path|.
   string gcs_bucket = 3;
 }
 
