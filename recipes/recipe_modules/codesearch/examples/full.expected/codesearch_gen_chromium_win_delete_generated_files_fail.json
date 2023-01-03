@@ -327,161 +327,6 @@
   },
   {
     "cmd": [
-      "python3",
-      "-u",
-      "[START_DIR]/src/tools/mb/mb.py",
-      "lookup",
-      "-m",
-      "chromium.linux",
-      "-b",
-      "codesearch-gen-chromium-win",
-      "--config-file",
-      "[START_DIR]/src/tools/mb/mb_config.pyl",
-      "--goma-dir",
-      "[CACHE]/goma/client",
-      "--quiet"
-    ],
-    "cwd": "[START_DIR]/src",
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_USE_LOCAL": "false"
-    },
-    "luci_context": {
-      "realm": {
-        "name": "chromium:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "lookup GN args",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python3",
-      "-u",
-      "[START_DIR]/src/tools/mb/mb.py",
-      "gen",
-      "-m",
-      "chromium.linux",
-      "-b",
-      "codesearch-gen-chromium-win",
-      "--config-file",
-      "[START_DIR]/src/tools/mb/mb_config.pyl",
-      "--goma-dir",
-      "[CACHE]/goma/client",
-      "--json-output",
-      "/path/to/tmp/json",
-      "[START_DIR]/src/out/win-Debug"
-    ],
-    "cwd": "[START_DIR]/src",
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_USE_LOCAL": "false"
-    },
-    "luci_context": {
-      "realm": {
-        "name": "chromium:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "generate build files",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
-      "@@@STEP_LOG_END@json.output[failure_summary]@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python3",
-      "-u",
-      "[START_DIR]/src/tools/clang/scripts/generate_compdb.py",
-      "-p",
-      "[START_DIR]/src/out/win-Debug",
-      "-o",
-      "[START_DIR]/src/out/win-Debug/compile_commands.json",
-      "all"
-    ],
-    "luci_context": {
-      "realm": {
-        "name": "chromium:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "generate compilation database"
-  },
-  {
-    "cmd": [
-      "python3",
-      "-u",
-      "RECIPE_REPO[depot_tools]/gn.py",
-      "desc",
-      "[START_DIR]/src/out/win-Debug",
-      "*",
-      "--format=json"
-    ],
-    "cwd": "[START_DIR]/src",
-    "luci_context": {
-      "realm": {
-        "name": "chromium:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "generate gn target list"
-  },
-  {
-    "cmd": [
-      "vpython3",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "",
-      "[START_DIR]/src/out/win-Debug/gn_targets.json"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "chromium:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "write gn target list"
-  },
-  {
-    "cmd": [
       "forfiles",
       "/p",
       "[START_DIR]/src/out",
@@ -1154,7 +999,7 @@
       "----",
       "cp",
       "[START_DIR]/src/out/win-Debug/chromium_win.kzip",
-      "gs://chrome-codesearch/prod/chromium_win_170242_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa+1337000000.kzip"
+      "gs://chrome-codesearch/prod/chromium_win_123_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa+1337000000.kzip"
     ],
     "infra_step": true,
     "luci_context": {
@@ -1171,7 +1016,7 @@
     },
     "name": "gsutil upload kythe index pack",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/prod/chromium_win_170242_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa+1337000000.kzip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/prod/chromium_win_123_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa+1337000000.kzip@@@"
     ]
   },
   {
@@ -1184,7 +1029,7 @@
       "----",
       "cp",
       "[START_DIR]/src/out/win-Debug/compile_commands.json",
-      "gs://chrome-codesearch/debug/compile_commands_win_170242.json"
+      "gs://chrome-codesearch/debug/compile_commands_win_123.json"
     ],
     "infra_step": true,
     "luci_context": {
@@ -1201,7 +1046,7 @@
     },
     "name": "gsutil upload compile_commands.json",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/debug/compile_commands_win_170242.json@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/debug/compile_commands_win_123.json@@@"
     ]
   },
   {
@@ -1421,7 +1266,7 @@
       "--copy",
       "foo;bar",
       "--message",
-      "Generated files from \"codesearch-gen-chromium-win\" build 8945511751514863184, revision f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "Generated files from \"codesearch-gen-chromium-win\" build 8945511751514863184, revision deadbeef",
       "--dest-branch",
       "win",
       "[CACHE]/generated",

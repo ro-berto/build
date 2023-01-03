@@ -2,14 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import re
-
 from recipe_engine import recipe_api
-
-from RECIPE_MODULES.build import chromium
-
-# Regular expression to identify a Git hash.
-GIT_COMMIT_HASH_RE = re.compile(r'[a-zA-Z0-9]{40}')
 
 class CodesearchApi(recipe_api.RecipeApi):
   _PROJECT_BROWSER, _PROJECT_OS, _PROJECT_UNSUPPORTED = range(3)
@@ -53,69 +46,6 @@ class CodesearchApi(recipe_api.RecipeApi):
       delete_command = ['find', self.m.path['checkout'].join('out'),
                         '-mtime', ('+%d' % age_days), '-type', 'f', '-delete']
       self.m.step('delete old generated files', delete_command)
-
-  def generate_compilation_database(self,
-                                    targets,
-                                    builder_group,
-                                    buildername,
-                                    output_file=None,
-                                    mb_config_path=None):
-    self.m.chromium.mb_gen(
-        chromium.BuilderId.create_for_group(builder_group, buildername),
-        build_dir=self.c.out_path,
-        name='generate build files',
-        mb_config_path=mb_config_path)
-
-    output_file = output_file or self.c.compile_commands_json_file
-
-    try:
-      step_result = self.m.step('generate compilation database', [
-          'python3', '-u', self.m.path['checkout'].join(
-              'tools', 'clang', 'scripts', 'generate_compdb.py'), '-p',
-          self.c.out_path, '-o', output_file
-      ] + list(targets))
-    except self.m.step.StepFailure as e:
-      raise e
-
-    return step_result
-
-  def generate_gn_compilation_database(self,
-                                       targets,
-                                       builder_group,
-                                       buildername,
-                                       mb_config_path=None):
-    self.m.chromium.mb_gen(
-        chromium.BuilderId.create_for_group(builder_group, buildername),
-        build_dir=self.c.out_path,
-        name='generate build files',
-        mb_config_path=mb_config_path)
-
-    with self.m.context(
-        cwd=self.m.path['checkout'], env=self.m.chromium.get_env()):
-      export_compile_cmd = '--export-compile-commands'
-      if targets:
-        export_compile_cmd += '=' + ','.join(targets)
-      self.m.step(
-          'generate gn compilation database', [
-              'python3', '-u', self.m.depot_tools.gn_py_path, 'gen',
-              export_compile_cmd, self.c.out_path
-          ],
-          stdout=self.m.raw_io.output_text())
-
-  def generate_gn_target_list(self, targets=None, output_file=None):
-    output_file = output_file or self.c.gn_targets_json_file
-    with self.m.context(
-        cwd=self.m.path['checkout'], env=self.m.chromium.get_env()):
-      targets_cmd = '*'
-      if targets:
-        targets_cmd = ' '.join(targets)
-      output = self.m.step(
-          'generate gn target list', [
-              'python3', '-u', self.m.depot_tools.gn_py_path, 'desc',
-              self.c.out_path, targets_cmd, '--format=json'
-          ],
-          stdout=self.m.raw_io.output_text()).stdout
-    self.m.file.write_raw('write gn target list', output_file, output)
 
   def add_kythe_metadata(self):
     """Adds inline Kythe metadata to Mojom generated files.
@@ -189,26 +119,10 @@ class CodesearchApi(recipe_api.RecipeApi):
       return self._PROJECT_OS
     return self._PROJECT_UNSUPPORTED  # pragma: nocover
 
-  def _get_commit_position(self):
-    """Returns the commit position of the project.
-    """
-    got_revision_cp = self.m.chromium.build_properties.get('got_revision_cp')
-    if not got_revision_cp:
-      # For some downstream bots, the build properties 'got_revision_cp' are not
-      # generated. To resolve this issue, use 'got_revision' property here
-      # instead.
-      return self._get_revision()
-    _, rev = self.m.commit_position.parse(got_revision_cp)
-    return rev
-
-  def _get_revision(self):
-    """Returns the git commit hash of the project.
-    """
-    commit = self.m.chromium.build_properties.get('got_revision')
-    if commit and GIT_COMMIT_HASH_RE.match(commit):
-      return commit
-
-  def create_and_upload_kythe_index_pack(self, commit_hash, commit_timestamp):
+  def create_and_upload_kythe_index_pack(self,
+                                         commit_hash,
+                                         commit_timestamp,
+                                         commit_position=None):
     """Create the kythe index pack and upload it to google storage.
 
     Args:
@@ -220,18 +134,23 @@ class CodesearchApi(recipe_api.RecipeApi):
     Returns:
       Path to the generated index pack.
     """
-    commit_hash = commit_hash or self._get_revision()
     # TODO(jsca): Delete the second part of the below condition after LUCI
     # migration is complete.
     experimental_suffix = '_experimental' if (
         self.c.EXPERIMENTAL or self.m.runtime.is_experimental) else ''
 
     index_pack_kythe_base = '%s_%s' % (self.c.PROJECT, self.c.PLATFORM)
+    index_pack_kythe_name = '%s.kzip' % index_pack_kythe_base
+    index_pack_kythe_path = self.c.out_path.join(index_pack_kythe_name)
+    self._create_kythe_index_pack(index_pack_kythe_path)
+
+    if self.m.tryserver.is_tryserver:
+      return index_pack_kythe_path
+
     index_pack_kythe_name_with_id = ''
-    commit_position = ''
     project_type = self._get_project_type()
     if project_type == self._PROJECT_BROWSER:
-      commit_position = self._get_commit_position()
+      assert commit_position, 'invalid commit_position %s' % commit_position
       index_pack_kythe_name_with_id = '%s_%s_%s+%d%s.kzip' % (
           index_pack_kythe_base, commit_position, commit_hash, commit_timestamp,
           experimental_suffix)
@@ -241,13 +160,6 @@ class CodesearchApi(recipe_api.RecipeApi):
           experimental_suffix)
     else:  # pragma: no cover
       assert False, 'Unsupported codesearch project %s' % self.c.PROJECT
-
-    index_pack_kythe_name = '%s.kzip' % index_pack_kythe_base
-    index_pack_kythe_path = self.c.out_path.join(index_pack_kythe_name)
-    self._create_kythe_index_pack(index_pack_kythe_path)
-
-    if self.m.tryserver.is_tryserver:
-      return index_pack_kythe_path
 
     assert self.c.bucket_name, (
         'Trying to upload Kythe index pack but no google storage bucket name')
@@ -337,12 +249,11 @@ class CodesearchApi(recipe_api.RecipeApi):
         dest='debug/%s' % destination_filename
     )
 
-
   def checkout_generated_files_repo_and_sync(self,
                                              copy,
+                                             revision,
                                              kzip_path=None,
-                                             ignore=None,
-                                             revision=None):
+                                             ignore=None):
     """Check out the generated files repo and sync the generated files
        into this checkout.
 
@@ -417,7 +328,7 @@ class CodesearchApi(recipe_api.RecipeApi):
         '--message',
         'Generated files from "%s" build %d, revision %s' %
         (self.m.buildbucket.builder_name, self.m.buildbucket.build.id,
-         revision or self._get_revision()),
+         revision),
         '--dest-branch',
         self.c.GEN_REPO_BRANCH,
         generated_repo_dir,

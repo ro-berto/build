@@ -2,7 +2,10 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import re
+
 from recipe_engine.engine_types import freeze
+from RECIPE_MODULES.build import chromium
 
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
 from PB.recipes.build.chromium_codesearch import (InputProperties,
@@ -11,24 +14,29 @@ from PB.recipes.build.chromium_codesearch import (InputProperties,
 PROPERTIES = InputProperties
 
 DEPS = [
-  'build',
-  'chromium',
-  'codesearch',
-  'depot_tools/bot_update',
-  'depot_tools/gclient',
-  'depot_tools/git',
-  'depot_tools/gsutil',
-  'depot_tools/tryserver',
-  'recipe_engine/buildbucket',
-  'recipe_engine/context',
-  'recipe_engine/file',
-  'recipe_engine/json',
-  'recipe_engine/path',
-  'recipe_engine/properties',
-  'recipe_engine/raw_io',
-  'recipe_engine/step',
-  'recipe_engine/time',
+    'build',
+    'chromium',
+    'codesearch',
+    'depot_tools/bot_update',
+    'depot_tools/depot_tools',
+    'depot_tools/gclient',
+    'depot_tools/git',
+    'depot_tools/gsutil',
+    'depot_tools/tryserver',
+    'recipe_engine/buildbucket',
+    'recipe_engine/commit_position',
+    'recipe_engine/context',
+    'recipe_engine/file',
+    'recipe_engine/json',
+    'recipe_engine/path',
+    'recipe_engine/properties',
+    'recipe_engine/raw_io',
+    'recipe_engine/step',
+    'recipe_engine/time',
 ]
+
+# Regular expression to identify a Git hash.
+GIT_COMMIT_HASH_RE = re.compile(r'[a-zA-Z0-9]{40}')
 
 # Defines the trybots and the mirrored CI builder
 # The trybot will use the parameters from the mirrored CI builder.
@@ -51,6 +59,89 @@ TRYBOT_SPEC = freeze({
         'gen-win-try': 'codesearch-gen-chromium-win',
     }
 })
+
+
+def _get_revision(api):  # pragma: no cover
+  """Returns the git commit hash of the project.
+  """
+  commit = api.chromium.build_properties.get('got_revision')
+  if commit and GIT_COMMIT_HASH_RE.match(commit):
+    return commit
+
+
+def _get_commit_position(api):
+  """Returns the commit position of the project.
+  """
+  got_revision_cp = api.chromium.build_properties.get('got_revision_cp')
+  if not got_revision_cp:
+    # For some downstream bots, the build properties 'got_revision_cp' are not
+    # generated. To resolve this issue, use 'got_revision' property here
+    # instead.
+    return _get_revision(api)  # pragma: no cover
+  _, rev = api.commit_position.parse(got_revision_cp)
+  return rev
+
+
+def generate_compilation_database(api,
+                                  out_path,
+                                  compile_commands_json_file,
+                                  targets,
+                                  builder_group,
+                                  buildername,
+                                  mb_config_path=None):
+  api.chromium.mb_gen(
+      chromium.BuilderId.create_for_group(builder_group, buildername),
+      build_dir=out_path,
+      name='generate build files',
+      mb_config_path=mb_config_path)
+
+  try:
+    step_result = api.step('generate compilation database', [
+        'python3', '-u', api.path['checkout'].join(
+            'tools', 'clang', 'scripts', 'generate_compdb.py'), '-p', out_path,
+        '-o', compile_commands_json_file
+    ] + list(targets))
+  except api.step.StepFailure as e:
+    raise e
+  return step_result
+
+
+def generate_gn_compilation_database(api,
+                                     out_path,
+                                     targets,
+                                     builder_group,
+                                     buildername,
+                                     mb_config_path=None):
+  api.chromium.mb_gen(
+      chromium.BuilderId.create_for_group(builder_group, buildername),
+      build_dir=out_path,
+      name='generate build files',
+      mb_config_path=mb_config_path)
+
+  with api.context(cwd=api.path['checkout'], env=api.chromium.get_env()):
+    export_compile_cmd = '--export-compile-commands'
+    if targets:
+      export_compile_cmd += '=' + ','.join(targets)
+    api.step(
+        'generate gn compilation database', [
+            'python3', '-u', api.depot_tools.gn_py_path, 'gen',
+            export_compile_cmd, out_path
+        ],
+        stdout=api.raw_io.output_text())
+
+
+def generate_gn_target_list(api, out_path, gn_targets_json_file, targets=None):
+  with api.context(cwd=api.path['checkout'], env=api.chromium.get_env()):
+    targets_cmd = '*'
+    if targets:
+      targets_cmd = ' '.join(targets)
+    output = api.step(
+        'generate gn target list', [
+            'python3', '-u', api.depot_tools.gn_py_path, 'desc', out_path,
+            targets_cmd, '--format=json'
+        ],
+        stdout=api.raw_io.output_text()).stdout
+  api.file.write_raw('write gn target list', gn_targets_json_file, output)
 
 
 def RunSteps(api, properties):
@@ -77,6 +168,13 @@ def RunSteps(api, properties):
   gen_repo_branch = bot_config.gen_repo_branch or 'main'
   gen_repo_out_dir = bot_config.gen_repo_out_dir or 'Debug'
   internal = bot_config.internal or False
+
+  # These values are identical to those in config.py.
+  # TODO(crbug.com/1378059): Remove config.py?
+  checkout_path = api.path['cache'].join('builder', 'src')
+  out_path = checkout_path.join('out', gen_repo_out_dir)
+  compile_commands_json_file = out_path.join('compile_commands.json')
+  gn_targets_json_file = out_path.join('gn_targets.json')
 
   project = 'chromium' if not internal else 'chrome'
   api.codesearch.set_config(
@@ -154,15 +252,23 @@ def RunSteps(api, properties):
     # GN target format is different than ninja's, we might need a dedicated GN
     # target list.
     webview_gn_targets = ['//android_webview:system_webview_apk']
-    api.codesearch.generate_gn_compilation_database(
-        targets, builder_group=builder_id.group, buildername=builder_id.builder)
-    api.codesearch.generate_gn_target_list(webview_gn_targets)
-  else:
-    api.codesearch.generate_compilation_database(
+    generate_gn_compilation_database(
+        api=api,
+        out_path=out_path,
         targets=targets,
         builder_group=builder_id.group,
         buildername=builder_id.builder)
-    api.codesearch.generate_gn_target_list()
+    generate_gn_target_list(api, out_path, gn_targets_json_file,
+                            webview_gn_targets)
+  else:
+    generate_compilation_database(
+        api=api,
+        out_path=out_path,
+        compile_commands_json_file=compile_commands_json_file,
+        targets=targets,
+        builder_group=builder_id.group,
+        buildername=builder_id.builder)
+    generate_gn_target_list(api, out_path, gn_targets_json_file)
 
   # Prepare Java Kythe output directory
   kzip_dir = api.codesearch.c.javac_extractor_output_dir
@@ -203,10 +309,11 @@ def RunSteps(api, properties):
 
   # Create the kythe index pack and upload it to google storage.
   api.codesearch.create_and_upload_kythe_index_pack(
-      commit_hash=properties.codesearch_mirror_revision or None,
+      commit_hash=properties.codesearch_mirror_revision or _get_revision(api),
       commit_timestamp=int(properties.codesearch_mirror_revision_timestamp or
                            properties.root_solution_revision_timestamp or
-                           api.time.time()))
+                           api.time.time()),
+      commit_position=_get_commit_position(api))
 
   # Check out the generated files repo and sync the generated files
   # into this checkout. This may fail due to other builders pushing to the
@@ -217,7 +324,7 @@ def RunSteps(api, properties):
   }
   _RunStepWithRetry(
       api, lambda: api.codesearch.checkout_generated_files_repo_and_sync(
-          copy_config))
+          copy_config, _get_revision(api)))
 
 
 def _RunStepWithRetry(api, step_function, max_tries=3):

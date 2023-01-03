@@ -25,6 +25,7 @@ def RunSteps(api):
       CORPUS=api.properties.get('corpus', 'chromium-linux'),
   )
   api.codesearch.checkout_generated_files_repo_and_sync({'foo': 'bar'},
+                                                        'deadbeef',
                                                         '/path/to/kzip')
 
 

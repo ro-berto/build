@@ -268,12 +268,12 @@
       "----",
       "cp",
       "[START_DIR]/src/out/linux/compile_commands.json",
-      "gs://chrome-codesearch/debug/compile_commands_linux_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.json"
+      "gs://chrome-codesearch/debug/compile_commands_linux_123.json"
     ],
     "infra_step": true,
     "name": "gsutil upload compile_commands.json",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/debug/compile_commands_linux_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.json@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/debug/compile_commands_linux_123.json@@@"
     ]
   },
   {

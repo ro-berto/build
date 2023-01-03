@@ -252,12 +252,12 @@
       "----",
       "cp",
       "[START_DIR]/src/out/Debug/chromium_linux.kzip",
-      "gs://chrome-codesearch/prod/chromium_linux_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa+1337000000.kzip"
+      "gs://chrome-codesearch/prod/chromium_linux_123_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa+1337000000.kzip"
     ],
     "infra_step": true,
     "name": "gsutil upload kythe index pack",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/prod/chromium_linux_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa+1337000000.kzip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/prod/chromium_linux_123_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa+1337000000.kzip@@@"
     ]
   },
   {
@@ -270,12 +270,12 @@
       "----",
       "cp",
       "[START_DIR]/src/out/Debug/compile_commands.json",
-      "gs://chrome-codesearch/debug/compile_commands_linux_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.json"
+      "gs://chrome-codesearch/debug/compile_commands_linux_123.json"
     ],
     "infra_step": true,
     "name": "gsutil upload compile_commands.json",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/debug/compile_commands_linux_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.json@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/debug/compile_commands_linux_123.json@@@"
     ]
   },
   {

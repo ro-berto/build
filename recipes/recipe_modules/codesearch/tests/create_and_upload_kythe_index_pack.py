@@ -31,7 +31,9 @@ def RunSteps(api):
       ROOT=api.properties.get('root', 'linux'),
   )
   api.codesearch.create_and_upload_kythe_index_pack(
-      commit_hash=kythe_commit_hash, commit_timestamp=1337000000)
+      commit_hash=kythe_commit_hash,
+      commit_timestamp=1337000000,
+      commit_position=123)
 
 
 def GenTests(api):

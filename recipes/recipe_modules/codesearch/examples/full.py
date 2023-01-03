@@ -88,10 +88,6 @@ def RunSteps(api):
   api.chromium.ensure_goma()
   api.chromium.runhooks()
 
-  api.codesearch.generate_compilation_database(
-      targets, builder_group=builder_id.group, buildername=builder_id.builder)
-  api.codesearch.generate_gn_target_list()
-
   api.codesearch.cleanup_old_generated()
 
   try:
@@ -110,12 +106,13 @@ def RunSteps(api):
 
   # Create the kythe index pack and upload it to google storage.
   api.codesearch.create_and_upload_kythe_index_pack(
-      commit_hash='a' * 40, commit_timestamp=1337000000)
+      commit_hash='a' * 40, commit_timestamp=1337000000, commit_position=123)
 
   # Check out the generated files repo and sync the generated files
   # into this checkout.
   api.codesearch.checkout_generated_files_repo_and_sync(
       {'foo': 'bar'},
+      'deadbeef',
       kzip_path='/path/to/foo.kzip',
       ignore=('/path/to/ignore/1/', '/path/to/ignore/2/'))
 
