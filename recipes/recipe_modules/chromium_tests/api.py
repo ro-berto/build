@@ -1299,9 +1299,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     compile_targets = sorted(set(compile_targets))
     failing_swarming_tests = [t for t in failing_tests if t.uses_isolate]
 
+    rts_setting = self.get_quickrun_options(builder_config)
+
     raw_result = self.run_mb_and_compile(
-        builder_id, compile_targets,
-        [t.isolate_target for t in failing_swarming_tests], ' (%s)' % suffix)
+        builder_id,
+        compile_targets, [t.isolate_target for t in failing_swarming_tests],
+        ' (%s)' % suffix,
+        rts_setting=rts_setting,
+        rts_recall=builder_config.regression_test_selection_recall)
     if raw_result:
       # Clobber the bot upon compile failure without patch.
       # See crbug.com/724533 for more detail.
