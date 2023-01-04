@@ -2,17 +2,13 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from recipe_engine import recipe_api
 from recipe_engine.engine_types import freeze
-from recipe_engine.recipe_api import Property
 
 DEPS = [
-  'chromium',
   'codesearch',
   'depot_tools/bot_update',
   'depot_tools/gclient',
   'depot_tools/git',
-  'goma',
   'recipe_engine/buildbucket',
   'recipe_engine/context',
   'recipe_engine/file',
@@ -53,14 +49,12 @@ BUILDERS = freeze({
 })
 
 def RunSteps(api):
-  builder_id = api.chromium.get_builder_id()
-  builder = BUILDERS[builder_id.builder]
+  builder = BUILDERS[api.buildbucket.build.builder.builder]
 
   project = builder.get('project', 'chromium')
   platform = builder.get('platform', 'linux')
   corpus = builder.get('corpus', 'chromium-linux')
   build_config = builder.get('build_config', 'linux')
-  targets = builder.get('compile_targets', [])
   gen_repo_out_dir = builder.get('gen_repo_out_dir', '')
 
   api.codesearch.set_config(
@@ -75,8 +69,7 @@ def RunSteps(api):
 
   # Checkout the repositories that are needed for the compile.
   api.gclient.c = api.gclient.make_config('chromium_no_telemetry_dependencies')
-  update_step = api.bot_update.ensure_checkout()
-  api.chromium.set_build_properties(update_step.json.output['properties'])
+  api.bot_update.ensure_checkout()
 
   # Remove the llvm-build directory, so that gclient runhooks will download
   # a new clang binary and not use the previous one downloaded by
@@ -84,19 +77,9 @@ def RunSteps(api):
   api.file.rmtree('llvm-build',
                   api.path['checkout'].join('third_party', 'llvm-build'))
 
-  api.chromium.set_config('codesearch', BUILD_CONFIG='Debug')
-  api.chromium.ensure_goma()
-  api.chromium.runhooks()
-
   api.codesearch.cleanup_old_generated()
 
-  try:
-    api.chromium.compile(targets, use_goma_module=True)
-  except api.step.StepFailure as _: # pragma: no cover
-    # Even if compilation fails, the Kythe indexer may still be able to extract
-    # (almost) all cross references. And the downside of failing on compile
-    # error is that Codesearch gets stale.
-    pass
+  # Generate your kzip here.
 
   # Download and run the clang tool.
   api.codesearch.run_clang_tool()
@@ -123,26 +106,17 @@ def GenTests(api):
   for buildername in BUILDERS:
     yield api.test(
         '%s_test_basic' % sanitize(buildername),
-        api.chromium.generic_build(
-            builder_group='chromium.infra.codesearch', builder=buildername),
+        api.buildbucket.generic_build(builder=buildername),
     )
     yield api.test(
         '%s_test_experimental' % sanitize(buildername),
-        api.chromium.generic_build(
-            builder_group='chromium.infra.codesearch', builder=buildername),
+        api.buildbucket.generic_build(builder=buildername),
         api.runtime(is_experimental=True),
     )
 
   yield api.test(
-      '%s_test_with_patch' % sanitize('codesearch-gen-chromium-linux'),
-      api.chromium.try_build(
-          builder_group='tryserver.chromium.codesearch',
-          builder='codesearch-gen-chromium-linux'),
-  )
-
-  yield api.test(
       '%s_delete_generated_files_fail' %
       sanitize('codesearch-gen-chromium-win'),
-      api.chromium.generic_build(builder='codesearch-gen-chromium-win'),
+      api.buildbucket.generic_build(builder='codesearch-gen-chromium-win'),
       api.step_data('delete old generated files', retcode=1),
   )

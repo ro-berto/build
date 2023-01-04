@@ -144,7 +144,7 @@ class CodesearchApi(recipe_api.RecipeApi):
     index_pack_kythe_path = self.c.out_path.join(index_pack_kythe_name)
     self._create_kythe_index_pack(index_pack_kythe_path)
 
-    if self.m.tryserver.is_tryserver:
+    if self.m.tryserver.is_tryserver:  # pragma: no cover
       return index_pack_kythe_path
 
     index_pack_kythe_name_with_id = ''
@@ -279,7 +279,7 @@ class CodesearchApi(recipe_api.RecipeApi):
     """
     if not self.c.SYNC_GENERATED_FILES:
       return
-    if self.m.tryserver.is_tryserver:
+    if self.m.tryserver.is_tryserver:  # pragma: no cover
       return
     assert self.c.generated_repo, (
         'Trying to check out generated files repo,'

@@ -3,7 +3,6 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'chromium',
   'codesearch',
   'depot_tools/bot_update',
   'depot_tools/gclient',
@@ -20,7 +19,6 @@ def RunSteps(api):
     kythe_commit_hash = None
   if api.properties.get('set_got_revision_cp_to_none'):
     properties.pop('got_revision_cp', 0)
-  api.chromium.set_build_properties(properties)
   api.codesearch.set_config(
       api.properties.get('codesearch_config', 'chromium'),
       PROJECT=api.properties.get('project', 'chromium'),

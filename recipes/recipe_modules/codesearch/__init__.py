@@ -1,5 +1,4 @@
 DEPS = [
-  'chromium',
   'depot_tools/depot_tools',
   'depot_tools/git',
   'depot_tools/gsutil',

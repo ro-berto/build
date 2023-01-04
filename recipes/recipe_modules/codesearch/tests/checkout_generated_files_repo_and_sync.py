@@ -3,7 +3,6 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'chromium',
   'codesearch',
   'depot_tools/bot_update',
   'depot_tools/gclient',
@@ -13,8 +12,7 @@ DEPS = [
 
 def RunSteps(api):
   api.gclient.set_config('chromium')
-  update_step = api.bot_update.ensure_checkout()
-  api.chromium.set_build_properties(update_step.json.output['properties'])
+  api.bot_update.ensure_checkout()
   api.codesearch.set_config(
       api.properties.get('codesearch_config', 'chromium'),
       PROJECT=api.properties.get('project', 'chromium'),
