@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # vim:fenc=utf-8:shiftwidth=2
 # Copyright 2017 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
@@ -54,7 +54,7 @@ class Node:
 
 def printv(line):
   if args.verbose:
-    print line
+    print(line)
 
 
 def parse_ninja_deps(ninja_deps):
@@ -138,16 +138,17 @@ def main():
   get_ext_nodes = lambda e: filter(lambda n: get_ext(n) == e, nodes)
   data['by_extension'] = {e: get_stats(get_ext_nodes(e)) for e in extensions}
 
-  print 'Top 500 header files:'
+  print('Top 500 header files:')
   for i, n in enumerate(sort_nodes(get_ext_nodes('h'))[:500]):
-    print ' [{:3d}]  {} ({} deps)'.format(i, n.label, len(n.edges))
+    print(' [{:3d}]  {} ({} deps)'.format(i, n.label, len(n.edges)))
 
   json_str = json.dumps(data, indent=2, sort_keys=True)
   if args.output and args.output != '-':
     with open(args.output, 'w') as outfile:
       outfile.write(json_str + '\n')
   else:
-    print json_str
+    print(json_str)
+
 
 if __name__ == '__main__':
   main()

@@ -44,7 +44,7 @@ import time
 from typing import (IO, Any, Callable, Dict, Generator, Iterable, List,
                     Optional, Set, Tuple, TypeVar)
 
-import yaml
+from yaml import reader as yaml_reader, parser as yaml_parser, safe_load as yaml_safe_load
 
 _CC_FILE_EXTENSIONS = ('.cc', '.cpp', '.c', '.cxx')
 _HEADER_FILE_EXTENSIONS = ('.h', '.hpp')
@@ -295,8 +295,8 @@ def _parse_tidy_fixes_file(
   assert os.path.isabs(tidy_invocation_dir)
 
   try:
-    findings = yaml.safe_load(stream)
-  except (yaml.parser.ParserError, yaml.reader.ReaderError) as v:
+    findings = yaml_safe_load(stream)
+  except (yaml_parser.ParserError, yaml_reader.ReaderError) as v:
     raise _ParseError('Broken yaml: %s' % v) from v
 
   if findings is None:

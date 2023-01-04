@@ -14,7 +14,9 @@ For a list of command-line options, call this script with '--help'.
 import logging
 import optparse
 import os
+import platform
 import re
+import signal
 import subprocess
 import sys
 import tempfile
@@ -78,7 +80,6 @@ def _LaunchDBus():
   Returns:
     True if it actually spawned DBus.
   """
-  import platform
   if (platform.uname()[0].lower() == 'linux' and
       'DBUS_SESSION_BUS_ADDRESS' not in os.environ):
     try:
@@ -108,7 +109,6 @@ def _ShutdownDBus():
   This function is called when the flag --spawn-dbus is given, and if
   _LaunchDBus(), above, actually spawned the dbus-daemon.
   """
-  import signal
   if 'DBUS_SESSION_BUS_PID' in os.environ:
     dbus_pid = os.environ['DBUS_SESSION_BUS_PID']
     try:
