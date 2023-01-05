@@ -304,7 +304,8 @@
     ],
     "builders": [
       "chromium.perf.fyi:fuchsia-builder-perf-x64",
-      "chromium.perf.fyi:fuchsia-perf-atlas-fyi"
+      "chromium.perf.fyi:fuchsia-perf-atlas-fyi",
+      "chromium.perf.fyi:fuchsia-perf-nuc-fyi"
     ]
   },
   "chromium.perf.fyi:fuchsia-perf-ast": {
@@ -326,7 +327,8 @@
     ],
     "builders": [
       "chromium.perf.fyi:fuchsia-builder-perf-x64",
-      "chromium.perf.fyi:fuchsia-perf-atlas-fyi"
+      "chromium.perf.fyi:fuchsia-perf-atlas-fyi",
+      "chromium.perf.fyi:fuchsia-perf-nuc-fyi"
     ]
   },
   "chromium.perf.fyi:fuchsia-perf-fyi": {
@@ -353,6 +355,16 @@
       "chromium.perf.fyi:fuchsia-perf-nsn",
       "chromium.perf.fyi:fuchsia-perf-sherlock-fyi",
       "chromium.perf.fyi:fuchsia-perf-shk"
+    ]
+  },
+  "chromium.perf.fyi:fuchsia-perf-nuc-fyi": {
+    "blockers": [
+      "cannot migrate builder 'chromium.perf.fyi:fuchsia-builder-perf-x64' with the following unsupported attrs:\n* bisect_archive_build\n* bisect_gs_bucket\n* bisect_gs_extra"
+    ],
+    "builders": [
+      "chromium.perf.fyi:fuchsia-builder-perf-x64",
+      "chromium.perf.fyi:fuchsia-perf-atlas-fyi",
+      "chromium.perf.fyi:fuchsia-perf-nuc-fyi"
     ]
   },
   "chromium.perf.fyi:fuchsia-perf-sherlock-fyi": {

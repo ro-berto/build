@@ -198,6 +198,13 @@ def fuchsia_atlas(c):
       'workstation_eng.chromebook-x64-release')
 
 
+@CONFIG_CTX(includes=['fuchsia'])
+def fuchsia_workstation_perf_images(c):
+  c.solutions[0].custom_vars['checkout_fuchsia_boot_images'] = (
+      'workstation_eng.chromebook-x64,'
+      'workstation_eng.x64')
+
+
 @CONFIG_CTX()
 def win(c):
   c.target_os.add('win')

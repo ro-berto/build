@@ -74,7 +74,7 @@ _AddBuildSpec(
     bisect_archive_build=True,
     target_bits=64,
     extra_gclient_apply_config=[
-        'fuchsia_atlas',
+        'fuchsia_workstation_perf_images',
     ])
 
 _AddIsolatedTestSpec(
@@ -87,6 +87,13 @@ _AddIsolatedTestSpec(
 
 _AddIsolatedTestSpec(
     'fuchsia-perf-atlas-fyi',
+    'fuchsia',
+    target_bits=64,
+    parent_buildername='fuchsia-builder-perf-x64',
+    parent_builder_group='chromium.perf.fyi')
+
+_AddIsolatedTestSpec(
+    'fuchsia-perf-nuc-fyi',
     'fuchsia',
     target_bits=64,
     parent_buildername='fuchsia-builder-perf-x64',

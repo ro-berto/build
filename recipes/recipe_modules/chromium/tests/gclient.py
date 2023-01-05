@@ -186,3 +186,8 @@ def GenTests(api):
       api.properties(apply_gclient_config='fuchsia_atlas'),
       api.post_process(post_process.DropExpectation),
   )
+  yield api.test(
+      'fuchsia_workstation_perf_images',
+      api.properties(apply_gclient_config='fuchsia_workstation_perf_images'),
+      api.post_process(post_process.DropExpectation),
+  )
