@@ -38,7 +38,6 @@ PROPERTIES = {
     'msvc': Property(default=False, kind=bool),
     'rel': Property(default=False, kind=bool),
     'run_skia_gold': Property(default=True, kind=bool),
-    'selected_tests_only': Property(default=False, kind=bool),
     'skia': Property(default=False, kind=bool),
     'skip_test': Property(default=False, kind=bool),
     'target_cpu': Property(default=None, kind=str),
@@ -305,11 +304,8 @@ def _run_all_corpus_tests(test_runner, skia, v8, xfa):
       test_runner.run_corpus_tests(_XfaDisabledOption)
 
 
-# TODO(https://crbug.com/pdfium/11): `selected_tests_only` currently enables
-# all tests except for corpus tests for the bots. Remove this parameter once
-# corpus tests can pass with Skia enabled.
 def _run_tests(api, memory_tool, v8, xfa, skia, out_dir, build_config, revision,
-               run_skia_gold, selected_tests_only):
+               run_skia_gold):
   """Runs the tests and uploads the results to Gold."""
   resultdb = _ResultDb(
       api, base_variant={
@@ -333,9 +329,8 @@ def _run_tests(api, memory_tool, v8, xfa, skia, out_dir, build_config, revision,
     # run_pixel_tests.py:
     _run_all_pixel_tests(test_runner, skia, v8, xfa)
 
-    if not selected_tests_only:
-      # run_corpus_tests.py:
-      _run_all_corpus_tests(test_runner, skia, v8, xfa)
+    # run_corpus_tests.py:
+    _run_all_corpus_tests(test_runner, skia, v8, xfa)
 
 
 class _ResultDb:
@@ -627,8 +622,7 @@ def _gen_ci_build(api, builder):
 
 
 def RunSteps(api, memory_tool, skia, xfa, v8, target_cpu, clang, msvc, rel,
-             run_skia_gold, component, skip_test, target_os,
-             selected_tests_only):
+             run_skia_gold, component, skip_test, target_os):
   revision = _checkout_step(api, target_os)
 
   out_dir = _generate_out_path(memory_tool, skia, xfa, v8, clang, msvc, rel,
@@ -651,7 +645,7 @@ def RunSteps(api, memory_tool, skia, xfa, v8, target_cpu, clang, msvc, rel,
       return
 
     _run_tests(api, memory_tool, v8, xfa, skia, out_dir, build_config, revision,
-               run_skia_gold, selected_tests_only)
+               run_skia_gold)
 
 
 def GenTests(api):
@@ -711,8 +705,7 @@ def GenTests(api):
       'win_skia',
       api.platform('win', 64),
       api.builder_group.for_current('client.pdfium'),
-      api.properties(
-          skia=True, xfa=True, selected_tests_only=True, bot_id='test_bot'),
+      api.properties(skia=True, xfa=True, bot_id='test_bot'),
       _gen_ci_build(api, 'windows_skia'),
   )
 
@@ -768,8 +761,7 @@ def GenTests(api):
       'linux_skia',
       api.platform('linux', 64),
       api.builder_group.for_current('client.pdfium'),
-      api.properties(
-          skia=True, xfa=True, selected_tests_only=True, bot_id='test_bot'),
+      api.properties(skia=True, xfa=True, bot_id='test_bot'),
       _gen_ci_build(api, 'linux_skia'),
   )
 
@@ -801,8 +793,7 @@ def GenTests(api):
       'mac_skia',
       api.platform('mac', 64),
       api.builder_group.for_current('client.pdfium'),
-      api.properties(
-          skia=True, xfa=True, selected_tests_only=True, bot_id='test_bot'),
+      api.properties(skia=True, xfa=True, bot_id='test_bot'),
       _gen_ci_build(api, 'mac_skia'),
   )
 
@@ -926,7 +917,6 @@ def GenTests(api):
       api.properties(
           skia=True,
           xfa=True,
-          selected_tests_only=True,
           bot_id='test_bot',
           clobber=''),
       _gen_ci_build(api, 'linux_skia'),
@@ -958,50 +948,12 @@ def GenTests(api):
   )
 
   yield api.test(
-      'fail-unittests-selected-tests-only',
-      api.platform('linux', 64),
-      api.builder_group.for_current('client.pdfium'),
-      api.properties(bot_id='test_bot', selected_tests_only=True),
-      _gen_ci_build(api, 'linux'),
-      api.step_data('unittests', retcode=1),
-  )
-
-  yield api.test(
       'fail-embeddertests',
       api.platform('linux', 64),
       api.builder_group.for_current('client.pdfium'),
       api.properties(bot_id='test_bot'),
       _gen_ci_build(api, 'linux'),
       api.step_data('embeddertests', retcode=1),
-  )
-
-  yield api.test(
-      'fail-embeddertests-selected-tests-only',
-      api.platform('linux', 64),
-      api.builder_group.for_current('client.pdfium'),
-      api.properties(bot_id='test_bot', selected_tests_only=True),
-      _gen_ci_build(api, 'linux'),
-      api.step_data('embeddertests', retcode=1),
-  )
-
-  yield api.test(
-      'fail-embeddertests-skia-agg',
-      api.platform('linux', 64),
-      api.builder_group.for_current('client.pdfium'),
-      api.properties(
-          skia=True, xfa=True, selected_tests_only=True, bot_id='test_bot'),
-      _gen_ci_build(api, 'linux'),
-      api.step_data('embeddertests (agg)', retcode=1),
-  )
-
-  yield api.test(
-      'fail-embeddertests-skia-skia',
-      api.platform('linux', 64),
-      api.builder_group.for_current('client.pdfium'),
-      api.properties(
-          skia=True, xfa=True, selected_tests_only=True, bot_id='test_bot'),
-      _gen_ci_build(api, 'linux'),
-      api.step_data('embeddertests (skia)', retcode=1),
   )
 
   yield api.test(
