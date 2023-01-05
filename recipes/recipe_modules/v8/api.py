@@ -115,8 +115,15 @@ class ProdTrigger(Trigger):
     project = project or self.api.buildbucket.INHERIT
     bucket = bucket or self.api.buildbucket.INHERIT
 
+    build = self.api.buildbucket.build
+    extra_tags = {
+      'triggered_by': (
+        f'build/milo/{build.builder.project}/{build.builder.bucket}/'
+        f'{build.builder.builder}/{build.number}'
+      ),
+    }
+
     # Add user_agent:cq to child builds if the parent is also triggered by CQ.
-    extra_tags = {}
     if any(tag.key == 'user_agent' and tag.value == 'cq'
            for tag in self.api.buildbucket.build.tags):
       extra_tags['user_agent'] = 'cq'
