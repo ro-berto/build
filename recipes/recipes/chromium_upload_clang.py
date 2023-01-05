@@ -135,12 +135,16 @@ def RunSteps(api):
                                                'package.py')
       ] + args)
 
-      # Rust build errors intentionally do not fail the bot.
+      args = ['--upload']
+      if api.buildbucket.builder_name == 'mac_upload_clang_arm':
+        args += ['--build-mac-arm']
       api.step(
-          'package rust', [
-              'python3', api.path['checkout'].join(
-                  'tools', 'rust', 'package_rust.py'), '--upload'
-          ],
+          'package rust',
+          [
+              'python3', api.path['checkout'].join('tools', 'rust',
+                                                   'package_rust.py')
+          ] + args,
+          # Rust build errors intentionally do not fail the bot.
           raise_on_failure=False)
 
 
