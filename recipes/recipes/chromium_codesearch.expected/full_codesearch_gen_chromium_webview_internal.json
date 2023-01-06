@@ -1135,7 +1135,7 @@
   {
     "cmd": [
       "python3",
-      "RECIPE_MODULE[build::codesearch]/resources/add_kythe_metadata.py",
+      "RECIPE_MODULE[infra::codesearch]/resources/add_kythe_metadata.py",
       "--corpus",
       "chromium.googlesource.com/chromium/src",
       "[CACHE]/builder/src/out/webview-Debug"
@@ -1516,7 +1516,7 @@
   {
     "cmd": [
       "vpython3",
-      "RECIPE_MODULE[build::codesearch]/resources/sync_generated_files.py",
+      "RECIPE_MODULE[infra::codesearch]/resources/sync_generated_files.py",
       "--copy",
       "[CACHE]/builder/src/out/webview-Debug/gen;webview-Debug/gen",
       "--message",

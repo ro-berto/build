@@ -1184,7 +1184,7 @@
   {
     "cmd": [
       "python3",
-      "RECIPE_MODULE[build::codesearch]/resources/add_kythe_metadata.py",
+      "RECIPE_MODULE[infra::codesearch]/resources/add_kythe_metadata.py",
       "--corpus",
       "chromium.googlesource.com/chromium/src",
       "[CACHE]/builder/src/out/linux-Debug"
