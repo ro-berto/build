@@ -2015,6 +2015,7 @@ class SwarmingTestSpec(TestSpec):
         'mako': 'Nexus 4',
         'manta': 'Nexus 10',
         'marlin': 'Pixel 1 XL',
+        'oriole': 'Pixel 6',
         'sailfish': 'Pixel 1',
         'shamu': 'Nexus 6',
         'sprout': 'Android One',
