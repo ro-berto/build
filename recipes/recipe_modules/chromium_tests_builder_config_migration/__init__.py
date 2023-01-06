@@ -11,3 +11,6 @@ DEPS = [
 
 # Don't set properties, just let the recipes set the properties to the
 # properties proto defined in this module
+
+# Forward symbols that might need to be imported
+from .api import BlockerCategory

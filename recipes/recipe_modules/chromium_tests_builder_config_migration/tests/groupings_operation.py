@@ -166,44 +166,6 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation),
   )
 
-  expected_non_existent_groupings = textwrap.dedent("""\
-      {
-        "non.existent:non-existent-builder": {
-          "blockers": [
-            "builder 'non.existent:non-existent-builder' does not exist"
-          ],
-          "builders": [
-            "non.existent:non-existent-builder"
-          ]
-        }
-      }""")
-
-  yield api.test(
-      'non-existent-builder',
-      api.properties(
-          groupings_operation={
-              'output_path':
-                  '/fake/output/path',
-              'builder_group_filters': [
-                  {
-                      'builder_group_regex': r'non\.existent',
-                  },
-              ],
-          }),
-      api.chromium_tests_builder_config.databases(
-          ctbc.BuilderDatabase.create({
-              'non.existent': {
-                  'non-existent-builder': ctbc.BuilderSpec.create(),
-              },
-          }),
-          ctbc.TryDatabase.create({}),
-      ),
-      api.post_check(post_process.StatusSuccess),
-      api.post_check(lambda check, steps: \
-          check(expected_non_existent_groupings in steps['groupings'].cmd)),
-      api.post_process(post_process.DropExpectation),
-  )
-
   yield api.test(
       'invalid-children',
       api.properties(

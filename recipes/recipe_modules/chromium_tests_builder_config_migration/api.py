@@ -7,7 +7,7 @@ import collections
 import contextlib
 import re
 
-from typing import ContextManager, Iterable
+from typing import Callable, ContextManager, Iterable, Mapping, Optional
 
 import attr
 
@@ -363,40 +363,46 @@ def _failure(summary):
       status=common_pb.INFRA_FAILURE, summary_markdown=summary)
 
 
-_NON_EXISTENT_BUILDERS = tuple(
-    chromium.BuilderId.create_for_group(group, builder)
-    for (group, builder) in (
-        # Test value
-        ('non.existent', 'non-existent-builder'),))
+class BlockerCategory(abc.ABC):
 
-_DEFAULT_BUILDER_SPEC = ctbc.BuilderSpec.create()
-_UNSUPPORTED_ATTRS = (
-    # The use of all of these fields should be replaced with the use of
-    # the archive module
-    'bisect_archive_build',
-    'bisect_gs_bucket',
-    'bisect_gs_extra',
-)
+  @abc.abstractmethod
+  def get_blocker(
+      self,
+      builder_id: chromium.BuilderId,
+      builder_spec: ctbc.BuilderSpec,
+  ) -> Optional[str]:
+    raise NotImplementedError()  # pragma: no cover
 
 
-def _builder_spec_migration_blocker(builder_id, builder_spec):
-  if builder_id in _NON_EXISTENT_BUILDERS:
-    return "builder '{}' does not exist".format(builder_id)
+class _UnsupportedAttr(BlockerCategory):
+  _DEFAULT_BUILDER_SPEC = ctbc.BuilderSpec.create()
+  _UNSUPPORTED_ATTRS = (
+      # The use of all of these fields should be replaced with the use of
+      # the archive module
+      'bisect_archive_build',
+      'bisect_gs_bucket',
+      'bisect_gs_extra',
+  )
 
-  invalid_attrs = [
-      a for a in _UNSUPPORTED_ATTRS
-      if getattr(builder_spec, a) != getattr(_DEFAULT_BUILDER_SPEC, a)
-  ]
-  if invalid_attrs:
+  def get_blocker(
+      self,
+      builder_id: chromium.BuilderId,
+      builder_spec: ctbc.BuilderSpec,
+  ) -> Optional[str]:
+    invalid_attrs = [
+        a for a in self._UNSUPPORTED_ATTRS
+        if getattr(builder_spec, a) != getattr(self._DEFAULT_BUILDER_SPEC, a)
+    ]
+    if not invalid_attrs:
+      return None
+
     message = [
-        "cannot migrate builder '{}' with the following unsupported attrs:"
-        .format(builder_id)
+        f"cannot migrate builder '{builder_id}'"
+        ' with the following unsupported attrs:'
     ]
     for a in invalid_attrs:
       message.append('* {}'.format(a))
     return '\n'.join(message)
-
-  return None
 
 
 def _migrate_builder_spec(
@@ -556,7 +562,14 @@ def _migrate_try_spec(
 
 class ChromiumTestsBuilderConfigMigrationApi(recipe_api.RecipeApi):
 
-  def __call__(self, properties, builder_db, try_db):
+  def __call__(
+      self,
+      properties: properties_pb.InputProperties,
+      builder_db: ctbc.BuilderDatabase,
+      try_db: ctbc.TryDatabase,
+      *,
+      additional_blocker_categories: Optional[Iterable[BlockerCategory]] = None,
+  ) -> Optional[result_pb.RawResult]:
     errors = _VALIDATORS.validate(properties)
     if errors:
       summary = [
@@ -573,9 +586,21 @@ class ChromiumTestsBuilderConfigMigrationApi(recipe_api.RecipeApi):
     }
     operation = properties.WhichOneof('operation')
     handler = handlers_by_operation[operation]
-    return handler(getattr(properties, operation), builder_db, try_db)
 
-  def _groupings_operation(self, groupings_operation, builder_db, try_db):
+    blocker_categories = [_UnsupportedAttr()]
+    if additional_blocker_categories:
+      blocker_categories.extend(additional_blocker_categories)
+
+    return handler(
+        getattr(properties, operation), builder_db, try_db, blocker_categories)
+
+  def _groupings_operation(
+      self,
+      groupings_operation: properties_pb.GroupingsOperation,
+      builder_db: ctbc.BuilderDatabase,
+      try_db: ctbc.TryDatabase,
+      blocker_categories: Iterable[BlockerCategory],
+  ) -> None:
     builder_group_filters = []
     for f in reversed(groupings_operation.builder_group_filters):
       regex = re.compile('^{}$'.format(f.builder_group_regex))
@@ -589,8 +614,8 @@ class ChromiumTestsBuilderConfigMigrationApi(recipe_api.RecipeApi):
           return include
       return False
 
-    groupings_by_builder_id = self._compute_groupings(builder_db, try_db,
-                                                      builder_filter)
+    groupings_by_builder_id = self._compute_groupings(
+        builder_db, try_db, blocker_categories, builder_filter=builder_filter)
 
     output_path = self.m.path.abspath(groupings_operation.output_path)
 
@@ -609,8 +634,15 @@ class ChromiumTestsBuilderConfigMigrationApi(recipe_api.RecipeApi):
     self.m.file.write_text(
         'groupings', output_path, output, include_log=self._test_data.enabled)
 
-  def _migration_operation(self, migration_operation, builder_db, try_db):
-    groupings_by_builder_id = self._compute_groupings(builder_db, try_db)
+  def _migration_operation(
+      self,
+      migration_operation: properties_pb.MigrationOperation,
+      builder_db: ctbc.BuilderDatabase,
+      try_db: ctbc.TryDatabase,
+      blocker_categories: Iterable[BlockerCategory],
+  ) -> Optional[result_pb.RawResult]:
+    groupings_by_builder_id = self._compute_groupings(builder_db, try_db,
+                                                      blocker_categories)
 
     to_migrate = set()
     for b in migration_operation.builders_to_migrate:
@@ -643,7 +675,14 @@ class ChromiumTestsBuilderConfigMigrationApi(recipe_api.RecipeApi):
     output_path = self.m.path.abspath(migration_operation.output_path)
     output_factory.write_output(self.m.file, 'src-side snippets', output_path)
 
-  def _compute_groupings(self, builder_db, try_db, builder_filter=None):
+  def _compute_groupings(
+      self,
+      builder_db: ctbc.BuilderDatabase,
+      try_db: ctbc.TryDatabase,
+      blocker_categories: Iterable[BlockerCategory],
+      *,
+      builder_filter: Callable[[chromium.BuilderId], bool] = None,
+  ) -> Mapping[chromium.BuilderId, _Grouping]:
     builder_filter = builder_filter or (lambda _: True)
 
     groupings_by_builder_id = collections.defaultdict(_Grouping)
@@ -666,11 +705,11 @@ class ChromiumTestsBuilderConfigMigrationApi(recipe_api.RecipeApi):
               for builder_id, included in included_by_builder_id.items()
           ])
 
-    def update_groupings(builder_id, related_ids, blocker=None):
+    def update_groupings(builder_id, related_ids, blockers=None):
       grouping = groupings_by_builder_id[builder_id]
       grouping.builder_ids.add(builder_id)
-      if blocker is not None:
-        grouping.blockers.add(blocker)
+      if blockers:
+        grouping.blockers.update(blockers)
       for related_id in related_ids:
         related_grouping = groupings_by_builder_id[related_id]
         related_grouping.builder_ids.add(related_id)
@@ -681,10 +720,13 @@ class ChromiumTestsBuilderConfigMigrationApi(recipe_api.RecipeApi):
     for builder_id, child_ids in builder_db.builder_graph.items():
       included = check_included([builder_id] + sorted(child_ids),
                                 'invalid children for {}'.format(builder_id))
-      builder_spec = builder_db[builder_id]
-      blocker = _builder_spec_migration_blocker(builder_id, builder_spec)
       if included:
-        update_groupings(builder_id, child_ids, blocker)
+        builder_spec = builder_db[builder_id]
+        blockers = []
+        for c in blocker_categories:
+          if (blocker := c.get_blocker(builder_id, builder_spec)) is not None:
+            blockers.append(blocker)
+        update_groupings(builder_id, child_ids, blockers)
 
     for try_id, try_spec in try_db.items():
       mirrored_ids = []
