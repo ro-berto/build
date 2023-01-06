@@ -842,8 +842,10 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "RBE_cache_dir": "[CACHE]/builder/reclient/deps/Libfuzzer_Upload_Linux32_V8_ARM_ASan_Debug",
       "RBE_deps_cache_dir": "[CACHE]/builder/reclient/deps/Libfuzzer_Upload_Linux32_V8_ARM_ASan_Debug",
       "RBE_deps_cache_max_mb": "256",
+      "RBE_enable_deps_cache": "true",
       "RBE_fail_early_min_action_count": "4000",
       "RBE_fail_early_min_fallback_ratio": "0.5",
       "RBE_instance": "projects/test-rbe-project/instances/default_instance",

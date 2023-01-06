@@ -385,6 +385,8 @@ class ReclientApi(recipe_api.RecipeApi):
         'RBE_fail_early_min_action_count': 4000,
         'RBE_fail_early_min_fallback_ratio': 0.5,
         'RBE_deps_cache_dir': reclient_cache_dir,
+        'RBE_cache_dir': reclient_cache_dir,
+        'RBE_enable_deps_cache': 'true',
         'RBE_deps_cache_max_mb': _DEPS_CACHE_MAX_MB,
     }
 
