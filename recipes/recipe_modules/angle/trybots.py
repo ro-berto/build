@@ -32,6 +32,11 @@ _SPEC = {
                     buildername='android-arm64-test',
                     tester='android-arm64-pixel4',
                 ),
+                try_spec.TryMirror.create(
+                    builder_group='angle',
+                    buildername='android-arm64-test',
+                    tester='android-arm64-pixel6',
+                ),
             ],
             analyze_names=['angle'],
             retry_failed_shards=False,
@@ -42,7 +47,7 @@ _SPEC = {
                 try_spec.TryMirror.create(
                     builder_group='angle',
                     buildername='android-arm64-exp-test',
-                    tester='android-arm64-pixel6',
+                    tester='android-arm64-exp-pixel6',
                 ),
             ],
             analyze_names=['angle'],
@@ -55,6 +60,18 @@ _SPEC = {
                     builder_group='angle',
                     buildername='android-perf',
                     tester='android-arm64-pixel4-perf',
+                ),
+            ],
+            analyze_names=['angle'],
+            retry_failed_shards=False,
+        ),
+    'android-pixel6-perf':
+        try_spec.TrySpec.create(
+            mirrors=[
+                try_spec.TryMirror.create(
+                    builder_group='angle',
+                    buildername='android-perf',
+                    tester='android-arm64-pixel6-perf',
                 ),
             ],
             analyze_names=['angle'],
