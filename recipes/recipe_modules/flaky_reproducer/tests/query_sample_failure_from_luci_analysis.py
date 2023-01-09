@@ -42,6 +42,18 @@ def GenTests(api):
       api.weetbix.query_cluster_failures(
           [
               {
+                  # not picked, because it's a reviver build
+                  'test_id': 'test/1',
+                  'ingested_invocation_id': 'build-6',
+                  'count': 5,
+                  'variant': {
+                      'def': {
+                          'builder': 'runner',
+                          'reviver_builder': 'Mac10.14 Tests'
+                      }
+                  }
+              },
+              {
                   # not picked, because it's a presubmit build
                   'test_id': 'test/1',
                   'ingested_invocation_id': 'build-1',

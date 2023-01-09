@@ -500,15 +500,18 @@ class FlakyReproducer(recipe_api.RecipeApi):
     for ((presubmit, variant_set, variant_test_id),
          (count, first_build_id)) in sorted(
              test_variants.items(), key=lambda kv: kv[1][0], reverse=True):
+      variant = dict(variant_set)
       # Choose from the test_id or build_id specified
       if test_id and variant_test_id != test_id:
+        continue
+      # Ignore reviver builders
+      if 'reviver_builder' in variant:
         continue
       # The test variant should fail >50% of most failing variant.
       top_count = top_presubmit_variant_count.setdefault(presubmit, count)
       if count < top_count * 0.5:
         continue
       # Prefer CI desktop builders, suppress known not supported platforms
-      variant = dict(variant_set)
       builder = variant.get('builder', '')
       builder_score = 0
       if not presubmit:
