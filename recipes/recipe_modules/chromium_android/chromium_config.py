@@ -63,6 +63,7 @@ def mipsel_builder_mb(_):
 @CONFIG_CTX(includes=['clobber'])
 def cronet_builder(c):
   # From //tools/mb/mb_config.pyl's "cronet_common":
+  c.gn_args.append('is_cronet_build=true')
   c.gn_args.append('disable_file_support=true')
   c.gn_args.append('enable_websockets=false')
   c.gn_args.append('include_transport_security_state_preload_list=false')
