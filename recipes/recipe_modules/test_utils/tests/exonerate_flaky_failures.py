@@ -236,18 +236,16 @@ def GenTests(api):
                   'should_exonerate_flaky_failures': True,
               },
           }),
-      api.step_data(
-          'query LUCI Analysis for failure rates.rpc call',
-          stdout=api.raw_io.output_text(
-              api.json.dumps({
-                  'testVariants': [
-                      api.weetbix.generate_analysis(
-                          'testA', expected_count=10, unexpected_count=0),
-                      api.weetbix.generate_analysis(
-                          'testB', expected_count=10, unexpected_count=0),
-                  ]
-              })),
-      ),
+      api.weetbix.query_failure_rate_results([
+          api.weetbix.generate_analysis(
+              test_id='ninja://failed_test/testA',
+              expected_count=10,
+              unexpected_count=0),
+          api.weetbix.generate_analysis(
+              test_id='ninja://failed_test/testB',
+              expected_count=10,
+              unexpected_count=0),
+      ]),
       api.post_process(post_process.MustRun,
                        'query known flaky failures on CQ'),
       api.post_process(post_process.StatusSuccess),
@@ -284,17 +282,15 @@ def GenTests(api):
           'failed_test results',
           stdout=api.raw_io.output_text(
               api.test_utils.rdb_results(
-                  'failed_test', failing_tests=['testA']))),
-      api.step_data(
-          'query LUCI Analysis for failure rates.rpc call',
-          stdout=api.raw_io.output_text(
-              api.json.dumps({
-                  'testVariants': [
-                      api.weetbix.generate_analysis(
-                          'testA', flaky_verdict_count=10),
-                  ]
-              })),
-      ),
+                  'failed_test', failing_tests=['testA', 'testB']))),
+      api.weetbix.query_failure_rate_results([
+          api.weetbix.generate_analysis(
+              test_id='ninja://failed_test/testA',
+              flaky_verdict_counts=[10],
+              examples_times=[60 * 60 * 12],
+          ),
+          api.weetbix.generate_analysis(test_id='ninja://failed_test/testB'),
+      ]),
       api.step_data(
           'query known flaky failures on CQ',
           api.json.output({
@@ -339,16 +335,10 @@ def GenTests(api):
           stdout=api.raw_io.output_text(
               api.test_utils.rdb_results(
                   'failed_test', skipped_tests=['testA']))),
-      api.step_data(
-          'query LUCI Analysis for failure rates.rpc call',
-          stdout=api.raw_io.output_text(
-              api.json.dumps({
-                  'testVariants': [
-                      api.weetbix.generate_analysis(
-                          'testA', flaky_verdict_count=10),
-                  ]
-              })),
-      ),
+      api.weetbix.query_failure_rate_results([
+          api.weetbix.generate_analysis(
+              test_id='ninja://failed_test/testA', flaky_verdict_counts=[10]),
+      ]),
       api.post_process(post_process.MustRun,
                        'query known flaky failures on CQ'),
       api.post_process(post_process.DoesNotRun,
@@ -407,22 +397,16 @@ def GenTests(api):
               ]
           })),
       api.time.seed(60 * 60 * 12),
-      api.step_data(
-          'query LUCI Analysis for failure rates.rpc call',
-          stdout=api.raw_io.output_text(
-              api.json.dumps({
-                  'testVariants': [
-                      api.weetbix.generate_analysis(
-                          'testA',
-                          flaky_verdict_count=10,
-                          examples_times=[60 * 60 * 12]),
-                      api.weetbix.generate_analysis(
-                          'testB',
-                          flaky_verdict_count=10,
-                          examples_times=[60 * 60 * 12]),
-                  ]
-              })),
-      ),
+      api.weetbix.query_failure_rate_results([
+          api.weetbix.generate_analysis(
+              test_id='ninja://failed_test/testA',
+              flaky_verdict_counts=[10],
+              examples_times=[60 * 60 * 12]),
+          api.weetbix.generate_analysis(
+              test_id='ninja://failed_test/testB',
+              flaky_verdict_counts=[10],
+              examples_times=[60 * 60 * 12]),
+      ]),
       api.post_process(post_process.MustRun,
                        'query known flaky failures on CQ'),
       api.post_process(post_process.MustRun,
@@ -478,16 +462,13 @@ def GenTests(api):
                   'monorail_issue': '999',
               }],
           })),
-      api.step_data(
-          'query LUCI Analysis for failure rates.rpc call',
-          stdout=api.raw_io.output_text(
-              api.json.dumps({
-                  'testVariants': [
-                      api.weetbix.generate_analysis(
-                          'testA', expected_count=1, unexpected_count=9)
-                  ]
-              })),
-      ),
+      api.weetbix.query_failure_rate_results([
+          api.weetbix.generate_analysis(
+              test_id='ninja://failed_test/testA',
+              expected_count=1,
+              unexpected_count=9,
+              examples_times=[60 * 60 * 12]),
+      ]),
       api.post_process(post_process.PropertiesContain, 'luci_analysis_info'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
@@ -541,18 +522,12 @@ def GenTests(api):
                   'should_exonerate_flaky_failures': True,
               },
           }),
-      api.step_data(
-          'query LUCI Analysis for failure rates.rpc call',
-          stdout=api.raw_io.output_text(
-              api.json.dumps({
-                  'testVariants': [
-                      api.weetbix.generate_analysis(
-                          'testA', unexpected_count=10),
-                      api.weetbix.generate_analysis(
-                          'testB', unexpected_count=10),
-                  ]
-              })),
-      ),
+      api.weetbix.query_failure_rate_results([
+          api.weetbix.generate_analysis(
+              test_id='ninja://failed_test/testA', unexpected_count=10),
+          api.weetbix.generate_analysis(
+              test_id='ninja://failed_test/testB', unexpected_count=10),
+      ]),
       api.post_process(post_process.LogContains,
                        'query known flaky failures on CQ', 'input',
                        ['failed_test (with patch)']),
@@ -587,22 +562,16 @@ def GenTests(api):
           stdout=api.raw_io.output_text(
               api.test_utils.rdb_results(
                   'failed_test', failing_tests=['testA', 'testB']))),
-      api.step_data(
-          'query LUCI Analysis for failure rates.rpc call',
-          stdout=api.raw_io.output_text(
-              api.json.dumps({
-                  'testVariants': [
-                      api.weetbix.generate_analysis(
-                          'testA',
-                          flaky_verdict_count=10,
-                          examples_times=[60 * 60 * 12]),
-                      api.weetbix.generate_analysis(
-                          'testB',
-                          flaky_verdict_count=10,
-                          examples_times=[60 * 60 * 12])
-                  ]
-              })),
-      ),
+      api.weetbix.query_failure_rate_results([
+          api.weetbix.generate_analysis(
+              test_id='ninja://failed_test/testA',
+              flaky_verdict_counts=[10],
+              examples_times=[60 * 60 * 12]),
+          api.weetbix.generate_analysis(
+              test_id='ninja://failed_test/testB',
+              flaky_verdict_counts=[10],
+              examples_times=[60 * 60 * 12]),
+      ]),
       api.step_data(
           'query known flaky failures on CQ',
           api.json.output({
@@ -665,18 +634,12 @@ def GenTests(api):
           stdout=api.raw_io.output_text(
               api.test_utils.rdb_results(
                   'failed_test', failing_tests=['testA', 'testB']))),
-      api.step_data(
-          'query LUCI Analysis for failure rates.rpc call',
-          stdout=api.raw_io.output_text(
-              api.json.dumps({
-                  'testVariants': [
-                      api.weetbix.generate_analysis(
-                          'testA', flaky_verdict_count=10),
-                      api.weetbix.generate_analysis(
-                          'testB', flaky_verdict_count=10)
-                  ]
-              })),
-      ),
+      api.weetbix.query_failure_rate_results([
+          api.weetbix.generate_analysis(
+              test_id='ninja://failed_test/testA', flaky_verdict_counts=[10]),
+          api.weetbix.generate_analysis(
+              test_id='ninja://failed_test/testB', flaky_verdict_counts=[10]),
+      ]),
       api.step_data(
           'query known flaky failures on CQ',
           api.json.output({
@@ -736,18 +699,12 @@ def GenTests(api):
           stdout=api.raw_io.output_text(
               api.test_utils.rdb_results(
                   'failed_test', failing_tests=['testA', 'testB']))),
-      api.step_data(
-          'query LUCI Analysis for failure rates.rpc call',
-          stdout=api.raw_io.output_text(
-              api.json.dumps({
-                  'testVariants': [
-                      api.weetbix.generate_analysis(
-                          'testA', flaky_verdict_count=10),
-                      api.weetbix.generate_analysis(
-                          'testB', flaky_verdict_count=10)
-                  ]
-              })),
-      ),
+      api.weetbix.query_failure_rate_results([
+          api.weetbix.generate_analysis(
+              test_id='ninja://failed_test/testA', flaky_verdict_counts=[10]),
+          api.weetbix.generate_analysis(
+              test_id='ninja://failed_test/testB', flaky_verdict_counts=[10]),
+      ]),
       api.step_data('query known flaky failures on CQ',
                     api.json.output({'flakes': []})),
       api.post_process(post_process.MustRun, 'failed_test (with patch)'),

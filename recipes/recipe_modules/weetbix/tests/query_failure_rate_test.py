@@ -155,106 +155,30 @@ def GenTests(api):
       },
   ]
 
-  test_variants_response = [
-      {
-          'testId':
-              'ninja://gpu:suite_1/test_one',
-          'variantHash':
-              '8897b2a859b391d5',
-          'intervalStats': [
-              {
-                  'intervalAge': 1,
-                  'totalRunExpectedVerdicts': 300,
-                  'totalRunUnexpectedVerdicts': 2,
-                  'totalRunFlakyVerdicts': 3,
-              },
-              {
-                  'intervalAge': 2,
-                  'totalRunExpectedVerdicts': 300,
-                  'totalRunFlakyVerdicts': 10,
-              },
-              {
-                  'intervalAge': 3,
-                  'totalRunExpectedVerdicts': 300,
-                  'totalRunFlakyVerdicts': 10,
-              },
-          ],
-          'recentVerdicts':
-              api.weetbix.construct_recent_verdicts(
-                  expected_count=8,
-                  unexpected_count=2,
-              )
-      },
-      {
-          'testId':
-              'ninja://gpu:suite_2/test_one',
-          'variantHash':
-              '8897b2a859b39abc',
-          'intervalStats': [
-              {
-                  'intervalAge': 1,
-                  'totalRunExpectedVerdicts': 300,
-                  'totalRunUnexpectedVerdicts': 9,
-              },
-              {
-                  'intervalAge': 2,
-                  'totalRunExpectedVerdicts': 300,
-                  'totalRunUnexpectedVerdicts': 0,
-              },
-          ],
-          'recentVerdicts':
-              api.weetbix.construct_recent_verdicts(
-                  expected_count=1,
-                  unexpected_count=9,
-              )
-      },
-      {
-          'testId':
-              'ninja://gpu:suite_3/test_one',
-          'variantHash':
-              '8897b2a859b39abc',
-          'intervalStats': [
-              {
-                  'intervalAge': 1,
-                  'totalRunExpectedVerdicts': 300,
-                  'totalRunUnexpectedVerdicts': 1,
-              },
-              {
-                  'intervalAge': 2,
-                  'totalRunExpectedVerdicts': 300,
-                  'totalRunUnexpectedVerdicts': 3,
-              },
-          ],
-          'recentVerdicts':
-              api.weetbix.construct_recent_verdicts(
-                  expected_count=9,
-                  unexpected_count=1,
-              )
-      },
-      {
-          'testId':
-              'ninja://gpu:suite_3/test_two',
-          'variantHash':
-              '8897b2a859b39abc',
-          'intervalStats': [
-              {
-                  'intervalAge': 1,
-                  'totalRunExpectedVerdicts': 300,
-                  'totalRunUnexpectedVerdicts': 1,
-              },
-              {
-                  'intervalAge': 2,
-                  'totalRunExpectedVerdicts': 300,
-                  'totalRunUnexpectedVerdicts': 3,
-              },
-          ],
-          'recentVerdicts':
-              api.weetbix.construct_recent_verdicts(
-                  expected_count=10,
-                  unexpected_count=0,
-              )
-      },
+  query_failure_rate_results = [
+      api.weetbix.generate_analysis(
+          test_id='ninja://gpu:suite_1/test_one',
+          expected_count=8,
+          unexpected_count=2,
+          flaky_verdict_counts=[3, 20],
+      ),
+      api.weetbix.generate_analysis(
+          test_id='ninja://gpu:suite_2/test_one',
+          expected_count=1,
+          unexpected_count=9,
+      ),
+      api.weetbix.generate_analysis(
+          test_id='ninja://gpu:suite_3/test_one',
+          expected_count=9,
+          unexpected_count=1,
+      ),
+      api.weetbix.generate_analysis(
+          test_id='ninja://gpu:suite_3/test_two',
+          expected_count=10,
+          unexpected_count=0,
+      ),
   ]
+
   yield api.test(
       'basic',
       api.properties(
@@ -281,13 +205,7 @@ def GenTests(api):
               },
           },
       ),
-      api.step_data(
-          'query LUCI Analysis for failure rates.rpc call',
-          stdout=api.raw_io.output_text(
-              api.json.dumps({
-                  'testVariants': test_variants_response,
-              }),),
-      ),
+      api.weetbix.query_failure_rate_results(query_failure_rate_results),
       api.post_process(
           post_process.LogContains,
           'query LUCI Analysis for failure rates.rpc call',

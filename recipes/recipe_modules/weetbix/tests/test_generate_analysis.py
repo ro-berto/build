@@ -15,7 +15,7 @@ DEPS = [
 
 
 def RunSteps(api):
-  # This is to get coverage of the test_api which is bein used more extensively
+  # This is to get coverage of the test_api which is being used more extensively
   # outside this module
   api.step.empty('step')
 
@@ -29,11 +29,11 @@ def GenTests(api):
               api.json.dumps({
                   'testVariants': [
                       api.weetbix.generate_analysis(
-                          'testA',
+                          test_id='ninja://failed_test/testA',
                           expected_count=10,
                           unexpected_count=0,
                           examples_times=[0, 1],
-                          flaky_verdict_count=1,
+                          flaky_verdict_counts=[1, 0],
                       ),
                   ]
               }))),

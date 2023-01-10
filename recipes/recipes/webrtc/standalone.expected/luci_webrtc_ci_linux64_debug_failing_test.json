@@ -1540,7 +1540,7 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@raw_io.output_text@{\"invocation\": {\"name\": \"dummy_test_results\", \"state\": \"FINALIZED\"}, \"invocationId\": \"inv0\"}@@@",
-      "@@@STEP_LOG_LINE@raw_io.output_text@{\"invocationId\": \"inv0\", \"testResult\": {\"failureReason\": {\"primaryErrorMessage\": \"paint_op_writer.cc(106): Check failed:\"}, \"status\": \"FAIL\", \"testId\": \"dummy_test\", \"variant\": {\"def\": {\"test_suite\": \"dummy_test\"}}, \"variantHash\": \"dummy_test_hash\"}}@@@",
+      "@@@STEP_LOG_LINE@raw_io.output_text@{\"invocationId\": \"inv0\", \"testResult\": {\"failureReason\": {\"primaryErrorMessage\": \"paint_op_writer.cc(106): Check failed:\"}, \"status\": \"FAIL\", \"tags\": [{\"key\": \"test_name\", \"value\": \"dummy_test\"}], \"testId\": \"ninja://dummy_test/dummy_test\", \"variant\": {\"def\": {\"test_suite\": \"dummy_test\"}}, \"variantHash\": \"dummy_test_hash\"}}@@@",
       "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
   },
@@ -1652,7 +1652,7 @@
     "cmd": [],
     "name": "$debug - all results",
     "~followup_annotations": [
-      "@@@STEP_TEXT@1.76 KB@@@",
+      "@@@STEP_TEXT@1.78 KB@@@",
       "@@@STEP_LOG_LINE@serialized results@{@@@",
       "@@@STEP_LOG_LINE@serialized results@  \"all_suites\": [@@@",
       "@@@STEP_LOG_LINE@serialized results@    {@@@",
@@ -1673,11 +1673,11 @@
       "@@@STEP_LOG_LINE@serialized results@  ]@@@",
       "@@@STEP_LOG_LINE@serialized results@}@@@",
       "@@@STEP_LOG_END@serialized results@@@",
-      "@@@STEP_LOG_LINE@memory usage@Size of this RDBResults: 1.76 KB@@@",
+      "@@@STEP_LOG_LINE@memory usage@Size of this RDBResults: 1.78 KB@@@",
       "@@@STEP_LOG_LINE@memory usage@@@@",
-      "@@@STEP_LOG_LINE@memory usage@\tSize of RDBPerSuiteResults for dummy_test: 1.48 KB@@@",
+      "@@@STEP_LOG_LINE@memory usage@\tSize of RDBPerSuiteResults for dummy_test: 1.50 KB@@@",
       "@@@STEP_LOG_LINE@memory usage@\t\tNumber of RDBPerIndividualTestResults entries: 1@@@",
-      "@@@STEP_LOG_LINE@memory usage@\t\tSize of all RDBPerIndividualTestResults entries: 461.00 B@@@",
+      "@@@STEP_LOG_LINE@memory usage@\t\tSize of all RDBPerIndividualTestResults entries: 480.00 B@@@",
       "@@@STEP_LOG_END@memory usage@@@"
     ]
   },

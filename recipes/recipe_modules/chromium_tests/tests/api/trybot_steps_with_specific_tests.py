@@ -1025,18 +1025,18 @@ def GenTests(api):
                   'monorail_issue': '999',
               }]
           })),
-      api.step_data(
-          'query LUCI Analysis for failure rates.rpc call',
-          stdout=api.raw_io.output_text(
-              api.json.dumps({
-                  'testVariants': [
-                      api.weetbix.generate_analysis(
-                          'testA', expected_count=0, unexpected_count=10),
-                      api.weetbix.generate_analysis(
-                          'testB', expected_count=0, unexpected_count=10),
-                  ]
-              })),
-      ),
+      api.weetbix.query_failure_rate_results([
+          api.weetbix.generate_analysis(
+              test_id='ninja://base_unittests/Test.One',
+              expected_count=0,
+              unexpected_count=10,
+          ),
+          api.weetbix.generate_analysis(
+              test_id='ninja://base_unittests/Test.Two',
+              expected_count=0,
+              unexpected_count=10,
+          ),
+      ]),
       api.post_process(post_process.MustRun, 'base_unittests (with patch)'),
       api.post_process(post_process.DoesNotRun,
                        'base_unittests (retry shards with patch)'),

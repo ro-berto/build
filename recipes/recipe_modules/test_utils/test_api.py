@@ -218,7 +218,8 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
             primary_error_message='paint_op_writer.cc(106): Check failed:')
 
       test_result = rdb_test_result.TestResult(
-          test_id=test,
+          test_id='ninja://{}/{}'.format(suite_name, test),
+          tags=[rdb_common.StringPair(key="test_name", value=test)],
           variant=rdb_common.Variant(**{
               'def': {
                   'test_suite': suite_name,

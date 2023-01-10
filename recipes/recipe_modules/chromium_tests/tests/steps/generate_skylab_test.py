@@ -110,31 +110,21 @@ def GenTests(api):
             builder_group, {
                 builder: {
                     'skylab_tests': [{
-                        'cros_board':
-                            'eve',
-                        'cros_img':
-                            'eve-release/R89-13631.0.0',
-                        'test_id_prefix':
-                            'ninja://chromeos/lacros:lacros_fyi_tast_tests/',
-                        'ci_only':
-                            True,
-                        'name':
-                            'basic_EVE_TOT',
-                        'tast_expr':
-                            tast_expr,
-                        'benchmark':
-                            benchmark,
+                        'cros_board': 'eve',
+                        'cros_img': 'eve-release/R89-13631.0.0',
+                        'test_id_prefix': 'ninja://basic_EVE_TOT/',
+                        'ci_only': True,
+                        'name': 'basic_EVE_TOT',
+                        'tast_expr': tast_expr,
+                        'benchmark': benchmark,
                         'args': [test_args],
                         'swarming': {},
-                        'test':
-                            target_name,
+                        'test': target_name,
                         'resultdb': {
                             'enable': True,
                         },
-                        'description':
-                            'This is a description.',
-                        'timeout_sec':
-                            7200
+                        'description': 'This is a description.',
+                        'timeout_sec': 7200
                     }],
                 }
             }),

@@ -2263,7 +2263,7 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@raw_io.output_text@{\"invocation\": {\"name\": \"blink_web_tests_results\", \"state\": \"FINALIZED\"}, \"invocationId\": \"inv0\"}@@@",
-      "@@@STEP_LOG_LINE@raw_io.output_text@{\"invocationId\": \"inv0\", \"testResult\": {\"failureReason\": {\"primaryErrorMessage\": \"paint_op_writer.cc(106): Check failed:\"}, \"status\": \"FAIL\", \"testId\": \"Test.One\", \"variant\": {\"def\": {\"test_suite\": \"blink_web_tests\"}}, \"variantHash\": \"blink_web_tests_hash\"}}@@@",
+      "@@@STEP_LOG_LINE@raw_io.output_text@{\"invocationId\": \"inv0\", \"testResult\": {\"failureReason\": {\"primaryErrorMessage\": \"paint_op_writer.cc(106): Check failed:\"}, \"status\": \"FAIL\", \"tags\": [{\"key\": \"test_name\", \"value\": \"Test.One\"}], \"testId\": \"ninja://blink_web_tests/Test.One\", \"variant\": {\"def\": {\"test_suite\": \"blink_web_tests\"}}, \"variantHash\": \"blink_web_tests_hash\"}}@@@",
       "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
   },
@@ -2383,7 +2383,7 @@
     "cmd": [],
     "name": "$debug - all results (with patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@1.77 KB@@@",
+      "@@@STEP_TEXT@1.79 KB@@@",
       "@@@STEP_LOG_LINE@serialized results@{@@@",
       "@@@STEP_LOG_LINE@serialized results@  \"all_suites\": [@@@",
       "@@@STEP_LOG_LINE@serialized results@    {@@@",
@@ -2404,11 +2404,11 @@
       "@@@STEP_LOG_LINE@serialized results@  ]@@@",
       "@@@STEP_LOG_LINE@serialized results@}@@@",
       "@@@STEP_LOG_END@serialized results@@@",
-      "@@@STEP_LOG_LINE@memory usage@Size of this RDBResults: 1.77 KB@@@",
+      "@@@STEP_LOG_LINE@memory usage@Size of this RDBResults: 1.79 KB@@@",
       "@@@STEP_LOG_LINE@memory usage@@@@",
-      "@@@STEP_LOG_LINE@memory usage@\tSize of RDBPerSuiteResults for blink_web_tests: 1.49 KB@@@",
+      "@@@STEP_LOG_LINE@memory usage@\tSize of RDBPerSuiteResults for blink_web_tests: 1.51 KB@@@",
       "@@@STEP_LOG_LINE@memory usage@\t\tNumber of RDBPerIndividualTestResults entries: 1@@@",
-      "@@@STEP_LOG_LINE@memory usage@\t\tSize of all RDBPerIndividualTestResults entries: 457.00 B@@@",
+      "@@@STEP_LOG_LINE@memory usage@\t\tSize of all RDBPerIndividualTestResults entries: 481.00 B@@@",
       "@@@STEP_LOG_END@memory usage@@@"
     ]
   },

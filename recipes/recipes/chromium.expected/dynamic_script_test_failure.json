@@ -805,9 +805,9 @@
     "name": "test_script_with_broken_tests results",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@raw_io.output_text@{\"invocation\": {\"name\": \"test_script_with_broken_tests_results\", \"state\": \"FINALIZED\"}, \"invocationId\": \"inv0\"}@@@",
-      "@@@STEP_LOG_LINE@raw_io.output_text@{\"invocationId\": \"inv0\", \"testResult\": {\"failureReason\": {\"primaryErrorMessage\": \"paint_op_writer.cc(106): Check failed:\"}, \"status\": \"FAIL\", \"testId\": \"FailSuite.Test1\", \"variant\": {\"def\": {\"test_suite\": \"test_script_with_broken_tests\"}}, \"variantHash\": \"test_script_with_broken_tests_hash\"}}@@@",
+      "@@@STEP_LOG_LINE@raw_io.output_text@{\"invocationId\": \"inv0\", \"testResult\": {\"failureReason\": {\"primaryErrorMessage\": \"paint_op_writer.cc(106): Check failed:\"}, \"status\": \"FAIL\", \"tags\": [{\"key\": \"test_name\", \"value\": \"FailSuite.Test1\"}], \"testId\": \"ninja://test_script_with_broken_tests/FailSuite.Test1\", \"variant\": {\"def\": {\"test_suite\": \"test_script_with_broken_tests\"}}, \"variantHash\": \"test_script_with_broken_tests_hash\"}}@@@",
       "@@@STEP_LOG_LINE@raw_io.output_text@{\"invocation\": {\"name\": \"test_script_with_broken_tests_results\", \"state\": \"FINALIZED\"}, \"invocationId\": \"inv1\"}@@@",
-      "@@@STEP_LOG_LINE@raw_io.output_text@{\"invocationId\": \"inv1\", \"testResult\": {\"failureReason\": {\"primaryErrorMessage\": \"paint_op_writer.cc(106): Check failed:\"}, \"status\": \"FAIL\", \"testId\": \"FlakySuite.TestA\", \"variant\": {\"def\": {\"test_suite\": \"test_script_with_broken_tests\"}}, \"variantHash\": \"test_script_with_broken_tests_hash\"}}@@@",
+      "@@@STEP_LOG_LINE@raw_io.output_text@{\"invocationId\": \"inv1\", \"testResult\": {\"failureReason\": {\"primaryErrorMessage\": \"paint_op_writer.cc(106): Check failed:\"}, \"status\": \"FAIL\", \"tags\": [{\"key\": \"test_name\", \"value\": \"FlakySuite.TestA\"}], \"testId\": \"ninja://test_script_with_broken_tests/FlakySuite.TestA\", \"variant\": {\"def\": {\"test_suite\": \"test_script_with_broken_tests\"}}, \"variantHash\": \"test_script_with_broken_tests_hash\"}}@@@",
       "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
   },
@@ -854,7 +854,7 @@
     "cmd": [],
     "name": "$debug - all results",
     "~followup_annotations": [
-      "@@@STEP_TEXT@2.29 KB@@@",
+      "@@@STEP_TEXT@2.37 KB@@@",
       "@@@STEP_LOG_LINE@serialized results@{@@@",
       "@@@STEP_LOG_LINE@serialized results@  \"all_suites\": [@@@",
       "@@@STEP_LOG_LINE@serialized results@    {@@@",
@@ -876,11 +876,11 @@
       "@@@STEP_LOG_LINE@serialized results@  ]@@@",
       "@@@STEP_LOG_LINE@serialized results@}@@@",
       "@@@STEP_LOG_END@serialized results@@@",
-      "@@@STEP_LOG_LINE@memory usage@Size of this RDBResults: 2.29 KB@@@",
+      "@@@STEP_LOG_LINE@memory usage@Size of this RDBResults: 2.37 KB@@@",
       "@@@STEP_LOG_LINE@memory usage@@@@",
-      "@@@STEP_LOG_LINE@memory usage@\tSize of RDBPerSuiteResults for test_script_with_broken_tests: 2.01 KB@@@",
+      "@@@STEP_LOG_LINE@memory usage@\tSize of RDBPerSuiteResults for test_script_with_broken_tests: 2.09 KB@@@",
       "@@@STEP_LOG_LINE@memory usage@\t\tNumber of RDBPerIndividualTestResults entries: 2@@@",
-      "@@@STEP_LOG_LINE@memory usage@\t\tSize of all RDBPerIndividualTestResults entries: 944.00 B@@@",
+      "@@@STEP_LOG_LINE@memory usage@\t\tSize of all RDBPerIndividualTestResults entries: 1.02 KB@@@",
       "@@@STEP_LOG_END@memory usage@@@"
     ]
   },

@@ -36,35 +36,25 @@ class WeetbixTestApi(recipe_test_api.RecipeTestApi):
     return verdict_examples
 
   def generate_analysis(self,
-                        test_name,
-                        suite_name='failed_test',
+                        test_id,
                         expected_count=10,
                         unexpected_count=0,
-                        flaky_verdict_count=None,
+                        flaky_verdict_counts=(0, 0),
                         examples_times=None):
-    flaky_verdicts1 = 0
-    flaky_verdicts2 = 0
-    if flaky_verdict_count != None:
-      flaky_verdicts1 = flaky_verdict_count
+    interval_stats = [{
+        'intervalAge': i + 1,
+        'totalRunExpectedVerdicts': 300,
+        'totalRunUnexpectedVerdicts': 1,
+        'totalRunFlakyVerdicts': count,
+    } for i, count in enumerate(flaky_verdict_counts)]
 
     return {
         'testId':
-            'ninja://{}/{}'.format(suite_name, test_name),
+            test_id,
         'variantHash':
             'fake_variant_hash',
-        'intervalStats': [
-            {
-                'intervalAge': 1,
-                'totalRunExpectedVerdicts': 300,
-                'totalRunUnexpectedVerdicts': 1,
-                'totalRunFlakyVerdicts': flaky_verdicts1,
-            },
-            {
-                'intervalAge': 2,
-                'totalRunExpectedVerdicts': 300,
-                'totalRunFlakyVerdicts': flaky_verdicts2,
-            },
-        ],
+        'intervalStats':
+            interval_stats,
         'recentVerdicts':
             self.construct_recent_verdicts(
                 expected_count=expected_count,
@@ -73,6 +63,17 @@ class WeetbixTestApi(recipe_test_api.RecipeTestApi):
         'runFlakyVerdictExamples':
             self.construct_flaky_verdict_examples(examples_times)
     }
+
+  @recipe_test_api.mod_test_data
+  @staticmethod
+  def query_failure_rate_results(analysis_list):
+    """Returns a test_id -> analysis dict to be used by the weetbix module
+
+    analysis_list: List of analysis dicts created from generate_analysis()
+
+    Returns: Dict
+    """
+    return {analysis['testId']: analysis for analysis in analysis_list}
 
   def query_test_history(self,
                          response,

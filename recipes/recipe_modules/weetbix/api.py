@@ -44,6 +44,40 @@ class WeetbixApi(recipe_api.RecipeApi):
         request_input, indent=2)
     return result.stdout
 
+  def _query_failure_rate_step_test_data(self, test_ids):
+    analysis_by_test_id = self._test_data.get('query_failure_rate_results', {})
+    intervals = [{
+        "endTime": "2022-12-01T18:49:23.160302198Z",
+        "intervalAge": 1,
+        "startTime": "2022-11-30T18:49:23.160302198Z"
+    }, {
+        "endTime": "2022-11-30T18:49:23.160302198Z",
+        "intervalAge": 2,
+        "startTime": "2022-11-29T18:49:23.160302198Z"
+    }, {
+        "endTime": "2022-11-29T18:49:23.160302198Z",
+        "intervalAge": 3,
+        "startTime": "2022-11-28T18:49:23.160302198Z"
+    }, {
+        "endTime": "2022-11-28T18:49:23.160302198Z",
+        "intervalAge": 4,
+        "startTime": "2022-11-25T18:49:23.160302198Z"
+    }, {
+        "endTime": "2022-11-25T18:49:23.160302198Z",
+        "intervalAge": 5,
+        "startTime": "2022-11-24T18:49:23.160302198Z"
+    }]
+
+    def _create_individual_test_variant(test_id):
+      if test_id not in analysis_by_test_id:
+        return self.test_api.generate_analysis(test_id=test_id)
+      return analysis_by_test_id[test_id]
+
+    return self.m.json.test_api.output_stream({
+        'intervals': intervals,
+        'testVariants': [_create_individual_test_variant(t) for t in test_ids],
+    })
+
   def query_failure_rate(self, test_suites):
     """Queries LUCI Analysis for failure rates
 
@@ -69,11 +103,17 @@ class WeetbixApi(recipe_api.RecipeApi):
         })
 
     with self.m.step.nest('query LUCI Analysis for failure rates'):
+
       failure_analysis_dicts = self._run(
-          'rpc call', 'luci.analysis.v1.TestVariants.QueryFailureRate', {
+          'rpc call',
+          'luci.analysis.v1.TestVariants.QueryFailureRate',
+          {
               'project': 'chromium',
               'testVariants': test_variants_to_query,
-          }).get('testVariants')
+          },
+          step_test_data=lambda: self._query_failure_rate_step_test_data(
+              [t['testId'] for t in test_variants_to_query]),
+      ).get('testVariants')
 
       # Should not happen unless there's a server issue with the RPC
       if not failure_analysis_dicts:

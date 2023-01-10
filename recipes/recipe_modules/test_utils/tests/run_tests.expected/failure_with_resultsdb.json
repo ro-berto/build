@@ -711,7 +711,7 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@raw_io.output_text@{\"invocation\": {\"name\": \"base_unittests_failed_results_results\", \"state\": \"FINALIZED\"}, \"invocationId\": \"inv0\"}@@@",
-      "@@@STEP_LOG_LINE@raw_io.output_text@{\"invocationId\": \"inv0\", \"testResult\": {\"failureReason\": {\"primaryErrorMessage\": \"paint_op_writer.cc(106): Check failed:\"}, \"status\": \"FAIL\", \"testId\": \"Test.One\", \"variant\": {\"def\": {\"test_suite\": \"base_unittests_failed_results\"}}, \"variantHash\": \"base_unittests_failed_results_hash\"}}@@@",
+      "@@@STEP_LOG_LINE@raw_io.output_text@{\"invocationId\": \"inv0\", \"testResult\": {\"failureReason\": {\"primaryErrorMessage\": \"paint_op_writer.cc(106): Check failed:\"}, \"status\": \"FAIL\", \"tags\": [{\"key\": \"test_name\", \"value\": \"Test.One\"}], \"testId\": \"ninja://base_unittests_failed_results/Test.One\", \"variant\": {\"def\": {\"test_suite\": \"base_unittests_failed_results\"}}, \"variantHash\": \"base_unittests_failed_results_hash\"}}@@@",
       "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
   },
@@ -1003,7 +1003,7 @@
     "cmd": [],
     "name": "$debug - all results",
     "~followup_annotations": [
-      "@@@STEP_TEXT@3.81 KB@@@",
+      "@@@STEP_TEXT@3.85 KB@@@",
       "@@@STEP_LOG_LINE@serialized results@{@@@",
       "@@@STEP_LOG_LINE@serialized results@  \"all_suites\": [@@@",
       "@@@STEP_LOG_LINE@serialized results@    {@@@",
@@ -1045,11 +1045,11 @@
       "@@@STEP_LOG_LINE@serialized results@  ]@@@",
       "@@@STEP_LOG_LINE@serialized results@}@@@",
       "@@@STEP_LOG_END@serialized results@@@",
-      "@@@STEP_LOG_LINE@memory usage@Size of this RDBResults: 3.81 KB@@@",
+      "@@@STEP_LOG_LINE@memory usage@Size of this RDBResults: 3.85 KB@@@",
       "@@@STEP_LOG_LINE@memory usage@@@@",
-      "@@@STEP_LOG_LINE@memory usage@\tSize of RDBPerSuiteResults for base_unittests_failed_results: 1.52 KB@@@",
+      "@@@STEP_LOG_LINE@memory usage@\tSize of RDBPerSuiteResults for base_unittests_failed_results: 1.56 KB@@@",
       "@@@STEP_LOG_LINE@memory usage@\t\tNumber of RDBPerIndividualTestResults entries: 1@@@",
-      "@@@STEP_LOG_LINE@memory usage@\t\tSize of all RDBPerIndividualTestResults entries: 457.00 B@@@",
+      "@@@STEP_LOG_LINE@memory usage@\t\tSize of all RDBPerIndividualTestResults entries: 495.00 B@@@",
       "@@@STEP_LOG_LINE@memory usage@@@@",
       "@@@STEP_LOG_LINE@memory usage@\tSize of RDBPerSuiteResults for base_unittests_failed_results_2: 1.02 KB@@@",
       "@@@STEP_LOG_LINE@memory usage@\t\tNumber of RDBPerIndividualTestResults entries: 0@@@",
