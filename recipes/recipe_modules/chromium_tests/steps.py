@@ -244,13 +244,11 @@ def _present_info_messages(presentation, test):
   if test.is_rts:
     messages.append(
         'Ran tests selected by RTS. See '
-        'https://crsrc.org/c/docs/testing/regression-test-selection.md'
-        ' for more information\n')
+        'https://bit.ly/regression-test-selection for more information\n')
   elif test.is_inverted_rts:
     messages.append(
         'Ran tests previously skipped by RTS. See '
-        'https://crsrc.org/c/docs/testing/regression-test-selection.md'
-        ' for more information\n')
+        'https://bit.ly/regression-test-selection for more information\n')
   messages.extend(test.spec.info_messages)
   messages.append(presentation.step_text)
   presentation.step_text = '\n'.join(messages)
