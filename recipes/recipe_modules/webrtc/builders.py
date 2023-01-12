@@ -500,6 +500,18 @@ _CLIENT_WEBRTC_SPEC = {
                 'TARGET_ARCH': 'arm',
                 'TARGET_BITS': 64,
             }),
+    'iOS Debug (simulator)':
+        WebRTCBuilderSpec.create(
+            chromium_config='webrtc_default',
+            gclient_config='webrtc_ios',
+            chromium_apply_config=['mac_toolchain'],
+            simulation_platform='mac',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_PLATFORM': 'ios',
+                'TARGET_ARCH': 'intel',
+                'TARGET_BITS': 64,
+            }),
     'iOS64 Sim Debug (iOS 12)':
         WebRTCBuilderSpec.create(
             chromium_config='webrtc_default',
@@ -929,6 +941,18 @@ _TRYSERVER_WEBRTC_SPEC = {
                 'TARGET_ARCH': 'arm',
                 'TARGET_BITS': 64,
             }),
+    'ios_dbg_simulator':
+        WebRTCBuilderSpec.create(
+            chromium_config='webrtc_default',
+            gclient_config='webrtc_ios',
+            chromium_apply_config=['mac_toolchain'],
+            simulation_platform='mac',
+            chromium_config_kwargs={
+                'BUILD_CONFIG': 'Debug',
+                'TARGET_PLATFORM': 'ios',
+                'TARGET_ARCH': 'intel',
+                'TARGET_BITS': 64,
+            }),
     'ios_sim_x64_dbg_ios14':
         WebRTCBuilderSpec.create(
             chromium_config='webrtc_default',
@@ -1268,15 +1292,6 @@ _TRYSERVER_WEBRTC_SPEC = {
     'win_x64_clang_dbg':
         WebRTCBuilderSpec.create(
             chromium_config='webrtc_clang',
-            gclient_config='webrtc',
-            simulation_platform='win',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Debug',
-                'TARGET_BITS': 64,
-            }),
-    'win_x64_clang_dbg_win10':
-        WebRTCBuilderSpec.create(
-            chromium_config='webrtc_default',
             gclient_config='webrtc',
             simulation_platform='win',
             chromium_config_kwargs={
