@@ -75,11 +75,11 @@ def RunSteps(api):
       return
 
     tests_to_compile = [
-        t for t in targets_config.all_tests if t.canonical_name in test_targets
+        t for t in targets_config.all_tests if t.target_name in test_targets
     ]
 
-    gn_args = api.webrtc.run_mb(
-        builder_id, phase, tests_to_compile, mb_config_path=mb_config_path)
+    gn_args = api.webrtc.run_mb(builder_id, phase, tests_to_compile,
+                                mb_config_path)
 
     use_reclient = api.gn.parse_gn_args(gn_args).get('use_remoteexec') == 'true'
     use_goma_module = use_reclient == False
@@ -101,7 +101,7 @@ def RunSteps(api):
 
     tests_to_run = [
         t for t in targets_config.tests_on(builder_id)
-        if t.canonical_name in test_targets
+        if t.target_name in test_targets
     ]
 
     test_failure_summary = api.webrtc.run_tests(builder_id, tests_to_run)

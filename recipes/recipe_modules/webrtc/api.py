@@ -32,14 +32,14 @@ def _replace_string_in_dict(dict_input, old, new):
 
 
 def _get_isolated_targets(tests):
-  return [t.canonical_name for t in tests if t.runs_on_swarming]
+  return [t.target_name for t in tests if t.runs_on_swarming]
 
 
 def _get_test_targets_from_config(targets_config, phase):
   if phase is None:
-    return [t.canonical_name for t in targets_config.all_tests]
+    return [t.target_name for t in targets_config.all_tests]
   if phase == 'rtti_no_sctp':
-    return [t.canonical_name for t in targets_config.all_tests]
+    return [t.target_name for t in targets_config.all_tests]
   return []
 
 
@@ -311,7 +311,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     relative_cwd = self.m.path.relpath(output_dir, self.m.path['checkout'])
     for test in tests:
       if test.runs_on_swarming:
-        command_line = swarming_command_lines.get(test.canonical_name, [])
+        command_line = swarming_command_lines.get(test.target_name, [])
         if command_line:
           test.raw_cmd = command_line
           test.relative_cwd = relative_cwd
