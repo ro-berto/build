@@ -423,17 +423,8 @@ class Test:
 
     self._test_options = TestOptions.create()
 
-    # Contains a set of flaky failures that are known to be flaky, along with
-    # the according id of the monorail bug filed for the flaky test.
-    # The set of flaky tests is supposed to be a subset of the deterministic
-    # failures.
-    # Maps test name to monorail issue
-    # Ex: "fast/frames/002.html" -> "1339538"
-    # TODO (crbug/1314194): Remove once we're using luci analysis for flake
-    # exoneration
-    self._known_flaky_failures_map = {}
-
-    # Set of test names
+    # Set of test names that are either flaky or deterministically failing on
+    # ToT, according to luci analysis criteria.
     # TODO (crbug/1314194): Update name to something else since
     # this also includes tests failing on ToT
     self._known_luci_analysis_flaky_failures = set()
@@ -670,13 +661,6 @@ class Test:
   def update_rdb_results(self, suffix, results):
     self._rdb_results[suffix] = results
 
-  # TODO (crbug/1314194): Remove once we're using luci analysis for flake
-  # exoneration
-  @property
-  def known_flaky_failures(self):
-    """Return a set of tests that failed but known to be flaky at ToT."""
-    return set(self._known_flaky_failures_map)
-
   @property
   def known_luci_analysis_flaky_failures(self):
     return self._known_luci_analysis_flaky_failures
@@ -684,21 +668,6 @@ class Test:
   @property
   def weak_luci_analysis_flaky_failures(self):
     return self._weak_luci_analysis_flaky_failures
-
-  def get_summary_of_known_flaky_failures(self):
-    """Returns a set of text to use to display in the test results summary."""
-    luci_analysis_exoneration = ('weetbix.enable_weetbix_exonerations' in
-                                 self.api.m.buildbucket.build.input.experiments)
-    if luci_analysis_exoneration:
-      return self.known_luci_analysis_flaky_failures
-    return {
-        '%s: crbug.com/%s' % (test_name, issue_id)
-        for test_name, issue_id in self._known_flaky_failures_map.items()
-    }
-
-  def add_known_flaky_failure(self, test_name, monorail_issue):
-    """Add a known flaky failure on ToT along with the monorail issue id."""
-    self._known_flaky_failures_map[test_name] = monorail_issue
 
   def add_known_luci_analysis_flaky_failures(self, test_names):
     """Add known flaky failures on ToT
@@ -957,24 +926,20 @@ class Test:
     if retry_shards_valid:
       retry_shards_failures = self.deterministic_failures(retry_suffix)
 
-    luci_analysis_exoneration = ('weetbix.enable_weetbix_exonerations' in
-                                 self.api.m.buildbucket.build.input.experiments)
-    known_flaky_failures = (
-        self.known_flaky_failures if not luci_analysis_exoneration else
-        self.known_luci_analysis_flaky_failures)
     if original_run_valid and retry_shards_valid:
       # TODO(martiniss): Maybe change this behavior? This allows for failures
       # in 'retry shards with patch' which might not be reported to devs, which
       # may confuse them.
       return True, (
           set(failures).intersection(retry_shards_failures) -
-          known_flaky_failures)
+          self.known_luci_analysis_flaky_failures)
 
     if original_run_valid:
-      return True, set(failures) - known_flaky_failures
+      return True, set(failures) - self.known_luci_analysis_flaky_failures
 
     if retry_shards_valid:
-      return True, set(retry_shards_failures) - known_flaky_failures
+      return True, set(
+          retry_shards_failures) - self.known_luci_analysis_flaky_failures
 
     return False, None
 
@@ -986,12 +951,7 @@ class Test:
   # failed "with patch", but passed in "retry shards with patch".
   def has_failures_to_summarize(self):
     _, failures = self.failures_including_retry('with patch')
-    luci_analysis_exoneration = ('weetbix.enable_weetbix_exonerations' in
-                                 self.api.m.buildbucket.build.input.experiments)
-    known_flaky_failures = (
-        self.known_flaky_failures if not luci_analysis_exoneration else
-        self.known_luci_analysis_flaky_failures)
-    return bool(failures or known_flaky_failures)
+    return bool(failures or self.known_luci_analysis_flaky_failures)
 
   def without_patch_failures_to_ignore(self):
     """Returns test failures that should be ignored.
@@ -1038,14 +998,11 @@ class Test:
     # When a patch is adding a new test (and it fails), the test runner is
     # required to just ignore the unknown test.
     if suffix == 'without patch':
-      luci_analysis_exoneration = ('weetbix.enable_weetbix_exonerations' in self
-                                   .api.m.buildbucket.build.input.experiments)
-      known_flaky_failures = (
-          self.known_flaky_failures if not luci_analysis_exoneration else
-          self.known_luci_analysis_flaky_failures)
       # Invalid results should be treated as if every test failed.
       valid_results, failures = self.with_patch_failures_including_retry()
-      return sorted(failures - known_flaky_failures) if valid_results else None
+      return sorted(
+          failures -
+          self.known_luci_analysis_flaky_failures) if valid_results else None
 
     # If we don't recognize the step, then return None. This makes it easy for
     # bugs to slip through, but this matches the previous behavior. Importantly,

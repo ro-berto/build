@@ -26,10 +26,6 @@ PROPERTIES = {
     # This property is a dictionary that specifies the expectations of the
     # labeled known flakes of the mocked tests, and the format is from a test
     # name to a list of tests.
-    'known_flakes_expectations': Property(default={}),
-    # This property is a dictionary that specifies the expectations of the
-    # labeled known flakes of the mocked tests, and the format is from a test
-    # name to a list of tests.
     'known_luci_analysis_flakes_expectations': Property(default={}),
     'weak_flaky_failures': Property(default={}),
 
@@ -51,8 +47,7 @@ PROPERTIES = {
 }
 
 
-def RunSteps(api, known_flakes_expectations,
-             known_luci_analysis_flakes_expectations, weak_flaky_failures,
+def RunSteps(api, known_luci_analysis_flakes_expectations, weak_flaky_failures,
              exclude_failed_test, has_too_many_failures, all_valid):
   test_specs = [
       steps.MockTestSpec.create(name='succeeded_test'),
@@ -87,8 +82,6 @@ def RunSteps(api, known_flakes_expectations,
       tests, 'with patch', retry_failed_shards=True, retry_invalid_shards=True)
 
   for t in tests:
-    api.assertions.assertEqual(t.known_flaky_failures,
-                               set(known_flakes_expectations.get(t.name, [])))
     api.assertions.assertEqual(
         t.known_luci_analysis_flaky_failures,
         set(known_luci_analysis_flakes_expectations.get(t.name, [])))
@@ -109,16 +102,10 @@ def GenTests(api):
               'should_exonerate_flaky_failures': True,
           },
       }),
-      api.step_data('query known flaky failures on CQ', retcode=1),
       api.override_step_data(
           'query LUCI Analysis for failure rates.rpc call', retcode=1),
       api.post_process(post_process.MustRun,
                        'error querying LUCI Analysis for failure rates'),
-      api.post_process(post_process.MustRun,
-                       'query known flaky failures on CQ'),
-      api.post_process(post_process.StepTextContains,
-                       'query known flaky failures on CQ',
-                       ['Failed to get known flakes']),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -138,12 +125,6 @@ def GenTests(api):
           'query LUCI Analysis for failure rates.rpc call',
           stdout=api.raw_io.output_text(api.json.dumps({'testVariants': []})),
       ),
-      api.step_data(
-          'query known flaky failures on CQ',
-          api.json.output({'step_ui_name': 'browser_tests (with patch)'})),
-      api.post_process(post_process.StepTextContains,
-                       'query known flaky failures on CQ',
-                       ['Response is ill-formed']),
       api.post_process(post_process.MustRun,
                        'error querying LUCI Analysis for failure rates'),
       api.post_process(post_process.StatusSuccess),
@@ -161,15 +142,6 @@ def GenTests(api):
               'should_exonerate_flaky_failures': True,
           },
       }),
-      api.step_data(
-          'query known flaky failures on CQ',
-          api.json.output(
-              {'flakes': [{
-                  'step_ui_name': 'browser_tests (with patch)'
-              }]})),
-      api.post_process(post_process.StepTextContains,
-                       'query known flaky failures on CQ',
-                       ['Response is ill-formed']),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -209,8 +181,6 @@ def GenTests(api):
               },
           }),
       api.post_process(post_process.DoesNotRun,
-                       'query known flaky failures on CQ'),
-      api.post_process(post_process.DoesNotRun,
                        'query LUCI Analysis for failure rates'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
@@ -221,9 +191,7 @@ def GenTests(api):
       api.chromium.generic_build(
           builder_group='fake-group',
           builder='fake-builder',
-          experiments=[
-              'enable_weetbix_queries', 'weetbix.enable_weetbix_exonerations'
-          ]),
+      ),
       api.override_step_data(
           'failed_test results',
           stdout=api.raw_io.output_text(
@@ -246,33 +214,34 @@ def GenTests(api):
               expected_count=10,
               unexpected_count=0),
       ]),
-      api.post_process(post_process.MustRun,
-                       'query known flaky failures on CQ'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
 
-  def CheckStepInput(check, step_odict, step_name, test_name):
+  def CheckStepInput(check,
+                     step_odict,
+                     step_name,
+                     test_name,
+                     should_contain=True):
     step = step_odict[step_name]
-    check(test_name in step.stdin)
+    if should_contain:
+      check(test_name in step.stdin)
+    else:
+      check(test_name not in step.stdin)
 
   yield api.test(
       'part of the tests are marked as known flaky',
       api.chromium.generic_build(
           builder_group='fake-group',
           builder='fake-builder',
-          experiments=['enable_weetbix_queries']),
+      ),
       api.properties(
-          known_flakes_expectations={
-              'failed_test': ['testA'],
-          },
           known_luci_analysis_flakes_expectations={
               'failed_test': ['testA'],
           },
           weak_flaky_failures={
               'failed_test': ['testA'],
           },
-          override_failed_test_names=['testA'],
           **{
               '$build/test_utils': {
                   'should_exonerate_flaky_failures': True,
@@ -291,24 +260,13 @@ def GenTests(api):
           ),
           api.weetbix.generate_analysis(test_id='ninja://failed_test/testB'),
       ]),
-      api.step_data(
-          'query known flaky failures on CQ',
-          api.json.output({
-              'flakes': [{
-                  'test': {
-                      'step_ui_name': 'failed_test (with patch)',
-                      'test_name': 'testA',
-                  },
-                  'affected_gerrit_changes': ['123', '234'],
-                  'monorail_issue': '999',
-              }]
-          })),
-      api.post_process(post_process.MustRun,
-                       'query known flaky failures on CQ'),
-      api.post_process(post_process.MustRun,
-                       'exonerate unrelated test failures'),
       api.post_process(CheckStepInput, 'exonerate unrelated test failures',
                        'testA'),
+      api.post_process(
+          CheckStepInput,
+          'exonerate unrelated test failures',
+          'testB',
+          should_contain=False),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -318,11 +276,8 @@ def GenTests(api):
       api.chromium.generic_build(
           builder_group='fake-group',
           builder='fake-builder',
-          experiments=[
-              'enable_weetbix_queries', 'weetbix.enable_weetbix_exonerations'
-          ]),
+      ),
       api.properties(
-          known_flakes_expectations={},
           known_luci_analysis_flakes_expectations={},
           weak_flaky_failures={},
           **{
@@ -339,10 +294,8 @@ def GenTests(api):
           api.weetbix.generate_analysis(
               test_id='ninja://failed_test/testA', flaky_verdict_counts=[10]),
       ]),
-      api.post_process(post_process.MustRun,
-                       'query known flaky failures on CQ'),
       api.post_process(post_process.DoesNotRun,
-                       'exonerate unrelated test failures (luci.analysis)'),
+                       'exonerate unrelated test failures'),
       api.post_process(post_process.MustRun,
                        'failed_test (retry shards with patch)'),
       api.post_process(post_process.StatusSuccess),
@@ -354,18 +307,13 @@ def GenTests(api):
       api.chromium.generic_build(
           builder_group='fake-group',
           builder='fake-builder',
-          experiments=[
-              'enable_weetbix_queries', 'weetbix.enable_weetbix_exonerations'
-          ]),
+      ),
       api.override_step_data(
           'failed_test results',
           stdout=api.raw_io.output_text(
               api.test_utils.rdb_results(
                   'failed_test', failing_tests=['testA', 'testB']))),
       api.properties(
-          known_flakes_expectations={
-              'failed_test': ['testA', 'testB'],
-          },
           known_luci_analysis_flakes_expectations={
               'failed_test': ['testA', 'testB'],
           },
@@ -374,28 +322,6 @@ def GenTests(api):
                   'should_exonerate_flaky_failures': True,
               },
           }),
-      api.step_data(
-          'query known flaky failures on CQ',
-          api.json.output({
-              'flakes': [
-                  {
-                      'test': {
-                          'step_ui_name': 'failed_test (with patch)',
-                          'test_name': 'testA',
-                      },
-                      'affected_gerrit_changes': ['123', '234'],
-                      'monorail_issue': '999',
-                  },
-                  {
-                      'test': {
-                          'step_ui_name': 'failed_test (with patch)',
-                          'test_name': 'testB',
-                      },
-                      'affected_gerrit_changes': ['567', '678'],
-                      'monorail_issue': '998',
-                  },
-              ]
-          })),
       api.time.seed(60 * 60 * 12),
       api.weetbix.query_failure_rate_results([
           api.weetbix.generate_analysis(
@@ -407,19 +333,12 @@ def GenTests(api):
               flaky_verdict_counts=[10],
               examples_times=[60 * 60 * 12]),
       ]),
-      api.post_process(post_process.MustRun,
-                       'query known flaky failures on CQ'),
-      api.post_process(post_process.MustRun,
-                       'exonerate unrelated test failures (luci.analysis)'),
-      api.post_process(CheckStepInput,
-                       'exonerate unrelated test failures (luci.analysis)',
+      api.post_process(CheckStepInput, 'exonerate unrelated test failures',
                        'testA'),
-      api.post_process(CheckStepInput,
-                       'exonerate unrelated test failures (luci.analysis)',
+      api.post_process(CheckStepInput, 'exonerate unrelated test failures',
                        'testB'),
       # Ensure LUCI Analysis is in the explaination
-      api.post_process(CheckStepInput,
-                       'exonerate unrelated test failures (luci.analysis)',
+      api.post_process(CheckStepInput, 'exonerate unrelated test failures',
                        'LUCI Analysis'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
@@ -438,30 +357,14 @@ def GenTests(api):
               api.test_utils.rdb_results(
                   'failed_test', failing_tests=['testA']))),
       api.properties(
-          known_flakes_expectations={
-              'failed_test': ['testA'],
-          },
           known_luci_analysis_flakes_expectations={
               'failed_test': ['testA'],
           },
-          override_failed_test_names=['testA'],
           **{
               '$build/test_utils': {
                   'should_exonerate_flaky_failures': True,
               },
           }),
-      api.step_data(
-          'query known flaky failures on CQ',
-          api.json.output({
-              'flakes': [{
-                  'test': {
-                      'step_ui_name': 'failed_test (with patch)',
-                      'test_name': 'testA',
-                  },
-                  'affected_gerrit_changes': ['123', '234'],
-                  'monorail_issue': '999',
-              }],
-          })),
       api.weetbix.query_failure_rate_results([
           api.weetbix.generate_analysis(
               test_id='ninja://failed_test/testA',
@@ -490,8 +393,6 @@ def GenTests(api):
           }),
       api.post_process(post_process.DoesNotRun,
                        'query LUCI Analysis for failure rates'),
-      api.post_process(post_process.DoesNotRun,
-                       'query known flaky failures on CQ'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -528,9 +429,6 @@ def GenTests(api):
           api.weetbix.generate_analysis(
               test_id='ninja://failed_test/testB', unexpected_count=10),
       ]),
-      api.post_process(post_process.LogContains,
-                       'query known flaky failures on CQ', 'input',
-                       ['failed_test (with patch)']),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
@@ -544,13 +442,9 @@ def GenTests(api):
               'enable_weetbix_queries', 'weetbix.retry_weak_exonerations'
           ]),
       api.properties(
-          known_flakes_expectations={
-              'failed_test': ['testA', 'testB'],
-          },
           known_luci_analysis_flakes_expectations={
               'failed_test': ['testA', 'testB'],
           },
-          override_failed_test_names=['testA'],
           **{
               '$build/test_utils': {
                   'should_exonerate_flaky_failures': True,
@@ -572,28 +466,6 @@ def GenTests(api):
               flaky_verdict_counts=[10],
               examples_times=[60 * 60 * 12]),
       ]),
-      api.step_data(
-          'query known flaky failures on CQ',
-          api.json.output({
-              'flakes': [
-                  {
-                      'test': {
-                          'step_ui_name': 'failed_test (with patch)',
-                          'test_name': 'testA',
-                      },
-                      'affected_gerrit_changes': ['123', '234'],
-                      'monorail_issue': '999',
-                  },
-                  {
-                      'test': {
-                          'step_ui_name': 'failed_test (with patch)',
-                          'test_name': 'testB',
-                      },
-                      'affected_gerrit_changes': ['123', '234'],
-                      'monorail_issue': '999',
-                  },
-              ]
-          })),
       api.post_process(post_process.MustRun, 'failed_test (with patch)'),
       api.post_process(post_process.DoesNotRun,
                        'failed_test (retry shards with patch)'),
@@ -612,9 +484,6 @@ def GenTests(api):
               'enable_weetbix_queries', 'weetbix.retry_weak_exonerations'
           ]),
       api.properties(
-          known_flakes_expectations={
-              'failed_test': ['testA', 'testB'],
-          },
           known_luci_analysis_flakes_expectations={
               'failed_test': ['testA', 'testB'],
           },
@@ -623,7 +492,6 @@ def GenTests(api):
           },
           # Need to make sure the retry step isn't because of an invalid test
           all_valid=True,
-          override_failed_test_names=['testA'],
           **{
               '$build/test_utils': {
                   'should_exonerate_flaky_failures': True,
@@ -640,28 +508,6 @@ def GenTests(api):
           api.weetbix.generate_analysis(
               test_id='ninja://failed_test/testB', flaky_verdict_counts=[10]),
       ]),
-      api.step_data(
-          'query known flaky failures on CQ',
-          api.json.output({
-              'flakes': [
-                  {
-                      'test': {
-                          'step_ui_name': 'failed_test (with patch)',
-                          'test_name': 'testA',
-                      },
-                      'affected_gerrit_changes': ['123', '234'],
-                      'monorail_issue': '999',
-                  },
-                  {
-                      'test': {
-                          'step_ui_name': 'failed_test (with patch)',
-                          'test_name': 'testB',
-                      },
-                      'affected_gerrit_changes': ['123', '234'],
-                      'monorail_issue': '999',
-                  },
-              ]
-          })),
       api.post_process(post_process.MustRun, 'failed_test (with patch)'),
       api.post_process(post_process.MustRun,
                        'failed_test (retry shards with patch)'),
@@ -679,16 +525,12 @@ def GenTests(api):
               'enable_weetbix_queries', 'weetbix.retry_weak_exonerations'
           ]),
       api.properties(
-          known_flakes_expectations={
-              'failed_test': [],
-          },
           known_luci_analysis_flakes_expectations={
               'failed_test': ['testA', 'testB'],
           },
           weak_flaky_failures={
               'failed_test': ['testA', 'testB'],
           },
-          override_failed_test_names=['testA'],
           **{
               '$build/test_utils': {
                   'should_exonerate_flaky_failures': True,
@@ -705,8 +547,6 @@ def GenTests(api):
           api.weetbix.generate_analysis(
               test_id='ninja://failed_test/testB', flaky_verdict_counts=[10]),
       ]),
-      api.step_data('query known flaky failures on CQ',
-                    api.json.output({'flakes': []})),
       api.post_process(post_process.MustRun, 'failed_test (with patch)'),
       api.post_process(post_process.MustRun,
                        'failed_test (retry shards with patch)'),
@@ -723,13 +563,9 @@ def GenTests(api):
               'enable_weetbix_queries', 'weetbix.retry_weak_exonerations'
           ]),
       api.properties(
-          known_flakes_expectations={
-              'failed_test': [],
-          },
           known_luci_analysis_flakes_expectations={
               'failed_test': [],
           },
-          override_failed_test_names=[],
           **{
               '$build/test_utils': {
                   'should_exonerate_flaky_failures': True,

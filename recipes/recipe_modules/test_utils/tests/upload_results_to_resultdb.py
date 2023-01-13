@@ -395,8 +395,5 @@ def GenTests(api):
               api.test_utils.canned_gtest_output(passing=False),
               shards=2,
               failure=False)),
-      api.post_process(post_process.LogContains,
-                       'query known flaky failures on CQ', 'input',
-                       ['Different.Test.Name']),
       api.post_process(post_process.DropExpectation),
   )

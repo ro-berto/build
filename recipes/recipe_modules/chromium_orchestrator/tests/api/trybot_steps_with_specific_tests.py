@@ -25,6 +25,7 @@ DEPS = [
     'recipe_engine/step',
     'recipe_engine/swarming',
     'test_utils',
+    'weetbix',
 ]
 
 
@@ -377,18 +378,12 @@ def GenTests(api):
           with_patch=True, is_swarming_phase=False),
       api.chromium_tests.gen_swarming_and_rdb_results(
           'base_unittests', 'with patch', failures=['Test.Two']),
-      api.step_data(
-          'query known flaky failures on CQ',
-          api.json.output({
-              'flakes': [{
-                  'test': {
-                      'step_ui_name': 'base_unittests (with patch)',
-                      'test_name': 'Test.Two',
-                  },
-                  'affected_gerrit_changes': ['123', '234'],
-                  'monorail_issue': '999',
-              }]
-          })),
+      api.weetbix.query_failure_rate_results([
+          api.weetbix.generate_analysis(
+              test_id='ninja://base_unittests/Test.Two',
+              expected_count=0,
+              unexpected_count=10),
+      ]),
       api.post_process(post_process.MustRun, 'base_unittests (with patch)'),
       api.post_process(post_process.DoesNotRun,
                        'base_unittests (retry shards with patch)'),
@@ -398,7 +393,7 @@ def GenTests(api):
           post_process.StepTextContains,
           'base_unittests (test results summary)', [
               'Tests failed with patch, but ignored as they are known to be '
-              'flaky:<br/>Test.Two: crbug.com/999<br/>'
+              'flaky (see Test Results Tab for more info):<br/>Test.Two<br/>'
           ]),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
@@ -439,7 +434,6 @@ def GenTests(api):
           'base_unittests', 'with patch', failures=['Test.Two']),
       api.chromium_tests.gen_swarming_and_rdb_results(
           'base_unittests', 'retry shards with patch', failures=['Test.Two']),
-      api.step_data('query known flaky failures on CQ', api.json.output([])),
       api.post_process(post_process.MustRun, 'base_unittests (with patch)'),
       api.post_process(post_process.MustRun,
                        'base_unittests (retry shards with patch)'),
@@ -492,18 +486,17 @@ def GenTests(api):
           'base_unittests', 'with patch', failures=['Test.One', 'Test.Two']),
       api.chromium_tests.gen_swarming_and_rdb_results(
           'base_unittests', 'retry shards with patch', failures=['Test.Two']),
-      api.step_data(
-          'query known flaky failures on CQ',
-          api.json.output({
-              'flakes': [{
-                  'test': {
-                      'step_ui_name': 'base_unittests (with patch)',
-                      'test_name': 'Test.Two',
-                  },
-                  'affected_gerrit_changes': ['123', '234'],
-                  'monorail_issue': '999',
-              }]
-          })),
+      api.weetbix.query_failure_rate_results([
+          api.weetbix.generate_analysis(
+              test_id='ninja://base_unittests/Test.One',
+              expected_count=10,
+              unexpected_count=0),
+          api.weetbix.generate_analysis(
+              test_id='ninja://base_unittests/Test.Two',
+              expected_count=10,
+              unexpected_count=0,
+              flaky_verdict_counts=[5, 20]),
+      ]),
       api.post_process(post_process.MustRun, 'base_unittests (with patch)'),
       api.post_process(post_process.MustRun,
                        'base_unittests (retry shards with patch)'),
@@ -513,17 +506,18 @@ def GenTests(api):
           post_process.StepTextContains,
           'base_unittests (test results summary)', [
               'Tests failed with patch, but ignored as they are known to be '
-              'flaky:<br/>Test.Two: crbug.com/999<br/>'
+              'flaky (see Test Results Tab for more info):<br/>Test.Two<br/>'
           ]),
       api.post_process(post_process.DropExpectation),
   )
 
   # This test tests the scenario that a known flaky failure shouldn't be retried
-  # "without patch". For example: t1 and t2 failed "with patch", and t2 is
-  # known to be flaky, while retrying, t1 and t2 fails again, and only t1 is
+  # "without patch". For example: t1, t2, t3 failed "with patch", and t2 is
+  # known to be flaky and t3 is known to be deterministically failing.
+  # While retrying, t1, t2, t3 fails again, and only t1 is
   # expected to be retried during "without patch".
   yield api.test(
-      'without_patch_only_retries_non_flaky_failures',
+      'without_patch_only_retries_non_flaky_and_not_trunk_failing_failures',
       api.chromium.try_build(
           builder_group='fake-try-group',
           builder='fake-orchestrator',
@@ -554,23 +548,28 @@ def GenTests(api):
           },
       }),
       api.chromium_tests.gen_swarming_and_rdb_results(
-          'base_unittests', 'with patch', failures=['Test.One', 'Test.Two']),
+          'base_unittests',
+          'with patch',
+          failures=['Test.One', 'Test.Two', 'Test.Three']),
       api.chromium_tests.gen_swarming_and_rdb_results(
           'base_unittests',
           'retry shards with patch',
-          failures=['Test.One', 'Test.Two']),
-      api.step_data(
-          'query known flaky failures on CQ',
-          api.json.output({
-              'flakes': [{
-                  'test': {
-                      'step_ui_name': 'base_unittests (with patch)',
-                      'test_name': 'Test.Two',
-                  },
-                  'affected_gerrit_changes': ['123', '234'],
-                  'monorail_issue': '999',
-              }]
-          })),
+          failures=['Test.One', 'Test.Two', 'Test.Three']),
+      api.weetbix.query_failure_rate_results([
+          api.weetbix.generate_analysis(
+              test_id='ninja://base_unittests/Test.One',
+              expected_count=10,
+              unexpected_count=0),
+          api.weetbix.generate_analysis(
+              test_id='ninja://base_unittests/Test.Two',
+              expected_count=10,
+              unexpected_count=0,
+              flaky_verdict_counts=[5, 20]),
+          api.weetbix.generate_analysis(
+              test_id='ninja://base_unittests/Test.Three',
+              expected_count=10,
+              unexpected_count=20),
+      ]),
       api.post_process(post_process.MustRun, 'base_unittests (with patch)'),
       api.post_process(post_process.MustRun,
                        'base_unittests (retry shards with patch)'),
@@ -581,13 +580,17 @@ def GenTests(api):
           '(without patch)', lambda check, req: check('--gtest_filter=Test.One'
                                                       in req[0].command)),
       api.post_process(
-          post_process.StepTextContains,
-          'base_unittests (test results summary)', [
-              'Tests failed with patch, and caused build to fail:'
-              '<br/>Test.One<br/>',
-              'Tests failed with patch, but ignored as they are known to be '
-              'flaky:<br/>Test.Two: crbug.com/999<br/>'
-          ]),
+          post_process.StepCommandDoesNotContain,
+          'test_pre_run (without patch).[trigger] base_unittests '
+          '(without patch)',
+          'Test.Two',
+      ),
+      api.post_process(
+          post_process.StepCommandDoesNotContain,
+          'test_pre_run (without patch).[trigger] base_unittests '
+          '(without patch)',
+          'Test.Three',
+      ),
       api.post_process(post_process.DropExpectation),
   )
 
@@ -636,23 +639,19 @@ def GenTests(api):
           'url_unittests', 'with patch', failures=['UrlTest.One']),
       api.chromium_tests.gen_swarming_and_rdb_results(
           'url_unittests', 'retry shards with patch', failures=['UrlTest.One']),
-      api.step_data(
-          'query known flaky failures on CQ',
-          api.json.output({
-              'flakes': [{
-                  'test': {
-                      'step_ui_name': 'base_unittests (with patch)',
-                      'test_name': 'BaseTest.One',
-                  },
-                  'affected_gerrit_changes': ['123', '234'],
-                  'monorail_issue': '999',
-              }]
-          })),
+      api.weetbix.query_failure_rate_results([
+          api.weetbix.generate_analysis(
+              test_id='ninja://base_unittests/BaseTest.One',
+              expected_count=10,
+              unexpected_count=0,
+              flaky_verdict_counts=[5, 25]),
+      ]),
       api.post_process(
           post_process.StepTextContains,
           'base_unittests (test results summary)', [
               'Tests failed with patch, but ignored as they are known to be '
-              'flaky:<br/>BaseTest.One: crbug.com/999<br/>'
+              'flaky (see Test Results Tab for more info):'
+              '<br/>BaseTest.One<br/>'
           ]),
       api.post_process(post_process.StepTextContains,
                        'url_unittests (test results summary)', [

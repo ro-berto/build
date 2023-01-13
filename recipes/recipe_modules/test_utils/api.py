@@ -51,11 +51,13 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
   # Header for ignored failures due to without patch.
   IGNORED_FAILURES_TEXT = (
-      'Tests failed with patch, but ignored as they also fail without patch:')
+      'Tests failed with patch, but ignored as they also fail without patch '
+      '(see Test Results Tab for more info):')
 
   # Header for ignored failures due to that they're known to be flaky.
   IGNORED_FLAKES_TEXT = (
-      'Tests failed with patch, but ignored as they are known to be flaky:')
+      'Tests failed with patch, but ignored as they are known to be flaky '
+      '(see Test Results Tab for more info):')
 
   def __init__(self, properties, *args, **kwargs):
     super().__init__(*args, **kwargs)
@@ -328,7 +330,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
       test_suites: list of steps.Test objects representing tests to run
       suffix: suffix indicating context of the test run
     """
-    step_name = 'exonerate unrelated test failures'
     exonerations = []
     for suite in test_suites:
       results = suite.get_rdb_results(suffix)
@@ -375,19 +376,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
               ))
       # Any failure known to be flaky should also be exonerated.
       elif suffix == 'with patch':
-
-        luci_analysis_exoneration = ('weetbix.enable_weetbix_exonerations' in
-                                     self.m.buildbucket.build.input.experiments)
-
-        if luci_analysis_exoneration:
-          step_name = 'exonerate unrelated test failures (luci.analysis)'
-          explanation_html = (
-              'LUCI Analysis reported this test as being flaky or failing.')
-          flakes = suite.known_luci_analysis_flaky_failures
-        else:
-          explanation_html = 'FindIt reported this test as being flaky.'
-          flakes = suite.known_flaky_failures
-
+        flakes = suite.known_luci_analysis_flaky_failures
         for known_flake in flakes:
           exonerations.append(
               test_result_pb2.TestExoneration(
@@ -396,14 +385,16 @@ class TestUtilsApi(recipe_api.RecipeApi):
                   variant_hash=results.variant_hash,
                   # TODO(crbug.com/1076096): add deep link to the Milo UI to
                   #  display the exonerated test results.
-                  explanation_html=explanation_html,
+                  explanation_html=(
+                      'LUCI Analysis reported this test as being flaky or '
+                      'failing.'),
                   reason=test_result_pb2.ExonerationReason.OCCURS_ON_OTHER_CLS,
               ))
 
     if exonerations:
       self.m.resultdb.exonerate(
           test_exonerations=exonerations,
-          step_name=step_name,
+          step_name='exonerate unrelated test failures',
       )
 
   def _clean_failed_suite_list(self, failed_test_suites):
@@ -436,28 +427,16 @@ class TestUtilsApi(recipe_api.RecipeApi):
     retry_weak_luci_analysis_exonerations = (
         'weetbix.retry_weak_exonerations' in
         self.m.buildbucket.build.input.experiments)
-    luci_analysis_exoneration = ('weetbix.enable_weetbix_exonerations' in
-                                 self.m.buildbucket.build.input.experiments)
-
     pruned_suites = failed_test_suites[:]
     exonerated_suites_to_retry = []
     self._query_and_mark_flaky_failures(pruned_suites)
-    if luci_analysis_exoneration:
-      for t in failed_test_suites:
-        if not t.known_luci_analysis_flaky_failures:
-          continue
+    for t in failed_test_suites:
+      if not t.known_luci_analysis_flaky_failures:
+        continue
 
-        if set(t.deterministic_failures('with patch')).issubset(
-            t.known_luci_analysis_flaky_failures):
-          pruned_suites.remove(t)
-    else:
-      for t in failed_test_suites:
-        if not t.known_flaky_failures:
-          continue
-
-        if set(t.deterministic_failures('with patch')).issubset(
-            t.known_flaky_failures):
-          pruned_suites.remove(t)
+      if set(t.deterministic_failures('with patch')).issubset(
+          t.known_luci_analysis_flaky_failures):
+        pruned_suites.remove(t)
 
     if retry_weak_luci_analysis_exonerations:
       for t in failed_test_suites:
@@ -623,74 +602,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
     query_luci_analysis_step.presentation.properties['luci_analysis_info'] = (
         luci_analysis_build_output)
 
-  def _query_flaky_failures(self, tests_to_check):
-    """Queries FindIt if a given set of tests are known to be flaky.
-
-    Args:
-      tests_to_check: List of dicts like {'step_ui_name': .., 'test_name': ..}]
-    Returns:
-      Dict of flakes. See query_cq_flakes.py for the full format.
-    """
-    if not tests_to_check:
-      return {}
-
-    builder = self.m.buildbucket.build.builder
-    flakes_input = {
-        'project': builder.project,
-        'bucket': builder.bucket,
-        'builder': builder.builder,
-        'tests': tests_to_check,
-    }
-
-    result = self.m.step(
-        'query known flaky failures on CQ',
-        [
-            'python3',
-            self.resource('query_cq_flakes.py'),
-            '--input-path',
-            self.m.json.input(flakes_input),
-            '--output-path',
-            self.m.json.output(),
-        ],
-        infra_step=True,
-        # Failing to query data from the service for any reason results in a
-        # step with infra failure, but doesn't fail the build to avoid
-        # affecting developers from landing their code, and the recipe will
-        # fall back to the original behavior to retrying failed tests in case
-        # of any issue.
-        ok_ret=('any'))
-
-    result.presentation.logs['input'] = self.m.json.dumps(
-        flakes_input, indent=2)
-    result.presentation.logs['output'] = self.m.json.dumps(
-        result.json.output, indent=2)
-
-    if result.exc_result.retcode != 0:
-      # FindIt can return 500 errors for large requests: crbug.com/1281674
-      result.presentation.step_text = (
-          'Failed to get known flakes. '
-          'Was there a large (1000+) amount of test failures?')
-      return {}
-
-    if not result.json.output:
-      return {}
-
-    if 'flakes' not in result.json.output:
-      result.presentation.step_text = 'Response is ill-formed'
-      return {}
-
-    for flake in result.json.output['flakes']:
-      if ('affected_gerrit_changes' not in flake or
-          'monorail_issue' not in flake or 'test' not in flake or
-          'step_ui_name' not in flake['test'] or
-          'test_name' not in flake['test']):
-        # Response is ill-formed. Don't expect to ever happen, but have this
-        # check in place just in case.
-        result.presentation.step_text = 'Response is ill-formed'
-        return {}
-
-    return result.json.output
-
   def _query_and_mark_flaky_failures(self, failed_test_suites):
     """Queries and marks failed tests that are already known to be flaky.
 
@@ -714,42 +625,16 @@ class TestUtilsApi(recipe_api.RecipeApi):
     if not failed_test_suites:
       return
 
-    tests_to_check = []
     luci_analysis_tests_to_check = []
     for test_suite in failed_test_suites:
-      tests = []
-      for t in set(test_suite.deterministic_failures('with patch')):
-        tests.append({
-            'step_ui_name': test_suite.name_of_step_for_suffix('with patch'),
-            'test_name': t,
-        })
-
-      if len(tests) > 100:
+      if len(test_suite.deterministic_failures('with patch')) > 100:
         # Bail out if there are too many failed tests because:
         # 1. It's unlikely they're all legitimate flaky failures.
         # 2. Avoid overloading the service.
         continue
 
       luci_analysis_tests_to_check.append(test_suite)
-      tests_to_check.extend(tests)
-
-    experiments = self.m.buildbucket.build.input.experiments
-    if 'enable_weetbix_queries' in experiments:
-      # TODO (crbug/1314194): Process failure rates for test flakiness and
-      # report difference
-      self._query_luci_analysis_failures(luci_analysis_tests_to_check)
-
-    known_flakes = self._query_flaky_failures(tests_to_check)
-    if not known_flakes:
-      return
-
-    for flake in known_flakes['flakes']:
-      for t in failed_test_suites:
-        if (t.name_of_step_for_suffix('with patch') == flake['test']
-            ['step_ui_name']):
-          t.add_known_flaky_failure(flake['test']['test_name'],
-                                    flake['monorail_issue'])
-          break
+    self._query_luci_analysis_failures(luci_analysis_tests_to_check)
 
   def _still_invalid_suites(self, old_invalid_suites, retried_invalid_suites):
     # For swarming test suites, if we have valid test results from one of
@@ -958,7 +843,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
       test_suite: A test suite that's been retried.
       new_failures: Failures that are potentially caused by the patched CL.
       ignored_failures: Failures that are not caused by the patched CL.
-      ignored_flakes: Failures due to known flakes unrelated to the patched CL.
+      ignored_flakes: Failures due to known flakes or deterministic failures
+        unrelated to the patched CL.
       new_failures_text: A user-visible string describing new_failures.
       ignored_failures_text: A user-visible string describing ignored_failures.
       ignored_flakes_text: A user-visible string describing ignored_flakes.
@@ -1007,16 +893,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
           'failures ignored as they also fail without patch'] = (
               self.m.json.dumps(ignored_failures, indent=2).split('\n'))
     if ignored_flakes:
-      # TODO(crbug/1314194): Refactor ignored_failures and ignored_flakes to
-      # take into account for ignored ToT failures exonerated by luci analysis.
-      if ('weetbix.enable_weetbix_exonerations' in
-          self.m.buildbucket.build.input.experiments):
-        ignored_flakes_key = (
-            'failures ignored as they are known to be flaky or '
-            'deterministically failing')
-      # TODO(crbug/1314194): Remove once we're migrated to luci analysis
-      else:
-        ignored_flakes_key = 'failures ignored as they are known to be flaky'
+      ignored_flakes_key = ('failures ignored as they are known to be flaky or '
+                            'deterministically failing')
 
       result.presentation.logs[ignored_flakes_key] = self.m.json.dumps(
           ignored_flakes, indent=2).split('\n')
@@ -1078,9 +956,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     return self._summarize_new_and_ignored_failures(
         test_suite, new_failures, ignored_failures,
-        test_suite.get_summary_of_known_flaky_failures(),
-        self.NEW_FAILURES_TEXT, self.IGNORED_FAILURES_TEXT,
-        self.IGNORED_FLAKES_TEXT)
+        test_suite.known_luci_analysis_flaky_failures, self.NEW_FAILURES_TEXT,
+        self.IGNORED_FAILURES_TEXT, self.IGNORED_FLAKES_TEXT)
 
   def summarize_failing_test_with_no_retries(self, test_suite):
     """Summarizes a failing test suite that is not going to be retried."""
@@ -1100,7 +977,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
         test_suite,
         new_failures,
         set(),
-        test_suite.get_summary_of_known_flaky_failures(),
+        test_suite.known_luci_analysis_flaky_failures,
         new_failures_text=self.NEW_FAILURES_TEXT,
         ignored_failures_text=self.IGNORED_FAILURES_TEXT,
         ignored_flakes_text=self.IGNORED_FLAKES_TEXT)
