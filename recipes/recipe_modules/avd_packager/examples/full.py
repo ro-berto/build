@@ -61,6 +61,9 @@ def GenTests(api):
           'instance-id-generic-android-28'),
       api.post_process(post_process.MustRun,
                        'cipd set-tag sample/avd/package/name'),
+      api.post_process(
+          post_process.MustRun,
+          'avd uninstall tools/android/avd/proto/generic_android28.textpb'),
       api.post_process(post_process.StatusFailure),
       api.post_process(post_process.DropExpectation),
   )
