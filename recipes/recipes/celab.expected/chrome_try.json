@@ -852,6 +852,7 @@
       "[CACHE]\\builder\\src\\out\\Release_x64",
       "-j",
       "80",
+      "chrome/updater",
       "chrome/installer/mini_installer",
       "chromedriver"
     ],
@@ -883,6 +884,7 @@
       "[CACHE]\\builder\\src\\out\\Release_x64",
       "-j",
       "80",
+      "chrome/updater",
       "chrome/installer/mini_installer",
       "chromedriver",
       "-d",
@@ -1069,7 +1071,7 @@
       "--ninja-log-outdir",
       "[CACHE]\\builder\\src\\out\\Release_x64",
       "--ninja-log-command-file",
-      "[\"[CACHE]\\\\builder\\\\src\\\\third_party\\\\ninja\\\\ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]\\\\builder\\\\src\\\\out\\\\Release_x64\", \"-j\", 80, \"chrome/installer/mini_installer\", \"chromedriver\"]",
+      "[\"[CACHE]\\\\builder\\\\src\\\\third_party\\\\ninja\\\\ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]\\\\builder\\\\src\\\\out\\\\Release_x64\", \"-j\", 80, \"chrome/updater\", \"chrome/installer/mini_installer\", \"chromedriver\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -1405,7 +1407,7 @@
       "--noprogress",
       "-v",
       "1",
-      "--test_py_args=--cel_ctl=[START_DIR]\\packages\\windows_amd64\\bin\\cel_ctl.exe --test_arg=--chrome_installer=[CACHE]\\builder\\src\\out\\Release_x64\\mini_installer.exe --test_arg=--chromedriver=[CACHE]\\builder\\src\\out\\Release_x64\\chromedriver.exe --no_external_access=True"
+      "--test_py_args=--cel_ctl=[START_DIR]\\packages\\windows_amd64\\bin\\cel_ctl.exe --test_arg=--omaha_updater=[CACHE]\\builder\\src\\out\\Release_x64\\updater.exe --test_arg=--omaha_installer=[CACHE]\\builder\\src\\out\\Release_x64\\UpdaterSetup.exe --test_arg=--chrome_installer=[CACHE]\\builder\\src\\out\\Release_x64\\mini_installer.exe --test_arg=--chromedriver=[CACHE]\\builder\\src\\out\\Release_x64\\chromedriver.exe --no_external_access=True"
     ],
     "cwd": "[CACHE]\\builder\\src\\chrome\\test\\enterprise\\e2e",
     "env_suffixes": {

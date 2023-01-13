@@ -130,9 +130,13 @@ def _RunStepsChromium(api):
 
   # Run tests for all chromium bots.
   cel_ctl = celab_bin_dir.join(_get_ctl_binary_name(api))
+  omaha_updater = chromium_bin_dir.join('updater.exe')
+  omaha_installer = chromium_bin_dir.join('UpdaterSetup.exe')
   installer = chromium_bin_dir.join('mini_installer.exe')
   chromedriver = chromium_bin_dir.join('chromedriver.exe')
   test_py_args = '--cel_ctl=%s' % cel_ctl
+  test_py_args += ' --test_arg=--omaha_updater=%s' % omaha_updater
+  test_py_args += ' --test_arg=--omaha_installer=%s' % omaha_installer
   test_py_args += ' --test_arg=--chrome_installer=%s' % installer
   test_py_args += ' --test_arg=--chromedriver=%s' % chromedriver
   _RunTests(
@@ -227,7 +231,9 @@ def _CheckoutChromiumRepo(api):
 
 def _BuildChromiumFromSource(api, test_root):
   with api.chromium.chromium_layout():
-    compile_targets = ['chrome/installer/mini_installer', 'chromedriver']
+    compile_targets = [
+        'chrome/updater', 'chrome/installer/mini_installer', 'chromedriver'
+    ]
     raw_result = api.chromium_tests.run_mb_and_compile(
         api.chromium.get_builder_id(),
         compile_targets,
