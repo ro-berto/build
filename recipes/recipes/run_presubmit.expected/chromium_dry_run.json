@@ -63,7 +63,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/builder/builder"
+      "[CACHE]/builder/chromium_presubmit"
     ],
     "infra_step": true,
     "luci_context": {
@@ -98,15 +98,15 @@
       "--output_json",
       "/path/to/tmp/json",
       "--patch_ref",
-      "https://chromium.googlesource.com/project@refs/heads/main:refs/changes/56/123456/7",
+      "https://chromium.googlesource.com/chromium/src@refs/heads/main:refs/changes/56/123456/7",
       "--revision",
       "src@refs/heads/main",
       "--refs",
       "refs/heads/main"
     ],
-    "cwd": "[CACHE]/builder/builder",
+    "cwd": "[CACHE]/builder/chromium_presubmit",
     "env": {
-      "DEPOT_TOOLS_REPORT_BUILD": "project/try/builder/8945511751514863184",
+      "DEPOT_TOOLS_REPORT_BUILD": "project/try/chromium_presubmit/8945511751514863184",
       "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
       "GIT_HTTP_LOW_SPEED_TIME": "1800"
     },
@@ -280,7 +280,7 @@
       "-m",
       "Committed patch"
     ],
-    "cwd": "[CACHE]/builder/builder/src",
+    "cwd": "[CACHE]/builder/chromium_presubmit/src",
     "luci_context": {
       "realm": {
         "name": "project:try"
@@ -309,13 +309,13 @@
       "--gerrit_url",
       "https://chromium-review.googlesource.com",
       "--gerrit_project",
-      "project",
+      "chromium/src",
       "--gerrit_branch",
       "refs/heads/main",
       "--gerrit_fetch",
       "--dry_run",
       "--root",
-      "[CACHE]/builder/builder/src",
+      "[CACHE]/builder/chromium_presubmit/src",
       "--commit",
       "--verbose",
       "--verbose",
@@ -326,7 +326,7 @@
       "--json_output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]/builder/builder",
+    "cwd": "[CACHE]/builder/chromium_presubmit",
     "env_suffixes": {
       "DEPOT_TOOLS_UPDATE": [
         "0"
@@ -372,13 +372,13 @@
       "--gerrit_url",
       "https://chromium-review.googlesource.com",
       "--gerrit_project",
-      "project",
+      "chromium/src",
       "--gerrit_branch",
       "refs/heads/main",
       "--gerrit_fetch",
       "--dry_run",
       "--root",
-      "[CACHE]/builder/builder/src",
+      "[CACHE]/builder/chromium_presubmit/src",
       "--commit",
       "--verbose",
       "--verbose",
@@ -389,7 +389,7 @@
       "--json_output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]/builder/builder",
+    "cwd": "[CACHE]/builder/chromium_presubmit",
     "env_suffixes": {
       "DEPOT_TOOLS_UPDATE": [
         "0"

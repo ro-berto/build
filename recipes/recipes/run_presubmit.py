@@ -238,7 +238,8 @@ def _RunStepsInternal(api):
     #
     # https://crbug.com/917479 This is a problem on luci-py, bump to 15
     # minutes.
-    timeout = 900 if repo_name == 'luci_py' else 480
+    default_timeout = 900 if repo_name == 'luci_py' else 480
+    timeout = api.properties.get('timeout') or default_timeout
     # ok_ret='any' causes all exceptions to be ignored in this step
     step_json = api.presubmit(*presubmit_args, timeout=timeout, ok_ret='any')
     # Set recipe result values
@@ -295,40 +296,34 @@ def GenTests(api):
   yield api.test(
       'expected_tryjob',
       api.buildbucket.try_build(
-          project='chromium',
-          bucket='try',
           builder='chromium_presubmit',
           git_repo='https://chromium.googlesource.com/chromium/src'),
+      api.properties(repo_name='chromium'),
       api.step_data('presubmit', api.json.output({})),
   )
 
-  # TODO(machenbach): This uses the same tryserver for all repos, which doesn't
-  # reflect reality (cosmetical problem only).
-  REPO_NAMES = [
-      'angle',
-      'build',
-      'build_internal',
-      'build_internal_scripts_slave',
-      'catapult',
-      'chrome_golo',
-      'chromium',
-      'depot_tools',
-      'gyp',
-      'nacl',
-      'openscreen',
-      'pdfium',
-      'skia',
-      'v8',
-      'webports',
-      'webrtc',
+  REPOSITORIES = [
+      ('angle', 'https://chromium.googlesource.com/angle/angle'),
+      ('build', 'https://chromium.googlesource.com/chromium/tools/build'),
+      ('catapult', 'https://chromium.googlesource.com/catapult'),
+      ('chromium', 'https://chromium.googlesource.com/chromium/src'),
+      ('depot_tools', 'https://chromium.googlesource.com/chromium/tools/depot_tools'),
+      ('gyp', 'https://chromium.googlesource.com/external/gyp'),
+      ('nacl', 'https://chromium.googlesource.com/native_client/src/native_client'),
+      ('openscreen', 'https://chromium.googlesource.com/openscreen'),
+      ('pdfium', 'https://pdfium.googlesource.com/pdfium'),
+      ('skia', 'https://skia.googlesource.com/skia'),
+      ('v8', 'https://chromium.googlesource.com/v8/v8'),
+      ('webports', 'https://chromium.googlesource.com/webports'),
+      ('webrtc', 'https://webrtc.googlesource.com/src'),
   ]
-  for repo_name in REPO_NAMES:
+  for repo_name, url in REPOSITORIES:
     yield api.test(
         repo_name,
-        api.properties.tryserver(
-            buildername='%s_presubmit' % repo_name,
-            repo_name=repo_name,
-            gerrit_project=repo_name),
+        api.buildbucket.try_build(
+            builder='%s_presubmit' % repo_name,
+            git_repo=url),
+        api.properties(repo_name=repo_name),
         api.step_data(
             'presubmit',
             api.json.output({
@@ -340,10 +335,10 @@ def GenTests(api):
 
   yield api.test(
       'chromium_timeout',
-      api.properties.tryserver(
-          buildername='chromium_presubmit',
-          repo_name='chromium',
-          gerrit_project='chromium/src'),
+      api.buildbucket.try_build(
+          builder='chromium_presubmit',
+          git_repo='https://chromium.googlesource.com/chromium/src'),
+      api.properties(repo_name='chromium'),
       api.step_data(
           'presubmit',
           api.json.output({
@@ -360,10 +355,10 @@ def GenTests(api):
 
   yield api.test(
       'chromium_timeout_with_error',
-      api.properties.tryserver(
-          buildername='chromium_presubmit',
-          repo_name='chromium',
-          gerrit_project='chromium/src'),
+      api.buildbucket.try_build(
+          builder='chromium_presubmit',
+          git_repo='https://chromium.googlesource.com/chromium/src'),
+      api.properties(repo_name='chromium'),
       api.step_data(
           'presubmit',
           api.json.output({
@@ -397,14 +392,30 @@ def GenTests(api):
   )
 
   yield api.test(
+      'chromium_long_running',
+      api.buildbucket.try_build(
+          builder='chromium_presubmit',
+          git_repo='https://chromium.googlesource.com/chromium/src'),
+      api.properties(timeout=60 * 20 + 5, repo_name='chromium'),
+      api.step_data(
+          'presubmit',
+          api.json.output({
+              'errors': [],
+              'notifications': [],
+              'warnings': []
+          }),
+          times_out_after=60 * 20),
+      api.post_process(post_process.StatusSuccess),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
       'chromium_dry_run',
       api.cq(run_mode=api.cq.DRY_RUN),
-      api.buildbucket.try_build(),
-      api.properties.tryserver(
-          buildername='chromium_presubmit',
-          repo_name='chromium',
-          gerrit_project='chromium/src',
-          dry_run=True),
+      api.buildbucket.try_build(
+          builder='chromium_presubmit',
+          git_repo='https://chromium.googlesource.com/chromium/src'),
+      api.properties(dry_run=True, repo_name='chromium'),
       api.step_data(
           'presubmit',
           api.json.output({
@@ -416,11 +427,10 @@ def GenTests(api):
 
   yield api.test(
       'infra_with_runhooks',
-      api.properties.tryserver(
-          buildername='infra_presubmit',
-          repo_name='infra',
-          gerrit_project='infra/infra',
-          runhooks=True),
+      api.buildbucket.try_build(
+          builder='chromium_presubmit',
+          git_repo='https://chromium.googlesource.com/infra/infra'),
+      api.properties(runhooks=True, repo_name='infra'),
       api.step_data(
           'presubmit',
           api.json.output({
@@ -432,11 +442,10 @@ def GenTests(api):
 
   yield api.test(
       'recipes-py',
-      api.properties.tryserver(
-          buildername='infra_presubmit',
-          repo_name='recipes_py',
-          gerrit_project='infra/luci/recipes-py',
-          runhooks=True),
+      api.buildbucket.try_build(
+          builder='infra_presubmit',
+          git_repo='https://chromium.googlesource.com/infra/luci/recipes-py'),
+      api.properties(runhooks=True, repo_name='recipes_py'),
       api.step_data(
           'presubmit',
           api.json.output({
@@ -448,11 +457,10 @@ def GenTests(api):
 
   yield api.test(
       'recipes-py-windows',
-      api.properties.tryserver(
-          buildername='infra_presubmit',
-          repo_name='recipes_py',
-          gerrit_project='infra/luci/recipes-py',
-          runhooks=True),
+      api.buildbucket.try_build(
+          builder='infra_presubmit',
+          git_repo='https://chromium.googlesource.com/infra/luci/recipes-py'),
+      api.properties(runhooks=True, repo_name='recipes_py'),
       api.platform('win', 64),
       api.step_data(
           'presubmit',
@@ -465,10 +473,10 @@ def GenTests(api):
 
   yield api.test(
       'luci-py',
-      api.properties.tryserver(
-          buildername='Luci-py Presubmit',
-          repo_name='luci_py',
-          gerrit_project='infra/luci/luci-py'),
+      api.buildbucket.try_build(
+          builder='Luci-py Presubmit',
+          git_repo='https://chromium.googlesource.com/infra/luci/luci-py'),
+      api.properties(repo_name='luci_py'),
       api.step_data(
           'presubmit',
           api.json.output({
@@ -480,10 +488,10 @@ def GenTests(api):
 
   yield api.test(
       'presubmit-failure',
-      api.properties.tryserver(
-          buildername='chromium_presubmit',
-          repo_name='chromium',
-          gerrit_project='chromium/src'),
+      api.buildbucket.try_build(
+          builder='chromium_presubmit',
+          git_repo='https://chromium.googlesource.com/chromium/src'),
+      api.properties(repo_name='chromium'),
       api.step_data(
           'presubmit',
           api.json.output({
@@ -544,10 +552,10 @@ def GenTests(api):
                   '\nreallyLongFakeAccountNameEmail@chromium.org' * 10)
   yield api.test(
       'presubmit-failure-long-message',
-      api.properties.tryserver(
-          buildername='chromium_presubmit',
-          repo_name='chromium',
-          gerrit_project='chromium/src'),
+      api.buildbucket.try_build(
+          builder='chromium_presubmit',
+          git_repo='https://chromium.googlesource.com/chromium/src'),
+      api.properties(repo_name='chromium'),
       api.step_data(
           'presubmit',
           api.json.output({
@@ -602,10 +610,10 @@ def GenTests(api):
 
   yield api.test(
       'presubmit-infra-failure',
-      api.properties.tryserver(
-          buildername='chromium_presubmit',
-          repo_name='chromium',
-          gerrit_project='chromium/src'),
+      api.buildbucket.try_build(
+          builder='chromium_presubmit',
+          git_repo='https://chromium.googlesource.com/chromium/src'),
+      api.properties(repo_name='chromium'),
       api.step_data(
           'presubmit',
           api.json.output({
@@ -642,10 +650,10 @@ def GenTests(api):
              '&status=Untriaged)')
   yield api.test(
       'presubmit-failure-no-json',
-      api.properties.tryserver(
-          buildername='chromium_presubmit',
-          repo_name='chromium',
-          gerrit_project='chromium/src'),
+      api.buildbucket.try_build(
+          builder='chromium_presubmit',
+          git_repo='https://chromium.googlesource.com/chromium/src'),
+      api.properties(repo_name='chromium'),
       api.step_data('presubmit', api.json.output(None, retcode=1)),
       api.post_process(post_process.StatusException),
       api.post_process(post_process.ResultReason, bug_msg),
@@ -654,10 +662,10 @@ def GenTests(api):
 
   yield api.test(
       'presubmit-infra-failure-no-json',
-      api.properties.tryserver(
-          buildername='chromium_presubmit',
-          repo_name='chromium',
-          gerrit_project='chromium/src'),
+      api.buildbucket.try_build(
+          builder='chromium_presubmit',
+          git_repo='https://chromium.googlesource.com/chromium/src'),
+      api.properties(repo_name='chromium'),
       api.step_data('presubmit', api.json.output(None, retcode=2)),
       api.post_process(post_process.StatusException),
       api.post_process(post_process.ResultReason, bug_msg),
@@ -666,10 +674,10 @@ def GenTests(api):
 
   yield api.test(
       'presubmit-failure-message-with-underscores',
-      api.properties.tryserver(
-          buildername='chromium_presubmit',
-          repo_name='chromium',
-          gerrit_project='chromium/src'),
+      api.buildbucket.try_build(
+          builder='chromium_presubmit',
+          git_repo='https://chromium.googlesource.com/chromium/src'),
+      api.properties(repo_name='chromium'),
       api.step_data(
           'presubmit',
           api.json.output({
@@ -703,11 +711,10 @@ def GenTests(api):
 
   yield api.test(
       'repository_url_with_solution_name',
-      api.properties.tryserver(
-          buildername='chromium_presubmit',
-          repository_url='https://skia.googlesource.com/skia.git',
-          gerrit_project='skia',
-          solution_name='skia'),
+      api.buildbucket.try_build(
+          builder='chromium_presubmit',
+          git_repo='https://skia.googlesource.com/skia.git'),
+      api.properties(solution_name='skia'),
       api.step_data(
           'presubmit',
           api.json.output({
@@ -719,19 +726,18 @@ def GenTests(api):
 
   yield api.test(
       'v8_with_cache',
-      api.properties.tryserver(
-          buildername='v8_presubmit',
-          repo_name='v8',
-          gerrit_project='v8/v8',
-          runhooks=True),
+      api.buildbucket.try_build(
+          builder='v8_presubmit',
+          git_repo='https://chromium.googlesource.com/v8/v8'),
+      api.properties(runhooks=True, repo_name='v8'),
   )
 
   yield api.test(
       'v8_with_cache_infra_config_branch',
-      api.properties.tryserver(
-          buildername='v8_presubmit',
-          repo_name='v8',
-          gerrit_project='v8/v8',
-          runhooks=True),
+      api.buildbucket.try_build(
+          project='v8',
+          builder='v8_presubmit',
+          git_repo='https://chromium.googlesource.com/v8/v8'),
+      api.properties(runhooks=True, repo_name='v8'),
       api.tryserver.gerrit_change_target_ref('refs/heads/infra/config'),
   )
