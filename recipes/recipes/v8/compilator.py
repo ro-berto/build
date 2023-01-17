@@ -26,6 +26,7 @@ from recipe_engine.recipe_api import Property
 DEPS = [
   'builder_group',
   'chromium',
+  'depot_tools/tryserver',
   'recipe_engine/buildbucket',
   'recipe_engine/file',
   'recipe_engine/json',
@@ -52,6 +53,8 @@ PROPERTIES = {
     'target_platform': Property(default=None, kind=str),
     # Weather to use goma for compilation.
     'use_goma': Property(default=True, kind=bool),
+    # Revision to compile
+    'revision': Property(default=None, kind=str),
 }
 
 CANCELLATION_MESSAGE = (
@@ -65,6 +68,8 @@ def orchestrator_name(api):
       name with the "_compile" infix removed.
   """
   builder_name = api.buildbucket.builder_name
+  if not api.tryserver.is_tryserver:
+    return builder_name
   assert builder_name.endswith(('_compile_rel', '_compile_dbg')), (
     f'Compilator name doesn\'t follow the naming convention. Must end '
     f'in _compile_rel or _compile_dbg, but was {builder_name}.')
@@ -93,7 +98,7 @@ def emit_compilator_properties(api, test_spec):
 
 
 def compilator_steps(api, custom_deps, default_targets, gclient_vars,
-                     target_arch, target_platform, use_goma):
+                     target_arch, target_platform, use_goma, revision):
   v8 = api.v8
   api.v8_tests.load_static_test_configs()
   bot_config = v8.update_bot_config(
@@ -117,7 +122,7 @@ def compilator_steps(api, custom_deps, default_targets, gclient_vars,
     if api.platform.is_win:
       api.chromium.taskkill()
 
-    v8.checkout()
+    v8.checkout(revision)
     api.v8_tests.set_up_swarming()
     v8.runhooks()
 
@@ -132,11 +137,11 @@ def compilator_steps(api, custom_deps, default_targets, gclient_vars,
 
 
 def RunSteps(api, custom_deps, default_targets, gclient_vars, target_arch,
-             target_platform, use_goma):
+             target_platform, use_goma, revision):
   try:
     return compilator_steps(
         api, custom_deps, default_targets, gclient_vars, target_arch,
-        target_platform, use_goma)
+        target_platform, use_goma, revision)
   finally:
     if api.runtime.in_global_shutdown:
       # pylint: disable=lost-exception
@@ -173,6 +178,20 @@ def GenTests(api):
   yield (
       test('basic') +
       api.v8.test_spec_in_checkout('v8_foobar_rel', test_spec)
+  )
+
+  yield (
+      api.test('basic_ci') +
+      api.builder_group.for_current('client.v8') +
+      api.buildbucket.ci_build(
+          project='v8',
+          revision='deadbeef'*5,
+          builder='Random CI builder',
+          git_repo='https://chromium.googlesource.com/v8/v8',
+      ) +
+      api.v8.example_test_roots('test_checkout') +
+      api.v8.hide_infra_steps() +
+      api.v8.test_spec_in_checkout('Random CI builder', test_spec)
   )
 
   yield (

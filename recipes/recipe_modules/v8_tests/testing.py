@@ -192,6 +192,10 @@ TEST_CONFIGS = freeze({
     'tool': 'run-perf',
     'isolated_target': 'perf_integration',
   },
+  'pgo_instrumentation': {
+    'tool': 'run-perf',
+    'isolated_target': 'd8_pgo',
+  },
   'test262': {
     'name': 'Test262',
     'tests': ['test262'],

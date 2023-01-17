@@ -1,0 +1,613 @@
+[
+  {
+    "cmd": [],
+    "name": "initialization"
+  },
+  {
+    "cmd": [
+      "vpython3",
+      "-u",
+      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
+      "--spec-path",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
+      "--revision_mapping_file",
+      "{\"got_revision\": \"v8\"}",
+      "--git-cache-dir",
+      "[CACHE]/git",
+      "--cleanup-dir",
+      "[CLEANUP]/bot_update",
+      "--output_json",
+      "/path/to/tmp/json",
+      "--revision",
+      "v8@deadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
+      "--refs",
+      "refs/heads/main"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "DEPOT_TOOLS_REPORT_BUILD": "v8/ci/Random CI builder/8945511751514863184",
+      "GIT_HTTP_LOW_SPEED_LIMIT": "102400",
+      "GIT_HTTP_LOW_SPEED_TIME": "1800"
+    },
+    "env_suffixes": {
+      "DEPOT_TOOLS_UPDATE": [
+        "0"
+      ],
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "initialization.bot_update",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@Some step text@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"v8\": \"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"v8\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/v8.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"v8\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision\": \"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision_cp\": \"refs/heads/main@{#50110}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"root\": \"v8\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"source_manifest\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"directories\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"v8\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/v8.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        }@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"version\": 0@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"step_text\": \"Some step text\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@got_revision@\"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_revision_cp@\"refs/heads/main@{#50110}\"@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython3",
+      "-u",
+      "RECIPE_REPO[depot_tools]/gclient.py",
+      "runhooks"
+    ],
+    "cwd": "[CACHE]/builder/v8",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_REPORT_BUILD": "v8/ci/Random CI builder/8945511751514863184"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "initialization.gclient runhooks",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython3",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]/builder/v8/custom_deps"
+    ],
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "initialization.ensure custom_deps dir",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython3",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "listdir",
+      "[CACHE]/builder/v8/custom_deps"
+    ],
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "initialization.list test roots",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@listdir@[CACHE]/builder/v8/custom_deps/test_checkout@@@",
+      "@@@STEP_LOG_END@listdir@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython3",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/v8/infra/testing/builders.pyl",
+      "/path/to/tmp/"
+    ],
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "initialization.read test spec (v8)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@builders.pyl@{\"Random CI builder\": {@@@",
+      "@@@STEP_LOG_LINE@builders.pyl@  \"tests\": [@@@",
+      "@@@STEP_LOG_LINE@builders.pyl@    {@@@",
+      "@@@STEP_LOG_LINE@builders.pyl@      \"name\": \"v8testing\"@@@",
+      "@@@STEP_LOG_LINE@builders.pyl@    }@@@",
+      "@@@STEP_LOG_LINE@builders.pyl@  ]@@@",
+      "@@@STEP_LOG_LINE@builders.pyl@}}@@@",
+      "@@@STEP_LOG_END@builders.pyl@@@",
+      "@@@STEP_LOG_LINE@test_spec@Random CI builder@@@",
+      "@@@STEP_LOG_LINE@test_spec@  v8testing(1) None@@@",
+      "@@@STEP_LOG_END@test_spec@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "build"
+  },
+  {
+    "cmd": [
+      "python3",
+      "-u",
+      "[CACHE]/builder/v8/tools/mb/mb.py",
+      "lookup",
+      "-m",
+      "client.v8",
+      "-b",
+      "Random CI builder",
+      "--config-file",
+      "[CACHE]/builder/v8/infra/mb/mb_config.pyl",
+      "--goma-dir",
+      "[CACHE]/goma/client",
+      "--quiet"
+    ],
+    "cwd": "[CACHE]/builder/v8",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "build.lookup GN args",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@gn_args@target_cpu = \"x86\"@@@",
+      "@@@STEP_LOG_LINE@gn_args@use_goma = true@@@",
+      "@@@STEP_LOG_LINE@gn_args@goma_dir = \"/b/build/slave/cache/goma_client\"@@@",
+      "@@@STEP_LOG_END@gn_args@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python3",
+      "-u",
+      "[CACHE]/builder/v8/tools/mb/mb.py",
+      "gen",
+      "-m",
+      "client.v8",
+      "-b",
+      "Random CI builder",
+      "--config-file",
+      "[CACHE]/builder/v8/infra/mb/mb_config.pyl",
+      "--goma-dir",
+      "[CACHE]/goma/client",
+      "--json-output",
+      "/path/to/tmp/json",
+      "--isolate-map-file",
+      "[CACHE]/builder/v8/infra/mb/gn_isolate_map.pyl",
+      "--swarming-targets-file",
+      "bot_default\n",
+      "//out/build"
+    ],
+    "cwd": "[CACHE]/builder/v8",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "build.generate_build_files",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output[failure_summary]@{}@@@",
+      "@@@STEP_LOG_END@json.output[failure_summary]@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@bot_default@@@",
+      "@@@STEP_LOG_END@swarming-targets-file.txt@@@",
+      "@@@STEP_LOG_LINE@gn_args@target_cpu = \"x86\"@@@",
+      "@@@STEP_LOG_LINE@gn_args@use_goma = true@@@",
+      "@@@STEP_LOG_END@gn_args@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython3",
+      "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
+      "--ninja_info_output",
+      "/path/to/tmp/json",
+      "--failure_output",
+      "/path/to/tmp/",
+      "--no_prune_venv",
+      "--",
+      "[CACHE]/builder/v8/third_party/ninja/ninja",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[CACHE]/builder/v8/out/build",
+      "-j",
+      "80"
+    ],
+    "cwd": "[CACHE]/builder/v8",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "build.compile",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/builder/v8/third_party/ninja/ninja",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[CACHE]/builder/v8/out/build",
+      "-j",
+      "80",
+      "-d",
+      "explain",
+      "-n"
+    ],
+    "cwd": "[CACHE]/builder/v8",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "build.compile confirm no-op",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python3",
+      "RECIPE_MODULE[build::goma]/resources/goma_canceller.py",
+      "[CACHE]/goma/client/goma_ctl.py"
+    ],
+    "cost": {
+      "cpu": 0,
+      "disk": 0,
+      "memory": 0,
+      "net": 0
+    },
+    "cwd": "[CACHE]/builder/v8",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "build.start goma canceller",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "build.install infra/tools/luci/isolate",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython3",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[START_DIR]/cipd_tool/infra/tools/luci/isolate/git_revision%3Amock_infra_git_revision"
+    ],
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "build.install infra/tools/luci/isolate.ensure package directory",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[START_DIR]/cipd_tool/infra/tools/luci/isolate/git_revision%3Amock_infra_git_revision",
+      "-ensure-file",
+      "infra/tools/luci/isolate/${platform} git_revision:mock_infra_git_revision",
+      "-max-threads",
+      "0",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "build.install infra/tools/luci/isolate.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:moc\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/luci/isolate/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[START_DIR]/cipd_tool/infra/tools/luci/isolate/git_revision%3Amock_infra_git_revision/isolate",
+      "batcharchive",
+      "--dump-json",
+      "/path/to/tmp/json",
+      "--verbose",
+      "-cas-instance",
+      "projects/example-cas-server/instances/default_instance",
+      "-log-level",
+      "debug",
+      "[CACHE]/builder/v8/out/build/bot_default.isolated.gen.json"
+    ],
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "build.isolate tests",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"bot_default\": \"[dummy hash for bot_default/dummy size]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python3",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "-a",
+      "public-read",
+      "{\"bot_default\": \"[dummy hash for bot_default/dummy size]\"}",
+      "gs://chromium-v8/isolated/client.v8/Random CI builder/deadbeefdeadbeefdeadbeefdeadbeefdeadbeef.json"
+    ],
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "v8:ci"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "build.gsutil upload",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/isolated/client.v8/Random%20CI%20builder/deadbeefdeadbeefdeadbeefdeadbeefdeadbeef.json@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "compilator properties",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@compilator_properties@{@@@",
+      "@@@STEP_LOG_LINE@compilator_properties@  \"gn_args\": [@@@",
+      "@@@STEP_LOG_LINE@compilator_properties@    \"target_cpu = \\\"x86\\\"\", @@@",
+      "@@@STEP_LOG_LINE@compilator_properties@    \"use_goma = true\"@@@",
+      "@@@STEP_LOG_LINE@compilator_properties@  ], @@@",
+      "@@@STEP_LOG_LINE@compilator_properties@  \"parent_test_spec\": {@@@",
+      "@@@STEP_LOG_LINE@compilator_properties@    \"swarming_dimensions\": {}, @@@",
+      "@@@STEP_LOG_LINE@compilator_properties@    \"swarming_task_attrs\": {}, @@@",
+      "@@@STEP_LOG_LINE@compilator_properties@    \"tests\": [@@@",
+      "@@@STEP_LOG_LINE@compilator_properties@      [@@@",
+      "@@@STEP_LOG_LINE@compilator_properties@        \"v8testing\", @@@",
+      "@@@STEP_LOG_LINE@compilator_properties@        1, @@@",
+      "@@@STEP_LOG_LINE@compilator_properties@        null, @@@",
+      "@@@STEP_LOG_LINE@compilator_properties@        \"\", @@@",
+      "@@@STEP_LOG_LINE@compilator_properties@        [], @@@",
+      "@@@STEP_LOG_LINE@compilator_properties@        {}, @@@",
+      "@@@STEP_LOG_LINE@compilator_properties@        {}@@@",
+      "@@@STEP_LOG_LINE@compilator_properties@      ]@@@",
+      "@@@STEP_LOG_LINE@compilator_properties@    ]@@@",
+      "@@@STEP_LOG_LINE@compilator_properties@  }, @@@",
+      "@@@STEP_LOG_LINE@compilator_properties@  \"swarm_hashes\": {@@@",
+      "@@@STEP_LOG_LINE@compilator_properties@    \"bot_default\": \"[dummy hash for bot_default/dummy size]\"@@@",
+      "@@@STEP_LOG_LINE@compilator_properties@  }@@@",
+      "@@@STEP_LOG_LINE@compilator_properties@}@@@",
+      "@@@STEP_LOG_END@compilator_properties@@@",
+      "@@@SET_BUILD_PROPERTY@compilator_properties@{\"gn_args\": [\"target_cpu = \\\"x86\\\"\", \"use_goma = true\"], \"parent_test_spec\": {\"swarming_dimensions\": {}, \"swarming_task_attrs\": {}, \"tests\": [[\"v8testing\", 1, null, \"\", [], {}, {}]]}, \"swarm_hashes\": {\"bot_default\": \"[dummy hash for bot_default/dummy size]\"}}@@@"
+    ]
+  },
+  {
+    "name": "$result"
+  }
+]
