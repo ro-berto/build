@@ -26,15 +26,19 @@ DEPS = [
     'webrtc',
 ]
 
+
+# TODO(b/243594984): remove after CQ builder migration.
 def should_use_reclient(api, builder_id):
   # Builder groups:
   #   client.webrtc = CI builders
   #   client.webrtc.perf = Perf builders
   #   internal.client.webrtc = Internal CI builders
   #   tryserver.webrtc = CQ builders
-  if builder_id.group == 'tryserver.webrtc':
-    return False
-  return True
+  if builder_id.group != 'tryserver.webrtc':
+    return True
+  if api.platform.is_linux:
+    return True
+  return False
 
 
 def RunSteps(api):
