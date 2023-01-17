@@ -2064,12 +2064,12 @@ class SwarmingTest(Test):
     raise NotImplementedError()  # pragma: no cover
 
   def _apply_swarming_task_config(self, task, suffix, filter_flag,
-                                  filter_delimiter):
+                                  filter_delimiter, extra_args):
     """Applies shared configuration for swarming tasks.
     """
     tests_to_retry = self._tests_to_retry(suffix)
     test_options = self.test_options.for_running(suffix, tests_to_retry)
-    args = test_options.add_args(self.spec.args, self.option_flags)
+    args = test_options.add_args(extra_args, self.option_flags)
 
     # If we're in quick run or inverse quick run set the shard count to any
     # available quickrun shards
@@ -2342,13 +2342,26 @@ class SwarmingGTestTest(SwarmingTest):
       cmd = self.rts_raw_cmd
     else:
       cmd = self.raw_cmd
-
+    # gtests only support 1 test-launcher-filter-file. Remove the filter file
+    # arg from the raw command and combine it after the test spec is consumed
+    cmd_filters = [arg for arg in cmd if '--test-launcher-filter-file=' in arg]
+    for cmd_filter in cmd_filters:
+      cmd.remove(cmd_filter)
     task = self.api.m.chromium_swarming.gtest_task(
         raw_cmd=cmd,
         relative_cwd=self.relative_cwd,
         cas_input_root=cas_input_root,
         collect_json_output_override=json_override)
-    self._apply_swarming_task_config(task, suffix, '--gtest_filter', ':')
+    extra_args = list(self.spec.args) + cmd_filters
+    merged_filter_file_arg = ';'.join(
+        arg[len('--test-launcher-filter-file='):]
+        for arg in extra_args
+        if arg.startswith('--test-launcher-filter-file='))
+    if merged_filter_file_arg:
+      extra_args = _merge_arg(extra_args, '--test-launcher-filter-file',
+                              merged_filter_file_arg)
+    self._apply_swarming_task_config(task, suffix, '--gtest_filter', ':',
+                                     extra_args)
     return task
 
   @recipe_api.composite_step
@@ -2576,7 +2589,8 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
         cas_input_root=cas_input_root)
 
     self._apply_swarming_task_config(task, suffix,
-                                     '--isolated-script-test-filter', '::')
+                                     '--isolated-script-test-filter', '::',
+                                     self.spec.args)
     return task
 
   @recipe_api.composite_step

@@ -39,6 +39,7 @@ DEPS = [
     'recipe_engine/properties',
     'recipe_engine/raw_io',
     'recipe_engine/resultdb',
+    'recipe_engine/swarming',
     'test_utils',
     'weetbix',
 ]
@@ -819,10 +820,14 @@ def GenTests(api):
           'chromium.test', {
               'chromium-rel': {
                   'gtest_tests': [{
-                      'test': 'base_unittests',
+                      'test':
+                          'base_unittests',
                       'swarming': {
                           'can_use_on_swarming_builders': True,
-                      }
+                      },
+                      'args': [
+                          '--test-launcher-filter-file=../../testing/buildbot/filters/ozone-linux.interactive_ui_tests_wayland.filter',
+                      ],
                   }],
               },
           }),
@@ -832,9 +837,27 @@ def GenTests(api):
               'base_unittests': [
                   './%s' % 'base_unittests', '--fake-without-patch-flag',
                   '--fake-log-file', '$ISOLATED_OUTDIR/fake.log',
-                  '-filter=base_unittests.filter'
+                  '--test-launcher-filter-file=base_unittests.filter'
               ]
           })),
+      api.post_check(
+          api.swarming.check_triggered_request,
+          'test_pre_run (with patch).[trigger] base_unittests (with patch)',
+          lambda check, req: check(
+              '--test-launcher-filter-file=../../testing/buildbot/filters/ozone-linux.interactive_ui_tests_wayland.filter;base_unittests.filter'
+              in req[0].command)),
+      api.post_check(
+          api.swarming.check_triggered_request,
+          'test_pre_run (with patch).[trigger] base_unittests (with patch)',
+          lambda check, req: check(
+              '--test-launcher-filter-file=../../testing/buildbot/filters/ozone-linux.interactive_ui_tests_wayland.filter'
+              not in req[0].command)),
+      api.post_check(
+          api.swarming.check_triggered_request,
+          'test_pre_run (with patch).[trigger] base_unittests (with patch)',
+          lambda check, req: check(
+              '--test-launcher-filter-file=base_unittests.filter' \
+                not in req[0].command)),
       api.post_process(post_process.MustRun, 'quick run options'),
       api.post_process(post_process.MustRun, 'RTS was used'),
       api.post_process(post_process.PropertyEquals, 'rts_setting',
