@@ -1158,8 +1158,13 @@ class SwarmingGroup(TestGroup):
 
   def pre_run(self, api, suffix):
     """Executes the |pre_run| method of each test."""
+    futures = []
     for t in self._test_suites:
-      t.pre_run(suffix)
+      futures.append(api.futures.spawn_immediate(t.pre_run, suffix))
+    for f in futures:
+      f.result()
+
+    for t in self._test_suites:
       task = t.get_task(suffix)
 
       task_ids = tuple(task.get_task_ids())
