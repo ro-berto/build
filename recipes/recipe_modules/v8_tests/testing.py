@@ -396,7 +396,7 @@ class V8Test(BaseTest):
 
       search_query = ' label:{label} -status:Fixed -status:Verified'
       bug_description = MONORAIL_FILE_BUG_DESCRIPTION
-      if link_params['crash_state']:
+      if link_params['crash_analysis_hash']:
         search_query = '("{name}" OR {crash_analysis_hash})' + search_query
         bug_description += MONORAIL_CRASH_DESCRIPTION
       else:
@@ -1021,15 +1021,20 @@ class Failure:
       link_params = FLAKE_BUG_DEFAULTS
     else:
       link_params = FAILURE_BUG_DEFAULTS
+    analysis_failure_values = ['NULL', 'Unknown', '', None]
+    if self.crash_state in analysis_failure_values:
+      crash_analysis_hash = None
+    else:
+      crash_analysis_hash = md5((self.crash_type + self.crash_state +
+                                 '1').encode('utf-8')).hexdigest()
     return dict(
         link_params,
         name=self.name,
         build_link=build_link,
         crash_type=self.crash_type,
         crash_state=self.crash_state,
-        stderr=self.stderr,
-        crash_analysis_hash=md5((self.crash_type + self.crash_state +
-                                 '1').encode('utf-8')).hexdigest())
+        stderr='\n'.join(self.stderr.splitlines()[:20])[:10000],
+        crash_analysis_hash=crash_analysis_hash)
 
   @property
   def failure_dict(self):
