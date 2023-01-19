@@ -196,7 +196,7 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython3",
       "-u",
       "[START_DIR]/catapult/catapult_build/build_steps.py",
       "--api-path-checkout",

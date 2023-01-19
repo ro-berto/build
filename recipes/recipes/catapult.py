@@ -29,7 +29,7 @@ def _CheckoutSteps(api):
   api.gclient.runhooks()
 
 
-def _RemoteSteps(api, app_engine_sdk_path, platform, dashboard_only, use_py3):
+def _RemoteSteps(api, app_engine_sdk_path, platform, dashboard_only):
   """Runs the build steps specified in catapult_build/build_steps.py.
 
   Steps are specified in catapult repo in order to avoid multi-sided patches
@@ -52,9 +52,7 @@ def _RemoteSteps(api, app_engine_sdk_path, platform, dashboard_only, use_py3):
   ]
   if dashboard_only:
     args.append('--dashboard_only')
-  if use_py3:
-    args.append('--use_python3')
-  return api.generator_script(*args)
+  return api.generator_script(*args, interpreter='vpython3')
 
 
 def RunSteps(api, properties):
@@ -83,7 +81,7 @@ def RunSteps(api, properties):
         env_prefixes={'PATH': [packages_root,
                                packages_root.join('bin')]}):
       _RemoteSteps(api, app_engine_sdk_path, properties.platform,
-                   properties.dashboard_only, properties.use_python3)
+                   properties.dashboard_only)
 
 
 def GenTests(api):
@@ -138,28 +136,15 @@ def GenTests(api):
   )
 
   yield api.test(
-    'dashboard_only',
-    api.platform.name('linux'),
-    api.properties(
-        platform='linux',
-        dashboard_only=True,
-    ),
-    api.generator_script(
-        'build_steps.py',
-        {'name': 'Dashboard Tests', 'cmd': ['run_py_tests', '--no-hooks']},
-    )
-  )
-
-  yield api.test(
-      'use_py3', api.platform.name('linux'),
+      'dashboard_only', api.platform.name('linux'),
       api.properties(
           platform='linux',
-          use_python3=True,
+          dashboard_only=True,
       ),
       api.generator_script(
           'build_steps.py',
           {
-              'name': 'Py3 Tests',
+              'name': 'Dashboard Tests',
               'cmd': ['run_py_tests', '--no-hooks']
           },
       ))
