@@ -367,6 +367,64 @@
   },
   {
     "cmd": [
+      "vpython3",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]\\builder\\src\\tools_webrtc\\mb\\mb_config.pyl",
+      "/path/to/tmp/"
+    ],
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "Read [CACHE]\\builder\\src\\tools_webrtc\\mb\\mb_config.pyl",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@mb_config.pyl@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython3",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "",
+      "[TMP_BASE]\\mb_config.pyl"
+    ],
+    "infra_step": true,
+    "luci_context": {
+      "realm": {
+        "name": "webrtc:try"
+      },
+      "resultdb": {
+        "current_invocation": {
+          "name": "invocations/build:8945511751514863184",
+          "update_token": "token"
+        },
+        "hostname": "rdbhost"
+      }
+    },
+    "name": "Override MB config to use reclient",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@mb_config.pyl@@@"
+    ]
+  },
+  {
+    "cmd": [
       "git",
       "-c",
       "core.quotePath=false",
@@ -506,7 +564,7 @@
       "-b",
       "win_asan",
       "--config-file",
-      "[CACHE]\\builder\\src\\tools_webrtc\\mb\\mb_config.pyl",
+      "[TMP_BASE]\\mb_config.pyl",
       "--goma-dir",
       "[CACHE]\\goma\\client",
       "--quiet"
@@ -544,7 +602,7 @@
       "-b",
       "win_asan",
       "--config-file",
-      "[CACHE]\\builder\\src\\tools_webrtc\\mb\\mb_config.pyl",
+      "[TMP_BASE]\\mb_config.pyl",
       "--goma-dir",
       "[CACHE]\\goma\\client",
       "--json-output",
