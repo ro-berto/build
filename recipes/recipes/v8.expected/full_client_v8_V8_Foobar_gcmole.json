@@ -807,8 +807,8 @@
       "projects/example-cas-server/instances/default_instance",
       "-dump-digest",
       "/path/to/tmp/",
-      "-paths",
-      "[CLEANUP]/workspace_tmp_1:."
+      "-paths-json",
+      "[[\"[CLEANUP]/workspace_tmp_1\", \".\"]]"
     ],
     "cwd": "[CLEANUP]/workspace_tmp_1",
     "infra_step": true,
@@ -1319,8 +1319,8 @@
       "projects/example-cas-server/instances/default_instance",
       "-dump-digest",
       "/path/to/tmp/",
-      "-paths",
-      "[CLEANUP]/workspace_tmp_2:."
+      "-paths-json",
+      "[[\"[CLEANUP]/workspace_tmp_2\", \".\"]]"
     ],
     "cwd": "[CLEANUP]/workspace_tmp_2",
     "infra_step": true,

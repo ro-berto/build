@@ -488,8 +488,8 @@
       "projects/example-cas-server/instances/default_instance",
       "-dump-digest",
       "/path/to/tmp/",
-      "-paths",
-      "[CLEANUP]/tmp_tmp_2:."
+      "-paths-json",
+      "[[\"[CLEANUP]/tmp_tmp_2\", \".\"]]"
     ],
     "infra_step": true,
     "name": "repack_test_binary.new test binary",

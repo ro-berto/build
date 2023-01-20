@@ -149,12 +149,8 @@
       "projects/example-cas-server/instances/default_instance",
       "-dump-digest",
       "/path/to/tmp/",
-      "-paths",
-      ".:siso_build.pprof",
-      "-paths",
-      ".:siso_trace.json",
-      "-paths",
-      ".:siso_metrics.json"
+      "-paths-json",
+      "[[\".\", \"siso_build.pprof\"], [\".\", \"siso_trace.json\"], [\".\", \"siso_metrics.json\"]]"
     ],
     "infra_step": true,
     "name": "upload reports",

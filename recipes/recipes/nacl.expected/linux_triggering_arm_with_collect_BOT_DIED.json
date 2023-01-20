@@ -968,8 +968,8 @@
       "projects/example-cas-server/instances/default_instance",
       "-dump-digest",
       "/path/to/tmp/",
-      "-paths",
-      "[CLEANUP]/isolate_directory_tmp_1:."
+      "-paths-json",
+      "[[\"[CLEANUP]/isolate_directory_tmp_1\", \".\"]]"
     ],
     "infra_step": true,
     "luci_context": {
