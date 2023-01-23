@@ -122,6 +122,10 @@ class ChromiumOrchestratorApi(recipe_api.RecipeApi):
         'chromium_rts.inverted_rts_bail_early' in
         self.m.buildbucket.build.input.experiments)
 
+    if self.m.chromium_tests.is_rts_footer_disabled():
+      log_step = self.m.step.empty('log rts disabled by footer')
+      log_step.presentation.properties['rts_footer_disabled'] = True
+
     # The chromium_rts.inverted_rts attempts to run only the tests that were
     # skipped as part of a previous compatible Quick Run build
     reuseable_quick_run_build = None
