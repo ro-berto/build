@@ -65,8 +65,9 @@ def RunSteps(api):
       api.tryserver.gerrit_change_target_ref.startswith('refs/branch-heads/'))):
     skip_owners = True
 
-  # We are checking android on CI first and will change this check when we add other OS
-  if not api.tryserver.gerrit_change:
+  # We will add the android and linux target for all os besides win. This will
+  # only impact presubmit runs impacting CI because of the first condition
+  if not api.tryserver.gerrit_change and api.gclient.m.platform._name == "linux":
     # Ensures that pydeps checks android and linux checkouts as well
     api.gclient.c.target_os.add('android')
     api.gclient.c.target_os.add('linux')
