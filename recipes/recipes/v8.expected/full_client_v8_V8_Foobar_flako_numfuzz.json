@@ -8,6 +8,7 @@
       "@@@STEP_LOG_LINE@test-name@Flags: @@@",
       "@@@STEP_LOG_LINE@test-name@Command: d8 test.js@@@",
       "@@@STEP_LOG_LINE@test-name@Variant: None@@@",
+      "@@@STEP_LOG_LINE@test-name@Shard: 1:2@@@",
       "@@@STEP_LOG_LINE@test-name@@@@",
       "@@@STEP_LOG_LINE@test-name@GN arguments:@@@",
       "@@@STEP_LOG_LINE@test-name@use_goma = true@@@",

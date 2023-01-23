@@ -1069,6 +1069,14 @@ class Failure:
     return self.failure_dict.get('crash_state')
 
   @property
+  def shard_info(self):
+    index = self.failure_dict.get('shard_id', 0)
+    count = self.failure_dict.get('shard_count', 1)
+    if count > 1:
+      return f'{index}:{count}'
+    return ''
+
+  @property
   def test_step_config(self):
     return self.test.test_step_config
 
@@ -1168,6 +1176,10 @@ class Failure:
     lines.append('Flags: %s' % ' '.join(self.failure_dict['flags']))
     lines.append('Command: %s' % self.failure_dict['command'])
     lines.append('Variant: %s' % self.failure_dict['variant'])
+
+    if self.shard_info:
+      lines.append(f'Shard: {self.shard_info}')
+
     lines.append('')
     lines.append('GN arguments:')
     if self.api.v8_tests.gn_args is None:
