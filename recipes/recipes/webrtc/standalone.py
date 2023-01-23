@@ -34,11 +34,7 @@ def should_use_reclient(api, builder_id):
   #   client.webrtc.perf = Perf builders
   #   internal.client.webrtc = Internal CI builders
   #   tryserver.webrtc = CQ builders
-  if builder_id.group != 'tryserver.webrtc':
-    return True
-  if api.platform.is_linux or api.platform.is_win:
-    return True
-  return False
+  return True
 
 
 def RunSteps(api):
