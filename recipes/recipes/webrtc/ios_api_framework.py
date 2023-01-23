@@ -31,12 +31,10 @@ def RunSteps(api):
   build_script = api.path['checkout'].join('tools_webrtc', 'ios',
                                            'build_ios_libs.py')
   cmd = ['vpython3', '-u', build_script, '--verbose']
-  if api.tryserver.is_tryserver:
-    api.webrtc.build_with_goma('build', cmd)
-  else:
+  if not api.tryserver.is_tryserver:
     api.step('cleanup', [build_script, '-c'])
     cmd += ['-r', api.webrtc.revision_number]
-    api.webrtc.build_with_reclient('build', cmd)
+  api.webrtc.build_with_reclient('build', cmd)
 
   output_dir = api.path['checkout'].join('out_ios_libs')
 
@@ -71,4 +69,5 @@ def GenTests(api):
           xcode_build_version='dummy_xcode',
           gerrit_url='https://webrtc-review.googlesource.com',
           gerrit_project='src'),
+      api.reclient.properties(),
   )
