@@ -105,10 +105,6 @@ class FlakinessApi(recipe_api.RecipeApi):
     self.RUN_TEST_STEP_NAME = 'test new tests for flakiness'
     self.CALCULATE_FLAKE_RATE_STEP_NAME = 'calculate flake rates'
 
-    self.build_count = properties.build_count or 100
-    self.historical_query_count = properties.historical_query_count or 1000
-    self.current_query_count = properties.current_query_count or 10000
-
   @property
   def test_suffix(self):
     return self._suffix_by_shard_index(0)
@@ -192,141 +188,6 @@ class FlakinessApi(recipe_api.RecipeApi):
     pattern = re.compile(_FILE_PATH_ADDING_TESTS_PATTERN)
     return any(pattern.match(file_path) for file_path in affected_files)
 
-  def get_invocations_from_change(self, change=None, step_name=None):
-    """Gets ResultDB Invocation names from the same CL as the given change.
-
-    An invocation represents a container of results, in this case from a
-    buildbucket build. Invocation names can be used to map the buildbucket build
-    to the ResultDB test results.
-
-    Multiple builds can be triggered from the same CL and different patch sets.
-    This method searches through all patch sets for the current build,
-    gathers a list of the builds associated, and extracts the Invocation names
-    from each build.
-
-    Args:
-      change (common_pb2.GerritChange): The gerrit change associated with the
-        CL we want to find all invocations for. Every patch set up until and
-        including the current patch set of the given change will be used to
-        search buildbucket.
-      step_name (string): use to override default step name.
-
-    Returns:
-        A set of ResultDB Invocation names as strings.
-    """
-    change = change or self.m.buildbucket.build.input.gerrit_changes[0]
-    step_name = (
-        step_name or 'fetching associated builds with current gerrit patchset')
-
-    # Creating BuildPredicate object for each patch set within a CL and
-    # compiling them into a list. This is to search for builds from the
-    # same CL but from different patch sets to exclude from our historical
-    # data, ensuring all tests new to the CL are detected as new.
-    predicates = []
-    # Only check the latest 30 patchsets on win due to windows cmd line size
-    # limitation (8191 chars). Input char size is around 250 chars per patchset.
-    start_patchset = (
-        max(1, change.patchset - 30) if sys.platform == 'win32' else 1)
-
-    for i in range(start_patchset, change.patchset + 1):
-      predicates.append(
-          builds_service_pb2.BuildPredicate(
-              builder=self.m.buildbucket.build.builder,
-              gerrit_changes=[
-                  common_pb2.GerritChange(
-                      host=change.host,
-                      project=change.project,
-                      change=change.change,
-                      patchset=i),
-              ]))
-
-    search_results = self.m.buildbucket.search(
-        predicate=predicates,
-        report_build=False,
-        step_name=step_name,
-        fields=['infra.resultdb.invocation'],
-    )
-
-    inv_set = set(
-        # These invocation names will later be used to query ResultDB, which
-        # explicitly requires strings
-        str(build.infra.resultdb.invocation) for build in search_results)
-
-    return inv_set
-
-  def fetch_all_related_invocations(self):
-    """Gets all builds associated with the current CL, or chained CLs.
-
-    This method searches buildbucket for all builds associated with the CL of
-    the current build, or any CLs chained to the CL of the current build. Gerrit
-    is used to find all chained CLs, and then each patch set of those CLs is
-    used to query buildbucket for any associated builds. It then returns the
-    invocation names of all of these builds and tasks within the builds.
-
-    An invocation represents a container of results, in this case from a
-    buildbucket build. Invocation names can be used to map the buildbucket build
-    to the ResultDB test results.
-
-    Returns:
-        A set of invocation names as strings.
-    """
-    gerrit_change = self.m.buildbucket.build.input.gerrit_changes[0]
-    related = self.m.gerrit.get_related_changes('https://' + gerrit_change.host,
-                                                gerrit_change.change)
-
-    change_set = {gerrit_change.change}
-    excluded_invs = self.get_invocations_from_change()
-
-    def _get_excluded_changes(excluded_invs, current_change, step):
-      excluded_invs.update(
-          self.get_invocations_from_change(
-              change=current_change, step_name=step))
-
-    futures = []
-    for rel_change in related["changes"]:
-      change_number = int(rel_change['_change_number'])
-      if change_number not in change_set:
-        current_change = common_pb2.GerritChange(
-            host=gerrit_change.host,
-            project=gerrit_change.project,
-            change=change_number,
-            patchset=int(rel_change['_current_revision_number']))
-        step = ('fetching associated builds related with change %s' %
-                str(change_number))
-        futures.append(
-            self.m.futures.spawn(
-                _get_excluded_changes,
-                excluded_invs,
-                current_change,
-                step,
-            ))
-    for f in futures:
-      f.result()
-
-    def find_sub_invocations(api, build_inv, sub_invs):
-      sub_invs.extend([
-          str(inv) for inv in api.resultdb.get_included_invocations(build_inv)
-      ])
-
-    # Find all task invocations of each build invocation and add these to
-    # excluded.
-    sub_invs = []
-    futures = []
-    for build_inv in excluded_invs:
-      futures.append(
-          self.m.futures.spawn(
-              find_sub_invocations,
-              self.m,
-              build_inv,
-              sub_invs,
-          ))
-
-    for f in futures:
-      f.result()
-
-    excluded_invs.update(sub_invs)
-    return excluded_invs
-
   def fetch_precomputed_test_data(self):
     """Fetch the precomputed JSON file from GS
 
@@ -381,7 +242,7 @@ class FlakinessApi(recipe_api.RecipeApi):
               variant_hash=test_entry.get('variant_hash', None)))
     return tests
 
-  def verify_new_tests(self, prelim_tests, excluded_invs, builder):
+  def verify_new_tests(self, prelim_tests, builder):
     """Verify the newly identified tests are new by cross-checking ResultDB.
 
     Queries ResultDB for the instances of the given test_ids on the builder for
@@ -393,17 +254,12 @@ class FlakinessApi(recipe_api.RecipeApi):
         objects identified as potential new tests to be cross-referenced
         with ResultDB. This set will be modified by this method to contain only
         tests not found in ResultDB existing tests.
-      excluded_invs (set of str): the invocation names belonging to builds
-        associated with the current build to be excluded from existing tests.
       builder (str): The name of the builder to query test results for.
 
     Returns:
       A set of TestDefinition objects.
 
     """
-    # Invocation IDs stored in weetbix test verdict don't have "invocations/"
-    # prefix.
-    excluded_invs = [inv[len('invocations/'):] for inv in excluded_invs]
 
     def _ensure_new(test_id):
       now = int(self.m.time.time())
@@ -425,8 +281,9 @@ class FlakinessApi(recipe_api.RecipeApi):
           sub_realm='try',
           variant_predicate=predicate_pb2.VariantPredicate(
               contains={'def': {
-                  'builder': builder
+                  'builder': builder,
               }}),
+          submitted_filter=common_weetbix_pb2.ONLY_SUBMITTED,
           partition_time_range=search_range)
 
       for test_verdict in verdicts:
@@ -434,8 +291,10 @@ class FlakinessApi(recipe_api.RecipeApi):
             test_id=test_verdict.test_id,
             variant_hash=test_verdict.variant_hash,
         )
-        excluded = test_verdict.invocation_id in excluded_invs
-        if test in prelim_tests and not excluded:
+        # If a test has already been run, ie/ through chained CLs, the
+        # test history RPC call should return it as part of the verdict
+        # and will be removed from the set of preliminary tests.
+        if test in prelim_tests:
           prelim_tests.remove(test)
 
     futures = []
@@ -501,8 +360,6 @@ class FlakinessApi(recipe_api.RecipeApi):
       return set()
 
     with self.m.step.nest(self.IDENTIFY_STEP_NAME) as p:
-      excluded_invs = self.fetch_all_related_invocations()
-      p.logs["excluded_invocation_list"] = sorted(excluded_invs)
       builder_name = self.m.buildbucket.builder_name
 
       try:
@@ -586,7 +443,6 @@ class FlakinessApi(recipe_api.RecipeApi):
       try:
         new_tests = self.verify_new_tests(
             prelim_tests=preliminary_new_tests,
-            excluded_invs=excluded_invs,
             builder=builder_name)
       except recipe_api.StepFailure:
         p.status = self.m.step.INFRA_FAILURE
@@ -654,11 +510,13 @@ class FlakinessApi(recipe_api.RecipeApi):
     """Searches for new tests in a given change
 
     This method coordinates the workflow for searching and identifying new
-    tests. Buildbucket is queried for a historial set of runs, cross-references
-    the invocations against ResultDB, excludes certain runs and determines a
-    unique set of test_id + test_variant_hash. This set is compared to the tests
-    run for the current try run (both with and without patch) to determine which
-    tests are new.
+    tests. Test history for a CQ builder should be pre-generated, where the
+    test history is based on submitted test data. New tests are re-verified
+    through the (LUCI Test) Test History RPC call, and we only focus on
+    submitted test histories. This means that new tests that are merged but
+    not yet included in the generated test history are removed.
+
+    Test history generated through http://shortn/_BTd3kCb4cx.
 
     There are a few restrictions in place that will skip this (and thus) the
     flakiness checks:
@@ -694,7 +552,6 @@ class FlakinessApi(recipe_api.RecipeApi):
       return []
 
     new_tests = self.identify_new_tests(test_objects)
-
     new_tests = self.maybe_trim_new_tests(new_tests, _FINAL_TRIM)
 
     test_objects_by_suffix = collections.defaultdict(list)

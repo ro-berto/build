@@ -1103,9 +1103,6 @@ def GenTests(api):
           }),
       api.flakiness(
           check_for_flakiness=True,
-          build_count=10,
-          historical_query_count=2,
-          current_query_count=2,
       ),
       # This overrides the file check to ensure that we have test files
       # in the given patch.
@@ -1182,9 +1179,6 @@ def GenTests(api):
           }),
       api.flakiness(
           check_for_flakiness=True,
-          build_count=10,
-          historical_query_count=2,
-          current_query_count=2,
       ),
       # This overrides the file check to ensure that we have test files
       # in the given patch.
@@ -1257,9 +1251,6 @@ def GenTests(api):
           }),
       api.flakiness(
           check_for_flakiness=True,
-          build_count=10,
-          historical_query_count=2,
-          current_query_count=2,
       ),
       # This overrides the file check to ensure that we have test files
       # in the given patch.

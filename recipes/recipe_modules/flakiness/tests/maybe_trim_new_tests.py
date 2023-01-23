@@ -44,7 +44,4 @@ def GenTests(api):
       'basic',
       api.flakiness(
           check_for_flakiness=True,
-          build_count=10,
-          historical_query_count=2,
-          current_query_count=2,
       ), api.post_process(post_process.DropExpectation))

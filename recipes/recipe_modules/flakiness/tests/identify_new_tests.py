@@ -76,6 +76,8 @@ def RunSteps(api):
     test_objects.append(test_object)
 
   new_tests = {
+      'ninja://sample/test:some_test/TestSuite.Test0_0hash',
+      'ninja://sample/test:some_test/TestSuite.Test2_2hash',
       'ninja://sample/test:some_test/TestSuite.Test3_3hash',
       'TestSuite.Test4_4hash',
   }
@@ -120,30 +122,20 @@ def GenTests(api):
   yield api.test(
       'basic',
       api.buildbucket.build(basic_build),
-      api.flakiness(
-          check_for_flakiness=True,
-          build_count=10,
-          historical_query_count=2,
-          current_query_count=2,
-      ),
-      api.buildbucket.simulated_search_results(
-          builds=[basic_build],
-          step_name=('searching_for_new_tests.fetching associated builds with '
-                     'current gerrit patchset')),
-      api.step_data(
-          'searching_for_new_tests.process precomputed test history',
-          api.file.read_json([{
-              'test_id': 'ninja://sample/test:some_test/TestSuite.Test2',
-              'variant_hash': '2hash',
-              'invocation': ['invocation/3']
-          }, {
-              'test_id': 'ninja://sample/test:some_test/TestSuite.Test0',
-              'variant_hash': '0hash',
-              'invocation': ['invocation/1']
-          }])),
+      api.flakiness(check_for_flakiness=True,),
       api.weetbix.query_test_history(
           test1_history_res,
           'ninja://sample/test:some_test/TestSuite.Test1',
+          parent_step_name='searching_for_new_tests',
+      ),
+      api.weetbix.query_test_history(
+          empty_history_res,
+          'ninja://sample/test:some_test/TestSuite.Test0',
+          parent_step_name='searching_for_new_tests',
+      ),
+      api.weetbix.query_test_history(
+          empty_history_res,
+          'ninja://sample/test:some_test/TestSuite.Test2',
           parent_step_name='searching_for_new_tests',
       ),
       api.weetbix.query_test_history(
@@ -172,14 +164,7 @@ def GenTests(api):
       'cross reference infra failure', api.buildbucket.build(basic_build),
       api.flakiness(
           check_for_flakiness=True,
-          build_count=10,
-          historical_query_count=2,
-          current_query_count=2,
       ),
-      api.buildbucket.simulated_search_results(
-          builds=[basic_build],
-          step_name=('searching_for_new_tests.fetching associated builds with '
-                     'current gerrit patchset')),
       api.step_data(
           'searching_for_new_tests.process precomputed test history',
           api.file.read_json([{
@@ -216,9 +201,6 @@ def GenTests(api):
           patch_set=1),
       api.flakiness(
           check_for_flakiness=False,
-          build_count=10,
-          historical_query_count=2,
-          current_query_count=2,
       ),
       api.post_process(post_process.DropExpectation),
   )
@@ -233,9 +215,6 @@ def GenTests(api):
           patch_set=1),
       api.flakiness(
           check_for_flakiness=True,
-          build_count=10,
-          historical_query_count=2,
-          current_query_count=2,
       ),
       api.override_step_data(
           'searching_for_new_tests.gsutil download', retcode=1),
@@ -259,9 +238,6 @@ def GenTests(api):
           patch_set=1),
       api.flakiness(
           check_for_flakiness=True,
-          build_count=10,
-          historical_query_count=2,
-          current_query_count=2,
       ),
       api.override_step_data(
           'searching_for_new_tests.process precomputed test history',
@@ -280,14 +256,7 @@ def GenTests(api):
       api.buildbucket.build(basic_build),
       api.flakiness(
           check_for_flakiness=True,
-          build_count=10,
-          historical_query_count=2,
-          current_query_count=2,
       ),
-      api.buildbucket.simulated_search_results(
-          builds=[basic_build],
-          step_name=('searching_for_new_tests.fetching associated builds with '
-                     'current gerrit patchset')),
       api.step_data(
           # All build tests are returned from history.
           'searching_for_new_tests.process precomputed test history',

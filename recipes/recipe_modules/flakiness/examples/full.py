@@ -206,18 +206,6 @@ def GenTests(api):
   empty_history_res = test_history.QueryTestHistoryResponse(
       verdicts=[], next_page_token='dummy_token')
 
-  excluded_build = _generate_build(
-      builder,
-      'invocations/3',
-      build_input=build_pb2.Build.Input(gerrit_changes=[
-          common_pb2.GerritChange(
-              host='chromium-review.googlesource.com',
-              project='chromium/src',
-              change=10,
-              patchset=3,
-          )
-      ]))
-
   builder_db = ctbc.BuilderDatabase.create({
       'fake-group': {
           'fake-builder':
@@ -298,9 +286,6 @@ def GenTests(api):
           }),
       api.flakiness(
           check_for_flakiness=True,
-          build_count=10,
-          historical_query_count=2,
-          current_query_count=2,
       ),
       api.override_step_data(
           ('ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 '
@@ -336,12 +321,6 @@ def GenTests(api):
       api.step_data(
           'git diff to analyze patch (2)',
           api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
-      # This is the related build that'll be excluded, which includes itself.
-      api.buildbucket.simulated_search_results(
-          builds=[excluded_build],
-          step_name=(
-              'searching_for_new_tests.'
-              'fetching associated builds with current gerrit patchset')),
       api.weetbix.query_test_history(
           test_a_other_invocation_history_res,
           ('ninja://ios/chrome/test/earl_grey2:'
@@ -461,9 +440,6 @@ def GenTests(api):
           }),
       api.flakiness(
           check_for_flakiness=True,
-          build_count=10,
-          historical_query_count=2,
-          current_query_count=2,
       ),
       api.resultdb.query(
           junit_invocations,
@@ -547,9 +523,6 @@ def GenTests(api):
           }),
       api.flakiness(
           check_for_flakiness=True,
-          build_count=10,
-          historical_query_count=2,
-          current_query_count=2,
       ),
       api.resultdb.query(
           junit_nonparameterized_invocation,
@@ -625,9 +598,6 @@ def GenTests(api):
           }),
       api.flakiness(
           check_for_flakiness=True,
-          build_count=10,
-          historical_query_count=2,
-          current_query_count=2,
       ),
       api.resultdb.query(
           script_invocation,
@@ -687,9 +657,6 @@ def GenTests(api):
           }),
       api.flakiness(
           check_for_flakiness=True,
-          build_count=10,
-          historical_query_count=2,
-          current_query_count=2,
       ),
       api.override_step_data(('ios_chrome_web_eg2tests_module_iPad Air 2 14.4 '
                               '(with patch) on Mac-11'),
@@ -710,12 +677,6 @@ def GenTests(api):
       api.step_data(
           'git diff to analyze patch (2)',
           api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
-      # This is the related build that'll be excluded, which includes itself.
-      api.buildbucket.simulated_search_results(
-          builds=[excluded_build],
-          step_name=(
-              'searching_for_new_tests.'
-              'fetching associated builds with current gerrit patchset')),
       # This is what's been recently run, and that isn't in the exclusion list
       # and so should be removed (false positive).
       api.weetbix.query_test_history(
@@ -821,9 +782,6 @@ def GenTests(api):
           }),
       api.flakiness(
           check_for_flakiness=True,
-          build_count=10,
-          historical_query_count=2,
-          current_query_count=2,
       ),
       api.override_step_data(('base_unittests '
                               '(with patch) on Mac-11'),
@@ -844,12 +802,6 @@ def GenTests(api):
       api.step_data(
           'git diff to analyze patch (2)',
           api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
-      # This is the related build that'll be excluded, which includes itself.
-      api.buildbucket.simulated_search_results(
-          builds=[excluded_build],
-          step_name=(
-              'searching_for_new_tests.'
-              'fetching associated builds with current gerrit patchset')),
       api.weetbix.query_test_history(
           empty_history_res,
           ('ninja://base:base_unittests/TestSuite.test_d'),
@@ -912,9 +864,6 @@ def GenTests(api):
           }),
       api.flakiness(
           check_for_flakiness=True,
-          build_count=10,
-          historical_query_count=2,
-          current_query_count=2,
       ),
       api.override_step_data(
           ('ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 '
@@ -936,12 +885,6 @@ def GenTests(api):
       api.step_data(
           'git diff to analyze patch (2)',
           api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
-      # This is the related build that'll be excluded, which includes itself.
-      api.buildbucket.simulated_search_results(
-          builds=[excluded_build],
-          step_name=(
-              'searching_for_new_tests.'
-              'fetching associated builds with current gerrit patchset')),
       api.weetbix.query_test_history(
           test_a_other_invocation_history_res,
           ('ninja://ios/chrome/test/earl_grey2:'
@@ -1013,9 +956,6 @@ def GenTests(api):
           }),
       api.flakiness(
           check_for_flakiness=True,
-          build_count=10,
-          historical_query_count=2,
-          current_query_count=2,
       ),
       api.override_step_data(
           ('ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 '
@@ -1037,12 +977,6 @@ def GenTests(api):
       api.step_data(
           'git diff to analyze patch (2)',
           api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
-      # This is the related build that'll be excluded, which includes itself.
-      api.buildbucket.simulated_search_results(
-          builds=[excluded_build],
-          step_name=(
-              'searching_for_new_tests.'
-              'fetching associated builds with current gerrit patchset')),
       api.weetbix.query_test_history(
           test_a_other_invocation_history_res,
           ('ninja://ios/chrome/test/earl_grey2:'
@@ -1115,9 +1049,6 @@ def GenTests(api):
           }),
       api.flakiness(
           check_for_flakiness=True,
-          build_count=10,
-          historical_query_count=2,
-          current_query_count=2,
       ),
       api.override_step_data(
           ('ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 '
@@ -1138,12 +1069,6 @@ def GenTests(api):
       api.step_data(
           'git diff to analyze patch (2)',
           api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
-      # This is the related build that'll be excluded, which includes itself.
-      api.buildbucket.simulated_search_results(
-          builds=[excluded_build],
-          step_name=(
-              'searching_for_new_tests.'
-              'fetching associated builds with current gerrit patchset')),
       api.weetbix.query_test_history(
           test_a_other_invocation_history_res,
           ('ninja://ios/chrome/test/earl_grey2:'
@@ -1228,9 +1153,6 @@ def GenTests(api):
           }),
       api.flakiness(
           check_for_flakiness=True,
-          build_count=10,
-          historical_query_count=2,
-          current_query_count=2,
       ),
       api.override_step_data(
           ('ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 '
@@ -1252,12 +1174,6 @@ def GenTests(api):
       api.step_data(
           'git diff to analyze patch (2)',
           api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
-      # This is the related build that'll be excluded, which includes itself.
-      api.buildbucket.simulated_search_results(
-          builds=[excluded_build],
-          step_name=(
-              'searching_for_new_tests.'
-              'fetching associated builds with current gerrit patchset')),
       api.weetbix.query_test_history(
           empty_history_res,
           ('ninja://ios/chrome/test/earl_grey2:'
@@ -1325,9 +1241,6 @@ def GenTests(api):
           }),
       api.flakiness(
           check_for_flakiness=True,
-          build_count=10,
-          historical_query_count=2,
-          current_query_count=2,
       ),
       api.override_step_data(
           ('ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 '
@@ -1354,12 +1267,6 @@ def GenTests(api):
       api.step_data(
           'git diff to analyze patch (2)',
           api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
-      # This is the related build that'll be excluded, which includes itself.
-      api.buildbucket.simulated_search_results(
-          builds=[excluded_build],
-          step_name=(
-              'searching_for_new_tests.'
-              'fetching associated builds with current gerrit patchset')),
       api.weetbix.query_test_history(
           empty_history_res,
           ('ninja://ios/chrome/test/earl_grey2:'
@@ -1395,9 +1302,6 @@ def GenTests(api):
           })),
       api.flakiness(
           check_for_flakiness=True,
-          build_count=10,
-          historical_query_count=2,
-          current_query_count=2,
       ),
       api.step_data('git diff to analyze patch (2)',
                     api.raw_io.stream_output('chrome/file1.cc\nsrc/DEPS')),
@@ -1424,9 +1328,6 @@ def GenTests(api):
           })),
       api.flakiness(
           check_for_flakiness=True,
-          build_count=10,
-          historical_query_count=2,
-          current_query_count=2,
       ),
       api.step_data(
           'git diff to analyze patch (2)',
@@ -1455,9 +1356,6 @@ def GenTests(api):
           })),
       api.flakiness(
           check_for_flakiness=True,
-          build_count=10,
-          historical_query_count=2,
-          current_query_count=2,
       ),
       api.step_data(
           'git diff to analyze patch (2)',
@@ -1485,9 +1383,6 @@ def GenTests(api):
           })),
       api.flakiness(
           check_for_flakiness=True,
-          build_count=10,
-          historical_query_count=2,
-          current_query_count=2,
       ),
       api.step_data('parse description',
                     api.json.output({'Validate-Test-Flakiness': ['Skip']})),
