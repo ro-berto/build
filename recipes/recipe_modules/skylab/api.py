@@ -143,10 +143,27 @@ class SkylabApi(recipe_api.RecipeApi):
             cmd.extend(['-lacros-path', t.lacros_gcs_path])
 
             if t.spec.secondary_cros_board and t.spec.secondary_cros_img:
-              cmd.extend(['-secondary-lacros-paths', t.lacros_gcs_path])
+              num_boards = len(t.spec.secondary_cros_board.split(","))
+              # By default, browser files are sent to all secondary DUTs unless
+              # users explicitly override through should_provision_browser_files.
+              should_provision_browser_files = [True] * num_boards
+              if t.spec.should_provision_browser_files:
+                if len(t.spec.should_provision_browser_files) != num_boards:
+                  raise recipe_api.StepFailure(
+                      'Length of should_provision_browser_files'
+                      ' must match secondary_cros_board')
+                should_provision_browser_files = t.spec.should_provision_browser_files
 
-          if t.spec.bucket and 'chromium' in t.spec.bucket:
-            test_args.append('run_private_tests=false')
+              if any(should_provision_browser_files):
+                secondary_lacros_paths_list = [
+                    t.lacros_gcs_path if p else 'skip'
+                    for p in should_provision_browser_files
+                ]
+                secondary_lacros_paths = ','.join(secondary_lacros_paths_list)
+                cmd.extend(['-secondary-lacros-paths', secondary_lacros_paths])
+
+            if t.spec.bucket and 'chromium' in t.spec.bucket:
+              test_args.append('run_private_tests=false')
 
           assert t.spec.shards == 1 or t.is_tast_test, (
               'Only sharding for tast tests are currently supported in Skylab')

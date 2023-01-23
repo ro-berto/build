@@ -2851,9 +2851,18 @@ class SkylabTestSpec(TestSpec):
   # The key to extract the tast expression from the tast_expr_file.
   tast_expr_key = attrib(str, default='default')
 
-  # Spec for the nearby sharing tests.
+  # Spec for the Multi-DUT tests.
   secondary_cros_board = attrib(str, default='')
   secondary_cros_img = attrib(str, default='')
+  # Optional argument to control whether to provision browser files
+  # through `secondary_lacros_gcs_path` in the `crosfleet` command.
+  # If True, `skip` is put in `secondary_lacros_gcs_path`
+  # in the position corresponding to a DUT.
+  # e.g. [False,True] yield "skip,gs://path1"
+  # If this argument is empty, by default browser files are sent
+  # to all secondary DUTs.
+  # The length has to match that of `secondary_cros_board`.
+  should_provision_browser_files = attrib(sequence[bool], default=())
 
   # Spec for telemetry tests.
   benchmark = attrib(str, default='')
