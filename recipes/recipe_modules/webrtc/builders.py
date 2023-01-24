@@ -824,19 +824,6 @@ _TRYSERVER_WEBRTC_SPEC = {
                 'TARGET_ARCH': 'arm',
                 'TARGET_BITS': 32,
             }),
-    'android_arm_rel_reclient':
-        WebRTCBuilderSpec.create(
-            build_android_archive=True,
-            chromium_config='webrtc_android',
-            android_config='webrtc',
-            gclient_config='webrtc',
-            gclient_apply_config=['android'],
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_PLATFORM': 'android',
-                'TARGET_ARCH': 'arm',
-                'TARGET_BITS': 32,
-            }),
     'android_arm64_dbg':
         WebRTCBuilderSpec.create(
             chromium_config='webrtc_android',
@@ -882,18 +869,6 @@ _TRYSERVER_WEBRTC_SPEC = {
                 'TARGET_BITS': 64,
             }),
     'ios_compile_arm64_rel':
-        WebRTCBuilderSpec.create(
-            chromium_config='webrtc_default',
-            gclient_config='webrtc_ios',
-            chromium_apply_config=['mac_toolchain'],
-            simulation_platform='mac',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_PLATFORM': 'ios',
-                'TARGET_ARCH': 'arm',
-                'TARGET_BITS': 64,
-            }),
-    'ios_compile_arm64_rel_reclient':
         WebRTCBuilderSpec.create(
             chromium_config='webrtc_default',
             gclient_config='webrtc_ios',
@@ -1036,14 +1011,6 @@ _TRYSERVER_WEBRTC_SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             }),
-    'linux_rel_reclient':
-        WebRTCBuilderSpec.create(
-            chromium_config='webrtc_default',
-            gclient_config='webrtc',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            }),
     'linux_tsan2':
         WebRTCBuilderSpec.create(
             chromium_config='webrtc_clang',
@@ -1143,15 +1110,6 @@ _TRYSERVER_WEBRTC_SPEC = {
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,
             }),
-    'mac_rel_reclient':
-        WebRTCBuilderSpec.create(
-            chromium_config='webrtc_default',
-            gclient_config='webrtc',
-            simulation_platform='mac',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            }),
     'mac_rel_m1':
         WebRTCBuilderSpec.create(
             chromium_config='webrtc_default',
@@ -1182,15 +1140,6 @@ _TRYSERVER_WEBRTC_SPEC = {
                 'TARGET_BITS': 64,
             }),
     'win_compile_x64_clang_rel':
-        WebRTCBuilderSpec.create(
-            chromium_config='webrtc_clang',
-            gclient_config='webrtc',
-            simulation_platform='win',
-            chromium_config_kwargs={
-                'BUILD_CONFIG': 'Release',
-                'TARGET_BITS': 64,
-            }),
-    'win_compile_x64_clang_rel_reclient':
         WebRTCBuilderSpec.create(
             chromium_config='webrtc_clang',
             gclient_config='webrtc',
