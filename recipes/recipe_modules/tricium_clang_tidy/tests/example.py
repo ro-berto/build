@@ -6,6 +6,7 @@ import json
 
 from recipe_engine import post_process
 from RECIPE_MODULES.build.tricium_clang_tidy import _clang_tidy_path
+from RECIPE_MODULES.build.tricium_clang_tidy import CXX17_FAILURE_SUFFIX
 
 DEPS = [
     'recipe_engine/context',
@@ -264,7 +265,8 @@ def GenTests(api):
              _tricium_has_message,
              'a (https://clang.llvm.org/extra/clang-tidy/checks/b.html)\n\n'
              '(Note: building this file or its dependencies failed; this '
-             'diagnostic might be incorrect as a result.)') +
+             'diagnostic might be incorrect as a result. '
+             f'{CXX17_FAILURE_SUFFIX})') +
          api.post_process(post_process.DropExpectation))
 
   yield (test_with_patch(
@@ -288,7 +290,8 @@ def GenTests(api):
              _tricium_has_message,
              'a (https://clang.llvm.org/extra/clang-tidy/checks/b.html)\n\n'
              '(Note: building this file or its dependencies failed; this '
-             'diagnostic might be incorrect as a result.)') +
+             'diagnostic might be incorrect as a result. '
+             f'{CXX17_FAILURE_SUFFIX})') +
          api.post_process(post_process.DropExpectation))
 
   yield (test_with_patch(
@@ -311,7 +314,8 @@ def GenTests(api):
              _tricium_has_message,
              'a (https://clang.llvm.org/extra/clang-tidy/checks/b.html)\n\n'
              '(Note: running clang-tidy on this file failed; this '
-             'diagnostic might be incorrect as a result.)') +
+             'diagnostic might be incorrect as a result. '
+             f'{CXX17_FAILURE_SUFFIX})') +
          api.post_process(post_process.DropExpectation))
 
   yield (test_with_patch(

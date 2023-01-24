@@ -10,7 +10,7 @@ import collections
 
 from recipe_engine.recipe_api import RecipeApi
 
-from . import _clang_tidy_path
+from . import _clang_tidy_path, CXX17_FAILURE_SUFFIX
 
 
 def _is_clang_diagnostic(check_name):
@@ -80,10 +80,11 @@ class _SourceFileComments:
     if self._build_failed:
       failure_suffix = ('\n\n(Note: building this file or its dependencies '
                         'failed; this diagnostic might be incorrect as a '
-                        'result.)')
+                        f'result. {CXX17_FAILURE_SUFFIX})')
     elif self._tidy_failed:
       failure_suffix = ('\n\n(Note: running clang-tidy on this file failed; '
-                        'this diagnostic might be incorrect as a result.)')
+                        'this diagnostic might be incorrect as a result. '
+                        f'{CXX17_FAILURE_SUFFIX})')
     else:
       failure_suffix = ''
 
