@@ -83,15 +83,7 @@ class LibyuvApi(recipe_api.RecipeApi):
     return self.bot_type in ('builder', 'builder_tester')
 
   @property
-  def should_use_goma(self):
-    if self.m.builder_group.for_current != 'tryserver.libyuv':
-      return False
-    return self.buildername not in _LOCAL_COMPILE_BUILDERS
-
-  @property
   def should_use_reclient(self):
-    if self.m.builder_group.for_current == 'tryserver.libyuv':
-      return False
     return self.buildername not in _LOCAL_COMPILE_BUILDERS
 
   @property
