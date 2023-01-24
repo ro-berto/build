@@ -32,12 +32,11 @@ _SPEC = {
                     buildername='android-arm64-test',
                     tester='android-arm64-pixel4',
                 ),
-                # temporarily removed, fails after flashing crbug.com/1405504
-                # try_spec.TryMirror.create(
-                #     builder_group='angle',
-                #     buildername='android-arm64-test',
-                #     tester='android-arm64-pixel6',
-                # ),
+                try_spec.TryMirror.create(
+                    builder_group='angle',
+                    buildername='android-arm64-test',
+                    tester='android-arm64-pixel6',
+                ),
             ],
             analyze_names=['angle'],
             retry_failed_shards=False,
