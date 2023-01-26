@@ -576,7 +576,7 @@ class BinarySizeApi(recipe_api.RecipeApi):
       })
       step_result = self.m.step(
           'Run Expectations Script' + suffix, [
-              'python',
+              'python3',
               checker_script,
               '--check-expectations',
               '--results-path',

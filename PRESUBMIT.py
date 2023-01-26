@@ -49,10 +49,6 @@ PYTHON2_FILES = (
     'recipes/crash_utils.py',
     'recipes/daemonizer.py',
     'recipes/recipe_modules/adb/resources/list_devices.py',
-    (
-        'recipes/recipe_modules/binary_size/resources/'
-        'trybot_failed_expectations_checker.py'
-    ),
     'recipes/recipe_modules/chromium_android/resources/archive_build.py',
     (
         'recipes/recipe_modules/chromium_android/resources/'
