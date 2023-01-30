@@ -131,12 +131,15 @@ COMPARISON_BUILDERS = freeze({
         'chromium_apply_config': [
             'mb', 'goma_enable_cache_silo', 'goma_large_cache_file'
         ],
-        'gclient_apply_config': ['chromeos', 'reclient_test'],
+        'gclient_apply_config': [
+            'chromeos', 'reclient_test', 'checkout_lacros_sdk'
+        ],
         'platform': 'linux',
         'chromium_config_kwargs': {
             'TARGET_BITS': 64,
             'TARGET_PLATFORM': 'chromeos',
             'CROS_BOARDS_WITH_QEMU_IMAGES': 'amd64-generic:amd64-generic-vm',
+            'TARGET_CROS_BOARDS': 'amd64-generic',
         },
         'simulation_platform': 'linux',
         'targets': ['chrome'],
