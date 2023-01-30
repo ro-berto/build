@@ -79,7 +79,7 @@ class AndroidApi(recipe_api.RecipeApi):
       exclude_filters: List of globs to be excluded from the archive.
     """
     cmd = [
-        'python',
+        'python3',
         self.resource('archive_build.py'),
         '--target',
         self.m.chromium.c.BUILD_CONFIG,
