@@ -21,7 +21,6 @@ DEPS = [
     'depot_tools/gitiles',
     'depot_tools/gsutil',
     'depot_tools/tryserver',
-    'goma',
     'infra/zip',
     'isolate',
     'filter',

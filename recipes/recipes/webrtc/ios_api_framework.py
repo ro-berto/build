@@ -8,7 +8,6 @@ DEPS = [
     'chromium_checkout',
     'depot_tools/gclient',
     'depot_tools/tryserver',
-    'goma',
     'recipe_engine/buildbucket',
     'recipe_engine/path',
     'recipe_engine/properties',

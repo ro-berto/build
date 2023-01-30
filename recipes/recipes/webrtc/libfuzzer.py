@@ -55,11 +55,7 @@ def RunSteps(api):
   api.chromium_checkout.ensure_checkout()
   api.chromium.ensure_goma()
   api.chromium.runhooks()
-
-  gn_args = api.webrtc.run_mb(builder_id)
-  use_reclient = api.gn.parse_gn_args(gn_args).get('use_remoteexec') == 'true'
-  use_goma = use_reclient == False
-
+  api.webrtc.run_mb(builder_id)
   with api.context(cwd=api.path['checkout']):
     args = [
         '--root=%s' % str(api.path['checkout']),
@@ -77,8 +73,7 @@ def RunSteps(api):
 
   targets = step_result.stdout.split()
   api.step.active_result.presentation.logs['targets'] = targets
-  return api.chromium.compile(
-      targets=targets, use_goma_module=use_goma, use_reclient=use_reclient)
+  return api.chromium.compile(targets=targets, use_reclient=True)
 
 
 def GenTests(api):
@@ -94,5 +89,3 @@ def GenTests(api):
       'client.webrtc', 'Linux64 Release (Libfuzzer)')
   yield generate_builder(
       builder_id, suffix='_compile_failure', fail_compile=True)
-
-  yield generate_builder(builder_id, suffix='_reclient', use_reclient=True)

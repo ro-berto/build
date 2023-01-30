@@ -290,64 +290,6 @@
   },
   {
     "cmd": [
-      "vpython3",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
-      "/path/to/tmp/"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "webrtc:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "Read [CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
-    "~followup_annotations": [
-      "@@@STEP_LOG_END@mb_config.pyl@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "vpython3",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "",
-      "[TMP_BASE]/mb_config.pyl"
-    ],
-    "infra_step": true,
-    "luci_context": {
-      "realm": {
-        "name": "webrtc:ci"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "Override MB config to use reclient",
-    "~followup_annotations": [
-      "@@@STEP_LOG_END@mb_config.pyl@@@"
-    ]
-  },
-  {
-    "cmd": [
       "python3",
       "-u",
       "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
@@ -357,7 +299,7 @@
       "-b",
       "Android64 (dbg)",
       "--config-file",
-      "[TMP_BASE]/mb_config.pyl",
+      "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
       "--quiet"
@@ -382,7 +324,7 @@
     },
     "name": "lookup GN args",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>use_remoteexec=true@@@"
+      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
     ]
   },
   {
@@ -396,7 +338,7 @@
       "-b",
       "Android64 (dbg)",
       "--config-file",
-      "[TMP_BASE]/mb_config.pyl",
+      "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
       "--json-output",

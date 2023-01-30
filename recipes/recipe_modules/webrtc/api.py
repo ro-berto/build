@@ -203,22 +203,6 @@ class WebRTCApi(recipe_api.RecipeApi):
       self.m.code_coverage.instrument(
           affected_files, is_deps_only_change=is_deps_only_change)
 
-  def override_reclient_mb_config(self):
-    """Override mb_config.pyl to use reclient."""
-
-    mb_config_path = self.m.path['checkout'].join('tools_webrtc', 'mb',
-                                                  'mb_config.pyl')
-    mb_config = self.m.file.read_text('Read %s' % mb_config_path,
-                                      mb_config_path)
-    mb_config = mb_config.replace('use_goma=true', 'use_remoteexec=true')
-    new_mb_config_path = self.m.path['tmp_base'].join('mb_config.pyl')
-    self.m.file.write_text(
-        'Override MB config to use reclient',
-        new_mb_config_path,
-        mb_config,
-    )
-    return new_mb_config_path
-
   def run_mb(self, builder_id, phase=None, tests=None, mb_config_path=None):
     if phase:
       # Set the out folder to be the same as the phase name, so caches of
@@ -338,24 +322,7 @@ class WebRTCApi(recipe_api.RecipeApi):
       step_result = self.m.step(step_name, cmd)
       p.build_exit_status = step_result.retcode
 
-  def build_with_goma(self, step_name, cmd):
-    goma_dir = self.m.goma.ensure_goma()
-    self.m.goma.start()
-
-    cmd += ['--use-goma', '--extra-gn-args', 'goma_dir=\"%s\"' % goma_dir]
-
-    build_exit_status = 1
-    try:
-      step_result = self.m.step(step_name, cmd)
-      build_exit_status = step_result.retcode
-    except self.m.step.StepFailure as e:
-      build_exit_status = e.retcode
-      raise e
-    finally:
-      self.m.goma.stop(
-          ninja_log_compiler='goma', build_exit_status=build_exit_status)
-
-  def build_android_archive(self, use_reclient):
+  def build_android_archive(self):
     # Build the Android .aar archive and upload it to Google storage (except for
     # trybots). This should only be run on a single bot or the archive will be
     # overwritten (and it's a multi-arch build so one is enough).
@@ -370,13 +337,10 @@ class WebRTCApi(recipe_api.RecipeApi):
 
     with self.m.context(cwd=self.m.path['checkout']):
       build_step_name = 'build android archive'
-      if use_reclient:
-        build_dir = self.m.path.join(self.m.path['checkout'], 'andriod-archive')
-        cmd += ['--build-dir', build_dir]
-        self.build_with_reclient(build_step_name, cmd)
-        self.m.file.rmtree('Remove android archive dir', build_dir)
-      else:
-        self.build_with_goma(build_step_name, cmd)
+      build_dir = self.m.path.join(self.m.path['checkout'], 'andriod-archive')
+      cmd += ['--build-dir', build_dir]
+      self.build_with_reclient(build_step_name, cmd)
+      self.m.file.rmtree('Remove android archive dir', build_dir)
 
     if not self.m.tryserver.is_tryserver and not self.m.runtime.is_experimental:
       self.m.gsutil.upload(

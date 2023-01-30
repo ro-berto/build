@@ -27,16 +27,6 @@ DEPS = [
 ]
 
 
-# TODO(b/243594984): remove after CQ builder migration.
-def should_use_reclient(api, builder_id):
-  # Builder groups:
-  #   client.webrtc = CI builders
-  #   client.webrtc.perf = Perf builders
-  #   internal.client.webrtc = Internal CI builders
-  #   tryserver.webrtc = CQ builders
-  return True
-
-
 def RunSteps(api):
   builder_id, builder_config = api.chromium_tests_builder_config.lookup_builder(
       builder_db=builders.BUILDERS_DB)
@@ -62,10 +52,6 @@ def RunSteps(api):
   api.chromium.ensure_toolchains()
   api.chromium.runhooks()
 
-  mb_config_path = None
-  if should_use_reclient(api, builder_id):
-    mb_config_path = api.webrtc.override_reclient_mb_config()
-
   for phase in builders.BUILDERS_DB[builder_id].phases:
     test_targets, compile_targets = api.webrtc.determine_compilation_targets(
         builder_id, targets_config, phase)
@@ -78,15 +64,8 @@ def RunSteps(api):
         t for t in targets_config.all_tests if t.target_name in test_targets
     ]
 
-    gn_args = api.webrtc.run_mb(builder_id, phase, tests_to_compile,
-                                mb_config_path)
-
-    use_reclient = api.gn.parse_gn_args(gn_args).get('use_remoteexec') == 'true'
-    use_goma_module = use_reclient == False
-    raw_result = api.chromium.compile(
-        compile_targets,
-        use_goma_module=use_goma_module,
-        use_reclient=use_reclient)
+    api.webrtc.run_mb(builder_id, phase, tests_to_compile)
+    raw_result = api.chromium.compile(compile_targets, use_reclient=True)
     if raw_result.status != common_pb.SUCCESS:
       return raw_result
     api.webrtc.isolate(builder_id, builder_config, tests_to_compile)
@@ -95,7 +74,7 @@ def RunSteps(api):
     if builder_spec.binary_size_files:
       api.webrtc.get_binary_sizes(builder_spec.binary_size_files)
     if builder_spec.build_android_archive:
-      api.webrtc.build_android_archive(use_reclient)
+      api.webrtc.build_android_archive()
     if builder_spec.archive_apprtc:
       api.webrtc.package_apprtcmobile(builder_id)
 
@@ -120,14 +99,7 @@ def GenTests(api):
   generate_builder = functools.partial(api.webrtc.generate_builder, builders_db)
 
   for builder_id in builders_db:
-    builder_group = builder_id.group
-    builder_name = builder_id.builder.lower()
-    use_reclient = False
-    if builder_group == 'client.webrtc' and 'linux' in builder_name:
-      use_reclient = True
-    elif builder_group == 'client.webrtc' and 'android' in builder_name:
-      use_reclient = True
-    yield generate_builder(builder_id, use_reclient=use_reclient)
+    yield generate_builder(builder_id)
 
   builder_id = chromium.BuilderId.create_for_group('client.webrtc',
                                                    'Linux64 Debug')
