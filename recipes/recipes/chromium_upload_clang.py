@@ -23,7 +23,7 @@ DEPS = [
 ]
 
 
-BUILDERS = freeze({
+BUILDERS = {
     'tryserver.chromium.linux': {
         'builders': {
             'linux_upload_clang':
@@ -113,7 +113,25 @@ BUILDERS = freeze({
                 ),
         },
     },
-})
+}
+
+# Copy bot config for toolchain packagers.
+BUILDERS['official.toolchain'] = {
+    'builders': {
+        'toolchain-packager-linux':
+            BUILDERS['tryserver.chromium.linux']['builders']
+            ['linux_upload_clang'],
+        'toolchain-packager-mac':
+            BUILDERS['tryserver.chromium.mac']['builders']['mac_upload_clang'],
+        'toolchain-packager-mac-arm':
+            BUILDERS['tryserver.chromium.mac']['builders']
+            ['mac_upload_clang_arm'],
+        'toolchain-packager-windows':
+            BUILDERS['tryserver.chromium.win']['builders']['win_upload_clang'],
+    },
+}
+
+BUILDERS = freeze(BUILDERS)
 
 
 def RunSteps(api):
