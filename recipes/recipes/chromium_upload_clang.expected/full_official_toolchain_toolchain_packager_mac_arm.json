@@ -413,7 +413,8 @@
     "cmd": [
       "python3",
       "[CACHE]/builder/src/tools/clang/scripts/package.py",
-      "--upload"
+      "--upload",
+      "--build-mac-arm"
     ],
     "env_suffixes": {
       "DEPOT_TOOLS_UPDATE": [
@@ -441,7 +442,8 @@
     "cmd": [
       "python3",
       "[CACHE]/builder/src/tools/rust/package_rust.py",
-      "--upload"
+      "--upload",
+      "--build-mac-arm"
     ],
     "env_suffixes": {
       "DEPOT_TOOLS_UPDATE": [

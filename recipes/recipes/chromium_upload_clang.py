@@ -134,6 +134,12 @@ BUILDERS['official.toolchain'] = {
 BUILDERS = freeze(BUILDERS)
 
 
+ARM_MAC_BUILDERS = (
+    'mac_upload_clang_arm',
+    'toolchain-packager-mac-arm',
+)
+
+
 def RunSteps(api):
   _, bot_config = api.chromium.configure_bot(BUILDERS)
 
@@ -146,7 +152,7 @@ def RunSteps(api):
   with api.osx_sdk('ios'):
     with api.depot_tools.on_path():
       args = ['--upload']
-      if api.buildbucket.builder_name == 'mac_upload_clang_arm':
+      if api.buildbucket.builder_name in ARM_MAC_BUILDERS:
         args += ['--build-mac-arm']
       api.step('package clang', [
           'python3', api.path['checkout'].join('tools', 'clang', 'scripts',
@@ -154,7 +160,7 @@ def RunSteps(api):
       ] + args)
 
       args = ['--upload']
-      if api.buildbucket.builder_name == 'mac_upload_clang_arm':
+      if api.buildbucket.builder_name in ARM_MAC_BUILDERS:
         args += ['--build-mac-arm']
       api.step(
           'package rust',
