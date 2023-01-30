@@ -126,7 +126,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "[CACHE]\\builder\\angle\\src\\commit_id.py",
       "position"
     ],

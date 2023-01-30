@@ -42,7 +42,7 @@ class ANGLEApi(recipe_api.RecipeApi):
   def _get_angle_commit_pos(self):
     stepdata = self.m.step(
         'get commit position', [
-            'python',
+            'python3',
             self.m.path.join(self.m.path['checkout'], 'src', 'commit_id.py'),
             'position',
         ],
