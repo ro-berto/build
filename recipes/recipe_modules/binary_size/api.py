@@ -634,7 +634,7 @@ class BinarySizeApi(recipe_api.RecipeApi):
     # _check_for_failed_expectation_files.
     self.m.step(
         'Clear Expectation Files', [
-            'python',
+            'python3',
             checker_script,
             '--clear-expectations',
             '--output-directory',

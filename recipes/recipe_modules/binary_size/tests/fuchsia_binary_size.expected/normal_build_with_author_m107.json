@@ -482,7 +482,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "RECIPE_MODULE[build::binary_size]/resources/trybot_failed_expectations_checker.py",
       "--clear-expectations",
       "--output-directory",
