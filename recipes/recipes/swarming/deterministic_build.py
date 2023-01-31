@@ -44,6 +44,14 @@ DETERMINISTIC_BUILDERS = freeze({
         'platform': 'win',
         'targets': ['all'],
     },
+    # TODO(b/260228493) Remove once CI backend is switched
+    'Windows Cross deterministic': {
+        'chromium_config': 'chromium',
+        'gclient_config': 'chromium',
+        'platform': 'win',
+        'targets': ['all'],
+        'compare_local': True,
+    },
 
     # Debug builders
     'Mac deterministic (dbg)': {
