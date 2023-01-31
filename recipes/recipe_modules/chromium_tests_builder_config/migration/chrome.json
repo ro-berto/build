@@ -575,6 +575,26 @@
       "chromium.perf.fyi:android-pixel2-perf-fyi"
     ]
   },
+  "chromium.perf:android-pixel6-perf": {
+    "blockers": [
+      "cannot migrate builder 'chromium.perf:android_arm64_high_end-builder-perf' with the following unsupported attrs:\n* bisect_archive_build\n* bisect_gs_bucket\n* bisect_gs_extra"
+    ],
+    "builders": [
+      "chromium.perf:android-pixel6-perf",
+      "chromium.perf:android-pixel6-pro-perf",
+      "chromium.perf:android_arm64_high_end-builder-perf"
+    ]
+  },
+  "chromium.perf:android-pixel6-pro-perf": {
+    "blockers": [
+      "cannot migrate builder 'chromium.perf:android_arm64_high_end-builder-perf' with the following unsupported attrs:\n* bisect_archive_build\n* bisect_gs_bucket\n* bisect_gs_extra"
+    ],
+    "builders": [
+      "chromium.perf:android-pixel6-perf",
+      "chromium.perf:android-pixel6-pro-perf",
+      "chromium.perf:android_arm64_high_end-builder-perf"
+    ]
+  },
   "chromium.perf:android_arm64-builder-perf": {
     "blockers": [
       "cannot migrate builder 'chromium.perf:android_arm64-builder-perf' with the following unsupported attrs:\n* bisect_archive_build\n* bisect_gs_bucket\n* bisect_gs_extra"
@@ -598,6 +618,16 @@
     ],
     "builders": [
       "chromium.perf:android_arm64-builder-perf-pgo"
+    ]
+  },
+  "chromium.perf:android_arm64_high_end-builder-perf": {
+    "blockers": [
+      "cannot migrate builder 'chromium.perf:android_arm64_high_end-builder-perf' with the following unsupported attrs:\n* bisect_archive_build\n* bisect_gs_bucket\n* bisect_gs_extra"
+    ],
+    "builders": [
+      "chromium.perf:android-pixel6-perf",
+      "chromium.perf:android-pixel6-pro-perf",
+      "chromium.perf:android_arm64_high_end-builder-perf"
     ]
   },
   "chromium.perf:chromecast-linux-builder-perf": {

@@ -201,6 +201,13 @@ _AddBuildSpec(
     target_bits=64,
     bisect_archive_build=True)
 
+# LUCI builder
+_AddBuildSpec(
+    'android_arm64_high_end-builder-perf',
+    'android',
+    target_bits=64,
+    bisect_archive_build=True)
+
 _AddBuildSpec('win64-builder-perf', 'win', bisect_archive_build=True)
 _AddBuildSpec('win64-builder-perf-pgo', 'win', bisect_archive_build=True)
 _AddBuildSpec('mac-builder-perf', 'mac', bisect_archive_build=True)
@@ -305,6 +312,11 @@ _AddIsolatedTestSpec('android-pixel4_webview-perf', 'android',
 
 _AddIsolatedTestSpec('android-pixel4a_power-perf', 'android',
                      'android_arm64-builder-perf')
+
+_AddIsolatedTestSpec('android-pixel6-perf', 'android',
+                     'android_arm64_high_end-builder-perf')
+_AddIsolatedTestSpec('android-pixel6-pro-perf', 'android',
+                     'android_arm64_high_end-builder-perf')
 
 _AddIsolatedTestSpec(
     'android-go-wembley-perf',
