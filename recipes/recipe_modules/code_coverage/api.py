@@ -926,8 +926,6 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       args.extend([
           '--javascript-coverage-dir',
           self.build_dir.join('devtools_code_coverage'),
-          '--merged-js-cov-filename',
-          self.m.profiles.normalize(step_name),
       ])
     if self._is_per_cl_coverage:
       args.append('--per-cl-coverage')
