@@ -424,9 +424,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
     if not self._should_exonerate_flaky_failures:
       return failed_test_suites, []  #pragma: nocover
 
-    retry_weak_luci_analysis_exonerations = (
-        'weetbix.retry_weak_exonerations' in
-        self.m.buildbucket.build.input.experiments)
     pruned_suites = failed_test_suites[:]
     exonerated_suites_to_retry = []
     self._query_and_mark_flaky_failures(pruned_suites)
@@ -438,15 +435,14 @@ class TestUtilsApi(recipe_api.RecipeApi):
           t.known_luci_analysis_flaky_failures):
         pruned_suites.remove(t)
 
-    if retry_weak_luci_analysis_exonerations:
-      for t in failed_test_suites:
-        # If a test is barely considered flaky, we want to run  it again to
-        # keep it from thrashing between being classified as flaky and non-flaky
-        # effectively "cannibalizing" our data
-        # Long-term, we're thinking of triggering the retry shards and not
-        # having the build collect the results.
-        if (t.weak_luci_analysis_flaky_failures):
-          exonerated_suites_to_retry.append(t)
+    for t in failed_test_suites:
+      # If a test is barely considered flaky, we want to run  it again to
+      # keep it from thrashing between being classified as flaky and non-flaky
+      # effectively "cannibalizing" our data
+      # Long-term, we're thinking of triggering the retry shards and not
+      # having the build collect the results.
+      if (t.weak_luci_analysis_flaky_failures):
+        exonerated_suites_to_retry.append(t)
 
     if exonerated_suites_to_retry:
       to_log = [{

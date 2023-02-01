@@ -436,11 +436,7 @@ def GenTests(api):
   yield api.test(
       'retry_weak_weetbix_exonerations does not run strongly exonerated',
       api.chromium.generic_build(
-          builder_group='fake-group',
-          builder='fake-builder',
-          experiments=[
-              'enable_weetbix_queries', 'weetbix.retry_weak_exonerations'
-          ]),
+          builder_group='fake-group', builder='fake-builder'),
       api.properties(
           known_luci_analysis_flakes_expectations={
               'failed_test': ['testA', 'testB'],
@@ -478,11 +474,7 @@ def GenTests(api):
       # is enabled and weetbix is not confident of its verdict
       'retry_weak_weetbix_exonerations does run weakly exonerated',
       api.chromium.generic_build(
-          builder_group='fake-group',
-          builder='fake-builder',
-          experiments=[
-              'enable_weetbix_queries', 'weetbix.retry_weak_exonerations'
-          ]),
+          builder_group='fake-group', builder='fake-builder'),
       api.properties(
           known_luci_analysis_flakes_expectations={
               'failed_test': ['testA', 'testB'],
@@ -519,11 +511,7 @@ def GenTests(api):
       # is enabled and weetbix is not confident of its verdict
       'retry_weak_weetbix_exonerations still runs with no findit exoneration',
       api.chromium.generic_build(
-          builder_group='fake-group',
-          builder='fake-builder',
-          experiments=[
-              'enable_weetbix_queries', 'weetbix.retry_weak_exonerations'
-          ]),
+          builder_group='fake-group', builder='fake-builder'),
       api.properties(
           known_luci_analysis_flakes_expectations={
               'failed_test': ['testA', 'testB'],
@@ -557,11 +545,7 @@ def GenTests(api):
   yield api.test(
       'does not exonerate over 100',
       api.chromium.generic_build(
-          builder_group='fake-group',
-          builder='fake-builder',
-          experiments=[
-              'enable_weetbix_queries', 'weetbix.retry_weak_exonerations'
-          ]),
+          builder_group='fake-group', builder='fake-builder'),
       api.properties(
           known_luci_analysis_flakes_expectations={
               'failed_test': [],
