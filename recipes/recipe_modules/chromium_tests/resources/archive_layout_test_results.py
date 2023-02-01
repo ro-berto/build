@@ -23,6 +23,7 @@ import os
 import re
 import socket
 import sys
+import tempfile
 import time
 
 ROOT_DIR = os.path.normpath(
@@ -45,6 +46,71 @@ def _CollectZipArchiveFiles(output_dir):
     for name in files:
       file_list.append(os.path.join(rel_path, name))
   return file_list
+
+
+def maybe_archive_results_html(args):
+  start = time.time()
+
+  version_file = 'results.html.version'
+  pattern = 'Version=(\d+)\.(\d+)'
+  # Get local major and minor version number
+  try:
+    with open(os.path.join(args.results_dir, version_file)) as fp:
+      s = fp.readline()
+      result = re.compile(pattern).match(s)
+      major, minor = int(result[1]), int(result[2])
+  except FileNotFoundError:
+    # Do nothing when version file does not exist in result dir.
+    return
+
+  cache_control = 'no-cache'
+
+  print("Fetch remote version file...")
+  # Get the remote major and minor version number
+  with tempfile.TemporaryDirectory() as tmp_dir:
+    rc = bot_utils.GSUtilCopy(
+        '/'.join([args.gs_bucket, version_file]),
+        os.path.join(tmp_dir, version_file),
+        mimetype='text/plain',
+        gs_acl=args.gs_acl,
+        cache_control=cache_control,
+        add_quiet_flag=True,
+        compress=False)
+    if rc:
+      print("Failed to fetch version file from remote: %d" % rc)
+      do_update = True
+    else:
+      do_update = False
+      try:
+        with open(os.path.join(tmp_dir, version_file)) as fp:
+          s = fp.readline()
+          result = re.compile(pattern).match(s)
+          old_major, old_minor = int(result[1]), int(result[2])
+          print(f"Remote version: {old_major}.{old_minor}")
+          do_update = (major, minor) > (old_major, old_minor)
+      except FileNotFoundError:
+        do_update = True
+  print("took %.1f seconds" % (time.time() - start))
+
+  if do_update:
+    files_to_archive = ['results.html', 'results.html.version']
+    mimetypes = ['text/html', 'text/plain']
+    for file_to_archive, mimetype in zip(files_to_archive, mimetypes):
+      start = time.time()
+      print(f"Archive {file_to_archive}...")
+      rc = bot_utils.GSUtilCopy(
+          os.path.join(args.results_dir, file_to_archive),
+          '/'.join([args.gs_bucket, file_to_archive]),
+          mimetype=mimetype,
+          gs_acl=args.gs_acl,
+          cache_control=cache_control,
+          add_quiet_flag=True,
+          compress=False)
+      print("took %.1f seconds" % (time.time() - start))
+      sys.stdout.flush()
+      if rc:
+        print("cp failed: %d" % rc)
+        return
 
 
 def archive_layout(args):
@@ -102,25 +168,10 @@ def archive_layout(args):
 
   gs_acl = args.gs_acl
 
+  maybe_archive_results_html(args)
+
   # These files never change, cache for a year.
   cache_control = "public, max-age=31556926"
-
-  start = time.time()
-  file_to_archive = 'results.html'
-  print(f"Archive {file_to_archive}...")
-  rc = bot_utils.GSUtilCopy(
-      os.path.join(args.results_dir, file_to_archive),
-      '/'.join([args.gs_bucket, file_to_archive]),
-      mimetype='text/html',
-      gs_acl=gs_acl,
-      cache_control=cache_control,
-      add_quiet_flag=True,
-      compress=False)
-  print("took %.1f seconds" % (time.time() - start))
-  sys.stdout.flush()
-  if rc:
-    print("cp failed: %d" % rc)
-    return rc
 
   start = time.time()
   file_to_archive = 'full_results_jsonp.js'
