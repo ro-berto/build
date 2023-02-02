@@ -672,6 +672,7 @@
     ]
   },
   {
-    "name": "$result"
+    "name": "$result",
+    "summaryMarkdown": "ChangeRecall | Savings | Max distance<br>0.9700 | 0.50 | 50.00<br>0.9800 | 0.40 | 60.00<br>0.9900 | 0.30 | 70.00<br>1.0000 | 0.20 | 80.00"
   }
 ]

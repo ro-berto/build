@@ -751,6 +751,7 @@
     ]
   },
   {
-    "name": "$result"
+    "name": "$result",
+    "summaryMarkdown": "Fixed in [#-7..#-8](https://chromium.googlesource.com/v8/v8/+log/a-7..a-8)"
   }
 ]

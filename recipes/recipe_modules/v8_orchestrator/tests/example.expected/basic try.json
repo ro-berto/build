@@ -214,6 +214,7 @@
     ]
   },
   {
-    "name": "$result"
+    "name": "$result",
+    "summaryMarkdown": "All good!"
   }
 ]
