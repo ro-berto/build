@@ -120,13 +120,12 @@ REQUESTS = [
     gen_skylab_test(
         'm111_multi_dut_skip_secondary_lacros_paths',
         secondary_cros_board='pixel6',
-        secondary_cros_img='skip',
         should_provision_browser_files=[False],
     ),
     gen_skylab_test(
         'm111_multi_dut_partial_skip_secondary_lacros_paths',
         secondary_cros_board='atlas,pixel6,octopus',
-        secondary_cros_img='atlas-release/R111-15300.0.0,skip,octopus-release/R111-15300.0.0',
+        secondary_cros_img='atlas-release/R111-15300.0.0,,octopus-release/R111-15300.0.0',
         should_provision_browser_files=[True, False, True],
     ),
 ]
@@ -238,7 +237,7 @@ def GenTests(api):
           post_process.StepCommandContains,
           'schedule skylab tests.' + REQUESTS[7].name + '.schedule', [
               'run', 'test', '-json', '-board', 'eve', '-secondary-boards',
-              'pixel6', '-secondary-images', 'skip', '-pool', 'DUT_POOL_QUOTA',
+              'pixel6', '-pool', 'DUT_POOL_QUOTA',
               '-image', 'eve-release/R88-13545.0.0', '-timeout-mins', '60',
               '-qs-account', 'lacros', '-lacros-path',
               'gs://fake_bucket/lacros.squashfs'
@@ -256,11 +255,11 @@ def GenTests(api):
           'schedule skylab tests.' + REQUESTS[8].name + '.schedule', [
               'run', 'test', '-json', '-board', 'eve', '-secondary-boards',
               'atlas,pixel6,octopus', '-secondary-images',
-              'atlas-release/R111-15300.0.0,skip,octopus-release/R111-15300.0.0',
+              'atlas-release/R111-15300.0.0,,octopus-release/R111-15300.0.0',
               '-pool', 'DUT_POOL_QUOTA', '-image', 'eve-release/R88-13545.0.0',
               '-timeout-mins', '60', '-qs-account', 'lacros', '-lacros-path',
               'gs://fake_bucket/lacros.squashfs', '-secondary-lacros-paths',
-              'gs://fake_bucket/lacros.squashfs,skip,gs://fake_bucket/lacros.squashfs'
+              'gs://fake_bucket/lacros.squashfs,,gs://fake_bucket/lacros.squashfs'
           ]),
       api.post_process(post_process.DropExpectation),
   )

@@ -17,7 +17,7 @@ k = dict(
     cros_board='eve',
     cros_img='eve-release/R88-13545.0.0',
     secondary_cros_board='eve,pixel6',
-    secondary_cros_img='skip,skip',
+    secondary_cros_img='eve-release/R88-13545.0.0,',
     should_provision_browser_files=[True, False, True],
 )
 t = SkylabTestSpec.create(name, **k).get_test(SkylabTest)

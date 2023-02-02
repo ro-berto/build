@@ -63,9 +63,10 @@ class SkylabApi(recipe_api.RecipeApi):
 
           cmd.extend(['-board', t.spec.cros_board])
 
-          if t.spec.secondary_cros_board and t.spec.secondary_cros_img:
+          if t.spec.secondary_cros_board:
             cmd.extend(['-secondary-boards', t.spec.secondary_cros_board])
-            cmd.extend(['-secondary-images', t.spec.secondary_cros_img])
+            if t.spec.secondary_cros_img:
+              cmd.extend(['-secondary-images', t.spec.secondary_cros_img])
 
           if t.spec.bucket:
             cmd.extend(['-bucket', t.spec.bucket])
@@ -142,7 +143,7 @@ class SkylabApi(recipe_api.RecipeApi):
           if t.lacros_gcs_path:
             cmd.extend(['-lacros-path', t.lacros_gcs_path])
 
-            if t.spec.secondary_cros_board and t.spec.secondary_cros_img:
+            if t.spec.secondary_cros_board:
               num_boards = len(t.spec.secondary_cros_board.split(","))
               # By default, browser files are sent to all secondary DUTs unless
               # users explicitly override through should_provision_browser_files.
@@ -156,7 +157,7 @@ class SkylabApi(recipe_api.RecipeApi):
 
               if any(should_provision_browser_files):
                 secondary_lacros_paths_list = [
-                    t.lacros_gcs_path if p else 'skip'
+                    t.lacros_gcs_path if p else ''
                     for p in should_provision_browser_files
                 ]
                 secondary_lacros_paths = ','.join(secondary_lacros_paths_list)
