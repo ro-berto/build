@@ -16,6 +16,7 @@ DEPS = [
     'recipe_engine/futures',
     'recipe_engine/json',
     'recipe_engine/legacy_annotation',
+    'recipe_engine/luci_analysis',
     'recipe_engine/path',
     'recipe_engine/properties',
     'recipe_engine/raw_io',

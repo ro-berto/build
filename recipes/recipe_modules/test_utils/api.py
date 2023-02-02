@@ -9,6 +9,7 @@ from recipe_engine import recipe_api
 from recipe_engine import util as recipe_util
 
 from .util import GTestResults, RDBPerSuiteResults, RDBResults
+from .util import IndividualTestFailureRateAnalysis, FailureRateAnalysisPerSuite
 from google.protobuf import timestamp_pb2
 
 from PB.go.chromium.org.luci.resultdb.proto.v1 import (test_result as
@@ -481,7 +482,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
     if not tests_to_check:
       return
 
-    suite_to_per_suite_analysis = None
     query_failure_rate_step_error_msg = None
     total_failing_variants = sum([
         len(tests.get_rdb_results('with patch').unexpected_failing_tests)
@@ -492,13 +492,48 @@ class TestUtilsApi(recipe_api.RecipeApi):
           'Skipping querying LUCI Analysis for failure rates',
           step_text='Too many failed tests: %d' % total_failing_variants)
       return
+
+    test_variants_to_query = []
+    test_info_for_zip = []
+    for suite in tests_to_check:
+      rdb_results = suite.get_rdb_results('with patch')
+      failing_tests = rdb_results.unexpected_failing_tests
+      for failing_test in failing_tests:
+        test_variants_to_query.append({
+            'testId': failing_test.test_id,
+            'variantHash': rdb_results.variant_hash,
+        })
+        test_info_for_zip.append({
+            'test_name': failing_test.test_name,
+            'suite_name': suite.name,
+        })
+    failure_analysis_protos = []
     try:
-      suite_to_per_suite_analysis = self.m.weetbix.query_failure_rate(
-          tests_to_check)
+      failure_analysis_protos = self.m.luci_analysis.query_failure_rate(
+          test_variants_to_query)
     except self.m.step.StepFailure as f:
       # Don't fail the build if something's wrong with LUCI Analysis.
       # We'll just not exonerate any failing tests and log that this happened.
       query_failure_rate_step_error_msg = f.reason_message()
+
+    suite_to_per_suite_analysis = {}
+    assert len(test_info_for_zip) == len(failure_analysis_protos)
+    for test_info, failure_analysis in zip(test_info_for_zip,
+                                           failure_analysis_protos):
+      suite_name = test_info['suite_name']
+      indiv_failure_analysis = IndividualTestFailureRateAnalysis.create(
+          failure_analysis=failure_analysis,
+          suite_name=suite_name,
+          test_name=test_info['test_name'],
+      )
+
+      if suite_name not in suite_to_per_suite_analysis:
+        suite_to_per_suite_analysis[suite_name] = (
+            FailureRateAnalysisPerSuite.create(suite_name,
+                                               [indiv_failure_analysis]))
+      else:
+        suite_to_per_suite_analysis[suite_name].append_failure_analysis(
+            indiv_failure_analysis)
 
     # Handles LUCI Analysis RPC server errors: 500s or response returned but no
     # data

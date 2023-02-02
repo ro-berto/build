@@ -19,13 +19,13 @@ DEPS = [
     'filter',
     'profiles',
     'recipe_engine/json',
+    'recipe_engine/luci_analysis',
     'recipe_engine/path',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
     'recipe_engine/step',
     'recipe_engine/swarming',
     'test_utils',
-    'weetbix',
 ]
 
 
@@ -378,8 +378,8 @@ def GenTests(api):
           with_patch=True, is_swarming_phase=False),
       api.chromium_tests.gen_swarming_and_rdb_results(
           'base_unittests', 'with patch', failures=['Test.Two']),
-      api.weetbix.query_failure_rate_results([
-          api.weetbix.generate_analysis(
+      api.luci_analysis.query_failure_rate_results([
+          api.luci_analysis.generate_analysis(
               test_id='ninja://base_unittests/Test.Two',
               expected_count=0,
               unexpected_count=10),
@@ -486,12 +486,12 @@ def GenTests(api):
           'base_unittests', 'with patch', failures=['Test.One', 'Test.Two']),
       api.chromium_tests.gen_swarming_and_rdb_results(
           'base_unittests', 'retry shards with patch', failures=['Test.Two']),
-      api.weetbix.query_failure_rate_results([
-          api.weetbix.generate_analysis(
+      api.luci_analysis.query_failure_rate_results([
+          api.luci_analysis.generate_analysis(
               test_id='ninja://base_unittests/Test.One',
               expected_count=10,
               unexpected_count=0),
-          api.weetbix.generate_analysis(
+          api.luci_analysis.generate_analysis(
               test_id='ninja://base_unittests/Test.Two',
               expected_count=10,
               unexpected_count=0,
@@ -555,17 +555,17 @@ def GenTests(api):
           'base_unittests',
           'retry shards with patch',
           failures=['Test.One', 'Test.Two', 'Test.Three']),
-      api.weetbix.query_failure_rate_results([
-          api.weetbix.generate_analysis(
+      api.luci_analysis.query_failure_rate_results([
+          api.luci_analysis.generate_analysis(
               test_id='ninja://base_unittests/Test.One',
               expected_count=10,
               unexpected_count=0),
-          api.weetbix.generate_analysis(
+          api.luci_analysis.generate_analysis(
               test_id='ninja://base_unittests/Test.Two',
               expected_count=10,
               unexpected_count=0,
               flaky_verdict_counts=[5, 20]),
-          api.weetbix.generate_analysis(
+          api.luci_analysis.generate_analysis(
               test_id='ninja://base_unittests/Test.Three',
               expected_count=10,
               unexpected_count=20),
@@ -639,8 +639,8 @@ def GenTests(api):
           'url_unittests', 'with patch', failures=['UrlTest.One']),
       api.chromium_tests.gen_swarming_and_rdb_results(
           'url_unittests', 'retry shards with patch', failures=['UrlTest.One']),
-      api.weetbix.query_failure_rate_results([
-          api.weetbix.generate_analysis(
+      api.luci_analysis.query_failure_rate_results([
+          api.luci_analysis.generate_analysis(
               test_id='ninja://base_unittests/BaseTest.One',
               expected_count=10,
               unexpected_count=0,

@@ -5,6 +5,7 @@
 DEPS = [
     'recipe_engine/assertions',
     'recipe_engine/json',
+    'recipe_engine/luci_analysis',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
     'recipe_engine/step',
@@ -204,12 +205,12 @@ def GenTests(api):
                   'should_exonerate_flaky_failures': True,
               },
           }),
-      api.weetbix.query_failure_rate_results([
-          api.weetbix.generate_analysis(
+      api.luci_analysis.query_failure_rate_results([
+          api.luci_analysis.generate_analysis(
               test_id='ninja://failed_test/testA',
               expected_count=10,
               unexpected_count=0),
-          api.weetbix.generate_analysis(
+          api.luci_analysis.generate_analysis(
               test_id='ninja://failed_test/testB',
               expected_count=10,
               unexpected_count=0),
@@ -252,13 +253,14 @@ def GenTests(api):
           stdout=api.raw_io.output_text(
               api.test_utils.rdb_results(
                   'failed_test', failing_tests=['testA', 'testB']))),
-      api.weetbix.query_failure_rate_results([
-          api.weetbix.generate_analysis(
+      api.luci_analysis.query_failure_rate_results([
+          api.luci_analysis.generate_analysis(
               test_id='ninja://failed_test/testA',
               flaky_verdict_counts=[10],
               examples_times=[60 * 60 * 12],
           ),
-          api.weetbix.generate_analysis(test_id='ninja://failed_test/testB'),
+          api.luci_analysis.generate_analysis(
+              test_id='ninja://failed_test/testB'),
       ]),
       api.post_process(CheckStepInput, 'exonerate unrelated test failures',
                        'testA'),
@@ -290,8 +292,8 @@ def GenTests(api):
           stdout=api.raw_io.output_text(
               api.test_utils.rdb_results(
                   'failed_test', skipped_tests=['testA']))),
-      api.weetbix.query_failure_rate_results([
-          api.weetbix.generate_analysis(
+      api.luci_analysis.query_failure_rate_results([
+          api.luci_analysis.generate_analysis(
               test_id='ninja://failed_test/testA', flaky_verdict_counts=[10]),
       ]),
       api.post_process(post_process.DoesNotRun,
@@ -323,12 +325,12 @@ def GenTests(api):
               },
           }),
       api.time.seed(60 * 60 * 12),
-      api.weetbix.query_failure_rate_results([
-          api.weetbix.generate_analysis(
+      api.luci_analysis.query_failure_rate_results([
+          api.luci_analysis.generate_analysis(
               test_id='ninja://failed_test/testA',
               flaky_verdict_counts=[10],
               examples_times=[60 * 60 * 12]),
-          api.weetbix.generate_analysis(
+          api.luci_analysis.generate_analysis(
               test_id='ninja://failed_test/testB',
               flaky_verdict_counts=[10],
               examples_times=[60 * 60 * 12]),
@@ -365,8 +367,8 @@ def GenTests(api):
                   'should_exonerate_flaky_failures': True,
               },
           }),
-      api.weetbix.query_failure_rate_results([
-          api.weetbix.generate_analysis(
+      api.luci_analysis.query_failure_rate_results([
+          api.luci_analysis.generate_analysis(
               test_id='ninja://failed_test/testA',
               expected_count=1,
               unexpected_count=9,
@@ -423,10 +425,10 @@ def GenTests(api):
                   'should_exonerate_flaky_failures': True,
               },
           }),
-      api.weetbix.query_failure_rate_results([
-          api.weetbix.generate_analysis(
+      api.luci_analysis.query_failure_rate_results([
+          api.luci_analysis.generate_analysis(
               test_id='ninja://failed_test/testA', unexpected_count=10),
-          api.weetbix.generate_analysis(
+          api.luci_analysis.generate_analysis(
               test_id='ninja://failed_test/testB', unexpected_count=10),
       ]),
       api.post_process(post_process.StatusSuccess),
@@ -452,12 +454,12 @@ def GenTests(api):
           stdout=api.raw_io.output_text(
               api.test_utils.rdb_results(
                   'failed_test', failing_tests=['testA', 'testB']))),
-      api.weetbix.query_failure_rate_results([
-          api.weetbix.generate_analysis(
+      api.luci_analysis.query_failure_rate_results([
+          api.luci_analysis.generate_analysis(
               test_id='ninja://failed_test/testA',
               flaky_verdict_counts=[10],
               examples_times=[60 * 60 * 12]),
-          api.weetbix.generate_analysis(
+          api.luci_analysis.generate_analysis(
               test_id='ninja://failed_test/testB',
               flaky_verdict_counts=[10],
               examples_times=[60 * 60 * 12]),
@@ -470,8 +472,6 @@ def GenTests(api):
   )
 
   yield api.test(
-      # Even if findit exonerates the test, we want to run it if the experiment
-      # is enabled and weetbix is not confident of its verdict
       'retry_weak_weetbix_exonerations does run weakly exonerated',
       api.chromium.generic_build(
           builder_group='fake-group', builder='fake-builder'),
@@ -494,51 +494,15 @@ def GenTests(api):
           stdout=api.raw_io.output_text(
               api.test_utils.rdb_results(
                   'failed_test', failing_tests=['testA', 'testB']))),
-      api.weetbix.query_failure_rate_results([
-          api.weetbix.generate_analysis(
+      api.luci_analysis.query_failure_rate_results([
+          api.luci_analysis.generate_analysis(
               test_id='ninja://failed_test/testA', flaky_verdict_counts=[10]),
-          api.weetbix.generate_analysis(
+          api.luci_analysis.generate_analysis(
               test_id='ninja://failed_test/testB', flaky_verdict_counts=[10]),
       ]),
       api.post_process(post_process.MustRun, 'failed_test (with patch)'),
       api.post_process(post_process.MustRun,
                        'failed_test (retry shards with patch)'),
-      api.post_process(post_process.DropExpectation),
-  )
-
-  yield api.test(
-      # Even if findit exonerates the test, we want to run it if the experiment
-      # is enabled and weetbix is not confident of its verdict
-      'retry_weak_weetbix_exonerations still runs with no findit exoneration',
-      api.chromium.generic_build(
-          builder_group='fake-group', builder='fake-builder'),
-      api.properties(
-          known_luci_analysis_flakes_expectations={
-              'failed_test': ['testA', 'testB'],
-          },
-          weak_flaky_failures={
-              'failed_test': ['testA', 'testB'],
-          },
-          **{
-              '$build/test_utils': {
-                  'should_exonerate_flaky_failures': True,
-              },
-          }),
-      api.override_step_data(
-          'failed_test results',
-          stdout=api.raw_io.output_text(
-              api.test_utils.rdb_results(
-                  'failed_test', failing_tests=['testA', 'testB']))),
-      api.weetbix.query_failure_rate_results([
-          api.weetbix.generate_analysis(
-              test_id='ninja://failed_test/testA', flaky_verdict_counts=[10]),
-          api.weetbix.generate_analysis(
-              test_id='ninja://failed_test/testB', flaky_verdict_counts=[10]),
-      ]),
-      api.post_process(post_process.MustRun, 'failed_test (with patch)'),
-      api.post_process(post_process.MustRun,
-                       'failed_test (retry shards with patch)'),
-      api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
 
