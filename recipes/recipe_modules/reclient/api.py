@@ -488,15 +488,18 @@ class ReclientApi(recipe_api.RecipeApi):
     # `bqupload`'s expected JSON proto format is different from that of the
     # protobuf's native MessageToJson, so we have to dump this json to string on
     # our own.
-    step_result = self.m.step(
-        'upload RBE metrics to BigQuery', [
-            bqupload_cipd_path,
-            BQ_TABLE_NAME,
-        ],
-        stdin=self.m.raw_io.input(data=self.m.json.dumps(bq_json_dict)),
-        infra_step=True)
-    step_result.presentation.logs['rbe_metrics'] = self.m.json.dumps(
-        bq_json_dict, indent=2)
+    try:
+      self.m.step(
+          'upload RBE metrics to BigQuery', [
+              bqupload_cipd_path,
+              BQ_TABLE_NAME,
+          ],
+          stdin=self.m.raw_io.input(data=self.m.json.dumps(bq_json_dict)),
+          infra_step=True)
+    finally:
+      self.m.step.active_result.presentation.logs[
+          'rbe_metrics'] = self.m.json.dumps(
+              bq_json_dict, indent=2)
 
   def _check_mismatch(self, stats):
     """Update self._mismatch if there is mismatches."""
