@@ -8,6 +8,7 @@ DEPS = [
     'chromium_3pp',
     'recipe_engine/buildbucket',
     'recipe_engine/file',
+    'recipe_engine/path',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
 ]
@@ -111,6 +112,7 @@ def GenTests(api):
       generate_properties(
           runtime_properties={'is_experimental': True},
           local_checkout_dir='[CACHE]/hi'),
+      api.path.exists(api.path['cache'].join('hi', '.gclient')),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )

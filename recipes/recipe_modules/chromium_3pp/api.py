@@ -36,7 +36,12 @@ class Chromium3ppApi(recipe_api.RecipeApi):
       assert self.m.runtime.is_experimental, (
           'When local_checkout_dir is defined, is_experimental is required. '
           'See https://crrev.com/c/3749816 for context.')
+      original_path_str = self._checkout_path
       self._checkout_path = self.m.path.abs_to_path(self._checkout_path)
+      assert self.m.path.exists(self._checkout_path.join('.gclient')), (
+          'The chromium_3pp recipe expects local_checkout_dir to be the dir '
+          'that contains .gclient. You probably need to pass in the parent '
+          f'dir instead of: {original_path_str}')
     else:
       self.m.gclient.set_config(self._gclient_config)
       for c in self._gclient_apply_config:
