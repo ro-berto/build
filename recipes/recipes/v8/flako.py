@@ -32,9 +32,8 @@ import re
 
 from recipe_engine.config import Single
 from recipe_engine.post_process import (
-    DoesNotRun, DropExpectation, Filter, MustRun, StatusSuccess)
-from recipe_engine.post_process import ResultReasonRE
-from recipe_engine.post_process import ResultReason
+    DoesNotRun, DropExpectation, Filter, MustRun, StatusAnyFailure,
+    StatusSuccess, SummaryMarkdown, SummaryMarkdownRE)
 from recipe_engine.recipe_api import Property
 
 from PB.go.chromium.org.luci.buildbucket.proto import common as common_pb
@@ -802,9 +801,7 @@ class CombinedBisector(Validator):
 
 class ReproBisector(Bisector):
   def validate(self, known_bad_reproduces):
-    if known_bad_reproduces:
-      self.api.step('Flake still reproduces.', cmd=None)
-    else:
+    if not known_bad_reproduces:
       # We treat it as an error if a flake believed to repro, doesn't repro.
       raise self.api.step.StepFailure('Could not reproduce flake.')
 
@@ -1144,7 +1141,8 @@ def GenTests(api):
       is_flaky(0, 0, 5, calibration_attempt=1) +
       # The flake still reproduces.
       is_flaky(-3, 0, 2) +
-      api.post_process(ResultReasonRE, 'Flake still reproduces.') +
+      api.post_process(SummaryMarkdown, 'Flake still reproduces.') +
+      api.post_process(StatusAnyFailure) +
       api.post_process(DropExpectation)
   )
 
@@ -1158,9 +1156,10 @@ def GenTests(api):
       successful_lookups(0) +
       is_flaky(0, 0, 5, calibration_attempt=1) +
       api.post_process(
-          ResultReasonRE,
+          SummaryMarkdown,
           f'Could not connect the known bad revision to refs/heads/main. '
           f'Looked in over {MAX_HEAD_OFFSET} commits.') +
+      api.post_process(StatusAnyFailure) +
       api.post_process(DropExpectation)
   )
 
@@ -1180,6 +1179,10 @@ def GenTests(api):
       is_flaky(1, 0, 3) +
       is_flaky(2, 0, 3) +
       verify_suspects(3, 2) +
+      api.post_process(SummaryMarkdownRE, r'Flake still reproduces') +
+      api.post_process(
+          SummaryMarkdownRE,
+          re.escape(f'Suspecting [#3..#2]({REPO}/+log/a3..a2)')) +
       api.post_process(StatusSuccess) +
       api.post_process(DropExpectation)
   )
@@ -1195,6 +1198,8 @@ def GenTests(api):
       is_flaky(0, 0, 5, calibration_attempt=1) +
       is_flaky(-1, 0, 2) +
       verify_fixed(-1, -2) +
+      api.post_process(
+          SummaryMarkdown, f'Fixed in [#-1..#-2]({REPO}/+log/a-1..a-2)') +
       api.post_process(StatusSuccess) +
       api.post_process(DropExpectation)
   )
@@ -1204,7 +1209,8 @@ def GenTests(api):
       test('no_cas_digests') +
       sum((get_revisions(i, 1) for i in range(1, MAX_CAS_OFFSET)),
            api.empty_test_data()) +
-      api.post_process(ResultReasonRE, 'Couldn\'t find cas_digests.') +
+      api.post_process(SummaryMarkdown, 'Couldn\'t find cas_digests.') +
+      api.post_process(StatusAnyFailure) +
       api.post_process(DropExpectation)
   )
 
@@ -1217,8 +1223,9 @@ def GenTests(api):
           for i in range(1, 10)), api.empty_test_data()) +
       is_flaky(511, 0, 1, no_output=True) +
       api.post_process(
-          ResultReason,
+          SummaryMarkdown,
           'Unable to retrieve from CAS, probably went out of retention') +
+      api.post_process(StatusAnyFailure) +
       api.post_process(DropExpectation)
   )
 
@@ -1231,9 +1238,9 @@ def GenTests(api):
           for i in range(1, 5)), api.empty_test_data()) +
       is_flaky(15, 0, 1, no_output=True) +
       api.post_process(
-          ResultReason,
-          'Infra Failure: Step(\'Shard #0 failed: Details unknown (missing shard results)\') (retcode: 0)'
-      ) +
+          SummaryMarkdownRE,
+          'Infra Failure.*missing shard results.*') +
+      api.post_process(StatusAnyFailure) +
       api.post_process(DropExpectation)
   )
 
@@ -1242,7 +1249,8 @@ def GenTests(api):
       test('repro_only', mode='repro') +
       successful_lookups(0) +
       is_flaky(0, 0, 1, calibration_attempt=1) +
-      api.post_process(MustRun, 'Flake still reproduces.') +
+      api.post_process(SummaryMarkdown, 'Flake still reproduces.') +
+      api.post_process(StatusSuccess) +
       api.post_process(Filter(
           'calibration attempt 1.check mjsunit/foobar at #0.'
           '[trigger] check mjsunit/foobar at #0 - shard 0'))
@@ -1252,7 +1260,8 @@ def GenTests(api):
   yield (
       test('repro_only_failed', mode='repro') +
       successful_lookups(0) +
-      api.post_process(ResultReasonRE, 'Could not reproduce flake.') +
+      api.post_process(SummaryMarkdown, 'Could not reproduce flake.') +
+      api.post_process(StatusAnyFailure) +
       api.post_process(DropExpectation)
   )
 
@@ -1264,7 +1273,8 @@ def GenTests(api):
       successful_lookups(0) +
       is_flaky(0, 0, 1, calibration_attempt=1) +
       api.post_process(MustRun, 'init head #0') +
-      api.post_process(MustRun, 'Flake still reproduces.') +
+      api.post_process(SummaryMarkdown, 'Flake still reproduces.') +
+      api.post_process(StatusSuccess) +
       api.post_process(DropExpectation)
   )
 
@@ -1287,7 +1297,8 @@ def GenTests(api):
       successful_lookups(0) +
       is_flaky(0, 0, 1, calibration_attempt=1,
                output_prefix='has foo and bar in the output...\n') +
-      api.post_process(MustRun, 'Flake still reproduces.') +
+      api.post_process(SummaryMarkdown, 'Flake still reproduces.') +
+      api.post_process(StatusSuccess) +
       api.post_process(DropExpectation)
   )
 
@@ -1296,7 +1307,8 @@ def GenTests(api):
       test('repro_regexp_no_match', mode='repro', failure_regexp='foo.*bar') +
       successful_lookups(0) +
       is_flaky(0, 0, 1, calibration_attempt=1) +
-      api.post_process(ResultReasonRE, 'Could not reproduce flake.') +
+      api.post_process(SummaryMarkdown, 'Could not reproduce flake.') +
+      api.post_process(StatusAnyFailure) +
       api.post_process(DropExpectation)
   )
 
@@ -1335,7 +1347,8 @@ def GenTests(api):
       is_flaky(0, 2, 1, calibration_attempt=3, test_name=shortened_test_name) +
       is_flaky(0, 1, 3, calibration_attempt=4, test_name=shortened_test_name) +
       is_flaky(0, 0, 3, calibration_attempt=5, test_name=shortened_test_name) +
-      api.post_process(ResultReasonRE, 'Could not reach enough confidence.') +
+      api.post_process(SummaryMarkdown, 'Could not reach enough confidence.') +
+      api.post_process(StatusAnyFailure) +
       api.post_process(DropExpectation)
   )
 
@@ -1347,7 +1360,8 @@ def GenTests(api):
       successful_lookups(0) +
       is_flaky(0, 0, 0, calibration_attempt=1) +
       is_flaky(0, 1, 1, calibration_attempt=1) +
-      api.post_process(MustRun, 'Flake still reproduces.') +
+      api.post_process(SummaryMarkdown, 'Flake still reproduces.') +
+      api.post_process(StatusSuccess) +
       api.post_process(Filter(
           'calibration attempt 1.check mjsunit/foobar at #0.'
           '[trigger] check mjsunit/foobar at #0 - shard 1',
