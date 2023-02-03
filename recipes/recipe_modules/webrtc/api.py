@@ -183,16 +183,9 @@ class WebRTCApi(recipe_api.RecipeApi):
 
   def setup_code_coverage_module(self):
     """Configure internal constants of the code_coverage module."""
-    # TODO(terelius): Investigate which of these can be omitted.
     checkout_path = self.m.path['checkout']
-    llvm_dir = checkout_path.join('third_party', 'llvm-build',
-                                  'Release+Asserts', 'bin')
     self.m.profiles.src_dir = checkout_path
-    self.m.profiles._llvm_base_path = llvm_dir
-    # TODO(terelius): Add support for other platforms.
-    self.m.code_coverage._platform = 'linux'
     self.m.code_coverage._use_clang_coverage = True
-    self.m.code_coverage._include_component_mapping = False
     self.m.code_coverage.src_dir = checkout_path
 
     # For presubmit, only instrument changed files.
