@@ -180,7 +180,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "[CACHE]/builder/src/build/symlink.py",
       "-f",
       "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools/adb",
@@ -204,7 +204,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "RECIPE_REPO[build]/recipes/daemonizer.py",
       "--",
       "[CACHE]/builder/src/build/android/adb_logcat_monitor.py",
@@ -232,7 +232,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "RECIPE_REPO[build]/recipes/daemonizer.py",
       "--action",
       "restart",
@@ -263,7 +263,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "RECIPE_MODULE[build::chromium_android]/resources/authorize_adb_devices.py",
       "--verbose",
       "--adb-path",
@@ -290,7 +290,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "vpython3",
       "[CACHE]/builder/src/third_party/catapult/devil/devil/android/tools/device_recovery.py",
       "--denylist-file",
       "[CACHE]/builder/src/out/bad_devices.json",
@@ -321,7 +321,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "[CACHE]/builder/src/build/android/provision_devices.py",
       "--adb-path",
       "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools/adb",
@@ -510,7 +510,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "RECIPE_REPO[build]/recipes/daemonizer.py",
       "--action",
       "stop",
@@ -535,7 +535,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "[CACHE]/builder/src/build/android/adb_logcat_printer.py",
       "--output-path",
       "[CACHE]/builder/src/out/Debug/full_log",

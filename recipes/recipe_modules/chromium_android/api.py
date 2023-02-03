@@ -35,10 +35,6 @@ class AndroidApi(recipe_api.RecipeApi):
     return self.m.path['checkout'].join('out')
 
   @property
-  def coverage_dir(self):
-    return self.out_path.join(self.c.BUILD_CONFIG, 'coverage')
-
-  @property
   def known_devices_file(self):
     return self.m.path.join(
         self.m.path.expanduser('~'), '.android', 'known_devices.json')
@@ -220,7 +216,7 @@ class AndroidApi(recipe_api.RecipeApi):
   def create_adb_symlink(self):
     # Creates a sym link to the adb executable in the home dir
     cmd = [
-        'python',
+        'python3',
         self.m.path['checkout'].join('build', 'symlink.py'),
         '-f',
         self.m.adb.adb_path(),
@@ -233,7 +229,7 @@ class AndroidApi(recipe_api.RecipeApi):
       self.m.step(
           'spawn_logcat_monitor',
           [
-              'python',
+              'python3',
               self.repo_resource('recipes', 'daemonizer.py'),
               '--',
               self.c.cr_build_android.join('adb_logcat_monitor.py'),
@@ -250,7 +246,7 @@ class AndroidApi(recipe_api.RecipeApi):
     self.m.step(
         'spawn_device_monitor',
         [
-            'python',
+            'python3',
             self.repo_resource('recipes', 'daemonizer.py'),
             '--action',
             'restart',
@@ -270,7 +266,7 @@ class AndroidApi(recipe_api.RecipeApi):
     self.m.step(
         'shutdown_device_monitor',
         [
-            'python',
+            'python3',
             self.repo_resource('recipes', 'daemonizer.py'),
             '--action',
             'stop',
@@ -285,7 +281,7 @@ class AndroidApi(recipe_api.RecipeApi):
       return self.m.step(
           'authorize_adb_devices',
           [
-              'python',
+              'python3',
               self.resource('authorize_adb_devices.py'),
               '--verbose',
               '--adb-path',
@@ -380,7 +376,7 @@ class AndroidApi(recipe_api.RecipeApi):
 
   def device_recovery(self, **kwargs):
     cmd = [
-        'vpython',
+        'vpython3',
         self.m.path['checkout'].join('third_party', 'catapult', 'devil',
                                      'devil', 'android', 'tools',
                                      'device_recovery.py'),
@@ -520,7 +516,7 @@ class AndroidApi(recipe_api.RecipeApi):
       provision_path = self.m.path['checkout'].join('build', 'android',
                                                     'provision_devices.py')
     cmd = [
-        'python',
+        'python3',
         provision_path,
         '--adb-path',
         self.m.adb.adb_path(),
@@ -590,34 +586,10 @@ class AndroidApi(recipe_api.RecipeApi):
     with self.m.context(env={'BUILDTYPE': self.c.BUILD_CONFIG}):
       return self.test_runner('Monkey Test', args, **kwargs)
 
-  def run_telemetry_browser_test(self, test_name, browser='android-chromium'):
-    """Run a telemetry browser test."""
-    try:
-      cmd = [
-          'python',
-          self.m.path['checkout'].join('chrome', 'test', 'android',
-                                       'telemetry_tests',
-                                       'run_chrome_browser_tests.py'),
-          '--browser=%s' % browser,
-          '--write-abbreviated-json-results-to',
-          self.m.json.output(),
-          test_name,
-      ]
-      self.m.step(
-          name='Run telemetry browser_test %s' % test_name,
-          cmd=cmd,
-          step_test_data=lambda: self.m.json.test_api.output(
-              {'successes': ['passed_test1']}))
-    finally:
-      test_failures = self.m.step.active_result.json.output.get('failures', [])
-      self.m.step.active_result.presentation.step_text += (
-          self.m.presentation_utils.format_step_text(
-              [['failures:', test_failures]]))
-
   def create_result_details(self, step_name, json_results_file):
     try:
       cmd = [
-          'python',
+          'python3',
           self.m.path['checkout'].join('build', 'android', 'pylib', 'results',
                                        'presentation',
                                        'test_results_presentation.py'),
@@ -654,8 +626,8 @@ class AndroidApi(recipe_api.RecipeApi):
     if self.c.logcat_bucket:
       log_path = self.m.chromium.output_dir.join('full_log')
       cmd = [
-          'python', self.m.path['checkout'].join('build', 'android',
-                                                 'adb_logcat_printer.py'),
+          'python3', self.m.path['checkout'].join('build', 'android',
+                                                  'adb_logcat_printer.py'),
           '--output-path', log_path,
           self.m.path['checkout'].join('out', 'logcat')
       ]
@@ -674,7 +646,7 @@ class AndroidApi(recipe_api.RecipeApi):
 
     else:
       cmd = [
-          'python',
+          'python3',
           self.repo_resource('recipes', 'tee.py'),
           self.m.chromium.output_dir.join('full_log'),
           '--',
@@ -698,7 +670,7 @@ class AndroidApi(recipe_api.RecipeApi):
     build_dir = root_chromium_dir.join('out', self.m.chromium.c.BUILD_CONFIG)
 
     cmd = [
-        'python',
+        'python3',
         root_chromium_dir.join('components', 'crash', 'content', 'tools',
                                'generate_breakpad_symbols.py'),
         '--symbols-dir',
@@ -750,7 +722,7 @@ class AndroidApi(recipe_api.RecipeApi):
       self.generate_breakpad_symbols(temp_symbols_dir, binary,
                                      root_chromium_dir)
     cmd = [
-        'python',
+        'python3',
         root_chromium_dir.join('build', 'android', 'stacktrace',
                                'stackwalker.py'),
         '--stackwalker-binary-path',
@@ -904,132 +876,6 @@ class AndroidApi(recipe_api.RecipeApi):
           wrapper_script_suite_name=str(target_name or suite),
           pass_adb_path=False,
           **kwargs)
-
-  def coverage_report(self, upload=True, **kwargs):
-    """Creates an EMMA HTML report and optionally uploads it to storage bucket.
-
-    Creates an EMMA HTML report using generate_emma_html.py, and uploads the
-    HTML report to the chrome-code-coverage storage bucket if |upload| is True.
-
-    Args:
-      upload: Uploads EMMA HTML report to storage bucket unless False is passed
-        in.
-      **kwargs: Kwargs for python and gsutil steps.
-
-    Returns:
-      step_result: The recipe result from generating the coverage report.
-    """
-    assert self.c.coverage or self.c.incremental_coverage, (
-        'Trying to generate coverage report but coverage is not enabled')
-
-    cmd = [
-        'python',
-        self.m.path['checkout'].join('build', 'android',
-                                     'generate_emma_html.py'),
-        '--coverage-dir',
-        self.coverage_dir,
-        '--metadata-dir',
-        self.out_path.join(self.c.BUILD_CONFIG),
-        '--cleanup',
-        '--output',
-        self.coverage_dir.join('coverage_html', 'index.html'),
-    ]
-    step_result = self.m.step(
-        'Generate coverage report', cmd, infra_step=True, **kwargs)
-
-    if upload:
-      output_zip = self.coverage_dir.join('coverage_html.zip')
-      self.m.zip.directory(
-          step_name='Zip generated coverage report files',
-          directory=self.coverage_dir.join('coverage_html'),
-          output=output_zip)
-      gs_dest = 'java/%s/%s/' % (self.m.buildbucket.builder_name,
-                                 self.m.buildbucket.gitiles_commit.id)
-      self.m.gsutil.upload(
-          source=output_zip,
-          bucket='chrome-code-coverage',
-          dest=gs_dest,
-          name='upload coverage report',
-          link_name='Coverage report',
-          **kwargs)
-
-    return step_result
-
-  def incremental_coverage_report(self):
-    """Creates an incremental code coverage report.
-
-    Generates a JSON file containing incremental coverage stats. Requires
-    |file_changes_path| to contain a file with a valid JSON object.
-    """
-    with self.m.context(cwd=self.m.path['checkout']):
-      cmd = [
-          'python',
-          self.m.path.join('build', 'android', 'emma_coverage_stats.py'),
-          '-v',
-          '--out',
-          self.m.json.output(),
-          '--emma-dir',
-          self.coverage_dir.join('coverage_html'),
-          '--lines-for-coverage',
-          self.file_changes_path,
-      ]
-      step_result = self.m.step(
-          'Incremental coverage report',
-          cmd,
-          step_test_data=lambda: self.m.json.test_api.output({
-              'files': {
-                  'sample file 1': {
-                      'absolute': {
-                          'covered': 70,
-                          'total': 100,
-                      },
-                      'incremental': {
-                          'covered': 30,
-                          'total': 50,
-                      },
-                  },
-                  'sample file 2': {
-                      'absolute': {
-                          'covered': 50,
-                          'total': 100,
-                      },
-                      'incremental': {
-                          'covered': 50,
-                          'total': 50,
-                      },
-                  },
-              },
-              'patch': {
-                  'incremental': {
-                      'covered': 80,
-                      'total': 100,
-                  },
-              },
-          }))
-
-    if step_result.json.output:
-      covered_lines = step_result.json.output['patch']['incremental']['covered']
-      total_lines = step_result.json.output['patch']['incremental']['total']
-      percentage = covered_lines * 100.0 / total_lines if total_lines else 0
-
-      step_result.presentation.properties['summary'] = (
-          'Test coverage for this patch: %s/%s lines (%s%%).' % (
-              covered_lines,
-              total_lines,
-              int(percentage),
-          ))
-
-      step_result.presentation.properties['moreInfoURL'] = self.m.url.join(
-          self.m.properties['buildbotURL'],
-          'builders',
-          self.m.buildbucket.builder_name,
-          'builds',
-          str(self.m.buildbucket.build.number) or '0',
-          'steps',
-          'Incremental%20coverage%20report',
-          'logs',
-          'json.output',
-      )
 
   def get_changed_lines_for_revision(self):
     """Saves a JSON file containing the files/lines requiring coverage analysis.

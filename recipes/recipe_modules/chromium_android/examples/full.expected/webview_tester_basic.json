@@ -486,7 +486,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "RECIPE_REPO[build]/recipes/daemonizer.py",
       "--",
       "[START_DIR]/src/build/android/adb_logcat_monitor.py",
@@ -513,7 +513,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "vpython3",
       "[START_DIR]/src/third_party/catapult/devil/devil/android/tools/device_recovery.py",
       "--denylist-file",
       "[START_DIR]/src/out/bad_devices.json",
@@ -671,7 +671,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "vpython3",
       "[START_DIR]/src/third_party/catapult/devil/devil/android/tools/device_recovery.py",
       "--denylist-file",
       "[START_DIR]/src/out/bad_devices.json",
@@ -829,7 +829,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "[START_DIR]/src/third_party/catapult/devil/devil/android/tools/provision_devices.py",
       "--adb-path",
       "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb",
@@ -868,7 +868,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "[START_DIR]/src/build/symlink.py",
       "-f",
       "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb",
@@ -891,7 +891,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "RECIPE_REPO[build]/recipes/daemonizer.py",
       "--",
       "[START_DIR]/src/build/android/adb_logcat_monitor.py",
@@ -918,7 +918,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "RECIPE_REPO[build]/recipes/daemonizer.py",
       "--action",
       "restart",
@@ -948,7 +948,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "RECIPE_MODULE[build::chromium_android]/resources/authorize_adb_devices.py",
       "--verbose",
       "--adb-path",
@@ -974,7 +974,7 @@
   },
   {
     "cmd": [
-      "vpython",
+      "vpython3",
       "[START_DIR]/src/third_party/catapult/devil/devil/android/tools/device_recovery.py",
       "--denylist-file",
       "[START_DIR]/src/out/bad_devices.json",
@@ -1004,7 +1004,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "[START_DIR]/src/third_party/catapult/devil/devil/android/tools/provision_devices.py",
       "--adb-path",
       "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb",
@@ -1270,7 +1270,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "RECIPE_REPO[build]/recipes/tee.py",
       "[START_DIR]/src/out/Release/full_log",
       "--",

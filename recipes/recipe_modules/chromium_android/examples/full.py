@@ -25,11 +25,6 @@ BUILDERS = freeze({
         'target': 'Release',
         'build': True,
     },
-    'coverage_builder': {
-        'coverage': True,
-        'target': 'Debug',
-        'build': True,
-    },
     'tester': {},
     'gerrit_try_builder': {
         'build': True,
@@ -68,9 +63,6 @@ BUILDERS = freeze({
     'disable_location_tester': {
         'disable_location': True,
     },
-    'telemetry_browser_tests_tester': {
-        'run_telemetry_browser_tests': True,
-    },
     'use_devil_adb': {
       'android_apply_config': ['use_devil_adb'],
     },
@@ -94,7 +86,6 @@ def RunSteps(api):
       BUILD_CONFIG='Release')
 
   api.chromium_android.c.get_app_manifest_vars = True
-  api.chromium_android.c.coverage = config.get('coverage', False)
   api.chromium_android.c.logcat_bucket = None
 
   for c in config.get('android_apply_config', []):
@@ -161,13 +152,8 @@ def RunSteps(api):
     api.chromium_android.run_bisect_script(
         extra_src='test.py', path_to_config='test.py')
 
-  if config.get('run_telemetry_browser_tests'):
-    api.chromium_android.run_telemetry_browser_test('PopularUrlsTest')
-
   api.chromium_android.logcat_dump()
   api.chromium_android.stack_tool_steps()
-  if config.get('coverage', False):
-    api.chromium_android.coverage_report()
 
   if config.get('run_stackwalker'):
     chrome_breakpad_binary = api.path['checkout'].join(
@@ -278,18 +264,6 @@ def GenTests(api):
       'tombstones_m53',
       properties_for('tester'),
       api.chromium.override_version(major=53),
-  )
-
-  yield api.test(
-      'telemetry_browser_tests_failures',
-      properties_for('telemetry_browser_tests_tester'),
-      api.override_step_data(
-          'Run telemetry browser_test PopularUrlsTest',
-          api.json.output({
-              'successes': ['passed_test1', 'passed_test2'],
-              'failures': ['failed_test_1', 'failed_test_2']
-          }),
-          retcode=1),
   )
 
   yield api.test(

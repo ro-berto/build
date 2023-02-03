@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # Copyright 2013 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -67,7 +67,7 @@ def daemonize(cmd, pid_file_path):
     if pid > 0:
       # exit first parent
       sys.exit(0)
-  except OSError, e:
+  except OSError as e:
     sys.stderr.write("fork #1 failed, unable to daemonize: %d (%s)\n" %
                      (e.errno, e.strerror))
     sys.exit(1)
@@ -83,7 +83,7 @@ def daemonize(cmd, pid_file_path):
     if pid > 0:
       # exit from second parent
       sys.exit(0)
-  except OSError, e:
+  except OSError as e:
     sys.stderr.write("fork #2 failed, unable to daemonize: %d (%s)\n" %
                      (e.errno, e.strerror))
     sys.exit(1)
