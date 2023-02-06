@@ -29,7 +29,7 @@ def GetCmdOutput(cmd, env=None):
   stdout, stderr = subprocess.Popen(
       cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
       env=env).communicate()
-  output = stdout + stderr
+  output = stdout.decode('utf-8') + stderr.decode('utf-8')
   return output
 
 
