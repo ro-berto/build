@@ -1288,6 +1288,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           to execute the swarming tests in failing_tests.
 
     """
+    skylab_isolates = [t.target_name for t in failing_tests if t.is_skylabtest]
+
     compile_targets = list(
         itertools.chain(*[t.compile_targets() for t in failing_tests]))
 
@@ -1305,7 +1307,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     raw_result = self.run_mb_and_compile(
         builder_id,
-        compile_targets, [t.isolate_target for t in failing_swarming_tests],
+        compile_targets,
+        [t.isolate_target for t in failing_swarming_tests] + skylab_isolates,
         ' (%s)' % suffix,
         rts_setting=rts_setting,
         rts_recall=builder_config.regression_test_selection_recall)
@@ -1318,6 +1321,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       if raw_result.status != common_pb.SUCCESS:
         return raw_result, None
 
+    if skylab_isolates:
+      self._prepare_artifact_for_skylab(
+          builder_config,
+          [t for t in failing_tests if t.target_name in skylab_isolates],
+          suffix)
     if not failing_swarming_tests:
       return None, None
 
@@ -2545,13 +2553,16 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           gcs_bucket, '/experimental' if self.m.runtime.is_experimental else '',
           gcs_path, target)
 
-  def _prepare_artifact_for_skylab(self, builder_config, tests):
+  def _prepare_artifact_for_skylab(self,
+                                   builder_config,
+                                   tests,
+                                   phase='with patch'):
     if not (builder_config.skylab_gs_bucket and tests):
       return
     gcs_path = ''
     if builder_config.skylab_gs_extra:
       gcs_path += '%s/' % builder_config.skylab_gs_extra
-    gcs_path += '%d' % self.m.buildbucket.build.id
+    gcs_path += '%d_%s' % (self.m.buildbucket.build.id, phase.replace(' ', '_'))
     with self.m.step.nest('prepare skylab tests'):
       tests_by_target = collections.defaultdict(list)
       for t in tests:

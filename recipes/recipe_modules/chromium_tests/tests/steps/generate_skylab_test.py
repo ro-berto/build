@@ -75,7 +75,8 @@ def GenTests(api):
                   isolate_file_exists=True,
                   is_ci_build=True,
                   target_name=TAST_TARGET,
-                  should_read_isolate=True):
+                  should_read_isolate=True,
+                  ci_only_tests=True):
     builder_db = ctbc.BuilderDatabase.create({
         builder_group: {
             builder:
@@ -113,7 +114,7 @@ def GenTests(api):
                         'cros_board': 'eve',
                         'cros_img': 'eve-release/R89-13631.0.0',
                         'test_id_prefix': 'ninja://basic_EVE_TOT/',
-                        'ci_only': True,
+                        'ci_only': ci_only_tests,
                         'name': 'basic_EVE_TOT',
                         'tast_expr': tast_expr,
                         'benchmark': benchmark,
@@ -260,8 +261,8 @@ def GenTests(api):
           post_process.StepCommandContains,
           'test_pre_run.schedule skylab tests.basic_EVE_TOT.schedule', [
               '-lacros-path',
-              'gs://chrome-test-builds/lacros/8945511751514863184/%s' %
-              GTEST_TARGET
+              'gs://chrome-test-builds/lacros/8945511751514863184_with_patch/%s'
+              % GTEST_TARGET
           ]),
       api.post_process(
           _check_test_args,
@@ -428,5 +429,31 @@ def GenTests(api):
           post_process.StepCommandContains,
           'test_pre_run.schedule skylab tests.basic_EVE_TOT.schedule',
           ['chromium_Telemetry']),
+      api.post_process(post_process.DropExpectation),
+  )
+
+  yield api.test(
+      'retry_without_patch',
+      boilerplate(
+          'chrome-test-builds',
+          is_ci_build=False,
+          target_name=GTEST_TARGET,
+          ci_only_tests=False),
+      api.step_data(
+          'prepare skylab tests (2).'
+          'collect runtime deps for %s.read isolate file' % GTEST_TARGET,
+          api.file.read_text(GOOD_ISOLATE_TEXT)),
+      api.skylab.mock_wait_on_suites(
+          'find test runner build',
+          1,
+          runner_builds=[(902, common_pb2.SUCCESS)]),
+      api.override_step_data(
+          'basic_EVE_TOT results',
+          stdout=api.raw_io.output_text(
+              api.test_utils.rdb_results(
+                  'basic_EVE_TOT',
+                  failing_tests=['Test.One'],
+                  skipped_tests=['Test.One']))),
+      api.post_process(post_process.MustRun, 'test_pre_run (without patch)'),
       api.post_process(post_process.DropExpectation),
   )
