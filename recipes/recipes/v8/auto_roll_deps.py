@@ -22,7 +22,6 @@ DEPS = [
   'recipe_engine/service_account',
   'recipe_engine/step',
   'recipe_engine/url',
-  'ts_mon',
   'v8',
 ]
 
@@ -74,123 +73,103 @@ def is_gitiles_inconsistent(api):
 
 
 def RunSteps(api):
-  monitoring_state = 'failure'
-  try:
-    api.gclient.set_config('chromium')
-    api.gclient.apply_config('v8_tot')
+  api.gclient.set_config('chromium')
+  api.gclient.apply_config('v8_tot')
 
-    # We need a full V8 checkout as well in order to checkout V8 DEPS, which
-    # includes pinned depot_tools used by release scripts that we invoke below.
-    api.gclient.apply_config('v8_bare')
+  # We need a full V8 checkout as well in order to checkout V8 DEPS, which
+  # includes pinned depot_tools used by release scripts that we invoke below.
+  api.gclient.apply_config('v8_bare')
 
-    output = api.url.get_text(
-        'https://v8-roll.appspot.com/status',
-        step_name='check roll status',
-        default_test_data='1',
-    ).output
-    api.step.active_result.presentation.logs['output'] = output.splitlines()
-    if output.strip() != '1':
-      api.step.active_result.presentation.step_text = 'Rolling deactivated'
-      monitoring_state = 'deactivated'
-      return
+  output = api.url.get_text(
+      'https://v8-roll.appspot.com/status',
+      step_name='check roll status',
+      default_test_data='1',
+  ).output
+  api.step.active_result.presentation.logs['output'] = output.splitlines()
+  if output.strip() != '1':
+    api.step.active_result.presentation.step_text = 'Rolling deactivated'
+    return
 
-    api.step.active_result.presentation.step_text = 'Rolling activated'
+  api.step.active_result.presentation.step_text = 'Rolling activated'
 
-    # Check for an open auto-roller CL. There should be at most one CL in the
-    # chromium project, which is the last roll.
-    push_account = (
-        # TODO(sergiyb): Replace with api.service_account.default().get_email()
-        # when https://crbug.com/846923 is resolved.
-        'v8-ci-autoroll-builder@chops-service-accounts.iam.gserviceaccount.com')
-    commits = api.gerrit.get_changes(
-        'https://chromium-review.googlesource.com',
+  # Check for an open auto-roller CL. There should be at most one CL in the
+  # chromium project, which is the last roll.
+  push_account = (
+      # TODO(sergiyb): Replace with api.service_account.default().get_email()
+      # when https://crbug.com/846923 is resolved.
+      'v8-ci-autoroll-builder@chops-service-accounts.iam.gserviceaccount.com')
+  commits = api.gerrit.get_changes(
+      'https://chromium-review.googlesource.com',
+    query_params=[
+      ('project', 'chromium/src'),
+      ('owner', push_account),
+      ('status', 'open'),
+    ],
+    limit=1,
+  )
+
+  if commits:
+    cq_commits = api.gerrit.get_changes(
+      'https://chromium-review.googlesource.com/a',
       query_params=[
-        ('project', 'chromium/src'),
-        ('owner', push_account),
-        ('status', 'open'),
+        ('change', commits[0]['_number']),
+        ('label', 'Commit-Queue>=1'),
       ],
       limit=1,
     )
 
-    if commits:
-      cq_commits = api.gerrit.get_changes(
-        'https://chromium-review.googlesource.com/a',
-        query_params=[
-          ('change', commits[0]['_number']),
-          ('label', 'Commit-Queue>=1'),
-        ],
-        limit=1,
+    if not cq_commits:
+      api.v8.checkout()
+      with api.context(
+          cwd=api.path['checkout'],
+          env_prefixes={'PATH': [api.v8.depot_tools_path]}):
+        if api.runtime.is_experimental:
+          api.step('fake resubmit to CQ', cmd=None)
+        else:
+          api.git('cl', 'set-commit', '-i', commits[0]['_number'])
+        api.step.active_result.presentation.step_text = (
+          'Stale roll found. Resubmitted to CQ.')
+    else:
+      assert cq_commits[0]['_number'] == commits[0]['_number']
+      api.step.active_result.presentation.step_text = 'Active rolls found.'
+
+    return
+
+  # Make it more likely to avoid inconsistencies when hitting different
+  # mirrors.
+  api.v8.python(
+      'wait for consistency',
+      api.v8.resource('sleep_20_seconds.py'),
+  )
+
+  api.v8.checkout()
+
+  # Require local and gitiles DEPS to be consistent before proceeding.
+  if is_gitiles_inconsistent(api):
+    api.step('Local checkout is lagging behind.', cmd=None)
+    api.step.active_result.presentation.status = api.step.WARNING
+    return
+
+  with api.context(cwd=api.path['checkout'].join('v8'),
+                   env={'DEPOT_TOOLS_UPDATE': '0'},
+                   env_prefixes={'PATH': [api.v8.depot_tools_path]}):
+    safe_buildername = ''.join(
+      c if c.isalnum() else '_' for c in api.buildbucket.builder_name)
+    if api.runtime.is_experimental:
+      api.step('fake roll deps', cmd=None)
+    else:
+      api.v8.python(
+          'roll deps',
+          api.v8.checkout_root.join(
+              'v8', 'tools', 'release', 'auto_roll.py'),
+          ['--chromium', api.path['checkout'],
+           '--author', push_account,
+           '--reviewer', 'hablich@chromium.org,'
+                         'vahl@chromium.org,'
+                         'v8-waterfall-sheriff@grotations.appspotmail.com',
+           '--roll',
+           '--work-dir', api.path['cache'].join(safe_buildername, 'workdir')],
       )
-
-      if not cq_commits:
-        api.v8.checkout()
-        with api.context(
-            cwd=api.path['checkout'],
-            env_prefixes={'PATH': [api.v8.depot_tools_path]}):
-          if api.runtime.is_experimental:
-            api.step('fake resubmit to CQ', cmd=None)
-          else:
-            api.git('cl', 'set-commit', '-i', commits[0]['_number'])
-          api.step.active_result.presentation.step_text = (
-            'Stale roll found. Resubmitted to CQ.')
-          monitoring_state = 'stale_roll'
-      else:
-        assert cq_commits[0]['_number'] == commits[0]['_number']
-        api.step.active_result.presentation.step_text = 'Active rolls found.'
-        monitoring_state = 'active_roll'
-
-      return
-
-    # Make it more likely to avoid inconsistencies when hitting different
-    # mirrors.
-    api.v8.python(
-        'wait for consistency',
-        api.v8.resource('sleep_20_seconds.py'),
-    )
-
-    api.v8.checkout()
-
-    # Require local and gitiles DEPS to be consistent before proceeding.
-    if is_gitiles_inconsistent(api):
-      api.step('Local checkout is lagging behind.', cmd=None)
-      api.step.active_result.presentation.status = api.step.WARNING
-      monitoring_state = 'inconsistent'
-      return
-
-    with api.context(cwd=api.path['checkout'].join('v8'),
-                     env={'DEPOT_TOOLS_UPDATE': '0'},
-                     env_prefixes={'PATH': [api.v8.depot_tools_path]}):
-      safe_buildername = ''.join(
-        c if c.isalnum() else '_' for c in api.buildbucket.builder_name)
-      if api.runtime.is_experimental:
-        api.step('fake roll deps', cmd=None)
-      else:
-        result = api.v8.python(
-            'roll deps',
-            api.v8.checkout_root.join(
-                'v8', 'tools', 'release', 'auto_roll.py'),
-            ['--chromium', api.path['checkout'],
-             '--author', push_account,
-             '--reviewer', 'hablich@chromium.org,'
-                           'vahl@chromium.org,'
-                           'v8-waterfall-sheriff@grotations.appspotmail.com',
-             '--roll',
-             '--json-output', api.json.output(),
-             '--work-dir', api.path['cache'].join(safe_buildername, 'workdir')],
-            step_test_data=lambda: api.json.test_api.output(
-                {'monitoring_state': 'success'}),
-        )
-        monitoring_state = result.json.output['monitoring_state']
-  finally:
-    if not api.runtime.is_experimental:
-      api.ts_mon.send_value(
-          name='/v8/autoroller/count',
-          metric_type='counter',
-          value=1,
-          fields={'project': 'v8-roll', 'result': monitoring_state},
-          service_name='auto-roll',
-          job_name='roll',
-          step_name='upload_stats')
 
 
 def GenTests(api):

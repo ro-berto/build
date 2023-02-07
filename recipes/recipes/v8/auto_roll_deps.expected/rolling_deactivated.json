@@ -19,65 +19,6 @@
     ]
   },
   {
-    "cmd": [
-      "cipd",
-      "ensure",
-      "-root",
-      "[START_DIR]/send_ts_mon_values",
-      "-ensure-file",
-      "infra/send_ts_mon_values/all latest",
-      "-max-threads",
-      "0",
-      "-json-output",
-      "/path/to/tmp/json"
-    ],
-    "name": "ensure_installed",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-latest----------\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/send_ts_mon_values/all\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-vpython-spec",
-      "[START_DIR]/send_ts_mon_values/infra/tools/send_ts_mon_values/standalone.vpython",
-      "-m",
-      "infra.tools.send_ts_mon_values",
-      "--ts-mon-target-type",
-      "task",
-      "--ts-mon-task-service-name",
-      "auto-roll",
-      "--ts-mon-task-job-name",
-      "roll",
-      "--counter-file",
-      "{\"name\": \"/v8/autoroller/count\", \"project\": \"v8-roll\", \"result\": \"deactivated\", \"value\": 1}"
-    ],
-    "cwd": "[START_DIR]/send_ts_mon_values",
-    "infra_step": true,
-    "name": "upload_stats",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@metric_data@[@@@",
-      "@@@STEP_LOG_LINE@metric_data@  {@@@",
-      "@@@STEP_LOG_LINE@metric_data@    \"name\": \"/v8/autoroller/count\",@@@",
-      "@@@STEP_LOG_LINE@metric_data@    \"project\": \"v8-roll\",@@@",
-      "@@@STEP_LOG_LINE@metric_data@    \"result\": \"deactivated\",@@@",
-      "@@@STEP_LOG_LINE@metric_data@    \"value\": 1@@@",
-      "@@@STEP_LOG_LINE@metric_data@  }@@@",
-      "@@@STEP_LOG_LINE@metric_data@]@@@",
-      "@@@STEP_LOG_END@metric_data@@@"
-    ]
-  },
-  {
     "name": "$result"
   }
 ]
