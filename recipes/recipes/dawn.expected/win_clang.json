@@ -243,7 +243,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "RECIPE_REPO[depot_tools]\\gn.py",
       "--root=[CACHE]\\builder\\dawn",
       "gen",
@@ -815,7 +815,7 @@
   },
   {
     "cmd": [
-      "python",
+      "python3",
       "RECIPE_REPO[depot_tools]\\gn.py",
       "--root=[CACHE]\\builder\\dawn",
       "gen",

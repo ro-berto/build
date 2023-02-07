@@ -103,7 +103,7 @@ def _gn_gen_builds(api, target_cpu, debug, clang, use_goma, out_dir, static,
 
   with api.context(cwd=checkout):
     api.step('gn gen', [
-        'python',
+        'python3',
         gn_cmd,
         '--root=' + str(checkout),
         'gen',
