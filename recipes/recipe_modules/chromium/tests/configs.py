@@ -48,6 +48,8 @@ def GenTests(api):
 
   yield from_config('goma_large_cache_file')
 
+  yield from_config('reclient_deps_cache_by_step')
+
   yield from_config('gcc')
 
   yield from_config('trybot_flavor')

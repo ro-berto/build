@@ -52,6 +52,8 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS, TARGET_PLATFORM,
               bool, empty_val=False, required=False),
           goma_enable_cache_silo=Single(bool, empty_val=False, required=False),
           prune_venv=Single(bool, empty_val=False, required=False),
+          reclient_deps_cache_by_step=Single(
+              bool, empty_val=False, required=False),
       ),
       gyp_env=ConfigGroup(
           DOWNLOAD_VR_TEST_APKS=Single(int, required=False),
@@ -305,6 +307,11 @@ def goma_hermetic_fallback(c):
 @config_ctx()
 def goma_use_local(c):
   c.compile_py.goma_use_local = True
+
+
+@config_ctx()
+def reclient_deps_cache_by_step(c):
+  c.compile_py.reclient_deps_cache_by_step = True
 
 
 @config_ctx(group='builder')

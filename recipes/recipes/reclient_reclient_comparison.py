@@ -31,9 +31,7 @@ COMPARISON_BUILDERS = freeze({
     'Comparison Linux (reclient vs reclient remote links)': {
         'chromium_config': 'chromium',
         'gclient_config': 'chromium',
-        'chromium_apply_config': [
-            'mb', 'goma_enable_cache_silo', 'goma_large_cache_file'
-        ],
+        'chromium_apply_config': ['mb',],
         'gclient_apply_config': ['reclient_test'],
         'platform': 'linux',
         'targets': ['all'],
@@ -41,29 +39,7 @@ COMPARISON_BUILDERS = freeze({
     'Comparison Linux (reclient vs reclient remote links)(small)': {
         'chromium_config': 'chromium',
         'gclient_config': 'chromium',
-        'chromium_apply_config': [
-            'mb', 'goma_enable_cache_silo', 'goma_large_cache_file'
-        ],
-        'gclient_apply_config': ['reclient_test'],
-        'platform': 'linux',
-        'targets': ['all'],
-    },
-    'Comparison Linux (reclient vs reclient remote links)(medium)': {
-        'chromium_config': 'chromium',
-        'gclient_config': 'chromium',
-        'chromium_apply_config': [
-            'mb', 'goma_enable_cache_silo', 'goma_large_cache_file'
-        ],
-        'gclient_apply_config': ['reclient_test'],
-        'platform': 'linux',
-        'targets': ['all'],
-    },
-    'Comparison Linux (reclient vs reclient remote links)(large)': {
-        'chromium_config': 'chromium',
-        'gclient_config': 'chromium',
-        'chromium_apply_config': [
-            'mb', 'goma_enable_cache_silo', 'goma_large_cache_file'
-        ],
+        'chromium_apply_config': ['mb',],
         'gclient_apply_config': ['reclient_test'],
         'platform': 'linux',
         'targets': ['all'],
@@ -84,6 +60,8 @@ def configure_chromium_builder(api, recipe_config):
 
   for c in recipe_config.get('gclient_apply_config', []):
     api.gclient.apply_config(c)
+
+  api.chromium.apply_config('reclient_deps_cache_by_step')
 
   # Checkout chromium.
   api.chromium_checkout.ensure_checkout()

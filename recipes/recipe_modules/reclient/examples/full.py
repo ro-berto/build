@@ -26,8 +26,11 @@ _BOOTSTRAP_STEP_NAME = 'preprocess for reclient.start reproxy via bootstrap'
 def RunSteps(api):
   api.path['checkout'] = api.path['tmp_base'].join('checkout')
   ninja_command = ['ninja', '-C', 'out/Release']
+  deps_cache_by_step = api.properties.get('deps_cache_by_step', False)
   with api.reclient.process(
-      ninja_step_name=_NINJA_STEP_NAME, ninja_command=ninja_command):
+      ninja_step_name=_NINJA_STEP_NAME,
+      ninja_command=ninja_command,
+      deps_cache_by_step=deps_cache_by_step):
     api.step(_NINJA_STEP_NAME, ninja_command)
   _ = api.reclient.instance  # for code coverage
   _ = api.reclient.rewrapper_path
@@ -55,6 +58,18 @@ def GenTests(api):
       'basic windows',
       api.reclient.properties(),
       api.platform('win', 64),
+  )
+
+  def deps_cache_location_checker(check, steps):
+    env = steps[_BOOTSTRAP_STEP_NAME].env
+    check(_NINJA_STEP_NAME in env['RBE_deps_cache_dir'])
+
+  yield api.test(
+      'override deps_cache_by_step',
+      api.reclient.properties(),
+      api.properties(deps_cache_by_step=True),
+      api.post_check(deps_cache_location_checker),
+      api.post_process(post_process.DropExpectation),
   )
 
   yield api.test(

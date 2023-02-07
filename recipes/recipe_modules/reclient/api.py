@@ -272,7 +272,7 @@ class ReclientApi(recipe_api.RecipeApi):
     return data_cache.join(safe_buildername)
 
   @contextlib.contextmanager
-  def process(self, ninja_step_name, ninja_command):
+  def process(self, ninja_step_name, ninja_command, deps_cache_by_step=False):
     """Do preparation and cleanup steps for running the ninja command.
 
     Args:
@@ -282,10 +282,13 @@ class ReclientApi(recipe_api.RecipeApi):
     """
     assert self.instance, 'reclient is not configured'
     self._reclient_log_dir = self.m.path.mkdtemp('reclient_log')
+    deps_cache_path = self.deps_cache_path
+    if (deps_cache_by_step):
+      deps_cache_path = deps_cache_path.join(ninja_step_name)
     with self.m.step.nest('preprocess for reclient'):
       self._install_reclient_cfgs()
-      self._make_reclient_cache_dir(self.deps_cache_path)
-      self._list_reclient_cache_dir(self.deps_cache_path)
+      self._make_reclient_cache_dir(deps_cache_path)
+      self._list_reclient_cache_dir(deps_cache_path)
 
       # TODO: Shall we use the same project providing the RBE workers?
       cloudtail_project_id = 'goma-logs'
@@ -295,7 +298,7 @@ class ReclientApi(recipe_api.RecipeApi):
       self._start_cloudtail(cloudtail_project_id, log_dir,
                             'reproxy-gomaip.INFO')
 
-      self._start_reproxy(self._reclient_log_dir, self.deps_cache_path,
+      self._start_reproxy(self._reclient_log_dir, deps_cache_path,
                           self.bootstrap_env)
 
     p = BuildResultReceiver()

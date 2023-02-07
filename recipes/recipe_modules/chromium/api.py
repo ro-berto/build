@@ -506,7 +506,9 @@ class ChromiumApi(recipe_api.RecipeApi):
     Raises:
       - InfraFailure when an unexpected reclient failure occurs
     """
-    with self.m.reclient.process(name, ninja_command) as p:
+    with self.m.reclient.process(
+        name, ninja_command,
+        self.c.compile_py.reclient_deps_cache_by_step) as p:
       ninja_result = self._run_ninja(ninja_command, name, ninja_env, **kwargs)
       p.build_exit_status = ninja_result.retcode
     return ninja_result
