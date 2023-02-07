@@ -1,7 +1,7 @@
 [
   {
     "cmd": [
-      "python3",
+      "vpython3",
       "RECIPE_MODULE[build::chromium_android]/resources/clean_local_files.py",
       "[CACHE]/builder/src/out/Release/debug_info_dumps",
       "[CACHE]/builder/src/out/Release/test_logs",

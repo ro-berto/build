@@ -208,7 +208,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "vpython3",
       "RECIPE_MODULE[build::chromium_android]/resources/clean_local_files.py",
       "[START_DIR]/src/out/Release/debug_info_dumps",
       "[START_DIR]/src/out/Release/test_logs",
@@ -893,7 +893,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "vpython3",
       "RECIPE_MODULE[build::chromium_android]/resources/archive_build.py",
       "--target",
       "Release",
@@ -971,7 +971,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "vpython3",
       "RECIPE_REPO[build]/recipes/daemonizer.py",
       "--",
       "[START_DIR]/src/build/android/adb_logcat_monitor.py",
@@ -1314,7 +1314,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "vpython3",
       "[START_DIR]/src/build/android/provision_devices.py",
       "--adb-path",
       "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb",
@@ -1349,7 +1349,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "vpython3",
       "[START_DIR]/src/build/symlink.py",
       "-f",
       "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb",
@@ -1372,7 +1372,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "vpython3",
       "RECIPE_REPO[build]/recipes/daemonizer.py",
       "--",
       "[START_DIR]/src/build/android/adb_logcat_monitor.py",
@@ -1399,7 +1399,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "vpython3",
       "RECIPE_REPO[build]/recipes/daemonizer.py",
       "--action",
       "restart",
@@ -1429,7 +1429,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "vpython3",
       "RECIPE_MODULE[build::chromium_android]/resources/authorize_adb_devices.py",
       "--verbose",
       "--adb-path",
@@ -1485,7 +1485,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "vpython3",
       "[START_DIR]/src/build/android/provision_devices.py",
       "--adb-path",
       "[START_DIR]/src/third_party/android_sdk/public/platform-tools/adb",
@@ -1746,7 +1746,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "vpython3",
       "RECIPE_REPO[build]/recipes/tee.py",
       "[START_DIR]/src/out/Release/full_log",
       "--",

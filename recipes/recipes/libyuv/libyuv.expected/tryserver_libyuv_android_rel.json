@@ -1344,7 +1344,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "vpython3",
       "[CACHE]/builder/src/build/symlink.py",
       "-f",
       "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools/adb",
@@ -1368,7 +1368,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "vpython3",
       "RECIPE_REPO[build]/recipes/daemonizer.py",
       "--",
       "[CACHE]/builder/src/build/android/adb_logcat_monitor.py",
@@ -1396,7 +1396,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "vpython3",
       "RECIPE_REPO[build]/recipes/daemonizer.py",
       "--action",
       "restart",
@@ -1427,7 +1427,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "vpython3",
       "RECIPE_MODULE[build::chromium_android]/resources/authorize_adb_devices.py",
       "--verbose",
       "--adb-path",
@@ -1485,7 +1485,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "vpython3",
       "[CACHE]/builder/src/build/android/provision_devices.py",
       "--adb-path",
       "[CACHE]/builder/src/third_party/android_sdk/public/platform-tools/adb",
@@ -1674,7 +1674,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "vpython3",
       "RECIPE_REPO[build]/recipes/daemonizer.py",
       "--action",
       "stop",
@@ -1699,7 +1699,7 @@
   },
   {
     "cmd": [
-      "python3",
+      "vpython3",
       "[CACHE]/builder/src/build/android/adb_logcat_printer.py",
       "--output-path",
       "[CACHE]/builder/src/out/Release/full_log",

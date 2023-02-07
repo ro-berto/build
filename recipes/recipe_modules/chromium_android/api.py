@@ -75,7 +75,7 @@ class AndroidApi(recipe_api.RecipeApi):
       exclude_filters: List of globs to be excluded from the archive.
     """
     cmd = [
-        'python3',
+        'vpython3',
         self.resource('archive_build.py'),
         '--target',
         self.m.chromium.c.BUILD_CONFIG,
@@ -144,7 +144,7 @@ class AndroidApi(recipe_api.RecipeApi):
     test_logs = self.m.path['checkout'].join('out', target, 'test_logs')
     build_product = self.m.path['checkout'].join('out', 'build_product.zip')
     cmd = [
-        'python3',
+        'vpython3',
         self.resource('clean_local_files.py'),
         debug_info_dumps,
         test_logs,
@@ -208,7 +208,7 @@ class AndroidApi(recipe_api.RecipeApi):
     # TODO(crbug.com/1067294): Remove this after resolving.
     devil_path = self.m.path['checkout'].join('third_party', 'catapult',
                                               'devil')
-    cmd = ['python3', self.resource('initialize_devil.py'), devil_path]
+    cmd = ['vpython3', self.resource('initialize_devil.py'), devil_path]
     self.m.step('initialize devil', cmd)
     self.m.adb.set_adb_path(
         devil_path.join('bin', 'deps', 'linux2', 'x86_64', 'bin', 'adb'))
@@ -216,7 +216,7 @@ class AndroidApi(recipe_api.RecipeApi):
   def create_adb_symlink(self):
     # Creates a sym link to the adb executable in the home dir
     cmd = [
-        'python3',
+        'vpython3',
         self.m.path['checkout'].join('build', 'symlink.py'),
         '-f',
         self.m.adb.adb_path(),
@@ -229,7 +229,7 @@ class AndroidApi(recipe_api.RecipeApi):
       self.m.step(
           'spawn_logcat_monitor',
           [
-              'python3',
+              'vpython3',
               self.repo_resource('recipes', 'daemonizer.py'),
               '--',
               self.c.cr_build_android.join('adb_logcat_monitor.py'),
@@ -246,7 +246,7 @@ class AndroidApi(recipe_api.RecipeApi):
     self.m.step(
         'spawn_device_monitor',
         [
-            'python3',
+            'vpython3',
             self.repo_resource('recipes', 'daemonizer.py'),
             '--action',
             'restart',
@@ -266,7 +266,7 @@ class AndroidApi(recipe_api.RecipeApi):
     self.m.step(
         'shutdown_device_monitor',
         [
-            'python3',
+            'vpython3',
             self.repo_resource('recipes', 'daemonizer.py'),
             '--action',
             'stop',
@@ -281,7 +281,7 @@ class AndroidApi(recipe_api.RecipeApi):
       return self.m.step(
           'authorize_adb_devices',
           [
-              'python3',
+              'vpython3',
               self.resource('authorize_adb_devices.py'),
               '--verbose',
               '--adb-path',
@@ -516,7 +516,7 @@ class AndroidApi(recipe_api.RecipeApi):
       provision_path = self.m.path['checkout'].join('build', 'android',
                                                     'provision_devices.py')
     cmd = [
-        'python3',
+        'vpython3',
         provision_path,
         '--adb-path',
         self.m.adb.adb_path(),
@@ -589,7 +589,7 @@ class AndroidApi(recipe_api.RecipeApi):
   def create_result_details(self, step_name, json_results_file):
     try:
       cmd = [
-          'python3',
+          'vpython3',
           self.m.path['checkout'].join('build', 'android', 'pylib', 'results',
                                        'presentation',
                                        'test_results_presentation.py'),
@@ -626,8 +626,8 @@ class AndroidApi(recipe_api.RecipeApi):
     if self.c.logcat_bucket:
       log_path = self.m.chromium.output_dir.join('full_log')
       cmd = [
-          'python3', self.m.path['checkout'].join('build', 'android',
-                                                  'adb_logcat_printer.py'),
+          'vpython3', self.m.path['checkout'].join('build', 'android',
+                                                   'adb_logcat_printer.py'),
           '--output-path', log_path,
           self.m.path['checkout'].join('out', 'logcat')
       ]
@@ -646,7 +646,7 @@ class AndroidApi(recipe_api.RecipeApi):
 
     else:
       cmd = [
-          'python3',
+          'vpython3',
           self.repo_resource('recipes', 'tee.py'),
           self.m.chromium.output_dir.join('full_log'),
           '--',
@@ -670,7 +670,7 @@ class AndroidApi(recipe_api.RecipeApi):
     build_dir = root_chromium_dir.join('out', self.m.chromium.c.BUILD_CONFIG)
 
     cmd = [
-        'python3',
+        'vpython3',
         root_chromium_dir.join('components', 'crash', 'content', 'tools',
                                'generate_breakpad_symbols.py'),
         '--symbols-dir',
@@ -722,7 +722,7 @@ class AndroidApi(recipe_api.RecipeApi):
       self.generate_breakpad_symbols(temp_symbols_dir, binary,
                                      root_chromium_dir)
     cmd = [
-        'python3',
+        'vpython3',
         root_chromium_dir.join('build', 'android', 'stacktrace',
                                'stackwalker.py'),
         '--stackwalker-binary-path',
