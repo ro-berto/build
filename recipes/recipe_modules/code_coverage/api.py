@@ -926,6 +926,10 @@ class CodeCoverageApi(recipe_api.RecipeApi):
       args.extend([
           '--javascript-coverage-dir',
           self.build_dir.join('devtools_code_coverage'),
+          '--chromium-src-dir',
+          self.src_dir,
+          '--build-dir',
+          self.build_dir,
       ])
     if self._is_per_cl_coverage:
       args.append('--per-cl-coverage')
