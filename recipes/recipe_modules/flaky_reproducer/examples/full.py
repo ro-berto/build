@@ -9,11 +9,11 @@ DEPS = [
     'recipe_engine/buildbucket',
     'recipe_engine/file',
     'recipe_engine/json',
+    'recipe_engine/luci_analysis',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
     'recipe_engine/resultdb',
     'recipe_engine/swarming',
-    'weetbix',
 ]
 
 PROPERTIES = {
@@ -221,12 +221,12 @@ def GenTests(api):
                   resultdb_invocation,
           },
           step_name='verify_reproducing_step.find_related_builders.rdb query'),
-      api.weetbix.query_variants(
+      api.luci_analysis.query_variants(
           query_variants_res,
           test_id='ninja://base:base_unittests/MockUnitTests.FailTest',
           parent_step_name='verify_reproducing_step.find_related_builders',
       ),
-      api.weetbix.query_test_history(
+      api.luci_analysis.query_test_history(
           query_test_history_res,
           test_id='ninja://base:base_unittests/MockUnitTests.FailTest',
           parent_step_name='verify_reproducing_step.find_related_builders',
@@ -238,7 +238,7 @@ def GenTests(api):
           step_name=('verify_reproducing_step.find_related_builders'
                      '.buildbucket.get_multi'),
       ),
-      api.weetbix.query_test_history(
+      api.luci_analysis.query_test_history(
           query_test_history_res,
           test_id='ninja://base:base_unittests/MockUnitTests.FailTest',
           parent_step_name='verify_reproducing_step.find_related_builders',
@@ -249,7 +249,7 @@ def GenTests(api):
           step_name=('verify_reproducing_step.find_related_builders'
                      '.buildbucket.get_multi (2)'),
       ),
-      api.weetbix.query_test_history(
+      api.luci_analysis.query_test_history(
           test_history.QueryTestHistoryResponse(),
           test_id='ninja://base:base_unittests/MockUnitTests.FailTest',
           parent_step_name='verify_reproducing_step.find_related_builders',
@@ -430,7 +430,7 @@ def GenTests(api):
           '.GetIssue projects/chromium/issues/123',
           api.json.output_stream(issue_result),
       ),
-      api.weetbix.lookup_bug(
+      api.luci_analysis.lookup_bug(
           [],
           'chromium/123',
           parent_step_name='query_sample_failure_from_luci_analysis'),

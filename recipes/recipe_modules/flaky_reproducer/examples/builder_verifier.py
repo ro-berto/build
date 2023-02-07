@@ -23,12 +23,12 @@ DEPS = [
     'recipe_engine/buildbucket',
     'recipe_engine/file',
     'recipe_engine/json',
+    'recipe_engine/luci_analysis',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
     'recipe_engine/resultdb',
     'recipe_engine/step',
     'recipe_engine/swarming',
-    'weetbix',
 ]
 
 PROPERTIES = {
@@ -241,7 +241,7 @@ def GenTests(api):
                   resultdb_invocation,
           },
           step_name='find_related_builders.rdb query'),
-      api.weetbix.query_variants(
+      api.luci_analysis.query_variants(
           test_history.QueryVariantsResponse(variants=[
               test_history.QueryVariantsResponse.VariantInfo(
                   variant_hash='dummy_hash_1',
@@ -254,7 +254,7 @@ def GenTests(api):
           test_id='ninja://base:base_unittests/MockUnitTests.PassTest',
           parent_step_name='find_related_builders',
       ),
-      api.weetbix.query_test_history(
+      api.luci_analysis.query_test_history(
           query_test_history_res,
           test_id='ninja://base:base_unittests/MockUnitTests.PassTest',
           parent_step_name='find_related_builders',

@@ -17,6 +17,7 @@ DEPS = [
     'recipe_engine/file',
     'recipe_engine/futures',
     'recipe_engine/json',
+    'recipe_engine/luci_analysis',
     'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/properties',
@@ -25,7 +26,6 @@ DEPS = [
     'recipe_engine/step',
     'recipe_engine/time',
     'tar',
-    'weetbix',
 ]
 
 PROPERTIES = properties.InputProperties

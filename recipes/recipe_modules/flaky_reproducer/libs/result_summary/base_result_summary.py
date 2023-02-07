@@ -138,7 +138,7 @@ class TestResult:
 
 
 class TestResultErrorMessageRegexSimilarityMixin:
-  """Implements Weetbix regex test reason clustering algorithm, that ignore the
+  """Implements Luci Analysis regex test reason clustering algorithm, that ignore the
   numbers in the error message: http://go/weetbix-bugs-dd.
   """
 

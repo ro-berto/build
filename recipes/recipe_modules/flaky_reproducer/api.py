@@ -465,11 +465,11 @@ class FlakyReproducer(recipe_api.RecipeApi):
                                               monorail_issue,
                                               test_id=None):
     """Query sample failure from LUCI Analysis cluster failures."""
-    rules = self.m.weetbix.lookup_bug('chromium/' + monorail_issue)
+    rules = self.m.luci_analysis.lookup_bug('chromium/' + monorail_issue)
     if not rules:
       raise self.m.step.StepFailure('No cluster associated with bug.')
-    cluster = self.m.weetbix.rule_name_to_cluster_name(rules[0])
-    failures = self.m.weetbix.query_cluster_failures(cluster)
+    cluster = self.m.luci_analysis.rule_name_to_cluster_name(rules[0])
+    failures = self.m.luci_analysis.query_cluster_failures(cluster)
     if not failures:
       raise self.m.step.StepFailure(
           'No failure found in the LUCI Analysis cluster.')
@@ -755,7 +755,7 @@ class FlakyReproducer(recipe_api.RecipeApi):
     all_variants = []
     next_page_token = None
     while True:
-      variants, next_page_token = self.m.weetbix.query_variants(
+      variants, next_page_token = self.m.luci_analysis.query_variants(
           test_id=test_result.test_id,
           project=project,
           sub_realm=None if self.c.verify_on_all_buckets else bucket,
@@ -781,7 +781,7 @@ class FlakyReproducer(recipe_api.RecipeApi):
     )
     selected_invocations = []
     for variant_info in all_variants:
-      verdicts, _ = self.m.weetbix.query_test_history(
+      verdicts, _ = self.m.luci_analysis.query_test_history(
           test_id=test_result.test_id,
           # project=project  # This API hardcoded project as chromium.
           sub_realm=bucket,

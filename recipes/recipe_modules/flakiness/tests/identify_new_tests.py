@@ -28,11 +28,11 @@ DEPS = [
     'recipe_engine/buildbucket',
     'recipe_engine/file',
     'recipe_engine/json',
+    'recipe_engine/luci_analysis',
     'recipe_engine/properties',
     'recipe_engine/resultdb',
     'recipe_engine/step',
     'test_utils',
-    'weetbix',
 ]
 
 
@@ -123,27 +123,27 @@ def GenTests(api):
       'basic',
       api.buildbucket.build(basic_build),
       api.flakiness(check_for_flakiness=True,),
-      api.weetbix.query_test_history(
+      api.luci_analysis.query_test_history(
           test1_history_res,
           'ninja://sample/test:some_test/TestSuite.Test1',
           parent_step_name='searching_for_new_tests',
       ),
-      api.weetbix.query_test_history(
+      api.luci_analysis.query_test_history(
           empty_history_res,
           'ninja://sample/test:some_test/TestSuite.Test0',
           parent_step_name='searching_for_new_tests',
       ),
-      api.weetbix.query_test_history(
+      api.luci_analysis.query_test_history(
           empty_history_res,
           'ninja://sample/test:some_test/TestSuite.Test2',
           parent_step_name='searching_for_new_tests',
       ),
-      api.weetbix.query_test_history(
+      api.luci_analysis.query_test_history(
           empty_history_res,
           'ninja://sample/test:some_test/TestSuite.Test3',
           parent_step_name='searching_for_new_tests',
       ),
-      api.weetbix.query_test_history(
+      api.luci_analysis.query_test_history(
           empty_history_res,
           'TestSuite.Test4',
           parent_step_name='searching_for_new_tests',

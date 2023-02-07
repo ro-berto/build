@@ -13,7 +13,6 @@ DEPS = [
     'chromium',
     'chromium_tests',
     'test_utils',
-    'weetbix',
 ]
 
 from recipe_engine.recipe_api import Property
@@ -97,7 +96,7 @@ def GenTests(api):
       api.chromium.generic_build(
           builder_group='fake-group',
           builder='fake-builder',
-          experiments=['enable_weetbix_queries']),
+      ),
       api.properties(**{
           '$build/test_utils': {
               'should_exonerate_flaky_failures': True,
@@ -116,7 +115,7 @@ def GenTests(api):
       api.chromium.generic_build(
           builder_group='fake-group',
           builder='fake-builder',
-          experiments=['enable_weetbix_queries']),
+      ),
       api.properties(**{
           '$build/test_utils': {
               'should_exonerate_flaky_failures': True,
@@ -152,7 +151,7 @@ def GenTests(api):
       api.chromium.generic_build(
           builder_group='fake-group',
           builder='fake-builder',
-          experiments=['enable_weetbix_queries']),
+      ),
       api.properties(**{
           '$build/test_utils': {
               'should_exonerate_flaky_failures': True,
@@ -173,7 +172,7 @@ def GenTests(api):
       api.chromium.generic_build(
           builder_group='fake-group',
           builder='fake-builder',
-          experiments=['enable_weetbix_queries']),
+      ),
       api.properties(
           exclude_failed_test=True,
           **{
@@ -351,7 +350,6 @@ def GenTests(api):
       api.chromium.generic_build(
           builder_group='fake-group',
           builder='fake-builder',
-          experiments=['enable_weetbix_queries'],
       ),
       api.override_step_data(
           'failed_test results',
@@ -384,7 +382,7 @@ def GenTests(api):
       api.chromium.generic_build(
           builder_group='fake-group',
           builder='fake-builder',
-          experiments=['enable_weetbix_queries']),
+      ),
       api.properties(
           exclude_failed_test=True,
           has_too_many_failures=True,
@@ -409,7 +407,7 @@ def GenTests(api):
       api.chromium.generic_build(
           builder_group='fake-group',
           builder='fake-builder',
-          experiments=['enable_weetbix_queries']),
+      ),
       api.override_step_data(
           'failed_test results',
           stdout=api.raw_io.output_text(

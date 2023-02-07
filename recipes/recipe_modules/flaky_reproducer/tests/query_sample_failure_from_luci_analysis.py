@@ -7,8 +7,8 @@ from recipe_engine.recipe_api import Property
 DEPS = [
     'flaky_reproducer',
     'recipe_engine/properties',
+    'recipe_engine/luci_analysis',
     'recipe_engine/step',
-    'weetbix',
 ]
 
 PROPERTIES = {
@@ -33,13 +33,13 @@ def GenTests(api):
   yield api.test(
       'basic',
       api.properties(monorail_issue='123', test_id='test/1'),
-      api.weetbix.lookup_bug(
+      api.luci_analysis.lookup_bug(
           [
               'projects/chromium/rules/456',
           ],
           'chromium/123',
           parent_step_name='result.query_sample_failure_from_luci_analysis'),
-      api.weetbix.query_cluster_failures(
+      api.luci_analysis.query_cluster_failures(
           [
               {
                   # not picked, because it's a reviver build
@@ -138,7 +138,7 @@ def GenTests(api):
   yield api.test(
       'not rules',
       api.properties(monorail_issue='123',),
-      api.weetbix.lookup_bug(
+      api.luci_analysis.lookup_bug(
           [],
           'chromium/123',
           parent_step_name='result.query_sample_failure_from_luci_analysis'),
@@ -150,13 +150,13 @@ def GenTests(api):
   yield api.test(
       'not failures',
       api.properties(monorail_issue='123',),
-      api.weetbix.lookup_bug(
+      api.luci_analysis.lookup_bug(
           [
               'projects/chromium/rules/456',
           ],
           'chromium/123',
           parent_step_name='result.query_sample_failure_from_luci_analysis'),
-      api.weetbix.query_cluster_failures(
+      api.luci_analysis.query_cluster_failures(
           [],
           'projects/chromium/clusters/rules/456',
           parent_step_name='result.query_sample_failure_from_luci_analysis'),

@@ -276,7 +276,7 @@ class FlakinessApi(recipe_api.RecipeApi):
       # integration tests easier.
       # The default query size is 1000. This is sufficient for the query so
       # page token is not used.
-      verdicts, _ = self.m.weetbix.query_test_history(
+      verdicts, _ = self.m.luci_analysis.query_test_history(
           test_id,
           sub_realm='try',
           variant_predicate=predicate_pb2.VariantPredicate(

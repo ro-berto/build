@@ -34,6 +34,7 @@ DEPS = [
     'recipe_engine/file',
     'recipe_engine/json',
     'recipe_engine/legacy_annotation',
+    'recipe_engine/luci_analysis',
     'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/properties',
@@ -41,7 +42,6 @@ DEPS = [
     'recipe_engine/resultdb',
     'recipe_engine/swarming',
     'test_utils',
-    'weetbix',
 ]
 
 _TEST_BUILDERS = ctbc.BuilderDatabase.create({
@@ -1150,9 +1150,7 @@ def GenTests(api):
                   },],
               },
           }),
-      api.flakiness(
-          check_for_flakiness=True,
-      ),
+      api.flakiness(check_for_flakiness=True,),
       # This overrides the file check to ensure that we have test files
       # in the given patch.
       api.step_data(
@@ -1164,7 +1162,7 @@ def GenTests(api):
               'collect tasks (with patch).'
               'ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 results'),
       ),
-      api.weetbix.query_test_history(
+      api.luci_analysis.query_test_history(
           recent_run,
           ('ninja://ios/chrome/test/earl_grey2:'
            'ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a'),
@@ -1226,9 +1224,7 @@ def GenTests(api):
                   },],
               },
           }),
-      api.flakiness(
-          check_for_flakiness=True,
-      ),
+      api.flakiness(check_for_flakiness=True,),
       # This overrides the file check to ensure that we have test files
       # in the given patch.
       api.step_data(
@@ -1240,7 +1236,7 @@ def GenTests(api):
               'collect tasks (with patch).'
               'ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 results'),
       ),
-      api.weetbix.query_test_history(
+      api.luci_analysis.query_test_history(
           recent_run,
           ('ninja://ios/chrome/test/earl_grey2:'
            'ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a'),
@@ -1298,9 +1294,7 @@ def GenTests(api):
                   },],
               },
           }),
-      api.flakiness(
-          check_for_flakiness=True,
-      ),
+      api.flakiness(check_for_flakiness=True,),
       # This overrides the file check to ensure that we have test files
       # in the given patch.
       api.step_data(
@@ -1312,7 +1306,7 @@ def GenTests(api):
               'collect tasks (with patch).'
               'ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 results'),
       ),
-      api.weetbix.query_test_history(
+      api.luci_analysis.query_test_history(
           recent_run,
           ('ninja://ios/chrome/test/earl_grey2:'
            'ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a'),

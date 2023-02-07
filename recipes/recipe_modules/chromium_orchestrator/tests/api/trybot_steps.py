@@ -41,6 +41,7 @@ DEPS = [
     'recipe_engine/cq',
     'recipe_engine/file',
     'recipe_engine/json',
+    'recipe_engine/luci_analysis',
     'recipe_engine/path',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
@@ -49,7 +50,6 @@ DEPS = [
     'recipe_engine/step',
     'recipe_engine/swarming',
     'test_utils',
-    'weetbix',
 ]
 
 
@@ -1989,7 +1989,7 @@ def GenTests(api):
           ('collect tasks (with patch).browser_tests results'),
       ),
       api.flakiness(check_for_flakiness=True),
-      api.weetbix.query_test_history(
+      api.luci_analysis.query_test_history(
           recent_run,
           'ninja://browser_tests/Test:Test1',
           parent_step_name='searching_for_new_tests',
@@ -2043,7 +2043,7 @@ def GenTests(api):
           ('collect tasks (with patch).browser_tests results'),
       ),
       api.flakiness(check_for_flakiness=True),
-      api.weetbix.query_test_history(
+      api.luci_analysis.query_test_history(
           recent_run,
           'ninja://browser_tests/Test:Test1',
           parent_step_name='searching_for_new_tests',
@@ -2095,7 +2095,7 @@ def GenTests(api):
           ('collect tasks (with patch).browser_tests results'),
       ),
       api.flakiness(check_for_flakiness=True),
-      api.weetbix.query_test_history(
+      api.luci_analysis.query_test_history(
           recent_run,
           'ninja://browser_tests/Test:Test1',
           parent_step_name='searching_for_new_tests',

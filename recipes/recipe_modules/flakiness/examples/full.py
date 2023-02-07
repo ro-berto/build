@@ -34,11 +34,11 @@ DEPS = [
     'recipe_engine/assertions',
     'recipe_engine/buildbucket',
     'recipe_engine/json',
+    'recipe_engine/luci_analysis',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
     'recipe_engine/resultdb',
     'recipe_engine/step',
-    'weetbix',
 ]
 
 
@@ -284,9 +284,7 @@ def GenTests(api):
                   ],
               },
           }),
-      api.flakiness(
-          check_for_flakiness=True,
-      ),
+      api.flakiness(check_for_flakiness=True),
       api.override_step_data(
           ('ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 '
            '(with patch) on Mac-11'),
@@ -321,19 +319,19 @@ def GenTests(api):
       api.step_data(
           'git diff to analyze patch (2)',
           api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
-      api.weetbix.query_test_history(
+      api.luci_analysis.query_test_history(
           test_a_other_invocation_history_res,
           ('ninja://ios/chrome/test/earl_grey2:'
            'ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a'),
           parent_step_name='searching_for_new_tests',
       ),
-      api.weetbix.query_test_history(
+      api.luci_analysis.query_test_history(
           empty_history_res,
           ('ninja://ios/chrome/test/earl_grey2:'
            'ios_chrome_bookmarks_eg2tests_module/TestSuite.test_b'),
           parent_step_name='searching_for_new_tests',
       ),
-      api.weetbix.query_test_history(
+      api.luci_analysis.query_test_history(
           empty_history_res,
           ('ninja://ios/chrome/test/earl_grey2:'
            'ios_chrome_web_eg2tests_module/TestSuite.test_c'),
@@ -438,9 +436,7 @@ def GenTests(api):
                   }],
               },
           }),
-      api.flakiness(
-          check_for_flakiness=True,
-      ),
+      api.flakiness(check_for_flakiness=True),
       api.resultdb.query(
           junit_invocations,
           ('chrome_junit_tests results'),
@@ -448,7 +444,7 @@ def GenTests(api):
       api.step_data(
           'git diff to analyze patch (2)',
           api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
-      api.weetbix.query_test_history(
+      api.luci_analysis.query_test_history(
           empty_history_res,
           ('ninja://chrome/android:chrome_junit_tests/'
            'org.chromium.chrome.browser.safety_check.'
@@ -521,9 +517,7 @@ def GenTests(api):
                   }],
               },
           }),
-      api.flakiness(
-          check_for_flakiness=True,
-      ),
+      api.flakiness(check_for_flakiness=True),
       api.resultdb.query(
           junit_nonparameterized_invocation,
           ('chrome_junit_tests results'),
@@ -531,7 +525,7 @@ def GenTests(api):
       api.step_data(
           'git diff to analyze patch (2)',
           api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
-      api.weetbix.query_test_history(
+      api.luci_analysis.query_test_history(
           empty_history_res,
           ('ninja://chrome/android:chrome_junit_tests/'
            'org.chromium.chrome.browser.safety_check.'
@@ -596,9 +590,7 @@ def GenTests(api):
                   }],
               },
           }),
-      api.flakiness(
-          check_for_flakiness=True,
-      ),
+      api.flakiness(check_for_flakiness=True),
       api.resultdb.query(
           script_invocation,
           ('check_network_annotations results'),
@@ -606,7 +598,7 @@ def GenTests(api):
       api.step_data(
           'git diff to analyze patch (2)',
           api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
-      api.weetbix.query_test_history(
+      api.luci_analysis.query_test_history(
           empty_history_res,
           'check_network_annotations',
           parent_step_name='searching_for_new_tests',
@@ -655,9 +647,7 @@ def GenTests(api):
                   },],
               },
           }),
-      api.flakiness(
-          check_for_flakiness=True,
-      ),
+      api.flakiness(check_for_flakiness=True),
       api.override_step_data(('ios_chrome_web_eg2tests_module_iPad Air 2 14.4 '
                               '(with patch) on Mac-11'),
                              api.chromium_swarming.canned_summary_output(
@@ -679,7 +669,7 @@ def GenTests(api):
           api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
       # This is what's been recently run, and that isn't in the exclusion list
       # and so should be removed (false positive).
-      api.weetbix.query_test_history(
+      api.luci_analysis.query_test_history(
           empty_history_res,
           ('ninja://ios/chrome/test/earl_grey2:'
            'ios_chrome_web_eg2tests_module/TestSuite.test_c'),
@@ -780,9 +770,7 @@ def GenTests(api):
                   },],
               },
           }),
-      api.flakiness(
-          check_for_flakiness=True,
-      ),
+      api.flakiness(check_for_flakiness=True),
       api.override_step_data(('base_unittests '
                               '(with patch) on Mac-11'),
                              api.chromium_swarming.canned_summary_output(
@@ -802,7 +790,7 @@ def GenTests(api):
       api.step_data(
           'git diff to analyze patch (2)',
           api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
-      api.weetbix.query_test_history(
+      api.luci_analysis.query_test_history(
           empty_history_res,
           ('ninja://base:base_unittests/TestSuite.test_d'),
           parent_step_name='searching_for_new_tests',
@@ -862,9 +850,7 @@ def GenTests(api):
                   },],
               },
           }),
-      api.flakiness(
-          check_for_flakiness=True,
-      ),
+      api.flakiness(check_for_flakiness=True),
       api.override_step_data(
           ('ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 '
            '(with patch) on Mac-11'),
@@ -885,13 +871,13 @@ def GenTests(api):
       api.step_data(
           'git diff to analyze patch (2)',
           api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
-      api.weetbix.query_test_history(
+      api.luci_analysis.query_test_history(
           test_a_other_invocation_history_res,
           ('ninja://ios/chrome/test/earl_grey2:'
            'ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a'),
           parent_step_name='searching_for_new_tests',
       ),
-      api.weetbix.query_test_history(
+      api.luci_analysis.query_test_history(
           empty_history_res,
           ('ninja://ios/chrome/test/earl_grey2:'
            'ios_chrome_bookmarks_eg2tests_module/TestSuite.test_b'),
@@ -954,9 +940,7 @@ def GenTests(api):
                   },],
               },
           }),
-      api.flakiness(
-          check_for_flakiness=True,
-      ),
+      api.flakiness(check_for_flakiness=True),
       api.override_step_data(
           ('ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 '
            '(with patch) on Mac-11'),
@@ -977,13 +961,13 @@ def GenTests(api):
       api.step_data(
           'git diff to analyze patch (2)',
           api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
-      api.weetbix.query_test_history(
+      api.luci_analysis.query_test_history(
           test_a_other_invocation_history_res,
           ('ninja://ios/chrome/test/earl_grey2:'
            'ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a'),
           parent_step_name='searching_for_new_tests',
       ),
-      api.weetbix.query_test_history(
+      api.luci_analysis.query_test_history(
           empty_history_res,
           ('ninja://ios/chrome/test/earl_grey2:'
            'ios_chrome_bookmarks_eg2tests_module/TestSuite.test_b'),
@@ -1047,9 +1031,7 @@ def GenTests(api):
                   },],
               },
           }),
-      api.flakiness(
-          check_for_flakiness=True,
-      ),
+      api.flakiness(check_for_flakiness=True),
       api.override_step_data(
           ('ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 '
            '(with patch, experimental) on Mac-11'),
@@ -1069,13 +1051,13 @@ def GenTests(api):
       api.step_data(
           'git diff to analyze patch (2)',
           api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
-      api.weetbix.query_test_history(
+      api.luci_analysis.query_test_history(
           test_a_other_invocation_history_res,
           ('ninja://ios/chrome/test/earl_grey2:'
            'ios_chrome_bookmarks_eg2tests_module/TestSuite.test_a'),
           parent_step_name='searching_for_new_tests',
       ),
-      api.weetbix.query_test_history(
+      api.luci_analysis.query_test_history(
           empty_history_res,
           ('ninja://ios/chrome/test/earl_grey2:'
            'ios_chrome_bookmarks_eg2tests_module/TestSuite.test_b'),
@@ -1151,9 +1133,7 @@ def GenTests(api):
                   },],
               },
           }),
-      api.flakiness(
-          check_for_flakiness=True,
-      ),
+      api.flakiness(check_for_flakiness=True),
       api.override_step_data(
           ('ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 '
            '(with patch) on Mac-11'),
@@ -1174,7 +1154,7 @@ def GenTests(api):
       api.step_data(
           'git diff to analyze patch (2)',
           api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
-      api.weetbix.query_test_history(
+      api.luci_analysis.query_test_history(
           empty_history_res,
           ('ninja://ios/chrome/test/earl_grey2:'
            'ios_chrome_bookmarks_eg2tests_module/TestSuite.test_d'),
@@ -1239,9 +1219,7 @@ def GenTests(api):
                   },],
               },
           }),
-      api.flakiness(
-          check_for_flakiness=True,
-      ),
+      api.flakiness(check_for_flakiness=True),
       api.override_step_data(
           ('ios_chrome_bookmarks_eg2tests_module_iPad Air 2 14.4 '
            '(with patch) on Mac-11'),
@@ -1267,7 +1245,7 @@ def GenTests(api):
       api.step_data(
           'git diff to analyze patch (2)',
           api.raw_io.stream_output('chrome/test.cc\ncomponents/file2.cc')),
-      api.weetbix.query_test_history(
+      api.luci_analysis.query_test_history(
           empty_history_res,
           ('ninja://ios/chrome/test/earl_grey2:'
            'ios_chrome_bookmarks_eg2tests_module/TestSuite.test_d'),
