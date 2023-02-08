@@ -171,16 +171,6 @@ class WebRTCApi(recipe_api.RecipeApi):
   def should_generate_code_coverage(self, builder_id, builder_config):
     return builder_id.builder.lower() == 'linux_coverage'
 
-  def download_code_coverage_tools(self):
-    with self.m.depot_tools.on_path():
-      clang_update_script = self.m.path['checkout'].join(
-          'tools', 'clang', 'scripts', 'update.py')
-      args = ['python3', clang_update_script, '--package', 'coverage_tools']
-      self.m.step(
-          'download llvm-cov and llvm-profdata',
-          args,
-      )
-
   def setup_code_coverage_module(self):
     """Configure internal constants of the code_coverage module."""
     checkout_path = self.m.path['checkout']

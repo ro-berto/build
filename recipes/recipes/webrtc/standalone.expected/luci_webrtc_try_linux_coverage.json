@@ -20,7 +20,9 @@
       "@@@STEP_LOG_LINE@config@  \"solutions\": [@@@",
       "@@@STEP_LOG_LINE@config@    {@@@",
       "@@@STEP_LOG_LINE@config@      \"custom_deps\": {}, @@@",
-      "@@@STEP_LOG_LINE@config@      \"custom_vars\": {}, @@@",
+      "@@@STEP_LOG_LINE@config@      \"custom_vars\": {@@@",
+      "@@@STEP_LOG_LINE@config@        \"checkout_clang_coverage_tools\": \"True\"@@@",
+      "@@@STEP_LOG_LINE@config@      }, @@@",
       "@@@STEP_LOG_LINE@config@      \"deps_file\": \"DEPS\", @@@",
       "@@@STEP_LOG_LINE@config@      \"managed\": true, @@@",
       "@@@STEP_LOG_LINE@config@      \"name\": \"src\", @@@",
@@ -101,7 +103,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://webrtc.googlesource.com/src'}]",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'checkout_clang_coverage_tools': 'True'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://webrtc.googlesource.com/src'}]",
       "--patch_root",
       "src",
       "--revision_mapping_file",
@@ -224,35 +226,6 @@
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python3",
-      "[CACHE]/builder/src/tools/clang/scripts/update.py",
-      "--package",
-      "coverage_tools"
-    ],
-    "env_suffixes": {
-      "DEPOT_TOOLS_UPDATE": [
-        "0"
-      ],
-      "PATH": [
-        "RECIPE_REPO[depot_tools]"
-      ]
-    },
-    "luci_context": {
-      "realm": {
-        "name": "webrtc:try"
-      },
-      "resultdb": {
-        "current_invocation": {
-          "name": "invocations/build:8945511751514863184",
-          "update_token": "token"
-        },
-        "hostname": "rdbhost"
-      }
-    },
-    "name": "download llvm-cov and llvm-profdata"
   },
   {
     "cmd": [

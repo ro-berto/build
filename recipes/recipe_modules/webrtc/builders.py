@@ -909,7 +909,7 @@ _TRYSERVER_WEBRTC_SPEC = {
     'linux_coverage':
         WebRTCBuilderSpec.create(
             chromium_config='webrtc_default',
-            gclient_config='webrtc',
+            gclient_config='webrtc_use_clang_coverage',
             chromium_config_kwargs={
                 'BUILD_CONFIG': 'Release',
                 'TARGET_BITS': 64,

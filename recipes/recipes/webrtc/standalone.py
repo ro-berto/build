@@ -45,7 +45,6 @@ def RunSteps(api):
     api.webrtc.download_video_quality_tools()
 
   if api.webrtc.should_generate_code_coverage(builder_id, builder_config):
-    api.webrtc.download_code_coverage_tools()
     api.webrtc.setup_code_coverage_module()
 
   api.chromium.ensure_goma()

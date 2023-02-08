@@ -38,6 +38,13 @@ def webrtc_valgrind(c):
   c.solutions[0].custom_deps['src/third_party/valgrind'] = \
       ChromiumGitURL(c, 'chromium', 'deps', 'valgrind', 'binaries')
 
+
+@CONFIG_CTX(includes=['webrtc'])
+def webrtc_use_clang_coverage(c):
+  """Add llvm coverage tools (llvm-cov and llvm-profdata) to the solution."""
+  c.solutions[0].custom_vars['checkout_clang_coverage_tools'] = 'True'
+
+
 @CONFIG_CTX()
 def _webrtc(c):
   """Add the main solution for WebRTC standalone builds.
