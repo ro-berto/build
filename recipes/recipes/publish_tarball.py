@@ -7,6 +7,7 @@
 from recipe_engine import post_process, recipe_api
 
 import contextlib
+import json
 import re
 
 DEPS = [
@@ -16,7 +17,6 @@ DEPS = [
     'depot_tools/gclient',
     'depot_tools/git',
     'depot_tools/gsutil',
-    'infra/omahaproxy',
     'recipe_engine/buildbucket',
     'recipe_engine/context',
     'recipe_engine/file',
@@ -30,7 +30,7 @@ DEPS = [
 ]
 
 # Sometimes a revision will be bad because the checkout will fail, causing
-# publish_tarball to fail.  The version will stay in the omaha version list for
+# publish_tarball to fail.  The version will stay in the version list for
 # several months and publish_tarball will keep re-running on the same broken
 # version.  This denylist exists to exclude those broken versions so the bot
 # doesn't keep retrying and sending build failure emails out.
@@ -239,12 +239,21 @@ def trigger_publish_tarball_jobs(api):
   # TODO(phajdan.jr): find better solution than hardcoding version number.
   # We do that currently (carryover from a solution this recipe is replacing)
   # to avoid running into errors with older releases.
-  # Exclude ios - it often uses internal buildspecs so public ones don't work.
-  for release in api.omahaproxy.history(
-      min_major_version=74, exclude_platforms=['ios']):
-    if release['channel'] not in ('stable', 'beta', 'dev', 'canary'):
+  URL = 'https://versionhistory.googleapis.com/v1/chrome/platforms/all/channels/all/versions/all/releases?filter=version>74'
+  TEST_DATA = """{ "releases": [
+    { "name": "chrome/platforms/ios/channels/canary/versions/74.0.3729.169/releases/1234567890" },
+    { "name": "chrome/platforms/mac/channels/canary/versions/74.0.3729.169/releases/1234567890" },
+    { "name": "chrome/platforms/win64/channels/canary_asan/versions/74.0.3729.169/releases/1234567890" }
+  ]}"""
+  text = api.url.get_text(URL, default_test_data=TEST_DATA)
+  for release in json.loads(text.output)['releases']:
+    name = release['name'].split('/')
+    platform, channel, version = name[2], name[4], name[6]
+    # Exclude ios - it often uses internal buildspecs so public ones don't work.
+    if platform == 'ios':
       continue
-    version = release['version']
+    if channel not in ('stable', 'beta', 'dev', 'canary'):
+      continue
     if not published_all_tarballs(version, ls_result):
       missing_releases.add(version)
   if not missing_releases:
@@ -495,9 +504,10 @@ def GenTests(api):
       api.buildbucket.generic_build(),
       api.platform('linux', 64),
       api.url.text(
-          'GET https://omahaproxy.appspot.com/history',
-          """os,channel,version,timestamp
-        linux,canary,87.0.4273.0,2018-07-16 07:25:01.309860"""),
+          'GET https://versionhistory.googleapis.com/v1/chrome/platforms/all/channels/all/versions/all/releases?filter=version>74',
+          """{ "releases": [
+            { "name": "chrome/platforms/linux/channels/canary/versions/87.0.4273.0/releases/1234567890" }
+          ]}"""),
       api.step_data(
           'gsutil ls',
           stdout=api.raw_io.output_text(

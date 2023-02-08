@@ -34,7 +34,7 @@
       "-u",
       "RECIPE_MODULE[recipe_engine::url]/resources/pycurl.py",
       "--url",
-      "https://omahaproxy.appspot.com/history",
+      "https://versionhistory.googleapis.com/v1/chrome/platforms/all/channels/all/versions/all/releases?filter=version>74",
       "--status-json",
       "/path/to/tmp/json",
       "--outfile",
@@ -52,7 +52,7 @@
         "hostname": "rdbhost"
       }
     },
-    "name": "GET https://omahaproxy.appspot.com/history"
+    "name": "GET https://versionhistory.googleapis.com/v1/chrome/platforms/all/channels/all/versions/all/releases?filter=version>74"
   },
   {
     "cmd": [],
