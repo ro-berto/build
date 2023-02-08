@@ -8,14 +8,21 @@ Recipe for running CBB tests in Crossbench
 DEPS = [
     'depot_tools/git',
     'recipe_engine/buildbucket',
+    'depot_tools/gclient',
     'recipe_engine/step',
+    'v8',
 ]
 
 
 def RunSteps(api):
-  revision = api.buildbucket.gitiles_commit.id or 'HEAD'
-  api.git.checkout(
-      'https://chromium.googlesource.com/crossbench/', ref=revision)
+  gclient_config = api.gclient.make_config()
+  solution = gclient_config.solutions.add()
+  solution.url = 'https://chromium.googlesource.com/crossbench/'
+  solution.name = 'crossbench'
+  gclient_config.got_revision_mapping[solution.name] = 'got_revision'
+  api.gclient.c = gclient_config
+
+  api.v8.checkout()
 
   api.step('Run CBB Tests', ['vpython3', 'tests/cbb/cbb_runner.py'])
 
