@@ -1,0 +1,22 @@
+# Copyright 2023 The Chromium Authors
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+DEPS = [
+    'depbot',
+    'depot_tools/depot_tools',
+    'recipe_engine/json',
+    'recipe_engine/path',
+]
+
+
+def RunSteps(api):
+  api.depbot.run_depbot(
+      gn_path=api.depot_tools.gn_py_path,
+      src_dir=api.path['checkout'],
+      build_dir='out/Release',
+      json_out=api.json.output(name='results'))
+
+
+def GenTests(api):
+  yield api.test('basic')

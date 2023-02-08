@@ -1,0 +1,84 @@
+[
+  {
+    "cmd": [],
+    "name": "install infra_internal/tools/security/depbot"
+  },
+  {
+    "cmd": [
+      "vpython3",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[START_DIR]/cipd_tool/infra_internal/tools/security/depbot/latest"
+    ],
+    "infra_step": true,
+    "name": "install infra_internal/tools/security/depbot.ensure package directory",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[START_DIR]/cipd_tool/infra_internal/tools/security/depbot/latest",
+      "-ensure-file",
+      "infra_internal/tools/security/depbot/${platform} latest",
+      "-max-threads",
+      "0",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "infra_step": true,
+    "name": "install infra_internal/tools/security/depbot.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-latest----------\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra_internal/tools/security/depbot/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[START_DIR]/cipd_tool/infra_internal/tools/security/depbot/latest/depbot",
+      "--target",
+      "//base:base",
+      "--chromium-src-dir",
+      "None",
+      "--log-level",
+      "debug",
+      "--gn-path",
+      "RECIPE_REPO[depot_tools]/gn.py",
+      "--build-dir",
+      "out/Release",
+      "--json-output",
+      "/path/to/tmp/json"
+    ],
+    "name": "run depbot",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output[results]@{@@@",
+      "@@@STEP_LOG_LINE@json.output[results]@  \"artifacts\": [], @@@",
+      "@@@STEP_LOG_LINE@json.output[results]@  \"build_metadata\": {}, @@@",
+      "@@@STEP_LOG_LINE@json.output[results]@  \"entry_point\": \"//base:base\", @@@",
+      "@@@STEP_LOG_LINE@json.output[results]@  \"libraries\": []@@@",
+      "@@@STEP_LOG_LINE@json.output[results]@}@@@",
+      "@@@STEP_LOG_END@json.output[results]@@@"
+    ]
+  },
+  {
+    "name": "$result"
+  }
+]
