@@ -499,7 +499,6 @@ def RunSteps(api):
           use_coverage = False
 
     api.step('gn gen', [
-        'python',
         api.depot_tools.gn_py_path,
         'gen',
         paths.output_path,
