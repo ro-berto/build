@@ -4,15 +4,13 @@
 
 DEPS = [
     'depbot',
-    'depot_tools/depot_tools',
     'recipe_engine/json',
     'recipe_engine/path',
 ]
 
 
 def RunSteps(api):
-  api.depbot.run_depbot(
-      gn_path=api.depot_tools.gn_py_path,
+  api.depbot.run(
       src_dir=api.path['checkout'],
       build_dir='out/Release',
       json_out=api.json.output(name='results'))
