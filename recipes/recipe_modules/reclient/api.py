@@ -136,6 +136,7 @@ class ReclientApi(recipe_api.RecipeApi):
     self._mismatch = None
     self._bootstrap_env = None
     self._scandeps_server = props.scandeps_server
+    self._disable_bq_upload = props.disable_bq_upload
 
     if self._test_data.enabled:
       self._hostname = 'fakevm999-m9'
@@ -484,7 +485,12 @@ class ReclientApi(recipe_api.RecipeApi):
       bq_json_dict['stats']['proxy_info'] = [
           proxy_info_to_bq(p) for p in proxy_info
       ]
-
+    if self._disable_bq_upload:
+      self.m.step.empty(
+          'upload RBE metrics to BigQuery (DISABLED)',
+          log_name='rbe_metrics',
+          log_text=self.m.json.dumps(bq_json_dict, indent=2))
+      return
     bqupload_cipd_path = self.m.cipd.ensure_tool(
         'infra/tools/bqupload/${platform}', 'latest')
     BQ_TABLE_NAME = 'goma-logs.rbe_metrics.builds'

@@ -21,6 +21,8 @@ DEPS = [
 
 _NINJA_STEP_NAME = 'compile (reclient)'
 _BOOTSTRAP_STEP_NAME = 'preprocess for reclient.start reproxy via bootstrap'
+_BQ_UPLOAD_DISABLED_STEP_NAME = 'postprocess for reclient.upload RBE metrics to BigQuery (DISABLED)'
+_BQ_UPLOAD_STEP_NAME = 'postprocess for reclient.upload RBE metrics to BigQuery'
 
 
 def RunSteps(api):
@@ -58,6 +60,17 @@ def GenTests(api):
       'basic windows',
       api.reclient.properties(),
       api.platform('win', 64),
+  )
+
+  def no_bq_upload_checker(check, steps):
+    check(_BQ_UPLOAD_DISABLED_STEP_NAME in steps)
+    check(_BQ_UPLOAD_STEP_NAME not in steps)
+
+  yield api.test(
+      'disable_bq_upload',
+      api.reclient.properties(disable_bq_upload=True),
+      api.post_check(no_bq_upload_checker),
+      api.post_process(post_process.DropExpectation),
   )
 
   def deps_cache_location_checker(check, steps):

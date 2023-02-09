@@ -16,7 +16,8 @@ class ReclientTestApi(recipe_test_api.RecipeTestApi):
                  publish_trace=None,
                  scandeps_server=False,
                  cache_silo=None,
-                 ensure_verified=None):
+                 ensure_verified=None,
+                 disable_bq_upload=False):
     if rewrapper_env is None:
       rewrapper_env = {}
     if bootstrap_env is None:
@@ -34,5 +35,6 @@ class ReclientTestApi(recipe_test_api.RecipeTestApi):
                 'scandeps_server': scandeps_server,
                 'cache_silo': cache_silo,
                 'ensure_verified': ensure_verified,
+                'disable_bq_upload': disable_bq_upload,
             },
         })
