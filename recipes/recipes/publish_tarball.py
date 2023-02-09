@@ -35,8 +35,6 @@ DEPS = [
 # version.  This denylist exists to exclude those broken versions so the bot
 # doesn't keep retrying and sending build failure emails out.
 DENYLISTED_VERSIONS = [
-    '84.0.4104.56',
-    '84.0.4147.4',
 ]
 
 
@@ -239,11 +237,11 @@ def trigger_publish_tarball_jobs(api):
   # TODO(phajdan.jr): find better solution than hardcoding version number.
   # We do that currently (carryover from a solution this recipe is replacing)
   # to avoid running into errors with older releases.
-  URL = 'https://versionhistory.googleapis.com/v1/chrome/platforms/all/channels/all/versions/all/releases?filter=version>74'
+  URL = 'https://versionhistory.googleapis.com/v1/chrome/platforms/all/channels/all/versions/all/releases?filter=version>103'
   TEST_DATA = """{ "releases": [
-    { "name": "chrome/platforms/ios/channels/canary/versions/74.0.3729.169/releases/1234567890" },
-    { "name": "chrome/platforms/mac/channels/canary/versions/74.0.3729.169/releases/1234567890" },
-    { "name": "chrome/platforms/win64/channels/canary_asan/versions/74.0.3729.169/releases/1234567890" }
+    { "name": "chrome/platforms/ios/channels/canary/versions/103.0.5060.114/releases/1234567890" },
+    { "name": "chrome/platforms/mac/channels/canary/versions/103.0.5060.114/releases/1234567890" },
+    { "name": "chrome/platforms/win64/channels/canary_asan/versions/103.0.5060.114/releases/1234567890" }
   ]}"""
   text = api.url.get_text(URL, default_test_data=TEST_DATA)
   for release in json.loads(text.output)['releases']:
@@ -467,7 +465,7 @@ def GenTests(api):
 
   yield (
       api.test('basic-no-dawn-version') + api.buildbucket.generic_build() +
-      api.properties(version='87.0.4273.0') + api.platform('linux', 64) +
+      api.properties(version='103.0.4273.0') + api.platform('linux', 64) +
       api.step_data('gsutil ls', stdout=api.raw_io.output_text('')) +
       api.step_data(
           'get gn version', stdout=api.raw_io.output_text('1496 (0790d304)')) +
@@ -475,25 +473,16 @@ def GenTests(api):
                                                 'node_modules.tar.gz.sha1')))
 
   yield (api.test('dupe') + api.buildbucket.generic_build() + api.properties(
-      version='74.0.3729.169'
+      version='103.0.5060.114'
   ) + api.platform('linux', 64) + api.step_data(
       'gsutil ls',
       stdout=api.raw_io.output_text(
-          'gs://chromium-browser-official/chromium-74.0.3729.169.tar.xz\n'
-          'gs://chromium-browser-official/chromium-74.0.3729.169-lite.tar.xz\n'
+          'gs://chromium-browser-official/chromium-103.0.5060.114.tar.xz\n'
+          'gs://chromium-browser-official/chromium-103.0.5060.114-lite.tar.xz\n'
           'gs://chromium-browser-official/'
-          'chromium-74.0.3729.169-testdata.tar.xz\n'
-          'gs://chromium-browser-official/chromium-74.0.3729.169-nacl.tar.xz\n')
-  ))
-
-  yield (
-      api.test('clang-no-fuchsia') + api.buildbucket.generic_build() +
-      api.properties(version='74.0.3729.169') + api.platform('linux', 64) +
-      api.step_data('gsutil ls', stdout=api.raw_io.output_text('')) +
-      api.step_data(
-          'get gn version', stdout=api.raw_io.output_text('1496 (0790d304)')) +
-      api.path.exists(api.path['checkout'].join('third_party', 'node',
-                                                'node_modules.tar.gz.sha1')))
+          'chromium-103.0.5060.114-testdata.tar.xz\n'
+          'gs://chromium-browser-official/chromium-103.0.5060.114-nacl.tar.xz\n'
+      )))
 
   yield (api.test('trigger') + api.buildbucket.generic_build() +
          api.platform('linux', 64) +
@@ -504,36 +493,19 @@ def GenTests(api):
       api.buildbucket.generic_build(),
       api.platform('linux', 64),
       api.url.text(
-          'GET https://versionhistory.googleapis.com/v1/chrome/platforms/all/channels/all/versions/all/releases?filter=version>74',
+          'GET https://versionhistory.googleapis.com/v1/chrome/platforms/all/channels/all/versions/all/releases?filter=version>103',
           """{ "releases": [
-            { "name": "chrome/platforms/linux/channels/canary/versions/87.0.4273.0/releases/1234567890" }
+            { "name": "chrome/platforms/linux/channels/canary/versions/104.0.5112.79/releases/1234567890" }
           ]}"""),
       api.step_data(
           'gsutil ls',
           stdout=api.raw_io.output_text(
-              'gs://chromium-browser-official/chromium-87.0.4273.0.tar.xz\n'
-              'gs://chromium-browser-official/chromium-87.0.4273.0-lite.tar.xz\n'
-              'gs://chromium-browser-official/chromium-87.0.4273.0-testdata.tar.xz\n'
-              'gs://chromium-browser-official/chromium-87.0.4273.0-nacl.tar.xz\n'
+              'gs://chromium-browser-official/chromium-104.0.5112.79.tar.xz\n'
+              'gs://chromium-browser-official/chromium-104.0.5112.79-lite.tar.xz\n'
+              'gs://chromium-browser-official/chromium-104.0.5112.79-testdata.tar.xz\n'
+              'gs://chromium-browser-official/chromium-104.0.5112.79-nacl.tar.xz\n'
           )),
       api.post_process(post_process.MustRun, 'no new releases need publishing'),
       api.post_process(post_process.StatusSuccess),
       api.post_process(post_process.DropExpectation),
   )
-
-  yield (
-      api.test('basic-m76') + api.buildbucket.generic_build() +
-      api.properties(version='76.0.3784.0') + api.platform('linux', 64) +
-      api.post_process(post_process.StepCommandRE, 'download clang sources', [
-          'python3', '.*/build.py', '--without-android', '--use-system-cmake',
-          '--gcc-toolchain=/usr', '--skip-build', '--without-fuchsia'
-      ]) + api.post_process(post_process.DropExpectation) + api.step_data(
-          'get gn version', stdout=api.raw_io.output_text('1496 (0790d304)')) +
-      api.step_data(
-          'gsutil ls',
-          stdout=api.raw_io.output_text(
-              'gs://chromium-browser-official/chromium-74.0.3729.169.tar.xz\n'
-              'gs://chromium-browser-official/'
-              'chromium-74.0.3729.169-lite.tar.xz\n'
-              'gs://chromium-browser-official/'
-              'chromium-74.0.3729.169-nacl.tar.xz\n')))
